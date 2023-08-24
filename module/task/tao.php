@@ -130,7 +130,7 @@ class taskTao extends taskModel
             $actionID = $this->action->create('task', $task->id, 'Started', $record->work);
         }
         /* Activate task by effort. */
-        elseif($newTask->left != 0 and strpos('done,pause,cancel,closed,pause', $task->status) !== false)
+        elseif($newTask->left != 0 && strpos('done,pause,cancel,closed,pause', $task->status) !== false)
         {
             $newTask->status         = 'doing';
             $newTask->assignedTo     = $this->app->user->account;
@@ -167,7 +167,7 @@ class taskTao extends taskModel
             ->orderBy('date_desc,id_desc')->limit(1)->fetch();
 
         $consumed = $task->consumed + $effort->consumed - $oldEffort->consumed;
-        $left     = ($lastEffort and $effort->id == $lastEffort->id) ? $effort->left : $task->left;
+        $left     = ($lastEffort && $effort->id == $lastEffort->id) ? $effort->left : $task->left;
 
         $now  = helper::now();
         $data = new stdclass();
@@ -176,7 +176,7 @@ class taskTao extends taskModel
         $data->status         = $task->status;
         $data->lastEditedBy   = $this->app->user->account;
         $data->lastEditedDate = $now;
-        if(empty($left) and strpos('wait,doing,pause', $task->status) !== false)
+        if(empty($left) && strpos('wait,doing,pause', $task->status) !== false)
         {
             $data->status       = 'done';
             $data->finishedBy   = $this->app->user->account;
@@ -234,11 +234,11 @@ class taskTao extends taskModel
             {
                 dao::$errors["consumed[$id]"] = $this->lang->task->error->consumedThisTime;
             }
-            elseif(!is_numeric($consumed) and !empty($consumed))
+            elseif(!is_numeric($consumed) && !empty($consumed))
             {
                 dao::$errors["consumed[$id]"] = 'ID #' . $id . ' ' . $this->lang->task->error->totalNumber;
             }
-            elseif(is_numeric($consumed) and $consumed <= 0)
+            elseif(is_numeric($consumed) && $consumed <= 0)
             {
                 dao::$errors["consumed[$id]"] = sprintf($this->lang->error->gt, 'ID #' . $id . ' ' . $this->lang->task->record, '0');
             }
@@ -246,7 +246,7 @@ class taskTao extends taskModel
             /* Check left hours. */
             if($left === '') dao::$errors["left[$id]"] = $this->lang->task->error->left;
             if(!is_numeric($left)) dao::$errors["left[$id]"] = 'ID #' . $id . ' ' . $this->lang->task->error->leftNumber;
-            if(is_numeric($left) and $left < 0) dao::$errors["left[$id]"] = sprintf($this->lang->error->gt, 'ID #' . $id . ' ' . $this->lang->task->left, '0');
+            if(is_numeric($left) && $left < 0) dao::$errors["left[$id]"] = sprintf($this->lang->error->gt, 'ID #' . $id . ' ' . $this->lang->task->left, '0');
         }
 
         if(dao::isError()) return false;
@@ -276,7 +276,7 @@ class taskTao extends taskModel
                 ->orderBy('date desc,id desc')->limit(2)->fetchAll();
             $lastTwoEfforts  = isset($lastTwoEfforts[1]) ? $lastTwoEfforts[1] : '';
             if($lastTwoEfforts) $left = $lastTwoEfforts->left;
-            if(empty($lastTwoEfforts) and $left == 0) $left = $task->estimate;
+            if(empty($lastTwoEfforts) && $left == 0) $left = $task->estimate;
         }
 
         /* 如果该任务是多人团队任务则做一些额外的处理。*/
@@ -303,14 +303,14 @@ class taskTao extends taskModel
         $newTeamInfo = new stdclass();
         $newTeamInfo->consumed = $currentTeam->consumed - $effort->consumed;
         if($currentTeam->status != 'done') $newTeamInfo->left = $left;
-        if($currentTeam->status == 'done' and $left > 0 and $task->mode == 'multi')
+        if($currentTeam->status == 'done' && $left > 0 && $task->mode == 'multi')
         {
             $newTeamInfo->status = 'doing';
             $newTeamInfo->left = $left;
         }
 
-        if($currentTeam->status != 'done' and $newTeamInfo->consumed > 0 and $left == 0) $newTeamInfo->status = 'done';
-        if($task->mode == 'multi' and $currentTeam->status == 'done' and ($newTeamInfo->consumed == 0 and $left == 0))
+        if($currentTeam->status != 'done' && $newTeamInfo->consumed > 0 && $left == 0) $newTeamInfo->status = 'done';
+        if($task->mode == 'multi' && $currentTeam->status == 'done' && ($newTeamInfo->consumed == 0 && $left == 0))
         {
             $newTeamInfo->status = 'doing';
             $newTeamInfo->left   = $currentTeam->estimate;
@@ -337,7 +337,7 @@ class taskTao extends taskModel
         $data->consumed = $consumed;
         $data->left     = $left;
         $data->status   = ($left == 0 && $consumed != 0) ? 'done' : $task->status;
-        if($effort->isLast and $consumed == 0 and $task->status != 'wait')
+        if($effort->isLast && $consumed == 0 && $task->status != 'wait')
         {
             $data->status       = 'wait';
             $data->left         = $task->estimate;
@@ -350,7 +350,7 @@ class taskTao extends taskModel
             $data->closedDate   = null;
             if($task->assignedTo == 'closed') $data->assignedTo = $this->app->user->account;
         }
-        elseif($effort->isLast and $left != 0 and strpos('done,pause,cancel,closed', $task->status) !== false)
+        elseif($effort->isLast && $left != 0 && strpos('done,pause,cancel,closed', $task->status) !== false)
         {
             $data->status         = 'doing';
             $data->finishedBy     = '';
@@ -361,7 +361,7 @@ class taskTao extends taskModel
             $data->canceledDate   = null;
             $data->closedDate     = null;
         }
-        elseif($consumed != 0 and $left == 0 and strpos('done,pause,cancel,closed', $task->status) === false)
+        elseif($consumed != 0 && $left == 0 && strpos('done,pause,cancel,closed', $task->status) === false)
         {
             $now = helper::now();
             $data->status         = 'done';
@@ -508,7 +508,7 @@ class taskTao extends taskModel
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('parent')->eq((int)$taskID)->exec();
         $this->dao->update(TABLE_TASK)->set('assignedTo=openedBy')->where('parent')->eq((int)$taskID)->exec();
 
-        if(!dao::isError() and count($oldChildrenTasks) > 0)
+        if(!dao::isError() && count($oldChildrenTasks) > 0)
         {
             $this->loadModel('action');
             foreach($oldChildrenTasks as $oldChildrenTask)
@@ -606,7 +606,7 @@ class taskTao extends taskModel
         }
 
         /* Set the datetime and operator when the task is modified. */
-        if(empty($task->lastEditedDate) or empty($task->lastEditedBy))
+        if(empty($task->lastEditedDate) || empty($task->lastEditedBy))
         {
             $task->lastEditedBy   = $this->app->user->account;
             $task->lastEditedDate = helper::now();
@@ -1044,7 +1044,7 @@ class taskTao extends taskModel
         $this->dao->update(TABLE_TASK)->data($data)->autoCheck()->where('parent')->eq($parentID)->exec();
         $this->computeWorkingHours($parentID);
 
-        if(!dao::isError() and count($oldChildrenTasks) > 0)
+        if(!dao::isError() && count($oldChildrenTasks) > 0)
         {
             $this->loadModel('action');
             foreach($oldChildrenTasks as $oldChildrenTask)
@@ -1075,7 +1075,7 @@ class taskTao extends taskModel
                   ->where('id')->eq($currentTeam->id)
                   ->exec();
 
-        if($task->mode == 'linear' and empty($record->order)) $this->updateEffortOrder($effortID, $currentTeam->order);
+        if($task->mode == 'linear' && empty($record->order)) $this->updateEffortOrder($effortID, $currentTeam->order);
     }
 
     /**
@@ -1157,7 +1157,7 @@ class taskTao extends taskModel
             $task->closedReason = 'done';
         }
 
-        if($status == 'doing' or $status == 'wait')
+        if($status == 'doing' || $status == 'wait')
         {
             if($parentTask->assignedTo == 'closed')
             {

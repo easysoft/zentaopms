@@ -146,7 +146,7 @@ class task extends control
 
             /* Update other data related to the task after it is created. */
             $this->task->afterBatchCreate($taskIdList);
-            if(!isset($output['laneID']) or !isset($output['columnID'])) $this->loadModel('kanban')->updateLane($executionID, 'task');
+            if(!isset($output['laneID']) || !isset($output['columnID'])) $this->loadModel('kanban')->updateLane($executionID, 'task');
 
             $response = $this->taskZen->responseAfterbatchCreate($taskIdList, $execution);
             return $this->send($response);
@@ -332,7 +332,7 @@ class task extends control
         $this->session->set('executionList', $this->app->getURI(true), 'execution'); // This allow get var of session as `$_SESSION['app-execution']['executionList']`.
 
         $execution = $this->view->execution ?? $this->execution->getById($task->execution);
-        if(!helper::isAjaxRequest('modal') and $execution->type == 'kanban')
+        if(!helper::isAjaxRequest('modal') && $execution->type == 'kanban')
         {
             helper::setcookie('taskToOpen', (string)$taskID);
             return $this->send(array('load' => $this->createLink('execution', 'kanban', "executionID=$execution->id")));
@@ -531,7 +531,7 @@ class task extends control
         $task   = $this->task->getById($taskID);
 
         /* Show a confirm message if the task has no consumed effort. */
-        if($confirm == 'no' and $task->consumed - $effort->consumed == 0)
+        if($confirm == 'no' && $task->consumed - $effort->consumed == 0)
         {
             $formUrl = $this->createLink('task', 'deleteWorkhour', "effortID=$effortID&confirm=yes");
             return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm('{$this->lang->task->confirmDeleteLastEffort}').then((res) => {if(res) $.ajaxSubmit({url: '$formUrl'});});"));
@@ -637,7 +637,7 @@ class task extends control
             if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
             /* Record log. */
-            if($this->post->comment != '' or !empty($changes))
+            if($this->post->comment != '' || !empty($changes))
             {
                 $actionID = $this->loadModel('action')->create('task', $taskID, 'Paused', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
@@ -885,7 +885,7 @@ class task extends control
             $changes  = $this->task->activate($task, $this->post->comment, $teamData, $output);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if($this->post->comment != '' or !empty($changes))
+            if($this->post->comment != '' || !empty($changes))
             {
                 $actionID = $this->loadModel('action')->create('task', $taskID, 'Activated', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
@@ -908,7 +908,7 @@ class task extends control
             $teamMembers  = array();
             foreach($this->view->members as $account => $name)
             {
-                if(!$account or in_array($account, $teamAccounts)) $teamMembers[$account] = $name;
+                if(!$account || in_array($account, $teamAccounts)) $teamMembers[$account] = $name;
             }
             $this->view->teamMembers = $teamMembers;
         }
@@ -1059,7 +1059,7 @@ class task extends control
         /* Get execution info and export fields. */
         $execution       = $this->execution->getByID($executionID);
         $allExportFields = $this->config->task->exportFields;
-        if($execution->lifetime == 'ops' or in_array($execution->attribute, array('request', 'review'))) $allExportFields = str_replace(' story,', '', $allExportFields);
+        if($execution->lifetime == 'ops' || in_array($execution->attribute, array('request', 'review'))) $allExportFields = str_replace(' story,', '', $allExportFields);
 
         if($_POST)
         {

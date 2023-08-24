@@ -684,7 +684,7 @@ class taskModel extends model
         }
 
         /* Compute hours and manage team for multi-task. */
-        if($teamData and $teamData->team and count(array_filter($teamData->team)) > 1)
+        if($teamData && $teamData->team && count(array_filter($teamData->team)) > 1)
         {
             $teams = $this->manageTaskTeam($oldTask->mode, $task, $teamData);
             if(!empty($teams)) $task = $this->computeMultipleHours($oldTask, $task, array(), false);
@@ -700,13 +700,13 @@ class taskModel extends model
         unset($oldTask->parent, $task->parent);
 
         /* Logging history when multi-task team members have changed. */
-        if(!empty($oldTask->team) and !empty($teamData->team)) list($oldTask, $task) = $this->taskTao->createChangesForTeam($oldTask, $task);
+        if(!empty($oldTask->team) && !empty($teamData->team)) list($oldTask, $task) = $this->taskTao->createChangesForTeam($oldTask, $task);
 
         $this->loadModel('file')->processFile4Object('task', $oldTask, $task);
         $changes = common::createChanges($oldTask, $task);
 
         /* Record log. */
-        if($this->post->comment != '' or !empty($changes))
+        if($this->post->comment != '' || !empty($changes))
         {
             $action   = !empty($changes) ? 'Edited' : 'Commented';
             $actionID = $this->loadModel('action')->create('task', $taskID, $action, $this->post->comment);
@@ -901,7 +901,7 @@ class taskModel extends model
         $team = array_filter($postData->team);
         foreach($team as $i => $account)
         {
-            if($postData->teamConsumed[$i] == 0 and $postData->teamLeft[$i] == 0)
+            if($postData->teamConsumed[$i] == 0 && $postData->teamLeft[$i] == 0)
             {
                 dao::$errors[] = $this->lang->task->noticeTaskStart;
                 return false;
@@ -1063,7 +1063,7 @@ class taskModel extends model
             }
 
             $changes = common::createChanges($task, $newTask, 'task');
-            if($changes and $actionID) $this->loadModel('action')->logHistory($actionID, $changes);
+            if($changes && $actionID) $this->loadModel('action')->logHistory($actionID, $changes);
             if($changes) $allChanges = array_merge($allChanges, $changes);
             $task = $newTask;
         }
@@ -1076,7 +1076,7 @@ class taskModel extends model
             if($task->parent > 0) $this->updateParentStatus($task->id);
             if($task->story)  $this->loadModel('story')->setStage($task->story);
             if($task->status != $oldStatus) $this->loadModel('kanban')->updateLane($task->execution, 'task', $taskID);
-            if($task->status == 'done' and !dao::isError()) $this->loadModel('score')->create('task', 'finish', $taskID);
+            if($task->status == 'done' && !dao::isError()) $this->loadModel('score')->create('task', 'finish', $taskID);
         }
 
         return $allChanges;
@@ -1155,7 +1155,7 @@ class taskModel extends model
         $this->loadModel('score')->create('task', 'close', $task->id);
 
         /* Confirm need update issue status. */
-        if(isset($oldTask->fromIssue) and $oldTask->fromIssue > 0)
+        if(isset($oldTask->fromIssue) && $oldTask->fromIssue > 0)
         {
             $fromIssue = $this->loadModel('issue')->getByID($oldTask->fromIssue);
             if($fromIssue->status != 'closed')
@@ -1227,7 +1227,7 @@ class taskModel extends model
     {
         $taskID = $task->id;
 
-        if(strpos($this->config->task->activate->requiredFields, 'comment') !== false and !$comment)
+        if(strpos($this->config->task->activate->requiredFields, 'comment') !== false && !$comment)
         {
             dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->comment);
             return false;
@@ -1398,7 +1398,7 @@ class taskModel extends model
         $parentIdList = array();
         foreach($tasks as $task)
         {
-            if($task->parent <= 0 or isset($tasks[$task->parent]) or isset($parentIdList[$task->parent])) continue;
+            if($task->parent <= 0 || isset($tasks[$task->parent]) || isset($parentIdList[$task->parent])) continue;
             $parentIdList[$task->parent] = $task->parent;
         }
 
@@ -1572,7 +1572,7 @@ class taskModel extends model
         foreach($tasks as $task)
         {
             /* 如果任务不是父任务，或者父任务已经在任务列表中，或者父任务已经在当前列表中，则跳过处理。*/
-            if($task->parent <= 0 or isset($tasks[$task->parent]) or isset($parentIdList[$task->parent])) continue;
+            if($task->parent <= 0 || isset($tasks[$task->parent]) || isset($parentIdList[$task->parent])) continue;
             $parentIdList[$task->parent] = $task->parent;
         }
 
@@ -1716,11 +1716,11 @@ class taskModel extends model
             foreach($tasks as $key => $task)
             {
                 /* Compute task progress. */
-                if($task->consumed == 0 and $task->left == 0)
+                if($task->consumed == 0 && $task->left == 0)
                 {
                     $task->progress = 0;
                 }
-                elseif($task->consumed != 0 and $task->left == 0)
+                elseif($task->consumed != 0 && $task->left == 0)
                 {
                     $task->progress = 100;
                 }
@@ -1758,7 +1758,7 @@ class taskModel extends model
         {
             $members = array_column($task->team, 'account');
             if(!in_array($this->app->user->account, $members)) return false;
-            if($task->mode == 'linear' and $this->app->user->account != $task->assignedTo) return false;
+            if($task->mode == 'linear' && $this->app->user->account != $task->assignedTo) return false;
             return true;
         }
 
@@ -1803,7 +1803,7 @@ class taskModel extends model
                 $newTeamInfo = new stdclass();
                 $newTeamInfo->consumed = $currentTeam->consumed + $effort->consumed - $oldEffort->consumed;
                 if($currentTeam->status != 'done') $newTeamInfo->left = $data->left;
-                if($currentTeam->status != 'done' and $newTeamInfo->consumed > 0 and $data->left == 0) $newTeamInfo->status = 'done';
+                if($currentTeam->status != 'done' && $newTeamInfo->consumed > 0 && $data->left == 0) $newTeamInfo->status = 'done';
                 $this->dao->update(TABLE_TASKTEAM)->data($newTeamInfo)->where('id')->eq($currentTeam->id)->exec();
 
                 $data = $this->computeMultipleHours($task, $data);
@@ -1961,7 +1961,7 @@ class taskModel extends model
 
         /* Story changed or not. */
         $task->needConfirm = false;
-        if(!empty($task->storyStatus) and $task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion) $task->needConfirm = true;
+        if(!empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion) $task->needConfirm = true;
 
         /* Set product type for task. */
         if(!empty($task->product))
@@ -2031,7 +2031,7 @@ class taskModel extends model
             $children = array();
             foreach($tasks as $task)
             {
-                if($task->parent > 0 and isset($tasks[$task->parent]))
+                if($task->parent > 0 && isset($tasks[$task->parent]))
                 {
                     $children[$task->parent][$task->id] = $task;
                     unset($tasks[$task->id]);
@@ -2403,7 +2403,7 @@ class taskModel extends model
         }
 
         /* Process table statistics data. */
-        if($field != 'date' and $field != 'deadline') asort($fields);
+        if($field != 'date' && $field != 'deadline') asort($fields);
         foreach($fields as $field => $count)
         {
             $data = new stdclass();
