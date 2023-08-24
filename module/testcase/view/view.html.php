@@ -253,6 +253,12 @@
               <td class='status-testcase status-<?php echo $case->status;?>'>
                 <?php
                 echo $this->processStatus('testcase', $case);
+                if($case->version > $case->currentVersion and $from == 'testtask')
+                {
+                    echo "(<span class='warning' title={$lang->testcase->fromTesttask}>{$lang->testcase->changed}</span> ";
+                    if(common::hasPriv('testcase', 'confirmchange')) echo html::a($this->createLink('testcase', 'confirmchange', "caseID=$case->id&taskID=$taskID"), $lang->testcase->sync, 'hiddenwin', "class='btn btn-mini btn-info'");
+                    echo ")";
+                }
                 if(isset($case->fromCaseVersion) and $case->fromCaseVersion > $case->version and $from != 'testtask' and !empty($case->product))
                 {
                     echo "(<span class='warning' title={$lang->testcase->fromCaselib}>{$lang->testcase->changed}</span> ";
