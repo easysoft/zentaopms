@@ -486,7 +486,7 @@ class testcaseTest
      * @param  array  $sceneIdList
      * @param  int    $branchID
      * @access public
-     * @return bool|array
+     * @return bool
      */
     public function batchChangeBranchTest($caseIdList, $sceneIdList, $branchID)
     {
@@ -499,7 +499,7 @@ class testcaseTest
      * @param  array  $caseIdList
      * @param  int    $branchID
      * @access public
-     * @return bool|array
+     * @return bool
      */
     public function batchChangeCaseBranchTest($caseIdList, $branchID)
     {
@@ -512,7 +512,7 @@ class testcaseTest
      * @param  array  $sceneIdList
      * @param  int    $branchID
      * @access public
-     * @return bool|array
+     * @return bool
      */
     public function batchChangeSceneBranchTest($sceneIdList, $branchID)
     {
@@ -539,7 +539,7 @@ class testcaseTest
      * @param  array  $caseIdList
      * @param  int    $moduleID
      * @access public
-     * @return bool|array
+     * @return bool
      */
     public function batchChangeCaseModuleTest($caseIdList, $moduleID)
     {
@@ -552,7 +552,7 @@ class testcaseTest
      * @param  array  $sceneIdList
      * @param  int    $moduleID
      * @access public
-     * @return bool|array
+     * @return bool
      */
     public function batchChangeSceneModuleTest($sceneIdList, $moduleID)
     {
