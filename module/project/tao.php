@@ -703,7 +703,7 @@ class projectTao extends projectModel
      * @access protected
      * @return array
      */
-    protected function fetchProjectListByQuery(string $status, int $projectID, string $orderBy, int $limit, string $excludedModel): array
+    protected function fetchProjectListByQuery(string $status = 'all', int $projectID = 0, string $orderBy = 'order_asc', int $limit = 0, string $excludedModel = ''): array
     {
         return $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
@@ -712,8 +712,9 @@ class projectTao extends projectModel
             ->beginIF($excludedModel)->andWhere('model')->ne($excludedModel)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
-            ->beginIF($status && $status != 'all' && $status != 'undone')->andWhere('status')->eq($status)->fi()
-            ->beginIF($projectID)->andWhere('id')->eq($projectID)->fi()
+            ->beginIF($status == 'unclosed')->andWhere('status')->ne('closed')->fi()
+            ->beginIF($status && !in_array($status, array('all', 'undone', 'unclosed')))->andWhere('status')->eq($status)->fi()
+            ->beginIF($projectID)->orWhere('id')->eq($projectID)->fi()
             ->orderBy($orderBy)
             ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('id');
