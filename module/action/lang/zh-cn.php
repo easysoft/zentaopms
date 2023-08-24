@@ -167,6 +167,7 @@ $lang->action->objectTypes['privpackage']      = '权限包';
 $lang->action->objectTypes['serverroom']       = '机房';
 $lang->action->objectTypes['account']          = '账号';
 $lang->action->objectTypes['host']             = '主机';
+$lang->action->objectTypes['artifactrepo']     = '制品库';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
@@ -838,6 +839,7 @@ $lang->action->label->serverroom   = '机房|serverroom|browse|';
 $lang->action->label->host         = '主机|host|view|id=%s';
 $lang->action->label->account      = "账号|account|view|id=%s";
 $lang->action->label->instance     = '应用|instance|view|id=%s';
+$lang->action->label->artifactrepo = '制品库|artifactrepo|browse|';
 
 /* Object type. */
 $lang->action->search = new stdclass();

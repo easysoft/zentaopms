@@ -28,3 +28,4 @@ $lang->space->appType['gitea']     = 'Gitea';
 $lang->space->appType['gogs']      = 'Gogs';
 $lang->space->appType['jenkins']   = 'Jenkins';
 $lang->space->appType['sonarqube'] = 'SonarQube';
+$lang->space->appType['nexus']     = 'Nexus';

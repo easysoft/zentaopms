@@ -492,6 +492,7 @@ if(!defined('TABLE_METRICRECORDS')) define('TABLE_METRICRECORDS', '`' . $config-
 define('TABLE_SPACE',    '`' . $config->db->prefix . 'space`');
 define('TABLE_INSTANCE', '`' . $config->db->prefix . 'instance`');
 define('TABLE_SOLUTION', '`' . $config->db->prefix . 'solution`');
+define('TABLE_ARTIFACTREPO', '`' . $config->db->prefix . 'artifactrepo`');
 
 define('TABLE_SQLITE_QUEUE', '`' . $config->db->prefix . 'sqlite_queue`');
 
@@ -560,6 +561,7 @@ $config->objectTables['host']         = TABLE_ZAHOST;
 $config->objectTables['instance']     = TABLE_INSTANCE;
 $config->objectTables['space']        = TABLE_SPACE;
 $config->objectTables['solution']     = TABLE_SOLUTION;
+$config->objectTables['artifactrepo'] = TABLE_ARTIFACTREPO;
 
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions');
 $config->disabledFeatures = '';

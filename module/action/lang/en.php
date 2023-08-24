@@ -167,6 +167,7 @@ $lang->action->objectTypes['privpackage']      = 'Priv Package';
 $lang->action->objectTypes['serverroom']       = 'IDC';
 $lang->action->objectTypes['account']          = 'Account';
 $lang->action->objectTypes['host']             = 'Host';
+$lang->action->objectTypes['artifactrepo']     = 'Artifact Repo';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();
@@ -837,6 +838,8 @@ $lang->action->label->chartgroup   = 'Group';
 $lang->action->label->serverroom   = 'IDC|serverroom|browse|';
 $lang->action->label->host         = 'Host|host|view|id=%s';
 $lang->action->label->account      = "Account|account|view|id=%s";
+$lang->action->label->instance     = 'Application|instance|view|id=%s';
+$lang->action->label->artifactrepo = 'Artifact Repo|artifactrepo|browse|';
 
 /* Object type. */
 $lang->action->search = new stdclass();

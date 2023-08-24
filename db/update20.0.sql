@@ -124,6 +124,24 @@ CREATE TABLE IF NOT EXISTS `zt_solution` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- DROP TABLE IF EXISTS `zt_artifactrepo`;
+CREATE TABLE `zt_artifactrepo` (
+  `id` smallint(8) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) CHARACTER SET utf8 NOT NULL,
+  `products` varchar(1000) CHARACTER SET utf8 NOT NULL,
+  `serverID` smallint(8) NOT NULL,
+  `repoName` varchar(45) CHARACTER SET utf8 NOT NULL,
+  `format` varchar(10) CHARACTER SET utf8 NOT NULL,
+  `type` char(7) CHARACTER SET utf8 NOT NULL,
+  `status` varchar(10) CHARACTER SET utf8 NOT NULL,
+  `createdBy` varchar(30) CHARACTER SET utf8 NOT NULL,
+  `createdDate` datetime DEFAULT CURRENT_TIMESTAMP,
+  `editedBy` varchar(30) CHARACTER SET utf8 NOT NULL,
+  `editedDate` datetime DEFAULT CURRENT_TIMESTAMP,
+  `deleted` tinyint(4) UNSIGNED NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE IF NOT EXISTS `zt_session` (
     `id` varchar(32) NOT NULL,
     `data` mediumtext,
