@@ -580,120 +580,25 @@ class testcase extends control
             return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => $this->createLink('testcase', 'view', "caseID={$caseID}")));
         }
 
-        /* 处理单元测试用例列表的标签。*/
-        if($case->auto == 'unit')
-        {
-            $this->lang->testcase->subMenu->testcase->feature['alias']  = '';
-            $this->lang->testcase->subMenu->testcase->unit['alias']     = 'view';
-            $this->lang->testcase->subMenu->testcase->unit['subModule'] = 'testcase';
-        }
+        $case = $this->testcaseZen->preProcessForEdit($case);
 
-        /* 初始化用例步骤。*/
-        if(empty($case->steps))
-        {
-            $step = new stdclass();
-            $step->type   = 'step';
-            $step->desc   = '';
-            $step->expect = '';
-            $case->steps[] = $step;
-        }
-
-        $isLibCase = ($case->lib && empty($case->product));
-        /* 用例库用例。*/
-        if($isLibCase)
+        if($case->lib && empty($case->product))
         {
             $productID = isset($this->session->product) ? $this->session->product : 0;
             $libraries = $this->loadModel('caselib')->getLibraries();
-            $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->caselib->setLibMenu($libraries, $case->lib);
 
-            $this->view->title            = "CASE #$case->id $case->title - " . $libraries[$case->lib];
-            $this->view->libID            = $case->lib;
-            $this->view->libName          = $libraries[$case->lib];
-            $this->view->libraries        = $libraries;
-            $this->view->moduleOptionMenu = $this->tree->getOptionMenu($case->lib, $viewType = 'caselib', $startModuleID = 0);
+            $this->testcaseZen->setMenuForLibCaseEdit($case, $libraries);
+            $this->testcaseZen->assignForEditLibCase($case, $libraries);
         }
         else
-        /* 非用例库用例。*/
         {
             $productID = $case->product;
-            $product   = $this->product->getByID($productID);
-            if(!isset($this->products[$productID])) $this->products[$productID] = $product->name;
 
-            /* Set menu. */
-            if($this->app->tab == 'project') $this->loadModel('project')->setMenu($case->project);
-            if($this->app->tab == 'execution')
-            {
-                if(!$executionID) $executionID = $case->execution;
-                $this->loadModel('execution')->setMenu($executionID);
-            }
-            if($this->app->tab == 'qa') $this->testcase->setMenu($this->products, $productID, $case->branch);
-
-            $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $case->branch);
-            if($case->lib && $case->fromCaseID)
-            {
-                $libName    = $this->loadModel('caselib')->getByID($case->lib)->name;
-                $libModules = $this->tree->getOptionMenu($case->lib, 'caselib');
-                foreach($libModules as $moduleID => $moduleName)
-                {
-                    if($moduleID == 0) continue;
-                    $moduleOptionMenu[$moduleID] = $libName . $moduleName;
-                }
-            }
-
-            if(!isset($moduleOptionMenu[$case->module])) $moduleOptionMenu += $this->tree->getModulesName((array)$case->module);
-
-            /* Get product and branches. */
-            if($this->app->tab == 'execution' || $this->app->tab == 'project') $objectID = $this->app->tab == 'project' ? $case->project : $executionID;
-
-            /* Display status of branch. */
-            $branches = $this->loadModel('branch')->getList($productID, isset($objectID) ? $objectID : 0, 'all');
-            $branchTagOption = array();
-            foreach($branches as $branchInfo) $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
-
-            if(!isset($branchTagOption[$case->branch]))
-            {
-                $caseBranch = $this->branch->getByID($case->branch, $case->product, '');
-                $branchTagOption[$case->branch] = $case->branch == BRANCH_MAIN ? $caseBranch : ($caseBranch->name . ($caseBranch->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : ''));
-            }
-
-            $moduleIdList = $case->module;
-            if($case->module) $moduleIdList = $this->tree->getAllChildID($case->module);
-
-            if($this->app->tab == 'execution')
-            {
-                $stories = $this->loadModel('story')->getExecutionStoryPairs($case->execution, $productID, $case->branch, $moduleIdList);
-            }
-            else
-            {
-                $stories = $this->loadModel('story')->getProductStoryPairs($productID, $case->branch, $moduleIdList, 'all','id_desc', 0, 'full', 'story', false);
-            }
-
-            $this->view->productID        = $productID;
-            $this->view->product          = $product;
-            $this->view->products         = $this->products;
-            $this->view->branchTagOption  = $branchTagOption;
-            $this->view->productName      = $this->products[$productID];
-            $this->view->moduleOptionMenu = $moduleOptionMenu;
-            $this->view->stories          = $stories;
+            $this->testcaseZen->setMenuForCaseEdit($case);
+            $this->testcaseZen->assignForEditCase($case);
         }
 
-        $sceneOptionMenu = $this->testcase->getSceneMenu($productID, $case->module, $viewType = 'case', $startSceneID = 0,  0 );
-        if(!isset($sceneOptionMenu[$case->scene])) $sceneOptionMenu += $this->testcase->getScenesName($case->scene);
-
-        $forceNotReview = $this->testcase->forceNotReview();
-        if($forceNotReview) unset($this->lang->testcase->statusList['wait']);
-
-        $this->view->title           = $title;
-        $this->view->currentModuleID = $case->module;
-        $this->view->users           = $this->user->getPairs('noletter');
-        $this->view->case            = $case;
-        $this->view->actions         = $this->loadModel('action')->getList('case', $caseID);
-        $this->view->isLibCase       = $isLibCase;
-        $this->view->forceNotReview  = $forceNotReview;
-        $this->view->testtasks       = $testtasks;
-        $this->view->sceneOptionMenu = $sceneOptionMenu;
-        $this->view->currentSceneID  = $case->scene;
-
+        $this->testcaseZen->assignForEdit($productID, $case, $testtasks);
         $this->display();
     }
 

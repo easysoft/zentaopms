@@ -17,7 +17,7 @@ jsVar('executionID', $case->execution);
 
 set::title($lang->testcase->edit);
 
-$rootID   = $isLibCase ? $libID : $productID;
+$rootID   = $isLibCase ? $case->lib : $case->product;
 $viewType = $isLibCase ? 'caselib' : 'product';
 $createModuleLink = createLink('tree', 'browse', "rootID={$rootID}&view={$viewType}&currentModuleID=0&branch={$case->branch}");
 
@@ -105,7 +105,7 @@ detailBody
                 (
                     set::name('scene'),
                     set::items($sceneOptionMenu),
-                    set::value($currentSceneID),
+                    set::value($case->scene),
                     set::required(true),
                 )
             )
@@ -165,7 +165,7 @@ detailBody
                 (
                     set::name('lib'),
                     set::items($libraries),
-                    set::value($libID),
+                    set::value($case->lib),
                 )
             ) : item
             (
@@ -178,7 +178,7 @@ detailBody
                         setID('product'),
                         set::name('product'),
                         set::items($products),
-                        set::value($productID),
+                        set::value($case->product),
                     ),
                     isset($product->type) && $product->type != 'normal' ? picker
                     (
@@ -200,7 +200,7 @@ detailBody
                         setID('module'),
                         set::name('module'),
                         set::items($moduleOptionMenu),
-                        set::value($currentModuleID),
+                        set::value($case->module),
                         set::required(true),
                     ),
                     count($moduleOptionMenu) == 1 ? span

@@ -413,6 +413,227 @@ class testcaseZen extends testcase
     }
 
     /**
+     * 提前处理用例数据。
+     * Preprocess case.
+     *
+     * @param  object    $case
+     * @access protected
+     * @return object
+     */
+    protected function preProcessForEdit(object $case): object
+    {
+        /* 处理单元测试用例列表的标签。*/
+        /* Process the sub menu of unit test case. */
+        if($case->auto == 'unit')
+        {
+            $this->lang->testcase->subMenu->testcase->feature['alias']  = '';
+            $this->lang->testcase->subMenu->testcase->unit['alias']     = 'view';
+            $this->lang->testcase->subMenu->testcase->unit['subModule'] = 'testcase';
+        }
+
+        /* 初始化用例步骤。*/
+        /* Unit the steps of case. */
+        if(empty($case->steps))
+        {
+            $step = new stdclass();
+            $step->type   = 'step';
+            $step->desc   = '';
+            $step->expect = '';
+            $case->steps[] = $step;
+        }
+
+        return $case;
+    }
+
+    /**
+     * 设置编辑用例库用例的导航。
+     * Set menu for editing lib case.
+     *
+     * @param  object    $case
+     * @param  array     $libraries
+     * @access protected
+     * @return void
+     */
+    protected function setMenuForLibCaseEdit(object $case, array $libraries): void
+    {
+        if($this->app->tab == 'project')
+        {
+            $this->loadModel('project')->setMenu($this->session->project);
+        }
+        else
+        {
+            $this->caselib->setLibMenu($libraries, $case->lib);
+        }
+    }
+
+    /**
+     * 设置编辑用例的导航。
+     * Set menu for editing case.
+     *
+     * @param  object    $case
+     * @access protected
+     * @return void
+     */
+    protected function setMenuForCaseEdit(object $case): void
+    {
+        if($this->app->tab == 'project') $this->loadModel('project')->setMenu($case->project);
+
+        if($this->app->tab == 'execution')
+        {
+            if(!$executionID) $executionID = $case->execution;
+            $this->loadModel('execution')->setMenu($executionID);
+        }
+
+        if($this->app->tab == 'qa') $this->testcase->setMenu($this->products, $case->product, $case->branch);
+    }
+
+    /**
+     * 指定编辑用例库用例的数据。
+     * Assign data for editint lib case.
+     *
+     * @param  object    $case
+     * @param  array     $libraries
+     * @access protected
+     * @return void
+     */
+    protected function assignForEditLibCase(object $case, array $libraries): void
+    {
+        $this->view->title            = "CASE #$case->id $case->title - " . $libraries[$case->lib];
+        $this->view->isLibCase        = true;
+        $this->view->libraries        = $libraries;
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($case->lib, $viewType = 'caselib', $startModuleID = 0);
+    }
+
+    /**
+     * 指定编辑用例的数据。
+     * Assign for editing case.
+     *
+     * @param  object    $case
+     * @access protected
+     * @return void
+     */
+    protected function assignForEditCase(object $case): void
+    {
+        $product = $this->product->getByID($case->product);
+        if(!isset($this->products[$case->product])) $this->products[$case->product] = $product->name;
+
+        $this->view->title     = $this->products[$case->product] . $this->lang->colon . $this->lang->testcase->edit;
+        $this->view->isLibCase = false;
+        $this->view->product   = $product;
+        $this->view->products  = $this->products;
+
+        $this->assignBranchForEdit($case);
+        $this->assignStoriesForEdit($case);
+        $this->assignModuleOptionMenuForEdit($case);
+    }
+
+    /**
+     * 指定编辑用例的分支。
+     * Assign branch data for editing case.
+     *
+     * @param  object  $case
+     * @access private
+     * @return void
+     */
+    private function assignBranchForEdit(object $case): void
+    {
+        $objectID = 0;
+        if($this->app->tab == 'execution') $objectID = $executionID;
+        if($this->app->tab == 'project')   $objectID = $case->project;
+
+        $branches = $this->loadModel('branch')->getList($case->product, $objectID, 'all');
+        $branchTagOption = array();
+        foreach($branches as $branchInfo) $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+
+        if(!isset($branchTagOption[$case->branch]))
+        {
+            $caseBranch = $this->branch->getByID($case->branch, $case->product, '');
+            $branchTagOption[$case->branch] = $case->branch == BRANCH_MAIN ? $caseBranch : ($caseBranch->name . ($caseBranch->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : ''));
+        }
+
+        $this->view->branchTagOption = $branchTagOption;
+    }
+
+    /**
+     * 指定编辑用例的需求。
+     * Assign stories for editing case.
+     *
+     * @param  object  $case
+     * @access private
+     * @return void
+     */
+    private function assignStoriesForEdit(object $case): void
+    {
+        $moduleIdList = array();
+        if($case->module) $moduleIdList = $this->tree->getAllChildID($case->module);
+
+        if($this->app->tab == 'execution')
+        {
+            $stories = $this->loadModel('story')->getExecutionStoryPairs($case->execution, $case->product, $case->branch, $moduleIdList);
+        }
+        else
+        {
+            $stories = $this->loadModel('story')->getProductStoryPairs($case->product, $case->branch, $moduleIdList, 'all','id_desc', 0, 'full', 'story', false);
+        }
+
+        $this->view->stories = $stories;
+    }
+
+    /**
+     * 指定编辑用的模块选项。
+     * Assign module option menu for editing case.
+     *
+     * @param  object  $case
+     * @access private
+     * @return void
+     */
+    private function assignModuleOptionMenuForEdit(object $case): void
+    {
+        $moduleOptionMenu = $this->tree->getOptionMenu($case->product, $viewType = 'case', $startModuleID = 0, $case->branch);
+
+        if($case->lib && $case->fromCaseID)
+        {
+            $lib        = $this->loadModel('caselib')->getByID($case->lib);
+            $libModules = $this->tree->getOptionMenu($case->lib, 'caselib');
+            foreach($libModules as $moduleID => $moduleName)
+            {
+                if($moduleID == 0) continue;
+                $moduleOptionMenu[$moduleID] = $lib->name . $moduleName;
+            }
+        }
+
+        if(!isset($moduleOptionMenu[$case->module])) $moduleOptionMenu += $this->tree->getModulesName((array)$case->module);
+
+        $this->view->moduleOptionMenu = $moduleOptionMenu;
+    }
+
+    /**
+     * 指定编辑用例的其他数据。
+     * Assign other data for editing case.
+     *
+     * @param  int       $productID
+     * @param  object    $case
+     * @param  array     $testtasks
+     * @access protected
+     * @return void
+     */
+    protected function assignForEdit(int $productID, object $case, array $testtasks): void
+    {
+        $sceneOptionMenu = $this->testcase->getSceneMenu($productID, $case->module, $viewType = 'case', $startSceneID = 0, 0);
+        if(!isset($sceneOptionMenu[$case->scene])) $sceneOptionMenu += $this->testcase->getScenesName($case->scene);
+
+        $forceNotReview = $this->testcase->forceNotReview();
+        if($forceNotReview) unset($this->lang->testcase->statusList['wait']);
+
+        $this->view->case            = $case;
+        $this->view->testtasks       = $testtasks;
+        $this->view->forceNotReview  = $forceNotReview;
+        $this->view->sceneOptionMenu = $sceneOptionMenu;
+        $this->view->users           = $this->user->getPairs('noletter');
+        $this->view->actions         = $this->loadModel('action')->getList('case', $case->id);
+    }
+
+    /**
      * Assign testcase related variables.
      *
      * @param  object    $case
