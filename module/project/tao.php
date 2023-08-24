@@ -211,13 +211,14 @@ class projectTao extends projectModel
      *
      * @param  array     $members
      * @param  int       $projectID
+     * @param  array     $oldJoin
      * @access protected
      * @return array
      */
-    protected function insertMember(array $members, int $projectID): array
+    protected function insertMember(array $members, int $projectID, array $oldJoin): array
     {
         $accounts = array();
-        foreach($members as $key => $member)
+        foreach($members as $member)
         {
             if(empty($member->accounts)) continue;
             $account    = $member->accounts;

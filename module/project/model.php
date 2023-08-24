@@ -1400,7 +1400,6 @@ class projectModel extends model
         foreach($projects as $projectID => $project)
         {
             $oldProject = $oldProjects[$projectID];
-            $parentID   = !isset($project->parent) ? $oldProject->parent : $project->parent;
 
             $this->projectTao->doUpdate($projectID, $project);
 
@@ -1700,19 +1699,19 @@ class projectModel extends model
 
             if(!empty($project->days) and (int)$member->days > $project->days)
             {
-                dao::$errors['days'] = sprintf($this->lang->project->daysGreaterProject, $project->days);
+                dao::$errors["days{$key}"] = sprintf($this->lang->project->daysGreaterProject, $project->days);
                 return false;
             }
             if((float)$member->hours > 24)
             {
-                dao::$errors['hours'] = $this->lang->project->errorHours;
+                dao::$errors["hours{$key}"] = $this->lang->project->errorHours;
                 return false;
             }
         }
 
         $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq('project')->exec();
 
-        $accounts = $this->projectTao->insertMember($members, $projectID);
+        $accounts = $this->projectTao->insertMember($members, $projectID, $oldJoin);
         $this->projectTao->updateMemberView($projectID, $accounts, $oldJoin);
 
         /* Remove execution members. */
