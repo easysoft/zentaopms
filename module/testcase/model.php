@@ -803,161 +803,117 @@ class testcaseModel extends model
      * @access public
      * @return void
      */
-    public function update($caseID, $testtasks = array())
+    public function update($case, $testtasks = array())
     {
-        $steps   = $this->post->steps ? $this->post->steps : array();
-        $expects = $this->post->expects ? $this->post->expects : array();
-        foreach($expects as $key => $value)
-        {
-            if(!empty($value) and empty($steps[$key]))
-            {
-                dao::$errors[] = sprintf($this->lang->testcase->stepsEmpty, $key);
-                return false;
-            }
-        }
-
-        $now     = helper::now();
-        $oldCase = $this->getById($caseID);
-
-        $result = $this->getStatus('update', $oldCase);
-        if(!$result or !is_array($result)) return $result;
-
-        list($stepChanged, $status) = $result;
-
-        $version = $stepChanged ? (int)$oldCase->version + 1 : (int)$oldCase->version;
-
-        if(!empty($_POST['auto']))
-        {
-            $_POST['auto'] = 'auto';
-            if($_POST['script']) $_POST['script'] = htmlentities($_POST['script']);
-        }
-        else
-        {
-            $_POST['auto']   = 'no';
-            $_POST['script'] = '';
-        }
-
-        $case = fixer::input('post')
-            ->add('id', $caseID)
-            ->add('version', $version)
-            ->setIF($this->post->story != false and $this->post->story != $oldCase->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
-            ->setIF(!$this->post->linkCase, 'linkCase', '')
-            ->setDefault('lastEditedBy',   $this->app->user->account)
-            ->add('lastEditedDate', $now)
-            ->setDefault('story,branch', 0)
-            ->setDefault('stage', '')
-            ->setDefault('deleteFiles', array())
-            ->join('stage', ',')
-            ->join('linkCase', ',')
-            ->setForce('status', $status)
-            ->cleanInt('story,product,branch,module')
-            ->stripTags($this->config->testcase->editor->edit['id'], $this->config->allowedTags)
-            ->remove('comment,steps,expects,files,labels,linkBug,stepType,scriptFile,scriptName')
-            ->get();
-
         $requiredFields = $this->config->testcase->edit->requiredFields;
         if($oldCase->lib != 0)
         {
             /* Remove the require field named story when the case is a lib case.*/
             $requiredFields = str_replace(',story,', ',', ",$requiredFields,");
         }
-        $case = $this->loadModel('file')->processImgURL($case, $this->config->testcase->editor->edit['id'], $this->post->uid);
-        $this->dao->update(TABLE_CASE)->data($case, 'deleteFiles')->autoCheck()->batchCheck($requiredFields, 'notempty')->checkFlow()->where('id')->eq((int)$caseID)->exec();
-        if(!$this->dao->isError())
+
+        $this->dao->update(TABLE_CASE)->data($case, 'deleteFiles,uid,stepChanged')
+            ->autoCheck()
+            ->batchCheck($requiredFields, 'notempty')
+            ->checkFlow()
+            ->where('id')->eq((int)$case->id)
+            ->exec();
+
+        if(dao::isError()) return false;
+
+        $this->updateCase2Project($oldCase, $case, $caseID);
+
+        if($case->stepChanged)
         {
-            $this->updateCase2Project($oldCase, $case, $caseID);
-
-            if($stepChanged)
+            $parentStepID = 0;
+            $isLibCase    = ($oldCase->lib and empty($oldCase->product));
+            if($isLibCase)
             {
-                $parentStepID = 0;
-                $isLibCase    = ($oldCase->lib and empty($oldCase->product));
-                if($isLibCase)
-                {
-                    $fromcaseVersion = $this->dao->select('fromCaseVersion')->from(TABLE_CASE)->where('fromCaseID')->eq($caseID)->fetch('fromCaseVersion');
-                    $fromcaseVersion = (int)$fromcaseVersion + 1;
-                    $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($fromcaseVersion)->where('`fromCaseID`')->eq($caseID)->exec();
-                }
-
-                /* Ignore steps when post has no steps. */
-                if($this->post->steps)
-                {
-                    $data = fixer::input('post')->get();
-                    $this->testcaseTao->insertSteps($caseID, $data->steps, $data->expects, (array)$data->stepType);
-                }
-                else
-                {
-                    foreach($oldCase->steps as $step)
-                    {
-                        unset($step->id);
-                        $step->version = $version;
-                        $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
-                    }
-                }
+                $fromcaseVersion = $this->dao->select('fromCaseVersion')->from(TABLE_CASE)->where('fromCaseID')->eq($caseID)->fetch('fromCaseVersion');
+                $fromcaseVersion = (int)$fromcaseVersion + 1;
+                $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($fromcaseVersion)->where('`fromCaseID`')->eq($caseID)->exec();
             }
 
-            /* Link bugs to case. */
-            $this->post->linkBug = $this->post->linkBug ? $this->post->linkBug : array();
-            $linkedBugs = array_keys($oldCase->toBugs);
-            $linkBugs   = $this->post->linkBug;
-            $newBugs    = array_diff($linkBugs, $linkedBugs);
-            $removeBugs = array_diff($linkedBugs, $linkBugs);
-
-            if($newBugs)
+            /* Ignore steps when post has no steps. */
+            if($this->post->steps)
             {
-                foreach($newBugs as $bugID)
-                {
-                    $this->dao->update(TABLE_BUG)
-                        ->set('`case`')->eq($caseID)
-                        ->set('caseVersion')->eq($case->version)
-                        ->set('`story`')->eq($case->story)
-                        ->set('storyVersion')->eq($case->storyVersion)
-                        ->where('id')->eq($bugID)->exec();
-                }
-            }
-
-            if($removeBugs)
-            {
-                foreach($removeBugs as $bugID)
-                {
-                    $this->dao->update(TABLE_BUG)
-                        ->set('`case`')->eq(0)
-                        ->set('caseVersion')->eq(0)
-                        ->set('`story`')->eq(0)
-                        ->set('storyVersion')->eq(0)
-                        ->where('id')->eq($bugID)->exec();
-                }
-            }
-
-            /* Join the steps to diff. */
-            if($stepChanged and $this->post->steps)
-            {
-                $oldCase->steps = $this->joinStep($oldCase->steps);
-                $case->steps    = $this->joinStep($this->getById($caseID, $version)->steps);
+                $data = fixer::input('post')->get();
+                $this->testcaseTao->insertSteps($caseID, $data->steps, $data->expects, (array)$data->stepType);
             }
             else
             {
-                unset($oldCase->steps);
-            }
-
-            if($case->branch and !empty($testtasks))
-            {
-                $this->loadModel('action');
-                foreach($testtasks as $taskID => $testtask)
+                foreach($oldCase->steps as $step)
                 {
-                    if($testtask->branch != $case->branch and $taskID)
-                    {
-                        $this->dao->delete()->from(TABLE_TESTRUN)
-                            ->where('task')->eq($taskID)
-                            ->andWhere('`case`')->eq($caseID)
-                            ->exec();
-                        $this->action->create('case' ,$caseID, 'unlinkedfromtesttask', '', $taskID);
-                    }
+                    unset($step->id);
+                    $step->version = $version;
+                    $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
                 }
             }
-
-            $this->file->processFile4Object('testcase', $oldCase, $case);
-            return common::createChanges($oldCase, $case);
         }
+
+        /* Link bugs to case. */
+        $this->post->linkBug = $this->post->linkBug ? $this->post->linkBug : array();
+        $linkedBugs = array_keys($oldCase->toBugs);
+        $linkBugs   = $this->post->linkBug;
+        $newBugs    = array_diff($linkBugs, $linkedBugs);
+        $removeBugs = array_diff($linkedBugs, $linkBugs);
+
+        if($newBugs)
+        {
+            foreach($newBugs as $bugID)
+            {
+                $this->dao->update(TABLE_BUG)
+                    ->set('`case`')->eq($caseID)
+                    ->set('caseVersion')->eq($case->version)
+                    ->set('`story`')->eq($case->story)
+                    ->set('storyVersion')->eq($case->storyVersion)
+                    ->where('id')->eq($bugID)->exec();
+            }
+        }
+
+        if($removeBugs)
+        {
+            foreach($removeBugs as $bugID)
+            {
+                $this->dao->update(TABLE_BUG)
+                    ->set('`case`')->eq(0)
+                    ->set('caseVersion')->eq(0)
+                    ->set('`story`')->eq(0)
+                    ->set('storyVersion')->eq(0)
+                    ->where('id')->eq($bugID)->exec();
+            }
+        }
+
+        /* Join the steps to diff. */
+        if($stepChanged and $this->post->steps)
+        {
+            $oldCase->steps = $this->joinStep($oldCase->steps);
+            $case->steps    = $this->joinStep($this->getById($caseID, $version)->steps);
+        }
+        else
+        {
+            unset($oldCase->steps);
+        }
+
+        if($case->branch and !empty($testtasks))
+        {
+            $this->loadModel('action');
+            foreach($testtasks as $taskID => $testtask)
+            {
+                if($testtask->branch != $case->branch and $taskID)
+                {
+                    $this->dao->delete()->from(TABLE_TESTRUN)
+                        ->where('task')->eq($taskID)
+                        ->andWhere('`case`')->eq($caseID)
+                        ->exec();
+                    $this->action->create('case' ,$caseID, 'unlinkedfromtesttask', '', $taskID);
+                }
+            }
+        }
+
+        $this->file->processFile4Object('testcase', $oldCase, $case);
+
+        return common::createChanges($oldCase, $case);
     }
 
     /**

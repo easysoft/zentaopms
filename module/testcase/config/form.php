@@ -39,3 +39,28 @@ $config->testcase->form->batchCreate['precondition'] = array('required' => false
 $config->testcase->form->batchCreate['keywords']     = array('required' => false, 'type' => 'string', 'default' => '');
 $config->testcase->form->batchCreate['stage']        = array('required' => false, 'type' => 'string', 'default' => '');
 $config->testcase->form->batchCreate['review']       = array('required' => false, 'type' => 'int',    'default' => 0);
+
+$config->testcase->form->edit = array();
+$config->testcase->form->edit['product']      = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->testcase->form->edit['branch']       = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->testcase->form->edit['module']       = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->testcase->form->edit['story']        = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->testcase->form->edit['type']         = array('required' => false, 'type' => 'string', 'default' => '');
+$config->testcase->form->edit['auto']         = array('required' => false, 'type' => 'string', 'default' => '0');
+$config->testcase->form->edit['stage']        = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
+$config->testcase->form->edit['pri']          = array('required' => false, 'type' => 'int',    'default' => 3);
+$config->testcase->form->edit['status']       = array('required' => false, 'type' => 'string', 'default' => 'wait');
+$config->testcase->form->edit['keywords']     = array('required' => false, 'type' => 'string', 'default' => '');
+$config->testcase->form->edit['linkCase']     = array('required' => false, 'type' => 'array',  'default' => array(''));
+$config->testcase->form->edit['linkBug']      = array('required' => false, 'type' => 'array',  'default' => array(''));
+$config->testcase->form->edit['title']        = array('required' => true,  'type' => 'string', 'filter' => 'trim');
+$config->testcase->form->edit['color']        = array('required' => false, 'type' => 'string', 'default' => '');
+$config->testcase->form->edit['scene']        = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->testcase->form->edit['precondition'] = array('required' => false, 'type' => 'string', 'default' => '');
+$config->testcase->form->edit['steps']        = array('required' => false, 'type' => 'array',  'default' => array(''));
+$config->testcase->form->edit['expects']      = array('required' => false, 'type' => 'array',  'default' => array(''));
+$config->testcase->form->edit['stepType']     = array('required' => false, 'type' => 'array',  'default' => array(''));
+$config->testcase->form->edit['version']      = array('required' => false, 'type' => 'int',    'default' => 1);
+$config->testcase->form->edit['auto']         = array('required' => false, 'type' => 'string', 'default' => 'no');
+$config->testcase->form->edit['script']       = array('required' => false, 'type' => 'string', 'default' => '');
+$config->testcase->form->edit['comment']      = array('required' => false, 'type' => 'string', 'default' => '', 'control' => 'editor');

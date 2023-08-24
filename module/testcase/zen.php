@@ -38,6 +38,58 @@ class testcaseZen extends testcase
     }
 
     /**
+     * 处理更新请求数据。
+     * Processing request data.
+     *
+     * @param  form         $formData
+     * @param  object       $oldBug
+     * @access protected
+     * @return object|false
+     */
+    protected function prepareEditExtras(form $formData, object $oldCase): object|false
+    {
+        foreach($formData->data->expects as $key => $value)
+        {
+            if(!empty($value) && empty($steps[$key]))
+            {
+                dao::$errors[] = sprintf($this->lang->testcase->stepsEmpty, $key);
+                return false;
+            }
+        }
+
+        if(!empty($_FILES['scriptFile'])) unset($_FILES['scriptFile']);
+
+        $result = $this->testcase->getStatus('update', $oldCase);
+        if(!$result || !is_array($result)) return $result;
+
+        list($stepChanged, $status) = $result;
+
+        $case = $formData->add('id', $oldCase->id)
+            ->add('version', $stepChanged ? (int)$oldCase->version + 1 : (int)$oldCase->version)
+            ->add('lastEditedBy', $this->app->user->account)
+            ->add('lastEditedDate', helper::now())
+            ->add('stepChanged', $stepChanged)
+            ->setForce('status', $status)
+            ->setDefault('story,branch', 0)
+            ->setDefault('stage', '')
+            ->setDefault('deleteFiles', array())
+            ->setIF($formData->data->story != false && $formData->data->story != $oldCase->story, 'storyVersion', $this->loadModel('story')->getVersion($formData->data->story))
+            ->setIF(!$formData->data->linkCase, 'linkCase', '')
+            ->setIF($formData->data->auto, 'auto', 'auto')
+            ->setIF($formData->data->auto && $formData->data->script, 'script', htmlentities($formData->data->script))
+            ->setIF(!$formData->data->auto, 'auto', 'no')
+            ->setIF(!$formData->data->auto, 'script', '')
+            ->join('stage', ',')
+            ->join('linkCase', ',')
+            ->cleanInt('story,product,branch,module')
+            ->stripTags($this->config->testcase->editor->edit['id'], $this->config->allowedTags)
+            ->remove('comment,steps,expects,files,labels,linkBug,stepType,scriptFile,scriptName')
+            ->get();
+
+        return $this->loadModel('file')->processImgURL($case, $this->config->testcase->editor->edit['id'], $this->post->uid);
+    }
+
+    /**
      * 设置列表页面的 session。
      * Set Browse session.
      *

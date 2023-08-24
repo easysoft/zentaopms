@@ -550,16 +550,18 @@ class testcase extends control
 
         if(!empty($_POST))
         {
-            if(!empty($_FILES['scriptFile'])) unset($_FILES['scriptFile']);
+            $formData = form::data($this->config->testcase->form->edit);
+            $case     = $this->testcaseZen->prepareEditExtras($formData, $case);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $changes = array();
             if(!$comment)
             {
-                $changes = $this->testcase->update($caseID, $testtasks);
+                $changes = $this->testcase->update($case, $testtasks);
                 if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
 
-            if($this->post->comment != '' || !empty($changes))
+            if($this->post->comment || !empty($changes))
             {
                 $this->loadModel('action');
                 $action   = !empty($changes) ? 'Edited' : 'Commented';
@@ -574,7 +576,6 @@ class testcase extends control
             if(!$message) $message = $this->lang->saveSuccess;
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $caseID));
-
             return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => $this->createLink('testcase', 'view', "caseID={$caseID}")));
         }
 
