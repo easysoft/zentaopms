@@ -1014,7 +1014,7 @@ class taskTao extends taskModel
 
         if(helper::diffDate($start, $postData->startDate) > 0) dao::$errors[] = sprintf($this->lang->task->overEsStartDate, $typeLang, $typeLang);
         if(helper::diffDate($end, $postData->endDate) < 0)     dao::$errors[] = sprintf($this->lang->task->overEsEndDate, $typeLang, $typeLang);
-        return !dao::isError();
+        if(dao::getError()) return false;
 
         /* Update estimate started and deadline of a task. */
         $this->dao->update(TABLE_TASK)

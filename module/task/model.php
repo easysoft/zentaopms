@@ -2429,7 +2429,7 @@ class taskModel extends model
     {
         $action = strtolower($action);
         /* 父任务只能编辑和创建子任务。 Parent task only can edit task and create children. */
-        if($task->parent < 0 && !in_array($action, array('edit', 'batchcreate'))) return false;
+        if($task->parent < 0 && !in_array($action, array('edit', 'batchcreate', 'cancel'))) return false;
 
         /* 子任务和多人任务不能创建子任务。Multi task and child task cannot create children. */
         if($action == 'batchcreate' && (!empty($task->team) || $task->parent > 0)) return false;
@@ -2635,7 +2635,7 @@ class taskModel extends model
         $typeLang = $parentID ? $this->lang->programplan->parent : $this->lang->project->common;
         if(helper::diffDate($begin, $postData->startDate) > 0) dao::$errors[] = sprintf($this->lang->task->overEsStartDate, $typeLang, $typeLang);
         if(helper::diffDate($end, $postData->endDate) < 0) dao::$errors[] = sprintf($this->lang->task->overEsEndDate, $typeLang, $typeLang);
-        return !dao::isError();
+        if(dao::isError()) return false;
 
         $this->dao->update(TABLE_PROJECT)
             ->set('begin')->eq($postData->startDate)
