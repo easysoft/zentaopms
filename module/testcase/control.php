@@ -952,17 +952,20 @@ class testcase extends control
     /**
      * Batch review case.
      *
-     * @param  string $result
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function batchCaseTypeChange($result)
+    public function batchCaseTypeChange(string $type)
     {
-        if(!$this->post->caseIdList) return print(js::locate($this->session->caseList, 'parent'));
-        $caseIdList = array_unique($this->post->caseIdList);
-        $this->testcase->batchCaseTypeChange($caseIdList, $result);
+        $caseIdList = zget($_POST, 'caseIdList',  array());
+        if($caseIdList)
+        {
+            $this->testcase->batchChangeCaseType($caseIdList, $type);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        }
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->caseList));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->caseList));
     }
 
     /**
