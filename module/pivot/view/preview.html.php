@@ -1,4 +1,4 @@
-<?php include '../../common/view/header.html.php';?>
+<?php include $this->app->getModuleRoot() . 'common/view/header.html.php';?>
 <script>
 $('#subNavbar li').not('[data-id=<?php echo $groupID;?>]').removeClass('active');
 </script>
@@ -62,4 +62,4 @@ $('#subNavbar li').not('[data-id=<?php echo $groupID;?>]').removeClass('active')
     <?php endif;?>
   </div>
 </div>
-<?php include '../../common/view/footer.html.php';?>
+<?php include $this->app->getModuleRoot() . 'common/view/footer.html.php';?>
