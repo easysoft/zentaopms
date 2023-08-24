@@ -414,6 +414,31 @@ class Project
     }
 
     /**
+     * Test build search form.
+     *
+     * @param  int    $queryID
+     * @access public
+     * @return void
+     */
+    public function buildProjectBuildSearchFormTest(int $projectID, int $productID, string $type)
+    {
+        global $app, $config;
+        unset($config->build->search['module']);
+        unset($config->build->search['fields']['branch']);
+        unset($config->build->search['fields']['execution']);
+
+        $app->rawModule = 'projectBuild';
+        $app->rawMethod = 'browse';
+        $result = $this->project->buildProjectBuildSearchForm(array(), 0, $projectID, $productID, $type);
+        if(!$result) return false;
+
+        $result = array($config->build->search['module']);
+        if(isset($config->build->search['fields']['branch']))    $result[] = 'branch';
+        if(isset($config->build->search['fields']['execution'])) $result[] = 'execution';
+        return implode('|', $result);
+    }
+
+    /**
      * 创建项目后，创建默认的项目主库。
      * Create doclib after create a project.
      *
