@@ -220,12 +220,16 @@ class block extends control
             /* 根据表单中选择的宽度匹配配置项中的高度。 */
             if(!empty($this->config->block->size[$formData->module][$formData->code][$formData->width])) $formData->height = $this->config->block->size[$formData->module][$formData->code][$formData->width];
 
+            /* 根据区块ID获取更新前区块信息，判断区块宽度是否发生变化。 */
+            $block  = $this->block->getByID($blockID);
+            $isWidthChanged = $block->width != $formData->width;
+
             /* 执行区块的数据变更并且返回数据给view层。 */
             $this->block->update($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('score')->create('block', 'set');
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "$('#dashboard').dashboard('load', '$blockID')", 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => $isWidthChanged ? "loadComponent('#dashboard')" : "$('#dashboard').dashboard('load', '$blockID')", 'closeModal' => true));
         }
 
         $block  = $this->block->getByID($blockID);    // 根据区块ID获取区块信息。
