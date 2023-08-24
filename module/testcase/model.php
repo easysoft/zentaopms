@@ -539,11 +539,13 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getByList(array $caseIdList = array(), string $query = ''): array
+    public function getByList(array $caseIdList, string $query = ''): array
     {
+        if(!$caseIdList) return array();
+
         return $this->dao->select('*')->from(TABLE_CASE)
             ->where('deleted')->eq(0)
-            ->beginIF($caseIdList)->andWhere('id')->in($caseIdList)->fi()
+            ->andWhere('id')->in($caseIdList)
             ->beginIF($query)->andWhere($query)->fi()
             ->fetchAll('id');
     }
