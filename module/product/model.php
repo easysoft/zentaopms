@@ -1806,4 +1806,46 @@ class productModel extends model
             'url'  => helper::createLink($module, $method, $params, '', $onlyBody)
         );
     }
+
+    /**
+     * Build roadmap for UI.
+     *
+     * @param  array  $roadmaps
+     * @param  int    $branchKey
+     * @access public
+     * @return array
+     */
+    public function buildRoadmapForUI(array $roadmaps, int $branchKey = 0): array
+    {
+        unset($roadmaps['total']);
+
+        $data = array();
+        foreach($roadmaps as $year => $yearRoadmaps)
+        {
+            if(!isset($yearRoadmaps[$branchKey])) continue;
+
+            foreach($yearRoadmaps[$branchKey] as $roadmapData)
+            {
+                $yearNodes = array();
+                foreach($roadmapData as $roadmap)
+                {
+                    $isPlan     = (isset($roadmap->begin) && isset($roadmap->end));
+                    $moduleName = $isPlan ? 'productplan' : 'release';
+                    $node       = array();
+                    $node['href']    = common::hasPriv($moduleName, 'view') ? helper::createLink($moduleName, 'view', "id={$roadmap->id}") : '###';
+                    $node['version'] = $isPlan ? $roadmap->title : $roadmap->name;
+                    $node['date']    = $isPlan ? $roadmap->begin . '~' . $roadmap->end : $roadmap->date;
+                    if(!empty($roadmap->marker)) $node['marker'] = true;
+                    $yearNodes[] = $node;
+                }
+
+                $count = count($yearNodes);
+                $cols  = 5;
+                $lines = array();
+                for($i = 0; $i * $cols < $count; $i ++) $lines[] = array_slice($yearNodes, $i * $cols, $cols);
+                $data[$year] = array_reverse($lines);
+            }
+        }
+        return $data;
+    }
 }

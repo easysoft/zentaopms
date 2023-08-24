@@ -81,10 +81,17 @@ class roadMap extends wg
         }
 
         global $lang;
+        if(!isset($lang->execution->iterationInfo))
+        {
+            global $app;
+            $app->loadLang('execution');
+        }
+        $iterationInfo = $lang->execution->iterationInfo;
+
         return div
         (
             setClass('release-path flex gap-6 items-end'),
-            $this->releaseHead($year, sprintf($lang->execution->iterationInfo, (string)$count)),
+            $this->releaseHead($year, sprintf($iterationInfo, (string)$count)),
             div
             (
                 setClass('grow'),
