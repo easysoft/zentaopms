@@ -931,7 +931,7 @@ class projectModel extends model
         if($model == 'waterfallplus') $model = array('waterfall', 'waterfallplus');
 
         /* Set first program to the project attribute. */
-        $model    = $model == 'all' ? array() : array($model);
+        $model    = $model == 'all' ? array() : (array)$model;
         $multiple = strpos($param, 'multiple') !== false;
         foreach($projects as $projectID => $project)
         {
