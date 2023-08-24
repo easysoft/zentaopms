@@ -9,7 +9,7 @@ $lang->metric->unit          = "单位";
 $lang->metric->code          = "代号";
 $lang->metric->desc          = "描述";
 $lang->metric->definition    = "定义";
-$lang->metric->formula       = "计算方式";
+$lang->metric->formula       = "计算规则";
 $lang->metric->when          = "收集方式";
 $lang->metric->createdBy     = "创建者";
 $lang->metric->implementedBy = "由谁实现";
@@ -19,6 +19,10 @@ $lang->metric->value         = "数值";
 $lang->metric->name          = "名称";
 $lang->metric->date          = "日期";
 $lang->metric->metricData    = "度量数据";
+
+$lang->metric->noDesc    = "暂无描述";
+$lang->metric->noFormula = "暂无计算规则";
+$lang->metric->noCalc    = "暂未实现度量项PHP算法";
 
 $lang->metric->legendBasicInfo  = '基本信息';
 $lang->metric->legendCreateInfo = '创建编辑信息';

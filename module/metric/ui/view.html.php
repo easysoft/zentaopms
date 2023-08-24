@@ -68,13 +68,13 @@ detailBody
         section
         (
             set::title($lang->metric->desc),
-            set::content($metric->desc),
+            set::content(empty(trim($metric->desc)) ? $lang->metric->noDesc : $metric->desc),
             set::useHtml(true)
         ),
         section
         (
             set::title($lang->metric->formula),
-            set::content($metric->definition),
+            set::content(empty(trim($metric->definition)) ? $lang->metric->noFormula : $metric->definition),
             set::useHtml(true)
         ),
         section
