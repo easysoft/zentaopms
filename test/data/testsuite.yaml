@@ -33,7 +33,7 @@ fields:
     format: ""
   - field: type
     note: "类型"
-    range: [public,private]{100},library
+    range: "[public,private]{100!},library"
     prefix: ""
     postfix: ""
     loop: 0
