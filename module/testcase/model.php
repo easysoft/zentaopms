@@ -1249,33 +1249,105 @@ class testcaseModel extends model
     }
 
     /**
-     * Batch change branch.
+     * Batch change branch of cases and scenes.
      *
-     * @param  array  $caseIDList
+     * @param  array  $caseIdList
+     * @param  array  $sceneIdList
      * @param  int    $branchID
      * @access public
-     * @return array
+     * @return bool
      */
-    public function batchChangeBranch($caseIDList, $branchID)
+    public function batchChangeBranch(array $caseIdList, array $sceneIdList, int $branchID): bool
     {
-        $now        = helper::now();
-        $allChanges = array();
-        $oldCases   = $this->getByList($caseIDList);
-        foreach($caseIDList as $caseID)
+        if($branchID < 0 || $branchID > 16777215) return false; // The branch column's data type is mediumint unsigned and its range is 0-16777215.
+
+        $caseIdList  = array_filter($caseIdList);
+        $sceneIdList = array_filter($sceneIdList);
+        if(!$caseIdList && !$sceneIdList) return false;
+
+        if($caseIdList)  $this->batchChangeCaseBranch($caseIdList, $branchID);
+        if($sceneIdList) $this->batchChangeSceneBranch($sceneIdList, $branchID);
+
+        return !dao::isError();
+    }
+
+    /**
+     * Batch change branch of cases.
+     *
+     * @param  array  $caseIdList
+     * @param  int    $branchID
+     * @access public
+     * @return bool
+     */
+    public function batchChangeCaseBranch(array $caseIdList, int $branchID): bool
+    {
+        if(!$caseIdList) return false;
+        if($branchID < 0 || $branchID > 16777215) return false; // The branch column's data type is mediumint unsigned and its range is 0-16777215.
+
+        $oldCases = $this->getByList($caseIdList, "branch != '{$branchID}'");
+        if(!$oldCases) return false;
+
+        $case = new stdclass();
+        $case->branch         = $branchID;
+        $case->lastEditedBy   = $this->app->user->account;
+        $case->lastEditedDate = helper::now();
+
+        $this->dao->update(TABLE_CASE)->data($case)->where('id')->in(array_keys($oldCases))->exec();
+        if(dao::isError()) return false;
+
+        $this->loadModel('action');
+
+        foreach($oldCases as $oldCase)
         {
-            $oldCase = $oldCases[$caseID];
-            if($branchID == $oldCase->branch) continue;
-
-            $case = new stdclass();
-            $case->lastEditedBy   = $this->app->user->account;
-            $case->lastEditedDate = $now;
-            $case->branch         = $branchID;
-
-            $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->where('id')->eq((int)$caseID)->exec();
-            if(!dao::isError()) $allChanges[$caseID] = common::createChanges($oldCase, $case);
+            $changes = common::createChanges($oldCase, $case);
+            if($changes)
+            {
+                $actionID = $this->action->create('case', $oldCase->id, 'edited');
+                $this->action->logHistory($actionID, $changes);
+            }
         }
 
-        return $allChanges;
+        return !dao::isError();
+    }
+
+    /**
+     * Batch change branch of scenes.
+     *
+     * @param  array  $sceneIdList
+     * @param  int    $branchID
+     * @access public
+     * @return bool
+     */
+    public function batchChangeSceneBranch(array $sceneIdList, int $branchID): bool
+    {
+        if(!$sceneIdList) return false;
+        if($branchID < 0 || $branchID > 16777215) return false; // The branch column's data type is mediumint unsigned and its range is 0-16777215.
+
+        $oldScenes = $this->getScenesByList($sceneIdList, "branch != '{$branchID}'");
+        if(!$oldScenes) return false;
+
+        $scene = new stdclass();
+        $scene->branch         = $branchID;
+        $scene->lastEditedBy   = $this->app->user->account;
+        $scene->lastEditedDate = helper::now();
+
+        $this->dao->update(TABLE_SCENE)->data($scene)->where('id')->in(array_keys($oldScenes))->exec();
+        if(dao::isError()) return false;
+
+        $this->loadModel('action');
+
+        foreach($oldScenes as $oldScene)
+        {
+            $changes = common::createChanges($oldScene, $scene);
+            if($changes)
+            {
+                $actionID = $this->action->create('scene', $oldScene->id, 'edited');
+                $this->action->logHistory($actionID, $changes);
+            }
+        }
+
+        return !dao::isError();
+    }
     }
 
     /**
