@@ -507,6 +507,19 @@ class testcaseTest
     }
 
     /**
+     * Test batch change branch of scenes.
+     *
+     * @param  array  $sceneIdList
+     * @param  int    $branchID
+     * @access public
+     * @return bool|array
+     */
+    public function batchChangeSceneBranchTest($sceneIdList, $branchID)
+    {
+        return $this->objectModel->batchChangeSceneBranch($sceneIdList, $branchID);
+    }
+
+    /**
      * Test batch change module.
      *
      * @param  array  $caseIDList
