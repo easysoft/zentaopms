@@ -110,6 +110,7 @@ class metric extends control
         $metric = $this->metric->getByID($metricID);
         $result = $this->metric->getResultByCode($metric->code);
 
+        $this->view->title          = $metric->name;
         $this->view->metric         = $metric;
         $this->view->result         = $result;
         $this->view->resultHeader   = $this->metricZen->getResultHeader($result);
