@@ -494,6 +494,19 @@ class testcaseTest
     }
 
     /**
+     * Test batch change branch of cases.
+     *
+     * @param  array  $caseIdList
+     * @param  int    $branchID
+     * @access public
+     * @return bool|array
+     */
+    public function batchChangeCaseBranchTest($caseIdList, $branchID)
+    {
+        return $this->objectModel->batchChangeCaseBranch($caseIdList, $branchID);
+    }
+
+    /**
      * Test batch change module.
      *
      * @param  array  $caseIDList
