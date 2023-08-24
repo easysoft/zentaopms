@@ -24,7 +24,7 @@ class count_of_project extends baseCalc
 {
     public $dataset = 'getAllProjects';
 
-    public $fieldList = array('id');
+    public $fieldList = array('t1.id');
 
     public $result = 0;
 

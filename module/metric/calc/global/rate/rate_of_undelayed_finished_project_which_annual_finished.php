@@ -24,7 +24,7 @@ class rate_of_undelayed_finished_project_which_annual_finished extends baseCalc
 {
     public $dataset = 'getAllProjects';
 
-    public $fieldList = array('status', 'closedDate', 'realEnd', 'firstEnd');
+    public $fieldList = array('t1.status', 't1.closedDate', 't1.realEnd', 't1.firstEnd');
 
     public function calculate($row)
     {

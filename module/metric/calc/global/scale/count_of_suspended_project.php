@@ -24,7 +24,7 @@ class count_of_suspended_project extends baseCalc
 {
     public $dataset = 'getAllProjects';
 
-    public $fieldList = array('status');
+    public $fieldList = array('t1.status');
 
     public $result = 0;
 

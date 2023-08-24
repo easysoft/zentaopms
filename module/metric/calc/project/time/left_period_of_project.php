@@ -24,7 +24,7 @@ class left_period_of_project extends baseCalc
 {
     public $dataset = 'getAllProjects';
 
-    public $fieldList = array('id', 'status', 'end');
+    public $fieldList = array('t1.id', 't1.status', 't1.end');
 
     public function calculate($row)
     {

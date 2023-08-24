@@ -24,7 +24,7 @@ class count_of_delayed_finished_project_which_finished extends baseCalc
 {
     public $dataset = 'getAllProjects';
 
-    public $fieldList = array('status', 'firstEnd', 'realEnd');
+    public $fieldList = array('t1.status', 't1.firstEnd', 't1.realEnd');
 
     public $result = 0;
 

@@ -24,7 +24,7 @@ class count_of_annual_created_project extends baseCalc
 {
     public $dataset = 'getAllProjects';
 
-    public $fieldList = array('openedDate');
+    public $fieldList = array('t1.openedDate');
 
     public function calculate($row)
     {

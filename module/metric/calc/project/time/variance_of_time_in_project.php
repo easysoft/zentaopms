@@ -24,7 +24,7 @@ class variance_of_time_in_project extends baseCalc
 {
     public $dataset = 'getAllProjects';
 
-    public $fieldList = array('id', 'begin', 'end', 'realBegan', 'realEnd', 'status');
+    public $fieldList = array('t1.id', 't1.begin', 't1.end', 't1.realBegan', 't1.realEnd', 't1.status');
 
     public function calculate($row)
     {

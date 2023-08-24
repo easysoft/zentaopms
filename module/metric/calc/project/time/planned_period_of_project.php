@@ -24,7 +24,7 @@ class planned_period_of_project extends baseCalc
 {
     public $dataset = 'getAllProjects';
 
-    public $fieldList = array('id', 'begin', 'end');
+    public $fieldList = array('t1.id', 't1.begin', 't1.end');
 
     public function calculate($row)
     {
