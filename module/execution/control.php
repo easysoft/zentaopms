@@ -1816,7 +1816,7 @@ class execution extends control
         $this->view->code                = $code;
         $this->view->team                = $team;
         $this->view->teams               = $this->execution->getCanCopyObjects((int)$projectID);
-        $this->view->allProjects         = $this->project->getPairsByModel('all', 0, 'noclosed,multiple');
+        $this->view->allProjects         = $this->project->getPairsByModel('all', 'noclosed,multiple');
         $this->view->copyProjects        = $copyProjects;
         $this->view->copyProjectID       = $copyProjectID;
         $this->view->copyExecutions      = $this->execution->getList($copyProjectID, 'all', 'all', 0, 0, 0, null, false);
@@ -2052,7 +2052,7 @@ class execution extends control
         $this->view->productPlans         = $productPlans;
         $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($linkedProducts), $execution->project, 'noclosed', $linkedBranchList);
         $this->view->teamMembers          = $this->execution->getTeamMembers($executionID);
-        $this->view->allProjects          = $this->project->getPairsByModel($project->model, 0, 'noclosed', $project->id);
+        $this->view->allProjects          = $this->project->getPairsByModel($project->model, 'noclosed', $project->id);
         $this->view->parentStageList      = isset($parentStageList) ? $parentStageList : array();
 
         $this->display();
@@ -2093,14 +2093,14 @@ class execution extends control
         {
             $projectID   = $this->session->project;
             $project     = $this->project->getById($projectID);
-            $allProjects = $this->project->getPairsByModel($project->model, 0, 'noclosed', isset($projectID) ? $projectID : 0);
+            $allProjects = $this->project->getPairsByModel($project->model, 'noclosed', isset($projectID) ? $projectID : 0);
             $this->project->setMenu($projectID);
             $this->view->project = $project;
             if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->lang->execution->common = $this->lang->execution->stage;
         }
         else
         {
-            $allProjects = $this->project->getPairsByModel('all', 0, 'noclosed', isset($projectID) ? $projectID : 0);
+            $allProjects = $this->project->getPairsByModel('all', 'noclosed', isset($projectID) ? $projectID : 0);
         }
 
         if(!$this->post->executionIDList) return print(js::locate($this->session->executionList, 'parent'));
