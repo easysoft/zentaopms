@@ -28,12 +28,13 @@ formPanel
     on::click('#refresh',  'clickRefresh'),
     to::headingActions(icon('cog-outline')),
     set::title($lang->testcase->create),
+    !empty($gobackLink) ? set::backUrl($gobackLink) : null,
     formRow
     (
         formGroup
         (
             set::width('1/3'),
-            set::class($hiddenProduct ? 'hidden' : ''),
+            setClass(!empty($product->shadow) ? 'hidden' : ''),
             set::label($lang->testcase->product),
             inputGroup
             (
@@ -42,7 +43,7 @@ formPanel
                     set::id('product'),
                     set::name('product'),
                     set::items($products),
-                    set::value($productID)
+                    set::value(!empty($case->product) ? $case->product :  $productID)
                 ),
                 isset($product->type) && $product->type != 'normal' ? picker
                 (
@@ -121,7 +122,7 @@ formPanel
                 set::id('type'),
                 set::name('type'),
                 set::items($lang->testcase->typeList),
-                set::value($type)
+                set::value($case->type)
             ),
         ),
         formGroup
@@ -131,6 +132,7 @@ formPanel
             (
                 set::name('auto'),
                 set::text($lang->testcase->automated),
+                set::checked($case->auto == 'auto'),
             )
         )
     ),
@@ -149,7 +151,7 @@ formPanel
                     set::name('stage[]'),
                     set::multiple(true),
                     set::items($lang->testcase->stageList),
-                    set::value($stage)
+                    set::value($case->stage)
                 )
             )
         )
@@ -168,16 +170,16 @@ formPanel
                     set::id('story'),
                     set::name('story'),
                     set::items($stories),
-                    set::value($storyID)
+                    set::value($case->story)
                 ),
                 span
                 (
                     set('class', 'input-group-addon'),
-                    set('class' , !$storyID ? 'hidden' : ''),
+                    set('class' , !$case->story ? 'hidden' : ''),
                     a
                     (
                         set::id('preview'),
-                        set::href(helper::createLink('story', 'view', "storyID={$storyID}")),
+                        set::href(helper::createLink('story', 'view', "storyID={$case->story}")),
                         set('data-toggle', 'modal'),
                         $lang->preview
                     )
@@ -198,7 +200,7 @@ formPanel
                 input
                 (
                     set::name('title'),
-                    set::value($caseTitle),
+                    set::value($case->title),
                 ),
                 set::suffixWidth('icon'),
                 to::suffix
@@ -206,7 +208,7 @@ formPanel
                     colorPicker
                     (
                         set::name('color'),
-                        set::value(''),
+                        set::value($case->color),
                         set::syncColor('#title')
                     )
                 )
@@ -221,7 +223,7 @@ formPanel
                 width('80px'),
                 set::name('pri'),
                 set::items($lang->testcase->priList),
-                set::value($pri)
+                set::value($case->pri)
             ),
         ),
         formGroup
@@ -246,7 +248,7 @@ formPanel
             set::label($lang->testcase->precondition),
             set::control(array('type' => 'textarea', 'rows' => 2)),
             set::name('precondition'),
-            set::value($precondition)
+            set::value($case->precondition)
         )
     ),
     formRow
@@ -254,7 +256,7 @@ formPanel
         formGroup
         (
             set::label($lang->testcase->steps),
-            stepsEditor()
+            stepsEditor(set::data($case->steps))
         )
     ),
     formRow
@@ -263,7 +265,7 @@ formPanel
         (
             set::label($lang->testcase->keywords),
             set::name('keywords'),
-            set::value($keywords)
+            set::value($case->keywords)
         )
     ),
     formRow

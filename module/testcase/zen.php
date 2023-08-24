@@ -97,6 +97,24 @@ class testcaseZen extends testcase
     }
 
     /**
+     * 设置菜单。
+     * Set menu.
+     *
+     * @param  int       $projectID
+     * @param  int       $executionID
+     * @param  int       $productID
+     * @param  string    $branch
+     * @access protected
+     * @return void
+     */
+    protected function setMenu(int $projectID, int $executionID, int $productID, string $branch)
+    {
+        if($this->app->tab == 'project') $this->loadModel('project')->setMenu($projectID);
+        if($this->app->tab == 'execution') $this->loadModel('execution')->setMenu($executionID);
+        if($this->app->tab == 'qa') $this->testcase->setMenu($this->products, $productID, $branch);
+    }
+
+    /**
      * 构建搜索表单。
      * Build the search form.
      *
@@ -118,6 +136,109 @@ class testcaseZen extends testcase
         $searchProducts = $this->product->getPairs('', 0, '', 'all');
 
         $this->testcase->buildSearchForm($productID, $searchProducts, $queryID, $actionURL, $projectID);
+    }
+
+    /**
+     * 展示创建 testcase 的相关变量。
+     * Show the variables associated with the creation testcase.
+     *
+     * @param int        $productID
+     * @param string     $branch
+     * @param int        $moduleID
+     * @param string     $from
+     * @param int        $param
+     * @param int        $storyID
+     * @access protected
+     * @return void
+     */
+    protected function assignCreateVars(int $productID, string $branch = '', int $moduleID = 0, string $from = '', int $param = 0, int $storyID = 0)
+    {
+        $product = $this->product->getById($productID);
+        if(!isset($this->products[$productID])) $this->products[$productID] = $product->name;
+
+        $executionID = $from == 'execution' ? $param : 0;
+        $testcaseID  = $from && strpos('testcase|work|contribute', $from) !== false ? $param : 0;
+
+        /* 设置分支。 */
+        /* Set branches. */
+        if($this->app->tab == 'project' || $this->app->tab == 'execution')
+        {
+            $objectID        = $this->app->tab == 'project' ? $this->session->project : $executionID;
+            $productBranches = isset($product->type) && $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct(array($productID), $objectID, 'noclosed|withMain') : array();
+            $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
+            $branch          = key($branches);
+        }
+        else
+        {
+            $branches = isset($product->type) && $product->type != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
+        }
+
+        /* 设置菜单。 */
+        /* Set menu. */
+        $this->setMenu((int)$this->session->project, (int)$this->session->execution, $productID, $branch);
+
+        /* 初始化用例数据。 */
+        /* Initialize the testcase. */
+        $case = $this->initTestcase($storyID, $testcaseID, $from == 'bug' ? $param : 0);
+
+        /* 设置模块和需求。 */
+        /* Set modules. */
+        $this->assignModulesAndStoiresForCreate($productID, $moduleID, $branch, $case->story, $branches);
+
+        $this->view->product        = $product;
+        $this->view->projectID      = isset($projectID) ? $projectID : 0;
+        $this->view->currentSceneID = $testcaseID > 0 ? $case->scene : (int)$this->cookie->lastCaseScene;
+        $this->view->case           = $case;
+        $this->view->executionID    = $executionID;
+        $this->view->branch         = $branch;
+        $this->view->branches       = $branches;
+    }
+
+    /**
+     * 展示创建 testcase 的需求和模块变量。
+     * Show the modules and stoires associated with the creation testcase.
+     *
+     * @param  int       $productID
+     * @param  int       $moduleID
+     * @param  string    $branch
+     * @param  int       $storyID
+     * @param  array     $branches
+     * @access protected
+     * @return void
+     */
+    protected function assignModulesAndStoiresForCreate(int $productID, int $moduleID, string $branch, int $storyID, array $branches)
+    {
+        if($storyID)
+        {
+            $story = $this->loadModel('story')->getByID($storyID);
+            if(empty($moduleID)) $moduleID = $story->module;
+        }
+
+        $currentModuleID = $moduleID ? (int)$moduleID : (int)$this->cookie->lastCaseModule;
+
+        $modules = array();
+        if($currentModuleID)
+        {
+            $productModules = $this->loadModel('tree')->getOptionMenu($productID, 'story');
+            $storyModuleID  = array_key_exists($currentModuleID, $productModules) ? $currentModuleID : 0;
+            $modules        = $this->tree->getStoryModule($storyModuleID);
+            $modules        = $this->tree->getAllChildID($modules);
+        }
+
+        /* 获取未关闭的需求。 */
+        /* Get the status of stories are not closed. */
+        $stories = $this->loadModel('story')->getProductStoryPairs($productID, $branch, $modules, 'active', 'id_desc', 50, 'full', 'story', false);
+        if($this->app->tab != 'qa' && $this->app->tab != 'product')
+        {
+            $projectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
+            $stories   = $this->story->getExecutionStoryPairs($projectID, $productID, $branch, $modules);
+        }
+        if($storyID && !isset($stories[$storyID])) $stories = $this->story->formatStories(array($storyID => $storyID)) + $stories;
+
+        $this->view->stories          = $stories;
+        $this->view->currentModuleID  = $currentModuleID;
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, 'case', 0, $branch === 'all' || !isset($branches[$branch]) ? 0 : $branch);
+        $this->view->sceneOptionMenu  = $this->testcase->getSceneMenu($productID, $moduleID, 'case', 0, $branch === 'all' || !isset($branches[$branch]) ? 0 : $branch);
     }
 
     /**
@@ -332,6 +453,28 @@ class testcaseZen extends testcase
     }
 
     /**
+     * 构建创建 testcase 页面数据。
+     * Build form fields for creating testcase.
+     *
+     * @param  string    $from
+     * @param  int       $param
+     * @access protected
+     * @return void
+     */
+    protected function buildCaseForCase(string $from, int $param): object
+    {
+        return form::data($this->config->testcase->form->create)
+            ->setIF($from == 'bug', 'fromBug', $param)
+            ->setIF($this->post->auto, 'auto', 'auto')
+            ->setIF($this->post->auto && $this->post->script, 'script', $this->post->script ? htmlentities($this->post->script) : '')
+            ->setIF($this->testcase->forceNotReview() || $this->post->forceNotReview, 'status', 'normal')
+            ->setIF($this->app->tab == 'project',   'project',   $this->session->project)
+            ->setIF($this->app->tab == 'execution', 'execution', $this->session->execution)
+            ->setIF($this->post->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
+            ->get();
+    }
+
+    /**
      * 创建测试用例前检验表单数据是否正确。
      * check from data for create case.
      *
@@ -359,6 +502,72 @@ class testcaseZen extends testcase
             return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->duplicate, $this->lang->testcase->common), 'locate' => $this->createLink('testcase', 'view', "caseID={$result['duplicate']}")));
         }
         return true;
+    }
+
+    /**
+     * 初始化用例数据。
+     * Initialize the testcase.
+     *
+     * @param  int       $storyID
+     * @param  int       $testcaseID
+     * @param  int       $bugID
+     * @access protected
+     * @return object
+     */
+    protected function initTestcase(int $storyID, int $testcaseID, int $bugID): object
+    {
+        /* 初始化用例。 */
+        /* Initialize the testcase. */
+        $case = new stdclass();
+        $case->type         = 'feature';
+        $case->stage        = '';
+        $case->pri          = 3;
+        $case->scene        = 0;
+        $case->story        = $storyID;
+        $case->title        = '';
+        $case->precondition = '';
+        $case->keywords     = '';
+        $case->steps        = array();
+        $case->color        = '';
+        $case->auto         = '';
+
+        /* 如果用例 id 大于 0，使用这个用例数据作为模板。 */
+        /* If testcaseID large than 0, use this testcase as template. */
+        if($testcaseID > 0)
+        {
+            $testcase = $this->testcase->getById($testcaseID);
+            $case->product      = $testcase->product;
+            $case->type         = $testcase->type ? $testcase->type : 'feature';
+            $case->stage        = $testcase->stage;
+            $case->pri          = $testcase->pri;
+            $case->scene        = $testcase->scene;
+            $case->story        = $testcase->story;
+            $case->title        = $testcase->title;
+            $case->precondition = $testcase->precondition;
+            $case->keywords     = $testcase->keywords;
+            $case->steps        = $testcase->steps;
+            $case->color        = $testcase->color;
+            $case->auto         = $testcase->auto;
+        }
+
+        /* 如果 bug id 大于 0，使用这个 bug 数据作为模板。 */
+        /* If bugID large than 0, use this bug as template. */
+        if($bugID > 0)
+        {
+            $bug = $this->loadModel('bug')->getById($bugID);
+            $case->type      = $bug->type;
+            $case->pri       = $bug->pri ? $bug->pri : $bug->severity;
+            $case->story     = $bug->story;
+            $case->title     = $bug->title;
+            $case->keywords  = $bug->keywords;
+            $case->steps     = $this->testcase->createStepsFromBug($bug->steps);
+        }
+
+        /* 追加步骤到默认的步骤数。 */
+        /* Append the steps to the default steps count. */
+        $case->steps = $this->testcase->appendSteps(!empty($case->steps) ? $case->steps : array());
+
+        return $case;
     }
 
     /**
@@ -444,6 +653,52 @@ class testcaseZen extends testcase
         $mindMapSteps['children'] = array_reverse($stepList);
         $case->mindMapSteps = $mindMapSteps;
         return $case;
+    }
+
+    /**
+     * 创建完 testcase 后的相关处理。
+     * Relevant processing after create testcase.
+     *
+     * @param  object    $case
+     * @param  int       $caseID
+     * @access protected
+     * @return void
+     */
+    protected function afterCreate(object $case, int $caseID)
+    {
+        /* 设置 cookie。 */
+        /* Set cookie. */
+        helper::setcookie('lastCaseModule', (string)$case->module);
+        helper::setcookie('lastCaseScene',  (string)$case->scene);
+        helper::setcookie('caseModule', '0');
+
+        /* 如果需求关联到项目，把用例也关联到项目。 */
+        /* If the story is linked project, make the case link the project. */
+        $this->testcase->syncCase2Project($case, $caseID);
+    }
+
+    /**
+     * 返回创建 testcase 的结果。
+     * Respond after creating testcase.
+     *
+     * @param  int       $caseID
+     * @access protected
+     * @return void
+     */
+    protected function responseAfterCreate(int $caseID): array
+    {
+        $message = $this->executeHooks($caseID);
+        if(!$message) $message = $this->lang->saveSuccess;
+
+        if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'id' => $caseID));
+        /* If link from no head then reload. */
+        if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true));
+
+        /* 判断是否当前一级菜单不是 QA，并且 caseList session 存在，并且 caseList 不是动态页面。 */
+        /* Use this session link, when the tab is not QA, a session of the case list exists, and the session is not from the Dynamic page. */
+        $useSession = ($this->app->tab != 'qa' and $this->session->caseList and strpos($this->session->caseList, 'dynamic') === false);
+        $locateLink = $this->app->tab == 'project' ? $this->createLink('project', 'testcase', "projectID={$this->session->project}") : $this->createLink('testcase', 'browse', "productID={$this->post->product}&branch={$this->post->branch}");
+        return $this->send(array('result' => 'success', 'message' => $message, 'load' => $useSession ? $this->session->caseList : $locateLink));
     }
 }
 
