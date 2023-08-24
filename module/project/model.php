@@ -377,21 +377,22 @@ class projectModel extends model
     }
 
     /**
+     * 获取项目的工时信息。
      * Get project workhour info.
      *
      * @param  int    $projectID
      * @access public
      * @return object
      */
-    public function getWorkhour($projectID)
+    public function getWorkhour(int $projectID): object
     {
-        $total = $this->dao->select('ROUND(SUM(t1.estimate), 1) AS totalEstimate, ROUND(SUM(t1.`left`), 2) AS totalLeft')->from(TABLE_TASK)->alias('t1')
+        $totalEstimate = $this->dao->select('ROUND(SUM(t1.estimate), 1) AS totalEstimate')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
             ->where('t2.project')->in($projectID)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.parent')->lt(1)
-            ->fetch();
+            ->fetch('totalEstimate');
 
         $totalConsumed = $this->dao->select('ROUND(SUM(t1.consumed), 1) AS totalConsumed')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
@@ -401,25 +402,25 @@ class projectModel extends model
             ->andWhere('t1.parent')->lt(1)
             ->fetch('totalConsumed');
 
-        $closedTotalLeft = $this->dao->select('ROUND(SUM(t1.`left`), 2) AS totalLeft')->from(TABLE_TASK)->alias('t1')
+        $totalLeft = $this->dao->select('ROUND(SUM(t1.`left`), 1) AS totalLeft')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
             ->where('t2.project')->in($projectID)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.parent')->lt(1)
-            ->andWhere('t1.status')->in('closed,cancel')
+            ->andWhere('t1.status')->ne('closed,cancel')
             ->fetch('totalLeft');
 
         $workhour = new stdclass();
-        $workhour->totalHours    = $this->dao->select('sum(t1.days * t1.hours) AS totalHours')->from(TABLE_TEAM)->alias('t1')
+        $workhour->totalHours = $this->dao->select('sum(t1.days * t1.hours) AS totalHours')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.root=t2.id')
             ->where('t2.id')->in($projectID)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.type')->eq('project')
             ->fetch('totalHours');
-        $workhour->totalEstimate = $total->totalEstimate;
+        $workhour->totalEstimate = $totalEstimate;
         $workhour->totalConsumed = $totalConsumed;
-        $workhour->totalLeft     = round($total->totalLeft - $closedTotalLeft, 1);
+        $workhour->totalLeft     = $totalLeft;
 
         return $workhour;
     }
