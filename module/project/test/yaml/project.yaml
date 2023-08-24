@@ -1,6 +1,6 @@
-title: execution.
-desc: execution data.
-author: Wang Yidong
+title: project.
+desc: project data.
+author: Sun Guangming 
 version: "1.0"
 fields:
   - field: id
@@ -9,24 +9,22 @@ fields:
     note: "名称"
     fields:
     - field: name1
-      range: 敏捷项目,瀑布项目{2},看板项目
+      range: 敏捷项目,瀑布项目,看板项目
     - field: name2
-      range: 1-10000
+      range: 1-100
   - field: project
     range: 0
   - field: code 
     prefix: "code"
     range: 1-1000
   - field: model
-    range: scrum,waterfall{2},kanban
-  - field: attribute
-    range: "[]{4},[]{5},request,design,dev,qa,release,review,request,design,dev,qa,release,review,request,design,dev,qa,release,review,[]{5}"
+    range: scrum,waterfall,kanban
   - field: type
     range: project
   - field: budget
     range: 800000-1:100
   - field: status
-    range: doing{4},wait{2},doing{2},suspended{2},closed{2}
+    range: doing,wait,suspended,closed
   - field: auth
     range: "extend"
   - field: desc
