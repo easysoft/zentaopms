@@ -1349,125 +1349,106 @@ class testcaseModel extends model
 
         return !dao::isError();
     }
+
+    /**
+     * Batch change module of cases and scenes.
+     *
+     * @param  array  $caseIdList
+     * @param  array  $sceneIdList
+     * @param  int    $moduleID
+     * @access public
+     * @return bool
+     */
+    public function batchChangeModule(array $caseIdList, array $sceneIdList, int $moduleID): bool
+    {
+        if($moduleID < 0 || $moduleID > 16777215) return false; // The module column's data type is mediumint unsigned and its range is 0-16777215.
+
+        $caseIdList  = array_filter($caseIdList);
+        $sceneIdList = array_filter($sceneIdList);
+        if(!$caseIdList && !$sceneIdList) return false;
+
+        if($caseIdList)  $this->batchChangeCaseModule($caseIdList, $moduleID);
+        if($sceneIdList) $this->batchChangeSceneModule($sceneIdList, $moduleID);
+
+        return !dao::isError();
     }
 
     /**
-     * Batch change the module of case.
+     * Batch change module of cases.
      *
-     * @param  array  $caseIDList
+     * @param  array  $caseIdList
      * @param  int    $moduleID
      * @access public
-     * @return array
+     * @return bool
      */
-    public function batchChangeModule($caseIDList, $moduleID)
+    public function batchChangeCaseModule(array $caseIdList, int $moduleID): bool
     {
-        $now        = helper::now();
-        $allChanges = array();
-        $oldCases   = $this->dao->select('*')->from(VIEW_SCENECASE)
-            ->where('deleted')->eq(0)
-            ->beginIF($caseIDList)->andWhere('id')->in($caseIDList)->fi()
-            ->fetchAll('id');
+        if(!$caseIdList) return false;
+        if($moduleID < 0 || $moduleID > 16777215) return false; // The module column's data type is mediumint unsigned and its range is 0-16777215.
 
-        /* Split selected nodes into 2 arrays. */
-        /* Top level nodes. */
-        $finalOldCases1 = array();
-        /* Non-top level nodes. */
-        $finalOldCases2 = array();
-        if(!empty($oldCases))
+        $oldCases = $this->getByList($caseIdList, "module != '{$moduleID}'");
+        if(!$oldCases) return false;
+
+        $case = new stdclass();
+        $case->module         = $moduleID;
+        $case->lastEditedBy   = $this->app->user->account;
+        $case->lastEditedDate = helper::now();
+
+        $this->dao->update(TABLE_CASE)->data($case)->where('id')->in(array_keys($oldCases))->exec();
+        if(dao::isError()) return false;
+
+        $this->loadModel('action');
+
+        foreach($oldCases as $oldCase)
         {
-            foreach($oldCases as $k => $v)
+            $changes = common::createChanges($oldCase, $case);
+            if($changes)
             {
-                $flag = 0;
-                foreach($oldCases as $k2 => $v2)
-                {
-                    $resFlag = strpos($v->path,$v2->path);
-
-                    /* v2 is ancestor. */
-                    if (($resFlag || $resFlag === 0) && $v->grade > $v2->grade ) $flag = 1;
-                }
-                if($flag == 0)
-                {
-                    /* None selected node is its ancestor, assign to this array. */
-                    $finalOldCases1[$k] = $v;
-                }
-                else
-                {
-                    /* As one selected node is its ancestor, assign to this array. */
-                    $finalOldCases2[$k] = $v;
-                }
+                $actionID = $this->action->create('case', $oldCase->id, 'edited');
+                $this->action->logHistory($actionID, $changes);
             }
         }
 
-        /* Process all top level nodes of selected nodes. */
-        foreach($caseIDList as $caseID)
+        return !dao::isError();
+    }
+
+    /**
+     * Batch change module of scenes.
+     *
+     * @param  array  $sceneIdList
+     * @param  int    $moduleID
+     * @access public
+     * @return bool
+     */
+    public function batchChangeSceneModule(array $sceneIdList, int $moduleID): bool
+    {
+        if(!$sceneIdList) return false;
+        if($moduleID < 0 || $moduleID > 16777215) return false; // The module column's data type is mediumint unsigned and its range is 0-16777215.
+
+        $oldScenes = $this->getScenesByList($sceneIdList, "module != '{$moduleID}'");
+        if(!$oldScenes) return false;
+
+        $scene = new stdclass();
+        $scene->module         = $moduleID;
+        $scene->lastEditedBy   = $this->app->user->account;
+        $scene->lastEditedDate = helper::now();
+
+        $this->dao->update(TABLE_SCENE)->data($scene)->where('id')->in(array_keys($oldScenes))->exec();
+        if(dao::isError()) return false;
+
+        $this->loadModel('action');
+
+        foreach($oldScenes as $oldScene)
         {
-            if(!isset($finalOldCases1[$caseID])) continue;
-
-            $oldCase = $finalOldCases1[$caseID];
-
-            $case = new stdclass();
-            $case->lastEditedBy   = $this->app->user->account;
-            $case->lastEditedDate = $now;
-            $case->module         = $moduleID;
-
-            if($oldCase->isCase == 2)
+            $changes = common::createChanges($oldScene, $scene);
+            if($changes)
             {
-                $case->parent = 0;
-                $case->path   = ",$caseID,";
-                $case->grade  = 1;
-
-                $this->dao->update(TABLE_SCENE)->data($case)
-                    ->autoCheck()
-                    ->where('id')->eq((int)$caseID - CHANGEVALUE)
-                    ->exec();
-                if(!dao::isError()) $allChanges[0][$caseID] = common::createChanges($oldCase, $case);
-            }
-            else
-            {
-                $case->scene = 0;
-                $this->dao->update(TABLE_CASE)->data($case)
-                    ->autoCheck()
-                    ->where('id')->eq((int)$caseID)
-                    ->exec();
-                if(!dao::isError()) $allChanges[1][$caseID] = common::createChanges($oldCase, $case);
+                $actionID = $this->action->create('scene', $oldScene->id, 'edited');
+                $this->action->logHistory($actionID, $changes);
             }
         }
 
-        /* Process non-top level nodes of selected nodes. */
-        foreach($caseIDList as $caseID)
-        {
-            if(!isset($finalOldCases2[$caseID])) continue;
-
-            $oldCase = $finalOldCases2[$caseID];
-
-            $case = new stdclass();
-            $case->lastEditedBy   = $this->app->user->account;
-            $case->lastEditedDate = $now;
-            $case->module         = $moduleID;
-
-            if($oldCase->isCase == 2)
-            {
-                $resultScene = $this->dao->findById((int)$oldCase->parent - CHANGEVALUE)->from(TABLE_SCENE)->fetch();
-                $case->path  = $resultScene->path . "$caseID,";
-                $case->grade = $resultScene->grade + 1;
-
-                $this->dao->update(TABLE_SCENE)->data($case)
-                    ->autoCheck()
-                    ->where('id')->eq((int)$caseID - CHANGEVALUE)
-                    ->exec();
-                if(!dao::isError()) $allChanges[0][$caseID] = common::createChanges($oldCase, $case);
-            }
-            else
-            {
-                $this->dao->update(TABLE_CASE)->data($case)
-                    ->autoCheck()
-                    ->where('id')->eq((int)$caseID)
-                    ->exec();
-                if(!dao::isError()) $allChanges[1][$caseID] = common::createChanges($oldCase, $case);
-            }
-        }
-
-        return $allChanges;
+        return !dao::isError();
     }
 
     /**
