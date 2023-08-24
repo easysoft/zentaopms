@@ -482,19 +482,15 @@ class testcaseTest
     /**
      * Test batch change branch.
      *
-     * @param  array  $caseIDList
+     * @param  array  $caseIdList
+     * @param  array  $sceneIdList
      * @param  int    $branchID
      * @access public
-     * @return array
+     * @return bool|array
      */
-    public function batchChangeBranchTest($caseIDList, $branchID)
+    public function batchChangeBranchTest($caseIdList, $sceneIdList, $branchID)
     {
-        $this->objectModel->batchChangeBranch($caseIDList, $branchID);
-
-        if(dao::isError()) return dao::getError();
-
-        $objects = $this->objectModel->getByList($caseIDList);
-        return $objects;
+        return $this->objectModel->batchChangeBranch($caseIdList, $sceneIdList, $branchID);
     }
 
     /**
