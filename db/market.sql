@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS `zt_market` (
   `scale` decimal(10, 2) NOT NULL DEFAULT '0',
   `maturity` char(30) NOT NULL DEFAULT '',
   `speed` varchar(30) NOT NULL DEFAULT '',
-  `competition ` char(30) NOT NULL DEFAULT '',
+  `competition` char(30) NOT NULL DEFAULT '',
   `desc` mediumtext NULL,
   `openedBy` varchar(30) NOT NULL DEFAULT '',
   `openedDate` datetime NULL,
