@@ -523,7 +523,8 @@ class ai extends control
 
         if($prompt->status == 'draft') $_SESSION['auditPrompt']['time'] = time();
 
-        echo js::start() . "const currentApp = parent.$.apps.getLastApp().code; parent.$.apps.open('$location'); if(currentApp != parent.$.apps.getLastApp().code && currentApp != 'admin') parent.$.apps.close(currentApp);" . js::end();
+        $promptViewLink = $this->inlink('promptview', "promptID=$promptId");
+        echo js::start() . "const currentApp = parent.$.apps.getLastApp().code; parent.$.apps.open('$location'); if(currentApp == 'admin') {location.href = '$promptViewLink';} else if(currentApp != parent.$.apps.getLastApp().code) {parent.$.apps.close(currentApp);}" . js::end();
     }
 
     /**
