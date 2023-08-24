@@ -2,7 +2,6 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/task.class.php';
-su('admin');
 
 /**
 
@@ -33,6 +32,9 @@ $task->estStarted->range('2022\-01\-01');
 $task->assignedTo->prefix("old")->range('1-9');
 $task->status->range("wait,doing,done,pause,cancel,closed");
 $task->gen(9);
+
+zdTable('user')->gen(5);
+su('admin');
 
 $deadline   = '2022-03-29';
 $taskIDList = array(1, 2, 3, 4, 5, 6, 7, 8, 9);
