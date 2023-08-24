@@ -1452,32 +1452,42 @@ class testcaseModel extends model
     }
 
     /**
-     * Batch case type change.
+     * Batch change type of cases.
      *
-     * @param  array   $caseIDList
-     * @param  string  $result
+     * @param  array  $caseIdList
+     * @param  string $type
      * @access public
-     * @return array
+     * @return bool
      */
-    public function batchCaseTypeChange($caseIdList, $result)
+    public function batchChangeType(array $caseIdList, string $type): bool
     {
-        $now     = helper::now();
-        $actions = array();
+        $caseIdList = array_filter($caseIdList);
+        if(!$caseIdList) return false;
+
+        $oldCases = $this->getByList($caseIdList, "type != '{$type}'");
+        if(!$oldCases) return false;
+
+        $case = new stdClass();
+        $case->type           = $type;
+        $case->lastEditedBy   = $this->app->user->account;
+        $case->lastEditedDate = helper::now();
+
+        $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->where('id')->in(array_keys($oldCases))->exec();
+        if(dao::isError()) return false;
+
         $this->loadModel('action');
 
-        $oldCases = $this->getByList($caseIdList);
-        foreach($caseIdList as $caseID)
+        foreach($oldCases as $oldCase)
         {
-            $case = new stdClass();
-            $case->lastEditedBy   = $this->app->user->account;
-            $case->lastEditedDate = $now;
-            $case->type           = $result;
-
-            $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->where('id')->eq($caseID)->exec();
-            $actionID = $this->action->create('case', $caseID, 'Edited', '', ucfirst($result));
-            $changes  = common::createChanges($oldCases[$caseID], $case);
-            $this->action->logHistory($actionID, $changes);
+            $changes = common::createChanges($oldCase, $case);
+            if($changes)
+            {
+                $actionID = $this->action->create('case', $oldCase->id, 'Edited', '', ucfirst($result));
+                $this->action->logHistory($actionID, $changes);
+            }
         }
+
+        return !dao::isError();
     }
 
     /**
