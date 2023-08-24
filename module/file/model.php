@@ -1176,7 +1176,7 @@ class fileModel extends model
     public function processFile4Object($objectType, $oldObject, $newObject, $extra = '', $filesName = 'files', $labelsName = 'labels')
     {
         $oldFiles    = empty($oldObject->files) ? '' : implode(',', array_keys($oldObject->files));
-        $deleteFiles = $newObject->deleteFiles;
+        $deleteFiles = $newObject->deleteFiles ?? null;
         if(!empty($deleteFiles))
         {
             $this->dao->delete()->from(TABLE_FILE)->where('id')->in($deleteFiles)->exec();
