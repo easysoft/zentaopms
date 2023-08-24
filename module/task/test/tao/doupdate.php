@@ -10,32 +10,6 @@ title=测试taskModel->doUpdate();
 timeout=0
 cid=1
 
-- 测试修改任务名称和截止日期
- - 属性name @修改后的任务名称
- - 属性deadline @2022-03-29
-
-- 测试修改任务模块
- - 属性name @任务2
- - 属性module @25
-
-- 测试修改任务指派人
- - 属性name @任务3
- - 属性assignedTo @user94
-
-- 测试修改任务类型属性type @devel
-
-- 测试修改任务状态属性status @doing
-
-- 测试修改任务优先级属性pri @1
-
-- 测试修改任务所属执行属性execution @8
-
-- 测试修改任务截止时间属性deadline @2022-03-29
-
-- 测试修改任务关闭原因 @『关闭原因』必须为空。
-
-- 测试修改任务的父任务属性parent @1
-
 */
 
 $execution = zdTable('project');
@@ -61,7 +35,7 @@ $task->status->range("wait,doing,done,pause,cancel,closed");
 $task->gen(9);
 
 $deadline   = '2022-03-29';
-$taskIDList = array('1','2','3','4','5','6','7','8','9');
+$taskIDList = array(1, 2, 3, 4, 5, 6, 7, 8, 9);
 
 $changename       = array('name' => '修改后的任务名称','deadline' => $deadline);
 $changemodule     = array('module' => '25');
@@ -69,7 +43,7 @@ $changeassign     = array('assignedTo' => 'user94');
 $changetype       = array('type' => 'devel');
 $changestatus     = array('status' => 'doing');
 $changepri        = array('pri' => '1');
-$changeexecution  = array('execution' => '8');
+$changeexecution  = array('execution' => 8);
 $changedeadline   = array('deadline' => $deadline);
 $closedReason     = array('closedReason' => '关闭原因');
 $changeParent     = array('parent' => '1');
