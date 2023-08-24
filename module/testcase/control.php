@@ -2268,37 +2268,17 @@ class testcase extends control
     /**
      * Batch change scene.
      *
-     * @param  int $sceneId
+     * @param  int    $sceneId
      * @access public
      * @return void
      */
-    public function batchChangeScene($sceneId)
+    public function batchChangeScene(int $sceneId)
     {
-        if($this->post->caseIdList)
+        $caseIdList = zget($_POST, 'caseIdList',  array());
+        if($caseIdList)
         {
-            $caseIdList = $this->post->caseIdList;
-            $caseIdList = array_unique($caseIdList);
-            unset($_POST['caseIdList']);
-            $allChanges = $this->testcase->batchChangeScene($caseIdList, $sceneId);
+            $this->testcase->batchChangeScene($caseIdList, $sceneID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            if(!empty($allChanges[1]))
-            {
-                foreach($allChanges[1] as $caseID => $changes)
-                {
-                    $this->loadModel('action');
-                    $actionID = $this->action->create('case', $caseID, 'Edited');
-                }
-            }
-
-            if(!empty($allChanges[0]))
-            {
-                foreach($allChanges[0] as $sceneID => $changes)
-                {
-                    $this->loadModel('action');
-                    $actionID = $this->action->create('scene', $sceneID - CHANGEVALUE, 'Edited');
-                }
-            }
         }
 
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->caseList));
