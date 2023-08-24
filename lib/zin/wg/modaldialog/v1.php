@@ -28,11 +28,6 @@ class modalDialog extends wg
         'footer' => array('map' => 'toolbar')
     );
 
-    public static function getPageCSS(): string|false
-    {
-        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
-    }
-
     protected function buildHeader()
     {
         $title       = $this->prop('title');
