@@ -278,4 +278,27 @@ class blockModel extends model
         if(!$top) $top = 0;
         return $top;
     }
+
+    /**
+     * 更新区块布局（保存每个区块的坐标信息）。
+     * Update block layout.
+     *
+     * @param  array $layout
+     * @access public
+     * @return bool
+     */
+    public function updateLayout(array $layout): bool
+    {
+        foreach($layout as $blockID => $block)
+        {
+            $this->dao->update(TABLE_BLOCK)
+                ->set('left')->eq($block['left'])
+                ->set('top')->eq($block['top'])
+                ->where('id')->eq($blockID)
+                ->exec();
+
+            if(dao::isError()) return false;
+        }
+        return true;
+    }
 }

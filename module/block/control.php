@@ -304,4 +304,21 @@ class block extends control
 
         return $this->send(array('result' => 'success'));
     }
+
+    /**
+     * 修改当前用户仪表盘区块的布局。
+     * Change dashboard layout.
+     *
+     * @access public
+     * @return void
+     */
+    public function layout()
+    {
+        if(!$_POST) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->noData));
+
+        $blocksLayout = $this->post->block;
+        $this->block->updateLayout($blocksLayout);
+
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
+    }
 }
