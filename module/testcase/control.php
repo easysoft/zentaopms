@@ -918,22 +918,15 @@ class testcase extends control
      */
     public function batchChangeBranch($branchID)
     {
-        if($this->post->caseIdList)
+        $caseIdList  = zget($_POST, 'caseIdList',  array());
+        $sceneIdList = zget($_POST, 'sceneIdList', array());
+        if($caseIdList || $sceneIdList)
         {
-            $caseIdList = $this->post->caseIdList;
-            $caseIdList = array_unique($caseIdList);
-            unset($_POST['caseIdList']);
-            $allChanges = $this->testcase->batchChangeBranch($caseIdList, $branchID);
-            if(dao::isError()) return print(js::error(dao::getError()));
-            foreach($allChanges as $caseID => $changes)
-            {
-                $this->loadModel('action');
-                $actionID = $this->action->create('case', $caseID, 'Edited');
-                $this->action->logHistory($actionID, $changes);
-            }
+            $this->testcase->batchChangeBranch($caseIdList, $sceneIdList, $branchID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         }
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->caseList));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->caseList));
     }
 
     /**
