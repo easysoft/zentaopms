@@ -522,19 +522,15 @@ class testcaseTest
     /**
      * Test batch change module.
      *
-     * @param  array  $caseIDList
+     * @param  array  $caseIdList
+     * @param  array  $sceneIdList
      * @param  int    $moduleID
      * @access public
-     * @return array
+     * @return bool
      */
-    public function batchChangeModuleTest($caseIDList, $moduleID)
+    public function batchChangeModuleTest($caseIdList, $sceneIdList, $moduleID)
     {
-        $this->objectModel->batchChangeModule($caseIDList, $moduleID);
-
-        if(dao::isError()) return dao::getError();
-
-        $objects = $this->objectModel->getByList($caseIDList);
-        return $objects;
+        return $this->objectModel->batchChangeModule($caseIdList, $sceneIdList, $moduleID);
     }
 
     /**
