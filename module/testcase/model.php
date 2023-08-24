@@ -3518,6 +3518,25 @@ class testcaseModel extends model
     }
 
     /**
+     * Get scenes by id list and query string.
+     *
+     * @param  array  $sceneIdList
+     * @param  string $query
+     * @access public
+     * @return array
+     */
+    public function getScenesByList(array $sceneIdList, string $query = ''): array
+    {
+        if(!$sceneIdList) return array();
+
+        return $this->dao->select('*')->from(TABLE_SCENE)
+            ->where('deleted')->eq('0')
+            ->andWhere('id')->in($sceneIdList)
+            ->beginIF($query)->andWhere($query)->fi()
+            ->fetchAll('id');
+    }
+
+    /**
      * Get scene menu.
      *
      * @param  int    $rootID
