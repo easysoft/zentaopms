@@ -87,10 +87,12 @@ formPanel
     (
         set::width('1/2'),
         set::label($lang->testtask->type),
-        set::name('type[]'),
-        set::control('picker'),
-        set::items($lang->testtask->typeList),
-        set::multiple(true),
+        picker
+        (
+            set::multiple(true),
+            set::name('type[]'),
+            set::items($lang->testtask->typeList),
+        )
     ),
     formGroup
     (
@@ -178,10 +180,12 @@ formPanel
     formGroup
     (
         set::label($lang->testtask->mailto),
-        set::name('mailto[]'),
-        set::control('picker'),
-        set::items($users),
-        set::multiple(true),
+        picker
+        (
+            set::multiple(true),
+            set::name('mailto[]'),
+            set::items($users),
+        )
     ),
 );
 

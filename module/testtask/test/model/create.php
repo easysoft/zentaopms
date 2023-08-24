@@ -7,36 +7,77 @@ su('admin');
 /**
 
 title=测试 testtaskModel->create();
+timeout=0
 cid=1
-pid=1
 
-新增一个正常的测试单 >> 11,新增测试报告,200,1,system
-新增一个名称为空的测试单 >> 『名称』不能为空。
-新增一个结束日期小于开始日期的测试单 >> 『结束日期』应当不小于『2022-10-05』。
+- 新增一个正常的测试单是否成功 @1
 
-*/
+- 所属产品为空的时候插入是否成功 @0
 
-$testtask = new testtaskTest();
+- 所属版本为空的时候插入是否成功 @0
 
-$normalTask['product']   = 1;
-$normalTask['execution'] = 200;
-$normalTask['build']     = 11;
-$normalTask['type']      = 'system';
-$normalTask['owner']     = 'test10';
-$normalTask['pri']       = 3;
-$normalTask['begin']     = '2022-03-05';
-$normalTask['end']       = '2022-09-05';
-$normalTask['status']    = 'wait';
-$normalTask['name']      = '新增测试单';
-$normalTask['desc']      = '新增测试单的描述详情';
+- 开始时间为空的时候插入是否成功 @0
 
-$emptyNameTask = $normalTask;
-$emptyNameTask['name'] = '';
+- 结束时间为空的时候插入是否成功 @0
 
-$beginGtEndTask = $normalTask;
-$beginGtEndTask['begin'] = '2022-10-05';
+- 开始时间不符合日期规范的时候插入是否成功 @0
 
-r($testtask->create(11, $normalTask))     && p('id,name,execution,product,type') && e('11,新增测试报告,200,1,system');           // 新增一个正常的测试单
-r($testtask->create(12, $emptyNameTask))  && p('name:0')                         && e('『名称』不能为空。');                     // 新增一个名称为空的测试单
-r($testtask->create(13, $beginGtEndTask)) && p('end:0')                          && e('『结束日期』应当不小于『2022-10-05』。'); // 新增一个结束日期小于开始日期的测试单
+- 结束时间不符合日期规范的时候插入是否成功 @0
 
+- 开始时间比结束时间大的时候插入是否成功 @0
+
+- 状态为空的时候插入是否成功 @0
+
+- 名称为空的时候插入是否成功 @0
+
+ */
+
+global $tester;
+$tester->loadModel('testtask');
+
+$formData = new stdclass();
+$formData->product = 1;
+$formData->build   = 1;
+$formData->begin   = date('Y-m-d');
+$formData->end     = date('Y-m-d');
+$formData->status  = 'wait';
+$formData->name    = '测试单';
+r((bool)$tester->testtask->create($formData)) && p() && e('1'); // 新增一个正常的测试单是否成功
+
+$formData->product = 0;
+r((bool)$tester->testtask->create($formData)) && p() && e('0'); // 所属产品为空的时候插入是否成功
+$formData->product = 1;
+
+$formData->build = 0;
+r((bool)$tester->testtask->create($formData)) && p() && e('0'); // 所属版本为空的时候插入是否成功
+$formData->build = 1;
+
+$formData->begin = '';
+r((bool)$tester->testtask->create($formData)) && p() && e('0'); // 开始时间为空的时候插入是否成功
+$formData->begin = date('Y-m-d');
+
+$formData->end = '';
+r((bool)$tester->testtask->create($formData)) && p() && e('0'); // 结束时间为空的时候插入是否成功
+$formData->end = date('Y-m-d');
+
+$formData->begin = 'asdd';
+r((bool)$tester->testtask->create($formData)) && p() && e('0'); // 开始时间不符合日期规范的时候插入是否成功
+$formData->begin = date('Y-m-d');
+
+$formData->end = 'asdd';
+r((bool)$tester->testtask->create($formData)) && p() && e('0'); // 结束时间不符合日期规范的时候插入是否成功
+$formData->end = date('Y-m-d');
+
+$formData->begin = '2023-10-11';
+$formData->end   = '2023-10-10';
+r((bool)$tester->testtask->create($formData)) && p() && e('0'); // 开始时间比结束时间大的时候插入是否成功
+$formData->begin = date('Y-m-d');
+$formData->end   = date('Y-m-d');
+
+$formData->status = '';
+r((bool)$tester->testtask->create($formData)) && p() && e('0'); // 状态为空的时候插入是否成功
+$formData->status = 'wait';
+
+$formData->name = '';
+r((bool)$tester->testtask->create($formData)) && p() && e('0'); // 名称为空的时候插入是否成功
+$formData->name = '测试单';

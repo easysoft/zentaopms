@@ -2,7 +2,7 @@
 $config->testtask = new stdclass();
 $config->testtask->create = new stdclass();
 $config->testtask->edit   = new stdclass();
-$config->testtask->create->requiredFields = 'build,begin,end,name';
+$config->testtask->create->requiredFields = 'product,status,build,begin,end,name';
 $config->testtask->edit->requiredFields   = 'build,begin,end,name';
 
 $config->testtask->actions = new stdclass();

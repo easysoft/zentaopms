@@ -14,46 +14,29 @@
 class testtaskModel extends model
 {
     /**
+     * 创建一个测试单。
      * Create a test task.
      *
-     * @param  int   $projectID
+     * @param  object $testtask
      * @access public
-     * @return void
+     * @return int|false
      */
-    function create($projectID = 0)
+    function create(object $testtask): int|false
     {
-        if($this->post->execution)
-        {
-            $execution = $this->loadModel('execution')->getByID($this->post->execution);
-            $projectID = $execution->project;
-        }
-
-        $task = fixer::input('post')
-            ->setDefault('build', '')
-            ->setDefault('project', $projectID)
-            ->setDefault('createdBy', $this->app->user->account)
-            ->setDefault('createdDate', helper::now())
-            ->stripTags($this->config->testtask->editor->create['id'], $this->config->allowedTags)
-            ->join('mailto', ',')
-            ->join('type', ',')
-            ->remove('files,labels,uid,contactListMenu')
-            ->get();
-
-        $task = $this->loadModel('file')->processImgURL($task, $this->config->testtask->editor->create['id'], $this->post->uid);
-        $this->dao->insert(TABLE_TESTTASK)->data($task)
+        $this->dao->insert(TABLE_TESTTASK)->data($testtask)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->testtask->create->requiredFields, 'notempty')
-            ->checkIF($task->begin != '', 'begin', 'date')
-            ->checkIF($task->end != '', 'end', 'date')
-            ->checkIF($task->end != '', 'end', 'ge', $task->begin)
+            ->checkIF(!empty($testtask->begin) && $testtask->begin != '', 'begin', 'date')
+            ->checkIF(!empty($testtask->end)   && $testtask->end   != '', 'end',   'date')
+            ->checkIF(!empty($testtask->begin) && $testtask->begin != '', 'end',   'ge', zget($testtask, 'begin', ''))
             ->checkFlow()
             ->exec();
 
         if(dao::isError()) return false;
 
         $taskID = $this->dao->lastInsertID();
-        $this->file->updateObjectID($this->post->uid, $taskID, 'testtask');
-        $this->file->saveUpload('testtask', $taskID);
+        $this->loadModel('action')->create('testtask', $taskID, 'opened');
+
         return $taskID;
     }
 
@@ -1808,8 +1791,8 @@ class testtaskModel extends model
     public function getToAndCcList($testtask)
     {
         /* Set toList and ccList. */
-        $toList   = $testtask->owner;
-        $ccList   = str_replace(' ', '', trim($testtask->mailto, ','));
+        $toList   = zget($testtask, 'owner', '');
+        $ccList   = str_replace(' ', '', trim(zget($testtask, 'mailto', ''), ','));
 
         if(empty($toList))
         {
