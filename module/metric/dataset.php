@@ -66,7 +66,7 @@ class dataset
      */
     public function getAllProjects($fieldList)
     {
-        return $this->dao->select($fieldList)->from(TABLE_PROJECT)
+        return $this->dao->select($fieldList)->from(TABLE_PROJECT)->alias('t1')
             ->where('deleted')->eq(0)
             ->andWhere('type')->eq('project')
             ->query();
