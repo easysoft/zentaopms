@@ -388,6 +388,7 @@ define('TABLE_PRIVRELATION', '`' . $config->db->prefix . 'privrelation`');
 define('TABLE_SPACE',    '`' . $config->db->prefix . 'space`');
 define('TABLE_INSTANCE', '`' . $config->db->prefix . 'instance`');
 define('TABLE_SOLUTION', '`' . $config->db->prefix . 'solution`');
+define('TABLE_ARTIFACTREPO', '`' . $config->db->prefix . 'artifactrepo`');
 
 $config->objectTables['product']      = TABLE_PRODUCT;
 $config->objectTables['productplan']  = TABLE_PRODUCTPLAN;
@@ -453,6 +454,7 @@ $config->objectTables['host']         = TABLE_ZAHOST;
 $config->objectTables['instance']     = TABLE_INSTANCE;
 $config->objectTables['space']        = TABLE_SPACE;
 $config->objectTables['solution']     = TABLE_SOLUTION;
+$config->objectTables['artifactrepo'] = TABLE_ARTIFACTREPO;
 
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions');
 $config->disabledFeatures = '';

@@ -168,7 +168,7 @@ $lang->action->objectTypes['host']             = '主机';
 $lang->action->objectTypes['deploy']           = '发布';
 $lang->action->objectTypes['service']          = '服务';
 $lang->action->objectTypes['domain']           = '域名';
-
+$lang->action->objectTypes['artifactrepo']     = '制品库';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
@@ -844,6 +844,7 @@ $lang->action->label->instance     = '应用|instance|view|id=%s';
 $lang->action->label->deploy       = '上线|deploy|view|id=%s';
 $lang->action->label->domian       = '域名|domian|view|id=%s';
 $lang->action->label->service      = '服务|service|view|id=%s';
+$lang->action->label->artifactrepo = '制品库|artifactrepo|browse|';
 
 /* Object type. */
 $lang->action->search = new stdclass();

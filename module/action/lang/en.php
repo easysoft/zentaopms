@@ -168,6 +168,7 @@ $lang->action->objectTypes['host']             = 'Host';
 $lang->action->objectTypes['deploy']           = 'Deploy';
 $lang->action->objectTypes['service']          = 'Service';
 $lang->action->objectTypes['domain']           = 'Domain';
+$lang->action->objectTypes['artifactrepo']     = 'Artifact Repo';
 
 
 /* Used to describe operation history. */
@@ -848,6 +849,7 @@ $lang->action->label->instance     = 'Application|instance|view|id=%s';
 $lang->action->label->deploy       = 'Deploy|deploy|view|id=%s';
 $lang->action->label->domian       = 'Domain|domian|view|id=%s';
 $lang->action->label->service      = 'Service|service|view|id=%s';
+$lang->action->label->artifactrepo = 'Artifact Repo|artifactrepo|browse|';
 
 /* Object type. */
 $lang->action->search = new stdclass();

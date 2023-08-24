@@ -70,6 +70,24 @@ CREATE TABLE IF NOT EXISTS `zt_solution` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- DROP TABLE IF EXISTS `zt_artifactrepo`;
+CREATE TABLE `zt_artifactrepo` (
+  `id` smallint(8) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) CHARACTER SET utf8 NOT NULL,
+  `products` varchar(1000) CHARACTER SET utf8 NOT NULL,
+  `serverID` smallint(8) NOT NULL,
+  `repoName` varchar(45) CHARACTER SET utf8 NOT NULL,
+  `format` varchar(10) CHARACTER SET utf8 NOT NULL,
+  `type` char(7) CHARACTER SET utf8 NOT NULL,
+  `status` varchar(10) CHARACTER SET utf8 NOT NULL,
+  `createdBy` varchar(30) CHARACTER SET utf8 NOT NULL,
+  `createdDate` datetime DEFAULT CURRENT_TIMESTAMP,
+  `editedBy` varchar(30) CHARACTER SET utf8 NOT NULL,
+  `editedDate` datetime DEFAULT CURRENT_TIMESTAMP,
+  `deleted` tinyint(4) UNSIGNED NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 INSERT INTO `zt_privmanager` (`parent`, `code`, `type`, `edition`, `vision`, `order`) VALUES (515, 'application', 'package', ',open,biz,max,ipd,', ',rnd,', 5);
 INSERT INTO `zt_priv` (`module`, `method`, `parent`, `edition`, `vision`, `system`, `order`) VALUES ('space', 'browse', 651, ',open,biz,max,ipd,', ',rnd,', '1', 10),('instance', 'view', 651, ',open,biz,max,ipd,', ',rnd,', '1', 20),('space', 'getStoreAppInfo', 651, ',open,biz,max,ipd,', ',rnd,', '1', 30),('instance', 'install', 651, ',open,biz,max,ipd,', ',rnd,', '1', 40),('instance', 'visit', 651, ',open,biz,max,ipd,', ',rnd,', '1', 50),('instance', 'ajaxStatus', 651, ',open,biz,max,ipd,', ',rnd,', '1', 60),('instance', 'ajaxStart', 651, ',open,biz,max,ipd,', ',rnd,', '1', 70),('instance', 'ajaxStop', 651, ',open,biz,max,ipd,', ',rnd,', '1', 80),('instance', 'ajaxUninstall', 651, ',open,biz,max,ipd,', ',rnd,', '1', 90),('instance', 'upgrade', 651, ',open,biz,max,ipd,', ',rnd,', '1', 100);
 

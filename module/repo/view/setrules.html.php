@@ -93,7 +93,6 @@
         <tr>
           <td colspan='4' class='text-center'>
             <?php echo html::submitButton();?>
-            <?php if(!isonlybody()) echo html::a(inlink('browse', ""), $lang->goback, '', 'class="btn btn-wide"');?>
           </td>
         </tr>
       </tbody>
