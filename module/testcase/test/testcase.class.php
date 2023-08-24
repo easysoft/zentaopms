@@ -196,17 +196,14 @@ class testcaseTest
     /**
      * Test get case list.
      *
-     * @param  string $caseIDList
+     * @param  array  $caseIdList
+     * @param  string $query
      * @access public
      * @return array
      */
-    public function getByListTest($caseIDList = 0)
+    public function getByListTest($caseIdList, $query = '')
     {
-        $objects = $this->objectModel->getByList($caseIDList = 0);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $this->objectModel->getByList($caseIdList, $query);
     }
 
     /**
