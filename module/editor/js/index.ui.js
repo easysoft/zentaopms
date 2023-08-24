@@ -7,7 +7,6 @@ window.initModuleTree = function()
         let item  = menu.item;
         if(item.url != '')
         {
-            console.log(item.url);
             $this.attr('target', 'extendWin');
 
             $this.closest('#moduleTree').find('li.active').removeClass('active');

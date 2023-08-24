@@ -40,9 +40,15 @@ window.changFuture = function()
 
 window.initTime = function(e)
 {
-    let   $this   = $(e.target);
-    let   $tr     = $this.closest('tr');
-    let   $picker = $this.zui('picker');
+    let $this   = $(e.target);
+    let $tr     = $this.closest('tr');
+    let $picker = $this.zui('picker');
+    if(typeof $picker == 'undefined')
+    {
+        $this   = $tr.find('.picker-box[data-name=begin]')
+        $picker = $this.zui('picker');
+    }
+
     let   value   = $picker.$.value;
     let   $end    = $tr.find('[data-name=end]');
     const options = $picker.options;
@@ -63,9 +69,8 @@ window.initTime = function(e)
             }
         });
         $end.zui('picker').$.setValue(endValue);
-        value = endIndex;
+        if(typeof endIndex != 'undefined') value = endIndex;
     }
-    console.log(value);
 
     $('#batchCreateTodoForm tbody tr').each(function()
     {
@@ -84,7 +89,7 @@ window.initTime = function(e)
             });
             $(this).find('[data-name="beginAndEnd"] [data-name="begin"]').zui('picker').$.setValue(value);
             $(this).find('[data-name="beginAndEnd"] [data-name="end"]').zui('picker').$.setValue(endValue);
-            value = endIndex;
+            if(typeof endIndex != 'undefined') value = endIndex;
         }
     });
 }
