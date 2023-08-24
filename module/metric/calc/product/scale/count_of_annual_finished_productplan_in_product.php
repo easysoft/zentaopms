@@ -44,19 +44,7 @@ class count_of_annual_finished_productplan_in_product extends baseCalc
 
     public function getResult($options = array())
     {
-        $records = array();
-        foreach($this->result as $year => $products)
-        {
-            foreach($products as $product => $count)
-            {
-                $records[] = (object)array(
-                    'year'    => $year,
-                    'product' => $product,
-                    'value'   => $count,
-                );
-            }
-        }
-
+        $records = $this->getRecords(array('year', 'product', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }
