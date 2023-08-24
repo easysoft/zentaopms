@@ -612,7 +612,7 @@ class storyTao extends storyModel
         /* Take the earlier stage. */
         foreach($branches as $branchID => $storyIdList)
         {
-            $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($storyIdList)->andWhere('branch')->eq($branchID)->fetchPairs('story', 'stage');
+            $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($storyIdList)->andWhere('branch')->eq((int)$branchID)->fetchPairs('story', 'stage');
             foreach($stages as $storyID => $stage)
             {
                 if(strpos($stageOrderList, $stories[$storyID]->stage) > strpos($stageOrderList, $stage)) $stories[$storyID]->stage = $stage;
@@ -1058,7 +1058,7 @@ class storyTao extends storyModel
         $this->dao->update(TABLE_STORY)->set('stage')->eq('planned')->where('id')->eq($storyID)->exec();
         foreach($stages as $branchID => $stage)
         {
-            $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branchID)->set('stage')->eq('planned')->exec();
+            $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq((int)$branchID)->set('stage')->eq('planned')->exec();
             if(isset($oldStages[$branchID]) && !empty($oldStages[$branchID]->stagedBy)) $this->dao->replace(TABLE_STORYSTAGE)->data($oldStages[$branchID])->exec();
         }
         return true;
@@ -1082,7 +1082,7 @@ class storyTao extends storyModel
         $this->dao->update(TABLE_STORY)->set('stage')->eq('closed')->where('id')->eq($storyID)->exec();
         foreach($linkedBranches as $branchID)
         {
-            if(!empty($branchID)) $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branchID)->set('stage')->eq('closed')->exec();
+            if(!empty($branchID)) $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq((int)$branchID)->set('stage')->eq('closed')->exec();
         }
         if($story->stage != 'closed') $this->updateLinkedLane($storyID, $linkedProjects);
         return true;
@@ -1114,7 +1114,7 @@ class storyTao extends storyModel
             $minStage    = '';
             foreach($stages as $branchID => $stage)
             {
-                $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branchID)->set('stage')->eq($stage)->exec();
+                $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq((int)$branchID)->set('stage')->eq($stage)->exec();
                 if(isset($oldStages[$branchID]) && !empty($oldStages[$branchID]->stagedBy))
                 {
                     $this->dao->replace(TABLE_STORYSTAGE)->data($oldStages[$branchID])->exec();
