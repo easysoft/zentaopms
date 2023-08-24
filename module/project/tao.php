@@ -349,13 +349,13 @@ class projectTao extends projectModel
     }
 
     /**
-     * 创建项目时，如果直接输入了产品名，则创建产品并与项目关联.
+     * 创建项目时，如果直接输入了产品名，则创建产品并与项目关联。
      * Create doclib after create a project.
      *
-     * @param  int    $projectID
-     * @param  object $project
-     * @param  object $postData
-     * @param  object $program
+     * @param  int        $projectID
+     * @param  object     $project
+     * @param  object     $postData
+     * @param  object     $program
      * @access protected
      * @return bool
      */
@@ -380,40 +380,55 @@ class projectTao extends projectModel
         $product->createdVersion = $this->config->version;
         $product->vision         = zget($project, 'vision', 'rnd');
 
-        $this->app->loadConfig('product');
+        $this->app->loadLang('product');
         $this->dao->insert(TABLE_PRODUCT)->data($product)
+            ->check('name', 'notempty')
             ->checkIF(!empty($product->name), 'name', 'unique', "`program` = {$product->program} and `deleted` = '0'")
             ->exec();
         if(dao::isError()) return false;
 
         $productID = $this->dao->lastInsertId();
+
+        /* Update whitelist and user view. */
         if(!$project->hasProduct) $this->loadModel('personnel')->updateWhitelist(explode(',', $project->whitelist), 'product', $productID);
         $this->loadModel('action')->create('product', $productID, 'opened');
         $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
         if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
 
+        /* Link product. */
         $projectProduct = new stdclass();
         $projectProduct->project = $projectID;
         $projectProduct->product = $productID;
         $projectProduct->branch  = 0;
         $projectProduct->plan    = 0;
-
         $this->dao->insert(TABLE_PROJECTPRODUCT)->data($projectProduct)->exec();
+        return !dao::isError();
 
-        if($project->hasProduct)
-        {
-            /* Create doc lib. */
-            $this->app->loadLang('doc');
-            $lib = new stdclass();
-            $lib->product   = $productID;
-            $lib->name      = $this->lang->doclib->main['product'];
-            $lib->type      = 'product';
-            $lib->main      = '1';
-            $lib->acl       = 'default';
-            $lib->addedBy   = $this->app->user->account;
-            $lib->addedDate = helper::now();
-            $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
-        }
+        /* Create doc lib. */
+        if($project->hasProduct) $this->createProductDocLib($productID);
+        return !dao::isError();
+    }
+
+    /**
+     * 创建产品后，创建默认的产品主库。
+     * Create doclib after create a product.
+     *
+     * @param  int       $productID
+     * @access protected
+     * @return bool
+     */
+    protected function createProductDocLib(int $productID): bool
+    {
+        $this->app->loadLang('doc');
+        $lib = new stdclass();
+        $lib->product   = $productID;
+        $lib->name      = $this->lang->doclib->main['product'];
+        $lib->type      = 'product';
+        $lib->main      = '1';
+        $lib->acl       = 'default';
+        $lib->addedBy   = $this->app->user->account;
+        $lib->addedDate = helper::now();
+        $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
         return !dao::isError();
     }
