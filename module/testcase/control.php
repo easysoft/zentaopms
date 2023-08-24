@@ -962,7 +962,7 @@ class testcase extends control
         $caseIdList = zget($_POST, 'caseIdList',  array());
         if($caseIdList)
         {
-            $this->testcase->batchChangeCaseType($caseIdList, $type);
+            $this->testcase->batchChangeType($caseIdList, $type);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         }
 
