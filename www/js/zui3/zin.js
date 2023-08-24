@@ -1056,7 +1056,8 @@
         let start = 0;
         let end = Math.min(chunkSize, file.size);
 
-        while (start < end) {
+        while (start < end)
+        {
             chunks.push(file.slice(start, end));
             start = end;
             end = Math.min(start + chunkSize, file.size);
@@ -1070,21 +1071,36 @@
             method: 'POST',
             body: chunk,
             headers,
-        }).then(response => response.json());
+        }).then(response => {if(!response.ok) throw new Error('upload file failed');});
     }
 
-    function uploadFileByChunk(url, file, chunkSize = 1024 * 1024) {
+    function uploadFileByChunk(url, file, chunkSize = 1024 * 1024, onProgress = null)
+    {
         const chunks = getChunks(file, chunkSize);
-        const promises = [];
+        let i = 0;
 
-        for (let i = 0; i < chunks.length; i++) {
-            const headers = {
-                'X-Chunk-Index': chunkIndex,
-                'X-Total-Chunks': totalChunks,
+        return new Promise((resolve, reject) => {
+            const uploadNextChunk = () => {
+                if(i >= chunks.length)
+                {
+                    onProgress(1);
+                    resolve();
+                }
+
+                const headers = {
+                    'X-Chunk-Index': chunkIndex,
+                    'X-Total-Chunks': totalChunks,
+                };
+                uploadChunk(url, chunks[i], headers)
+                    .then(() => {
+                        i++;
+                        onProgress(i / chunks.length);
+                        uploadNextChunk();
+                    })
+                    .catch(reject);
             };
-            promises.push(uploadChunk(url, chunks[i], headers));
-        }
 
-        return Promise.all(promises);
+            uploadNextChunk();
+        });
     };
 }());
