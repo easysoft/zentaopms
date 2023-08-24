@@ -402,7 +402,7 @@ class projectTao extends projectModel
         $projectProduct->branch  = 0;
         $projectProduct->plan    = 0;
         $this->dao->insert(TABLE_PROJECTPRODUCT)->data($projectProduct)->exec();
-        return !dao::isError();
+        if(dao::isError()) return false;
 
         /* Create doc lib. */
         if($project->hasProduct) $this->createProductDocLib($productID);
