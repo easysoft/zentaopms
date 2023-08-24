@@ -1359,13 +1359,14 @@ class programModel extends model
     }
 
     /**
+     * 设置项目集的路径。
      * Set program tree path.
      *
      * @param  int    $programID
      * @access public
      * @return bool
      */
-    public function setTreePath($programID)
+    public function setTreePath(int $programID): bool
     {
         $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();
 
