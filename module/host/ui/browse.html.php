@@ -12,8 +12,9 @@ declare(strict_types=1);
 
 namespace zin;
 
-jsVar('orderBy',   $orderBy);
-jsVar('hostLang',  $lang->host);
+jsVar('orderBy',    $orderBy);
+jsVar('hostLang',   $lang->host);
+jsVar('zahostLang', $lang->zahost);
 jsVar('sortLink',  helper::createLink('host', 'browse', "browseType=$browseType&param=$param&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
 
 $config->host->featureBar[0]['active'] = true;

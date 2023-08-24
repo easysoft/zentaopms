@@ -11,6 +11,7 @@ $lang->host->treemap      = 'Topologie Serveur';
 $lang->host->changeStatus = 'Online/Offline';
 $lang->host->byQuery      = 'Recherche';
 $lang->host->reason       = 'Raison';
+$lang->host->testType     = 'Type';
 
 $lang->host->name         = 'Nom';
 $lang->host->type         = 'Type';
@@ -28,12 +29,14 @@ $lang->host->cpuCores     = 'CPU Cores';
 $lang->host->cpuRate      = 'CPU Freq.';
 $lang->host->memory       = 'Capacité Mémoire';
 $lang->host->serverRoom   = 'IDC';
+$lang->host->isTestNode   = 'Used as test node';
 
-$lang->host->createdBy   = 'Créé par';
-$lang->host->createdDate = 'Créé le';
-$lang->host->editedBy    = 'Edité par';
-$lang->host->editedDate  = 'Edité le';
-$lang->host->all         = 'Tous Serveurs';
+$lang->host->createdBy    = 'Créé par';
+$lang->host->createdDate  = 'Créé le';
+$lang->host->editedBy     = 'Edité par';
+$lang->host->editedDate   = 'Edité le';
+$lang->host->registerDate = 'RegisterDate';
+$lang->host->all          = 'Tous Serveurs';
 
 $lang->host->empty = 'No Host';
 

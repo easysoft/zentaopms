@@ -9,6 +9,7 @@ $lang->host->treemap      = '拓撲圖';
 $lang->host->changeStatus = '上架/下架';
 $lang->host->byQuery      = '搜索';
 $lang->host->reason       = '原因';
+$lang->host->testType     = '方式';
 
 $lang->host->name       = '名稱';
 $lang->host->type       = '類型';
@@ -24,12 +25,14 @@ $lang->host->cpuCores   = '單CPU核心數';
 $lang->host->cpuRate    = 'CPU頻率';
 $lang->host->memory     = '內存大小';
 $lang->host->serverRoom = '機房';
+$lang->host->isTestNode = '用於自動化測試';
 
-$lang->host->createdBy   = '由誰創建';
-$lang->host->createdDate = '創建時間';
-$lang->host->editedBy    = '由誰編輯';
-$lang->host->editedDate  = '編輯時間';
-$lang->host->all         = '所有主機';
+$lang->host->createdBy    = '由誰創建';
+$lang->host->createdDate  = '創建時間';
+$lang->host->editedBy     = '由誰編輯';
+$lang->host->editedDate   = '編輯時間';
+$lang->host->registerDate = '最後注冊時間';
+$lang->host->all          = '所有主機';
 
 $lang->host->groupMaintenance = '分組維護';
 

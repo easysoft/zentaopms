@@ -24,6 +24,22 @@ class hostModel extends model
             ->where('id')->eq($id)
             ->fetch();
 
+        if($host->testType === 'kvm')
+        {
+            $host->heartbeat = empty($host->heartbeat) ? '' : $host->heartbeat;
+
+            if(time() - strtotime($host->heartbeat) > 60 && $host->status == 'online')
+            {
+                $host->status = 'offline';
+            }
+        }
+        elseif($host->testType === 'node')
+        {
+            if(time() - strtotime($host->heartbeat) > 60)
+            {
+                $host->status = 'offline';
+            }
+        }
         return $host;
     }
 
@@ -84,15 +100,35 @@ class hostModel extends model
         }
 
         $orderBy = str_replace($orderBy, 't1.', '');
-        $host = $this->dao->select('*,id as hostID')->from(TABLE_HOST)
+        $hostList = $this->dao->select('*,id as hostID')->from(TABLE_HOST)
             ->where('deleted')->eq('0')
-            ->andWhere('type')->eq('normal')
+            ->andWhere('type')->in('normal,zahost')
             ->beginIF($modules)->andWhere('`group`')->in($modules)->fi()
             ->beginIF($query)->andWhere($query)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
-        return $host;
+
+        foreach($hostList as $host)
+        {
+
+            $host->heartbeat = empty($host->heartbeat) ? '' : $host->heartbeat;
+            if($host->testType === 'kvm')
+            {
+                if(time() - strtotime($host->heartbeat) > 60 && $host->status == 'online')
+                {
+                    $host->status = 'offline';
+                }
+            }
+            elseif($host->testType === 'node')
+            {
+                if(time() - strtotime($host->heartbeat) > 60)
+                {
+                    $host->status = 'offline';
+                }
+            }
+        }
+        return $hostList;
     }
 
     /**
@@ -110,7 +146,7 @@ class hostModel extends model
         return $this->dao->select('id,name')->from(TABLE_HOST)
             ->where('deleted')->eq('0')
             ->andWhere('`id`')->in($hostIdList)
-            ->andWhere('type')->eq('normal')
+            ->andWhere('type')->in('normal,zahost')
             ->orderBy('`group`')
             ->fetchPairs('id', 'name');
     }
@@ -138,7 +174,7 @@ class hostModel extends model
 
         return $this->dao->select("id,name")->from(TABLE_HOST)
             ->where('deleted')->eq('0')
-            ->andWhere('type')->eq('normal')
+            ->andWhere('type')->in('normal,zahost')
             ->beginIF($modules)->andWhere('`group`')->in($modules)->fi()
             ->orderBy('`group`')
             ->fetchPairs('id', 'name');
@@ -155,13 +191,33 @@ class hostModel extends model
         $hostInfo = fixer::input('post')
             ->setDefault('hardwareType', 'server')
             ->setDefault('cpuNumber,cpuCores,diskSize,memory', 0)
+            ->trim('extranet')
             ->get();
+
+        if(isset($hostInfo->isTestNode))
+        {
+            $hostInfo->product = empty($hostInfo->product) ? '' : ',' . implode(',', $hostInfo->product) . ',';
+            if($hostInfo->testType === 'kvm')
+            {
+                $hostInfo->status  = 'wait';
+                $hostInfo->zap     = $this->config->zahost->defaultPort;
+                $hostInfo->secret  = md5($hostInfo->name . time());
+            }
+        }
+        else
+        {
+            $hostInfo->product  = '';
+            $hostInfo->testType = '';
+        }
+        
+        unset($hostInfo->isTestNode);
 
         $hostInfo->admin      = intval($hostInfo->admin);
         $hostInfo->serverRoom = intval($hostInfo->serverRoom);
         $this->dao->update(TABLE_HOST)->data($hostInfo)
             ->batchCheck($this->config->host->create->requiredFields, 'notempty')
-            ->batchCheck('diskSize,memory', 'float');
+            ->batchCheck('diskSize,memory', 'float')
+            ->check('name', 'unique', "type='normal'");
         if(dao::isError()) return false;
     
         $intFields = explode(',', $this->config->host->create->intFields);
@@ -192,7 +248,7 @@ class hostModel extends model
         {
             $hostID = $this->dao->lastInsertID();
             $this->loadModel('action')->create('host', $hostID, 'created');
-            return true;
+            return $hostID;
         }
 
         return false;
@@ -214,12 +270,29 @@ class hostModel extends model
             ->setDefault('cpuNumber,cpuCores,diskSize,memory', 0)
             ->get();
 
+        if(isset($hostInfo->isTestNode))
+        {
+            $hostInfo->product = empty($hostInfo->product) ? '' : ',' . implode(',', $hostInfo->product) . ',';
+            if($hostInfo->testType === 'kvm')
+            {
+                $hostInfo->status  = 'wait';
+                $hostInfo->zap     = $this->config->zahost->defaultPort;
+                $hostInfo->secret  = md5($hostInfo->name . time());
+            }
+        }
+        else
+        {
+            $hostInfo->product  = '';
+            $hostInfo->testType = '';
+        }
+        unset($hostInfo->isTestNode);
         $hostInfo->admin      = intval($hostInfo->admin);
         $hostInfo->serverRoom = intval($hostInfo->serverRoom);
 
         $this->dao->update(TABLE_HOST)->data($hostInfo)
             ->batchCheck($this->config->host->create->requiredFields, 'notempty')
-            ->batchCheck('diskSize,memory', 'float');
+            ->batchCheck('diskSize,memory', 'float')
+            ->check('name', 'unique', "id != $id and type='normal'");
         if(dao::isError()) return false;
     
         $intFields = explode(',', $this->config->host->create->intFields);
@@ -241,7 +314,7 @@ class hostModel extends model
                 return false;
             }
         }
-
+        $hostInfo->type       = 'normal';
         $hostInfo->editedBy   = $this->app->user->account;
         $hostInfo->editedDate = helper::now();
         $this->dao->update(TABLE_HOST)->data($hostInfo)->autoCheck()->where('id')->eq($id)->exec();
@@ -274,7 +347,7 @@ class hostModel extends model
         $stmt = $this->dao->select('t1.id,t1.name,t3.id as roomID,t3.city,t3.name as roomName,t1.extranet')->from(TABLE_HOST)->alias('t1')
             ->leftJoin(TABLE_SERVERROOM)->alias('t3')->on('t1.serverRoom=t3.id')
             ->where('t1.deleted')->eq(0)
-            ->andWhere('t1.type')->eq('normal')
+            ->andWhere('t1.type')->in('normal,zahost')
             ->andWhere('t3.deleted')->eq(0)
             ->andWhere('t1.serverRoom')->ne(0)
             ->orderBy('t3.city,t3.id,t1.id')
@@ -334,7 +407,7 @@ class hostModel extends model
         $this->app->loadLang('serverroom');
         $hostGroups = $this->dao->select('id,name,`group`,extranet')->from(TABLE_HOST)
             ->where('deleted')->eq(0)
-            ->andWhere('type')->eq('normal')
+            ->andWhere('type')->in('normal,zahost')
             ->fetchGroup('group', 'id');
 
         /* Get module list by host group. */
@@ -403,6 +476,7 @@ class hostModel extends model
     {
         if(!$host->id)                                return false;
         if (in_array($action, array('online', 'offline')) && !common::hasPriv('host', 'changeStatus')) return false;
+        if (in_array($action, array('online', 'offline')) && $host->testType !== '') return false;
 
         if($host->status == 'online'  && $action == 'online')  return false;
         if($host->status == 'offline' && $action == 'offline') return false;

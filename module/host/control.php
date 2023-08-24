@@ -49,6 +49,7 @@ class host extends control
         $this->loadModel('search')->setSearchParams($this->config->host->search);
 
         $this->loadModel('tree');
+        $this->app->loadLang('zahost');
         $this->view->title      = $this->lang->host->common;
         $this->view->hostList   = $hostList;
         $this->view->pager      = $pager;
@@ -71,29 +72,34 @@ class host extends control
      * @access public
      * @return void
      */
-    public function create($osName = 'linux')
+    public function create($osName = 'linux', $hostType = 'physical', $isTestNode = 0)
     {
         if($_POST)
         {
             $id = $this->host->create();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $_POST['testType'] === 'node' && $_POST['$isTestNode'] == 1 ? inlink('view', "id=$id") : inlink('browse')));
         }
 
         $this->view->defaultParams = array(
-            'zap' => '8085',
-            'pri'       => '100',
-            'bridgeID'  => 'br0',
+            'pri'      => '100',
+            'bridgeID' => 'br0',
         );
+
+        $testTypes = $this->lang->host->testTypes;
+        if($hostType != 'physical') unset($testTypes['kvm']);
 
         $this->view->title      = $this->lang->host->create;
         $this->view->osName     = $osName;
+        $this->view->hostType   = $hostType;
+        $this->view->testTypes  = $testTypes;
+        $this->view->isTestNode = intval($isTestNode);
         $this->view->position[] = html::a($this->createLink('host', 'browse'), $this->lang->host->common);
         $this->view->position[] = $this->lang->host->create;
-
         $this->view->rooms      = $this->loadModel('serverroom')->getPairs();
         $this->view->accounts   = $this->loadModel('account')->getPairs();
+        $this->view->products   = $this->loadModel('product')->getPairs('', 0, '', 'all');
         $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu(0, 'host');
 
         $this->display();
@@ -105,7 +111,7 @@ class host extends control
      * @access public
      * @return void
      */
-    public function edit($id, $osName = '')
+    public function edit($id, $osName = '', $hostType = 'physical', $isTestNode = -1)
     {
         if($_POST)
         {
@@ -118,19 +124,29 @@ class host extends control
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browse'), 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $_POST['testType'] === 'node' && $_POST['isTestNode'] == 1 ? inlink('view', "id=$id") : inlink('browse'), 'closeModal' => true));
         }
 
+        $host      = $this->host->getById($id);
+        $testTypes = $this->lang->host->testTypes;
+        if($hostType != 'physical') unset($testTypes['kvm']);
+        if($isTestNode == -1) $isTestNode = $host->testType ? 1 : 0;
+
+        $this->view->osName     = $osName;
+        $this->view->hostType   = $hostType;
+        $this->view->testTypes  = $testTypes;
+        $this->view->isTestNode = intval($isTestNode);
         $this->view->accounts   = $this->loadModel('account')->getPairs();
         $this->view->title      = $this->lang->host->edit;
         $this->view->position[] = html::a($this->createLink('host', 'browse'), $this->lang->host->common);
         $this->view->position[] = $this->lang->host->edit;
 
-        $this->view->host       = $this->host->getById($id);
+        $this->view->host       = $host;
         $this->view->osName     = $osName ? $osName : $this->view->host->osName;
         $this->view->accounts   = $this->loadModel('account')->getPairs();
         $this->view->rooms      = $this->loadModel('serverroom')->getPairs();
         $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu(0, 'host');
+        $this->view->products   = $this->loadModel('product')->getPairs('', 0, '', 'all');
 
         $this->display();
     }

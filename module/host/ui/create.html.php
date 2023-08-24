@@ -12,6 +12,10 @@ declare(strict_types=1);
 
 namespace zin;
 
+jsVar('osName', $osName);
+jsVar('hostType', $hostType);
+jsVar('isTestNode', $isTestNode);
+
 formPanel
 (
     set::id('hostCreateForm'),
@@ -126,7 +130,8 @@ formPanel
             set::control('picker'),
             set::name('hostType'),
             set::items($lang->host->hostTypeList),
-            set::value('virtual')
+            set::value($hostType),
+            on::change('hostTypeChange'),
         )
     ),
     formRow
@@ -146,6 +151,7 @@ formPanel
             set::width('1/3'),
             set::label($lang->host->osVersion),
             set::control('picker'),
+            set::required(true),
             set::name('osVersion'),
             set::items($lang->host->{"{$osName}List"}),
         )
@@ -155,9 +161,10 @@ formPanel
         formGroup
         (
             set::width('1/3'),
-            set::name('zap'),
-            set::label($lang->host->zap),
-            set::value(8086),
+            set::label($lang->host->provider),
+            set::control('picker'),
+            set::name('provider'),
+            set::items($lang->host->providerList),
         ),
         formGroup
         (
@@ -189,10 +196,10 @@ formPanel
         formGroup
         (
             set::width('1/3'),
-            set::label($lang->host->provider),
-            set::control('picker'),
-            set::name('provider'),
-            set::items($lang->host->providerList),
+            set::label($lang->host->isTestNode),
+            set::control('checkbox'),
+            set::name('isTestNode'),
+            on::change('isTestNodeChange'),
         ),
         formGroup
         (
@@ -204,5 +211,28 @@ formPanel
             set::inline(true),
             set::items($lang->host->statusList),
         )
+    ),
+    formRow
+    (
+        setID('testContainer'),
+        formGroup
+        (
+            set::width('1/3'),
+            setClass($isTestNode ? '' : 'hidden'),
+            set::name("product[]"),
+            set::label($lang->story->product),
+            set::control(array("type" => "picker","multiple" => true)),
+            set::items($products),
+        ),
+        formGroup
+        (
+            set::width('1/3'),
+            setClass($isTestNode ? '' : 'hidden'),
+            set::name("testType"),
+            set::required(true),
+            set::label($lang->host->testType),
+            set::control('picker'),
+            set::items($testTypes),
+        ),
     ),
 );

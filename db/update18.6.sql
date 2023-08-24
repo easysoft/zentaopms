@@ -88,6 +88,10 @@ CREATE TABLE `zt_artifactrepo` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+ALTER TABLE `zt_host` ADD COLUMN `product` varchar(255) NOT NULL DEFAULT '' AFTER `hostType`,ADD COLUMN `testType` varchar(10) NOT NULL DEFAULT '' AFTER `product`;
+UPDATE `zt_host` SET `testType`='kvm',`type`='normal' WHERE `type`='zahost';
+UPDATE `zt_host` SET `testType`='node',`type`='normal',`hostType`='physical' WHERE `type`='node' AND `parent`=0;
+
 INSERT INTO `zt_privmanager` (`parent`, `code`, `type`, `edition`, `vision`, `order`) VALUES (515, 'application', 'package', ',open,biz,max,ipd,', ',rnd,', 5);
 INSERT INTO `zt_priv` (`module`, `method`, `parent`, `edition`, `vision`, `system`, `order`) VALUES ('space', 'browse', 651, ',open,biz,max,ipd,', ',rnd,', '1', 10),('instance', 'view', 651, ',open,biz,max,ipd,', ',rnd,', '1', 20),('space', 'getStoreAppInfo', 651, ',open,biz,max,ipd,', ',rnd,', '1', 30),('instance', 'install', 651, ',open,biz,max,ipd,', ',rnd,', '1', 40),('instance', 'visit', 651, ',open,biz,max,ipd,', ',rnd,', '1', 50),('instance', 'ajaxStatus', 651, ',open,biz,max,ipd,', ',rnd,', '1', 60),('instance', 'ajaxStart', 651, ',open,biz,max,ipd,', ',rnd,', '1', 70),('instance', 'ajaxStop', 651, ',open,biz,max,ipd,', ',rnd,', '1', 80),('instance', 'ajaxUninstall', 651, ',open,biz,max,ipd,', ',rnd,', '1', 90),('instance', 'upgrade', 651, ',open,biz,max,ipd,', ',rnd,', '1', 100);
 

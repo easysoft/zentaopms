@@ -59,6 +59,13 @@ $config->host->dtable->fieldList['status']['sortType'] = true;
 $config->host->dtable->fieldList['status']['width']    = 80;
 $config->host->dtable->fieldList['status']['map']      = $lang->host->statusList;
 
+$config->host->dtable->fieldList['heartbeat']['title']    = $lang->host->registerDate;
+$config->host->dtable->fieldList['heartbeat']['name']     = 'heartbeat';
+$config->host->dtable->fieldList['heartbeat']['type']     = 'datetime';
+$config->host->dtable->fieldList['heartbeat']['sortType'] = true;
+$config->host->dtable->fieldList['heartbeat']['width']    = 80;
+$config->host->dtable->fieldList['heartbeat']['map']      = $lang->host->statusList;
+
 $config->host->actionList = array();
 $config->host->actionList['online']['icon']        = 'arrow-up';
 $config->host->actionList['online']['text']        = $lang->host->online;
