@@ -20,12 +20,14 @@ $effort->deleted->range('0');
 $effort->gen(3);
 
 /**
+
 title=获取删除工时后的任务
 timeout=0
 cid=1
+
 */
 
 $task = new taskTest();
 r($task->getTaskAfterDeleteWorkhourTest(1)) && p('consumed,left,status') && e('0,2,wait');  // 删除ID为1的工时
-r($task->getTaskAfterDeleteWorkhourTest(2)) && p('consumed,left,status') && e('1,1,done');  // 删除ID为2的工时
+r($task->getTaskAfterDeleteWorkhourTest(2)) && p('consumed,left,status') && e('1,0,done');  // 删除ID为2的工时
 r($task->getTaskAfterDeleteWorkhourTest(3)) && p('consumed,left,status') && e('1,1,doing'); // 删除ID为3的工时
