@@ -62,49 +62,22 @@ class testtaskModel extends model
      *
      * @param  int    $productID
      * @param  string $branch
+     * @param  string $type
+     * @param  string $begin
+     * @param  string $end
      * @param  string $orderBy
      * @param  object $pager
-     * @param  string $type
-     * @param  string $beginTime
-     * @param  string $endTime
      * @access public
      * @return array
      */
-    public function getProductTasks(int $productID, string $branch = 'all', string $orderBy = 'id_desc', object $pager = null, string $type = '', string $beginTime = '', string $endTime = ''): array
+    public function getProductTasks(int $productID, string $branch = 'all', string $type = '', string $begin = '', string $end = '', string $orderBy = 'id_desc', object $pager = null): array
     {
         $scopeAndStatus = explode(',', $type);
         $scope          = !empty($scopeAndStatus[0]) ? $scopeAndStatus[0] : '';
         $status         = !empty($scopeAndStatus[1]) ? $scopeAndStatus[1] : '';
         $branch         = $scope == 'all' ? 'all' : $branch;
 
-        $tasks = $this->dao->select("t1.*, t5.multiple, IF(t2.shadow = 1, t5.name, t2.name) AS productName, t3.name as executionName, t4.name AS buildName, t4.branch AS branch, t5.name AS projectName")
-            ->from(TABLE_TESTTASK)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-            ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t1.execution = t3.id')
-            ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
-            ->leftJoin(TABLE_PROJECT)->alias('t5')->on('t3.project = t5.id')
-            ->where('t1.deleted')->eq(0)
-            ->andWhere('t1.auto')->ne('unit')
-            ->beginIF(!$this->app->user->admin)->andWhere('t3.id')->in("0,{$this->app->user->view->sprints}")->fi()
-            ->beginIF($scope == 'local')->andWhere('t1.product')->eq((int)$productID)->fi()
-            ->beginIF($scope == 'all')->andWhere('t1.product')->in($this->app->user->view->products)->fi()
-            ->beginIF(strtolower($status) == 'totalstatus')->andWhere('t1.status')->in('blocked,doing,wait,done')->fi()
-            ->beginIF(strtolower($status) == 'review') // 工作流开启审批的时候才会使用，才会新增字段。
-            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
-            ->andWhere('t1.reviewStatus')->eq('doing')
-            ->fi()
-            ->beginIF(!in_array(strtolower($status), array('totalstatus', 'review'), true))->andWhere('t1.status')->eq($status)->fi()
-            ->beginIF($branch !== 'all')->andWhere("CONCAT(',', t4.branch, ',')")->like("%,$branch,%")->fi()
-            ->beginIF($beginTime)->andWhere('t1.begin')->ge($beginTime)->fi()
-            ->beginIF($endTime)->andWhere('t1.end')->le($endTime)->fi()
-            ->beginIF($branch == BRANCH_MAIN)
-            ->orWhere('(t1.build')->eq('trunk')
-            ->andWhere('t1.product')->eq($productID)
-            ->markRight(1)
-            ->fi()
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll('id');
+        $tasks = $this->fetchTesttaskList($productID, $branch, 0, '', $scope, $status, $begin, $end, $orderBy, $pager);
 
         foreach($tasks as $taskID => $task)
         {
@@ -125,43 +98,37 @@ class testtaskModel extends model
     }
 
     /**
+     * 获取产品对应的单元测试类型的测试单。
      * Get product unit tasks.
      *
      * @param  int    $productID
      * @param  string $browseType
      * @param  string $orderBy
-     * @param  int    $pager
+     * @param  object $pager
      * @access public
-     * @return void
+     * @return array
      */
-    public function getProductUnitTasks($productID, $browseType = '', $orderBy = 'id_desc', $pager = null)
+    public function getProductUnitTasks(int $productID, string $browseType = 'newest', string $orderBy = 'id_desc', object $pager = null): array
     {
+        $begin = '';
+        $end   = '';
         $beginAndEnd = $this->loadModel('action')->computeBeginAndEnd($browseType);
-        if(empty($beginAndEnd)) $beginAndEnd = array('begin' => '', 'end' => '');
-
+        if($browseType != 'all' and $browseType != 'newest' and !empty($beginAndEnd))
+        {
+            $begin = $beginAndEnd['begin'];
+            $end   = $beginAndEnd['end'];
+        }
         if($browseType == 'newest') $orderBy = 'end_desc,' . $orderBy;
-        $tasks = $this->dao->select("t1.*, t2.name AS productName, t3.name AS executionName, t4.name AS buildName")
-            ->from(TABLE_TESTTASK)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-            ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t1.execution = t3.id')
-            ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
-            ->where('t1.deleted')->eq(0)
-            ->andWhere('t1.product')->eq($productID)
-            ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
-            ->andWhere('t1.auto')->eq('unit')
-            ->beginIF($browseType != 'all' and $browseType != 'newest' and $beginAndEnd)
-            ->andWhere('t1.end')->ge($beginAndEnd['begin'])
-            ->andWhere('t1.end')->le($beginAndEnd['end'])
-            ->fi()
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll('id');
+
+        $projectID = $this->lang->navGroup->testtask != 'qa' ? $this->session->project : 0;
+        $tasks     = $this->fetchTesttaskList($productID, '', 0, 'unit', 'local', '', $begin, $end, $orderBy, $pager);
 
         $resultGroups = $this->dao->select('t1.task, t2.*')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_TESTRESULT)->alias('t2')->on('t1.id=t2.run')
             ->where('t1.task')->in(array_keys($tasks))
             ->fetchGroup('task', 'run');
 
+        /* 计算本测试单执行的用例数、成功数、失败数。 */
         foreach($tasks as $taskID => $task)
         {
             $results = zget($resultGroups, $taskID, array());
@@ -173,6 +140,18 @@ class testtaskModel extends model
             {
                 if($result->caseResult == 'pass') $task->passCount ++;
                 if($result->caseResult == 'fail') $task->failCount ++;
+            }
+
+            if($task->multiple)
+            {
+                if($task->projectName and $task->executionName)
+                {
+                    $task->executionName = $task->projectName . '/' . $task->executionName;
+                }
+                elseif(!$task->executionName)
+                {
+                    $task->executionName = $task->projectName;
+                }
             }
         }
 

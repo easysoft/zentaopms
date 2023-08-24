@@ -1,0 +1,6 @@
+title: table zt_project
+author: Wang Yuting
+version: "1.0"
+fields:
+  - field: multiple
+    range: 0-1

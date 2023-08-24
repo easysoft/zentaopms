@@ -68,6 +68,7 @@ class testtask extends control
     }
 
     /**
+     * 测试单的列表。
      * Browse test tasks.
      *
      * @param  int    $productID
@@ -109,7 +110,7 @@ class testtask extends control
         $endTime   = $endTime   ? date('Y-m-d', strtotime($endTime))   : '';
         $product   = $this->product->getById($productID);
         if($product->type == 'normal') $branch = 'all';
-        $tasks = $this->testtask->getProductTasks($productID, $branch, $sort, $pager, $type, $beginTime, $endTime);
+        $tasks = $this->testtask->getProductTasks($productID, $branch, $type, $beginTime, $endTime, $sort, $pager);
 
         /* 获取不同状态测试单的数量，用于列表底部统计信息展示。 */
         $waitCount    = 0;
@@ -144,10 +145,13 @@ class testtask extends control
     }
 
     /**
+     *
+     * 单元测试列表页面。
      * Browse unit tasks.
      *
      * @param  int    $productID
      * @param  string $browseType
+     * @param  int    $projectID
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -155,17 +159,16 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function browseUnits($productID = 0, $browseType = 'newest', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
+    public function browseUnits(int $productID = 0, string $browseType = 'newest', int $projectID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Save session. */
         $this->session->set('testtaskList', $this->app->getURI(true), 'qa');
-        $this->session->set('caseList', $this->app->getURI(true), $this->app->tab);
-        $this->session->set('buildList', $this->app->getURI(true) . '#app=' . $this->app->tab, 'execution');
-        $this->loadModel('testcase');
-        $this->app->loadLang('tree');
+        $this->session->set('caseList',     $this->app->getURI(true), $this->app->tab);
+        $this->session->set('buildList',    $this->app->getURI(true) . '#app=' . $this->app->tab, 'execution');
 
         /* Set menu. */
-        $productID = $this->loadModel('product')->saveState($productID, $this->products);
+        $products  = $this->testtaskZen->getProducts();
+        $productID = $this->loadModel('product')->saveState($productID, $products);
         $product   = $this->product->getByID($productID);
         if($this->app->tab == 'project')
         {
@@ -179,11 +182,11 @@ class testtask extends control
             }
 
             $this->loadModel('project')->setMenu($projectID);
-            if(!$product->shadow) $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits', "projectID=$projectID", '', false);
+            if(!$product->shadow) $this->lang->modulePageNav = $this->product->select($products, $productID, 'testtask', 'browseUnits', "projectID=$projectID", '', false);
         }
         else
         {
-            $this->loadModel('qa')->setMenu($this->products, $productID);
+            $this->loadModel('qa')->setMenu($products, $productID);
             $this->app->rawModule = 'testcase';
         }
 
@@ -195,20 +198,16 @@ class testtask extends control
         /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
 
+        $this->app->loadLang('testcase');
         $this->lang->testcase->featureBar['browseunits'] = $this->lang->testtask->unitTag;
 
-        $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->common;
-        $this->view->projectID   = $projectID;
-        $this->view->productID   = $productID;
-        $this->view->productName = $this->products[$productID];
-        $this->view->orderBy     = $orderBy;
-        $this->view->browseType  = $browseType;
-        $this->view->tasks       = $this->testtask->getProductUnitTasks($productID, $browseType, $sort, $pager);
-        $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $this->view->pager       = $pager;
-        $this->view->product     = $product;
-        $this->view->suiteList   = $this->loadModel('testsuite')->getSuites($productID);
-
+        $this->view->title      = $products[$productID] . $this->lang->colon . $this->lang->testtask->common;
+        $this->view->productID  = $productID;
+        $this->view->orderBy    = $orderBy;
+        $this->view->browseType = $browseType;
+        $this->view->tasks      = $this->testtask->getProductUnitTasks($productID, $browseType, $sort, $pager);
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->pager      = $pager;
         $this->display();
     }
 
@@ -1611,7 +1610,7 @@ class testtask extends control
     public function ajaxGetDropMenu($productID, $branch, $taskID, $module, $method, $objectType = '', $objectID = 0)
     {
         $scope     = empty($objectType) ? 'local' : 'all';
-        $testtasks = $this->testtask->getProductTasks($productID, $branch, 'id_desc', null, "$scope,totalStatus");
+        $testtasks = $this->testtask->getProductTasks($productID, $branch, "$scope,totalStatus", '', '', 'id_desc', null);
 
         $namePairs = array();
         foreach($testtasks as $testtaskID => $testtask) $namePairs[$testtaskID] = $testtask->name;

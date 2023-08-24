@@ -30,7 +30,7 @@ dtable
         set::page($pager->pageID),
         set::recPerPage($pager->recPerPage),
         set::recTotal($pager->recTotal),
-        set::linkCreator(helper::createLink('testtask', 'browseunits', "productID={$product->id}&browseType={$browseType}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}"))
+        set::linkCreator(helper::createLink('testtask', 'browseunits', "productID={$productID}&browseType={$browseType}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}"))
     ),
 );
 

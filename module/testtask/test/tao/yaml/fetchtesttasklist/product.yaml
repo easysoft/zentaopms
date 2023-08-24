@@ -1,0 +1,6 @@
+title: table zt_product
+author: Wang Yuting
+version: "1.0"
+fields:
+  - field: shadow
+    range: 0-1
