@@ -10,15 +10,19 @@ declare(strict_types=1);
  */
 namespace zin;
 
-detailHeader
+featureBar
 (
-    to::title
+
+    detailHeader
     (
-        entityLabel(set(array('entityID' => $suite->id, 'level' => 3, 'text' => $suite->name))),
-        icon('angle-right'),
-        $lang->testsuite->linkCase,
-        div(searchToggle(set::open(true)))
-    )
+        to::title
+        (
+            entityLabel(set(array('entityID' => $suite->id, 'level' => 3, 'text' => $suite->name))),
+            icon('angle-right'),
+            $lang->testsuite->linkCase,
+            div(searchToggle())
+        )
+    ),
 );
 
 $footToolbar = array('items' => array
