@@ -147,4 +147,5 @@ objectType = $("#objectType").val();
 extra      = '<?php echo $extra;?>';
 method     = 'create';
 </script>
+<?php include '../../ai/view/inputinject.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

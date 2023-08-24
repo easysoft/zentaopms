@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php include '../../ai/view/promptmenu.html.php';?>
 <?php if(!common::checkNotCN()):?>
 <style> table.data-stats > tbody > tr.statsTr > td:first-child {width: 60px;}</style>
 <?php endif;?>

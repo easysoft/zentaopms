@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php include '../../ai/view/promptmenu.html.php';?>
 <?php $browseLink  = $app->session->caseList ? $app->session->caseList : $this->createLink('testcase', 'browse', "productID=$case->product");?>
 <?php js::set('sysurl', common::getSysUrl());?>
 <?php js::set('tab', $app->tab);?>

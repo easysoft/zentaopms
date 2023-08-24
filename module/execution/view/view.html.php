@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php include '../../ai/view/promptmenu.html.php';?>
 <?php js::import($this->config->webRoot . 'js/echarts/echarts.common.min.js'); ?>
 <?php js::set('type', $type);?>
 <?php js::set('chartData', $chartData);?>

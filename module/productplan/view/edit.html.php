@@ -89,4 +89,5 @@
     </form>
   </div>
 </div>
+<?php include '../../ai/view/inputinject.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php include '../../ai/view/promptmenu.html.php';?>
 <?php js::set('sysurl', common::getSysUrl());?>
 <?php js::set('confrimToStory', $lang->bug->confirmToStory);?>
 <?php js::set('tab', $app->tab);?>

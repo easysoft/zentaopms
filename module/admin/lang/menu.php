@@ -47,6 +47,11 @@ if($config->db->driver == 'mysql')
     $lang->admin->menuList->convert['order'] = 50;
 }
 
+$lang->admin->menuList->ai['name']  = $lang->admin->menuSetting['ai']['name'];
+$lang->admin->menuList->ai['desc']  = $lang->admin->menuSetting['ai']['desc'];
+$lang->admin->menuList->ai['link']  = 'ai|adminindex';
+$lang->admin->menuList->ai['order'] = 55;
+
 $lang->admin->menuList->system['subMenu']['mode']        = array('link' => "{$lang->custom->mode}|custom|mode|");
 $lang->admin->menuList->system['subMenu']['trash']       = array('link' => "{$lang->action->trash}|action|trash|");
 $lang->admin->menuList->system['subMenu']['safe']        = array('link' => "{$lang->security}|admin|safe|", 'alias' => 'checkweak,resetpwdsetting', 'links' => array('admin|resetpwdsetting|', 'admin|checkweak|'));
@@ -179,6 +184,22 @@ $lang->admin->menuList->dev['menuOrder']['10'] = 'db';
 $lang->admin->menuList->dev['menuOrder']['15'] = 'langItem';
 $lang->admin->menuList->dev['menuOrder']['20'] = 'editor';
 $lang->admin->menuList->dev['menuOrder']['25'] = 'entry';
+
+$lang->admin->menuList->ai['subMenu']['prompts']       = array('link' => "{$lang->admin->ai->prompt}|ai|prompts|", 'alias' => 'promptview,promptassignrole,promptselectdatasource,promptsetpurpose,promptsettargetform,promptfinalize,promptedit');
+// $lang->admin->menuList->ai['subMenu']['conversations'] = array('link' => "{$lang->admin->ai->conversation}|ai|conversations|");
+$lang->admin->menuList->ai['subMenu']['models']        = array('link' => "{$lang->admin->ai->model}|ai|models|", 'alias' => 'editmodel');
+
+$lang->admin->menuList->ai['menuOrder']['5']  = 'prompts';
+// $lang->admin->menuList->ai['menuOrder']['10'] = 'conversations';
+$lang->admin->menuList->ai['menuOrder']['15'] = 'models';
+
+$lang->admin->menuList->ai['subMenu']['prompts']       = array('link' => "{$lang->admin->ai->prompt}|ai|prompts|", 'alias' => 'promptview,promptassignrole,promptselectdatasource,promptsetpurpose,promptsettargetform,promptfinalize,promptedit');
+// $lang->admin->menuList->ai['subMenu']['conversations'] = array('link' => "{$lang->admin->ai->conversation}|ai|conversations|");
+$lang->admin->menuList->ai['subMenu']['models']        = array('link' => "{$lang->admin->ai->model}|ai|models|", 'alias' => 'editmodel');
+
+$lang->admin->menuList->ai['menuOrder']['5']  = 'prompts';
+// $lang->admin->menuList->ai['menuOrder']['10'] = 'conversations';
+$lang->admin->menuList->ai['menuOrder']['15'] = 'models';
 
 if($config->edition != 'max' and $config->edition != 'ipd')
 {

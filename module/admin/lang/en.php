@@ -180,6 +180,8 @@ $lang->admin->menuSetting['dev']['name']       = 'Develop';
 $lang->admin->menuSetting['dev']['desc']       = 'Support for secondary development of the system.';
 $lang->admin->menuSetting['convert']['name']   = 'Data Import';
 $lang->admin->menuSetting['convert']['desc']   = 'Data import from third-party systems.';
+$lang->admin->menuSetting['ai']['name']        = 'AI Configurations';
+$lang->admin->menuSetting['ai']['desc']        = 'Manage prompts and language models.';
 
 $lang->admin->updateDynamics   = 'Dynamics';
 $lang->admin->updatePatch      = 'Patch';
@@ -202,5 +204,10 @@ $lang->admin->productFeature['max'][] = 'Project Metrics';
 $lang->admin->productFeature['max'][] = 'Asset Library';
 $lang->admin->productFeature['max'][] = 'QA Plan';
 $lang->admin->productFeature['max'][] = 'Opportunity/Risk/Issues Management';
+
+$lang->admin->ai = new stdclass();
+$lang->admin->ai->model        = 'Language Models';
+$lang->admin->ai->conversation = 'Conversations';
+$lang->admin->ai->prompt       = 'Prompts';
 
 include dirname(__FILE__) . '/menu.php';

@@ -370,3 +370,4 @@ else
     include '../../common/view/footer.html.php';
 }
 ?>
+<?php include '../../ai/view/inputinject.html.php';?>

@@ -455,4 +455,5 @@ setTimeout(() => {
 }, 600);
 
 </script>
+<?php include '../../ai/view/inputinject.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

@@ -1,5 +1,11 @@
 (function()
 {
+    if(showFeatures && vision == 'rnd')
+    {
+        /* Show features dialog. */
+        new $.zui.ModalTrigger({url: $.createLink('misc', 'features'), type: 'iframe', width: 800, className: 'showFeatures', showHeader: false, backdrop: 'static'}).show();
+    }
+
     /* Init variables */
     var openedApps      = {}; // Key-value to save appCode-app pairs
     var appsMap         = {}; // Key-value to save opened appCode-app pairs

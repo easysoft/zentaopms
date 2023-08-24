@@ -240,6 +240,7 @@ $config->openMethods[] = 'custom.index';
 $config->openMethods[] = 'testcase.getxmindimport';
 $config->openMethods[] = 'testcase.showxmindimport';
 $config->openMethods[] = 'testcase.savexmindimport';
+$config->openMethods[] = 'ai.adminindex';
 
 $config->openModules = array();
 $config->openModules[] = 'install';
@@ -376,6 +377,10 @@ define('TABLE_PRIVLANG',     '`' . $config->db->prefix . 'privlang`');
 define('TABLE_PRIVMANAGER',  '`' . $config->db->prefix . 'privmanager`');
 define('TABLE_PRIVRELATION', '`' . $config->db->prefix . 'privrelation`');
 
+define('TABLE_PROMPT', '`' . $config->db->prefix . 'prompt`');
+define('TABLE_PROMPTROLE', '`' . $config->db->prefix . 'promptrole`');
+
+
 $config->objectTables['product']      = TABLE_PRODUCT;
 $config->objectTables['productplan']  = TABLE_PRODUCTPLAN;
 $config->objectTables['story']        = TABLE_STORY;
@@ -434,8 +439,9 @@ $config->objectTables['privlang']     = TABLE_PRIVLANG;
 $config->objectTables['privmanager']  = TABLE_PRIVMANAGER;
 $config->objectTables['privrelation'] = TABLE_PRIVRELATION;
 $config->objectTables['scene']        = TABLE_SCENE;
+$config->objectTables['prompt']       = TABLE_PROMPT;
 
-$config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions');
+$config->newFeatures      = array('aiPrompts', 'promptDesign', 'promptExec');
 $config->disabledFeatures = '';
 $config->closedFeatures   = '';
 

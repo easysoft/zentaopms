@@ -308,4 +308,5 @@ $(":checkbox[name^='auto']").on('click', function(){
     checkScript();
 });
 </script>
+<?php include '../../ai/view/inputinject.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

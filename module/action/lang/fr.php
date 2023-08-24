@@ -162,6 +162,7 @@ $lang->action->objectTypes['repo']             = 'Repo';
 $lang->action->objectTypes['dataview']         = 'Data View';
 $lang->action->objectTypes['privlang']         = 'Priv';
 $lang->action->objectTypes['scene']            = 'Scene';
+$lang->action->objectTypes['prompt']           = 'Prompt';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();
@@ -282,6 +283,10 @@ $lang->action->desc->releaseddoc = '$date, 由 <strong>$actor</strong> released 
 /* This parameter describes historical operations that are performed when a document is collected or uncollected. */
 $lang->action->desc->collected   = '$date, 由 <strong>$actor</strong> collected <strong>$extra</strong>。' . "\n";
 $lang->action->desc->uncollected = '$date, 由 <strong>$actor</strong> uncollected <strong>$extra</strong>。' . "\n";
+
+/* AI prompts related actions. */
+$lang->action->desc->published   = '$date, published by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->unpublished = '$date, unpublished by <strong>$actor</strong>.' . "\n";
 
 /* Used to display dynamic information. */
 $lang->action->label                        = new stdclass();
@@ -448,6 +453,9 @@ $lang->action->label->saveddraft            = 'save draft';
 $lang->action->label->releaseddoc           = 'released';
 $lang->action->label->collected             = 'collected';
 $lang->action->label->uncollected           = 'uncollected';
+$lang->action->label->published             = 'Published';
+$lang->action->label->unpublished           = 'Unpublished';
+$lang->action->label->prompt                = 'Prompt';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass();
@@ -745,6 +753,11 @@ $lang->action->dynamicAction->repo['edited']    = 'Edit Repo';
 $lang->action->dynamicAction->repo['deleted']   = 'Delete Repo';
 $lang->action->dynamicAction->repo['undeleted'] = 'Undelete Repo';
 
+$lang->action->dynamicAction->ai['created']     = 'Create prompt';
+$lang->action->dynamicAction->ai['edited']      = 'Edited prompt';
+$lang->action->dynamicAction->ai['published']   = 'Published prompt';
+$lang->action->dynamicAction->ai['unpublished'] = 'Unpublished prompt';
+
 /* Generate the corresponding object link. */
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';
 $lang->action->label->productplan = 'Plan|productplan|view|productID=%s';
@@ -786,6 +799,7 @@ $lang->action->label->stage        = 'Stage|stage|browse|';
 $lang->action->label->module       = 'Module|tree|browse|productid=%s&type=story&currentModuleID=0&branch=all';
 $lang->action->label->ticket       = 'Ticket|ticket|view|id=%s';
 $lang->action->label->chartgroup   = 'Group';
+$lang->action->label->prompt       = 'Prompt|ai|promptview|id=%s';
 
 /* Object type. */
 $lang->action->search = new stdclass();
