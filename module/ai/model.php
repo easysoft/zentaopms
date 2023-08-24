@@ -1381,7 +1381,7 @@ class aiModel extends model
                         if($objectName == 'task')
                         {
                             $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_TASK)->alias('tt')
-                                ->leftJoin(TABLE_DOC)->alias('td')->on('td.product = tt.product')
+                                ->leftJoin(TABLE_DOC)->alias('td')->on('td.project = tt.project or td.execution = tt.execution')
                                 ->where('td.id')->eq($objectId)
                                 ->andWhere('tt.deleted')->eq(0)
                                 ->fetch('maxId');
