@@ -300,12 +300,12 @@ class projectTao extends projectModel
 
 
     /**
-     * 创建项目后，创建默认的项目主库.
+     * 创建项目后，创建默认的项目主库。
      * Create doclib after create a project.
      *
-     * @param  int    $projectID
-     * @param  object $project
-     * @param  object $program
+     * @param  int       $projectID
+     * @param  object    $project
+     * @param  object    $program
      * @access protected
      * @return bool
      */

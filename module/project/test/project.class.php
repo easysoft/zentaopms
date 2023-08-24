@@ -224,11 +224,11 @@ class Project
 
     /**
      * Test manage members.
-     * 
-     * @param  int    $projectID 
-     * @param  array  $members 
+     *
+     * @param  int    $projectID
+     * @param  array  $members
      * @access public
-     * @return array 
+     * @return array
      */
     public function manageMembers(int $projectID, array $members): array
     {
@@ -411,5 +411,30 @@ class Project
         $this->project->buildSearchForm($queryID, 'searchUrl');
 
         return $_SESSION['projectsearchParams']['queryID'];
+    }
+
+    /**
+     * 创建项目后，创建默认的项目主库。
+     * Create doclib after create a project.
+     *
+     * @param  int    $projectID
+     * @param  int    $programID
+     * @access public
+     * @return object|bool
+     */
+    public function createDocLibTest(int $projectID, int $programID): object|bool
+    {
+        $program = new stdclass();
+        if($programID)
+        {
+            global $tester;
+            $program = $tester->loadModel('program')->getByID($programID);
+        }
+
+        $project = $this->project->getByID($projectID);
+
+        $this->project->createDocLib($projectID, $project, $program);
+
+        return $this->project->dao->select('*')->from(TABLE_DOCLIB)->where('type')->eq('project')->andWhere('project')->eq($projectID)->fetch();
     }
 }
