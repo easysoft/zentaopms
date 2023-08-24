@@ -859,7 +859,7 @@ class projectTao extends projectModel
      * @param  int    $projectID
      * @param  string $status
      *
-     * @access public
+     * @access protected
      * @return array|false
      */
     protected function changeExecutionStatus(int $projectID, string $status): array|false

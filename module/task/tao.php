@@ -156,7 +156,7 @@ class taskTao extends taskModel
      * After editing the effort, build the task data to be updated.
      *
      * @param  object      $task
-     * @access public
+     * @access protected
      * @return array|false
      */
     protected function buildTaskForUpdateEffort(object $task, object $oldEffort, object $effort): object
@@ -383,7 +383,7 @@ class taskTao extends taskModel
      * When editing a effort, check that the input is legal.
      *
      * @param  object  $effort
-     * @access public
+     * @access protected
      * @return bool
      */
     protected function checkEffort(object $effort): bool
@@ -776,10 +776,10 @@ class taskTao extends taskModel
      *
      * @param  int    $taskID
      * @param  array  $team
-     * @access public
+     * @access protected
      * @return array
      */
-    public function getFinishedUsers(int $taskID = 0, array $team = array()): array
+    protected function getFinishedUsers(int $taskID = 0, array $team = array()): array
     {
         return $this->dao->select('id,account')->from(TABLE_TASKTEAM)
             ->where('task')->eq($taskID)
