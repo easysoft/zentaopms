@@ -10,6 +10,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('orderBy',  $orderBy);
+jsVar('sortLink', createLink('repo', 'maintain', "objectID=$objectID&orderBy={orderBy}&recTotal={$pager->recTotal}&pageID={$pager->pageID}"));
+
 $createItem      = array('text' => $lang->repo->createAction, 'url' => createLink('repo', 'create'));
 $batchCreateItem = array('text' => $lang->repo->batchCreate, 'url' => createLink('repo', 'import'));
 
@@ -55,7 +58,7 @@ $config->repo->dtable->fieldList['actions']['list']['delete']['url'] = $this->cr
 $repos = initTableData($repoList, $config->repo->dtable->fieldList, $this->repo);
 
 featureBar
- (
+(
     set::current('all'),
     li(searchToggle(set::open($type == 'bySearch'))),
 );
@@ -89,6 +92,7 @@ dtable
 (
     set::cols($config->repo->dtable->fieldList),
     set::data($repos),
+    set::sortLink(jsRaw('createSortLink')),
     set::footPager(usePager()),
 );
 

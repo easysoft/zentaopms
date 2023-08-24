@@ -87,7 +87,7 @@ class repo extends control
         $recTotal = count($repoList);
         $pager    = new pager($recTotal, $recPerPage, $pageID);
         $repoList = array_chunk($repoList, $pager->recPerPage);
-        $repoList = empty($repoList) ? $repoList : $repoList[$pageID - 1];
+        $repoList = empty($repoList) ? array() : $repoList[$pageID - 1];
 
         /* Get success jobs of sonarqube.*/
         $jobIDList = array();
