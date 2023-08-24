@@ -547,6 +547,19 @@ class testcaseTest
     }
 
     /**
+     * Test batch change module of scenes.
+     *
+     * @param  array  $sceneIdList
+     * @param  int    $moduleID
+     * @access public
+     * @return bool|array
+     */
+    public function batchChangeSceneModuleTest($sceneIdList, $moduleID)
+    {
+        return $this->objectModel->batchChangeSceneModule($sceneIdList, $moduleID);
+    }
+
+    /**
      * Test batch case type change.
      *
      * @param  array  $caseIdList
