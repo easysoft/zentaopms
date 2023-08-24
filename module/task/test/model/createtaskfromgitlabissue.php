@@ -11,14 +11,29 @@ cid=1
 pid=1
 
 测试正常的创建开发任务 >> gitlab中新建的问题01
-测试正常的创建开发任务 >> 101
-测试正常的创建开发任务 >> 11
+测试正常的创建开发任务 >> 2
+测试正常的创建开发任务 >> 1
 测试不输入执行创建任务 >> 『所属执行』不能为空。
 测试不输入名称创建任务 >> 『任务名称』不能为空。
 
 */
 
-$executionID = 101;
+$execution = zdTable('project');
+$execution->id->range('1-2');
+$execution->name->setFields(array(
+    array('field' => 'name1', 'range' => '项目{1},执行{1}'),
+    array('field' => 'name2', 'range' => '1-2'),
+));
+$execution->code->setFields(array(
+    array('field' => 'name1', 'range' => '项目{1},执行{1}'),
+    array('field' => 'name2', 'range' => '1-2'),
+));
+$execution->type->range('project{1},sprint{1}');
+$execution->project->range('0{1},1{1}');
+$execution->status->range('doing');
+$execution->gen(2);
+
+$executionID = 2;
 
 $task1 = new stdclass();
 $task1->name      = 'gitlab中新建的问题01';
@@ -34,15 +49,15 @@ $task3->execution = $executionID;
 
 $task4 = new stdclass();
 $task4->name      = 'gitlab中新建的问题04';
-$task4->execution = '';
+$task4->execution = 0;
 
 $task5 = new stdclass();
 $task5->name      = '';
 $task5->execution = $executionID;
 
 $task = new taskTest();
-r($task->createTaskFromGitlabIssueTest($task1, $executionID)) && p('name')        && e('gitlab中新建的问题01');                 // 测试正常的创建开发任务
-r($task->createTaskFromGitlabIssueTest($task2, $executionID)) && p('execution')   && e('101');                                  // 测试正常的创建开发任务
-r($task->createTaskFromGitlabIssueTest($task3, $executionID)) && p('project')     && e('11');                                   // 测试正常的创建开发任务
-r($task->createTaskFromGitlabIssueTest($task4, $executionID)) && p('execution:0') && e('『所属执行』不能为空。');               // 测试不输入执行创建任务
-r($task->createTaskFromGitlabIssueTest($task5, $executionID)) && p('name:0')      && e('『任务名称』不能为空。');               // 测试不输入名称创建任务
+r($task->createTaskFromGitlabIssueTest($task1, $executionID)) && p('name')        && e('gitlab中新建的问题01');   // 测试正常的创建开发任务
+r($task->createTaskFromGitlabIssueTest($task2, $executionID)) && p('execution')   && e('2');                      // 测试正常的创建开发任务
+r($task->createTaskFromGitlabIssueTest($task3, $executionID)) && p('project')     && e('1');                      // 测试正常的创建开发任务
+r($task->createTaskFromGitlabIssueTest($task4, 0))            && p('execution:0') && e('『所属执行』不能为空。'); // 测试不输入执行创建任务
+r($task->createTaskFromGitlabIssueTest($task5, $executionID)) && p('name:0')      && e('『任务名称』不能为空。'); // 测试不输入名称创建任务
