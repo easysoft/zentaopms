@@ -426,26 +426,26 @@ class projectModel extends model
     }
 
     /**
+     * 获取给定项目的总计消耗工时。
      * Get projects consumed info.
      *
-     * @param  array    $projectID
-     * @param  string   $time
+     * @param  array  $projectID
+     * @param  string $time
      * @access public
-     * @return array
+     * @return object[]
      */
-    public function getProjectsConsumed($projectIdList, $time = '')
+    public function getProjectsConsumed(array $projectIdList, string $time = ''): array
     {
-        $projects = array();
-
         $totalConsumeds = $this->dao->select('t2.project,ROUND(SUM(t1.consumed), 1) AS totalConsumed')->from(TABLE_EFFORT)->alias('t1')
             ->leftJoin(TABLE_TASK)->alias('t2')->on("t1.objectID=t2.id and t1.objectType = 'task'")
             ->where('t2.project')->in($projectIdList)
-            ->beginIF($time == 'THIS_YEAR')->andWhere('LEFT(t1.`date`, 4)')->eq(date('Y'))->fi()
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.parent')->lt(1)
+            ->beginIF($time == 'THIS_YEAR')->andWhere('LEFT(t1.`date`, 4)')->eq(date('Y'))->fi()
             ->groupBy('t2.project')
             ->fetchAll('project');
 
+        $projects = array();
         foreach($projectIdList as $projectID)
         {
             $project = new stdClass();
