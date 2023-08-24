@@ -1079,7 +1079,7 @@ class testcaseModel extends model
      * @param  array  $caseIdList
      * @param  string $result
      * @access public
-     * @return array
+     * @return bool
      */
     public function batchReview(array $caseIdList, string $result): bool
     {
@@ -1096,7 +1096,7 @@ class testcaseModel extends model
         $case->lastEditedDate = $now;
         if($result == 'pass') $case->status = 'normal';
 
-        $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->where('status')->eq('wait')->andWhere('id')->in($caseIdList)->exec();
+        $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->where('id')->in(array_keys($oldCases))->exec();
         if(dao::isError()) return false;
 
         $this->loadModel('action');
