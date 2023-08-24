@@ -137,15 +137,17 @@ class programModel extends model
      * Get program pairs by id list.
      *
      * @param  string|array $programIDList
+     * @param  string       $orderBy
      * @access public
      * @return array
      */
-    public function getPairsByList($programIDList = '')
+    public function getPairsByList($programIDList = '', $orderBy = 'order_asc')
     {
         return $this->dao->select('id, name')->from(TABLE_PROGRAM)
             ->where('id')->in($programIDList)
             ->andWhere('`type`')->eq('program')
             ->andWhere('deleted')->eq(0)
+            ->orderBy($orderBy)
             ->fetchPairs();
     }
 
