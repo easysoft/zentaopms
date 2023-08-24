@@ -418,23 +418,26 @@ class projectTao extends projectModel
     }
 
     /**
-     * 获取创建项目时选择的产品数量.
+     * 获取创建项目时选择的产品数量。
      * Get products count from post.
      *
-     * @param  object $project
-     * @param  object $rawdata
-     * @param  object $program
+     * @param  object    $project
+     * @param  object    $rawdata
      * @access protected
-     * @return bool
+     * @return int
      */
     protected function getLinkedProductsCount(object $project, object $rawdata): int
     {
+        if(!isset($project)) return 0;
+
         $linkedProductsCount = 0;
         if($project->hasProduct && isset($rawdata->products))
         {
             foreach($rawdata->products as $product)
             {
-                if(!empty($product)) $linkedProductsCount++;
+                if(empty($product)) continue;
+
+                $linkedProductsCount ++;
             }
         }
 
