@@ -600,7 +600,7 @@ class taskTao extends taskModel
         /* Update children task. */
         if(isset($task->execution) && $task->execution != $oldTask->execution)
         {
-            $newExecution  = $this->loadModel('execution')->getByID($task->execution);
+            $newExecution  = $this->loadModel('execution')->getByID((int)$task->execution);
             $task->project = $newExecution->project;
             $this->dao->update(TABLE_TASK)->set('execution')->eq($task->execution)->set('module')->eq($task->module)->set('project')->eq($task->project)->where('parent')->eq($task->id)->exec();
         }
