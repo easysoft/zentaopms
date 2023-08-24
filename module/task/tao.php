@@ -449,9 +449,9 @@ class taskTao extends taskModel
         /* If consumed of the current task is not empty and left of the current task is empty, the current task status should be done or doing. */
         if($currentTask->consumed > 0 && $currentTask->left == 0)
         {
-            $finisedUsers = $this->getFinishedUsers($oldTask->id, $members);
+            $finishedUsers = $this->getFinishedUsers($oldTask->id, $members);
             /* If the number of finisher is less than the number of team members , the current task status should be doing. */
-            if(count($finisedUsers) != count($members))
+            if(count($finishedUsers) != count($members))
             {
                 if(strpos('cancel,pause', $oldTask->status) === false || ($oldTask->status == 'closed' && $oldTask->reason == 'done'))
                 {
@@ -1029,7 +1029,7 @@ class taskTao extends taskModel
 
     /**
      * 通过父任务更新子任务。
-     * Update chilren task by parent task.
+     * Update children task by parent task.
      *
      * @param  int       $parentID
      * @param  object    $data

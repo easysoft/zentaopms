@@ -61,7 +61,7 @@ class taskZen extends task
         $this->view->gobackLink    = (isset($output['from']) && $output['from'] == 'global') ? $this->createLink('execution', 'task', "executionID={$executionID}") : '';
         $this->view->execution     = $execution;
         $this->view->storyID       = $storyID;
-        $this->view->blockID       = helper::isAjaxRequest('modal') ? $this->loadModel('block')->getSpecifiedBlockID('my', 'assingtome', 'assingtome') : 0;
+        $this->view->blockID       = helper::isAjaxRequest('modal') ? $this->loadModel('block')->getSpecifiedBlockID('my', 'assigntome', 'assigntome') : 0;
         $this->view->hideStory     = $this->task->isNoStoryExecution($execution);
         $this->view->from          = $storyID || $todoID || $bugID  ? 'other' : 'task';
         $this->view->taskID        = $taskID;
@@ -461,14 +461,14 @@ class taskZen extends task
     protected function buildTasksForBatchAssignTo(array $taskIdList, string $assignedTo): array
     {
         $taskIdList     = array_unique($taskIdList);
-        $muletipleTasks = $this->dao->select('task, account')->from(TABLE_TASKTEAM)->where('task')->in($taskIdList)->fetchGroup('task', 'account');
+        $multipleTasks = $this->dao->select('task, account')->from(TABLE_TASKTEAM)->where('task')->in($taskIdList)->fetchGroup('task', 'account');
         $tasks          = $this->task->getByIdList($taskIdList);
 
         /* Filter tasks. */
         foreach($tasks as $taskID => $task)
         {
-            if(isset($muletipleTasks[$taskID]) && $task->assignedTo != $this->app->user->account && $task->mode == 'linear') unset($tasks[$taskID]);
-            if(isset($muletipleTasks[$taskID]) && !isset($muletipleTasks[$taskID][$this->post->assignedTo])) unset($tasks[$taskID]);
+            if(isset($multipleTasks[$taskID]) && $task->assignedTo != $this->app->user->account && $task->mode == 'linear') unset($tasks[$taskID]);
+            if(isset($multipleTasks[$taskID]) && !isset($multipleTasks[$taskID][$this->post->assignedTo])) unset($tasks[$taskID]);
             if($task->status == 'closed') unset($tasks[$taskID]);
         }
 
@@ -1018,7 +1018,7 @@ class taskZen extends task
             /* If the task start and end date must be between the execution start and end date, check if the task start and end date accord with the conditions. */
             if(!empty($this->config->limitTaskDate))
             {
-                $this->task->checkEstStartedAndDeadline($task->execuiton, $task->estStarted, $task->deadline);
+                $this->task->checkEstStartedAndDeadline($task->execution, $task->estStarted, $task->deadline);
                 if(dao::isError())
                 {
                     $error = current(dao::getError());
@@ -1420,7 +1420,7 @@ class taskZen extends task
      * @param  object    $task
      * @param  object    $oldTask
      * @access protected
-     * @return objecy
+     * @return object
      */
     protected function processTaskByStatus(object $task, object $oldTask): object
     {

@@ -1926,7 +1926,7 @@ class taskTest
 
     /**
      * 通过父任务更新子任务。
-     * Update chilren task by parent task.
+     * Update children task by parent task.
      *
      * @param  int    $parentID
      * @param  string $action

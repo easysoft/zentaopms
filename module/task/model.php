@@ -236,7 +236,7 @@ class taskModel extends model
             if($oldTask->story) $this->story->setStage($oldTask->story);
             if($task->status != $oldTask->status) $this->kanban->updateLane($oldTask->execution, 'task', $taskID);
 
-            /* Udate parent task's status, date and hour. */
+            /* Update parent task's status, date and hour. */
             if($oldTask->parent > 0)
             {
                 $this->updateParentStatus($taskID);

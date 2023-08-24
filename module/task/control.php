@@ -572,7 +572,7 @@ class task extends control
             $taskData = $this->taskZen->buildTaskForFinish($task);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            /* Get and record esitimate for task. */
+            /* Get and record estimate for task. */
             $effort = $this->taskZen->buildEffortForFinish($task, $taskData);
             if($effort->consumed > 0) $effortID = $this->task->addTaskEffort($effort);
             if($task->mode == 'linear' && !empty($effortID)) $this->task->updateEffortOrder($effortID, $currentTeam->order);

@@ -1290,7 +1290,7 @@ class treeModel extends model
         $branchID  = zget($extra, 'branchID', 0);
         $orderBy   = zget($extra, 'orderBy', '');
         $build     = zget($extra, 'build', 0);
-        if($this->app->tab == 'execution') $param = "execuitonID={$projectID}&productID={$module->root}&branch={$branchID}&orderBy={$orderBy}&build={$build}&type={$extraType}&param={$module->id}";
+        if($this->app->tab == 'execution') $param = "executionID={$projectID}&productID={$module->root}&branch={$branchID}&orderBy={$orderBy}&build={$build}&type={$extraType}&param={$module->id}";
         if($this->app->tab == 'project')   $param = "projectID={$projectID}&productID={$module->root}&branch={$branchID}&orderBy={$orderBy}&build={$build}&type={$extraType}&param={$module->id}";
 
         $data = new stdclass();
