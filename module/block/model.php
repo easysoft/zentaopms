@@ -220,7 +220,7 @@ class blockModel extends model
         $delayBugs = array();
         foreach($bugs as $bug)
         {
-            if($bug->status == 'active' && $bug->deadline && $bug->deadline < $today) $delayBugs[$bug->id] = true;
+            if($bug->status == 'active' && !helper::isZeroDate($bug->deadline) && $bug->deadline < $today) $delayBugs[$bug->id] = true;
             $totalBugs[$bug->id] = true;
         }
         $data['bugs']     = count($totalBugs);

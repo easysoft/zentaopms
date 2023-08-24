@@ -692,7 +692,6 @@ class upgradeModel extends model
                 if($ipdinstall) $this->execSQL($this->getUpgradeFile('ipdinstall'));
 
                 if($fromVersion == 'ipd1.0.beta1') $this->execSQL($this->getUpgradeFile('ipd1.0.beta1'));
-                if($this->config->edition == 'ipd' and strpos($fromVersion, 'ipd') === false) $this->addORPriv();
 
                 $this->loadModel('product')->refreshStats(true);
                 $this->loadModel('program')->refreshStats(true);

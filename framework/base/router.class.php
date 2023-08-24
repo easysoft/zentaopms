@@ -770,6 +770,7 @@ class baseRouter
         $account = isset($_SESSION['user']) ? $_SESSION['user']->account : '';
         if(empty($account) and isset($_POST['account'])) $account = $_POST['account'];
         if(empty($account) and isset($_GET['account']))  $account = $_GET['account'];
+        if(empty($account))                              $account = $this->cookie->za;
 
         $vision = '';
         if($this->config->installed and validater::checkAccount($account))

@@ -218,6 +218,7 @@ class upgrade extends control
                 $this->loadModel('setting')->setItem('system.custom.URAndSR', '1');
                 $this->loadModel('setting')->setItem('system.common.closedFeatures', '');
                 $this->loadModel('setting')->setItem('system.common.disabledFeatures', '');
+                $this->upgrade->addORPriv();
             }
 
             if($selectMode)
@@ -897,6 +898,9 @@ class upgrade extends control
         if(empty($needProcess) or $processed == 'yes')
         {
             $this->loadModel('setting')->updateVersion($this->config->version);
+
+            $zfile = $this->app->loadClass('zfile');
+            $zfile->removeDir($this->app->getTmpRoot() . 'model/');
 
             $installFile = $this->app->getAppRoot() . 'www/install.php';
             $upgradeFile = $this->app->getAppRoot() . 'www/upgrade.php';
