@@ -10,25 +10,13 @@ title=检查根据effortID更新任务团队工时
 timeout=0
 cid=1
 
-- 通过ID为1的日志更新任务团队工时第0条的consumed属性 @5.00
-
-- 通过ID为2的日志更新任务团队工时第0条的consumed属性 @10.00
-
-- 通过ID为3的日志更新任务团队工时第0条的consumed属性 @0.00
-
-- 通过ID为3的日志更新任务团队工时第0条的consumed属性 @1.00
-
-- 通过ID为4的日志更新任务团队工时第0条的consumed属性 @0.00
-
-- 通过ID为4的日志更新任务团队工时第0条的consumed属性 @1.00
-
 */
 $task = zdTable('task');
 $task->id->range('1-7');
 $task->execution->range('1-7');
 $task->name->prefix("任务")->range('1-7');
 $task->left->range('1-7');
-$task->mode->range(" , multi, , , , ,");
+$task->mode->range("linear,multi");
 $task->estStarted->range('2022\-01\-01');
 $task->assignedTo->prefix("user")->range('1-7');
 $task->status->range("wait,wait,doing,done,pause,cancel,closed");
@@ -77,7 +65,7 @@ $normalTaskEffort->work     = "记录了日志";
 $normalTaskEffort->date     = "2022-01-01";
 
 $task = new taskTest();
-r($task->updateTeamByEffortTest(1, $finishTaskEffort, 1)) && p('0:consumed') && e('5.00');   // 通过ID为1的日志更新任务团队工时
+r($task->updateTeamByEffortTest(1, $finishTaskEffort, 1)) && p('0:estimate') && e('5.00');   // 通过ID为1的日志更新任务团队工时
 r($task->updateTeamByEffortTest(2, $finishTaskEffort, 1)) && p('0:consumed') && e('10.00');  // 通过ID为2的日志更新任务团队工时
 r($task->updateTeamByEffortTest(3, $startTaskEffort,  3)) && p('0:consumed') && e('0.00');   // 通过ID为3的日志更新任务团队工时
 r($task->updateTeamByEffortTest(3, $startTaskEffort,  4)) && p('0:consumed') && e('1.00');   // 通过ID为3的日志更新任务团队工时
