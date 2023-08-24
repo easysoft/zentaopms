@@ -8,6 +8,7 @@ class testcaseTest
     }
 
     /**
+     * 测试创建一个用例。
      * Test create a case.
      *
      * @param  array  $param
@@ -16,27 +17,24 @@ class testcaseTest
      */
     public function createTest($param)
     {
-        $bugID = 0;
+        $case = new stdclass();
+        $case->product      = 1;
+        $case->module       = 1821;
+        $case->type         = 'feature';
+        $case->stage        = ',unittest';
+        $case->story        = 4;
+        $case->color        = '';
+        $case->pri          = 3;
+        $case->precondition = '前置条件';
+        $case->steps        = array('1' => '1','1.1' => '1.1', '1.2' => '1.2', '2' => '2', '3' => '3', '4' => '');
+        $case->stepType     = array('1' => 'group','1.1' => 'item', '1.2' => 'item', '2' => 'step', '3' => 'item', '4' => 'step');
+        $case->expects      = array('1' => '','1.1' => '', '1.2' => '', '2' => '', '3' => '', '4' => '');
+        $case->keywords     = '关键词1,关键词2';
+        $case->status       = 'normal';
 
-        $_POST['product']      = '1';
-        $_POST['module']       = '1821';
-        $_POST['type']         = 'feature';
-        $_POST['stage']        = array('', 'unittest');
-        $_POST['story']        = '4';
-        $_POST['color']        = '';
-        $_POST['pri']          = '3';
-        $_POST['precondition'] = '前置条件';
-        $_POST['steps']        = array('1' => '1','1.1' => '1.1', '1.2' => '1.2', '2' => '2', '3' => '3', '4' => '');
-        $_POST['stepType']     = array('1' => 'group','1.1' => 'item', '1.2' => 'item', '2' => 'step', '3' => 'item', '4' => 'step');
-        $_POST['expects']      = array('1' => '','1.1' => '', '1.2' => '', '2' => '', '3' => '', '4' => '');
-        $_POST['keywords']     = '关键词1,关键词2';
-        $_POST['status']       = 'normal';
-        $_POST['labels']       = array('');
-        $_POST['files']        = array('');
+        foreach($param as $field => $value) $case->{$field} = $value;
 
-        foreach($param as $field => $value) $_POST[$field] = $value;
-
-        $objects = $this->objectModel->create($bugID);
+        $objects = $this->objectModel->create($case);
 
         unset($_POST);
 
@@ -784,5 +782,41 @@ class testcaseTest
         if(dao::isError()) return dao::getError()[0];
 
         return $objects;
+    }
+
+    /**
+     * 测试添加步骤。
+     * Test append steps.
+     *
+     * @param  array  $steps
+     * @param  int    $count
+     * @access public
+     * @return array
+     */
+    public function appendStepsTest(array $steps, int $count = 0)
+    {
+        $objects = $this->objectModel->appendSteps($steps, $count);
+
+        return count($objects);
+    }
+
+    /**
+     * 测试插入步骤。
+     * Test insert steps.
+     *
+     * @param  int    $caseID
+     * @param  array  $steps
+     * @param  array  $expects
+     * @param  array  $stepTypes
+     * @access public
+     * @return array
+     */
+    public function insertStepsTest(int $caseID, array $steps, array $expects, array $stepTypes)
+    {
+        $objects = $this->objectModel->insertSteps($caseID, $steps, $expects, $stepTypes);
+        if(dao::isError()) return dao::getError()[0];
+        global $tester;
+        $steps  = $tester->dao->select('id')->from(TABLE_CASESTEP)->where('case')->eq($caseID)->fetchAll('id');
+        return implode(',', array_keys($steps));
     }
 }

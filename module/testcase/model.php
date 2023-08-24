@@ -31,16 +31,19 @@ class testcaseModel extends model
     }
 
     /**
+     * 创建一个用例。
      * Create a case.
      *
      * @param  object $case
      * @access public
      * @return bool|int
      */
-    public function create($case): bool|int
+    public function create(object $case): bool|int
     {
         if(empty($case->product)) $this->config->testcase->create->requiredFields = str_replace('story', '', $this->config->testcase->create->requiredFields);
-        /* Value of story may be showmore. */
+
+        /* 插入测试用例。 */
+        /* Insert testcase. */
         $this->dao->insert(TABLE_CASE)->data($case, 'steps,expects,files,labels,stepType,forceNotReview,scriptFile,scriptName')
             ->autoCheck()
             ->batchCheck($this->config->testcase->create->requiredFields, 'notempty')
@@ -50,58 +53,25 @@ class testcaseModel extends model
 
         $caseID = $this->dao->lastInsertID();
 
+        /* 记录动态。*/
+        /* Record log. */
         $this->loadModel('action');
         $this->action->create('case', $caseID, 'Opened');
         if($case->status == 'wait') $this->action->create('case', $caseID, 'submitReview');
 
+        /* 存储上传的文件。 */
+        /* Save upload files. */
         $this->config->dangers = '';
         $this->loadModel('file')->saveUpload('testcase', $caseID, 'autoscript', 'script', 'scriptName');
         $this->loadModel('file')->saveUpload('testcase', $caseID);
 
         $this->loadModel('score')->create('testcase', 'create', $caseID);
 
-        $stepTypes    = $this->post->stepType;
-        $preGrade     = 0;
-        $parentStepID = $grandPaStepID = 0;
-        foreach($case->steps as $stepKey => $stepDesc)
-        {
-            if(empty($stepDesc)) continue;
+        /* 插入用例步骤。 */
+        /* Insert testcase steps. */
+        $this->testcaseTao->insertSteps($caseID, $case->steps, $case->expects, $case->stepType);
 
-            $stepType = $stepTypes[$stepKey];
-            $grade    = substr_count($stepKey, '.');
-
-            if($grade == 0)
-            {
-                $parentStepID = $grandPaStepID = 0;
-            }
-            elseif($preGrade > $grade)
-            {
-                $parentStepID  = $grandPaStepID;
-                $grandPaStepID = 0;
-            }
-
-            $step = new stdClass();
-            $step->type    = $stepType;
-            $step->parent  = $parentStepID;
-            $step->case    = $caseID;
-            $step->version = 1;
-            $step->desc    = rtrim(htmlSpecialString($stepDesc));
-            $step->expect  = $stepType == 'group' ? '' : rtrim(htmlSpecialString(zget($case->expects, $stepKey, '')));
-
-            $this->dao->insert(TABLE_CASESTEP)->data($step)
-                ->autoCheck()
-                ->exec();
-
-            if($step->type == 'group')
-            {
-                $grandPaStepID = $parentStepID;
-                $parentStepID  = $this->dao->lastInsertID();
-            }
-
-            $preGrade = $grade;
-        }
         if(dao::isError()) return false;
-
         return $caseID;
     }
 
@@ -515,18 +485,7 @@ class testcaseModel extends model
             $preGrade = $grade;
         }
 
-        if(empty($steps))
-        {
-            $data = new stdclass();
-            $data->id     = 0;
-            $data->name   = '1';
-            $data->step   = '';
-            $data->desc   = '';
-            $data->expect = '';
-            $data->type   = 'step';
-
-            $case->steps[] = $data;
-        }
+        $case->steps = $this->appendSteps(!empty($case->steps) ? $case->steps : array(), 1);
 
         return $case;
     }
@@ -925,47 +884,7 @@ class testcaseModel extends model
                 if($this->post->steps)
                 {
                     $data = fixer::input('post')->get();
-
-                    $preGrade     = 0;
-                    $parentStepID = $grandPaStepID = 0;
-                    foreach($data->steps as $stepKey => $stepDesc)
-                    {
-                        if(empty($stepDesc)) continue;
-                        if(empty($stepDesc)) continue;
-
-                        $stepType = $data->stepType[$stepKey];
-                        $grade    = substr_count($stepKey, '.');
-
-                        if($grade == 0)
-                        {
-                            $parentStepID = $grandPaStepID = 0;
-                        }
-                        elseif($preGrade > $grade)
-                        {
-                            $parentStepID  = $grandPaStepID;
-                            $grandPaStepID = 0;
-                        }
-
-                        $step = new stdClass();
-                        $step->type    = $stepType;
-                        $step->parent  = $parentStepID;
-                        $step->case    = $caseID;
-                        $step->version = $version;
-                        $step->desc    = rtrim(htmlSpecialString($stepDesc));
-                        $step->expect  = $stepType == 'group' ? '' : rtrim(htmlSpecialString(zget($data->expects, $stepKey, '')));
-
-                        $this->dao->insert(TABLE_CASESTEP)->data($step)
-                            ->autoCheck()
-                            ->exec();
-
-                        if($step->type == 'group')
-                        {
-                            $grandPaStepID = $parentStepID;
-                            $parentStepID  = $this->dao->lastInsertID();
-                        }
-
-                        $preGrade = $grade;
-                    }
+                    $this->testcaseTao->insertSteps($caseID, $data->steps, $data->expects, (array)$data->stepType);
                 }
                 else
                 {
@@ -4598,5 +4517,34 @@ class testcaseModel extends model
             ->fetch('count');
         $case->caseFails = $caseFails;
         return $case;
+    }
+
+    /**
+     * 添加步骤。
+     * Append steps.
+     *
+     * @param  array  $steps
+     * @param  int    $count
+     * @access public
+     * @return array
+     */
+    public function appendSteps(array $steps, int $count = 0): array
+    {
+        if($count == 0) $count = $this->config->testcase->defaultSteps;
+        if(count($steps) < $count)
+        {
+            $step = new stdclass();
+            $step->step   = '';
+            $step->desc   = '';
+            $step->expect = '';
+            $step->type   = 'step';
+            for($i = count($steps) + 1; $i <= $count; $i ++)
+            {
+                $data = clone $step;
+                $data->name    = (string)$i;
+                $steps[] = $data;
+            }
+        }
+        return $steps;
     }
 }
