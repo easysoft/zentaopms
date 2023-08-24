@@ -249,6 +249,12 @@ class projectModel extends model
         /* Get project list by query. */
         $projects = $this->projectTao->fetchProjectListByQuery($status, $projectID, $orderBy, $limit, $excludedModel);
         if(empty($projects)) return array();
+        if($projectID)
+        {
+            if(empty($projects[$projectID])) return array();
+
+            $projects = array($projectID => $projects[$projectID]);
+        }
 
         /* Get team members under the project. */
         $projectIdList = array_keys($projects);
@@ -905,73 +911,59 @@ class projectModel extends model
     }
 
     /**
+     * 根据项目集和模型获取项目列表。
      * Get project pairs by model and project.
      *
-     * @param  string           $model all|scrum|waterfall|kanban
-     * @param  int              $programID
-     * @param  string           $param noclosed
-     * @param  string|int|array $append
+     * @param  string  $model all|scrum|waterfall|kanban
+     * @param  string  $param noclosed
+     * @param  int     $projectID
      * @access public
      * @return array
      */
-    public function getPairsByModel($model = 'all', $programID = 0, $param = '', $append = '', $orderBy = 'order_asc')
+    public function getPairsByModel(string $model = 'all', string $param = '', int $projectID = 0): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getProjectPairs();
+
+        /* Get project list. */
+        $projects = $this->projectTao->fetchProjectListByQuery(strpos($param, 'noclosed') !== false ? 'unclosed' : 'all', $projectID);
 
         if($model == 'agileplus')     $model = array('scrum', 'agileplus');
         if($model == 'waterfallplus') $model = array('waterfall', 'waterfallplus');
 
-        $projects = $this->dao->select('id, name, path')->from(TABLE_PROJECT)
-            ->where('type')->eq('project')
-            ->andWhere('deleted')->eq('0')
-            ->beginIF($programID)->andWhere('parent')->eq($programID)->fi()
-            ->beginIF($this->config->vision)->andWhere('vision')->eq($this->config->vision)->fi()
-            ->beginIF($model != 'all')->andWhere('model')->in($model)->fi()
-            ->beginIF(strpos($param, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
-            ->beginIF(strpos($param, 'multiple') !== false)->andWhere('multiple')->eq('1')->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->beginIF(!empty($append))->orWhere('id')->in($append)->fi()
-            ->orderBy($orderBy)
-            ->fetchAll();
-
-        $programIdList  = array();
-        $projectProgram = array();
-        foreach($projects as $project)
+        /* Set first program to the project attribute. */
+        $model    = array($model);
+        $multiple = strpos($param, 'multiple') !== false;
+        foreach($projects as $projectID => $project)
         {
+            if(!in_array($project->model, $model) || ($multiple && !$project->multiple))
+            {
+                unset($projects[$projectID]);
+                continue;
+            }
+
             list($programID) = explode(',', trim($project->path, ','));
-            $programIdList[$programID]    = $programID;
-            $projectProgram[$project->id] = $programID;
+            $projects[$projectID]->program = $programID;
         }
 
-        $programs = $this->dao->select('id, name')->from(TABLE_PROGRAM)->where('id')->in($programIdList)->orderBy($orderBy)->fetchPairs('id', 'name');
+        $programs = $this->loadModel('program')->getPairsByList(array_column($projects, 'program'));
 
         /* Sort by project order in the program list. */
         $allProjects = array();
         foreach($programs as $programID => $program) $allProjects[$programID] = array();
         foreach($projects as $project)
         {
-            $programID = zget($projectProgram, $project->id, '');
+            $programID = zget($project, 'program', '');
+
+            $projectName = $project->name;
+            if($this->config->systemMode == 'ALM' && $programID != $project->id) $projectName = zget($programs, $programID, '') . ' / ' . $projectName;
+            $project->name = $projectName;
+
             $allProjects[$programID][] = $project;
         }
 
-        $pairs = array();
-        foreach($allProjects as $programID => $projects)
-        {
-            foreach($projects as $project)
-            {
-                $projectName = $project->name;
-
-                if($this->config->systemMode == 'ALM')
-                {
-                    $programID = zget($projectProgram, $project->id, '');
-                    if($programID != $project->id) $projectName = zget($programs, $programID, '') . ' / ' . $projectName;
-                }
-
-                $pairs[$project->id] = $projectName;
-            }
-        }
-
-        return $pairs;
+        $projectPairs = array();
+        foreach($allProjects as $programID => $projects) $projectPairs = array_merge($projectPairs, array_column($projects, 'name'));
+        return $projectPairs;
     }
 
     /**
