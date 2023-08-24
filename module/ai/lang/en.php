@@ -410,6 +410,7 @@ $lang->ai->models->unconfigured   = 'Unconfigured';
 $lang->ai->models->edit           = 'Edit Parameters';
 $lang->ai->models->concealTip     = 'Visible when editing';
 $lang->ai->models->upgradeBiz     = 'For more AI features, all in <a target="_blank" href="https://www.zentao.net/page/enterprise.html" class="text-blue">ZenTao Biz</a>.';
+$lang->ai->models->noModelError   = 'No language model is configured, please contact the administrator.';
 
 $lang->ai->models->testConnectionResult = new stdclass();
 $lang->ai->models->testConnectionResult->success    = 'Successfully connected';

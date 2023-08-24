@@ -500,6 +500,11 @@ class ai extends control
      */
     public function promptExecute($promptId, $objectId)
     {
+        $modelConfig = new stdclass();
+        $storedModelConfig = $this->loadModel('setting')->getItems('owner=system&module=ai');
+        foreach($storedModelConfig as $item) $modelConfig->{$item->key} = $item->value;
+        if(empty($modelConfig->key)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'locate' => $this->inlink('models') . '#app=admin'));
+
         $prompt = $this->ai->getPromptByID($promptId);
         if(empty($prompt) || !$this->ai->isExecutable($prompt)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noPrompt'])));
 
