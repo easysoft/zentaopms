@@ -26,7 +26,7 @@ formPanel
         set::width("1/3"),
         set::name("assignedTo"),
         set::label($lang->task->assignedTo),
-        set::value((empty($task->team) or strpos('done,cencel,closed', $task->status) !== false) ? $task->assignedTo : $task->nextUser),
+        set::value((empty($task->team) or strpos('done,cancel,closed', $task->status) !== false) ? $task->assignedTo : $task->nextUser),
         set::control("picker"),
         set::items($members)
     ),

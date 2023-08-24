@@ -38,8 +38,8 @@
     <form method='post' target='hiddenwin'>
       <table class='table table-form'>
         <tr>
-          <th class='w-80px'><?php echo (empty($task->team) or strpos('done,cencel,closed', $task->status) !== false) ? $lang->task->assign : $lang->task->transferTo;?></th>
-          <td class='w-p25-f'><?php echo html::select('assignedTo', $members, (empty($task->team) or strpos('done,cencel,closed', $task->status) !== false) ? $task->assignedTo : $task->nextUser, "class='form-control chosen'");?></td><td></td>
+          <th class='w-80px'><?php echo (empty($task->team) or strpos('done,cancel,closed', $task->status) !== false) ? $lang->task->assign : $lang->task->transferTo;?></th>
+          <td class='w-p25-f'><?php echo html::select('assignedTo', $members, (empty($task->team) or strpos('done,cancel,closed', $task->status) !== false) ? $task->assignedTo : $task->nextUser, "class='form-control chosen'");?></td><td></td>
         </tr>
         <?php if($task->status != 'done' and $task->status != 'closed' and $task->parent >= 0):?>
         <tr>

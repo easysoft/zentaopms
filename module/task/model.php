@@ -2440,7 +2440,7 @@ class taskModel extends model
             $myself = new self();
             if($task->mode == 'linear')
             {
-                if($action == 'assignto' && !in_array($task->status, array('done', 'cencel', 'closed'))) return false;
+                if($action == 'assignto' && !in_array($task->status, array('done', 'cancel', 'closed'))) return false;
                 if($action == 'start' && in_array($task->status, array('wait', 'doing')))
                 {
                     if($task->assignedTo != $app->user->account) return false;
