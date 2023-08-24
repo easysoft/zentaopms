@@ -1083,7 +1083,7 @@
             const uploadNextChunk = () => {
                 if(i >= chunks.length)
                 {
-                    onProgress(1);
+                    if(typeof onProgress === 'function') onProgress(1);
                     resolve();
                 }
 
@@ -1094,7 +1094,7 @@
                 uploadChunk(url, chunks[i], headers)
                     .then(() => {
                         i++;
-                        onProgress(i / chunks.length);
+                        if(typeof onProgress === 'function') onProgress(i / chunks.length);
                         uploadNextChunk();
                     })
                     .catch(reject);
