@@ -1002,7 +1002,7 @@ class taskModel extends model
         $action = $left == 0 ? 'Finished' : 'Started';
         $this->afterChangeStatus($oldTask, $changes, $action, $output);
 
-        /* Send Webhook notifications and Synchornize status to execution, project and program. */
+        /* Send Webhook notifications and synchronize status to execution, project and program. */
         $this->executeHooks($oldTask->id);
         $this->loadModel('common')->syncPPEStatus($oldTask->id);
 
@@ -2363,7 +2363,7 @@ class taskModel extends model
      * @access public
      * @return object[]
      */
-    public function getDataOffinishedTasksPerDay(): array
+    public function getDataOfFinishedTasksPerDay(): array
     {
         $tasks = $this->dao->select("id, DATE_FORMAT(`finishedDate`, '%Y-%m-%d') AS `date`")->from(TABLE_TASK)
             ->where($this->reportCondition())
