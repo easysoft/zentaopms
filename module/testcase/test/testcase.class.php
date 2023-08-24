@@ -350,7 +350,7 @@ class testcaseTest
      * @access public
      * @return array
      */
-    public function getScenesByListTest($sceneIdLsit, $query = '')
+    public function getScenesByListTest($sceneIdList, $query = '')
     {
         return $this->objectModel->getScenesByList($sceneIdList, $query);
     }
