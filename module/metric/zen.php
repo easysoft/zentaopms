@@ -197,17 +197,18 @@ class metricZen extends metric
      *
      * @param  array     $result
      * @access protected
-     * @return array
+     * @return array|false
      */
     protected function getResultHeader($result)
     {
-        $header = array();
+        if(empty($result)) return false;
 
+        $header = array();
         $row = current($result);
         foreach($row as $field => $value)
         {
             if(array_key_exists($field, $this->lang->metric->scopeList)) $header[] = array('name' => 'scope', 'title' => $this->lang->metric->scopeList[$field] . $this->lang->metric->name);
-            if(array_key_exists($field, $this->lang->metric->dateList))  $header[] = array('name' => 'data', 'title' => $this->lang->metric->date);
+            if(array_key_exists($field, $this->lang->metric->dateList))  $header[] = array('name' => 'date',  'title' => $this->lang->metric->date);
             if($field == 'value')                                        $header[] = array('name' => 'value', 'title' => $this->lang->metric->value);
         }
 
@@ -221,32 +222,20 @@ class metricZen extends metric
      * @param  object    $metric
      * @param  array     $result
      * @access protected
-     * @return array
+     * @return array|false
      */
     protected function getResultData($metric, $result)
     {
-        if(empty($result)) return array_map(function($item){return null;}, (array)current($result));
+        if(empty($result)) return false;
 
-        $objectPairs = array();
-        $scope = $metric->scope;
-        switch($scope)
-        {
-            case 'dept':
-                $objectPairs = $this->loadModel('dept')->getPairs();
-                break;
-            case 'user':
-                $objectPairs = $this->loadModel('user')->getPairs();
-                break;
-            default:
-                $objectPairs = $this->loadModel($scope)->getPairs();
-                break;
-        }
+        if($metric->scope != 'global') $objectPairs = $this->metric->getPairsByScope($metric->scope);
 
         $tableData = array();
         foreach($result as $row)
         {
             $row = (object)$row;
-            $row->scope = $objectPairs[$row->$scope];
+            foreach($this->config->metric->scopeList as $scope) if(isset($row->$scope)) $row->scope = $objectPairs[$row->$scope];
+
             $tableData[] = $row;
         }
 

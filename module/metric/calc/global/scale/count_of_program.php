@@ -35,7 +35,7 @@ class count_of_program extends baseCalc
 
     public function getResult($options = array())
     {
-        $records = $this->getRecords($options);
+        $records = $this->getRecords(array('value'));
         return $this->filterByOptions($records, $options);
     }
 }

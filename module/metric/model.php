@@ -349,4 +349,32 @@ class metricModel extends model
 
         $this->loadModel('search')->setSearchParams($this->config->metric->browse->search);
     }
+
+    /**
+     * Get object pairs by scope.
+     *
+     * @param  string    $scope
+     * @access protected
+     * @return array
+     */
+    protected function getPairsByScope($scope)
+    {
+        if($scope == 'global') return array();
+
+        $objectPairs = array();
+        switch($scope)
+        {
+            case 'dept':
+                $objectPairs = $this->loadModel('dept')->getPairs();
+                break;
+            case 'user':
+                $objectPairs = $this->loadModel('user')->getPairs();
+                break;
+            default:
+                $objectPairs = $this->loadModel($scope)->getPairs();
+                break;
+        }
+
+        return $objectPairs;
+    }
 }
