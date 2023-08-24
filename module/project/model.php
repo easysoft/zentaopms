@@ -975,13 +975,14 @@ class projectModel extends model
     }
 
     /**
+     * 根据项目ID获取需求信息。
      * Get stories by project id.
      *
      * @param  int    $projectID
      * @access public
      * @return array
      */
-    public function getStoriesByProject($projectID = 0)
+    public function getStoriesByProject(int $projectID = 0): array
     {
         return $this->dao->select("t2.product, t2.branch, GROUP_CONCAT(t2.story) as storyIDList")->from(TABLE_STORY)->alias('t1')
            ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
