@@ -485,8 +485,6 @@ class testcaseModel extends model
             $preGrade = $grade;
         }
 
-        $case->steps = $this->appendSteps(!empty($case->steps) ? $case->steps : array(), 1);
-
         return $case;
     }
 
