@@ -351,6 +351,7 @@ class metricModel extends model
     }
 
     /**
+     * 获取范围的对象列表。
      * Get object pairs by scope.
      *
      * @param  string    $scope
@@ -365,10 +366,10 @@ class metricModel extends model
         switch($scope)
         {
             case 'dept':
-                $objectPairs = $this->loadModel('dept')->getPairs();
+                $objectPairs = $this->loadModel('dept')->getDeptPairs();
                 break;
             case 'user':
-                $objectPairs = $this->loadModel('user')->getPairs();
+                $objectPairs = $this->loadModel('user')->getPairs('noletter');
                 break;
             default:
                 $objectPairs = $this->loadModel($scope)->getPairs();
@@ -376,5 +377,37 @@ class metricModel extends model
         }
 
         return $objectPairs;
+    }
+
+    /**
+     * 获取度量项的日期字符串。
+     * Build date cell.
+     *
+     * @param  object    $row
+     * @access protected
+     * @return string
+     */
+    protected function buildDateCell($row)
+    {
+        extract((array)$row);
+
+        if(isset($year, $month, $day))
+        {
+            return "{$year}-{$month}-{$day}";
+        }
+        elseif(isset($year, $week))
+        {
+            return sprintf($this->lang->metric->weekCell, $year, $month);
+        }
+        elseif(isset($year, $month))
+        {
+            return $year . $this->lang->year . $month . $this->lang->month;
+        }
+        elseif(isset($year))
+        {
+            return $year . $this->lang->year;
+        }
+
+        return false;
     }
 }

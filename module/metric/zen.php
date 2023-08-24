@@ -203,14 +203,15 @@ class metricZen extends metric
     {
         if(empty($result)) return false;
 
+        $fieldList = array_keys(current($result));
+        $scopeList = array_intersect($fieldList, $this->config->metric->scopeList);
+        $dateList  = array_intersect($fieldList, $this->config->metric->dateList);
+        $scope     = current($scopeList);
+
         $header = array();
-        $row = current($result);
-        foreach($row as $field => $value)
-        {
-            if(array_key_exists($field, $this->lang->metric->scopeList)) $header[] = array('name' => 'scope', 'title' => $this->lang->metric->scopeList[$field] . $this->lang->metric->name);
-            if(array_key_exists($field, $this->lang->metric->dateList))  $header[] = array('name' => 'date',  'title' => $this->lang->metric->date);
-            if($field == 'value')                                        $header[] = array('name' => 'value', 'title' => $this->lang->metric->value);
-        }
+        if(!empty($scopeList)) $header[] = array('name' => 'scope', 'title' => $this->lang->metric->scopeList[$scope] . $this->lang->metric->name);
+        if(!empty($dateList))  $header[] = array('name' => 'date',  'title' => $this->lang->metric->date);
+        $header[] = array('name' => 'value', 'title' => $this->lang->metric->value);
 
         return $header;
     }
@@ -226,15 +227,21 @@ class metricZen extends metric
      */
     protected function getResultData($metric, $result)
     {
+        $scope = $metric->scope;
         if(empty($result)) return false;
 
-        if($metric->scope != 'global') $objectPairs = $this->metric->getPairsByScope($metric->scope);
+        if($metric->scope != 'global') $objectPairs = $this->metric->getPairsByScope($scope);
 
         $tableData = array();
-        foreach($result as $row)
+        foreach($result as $record)
         {
-            $row = (object)$row;
-            foreach($this->config->metric->scopeList as $scope) if(isset($row->$scope)) $row->scope = $objectPairs[$row->$scope];
+            $fieldList = array_keys($record);
+            $dateList  = array_intersect($fieldList, $this->config->metric->dateList);
+
+            $row = new stdclass();
+            if(!empty($dateList))  $row->date = $this->metric->buildDateCell($record);
+            if($scope != 'global') $row->scope = $objectPairs[$record[$scope]];
+            $row->value = $record['value'];
 
             $tableData[] = $row;
         }

@@ -61,6 +61,13 @@ detailHeader
     )
 );
 
+$dtable = empty($resultData) || empty($resultData) ? null : dtable
+(
+    set::height(400),
+    set::cols($resultHeader),
+    set::data($resultData)
+);
+
 detailBody
 (
     sectionList
@@ -80,12 +87,7 @@ detailBody
         section
         (
             set::title($lang->metric->metricData),
-            dtable
-            (
-                set::height(400),
-                set::cols($resultHeader),
-                set::data(array_values($resultData))
-            )
+            $dtable,
         )
     ),
     history(),
