@@ -343,6 +343,19 @@ class testcaseTest
     }
 
     /**
+     * Test get scenes by id list and query string.
+     *
+     * @param  array  $sceneIdLsit
+     * @param  string $query
+     * @access public
+     * @return array
+     */
+    public function getScenesByListTest($sceneIdLsit, $query = '')
+    {
+        return $this->objectModel->getScenesByList($sceneIdList, $query);
+    }
+
+    /**
      * Test update a case.
      *
      * @param  array $param
