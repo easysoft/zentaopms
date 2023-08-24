@@ -42,7 +42,6 @@ window.handleLayoutChange = function(layout)
         form.append(`block[${key}][left]`, block.left);
         form.append(`block[${key}][top]`, block.top);
     });
-    const dashboard = $('#dashboard').data('dashboard');
     $.ajaxSubmit(
     {
         url:       $.createLink('block', 'layout'),
