@@ -3,7 +3,7 @@ class setting extends control
 {
     public function downloadXXD($type = '', $os = '')
     {
-        if(!isset($this->app->user) || (!$this->app->user->admin && !common::hasPriv('im', 'downloadXxdPackage'))) die('nonono.');
+        if(!isset($this->app->user) || (!$this->app->user->admin && !common::hasPriv('im', 'downloadXxdPackage'))) die('Unauthorized.');
 
         if(in_array($type, array('config', 'package')))
         {
