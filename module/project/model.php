@@ -1253,25 +1253,6 @@ class projectModel extends model
     }
 
     /**
-     * 更新项目的影子产品的状态。
-     * Update shadow product's status.
-     *
-     * @param  int    $projectID
-     * @param  string $status
-     * @access public
-     * @return bool
-     */
-    public function updateShadowProductStatus(int $projectID, string $status): bool
-    {
-        /* Activate or close the shadow product. */
-        $productID = $this->loadModel('product')->getProductIDByProject($projectID);
-        if($status == 'doing')  $this->product->activate($productID);
-        if($status == 'closed') $this->product->close($productID);
-
-        return !dao::isError();
-    }
-
-    /**
      * 更新用户视图。
      * Update user view.
      *
@@ -1551,12 +1532,11 @@ class projectModel extends model
     {
         /* If this is a project without product, update shadow product's info. */
         if($oldProject->hasProduct) return true;
-        $projectID = $oldProject->id;
 
         /* If oldProject has no product and name or parent or acl has changed, update shadow product. */
         if($oldProject->name != $project->name || $oldProject->parent != $project->parent || $oldProject->acl != $project->acl)
         {
-            $product    = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetch('product');
+            $product    = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($oldProject->id)->fetch('product');
             $topProgram = !empty($project->parent) ? $this->loadModel('program')->getTopByID($project->parent) : 0;
             $this->dao->update(TABLE_PRODUCT)
                 ->set('name')->eq($project->name)
@@ -1567,7 +1547,12 @@ class projectModel extends model
         }
 
         /* Update shadow product's status if need .*/
-        if($oldProject->status != $project->status && str_contains('doing,closed', $project->status)) $this->updateShadowProductStatus($projectID, $project->status);
+        if($oldProject->status != $project->status && str_contains('doing,closed', $project->status))
+        {
+            $productID = $this->loadModel('product')->getProductIDByProject($oldProject->id);
+            if($status == 'doing')  $this->product->activate($productID);
+            if($status == 'closed') $this->product->close($productID);
+        }
 
         return !dao::isError();
     }

@@ -516,4 +516,28 @@ class Project
         }
         return $this->project->buildBatchUpdateProjects($newProjects, $oldProjects);
     }
+
+    /**
+     * 如果是无产品项目，更新影子产品信息。
+     * Update shadow product.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function updateShadowProductTest(int $projectID)
+    {
+        $oldProject = $this->project->getByID($projectID);
+        $newProject = clone $oldProject;
+        $newProject->name = '更新' . $oldProject->name;
+        $newProject->acl  = 'open';
+
+        $this->project->updateShadowProduct($newProject, $oldProject);
+        $products = $this->project->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.project')->eq($projectID)
+            ->fetchAll();
+
+        return $products;
+    }
 }
