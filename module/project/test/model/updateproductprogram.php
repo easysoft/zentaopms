@@ -2,19 +2,32 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/project.class.php';
+
+$project = zdTable('project');
+$project->id->range('1-5');
+$project->name->range('项目1,项目2,迭代1,迭代2,迭代3');
+$project->type->range('project{2},sprint,stage,kanban');
+$project->status->range('doing');
+$project->parent->range('0,0,1,1,2');
+$project->project->range('0,0,1,1,2');
+$project->grade->range('2{2},1{3}');
+$project->multiple->range('1,0,1{3}');
+$project->path->range('1,2,`1,3`,`1,4`,`2,5`')->prefix(',')->postfix(',');
+$project->begin->range('20230102 000000:0')->type('timestamp')->format('YY/MM/DD');
+$project->end->range('20230212 000000:0')->type('timestamp')->format('YY/MM/DD');
+$project->gen(5);
+
+$product = zdTable('product');
+$product->type->range('normal,branch,platform');
+$product->gen(20);
+
 su('admin');
 
 /**
 
 title=测试 projectModel->updateProductProgram();
+timeout=0
 cid=1
-pid=1
-
-查看被更新了项目集的产品数量 >> 4
-查看被更新了项目集的产品详情 >> 1,正常产品1
-查看被更新了项目集的产品详情 >> 1,正常产品2
-查看被更新了项目集的产品详情 >> 1,正常产品3
-查看被更新了项目集的产品详情 >> 1,正常产品4
 
 */
 

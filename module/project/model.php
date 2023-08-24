@@ -1582,6 +1582,7 @@ class projectModel extends model
     }
 
     /**
+     * 更新产品的项目集。
      * Update the program of the product.
      *
      * @param  int    $oldProgram
@@ -1589,27 +1590,28 @@ class projectModel extends model
      * @param  array  $products
      *
      * @access public
-     * @return void
+     * @return bool
      */
-    public function updateProductProgram($oldProgram, $newProgram, $products)
+    public function updateProductProgram(int $oldProgram, int $newProgram, array $products): bool
     {
-        $this->loadModel('action');
-        $this->loadModel('program');
         /* Product belonging project set processing. */
-        $oldTopProgram = $this->program->getTopByID($oldProgram);
+        $oldTopProgram = $this->loadModel('program')->getTopByID($oldProgram);
         $newTopProgram = $this->program->getTopByID($newProgram);
         if($oldTopProgram != $newTopProgram)
         {
+            $productList = $this->loadModel('product')->getByIdList($products);
             foreach($products as $productID)
             {
-                $oldProduct = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
-                $this->dao->update(TABLE_PRODUCT)->set('program')->eq((int)$newTopProgram)->where('id')->eq((int)$productID)->exec();
-                $newProduct = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
-                $changes    = common::createChanges($oldProduct, $newProduct);
-                $actionID   = $this->action->create('product', $productID, 'edited');
-                $this->action->logHistory($actionID, $changes);
+                $product = zget($productList, $productID, array());
+                if(!$product) continue;
+
+                unset($product->id);
+                $product->program = $newTopProgram;
+                $this->product->update($productID, $product);
             }
         }
+
+        return !dao::isError();
     }
 
     /**
