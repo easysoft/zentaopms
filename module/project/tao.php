@@ -461,10 +461,10 @@ class projectTao extends projectModel
     }
 
     /**
-     * 创建项目后，将项目创建者加到项目管理员分组.
+     * 创建项目后，将项目创建者加到项目管理员分组。
      * Create project admin after create a project.
      *
-     * @param  int $projectID
+     * @param  int       $projectID
      * @access protected
      * @return bool
      */
