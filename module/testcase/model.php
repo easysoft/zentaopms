@@ -1006,6 +1006,7 @@ class testcaseModel extends model
         if(!$caseIdList) return false;
 
         $oldCases = $this->getByList($caseIdList, "status = 'wait'");
+        if(!$oldCases) return false;
 
         $now  = helper::now();
         $case = new stdClass();
