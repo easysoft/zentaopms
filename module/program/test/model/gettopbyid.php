@@ -7,11 +7,8 @@ su('admin');
 /**
 
 title=测试 programModel::getTopByID();
+timeout=0
 cid=1
-pid=1
-
-获取项目集1最上级的项目集id >> 1
-获取项目集1000最上级的项目集id >> 0
 
 */
 

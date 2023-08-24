@@ -5,11 +5,8 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 /**
 
 title=测试 programModel::getTopByPath();
+timeout=0
 cid=1
-pid=1
-
-获取顶级项目集的顶级id     >> 1
-获取子项目集的顶级父项目集 >> 2
 
 */
 

@@ -1230,13 +1230,14 @@ class programModel extends model
     }
 
     /**
+     * 获取顶级项目集的ID。
      * Get top program by id.
      *
      * @param  int    $programID
      * @access public
      * @return int
      */
-    public function getTopByID($programID)
+    public function getTopByID(int $programID): int
     {
         if(empty($programID)) return 0;
 
@@ -1247,16 +1248,17 @@ class programModel extends model
     }
 
     /**
+     * 通过路径获取顶级项目集的ID。
      * Get top program by path.
      *
      * @param  string  $path
      * @access public
-     * @return string
+     * @return int
      */
-    public function getTopByPath($path)
+    public function getTopByPath($path): int
     {
         $paths = explode(',', trim($path, ','));
-        return $paths[0];
+        return (int)$paths[0];
     }
 
     /**
