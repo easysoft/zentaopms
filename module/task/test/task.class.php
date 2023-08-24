@@ -718,12 +718,12 @@ class taskTest
     /**
      * Test create task from gitlab issue.
      *
-     * @param  array  $task
+     * @param  object $task
      * @param  int    $executionID
      * @access public
-     * @return int
+     * @return object|array
      */
-    public function createTaskFromGitlabIssueTest($task, $executionID)
+    public function createTaskFromGitlabIssueTest(object $task, int $executionID): object|array
     {
         $objectID = $this->objectModel->createTaskFromGitlabIssue($task, $executionID);
 
