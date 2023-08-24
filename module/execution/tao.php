@@ -55,8 +55,8 @@ class executionTao extends executionModel
     protected function getProductList(int $projectID): array
     {
         $executions = $this->dao->select('t1.id,t2.product,t3.name')->from(TABLE_EXECUTION)->alias('t1')
-            ->leftjoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
-            ->leftjoin(TABLE_PRODUCT)->alias('t3')->on('t2.product=t3.id')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product=t3.id')
             ->where('t1.project')->eq($projectID)
             ->andWhere('t1.type')->in('kanban,sprint,stage')
             ->fetchAll();

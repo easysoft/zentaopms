@@ -1721,7 +1721,7 @@ class docModel extends model
             if($this->app->tab == 'doc')
             {
                 $myObjects = $this->dao->select('t1.id, t1.name')->from(TABLE_PROJECT)->alias('t1')
-                    ->leftjoin(TABLE_DOCLIB)->alias('t2')->on('t2.project=t1.id')
+                    ->leftJoin(TABLE_DOCLIB)->alias('t2')->on('t2.project=t1.id')
                     ->where("CONCAT(',', t2.users, ',')")->like("%,{$this->app->user->account},%")
                     ->andWhere('t1.vision')->eq($this->config->vision)
                     ->andWhere('t1.deleted')->eq(0)

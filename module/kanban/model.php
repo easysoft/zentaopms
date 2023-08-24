@@ -3682,7 +3682,7 @@ class kanbanModel extends model
     public function getColumnByID($columnID)
     {
         $column = $this->dao->select('t1.*, t2.type as laneType')->from(TABLE_KANBANCOLUMN)->alias('t1')
-            ->leftjoin(TABLE_KANBANCELL)->alias('t2')->on('t1.id=t2.column')
+            ->leftJoin(TABLE_KANBANCELL)->alias('t2')->on('t1.id=t2.column')
             ->where('t1.id')->eq($columnID)
             ->fetch();
 

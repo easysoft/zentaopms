@@ -7294,7 +7294,7 @@ class upgradeModel extends model
         if(empty($linkStoryCases)) return true;
 
         $projectList = $this->dao->select('t1.project, t1.story, t1.product')->from(TABLE_PROJECTSTORY)->alias('t1')
-            ->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
             ->where('t2.status')->ne('closed')
             ->fetchGroup('story', 'project');
 

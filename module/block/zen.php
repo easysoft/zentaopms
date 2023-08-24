@@ -2138,7 +2138,7 @@ class blockZen extends block
             $meetingCount = isset($params->meetingCount) ? isset($params->meetingCount) : 0;
 
             $meetings = $this->dao->select('*')->from(TABLE_MEETING)->alias('t1')
-                ->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                 ->where('t1.deleted')->eq('0')
                 ->andWhere('t2.deleted')->eq('0')
                 ->andWhere('(t1.date')->gt($today)

@@ -986,7 +986,7 @@ class apiModel extends model
 
         $libs     = $this->loadModel('doc')->getApiLibs();
         $products = $this->dao->select('t1.id, t1.order, t1.name, t1.status')->from(TABLE_PRODUCT)->alias('t1')
-            ->leftjoin(TABLE_DOCLIB)->alias('t2')->on('t2.product=t1.id')
+            ->leftJoin(TABLE_DOCLIB)->alias('t2')->on('t2.product=t1.id')
             ->where('t2.id')->gt(0)
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.deleted')->eq(0)
@@ -1007,7 +1007,7 @@ class apiModel extends model
         }
 
         $projects = $this->dao->select('t1.id, t1.order, t1.name, t1.status')->from(TABLE_PROJECT)->alias('t1')
-            ->leftjoin(TABLE_DOCLIB)->alias('t2')->on('t2.project=t1.id')
+            ->leftJoin(TABLE_DOCLIB)->alias('t2')->on('t2.project=t1.id')
             ->where('t2.id')->gt(0)
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.deleted')->eq(0)

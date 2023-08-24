@@ -493,7 +493,7 @@ class redmine11ConvertModel extends redmineConvertModel
         $docs = $this->dao->dbh($this->sourceDBH)
             ->select("t1.id, t1.execution_id AS product, t2.id AS lib, t1.title, t1.description AS content, t1.created_on AS addedDate")
             ->from(REDMINE_TABLE_DOCUMENTS)->alias('t1')
-            ->leftjoin(REDMINE_TABLE_ENUMERATIONS)->alias('t2')->on('t1.category_id = t2.id')
+            ->leftJoin(REDMINE_TABLE_ENUMERATIONS)->alias('t2')->on('t1.category_id = t2.id')
             ->fetchAll('id');
 
         /* Insert into zentao */
