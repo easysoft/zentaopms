@@ -1024,22 +1024,6 @@ class projectModel extends model
     }
 
     /**
-     * Create the manage link.
-     *
-     * @param  object    $project
-     * @access public
-     * @return string
-     */
-    public function createManageLink($project)
-    {
-        $link = $project->type == 'program' ? helper::createLink('project', 'browse', "projectID={$project->id}&status=all") : helper::createLink('project', 'index', "projectID={$project->id}", '', '', $project->id);
-
-        if($this->app->rawModule == 'execution') $link = helper::createLink('execution', 'all', "status=all&projectID={$project->id}");
-
-        return html::a($link, $project->name, '_self', "id=program{$project->id} title='{$project->name}' class='text-ellipsis'");
-    }
-
-    /**
      * 创建项目后，新增团队成员.
      * Add team members after create a project.
      *
