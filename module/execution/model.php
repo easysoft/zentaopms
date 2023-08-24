@@ -1967,7 +1967,7 @@ class executionModel extends model
         $parentList = array();
         $emptyHour  = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
         $today      = helper::today();
-        $hours      = $this->loadModel('project')->computerProgress($executions);
+        $hours      = $this->loadModel('project')->computeProgress($executions);
         $burns      = $this->getBurnData($executions);
         foreach($executions as $execution)
         {

@@ -86,7 +86,7 @@ class productEntry extends entry
                         ->fetch();
                     if($execution)
                     {
-                        $workhour = $this->loadModel('project')->computerProgress(array($execution->id => $execution));
+                        $workhour = $this->loadModel('project')->computeProgress(array($execution->id => $execution));
                         if(isset($workhour[$execution->id])) $execution->progress = $workhour[$execution->id]->progress;
                     }
 

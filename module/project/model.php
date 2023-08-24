@@ -2042,7 +2042,7 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function computerProgress($executions)
+    public function computeProgress($executions)
     {
         $hours     = array();
         $emptyHour = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);

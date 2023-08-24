@@ -1264,7 +1264,7 @@ class kanbanModel extends model
             }
             elseif($fromType == 'execution')
             {
-                $executionProgress = $this->loadModel('project')->computerProgress($objects);
+                $executionProgress = $this->loadModel('project')->computeProgress($objects);
             }
 
             /* Data for constructing the card. */

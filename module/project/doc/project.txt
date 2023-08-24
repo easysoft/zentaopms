@@ -106,7 +106,7 @@ unlinkMember
 manageMembers
 updateProducts
 updateInvolvedUserView
-computerProgress
+computeProgress
 setNoMultipleMenu
 buildOperateMenuZin
 buildOperateMenu
