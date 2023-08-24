@@ -605,6 +605,13 @@ class taskTao extends taskModel
             $this->dao->update(TABLE_TASK)->set('execution')->eq($task->execution)->set('module')->eq($task->module)->set('project')->eq($task->project)->where('parent')->eq($task->id)->exec();
         }
 
+        /* Set the datetime and operator when the task is modified. */
+        if(empty($task->lastEditedDate) or empty($task->lastEditedBy))
+        {
+            $task->lastEditedBy   = $this->app->user->account;
+            $task->lastEditedDate = helper::now();
+        }
+
         $this->dao->update(TABLE_TASK)->data($task, 'deleteFiles')
             ->autoCheck()
             ->batchCheckIF($task->status != 'cancel', $requiredFields, 'notempty')
