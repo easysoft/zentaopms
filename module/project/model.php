@@ -876,20 +876,22 @@ class projectModel extends model
      * @param  int    $productID
      * @param  string $type project|execution
      * @access public
-     * @return void
+     * @return bool
      */
-    public function buildProjectBuildSearchForm(array $products, int $queryID, int $projectID, int $productID, string $type = 'project')
+    public function buildProjectBuildSearchForm(array $products, int $queryID, int $projectID, int $productID, string $type = 'project'): bool
     {
         /* Set search param. */
         $project = $this->projectTao->fetchProjectInfo($projectID);
+        if(!$project) return false;
+
         if(!$project->hasProduct) unset($this->config->build->search['fields']['product']);
 
         $this->loadModel('build');
         $product = $productID ? $this->loadModel('product')->getByID($productID) : '';
-        if($product and $product->type != 'normal')
+        if($product && $product->type != 'normal')
         {
             $this->loadModel('branch');
-            $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->branch->getPairs($product->id, '', $executionID);
+            $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->branch->getPairs($product->id, '', $projectID);
             $this->config->build->search['fields']['branch'] = sprintf($this->lang->build->branchName, $this->lang->product->branchName[$product->type]);
             $this->config->build->search['params']['branch'] = array('operator' => '=', 'control' => 'select', 'values' => $branches);
         }
@@ -903,11 +905,12 @@ class projectModel extends model
         }
 
         $this->config->build->search['module']    = $type == 'project' ? 'projectBuild' : 'executionBuild';
-        $this->config->build->search['actionURL'] = $this->createLink($this->app->rawModule, $this->app->rawMethod, "projectID=$projectID&type=bysearch&queryID=myQueryID");
+        $this->config->build->search['actionURL'] = helper::createLink($this->app->rawModule, $this->app->rawMethod, "projectID=$projectID&type=bysearch&queryID=myQueryID");
         $this->config->build->search['queryID']   = $queryID;
         $this->config->build->search['params']['product']['values'] = $products;
 
         $this->loadModel('search')->setSearchParams($this->config->build->search);
+        return true;
     }
 
     /**
