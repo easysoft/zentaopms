@@ -180,6 +180,11 @@ class ai extends control
             $data = fixer::input('post')->get();
             if(isset($data->togglePromptStatus) && isset($data->promptId))
             {
+                $modelConfig = new stdclass();
+                $storedModelConfig = $this->loadModel('setting')->getItems('owner=system&module=ai');
+                foreach($storedModelConfig as $item) $modelConfig->{$item->key} = $item->value;
+                if(empty($modelConfig->key)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'locate' => $this->inlink('models') . '#app=admin'));
+
                 $this->ai->togglePromptStatus($data->promptId);
 
                 if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -617,6 +622,11 @@ class ai extends control
      */
     public function promptPublish($id, $backToTestingLocation = false)
     {
+        $modelConfig = new stdclass();
+        $storedModelConfig = $this->loadModel('setting')->getItems('owner=system&module=ai');
+        foreach($storedModelConfig as $item) $modelConfig->{$item->key} = $item->value;
+        if(empty($modelConfig->key)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'locate' => $this->inlink('models') . '#app=admin'));
+
         unset($_SESSION['auditPrompt']);
         $this->ai->togglePromptStatus($id, 'active');
 
