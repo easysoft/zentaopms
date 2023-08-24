@@ -75,6 +75,7 @@
         {
           for(const key in obj)
           {
+            duelWithSpecialInputType(key, obj[key]);
             if(Array.isArray(obj[key]))
             {
               const arr = obj[key];
@@ -93,6 +94,25 @@
             else
             {
               injectToInputElement(key, obj[key])
+            }
+          }
+        }
+
+        function duelWithSpecialInputType(key, value)
+        {
+          if(key === 'steps')
+          {
+            const steps = document.getElementById('steps');
+            if(!steps) return;
+            if(value.length > steps.children.length)
+            {
+              const gap = value.length - steps.children.length;
+              for(let i = 0; i < gap; i++)
+              {
+                const addButton = document.querySelector('#steps > tr:last-child > .step-actions button:first-child');
+                if(!addButton) return;
+                addButton.click();
+              }
             }
           }
         }
