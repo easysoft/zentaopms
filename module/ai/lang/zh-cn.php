@@ -47,6 +47,7 @@ $lang->ai->promptUnpublish        = '取消发布提词';
 $lang->ai->promptBrowse           = '浏览提词列表';
 $lang->ai->promptView             = '查看提词详情';
 $lang->ai->promptExecute          = '执行提词';
+$lang->ai->promptExecutionReset   = '重置调试';
 $lang->ai->roleTemplates          = '管理角色模板';
 
 $lang->ai->nextStep  = '下一步';
