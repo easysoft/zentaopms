@@ -666,7 +666,7 @@ class taskModel extends model
      * @access public
      * @return array|string|false
      */
-    public function update(object $task, object $teamData): array|string|false
+    public function update(object $task, object $teamData = null): array|string|false
     {
         $taskID  = $task->id;
         $oldTask = $this->getByID($taskID);
@@ -678,7 +678,7 @@ class taskModel extends model
         }
 
         /* Compute hours and manage team for multi-task. */
-        if($this->post->team and count(array_filter($this->post->team)) > 1)
+        if($teamData and $teamData->team and count(array_filter($teamData->team)) > 1)
         {
             $teams = $this->manageTaskTeam($oldTask->mode, $task, $teamData);
             if(!empty($teams)) $task = $this->computeMultipleHours($oldTask, $task, array(), false);
@@ -694,7 +694,7 @@ class taskModel extends model
         unset($oldTask->parent, $task->parent);
 
         /* Logging history when multi-task team members have changed. */
-        if(isset($oldTask->team)) list($oldTask, $task) = $this->taskTao->createChangesForTeam($oldTask, $task);
+        if(isset($oldTask->team) and isset($teamData->team)) list($oldTask, $task) = $this->taskTao->createChangesForTeam($oldTask, $task);
 
         $this->loadModel('file')->processFile4Object('task', $oldTask, $task);
         $changes = common::createChanges($oldTask, $task);
