@@ -484,15 +484,22 @@ class testcase extends control
 
         $case = $this->testcase->getById($caseID, $version);
 
+        /* 如果用例不存在，返回到测试仪表盘页面。 */
+        /* If testcase isn't exist, locate to qa-ndex.*/
         if(!$case)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
             return print(js::error($this->lang->notFound) . js::locate($this->createLink('qa', 'index')));
         }
+        $this->executeHooks($caseID);
+
+        if(defined('RUN_MODE') && RUN_MODE == 'api' && !empty($this->app->version)) return $this->send(array('status' => 'success', 'case' => $case));
 
         $this->testcaseZen->assignCaseForView($case, $from, $taskID);
 
-        $isLibCase = ($case->lib && empty($case->product));
+        $isLibCase = $case->lib && empty($case->product);
+        /* 如果用例是在用例库内，指定相关变量。 */
+        /* If testcase is in case lib, assign associated variables. */
         if($isLibCase)
         {
             $libraries = $this->loadModel('caselib')->getLibraries();
@@ -501,15 +508,15 @@ class testcase extends control
             $this->view->title   = "CASE #$case->id $case->title - " . $libraries[$case->lib];
             $this->view->libName = $libraries[$case->lib];
         }
+        /* 如果用例不在用例库内，指定相关变量。 */
+        /* If testcase isn't in case lib, assign associated variables. */
         else
         {
             $productID = $case->product;
             $product   = $this->product->getByID($productID);
             $branches  = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
 
-            if($this->app->tab == 'project')   $this->loadModel('project')->setMenu($this->session->project);
-            if($this->app->tab == 'execution') $this->loadModel('execution')->setMenu($this->session->execution);
-            if($this->app->tab == 'qa')        $this->testcase->setMenu($this->products, $productID, $case->branch);
+            $this->testcaseZen->setMenu((int)$this->session->project, (int)$this->session->execution, $productID, $case->branch);
 
             $this->view->title       = "CASE #$case->id $case->title - " . $product->name;
             $this->view->product     = $product;
@@ -517,18 +524,9 @@ class testcase extends control
             $this->view->branchName  = $product->type == 'normal' ? '' : zget($branches, $case->branch, '');
         }
 
-        $this->executeHooks($caseID);
-
-        $this->view->from       = $from;
-        $this->view->taskID     = $taskID;
-        $this->view->stepsType   = $stepsType;
+        $this->view->stepsType  = $stepsType;
         $this->view->version    = $version ? $version : $case->version;
-        $this->view->users      = $this->user->getPairs('noletter');
-        $this->view->actions    = $this->loadModel('action')->getList('case', $caseID);
-        $this->view->preAndNext = !isOnlybody() ? $this->loadModel('common')->getPreAndNextObject('testcase', $caseID) : '';
         $this->view->isLibCase  = $isLibCase;
-
-        if(defined('RUN_MODE') && RUN_MODE == 'api' && !empty($this->app->version)) return $this->send(array('status' => 'success', 'case' => $case));
         $this->display();
     }
 

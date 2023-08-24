@@ -325,7 +325,7 @@ detailBody
         (
             setClass('steps-section'),
             set::title($lang->testcase->steps),
-            to::actions
+            !empty($steps) ? to::actions
             (
                 row
                 (
@@ -354,41 +354,56 @@ detailBody
                         ),
                     ),
                 ),
-            ),
-            $stepsType == 'table' ? div
+            ) : null,
+            !empty($steps) ? div
             (
-                set::id('stepsTable'),
-                div
+                $stepsType == 'table' ? div
                 (
-                    setClass('steps-header'),
+                    set::id('stepsTable'),
                     div
                     (
-                        setClass('text-left inline-block steps border'),
-                        width('1/2'),
-                        $lang->testcase->stepDesc,
+                        setClass('steps-header'),
+                        div
+                        (
+                            setClass('text-left inline-block steps border'),
+                            width('1/2'),
+                            $lang->testcase->stepDesc,
+                        ),
+                        div
+                        (
+                            setClass('text-left inline-block border border-l-0'),
+                            width('1/2'),
+                            $lang->testcase->stepExpect,
+                        ),
                     ),
                     div
                     (
-                        setClass('text-left inline-block border border-l-0'),
-                        width('1/2'),
-                        $lang->testcase->stepExpect,
+                        setClass('steps-body'),
+                        $steps,
+                    )
+                ) : div
+                (
+                    set::id('stepsView'),
+                    mindmap
+                    (
+                        set::data($case->mindMapSteps),
+                        set::height('600px'),
+                        set::width('100%'),
+                        set::readonly(true),
                     ),
                 ),
-                div
-                (
-                    setClass('steps-body'),
-                    $steps,
-                )
             ) : div
             (
-                set::id('stepsView'),
-                mindmap
+                setClass('canvas text-center py-2'),
+                p
                 (
-                    set::data($case->mindMapSteps),
-                    set::height('600px'),
-                    set::width('100%'),
-                    set::readonly(true),
-                ),
+                    setClass('py-2 my-2'),
+                    span
+                    (
+                        setClass('text-gray'),
+                        $lang->noData
+                    )
+                )
             ),
             set::useHtml(true),
         ),

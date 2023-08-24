@@ -634,6 +634,7 @@ class testcaseZen extends testcase
     }
 
     /**
+     * 指定 testcase 查看的关联的变量。
      * Assign testcase related variables.
      *
      * @param  object    $case
@@ -666,11 +667,16 @@ class testcaseZen extends testcase
         $case = $this->testcase->appendCaseFails($case, $from, $taskID);
         $case = $this->processStepsForMindMap($case);
 
+        $this->view->from       = $from;
+        $this->view->taskID     = $taskID;
         $this->view->runID      = $from == 'testcase' ? 0 : $run->id;
         $this->view->case       = $case;
         $this->view->caseFails  = $case->caseFails;
         $this->view->modulePath = $this->tree->getParents($case->module);
         $this->view->caseModule = empty($case->module) ? '' : $this->tree->getById($case->module);
+        $this->view->preAndNext = !isOnlybody() ? $this->loadModel('common')->getPreAndNextObject('testcase', $case->id) : '';
+        $this->view->users      = $this->user->getPairs('noletter');
+        $this->view->actions    = $this->loadModel('action')->getList('case', $case->id);
     }
 
     /**
@@ -847,13 +853,15 @@ class testcaseZen extends testcase
         $mindMapSteps['id']      = $case->id;
         $mindMapSteps['text']    = $case->title;
         $mindMapSteps['type']    = 'root';
-            $stepItem['subSide'] = 'right';
+        $stepItem['subSide']     = 'right';
 
         $reverseSteps = array_reverse($case->steps);
 
+        $stepList = array();
         $parentSteps = array();
         foreach($reverseSteps as $step)
         {
+            if(empty($step->id)) continue;
             $stepItem = array();
             $stepItem['id']      = $step->id;
             $stepItem['text']    = $step->step;
