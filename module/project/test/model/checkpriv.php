@@ -1,10 +1,16 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-su('user1');
 
 zdTable('project')->config('project')->gen(8);
 zdTable('user')->config('user')->gen(2);
+
+$userview = zdTable('userview')->config('userview');
+$userview->account->range('admin,user1');
+$userview->projects->range('[],`,1,`');
+$userview->gen(2);
+
+su('user1');
 
 /**
 
