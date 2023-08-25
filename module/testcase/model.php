@@ -1329,6 +1329,40 @@ class testcaseModel extends model
     }
 
     /**
+     * Batch confirm story change of cases.
+     *
+     * @param  array  $caseIdList
+     * @access public
+     * @return bool
+     */
+    public function batchConfirmStoryChange(array $caseIdList): bool
+    {
+        $caseIdList = array_filter($caseIdList);
+        if(!$caseIdList) return false;
+
+        $cases = $this->getByList($caseIdList);
+        if(!$cases) return false;
+
+        $storyIdList = array_unique(array_filter(array_map(function($case){return $case->story;}, $cases)));
+        if(!$storyIdList) return false;
+
+        $stories = $this->dao->select('id, version')->from(TABLE_STORY)->where('id')->in($storyIdList)->fetchPairs();
+
+        $this->loadModel('action');
+
+        foreach($cases as $case)
+        {
+            $storyVersion = zget($stories, $case->story, 0);
+            if(!$storyVersion) continue;
+
+            $this->dao->update(TABLE_CASE)->set('storyVersion')->eq($storyVersion)->where('id')->eq($case->id)->exec();
+            $this->action->create('case', $case->id, 'confirmed', '', $storyVersion);
+        }
+
+        return !dao::isError();
+    }
+
+    /**
      * Join steps to a string, thus can diff them.
      *
      * @param  array   $steps
