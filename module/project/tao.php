@@ -143,11 +143,12 @@ class projectTao extends projectModel
     }
 
     /**
+     * 获取未完成的任务。
      * Fetch undone tasks.
      *
-     * @param  int $projectID
+     * @param  int       $projectID
      * @access protected
-     * @return array
+     * @return object[]
      */
     protected function fetchUndoneTasks(int $projectID): array
     {
