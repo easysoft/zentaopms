@@ -9,12 +9,17 @@ $lang->demand->common = 'Demand';
 $lang->charter = new stdclass();
 $lang->charter->common = 'Charter';
 
+$lang->market = new stdclass();
+$lang->market->common = 'Market';
+
 $lang->navIcons['demandpool'] = "<i class='icon icon-bars'></i>";
+$lang->navIcons['market']     = "<i class='icon icon-bars'></i>";
 
 /* Main Navigation. */
 $lang->mainNav              = new stdclass();
 $lang->mainNav->my          = "{$lang->navIcons['my']} {$lang->my->shortCommon}|my|index|";
 $lang->mainNav->demandpool  = "{$lang->navIcons['demandpool']} {$lang->demandpool->common}|demandpool|browse|";
+$lang->mainNav->market      = "{$lang->navIcons['market']} {$lang->market->common}|marketreport|browse|";
 $lang->mainNav->product     = "{$lang->navIcons['product']} {$lang->productCommon}|product|all|";
 $lang->mainNav->charter     = "{$lang->navIcons['project']} {$lang->charter->common}|charter|browse|";
 $lang->mainNav->doc         = "{$lang->navIcons['doc']} {$lang->doc->common}|doc|index|";
@@ -31,8 +36,9 @@ $lang->mainNav->admin       = "{$lang->navIcons['admin']} {$lang->admin->common}
 
 $lang->mainNav->menuOrder[5]  = 'my';
 $lang->mainNav->menuOrder[10] = 'demandpool';
-$lang->mainNav->menuOrder[15] = 'product';
-$lang->mainNav->menuOrder[20] = 'charter';
+$lang->mainNav->menuOrder[15] = 'market';
+$lang->mainNav->menuOrder[20] = 'product';
+$lang->mainNav->menuOrder[25] = 'charter';
 //$lang->mainNav->menuOrder[25] = 'feedback';
 $lang->mainNav->menuOrder[30] = 'doc';
 $lang->mainNav->menuOrder[35] = 'admin';
@@ -117,3 +123,8 @@ $lang->searchObjects['charter']    = 'Charter';
 $lang->searchObjects['product']    = $lang->productCommon;
 $lang->searchObjects['doc']        = 'Document';
 $lang->searchTips                  = 'ID(ctrl+g)';
+
+$lang->market->menu           = new stdclass();
+$lang->market->menu->report   = array('link' => "Report|marketreport|browse|browseType=all");
+$lang->market->menu->research = array('link' => "Reseach|charter|browse|browseType=launched");
+$lang->market->menu->market   = array('link' => "Market|market|browse|browseType=all");
