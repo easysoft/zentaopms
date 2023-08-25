@@ -3,6 +3,19 @@ declare(strict_types=1);
 class testcaseTao extends testcaseModel
 {
     /**
+     * 获取用例的基础数据。
+     * Fetch base info of a case.
+     *
+     * @param  int       $caseID
+     * @access protected
+     * @return object|false
+     */
+    protected function fetchBaseInfo(int $caseID): object|false
+    {
+        return $this->dao->select('*')->from(TABLE_CASE)->where('id')->eq($caseID)->fetch();
+    }
+
+    /**
      * Fetch scene name.
      *
      * @param  int       $sceneID
