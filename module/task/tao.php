@@ -419,6 +419,10 @@ class taskTao extends taskModel
             $left     = 0;
             $consumed = 0;
             $childrenStatus = array();
+
+            /* 有的任务对象不是通过taskModel::getByID获取的（比如执行的任务列表），因此可能没有children，需要重新获取它的子任务。*/
+            if(!isset($task->children)) $task->children = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($task->id)->fetchAll('id');
+
             foreach($task->children as $childTask)
             {
                 $left     += $childTask->left;
