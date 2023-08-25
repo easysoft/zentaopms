@@ -4,6 +4,10 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/testsuite.class.php';
 su('admin');
 
+zdTable('case')->gen(2);
+zdTable('testsuite')->gen(1);
+zdTable('suitecase')->gen(2);
+
 /**
 
 title=测试 testsuiteModel->getLinkedCases();

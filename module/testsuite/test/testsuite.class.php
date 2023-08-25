@@ -119,19 +119,13 @@ class testsuiteTest
      *
      * @param  int   $suiteID
      * @param  array $cases
+     * @param  array $versions
      * @access public
      * @return void
      */
-    public function linkCaseTest($suiteID, $cases)
+    public function linkCaseTest($suiteID, $cases, $versions)
     {
-        $_POST['cases']    = $cases;
-        foreach($cases as $case)
-        {
-            $_POST['versions'][$case] = 1;
-        }
-
-        $this->objectModel->linkCase($suiteID);
-        unset($_POST);
+        $this->objectModel->linkCase($suiteID, $cases, $versions);
 
         if(dao::isError()) return dao::getError();
 
@@ -171,6 +165,8 @@ class testsuiteTest
      */
     public function getUnlinkedCasesTest($suiteID, $param = 0, $pager = null)
     {
+        global $tester;
+        $tester->session->set('testsuiteQuery', null);
 
         $suite   = $this->objectModel->getById($suiteID);
         $objects = $this->objectModel->getUnlinkedCases($suite, $param, $pager);

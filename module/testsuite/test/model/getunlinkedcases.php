@@ -4,6 +4,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/testsuite.class.php';
 su('admin');
 
+zdTable('suitecase')->gen(0);
 zdTable('case')->gen(2);
 zdTable('testsuite')->gen(2);
 zdTable('userquery')->config('userquery')->gen(1);
