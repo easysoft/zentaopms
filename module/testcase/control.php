@@ -1136,20 +1136,20 @@ class testcase extends control
     }
 
     /**
-     * Batch ctory change cases.
+     * Batch confirm story change of cases.
      *
-     * @param  int    $productID
      * @access public
      * @return void
      */
-    public function batchConfirmStoryChange($productID = 0)
+    public function batchConfirmStoryChange()
     {
-        if($this->post->caseIdList)
+        $caseIdList = zget($_POST, 'caseIdList',  array());
+        if($caseIdList)
         {
-            $caseIdList = array_unique($this->post->caseIdList);
-            foreach($caseIdList as $caseID) $this->confirmStoryChange($caseID,false);
+            $this->testcase->batchConfirmStoryChange($caseIdList);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         }
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->caseList));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->caseList));
     }
 
     /**
