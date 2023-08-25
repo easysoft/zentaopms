@@ -2103,7 +2103,8 @@ class execution extends control
             $allProjects = $this->project->getPairsByModel('all', 'noclosed', isset($projectID) ? $projectID : 0);
         }
 
-        if(!$this->post->executionIDList) return print(js::locate($this->session->executionList, 'parent'));
+        if(!$this->post->executionIDList) return $this->locate($this->session->executionList);
+
         $executionIDList = $this->post->executionIDList;
         $executions      = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($executionIDList)->fetchAll('id');
         $projects        = $this->dao->select('id,project')->from(TABLE_PROJECT)->where('id')->in($executionIDList)->fetchPairs();
