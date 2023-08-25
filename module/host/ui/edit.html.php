@@ -163,7 +163,7 @@ formPanel
             set::label($lang->host->osVersion),
             set::control('picker'),
             set::name('osVersion'),
-            set::items($lang->host->{"{$osName}List"}),
+            set::items(empty($osName) ? array() : $lang->host->{"{$osName}List"}),
             set::value($host->osVersion)
         )
     ),

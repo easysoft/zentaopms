@@ -13,7 +13,6 @@ window.hostTypeChange = function(e)
 window.isTestNodeChange = function(e)
 {
     const checked = $('#isTestNode_1').prop('checked');
-    console.log(111, checked)
     var currentParam = params.replace('{osName}', osName).replace('{hostType}', hostType).replace('{isTestNode}', checked ? 1 : 0);
     loadPage($.createLink('host', 'edit', currentParam), '#testContainer');
 }
