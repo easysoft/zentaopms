@@ -80,6 +80,7 @@ class formBatchItem extends wg
 
         $asIndex = $control['type'] === 'index';
         if($asIndex) $control['type'] = 'static';
+        if($control['type'] == 'static') $name .= '_static';
 
         return array(
             h::th
