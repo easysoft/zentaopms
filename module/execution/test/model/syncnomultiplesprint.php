@@ -36,11 +36,8 @@ su('admin');
 /**
 
 title=测试executionModel->syncNoMultipleSprint();
+timeout=0
 cid=1
-pid=1
-
-同步没有执行的项目 >> 5
-同步错误的项目     >> 0
 
 */
 

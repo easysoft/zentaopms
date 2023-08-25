@@ -693,7 +693,7 @@ class executionModel extends model
             ->exec();
         if(isset($execution->project) and $execution->project) $this->addProjectMembers($execution->project, $teamMembers);
 
-        $whitelist = $execution->whitelist;
+        $whitelist = explode(',', $execution->whitelist);
         $this->loadModel('personnel')->updateWhitelist($whitelist, 'sprint', $executionID);
 
         /* Fix bug#3074, Update views for team members. */
@@ -5467,21 +5467,21 @@ class executionModel extends model
     }
 
     /**
+     * 同步无迭代项目下的影子迭代。
      * Sync no multiple project to sprint.
      *
      * @param  int    $projectID
      * @access public
      * @return int
      */
-    public function syncNoMultipleSprint($projectID)
+    public function syncNoMultipleSprint(int $projectID): int
     {
         $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
         if(empty($project)) return 0;
 
-        $post  = $_POST;
+        $postData = $_POST;
 
         $_POST = array();
-
         $_POST['project']   = $projectID;
         $_POST['name']      = $project->name;
         $_POST['begin']     = $project->begin;
@@ -5499,11 +5499,7 @@ class executionModel extends model
 
         /* Handle extend fields. */
         $extendFields = $this->loadModel('project')->getFlowExtendFields();
-        foreach($extendFields as $field)
-        {
-            $_POST[$field->field] = $project->field;
-        }
-
+        foreach($extendFields as $field) $_POST[$field->field] = $project->field;
         if(isset($this->config->setCode) and $this->config->setCode == 1) $_POST['code'] = $project->code;
 
         $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchAll();
@@ -5511,12 +5507,13 @@ class executionModel extends model
         {
             $_POST['products'][] = $projectProduct->product;
             $_POST['branch'][]   = $projectProduct->branch;
-            if($projectProduct->plan) $_POST['plans'][$projectProduct->product][$projectProduct->branch] = explode(',', trim($projectProduct->plan, ','));
+            if($projectProduct->plan) $_POST['plans'][$projectProduct->product] = explode(',', trim($projectProduct->plan, ','));
         }
 
         $teamMembers = $this->dao->select('*')->from(TABLE_TEAM)->where('type')->eq('project')->andWhere('root')->eq($projectID)->fetchPairs('account', 'account');
         $_POST['teamMembers'] = array_values($teamMembers);
 
+        /* Update execution and linked product. */
         $executionID = $this->dao->select('*')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->andWhere('type')->in('sprint,kanban')->andWhere('multiple')->eq(0)->fetch('id');
         if($executionID)
         {
@@ -5524,7 +5521,7 @@ class executionModel extends model
             $this->updateProducts($executionID);
         }
 
-        $_POST = $post;
+        $_POST = $postData;
 
         return $executionID;
     }
