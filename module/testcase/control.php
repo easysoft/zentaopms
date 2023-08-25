@@ -172,49 +172,44 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function zeroCase($productID = 0, $branchID = 0, $orderBy = 'id_desc', $projectID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function zeroCase(int $productID = 0, int $branchID = 0, string $orderBy = 'id_desc', int $projectID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $orderBy = empty($orderBy) ? 'id_desc' : $orderBy;
+        /* 设置 session, cookie 和菜单。*/
+        /* Set session, cookie and set menu. */
         $this->session->set('storyList', $this->app->getURI(true) . '#app=' . $this->app->tab, 'product');
         $this->session->set('caseList', $this->app->getURI(true), $this->app->tab);
-
-        $this->loadModel('story');
         if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($this->session->project);
             $products  = $this->product->getProducts($this->session->project, 'all', '', false);
             $productID = $this->product->saveState($productID, $products);
-            $productID = (int)$productID;
-            $product   = $this->product->getByID($productID);
-            if(!$product->shadow) $this->lang->modulePageNav = $this->product->select($products, $productID, 'testcase', 'zeroCase', $projectID, $branchID);
         }
         else
         {
             $products  = $this->product->getPairs();
             $productID = $this->product->saveState($productID, $products);
-            $productID = (int)$productID;
-            $product   = $this->product->getByID($productID);
             $this->loadModel('qa');
             $this->app->rawModule = 'testcase';
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
             $this->qa->setMenu($products, $productID, $branchID);
         }
 
-        /* Append id for second sort. */
-        $sort    = common::appendOrder($orderBy);
-        $stories = $this->story->getZeroCase($productID, $branchID, $sort);
-
-        /* Pager. */
+        /* 设置 分页。*/
+        /* Set pager. */
         $this->app->loadClass('pager', $static = true);
-        $recTotal = count($stories);
-        $pager    = new pager($recTotal, $recPerPage, $pageID);
-        $stories  = array_chunk($stories, $pager->recPerPage);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        /* 追加二次排序条件。*/
+        /* Append id for second sort. */
+        $sort = common::appendOrder(empty($orderBy) ? 'id_desc' : $orderBy);
 
         $this->lang->testcase->featureBar['zerocase'] = $this->lang->testcase->featureBar['browse'];
 
+        /* 展示变量. */
+        /* Show the variables. */
+        $this->loadModel('story');
         $this->view->title      = $this->lang->story->zeroCase;
-
-        $this->view->stories    = empty($stories) ? $stories : $stories[$pageID - 1];
+        $this->view->stories    = $this->story->getZeroCase($productID, $branchID, $sort, $pager);
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->projectID  = $projectID;
         $this->view->productID  = $productID;
@@ -222,7 +217,7 @@ class testcase extends control
         $this->view->orderBy    = $orderBy;
         $this->view->suiteList  = $this->loadModel('testsuite')->getSuites($productID);
         $this->view->browseType = '';
-        $this->view->product    = $product;
+        $this->view->product    = $this->product->getByID($productID);
         $this->view->pager      = $pager;
         $this->display();
     }
