@@ -3,63 +3,45 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/project.class.php';
 su('admin');
+$projectTable = zdTable('project')->config('project');
+$projectTable->status->range('closed');
+$projectTable->gen(20);
 
 /**
 
 title=测试 projectModel->activate();
+timeout=0
 cid=1
-pid=1
-
-激活id为2的项目
-激活id为3的项目
 
 */
 
-function initData()
-{
-    $project = zdTable('project');
-    $project->id->range('2-5');
-    $project->project->range('2-5');
-    $project->name->prefix("项目")->range('2-5');
-    $project->code->prefix("project")->range('2-5');
-    $project->model->range("scrum");
-    $project->auth->range("[]");
-    $project->path->range("[]");
-    $project->type->range("project");
-    $project->grade->range("1");
-    $project->days->range("1");
-    $project->status->range("closed, suspended");
-    $project->desc->range("[]");
-    $project->budget->range("100000,200000");
-    $project->budgetUnit->range("CNY");
-    $project->percent->range("0-0");
-
-    $project->gen(2);
-}
-
-initData();
 
 global $tester;
 $tester->loadModel('project');
-$project = new Project();
-$data    = new stdClass();
 
+$data = new stdClass();
 $data->status       = 'doing';
 $data->begin        = '2022-10-10';
 $data->end          = '2022-10-10';
 $data->status       = 'doing';
-$data->comment      = 'fgasgqasfdgasfgasg';
+$data->comment      = '这是一条备注';
 $data->readjustTime = 1;
 $data->readjustTask = 1;
 
+$normalIdList                = array(2, 4, 6);
+$noProductIdList             = array(1, 3, 5);
+$noExecutionIdList           = array(12, 14, 16);
+$noExecutionAndProductIdList = array(11, 13, 15);
 
-$changes2 = $project->activate(2, $data);
-$changes3 = $project->activate(3, $data);
-
-r($changes2['0']) && p('field') && e('status');
-r($changes2['0']) && p('old') && e('closed');
-r($changes2['0']) && p('new') && e('doing');
-
-r($changes3['0']) && p('field') && e('status');
-r($changes3['0']) && p('old') && e('suspended');
-r($changes3['0']) && p('new') && e('doing');
+r($tester->project->activate($normalIdList[0],                $data)) && p('0:field,old,new') && e('status,closed,doing'); // 测试激活瀑布项目
+r($tester->project->activate($normalIdList[1],                $data)) && p('0:field,old,new') && e('status,closed,doing'); // 测试激活敏捷项目
+r($tester->project->activate($normalIdList[2],                $data)) && p('0:field,old,new') && e('status,closed,doing'); // 测试激活看板项目
+r($tester->project->activate($noProductIdList[0],             $data)) && p('0:field,old,new') && e('status,closed,doing'); // 测试激活项目型敏捷项目
+r($tester->project->activate($noProductIdList[1],             $data)) && p('0:field,old,new') && e('status,closed,doing'); // 测试激活项目型看板项目
+r($tester->project->activate($noProductIdList[2],             $data)) && p('0:field,old,new') && e('status,closed,doing'); // 测试激活项目型瀑布项目
+r($tester->project->activate($noExecutionIdList[0],           $data)) && p('0:field,old,new') && e('status,closed,doing'); // 测试激活无迭代的看板项目
+r($tester->project->activate($noExecutionIdList[1],           $data)) && p('0:field,old,new') && e('status,closed,doing'); // 测试激活无迭代的瀑布项目
+r($tester->project->activate($noExecutionIdList[2],           $data)) && p('0:field,old,new') && e('status,closed,doing'); // 测试激活无迭代的敏捷项目
+r($tester->project->activate($noExecutionAndProductIdList[0], $data)) && p('0:field,old,new') && e('status,closed,doing'); // 测试激活无产品无迭代的瀑布项目
+r($tester->project->activate($noExecutionAndProductIdList[1], $data)) && p('0:field,old,new') && e('status,closed,doing'); // 测试激活无产品无迭代的敏捷项目
+r($tester->project->activate($noExecutionAndProductIdList[2], $data)) && p('0:field,old,new') && e('status,closed,doing'); // 测试激活无产品无迭代的看板项目

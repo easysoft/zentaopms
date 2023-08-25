@@ -173,19 +173,6 @@ class Project
     }
 
     /**
-     * Activate a project.
-     *
-     * @param  int    $projectID
-     * @param  object $project
-     * @access public
-     * @return array
-     */
-    public function activate($projectID, $project)
-    {
-        return $this->project->activate($projectID, $project);
-    }
-
-    /**
      * Do create a project.
      *
      * @param  object $project
