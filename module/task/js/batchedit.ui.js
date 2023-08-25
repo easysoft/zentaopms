@@ -23,18 +23,22 @@ window.renderRowData = function($row, index, row)
         taskMembers = members;
     }
 
+    const taskUsers = [];
+    let   disabled  = false;
     let $assignedTo = $row.find('.form-batch-input[data-name="assignedTo"]').empty();
     if(teams[row.id] != undefined && ((row.assignedTo != currentUser && row.mode == 'linear') || taskMembers[currentUser] == undefined))
     {
-        $assignedTo.attr('disabled', 'disabled');
+        disabled = true;
     }
 
     if(row.assignedTo && taskMembers[row.assignedTo] == undefined) taskMembers[row.assignedTo] = users[row.assignedTo];
-    $assignedTo.append('<option value=""></option>');
-    for(let account in taskMembers)
-    {
-        $assignedTo.append('<option value="' + account +'"' + (row.assignedTo == account ? 'selected' : '') + '>' + taskMembers[account] + '</option>');
-    }
+    for(let account in taskMembers) taskUsers.push({value: account, text: taskMembers[account]});
+
+    $(`#assignedTo_${index}`).picker({
+        items: taskUsers,
+        defaultValue: row.assignedTo,
+        disabled: disabled,
+    });
 
     if(teams[row.id] != undefined || row.parent < 0)
     {

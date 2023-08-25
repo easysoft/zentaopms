@@ -173,8 +173,9 @@ formBatchPanel
     (
         set::name('pri'),
         set::label($lang->task->pri),
-        set::control('select'),
+        set::control('priPicker'),
         set::value(3),
+        set::required(true),
         set::items($lang->task->priList),
         set::width('80px'),
     ),

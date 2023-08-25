@@ -47,7 +47,7 @@ formBatchPanel
     (
         set::name('module'),
         set::label($lang->task->module),
-        set::control('select'),
+        set::control('picker'),
         set::items($modules),
         set::width('200px'),
         set::ditto(true),
@@ -57,7 +57,7 @@ formBatchPanel
     (
         set::name('assignedTo'),
         set::label($lang->task->assignedTo),
-        set::control('select'),
+        set::control('picker'),
         set::items(array()),
         set::width('128px'),
         set::ditto(true),
@@ -67,7 +67,7 @@ formBatchPanel
     (
         set::name('type'),
         set::label($lang->task->type),
-        set::control('select'),
+        set::control('picker'),
         set::items($lang->task->typeList),
         set::width('128px'),
         set::ditto(true),
@@ -77,7 +77,7 @@ formBatchPanel
     (
         set::name('status'),
         set::label($lang->task->status),
-        set::control('select'),
+        set::control('picker'),
         set::items($lang->task->statusList),
         set::width('128px'),
         set::ditto(true),
@@ -101,7 +101,7 @@ formBatchPanel
     (
         set::name('pri'),
         set::label($lang->task->pri),
-        set::control('select'),
+        set::control('priPicker'),
         set::items($lang->task->priList),
         set::width('80px'),
     ),
