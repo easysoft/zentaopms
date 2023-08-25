@@ -2203,9 +2203,9 @@ class projectModel extends model
      * @param  int    $projectID
      * @param  string $type
      * @access public
-     * @return object
+     * @return object|bool
      */
-    public function getDataByProject(string $table, int $projectID, string $type = ''): object
+    public function getDataByProject(string $table, int $projectID, string $type = ''): object|bool
     {
         return $this->dao->select('id')->from($table)
             ->where('project')->eq($projectID)
