@@ -1,0 +1,9 @@
+title: table zt_bug
+desc: "bug"
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: case
+    range: 1-3,6-9
+  - field: result
+    range: 3-5,7-9

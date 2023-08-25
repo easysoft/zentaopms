@@ -90,14 +90,15 @@ class testcaseTest
     }
 
     /**
-     * Test get cases of a module.
+     * 测试获取模块的用例。
+     * Test get cases of modules.
      *
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  int    $moduleIdList
-     * @param  string $browseType
-     * @param  string $auto
-     * @param  string $caseType
+     * @param  int         $productID
+     * @param  int|string  $branch
+     * @param  int|array   $moduleIdList
+     * @param  string      $browseType
+     * @param  string      $auto   no|unit
+     * @param  string      $caseType
      * @access public
      * @return string
      */
@@ -677,16 +678,18 @@ class testcaseTest
     }
 
     /**
+     * 测试追加 bug 和执行结果信息。
      * Test append bugs and results.
      *
      * @param  array  $cases
      * @param  string $type
+     * @param  array  $caseIdList
      * @access public
      * @return array
      */
-    public function appendDataTest($cases, $type = 'case')
+    public function appendDataTest(array $cases, string $type = 'case', array $caseIdList = array()): array
     {
-        $objects = $this->objectModel->appendData($cases, $type = 'case');
+        $objects = $this->objectModel->appendData($cases, $type, $caseIdList);
 
         if(dao::isError()) return dao::getError();
 

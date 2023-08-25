@@ -2247,56 +2247,49 @@ class testcaseModel extends model
     }
 
     /**
+     * 追加 bug 和用例执行结果信息
      * Append bugs and results.
      *
-     * @param  int    $cases
+     * @param  array  $cases
      * @param  string $type
-     * @param  array  $caseIdlist
+     * @param  array  $caseIdList
      * @access public
      * @return void
      */
-    public function appendData($cases, $type = 'case', $caseIdlist = array())
+    public function appendData(array $cases, string $type = 'case', array $caseIdList = array()): array
     {
-        if(empty($caseIdlist)) $caseIdList = array_keys($cases);
-        if($type == 'case')
-        {
-            $caseBugs   = $this->dao->select('count(*) as count, `case`')->from(TABLE_BUG)->where('`case`')->in($caseIdList)->andWhere('deleted')->eq(0)->groupBy('`case`')->fetchPairs('case', 'count');
-            $results    = $this->dao->select('count(*) as count, `case`')->from(TABLE_TESTRESULT)->where('`case`')->in($caseIdList)->groupBy('`case`')->fetchPairs('case', 'count');
+        if(empty($caseIdList)) $caseIdList = array_keys($cases);
 
-            $caseFails = $this->dao->select('count(*) as count, `case`')->from(TABLE_TESTRESULT)
-                ->where('caseResult')->eq('fail')
-                ->andwhere('`case`')->in($caseIdList)
-                ->groupBy('`case`')
-                ->fetchPairs('case','count');
+        /* 查询用例的 bugs 和结果。 */
+        /* Get bugs and results. */
+        $queryField = $type == 'case' ? '`case`' : '`result`';
+        $caseBugs   = $this->dao->select('count(*) as count, `case`')->from(TABLE_BUG)->where($queryField)->in($caseIdList)->andWhere('deleted')->eq(0)->groupBy('`case`')->fetchPairs('case', 'count');
+        $results    = $this->dao->select('count(*) as count, `case`')->from(TABLE_TESTRESULT)->where('`case`')->in($caseIdList)->groupBy('`case`')->fetchPairs('case', 'count');
 
-            $steps = $this->dao->select('count(distinct t1.id) as count, t1.`case`')->from(TABLE_CASESTEP)->alias('t1')
-                ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.`case`=t2.`id`')
-                ->where('t1.`case`')->in($caseIdList)
-                ->andWhere('t1.type')->ne('group')
-                ->andWhere('t1.version=t2.version')
-                ->groupBy('t1.`case`')
-                ->fetchPairs('case', 'count');
-        }
-        else
-        {
-            $caseBugs = $this->dao->select('count(*) as count, `case`')->from(TABLE_BUG)->where('`result`')->in($caseIdList)->andWhere('deleted')->eq(0)->groupBy('`case`')->fetchPairs('case', 'count');
-            $results  = $this->dao->select('count(*) as count, `case`')->from(TABLE_TESTRESULT)->where('`run`')->in($caseIdList)->groupBy('`case`')->fetchPairs('case', 'count');
+        /* 查询用例的失败结果。 */
+        /* Get result fails of the the testcases. */
+        if($type != 'case') $queryField = '`run`';
+        $caseFails  = $this->dao->select('count(*) as count, `case`')->from(TABLE_TESTRESULT)
+            ->where('caseResult')->eq('fail')
+            ->andWhere($queryField)->in($caseIdList)
+            ->groupBy('`case`')
+            ->fetchPairs('case','count');
 
-            $caseFails = $this->dao->select('count(*) as count, `case`')->from(TABLE_TESTRESULT)
-                ->where('caseResult')->eq('fail')
-                ->andwhere('`run`')->in($caseIdList)
-                ->groupBy('`case`')
-                ->fetchPairs('case','count');
+        /* 查询用例的步骤。 */
+        /* Get the the testcase steps. */
+        $queryTable = $type == 'case' ? TABLE_CASE : TABLE_TESTRUN;
+        $queryOn    = $type == 'case' ? 't1.`case`=t2.`id`' : 't1.`case`=t2.`case`';
+        $queryField = $type == 'case' ? 't1.`case`' : 't2.`id`';
+        $steps = $this->dao->select('count(distinct t1.id) as count, t1.`case`')->from(TABLE_CASESTEP)->alias('t1')
+            ->leftJoin($queryTable)->alias('t2')->on($queryOn)
+            ->where($queryField)->in($caseIdList)
+            ->andWhere('t1.type')->ne('group')
+            ->andWhere('t1.version=t2.version')
+            ->groupBy('t1.`case`')
+            ->fetchPairs('case', 'count');
 
-            $steps = $this->dao->select('count(distinct t1.id) as count, t1.`case`')->from(TABLE_CASESTEP)->alias('t1')
-                ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.`case`=t2.`case`')
-                ->where('t2.`id`')->in($caseIdList)
-                ->andWhere('t1.type')->ne('group')
-                ->andWhere('t1.version=t2.version')
-                ->groupBy('t1.`case`')
-                ->fetchPairs('case', 'count');
-        }
-
+        /* 设置测试用例的 bugs 执行结果和步骤。 */
+        /* Set related bugs, results and steps of the testcases. */
         foreach($cases as $key => $case)
         {
             $caseID = $type == 'case' ? $case->id : $case->case;
@@ -2305,7 +2298,6 @@ class testcaseModel extends model
             $case->caseFails  = isset($caseFails[$caseID]) ? $caseFails[$caseID]  : 0;
             $case->stepNumber = isset($steps[$caseID])     ? $steps[$caseID]      : 0;
         }
-
         return $cases;
     }
 
