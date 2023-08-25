@@ -1523,9 +1523,8 @@ class baseRouter
             {
                 $fp = fopen($file2Included, 'r');
                 $line1 = fgets($fp);
-                $line2 = fgets($fp);
                 fclose($fp);
-                if(strpos($line1, '<?php //') === 0 and strpos($line2, "if(!extension_loaded('ionCube Loader'))") === 0) $isEncrypted = true;
+                if(strpos($line1, '<?php //') === 0) $isEncrypted = true;
             }
 
             /*
