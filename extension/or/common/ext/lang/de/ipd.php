@@ -125,6 +125,6 @@ $lang->searchObjects['doc']        = 'Document';
 $lang->searchTips                  = 'ID(ctrl+g)';
 
 $lang->market->menu           = new stdclass();
-$lang->market->menu->report   = array('link' => "Report|marketreport|browse|browseType=all");
-$lang->market->menu->research = array('link' => "Reseach|charter|browse|browseType=launched");
+$lang->market->menu->report   = array('link' => "Report|marketreport|all");
+$lang->market->menu->research = array('link' => "Reseach|marketresearch|all");
 $lang->market->menu->market   = array('link' => "Market|market|browse|browseType=all");
