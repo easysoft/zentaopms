@@ -383,6 +383,7 @@ function isonlybody()
  */
 function formatTime($time, $format = '')
 {
+    if(empty($time)) return '';
     $time = str_replace('0000-00-00', '', $time);
     $time = str_replace('00:00:00', '', $time);
     if(trim($time) == '') return '';
