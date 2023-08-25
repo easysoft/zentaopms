@@ -195,6 +195,7 @@ $lang->bi->common           = 'BI';
 $lang->screen->common       = 'Screen';
 $lang->pivot->common        = 'Pivot Table';
 $lang->chart->common        = 'Chart';
+$lang->metric->common       = 'Metric';
 $lang->report->common       = 'Report';
 $lang->system->common       = 'System';
 $lang->admin->common        = 'Admin';
