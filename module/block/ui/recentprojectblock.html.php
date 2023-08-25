@@ -14,7 +14,7 @@ namespace zin;
 $cards = array();
 foreach($projects as $projectID => $project)
 {
-    $viewLink  = $this->createLink('project', 'index', "projectID=$project->id");
+    $viewLink  = createLink('project', 'index', "projectID=$project->id");
     $execution = empty($project->executions) ? '' : end($project->executions);
 
     $cards[] = cell
@@ -22,13 +22,13 @@ foreach($projects as $projectID => $project)
         setClass('p-2', $longBlock ? 'w-1/3' : 'w-full'),
         div
         (
-            setClass('border rounded-sm h-full p-4'),
+            setClass('border rounded-sm h-full p-4 hover:shadow'),
             div
             (
                 setClass('mb-4'),
                 a
                 (
-                    set('class', 'font-bold text-fore text-md'),
+                    setClass('font-bold text-fore text-md'),
                     set('href', $viewLink),
                     $project->name
                 )
@@ -42,7 +42,7 @@ foreach($projects as $projectID => $project)
                     (
                         span
                         (
-                            set('class', 'text-gray mr-1'),
+                            setClass('text-gray mr-1'),
                             $execution->type == 'kanban' ? $lang->project->lastKanban : $lang->project->lastIteration . ': '
                         ),
                         a
@@ -52,7 +52,7 @@ foreach($projects as $projectID => $project)
                         ),
                         label
                         (
-                            set('class', 'label warning-pale circle ml-2'),
+                            setClass('label warning-pale circle ml-2'),
                             $lang->execution->statusList[$execution->status]
                         )
                     ),
@@ -60,7 +60,7 @@ foreach($projects as $projectID => $project)
                     (
                         span
                         (
-                            set('class', 'text-gray mr-1'),
+                            setClass('text-gray mr-1'),
                             $lang->block->projectMember . ': ',
                         ),
                         sprintf($lang->block->totalMember, $project->teamCount)
@@ -69,7 +69,7 @@ foreach($projects as $projectID => $project)
                     (
                         span
                         (
-                            set('class', 'text-gray mr-1'),
+                            setClass('text-gray mr-1'),
                             $lang->project->end . ': '
                         ),
                         $project->end
@@ -85,5 +85,3 @@ blockPanel
     set::bodyClass('row flex-wrap justify-between p-1.5'),
     $cards
 );
-
-render();
