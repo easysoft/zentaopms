@@ -1,6 +1,6 @@
 title: project.
 desc: project data.
-author: Sun Guangming 
+author: Sun Guangming
 version: "1.0"
 fields:
   - field: id
@@ -14,7 +14,7 @@ fields:
       range: 1-100
   - field: project
     range: 0
-  - field: code 
+  - field: code
     prefix: "code"
     range: 1-1000
   - field: model
@@ -48,5 +48,7 @@ fields:
     prefix: ","
     range: 1-100
     postfix: ","
-  - field: hasProduct 
+  - field: hasProduct
     range: 0,1
+  - field: multiple
+    range: 1{10},0{10}
