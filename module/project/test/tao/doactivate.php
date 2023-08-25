@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=测试 projectModel->activate();
+title=测试 projectModel->doActivate();
 timeout=0
 cid=1
 
