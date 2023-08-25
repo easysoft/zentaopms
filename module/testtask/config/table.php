@@ -108,6 +108,7 @@ $config->testtask->browseUnits->dtable->fieldList['id']    = $config->testtask->
 
 $config->testtask->browseUnits->dtable->fieldList['title'] = $config->testtask->dtable->fieldList['title'];
 $config->testtask->browseUnits->dtable->fieldList['title']['title'] = $lang->testtask->unitName;
+$config->testtask->browseUnits->dtable->fieldList['title']['link']  = array('module' => 'testtask', 'method' => 'unitCases', 'params' => 'taskID={id}');
 
 $config->testtask->browseUnits->dtable->fieldList['execution'] = $config->testtask->dtable->fieldList['execution'];
 $config->testtask->browseUnits->dtable->fieldList['build']     = $config->testtask->dtable->fieldList['build'];

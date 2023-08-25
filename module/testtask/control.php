@@ -353,66 +353,51 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function unitCases($taskID, $orderBy = 'id')
+    public function unitCases(int $taskID, string $orderBy = 't1.id_asc')
     {
-        $task = $this->testtask->getByID($taskID);
-
         /* Set browseType, productID, moduleID and queryID. */
-        $productID = $this->product->saveState($task->product, $this->products);
+        $task      = $this->testtask->getByID($taskID);
+        $products  = $this->testtaskZen->getProducts();
+        $productID = $this->product->saveState($task->product, $products);
         if($this->app->tab == 'project')
         {
             $this->lang->scrum->menu->qa['subMenu']->testcase['subModule'] = 'testtask';
             $this->lang->scrum->menu->qa['subMenu']->testtask['subModule'] = '';
             $this->loadModel('project')->setMenu($this->session->project);
-            $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits', '', '', false);
+            $this->lang->modulePageNav = $this->product->select($products, $productID, 'testtask', 'browseUnits', '', '', false);
         }
         else
         {
-            $this->loadModel('qa')->setMenu($this->products, $productID);
+            $this->loadModel('qa')->setMenu($products, $productID);
             $this->app->rawModule = 'testcase';
         }
 
         /* Save session. */
         $this->session->set('caseList', $this->app->getURI(true), 'qa');
 
-        /* Load lang. */
-        $this->app->loadLang('testtask');
-        $this->app->loadLang('execution');
-
         /* Get test cases. */
-        $runs = $this->testtask->getRuns($taskID, 0, $orderBy);
+        $runs = $this->testtask->groupRunsBySuite($taskID, "t4.suite_asc,$orderBy");
+
+        /* 因为套件和测试单是多堆垛关系，所以要过滤掉相同ID的测试单执行数据。 */
+        $filterRuns = array();
+        foreach($runs as $run)
+        {
+            if(empty($filterRuns[$run->id])) $filterRuns[$run->id] = $run;
+        }
 
         /* save session .*/
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
-        $runs = $this->loadModel('testcase')->appendData($runs, 'testrun');
+        /* append run case result to runs. */
+        $filterRuns = $this->loadModel('testcase')->appendData($filterRuns, 'testrun');
 
-        $cases = array();
-        foreach($runs as $run) $cases[$run->case] = $run;
-
-        $results = $this->dao->select('*')->from(TABLE_TESTRESULT)->where('`case`')->in(array_keys($cases))->andWhere('run')->in(array_keys($runs))->fetchAll('run');
-        foreach($results as $result)
-        {
-            $runs[$result->run]->caseResult = $result->caseResult;
-            $runs[$result->run]->xml        = $result->xml;
-            $runs[$result->run]->duration   = $result->duration;
-        }
-
-        $suitecases = $this->dao->select('t1.*,t2.name')->from(TABLE_SUITECASE)->alias('t1')
-            ->leftJoin(TABLE_TESTSUITE)->alias('t2')->on('t1.case=t2.id')
-            ->where('t1.case')->in(array_keys($cases))->orderBy('t1.case')
-            ->fetchAll('case');
-
+        /* 将测试单执行数据按照套件进行分组，方便按套件计算数量。 */
         $groupCases = array();
-        foreach($runs as $run)
-        {
-            $run->suite      = !empty($suitecases[$run->case]) ? $suitecases[$run->case]->suite : '';
-            $run->suiteTitle = !empty($suitecases[$run->case]) ? $suitecases[$run->case]->name : '';
-            $groupCases[$run->suite][] = $run;
-        }
+        foreach($filterRuns as $run) $groupCases[$run->suite][] = $run;
 
+        /* 将每个套件下的总执行数量赋予每个套件的第一条执行记录。 */
         $suite = null;
-        foreach($runs as $run)
+        foreach($filterRuns as $run)
         {
             $run->rowspan = 0;
             if($suite !== $run->suite)
@@ -423,15 +408,14 @@ class testtask extends control
         }
 
         /* Assign. */
-        $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
+        $this->view->title       = $products[$productID] . $this->lang->colon . $this->lang->testcase->common;
         $this->view->productID   = $productID;
         $this->view->task        = $task;
         $this->view->product     = $this->product->getById($productID);
-        $this->view->productName = $this->products[$productID];
+        $this->view->productName = $products[$productID];
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-        $this->view->runs        = $runs;
+        $this->view->runs        = $filterRuns;
         $this->view->taskID      = $taskID;
-
         $this->display();
     }
 

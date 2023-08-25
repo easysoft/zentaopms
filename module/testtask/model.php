@@ -1001,6 +1001,30 @@ class testtaskModel extends model
     }
 
     /**
+     * 按照测试单分组展示用例。
+     * Group case run by suite.
+     *
+     * @param  int    $taskID
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function groupRunsBySuite(int $taskID, string $orderBy = 't1.id_desc', object $pager = null): array
+    {
+        return $this->dao->select('t2.*,t1.*,t2.version as caseVersion,t3.title as storyTitle,t2.status as caseStatus,t4.suite,t5.name as suiteTitle')->from(TABLE_TESTRUN)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
+            ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
+            ->leftJoin(TABLE_SUITECASE)->alias('t4')->on('t1.case = t4.case')
+            ->leftJoin(TABLE_TESTSUITE)->alias('t5')->on('t4.suite = t5.id')
+            ->where('t1.task')->eq($taskID)
+            ->andWhere('t2.deleted')->eq(0)
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
+    }
+
+    /**
      * Get test runs of a user.
      *
      * @param  int    $taskID
