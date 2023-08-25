@@ -1120,13 +1120,17 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function confirmStoryChange($caseID, $reload = true)
+    public function confirmStoryChange(int $caseID, bool $reload = true)
     {
-        $case = $this->testcase->getById($caseID);
+        $case = $this->testcase->fetchBaseInfo($caseID);
         if($case->story)
         {
-            $this->dao->update(TABLE_CASE)->set('storyVersion')->eq($case->latestStoryVersion)->where('id')->eq($caseID)->exec();
-            $this->loadModel('action')->create('case', $caseID, 'confirmed', '', $case->latestStoryVersion);
+            $story = $this->loadModel('story')->fetchBaseInfo($case->story);
+            if($story->version)
+            {
+                $this->dao->update(TABLE_CASE)->set('storyVersion')->eq($story->version)->where('id')->eq($caseID)->exec();
+                $this->loadModel('action')->create('case', $caseID, 'confirmed', '', $story->version);
+            }
         }
         if($reload) return $this->send(array('load' => true));
     }
