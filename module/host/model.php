@@ -481,6 +481,64 @@ class hostModel extends model
         if($host->status == 'online'  && $action == 'online')  return false;
         if($host->status == 'offline' && $action == 'offline') return false;
 
+        if($action === 'download')
+        {
+            if(in_array($host->status, array("completed", "inprogress", "created"))  || $host->from == 'user') return false;
+        }
+
+        if($action === 'cancel')
+        {
+            if(!in_array($host->status, array("inprogress", "created"))) return false;
+        }
+
         return true;
+    }
+
+    /**
+     * Get image files from ZAgent server.
+     *
+     * @param  object $hostID
+     * @access public
+     * @return array
+     */
+    public function getImageList($hostID, $browseType = 'all', $param = 0, $orderBy = 'id', $pager = null)
+    {
+        $imageList = json_decode(commonModel::http($this->config->host->imageListUrl, array(), array()));
+        if(empty($imageList)) return array();
+
+        $downloadedImageList = $this->dao->select('*')->from(TABLE_IMAGE)
+            ->where('host')->eq($hostID)
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('name');
+
+        $refreshPageData = false;
+        foreach($imageList as $remoteImage)
+        {
+            $downloadedImage = zget($downloadedImageList, $remoteImage->name, '');
+            if(empty($downloadedImage))
+            {
+                $refreshPageData = true;
+                $remoteImage->status = 'notDownloaded';
+                $remoteImage->from   = 'zentao';
+                $remoteImage->osName = $remoteImage->os;
+                $remoteImage->host   = $hostID;
+                $remoteImage->status = 'notDownloaded';
+
+                unset($remoteImage->os);
+                $this->dao->insert(TABLE_IMAGE)->data($remoteImage, 'desc')->autoCheck()->exec();
+            }
+        }
+
+        if($refreshPageData)
+        {
+            $downloadedImageList = $this->dao->select('*')->from(TABLE_IMAGE)
+            ->where('host')->eq($hostID)
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('name');
+        }
+
+        return $downloadedImageList;
     }
 }

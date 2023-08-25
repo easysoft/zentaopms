@@ -67,6 +67,76 @@ class host extends control
     }
 
     /**
+     * Show image list page.
+     *
+     * @param  int    $hostID
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function browseImage($hostID, $browseType = 'all', $param = 0, $orderBy = 'id', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->app->session->set('imageList', $this->app->getURI(true));
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        $imageList = $this->host->getImageList($hostID, $browseType, $param, $orderBy, $pager);
+
+        $this->app->loadLang('zahost');
+        $this->view->title      = $this->lang->zahost->image->browseImage;
+        $this->view->hostID     = $hostID;
+        $this->view->imageList  = $imageList;
+        $this->view->pager      = $pager;
+        $this->view->param      = $param;
+        $this->view->orderBy    = $orderBy;
+        $this->view->browseType = $browseType;
+
+        $this->display();
+    }
+
+    /**
+     * Sent download image request to Host.
+     *
+     * @param  int    $hostID
+     * @param  int $imageID
+     * @access public
+     * @return object
+     */
+    public function downloadImage($imageID)
+    {
+        $this->loadModel('zahost');
+        $image = $this->zahost->getImageByID($imageID);
+        $this->zahost->downloadImage($image);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => $this->lang->zahost->image->downloadImageFail));
+
+        return $this->send(array('result' => 'success', 'load' => true));
+    }
+
+    /**
+     * Sent cancel download image request to Host.
+     *
+     * @param  int    $hostID
+     * @param  string $imageName
+     * @access public
+     * @return object
+     */
+    public function cancelDownload($imageID)
+    {
+        $this->loadModel('zahost');
+        $image = $this->zahost->getImageByID($imageID);
+
+        $this->zahost->cancelDownload($image);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => $this->lang->zahost->image->downloadImageFail));
+
+        $this->send(array('result' => 'success', 'load' => true));
+    }
+
+    /**
      * Create host.
      *
      * @access public
