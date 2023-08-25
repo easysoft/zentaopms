@@ -563,18 +563,13 @@ class testcaseTest
      * Test batch case type change.
      *
      * @param  array  $caseIdList
-     * @param  string $result
+     * @param  string $type
      * @access public
      * @return array
      */
-    public function batchCaseTypeChangeTest($caseIdList, $result)
+    public function batchChangeTypeTest($caseIdList, $type)
     {
-        $this->objectModel->batchCaseTypeChange($caseIdList, $result);
-
-        if(dao::isError()) return dao::getError();
-
-        $objects = $this->objectModel->getByList($caseIdList);
-        return $objects;
+        return $this->objectModel->batchChangeType($caseIdList, $type);
     }
 
     /**
