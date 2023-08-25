@@ -1282,7 +1282,9 @@ class executionModel extends model
 
         if($oldExecution->grade > 1)
         {
-            $parent      = $this->dao->select('begin,end')->from(TABLE_PROJECT)->where('id')->eq($oldExecution->parent)->fetch();
+            $parent = $this->dao->select('begin,end')->from(TABLE_PROJECT)->where('id')->eq($oldExecution->parent)->fetch();
+            if(!$parent) return false;
+
             $parentBegin = $parent->begin;
             $parentEnd   = $parent->end;
             if($begin < $parentBegin)
@@ -1389,20 +1391,18 @@ class executionModel extends model
         /* When it has multiple errors, only the first one is prompted */
         if(dao::isError() and count(dao::$errors['realEnd']) > 1) dao::$errors['realEnd'] = dao::$errors['realEnd'][0];
 
-        if(!dao::isError())
+        if(!dao::isError()) return false;
+
+        $changes = common::createChanges($oldExecution, $execution);
+        if($this->post->comment != '' or !empty($changes))
         {
-
-            $changes = common::createChanges($oldExecution, $execution);
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $this->loadModel('action');
-                $actionID = $this->action->create('execution', $executionID, 'Closed', $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
-
-            $this->loadModel('score')->create('execution', 'close', $oldExecution);
-            return $changes;
+            $this->loadModel('action');
+            $actionID = $this->action->create('execution', $executionID, 'Closed', $this->post->comment);
+            $this->action->logHistory($actionID, $changes);
         }
+
+        $this->loadModel('score')->create('execution', 'close', $oldExecution);
+        return $changes;
     }
 
     /**
