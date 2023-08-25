@@ -877,7 +877,7 @@ class testcaseTest
      * @access public
      * @return object|bool
      */
-    public function fetchBaseInfo(int $caseID): object|bool
+    public function fetchBaseInfoTest(int $caseID): object|bool
     {
         return $this->objectModel->fetchBaseInfo($caseID);
     }
