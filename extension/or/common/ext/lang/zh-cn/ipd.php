@@ -12,6 +12,12 @@ $lang->charter->common = '立项';
 $lang->market = new stdclass();
 $lang->market->common = '市场';
 
+$lang->marketreport = new stdclass();
+$lang->marketreport->common = '报告';
+
+$lang->marketresearch = new stdclass();
+$lang->marketresearch->common = '调研';
+
 $lang->navIcons['demandpool'] = "<i class='icon icon-bars'></i>";
 $lang->navIcons['market']     = "<i class='icon icon-bars'></i>";
 
