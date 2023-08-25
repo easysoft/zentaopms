@@ -523,7 +523,12 @@
         if(typeof options === 'string') options = {url: options};
         options = options || {};
 
-        if(is18version && !options.partial) return $.apps.openUrl(options.url, options);
+        if(is18version && !options.partial)
+        {
+            const currentLink = $.parseLink(currentAppUrl);
+            const urlInfo = $.parseLink(options.url);
+            if(currentLink.moduleName !== urlInfo.moduleName || currentLink.methodName !== urlInfo.methodName) return $.apps.openUrl(options.url, options);
+        }
 
         if ($.apps.isOldPage(options.url)) return loadOldPage(options.url);
         else hideOldPage();
