@@ -557,4 +557,38 @@ class Project
 
         return $products;
     }
+
+    /**
+     * 更新任务的起止日期。
+     * Update start and end date of tasks.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function updateTasksStartAndEndDateTest(int $projectID, string $type = 'expand')
+    {
+        $oldProject = $this->project->getByID($projectID);
+
+        $project = clone $oldProject;
+        $project->begin = $type = 'expand' ? '2020-01-01' : '2020-12-01';
+        $project->end   = $type = 'expand' ? '2022-12-01' : '2021-12-01';
+
+        $tasks = $this->project->dao->select('id,status,estStarted,deadline')->from(TABLE_TASK)
+            ->where('deleted')->eq(0)
+            ->andWhere('project')->eq($projectID)
+            ->fetchAll();
+
+        if(!empty($tasks)) $oldTask = current($tasks);
+
+        $this->project->updateTasksStartAndEndDate($tasks, $oldProject, $project);
+
+        $changes = array();
+        if(isset($oldTask))
+        {
+            $task = $this->project->dao->select('id,status,estStarted,deadline')->from(TABLE_TASK) ->where('id')->eq($oldTask->id)->fetch();
+            $changes = common::createChanges($oldTask, $task);
+        }
+        return $changes;
+    }
 }

@@ -160,9 +160,12 @@ class projectTao extends projectModel
     }
 
     /**
+     * 更新任务的起止日期。
      * Update start and end date of tasks.
      *
-     * @param  array $tasks
+     * @param  array     $tasks
+     * @param  object    $oldProject
+     * @param  object    $project
      * @access protected
      * @return bool
      */
@@ -178,8 +181,8 @@ class projectTao extends projectModel
                 $taskOffset = helper::diffDate($task->estStarted, $oldProject->begin);
 
                 $estStartedTimeStamp = $beginTimeStamp + $taskOffset * 24 * 3600;
-                $estStarted = date('Y-m-d', $estStartedTimeStamp);
-                $deadline   = date('Y-m-d', $estStartedTimeStamp + $taskDays * 24 * 3600);
+                $estStarted          = date('Y-m-d', $estStartedTimeStamp);
+                $deadline            = date('Y-m-d', $estStartedTimeStamp + $taskDays * 24 * 3600);
 
                 if($estStarted > $project->end) $estStarted = $project->end;
                 if($deadline > $project->end)   $deadline   = $project->end;
