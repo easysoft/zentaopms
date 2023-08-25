@@ -115,6 +115,7 @@ class testcase extends control
     }
 
     /**
+     * 分组查看用例。
      * Group case.
      *
      * @param  int    $productID
@@ -127,64 +128,31 @@ class testcase extends control
      */
     public function groupCase(int $productID = 0, string $branch = '', string $groupBy = 'story', int $projectID = 0, string $caseType = '')
     {
-        $groupBy   = empty($groupBy) ? 'story' : $groupBy;
+        /* 设置SESSION和COOKIE，获取产品信息。 */
+        /* Set session and cookie, and get product. */
         $productID = $this->product->saveState($productID, $this->products);
         $product   = $this->product->getByID($productID);
-        if($branch === '') $branch = $this->cookie->preBranch;
-
-        $this->app->loadLang('testtask');
-
-        $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);
-        if($this->app->tab == 'project')
-        {
-            $products = array('0' => $this->lang->product->all) + $this->product->getProducts($this->session->project, 'all', '', false);
-            if(!$product->shadow) $this->lang->modulePageNav = $this->product->select($products, $productID, 'testcase', 'groupCase', $projectID, $branch);
-        }
-
         $this->session->set('caseList', $this->app->getURI(true), $this->app->tab);
 
-        $cases = $this->testcase->getModuleCases($productID, $branch, 0, '', 'no', $caseType, $groupBy);
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
-        $cases = $this->loadModel('story')->checkNeedConfirm($cases);
-        $cases = $this->testcase->appendData($cases);
+        if($branch === '') $branch = $this->cookie->preBranch;
+        if(empty($groupBy)) $groupBy = 'story';
 
-        $groupCases  = array();
-        foreach($cases as $case)
-        {
-            if($groupBy == 'story') $groupCases[$case->story][] = $case;
-        }
+        /* 设置菜单。 */
+        /* Set menu. */
+        if($this->app->tab == 'project') $this->loadModel('project')->setMenu((int)$this->session->project);
+        if($this->app->tab == 'qa') $this->testcase->setMenu($this->products, $productID, $branch);
 
-        $story = null;
-        foreach($cases as $index => $case)
-        {
-            if($case->storyDeleted)
-            {
-                unset($cases[$index]);
-                continue;
-            }
-            $case->rowspan = 0;
-            if($story !== $case->story)
-            {
-                $story = $case->story;
-                if(!empty($groupCases[$case->story])) $case->rowspan = count($groupCases[$case->story]);
-            }
-        }
-
-        $this->app->loadLang('execution');
-        $this->app->loadLang('task');
-
+        /* 展示变量. */
+        /* Show the variables. */
         $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
         $this->view->projectID   = $projectID;
         $this->view->productID   = $productID;
-        $this->view->productName = $this->products[$productID];
         $this->view->users       = $this->user->getPairs('noletter');
         $this->view->browseType  = 'group';
         $this->view->groupBy     = $groupBy;
         $this->view->orderBy     = $groupBy;
-        $this->view->cases       = $cases;
+        $this->view->cases       = $this->testcaseZen->getGroupCases($productID, $branch, $groupBy, $caseType);
         $this->view->suiteList   = $this->loadModel('testsuite')->getSuites($productID);
-        $this->view->suiteID     = 0;
-        $this->view->moduleID    = 0;
         $this->view->branch      = $branch;
         $this->view->caseType    = $caseType;
         $this->view->product     = $product;

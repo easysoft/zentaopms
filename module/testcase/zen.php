@@ -937,6 +937,54 @@ class testcaseZen extends testcase
     }
 
     /**
+     * 获取分组用例。
+     * Get group cases.
+     *
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  string    $groupBy
+     * @param  string    $caseType
+     * @access protected
+     * @return array
+     */
+    protected function getGroupCases(int $productID, string $branch, string $groupBy, string $caseType): array
+    {
+        /* 获取用例。 */
+        /* Get cases. */
+        $cases = $this->testcase->getModuleCases($productID, $branch, 0, '', 'no', $caseType, $groupBy);
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
+        $cases = $this->loadModel('story')->checkNeedConfirm($cases);
+        $cases = $this->testcase->appendData($cases);
+
+        /* 获取用例的需求分组。 */
+        /* Get story groups of cases. */
+        $groupCases = array();
+        if($groupBy == 'story')
+        {
+            foreach($cases as $case) $groupCases[$case->story][] = $case;
+        }
+
+        /* 设置用例的需求分组的行占比。 */
+        /* Set row span of story group in cases. */
+        $story = null;
+        foreach($cases as $index => $case)
+        {
+            if($case->storyDeleted)
+            {
+                unset($cases[$index]);
+                continue;
+            }
+            $case->rowspan = 0;
+            if($story !== $case->story)
+            {
+                $story = $case->story;
+                if(!empty($groupCases[$case->story])) $case->rowspan = count($groupCases[$case->story]);
+            }
+        }
+        return $cases;
+    }
+
+    /**
      * 创建完 testcase 后的相关处理。
      * Relevant processing after create testcase.
      *

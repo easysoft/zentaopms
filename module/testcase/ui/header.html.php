@@ -192,7 +192,7 @@ featureBar
     $rawMethod != 'browseunits' && $rawMethod != 'groupcase' ? (searchToggle(set::open($browseType == 'bysearch'))) : null
 );
 
-$viewItems   = array(array('text' => $lang->testcase->listView, 'url' => inlink('browse', "productID=$productID&branch=$branch&browseType=all"), 'active' => $rawMethod != 'groupcase' ? true : false));
+$viewItems   = array(array('text' => $lang->testcase->listView, 'url' => $app->tab == 'project' ? createLink('project', 'testcase', "projectID={$projectID}") : inlink('browse', "productID=$productID&branch=$branch&browseType=all"), 'active' => $rawMethod != 'groupcase' ? true : false));
 $exportItems = array();
 $importItems = array();
 $createItems = array();
