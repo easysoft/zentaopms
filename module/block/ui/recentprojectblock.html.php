@@ -22,13 +22,14 @@ foreach($projects as $projectID => $project)
         setClass('p-2', $longBlock ? 'w-1/3' : 'w-full'),
         div
         (
-            setClass('border rounded-sm h-full p-4 hover:shadow'),
+            setClass('border rounded-sm h-full p-4 hover:shadow hover:border-primary cursor-pointer open-url group'),
+            setData('url', $viewLink),
             div
             (
                 setClass('mb-4'),
                 a
                 (
-                    setClass('font-bold text-fore text-md'),
+                    setClass('font-bold text-fore text-md group-hover:text-primary'),
                     set('href', $viewLink),
                     $project->name
                 )
