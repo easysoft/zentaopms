@@ -510,8 +510,8 @@ class testcase extends control
      */
     public function edit(int $caseID, bool $comment = false, int $executionID = 0)
     {
-        $case = $this->testcase->getByID($caseID);
-        if(!$case) return print(js::error($this->lang->notFound) . js::locate('back'));
+        $oldCase = $this->testcase->getByID($caseID);
+        if(!$oldCase) return print(js::error($this->lang->notFound) . js::locate('back'));
 
         $testtasks = $this->loadModel('testtask')->getGroupByCases($caseID);
         $testtasks = empty($testtasks[$caseID]) ? array() : $testtasks[$caseID];
@@ -519,26 +519,16 @@ class testcase extends control
         if(!empty($_POST))
         {
             $formData = form::data($this->config->testcase->form->edit);
-            $case     = $this->testcaseZen->prepareEditExtras($formData, $case);
+            $case     = $this->testcaseZen->prepareEditExtras($formData, $oldCase);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $changes = array();
             if(!$comment)
             {
-                $changes = $this->testcase->update($case, $testtasks);
+                $changes = $this->testcase->update($case, $oldCase);
                 if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
 
-            if($this->post->comment || !empty($changes))
-            {
-                $this->loadModel('action');
-                $action   = !empty($changes) ? 'Edited' : 'Commented';
-                $actionID = $this->action->create('case', $caseID, $action, $this->post->comment);
-
-                $this->action->logHistory($actionID, $changes);
-
-                if($case->status != 'wait' && $this->post->status == 'wait') $this->action->create('case', $caseID, 'submitReview');
-            }
+            if($case->comment || !empty($changes)) $this->testcaseZen->addEditAction($caseID, $oldCase->status, $case->status, $changes, $case->comment);
 
             $message = $this->executeHooks($caseID);
             if(!$message) $message = $this->lang->saveSuccess;
@@ -547,7 +537,7 @@ class testcase extends control
             return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => $this->createLink('testcase', 'view', "caseID={$caseID}")));
         }
 
-        $case = $this->testcaseZen->preProcessForEdit($case);
+        $case = $this->testcaseZen->preProcessForEdit($oldCase);
 
         if($case->lib && empty($case->product))
         {
