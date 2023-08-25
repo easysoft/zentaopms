@@ -748,11 +748,13 @@ class testcaseModel extends model
     }
 
     /**
+     * 更新用例。
      * Update a case.
      *
-     * @param  int    $caseID
+     * @param  object $case
+     * @param  object $oldCase
      * @access public
-     * @return void
+     * @return bool|array
      */
     public function update(object $case, object $oldCase): bool|array
     {
@@ -769,13 +771,13 @@ class testcaseModel extends model
 
         if(dao::isError()) return false;
 
-        $this->testcase->updateCase2Project($oldCase, $case);
+        $this->testcaseTao->updateCase2Project($oldCase, $case);
 
-        if($case->stepChanged) $this->testcase->updateStep($case, $oldCase);
+        if($case->stepChanged) $this->testcaseTao->updateStep($case, $oldCase);
 
-        $this->testcase->linkBugs(array_keys($oldCase->toBugs), $case);
+        $this->testcaseTao->linkBugs(array_keys($oldCase->toBugs), $case);
 
-        if($case->branch && !empty($testtasks)) $this->testcase->unlinkCaseFromTesttask($oldCase->id, $testtasks);
+        if($case->branch && !empty($testtasks)) $this->testcaseTao->unlinkCaseFromTesttask($oldCase->id, $testtasks);
 
         $this->loadModel('file')->processFile4Object('testcase', $oldCase, $case);
 

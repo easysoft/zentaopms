@@ -522,6 +522,7 @@ class testcase extends control
             $case     = $this->testcaseZen->prepareEditExtras($formData, $oldCase);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $changes = array();
             if(!$comment)
             {
                 $changes = $this->testcase->update($case, $oldCase);
