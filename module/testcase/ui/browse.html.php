@@ -53,6 +53,7 @@ if($canBatchReview || $canBatchDelete || $canBatchChangeType || $canBatchConfirm
         $typeItems = array();
         foreach($lang->testcase->typeList as $key => $type)
         {
+            if(!$key || $key == 'unit') continue;
             $typeItems[] = array('text' => $type, 'className' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchChangeType', "type={$key}"));
         }
         $navActions[] = array('text' => $lang->testcase->type, 'class' => 'not-hide-menu', 'items' => $typeItems);

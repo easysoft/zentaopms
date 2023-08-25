@@ -15,10 +15,8 @@ jsVar('tab', $this->app->tab);
 if($app->tab == 'execution') jsVar('objectID', $executionID);
 if($app->tab == 'project')   jsVar('objectID', $projectID);
 
-foreach($lang->testcase->priList as $priKey => $priValue)
-{
-    if(empty($priValue)) unset($lang->testcase->priList[$priKey]);
-}
+$priList  = array_filter($lang->testcase->priList);
+unset($lang->testcase->typeList['unit']);
 
 formPanel
 (
@@ -222,7 +220,7 @@ formPanel
             (
                 width('80px'),
                 set::name('pri'),
-                set::items($lang->testcase->priList),
+                set::items($priList),
                 set::value($case->pri)
             ),
         ),

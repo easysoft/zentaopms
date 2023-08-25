@@ -80,6 +80,8 @@ $items[] = array
     'ditto'    => true,
 );
 
+unset($lang->testcase->typeList['unit']);
+
 /* Field of type. */
 $items[] = array
 (
@@ -87,7 +89,7 @@ $items[] = array
     'label'    => $lang->testcase->type,
     'control'  => 'picker',
     'items'    => $lang->testcase->typeList,
-    'value'    => 1,
+    'value'    => 'feature',
     'width'    => '160px',
     'required' => true,
     'ditto'    => true,

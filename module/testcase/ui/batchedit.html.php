@@ -34,16 +34,16 @@ else
         if(!$field) continue;
         $visibleFields[$field] = $field;
     }
-    
+
     foreach(explode(',', $config->testcase->edit->requiredFields) as $field)
     {
         if(!$field) continue;
-    
+
         $requiredFields[$field] = $field;
-    
+
         if(strpos(",{$config->testcase->customBatchEditFields},", ",{$field},") !== false) $visibleFields[$field] = $field;
     }
-    
+
     $items = array();
     $items[] = array
     (
@@ -126,6 +126,8 @@ else
         'control'  => 'input',
         'required' => true,
     );
+
+    unset($lang->testcase->typeList['unit']);
     $items[] = array
     (
         'name'     => 'type',
@@ -162,7 +164,7 @@ else
         'hidden'   => !isset($visibleFields['stage']),
         'required' => isset($requiredFields['stage']),
     );
-    
+
     formBatchPanel
     (
         on::change('[data-name=branch]', 'loadBranches'),
