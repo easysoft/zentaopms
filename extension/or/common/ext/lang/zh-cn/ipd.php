@@ -125,6 +125,6 @@ $lang->searchObjects['doc']        = '文档';
 $lang->searchTips                  = '编号(ctrl+g)';
 
 $lang->market->menu           = new stdclass();
-$lang->market->menu->report   = array('link' => "报告|charter|browse|browseType=wait");
+$lang->market->menu->report   = array('link' => "报告|marketreport|browse|browseType=all");
 $lang->market->menu->research = array('link' => "调研|charter|browse|browseType=launched");
 $lang->market->menu->market   = array('link' => "市场|charter|browse|browseType=failed");
