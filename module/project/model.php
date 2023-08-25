@@ -2259,7 +2259,8 @@ class projectModel extends model
     }
 
     /**
-     * Update plans.
+     * 更新项目关联的计划。
+     * Update project's plans.
      *
      * @param  int    $projectID
      * @param  array  $plans
