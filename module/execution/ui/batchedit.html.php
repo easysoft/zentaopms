@@ -45,7 +45,7 @@ formBatchPanel
     (
         set::name('type'),
         set::label($lang->execution->method),
-        set::control('select'),
+        set::control('picker'),
         set::items($lang->execution->typeList),
         set::disabled(true),
         set::width('64px'),
@@ -60,7 +60,7 @@ formBatchPanel
     (
         set::name('PM'),
         set::label($lang->execution->execPM),
-        set::control('select'),
+        set::control('picker'),
         set::ditto(true),
         set::defaultDitto('off'),
         set::items($pmUsers),
