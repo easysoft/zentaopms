@@ -80,13 +80,15 @@ class metricTao extends metricModel
      * 请求模块数据。
      * Fetch module data.
      *
+     * @param string  $scope
      * @access protected
      * @return void
      */
-    protected function fetchModules()
+    protected function fetchModules($scope)
     {
         return $this->dao->select('object, purpose')->from(TABLE_METRIC)
             ->where('deleted')->eq('0')
+            ->andWhere('scope')->eq($scope)
             ->groupBy('object, purpose')
             ->fetchAll();
     }

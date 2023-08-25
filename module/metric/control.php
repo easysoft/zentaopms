@@ -55,7 +55,7 @@ class metric extends control
         /* Process the sql, get the conditon partion, save it to session. */
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'metric', true);
 
-        $modules    = $this->metric->getModuleTreeList();
+        $modules    = $this->metric->getModuleTreeList($scope);
         $metricTree = $this->metricZen->prepareTree($scope, $modules);
         $scopeList  = $this->metricZen->prepareScopeList();
 
@@ -83,12 +83,15 @@ class metric extends control
      */
     public function updateMetricLib()
     {
-        $calcList = $this->metric->getCalcList();
+        $calcList = $this->metric->getCalcInstanceList();
         $classifiedCalcGroup = $this->metric->classifyCalc($calcList);
 
         foreach($classifiedCalcGroup as $calcGroup)
         {
-            $rows = $this->metricZen->prepareDataset($calcGroup)->fetchAll();
+            $statement = $this->metricZen->prepareDataset($calcGroup);
+            if(empty($statement)) continue;
+
+            $rows = $statement->fetchAll();
             $this->metricZen->calcMetric($rows, $calcGroup->calcList);
         }
 

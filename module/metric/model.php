@@ -56,12 +56,13 @@ class metricModel extends model
      * 获取模块树数据。
      * Get module tree data.
      *
+     * @param string  $scope
      * @access public
      * @return void
      */
-    public function getModuleTreeList()
+    public function getModuleTreeList($scope)
     {
-        return $this->metricTao->fetchModules();
+        return $this->metricTao->fetchModules($scope);
     }
 
     /**
@@ -188,20 +189,33 @@ class metricModel extends model
         $currentDay  = date('d');
         $now         = date('H:i');
 
-        $metricList = $this->dao->select('id,code,crontab,cronList,time')->from(TABLE_METRIC)
-            ->where('when')->eq('cron')
+        $metricList = $this->dao->select('id,code,time')
+            ->from(TABLE_METRIC)
+            ->where('deleted')->eq('0')
             ->fetchAll();
 
         $excutableMetrics = array();
         foreach($metricList as $metric)
         {
-            if($metric->crontab == 'week' and strpos($metric->cronList, $currentWeek) === false)  continue;
-            if($metric->crontab == 'month' and strpos($metric->cronList, $currentDay) === false) continue;
-            if($now < $metric->time) continue;
-
             $excutableMetrics[$metric->id] = $metric->code;
         }
         return $excutableMetrics;
+    }
+
+    /**
+     * insertmetricLib
+     *
+     * @param  int    $records
+     * @access public
+     * @return void
+     */
+    public function insertmetricLib($records)
+    {
+        $this->dao->insert(TABLE_METRICLIB)
+            ->data($records)
+            ->exec();
+
+        return dao::isError();
     }
 
     /**
@@ -313,7 +327,7 @@ class metricModel extends model
         $classifiedCalcGroup = array();
         foreach($datasetCalcGroup as $dataset => $calcList) $classifiedCalcGroup[] = (object)array('dataset' => $dataset, 'calcList' => $calcList);
 
-        foreach($otherCalcList as $calc) $classifiedCalcGroup[] = (object)array('dataset' => '', 'calcList' => $calcList);
+        foreach($otherCalcList as $calcList) $classifiedCalcGroup[] = (object)array('dataset' => '', 'calcList' => array($calcList));
         return $classifiedCalcGroup;
     }
 

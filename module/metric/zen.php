@@ -23,7 +23,7 @@ class metricZen extends metric
     protected function prepareDataset($calcGroup)
     {
         $dataSource = $calcGroup->dataset;
-        $calcList   = $calcGroup->clacList;
+        $calcList   = $calcGroup->calcList;
 
         if(empty($dataSource))
         {
@@ -33,7 +33,7 @@ class metricZen extends metric
             return $calc->getStatement();
         }
 
-        $dataset   = $this->metric->getDataset();
+        $dataset   = $this->metric->getDataset($this->dao);
         $fieldList = $this->metric->uniteFieldList($calcList);
 
         return $dataset->$dataSource($fieldList);
@@ -111,6 +111,8 @@ class metricZen extends metric
 
             foreach($calcResult as $record)
             {
+                $record = (object)$record;
+
                 $record->metricID   = $calc->id;
                 $record->metricCode = $code;
                 $record->date       = helper::today();
