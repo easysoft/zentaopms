@@ -2476,14 +2476,14 @@ class taskModel extends model
      */
     public function processTasks(array $tasks): array
     {
-        foreach($tasks as $task)
+        foreach($tasks as &$task)
         {
             $task = $this->processTask($task);
             if(!empty($task->children))
             {
-                foreach($task->children as $child)
+                foreach($task->children as &$child)
                 {
-                    $tasks[$task->id]->children[$child->id] = $this->processTask($child);
+                    $child = $this->processTask($child);
                 }
             }
         }
