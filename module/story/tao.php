@@ -12,6 +12,19 @@ declare(strict_types=1);
 class storyTao extends storyModel
 {
     /**
+     * 获取需求的基础数据。
+     * Fetch base info of a story.
+     *
+     * @param  int       $storyID
+     * @access protected
+     * @return object|false
+     */
+    protected function fetchBaseInfo(int $storyID): object|false
+    {
+        return $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
+    }
+
+    /**
      * 获取项目研发需求关联的用户需求。
      * Get project requirements.
      *
