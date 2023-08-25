@@ -189,6 +189,15 @@ class testcaseTao extends testcaseModel
         return !dao::isError();
     }
 
+    /**
+     * 更新用例步骤。
+     * Update step.
+     *
+     * @param  object    $case
+     * @param  object    $oldCase
+     * @access protected
+     * @return bool
+     */
     protected function updateStep(object $case, object $oldCase): bool
     {
         if($oldCase->lib && empty($oldCase->product))
@@ -198,7 +207,6 @@ class testcaseTao extends testcaseModel
             $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($fromcaseVersion)->where('`fromCaseID`')->eq($caseID)->exec();
         }
 
-        /* Ignore steps when post has no steps. */
         if($case->steps)
         {
             $this->insertSteps($case->id, $case->steps, $case->expects, (array)$case->stepType);
@@ -216,7 +224,16 @@ class testcaseTao extends testcaseModel
         return !dao::isError();
     }
 
-    protected function linkBugs($linkedBugs, $case): bool
+    /**
+     * 更新用例和 bug 的关联关系。
+     * Link bugs with case.
+     *
+     * @param  array     $linkedBugs
+     * @param  object    $case
+     * @access protected
+     * @return bool
+     */
+    protected function linkBugs(array $linkedBugs, object $case): bool
     {
         $toLinkBugs = $case->linkBug;
         $newBugs    = array_diff($toLinkBugs, $linkedBugs);
@@ -228,6 +245,15 @@ class testcaseTao extends testcaseModel
         return !dao::isError();
     }
 
+    /**
+     * 解除用例和测试单的关联。
+     * Unlink case from test task.
+     *
+     * @param  int       $caseID
+     * @param  array     $testtasks
+     * @access protected
+     * @return bool
+     */
     protected function unlinkCaseFromTesttask($caseID, $testtasks): bool
     {
         $this->loadModel('action');
