@@ -137,7 +137,7 @@ class ci extends control
         /* Get testtaskID or create testtask. */
         if(!empty($taskID))
         {
-            $testtask  = $this->testtask->getById($taskID);
+            $testtask  = $this->testtask->getByID($taskID);
             $this->dao->update(TABLE_TESTTASK)->set('auto')->eq(strtolower($testType))->where('id')->eq($taskID)->exec();
             $productID = $testtask->product;
         }

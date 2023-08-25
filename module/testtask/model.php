@@ -17,7 +17,7 @@ class testtaskModel extends model
      * 创建一个测试单。
      * Create a test task.
      *
-     * @param  object $testtask
+     * @param  object    $testtask
      * @access public
      * @return int|false
      */
@@ -242,49 +242,50 @@ class testtaskModel extends model
      */
     public function getByList($idList)
     {
-        return $this->dao->select("*")->from(TABLE_TESTTASK)->where('id')->in($idList)->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_TESTTASK)->where('id')->in($idList)->fetchAll('id');
     }
 
     /**
+     * 根据ID获取单条测试单的数据。
      * Get test task info by id.
      *
-     * @param  int   $taskID
-     * @param  bool  $setImgSize
+     * @param  int          $taskID
+     * @param  bool         $setImgSize
      * @access public
-     * @return void
+     * @return object|false
      */
-    public function getById($taskID, $setImgSize = false)
+    public function getByID(int $testtaskID, bool $setImgSize = false): object|false
     {
-        $task = $this->dao->select("*")->from(TABLE_TESTTASK)->where('id')->eq((int)$taskID)->fetch();
-        if($task)
+        $testtask = $this->dao->select('*')->from(TABLE_TESTTASK)->where('id')->eq($testtaskID)->fetch();
+        if($testtask)
         {
-            $product = $this->dao->select('name,type')->from(TABLE_PRODUCT)->where('id')->eq($task->product)->fetch();
-            $task->productName   = $product->name;
-            $task->productType   = $product->type;
-            $task->branch        = 0;
-            $task->executionName = '';
-            $task->buildName     = '';
+            $product = $this->dao->select('name,type')->from(TABLE_PRODUCT)->where('id')->eq($testtask->product)->fetch();
+            $testtask->productName   = $product->name;
+            $testtask->productType   = $product->type;
+            $testtask->branch        = 0;
+            $testtask->executionName = '';
+            $testtask->buildName     = '';
 
-            if($task->execution)
+            if($testtask->execution)
             {
-                $task->executionName = $this->dao->select('name')->from(TABLE_EXECUTION)->where('id')->eq($task->execution)->fetch('name');
-                $task->branch        = $this->dao->select('branch')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($task->execution)->andWhere('product')->eq($task->product)->fetch('branch');
+                $testtask->executionName = $this->dao->select('name')->from(TABLE_EXECUTION)->where('id')->eq($testtask->execution)->fetch('name');
+                $testtask->branch        = $this->dao->select('branch')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($testtask->execution)->andWhere('product')->eq($testtask->product)->fetch('branch');
             }
 
-            $build = $this->dao->select('branch,name')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch();
-            if($build)
+            if($testtask->build)
             {
-                $task->buildName = $build->name;
-                $task->branch    = $build->branch;
+                $build = $this->dao->select('branch,name')->from(TABLE_BUILD)->where('id')->eq($testtask->build)->fetch();
+                $testtask->buildName = zget($build, 'name', '');
+                $testtask->branch    = zget($build, 'branch', '');
             }
         }
 
-        if(!$task) return false;
+        if(!$testtask) return false;
 
-        $task = $this->loadModel('file')->replaceImgURL($task, 'desc');
-        if($setImgSize) $task->desc = $this->loadModel('file')->setImgSize($task->desc);
-        $task->files = $this->loadModel('file')->getByObject('testtask', $task->id);
-        return $task;
+        $testtask = $this->loadModel('file')->replaceImgURL($testtask, 'desc');
+        if($setImgSize) $testtask->desc = $this->loadModel('file')->setImgSize($testtask->desc);
+        $testtask->files = $this->loadModel('file')->getByObject('testtask', $testtask->id);
+        return $testtask;
     }
 
     /**
@@ -751,7 +752,7 @@ class testtaskModel extends model
      */
     public function update($taskID)
     {
-        $oldTask = $this->getById($taskID);
+        $oldTask = $this->getByID($taskID);
         $task = fixer::input('post')
             ->add('id', $taskID)
             ->add('product', $oldTask->product)
@@ -788,7 +789,7 @@ class testtaskModel extends model
      */
     public function start($taskID)
     {
-        $oldTesttask = $this->getById($taskID);
+        $oldTesttask = $this->getByID($taskID);
         $testtask = fixer::input('post')
             ->add('id', $taskID)
             ->add('status', 'doing')
@@ -814,7 +815,7 @@ class testtaskModel extends model
      */
     public function close($taskID)
     {
-        $oldTesttask = $this->getById($taskID);
+        $oldTesttask = $this->getByID($taskID);
         $testtask = fixer::input('post')
             ->add('id', $taskID)
             ->add('status', 'done')
@@ -857,7 +858,7 @@ class testtaskModel extends model
      */
     public function block($taskID)
     {
-        $oldTesttask = $this->getById($taskID);
+        $oldTesttask = $this->getByID($taskID);
         $testtask = fixer::input('post')
             ->add('id', $taskID)
             ->add('status', 'blocked')
@@ -883,7 +884,7 @@ class testtaskModel extends model
      */
     public function activate($taskID)
     {
-        $oldTesttask = $this->getById($taskID);
+        $oldTesttask = $this->getByID($taskID);
         $testtask = fixer::input('post')
             ->add('status', 'doing')
             ->stripTags($this->config->testtask->editor->activate['id'], $this->config->allowedTags)
@@ -2414,7 +2415,7 @@ class testtaskModel extends model
 
         if($taskID and $this->app->viewType != 'mhtml')
         {
-            $testtask     = $this->getById($taskID);
+            $testtask     = $this->getByID($taskID);
             $module       = $this->app->rawModule;
             $method       = $this->app->rawMethod;
             $dropMenuLink = helper::createLink('testtask', 'ajaxGetDropMenu', "productID=$productID&branch=$branch&taskID=$taskID&module=$module&method=$method");
@@ -2445,7 +2446,7 @@ class testtaskModel extends model
         if($testtaskID and $this->app->viewType != 'mhtml')
         {
             $dropMenuLink = helper::createLink('testtask', 'ajaxGetDropMenu', "productID=$productID&branch=&taskID=$testtaskID&module=$currentModule&method=$currentMethod&objectType=$objectType&objectID=$objectID");
-            $testtask     = $this->getById($testtaskID);
+            $testtask     = $this->getByID($testtaskID);
 
             $output .= "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentTesttask' title='{$testtask->name}'><span class='text'>{$testtask->name}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
             $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';

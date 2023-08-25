@@ -110,27 +110,27 @@ class testtask extends control
         $endTime   = $endTime   ? date('Y-m-d', strtotime($endTime))   : '';
         $product   = $this->product->getById($productID);
         if($product->type == 'normal') $branch = 'all';
-        $tasks = $this->testtask->getProductTasks($productID, $branch, $type, $beginTime, $endTime, $sort, $pager);
+        $testtasks = $this->testtask->getProductTasks($productID, $branch, $type, $beginTime, $endTime, $sort, $pager);
 
         /* 获取不同状态测试单的数量，用于列表底部统计信息展示。 */
         $waitCount    = 0;
         $testingCount = 0;
         $blockedCount = 0;
         $doneCount    = 0;
-        foreach($tasks as $key => $task)
+        foreach($testtasks as $testtask)
         {
-            if($task->status == 'wait')    $waitCount ++;
-            if($task->status == 'doing')   $testingCount ++;
-            if($task->status == 'blocked') $blockedCount ++;
-            if($task->status == 'done')    $doneCount ++;
-            if($task->build == 'trunk' || empty($task->buildName)) $task->buildName = $this->lang->trunk;
+            if($testtask->status == 'wait')    $waitCount ++;
+            if($testtask->status == 'doing')   $testingCount ++;
+            if($testtask->status == 'blocked') $blockedCount ++;
+            if($testtask->status == 'done')    $doneCount ++;
+            if($testtask->build == 'trunk' || empty($testtask->buildName)) $testtask->buildName = $this->lang->trunk;
         }
 
         $this->view->title        = $products[$productID] . $this->lang->colon . $this->lang->testtask->common;
         $this->view->productID    = $productID;
         $this->view->product      = $product;
         $this->view->branch       = $branch;
-        $this->view->tasks        = $tasks;
+        $this->view->tasks        = $testtasks;
         $this->view->users        = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->pager        = $pager;
         $this->view->beginTime    = $beginTime;
@@ -241,23 +241,23 @@ class testtask extends control
             }
 
             /* 进行测试单数据插入操作。 */
-            $taskID = $this->testtask->create($formData);
+            $testtaskID = $this->testtask->create($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* 插入数据后对上传的文件进行处理。 */
-            $this->loadModel('file')->updateObjectID($this->post->uid, $taskID, 'testtask');
-            $this->file->saveUpload('testtask', $taskID);
+            $this->loadModel('file')->updateObjectID($this->post->uid, $testtaskID, 'testtask');
+            $this->file->saveUpload('testtask', $testtaskID);
 
             /* 执行工作流的扩展动作并返回提示消息。 */
-            $message = $this->executeHooks($taskID);
+            $message = $this->executeHooks($testtaskID);
             if(!$message) $message = $this->lang->saveSuccess;
 
             /* 根据不同的应用生成不同的跳转链接。 */
-            $task = $this->dao->findById($taskID)->from(TABLE_TESTTASK)->fetch();
-            if($this->app->tab == 'project')   $link = $this->createLink('project', 'testtask', "projectID=$task->project");
-            if($this->app->tab == 'execution') $link = $this->createLink('execution', 'testtask', "executionID=$task->execution");
+            $testtask = $this->dao->findById($testtaskID)->from(TABLE_TESTTASK)->fetch();
+            if($this->app->tab == 'project')   $link = $this->createLink('project', 'testtask', "projectID=$testtask->project");
+            if($this->app->tab == 'execution') $link = $this->createLink('execution', 'testtask', "executionID=$testtask->execution");
             if($this->app->tab == 'qa')        $link = $this->createLink('testtask', 'browse', "productID=" . $this->post->product);
-            return $this->send(array('result' => 'success', 'message' => $message, 'load' => $link, 'id' => $taskID));
+            return $this->send(array('result' => 'success', 'message' => $message, 'load' => $link, 'id' => $testtaskID));
         }
 
         if($executionID)
@@ -281,7 +281,7 @@ class testtask extends control
         if($this->app->tab == 'execution') $this->loadModel('execution')->setMenu($executionID);
         if($this->app->tab == 'qa')        $this->loadModel('qa')->setMenu($products, $productID);
 
-        $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->create;
+        $this->view->title       = $products[$productID] . $this->lang->colon . $this->lang->testtask->create;
         $this->view->product     = $this->product->getByID($productID);
         $this->view->projectID   = $projectID;
         $this->view->executionID = $executionID;
@@ -294,77 +294,54 @@ class testtask extends control
     }
 
     /**
+     * 查看当前测试单的概要信息。
      * View a test task.
      *
-     * @param  int    $taskID
+     * @param  int    $testtaskID
      * @access public
      * @return void
      */
-    public function view($taskID)
+    public function view(int $testtaskID)
     {
-        /* Get test task, and set menu. */
-        $taskID = (int)$taskID;
-        $task   = $this->testtask->getById($taskID, true);
-        if(!$task)
-        {
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
-            return print(js::error($this->lang->notFound) . js::locate($this->createLink('qa', 'index')));
-        }
+        /* Get test task. */
+        $testtask = $this->testtask->getByID($testtaskID, true);
+        if(!$testtask) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('qa', 'index'))));
 
         /* When the session changes, you need to query the related products again. */
-        if($this->session->project != $task->project) $this->view->products = $this->products = $this->product->getProductPairsByProject($task->project);
-        $this->session->project = $task->project;
+        $this->loadModel('product');
+        $products = $this->testtaskZen->getProducts();
+        if($this->session->project != $testtask->project) $products = $this->product->getProductPairsByProject($testtask->project);
+        $this->session->project = $testtask->project;
 
-        $productID = $task->product;
-        $buildID   = $task->build;
-
-        if(!isset($this->products[$productID]))
+        /* 如果该测试单的所属产品不在products里，则把所属产品塞入到products里。 */
+        $productID = $testtask->product;
+        if(!isset($products[$productID]))
         {
             $product = $this->product->getByID($productID);
-            $this->products[$productID] = $product->name;
-        }
-
-        $build   = $this->loadModel('build')->getByID($buildID);
-        $stories = array();
-        $bugs    = array();
-
-        if($build)
-        {
-            $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($build->stories)->fetchAll();
-            $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
-
-            $bugs    = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($build->bugs)->fetchAll();
-            $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
+            $products[$productID] = $product->name;
         }
 
         if($this->app->tab == 'project')
         {
-            $this->loadModel('project')->setMenu($task->project);
-            $this->lang->modulePageNav = $this->testtask->select($productID, $taskID, 'project', $task->project);
+            $this->loadModel('project')->setMenu($testtask->project);
+            $this->lang->modulePageNav = $this->testtask->select($productID, $testtaskID, 'project', $testtask->project);
         }
-        elseif($this->app->tab == 'execution')
+        if($this->app->tab == 'execution')
         {
-            $this->loadModel('execution')->setMenu($task->execution);
-            $this->lang->modulePageNav = $this->testtask->select($productID, $taskID, 'execution', $task->execution);
+            $this->loadModel('execution')->setMenu($testtask->execution);
+            $this->lang->modulePageNav = $this->testtask->select($productID, $testtaskID, 'execution', $testtask->execution);
         }
-        elseif($this->app->tab == 'qa')
-        {
-            $this->testtask->setMenu($this->products, $productID, $task->branch, $taskID);
-        }
+        if($this->app->tab == 'qa') $this->testtask->setMenu($products, $productID, $testtask->branch, $testtaskID);
 
-        $this->executeHooks($taskID);
+        $this->executeHooks($testtaskID); // 执行工作流配置的扩展动作。
 
-        if($task->execution) $this->view->execution = $this->loadModel('project')->getById($task->execution);
+        if($testtask->execution) $this->view->execution = $this->loadModel('project')->getByID($testtask->execution);
 
-        $this->view->title           = "TASK #$task->id $task->name/" . $this->products[$productID];
-        $this->view->productID       = $productID;
-        $this->view->task            = $task;
-        $this->view->users           = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $this->view->actions         = $this->loadModel('action')->getList('testtask', $taskID);
-        $this->view->build           = $build;
-        $this->view->testreportTitle = $this->dao->select('title')->from(TABLE_TESTREPORT)->where('id')->eq($task->testreport)->fetch('title');
-        $this->view->stories         = $stories;
-        $this->view->bugs            = $bugs;
+        $this->view->title      = "TASK #$testtask->id $testtask->name/" . $products[$productID];
+        $this->view->task       = $testtask;
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->actions    = $this->loadModel('action')->getList('testtask', $testtaskID);
+        $this->view->testreport = $this->loadModel('testreport')->getById($testtask->testreport);
         $this->display();
     }
 
@@ -378,7 +355,7 @@ class testtask extends control
      */
     public function unitCases($taskID, $orderBy = 'id')
     {
-        $task = $this->testtask->getById($taskID);
+        $task = $this->testtask->getByID($taskID);
 
         /* Set browseType, productID, moduleID and queryID. */
         $productID = $this->product->saveState($task->product, $this->products);
@@ -489,7 +466,7 @@ class testtask extends control
         $browseType = strtolower($browseType);
 
         /* Get task and product info, set menu. */
-        $task = $this->testtask->getById($taskID);
+        $task = $this->testtask->getByID($taskID);
         if(!$task) return print(js::error($this->lang->testtask->checkLinked) . js::locate('back'));
 
         $productID = $task->product;
@@ -612,7 +589,7 @@ class testtask extends control
         $this->loadModel('report');
         $this->view->charts = array();
 
-        $task = $this->testtask->getById($taskID);
+        $task = $this->testtask->getByID($taskID);
 
         if(!empty($_POST))
         {
@@ -684,7 +661,7 @@ class testtask extends control
 
         /* Get task and product info, set menu. */
         $groupBy = empty($groupBy) ? 'story' : $groupBy;
-        $task    = $this->testtask->getById($taskID);
+        $task    = $this->testtask->getByID($taskID);
         if(!$task) return print(js::error($this->lang->notFound) . js::locate('back'));
 
         $productID = $task->product;
@@ -773,7 +750,7 @@ class testtask extends control
     public function edit($taskID)
     {
         /* Get task info. */
-        $task      = $this->testtask->getById($taskID);
+        $task      = $this->testtask->getByID($taskID);
         $productID = $this->loadModel('product')->saveState($task->product, $this->products);
 
         if(!empty($_POST))
@@ -878,7 +855,7 @@ class testtask extends control
         }
 
         /* Get task info. */
-        $testtask  = $this->testtask->getById($taskID);
+        $testtask  = $this->testtask->getByID($taskID);
         $productID = $this->product->saveState($testtask->product, $this->products);
 
         /* Set menu. */
@@ -918,7 +895,7 @@ class testtask extends control
         }
 
         /* Get task info. */
-        $testtask  = $this->testtask->getById($taskID);
+        $testtask  = $this->testtask->getByID($taskID);
         $productID = $this->product->saveState($testtask->product, $this->products);
 
         /* Set menu. */
@@ -958,13 +935,13 @@ class testtask extends control
         }
 
         /* Get task info. */
-        $testtask  = $this->testtask->getById($taskID);
+        $testtask  = $this->testtask->getByID($taskID);
         $productID = $this->product->saveState((int)$testtask->product, $this->products);
 
         /* Set menu. */
         $this->loadModel('qa')->setMenu($this->products, $productID, (string)$testtask->branch, $taskID);
 
-        $this->view->testtask     = $this->testtask->getById($taskID);
+        $this->view->testtask     = $testtask;
         $this->view->title        = $testtask->name . $this->lang->colon . $this->lang->close;
         $this->view->actions      = $this->loadModel('action')->getList('testtask', $taskID);
         $this->view->users        = $this->loadModel('user')->getPairs('noclosed|nodeleted|qdfirst');
@@ -999,7 +976,7 @@ class testtask extends control
         }
 
         /* Get task info. */
-        $testtask  = $this->testtask->getById($taskID);
+        $testtask  = $this->testtask->getByID($taskID);
         $productID = $this->product->saveState($testtask->product, $this->products);
 
         /* Set menu. */
@@ -1062,7 +1039,7 @@ class testtask extends control
         $this->session->set('caseList', $this->app->getURI(true), 'qa');
 
         /* Get task and product id. */
-        $task      = $this->testtask->getById($taskID);
+        $task      = $this->testtask->getByID($taskID);
         $productID = $this->product->saveState($task->product, $this->products);
         $product   = $this->product->getByID($productID);
 

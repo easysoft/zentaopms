@@ -316,7 +316,7 @@ class job extends control
         {
             $this->app->loadLang('project');
             $taskID = $compile->testtask;
-            $task   = $this->loadModel('testtask')->getById($taskID);
+            $task   = $this->loadModel('testtask')->getByID($taskID);
             $runs   = $this->testtask->getRuns($taskID, 0, 'id');
 
             $cases = array();

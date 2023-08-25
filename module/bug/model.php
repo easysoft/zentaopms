@@ -1311,7 +1311,7 @@ class bugModel extends model
         $bugSteps .= !empty($stepResults) && !empty($bugResult) ? str_replace('<br/>', '', $this->lang->bug->tplResult) . $bugResult : $this->lang->bug->tplResult;
         $bugSteps .= !empty($stepResults) && !empty($bugExpect) ? str_replace('<br/>', '', $this->lang->bug->tplExpect) . $bugExpect : $this->lang->bug->tplExpect;
 
-        if(!empty($run->task)) $testtask = $this->loadModel('testtask')->getById($run->task);
+        if(!empty($run->task)) $testtask = $this->loadModel('testtask')->getByID($run->task);
         $executionID = isset($testtask->execution) ? $testtask->execution : 0;
 
         if(!$executionID and $caseID > 0) $executionID = isset($run->case->execution) ? $run->case->execution : 0; // Fix feedback #1043.

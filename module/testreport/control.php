@@ -92,7 +92,7 @@ class testreport extends control
 
         $objectID = $this->commonAction($objectID, $objectType);
         $object   = $this->$objectType->getById($objectID);
-        if($extra) $task = $this->testtask->getById($extra);
+        if($extra) $task = $this->testtask->getByID($extra);
 
         $title = $extra ? $task->name : $object->name;
 
@@ -181,7 +181,7 @@ class testreport extends control
             if(empty($objectID) and $extra) $productID = $extra;
             if($objectID)
             {
-                $task      = $this->testtask->getById($objectID);
+                $task      = $this->testtask->getByID($objectID);
                 $productID = $this->commonAction($task->product, 'product');
             }
 
@@ -199,7 +199,7 @@ class testreport extends control
             if(empty($objectID))
             {
                 $objectID  = key($taskPairs);
-                $task      = $this->testtask->getById($objectID);
+                $task      = $this->testtask->getByID($objectID);
                 $productID = $this->commonAction($task->product, 'product');
             }
             $this->view->taskPairs = $taskPairs;
@@ -240,7 +240,7 @@ class testreport extends control
 
             $execution     = $this->execution->getById($executionID);
             $tasks         = $this->testtask->getExecutionTasks($executionID, $objectType);
-            $task          = $objectID ? $this->testtask->getById($objectID) : key($tasks);
+            $task          = $objectID ? $this->testtask->getByID($objectID) : key($tasks);
             $owners        = array();
             $buildIdList   = array();
             $productIdList = array();
@@ -383,7 +383,7 @@ class testreport extends control
         {
             $productIdList[$report->product] = $report->product;
 
-            $task      = $this->testtask->getById($report->objectID);
+            $task      = $this->testtask->getByID($report->objectID);
             $execution = $this->execution->getById($task->execution);
             $builds    = array();
             if($task->build == 'trunk')
@@ -631,7 +631,7 @@ class testreport extends control
     public function setChartDatas($taskID)
     {
         $this->loadModel('report');
-        $task   = $this->loadModel('testtask')->getById($taskID);
+        $task   = $this->loadModel('testtask')->getByID($taskID);
         foreach($this->lang->testtask->report->charts as $chart => $title)
         {
             if(strpos($chart, 'testTask') === false) continue;

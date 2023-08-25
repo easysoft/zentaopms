@@ -2349,7 +2349,7 @@ class bugZen extends bug
         /* Get buildID from testtask. */
         if(isset($testtask) and $testtask)
         {
-            $testtask = $this->loadModel('testtask')->getById((int)$testtask);
+            $testtask = $this->loadModel('testtask')->getByID((int)$testtask);
             $bug      = $this->updateBug($bug, array('buildID' => $testtask->build));
         }
 

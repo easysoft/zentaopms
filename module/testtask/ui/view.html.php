@@ -135,7 +135,7 @@ detailBody
                         !empty($task->testreport) ? a
                         (
                             set('href', createLink('testreport', 'view', "reportID=$task->testreport")),
-                            $testreportTitle
+                            zget($testreport, 'title', '')
                         ) : null,
                     )
                 )
