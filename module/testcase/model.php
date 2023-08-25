@@ -1392,7 +1392,7 @@ class testcaseModel extends model
             $changes = common::createChanges($oldCase, $case);
             if($changes)
             {
-                $actionID = $this->action->create('case', $oldCase->id, 'Edited', '', ucfirst($result));
+                $actionID = $this->action->create('case', $oldCase->id, 'Edited', '', ucfirst($type));
                 $this->action->logHistory($actionID, $changes);
             }
         }
