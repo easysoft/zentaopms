@@ -1588,7 +1588,6 @@ class projectModel extends model
      * @param  int    $oldProgram
      * @param  int    $newProgram
      * @param  array  $products
-     *
      * @access public
      * @return bool
      */
