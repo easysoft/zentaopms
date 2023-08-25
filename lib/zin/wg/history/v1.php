@@ -13,6 +13,7 @@ class history extends wg
         'commentUrl?: string',
         'commentBtn?: bool',
         'bodyClass?: string',
+        'hasComment?: bool',
     );
 
     public static function getPageCSS(): string|false
@@ -230,7 +231,7 @@ class history extends wg
         $isInModal = isAjaxRequest('modal');
         $padding   = $isInModal ? 'px-3 pd-3' : 'px-6 pb-6';
 
-        list($commentUrl, $bodyClass) = $this->prop(array('commentUrl', 'bodyClass'));
+        list($commentUrl, $bodyClass, $hasComment) = $this->prop(array('commentUrl', 'bodyClass', 'hasComment'));
         return panel
         (
             setClass('history', 'pt-4', 'h-full', $padding),
@@ -257,11 +258,11 @@ class history extends wg
                 )
             ),
             div(setClass('mt-3'), $this->historyList()),
-            commentDialog
+            $hasComment !== false ? commentDialog
             (
                 set::name('comment'),
                 set::url($commentUrl),
-            )
+            ) : null
         );
     }
 }

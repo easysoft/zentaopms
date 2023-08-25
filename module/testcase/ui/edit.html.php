@@ -143,7 +143,7 @@ detailBody
             editor
             (
                 set::name('comment'),
-                set::rows(5)
+                set::rows(5),
             )
         )
     ),
@@ -152,6 +152,7 @@ detailBody
         set::actions($actions),
         set::users($users),
         set::methodName($methodName),
+        set::hasComment(false),
     ),
     detailSide
     (
