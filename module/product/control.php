@@ -773,7 +773,7 @@ class product extends control
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->groups     = $this->loadModel('group')->getPairs();
         $this->view->branches   = $this->loadModel('branch')->getPairs($productID);
-        $this->view->reviewers  = explode(',', $product->reviewer);
+        $this->view->reviewers  = $product->reviewer ? explode(',', $product->reviewer) : array();
 
         $this->display();
     }
