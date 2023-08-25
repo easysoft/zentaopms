@@ -251,7 +251,7 @@ class baseHelper
     {
         if(is_array($idList))
         {
-            foreach($idList as $key=>$value) $idList[$key] = addslashes($value);
+            foreach($idList as $key => $value) $idList[$key] = empty($value) ? '' : addslashes($value);
             return "IN ('" . join("','", $idList) . "')";
         }
 
