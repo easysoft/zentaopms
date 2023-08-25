@@ -1887,7 +1887,7 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getTeamMembers($projectID)
+    public function getTeamMembers(int $projectID): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getTeamMembers();
 
