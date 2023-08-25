@@ -19,71 +19,71 @@ foreach($projects as $projectID => $project)
 
     $cards[] = cell
     (
-        set('width', $longBlock ? '32%' : '100%'),
-        set('class', 'border p-4 overflow-hidden  ' . ($longBlock ? '' : ' mb-2')),
+        setClass('p-2', $longBlock ? 'w-1/3' : 'w-full'),
         div
         (
-            set('class', 'pb-2'),
-            a
-            (
-                set('class', 'text-black'),
-                set('href', $viewLink),
-                $project->name
-            )
-        ),
-        ($project->multiple && $execution) ?  div
-        (
-            set('class', 'card-body py-1.5'),
+            setClass('border rounded-sm h-full p-4'),
             div
             (
-                set('class', 'py-1.5'),
-                span
+                setClass('mb-4'),
+                a
                 (
-                    set('class', 'text-gray'),
-                    $execution->type == 'kanban' ? $lang->project->lastKanban : $lang->project->lastIteration . ' : '
-                ),
-                a(
-                    set('href', createLink('execution', 'task', "executionID={$execution->id}")),
-                    $execution->name
-                ),
-                label
-                (
-                    set('class', 'warning-pale circle ml-2'),
-                    $lang->execution->statusList[$execution->status]
+                    set('class', 'font-bold text-fore text-md'),
+                    set('href', $viewLink),
+                    $project->name
                 )
             ),
             div
             (
-                set('class', 'py-1.5'),
-                span
+                ($project->multiple && $execution) ? array
                 (
-                    set('class', 'text-gray'),
-                    $lang->block->projectMember . ' : ',
-                ),
-                sprintf($lang->block->totalMember, $project->teamCount)
-            ),
-            div
-            (
-                set('class', 'py-1.5'),
-                span
-                (
-                    set('class', 'text-gray'),
-                    $lang->project->end . ' : '
-                ),
-                $project->end
+                    setClass('space-y-3'),
+                    div
+                    (
+                        span
+                        (
+                            set('class', 'text-gray mr-1'),
+                            $execution->type == 'kanban' ? $lang->project->lastKanban : $lang->project->lastIteration . ': '
+                        ),
+                        a
+                        (
+                            set('href', createLink('execution', 'task', "executionID={$execution->id}")),
+                            $execution->name
+                        ),
+                        label
+                        (
+                            set('class', 'label warning-pale circle ml-2'),
+                            $lang->execution->statusList[$execution->status]
+                        )
+                    ),
+                    div
+                    (
+                        span
+                        (
+                            set('class', 'text-gray mr-1'),
+                            $lang->block->projectMember . ': ',
+                        ),
+                        sprintf($lang->block->totalMember, $project->teamCount)
+                    ),
+                    div
+                    (
+                        span
+                        (
+                            set('class', 'text-gray mr-1'),
+                            $lang->project->end . ': '
+                        ),
+                        $project->end
+                    )
+                ) : null
             )
-        ) : div
-        (
-            set::class('card-body'),
         )
     );
 }
 
 blockPanel
 (
-    set::bodyClass('row flex-wrap cards justify-between'),
+    set::bodyClass('row flex-wrap justify-between p-1.5'),
     $cards
 );
 
-setPageData('zinDebug', null);
 render();
