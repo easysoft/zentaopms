@@ -77,10 +77,11 @@ class projectTao extends projectModel
     }
 
     /**
+     * 激活项目时更新项目的信息。
      * Update project table when activate a project.
      *
-     * @param  int    $projectID
-     * @param  object $project
+     * @param  int       $projectID
+     * @param  object    $project
      * @access protected
      * @return bool
      */
