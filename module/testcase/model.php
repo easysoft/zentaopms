@@ -751,20 +751,16 @@ class testcaseModel extends model
      * Update a case.
      *
      * @param  int    $caseID
-     * @param  array  $testtasks
      * @access public
      * @return void
      */
-    public function update($case, $testtasks = array())
+    public function update(object $case, object $oldCase): bool|array
     {
+        /* Remove the require field named story when the case is a lib case.*/
         $requiredFields = $this->config->testcase->edit->requiredFields;
-        if($oldCase->lib != 0)
-        {
-            /* Remove the require field named story when the case is a lib case.*/
-            $requiredFields = str_replace(',story,', ',', ",$requiredFields,");
-        }
+        if($oldCase->lib != 0) $requiredFields = str_replace(',story,', ',', ",$requiredFields,");
 
-        $this->dao->update(TABLE_CASE)->data($case, 'deleteFiles,uid,stepChanged')
+        $this->dao->update(TABLE_CASE)->data($case, 'deleteFiles,uid,stepChanged,comment,steps,expects,stepType,linkBug')
             ->autoCheck()
             ->batchCheck($requiredFields, 'notempty')
             ->checkFlow()
@@ -773,97 +769,27 @@ class testcaseModel extends model
 
         if(dao::isError()) return false;
 
-        $this->updateCase2Project($oldCase, $case, $caseID);
+        $this->testcase->updateCase2Project($oldCase, $case);
 
-        if($case->stepChanged)
-        {
-            $parentStepID = 0;
-            $isLibCase    = ($oldCase->lib and empty($oldCase->product));
-            if($isLibCase)
-            {
-                $fromcaseVersion = $this->dao->select('fromCaseVersion')->from(TABLE_CASE)->where('fromCaseID')->eq($caseID)->fetch('fromCaseVersion');
-                $fromcaseVersion = (int)$fromcaseVersion + 1;
-                $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($fromcaseVersion)->where('`fromCaseID`')->eq($caseID)->exec();
-            }
+        if($case->stepChanged) $this->testcase->updateStep($case, $oldCase);
 
-            /* Ignore steps when post has no steps. */
-            if($this->post->steps)
-            {
-                $data = fixer::input('post')->get();
-                $this->testcaseTao->insertSteps($caseID, $data->steps, $data->expects, (array)$data->stepType);
-            }
-            else
-            {
-                foreach($oldCase->steps as $step)
-                {
-                    unset($step->id);
-                    $step->version = $version;
-                    $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
-                }
-            }
-        }
+        $this->testcase->linkBugs(array_keys($oldCase->toBugs), $case);
 
-        /* Link bugs to case. */
-        $this->post->linkBug = $this->post->linkBug ? $this->post->linkBug : array();
-        $linkedBugs = array_keys($oldCase->toBugs);
-        $linkBugs   = $this->post->linkBug;
-        $newBugs    = array_diff($linkBugs, $linkedBugs);
-        $removeBugs = array_diff($linkedBugs, $linkBugs);
+        if($case->branch && !empty($testtasks)) $this->testcase->unlinkCaseFromTesttask($oldCase->id, $testtasks);
 
-        if($newBugs)
-        {
-            foreach($newBugs as $bugID)
-            {
-                $this->dao->update(TABLE_BUG)
-                    ->set('`case`')->eq($caseID)
-                    ->set('caseVersion')->eq($case->version)
-                    ->set('`story`')->eq($case->story)
-                    ->set('storyVersion')->eq($case->storyVersion)
-                    ->where('id')->eq($bugID)->exec();
-            }
-        }
-
-        if($removeBugs)
-        {
-            foreach($removeBugs as $bugID)
-            {
-                $this->dao->update(TABLE_BUG)
-                    ->set('`case`')->eq(0)
-                    ->set('caseVersion')->eq(0)
-                    ->set('`story`')->eq(0)
-                    ->set('storyVersion')->eq(0)
-                    ->where('id')->eq($bugID)->exec();
-            }
-        }
+        $this->loadModel('file')->processFile4Object('testcase', $oldCase, $case);
 
         /* Join the steps to diff. */
-        if($stepChanged and $this->post->steps)
+        if($case->stepChanged && $case->steps)
         {
             $oldCase->steps = $this->joinStep($oldCase->steps);
-            $case->steps    = $this->joinStep($this->getById($caseID, $version)->steps);
+            $case->steps    = $this->joinStep($this->getByID($oldCase->id, $case->version)->steps);
         }
         else
         {
             unset($oldCase->steps);
+            unset($case->steps);
         }
-
-        if($case->branch and !empty($testtasks))
-        {
-            $this->loadModel('action');
-            foreach($testtasks as $taskID => $testtask)
-            {
-                if($testtask->branch != $case->branch and $taskID)
-                {
-                    $this->dao->delete()->from(TABLE_TESTRUN)
-                        ->where('task')->eq($taskID)
-                        ->andWhere('`case`')->eq($caseID)
-                        ->exec();
-                    $this->action->create('case' ,$caseID, 'unlinkedfromtesttask', '', $taskID);
-                }
-            }
-        }
-
-        $this->file->processFile4Object('testcase', $oldCase, $case);
 
         return common::createChanges($oldCase, $case);
     }
@@ -1087,7 +1013,7 @@ class testcaseModel extends model
             if(!dao::isError())
             {
                 $case->product = $oldCase->product;
-                $this->updateCase2Project($oldCase, $case, $caseID);
+                $this->testcaseTao->updateCase2Project($oldCase, $case);
 
                 $this->executeHooks($caseID);
 
@@ -1682,7 +1608,7 @@ class testcaseModel extends model
                         $caseData->steps = $this->joinStep($steps);
                         $changes  = common::createChanges($oldCase, $caseData);
 
-                        $this->updateCase2Project($oldCase, $caseData, $caseID);
+                        $this->testcaseTao->updateCase2Project($oldCase, $caseData);
 
                         $actionID = $this->action->create('case', $caseID, 'Edited');
                         $this->action->logHistory($actionID, $changes);
@@ -2465,63 +2391,6 @@ class testcaseModel extends model
         }
     }
 
-    /**
-     * Deal with the relationship between the case and project when edit the case.
-     *
-     * @param  object  $oldCase
-     * @param  object  $case
-     * @param  int     $caseID
-     * @access public
-     * @return void
-     */
-    public function updateCase2Project($oldCase, $case, $caseID)
-    {
-        $productChanged = ($oldCase->product != $case->product);
-        $storyChanged   = ($oldCase->story   != $case->story);
-
-        if($productChanged)
-        {
-            $this->dao->update(TABLE_PROJECTCASE)
-                ->set('product')->eq($case->product)
-                ->set('version')->eq($case->version)
-                ->where('`case`')->eq($oldCase->id)
-                ->exec();
-        }
-
-        /* The related story is changed. */
-        if($storyChanged)
-        {
-            /* If the new related story isn't linked the project, unlink the case. */
-            $projects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($oldCase->story)->fetchAll('project');
-
-            $projectIdList = array_keys($projects);
-            $this->dao->delete()->from(TABLE_PROJECTCASE)
-                ->where('project')->in()
-                ->andWhere('`case`')->eq($oldCase->id)
-                ->exec();
-
-            /* If the new related story is not null, make the case link the project which link the new related story. */
-            if(!empty($case->story))
-            {
-                $projects = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('story')->eq($case->story)->fetchAll('project');
-                if($projects)
-                {
-                    $projects = array_keys($projects);
-                    foreach($projects as $projectID)
-                    {
-                        $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
-                        $data = new stdclass();
-                        $data->project = $projectID;
-                        $data->product = $case->product;
-                        $data->case    = $caseID;
-                        $data->version = $oldCase->version;
-                        $data->order   = ++ $lastOrder;
-                        $this->dao->replace(TABLE_PROJECTCASE)->data($data)->exec();
-                    }
-                }
-            }
-        }
-    }
 
     /**
      * Get status for different method.
