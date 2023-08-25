@@ -407,9 +407,32 @@ class taskTao extends taskModel
      */
     protected function computeTaskProgress(object $task): float
     {
-        if($task->left != 0) return round($task->consumed / ($task->consumed + $task->left), 2) * 100;
-        if($task->consumed == 0) return 0;
-        return 100;
+        if($task->parent >= 0)
+        {
+            if($task->left != 0) return round($task->consumed / ($task->consumed + $task->left), 2) * 100;
+            if($task->consumed == 0) return 0;
+            return 100;
+        }
+        else
+        {
+            /* 如果一个任务创建了多个子任务但都没有设置预计剩余工时，此时如果其中一个子任务已完成但其他子任务都未开始，会出现父任务进度100%但任务状态仍在进行中的情况，为了避免这种情况，父任务类型的任务进度需要单独计算。*/
+            $left     = 0;
+            $consumed = 0;
+            $childrenStatus = array();
+            foreach($task->children as $childTask)
+            {
+                $left     += $childTask->left;
+                $consumed += $childTask->consumed;
+                $childrenStatus[] = $childTask->status;
+            }
+            if($left != 0) return round($consumed / ($consumed + $left), 2) * 100;
+            if($consumed == 0) return 0;
+
+            /* Compute progress by the count of done status in status list if some child task is finished(left is 0, consumed is not 0) but other task is in wait. */
+            $statusCount = array_count_values($childrenStatus);
+            if(in_array('wait', $childrenStatus)) return round($statusCount['done'] / count($childrenStatus), 2) * 100;
+            return 100;
+        }
     }
 
     /**
