@@ -1395,9 +1395,12 @@ class taskModel extends model
 
         if($this->config->vision == 'lite') $tasks = $this->appendLane($tasks);
 
+        $userList     = $this->loadModel('user')->getPairs('noletter|noclosed');
         $parentIdList = array();
-        foreach($tasks as $task)
+        foreach($tasks as &$task)
         {
+            $task->assignedToRealName = zget($userList, $task->assignedTo);
+
             if($task->parent <= 0 || isset($tasks[$task->parent]) || isset($parentIdList[$task->parent])) continue;
             $parentIdList[$task->parent] = $task->parent;
         }
