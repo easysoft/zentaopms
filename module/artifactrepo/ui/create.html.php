@@ -41,7 +41,7 @@ formPanel
         set::width('2/3'),
         set::name('repoName'),
         set::required(true),
-        set::label($lang->devops->artifact),
+        set::label($lang->artifactrepo->repoName),
         set::items(array()),
         on::change('onRepoChange'),
     ),

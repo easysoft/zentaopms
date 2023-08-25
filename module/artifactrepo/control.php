@@ -35,6 +35,8 @@ class artifactrepo extends control
         $this->view->orderBy        = $orderBy;
         $this->view->pager          = $pager;
         $this->view->browseType     = $browseType;
+        $this->view->recTotal       = $recTotal;
+        $this->view->recPerPage     = $recPerPage;
         $this->view->artifactRepos  = $artifactRepos;
         $this->view->products       = $this->loadModel('product')->getPairs('', 0, '', 'all');
         $this->view->pageLink       = $this->createLink('artifactrepo', 'browse', "browseType={$browseType}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");

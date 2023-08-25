@@ -380,6 +380,8 @@ $lang->devops->provider     = 'IDC Provider';
 $lang->devops->cpuBrand     = 'CPU Brand';
 $lang->devops->city         = 'IDC Location';
 $lang->devops->os           = 'OS Version';
+$lang->devops->deploy       = 'Deploy'
+$lang->devops->service      = 'Service';
 
 $lang->admin->module      = 'Module';
 $lang->admin->system      = 'System';
