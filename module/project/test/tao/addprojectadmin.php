@@ -5,7 +5,11 @@ include dirname(__FILE__, 2) . '/project.class.php';
 su('admin');
 
 zdTable('projectadmin')->gen(0);
-zdTable('project')->gen(5);
+
+zdTable('project')->gen(15);
+$group = zdTable('group');
+$group->role->range('projectAdmin');
+$group->gen(15);
 
 /**
 

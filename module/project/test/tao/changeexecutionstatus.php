@@ -14,6 +14,11 @@ cid=1
 
 */
 
+$_POST['realBegan'] = '2023-01-01';
+$_POST['begin']     = '2023-01-01';
+$_POST['end']       = '2024-01-01';
+$_POST['realEnd']   = '2023-08-01';
+
 global $tester;
 
 $statusList = array('suspend', 'start', 'activate', 'close');
@@ -25,5 +30,5 @@ foreach($statusList as $status)
 
 r($suspend)  && p('status') && e("suspended");
 r($start)    && p('status') && e("doing");
-r($activate) && p('status') && e("wait");
+r($activate) && p('status') && e("doing");
 r($close)    && p('status') && e("closed");

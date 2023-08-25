@@ -1,6 +1,7 @@
 # ZenData yaml语法：https://www.zendata.cn/book/zendata/zendata-syntax-glance-72.html
 title: changeexecutionstatus-execution
 author: chaideqing
+version: '1.0'
 fields:
     - field: id
       range: '1-2'
