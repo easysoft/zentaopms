@@ -958,6 +958,7 @@
     /* Transfer click event to parent */
     $(document).on('click', (e) =>
     {
+        if(e.defaultPrevented) return;
         if(isInAppTab) window.parent.$('body').trigger('click');
 
         const $link = $(e.target).closest('a,.open-url');
@@ -1022,7 +1023,7 @@
         {
             const state = event.state;
             if(DEBUG) console.log('[APP]', 'popstate:', state);
-            openPage(state.url);
+            if(state && state.url) openPage(state.url);
         });
     }
 
