@@ -1842,7 +1842,7 @@ class productModel extends model
             ->from(TABLE_BUG)
             ->where('deleted')->eq(0)
             ->beginIF(!empty($products))->andWhere('product')->in($products)->fi()
-            ->groupBy('product')
+            ->groupBy('product, status, resolution')
             ->fetchAll();
         $productBugs = array();
         foreach($bugs as $bug)
