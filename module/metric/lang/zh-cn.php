@@ -20,6 +20,7 @@ $lang->metric->name          = "名称";
 $lang->metric->date          = "日期";
 $lang->metric->metricData    = "度量数据";
 $lang->metric->system        = "system";
+$lang->metric->weekCell      = "%s年第%s周";
 
 $lang->metric->noDesc    = "暂无描述";
 $lang->metric->noFormula = "暂无计算规则";
