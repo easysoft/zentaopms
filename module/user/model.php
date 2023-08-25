@@ -2714,7 +2714,7 @@ class userModel extends model
         foreach(explode(',', trim($this->app->company->admins, ',')) as $admin) $users[$admin]   = $admin;
         if(!empty($product->reviewer))
         {
-            foreach(explode(',', trim($product->reviewer, ',')) as $account)        $users[$account] = $account;
+            foreach(explode(',', trim($product->reviewer, ',')) as $account) $users[$account] = $account;
         }
         if(isset($product->PMT))
         {
