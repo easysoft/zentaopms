@@ -16,16 +16,10 @@ title=测试 projectModel->getNoProductList();
 timeout=0
 cid=1
 
-- 查询所有没有产品的项目数量 @25
-
-- 查询没有产品的ID为17的项目详情
- - 第17条的name属性 @敏捷项目17
- - 第17条的code属性 @code17
-
 */
 
 global $tester;
 $tester->loadModel('project');
 
-r(count($tester->project->getNoProductList())) && p() && e('25'); // 查询所有没有产品的项目数量
-r($tester->project->getNoProductList())        && p('17:name,code') && e('敏捷项目17,code17'); //查询没有产品的ID为17的项目详情
+r(count($tester->project->getNoProductList())) && p()               && e('25');                // 查询所有没有产品的项目数量
+r($tester->project->getNoProductList())        && p('17:name,code') && e('瀑布项目17,code17'); // 查询没有产品的ID为17的项目详情
