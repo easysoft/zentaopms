@@ -15,11 +15,12 @@ pid=1
 */
 
 $testcase   = new testcaseTest();
-$caseIdList = array(array(), array(1, 2));
+$caseIdList = array(array(), array(1, 2), array(3, 4));
 
 r($testcase->batchChangeCaseBranchTest($caseIdList[0], 1))        && p() && e('0'); // 用例参数为空返回 false。
 r($testcase->batchChangeCaseBranchTest($caseIdList[1], -1))       && p() && e('0'); // 用例参数不为空、所属分支参数小于 mediumint unsigned 类型最小值返回 false。
 r($testcase->batchChangeCaseBranchTest($caseIdList[1], 16777216)) && p() && e('0'); // 用例参数不为空、所属分支参数大于 mediumint unsigned 类型最大值返回 false。
+r($testcase->batchChangeCaseBranchTest($caseIdList[2], 1))        && p() && e('0'); // 用例参数对应的用例不存在，返回 false。
 
 r($testcase->batchChangeCaseBranchTest($caseIdList[1], 1)) && p() && e('1');       // 批量修改用例所属分支为 1 成功，返回 true。
 r($testcase->getByListTest($caseIdList[1])) && p('1:branch;2:branch') && e('1,1'); // 批量修改用例所属分支后分支为 1。
