@@ -30,7 +30,7 @@ detailHeader
                     'level' => 1,
                 )
             ),
-            $task->parent ?
+            $task->parent > 0 ?
             span
             (
                 setClass('text'),
