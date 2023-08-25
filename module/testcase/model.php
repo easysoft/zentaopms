@@ -181,11 +181,12 @@ class testcaseModel extends model
     }
 
     /**
-     * Get cases of a module.
+     * 获取模块的用例。
+     * Get cases of modules.
      *
      * @param  int         $productID
      * @param  int|string  $branch
-     * @param  int         $moduleIdList
+     * @param  int|array   $moduleIdList
      * @param  string      $browseType
      * @param  string      $auto   no|unit
      * @param  string      $caseType
@@ -194,7 +195,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getModuleCases($productID, $branch = 0, $moduleIdList = 0, $browseType = '', $auto = 'no', $caseType = '', $orderBy = 'id_desc', $pager = null)
+    public function getModuleCases(int $productID, int|string $branch = 0, int|array $moduleIdList = 0, string $browseType = '', string $auto = 'no', string $caseType = '', string $orderBy = 'id_desc', object $pager = null): array
     {
         $stmt = $this->dao->select('t1.*, t2.title as storyTitle, t2.deleted as storyDeleted')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id');
@@ -206,8 +207,7 @@ class testcaseModel extends model
             ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
             ->beginIF($browseType == 'wait')->andWhere('t1.status')->eq($browseType)->fi()
-            ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
-            ->beginIF($auto == 'auto')->andWhere('t1.auto')->eq('auto')->fi()
+            ->beginIF($auto == 'unit' || $auto == 'auto')->andWhere('t1.auto')->eq($auto)->fi()
             ->beginIF($auto != 'unit' && $auto != 'auto')->andWhere('t1.auto')->ne('unit')->fi()
             ->beginIF($caseType)->andWhere('t1.type')->eq($caseType)->fi()
             ->andWhere('t1.deleted')->eq('0')

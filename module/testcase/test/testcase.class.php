@@ -98,18 +98,17 @@ class testcaseTest
      * @param  string $browseType
      * @param  string $auto
      * @param  string $caseType
-     * @param  string $orderBy
-     * @param  object $pager
      * @access public
-     * @return array
+     * @return string
      */
-    public function getModuleCasesTest($productID, $branch = 0, $moduleIdList = 0, $browseType = '', $auto = 'no', $caseType = '', $orderBy = 'id_desc', $pager = null)
+    public function getModuleCasesTest(int $productID, int|string $branch = 0, int|array $moduleIdList = 0, string $browseType = '', string $auto = 'no', string $caseType = ''): string
     {
-        $objects = $this->objectModel->getModuleCases($productID, $branch, $moduleIdList, $browseType, $auto, $caseType, $orderBy, $pager);
+        $objects = $this->objectModel->getModuleCases($productID, $branch, $moduleIdList, $browseType, $auto, $caseType);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $ids = is_array($objects) ? implode(',', array_keys($objects)) : '0';
+        return $ids;
     }
 
     /**

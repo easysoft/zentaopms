@@ -2,6 +2,11 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/testcase.class.php';
+
+zdTable('user')->gen('1');
+zdTable('case')->config('modulecase')->gen('100');
+zdTable('story')->gen('10');
+
 su('admin');
 
 /**
@@ -10,32 +15,37 @@ title=测试 testcaseModel->getModuleCases();
 cid=1
 pid=1
 
-测试获取产品1的case >> 这个是测试用例1;这个是测试用例2;这个是测试用例3;这个是测试用例4
-测试获取产品1 module 1821 1822 的case >> 0
-测试获取产品2的case >> 这个是测试用例5;这个是测试用例6;这个是测试用例7;这个是测试用例8
-测试获取产品2 module 1825 2827 的case >> 0
-测试获取产品3的case >> 这个是测试用例9;这个是测试用例10;这个是测试用例11;这个是测试用例
-测试获取产品3 module 1829 2832 的case >> 0
-测试获取产品4的case >> 这个是测试用例13;这个是测试用例14;这个是测试用例15;这个是测试用例
-测试获取产品4 module 1834 2835 的case >> 0
-测试获取产品5的case >> 这个是测试用例17;这个是测试用例18;这个是测试用例19;这个是测试用例
-测试获取产品5 module 1838 2840 的case >> 0
-
 */
 
-$productIDList = array(1, 2, 3, 4, 5);
-$branch        = 0;
-$moduleIDList  = array('1821,1822', '1825,1827', '1829,1832', '1834,2835', '1838,1840');
+$productIDList = array(1, 2, 10001);
+$branchList    = array(0, 'all');
+$moduleIdList  = array(0, array(1821,1822), array(1825,1827), array(1829,1832));
+$browseList    = array('', 'wait');
+$autoList      = array('', 'no', 'unit');
+$caseTypeList  = array('', 'feature');
 
 $testcase = new testcaseTest();
 
-r($testcase->getModuleCasesTest($productIDList[0]))                            && p('1:title;2:title;3:title;4:title')     && e('这个是测试用例1;这个是测试用例2;这个是测试用例3;这个是测试用例4');   // 测试获取产品1的case
-r($testcase->getModuleCasesTest($productIDList[0], $branch, $moduleIDList[0])) && p()                                      && e('0');                                                                 // 测试获取产品1 module 1821 1822 的case
-r($testcase->getModuleCasesTest($productIDList[1]))                            && p('5:title;6:title;7:title;8:title')     && e('这个是测试用例5;这个是测试用例6;这个是测试用例7;这个是测试用例8');   // 测试获取产品2的case
-r($testcase->getModuleCasesTest($productIDList[1], $branch, $moduleIDList[1])) && p()                                      && e('0');                                                                 // 测试获取产品2 module 1825 2827 的case
-r($testcase->getModuleCasesTest($productIDList[2]))                            && p('9:title;10:title;11:title;12:title')  && e('这个是测试用例9;这个是测试用例10;这个是测试用例11;这个是测试用例');  // 测试获取产品3的case
-r($testcase->getModuleCasesTest($productIDList[2], $branch, $moduleIDList[2])) && p()                                      && e('0');                                                                 // 测试获取产品3 module 1829 2832 的case
-r($testcase->getModuleCasesTest($productIDList[3]))                            && p('13:title;14:title;15:title;16:title') && e('这个是测试用例13;这个是测试用例14;这个是测试用例15;这个是测试用例'); // 测试获取产品4的case
-r($testcase->getModuleCasesTest($productIDList[3], $branch, $moduleIDList[3])) && p()                                      && e('0');                                                                 // 测试获取产品4 module 1834 2835 的case
-r($testcase->getModuleCasesTest($productIDList[4]))                            && p('17:title;18:title;19:title;20:title') && e('这个是测试用例17;这个是测试用例18;这个是测试用例19;这个是测试用例'); // 测试获取产品5的case
-r($testcase->getModuleCasesTest($productIDList[4], $branch, $moduleIDList[4])) && p()                                      && e('0');                                                                 // 测试获取产品5 module 1838 2840 的case
+r($testcase->getModuleCasesTest($productIDList[0], $branchList[0], $moduleIdList[0], $browseList[0], $autoList[0], $caseTypeList[0])) && p() && e('4,2,1'); // 测试获取产品1 分支 0 模块 0 browse 空 auto 空 用例类型 空 的cases
+r($testcase->getModuleCasesTest($productIDList[0], $branchList[1], $moduleIdList[0], $browseList[0], $autoList[0], $caseTypeList[0])) && p() && e('4,2,1'); // 测试获取产品1 分支 all 模块 0 browse 空 auto 空 用例类型 空 的cases
+r($testcase->getModuleCasesTest($productIDList[0], $branchList[0], $moduleIdList[1], $browseList[0], $autoList[0], $caseTypeList[0])) && p() && e('2,1');   // 测试获取产品1 分支 0 模块 1821 1822 browse 空 auto 空 用例类型 空 的cases
+r($testcase->getModuleCasesTest($productIDList[0], $branchList[0], $moduleIdList[0], $browseList[1], $autoList[0], $caseTypeList[0])) && p() && e('1');     // 测试获取产品1 分支 0 模块 0 browse wait auto 空 用例类型 空 的cases
+r($testcase->getModuleCasesTest($productIDList[0], $branchList[0], $moduleIdList[0], $browseList[0], $autoList[1], $caseTypeList[0])) && p() && e('4,2,1'); // 测试获取产品1 分支 0 模块 0 browse 空 auto no 用例类型 空 的cases
+r($testcase->getModuleCasesTest($productIDList[0], $branchList[0], $moduleIdList[0], $browseList[0], $autoList[2], $caseTypeList[0])) && p() && e('3');     // 测试获取产品1 分支 0 模块 0 browse 空 auto unit 用例类型 空 的cases
+r($testcase->getModuleCasesTest($productIDList[0], $branchList[0], $moduleIdList[0], $browseList[0], $autoList[0], $caseTypeList[1])) && p() && e('1');     // 测试获取产品1 分支 0 模块 0 browse 空 auto 空 用例类型 feature 的cases
+r($testcase->getModuleCasesTest($productIDList[0], $branchList[1], $moduleIdList[1], $browseList[1], $autoList[1], $caseTypeList[1])) && p() && e('1');     // 测试获取产品1 分支 all 模块 1821 1822 browse wait auto no 用例类型 feature 的cases
+r($testcase->getModuleCasesTest($productIDList[0], $branchList[1], $moduleIdList[1], $browseList[1], $autoList[2], $caseTypeList[1])) && p() && e('0');     // 测试获取产品1 分支 all 模块 1821 1822 browse wait auto unit 用例类型 feature 的cases
+
+r($testcase->getModuleCasesTest($productIDList[1], $branchList[0], $moduleIdList[0], $browseList[0], $autoList[0], $caseTypeList[0])) && p() && e('8,7,5'); // 测试获取产品2 分支 0 模块 0 browse 空 auto 空 用例类型 空 的cases
+r($testcase->getModuleCasesTest($productIDList[1], $branchList[1], $moduleIdList[0], $browseList[0], $autoList[0], $caseTypeList[0])) && p() && e('8,7,5'); // 测试获取产品2 分支 all 模块 0 browse 空 auto 空 用例类型 空 的cases
+r($testcase->getModuleCasesTest($productIDList[1], $branchList[0], $moduleIdList[1], $browseList[0], $autoList[0], $caseTypeList[0])) && p() && e('0');     // 测试获取产品2 分支 0 模块 1825 1827 browse 空 auto 空 用例类型 空 的cases
+r($testcase->getModuleCasesTest($productIDList[1], $branchList[0], $moduleIdList[0], $browseList[1], $autoList[0], $caseTypeList[0])) && p() && e('5');     // 测试获取产品2 分支 0 模块 0 browse wait auto 空 用例类型 空 的cases
+r($testcase->getModuleCasesTest($productIDList[1], $branchList[0], $moduleIdList[0], $browseList[0], $autoList[1], $caseTypeList[0])) && p() && e('8,7,5'); // 测试获取产品2 分支 0 模块 0 browse 空 auto no 用例类型 空 的cases
+r($testcase->getModuleCasesTest($productIDList[1], $branchList[0], $moduleIdList[0], $browseList[0], $autoList[2], $caseTypeList[0])) && p() && e('6');     // 测试获取产品2 分支 0 模块 0 browse 空 auto unit 用例类型 空 的cases
+r($testcase->getModuleCasesTest($productIDList[1], $branchList[0], $moduleIdList[0], $browseList[0], $autoList[0], $caseTypeList[1])) && p() && e('8');     // 测试获取产品2 分支 0 模块 0 browse 空 auto 空 用例类型 feature 的cases
+r($testcase->getModuleCasesTest($productIDList[1], $branchList[1], $moduleIdList[1], $browseList[1], $autoList[1], $caseTypeList[1])) && p() && e('0');     // 测试获取产品2 分支 all 模块 1825 1827 browse wait auto no 用例类型 feature 的cases
+r($testcase->getModuleCasesTest($productIDList[1], $branchList[1], $moduleIdList[1], $browseList[1], $autoList[2], $caseTypeList[1])) && p() && e('0');     // 测试获取产品2 分支 all 模块 1825 1827 browse wait auto unit 用例类型 feature 的cases
+
+r($testcase->getModuleCasesTest($productIDList[2], $branchList[0], $moduleIdList[0], $browseList[0], $autoList[0], $caseTypeList[0])) && p() && e('0'); // 测试获取不存在的产品 分支 0 模块 0 browse 空 auto 空 用例类型 空 的cases
+r($testcase->getModuleCasesTest($productIDList[2], $branchList[0], $moduleIdList[0], $browseList[0], $autoList[1], $caseTypeList[0])) && p() && e('0'); // 测试获取不存在的产品 分支 0 模块 0 browse 空 auto no 用例类型 空 的cases
+r($testcase->getModuleCasesTest($productIDList[2], $branchList[0], $moduleIdList[0], $browseList[0], $autoList[2], $caseTypeList[0])) && p() && e('0');     // 测试获取不存在的产品 分支 0 模块 0 browse 空 auto unit 用例类型 空 的cases

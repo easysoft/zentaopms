@@ -88,7 +88,7 @@ fields:
     range: 1-3
   - field: order
     note: "排序"
-    range: 1-500:5
+    range: 5-200:5
   - field: openedBy
     note: "由谁创建"
     range: 1-100
