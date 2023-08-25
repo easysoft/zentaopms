@@ -292,6 +292,7 @@ class storyTao extends storyModel
         if(empty($branchProducts)) return '`product` ' . helper::dbIN($normalProducts);
 
         /* 构造多分支产品和正常产品的复合条件。 */
+        if(is_int($branch)) $branch = (string)$branch;
         $productQuery = "(`product` " . helper::dbIN($branchProducts) . " AND `branch` " . helper::dbIN($branch) . ')';
         if(!empty($normalProducts)) $productQuery .= ' OR `product` ' . helper::dbIN($normalProducts);
         return "({$productQuery}) ";
