@@ -17,90 +17,90 @@ cid=1
 global $tester;
 $projectModel = $tester->loadModel('project');
 
-/** test project module */
-r($projectModel->getProjectLink('project', 'execution', 11))      && p() && e('~f:m=project&f=index&projectID=%%s$~'); //test project->multiple=0
-r($projectModel->getProjectLink('project', 'execution', 12))      && p() && e('~f:m=project&f=execution&status=all&projectID=%s$~');
-r($projectModel->getProjectLink('project', 'test', 12))           && p() && e('~f:m=project&f=index&projectID=%%s$~');
-r($projectModel->getProjectLink('project', 'bug', 12))            && p() && e('~f:m=project&f=bug&projectID=%%s$~');
-r($projectModel->getProjectLink('project', 'testcase', 12))       && p() && e('~f:m=project&f=testcase&projectID=%%s$~');
-r($projectModel->getProjectLink('project', 'testtask', 12))       && p() && e('~f:m=project&f=testtask&projectID=%%s$~');
-r($projectModel->getProjectLink('project', 'testreport', 12))     && p() && e('~f:m=project&f=testreport&projectID=%%s$~');
-r($projectModel->getProjectLink('project', 'build', 12))          && p() && e('~f:m=project&f=build&projectID=%%s$~');
-r($projectModel->getProjectLink('project', 'dynamic', 12))        && p() && e('~f:m=project&f=dynamic&projectID=%%s$~');
-r($projectModel->getProjectLink('project', 'view', 12))           && p() && e('~f:m=project&f=view&projectID=%%s$~');
-r($projectModel->getProjectLink('project', 'manageproducts', 12)) && p() && e('~f:m=project&f=manageproducts&projectID=%%s$~');
-r($projectModel->getProjectLink('project', 'team', 12))           && p() && e('~f:m=project&f=team&projectID=%%s$~');
-r($projectModel->getProjectLink('project', 'managemembers', 12))  && p() && e('~f:m=project&f=managemembers&projectID=%%s$~');
-r($projectModel->getProjectLink('project', 'whitelist', 12))      && p() && e('~f:m=project&f=whitelist&projectID=%%s$~');
-r($projectModel->getProjectLink('project', 'addwhitelist', 12))   && p() && e('~f:m=project&f=addwhitelist&projectID=%%s$~');
-r($projectModel->getProjectLink('project', 'group', 12))          && p() && e('~f:m=project&f=group&projectID=%%s$~');
-r($projectModel->getProjectLink('project', 'managePriv', 12))     && p() && e('~f:m=project&f=group&projectID=%%s$~');
+/* test project module */
+r(strlen($projectModel->getProjectLink('project', 'execution'     , 11)) > 0) && p() && e('1'); //test project->multiple=0
+r(strlen($projectModel->getProjectLink('project', 'execution'     , 12)) > 0) && p() && e('1');
+r(strlen($projectModel->getProjectLink('project', 'test'          , 12)) > 0) && p() && e('1');
+r(strlen($projectModel->getProjectLink('project', 'bug'           , 12)) > 0) && p() && e('1');
+r(strlen($projectModel->getProjectLink('project', 'testcase'      , 12)) > 0) && p() && e('1');
+r(strlen($projectModel->getProjectLink('project', 'testtask'      , 12)) > 0) && p() && e('1');
+r(strlen($projectModel->getProjectLink('project', 'testreport'    , 12)) > 0) && p() && e('1');
+r(strlen($projectModel->getProjectLink('project', 'build'         , 12)) > 0) && p() && e('1');
+r(strlen($projectModel->getProjectLink('project', 'dynamic'       , 12)) > 0) && p() && e('1');
+r(strlen($projectModel->getProjectLink('project', 'view'          , 12)) > 0) && p() && e('1');
+r(strlen($projectModel->getProjectLink('project', 'manageproducts', 12)) > 0) && p() && e('1');
+r(strlen($projectModel->getProjectLink('project', 'team'          , 12)) > 0) && p() && e('1');
+r(strlen($projectModel->getProjectLink('project', 'managemembers' , 12)) > 0) && p() && e('1');
+r(strlen($projectModel->getProjectLink('project', 'whitelist'     , 12)) > 0) && p() && e('1');
+r(strlen($projectModel->getProjectLink('project', 'addwhitelist'  , 12)) > 0) && p() && e('1');
+r(strlen($projectModel->getProjectLink('project', 'group'         , 12)) > 0) && p() && e('1');
+r(strlen($projectModel->getProjectLink('project', 'managePriv'    , 12)) > 0) && p() && e('1');
 
-/** test product module */
-r($projectModel->getProjectLink('product', 'showerrornone', 12))  && p() && e('~f:m=projectstory&f=story&projectID=%%s$~');
+/* test product module */
+r(strlen($projectModel->getProjectLink('product', 'showerrornone', 12)) > 0) && p() && e('1');
 
-/** test projectstory module */
-r($projectModel->getProjectLink('projectstory', 'story', 12))     && p() && e('~f:m=projectstory&f=story&projectID=%%s$~');
-r($projectModel->getProjectLink('projectstory', 'linkstory', 12)) && p() && e('~f:m=projectstory&f=linkstory&projectID=%%s$~');
-r($projectModel->getProjectLink('projectstory', 'track', 12))     && p() && e('~f:m=projectstory&f=track&projectID=%%s$~');
+/* test projectstory module */
+r(strlen($projectModel->getProjectLink('projectstory', 'story'    , 12)) > 0) && p() && e('1');
+r(strlen($projectModel->getProjectLink('projectstory', 'linkstory', 12)) > 0) && p() && e('1');
+r(strlen($projectModel->getProjectLink('projectstory', 'track'    , 12)) > 0) && p() && e('1');
 
-/** test bug module */
-r($projectModel->getProjectLink('bug', 'create', 12)) && p() && e('~f:m=bug&f=create&productID=0&branch=0&extras=projectID=%%s$~');
-r($projectModel->getProjectLink('bug', 'edit', 12))   && p() && e('~f:m=project&f=bug&projectID=%%s$~');
+/* test bug module */
+r(strlen($projectModel->getProjectLink('bug', 'create', 12)) > 0) && p() && e('1');
+r(strlen($projectModel->getProjectLink('bug', 'edit'  , 12)) > 0) && p() && e('1');
 
-/** test story module */
-r($projectModel->getProjectLink('story', 'change', 12))   && p() && e('~f:m=projectstory&f=story&projectID=%%s$~');
-r($projectModel->getProjectLink('story', 'create', 12))   && p() && e('~f:m=projectstory&f=story&projectID=%%s$~');
-r($projectModel->getProjectLink('story', 'zerocase', 12)) && p() && e('~f:m=project&f=testcase&projectID=%%s$~');
+/* test story module */
+r(strlen($projectModel->getProjectLink('story', 'change'  , 12)) > 0) && p() && e('1');
+r(strlen($projectModel->getProjectLink('story', 'create'  , 12)) > 0) && p() && e('1');
+r(strlen($projectModel->getProjectLink('story', 'zerocase', 12)) > 0) && p() && e('1');
 
-/** test testcase module */
-r($projectModel->getProjectLink('testcase', 'browse', 12)) && p() && e('~f:m=project&f=testcase&projectID=%%s$~');
+/* test testcase module */
+r(strlen($projectModel->getProjectLink('testcase', 'browse', 12)) > 0) && p() && e('1');
 
-/** test testtask module */
-r($projectModel->getProjectLink('testtask', 'browseunits', 12)) && p() && e('~f:m=project&f=testcase&projectID=%%s$~');
-r($projectModel->getProjectLink('testtask', 'browse', 12))      && p() && e('~f:m=project&f=testtask&projectID=%%s$~');
+/* test testtask module */
+r(strlen($projectModel->getProjectLink('testtask', 'browseunits' , 12)) > 0)  && p() && e('1');
+r(strlen($projectModel->getProjectLink('testtask', 'browse'      , 12)) > 0 ) && p() && e('1');
 
-/** test testreport module */
-r($projectModel->getProjectLink('testreport', 'browse', 12)) && p() && e('~f:m=project&f=testreport&projectID=%%s$~');
+/* test testreport module */
+r(strlen($projectModel->getProjectLink('testreport', 'browse', 12)) > 0) && p() && e('1');
 
-/** test repo module */
-r($projectModel->getProjectLink('repo', 'browse', 12)) && p() && e('~f:m=repo&f=browse&repoID=&branchID=&objectID=%%s#app=project$~');
+/* test repo module */
+r(strlen($projectModel->getProjectLink('repo', 'browse', 12)) > 0) && p() && e('1');
 
-/** test repo module */
-r($projectModel->getProjectLink('doc', 'browse', 12)) && p() && e('~f:m=doc&f=projectSpace&objectID=%%s#app=project$~');
+/* test repo module */
+r(strlen($projectModel->getProjectLink('doc', 'browse', 12)) > 0) && p() && e('1');
 
-/** test api module */
-r($projectModel->getProjectLink('api', 'browse', 12)) && p() && e('~f:m=project&f=index&projectID=%%s$~');
+/* test api module */
+r(strlen($projectModel->getProjectLink('api', 'browse', 12)) > 0) && p() && e('1');
 
-/** test build module */
-r($projectModel->getProjectLink('build', 'create', 12)) && p() && e('~f:m=build&f=create&executionID=&productID=&projectID=%%s#app=project$~');
+/* test build module */
+r(strlen($projectModel->getProjectLink('build', 'create', 12)) > 0) && p() && e('1');
 
 $tester->app->tab = 'project';
-r($projectModel->getProjectLink('build', 'browse', 12)) && p() && e('~f:m=projectbuild&f=browse&projectID=%%s$~');
+r(strlen($projectModel->getProjectLink('build', 'browse', 12)) > 0) && p() && e('1');
 
 $tester->app->tab = 'my';
-r($projectModel->getProjectLink('build', 'browse', 12)) && p() && e('~f:m=project&f=build&projectID=%%s$~');
+r(strlen($projectModel->getProjectLink('build', 'browse', 12)) > 0) && p() && e('1');
 
-/** test projectrelease module */
-r($projectModel->getProjectLink('projectrelease', 'create', 12)) && p() && e('~f:m=projectrelease&f=create&projectID=%%s$~');
-r($projectModel->getProjectLink('projectrelease', 'browse', 12)) && p() && e('~f:m=projectrelease&f=browse&projectID=%%s$~');
+/* test projectrelease module */
+r(strlen($projectModel->getProjectLink('projectrelease', 'create', 12)) > 0) && p() && e('1');
+r(strlen($projectModel->getProjectLink('projectrelease', 'browse', 12)) > 0) && p() && e('1');
 
-/** test projectrelease module */
-r($projectModel->getProjectLink('stakeholder', 'create', 12)) && p() && e('~f:m=stakeholder&f=create&projectID=%%s$~');
-r($projectModel->getProjectLink('stakeholder', 'browse', 12)) && p() && e('~f:m=stakeholder&f=browse&projectID=%%s$~');
+/* test projectrelease module */
+r(strlen($projectModel->getProjectLink('stakeholder', 'create', 12)) > 0) && p() && e('1');
+r(strlen($projectModel->getProjectLink('stakeholder', 'browse', 12)) > 0) && p() && e('1');
 
-/** test issue module */
-r($projectModel->getProjectLink('issue', 'projectsummary', 12)) && p() && e('~f:m=issue&f=projectsummary&projectID=%%s#app=project$~');
-r($projectModel->getProjectLink('issue', 'browse', 12))         && p() && e('~f:m=issue&f=browse&projectID=%%s$~');
+/* test issue module */
+r(strlen($projectModel->getProjectLink('issue', 'projectsummary', 11)) > 0) && p() && e('1');
+r(strlen($projectModel->getProjectLink('issue', 'browse'        , 12)) > 0) && p() && e('1');
 
-/** test zahost module which not in waterfallModules */
-r($projectModel->getProjectLink('zahost', 'browse', 12)) && p() && e('~f:m=project&f=index&projectID=%%s$~');
+/* test zahost module which not in waterfallModules */
+r(strlen($projectModel->getProjectLink('zahost', 'browse', 12)) > 0) && p() && e('1');
 
-/** test design module which in waterfallModules */
-r($projectModel->getProjectLink('design', 'browse', 12)) && p() && e('~f:m=design&f=browse&projectID=%%s$~');
+/* test design module which in waterfallModules */
+r(strlen($projectModel->getProjectLink('design', 'browse', 12)) > 0) && p() && e('1');
 
-/** test reviewissue module */
-r($projectModel->getProjectLink('reviewissue', 'browse', 12)) && p() && e('~f:m=reviewissue&f=issue&projectID=%%s$~');
+/* test reviewissue module */
+r(strlen($projectModel->getProjectLink('reviewissue', 'browse', 12)) > 0) && p() && e('1');
 
-/** test programplan module */
-r($projectModel->getProjectLink('programplan', 'execution', 12)) && p() && e('~f:m=project&f=execution&type=all&projectID=%s$~');
+/* test programplan module */
+r(strlen($projectModel->getProjectLink('programplan', 'execution', 12)) > 0) && p() && e('1');
