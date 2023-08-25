@@ -1022,6 +1022,7 @@ class project extends control
     }
 
     /**
+     * 移除项目成员。
      * Unlink a memeber.
      *
      * @param  int    $projectID
@@ -1035,21 +1036,13 @@ class project extends control
         $user    = $this->loadModel('user')->getById($userID, 'id');
         $account = $user->account;
 
-        $this->project->unlinkMember($projectID, $account, $removeExecution);
+        $this->project->unlinkMember($projectID, $account, $removeExecution == 'yes');
         if(!dao::isError()) $this->loadModel('action')->create('team', $projectID, 'managedTeam');
 
         /* if ajax request, send result. */
-        if(dao::isError())
-        {
-            $response['result']  = 'fail';
-            $response['message'] = dao::getError();
-        }
-        else
-        {
-            $response['result'] = 'success';
-            $response['load']   = helper::createLink('project', 'team', "projectID={$projectID}");
-        }
-        return $this->send($response);
+        if(dao::isError()) return $this->sendError(dao::getError());
+
+        return $this->send(array('result' => 'success', 'load' => inlink('team', "projectID={$projectID}")));
     }
 
     /**
