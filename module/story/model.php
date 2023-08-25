@@ -86,11 +86,11 @@ class storyModel extends model
         $story->children = array();
         if($story->parent == '-1') $story->children = $this->dao->select('*')->from(TABLE_STORY)->where('parent')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll('id');
 
-        $story->openedDate    = substr($story->openedDate, 0, 19);
-        $story->assignedDate  = substr($story->assignedDate, 0, 19);
-        $story->reviewedDate  = substr($story->reviewedDate, 0, 19);
-        $story->closedDate    = substr($story->closedDate, 0, 19);
-        $story->lastEditedDate= substr($story->lastEditedDate, 0, 19);
+        if($story->openedDate)     $story->openedDate    = substr($story->openedDate, 0, 19);
+        if($story->assignedDate)   $story->assignedDate  = substr($story->assignedDate, 0, 19);
+        if($story->reviewedDate)   $story->reviewedDate  = substr($story->reviewedDate, 0, 19);
+        if($story->closedDate)     $story->closedDate    = substr($story->closedDate, 0, 19);
+        if($story->lastEditedDate) $story->lastEditedDate= substr($story->lastEditedDate, 0, 19);
 
         return $story;
     }
