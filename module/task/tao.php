@@ -34,59 +34,6 @@ class taskTao extends taskModel
     }
 
     /**
-     * 将任务的层级改为父子结构。
-     * Change the hierarchy of tasks to a parent-child structure.
-     *
-     * @param  object[]  $tasks
-     * @param  object[]  $parentTasks
-     * @access protected
-     * @return object[]
-     */
-    protected function buildTaskTree(array $tasks, array $parentTasks): array
-    {
-        foreach($tasks as $task)
-        {
-            /* 如果不是父任务则跳过。*/
-            if($task->parent <= 0) continue;
-
-            if(isset($tasks[$task->parent]))
-            {
-                /* 如果任务列表里有这个任务的父任务，则将子任务放到父任务里，并删除子任务。*/
-                if(!isset($tasks[$task->parent]->children)) $tasks[$task->parent]->children = array();
-                $tasks[$task->parent]->children[$task->id] = $task;
-                unset($tasks[$task->id]);
-            }
-            else
-            {
-                /* 如果任务列表里没有这个任务的父任务，则从父任务列表获取到父任务名称并附加到子任务上。*/
-                $parent = $parentTasks[$task->parent];
-                $task->parentName = $parent->name;
-            }
-        }
-        return $tasks;
-    }
-
-    /**
-     * 构造日志数据，加上任务ID、记录人字段。
-     * Add fields to workhour.
-     *
-     * @param  int       $taskID
-     * @param  array     $workhour
-     * @access protected
-     * @return array
-     */
-    protected function buildWorkhour(int $taskID, array $workhour): array
-    {
-        foreach($workhour as $record)
-        {
-            $record->task    = $taskID;
-            $record->account = $this->app->user->account;
-        }
-
-        return $workhour;
-    }
-
-    /**
      * 根据填写的日志，记录历史记录、改变任务的状态、消耗工时等信息并返回。
      * According to the effort, record the history, change the status of the task, consumed hours and other information and return.
      *
@@ -188,6 +135,107 @@ class taskTao extends taskModel
     }
 
     /**
+     * 将任务的层级改为父子结构。
+     * Change the hierarchy of tasks to a parent-child structure.
+     *
+     * @param  object[]  $tasks
+     * @param  object[]  $parentTasks
+     * @access protected
+     * @return object[]
+     */
+    protected function buildTaskTree(array $tasks, array $parentTasks): array
+    {
+        foreach($tasks as $task)
+        {
+            /* 如果不是父任务则跳过。*/
+            if($task->parent <= 0) continue;
+
+            if(isset($tasks[$task->parent]))
+            {
+                /* 如果任务列表里有这个任务的父任务，则将子任务放到父任务里，并删除子任务。*/
+                if(!isset($tasks[$task->parent]->children)) $tasks[$task->parent]->children = array();
+                $tasks[$task->parent]->children[$task->id] = $task;
+                unset($tasks[$task->id]);
+            }
+            else
+            {
+                /* 如果任务列表里没有这个任务的父任务，则从父任务列表获取到父任务名称并附加到子任务上。*/
+                $parent = $parentTasks[$task->parent];
+                $task->parentName = $parent->name;
+            }
+        }
+        return $tasks;
+    }
+
+    /**
+     * 构造日志数据，加上任务ID、记录人字段。
+     * Add fields to workhour.
+     *
+     * @param  int       $taskID
+     * @param  array     $workhour
+     * @access protected
+     * @return array
+     */
+    protected function buildWorkhour(int $taskID, array $workhour): array
+    {
+        foreach($workhour as $record)
+        {
+            $record->task    = $taskID;
+            $record->account = $this->app->user->account;
+        }
+
+        return $workhour;
+    }
+
+    /**
+     * 取消父任务更新子任务。
+     * Update a child task when cancel its parent task.
+     *
+     * @param  object    $task
+     * @access protected
+     * @return void
+     */
+    protected function cancelParentTask(object $task): void
+    {
+        $taskID = $task->id;
+        unset($task->assignedTo);
+        unset($task->id);
+
+        $oldChildrenTasks = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->fetchAll('id');
+        $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('parent')->eq((int)$taskID)->exec();
+        $this->dao->update(TABLE_TASK)->set('assignedTo=openedBy')->where('parent')->eq((int)$taskID)->exec();
+
+        if(!dao::isError() && count($oldChildrenTasks) > 0)
+        {
+            $this->loadModel('action');
+            foreach($oldChildrenTasks as $oldChildrenTask)
+            {
+                $actionID = $this->action->create('task', $oldChildrenTask->id, 'Canceled', $this->post->comment);
+                $this->action->logHistory($actionID, common::createChanges($oldChildrenTask, $task));
+            }
+        }
+    }
+
+    /**
+     * 编辑日志时，检查输入是否合法。
+     * When editing a effort, check that the input is legal.
+     *
+     * @param  object  $effort
+     * @access protected
+     * @return bool
+     */
+    protected function checkEffort(object $effort): bool
+    {
+        $today = helper::today();
+        if(helper::isZeroDate($effort->date)) dao::$errors[] = $this->lang->task->error->dateEmpty;
+        if($effort->date > $today)            dao::$errors[] = $this->lang->task->error->date;
+        if($effort->consumed <= 0)            dao::$errors[] = sprintf($this->lang->error->gt, $this->lang->task->record, '0');
+        if($effort->left < 0)                 dao::$errors[] = sprintf($this->lang->error->ge, $this->lang->task->left, '0');
+
+        return !dao::isError();
+    }
+
+    /**
      * 检查一个任务是否有子任务。
      * Check if a task has children.
      *
@@ -255,146 +303,6 @@ class taskTao extends taskModel
         if($task->team && !$inTeam) return false;
 
         return true;
-    }
-
-    /**
-     * Get left workhour of task after deleting a workhour of task.
-     *
-     * @param  object $effort
-     * @param  object $task
-     * @return float
-     */
-    protected function getLeftAfterDeleteWorkhour(object $effort, object $task): float
-    {
-        $left = $task->left;
-        if($effort->isLast)
-        {
-            $lastTwoEfforts = $this->dao->select('*')->from(TABLE_EFFORT)
-                ->where('objectID')->eq($effort->objectID)
-                ->andWhere('objectType')->eq('task')
-                ->andWhere('deleted')->eq('0')
-                ->orderBy('date desc,id desc')->limit(2)->fetchAll();
-            $lastTwoEfforts  = isset($lastTwoEfforts[1]) ? $lastTwoEfforts[1] : '';
-            if($lastTwoEfforts) $left = $lastTwoEfforts->left;
-            if(empty($lastTwoEfforts) && $left == 0) $left = $task->estimate;
-        }
-
-        /* 如果该任务是多人团队任务则做一些额外的处理。*/
-        if(empty($task->team)) return $left;
-
-        /* 获取要删除的工时的团队，如果要删除的工时的用户不是团队成员则不做任何处理。*/
-        $currentTeam = $this->getTeamByAccount($task->team, $effort->account, array('effortID' => $effort->id, 'order' => $effort->order));
-        if(!$currentTeam) return $left;
-
-        $left = $currentTeam->left;
-        if($task->mode == 'multi') /* 如果任务是多人并行任务。注：多人串行任务的mode是linear。*/
-        {
-            /* 获取要删除的工时对应的用户的工时信息列表。*/
-            $accountEfforts = $this->getTaskEfforts($currentTeam->task, $effort->account, $effort->id);
-            $lastEffort     = array_pop($accountEfforts);
-            if($lastEffort->id == $effort->id)
-            {
-                $lastTwoEfforts = array_pop($accountEfforts);
-                if($lastTwoEfforts) $left = $lastTwoEfforts->left;
-            }
-        }
-
-        /* 更新要删除的工时对应的用户的任务信息。*/
-        $newTeamInfo = new stdclass();
-        $newTeamInfo->consumed = $currentTeam->consumed - $effort->consumed;
-        if($currentTeam->status != 'done') $newTeamInfo->left = $left;
-        if($currentTeam->status == 'done' && $left > 0 && $task->mode == 'multi')
-        {
-            $newTeamInfo->status = 'doing';
-            $newTeamInfo->left = $left;
-        }
-
-        if($currentTeam->status != 'done' && $newTeamInfo->consumed > 0 && $left == 0) $newTeamInfo->status = 'done';
-        if($task->mode == 'multi' && $currentTeam->status == 'done' && ($newTeamInfo->consumed == 0 && $left == 0))
-        {
-            $newTeamInfo->status = 'doing';
-            $newTeamInfo->left   = $currentTeam->estimate;
-        }
-        $this->dao->update(TABLE_TASKTEAM)->data($newTeamInfo)->where('id')->eq($currentTeam->id)->exec();
-        return $left;
-    }
-
-    /**
-     * Get a new task after deleting a workhour of task.
-     *
-     * @param  object $effort
-     * @param  object $task
-     * @return object
-     */
-    protected function getTaskAfterDeleteWorkhour(object $effort, object $task)
-    {
-        /* Compute the left and consumed workhour of the task. */
-        $consumed = $task->consumed - $effort->consumed;
-        $left     = $this->getLeftAfterDeleteWorkhour($effort, $task);
-
-        /* Define and prepare one new task object to update the task. */
-        $data = new stdclass();
-        $data->consumed = $consumed;
-        $data->left     = $left;
-        $data->status   = ($left == 0 && $consumed != 0) ? 'done' : $task->status;
-        if($effort->isLast && $consumed == 0 && $task->status != 'wait')
-        {
-            $data->status       = 'wait';
-            $data->left         = $task->estimate;
-            $data->finishedBy   = '';
-            $data->canceledBy   = '';
-            $data->closedBy     = '';
-            $data->closedReason = '';
-            $data->finishedDate = null;
-            $data->canceledDate = null;
-            $data->closedDate   = null;
-            if($task->assignedTo == 'closed') $data->assignedTo = $this->app->user->account;
-        }
-        elseif($effort->isLast && $left != 0 && strpos('done,pause,cancel,closed', $task->status) !== false)
-        {
-            $data->status         = 'doing';
-            $data->finishedBy     = '';
-            $data->canceledBy     = '';
-            $data->closedBy       = '';
-            $data->closedReason   = '';
-            $data->finishedDate   = null;
-            $data->canceledDate   = null;
-            $data->closedDate     = null;
-        }
-        elseif($consumed != 0 && $left == 0 && strpos('done,pause,cancel,closed', $task->status) === false)
-        {
-            $now = helper::now();
-            $data->status         = 'done';
-            $data->assignedTo     = $task->openedBy;
-            $data->assignedDate   = $now;
-            $data->finishedBy     = $this->app->user->account;
-            $data->finishedDate   = $now;
-        }
-        else
-        {
-            $data->status = $task->status;
-        }
-
-        return $data;
-    }
-
-    /**
-     * 编辑日志时，检查输入是否合法。
-     * When editing a effort, check that the input is legal.
-     *
-     * @param  object  $effort
-     * @access protected
-     * @return bool
-     */
-    protected function checkEffort(object $effort): bool
-    {
-        $today = helper::today();
-        if(helper::isZeroDate($effort->date)) dao::$errors[] = $this->lang->task->error->dateEmpty;
-        if($effort->date > $today)            dao::$errors[] = $this->lang->task->error->date;
-        if($effort->consumed <= 0)            dao::$errors[] = sprintf($this->lang->error->gt, $this->lang->task->record, '0');
-        if($effort->left < 0)                 dao::$errors[] = sprintf($this->lang->error->ge, $this->lang->task->left, '0');
-
-        return !dao::isError();
     }
 
     /**
@@ -518,35 +426,6 @@ class taskTao extends taskModel
     }
 
     /**
-     * 取消父任务更新子任务。
-     * Update a child task when cancel its parent task.
-     *
-     * @param  object    $task
-     * @access protected
-     * @return void
-     */
-    protected function cancelParentTask(object $task): void
-    {
-        $taskID = $task->id;
-        unset($task->assignedTo);
-        unset($task->id);
-
-        $oldChildrenTasks = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->fetchAll('id');
-        $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('parent')->eq((int)$taskID)->exec();
-        $this->dao->update(TABLE_TASK)->set('assignedTo=openedBy')->where('parent')->eq((int)$taskID)->exec();
-
-        if(!dao::isError() && count($oldChildrenTasks) > 0)
-        {
-            $this->loadModel('action');
-            foreach($oldChildrenTasks as $oldChildrenTask)
-            {
-                $actionID = $this->action->create('task', $oldChildrenTask->id, 'Canceled', $this->post->comment);
-                $this->action->logHistory($actionID, common::createChanges($oldChildrenTask, $task));
-            }
-        }
-    }
-
-    /**
      * 复制任务数据。
      * Copy the task data and update the effort to the new task.
      *
@@ -600,6 +479,42 @@ class taskTao extends taskModel
         }
 
         return array($oldTask, $task);
+    }
+
+    /**
+     * 更新父任务状态时记录修改日志。
+     * Create action record when update parent task.
+     *
+     * @param  object    $oldParentTask
+     * @access protected
+     * @return void
+     */
+    protected function createUpdateParentTaskAction(object $oldParentTask) :void
+    {
+        $newParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($oldParentTask->id)->fetch();
+
+        unset($oldParentTask->subStatus);
+        unset($newParentTask->subStatus);
+
+        $status  = $newParentTask->status;
+        $changes = common::createChanges($oldParentTask, $newParentTask);
+        $action  = '';
+
+        if($status == 'done'   && $oldParentTask->status != 'done')   $action = 'Finished';
+        if($status == 'closed' && $oldParentTask->status != 'closed') $action = 'Closed';
+        if($status == 'pause'  && $oldParentTask->status != 'paused') $action = 'Paused';
+        if($status == 'cancel' && $oldParentTask->status != 'cancel') $action = 'Canceled';
+        if($status == 'doing'  && $oldParentTask->status == 'wait')   $action = 'Started';
+        if($status == 'doing'  && $oldParentTask->status == 'pause')  $action = 'Restarted';
+
+        if($status == 'doing'  && $oldParentTask->status != 'wait' && $oldParentTask->status != 'pause') $action = 'Activated';
+
+        if($status == 'wait'   && $oldParentTask->status != 'wait') $action = 'Adjusttasktowait';
+
+        if(!$action) return;
+
+        $actionID = $this->loadModel('action')->create('task', $oldParentTask->id, $action, '', '', '', false);
+        $this->action->logHistory($actionID, $changes);
     }
 
     /**
@@ -671,23 +586,6 @@ class taskTao extends taskModel
 
         $value = isset($task->$field) ? $task->$field : false;
         return (string)$value;
-    }
-
-    /**
-     * Format the task with valid datetime that set the zero date or datetime to null.
-     *
-     * @param  object $task
-     * @return object
-     */
-    protected function formatDatetime(object $task): object
-    {
-        if(empty($task)) return $task;
-        foreach($task as $key => $value)
-        {
-            if(!in_array($key, array('deadline', 'openedDate', 'assignedDate', 'estStarted', 'realStarted', 'finishedDate', 'canceledDate', 'closedDate', 'lastEditedDate', 'activatedDate'))) continue;
-            if(!empty($value) && is_string($value) && helper::isZeroDate($value)) $task->$key = null;
-        }
-        return $task;
     }
 
     /**
@@ -797,6 +695,23 @@ class taskTao extends taskModel
     }
 
     /**
+     * Format the task with valid datetime that set the zero date or datetime to null.
+     *
+     * @param  object $task
+     * @return object
+     */
+    protected function formatDatetime(object $task): object
+    {
+        if(empty($task)) return $task;
+        foreach($task as $key => $value)
+        {
+            if(!in_array($key, array('deadline', 'openedDate', 'assignedDate', 'estStarted', 'realStarted', 'finishedDate', 'canceledDate', 'closedDate', 'lastEditedDate', 'activatedDate'))) continue;
+            if(!empty($value) && is_string($value) && helper::isZeroDate($value)) $task->$key = null;
+        }
+        return $task;
+    }
+
+    /**
      * 获取多人任务的完成者。
      * Get the users who finished the multiple task.
      *
@@ -815,6 +730,68 @@ class taskTao extends taskModel
     }
 
     /**
+     * Get left workhour of task after deleting a workhour of task.
+     *
+     * @param  object $effort
+     * @param  object $task
+     * @return float
+     */
+    protected function getLeftAfterDeleteWorkhour(object $effort, object $task): float
+    {
+        $left = $task->left;
+        if($effort->isLast)
+        {
+            $lastTwoEfforts = $this->dao->select('*')->from(TABLE_EFFORT)
+                ->where('objectID')->eq($effort->objectID)
+                ->andWhere('objectType')->eq('task')
+                ->andWhere('deleted')->eq('0')
+                ->orderBy('date desc,id desc')->limit(2)->fetchAll();
+            $lastTwoEfforts  = isset($lastTwoEfforts[1]) ? $lastTwoEfforts[1] : '';
+            if($lastTwoEfforts) $left = $lastTwoEfforts->left;
+            if(empty($lastTwoEfforts) && $left == 0) $left = $task->estimate;
+        }
+
+        /* 如果该任务是多人团队任务则做一些额外的处理。*/
+        if(empty($task->team)) return $left;
+
+        /* 获取要删除的工时的团队，如果要删除的工时的用户不是团队成员则不做任何处理。*/
+        $currentTeam = $this->getTeamByAccount($task->team, $effort->account, array('effortID' => $effort->id, 'order' => $effort->order));
+        if(!$currentTeam) return $left;
+
+        $left = $currentTeam->left;
+        if($task->mode == 'multi') /* 如果任务是多人并行任务。注：多人串行任务的mode是linear。*/
+        {
+            /* 获取要删除的工时对应的用户的工时信息列表。*/
+            $accountEfforts = $this->getTaskEfforts($currentTeam->task, $effort->account, $effort->id);
+            $lastEffort     = array_pop($accountEfforts);
+            if($lastEffort->id == $effort->id)
+            {
+                $lastTwoEfforts = array_pop($accountEfforts);
+                if($lastTwoEfforts) $left = $lastTwoEfforts->left;
+            }
+        }
+
+        /* 更新要删除的工时对应的用户的任务信息。*/
+        $newTeamInfo = new stdclass();
+        $newTeamInfo->consumed = $currentTeam->consumed - $effort->consumed;
+        if($currentTeam->status != 'done') $newTeamInfo->left = $left;
+        if($currentTeam->status == 'done' && $left > 0 && $task->mode == 'multi')
+        {
+            $newTeamInfo->status = 'doing';
+            $newTeamInfo->left = $left;
+        }
+
+        if($currentTeam->status != 'done' && $newTeamInfo->consumed > 0 && $left == 0) $newTeamInfo->status = 'done';
+        if($task->mode == 'multi' && $currentTeam->status == 'done' && ($newTeamInfo->consumed == 0 && $left == 0))
+        {
+            $newTeamInfo->status = 'doing';
+            $newTeamInfo->left   = $currentTeam->estimate;
+        }
+        $this->dao->update(TABLE_TASKTEAM)->data($newTeamInfo)->where('id')->eq($currentTeam->id)->exec();
+        return $left;
+    }
+
+    /**
      * 根据报表条件查询任务.
      * Get task list by report.
      *
@@ -828,6 +805,66 @@ class taskTao extends taskModel
         return $this->dao->select("id,{$field}")->from(TABLE_TASK)
                 ->where($condition)
                 ->fetchAll('id');
+    }
+
+    /**
+     * 查询当前任务作为父任务时的状态。
+     * Get the status of the taskID as a parent task.
+     *
+     * @param  int       $taskID
+     * @access protected
+     * @return string
+     */
+    protected function getParentStatusById(int $taskID) :string
+    {
+        $children = $this->dao->select('id,status,closedReason,parent')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('deleted')->eq('0')->fetchAll();
+
+        if(empty($children)) return '';
+
+        $childrenStatus = $childrenClosedReason = array();
+
+        foreach($children as $task)
+        {
+            $childrenStatus[$task->status]             = $task->status;
+            $childrenClosedReason[$task->closedReason] = $task->closedReason;
+        }
+
+        if(count($childrenStatus) == 1) return current($childrenStatus);
+
+        if(isset($childrenStatus['doing']) || isset($childrenStatus['pause'])) return 'doing';
+
+        if((isset($childrenStatus['done']) || isset($childrenClosedReason['done'])) && isset($childrenStatus['wait'])) return 'doing';
+
+        if(isset($childrenStatus['wait']))   return 'wait';
+        if(isset($childrenStatus['done']))   return 'done';
+        if(isset($childrenStatus['closed'])) return 'closed';
+        if(isset($childrenStatus['cancel'])) return 'cancel';
+
+        return '';
+    }
+
+    /**
+     * 如果任务是从Bug转来的，并且已经完成了，则获取提醒bug的链接。
+     * Get a link to locate the bug if the task was transferred from the bug and it has already been finished.
+     *
+     * @param  object    $task
+     * @param  array     $changes
+     * @access protected
+     * @return array
+     */
+    protected function getRemindBugLink(object $task, array $changes): array
+    {
+        foreach($changes as $change)
+        {
+            if($change['field'] == 'status' && $change['new'] == 'done')
+            {
+                $confirmURL = helper::createLink('bug', 'view', "id={$task->fromBug}");
+                $cancelURL  = helper::createLink('task', 'view', "taskID={$task->id}");
+                return array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->task->remindBug, $task->fromBug), 'confirmed' => $confirmURL, 'canceled' => $cancelURL));
+            }
+        }
+
+        return array();
     }
 
     /**
@@ -861,40 +898,17 @@ class taskTao extends taskModel
     }
 
     /**
-     * 如果任务是从Bug转来的，并且已经完成了，则获取提醒bug的链接。
-     * Get a link to locate the bug if the task was transferred from the bug and it has already been finished.
+     * 通过任务ID获取任务团队信息。
+     * Get the task team information through the task ID.
      *
-     * @param  object    $task
-     * @param  array     $changes
+     * @param  int       $taskID
+     * @param  string    $orderBy
      * @access protected
-     * @return array
+     * @return object[]
      */
-    protected function getRemindBugLink(object $task, array $changes): array
+    protected function getTeamByTask(int $taskID, string $orderBy = 'order_asc'): array
     {
-        foreach($changes as $change)
-        {
-            if($change['field'] == 'status' && $change['new'] == 'done')
-            {
-                $confirmURL = helper::createLink('bug', 'view', "id={$task->fromBug}");
-                $cancelURL  = helper::createLink('task', 'view', "taskID={$task->id}");
-                return array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->task->remindBug, $task->fromBug), 'confirmed' => $confirmURL, 'canceled' => $cancelURL));
-            }
-        }
-
-        return array();
-    }
-
-    /**
-     * 通过任务ID列表查询任务团队信息。
-     * Get task team by id list.
-     *
-     * @param  array     $taskIdList
-     * @access protected
-     * @return array[]
-     */
-    protected function getTeamMembersByIdList(array $taskIdList): array
-    {
-        return $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in($taskIdList)->fetchGroup('task');
+        return $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy($orderBy)->fetchAll('id');
     }
 
     /**
@@ -930,20 +944,6 @@ class taskTao extends taskModel
     }
 
     /**
-     * 通过任务ID获取任务团队信息。
-     * Get the task team information through the task ID.
-     *
-     * @param  int       $taskID
-     * @param  string    $orderBy
-     * @access protected
-     * @return object[]
-     */
-    protected function getTeamByTask(int $taskID, string $orderBy = 'order_asc'): array
-    {
-        return $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy($orderBy)->fetchAll('id');
-    }
-
-    /**
      * 维护团队成员信息。
      * Maintain team member information.
      *
@@ -970,6 +970,78 @@ class taskTao extends taskModel
             $this->dao->insert(TABLE_TASKTEAM)->data($member)->autoCheck()->exec();
         }
         return !dao::isError();
+    }
+
+    /**
+     * 通过任务ID列表查询任务团队信息。
+     * Get task team by id list.
+     *
+     * @param  array     $taskIdList
+     * @access protected
+     * @return array[]
+     */
+    protected function getTeamMembersByIdList(array $taskIdList): array
+    {
+        return $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in($taskIdList)->fetchGroup('task');
+    }
+
+    /**
+     * Get a new task after deleting a workhour of task.
+     *
+     * @param  object $effort
+     * @param  object $task
+     * @return object
+     */
+    protected function getTaskAfterDeleteWorkhour(object $effort, object $task)
+    {
+        /* Compute the left and consumed workhour of the task. */
+        $consumed = $task->consumed - $effort->consumed;
+        $left     = $this->getLeftAfterDeleteWorkhour($effort, $task);
+
+        /* Define and prepare one new task object to update the task. */
+        $data = new stdclass();
+        $data->consumed = $consumed;
+        $data->left     = $left;
+        $data->status   = ($left == 0 && $consumed != 0) ? 'done' : $task->status;
+        if($effort->isLast && $consumed == 0 && $task->status != 'wait')
+        {
+            $data->status       = 'wait';
+            $data->left         = $task->estimate;
+            $data->finishedBy   = '';
+            $data->canceledBy   = '';
+            $data->closedBy     = '';
+            $data->closedReason = '';
+            $data->finishedDate = null;
+            $data->canceledDate = null;
+            $data->closedDate   = null;
+            if($task->assignedTo == 'closed') $data->assignedTo = $this->app->user->account;
+        }
+        elseif($effort->isLast && $left != 0 && strpos('done,pause,cancel,closed', $task->status) !== false)
+        {
+            $data->status         = 'doing';
+            $data->finishedBy     = '';
+            $data->canceledBy     = '';
+            $data->closedBy       = '';
+            $data->closedReason   = '';
+            $data->finishedDate   = null;
+            $data->canceledDate   = null;
+            $data->closedDate     = null;
+        }
+        elseif($consumed != 0 && $left == 0 && strpos('done,pause,cancel,closed', $task->status) === false)
+        {
+            $now = helper::now();
+            $data->status         = 'done';
+            $data->assignedTo     = $task->openedBy;
+            $data->assignedDate   = $now;
+            $data->finishedBy     = $this->app->user->account;
+            $data->finishedDate   = $now;
+        }
+        else
+        {
+            $data->status = $task->status;
+        }
+
+        return $data;
     }
 
     /**
@@ -1019,41 +1091,6 @@ class taskTao extends taskModel
     }
 
     /**
-     * 通过拖动甘特图修改任务的预计开始日期和截止日期。
-     * Update task estimate date and deadline through gantt.
-     *
-     * @param  object    $postData
-     * @access protected
-     * @return bool
-     */
-    protected function updateTaskEsDateByGantt(object $postData): bool
-    {
-        $task        = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($postData->id)->fetch();
-        $isChildTask = $task->parent > 0;
-
-        if($isChildTask) $parentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($task->parent)->fetch();
-        $stage = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->andWhere('project')->eq($task->project)->fetch();
-
-        $start    = $isChildTask ? $parentTask->estStarted   : $stage->begin;
-        $end      = $isChildTask ? $parentTask->deadline     : $stage->end;
-        $typeLang = $isChildTask ? $this->lang->task->parent : $this->lang->project->stage;
-
-        if(helper::diffDate($start, $postData->startDate) > 0) dao::$errors[] = sprintf($this->lang->task->overEsStartDate, $typeLang, $typeLang);
-        if(helper::diffDate($end, $postData->endDate) < 0)     dao::$errors[] = sprintf($this->lang->task->overEsEndDate, $typeLang, $typeLang);
-        if(dao::isError()) return false;
-
-        /* Update estimate started and deadline of a task. */
-        $this->dao->update(TABLE_TASK)
-            ->set('estStarted')->eq($postData->startDate)
-            ->set('deadline')->eq($postData->endDate)
-            ->set('lastEditedBy')->eq($this->app->user->account)
-            ->where('id')->eq($postData->id)
-            ->exec();
-
-        return !dao::isError();
-    }
-
-    /**
      * 通过父任务更新子任务。
      * Update children task by parent task.
      *
@@ -1079,65 +1116,6 @@ class taskTao extends taskModel
                 $this->action->logHistory($actionID, common::createChanges($oldChildrenTask, $data));
             }
         }
-    }
-
-    /**
-     * 通过填写的日志更新多人任务的团队表，计算多人任务的工时。
-     * Update team of multi-task by effort.
-     *
-     * @param  int       $effortID
-     * @param  object    $record
-     * @param  object    $currentTeam
-     * @param  object    $task
-     * @access protected
-     * @return void
-     */
-    protected function updateTeamByEffort(int $effortID, object $record, object $currentTeam, object $task)
-    {
-        $this->dao->update(TABLE_TASKTEAM)
-                  ->set('left')->eq($record->left)
-                  ->set("consumed = consumed + {$record->consumed}")
-                  ->set('status')->eq($currentTeam->status)
-                  ->where('id')->eq($currentTeam->id)
-                  ->exec();
-
-        if($task->mode == 'linear' && empty($record->order)) $this->updateEffortOrder($effortID, $currentTeam->order);
-    }
-
-    /**
-     * 查询当前任务作为父任务时的状态。
-     * Get the status of the taskID as a parent task.
-     *
-     * @param  int       $taskID
-     * @access protected
-     * @return string
-     */
-    protected function getParentStatusById(int $taskID) :string
-    {
-        $children = $this->dao->select('id,status,closedReason,parent')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('deleted')->eq('0')->fetchAll();
-
-        if(empty($children)) return '';
-
-        $childrenStatus = $childrenClosedReason = array();
-
-        foreach($children as $task)
-        {
-            $childrenStatus[$task->status]             = $task->status;
-            $childrenClosedReason[$task->closedReason] = $task->closedReason;
-        }
-
-        if(count($childrenStatus) == 1) return current($childrenStatus);
-
-        if(isset($childrenStatus['doing']) || isset($childrenStatus['pause'])) return 'doing';
-
-        if((isset($childrenStatus['done']) || isset($childrenClosedReason['done'])) && isset($childrenStatus['wait'])) return 'doing';
-
-        if(isset($childrenStatus['wait']))   return 'wait';
-        if(isset($childrenStatus['done']))   return 'done';
-        if(isset($childrenStatus['closed'])) return 'closed';
-        if(isset($childrenStatus['cancel'])) return 'cancel';
-
-        return '';
     }
 
     /**
@@ -1206,38 +1184,60 @@ class taskTao extends taskModel
     }
 
     /**
-     * 更新父任务状态时记录修改日志。
-     * Create action record when update parent task.
+     * 通过拖动甘特图修改任务的预计开始日期和截止日期。
+     * Update task estimate date and deadline through gantt.
      *
-     * @param  object    $oldParentTask
+     * @param  object    $postData
+     * @access protected
+     * @return bool
+     */
+    protected function updateTaskEsDateByGantt(object $postData): bool
+    {
+        $task        = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($postData->id)->fetch();
+        $isChildTask = $task->parent > 0;
+
+        if($isChildTask) $parentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($task->parent)->fetch();
+        $stage = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->andWhere('project')->eq($task->project)->fetch();
+
+        $start    = $isChildTask ? $parentTask->estStarted   : $stage->begin;
+        $end      = $isChildTask ? $parentTask->deadline     : $stage->end;
+        $typeLang = $isChildTask ? $this->lang->task->parent : $this->lang->project->stage;
+
+        if(helper::diffDate($start, $postData->startDate) > 0) dao::$errors[] = sprintf($this->lang->task->overEsStartDate, $typeLang, $typeLang);
+        if(helper::diffDate($end, $postData->endDate) < 0)     dao::$errors[] = sprintf($this->lang->task->overEsEndDate, $typeLang, $typeLang);
+        if(dao::isError()) return false;
+
+        /* Update estimate started and deadline of a task. */
+        $this->dao->update(TABLE_TASK)
+            ->set('estStarted')->eq($postData->startDate)
+            ->set('deadline')->eq($postData->endDate)
+            ->set('lastEditedBy')->eq($this->app->user->account)
+            ->where('id')->eq($postData->id)
+            ->exec();
+
+        return !dao::isError();
+    }
+
+    /**
+     * 通过填写的日志更新多人任务的团队表，计算多人任务的工时。
+     * Update team of multi-task by effort.
+     *
+     * @param  int       $effortID
+     * @param  object    $record
+     * @param  object    $currentTeam
+     * @param  object    $task
      * @access protected
      * @return void
      */
-    protected function createUpdateParentTaskAction(object $oldParentTask) :void
+    protected function updateTeamByEffort(int $effortID, object $record, object $currentTeam, object $task)
     {
-        $newParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($oldParentTask->id)->fetch();
+        $this->dao->update(TABLE_TASKTEAM)
+                  ->set('left')->eq($record->left)
+                  ->set("consumed = consumed + {$record->consumed}")
+                  ->set('status')->eq($currentTeam->status)
+                  ->where('id')->eq($currentTeam->id)
+                  ->exec();
 
-        unset($oldParentTask->subStatus);
-        unset($newParentTask->subStatus);
-
-        $status  = $newParentTask->status;
-        $changes = common::createChanges($oldParentTask, $newParentTask);
-        $action  = '';
-
-        if($status == 'done'   && $oldParentTask->status != 'done')   $action = 'Finished';
-        if($status == 'closed' && $oldParentTask->status != 'closed') $action = 'Closed';
-        if($status == 'pause'  && $oldParentTask->status != 'paused') $action = 'Paused';
-        if($status == 'cancel' && $oldParentTask->status != 'cancel') $action = 'Canceled';
-        if($status == 'doing'  && $oldParentTask->status == 'wait')   $action = 'Started';
-        if($status == 'doing'  && $oldParentTask->status == 'pause')  $action = 'Restarted';
-
-        if($status == 'doing'  && $oldParentTask->status != 'wait' && $oldParentTask->status != 'pause') $action = 'Activated';
-
-        if($status == 'wait'   && $oldParentTask->status != 'wait') $action = 'Adjusttasktowait';
-
-        if(!$action) return;
-
-        $actionID = $this->loadModel('action')->create('task', $oldParentTask->id, $action, '', '', '', false);
-        $this->action->logHistory($actionID, $changes);
+        if($task->mode == 'linear' && empty($record->order)) $this->updateEffortOrder($effortID, $currentTeam->order);
     }
 }
