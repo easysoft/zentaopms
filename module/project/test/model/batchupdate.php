@@ -29,31 +29,6 @@ title=测试taskModel->batchUpdate();
 timeout=0
 cid=1
 
-- 查看被编辑了的项目数量 @3
-
-- 查看被编辑了的项目11详情
- - 第1条的name属性 @批量修改项目11
- - 第1条的parent属性 @1
- - 第1条的PM属性 @user10
- - 第1条的begin属性 @2022-02-08
- - 第1条的acl属性 @open
-
-- 查看被编辑了的项目12详情
- - 第2条的name属性 @批量修改项目12
- - 第2条的parent属性 @2
- - 第2条的PM属性 @user11
- - 第2条的begin属性 @2022-03-05
- - 第2条的acl属性 @private
-
-- 查看被编辑了的项目13详情
- - 第3条的name属性 @批量修改项目13
- - 第3条的parent属性 @3
- - 第3条的PM属性 @user13
- - 第3条的begin属性 @2022-02-19
- - 第3条的acl属性 @program
-
-- 异常情况第message[end]条的0属性 @ID4『计划完成』应当大于『2023-02-19』。
-
 */
 
 $project = new Project();
