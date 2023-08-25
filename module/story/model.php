@@ -316,16 +316,16 @@ class storyModel extends model
     /**
      * Get stories pairs of a execution.
      *
-     * @param  int           $executionID
-     * @param  int           $productID
-     * @param  string|int    $branch
-     * @param  array|string  $moduleIdList
-     * @param  string        $type full|short
-     * @param  string        $status all|unclosed|review
+     * @param  int              $executionID
+     * @param  int              $productID
+     * @param  string|int       $branch
+     * @param  array|string|int $moduleIdList
+     * @param  string           $type full|short
+     * @param  string           $status all|unclosed|review
      * @access public
      * @return array
      */
-    public function getExecutionStoryPairs(int $executionID = 0, int $productID = 0, string|int $branch = 'all', array|string $moduleIdList = '', string $type = 'full', string $status = 'all'): array
+    public function getExecutionStoryPairs(int $executionID = 0, int $productID = 0, string|int $branch = 'all', array|string|int $moduleIdList = '', string $type = 'full', string $status = 'all'): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getExecutionStoryPairs();
 
