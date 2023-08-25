@@ -425,7 +425,7 @@ class testcaseZen extends testcase
     {
         foreach($formData->data->expects as $key => $value)
         {
-            if(!empty($value) && empty($steps[$key]))
+            if(!empty($value) && empty($formData->data->steps[$key]))
             {
                 dao::$errors[] = sprintf($this->lang->testcase->stepsEmpty, $key);
                 return false;
