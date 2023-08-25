@@ -1511,19 +1511,19 @@ class programModel extends model
     }
 
     /**
-     * Move project node.
+     * 修改子项目集和项目的层级。
+     * Modify the subProgram and project grade.
      *
-     * @param  int       $programID
-     * @param  int       $parentID
-     * @param  string    $oldPath
-     * @param  int       $oldGrade
+     * @param  int    $programID
+     * @param  int    $parentID
+     * @param  string $oldPath
+     * @param  int    $oldGrade
      * @access public
      * @return bool
      */
-    public function processNode($programID, $parentID, $oldPath, $oldGrade)
+    public function processNode(int $programID, int $parentID, string $oldPath, int $oldGrade): bool
     {
-        $parent = $this->dao->select('id,parent,path,grade')->from(TABLE_PROGRAM)->where('id')->eq($parentID)->fetch();
-
+        $parent     = $this->dao->select('id,parent,path,grade')->from(TABLE_PROGRAM)->where('id')->eq($parentID)->fetch();
         $childNodes = $this->dao->select('id,parent,path,grade,type')->from(TABLE_PROGRAM)
             ->where('path')->like("{$oldPath}%")
             ->andWhere('deleted')->eq(0)

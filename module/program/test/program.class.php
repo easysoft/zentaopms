@@ -414,4 +414,34 @@ class programTest
         global $lang;
         return strip_tags($lang->switcherMenu);
     }
+
+    /**
+     * 修改子项目集和项目的层级。
+     * Modify the subProgram and project grade.
+     *
+     * @param  int     $programID
+     * @param  int     $parentID
+     * @param  string  $oldPath
+     * @param  int     $oldGrade
+     * @access public
+     * @return array
+     */
+    public function processNodeTest(int $programID, int $parentID, string $oldPath, int $oldGrade): array
+    {
+        $oldChildGrade = $this->program->dao->select('grade')->from(TABLE_PROGRAM)
+            ->where('path')->like("{$oldPath}%")
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('grade')
+            ->fetch('grade');
+
+        $this->program->processNode($programID, $parentID, $oldPath, $oldGrade);
+
+        $newChildGrade = $this->program->dao->select('grade')->from(TABLE_PROGRAM)
+            ->where('path')->like("{$oldPath}%")
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('grade')
+            ->fetch('grade');
+
+        return array('old' => empty($oldChildGrade) ? 0 : $oldChildGrade, 'new' => empty($newChildGrade) ? 0 : $newChildGrade);
+    }
 }
