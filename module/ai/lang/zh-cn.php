@@ -767,7 +767,7 @@ $lang->ai->dataInject->success = '已将提词执行结果填写到表单中';
 $lang->ai->dataInject->fail    = '提词执行结果填写失败';
 
 $lang->ai->execute = new stdclass();
-$lang->ai->execute->loading    = '提词执行中';
+$lang->ai->execute->loading    = '即将跳转至调试页面并执行提词';
 $lang->ai->execute->success    = '提词执行成功';
 $lang->ai->execute->fail       = '提词执行失败';
 $lang->ai->execute->failFormat = '提词执行失败：%s。';
