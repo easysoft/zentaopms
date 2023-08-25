@@ -78,8 +78,8 @@ if($block->width == 3)
 
     blockPanel
     (
-        set::bodyClass('gradient row p-0'),
-        set::headingClass('border-0'),
+        set::headingClass('hidden'),
+        set::bodyClass('gradient row p-1 pt-3'),
         set::bodyProps(array('style' => array('background-image' => 'linear-gradient( 90deg, #ECF7FE 0%, #FFF 22%)'))),
         col
         (
@@ -87,8 +87,8 @@ if($block->width == 3)
             width('62.5%'),
             div
             (
-                setClass('text-sm font-bold mt-2 ml-4'),
-                $lang->block->productoverview->overview
+                setClass('text-md font-bold mt-2 mb-3 ml-3'),
+                $block->title
             ),
             row
             (
@@ -152,15 +152,16 @@ if($block->width == 3)
             setClass('flex-auto'),
             row
             (
-                setClass('text-sm font-bold mt-2 ml-4'),
+                setClass('text-sm font-bold mt-1 mb-3 ml-3 items-center'),
                 span($lang->block->productoverview->yearFinished),
                 dropdown
                 (
-                    a
+                    btn
                     (
+                        set::type('ghost'),
+                        set::size('sm'),
                         setClass('text-gray ml-4'),
                         $currentYear . $suffix,
-                        span(setClass('caret align-middle ml-1'))
                     ),
                     set::placement('bottom-end'),
                     set::menu(array('style' => array('minWidth' => 70, 'width' => 70))),
