@@ -1,0 +1,9 @@
+title: table zt_case
+desc: "用例"
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: module
+    range: 1821,1822,0,0,1825,1827,0,0,0,1829,1832,0,0,0,0{10000}
+  - field: auto
+    range: no{2},unit
