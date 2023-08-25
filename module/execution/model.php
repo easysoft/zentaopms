@@ -5523,7 +5523,7 @@ class executionModel extends model
 
         $_POST = $postData;
 
-        return $executionID;
+        return (int)$executionID;
     }
 
     /**
