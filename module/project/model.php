@@ -1615,21 +1615,22 @@ class projectModel extends model
     }
 
     /**
+     * 移除项目成员。
      * Unlink a member.
      *
      * @param  int    $projectID
      * @param  string $account
-     * @param  string $removeExecution no|yes
+     * @param  bool   $removeExecution
      * @access public
-     * @return void
+     * @return bool
      */
-    public function unlinkMember(int $projectID, string $account, string $removeExecution = 'no'): void
+    public function unlinkMember(int $projectID, string $account, bool $removeExecution = false): bool
     {
         $this->projectTao->unlinkTeamMember($projectID, 'project', $account);
 
         $this->loadModel('user')->updateUserView($projectID, 'project', array($account));
 
-        if($removeExecution == 'yes')
+        if($removeExecution)
         {
             $executions = $this->loadModel('execution')->getByProject($projectID, 'undone', 0, true);
             $this->projectTao->unlinkTeamMember(array_keys($executions), 'execution', $account);
@@ -1638,6 +1639,8 @@ class projectModel extends model
 
         $linkedProducts = $this->loadModel('product')->getProductPairsByProject($projectID);
         if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', array($account));
+
+        return !dao::isError();
     }
 
     /**
