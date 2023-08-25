@@ -36,7 +36,7 @@ $(function()
             {
                 $dropmenu.append("<li><a href='<?php echo $this->createLink('datatable', 'ajaxCustom', 'id=' . $this->moduleName . '&method=' . $this->methodName)?>' data-toggle='modal' data-type='ajax'><?php echo $lang->datatable->custom?></a></li>");
             }
-            if(!(currentModule == 'execution' && currentMethod == 'all')) $dropmenu.append("<li><a href='javascript:saveDatatableConfig(\"mode\", \"<?php echo $mode == 'table' ? 'datatable' : 'table';?>\", true);' id='switchToDatatable'><?php echo $mode == 'table' ? $lang->datatable->switchToDatatable : $lang->datatable->switchToTable;?></a></li>");
+            if(!(currentModule == 'execution' && (currentMethod == 'all' || currentMethod == 'task'))) $dropmenu.append("<li><a href='javascript:saveDatatableConfig(\"mode\", \"<?php echo $mode == 'table' ? 'datatable' : 'table';?>\", true);' id='switchToDatatable'><?php echo $mode == 'table' ? $lang->datatable->switchToDatatable : $lang->datatable->switchToTable;?></a></li>");
             $dropdown.append($dropmenu)
               .appendTo($btnToolbar)
               .on('shown.zui.dropdown', function(){$btnToolbar.closest('.table-header').css('z-index', 11);})
