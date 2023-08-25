@@ -51,7 +51,7 @@ VALUES
     (2132, 'ai', 'promptView', 654, ',open,biz,max,', ',rnd,', '1', 80),
     (2133, 'ai', 'promptExecute', 652, ',open,biz,max,', ',rnd,', '1', 85),
     (2134, 'ai', 'roleTemplates', 655, ',biz,max,', ',rnd,', '1', 90),
-    (2135, 'ai', 'promptExecutionReset', 655, ',biz,max,', ',rnd,', '1', 95);
+    (2135, 'ai', 'promptExecutionReset', 652, ',open,biz,max,', ',rnd,', '1', 95);
 
 REPLACE INTO
     `zt_privmanager` (`id`, `parent`, `code`, `type`, `edition`, `vision`, `order`)
@@ -226,7 +226,7 @@ VALUES
     ('ai-promptFinalize', 'depend', 'ai-promptAssignRole'), ('ai-promptFinalize', 'depend', 'ai-promptSelectDataSource'), ('ai-promptFinalize', 'depend', 'ai-promptSetPurpose'), ('ai-promptFinalize', 'depend', 'ai-promptSetTargetForm'), ('ai-promptFinalize', 'depend', 'ai-promptAudit'), ('ai-promptFinalize', 'depend', 'ai-promptExecute'),
     ('ai-promptAudit', 'depend', 'ai-promptAssignRole'), ('ai-promptAudit', 'depend', 'ai-promptSelectDataSource'), ('ai-promptAudit', 'depend', 'ai-promptSetPurpose'), ('ai-promptAudit', 'depend', 'ai-promptSetTargetForm'), ('ai-promptAudit', 'depend', 'ai-promptFinalize'), ('ai-promptAudit', 'depend', 'ai-promptExecute'),
     ('ai-roleTemplates', 'depend', 'ai-promptAssignRole'), ('ai-promptAssignRole', 'depend', 'ai-roleTemplates'),
-    ('ai-promptExecutionReset', 'depend', 'ai-promptAudit'), ('ai-promptAudit', 'depend', 'ai-promptExecutionReset');
+    ('ai-promptExecutionReset', 'depend', 'ai-promptExecute'), ('ai-promptExecute', 'depend', 'ai-promptExecutionReset');
 
 INSERT INTO `zt_promptrole` (`role`, `characterization`) VALUES ('请你扮演一名资深的产品经理。', '负责产品战略、设计、开发、数据分析、用户体验、团队管理、沟通协调等方面，需要具备多种技能和能力，以实现产品目标和公司战略。');
 INSERT INTO `zt_promptrole` (`role`, `characterization`) VALUES ('你是一名经验丰富的开发工程师。', '精通多种编程语言和框架、熟悉前后端技术和架构、擅长性能优化和安全防护、熟悉云计算和容器化技术、能够协调多人协作和项目管理。');
