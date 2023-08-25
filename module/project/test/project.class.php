@@ -158,6 +158,23 @@ class Project
     }
 
     /**
+     * Test add plans.
+     *
+     * @param  int    $projectID
+     * @param  array  $plans
+     * @access public
+     * @return array
+     */
+    public function addPlansTest(int $projectID, array $plans): array
+    {
+        $this->project->addPlans($projectID, $plans);
+
+        if(dao::isError()) return dao::getError();
+
+        return $this->project->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->fetchAll();
+    }
+
+    /**
      *  Test get all the projects under the program set to which an project belongs
      *
      * @param object $project
