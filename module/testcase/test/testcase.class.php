@@ -868,4 +868,17 @@ class testcaseTest
         foreach($steps as $step) $return .= "{$step->name} ";
         return trim($return, ' ');
     }
+
+    /**
+     * 获取用例基本信息。
+     * Fetch base info of a case.
+     *
+     * @param  int    $caseID
+     * @access public
+     * @return object|bool
+     */
+    public function fetchBaseInfo(int $caseID): object|bool
+    {
+        return $this->objectModel->fetchBaseInfo($caseID);
+    }
 }
