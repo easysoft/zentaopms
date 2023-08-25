@@ -1,15 +1,32 @@
 <?php
-$lang->metric->common    = "Metric";
-$lang->metric->name      = "Name";
-$lang->metric->stage     = "Stage";
-$lang->metric->scope     = "Scope";
-$lang->metric->object    = "Object";
-$lang->metric->purpose   = "Purpose";
-$lang->metric->unit      = "Unit";
-$lang->metric->code      = "Code";
-$lang->metric->desc      = "Description";
-$lang->metric->when      = "Collection Method";
-$lang->metric->createdBy = "Created By";
+$lang->metric->common        = "Metric";
+$lang->metric->name          = "Name";
+$lang->metric->stage         = "Stage";
+$lang->metric->scope         = "Scope";
+$lang->metric->object        = "Object";
+$lang->metric->purpose       = "Purpose";
+$lang->metric->unit          = "Unit";
+$lang->metric->code          = "Code";
+$lang->metric->desc          = "Description";
+$lang->metric->definition    = "Definition";
+$lang->metric->formula       = "Formula";
+$lang->metric->when          = "Collection Method";
+$lang->metric->createdBy     = "Created By";
+$lang->metric->implementedBy = "Implemented By";
+$lang->metric->removedBy     = "Removed By";
+$lang->metric->lastEdited    = "Last Edited";
+$lang->metric->value         = "Value";
+$lang->metric->name          = "Name";
+$lang->metric->date          = "Date";
+$lang->metric->metricData    = "Metric Data";
+$lang->metric->system        = "system";
+
+$lang->metric->noDesc    = "No description";
+$lang->metric->noFormula = "No formula";
+$lang->metric->noCalc    = "Metric's PHP algorithm is not implemented yet";
+
+$lang->metric->legendBasicInfo  = 'Basic info';
+$lang->metric->legendCreateInfo = 'Create and edit info';
 
 $lang->metric->confirmDelete = "Are you sure you want to delete?";
 
@@ -18,6 +35,12 @@ $lang->metric->browseAction = 'Metric List';
 $lang->metric->stageList = array();
 $lang->metric->stageList['wait']     = "Unpublished";
 $lang->metric->stageList['released'] = "Published";
+
+$lang->metric->dateList = array();
+$lang->metric->dateList['year']  = 'Year';
+$lang->metric->dateList['month'] = 'Month';
+$lang->metric->dateList['week']  = 'Week';
+$lang->metric->dateList['day']   = 'Day';
 
 $lang->metric->purposeList = array();
 $lang->metric->purposeList['scale'] = "Scale Estimation";
