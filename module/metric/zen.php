@@ -181,10 +181,13 @@ class metricZen extends metric
     {
         extract((array)$view);
 
+        $users = $this->loadModel('user')->getPairs('noletter');
+
         $createEditInfo = array();
-        $createEditInfo['createdBy']     = array('name' => $this->lang->metric->createdBy, 'text' => zget($users, $metric->createdBy) . ($metric->createdBy ? $this->lang->at . $metric->createdDate : ''));
-        $createEditInfo['implementedBy'] = array('name' => $this->lang->metric->implementedBy, 'text' => zget($users, $metric->implementedBy) . ($metric->implementedBy ? $this->lang->at . $metric->implementedDate : ''));
-        $createEditInfo['removedBy']     = array('name' => $this->lang->metric->removedBy, 'text' => zget($users, $metric->removedBy) . ($metric->removedBy ? $this->lang->at . $metric->removedDate : ''));
+        $createEditInfo['createdBy']     = array('name' => $this->lang->metric->createdBy, 'text' => $this->lang->metric->system . $this->lang->at . $metric->createdDate);
+        //$createEditInfo['createdBy']     = array('name' => $this->lang->metric->createdBy, 'text' => zget($users, $metric->createdBy) . ($metric->createdBy ? $this->lang->at . $metric->createdDate : ''));
+        //$createEditInfo['implementedBy'] = array('name' => $this->lang->metric->implementedBy, 'text' => zget($users, $metric->implementedBy) . ($metric->implementedBy ? $this->lang->at . $metric->implementedDate : ''));
+        //$createEditInfo['removedBy']     = array('name' => $this->lang->metric->removedBy, 'text' => zget($users, $metric->removedBy) . ($metric->removedBy ? $this->lang->at . $metric->removedDate : ''));
         $createEditInfo['lastEdited']    = array('name' => $this->lang->metric->lastEdited, 'text' => zget($users, $metric->editedBy) . ($metric->editedBy ? $this->lang->at . $metric->editedDate : ''));
 
         return $createEditInfo;
