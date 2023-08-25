@@ -843,14 +843,32 @@ class testcaseTest
      * @param  array  $expects
      * @param  array  $stepTypes
      * @access public
-     * @return array
+     * @return string
      */
-    public function insertStepsTest(int $caseID, array $steps, array $expects, array $stepTypes)
+    public function insertStepsTest(int $caseID, array $steps, array $expects, array $stepTypes): string
     {
         $objects = $this->objectModel->insertSteps($caseID, $steps, $expects, $stepTypes);
         if(dao::isError()) return dao::getError()[0];
         global $tester;
         $steps  = $tester->dao->select('id')->from(TABLE_CASESTEP)->where('case')->eq($caseID)->fetchAll('id');
         return implode(',', array_keys($steps));
+    }
+
+    /**
+     * 测试获取步骤。
+     * Test get steps.
+     *
+     * @param  int    $caseID
+     * @param  int    $version
+     * @access public
+     * @return string
+     */
+    public function getStepsTest(int $caseID, int $version): string
+    {
+        $steps = $this->objectModel->getSteps($caseID, $version);
+        if(dao::isError()) return dao::getError()[0];
+        $return = '';
+        foreach($steps as $step) $return .= "{$step->name} ";
+        return trim($return, ' ');
     }
 }

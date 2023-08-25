@@ -79,4 +79,59 @@ class testcaseTao extends testcaseModel
             $preGrade = $grade;
         }
     }
+
+    /**
+     * 获取用例步骤。
+     * Get case steps.
+     *
+     * @param  int       $caseID
+     * @param  int       $version
+     * @access protected
+     * @return void
+     */
+    protected function getSteps(int $caseID, int $version)
+    {
+        $caseSteps     = array();
+        $steps         = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->eq($caseID)->andWhere('version')->eq($version)->orderBy('id')->fetchAll('id');
+        $preGrade      = 1;
+        $parentSteps   = array();
+        $key           = array(0, 0, 0);
+        foreach($steps as $step)
+        {
+            $parentSteps[$step->id] = $step->parent;
+            $grade = 1;
+            if(isset($parentSteps[$step->parent])) $grade = isset($parentSteps[$parentSteps[$step->parent]]) ? 3 : 2;
+
+            if($grade > $preGrade)
+            {
+                $key[$grade - 1] = 1;
+            }
+            else
+            {
+                if($grade < $preGrade)
+                {
+                    if($grade < 2) $key[1] = 0;
+                    if($grade < 3) $key[2] = 0;
+                }
+                $key[$grade - 1] ++;
+            }
+            $name = implode('.', $key);
+            $name = str_replace('.0', '', $name);
+
+            $data = new stdclass();
+            $data->name   = str_replace('.0', '', $name);
+            $data->id     = $step->id;
+            $data->step   = $step->desc;
+            $data->desc   = $step->desc;
+            $data->expect = $step->expect;
+            $data->type   = $step->type;
+            $data->parent = $step->parent;
+            $data->grade  = $grade;
+
+            $caseSteps[] = $data;
+
+            $preGrade = $grade;
+        }
+        return $caseSteps;
+    }
 }
