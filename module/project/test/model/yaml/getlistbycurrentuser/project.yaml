@@ -2,6 +2,11 @@ title: zt_project
 author: liuhong
 version: "1.0"
 fields:
+    - field: id
+      range: 1-10
+    - field: name
+      range: 1-10
+      prefix: 项目
     - field: type
       range: 'project,sprint,project,stage'
     - field: status
@@ -11,6 +16,6 @@ fields:
     - field: vision
       range: rnd,rnd,rnd,lite
     - field: openedDate
-      range: "20220101 000000:1W"   # 生成从2021年1月1日0时0分0秒到当前时间的数据，步长为1周    
+      range: "20220101 000000:1W"   # 生成从2021年1月1日0时0分0秒到当前时间的数据，步长为1周
       type: timestamp
       format: "YY/MM/DD hh:mm:ss"
