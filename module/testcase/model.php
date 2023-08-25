@@ -1369,6 +1369,8 @@ class testcaseModel extends model
      */
     public function batchChangeType(array $caseIdList, string $type): bool
     {
+        if(!$type) return false;
+
         $caseIdList = array_filter($caseIdList);
         if(!$caseIdList) return false;
 
