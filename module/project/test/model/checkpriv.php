@@ -12,12 +12,6 @@ title=测试 projectModel::checkPriv;
 timeout=0
 cid=1
 
-- 执行project模块的checkPriv方法，参数是1 @1
-
-- 执行project模块的checkPriv方法，参数是2 @0
-
-- 执行project模块的checkPriv方法，参数是2 @1
-
 */
 
 global $tester;
