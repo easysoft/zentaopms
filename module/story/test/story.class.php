@@ -846,4 +846,17 @@ class storyTest
         $this->objectModel->linkStory($executionID, $productID, $storyID);
         return $this->objectModel->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->fetchAll();
     }
+
+    /**
+     * 获取一个需求的基础信息。
+     * Fetch base info of a story.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return object|bool
+     */
+    public function fetchBaseInfoTest(int $storyID): object|false
+    {
+        return $this->objectModel->fetchBaseInfo($storyID);
+    }
 }
