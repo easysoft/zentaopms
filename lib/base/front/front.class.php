@@ -1300,12 +1300,12 @@ EOT;
         elseif(is_bool($value))
         {
             $value = $value ? 'true' : 'false';
-            $js .= "{$prefix}{$key} = $value;";
+            $js   .= "{$prefix}{$key} = $value;";
         }
         else
         {
-            $value = addslashes($value);
-            $js .= "{$prefix}{$key} = '{$value}';";
+            $value = empty($value) ? '' : addslashes($value);
+            $js   .= "{$prefix}{$key} = '{$value}';";
         }
         $js .= static::end($newline = false);
         echo $js;
