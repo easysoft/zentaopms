@@ -63,13 +63,10 @@ fields:
     loop: 0
     format: ""
   - field: lastEditedDate
-    note: "最后编辑日期"
-    from: common.date.v1.yaml
-    use: dateA
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    note: "创建日期"
+    range: "(M)-(w)"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
   - field: deleted
     note: "是否删除"
     range: 0

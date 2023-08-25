@@ -39,7 +39,7 @@ fields:
     format: ""
   - field: sql
     note: "SQL条件"
-    range: "(( 1   AND `name`  LIKE '%aa%' ) AND ( 1  )) AND deleted = '0'"
+    range: "(( 1   AND `title`  LIKE '%1%' ) AND ( 1  )) AND deleted = '0'"
     postfix: ""
     loop: 0
     format: ""
