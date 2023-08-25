@@ -124,7 +124,12 @@ $lang->searchObjects['product']    = $lang->productCommon;
 $lang->searchObjects['doc']        = 'Document';
 $lang->searchTips                  = 'ID(ctrl+g)';
 
+$lang->market->homeMenu           = new stdclass();
+$lang->market->homeMenu->report   = array('link' => "Report|marketreport|all");
+$lang->market->homeMenu->research = array('link' => "Reseach|marketresearch|all");
+$lang->market->homeMenu->market   = array('link' => "Market|market|browse|browseType=all");
+
 $lang->market->menu           = new stdclass();
-$lang->market->menu->report   = array('link' => "Report|marketreport|all");
-$lang->market->menu->research = array('link' => "Reseach|marketresearch|all");
-$lang->market->menu->market   = array('link' => "Market|market|browse|browseType=all");
+$lang->market->menu->report   = array('link' => "Report|marketreport|browse|marketID=%s");
+$lang->market->menu->research = array('link' => "Research|marketresearch|browse|marketID=%s");
+$lang->market->menu->view     = array('link' => "View|market|view|marketID=%s");
