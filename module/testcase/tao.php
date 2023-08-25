@@ -145,6 +145,8 @@ class testcaseTao extends testcaseModel
 
             $preGrade = $grade;
         }
+
+        return $caseSteps;
     }
 
     /*
