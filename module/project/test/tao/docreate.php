@@ -13,18 +13,6 @@ title=测试 projectTao::doCreate();
 timeout=0
 cid=1
 
-- 执行projectClass模块的doCreate方法，参数是$normalProject 属性name @测试新增项目一
-
-- 执行projectClass模块的doCreate方法，参数是$normalProject 第name条的0属性 @『项目名称』已经有『测试新增项目一』这条记录了。
-
-- 执行projectClass模块的doCreate方法，参数是$emptyNameProject 第name条的0属性 @『项目名称』不能为空。
-
-- 执行projectClass模块的doCreate方法，参数是$emptyEndProject 第end条的0属性 @『计划完成』不能为空。
-
-- 执行projectClass模块的doCreate方法，参数是$beginGtEndProject 第end条的0属性 @『计划完成』应当大于『2022-02-07』。
-
-- 执行projectClass模块的doCreate方法，参数是$emptyBeginProject 第begin条的0属性 @『计划开始』不能为空。
-
 */
 
 global $tester;
