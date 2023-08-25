@@ -916,7 +916,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function batchCaseTypeChange(string $type)
+    public function batchChangeType(string $type)
     {
         $caseIdList = zget($_POST, 'caseIdList',  array());
         if($caseIdList)

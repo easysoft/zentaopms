@@ -439,3 +439,8 @@ ALTER TABLE `zt_project` ADD `firstEnd` date DEFAULT NULL AFTER `end`;
 ALTER TABLE `zt_product` ADD `closedDate` date DEFAULT NULL AFTER `createdVersion`;
 ALTER TABLE `zt_productplan` ADD `finishedDate` datetime DEFAULT NULL AFTER `end`;
 ALTER TABLE `zt_productplan` ADD `closedDate` datetime DEFAULT NULL AFTER `finishedDate`;
+
+UPDATE `zt_grouppriv` SET `method` = 'batchChangeType' WHERE `method` = 'batchCaseTypeChange';
+UPDATE `zt_priv` SET `method` = 'batchChangeType' WHERE `method` = 'batchCaseTypeChange';
+UPDATE `zt_privlang` SET `key` = 'testcase-batchChangeType' WHERE `key` = 'testcase-batchCaseTypeChange';
+UPDATE `zt_privrelation` SET `priv` = 'testcase-batchChangeType' WHERE `priv` = 'testcase-batchCaseTypeChange';

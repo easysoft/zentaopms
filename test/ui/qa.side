@@ -4109,7 +4109,7 @@
         ["linkText=功能测试", "linkText"],
         ["css=.dropdown-submenu:nth-child(2) li:nth-child(1) > a", "css:finder"],
         ["xpath=//a[contains(text(),'功能测试')]", "xpath:link"],
-        ["xpath=//a[@onclick=\"setFormAction('/testcase-batchCaseTypeChange-feature.html', 'hiddenwin')\"]", "xpath:attributes"],
+        ["xpath=//a[@onclick=\"setFormAction('/testcase-batchChangeType-feature.html', 'hiddenwin')\"]", "xpath:attributes"],
         ["xpath=//ul[@id='moreActionMenu']/li[2]/ul/li/a", "xpath:idRelative"],
         ["xpath=(//a[contains(@href, '#')])[3]", "xpath:href"],
         ["xpath=//li[2]/ul/li/a", "xpath:position"],

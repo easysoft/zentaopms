@@ -21,13 +21,13 @@ $canBatchRun                = hasPriv('testtask', 'batchRun') && !$isOnlyScene;
 $canBatchEdit               = hasPriv('testcase', 'batchEdit') && !$isOnlyScene;
 $canBatchReview             = hasPriv('testcase', 'batchReview') && !$isOnlyScene && ($config->testcase->needReview || !empty($config->testcase->forceReview));
 $canBatchDelete             = hasPriv('testcase', 'batchDelete') && !$isOnlyScene;
-$canBatchCaseTypeChange     = hasPriv('testcase', 'batchCaseTypeChange') && !$isOnlyScene;
+$canBatchChangeType         = hasPriv('testcase', 'batchChangeType') && !$isOnlyScene;
 $canBatchConfirmStoryChange = hasPriv('testcase', 'batchConfirmStoryChange') && !$isOnlyScene;
 $canBatchChangeBranch       = hasPriv('testcase', 'batchChangeBranch') && !$isOnlyScene && $this->session->currentProductType && $this->session->currentProductType != 'normal';
 $canBatchChangeModule       = hasPriv('testcase', 'batchChangeModule') && !empty($productID) && ($product->type == 'normal' || $branch !== 'all');
 $canBatchChangeScene        = hasPriv('testcase', 'batchChangeScene') && !$isOnlyScene;
 $canImportToLib             = hasPriv('testcase', 'importToLib') && !$isOnlyScene;
-$canGroupBatch              = ($canBatchRun || $canBatchEdit || $canBatchReview || $canBatchDelete || $canBatchCaseTypeChange || $canBatchConfirmStoryChange);
+$canGroupBatch              = ($canBatchRun || $canBatchEdit || $canBatchReview || $canBatchDelete || $canBatchChangeType || $canBatchConfirmStoryChange);
 $canBatchAction             = ($canGroupBatch || $canBatchChangeBranch || $canBatchChangeModule || $canBatchChangeScene || $canImportToLib);
 
 $caseProductIds = array();
@@ -35,7 +35,7 @@ foreach($cases as $case) $caseProductIds[$case->product] = $case->product;
 $caseProductID = count($caseProductIds) > 1 ? 0 : $productID;
 
 $navActions = array();
-if($canBatchReview || $canBatchDelete || $canBatchCaseTypeChange || $canBatchConfirmStoryChange)
+if($canBatchReview || $canBatchDelete || $canBatchChangeType || $canBatchConfirmStoryChange)
 {
     if($canBatchReview)
     {
@@ -48,12 +48,12 @@ if($canBatchReview || $canBatchDelete || $canBatchCaseTypeChange || $canBatchCon
         $navActions[] = array('text' => $lang->testcase->review, 'class' => 'not-hide-menu', 'items' => $reviewItems);
     }
     if($canBatchDelete) $navActions[] = array('text' => $lang->delete, 'class' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchDelete', "productID=$productID"));
-    if($canBatchCaseTypeChange)
+    if($canBatchChangeType)
     {
         $typeItems = array();
-        foreach($lang->testcase->typeList as $key => $result)
+        foreach($lang->testcase->typeList as $key => $type)
         {
-            $typeItems[] = array('text' => $result, 'className' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchCaseTypeChange', "result={$key}"));
+            $typeItems[] = array('text' => $type, 'className' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchChangeType', "type={$key}"));
         }
         $navActions[] = array('text' => $lang->testcase->type, 'class' => 'not-hide-menu', 'items' => $typeItems);
     }

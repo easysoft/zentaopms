@@ -2052,11 +2052,11 @@ class testcaseModel extends model
         $canBatchRun                = common::hasPriv('testtask', 'batchRun');
         $canBatchEdit               = common::hasPriv('testcase', 'batchEdit');
         $canBatchDelete             = common::hasPriv('testcase', 'batchDelete');
-        $canBatchCaseTypeChange     = common::hasPriv('testcase', 'batchCaseTypeChange');
+        $canBatchChangeType         = common::hasPriv('testcase', 'batchChangeType');
         $canBatchConfirmStoryChange = common::hasPriv('testcase', 'batchConfirmStoryChange');
         $canBatchChangeModule       = common::hasPriv('testcase', 'batchChangeModule');
 
-        $canBatchAction             = ($canBatchRun or $canBatchEdit or $canBatchDelete or $canBatchCaseTypeChange or $canBatchConfirmStoryChange or $canBatchChangeModule);
+        $canBatchAction             = ($canBatchRun or $canBatchEdit or $canBatchDelete or $canBatchChangeType or $canBatchConfirmStoryChange or $canBatchChangeModule);
 
         $canView    = common::hasPriv('testcase', 'view');
         $caseLink   = helper::createLink('testcase', 'view', "caseID=$case->id&version=$case->version");

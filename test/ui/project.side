@@ -9606,7 +9606,7 @@
         ["linkText=安全相关", "linkText"],
         ["css=.dropdown-submenu:nth-child(2) li:nth-child(5) > a", "css:finder"],
         ["xpath=//a[contains(text(),'安全相关')]", "xpath:link"],
-        ["xpath=//a[@onclick=\"setFormAction('/testcase-batchCaseTypeChange-security.html', 'hiddenwin')\"]", "xpath:attributes"],
+        ["xpath=//a[@onclick=\"setFormAction('/testcase-batchChangeType-security.html', 'hiddenwin')\"]", "xpath:attributes"],
         ["xpath=//ul[@id='moreActionMenu']/li[2]/ul/li[5]/a", "xpath:idRelative"],
         ["xpath=(//a[contains(@href, '#')])[7]", "xpath:href"],
         ["xpath=//li[2]/ul/li[5]/a", "xpath:position"],

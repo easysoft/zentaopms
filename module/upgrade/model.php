@@ -3079,7 +3079,7 @@ class upgradeModel extends model
             $data = new stdclass();
             $data->group  = $groupID;
             $data->module = 'testcase';
-            $newMethods   = array('review', 'batchReview', 'batchCaseTypeChange', 'batchConfirmStoryChange');
+            $newMethods   = array('review', 'batchReview', 'batchChangeType', 'batchConfirmStoryChange');
             foreach($newMethods as $method)
             {
                 $data->method = $method;

@@ -86,7 +86,7 @@ js::set('langNormal',       $lang->testcase->normal);
     $datatableId  = $this->moduleName . ucfirst($this->methodName);
     $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
     ?>
-    <form class='main-table table-case' data-nested='true' data-expand-nest-child='false' data-checkable='true' data-enable-empty-nested-row='true' data-replace-id='caseTableList' data-preserve-nested='true' 
+    <form class='main-table table-case' data-nested='true' data-expand-nest-child='false' data-checkable='true' data-enable-empty-nested-row='true' data-replace-id='caseTableList' data-preserve-nested='true'
     id='caseForm' method='post' <?php if(!$useDatatable) echo "data-ride='table'";?>>
       <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right setting"></nav>
@@ -105,11 +105,11 @@ js::set('langNormal',       $lang->testcase->normal);
       $canBatchRun                = common::hasPriv('testtask', 'batchRun');
       $canBatchEdit               = common::hasPriv('testcase', 'batchEdit');
       $canBatchDelete             = common::hasPriv('testcase', 'batchDelete');
-      $canBatchCaseTypeChange     = common::hasPriv('testcase', 'batchCaseTypeChange');
+      $canBatchChangeType         = common::hasPriv('testcase', 'batchChangeType');
       $canBatchConfirmStoryChange = common::hasPriv('testcase', 'batchConfirmStoryChange');
       $canBatchChangeModule       = common::hasPriv('testcase', 'batchChangeModule');
       $canImportToLib             = common::hasPriv('testcase', 'importToLib');
-      $canBatchAction             = ($canBatchRun or $canBatchEdit or $canBatchDelete or $canBatchCaseTypeChange or $canBatchConfirmStoryChange or $canBatchChangeModule or $canImportToLib);
+      $canBatchAction             = ($canBatchRun or $canBatchEdit or $canBatchDelete or $canBatchChangeType or $canBatchConfirmStoryChange or $canBatchChangeModule or $canImportToLib);
       ?>
       <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
       <table class='table has-sort-head table-fixed table-nested table has-sort-head<?php if($useDatatable) echo ' datatable';?>' id='caseList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>' data-checkbox-name='caseIDList[]'>
@@ -201,16 +201,17 @@ js::set('langNormal',       $lang->testcase->normal);
                   echo "<li>" . html::a('#', $lang->delete, '', $misc) . "</li>";
               }
 
-              if($canBatchCaseTypeChange)
+              if($canBatchChangeType)
               {
                   echo "<li class='dropdown-submenu'>";
                   echo html::a('javascript:;', $lang->testcase->type, '', "id='typeChangeItem'");
                   echo "<ul class='dropdown-menu'>";
                   unset($lang->testcase->typeList['']);
-                  foreach($lang->testcase->typeList as $key => $result)
+                  unset($lang->testcase->typeList['unit']);
+                  foreach($lang->testcase->typeList as $key => $type)
                   {
-                      $actionLink = $this->createLink('testcase', 'batchCaseTypeChange', "result=$key");
-                      echo '<li>' . html::a('#', $result, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#caseList')\"") . '</li>';
+                      $actionLink = $this->createLink('testcase', 'batchChangeType', "type=$key");
+                      echo '<li>' . html::a('#', $type, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#caseList')\"") . '</li>';
                   }
                   echo '</ul></li>';
               }
