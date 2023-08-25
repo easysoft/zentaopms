@@ -726,7 +726,6 @@ class projectModel extends model
      *
      * @param  int   $projectID
      * @param  array $productIdList
-     *
      * @access public
      * @return array
      */
@@ -736,8 +735,8 @@ class projectModel extends model
             ->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
             ->where('t1.product')->in($productIdList)
+            ->andWhere('t1.project')->eq($projectID)
             ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t2.project')->eq($projectID)
             ->fetchGroup('productID', 'branchID');
     }
 
