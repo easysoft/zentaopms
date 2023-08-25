@@ -135,6 +135,7 @@ class testcaseTao extends testcaseModel
     }
 
     /*
+     * 处理用例和项目的关系。
      * Deal with the relationship between the case and project when edit the case.
      *
      * @param  object  $oldCase
@@ -142,53 +143,50 @@ class testcaseTao extends testcaseModel
      * @access public
      * @return void
      */
-    protected function updateCase2Project($oldCase, $case)
+    protected function updateCase2Project(object $oldCase, object $case): bool
     {
-        $productChanged = ($oldCase->product != $case->product);
-        $storyChanged   = ($oldCase->story   != $case->story);
+        $productChanged = $oldCase->product != $case->product;
+        $storyChanged   = $oldCase->story   != $case->story;
 
-        if($productChanged)
-        {
-            $this->dao->update(TABLE_PROJECTCASE)
-                ->set('product')->eq($case->product)
-                ->set('version')->eq($case->version)
-                ->where('`case`')->eq($oldCase->id)
-                ->exec();
-        }
+        if(!$productChanged && !$storyChanged) return true;
 
-        /* The related story is changed. */
+        if($productChanged) $this->dao->update(TABLE_PROJECTCASE)->set('product')->eq($case->product)->set('version')->eq($case->version)->where('`case`')->eq($oldCase->id)->exec();
+
         if($storyChanged)
         {
+            /* 取消之前需求对应项目和用例的关联关系。*/
             /* If the new related story isn't linked the project, unlink the case. */
             $projects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($oldCase->story)->fetchAll('project');
+            $this->dao->delete()->from(TABLE_PROJECTCASE)->where('project')->in(array_keys($projects))->andWhere('`case`')->eq($oldCase->id)->exec();
 
-            $projectIdList = array_keys($projects);
-            $this->dao->delete()->from(TABLE_PROJECTCASE)
-                ->where('project')->in()
-                ->andWhere('`case`')->eq($oldCase->id)
-                ->exec();
-
+            /* 设置需求对应项目和用例的关联关系。*/
             /* If the new related story is not null, make the case link the project which link the new related story. */
             if(!empty($case->story))
             {
-                $projects = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('story')->eq($case->story)->fetchAll('project');
+                $projects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($case->story)->fetchAll('project');
                 if($projects)
                 {
-                    $projects = array_keys($projects);
+                    $projects   = array_keys($projects);
+                    $lastOrders = $this->dao->select('project, MAX(`order`) AS lastOrder')->from(TABLE_PROJECTCASE)->where('project')->in($projects)->groupBy('project')->fetchPairs();
+
                     foreach($projects as $projectID)
                     {
-                        $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
+                        $lastOrder = isset($lastOrders[$projectID]) ? $lastOrders[$projectID] : 0;
+
                         $data = new stdclass();
                         $data->project = $projectID;
                         $data->product = $case->product;
                         $data->case    = $oldCase->id;
                         $data->version = $oldCase->version;
                         $data->order   = ++ $lastOrder;
-                        $this->dao->replace(TABLE_PROJECTCASE)->data($data)->exec();
+
+                        $this->dao->replace(TABLE_PROJECTCASE)->data($data)->autoCheck()->exec();
                     }
                 }
             }
         }
+
+        return !dao::isError();
     }
 
     protected function updateStep(object $case, object $oldCase): bool
