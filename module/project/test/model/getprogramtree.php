@@ -17,4 +17,4 @@ $tester->loadModel('project');
 
 $programs = $tester->project->getProgramTree();
 r($programs)        && p('0:name') && e('项目集1'); // 查询第一个项目集名称
-r(count($programs)) && p()         && e('4');       // 查询项目集数量
+r(count($programs)) && p()         && e('9');       // 查询项目集数量

@@ -1000,7 +1000,7 @@ class projectModel extends model
             ->where('deleted')->eq('0')
             ->andWhere('type')->eq('program')
             ->andWhere('status')->ne('closed')
-            ->andWhere('id')->in($this->app->user->view->programs)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
             ->orderBy('grade desc, `order`')
             ->fetchAll();
 
