@@ -60,6 +60,8 @@ class artifactrepo extends control
                 ->add('createdBy', $this->app->user->account)
                 ->add('createdDate', helper::now())
                 ->get();
+            if($repo->products) $repo->products = ',' . $repo->products . ',';
+
             $repoID = $this->artifactrepo->create($repo);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -93,6 +95,7 @@ class artifactrepo extends control
                 ->add('editedBy', $this->app->user->account)
                 ->add('editedDate', helper::now())
                 ->get();
+            if($repo->products) $repo->products = ',' . $repo->products . ',';
 
             $changes = $this->artifactrepo->update($repo, $artifactRepoID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));

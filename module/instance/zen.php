@@ -30,7 +30,6 @@ class instanceZen extends instance
         $tempMappings = $this->loadModel('cne')->getSettingsMapping($instance);
         if(empty($tempMappings)) return;
 
-        
         $pipeline = new stdclass();
         $instance->type        = $this->config->instance->devopsApps[$instance->appID];
         $pipeline->type        = $instance->type;
