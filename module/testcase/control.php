@@ -337,6 +337,7 @@ class testcase extends control
     }
 
     /**
+     * 创建 bug。
      * Create bug.
      *
      * @param  int    $productID
@@ -344,12 +345,16 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function createBug($productID, $branch = 0, $extras = '')
+    public function createBug(int $productID, string $extras = '')
     {
+        /* 从 extras 中提取变量。 */
+        /* Extract variables from extras. */
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
         parse_str($extras, $params);
         extract($params);
 
+        /* 获取用例和用例执行结果。 */
+        /* Get case and results. */
         $this->loadModel('testtask');
         $case = '';
         if($runID)
@@ -363,14 +368,20 @@ class testcase extends control
             $results = $this->testtask->getResults(0, $caseID);
         }
 
+        /* 如果用例不存在，关闭模态框。 */
+        /* If case isn't exist, close modal box. */
         if(!$case) return $this->send(array('result' => 'fail', 'message' => $this->lang->notFound, 'closeModal' => true));
 
+        /* 如果产品未获取，获取产品。 */
+        /* If product isn't available, get the product. */
         if(!isset($this->products[$productID]))
         {
             $product = $this->product->getByID($productID);
             $this->products[$productID] = $product->name;
         }
 
+        /* 展示变量. */
+        /* Show the variables. */
         $this->view->title   = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->createBug;
         $this->view->runID   = $runID;
         $this->view->case    = $case;
