@@ -44,52 +44,6 @@ class testcaseTest
     }
 
     /**
-     * Test batch create cases.
-     *
-     * @param  array  $param
-     * @access public
-     * @return int
-     */
-    function batchCreateTest($param)
-    {
-        $productID = 1;
-        $branch    = 0;
-        $storyID   = 0;
-
-        $module       = array(0, 0, 0);
-        $story        = array(0, 0, 0);
-        $title        = array('测试批量创建1', '测试批量创建2', '测试批量创建3');
-        $color        = array('#3da7f5', '', '#ffaf38');
-        $type         = array('performance', 'config', 'install');
-        $pri          = array('1', '2', '3');
-        $precondition = array('测试批量创建前置1', '测试批量创建前置2', '测试批量创建前置3');
-        $keywords     = array('测试批量创建关键词1', '测试批量创建关键词2', '测试批量创建关键词3');
-        $stage        = array(array('smoke'), array('bvt'), array('intergrate'));
-        $needReview   = array(0, 0, 0);
-
-        $_POST['module']       =  $module;
-        $_POST['story']        =  $story;
-        $_POST['title']        =  $title;
-        $_POST['color']        =  $color;
-        $_POST['type']         =  $type;
-        $_POST['pri']          =  $pri;
-        $_POST['precondition'] =  $precondition;
-        $_POST['keywords']     =  $keywords;
-        $_POST['stage']        =  $stage;
-        $_POST['needReview']   =  $needReview;
-
-        foreach($param as $field => $value) $_POST[$field] = $value;
-
-        $objects = $this->objectModel->batchCreate($productID, $branch, $storyID);
-
-        unset($_POST);
-
-        if(dao::isError()) return dao::getError();
-
-        return count($objects);
-    }
-
-    /**
      * 测试获取模块的用例。
      * Test get cases of modules.
      *
