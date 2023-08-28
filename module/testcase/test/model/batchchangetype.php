@@ -15,10 +15,11 @@ pid=1
 */
 
 $testcase   = new testcaseTest();
-$caseIdList = array(array(), array(1, 2));
+$caseIdList = array(array(), array(1, 2), array(3, 4));
 
 r($testcase->batchChangeTypeTest($caseIdList[0], 1))  && p() && e('0'); // 用例参数为空返回 false。
 r($testcase->batchChangeTypeTest($caseIdList[1], '')) && p() && e('0'); // 用例参数不为空、类型参数为空返回 false。
+r($testcase->batchChangeTypeTest($caseIdList[2], 1))  && p() && e('0'); // 用例参数对应的用例不存在，返回 false。
 
 r($testcase->batchChangeTypeTest($caseIdList[1], 'other'))        && p() && e('1');                // 批量修改用例类型为 other 成功，返回 true。
 r($testcase->getByListTest($caseIdList[1])) && p('1:type;2:type') && e('other,other');             // 批量修改用例类型后类型为 other。
