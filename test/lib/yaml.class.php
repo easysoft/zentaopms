@@ -412,7 +412,7 @@ class yaml
             }
         }
 
-        $this->insertDB($sqlPath, $this->tableName, $isClear);
+        $this->insertDB($sqlPath, $this->tableName, $isClear, $rows);
 
         return $this;
     }
@@ -449,13 +449,14 @@ class yaml
     /**
      * Insert the data into database.
      *
-     * @param  string    $sqlPath
-     * @param  string    $tableName
-     * @param  bool      $isClear Truncate table if set isClear to true.
+     * @param  string $sqlPath
+     * @param  string $tableName
+     * @param  bool   $isClear   Truncate table if set isClear to true.
+     * @param  int    $rows      truncate table only if rows is o.
      * @access public
      * @return string
      */
-    function insertDB($sqlPath, $tableName, $isClear = true)
+    function insertDB($sqlPath, $tableName, $isClear = true, $rows = null)
     {
         $tableName = $this->config->db->prefix . $tableName;
         $dbName    = $this->config->db->name;
@@ -472,6 +473,7 @@ class yaml
         {
             /* Truncate table to reset auto increment number. */
             system(sprintf("mysql -u%s -p%s -h%s -P%s %s -e 'truncate %s' 2>/dev/null", $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $tableName));
+            if($rows === 0) return;
         }
 
         if(!file_exists($sqlPath)) return;
