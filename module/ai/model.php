@@ -1105,7 +1105,16 @@ class aiModel extends model
             {
                 /* Try to get a related object, we are sorry if it could not find any. */
                 $relatedObj = $this->tryGetRelatedObjects($prompt, $object, array($arg));
-                $var = !empty($relatedObj) ? current($relatedObj) : '';
+                if(!empty($relatedObj))
+                {
+                    $relatedObj = current($relatedObj);
+                    if(is_string($relatedObj) && strlen($relatedObj) && $relatedObj[0] === ',' && $relatedObj[strlen($relatedObj) - 1] === ',')
+                    {
+                        $relatedObj = explode(',', $relatedObj);
+                        $relatedObj = array_filter($relatedObj);
+                    }
+                    $var = $relatedObj;
+                }
             }
             if(!empty($isRequired) && empty($var)) return array(helper::createLink('ai', 'promptExecutionReset', 'failed=1'), true);
             $vars[] = $var;
