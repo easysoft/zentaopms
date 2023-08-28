@@ -2177,43 +2177,6 @@ class testcase extends control
     }
 
     /**
-     * Ajax get scenes.
-     *
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  int    $moduleID
-     * @param  int    $stype
-     * @param  int    $storyID
-     * @param  bool   $onlyOption
-     * @param  string $status
-     * @param  string $limit
-     * @param  string $type
-     * @param  int    $hasParent
-     * @param  string $number
-     * @param  int    $currentScene
-     * @access public
-     * @return void
-     */
-    public function ajaxGetScenesForBC($productID, $branch = 0, $moduleID = 0, $stype = 1, $storyID = 0, $onlyOption = 'false', $status = '', $limit = 0, $type = 'full', $hasParent = 1, $number = '', $currentScene = 0)
-    {
-        $optionMenu = $this->testcase->getSceneMenu($productID, $moduleID, 'case', 0, $branch, $currentScene);
-
-        if($stype == 1)
-        {
-            $optionMenu['ditto'] = $this->lang->testcase->ditto;
-            $output = html::select("parent", $optionMenu, "", "class='form-control'");
-            return print($output);
-        }
-        else
-        {
-            $scenes = array();
-            foreach($optionMenu as $sceneID => $sceneName) $scenes[] = array('value' => $sceneID, 'text' => $sceneName);
-            return $this->send($scenes);
-        }
-
-    }
-
-    /**
      * Batch change scene.
      *
      * @param  int    $sceneID
