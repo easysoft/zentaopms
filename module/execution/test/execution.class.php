@@ -1909,15 +1909,21 @@ class executionTest
     }
 
     /**
-     * Function getBurnDataFlot test by execution.
+     * 获取燃尽图时间点数据。
+     * Get burn chart flot data.
      *
-     * @param  int   $executionID
+     * @param  int    $executionID
+     * @param  string $burnBy
+     * @param  bool   $showDelay
      * @access public
-     * @return int
+     * @return array|null
      */
-    public function getBurnDataFlotTest($executionID = 0)
+    public function getBurnDataFlotTest(int $executionID, string $burnBy, bool $showDelay = false, string $begin = '', string $end = ''):array|null
     {
-        $object = $this->executionModel->getBurnDataFlot($executionID, $burnBy = 'left');
+        $dateList = array();
+        if($begin && $end) list($dateList) = $this->executionModel->getDateList($begin, $end, 'noweekend', 0, 'Y-m-d');
+
+        $object = $this->executionModel->getBurnDataFlot($executionID, $burnBy, $showDelay, $dateList);
 
         if(dao::isError())
         {
@@ -2295,22 +2301,23 @@ class executionTest
     }
 
     /**
-     * function buildBurnData test by execution
+     * 构建燃尽图数据。
+     * Build burn data.
      *
-     * @param  string $executionID
-     * @param  string $count
-     * @param  string $type
+     * @param  int    $executionID
+     * @param  int    $count
+     * @param  string $type         noweekend|withweekend
+     * @param  string $burnBy       left|estimate|storyPoint
      * @access public
-     * @return array
+     * @return array|int
      */
-    public function buildBurnDataTest($executionID, $count, $type = 'noweek')
+    public function buildBurnDataTest(int $executionID, int $count, string $type = 'noweekend', string $burnBy = 'left'): array|int
     {
         $begin = '2022-01-07';
         $end   = '2022-01-17';
 
-        $dateList = $this->executionModel->getDateList($begin, $end, $type, 0, $format = 'Y-m-d');
-
-        $object = $this->executionModel->buildBurnData($executionID, $dateList[0], $type);
+        $dateList = $this->executionModel->getDateList($begin, $end, $type, 0, 'Y-m-d');
+        $object   = $this->executionModel->buildBurnData($executionID, $dateList[0], $burnBy);
 
         if(dao::isError())
         {

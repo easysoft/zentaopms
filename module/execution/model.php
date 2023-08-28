@@ -3998,19 +3998,20 @@ class executionModel extends model
     }
 
     /**
-     * Get burn data for flot
+     * 获取燃尽图时间点数据。
+     * Get burn chart flot data.
      *
      * @param  int    $executionID
-     * @param  string $burnBy
+     * @param  string $burnBy      left|estimate|storyPoint
      * @param  bool   $showDelay
      * @param  array  $dateList
      * @access public
-     * @return array
+     * @return array|null
      */
-    public function getBurnDataFlot($executionID = 0, $burnBy = '', $showDelay = false, $dateList = array())
+    public function getBurnDataFlot(int $executionID = 0, string $burnBy = '', bool $showDelay = false, array $dateList = array()): array|null
     {
         /* Get execution and burn counts. */
-        $execution = $this->getById($executionID);
+        $execution = $this->getByID($executionID);
 
         /* If the burnCounts > $itemCounts, get the latest $itemCounts records. */
         $sets = $this->dao->select("date AS name, `$burnBy` AS value, `$burnBy`")->from(TABLE_BURN)->where('execution')->eq((int)$executionID)->andWhere('task')->eq(0)->orderBy('date DESC')->fetchAll('name');
@@ -4019,25 +4020,23 @@ class executionModel extends model
         foreach($sets as $date => $set)
         {
             if($date < $execution->begin) continue;
-            if(!$showDelay and $date > $execution->end) $set->value = 'null';
-            if($showDelay  and $date < $execution->end) $set->value = 'null';
+            if(!$showDelay && $date > $execution->end) $set->value = 'null';
+            if($showDelay  && $date < $execution->end) $set->value = 'null';
 
             $burnData[$date] = $set;
         }
 
         foreach($dateList as $date)
         {
-            if(!isset($burnData[$date]))
+            if(isset($burnData[$date])) continue;
+            if(($showDelay && $date < $execution->end) || (!$showDelay && $date > $execution->end))
             {
-                if(($showDelay and $date < $execution->end) or (!$showDelay and $date > $execution->end))
-                {
-                    $set = new stdClass();
-                    $set->name    = $date;
-                    $set->value   = 'null';
-                    $set->$burnBy = 0;
+                $set = new stdClass();
+                $set->name    = $date;
+                $set->value   = 'null';
+                $set->$burnBy = 0;
 
-                    $burnData[$date] = $set;
-                }
+                $burnData[$date] = $set;
             }
         }
 
@@ -4386,7 +4385,7 @@ class executionModel extends model
      *
      * @param  string $begin
      * @param  string $end
-     * @param  string $type
+     * @param  string $type noweekend|withweekend
      * @param  int    $interval
      * @param  string $format
      * @param  string $executionDeadline
@@ -4822,16 +4821,17 @@ class executionModel extends model
     }
 
     /**
+     * 构建燃尽图数据。
      * Build burn data.
      *
      * @param  int    $executionID
      * @param  array  $dateList
-     * @param  string $burnBy
+     * @param  string $burnBy       left|estimate|storyPoint
      * @param  string $executionEnd
      * @access public
      * @return array
      */
-    public function buildBurnData($executionID, $dateList, $burnBy = 'left', $executionEnd = '')
+    public function buildBurnData(int $executionID, array $dateList, string $burnBy = 'left', string $executionEnd = ''): array
     {
         $this->loadModel('report');
         $burnBy = $burnBy ? $burnBy : 'left';
@@ -4855,7 +4855,7 @@ class executionModel extends model
         $chartData['burnLine'] = $this->report->createSingleJSON($sets, $dateList);
         $chartData['baseLine'] = $baseline;
 
-        $execution = $this->getById($executionID);
+        $execution = $this->getByID($executionID);
 
         /*
          * 1. Execution status is not closed and suspended, end date less than today;
@@ -4864,7 +4864,7 @@ class executionModel extends model
          * Processing burn down chart Information.
          */
         $endDate = helper::today();
-        if($execution->status == 'closed')    $endDate = substr($execution->closedDate, 0, 10);
+        if($execution->status == 'closed')    $endDate = empty($execution->closedDate) ? '' : substr($execution->closedDate, 0, 10);
         if($execution->status == 'suspended') $endDate = $execution->suspendedDate;
 
         if($endDate > $execution->end)
