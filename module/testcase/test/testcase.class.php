@@ -754,6 +754,34 @@ class testcaseTest
     }
 
     /**
+     * 关联 bug 的测试用例。
+     * Link bugs test.
+     *
+     * @param  int $caseID
+     * @param  array $toLinkBugs
+     * @access public
+     * @return array
+     */
+    public function linkBugsTest(int $caseID, array $toLinkBugs): array
+    {
+        $oldCase = $this->objectModel->getByID($caseID);
+
+        $case = new stdclass();
+        $case->linkBug      = $toLinkBugs;
+        $case->version      = $oldCase->version + 1;
+        $case->story        = 0;
+        $case->storyVersion = 0;
+
+        $this->objectModel->linkBugs($caseID, array_keys($oldCase->toBugs), $case);
+
+        if(dao::isError()) return dao::getError();
+
+        global $tester;
+        $bugs = $tester->dao->select('id,`case`')->from(TABLE_BUG)->where('`case`')->eq($caseID)->fetchAll();
+        return $bugs;
+    }
+
+    /**
      * Test get status for different method.
      *
      * @param  string $methodName
