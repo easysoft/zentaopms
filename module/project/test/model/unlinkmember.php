@@ -8,7 +8,7 @@ $team->root->range('2,7-9{3}');
 $team->type->range('project,execution{7}');
 $team->account->range('admin,user1,user2,admin');
 $team->limited->range('no');
-$team->join->range('2023-04-02');
+$team->join->range('`2023-04-02`');
 $team->days->range('7');
 $team->hours->range('7');
 $team->gen(8);
