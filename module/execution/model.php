@@ -2517,8 +2517,8 @@ class executionModel extends model
      * 获取执行的信息。
      * Get the execution information by ID.
      *
-     * @param  int    $executionID
-     * @param  bool   $setImgSize
+     * @param  int          $executionID
+     * @param  bool         $setImgSize
      * @access public
      * @return object|false
      */

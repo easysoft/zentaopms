@@ -20,7 +20,7 @@ su('admin');
 
 title=executionModel->getByID();
 timeout=0
-pid=1
+cid=1
 
 */
 
