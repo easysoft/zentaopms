@@ -281,110 +281,58 @@ class testcase extends control
     }
 
     /**
-     * Create a batch test case.
+     * 批量创建用例。
+     * Create batch testcase.
      *
-     * @param  int   $productID
-     * @param  int   $moduleID
-     * @param  int   $storyID
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  int    $moduleID
+     * @param  int    $storyID
      * @access public
      * @return void
      */
-    public function batchCreate($productID, $branch = '', $moduleID = 0, $storyID = 0)
+    public function batchCreate(int $productID, string $branch = '', int $moduleID = 0, int $storyID = 0)
     {
-        $this->loadModel('story');
         if(!empty($_POST))
         {
-            $caseIdList = $this->testcase->batchCreate($productID, $branch, $storyID);
+            $testcases = $this->testcaseZen->buildCasesForBathcCreate($productID);
+            $testcases = $this->testcaseZen->checkTestcasesForBatchCreate($testcases, $productID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if(helper::isAjaxRequest('modal')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
+            foreach($testcases as $testcase)
+            {
+                $testcaseID = $this->testcase->create($testcase);
+                $this->executeHooks($testcaseID);
+                $this->testcase->syncCase2Project($testcase, $testcaseID);
+            }
 
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $caseIdList));
-
-            helper::setcookie('caseModule', 0);
-            $currentModule = $this->app->tab == 'project' ? 'project'  : 'testcase';
-            $currentMethod = $this->app->tab == 'project' ? 'testcase' : 'browse';
-            $projectParam  = $this->app->tab == 'project' ? "projectID={$this->session->project}&" : '';
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink($currentModule, $currentMethod, "{$projectParam}productID={$productID}&branch={$branch}&browseType=all&param=0&caseType=&orderBy=id_desc")));
+            if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchCreate');
+            return $this->testcaseZen->responseAfterBatchCreate($productID, $branch);
         }
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 
-        /* Set productID and currentModuleID. */
+        /* 设置 session 和 cookie, 并且设置产品 id、分支。 */
+        /* Set session and cookie, and set product id, branch. */
         $productID = $this->product->saveState($productID, $this->products);
         if($branch === '') $branch = $this->cookie->preBranch;
-        if($storyID and empty($moduleID))
-        {
-            $story    = $this->loadModel('story')->getByID($storyID);
-            $moduleID = $story->module;
-        }
-        $currentModuleID = (int)$moduleID;
 
+        /* 设置菜单。 */
         /* Set menu. */
         $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);
 
-        /* Set story list. */
-        $story       = $storyID ? $this->story->getByID($storyID) : '';
-        $storyPairs  = $this->loadModel('story')->getProductStoryPairs($productID, $branch === 'all' ? 0 : $branch);
-        $storyPairs += $storyID ? array($storyID => $story->id . ':' . $story->title) : array();
+        /* 指派产品、分支、需求、自定义字段等变量. */
+        /* Assign the variables about product, branches, story and custom fields. */
+        $this->testcaseZen->assignForBatchCreate($productID, $branch, $moduleID, $storyID);
 
-        /* Set custom. */
-        $product = $this->product->getById($productID);
-        foreach(explode(',', $this->config->testcase->customBatchCreateFields) as $field)
-        {
-            if($product->type != 'normal') $customFields[$product->type] = $this->lang->product->branchName[$product->type];
-            $customFields[$field] = $this->lang->testcase->$field;
-        }
-
-        if($product->type != 'normal')
-        {
-            $this->config->testcase->custom->batchCreateFields = sprintf($this->config->testcase->custom->batchCreateFields, $product->type);
-        }
-        else
-        {
-            $this->config->testcase->custom->batchCreateFields = trim(sprintf($this->config->testcase->custom->batchCreateFields, ''), ',');
-        }
-
-        $showFields = $this->config->testcase->custom->batchCreateFields;
-        if($product->type == 'normal')
-        {
-            $showFields = str_replace(array(0 => ",branch,", 1 => ",platform,"), '', ",$showFields,");
-            $showFields = trim($showFields, ',');
-        }
-
-        if($this->app->tab == 'project' and $product->type != 'normal')
-        {
-            $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
-
-            $productBranches = $this->loadModel('execution')->getBranchByProduct($productID, $this->session->project, 'noclosed|withMain');
-            $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
-            $branch          = key($branches);
-        }
-        else
-        {
-            $branches = $this->loadModel('branch')->getPairs($productID, 'active');
-        }
-
-        /* Set module option menu. */
-        $moduleOptionMenu = $this->tree->getOptionMenu($productID, 'case', 0, $branch === 'all' ? 0 : $branch);
-        $sceneOptionMenu  = $this->testcase->getSceneMenu($productID, $moduleID, $viewType = 'case', $startSceneID = 0, ($branch === 'all' or !isset($branches[$branch])) ? 0 : $branch);
-
-        $this->view->customFields = $customFields;
-        $this->view->showFields   = $showFields;
-
+        /* 展示变量. */
+        /* Show the variables. */
         $this->view->title            = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->batchCreate;
-        $this->view->product          = $product;
         $this->view->productID        = $productID;
-        $this->view->story            = $story;
-        $this->view->storyPairs       = $storyPairs;
         $this->view->productName      = $this->products[$productID];
-        $this->view->moduleOptionMenu = $moduleOptionMenu;
-        $this->view->currentModuleID  = $currentModuleID;
-        $this->view->sceneOptionMenu  = $sceneOptionMenu;
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, 'case', 0, $branch === 'all' ? 0 : $branch);
         $this->view->currentSceneID   = 0;
         $this->view->branch           = $branch;
-        $this->view->branches         = $branches;
         $this->view->needReview       = $this->testcase->forceNotReview() == true ? 0 : 1;
-
         $this->display();
     }
 

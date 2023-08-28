@@ -755,6 +755,67 @@ class testcaseZen extends testcase
     }
 
     /**
+     * 指定批量创建用例的相关变量。
+     * Assign for batch creating case.
+     *
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  int       $moduleID
+     * @param  int       $storyID
+     * @access protected
+     * @return void
+     */
+    protected function assignForBatchCreate(int $productID, string $branch = '', int $moduleID = 0, int $storyID = 0)
+    {
+        $product = $this->product->getById($productID);
+
+        /* 设置分支。 */
+        /* Set branches. */
+        if($this->app->tab == 'project' and $product->type != 'normal')
+        {
+            $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+
+            $productBranches = $this->loadModel('execution')->getBranchByProduct($productID, $this->session->project, 'noclosed|withMain');
+            $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
+            $branch          = key($branches);
+        }
+        else
+        {
+            $branches = $this->loadModel('branch')->getPairs($productID, 'active');
+        }
+
+        /* 设置自定义字段和展示字段。 */
+        /* Set custom fields and show fields. */
+        foreach(explode(',', $this->config->testcase->customBatchCreateFields) as $field)
+        {
+            if($product->type != 'normal') $customFields[$product->type] = $this->lang->product->branchName[$product->type];
+            $customFields[$field] = $this->lang->testcase->$field;
+        }
+        $showFields = sprintf($this->config->testcase->custom->batchCreateFields, $product->type);
+        if($product->type == 'normal')
+        {
+            $showFields = str_replace(array(",branch,", ",platform,"), '', ",$showFields,");
+            $showFields = trim($showFields, ',');
+        }
+
+        /* 设置需求键对。 */
+        /* Set story pairs. */
+        $story       = $storyID ? $this->story->getByID($storyID) : '';
+        $storyPairs  = $this->loadModel('story')->getProductStoryPairs($productID, $branch === 'all' ? 0 : $branch);
+        $storyPairs += $storyID ? array($storyID => $story->id . ':' . $story->title) : array();
+        if($storyID && empty($moduleID)) $moduleID = $story->module;
+
+        $this->view->product         = $product;
+        $this->view->branches        = $branches;
+        $this->view->customFields    = $customFields;
+        $this->view->showFields      = $showFields;
+        $this->view->story           = $story;
+        $this->view->storyPairs      = $storyPairs;
+        $this->view->sceneOptionMenu = $this->testcase->getSceneMenu($productID, $moduleID, 'case', 0, $branch === 'all' || !isset($branches[$branch]) ? 0 : $branch);
+        $this->view->currentModuleID = $moduleID;
+    }
+
+    /**
      * 构建创建 testcase 页面数据。
      * Build form fields for creating testcase.
      *
@@ -774,6 +835,44 @@ class testcaseZen extends testcase
             ->setIF($this->app->tab == 'execution', 'execution', $this->session->execution)
             ->setIF($this->post->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->get();
+    }
+
+    /**
+     * 构建批量创建用例的数据。
+     * Build cases for bathc creating.
+     *
+     * @param  int       $productID
+     * @access protected
+     * @return array
+     */
+    protected function buildCasesForBathcCreate(int $productID): array
+    {
+        $now            = helper::now();
+        $account        = $this->app->user->account;
+        $forceNotReview = $this->testcase->forceNotReview();
+        $storyVersions  = array();
+        $testcases      = form::batchData($this->config->testcase->form->batchCreate)->get();
+        foreach($testcases as $testcase)
+        {
+            $testcase->product = $productID;
+            if($this->app->tab == 'project') $testcase->project = $this->session->project;
+            $testcase->openedBy     = $account;
+            $testcase->openedDate   = $now;
+            $testcase->status       = $forceNotReview || $testcase->review == 0 ? 'normal' : 'wait';
+            $testcase->version      = 1;
+            $testcase->storyVersion = isset($storyVersions[$testcase->story]) ? $storyVersions[$testcase->story] : 0;
+            $testcase->steps        = array();
+            $testcase->expects      = array();
+            $testcase->stepType     = array();
+            if($testcase->story && !isset($storyVersions[$testcase->story]))
+            {
+                if(count($storyVersions) == 0) $this->loadModel('story');
+                $testcase->storyVersion = $this->story->getVersion($testcase->story);
+                $storyVersions[$testcase->story] = $testcase->storyVersion;
+            }
+            unset($testcase->review);
+        }
+        return $testcases;
     }
 
     /**
@@ -804,6 +903,44 @@ class testcaseZen extends testcase
             return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->duplicate, $this->lang->testcase->common), 'locate' => $this->createLink('testcase', 'view', "caseID={$result['duplicate']}")));
         }
         return true;
+    }
+
+    /**
+     * 批量创建测试用例前检验数据是否正确。
+     * Check testcases for batch creating.
+     *
+     * @param  array     $testcases
+     * @param  int       $productID
+     * @access protected
+     * @return array
+     */
+    protected function checkTestcasesForBatchCreate(array $testcases, int $productID): array
+    {
+        $this->loadModel('common');
+        foreach($testcases as $i => $testcase)
+        {
+            /* 检查重复项。 */
+            /* Check duplicate. */
+            $result = $this->common->removeDuplicate('testcase', $testcase, "product={$productID}");
+            if(zget($result, 'stop', false) !== false)
+            {
+                unset($testcases[$i]);
+                continue;
+            }
+
+            /* 检验必填项。 */
+            /* Check reuqired. */
+            foreach(explode(',', $this->config->testcase->create->requiredFields) as $field)
+            {
+                $field = trim($field);
+                if($field && empty($testcases[$i]->{$field}))
+                {
+                    $fieldName = $this->config->testcase->form->batchCreate[$field]['type'] != 'array' ? "{$field}[{$i}]" : "{$field}[{$i}][]";
+                    dao::$errors[$fieldName][] = sprintf($this->lang->error->notempty, $this->lang->testcase->{$field});
+                }
+            }
+        }
+        return $testcases;
     }
 
     /**
@@ -1035,7 +1172,7 @@ class testcaseZen extends testcase
      *
      * @param  int       $caseID
      * @access protected
-     * @return void
+     * @return array
      */
     protected function responseAfterCreate(int $caseID): array
     {
@@ -1051,6 +1188,30 @@ class testcaseZen extends testcase
         $useSession = ($this->app->tab != 'qa' and $this->session->caseList and strpos($this->session->caseList, 'dynamic') === false);
         $locateLink = $this->app->tab == 'project' ? $this->createLink('project', 'testcase', "projectID={$this->session->project}") : $this->createLink('testcase', 'browse', "productID={$this->post->product}&branch={$this->post->branch}");
         return $this->send(array('result' => 'success', 'message' => $message, 'load' => $useSession ? $this->session->caseList : $locateLink));
+    }
+    /**
+     * 返回批量创建 testcase 的结果。
+     * Respond after batch creating testcase.
+     *
+     * @param  int        $productID
+     * @param  string|int $branch
+     * @access protected
+     * @return void
+     */
+    protected function responseAfterBatchCreate(int $productID, string|int $branch): array
+    {
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        if(helper::isAjaxRequest('modal')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
+
+        if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $caseIdList));
+
+        helper::setcookie('caseModule', '0');
+
+        $currentModule = $this->app->tab == 'project' ? 'project'  : 'testcase';
+        $currentMethod = $this->app->tab == 'project' ? 'testcase' : 'browse';
+        $projectParam  = $this->app->tab == 'project' ? "projectID={$this->session->project}&" : '';
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink($currentModule, $currentMethod, "{$projectParam}productID={$productID}&branch={$branch}&browseType=all&param=0&caseType=&orderBy=id_desc")));
     }
 }
 
