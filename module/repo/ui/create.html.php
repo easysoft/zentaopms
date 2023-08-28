@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+if($this->app->tab != 'devops') dropmenu(set::module('repo'), set::tab('repo'));
+
 jsVar('pathGitTip', $lang->repo->example->path->git);
 jsVar('pathSvnTip', $lang->repo->example->path->svn);
 jsVar('clientGitTip', $lang->repo->example->client->git);
@@ -24,14 +26,18 @@ formPanel
     on::change('#serviceProject', 'onProjectChange'),
     set::title($lang->repo->createAction),
     set::back('repo-maintain'),
-    formGroup
+    formRow
     (
-        set::name("product[]"),
-        set::label($lang->story->product),
-        set::required(true),
-        set::control(array("type" => "picker","multiple" => true)),
-        set::items($products),
-        set::value(empty($objectID) ? '' : array_keys($products))
+        $this->app->tab != 'devops' ? setClass('hidden') : null,
+        formGroup
+        (
+            set::name("product[]"),
+            set::label($lang->story->product),
+            set::required(true),
+            set::control(array("type" => "picker","multiple" => true)),
+            set::items($products),
+            set::value(empty($objectID) ? '' : array_keys($products))
+        ),
     ),
     formGroup
     (

@@ -86,6 +86,8 @@ featureBar(
 $refreshLink   = $this->createLink('repo', 'browse', "repoID=$repoID&branchID=" . $base64BranchID . "&objectID=$objectID&path=" . $this->repo->encodePath($path) . "&revision=$revision&refresh=1");
 $refreshItem   = array('text' => $lang->refresh, 'url' => $refreshLink, 'class' => 'primary', 'icon' => 'refresh');
 
+$createItem = array('text' => $lang->repo->createAction, 'url' => createLink('repo', 'create', "objectID={$objectID}"));
+
 $tableData = initTableData($infos, $config->repo->repoDtable->fieldList, $this->repo);
 
 $downloadWg = div
@@ -208,7 +210,16 @@ toolbar
         (
             array($downloadWg)
         ),
-    )
+    ),
+    hasPriv('repo', 'create') && $this->app->tab == 'project' ? item
+    (
+        set($createItem + array
+        (
+            'icon'  => 'plus',
+            'class' => 'btn primary',
+        )),
+        set('data-app', $this->app->tab),
+    ) : null,
 );
 
 dtable
