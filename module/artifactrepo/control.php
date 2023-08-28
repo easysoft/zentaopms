@@ -115,6 +115,9 @@ class artifactrepo extends control
     {
         if($confirm == 'yes')
         {
+            $linkBuild = $this->dao->select('*')->from(TABLE_BUILD)->where('artifactRepoID')->eq($artifactRepoID)->fetch();
+            if($linkBuild) return $this->send(array('result' => 'fail', 'message' => $this->lang->artifactrepo->deleteError));
+
             $this->artifactrepo->delete(TABLE_ARTIFACTREPO, $artifactRepoID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
