@@ -35,7 +35,7 @@
 #monacoTabs .tab-nav-item .icon {line-height: inherit;}
 #monacoTabs {overflow: hidden; position: relative; height: 100%;}
 #monacoTabs > .nav-tabs {position: absolute; display: flex; padding-right: 20px;}
-#fileTabs .arrow-left, #fileTabs .arrow-right {line-height: 26px; padding: 6px; width: 26px; background: #efefef; cursor: pointer;}
+#fileTabs .arrow-left, #fileTabs .arrow-right {line-height: 27px; padding: 6px; width: 26px; background: #efefef; cursor: pointer;}
 #fileTabs .arrow-right {right: 40px; cursor: pointer;}
 #monacoTabs ul {min-width: 100%; padding-left: 25px; z-index: 1;}
 #monacoTabs .tab-content {margin-top: 40px;}

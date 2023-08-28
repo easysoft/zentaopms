@@ -1,6 +1,7 @@
 #serverroomCreateForm .form-row {width: 600px;}
 
-#mainNavbar .nav {justify-content: left;}
+#mainNavbar>.container {padding-top: 8px}
+#mainNavbar .nav {justify-content: left; position: relative; left: -12px; top: -4px;}
 #mainNavbar {background: none;}
 #mainNavbar .nav-item>a {padding-right: 0.5rem}
 #mainNavbar .nav-item>.active {color: unset; font-weight: 700;}

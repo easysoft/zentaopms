@@ -55,7 +55,7 @@ detailHeader(
 );
 div
 (
-    setClass('flex flex-normal gap-x-5'),
+    setClass('flex flex-normal gap-x-5 justify-center'),
     div
     (
         setClass('basis-2/3'),
