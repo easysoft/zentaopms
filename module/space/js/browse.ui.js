@@ -20,7 +20,7 @@ window.renderInstanceList = function (result, {col, row, value})
     {
         if(row.data.type == 'external')
         {
-            if(row.data.appName == 'Gitea' || row.data.appName == 'GitLab' || row.data.appName == 'Gogs') result[0] = {html: '<a href="' + $.createLink(row.data.appName, 'view', 'id=' + row.data.externalID) + '" data-toggle="modal">' + result[0] + '</a>'};
+            result[0] = {html: '<a href="' + $.createLink('instance', 'view', 'id=' + row.data.externalID + '&type=external') + '">' + result[0] + '</a>'};
         }
         else
         {

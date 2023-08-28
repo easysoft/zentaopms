@@ -15,7 +15,6 @@ namespace zin;
 
 jsVar('instanceID', $instance->id);
 
-$setting    = usePager('pager');
 $cpuInfo    = $this->instance->printCpuUsage($instance, $instanceMetric->cpu, 'array');
 $memoryInfo = $this->instance->printMemUsage($instance, $instanceMetric->memory, 'array');
 $actions    = $this->loadModel('common')->buildOperateMenu($instance);
@@ -73,16 +72,16 @@ div
                         div
                         (
                             setClass('flex basis-full'),
-                            img(set::src($instance->logo), setStyle(array('width' => '50px', 'height' => '50px'))),
+                            $type === 'store' ? img(set::src($instance->logo), setStyle(array('width' => '50px', 'height' => '50px'))) : null,
                             div
                             (
                                 setClass('ml-3 flex col gap-y-1 basis-full'),
                                 div
                                 (
                                     $instance->name, setClass('text-xl'),
-                                    span($cloudApp->app_version, setClass('ml-3 label lighter rounded-full'))
+                                    $type === 'store' ? span($cloudApp->app_version, setClass('ml-3 label lighter rounded-full')) : null
                                 ),
-                                div
+                                $type === 'store' ? div
                                 (
                                     setClass('flex progress-container'),
                                     set::title($cpuInfo['tip']),
@@ -120,10 +119,10 @@ div
                                             setStyle('width', $memoryInfo['rate'])
                                         )
                                     )
-                                ),
+                                ) : null,
                             ),
                         ),
-                        btn
+                        $type !== 'store' ? null : btn
                         (
                             $lang->instance->setting,
                             setClass('btn ghost'),
@@ -144,18 +143,19 @@ div
                         setClass('table w-auto max-w-full bordered mt-4'),
                         h::tr
                         (
-                            h::th($lang->instance->status),
+                            $type !== 'store' ? null : h::th($lang->instance->status),
                             h::th($lang->instance->source),
                             // h::th($lang->instance->appTemplate),
                             h::th($lang->instance->installBy),
                             h::th($lang->instance->installAt),
-                            h::th($lang->instance->runDuration),
+                            $type !== 'store' ? null : h::th($lang->instance->runDuration),
                             $defaultAccount ? h::th($lang->instance->defaultAccount) : null,
                             $defaultAccount ? h::th($lang->instance->defaultPassword) : null,
+                            $type === 'store' ? null : h::th($lang->instance->browseProject),
                         ),
                         h::tr
                         (
-                            h::td
+                            $type !== 'store' ? null : h::td
                             (
                                 setID('statusTD'),
                                 setData('reload', in_array($instance->status, array('creating', 'initializing', 'pulling', 'startup', 'starting', 'suspending', 'installing', 'uninstalling', 'stopping', 'destroying', 'upgrading'))),
@@ -169,9 +169,18 @@ div
                             // h::td(a(set::href($this->createLink('store', 'appView', "id=$instance->appID")), $instance->appName)),
                             h::td(zget($users, $instance->createdBy, '')),
                             h::td(substr($instance->createdAt, 0, 16)),
-                            h::td(common::printDuration($instance->runDuration)),
+                            $type !== 'store' ? null : h::td(common::printDuration($instance->runDuration)),
                             $defaultAccount ? h::td($defaultAccount->username) : null,
                             $defaultAccount ? h::td($defaultAccount->password) : null,
+                            $type === 'store' ? null : h::td
+                            (
+                                btn
+                                (
+                                    $lang->instance->management,
+                                    setClass('btn text-primary ghost'),
+                                    set::url(createLink($instance->type, 'browseProject', "{$instance->type}ID={$instance->id}"))
+                                )
+                            ),
                         )
                     )
                 ),
@@ -208,7 +217,7 @@ div
         setClass('basis-auto'),
         history
         (
-            set::commentUrl(createLink('action', 'comment', array('objectType' => 'instance', 'objectID' => $instance->id))),
+            set::commentUrl(createLink('action', 'comment', array('objectType' => $type === 'store' ? 'instance' : $instance->type, 'objectID' => $instance->id))),
         )
     )
 );

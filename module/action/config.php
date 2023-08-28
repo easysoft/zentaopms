@@ -100,4 +100,4 @@ $config->trash->search['params']['objectID']   = array('operator' => 'include', 
 $config->trash->search['params']['actor']      = array('operator' => '=', 'control' => 'select',  'values' => 'users');
 $config->trash->search['params']['date']       = array('operator' => '=', 'control' => 'input',  'values' => '', 'class' => 'date');
 
-$config->action->newPageModule = array('repo', 'mr', 'host', 'account', 'serverroom', 'instance', 'store', 'space', 'host');
+$config->action->newPageModule = array('repo', 'mr', 'host', 'account', 'serverroom', 'instance', 'store', 'space', 'deploy', 'domain', 'service', 'gitlab', 'gitea', 'gogs', 'sonarqube', 'jenkins');

@@ -40,6 +40,7 @@ $lang->instance->editName         = 'Modify Name';
 $lang->instance->cpuCore          = 'Core';
 $lang->instance->scaleble         = 'Application level expansion';
 $lang->instance->change           = 'Modify';
+$lang->instance->browseProject    = "Project List";
 
 $lang->instance->systemLDAPInactive = 'System LDAP not enabled';
 $lang->instance->toSystemLDAP       = 'Deactivate';
@@ -194,6 +195,7 @@ $lang->instance->actionList['deleteexpiredbackup']     = 'The system has deleted
 $lang->instance->sourceList = array();
 $lang->instance->sourceList['cloud'] = 'Chancheng Public Market';
 $lang->instance->sourceList['local'] = 'Local Market';
+$lang->instance->sourceList['user']  = 'User';
 
 $lang->instance->channelList = array();
 $lang->instance->channelList['test']   = 'Test version';

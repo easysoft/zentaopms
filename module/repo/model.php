@@ -2639,7 +2639,7 @@ class repoModel extends model
                 {
                     $id++;
 
-                    $id = base64_encode(urlencode($parent));
+                    $id = $this->encodePath($parent);
                     $files[$parent] = array(
                         'id'     => str_replace('=', '-', $id),
                         'parent' => $parentID,

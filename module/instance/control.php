@@ -37,7 +37,53 @@ class instance extends control
      * @access public
      * @return void
      */
-    public function view($id, $recTotal = 0, $recPerPage = 20, $pageID = 1, $tab ='baseinfo' )
+    public function view($id, $type = 'store', $tab ='baseinfo' )
+    {
+        if($type === 'store')
+        {
+            $this->storeView($id, $tab);
+        }
+        else
+        {
+            $instance = $this->loadModel('gitea')->getByID($id);
+            $instance->status      = '';
+            $instance->source      = 'user';
+            $instance->runDuration = 0;
+            $instance->createdAt   = $instance->createdDate;
+
+            $this->view->title           = $instance->name;
+            $this->view->instance        = $instance;
+            $this->view->cloudApp        = array();
+            $this->view->seniorAppList   = array();
+            $this->view->actions         = $this->loadModel('action')->getList($instance->type, $id);
+            $this->view->defaultAccount  = '';
+            $this->view->instanceMetric  = '';
+            $this->view->currentResource = '';
+            $this->view->customItems     = array();
+            $this->view->backupList      = array();
+            $this->view->hasRestoreLog   =  false;
+            $this->view->latestBackup    = array();
+            $this->view->dbList          = array();
+            $this->view->domain          = '';
+        }
+        
+        $this->view->users = $this->loadModel('user')->getPairs('noletter');
+        $this->view->tab   = $tab;
+        $this->view->type  = $type;
+        $this->display();
+    }
+
+    /**
+     * Show instance view.
+     *
+     * @param  int $id
+     * @param  int $recTotal
+     * @param  int $recPerPage
+     * @param  int $page
+     * @access public
+     * @return void
+     */
+    protected function storeView($id, $tab ='baseinfo' )
     {
         $this->loadModel('system');
         $this->app->loadLang('system');
@@ -52,9 +98,6 @@ class instance extends control
         $instanceMetric = $this->cne->instancesMetrics(array($instance));
         $instanceMetric = $instanceMetric[$instance->id];
         $this->lang->switcherMenu = $this->instance->getSwitcher($instance);
-
-        $this->app->loadClass('pager', true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $backupList   = array();
         $latestBackup = new stdclass;
@@ -88,7 +131,6 @@ class instance extends control
         $this->view->cloudApp        = $this->loadModel('store')->getAppInfoByChart($instance->chart, $instance->channel, false);
         $this->view->seniorAppList   = $tab == 'baseinfo' ? $this->instance->seniorAppList($instance, $instance->channel) :  array();
         $this->view->actions         = $this->loadModel('action')->getList('instance', $id);
-        $this->view->users           = $this->loadModel('user')->getPairs('noletter');
         $this->view->defaultAccount  = $this->cne->getDefaultAccount($instance);
         $this->view->instanceMetric  = $instanceMetric;
         $this->view->currentResource = $currentResource;
@@ -99,9 +141,6 @@ class instance extends control
         $this->view->dbList          = $dbList;
         $this->view->domain          = $this->cne->getDomain($instance);
         $this->view->tab             = $tab;
-        $this->view->pager           = $pager;
-
-        $this->display();
     }
 
     /**

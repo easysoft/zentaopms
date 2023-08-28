@@ -40,6 +40,7 @@ $lang->instance->editName         = '修改名称';
 $lang->instance->cpuCore          = '核';
 $lang->instance->scalable         = '应用水平扩容';
 $lang->instance->change           = '修改';
+$lang->instance->browseProject    = "项目列表";
 
 $lang->instance->systemLDAPInactive = '未开启系统LDAP';
 $lang->instance->toSystemLDAP       = '去启用';
@@ -195,6 +196,7 @@ $lang->instance->actionList['deleteexpiredbackup']     = '系统删除了过期�
 $lang->instance->sourceList = array();
 $lang->instance->sourceList['cloud'] = '渠成公共市场';
 $lang->instance->sourceList['local'] = '本地市场';
+$lang->instance->sourceList['user']  = '手工配置';
 
 $lang->instance->channelList = array();
 $lang->instance->channelList['test']   = '测试版';
