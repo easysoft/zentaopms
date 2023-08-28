@@ -69,8 +69,8 @@ $lang->metric->scopeList = array();
 $lang->metric->scopeList['global']    = "全局";
 $lang->metric->scopeList['program']   = "项目集";
 $lang->metric->scopeList['project']   = "项目";
-$lang->metric->scopeList['execution'] = "执行";
 $lang->metric->scopeList['product']   = "产品";
+$lang->metric->scopeList['execution'] = "执行";
 $lang->metric->scopeList['user']      = "个人";
 $lang->metric->scopeList['dept']      = "团队";
 

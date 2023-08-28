@@ -54,8 +54,8 @@ $lang->metric->scopeList = array();
 $lang->metric->scopeList['global']    = "Global";
 $lang->metric->scopeList['program']   = "Program";
 $lang->metric->scopeList['project']   = "Project";
-$lang->metric->scopeList['execution'] = "Execution";
 $lang->metric->scopeList['product']   = "Product";
+$lang->metric->scopeList['execution'] = "Execution";
 $lang->metric->scopeList['user']      = "User";
 $lang->metric->scopeList['dept']      = "Team";
 
