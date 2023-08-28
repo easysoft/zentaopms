@@ -4383,16 +4383,16 @@ class executionModel extends model
      * 获取日期列表数据。
      * Get date list data.
      *
-     * @param  string $begin
-     * @param  string $end
-     * @param  string $type noweekend|withweekend
-     * @param  int    $interval
-     * @param  string $format
-     * @param  string $executionDeadline
+     * @param  string     $begin
+     * @param  string     $end
+     * @param  string     $type noweekend|withweekend
+     * @param  int|string $interval
+     * @param  string     $format
+     * @param  string     $executionDeadline
      * @access public
      * @return array
      */
-    public function getDateList(string $begin, string $end, string $type, int $interval = 0, string $format = 'm/d/Y', string $executionDeadline = ''): array
+    public function getDateList(string $begin, string $end, string $type, int|string $interval = 0, string $format = 'm/d/Y', string $executionDeadline = ''): array
     {
         $this->app->loadClass('date', true);
         $dateList = date::getDateList($begin, $end, $format, $type, $this->config->execution->weekend);

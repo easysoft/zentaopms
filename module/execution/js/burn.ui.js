@@ -11,13 +11,13 @@ window.randTipInfo = function(rowDatas)
 
 $(document).on('change', '#burnBy', function()
 {
-    $.cookie.set('burnBy', $(this).val(), {expires:config.cookieLife, path:config.webRoot});
+    $.cookie.set('burnBy', $('input[name=burnBy]').val(), {expires:config.cookieLife, path:config.webRoot});
 
-    let interval = typeof($('#interval').val()) == 'undefined' ? 0 : $('#interval').val() ;
-    loadPage($.createLink('execution', 'burn', 'executionID=' + executionID + '&type=' + type + '&interval=' + interval + '&burnBy=' + $(this).val()));
+    let interval = typeof($('input[name=interval]').val()) == 'undefined' ? 0 : $('input[name=interval]').val() ;
+    loadPage($.createLink('execution', 'burn', 'executionID=' + executionID + '&type=' + type + '&interval=' + interval + '&burnBy=' + $('input[name=burnBy]').val()));
 });
 
-$(document).on('change', '#interval', function()
+$(document).off('change', '#interval').on('change', '#interval', function()
 {
-    loadPage($.createLink('execution', 'burn', 'executionID=' + executionID + '&type=' + type + '&interval=' + $(this).val()));
+    loadPage($.createLink('execution', 'burn', 'executionID=' + executionID + '&type=' + type + '&interval=' + $('input[name=interval]').val()));
 });

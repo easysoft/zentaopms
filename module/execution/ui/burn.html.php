@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('workHour', $lang->execution->workHour);
-jsVar('type', $type);
+jsVar('+type', str_replace(',', '%2C', $type));
 jsVar('executionID', $executionID);
 
 $weekend      = strpos($type, 'noweekend') !== false ? 'withweekend' : 'noweekend';
@@ -79,6 +79,7 @@ featureBar
         set::class('burnByBox'),
         picker
         (
+            set::id('burnBy'),
             set::name('burnBy'),
             set::items($lang->execution->burnByList),
             set::value($burnBy),
@@ -90,6 +91,7 @@ featureBar
         set::class('intervalBox ml-4'),
         picker
         (
+            set::id('interval'),
             set::name('interval'),
             set::items($dayList),
             set::value($interval),
