@@ -244,7 +244,7 @@ function printSteps()
             $desc .= genRowStep($part, $delimiter, $expectList[$index], $isGroup);
         }
 
-        $desc .= "\n";
+        // $desc .= "\n";
     }
 
     echo trim($desc);

@@ -13,20 +13,21 @@ $config->repo->dtable->fieldList['name']['width'] = '0.2';
 $config->repo->dtable->fieldList['product']['name']     = 'productNames';
 $config->repo->dtable->fieldList['product']['title']    = $lang->repo->product;
 $config->repo->dtable->fieldList['product']['type']     = 'text';
-$config->repo->dtable->fieldList['product']['sortType'] = true;
+$config->repo->dtable->fieldList['product']['sortType'] = false;
 $config->repo->dtable->fieldList['product']['width']    = '136';
 
 $config->repo->dtable->fieldList['project']['name']     = 'projectNames';
 $config->repo->dtable->fieldList['project']['title']    = $lang->repo->projects;
 $config->repo->dtable->fieldList['project']['type']     = 'text';
-$config->repo->dtable->fieldList['project']['sortType'] = true;
+$config->repo->dtable->fieldList['project']['sortType'] = false;
 $config->repo->dtable->fieldList['project']['width']    = '136';
 
-$config->repo->dtable->fieldList['scm']['name']  = 'SCM';
-$config->repo->dtable->fieldList['scm']['title'] = $lang->repo->type;
-$config->repo->dtable->fieldList['scm']['type']  = 'scm';
-$config->repo->dtable->fieldList['scm']['map']   = $lang->repo->scmList;
-$config->repo->dtable->fieldList['scm']['group'] = 1;
+$config->repo->dtable->fieldList['scm']['name']     = 'SCM';
+$config->repo->dtable->fieldList['scm']['title']    = $lang->repo->type;
+$config->repo->dtable->fieldList['scm']['type']     = 'scm';
+$config->repo->dtable->fieldList['scm']['sortType'] = true;
+$config->repo->dtable->fieldList['scm']['map']      = $lang->repo->scmList;
+$config->repo->dtable->fieldList['scm']['group']    = 1;
 
 $config->repo->dtable->fieldList['path']['name']  = 'codePath';
 $config->repo->dtable->fieldList['path']['title'] = $lang->repo->path;
@@ -34,10 +35,11 @@ $config->repo->dtable->fieldList['path']['type']  = 'text';
 $config->repo->dtable->fieldList['path']['width'] = '260';
 $config->repo->dtable->fieldList['path']['group'] = 1;
 
-$config->repo->dtable->fieldList['lastSubmit']['name']  = 'lastSubmitTime';
-$config->repo->dtable->fieldList['lastSubmit']['title'] = $lang->repo->lastSubmitTime;
-$config->repo->dtable->fieldList['lastSubmit']['type']  = 'datetime';
-$config->repo->dtable->fieldList['lastSubmit']['width'] = '128';
+$config->repo->dtable->fieldList['lastSubmit']['name']     = 'lastSubmitTime';
+$config->repo->dtable->fieldList['lastSubmit']['title']    = $lang->repo->lastSubmitTime;
+$config->repo->dtable->fieldList['lastSubmit']['type']     = 'datetime';
+$config->repo->dtable->fieldList['lastSubmit']['sortType'] = false;
+$config->repo->dtable->fieldList['lastSubmit']['width']    = '128';
 
 $config->repo->dtable->fieldList['job']['name']  = 'job';
 $config->repo->dtable->fieldList['job']['hidden'] = true;
@@ -184,17 +186,42 @@ $config->repo->taskDtable->fieldList['id']['title']    = $lang->idAB;
 $config->repo->taskDtable->fieldList['id']['type']     = 'id';
 $config->repo->taskDtable->fieldList['id']['checkbox'] = true;
 
-$config->repo->taskDtable->fieldList['pri']        = $config->task->dtable->fieldList['pri'];
-$config->repo->taskDtable->fieldList['name']       = $config->task->dtable->fieldList['name'];
-$config->repo->taskDtable->fieldList['finishedBy'] = $config->task->dtable->fieldList['finishedBy'];
-$config->repo->taskDtable->fieldList['assignedTo'] = $config->task->dtable->fieldList['assignedTo'];
-$config->repo->taskDtable->fieldList['status']     = $config->task->dtable->fieldList['status'];
+$config->repo->taskDtable->fieldList['pri']['title']    = $lang->priAB;
+$config->repo->taskDtable->fieldList['pri']['type']     = 'pri';
+$config->repo->taskDtable->fieldList['pri']['sortType'] = true;
+$config->repo->taskDtable->fieldList['pri']['show']     = true;
+$config->repo->taskDtable->fieldList['pri']['group']    = 1;
+$config->repo->taskDtable->fieldList['pri']['fixed']    = 'left';
 
-$config->repo->taskDtable->fieldList['pri']['fixed']         = 'left';
+$config->repo->taskDtable->fieldList['name']['flex']         = 1;
 $config->repo->taskDtable->fieldList['name']['nestedToggle'] = false;
+$config->repo->taskDtable->fieldList['name']['sortType']     = true;
+$config->repo->taskDtable->fieldList['name']['required']     = true;
+$config->repo->taskDtable->fieldList['name']['fixed']        = 'left';
+$config->repo->taskDtable->fieldList['name']['type']         = 'nestedTitle';
 $config->repo->taskDtable->fieldList['name']['title']        = $lang->task->name;
 $config->repo->taskDtable->fieldList['name']['link']         = array('module' => 'task', 'method' => 'view', 'params' => 'taskID={id}', 'target' => '_blank');
-$config->repo->taskDtable->fieldList['assignedTo']['title']  = $lang->task->assignedTo;
+
+$config->repo->taskDtable->fieldList['finishedBy']['title']    = $lang->task->finishedByAB;
+$config->repo->taskDtable->fieldList['finishedBy']['type']     = 'user';
+$config->repo->taskDtable->fieldList['finishedBy']['sortType'] = true;
+$config->repo->taskDtable->fieldList['finishedBy']['show']     = true;
+$config->repo->taskDtable->fieldList['finishedBy']['group']    = 4;
+
+$config->repo->taskDtable->fieldList['assignedTo']['type']        = 'assign';
+$config->repo->taskDtable->fieldList['assignedTo']['sortType']    = true;
+$config->repo->taskDtable->fieldList['assignedTo']['show']        = true;
+$config->repo->taskDtable->fieldList['assignedTo']['group']       = 3;
+$config->repo->taskDtable->fieldList['assignedTo']['currentUser'] = $app->user->account;
+$config->repo->taskDtable->fieldList['assignedTo']['title']   = $lang->task->assignedTo;
+$config->repo->taskDtable->fieldList['assignedTo']['assignLink']  = array('module' => 'task', 'method' => 'assignTo', 'params' => 'executionID={execution}&taskID={id}');
+
+$config->repo->taskDtable->fieldList['status']['title']     = $lang->statusAB;
+$config->repo->taskDtable->fieldList['status']['type']      = 'status';
+$config->repo->taskDtable->fieldList['status']['statusMap'] = $lang->task->statusList;
+$config->repo->taskDtable->fieldList['status']['sortType']  = true;
+$config->repo->taskDtable->fieldList['status']['show']      = true;
+$config->repo->taskDtable->fieldList['status']['group']     = 1;
 
 $config->repo->reviewDtable = new stdclass();
 
@@ -212,8 +239,8 @@ $config->repo->reviewDtable->fieldList['revisionA']['name']  = 'revisionA';
 $config->repo->reviewDtable->fieldList['revisionA']['width'] = '100';
 
 $config->repo->reviewDtable->fieldList['type']['title'] = $lang->repo->type;
-$config->repo->reviewDtable->fieldList['type']['name']  = 'repoType';
-$config->repo->reviewDtable->fieldList['type']['map']   = $lang->repo->typeList;
+$config->repo->reviewDtable->fieldList['type']['name'] = 'repoType';
+$config->repo->reviewDtable->fieldList['type']['map']  = $lang->repo->typeList;
 
 $config->repo->reviewDtable->fieldList['status']['map'] = $lang->bug->statusList;
 

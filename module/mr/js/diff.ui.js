@@ -211,7 +211,9 @@ window.afterPageUpdate = function()
         
         /* Select default tree item. */
         const currentElement = findItemInTreeItems(tree, fileAsId, 0);
-        if(currentElement != undefined) $('#' + currentElement.id).parent().addClass('selected');
+        setTimeout(() => {
+            if(currentElement != undefined) $('#' + currentElement.id).parent().addClass('selected');
+        }, 200);
         expandTree();
 
         $('.btn-left').on('click', function()  {arrowTabs('monacoTabs', 1);});

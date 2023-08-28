@@ -7,13 +7,11 @@
 #fileTabs > .nav-tabs {position: absolute; display: flex; padding-left: 25px;}
 #fileTabs .monaco-close{margin-right: 18px;}
 #fileTabs .nav-tabs > li > a > span{margin-left: 18px;font-weight: 700;color: #313c52!important;}
-#related .btn-right, #related .btn-left {padding-top: 9px;}
 #log .action-btn {margin-top: -7px;}
 .repoCode .btn.btn-right, .repoCode .btn.btn-left {margin-right: 0; padding: 6px 6px;}
-#related .btn-right, #related .btn-left {padding-top: 9px;}
 .btn-left, .btn-right {display: none;}
 #linkObject{display: none;}
-#related .btn-right, #related .btn-left {padding-top: 9px;}
+#related .btn-right, #related .btn-left {padding-top: 6px;}
 #monacoTree .tree-item-content span {cursor: pointer;}
 .directory {background-image:url('theme/default/images/repo/dir.png');}
 .file {background-image:url('theme/default/images/repo/txt.png');}
@@ -38,7 +36,7 @@
 #monacoTabs .tab-nav-item .icon {line-height: inherit;}
 #monacoTabs {overflow: hidden; padding-bottom: 10px; position: relative; height: 100%;}
 #monacoTabs > .nav-tabs {position: absolute; display: flex; padding-right: 20px;}
-#fileTabs .arrow-left, #fileTabs .arrow-right {line-height: 28px; padding: 6px; width: 26px; background: #efefef; cursor: pointer;}
+#fileTabs .arrow-left, #fileTabs .arrow-right {line-height: 27px; padding: 6px; width: 26px; background: #efefef; cursor: pointer;}
 #fileTabs .arrow-right {right: 40px; cursor: pointer;}
 #monacoTabs ul {min-width: 100%; padding-left: 25px; z-index: 1;}
 #monacoTabs .tab-content {margin-top: 40px;}
