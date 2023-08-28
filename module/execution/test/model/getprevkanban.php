@@ -27,11 +27,8 @@ $task->gen(10);
 /**
 
 title=测试executionModel->getPrevKanban();
+timeout=0
 cid=1
-pid=1
-
-查询执行4数据 >> empty
-保存数据后查询执行4数据 >> task1
 
 */
 

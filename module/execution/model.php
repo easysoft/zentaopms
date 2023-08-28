@@ -4676,13 +4676,14 @@ class executionModel extends model
     }
 
     /**
-     * Get Prev Kanban.
+     * 获取上一个看板的数据。
+     * Get the data from the previous Kanban.
      *
-     * @param  int    $executionID
+     * @param  int        $executionID
      * @access public
-     * @return array
+     * @return array|null
      */
-    public function getPrevKanban($executionID)
+    public function getPrevKanban(int $executionID): array|null
     {
         $prevKanbans = $this->loadModel('setting')->getItem("owner=null&module=execution&section=kanban&key=execution$executionID");
         return json_decode($prevKanbans, true);
