@@ -25,7 +25,7 @@
   ?>
     <?php
       js::set('injectData', $injectData);
-      unset($_SESSION['aiInjectData'][$module][$method]);
+      unset($_SESSION['aiInjectData'][$module]);
       $this->app->loadLang('ai');
     ?>
     <script>
@@ -218,7 +218,7 @@
             aTag.style.display = 'none';
             document.body.appendChild(aTag);
             aTag.click();
-            
+
             if($.appCode !== 'admin') $.apps.close($.appCode);
           });
         }

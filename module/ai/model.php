@@ -1110,6 +1110,9 @@ class aiModel extends model
         }
         $linkVars = vsprintf($varsConfig->format, $vars);
 
+        /* Override method for story drafts. */
+        if($module == 'story' && $method == 'change' && !empty($object->story) && $object->story->status == 'draft') $method = 'edit';
+
         return array(helper::createLink($module, $method, $linkVars) . (empty($varsConfig->app) ? '' : "#app=$varsConfig->app"), false);
     }
 
@@ -1500,6 +1503,9 @@ class aiModel extends model
 
         $targetForm = $this->config->ai->targetForm[$form[0]][$form[1]];
         if(empty($targetForm)) return;
+
+        /* Override method for story drafts. */
+        if($targetForm->m == 'story' && $targetForm->f == 'change') $_SESSION['aiInjectData']['story']['edit'] = is_string($data) ? $data : json_encode($data);
 
         $_SESSION['aiInjectData'][$targetForm->m][$targetForm->f] = is_string($data) ? $data : json_encode($data);
     }
