@@ -2,6 +2,9 @@
 declare(strict_types=1);
 global $lang, $app;
 
+$account = isset($app->user->account) ? $app->user->account : '';
+$now     = helper::now();
+
 $config->testcase->form = new stdclass();
 
 $config->testcase->form->create = array();
@@ -22,8 +25,8 @@ $config->testcase->form->create['stepType']       = array('required' => false, '
 $config->testcase->form->create['keywords']       = array('required' => false, 'type' => 'string', 'default' => '');
 $config->testcase->form->create['status']         = array('required' => false, 'type' => 'string', 'default' => 'wait');
 $config->testcase->form->create['version']        = array('required' => false, 'type' => 'int',    'default' => 1);
-$config->testcase->form->create['openedBy']       = array('required' => false, 'type' => 'string', 'default' => isset($app->user->account) ? $app->user->account : '');
-$config->testcase->form->create['openedDate']     = array('required' => false, 'type' => 'date',   'default' => helper::now());
+$config->testcase->form->create['openedBy']       = array('required' => false, 'type' => 'string', 'default' => $account);
+$config->testcase->form->create['openedDate']     = array('required' => false, 'type' => 'date',   'default' => $now);
 $config->testcase->form->create['auto']           = array('required' => false, 'type' => 'string', 'default' => 'no');
 $config->testcase->form->create['script']         = array('required' => false, 'type' => 'string', 'default' => '');
 
@@ -65,3 +68,12 @@ $config->testcase->form->edit['version']      = array('required' => false, 'type
 $config->testcase->form->edit['auto']         = array('required' => false, 'type' => 'string', 'default' => 'no');
 $config->testcase->form->edit['script']       = array('required' => false, 'type' => 'string', 'default' => '');
 $config->testcase->form->edit['comment']      = array('required' => false, 'type' => 'string', 'default' => '', 'control' => 'editor');
+
+$config->testcase->form->createScene = array();
+$config->testcase->form->createScene['product']    = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->testcase->form->createScene['branch']     = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->testcase->form->createScene['module']     = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->testcase->form->createScene['parent']     = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->testcase->form->createScene['title']      = array('required' => true,  'type' => 'string', 'filter' => 'trim');
+$config->testcase->form->createScene['openedBy']   = array('required' => false, 'type' => 'string', 'default' => $account);
+$config->testcase->form->createScene['openedDate'] = array('required' => false, 'type' => 'date',   'default' => $now);
