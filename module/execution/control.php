@@ -4095,7 +4095,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function treeStory($storyID, $version = 0)
+    public function treeStory(int $storyID, int $version = 0)
     {
         $story   = $this->loadModel('story')->getById($storyID, $version, true);
         $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name,id,type,shadow')->fetch();
@@ -4124,7 +4124,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function treeTask($taskID)
+    public function treeTask(int $taskID)
     {
         $this->loadModel('task');
         $task = $this->task->getById($taskID, true);
