@@ -1112,6 +1112,7 @@ class aiModel extends model
                     {
                         $relatedObj = explode(',', $relatedObj);
                         $relatedObj = array_filter($relatedObj);
+                        $relatedObj = current($relatedObj);
                     }
                     $var = $relatedObj;
                 }
