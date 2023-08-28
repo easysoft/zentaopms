@@ -2109,7 +2109,7 @@ class testcase extends control
         $items = array();
         foreach($optionMenu as $optionID => $optionName) $items[] = array('text' => $optionName, 'value' => $optionID);
 
-        echo json_encode($items);
+        return $this->send($items);
     }
 
     /**
