@@ -2798,31 +2798,31 @@ class execution extends control
     }
 
     /**
-     * Tree view.
-     * Product
+     * 用树状图的形式查看迭代/执行的视图。
+     * Show the view of the execution in a tree mode.
      *
      * @param  int    $executionID
      * @param  string $type
      * @access public
      * @return void
      */
-    public function tree($executionID, $type = 'task')
+    public function tree(int $executionID, string $type = 'task')
     {
         $this->execution->setMenu($executionID);
 
-        $execution = $this->loadModel('execution')->getById($executionID);
-        $project   = $this->loadModel('project')->getById($execution->project);
-        $tree      = $this->execution->getTree($executionID);
-
-        /* Save to session. */
+        /* Save this URI to session for locate it back. */
         $uri = $this->app->getURI(true);
-        $this->app->session->set('taskList', $uri, 'execution');
-        $this->app->session->set('storyList', $uri, 'execution');
+        $this->app->session->set('taskList',      $uri, 'execution');
+        $this->app->session->set('storyList',     $uri, 'execution');
         $this->app->session->set('executionList', $uri, 'execution');
-        $this->app->session->set('caseList', $uri, 'qa');
-        $this->app->session->set('bugList', $uri, 'qa');
+        $this->app->session->set('caseList',      $uri, 'qa');
+        $this->app->session->set('bugList',       $uri, 'qa');
 
+        $tree = $this->execution->getTree($executionID);
         if($type === 'json') return print(helper::jsonEncode4Parse($tree, JSON_HEX_QUOT | JSON_HEX_APOS));
+
+        $execution = $this->execution->getById($executionID);
+        $project   = $this->project->getById($execution->project);
         if($execution->lifetime == 'ops') unset($this->lang->execution->treeLevel['story']);
 
         $this->view->title       = $this->lang->execution->tree;
