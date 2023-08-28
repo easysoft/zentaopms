@@ -387,6 +387,7 @@ class product extends control
         $this->view->projectProducts = isset($projectProducts) ? $projectProducts : array();
         $this->view->storyType       = $storyType;
         $this->view->from            = $this->app->tab;
+        $this->view->isProjectStory  = $isProjectStory;
         $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'story', $showModule) : array();
         $this->view->project         = $project;
         $this->display();

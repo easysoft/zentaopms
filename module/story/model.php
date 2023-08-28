@@ -4606,7 +4606,7 @@ class storyModel extends model
 
                 $isClick = $this->isClickable($story, 'change');
                 $title   = $isClick ? '' : $this->lang->story->changeTip;
-                $menu   .= $this->buildMenu('story', 'change', $params . "&from=$story->from&storyType=$story->type", $story, $type, 'alter', '', 'showinonlybody', false, '', $title);
+                $menu   .= $this->buildMenu('story', 'change', $params . "&from=&storyType=$story->type", $story, $type, 'alter', '', 'showinonlybody', false, '', $title);
 
                 if($story->status != 'reviewing')
                 {
@@ -5399,7 +5399,7 @@ class storyModel extends model
      * @access public
      * @return string
      */
-    public function printAssignedHtml($story, $users)
+    public function printAssignedHtml($story, $users, $print = true)
     {
         $btnTextClass   = '';
         $btnClass       = '';
@@ -5418,8 +5418,10 @@ class storyModel extends model
         $btnClass    .= ' iframe btn btn-icon-left btn-sm';
         $assignToLink = helper::createLink('story', 'assignTo', "storyID=$story->id&kanbanGroup=default&from=&storyType=$story->type", '', true);
         $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span>{$assignedToText}</span>", '', "class='$btnClass'");
+        $assignToHtml = !common::hasPriv($story->type, 'assignTo', $story) ? "<span style='padding-left: 21px' class='$btnTextClass'>{$assignedToText}</span>" : $assignToHtml;
 
-        echo !common::hasPriv($story->type, 'assignTo', $story) ? "<span style='padding-left: 21px' class='$btnTextClass'>{$assignedToText}</span>" : $assignToHtml;
+        if(!$print) return $assignToHtml;
+        print($assignToHtml);
     }
 
     /**
@@ -6657,5 +6659,216 @@ class storyModel extends model
         if($status == 'active') $storyStatus = $status;
 
         return $storyStatus;
+    }
+
+    /**
+     * Build for datatable columns.
+     *
+     * @param  string $orderBy
+     * @param  string $storyType
+     * @access public
+     * @return array
+     */
+    public function generateCol($orderBy = '', $storyType = 'story')
+    {
+        $setting   = $this->loadModel('datatable')->getSetting('product');
+        $fieldList = $this->config->story->datatable->fieldList;
+
+        foreach($fieldList as $field => $items)
+        {
+            if(isset($items['title'])) continue;
+
+            $title    = $field == 'id' ? 'ID' : zget($this->lang->story, $field, zget($this->lang, $field, $field));
+            $fieldList[$field]['title'] = $title;
+        }
+
+        if(empty($setting))
+        {
+            $setting = $this->config->story->datatable->defaultField;
+            $order   = 1;
+            foreach($setting as $key => $value)
+            {
+                $set = new stdclass();;
+                $set->id    = $value;
+                $set->order = $order ++;
+                $set->show  = true;
+                $setting[$key] = $set;
+            }
+        }
+
+        $viewType    = $this->app->getViewType();
+        $shownFields = array();
+        foreach($setting as $key => $set)
+        {
+            if($storyType == 'requirement' and in_array($set->id, array('plan', 'stage', 'taskCount', 'bugCount', 'caseCount'))) $set->show = false;
+            if($viewType == 'xhtml' and !in_array($set->id, array('title', 'id', 'pri', 'status'))) $set->show = false;
+            if(empty($set->show)) continue;
+
+            $sortType = '';
+            if(!strpos($orderBy, ',') && strpos($orderBy, $set->id) !== false)
+            {
+                $sort = str_replace("{$set->id}_", '', $orderBy);
+                $sortType = $sort == 'asc' ? 'up' : 'down';
+            }
+
+            $set->name  = $set->id;
+            $set->title = $fieldList[$set->id]['title'];
+
+            if(isset($fieldList[$set->id]['checkbox']))     $set->checkbox     = $fieldList[$set->id]['checkbox'];
+            if(isset($fieldList[$set->id]['nestedToggle'])) $set->nestedToggle = $fieldList[$set->id]['nestedToggle'];
+            if(isset($fieldList[$set->id]['fixed']))        $set->fixed        = $fieldList[$set->id]['fixed'];
+            if(isset($fieldList[$set->id]['type']))         $set->type         = $fieldList[$set->id]['type'];
+            if(isset($fieldList[$set->id]['sortType']))     $set->sortType     = $fieldList[$set->id]['sortType'];
+            if(isset($fieldList[$set->id]['flex']))         $set->flex         = $fieldList[$set->id]['flex'];
+            if(isset($fieldList[$set->id]['minWidth']))     $set->minWidth     = $fieldList[$set->id]['minWidth'];
+            if(isset($fieldList[$set->id]['maxWidth']))     $set->maxWidth     = $fieldList[$set->id]['maxWidth'];
+            if(isset($fieldList[$set->id]['pri']))          $set->pri          = $fieldList[$set->id]['pri'];
+            if(isset($fieldList[$set->id]['map']))          $set->map          = $fieldList[$set->id]['map'];
+
+            if($sortType) $set->sortType = $sortType;
+
+            if(isset($set->fixed) && $set->fixed == 'no') unset($set->fixed);
+            if(isset($set->width)) $set->width = str_replace('px', '', $set->width);
+            unset($set->id);
+            $shownFields[] = $set;
+        }
+
+        usort($shownFields, array('datatableModel', 'sortCols'));
+        return $shownFields;
+    }
+
+    /**
+     * Build for datatable rows.
+     *
+     * @param  array    $stories
+     * @param  array    $cols
+     * @param  array    $options
+     * @param  object   $execution
+     * @param  string   $storyType
+     * @access public
+     * @return array
+     */
+    public function generateRow($stories, $cols, $options, $execution, $storyType)
+    {
+        $users         = zget($options, 'users',         array());
+        $branches      = zget($options, 'branchOption',  array());
+        $branchOptions = zget($options, 'branchOptions', array());
+        $modulePairs   = zget($options, 'modulePairs',   array());
+        $storyStages   = zget($options, 'storyStages',   array());
+        $isShowBranch  = zget($options, 'isShowBranch',  '');
+
+        $userFields  = array('assignedTo', 'openedBy', 'closedBy', 'lastEditedBy', 'reviewedBy', 'feedbackBy');
+        $dateFields  = array('assignedDate', 'openedDate', 'closedDate', 'lastEditedDate', 'reviewedDate', 'activatedDate');
+        $executionID = empty($execution) ? $this->session->execution : $execution->id;
+        $showBranch  = isset($this->config->product->browse->showBranch) ? $this->config->product->browse->showBranch : 1;
+        $canView     = common::hasPriv($storyType, 'view', null, "storyType=$storyType");
+        $tab         = $this->app->tab;
+        $rows        = array();
+
+        $storyIdList = array_keys($stories);
+        $storyTasks  = $this->loadModel('task')->getStoryTaskCounts($storyIdList);
+        $storyBugs   = $this->loadModel('bug')->getStoryBugCounts($storyIdList);
+        $storyCases  = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
+
+        if($this->config->vision == 'or') $this->app->loadLang('demand');
+        foreach($stories as $story)
+        {
+            if(!empty($branchOptions)) $branches = zget($branchOptions, $story->product, array());
+            $story->estimateNum  = $story->estimate;;
+            $story->caseCountNum = zget($storyCases, $story->id, 0);
+            foreach($cols as $col)
+            {
+                if($col->name == 'assignedTo') $story->assignedTo = $this->printAssignedHtml($story, $users, false);
+                if($col->name == 'order')      $story->order      = "<i class='icon-move'>";
+                if($col->name == 'pri')        $story->pri        = "<span class='" . ($story->pri ? "label-pri label-pri-" . $story->pri : '') . "' title='" . zget($this->lang->story->priList, $story->pri, $story->pri) . "'>" . zget($this->lang->story->priList, $story->pri, $story->pri) . "</span>";
+                if($col->name == 'plan')       $story->plan       = isset($story->planTitle) ? $story->planTitle : '';
+                if($col->name == 'branch')     $story->branch     = zget($branches, $story->branch, '');
+                if($col->name == 'source')     $story->source     = zget($this->lang->story->sourceList, $story->source);
+                if($col->name == 'category')   $story->category   = zget($this->lang->story->categoryList, $story->category);
+                if($col->name == 'duration')   $story->duration   = zget($this->lang->demand->durationList, $story->duration);
+                if($col->name == 'BSA')        $story->BSA        = zget($this->lang->demand->bsaList, $story->BSA);
+                if($col->name == 'taskCount')  $story->taskCount  = $storyTasks[$story->id] > 0 ? html::a(helper::createLink('story', 'tasks', "storyID=$story->id"), $storyTasks[$story->id], '', 'class="iframe"') : 0;
+                if($col->name == 'bugCount')   $story->bugCount   = $storyBugs[$story->id]  > 0 ? html::a(helper::createLink('story', 'bugs', "storyID=$story->id"),  $storyBugs[$story->id],  '', 'class="iframe"') : 0;
+                if($col->name == 'estimate')   $story->estimate  .= $this->config->hourUnit;
+                if($col->name == 'stage')
+                {
+                    $maxStage = $story->stage;
+                    if(isset($storyStages[$story->id]))
+                    {
+                        $stageList   = join(',', array_keys($this->lang->story->stageList));
+                        $maxStagePos = strpos($stageList, $maxStage);
+                        foreach($storyStages[$story->id] as $storyBranch => $storyStage)
+                        {
+                            if(strpos($stageList, $storyStage->stage) !== false and strpos($stageList, $storyStage->stage) > $maxStagePos)
+                            {
+                                $maxStage    = $storyStage->stage;
+                                $maxStagePos = strpos($stageList, $storyStage->stage);
+                            }
+                        }
+                    }
+                    $story->stage = zget($this->lang->story->stageList, $maxStage);
+                }
+                if($col->name == 'status')
+                {
+                    $story->status = "<span class='status-{$story->status}'>" . $this->processStatus('story', $story) . '</span>';
+                    if($story->URChanged) $story->status = "<span class='status-story status-changed'>{$this->lang->story->URChanged}</span>";
+                }
+                if($col->name == 'title')
+                {
+                    $storyTitle = '';
+                    $storyLink  = helper::createLink('story', 'view', "storyID=$story->id&version=0&param=&storyType=$story->type") . "#app=$tab";
+                    if($tab == 'project')
+                    {
+                        $showBranch = isset($this->config->projectstory->story->showBranch) ? $this->config->projectstory->story->showBranch : 1;
+                        $storyLink  = helper::createLink('story', 'view', "storyID=$story->id&version=0&param={$this->session->execution}&storyType=$story->type");
+                        if($this->session->multiple)
+                        {
+                            $storyLink = helper::createLink('projectstory', 'view', "storyID=$story->id&project={$this->session->project}");
+                            $canView   = common::hasPriv('projectstory', 'view');
+                        }
+                    }
+                    elseif($tab == 'execution')
+                    {
+                        $storyLink  = helper::createLink('execution', 'storyView', "storyID=$story->id&execution={$this->session->execution}");
+                        $canView    = common::hasPriv('execution', 'storyView');
+                        $showBranch = 0;
+                        if($isShowBranch) $showBranch = isset($this->config->execution->story->showBranch) ? $this->config->execution->story->showBranch : 1;
+                    }
+
+                    if($storyType == 'requirement' and $story->type == 'story') $storyTitle .= '<span class="label label-badge label-light">SR</span> ';
+                    if($story->parent > 0 and isset($story->parentName)) $storyTitle .= "{$story->parentName} / ";
+                    if(isset($branches[$story->branch]) and $showBranch and $this->config->vision != 'lite') $storyTitle .= "<span class='label label-outline label-badge' title={$branches[$story->branch]}>{$branches[$story->branch]}</span> ";
+                    if($story->module and isset($modulePairs[$story->module])) $storyTitle .= "<span class='label label-gray label-badge'>{$modulePairs[$story->module]}</span> ";
+                    if($story->parent > 0) $storyTitle .= '<span class="label label-badge label-light" title="' . $this->lang->story->children . '">' . $this->lang->story->childrenAB . '</span> ';
+                    $storyTitle .= $canView ? html::a($storyLink, $storyTitle . $story->title, '', "title='$story->title' style='color: $story->color' data-app='$tab'") : "<span style='color: $story->color'>{$storyTitle}{$story->title}</span>";
+                    if(!empty($story->children)) $storyTitle .= '<a class="story-toggle" data-id="' . $story->id . '"><i class="icon icon-angle-right"></i></a>';
+                    $story->title = $storyTitle;
+                }
+                if($col->name == 'mailto')
+                {
+                    $mailto = array_map(function($account) use($users){$account = trim($account); return zget($users, $account);}, explode(',', $story->mailto));
+                    $story->mailto = implode(' ', $mailto);
+                }
+                if($col->name == 'actions')
+                {
+                    $menuType = 'browse';
+                    if(($tab == 'execution' || ($tab == 'project' and $this->session->multiple)) && $storyType == 'story') $menuType = 'execution';
+                    $story->actions = '<div class="c-actions">' . $this->buildOperateMenu($story, $menuType, $execution, $storyType) . '</div>';
+                }
+                if(in_array($col->name, $userFields)) $story->{$col->name} = zget($users, $story->{$col->name});
+                if(in_array($col->name, $dateFields)) $story->{$col->name} = helper::isZeroDate($story->{$col->name}) ? '' : substr($story->{$col->name}, 5, 11);
+            }
+
+            $story->isParent = false;
+            if($story->parent == -1)
+            {
+                $story->isParent = true;
+                $story->parent   = 0;
+            }
+
+            $rows[] = $story;
+            if(!empty($story->children)) $rows = array_merge($rows, $this->generateRow($story->children, $cols, $options, $execution, $storyType));
+        }
+        return $rows;
     }
 }

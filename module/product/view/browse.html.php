@@ -10,8 +10,48 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/datatable.fix.html.php';?>
+<?php
+include '../../common/view/header.html.php';
+include '../../common/view/datatable.fix.html.php';
+include '../../common/view/zui3dtable.html.php';
+
+$options = array();
+$options['users']        = $users;
+$options['branchOption'] = $branchOption;
+$options['modulePairs']  = $modulePairs;
+$options['storyStages']  = $storyStages;
+$options['isShowBranch'] = '';
+if(!empty($branchOptions)) $options['branchOptions'] = $branchOptions;
+
+$cols = $this->story->generateCol($orderBy, $storyType);
+$rows = $this->story->generateRow($stories, $cols, $options, $project, $storyType);
+$vars = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
+if($from == 'project' and !empty($projectID)) $vars = "projectID=$projectID&productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
+$sortLink = helper::createLink('product', 'browse', $vars);
+$projectHasProduct = $isProjectStory && !empty($project->hasProduct);
+
+$canBeChanged          = common::canModify('product', $product);
+$canBatchEdit          = ($canBeChanged and common::hasPriv($storyType, 'batchEdit'));
+$canBatchClose         = (common::hasPriv($storyType, 'batchClose') and strtolower($browseType) != 'closedbyme' and strtolower($browseType) != 'closedstory');
+$canBatchReview        = ($canBeChanged and common::hasPriv($storyType, 'batchReview'));
+$canBatchChangeStage   = ($canBeChanged and common::hasPriv('story', 'batchChangeStage') and $storyType == 'story');
+$canBatchChangeBranch  = ($canBeChanged and common::hasPriv($storyType, 'batchChangeBranch') and $this->session->currentProductType and $this->session->currentProductType != 'normal' and $productID);
+$canBatchChangeModule  = ($canBeChanged and common::hasPriv($storyType, 'batchChangeModule'));
+$canBatchChangePlan    = ($canBeChanged and common::hasPriv('story', 'batchChangePlan') and $storyType == 'story' and (!$isProjectStory or $projectHasProduct or ($isProjectStory and isset($project->model) and $project->model == 'scrum')));
+$canBatchAssignTo      = ($canBeChanged and common::hasPriv($storyType, 'batchAssignTo'));
+$canBatchUnlink        = ($canBeChanged and $projectHasProduct and common::hasPriv('projectstory', 'batchUnlinkStory'));
+$canBatchImportToLib   = ($canBeChanged and $isProjectStory and isset($this->config->maxVersion) and common::hasPriv('story', 'batchImportToLib') and helper::hasFeature('storylib'));
+$canBatchChangeRoadmap = common::hasPriv('story', 'batchChangeRoadmap');
+
+$canBatchAction = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo or $canBatchUnlink or $canBatchImportToLib or $canBatchChangeBranch or $canBatchChangeRoadmap);
+if(!$canBatchAction) unset($cols[0]->checkbox);
+
+/* Set unfold parent taskID. */
+js::set('orderBy', $orderBy);
+js::set('sortLink', $sortLink);
+js::set('cols', json_encode($cols));
+js::set('data', json_encode($rows));
+?>
 <style>
 body {margin-bottom: 25px;}
 #mainMenu .btn-toolbar .btn-group .dropdown-menu .btn-active-text:hover .text {color: #fff;}
@@ -24,7 +64,6 @@ $lang->story->createCommon = $storyType == 'story' ? $lang->story->createStory :
 $unfoldStories     = isset($config->product->browse->unfoldStories) ? json_decode($config->product->browse->unfoldStories, true) : array();
 $unfoldStories     = zget($unfoldStories, $productID, array());
 $isProjectStory    = $this->app->rawModule == 'projectstory';
-$projectHasProduct = $isProjectStory && !empty($project->hasProduct);
 $projectIDParam    = $isProjectStory ? "projectID=$projectID&" : '';
 $projectModel      = isset($project->model) ? $project->model : '';
 js::set('browseType', $browseType);
@@ -43,6 +82,7 @@ js::set('unfoldAll',     $lang->execution->treeLevel['all']);
 js::set('foldAll',       $lang->execution->treeLevel['root']);
 js::set('storyType',     $storyType);
 js::set('vision',        $this->config->vision);
+js::set('pageSummary',   $summary);
 ?>
 <style>
 .btn-group .icon-close:before {font-size: 5px; vertical-align: 25%;}
@@ -300,117 +340,7 @@ js::set('vision',        $this->config->vision);
       <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right setting"></nav>
       </div>
-      <?php
-      $datatableId  = $this->moduleName . ucfirst($this->methodName);
-      $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
-      $vars = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
-      if($from == 'project' and !empty($projectID)) $vars = "projectID=$projectID&productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
-
-      if($useDatatable) include '../../common/view/datatable.html.php';
-      $setting = $this->datatable->getSetting('product');
-      $widths  = $this->datatable->setFixedFieldWidth($setting);
-      $columns = 0;
-
-      $canBeChanged          = common::canModify('product', $product);
-      $canBatchEdit          = ($canBeChanged and common::hasPriv($storyType, 'batchEdit'));
-      $canBatchClose         = (common::hasPriv($storyType, 'batchClose') and strtolower($browseType) != 'closedbyme' and strtolower($browseType) != 'closedstory');
-      $canBatchReview        = ($canBeChanged and common::hasPriv($storyType, 'batchReview'));
-      $canBatchChangeStage   = ($canBeChanged and common::hasPriv('story', 'batchChangeStage') and $storyType == 'story');
-      $canBatchChangeBranch  = ($canBeChanged and common::hasPriv($storyType, 'batchChangeBranch') and $this->session->currentProductType and $this->session->currentProductType != 'normal' and $productID);
-      $canBatchChangeModule  = ($canBeChanged and common::hasPriv($storyType, 'batchChangeModule'));
-      $canBatchChangePlan    = ($canBeChanged and common::hasPriv('story', 'batchChangePlan') and $storyType == 'story' and (!$isProjectStory or $projectHasProduct or ($isProjectStory and isset($project->model) and $project->model == 'scrum')));
-      $canBatchAssignTo      = ($canBeChanged and common::hasPriv($storyType, 'batchAssignTo'));
-      $canBatchUnlink        = ($canBeChanged and $projectHasProduct and common::hasPriv('projectstory', 'batchUnlinkStory'));
-      $canBatchImportToLib   = ($canBeChanged and $isProjectStory and isset($this->config->maxVersion) and common::hasPriv('story', 'batchImportToLib') and helper::hasFeature('storylib'));
-      $canBatchChangeRoadmap = common::hasPriv('story', 'batchChangeRoadmap');
-
-      $canBatchAction       = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo or $canBatchUnlink or $canBatchImportToLib or $canBatchChangeBranch or $canBatchChangeRoadmap);
-      ?>
-      <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
-      <table class='table has-sort-head<?php if($useDatatable) echo ' datatable';?>' id='storyList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>'>
-        <thead>
-          <tr>
-          <?php if($this->app->getViewType() == 'xhtml'):?>
-          <?php
-          foreach($setting as $key => $value)
-          {
-              if($value->id == 'title' || $value->id == 'id' || $value->id == 'pri' || $value->id == 'status')
-              {
-                  if($storyType == 'requirement' and (in_array($value->id, array('plan', 'stage', 'taskCount', 'bugCount', 'caseCount')))) $value->show = false;
-
-                  if($value->show)
-                  {
-                      $this->datatable->printHead($value, $orderBy, $vars, $canBatchAction);
-                      $columns ++;
-                  }
-              }
-          }?>
-          <?php else:?>
-          <?php
-          foreach($setting as $key => $value)
-          {
-              if($storyType == 'requirement' and (in_array($value->id, array('plan', 'stage', 'taskCount', 'bugCount', 'caseCount')))) $value->show = false;
-
-              if($value->show)
-              {
-                  $this->datatable->printHead($value, $orderBy, $vars, $canBatchAction);
-                  $columns ++;
-              }
-          }
-          ?>
-          <?php endif;?>
-          </tr>
-        </thead>
-        <tbody>
-          <?php foreach($stories as $story):?>
-          <tr data-id='<?php echo $story->id?>' data-estimate='<?php echo $story->estimate?>' <?php if(!empty($story->children)) echo "data-children=" . count($story->children);?> data-cases='<?php echo zget($storyCases, $story->id, 0);?>'>
-            <?php $story->from = $from;?>
-            <?php
-            if(!empty($branchOptions))
-            {
-                $branchOption = isset($branchOptions[$story->product]) ? $branchOptions[$story->product] : array();
-            }
-            ?>
-            <?php if($this->app->getViewType() == 'xhtml'):?>
-            <?php
-            foreach($setting as $key => $value)
-            {
-                if($value->id == 'title' || $value->id == 'id' || $value->id == 'pri' || $value->id == 'status')
-                {
-                    $this->story->printCell($value, $story, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType, $project);
-                }
-            }?>
-            <?php else:?>
-            <?php foreach($setting as $key => $value) $this->story->printCell($value, $story, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType, $project);?>
-            <?php endif;?>
-          </tr>
-          <?php if(!empty($story->children)):?>
-          <?php $i = 0;?>
-          <?php foreach($story->children as $key => $child):?>
-          <?php $child->from = $from;?>
-          <?php $class  = $i == 0 ? ' table-child-top' : '';?>
-          <?php $class .= ($i + 1 == count($story->children)) ? ' table-child-bottom' : '';?>
-          <tr class='table-children<?php echo $class;?> parent-<?php echo $story->id;?>' data-id='<?php echo $child->id?>' data-status='<?php echo $child->status?>' data-estimate='<?php echo $child->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0);?>'>
-            <?php if($this->app->getViewType() == 'xhtml'):?>
-            <?php
-            foreach($setting as $key => $value)
-            {
-                if($value->id == 'title' || $value->id == 'id' || $value->id == 'pri' || $value->id == 'status')
-                {
-                  $this->story->printCell($value, $child, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType, $project);
-                }
-            }?>
-            <?php else:?>
-            <?php foreach($setting as $key => $value) $this->story->printCell($value, $child, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType, $project);?>
-            <?php endif;?>
-          </tr>
-          <?php $i ++;?>
-          <?php endforeach;?>
-          <?php endif;?>
-          <?php endforeach;?>
-        </tbody>
-      </table>
-      <?php if(!$useDatatable) echo '</div>';?>
+      <div id="storyList" class="table"></div>
       <div class="table-footer">
         <?php if($canBatchAction):?>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
@@ -748,58 +678,17 @@ js::set('vision',        $this->config->vision);
     </div>
   </div>
 </div>
+
+<?php
+$storyCommon = $storyType == 'requirement' ? $lang->URCommon : $lang->SRCommon;
+js::set('checkedSummary', str_replace('%storyCommon%', $storyCommon, $lang->product->checkedSummary));
+js::set('moduleID', $moduleID);
+?>
+
 <script>
-var moduleID = <?php echo $moduleID?>;
 var branchID = $.cookie('storyBranch');
 $('#module<?php echo $moduleID;?>').closest('li').addClass('active');
 $('#branch' + branchID).closest('li').addClass('active');
-
-$(function()
-{
-    // Update table summary text.
-    <?php $storyCommon = $storyType == 'requirement' ? $lang->URCommon : $lang->SRCommon;?>
-    var checkedSummary = '<?php echo str_replace('%storyCommon%', $storyCommon, $lang->product->checkedSummary)?>';
-    $('#productStoryForm').table(
-    {
-        statisticCreator: function(table)
-        {
-            var $checkedRows = table.getTable().find(table.isDataTable ? '.datatable-row-left.checked' : 'tbody>tr.checked');
-            var $originTable = table.isDataTable ? table.$.find('.datatable-origin') : null;
-            var checkedTotal = $checkedRows.length;
-            if(!checkedTotal) return;
-
-            var checkedEstimate = 0;
-            var checkedCase     = 0;
-            var rateCount       = checkedTotal;
-            $checkedRows.each(function()
-            {
-                var $row = $(this);
-                if($originTable)
-                {
-                    $row = $originTable.find('tbody>tr[data-id="' + $row.data('id') + '"]');
-                }
-                var data = $row.data();
-                checkedEstimate += data.estimate;
-
-                if(data.cases > 0)
-                {
-                    checkedCase += 1;
-                }
-                else if(data.children != undefined && data.children > 0)
-                {
-                    rateCount -= 1;
-                }
-            });
-
-            var rate = '0%';
-            if(rateCount) rate = Math.round(checkedCase / rateCount * 10000 / 100) + '' + '%';
-
-            return checkedSummary.replace('%total%', checkedTotal)
-                  .replace('%estimate%', checkedEstimate.toFixed(1))
-                  .replace('%rate%', rate);
-        }
-    });
-});
 
 /**
  * Set the color of the badge to white.
