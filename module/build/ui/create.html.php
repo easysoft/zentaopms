@@ -16,6 +16,8 @@ jsVar('autoRelationTip', $lang->build->notice->autoRelation);
 jsVar('projectID', $projectID);
 jsVar('executionID', $executionID);
 jsVar('productGroups', $productGroups);
+jsVar('productArtifactRepos', !empty($productArtifactRepos) ? $productArtifactRepos : '');
+jsVar('today', helper::today());
 
 $integratedRow = '';
 if($app->tab == 'project' && !empty($multipleProject))
@@ -67,7 +69,38 @@ if(!$hidden)
             set::value(empty($product) ? '' : $product->id),
             set::items($products),
             set::required(true),
-            on::change('loadBranches')
+            on::change('loadBranches'),
+            on::change('loadArtifactrepo'),
+        );
+
+        $artifactRepoRow[] = formRow
+        (
+            setClass('artifactrepo ' . ((empty($product) || empty($productArtifactRepos[$product->id])) ? 'hidden' : '')),
+            formGroup
+            (
+                set::width('1/2'),
+                set::label($lang->build->linkArtifactRepo),
+                radioList
+                (
+                    set::name('isArtifactRepo'),
+                    set::items($lang->build->isIntegrated),
+                    set::value('no'),
+                    set::inline(true),
+                    on::click('onShowArtifactRepo')
+                ),
+            ),
+        );
+        $artifactRepoRow[] = formRow
+        (
+            setClass('artifactrepo-id hidden'),
+            formGroup
+            (
+                set::width('1/2'),
+                set::label($lang->artifactrepo->repoName),
+                set::name('artifactRepoID'),
+                set::items(array()),
+                on::change('onChangeArtifactRepo'),
+            ),
         );
     }
     else
@@ -107,6 +140,7 @@ formPanel
             set::items($branches),
         )
     ),
+    !empty($artifactRepoRow) ? $artifactRepoRow : null,
     formRow
     (
         setClass('hidden'),

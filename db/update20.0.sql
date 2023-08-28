@@ -142,6 +142,8 @@ CREATE TABLE `zt_artifactrepo` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+ALTER TABLE `zt_build` ADD `artifactRepoID` MEDIUMINT(8) UNSIGNED NOT NULL AFTER `bugs`;
+
 CREATE TABLE IF NOT EXISTS `zt_session` (
     `id` varchar(32) NOT NULL,
     `data` mediumtext,

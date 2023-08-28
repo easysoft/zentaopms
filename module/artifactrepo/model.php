@@ -26,7 +26,7 @@ class artifactrepoModel extends model
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.id')->eq($artifactRepoID)
             ->fetch();
-        $artifactRepo->url .= 'repository/' . $artifactRepo->repoName;
+        $artifactRepo->url .= '/repository/' . $artifactRepo->repoName;
 
         return $artifactRepo;
     }
@@ -50,7 +50,7 @@ class artifactrepoModel extends model
             ->fetchAll('id');
         foreach($artifactRepos as $repo)
         {
-            $repo->url .= 'repository/' . $repo->repoName;
+            $repo->url .= '/repository/' . $repo->repoName;
         }
 
         return $artifactRepos;
@@ -71,7 +71,7 @@ class artifactrepoModel extends model
 
         if($server->type == 'nexus')
         {
-            $url = $server->url . 'service/rest/v1/repositorySettings';
+            $url = $server->url . '/service/rest/v1/repositorySettings';
             $auth = "{$server->account}:{$server->password}";
 
             $response = common::http($url, '', array(CURLOPT_USERPWD => $auth));
@@ -92,8 +92,8 @@ class artifactrepoModel extends model
      */
     public function create(object $artifactRepo): false|int
     {
-        if(substr($artifactRepo->url, -1) != '/') $artifactRepo->url .= '/';
         $this->dao->insert(TABLE_ARTIFACTREPO)->data($artifactRepo)
+            ->check('name', 'unique', "name = '{$artifactRepo->name}'")
             ->check('repoName', 'unique', "serverID = {$artifactRepo->serverID} and repoName = '{$artifactRepo->repoName}'")
             ->autoCheck()
             ->exec();
@@ -130,5 +130,22 @@ class artifactrepoModel extends model
         }
 
         return $changes;
+    }
+
+    public function getReposByProduct(int $productID)
+    {
+        $artifactRepos = $this->dao->select('t1.*, t2.id AS pipelineID, t2.url')->from(TABLE_ARTIFACTREPO)->alias('t1')
+            ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.serverID = t2.id')
+            ->where('products')->like("%,{$productID},%")
+            ->andWhere('t1.deleted')->eq(0)
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+        foreach($artifactRepos as $repo)
+        {
+            $repo->url .= '/repository/' . $repo->repoName;
+        }
+
+        return $artifactRepos;
     }
 }

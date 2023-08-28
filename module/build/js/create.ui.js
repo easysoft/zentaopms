@@ -112,3 +112,100 @@ function loadLastBuild()
         $('#lastBuildBox').html(data);
     });
 }
+
+/**
+ * 产品改变时更新制品库显示。
+ * When change product load artifactrepo.
+ *
+ * @param  event $event
+ * @access public
+ * @return viod
+ */
+function loadArtifactrepo(event)
+{
+    const productID = $(event.target).val();
+
+    var data = Object.values(productArtifactRepos[productID]);
+    if(data.length > 0)
+    {
+        $('.artifactrepo').removeClass('hidden');
+    }
+    else
+    {
+        $('.artifactrepo').addClass('hidden');
+        $('#filePath').val('');
+        var datePicker = $('#date').datePicker().zui();
+        datePicker.$.setValue(today);
+    }
+
+    onShowArtifactRepo();
+}
+
+/**
+ * 版本库显示改变事件。
+ * Artifact repo show change event.
+ *
+ * @access public
+ * @return viod
+ */
+function onShowArtifactRepo()
+{
+    var isArtifactRepo = $('input[name=isArtifactRepo]:checked').val();
+    if(isArtifactRepo == 'yes')
+    {
+        var productID = $('[name=product]').val();
+
+        var data = Object.values(productArtifactRepos[productID]);
+        if(data.length > 0)
+        {
+            $('.artifactrepo-id').removeClass('hidden');
+            var items = [];
+            for(i in productArtifactRepos[productID])
+            {
+                items.push({'text': productArtifactRepos[productID][i].name, 'value': productArtifactRepos[productID][i].id});
+            }
+            $artifactRepo = $('#artifactRepoID').zui('picker');
+            $artifactRepo.render({items: items});
+            $artifactRepo.$.clear();
+        }
+        else
+        {
+            $('.artifactrepo-id').addClass('hidden');
+        }
+    }
+    else
+    {
+        $('.artifactrepo-id').addClass('hidden');
+    }
+}
+
+/**
+ * 版本库改变事件。
+ * Artifact repo change event.
+ *
+ * @access public
+ * @return viod
+ */
+function onChangeArtifactRepo(event)
+{
+    const repoID   = $(event.target).val();
+    const datePicker = $('#date').datePicker().zui();
+
+    var productID  = $('[name=product]').val();
+    var data       = Object.values(productArtifactRepos[productID]);
+    if(data.length == 0 || !repoID)
+    {
+        $('#filePath').val('');
+        datePicker.$.setValue(today);
+        return;
+    }
+
+    for(i in productArtifactRepos[productID])
+    {
+        if(productArtifactRepos[productID][i].id == repoID)
+        {
+            $('#filePath').val(productArtifactRepos[productID][i].url);
+            datePicker.$.setValue(productArtifactRepos[productID][i].createdDate.substr(0, 10));
+        }
+    }
+}

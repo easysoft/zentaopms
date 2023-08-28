@@ -35,6 +35,8 @@ class artifactrepo extends control
         $this->view->orderBy        = $orderBy;
         $this->view->pager          = $pager;
         $this->view->browseType     = $browseType;
+        $this->view->recTotal       = $recTotal;
+        $this->view->recPerPage     = $recPerPage;
         $this->view->artifactRepos  = $artifactRepos;
         $this->view->products       = $this->loadModel('product')->getPairs('', 0, '', 'all');
         $this->view->pageLink       = $this->createLink('artifactrepo', 'browse', "browseType={$browseType}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
@@ -58,6 +60,8 @@ class artifactrepo extends control
                 ->add('createdBy', $this->app->user->account)
                 ->add('createdDate', helper::now())
                 ->get();
+            if($repo->products) $repo->products = ',' . $repo->products . ',';
+
             $repoID = $this->artifactrepo->create($repo);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -91,6 +95,7 @@ class artifactrepo extends control
                 ->add('editedBy', $this->app->user->account)
                 ->add('editedDate', helper::now())
                 ->get();
+            if($repo->products) $repo->products = ',' . $repo->products . ',';
 
             $changes = $this->artifactrepo->update($repo, $artifactRepoID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));

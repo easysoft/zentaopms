@@ -116,6 +116,17 @@ class build extends control
 
         foreach($productGroups as $product) $products[$product->id] = $product->name;
 
+        if(!$this->view->hidden && $products)
+        {
+            $this->loadModel('artifactrepo');
+            $productArtifactRepos = array();
+            foreach($products as $ID => $productName)
+            {
+                $productArtifactRepos[$ID] = $this->artifactrepo->getReposByProduct($ID);
+            }
+            $this->view->productArtifactRepos = $productArtifactRepos;
+        }
+
         $this->view->title      = $this->lang->build->create;
 
         $this->view->product       = isset($productGroups[$productID]) ? $productGroups[$productID] : '';
@@ -323,7 +334,7 @@ class build extends control
         $this->view->title             = "BUILD #$build->id $build->name" . (isset($executions[$build->execution]) ? " - " . $executions[$build->execution] : '');
         $this->view->stories           = $stories;
         $this->view->storyPager        = $storyPager;
-        $this->view->generatedBugs     = $this->bug->getExecutionBugs($build->execution, $build->product, 'all', "$build->id,{$build->builds}", $type, $param, $type == 'generatedBug' ? $sort : 'status_desc,id_desc', '', $generatedBugPager);
+        $this->view->generatedBugs     = $this->bug->getExecutionBugs($build->execution, $build->product, 'all', "$build->id,{$build->builds}", $type, (int)$param, $type == 'generatedBug' ? $sort : 'status_desc,id_desc', '', $generatedBugPager);
         $this->view->generatedBugPager = $generatedBugPager;
         $this->view->canBeChanged      = common::canBeChanged('build', $build); // Determines whether an object is editable.
         $this->view->users             = $this->loadModel('user')->getPairs('noletter');

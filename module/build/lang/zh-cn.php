@@ -22,6 +22,7 @@ $lang->build->batchUnlinkStory = "批量移除{$lang->SRCommon}";
 $lang->build->batchUnlinkBug   = '批量移除Bug';
 $lang->build->viewBug          = '查看Bug';
 $lang->build->bugList          = 'Bug列表';
+$lang->build->linkArtifactRepo = '关联制品库';
 
 $lang->build->confirmDelete      = "您确认删除该版本吗？";
 $lang->build->confirmUnlinkStory = "您确认移除该{$lang->SRCommon}吗？";

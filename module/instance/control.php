@@ -378,6 +378,7 @@ class instance extends control
             ->skipSpecial('url,token,account,password')
             ->remove('token,appType')
             ->get();
+        $externalApp->url = rtrim($externalApp->url, '/');
         if(!$this->instance->checkAppNameUnique($externalApp->name)) return $this->send(array('result' => false, 'message' => array('name' => sprintf($this->lang->error->repeat, $this->lang->pipeline->name, $externalApp->name))));
 
         $appID = $this->loadModel('pipeline')->create($externalApp);
