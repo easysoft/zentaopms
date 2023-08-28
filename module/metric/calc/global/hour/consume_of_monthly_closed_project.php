@@ -55,6 +55,8 @@ class consume_of_monthly_closed_project extends baseCalc
         $month    = $data->month;
         $consumed = $data->consumed;
 
+        if(!is_numeric($consumed) || empty($consumed)) return false;
+
         if(!isset($this->result[$year])) $this->result[$year] = array();
         if(!isset($this->result[$year][$month])) $this->result[$year][$month] = array();
 

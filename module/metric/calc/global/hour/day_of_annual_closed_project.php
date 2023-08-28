@@ -54,6 +54,8 @@ class day_of_annual_closed_project extends baseCalc
         $year     = $data->year;
         $consumed = $data->consumed;
 
+        if(!is_numeric($consumed) || empty($consumed)) return false;
+
         if(!isset($this->result[$year])) $this->result[$year] = array();
 
         $this->result[$year][$project] = round($consumed, 2);
