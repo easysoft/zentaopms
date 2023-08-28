@@ -246,19 +246,19 @@ $createItems = array();
 if($canCreateCase)
 {
     $link = createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule");
-    $createItems[] = array('text' => $lang->testcase->create, 'url' => $link);
+    $createItems[] = array('text' => $lang->testcase->create, 'url' => $link, 'data-app' => $app->tab);
 }
 
 if($canBatchCreateCase)
 {
     $link = createLink('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$initModule");
-    $createItems[] = array('text' => $lang->testcase->batchCreate, 'url' => $link);
+    $createItems[] = array('text' => $lang->testcase->batchCreate, 'url' => $link, 'data-app' => $app->tab);
 }
 
 if($canCreateScene)
 {
     $link = createLink('testcase', 'createScene', "productID=$productID&branch=$branch&moduleID=$initModule");
-    $createItems[] = array('text' => $lang->testcase->newScene, 'url' => $link);
+    $createItems[] = array('text' => $lang->testcase->newScene, 'url' => $link, 'data-app' => $app->tab);
 }
 
 $currentCreateItem = current($createItems);
@@ -312,6 +312,7 @@ toolbar
             setClass('btn primary'),
             set::icon('plus'),
             set::url($currentCreateItem['url']),
+            set(array('data-app' => $app->tab)),
             $currentCreateItem['text']
         ),
         count($createItems) > 1 ?  dropdown
