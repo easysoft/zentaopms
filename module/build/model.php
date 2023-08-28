@@ -424,7 +424,7 @@ class buildModel extends model
             ->stripTags($this->config->build->editor->create['id'], $this->config->allowedTags)
             ->join('builds', ',')
             ->join('branch', ',')
-            ->remove('resolvedBy,allchecker,files,labels,isIntegrated,uid')
+            ->remove('resolvedBy,allchecker,files,labels,isIntegrated,uid,isArtifactRepo')
             ->get();
 
         if($this->post->isIntegrated == 'yes')

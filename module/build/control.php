@@ -111,6 +111,17 @@ class build extends control
 
         foreach($productGroups as $product) $products[$product->id] = $product->name;
 
+        if(!$this->view->hidden && $products)
+        {
+            $this->loadModel('artifactrepo');
+            $productArtifactRepos = array();
+            foreach($products as $ID => $productName)
+            {
+                $productArtifactRepos[$ID] = $this->artifactrepo->getReposByProduct($ID);
+            }
+            $this->view->productArtifactRepos = $productArtifactRepos;
+        }
+
         $this->view->title      = $this->lang->build->create;
         $this->view->position[] = $this->lang->build->create;
 

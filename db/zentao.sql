@@ -353,6 +353,7 @@ CREATE TABLE IF NOT EXISTS `zt_build` (
   `date` date NULL,
   `stories` text NULL,
   `bugs` text NULL,
+  `artifactRepoID` mediumint(8) unsigned NOT NULL,
   `builder` char(30) NOT NULL default '',
   `desc` mediumtext NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',

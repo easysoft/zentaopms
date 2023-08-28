@@ -88,6 +88,8 @@ CREATE TABLE `zt_artifactrepo` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+ALTER TABLE `zt_build` ADD `artifactRepoID` MEDIUMINT(8) UNSIGNED NOT NULL AFTER `bugs`;
+
 ALTER TABLE `zt_host` ADD COLUMN `product` varchar(255) NOT NULL DEFAULT '' AFTER `hostType`,ADD COLUMN `testType` varchar(10) NOT NULL DEFAULT '' AFTER `product`;
 UPDATE `zt_host` SET `testType`='kvm',`type`='normal' WHERE `type`='zahost';
 UPDATE `zt_host` SET `testType`='node',`type`='normal',`hostType`='physical' WHERE `type`='node' AND `parent`=0;

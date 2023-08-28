@@ -125,6 +125,7 @@ $lang->lineNumber      = '行号';
 $lang->tutorialConfirm = '检测到你尚未退出新手教程模式，是否现在退出？';
 $lang->levelExceeded   = '层级已超过显示范围，更多信息请前往网页端查看或者是通过搜索方式查看。';
 $lang->noticeOkFile    = '为了安全起见，系统需要确认您的管理员身份。\n 请登录禅道所在的服务器，创建%s文件。\n 注意：\n 1. 文件内容为空。\n 2. 如果之前文件存在，删除之后重新创建。';
+$lang->noticeDrag      = '可点击添加或拖拽上传, 不超过 %s';
 
 $lang->serviceAgreement = "服务协议";
 $lang->privacyPolicy    = "隐私政策";
