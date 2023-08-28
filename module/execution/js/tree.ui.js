@@ -10,7 +10,7 @@ window.loadObject = function({event, item})
         $('#taskTree .tree-item-content').removeClass('active');
         $(event.target).closest('.tree-item-content').addClass('active');
 
-        $('#detailBlock').load(item.link);
+        loadTarget(item.link, '#detailBlock');
         $('#detailBlock').removeClass('hidden');
     }
 }
