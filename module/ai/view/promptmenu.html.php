@@ -57,7 +57,7 @@
 
         $('<?php echo count($prompts) > 1 ? '.prompts.dropdown ul.dropdown-menu' : '.prompt';?>').on('click', <?php if(count($prompts) > 1) echo "'button',";?> function(e)
         {
-          $('body').attr('data-loading', '<?php echo $lang->ai->execute->loading;?>');
+          $('body').attr('data-loading', e.target.querySelector('.label') ? '<?php echo $lang->ai->execute->auditing;?>' : '<?php echo $lang->ai->execute->loading;?>');
           $('body').addClass('load-indicator loading');
 
           /* Checks for session storage to cancel loading status (see inputinject.html.php). */
