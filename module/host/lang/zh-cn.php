@@ -11,7 +11,6 @@ $lang->host->treemap      = '主机拓扑图';
 $lang->host->changeStatus = '上架/下架';
 $lang->host->byQuery      = '搜索';
 $lang->host->reason       = '原因';
-$lang->host->testType     = '方式';
 
 $lang->host->name         = '名称';
 $lang->host->type         = '类型';
@@ -29,14 +28,12 @@ $lang->host->cpuCores     = '单CPU核心数';
 $lang->host->cpuRate      = 'CPU频率';
 $lang->host->memory       = '内存大小';
 $lang->host->serverRoom   = '机房';
-$lang->host->isTestNode   = '用于自动化测试';
 
-$lang->host->createdBy    = '由谁创建';
-$lang->host->createdDate  = '创建时间';
-$lang->host->editedBy     = '由谁编辑';
-$lang->host->editedDate   = '编辑时间';
-$lang->host->registerDate = '最后注册时间';
-$lang->host->all          = '全部主机';
+$lang->host->createdBy   = '由谁创建';
+$lang->host->createdDate = '创建时间';
+$lang->host->editedBy    = '由谁编辑';
+$lang->host->editedDate  = '编辑时间';
+$lang->host->all         = '全部主机';
 
 $lang->host->empty = '暂时没有主机';
 
@@ -46,9 +43,6 @@ $lang->host->status = '状态';
 $lang->host->statusList['online']  = '已上架';
 $lang->host->statusList['busy']    = '已超载';
 $lang->host->statusList['offline'] = '已下架';
-
-$lang->host->testTypes['node'] = '使用主机执行测试';
-$lang->host->testTypes['kvm']  = '使用主机生成的虚拟机执行测试';
 
 $lang->host->online  = '上架';
 $lang->host->busy    = '超载';

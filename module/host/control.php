@@ -49,7 +49,6 @@ class host extends control
         $this->loadModel('search')->setSearchParams($this->config->host->search);
 
         $this->loadModel('tree');
-        $this->app->loadLang('zahost');
         $this->view->title      = $this->lang->host->common;
         $this->view->hostList   = $hostList;
         $this->view->pager      = $pager;
@@ -67,109 +66,34 @@ class host extends control
     }
 
     /**
-     * Show image list page.
-     *
-     * @param  int    $hostID
-     * @param  string $browseType
-     * @param  int    $param
-     * @param  string $orderBy
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
-     * @access public
-     * @return void
-     */
-    public function browseImage($hostID, $browseType = 'all', $param = 0, $orderBy = 'id', $recTotal = 0, $recPerPage = 20, $pageID = 1)
-    {
-        $this->app->session->set('imageList', $this->app->getURI(true));
-        $this->app->loadClass('pager', $static = true);
-        $pager = pager::init($recTotal, $recPerPage, $pageID);
-
-        $imageList = $this->host->getImageList($hostID, $browseType, $param, $orderBy, $pager);
-
-        $this->app->loadLang('zahost');
-        $this->view->title      = $this->lang->zahost->image->browseImage;
-        $this->view->hostID     = $hostID;
-        $this->view->imageList  = $imageList;
-        $this->view->pager      = $pager;
-        $this->view->param      = $param;
-        $this->view->orderBy    = $orderBy;
-        $this->view->browseType = $browseType;
-
-        $this->display();
-    }
-
-    /**
-     * Sent download image request to Host.
-     *
-     * @param  int    $hostID
-     * @param  int $imageID
-     * @access public
-     * @return object
-     */
-    public function downloadImage($imageID)
-    {
-        $this->loadModel('zahost');
-        $image = $this->zahost->getImageByID($imageID);
-        $this->zahost->downloadImage($image);
-        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => $this->lang->zahost->image->downloadImageFail));
-
-        return $this->send(array('result' => 'success', 'load' => true));
-    }
-
-    /**
-     * Sent cancel download image request to Host.
-     *
-     * @param  int    $hostID
-     * @param  string $imageName
-     * @access public
-     * @return object
-     */
-    public function cancelDownload($imageID)
-    {
-        $this->loadModel('zahost');
-        $image = $this->zahost->getImageByID($imageID);
-
-        $this->zahost->cancelDownload($image);
-        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => $this->lang->zahost->image->downloadImageFail));
-
-        $this->send(array('result' => 'success', 'load' => true));
-    }
-
-    /**
      * Create host.
      *
      * @access public
      * @return void
      */
-    public function create($osName = 'linux', $hostType = 'physical', $isTestNode = 0)
+    public function create($osName = 'linux')
     {
         if($_POST)
         {
             $id = $this->host->create();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $_POST['testType'] === 'node' && $_POST['$isTestNode'] == 1 ? inlink('view', "id=$id") : inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
         $this->view->defaultParams = array(
-            'pri'      => '100',
-            'bridgeID' => 'br0',
+            'zap' => '8085',
+            'pri'       => '100',
+            'bridgeID'  => 'br0',
         );
-
-        $testTypes = $this->lang->host->testTypes;
-        if($hostType != 'physical') unset($testTypes['kvm']);
 
         $this->view->title      = $this->lang->host->create;
         $this->view->osName     = $osName;
-        $this->view->hostType   = $hostType;
-        $this->view->testTypes  = $testTypes;
-        $this->view->isTestNode = intval($isTestNode);
         $this->view->position[] = html::a($this->createLink('host', 'browse'), $this->lang->host->common);
         $this->view->position[] = $this->lang->host->create;
+
         $this->view->rooms      = $this->loadModel('serverroom')->getPairs();
         $this->view->accounts   = $this->loadModel('account')->getPairs();
-        $this->view->products   = $this->loadModel('product')->getPairs('', 0, '', 'all');
         $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu(0, 'host');
 
         $this->display();
@@ -181,7 +105,7 @@ class host extends control
      * @access public
      * @return void
      */
-    public function edit($id, $osName = '', $hostType = 'physical', $isTestNode = -1)
+    public function edit($id, $osName = '')
     {
         if($_POST)
         {
@@ -194,29 +118,19 @@ class host extends control
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $_POST['testType'] === 'node' && $_POST['isTestNode'] == 1 ? inlink('view', "id=$id") : inlink('browse'), 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browse'), 'closeModal' => true));
         }
 
-        $host      = $this->host->getById($id);
-        $testTypes = $this->lang->host->testTypes;
-        if($hostType != 'physical') unset($testTypes['kvm']);
-        if($isTestNode == -1) $isTestNode = $host->testType ? 1 : 0;
-
-        $this->view->osName     = $osName;
-        $this->view->hostType   = $hostType;
-        $this->view->testTypes  = $testTypes;
-        $this->view->isTestNode = intval($isTestNode);
         $this->view->accounts   = $this->loadModel('account')->getPairs();
         $this->view->title      = $this->lang->host->edit;
         $this->view->position[] = html::a($this->createLink('host', 'browse'), $this->lang->host->common);
         $this->view->position[] = $this->lang->host->edit;
 
-        $this->view->host       = $host;
+        $this->view->host       = $this->host->getById($id);
         $this->view->osName     = $osName ? $osName : $this->view->host->osName;
         $this->view->accounts   = $this->loadModel('account')->getPairs();
         $this->view->rooms      = $this->loadModel('serverroom')->getPairs();
         $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu(0, 'host');
-        $this->view->products   = $this->loadModel('product')->getPairs('', 0, '', 'all');
 
         $this->display();
     }

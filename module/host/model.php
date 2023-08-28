@@ -24,22 +24,6 @@ class hostModel extends model
             ->where('id')->eq($id)
             ->fetch();
 
-        if($host->testType === 'kvm')
-        {
-            $host->heartbeat = empty($host->heartbeat) ? '' : $host->heartbeat;
-
-            if(time() - strtotime($host->heartbeat) > 60 && $host->status == 'online')
-            {
-                $host->status = 'offline';
-            }
-        }
-        elseif($host->testType === 'node')
-        {
-            if(time() - strtotime($host->heartbeat) > 60)
-            {
-                $host->status = 'offline';
-            }
-        }
         return $host;
     }
 
@@ -77,7 +61,7 @@ class hostModel extends model
             /* Concatenate the conditions for the query. */
             if($param)
             {
-                $query = $this->loadModel('search')->getZinQuery($param);
+                $query = $this->loadModel('search')->getQuery($param);
                 if($query)
                 {
                     $this->session->set('hostQuery', $query->sql);
@@ -100,35 +84,15 @@ class hostModel extends model
         }
 
         $orderBy = str_replace($orderBy, 't1.', '');
-        $hostList = $this->dao->select('*,id as hostID')->from(TABLE_HOST)
+        $host = $this->dao->select('*,id as hostID')->from(TABLE_HOST)
             ->where('deleted')->eq('0')
-            ->andWhere('type')->in('normal,zahost')
+            ->andWhere('type')->eq('normal')
             ->beginIF($modules)->andWhere('`group`')->in($modules)->fi()
             ->beginIF($query)->andWhere($query)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
-
-        foreach($hostList as $host)
-        {
-
-            $host->heartbeat = empty($host->heartbeat) ? '' : $host->heartbeat;
-            if($host->testType === 'kvm')
-            {
-                if(time() - strtotime($host->heartbeat) > 60 && $host->status == 'online')
-                {
-                    $host->status = 'offline';
-                }
-            }
-            elseif($host->testType === 'node')
-            {
-                if(time() - strtotime($host->heartbeat) > 60)
-                {
-                    $host->status = 'offline';
-                }
-            }
-        }
-        return $hostList;
+        return $host;
     }
 
     /**
@@ -146,7 +110,7 @@ class hostModel extends model
         return $this->dao->select('id,name')->from(TABLE_HOST)
             ->where('deleted')->eq('0')
             ->andWhere('`id`')->in($hostIdList)
-            ->andWhere('type')->in('normal,zahost')
+            ->andWhere('type')->eq('normal')
             ->orderBy('`group`')
             ->fetchPairs('id', 'name');
     }
@@ -174,7 +138,7 @@ class hostModel extends model
 
         return $this->dao->select("id,name")->from(TABLE_HOST)
             ->where('deleted')->eq('0')
-            ->andWhere('type')->in('normal,zahost')
+            ->andWhere('type')->eq('normal')
             ->beginIF($modules)->andWhere('`group`')->in($modules)->fi()
             ->orderBy('`group`')
             ->fetchPairs('id', 'name');
@@ -191,33 +155,11 @@ class hostModel extends model
         $hostInfo = fixer::input('post')
             ->setDefault('hardwareType', 'server')
             ->setDefault('cpuNumber,cpuCores,diskSize,memory', 0)
-            ->trim('extranet')
             ->get();
 
-        if(isset($hostInfo->isTestNode))
-        {
-            $hostInfo->product = empty($hostInfo->product) ? '' : ',' . implode(',', $hostInfo->product) . ',';
-            if($hostInfo->testType === 'kvm')
-            {
-                $hostInfo->status  = 'wait';
-                $hostInfo->zap     = $this->config->zahost->defaultPort;
-                $hostInfo->secret  = md5($hostInfo->name . time());
-            }
-        }
-        else
-        {
-            $hostInfo->product  = '';
-            $hostInfo->testType = '';
-        }
-        
-        unset($hostInfo->isTestNode);
-
-        $hostInfo->admin      = intval($hostInfo->admin);
-        $hostInfo->serverRoom = intval($hostInfo->serverRoom);
         $this->dao->update(TABLE_HOST)->data($hostInfo)
             ->batchCheck($this->config->host->create->requiredFields, 'notempty')
-            ->batchCheck('diskSize,memory', 'float')
-            ->check('name', 'unique', "type='normal'");
+            ->batchCheck('diskSize,memory', 'float');
         if(dao::isError()) return false;
     
         $intFields = explode(',', $this->config->host->create->intFields);
@@ -248,7 +190,7 @@ class hostModel extends model
         {
             $hostID = $this->dao->lastInsertID();
             $this->loadModel('action')->create('host', $hostID, 'created');
-            return $hostID;
+            return true;
         }
 
         return false;
@@ -270,29 +212,12 @@ class hostModel extends model
             ->setDefault('cpuNumber,cpuCores,diskSize,memory', 0)
             ->get();
 
-        if(isset($hostInfo->isTestNode))
-        {
-            $hostInfo->product = empty($hostInfo->product) ? '' : ',' . implode(',', $hostInfo->product) . ',';
-            if($hostInfo->testType === 'kvm')
-            {
-                $hostInfo->status  = 'wait';
-                $hostInfo->zap     = $this->config->zahost->defaultPort;
-                $hostInfo->secret  = md5($hostInfo->name . time());
-            }
-        }
-        else
-        {
-            $hostInfo->product  = '';
-            $hostInfo->testType = '';
-        }
-        unset($hostInfo->isTestNode);
         $hostInfo->admin      = intval($hostInfo->admin);
         $hostInfo->serverRoom = intval($hostInfo->serverRoom);
 
         $this->dao->update(TABLE_HOST)->data($hostInfo)
             ->batchCheck($this->config->host->create->requiredFields, 'notempty')
-            ->batchCheck('diskSize,memory', 'float')
-            ->check('name', 'unique', "id != $id and type='normal'");
+            ->batchCheck('diskSize,memory', 'float');
         if(dao::isError()) return false;
     
         $intFields = explode(',', $this->config->host->create->intFields);
@@ -314,7 +239,7 @@ class hostModel extends model
                 return false;
             }
         }
-        $hostInfo->type       = 'normal';
+
         $hostInfo->editedBy   = $this->app->user->account;
         $hostInfo->editedDate = helper::now();
         $this->dao->update(TABLE_HOST)->data($hostInfo)->autoCheck()->where('id')->eq($id)->exec();
@@ -347,7 +272,7 @@ class hostModel extends model
         $stmt = $this->dao->select('t1.id,t1.name,t3.id as roomID,t3.city,t3.name as roomName,t1.extranet')->from(TABLE_HOST)->alias('t1')
             ->leftJoin(TABLE_SERVERROOM)->alias('t3')->on('t1.serverRoom=t3.id')
             ->where('t1.deleted')->eq(0)
-            ->andWhere('t1.type')->in('normal,zahost')
+            ->andWhere('t1.type')->eq('normal')
             ->andWhere('t3.deleted')->eq(0)
             ->andWhere('t1.serverRoom')->ne(0)
             ->orderBy('t3.city,t3.id,t1.id')
@@ -407,7 +332,7 @@ class hostModel extends model
         $this->app->loadLang('serverroom');
         $hostGroups = $this->dao->select('id,name,`group`,extranet')->from(TABLE_HOST)
             ->where('deleted')->eq(0)
-            ->andWhere('type')->in('normal,zahost')
+            ->andWhere('type')->eq('normal')
             ->fetchGroup('group', 'id');
 
         /* Get module list by host group. */
@@ -475,70 +400,11 @@ class hostModel extends model
     public static function isClickable($host, $action)
     {
         if(!$host->id)                                return false;
-        if (in_array($action, array('online', 'offline')) && !common::hasPriv('host', 'changeStatus')) return false;
-        if (in_array($action, array('online', 'offline')) && $host->testType !== '') return false;
+        if (!common::hasPriv('host', 'changeStatus')) return false;
 
         if($host->status == 'online'  && $action == 'online')  return false;
         if($host->status == 'offline' && $action == 'offline') return false;
 
-        if($action === 'download')
-        {
-            if(in_array($host->status, array("completed", "inprogress", "created"))  || $host->from == 'user') return false;
-        }
-
-        if($action === 'cancel')
-        {
-            if(!in_array($host->status, array("inprogress", "created"))) return false;
-        }
-
         return true;
-    }
-
-    /**
-     * Get image files from ZAgent server.
-     *
-     * @param  object $hostID
-     * @access public
-     * @return array
-     */
-    public function getImageList($hostID, $browseType = 'all', $param = 0, $orderBy = 'id', $pager = null)
-    {
-        $imageList = json_decode(commonModel::http($this->config->host->imageListUrl, array(), array()));
-        if(empty($imageList)) return array();
-
-        $downloadedImageList = $this->dao->select('*')->from(TABLE_IMAGE)
-            ->where('host')->eq($hostID)
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll('name');
-
-        $refreshPageData = false;
-        foreach($imageList as $remoteImage)
-        {
-            $downloadedImage = zget($downloadedImageList, $remoteImage->name, '');
-            if(empty($downloadedImage))
-            {
-                $refreshPageData = true;
-                $remoteImage->status = 'notDownloaded';
-                $remoteImage->from   = 'zentao';
-                $remoteImage->osName = $remoteImage->os;
-                $remoteImage->host   = $hostID;
-                $remoteImage->status = 'notDownloaded';
-
-                unset($remoteImage->os);
-                $this->dao->insert(TABLE_IMAGE)->data($remoteImage, 'desc')->autoCheck()->exec();
-            }
-        }
-
-        if($refreshPageData)
-        {
-            $downloadedImageList = $this->dao->select('*')->from(TABLE_IMAGE)
-            ->where('host')->eq($hostID)
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll('name');
-        }
-
-        return $downloadedImageList;
     }
 }

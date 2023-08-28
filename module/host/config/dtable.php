@@ -1,7 +1,6 @@
 <?php
 global $lang, $app;
 $app->loadLang('serverroom');
-$app->loadLang('zahost');
 
 $config->host->dtable = new stdclass();
 
@@ -60,13 +59,6 @@ $config->host->dtable->fieldList['status']['sortType'] = true;
 $config->host->dtable->fieldList['status']['width']    = 80;
 $config->host->dtable->fieldList['status']['map']      = $lang->host->statusList;
 
-$config->host->dtable->fieldList['heartbeat']['title']    = $lang->host->registerDate;
-$config->host->dtable->fieldList['heartbeat']['name']     = 'heartbeat';
-$config->host->dtable->fieldList['heartbeat']['type']     = 'datetime';
-$config->host->dtable->fieldList['heartbeat']['sortType'] = true;
-$config->host->dtable->fieldList['heartbeat']['width']    = 80;
-$config->host->dtable->fieldList['heartbeat']['map']      = $lang->host->statusList;
-
 $config->host->actionList = array();
 $config->host->actionList['online']['icon']        = 'arrow-up';
 $config->host->actionList['online']['text']        = $lang->host->online;
@@ -102,58 +94,3 @@ $config->host->dtable->fieldList['actions']['sortType'] = false;
 $config->host->dtable->fieldList['actions']['fixed']    = 'right';
 $config->host->dtable->fieldList['actions']['menu']     = array('online|offline', 'edit', 'delete');
 $config->host->dtable->fieldList['actions']['list']     = $config->host->actionList;
-
-$config->host->imageDtable = new stdclass();
-
-$config->host->imageDtable->fieldList['name']['title']    = $lang->zahost->image->name;
-$config->host->imageDtable->fieldList['name']['name']     = 'name';
-$config->host->imageDtable->fieldList['name']['sortType'] = true;
-$config->host->imageDtable->fieldList['name']['width']    = 120;
-$config->host->imageDtable->fieldList['name']['hint']     = true;
-
-$config->host->imageDtable->fieldList['osName']['title']    = $lang->zahost->image->os;
-$config->host->imageDtable->fieldList['osName']['name']     = 'osName';
-$config->host->imageDtable->fieldList['osName']['sortType'] = true;
-$config->host->imageDtable->fieldList['osName']['width']    = 120;
-$config->host->imageDtable->fieldList['osName']['hint']     = true;
-
-$config->host->imageDtable->fieldList['status']['title']    = $lang->zahost->status;
-$config->host->imageDtable->fieldList['status']['name']     = 'status';
-$config->host->imageDtable->fieldList['status']['sortType'] = false;
-$config->host->imageDtable->fieldList['status']['width']    = 100;
-$config->host->imageDtable->fieldList['status']['map']      = $lang->zahost->image->statusList;
-
-$config->host->imageDtable->fieldList['path']['title']    = $lang->zahost->image->path;
-$config->host->imageDtable->fieldList['path']['name']     = 'path';
-$config->host->imageDtable->fieldList['path']['type']     = 'desc';
-$config->host->imageDtable->fieldList['path']['sortType'] = false;
-$config->host->imageDtable->fieldList['path']['hint']     = true;
-
-$config->host->imageDtable->fieldList['progress']['title']    = $lang->zahost->image->progress;
-$config->host->imageDtable->fieldList['progress']['name']     = 'progress';
-$config->host->imageDtable->fieldList['progress']['sortType'] = false;
-$config->host->imageDtable->fieldList['progress']['width']    = 120;
-$config->host->imageDtable->fieldList['progress']['hint']     = true;
-
-$config->host->imageActionList = array();
-$config->host->imageActionList['download']['icon']         = 'download';
-$config->host->imageActionList['download']['text']         = $lang->zahost->image->downloadImage;
-$config->host->imageActionList['download']['hint']         = $lang->zahost->image->downloadImage;
-$config->host->imageActionList['download']['url']          = helper::createLink('host', 'downloadImage', 'imageID={id}');
-$config->host->imageActionList['download']['ajaxSubmit']   = true;
-$config->host->imageActionList['download']['data-confirm'] = false;
-
-$config->host->imageActionList['cancel']['icon']         = 'ban-circle';
-$config->host->imageActionList['cancel']['text']         = $lang->cancel;
-$config->host->imageActionList['cancel']['hint']         = $lang->cancel;
-$config->host->imageActionList['cancel']['url']          = helper::createLink('host', 'cancelDownload', 'id={id}');
-$config->host->imageActionList['cancel']['ajaxSubmit']   = true;
-$config->host->imageActionList['cancel']['data-confirm'] = $lang->zahost->cancelDelete;
-
-$config->host->imageDtable->fieldList['actions']['name']     = 'actions';
-$config->host->imageDtable->fieldList['actions']['title']    = $lang->actions;
-$config->host->imageDtable->fieldList['actions']['type']     = 'actions';
-$config->host->imageDtable->fieldList['actions']['sortType'] = false;
-$config->host->imageDtable->fieldList['actions']['fixed']    = 'right';
-$config->host->imageDtable->fieldList['actions']['menu']     = array('download', 'cancel');
-$config->host->imageDtable->fieldList['actions']['list']     = $config->host->imageActionList;

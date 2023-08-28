@@ -11,7 +11,6 @@ $lang->host->treemap   = 'Cấu trúc Host';
 $lang->host->changeStatus = 'Online/Offline';
 $lang->host->byQuery   = 'Tìm kiếm';
 $lang->host->reason    = 'Lý do';
-$lang->host->testType     = 'Type';
 
 $lang->host->name   = 'Tên';
 $lang->host->type   = 'Loại';
@@ -29,14 +28,12 @@ $lang->host->cpuCores  = 'CPU Cores';
 $lang->host->cpuRate   = 'CPU Rate';
 $lang->host->memory    = 'Memory Size';
 $lang->host->serverRoom   = 'IDC';
-$lang->host->isTestNode   = 'Used as test node';
 
-$lang->host->createdBy    = 'Người tạo';
-$lang->host->createdDate  = 'Ngày tạo';
-$lang->host->editedBy     = 'Người sửa';
-$lang->host->editedDate   = 'Ngày sửa';
-$lang->host->registerDate = 'RegisterDate';
-$lang->host->all          = 'Tất cả Hosts';
+$lang->host->createdBy   = 'Người tạo';
+$lang->host->createdDate = 'Ngày tạo';
+$lang->host->editedBy = 'Người sửa';
+$lang->host->editedDate  = 'Ngày sửa';
+$lang->host->all   = 'Tất cả Hosts';
 
 $lang->host->groupMaintenance = 'Quản lý Group';
 
