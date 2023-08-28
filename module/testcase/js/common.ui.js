@@ -184,12 +184,13 @@ function loadProductStories(productID)
 
 function loadScenes(productID, sceneName = 'scene')
 {
-    let branch   = $('[name=branch]').val();
+    let branchID = $('[name=branch]').val();
     let moduleID = $('[name=module]').val();
-    if(typeof(branch) == 'undefined')   branch   = 0;
+    if(typeof(branchID) == 'undefined') branchID = 0;
     if(typeof(moduleID) == 'undefined') moduleID = 0;
+    if(typeof(sceneID)  == 'undefined') sceneID  = 0;
 
-    const link = $.createLink('testcase', 'ajaxGetModuleScenes', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&stype=2&storyID=0&onlyOption=false&status=noclosed&limit=50&type=full&hasParent=1');
+    const link = $.createLink('testcase', 'ajaxGetScenes', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&sceneID=' + sceneID);
     $.get(link, function(data)
     {
         let $scenePicker = $('[name=' + sceneName + ']').zui('picker');
