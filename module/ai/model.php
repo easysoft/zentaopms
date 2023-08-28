@@ -822,6 +822,8 @@ class aiModel extends model
             $objectData->$objectName = array();
             foreach($objectKeys as $objectKey)
             {
+                if(!isset($object->$objectName)) continue;
+
                 /* Check if is plain object, data might contain arrays. */
                 if(is_object($object->$objectName))
                 {
