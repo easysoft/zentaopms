@@ -1982,7 +1982,13 @@ class testcase extends control
             /* Record the ID of the parent scene, so that the parent scene will be selected by default when creating a scene next time. */
             helper::setcookie('lastCaseScene', (int)$this->post->parent);
 
-            $this->testcase->createScene();
+            $scene = form::data($this->config->testcase->form->createScene)
+                ->add('openedBy', $this->app->user->account)
+                ->add('openedDate', helper::now())
+                ->cleanInt('product,module,branch,parent')
+                ->get();
+
+            $this->testcase->createScene($scene);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $useSession = $this->app->tab != 'qa' && $this->session->caseList && strpos($this->session->caseList, 'dynamic') === false;

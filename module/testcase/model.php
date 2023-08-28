@@ -2723,14 +2723,8 @@ class testcaseModel extends model
      * @access public
      * @return bool
      */
-    public function createScene(): bool
+    public function createScene(object $scene): bool
     {
-        $scene = fixer::input('post')
-            ->add('openedBy', $this->app->user->account)
-            ->add('openedDate', helper::now())
-            ->cleanInt('product,module,branch,parent')
-            ->get();
-
         $this->dao->insert(TABLE_SCENE)->data($scene)
             ->autoCheck()
             ->batchCheck($this->config->testcase->createscene->requiredFields, 'notempty')
@@ -2740,20 +2734,21 @@ class testcaseModel extends model
         if(dao::isError()) return false;
 
         $sceneID = $this->dao->lastInsertID();
+
+        $scene->path  = ',' . $sceneID . ',';
+        $scene->grade = 1;
+
         if($scene->parent)
         {
             $parent = $this->getSceneByID($scene->parent);
-
-            $scene->path    = $parent->path . $sceneID . ',';
-            $scene->grade   = ++$parent->grade;
-            $scene->product = $parent->product;
-            $scene->branch  = $parent->branch;
-            $scene->module  = $parent->module;
-        }
-        else
-        {
-            $scene->path  = ',' . $sceneID . ',';
-            $scene->grade = 1;
+            if($parent)
+            {
+                $scene->path    = $parent->path . $sceneID . ',';
+                $scene->grade   = ++$parent->grade;
+                $scene->product = $parent->product;
+                $scene->branch  = $parent->branch;
+                $scene->module  = $parent->module;
+            }
         }
 
         $this->dao->update(TABLE_SCENE)->data($scene)->where('id')->eq($sceneID)->exec();
