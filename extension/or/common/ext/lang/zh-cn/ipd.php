@@ -138,4 +138,4 @@ $lang->market->homeMenu->market   = array('link' => "市场|market|browse|browse
 $lang->market->menu           = new stdclass();
 $lang->market->menu->report   = array('link' => "报告|marketreport|browse|marketID=%s");
 $lang->market->menu->research = array('link' => "调研|marketresearch|browse|marketID=%s");
-$lang->market->menu->view     = array('link' => "概况|market|view|marketID=%s");
+$lang->market->menu->view     = array('link' => "概况|market|view|marketID=%s", 'alias' => 'edit');
