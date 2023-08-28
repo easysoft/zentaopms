@@ -2616,11 +2616,11 @@ class testcaseModel extends model
      * Batch change scene.
      *
      * @param  array $caseIdList
-     * @param  int   $sceneId
+     * @param  int   $sceneID
      * @access public
      * @return bool
      */
-    public function batchChangeScene(array $caseIdList, int $sceneId): bool
+    public function batchChangeScene(array $caseIdList, int $sceneID): bool
     {
         if($sceneID < 0 || $sceneID > 16777215) return false; // The scene column's data type is mediumint unsigned and its range is 0-16777215.
 

@@ -2227,11 +2227,11 @@ class testcase extends control
     /**
      * Batch change scene.
      *
-     * @param  int    $sceneId
+     * @param  int    $sceneID
      * @access public
      * @return void
      */
-    public function batchChangeScene(int $sceneId)
+    public function batchChangeScene(int $sceneID)
     {
         $caseIdList = zget($_POST, 'caseIdList',  array());
         if($caseIdList)
