@@ -239,13 +239,13 @@ class projectModel extends model
             ->andWhere('status')->notin('done,closed')
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)
-            ->fetchGroup('project');
+            ->fetchGroup('project', 'id');
 
         $this->app->loadClass('pager', $static = true);
         foreach($projects as $projectID => $project)
         {
-            $orderBy = $project->model == 'waterfall' ? 'id_asc' : 'id_desc';
-            $pager   = $project->model == 'waterfall' ? null : new pager(0, 1, 1);
+            $project->model == 'waterfall' ? ksort($executions[$projectID]) : krsort($executions[$projectID]);
+
             $project->executions = isset($executions[$projectID]) ? $executions[$projectID] : array();
             $project->parentName = $projectParentNames[$project->id];
         }
