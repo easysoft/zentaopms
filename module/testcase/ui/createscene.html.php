@@ -34,7 +34,7 @@ formPanel
                     setID('product'),
                     set::name('product'),
                     set::items($products),
-                    set::value($productID),
+                    set::value($product->id),
                 ),
                 isset($product->type) && $product->type != 'normal' ? picker
                 (
@@ -56,10 +56,10 @@ formPanel
                 (
                     setID('module'),
                     set::name('module'),
-                    set::items($moduleOptionMenu),
-                    set::value($currentModuleID),
+                    set::items($modules),
+                    set::value($moduleID),
                 ),
-                count($moduleOptionMenu) == 1 ? div
+                count($modules) == 1 ? div
                 (
                     set::class('input-group-btn flex'),
                     a
@@ -87,8 +87,8 @@ formPanel
         (
             setID('parent'),
             set::name('parent'),
-            set::items($sceneOptionMenu),
-            set::value($currentParentID),
+            set::items($scenes),
+            set::value($parent),
         )
     ),
     formGroup

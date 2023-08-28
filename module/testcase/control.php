@@ -1971,82 +1971,26 @@ class testcase extends control
      * @param  int    $productID
      * @param  int    $branch
      * @param  int    $moduleID
-     * @param  string $from
-     * @param  string $param
-     * @param  int    $storyID
-     * @param  string $extras
      * @access public
      * @return void
      */
-    public function createScene($productID, $branch = '', $moduleID = 0, $from = '', $param = 0, $storyID = 0, $extras = '')
+    public function createScene(int $productID, string $branch = '', int $moduleID = 0)
     {
-        if(!empty($_POST))
+        if($_POST)
         {
-            $response['result'] = 'success';
+            /* 记录父场景 ID，便于下次创建场景时默认选中父场景。*/
+            /* Record the ID of the parent scene, so that the parent scene will be selected by default when creating a scene next time. */
             helper::setcookie('lastCaseScene', (int)$this->post->parent);
 
-            $sceneResult = $this->testcase->createScene();
-            if(!$sceneResult or dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-                return $this->send($response);
-            }
+            $this->testcase->createScene();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $sceneID = $sceneResult['id'];
-            $this->loadModel('action');
-            $this->action->create('scene', $sceneID, 'Opened');
-
-            $useSession          = $this->app->tab != 'qa' and $this->session->caseList and strpos($this->session->caseList, 'dynamic') === false;
-            $response['locate']  = $useSession ? $this->session->caseList : $this->createLink('testcase', 'browse', "root={$this->post->product}&branch=$branch&type=byModule&param=" . $this->post->module);
-            $response['message'] = $this->lang->saveSuccess;
-
-            return $this->send($response);
+            $useSession = $this->app->tab != 'qa' && $this->session->caseList && strpos($this->session->caseList, 'dynamic') === false;
+            $locate     = $useSession ? $this->session->caseList : inlink('browse', "productID={$this->post->product}&branch={$this->post->branch}&browseType=all&param={$this->post->module}");
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
-        /* Set menu. */
-        if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
-        $this->qa->setMenu($this->products, $productID, $branch);
-
-        /* Set branch. */
-        $product = $this->product->getById($productID);
-        if(!isset($this->products[$productID])) $this->products[$productID] = $product->name;
-        if($this->app->tab == 'execution' or $this->app->tab == 'project')
-        {
-            $objectID        = $this->app->tab == 'project' ? $this->session->project : $executionID;
-            $productBranches = (isset($product->type) and $product->type != 'normal') ? $this->execution->getBranchByProduct($productID, $objectID, 'noclosed|withMain') : array();
-            $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
-            $branch          = key($branches);
-        }
-        else
-        {
-            $branches = (isset($product->type) and $product->type != 'normal') ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
-        }
-
-        $currentModuleID = $moduleID ? (int)$moduleID : (int)$this->cookie->lastCaseModule;
-        $currentParentID = (int)$this->cookie->lastCaseScene;
-
-        $modules = array();
-        if($currentModuleID)
-        {
-            $productModules = $this->tree->getOptionMenu($productID, 'story');
-            $storyModuleID  = array_key_exists($currentModuleID, $productModules) ? $currentModuleID : 0;
-            $modules        = $this->loadModel('tree')->getStoryModule($storyModuleID);
-            $modules        = $this->tree->getAllChildID($modules);
-        }
-
-        $this->view->title            = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->newScene;
-        $this->view->productID        = $productID;
-        $this->view->currentModuleID  = $currentModuleID;
-        $this->view->currentParentID  = $currentParentID;
-        $this->view->gobackLink       = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('testcase', 'browse', "productID=$productID") : '';
-        $this->view->showFields       = $this->config->testcase->custom->createFields;
-        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, ($branch === 'all' or !isset($branches[$branch])) ? 0 : $branch);
-        $this->view->branch           = $branch;
-        $this->view->product          = $product;
-        $this->view->branches         = $branches;
-        $this->view->sceneTitle       = '';
-        $this->view->sceneOptionMenu  = $this->testcase->getSceneMenu($productID, $moduleID, $viewType = 'case', $startSceneID = 0, ($branch === 'all' or !isset($branches[$branch])) ? 0 : $branch);
+        $this->assignCreateSceneVars($productID, $branch, $moduleID);
 
         $this->display();
     }
