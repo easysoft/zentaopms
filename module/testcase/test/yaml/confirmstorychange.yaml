@@ -1,0 +1,9 @@
+title: table zt_case
+desc: "用例"
+author: Gang Liu
+version: "1.0"
+fields:
+  - field: story 
+    range: 2{2}, 0{2}, 2
+  - field: storyVersion
+    range: 1{2},0{2},1

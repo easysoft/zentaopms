@@ -573,6 +573,19 @@ class testcaseTest
     }
 
     /**
+     * 批量确认需求变动。
+     * Batch confirm story change of cases.
+     *
+     * @param  array  $caseIdList
+     * @access public
+     * @return bool
+     */
+    public function batchConfirmStoryChangeTest(array $caseIdList): bool
+    {
+        return $this->objectModel->batchConfirmStoryChange($caseIdList);
+    }
+
+    /**
      * Test join steps to a string, thus can diff them.
      *
      * @param  array  $stepIDList
