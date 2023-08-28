@@ -4,6 +4,8 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/task.class.php';
 su('admin');
 
+zdTable('projectstory')->gen(0); // Clear the table zt_projectstory to make sure the story is not projected.
+
 $task = zdTable('task');
 $task->id->range('1-4');
 $task->type->range('test,devel,design,story');
