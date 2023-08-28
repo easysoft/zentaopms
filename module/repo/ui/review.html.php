@@ -16,7 +16,7 @@ foreach($bugs as $bug)
     $bug->entry     = $repo->name . '/' . $this->repo->decodePath($bug->entry);
 
     $lines       = explode(',', trim($bug->lines, ','));
-    $encodeEntry = urlencode($bug->entry);
+    $encodeEntry = $this->repo->encodePath($bug->entry);
     if(empty($bug->v1))
     {
         $revision  = $repo->SCM != 'Subversion' ? $this->repo->getGitRevisionName($bug->v2, zget($historys, $bug->v2)) : $bug->v2;
