@@ -13,13 +13,13 @@ namespace zin;
 foreach($bugs as $bug)
 {
     $bug->revisionA = $repo->SCM != 'Subversion' ? substr(strtr($bug->v2, '*', '-'), 0, 10) : $bug->v2;
+    $bug->entry     = $repo->name . '/' . $this->repo->decodePath($bug->entry);
 
-    $lines = explode(',', trim($bug->lines, ','));
-    $bug->entry = $repo->name . '/' . $this->repo->decodePath($bug->entry);
+    $lines       = explode(',', trim($bug->lines, ','));
     $encodeEntry = urlencode($bug->entry);
     if(empty($bug->v1))
     {
-        $revision = $repo->SCM != 'Subversion' ? $this->repo->getGitRevisionName($bug->v2, zget($historys, $bug->v2)) : $bug->v2;
+        $revision  = $repo->SCM != 'Subversion' ? $this->repo->getGitRevisionName($bug->v2, zget($historys, $bug->v2)) : $bug->v2;
         $bug->link = $this->repo->createLink('view', "repoID=$repoID&objectID=0&entry={$encodeEntry}&revision={$bug->v2}") . "#L$lines[0]";
     }
     else
