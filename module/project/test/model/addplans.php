@@ -17,21 +17,8 @@ title=测试 projectModel::addPlans();
 timeout=0
 cid=1
 
-- 将计划1，4，7下的需求关联到项目13，查看关联后的需求数 @8
-
-- 将计划1，4，7下的需求关联到项目13，查看关联后的需求ID/产品ID
- - 第3条的story属性 @8
- - 第3条的product属性 @2
-
-- 将计划2，5，10，13下的需求关联到项目11，查看关联后的需求数 @4
-
-- 将计划2，5，10，13下的需求关联到项目11，查看关联后的需求ID/产品ID
- - 第0条的story属性 @14
- - 第0条的product属性 @4
-
 */
 
-global $tester;
 $project = new Project();
 
 $plan = array();

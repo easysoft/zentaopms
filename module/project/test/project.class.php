@@ -595,4 +595,67 @@ class Project
         }
         return $changes;
     }
+
+    /**
+     * 关联其他项目集下的产品。
+     * Link products of other programs.
+     *
+     * @param  int    $projectID
+     * @param  array  $productIdList
+     * @access public
+     * @return bool
+     */
+    public function linkOtherProductsTest(int $projectID, array $productIdList): bool
+    {
+        $members = $this->project->getTeamMembers($projectID);
+
+        $_POST['otherProducts'] = $productIdList;
+        $_POST['stageBy']       = 'product';
+
+        return $this->project->linkOtherProducts($projectID, $members);
+    }
+
+    /**
+     * 关联项目所属项目集下的产品。
+     * Link products of current program of the project.
+     *
+     * @param  int    $projectID
+     * @param  array  $products
+     * @param  array  $branches
+     * @param  array  $plans
+     * @access public
+     * @return array
+     */
+    public function linkProductsTest(int $projectID, array $products = array(), array $branches = array(), array $plans = array()): array
+    {
+        $members            = $this->project->getTeamMembers($projectID);
+        $oldProjectProducts = $this->project->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchGroup('product', 'branch');
+        if(!empty($branches)) $_POST['branch'] = $branches;
+        if(!empty($plans)) $_POST['branch'] = $plans;
+
+        $this->project->linkProducts($projectID, $products, $oldProjectProducts, $members);
+
+        return $this->project->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchAll();
+    }
+
+    /**
+     * 更新项目关联的产品信息。
+     * Update products of a project.
+     *
+     * @param  int    $projectID
+     * @param  array  $products
+     * @param  array  $otherProducts
+     * @access public
+     * @return array
+     */
+    public function updateProductsTest(int $projectID, array $products = array(), array $otherProducts = array()): array
+    {
+        $_POST['stageBy'] = 'product';
+        if(!empty($otherProducts)) $_POST['otherProducts'] = $otherProducts;
+        if(!empty($products)) $_POST['products'] = $products;
+
+        $this->project->updateProducts($projectID, $products);
+
+        return $this->project->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchAll();
+    }
 }
