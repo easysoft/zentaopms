@@ -38,7 +38,7 @@ class testcaseTao extends testcaseModel
      * @access protected
      * @return void
      */
-    protected function insertSteps(int $caseID, array $steps, array $expects, array $stepTypes)
+    protected function insertSteps(int $caseID, array $steps, array $expects, array $stepTypes, int $version = 1)
     {
         $preGrade     = 0;
         $parentStepID = $grandPaStepID = 0;
@@ -73,7 +73,7 @@ class testcaseTao extends testcaseModel
             $step->type    = $stepType;
             $step->parent  = $parentStepID;
             $step->case    = $caseID;
-            $step->version = 1;
+            $step->version = $version;
             $step->desc    = rtrim(htmlSpecialString($stepDesc));
             $step->expect  = $stepType == 'group' ? '' : rtrim(htmlSpecialString(zget($expects, $stepKey, '')));
 
@@ -224,7 +224,7 @@ class testcaseTao extends testcaseModel
 
         if($case->steps)
         {
-            $this->insertSteps($case->id, $case->steps, $case->expects, (array)$case->stepType);
+            $this->insertSteps($oldCase->id, $case->steps, $case->expects, (array)$case->stepType, $case->version);
         }
         else
         {
