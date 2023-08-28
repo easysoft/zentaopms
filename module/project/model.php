@@ -1735,80 +1735,93 @@ class projectModel extends model
     public function updateProducts(int $projectID, array $products = array()): bool
     {
         $this->loadModel('user');
-
         $members = array_keys($this->getTeamMembers($projectID));
 
         /* Link products of other programs. */
-        if(!empty($_POST['otherProducts']))
-        {
-            $products      = array();
-            $otherProducts = $_POST['otherProducts'];
-            foreach($otherProducts as $otherProduct)
-            {
-                if(!$otherProduct) continue;
-
-                $data = new stdclass();
-                $data->project = $projectID;
-                $data->plan    = 0;
-
-                if(strpos($otherProduct, '_') !== false)
-                {
-                    $params = explode('_', $otherProduct);
-                    $data->product = $params[0];
-                    $data->branch  = $params[1];
-                }
-                else
-                {
-                    $data->product = $otherProduct;
-                    $data->branch  = 0;
-                }
-
-                $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
-
-                $products[] = $data->product;
-            }
-
-            $this->user->updateUserView($products, 'product', $members);
-            if((int)$projectID > 0 and !empty($_POST['stageBy']))
-            {
-                $this->dao->update(TABLE_PROJECT)->set('stageBy')->eq('product')->where('id')->eq((int)$projectID)->exec();
-                $this->dao->update(TABLE_EXECUTION)->set('stageBy')->eq('product')->where('project')->eq((int)$projectID)->exec();
-            }
-
-            return !dao::isError();
-        }
+        if(!empty($_POST['otherProducts'])) return $this->linkOtherProducts($projectID, $members);
 
         /* Link products of current program of the project. */
         $products           = isset($_POST['products']) ? (array)$_POST['products'] : $products;
-        $oldProjectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->fetchGroup('product', 'branch');
+        $oldProjectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchGroup('product', 'branch');
+        $this->linkProducts($projectID, $products, $oldProjectProducts, $members);
 
-        $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->exec();
+        /* Delete the execution linked products that is not linked with the execution. */
+        if($projectID > 0)
+        {
+            $executions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->fetchPairs('id');
+            $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->in($executions)->andWhere('product')->notin($products)->exec();
 
+            if(!empty($_POST['stageBy']))
+            {
+                $this->dao->update(TABLE_PROJECT)->set('stageBy')->eq('product')->where('id')->eq($projectID)->orWhere('project')->eq($projectID)->exec();
+            }
+
+            $project = $this->projectTao->fetchProjectInfo($projectID);
+            if(!empty($project) && !empty($executions) && $project->stageBy == 'project' && in_array($project->model, array('waterfall', 'waterfallplus')))
+            {
+                $this->loadModel('execution');
+                foreach($executions as $executionID) $this->execution->updateProducts($executionID);
+            }
+        }
+
+        /* Update the user product view. */
+        $oldProductIdList = array_keys($oldProjectProducts);
+        $needUpdate       = array_merge(array_diff($oldProductIdList, $products), array_diff($products, $oldProductIdList));
+        if($needUpdate) $this->user->updateUserView($needUpdate, 'product', $members);
+
+        /* Create actions. */
+        $unlinkedProducts = array_diff($oldProductIdList, $products);
+        if(!empty($unlinkedProducts))
+        {
+            $products = $this->dao->select('name')->from(TABLE_PRODUCT)
+                ->where('id')->in($unlinkedProducts)
+                ->fetchPairs();
+            $this->loadModel('action')->create('project', $projectID, 'unlinkproduct', '', implode(',', $products));
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * 关联项目所属项目集下的产品。
+     * Link products of current program of the project.
+     *
+     * @param  int    $projectID
+     * @param  array  $products
+     * @param  array  $oldProjectProducts
+     * @param  array  $members
+     * @access public
+     * @return void
+     */
+    public function linkProducts(int $projectID, array $products, array $oldProjectProducts, array $members)
+    {
+        $this->loadModel('user');
+
+        /* Delete the linked data. */
+        $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->exec();
+
+        /* Update the user product view. */
         if(empty($products))
         {
             $this->user->updateUserView(array_keys($oldProjectProducts), 'product', $members);
             return true;
         }
 
-        $branches = isset($_POST['branch']) ? $_POST['branch'] : array();
-        $plans    = isset($_POST['plans']) ? $_POST['plans'] : array();
-
+        /* Set the product information linked with the project. */
+        $branches        = isset($_POST['branch']) ? $_POST['branch'] : array();
+        $plans           = isset($_POST['plans']) ? $_POST['plans'] : array();
         $existedProducts = array();
-        foreach($products as $i => $productID)
+        foreach($products as $index => $productID)
         {
             if(empty($productID)) continue;
-
             if(!isset($existedProducts[$productID])) $existedProducts[$productID] = array();
 
             $oldPlan = 0;
-            $branch  = isset($branches[$i]) ? $branches[$i] : 0;
-
-            if(!is_array($branch)) $branch = array($branch => $branch);
-
+            $branch  = isset($branches[$index]) ? $branches[$index] : 0;
+            $branch  = !is_array($branch) ? array($branch => $branch) : $branch;
             foreach($branch as $branchID)
             {
                 if(isset($existedProducts[$productID][$branchID])) continue;
-
                 if(isset($oldProjectProducts[$productID][$branchID]))
                 {
                     $oldProjectProduct = $oldProjectProducts[$productID][$branchID];
@@ -1827,39 +1840,50 @@ class projectModel extends model
                 $existedProducts[$productID][$branchID] = true;
             }
         }
+    }
 
-        /* Delete the execution linked products that is not linked with the execution. */
-        $projectID = (int)$projectID;
-        if($projectID > 0)
+    /**
+     * 关联其他项目集下的产品。
+     * Link products of other programs.
+     *
+     * @access public
+     * @return bool
+     */
+    public function linkOtherProducts(int $projectID, array $members): bool
+    {
+        $this->loadModel('user');
+
+        $productIdList = array();
+        $otherProducts = $_POST['otherProducts'];
+        foreach($otherProducts as $otherProduct)
         {
-            $executions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->fetchPairs('id');
-            $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->in($executions)->andWhere('product')->notin($products)->exec();
+            if(!$otherProduct) continue;
 
-            if(!empty($_POST['stageBy']))
+            $data = new stdclass();
+            $data->project = $projectID;
+            $data->plan    = 0;
+
+            if(strpos($otherProduct, '_') !== false)
             {
-                $this->dao->update(TABLE_PROJECT)->set('stageBy')->eq('product')->where('id')->eq((int)$projectID)->exec();
-                $this->dao->update(TABLE_EXECUTION)->set('stageBy')->eq('product')->where('project')->eq((int)$projectID)->exec();
+                $params = explode('_', $otherProduct);
+                $data->product = $params[0];
+                $data->branch  = $params[1];
+            }
+            else
+            {
+                $data->product = $otherProduct;
+                $data->branch  = 0;
             }
 
-            $project = $this->projectTao->fetchProjectInfo($projectID);
-            if(!empty($project) && !empty($executions) && $project->stageBy == 'project' && in_array($project->model, array('waterfall', 'waterfallplus')))
-            {
-                $this->loadModel('execution');
-                foreach($executions as $executionID) $this->execution->updateProducts($executionID);
-            }
+            $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
+
+            $productIdList[] = $data->product;
         }
 
-        $oldProductKeys = array_keys($oldProjectProducts);
-        $needUpdate     = array_merge(array_diff($oldProductKeys, $products), array_diff($products, $oldProductKeys));
-        if($needUpdate) $this->user->updateUserView($needUpdate, 'product', $members);
-
-        $unlinkedProducts = array_diff($oldProductKeys, $products);
-        if(!empty($unlinkedProducts))
+        $this->user->updateUserView($productIdList, 'product', $members);
+        if($projectID > 0 and !empty($_POST['stageBy']))
         {
-            $products = $this->dao->select('name')->from(TABLE_PRODUCT)
-                ->where('id')->in($unlinkedProducts)
-                ->fetchPairs();
-            $this->loadModel('action')->create('project', $projectID, 'unlinkproduct', '', implode(',', $products));
+            $this->dao->update(TABLE_PROJECT)->set('stageBy')->eq('product')->where('id')->eq($projectID)->orWhere('project')->eq($projectID)->exec();
         }
 
         return !dao::isError();
