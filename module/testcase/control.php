@@ -2373,37 +2373,46 @@ class testcase extends control
      */
     public function updateOrder()
     {
-        $idList  = explode(',', trim($this->post->scenes, ','));
-        $orderBy = $this->post->orderBy;
-        if(strpos($orderBy, 'sort') === false) return false;
-        /* Get list of original scenes and cases, and sort with orderBy param. */
-        $scenesMap = $this->dao->select('id,sort,isCase')->from(VIEW_SCENECASE)->where('id')->in($idList)->orderBy($orderBy)->fetchAll('id');
+        $type     = $this->post->type;
+        $sourceID = $this->post->sourceID;
+        $targetID = $this->post->targetID;
+        $dataList = $this->post->dataList;
+        if(!$type || !$sourceID || !$targetID || !$dataList) return false;
+        if($sourceID == $targetID) return false;
 
-        foreach($scenesMap as $scene)
+        $idList      = array_map(function($data){return $data['id'];},    $dataList);
+        $orderList   = array_map(function($data){return $data['order'];}, $dataList);
+        $sourceIndex = array_search($sourceID, $idList);
+        $targetIndex = array_search($targetID, $idList);
+
+        if($sourceIndex === false || $targetIndex === false) return false;
+
+        if($sourceIndex > $targetIndex)
         {
-            /* Compare with sorted list from front-end. */
-            $newID = array_shift($idList);
-            if($scene->id == $newID) continue;
-
-            /* Change sort value of scene. */
-            if ($scenesMap[$newID]->isCase == 2)
+            $idList    = array_slice($idList,    $targetIndex, $sourceIndex - $targetIndex + 1);
+            $orderList = array_slice($orderList, $targetIndex, $sourceIndex - $targetIndex + 1);
+            array_unshift($idList, array_pop($idList));
+        }
+        else
+        {
+            $idList    = array_slice($idList,    $sourceIndex, $targetIndex - $sourceIndex + 1);
+            $orderList = array_slice($orderList, $sourceIndex, $targetIndex - $sourceIndex + 1);
+            if(count($idList) == 2)
             {
-                $this->dao->update(TABLE_SCENE)
-                    ->set('sort')->eq($scene->sort)
-                    ->set('lastEditedBy')->eq($this->app->user->account)
-                    ->set('lastEditedDate')->eq(helper::now())
-                    ->where('id')->eq($newID - CHANGEVALUE)
-                    ->exec();
-                continue;
+                $idList = array_reverse($idList);
             }
+            else
+            {
+                array_splice($idList, -1, 0, array_shift($idList));
+            }
+        }
 
-            /* Change sort value of case. */
-            $this->dao->update(TABLE_CASE)
-                ->set('sort')->eq($scene->sort)
-                ->set('lastEditedBy')->eq($this->app->user->account)
-                ->set('lastEditedDate')->eq(helper::now())
-                ->where('id')->eq($newID)
-                ->exec();
+        $table = $type == 'case' ? TABLE_CASE : TABLE_SCENE;
+
+        foreach($idList as $key => $id)
+        {
+            if(!isset($orderList[$key])) continue;
+            $this->dao->update($table)->set('sort')->eq($orderList[$key])->where('id')->eq($id)->exec();
         }
     }
 
