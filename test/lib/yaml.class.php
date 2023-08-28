@@ -411,6 +411,10 @@ class yaml
                 print_r($output);
             }
         }
+        elseif(file_exists($sqlPath) && $isClear && is_writable($sqlPath))
+        {
+            unlink($sqlPath);
+        }
 
         $this->insertDB($sqlPath, $this->tableName, $isClear, $rows);
 
