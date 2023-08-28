@@ -34,10 +34,12 @@ $config->testcase->form->batchCreate['scene']        = array('required' => false
 $config->testcase->form->batchCreate['story']        = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->testcase->form->batchCreate['title']        = array('required' => true,  'type' => 'string', 'default' => '', 'base' => true);
 $config->testcase->form->batchCreate['type']         = array('required' => false, 'type' => 'string', 'default' => '');
+$config->testcase->form->batchCreate['color']        = array('required' => false, 'type' => 'string', 'default' => '');
 $config->testcase->form->batchCreate['pri']          = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->testcase->form->batchCreate['needReview']   = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->testcase->form->batchCreate['precondition'] = array('required' => false, 'type' => 'string', 'default' => '');
 $config->testcase->form->batchCreate['keywords']     = array('required' => false, 'type' => 'string', 'default' => '');
-$config->testcase->form->batchCreate['stage']        = array('required' => false, 'type' => 'string', 'default' => '');
+$config->testcase->form->batchCreate['stage']        = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
 $config->testcase->form->batchCreate['review']       = array('required' => false, 'type' => 'int',    'default' => 0);
 
 $config->testcase->form->edit = array();
