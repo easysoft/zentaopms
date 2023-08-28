@@ -64,6 +64,7 @@ class testsuiteModel extends model
             ->batchcheck($this->config->testsuite->create->requiredFields, 'notempty')
             ->checkFlow()
             ->exec();
+
         if(!dao::isError())
         {
             $suiteID = $this->dao->lastInsertID();
@@ -296,6 +297,7 @@ class testsuiteModel extends model
             ->orderBy('id desc')
             ->page($pager)
             ->fetchAll();
+
         return $cases;
     }
 

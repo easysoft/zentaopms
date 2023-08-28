@@ -24,7 +24,7 @@ featureBar
     set::module('testsuite'),
     set::method('browse'),
     set::current('all'),
-    set::linkParams("productID={$productID}&type=all"),
+    set::linkParams("productID={$product->id}&type=all"),
 );
 
 toolbar
@@ -35,7 +35,7 @@ toolbar
         (
             setClass('btn primary'),
             set::icon('plus'),
-            set::url(helper::createLink('testsuite', 'create', "productID={$productID}")),
+            set::url(helper::createLink('testsuite', 'create', "productID={$product->id}")),
             $lang->testsuite->create
         )
     )
