@@ -243,12 +243,13 @@ class testcaseTao extends testcaseModel
      * 更新用例和 bug 的关联关系。
      * Link bugs with case.
      *
+     * @param  int       $caseID
      * @param  array     $linkedBugs
      * @param  object    $case
      * @access protected
      * @return bool
      */
-    protected function linkBugs(array $linkedBugs, object $case): bool
+    protected function linkBugs(int $caseID, array $linkedBugs, object $case): bool
     {
         $toLinkBugs = $case->linkBug;
         $newBugs    = array_diff($toLinkBugs, $linkedBugs);

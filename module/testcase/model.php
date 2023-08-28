@@ -775,7 +775,7 @@ class testcaseModel extends model
 
         if($case->stepChanged) $this->testcaseTao->updateStep($case, $oldCase);
 
-        $this->testcaseTao->linkBugs(array_keys($oldCase->toBugs), $case);
+        $this->testcaseTao->linkBugs($oldCase->id, array_keys($oldCase->toBugs), $case);
 
         if($case->branch && !empty($testtasks)) $this->testcaseTao->unlinkCaseFromTesttask($oldCase->id, $testtasks);
 
