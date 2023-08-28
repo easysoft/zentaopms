@@ -99,7 +99,7 @@ class executionEntry extends entry
                     $execution->dynamics = $this->loadModel('action')->processDynamicForAPI($dynamics);
                     break;
                 case 'chartdata':
-                    list($dateList, $interval) = $this->loadModel('execution')->getDateList($execution->begin, $execution->end, 'noweekend', '0', 'Y-m-d');
+                    list($dateList, $interval) = $this->loadModel('execution')->getDateList($execution->begin, $execution->end, 'noweekend', 0, 'Y-m-d');
                     $execution->chartData = $this->execution->buildBurnData($executionID, $dateList, 'left');
                     break;
             }

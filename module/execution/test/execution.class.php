@@ -2047,17 +2047,18 @@ class executionTest
     }
 
     /**
-     * function getDateList test by execution
+     * 获取日期列表数据。
+     * Get date list data.
      *
      * @param  string $begin
      * @param  string $end
      * @param  string $type
-     * @param  string $count
-     * @param  int $interval
+     * @param  int    $count
+     * @param  int    $interval
      * @access public
-     * @return array
+     * @return array|string|int
      */
-    public function getDateListTest($begin, $end, $type, $count, $interval = 0)
+    public function getDateListTest(string $begin, string $end, string $type, int $count, int $interval = 0): array|string|int
     {
         $object = $this->executionModel->getDateList($begin, $end, $type, $interval);
 
