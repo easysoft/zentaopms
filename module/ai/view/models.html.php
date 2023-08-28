@@ -26,7 +26,7 @@ $requiredFields = $config->ai->vendorList[$currentVendor]['requiredFields'];
     </tr>
     <?php if(in_array('key', $requiredFields)): ?>
       <tr>
-        <th><?php echo $lang->ai->models->apiKey; ?></th>
+        <th><?php echo $lang->ai->models->key; ?></th>
         <td><?php echo empty($modelConfig->key) ? $lang->ai->models->unconfigured : ("<code title='{$lang->ai->models->concealTip}'>" . substr_replace($modelConfig->key, '...', 4, strlen($modelConfig->key) - 8) . '</code>'); ?></td>
       </tr>
     <?php endif; ?>
