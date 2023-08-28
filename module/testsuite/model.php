@@ -58,7 +58,7 @@ class testsuiteModel extends model
      * @access public
      * @return bool|int
      */
-    public function create(object $suite): int|false
+    public function create(object $suite): bool|int
     {
         $this->dao->insert(TABLE_TESTSUITE)->data($suite)
             ->batchcheck($this->config->testsuite->create->requiredFields, 'notempty')
