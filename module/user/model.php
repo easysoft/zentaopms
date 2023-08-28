@@ -2984,11 +2984,11 @@ class userModel extends model
     /**
      * Put the current user first.
      *
-     * @param  array    $users
+     * @param  array  $users
      * @access public
      * @return array
      */
-    public function processAccountSort($users = array())
+    public function processAccountSort(array $users = array()): array
     {
         if(isset($this->app->user->account) and isset($users[$this->app->user->account]))
         {
