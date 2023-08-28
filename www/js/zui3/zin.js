@@ -621,6 +621,17 @@
 
         let remoteData;
         let loadError;
+        target = options.target;
+        if(target[0] !== '#' && target[0] !== '.') target = `#${target}`;
+        const $target = $(target);
+        if(!$target.length) return;
+        if(options.cache)
+        {
+            const cache = (typeof options.cache === 'number' ? options.cache : 3600) *  1000;
+            const lastLoad = $target.data('zin-target-load');
+            if(lastLoad && (Date.now() - lastLoad) < cache) return;
+        }
+
         const ajaxOptions =
         {
             url:         url,
@@ -642,23 +653,13 @@
                     if(result === false) return;
                     if(typeof result === 'string') data = result;
                 }
-                let target = options.target;
-                if(target[0] !== '#' && target[0] !== '.') target = `#${target}`;
-                const $target = $(target);
-                if($target.length)
-                {
-                    if(options.success) options.success(data, options);
-                    let $content = $(data);
-                    if(options.selector) $content = $('<div>').append($content).find(options.selector);
-                    if(options.replace) $target.replaceWith($content);
-                    else $target.empty().append($content);
-                    $target.zuiInit();
-                }
-                else
-                {
-                    loadError = new Error(`ZIN: Target "${target}" not found.`);
-                    if(options.error) options.error(data, loadError);
-                }
+
+                if(options.success) options.success(data, options);
+                let $content = $(data);
+                if(options.selector) $content = $('<div>').append($content).find(options.selector);
+                if(options.replace) $target.replaceWith($content);
+                else $target.empty().append($content);
+                $target.data('zin-target-load', Date.now()).zuiInit();
             },
             error: (xhr, type, error) =>
             {
