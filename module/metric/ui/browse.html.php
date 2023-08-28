@@ -32,6 +32,18 @@ featureBar
     li(searchToggle(set::open($type == 'bysearch'), set::module('metric'))),
 );
 
+toolbar
+(
+    common::hasPriv('metric', 'create') ? btn
+    (
+        setClass('btn primary'),
+        set::icon('plus'),
+        set::url(helper::createLink('metric', 'create')),
+        set('data-toggle', 'modal'),
+        $lang->metric->create
+    ) : null,
+);
+
 sidebar
 (
     moduleMenu(set(array

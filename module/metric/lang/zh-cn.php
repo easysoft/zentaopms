@@ -1,13 +1,13 @@
 <?php
 $lang->metric->common        = "度量项";
-$lang->metric->name          = "度量项名称";
+$lang->metric->name          = "度量名称";
 $lang->metric->stage         = "阶段";
-$lang->metric->scope         = "范围";
-$lang->metric->object        = "对象";
-$lang->metric->purpose       = "目的";
-$lang->metric->unit          = "单位";
-$lang->metric->code          = "代号";
-$lang->metric->desc          = "描述";
+$lang->metric->scope         = "度量范围";
+$lang->metric->object        = "度量对象";
+$lang->metric->purpose       = "度量目的";
+$lang->metric->unit          = "度量单位";
+$lang->metric->code          = "度量代号";
+$lang->metric->desc          = "度量项描述";
 $lang->metric->definition    = "定义";
 $lang->metric->formula       = "计算规则";
 $lang->metric->when          = "收集方式";
@@ -21,6 +21,7 @@ $lang->metric->date          = "日期";
 $lang->metric->metricData    = "度量数据";
 $lang->metric->system        = "system";
 $lang->metric->weekCell      = "%s年第%s周";
+$lang->metric->create        = "创建" . $this->lang->metric->common;
 
 $lang->metric->noDesc    = "暂无描述";
 $lang->metric->noFormula = "暂无计算规则";

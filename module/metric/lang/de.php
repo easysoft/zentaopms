@@ -1,13 +1,13 @@
 <?php
 $lang->metric->common        = "Metric";
-$lang->metric->name          = "Name";
+$lang->metric->name          = "Metric Name";
 $lang->metric->stage         = "Stage";
-$lang->metric->scope         = "Scope";
-$lang->metric->object        = "Object";
-$lang->metric->purpose       = "Purpose";
-$lang->metric->unit          = "Unit";
-$lang->metric->code          = "Code";
-$lang->metric->desc          = "Description";
+$lang->metric->scope         = "Metric Scope";
+$lang->metric->object        = "Metric Object";
+$lang->metric->purpose       = "Metric Purpose";
+$lang->metric->unit          = "Metric Unit";
+$lang->metric->code          = "Metric Code";
+$lang->metric->desc          = "Metric Description";
 $lang->metric->definition    = "Definition";
 $lang->metric->formula       = "Formula";
 $lang->metric->when          = "Collection Method";
@@ -20,6 +20,7 @@ $lang->metric->name          = "Name";
 $lang->metric->date          = "Date";
 $lang->metric->metricData    = "Metric Data";
 $lang->metric->system        = "system";
+$lang->metric->create        = "Create " . $this->lang->metric->common;
 
 $lang->metric->noDesc    = "No description";
 $lang->metric->noFormula = "No formula";

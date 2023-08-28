@@ -23,6 +23,17 @@ class metric extends control
     }
 
     /**
+     * Create a metric.
+     *
+     * @access public
+     * @return void
+     */
+    public function create()
+    {
+        $this->display();
+    }
+
+    /**
      * Browse metric list.
      *
      * @param  int    $param
