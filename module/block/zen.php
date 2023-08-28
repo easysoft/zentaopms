@@ -199,10 +199,10 @@ class blockZen extends block
         foreach($blocks as $key => $block)
         {
             /* 将没有开启功能区块过虑。 */
-            if($block->code == 'waterfallrisk' && !helper::hasFeature('waterfall_risk'))   continue;
+            if($block->code == 'waterfallrisk'  && !helper::hasFeature('waterfall_risk'))  continue;
             if($block->code == 'waterfallissue' && !helper::hasFeature('waterfall_issue')) continue;
-            if($block->code == 'scrumrisk' && !helper::hasFeature('scrum_risk'))           continue;
-            if($block->code == 'scrumissue' && !helper::hasFeature('scrum_issue'))         continue;
+            if($block->code == 'scrumrisk'      && !helper::hasFeature('scrum_risk'))      continue;
+            if($block->code == 'scrumissue'     && !helper::hasFeature('scrum_issue'))     continue;
 
             /* 将没有视图权限的区块过滤。 */
             if(!empty($block->module) && $block->module != 'todo' && !empty($acls['views']) && !isset($acls['views'][$block->module]))
@@ -221,12 +221,13 @@ class blockZen extends block
             $sizeConfig  = $this->config->block->size[$block->module][$block->code];
             $defaultSize = empty($sizeConfig) ? $this->config->block->defaultSize : $sizeConfig; // 默认为区块的统一默认尺寸。
 
+            /* 设置区块的默认宽度和高度。 */
             if(empty($block->width))  $block->width  = reset(array_keys($defaultSize));
             if(empty($block->height)) $block->height = !empty($sizeConfig[$block->width]) ? $sizeConfig[$block->width] : reset($defaultSize);
 
             /* 设置区块距离左侧的宽度和距离顶部的高度。 */
-            if(!isset($block->left))  $block->left = $block->width == 1 ? 2 : 0;
-            if(!isset($block->top))   $block->top = -1; // -1 将会自动计算高度。
+            if(empty($block->left)) $block->left = $block->width == 1 ? 2 : 0;
+            if(empty($block->top))  $block->top  = -1; // -1 将会自动计算高度。
 
             $block->width  = (int)$block->width;
             $block->height = (int)$block->height;
