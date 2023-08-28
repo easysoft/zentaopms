@@ -194,6 +194,52 @@ class testcaseZen extends testcase
         $this->view->branches       = $branches;
     }
 
+
+    /**
+     * 展示创建场景的相关变量。
+     * Show the variables associated with the creation scene.
+     *
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  int       $moduleID
+     * @access protected
+     * @return void
+     */
+    protected function assignCreateSceneVars(int $productID, string $branch = '', int $moduleID = 0): void
+    {
+        $product = $this->product->getById($productID);
+        if(!isset($this->products[$productID])) $this->products[$productID] = $product->name;
+
+        /* 获取分支键值对及当前分支。*/
+        /* Get branch pairs and set current branch. */
+        if($this->app->tab == 'project' || $this->app->tab == 'execution')
+        {
+            /* 在项目或执行中显示时只显示项目或执行关联的分支键值对。*/
+            /* When showing in a project or execution, only the branch key-value pairs associated with the project or execution are shown. */
+            $objectID        = $this->app->tab == 'project' ? $this->session->project : $executionID;
+            $productBranches = isset($product->type) && $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct(array($productID), $objectID, 'noclosed|withMain') : array();
+            $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
+            $branch          = key($branches);
+        }
+        else
+        {
+            $branches = isset($product->type) && $product->type != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
+        }
+
+        /* 设置菜单。 */
+        /* Set menu. */
+        $this->setMenu((int)$this->session->project, (int)$this->session->execution, $productID, $branch);
+
+        $this->view->title    = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->newScene;
+        $this->view->modules  = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, ($branch === 'all' || !isset($branches[$branch])) ? 0 : $branch);
+        $this->view->scenes   = $this->testcase->getSceneMenu($productID, $moduleID, $viewType = 'case', $startSceneID = 0, ($branch === 'all' || !isset($branches[$branch])) ? 0 : $branch);
+        $this->view->moduleID = $moduleID ? (int)$moduleID : (int)$this->cookie->lastCaseModule;
+        $this->view->parent   = (int)$this->cookie->lastCaseScene;
+        $this->view->product  = $product;
+        $this->view->branch   = $branch;
+        $this->view->branches = $branches;
+    }
+
     /**
      * 展示创建 testcase 的需求和模块变量。
      * Show the modules and stoires associated with the creation testcase.
