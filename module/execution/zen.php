@@ -180,9 +180,9 @@ class executionZen extends execution
      *
      * @param  array     $stories
      * @access protected
-     * @return void
+     * @return array
      */
-    protected function getPrintKanbanData(array $stories)
+    protected function getPrintKanbanData(array $stories): array
     {
         $kanbanTasks = $this->execution->getKanbanTasks($executionID, "id");
         $kanbanBugs  = $this->loadModel('bug')->getExecutionBugs($executionID);
@@ -213,7 +213,7 @@ class executionZen extends execution
             $dataList[$content] = $content == 'story' ? $stories : $taskAndBugs[$content];
         }
 
-        return array(dataList, $users);
+        return array($dataList, $users);
     }
 
     /**
