@@ -314,7 +314,7 @@ div
         div
         (
             setID('chartLine'),
-            h::js("$('#chartLine').load('{$chartURL}')")
+            h::js("loadTarget('{$chartURL}', '#chartLine')")
         )
     )
 );

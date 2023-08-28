@@ -16,7 +16,7 @@ namespace zin;
 featureBar
 (
     set::current($browseType),
-    set::linkParams("executionID={$execution->id}&status={key}&param={$param}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}"),
+    set::linkParams("executionID={$execution->id}&status={key}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
     li(searchToggle(set::module('task'), set::open($browseType == 'bysearch')))
 );
 
@@ -179,7 +179,7 @@ if($canBatchAction)
 }
 
 jsVar('orderBy',        $orderBy);
-jsVar('sortLink',       helper::createLink('execution', 'task', "executionID={$execution->id}&status={$status}&param={$param}&orderBy={orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}"));
+jsVar('sortLink',       helper::createLink('execution', 'task', "executionID={$execution->id}&status={$status}&param={$param}&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
 jsVar('pageSummary',    $lang->execution->pageSummary);
 jsVar('checkedSummary', $lang->execution->checkedSummary);
 jsVar('multipleAB',     $lang->task->multipleAB);
@@ -199,9 +199,9 @@ dtable
     set::footToolbar($footToolbar),
     set::footPager(usePager(array
     (
-        'recPerPage'  => $recPerPage,
-        'recTotal'    => $recTotal,
-        'linkCreator' => helper::createLink('execution', 'task', "executionID={$execution->id}&status={$status}&param={$param}&orderBy=$orderBy&recTotal={$recTotal}&recPerPage={recPerPage}&page={page}")
+        'recPerPage'  => $pager->recPerPage,
+        'recTotal'    => $pager->recTotal,
+        'linkCreator' => helper::createLink('execution', 'task', "executionID={$execution->id}&status={$status}&param={$param}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}")
     ))),
     set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
     set::customCols(true)
