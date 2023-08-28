@@ -448,6 +448,7 @@ class testcaseZen extends testcase
             ->setDefault('story,branch', 0)
             ->setDefault('stage', '')
             ->setDefault('deleteFiles', array())
+            ->setDefault('storyVersion', $oldCase->storyVersion)
             ->setIF($formData->data->story != false && $formData->data->story != $oldCase->story, 'storyVersion', $this->loadModel('story')->getVersion($formData->data->story))
             ->setIF(!$formData->data->linkCase, 'linkCase', '')
             ->setIF($formData->data->auto, 'auto', 'auto')
