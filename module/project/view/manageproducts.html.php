@@ -140,7 +140,7 @@
   </div>
 </div>
 
-<?php $noticeSwitch = (!$project->division and count($linkedProducts) == 1 and empty($executions));?>
+<?php $noticeSwitch = (!$project->division and count($linkedProducts) == 1 and empty($executions) and in_array($project->model, array('waterfall', 'waterfallplus')));?>
 <?php js::set('linkedProducts', array_keys($linkedProducts));?>
 <?php js::set('noticeSwitch', $noticeSwitch);?>
 <?php js::set('noticeDivsion', $lang->project->noticeDivsion);?>

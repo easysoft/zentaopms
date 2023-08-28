@@ -37,7 +37,7 @@ foreach(explode(',', $showFields) as $field)
     if($field) $visibleFields[$field] = '';
 }
 ?>
-<form method='post' target='hiddenwin' action="<?php echo inLink('batchEdit', "productID=$productID&executionID=$executionID")?>" id="batchEditForm">
+<form method='post' target='hiddenwin' action="<?php echo inLink('batchEdit', "productID=$productID&executionID=$executionID&branch=$branch&storyType=$storyType")?>" id="batchEditForm">
   <div class="table-responsive">
     <table class='table table-form'>
       <thead>

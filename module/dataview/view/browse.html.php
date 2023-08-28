@@ -14,11 +14,13 @@
 <?php js::set('table',      $selectedTable);?>
 <?php js::set('type',       $type);?>
 <?php js::set('dataview',   $dataview);?>
+<?php js::set('fieldCount', count($fields));?>
 <?php js::set('warningDesign', $lang->dataview->error->warningDesign);?>
+<?php js::set('viewResult',    $lang->dataview->viewResult);?>
 
-<?php js::set('pageID', 1);?>
-<?php js::set('recPerPage', 25);?>
-<?php js::set('recTotal', $dataCount);?>
+<?php js::set('pageID', $pageID);?>
+<?php js::set('recPerPage', $recPerPage);?>
+<?php js::set('recTotal', $recTotal);?>
 <?php js::set('recTotalTip', $lang->dataview->recTotalTip);?>
 <?php js::set('recPerPageTip', $lang->dataview->recPerPageTip);?>
 
@@ -112,7 +114,8 @@
                     <?php foreach($data as $value):?>
                     <?php echo '<tr>';?>
                       <?php foreach($fields as $key => $field):?>
-                      <td title='<?php echo isset($value->$key) ? $value->$key : 'null';?>'><?php echo isset($value->$key) ? $value->$key : 'null';?></td>
+                      <?php $tdValue = isset($value->$key) ? $value->$key : 'null';?>
+                      <td title='<?php echo $tdValue;?>'><?php echo $tdValue;?></td>
                       <?php endforeach;?>
                     <?php echo '</tr>';?>
                     <?php endforeach;?>
@@ -159,6 +162,7 @@
                     <a class='pager-item' data-page='1' href='javascript:;'><i class='icon icon-last-page'></i></a>
                   </li>
                 </ul>
+                <span style="float:left;line-height:28px" id="queryResult"></span>
               </div>
               <?php endif;?>
             </div>

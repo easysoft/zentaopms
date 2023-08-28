@@ -2590,6 +2590,8 @@ class userModel extends model
     public function checkProductPriv($product, $account, $groups, $teams, $stakeholders, $whiteList, $admins = array())
     {
         if(strpos($this->app->company->admins, ',' . $account . ',') !== false) return true;
+        if(strpos(",{$product->reviewer},", ',' . $account . ',') !== false)    return true;
+        if(strpos(",{$product->PMT},", ',' . $account . ',') !== false)         return true;
         if($product->PO == $account OR $product->QD == $account OR $product->RD == $account OR $product->createdBy == $account OR (isset($product->feedback) && $product->feedback == $account)) return true;
         if($product->acl == 'open') return true;
 
@@ -2709,7 +2711,9 @@ class userModel extends model
     {
         $users = array();
 
-        foreach(explode(',', trim($this->app->company->admins, ',')) as $admin) $users[$admin] = $admin;
+        foreach(explode(',', trim($this->app->company->admins, ',')) as $admin) $users[$admin]   = $admin;
+        foreach(explode(',', trim($product->reviewer, ',')) as $account)        $users[$account] = $account;
+        foreach(explode(',', trim($product->PMT, ',')) as $account)             $users[$account] = $account;
 
         $users[$product->PO]        = $product->PO;
         $users[$product->QD]        = $product->QD;
@@ -2868,7 +2872,7 @@ class userModel extends model
         $personalData['createdBugs']         = $this->dao->select($t1Count)->from(TABLE_BUG)->alias('t1')->leftjoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')->where('t1.openedBy')->eq($account)->andWhere('t1.deleted')->eq('0')->andWhere('t2.deleted')->eq('0')->fetch('count');
         $personalData['resolvedBugs']        = $this->dao->select($t1Count)->from(TABLE_BUG)->alias('t1')->leftjoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')->where('t1.resolvedBy')->eq($account)->andWhere('t1.deleted')->eq('0')->andWhere('t2.deleted')->eq('0')->fetch('count');
         $personalData['createdCases']        = $this->dao->select($count)->from(TABLE_CASE)->where('openedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
-        if($this->config->edition == 'max')
+        if($this->config->edition == 'max' or $this->config->edition == 'ipd')
         {
             $personalData['createdRisks']   = $this->dao->select($t1Count)->from(TABLE_RISK)->alias('t1')->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')->where('t1.createdBy')->eq($account)->andWhere('t1.deleted')->eq('0')->andWhere('t2.deleted')->eq('0')->fetch('count');
             $personalData['resolvedRisks']  = $this->dao->select($t1Count)->from(TABLE_RISK)->alias('t1')->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')->where('t1.resolvedBy')->eq($account)->andWhere('t1.deleted')->eq('0')->andWhere('t2.deleted')->eq('0')->fetch('count');

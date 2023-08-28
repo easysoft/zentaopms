@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 
 <?php
-if($this->config->edition == 'biz' || $this->config->edition == 'max')
+if($this->config->edition != 'open')
 {
     $action = $this->loadModel('workflowaction')->getByModuleAndAction('bug', 'batchactivate');
     if($action->js)  echo "<script>{$action->js}</script>";

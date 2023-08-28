@@ -26,6 +26,7 @@ $unfoldStories     = zget($unfoldStories, $productID, array());
 $isProjectStory    = $this->app->rawModule == 'projectstory';
 $projectHasProduct = $isProjectStory && !empty($project->hasProduct);
 $projectIDParam    = $isProjectStory ? "projectID=$projectID&" : '';
+$projectModel      = isset($project->model) ? $project->model : '';
 js::set('browseType', $browseType);
 js::set('account', $this->app->user->account);
 js::set('reviewStory', $lang->product->reviewStory);
@@ -35,6 +36,7 @@ js::set('branch', $branch);
 js::set('rawModule', $this->app->rawModule);
 js::set('productType', $this->app->tab == 'product' ? $product->type : '');
 js::set('projectHasProduct', $projectHasProduct);
+js::set('projectModel', $projectModel);
 js::set('URAndSR', $this->config->URAndSR);
 js::set('unfoldStories', $unfoldStories);
 js::set('unfoldAll',     $lang->execution->treeLevel['all']);
@@ -44,7 +46,6 @@ js::set('vision',        $this->config->vision);
 ?>
 <style>
 .btn-group .icon-close:before {font-size: 5px; vertical-align: 25%;}
-.btn-group a i.icon-plus, .btn-group a i.icon-link {font-size: 16px;}
 .btn-group a.btn-secondary, .btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.2);}
 .btn-group button.dropdown-toggle.btn-secondary, .btn-group button.dropdown-toggle.btn-primary {padding:6px;}
 #productStoryForm table tbody tr td.c-actions {overflow: visible;}
@@ -79,11 +80,11 @@ js::set('vision',        $this->config->vision);
       <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;"><div class='text' style="overflow: hidden;" title='<?php echo $productName;?>'><?php echo $productName;?></div> <span class='caret'></span></a>
       <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
         <?php
-        echo '<li ' . (empty($productID) ? "class='active'" : '') . '>' . html::a($this->createLink('projectstory', 'story', "projectID=$projectID"), $lang->product->all)  . "</li>";
+        echo '<li ' . (empty($productID) ? "class='active'" : '') . '>' . html::a($this->createLink('projectstory', 'story', "projectID=$projectID&productID=0&branch=all&browseType=&param=0&storyType=$storyType"), $lang->product->all)  . "</li>";
         foreach($projectProducts as $projectProduct)
         {
             $active = $projectProduct->id == $productID ? "class='active'" : '';
-            echo "<li $active>" . html::a($this->createLink('projectstory', 'story', "projectID=$projectID&productID=$projectProduct->id&branch=all"), $projectProduct->name, '', "title='{$projectProduct->name}' class='text-ellipsis'") . "</li>";
+            echo "<li $active>" . html::a($this->createLink('projectstory', 'story', "projectID=$projectID&productID=$projectProduct->id&branch=all&browseType=&param=0&storyType=$storyType"), $projectProduct->name, '', "title='{$projectProduct->name}' class='text-ellipsis'") . "</li>";
         }
         ?>
       </ul>
@@ -232,7 +233,9 @@ js::set('vision',        $this->config->vision);
         }
         if(common::hasPriv('projectstory', 'linkStory'))
         {
-            $buttonLink  = $this->createLink('projectstory', 'linkStory', "project=$projectID");
+            if($storyType == 'requirement') $lang->execution->linkStory = str_replace($lang->SRCommon, $lang->URCommon, $lang->execution->linkStory);
+
+            $buttonLink  = $this->createLink('projectstory', 'linkStory', "project=$projectID&browseType=&param=0&recTotal=0&recPerPage=50&pageID=1&storyType=$storyType");
             $buttonTitle = $lang->execution->linkStory;
             $dataToggle  = '';
         }
@@ -240,7 +243,7 @@ js::set('vision',        $this->config->vision);
         $hidden = empty($buttonLink) ? 'hidden' : '';
         echo html::a($buttonLink, "<i class='icon-link'></i> $buttonTitle", '', "class='btn btn-primary $hidden' $dataToggle");
 
-        if(!empty($productID) and common::hasPriv('projectstory', 'linkStory') and common::hasPriv('projectstory', 'importPlanStories'))
+        if(!empty($productID) and common::hasPriv('projectstory', 'linkStory') and common::hasPriv('projectstory', 'importPlanStories') and $projectModel != 'ipd')
         {
             echo "<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
             echo "<ul class='dropdown-menu pull-right'>";
@@ -308,19 +311,20 @@ js::set('vision',        $this->config->vision);
       $widths  = $this->datatable->setFixedFieldWidth($setting);
       $columns = 0;
 
-      $canBeChanged         = common::canModify('product', $product);
-      $canBatchEdit         = ($canBeChanged and common::hasPriv($storyType, 'batchEdit'));
-      $canBatchClose        = (common::hasPriv($storyType, 'batchClose') and strtolower($browseType) != 'closedbyme' and strtolower($browseType) != 'closedstory');
-      $canBatchReview       = ($canBeChanged and common::hasPriv($storyType, 'batchReview'));
-      $canBatchChangeStage  = ($canBeChanged and common::hasPriv('story', 'batchChangeStage') and $storyType == 'story');
-      $canBatchChangeBranch = ($canBeChanged and common::hasPriv($storyType, 'batchChangeBranch') and $this->session->currentProductType and $this->session->currentProductType != 'normal' and $productID);
-      $canBatchChangeModule = ($canBeChanged and common::hasPriv($storyType, 'batchChangeModule'));
-      $canBatchChangePlan   = ($canBeChanged and common::hasPriv('story', 'batchChangePlan') and $storyType == 'story' and (!$isProjectStory or $projectHasProduct or ($isProjectStory and isset($project->model) and $project->model == 'scrum')));
-      $canBatchAssignTo     = ($canBeChanged and common::hasPriv($storyType, 'batchAssignTo'));
-      $canBatchUnlink       = ($canBeChanged and $projectHasProduct and common::hasPriv('projectstory', 'batchUnlinkStory'));
-      $canBatchImportToLib  = ($canBeChanged and $isProjectStory and isset($this->config->maxVersion) and common::hasPriv('story', 'batchImportToLib') and helper::hasFeature('storylib'));
+      $canBeChanged          = common::canModify('product', $product);
+      $canBatchEdit          = ($canBeChanged and common::hasPriv($storyType, 'batchEdit'));
+      $canBatchClose         = (common::hasPriv($storyType, 'batchClose') and strtolower($browseType) != 'closedbyme' and strtolower($browseType) != 'closedstory');
+      $canBatchReview        = ($canBeChanged and common::hasPriv($storyType, 'batchReview'));
+      $canBatchChangeStage   = ($canBeChanged and common::hasPriv('story', 'batchChangeStage') and $storyType == 'story');
+      $canBatchChangeBranch  = ($canBeChanged and common::hasPriv($storyType, 'batchChangeBranch') and $this->session->currentProductType and $this->session->currentProductType != 'normal' and $productID);
+      $canBatchChangeModule  = ($canBeChanged and common::hasPriv($storyType, 'batchChangeModule'));
+      $canBatchChangePlan    = ($canBeChanged and common::hasPriv('story', 'batchChangePlan') and $storyType == 'story' and (!$isProjectStory or $projectHasProduct or ($isProjectStory and isset($project->model) and $project->model == 'scrum')));
+      $canBatchAssignTo      = ($canBeChanged and common::hasPriv($storyType, 'batchAssignTo'));
+      $canBatchUnlink        = ($canBeChanged and $projectHasProduct and common::hasPriv('projectstory', 'batchUnlinkStory'));
+      $canBatchImportToLib   = ($canBeChanged and $isProjectStory and isset($this->config->maxVersion) and common::hasPriv('story', 'batchImportToLib') and helper::hasFeature('storylib'));
+      $canBatchChangeRoadmap = common::hasPriv('story', 'batchChangeRoadmap');
 
-      $canBatchAction       = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo or $canBatchUnlink or $canBatchImportToLib or $canBatchChangeBranch);
+      $canBatchAction       = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo or $canBatchUnlink or $canBatchImportToLib or $canBatchChangeBranch or $canBatchChangeRoadmap);
       ?>
       <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
       <table class='table has-sort-head<?php if($useDatatable) echo ' datatable';?>' id='storyList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>'>
@@ -581,6 +585,39 @@ js::set('vision',        $this->config->vision);
             </div>
           </div>
           <?php endif;?>
+
+          <?php if($canBatchChangeRoadmap and $config->edition == 'ipd' and $config->vision == 'or'):?>
+          <div class="btn-group dropup">
+            <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->roadmap->common;?> <span class="caret"></span></button>
+            <?php
+            unset($roadmaps['']);
+            $roadmaps   = array(0 => $lang->null) + $roadmaps;
+            $withSearch = count($roadmaps) > 8;
+            ?>
+            <div class="dropdown-menu search-list<?php if($withSearch) echo ' search-box-sink';?>" data-ride="searchList">
+              <?php if($withSearch):?>
+              <div class="input-control search-box has-icon-left has-icon-right search-example">
+                <input id="planSearchBox" type="search" autocomplete="off" class="form-control search-input">
+                <label for="planSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
+                <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
+              </div>
+              <?php $roadmapsPinYin = common::convert2Pinyin($roadmaps);?>
+              <?php endif;?>
+              <div class="list-group">
+                <?php
+                foreach($roadmaps as $roadmapID => $roadmap)
+                {
+                    $position   = stripos($roadmap, '/');
+                    $searchKey  = $withSearch ? ('data-key="' . zget($roadmapsPinYin, $roadmap, '') . '"') : '';
+                    $actionLink = $this->createLink('story', 'batchChangeRoadmap', "roadmapID=$roadmapID");
+                    echo html::a('#', $roadmap, '', "$searchKey title='{$roadmap}' onclick=\"setFormAction('$actionLink', 'hiddenwin', '#productStoryForm')\"");
+                }
+                ?>
+              </div>
+            </div>
+          </div>
+          <?php endif;?>
+
           <?php endif;?>
 
           <?php if($canBatchAssignTo):?>

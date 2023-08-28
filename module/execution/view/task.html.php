@@ -30,7 +30,6 @@ js::set('foldAll',     $lang->execution->treeLevel['root']);
 ?>
 <style>
 body {margin-bottom: 25px;}
-.btn-group a i.icon-plus {font-size: 16px;}
 .btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.2);}
 .btn-group button.dropdown-toggle.btn-primary {padding:6px;}
 </style>

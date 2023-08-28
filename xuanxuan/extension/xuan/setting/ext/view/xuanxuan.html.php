@@ -136,8 +136,8 @@
               <?php echo html::a(helper::createLink('setting', 'xuanxuan'), $lang->goback, '', 'class="btn" style="min-width: 120px"');?>
             <?php else:?>
               <?php $disabled = $config->xuanxuan->turnon ? '' : 'disabled';?>
-              <?php if(common::hasPriv('im', 'downloadXxdPackage')) echo html::a(helper::createLink('setting', 'downloadXXD', 'type=package'), $lang->im->downloadXXD, 'hiddenwin', "class='btn btn-primary download download-package $disabled'");?>
-              <?php echo html::a(helper::createLink('setting', 'downloadXXD', 'type=config'), $lang->im->downloadConfig, 'hiddenwin', "class='btn btn-primary download $disabled'");?>
+              <?php if(common::hasPriv('im', 'downloadXxdPackage')) echo html::a(helper::createLink('setting', 'downloadXXD', 'type=package'), $lang->im->downloadXXD, 'hiddenwin', "class='btn btn-primary download download-package $disabled'" . " $disabled");?>
+              <?php echo html::a(helper::createLink('setting', 'downloadXXD', 'type=config'), $lang->im->downloadConfig, 'hiddenwin', "class='btn btn-primary download $disabled'" . " $disabled");?>
               <?php echo html::a(helper::createLink('setting', 'xuanxuan', 'type=edit'), $lang->im->changeSetting, '', "class='btn'");?>
               <?php if($debug and common::hasPriv('im', 'debug')) echo html::a(helper::createLink('im', 'debug', 'source=setting'), $lang->im->viewDebug, '', "class='btn viewDebug iframe' data-height=220");?>
               <?php echo html::a('http://www.zentao.net/book/zentaopmshelp/302.html', $lang->im->help, '_blank', "class='btn'");?>

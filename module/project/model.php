@@ -1243,6 +1243,7 @@ class projectModel extends model
             ->setIF($this->post->acl   == 'open', 'whitelist', '')
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
             ->setIF(!isset($_POST['multiple']), 'multiple', '1')
+            ->setIF($this->post->model == 'ipd', 'division', '0')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', helper::now())
             ->setDefault('team', $this->post->name)
@@ -1268,7 +1269,7 @@ class projectModel extends model
             }
         }
 
-        if($_POST['products'])
+        if($_POST['products'] and $this->post->model != 'ipd')
         {
             $topProgramID     = $this->loadModel('program')->getTopByID($project->parent);
             $multipleProducts = $this->loadModel('product')->getMultiBranchPairs($topProgramID);
@@ -1556,7 +1557,7 @@ class projectModel extends model
             if(dao::isError()) return false;
         }
 
-        if($_POST['products'])
+        if($_POST['products'] and $oldProject->model != 'ipd')
         {
             $topProgramID     = $this->loadModel('program')->getTopByID($project->parent);
             $multipleProducts = $this->loadModel('product')->getMultiBranchPairs($topProgramID);
@@ -2806,8 +2807,11 @@ class projectModel extends model
             }
         }
 
-        if($project and $project->model == 'waterfall') $model = $project->model;
-        if($project and $project->model == 'waterfallplus') $model = 'waterfall';
+        if($project)
+        {
+            if(in_array($project->model, array('waterfall', 'waterfallplus'))) $model = 'waterfall';
+            if($project->model == 'ipd') $model = 'ipd';
+        }
         if($project and $project->model == 'kanban')
         {
             $model = $project->model . 'Project';
@@ -2822,9 +2826,8 @@ class projectModel extends model
             $lang->project->dividerMenu = $lang->{$model}->dividerMenu;
         }
 
-        if(empty($project->hasProduct))
+        if(empty($project->hasProduct) or $model == 'ipd')
         {
-            unset($lang->project->menu->settings['subMenu']->products);
             $projectProduct = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectID)->fetch('product');
             $lang->project->menu->settings['subMenu']->module['link'] = sprintf($lang->project->menu->settings['subMenu']->module['link'], $projectProduct);
 
@@ -2848,8 +2851,6 @@ class projectModel extends model
                     $lang->project->menu->story['dropMenu']->story['link']       = sprintf($lang->project->menu->storyGroup['dropMenu']->story['link'], '%s', $projectProduct);
                     $lang->project->menu->story['dropMenu']->requirement['link'] = sprintf($lang->project->menu->storyGroup['dropMenu']->requirement['link'], '%s', $projectProduct);
                 }
-
-                unset($lang->project->menu->settings['subMenu']->products);
             }
         }
         else
@@ -2858,7 +2859,9 @@ class projectModel extends model
             unset($lang->project->menu->projectplan);
         }
 
-        if(isset($lang->project->menu->storyGroup)) unset($lang->project->menu->storyGroup);
+        if(isset($lang->project->menu->storyGroup))  unset($lang->project->menu->storyGroup);
+        if($model != 'ipd' and $project->hasProduct) unset($lang->project->menu->settings['subMenu']->module);
+        if(empty($project->hasProduct))              unset($lang->project->menu->settings['subMenu']->products);
 
         /* Reset project priv. */
         $moduleName = $this->app->rawModule;
@@ -2866,7 +2869,7 @@ class projectModel extends model
         $this->loadModel('common')->resetProjectPriv($objectID);
         if(!$this->common->isOpenMethod($moduleName, $methodName) and !commonModel::hasPriv($moduleName, $methodName)) $this->common->deny($moduleName, $methodName, false);
 
-        if(isset($project->model) and ($project->model == 'waterfall' or $project->model == 'waterfallplus'))
+        if(isset($project->model) and (in_array($project->model, array('waterfall', 'waterfallplus', 'ipd'))))
         {
             $lang->project->createExecution = str_replace($lang->executionCommon, $lang->project->stage, $lang->project->createExecution);
             $lang->project->lastIteration   = str_replace($lang->executionCommon, $lang->project->stage, $lang->project->lastIteration);
@@ -3008,7 +3011,7 @@ class projectModel extends model
     public function checkCanChangeModel($projectID, $model)
     {
         $checkList = $this->config->project->checkList->$model;
-        if($this->config->edition == 'max') $checkList = $this->config->project->maxCheckList->$model;
+        if($this->config->edition == 'max' or $this->config->edition == 'ipd') $checkList = $this->config->project->maxCheckList->$model;
         foreach($checkList as $module)
         {
             if($module == '') continue;

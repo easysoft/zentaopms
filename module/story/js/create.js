@@ -32,7 +32,7 @@ $(function()
 
     $('#source').on('change', function()
     {
-        if(storyType == 'requirement') return false;
+        if(storyType == 'requirement' && systemMode != 'PLM') return false;
 
         var source = $(this).val();
         if($.inArray(source, feedbackSource) != -1)

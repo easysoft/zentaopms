@@ -36,7 +36,7 @@ EOT;
 <?php js::set('field',   $field)?>
 <?php js::set('confirmReviewCase', $lang->custom->notice->confirmReviewCase)?>
 <?php js::set('stopSubmit', true)?>
-<?php if($module == 'story' and $field == 'review'):?>
+<?php if(($module == 'story' or $module == 'demand') and $field == 'review'):?>
 <style>
 .table-form>tbody>tr>th {width: 120px !important}
 .checkbox-primary {margin-bottom: 0px; width: 82px !important;}
@@ -72,7 +72,7 @@ EOT;
           <td colspan='4' class='text-center'><?php echo html::submitButton();?></td>
         </tr>
       </table>
-      <?php elseif($module == 'story' and $field == 'reviewRules'):?>
+      <?php elseif(in_array($module, array('story', 'demand')) and $field == 'reviewRules'):?>
       <table class='table table-form mw-700px'>
         <tr>
           <th class='thWidth'><?php echo $lang->custom->reviewRule;?></th>
@@ -87,13 +87,13 @@ EOT;
           <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
         </tr>
       </table>
-      <?php elseif(($module == 'story' or $module == 'testcase') and $field == 'review'):?>
+      <?php elseif(in_array($module, array('story', 'testcase', 'demand')) and $field == 'review'):?>
       <table class='table table-form'>
         <tr class='reviewBox'>
           <th class='thWidth'><?php echo $lang->custom->storyReview;?></th>
           <td><?php echo html::radio('needReview', $lang->custom->reviewList, $needReview);?></td>
         </tr>
-        <?php if($module == 'story'):?>
+        <?php if($module == 'story' or $module == 'demand'):?>
         <tr>
           <?php $space = ($app->getClientLang() != 'zh-cn' and $app->getClientLang() != 'zh-tw') ? ' ': '';?>
           <td colspan='3' class='storyReviewTip<?php if($needReview) echo " hidden"?>'><div><?php echo sprintf($lang->custom->notice->forceReview, $lang->$module->common) . $lang->custom->notice->storyReviewTip;?></td>
@@ -249,7 +249,7 @@ EOT;
     </form>
   </div>
 </div>
-<?php if($module == 'story' and $field == 'review'):?>
+<?php if(in_array($module, array('story', 'demand')) and $field == 'review'):?>
 <script>
 $(function()
 {

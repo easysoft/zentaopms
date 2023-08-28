@@ -279,6 +279,7 @@
 <?php js::set('todoID', $todo->id);?>
 <?php js::set('selectExecution', $lang->execution->selectExecution);?>
 <?php js::set('selectProduct', $lang->todo->selectProduct);?>
+<?php js::set('currentVision', $config->vision);?>
 <script>
 $(function() {parent.$('body.hide-modal-close').removeClass('hide-modal-close'); })
 </script>

@@ -62,15 +62,51 @@ class dataviewModel extends model
     }
 
     /**
+     * Get alias names.
+     *
+     * @param  object $statement
+     * @param  array  $moduleNames
+     * @access public
+     * @return array
+     */
+    public function getAliasNames($statement, $moduleNames)
+    {
+        $aliasNames = array();
+        if(isset($statement->from))
+        {
+            foreach($statement->from as $from)
+            {
+                if(isset($moduleNames[$from->table]))
+                {
+                    $aliasNames[$from->alias] = $from->table;
+                }
+            }
+        }
+        if(isset($statement->join))
+        {
+            foreach($statement->join as $join)
+            {
+                if(isset($moduleNames[$join->expr->table]))
+                {
+                    $aliasNames[$join->expr->alias] = $join->expr->table;
+                }
+            }
+        }
+
+        return $aliasNames;
+    }
+
+    /**
      * Merge fields.
      *
-     * @param  int    $dataFields
-     * @param  int    $sqlFields
-     * @param  int    $moduleNames
+     * @param  array  $dataFields
+     * @param  array  $sqlFields
+     * @param  array  $moduleNames
+     * @param  array  $aliasNames
      * @access public
      * @return void
      */
-    public function mergeFields($dataFields, $sqlFields, $moduleNames)
+    public function mergeFields($dataFields, $sqlFields, $moduleNames, $aliasNames = array())
     {
         $mergeFields   = array();
         $relatedObject = array();
@@ -89,6 +125,14 @@ class dataviewModel extends model
                 if(isset($moduleNames[$table]))
                 {
                     $moduleName = $moduleNames[$table];
+                    if(strpos($moduleName, 'flow_') !== false) $moduleName = substr($moduleName, 5);
+                    $mergeFields[$field]   = isset($this->lang->$moduleName->$fieldName) ? $this->lang->$moduleName->$fieldName : $field;
+                    $relatedObject[$field] = $moduleName;
+                    continue;
+                }
+                elseif(isset($aliasNames[$table]))
+                {
+                    $moduleName = $aliasNames[$table];
                     if(strpos($moduleName, 'flow_') !== false) $moduleName = substr($moduleName, 5);
                     $mergeFields[$field]   = isset($this->lang->$moduleName->$fieldName) ? $this->lang->$moduleName->$fieldName : $field;
                     $relatedObject[$field] = $moduleName;

@@ -212,6 +212,7 @@ class product extends control
         {
             setcookie('treeBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
             $browseType = 'unclosed';
+            if($this->config->vision == 'or') $browseType = 'assignedtome';
         }
         else
         {
@@ -447,7 +448,7 @@ class product extends control
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
 
         $lines = array();
-        if($programID and $this->config->systemMode == 'ALM') $lines = array('') + $this->product->getLinePairs($programID);
+        if($programID and in_array($this->config->systemMode, array('ALM', 'PLM'))) $lines = array('') + $this->product->getLinePairs($programID);
 
         if($this->app->tab == 'doc') unset($this->lang->doc->menu->product['subMenu']);
 
@@ -534,7 +535,7 @@ class product extends control
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
 
         $lines = array();
-        if($product->program and $this->config->systemMode == 'ALM') $lines = array('') + $this->product->getLinePairs($product->program);
+        if($product->program and in_array($this->config->systemMode, array('ALM', 'PLM'))) $lines = array('') + $this->product->getLinePairs($product->program);
 
         /* Get programs. */
         $programs = $this->loadModel('program')->getTopPairs('', 'noclosed');
@@ -597,6 +598,8 @@ class product extends control
         /* Set menu when page come from program. */
         if($this->app->tab == 'program') $this->loadModel('program')->setMenu(0);
 
+        if($this->config->vision == 'or') unset($this->lang->product->statusList['normal']);
+
         /* Set custom. */
         foreach(explode(',', $this->config->product->customBatchEditFields) as $field) $customFields[$field] = $this->lang->product->$field;
         $this->view->customFields = $customFields;
@@ -623,7 +626,7 @@ class product extends control
 
         $programs             = array();
         $unauthorizedPrograms = array();
-        if($this->config->systemMode == 'ALM')
+        if(in_array($this->config->systemMode, array('ALM', 'PLM')))
         {
             $programs = $this->loadModel('program')->getTopPairs();
 
@@ -702,6 +705,39 @@ class product extends control
     }
 
     /**
+     * Activate a product.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function activate($productID)
+    {
+        $product = $this->product->getById($productID);
+        $actions = $this->loadModel('action')->getList('product', $productID);
+
+        if(!empty($_POST))
+        {
+            $changes = $this->product->activate($productID);
+            if(dao::isError()) return print(js::error(dao::getError()));
+
+            if($this->post->comment != '' or !empty($changes))
+            {
+                $actionID = $this->action->create('product', $productID, 'Activate', $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
+
+            return print(js::reload('parent.parent'));
+        }
+
+        $this->view->product = $product;
+        $this->view->title   = $this->view->product->name . $this->lang->colon .$this->lang->activate;
+        $this->view->actions = $actions;
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->display();
+    }
+
+    /**
      * View a product.
      *
      * @param  int    $productID
@@ -716,7 +752,7 @@ class product extends control
         if(!$product)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
-            return print(js::error($this->lang->notFound) . js::locate($this->createLink('product', 'index')));
+            return print(js::error($this->lang->notFound) . js::locate($this->createLink('product', 'all')));
         }
 
         $product->desc = $this->loadModel('file')->setImgSize($product->desc);

@@ -20,6 +20,7 @@ $lang->product->create           = "Créer {$lang->productCommon}";
 $lang->product->delete           = "Supprimer {$lang->productCommon}";
 $lang->product->deleted          = 'Supprimé';
 $lang->product->close            = "Fermer";
+$lang->product->activate         = 'Activate';
 $lang->product->select           = "Choisir {$lang->productCommon}";
 $lang->product->mine             = 'Les miens';
 $lang->product->other            = 'Autres';
@@ -41,11 +42,12 @@ $lang->product->checkedProducts  = "%s {$lang->productCommon}s selected";
 $lang->product->pageSummary      = "Total {$lang->productCommon}s: %s.";
 $lang->product->lineSummary      = "Total product lines: %s, Total {$lang->productCommon}s: %s.";
 
-$lang->product->indexAction  = "All {$lang->productCommon}";
-$lang->product->closeAction  = "Fermer {$lang->productCommon}";
-$lang->product->orderAction  = "Rang {$lang->productCommon}";
-$lang->product->exportAction = "Export {$lang->productCommon}";
-$lang->product->link2Project = "Link {$lang->projectCommon}";
+$lang->product->indexAction    = "All {$lang->productCommon}";
+$lang->product->closeAction    = "Fermer {$lang->productCommon}";
+$lang->product->activateAction = "Activate {$lang->productCommon}";
+$lang->product->orderAction    = "Rang {$lang->productCommon}";
+$lang->product->exportAction   = "Export {$lang->productCommon}";
+$lang->product->link2Project   = "Link {$lang->projectCommon}";
 
 $lang->product->basicInfo = 'Infos de Base';
 $lang->product->otherInfo = 'Autres Infos';
@@ -250,3 +252,6 @@ $lang->product->featureBar['dynamic']['thisWeek']  = 'This Week';
 $lang->product->featureBar['dynamic']['lastWeek']  = 'Last Week';
 $lang->product->featureBar['dynamic']['thisMonth'] = 'This Month';
 $lang->product->featureBar['dynamic']['lastMonth'] = 'Last Month';
+
+$lang->product->action = new stdclass();
+$lang->product->action->activate = array('main' => '$date, activated by <strong>$actor</strong>.');

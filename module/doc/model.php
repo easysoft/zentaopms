@@ -848,11 +848,11 @@ class docModel extends model
      */
     public function getByIdList($docIdList = array())
     {
-        return $this->dao->select('*,t1.id as docID,t1.type as docType,t2.type as contentType')->from(TABLE_DOC)->alias('t1')
+        return $this->dao->select('*,t1.id as docID,t1.type as docType,t1.version as docVersion,t2.type as contentType')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc and t1.version=t2.version')
             ->where('t1.id')->in($docIdList)
             ->andWhere('deleted')->eq(0)
-            ->fetchAll('id');
+            ->fetchAll('docID');
 
     }
 
@@ -1692,11 +1692,11 @@ class docModel extends model
             if($append and !isset($products[$append])) $products[$append] = $this->product->getByID($append);
             foreach($products as $id => $product)
             {
-                if($product->status == 'normal' and $product->PO == $this->app->user->account)
+                if($product->status != 'closed' and $product->PO == $this->app->user->account)
                 {
                     $myObjects[$id] = $product->name;
                 }
-                elseif($product->status == 'normal' and !($product->PO == $this->app->user->account))
+                elseif($product->status != 'closed' and !($product->PO == $this->app->user->account))
                 {
                     $normalObjects[$id] = $product->name;
                 }
@@ -1902,7 +1902,7 @@ class docModel extends model
             $projectIDList = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($objectID)->orWhere('project')->eq($objectID)->fetchPairs('id', 'id');
             $storyIDList   = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->in($projectIDList)->fetchPairs('story', 'story');
 
-            if($this->config->edition == 'max')
+            if($this->config->edition == 'max' or $this->config->edition == 'ipd')
             {
                 $issueIdList   = $this->dao->select('id')->from(TABLE_ISSUE)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
                 $meetingIdList = $this->dao->select('id')->from(TABLE_MEETING)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
@@ -3242,7 +3242,7 @@ class docModel extends model
         if(!common::hasPriv('doc', 'create') or !isset($lib->id)) return null;
 
         $objectID      = zget($lib, $lib->type, 0);
-        $templateParam = $this->config->edition == 'max' ? '&from=template' : '';
+        $templateParam = ($this->config->edition == 'max' or $this->config->edition == 'ipd') ? '&from=template' : '';
         $class         = $from == 'list' ? 'btn-info' : 'btn-primary';
         $html          = "<div class='dropdown btn-group createDropdown'>";
         $html         .= html::a(helper::createLink('doc', 'create', "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html$templateParam"), "<i class='icon icon-plus'></i> {$this->lang->doc->create}", '', "class='btn $class' data-app='{$this->app->tab}'");
@@ -3256,7 +3256,7 @@ class docModel extends model
             $attr     = "data-app='{$this->app->tab}'";
             $class    = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
             $params   = "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=$typeKey";
-            if($typeKey == 'template' and $this->config->edition == 'max') $params = "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html&from=template";
+            if($typeKey == 'template' and ($this->config->edition == 'max' or $this->config->edition == 'ipd')) $params = "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html&from=template";
 
             $html .= "<li>";
             $html .= html::a(helper::createLink('doc', 'create', $params, '', $class ? true : false), $icon . ' ' . $typeName, '', "class='$class' $attr");

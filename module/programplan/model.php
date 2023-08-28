@@ -58,7 +58,7 @@ class programplanModel extends model
         $plans = $this->dao->select('t1.*')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
             ->where('1 = 1')
-            ->beginIF($projectModel != 'waterfallplus')->andWhere('t1.type')->eq('stage')->fi()
+            ->beginIF(!in_array($projectModel, array('waterfallplus', 'ipd')))->andWhere('t1.type')->eq('stage')->fi()
             ->beginIF($productID)->andWhere('t2.product')->eq($productID)->fi()
             ->beginIF($browseType == 'all')->andWhere('t1.project')->eq($executionID)->fi()
             ->beginIF($browseType == 'parent')->andWhere('t1.parent')->eq($executionID)->fi()
@@ -152,7 +152,7 @@ class programplanModel extends model
     /**
      * Get gantt data.
      *
-     * @param  int     $executionID
+     * @param  int     $projectID
      * @param  int     $productID
      * @param  int     $baselineID
      * @param  string  $selectCustom
@@ -160,12 +160,12 @@ class programplanModel extends model
      * @access public
      * @return string
      */
-    public function getDataForGantt($executionID, $productID, $baselineID = 0, $selectCustom = '', $returnJson = true)
+    public function getDataForGantt($projectID, $productID, $baselineID = 0, $selectCustom = '', $returnJson = true)
     {
         $this->loadModel('stage');
         $this->loadModel('execution');
 
-        $plans = $this->getStage($executionID, $productID, 'all', 'order');
+        $plans = $this->getStage($projectID, $productID, 'all', 'order');
         if($baselineID)
         {
             $baseline = $this->loadModel('cm')->getByID($baselineID);
@@ -182,14 +182,24 @@ class programplanModel extends model
             }
         }
 
-        $today       = helper::today();
-        $datas       = array();
-        $planIdList  = array();
-        $isMilestone = "<icon class='icon icon-flag icon-sm red'></icon> ";
-        $stageIndex  = array();
+        $project        = $this->loadModel('project')->getByID($projectID);
+        $today          = helper::today();
+        $datas          = array();
+        $planIdList     = array();
+        $isMilestone    = "<icon class='icon icon-flag icon-sm red'></icon> ";
+        $stageIndex     = array();
+        $reviewDeadline = array();
+
+        foreach($plans as $plan)
+        {
+            $plan->isParent = false;
+            if(isset($plans[$plan->parent])) $plans[$plan->parent]->isParent = true;
+        }
+
         foreach($plans as $plan)
         {
             $planIdList[$plan->id] = $plan->id;
+            $reviewDeadline[$plan->id]['stageEnd'] = $plan->end;
 
             $start     = helper::isZeroDate($plan->begin) ? '' : $plan->begin;
             $end       = helper::isZeroDate($plan->end)   ? '' : $plan->end;
@@ -210,7 +220,8 @@ class programplanModel extends model
             $data->deadline      = $end;
             $data->realBegan     = $realBegan ? substr($realBegan, 0, 10) : '';
             $data->realEnd       = $realEnd ? substr($realEnd, 0, 10) : '';;
-            $data->parent        = $plan->grade == 1 ? 0 :$plan->parent;
+            $data->parent        = $plan->grade == 1 ? 0 : $plan->parent;
+            $data->isParent      = $plan->isParent;
             $data->open          = true;
             $data->start_date    = $realBegan ? $realBegan : $start;
             $data->endDate       = $realEnd ? $realEnd : $end;
@@ -223,7 +234,8 @@ class programplanModel extends model
             /* Determines if the object is delay. */
             $data->delay     = $this->lang->programplan->delayList[0];
             $data->delayDays = 0;
-            if($today > $end)
+
+            if(($today > $end) and $plan->status != 'closed')
             {
                 $data->delay     = $this->lang->programplan->delayList[1];
                 $data->delayDays = helper::diffDate($today, substr($end, 0, 10));
@@ -234,7 +246,7 @@ class programplanModel extends model
             if($data->start_date == '' or $data->endDate == '') $data->duration = 1;
 
             $datas['data'][$plan->id] = $data;
-            $stageIndex[$plan->id]    = array('planID' => $plan->id, 'parent' => $plan->parent, 'progress' => array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalReal' => 0));
+            $stageIndex[$plan->id] = array('planID' => $plan->id, 'parent' => $plan->parent, 'progress' => array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalReal' => 0));
         }
 
         $taskPri  = "<span class='label-pri label-pri-%s' title='%s'>%s</span> ";
@@ -274,6 +286,17 @@ class programplanModel extends model
             $realBegan = helper::isZeroDate($task->realStarted) ? '' : $task->realStarted;
             $realEnd   = (in_array($task->status, array('done', 'closed')) and !helper::isZeroDate($task->finishedDate)) ? $task->finishedDate : '';
 
+            /* Get lastest task deadline. */
+            $taskExecutionID = $execution->parent ? $execution->parent : $execution->id;
+            if(isset($reviewDeadline[$taskExecutionID]['taskEnd']))
+            {
+                $reviewDeadline[$taskExecutionID]['taskEnd'] = $task->deadline > $reviewDeadline[$taskExecutionID]['taskEnd'] ? $task->deadline : $reviewDeadline[$taskExecutionID]['taskEnd'];
+            }
+            else
+            {
+                $reviewDeadline[$taskExecutionID]['taskEnd'] = $task->deadline;
+            }
+
             $start = $realBegan ? $realBegan : $estStart;
             $end   = $realEnd   ? $realEnd   : $estEnd;
             if(empty($start) and $execution) $start = $execution->begin;
@@ -312,7 +335,7 @@ class programplanModel extends model
             /* Determines if the object is delay. */
             $data->delay     = $this->lang->programplan->delayList[0];
             $data->delayDays = 0;
-            if($today > $end)
+            if(($today > $end) and $plan->status != 'closed')
             {
                 $data->delay     = $this->lang->programplan->delayList[1];
                 $data->delayDays = helper::diffDate($today, substr($end, 0, 10));
@@ -346,6 +369,87 @@ class programplanModel extends model
                         $stageIndex[$parent]['progress']['totalEstimate'] += $task->estimate;
                         $stageIndex[$parent]['progress']['totalConsumed'] += $task->parent == '-1' ? 0 : $task->consumed;
                         $stageIndex[$parent]['progress']['totalReal']     += ($task->left + $task->consumed);
+                    }
+                }
+            }
+        }
+
+        /* Build review points tree for ipd project. */
+        if($project->model == 'ipd' and $datas)
+        {
+            $this->loadModel('review');
+            $reviewPoints = $this->dao->select('t1.*, t2.status, t2.lastReviewedDate,t2.id as reviewID')->from(TABLE_OBJECT)->alias('t1')
+                ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.id = t2.object')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t1.project')->eq($projectID)
+                ->andWhere('t1.product')->eq($productID)
+                ->fetchAll('id');
+
+            foreach($datas['data'] as $plan)
+            {
+                if($plan->type != 'plan') continue;
+
+                foreach($reviewPoints as $id => $point)
+                {
+                    if(!isset($this->config->stage->ipdReviewPoint->{$plan->attribute})) continue;
+                    if(!isset($point->status)) $point->status = '';
+
+                    $categories = $this->config->stage->ipdReviewPoint->{$plan->attribute};
+                    if(in_array($point->category, $categories))
+                    {
+                        if($point->end and !helper::isZeroDate($point->end))
+                        {
+                            $end = $point->end;
+                        }
+                        else
+                        {
+                            $end = $reviewDeadline[$plan->id]['stageEnd'];
+                            if(strpos($point->category, "TR") !== false)
+                            {
+                                if(isset($reviewDeadline[$plan->id]['taskEnd']) and !helper::isZeroDate($reviewDeadline[$plan->id]['taskEnd']))
+                                {
+                                    $end = $reviewDeadline[$plan->id]['taskEnd'];
+                                }
+                                else
+                                {
+                                    $end = $this->getReviewDeadline($end);
+                                }
+                            }
+                            elseif(strpos($point->category, "DCP") !== false)
+                            {
+                                $end = $this->getReviewDeadline($end, 2);
+                            }
+                        }
+
+                        $data = new stdclass();
+                        $data->id            = $plan->id . '-' . $point->category . '-' . $point->id;
+                        $data->reviewID      = $point->reviewID;
+                        $data->type          = 'point';
+                        $data->text          = "<i class='icon-seal'></i> " . $point->title;
+                        $data->name          = $point->title;
+                        $data->attribute     = '';
+                        $data->milestone     = '';
+                        $data->owner_id      = '';
+                        $data->rawStatus     = $point->status;
+                        $data->status        = $point->status ? zget($this->lang->review->statusList, $point->status) : $this->lang->programplan->wait;
+                        $data->status        = "<span class='status-{$point->status}'>" . $data->status . '</span>';
+                        $data->begin         = $end;
+                        $data->deadline      = $end;
+                        $data->realBegan     = $point->createdDate;
+                        $data->realEnd       = $point->lastReviewedDate;;
+                        $data->parent        = $plan->id;
+                        $data->open          = true;
+                        $data->start_date    = $end;
+                        $data->endDate       = $end;
+                        $data->duration      = 1;
+                        $data->color         = isset($this->lang->programplan->reviewColorList[$point->status]) ? $this->lang->programplan->reviewColorList[$point->status] : '#FC913F';
+                        $data->progressColor = $this->lang->execution->gantt->stage->progressColor;
+                        $data->textColor     = $this->lang->execution->gantt->stage->textColor;
+                        $data->bar_height    = $this->lang->execution->gantt->bar_height;
+
+                        if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));
+
+                        if($selectCustom && strpos($selectCustom, "point") !== false && !$plan->parent) $datas['data'][$data->id] = $data;
                     }
                 }
             }
@@ -868,7 +972,7 @@ class programplanModel extends model
         foreach($datas as $data)
         {
             /* Set planDuration and realDuration. */
-            if($this->config->edition == 'max')
+            if($this->config->edition == 'max' or $this->config->edition == 'ipd')
             {
                 $data->planDuration = $this->getDuration($data->begin, $data->end);
                 $data->realDuration = $this->getDuration($data->realBegan, $data->realEnd);
@@ -955,6 +1059,10 @@ class programplanModel extends model
                 if(!dao::isError())
                 {
                     $stageID = $this->dao->lastInsertID();
+
+                    /* Ipd project create default review points. */
+                    if($project->model == 'ipd' && $this->config->edition == 'ipd' && !$parentID) $this->loadModel('review')->createDefaultPoint($projectID, $productID, $data->attribute);
+
                     if($data->type == 'kanban')
                     {
                         $execution = $this->execution->getByID($stageID);
@@ -1147,7 +1255,7 @@ class programplanModel extends model
         }
 
         /* Set planDuration and realDuration. */
-        if($this->config->edition == 'max')
+        if($this->config->edition == 'max' or $this->config->edition == 'ipd')
         {
             $plan->planDuration = $this->getDuration($plan->begin, $plan->end);
             $plan->realDuration = $this->getDuration($plan->realBegan, $plan->realEnd);
@@ -1516,7 +1624,7 @@ class programplanModel extends model
     {
         $stage   = $this->loadModel('execution')->getByID($stageID);
         $project = $this->loadModel('project')->getByID($stage->project);
-        if(empty($stage) or empty($stage->path) or ($project->model != 'waterfall' and $project->model != 'waterfallplus')) return false;
+        if(empty($stage) or empty($stage->path) or (!in_array($project->model, array('waterfall','waterfallplus','ipd')))) return false;
 
         $this->loadModel('execution');
         $this->loadModel('action');
@@ -1548,6 +1656,7 @@ class programplanModel extends model
             {
                 if($parent->status != 'closed')
                 {
+                    if($project->model == 'ipd' and $parent->parent == $project->id) break;
                     $newParent    = $this->execution->buildExecutionByStatus('closed');
                     $parentAction = 'closedbychild';
                 }
@@ -1689,5 +1798,35 @@ class programplanModel extends model
         }
 
         return $siblingStages;
+    }
+
+    /**
+     * Get five days ago.
+     *
+     * @param  string $date
+     * @access public
+     * @return void
+     */
+    public function getReviewDeadline($date, $counter = 5)
+    {
+        if(helper::isZeroDate($date)) return '';
+
+        $weekend_days = [6, 7];
+
+        $timestamp = strtotime($date);
+        $i         = 0;
+        $this->loadModel('holiday');
+        while($i < $counter)
+        {
+            $timestamp   = strtotime('-1 day', $timestamp);
+            $weekday     = date('N', $timestamp);
+            $currentDate = date('Y-m-d', $timestamp);
+            if(!in_array($weekday, $weekend_days) and !$this->holiday->isHoliday($currentDate))
+            {
+                $i ++;
+            }
+        }
+
+        return date('Y-m-d', $timestamp);
     }
 }

@@ -295,7 +295,7 @@ class commonModel extends model
     public function setApproval()
     {
         $this->config->openedApproval = false;
-        if($this->config->edition == 'max' && $this->config->vision == 'rnd') $this->config->openedApproval = true;
+        if(($this->config->edition == 'max' or $this->config->edition == 'ipd') && $this->config->vision == 'rnd') $this->config->openedApproval = true;
     }
 
     /**
@@ -992,6 +992,7 @@ class commonModel extends model
     {
         global $lang;
         global $app;
+        global $config;
 
         $app->loadLang('my');
 
@@ -1041,7 +1042,7 @@ class commonModel extends model
 
             /* Check whether other preference item under the module have permissions. If yes, point to other methods. */
             $moduleLinkList = $currentModule . 'LinkList';
-            if(!$display and isset($lang->my->$moduleLinkList))
+            if(!$display and isset($lang->my->$moduleLinkList) and $config->vision != 'or')
             {
                 foreach($lang->my->$moduleLinkList as $key => $linkList)
                 {
@@ -1057,7 +1058,7 @@ class commonModel extends model
             }
 
             /* Check whether other methods under the module have permissions. If yes, point to other methods. */
-            if($display == false and isset($lang->$currentModule->menu) and !in_array($currentModule, array('program', 'product', 'project', 'execution')))
+            if($display == false and isset($lang->$currentModule->menu) and !in_array($currentModule, array('program', 'product', 'project', 'execution', 'demandpool')))
             {
                 foreach($lang->$currentModule->menu as $menu)
                 {
@@ -1081,7 +1082,7 @@ class commonModel extends model
             }
 
             /* Check whether the menu of this group have permissions. If yes, point to them. */
-            if($display == false and isset($lang->$group->menu))
+            if($display == false and isset($lang->$group->menu) and $config->vision != 'or')
             {
                 foreach($lang->$group->menu as $menu)
                 {
@@ -1779,13 +1780,13 @@ EOF;
             }
             if($type == 'button')
             {
-                if($method != 'edit' and $method != 'copy' and $method != 'delete')
+                if($method == 'edit' or $method == 'copy' or $method == 'delete' or ($method == 'review' and $module == 'charter'))
                 {
-                    return html::a($link, "<i class='$class'></i> " . "<span class='text'>{$title}</span>", $target, "class='btn btn-link $extraClass' $misc", true);
+                    return html::a($link, "<i class='$class'></i>", $target, "class='btn btn-link $extraClass' title=\"$title\" $misc", false);
                 }
                 else
                 {
-                    return html::a($link, "<i class='$class'></i>", $target, "class='btn btn-link $extraClass' title=\"$title\" $misc", false);
+                    return html::a($link, "<i class='$class'></i> " . "<span class='text'>{$title}</span>", $target, "class='btn btn-link $extraClass' $misc", true);
                 }
             }
             else
@@ -2596,11 +2597,12 @@ EOF;
      */
     public static function hasPriv($module, $method, $object = null, $vars = '')
     {
-        global $app, $lang;
+        global $app, $lang, $config;
         $module = strtolower($module);
         $method = strtolower($method);
         parse_str($vars, $params);
 
+        if($config->vision == 'or' and $module == 'story') $module = 'requirement';
         if(empty($params['storyType']) and $module == 'story' and !empty($app->params['storyType']) and strpos(",story,requirement,", ",{$app->params['storyType']},") !== false) $module = $app->params['storyType'];
         if($module == 'story' and !empty($params['storyType']) and strpos(",story,requirement,", ",{$params['storyType']},") !== false) $module = $params['storyType'];
         if($module == 'product' and $method == 'browse' and !empty($app->params['storyType']) and $app->params['storyType'] == 'requirement') $method = 'requirement';

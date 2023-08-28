@@ -42,7 +42,7 @@ js::set('isIntranet',    helper::isIntranet());
 #menuMoreList > li.active:after {content: attr(data-tip); display: block; position: absolute; left: 100%; background-color: #f1a325; color: #fff; top: 3px; white-space: nowrap; line-height: 16px; padding: 8px 10px; margin-left: 5px; border-radius: 4px;}
 <?php endif;?>
 
-<?php if($this->config->vision == 'lite'):?>
+<?php if($config->vision == 'lite' or $config->vision == 'or'):?>
 #searchbox .dropdown-menu.show-quick-go.with-active {min-height: 180px;}
 <?php endif;?>
 </style>

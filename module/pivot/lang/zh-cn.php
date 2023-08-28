@@ -264,7 +264,7 @@ $lang->pivot->noChartSelected = '请选择至少一个图表。';
 $lang->pivot->beginGtEnd      = '开始时间不得大于结束时间。';
 $lang->pivot->resetSettings   = '查询数据的配置已修改，是否清空透视表设计，并重新设计。';
 $lang->pivot->clearSettings   = '查询数据的配置已修改，是否清空透视表设计并保存。';
-$lang->pivot->draftSave       = '已发布的内容被编辑，将覆盖，是否继续?';
+$lang->pivot->draftSave       = '该透视表已发布，将变为草稿态，是否继续？';
 $lang->pivot->cannotAddQuery  = '已添加结果筛选器，无法添加查询筛选器';
 $lang->pivot->cannotAddResult = '已添加查询筛选器，无法添加结果筛选器';
 

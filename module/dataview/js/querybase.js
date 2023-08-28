@@ -40,7 +40,7 @@ function query(callback) {
         $('#querying').addClass('hidden');
         if(resp.result !== 'success')
         {
-            $('#export').addClass('hidden');
+            $('#exportDataview').addClass('hidden');
             var message = resp.message.errorInfo ? resp.message.errorInfo[2] : resp.message;
             $('.error').removeClass('hidden');
             $('.error td').html(message);
@@ -48,7 +48,7 @@ function query(callback) {
         }
         else
         {
-            $('#export').removeClass('hidden');
+            $('#exportDataview').removeClass('hidden');
             DataStorage.fields        = resp.fields;
             DataStorage.columns       = resp.columns;
             DataStorage.rows          = resp.rows;
@@ -140,6 +140,7 @@ function saveSettings()
 {
     var fieldSettings = DataStorage.clone('fieldSettings');
     var relatedObject = DataStorage.relatedObject;
+    var objectFields  = DataStorage.objectFields;
     for(let index in DataStorage.fields)
     {
         var relatedTable = $('#relatedTable' + index).val();
@@ -147,7 +148,11 @@ function saveSettings()
         fieldSettings[index].object = relatedTable;
         fieldSettings[index].field  = relatedField;
 
-        if(relatedTable != relatedObject[index]) fieldSettings[index].type = 'object';
+        if(relatedTable != relatedObject[index])
+        {
+            fieldSettings[index].type = 'object';
+            if(typeof(objectFields) != 'undefined' && typeof(objectFields[relatedTable]) != 'undefined' && typeof(objectFields[relatedTable][index]) != 'undefined') fieldSettings[index].type = objectFields[relatedTable][index].type == 'object' ? 'string' : objectFields[relatedTable][index].type;
+        }
         if(relatedTable == relatedObject[index] && fieldSettings[index].type == 'object') fieldSettings[index].type = 'string';
     }
 

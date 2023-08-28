@@ -25,7 +25,7 @@
   </div>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('product', 'export', "status=$browseType&orderBy=$orderBy", "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export'", true, true)?>
-    <?php if($config->systemMode == 'ALM'):?>
+    <?php if(in_array($config->systemMode, array('ALM', 'PLM'))):?>
     <?php common::printLink('product', 'manageLine', '', "<i class='icon-edit'></i> &nbsp;" . $lang->product->line, '', 'class="btn btn-link iframe"', '', true);?>
     <?php endif;?>
     <?php common::printLink('product', 'create', '', '<i class="icon icon-plus"></i>' . $lang->product->create, '', 'class="btn btn-primary create-product-btn"');?>
@@ -51,7 +51,7 @@
             </th>
             <?php endif;?>
             <th class='table-nest-title text-left c-name' rowspan="2">
-              <?php if($config->systemMode == 'ALM'):?>
+              <?php if(in_array($config->systemMode, array('ALM', 'PLM'))):?>
               <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse; ?>'></a>
               <?php endif;?>
               <?php common::printOrderLink('name', $orderBy, $vars, $lang->product->name);?>
@@ -101,7 +101,7 @@
               }
           }
           ?>
-          <?php if(isset($program['programName']) and $config->systemMode == 'ALM'):?>
+          <?php if(isset($program['programName']) and in_array($config->systemMode, array('ALM', 'PLM'))):?>
           <tr class="row-program" <?php echo $trAttrs;?>>
             <?php if($canBatchEdit):?>
             <td class='c-checkbox'><div class='checkbox-primary program-checkbox'><label></label></div></td>
@@ -141,10 +141,10 @@
           <?php endif;?>
 
           <?php foreach($program as $lineID => $line):?>
-          <?php if(isset($line['lineName']) and isset($line['products']) and is_array($line['products']) and $config->systemMode == 'ALM'):?>
+          <?php if(isset($line['lineName']) and isset($line['products']) and is_array($line['products']) and in_array($config->systemMode, array('ALM', 'PLM'))):?>
           <?php $lineNames[] = $line['lineName'];?>
           <?php
-          if($this->config->systemMode == 'ALM' and $programID)
+          if(in_array($config->systemMode, array('ALM', 'PLM')) and $programID)
           {
               $trAttrs  = "data-id='line.$lineID' data-parent='program.$programID'";
               $trAttrs .= " data-nest-parent='program.$programID' data-nest-path='program.$programID,line.$lineID'" . "class='text-center'";
@@ -187,15 +187,15 @@
           $totalStories = ($product->totalStories - $product->closedStories) + $product->finishClosedStories;
 
           $trClass = '';
-          if($product->line and $this->config->systemMode == 'ALM')
+          if($product->line and in_array($config->systemMode, array('ALM', 'PLM')))
           {
               $path = "line.$product->line,$product->id";
-              if($this->config->systemMode == 'ALM' and $product->program) $path = "program.$product->program,$path";
+              if(in_array($config->systemMode, array('ALM', 'PLM')) and $product->program) $path = "program.$product->program,$path";
               $trAttrs  = "data-id='$product->id' data-parent='line.$product->line'";
               $trClass .= ' is-nest-child  table-nest';
               $trAttrs .= " data-nest-parent='line.$product->line' data-nest-path='$path'";
           }
-          elseif($product->program and $this->config->systemMode == 'ALM')
+          elseif($product->program and in_array($config->systemMode, array('ALM', 'PLM')))
           {
               $trAttrs  = "data-id='$product->id' data-parent='program.$product->program'";
               $trClass .= ' is-nest-child  table-nest';

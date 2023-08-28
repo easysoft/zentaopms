@@ -91,7 +91,7 @@ class design extends control
 
         /* Print top and right actions. */
         $this->lang->TRActions  = '<div class="btn-toolbar pull-right">';
-        if($this->config->edition == 'max' and common::hasPriv('design', 'submit'))
+        if(($this->config->edition == 'max' or $this->config->edition == 'ipd') and common::hasPriv('design', 'submit'))
         {
             $this->lang->TRActions .= '<div class="btn-group">';
             $this->lang->TRActions .= html::a($this->createLink('design', 'submit', "productID=$productID", '', true), "<i class='icon-plus'></i> {$this->lang->design->submit}", '', "class='btn btn-secondary iframe'");

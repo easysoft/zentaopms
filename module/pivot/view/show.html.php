@@ -39,11 +39,12 @@
       <?php endif;?>
     </div>
     <div class='flex-start'>
-      <?php echo html::a('#', "{$lang->pivot->showOrigin}", '', "id='origin-query' class='query-after btn-query-origin' title='{$lang->pivot->showOrigin}'");?>
-      <?php echo html::a('#', "{$lang->pivot->showPivot}",  '', "id='pivot-query'  class='query-after btn-query hidden' title='{$lang->pivot->showPivot}'");?>
+      <?php $clickable = $this->pivot->isClickable($pivot, 'design');?>
+      <?php $showLine  = ($clickable and (common::hasPriv('pivot', 'design') or common::hasPriv('pivot', 'edit') or common::hasPriv('pivot', 'delete'))) ? 'query-pseudo' : 'query-after';?>
+      <?php echo html::a('#', "{$lang->pivot->showOrigin}", '', "id='origin-query' class='$showLine btn-query-origin' title='{$lang->pivot->showOrigin}'");?>
+      <?php echo html::a('#', "{$lang->pivot->showPivot}",  '', "id='pivot-query'  class='$showLine btn-query hidden' title='{$lang->pivot->showPivot}'");?>
 
       <?php
-        $clickable = $this->pivot->isClickable($pivot, 'design');
         $params    = helper::safe64Encode("dimensionID=$pivot->dimension&groupID=$pivot->group&pivotID=$pivot->id");
         $class     = !empty($pivot->used) ? "btn-design" : '';
 
@@ -57,7 +58,7 @@
     <div id="filterItems" class='filterBox'>
       <div class='filter-items'></div>
       <?php if(!empty($pivot->filters)):?>
-      <div class='queryBtn query-outside'><?php echo html::submitButton($lang->pivot->query, "", 'btn btn-primary btn-query');?></div>
+      <div class='queryBtn query-outside visibility-hidden'><?php echo html::submitButton($lang->pivot->query, "", 'btn btn-primary btn-query');?></div>
       <?php endif;?>
     </div>
     <div id="filterMargin" class='hidden'></div>

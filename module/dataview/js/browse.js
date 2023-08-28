@@ -18,7 +18,7 @@ $(function()
         if(result) window.location.href = url;
     });
 
-    initPager(pageID, recPerPage, recTotal);
+    initPager(pageID, recPerPage, recTotal, fieldCount);
 
     $('.first-page,.left-page,.last-page,.right-page').click(function()
     {
@@ -66,12 +66,59 @@ function queryTableData()
     $.post(createLink('dataview', 'ajaxGetTableData'), params,function(resp)
     {
         resp = JSON.parse(resp);
-        $('#datas').empty();
-        $('#datas').append(resp.html);
+        buildTable(resp);
 
-        recTotal = resp.recTotal;
-        initPager(pageID, recPerPage, recTotal);
+        recTotal   = resp.recTotal;
+        fieldCount = resp.fieldCount;
+        initPager(pageID, recPerPage, recTotal, fieldCount);
     });
+}
+
+/**
+ * Build dataview data table.
+ *
+ * @param  object resp
+ * @return void
+ */
+function buildTable(resp)
+{
+    var dataview   = resp.dataview;
+    var clientLang = resp.clientLang;
+    var minWidth   = resp.fieldCount * 100 + 'px';
+
+    var html = "<table class='table table-bordered' style='min-width:" +  minWidth + "'>";
+    html    += "<thead><tr>";
+    for(var field in resp.fields)
+    {
+        var fieldName = dataview?.fieldSettings?.[field]?.name ? dataview.fieldSettings[field].name : field;
+        if(dataview?.langs)
+        {
+            var langs = JSON.parse(dataview.langs);
+            if(langs) fieldName = langs?.[field]?.[clientLang] ? langs[field][clientLang] : fieldName;
+        }
+
+        html += "<th>" + fieldName + "</th>";
+    }
+    html += "</tr></thead>";
+    html += "<tbody>";
+
+    for(var index in resp.datas)
+    {
+        var data = resp.datas[index];
+
+        html += '<tr>';
+        for(var field in resp.fields)
+        {
+            var tdValue = data?.[field] ? data[field] : 'null';
+            html += "<td title='" + tdValue + "'>" + tdValue + "</td>";
+        }
+        html += '</tr>';
+    }
+    html += '</tbody>';
+    html += '</table>';
+
+    $('#datas').empty();
+    $('#datas').append(html);
 }
 
 /**
@@ -83,7 +130,7 @@ function queryTableData()
  * @access public
  * @return void
  */
-function initPager(pageID, recPerPage, recTotal)
+function initPager(pageID, recPerPage, recTotal, fieldCount)
 {
     var pageID     = parseInt(pageID);
     var recPerPage = parseInt(recPerPage);
@@ -105,6 +152,7 @@ function initPager(pageID, recPerPage, recTotal)
 
     $('.page-number').html('<strong>' + pageID + '</strong>/<strong>' + pageTotal + '</strong>');
 
+    $('.first-page').data('page', 1);
     $('.left-page').data('page', pageID - 1);
     $('.right-page').data('page', pageID + 1);
     $('.last-page').data('page', pageTotal);
@@ -112,5 +160,7 @@ function initPager(pageID, recPerPage, recTotal)
     $('.first-page,.left-page,.last-page,.right-page').removeClass('disabled');
     if(pageID == 1) $('.first-page,.left-page').addClass('disabled');
     if(pageID == pageTotal) $('.last-page,.right-page').addClass('disabled');
+
+    $('#queryResult').html(viewResult.replace('%s', recTotal).replace('%s', fieldCount));
 }
 

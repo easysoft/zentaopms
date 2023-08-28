@@ -1,6 +1,6 @@
 function changeParentStage(stageID)
 {
-    $.get(createLink('programplan', 'ajaxGetAttribute', 'stageID=' + stageID + '&attribute=' + plan.attribute), function(attribute)
+    $.get(createLink('programplan', 'ajaxGetAttribute', 'stageID=' + stageID + '&attribute=' + plan.attribute + '&projectModel=' + projectModel), function(attribute)
     {
         $('#attributeType td:first').html(attribute);
         $("#attribute" + "_chosen").remove();

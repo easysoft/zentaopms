@@ -44,11 +44,11 @@
             <?php endif;?>
             <th><?php echo $lang->story->story;?></th>
             <th><?php echo $lang->story->tasks;?></th>
-            <?php if($config->edition == 'max'):?>
+            <?php if($config->edition == 'max' or $config->edition == 'ipd'):?>
             <th><?php echo $lang->story->design;?></th>
             <?php endif;?>
             <th><?php echo $lang->story->case;?></th>
-            <?php if($config->edition == 'max' and helper::hasFeature('devops')):?>
+            <?php if(($config->edition == 'max' or $config->edition == 'ipd') and helper::hasFeature('devops')):?>
             <th><?php echo $lang->story->repoCommit;?></th>
             <?php endif;?>
             <th><?php echo $lang->story->bug;?></th>
@@ -82,7 +82,7 @@
                 <?php echo html::a($this->createLink('task', 'view', "taskID=$taskID"), $task->name, '', "title='$task->name'") . '<br/>';?>
                 <?php endforeach;?>
               </td>
-              <?php if($config->edition == 'max'):?>
+              <?php if($config->edition == 'max' or $config->edition == 'ipd'):?>
               <td>
                 <?php foreach($story->designs as $designID => $design):?>
                 <?php echo html::a($this->createLink('design', 'view', "designID=$designID"), $design->name, '', "title='$design->name'") . '<br/>';?>
@@ -94,7 +94,7 @@
                 <?php echo html::a($this->createLink('testcase', 'view', "caseID=$caseID"), $case->title, '', "title='$case->title'") . '<br/>';?>
                 <?php endforeach;?>
               </td>
-              <?php if($config->edition == 'max' and helper::hasFeature('devops')):?>
+              <?php if(($config->edition == 'max' or $config->edition == 'ipd') and helper::hasFeature('devops')):?>
               <td>
                 <?php foreach($story->revisions as $revision => $repoComment):?>
                 <?php

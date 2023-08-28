@@ -130,7 +130,7 @@ class personnelModel extends model
         $executionPairs    = $this->getInvolvedExecutions($projects);
         $taskInvest        = $this->getProjectTaskInvest($projects, $accountPairs);
         $bugAndStoryInvest = $this->getBugAndStoryInvest($accountPairs, $programID);
-        if($this->config->edition == 'max')
+        if($this->config->edition == 'max' or $this->config->edition == 'ipd')
         {
             $issueInvest = $this->getIssueInvest($accountPairs, $projects);
             $riskInvest  = $this->getRiskInvest($accountPairs, $projects);
@@ -153,7 +153,7 @@ class personnelModel extends model
 
             $personnelList[$user->role][$account] += $taskInvest[$account];
             $personnelList[$user->role][$account] += $bugAndStoryInvest[$account];
-            if($this->config->edition == 'max')
+            if($this->config->edition == 'max' or $this->config->edition == 'ipd')
             {
                 $personnelList[$user->role][$account] += $issueInvest[$account];
                 $personnelList[$user->role][$account] += $riskInvest[$account];

@@ -497,13 +497,14 @@ class installModel extends model
         $this->dao->insert(TABLE_COMPANY)->data($company)->autoCheck()->exec();
         if(!dao::isError())
         {
+            $visions = $this->config->edition == 'ipd' ? 'or,rnd,lite' : 'rnd,lite';
             /* Set admin. */
             $admin = new stdclass();
             $admin->account  = $this->post->account;
             $admin->realname = $this->post->account;
             $admin->password = md5($this->post->password);
             $admin->gender   = 'f';
-            $admin->visions  = 'rnd,lite';
+            $admin->visions  = $visions;
             $this->dao->replace(TABLE_USER)->data($admin)->exec();
         }
     }
@@ -558,7 +559,7 @@ class installModel extends model
             }
         }
 
-        if($this->config->edition == 'max')
+        if($this->config->edition == 'max' or $this->config->edition == 'ipd')
         {
             /* Update process by lang. */
             foreach($this->lang->install->processList as $id => $name)

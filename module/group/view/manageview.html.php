@@ -101,6 +101,7 @@
           <?php endif;?>
         </td>
       </tr>
+      <?php if($config->vision != 'or'):?>
       <tr>
         <th class='text-right text-top'><?php echo $lang->group->dynamic?></th>
         <td class='pl-0px pt-0px'>
@@ -168,6 +169,7 @@
           </table>
         </td>
       </tr>
+      <?php endif;?>
       <tr>
         <td colspan='2' class='form-actions text-center'>
           <?php echo html::submitButton();?>

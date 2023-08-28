@@ -254,7 +254,7 @@ $lang->pivot->noChartSelected = 'Please select one pivot.';
 $lang->pivot->beginGtEnd      = 'Begin time should not be >= end time.';
 $lang->pivot->resetSettings   = 'The configuration of the query data has been modified, requiring redesign of the pivot, whether to continue.';
 $lang->pivot->clearSettings   = 'The configuration of the query data has been modified, whether to clear the pivot and save.';
-$lang->pivot->draftSave       = 'Released content is edited, will be overwritten, whether to continue?';
+$lang->pivot->draftSave       = 'The pivot table has been published and will be in draft state. Do you want to continue?';
 $lang->pivot->cannotAddQuery  = 'Result filter has been added, query filter cannot be added.';
 $lang->pivot->cannotAddResult = 'Query filter has been added, result filter cannot be added.';
 

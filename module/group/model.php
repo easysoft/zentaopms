@@ -22,6 +22,8 @@ class groupModel extends model
     public function create()
     {
         $group = fixer::input('post')->get();
+        $group->vision = $this->config->vision;
+
         if(isset($group->limited))
         {
             unset($group->limited);
@@ -1494,6 +1496,168 @@ class groupModel extends model
         file_put_contents($allResourceFile, "\$views['{$this->config->edition}']['{$this->config->vision}'] = '$view';\n", FILE_APPEND);
         file_put_contents($allResourceFile, "\$resources['{$this->config->edition}']['{$this->config->vision}'] = '$resource';\n", FILE_APPEND);
         die('success');
+    }
+
+    /**
+     * Super Model: Init views, modules and privileges for IPD.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function initPrivs4IPD()
+    {
+        $views     = array_keys(json_decode(json_encode($this->lang->mainNav), true));
+        $resources = json_decode(json_encode($this->lang->resource), true);
+
+        $hasStoredPrivs = $this->dao->select('*')->from(TABLE_PRIV)->fetchAll('id');
+        foreach($hasStoredPrivs as $privID => $hasStoredPriv)
+        {
+            $hasStoredPrivs["{$hasStoredPriv->module}-{$hasStoredPriv->method}"] = $hasStoredPriv;
+            unset($hasStoredPrivs[$privID]);
+        }
+
+        $hasStoredManagered = $this->dao->select('*')->from(TABLE_PRIVMANAGER)->where('type')->ne('package')->fetchGroup('type', 'code');
+        $hasStoredViews     = $hasStoredManagered['view'];
+        $hasStoredModules   = $hasStoredManagered['module'];
+
+        $viewOrder = 1;
+        $viewPairs = array();
+        foreach($views as $view)
+        {
+            if($view == 'menuOrder') continue;
+
+            if(!empty($hasStoredViews[$view]))
+            {
+                $vision  = strpos($hasStoredViews[$view]->vision, ",{$this->config->vision},") !== false ? $hasStoredViews[$view]->vision : $hasStoredViews[$view]->vision . "{$this->config->vision},";
+                $edition = strpos($hasStoredViews[$view]->edition, ",{$this->config->edition},") !== false ? $hasStoredViews[$view]->edition : $hasStoredViews[$view]->edition . "{$this->config->edition},";
+
+                $viewID = $hasStoredViews[$view]->id;
+                $this->dao->update(TABLE_PRIVMANAGER)
+                    ->set('vision')->eq($vision)
+                    ->set('edition')->eq($edition)
+                    ->where('id')->eq($viewID)
+                    ->exec();
+            }
+            else
+            {
+                $viewManager = new stdclass();
+                $viewManager->parent  = 0;
+                $viewManager->code    = $view;
+                $viewManager->type    = 'view';
+                $viewManager->edition = ',ipd,';
+                $viewManager->vision  = ",{$this->config->vision},";
+                $viewManager->order   = $viewOrder * 10;
+                $viewOrder ++;
+
+                $this->dao->insert(TABLE_PRIVMANAGER)->data($viewManager)->exec();
+                $viewID = $this->dao->lastInsertId();
+
+                foreach($this->config->langs as $lang => $langValue)
+                {
+                    $viewLang = new stdclass();
+                    $viewLang->objectID   = $viewID;
+                    $viewLang->objectType = 'manager';
+                    $viewLang->lang       = $lang;
+                    $viewLang->key        = $view;
+                    $viewLang->value      = '';
+                    $viewLang->desc       = '';
+
+                    $this->dao->insert(TABLE_PRIVLANG)->data($viewLang)->exec();
+                }
+            }
+
+            $viewPairs[$view] = $viewID;
+        }
+
+        $moduleOrder = 1;
+        foreach($resources as $module => $privs)
+        {
+            if(!empty($hasStoredModules[$module]))
+            {
+                $vision  = strpos($hasStoredModules[$module]->vision, ",{$this->config->vision},") !== false ? $hasStoredModules[$module]->vision : $hasStoredModules[$module]->vision . "{$this->config->vision},";
+                $edition = strpos($hasStoredModules[$module]->edition, ",{$this->config->edition},") !== false ? $hasStoredModules[$module]->edition : $hasStoredModules[$module]->edition . "{$this->config->edition},";
+
+                $moduleID = $hasStoredModules[$module]->id;
+                $this->dao->update(TABLE_PRIVMANAGER)
+                    ->set('vision')->eq($vision)
+                    ->set('edition')->eq($edition)
+                    ->where('id')->eq($moduleID)
+                    ->exec();
+            }
+            else
+            {
+                $moduleMenu = isset($this->lang->navGroup->{$module}) ? $this->lang->navGroup->{$module} : '';
+                $moduleManager = new stdclass();
+                $moduleManager->parent  = $moduleMenu ? $viewPairs[$moduleMenu] : 0;
+                $moduleManager->code    = $module;
+                $moduleManager->type    = 'module';
+                $moduleManager->edition = ',ipd,';
+                $moduleManager->vision  = ",{$this->config->vision},";
+                $moduleManager->order   = $moduleOrder * 10;
+                $moduleOrder ++;
+
+                $this->dao->insert(TABLE_PRIVMANAGER)->data($moduleManager)->exec();
+                $moduleID = $this->dao->lastInsertId();
+
+                foreach($this->config->langs as $lang => $langValue)
+                {
+                    $moduleLang = new stdclass();
+                    $moduleLang->objectID   = $moduleID;
+                    $moduleLang->objectType = 'manager';
+                    $moduleLang->lang       = $lang;
+                    $moduleLang->key        = $module;
+                    $moduleLang->value      = '';
+                    $moduleLang->desc       = '';
+
+                    $this->dao->insert(TABLE_PRIVLANG)->data($moduleLang)->exec();
+                }
+            }
+
+            $privOrder = 1;
+            foreach($privs as $methodName => $methodLang)
+            {
+                if(!empty($hasStoredPrivs["$module-$methodName"]))
+                {
+                    $vision  = strpos($hasStoredPrivs["$module-$methodName"]->vision, ",{$this->config->vision},") !== false ? $hasStoredPrivs["$module-$methodName"]->vision : $hasStoredPrivs["$module-$methodName"]->vision . "{$this->config->vision},";
+                    $edition = strpos($hasStoredPrivs["$module-$methodName"]->edition, ",{$this->config->edition},") !== false ? $hasStoredPrivs["$module-$methodName"]->edition : $hasStoredPrivs["$module-$methodName"]->edition . "{$this->config->edition},";
+
+                    $this->dao->update(TABLE_PRIV)
+                        ->set('vision')->eq($vision)
+                        ->set('edition')->eq($edition)
+                        ->where('id')->eq($hasStoredPrivs["$module-$methodName"]->id)
+                        ->exec();
+                }
+                else
+                {
+                    $priv = new stdclass();
+                    $priv->module  = $module;
+                    $priv->method  = $methodName;
+                    $priv->parent  = $moduleID;
+                    $priv->edition = ',ipd,';
+                    $priv->vision  = ",{$this->config->vision},";
+                    $priv->system  = '1';
+                    $priv->order   = $privOrder * 10;
+                    $privOrder ++;
+
+                    $this->dao->insert(TABLE_PRIV)->data($priv)->exec();
+                    $privID = $this->dao->lastInsertId();
+
+                    foreach($this->config->langs as $lang => $langValue)
+                    {
+                        $privLang = new stdclass();
+                        $privLang->objectID   = $privID;
+                        $privLang->objectType = 'priv';
+                        $privLang->lang       = $lang;
+                        $privLang->key        = "{$module}-{$methodLang}";
+                        $privLang->value      = '';
+                        $privLang->desc       = '';
+                        $this->dao->replace(TABLE_PRIVLANG)->data($privLang)->exec();
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 
     /**

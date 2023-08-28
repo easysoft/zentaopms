@@ -398,7 +398,7 @@ class bug extends control
                 $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($output['todoID'])->exec();
                 $this->action->create('todo', $output['todoID'], 'finished', '', "BUG:$bugID");
 
-                if($this->config->edition == 'biz' || $this->config->edition == 'max')
+                if($this->config->edition != 'open')
                 {
                     $todo = $this->dao->select('type, idvalue')->from(TABLE_TODO)->where('id')->eq($output['todoID'])->fetch();
                     if($todo->type == 'feedback' && $todo->idvalue) $this->loadModel('feedback')->updateStatus('todo', $todo->idvalue, 'done');
@@ -1189,7 +1189,8 @@ class bug extends control
         $this->view->branchOption          = $branchOption;
         $this->view->branchTagOption       = $branchTagOption;
         $this->view->tasks                 = $this->task->getExecutionTaskPairs($bug->execution);
-        $this->view->users                 = $this->user->getPairs('', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
+        $this->view->testtasks             = $this->loadModel('testtask')->getPairs($bug->product, $bug->execution, $bug->testtask);
+        $this->view->users                 = $this->user->getPairs('noclosed', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
         $this->view->assignedToList        = $assignedToList;
         $this->view->cases                 = array('' => '') + $cases;
         $this->view->actions               = $this->action->getList('bug', $bugID);

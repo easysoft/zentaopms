@@ -34,7 +34,7 @@ $config->methodVar   = 'f';                       // 请求类型为GET：模块
 $config->viewVar     = 't';                       // 请求类型为GET：视图变量名。            requestType=GET: the view var name.
 $config->sessionVar  = 'zentaosid';               // 请求类型为GET：session变量名。         requestType=GET: the session var name.
 $config->views       = ',html,json,mhtml,xhtml,'; // 支持的视图类型。                       Supported view formats.
-$config->visions     = ',rnd,lite,';              // 支持的界面类型。                       Supported vision formats.
+$config->visions     = ',or,rnd,lite,';           // 支持的界面类型。                       Supported vision formats.
 
 /* 支持的主题和语言。Supported thems and languages. */
 $config->themes['default'] = 'default';
@@ -222,9 +222,11 @@ if($config->edition != 'open')
 {
     $config->version = $config->edition . $config->{$config->edition . 'Version'};
     if($config->edition != 'max') unset($config->maxVersion);
+    if($config->edition != 'ipd') unset($config->ipdVersion);
 }
 else
 {
     unset($config->bizVersion);
     unset($config->maxVersion);
+    unset($config->ipdVersion);
 }
