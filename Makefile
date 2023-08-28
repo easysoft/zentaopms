@@ -282,7 +282,7 @@ ciCommon:
 	zip -rq -9 ZenTaoALM.$(VERSION).int.zip zentaoalm
 
 	# downgrade
-	@test "$(DOWNGRADE_ENABLED)" != "true" && echo "skip downgrade" || ./misc/downgrade.sh -p "$(DOWNGRADE_VERSIONS)" -i -r zentaopms -o "$(RELEASE_PATH)" framework/ module/*
+	@test "$(DOWNGRADE_ENABLED)" != "true" && echo "skip downgrade" || ./misc/downgrade.sh -p "$(DOWNGRADE_VERSIONS)" -i -r zentaopms -o "$(RELEASE_PATH)" framework/ lib/ module/*
 
 	rm -fr zentaopms zentaoalm
 
