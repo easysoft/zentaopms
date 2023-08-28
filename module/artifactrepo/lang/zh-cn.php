@@ -13,4 +13,5 @@ $lang->artifactrepo->type     = '类型';
 $lang->artifactrepo->status   = '状态';
 $lang->artifactrepo->url      = '库地址';
 
-$lang->artifactrepo->confirmDelete = '您确认要删除该制品库吗？';
+$lang->artifactrepo->confirmDelete = '制品库删除后无法还原，你确认要继续么？';
+$lang->artifactrepo->deleteError   = '当前制品库中制品已关联版本，请取消关联后重试。';

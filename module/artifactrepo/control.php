@@ -66,7 +66,7 @@ class artifactrepo extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('artifactRepo', $repoID, 'created');
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browse')));
         }
 
         $nexusList = $this->loadModel('pipeline')->getPairs('nexus');
@@ -115,6 +115,9 @@ class artifactrepo extends control
     {
         if($confirm == 'yes')
         {
+            $linkBuild = $this->dao->select('*')->from(TABLE_BUILD)->where('artifactRepoID')->eq($artifactRepoID)->fetch();
+            if($linkBuild) return $this->send(array('result' => 'fail', 'message' => $this->lang->artifactrepo->deleteError));
+
             $this->artifactrepo->delete(TABLE_ARTIFACTREPO, $artifactRepoID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

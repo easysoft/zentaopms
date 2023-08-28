@@ -22,6 +22,7 @@ $lang->build->batchUnlinkStory = "Batch Unlink {$lang->SRCommon}";
 $lang->build->batchUnlinkBug   = 'Batch Unlink Bugs';
 $lang->build->viewBug          = 'Bugs';
 $lang->build->bugList          = 'Bug List';
+$lang->build->linkArtifactRepo = 'Link Artifact Repo';
 
 $lang->build->confirmDelete      = "Do you want to delete this build?";
 $lang->build->confirmUnlinkStory = "Do you want to unlink this {$lang->SRCommon}?";

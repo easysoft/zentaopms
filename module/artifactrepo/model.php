@@ -138,8 +138,6 @@ class artifactrepoModel extends model
             ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.serverID = t2.id')
             ->where('products')->like("%,{$productID},%")
             ->andWhere('t1.deleted')->eq(0)
-            ->orderBy($orderBy)
-            ->page($pager)
             ->fetchAll('id');
         foreach($artifactRepos as $repo)
         {
