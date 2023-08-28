@@ -53,33 +53,33 @@ class execution extends control
     }
 
     /**
-     * Browse a execution.
+     * 执行任务列表页。
+     * Browse task list for a execution.
      *
      * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function browse($executionID = 0)
+    public function browse(int $executionID = 0)
     {
         $this->locate($this->createLink($this->moduleName, 'task', "executionID=$executionID"));
     }
 
     /**
+     * 设置页面公共数据。
      * Common actions.
      *
-     * @param  int    $executionID
-     * @param  string $extra
+     * @param  int          $executionID
+     * @param  string       $extra
      * @access public
-     * @return object current object
+     * @return object|false
      */
-    public function commonAction(int $executionID = 0, string $extra = '')
+    public function commonAction(int $executionID = 0, string $extra = ''): object|false
     {
-        $this->loadModel('product');
-
         /* Get executions and products info. */
         $executionID     = $this->execution->checkAccess($executionID, $this->executions);
         $execution       = $this->execution->getById($executionID);
-        $products        = $this->product->getProducts($executionID);
+        $products        = $this->loadModel('product')->getProducts($executionID);
         $childExecutions = $this->execution->getChildExecutions($executionID);
         $teamMembers     = $this->execution->getTeamMembers($executionID);
         $actions         = $this->loadModel('action')->getList($this->objectType, $executionID);
@@ -88,10 +88,12 @@ class execution extends control
         /* Set menu. */
         $this->execution->setMenu($executionID, $buildID = 0, $extra);
 
-        /* Assign. */
+        /* Assign view data. */
+        if($this->app->tab == 'project') $this->view->projectID = $executionID;
         $this->view->hidden          = !empty($project->hasProduct) ? '' : 'hide';
         $this->view->executions      = $this->executions;
         $this->view->execution       = $execution;
+        $this->view->executionID     = $executionID;
         $this->view->childExecutions = $childExecutions;
         $this->view->products        = $products;
         $this->view->teamMembers     = $teamMembers;
@@ -100,6 +102,7 @@ class execution extends control
     }
 
     /**
+     * 执行下任务列表页。
      * Tasks of a execution.
      *
      * @param  int    $executionID
@@ -112,83 +115,40 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function task($executionID = 0, $status = 'unclosed', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function task(int $executionID = 0, string $status = 'unclosed', int $param = 0, string $orderBy = '', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
     {
-        if(common::hasPriv('execution', 'create')) $this->lang->TRActions = html::a($this->createLink('execution', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->execution->create, '', "class='btn btn-primary'");
-
         if(!isset($_SESSION['limitedExecutions'])) $this->execution->getLimitedExecution();
 
         /* Set browse type. */
         $browseType = strtolower($status);
-
-        $execution   = $this->commonAction($executionID, $status);
-        $executionID = $execution->id;
-
-        if($execution->type == 'kanban' and $this->config->vision != 'lite' and $this->app->getViewType() != 'json') $this->locate($this->createLink('execution', 'kanban', "executionID=$executionID"));
-
-        helper::setcookie('preExecutionID', $executionID);
+        $execution  = $this->commonAction($executionID, $status);
+        if($execution->type == 'kanban' && $this->config->vision != 'lite' && $this->app->getViewType() != 'json') $this->locate($this->createLink('execution', 'kanban', "executionID=$executionID"));
 
         /* Save the recently five executions visited in the cookie. */
-        $recentExecutions = isset($this->config->execution->recentExecutions) ? explode(',', $this->config->execution->recentExecutions) : array();
-        array_unshift($recentExecutions, $executionID);
-        $recentExecutions = array_unique($recentExecutions);
-        $recentExecutions = array_slice($recentExecutions, 0, 5);
-        $recentExecutions = implode(',', $recentExecutions);
-        if($this->session->multiple)
-        {
-            $this->loadModel('setting');
-            if(!isset($this->config->execution->recentExecutions) or $this->config->execution->recentExecutions != $recentExecutions) $this->setting->updateItem($this->app->user->account . 'common.execution.recentExecutions', $recentExecutions);
-            if(!isset($this->config->execution->lastExecution)    or $this->config->execution->lastExecution != $executionID)         $this->setting->updateItem($this->app->user->account . 'common.execution.lastExecution', $executionID);
-        }
+        $executionID = $execution->id;
+        $this->executionZen->setRecentExecutions($executionID);
 
-        if($this->cookie->preExecutionID != $executionID)
-        {
-            helper::setcookie('moduleBrowseParam',  0);
-            helper::setcookie('productBrowseParam', 0);
-        }
-        if($browseType == 'bymodule')
-        {
-            helper::setcookie('moduleBrowseParam',  (int)$param);
-            helper::setcookie('productBrowseParam', 0);
-        }
-        elseif($browseType == 'byproduct')
-        {
-            helper::setcookie('moduleBrowseParam',  0);
-            helper::setcookie('productBrowseParam', (int)$param);
-        }
-        else
-        {
-            $this->session->set('taskBrowseType', $browseType);
-        }
-
-        if($browseType == 'bymodule' and $this->session->taskBrowseType == 'bysearch') $this->session->set('taskBrowseType', 'unclosed');
+        /* Append id for second sort and process the order by field. */
+        if(!$orderBy) $orderBy = $this->cookie->executionTaskOrder ? $this->cookie->executionTaskOrder : 'status,id_desc';
+        $orderBy = common::appendOrder($orderBy);
+        $this->executionZen->setTaskPageStorage($executionID, $orderBy, $browseType, (int)$param);
 
         /* Set queryID, moduleID and productID. */
-        $queryID   = ($browseType == 'bysearch')  ? (int)$param : 0;
-        $moduleID  = ($browseType == 'bymodule')  ? (int)$param : (($browseType == 'bysearch' or $browseType == 'byproduct') ? 0 : $this->cookie->moduleBrowseParam);
-        $productID = ($browseType == 'byproduct') ? (int)$param : (($browseType == 'bysearch' or $browseType == 'bymodule')  ? 0 : $this->cookie->productBrowseParam);
-
-        /* Save to session. */
-        $uri = $this->app->getURI(true);
-        $this->app->session->set('taskList', $uri . "#app={$this->app->tab}", 'execution');
-
-        /* Process the order by field. */
-        if(!$orderBy) $orderBy = $this->cookie->executionTaskOrder ? $this->cookie->executionTaskOrder : 'status,id_desc';
-        helper::setcookie('executionTaskOrder', $orderBy);
-
-        /* Append id for second sort. */
-        $sort = common::appendOrder($orderBy);
-
-        /* Header and position. */
-        $this->view->title = $execution->name . $this->lang->colon . $this->lang->execution->task;
+        $queryID = $moduleID = $productID = 0;
+        if($browseType == 'bysearch')  $queryID   = (int)$param;
+        if($browseType == 'bymodule')  $moduleID  = (int)$param;
+        if($browseType == 'byproduct') $productID = (int)$param;
+        if(!in_array($browseType, array('bysearch', 'bymodule', 'byproduct')))
+        {
+            $moduleID  = $this->cookie->moduleBrowseParam;
+            $productID = $this->cookie->productBrowseParam;
+        }
 
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', true);
         if($this->app->getViewType() == 'mhtml' || $this->app->getViewType() == 'xhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
-
-        /* Get tasks. */
-        $tasks = $this->execution->getTasks($productID, $executionID, $this->executions, $browseType, $queryID, $moduleID, $sort, $pager);
+        $tasks = $this->execution->getTasks($productID, $executionID, $this->executions, $browseType, $queryID, $moduleID, $orderBy, $pager);
 
         /* Build the search form. */
         $actionURL = $this->createLink('execution', 'task', "executionID=$executionID&status=bySearch&param=myQueryID");
@@ -201,35 +161,25 @@ class execution extends control
         foreach($this->view->teamMembers as $key => $member) $memberPairs[$key] = $member->realname;
         $memberPairs = $this->loadModel('user')->processAccountSort($memberPairs);
 
-        $showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
-        $extra         = $showAllModule ? 'allModule' : '';
-
         /* Append branches to task. */
         $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($this->view->products));
-        if($branchGroups)
+        foreach($tasks as $task)
         {
-            foreach($tasks as $task)
-            {
-                if(!empty($task->product) and isset($branchGroups[$task->product][$task->branch])) $task->branch = $branchGroups[$task->product][$task->branch];
-            }
+            if(isset($branchGroups[$task->product][$task->branch])) $task->branch = $branchGroups[$task->product][$task->branch];
         }
 
-        /* Assign. */
-        if($this->app->tab == 'project') $this->view->projectID = $executionID;
-        $this->view->tasks        = $tasks;
-        $this->view->pager        = $pager;
-        $this->view->recTotal     = $pager->recTotal;
-        $this->view->recPerPage   = $pager->recPerPage;
-        $this->view->orderBy      = $orderBy;
-        $this->view->browseType   = $browseType;
-        $this->view->status       = $status;
-        $this->view->param        = $param;
-        $this->view->execution    = $execution;
-        $this->view->executionID  = $executionID;
-        $this->view->moduleID     = $moduleID;
-        $this->view->modules      = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, $extra);
-        $this->view->moduleTree   = $this->tree->getTaskTreeMenu($executionID, $productID, 0, array('treeModel', 'createTaskLink'), $extra);
-        $this->view->memberPairs  = $memberPairs;
+        $extra = empty($this->config->execution->task->allModule) ? '' : 'allModule';
+        $this->view->title       = $execution->name . $this->lang->colon . $this->lang->execution->task;
+        $this->view->tasks       = $tasks;
+        $this->view->pager       = $pager;
+        $this->view->orderBy     = $orderBy;
+        $this->view->browseType  = $browseType;
+        $this->view->status      = $status;
+        $this->view->param       = $param;
+        $this->view->moduleID    = $moduleID;
+        $this->view->modules     = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, $extra);
+        $this->view->moduleTree  = $this->tree->getTaskTreeMenu($executionID, $productID, 0, array('treeModel', 'createTaskLink'), $extra);
+        $this->view->memberPairs = $memberPairs;
         $this->display();
     }
 

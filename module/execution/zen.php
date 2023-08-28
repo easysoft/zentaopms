@@ -175,6 +175,63 @@ class executionZen extends execution
     }
 
     /**
+     * 设置最近五次执行。
+     * Set the recent five executions.
+     *
+     * @param  int $executionID
+     * @access protected
+     * @return void
+     */
+    protected function setRecentExecutions(int $executionID)
+    {
+        if($this->session->multiple)
+        {
+            $recentExecutions = isset($this->config->execution->recentExecutions) ? explode(',', $this->config->execution->recentExecutions) : array();
+            array_unshift($recentExecutions, $executionID);
+            $recentExecutions = array_slice(array_unique($recentExecutions), 0, 5);
+            $recentExecutions = implode(',', $recentExecutions);
+
+            $this->loadModel('setting');
+            if(empty($this->config->execution->recentExecutions) || $this->config->execution->recentExecutions != $recentExecutions) $this->setting->updateItem($this->app->user->account . 'common.execution.recentExecutions', $recentExecutions);
+            if(empty($this->config->execution->lastExecution)    || $this->config->execution->lastExecution != $executionID)         $this->setting->updateItem($this->app->user->account . 'common.execution.lastExecution', $executionID);
+        }
+    }
+
+    /**
+     * 设置任务页面的Cookie和Session。
+     * Set task page storage.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function setTaskPageStorage(int $executionID, string $orderBy, string $browseType, int $param = 0)
+    {
+        helper::setcookie('preExecutionID', (string)$executionID);
+        helper::setcookie('executionTaskOrder', $orderBy);
+        if($this->cookie->preExecutionID != $executionID)
+        {
+            helper::setcookie('moduleBrowseParam',  '0');
+            helper::setcookie('productBrowseParam', '0');
+        }
+        if($browseType == 'bymodule')
+        {
+            helper::setcookie('moduleBrowseParam',  (string)$param);
+            helper::setcookie('productBrowseParam', '0');
+        }
+        elseif($browseType == 'byproduct')
+        {
+            helper::setcookie('moduleBrowseParam',  '0');
+            helper::setcookie('productBrowseParam', (string)$param);
+        }
+        else
+        {
+            $this->session->set('taskBrowseType', $browseType);
+        }
+
+        if($browseType == 'bymodule' && $this->session->taskBrowseType == 'bysearch') $this->session->set('taskBrowseType', 'unclosed');
+    }
+
+    /**
      * 获取打印看板的数据。
      * Get printed kanban data.
      *
