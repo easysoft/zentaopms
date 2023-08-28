@@ -2162,87 +2162,44 @@ class testcase extends control
      */
     public function changeScene()
     {
-        $now       = helper::now();
-        $currentID = $this->post->sourceId;
-        $targetId  = $this->post->targetId;
+        $sourceID = $this->post->sourceID;
+        $sceneID  = $this->post->targetID;
+        if($sourceID == $sceneID) return false;
 
-        $targetScene  = $this->dao->findById((int)$targetId)->from(VIEW_SCENECASE)->fetch();
-        $currentScene = $this->dao->findById((int)$currentID)->from(VIEW_SCENECASE)->fetch();
-
-        $product = $targetScene->product;
-        $module  = $targetScene->module;
-        if($targetScene->isCase == 2)
+        if(strpos($sourceID, 'case_') !== false)
         {
-            if($currentScene->isCase == 2)
-            {
-                $childPath = $targetScene->path . "$currentID,";
-                $grade     = $targetScene->grade + 1;
+            $caseID  = str_replace('case_', '', $sourceID);
+            $oldCase = $this->dao->select('scene')->from(TABLE_CASE)->where('id')->eq($caseID)->fetch();
+            if($oldCase->scene == $sceneID) return false;
 
-                $this->dao->update(TABLE_SCENE)->set('parent')->eq($targetId)
-                    ->set('path')->eq($childPath)
-                    ->set('grade')->eq($grade)
-                    ->set('product')->eq($product)
-                    ->set('module')->eq($module)
-                    ->set('lastEditedBy')->eq($this->app->user->account)
-                    ->set('lastEditedDate')->eq($now)
-                    ->where('id')->eq($currentID-CHANGEVALUE)
-                    ->exec();
+            $this->dao->update(TABLE_CASE)->set('scene')->eq($sceneID)->where('id')->eq($caseID)->exec();
+            if(dao::isError()) return false;
 
-                $children = $this->dao->select('*')->from(VIEW_SCENECASE)
-                    ->where('deleted')->eq(0)
-                    ->andWhere('path')->like("%,$currentID,%")
-                    ->orderBy('grade')
-                    ->fetchAll('id');
+            $newCase = new stdclass();
+            $newCase->scene = $sceneID;
 
-                foreach($children as $id => $childScene)
-                {
-                    if($id && $id != $currentID)
-                    {
-                        if($childScene->parent)
-                        {
-                            $parentScene = $this->dao->findById((int)$childScene->parent-CHANGEVALUE)->from(TABLE_SCENE)->fetch();
-                            if($childScene->isCase == 2)
-                            {
-                                if($childScene->grade > $currentScene->grade)
-                                {
-                                    $childPath = $parentScene->path . "$id,";
-                                    $grade     = $parentScene->grade + 1;
+            $changes  = common::createChanges($oldCase, $newCase);
+            $actionID = $this->loadModel('action')->create('case', $caseID, 'edited');
+            $this->action->logHistory($actionID, $changes);
 
-                                    $this->dao->update(TABLE_SCENE)->set('path')->eq($childPath)
-                                        ->set('grade')->eq($grade)
-                                        ->set('product')->eq($parentScene->product)
-                                        ->set('module')->eq($parentScene->module)
-                                        ->set('lastEditedBy')->eq($this->app->user->account)
-                                        ->set('lastEditedDate')->eq($now)
-                                        ->where('id')->eq($id - CHANGEVALUE)
-                                        ->exec();
-                                }
-                            }
-                            else
-                            {
-                                $this->dao->update(TABLE_CASE)
-                                    ->set('product')->eq($parentScene->product)
-                                    ->set('module')->eq($parentScene->module)
-                                    ->set('lastEditedBy')->eq($this->app->user->account)
-                                    ->set('lastEditedDate')->eq($now)
-                                    ->where('id')->eq($id)
-                                    ->exec();
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                $this->dao->update(TABLE_CASE)->set('scene')->eq($targetId)
-                    ->set('product')->eq($product)
-                    ->set('module')->eq($module)
-                    ->set('lastEditedBy')->eq($this->app->user->account)
-                    ->set('lastEditedDate')->eq($now)
-                    ->where('id')->eq($currentID)
-                    ->exec();
-            }
+            return !dao::isError();
         }
+
+        $oldScene      = $this->testcase->getSceneByID($sourceID);
+        $newScene      = $this->testcase->getSceneByID($sceneID);
+        $oldParentPath = substr($oldScene->path, 0, strpos($oldScene->path, ",{$oldScene->id},") + strlen(",{$oldScene->id},"));
+
+        $this->dao->update(TABLE_SCENE)->set('parent')->eq($sceneID)->where('id')->eq($oldScene->id)->exec();
+        $this->dao->update(TABLE_SCENE)
+            ->set('product')->eq($newScene->product)
+            ->set('branch')->eq($newScene->branch)
+            ->set('module')->eq($newScene->module)
+            ->set("grade=grade + {$newScene->grade} + 1 - {$oldScene->grade}")
+            ->set("path=REPLACE(path, '{$oldParentPath}', '{$newScene->path}{$oldScene->id},')")
+            ->where('path')->like("{$oldScene->path}%")
+            ->exec();
+
+        return !dao::isError();
     }
 
     /**
