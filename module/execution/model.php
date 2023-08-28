@@ -4660,17 +4660,18 @@ class executionModel extends model
     }
 
     /**
+     * 保存看板数据。
      * Save Kanban Data.
      *
      * @param  int    $executionID
-     * @param  array  $kanbanDatas
+     * @param  array  $kanbanDataList
      * @access public
      * @return void
      */
-    public function saveKanbanData($executionID, $kanbanDatas)
+    public function saveKanbanData(int $executionID, array $kanbanDataList)
     {
         $data = array();
-        foreach($kanbanDatas as $type => $kanbanData) $data[$type] = array_keys($kanbanData);
+        foreach($kanbanDataList as $type => $kanbanData) $data[$type] = array_keys($kanbanData);
         $this->loadModel('setting')->setItem("null.execution.kanban.execution$executionID", json_encode($data));
 
     }

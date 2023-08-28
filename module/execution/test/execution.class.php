@@ -2532,13 +2532,14 @@ class executionTest
     }
 
     /**
-     * Test Get Prev Kanban.
+     * 获取上一个看板的数据。
+     * Get the data from the previous Kanban.
      *
-     * @param int $executionID
+     * @param  int    $executionID
      * @access public
-     * @return void
+     * @return array|string|null
      */
-    public function getPrevKanbanTest($executionID)
+    public function getPrevKanbanTest(int $executionID): array|string|null
     {
         $result = $this->executionModel->getPrevKanban($executionID);
 
@@ -2554,16 +2555,18 @@ class executionTest
     }
 
     /**
-     * Test save Kanban Data.
+     * 保存看板数据。
+     * Save Kanban Data.
      *
-     * @param int $executionID
-     * @param array $kanbanDatas
+     * @param  int    $executionID
+     * @param  bool   $isEmptyData
      * @access public
-     * @return void
+     * @return array|string|null
      */
-    public function saveKanbanDataTest($executionID, $kanbanDatas = '')
+    public function saveKanbanDataTest(int $executionID, $isEmptyData = false): array|string|null
     {
-        if($kanbanDatas === '')
+        $kanbanDataList = array();
+        if(!$isEmptyData)
         {
             global $tester;
             $contents    = array('story', 'wait', 'doing', 'done', 'cancel');
@@ -2596,10 +2599,10 @@ class executionTest
                 if($content != 'story' and !isset($taskAndBugs[$content])) continue;
                 $datas[$content] = $content == 'story' ? $stories : $taskAndBugs[$content];
             }
-            $kanbanDatas = $datas;
+            $kanbanDataList = $datas;
         }
 
-        $object = $this->executionModel->saveKanbanData($executionID, $kanbanDatas);
+        $object = $this->executionModel->saveKanbanData($executionID, $kanbanDataList);
 
         if(dao::isError())
         {

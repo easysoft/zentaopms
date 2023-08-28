@@ -42,18 +42,14 @@ su('admin');
 /**
 
 title=测试executionModel->saveKanbanData();
+timeout=0
 cid=1
-pid=1
-
-保存执行5看板数据   >> 3
-保存执行5看板空数据 >> empty
 
 */
 
 $execution = new executionTest();
 
 $executionID = 5;
-$emptyData   = array();
 
-r($execution->saveKanbanDataTest($executionID))             && p('story:0') && e('3');         //保存执行162看板数据
-r($execution->saveKanbanDataTest($executionID, $emptyData)) && p('')        && e('empty');     //保存执行162看板空数据
+r($execution->saveKanbanDataTest($executionID))       && p('story:0') && e('3');     // 保存看板1的看板数据
+r($execution->saveKanbanDataTest($executionID, true)) && p('')        && e('empty'); // 保存看板1的空数据
