@@ -2131,16 +2131,18 @@ class executionTest
     }
 
     /**
-     * function getKanbanTasks test by execution
+     * 获取看板的任务卡片数据。
+     * Get the Kanban task card data.
      *
-     * @param  string $executionID
-     * @param  string $count
+     * @param  int       $executionID
+     * @param  int       $count
+     * @param  array     $excludeTasks
      * @access public
-     * @return array
+     * @return array|int
      */
-    public function getKanbanTasksTest($executionID, $count)
+    public function getKanbanTasksTest(int $executionID, int $count, array $excludeTasks = array()): array|int
     {
-        $object = $this->executionModel->getKanbanTasks($executionID);
+        $object = $this->executionModel->getKanbanTasks($executionID, 'id_desc', $excludeTasks);
 
         if(dao::isError())
         {

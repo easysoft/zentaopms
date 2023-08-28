@@ -30,25 +30,25 @@ $task->gen(30);
 /**
 
 title=测试executionModel->getKanbanTasksTest();
+timeout=0
 cid=1
-pid=1
-
-敏捷执行查询 >> 任务25,5
-瀑布执行查询 >> 任务29,7
-看板执行查询 >> 任务21,9
-敏捷执行查询统计 >> 10
-瀑布执行查询统计 >> 10
-看板执行查询统计 >> 10
 
 */
 
-$executionIDList = array(5, 7, 9);
-$count           = array('0', '1');
+$executionIDList   = array(5, 7, 9);
+$count             = array('0', '1');
+$excludeTaskIdList = array(21, 25, 29);
 
 $executionTester = new executionTest();
-r($executionTester->getKanbanTasksTest($executionIDList[0], $count[0])) && p('25:name,execution') && e('任务25,5'); // 敏捷执行查询
-r($executionTester->getKanbanTasksTest($executionIDList[1], $count[0])) && p('29:name,execution') && e('任务29,7'); // 瀑布执行查询
-r($executionTester->getKanbanTasksTest($executionIDList[2], $count[0])) && p('21:name,execution') && e('任务21,9'); // 看板执行查询
-r($executionTester->getKanbanTasksTest($executionIDList[0], $count[1])) && p()                    && e('10');       // 敏捷执行查询统计
-r($executionTester->getKanbanTasksTest($executionIDList[1], $count[1])) && p()                    && e('10');       // 瀑布执行查询统计
-r($executionTester->getKanbanTasksTest($executionIDList[2], $count[1])) && p()                    && e('10');       // 看板执行查询统计
+r($executionTester->getKanbanTasksTest($executionIDList[0], $count[0]))                     && p('25:name,execution') && e('任务25,5'); // 敏捷执行查询
+r($executionTester->getKanbanTasksTest($executionIDList[1], $count[0]))                     && p('29:name,execution') && e('任务29,7'); // 瀑布执行查询
+r($executionTester->getKanbanTasksTest($executionIDList[2], $count[0]))                     && p('21:name,execution') && e('任务21,9'); // 看板执行查询
+r($executionTester->getKanbanTasksTest($executionIDList[0], $count[1]))                     && p()                    && e('10');       // 敏捷执行查询统计
+r($executionTester->getKanbanTasksTest($executionIDList[1], $count[1]))                     && p()                    && e('10');       // 瀑布执行查询统计
+r($executionTester->getKanbanTasksTest($executionIDList[2], $count[1]))                     && p()                    && e('10');       // 看板执行查询统计
+r($executionTester->getKanbanTasksTest($executionIDList[0], $count[0], $excludeTaskIdList)) && p('1:name,execution')  && e('任务1,5');  // 敏捷执行查询不包括任务25
+r($executionTester->getKanbanTasksTest($executionIDList[1], $count[0], $excludeTaskIdList)) && p('2:name,execution')  && e('任务2,7');  // 瀑布执行查询不包括任务29
+r($executionTester->getKanbanTasksTest($executionIDList[2], $count[0], $excludeTaskIdList)) && p('3:name,execution')  && e('任务3,9');  // 看板执行查询不包括任务21
+r($executionTester->getKanbanTasksTest($executionIDList[0], $count[1], $excludeTaskIdList)) && p()                    && e('9');        // 敏捷执行不包括任务25查询统计
+r($executionTester->getKanbanTasksTest($executionIDList[1], $count[1], $excludeTaskIdList)) && p()                    && e('9');        // 瀑布执行不包括任务29查询统计
+r($executionTester->getKanbanTasksTest($executionIDList[2], $count[1], $excludeTaskIdList)) && p()                    && e('9');        // 看板执行不包括任务21查询统计

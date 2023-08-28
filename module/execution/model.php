@@ -4559,22 +4559,23 @@ class executionModel extends model
     }
 
     /**
-     * Get Kanban tasks
+     * 获取看板的任务卡片数据。
+     * Get the Kanban task card data.
      *
-     * @param  int          $executionID
-     * @param  string       $orderBy
-     * @param  object       $pager
-     * @param  array|string $excludeTasks
+     * @param  int         $executionID
+     * @param  string      $orderBy
+     * @param  object|null $pager
+     * @param  array       $excludeTasks
      * @access public
-     * @return void
+     * @return array
      */
-    public function getKanbanTasks($executionID, $orderBy = 'status_asc, id_desc', $pager = null, $excludeTasks = '')
+    public function getKanbanTasks(int $executionID, string $orderBy = 'status_asc, id_desc', array $excludeTasks = array(), object|null $pager = null): array
     {
         $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
-            ->where('t1.execution')->eq((int)$executionID)
+            ->where('t1.execution')->eq($executionID)
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.parent')->ge(0)
             ->beginIF($excludeTasks)->andWhere('t1.id')->notIN($excludeTasks)->fi()

@@ -2992,7 +2992,7 @@ class kanbanModel extends model
         }
         elseif($laneType == 'task')
         {
-            $tasks = $this->loadModel('execution')->getKanbanTasks($executionID, 'status_asc, id_desc', null, $otherCardList);
+            $tasks = $this->loadModel('execution')->getKanbanTasks($executionID, 'status_asc, id_desc', explode(',', $otherCardList));
             foreach($tasks as $taskID => $task)
             {
                 foreach($this->config->kanban->taskColumnStatusList as $colType => $status)
