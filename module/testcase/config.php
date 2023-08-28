@@ -30,13 +30,13 @@ $config->testcase->exportFields = '
     lastEditedBy, lastEditedDate, version, linkCase, files';
 
 $config->testcase->customCreateFields      = 'story,stage,pri,keywords';
-$config->testcase->customBatchCreateFields = 'module,stage,story,pri,precondition,keywords,review';
-$config->testcase->customBatchEditFields   = 'module,story,stage,precondition,status,pri,keywords';
+$config->testcase->customBatchCreateFields = 'module,scene,stage,story,pri,precondition,keywords,review';
+$config->testcase->customBatchEditFields   = 'module,scene,story,stage,precondition,status,pri,keywords';
 
 $config->testcase->custom = new stdclass();
 $config->testcase->custom->createFields      = $config->testcase->customCreateFields;
-$config->testcase->custom->batchCreateFields = 'module,story,%s';
-$config->testcase->custom->batchEditFields   = 'branch,module,stage,status,pri,story';
+$config->testcase->custom->batchCreateFields = 'module,scene,story,%s';
+$config->testcase->custom->batchEditFields   = 'branch,module,scene,stage,status,pri,story';
 
 $config->testcase->excludeCheckFields = ',pri,type,stage,needReview,story,branch,';
 
@@ -273,11 +273,6 @@ $config->testcase->search['params']['scene'] = array('operator' => 'belong',  'c
 
 $config->testcase->createscene = new stdclass();
 $config->testcase->createscene->requiredFields = 'title';
-
-$config->testcase->customBatchCreateFields   = 'module,scene,stage,story,pri,precondition,keywords,review';
-$config->testcase->customBatchEditFields     = 'module,scene,story,stage,precondition,status,pri,keywords';
-$config->testcase->custom->batchCreateFields = 'module,scene,story,%s';
-$config->testcase->custom->batchEditFields   = 'branch,module,scene,stage,status,pri,story';
 
 $app->loadLang('story');
 $config->testcase->zerocase = new stdclass();
