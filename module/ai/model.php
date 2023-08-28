@@ -883,7 +883,7 @@ class aiModel extends model
      * @access public
      * @return string
      */
-    public function assemblePrompt($prompt, $dataPrompt)
+    public static function assemblePrompt($prompt, $dataPrompt)
     {
         $wholePrompt = "$dataPrompt\n";
 
@@ -916,7 +916,7 @@ class aiModel extends model
         $dataPrompt = $this->serializeDataToPrompt($prompt->module, $prompt->source, $objectData);
         if(empty($dataPrompt)) return -3;
 
-        $wholePrompt = $this->assemblePrompt($prompt, $dataPrompt);
+        $wholePrompt = static::assemblePrompt($prompt, $dataPrompt);
         $schema      = $this->getFunctionCallSchema($prompt->targetForm);
         if(empty($schema)) return -4;
 
