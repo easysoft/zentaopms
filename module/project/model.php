@@ -1723,6 +1723,7 @@ class projectModel extends model
     }
 
     /**
+     * 更新项目关联的产品信息。
      * Update products of a project.
      *
      * @param  int    $projectID
@@ -1882,6 +1883,7 @@ class projectModel extends model
     }
 
     /**
+     * 获取项目团队成员。
      * Get team members.
      *
      * @param  int    $projectID

@@ -286,8 +286,8 @@ class projectTao extends projectModel
      * 获取项目的详情，包含project表的所有内容。
      * Get project details, including all contents of the project.
      *
-     * @param  int       $projectID
-     * @param  string    $type
+     * @param  int          $projectID
+     * @param  string       $type
      * @access protected
      * @return object|false
      */
