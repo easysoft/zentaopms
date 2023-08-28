@@ -18,7 +18,7 @@ if($block->width == 1)
     blockPanel
     (
         set::bodyClass('row items-center text-center'),
-        set::headingClass('border-0'),
+        set::headingClass('border-0 pb-0'),
         cell
         (
             width('1/3'),
