@@ -411,7 +411,7 @@ class yaml
                 print_r($output);
             }
         }
-        elseif(file_exists($sqlPath) && $isClear && is_writable($sqlPath))
+        elseif(!$rows && $isClear && file_exists($sqlPath) && is_writable($sqlPath))
         {
             unlink($sqlPath);
         }
