@@ -2011,22 +2011,17 @@ class projectModel extends model
      */
     public function computeProgress($executions)
     {
-        $hours     = array();
-        $emptyHour = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
+        $hours           = array();
+        $emptyHour       = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
+        $executionIdList = array_keys($executions);
 
         /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */
-        $tasks = $this->dao->select('id, execution, estimate, consumed, `left`, status, closedReason')
-            ->from(TABLE_TASK)
-            ->where('execution')->in(array_keys($executions))
-            ->andWhere('parent')->lt(1)
-            ->andWhere('deleted')->eq(0)
-            ->fetchGroup('execution', 'id');
-
+        $tasks    = $this->loadModel('execution')->getTaskGroupByExecution($executionIdList);
         $projects = $this->dao->select('t1.id,t2.model')
             ->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
             ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.id')->in(array_keys($executions))
+            ->andWhere('t1.id')->in($executionIdList)
             ->fetchPairs();
 
         /* Compute totalEstimate, totalConsumed, totalLeft. */
@@ -2068,7 +2063,6 @@ class projectModel extends model
             $hour->totalReal     = $hour->totalConsumed + $hour->totalLeft;
             $hour->progress      = $hour->totalReal ? round($hour->totalConsumed / $hour->totalReal * 100, 2) : 0;
         }
-
         return $hours;
     }
 
