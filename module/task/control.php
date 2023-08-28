@@ -145,7 +145,7 @@ class task extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Update other data related to the task after it is created. */
-            $this->task->afterBatchCreate($taskIdList);
+            $this->task->afterBatchCreate($taskIdList, $taskID);
             if(!isset($output['laneID']) || !isset($output['columnID'])) $this->loadModel('kanban')->updateLane($executionID, 'task');
 
             $response = $this->taskZen->responseAfterbatchCreate($taskIdList, $execution);
