@@ -16,12 +16,18 @@ $lang->metric->implementedBy = "由谁实现";
 $lang->metric->offlineBy     = "由谁下架";
 $lang->metric->lastEdited    = "最后修改";
 $lang->metric->value         = "数值";
-$lang->metric->name          = "名称";
 $lang->metric->date          = "日期";
 $lang->metric->metricData    = "度量数据";
 $lang->metric->system        = "system";
 $lang->metric->weekCell      = "%s年第%s周";
 $lang->metric->create        = "创建" . $this->lang->metric->common;
+$lang->metric->afterCreate   = "保存后";
+$lang->metric->definition    = "计算规则";
+
+$lang->metric->nameTip       = '按[范围]统计的[对象][指标]';
+$lang->metric->codeTip       = '[指标]_of_[对象]_in_[范围]';
+$lang->metric->descTip       = '请输入指标含义、目的和作用等';
+$lang->metric->definitionTip = '请输入度量项的计算规则及过滤条件等';
 
 $lang->metric->noDesc    = "暂无描述";
 $lang->metric->noFormula = "暂无计算规则";
@@ -37,6 +43,13 @@ $lang->metric->browseAction = '度量项列表';
 $lang->metric->stageList = array();
 $lang->metric->stageList['wait']     = "未发布";
 $lang->metric->stageList['released'] = "已发布";
+
+$lang->metric->unitList = array();
+$lang->metric->unitList[''] = '';
+
+$lang->metric->afterCreateList = array();
+$lang->metric->afterCreateList['back']   = '返回列表页';
+$lang->metric->afterCreateList['finish'] = '去实现度量项';
 
 $lang->metric->dateList = array();
 $lang->metric->dateList['year']  = '年';

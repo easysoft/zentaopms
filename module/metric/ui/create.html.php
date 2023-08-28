@@ -47,6 +47,54 @@ formPanel
             set::value('scale'),
             set::required(true),
         ),
-
     ),
+    formGroup
+    (
+        set::label($lang->metric->name),
+        set::name('name'),
+        set::placeholder($lang->metric->nameTip),
+        set::required(true),
+    ),
+    formGroup
+    (
+        set::label($lang->metric->code),
+        set::name('code'),
+        set::placeholder($lang->metric->codeTip),
+        set::required(true),
+    ),
+    formGroup
+    (
+        set::width('1/2'),
+        set::label($lang->metric->unit),
+        set::name('unit'),
+        set::items($lang->metric->unitList),
+        set::required(true),
+    ),
+    formGroup
+    (
+        set::label($lang->metric->desc),
+        set::control(array('type' => 'textarea', 'rows' => 3)),
+        set::name('desc'),
+        set::placeholder($lang->metric->descTip),
+        set::required(true),
+    ),
+    formGroup
+    (
+        set::label($lang->metric->definition),
+        set::control(array('type' => 'textarea', 'rows' => 3)),
+        set::name('definition'),
+        set::placeholder($lang->metric->definitionTip),
+        set::required(true),
+    ),
+    formGroup
+    (
+        set::width('1/2'),
+        set::name('afterCreate'),
+        set::label($lang->metric->afterCreate),
+        set::control(array('type' => 'radioList', 'inline' => true)),
+        set::items($lang->metric->afterCreateList),
+        set::value('back'),
+        set::required(true),
+    ),
+
 );

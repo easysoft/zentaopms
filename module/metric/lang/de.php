@@ -16,7 +16,6 @@ $lang->metric->implementedBy = "Implemented By";
 $lang->metric->offlineBy     = "Offline By";
 $lang->metric->lastEdited    = "Last Edited";
 $lang->metric->value         = "Value";
-$lang->metric->name          = "Name";
 $lang->metric->date          = "Date";
 $lang->metric->metricData    = "Metric Data";
 $lang->metric->system        = "system";
