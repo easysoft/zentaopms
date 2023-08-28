@@ -351,45 +351,45 @@ class testcaseTest
     }
 
     /**
+     * 更新的测试用例。
      * Test update a case.
      *
-     * @param  array $param
+     * @param  array  $param
      * @access public
-     * @return int
+     * @return bool|array
      */
-    public function updateTest($param = array())
+    public function updateTest(int $caseID, array $param = array()): bool|array
     {
-        $caseId = 1;
-        $case = $this->objectModel->getById($caseId);
+        $oldCase = $this->objectModel->getByID($caseID);
 
-        $_POST['title']          = $case->title;
-        $_POST['color']          = $case->color;
-        $_POST['precondition']   = $case->precondition;
-        $_POST['steps']          = array('用例步骤描述1');
-        $_POST['stepType']       = array('step');
-        $_POST['expects']        = array('这是用例预期结果1');
-        $_POST['comment']        = '';
-        $_POST['labels']         = '';
-        $_POST['lastEditedDate'] = $case->lastEditedDate;
-        $_POST['product']        = $case->product;
-        $_POST['module']         = $case->module;
-        $_POST['story']          = $case->story;
-        $_POST['type']           = $case->type;
-        $_POST['stage']          = $case->stage;
-        $_POST['pri']            = $case->pri;
-        $_POST['status']         = $case->status;
-        $_POST['keywords']       = $case->keywords;
+        $case = new stdclass();
+        $case->title          = $oldCase->title;
+        $case->color          = $oldCase->color;
+        $case->precondition   = $oldCase->precondition;
+        $case->steps          = array('用例步骤描述1');
+        $case->stepType       = array('step');
+        $case->expects        = array('这是用例预期结果1');
+        $case->comment        = '';
+        $case->labels         = '';
+        $case->lastEditedDate = $oldCase->lastEditedDate;
+        $case->product        = $oldCase->product;
+        $case->module         = $oldCase->module;
+        $case->story          = $oldCase->story;
+        $case->type           = $oldCase->type;
+        $case->stage          = $oldCase->stage;
+        $case->pri            = $oldCase->pri;
+        $case->status         = $oldCase->status;
+        $case->keywords       = $oldCase->keywords;
+        $case->linkBug        = array();
 
-        foreach($param as $field => $value) $_POST[$field] = $value;
+        foreach($param as $field => $value) $case->$field = $value;
 
-        $change = $this->objectModel->update('1');
-        if($change == array()) $change = '没有数据更新';
-
-        unset($_POST);
+        $changes = $this->objectModel->update($case, $oldCase);
+        if($changes == array()) $changes = '没有数据更新';
 
         if(dao::isError()) return dao::getError();
 
-        return $change;
+        return $changes;
     }
 
     /**
