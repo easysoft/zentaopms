@@ -2080,7 +2080,7 @@ class projectModel extends model
         $methodName = $this->app->rawMethod;
         if(!$this->loadModel('common')->isOpenMethod($moduleName, $methodName) and !commonModel::hasPriv($moduleName, $methodName)) $this->common->deny($moduleName, $methodName, false);
 
-        $projectID = $this->checkAccess($projectID, $this->getPairsByProgram());
+        $projectID = (int)$this->checkAccess($projectID, $this->getPairsByProgram());
         $project   = $this->projectTao->fetchProjectInfo($projectID);
         if(!$project) return false;
 
