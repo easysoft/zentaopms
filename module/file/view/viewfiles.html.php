@@ -62,10 +62,11 @@ function deleteFile(fileID, obj)
  * @param  int    $extension
  * @param  int    $imageWidth
  * @param  string $fileTitle
+ * @param  string $type download|preview
  * @access public
  * @return void
  */
-function downloadFile(fileID, extension, imageWidth, fileTitle)
+function downloadFile(fileID, extension, imageWidth, fileTitle, type = 'download')
 {
     if(!fileID) return;
     var fileTypes      = 'txt,jpg,jpeg,gif,png,bmp';
@@ -73,7 +74,7 @@ function downloadFile(fileID, extension, imageWidth, fileTitle)
     var width          = (windowWidth > imageWidth) ? ((imageWidth < windowWidth * 0.5) ? windowWidth * 0.5 : imageWidth) : windowWidth;
     var checkExtension = fileTitle.lastIndexOf('.' + extension) == (fileTitle.length - extension.length - 1);
 
-    var url = createLink('file', 'download', 'fileID=' + fileID + '&mouse=left');
+    var url = createLink('file', type, 'fileID=' + fileID + '&mouse=left');
     url    += url.indexOf('?') >= 0 ? '&' : '?';
     url    += '<?php echo $sessionString;?>';
 
@@ -148,7 +149,6 @@ function setFileName(fileID)
 </script>
     <ul class="files-list">
       <?php foreach($files as $file):?>
-        <?php if(common::hasPriv('file', 'download')):?>
           <?php
           $uploadDate = $lang->file->uploadDate . substr($file->addedDate, 0, 10);
           $fileTitle  = "<i class='icon icon-file-text'></i> &nbsp;" . $file->title;
@@ -183,8 +183,9 @@ function setFileName(fileID)
           }
 
           $downloadLink  = $this->createLink('file', 'download', "fileID=$file->id");
-          $downloadLink .= strpos($downloadLink, '?') === false ? '?' : '&';
-          $downloadLink .= $sessionString;
+          $previewLink   = $this->createLink('file', 'preview', "fileID=$file->id");
+          //$downloadLink .= strpos($downloadLink, '?') === false ? '?' : '&';
+          //$downloadLink .= $sessionString;
           echo "<li class='file' title='{$uploadDate}'>" . html::a($downloadLink, $fileTitle . " <span class='text-muted'>({$fileSize})</span>", '_blank', "id='fileTitle$file->id'  onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
 
           $objectType = zget($this->config->file->objectType, $file->objectType);
@@ -202,18 +203,18 @@ function setFileName(fileID)
               }
 
               /* For the open source version of the file judgment. */
-              if(stripos('txt|jpg|jpeg|gif|png|bmp', $file->extension) !== false)
+              if(stripos('txt|jpg|jpeg|gif|png|bmp', $file->extension) !== false and common::hasPriv('file', 'preview'))
               {
-                  echo html::a($downloadLink, "<i class='icon icon-eye'></i>", '_blank', "class='fileAction btn btn-link text-primary' title='{$lang->file->preview}' onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
+                  echo html::a($previewLink, "<i class='icon icon-eye'></i>", '_blank', "class='fileAction btn btn-link text-primary' title='{$lang->file->preview}' onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title', 'preview')\"");
               }
 
               /* For the max version of the file judgment. */
-              if(isset($this->config->file->libreOfficeTurnon) and $this->config->file->libreOfficeTurnon == 1)
+              if(isset($this->config->file->libreOfficeTurnon) and $this->config->file->libreOfficeTurnon == 1 and !($this->config->file->convertType == 'collabora' and $this->config->requestType == 'GET') and common::hasPriv('file', 'preview'))
               {
                   $officeTypes = 'doc|docx|xls|xlsx|ppt|pptx|pdf';
                   if(stripos($officeTypes, $file->extension) !== false)
                   {
-                      echo html::a($downloadLink, "<i class='icon icon-eye'></i>", '_blank', "class='fileAction btn btn-link text-primary' title='{$lang->file->preview}' onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
+                      echo html::a($previewLink, "<i class='icon icon-eye'></i>", '_blank', "class='fileAction btn btn-link text-primary' title='{$lang->file->preview}' onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title', 'preview')\"");
                   }
               }
 
@@ -255,7 +256,6 @@ function setFileName(fileID)
             </div>
           </li>
 
-        <?php endif;?>
       <?php endforeach;?>
     </ul>
 <?php if($fieldset == 'true'):?>

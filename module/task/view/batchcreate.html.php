@@ -186,8 +186,8 @@ $colspan = count($visibleFields) + 3;
         <tfoot>
           <tr>
             <td colspan='<?php echo $colspan?>' class='text-center form-actions'>
-              <?php echo html::submitButton();?>
-              <?php echo html::backButton();?>
+              <?php echo html::submitButton(); ?>
+              <?php echo html::backButton(); ?>
             </td>
           </tr>
         </tfoot>
@@ -344,4 +344,5 @@ $(function()
 </script>
 <?php endif;?>
 <?php include '../../common/view/pastetext.html.php';?>
+<?php include '../../ai/view/inputinject.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

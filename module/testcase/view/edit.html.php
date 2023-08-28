@@ -17,6 +17,7 @@
 <?php js::set('lblBefore', $lang->testcase->insertBefore);?>
 <?php js::set('lblAfter',  $lang->testcase->insertAfter);?>
 <?php js::set('caseID', $case->id);?>
+<?php js::set('sceneID', $case->scene);?>
 <?php js::set('tab', $this->app->tab);?>
 <?php js::set('isLibCase', $isLibCase);?>
 <?php js::set('testtasks', $testtasks);?>
@@ -187,8 +188,8 @@
                 <th><?php echo $lang->testcase->product;?></th>
                 <td>
                   <div class='input-group'>
-                    <?php echo html::select('product', $products, $productID, "onchange='loadAllNew(this.value)' class='form-control chosen'");?>
-                    <?php if(isset($product->type) and $product->type != 'normal') echo html::select('branch', $branchTagOption, $case->branch, "onchange='loadBranchNew($case->branch);' class='form-control'");?>
+                    <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value)' class='form-control chosen'");?>
+                    <?php if(isset($product->type) and $product->type != 'normal') echo html::select('branch', $branchTagOption, $case->branch, "onchange='loadBranch($case->branch);' class='form-control'");?>
                   </div>
                 </td>
               </tr>
@@ -197,13 +198,13 @@
                 <td>
                   <div class='input-group' id='moduleIdBox'>
                   <?php
-                  echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelatedNew()' class='form-control chosen'");
+                  echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated()' class='form-control chosen'");
                   if(count($moduleOptionMenu) == 1)
                   {
                       echo "<span class='input-group-addon'>";
                       echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=case&currentModuleID=0&branch=$case->branch", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
                       echo '&nbsp; ';
-                      echo html::a("javascript:void(0)", $lang->refreshIcon, '', "class='refresh' onclick='loadProductModulesNew($productID)'");
+                      echo html::a("javascript:void(0)", $lang->refreshIcon, '', "class='refresh' onclick='loadProductModules($productID)'");
 
                       echo '</span>';
                   }
@@ -353,4 +354,5 @@ $(":checkbox[name^='auto']").on('click', function(){
     checkScript();
 });
 </script>
+<?php include '../../ai/view/inputinject.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

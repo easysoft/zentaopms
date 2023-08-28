@@ -103,18 +103,31 @@ function getStatus(method, params)
  */
 function loadURS()
 {
+    var $URS = $('#URS');
+    if($URS.length == 0) return;
+
     var productID       = $('#product').val();
     var branchID        = $('#branch').val() ? $('#branch').val() : 0;
-    var requirementList = $('#URS').val();
+    var requirementList = $URS.val();
     requirementList     = requirementList ? requirementList.join(',') : '';
+    var $branches       = $('#dataform #branchBox [id^=branches]');
+    if($branches.length > 0)
+    {
+        branchIdList = [];
+        $branches.each(function()
+        {
+            var currentBranch = $(this).val();
+            if(currentBranch == '') currentBranch = 0;
+            if(!branchIdList.includes(currentBranch)) branchIdList.push(currentBranch);
+        })
+        branchID = branchIdList.join(',');
+    }
 
     var link = createLink('story', 'ajaxGetProductUserStories', 'productID=' + productID + '&branchID=' + branchID + '&requirementList=' + requirementList);
-
     $.post(link, function(data)
     {
-        $('#URS').replaceWith(data);
-        $('#URS_chosen').remove();
-        $('#URS').chosen();
+        $('.URSBox').html(data);
+        $('.URSBox #URS').picker();
     });
 }
 

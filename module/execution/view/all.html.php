@@ -11,10 +11,8 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datatable.fix.html.php';?>
+<?php include '../../common/view/zui3dtable.html.php';?>
 <?php
-js::import($jsRoot . 'dtable/min.js');
-css::import($jsRoot . 'dtable/min.css');
-
 $cols       = $this->execution->generateCol($orderBy);
 $executions = $this->execution->generateRow($executionStats, $users, $productID);
 
@@ -85,7 +83,7 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
     <div class="table-header fixed-right">
       <nav class="btn-toolbar pull-right setting"></nav>
     </div>
-    <div id="myTable"></div>
+    <div id="dtable"></div>
     <div class='table-footer'>
       <div class="table-actions btn-toolbar">
         <?php
@@ -117,6 +115,7 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
   <script>
   cols = JSON.parse(cols);
   data = JSON.parse(data);
+  if(convertCols != undefined) cols = convertCols(cols);
   const options =
   {
       striped: true,
@@ -140,18 +139,18 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
               return [{html: '<span class="sparkline pending text-left no-padding" values="' + info.row.data.burns.join(',') + '"></span>'}];
           }
           return result;
-      }
+      },
   };
 
   function renderSparkline()
   {
-      $('#myTable .dtable-rows .sparkline.pending').removeClass('pending').sparkline();
+      $('#dtable .sparkline.pending').removeClass('pending').sparkline();
   }
 
   function tryRenderSparkline()
   {
       if(window.renderingSparkline) clearTimeout(window.renderingSparkline);
-      window.renderingSparkline = setTimeout(renderSparkline, 200);
+      window.renderingSparkline = setTimeout(renderSparkline, 500);
   }
 
   function createSortLink(col)
@@ -182,7 +181,7 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
       $.cookie('checkedItem', checkItems.join(','), {expires: config.cookieLife, path: config.webRoot});
   }
 
-  $('#myTable').dtable(options);
+  $('#dtable').dtable(options);
 
   $('#batchEditBtn').click(function()
   {

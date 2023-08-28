@@ -216,12 +216,6 @@ class execution extends control
         /* Display of branch label. */
         $showBranch = $this->loadModel('branch')->showBranch($productID, $moduleID, $executionID);
 
-        /* Build the search form. */
-        $actionURL = $this->createLink('execution', 'task', "executionID=$executionID&status=bySearch&param=myQueryID");
-        $this->config->execution->search['onMenuBar'] = 'yes';
-        if(!$execution->multiple) unset($this->config->execution->search['fields']['execution']);
-        $this->execution->buildTaskSearchForm($executionID, $this->executions, $queryID, $actionURL);
-
         /* team member pairs. */
         $memberPairs = array();
         foreach($this->view->teamMembers as $key => $member) $memberPairs[$key] = $member->realname;
@@ -231,6 +225,13 @@ class execution extends control
         $extra         = (isset($this->config->execution->task->allModule) && $this->config->execution->task->allModule == 1) ? 'allModule' : '';
         $showModule    = !empty($this->config->datatable->executionTask->showModule) ? $this->config->datatable->executionTask->showModule : '';
         $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($executionID, 'task', $showModule) : array();
+
+        /* Build the search form. */
+        $modules   = $this->tree->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
+        $actionURL = $this->createLink('execution', 'task', "executionID=$executionID&status=bySearch&param=myQueryID");
+        $this->config->execution->search['onMenuBar'] = 'yes';
+        if(!$execution->multiple) unset($this->config->execution->search['fields']['execution']);
+        $this->execution->buildTaskSearchForm($executionID, $this->executions, $queryID, $actionURL, $modules);
 
         /* Assign. */
         $this->view->tasks        = $tasks;
@@ -249,7 +250,7 @@ class execution extends control
         $this->view->execution    = $execution;
         $this->view->productID    = $productID;
         $this->view->product      = $product;
-        $this->view->modules      = $this->tree->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
+        $this->view->modules      = $modules;
         $this->view->moduleID     = $moduleID;
         $this->view->moduleTree   = $this->tree->getTaskTreeMenu($executionID, $productID, $startModuleID = 0, array('treeModel', 'createTaskLink'), $extra);
         $this->view->memberPairs  = $memberPairs;
@@ -837,7 +838,7 @@ class execution extends control
         if($this->app->getViewType() == 'xhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $stories = $this->story->getExecutionStories($executionID, 0, 0, $sort, $type, $param, $storyType, '', $pager);
+        $stories = $this->story->getExecutionStories($executionID, 0, 0, $sort, $type, $param, $storyType, '', '', $pager);
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
 
@@ -2590,23 +2591,17 @@ class execution extends control
             $chartData    = $this->execution->buildBurnData($executionID, $dateList, $type, 'left', $executionEnd);
         }
 
-        /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager(0, 30, 1);
-
         $this->executeHooks($executionID);
         if(!$execution->projectInfo->hasProduct) $this->lang->execution->PO = $this->lang->common->story . $this->lang->execution->owner;
 
         $this->view->title      = $this->lang->execution->view;
-        $this->view->position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
-        $this->view->position[] = $this->view->title;
 
         $this->view->execution    = $execution;
         $this->view->products     = $products;
         $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), '', $linkedBranches);
         $this->view->planGroups   = $this->execution->getPlans($products);
         $this->view->actions      = $this->loadModel('action')->getList($this->objectType, $executionID);
-        $this->view->dynamics     = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, 'all', 'all', $executionID);
+        $this->view->dynamics     = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', 30, 'all', 'all', $executionID);
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->teamMembers  = $this->execution->getTeamMembers($executionID);
         $this->view->docLibs      = $this->loadModel('doc')->getLibsByObject('execution', $executionID);
@@ -3723,10 +3718,6 @@ class execution extends control
         /* Set the menu. If the executionID = 0, use the indexMenu instead. */
         $this->execution->setMenu($executionID);
 
-        /* Set the pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage = 50, $pageID = 1);
-
         /* Set the user and type. */
         $account = 'all';
         if($type == 'account')
@@ -3734,30 +3725,27 @@ class execution extends control
             $user = $this->loadModel('user')->getById((int)$param, 'id');
             if($user) $account = $user->account;
         }
-        $period  = $type == 'account' ? 'all'  : $type;
-        $date    = empty($date) ? '' : date('Y-m-d', $date);
-        $actions = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager, 'all', 'all', $executionID, $date, $direction);
-        if(empty($recTotal)) $recTotal = count($actions);
+        $period     = $type == 'account' ? 'all'  : $type;
+        $date       = empty($date) ? '' : date('Y-m-d', $date);
+        $actions    = $this->loadModel('action')->getDynamic($account, $period, $orderBy, 50, 'all', 'all', $executionID, $date, $direction);
+        $dateGroups = $this->action->buildDateGroup($actions, $direction, $type);
 
-        /* The header and position. */
+        if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($actions) : $this->action->getDynamicCount();
+
         $execution = $this->execution->getByID($executionID);
-        $this->view->title      = $execution->name . $this->lang->colon . $this->lang->execution->dynamic;
-        $this->view->position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
-        $this->view->position[] = $this->lang->execution->dynamic;
-
-        $this->view->userIdPairs  = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted|useid');
-        $this->view->accountPairs = $this->loadModel('user')->getPairs('noletter|nodeleted');
 
         /* Assign. */
-        $this->view->executionID = $executionID;
-        $this->view->type        = $type;
-        $this->view->orderBy     = $orderBy;
-        $this->view->pager       = $pager;
-        $this->view->account     = $account;
-        $this->view->param       = $param;
-        $this->view->dateGroups  = $this->action->buildDateGroup($actions, $direction, $type);
-        $this->view->direction   = $direction;
-        $this->view->recTotal    = $recTotal;
+        $this->view->title        = $execution->name . $this->lang->colon . $this->lang->execution->dynamic;
+        $this->view->userIdPairs  = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted|useid');
+        $this->view->accountPairs = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $this->view->executionID  = $executionID;
+        $this->view->type         = $type;
+        $this->view->orderBy      = $orderBy;
+        $this->view->account      = $account;
+        $this->view->param        = $param;
+        $this->view->dateGroups   = $dateGroups;
+        $this->view->direction    = $direction;
+        $this->view->recTotal     = $recTotal;
         $this->display();
     }
 
@@ -3839,16 +3827,20 @@ class execution extends control
      * @param  string $module
      * @param  string $method
      * @param  mixed  $extra
+     * @param  mixed  $type
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu($executionID, $module, $method, $extra)
+    public function ajaxGetDropMenu($executionID, $module, $method, $extra, $type = '')
     {
+        $onlyClosed = $type == 'closed';
+
         $this->view->link        = $this->execution->getLink($module, $method, $extra);
         $this->view->module      = $module;
         $this->view->method      = $method;
         $this->view->executionID = $executionID;
         $this->view->extra       = $extra;
+        $this->view->onlyClosed  = $onlyClosed;
 
         $cacheProjectsKey   = $this->config->cacheKeys->execution->ajaxGetDropMenuProjects;
         $cacheExecutionsKey = $this->config->cacheKeys->execution->ajaxGetDropMenuExecutions;
@@ -3868,14 +3860,32 @@ class execution extends control
         }
 
         $projects = $this->loadModel('program')->getProjectList(0, 'all', 0, 'order_asc', null, 0, 0, true);
-        $executionGroups = $this->dao->select('*')->from(TABLE_EXECUTION)
+
+        $executions = $this->dao->select('id,parent,project,grade,status,name,type,PM,path')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
             ->andWhere('multiple')->eq('1')
             ->andWhere('type')->in('sprint,stage,kanban')
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF($onlyClosed)
+            ->andWhere('status')
+            ->in('done,closed')->fi()
+            ->beginIF(!$onlyClosed)
+            ->andWhere('status')
+            ->notin('done,closed')->fi()
             ->andWhere('project')->in(array_keys($projects))
             ->orderBy('order_asc')
-            ->fetchGroup('project', 'id');
+            ->fetchAll('id');
+
+        $executionGroups = array();
+        $childExecutions = array();
+        foreach($executions as $executionID => $execution)
+        {
+            if(!isset($executionGroups[$execution->project])) $executionGroups[$execution->project] = array();
+            $executionGroups[$execution->project][$executionID] = $execution;
+
+            if(!isset($childExecutions[$execution->parent])) $childExecutions[$execution->parent] = array();
+            $childExecutions[$execution->parent][$executionID] = $execution;
+        }
 
         $teams = $this->dao->select('root,account')->from(TABLE_TEAM)
             ->where('root')->in($this->app->user->view->sprints)
@@ -3897,7 +3907,7 @@ class execution extends control
                 if($execution->grade == 1) $firstGradeExecs[$execution->id] = $execution->id;
             }
 
-            $executions = $this->execution->resetExecutionSorts($executions, $firstGradeExecs);
+            $executions = $this->execution->resetExecutionSorts($executions, $firstGradeExecs, $childExecutions);
             foreach($executions as $execution)
             {
                 /* Only show leaf executions. */
@@ -3927,6 +3937,7 @@ class execution extends control
 
         $this->view->projects          = $projectPairs;
         $this->view->projectExecutions = $projectExecutions;
+        $this->view->namePinyinList    = common::convert2Pinyin($nameList);
         $this->display();
     }
 

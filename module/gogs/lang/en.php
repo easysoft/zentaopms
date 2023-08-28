@@ -13,6 +13,7 @@ $lang->gogs->gogsAccount   = 'Gogs Account';
 $lang->gogs->gogsEmail     = 'Email';
 $lang->gogs->zentaoAccount = 'Zentao Account';
 $lang->gogs->bindingStatus = 'Binding Status';
+$lang->gogs->all           = 'All';
 $lang->gogs->notBind       = 'Not bind';
 $lang->gogs->binded        = 'Binded';
 $lang->gogs->bindDynamic   = '%s and Zentao user %s';

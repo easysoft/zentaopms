@@ -60,7 +60,7 @@ class programplanModel extends model
             ->where('1 = 1')
             ->beginIF(!in_array($projectModel, array('waterfallplus', 'ipd')))->andWhere('t1.type')->eq('stage')->fi()
             ->beginIF($productID)->andWhere('t2.product')->eq($productID)->fi()
-            ->beginIF($browseType == 'all')->andWhere('t1.project')->eq($executionID)->fi()
+            ->beginIF($browseType == 'all' || $browseType == 'leaf')->andWhere('t1.project')->eq($executionID)->fi()
             ->beginIF($browseType == 'parent')->andWhere('t1.parent')->eq($executionID)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
             ->andWhere('t1.deleted')->eq('0')
@@ -297,8 +297,8 @@ class programplanModel extends model
                 $reviewDeadline[$taskExecutionID]['taskEnd'] = $task->deadline;
             }
 
-            $start = $realBegan ? $realBegan : $estStart;
-            $end   = $realEnd   ? $realEnd   : $estEnd;
+            $start = $estStart;
+            $end   = $estEnd;
             if(empty($start) and $execution) $start = $execution->begin;
             if(empty($end)   and $execution) $end   = $execution->end;
             if($start > $end) $end = $start;
@@ -1537,7 +1537,6 @@ class programplanModel extends model
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
             ->where('t2.product')->eq($productID)
             ->andWhere('t1.project')->eq($projectID)
-            ->andWhere('t1.type')->eq('stage')
             ->andWhere('t1.milestone')->eq(1)
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.begin asc,path')

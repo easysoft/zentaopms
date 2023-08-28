@@ -130,9 +130,11 @@ class executionModel extends model
 
         if(!$this->app->user->admin and strpos(",{$this->app->user->view->sprints},", ",$executionID,") === false and !defined('TUTORIAL') and $executionID != 0) return print(js::error($this->lang->execution->accessDenied) . js::locate('back'));
 
-        $executions = $this->getPairs(0, 'all', 'nocode');
+        $executions = $this->fetchPairs($execution->project, 'all');
         if(!$executionID and $this->session->execution) $executionID = $this->session->execution;
-        if(!$executionID or !in_array($executionID, array_keys($executions))) $executionID = key($executions);
+        if(!$executionID) $executionID = key($executions);
+        if($execution->multiple and !isset($executions[$executionID])) $executionID = key($executions);
+        if($execution->multiple and $executions and (!isset($executions[$executionID]) or !$this->checkPriv($executionID))) $this->accessDenied();
         $this->session->set('execution', $executionID, $this->app->tab);
 
         if($execution and $execution->type == 'stage')
@@ -157,8 +159,6 @@ class executionModel extends model
         if(!$features['other'])  unset($this->lang->execution->menu->other);
         if(!$features['story'] and $this->config->edition == 'open') unset($this->lang->execution->menu->view);
 
-        if($executions and (!isset($executions[$executionID]) or !$this->checkPriv($executionID))) $this->accessDenied();
-
         $moduleName = $this->app->getModuleName();
         $methodName = $this->app->getMethodName();
 
@@ -178,8 +178,8 @@ class executionModel extends model
         if(isset($this->lang->execution->menu->storyGroup)) unset($this->lang->execution->menu->storyGroup);
         if(isset($this->lang->execution->menu->story['dropMenu']) and $methodName == 'storykanban')
         {
-            unset($this->lang->execution->menu->story['dropMenu']);
-            $this->lang->execution->menu->story['link'] = str_replace(array($this->lang->common->story, 'story'), array($this->lang->SRCommon, 'storykanban'), $this->lang->execution->menu->story['link']);
+            $this->lang->execution->menu->story['link']            = str_replace(array($this->lang->common->story, 'story'), array($this->lang->SRCommon, 'storykanban'), $this->lang->execution->menu->story['link']);
+            $this->lang->execution->menu->story['dropMenu']->story = str_replace('execution|story', 'execution|storykanban', $this->lang->execution->menu->story['dropMenu']->story);
         }
     }
 
@@ -219,7 +219,7 @@ class executionModel extends model
         $currentExecutionName = '';
         if(isset($currentExecution->name)) $currentExecutionName = $currentExecution->name;
 
-        $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentExecutionName}'><span class='text'><i class='icon icon-{$this->lang->icons[$currentExecution->type]}'></i> {$currentExecutionName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentExecutionName}'><span class='text'><i class='icon icon-{$this->lang->icons[$currentExecution->type]}'></i> {$currentExecutionName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='dropmenu' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div></div>";
         if($isMobile) $output  = "<a id='currentItem' href=\"javascript:showSearchMenu('execution', '$executionID', '$currentModule', '$currentMethod', '$extra')\"><span class='text'>{$currentExecution->name}</span> <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
@@ -1593,7 +1593,7 @@ class executionModel extends model
         }
 
         $dropMenuLink = helper::createLink('execution', 'ajaxGetDropMenu', "executionID=$executionID&module=$currentModule&method=$currentMethod&extra=");
-        $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$projectNameTitle}{$currentExecutionName}'>{$projectNameSpan}<span class='text'>{$currentExecutionName}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$projectNameTitle}{$currentExecutionName}'>{$projectNameSpan}<span class='text'>{$currentExecutionName}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='dropmenu' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div>";
 
@@ -1712,6 +1712,26 @@ class executionModel extends model
         }
 
         return $pairs;
+    }
+
+    /**
+     * Get an array of execution id:name.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function fetchPairs($projectID = 0, $type = 'all', $filterMulti = true)
+    {
+        return $this->dao->select('id,name')->from(TABLE_EXECUTION)
+            ->where('deleted')->eq(0)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
+            ->beginIF($type == 'all')->andWhere('type')->in('stage,sprint,kanban')->fi()
+            ->beginIF($type != 'all')->andWhere('type')->in($type)->fi()
+            ->beginIF($filterMulti)->andWhere('multiple')->eq('1')->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
+            ->fetchPairs();
     }
 
     /**
@@ -2588,8 +2608,16 @@ class executionModel extends model
             ->andWhere('status')->in('closed,cancel')
             ->fetch('totalLeft');
 
+        $totalHours = $this->dao->select('sum(t1.days * t1.hours) AS totalHours')->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')
+            ->on('t1.account=t2.account')
+            ->where('t1.root')->eq($execution->id)
+            ->andWhere('t1.type')->eq('execution')
+            ->andWhere('t2.deleted')->eq(0)
+            ->fetch('totalHours');
+
+        $execution->totalHours    = $totalHours;
         $execution->days          = $execution->days ? $execution->days : '';
-        $execution->totalHours    = $this->dao->select('sum(days * hours) AS totalHours')->from(TABLE_TEAM)->where('root')->eq($execution->id)->andWhere('type')->eq('execution')->fetch('totalHours');
         $execution->totalEstimate = round((float)$total->totalEstimate, 1);
         $execution->totalConsumed = round((float)$total->totalConsumed, 1);
         $execution->totalLeft     = round((float)($total->totalLeft - $closedTotalLeft), 1);
@@ -4302,8 +4330,6 @@ class executionModel extends model
              ->orderBy($orderBy)
              ->fetchAll('id');
 
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', true);
-
         if(empty($tasks)) return array();
 
         $taskTeam = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($tasks))->fetchGroup('task');
@@ -4379,7 +4405,17 @@ class executionModel extends model
 
         foreach($tasks as $task)
         {
-            if(!isset($tasks[$task->parent]) or $task->parent <= 0)
+            if(isset($task->children))
+            {
+                foreach($task->children as $child)
+                {
+                    $totalEstimate  += $child->estimate;
+                    $totalConsumed  += $child->consumed;
+
+                    if($child->status != 'cancel' and $child->status != 'closed') $totalLeft += $child->left;
+                }
+            }
+            else
             {
                 $totalEstimate  += $task->estimate;
                 $totalConsumed  += $task->consumed;
@@ -4590,17 +4626,16 @@ class executionModel extends model
      * @param  array  $executions
      * @param  int    $queryID
      * @param  string $actionURL
+     * @param  array  $modules
      * @access public
      * @return void
      */
-    public function buildTaskSearchForm($executionID, $executions, $queryID, $actionURL)
+    public function buildTaskSearchForm($executionID, $executions, $queryID, $actionURL, $modules)
     {
         $this->config->execution->search['actionURL'] = $actionURL;
         $this->config->execution->search['queryID']   = $queryID;
         $this->config->execution->search['params']['execution']['values'] = array(''=>'', $executionID => $executions[$executionID], 'all' => $this->lang->execution->allExecutions);
-
-        $showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
-        $this->config->execution->search['params']['module']['values']  = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
+        $this->config->execution->search['params']['module']['values']    = $modules;
 
         $this->loadModel('search')->setSearchParams($this->config->execution->search);
     }
@@ -5044,6 +5079,8 @@ class executionModel extends model
                     $node->tasksCount += count($taskItems);
                     foreach($taskItems as $taskItem)
                     {
+                        if($taskItem->story > 0) continue; // If a story link to task, display task in story tree.
+
                         $node->children[$taskItem->id] = $taskItem;
                         if(!empty($tasks[$taskItem->id]->children))
                         {
@@ -5053,7 +5090,7 @@ class executionModel extends model
                         }
                     }
                 }
-                $node->children = array_values($node->children);
+                $node->children = isset($node->children) ? array_values($node->children) : array();
             }
         }
         elseif($node->type == 'product')
@@ -5091,6 +5128,7 @@ class executionModel extends model
             $taskItem->pri          = (int)$task->pri;
             $taskItem->status       = $task->status;
             $taskItem->parent       = $task->parent;
+            $taskItem->story        = $task->story;
             $taskItem->estimate     = $task->estimate;
             $taskItem->consumed     = $task->consumed;
             $taskItem->left         = $task->left;
@@ -5773,7 +5811,7 @@ class executionModel extends model
 
                 if($sortType) $set->sortType = $sortType;
 
-                $set->width = str_replace('px', '', $set->width);
+                if(isset($set->width)) $set->width = str_replace('px', '', $set->width);
 
                 unset($set->id);
 
@@ -6069,22 +6107,32 @@ class executionModel extends model
      *
      * @param  array  $executions
      * @param  array  $parentExecutions
+     * @param  array  $childExecutions
      * @access public
      * @return array
      */
-    public function resetExecutionSorts($executions, $parentExecutions = array())
+    public function resetExecutionSorts($executions, $parentExecutions = array(), $childExecutions = array())
     {
         if(empty($executions)) return array();
         if(empty($parentExecutions))
         {
             $execution        = current($executions);
-            $parentExecutions = $this->dao->select('*')->from(TABLE_EXECUTION)
-                ->where('deleted')->eq(0)
+            $parentExecutions = $this->dao->select('id,parent,project,grade,status,name,type,PM')->from(TABLE_EXECUTION)
+                ->where('parent')->eq($execution->project)
+                ->andWhere('deleted')->eq('0')
                 ->andWhere('type')->in('kanban,sprint,stage')
                 ->andWhere('grade')->eq(1)
-                ->andWhere('project')->eq($execution->project)
                 ->orderBy('order_asc')
                 ->fetchAll('id');
+        }
+
+        if(empty($childExecutions))
+        {
+            $childExecutions = $this->dao->select('id,parent,project,grade,status,name,type,PM')->from(TABLE_EXECUTION)
+                ->where('deleted')->eq(0)
+                ->andWhere('parent')->in(array_keys($parentExecutions))
+                ->orderBy('order_asc')
+                ->fetchGroup('parent', 'id');
         }
 
         $sortedExecutions = array();
@@ -6092,8 +6140,8 @@ class executionModel extends model
         {
             if(!isset($sortedExecutions[$executionID]) and isset($executions[$executionID])) $sortedExecutions[$executionID] = $executions[$executionID];
 
-            $children = $this->getChildExecutions($executionID, 'order_asc');
-            if(!empty($children)) $sortedExecutions += $this->resetExecutionSorts($executions, $children);
+            $children = isset($childExecutions[$executionID]) ? $childExecutions[$executionID] : array();
+            if(!empty($children)) $sortedExecutions += $this->resetExecutionSorts($executions, $children, $childExecutions);
         }
         return $sortedExecutions;
     }

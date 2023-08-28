@@ -90,7 +90,7 @@
           ?>
           <tr>
             <td class="text-center"><?php echo $i;?></td>
-            <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?> branchBox'><?php echo html::select("branch[$i]", $branches, $branch, "class='form-control' onchange='setModules(this.value, $productID, $i)'");?></td>
+            <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?> branchBox'><?php echo html::select("branch[$i]", $branches, $branch, "class='form-control' onchange='setModules($productID, this.value, $i)'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?> moduleBox' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen' onchange='onModuleChanged($productID, this.value, $i)' data-drop_direction='down'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'scene', ' hidden')?>' style='overflow:visible;'><?php echo html::select("scene[$i]", $sceneOptionMenu, $currentSceneID, "class='form-control chosen' data-drop_direction='down'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden'); echo $hiddenStory;?> storyBox' style='overflow:visible'> <?php echo html::select("story[$i]", $storyPairs, $story ? $story->id : '', 'class="form-control picker-select"');?></td>
@@ -142,7 +142,7 @@
   <tbody>
     <tr>
       <td class="text-center">%s</td>
-      <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?> branchBox'><?php echo html::select("branch[%s]", $branches, $branch, "class='form-control chosen' onchange='setModules(this.value, $productID, \"%s\")'");?></td>
+      <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?> branchBox'><?php echo html::select("branch[%s]", $branches, $branch, "class='form-control chosen' onchange='setModules($productID, this.value, \"%s\")'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?> moduleBox' style='overflow:visible'><?php echo html::select("module[%s]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen' onchange='onModuleChanged($productID, this.value, \"%s\")' data-drop_direction='down'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'scene', ' hidden')?>' style='overflow:visible'><?php echo html::select("scene[%s]", $sceneOptionMenu, $currentSceneID, "class='form-control chosen' data-drop_direction='down'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden'); echo $hiddenStory;?> storyBox' style='overflow:visible'> <?php echo html::select("story[%s]", $storyPairs, '', 'class="form-control picker-select"');?></td>
@@ -182,7 +182,7 @@
   <table class='hidden'>
     <tr id='addRow' class='hidden'>
       <td class="text-center"><?php echo $i;?></td>
-      <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?> branchBox'><?php echo html::select("branch[$i]", $branches, $branch, "class='form-control' onchange='setModules(this.value, $productID, $i)'");?></td>
+      <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?> branchBox'><?php echo html::select("branch[$i]", $branches, $branch, "class='form-control' onchange='setModules($productID, this.value, $i)'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?> moduleBox' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen' onchange='onModuleChanged($productID, this.value, $i)' data-drop_direction='down'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'scene', ' hidden')?>' style='overflow:visible'><?php echo html::select("scene[$i]", $sceneOptionMenu, $currentSceneID, "class='form-control chosen' data-drop_direction='down'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden'); echo $hiddenStory;?> storyBox' style='overflow:visible'> <?php echo html::select("story[$i]", $storyPairs, $story ? $story->id : '', 'class="form-control picker-select"');?></td>

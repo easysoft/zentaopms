@@ -745,6 +745,7 @@ class gitlab extends control
             if(!$project->adminer and isset($project->owner) and $project->owner->id == $openID) $project->adminer = true;
 
             $project->isMaintainer = $this->gitlab->checkUserAccess($gitlabID, $project->id, $project, $groupIDList, 'maintainer');
+            $project->isDeveloper  = $this->gitlab->checkUserAccess($gitlabID, $project->id, $project, $groupIDList, 'developer');
         }
 
         $gitlab    = $this->gitlab->getByID($gitlabID);

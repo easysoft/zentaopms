@@ -1541,7 +1541,8 @@ class pivotModel extends model
                 {
                     if($fields[$field]['type'] != 'number' and in_array($stat, array('avg', 'sum')))
                     {
-                        $columnSQL = "$stat(0) as `$uuName`";
+                        $convertSql = $this->config->db->driver == 'mysql' ? "CAST(tt.`$field` AS DECIMAL(32, 2))" : "TO_DECIMAL(tt.`$field`)";
+                        $columnSQL  = "$stat($convertSql) as `$uuName`";
                     }
                     else
                     {
@@ -2259,9 +2260,13 @@ class pivotModel extends model
     }
 
     /**
-     * replace defined table names.
+     * Gen sheet by origin sql.
      *
+     * @param  array  $fields
+     * @param  array  $settings
      * @param  string $sql
+     * @param  array  $filters
+     * @param  array  $langs
      * @access public
      * @return string
      */

@@ -1,12 +1,15 @@
 VERSION        = $(shell head -n 1 VERSION)
-XUANVERSION    = $(shell jq -r .pkg.xuanxuan.gitVersion < dependency.json)
-XVERSION       = $(shell jq -r .pkg.xuanxuan.ersion < dependency.json)
+XUANVERSION    = $(shell jq -r .pkg.xuanxuan.gitVersion < ci.json)
+XVERSION       = $(shell jq -r .pkg.xuanxuan.version < ci.json)
 XHPROF_VERSION = 2.3.9
 
 XUANPATH      := $(XUANXUAN_SRC_PATH)
 BUILD_PATH    := $(if $(ZENTAO_BUILD_PATH),$(ZENTAO_BUILD_PATH),$(shell pwd))
 RELEASE_PATH  := $(if $(ZENTAO_RELEASE_PATH),$(ZENTAO_RELEASE_PATH),$(shell pwd))
 XUAN_WEB_PATH := $(ZENTAO_BUILD_PATH)/web
+
+DOWNGRADE_ENABLED := $(or $(DOWNGRADE_ENABLED),$(shell jq -r .downgrade.enabled < ci.json))
+DOWNGRADE_VERSIONS := $(or $(DOWNGRADE_VERSIONS),$(shell jq -r .downgrade.versions < ci.json))
 
 all:
 	make clean
@@ -272,12 +275,17 @@ ciCommon:
 	make cleanAssets
 	zip -rq -9 ZenTaoPMS.$(VERSION).zip zentaopms
 	# en
-	cd zentaopms/; grep -rl 'zentao.net'|xargs sed -i 's/zentao.net/zentao.pm/g';
-	cd zentaopms/; grep -rl 'http://www.zentao.pm'|xargs sed -i 's/http:\/\/www.zentao.pm/https:\/\/www.zentao.pm/g';
-	cd zentaopms/config/; echo >> config.php; echo '$$config->isINT = true;' >> config.php
-	mv zentaopms zentaoalm
-	zip -r -9 ZenTaoALM.$(VERSION).int.zip zentaoalm
-	rm -fr zentaoalm
+	cp -a zentaopms zentaoalm
+	cd zentaoalm/; grep -rl 'zentao.net'|xargs sed -i 's/zentao.net/zentao.pm/g';
+	cd zentaoalm/; grep -rl 'http://www.zentao.pm'|xargs sed -i 's/http:\/\/www.zentao.pm/https:\/\/www.zentao.pm/g';
+	cd zentaoalm/config/; echo >> config.php; echo '$$config->isINT = true;' >> config.php
+	zip -rq -9 ZenTaoALM.$(VERSION).int.zip zentaoalm
+
+	# downgrade
+	@test "$(DOWNGRADE_ENABLED)" != "true" && echo "skip downgrade" || ./misc/downgrade.sh -p "$(DOWNGRADE_VERSIONS)" -i -r zentaopms -o "$(RELEASE_PATH)" framework/ lib/ module/*
+
+	rm -fr zentaopms zentaoalm
+
 	# move pms zip to build and release path.
 	rm -f $(BUILD_PATH)/ZenTao*.zip $(RELEASE_PATH)/ZenTaoPMS.$(VERSION).zip $(RELEASE_PATH)/ZenTaoALM.$(VERSION).int.zip
 	cp ZenTaoPMS.$(VERSION).zip $(BUILD_PATH)

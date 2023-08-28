@@ -232,6 +232,7 @@ class task extends control
 
                 $response['message'] = $this->lang->task->successSaved . $this->lang->task->afterChoices['continueAdding'];
                 $response['locate']  = $this->createLink('task', 'create', "executionID=$executionID&storyID={$storyParam}&moduleID=$moduleID");
+                if($this->app->tab == 'project') $response['locate']  = 'reload';
                 return $this->send($response);
             }
             elseif($this->post->after == 'toTaskList')
@@ -538,6 +539,8 @@ class task extends control
 
         /* Set menu. */
         $this->execution->setMenu($this->view->execution->id);
+        if(!$this->view->execution->multiple) $this->loadModel('project')->setMenu($this->view->task->project);
+
         $this->view->position[] = html::a($this->createLink('execution', 'browse', "execution={$this->view->task->execution}"), $this->view->execution->name);
     }
 

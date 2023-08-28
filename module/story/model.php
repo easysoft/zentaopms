@@ -86,11 +86,11 @@ class storyModel extends model
         $story->children = array();
         if($story->parent == '-1') $story->children = $this->dao->select('*')->from(TABLE_STORY)->where('parent')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll('id');
 
-        $story->openedDate    = substr($story->openedDate, 0, 19);
-        $story->assignedDate  = substr(is_null($story->assignedDate) ? '' : $story->assignedDate, 0, 19);
-        $story->reviewedDate  = substr(is_null($story->reviewedDate) ? '' : $story->reviewedDate, 0, 19);
-        $story->closedDate    = substr(is_null($story->closedDate) ? '' : $story->closedDate, 0, 19);
-        $story->lastEditedDate= substr(is_null($story->lastEditedDate) ? '' : $story->lastEditedDate, 0, 19);
+        if($story->openedDate)     $story->openedDate    = substr($story->openedDate, 0, 19);
+        if($story->assignedDate)   $story->assignedDate  = substr($story->assignedDate, 0, 19);
+        if($story->reviewedDate)   $story->reviewedDate  = substr($story->reviewedDate, 0, 19);
+        if($story->closedDate)     $story->closedDate    = substr($story->closedDate, 0, 19);
+        if($story->lastEditedDate) $story->lastEditedDate= substr($story->lastEditedDate, 0, 19);
 
         return $story;
     }
@@ -234,10 +234,11 @@ class storyModel extends model
             ->cleanInt('product,module,pri,plan')
             ->callFunc('title', 'trim')
             ->add('version', 1)
-            ->setDefault('plan,verify,notifyEmail', '')
+            ->setDefault('plan,notifyEmail', '')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
             ->setDefault('estimate', 0)
+            ->setIF(strlen($this->post->verify) == 0, 'verify', '')
             ->setIF($this->post->assignedTo, 'assignedDate', $now)
             ->setIF($this->post->plan > 0, 'stage', 'planned')
             ->setIF($this->post->estimate, 'estimate', (float)$this->post->estimate)
@@ -265,8 +266,8 @@ class storyModel extends model
         if($product->type == 'normal' or $product->type == 'branch' or $story->type == 'requirement')
         {
             if(!$this->post->branches) $this->post->branches = isset($story->branch) ? array($story->branch) : array(0 => 0);
-            if(!$this->post->modules)  $this->post->modules  = isset($story->module) ? array($story->module) : array(0 => 0);
-            $this->post->plans    = isset($story->plan) ? array($story->plan) : array(0 => 0);
+            if(!$this->post->modules or $product->type == 'normal')  $this->post->modules  = isset($story->module) ? array($story->module) : array(0 => 0);
+            if(!$this->post->plans or $product->type == 'normal') $this->post->plans = isset($story->plan) ? array($story->plan) : array(0 => 0);
         }
 
         /* check module */
@@ -283,6 +284,18 @@ class storyModel extends model
             }
         }
 
+        if(strpos($requiredFields, ',plan,') !== false)
+        {
+            /* Create a project with no execution, remove plan required check. */
+            $project = $this->dao->findById((int)$executionID)->from(TABLE_PROJECT)->fetch();
+            if(!empty($project->project)) $project = $this->dao->findById((int)$project->project)->from(TABLE_PROJECT)->fetch();
+
+            if(empty($project->hasProduct))
+            {
+                if($project->model !== 'scrum' or !$project->multiple) $requiredFields = str_replace(',plan,', ',', $requiredFields);
+            }
+        }
+
         $storyIds    = array();
         $storyFile   = array();
         $mainStoryID = 0;
@@ -292,7 +305,7 @@ class storyModel extends model
             $story->module = $this->post->modules[$key];
             $story->plan   = $this->post->plans[$key];
 
-            if(strpos('draft,reviewing', $story->status) !== false) $story->stage = $this->post->plan > 0 ? 'planned' : 'wait';
+            if(strpos('draft,reviewing', $story->status) !== false) $story->stage = $story->plan > 0 ? 'planned' : 'wait';
             if($story->type == 'requirement') $requiredFields = str_replace(',plan,', ',', $requiredFields);
             if(strpos($requiredFields, ',estimate,') !== false)
             {
@@ -800,7 +813,7 @@ class storyModel extends model
 
         /* If in ipd mode, set requirement status = 'launched'. */
         if($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement' and $story->status == 'active' and $this->config->vision == 'rnd') $story->status = 'launched';
-        if($story->status == 'launched' and $this->app->tab != 'product') $story->status = 'developing';
+        if(isset($story->status) and $story->status == 'launched' and $this->app->tab != 'product') $story->status = 'developing';
 
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->change['id'], $this->post->uid);
         $this->dao->update(TABLE_STORY)->data($story, 'spec,verify,deleteFiles,relievedTwins')
@@ -942,12 +955,12 @@ class storyModel extends model
         if($this->config->vision != 'or')
         {
             /* Unchanged product when editing requirements on site. */
-            $storyProjectID = $this->dao->select('t2.hasProduct')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            $hasProduct = $this->dao->select('t2.hasProduct')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                 ->where('t1.product')->eq($oldStory->product)
                 ->andWhere('t2.deleted')->eq(0)
-                ->fetch();
-            $_POST['product'] = !$storyProjectID->hasProduct ? $oldStory->product : $this->post->product;
+                ->fetch('hasProduct');
+            $_POST['product'] = (!empty($hasProduct) && !$hasProduct) ? $oldStory->product : $this->post->product;
         }
 
         $story = fixer::input('post')
@@ -2528,7 +2541,6 @@ class storyModel extends model
                 $field = trim($field);
                 if(empty($field)) continue;
 
-                if(!isset($task->$field)) continue;
                 if(!empty($task->$field)) continue;
                 if($field == 'estimate' and strlen(trim($task->estimate)) != 0) continue;
 
@@ -2569,7 +2581,11 @@ class storyModel extends model
             $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
             if(dao::isError()) return false;
 
-            if($task->story) $this->setStage($task->story);
+            if($task->story)
+            {
+                $storyStage = $this->dao->select('stage')->from(TABLE_STORY)->where('id')->eq($task->story)->fetch('stage');
+                if($storyStage && $storyStage != 'projected') $this->setStage($task->story);
+            }
 
             $this->action->create('task', $taskID, 'Opened', '');
         }
@@ -2975,7 +2991,7 @@ class storyModel extends model
 
         if($browseType == 'bySearch')
         {
-            $stories2Link = $this->getBySearch($story->product, $story->branch, $queryID, 'id_desc', '', $tmpStoryType, $storyIDList, $pager);
+            $stories2Link = $this->getBySearch($story->product, $story->branch, $queryID, 'id_desc', '', $tmpStoryType, $storyIDList, '', $pager);
         }
         elseif($type != 'linkRelateSR' and $type != 'linkRelateUR')
         {
@@ -3324,11 +3340,12 @@ class storyModel extends model
      * @param  string      $executionID
      * @param  string      $type requirement|story
      * @param  string      $excludeStories
+     * @param  string      $excludeStatus
      * @param  object      $pager
      * @access public
      * @return array
      */
-    public function getBySearch($productID, $branch = '', $queryID = 0, $orderBy = '', $executionID = '', $type = 'story', $excludeStories = '', $pager = null)
+    public function getBySearch($productID, $branch = '', $queryID = 0, $orderBy = '', $executionID = '', $type = 'story', $excludeStories = '', $excludeStatus = '', $pager = null)
     {
         $this->loadModel('product');
         $executionID = empty($executionID) ? 0 : $executionID;
@@ -3356,7 +3373,9 @@ class storyModel extends model
         $storyQuery = $storyQuery . ' AND `product` ' . helper::dbIN(array_keys($products));
 
         if($excludeStories) $storyQuery = $storyQuery . ' AND `id` NOT ' . helper::dbIN($excludeStories);
+        if($excludeStatus)  $storyQuery = $storyQuery . ' AND `status` NOT ' . helper::dbIN($excludeStatus);
         if($this->app->moduleName == 'productplan') $storyQuery .= " AND `status` NOT IN ('closed') AND `parent` >= 0 ";
+        if(in_array($this->app->moduleName, array('build', 'projectrelease', 'release'))) $storyQuery .= "AND `parent` >= 0 ";
         $allBranch = "`branch` = 'all'";
         if(!empty($executionID))
         {
@@ -3416,6 +3435,7 @@ class storyModel extends model
         {
             if($branch and strpos($storyQuery, '`branch` =') === false) $storyQuery .= " AND `branch` " . helper::dbIN($branch);
         }
+
         $storyQuery = preg_replace("/`plan` +LIKE +'%([0-9]+)%'/i", "CONCAT(',', `plan`, ',') LIKE '%,$1,%'", $storyQuery);
 
 
@@ -3514,11 +3534,12 @@ class storyModel extends model
      * @param  int    $param
      * @param  string $storyType
      * @param  string $excludeStories
+     * @param  string $excludeStatus
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getExecutionStories($executionID = 0, $productID = 0, $branch = 0, $orderBy = 't1.`order`_desc', $type = 'byModule', $param = 0, $storyType = 'story', $excludeStories = '', $pager = null)
+    public function getExecutionStories($executionID = 0, $productID = 0, $branch = 0, $orderBy = 't1.`order`_desc', $type = 'byModule', $param = 0, $storyType = 'story', $excludeStories = '', $excludeStatus = '', $pager = null)
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getExecutionStories();
 
@@ -3637,6 +3658,7 @@ class storyModel extends model
                 ->beginIF($type == 'bybranch' and $branchParam !== '')->andWhere('t2.branch')->in("0,$branchParam")->fi()
                 ->beginIF(strpos('draft|reviewing|changing|closed', $type) !== false)->andWhere('t2.status')->eq($type)->fi()
                 ->beginIF($type == 'unclosed')->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
+                ->beginIF($excludeStatus)->andWhere('t2.status')->notIN($excludeStatus)->fi()
                 ->beginIF($type == 'linkedexecution')->andWhere('t2.id')->in($storyIdList)->fi()
                 ->beginIF($type == 'unlinkedexecution')->andWhere('t2.id')->notIn($storyIdList)->fi()
                 ->fi()
@@ -5052,7 +5074,7 @@ class storyModel extends model
         $tab         = $this->app->tab;
         $executionID = empty($execution) ? $this->session->execution : $execution->id;
         $account     = $this->app->user->account;
-        $storyLink   = helper::createLink('story', 'view', "storyID=$story->id&version=0&param=&storyType=$story->type");
+        $storyLink   = helper::createLink('story', 'view', "storyID=$story->id&version=0&param=&storyType=$story->type") . "#app=$tab";
         $canView     = common::hasPriv($story->type, 'view', null, "storyType=$story->type");
         if($this->config->vision == 'or') $this->app->loadLang('demand');
 
@@ -5563,7 +5585,7 @@ class storyModel extends model
         {
             if($projectID)
             {
-                $stories = $this->getExecutionStories($projectID, $productID, $branch, '`order`_desc', 'all', 0, 'story', $excludeStories, $pager);
+                $stories = $this->getExecutionStories($projectID, $productID, $branch, '`order`_desc', 'all', 0, 'story', $excludeStories, '', $pager);
             }
             else
             {

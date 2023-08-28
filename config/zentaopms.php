@@ -244,6 +244,7 @@ $config->openMethods[] = 'search.buildzinform';
 $config->openMethods[] = 'search.buildzinquery';
 $config->openMethods[] = 'search.savezinquery';
 $config->openMethods[] = 'space.createapplication';
+$config->openMethods[] = 'ai.adminindex';
 
 $config->openModules = array();
 $config->openModules[] = 'install';
@@ -320,6 +321,7 @@ define('TABLE_API_LIB_RELEASE', '`' . $config->db->prefix . 'api_lib_release`');
 
 define('TABLE_MODULE',        '`' . $config->db->prefix . 'module`');
 define('TABLE_ACTION',        '`' . $config->db->prefix . 'action`');
+define('TABLE_ACTIONRECENT',  '`' . $config->db->prefix . 'actionrecent`');
 define('TABLE_FILE',          '`' . $config->db->prefix . 'file`');
 define('TABLE_HOLIDAY',       '`' . $config->db->prefix . 'holiday`');
 define('TABLE_HISTORY',       '`' . $config->db->prefix . 'history`');
@@ -376,9 +378,6 @@ define('TABLE_DATASET',   '`' . $config->db->prefix . 'dataset`');
 define('TABLE_DATAVIEW',  '`' . $config->db->prefix . 'dataview`');
 define('TABLE_DIMENSION', '`' . $config->db->prefix . 'dimension`');
 define('TABLE_SCENE',     '`' . $config->db->prefix . 'scene`');
-define('VIEW_SCENECASE',  '`ztv_scenecase`');
-
-define('CHANGEVALUE', 100000000);
 
 define('TABLE_PRIV',         '`' . $config->db->prefix . 'priv`');
 define('TABLE_PRIVLANG',     '`' . $config->db->prefix . 'privlang`');
@@ -389,6 +388,8 @@ define('TABLE_SPACE',    '`' . $config->db->prefix . 'space`');
 define('TABLE_INSTANCE', '`' . $config->db->prefix . 'instance`');
 define('TABLE_SOLUTION', '`' . $config->db->prefix . 'solution`');
 define('TABLE_ARTIFACTREPO', '`' . $config->db->prefix . 'artifactrepo`');
+define('TABLE_PROMPT', '`' . $config->db->prefix . 'prompt`');
+define('TABLE_PROMPTROLE', '`' . $config->db->prefix . 'promptrole`');
 
 $config->objectTables['product']      = TABLE_PRODUCT;
 $config->objectTables['productplan']  = TABLE_PRODUCTPLAN;
@@ -455,8 +456,9 @@ $config->objectTables['instance']     = TABLE_INSTANCE;
 $config->objectTables['space']        = TABLE_SPACE;
 $config->objectTables['solution']     = TABLE_SOLUTION;
 $config->objectTables['artifactrepo'] = TABLE_ARTIFACTREPO;
+$config->objectTables['prompt']       = TABLE_PROMPT;
 
-$config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions');
+$config->newFeatures      = array('aiPrompts', 'promptDesign', 'promptExec');
 $config->disabledFeatures = '';
 $config->closedFeatures   = '';
 

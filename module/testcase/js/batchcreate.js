@@ -96,7 +96,7 @@ function loadScenes(productID, moduleID, num)
     var branchID     = $(branchIDName + num).val();
     if(!branchID) branchID = 0;
 
-    var sceneLink = createLink('testcase', 'ajaxGetScenesForBC', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&stype=2&storyID=0&onlyOption=false&status=noclosed&limit=50&type=full&hasParent=1&number=' + num);
+    var sceneLink = createLink('testcase', 'ajaxGetScenes', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&element=scene&sceneID=0&number=' + num + '&ditto=1');
     $.get(sceneLink, function(scenes)
     {
         if(!scenes) scenes = '<select id="scene' + num + '" name="scene[' + num + ']" class="form-control"></select>';
@@ -104,21 +104,13 @@ function loadScenes(productID, moduleID, num)
         {
             for(var i = num; i <= rowIndex ; i ++)
             {
-                //if(i != num && $('#scene' + i).val() != 'ditto') break;
-
                 var nowScenes = scenes.replaceAll('scene' + num, 'scene' + i);
                 $('#scene' + i).replaceWith(nowScenes);
                 if(canSceneDitto(i) == false) $('#scene' + i).find("option:last").remove();
                 $('#scene' + i + "_chosen").remove();
                 $('#scene' + i).next('.picker').remove();
                 $('#scene' + i).attr('name', 'scene[' + i + ']');
-                $('#scene' + i).picker();
-
-                if (i != num)
-                {
-                    var myPicker = $('#scene' + i).data('zui.picker');
-                    myPicker && myPicker.setValue("ditto");
-                }
+                $('#scene' + i).chosen();
             }
         }
         else
@@ -127,7 +119,7 @@ function loadScenes(productID, moduleID, num)
             $('#scene' + num + "_chosen").remove();
             $('#scene' + num).next('.picker').remove();
             $('#scene' + num).attr('name', 'scene[' + num + ']');
-            $('#scene' + num).picker();
+            $('#scene' + num).chosen();
         }
     });
 }

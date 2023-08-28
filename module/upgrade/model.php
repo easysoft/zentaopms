@@ -24,7 +24,7 @@ class upgradeModel extends model
     public function __construct()
     {
         parent::__construct();
-        if($this->config->edition == 'ipd') $this->config->vision = 'rnd';
+        if($this->config->edition != 'lite') $this->config->vision = 'rnd';
         $this->loadModel('setting');
     }
 
@@ -97,6 +97,16 @@ class upgradeModel extends model
         /* Execute. */
         $fromOpenVersion = $this->getOpenVersion($fromVersion);
         $versions        = $this->getVersionsToUpdate($fromOpenVersion, $fromEdition);
+
+        /* Get total sqls and write in tmp file. */
+        if(is_writable($this->app->getTmpRoot()))
+        {
+            file_put_contents($this->app->getTmpRoot() . 'upgradeSqlLines', '0-0');
+            $confirm        = $this->getConfirm($fromVersion);
+            $updateTotalSql = count(explode(';', $confirm));
+            file_put_contents($this->app->getTmpRoot() . 'upgradeSqlLines', $updateTotalSql . '-0');
+        }
+
         foreach($versions as $openVersion => $chargedVersions)
         {
             $executedXuanxuan = false;
@@ -673,14 +683,21 @@ class upgradeModel extends model
                 break;
             case '18_5':
                 $fromVersion = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=version');
-                if(strpos($fromVersion, 'ipd') === false) $this->execSQL($this->getUpgradeFile('ipdinstall'));
+                $ipdinstall  = false;
+
+                if(is_numeric($fromVersion[0]) and version_compare($fromVersion, '18.5', '<='))             $ipdinstall = true;
+                if(strpos($fromVersion, 'pro') !== false)                                                   $ipdinstall = true;
+                if(strpos($fromVersion, 'biz') !== false and version_compare($fromVersion, 'biz8.5', '<=')) $ipdinstall = true;
+                if(strpos($fromVersion, 'max') !== false and version_compare($fromVersion, 'max4.5', '<=')) $ipdinstall = true;
+                if($ipdinstall) $this->execSQL($this->getUpgradeFile('ipdinstall'));
+
                 if($fromVersion == 'ipd1.0.beta1') $this->execSQL($this->getUpgradeFile('ipd1.0.beta1'));
-                if($this->config->edition == 'ipd' and strpos($fromVersion, 'ipd') === false) $this->addORPriv();
 
                 $this->loadModel('product')->refreshStats(true);
                 $this->loadModel('program')->refreshStats(true);
                 $this->updatePivotFieldsType();
 
+                if(in_array($fromVersion, array('18.5', 'biz8.5', 'max4.5'))) $this->addCreateAction4Story();
                 break;
         }
 
@@ -1171,7 +1188,13 @@ class upgradeModel extends model
              case '18_4':
                 $confirmContent .= file_get_contents($this->getUpgradeFile('18.4'));
              case '18_5':
-                $confirmContent .= file_get_contents($this->getUpgradeFile('ipdinstall')); // confirm insert position.
+                $ipdinstall  = false;
+                if(is_numeric($fromVersion[0]) and version_compare($fromVersion, '18.5', '<'))             $ipdinstall = true;
+                if(strpos($fromVersion, 'biz') !== false and version_compare($fromVersion, 'biz8.5', '<')) $ipdinstall = true;
+                if(strpos($fromVersion, 'max') !== false and version_compare($fromVersion, 'max4.5', '<')) $ipdinstall = true;
+                if($ipdinstall) $confirmContent .= file_get_contents($this->getUpgradeFile('ipdinstall'));
+
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.5')); // confirm insert position.
         }
 
         return $confirmContent;
@@ -2082,18 +2105,7 @@ class upgradeModel extends model
         $mysqlVersion = $this->loadModel('install')->getDatabaseVersion();
         $ignoreCode   = '|1050|1054|1060|1091|1061|';
 
-        /* Read the sql file to lines, remove the comment lines, then join theme by ';'. */
-        $sqls = explode("\n", file_get_contents($sqlFile));
-        foreach($sqls as $key => $line)
-        {
-            $line       = trim($line);
-            $sqls[$key] = $line;
-
-            /* Skip sql that is note. */
-            if(preg_match('/^--|^#|^\/\*/', $line) or empty($line)) unset($sqls[$key]);
-        }
-        $sqls = explode(';', join("\n", $sqls));
-
+        $sqls = $this->parseToSqls($sqlFile);
         foreach($sqls as $sql)
         {
             if(empty($sql)) continue;
@@ -2116,6 +2128,17 @@ class upgradeModel extends model
             try
             {
                 $this->saveLogs($sql);
+
+                /* Calculate the number of sql runs completed. */
+                if(is_writable($this->app->getTmpRoot()))
+                {
+                    $sqlLines    = file_get_contents($this->app->getTmpRoot() . 'upgradeSqlLines');
+                    $sqlLines    = explode('-', $sqlLines);
+                    $executeLine = $sqlLines[1];
+                    $executeLine ++;
+                    file_put_contents($this->app->getTmpRoot() . 'upgradeSqlLines', $sqlLines[0] . '-' . $executeLine);
+                }
+
                 $this->dbh->exec($sql);
             }
             catch(PDOException $e)
@@ -2127,6 +2150,30 @@ class upgradeModel extends model
             }
         }
     }
+
+    /**
+     * Parse sql file to sqls.
+     *
+     * @param  string $sqlFile
+     * @access public
+     * @return array
+     */
+    public function parseToSqls($sqlFile)
+    {
+        /* Read the sql file to lines, remove the comment lines, then join theme by ';'. */
+        $sqls = explode("\n", file_get_contents($sqlFile));
+        $sqlList = array();
+        foreach($sqls as $key => $line)
+        {
+            $line = trim($line);
+            if(!$line) continue;
+            /* Skip sql that is note. */
+            if(!preg_match('/^--|^#|^\/\*/', $line)) $sqlList[] = $line;
+        }
+
+        return array_filter(explode(';', join("\n", $sqlList)));
+    }
+
 
     /**
      * Add priv for version 4.0.1
@@ -9659,6 +9706,48 @@ class upgradeModel extends model
             if(isset($field['langs']))  $data->langs = $field['langs'];
 
             $this->dao->update(TABLE_PIVOT)->data($data)->where('id')->eq($pivot->id)->exec();
+        }
+    }
+
+    /**
+     * Init recent action for new table.
+     *
+     * @access public
+     * @return void
+     */
+    public function addCreateAction4Story()
+    {
+        $stories = $this->dao->select('id,product,openedBy,openedDate,vision')->from(TABLE_STORY)->where('openedDate')->ge('2023-07-12')->fetchAll('id');
+        foreach($stories as $story)
+        {
+            $firstAction = $this->dao->select('*')->from(TABLE_ACTION)
+                ->where('objectType')->eq('story')
+                ->andWhere('objectID')->eq($story->id)
+                ->orderBy('date,id')
+                ->fetch();
+
+            if(empty($firstAction) or $firstAction->action != 'opened')
+            {
+                $actionDate = $story->openedDate;
+                if($firstAction->date <= $actionDate) $actionDate = date('Y-m-d H:i:s', strtotime($firstAction->date) - 1);
+
+                $action = new stdclass();
+                $action->objectType = 'story';
+                $action->objectID   = $story->id;
+                $action->product    = ',' . $story->product . ',';
+                $action->project    = 0;
+                $action->execution  = 0;
+                $action->actor      = $story->openedBy;
+                $action->action     = 'opened';
+                $action->date       = $actionDate;
+                $action->comment    = '';
+                $action->extra      = '';
+                $action->read       = 0;
+                $action->vision     = $story->vision;
+                $action->efforted   = 0;
+
+                $this->dao->insert(TABLE_ACTION)->data($action)->exec();
+            }
         }
     }
 }

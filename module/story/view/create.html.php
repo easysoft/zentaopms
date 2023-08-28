@@ -68,7 +68,9 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
               </div>
             </td>
             <?php endif;?>
+            <?php if($this->app->tab != 'project'):?>
             <td class='w-60px <?php if((!$branches and $type == 'story') or $type == 'requirement') echo "hidden"; ?> switchBranch'></td>
+            <?php endif;?>
             <td colspan="2" class='<?php if($branches and $type == 'story') echo "hidden"; ?> switchBranch'>
             <div class='input-group' id='moduleIdBox'>
               <?php if(!$hiddenProduct):?>
@@ -90,8 +92,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
           </tr>
           <?php $hiddenSource = strpos(",$showFields,", ',source,') !== false ? '' : 'hidden';?>
           <?php if($type == 'story'):?>
-          <?php if($branches):?>
-          <tr class='switchBranch' >
+          <tr class='<?php if(!$branches) echo 'hidden'; ?> switchBranch' >
             <th><?php echo $lang->product->branchName[$product->type];?></th>
             <td colspan="4">
               <div class='input-group' style='display: flex;'>
@@ -125,7 +126,6 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
             </td>
             <?php endif;?>
           </tr>
-          <?php endif;?>
           <tr class='hidden' >
             <th></th>
             <td colspan="4" id="storyNoticeBranch">
@@ -248,7 +248,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
             <th><?php echo $hiddenURS ? $lang->story->parent : $lang->story->requirement;?></th>
             <td colspan="2" class="<?php if($hiddenURS) echo 'hidden';?>">
               <div class='input-group'>
-                <?php echo html::select('URS[]', $URS, '', "class='form-control chosen' multiple");?>
+                <div class='URSBox'><?php echo html::select('URS[]', $URS, '', "class='form-control picker-select' multiple");?></div>
                 <span class='input-group-btn'><?php echo html::commonButton($lang->story->loadAllStories, "class='btn btn-default' onclick='loadURS()' data-toggle='tooltip'");?></span>
               </div>
             </td>
@@ -455,4 +455,5 @@ setTimeout(() => {
 }, 600);
 
 </script>
+<?php include '../../ai/view/inputinject.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

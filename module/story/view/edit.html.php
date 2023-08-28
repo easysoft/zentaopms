@@ -150,7 +150,8 @@
                 <th class='thWidth'><?php echo $lang->story->product;?></th>
                 <td id='productBox'>
                   <div class='input-group'>
-                    <?php echo html::select('product', $products, $story->product, "onchange='loadProduct(this.value);' class='form-control chosen control-product'");?>
+                    <?php $class = $hiddenProduct ? 'disabled' : ''?>
+                    <?php echo html::select('product', $products, $story->product, "onchange='loadProduct(this.value);' class='form-control chosen control-product $class'");?>
                     <span class='input-group-addon fix-border fix-padding'></span>
                     <?php if($product->type != 'normal') echo html::select('branch', $branchTagOption, $story->branch, "onchange='loadBranch();' class='form-control chosen control-branch'");?>
                   </div>

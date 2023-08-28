@@ -21,6 +21,7 @@
     <?php $i          = 0;?>
     <?php $maxItem    = common::checkNotCN() ? 6 : 8;?>
     <?php foreach($hasViewPriv as $type => $bool):?>
+    <?php if(!$bool) continue;?>
     <?php if($i <= $maxItem):?>
     <li<?php if($isFirstTab) {echo ' class="active"';}?>>
         <a data-tab href='#assigntomeTab-<?php echo $type;?>' onClick="changeLabel('<?php echo $type;?>')">
@@ -49,6 +50,7 @@
   <div class="tab-content">
     <?php $isFirstTab = true; ?>
     <?php foreach($hasViewPriv as $type => $bool):?>
+    <?php if(!$bool) continue;?>
     <div class="tab-pane<?php if($isFirstTab) {echo ' active'; $isFirstTab = false;}?>" id="assigntomeTab-<?php echo $type?>">
       <?php include "{$type}block.html.php";?>
     </div>

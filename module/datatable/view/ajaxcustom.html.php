@@ -64,12 +64,13 @@
         <?php
         $required  = $col['required'] == 'yes';
         $fixed     = $col['fixed'];
-        $autoWidth = $col['width'] == 'auto';
+        $width     = $col['width'];
+        $autoWidth = $width == 'auto';
         ?>
-        <div class='clearfix col<?php echo ($required ? ' require' : '') . (' fixed-' . $fixed) ?>' data-key='<?php echo $key?>' data-fixed='<?php echo $fixed?>' data-width='<?php echo $col['width']?>'>
+        <div class='clearfix col<?php echo ($required ? ' require' : '') . (' fixed-' . $fixed) ?>' data-key='<?php echo $key?>' data-fixed='<?php echo $fixed?>' data-width='<?php echo $width;?>'>
           <div class='actions pull-right' <?php if($autoWidth) echo "style='padding-right: 11px'";?>>
             <?php if(isset($col['name'])) echo html::hidden('name', $col['name'])?>
-            <span><span class='text-muted'><?php echo $lang->datatable->width?></span> <input type='text' id='width' class='form-control' value='<?php echo $col['width']?>'><?php echo $autoWidth ? '&nbsp;' : 'px' ?></span>
+            <span><span class='text-muted'><?php echo $lang->datatable->width?></span> <input type='text' id='width' class='form-control' value='<?php echo $width;?>'><?php echo $autoWidth ? '&nbsp;' : 'px' ?></span>
           </div>
           <div class="checkbox-primary<?php echo $required ? ' disabled' : '';?>"><label></label></div>
           <span class='title'><span class='title-bar'><strong><?php echo $col['title']?></strong><i class='icon-move'></i></span></span> <?php if($required) echo "<span class='text-muted'>({$lang->datatable->required})</span>"?>

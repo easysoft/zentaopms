@@ -22,10 +22,7 @@ class pipelineModel extends model
     public function getByID($id)
     {
         $pipeline = $this->dao->select('*')->from(TABLE_PIPELINE)->where('id')->eq($id)->fetch();
-        if(!empty($pipeline->password))
-        {
-            $pipeline->password = base64_decode($pipeline->password);
-        }
+        if($pipeline && !empty($pipeline->password)) $pipeline->password = base64_decode($pipeline->password);
         return $pipeline;
     }
 

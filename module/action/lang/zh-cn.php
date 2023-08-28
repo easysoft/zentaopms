@@ -169,6 +169,7 @@ $lang->action->objectTypes['deploy']           = '发布';
 $lang->action->objectTypes['service']          = '服务';
 $lang->action->objectTypes['domain']           = '域名';
 $lang->action->objectTypes['artifactrepo']     = '制品库';
+$lang->action->objectTypes['prompt']           = '提词';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
@@ -292,6 +293,10 @@ $lang->action->desc->releaseddoc = '$date, 由 <strong>$actor</strong> 发布 <s
 /* 用来描述文档收藏或取消收藏时的历史操作记录。*/
 $lang->action->desc->collected   = '$date, 由 <strong>$actor</strong> 收藏 <strong>$extra</strong>。' . "\n";
 $lang->action->desc->uncollected = '$date, 由 <strong>$actor</strong> 取消收藏 <strong>$extra</strong>。' . "\n";
+
+/* AI 提词历史操作记录。 */
+$lang->action->desc->published   = '$date, 由 <strong>$actor</strong> 发布。' . "\n";
+$lang->action->desc->unpublished = '$date, 由 <strong>$actor</strong> 下架。' . "\n";
 
 /* 用来描述应用的历史操作记录。*/
 $lang->action->desc->install                 = '$date, 由 <strong>$actor</strong> 安装。' . "\n";
@@ -499,6 +504,9 @@ $lang->action->label->uncollected             = '取消收藏了';
 $lang->action->label->online                  = '上架了';
 $lang->action->label->offline                 = '下架了';
 $lang->action->label->linkhost                = '主机关联到';
+$lang->action->label->published               = '发布了';
+$lang->action->label->unpublished             = '下架了';
+$lang->action->label->prompt                  = '提词';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
@@ -796,6 +804,11 @@ $lang->action->dynamicAction->repo['edited']    = '编辑代码库';
 $lang->action->dynamicAction->repo['deleted']   = '删除代码库';
 $lang->action->dynamicAction->repo['undeleted'] = '还原代码库';
 
+$lang->action->dynamicAction->ai['created']     = '创建提词';
+$lang->action->dynamicAction->ai['edited']      = '编辑提词';
+$lang->action->dynamicAction->ai['published']   = '发布提词';
+$lang->action->dynamicAction->ai['unpublished'] = '下架提词';
+
 /* 用来生成相应对象的链接。*/
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';
 $lang->action->label->productplan = "计划|productplan|view|productID=%s";
@@ -845,6 +858,7 @@ $lang->action->label->deploy       = '上线|deploy|view|id=%s';
 $lang->action->label->domian       = '域名|domian|view|id=%s';
 $lang->action->label->service      = '服务|service|view|id=%s';
 $lang->action->label->artifactrepo = '制品库|artifactrepo|browse|';
+$lang->action->label->prompt       = '提词|ai|promptview|id=%s';
 
 /* Object type. */
 $lang->action->search = new stdclass();

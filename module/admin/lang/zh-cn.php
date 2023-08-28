@@ -183,6 +183,8 @@ $lang->admin->menuSetting['convert']['name']   = '数据导入';
 $lang->admin->menuSetting['convert']['desc']   = '第三方系统的数据导入。';
 $lang->admin->menuSetting['platform']['name']  = 'DevOps设置';
 $lang->admin->menuSetting['platform']['desc']  = '资源、环境等DevOps各要素配置。';
+$lang->admin->menuSetting['ai']['name']        = 'AI 配置';
+$lang->admin->menuSetting['ai']['desc']        = '管理 AI 提词应用、配置语言模型。';
 
 $lang->admin->updateDynamics   = '更新动态';
 $lang->admin->updatePatch      = '补丁更新';
@@ -205,5 +207,10 @@ $lang->admin->productFeature['max'][] = '120+概念，全面覆盖瀑布管理�
 $lang->admin->productFeature['max'][] = '项目管理可视化，精准掌控项目进度';
 $lang->admin->productFeature['max'][] = '资产库管理，为项目提供数据支撑';
 $lang->admin->productFeature['max'][] = '严格权限控制，方式灵活安全';
+
+$lang->admin->ai = new stdclass();
+$lang->admin->ai->model        = '语言模型';
+$lang->admin->ai->conversation = '会话';
+$lang->admin->ai->prompt       = '提词';
 
 include dirname(__FILE__) . '/menu.php';

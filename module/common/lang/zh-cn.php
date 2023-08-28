@@ -25,6 +25,7 @@ $lang->ellipsis  = '…';
 $lang->percent   = '%';
 $lang->dash      = '-';
 $lang->and       = '和';
+$lang->separater = '、';
 
 $lang->zentaoPMS      = '禅道';
 $lang->pmsName        = '开源版';
@@ -433,9 +434,14 @@ $lang->exportTypeList['all']      = '全部记录';
 $lang->exportTypeList['selected'] = '选中记录';
 
 $lang->visionList = array();
-$lang->visionList['or']   = '需求与市场管理界面';
-$lang->visionList['rnd']  = 'IPD研发管理界面';
+$lang->visionList['rnd']  = '综合研发界面';
 $lang->visionList['lite'] = '运营管理界面';
+
+if($config->edition == 'ipd')
+{
+    $lang->visionList['or']   = '需求与市场管理界面';
+    $lang->visionList['rnd']  = 'IPD研发管理界面';
+}
 
 $lang->createObjects['todo']        = '待办';
 $lang->createObjects['effort']      = '日志';

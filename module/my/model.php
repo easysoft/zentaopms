@@ -286,10 +286,7 @@ class myModel extends model
      */
     public function getActions()
     {
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager(0, 50, 1);
-
-        $actions = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager);
+        $actions = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', 50);
         $users   = $this->loadModel('user')->getList();
 
         $simplifyUsers = array();
@@ -1023,7 +1020,7 @@ class myModel extends model
     public function getReviewingTypeList()
     {
         $typeList = array();
-        if($this->getReviewingDemands('id_desc', true))   $typeList[] = 'demand';
+        if($this->config->edition == 'ipd' and $this->getReviewingDemands('id_desc', true))   $typeList[] = 'demand';
         if($this->getReviewingStories('id_desc', true))   $typeList[] = 'story';
         if($this->getReviewingCases('id_desc', true))     $typeList[] = 'testcase';
         if($this->getReviewingApprovals('id_desc', true)) $typeList[] = 'project';
@@ -1055,7 +1052,7 @@ class myModel extends model
     public function getReviewingList($browseType, $orderBy = 'time_desc', $pager = null)
     {
         $reviewList = array();
-        if($browseType == 'all' or $browseType == 'demand')   $reviewList = array_merge($reviewList, $this->getReviewingDemands());
+        if($this->config->edition == 'ipd' and ($browseType == 'all' or $browseType == 'demand'))   $reviewList = array_merge($reviewList, $this->getReviewingDemands());
         if($browseType == 'all' or $browseType == 'story')    $reviewList = array_merge($reviewList, $this->getReviewingStories());
         if($browseType == 'all' or $browseType == 'testcase') $reviewList = array_merge($reviewList, $this->getReviewingCases());
         if($browseType == 'all' or $browseType == 'project')  $reviewList = array_merge($reviewList, $this->getReviewingApprovals());

@@ -800,6 +800,7 @@ class baseRouter
         $account = isset($_SESSION['user']) ? $_SESSION['user']->account : '';
         if(empty($account) and isset($_POST['account'])) $account = $_POST['account'];
         if(empty($account) and isset($_GET['account']))  $account = $_GET['account'];
+        if(empty($account))                              $account = $this->cookie->za;
 
         $vision = '';
         if($this->config->installed and validater::checkAccount($account))
@@ -1552,9 +1553,8 @@ class baseRouter
             {
                 $fp = fopen($file2Included, 'r');
                 $line1 = fgets($fp);
-                $line2 = fgets($fp);
                 fclose($fp);
-                if(strpos($line1, '<?php //') === 0 and strpos($line2, "if(!extension_loaded('ionCube Loader'))") === 0) $isEncrypted = true;
+                if(strpos($line1, '<?php //') === 0) $isEncrypted = true;
             }
 
             /*
@@ -3418,7 +3418,8 @@ class ztSessionHandler
      */
     public function getSessionFile($id)
     {
-        if(!empty($this->sessionFile)) return $this->sessionFile;
+        if(!empty($this->sessionFile))  return $this->sessionFile;
+        if(!preg_match('/^\w+$/', $id)) return false;
 
         $sessionID = $id;
         if($this->tagID) $sessionID = md5($id . $this->tagID);
@@ -3470,6 +3471,7 @@ class ztSessionHandler
     public function read($id)
     {
         $sessFile = $this->getSessionFile($id);
+        if(!$sessFile) return false;
         if(!file_exists($sessFile))
         {
             ($this->tagID and file_exists($this->rawFile)) ? copy($this->rawFile, $sessFile) : touch($sessFile);
@@ -3490,6 +3492,8 @@ class ztSessionHandler
     public function write($id, $sessData)
     {
         $sessFile = $this->getSessionFile($id);
+        if(!$sessFile) return false;
+
         touch($sessFile);
         touch($this->rawFile);
         if(md5_file($sessFile) == md5($sessData)) return true;

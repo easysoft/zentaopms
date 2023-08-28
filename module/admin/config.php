@@ -16,6 +16,7 @@ $config->admin->menuGroup['dev']       = array('dev', 'entry', 'editor');
 $config->admin->menuGroup['extension'] = array('extension');
 $config->admin->menuGroup['convert']   = array('convert');
 $config->admin->menuGroup['platform']  = array('system', 'repo', 'account', 'host', 'serverroom', 'ops', 'tree', 'domain', 'deploy', 'service');
+$config->admin->menuGroup['ai']        = array('ai|adminindex', 'ai|prompts', 'ai|promptview', 'ai|conversations', 'ai|models', 'ai|editmodel', 'ai|promptassignrole', 'ai|promptselectdatasource', 'ai|promptsetpurpose', 'ai|promptsettargetform', 'ai|promptfinalize', 'ai|promptedit');
 
 $config->admin->menuModuleGroup['model']['custom|set']        = array('project', 'issue', 'risk', 'opportunity', 'nc');
 $config->admin->menuModuleGroup['model']['custom|required']   = array('project', 'build');
@@ -84,6 +85,7 @@ $config->admin->helpURL['extension'] = 'https://www.zentao.net/book/zentaopms/53
 $config->admin->helpURL['dev']       = 'https://www.zentao.net/book/zentaopms/537.html';
 $config->admin->helpURL['convert']   = 'https://www.zentao.net/book/zentaopms/656.html';
 $config->admin->helpURL['platform']  = 'https://www.zentao.net/book/zentaopms/656.html';
+$config->admin->helpURL['ai']        = 'https://www.zentao.net/book/zentaopms/';
 
 $config->admin->navsGroup['feature']['my']        = ',todo,block,';
 $config->admin->navsGroup['feature']['product']   = ',product,story,productplan,release,';

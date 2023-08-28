@@ -433,9 +433,14 @@ $lang->exportTypeList['all']      = 'Alle';
 $lang->exportTypeList['selected'] = 'Ausgewählte';
 
 $lang->visionList = array();
-$lang->visionList['or']   = 'OR & MM Interface';
-$lang->visionList['rnd']  = 'IPD Interface';
+$lang->visionList['rnd']  = 'Full Feature Interface';
 $lang->visionList['lite'] = 'Operation Management Interface';
+
+if($config->edition == 'ipd')
+{
+    $lang->visionList['or']   = 'OR & MM Interface';
+    $lang->visionList['rnd']  = 'IPD Interface';
+}
 
 $lang->createObjects['todo']        = 'Todo';
 $lang->createObjects['effort']      = 'Effort';

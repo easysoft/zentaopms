@@ -1,0 +1,17 @@
+spec:
+  affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        preference:
+          matchExpressions:
+          - key: easycorp.io/cpu-spec
+            operator: Lt
+            values:
+            - "8"
+      - weight: 50
+        preference:
+          matchExpressions:
+          - key: easycorp.io/cpu-spec
+            operator: DoesNotExist
+

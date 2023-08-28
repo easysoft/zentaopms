@@ -59,9 +59,8 @@ $(function()
         return false;
     });
 
-    $('#module').on('change', function(){
-        loadURS();
-    });
+    $('#module').on('change', function(){ loadURS(); });
+    if($('form select[id^=branches]').length > 0) loadURS();
 
     if($(".table-form select[id^='branches']").length == $('.switchBranch #branchBox option').length)
     {
@@ -227,6 +226,7 @@ function disableSelectedBranches()
     })
 
     $(".table-form select[id^=branches]").trigger('chosen:updated');
+    loadURS();
 }
 
  /**
@@ -245,6 +245,7 @@ function loadBranchRelation(branch, branchIndex)
     $.ajaxSettings.async = false;
     loadModuleForTwins(productID, branch, branchIndex)
     loadPlanForTwins(productID, branch, branchIndex)
+    loadURS()
     $.ajaxSettings.async = true;
 
     disableSelectedBranches()

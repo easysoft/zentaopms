@@ -996,6 +996,9 @@ class commonModel extends model
 
         $app->loadLang('my');
 
+        /* Ensure user has latest rights set. */
+        $app->user->rights = $app->control->loadModel('user')->authorize($app->user->account);
+
         $menuOrder = $lang->mainNav->menuOrder;
         ksort($menuOrder);
 
@@ -1719,6 +1722,7 @@ EOF;
 
         /* Add data-app attribute. */
         if(strpos($misc, 'data-app') === false) $misc .= ' data-app="' . $app->tab . '"';
+        if($onlyBody && strpos($misc, 'data-toggle') === false) $misc .= ' data-toggle="modal"';
 
         /* Judge the $method of $module clickable or not, default is clickable. */
         $clickable = true;
@@ -2570,7 +2574,8 @@ EOF;
          * The following pages can be allowed to open in non-iframe, so ignore these pages.
          */
         $module    = $this->app->getModuleName();
-        $whitelist = '|index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-uploadimages|report-annualdata|misc-captcha|execution-printkanban||traincourse-playvideo|';
+        $method    = $this->app->getMethodName();
+        $whitelist = '|index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-preview|file-uploadimages|file-ajaxwopifiles|report-annualdata|misc-captcha|execution-printkanban|traincourse-ajaxuploadlargefile|traincourse-playvideo|screen-view|zanode-create|screen-ajaxgetchart|';
         if(strpos($whitelist, "|{$module}|") !== false || strpos($whitelist, "|{$module}-{$method}|") !== false) return true;
 
         /**

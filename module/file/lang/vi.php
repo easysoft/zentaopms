@@ -28,6 +28,7 @@ $lang->file->exportRange   = "Data";
 $lang->file->defaultTPL    = "Default";
 $lang->file->setExportTPL  = "Thiết lập";
 $lang->file->preview       = "Preview";
+$lang->file->previewFile   = "xem trước tệp đính kèm";
 $lang->file->addFile       = 'Thêm';
 $lang->file->beginUpload   = 'Click to Upload';
 $lang->file->uploadSuccess = 'Uploaded!';

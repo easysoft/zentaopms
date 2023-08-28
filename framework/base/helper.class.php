@@ -251,8 +251,8 @@ class baseHelper
     {
         if(is_array($idList))
         {
-            foreach($idList as $key=>$value) $idList[$key] = addslashes($value);
-            return "IN ('" . join("','", $idList) . "')";
+            foreach($idList as $key => $value) $idList[$key] = empty($value) ? '' : addslashes($value);
+            return "IN ('" . implode("','", $idList) . "')";
         }
 
         if(is_null($idList)) $idList = '';
@@ -446,7 +446,7 @@ class baseHelper
         if(function_exists('mb_substr')) $string = mb_substr($string, 0, $length, 'utf-8');
 
         preg_match_all("/./su", $string, $data);
-        $string = join("", array_slice($data[0],  0, $length));
+        $string = implode("", array_slice($data[0],  0, $length));
 
         return ($string != $rawString) ? $string . $append : $string;
     }

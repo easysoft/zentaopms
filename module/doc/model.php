@@ -422,6 +422,7 @@ class docModel extends model
             $docIDList = $this->dao->select('objectID')->from(TABLE_ACTION)
                 ->where('objectType')->eq('doc')
                 ->andWhere('objectID')->in($hasPrivDocIdList)
+                ->andWhere('templateType')->eq('')
                 ->andWhere('actor')->eq($this->app->user->account)
                 ->andWhere('action')->eq('edited')
                 ->fetchAll('objectID');
@@ -430,6 +431,7 @@ class docModel extends model
                 ->where('t1.deleted')->eq(0)
                 ->andWhere($query)
                 ->andWhere('t1.lib')->in($allLibIDList)
+                ->andWhere('t1.templateType')->eq('')
                 ->andWhere('t1.vision')->in($this->config->vision)
                 ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('t1.addedBy', 1)->eq($this->app->user->account)
@@ -449,6 +451,7 @@ class docModel extends model
                 ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('t1.addedBy')->eq($this->app->user->account)
                 ->andWhere('t1.vision')->in($this->config->vision)
+                ->andWhere('t1.templateType')->eq('')
                 ->orderBy($sort)
                 ->page($pager)
                 ->fetchAll('id');
@@ -468,6 +471,7 @@ class docModel extends model
                 ->andWhere('t1.id')->in(array_keys($docIdList))
                 ->andWhere('t1.lib')->ne('')
                 ->andWhere('t1.vision')->in($this->config->vision)
+                ->andWhere('t1.templateType')->eq('')
                 ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
                 ->orderBy($sort)
                 ->page($pager)
@@ -478,6 +482,7 @@ class docModel extends model
             $docs = $this->dao->select('*')->from(TABLE_DOC)
                 ->where('deleted')->eq(0)
                 ->andWhere('id')->in($hasPrivDocIdList)
+                ->andWhere('templateType')->eq('')
                 ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('lib')->in($allLibIDList)
                 ->andWhere('vision')->in($this->config->vision)
@@ -491,6 +496,7 @@ class docModel extends model
                 ->leftJoin(TABLE_DOCACTION)->alias('t2')->on("t1.id=t2.doc && t2.action='collect'")
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.lib')->ne('')
+                ->andWhere('t1.templateType')->eq('')
                 ->andWhere('t1.id')->in($hasPrivDocIdList)
                 ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('t2.actor')->eq($this->app->user->account)
@@ -619,6 +625,7 @@ class docModel extends model
         $docs = $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('templateType')->eq('')
             ->andWhere('id')->in($docIdList)
             ->beginIF($browseType == 'all')->andWhere("(status = 'normal' or (status = 'draft' and addedBy='{$this->app->user->account}'))")->fi()
             ->beginIF($browseType == 'draft')->andWhere('status')->eq('draft')->andWhere('addedBy')->eq($this->app->user->account)->fi()
@@ -746,6 +753,7 @@ class docModel extends model
         $modules = $module && $mode == 'children' ? $this->loadModel('tree')->getAllChildID($module) : $module;
         $stmt = $this->dao->select('*')->from(TABLE_DOC)
             ->where('vision')->eq($this->config->vision)
+            ->andWhere('templateType')->eq('')
             ->beginIF(!empty($modules))->andWhere('module')->in($modules)->fi()
             ->beginIF($mode == 'normal')->andWhere('deleted')->eq(0)->fi()
             ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
@@ -820,10 +828,11 @@ class docModel extends model
             $this->dao->update(TABLE_DOC)->set('version')->eq($doc->version)->where('id')->eq($doc->id)->exec();
         }
 
-        $doc->title       = isset($docContent->title) ? $docContent->title : '';
-        $doc->digest      = isset($docContent->digest) ? $docContent->digest : '';
-        $doc->content     = isset($docContent->content) ? $docContent->content : '';
-        $doc->contentType = isset($docContent->type) ? $docContent->type : '';
+        $doc->title          = isset($docContent->title) ? $docContent->title : '';
+        $doc->digest         = isset($docContent->digest) ? $docContent->digest : '';
+        $doc->content        = isset($docContent->content) ? $docContent->content : '';
+        $doc->contentType    = isset($docContent->type) ? $docContent->type : '';
+        $doc->contentVersion = isset($docContent->version) ? $docContent->version : $version;
 
         if($doc->type != 'url' and $doc->contentType != 'markdown') $doc = $this->loadModel('file')->replaceImgURL($doc, 'content,draft');
         if($setImgSize) $doc->content = $this->file->setImgSize($doc->content);
@@ -959,6 +968,7 @@ class docModel extends model
             ->setDefault('mailto', '')
             ->add('editedBy', $account)
             ->add('editedDate', $now)
+            ->setIF(strpos(",$oldDoc->editedList,", ",$account,") === false, 'editedList', $oldDoc->editedList . ",$account")
             ->cleanInt('project,product,execution,lib,module')
             ->join('groups', ',')
             ->join('users', ',')
@@ -2188,7 +2198,7 @@ class docModel extends model
             ->andWhere('type')->in('text,word,ppt,excel,url,article')
             ->andWhere('vision')->eq($this->config->vision)
             ->fetch('count');
-        $statistic->todayEditedDocs = $this->dao->select('count(DISTINCT objectID) as count')->from(TABLE_ACTION)->alias('t1')
+        $statistic->todayEditedDocs = $this->dao->select('count(DISTINCT objectID) as count')->from(TABLE_ACTIONRECENT)->alias('t1')
             ->leftJoin(TABLE_DOC)->alias('t2')->on("t1.objectID=t2.id and t1.objectType='doc'")
             ->where('t1.objectType')->eq('doc')
             ->andWhere('t1.action')->eq('edited')
@@ -2198,15 +2208,11 @@ class docModel extends model
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.type')->in('text,word,ppt,excel,url,article')
             ->fetch('count');
-        $statistic->myEditedDocs = $this->dao->select('count(DISTINCT t1.objectID) as count')->from(TABLE_ACTION)->alias('t1')
-            ->leftJoin(TABLE_DOC)->alias('t2')->on("t1.objectID=t2.id and t1.objectType='doc'")
-            ->where('t1.objectType')->eq('doc')
-            ->andWhere('t1.action')->eq('edited')
-            ->andWhere('t1.actor')->eq($this->app->user->account)
-            ->andWhere('t1.vision')->eq($this->config->vision)
-            ->andWhere('t2.lib')->ne('')
-            ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t2.type')->in('text,word,ppt,excel,url,article')
+        $statistic->myEditedDocs = $this->dao->select('count(*) as count')->from(TABLE_DOC)
+            ->where("CONCAT(',', editedList, ',')")->like("%,{$this->app->user->account},%")
+            ->andWhere('lib')->ne('')
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('type')->in('text,word,ppt,excel,url,article')
             ->fetch('count');
 
         $my = $this->dao->select("count(*) as myDocs, SUM(views) as docViews, SUM(collects) as docCollects")->from(TABLE_DOC)
@@ -3448,11 +3454,11 @@ class docModel extends model
     /**
      * Get document dynamic.
      *
-     * @param  object $pager
+     * @param  int    $limit
      * @access public
      * @return array
      */
-    public function getDynamic($pager = null)
+    public function getDynamic($limit = 30)
     {
         $allLibs          = $this->getLibs('hasApi');
         $hasPrivDocIdList = $this->getPrivDocs('', 0, 'all');
@@ -3470,7 +3476,7 @@ class docModel extends model
             ->andWhere('objectID')->in(array_keys($apiList))
             ->markRight(2)
             ->orderBy('date_desc')
-            ->page($pager)
+            ->limit($limit)
             ->fetchAll();
 
         return $this->loadModel('action')->transformActions($actions);

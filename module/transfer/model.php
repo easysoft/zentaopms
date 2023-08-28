@@ -897,6 +897,9 @@ class transferModel extends model
             return $modelDatas;
         }
 
+        /* Fetch the scene's cases. */
+        if($model == 'testcase') $queryCondition = preg_replace("/AND\s+t[0-9]\.scene\s+=\s+'0'/i", '', $queryCondition);
+
         if($onlyCondition and $queryCondition)
         {
             $table = zget($this->config->objectTables, $model);
@@ -1464,6 +1467,7 @@ class transferModel extends model
                 {
                     if(!empty($values[$selected])) $options = array($selected => $values[$selected]);
                     if(empty($options) and is_array($values)) $options = array_slice($values, 0, 1, true);
+                    if(!isset($options['']) and !in_array($field, $this->config->transfer->requiredFields)) $options[''] = '';
                 }
 
                 if($control == 'select')       $html .= '<td>' . html::select("$name", $options, $selected, "class='form-control picker-select nopicker' data-field='{$field}' data-index='{$row}'") . '</td>';
@@ -1512,6 +1516,7 @@ class transferModel extends model
                 else $html .= '<td>' . html::input("$name", $selected, "class='form-control autocomplete='off'") . '</td>';
             }
 
+            if(in_array($model, $this->config->transfer->actionModule)) $html .= '<td><a onclick="delItem(this)"><i class="icon-close"></i></a></td>';
             $html .= '</tr>' . "\n";
         }
 

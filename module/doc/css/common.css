@@ -107,7 +107,7 @@ ol, ul {margin-bottom: 0}
 #subHeader .list-group>a.selected {color: #e9f2fb !important;}
 #pageNav #dropMenu .table-col .list-group .icon-move {display:block; float: left; font-size: 12px; padding: 3px 4px 3px 1px;}
 
-#content .detail-content.article-content {overflow-y: auto; height: calc(100vh - 200px); padding-right: 20px;}
+#content .detail-content.article-content {overflow-y: auto; padding-right: 20px;}
 #content.scrollbar-hover .detail-content.article-content {height: 100%;}
 #aclBox .acl-tip {color: #838a9d;}
 #outlineMenu {background: #fff; position: absolute; height: calc(100vh - 180px)!important; overflow-y: auto; top: 50px; right: 25px;}

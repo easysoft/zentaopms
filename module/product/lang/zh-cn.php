@@ -235,6 +235,7 @@ $lang->product->featureBar['project']['doing']     = '进行中';
 $lang->product->featureBar['project']['suspended'] = '已挂起';
 $lang->product->featureBar['project']['closed']    = '已关闭';
 
+
 $lang->product->moreSelects['browse']['more']['reviewedbyme']   = $lang->product->reviewedByMe;
 $lang->product->moreSelects['browse']['more']['assignedbyme']   = $lang->product->assignedByMe;
 $lang->product->moreSelects['browse']['more']['closedbyme']     = $lang->product->closedByMe;

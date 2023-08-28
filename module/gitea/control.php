@@ -245,6 +245,7 @@ class gitea extends control
         $this->view->recTotal    = count($userList);
         $this->view->userList    = $userList;
         $this->view->userPairs   = $userPairs;
+
         $this->view->zentaoUsers = $zentaoUsers;
         $this->display();
     }

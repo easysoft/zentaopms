@@ -1479,7 +1479,8 @@ class repoModel extends model
             return false;
         }
 
-        if(strpos($this->post->client, ' '))
+        /* Check command injection. */
+        if(preg_match('/[ #&;`,\|*?~<>^()\[\]{}$]/', $this->post->client))
         {
             dao::$errors['client'] = $this->lang->repo->error->clientPath;
             return false;

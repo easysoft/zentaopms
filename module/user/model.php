@@ -2712,8 +2712,14 @@ class userModel extends model
         $users = array();
 
         foreach(explode(',', trim($this->app->company->admins, ',')) as $admin) $users[$admin]   = $admin;
-        foreach(explode(',', trim($product->reviewer, ',')) as $account)        $users[$account] = $account;
-        foreach(explode(',', trim($product->PMT, ',')) as $account)             $users[$account] = $account;
+        if(!empty($product->reviewer))
+        {
+            foreach(explode(',', trim($product->reviewer, ',')) as $account) $users[$account] = $account;
+        }
+        if(isset($product->PMT))
+        {
+            foreach(explode(',', trim($product->PMT, ',')) as $account) $users[$account] = $account;
+        }
 
         $users[$product->PO]        = $product->PO;
         $users[$product->QD]        = $product->QD;
@@ -2808,7 +2814,7 @@ class userModel extends model
         $action = strtolower($action);
 
         if($action == 'unbind' and empty($user->ranzhi)) return false;
-        if($action == 'unlock' and (strtotime(date('Y-m-d H:i:s')) - strtotime($user->locked)) >= $config->user->lockMinutes * 60) return false;
+        if($action == 'unlock' and (strtotime(date('Y-m-d H:i:s')) - strtotime($user->locked ? $user->locked : '0000-00-00 00:00:00')) >= $config->user->lockMinutes * 60) return false;
 
         return true;
     }

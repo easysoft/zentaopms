@@ -1360,7 +1360,7 @@ class testtask extends control
         }
 
         if(!$this->post->caseIDList) return print(js::locate($url, 'parent'));
-        $caseIDList = array_unique($this->post->caseIDList);
+        $caseIDList = array_filter($this->post->caseIDList);
 
         /* The case of tasks of qa. */
         if($productID or ($this->app->tab == 'project' and empty($productID)))

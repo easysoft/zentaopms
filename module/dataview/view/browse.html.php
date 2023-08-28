@@ -28,7 +28,7 @@
   <div class='btn-toolbar pull-left'><?php // common::printAdminSubMenu('dev');?></div>
   <div class="btn-toolbar pull-right">
     <?php if($selectedTable):?>
-      <?php if(common::hasPriv('dataview', 'export')) echo html::a($this->createLink('dataview', 'export', "type=$type&table=$selectedTable", '', true), "<i class='icon icon-export'></i> {$lang->dataview->export}", '', "class='iframe btn btn-link'");?>
+      <?php if(common::hasPriv('dataview', 'export')) echo html::a($this->createLink('dataview', 'export', "type=$type&table=$selectedTable", '', true), "<i class='icon icon-export'></i> {$lang->dataview->export}", '', "class='iframe btn btn-link dataview-export'");?>
     <?php endif;?>
     <?php if(common::hasPriv('dataview', 'create')) echo html::a($this->createLink('dataview', 'create'), "<i class='icon icon-plus'></i><span class='text'>" . $lang->dataview->create . "</span>", '', "class='btn btn-secondary'");?>
   </div>
@@ -65,7 +65,7 @@
   <div id='dataContent' class='main-col main-content'>
     <div class='detail'>
       <div class='detail-title'>
-        <div class='dataview-title' title='<?php echo $dataTitle;?>'><?php echo $dataTitle;?></div>
+        <div class='dataview-title' title='<?php echo $dataTitle;?>'><?php echo $dataTitle;?><?php if($type == 'table') echo "<span class='table-code'>$table</span>";?></div>
         <div class='actions pull-right'>
           <?php if($selectedTable and isset($dataview)):?>
           <?php
@@ -84,10 +84,10 @@
       <div class='detail-content'>
         <div class='tabs'>
           <ul class='nav nav-tabs'>
-            <li class='active'><a href='#data' data-toggle='tab'><?php echo $lang->dataview->data;?></a></li>
-            <li><a href='#schema' data-toggle='tab'><?php echo $lang->dataview->schema;?></a></li>
+            <li class='active'><a href='#data' data-toggle='tab' onclick="setExport('show')"><?php echo $lang->dataview->data;?></a></li>
+            <li><a href='#schema' data-toggle='tab' onclick="setExport('hide')"><?php echo $lang->dataview->schema;?></a></li>
             <?php if(!empty($dataview)):?>
-            <li><a href='#details' data-toggle='tab'><?php echo $lang->dataview->details;?></a></li>
+            <li><a href='#details' data-toggle='tab' onclick="setExport('hide')"><?php echo $lang->dataview->details;?></a></li>
             <?php endif;?>
           </ul>
           <div class='tab-content '>

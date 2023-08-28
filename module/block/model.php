@@ -220,7 +220,7 @@ class blockModel extends model
         $delayBugs = array();
         foreach($bugs as $bug)
         {
-            if($bug->status == 'active' && $bug->deadline && $bug->deadline < $today) $delayBugs[$bug->id] = true;
+            if($bug->status == 'active' && !helper::isZeroDate($bug->deadline) && $bug->deadline < $today) $delayBugs[$bug->id] = true;
             $totalBugs[$bug->id] = true;
         }
         $data['bugs']     = count($totalBugs);
@@ -822,6 +822,10 @@ class blockModel extends model
         $params->todoCount['default'] = 20;
         $params->todoCount['control'] = 'input';
 
+        $params->reviewCount['name']    = $this->lang->block->reviewCount;
+        $params->reviewCount['default'] = 20;
+        $params->reviewCount['control'] = 'input';
+
         $params->taskCount['name']    = $this->lang->block->taskCount;
         $params->taskCount['default'] = 20;
         $params->taskCount['control'] = 'input';
@@ -861,10 +865,6 @@ class blockModel extends model
         $params->storyCount['name']    = $this->lang->block->storyCount;
         $params->storyCount['default'] = 20;
         $params->storyCount['control'] = 'input';
-
-        $params->reviewCount['name']    = $this->lang->block->reviewCount;
-        $params->reviewCount['default'] = 20;
-        $params->reviewCount['control'] = 'input';
 
         return json_encode($params);
     }

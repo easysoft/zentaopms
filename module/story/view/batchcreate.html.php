@@ -283,4 +283,5 @@ $(function()
 </script>
 <?php endif;?>
 <?php include '../../common/view/pastetext.html.php';?>
+<?php include '../../ai/view/inputinject.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

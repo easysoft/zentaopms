@@ -1983,6 +1983,18 @@ $lang->resource->api->getModel     = 'getModel';
 $lang->resource->api->debug        = 'debug';
 $lang->resource->api->sql          = 'sql';
 
+/* AI methods. */
+$lang->resource->ai = new stdclass();
+$lang->resource->ai->models                 = 'modelBrowse';
+$lang->resource->ai->editModel              = 'modelEdit';
+$lang->resource->ai->testConnection         = 'modelTestConnection';
+$lang->resource->ai->promptPublish          = 'promptPublish';
+$lang->resource->ai->promptUnpublish        = 'promptUnpublish';
+$lang->resource->ai->prompts                = 'promptBrowse';
+$lang->resource->ai->promptView             = 'promptView';
+$lang->resource->ai->promptExecute          = 'promptExecute';
+$lang->resource->ai->promptExecutionReset   = 'promptExecutionReset';
+
 $lang->api->methodOrder[0]   = 'index';
 $lang->api->methodOrder[5]   = 'createLib';
 $lang->api->methodOrder[10]  = 'editLib';
@@ -2007,16 +2019,18 @@ $lang->api->methodOrder[100] = 'sql';
 
 $lang->resource->file = new stdclass();
 $lang->resource->file->download     = 'download';
+$lang->resource->file->preview      = 'preview';
 $lang->resource->file->edit         = 'edit';
 $lang->resource->file->delete       = 'delete';
 $lang->resource->file->uploadImages = 'uploadImages';
 $lang->resource->file->setPublic     = 'setPublic';
 
 $lang->file->methodOrder[5]  = 'download';
-$lang->file->methodOrder[10] = 'edit';
-$lang->file->methodOrder[15] = 'delete';
-$lang->file->methodOrder[20] = 'uploadImages';
-$lang->file->methodOrder[25] = 'setPublic';
+$lang->file->methodOrder[10] = 'preview';
+$lang->file->methodOrder[15] = 'edit';
+$lang->file->methodOrder[20] = 'delete';
+$lang->file->methodOrder[25] = 'uploadImages';
+$lang->file->methodOrder[30] = 'setPublic';
 
 $lang->resource->misc = new stdclass();
 $lang->resource->misc->ping = 'ping';

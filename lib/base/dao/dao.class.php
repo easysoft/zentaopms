@@ -1925,7 +1925,7 @@ class baseSQL
         }
         else
         {
-            $condition = ctype_alnum((string)$arg1) ? '`' . $arg1 . '`' : $arg1;
+            $condition = (is_string($arg1) && ctype_alnum($arg1)) ? '`' . $arg1 . '`' : $arg1;
         }
 
         if(!$this->inMark) $this->sql .= ' ' . DAO::WHERE ." $condition ";
@@ -1944,7 +1944,7 @@ class baseSQL
     public function andWhere($condition, $addMark = false)
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
-        if(ctype_alnum($condition)) $condition = '`' . $condition . '`';
+        if(is_string($condition) && ctype_alnum($condition)) $condition = '`' . $condition . '`';
 
         $mark = $addMark ? '(' : '';
         $this->sql .= " AND {$mark} $condition ";
@@ -1962,7 +1962,7 @@ class baseSQL
     public function orWhere($condition)
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
-        if(ctype_alnum($condition)) $condition = '`' . $condition . '`';
+        if(is_string($condition) && ctype_alnum($condition)) $condition = '`' . $condition . '`';
 
         $this->sql .= " OR $condition ";
         return $this;

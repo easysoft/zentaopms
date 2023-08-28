@@ -85,6 +85,7 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 #mainContent > .pull-left > .btn-group > a > .text{overflow: hidden;display: block;}
 #mainContent > .pull-right > .button-group  .text{margin-left: 0px;}
 .pull-right .icon-plus.icon-sm:before{vertical-align: 4%;}
+#ganttView .gantt_resizer{min-width: unset !important;}
 </style>
 <?php js::set('customUrl', $this->createLink('programplan', 'ajaxCustom'));?>
 <?php js::set('dateDetails', $dateDetails);?>
@@ -515,6 +516,10 @@ function validateResources(id)
         return false;
     }
 
+    task.begin    = from;
+    task.deadline = (new Date(to.valueOf() - 1));;
+
+    gantt.updateTask(task.id);
     var itemID;
     if(type == 'task')
     {
@@ -613,8 +618,8 @@ $(function()
     gantt.config.columns.push({name:"custom", label:"", align: "left", width: 40, template: getSubmitBtn});
     if(showFields.indexOf('PM') != -1) gantt.config.columns.push({name: 'owner_id', align: 'left', resize: true, width: 80, template: function(task){return getByIdForGantt(gantt.serverList('userList'), task.owner_id)}})
     if(showFields.indexOf('status') != -1) gantt.config.columns.push({name: 'status', align: 'center', resize: true, width: 80});
-    gantt.config.columns.push({name: 'start_date', align: 'center', resize: true, width: 80});
-    if(showFields.indexOf('deadline') != -1) gantt.config.columns.push({name: 'end_date', align: 'center', resize: true, width: 140, template: getDeadlineBtn});
+    gantt.config.columns.push({name: 'begin', align: 'center', resize: true, width: 80});
+    if(showFields.indexOf('deadline') != -1) gantt.config.columns.push({name: 'deadline', align: 'center', resize: true, width: 140, template: getDeadlineBtn});
     gantt.config.columns.push({name: 'duration', align: 'center', resize: true, width: 60});
     if(showFields.indexOf('estimate') != -1) gantt.config.columns.push({name: 'estimate', align: 'center', resize: true, width: 60});
     if(showFields.indexOf('progress') != -1) gantt.config.columns.push({name: 'percent', align: 'center', resize: true, width:70, template: function(plan){ if(plan.percent) return Math.round(plan.percent) + '%';}});
@@ -627,9 +632,9 @@ $(function()
 
     function getDeadlineBtn(task)
     {
-        var date = task.end_date;
-        if(task.type == 'point' && canEditDeadline && (!task.rawStatus || task.rawStatus == 'fail' || task.rawStatus == 'draft')) return "<table><tr><td><span class='deadline'>" + gridDateToStr(new Date(date.valueOf() - 1)) + '</span> <a class="btn btn-primary editDeadline" title="<?php echo $lang->programplan->edit;?>"><i class="icon-common-edit icon-edit"></i> <?php echo $lang->programplan->edit;?></a></td></tr></table>';
-        return gridDateToStr(new Date(date.valueOf() - 1));
+        var date = task.deadline;
+        if(task.type == 'point' && canEditDeadline && (!task.rawStatus || task.rawStatus == 'fail' || task.rawStatus == 'draft')) return "<table><tr><td><span class='deadline'>" + gridDateToStr(new Date(date.valueOf())) + '</span> <a class="btn btn-primary editDeadline" title="<?php echo $lang->programplan->edit;?>"><i class="icon-common-edit icon-edit"></i> <?php echo $lang->programplan->edit;?></a></td></tr></table>';
+        return date;
     }
 
     function getSubmitBtn(task)
@@ -664,7 +669,9 @@ $(function()
     gantt.locale.labels.column_status       = "<?php echo $lang->statusAB;?>";
     gantt.locale.labels.column_percent      = "<?php echo $lang->programplan->percentAB;?>";
     gantt.locale.labels.column_taskProgress = "<?php echo $lang->programplan->taskProgress;?>";
+    gantt.locale.labels.column_begin        = "<?php echo $lang->programplan->begin;?>";
     gantt.locale.labels.column_start_date   = "<?php echo $lang->programplan->begin;?>";
+    gantt.locale.labels.column_deadline     = "<?php echo $lang->programplan->end;?>";
     gantt.locale.labels.column_end_date     = "<?php echo $lang->programplan->end;?>";
     gantt.locale.labels.column_realBegan    = "<?php echo $lang->programplan->realBegan;?>";
     gantt.locale.labels.column_realEnd      = "<?php echo $lang->programplan->realEnd;?>";

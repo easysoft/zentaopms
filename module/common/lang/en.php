@@ -25,6 +25,7 @@ $lang->ellipsis  = '…';
 $lang->percent   = '%';
 $lang->dash      = '-';
 $lang->and       = 'and';
+$lang->separater = ',';
 
 $lang->zentaoPMS      = 'ZenTao';
 $lang->pmsName        = 'ALM';
@@ -435,9 +436,14 @@ $lang->exportTypeList['all']      = 'All Data';
 $lang->exportTypeList['selected'] = 'Selected Data';
 
 $lang->visionList = array();
-$lang->visionList['or']   = 'OR & MM Interface';
-$lang->visionList['rnd']  = 'IPD Interface';
+$lang->visionList['rnd']  = 'Full Feature Interface';
 $lang->visionList['lite'] = 'Operation Management Interface';
+
+if($config->edition == 'ipd')
+{
+    $lang->visionList['or']   = 'OR & MM Interface';
+    $lang->visionList['rnd']  = 'IPD Interface';
+}
 
 $lang->createObjects['todo']        = 'Todo';
 $lang->createObjects['effort']      = 'Effort';

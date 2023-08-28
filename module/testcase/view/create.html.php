@@ -45,8 +45,8 @@ foreach(explode(',', $config->testcase->create->requiredFields) as $field)
             <th><?php echo $hiddenProduct ? $lang->testcase->module : $lang->testcase->product;?></th>
             <td class='<?php if($hiddenProduct) echo 'hidden';?>'>
               <div class='input-group'>
-                <?php echo html::select('product', $products, $productID, "onchange='loadAllNew(this.value);' class='form-control chosen'");?>
-                <?php if(isset($product->type) and $product->type != 'normal') echo html::select('branch', $branches, $branch, "onchange='loadBranchNew();' class='form-control' style='width:120px'");?>
+                <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value);' class='form-control chosen'");?>
+                <?php if(isset($product->type) and $product->type != 'normal') echo html::select('branch', $branches, $branch, "onchange='loadBranch();' class='form-control' style='width:120px'");?>
               </div>
             </td>
             <td style='<?php if(!$hiddenProduct) echo 'padding-left:15px;';?>'>
@@ -55,12 +55,12 @@ foreach(explode(',', $config->testcase->create->requiredFields) as $field)
                 <span class="input-group-addon w-80px"><?php echo $lang->testcase->module?></span>
                 <?php endif;?>
                 <?php
-                echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelatedNew();' class='form-control chosen'");
+                echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated();' class='form-control chosen'");
                 if(count($moduleOptionMenu) == 1)
                 {
                     echo "<span class='input-group-addon'>";
                     echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=case&currentModuleID=0&branch=$branch", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
-                    echo html::a("javascript:void(0)", $lang->refreshIcon, '', "id='refresh' class='refresh' title='$lang->refresh' onclick='loadProductModulesNew($productID)'");
+                    echo html::a("javascript:void(0)", $lang->refreshIcon, '', "id='refresh' class='refresh' title='$lang->refresh' onclick='loadProductModules($productID)'");
                     echo '</span>';
                 }
                 ?>
@@ -308,4 +308,5 @@ $(":checkbox[name^='auto']").on('click', function(){
     checkScript();
 });
 </script>
+<?php include '../../ai/view/inputinject.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

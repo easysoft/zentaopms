@@ -509,7 +509,10 @@ class router extends baseRouter
         }
         else
         {
-            $action = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOWACTION . " WHERE `module` = '$this->moduleName' AND `action` = '$this->methodName' AND `vision` = '{$this->config->vision}'")->fetch();
+            $actionQuery = "SELECT * FROM " . TABLE_WORKFLOWACTION . " WHERE `module` = '$this->moduleName' AND `action` = '$this->methodName'";
+            if(isset($this->app->user) && $this->app->user->account != 'guest') $actionQuery .= " AND `vision` = '{$this->config->vision}'";
+
+            $action = $this->dbh->query($actionQuery)->fetch();
             if(zget($action, 'extensionType') == 'override')
             {
                 $this->rawModule = $this->moduleName;
@@ -691,5 +694,25 @@ class router extends baseRouter
 
         $this->rawParams = parent::mergeParams($defaultParams, $passedParams);
         return $this->rawParams;
+    }
+
+    /**
+     * 加载一个模块：
+     *
+     * Load a module.
+     *
+     * @access public
+     * @return bool|object  if the module object of die.
+     */
+    public function loadModule()
+    {
+        /* 不能直接请求基类的方法 Cannot call methods of base control class. */
+        if(method_exists('Control', $this->methodName))
+        {
+            echo 'Cannot call methods of base control class.';
+            return false;
+        }
+
+        return parent::loadModule();
     }
 }

@@ -125,10 +125,11 @@ function refreshPivot(pivotInfo, isOrigin = false)
 
             $('#pivot-query').addClass('hidden');
             $('#origin-query').removeClass('hidden');
+
+            $('.query-outside').addClass('visibility-hidden');
         }
     });
 }
-
 
 function calcPreviewGrowFilter()
 {

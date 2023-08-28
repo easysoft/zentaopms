@@ -457,8 +457,11 @@ class groupModel extends model
             foreach($this->post->actions as $moduleName => $moduleActions)
             {
                 if(empty($moduleName) or empty($moduleActions)) continue;
-                $privIdList    = $this->dao->select('id')->from(TABLE_PRIV)->where('module')->eq($moduleName)->andWhere('method')->in($moduleActions)->fetchPairs();
-                $relationPrivs = $this->getPrivRelationsByIdList($privIdList, 'depend', 'idGroup');
+
+                $privList = array();
+                foreach($moduleActions as $actionName) $privList["{$moduleName}-{$actionName}"] = "{$moduleName}-{$actionName}";
+
+                $relationPrivs = $this->getPrivRelationsByIdList($privList, 'depend', 'idGroup');
                 $depentedPrivs = array_merge($depentedPrivs, array_keys(zget($relationPrivs, 'depend', array())));
                 foreach($moduleActions as $actionName)
                 {
@@ -469,33 +472,39 @@ class groupModel extends model
                     $privs[]      = $data;
                 }
             }
+
             $this->insertPrivs($privs);
-            $depentedPrivs = $this->getPrivByIdList($depentedPrivs);
-            foreach($depentedPrivs as $privID => $priv)
+
+            foreach($depentedPrivs as $index => $priv)
             {
-                if(!empty($_POST['actions'][$priv->module]) and in_array($priv->method, $_POST['actions'][$priv->module]))
+                list($module, $method) = explode('-', $priv);
+
+                if(!empty($_POST['actions'][$module]) and in_array($method, $_POST['actions'][$module]))
                 {
-                    unset($depentedPrivs[$privID]);
+                    unset($depentedPrivs[$index]);
                     continue;
                 }
                 $data         = new stdclass();
                 $data->group  = $groupID;
-                $data->module = $priv->module;
-                $data->method = $priv->method;
+                $data->module = $module;
+                $data->method = $method;
                 $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
             }
-            $recommendPrivs = $this->getPrivByIdList(zget($_POST, 'recommendPrivs', '0'));
-            foreach($recommendPrivs as $privID => $priv)
+            
+            $recommendPrivs = zget($_POST, 'recommendPrivs', array());
+            foreach($recommendPrivs as $moduleMethod => $priv)
             {
-                if(in_array($priv->method, zget($_POST['actions'], $priv->module, array())))
+                list($module, $method) = explode('-', $moduleMethod);
+
+                if(in_array($method, zget($_POST['actions'], $module, array())))
                 {
-                    unset($recommendPrivs[$privID]);
+                    unset($recommendPrivs[$moduleMethod]);
                     continue;
                 }
                 $data         = new stdclass();
                 $data->group  = $groupID;
-                $data->module = $priv->module;
-                $data->method = $priv->method;
+                $data->module = $module;
+                $data->method = $method;
                 $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
             }
         }
@@ -1500,7 +1509,7 @@ class groupModel extends model
 
     /**
      * Super Model: Init views, modules and privileges for IPD.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -1909,7 +1918,7 @@ class groupModel extends model
     public function getPrivRelation($priv, $type = '', $module = '')
     {
         $relations = $this->dao->select('t1.type,t2.*,t3.`key`,t3.value')->from(TABLE_PRIVRELATION)->alias('t1')
-            ->leftJoin(TABLE_PRIV)->alias('t2')->on('t1.relationPriv=t2.id')
+            ->leftJoin(TABLE_PRIV)->alias('t2')->on("t1.relationPriv=CONCAT(t2.module, '-', t2.method)")
             ->leftJoin(TABLE_PRIVLANG)->alias('t3')->on('t2.id=t3.objectID')
             ->where('t1.priv')->eq($priv)
             ->andWhere('t2.edition')->like("%,{$this->config->edition},%")
@@ -1936,7 +1945,7 @@ class groupModel extends model
     public function getPrivRelationsByIdList($privs, $type = '', $returnType = 'name')
     {
         $privs = $this->dao->select('t1.priv,t3.`key`,t3.value,t1.type,t1.relationPriv')->from(TABLE_PRIVRELATION)->alias('t1')
-            ->leftJoin(TABLE_PRIV)->alias('t2')->on('t1.relationPriv=t2.id')
+            ->leftJoin(TABLE_PRIV)->alias('t2')->on("t1.relationPriv=CONCAT(t2.module, '-', t2.method)")
             ->leftJoin(TABLE_PRIVLANG)->alias('t3')->on('t2.id=t3.objectID')
             ->where('t1.priv')->in($privs)
             ->andWhere('t2.edition')->like("%,{$this->config->edition},%")
@@ -2314,7 +2323,7 @@ class groupModel extends model
      */
     public function getCustomPrivs($menu, $privs = array())
     {
-        $allPrivs = $this->dao->select('module,method')->from(TABLE_PRIV)->fetchGroup('module', 'method');
+        $allPrivs = $this->dao->select('module,method')->from(TABLE_PRIV)->where('edition')->like("%,{$this->config->edition},%")->andWhere('vision')->like("%,{$this->config->vision},%")->fetchGroup('module', 'method');
         foreach($this->lang->resource as $module => $methods)
         {
             if(isset($this->lang->$module->menus) and (empty($menu) or $menu == 'general'))
@@ -2365,25 +2374,25 @@ class groupModel extends model
     /**
      * Get related privs.
      *
-     * @param  array  $privIdList
+     * @param  array  $privList
      * @param  string $type
      * @param  array  $excludePrivs
      * @param  array  $recommedSelect
      * @access public
      * @return array
      */
-    public function getRelatedPrivs($privIdList, $type = '', $excludePrivs = array(), $recommedSelect = array())
+    public function getRelatedPrivs($privList, $type = '', $excludePrivs = array(), $recommedSelect = array())
     {
         $modulePairs = $this->getPrivManagerPairs('module');
         $modules     = array_keys($modulePairs);
-        $privs = $this->dao->select("t1.relationPriv,t1.type,t2.parent,t2.module,t2.method,t2.`order`,t3.`key`,t3.value, IF(t4.type = 'module', t4.code, t5.code) as parentCode")->from(TABLE_PRIVRELATION)->alias('t1')
-            ->leftJoin(TABLE_PRIV)->alias('t2')->on('t1.relationPriv=t2.id')
-            ->leftJoin(TABLE_PRIVLANG)->alias('t3')->on('t1.relationPriv=t3.objectID')
+        $privs = $this->dao->select("t1.relationPriv,t1.type,t2.parent,t2.module,t2.method,t2.`order`,t3.`key`,t3.value, IF(t4.type = 'module', t4.code, t5.code) as parentCode,CONCAT(t2.module, '-', t2.method) as moduleMethod")->from(TABLE_PRIVRELATION)->alias('t1')
+            ->leftJoin(TABLE_PRIV)->alias('t2')->on("t1.relationPriv=CONCAT(t2.module, '-', t2.method)")
+            ->leftJoin(TABLE_PRIVLANG)->alias('t3')->on('t2.id=t3.objectID')
             ->leftJoin(TABLE_PRIVMANAGER)->alias('t4')->on('t2.parent=t4.id')
             ->leftJoin(TABLE_PRIVMANAGER)->alias('t5')->on('t4.parent=t5.id')
-            ->where('t1.priv')->in($privIdList)
+            ->where('t1.priv')->in($privList)
             ->andWhere('t5.code')->in(array_keys($modulePairs))
-            ->andWhere('(t1.relationPriv')->notin($privIdList)
+            ->andWhere('(t1.relationPriv')->notin($privList)
 
             ->beginIF(!empty($recommedSelect))
             ->orWhere('(t1.relationPriv')->in($recommedSelect)
@@ -2450,13 +2459,13 @@ class groupModel extends model
     }
 
     /**
-     * Get privs id list by group.
+     * Get privs list by group.
      *
      * @param  int    $groupID
      * @access public
-     * @return void
+     * @return array
      */
-    public function getPrivsIdListByGroup($groupID)
+    public function getPrivListByGroup($groupID)
     {
         $modulePairs = $this->getPrivManagerPairs('module');
         $modules     = array_keys($modulePairs);
@@ -2467,6 +2476,10 @@ class groupModel extends model
             ->andWhere('edition')->like("%,{$this->config->edition},%")
             ->andWhere('vision')->like("%,{$this->config->vision},%")
             ->fetchAll('id');
-        return $privIdList;
+
+        $privs = array();
+        foreach($privIdList as $priv) $privs["{$priv->module}-{$priv->method}"] = "{$priv->module}-{$priv->method}";
+
+        return $privs;
     }
 }

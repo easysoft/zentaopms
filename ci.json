@@ -1,0 +1,29 @@
+{
+  "pkg": {
+    "xuanxuan": {
+      "gitVersion": "e08cd0387cbfcf4cbc28b3b3e829683066ee3bc7",
+      "version": "7.2.1"
+    },
+    "zentaoext": {
+      "gitVersion": "18.x",
+      "gitRepo": "https://git.zcorp.cc/easycorp/zentaoext.git"
+    },
+    "zdoo": {
+      "gitVersion": "master"
+    },
+    "zdooext": {
+      "gitVersion": "master"
+    }
+  },
+  "downgrade": {
+    "enabled": true,
+    "versions": "7.2,7.1,7.0,5.4"
+  },
+  "upload": {
+    "bucket": "download"
+  },
+  "notice": {
+    "users": "qishiyao,hufangzhou",
+    "groups": "84be4c6e-02e3-4fdc-b081-318c0c1eca02,31a0008b-6e3e-4b7f-9b7b-396a46b1f8f4"
+  }
+}

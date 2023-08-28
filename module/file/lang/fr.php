@@ -32,6 +32,7 @@ $lang->file->exportRange   = "Données";
 $lang->file->defaultTPL    = "Défaut";
 $lang->file->setExportTPL  = "Paramétrages";
 $lang->file->preview       = "Apperçu";
+$lang->file->previewFile   = "aperçu de la pièce jointe";
 $lang->file->addFile       = 'Ajouter';
 $lang->file->beginUpload   = 'Clic pour Charger';
 $lang->file->uploadSuccess = 'Chargé !';

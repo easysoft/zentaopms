@@ -172,7 +172,7 @@ class bug extends control
         }
         else
         {
-            $executions = $this->loadModel('execution')->getPairs($this->projectID, 'all', 'empty|withdelete|hideMultiple');
+            $executions = $this->loadModel('execution')->fetchPairs($this->projectID, 'all', 'empty|withdelete|hideMultiple');
             if($this->config->cache->enable) $this->cache->set($cacheKey, $executions);
         }
 
@@ -234,7 +234,6 @@ class bug extends control
         $this->view->position[]      = $this->lang->bug->common;
         $this->view->productID       = $productID;
         $this->view->product         = $product;
-        $this->view->projectProducts = $this->product->getProducts($this->projectID);
         $this->view->productName     = $productName;
         $this->view->builds          = $this->loadModel('build')->getBuildPairs($productID, $branch);
         $this->view->releasedBuilds  = $this->loadModel('release')->getReleasedBuilds($productID, $branch);
@@ -1417,6 +1416,11 @@ class bug extends control
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->bug->custom->batchEditFields;
 
+        /* Set users. */
+        $users = $this->loadModel('user')->getPairs();
+        $limitUsers = $users;
+        if(count($users) > $this->config->batchMaxCount) $limitUsers = array_slice($users, 0 , $this->config->batchMaxCount);
+
         $branchIdList    = array();
         $projectIdList   = array();
         $executionIdList = array();
@@ -1441,7 +1445,38 @@ class bug extends control
                 }
             }
 
+            $bug->assignedToList = array();
+            if($this->app->tab == 'project' or $this->app->tab == 'execution')
+            {
+                if($bug->execution)
+                {
+                    $bug->assignedToList = $executionMembers[$bug->execution];
+                }
+                elseif($bug->project)
+                {
+                    $bug->assignedToList = $projectMembers[$bug->project];
+                }
+                else
+                {
+                    $bug->assignedToList = $productMembers[$bug->product][$bug->branch];
+                    if(empty($bug->assignedToList))
+                    {
+                        $bug->assignedToList = $limitUsers;
+                        if(count($users) > $this->config->batchMaxCount) $this->config->moreLinks["assignedTos[$bug->id]"] = helper::createLink('user', 'ajaxGetMore');
+                        unset($bug->assignedToList['closed']);
+                    }
+                }
+            }
+            else
+            {
+                $bug->assignedToList = $limitUsers;
+                if(count($users) > $this->config->batchMaxCount) $this->config->moreLinks["assignedTos[$bug->id]"] = helper::createLink('user', 'ajaxGetMore');
+                unset($bug->assignedToList['closed']);
+            }
+            $bug->assignedToList = array('' => '', 'ditto' => $this->lang->bug->ditto) + array($bug->assignedTo => zget($users, $bug->assignedTo)) + $bug->assignedToList;
+
             $this->config->moreLinks["duplicateBugs[{$bug->id}]"] = inlink('ajaxGetProductBugs', "productID={$bug->product}&bugID={$bug->id}&type=json");
+            if(count($users) > $this->config->batchMaxCount) $this->config->moreLinks["resolvedBys[$bug->id]"]     = helper::createLink('user', 'ajaxGetMore');
         }
 
         /* Get assigned to member. */
@@ -1504,10 +1539,6 @@ class bug extends control
             $this->view->executionMembers = $executionMembers;
         }
 
-        /* Set users. */
-        $users = $this->user->getPairs('devfirst');
-        $users = array('' => '', 'ditto' => $this->lang->bug->ditto) + $users;
-
         /* Assign. */
         $this->view->productID        = $productID;
         $this->view->branchProduct    = $branchProduct;
@@ -1519,6 +1550,7 @@ class bug extends control
         $this->view->bugs             = $bugs;
         $this->view->branch           = $branch;
         $this->view->users            = $users;
+        $this->view->limitUsers       = $limitUsers;
         $this->view->modules          = $modules;
         $this->view->branchTagOption  = $branchTagOption;
         $this->view->productBugList   = $productBugList;
@@ -1933,6 +1965,8 @@ class bug extends control
 
         $this->bug->checkBugExecutionPriv($bug);
         $this->qa->setMenu($this->products, $productID, $bug->branch);
+
+        $this->config->moreLinks['duplicateBug'] = inlink('ajaxGetProductBugs', "productID={$productID}&bugID={$bugID}&type=json");
 
         $this->view->title          = $this->products[$productID] . $this->lang->colon . $this->lang->bug->resolve;
         $this->view->bug            = $bug;
@@ -2591,13 +2625,14 @@ class bug extends control
      *
      * @param  int     $productID
      * @param  int     $bugID
+     * @param  string  $type
      * @access public
      * @return string
      */
     public function ajaxGetProductBugs($productID, $bugID, $type = 'html')
     {
         $search      = $this->get->search;
-        $limit       = $this->get->limit;
+        $limit       = $this->get->limit ? $this->get->limit : $this->config->maxCount;
         $product     = $this->loadModel('product')->getById($productID);
         $bug         = $this->bug->getById($bugID);
         $branch      = $product->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';

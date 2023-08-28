@@ -122,7 +122,7 @@ class model extends baseModel
 
             if($action->extensionType == 'override') return $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type);
 
-            $conditions = json_decode($action->conditions);
+            $conditions = empty($action->conditions) ? array() : json_decode($action->conditions);
             if($conditions and $action->extensionType == 'extend')
             {
                 if($icon != 'copy' and $methodName != 'create') $title = $action->name;

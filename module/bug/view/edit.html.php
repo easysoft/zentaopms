@@ -329,4 +329,5 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
     </div>
   </form>
 </div>
+<?php include '../../ai/view/inputinject.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

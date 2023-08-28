@@ -90,11 +90,12 @@ function buildTable(resp)
     html    += "<thead><tr>";
     for(var field in resp.fields)
     {
-        var fieldName = dataview?.fieldSettings?.[field]?.name ? dataview.fieldSettings[field].name : field;
-        if(dataview?.langs)
+        var fieldName = field;
+        if(typeof(dataview) != 'undefined' && typeof(dataview.fieldSettings) != 'undefined' && typeof(dataview.fieldSettings[field]) != 'undefined' && typeof(dataview.fieldSettings[field].name) != 'undefined') fieldName = dataview.fieldSettings[field].name ? dataview.fieldSettings[field].name : field;
+        if(typeof(dataview.langs) != 'undefined')
         {
             var langs = JSON.parse(dataview.langs);
-            if(langs) fieldName = langs?.[field]?.[clientLang] ? langs[field][clientLang] : fieldName;
+            if(langs && typeof(langs[field]) != 'undefined' && typeof(langs[field][clientLang]) != 'undefined') fieldName = langs[field][clientLang] ? langs[field][clientLang] : fieldName;
         }
 
         html += "<th>" + fieldName + "</th>";
@@ -109,7 +110,7 @@ function buildTable(resp)
         html += '<tr>';
         for(var field in resp.fields)
         {
-            var tdValue = data?.[field] ? data[field] : 'null';
+            var tdValue = (typeof(data[field]) != 'undefined' && data[field]) ? data[field] : 'null';
             html += "<td title='" + tdValue + "'>" + tdValue + "</td>";
         }
         html += '</tr>';
@@ -164,3 +165,15 @@ function initPager(pageID, recPerPage, recTotal, fieldCount)
     $('#queryResult').html(viewResult.replace('%s', recTotal).replace('%s', fieldCount));
 }
 
+/**
+ * Set export show or hidden.
+ *
+ * @param  string stat show|hide
+ * @access public
+ * @return void
+ */
+function setExport(stat)
+{
+    if(stat == 'show') $('.dataview-export').removeClass('hidden');
+    else $('.dataview-export').addClass('hidden');
+}

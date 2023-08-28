@@ -5,8 +5,6 @@ FIELD=$2
 
 frameCount=`echo $TAG| grep -o '_' | wc -l`
 
-build_date=${TAG##*_}
-
 build_id=''
 
 if [ $frameCount -eq 3 ];then
@@ -14,19 +12,20 @@ if [ $frameCount -eq 3 ];then
 fi
 
 case $FIELD in
-  date)
-     # must 8 numbers
-     echo $build_date | egrep -E '^[0-9]{8}$'
-  ;;
-  id)
-    echo $build_id
-  ;;
   group)
-    if [ -n "$build_id" ];then
-      echo "$build_date.$build_id"
-    else
-      echo "$build_date.release"
-    fi
+    case $frameCount in
+      1)
+        echo release
+        ;;
+      *)
+        build_date=${TAG##*_}
+        if [ -n "$build_id" ];then
+          echo "$build_date.$build_id"
+        else
+          echo "$build_date.release"
+        fi
+        ;;
+    esac
   ;;
   type)
     if [ -n "$build_id" ];then

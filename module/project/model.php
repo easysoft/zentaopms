@@ -239,13 +239,13 @@ class projectModel extends model
             ->andWhere('status')->notin('done,closed')
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)
-            ->fetchGroup('project');
+            ->fetchGroup('project', 'id');
 
         $this->app->loadClass('pager', $static = true);
         foreach($projects as $projectID => $project)
         {
-            $orderBy = $project->model == 'waterfall' ? 'id_asc' : 'id_desc';
-            $pager   = $project->model == 'waterfall' ? null : new pager(0, 1, 1);
+            $project->model == 'waterfall' ? ksort($executions[$projectID]) : krsort($executions[$projectID]);
+
             $project->executions = isset($executions[$projectID]) ? $executions[$projectID] : array();
             $project->parentName = $projectParentNames[$project->id];
         }
@@ -395,12 +395,11 @@ class projectModel extends model
      */
     public function getTotalTaskByProject($projectIdList)
     {
-        return $this->dao->select("t1.project, count(t1.id) as allTasks, count(if(t1.status = 'wait', 1, null)) as waitTasks, count(if(t1.status = 'doing', 1, null)) as doingTasks, count(if(t1.status = 'done', 1, null)) as doneTasks, count(if(t1.status = 'wait' or t1.status = 'pause' or t1.status = 'cancel', 1, null)) as leftTasks, count(if(t1.status = 'done' or t1.status = 'closed', 1, null)) as litedoneTasks")->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution=t2.id')
-            ->where('t1.project')->in($projectIdList)
-            ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t2.deleted')->eq(0)
-            ->groupBy('t1.project')
+        $executionIdList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->in($projectIdList)->andWhere('deleted')->eq(0)->fetchPairs();
+        return $this->dao->select("project, count(id) as allTasks, count(if(status = 'wait', 1, null)) as waitTasks, count(if(status = 'doing', 1, null)) as doingTasks, count(if(status = 'done', 1, null)) as doneTasks, count(if(status = 'wait' or status = 'pause' or status = 'cancel', 1, null)) as leftTasks, count(if(status = 'done' or status = 'closed', 1, null)) as litedoneTasks")->from(TABLE_TASK)
+            ->where('execution')->in($executionIdList)
+            ->andWhere('deleted')->eq(0)
+            ->groupBy('project')
             ->fetchAll('project');
     }
 
@@ -533,9 +532,11 @@ class projectModel extends model
         $workhour = new stdclass();
         $workhour->totalHours    = $this->dao->select('sum(t1.days * t1.hours) AS totalHours')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.root=t2.id')
+            ->leftJoin(TABLE_USER)->alias('t3')->on('t1.account=t3.account')
             ->where('t2.id')->in($projectID)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.type')->eq('project')
+            ->andWhere('t3.deleted')->eq(0)
             ->fetch('totalHours');
         $workhour->totalEstimate = $total->totalEstimate;
         $workhour->totalConsumed = $totalConsumed;
@@ -2412,7 +2413,9 @@ class projectModel extends model
     {
         $this->loadModel('user');
 
-        $members = array_keys($this->getTeamMembers($projectID));
+        $teams        = array_keys($this->getTeamMembers($projectID));
+        $stakeholders = array_keys($this->loadModel('stakeholder')->getStakeHolderPairs($projectID));
+        $members      = array_merge($teams, $stakeholders);
 
         /* Link products of other programs. */
         if(!empty($_POST['otherProducts']))
@@ -2860,7 +2863,7 @@ class projectModel extends model
         }
 
         if(isset($lang->project->menu->storyGroup))  unset($lang->project->menu->storyGroup);
-        if($model != 'ipd' and $project->hasProduct) unset($lang->project->menu->settings['subMenu']->module);
+        if($model != 'ipd' and isset($project->hasProduct) and $project->hasProduct) unset($lang->project->menu->settings['subMenu']->module);
         if(empty($project->hasProduct))              unset($lang->project->menu->settings['subMenu']->products);
 
         /* Reset project priv. */

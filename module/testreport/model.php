@@ -544,13 +544,12 @@ class testreportModel extends model
         {
             foreach($builds as $build) $bugIdList .= $build->bugs . ',';
         }
+        $bugIdList = trim($bugIdList, ',');
+
         return $this->dao->select('*')->from(TABLE_BUG)->where('deleted')->eq(0)
             ->andWhere('product')->in($product)
             ->andWhere('openedDate')->lt("$begin 23:59:59")
-            ->beginIF(is_array($builds) and $type == 'build')->andWhere('id')->in(trim($bugIdList, ','))->fi()
-            ->beginIF(!is_array($builds) and $type == 'build')->andWhere("(resolvedBuild = 'trunk' and resolvedDate >= '$begin' and resolvedDate <= '$end 23:59:59')")->fi()
-            ->beginIF($type == 'project')->andWhere("(id " . helper::dbIN(trim($bugIdList, ',')) . " OR (resolvedBuild = 'trunk' and resolvedDate >= '$begin' and resolvedDate <= '$end 23:59:59'))")
-            ->beginIF($type == 'execution')->andWhere("(id " . helper::dbIN(trim($bugIdList, ',')) . " OR (resolvedBuild = 'trunk' and resolvedDate >= '$begin' and resolvedDate <= '$end 23:59:59'))")
+            ->andWhere("id")->in($bugIdList)
             ->fetchAll('id');
     }
 

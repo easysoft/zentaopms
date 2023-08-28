@@ -129,8 +129,7 @@ $lang->programplan->error->sameType        = 'Type of the stage must be as same 
 $lang->programplan->ganttBrowseType['gantt']       = 'Group by Stage';
 $lang->programplan->ganttBrowseType['assignedTo']  = 'Group by AssignedTo';
 
-$lang->programplan->gantt = new stdclass();
-$lang->programplan->gantt->reviewColorList['draft']     = '#FC913F';
-$lang->programplan->gantt->reviewColorList['reviewing'] = '#CD6F27';
-$lang->programplan->gantt->reviewColorList['pass']      = '#0DBB7D';
-$lang->programplan->gantt->reviewColorList['fail']      = '#FB2B2B';
+$lang->programplan->reviewColorList['draft']     = '#FC913F';
+$lang->programplan->reviewColorList['reviewing'] = '#CD6F27';
+$lang->programplan->reviewColorList['pass']      = '#0DBB7D';
+$lang->programplan->reviewColorList['fail']      = '#FB2B2B';

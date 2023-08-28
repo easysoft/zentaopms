@@ -150,13 +150,13 @@ class cron extends control
         /* make cron status to running. */
         $configID = $this->cron->getConfigID();
         $configID = $this->cron->markCronStatus('running', $configID);
+        $this->dao->update(TABLE_CRON)->set('lastTime')->eq(date(DT_DATETIME1))->where('id')->eq(1)->exec();
 
         /* Get and parse crons. */
         $crons       = $this->cron->getCrons('nostop');
         $parsedCrons = $this->cron->parseCron($crons);
 
-        /* Update last time. */
-        $this->cron->changeStatus(key($parsedCrons), 'normal', true);
+        $this->cron->logCron("The cron process created.\n");
         $this->loadModel('common');
         $startedTime = time();
         while(true)
@@ -166,10 +166,18 @@ class cron extends control
             /* When cron is null then die. */
             if(empty($crons)) break;
             if(empty($parsedCrons)) break;
-            if(!$this->cron->getTurnon()) break;
+            if(!$this->cron->getTurnon())
+            {
+                $this->cron->logCron("The cron process turned off.\n");
+                break;
+            }
 
             /* Die old process when restart. */
-            if(file_exists($restartTag) and !$restart) return unlink($restartTag);
+            if(file_exists($restartTag) and !$restart)
+            {
+                $this->cron->logCron("The cron process restarted.\n");
+                return unlink($restartTag);
+            }
             $restart = false;
 
             /* Run crons. */
@@ -205,6 +213,11 @@ class cron extends control
                     $return = '';
                     if($cron['command'])
                     {
+                        /* Save log of executing cron. */
+                        $time = $now->format('Y-m-d H:i:s');
+                        $log  = "\n$time task " . $id . " executing,\ncommand: $cron[command]\n";
+                        $this->cron->logCron($log);
+
                         if(isset($crons[$id]) and $crons[$id]->type == 'zentao')
                         {
                             parse_str($cron['command'], $params);
@@ -220,12 +233,11 @@ class cron extends control
                             if($output) $output = join("\n", $output);
                         }
 
-                        /* Save log. */
-                        $log    = '';
-                        $time   = $now->format('G:i:s');
-                        $output = "\n" . $output;
+                        /* Save log of executed cron. */
+                        $time   = $now->format('Y-m-d H:i:s');
+                        $output = $output;
 
-                        $log = "$time task " . $id . " executed,\ncommand: $cron[command].\nreturn : $return.\noutput : $output\n";
+                        $log = "\n$time task " . $id . " executed,\ncommand: $cron[command]\nreturn : $return\noutput : $output\n";
                         $this->cron->logCron($log);
                         unset($log);
                     }
@@ -248,8 +260,6 @@ class cron extends control
             $sleepTime = 60 - ((time() - strtotime($now->format('Y-m-d H:i:s'))) % 60);
             sleep($sleepTime);
 
-            /* Break while. */
-            if('cli' !== PHP_SAPI && connection_status() != CONNECTION_NORMAL) break;
             if(((time() - $startedTime) / 3600 / 24) >= $this->config->cron->maxRunDays) break;
         }
 
