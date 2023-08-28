@@ -1029,7 +1029,7 @@ class projectModel extends model
      * @access protected
      * @return bool
      */
-    protected function addTeamMembers(int $projectID, object $project, array $members): array
+    protected function addTeamMembers(int $projectID, object $project, array $members): bool
     {
         /* Set team of project. */
         array_push($members, $project->PM, $project->openedBy);
@@ -1042,7 +1042,9 @@ class projectModel extends model
         $member->type    = 'project';
         $member->join    = helper::now();
         $member->days    = zget($project, 'days', 0);
-        $member->hours   = $this->config->loadModel('execution')->defaultWorkhours;
+
+        $this->loadModel('execution');
+        $member->hours = $this->config->execution->defaultWorkhours;
 
         foreach($members as $account)
         {
@@ -1050,7 +1052,6 @@ class projectModel extends model
 
             $member->account = $account;
             $member->role    = zget($roles, $account, '');
-            $this->dao->insert(TABLE_TEAM)->data($member)->exec();
             $teamMembers[$account] = $member;
         }
         $this->execution->addProjectMembers($projectID, $teamMembers);
