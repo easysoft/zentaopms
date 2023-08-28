@@ -713,6 +713,8 @@ class testcaseTest
     }
 
     /**
+     *
+     * 处理用例和项目的关系的测试用例。
      * Test deal with the relationship between the case and project when edit the case.
      *
      * @param  int    $caseID
@@ -721,7 +723,7 @@ class testcaseTest
      * @access public
      * @return array
      */
-    public function updateCase2ProjectTest($caseID, $objectType, $objectID)
+    public function updateCase2ProjectTest(int $caseID, string $objectType, int $objectID): array
     {
         $oldCase = $this->objectModel->getByID($caseID);
 
@@ -743,13 +745,12 @@ class testcaseTest
         $case->lastEditedBy   = $oldCase->lastEditedBy;
         $case->branch         = $oldCase->branch;
 
-        $this->objectModel->updateCase2Project($oldCase, $case, $caseID);
+        $this->objectModel->updateCase2Project($oldCase, $case);
 
         if(dao::isError()) return dao::getError();
 
         global $tester;
-        $objects = $tester->dao->select('*')->from(TABLE_PROJECTCASE)->where('`case`')->eq($caseID)->fetchAll();
-        return $objects;
+        return $tester->dao->select('*')->from(TABLE_PROJECTCASE)->where('`case`')->eq($caseID)->fetchAll();
     }
 
     /**
