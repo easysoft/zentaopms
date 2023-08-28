@@ -388,7 +388,7 @@
                             zui.Modal.alert(data.load.alert);
                             if(data.load.locate)
                             {
-                                setTimeout(function(){loadPage(data.load.locate);}, 1500);
+                                setTimeout(function(){openUrl(data.load.locate);}, 1500);
                             }
                         }
                         else
