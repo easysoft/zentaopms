@@ -101,13 +101,14 @@ class testsuiteTest
      */
     public function updateTest($suiteID, $name, $type)
     {
-        $_POST['name'] = $name;
-        $_POST['desc'] = '';
-        $_POST['type'] = $type;
-        $_POST['uid']  = '62538b850bb9d';
+        $suite = new stdclass();
+        $suite->id   = $suiteID;
+        $suite->name = $name;
+        $suite->desc = '';
+        $suite->type = $type;
 
-        $objects = $this->objectModel->update($suiteID);
-        unset($_POST);
+        $uid = 1;
+        $objects = $this->objectModel->update($suite, $uid);
 
         if(dao::isError()) return dao::getError();
 
@@ -187,25 +188,6 @@ class testsuiteTest
     public function deleteTest($suiteID, $table = '')
     {
         $objects = $this->objectModel->delete($suiteID, $table);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
-     * Test get not imported cases.
-     *
-     * @param  int    $productID
-     * @param  int    $libID
-     * @param  string $orderBy
-     * @param  object $pager
-     * @access public
-     * @return array
-     */
-    public function getNotImportedCasesTest($productID, $libID, $orderBy = 'id_desc', $pager = null, $browseType = '', $queryID = 0)
-    {
-        $objects = $this->objectModel->getNotImportedCases($productID, $libID, $orderBy, $pager, $browseType, $queryID);
 
         if(dao::isError()) return dao::getError();
 
