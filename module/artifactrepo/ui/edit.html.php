@@ -23,6 +23,7 @@ formPanel
     ),
     formGroup
     (
+        set::width('2/3'),
         set::name('products[]'),
         set::label($lang->repo->product),
         set::control(array('type' => 'picker', 'multiple' => true)),
@@ -40,7 +41,7 @@ formPanel
     formGroup
     (
         set::width('2/3'),
-        set::label($lang->devops->artifact),
+        set::label($lang->artifactrepo->repoName),
         set::control('static'),
         set::value($artifactRepo->repoName),
     ),

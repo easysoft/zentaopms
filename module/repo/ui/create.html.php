@@ -31,6 +31,7 @@ formPanel
         $this->app->tab != 'devops' ? setClass('hidden') : null,
         formGroup
         (
+            set::width('1/2'),
             set::name("product[]"),
             set::label($lang->story->product),
             set::required(true),
@@ -41,6 +42,7 @@ formPanel
     ),
     formGroup
     (
+        set::width('1/2'),
         set::name("projects[]"),
         set::label($lang->repo->projects),
         set::control(array("type" => "picker","multiple" => true)),

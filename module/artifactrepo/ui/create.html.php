@@ -22,6 +22,7 @@ formPanel
     ),
     formGroup
     (
+        set::width('2/3'),
         set::name('products[]'),
         set::label($lang->repo->product),
         set::control(array('type' => 'picker', 'multiple' => true)),
