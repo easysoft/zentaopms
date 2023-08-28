@@ -124,7 +124,7 @@ formPanel
     ),
     formRow
     (
-        ($config->isContainer || $config->inQuickon) ? setClass('hidden') : setClass('hide-service'),
+        ($config->inContainer || $config->inQuickon) ? setClass('hidden') : setClass('hide-service'),
         formGroup
         (
             set::name("client"),
