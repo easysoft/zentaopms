@@ -917,6 +917,7 @@ class testcaseZen extends testcase
     protected function checkTestcasesForBatchCreate(array $testcases, int $productID): array
     {
         $this->loadModel('common');
+        $requiredErrors = array();
         foreach($testcases as $i => $testcase)
         {
             /* 检查重复项。 */
@@ -936,10 +937,12 @@ class testcaseZen extends testcase
                 if($field && empty($testcases[$i]->{$field}))
                 {
                     $fieldName = $this->config->testcase->form->batchCreate[$field]['type'] != 'array' ? "{$field}[{$i}]" : "{$field}[{$i}][]";
-                    dao::$errors[$fieldName][] = sprintf($this->lang->error->notempty, $this->lang->testcase->{$field});
+                    $requiredErrors[$fieldName] = sprintf($this->lang->error->notempty, $this->lang->testcase->{$field});
                 }
             }
+
         }
+        if(!empty($requiredErrors)) dao::$errors = $requiredErrors;
         return $testcases;
     }
 
