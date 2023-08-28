@@ -683,30 +683,6 @@ class projectModel extends model
     }
 
     /**
-     * 获取可复制项目的键值对。
-     * get the copy project pairs.
-     *
-     * @param  string $name
-     * @param  string $model
-     *
-     * @access public
-     * @return array
-     */
-    public function getCopyProjectPairs(string $name, string $model = 'kanban'): array
-    {
-        $projectPairs = $this->dao->select('id, name')->from(TABLE_PROJECT)
-            ->where('type')->eq('project')
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('vision')->eq($this->config->vision)
-            ->andWhere('model')->eq($model)
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->beginIF(trim($name))->andWhere('name')->like("%$name%")->fi()
-            ->fetchPairs();
-
-        return array_keys($projectPairs);
-    }
-
-    /**
      * 根据项目ID获取关联产品及分支
      * Get branches by project id.
      *

@@ -1,6 +1,0 @@
-title: zt_user
-author: liuhong
-version: "1.0"
-fields:
-    - field: account
-      range: 'admin,user1,user2'

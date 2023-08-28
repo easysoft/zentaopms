@@ -1,8 +1,0 @@
-title: zt_userview
-author: liuhong
-version: "1.0"
-fields:
-    - field: account
-      range: 'user1'
-    - field: projects
-      range: '`,6,`'
