@@ -2705,6 +2705,19 @@ class testcaseModel extends model
     }
 
     /**
+     * 根据 ID 获取一个场景。
+     * Get a scene by id.
+     *
+     * @param  int    $sceneID
+     * @access public
+     * @return object
+     */
+    public function getSceneByID(int $sceneID): object|bool
+    {
+        return $this->dao->select('*')->from(TABLE_SCENE)->where('id')->eq($sceneID)->fetch();
+    }
+
+    /**
      * Create scene.
      *
      * @access public
