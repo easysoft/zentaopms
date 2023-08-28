@@ -191,12 +191,11 @@ function loadScenes(productID, sceneName = 'scene')
     if(typeof(sceneID)  == 'undefined') sceneID  = 0;
 
     const link = $.createLink('testcase', 'ajaxGetScenes', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&sceneID=' + sceneID);
-    $.get(link, function(data)
+    $.get(link, function(scenes)
     {
-        let $scenePicker = $('[name=' + sceneName + ']').zui('picker');
-
-        data = JSON.parse(data);
-        $scenePicker.render({items: data});
-        $scenePicker.$.changeState({value: ''});
+        const $picker = $('[name=' + sceneName + ']').zui('picker');
+        const items = JSON.parse(scenes);
+        $picker.render({items});
+        $picker.$.setValue({value: ''});
     });
 }
