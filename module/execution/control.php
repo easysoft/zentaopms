@@ -4175,7 +4175,8 @@ class execution extends control
     }
 
     /**
-     * Task info for tree list.
+     * 在执行/迭代的树状图中查看某个任务的详情。
+     * View a task in the tree view of the execution.
      *
      * @param int $taskID
      *
@@ -4200,9 +4201,9 @@ class execution extends control
         else
         {
             $story = $this->loadModel('story')->getById($task->story);
-            $task->storySpec     = empty($story) ? '' : $this->loadModel('file')->setImgSize($story->spec);
-            $task->storyVerify   = empty($story) ? '' : $this->loadModel('file')->setImgSize($story->verify);
-            $task->storyFiles    = $this->loadModel('file')->getByObject('story', $task->story);
+            $task->storySpec   = empty($story) ? '' : $this->loadModel('file')->setImgSize($story->spec);
+            $task->storyVerify = empty($story) ? '' : $this->loadModel('file')->setImgSize($story->verify);
+            $task->storyFiles  = $this->loadModel('file')->getByObject('story', $task->story);
         }
 
         if($task->team) $this->lang->task->assign = $this->lang->task->transfer;
@@ -4210,12 +4211,10 @@ class execution extends control
         /* Update action. */
         if($task->assignedTo == $this->app->user->account) $this->loadModel('action')->read('task', $taskID);
 
-        $execution = $this->execution->getById($task->execution);
-
-        $this->view->task    = $task;
-        $this->view->execution = $execution;
-        $this->view->actions = $this->loadModel('action')->getList('task', $taskID);
-        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->view->task      = $task;
+        $this->view->execution = $this->execution->getById($task->execution);
+        $this->view->actions   = $this->loadModel('action')->getList('task', $taskID);
+        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
