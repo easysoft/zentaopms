@@ -208,6 +208,7 @@ class docModel extends model
             ->join('users', ',')
             ->add('addedBy', $this->app->user->account)
             ->add('addedDate', helper::now())
+            ->add('vision', $this->config->vision)
             ->remove('uid,contactListMenu,libType')
             ->get();
 
