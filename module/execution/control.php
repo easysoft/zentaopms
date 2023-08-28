@@ -2835,6 +2835,7 @@ class execution extends control
     }
 
     /**
+     * 看板看板。
      * Print kanban.
      *
      * @param  int    $executionID
@@ -2842,107 +2843,56 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function printKanban($executionID, $orderBy = 'id_asc')
+    public function printKanban(int $executionID, string $orderBy = 'id_asc')
     {
         $this->view->title = $this->lang->execution->printKanban;
-        $contents = array('story', 'wait', 'doing', 'done', 'cancel');
 
         if($_POST)
         {
+            /* Get stories information. */
+            $order      = 1;
             $stories    = $this->loadModel('story')->getExecutionStories($executionID, 0, $orderBy);
             $storySpecs = $this->story->getStorySpecs(array_keys($stories));
+            foreach($stories as $story) $story->order = $order ++;
 
-            $order = 1;
-            foreach($stories as $story) $story->order = $order++;
+            /* Get printed kanban data. */
+            list($dataList, $users) = $this->executionZen->getPrintKanbanData($stories);
 
-            $kanbanTasks = $this->execution->getKanbanTasks($executionID, "id");
-            $kanbanBugs  = $this->loadModel('bug')->getExecutionBugs($executionID);
-
-            $users       = array();
-            $taskAndBugs = array();
-            foreach($kanbanTasks as $task)
-            {
-                $status  = $task->status;
-                $users[] = $task->assignedTo;
-
-                $taskAndBugs[$status]["task{$task->id}"] = $task;
-            }
-            foreach($kanbanBugs as $bug)
-            {
-                $status  = $bug->status;
-                $status  = $status == 'active' ? 'wait' : ($status == 'resolved' ? ($bug->resolution == 'postponed' ? 'cancel' : 'done') : $status);
-                $users[] = $bug->assignedTo;
-
-                $taskAndBugs[$status]["bug{$bug->id}"] = $bug;
-            }
-
-            $datas = array();
-            foreach($contents as $content)
-            {
-                if($content != 'story' and !isset($taskAndBugs[$content])) continue;
-                $datas[$content] = $content == 'story' ? $stories : $taskAndBugs[$content];
-            }
-
-            unset($this->lang->story->stageList['']);
-            unset($this->lang->story->stageList['wait']);
-            unset($this->lang->story->stageList['planned']);
-            unset($this->lang->story->stageList['projected']);
-            unset($this->lang->story->stageList['released']);
-            unset($this->lang->task->statusList['']);
-            unset($this->lang->task->statusList['wait']);
-            unset($this->lang->task->statusList['closed']);
-            unset($this->lang->bug->statusList['']);
-            unset($this->lang->bug->statusList['closed']);
-
-            $originalDatas = $datas;
-            if($this->post->content == 'increment')
-            {
-                $prevKanbans = $this->execution->getPrevKanban($executionID);
-                foreach($datas as $type => $data)
-                {
-                    if(isset($prevKanbans[$type]))
-                    {
-                        $prevData = $prevKanbans[$type];
-                        foreach($prevData as $id)
-                        {
-                            if(isset($data[$id])) unset($datas[$type][$id]);
-                        }
-                    }
-                }
-            }
+            $originalDataList = $dataList;
+            if($this->post->content == 'increment') $dateList = $this->executionZen->processPrintKanbanData($executionID, $dateList);
 
             /* Close the page when there is no data. */
             $hasData = false;
-            foreach($datas as $data)
+            foreach($dataList as $data)
             {
-                if(!empty($data)) $hasData = true;
+                if(empty($data)) continue;
+                $hasData = true;
+                break;
             }
-            if(!$hasData) return print(js::alert($this->lang->execution->noPrintData) . js::close());
+            if(!$hasData) return $this->sendSuccess(array('message' => $this->lang->execution->noPrintData, 'load' => true));
 
-            $this->execution->saveKanbanData($executionID, $originalDatas);
+            $this->execution->saveKanbanData($executionID, $originalDataList);
 
-            $hasBurn = $this->post->content == 'all';
-            if($hasBurn)
+            /* Get date list. */
+            if($this->post->content == 'all')
             {
-                /* Get date list. */
-                $executionInfo    = $this->execution->getByID($executionID);
+                $executionInfo  = $this->execution->getByID($executionID);
                 list($dateList) = $this->execution->getDateList($executionInfo->begin, $executionInfo->end, 'noweekend');
-                $chartData      = $this->execution->buildBurnData($executionID, $dateList);
             }
 
-            $this->view->hasBurn    = $hasBurn;
-            $this->view->datas      = $datas;
-            $this->view->chartData  = isset($chartData) ? $chartData : array();
-            $this->view->storySpecs = $storySpecs;
-            $this->view->realnames  = $this->loadModel('user')->getRealNameAndEmails($users);
-            $this->view->executionID  = $executionID;
+            $this->view->hasBurn     = $this->post->content == 'all';
+            $this->view->datas       = $dataList;
+            $this->view->chartData   = $this->post->content == 'all' ? $this->execution->buildBurnData($executionID, $dateList) : array();
+            $this->view->storySpecs  = $storySpecs;
+            $this->view->realnames   = $this->loadModel('user')->getRealNameAndEmails($users);
+            $this->view->executionID = $executionID;
 
             return $this->display();
         }
 
         $this->execution->setMenu($executionID);
-
         $this->view->executionID = $executionID;
+
         $this->display();
     }
 

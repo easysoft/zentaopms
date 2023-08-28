@@ -173,4 +173,73 @@ class executionZen extends execution
 
         return $teamMembers;
     }
+
+    /**
+     * 获取打印看板的数据。
+     * Get printed kanban data.
+     *
+     * @param  array     $stories
+     * @access protected
+     * @return void
+     */
+    protected function getPrintKanbanData(array $stories)
+    {
+        $kanbanTasks = $this->execution->getKanbanTasks($executionID, "id");
+        $kanbanBugs  = $this->loadModel('bug')->getExecutionBugs($executionID);
+
+        $users       = array();
+        $taskAndBugs = array();
+        foreach($kanbanTasks as $task)
+        {
+            $status  = $task->status;
+            $users[] = $task->assignedTo;
+
+            $taskAndBugs[$status]["task{$task->id}"] = $task;
+        }
+        foreach($kanbanBugs as $bug)
+        {
+            $status  = $bug->status;
+            $status  = $status == 'active' ? 'wait' : ($status == 'resolved' ? ($bug->resolution == 'postponed' ? 'cancel' : 'done') : $status);
+            $users[] = $bug->assignedTo;
+
+            $taskAndBugs[$status]["bug{$bug->id}"] = $bug;
+        }
+
+        $dataList = array();
+        $contents = array('story', 'wait', 'doing', 'done', 'cancel');
+        foreach($contents as $content)
+        {
+            if($content != 'story' and !isset($taskAndBugs[$content])) continue;
+            $dataList[$content] = $content == 'story' ? $stories : $taskAndBugs[$content];
+        }
+
+        return array(dataList, $users);
+    }
+
+    /**
+     * 处理打印的看板数据。
+     * Process printed Kanban data.
+     *
+     * @param  int       $executionID
+     * @param  array     $dataList
+     * @access protected
+     * @return array
+     */
+    protected function processPrintKanbanData(int $executionID, array $dataList): array
+    {
+        $prevKanbans = $this->execution->getPrevKanban($executionID);
+        foreach($dataList as $type => $data)
+        {
+            if(isset($prevKanbans[$type]))
+            {
+                $prevData = $prevKanbans[$type];
+                foreach($prevData as $id)
+                {
+                    if(isset($data[$id])) unset($dataList[$type][$id]);
+                }
+            }
+        }
+
+        return $dataList;
+    }
 }
