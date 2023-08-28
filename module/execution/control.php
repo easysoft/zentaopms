@@ -4103,7 +4103,7 @@ class execution extends control
         $this->view->story      = $story;
         $this->view->product    = $product;
         $this->view->branches   = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
-        $this->view->plan       = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
+        $this->view->plan       = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fields('title')->fetch('title');
         $this->view->bugs       = $this->dao->select('id,title')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
         $this->view->fromBug    = $this->dao->select('id,title')->from(TABLE_BUG)->where('toStory')->eq($storyID)->fetch();
         $this->view->cases      = $this->dao->select('id,title')->from(TABLE_CASE)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
