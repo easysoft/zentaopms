@@ -573,6 +573,20 @@ class testcaseTest
     }
 
     /**
+     * 批量修改用例所属场景。
+     * Batch change scene of cases.
+     *
+     * @param  array  $caseIdList
+     * @param  int    $sceneID
+     * @access public
+     * @return bool
+     */
+    public function batchChangeSceneTest(array $caseIdList, int $sceneID): bool
+    {
+        return $this->objectModel->batchChangeScene($caseIdList, $sceneID);
+    }
+
+    /**
      * 批量确认需求变动。
      * Batch confirm story change of cases.
      *
