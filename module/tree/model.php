@@ -619,7 +619,7 @@ class treeModel extends model
         }
 
         /* Get execution module. */
-        $query = $this->dao->select('id, name, grade, path, parent')->from(TABLE_MODULE)
+        $query = $this->dao->select('id,name,type,grade,path,parent')->from(TABLE_MODULE)
             ->where('root')->eq((int)$rootID)
             ->andWhere('type')->eq('task')
             ->andWhere('deleted')->eq(0)
