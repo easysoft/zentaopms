@@ -247,7 +247,7 @@ class metricZen extends metric
         $scope = $metric->scope;
         if(empty($result)) return false;
 
-        if($metric->scope != 'global') $objectPairs = $this->metric->getPairsByScope($scope);
+        if($metric->scope != 'system') $objectPairs = $this->metric->getPairsByScope($scope);
 
         $tableData = array();
         foreach($result as $record)
@@ -257,7 +257,7 @@ class metricZen extends metric
 
             $row = new stdclass();
             if(!empty($dateList))  $row->date = $this->metric->buildDateCell($record);
-            if($scope != 'global') $row->scope = $objectPairs[$record[$scope]];
+            if($scope != 'system') $row->scope = $objectPairs[$record[$scope]];
             $row->value = $record['value'];
 
             $tableData[] = $row;
