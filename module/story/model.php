@@ -4439,14 +4439,15 @@ class storyModel extends model
     }
 
     /**
-     * Get estimate info
+     * 根据需求ID和轮次获取需求估算。
+     * Get estimate info.
      *
      * @param  int    $storyID
      * @param  int    $round
      * @access public
-     * @return bool|array
+     * @return bool|object
      */
-    public function getEstimateInfo($storyID, $round = 0)
+    public function getEstimateInfo(int $storyID, int $round = 0): object|bool
     {
         $estimateInfo = $this->dao->select('*')->from(TABLE_STORYESTIMATE)
             ->where('story')->eq($storyID)
