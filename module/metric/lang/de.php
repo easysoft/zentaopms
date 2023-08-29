@@ -49,11 +49,11 @@ $lang->metric->dateList['day']   = 'Day';
 
 $lang->metric->purposeList = array();
 $lang->metric->purposeList['scale'] = "Scale Estimation";
-$lang->metric->purposeList['qc']    = "Quality Control";
-$lang->metric->purposeList['hour']  = "Hour Tracking";
-$lang->metric->purposeList['cost']  = "Cost Calculation";
-$lang->metric->purposeList['rate']  = "Efficiency Improvement";
 $lang->metric->purposeList['time']  = "Time Control";
+$lang->metric->purposeList['cost']  = "Cost Calculation";
+$lang->metric->purposeList['hour']  = "Hour Tracking";
+$lang->metric->purposeList['qc']    = "Quality Control";
+$lang->metric->purposeList['rate']  = "Efficiency Improvement";
 
 $lang->metric->scopeList = array();
 $lang->metric->scopeList['system']    = "System";

@@ -59,11 +59,11 @@ $lang->metric->dateList['day']   = '日';
 
 $lang->metric->purposeList = array();
 $lang->metric->purposeList['scale'] = "规模估算";
-$lang->metric->purposeList['qc']    = "质量控制";
-$lang->metric->purposeList['hour']  = "工时统计";
-$lang->metric->purposeList['cost']  = "成本计算";
-$lang->metric->purposeList['rate']  = "效率提升";
 $lang->metric->purposeList['time']  = "工期控制";
+$lang->metric->purposeList['cost']  = "成本计算";
+$lang->metric->purposeList['hour']  = "工时统计";
+$lang->metric->purposeList['qc']    = "质量控制";
+$lang->metric->purposeList['rate']  = "效率提升";
 
 $lang->metric->scopeList = array();
 $lang->metric->scopeList['system']    = "系统";
