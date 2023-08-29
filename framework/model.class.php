@@ -224,6 +224,23 @@ class model extends baseModel
     }
 
     /**
+     * 通过对象ID获取对象信息。
+     * Get object information by ID.
+     *
+     * @param  int         $objectID
+     * @param  string      $moduleName
+     * @access public
+     * @return object|bool
+     */
+    public function fetchByID(int $objectID, string $moduleName = ''): object|bool
+    {
+        if(empty($moduleName)) $moduleName = $this->getModuleName();
+        $table = $this->config->objectTables[$moduleName];
+
+        return $this->dao->findById($objectID)->from($table)->fetch();
+    }
+
+    /**
      * Process status of an object according to its subStatus.
      *
      * @param  string $module   product | release | story | project | task | bug | testcase | testtask | feedback
