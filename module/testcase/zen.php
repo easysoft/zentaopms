@@ -562,7 +562,7 @@ class testcaseZen extends testcase
         }
         else
         {
-            $this->caselib->setLibMenu($libraries, $case->lib);
+            $this->loadModel('caselib')->setLibMenu($libraries, $case->lib);
         }
     }
 
