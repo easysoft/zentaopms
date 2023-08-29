@@ -383,42 +383,6 @@ class testcaseTest
     }
 
     /**
-     * Test batch update cases.
-     *
-     * @param  array  $param
-     * @access public
-     * @return array
-     */
-    public function batchUpdateTest($index, $param = array())
-    {
-        $batchUpdateField['caseIDList']   = array('1' => 1, '2' => 2, '3' => 3, '4' => 4);
-        $batchUpdateField['pris']         = array('1' => 1, '2' => 2, '3' => 3, '4' => 4);
-        $batchUpdateField['statuses']     = array('1' => 'wait', '2' => 'normal', '3' => 'blocked', '4' => 'investigate');
-        $batchUpdateField['modules']      = array('1' => 0, '2' => 0, '3' => 0, '4' => 0);
-        $batchUpdateField['branches']     = array('1' => 0, '2' => 0, '3' => 0, '4' => 0);
-        $batchUpdateField['story']        = array('1' => 2, '2' => 2, '3' => 2, '4' => 2);
-        $batchUpdateField['product']      = array('1' => 1, '2' => 1, '3' => 1, '4' => 1);
-        $batchUpdateField['title']        = array('1' => '这个是测试用例1', '2' => '这个是测试用例2', '3' => '这个是测试用例3', '4' => '这个是测试用例4');
-        $batchUpdateField['color']        = array('1' => '#3da7f5', '2' => '#75c941', '3' => '#2dbdb2', '4' => '#797ec9');
-        $batchUpdateField['types']        = array('1' => 'feature', '2' => 'performance', '3' => 'config', '4' => 'install');
-        $batchUpdateField['precondition'] = array('1' => '这是前置条件1', '2' => '这是前置条件2', '3' => '这是前置条件3', '4' => '这是前置条件4');
-        $batchUpdateField['keywords']     = array('1' => '这是关键词1', '2' => '这是关键词2', '3' => '这是关键词3', '4' => '这是关键词4');
-        $batchUpdateField['stages']       = array('1' => array('unittest'), '2' => array('feature'), '3' => array('intergrate'), '4' => array('system'));
-
-        foreach($batchUpdateField as $field => $defaultValue) $_POST[$field] = $defaultValue;
-
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $objects = $this->objectModel->batchUpdate();
-
-        unset($_POST);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects[$index][0];
-    }
-
-    /**
      * Test the batch delete method.
      *
      * @param  array  $caseIdList
