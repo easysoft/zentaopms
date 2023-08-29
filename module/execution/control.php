@@ -3708,7 +3708,7 @@ class execution extends control
 
         if($this->app->viewType == 'mhtml')
         {
-            $executionID = $this->execution->saveState(0, $this->executions);
+            $executionID = $this->execution->checkAccess(0, $this->executions);
             $this->execution->setMenu($executionID);
         }
 
