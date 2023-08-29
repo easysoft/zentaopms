@@ -3682,6 +3682,7 @@ class execution extends control
     }
 
     /**
+     * 查看执行列表。
      * All execution.
      *
      * @param  string $status
@@ -3719,13 +3720,8 @@ class execution extends control
         $actionURL = $this->createLink('execution', 'all', "status=bySearch&orderBy=$orderBy&productID=$productID&param=myQueryID");
         $this->execution->buildSearchForm($queryID, $actionURL);
 
-        $executionStats = $this->execution->getStatData(0, $status, $productID, 0, false, $queryID, $orderBy, $pager);
-
-        $allExecutionsNum = $this->execution->getStatData(0, 'all');
-        $this->view->allExecutionsNum = count($allExecutionsNum);
-
         $this->view->title          = $this->lang->execution->allExecutions;
-        $this->view->executionStats = $executionStats;
+        $this->view->executionStats = $this->execution->getStatData(0, $status, $productID, 0, false, $queryID, $orderBy, $pager);
         $this->view->productList    = $this->loadModel('product')->getProductPairsByProject(0);
         $this->view->productID      = $productID;
         $this->view->pager          = $pager;
