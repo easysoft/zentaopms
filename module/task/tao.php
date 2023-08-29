@@ -575,24 +575,6 @@ class taskTao extends taskModel
     }
 
     /**
-     * 根据任务编号查询任务数据。
-     * Fetch a task by id.
-     *
-     * @param  int       $taskID
-     * @param  string    $field
-     * @access protected
-     * @return object|string|false
-     */
-    protected function fetchByID(int $taskID, string $field = ''): object|string|false
-    {
-        $task = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
-        if(empty($field)) return $task;
-
-        $value = isset($task->$field) ? $task->$field : false;
-        return (string)$value;
-    }
-
-    /**
      * 获取执行下的任务。
      * Fetch tasks under execution by executionID(Todo).
      *

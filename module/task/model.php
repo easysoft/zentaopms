@@ -107,7 +107,7 @@ class taskModel extends model
         /* Process other data after split task. */
         if($parentID && !empty($taskIdList))
         {
-            $parentTask = $this->taskTao->fetchByID($parentID);
+            $parentTask = $this->fetchByID($parentID);
             $this->afterSplitTask($parentTask, $taskIdList);
         }
 
@@ -1977,6 +1977,23 @@ class taskModel extends model
     }
 
     /**
+     * 获取未完成的任务。
+     * Get the unfinish tasks.
+     *
+     * @param  int      $executionID
+     * @access public
+     * @return object[]
+     */
+    public function getUnfinishTasks(int $executionID): array
+    {
+        return $this->dao->select('*')->from(TABLE_TASK)
+            ->where('execution')->eq($executionID)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('status')->in('wait,doing,pause')
+            ->fetchAll();
+    }
+
+    /**
      * 获取暂停的项目和执行下，指派给指定用户的任务信息。
      * Get tasks assigned to the user for the suspended project and execution.
      *
@@ -2501,7 +2518,7 @@ class taskModel extends model
      */
     public function recordWorkhour(int $taskID, array $workhour): array
     {
-        $task = $this->taskTao->fetchByID($taskID);
+        $task = $this->fetchByID($taskID);
         $task = $this->taskTao->formatDatetime($task);
         $task->team = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy('order')->fetchAll('id');
 
@@ -2958,7 +2975,7 @@ class taskModel extends model
      */
     public function updateParent(object $task, bool $isParentChanged): void
     {
-        $parentTask = $this->taskTao->fetchByID($task->parent);
+        $parentTask = $this->fetchByID($task->parent);
 
         $this->dao->update(TABLE_TASK)->set('parent')->eq(-1)->where('id')->eq($task->parent)->exec();
 
@@ -2970,7 +2987,7 @@ class taskModel extends model
             $this->loadModel('action')->create('task', $task->id, 'linkParentTask', '', $task->parent, '', false);
             $actionID = $this->action->create('task', $task->parent, 'linkChildTask', '', $task->id, '', false);
 
-            $newParentTask = $this->taskTao->fetchByID($task->parent);
+            $newParentTask = $this->fetchByID($task->parent);
             $changes = common::createChanges($parentTask, $newParentTask);
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
         }
