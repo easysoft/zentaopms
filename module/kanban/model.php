@@ -1516,7 +1516,7 @@ class kanbanModel extends model
      *
      * @param  object $lane
      * @param  array  $columns
-     * @param  array  $bjectGroup
+     * @param  array  $objectGroup
      * @param  string $searchValue
      * @param  array  $storyCardMenu
      * @param  array  $bugCardMenu
@@ -1524,7 +1524,7 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function buildExecutionGroup(object $lane, array $columns, array $bjectGroup, string $searchValue = '', array $storyCardMenu = array(), array $bugCardMenu = array(), array $taskCardMenu = array()): array
+    public function buildExecutionGroup(object $lane, array $columns, array $objectGroup, string $searchValue = '', array $storyCardMenu = array(), array $bugCardMenu = array(), array $taskCardMenu = array()): array
     {
         $laneData   = array();
         $columnData = array();
