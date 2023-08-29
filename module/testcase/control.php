@@ -857,6 +857,7 @@ class testcase extends control
     }
 
     /**
+     * 关联相关用例。
      * Link related cases.
      *
      * @param  int    $caseID
@@ -868,27 +869,31 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function linkCases($caseID, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function linkCases(int $caseID, string $browseType = '', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        /* Get case and queryID. */
-        $case    = $this->testcase->getById($caseID);
-        $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
+        $case = $this->testcase->getByID($caseID);
 
+        /* 设置导航。*/
         /* Set menu. */
         $this->testcase->setMenu($this->products, $case->product, $case->branch);
 
+        /* 构建搜索表单。*/
         /* Build the search form. */
-        $actionURL = $this->createLink('testcase', 'linkCases', "caseID=$caseID&browseType=bySearch&queryID=myQueryID", '', true);
-        $objectID  = 0;
-        if($this->app->tab == 'project') $objectID = $case->project;
+        $objectID = 0;
+        if($this->app->tab == 'project')   $objectID = $case->project;
         if($this->app->tab == 'execution') $objectID = $case->execution;
+
+        $queryID   = ($browseType == 'bySearch') ? (int)$param : 0;
+        $actionURL = $this->createLink('testcase', 'linkCases', "caseID=$caseID&browseType=bySearch&queryID=myQueryID", '', true);
 
         unset($this->config->testcase->search['fields']['product']);
         $this->testcase->buildSearchForm($case->product, $this->products, $queryID, $actionURL, $objectID);
 
+        /* 获取可关联的用例。*/
         /* Get cases to link. */
         $cases2Link = $this->testcase->getCases2Link($caseID, $browseType, $queryID);
 
+        /* 用例分页。*/
         /* Pager. */
         $this->app->loadClass('pager', true);
         $recTotal   = count($cases2Link);
