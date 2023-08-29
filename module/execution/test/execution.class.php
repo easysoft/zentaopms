@@ -997,13 +997,16 @@ class executionTest
      */
     public function getTasksTest($productID, $executionID, $browseType, $queryID, $moduleID, $sort, $count)
     {
-        global $tester;
+        global $tester, $app;
+        $app->moduleName = 'execution';
+        $app->methodName = 'task';
 
         $execution  = $tester->dbh->query("select * from zt_project where id = $executionID")->fetch();
         $executions = array($executionID => $execution->name);
-        $page       = 'NULL';
 
-        $object = $this->executionModel->getTasks($productID, $executionID, $executions, $browseType, $queryID, $moduleID, $sort, $page);
+        $app->loadClass('pager');
+        $pager = new pager(0, 100, 1);
+        $object = $this->executionModel->getTasks($productID, $executionID, $executions, $browseType, $queryID, $moduleID, $sort, $pager);
 
         if(dao::isError())
         {
