@@ -3,6 +3,11 @@
 <?php $datatableId   = $this->moduleName . ucfirst($this->methodName);?>
 <?php js::set('currentMethod', $this->app->rawMethod)?>
 <?php js::set('currentModule', $this->app->rawModule)?>
+<?php
+$showSwitchLink = true;
+if($currentModule == 'execution' && ($currentMethod == 'all' || $currentMethod == 'task')) $showSwitchLink = false;
+if($currentModule == 'product' && $currentMethod == 'browse') $showSwitchLink = false;
+?>
 
 <style>
 #setShowModule {margin-left: 30px;}
@@ -36,7 +41,9 @@ $(function()
             {
                 $dropmenu.append("<li><a href='<?php echo $this->createLink('datatable', 'ajaxCustom', 'id=' . $this->moduleName . '&method=' . $this->methodName)?>' data-toggle='modal' data-type='ajax'><?php echo $lang->datatable->custom?></a></li>");
             }
-            if(!(currentModule == 'execution' && (currentMethod == 'all' || currentMethod == 'task'))) $dropmenu.append("<li><a href='javascript:saveDatatableConfig(\"mode\", \"<?php echo $mode == 'table' ? 'datatable' : 'table';?>\", true);' id='switchToDatatable'><?php echo $mode == 'table' ? $lang->datatable->switchToDatatable : $lang->datatable->switchToTable;?></a></li>");
+            <?php if($showSwitchLink):?>
+            $dropmenu.append("<li><a href='javascript:saveDatatableConfig(\"mode\", \"<?php echo $mode == 'table' ? 'datatable' : 'table';?>\", true);' id='switchToDatatable'><?php echo $mode == 'table' ? $lang->datatable->switchToDatatable : $lang->datatable->switchToTable;?></a></li>");
+            <?php endif;?>
             $dropdown.append($dropmenu)
               .appendTo($btnToolbar)
               .on('shown.zui.dropdown', function(){$btnToolbar.closest('.table-header').css('z-index', 11);})

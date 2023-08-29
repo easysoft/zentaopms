@@ -4576,8 +4576,8 @@ class storyModel extends model
         $story->notReview = isset($story->notReview) ? $story->notReview : array();
         $isSuperReviewer = strpos(',' . trim(zget($config->story, 'superReviewers', ''), ',') . ',', ',' . $app->user->account . ',');
 
-        if($action == 'change')     return (($isSuperReviewer !== false or count($story->reviewer) == 0 or count($story->notReview) == 0) and $story->status == 'active');
-        if($action == 'review')     return (($isSuperReviewer !== false or in_array($app->user->account, $story->notReview)) and $story->status == 'reviewing');
+        if($action == 'change') return (($isSuperReviewer !== false or count($story->reviewer) == 0 or count($story->notReview) == 0) and $story->status == 'active');
+        if($action == 'review') return (($isSuperReviewer !== false or in_array($app->user->account, $story->notReview)) and $story->status == 'reviewing');
 
         return true;
     }
@@ -4599,126 +4599,121 @@ class storyModel extends model
 
         if($type == 'browse')
         {
-            if(common::canBeChanged('story', $story))
+            if(!common::canBeChanged('story', $story)) return $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, 'list', '', '', 'iframe', true);
+
+            $storyReviewer = isset($story->reviewer) ? $story->reviewer : array();
+            if($story->URChanged) return $this->buildMenu('story', 'processStoryChange', $params, $story, $type, 'ok', '', 'iframe', true, '', $this->lang->confirm);
+
+            $isClick = $this->isClickable($story, 'change');
+            $title   = $isClick ? '' : $this->lang->story->changeTip;
+            $menu   .= $this->buildMenu('story', 'change', $params . "&from=&storyType=$story->type", $story, $type, 'alter', '', 'showinonlybody', false, '', $title);
+
+            if($story->status != 'reviewing')
             {
-                $storyReviewer = isset($story->reviewer) ? $story->reviewer : array();
-                if($story->URChanged) return $this->buildMenu('story', 'processStoryChange', $params, $story, $type, 'ok', '', 'iframe', true, '', $this->lang->confirm);
-
-                $isClick = $this->isClickable($story, 'change');
-                $title   = $isClick ? '' : $this->lang->story->changeTip;
-                $menu   .= $this->buildMenu('story', 'change', $params . "&from=&storyType=$story->type", $story, $type, 'alter', '', 'showinonlybody', false, '', $title);
-
-                if($story->status != 'reviewing')
-                {
-                    $menu .= $this->buildMenu('story', 'submitReview', "storyID=$story->id&storyType=$story->type", $story, $type, 'confirm', '', 'iframe', true, "data-width='50%'");
-                }
-                else
-                {
-                    $isClick = $this->isClickable($story, 'review');
-                    $title   = $this->lang->story->review;
-                    if(!$isClick and $story->status != 'closed')
-                    {
-                        if($story->status == 'active')
-                        {
-                            $title = $this->lang->story->reviewTip['active'];
-                        }
-                        elseif($storyReviewer and in_array($this->app->user->account, $storyReviewer))
-                        {
-                            $title = $this->lang->story->reviewTip['reviewed'];
-                        }
-                        elseif($storyReviewer and !in_array($this->app->user->account, $storyReviewer))
-                        {
-                            $title = $this->lang->story->reviewTip['notReviewer'];
-                        }
-                    }
-                    $menu .= $this->buildMenu('story', 'review', $params . "&from=$story->from&storyType=$story->type", $story, $type, 'search', '', 'showinonlybody', false, '', $title);
-                }
-
-                $isClick = $this->isClickable($story, 'recall');
-                $title   = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
-                $title   = $isClick ? $title : $this->lang->story->recallTip['actived'];
-                $menu   .= $this->buildMenu('story', 'recall', $params . "&from=list&confirm=no&storyType=$story->type", $story, $type, 'undo', 'hiddenwin', 'showinonlybody', false, '', $title);
-                $menu   .= $this->buildMenu('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type", $story, $type, '', '', 'showinonlybody');
-
-                $vars            = "storyType={$story->type}";
-                $canChange       = common::hasPriv('story', 'change', '', $vars);
-                $canRecall       = common::hasPriv('story', 'recall', '', $vars);
-                $canSubmitReview = (strpos('draft,changing', $story->status) !== false and common::hasPriv('story', 'submitReview', '', $vars));
-                $canReview       = (strpos('draft,changing', $story->status) === false and common::hasPriv('story', 'review', '', $vars));
-                $canEdit         = common::hasPriv('story', 'edit', '', $vars);
-                $canBatchCreate  = ($this->app->tab == 'product' and (common::hasPriv('story', 'batchCreate', '', 'storyType=story')));
-                $canCreateCase   = ($story->type == 'story' and common::hasPriv('testcase', 'create'));
-                $canClose        = common::hasPriv('story', 'close', '', $vars);
-                $canUnlinkStory  = ($this->app->tab == 'project' and common::hasPriv('projectstory', 'unlinkStory'));
-
-                if(in_array($this->app->tab, array('product', 'project')))
-                {
-                    if(($canChange or $canRecall or $canSubmitReview or $canReview or $canEdit) and ($canCreateCase or $canBatchCreate or $canClose or $canUnlinkStory))
-                    {
-                        $menu .= "<div class='dividing-line'></div>";
-                    }
-                }
-
-                if($this->app->tab == 'product' and $storyType == 'requirement')
-                {
-                    if($story->status != 'closed')
-                    {
-                        $menu .= $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, $type, '', '', 'iframe', true);
-                    }
-                    else
-                    {
-                        $menu .= $this->buildMenu('story', 'activate', $params . "&storyType=$story->type", $story, $type, '', '', 'iframe showinonlybody', true);
-                    }
-
-                    if($canClose and ($canBatchCreate or $canCreateCase)) $menu .= "<div class='dividing-line'></div>";
-                }
-
-                if($story->type != 'requirement' and $this->config->vision != 'lite') $menu .= $this->buildMenu('testcase', 'create', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params", $story, $type, 'sitemap', '', 'iframe showinonlybody', true, "data-app='{$this->app->tab}'");
-
-                $shadow = $this->dao->findByID($story->product)->from(TABLE_PRODUCT)->fetch('shadow');
-                if($this->app->rawModule != 'projectstory' OR $this->config->vision == 'lite' OR $shadow OR $story->type == 'requirement')
-                {
-                    $isClick = $this->isClickable($story, 'batchcreate');
-                    $title   = $story->type == 'story' ? $this->lang->story->subdivideSR : $this->lang->story->subdivide;
-                    if(!$isClick and $story->status != 'closed')
-                    {
-                        if($story->parent > 0)
-                        {
-                            $title = $this->lang->story->subDivideTip['subStory'];
-                        }
-                        elseif(!empty($story->twins))
-                        {
-                            $title = $this->lang->story->subDivideTip['twinsSplit'];
-                        }
-                        else
-                        {
-                            if($story->status != 'active') $title = sprintf($this->lang->story->subDivideTip['notActive'], $story->type == 'story' ? $this->lang->SRCommon : $this->lang->URCommon);
-                            if($story->status == 'active' and $story->stage != 'wait') $title = sprintf($this->lang->story->subDivideTip['notWait'], zget($this->lang->story->stageList, $story->stage));
-                        }
-                    }
-
-                    $executionID = empty($execution) ? 0 : $execution->id;
-                    if($this->config->vision != 'or') $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0&storyType=story", $story, $type, 'split', '', 'showinonlybody', '', '', $title);
-                }
-
-                if(($this->app->rawModule == 'projectstory' or ($this->app->tab != 'product' and $storyType == 'requirement')) and $this->config->vision != 'lite')
-                {
-                    if($canClose) $menu .= "<div class='dividing-line'></div>";
-
-                    $menu .= $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, $type, '', '', 'iframe', true);
-                    if(!empty($execution) and $execution->hasProduct and !($storyType == 'requirement' and $story->type == 'story')) $menu .= $this->buildMenu('projectstory', 'unlinkStory', "projectID={$this->session->project}&$params", $story, $type, 'unlink', 'hiddenwin', 'showinonlybody');
-                }
-
-                if($this->app->tab == 'product' and $storyType == 'story')
-                {
-                    if(($canBatchCreate or $canCreateCase) and $canClose) $menu .= "<div class='dividing-line'></div>";
-
-                    $menu .= $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, $type, '', '', 'iframe', true);
-                }
+                $menu .= $this->buildMenu('story', 'submitReview', "storyID=$story->id&storyType=$story->type", $story, $type, 'confirm', '', 'iframe', true, "data-width='50%'");
             }
             else
             {
-                return $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, 'list', '', '', 'iframe', true);
+                $isClick = $this->isClickable($story, 'review');
+                $title   = $this->lang->story->review;
+                if(!$isClick and $story->status != 'closed')
+                {
+                    if($story->status == 'active')
+                    {
+                        $title = $this->lang->story->reviewTip['active'];
+                    }
+                    elseif($storyReviewer and in_array($this->app->user->account, $storyReviewer))
+                    {
+                        $title = $this->lang->story->reviewTip['reviewed'];
+                    }
+                    elseif($storyReviewer and !in_array($this->app->user->account, $storyReviewer))
+                    {
+                        $title = $this->lang->story->reviewTip['notReviewer'];
+                    }
+                }
+                $menu .= $this->buildMenu('story', 'review', $params . "&from=&storyType=$story->type", $story, $type, 'search', '', 'showinonlybody', false, '', $title);
+            }
+
+            $isClick = $this->isClickable($story, 'recall');
+            $title   = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
+            $title   = $isClick ? $title : $this->lang->story->recallTip['actived'];
+            $menu   .= $this->buildMenu('story', 'recall', $params . "&from=list&confirm=no&storyType=$story->type", $story, $type, 'undo', 'hiddenwin', 'showinonlybody', false, '', $title);
+            $menu   .= $this->buildMenu('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type", $story, $type, '', '', 'showinonlybody');
+
+            $vars            = "storyType={$story->type}";
+            $canChange       = common::hasPriv('story', 'change', '', $vars);
+            $canRecall       = common::hasPriv('story', 'recall', '', $vars);
+            $canSubmitReview = (strpos('draft,changing', $story->status) !== false and common::hasPriv('story', 'submitReview', '', $vars));
+            $canReview       = (strpos('draft,changing', $story->status) === false and common::hasPriv('story', 'review', '', $vars));
+            $canEdit         = common::hasPriv('story', 'edit', '', $vars);
+            $canBatchCreate  = ($this->app->tab == 'product' and (common::hasPriv('story', 'batchCreate', '', 'storyType=story')));
+            $canCreateCase   = ($story->type == 'story' and common::hasPriv('testcase', 'create'));
+            $canClose        = common::hasPriv('story', 'close', '', $vars);
+            $canUnlinkStory  = ($this->app->tab == 'project' and common::hasPriv('projectstory', 'unlinkStory'));
+
+            if(in_array($this->app->tab, array('product', 'project')))
+            {
+                if(($canChange or $canRecall or $canSubmitReview or $canReview or $canEdit) and ($canCreateCase or $canBatchCreate or $canClose or $canUnlinkStory))
+                {
+                    $menu .= "<div class='dividing-line'></div>";
+                }
+            }
+
+            if($this->app->tab == 'product' and $storyType == 'requirement')
+            {
+                if($story->status != 'closed')
+                {
+                    $menu .= $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, $type, '', '', 'iframe', true);
+                }
+                else
+                {
+                    $menu .= $this->buildMenu('story', 'activate', $params . "&storyType=$story->type", $story, $type, '', '', 'iframe showinonlybody', true);
+                }
+
+                if($canClose and ($canBatchCreate or $canCreateCase)) $menu .= "<div class='dividing-line'></div>";
+            }
+
+            if($story->type != 'requirement' and $this->config->vision != 'lite') $menu .= $this->buildMenu('testcase', 'create', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params", $story, $type, 'sitemap', '', 'iframe showinonlybody', true, "data-app='{$this->app->tab}'");
+
+            $shadow = $this->dao->findByID($story->product)->from(TABLE_PRODUCT)->fetch('shadow');
+            if($this->app->rawModule != 'projectstory' OR $this->config->vision == 'lite' OR $shadow OR $story->type == 'requirement')
+            {
+                $isClick = $this->isClickable($story, 'batchcreate');
+                $title   = $story->type == 'story' ? $this->lang->story->subdivideSR : $this->lang->story->subdivide;
+                if(!$isClick and $story->status != 'closed')
+                {
+                    if($story->parent > 0)
+                    {
+                        $title = $this->lang->story->subDivideTip['subStory'];
+                    }
+                    elseif(!empty($story->twins))
+                    {
+                        $title = $this->lang->story->subDivideTip['twinsSplit'];
+                    }
+                    else
+                    {
+                        if($story->status != 'active') $title = sprintf($this->lang->story->subDivideTip['notActive'], $story->type == 'story' ? $this->lang->SRCommon : $this->lang->URCommon);
+                        if($story->status == 'active' and $story->stage != 'wait') $title = sprintf($this->lang->story->subDivideTip['notWait'], zget($this->lang->story->stageList, $story->stage));
+                    }
+                }
+
+                $executionID = empty($execution) ? 0 : $execution->id;
+                if($this->config->vision != 'or') $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0&storyType=story", $story, $type, 'split', '', 'showinonlybody', '', '', $title);
+            }
+
+            if(($this->app->rawModule == 'projectstory' or ($this->app->tab != 'product' and $storyType == 'requirement')) and $this->config->vision != 'lite')
+            {
+                if($canClose) $menu .= "<div class='dividing-line'></div>";
+
+                $menu .= $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, $type, '', '', 'iframe', true);
+                if(!empty($execution) and $execution->hasProduct and !($storyType == 'requirement' and $story->type == 'story')) $menu .= $this->buildMenu('projectstory', 'unlinkStory', "projectID={$this->session->project}&$params", $story, $type, 'unlink', 'hiddenwin', 'showinonlybody');
+            }
+
+            if($this->app->tab == 'product' and $storyType == 'story')
+            {
+                if(($canBatchCreate or $canCreateCase) and $canClose) $menu .= "<div class='dividing-line'></div>";
+
+                $menu .= $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, $type, '', '', 'iframe', true);
             }
         }
 
@@ -5417,7 +5412,7 @@ class storyModel extends model
         $btnClass    .= $story->assignedTo == 'closed' ? ' disabled' : '';
         $btnClass    .= ' iframe btn btn-icon-left btn-sm';
         $assignToLink = helper::createLink('story', 'assignTo', "storyID=$story->id&kanbanGroup=default&from=&storyType=$story->type", '', true);
-        $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span>{$assignedToText}</span>", '', "class='$btnClass'");
+        $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span>{$assignedToText}</span>", '', "class='$btnClass' data-toggle='modal'");
         $assignToHtml = !common::hasPriv($story->type, 'assignTo', $story) ? "<span style='padding-left: 21px' class='$btnTextClass'>{$assignedToText}</span>" : $assignToHtml;
 
         if(!$print) return $assignToHtml;
@@ -6773,9 +6768,13 @@ class storyModel extends model
         if($this->config->vision == 'or') $this->app->loadLang('demand');
         foreach($stories as $story)
         {
+            $menuType = 'browse';
+            if(($tab == 'execution' || ($tab == 'project' and $this->session->multiple)) && $storyType == 'story') $menuType = 'execution';
+
             if(!empty($branchOptions)) $branches = zget($branchOptions, $story->product, array());
             $story->estimateNum  = $story->estimate;;
             $story->caseCountNum = zget($storyCases, $story->id, 0);
+            $story->actions      = '<div class="c-actions">' . $this->buildOperateMenu($story, $menuType, $execution, $storyType) . '</div>';
             foreach($cols as $col)
             {
                 if($col->name == 'assignedTo') $story->assignedTo = $this->printAssignedHtml($story, $users, false);
@@ -6848,12 +6847,6 @@ class storyModel extends model
                 {
                     $mailto = array_map(function($account) use($users){$account = trim($account); return zget($users, $account);}, explode(',', $story->mailto));
                     $story->mailto = implode(' ', $mailto);
-                }
-                if($col->name == 'actions')
-                {
-                    $menuType = 'browse';
-                    if(($tab == 'execution' || ($tab == 'project' and $this->session->multiple)) && $storyType == 'story') $menuType = 'execution';
-                    $story->actions = '<div class="c-actions">' . $this->buildOperateMenu($story, $menuType, $execution, $storyType) . '</div>';
                 }
                 if(in_array($col->name, $userFields)) $story->{$col->name} = zget($users, $story->{$col->name});
                 if(in_array($col->name, $dateFields)) $story->{$col->name} = helper::isZeroDate($story->{$col->name}) ? '' : substr($story->{$col->name}, 5, 11);

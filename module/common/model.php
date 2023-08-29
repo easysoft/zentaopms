@@ -1720,10 +1720,6 @@ EOF;
 
         global $app, $lang, $config;
 
-        /* Add data-app attribute. */
-        if(strpos($misc, 'data-app') === false) $misc .= ' data-app="' . $app->tab . '"';
-        if($onlyBody && strpos($misc, 'data-toggle') === false) $misc .= ' data-toggle="modal"';
-
         /* Judge the $method of $module clickable or not, default is clickable. */
         $clickable = true;
         if(is_bool($extraEnabled))
@@ -1741,6 +1737,10 @@ EOF;
                 $clickable = call_user_func_array(array($modelClass, 'isClickable'), array($object, $method));
             }
         }
+
+        /* Add data-app attribute. */
+        if(strpos($misc, 'data-app') === false) $misc .= ' data-app="' . $app->tab . '"';
+        if($onlyBody && strpos($misc, 'data-toggle') === false && $clickable) $misc .= ' data-toggle="modal"';
 
         /* Set module and method, then create link to it. */
         if(strtolower($module) == 'story'    and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
