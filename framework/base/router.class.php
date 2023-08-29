@@ -3090,7 +3090,12 @@ class baseRouter
             $isNonSeriousError = $level !== E_ERROR && $level !== E_PARSE && $level !== E_CORE_ERROR && $level !== E_COMPILE_ERROR;
             if($isZinRequest && $isNonSeriousError)
             {
-                $this->zinErrors[] = array('file' => $file, 'line' => $line, 'message' => $message, 'level' => $level);
+                /* Generate error stack trace info. */
+                $e     = new Exception();
+                $trace = $e->getTrace();
+                array_shift($trace); // remove call to this method.
+
+                $this->zinErrors[] = array('file' => $file, 'line' => $line, 'message' => $message, 'level' => $level, 'trace' => $trace);
                 return;
             }
 
