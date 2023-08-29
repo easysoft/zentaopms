@@ -757,6 +757,7 @@ class testcaseModel extends model
     }
 
     /**
+     * 获取可关联的用例。
      * Get cases to link.
      *
      * @param  int    $caseID
@@ -765,26 +766,22 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getCases2Link($caseID, $browseType = 'bySearch', $queryID = 0)
+    public function getCases2Link(int $caseID, string $browseType = 'bySearch', int $queryID = 0): array
     {
-        if($browseType == 'bySearch')
+        if($browseType != 'bySearch') return array();
+
+        $case       = $this->getByID($caseID);
+        $cases2Link = $this->getBySearch($case->product, $queryID, 'id', null, $case->branch);
+        foreach($cases2Link as $key => $case2Link)
         {
-            $case       = $this->getById($caseID);
-            $cases2Link = $this->getBySearch($case->product, $queryID, 'id', null, $case->branch);
-            foreach($cases2Link as $key => $case2Link)
-            {
-                if($case2Link->id == $caseID) unset($cases2Link[$key]);
-                if(in_array($case2Link->id, explode(',', $case->linkCase))) unset($cases2Link[$key]);
-            }
-            return $cases2Link;
+            if($case2Link->id == $caseID) unset($cases2Link[$key]);
+            if(in_array($case2Link->id, explode(',', $case->linkCase))) unset($cases2Link[$key]);
         }
-        else
-        {
-            return array();
-        }
+        return $cases2Link;
     }
 
     /**
+     * 获取可关联的 bug。
      * Get bugs to link.
      *
      * @param  int    $caseID
@@ -793,23 +790,17 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getBugs2Link($caseID, $browseType = 'bySearch', $queryID = 0)
+    public function getBugs2Link(int $caseID, string $browseType = 'bySearch', int $queryID = 0): array
     {
-        $this->loadModel('bug');
-        if($browseType == 'bySearch')
+        if($browseType != 'bySearch') return array();
+
+        $case      = $this->getByID($caseID);
+        $bugs2Link = $this->loadModel('bug')->getBySearch($case->product, $case->branch, $queryID, 'id');
+        foreach($bugs2Link as $key => $bug2Link)
         {
-            $case      = $this->getById($caseID);
-            $bugs2Link = $this->bug->getBySearch($case->product, $case->branch, $queryID, 'id');
-            foreach($bugs2Link as $key => $bug2Link)
-            {
-                if($bug2Link->case != 0) unset($bugs2Link[$key]);
-            }
-            return $bugs2Link;
+            if($bug2Link->case != 0) unset($bugs2Link[$key]);
         }
-        else
-        {
-            return array();
-        }
+        return $bugs2Link;
     }
 
     /**
