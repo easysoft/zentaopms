@@ -3649,7 +3649,7 @@ class execution extends control
         if($_POST)
         {
             $this->story->saveEstimateInfo($storyID);
-            if(dao::isError()) return $this->sendErrot(dao::getError());
+            if(dao::isError()) return $this->sendError(dao::getError());
 
             $this->loadModel('action')->create('story', $storyID, 'estimated', '', $executionID);
             return $this->sendSuccess(array('load' => true, 'closeModal' => true));
