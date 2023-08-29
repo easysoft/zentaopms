@@ -2671,13 +2671,14 @@ class executionTest
     }
 
     /**
-     * Test set menu.
+     * 设置看板执行的菜单。
+     * Set kanban menu.
      *
-     * @param  int    $executionID
+     * @param  int           $executionID
      * @access public
-     * @return string
+     * @return object|string
      */
-    public function setMenuTest($executionID = 0)
+    public function setMenuTest($executionID = 0): object|string
     {
         $execution = $this->executionModel->getByID($executionID);
         if(empty($execution)) return '0';
@@ -2685,7 +2686,7 @@ class executionTest
         $this->executionModel->setMenu($executionID);
 
         global $lang;
-        return strip_tags($lang->switcherMenu);
+        return $lang->execution->menu;
     }
 
     /**

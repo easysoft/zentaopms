@@ -95,51 +95,31 @@ class executionModel extends model
     }
 
     /**
+     * 设置执行导航。
      * Set menu.
      *
      * @param  int    $executionID
-     * @param  int    $buildID
-     * @param  string $extra
      * @access public
      * @return void
      */
-    public function setMenu($executionID, $buildID = 0, $extra = '')
+    public function setMenu(int $executionID)
     {
         $execution = $this->getByID($executionID);
         if(!$execution) return;
 
-        if($execution and $execution->type == 'kanban')
-        {
-            global $lang;
-            $lang->executionCommon = $lang->execution->kanban;
-            include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
-
-            $this->lang->execution->menu           = new stdclass();
-            $this->lang->execution->menu->kanban   = array('link' => "{$this->lang->kanban->common}|execution|kanban|executionID=%s", 'subModule' => 'task');
-            $this->lang->execution->menu->CFD      = array('link' => "{$this->lang->execution->CFD}|execution|cfd|executionID=%s");
-            $this->lang->execution->menu->build    = array('link' => "{$this->lang->build->common}|execution|build|executionID=%s");
-            $this->lang->execution->menu->settings = array('link' => "{$this->lang->settings}|execution|view|executionID=%s", 'subModule' => 'personnel', 'alias' => 'edit,manageproducts,team,whitelist,addwhitelist,managemembers', 'class' => 'dropdown dropdown-hover');
-            $this->lang->execution->dividerMenu    = '';
-
-            $this->lang->execution->menu->settings['subMenu']            = new stdclass();
-            $this->lang->execution->menu->settings['subMenu']->view      = array('link' => "{$this->lang->overview}|execution|view|executionID=%s", 'subModule' => 'view', 'alias' => 'edit,start,suspend,putoff,close');
-            $this->lang->execution->menu->settings['subMenu']->products  = array('link' => "{$this->lang->productCommon}|execution|manageproducts|executionID=%s");
-            $this->lang->execution->menu->settings['subMenu']->team      = array('link' => "{$this->lang->team->common}|execution|team|executionID=%s", 'alias' => 'managemembers');
-            $this->lang->execution->menu->settings['subMenu']->whitelist = array('link' => "{$this->lang->whitelist}|execution|whitelist|executionID=%s", 'subModule' => 'personnel', 'alias' => 'addwhitelist');
-        }
+        if($execution->type == 'kanban') $this->executionTao->setKanbanMenu();
 
         $project = $this->loadModel('project')->getByID($execution->project);
+        if($execution->type == 'stage' || (!empty($project) && $project->model == 'waterfallplus')) unset($this->lang->execution->menu->settings['subMenu']->products);
 
-        if($execution->type == 'stage' or (!empty($project) and $project->model == 'waterfallplus')) unset($this->lang->execution->menu->settings['subMenu']->products);
-
-        if(!$this->app->user->admin and strpos(",{$this->app->user->view->sprints},", ",$executionID,") === false and !commonModel::isTutorialMode() and $executionID != 0) return print(js::error($this->lang->execution->accessDenied) . js::locate('back'));
-
+        /* Check execution permission. */
         $executions = $this->getPairs(0, 'all', 'nocode');
-        if(!$executionID and $this->session->execution) $executionID = $this->session->execution;
-        if(!$executionID or !in_array($executionID, array_keys($executions))) $executionID = key($executions);
-        $this->session->set('execution', $executionID, $this->app->tab);
+        if(!$executionID && $this->session->execution) $executionID = $this->session->execution;
+        if(!$executionID || !in_array($executionID, array_keys($executions))) $executionID = key($executions);
+        if($executions && (!isset($executions[$executionID]) || !$this->checkPriv($executionID))) return $this->accessDenied();
 
-        if($execution and $execution->type == 'stage')
+        /* Replaces the iterated language with the stage. */
+        if($execution->type == 'stage')
         {
             global $lang;
             $this->app->loadLang('project');
@@ -147,9 +127,41 @@ class executionModel extends model
             include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
         }
 
-        if(isset($execution->acl) and $execution->acl != 'private') unset($this->lang->execution->menu->settings['subMenu']->whitelist);
+        /* Set secondary navigation based on the conditions. */
+        $this->removeMenu($execution);
 
-        /* Redjust menus. */
+        if($this->cookie->executionMode == 'noclosed' && $execution && ($execution->status == 'done' || $execution->status == 'closed'))
+        {
+            helper::setcookie('executionMode', 'all');
+            $this->cookie->executionMode = 'all';
+        }
+
+        $this->session->set('execution', $executionID, $this->app->tab);
+        common::setMenuVars('execution', $executionID);
+
+        /* Set stroy navigation for no-product project. */
+        $this->loadModel('project')->setNoMultipleMenu($executionID);
+        if(isset($this->lang->execution->menu->storyGroup)) unset($this->lang->execution->menu->storyGroup);
+        if(isset($this->lang->execution->menu->story['dropMenu']) && $this->app->getMethodName() == 'storykanban')
+        {
+            unset($this->lang->execution->menu->story['dropMenu']);
+            $this->lang->execution->menu->story['link'] = str_replace(array($this->lang->common->story, 'story'), array($this->lang->SRCommon, 'storykanban'), $this->lang->execution->menu->story['link']);
+        }
+    }
+
+    /**
+     * 根据条件设置执行二级导航。
+     * Set secondary navigation based on the conditions.
+     *
+     * @param  object $execution
+     * @access public
+     * @return void
+     */
+    public function removeMenu(object $execution)
+    {
+        if(empty($execution->hasProduct)) unset($this->lang->execution->menu->settings['subMenu']->products);
+        if(isset($execution->acl) && $execution->acl != 'private') unset($this->lang->execution->menu->settings['subMenu']->whitelist);
+
         $features = $this->getExecutionFeatures($execution);
         if(!$features['story'])  unset($this->lang->execution->menu->story);
         if(!$features['story'])  unset($this->lang->execution->menu->view['subMenu']->groupTask);
@@ -159,32 +171,7 @@ class executionModel extends model
         if(!$features['build'])  unset($this->lang->execution->menu->build);
         if(!$features['burn'])   unset($this->lang->execution->menu->burn);
         if(!$features['other'])  unset($this->lang->execution->menu->other);
-        if(!$features['story'] and $this->config->edition == 'open') unset($this->lang->execution->menu->view);
-
-        if($executions and (!isset($executions[$executionID]) or !$this->checkPriv($executionID))) $this->accessDenied();
-
-        $moduleName = $this->app->getModuleName();
-        $methodName = $this->app->getMethodName();
-
-        if($this->cookie->executionMode == 'noclosed' and $execution and ($execution->status == 'done' or $execution->status == 'closed'))
-        {
-            helper::setcookie('executionMode', 'all');
-            $this->cookie->executionMode = 'all';
-        }
-
-        if(empty($execution->hasProduct)) unset($this->lang->execution->menu->settings['subMenu']->products);
-
-        $this->lang->switcherMenu = $this->getSwitcher($executionID, $this->app->rawModule, $this->app->rawMethod);
-        common::setMenuVars('execution', $executionID);
-
-        $this->loadModel('project')->setNoMultipleMenu($executionID);
-
-        if(isset($this->lang->execution->menu->storyGroup)) unset($this->lang->execution->menu->storyGroup);
-        if(isset($this->lang->execution->menu->story['dropMenu']) and $methodName == 'storykanban')
-        {
-            unset($this->lang->execution->menu->story['dropMenu']);
-            $this->lang->execution->menu->story['link'] = str_replace(array($this->lang->common->story, 'story'), array($this->lang->SRCommon, 'storykanban'), $this->lang->execution->menu->story['link']);
-        }
+        if(!$features['story'] && $this->config->edition == 'open') unset($this->lang->execution->menu->view);
     }
 
     /**

@@ -75,4 +75,31 @@ class executionTao extends executionModel
         }
         return $productList;
     }
+
+    /**
+     * 设置看板执行的菜单。
+     * Set kanban menu.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function setKanbanMenu()
+    {
+        global $lang;
+        $lang->executionCommon = $lang->execution->kanban;
+        include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
+
+        $this->lang->execution->menu           = new stdclass();
+        $this->lang->execution->menu->kanban   = array('link' => "{$this->lang->kanban->common}|execution|kanban|executionID=%s", 'subModule' => 'task');
+        $this->lang->execution->menu->CFD      = array('link' => "{$this->lang->execution->CFD}|execution|cfd|executionID=%s");
+        $this->lang->execution->menu->build    = array('link' => "{$this->lang->build->common}|execution|build|executionID=%s");
+        $this->lang->execution->menu->settings = array('link' => "{$this->lang->settings}|execution|view|executionID=%s", 'subModule' => 'personnel', 'alias' => 'edit,manageproducts,team,whitelist,addwhitelist,managemembers', 'class' => 'dropdown dropdown-hover');
+        $this->lang->execution->dividerMenu    = '';
+
+        $this->lang->execution->menu->settings['subMenu']            = new stdclass();
+        $this->lang->execution->menu->settings['subMenu']->view      = array('link' => "{$this->lang->overview}|execution|view|executionID=%s", 'subModule' => 'view', 'alias' => 'edit,start,suspend,putoff,close');
+        $this->lang->execution->menu->settings['subMenu']->products  = array('link' => "{$this->lang->productCommon}|execution|manageproducts|executionID=%s");
+        $this->lang->execution->menu->settings['subMenu']->team      = array('link' => "{$this->lang->team->common}|execution|team|executionID=%s", 'alias' => 'managemembers');
+        $this->lang->execution->menu->settings['subMenu']->whitelist = array('link' => "{$this->lang->whitelist}|execution|whitelist|executionID=%s", 'subModule' => 'personnel', 'alias' => 'addwhitelist');
+    }
 }

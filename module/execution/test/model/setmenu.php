@@ -20,15 +20,12 @@ $execution->gen(5);
 /**
 
 title=测试 executionModel::setMenu();
+timeout=0
 cid=1
-pid=1
-
-执行存在的情况   >> 迭代1
-执行不存在的情况 >> 0
 
 */
 
 $executionTester = new executionTest();
 
-r($executionTester->setMenuTest(3))  && p() && e('迭代1'); // 执行存在的情况
-r($executionTester->setMenuTest(10)) && p() && e('0');     // 执行不存在的情况
+r($executionTester->setMenuTest(3))  && p('more:link') && e('更多|execution|more|3'); // 执行存在的情况
+r($executionTester->setMenuTest(10)) && p()            && e('0');                     // 执行不存在的情况
