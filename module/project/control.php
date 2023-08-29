@@ -1397,7 +1397,7 @@ class project extends control
     {
         $projectID = $this->project->setMenu($projectID);
         $project   = $this->project->getByID($projectID);
-        if(isset($project->acl) and $project->acl == 'open') $this->locate($this->createLink('project', 'index', "projectID=$projectID"));
+        if(isset($project->acl) and $project->acl == 'open') return $this->sendError($this->lang->whitelistNotNeed, $this->createLink('project', 'index', "projectID=$projectID"));
 
         echo $this->fetch('personnel', 'whitelist', "objectID=$projectID&module=project&browseType=project&orderBy=id_desc&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID&from=$from");
     }
@@ -1419,7 +1419,7 @@ class project extends control
     {
         $projectID = $this->project->setMenu($projectID);
         $project   = $this->project->getByID($projectID);
-        if(isset($project->acl) and $project->acl == 'open') $this->locate($this->createLink('project', 'index', "projectID=$projectID"));
+        if(isset($project->acl) and $project->acl == 'open') return $this->sendError($this->lang->whitelistNotNeed, $this->createLink('project', 'index', "projectID=$projectID"));
 
         echo $this->fetch('personnel', 'addWhitelist', "objectID=$projectID&dept=$deptID&copyID=$copyID&objectType=project&module=project&programID=$programID&from=$from");
     }
