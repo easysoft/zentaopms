@@ -25,6 +25,18 @@ class metricTao extends metricModel
     }
 
     /**
+     * 获取用户自定义的度量项计算文件的根目录。
+     * Get root of custom metric calculator.
+     *
+     * @access protected
+     * @return string
+     */
+    protected function getCustomCalcRoot()
+    {
+        return $this->app->getTmpRoot() . 'metric' .DS;
+    }
+
+    /**
      * 获取数据集文件的路径
      * Get path of calculator data set.
      *
@@ -94,4 +106,25 @@ class metricTao extends metricModel
             ->groupBy('object, purpose')
             ->fetchAll();
     }
+
+    /**
+     * 通过反射获取类的函数列表。
+     * Get method name list of class by reflection.
+     *
+     * @param  string $file
+     * @param  string $className
+     * @access public
+     * @return array
+     */
+    public function getMethodNameList($className)
+    {
+        $classReflection = new ReflectionClass($className);
+        $methods = $classReflection->getMethods();
+
+        $methodNameList = array();
+        foreach($methods as $index => $reflectionMethod) $methodNameList[$index] = $reflectionMethod->name;
+
+        return $methodNameList;
+    }
+
 }
