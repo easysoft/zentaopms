@@ -177,7 +177,7 @@ class metricZen extends metric
         $legendBasic['object']  = array('name' => $this->lang->metric->object, 'text' => zget($this->lang->metric->objectList, $metric->object));
         $legendBasic['purpose'] = array('name' => $this->lang->metric->purpose, 'text' => zget($this->lang->metric->purposeList, $metric->purpose));
         $legendBasic['code']    = array('name' => $this->lang->metric->code, 'text' => $metric->code);
-        $legendBasic['unit']    = array('name' => $this->lang->metric->unit, 'text' => $metric->unit);
+        $legendBasic['unit']    = array('name' => $this->lang->metric->unit, 'text' => zget($this->lang->metric->unitList, $metric->unit));
         $legendBasic['stage']   = array('name' => $this->lang->metric->stage, 'text' => zget($this->lang->metric->stageList, $metric->stage));
 
         return $legendBasic;

@@ -122,6 +122,7 @@ class metric extends control
      */
     public function view(int $metricID)
     {
+        $this->metricZen->processUnitList();
         $metric = $this->metric->getByID($metricID);
         $result = $this->metric->getResultByCode($metric->code);
 
