@@ -21,8 +21,6 @@ $lang->metric->metricData    = "Metric Data";
 $lang->metric->system        = "system";
 $lang->metric->create        = "Create " . $this->lang->metric->common;
 
-$lang->metric->nameTip       = 'The [scope] of [object][index]';
-$lang->metric->codeTip       = '[index]_of_[object]_in_[scpoe]';
 $lang->metric->descTip       = 'Please enter the meaning, purpose and use of the measurement item';
 $lang->metric->definitionTip = 'Please enter the calculation rules and filtering conditions of the measurement items';
 

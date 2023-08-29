@@ -52,14 +52,12 @@ formPanel
     (
         set::label($lang->metric->name),
         set::name('name'),
-        set::placeholder($lang->metric->nameTip),
         set::required(true),
     ),
     formGroup
     (
         set::label($lang->metric->code),
         set::name('code'),
-        set::placeholder($lang->metric->codeTip),
         set::required(true),
     ),
     formGroup

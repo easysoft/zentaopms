@@ -24,8 +24,6 @@ $lang->metric->create        = "创建" . $this->lang->metric->common;
 $lang->metric->afterCreate   = "保存后";
 $lang->metric->definition    = "计算规则";
 
-$lang->metric->nameTip       = '按[范围]统计的[对象][指标]';
-$lang->metric->codeTip       = '[指标]_of_[对象]_in_[范围]';
 $lang->metric->descTip       = '请输入度量项含义、目的和作用等';
 $lang->metric->definitionTip = '请输入度量项的计算规则及过滤条件等';
 
