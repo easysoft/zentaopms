@@ -4022,19 +4022,19 @@ class execution extends control
     }
 
     /**
-     *Ajax get group menu of lanes.
+     * 获取泳道分组下拉。
+     * Get the lane group drop-down by ajax.
      *
-     * @param string $type all|syory|task|bug
-     * @param string $group
+     * @param  string $type all|syory|task|bug
+     * @param  string $group
      * @access public
      * @return void
      */
     public function ajaxGetGroup($type, $group = 'default')
     {
         $this->app->loadLang('kanban');
-        $groups = array();
-        $groups = $this->lang->kanban->group->$type;
-        return print(html::select("group", $groups, $group, 'class="form-control chosen" data-max_drop_width="215"'));
+
+        return print(html::select("group", $this->lang->kanban->group->$type, $group, 'class="form-control chosen" data-max_drop_width="215"'));
     }
 
     /**
