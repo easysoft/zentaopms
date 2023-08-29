@@ -1710,13 +1710,13 @@ class InstanceModel extends model
      *
      * @param  object $instance
      * @param  object $metrics
-     * @param  string $type    'bar' is progress bar, 'pie' is progress pie.
      * @static
      * @access public
      * @return mixed
      */
-    public static function printCpuUsage($instance, $metrics, $type = 'bar')
+    public static function printCpuUsage($instance, $metrics)
     {
+        if($instance->source === 'user') return array('color' => '', 'tip' => '', 'rate' => '', 'usage' => '', 'limit' => '');
         $rate = $instance->status == 'stopped' ? 0 : $metrics->rate;
         $tip  = "{$rate}% = {$metrics->usage} / {$metrics->limit}";
 
@@ -1726,14 +1726,7 @@ class InstanceModel extends model
         if(empty($color) && $rate >= 0 && $rate < 90) $color = 'important';
         if(empty($color) && $rate >= 80)              $color = 'danger';
 
-        if($type == 'array') return array('color' => $color, 'tip' => $tip, 'rate' => $rate . '%', 'usage' => $metrics->usage, 'limit' => $metrics->limit);
-
-        if(strtolower($type) == 'pie') commonModel::printProgressPie($rate, '', $tip);
-
-        $valueType = 'percent';
-        if($instance->status == 'stopped') $valueType = '';
-
-        commonModel::printProgressBar($rate, '', $tip, $valueType);
+        return array('color' => $color, 'tip' => $tip, 'rate' => $rate . '%', 'usage' => $metrics->usage, 'limit' => $metrics->limit);
     }
 
     /**
@@ -1741,13 +1734,13 @@ class InstanceModel extends model
      *
      * @param  object $instance
      * @param  object $metrics
-     * @param  string $type    'bar' is progress bar, 'pie' is progress pie.
      * @static
      * @access public
      * @return mixed
      */
-    public static function printMemUsage($instance, $metrics, $type = 'bar')
+    public static function printMemUsage($instance, $metrics)
     {
+        if($instance->source === 'user') return array('color' => '', 'tip' => '', 'rate' => '', 'usage' => '', 'limit' => '');
         $rate = $instance->status == 'stopped' ? 0 : $metrics->rate;
         $tip  = "{$rate}% = " . helper::formatKB($metrics->usage) . ' / ' . helper::formatKB($metrics->limit);
 
@@ -1757,14 +1750,7 @@ class InstanceModel extends model
         if(empty($color) && $rate >= 0 && $rate < 90) $color = 'important';
         if(empty($color) && $rate >= 80)              $color = 'danger';
 
-        if($type == 'array') return array('color' => $color, 'tip' => $tip, 'rate' => $rate . '%', 'usage' => helper::formatKB($metrics->usage), 'limit' => helper::formatKB($metrics->limit));
-
-        if(strtolower($type) == 'pie') commonModel::printProgressPie($rate, '', $tip);
-
-        $valueType = 'tip';
-        if($instance->status == 'stopped') $valueType = '';
-
-        commonModel::printProgressBar($rate, '', $tip, $valueType);
+        return array('color' => $color, 'tip' => $tip, 'rate' => $rate . '%', 'usage' => helper::formatKB($metrics->usage), 'limit' => helper::formatKB($metrics->limit));
     }
 
     /*

@@ -8,7 +8,8 @@
 .ops-ml-0 {margin-left: 0!important;}
 
 #mainNavbar>.container {padding-top: 8px}
-#mainNavbar .nav {justify-content: left; position: relative; left: -12px; top: -4px;}
+#mainNavbar .nav {justify-content: left; position: relative; left: 0px; top: -4px;}
+@media (min-width: 1400px){#mainNavbar .nav {left: -12px;}}
 #mainNavbar {background: none;}
 #mainNavbar .nav-item>a {padding-right: 0.5rem}
 #mainNavbar .nav-item>.active {color: unset; font-weight: 700;}

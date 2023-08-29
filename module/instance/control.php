@@ -48,8 +48,14 @@ class instance extends control
             $instance = $this->loadModel('gitea')->getByID($id);
             $instance->status      = '';
             $instance->source      = 'user';
+            $instance->type        = 'external';
+            $instance->externalID  = $instance->id;
             $instance->runDuration = 0;
             $instance->createdAt   = $instance->createdDate;
+
+            $instanceMetric = new stdclass();
+            $instanceMetric->cpu    = 0;
+            $instanceMetric->memory = 0;
 
             $this->view->title           = $instance->name;
             $this->view->instance        = $instance;
@@ -57,7 +63,7 @@ class instance extends control
             $this->view->seniorAppList   = array();
             $this->view->actions         = $this->loadModel('action')->getList($instance->type, $id);
             $this->view->defaultAccount  = '';
-            $this->view->instanceMetric  = '';
+            $this->view->instanceMetric  = $instanceMetric;
             $this->view->currentResource = '';
             $this->view->customItems     = array();
             $this->view->backupList      = array();
