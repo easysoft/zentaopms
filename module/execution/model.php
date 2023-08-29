@@ -299,8 +299,8 @@ class executionModel extends model
         if($executionID)
         {
             $execution = $this->dao->findByID($executionID)->from(TABLE_EXECUTION)->fetch();
-            if(empty($execution)) return js::error($this->lang->notFound);
-            if(strpos(",{$this->app->user->view->sprints},", ",{$executionID},") === false) $this->accessDenied();
+            if(empty($execution)) return $this->app->control->sendError($this->lang->notFound, helper::createLink('execution', 'all'));
+            if(!$this->app->user->admin && strpos(",{$this->app->user->view->sprints},", ",{$executionID},") === false) $this->accessDenied();
         }
 
         /* Save session. */
