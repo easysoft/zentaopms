@@ -3621,7 +3621,7 @@ class execution extends control
      */
     public function storySort($executionID)
     {
-        $idList   = explode(',', trim($this->post->storys, ','));
+        $idList   = explode(',', trim($this->post->storyList, ','));
         $orderBy  = $this->post->orderBy;
 
         $order = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('story')->in($idList)->andWhere('project')->eq($executionID)->orderBy('order_asc')->fetch('order');

@@ -20,7 +20,7 @@ $(function()
     });
 
     $(document).on('click', '.story-toggle', function(e)
-    {   
+    {
         var $toggle = $(this);
         var id = $(this).data('id');
         var isCollapsed = $toggle.toggleClass('collapsed').hasClass('collapsed');
@@ -34,7 +34,7 @@ $(function()
     {
         var list = '';
         for(i = 0; i < data.list.length; i++) list += $(data.list[i].item).attr('data-id') + ',';
-        $.post(createLink('execution', 'storySort', 'executionID=' + executionID), {'storys' : list, 'orderBy' : orderBy}, function()
+        $.post(createLink('execution', 'storySort', 'executionID=' + executionID), {'storyList' : list, 'orderBy' : orderBy}, function()
         {
             var $target = $(data.element[0]);
             $target.hide();
