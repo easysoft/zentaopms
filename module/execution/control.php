@@ -168,7 +168,7 @@ class execution extends control
             if(isset($branchGroups[$task->product][$task->branch])) $task->branch = $branchGroups[$task->product][$task->branch];
         }
 
-        $extra = empty($this->config->execution->task->allModule) ? '' : 'allModule';
+        $showModule = empty($this->config->execution->task->allModule) ? '' : 'allModule';
         $this->view->title       = $execution->name . $this->lang->colon . $this->lang->execution->task;
         $this->view->tasks       = $tasks;
         $this->view->pager       = $pager;
@@ -177,8 +177,8 @@ class execution extends control
         $this->view->status      = $status;
         $this->view->param       = $param;
         $this->view->moduleID    = $moduleID;
-        $this->view->modules     = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, $extra);
-        $this->view->moduleTree  = $this->tree->getTaskTreeMenu($executionID, $productID, 0, array('treeModel', 'createTaskLink'), $extra);
+        $this->view->modules     = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, $showModule);
+        $this->view->moduleTree  = $this->tree->getTaskTreeMenu($executionID, $productID, 0, array('treeModel', 'createTaskLink'), $showModule);
         $this->view->memberPairs = $memberPairs;
         $this->display();
     }
