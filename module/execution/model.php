@@ -2422,7 +2422,7 @@ class executionModel extends model
      * @access public
      * @return array
      */
-    public function getTasks($productID, $executionID, $executions, $browseType, $queryID, $moduleID, $sort, $pager)
+    public function getTasks(int $productID, int $executionID, array $executions, string $browseType, int $queryID, int $moduleID, string $sort, object $pager): array
     {
         $this->loadModel('task');
 
@@ -2432,7 +2432,6 @@ class executionModel extends model
         if(in_array($browseType, array('bymodule', 'byproduct')) && $this->session->taskBrowseType && $this->session->taskBrowseType != 'bysearch') $browseType = $this->session->taskBrowseType;
 
         /* Get tasks. */
-        $tasks = array();
         if($browseType != "bysearch")
         {
             $queryStatus = $browseType == 'byexecution' ? 'all' : $browseType;
@@ -2442,42 +2441,33 @@ class executionModel extends model
                 unset($queryStatus['closed']);
                 $queryStatus = array_keys($queryStatus);
             }
-            $tasks = $this->task->getExecutionTasks($executionID, $productID, $queryStatus, $modules, $sort, $pager);
+            return $this->task->getExecutionTasks($executionID, $productID, $queryStatus, $modules, $sort, $pager);
         }
         else
         {
-            if($queryID)
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
             {
-                $query = $this->loadModel('search')->getQuery($queryID);
-                if($query)
-                {
-                    $this->session->set('taskQuery', $query->sql);
-                    $this->session->set('taskForm', $query->form);
-                }
-                else
-                {
-                    $this->session->set('taskQuery', ' 1 = 1');
-                }
+                $this->session->set('taskQuery', $query->sql);
+                $this->session->set('taskForm', $query->form);
             }
-            else
+            elseif(!$this->session->taskQuery)
             {
-                if($this->session->taskQuery === false) $this->session->set('taskQuery', ' 1 = 1');
+                $this->session->set('taskQuery', ' 1 = 1');
             }
 
             if(strpos($this->session->taskQuery, "deleted =") === false) $this->session->set('taskQuery', $this->session->taskQuery . " AND deleted = '0'");
 
             $taskQuery = $this->session->taskQuery;
             /* Limit current execution when no execution. */
-            if(strpos($taskQuery, "`execution` =") === false) $taskQuery = $taskQuery . " AND `execution` = $executionID";
+            if(strpos($taskQuery, "`execution` =") === false) $taskQuery .= " AND `execution` = $executionID";
             $executionQuery = "`execution` " . helper::dbIN(array_keys($executions));
             $taskQuery      = str_replace("`execution` = 'all'", $executionQuery, $taskQuery); // Search all execution.
             $this->session->set('taskQueryCondition', $taskQuery, $this->app->tab);
             $this->session->set('taskOnlyCondition', true, $this->app->tab);
 
-            $tasks = $this->getSearchTasks($taskQuery, $pager, $sort);
+            return $this->getSearchTasks($taskQuery, $pager, $sort);
         }
-
-        return $tasks;
     }
 
     /**
