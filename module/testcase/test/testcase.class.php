@@ -347,6 +347,7 @@ class testcaseTest
     }
 
     /**
+     * 测试评审用例。
      * Test review case.
      *
      * @param  int    $caseID
@@ -354,17 +355,14 @@ class testcaseTest
      * @access public
      * @return array
      */
-    public function reviewTest($caseID, $case)
+    public function reviewTest(int $caseID, object $case)
     {
-        foreach($case as $field => $value) $_POST[$field] = $value;
-
-        $objects = $this->objectModel->review($caseID);
-
-        unset($_POST);
+        $oldCase = $this->objectModel->getByID($caseID);
+        $objects = $this->objectModel->review($case, $oldCase);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $this->objectModel->getByID($caseID);
     }
 
     /**
