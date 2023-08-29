@@ -47,7 +47,7 @@ else
     $items = array();
     $items[] = array
     (
-        'name'    => 'caseIdList',
+        'name'    => 'id',
         'label'   => $lang->idAB,
         'control' => 'hidden',
         'hidden'  => true,
@@ -63,7 +63,7 @@ else
     (
         'name'     => 'pri',
         'label'    => $lang->priAB,
-        'width'    => '100px',
+        'width'    => '120px',
         'control'  => 'picker',
         'items'    => $lang->testcase->priList,
         'ditto'    => true,
@@ -74,7 +74,7 @@ else
     (
         'name'    => 'status',
         'label'   => $lang->statusAB,
-        'width'   => '80px',
+        'width'   => '120px',
         'control' => 'picker',
         'items'   => $lang->testcase->statusList,
         'hidden'   => !isset($visibleFields['status']),
@@ -124,6 +124,7 @@ else
         'name'     => 'title',
         'label'    => $lang->testcase->title,
         'control'  => 'input',
+        'width'    => '180px',
         'required' => true,
     );
 
@@ -160,6 +161,7 @@ else
         'label'    => $lang->testcase->stage,
         'width'    => '120px',
         'control'  => 'picker',
+        'multiple' => true,
         'items'    => $lang->testcase->stageList,
         'hidden'   => !isset($visibleFields['stage']),
         'required' => isset($requiredFields['stage']),

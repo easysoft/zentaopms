@@ -104,6 +104,7 @@ class testcaseZen extends testcase
      * @param  int       $executionID
      * @param  int       $productID
      * @param  string    $branch
+     * @param  string    $case
      * @access protected
      * @return void
      */
@@ -175,7 +176,7 @@ class testcaseZen extends testcase
 
         /* 设置菜单。 */
         /* Set menu. */
-        $this->setMenu((int)$this->session->project, (int)$this->session->execution, $productID, $branch);
+        $this->setMenu((int)$this->session->project, $executionID ? $executionID : (int)$this->session->execution, $productID, $branch);
 
         /* 初始化用例数据。 */
         /* Initialize the testcase. */
@@ -733,6 +734,183 @@ class testcaseZen extends testcase
     }
 
     /**
+     * 指定批量编辑用例的数据。
+     * Assign for editing case.
+     *
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  string    $type
+     * @param  array     $cases
+     * @access protected
+     * @return void
+     */
+    protected function assignForBatchEdit(int $productID, string $branch, string $type, array $cases): void
+    {
+        list($productIdList, $libIdList) = $this->assignTitleForBatchEdit($productID, $branch, $type, $cases);
+
+        /* 设置模块。 */
+        /* Set modules. */
+        $modules         = array();
+        $branchProduct   = false;
+        $branchTagOption = array();
+        $products        = $this->product->getByIdList($productIdList);
+        $branches        = array(0 => 0);
+        foreach($products as $product)
+        {
+            if($product->type != 'normal')
+            {
+                $branches = $this->loadModel('branch')->getList($product->id, 0, 'all');
+                foreach($branches as $branchInfo) $branchTagOption[$product->id][$branchInfo->id] = "/{$product->name}/{$branchInfo->name}" . ($branchInfo->status == 'closed' ? " ({$this->lang->branch->statusList['closed']})" : '');
+                $branchProduct = true;
+            }
+
+            $modulePairs = $this->tree->getOptionMenu($product->id, 'case', 0, array_keys($branches));
+            foreach($modulePairs as $branchID => $branchModules)
+            {
+                $modules['case'][$product->id][$branchID] = array();
+                foreach($branchModules as $moduleID => $module) $modules['case'][$product->id][$branchID][] = array('text' => $module, 'value' => $moduleID);
+            }
+        }
+        foreach($libIdList as $libID)
+        {
+            $libModules                = $this->tree->getOptionMenu($libID, 'caselib');
+            $modules['lib'][$libID][0] = array();
+            foreach($libModules as $moduleID => $module) $modules['lib'][$libID][0][] = array('text' => $module, 'value' => $moduleID);
+        }
+
+        if($this->app->tab == 'project') $branchTagOption = $this->loadModel('branch')->getPairsByProjectProduct($this->session->project, $productID);
+
+        /* 指派模块和场景。 */
+        /* Assign modules and scenes. */
+        $this->assignModuleAndSceneForBatchEdit($productID, $branch, $branches, $cases, $modules);
+
+        /* 设置自定义字段。 */
+        /* Set custom fields. */
+        foreach(explode(',', $this->config->testcase->customBatchEditFields) as $field) $customFields[$field] = $this->lang->testcase->$field;
+        $this->view->customFields = $customFields;
+        $this->view->showFields   = $this->config->testcase->custom->batchEditFields;
+
+        $this->view->branchTagOption = $branchTagOption;
+        $this->view->products        = $products;
+        $this->view->branchProduct   = $branchProduct;
+    }
+
+    /**
+     * 指定批量编辑用例的页面标题。
+     * Assign title for editing case.
+     *
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  string    $type
+     * @param  array     $cases
+     * @access protected
+     * @return array
+     */
+    protected function assignTitleForBatchEdit(int $productID, string $branch, string $type, array $cases): array
+    {
+        $productIdList = array();
+        $libIdList     = array();
+        /* 指派用例库用例。 */
+        /* Assign lib cases. */
+        if($type == 'lib')
+        {
+            $libID     = $productID;
+            $libIdList = array($libID);
+            $libraries = $this->loadModel('caselib')->getLibraries();
+
+            /* Remove story custom fields from caselib */
+            $this->config->testcase->customBatchEditFields   = str_replace(',story', '', $this->config->testcase->customBatchEditFields);
+            $this->config->testcase->custom->batchEditFields = str_replace(',story', '', $this->config->testcase->custom->batchEditFields);
+
+            /* Set caselib menu. */
+            $this->caselib->setLibMenu($libraries, $libID);
+
+            $this->view->title = $libraries[$libID] . $this->lang->colon . $this->lang->testcase->batchEdit;
+        }
+        /* 指派测试用例。 */
+        /* Assign test cases. */
+        elseif($productID)
+        {
+            $product       = $this->product->getByID($productID);
+            $productIdList = array($productID);
+
+            $this->setMenu((int)$this->session->project, (int)$this->session->execution, $productID, $branch);
+
+            $this->view->title = $product->name . $this->lang->colon . $this->lang->testcase->batchEdit;
+        }
+        /* 指派地盘标签下的用例。 */
+        /* Assign cases of my tab. */
+        else
+        {
+            foreach($cases as $case)
+            {
+                if($case->lib == 0) $productIdList[$case->product] = $case->product;
+                if($case->lib > 0) $libIdList[$case->lib] = $case->lib;
+            }
+
+            $this->app->loadLang('my');
+            $this->lang->testcase->menu = $this->lang->my->menu->work;
+            $this->lang->my->menu->work['subModule'] = 'testcase';
+
+            $this->view->title = $this->lang->testcase->batchEdit;
+        }
+        return array($productIdList, $libIdList);
+    }
+
+    /**
+     * 指定批量编辑用例的模块和场景标题。
+     * Assign modules and scenes for editing case.
+     *
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  array     $branches
+     * @param  array     $cases
+     * @param  array     $modules
+     * @access protected
+     * @return void
+     */
+    protected function assignModuleAndSceneForBatchEdit(int $productID, string $branch, array $branches, array $cases, array $modules): void
+    {
+        $moduleScenes      = array();
+        $moduleScenesPairs = array();
+        $modulePairs       = array();
+        $scenePairs        = array();
+        foreach($cases as $case)
+        {
+            /* 设置用例模块。 */
+            /* Set case module. */
+            $objectID   = $case->lib > 0 ? $case->lib : $case->product;
+            $objectType = $case->lib > 0 ? 'lib' : 'case';
+            if(isset($modules[$objectType][$objectID][$case->branch]))
+            {
+                $modulePairs[$case->id] = $modules[$objectType][$objectID][$case->branch];
+            }
+            elseif(isset($modules[$objectType][$objectID]))
+            {
+                $modulePairs[$case->id] = $modules[$objectType][$objectID][0];
+            }
+            else
+            {
+                $module = $this->tree->getByID($case->module);
+                $modulePairs[$case->id][] = array('text' => zget($module, 'name', ''), 'value' => $case->module);
+            }
+
+            /* 设置用例场景。 */
+            /* Set case 场景. */
+            if(!isset($moduleScenesPairs[$case->module]))
+            {
+                $moduleScenesPairs[$case->module] = array();
+                $moduleScenes                 = $this->testcase->getSceneMenu($productID, $case->module, 'case', 0, $branch === 'all' || !isset($branches[$branch]) ? 0 : $branch);
+                foreach($moduleScenes as $sceneID => $scene) $moduleScenesPairs[$case->module][] = array('text' => $scene, 'value' => $sceneID);
+            }
+            $scenePairs[$case->id][] = $moduleScenesPairs[$case->module];
+            if(!isset($scenes[$case->scene])) $scenePairs[$case->id][] = array('text' => '/' . $this->testcase->fetchSceneName($case->scene), 'value' => $case->scene);
+        }
+        $this->view->scenePairs      = $scenePairs;
+        $this->view->modulePairs     = $modulePairs;
+    }
+
+    /**
      * Add edit action.
      *
      * @param  int       $caseID
@@ -885,7 +1063,7 @@ class testcaseZen extends testcase
 
     /**
      * 构建批量创建用例的数据。
-     * Build cases for bathc creating.
+     * Build cases for batch creating.
      *
      * @param  int       $productID
      * @access protected
@@ -919,6 +1097,36 @@ class testcaseZen extends testcase
             unset($testcase->review);
         }
         return $testcases;
+    }
+
+    /**
+     * 构建批量编辑用例的数据。
+     * Build cases for batch editing.
+     *
+     * @param  array     $oldCases
+     * @access protected
+     * @return array
+     */
+    protected function buildCasesForBathcEdit(array $oldCases): array
+    {
+        $caseIdList = array_keys($oldCases);
+        if(empty($caseIdList)) return array();
+
+        $now     = helper::now();
+        $account = $this->app->user->account;
+        $cases   = form::batchData($this->config->testcase->form->batchEdit)->get();
+        foreach($cases as $caseID => $case)
+        {
+            $oldCase = $oldCases[$caseID];
+            $case->id             = $caseID;
+            $case->product        = $oldCase->product;
+            $case->lastEditedBy   = $account;
+            $case->lastEditedDate = $now;
+            $case->stepChange     = false;
+            $case->steps          = $oldCase->steps;
+            $case->linkBug        = $oldCase->linkBug;
+        }
+        return $cases;
     }
 
     /**
@@ -990,6 +1198,37 @@ class testcaseZen extends testcase
         }
         if(!empty($requiredErrors)) dao::$errors = $requiredErrors;
         return $testcases;
+    }
+
+    /**
+     * 批量创建测试用例前检验数据是否正确。
+     * Check testcases for batch editing.
+     *
+     * @param  array     $cases
+     * @access protected
+     * @return array
+     */
+    protected function checkCasesForBatchEdit(array $cases): array
+    {
+        $this->loadModel('common');
+        $requiredErrors = array();
+        foreach($cases as $i => $testcase)
+        {
+            /* 检验必填项。 */
+            /* Check reuqired. */
+            foreach(explode(',', $this->config->testcase->edit->requiredFields) as $field)
+            {
+                $field = trim($field);
+                if($field && empty($cases[$i]->{$field}))
+                {
+                    $fieldName = $this->config->testcase->form->batchEdit[$field]['type'] != 'array' ? "{$field}[{$i}]" : "{$field}[{$i}][]";
+                    $requiredErrors[$fieldName] = sprintf($this->lang->error->notempty, $this->lang->testcase->{$field});
+                }
+            }
+        }
+
+        if(!empty($requiredErrors)) dao::$errors = $requiredErrors;
+        return $cases;
     }
 
     /**

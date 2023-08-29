@@ -479,7 +479,7 @@ class testcase extends control
             $changes = array();
             if(!$comment)
             {
-                $changes = $this->testcase->update($case, $oldCase);
+                $changes = $this->testcase->update($case, $oldCase, $testtasks);
                 if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
 
@@ -518,193 +518,60 @@ class testcase extends control
      * Batch edit case.
      *
      * @param  int    $productID
-     * @param  int    $branch
+     * @param  string $branch
      * @param  string $type
      * @param  string $tab
      * @access public
      * @return void
      */
-    public function batchEdit($productID = 0, $branch = 0, $type = 'case', $tab = '')
+    public function batchEdit(int $productID = 0, string $branch = '0', string $type = 'case', string $tab = '')
     {
-        if(!$this->post->caseIdList) return print(js::locate($this->session->caseList));
+        if(!$this->post->caseIdList && !$this->post->id) $this->locate($this->session->caseList ? $this->session->caseList : inlink('browse', "productID={$productID}"));
 
-        $caseIdList = array_unique($this->post->caseIdList);
+        $caseIdList = $this->post->caseIdList ? array_unique($this->post->caseIdList) : array_unique($this->post->id);
+        $cases      = $this->testcase->getByList($caseIdList);
+        $caseIdList = array_keys($cases);
         $testtasks  = $this->loadModel('testtask')->getGroupByCases($caseIdList);
-        if($this->post->title)
+        if($this->post->id)
         {
-            $allChanges = $this->testcase->batchUpdate($testtasks);
-            if($allChanges)
-            {
-                foreach($allChanges as $caseID => $changes )
-                {
-                    if(empty($changes)) continue;
+            $editedCases = $this->testcaseZen->buildCasesForBathcEdit($cases);
+            $editedCases = $this->testcaseZen->checkCasesForBatchEdit($cases);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-                    $actionID = $this->loadModel('action')->create('case', $caseID, 'Edited');
-                    $this->action->logHistory($actionID, $changes);
-                }
+            /* 更新用例。 */
+            /* Update cases. */
+            foreach($editedCases as $caseID => $case)
+            {
+                $changes = $this->testcase->update($case, $cases[$caseID], $testtasks[$caseID]);
+                $this->executeHooks($caseID);
+
+                if(empty($changes)) continue;
+                $actionID = $this->loadModel('action')->create('case', $caseID, 'Edited');
+                $this->action->logHistory($actionID, $changes);
             }
 
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $this->loadModel('score')->create('ajax', 'batchEdit');
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->caseList));
         }
 
-        $branchProduct = false;
+        $this->testcaseZen->assignForBatchEdit($productID, $branch, $type, $cases);
 
-        if($this->app->tab == 'project')               $this->loadModel('project')->setMenu($this->session->project);
-        if($this->app->tab == 'qa' and $type != 'lib') $this->testcase->setMenu($this->products, $productID, $branch);
-        if($this->app->tab == 'execution')             $this->loadModel('execution')->setMenu($this->session->execution);
-
-        /* The cases of a product. */
-        if($productID)
-        {
-            /* Get the edited cases. */
-            $cases = $this->testcase->getByList($caseIdList);
-
-            if($type == 'lib')
-            {
-                $libID     = $productID;
-                $libraries = $this->loadModel('caselib')->getLibraries();
-
-                /* Remove story custom fields from caselib */
-                $this->config->testcase->customBatchEditFields   = str_replace(',story', '', $this->config->testcase->customBatchEditFields);
-                $this->config->testcase->custom->batchEditFields = str_replace(',story', '', $this->config->testcase->custom->batchEditFields);
-
-                /* Set caselib menu. */
-                $this->caselib->setLibMenu($libraries, $libID);
-
-                /* Set modules. */
-                $modules    = array();
-                $libModules = $this->tree->getOptionMenu($libID, 'caselib', 0, $branch);
-                foreach($libModules as $moduleID => $module) $modules[] = array('text' => $module, 'value' => $moduleID);
-
-                $this->view->title = $libraries[$libID] . $this->lang->colon . $this->lang->testcase->batchEdit;
-            }
-            else
-            {
-                $product = $this->product->getByID($productID);
-
-                if($product->type != 'normal') $branchProduct = true;
-
-                /* Set branches and modules. */
-                $branches        = array();
-                $branchTagOption = array();
-                $modules         = array();
-                if($product->type != 'normal')
-                {
-                    $branches = $this->loadModel('branch')->getList($productID, 0, 'all');
-                    foreach($branches as $branchInfo)
-                    {
-                        $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
-                    }
-                    if($this->app->tab == 'project')
-                    {
-                        $branchTagOption = $this->loadModel('branch')->getPairsByProjectProduct($this->session->project, $productID);
-                    }
-
-                    foreach($branchTagOption as $branchID => $branchName)
-                    {
-                        $branchModules = $this->tree->getOptionMenu($productID, 'case', 0, $branchID);
-                        foreach($branchModules as $moduleID => $module) $modules[$productID][$branchID][] = array('text' => $module, 'value' => $moduleID);
-                    }
-                }
-                else
-                {
-                    $branchModules = $this->tree->getOptionMenu($productID, 'case');
-                    foreach($branchModules as $moduleID => $module) $modules[$productID][BRANCH_MAIN][] = array('text' => $module, 'value' => $moduleID);
-                }
-
-                $this->view->branchTagOption = array($productID => $branchTagOption);
-                $this->view->title           = $product->name . $this->lang->colon . $this->lang->testcase->batchEdit;
-            }
-        }
-        else
-        {
-            /* Get the edited cases. */
-            $cases = $this->dao->select('t1.*,t2.id as runID')->from(TABLE_CASE)->alias('t1')
-                ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
-                ->where('t1.deleted')->eq(0)
-                ->andWhere('t1.id')->in($caseIdList)
-                ->fetchAll('id');
-            $caseIdList = array_keys($cases);
-
-            /* The cases of my. */
-            $this->app->loadLang('my');
-            $this->lang->testcase->menu = $this->lang->my->menu->work;
-            $this->lang->my->menu->work['subModule'] = 'testcase';
-
-            $this->view->title      = $this->lang->testcase->batchEdit;
-
-            $productIdList = array();
-            foreach($cases as $case) $productIdList[$case->product] = $case->product;
-
-            $branchTagOption = array();
-            $products        = $this->product->getByIdList($productIdList);
-            foreach($products as $product)
-            {
-                $branches = 0;
-                if($product->type != 'normal')
-                {
-                    $branches = $this->loadModel('branch')->getList($product->id, 0, 'all');
-                    foreach($branches as $branchInfo) $branchTagOption[$product->id][$branchInfo->id] = '/' . $product->name . '/' . $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
-                    $branches      = array_keys($branches);
-                    $branchProduct = true;
-                }
-
-                $modules     = array();
-                $modulePairs = $this->tree->getOptionMenu($product->id, 'case', 0, $branches);
-                foreach($modulePairs as $moduleID => $module) $modules[] = array('text' => $module, 'value' => $moduleID);
-                if($product->type == 'normal') $modules = array(0 => $modules);
-            }
-
-            $this->view->products        = $products;
-            $this->view->branchTagOption = $branchTagOption;
-        }
-
+        /* 判断要编辑的用例是否太大，设置 session。 */
         /* Judge whether the editedCases is too large and set session. */
         $countInputVars  = count($cases) * (count(explode(',', $this->config->testcase->custom->batchEditFields)) + 3);
         $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
-        $stories = $this->loadModel('story')->getProductStoryPairs($productID, $branch);
-
-        /* Set custom. */
-        foreach(explode(',', $this->config->testcase->customBatchEditFields) as $field) $customFields[$field] = $this->lang->testcase->$field;
-        $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->testcase->custom->batchEditFields;
-
-        /* Append module when change product type. */
-        $modulePairs = array();
-        $scenePairs  = array();
-        foreach($cases as $case)
-        {
-            $caseProduct = $type == 'lib' ? $productID : $case->product;
-            if(isset($modules[$caseProduct][$case->branch]))
-            {
-                $modulePairs[$case->id] = $modules[$caseProduct][$case->branch];
-            }
-            else
-            {
-                $modulePairs[$case->id] = isset($modules[$caseProduct]) ? $modules[$caseProduct][0] : array('text' => $this->tree->getModulesName($case->module), 'value' => $case->module);
-            }
-
-            $scenes = $this->testcase->getSceneMenu($productID, $case->module, $viewType = 'case', $startSceneID = 0, ($branch === 'all' or !isset($branches[$branch])) ? 0 : $branch);
-            foreach($scenes as $sceneID => $scene) $scenePairs[$case->id][] = array('text' => $scene, 'value' => $sceneID);
-            if(!isset($scenes[$case->scene])) $scenePairs[$case->id][] = array('text' => '/' .$this->testcase->fetchSceneName($case->scene), 'value' => $case->scene);
-        }
-
-        /* Assign. */
-        $this->view->scenePairs     = $scenePairs;
-        $this->view->stories        = $stories;
-        $this->view->caseIdList     = $caseIdList;
-        $this->view->productID      = $productID;
-        $this->view->branchProduct  = $branchProduct;
-        $this->view->priList        = $this->lang->testcase->priList;
-        $this->view->typeList       = $this->lang->testcase->typeList;
-        $this->view->cases          = $cases;
-        $this->view->forceNotReview = $this->testcase->forceNotReview();
-        $this->view->modulePairs    = $modulePairs;
-        $this->view->testtasks      = $testtasks;
-        $this->view->isLibCase      = $type == 'lib' ? true : false;
-
+        /* 展示变量. */
+        /* Show the variables. */
+        $this->view->stories         = $this->loadModel('story')->getProductStoryPairs($productID, $branch);
+        $this->view->caseIdList      = $caseIdList;
+        $this->view->productID       = $productID;
+        $this->view->cases           = $cases;
+        $this->view->forceNotReview  = $this->testcase->forceNotReview();
+        $this->view->testtasks       = $testtasks;
+        $this->view->isLibCase       = $type == 'lib' ? true : false;
         $this->display();
     }
 

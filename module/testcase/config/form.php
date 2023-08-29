@@ -69,6 +69,21 @@ $config->testcase->form->edit['auto']         = array('required' => false, 'type
 $config->testcase->form->edit['script']       = array('required' => false, 'type' => 'string', 'default' => '');
 $config->testcase->form->edit['comment']      = array('required' => false, 'type' => 'string', 'default' => '', 'control' => 'editor');
 
+$config->testcase->form->batchEdit = common::formConfig('testcase', 'batchEdit');
+$config->testcase->form->batchEdit['pri']          = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->testcase->form->batchEdit['status']       = array('required' => false, 'type' => 'string', 'default' => '');
+$config->testcase->form->batchEdit['branch']       = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->testcase->form->batchEdit['module']       = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->testcase->form->batchEdit['scene']        = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->testcase->form->batchEdit['story']        = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->testcase->form->batchEdit['title']        = array('required' => true,  'type' => 'string', 'default' => '', 'base' => true);
+$config->testcase->form->batchEdit['type']         = array('required' => false, 'type' => 'string', 'default' => '');
+$config->testcase->form->batchEdit['precondition'] = array('required' => false, 'type' => 'string', 'default' => '');
+$config->testcase->form->batchEdit['keywords']     = array('required' => false, 'type' => 'string', 'default' => '');
+$config->testcase->form->batchEdit['stage']        = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
+$config->testcase->form->batchEdit['stepChange']   = array('required' => false, 'type' => 'bool',   'default' => false);
+$config->testcase->form->batchEdit['steps']        = array('required' => false, 'type' => 'array',   'default' => array());
+
 $config->testcase->form->createScene = array();
 $config->testcase->form->createScene['product']    = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->testcase->form->createScene['branch']     = array('required' => false, 'type' => 'int',    'default' => 0);
