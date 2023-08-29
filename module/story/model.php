@@ -3438,7 +3438,6 @@ class storyModel extends model
 
         $storyQuery = preg_replace("/`plan` +LIKE +'%([0-9]+)%'/i", "CONCAT(',', `plan`, ',') LIKE '%,$1,%'", $storyQuery);
 
-
         return $this->getBySQL($queryProductID, $storyQuery, $orderBy, $pager, $type);
     }
 
@@ -6786,8 +6785,9 @@ class storyModel extends model
                 if($col->name == 'category')   $story->category   = zget($this->lang->story->categoryList, $story->category);
                 if($col->name == 'duration')   $story->duration   = zget($this->lang->demand->durationList, $story->duration);
                 if($col->name == 'BSA')        $story->BSA        = zget($this->lang->demand->bsaList, $story->BSA);
-                if($col->name == 'taskCount')  $story->taskCount  = $storyTasks[$story->id] > 0 ? html::a(helper::createLink('story', 'tasks', "storyID=$story->id"), $storyTasks[$story->id], '', 'class="iframe"') : 0;
-                if($col->name == 'bugCount')   $story->bugCount   = $storyBugs[$story->id]  > 0 ? html::a(helper::createLink('story', 'bugs', "storyID=$story->id"),  $storyBugs[$story->id],  '', 'class="iframe"') : 0;
+                if($col->name == 'taskCount')  $story->taskCount  = $storyTasks[$story->id] > 0 ? html::a(helper::createLink('story', 'tasks', "storyID=$story->id"), $storyTasks[$story->id], '', 'class="iframe" data-toggle="modal"') : '0';
+                if($col->name == 'bugCount')   $story->bugCount   = $storyBugs[$story->id]  > 0 ? html::a(helper::createLink('story', 'bugs', "storyID=$story->id"),  $storyBugs[$story->id],  '', 'class="iframe" data-toggle="modal"') : '0';
+                if($col->name == 'caseCount')  $story->caseCount  = $storyCases[$story->id] > 0 ? html::a(helper::createLink('story', 'cases', "storyID=$story->id"),  $storyBugs[$story->id], '', 'class="iframe" data-toggle="modal"') : '0';
                 if($col->name == 'estimate')   $story->estimate  .= $this->config->hourUnit;
                 if($col->name == 'stage')
                 {

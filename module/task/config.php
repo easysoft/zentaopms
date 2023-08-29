@@ -80,6 +80,7 @@ $config->task->datatable->fieldList['pri']['sortType'] = true;
 $config->task->datatable->fieldList['pri']['name']     = $lang->task->pri;
 
 $config->task->datatable->fieldList['assignedTo']['title']      = 'assignedTo';
+$config->task->datatable->fieldList['assignedTo']['fixed']      = 'no';
 $config->task->datatable->fieldList['assignedTo']['width']      = '100';
 $config->task->datatable->fieldList['assignedTo']['type']       = 'html';
 $config->task->datatable->fieldList['assignedTo']['required']   = 'no';
@@ -88,126 +89,170 @@ $config->task->datatable->fieldList['assignedTo']['assignLink']  = array('module
 $config->task->datatable->fieldList['assignedTo']['sortType']    = true;
 
 $config->task->datatable->fieldList['assignedDate']['title']    = 'assignedDate';
+$config->task->datatable->fieldList['assignedDate']['fixed']    = 'no';
 $config->task->datatable->fieldList['assignedDate']['type']     = 'date';
 $config->task->datatable->fieldList['assignedDate']['width']    = '110';
+$config->task->datatable->fieldList['assignedDate']['sortType'] = true;
 $config->task->datatable->fieldList['assignedDate']['required'] = 'no';
 
 $config->task->datatable->fieldList['type']['title']    = 'typeAB';
 $config->task->datatable->fieldList['type']['type']     = 'category';
 $config->task->datatable->fieldList['type']['width']    = '80';
+$config->task->datatable->fieldList['type']['fixed']    = 'no';
+$config->task->datatable->fieldList['type']['sortType'] = true;
 $config->task->datatable->fieldList['type']['required'] = 'no';
 $config->task->datatable->fieldList['type']['map']      = $lang->task->typeList;
 
 $config->task->datatable->fieldList['status']['title']    = 'statusAB';
 $config->task->datatable->fieldList['status']['type']     = 'html';
 $config->task->datatable->fieldList['status']['width']    = '60';
+$config->task->datatable->fieldList['status']['fixed']    = 'no';
+$config->task->datatable->fieldList['status']['sortType'] = true;
 $config->task->datatable->fieldList['status']['required'] = 'no';
 
 $config->task->datatable->fieldList['finishedBy']['title']    = 'finishedByAB';
 $config->task->datatable->fieldList['finishedBy']['type']     = 'user';
 $config->task->datatable->fieldList['finishedBy']['width']    = '80';
+$config->task->datatable->fieldList['finishedBy']['fixed']    = 'no';
+$config->task->datatable->fieldList['finishedBy']['sortType'] = true;
 $config->task->datatable->fieldList['finishedBy']['required'] = 'no';
 
 $config->task->datatable->fieldList['deadline']['title']    = 'deadlineAB';
 $config->task->datatable->fieldList['deadline']['type']     = 'date';
 $config->task->datatable->fieldList['deadline']['width']    = '70';
+$config->task->datatable->fieldList['deadline']['fixed']    = 'no';
+$config->task->datatable->fieldList['deadline']['sortType'] = true;
 $config->task->datatable->fieldList['deadline']['required'] = 'no';
 
 $config->task->datatable->fieldList['estimate']['title']    = 'estimateAB';
 $config->task->datatable->fieldList['estimate']['width']    = '85';
 $config->task->datatable->fieldList['estimate']['sortType'] = true;
+$config->task->datatable->fieldList['estimate']['fixed']    = 'no';
 $config->task->datatable->fieldList['estimate']['required'] = 'no';
 
 $config->task->datatable->fieldList['consumed']['title']    = 'consumedAB';
 $config->task->datatable->fieldList['consumed']['width']    = '85';
 $config->task->datatable->fieldList['consumed']['sortType'] = true;
+$config->task->datatable->fieldList['consumed']['fixed']    = 'no';
 $config->task->datatable->fieldList['consumed']['required'] = 'no';
 
 $config->task->datatable->fieldList['left']['title']    = 'leftAB';
 $config->task->datatable->fieldList['left']['width']    = '85';
 $config->task->datatable->fieldList['left']['sortType'] = true;
+$config->task->datatable->fieldList['left']['fixed']    = 'no';
 $config->task->datatable->fieldList['left']['required'] = 'no';
 
 $config->task->datatable->fieldList['progress']['title']    = 'progressAB';
 $config->task->datatable->fieldList['progress']['width']    = '75';
 $config->task->datatable->fieldList['progress']['type']     = 'progress';
+$config->task->datatable->fieldList['progress']['fixed']    = 'no';
 $config->task->datatable->fieldList['progress']['required'] = 'no';
 $config->task->datatable->fieldList['progress']['name']     = $lang->task->progress;
 
 $config->task->datatable->fieldList['openedBy']['title']    = 'openedByAB';
 $config->task->datatable->fieldList['openedBy']['type']     = 'user';
 $config->task->datatable->fieldList['openedBy']['width']    = '90';
+$config->task->datatable->fieldList['openedBy']['fixed']    = 'no';
+$config->task->datatable->fieldList['openedBy']['sortType'] = true;
 $config->task->datatable->fieldList['openedBy']['required'] = 'no';
 
 $config->task->datatable->fieldList['openedDate']['title']    = 'openedDate';
 $config->task->datatable->fieldList['openedDate']['type']     = 'date';
 $config->task->datatable->fieldList['openedDate']['width']    = '110';
+$config->task->datatable->fieldList['openedDate']['fixed']    = 'no';
+$config->task->datatable->fieldList['openedDate']['sortType'] = true;
 $config->task->datatable->fieldList['openedDate']['required'] = 'no';
 
 $config->task->datatable->fieldList['estStarted']['title']    = 'estStarted';
 $config->task->datatable->fieldList['estStarted']['type']     = 'date';
 $config->task->datatable->fieldList['estStarted']['width']    = '90';
+$config->task->datatable->fieldList['estStarted']['fixed']    = 'no';
+$config->task->datatable->fieldList['estStarted']['sortType'] = true;
 $config->task->datatable->fieldList['estStarted']['required'] = 'no';
 $config->task->datatable->fieldList['estStarted']['control']  = 'date';
 
 $config->task->datatable->fieldList['realStarted']['title']    = 'realStarted';
 $config->task->datatable->fieldList['realStarted']['type']     = 'date';
 $config->task->datatable->fieldList['realStarted']['width']    = '95';
+$config->task->datatable->fieldList['realStarted']['fixed']    = 'no';
+$config->task->datatable->fieldList['realStarted']['sortType'] = true;
 $config->task->datatable->fieldList['realStarted']['required'] = 'no';
 
 $config->task->datatable->fieldList['finishedDate']['title']    = 'finishedDateAB';
 $config->task->datatable->fieldList['finishedDate']['type']     = 'date';
 $config->task->datatable->fieldList['finishedDate']['width']    = '105';
+$config->task->datatable->fieldList['finishedDate']['fixed']    = 'no';
+$config->task->datatable->fieldList['finishedDate']['sortType'] = true;
 $config->task->datatable->fieldList['finishedDate']['required'] = 'no';
 
 $config->task->datatable->fieldList['canceledBy']['title']    = 'canceledBy';
 $config->task->datatable->fieldList['canceledBy']['type']     = 'user';
 $config->task->datatable->fieldList['canceledBy']['width']    = '110';
+$config->task->datatable->fieldList['canceledBy']['fixed']    = 'no';
+$config->task->datatable->fieldList['canceledBy']['sortType'] = true;
 $config->task->datatable->fieldList['canceledBy']['required'] = 'no';
 
 $config->task->datatable->fieldList['canceledDate']['title']    = 'canceledDate';
 $config->task->datatable->fieldList['canceledDate']['type']     = 'date';
 $config->task->datatable->fieldList['canceledDate']['width']    = '115';
+$config->task->datatable->fieldList['canceledDate']['fixed']    = 'no';
+$config->task->datatable->fieldList['canceledDate']['sortType'] = true;
 $config->task->datatable->fieldList['canceledDate']['required'] = 'no';
 
 $config->task->datatable->fieldList['closedBy']['title']    = 'closedBy';
 $config->task->datatable->fieldList['closedBy']['type']     = 'user';
 $config->task->datatable->fieldList['closedBy']['width']    = '100';
+$config->task->datatable->fieldList['closedBy']['fixed']    = 'no';
+$config->task->datatable->fieldList['closedBy']['sortType'] = true;
 $config->task->datatable->fieldList['closedBy']['required'] = 'no';
 
 $config->task->datatable->fieldList['closedDate']['title']    = 'closedDate';
 $config->task->datatable->fieldList['closedDate']['type']     = 'date';
 $config->task->datatable->fieldList['closedDate']['width']    = '115';
+$config->task->datatable->fieldList['closedDate']['fixed']    = 'no';
+$config->task->datatable->fieldList['closedDate']['sortType'] = true;
 $config->task->datatable->fieldList['closedDate']['required'] = 'no';
 
 $config->task->datatable->fieldList['closedReason']['title']    = 'closedReason';
 $config->task->datatable->fieldList['closedReason']['type']     = 'category';
 $config->task->datatable->fieldList['closedReason']['width']    = '120';
+$config->task->datatable->fieldList['closedReason']['fixed']    = 'no';
+$config->task->datatable->fieldList['closedReason']['sortType'] = true;
 $config->task->datatable->fieldList['closedReason']['required'] = 'no';
 $config->task->datatable->fieldList['closedReason']['map']      = $lang->task->reasonList;
 
 $config->task->datatable->fieldList['lastEditedBy']['title']    = 'lastEditedBy';
 $config->task->datatable->fieldList['lastEditedBy']['width']    = '95';
+$config->task->datatable->fieldList['lastEditedBy']['fixed']    = 'no';
+$config->task->datatable->fieldList['lastEditedBy']['sortType'] = true;
 $config->task->datatable->fieldList['lastEditedBy']['required'] = 'no';
 
 $config->task->datatable->fieldList['lastEditedDate']['title']    = 'lastEditedDate';
 $config->task->datatable->fieldList['lastEditedDate']['width']    = '120';
 $config->task->datatable->fieldList['lastEditedDate']['type']     = 'date';
+$config->task->datatable->fieldList['lastEditedDate']['fixed']    = 'no';
+$config->task->datatable->fieldList['lastEditedDate']['sortType'] = true;
 $config->task->datatable->fieldList['lastEditedDate']['required'] = 'no';
 
 $config->task->datatable->fieldList['activatedDate']['title']    = 'activatedDate';
 $config->task->datatable->fieldList['activatedDate']['width']    = '90';
 $config->task->datatable->fieldList['activatedDate']['type']     = 'date';
+$config->task->datatable->fieldList['activatedDate']['fixed']    = 'no';
+$config->task->datatable->fieldList['activatedDate']['sortType'] = true;
 $config->task->datatable->fieldList['activatedDate']['required'] = 'no';
 
 $config->task->datatable->fieldList['story']['title']      = "storyAB";
 $config->task->datatable->fieldList['story']['width']      = '80';
+$config->task->datatable->fieldList['story']['fixed']      = 'no';
+$config->task->datatable->fieldList['story']['sortType']   = true;
 $config->task->datatable->fieldList['story']['required']   = 'no';
 $config->task->datatable->fieldList['story']['name']       = $lang->task->story;
 $config->task->datatable->fieldList['story']['type']       = 'html';
 
 $config->task->datatable->fieldList['mailto']['title']    = 'mailto';
 $config->task->datatable->fieldList['mailto']['width']    = '100';
+$config->task->datatable->fieldList['mailto']['fixed']    = 'no';
+$config->task->datatable->fieldList['mailto']['sortType'] = true;
 $config->task->datatable->fieldList['mailto']['required'] = 'no';
 
 $config->task->datatable->fieldList['actions']['title']    = 'actions';
