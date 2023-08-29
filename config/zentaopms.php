@@ -487,6 +487,7 @@ if(!defined('TABLE_MEASQUEUE'))          define('TABLE_MEASQUEUE', '`' . $config
 if(!defined('TABLE_MEASTEMPLATE'))       define('TABLE_MEASTEMPLATE', '`' . $config->db->prefix . 'meastemplate`');
 
 if(!defined('TABLE_METRIC'))        define('TABLE_METRIC', '`' . $config->db->prefix . 'metric`');
+if(!defined('TABLE_METRICLIB'))     define('TABLE_METRICLIB', '`' . $config->db->prefix . 'metriclib`');
 if(!defined('TABLE_METRICRECORDS')) define('TABLE_METRICRECORDS', '`' . $config->db->prefix . 'metricrecords`');
 
 define('TABLE_SPACE',    '`' . $config->db->prefix . 'space`');

@@ -178,6 +178,27 @@ CREATE TABLE IF NOT EXISTS `zt_metric` (
   UNIQUE KEY `code` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- DROP TABLE IF EXISTS `zt_metriclib`;
+CREATE TABLE IF NOT EXISTS `zt_metriclib` (
+  `id` mediumint unsigned NOT NULL AUTO_INCREMENT,
+  `metricID`   mediumint    NOT NULL DEFAULT 0,
+  `metricCode` varchar(100) NOT NULL DEFAULT '',
+  `global`     char(30)     NOT NULL DEFAULT '0',
+  `program`    char(30)     NOT NULL DEFAULT '0',
+  `project`    char(30)     NOT NULL DEFAULT '0',
+  `product`    char(30)     NOT NULL DEFAULT '0',
+  `execution`  char(30)     NOT NULL DEFAULT '0',
+  `user`       char(30)     NOT NULL DEFAULT '0',
+  `dept`       char(30)     NOT NULL DEFAULT '0',
+  `year`       char(4)      NOT NULL DEFAULT '0',
+  `month`      char(2)      NOT NULL DEFAULT '0',
+  `week`       char(2)      NOT NULL DEFAULT '0',
+  `day`        char(2)      NOT NULL DEFAULT '0',
+  `value`      varchar(100) NOT NULL DEFAULT '0',
+  `date`       datetime              DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 INSERT INTO `zt_metric`(`purpose`, `scope`, `object`, `stage`, `name`, `code`, `unit`, `desc`, `definition`, `when`, `event`, `cronCFG`, `time`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `order`, `deleted`) VALUES ('scale', 'product', 'productplan', 'released', '按产品统计的计划总数', 'count_of_productplan_in_product', '个', '按产品统计的计划总数是指在特定时间段内，产品团队制定并记录的所有计划数量。这个度量项可以反映产品团队的规划能力和工作负荷。计划总数越多，说明产品团队在该时间段内需要处理的任务和项目越多，也代表着团队的工作量和复杂度。', '产品中计划的个数求和\r\n过滤已删除的计划\r\n过滤已删除的产品', 'realtime', '', '', '', 'system', '2023-08-22 08:00:00', '', NULL, 0, '0');
 INSERT INTO `zt_metric`(`purpose`, `scope`, `object`, `stage`, `name`, `code`, `unit`, `desc`, `definition`, `when`, `event`, `cronCFG`, `time`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `order`, `deleted`) VALUES ('scale', 'product', 'productplan', 'released', '按产品统计的年度新增计划数', 'count_of_annual_created_productplan_in_product', '个', '按产品统计的年度新增计划数是指在某年度，产品团队新加入的计划数量。这个度量项可以反映产品团队对于新需求和新项目的接收能力和规模的扩展。新增计划数越多，说明产品团队在该年度内面临着更多的新挑战和需求。', '产品中创建时间为某年的计划个数求和\r\n过滤已删除的计划\r\n过滤已删除的产品', 'realtime', '', '', '', 'system', '2023-08-22 08:00:00', '', NULL, 0, '0');
 INSERT INTO `zt_metric`(`purpose`, `scope`, `object`, `stage`, `name`, `code`, `unit`, `desc`, `definition`, `when`, `event`, `cronCFG`, `time`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `order`, `deleted`) VALUES ('scale', 'product', 'productplan', 'released', '按产品统计的年度完成计划数', 'count_of_annual_finished_productplan_in_product', '个', '按产品统计的年度完成计划数是指在某年度，产品团队实际完成的计划数量。这个度量项可以反映产品团队在规划和执行过程中的效率和执行能力。完成计划数越多，说明产品团队在该年度内取得了更多的成果和交付物。', '产品中完成时间为某年的计划个数求和\r\n过滤已删除的计划\r\n过滤已删除的产品', 'realtime', '', '', '', 'system', '2023-08-22 08:00:00', '', NULL, 0, '0');
