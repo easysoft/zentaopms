@@ -1736,6 +1736,19 @@ class executionModel extends model
     }
 
     /**
+     * 获取泳道的最后更新日期。
+     * Get the last updated date of the lane.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return string|null
+     */
+    public function getLaneMaxEditedTime(int $executionID): string|null
+    {
+        return $this->dao->select("max(lastEditedTime) as lastEditedTime")->from(TABLE_KANBANLANE)->where('execution')->eq($executionID)->fetch('lastEditedTime');
+    }
+
+    /**
      * Get involved execution list.
      *
      * @param  int    $projectID
