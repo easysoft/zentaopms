@@ -106,6 +106,9 @@ pipeline {
               env.GIT_TAG_BUILD_GROUP = sh(returnStdout: true, script: 'misc/parse_tag.sh $TAG_NAME group').trim()
               env.GIT_TAGGER_NAME = sh(returnStdout: true, script: 'git for-each-ref --format="%(taggername)" refs/tags/$(git tag --points-at HEAD)').trim()
 
+              env.CI_PUBLIC_IMAGE_NAMESPACE = sh(returnStdout: true,script: 'jq -r .image.public.namespace.' + env.GIT_TAG_BUILD_TYPE + ' < ci.json'.trim())
+              env.CI_INTERNAL_IMAGE_NAMESPACE = sh(returnStdout: true,script: 'jq -r .image.internal.namespace.' + env.GIT_TAG_BUILD_TYPE + ' < ci.json'.trim())
+
               def ximUsers = sh(returnStdout: true,script: 'jq -r .notice.users < ci.json').trim()
               env.XIM_USERS = ximUsers + ',' + env.GIT_TAGGER_NAME
               env.XIM_GROUPS = sh(returnStdout: true,script: 'jq -r .notice.groups < ci.json').trim()
@@ -700,18 +703,7 @@ pipeline {
 
           environment {
             REGISTRY_HOST="hub.zentao.net"
-            CI_BUILD_PUBLIC_IMAGE="""${sh(
-                      returnStdout: true,
-                      script: 'test "$GIT_TAG_BUILD_TYPE" = release && echo true || echo false'
-            ).trim()}"""
-            CI_PUBLIC_IMAGE_NAMESPACE="""${sh(
-                      returnStdout: true,
-                      script: "echo $GIT_URL | grep demo/zentao >/dev/null && echo test || echo app"
-            ).trim()}"""
-            CI_INTERNAL_IMAGE_NAMESPACE="""${sh(
-                      returnStdout: true,
-                      script: "echo $GIT_URL | grep demo/zentao >/dev/null && echo test || echo app"
-            ).trim()}"""
+            CI_BUILD_PUBLIC_IMAGE="true"
           }
 
           stages() {
