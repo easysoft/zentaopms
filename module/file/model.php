@@ -1192,7 +1192,7 @@ class fileModel extends model
         $addedFiles = empty($addedFiles) ? '' : ',' . implode(',', array_keys($addedFiles));
 
         $newObject->files = trim($oldFiles . $addedFiles, ',');
-        $oldObject->files = implode(',', array_keys($oldObject->files));
+        $oldObject->files = $oldFiles;
     }
 
     /**
