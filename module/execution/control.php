@@ -3794,6 +3794,7 @@ class execution extends control
     }
 
     /*
+     * 从白名单中移除用户。
      * Removing users from the white list.
      *
      * @param  int     $id
@@ -3801,7 +3802,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function unbindWhitelist($id = 0, $confirm = 'no')
+    public function unbindWhitelist(int $id = 0, string $confirm = 'no')
     {
         echo $this->fetch('personnel', 'unbindWhitelist', "id=$id&confirm=$confirm");
     }
