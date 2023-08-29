@@ -79,12 +79,13 @@ class executionZen extends execution
      * 构建产品下拉选择数据。
      * Build product drop-down select data.
      *
+     * @param  int       $executionID
      * @param  int       $productID
      * @param  object[]  $products
      * @access protected
      * @return array
      */
-    protected function buildProductSwitcher(int $productID, array $products)
+    protected function buildProductSwitcher(int $executionID, int $productID, array $products)
     {
         $productOption = array();
         $branchOption  = array();
@@ -235,11 +236,12 @@ class executionZen extends execution
      * 获取打印看板的数据。
      * Get printed kanban data.
      *
+     * @param  int       $executionID
      * @param  array     $stories
      * @access protected
      * @return array
      */
-    protected function getPrintKanbanData(array $stories): array
+    protected function getPrintKanbanData(int $executionID, array $stories): array
     {
         $kanbanTasks = $this->execution->getKanbanTasks($executionID, "id");
         $kanbanBugs  = $this->loadModel('bug')->getExecutionBugs($executionID);

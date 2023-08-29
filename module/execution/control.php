@@ -941,7 +941,7 @@ class execution extends control
         $showBranch    = $this->loadModel('branch')->showBranch($productID);
         if($execution->hasProduct)
         {
-            list($productOption, $branchOption) = $this->executionZen->buildProductSwitcher($productID, $products);
+            list($productOption, $branchOption) = $this->executionZen->buildProductSwitcher($executionID, $productID, $products);
             unset($this->config->bug->search['fields']['product']);
             unset($this->config->bug->search['params']['product']);
             if($project->model != 'scrum')
@@ -1081,7 +1081,7 @@ class execution extends control
         $showBranch    = $this->loadModel('branch')->showBranch($productID);
         if($execution->hasProduct)
         {
-            list($productOption, $branchOption) = $this->executionZen->buildProductSwitcher($productID, $products);
+            list($productOption, $branchOption) = $this->executionZen->buildProductSwitcher($executionID, $productID, $products);
         }
 
         /* Load pager. */
@@ -2806,7 +2806,7 @@ class execution extends control
             foreach($stories as $story) $story->order = $order ++;
 
             /* Get printed kanban data. */
-            list($dataList, $users) = $this->executionZen->getPrintKanbanData($stories);
+            list($dataList, $users) = $this->executionZen->getPrintKanbanData($executionID, $stories);
 
             $originalDataList = $dataList;
             if($this->post->content == 'increment') $dateList = $this->executionZen->processPrintKanbanData($executionID, $dateList);
