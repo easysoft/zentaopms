@@ -3883,6 +3883,7 @@ class execution extends control
     }
 
     /**
+     * 在迭代中查看迭代的文档。
      * Doc for compatible.
      *
      * @param  int    $executionID
