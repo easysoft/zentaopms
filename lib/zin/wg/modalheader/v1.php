@@ -45,7 +45,7 @@ class modalHeader extends wg
             $title ? div
             (
                 $title,
-                set::class($this->prop('titleClass')),
+                set::className($this->prop('titleClass')),
             ) : null,
             ($entityText || $entityID) ? entityLabel
             (
@@ -62,7 +62,7 @@ class modalHeader extends wg
 
         return h::div
         (
-            set::class('modal-header panel-form rounded-md canvas mx-auto'),
+            set::className('modal-header panel-form rounded-md canvas mx-auto'),
             set::style(array('margin-bottom' => '0px')),
             $header
         );

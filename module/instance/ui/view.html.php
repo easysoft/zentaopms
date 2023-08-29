@@ -44,7 +44,7 @@ foreach($dbList as $db)
             $db->ready ? $lang->instance->dbReady : $lang->instance->dbWaiting,
             setClass('text-' . ($db->ready ? 'success' : 'danger'))
         ),
-        
+
         h::td
         (
             btn
@@ -187,12 +187,12 @@ div
                             !empty($defaultAccount->password) ? h::td
                             (
                                 input(set::type('text'), set::value($defaultAccount->password), set::name('password'), setStyle('display', 'none')),
-                                btn(set::class('copy-btn ghost'),set::icon('copy'))
+                                btn(set::className('copy-btn ghost'),set::icon('copy'))
                             ): null,
                             !empty($defaultAccount->token)    ? h::td
                             (
                                 input(set::type('text'), set::value($defaultAccount->token), set::name('token'), setStyle('display', 'none')),
-                                btn(set::class('copy-btn ghost'),set::icon('copy'))
+                                btn(set::className('copy-btn ghost'),set::icon('copy'))
                             ): null,
                             $type === 'store' ? null : h::td
                             (
@@ -228,7 +228,7 @@ div
             floatToolbar
             (
                 set::object($instance),
-                isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), set::class('ghost text-white'), $lang->goback)),
+                isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), set::className('ghost text-white'), $lang->goback)),
                 set::main($actions['mainActions']),
                 set::suffix($actions['suffixActions'])
             ),

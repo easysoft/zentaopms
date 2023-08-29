@@ -163,7 +163,7 @@ class formPanel extends panel
 
         return new form
         (
-            set::class($this->prop('formClass')),
+            set::className($this->prop('formClass')),
             set($this->props->pick(array_keys(form::definedPropsList()))),
             $this->children(),
             $hiddenFields ? jsVar('hiddenFields', $hiddenFields) : null,

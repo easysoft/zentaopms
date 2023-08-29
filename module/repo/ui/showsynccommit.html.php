@@ -31,7 +31,7 @@ div
     setClass('sync-main-content'),
     div
     (
-        set::class('sync-content'),
+        set::className('sync-content'),
         div
         (
             setClass('alert light-pale flex items-center'),

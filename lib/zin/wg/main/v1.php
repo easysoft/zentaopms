@@ -91,7 +91,7 @@ class main extends wg
         (
             set::id('mainContent'),
             $leftSides,
-            set::class(empty($leftSides) && empty($rightSides) ? '' : 'row', empty($leftSides) ? '' : 'has-sidebar-left', empty($rightSides) ? '' : 'has-sidebar-right'),
+            set::className(empty($leftSides) && empty($rightSides) ? '' : 'row', empty($leftSides) ? '' : 'has-sidebar-left', empty($rightSides) ? '' : 'has-sidebar-right'),
             $this->children(),
             $rightSides
         );
@@ -125,7 +125,7 @@ class main extends wg
             $this->buildMainNavbar(),
             div
             (
-                set::class('container'),
+                set::className('container'),
                 $this->buildMenu(),
                 $this->buildContent()
             )

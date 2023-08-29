@@ -182,7 +182,7 @@ class dataset
      * @access public
      * @return object
      */
-    public function clone()
+    public function copy()
     {
         $className = get_called_class();
         return new $className($this->data);

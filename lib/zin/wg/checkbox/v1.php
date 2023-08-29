@@ -47,7 +47,7 @@ class checkbox extends wg
             ),
             h::label
             (
-                set::for($id),
+                set('for', $id),
                 setClass($labelClass),
                 $text,
             ),
@@ -68,7 +68,7 @@ class checkbox extends wg
                 set::type($type),
                 set($this->props->skip('text,primary,typeClass')),
             ),
-            is_string($text) ? span($text, set::class('text')) : $text,
+            is_string($text) ? span($text, set::className('text')) : $text,
             $this->children()
         );
     }

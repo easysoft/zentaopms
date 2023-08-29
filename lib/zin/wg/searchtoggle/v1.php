@@ -29,7 +29,7 @@ class searchToggle extends wg
         if(is_null($open) && !empty($_GET['browseType'])) $open = $_GET['browseType'] === 'bySearch';
         return btn
         (
-            set::class('ghost search-form-toggle'),
+            set::className('ghost search-form-toggle'),
             set::icon('search'),
             set::text($lang->searchAB),
             set('data-module', $this->prop('module')),

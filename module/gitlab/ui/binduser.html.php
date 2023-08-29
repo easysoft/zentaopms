@@ -15,7 +15,7 @@ namespace zin;
 /* zin: Define the set::module('compile') feature bar on main menu. */
 featureBar
 (
-    to::leading(array(backBtn(set::icon('back'), set::class('secondary'), $lang->goback))),
+    to::leading(array(backBtn(set::icon('back'), set::className('secondary'), $lang->goback))),
     set::current($type),
     set::link($this->createLink('gitlab', 'binduser', "gitlabID=$gitlabID&type={key}")),
 );

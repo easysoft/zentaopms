@@ -49,13 +49,13 @@ class formGroup extends wg
 
         return div
         (
-            set::class('form-group', $required ? 'required' : null, ($label === false || $label === null) ? 'no-label' : null, empty($width) ? null : 'grow-0'),
+            set::className('form-group', $required ? 'required' : null, ($label === false || $label === null) ? 'no-label' : null, empty($width) ? null : 'grow-0'),
             zui::width($width),
             set($this->getRestProps()),
             setCssVar('form-grid-label-width', $labelWidth),
             empty($label) ? null : new formLabel
             (
-                set::class($labelClass, $strong ? 'font-bold' : null),
+                set::className($labelClass, $strong ? 'font-bold' : null),
                 set::required($required),
                 set($labelProps),
                 $label
@@ -65,7 +65,7 @@ class formGroup extends wg
             $this->children(),
             empty($tip) ? null : div
             (
-                set::class($tipClass),
+                set::className($tipClass),
                 set($tipProps),
                 $tip
             )

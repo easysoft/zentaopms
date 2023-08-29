@@ -50,8 +50,8 @@ class props extends \zin\utils\dataset
      */
     public function __construct(array $props = array())
     {
-        $this->style = style::new();
-        $this->class = classlist::new();
+        $this->style = new style();
+        $this->class = new classlist();
 
         parent::__construct($props);
     }

@@ -46,7 +46,7 @@ if(strpos($config->repo->images, "|$suffix|") !== false)
 {
     $wg = div
     (
-        set::class('image'),
+        set::className('image'),
         img(set::src('data:image/' . $suffix . ';base64,' . $content))
     );
 }
@@ -54,7 +54,7 @@ elseif($suffix == 'binary')
 {
     $wg = div
     (
-        set::class('binary'),
+        set::className('binary'),
         a
         (
             set::href($this->repo->createLink('download', "repoID=$repoID&path=" . $this->repo->encodePath($entry) . "&fromRevision=$revision")),
@@ -102,11 +102,11 @@ if($canLinkTask)  $dropMenus[] = array('id' => 'linkTask',  'text' => $this->lan
 $logWg = div
 (
     set::id('log'),
-    div(set::class('history')),
+    div(set::className('history')),
     div
     (
-        set::class('action-btn pull-right'),
-        div(set::class('btn btn-close pull-right ghost text-black bg-light bg-opacity-50'), icon('close')),
+        set::className('action-btn pull-right'),
+        div(set::className('btn btn-close pull-right ghost text-black bg-light bg-opacity-50'), icon('close')),
         !empty($dropMenus) ? dropdown
         (
             set::arrow(false),
@@ -127,11 +127,11 @@ $logWg = div
 $relatedWg = div
 (
     set::id('related'),
-    div(set::class('btn btn-left pull-left'), icon('chevron-left')),
-    div(set::class('btn btn-right pull-right'), icon('chevron-right')),
+    div(set::className('btn btn-left pull-left'), icon('chevron-left')),
+    div(set::className('btn btn-right pull-right'), icon('chevron-right')),
     div
     (
-        set::class('panel-title'),
+        set::className('panel-title'),
         tabs
         (
             set::id('relationTabs'),
@@ -143,13 +143,13 @@ $relatedWg = div
             ),
         ),
     ),
-    div(set::class('table-empty-tip'), p($this->lang->repo->notRelated))
+    div(set::className('table-empty-tip'), p($this->lang->repo->notRelated))
 );
 
 div
 (
     set::id('monacoEditor'),
-    set::class('repoCode'),
+    set::className('repoCode'),
     $wg,
     $logWg,
     $relatedWg
