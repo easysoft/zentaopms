@@ -3954,23 +3954,24 @@ class execution extends control
     }
 
     /**
-     * Import stories by plan.
+     * 将计划中的需求关联到此项目或迭代/执行或看板中。
+     * Import the stories to execution/project/kanban by product plan.
      *
      * @param  int    $executionID
      * @param  int    $planID
      * @param  int    $productID
      * @param  string $extra
-     * @param  string $param
      * @access public
      * @return void
      */
-    public function importPlanStories(int $executionID, int $planID, int $productID = 0, string $extra = '', string $param = '')
+    public function importPlanStories(int $executionID, int $planID, int $productID = 0, string $extra = '')
     {
-        $planStories = $planProducts = array();
-        $planStory   = $this->loadModel('story')->getPlanStories($planID);
-        $execution   = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
+        if($_SERVER['REQUEST_METHOD'] !== 'POST') return $this->sendError($this->lang->error->accessDenied);
 
-        $count = 0;
+        $execution   = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
+        $planStories = array();
+        $planStory   = $this->loadModel('story')->getPlanStories($planID);
+        $draftCount  = 0;
         if(!empty($planStory))
         {
             $projectProducts = $this->loadModel('project')->getBranchesByProject($executionID);
@@ -3979,29 +3980,19 @@ class execution extends control
                 $projectBranches = zget($projectProducts, $story->product, array());
                 if($story->status != 'active' or (!empty($story->branch) and !empty($projectBranches) and !isset($projectBranches[$story->branch])))
                 {
-                    $count++;
+                    $draftCount++;
                     unset($planStory[$id]);
                     continue;
                 }
-                $planProducts[$story->id] = $story->product;
             }
 
-            $projectID   = $this->dao->findByID($executionID)->from(TABLE_EXECUTION)->fetch('project');
             $planStories = array_keys($planStory);
-
-            if($executionID != $projectID) $this->execution->linkStory($projectID, $planStories);
-            $this->execution->linkStory($executionID, $planStories, $extra);
+            if($execution->project != 0) $this->execution->linkStory($execution->project, $planStories); /* Link story to the project of the execution. */
+            $this->execution->linkStory($executionID, $planStories, $extra); /* Link story to the execution. */
         }
 
         $moduleName = 'execution';
-        if(empty($param))  $param = "executionID=$executionID";
-        if(!empty($param)) $param = str_replace(array(',', ' '), array('&', ''), $param);
-        if($execution->type == 'project')
-        {
-            $moduleName = 'projectstory';
-            $param      = "projectID=$executionID&productID=$productID";
-        }
-
+        if($execution->type == 'project') $moduleName = 'projectstory';
         if($execution->type == 'kanban')
         {
             global $lang;
@@ -4009,29 +4000,16 @@ class execution extends control
             include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
         }
 
-        $multiBranchProduct = false;
-        if($productID)
-        {
-            $product = $this->loadModel('product')->getByID($productID);
-            if($product->type != 'normal') $multiBranchProduct = true;
-        }
-        else
-        {
-            $executionProductList = $this->loadModel('product')->getProducts($executionID);
-            foreach($executionProductList as $executionProduct)
-            {
-                if($executionProduct->type != 'normal')
-                {
-                    $multiBranchProduct = true;
-                    break;
-                }
-            }
-        }
-        $importPlanStoryTips = $multiBranchProduct ? $this->lang->execution->haveBranchDraft : $this->lang->execution->haveDraft;
+        /* Check if the product is multiple branch. */
+        $multiBranchProduct = $this->executionZen->hasMultipleBranch($productID, $executionID);
 
-        $haveDraft = sprintf($importPlanStoryTips, $count);
-        if(!$execution->multiple or $moduleName == 'projectstory') $haveDraft = str_replace($this->lang->executionCommon, $this->lang->projectCommon, $haveDraft);
-        if($count != 0) return $this->sendError($haveDraft);
+        if($draftCount != 0)
+        {
+            $importPlanStoryTips = $multiBranchProduct ? $this->lang->execution->haveBranchDraft : $this->lang->execution->haveDraft;
+            $haveDraft           = sprintf($importPlanStoryTips, $draftCount);
+            if(!$execution->multiple || $moduleName == 'projectstory') $haveDraft = str_replace($this->lang->executionCommon, $this->lang->projectCommon, $haveDraft);
+            return $this->sendError($haveDraft);
+        }
 
         return $this->sendSuccess(array('closeModal' => true, 'load' => true));
     }
