@@ -4695,7 +4695,7 @@ class taskModel extends model
                 }
             }
 
-            $mailto = explode(',', $task->mailto);
+            $mailto = $task->mailto ? explode(',', $task->mailto) : array();
             foreach($mailto as $key => $account)
             {
                 $account = trim($account);
