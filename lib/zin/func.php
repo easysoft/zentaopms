@@ -1620,6 +1620,15 @@ function overviewBlock(): overviewBlock
 }
 
 /**
+ * Statistic block widget.
+ *
+ */
+function statisticBlock(): statisticBlock
+{
+    return createWg('statisticBlock', func_get_args());
+}
+
+/**
  * Picker widget.
  */
 function picker(): picker
