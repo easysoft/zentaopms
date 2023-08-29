@@ -26,6 +26,7 @@ cid=1
 */
 
 $executionTester = new executionTest();
-
-r($executionTester->setMenuTest(3))  && p('more:link') && e('更多|execution|more|3'); // 执行存在的情况
-r($executionTester->setMenuTest(10)) && p()            && e('0');                     // 执行不存在的情况
+r($executionTester->setMenuTest(3))  && p('more:link')   && e('更多|execution|more|3');               // 测试设置迭代导航
+r($executionTester->setMenuTest(4))  && p('more:link')   && e('更多|execution|more|3');               // 测试设置阶段导航
+r($executionTester->setMenuTest(5))  && p('kanban:link') && e('看板|execution|kanban|executionID=5'); // 测试设置看板导航
+r($executionTester->setMenuTest(10)) && p()              && e('0');                                   // 执行不存在的情况

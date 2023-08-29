@@ -109,9 +109,6 @@ class executionModel extends model
 
         if($execution->type == 'kanban') $this->executionTao->setKanbanMenu();
 
-        $project = $this->loadModel('project')->getByID($execution->project);
-        if($execution->type == 'stage' || (!empty($project) && $project->model == 'waterfallplus')) unset($this->lang->execution->menu->settings['subMenu']->products);
-
         /* Check execution permission. */
         $executions = $this->getPairs(0, 'all', 'nocode');
         if(!$executionID && $this->session->execution) $executionID = $this->session->execution;
@@ -159,6 +156,9 @@ class executionModel extends model
      */
     public function removeMenu(object $execution)
     {
+        $project = $this->loadModel('project')->getByID($execution->project);
+        if($execution->type == 'stage' || (!empty($project) && $project->model == 'waterfallplus')) unset($this->lang->execution->menu->settings['subMenu']->products);
+
         if(empty($execution->hasProduct)) unset($this->lang->execution->menu->settings['subMenu']->products);
         if(isset($execution->acl) && $execution->acl != 'private') unset($this->lang->execution->menu->settings['subMenu']->whitelist);
 
