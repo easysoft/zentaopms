@@ -420,12 +420,12 @@ class instance extends control
             $freeMemory = intval($clusterResource->metrics->memory->allocatable * 0.9); // Remain 10% memory for system.
             if($cloudApp->memory > $freeMemory)
             {
-                $this->view->cloudApp       = $cloudApp;
-                $this->view->gapMemory      = helper::formatKB(intval(($cloudApp->memory - $freeMemory)));
-                $this->view->requiredMemory = helper::formatKB(intval($cloudApp->memory));
-                $this->view->freeMemory     = helper::formatKB(intval($freeMemory));
+                $cloudApp       = $cloudApp;
+                $gapMemory      = helper::formatKB(intval(($cloudApp->memory - $freeMemory)));
+                $requiredMemory = helper::formatKB(intval($cloudApp->memory));
+                $freeMemory     = helper::formatKB(intval($freeMemory));
 
-                return $this->display('instance','resourceerror');
+                return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->instance->errors->notEnoughMemory, $cloudApp->alias, $requiredMemory, $freeMemory, $gapMemory)));
             }
         }
 
