@@ -18,21 +18,14 @@ $execution->gen(5);
 /**
 
 title=测试 executionModel->checkPriv();
+timeout=0
 cid=1
-pid=1
-
-测试传入空值 >> 0
-测试传入0 >> 0
-测试传入迭代ID的权限判断 >> 1
-测试传入阶段ID的权限判断 >> 1
-测试传入看板ID的权限判断 >> 1
 
 */
 
-$executionIdList = array('', 0, 1, 2, 3);
+$executionIdList = array(0, 0, 1, 2, 3);
 
 $executionTester = new executionTest();
-
 r($executionTester->checkPrivTest($executionIdList[0])) && p() && e('0'); // 测试传入空值
 r($executionTester->checkPrivTest($executionIdList[1])) && p() && e('0'); // 测试传入0
 r($executionTester->checkPrivTest($executionIdList[2])) && p() && e('1'); // 测试传入迭代ID的权限判断

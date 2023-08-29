@@ -15,13 +15,14 @@ class executionModel extends model
     const LINK_MEMBERS_ONE_TIME = 20;
 
     /**
+     * 检查执行的权限
      * Check the privilege.
      *
      * @param  int    $executionID
      * @access public
      * @return bool
      */
-    public function checkPriv($executionID)
+    public function checkPriv(int $executionID): bool
     {
         if(empty($executionID)) return false;
 
