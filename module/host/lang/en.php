@@ -110,6 +110,7 @@ $lang->host->pri                   = 'Priority';
 $lang->host->tags                  = 'Platform Label';
 $lang->host->provider              = 'Priority';
 $lang->host->bridgeID              = 'Virtual Bridge';
+
 $lang->host->osNameList['linux']   = 'Linux';
 $lang->host->osNameList['windows'] = 'Microsoft Windows';
 $lang->host->osNameList['solaris'] = 'Solaris';

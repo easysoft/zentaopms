@@ -49,7 +49,6 @@ $lang->instance->enableSMTP         = '启用SMTP';
 $lang->instance->systemSMTPInactive = '未开启系统SMTP';
 $lang->instance->toSystemSMTP       = '去启用';
 
-
 $lang->instance->serviceInfo      = '服务信息';
 $lang->instance->appTemplate      = '应用模板';
 $lang->instance->source           = '来源';
@@ -321,8 +320,7 @@ $lang->instance->appLifeTip         = 'demo账号安装的应用有30分钟限�
 $lang->instance->serialDiff         = '查看版本区别';
 $lang->instance->descOfSwitchSerial = '您当前使用的是<strong>%s</strong>，想要体验更多高级功能，可升级至%s。';
 $lang->instance->toSeniorAttention  = '重要提示';
-$lang->instance->toSeniorTips       = "<ul class='text-danger'><li>版本升级后，无法回退到原版本。</li><li>企业版、旗舰版自安装后免费试用6个月。</li><li>开源版升级到企业版或旗舰版后，试用期最大支持3个用户，
-    请检查开源版用户数量。超出限制将不可用。</li><li>升级成功后，服务将自动重启。</li><li>为避免造成数据丢失，请您在升级前务必做好数据备份。</li></ul>";
+$lang->instance->toSeniorTips       = "<ul class='text-danger'><li>版本升级后，无法回退到原版本。</li><li>企业版、旗舰版自安装后免费试用6个月。</li><li>开源版升级到企业版或旗舰版后，试用期最大支持3个用户，请检查开源版用户数量。超出限制将不可用。</li><li>升级成功后，服务将自动重启。</li><li>为避免造成数据丢失，请您在升级前务必做好数据备份。</li></ul>";
 
 $lang->instance->errors = new stdclass;
 $lang->instance->errors->domainLength         = '域名长度必须介于2-20字符之间';

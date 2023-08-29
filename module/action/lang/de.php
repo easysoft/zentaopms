@@ -165,6 +165,10 @@ $lang->action->objectTypes['scene']            = 'Scene';
 $lang->action->objectTypes['serverroom']       = 'IDC';
 $lang->action->objectTypes['account']          = 'Account';
 $lang->action->objectTypes['host']             = 'Host';
+$lang->action->objectTypes['deploy']           = 'Deploy';
+$lang->action->objectTypes['service']          = 'Service';
+$lang->action->objectTypes['domain']           = 'Domain';
+$lang->action->objectTypes['artifactrepo']     = 'Artifact Repo';
 $lang->action->objectTypes['prompt']           = 'Prompt';
 
 /* Used to describe operation history. */
@@ -299,7 +303,7 @@ $lang->action->desc->install                 = '$date, installed by <strong>$act
 $lang->action->desc->uninstall               = '$date, uninstalled by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->start                   = '$date, started by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->stop                    = '$date, closed by <strong>$actor</strong>.' . "\n";
-$lang->action->desc->editextra               = '$date, updated from <strong>$oldname</strong> to <strong>$newName</strong> by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->editname                = '$date, updated from <strong>$oldname</strong> to <strong>$newName</strong> by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->upgrade                 = '$date, upgraded from <strong>$oldVersion</strong> to <strong>$newVersion</strong> by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->backup                  = '$date, backuped by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->adjustmemory            = '$date, resized to <strong>$newMemory</strong> of memory by <strong>$actor</strong>.' . "\n";
@@ -336,8 +340,6 @@ $lang->action->label->closeautobackupsettings = 'disable auto backup ';
 $lang->action->label->autobackup              = 'auto backup by system ';
 $lang->action->label->autorestore             = 'auto restore by system ';
 $lang->action->label->deleteexpiredbackup     = 'delete expire backup by system ';
-$lang->action->label->revert                  = 'revert ';
-$lang->action->label->install                 = 'install ';
 $lang->action->label->revert                  = 'revert ';
 $lang->action->label->created                 = 'created ';
 $lang->action->label->opened                  = 'opened ';
@@ -848,6 +850,14 @@ $lang->action->label->stage        = 'Stage|stage|browse|';
 $lang->action->label->module       = 'Module|tree|browse|productid=%s&type=story&currentModuleID=0&branch=all';
 $lang->action->label->ticket       = 'Ticket|ticket|view|id=%s';
 $lang->action->label->chartgroup   = 'Group';
+$lang->action->label->serverroom   = 'IDC|serverroom|browse|';
+$lang->action->label->host         = 'Host|host|view|id=%s';
+$lang->action->label->account      = "Account|account|view|id=%s";
+$lang->action->label->instance     = 'Application|instance|view|id=%s';
+$lang->action->label->deploy       = 'Deploy|deploy|view|id=%s';
+$lang->action->label->domian       = 'Domain|domian|view|id=%s';
+$lang->action->label->service      = 'Service|service|view|id=%s';
+$lang->action->label->artifactrepo = 'Artifact Repo|artifactrepo|browse|';
 $lang->action->label->prompt       = 'Prompt|ai|promptview|id=%s';
 
 /* Object type. */

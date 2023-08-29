@@ -42,6 +42,8 @@ $lang->system->LDAP->ldapUsername     = 'Username';
 $lang->system->LDAP->ldapName         = 'Name';
 $lang->system->LDAP->host             = 'Host';
 $lang->system->LDAP->port             = 'Port';
+$lang->system->LDAP->account          = 'Account';
+$lang->system->LDAP->password         = 'Password';
 $lang->system->LDAP->ldapRoot         = 'Root node';
 $lang->system->LDAP->filterUser       = 'User filtering';
 $lang->system->LDAP->email            = 'Mail Fields';
@@ -210,6 +212,11 @@ $lang->system->backup->rollback = 'Rollback';
 $lang->system->backup->restart  = 'Restart';
 $lang->system->backup->delete   = 'Delte';
 
+$lang->system->backup->statusList['pending']    = 'Waiting';
+$lang->system->backup->statusList['inprogress'] = 'In progress';
+$lang->system->backup->statusList['completed']  = 'Compelete';
+$lang->system->backup->statusList['failed']     = 'Fail';
+
 $lang->system->backup->restoreProgress['doing'] = 'Doing';
 $lang->system->backup->restoreProgress['done']  = 'Done';
 
@@ -217,12 +224,15 @@ $lang->system->backup->typeList['manual']  = 'Manual backup';
 $lang->system->backup->typeList['upgrade'] = 'Automatic backup before upgrade';
 $lang->system->backup->typeList['restore'] = 'Automatic backup before rollback';
 
-$lang->system->backup->waitting        = '<span id="backupType"></span>In progress，please wait...';
+$lang->system->backup->waitting        = 'Backup is in progress, please wait...';
+$lang->system->backup->waittingStore   = 'Restoring app data, please wait...';
+$lang->system->backup->progress        = 'Backup in progress（%d/%d）';
+$lang->system->backup->progressStore   = 'Restoring, progress(%d/%d)';
 $lang->system->backup->progressSQL     = 'In backup，%s has been backed up';
 $lang->system->backup->progressAttach  = 'There are a total of %s files in the backup, and %s files have already been backed up';
 $lang->system->backup->progressCode    = 'There are a total of %s files in the backup, and %s files have already been backed up';
 $lang->system->backup->confirmDelete   = 'Do you want to delte the backup';
-$lang->system->backup->confirmRestore  = 'Please confirm whether to roallback?';
+$lang->system->backup->confirmRestore  = 'A restart is required during the platform restore process, which will cause all your current operations to be interrupted and cannot be restored. Are you sure you want to continue?';
 $lang->system->backup->holdDays        = 'Backup has been retained for the last %s days';
 $lang->system->backup->copiedFail      = 'Files that failed to copy:';
 $lang->system->backup->restoreTip      = 'The restore function only restores the database.';
@@ -239,7 +249,8 @@ $lang->system->backup->success->upgrade = 'Upgrade successful!';
 $lang->system->backup->success->degrade = 'Successfully downgraded!';
 
 $lang->system->backup->error = new stdclass();
-
+$lang->system->backup->error->backupFail        = "Backup failed!";
+$lang->system->backup->error->restoreFail       = "Restore failed!";
 $lang->system->backup->error->upgradeFail       = "Upgrade failed!";
 $lang->system->backup->error->upgradeOvertime   = "Upgrade timed out!";
 $lang->system->backup->error->degradeFail       = "Downgrade failed!";

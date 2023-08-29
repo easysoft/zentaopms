@@ -249,7 +249,6 @@ $lang->system->backup->success->upgrade = '升级成功！';
 $lang->system->backup->success->degrade = '降级成功！';
 
 $lang->system->backup->error = new stdclass();
-
 $lang->system->backup->error->backupFail        = "备份失败!";
 $lang->system->backup->error->restoreFail       = "还原失败!";
 $lang->system->backup->error->upgradeFail       = "升级失败!";
