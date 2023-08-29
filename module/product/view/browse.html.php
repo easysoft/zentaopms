@@ -51,46 +51,25 @@ js::set('orderBy', $orderBy);
 js::set('sortLink', $sortLink);
 js::set('cols', json_encode($cols));
 js::set('data', json_encode($rows));
-?>
-<style>
-body {margin-bottom: 25px;}
-#mainMenu .btn-toolbar .btn-group .dropdown-menu .btn-active-text:hover .text {color: #fff;}
-#mainMenu .btn-toolbar .btn-group .dropdown-menu .btn-active-text:hover .text:after {border-bottom: unset;}
-.body-modal #mainMenu>.btn-toolbar {width: auto;}
-.assignedTo{border-radius: 4px !important;}
-</style>
-<?php
+
 $lang->story->createCommon = $storyType == 'story' ? $lang->story->createStory : $lang->story->createRequirement;
-$unfoldStories     = isset($config->product->browse->unfoldStories) ? json_decode($config->product->browse->unfoldStories, true) : array();
-$unfoldStories     = zget($unfoldStories, $productID, array());
-$isProjectStory    = $this->app->rawModule == 'projectstory';
 $projectIDParam    = $isProjectStory ? "projectID=$projectID&" : '';
 $projectModel      = isset($project->model) ? $project->model : '';
-js::set('browseType', $browseType);
-js::set('account', $this->app->user->account);
-js::set('reviewStory', $lang->product->reviewStory);
-js::set('productID', $productID);
-js::set('projectID', $projectID);
-js::set('branch', $branch);
-js::set('rawModule', $this->app->rawModule);
-js::set('productType', $this->app->tab == 'product' ? $product->type : '');
+js::set('browseType',        $browseType);
+js::set('account',           $this->app->user->account);
+js::set('reviewStory',       $lang->product->reviewStory);
+js::set('productID',         $productID);
+js::set('projectID',         $projectID);
+js::set('branch',            $branch);
+js::set('rawModule',         $this->app->rawModule);
+js::set('productType',       $this->app->tab == 'product' ? $product->type : '');
 js::set('projectHasProduct', $projectHasProduct);
-js::set('projectModel', $projectModel);
-js::set('URAndSR', $this->config->URAndSR);
-js::set('unfoldStories', $unfoldStories);
-js::set('unfoldAll',     $lang->execution->treeLevel['all']);
-js::set('foldAll',       $lang->execution->treeLevel['root']);
-js::set('storyType',     $storyType);
-js::set('vision',        $this->config->vision);
-js::set('pageSummary',   $summary);
+js::set('projectModel',      $projectModel);
+js::set('URAndSR',           $this->config->URAndSR);
+js::set('storyType',         $storyType);
+js::set('vision',            $this->config->vision);
+js::set('pageSummary',       $summary);
 ?>
-<style>
-.btn-group .icon-close:before {font-size: 5px; vertical-align: 25%;}
-.btn-group a.btn-secondary, .btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.2);}
-.btn-group button.dropdown-toggle.btn-secondary, .btn-group button.dropdown-toggle.btn-primary {padding:6px;}
-#productStoryForm table tbody tr td.c-actions {overflow: visible;}
-#productStoryForm table tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-block; vertical-align: middle; background: #F4F5F7; margin: 0 4px 0 0;}
-</style>
 <?php if(isset($project->hasProduct) && empty($project->hasProduct) && $project->model != 'scrum'):?>
 <style>
 #productStoryForm th.c-plan {display: none !important;}

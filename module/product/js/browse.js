@@ -56,15 +56,8 @@ $(function()
             if(!$next.length) break;
             height += $next.outerHeight;
         }
-        if(height < menuHeight)
-        {
-            $this.addClass('dropup');
-        }
+        if(height < menuHeight) $this.addClass('dropup');
     });
-
-    adjustTableFooter();
-    $('body').on('click', '#toggleFold', adjustTableFooter);
-    $('body').on('click', '.icon.icon-angle-double-right', adjustTableFooter);
 
     /* Get checked stories. */
     $('#importToLib').on('click', function()
@@ -146,22 +139,6 @@ $(function()
         $('#productStoryForm').attr('action', $(this).data('formAction')).submit();
     });
 });
-
-/**
- * Adjust the table footer style.
- *
- * @access public
- * @return void
- */
-function adjustTableFooter()
-{
-    if($('.main-col').height() < $(window).height())
-    {
-        $('.table.with-footer-fixed').css('margin-bottom', '0');
-        $('.table-footer').removeClass('fixed-footer');
-        $('.table-footer').css({"left":"0", "bottom":"0", "width":"unset"});
-    }
-}
 
 function createSortLink(col)
 {

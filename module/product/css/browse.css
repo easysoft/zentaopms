@@ -1,3 +1,8 @@
+#mainMenu .btn-toolbar .btn-group .dropdown-menu .btn-active-text:hover .text {color: #fff;}
+#mainMenu .btn-toolbar .btn-group .dropdown-menu .btn-active-text:hover .text:after {border-bottom: unset;}
+.body-modal #mainMenu>.btn-toolbar {width: auto;}
+.assignedTo{border-radius: 4px !important;}
+
 #createActionMenu .dropdown-menu {width: 100%;}
 #productStoryForm table tbody tr td {overflow: hidden; white-space: nowrap;}
 
@@ -32,6 +37,11 @@ a.removeModule:hover {color: red;}
 .btn-toolbar #query span.text{overflow: hidden; width: 52px; vertical-align: middle; margin-right: 1px;}
 #linkStoryByPlan .modal-header {padding: 20px 0 10px 0; border-bottom: 0px}
 
+.dtable-cell[data-col="actions"] > .dtable-cell-content .c-actions {overflow: visible;}
 .dtable-cell[data-col="actions"] > .dtable-cell-content .c-actions .dividing-line {width: 1px; height: 16px; display: inline-block; vertical-align: middle; background: #F4F5F7; margin: 0 4px 0 0;}
 .table-footer{z-index: 10}
 #dtable .scrollbar, .table-header.fixed-right {z-index: 11}
+
+.btn-group .icon-close:before {font-size: 5px; vertical-align: 25%;}
+.btn-group a.btn-secondary, .btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.2);}
+.btn-group button.dropdown-toggle.btn-secondary, .btn-group button.dropdown-toggle.btn-primary {padding:6px;}
