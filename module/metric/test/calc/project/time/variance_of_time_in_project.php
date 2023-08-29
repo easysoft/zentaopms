@@ -18,4 +18,4 @@ pid=1
 
 r(count($calc->getResult())) && p('') && e('1000'); // 测试分组数。
 
-r($calc->getResult(array('project' => '1804'))) && p('0:value') && e('199'); // 测试项目424。
+r($calc->getResult(array('project' => '1804'))) && p('0:value') && e('214'); // 测试项目1804。

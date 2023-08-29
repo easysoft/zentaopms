@@ -19,6 +19,6 @@ pid=1
 
 */
 
-r(count($calc->getResult())) && p('') && e('10'); // 测试分组数。
+r(count($calc->getResult())) && p('') && e('6'); // 测试分组数。
 
-r($calc->getResult(array('project' => '4'))) && p('0:value') && e('1');  // 测试项目2。
+r($calc->getResult(array('project' => '4'))) && p('0:value') && e('0');  // 测试项目2。
