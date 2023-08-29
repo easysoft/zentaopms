@@ -20,10 +20,32 @@ class classlist
     /**
      * Store classname list, key => value
      *
-     * @access public
+     * @access private
      * @var    array
      */
-    public $list = array();
+    private array $list = array();
+
+    /**
+     * Create an classlist instance
+     *
+     * @param string|array|null $names - A string or a class name list
+     * @return classlist
+     */
+    public static function new(string|array|null $names = array()): classlist
+    {
+        return new classlist($names);
+    }
+
+    /**
+     * Stringify class list
+     *
+     * @param string|array $names - A string or a class name list
+     * @return string
+     */
+    public static function str(string|array $names): string
+    {
+        return classlist::new($names)->toStr();
+    }
 
     /**
      * Create classname instance
@@ -43,49 +65,9 @@ class classlist
      * @access public
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->toStr();
-    }
-
-    /**
-     * Override __invoke
-     *
-     * Example:
-     *
-     *     $classlist = classlist::create('btn primary');
-     *     echo $classlist(); // Output: "btn primary"
-     *
-     * @access public
-     * @param array $list - Class name list
-     * @return string
-     */
-    public function __invoke()
-    {
-        $list = func_get_args();
-        if(empty($list)) return $this->toStr();
-        return $this->set($list);
-    }
-
-    /**
-     * Override __call to invoke toggle method conveniently
-     *
-     * Example:
-     *
-     *     $classlist = classlist::new();
-     *
-     *     // Add "primary" class
-     *     $classlist->primary();
-     *
-     *     // Remove "primary" class
-     *     $classlist->primary(false);
-     *
-     * @access public
-     * @return classlist
-     */
-    public function __call($name, $args)
-    {
-        return $this->toggle($name, !count($args) || $args[0]);
     }
 
     /**
@@ -94,7 +76,7 @@ class classlist
      * Example:
      *
      *     // Set class names
-     *     $classlist = new classlist();
+     *     $classlist = classlist::new();
      *     $classlist->set('btn primary rounded');
      *
      *     // Set multiple classnames by string list
@@ -104,11 +86,11 @@ class classlist
      *     $classlist->set(array('btn' => true, 'primary' => true, 'rounded' => $isRounded));
      *
      * @access public
-     * @param string|array $list - A string or a class name list
-     * @param bool         $reset
+     * @param string|array|null $list - A string or a class name list
+     * @param bool              $reset
      * @return classlist
      */
-    public function set($list, $reset = false)
+    public function set(string|array|null $list, bool $reset = false): classlist
     {
         if(is_string($list)) $list = explode(' ', $list);
 
@@ -151,7 +133,7 @@ class classlist
      *
      * Example:
      *
-     *     $classlist = new classlist();
+     *     $classlist = classlist::new();
      *     $classlist->add('btn primary rounded');
      *
      *     // Add multiple classnames by string list
@@ -171,7 +153,7 @@ class classlist
      *
      * Example:
      *
-     *     $classlist = new classlist('btn primary rounded');
+     *     $classlist = classlist::new('btn primary rounded');
      *     $classlist->remove('btn primary');
      *
      *     // Add multiple classnames by string list
@@ -181,7 +163,7 @@ class classlist
      * @param array|string $list - classname string joined by space or string array
      * @return classlist
      */
-    public function remove($list)
+    public function remove(array|string $list): classlist
     {
         if(is_string($list)) $list = explode(' ', $list);
 
@@ -201,7 +183,7 @@ class classlist
      *
      * Example:
      *
-     *     $classlist = new classlist('btn');
+     *     $classlist = classlist::new('btn');
      *     $classlist->toggle('btn'); // class list is ""
      *
      *     // Toggle class name by flag
@@ -211,7 +193,7 @@ class classlist
      * @param string $name - classname string
      * @return classlist
      */
-    public function toggle($name, $toggle = null)
+    public function toggle(string $name, bool|null $toggle = null): classlist
     {
         $name = trim($name);
         if(strlen($name))
@@ -227,13 +209,13 @@ class classlist
      *
      * Example:
      *
-     *     $classlist = new classlist('btn primary rounded');
+     *     $classlist = classlist::new('btn primary rounded');
      *     echo $classlist->has('btn'); // Output true
      *
      *     // Check multiple names
      *     echo $classlist->has('btn primary'); // Output true
      */
-    public function has($list)
+    public function has(array|string $list): bool
     {
         if(is_string($list)) $list = explode(' ', $list);
 
@@ -280,34 +262,12 @@ class classlist
      * @access public
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         return count($this->list);
     }
 
-    /**
-     * Create an classlist instance
-     *
-     * @param string|array $names - A string or a class name list
-     * @return classlist
-     */
-    static public function new($names = null)
-    {
-        return (new classlist($names));
-    }
-
-    /**
-     * Stringify class list
-     *
-     * @param string|array $names - A string or a class name list
-     * @return string
-     */
-    static public function str($names)
-    {
-        return (new classlist($names))->toStr();
-    }
-
-    public function toJSON()
+    public function toJSON(): array
     {
         return $this->list;
     }

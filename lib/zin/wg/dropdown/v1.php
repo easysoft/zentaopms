@@ -116,7 +116,7 @@ class dropdown extends wg
                     foreach($itemsList as $item)
                     {
                         if(!($item instanceof item)) continue;
-                        $items[] = $item->props->toJsonData();
+                        $items[] = $item->props->toJSON();
                     }
                 }
                 foreach($items as $index => $item)

@@ -29,6 +29,6 @@ class echarts extends wg
         global $app;
         $jsFile = $app->getWebRoot() . 'js/echarts/echarts.common.min.js';
 
-        return zui::echarts(inherit($this), set::_call("~((name,selector,options) => $.getScript('$jsFile', null, () => zui.create(name,selector,options)))"));
+        return zui::echarts(inherit($this), set::_call("~((name,selector,options) => $.getLib('$jsFile', {root: false}, () => zui.create(name,selector,options)))"));
     }
 }

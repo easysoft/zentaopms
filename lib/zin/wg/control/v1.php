@@ -21,7 +21,7 @@ class control extends wg
 {
     protected static array $defineProps = array(
         'type?: string',         // 表单输入元素类型，值可以为：static, text, password, email, number, date, time, datetime, month, url, search, tel, color, picker, pri, severity, select, checkbox, radio, checkboxList, radioList, checkboxListInline, radioListInline, file, textarea
-        'name?: string',          // HTML name 属性
+        'name: string',          // HTML name 属性
         'id?: string',           // HTML id 属性
         'value?: string',        // HTML value 属性
         'placeholder?: string',  // HTML placeholder 属性

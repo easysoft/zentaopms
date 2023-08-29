@@ -5,9 +5,10 @@ namespace zin;
 class panel extends wg
 {
     protected static array $defineProps = array(
-        'class?: string="rounded shadow ring-0 bg-canvas"', // 类名。
+        'class?: string="rounded ring-0 bg-canvas"', // 类名。
         'size?: "sm"|"lg"',         // 额外尺寸。
         'title?: string',           // 标题。
+        'shadow?: bool=true',       // 阴影效果。
         'titleClass?: string',      // 标题类名。
         'titleProps?: array',       // 标题属性。
         'headingClass?: string',    // 标题栏类名。
@@ -53,7 +54,13 @@ class panel extends wg
         (
             setClass('panel-heading', $this->prop('headingClass')),
             set($this->prop('headingProps')),
-            empty($title) ? null : div(setClass('panel-title', $this->prop('titleClass', empty($size) ? null : "text-$size")), $title, set($this->prop('titleProps'))),
+            !empty($title) ? div
+            (
+                setClass('panel-title', $this->prop('titleClass', empty($size) ? null : "text-$size")),
+                $this->prop('titleIcon') ? icon($this->prop('titleIcon')) : null,
+                set($this->prop('titleProps')),
+                $title
+            ) : null,
             $headingBlock,
             $actions
         );
@@ -87,8 +94,8 @@ class panel extends wg
 
     protected function buildProps(): array
     {
-        list($class, $size) = $this->prop(array('class', 'size'));
-        return array(setClass('panel', $class, empty($size) ? null : "size-$size"));
+        list($class, $size, $shadow) = $this->prop(array('class', 'size', 'shadow'));
+        return array(setClass('panel', $class, empty($size) ? null : "size-$size", $shadow ? 'shadow' : null));
     }
 
     protected function build(): wg

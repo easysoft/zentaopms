@@ -30,6 +30,7 @@ class blockPanel extends panel
         'block?: object|array',             // 区块对象。
         'title?: string',                   // 标题。
         'headingClass?: string="border-b"', // 标题栏类名。
+        'longBlock?: bool',                 // 是否为长区块。
         'moreLink?: string'                 // 更多链接。
     );
 
@@ -59,19 +60,24 @@ class blockPanel extends panel
 
         if(empty($this->prop('title'))) $props['title'] = empty($block) ? $lang->block->titleList[$name] : $block->title;
 
+        if($this->prop('longBlock') === null) $props['longBlock'] = data('longBlock');
+
         $this->setProp($props);
     }
 
     protected function buildProps(): array
     {
         $props = parent::buildProps();
-        $name = $this->prop('name');
+        $name  = $this->prop('name');
         if(!empty($name))
         {
             $props[] = setData('block', $name);
             $props[] = setClass("block-{$name}");
             $props[] = setID($this->prop('id'));
         }
+
+        $props[] = setClass($this->prop('longBlock') ? 'is-long' : 'is-short');
+
         return $props;
     }
 }

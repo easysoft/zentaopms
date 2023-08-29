@@ -64,7 +64,7 @@ class select extends wg
      */
     public function onBuildItem(wg|array $item): wg
     {
-        if($item instanceof item) $item = $item->props->toJsonData();
+        if($item instanceof item) $item = $item->props->toJSON();
 
         $text  = isset($item['text']) ? $item['text'] : '';
         unset($item['text']);

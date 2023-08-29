@@ -8,7 +8,7 @@ class center extends wg
     {
         return div
         (
-            setClass("flex justify-center items-center"),
+            setClass("center"),
             set($this->getRestProps()),
             $this->children()
         );

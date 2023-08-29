@@ -12,7 +12,8 @@ class checkList extends wg
         'name?: string',
         'value?: string|array',
         'items?: array',
-        'inline?: bool'
+        'inline?: bool',
+        'disabled?: bool'
     );
 
     public function getValueList()
@@ -26,7 +27,7 @@ class checkList extends wg
 
     public function onBuildItem($item): checkbox
     {
-        if($item instanceof item) $item = $item->props->toJsonData();
+        if($item instanceof item) $item = $item->props->toJSON();
 
         if(!isset($item['checked']))
         {
@@ -34,15 +35,18 @@ class checkList extends wg
             $valueList = $this->getValueList();
 
             $item['checked'] = in_array($value, $valueList);
+            $item['disabled'] = $this->prop('disabled');
         }
 
-        $props = $this->props->pick(['primary', 'type', 'name']);
+        $props = $this->props->pick(['primary', 'type', 'name', 'disabled']);
+        if(!empty($props['name']) && !empty($item['value'])) $props['id'] = $props['name'] . $item['value'];
+
         return new checkbox(set($props), set($item));
     }
 
     protected function build(): wg
     {
-        list($items, $inline) = $this->prop(['items', 'inline']);
+        list($items, $inline, $disabled) = $this->prop(['items', 'inline', 'disabled']);
 
         if(!empty($items))
         {
@@ -59,6 +63,7 @@ class checkList extends wg
         (
             setClass($inline ? 'check-list-inline' : 'check-list'),
             set($this->getRestProps()),
+            $disabled ? set('disabled', 'disabled') : '',
             $items,
             $this->children()
         );

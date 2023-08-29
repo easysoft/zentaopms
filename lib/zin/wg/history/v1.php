@@ -13,6 +13,7 @@ class history extends wg
         'commentUrl?: string',
         'commentBtn?: bool',
         'bodyClass?: string',
+        'hasComment?: bool',
     );
 
     public static function getPageCSS(): string|false
@@ -25,12 +26,12 @@ class history extends wg
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
-    private function marker(int $num): wg
+    private function marker(int|string $content): wg
     {
         return span
         (
             setClass('marker', 'relative', 'z-10', 'text-sm', 'rounded-full', 'aspect-square', 'inline-flex', 'justify-center', 'items-center', 'mr-1', 'border', 'h-5', 'w-5', 'z-10'),
-            $num
+            is_int($content) ? $content : icon('check', setClass('text-success font-semibold'))
         );
     }
 
@@ -105,8 +106,7 @@ class history extends wg
         return li
         (
             setClass('mb-2 flex'),
-            set::value($i),
-            $this->marker($i),
+            $this->marker($action->action === 'finished' ? 'finished' : $i),
             $actionItemView
         );
     }
@@ -231,7 +231,7 @@ class history extends wg
         $isInModal = isAjaxRequest('modal');
         $padding   = $isInModal ? 'px-3 pd-3' : 'px-6 pb-6';
 
-        list($commentUrl, $bodyClass) = $this->prop(array('commentUrl', 'bodyClass'));
+        list($commentUrl, $bodyClass, $hasComment) = $this->prop(array('commentUrl', 'bodyClass', 'hasComment'));
         return panel
         (
             setClass('history', 'pt-4', 'h-full', $padding),
@@ -258,11 +258,11 @@ class history extends wg
                 )
             ),
             div(setClass('mt-3'), $this->historyList()),
-            commentDialog
+            $hasComment !== false ? commentDialog
             (
                 set::name('comment'),
                 set::url($commentUrl),
-            )
+            ) : null
         );
     }
 }

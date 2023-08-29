@@ -91,6 +91,7 @@ class modalDialog extends wg
         return div
         (
             setClass('modal-body', $this->prop('bodyClass')),
+            on::scroll('e.stopPropagation();'),
             set($this->prop('bodyProps')),
             $this->children(),
             $rawContent ? rawContent() : null,

@@ -67,6 +67,40 @@ class formPanel extends panel
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
+    protected function created()
+    {
+        $customFields = $this->prop('customFields');
+        if($customFields === true)
+        {
+            global $app, $config, $lang;
+            $module = $app->rawModule;
+            $method = $app->rawMethod;
+
+            $app->loadLang($module);
+            $app->loadModuleConfig($module);
+
+            $key           = $method . 'Fields';
+            $listFields    = array();
+            $listFieldsKey = 'custom' . ucfirst($key);
+            if(!empty($config->$module->$listFieldsKey))       $listFields = explode(',', $config->$module->$listFieldsKey);
+            if(!empty($config->$module->list->$listFieldsKey)) $listFields = explode(',', $config->$module->list->$listFieldsKey);
+
+            if(empty($listFields))
+            {
+                $this->setProp('customFields', array());
+                return false;
+            }
+
+            $fields = array();
+            foreach($listFields as $field) $fields[$field] = $lang->$module->$field;
+
+            $showFields   = explode(',', $config->$module->custom->$key);
+            $customFields = array('list' => $fields, 'show' => $showFields, 'key' => $key);
+
+            $this->setProp('customFields', $customFields);
+        }
+    }
+
     /**
      * Build heading actions.
      *
@@ -78,18 +112,27 @@ class formPanel extends panel
         $headingActions = $this->prop('headingActions');
         if(!$headingActions) $headingActions = array();
 
-        $customFields = $this->prop('customFields');
-
         /* Custom fields. */
+        $customFields = $this->prop('customFields', array());
         if($customFields)
         {
             global $app;
-            $urlParams = isset($customFields['urlParams']) ? $customFields['urlParams'] : "module={$app->rawModule}&section=custom&key=batchCreateFields";
+            $listFields = zget($customFields, 'list', array());
+            $showFields = zget($customFields, 'show', array());
+            $key        = zget($customFields, 'key', $app->rawMethod);
 
-            $headingActions[] = formSettingBtn(set::customFields($customFields['items']), set::urlParams($urlParams));
+            if($listFields && $key)
+            {
+                $urlParams        = "module={$app->rawModule}&section=custom&key={$key}";
+                $headingActions[] = formSettingBtn
+                (
+                    set::customFields(array('list' => $listFields, 'show' => $showFields)),
+                    set::urlParams(zget($customFields, 'urlParams', $urlParams)),
+                );
+
+                $this->setProp('headingActions', $headingActions);
+            }
         }
-
-        $this->setProp('headingActions', $headingActions);
 
         return parent::buildHeadingActions();
     }
@@ -102,15 +145,10 @@ class formPanel extends panel
      */
     protected function buildForm(): wg
     {
-        $customFields = $this->prop('customFields');
-        $hiddenFields = array();
-        if(!empty($customFields['items']))
-        {
-            $hiddenFields = array_values(array_filter(array_map(function($item)
-            {
-                return $item['show'] ? false : $item['name'];
-            }, $customFields['items'])));
-        }
+        $customFields = $this->prop('customFields', array());
+        $listFields   = zget($customFields, 'list', array());
+        $showFields   = zget($customFields, 'show', array());
+        $hiddenFields = $listFields && $showFields ? array_values(array_diff(array_keys($listFields), $showFields)) : array();
 
         if($this->prop('batch'))
         {
@@ -160,7 +198,8 @@ class formPanel extends panel
     {
         return div
         (
-            setClass('panel-body'),
+            setClass('panel-body ' . $this->prop('bodyClass')),
+            set($this->prop('bodyProps')),
             $this->buildForm()
         );
     }

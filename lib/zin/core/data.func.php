@@ -37,8 +37,10 @@ function getPageData($name)
     return zin::getData($name);
 }
 
-function data(...$args)
+function data()
 {
+    $args = func_get_args();
+
     if(count($args) >= 2) return setPageData($args[0], $args[1]);
     return getPageData($args[0]);
 }

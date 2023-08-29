@@ -1,15 +1,15 @@
-.module-menu {max-height: calc(100vh - 105px);}
-.module-menu {padding: 0 0 8px;}
+.module-menu {max-height: calc(100vh - 105px); padding: 0 0 8px;}
 .module-menu .active {color: var(--color-primary-600); font-weight: 500;}
 .module-menu header a:hover > .icon {color: var(--color-primary-600) !important;}
 .module-menu .tree-item * {white-space: nowrap;}
 
+#docDropmenu {padding-bottom: 0.5rem;}
 #docDropmenu .is-leading {display: none;}
 #docDropmenu .primary {--tw-ring-color: var(--btn-border-color); background-color: var(--btn-bg); color: inherit; width: 100%;}
 
 .module-menu .tree .tree-item .tree-link {text-overflow: clip; overflow: hidden; flex: 1 10 auto;}
 .module-menu .tree .tree-item .tree-actions {margin-left: 0;}
-.module-menu .tree .tree-item .tree-actions .icon {display: none;}
+.module-menu .tree .tree-item .tree-actions .icon-ellipsis-v {display: none;}
 .module-menu .tree .tree-item .tree-item-content:hover .tree-actions .icon {display: block;}
 .module-menu .tree .tree-item .tree-item-content .tree-actions .with-popover-show .icon {display: block;}
 

@@ -43,6 +43,41 @@ require_once __DIR__ . DS . 'dataset.class.php';
  */
 class style extends dataset
 {
+     /**
+     * Create an instance
+     *
+     * @param array $style - CSS style list
+     * @return style
+     */
+    public static function new(array $style = array()): style
+    {
+        return new style($style);
+    }
+
+    /**
+     * Create css from style list
+     *
+     * @access public
+     * @param array $style - CSS style list
+     * @return string
+     */
+    public static function str(array $style): string
+    {
+        return (new style($style))->toStr();
+    }
+
+    /**
+     * Format CSS variable name with prefix "--"
+     *
+     * @access public
+     * @param string $name - CSS variable name
+     * @return string
+     */
+    public static function formatVarName(string $name): string
+    {
+        return \zin\str_starts_with($name, '--') ? $name : "--$name";
+    }
+
     /**
      * Set or get css variable, an array can be passed to set multiple variables
      * If only pass variable name, then the variable value will be returned
@@ -70,9 +105,9 @@ class style extends dataset
      *     $style->cssVar('text-color', '');
      *
      * @access public
-     * @param array|string   $name  - Variable name or variables list
-     * @param mixed          $value - Property value
-     * @return mixed
+     * @param array|string $name  - Variable name or variables list
+     * @param string|null  $value - Property value
+     * @return style|array|string
      */
     public function cssVar(array|string $name = '', ?string $value = null): style|array|string
     {
@@ -113,17 +148,6 @@ class style extends dataset
      */
     public function toStr(): string
     {
-        return $this->toCss();
-    }
-
-    /**
-     * Convert style to css string
-     *
-     * @access public
-     * @return string
-     */
-    public function toCss(): string
-    {
         $pairs = array();
 
         foreach($this->data as $prop => $value)
@@ -135,40 +159,5 @@ class style extends dataset
         }
 
         return implode(' ', $pairs);
-    }
-
-    /**
-     * Create an instance
-     *
-     * @param ?array $style - CSS style list
-     * @return style
-     */
-    public static function new(?array $style = null): style
-    {
-        return new style($style);
-    }
-
-    /**
-     * Create css from style list
-     *
-     * @access public
-     * @param ?array $style - CSS style list
-     * @return string
-     */
-    public static function css(?array $style): string
-    {
-        return (new style($style))->toCss();
-    }
-
-    /**
-     * Format CSS variable name with prefix "--"
-     *
-     * @access public
-     * @param string $name - CSS variable name
-     * @return string
-     */
-    public static function formatVarName(string $name): string
-    {
-        return \zin\str_starts_with($name, '--') ? $name : "--$name";
     }
 }

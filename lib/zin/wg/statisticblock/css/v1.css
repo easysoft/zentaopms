@@ -1,0 +1,8 @@
+.block-statistic-nav {overflow-y: overlay;}
+.block-statistic-nav-item {width: auto!important; height: 36px!important;}
+.block-statistic-nav-item:hover {padding-right: 32px;}
+.block-statistic-nav-item.active {background: var(--color-canvas); box-shadow: inset 2px 0 0 var(--color-primary-500);}
+.block-statistic-nav-item .text {opacity: .8;}
+.block-statistic-nav-item.active .text, .block-statistic-nav-item:hover .text {opacity: 1;}
+.block-statistic-nav-url {position: absolute!important; padding: 0!important; width: 32px!important; justify-content: center!important; height: 36px!important;}
+.block-statistic-nav-url:hover {background-color: var(--color-canvas);}

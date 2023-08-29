@@ -98,7 +98,7 @@ class picker extends wg
         $pickerProps['items']         = $pickerItems;
         $pickerProps['defaultValue']  = $defaultValue;
 
-        if(!isset($pickerProps['emptyValue'])) $pickerProps['emptyValue'] = ($hasZeroValue || (!is_array($defaultValue) && "$defaultValue" !== '0')) ? '' : '0,';
+        if(!isset($pickerProps['emptyValue'])) $pickerProps['emptyValue'] = ($hasZeroValue || "$defaultValue" !== '0') ? '' : '0,';
 
         if(isset($pickerProps['id']))
         {

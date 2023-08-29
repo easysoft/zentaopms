@@ -29,22 +29,18 @@ class zui extends wg
         '_size?: array',
         '_id?: string',
         '_class?: string',
-        '_call?: string'
+        '_call?: string',
+        '_initWithShareData?: bool',
     );
 
-    protected function build(): wg
+    protected function build(): wg|array
     {
-        list($name, $target, $tagName, $targetProps, $size, $id, $class, $map, $call) = $this->prop(array('_name', '_to', '_tag', '_props', '_size', '_id', '_class', '_map', '_call'));
+        list($name, $target, $tagName, $targetProps, $size, $id, $class, $map, $call, $initWithShareData) = $this->prop(array('_name', '_to', '_tag', '_props', '_size', '_id', '_class', '_map', '_call', '_initWithShareData'));
         list($width, $height) = $size;
 
         $options  = $this->getRestProps();
         $children = $this->children();
-        $selector = $target;
-        if(empty($selector))
-        {
-            if(empty($id)) $id = $this->gid;
-            $selector = "#$id";
-        }
+
         if(is_array($map))
         {
             foreach($options as $key => $value)
@@ -55,7 +51,24 @@ class zui extends wg
             }
         }
 
-        if(empty($call)) $call = '~zui.create';
+        if($initWithShareData && empty($call) && empty($target))
+        {
+            if(empty($id)) $id = $this->gid;
+            $optionsName = "_options_$id";
+            $children[] = setData(array('zui' => "$name:$optionsName"));
+            $children[] = h::jsShare($optionsName, $options);
+        }
+        else
+        {
+            if(empty($call)) $call = '~zui.create';
+            $selector = $target;
+            if(empty($selector))
+            {
+                if(empty($id)) $id = $this->gid;
+                $selector = "#$id";
+            }
+            $children[] = h::jsCall($call, $name, $selector, $options);
+        }
 
         if(empty($target))
         {
@@ -68,11 +81,10 @@ class zui extends wg
                 setStyle('width', $width),
                 setStyle('height', $height),
                 $children,
-                h::jsCall($call, $name, $selector, $options)
             );
         }
 
-        return  h::jsCall($call, $name, $selector, $options);
+        return  $children;
     }
 
     public static function __callStatic($name, $args)
@@ -80,13 +92,15 @@ class zui extends wg
         return new zui(set('_name', $name), $args);
     }
 
-    public static function toggle($name, $options = null)
+    public static function toggle($name, $options = array())
     {
         return toggle($name, $options);
     }
 
-    public static function setClass($name, ...$args)
+    public static function setClass(/* $name, ...$args */)
     {
+        $args = func_get_args();
+        $name = array_shift($args);
         $class = array($name => true);
         foreach($args as $arg)
         {
@@ -199,13 +213,13 @@ class zui extends wg
         return zui::skin('h', $value, '0', 'width');
     }
 
-    public static function ring(...$args)
+    public static function ring(/* ...$args */)
     {
-        return zui::skin('ring', $args, '0');
+        return zui::skin('ring', func_get_args(), '0');
     }
 
-    public static function border(...$args)
+    public static function border(/* ...$args */)
     {
-        return zui::skin('border', $args, 'none', 'border');
+        return zui::skin('border', func_get_args(), 'none', 'border');
     }
 }
