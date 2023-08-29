@@ -3231,9 +3231,10 @@ class executionModel extends model
     }
 
     /**
-     * Link story.
+     * 关联需求到项目或执行。
+     * Link story for project or execution.
      *
-     * @param int    $executionID
+     * @param int    $executionID projectID|executionID
      * @param array  $stories
      * @param string $extra
      * @param array  $lanes
