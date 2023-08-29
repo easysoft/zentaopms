@@ -305,6 +305,19 @@ class testcaseTest
     }
 
     /**
+     * Test get cases 2 link.
+     *
+     * @param  int    $caseID
+     * @param  string $browseType
+     * @access public
+     * @return array
+     */
+    public function getCases2LinkTest(int $caseID, string $browseType): array
+    {
+        return $this->objectModel->getCases2Link($caseID, $browseType);
+    }
+
+    /**
      * 更新的测试用例。
      * Test update a case.
      *
