@@ -3005,4 +3005,17 @@ class executionTest
 
         return $this->executionModel->getExecutionQuery($queryID);
     }
+
+    /**
+     * 设置看板执行的菜单。
+     * Set kanban menu.
+     *
+     * @access public
+     * @return object
+     */
+    public function setKanbanMenuTest(): object
+    {
+        $this->executionModel->setKanbanMenu();
+        return $this->executionModel->lang->execution->menu;
+    }
 }
