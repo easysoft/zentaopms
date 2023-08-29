@@ -175,6 +175,9 @@ class ai extends control
      */
     public function prompts($module = '', $status = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
+        $this->loadModel('user');
+        $users = $this->user->getPairs('noletter');
+
         if($_POST)
         {
             $data = fixer::input('post')->get();
@@ -202,6 +205,7 @@ class ai extends control
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
         $this->view->title      = $this->lang->ai->prompts->common;
+        $this->view->users      = $users;
 
         if($this->config->edition == 'open')
         {
