@@ -31,13 +31,13 @@ class actionModel extends model
      * @access public
      * @return int
      */
-    public function create($objectType, $objectID, $actionType, $comment = '', $extra = '', $actor = '', $autoDelete = true)
+    public function create(string $objectType, int $objectID, string $actionType, string $comment = '', string $extra = '', string $actor = '', bool $autoDelete = true): int
     {
-        if(strtolower($actionType) == 'commented' and empty($comment)) return false;
+        if(strtolower($actionType) == 'commented' && empty($comment)) return false;
 
-        $actor      = $actor ? $actor : (!empty($this->app->user->account) ? $this->app->user->account : 'system');
+        $actor      = $actor ?? ($this->app->user->account ?? 'system');
         $actionType = strtolower($actionType);
-        $actor      = ($actionType == 'openedbysystem' or $actionType == 'closedbysystem') ? '' : $actor;
+        $actor      = ($actionType == 'openedbysystem' || $actionType == 'closedbysystem') ? '' : $actor;
         if($actor == 'guest' and $actionType == 'logout') return false;
 
         $objectType = str_replace('`', '', $objectType);
@@ -51,7 +51,7 @@ class actionModel extends model
         $action->extra      = $extra;
         if(!$this->app->upgrading) $action->vision = $this->config->vision;
 
-        if($objectType == 'story' and strpos(',reviewpassed,reviewrejected,reviewclarified,reviewreverted,synctwins,', ",$actionType,") !== false) $action->actor = $this->lang->action->system;
+        if($objectType == 'story' && in_array($actionType, array('reviewpassed', 'reviewrejected', 'reviewclarified', 'reviewreverted', 'synctwins'))) $action->actor = $this->lang->action->system;
 
         /* Use purifier to process comment. Fix bug #2683. */
         if(empty($comment)) $comment = '';

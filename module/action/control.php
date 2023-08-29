@@ -20,10 +20,9 @@ class action extends control
      * @access public
      * @return void
      */
-    public function create($objectType, $actionType, $objectName)
+    public function create(string $objectType, string $actionType, string $objectName)
     {
         $actionID = $this->action->create($objectType, 0, $actionType, '', $objectName);
-
         if($actionID)
         {
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
@@ -33,7 +32,6 @@ class action extends control
             $this->send(array('result' => 'fail', 'message' => 'error'));
         }
     }
-
 
     /**
      * 回收站。

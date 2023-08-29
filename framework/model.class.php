@@ -65,7 +65,7 @@ class model extends baseModel
     {
         $this->dao->update($table)->set('deleted')->eq(1)->where('id')->eq($id)->exec();
         $object = preg_replace('/^' . preg_quote((string) $this->config->db->prefix) . '/', '', trim($table, '`'));
-        $this->loadModel('action')->create($object, $id, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
+        $this->loadModel('action')->create($object, $id, 'deleted', '', $extra = (string)ACTIONMODEL::CAN_UNDELETED);
 
         return true;
     }
