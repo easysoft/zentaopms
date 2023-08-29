@@ -131,7 +131,7 @@ $lang->searchObjects['doc']        = '文档';
 $lang->searchTips                  = '编号(ctrl+g)';
 
 $lang->market->homeMenu           = new stdclass();
-$lang->market->homeMenu->report   = array('link' => "报告|marketreport|all");
+$lang->market->homeMenu->report   = array('link' => "报告|marketreport|browse");
 $lang->market->homeMenu->research = array('link' => "调研|marketresearch|all");
 $lang->market->homeMenu->market   = array('link' => "市场|market|browse|browseType=all");
 
