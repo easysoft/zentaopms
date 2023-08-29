@@ -220,6 +220,9 @@ modal
     )
 );
 
+$checkObject = new stdclass();
+$checkObject->execution = $execution->id;
+
 $canBatchEdit        = common::hasPriv('story', 'batchEdit');
 $canBatchClose       = common::hasPriv('story', 'batchClose') && $storyType != 'requirement';
 $canBatchChangeStage = common::hasPriv('story', 'batchChangeStage') && $storyType != 'requirement';
@@ -358,7 +361,7 @@ foreach($setting as $col)
 /* DataTable data. */
 $data = array();
 $actionMenus = array('submitreview', 'recall', 'recalledchange', 'review', 'dropdown', 'createTask', 'batchCreateTask', 'divider', 'storyEstimate', 'testcase', 'unlink');
-$options     = array('storyTasks' => $storyTasks, 'storyBugs' => $storyBugs, 'storyCases' => $storyCases, 'modules' => $modules, 'plans' => (isset($plans) ? $plans : array()), 'users' => $users, 'execution' => $execution, 'actionMenus' => $actionMenus);
+$options     = array('storyTasks' => $storyTasks, 'storyBugs' => $storyBugs, 'storyCases' => $storyCases, 'modules' => $modules ?? array(), 'plans' => (isset($plans) ? $plans : array()), 'users' => $users, 'execution' => $execution, 'actionMenus' => $actionMenus);
 foreach($stories as $story)
 {
     $story = $this->story->formatStoryForList($story, $options);
@@ -387,7 +390,7 @@ dtable
     (
         'recPerPage'  => $pager->recPerPage,
         'recTotal'    => $pager->recTotal,
-        'linkCreator' => helper::createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy=$orderBy&type={$type}&param={$param}&recTotal={$recTotal}&recPerPage={recPerPage}&page={page}")
+        'linkCreator' => helper::createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy=$orderBy&type={$type}&param={$param}&recTotal={recTotal}&recPerPage={recPerPage}&page={page}")
     ))),
     set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
 );
