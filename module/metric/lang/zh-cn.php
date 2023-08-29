@@ -44,7 +44,10 @@ $lang->metric->stageList['wait']     = "未发布";
 $lang->metric->stageList['released'] = "已发布";
 
 $lang->metric->unitList = array();
-$lang->metric->unitList[''] = '';
+$lang->metric->unitList['single'] = '个';
+$lang->metric->unitList['hour']   = '小时';
+$lang->metric->unitList['day']    = '天';
+$lang->metric->unitList['manday'] = '人天';
 
 $lang->metric->afterCreateList = array();
 $lang->metric->afterCreateList['back']   = '返回列表页';
