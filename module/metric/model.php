@@ -429,4 +429,39 @@ class metricModel extends model
 
         return false;
     }
+
+    /**
+     * 检查度量项计算文件是否存在。
+     * Check if the calculator file exists or not.
+     *
+     * @param  object    $row
+     * @access protected
+     * @return bool
+     */
+    protected function checkCalcExists($metric)
+    {
+        $calcName = $this->metricTao->getCustomCalcRoot() . $metric->code . '.php';
+        return file_exists($calcName);
+    }
+
+    /**
+     * 检查度量项计算文件中是否编写了必要的方法。
+     * Check whether the necessary methods exist in the file.
+     *
+     * @param  object    $row
+     * @access protected
+     * @return bool
+     */
+    protected function checkCalcMethods($metric)
+    {
+        $necessaryMethodList = array('getStatement', 'calculator', 'getResult');
+        $methodNameList = $this->metricTao->getMethodNameList($metric->code);
+
+        foreach($necessaryMethodList as $method)
+        {
+            if(!in_array($method, $methodNameList)) return false;
+        }
+ 
+        return true;
+    }
 }
