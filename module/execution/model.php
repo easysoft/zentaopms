@@ -32,23 +32,17 @@ class executionModel extends model
     }
 
     /**
-     * Show accessDenied response.
+     * 提示没有查看执行的权限并跳转到执行列表。
+     * Tip no permission to view the execution and jump to the execution list.
      *
-     * @access private
-     * @return void
+     * @access public
+     * @return bool|void
      */
     public function accessDenied()
     {
         if(commonModel::isTutorialMode()) return true;
 
-        echo(js::alert($this->lang->execution->accessDenied));
-
-        if(!$this->server->http_referer) return print(js::locate(helper::createLink('execution', 'all')));
-
-        $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-        if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(helper::createLink('execution', 'all')));
-
-        return print(js::locate(helper::createLink('execution', 'all')));
+        return $this->app->control->sendError($this->lang->execution->accessDenied, helper::createLink('execution', 'all'));
     }
 
     /**
