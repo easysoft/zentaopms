@@ -19,4 +19,5 @@ function opacity($value)            {return zui::opacity($value);}
 function disabled($value = true)    {return zui::disabled($value);}
 function width($value)              {return zui::width($value);}
 function height($value)             {return zui::height($value);}
-function ring(...$args)             {return zui::ring(...$args);}
+function ring(/* ...$args */)       {return call_user_func_array('\zin\zui::ring', func_get_args());}
+function border(/* ...$args */)     {return call_user_func_array('\zin\zui::border', func_get_args());}

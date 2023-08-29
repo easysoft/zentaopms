@@ -18,8 +18,6 @@ require_once __DIR__ . DS . 'wg.func.php';
 
 class h extends wg
 {
-    private static $selfCloseTags = array('area', 'base', 'br', 'col', 'command', 'embed', 'hr', 'img', 'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr');
-
     protected static array $defineProps = array(
         'tagName: string',
         'selfClose?: bool'
@@ -35,10 +33,10 @@ class h extends wg
         return true;
     }
 
-    public function isSelfClose(): bool
+    public function isSelfClose()
     {
         $selfClose = $this->props->get('selfClose');
-        if(is_bool($selfClose)) return $selfClose;
+        if($selfClose !== null) return $selfClose;
 
         return in_array($this->getTagName(), static::$selfCloseTags);
     }
@@ -50,9 +48,9 @@ class h extends wg
         return array($this->buildTagBegin(), parent::build(), $this->buildTagEnd());
     }
 
-    public function toJSON(): array
+    public function toJsonData(): array
     {
-        $data = parent::toJSON();
+        $data = parent::toJsonData();
         $data['type'] = 'h:' . $this->getTagName();
         return $data;
     }
@@ -98,7 +96,7 @@ class h extends wg
     {
         $args = func_get_args();
         $tagName = array_shift($args);
-        return new h(set('tagName', $tagName), $args);
+        return new h(is_string($tagName) ? set('tagName', $tagName) : $tagName, $args);
     }
 
     public static function __callStatic(string $tagName, array $args): h
@@ -113,49 +111,49 @@ class h extends wg
         return $a;
     }
 
-    public static function button(): h
+    public static function button()
     {
         return static::create('button', set('type', 'button'), func_get_args());
     }
 
-    public static function input(): h
+    public static function input()
     {
         return static::create('input', set('type', 'text'), func_get_args());
     }
 
-    public static function formHidden(): h
+    public static function formHidden(/* $name, $value, ...$args */)
     {
-        $args = func_get_args();
-        $name = array_shift($args);
+        $args  = func_get_args();
+        $name  = array_shift($args);
         $value = array_shift($args);
         return static::create('input', set('type', 'hidden'), set::name($name), set::value($value), $args);
     }
 
-    public static function checkbox(): h
+    public static function checkbox()
     {
         return static::create('input', set('type', 'checkbox'), func_get_args());
     }
 
-    public static function radio(): h
+    public static function radio()
     {
         return static::create('input', set('type', 'radio'), func_get_args());
     }
 
-    public static function date(): h
+    public static function date()
     {
         return static::create('input', set('type', 'date'), func_get_args());
     }
 
-    public static function file(): h
+    public static function file()
     {
         return static::create('input', set('type', 'file'), func_get_args());
     }
 
-    public static function textarea(): h
+    public static function textarea(/* ...$args */)
     {
         $args = func_get_args();
         list($code, $args) = h::splitRawCode($args);
-        return call_user_func_array('static::create', array_merge(array('textarea', $code), $args));
+        return static::create('textarea', $code, $args);
     }
 
     /**
@@ -170,25 +168,26 @@ class h extends wg
         return html("<!-- $comment -->");
     }
 
-    public static function importJs(): h
+    public static function importJs(/* $src, ...$args */)
     {
         $args = func_get_args();
         $src = array_shift($args);
-        return call_user_func_array('static::create', array_merge(array('script', set('src', $src)), $args));
+        return static::create('script', set('src', $src), $args);
     }
 
-    public static function importCss(): h
+    public static function importCss(/* $src, ...$args */)
     {
         $args = func_get_args();
         $src = array_shift($args);
-        return call_user_func_array('static::create', array_merge(array('link', set('rel', 'stylesheet'), set('href', $src)), $args));
+        return static::create('link', set('rel', 'stylesheet'), set('href', $src), $args);
     }
 
-    public static function import(): h|array|null
+    public static function import(/* $file, $type = null, ...$args */)
     {
-        $args = func_get_args();
+        $args = array_merge(func_get_args(), array(null, null));
         $file = array_shift($args);
         $type = array_shift($args);
+
         if(is_array($file))
         {
             $children = array();
@@ -199,80 +198,73 @@ class h extends wg
             return $children;
         }
         if($type === null) $type = pathinfo($file, PATHINFO_EXTENSION);
-        if($type == 'js' || $type == 'cjs') return call_user_func_array('static::importJs', array_merge(array($file), $args));
-        if($type == 'css') return call_user_func_array('static::importCss', array_merge(array($file), $args));
+        if($type == 'js' || $type == 'cjs') return static::importJs($file, $args);
+        if($type == 'css') return static::importCss($file, $args);
         return null;
     }
 
-    public static function css(): ?h
+    public static function css(/* ...$args */)
     {
-        $args = func_get_args();
-        list($code, $args) = h::splitRawCode($args);
+        list($code, $args) = h::splitRawCode(func_get_args());
         if(empty($code)) return null;
-        return call_user_func_array('static::create', array_merge(array('style', html(implode("\n", $code))), $args));
+        return static::create('style', html(implode("\n", $code)), $args);
     }
 
-    public static function globalJS(): ?h
+    public static function globalJS(/* ...$args */)
     {
-        $args = func_get_args();
-        list($code, $args) = h::splitRawCode($args);
+        list($code, $args) = h::splitRawCode(func_get_args());
         if(empty($code)) return null;
-        return call_user_func_array('static::create', array_merge(array('script', html(implode("\n", $code))), $args));
+        return static::create('script', html(implode("\n", $code)), $args);
     }
 
-    public static function js(): ?h
+    public static function js(/* ...$args */)
     {
-        $args = func_get_args();
-        list($code, $args) = h::splitRawCode($args);
+
+        list($code, $args) = h::splitRawCode(func_get_args());
         if(empty($code)) return null;
-        return call_user_func_array('static::create', array_merge(array('script', html(h::createJsScopeCode($code))), $args));
+        return static::create('script', html(h::createJsScopeCode($code)), $args);
     }
 
-    public static function jsVar(): ?h
+    public static function jsVar(/* $name, $value, ...$args */)
     {
-        $args = func_get_args();
-        $name = array_shift($args);
+        $args  = func_get_args();
+        $name  = array_shift($args);
         $value = array_shift($args);
-        return call_user_func_array('static::js', array_merge(array(static::createJsVarCode($name, $value)), $args));
+        return static::js(static::createJsVarCode($name, $value), $args);
     }
 
-    public static function jsCall(): ?h
+    public static function jsCall(/* $funcName, ...$args */)
     {
-        $args = func_get_args();
-        $funcName = array_shift($args);
-        $funcArgs   = array();
-        $directives = array();
+        $args  = func_get_args();
+        $funcName  = array_shift($args);
+
+        $funcArgs   = [];
+        $directives = [];
         foreach($args as $arg)
         {
             if(isDirective($arg)) $directives[] = $arg;
             else $funcArgs[] = $arg;
         }
         $code = static::createJsCallCode($funcName, $funcArgs);
-        return call_user_func_array('static::js', array_merge(array($code), $directives));
+        return static::js($code, $directives);
     }
 
-    public static function jsShare($name, $data): ?h
-    {
-        return h::js('$.share[' . json_encode($name) . ']=' . h::encodeJsonWithRawJs($data) . ';');
-    }
-
-    public static function createJsCallCode(string $func, array $args): string
+    public static function createJsCallCode($func, $args)
     {
         foreach($args as $index => $arg)
         {
-            $args[$index] = h::encodeJsonWithRawJs($arg);
+            $args[$index] = h::encodeJsonWithRawJs($arg, JSON_UNESCAPED_UNICODE);
         }
 
-        $argsStr = implode(',', $args);
         if($func[0] === '~')
         {
             $func = substr($func, 1);
-            return "$(() => $func($argsStr));";
+            return "$(() => $func(" . implode(',', $args) . "));";
         }
-        return "$func($argsStr);";
+        return $func . '(' . implode(',', $args) . ');';
     }
 
-    public static function createJsVarCode(string|array $name, $value): string
+    public static function createJsVarCode($name, $value)
     {
         $vars = is_string($name) ? array($name => $value) : $name;
         $jsCode = '';
@@ -282,9 +274,9 @@ class h extends wg
 
             $val = h::encodeJsonWithRawJs($val);
 
-            if(str_starts_with($var, 'window.')) $jsCode .= "$var=$val;";
-            elseif(str_starts_with($var, '+')) $jsCode .= 'let ' . substr($var, 1) . "=$val;";
-            else $jsCode .= "const $var=$val;";
+            if(str_starts_with($var, 'window.')) $jsCode .= "$var=" . $val . ';';
+            elseif(str_starts_with($var, '+')) $jsCode .= 'let ' . substr($var, 1) . '=' . $val . ';';
+            else $jsCode .= "const $var=" . $val . ';';
         }
         return $jsCode;
     }
@@ -300,7 +292,7 @@ class h extends wg
         return 'RAWJS<' . implode("\n", func_get_args()) . '>RAWJS';
     }
 
-    protected static function encodeJsonWithRawJs(mixed $data): string
+    protected static function encodeJsonWithRawJs($data)
     {
         $json = json_encode($data, JSON_UNESCAPED_UNICODE);
         if(empty($json) && (is_array($data) || is_object($data))) return '[]';
@@ -309,16 +301,18 @@ class h extends wg
         return $json;
     }
 
-    protected static function splitRawCode(array $children): array
+    protected static function splitRawCode($children)
     {
         $children = \zin\utils\flat($children);
-        $code = array();
-        $args = array();
-        foreach($children as $child)
+        $code = [];
+        $args = [];
+        foreach($children as $key => $child)
         {
             if(is_string($child)) $code[] = $child;
             else $args[] = $child;
         }
-        return array($code, $args);
+        return [$code, $args];
     }
+
+    public static $selfCloseTags = array('area', 'base', 'br', 'col', 'command', 'embed', 'hr', 'img', 'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr');
 }

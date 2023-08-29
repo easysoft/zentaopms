@@ -97,8 +97,10 @@ class zui extends wg
         return toggle($name, $options);
     }
 
-    public static function setClass($name, ...$args)
+    public static function setClass(/* $name, ...$args */)
     {
+        $args = func_get_args();
+        $name = array_shift($args);
         $class = array($name => true);
         foreach($args as $arg)
         {
@@ -211,13 +213,13 @@ class zui extends wg
         return zui::skin('h', $value, '0', 'width');
     }
 
-    public static function ring(...$args)
+    public static function ring(/* ...$args */)
     {
-        return zui::skin('ring', $args, '0');
+        return zui::skin('ring', func_get_args(), '0');
     }
 
-    public static function border(...$args)
+    public static function border(/* ...$args */)
     {
-        return zui::skin('border', $args, 'none', 'border');
+        return zui::skin('border', func_get_args(), 'none', 'border');
     }
 }
