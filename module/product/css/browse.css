@@ -39,10 +39,13 @@ a.removeModule:hover {color: red;}
 
 .dtable-cell[data-col="actions"] > .dtable-cell-content .c-actions {overflow: visible;}
 .dtable-cell[data-col="actions"] > .dtable-cell-content .c-actions .dividing-line {width: 1px; height: 16px; display: inline-block; vertical-align: middle; background: #F4F5F7; margin: 0 4px 0 0;}
-.table-footer{z-index: 10}
+.table-footer{z-index: 10; padding-left: 12px;}
 #dtable .scrollbar, .table-header.fixed-right {z-index: 11}
 
 #heading .btn-group {display: inline-block !important;}
 .btn-group .icon-close:before {font-size: 5px; vertical-align: 25%;}
 .btn-group a.btn-secondary, .btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.2);}
 .btn-group button.dropdown-toggle.btn-secondary, .btn-group button.dropdown-toggle.btn-primary {padding:6px;}
+
+.dtable-cell[data-sort='up']   .dtable-sort:before {color: #000; opacity: 1}
+.dtable-cell[data-sort='down'] .dtable-sort:after  {color: #000; opacity: 1}

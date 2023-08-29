@@ -32,7 +32,12 @@ $(function()
         }
 
         setStatistics();
-    })
+    });
+
+    $('.dtable-cell.has-checkbox[data-row="HEADER"] .dtable-checkbox').click(function()
+    {
+        $('.table-footer .check-all').toggleClass('checked', !$('.table-footer .check-all').hasClass('checked'));
+    });
 
     $('#toTaskButton').on('click', function()
     {
