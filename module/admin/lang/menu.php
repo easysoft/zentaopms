@@ -51,7 +51,7 @@ $lang->admin->menuList->platform['order'] = 55;
 $lang->admin->menuList->ai['name']  = $lang->admin->menuSetting['ai']['name'];
 $lang->admin->menuList->ai['desc']  = $lang->admin->menuSetting['ai']['desc'];
 $lang->admin->menuList->ai['link']  = 'ai|adminindex';
-$lang->admin->menuList->ai['order'] = 55;
+$lang->admin->menuList->ai['order'] = 60;
 
 $lang->admin->menuList->system['subMenu']['mode']        = array('link' => "{$lang->custom->mode}|custom|mode|");
 $lang->admin->menuList->system['subMenu']['trash']       = array('link' => "{$lang->action->trash}|action|trash|");
