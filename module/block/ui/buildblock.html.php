@@ -19,7 +19,7 @@ if(!$longBlock)
 panel
 (
     set::title($block->title),
-    set::class('build-block list-block ' . ($longBlock ? 'block-long' : 'block-sm')),
+    set::className('build-block list-block ' . ($longBlock ? 'block-long' : 'block-sm')),
     set::headingClass('border-b'),
     to::headingActions
     (

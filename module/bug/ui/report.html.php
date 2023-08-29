@@ -48,22 +48,22 @@ foreach($lang->report->typeList as $type => $typeName)
         set::active($type == $chartType),
         set::param($type),
         to::prefix(icon($type == 'default' ? 'list-alt' : "chart-{$type}")),
-        div(set::class('pb-4 pt-2'), span(set::class('text-gray'), html(str_replace('%tab%', $lang->bug->unclosed . $lang->bug->common, $lang->report->notice->help)))),
+        div(set::className('pb-4 pt-2'), span(set::className('text-gray'), html(str_replace('%tab%', $lang->bug->unclosed . $lang->bug->common, $lang->report->notice->help)))),
         div($echarts)
     );
 }
 
 div
 (
-    set::class('flex items-start'),
+    set::className('flex items-start'),
     cell
     (
         set::width('240'),
-        set::class('bg-white p-4 mr-5'),
-        div(set::class('pb-2'), span(set::class('font-bold'), $lang->bug->report->select)),
+        set::className('bg-white p-4 mr-5'),
+        div(set::className('pb-2'), span(set::className('font-bold'), $lang->bug->report->select)),
         div
         (
-            set::class('pb-2'),
+            set::className('pb-2'),
             control
             (
                 set::type('checkList'),
@@ -79,7 +79,7 @@ div
         ),
         btn
         (
-            set::class('primary ml-4 inited'),
+            set::className('primary ml-4 inited'),
             set('data-on', 'click'),
             set('data-call', 'clickInit'),
             set('data-params', 'event'),
@@ -89,7 +89,7 @@ div
     cell
     (
         set::flex('1'),
-        set::class('bg-white px-4 py-2'),
+        set::className('bg-white px-4 py-2'),
         set::id('report'),
         tabs($tabItems)
     )

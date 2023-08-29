@@ -63,8 +63,8 @@ div
                     )->size(120, 120),
                     div
                     (
-                        set::class('pie-chart-title text-center'),
-                        div(span(set::class('text-2xl font-bold'), $product->storyDeliveryRate . '%')),
+                        set::className('pie-chart-title text-center'),
+                        div(span(set::className('text-2xl font-bold'), $product->storyDeliveryRate . '%')),
                         div
                         (
                             span
@@ -191,7 +191,7 @@ div
                 ),
                 div
                 (
-                    set::class('detail-content mt-4'),
+                    set::className('detail-content mt-4'),
                     html($product->desc),
                 ),
             ),

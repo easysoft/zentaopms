@@ -26,7 +26,7 @@ if(count($teams2Import) > 1)
             setClass('select-team-box ml-4'),
             span
             (
-                set::class('flex items-center team-title'),
+                set::className('flex items-center team-title'),
                 $lang->execution->copyTeam
             ),
             picker
@@ -49,7 +49,7 @@ featureBar
         setClass('select-dept-box ml-4'),
         span
         (
-            set::class('flex items-center dept-title'),
+            set::className('flex items-center dept-title'),
             $lang->execution->selectDept
         ),
         picker
@@ -138,7 +138,7 @@ foreach($teamMembers as $member)
             ),
             h::td
             (
-                set::class('actions-list'),
+                set::className('actions-list'),
                 btnGroup
                 (
                     set::items(array(
@@ -158,7 +158,7 @@ jsVar('+itemIndex', $i);
 $i = '_i';
 h::table
 (
-    set::class('hidden'),
+    set::className('hidden'),
     set::id('addItem'),
     h::tr(
         h::td(
@@ -210,7 +210,7 @@ h::table
         ),
         h::td
         (
-            set::class('actions-list'),
+            set::className('actions-list'),
             btnGroup
             (
                 set::items(array(
@@ -231,7 +231,7 @@ div
         set::id('teamForm'),
         h::table
         (
-            set::class('table table-form'),
+            set::className('table table-form'),
             h::thead
             (
                 h::tr

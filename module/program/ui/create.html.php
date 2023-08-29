@@ -74,7 +74,7 @@ formPanel
         (
             set::width('1/4'),
             set::name('future'),
-            set::class('items-center'),
+            set::className('items-center'),
             set::control(array('type' => 'checkList', 'inline' => true)),
             set::items(array('1' => $lang->project->future)),
         )
@@ -113,7 +113,7 @@ formPanel
         formGroup
         (
             set::name('delta'),
-            set::class('pl-4 items-center'),
+            set::className('pl-4 items-center'),
             set::control(array('type' => 'radioList', 'inline' => true, 'rootClass' => 'ml-4', 'items' => $lang->program->endList)),
             on::change('setDate'),
         ),

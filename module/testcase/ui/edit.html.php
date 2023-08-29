@@ -206,17 +206,17 @@ detailBody
                     ),
                     count($moduleOptionMenu) == 1 ? span
                     (
-                        set::class('input-group-btn flex'),
+                        set::className('input-group-btn flex'),
                         a
                         (
-                            set::class('btn'),
+                            set::className('btn'),
                             set::url($createModuleLink),
                             set('data-toggle', 'modal'),
                             $lang->tree->manage,
                         ),
                         btn
                         (
-                            set::class('refresh'),
+                            set::className('refresh'),
                             set::icon('refresh'),
                         )
                     ) : null,
@@ -251,7 +251,7 @@ detailBody
                     ),
                     span
                     (
-                        set::class('input-group-addon'),
+                        set::className('input-group-addon'),
                         control
                         (
                             set::type('checkbox'),
@@ -381,4 +381,3 @@ detailBody
 );
 
 render();
-

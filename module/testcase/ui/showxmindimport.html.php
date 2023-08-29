@@ -38,9 +38,9 @@ panel
     mindmap(set::data($scenes), set::height('600px'), set::nodeTeamplate($nodeTemplate)),
     div
     (
-        set::class('py-6 text-center'),
-        btn(set::class('primary btn-wide'), $lang->save),
-        backBtn(set::class('btn-wide ml-4'), $lang->goback)
+        set::className('py-6 text-center'),
+        btn(set::className('primary btn-wide'), $lang->save),
+        backBtn(set::className('btn-wide ml-4'), $lang->goback)
     )
 );
 render();

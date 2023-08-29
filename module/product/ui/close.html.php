@@ -24,7 +24,7 @@ formPanel
             set::rows('6'),
         ),
         input(
-            set::class('hidden'),
+            set::className('hidden'),
             set::name('status'),
             set::value('closed')
         )

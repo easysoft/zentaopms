@@ -26,7 +26,7 @@ $formRowList[] = formRow
         $config->systemMode == 'ALM' ? formGroup
         (
             set::width('1/2'),
-            set::class('ml-4'),
+            set::className('ml-4'),
             set::label($lang->product->program),
             set::labelClass('font-bold required'),
         ) : null,
@@ -44,7 +44,7 @@ foreach($lines as $line)
 {
     $lineMenuList[] = div
     (
-        set::class('ml-4 line-item flex items-center'),
+        set::className('ml-4 line-item flex items-center'),
         span($line->name),
         btn
         (
@@ -71,7 +71,7 @@ foreach($lines as $line)
             $config->systemMode == 'ALM' ? formGroup
             (
                 set::width('1/2'),
-                set::class('ml-4'),
+                set::className('ml-4'),
                 set::control(array('type' => 'picker', 'id' => "programs_id{$line->id}")),
                 set::name("programs[id$line->id]"),
                 set::items($programs),
@@ -86,7 +86,7 @@ for($i = 0; $i <= 5; $i ++)
 {
     $formRowList[] = formRow
     (
-        set::class('line-row-add'),
+        set::className('line-row-add'),
         cell
         (
             setClass('flex flex-1'),
@@ -99,7 +99,7 @@ for($i = 0; $i <= 5; $i ++)
             $config->systemMode == 'ALM' ? formGroup
             (
                 set::width('1/2'),
-                set::class('ml-4'),
+                set::className('ml-4'),
                 set::control(array('type' => 'picker', 'id' => "programs_{$i}")),
                 set::name("programs[$i]"),
                 set::items($programs),
@@ -133,11 +133,11 @@ jsVar('+index', $i);
 modalHeader(set::title($lang->product->manageLine), set::titleClass('text-lg font-bold'));
 div
 (
-    set::class('flex'),
+    set::className('flex'),
     cell
     (
         set::width('1/3'),
-        set::class('lineTree mr-1'),
+        set::className('lineTree mr-1'),
         h2(setClass('article-h2'), $lang->product->line),
         div
         (
@@ -153,7 +153,7 @@ div
         (
             set::submitBtnText($lang->save),
             set::actionsClass('justify-start'),
-            set::class('border-b-0'),
+            set::className('border-b-0'),
             $formRowList
         )
     )

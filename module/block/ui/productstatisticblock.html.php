@@ -154,7 +154,7 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
                                 div
                                 (
                                     setClass('pie-chart-title text-center h-0'),
-                                    div(span(set::class('text-2xl font-bold'), $product->storyDeliveryRate . '%')),
+                                    div(span(set::className('text-2xl font-bold'), $product->storyDeliveryRate . '%')),
                                     div
                                     (
                                         span

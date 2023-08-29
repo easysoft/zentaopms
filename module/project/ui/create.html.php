@@ -539,7 +539,7 @@ modalTrigger
             (
                 h4
                 (
-                    set::class('copy-title'),
+                    set::className('copy-title'),
                     $lang->project->copyTitle
                 )
             ),

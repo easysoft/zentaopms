@@ -27,7 +27,7 @@ div
             set::title($lang->upgrade->confirm),
             div
             (
-                set::class('border p-4 mb-4'),
+                set::className('border p-4 mb-4'),
                 set::style(array('background-color' => 'var(--color-gray-100)')),
                 div
                 (
@@ -47,4 +47,3 @@ div
 );
 
 render('pagebase');
-

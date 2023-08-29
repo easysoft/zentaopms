@@ -25,28 +25,28 @@ div
             set::title($lang->upgrade->consistency),
             div
             (
-                set::class('border p-4 mb-4'),
+                set::className('border p-4 mb-4'),
                 set::style(array('background-color' => 'var(--color-gray-100)')),
                 div
                 (
-                    set::class('article-h3 mb-2'),
+                    set::className('article-h3 mb-2'),
                     $lang->upgrade->noticeSQL
                 ),
                 div
                 (
-                    set::class('text-danger leading-loose'),
+                    set::className('text-danger leading-loose'),
                     html("SET @@sql_mode= '';<br />"),
                     html(nl2br($alterSQL)),
                 )
             ),
             div
             (
-                set::class('text-center'),
+                set::className('text-center'),
                 btn
                 (
                     on::click('loadCurrentPage'),
                     set::type('primary'),
-                    set::class('px-10'),
+                    set::className('px-10'),
                     $lang->refresh,
                 )
             )
@@ -55,4 +55,3 @@ div
 );
 
 render('pagebase');
-

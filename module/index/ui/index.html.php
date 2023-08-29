@@ -31,12 +31,12 @@ div
     div
     (
         setID('menuNav'),
-        ul(set::class('nav'), setID('menuMainNav')),
+        ul(set::className('nav'), setID('menuMainNav')),
         ul
         (
-            set::class('nav'),
+            set::className('nav'),
             setID('menuMoreNav'),
-            li(set::class('divider')),
+            li(set::className('divider')),
             li
             (
                 a
@@ -44,10 +44,10 @@ div
                     set::title($lang->more),
                     set::href('#menuMoreList'),
                     icon('more-circle'),
-                    span(set::class('text'), $lang->more),
+                    span(set::className('text'), $lang->more),
                     toggle::dropdown(array('placement' => 'right-end', 'offset' => 12))
                 ),
-                ul(set::class('dropdown-menu nav'), setID('menuMoreList'))
+                ul(set::className('dropdown-menu nav'), setID('menuMoreList'))
             )
         ),
     ),
@@ -56,13 +56,13 @@ div
         setID('menuFooter'),
         ul
         (
-            set::class('nav'),
+            set::className('nav'),
             li
             (
                 setID('menuToggleMenu'),
                 a
                 (
-                    set::class('menu-toggle justify-center cursor-pointer'),
+                    set::className('menu-toggle justify-center cursor-pointer'),
                     toggle::tooltip(array('placement' => 'right', 'collapse-text' => $lang->collapseMenu, 'unfold-text' => $lang->unfoldMenu)),
                     icon('menu-collapse icon-sm')
                 )
@@ -82,7 +82,7 @@ div
     ul
     (
         setID('appTabs'),
-        set::class('nav')
+        set::className('nav')
     ),
     toolbar
     (
@@ -90,7 +90,7 @@ div
         hasPriv('search', 'index') ? globalSearch() : null,
         item
         (
-            set::class('ghost btn-zentao'),
+            set::className('ghost btn-zentao'),
             set::icon('zentao text-2xl'),
             set::url('$lang->website'),
             set::target('_blank'),

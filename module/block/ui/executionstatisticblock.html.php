@@ -212,8 +212,8 @@ $getExecutionInfo = function(array $executions, string $blockNavID, bool $longBl
                                     )->size('100%', 120),
                                     div
                                     (
-                                        set::class('pie-chart-title text-center'),
-                                        div(span(set::class('text-2xl font-bold'), $execution->progress . '%')),
+                                        set::className('pie-chart-title text-center'),
+                                        div(span(set::className('text-2xl font-bold'), $execution->progress . '%')),
                                         div
                                         (
                                             span

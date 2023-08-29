@@ -239,7 +239,7 @@ if($canBatchAction)
         menu
         (
             set::id('batchToTask'),
-            set::class('dropdown-menu'),
+            set::className('dropdown-menu'),
             $canBatchToTask ? item(set(array(
                 'text'  => $lang->story->batchToTask,
                 'url'   => '#taskModal',
@@ -275,7 +275,7 @@ if($canBatchAction)
         menu
         (
             set::id('navAssignedTo'),
-            set::class('dropdown-menu'),
+            set::className('dropdown-menu'),
             set::items($assignedToItems)
         );
     }
@@ -315,7 +315,7 @@ if($canBatchAction)
         menu
         (
             set::id('navStage'),
-            set::class('dropdown-menu'),
+            set::className('dropdown-menu'),
             set::items($stageItems)
         );
     }

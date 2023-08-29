@@ -121,8 +121,8 @@ formBatchPanel
     set::mode('edit'),
     set::actionsText(false),
     set::onRenderRow(jsRaw('handleRenderRow')),
-    input(set::class('hidden'), set::name('isEndPage'), set::value($isEndPage ? '1' : '0')),
-    input(set::class('hidden'), set::name('pagerID'), set::value($pagerID)),
+    input(set::className('hidden'), set::name('isEndPage'), set::value($isEndPage ? '1' : '0')),
+    input(set::className('hidden'), set::name('pagerID'), set::value($pagerID)),
 );
 
 render();

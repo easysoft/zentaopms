@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace zin;
 
-set::title(array('html' => div(span($lang->uploadImages), span(set::class('text-gray text-sm font-normal'), $lang->uploadImagesTip))));
+set::title(array('html' => div(span($lang->uploadImages), span(set::className('text-gray text-sm font-normal'), $lang->uploadImagesTip))));
 uploadImgs();
 
 render();

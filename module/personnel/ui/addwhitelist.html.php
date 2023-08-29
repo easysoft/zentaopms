@@ -40,7 +40,7 @@ formBatchPanel
             setClass('select-dept-box ml-4'),
             span
             (
-                set::class('flex items-center dept-title mr-2'),
+                set::className('flex items-center dept-title mr-2'),
                 $lang->execution->selectDept
             ),
             select
@@ -83,4 +83,3 @@ formBatchPanel
 );
 
 render();
-

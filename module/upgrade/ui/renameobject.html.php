@@ -41,7 +41,7 @@ div
     div
     (
         set::id('mainContent'),
-        set::class('bg-white'),
+        set::className('bg-white'),
         set::style(array('margin' => '50px auto 0', 'width' => '1200px')),
         formBatchPanel
         (
@@ -56,4 +56,3 @@ div
 );
 
 render('pagebase');
-

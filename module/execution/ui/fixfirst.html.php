@@ -12,7 +12,7 @@ namespace zin;
 to::header(
     span
     (
-        set::class('article-h2'),
+        set::className('article-h2'),
         $lang->execution->fixFirst,
     ),
     span

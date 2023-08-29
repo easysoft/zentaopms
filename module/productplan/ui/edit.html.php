@@ -24,7 +24,7 @@ formPanel
     set::title($lang->productplan->edit),
     !$product->shadow ? formGroup
     (
-        set::class('items-center'),
+        set::className('items-center'),
         set::label($lang->productplan->product),
         $product->name
     ) : null,

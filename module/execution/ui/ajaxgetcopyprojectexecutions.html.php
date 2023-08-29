@@ -17,12 +17,12 @@ if(empty($executions))
 {
     $executionsBox[] = div
         (
-            set::class('inline-flex items-center'),
+            set::className('inline-flex items-center'),
             setClass(empty($executions) ? 'bg-lighter h-12' : ''),
             icon('exclamation-sign icon-2x pl-2 text-warning'),
             span
             (
-                set::class('font-bold ml-2'),
+                set::className('font-bold ml-2'),
                 $lang->execution->copyNoExecution,
             )
         );

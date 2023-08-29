@@ -42,19 +42,19 @@ formPanel
             ),
             input
             (
-                set::class('hidden'),
+                set::className('hidden'),
                 set::name('product'),
                 set::value($productIdList)
             ),
             input
             (
-                set::class('hidden'),
+                set::className('hidden'),
                 set::name('execution'),
                 set::value($execution->id)
             ),
             input
             (
-                set::class('hidden'),
+                set::className('hidden'),
                 set::name('tasks'),
                 set::value($tasks)
             )
@@ -94,7 +94,7 @@ formPanel
     (
         formGroup
         (
-            set::class('items-center'),
+            set::className('items-center'),
             set::label($lang->testreport->goal),
             span
             (
@@ -113,7 +113,7 @@ formPanel
     (
         formGroup
         (
-            set::class('items-center'),
+            set::className('items-center'),
             set::label($lang->testreport->profile),
             div
             (
@@ -154,7 +154,7 @@ panel
         set::data(array_values($stories)),
         set::userMap($users)
     ),
-    div(set::class('my-6')),
+    div(set::className('my-6')),
     dtable
     (
         set::cols($config->testreport->bug->dtable->fieldList),
@@ -165,7 +165,7 @@ panel
 
 panel
 (
-    set::class('mt-6'),
+    set::className('mt-6'),
     set::title($lang->testreport->legendBuild),
     dtable
     (
@@ -177,7 +177,7 @@ panel
 
 panel
 (
-    set::class('mt-6'),
+    set::className('mt-6'),
     set::title($lang->testreport->legendCase),
     dtable
     (
@@ -189,7 +189,7 @@ panel
 
 panel
 (
-    set::class('mt-6'),
+    set::className('mt-6'),
     set::title($lang->testreport->legendLegacyBugs),
     dtable
     (
@@ -212,7 +212,7 @@ foreach($charts as $chartType => $chartOption)
         $chartOption[] = array('name' => $data->name, 'value' => $data->value);
         $tableTR[] = h::tr
         (
-            h::td(label(set::class('label-dot mr-2'), set::style(array('background-color' => $color, '--tw-ring-color' => $color))), $data->name),
+            h::td(label(set::className('label-dot mr-2'), set::style(array('background-color' => $color, '--tw-ring-color' => $color))), $data->name),
             h::td($data->value),
             h::td(($data->percent * 100) . '%')
         );
@@ -221,15 +221,15 @@ foreach($charts as $chartType => $chartOption)
 
     $caseCharts[] = div
     (
-        set::class('mt-6'),
+        set::className('mt-6'),
         div
         (
-            set::class('flex border'),
+            set::className('flex border'),
             cell
             (
                 set::width('50%'),
-                set::class('border-r'),
-                div(set::class('center text-base font-bold py-2'), $lang->testtask->report->charts[$chartType]),
+                set::className('border-r'),
+                div(set::className('center text-base font-bold py-2'), $lang->testtask->report->charts[$chartType]),
                 echarts
                 (
                     set::color($colorList),
@@ -251,7 +251,7 @@ foreach($charts as $chartType => $chartOption)
                 set::width('50%'),
                 h::table
                 (
-                    set::class('table'),
+                    set::className('table'),
                     h::tr
                     (
                         h::th($lang->report->item),
@@ -280,7 +280,7 @@ foreach($lang->bug->priList as $key => $value)
     $chartOption[] = array('name' => $label, 'type' => 'bar', 'data' => array($generated, $legacy, $resolved));
     $tableTR[] = h::tr
     (
-        h::td(label(set::class('label-dot mr-2'), set::style(array('background-color' => $color, '--tw-ring-color' => $color))), $label),
+        h::td(label(set::className('label-dot mr-2'), set::style(array('background-color' => $color, '--tw-ring-color' => $color))), $label),
         h::td($generated),
         h::td($legacy),
         h::td($resolved),
@@ -290,15 +290,15 @@ foreach($lang->bug->priList as $key => $value)
 
 $bugStageChart = div
 (
-    set::class('mt-6'),
+    set::className('mt-6'),
     div
     (
-        set::class('flex border'),
+        set::className('flex border'),
         cell
         (
             set::width('50%'),
-            set::class('border-r'),
-            div(set::class('center text-base font-bold py-2'), $lang->testreport->bugStageGroups),
+            set::className('border-r'),
+            div(set::className('center text-base font-bold py-2'), $lang->testreport->bugStageGroups),
             echarts
             (
                 set::color($colorList),
@@ -319,7 +319,7 @@ $bugStageChart = div
             set::width('50%'),
             h::table
             (
-                set::class('table'),
+                set::className('table'),
                 h::tr
                 (
                     h::th($lang->bug->pri),
@@ -366,15 +366,15 @@ for($time = $beginTime; $time <= $endTime; $time += 86400)
 $chartOption    = array_values($chartOption);
 $bugHandleChart = div
 (
-    set::class('mt-6'),
+    set::className('mt-6'),
     div
     (
-        set::class('flex border'),
+        set::className('flex border'),
         cell
         (
             set::width('50%'),
-            set::class('border-r'),
-            div(set::class('center text-base font-bold py-2'), $lang->testreport->bugHandleGroups),
+            set::className('border-r'),
+            div(set::className('center text-base font-bold py-2'), $lang->testreport->bugHandleGroups),
             echarts
             (
                 set::color(array('#FF9800', '#2098EE', '#009688')),
@@ -395,13 +395,13 @@ $bugHandleChart = div
             set::width('50%'),
             h::table
             (
-                set::class('table'),
+                set::className('table'),
                 h::tr
                 (
                     h::th($lang->testreport->date),
-                    h::th(label(set::class('label-dot mr-2'), set::style(array('background-color' => '#FF9800', '--tw-ring-color' => '#FF9800'))), $lang->testreport->bugStageList['generated']),
-                    h::th(label(set::class('label-dot mr-2'), set::style(array('background-color' => '#2098EE', '--tw-ring-color' => '#2098EE'))), $lang->testreport->bugStageList['legacy']),
-                    h::th(label(set::class('label-dot mr-2'), set::style(array('background-color' => '#009688', '--tw-ring-color' => '#009688'))), $lang->testreport->bugStageList['resolved'])
+                    h::th(label(set::className('label-dot mr-2'), set::style(array('background-color' => '#FF9800', '--tw-ring-color' => '#FF9800'))), $lang->testreport->bugStageList['generated']),
+                    h::th(label(set::className('label-dot mr-2'), set::style(array('background-color' => '#2098EE', '--tw-ring-color' => '#2098EE'))), $lang->testreport->bugStageList['legacy']),
+                    h::th(label(set::className('label-dot mr-2'), set::style(array('background-color' => '#009688', '--tw-ring-color' => '#009688'))), $lang->testreport->bugStageList['resolved'])
                 ),
                 $tableTR
             )
@@ -438,7 +438,7 @@ foreach($bugInfo as $infoKey => $infoValue)
         $chartOption[] = array('name' => $name, 'value' => $value);
         $tableTR[]     = h::tr
         (
-            h::td(label(set::class('label-dot mr-2'), set::style(array('background-color' => $color, '--tw-ring-color' => $color))), $name),
+            h::td(label(set::className('label-dot mr-2'), set::style(array('background-color' => $color, '--tw-ring-color' => $color))), $name),
             h::td($value),
             h::td(($sum ? round(($value / $sum * 100), 2) : '0') . '%')
         );
@@ -447,15 +447,15 @@ foreach($bugInfo as $infoKey => $infoValue)
 
     $bugCharts[] = div
     (
-        set::class('mt-6'),
+        set::className('mt-6'),
         div
         (
-            set::class('flex border'),
+            set::className('flex border'),
             cell
             (
                 set::width('50%'),
-                set::class('border-r'),
-                div(set::class('center text-base font-bold py-2'), $lang->testreport->{$infoKey}),
+                set::className('border-r'),
+                div(set::className('center text-base font-bold py-2'), $lang->testreport->{$infoKey}),
                 echarts
                 (
                     set::color($colorList),
@@ -477,7 +477,7 @@ foreach($bugInfo as $infoKey => $infoValue)
                 set::width('50%'),
                 h::table
                 (
-                    set::class('table'),
+                    set::className('table'),
                     h::tr
                     (
                         h::th($lang->report->item),
@@ -493,7 +493,7 @@ foreach($bugInfo as $infoKey => $infoValue)
 
 panel
 (
-    set::class('mt-6'),
+    set::className('mt-6'),
     set::title($lang->testreport->legendReport),
     $caseCharts,
     $bugStageChart,

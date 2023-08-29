@@ -67,7 +67,7 @@ featureBar
     set::items($items),
     set::current($type),
     set::linkParams("taskID=$taskID&type={key}"),
-    to::before(backBtn(set::icon('back'), set::class('btn secondary'), $lang->goback)),
+    to::before(backBtn(set::icon('back'), set::className('btn secondary'), $lang->goback)),
     li(searchToggle())
 );
 
@@ -101,4 +101,3 @@ dtable
 );
 
 render();
-

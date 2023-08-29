@@ -18,7 +18,7 @@ featureBar
 (
     li
     (
-        set::class('nav-item'),
+        set::className('nav-item'),
         a(set('data-app', $app->tab), $lang->backup->history)
     ),
     set::current('all')

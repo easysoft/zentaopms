@@ -16,7 +16,7 @@ featureBar
     div(setClass('divider')),
     li
     (
-        set::class('nav-item'),
+        set::className('nav-item'),
         $lang->struct->list
     )
 );

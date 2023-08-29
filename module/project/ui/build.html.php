@@ -14,7 +14,7 @@ $changeProductBox = '';
 if($project->hasProduct)
 {
     $changeProductBox = div(
-        set::class('select-product-box'),
+        set::className('select-product-box'),
         select
         (
             set::name('product'),

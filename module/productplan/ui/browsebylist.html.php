@@ -204,7 +204,7 @@ $fnGenerateDropdownMenu = function() use($lang, $canBatchChangeStatus, $productI
     zui::menu
     (
         set::id('footbarActionMenu'),
-        set::class('menu dropdown-menu'),
+        set::className('menu dropdown-menu'),
         set::items(array_values($items))
     );
 };

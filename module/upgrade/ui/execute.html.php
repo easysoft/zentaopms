@@ -24,7 +24,7 @@ div
             zui::width('800px'),
             div
             (
-                set::class('article-h1 mb-4'),
+                set::className('article-h1 mb-4'),
                 icon
                 (
                     'close',
@@ -45,7 +45,7 @@ div
             ) : null,
             in_array($result, array('fail', 'sqlFail')) ? div
             (
-                set::class('mt-4'),
+                set::className('mt-4'),
                 $result == 'sqlFail' ? $lang->upgrade->afterExec : $lang->upgrade->afterDeleted,
                 btn
                 (

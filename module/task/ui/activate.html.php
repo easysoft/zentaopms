@@ -34,11 +34,11 @@ if($isMultiple)
         set::label($lang->task->mode),
         inputGroup
         (
-            set::class('no-background'),
+            set::className('no-background'),
             zget($lang->task->modeList, $task->mode),
             input
             (
-                set::class('hidden'),
+                set::className('hidden'),
                 set::name('mode'),
                 set::value($task->mode),
             ),
@@ -82,7 +82,7 @@ if($isMultiple)
 {
     $modalTeamBtn = btn(
         set::text($lang->task->team),
-        set::class('team-group hidden'),
+        set::className('team-group hidden'),
         set::url('#modalTeam'),
         set('data-toggle', 'modal'),
     );

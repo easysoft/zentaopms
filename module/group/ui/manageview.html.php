@@ -49,7 +49,7 @@ function getActionsBox($navGroup, $group, $module)
         {
             $actionsBox[] = div
                 (
-                    set::class('action-item'),
+                    set::className('action-item'),
                     checkbox
                     (
                         set::id("{$module}-{$action}"),
@@ -71,7 +71,7 @@ function getActionsBox($navGroup, $group, $module)
                 {
                     $actionsBox[] = div
                         (
-                            set::class('action-item'),
+                            set::className('action-item'),
                             checkbox
                             (
                                 set::id("$subModule-$action"),
@@ -111,10 +111,10 @@ foreach($lang->mainNav as $module => $title)
     $dynamicActionList[] = div
         (
             set::id("{$module}ActionBox"),
-            set::class('flex w-full'),
+            set::className('flex w-full'),
             div
             (
-                set::class('flex item-center action-title'),
+                set::className('flex item-center action-title'),
                 checkbox
                 (
                     set::name('allchecker'),
@@ -124,7 +124,7 @@ foreach($lang->mainNav as $module => $title)
             ),
             div
             (
-                set::class('flex check-list-inline w-full justify-start'),
+                set::className('flex check-list-inline w-full justify-start'),
                 getActionsBox($navGroup, $group, $module)
             )
         );
@@ -136,30 +136,30 @@ formPanel
     set::id('manageViewForm'),
     span
     (
-        set::class('article-h2'),
+        set::className('article-h2'),
         icon('lock mr-2'),
         $group->name,
     ),
     span
     (
-        set::class('text-md text-gray'),
+        set::className('text-md text-gray'),
         html($lang->arrow),
         $lang->group->manageView
     ),
     formGroup
     (
         set::label($lang->group->viewList),
-        set::class('items-center'),
+        set::className('items-center'),
         div
         (
-            set::class('viewBox check-list-inline flex flex-wrap w-full'),
+            set::className('viewBox check-list-inline flex flex-wrap w-full'),
             $viewCheckList
         )
     ),
     $config->systemMode == 'ALM' ? formRow
     (
         set::id('programBox'),
-        set::class('items-center hidden'),
+        set::className('items-center hidden'),
         formGroup
         (
             set::label($lang->group->programList),
@@ -184,7 +184,7 @@ formPanel
                     )
                 ),
             ) : span(
-                set::class('flex items-center'),
+                set::className('flex items-center'),
                 icon('info text-warning mr-2'),
                 $lang->group->noneProgram
             )
@@ -193,7 +193,7 @@ formPanel
     formRow
     (
         set::id('productBox'),
-        set::class('items-center hidden'),
+        set::className('items-center hidden'),
         formGroup
         (
             set::label($lang->group->productList),
@@ -217,7 +217,7 @@ formPanel
                     )
                 ),
             ) : span(
-                set::class('flex items-center'),
+                set::className('flex items-center'),
                 icon('info text-warning mr-2'),
                 $lang->group->noneProduct
             )
@@ -225,7 +225,7 @@ formPanel
     ),
     formRow
     (
-        set::class('items-center hidden'),
+        set::className('items-center hidden'),
         set::id('projectBox'),
         formGroup
         (
@@ -250,7 +250,7 @@ formPanel
                     )
                 ),
             ) : span(
-                set::class('flex items-center'),
+                set::className('flex items-center'),
                 icon('info text-warning mr-2'),
                 $lang->group->noneProject
             )
@@ -258,7 +258,7 @@ formPanel
     ),
     formRow
     (
-        set::class('items-center hidden'),
+        set::className('items-center hidden'),
         set::id('executionBox'),
         formGroup
         (
@@ -283,7 +283,7 @@ formPanel
                     )
                 ),
             ) : span(
-                set::class('flex items-center'),
+                set::className('flex items-center'),
                 icon('info text-warning mr-2'),
                 $lang->group->noneExecution
             )

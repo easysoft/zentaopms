@@ -88,7 +88,7 @@ foreach($testStories as $storyID => $storyTitle)
             ),
             h::td
             (
-                set::class('center'),
+                set::className('center'),
                 btnGroup
                 (
                     set::items(array(
@@ -107,7 +107,7 @@ formGroup
     set::labelClass('selectStoryLabel'),
     h::table
     (
-        set::class('table table-form'),
+        set::className('table table-form'),
         set::id('testTaskTable'),
         h::thead
         (

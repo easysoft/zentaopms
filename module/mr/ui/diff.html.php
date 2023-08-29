@@ -92,7 +92,7 @@ panel
             tabs
             (
                 set::id('monacoTabs'),
-                set::class('relative'),
+                set::className('relative'),
                 div(setStyle(array('position' => 'absolute', 'width' => '100%', 'height' => '35px', 'background' => '#efefef', 'top' => '0px'))),
                 tabPane
                 (
@@ -104,7 +104,7 @@ panel
                         icon
                         (
                             'close',
-                            set::class('monaco-close'),
+                            set::className('monaco-close'),
                         )
                     ),
                     div(set::id('tab-' . $currentEntry)),
@@ -113,7 +113,7 @@ panel
                 (
                     set::arrow(false),
                     set::staticMenu(true),
-                    set::class('absolute top-0 right-0 z-10 monaco-dropmenu'),
+                    set::className('absolute top-0 right-0 z-10 monaco-dropmenu'),
                     btn
                     (
                         setClass('ghost text-black pull-right'),
@@ -124,11 +124,11 @@ panel
                         $dropMenus
                     ),
                 ),
-                div(set::class('absolute top-0 left-0 z-20 arrow-left btn-left'), icon('chevron-left')),
-                div(set::class('absolute top-0 right-0 z-20 arrow-right btn-right'), icon('chevron-right')),
+                div(set::className('absolute top-0 left-0 z-20 arrow-left btn-left'), icon('chevron-left')),
+                div(set::className('absolute top-0 right-0 z-20 arrow-right btn-right'), icon('chevron-right')),
             )
         ),
-    
+
         sidebar
         (
             set::side('left'),
@@ -144,7 +144,7 @@ panel
                 set::onClickItem(jsRaw('window.treeClick')),
             )
         ),
-        a(set::class('iframe'), setData('size', '1000px'), setData('toggle', 'modal'), set::id('linkObject'))
+        a(set::className('iframe'), setData('size', '1000px'), setData('toggle', 'modal'), set::id('linkObject'))
     )
 );
 

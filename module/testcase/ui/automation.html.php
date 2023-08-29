@@ -17,12 +17,12 @@ to::header
    span
    (
        $lang->testcase->automation,
-       set::class('article-h1'),
+       set::className('article-h1'),
    ),
    icon
    (
        'help',
-       set::class('text-gray'),
+       set::className('text-gray'),
        set::id('automationTip'),
        set('data-toggle', 'tooltip'),
        set('title', 'tooltip'),
@@ -57,10 +57,10 @@ form
             ),
             div
             (
-                set::class('input-group-btn'),
+                set::className('input-group-btn'),
                 a
                 (
-                    set::class('btn'),
+                    set::className('btn'),
                     $lang->zanode->create,
                     set::href(createLink('zanode', 'create')),
                     set::target('_blank'),

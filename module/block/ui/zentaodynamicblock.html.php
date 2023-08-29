@@ -44,7 +44,7 @@ foreach($dynamics as $key => $dynamic)
 }
 panel
 (
-    set::class('zentaoDynamic-block'),
+    set::className('zentaoDynamic-block'),
     set::bodyClass('p-0 px-4'),
     set::title($block->title),
     to::headingActions

@@ -70,7 +70,7 @@ foreach($legendMisc['relatedBug']['text'] as $relatedBugID => $relatedBugTitle)
         set('href', $this->createLink('bug', 'view', "bugID={$relatedBugID}")),
         set('data-toggle', 'modal'),
         set('data-size', 'lg'),
-        span(label(set::class('dark-outline rounded-full mr-2'), $relatedBugID), $relatedBugTitle)
+        span(label(set::className('dark-outline rounded-full mr-2'), $relatedBugID), $relatedBugTitle)
     ));
 }
 
@@ -80,7 +80,7 @@ foreach($legendMisc['linkMR']['text'] as $MRID => $linkMRTitle)
     $linkMR[] = div(a
     (
         $canViewMR ? set('href', $this->createLink('mr', 'view', "MRID={$MRID}")) : null,
-        span(label(set::class('dark-outline rounded-full mr-2'), $MRID), $linkMRTitle)
+        span(label(set::className('dark-outline rounded-full mr-2'), $MRID), $linkMRTitle)
     ));
 }
 
@@ -206,7 +206,7 @@ detailBody
     floatToolbar
     (
         set::object($bug),
-        isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), set::class('ghost text-white'), $lang->goback)),
+        isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), set::className('ghost text-white'), $lang->goback)),
         set::main($actions['mainActions']),
         set::suffix($actions['suffixActions'])
     ),
@@ -270,7 +270,7 @@ modal
     (
         div
         (
-            set::class('toolbar gap-4 w-full justify-center'),
+            set::className('toolbar gap-4 w-full justify-center'),
             btn($lang->bug->nextStep, set::id('toTaskButton'), setClass('primary')),
             btn($lang->cancel, set::id('cancelButton'), set('data-dismiss', 'modal'))
         )

@@ -28,7 +28,7 @@ featureBar
 (
     li
     (
-        set::class('nav-item'),
+        set::className('nav-item'),
         a
         (
             set::href($this->createLink('stakeholder', 'browse', $navLinkParams)),

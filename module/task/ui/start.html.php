@@ -18,11 +18,11 @@ $assignedToControl = '';
 if($task->mode == 'linear')
 {
     $assignedToControl = inputGroup(
-        set::class('no-background'),
+        set::className('no-background'),
         zget($members, $assignedTo),
         input
         (
-            set::class('hidden'),
+            set::className('hidden'),
             set::name('assignedTo'),
             set::value($assignedTo),
         )
@@ -53,14 +53,14 @@ if(!$canRecordEffort)
 
     div
     (
-        set::class('alert with-icon'),
+        set::className('alert with-icon'),
         icon('exclamation-sign icon-3x'),
         div
         (
-            set::class('content'),
+            set::className('content'),
             p
             (
-                set::class('font-bold'),
+                set::className('font-bold'),
                 $deniedNotice
             )
         )
@@ -73,7 +73,7 @@ else
         setID('startForm'),
         formGroup
         (
-            set::class($task->mode == 'multi' ? 'hidden' : ''),
+            set::className($task->mode == 'multi' ? 'hidden' : ''),
             set::width('1/3'),
             set::label($lang->task->assignedTo),
             $assignedToControl,

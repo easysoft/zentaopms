@@ -57,7 +57,7 @@ panel
             ),
             cell
             (
-                set::class('pr-8'),
+                set::className('pr-8'),
                 span(set('class', 'text-sm font-normal'), html(sprintf($lang->block->summary->welcome, $usageDays, $finishTask, $fixBug)))
             )
         )
@@ -69,7 +69,7 @@ panel
         (
             set('width', '22%'),
             set('align', 'center'),
-            set::class('gradient border-right py-2'),
+            set::className('gradient border-right py-2'),
             center
             (
                 set('class', 'font-bold'),
@@ -77,16 +77,16 @@ panel
             ),
             center
             (
-                set::class('my-1'),
+                set::className('my-1'),
                 center
                 (
-                    set::class('rounded-full avatar-border-one'),
+                    set::className('rounded-full avatar-border-one'),
                     center
                     (
-                        set::class('rounded-full avatar-border-two'),
+                        set::className('rounded-full avatar-border-two'),
                         userAvatar
                         (
-                            set::class('welcome-avatar ellipsis'),
+                            set::className('welcome-avatar ellipsis'),
                             set('user', $this->app->user)
                         )
                     )
@@ -97,7 +97,7 @@ panel
         cell
         (
             set('width', '78%'),
-            set::class('px-8'),
+            set::className('px-8'),
             tabs
             (
                 tabPane
@@ -106,7 +106,7 @@ panel
                     set::title($lang->block->welcome->reviewByMe),
                     div
                     (
-                        set::class('flex justify-around text-center'),
+                        set::className('flex justify-around text-center'),
                         $getMeasureItem($reviewByMe)
                     )
                 ),
@@ -117,7 +117,7 @@ panel
                     set::active(true),
                     div
                     (
-                        set::class('flex justify-around text-center'),
+                        set::className('flex justify-around text-center'),
                         $getMeasureItem($assignToMe)
                     )
                 )

@@ -445,7 +445,7 @@ detailBody
             floatToolbar
             (
                 set::object($case),
-                $isInModal ? null : to::prefix(backBtn(set::icon('back'), set::class('ghost text-white'), $lang->goback)),
+                $isInModal ? null : to::prefix(backBtn(set::icon('back'), set::className('ghost text-white'), $lang->goback)),
                 set::main($actions['mainActions']),
                 set::suffix($actions['suffixActions'])
             ),

@@ -21,7 +21,7 @@ featureBar
 (
     li
     (
-        set::class('nav-item'),
+        set::className('nav-item'),
         a
         (
             set::href(inlink('cases', "taskID={$task->id}&browseType=all")),
@@ -31,7 +31,7 @@ featureBar
     ),
     li
     (
-        set::class('nav-item'),
+        set::className('nav-item'),
         a
         (
             set::href(inlink('cases', "taskID={$task->id}&browseType=assignedtome")),
@@ -58,33 +58,33 @@ toolbar
     ),
     $canLinkCase ? btn
     (
-        set::class('ghost'),
+        set::className('ghost'),
         set::icon('link'),
         set::url(inlink('linkCase', "taskID=$task->id")),
         $lang->testtask->linkCase,
     ) : null,
     $canExport ? btn
     (
-        set::class('ghost'),
+        set::className('ghost'),
         set::icon('export'),
         set::url($this->createLink('testcase', 'export', "productID=$productID&orderBy=case_desc&taskID=$task->id")),
         $lang->export
     ) : null,
     $canReport ? btn
     (
-        set::class('ghost'),
+        set::className('ghost'),
         set::icon('bar-chart'),
         set::url(inlink('report', "productID=$productID&taskID=$task->id&browseType=$browseType&branchID=$task->branch&moduleID=" . (empty($moduleID) ? '' : $moduleID))),
         $lang->testtask->report->common
     ) : null,
     $canView ? btn
     (
-        set::class('ghost'),
+        set::className('ghost'),
         set::icon('list-alt'),
         set::url(inlink('view', "taskID=$task->id")),
         $lang->testtask->view
     ) : null,
-    btn(set::icon('back'), set::class('ghost'), set::url($this->session->testtaskList), $lang->goback)
+    btn(set::icon('back'), set::className('ghost'), set::url($this->session->testtaskList), $lang->goback)
 );
 
 $config->testcase->actionList['runCase']['url']    = array('module' => 'testtask', 'method' => 'runCase', 'params' => 'runID={id}&caseID={case}&version={version}');

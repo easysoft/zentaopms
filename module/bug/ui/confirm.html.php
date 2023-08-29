@@ -47,7 +47,7 @@ formPanel
     ),
     formRow
     (
-        set::class('hidden'),
+        set::className('hidden'),
         formGroup
         (
             set::width('1/3'),

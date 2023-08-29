@@ -69,7 +69,7 @@ if($fileName) $breadcrumbItems[] = h::span($fileName);
 featureBar(
     formGroup
     (
-        set::class('repo-select'),
+        set::className('repo-select'),
         set::required(true),
         dropmenu
         (
@@ -97,7 +97,7 @@ $downloadWg = div
     on('click', '', array('capture' => true, 'prevent' => true, 'stop' => true)),
     $cloneUrl->svn ? div
     (
-        p(set::class('repo-downloadCode'), $lang->repo->cloneUrl),
+        p(set::className('repo-downloadCode'), $lang->repo->cloneUrl),
         formRow
         (
             formGroup
@@ -123,7 +123,7 @@ $downloadWg = div
 
     $cloneUrl->ssh ? div
     (
-        p(set::class('repo-downloadCode'), $lang->repo->sshClone),
+        p(set::className('repo-downloadCode'), $lang->repo->sshClone),
         formRow
         (
             formGroup
@@ -141,7 +141,7 @@ $downloadWg = div
                 set::width('50px'),
                 btn
                 (
-                    set::class('copy-btn'),
+                    set::className('copy-btn'),
                     set::icon('copy'),
                 )
             )
@@ -150,7 +150,7 @@ $downloadWg = div
 
     $cloneUrl->http ? div
     (
-        p(set::class('repo-downloadCode'), $lang->repo->httpClone),
+        p(set::className('repo-downloadCode'), $lang->repo->httpClone),
         formRow
         (
             formGroup
@@ -168,7 +168,7 @@ $downloadWg = div
                 set::width('50px'),
                 btn
                 (
-                    set::class('copy-btn'),
+                    set::className('copy-btn'),
                     set::icon('copy'),
                 )
             )
@@ -181,7 +181,7 @@ $downloadWg = div
         btn
         (
             set::icon('down-circle'),
-            set::class('downloadZip-btn'),
+            set::className('downloadZip-btn'),
             set::text($lang->repo->downloadZip),
         )
     ),
@@ -190,7 +190,7 @@ $downloadWg = div
 toolbar
 (
     span(
-        set::class('last-sync-time'),
+        set::className('last-sync-time'),
         $lang->repo->notice->lastSyncTime . $cacheTime
     ),
     item(set($refreshItem)),

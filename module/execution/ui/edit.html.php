@@ -50,7 +50,7 @@ if(isset($project))
     {
         $projectBox = formGroup
             (
-                set::class('items-center'),
+                set::className('items-center'),
                 set::label($lang->execution->method),
                 zget($lang->execution->typeList, $execution->type)
             );
@@ -77,7 +77,7 @@ if($project->model == 'waterfall' || $project->model == 'waterfallplus')
             (
                 set::width($enableOptionalAttr ? '1/2' : '1/8'),
                 set::label($lang->stage->type),
-                set::class('items-center'),
+                set::className('items-center'),
                 $enableOptionalAttr ? picker
                 (
                     set::name('attribute'),
@@ -122,8 +122,8 @@ elseif($execution->type != 'kanban')
             (
                 set::width('1/2'),
                 set::id('lifeTimeTips'),
-                set::class('text-gray'),
-                set::class($execution->lifetime != 'ops' ? 'hidden' : ''),
+                set::className('text-gray'),
+                set::className($execution->lifetime != 'ops' ? 'hidden' : ''),
                 span($lang->execution->typeDesc),
             ),
         );
@@ -142,7 +142,7 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
             $plans     = isset($productPlans[$product->id]) ? $productPlans[$product->id] : array();
             $productsBox[] = formRow
                 (
-                    set::class('productsBox'),
+                    set::className('productsBox'),
                     formGroup
                     (
                         set::width($hasBranch ? '1/4' : '1/2'),
@@ -191,7 +191,7 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                     (
                         set::width('1/2'),
                         set::label($lang->project->associatePlan),
-                        set::class('planBox'),
+                        set::className('planBox'),
                         inputGroup
                         (
                             set::id("plan{$i}"),
@@ -233,7 +233,7 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                 set::width('1/2'),
                 set::label($lang->execution->linkPlan),
                 set('id', 'plansBox'),
-                set::class('planBox'),
+                set::className('planBox'),
                 picker
                 (
                     set::name("plans[{$planProductID}][]"),
@@ -249,7 +249,7 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
     {
         $productsBox [] = formRow
             (
-                set::class('productsBox'),
+                set::className('productsBox'),
                 formGroup
                 (
                     set::width('1/2'),
@@ -284,7 +284,7 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                 (
                     set::width('1/2'),
                     set::label($lang->project->associatePlan),
-                    set::class('planBox'),
+                    set::className('planBox'),
                     inputGroup
                     (
                         set::id("plan0"),
@@ -323,7 +323,7 @@ else
         $plans     = isset($productPlans[$product->id]) ? $productPlans[$product->id] : array();
         $productsBox[] = formRow
             (
-                set::class('productsBox'),
+                set::className('productsBox'),
                 formGroup
                 (
                     set::width($hasBranch ? '1/4' : '1/2'),
@@ -373,7 +373,7 @@ else
                 (
                     set::width('1/2'),
                     set::label($lang->project->associatePlan),
-                    set::class('planBox'),
+                    set::className('planBox'),
                     inputGroup
                     (
                         set::id("plan{$i}"),
@@ -397,7 +397,7 @@ else
 if(helper::isAjaxRequest('modal')) modalHeader(set::title($lang->execution->edit));
 formPanel
 (
-    set::class('editPanel'),
+    set::className('editPanel'),
     !helper::isAjaxRequest('modal') ? modalHeader(set::title($lang->execution->edit)) : null,
     on::click('.addLine', 'addNewLine'),
     on::click('.removeLine', 'removeLine'),
@@ -592,7 +592,7 @@ formPanel
     (
         set::label($lang->whitelist),
         set::id('whitelistBox'),
-        set::class($execution->acl == 'open' ? 'hidden' : ''),
+        set::className($execution->acl == 'open' ? 'hidden' : ''),
         picker
         (
             set::name('whitelist'),

@@ -17,7 +17,7 @@ featureBar
     set::linkParams("executionID={$execution->id}&type={key}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
     div
     (
-        set::class('select-product-box'),
+        set::className('select-product-box'),
         picker
         (
             set::name('product'),

@@ -25,19 +25,19 @@ foreach($releases as $productName => $releaseCount)
 
     $releaseProgressData[] = div
     (
-        set::class('flex py-1.5 justify-between'),
+        set::className('flex py-1.5 justify-between'),
         cell
         (
             set::width('30%'),
-            set::class('ellipsis'),
+            set::className('ellipsis'),
             label
             (
-                set::class($labelClass . '-pale px-1.5 circle'),
+                set::className($labelClass . '-pale px-1.5 circle'),
                 $i
             ),
             span
             (
-                set::class('pl-2 text-' . $nameClass),
+                set::className('pl-2 text-' . $nameClass),
                 $productName,
             )
         ),
@@ -46,10 +46,10 @@ foreach($releases as $productName => $releaseCount)
             set::width('70%'),
             div
             (
-                set::class('progress'),
+                set::className('progress'),
                 div
                 (
-                    set::class('progress-bar primary'),
+                    set::className('progress-bar primary'),
                     setStyle('width', $progress),
                 )
             )
@@ -61,19 +61,19 @@ foreach($releases as $productName => $releaseCount)
 panel
 (
     set::title($block->title),
-    set::class('releasestatistic-block ' . ($longBlock ? 'block-long' : 'block-sm')),
+    set::className('releasestatistic-block ' . ($longBlock ? 'block-long' : 'block-sm')),
     set('headingClass', 'border-b'),
     div
     (
-        set::class('flex flex-wrap justify-between'),
+        set::className('flex flex-wrap justify-between'),
         cell
         (
             set::width($longBlock ? '49%' : '100%'),
-            set::class($longBlock ? '' : 'pb-2'),
+            set::className($longBlock ? '' : 'pb-2'),
 
             div
             (
-                set::class('px-2 pb-2'),
+                set::className('px-2 pb-2'),
                 $lang->block->releasestatistic->monthly,
             ),
             echarts
@@ -102,13 +102,13 @@ panel
             set::width($longBlock ? '49%' : '100%'),
             div
             (
-                set::class('px-2 pb-2'),
+                set::className('px-2 pb-2'),
                 icon('chart-bar pr-1'),
                 sprintf($lang->block->releasestatistic->annual, date('Y'))
             ),
             div
             (
-                set::class('p-2 overflow-y-auto'),
+                set::className('p-2 overflow-y-auto'),
                 setStyle('height', $longBlock ? '200px' : '175px'),
                 $releaseProgressData,
             )

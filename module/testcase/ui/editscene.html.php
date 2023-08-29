@@ -68,7 +68,7 @@ formPanel
                 ),
                 count($moduleOptionMenu) == 1 ? div
                 (
-                    set::class('input-group-btn flex'),
+                    set::className('input-group-btn flex'),
                     a
                     (
                         $lang->tree->manage,
@@ -107,4 +107,3 @@ formPanel
 );
 
 render();
-

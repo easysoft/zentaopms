@@ -76,7 +76,7 @@ featureBar
     ),
     li
     (
-        set::class('burnByBox'),
+        set::className('burnByBox'),
         picker
         (
             set::id('burnBy'),
@@ -88,7 +88,7 @@ featureBar
     ),
     $interval ? li
     (
-        set::class('intervalBox ml-4'),
+        set::className('intervalBox ml-4'),
         picker
         (
             set::id('interval'),

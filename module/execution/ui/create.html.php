@@ -73,7 +73,7 @@ if((empty($project) || $project->model != 'kanban') && $type != 'kanban')
         (
             set::width('1/2'),
             set::id('lifeTimeTips'),
-            set::class('text-gray hidden'),
+            set::className('text-gray hidden'),
             span($lang->execution->typeDesc),
         ),
     );
@@ -102,7 +102,7 @@ if(isset($project->hasProduct) && !empty($project->hasProduct) && $products)
 
         $productsBox[] = formRow
         (
-            set::class('productsBox'),
+            set::className('productsBox'),
             formGroup
             (
                 set::width($hasBranch ? '1/4' : '1/2'),
@@ -149,7 +149,7 @@ if(isset($project->hasProduct) && !empty($project->hasProduct) && $products)
             (
                 set::width('1/2'),
                 set::label($lang->project->associatePlan),
-                set::class('planBox'),
+                set::className('planBox'),
                 inputGroup
                 (
                     set::id("plan{$i}"),
@@ -191,7 +191,7 @@ elseif(!empty($project) && empty($project->hasProduct) && !in_array($project->mo
             set::width('1/2'),
             set::label($lang->execution->linkPlan),
             set('id', 'plansBox'),
-            set::class('planBox'),
+            set::className('planBox'),
             picker
             (
                 set::name("plans[{$planProductID}][]"),
@@ -207,7 +207,7 @@ else
 {
     $productsBox [] = formRow
     (
-        set::class('productsBox'),
+        set::className('productsBox'),
         formGroup
         (
             set::width('1/2'),
@@ -239,7 +239,7 @@ else
         (
             set::width('1/2'),
             set::label($lang->project->associatePlan),
-            set::class('planBox'),
+            set::className('planBox'),
             inputGroup
             (
                 set::id("plan0"),
@@ -271,7 +271,7 @@ else
 
 formPanel
 (
-    set::class('createPanel'),
+    set::className('createPanel'),
     to::heading(div
     (
         setClass('panel-title text-lg'),
@@ -513,13 +513,13 @@ modalTrigger
             (
                 h4
                 (
-                    set::class('copy-title'),
+                    set::className('copy-title'),
                     $lang->execution->copyTitle
                 )
             ),
             picker
             (
-                set::class('pickerProject'),
+                set::className('pickerProject'),
                 set::name('project'),
                 set::items($copyProjects),
                 set::value($projectID),

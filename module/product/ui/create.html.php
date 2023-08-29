@@ -50,11 +50,11 @@ foreach($fields as $field => $attr)
                 (
                     set::type('text'),
                     set::name('lineName'),
-                    set::class('hidden')
+                    set::className('hidden')
                 ),
                 span
                 (
-                    set::class('input-group-addon'),
+                    set::className('input-group-addon'),
                     checkbox
                     (
                         set::name('newLine'),

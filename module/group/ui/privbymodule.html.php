@@ -13,12 +13,12 @@ namespace zin;
 to::header(
     span
     (
-        set::class('article-h2'),
+        set::className('article-h2'),
         $lang->group->managePriv,
     ),
     span
     (
-        set::class('text-gray'),
+        set::className('text-gray'),
         $lang->group->byModuleTips
     )
 );
@@ -30,7 +30,7 @@ foreach($packageGroup as $module => $modulePackages)
     $packageBox[] = select
         (
             set::name('packages[]'),
-            set::class($hiddenClass),
+            set::className($hiddenClass),
             set::items($modulePackages),
             set::multiple(true),
             set::required(true),
@@ -45,16 +45,16 @@ form
 (
     set::submitBtnText($lang->save),
     set::id('privByModuleForm'),
-    set::class('border-b-0'),
+    set::className('border-b-0'),
     formRow
     (
         cell
         (
             set::width('1/4'),
-            set::class('mr-4'),
+            set::className('mr-4'),
             div
             (
-                set::class('text-center pb-2'),
+                set::className('text-center pb-2'),
                 h::strong($lang->group->module),
             ),
             div
@@ -72,10 +72,10 @@ form
         cell
         (
             set::width('1/4'),
-            set::class('mr-4'),
+            set::className('mr-4'),
             div
             (
-                set::class('text-center pb-2'),
+                set::className('text-center pb-2'),
                 h::strong($lang->privpackage->common)
             ),
             div
@@ -87,10 +87,10 @@ form
         cell
         (
             set::width('1/4'),
-            set::class('mr-4'),
+            set::className('mr-4'),
             div
             (
-                set::class('text-center pb-2'),
+                set::className('text-center pb-2'),
                 h::strong($lang->group->method)
             ),
             div
@@ -110,7 +110,7 @@ form
             set::width('1/4'),
             div
             (
-                set::class('text-center pb-2'),
+                set::className('text-center pb-2'),
                 h::strong($lang->group->common)
             ),
             div

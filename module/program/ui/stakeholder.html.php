@@ -19,7 +19,7 @@ featureBar
 (
     li
     (
-        set::class('nav-item'),
+        set::className('nav-item'),
         a
         (
             set::href($this->createLink('program', 'stakeholder', $navLinkParams)),

@@ -42,7 +42,7 @@ formPanel
                 ),
                 !empty($executionID) && empty($builds) ? span
                 (
-                    set::class('input-group-addon'),
+                    set::className('input-group-addon'),
                     a
                     (
                         set::url(createLink('build', 'create', "executionID=$executionID")),

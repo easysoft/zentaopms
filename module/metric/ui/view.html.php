@@ -102,7 +102,7 @@ detailBody
             tabPane
             (
                 set::key('legendBasicInfo'),
-                set::class('overflow-hidden'),
+                set::className('overflow-hidden'),
                 set::title($lang->metric->legendBasicInfo),
                 set::active(true),
                 tableData

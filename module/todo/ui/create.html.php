@@ -66,7 +66,7 @@ formPanel
                 (
                     set::id('date'),
                     set::name('date'),
-                    set::class('date'),
+                    set::className('date'),
                     set::value('today'),
                     set::type('datePicker'),
                     on::change('changeCreateDate')
@@ -78,7 +78,7 @@ formPanel
                         set::id('switchDate'),
                         set::name('switchDate'),
                         set::text($lang->todo->periods['future']),
-                        set::class($lang->todo->periods['future']),
+                        set::className($lang->todo->periods['future']),
                         on::change("zui.DatePicker.query('#date').render({disabled: e.target.checked})")
                     )
                 ),
@@ -140,7 +140,7 @@ formPanel
                     set::type('date'),
                     set::id('configDate'),
                     set::name('config[date]'),
-                    set::class('cycle-date'),
+                    set::className('cycle-date'),
                     on::change("e.target.closest('.input-group').classList.toggle('has-error', !e.target.value)")
                 ),
             )
@@ -369,7 +369,7 @@ formPanel
                 set::icon('help'),
                 toggle::tooltip(array('placement' => 'top-start', 'title' => $lang->todo->privateTip)),
                 set::square(true),
-                set::class('ghost h-6 mt-0.5 tooltip-btn'),
+                set::className('ghost h-6 mt-0.5 tooltip-btn'),
             ),
         )
     ),

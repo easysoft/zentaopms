@@ -229,8 +229,8 @@ div
                 )->size(120, 120),
                 div
                 (
-                    set::class('pie-chart-title text-center'),
-                    div(span(set::class('text-2xl font-bold'), $progress . '%')),
+                    set::className('pie-chart-title text-center'),
+                    div(span(set::className('text-2xl font-bold'), $progress . '%')),
                     div
                     (
                         span
@@ -366,7 +366,7 @@ div
             ),
             div
             (
-                set::class('detail-content mt-4'),
+                set::className('detail-content mt-4'),
                 html($project->desc),
             ),
         ),

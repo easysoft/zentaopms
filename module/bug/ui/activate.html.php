@@ -40,7 +40,7 @@ formPanel
         (
             set::name('status'),
             set::value('active'),
-            set::class('hidden')
+            set::className('hidden')
         )
     ),
     formGroup

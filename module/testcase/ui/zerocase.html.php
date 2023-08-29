@@ -45,7 +45,7 @@ foreach($lang->story->reasonList as $key => $reason) $rejectItems[] = array('tex
 menu
 (
     set::id('navReview'),
-    set::class('dropdown-menu'),
+    set::className('dropdown-menu'),
     set::items($reviewItems)
 );
 
@@ -56,7 +56,7 @@ foreach($lang->story->stageList as $key => $stage) $stageItems[] = array('text' 
 menu
 (
     set::id('navStage'),
-    set::class('dropdown-menu'),
+    set::className('dropdown-menu'),
     set::items($stageItems),
 );
 

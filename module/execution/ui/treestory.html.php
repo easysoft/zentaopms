@@ -150,7 +150,7 @@ div
         set::content(empty($story->verify) ? $lang->noData : $story->verify),
         set::useHtml(true)
     ),
-    h::hr(set::class('mt-5 mb-1')),
+    h::hr(set::className('mt-5 mb-1')),
     fileList
     (
         set::padding(false),

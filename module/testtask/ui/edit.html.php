@@ -19,7 +19,7 @@ formPanel
         set::label($lang->testtask->execution),
         set::name('execution'),
         set::value($task->execution),
-        set::class(((!empty($project) && !$project->multiple) || ($app->tab == 'execution' && $task->execution)) ? 'hidden' : ''),
+        set::className(((!empty($project) && !$project->multiple) || ($app->tab == 'execution' && $task->execution)) ? 'hidden' : ''),
         set::control('picker'),
         set::items($executions),
     ),

@@ -90,7 +90,7 @@ if($canBatchAssignTo)
 
     menu(
         set::id('navAssignedTo'),
-        set::class('dropdown-menu'),
+        set::className('dropdown-menu'),
         set::items($assignedToItems)
     );
 

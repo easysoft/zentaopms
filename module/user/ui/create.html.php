@@ -59,7 +59,7 @@ formPanel
     formRow
     (
         set::id('companyBox'),
-        set::class('hidden'),
+        set::className('hidden'),
         formGroup
         (
             set::width('1/2'),
@@ -137,7 +137,7 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            set::class('flex gap-4 items-center ' . ($showVisionList ? '' : 'hide')),
+            set::className('flex gap-4 items-center ' . ($showVisionList ? '' : 'hide')),
             set::label($lang->user->visions),
             set::required(true),
             $visionsCheckbox
@@ -241,13 +241,13 @@ formPanel
     ),
     input
     (
-        set::class('hidden'),
+        set::className('hidden'),
         set::name('verifyRand'),
         set::value($rand)
     ),
     input
     (
-        set::class('hidden'),
+        set::className('hidden'),
         set::id('passwordLength'),
         set::name('passwordLength'),
         set::value($rand)

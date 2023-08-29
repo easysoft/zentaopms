@@ -414,7 +414,7 @@ formPanel
                 ),
                 inputControl
                 (
-                    set::class($hiddenEstimate),
+                    set::className($hiddenEstimate),
                     input(set::name('estimate')),
                     to::suffix
                     (

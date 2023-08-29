@@ -40,7 +40,7 @@ if($canBatchAction)
         menu
         (
             set::id('navStatus'),
-            set::class('dropdown-menu'),
+            set::className('dropdown-menu'),
             set::items($statusList)
         );
 

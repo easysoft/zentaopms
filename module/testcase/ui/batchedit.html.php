@@ -21,7 +21,7 @@ if(isset($suhosinInfo))
 {
     div
     (
-        set::class('alert warning'),
+        set::className('alert warning'),
         $suhosinInfo
     );
 }
@@ -178,4 +178,3 @@ else
 }
 
 render();
-

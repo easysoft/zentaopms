@@ -28,7 +28,7 @@ div
         (
             span
             (
-                set::class('text-md text-gray'),
+                set::className('text-md text-gray'),
                 html($lang->arrow),
             ),
         ),

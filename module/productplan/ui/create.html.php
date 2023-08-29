@@ -29,13 +29,13 @@ formPanel
     set::title($parent ? $lang->productplan->createChildren : $lang->productplan->create),
     $parent ? formGroup
     (
-        set::class('items-center'),
+        set::className('items-center'),
         set::label($lang->productplan->parent),
         $parentPlan->title
     ) : null,
     !$parent && !$product->shadow ? formGroup
     (
-        set::class('items-center'),
+        set::className('items-center'),
         set::label($lang->productplan->product),
         $product->name
     ) : null,

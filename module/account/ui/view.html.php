@@ -77,7 +77,7 @@ detailBody
     floatToolbar
     (
         set::object($account),
-        isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), set::class('ghost text-white'), $lang->goback)),
+        isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), set::className('ghost text-white'), $lang->goback)),
         set::suffix($actions['suffixActions'])
     ),
 );

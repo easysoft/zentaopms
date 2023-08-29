@@ -65,8 +65,8 @@ foreach($lang->report->typeList as $type => $typeName)
         to::prefix(icon($type == 'default' ? 'list-alt' : "chart-{$type}")),
         div
         (
-            set::class('pb-4'),
-            span(set::class('text-gray'),
+            set::className('pb-4'),
+            span(set::className('text-gray'),
             html(str_replace('%tab%', $lang->task->wait . $lang->testcase->common, $lang->report->notice->help)))
         ),
         div($echarts)

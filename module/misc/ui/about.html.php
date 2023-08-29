@@ -5,7 +5,7 @@ declare(strict_types=1);
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Tingting Dai <daitingting@easycorp.ltd>
- * @package     misc 
+ * @package     misc
  * @link        https://www.zentao.net
  */
 namespace zin;
@@ -41,14 +41,14 @@ foreach($lang->misc->zentao as $label => $groupItems)
 
     $zentaoItems[] = panel
     (
-        set::class('w-1/5 mx-3'),
+        set::className('w-1/5 mx-3'),
         set::title($lang->misc->zentao->labels[$label]),
         set::titleClass('strong'),
         set::headingClass('gray-200'),
         set::bodyClass('pd-10px'),
         h::ul
         (
-            set::class('pl-5 mb-2'),
+            set::className('pl-5 mb-2'),
             setStyle('list-style-type', 'disc'),
             $liItems
         )
@@ -57,12 +57,12 @@ foreach($lang->misc->zentao as $label => $groupItems)
 
 h::table
 (
-    set::class('table borderless'),
+    set::className('table borderless'),
     h::tr
     (
         h::td
         (
-            set::class('text-center'),
+            set::className('text-center'),
             zui::width('177px'),
             img
             (
@@ -70,7 +70,7 @@ h::table
             ),
             h4
             (
-                set::class('text-center my-2 font-bold'),
+                set::className('text-center my-2 font-bold'),
                 trim($config->visions, ',') == 'lite' ? $lang->liteName . $config->liteVersion : sprintf($lang->misc->zentao->version, $config->version)
             )
         ),
@@ -78,7 +78,7 @@ h::table
         (
             div
             (
-                set::class('flex flex-nowrap justify-start'),
+                set::className('flex flex-nowrap justify-start'),
                 $zentaoItems,
             )
         ),
@@ -87,16 +87,16 @@ h::table
     (
         h::td
         (
-            set::class('copyright text-right align-middle'),
+            set::className('copyright text-right align-middle'),
             set('colspan', 2),
             div
             (
-                set::class('pull-left'),
+                set::className('pull-left'),
                 html($lang->designedByAIUX),
             ),
             div
             (
-                set::class('pull-right'),
+                set::className('pull-right'),
                 html($lang->misc->copyright)
             )
         )

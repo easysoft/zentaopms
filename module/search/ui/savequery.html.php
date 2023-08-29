@@ -14,7 +14,7 @@ form
             set::id('title'),
             set::name('title'),
             set::type('text'),
-            set::class('form-control w-5/12'),
+            set::className('form-control w-5/12'),
             set::placeholder($lang->search->setCondName)
         ),
         checkbox
@@ -22,14 +22,14 @@ form
             set::id('common'),
             set::name('common'),
             set::value(1),
-            set::class('w-3/12'),
+            set::className('w-3/12'),
             $lang->search->setCommon
         ),
         checkbox
         (
             set::id('onMenuBar'),
             set::name('onMenuBar'),
-            set::class('w-3/12'),
+            set::className('w-3/12'),
             $lang->search->onMenuBar
         ),
         btn(

@@ -74,7 +74,7 @@ foreach ($memberPairs as $key => $value) $assignedToItems[] = array('text' => $v
 menu
 (
     set::id('navAssignedTo'),
-    set::class('dropdown-menu'),
+    set::className('dropdown-menu'),
     set::items($assignedToItems)
 );
 

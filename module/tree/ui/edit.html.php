@@ -26,7 +26,7 @@ formPanel
     set::submitBtnText($lang->save),
     $showProduct ? formRow
     (
-        set::class($hiddenProduct ? 'hidden' : ''),
+        set::className($hiddenProduct ? 'hidden' : ''),
         formGroup
         (
             set::label($lang->tree->product),
@@ -69,7 +69,7 @@ formPanel
     ),
     $module->type != 'line' ? formGroup
     (
-        set::class($hidden ? 'moduleBox hidden' : 'moduleBox'),
+        set::className($hidden ? 'moduleBox hidden' : 'moduleBox'),
         set::label(($type == 'doc' or $type == 'api') ? $lang->tree->parentCate : $lang->tree->parent),
         control
         (

@@ -270,7 +270,7 @@ div
             ),
             div
             (
-                set::Class('panel-body'),
+                set::className('panel-body'),
                 set::id('content'),
                 h2($api->title),
                 div(setClass('desc'), $api->desc),

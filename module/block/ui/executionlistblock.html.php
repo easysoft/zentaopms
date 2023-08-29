@@ -14,7 +14,7 @@ namespace zin;
 panel
 (
     set::title($block->title),
-    set::class('executionlist-block list-block ' . ($longBlock ? 'block-long' : 'block-sm')),
+    set::className('executionlist-block list-block ' . ($longBlock ? 'block-long' : 'block-sm')),
     set::headingClass('border-b'),
     to::headingActions
     (

@@ -13,7 +13,7 @@ panel
 (
     div
     (
-        set::class('flex flex-nowrap justify-between'),
+        set::className('flex flex-nowrap justify-between'),
         div
         (
             set('class', 'panel-title'),

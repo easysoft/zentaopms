@@ -55,7 +55,7 @@ panel
 (
     setClass('panel-form mx-auto'),
     form($formItems),
-    h::hr(set::class('mt-6 mb-6')),
+    h::hr(set::className('mt-6 mb-6')),
     history()
 );
 

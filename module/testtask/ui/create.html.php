@@ -23,7 +23,7 @@ formPanel
     (
         set::width('1/2'),
         set::label($lang->testtask->product),
-        set::class(!isset($executionID) || !empty($product->shadow) ? 'hidden' : ''),
+        set::className(!isset($executionID) || !empty($product->shadow) ? 'hidden' : ''),
         set::name('product'),
         set::value($product->id),
         set::control('picker'),
@@ -38,7 +38,7 @@ formPanel
     (
         set::width('1/2'),
         set::label($lang->testtask->execution),
-        set::class(($app->tab == 'execution' && $executionID) ? 'hidden' : ''),
+        set::className(($app->tab == 'execution' && $executionID) ? 'hidden' : ''),
         set::name('execution'),
         set::value($executionID),
         set::control('picker'),
@@ -62,7 +62,7 @@ formPanel
             ),
             span
             (
-                set::class(!empty($executionID) && empty($builds) ? 'input-group-addon' : 'hidden'),
+                set::className(!empty($executionID) && empty($builds) ? 'input-group-addon' : 'hidden'),
                 a
                 (
                     set('href', createLink('build', 'create', "executionID=$executionID&productID={$product->id}&projectID={$projectID}")),
@@ -72,7 +72,7 @@ formPanel
             ),
             span
             (
-                set::class(!empty($executionID) && empty($builds) ? 'input-group-addon' : 'hidden'),
+                set::className(!empty($executionID) && empty($builds) ? 'input-group-addon' : 'hidden'),
                 a
                 (
                     set('href', 'javascript:void(0)'),
@@ -190,4 +190,3 @@ formPanel
 );
 
 render();
-

@@ -116,7 +116,7 @@ if($canBatchAction)
         menu
         (
             set::id('navActions'),
-            set::class('dropdown-menu'),
+            set::className('dropdown-menu'),
             $canBatchClose ? item(set(array(
                 'text'     => $lang->close,
                 'class'    => 'batch-btn ajax-btn',
@@ -141,7 +141,7 @@ if($canBatchAction)
         menu
         (
             set::id('navModule'),
-            set::class('dropdown-menu'),
+            set::className('dropdown-menu'),
             set::items($moduleItems)
         );
     }
@@ -157,7 +157,7 @@ if($canBatchAction)
         menu
         (
             set::id('navAssignedTo'),
-            set::class('dropdown-menu'),
+            set::className('dropdown-menu'),
             set::items($assignedToItems)
         );
     }

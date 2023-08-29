@@ -26,14 +26,14 @@ if(!$canRecordEffort)
 
     div
     (
-        set::class('alert with-icon'),
+        set::className('alert with-icon'),
         icon('exclamation-sign icon-3x'),
         div
         (
-            set::class('content'),
+            set::className('content'),
             p
             (
-                set::class('font-bold'),
+                set::className('font-bold'),
                 $deniedNotice
             )
         )
@@ -55,7 +55,7 @@ else
                 set::width('1/3'),
                 set::label($lang->task->my . $lang->task->hasConsumed),
                 div(
-                    set::class('consumed'),
+                    set::className('consumed'),
                     $task->myConsumed . $lang->task->suffixHour
                 )
             );

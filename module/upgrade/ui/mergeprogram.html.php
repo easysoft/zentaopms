@@ -33,11 +33,11 @@ div
     div
     (
         set::id('mainContent'),
-        set::class('bg-white p-4'),
+        set::className('bg-white p-4'),
         set::style(array('margin' => '50px auto 0', 'width' => '1200px')),
         div
         (
-            set::class('article-h1 mb-4'),
+            set::className('article-h1 mb-4'),
             $lang->upgrade->mergeModes['manually']
         ),
         form
@@ -49,8 +49,8 @@ div
                 div
                 (
                     set::style(array('background-color' => 'var(--color-secondary-50)')),
-                    set::class('p-4'),
-                    div(set::class('text-secondary'), sprintf($lang->upgrade->mergeSummary, $content)), div(set::class('text-secondary'), html($lang->upgrade->mergeByProject))
+                    set::className('p-4'),
+                    div(set::className('text-secondary'), sprintf($lang->upgrade->mergeSummary, $content)), div(set::className('text-secondary'), html($lang->upgrade->mergeByProject))
                 ),
                 div($getMergeData($this->view))
             )
@@ -59,4 +59,3 @@ div
 );
 
 render('pagebase');
-

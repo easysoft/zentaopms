@@ -39,7 +39,7 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            set::class($product->shadow ? 'hidden' : ''),
+            set::className($product->shadow ? 'hidden' : ''),
             set::label($lang->bug->product),
             inputGroup
             (
@@ -370,7 +370,7 @@ formPanel
                     set('class', 'input-group-addon'),
                     $contactList ? picker
                     (
-                        set::class('width', 'w-20'),
+                        set::className('width', 'w-20'),
                         set::name('contactListMenu'),
                         set::items($contactList),
                         set::value()

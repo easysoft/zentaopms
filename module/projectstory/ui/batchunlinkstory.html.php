@@ -27,7 +27,7 @@ foreach($executionStories as $story)
 
 h::table
 (
-    set::class('table'),
+    set::className('table'),
     h::tr
     (
         h::th(set::width('60px'), $lang->idAB),

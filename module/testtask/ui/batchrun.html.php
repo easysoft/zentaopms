@@ -29,17 +29,17 @@ foreach($cases as $caseID => $case)
             }
             $currentID = $step->type == 'item' ? "{$stepId}.{$childId}" : $stepId;
             $stepClass = $step->type == 'item' ? 'step-item pl-2' : 'step-group';
-            
+
             $stepItems[] = h::tr
             (
                 h::td
                 (
                     set::width('30%'),
-                    set::class('break-words'),
+                    set::className('break-words'),
                     set::colspan($step->type == 'group' ? 2 : 1),
                     span
                     (
-                        set::class($stepClass),
+                        set::className($stepClass),
                         set::hint(true),
                         $currentID . '、' . $step->desc
                     )
@@ -47,7 +47,7 @@ foreach($cases as $caseID => $case)
                 $step->type != 'group' ? h::td
                 (
                     set::width('30%'),
-                    set::class('break-words'),
+                    set::className('break-words'),
                     span
                     (
                         set::hint(true),
@@ -57,7 +57,7 @@ foreach($cases as $caseID => $case)
                 $step->type != 'group' ? h::td
                 (
                     set::width('90px'),
-                    set::class("hidden steps"),
+                    set::className("hidden steps"),
                     picker
                     (
                         set::name("steps[$caseID][$stepID]"),
@@ -67,7 +67,7 @@ foreach($cases as $caseID => $case)
                 ) : null,
                 $step->type != 'group' ? h::td
                 (
-                    set::class("hidden reals"),
+                    set::className("hidden reals"),
                     input
                     (
                         set::name("reals[$caseID][$stepID]")
@@ -106,7 +106,7 @@ foreach($cases as $caseID => $case)
         ),
         h::td
         (
-            set::class('break-words'),
+            set::className('break-words'),
             h::span
             (
                 set::hint(true),
@@ -115,7 +115,7 @@ foreach($cases as $caseID => $case)
         ),
         h::td
         (
-            set::class('precondition break-words'),
+            set::className('precondition break-words'),
             span
             (
                 set::hint(true),
@@ -135,10 +135,10 @@ foreach($cases as $caseID => $case)
         ),
         h::td
         (
-            set::class(empty($steps[$caseID]) ? 'hidden reals' : 'stepsAndExpect'),
+            set::className(empty($steps[$caseID]) ? 'hidden reals' : 'stepsAndExpect'),
             !empty($steps[$caseID]) ? h::table
             (
-                set::class('table bordered'),
+                set::className('table bordered'),
                 $stepItems
             ) : null,
             empty($steps[$caseID]) ? input
@@ -158,7 +158,7 @@ formPanel
 
     h::table
     (
-        set::class('table bordered'),
+        set::className('table bordered'),
         h::thead
         (
             h::tr
@@ -181,7 +181,7 @@ formPanel
                 h::th
                 (
                     set::width('100px'),
-                    set::class('precondition'),
+                    set::className('precondition'),
                     $lang->testcase->precondition
                 ),
                 h::th
@@ -203,4 +203,3 @@ formPanel
 );
 
 render();
-

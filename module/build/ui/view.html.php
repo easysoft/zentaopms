@@ -106,7 +106,7 @@ detailBody
     sectionList(
         tabs
         (
-            set::class('w-full'),
+            set::className('w-full'),
 
             /* Linked story table. */
             tabPane
@@ -246,7 +246,7 @@ detailBody
                             $build->desc
                         ),
                     ),
-                    h::hr(set::class('mt-6')),
+                    h::hr(set::className('mt-6')),
                     section
                     (
                         $build->files ? fileList
@@ -254,7 +254,7 @@ detailBody
                             set::files($build->files),
                         ) : null,
                     ),
-                    h::hr(set::class('mt-6')),
+                    h::hr(set::className('mt-6')),
                     history()
                 )
             )

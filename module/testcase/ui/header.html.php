@@ -143,7 +143,7 @@ featureBar
     ) : null,
     $canDisplaySuite && $rawMethod != 'groupcase' ? li
     (
-        set::class('nav-item'),
+        set::className('nav-item'),
         dropdown
         (
             a
@@ -157,7 +157,7 @@ featureBar
     ) : null,
     $canBrowseZeroCase && $rawMethod != 'groupcase' ? li
     (
-        set::class('nav-item'),
+        set::className('nav-item'),
         a
         (
             set::href($this->createLink('testcase', 'zeroCase', "productID=$productID&branch=$branch&orderBy=id_desc&projectID=" . ($isProjectApp ? $this->session->project : 0))),
@@ -169,7 +169,7 @@ featureBar
     ) : null,
     $rawMethod == 'browse' ? li
     (
-        set::class('nav-item'),
+        set::className('nav-item'),
         a
         (
             set::href(str_replace('{key}', 'onlyScene', $browseLink)),
@@ -180,7 +180,7 @@ featureBar
     ) : null,
     $rawMethod != 'browseunits' && $rawMethod != 'zerocase' && $rawMethod != 'groupcase' ? li
     (
-        set::class('nav-item'),
+        set::className('nav-item'),
         checkbox
         (
             setID('onlyAutoCase'),
@@ -324,7 +324,7 @@ toolbar
     ) : null,
     $rawMethod == 'browseunits' && (empty($productID) || $canModify) && $canImportUnitResult ? btn
     (
-        set::class('btn primary'),
+        set::className('btn primary'),
         set::icon('import'),
         set::url(createLink('testtask', 'importUnitResult', "product=$productID")),
         $lang->testtask->importUnitResult,

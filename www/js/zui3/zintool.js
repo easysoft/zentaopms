@@ -657,7 +657,7 @@ function genFormGroupStatement(formGroup, indent = 0)
                 formGroup.width    ? `set::width(${JSON.stringify(formGroup.width)})` : null,
                 formGroup.name     ? `set::name(${JSON.stringify(formGroup.name)})` : null,
                 formGroup.label    ? `set::label(${genValueStatement(formGroup.label)})` : null,
-                formGroup.class    ? `set::class(${JSON.stringify(formGroup.class)})` : null,
+                formGroup.class    ? `set::className(${JSON.stringify(formGroup.class)})` : null,
                 formGroup.disabled ? 'set::disabled(true)' : null,
                 formGroup.required ? 'set::required(true)' : null,
                 formGroup.value    ? `set::value(${JSON.stringify(formGroup.value)})` : null,

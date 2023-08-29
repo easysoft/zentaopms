@@ -39,17 +39,17 @@ div
             set::formClass('border-0'),
             $groupUsers ? formRow
             (
-                set::class('group-user-row'),
+                set::className('group-user-row'),
                 formGroup
                 (
-                    set::class('items-center'),
+                    set::className('items-center'),
                     set::label($lang->group->inside),
                     set::width('1/10'),
                     checkbox
                     (
                         set::id('allInsideChecker'),
                         set::name('allInsideChecker'),
-                        set::class('check-all'),
+                        set::className('check-all'),
                         set::checked(true),
                     ),
                 ),
@@ -68,17 +68,17 @@ div
             $groupUsers ? h::hr() : null,
             !empty($otherUsers) ? formRow
             (
-                set::class('group-user-row'),
+                set::className('group-user-row'),
                 formGroup
                 (
-                    set::class('items-center'),
+                    set::className('items-center'),
                     set::label($lang->group->outside),
                     set::width('1/10'),
                     checkbox
                     (
                         set::id('allOtherChecker'),
                         set::name('allOtherChecker'),
-                        set::class('check-all'),
+                        set::className('check-all'),
                     ),
                 ),
                 formGroup
@@ -96,17 +96,17 @@ div
             $outsideUsers ? h::hr() : null,
             !empty($outsideUsers) ? formRow
             (
-                set::class('group-user-row'),
+                set::className('group-user-row'),
                 formGroup
                 (
-                    set::class('items-center'),
+                    set::className('items-center'),
                     set::label($lang->user->outside),
                     set::width('1/10'),
                     checkbox
                     (
                         set::id('allOutSideChecker'),
                         set::name('allOutSideChecker'),
-                        set::class('check-all'),
+                        set::className('check-all'),
                     ),
                 ),
                 formGroup

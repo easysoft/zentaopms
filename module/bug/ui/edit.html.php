@@ -104,7 +104,7 @@ detailBody
             set::tdClass('w-64'),
             item
             (
-                set::class($product->shadow ? 'hidden' : ''),
+                set::className($product->shadow ? 'hidden' : ''),
                 set::name($lang->bug->product),
                 inputGroup
                 (
@@ -158,7 +158,7 @@ detailBody
             ),
             item
             (
-                set::class($product->shadow && isset($project) && empty($project->multiple) ? 'hidden' : ''),
+                set::className($product->shadow && isset($project) && empty($project->multiple) ? 'hidden' : ''),
                 set::name($lang->bug->plan),
                 inputGroup
                 (
@@ -334,7 +334,7 @@ detailBody
                         set('class', 'input-group-addon'),
                         $contactList ? picker
                         (
-                            set::class('width', 'w-20'),
+                            set::className('width', 'w-20'),
                             set::name('contactListMenu'),
                             set::items($contactList),
                             set::value()
@@ -380,7 +380,7 @@ detailBody
             ),
             item
             (
-                set::class($execution && !$execution->multiple ? 'hidden' : ''),
+                set::className($execution && !$execution->multiple ? 'hidden' : ''),
                 set::name($lang->bug->execution),
                 inputGroup
                 (

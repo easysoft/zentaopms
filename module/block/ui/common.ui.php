@@ -66,7 +66,7 @@ function buildBlockModuleNav(?array $modules = null, ?string $module = null): wg
 
     return nav
     (
-        set::class('block-modules-nav py-2'),
+        set::className('block-modules-nav py-2'),
         set::stacked(true),
         set::items($items),
         on::click('.nav-item>a', 'getForm'),

@@ -35,7 +35,7 @@ function buildItem(array $item): wg
         h::label
         (
             setClass('flex-auto cursor-move'),
-            set::for($item['name'] . '_'),
+            set('for', $item['name'] . '_'),
             $item['title']
         ),
         div

@@ -289,7 +289,7 @@ function printStepsTable()
         (
             h::td
             (
-                set::class('center'),
+                set::className('center'),
                 $i
             ),
             h::td
@@ -322,7 +322,7 @@ function printStepsTable()
             ),
             h::td
             (
-                set::class('center'),
+                set::className('center'),
                 btnGroup
                 (
                     set::items(array(
@@ -336,7 +336,7 @@ function printStepsTable()
     }
     return h::table
     (
-        set::class('w-full'),
+        set::className('w-full'),
         h::thead
         (
             h::tr

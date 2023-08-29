@@ -24,7 +24,7 @@ featureBar
             $lang->goback,
             set::icon('back'),
             set::url($this->session->caseList),
-            set::class('secondary')
+            set::className('secondary')
         ),
         picker
         (

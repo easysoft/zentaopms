@@ -131,7 +131,7 @@ detailBody
     sectionList(
         tabs
         (
-            set::class('w-full'),
+            set::className('w-full'),
 
             /* Linked story table. */
             tabPane
@@ -281,7 +281,7 @@ detailBody
                     (
                         set::files($release->files),
                     ),
-                    h::hr(set::class('mt-6')),
+                    h::hr(set::className('mt-6')),
                     history()
                 )
             )

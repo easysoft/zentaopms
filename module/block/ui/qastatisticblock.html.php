@@ -189,8 +189,8 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
                                 )->size('100%', 120),
                                 div
                                 (
-                                    set::class('pie-chart-title text-center'),
-                                    div(span(set::class('text-2xl font-bold'), $product->closedBugRate . '%')),
+                                    set::className('pie-chart-title text-center'),
+                                    div(span(set::className('text-2xl font-bold'), $product->closedBugRate . '%')),
                                     div
                                     (
                                         span

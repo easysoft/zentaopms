@@ -120,7 +120,7 @@ if($canBatchAssignToStory)     $navStoryActionItems[] = array('class' => 'not-hi
 zui::menu
 (
     set::id('navStoryActions'),
-    set::class('menu dropdown-menu'),
+    set::className('menu dropdown-menu'),
     set::items($navStoryActionItems)
 );
 
@@ -133,7 +133,7 @@ if($canBatchChangePlanBug) $navBugActionItems[] = array('class' => 'not-hide-men
 zui::menu
 (
     set::id('navBugActions'),
-    set::class('menu dropdown-menu'),
+    set::className('menu dropdown-menu'),
     set::items($navBugActionItems)
 );
 
