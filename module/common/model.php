@@ -314,7 +314,7 @@ class commonModel extends model
         if($config->edition == 'open') return array();
 
         $required   = $dbh->query("SELECT * FROM " . TABLE_WORKFLOWRULE . " WHERE `type` = 'system' and `rule` = 'notempty'")->fetch();
-        $fields     = $app->control->loadModel('flow')->getExtendFields($module, $method);
+        $fields     = (new self())->loadModel('flow')->getExtendFields($module, $method);
         $formConfig = array();
         $type       = 'string';
         foreach($fields as $fieldObject)
