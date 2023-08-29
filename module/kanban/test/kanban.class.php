@@ -1820,4 +1820,35 @@ class kanbanTest
 
         return $this->objectModel->buildExecutionCards($lane, array(), $columnType, $cardIdList, $objectGroup, '', $storyCardMenu, $bugCardMenu, $taskCardMenu);
     }
+
+    /**
+     * 构建迭代看板的泳道组数据。
+     * Build the laneGroup data for the execution Kanban.
+     *
+     * @param  int    $executionID
+     * @param  int    $laneID
+     * @access public
+     * @return array
+     */
+    public function buildExecutionGroupTest(int $executionID, int $laneID): array
+    {
+        $lane = $this->objectModel->getLaneById($laneID);
+
+        $objectGroup['story'] = $this->objectModel->loadModel('story')->getExecutionStories($executionID, 0, 't1.`order`_desc', 'allStory');
+        $objectGroup['bug']   = $this->objectModel->loadModel('bug')->getExecutionBugs($executionID);
+        $objectGroup['task']  = $this->objectModel->loadModel('execution')->getKanbanTasks($executionID, "id");
+
+        $storyCardMenu = $this->objectModel->getKanbanCardMenu($executionID, $objectGroup['story'], 'story');
+        $bugCardMenu   = $this->objectModel->getKanbanCardMenu($executionID, $objectGroup['bug'], 'bug');
+        $taskCardMenu  = $this->objectModel->getKanbanCardMenu($executionID, $objectGroup['task'], 'task');
+
+        $columns = $this->objectModel->dao->select('t1.cards, t1.lane, t2.id, t2.type, t2.name, t2.color, t2.limit, t2.parent')->from(TABLE_KANBANCELL)->alias('t1')
+            ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.column = t2.id')
+            ->where('t2.deleted')->eq(0)
+            ->andWhere('t1.lane')->in($laneID)
+            ->orderBy('id_asc')
+            ->fetchGroup('lane', 'id');
+
+        return $this->objectModel->buildExecutionGroup($lane, $columns, $objectGroup, '', $storyCardMenu, $bugCardMenu, $taskCardMenu);
+    }
 }
