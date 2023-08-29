@@ -29,7 +29,7 @@ class formRow extends wg
 
         return div
         (
-            set::class('form-row', empty($width) ? null : 'grow-0', $hidden ? 'hidden' : ''),
+            set::className('form-row', empty($width) ? null : 'grow-0', $hidden ? 'hidden' : ''),
             zui::width($width),
             is_array($items) ? array_map(array($this, 'onBuildItem'), $items) : null,
             set($this->getRestProps()),

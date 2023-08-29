@@ -32,7 +32,7 @@ foreach($dbList as $db)
             $db->ready ? $lang->instance->dbReady : $lang->instance->dbWaiting,
             setClass('text-' . ($db->ready ? 'success' : 'danger'))
         ),
-        
+
         h::td
         (
             btn
@@ -206,7 +206,7 @@ div
             floatToolbar
             (
                 set::object($instance),
-                isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), set::class('ghost text-white'), $lang->goback)),
+                isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), set::className('ghost text-white'), $lang->goback)),
                 set::main($actions['mainActions']),
                 set::suffix($actions['suffixActions'])
             ),

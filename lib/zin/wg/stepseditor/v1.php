@@ -77,25 +77,25 @@ class stepsEditor extends wg
                     setClass('steps-editor-row'),
                     cell
                     (
-                        set::class('steps-editor-col steps-editor-col-step'),
+                        set::className('steps-editor-col steps-editor-col-step'),
                         $stepText
                     ),
                     cell
                     (
-                        set::class('steps-editor-col steps-editor-col-add'),
+                        set::className('steps-editor-col steps-editor-col-add'),
                         div($sameLevelText),
                         div($subLevelText),
                     ),
                     cell
                     (
-                        set::class('steps-editor-col steps-editor-col-expect'),
+                        set::className('steps-editor-col steps-editor-col-expect'),
                         $expectText
                     )
                 )
             ),
             div
             (
-                set::class('steps-editor-body')
+                set::className('steps-editor-body')
             ),
             zui::stepsEditor
             (

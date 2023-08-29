@@ -137,7 +137,7 @@ detailBody
                 (
                     div
                     (
-                        set::class('mt-4'),
+                        set::className('mt-4'),
                         html(nl2br($compile->logs))
                     )
                 )

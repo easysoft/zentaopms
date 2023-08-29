@@ -21,7 +21,7 @@ detailHeader(
             $job->engine == 'gitlab' ? btn
             (
                 set::id('refreshBtn'),
-                set::class('mr-3 secondary'),
+                set::className('mr-3 secondary'),
                 set::icon('eye'),
                 set::text($lang->compile->refresh),
                 set::url(helper::createLink('ci', "checkCompileStatus", "compileID={$build->id}"))
