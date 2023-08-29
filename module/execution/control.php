@@ -3627,7 +3627,7 @@ class execution extends control
         $idList  = explode(',', trim($this->post->storyList, ','));
         $orderBy = $this->post->orderBy;
 
-        $order = $this->dao->select('order')->from(TABLE_PROJECTSTORY)->where('story')->in($idList)->andWhere('project')->eq($executionID)->orderBy('order_asc')->fetch('order');
+        $order = $this->dao->select('`order`')->from(TABLE_PROJECTSTORY)->where('story')->in($idList)->andWhere('project')->eq($executionID)->orderBy('order_asc')->fetch('order');
         if(strpos($orderBy, 'order_desc') !== false) $idList = array_reverse($idList);
         foreach($idList as $storyID)
         {
