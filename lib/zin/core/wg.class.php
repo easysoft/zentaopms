@@ -167,17 +167,21 @@ class wg
         }
         elseif(is_array($result))
         {
-            foreach($result as $name => $item)
+            foreach($result as $index => $item)
             {
+                if($item['name'] === 'zinDebug' && $zinDebug)
+                {
+                    $result[$index]['data'] = $zinDebug;
+                    continue;
+                }
                 if(!isset($item['type']) || $item['type'] !== 'html') continue;
 
-                $item['data'] = str_replace('/*{{ZIN_PAGE_CSS}}*/',     $css,        $item['data']);
-                $item['data'] = str_replace('/*{{ZIN_PAGE_JS}}*/',      $js,         $item['data']);
-                $item['data'] = str_replace('<!-- {{RAW_CONTENT}} -->', $rawContent, $item['data']);
-
-                $result[$name]['data'] = $item['data'];
+                $data = $item['data'];
+                $data = str_replace('/*{{ZIN_PAGE_CSS}}*/',     $css,        $data);
+                $data = str_replace('/*{{ZIN_PAGE_JS}}*/',      $js,         $data);
+                $data = str_replace('<!-- {{RAW_CONTENT}} -->', $rawContent, $data);
+                $result[$index]['data'] = $data;
             }
-            if($zinDebug && isset($result['zinDebug'])) $result['zinDebug'] = $zinDebug;
             $result = json_encode($result);
         }
         else
