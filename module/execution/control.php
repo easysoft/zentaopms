@@ -39,17 +39,15 @@ class execution extends control
         parent::__construct($moduleName, $methodName);
 
         $this->loadModel('project');
-
-        if($this->app->upgrading) return false;
-        if(!isset($this->app->user)) return;
+        if($this->app->upgrading || !isset($this->app->user)) return false;
 
         $mode = $this->app->tab == 'execution' ? 'multiple' : '';
         $this->executions = $this->execution->getPairs(0, 'all', "nocode,{$mode}");
         $skipCreateStep   = array('computeburn', 'ajaxgetdropmenu', 'executionkanban', 'ajaxgetteammembers', 'all');
-        if(!in_array($this->methodName, $skipCreateStep) and $this->app->tab == 'execution')
-        {
-            if(!$this->executions and $this->methodName != 'index' and $this->methodName != 'create' and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('execution', 'create'));
-        }
+        if(in_array($this->methodName, $skipCreateStep) && $this->app->tab == 'execution') return false;
+        if($this->executions || $this->methodName == 'index' || $this->methodName == 'create' || $this->app->getViewType() == 'mhtml') return false;
+
+        $this->locate($this->createLink('execution', 'create'));
     }
 
     /**

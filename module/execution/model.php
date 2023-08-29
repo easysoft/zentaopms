@@ -2319,6 +2319,7 @@ class executionModel extends model
     }
 
     /**
+     * 获取子阶段列表。
      * Get child executions.
      *
      * @param  int    $executionID
@@ -2326,7 +2327,7 @@ class executionModel extends model
      * @access public
      * @return array
      */
-    public function getChildExecutions($executionID, $orderBy = 'id_desc')
+    public function getChildExecutions(int $executionID, string $orderBy = 'id_desc'): array
     {
         return $this->dao->select('*')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
@@ -3481,13 +3482,14 @@ class executionModel extends model
     }
 
     /**
+     * 获取执行团队成员列表。
      * Get team members.
      *
      * @param  int    $executionID
      * @access public
      * @return array
      */
-    public function getTeamMembers($executionID)
+    public function getTeamMembers(int $executionID): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getTeamMembers();
 
