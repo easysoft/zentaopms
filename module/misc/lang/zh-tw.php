@@ -89,7 +89,7 @@ $lang->misc->feature->tutorialImage  = 'theme/default/images/main/tutorial.png';
 $lang->misc->feature->youngBlueTheme = '全新青春藍主題';
 $lang->misc->feature->youngBlueImage = 'theme/default/images/main/new_theme.png';
 $lang->misc->feature->nextStep       = '下一步';
-$lang->misc->feature->close          = '關閉';
+$lang->misc->feature->close          = '了解更多';
 $lang->misc->feature->downloadFile   = '下載新版本功能介紹文檔';
 $lang->misc->feature->tutorialDesc   = "<p>禪道15系列新增了多項功能，您可以通過“<strong>新手引導教程</strong>”快速瞭解禪道的基本使用方法。</p><p>通過滑鼠經過 [<span style='color: #0c60e1'>頭像-新手引導</span>]，點擊新手引導，即可進入新手引導教程。</p>";
 $lang->misc->feature->themeDesc      = "<p>禪道15系列上線了全新的“青春藍”主題，頁面呈現更加美觀，體驗更加友好。</p><p>通過滑鼠經過 [<span style='color: #0c60e1'>頭像-主題-青春藍</span>]，點擊青春藍，即可設置成功。</p>";

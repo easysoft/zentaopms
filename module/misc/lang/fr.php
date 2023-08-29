@@ -97,7 +97,7 @@ $lang->misc->feature->youngBlueImage    = 'theme/default/images/main/new_theme_e
 $lang->misc->feature->visions           = "Interface switching";
 $lang->misc->feature->nextStep          = 'Next step';
 $lang->misc->feature->prevStep          = 'Previous step';
-$lang->misc->feature->close             = 'Close';
+$lang->misc->feature->close             = 'Learn More';
 $lang->misc->feature->downloadFile      = 'Download introduction';
 $lang->misc->feature->tutorialDesc      = '<p>ZenTao 15.0 has new functions, and you know how to use it through the "<strong>Tutorial</strong>".</p><p>Click your [<span style="color: #0c60e1">Avatar-Theme-Young Blue</span>] to set it.</p>';
 $lang->misc->feature->themeDesc         = '<p>ZenTao 15.0+ a new "Youth Blue" theme, the pages are more beautiful and the experience is more friendly.</p><p>Click your [<span style="color: #0c60e1">Avatar-Theme-Young Blue</span>] to set it.</p>';
@@ -107,10 +107,9 @@ $lang->misc->feature->aiPrompts         = 'AI prompts';
 $lang->misc->feature->aiPromptsImage    = 'theme/default/images/main/ai_prompts_en.svg';
 $lang->misc->feature->promptDesign      = 'Prompt Engineering';
 $lang->misc->feature->promptDesignImage = 'theme/default/images/main/prompt_design_en.svg';
-$lang->misc->feature->promptDesignLink  = 'https://www.zentao.net/page/enterprise.html';
 $lang->misc->feature->promptExec        = 'Prompt Execution';
 $lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec_en.svg';
-
+$lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/dynamic/82835.html';
 
 /* Release Date. */
 $lang->misc->releaseDate['18.6']        = '2023-08-15';

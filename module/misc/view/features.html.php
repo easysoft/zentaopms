@@ -20,18 +20,7 @@
             </div>
         <?php elseif($feature == 'promptDesign'): ?>
             <div class='text-center'>
-                <?php if($this->config->edition == 'open'): ?>
-                    <map name="imgButton">
-                        <area
-                                shape="rect"
-                                coords="655,150,720,180"
-                                href="<?php echo $lang->misc->feature->promptDesignLink; ?>"
-                                target="_blank"
-                                alt="<?php echo $lang->misc->feature->promptDesign; ?>"
-                        />
-                    </map>
-                <?php endif; ?>
-                <img usemap="#imgButton" class='text-center' src='<?php echo $config->webRoot . $lang->misc->feature->promptDesignImage; ?>'/>
+                <img class='text-center' src='<?php echo $config->webRoot . $lang->misc->feature->promptDesignImage; ?>'/>
             </div>
         <?php elseif($feature == 'promptExec'): ?>
             <div class='text-center'>
@@ -45,7 +34,7 @@
   <footer style="display: flex; gap: 16px; justify-content: center; padding: 24px 0 24px 0;">
     <button type='button' class='btn btn-primary btn-wide slide-feature-to-prev btn-slide-prev'><?php echo $lang->misc->feature->prevStep; ?></button>
     <button type='button' class='btn btn-primary btn-wide slide-feature-to-next btn-slide-next'><?php echo $lang->misc->feature->nextStep; ?></button>
-    <button type='button' data-dismiss='modal' class='btn btn-primary btn-wide btn-close-modal'><?php echo $lang->misc->feature->close; ?></button>
+    <a class="btn-close-modal" href="<?php echo $lang->misc->feature->promptLearnMore;?>" target="_blank"><button type='button' data-dismiss='modal' class='btn btn-primary btn-wide'><?php echo $lang->misc->feature->close; ?></button></a>
   </footer>
 </main>
 <?php include '../../common/view/footer.lite.html.php';?>
