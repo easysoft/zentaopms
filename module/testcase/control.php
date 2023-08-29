@@ -879,14 +879,8 @@ class testcase extends control
 
         /* 构建搜索表单。*/
         /* Build the search form. */
-        $queryID   = ($browseType == 'bySearch') ? (int)$param : 0;
-        $actionURL = $this->createLink('testcase', 'linkCases', "caseID=$caseID&browseType=bySearch&queryID=myQueryID", '', true);
-        $objectID  = 0;
-        if($this->app->tab == 'project')   $objectID = $case->project;
-        if($this->app->tab == 'execution') $objectID = $case->execution;
-
-        unset($this->config->testcase->search['fields']['product']);
-        $this->testcase->buildSearchForm($case->product, $this->products, $queryID, $actionURL, $objectID);
+        $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
+        $this->testcaseZen->buildLinkCasesSearchForm($case, $queryID);
 
         /* 获取可关联的用例。*/
         /* Get cases to link. */
@@ -930,22 +924,8 @@ class testcase extends control
 
         /* 构建搜索表单。*/
         /* Build the search form. */
-        $queryID   = ($browseType == 'bySearch') ? (int)$param : 0;
-        $actionURL = $this->createLink('testcase', 'linkBugs', "caseID=$caseID&browseType=bySearch&queryID=myQueryID", '', true);
-        $objectID  = 0;
-        if($this->app->tab == 'project')   $objectID = $case->project;
-        if($this->app->tab == 'execution') $objectID = $case->execution;
-
-        /* 删除单一项目的计划字段。*/
-        /* Unset search field 'plan' in single project. */
-        unset($this->config->bug->search['fields']['product']);
-        if($case->project && ($this->app->tab == 'project' || $this->app->tab == 'execution'))
-        {
-            $project = $this->loadModel('project')->getByID($case->project);
-            if(!$project->hasProduct && $project->model == 'waterfall') unset($this->config->bug->search['fields']['plan']);
-        }
-
-        $this->bug->buildSearchForm($case->product, $this->products, $queryID, $actionURL, $objectID);
+        $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
+        $this->testcaseZen->buildLinkBugsSearchForm($case, $queryID);
 
         /* 获取关联的bug。*/
         /* Get bugs to link. */

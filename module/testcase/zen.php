@@ -1268,12 +1268,12 @@ class testcaseZen extends testcase
      * 处理评审数据。
      * Prepare review data.
      *
-     * @param  int       $caseID
-     * @param  object    $oldCase
+     * @param  int        $caseID
+     * @param  object     $oldCase
      * @access protected
-     * @return void
+     * @return bool|object
      */
-    protected function prepareReviewData(int $caseID, object $oldCase)
+    protected function prepareReviewData(int $caseID, object $oldCase): bool|object
     {
         $now    = helper::now();
         $status = $this->testcase->getStatus('review', $oldCase);
@@ -1294,5 +1294,53 @@ class testcaseZen extends testcase
         }
 
         return $this->loadModel('file')->processImgURL($case, $this->config->testcase->editor->review['id'], $this->post->uid);
+    }
+
+    /**
+     * 构建关联用例页面的搜索表单。
+     * Build search form for link cases.
+     *
+     * @param  object    $case
+     * @param  int       $queryID
+     * @access protected
+     * @return void
+     */
+    protected function buildLinkCasesSearchForm(object $case, int $queryID): void
+    {
+        $actionURL = $this->createLink('testcase', 'linkCases', "caseID={$case->id}&browseType=bySearch&queryID=myQueryID", '', true);
+        $objectID  = 0;
+        if($this->app->tab == 'project')   $objectID = $case->project;
+        if($this->app->tab == 'execution') $objectID = $case->execution;
+
+        unset($this->config->testcase->search['fields']['product']);
+        $this->testcase->buildSearchForm($case->product, $this->products, $queryID, $actionURL, $objectID);
+    }
+
+    /**
+     * 构建关联 bug 页面的搜索表单。
+     * Build search form for link bugs.
+     *
+     * @param  object    $case
+     * @param  int       $queryID
+     * @access protected
+     * @return void
+     */
+    protected function buildLinkBugsSearchForm(object $case, int $queryID): void
+    {
+        $actionURL = $this->createLink('testcase', 'linkBugs', "caseID={$case->id}&browseType=bySearch&queryID=myQueryID", '', true);
+        $objectID  = 0;
+        if($this->app->tab == 'project')   $objectID = $case->project;
+        if($this->app->tab == 'execution') $objectID = $case->execution;
+
+        /* 删除单一项目的计划字段。*/
+        /* Unset search field 'plan' in single project. */
+        unset($this->config->bug->search['fields']['product']);
+        if($case->project && ($this->app->tab == 'project' || $this->app->tab == 'execution'))
+        {
+            $project = $this->loadModel('project')->getByID($case->project);
+            if(!$project->hasProduct && $project->model == 'waterfall') unset($this->config->bug->search['fields']['plan']);
+        }
+
+        $this->bug->buildSearchForm($case->product, $this->products, $queryID, $actionURL, $objectID);
     }
 }
