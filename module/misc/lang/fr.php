@@ -104,12 +104,12 @@ $lang->misc->feature->themeDesc         = '<p>ZenTao 15.0+ a new "Youth Blue" th
 $lang->misc->feature->visionsDesc       = "<p>The concept of interface has been added since 16.5. Users can deal with R&D affairs in <span style='color: #0c60e1'>[Full Feature Interface]</span> and daily office affairs in <span style='color: #0c60e1'>[Operation Management Interface]</span>.</p><p>You can view the current interface on the avatar, and click the name of the interface to view and switch other interfaces.</p>";
 $lang->misc->feature->visionsImage      = 'theme/default/images/main/visions_en.png';
 $lang->misc->feature->aiPrompts         = 'AI prompts';
-$lang->misc->feature->aiPromptsImage    = 'theme/default/images/main/ai_prompts_en.png';
+$lang->misc->feature->aiPromptsImage    = 'theme/default/images/main/ai_prompts_en.svg';
 $lang->misc->feature->promptDesign      = 'Prompt Engineering';
-$lang->misc->feature->promptDesignImage = 'theme/default/images/main/prompt_design_en.png';
+$lang->misc->feature->promptDesignImage = 'theme/default/images/main/prompt_design_en.svg';
 $lang->misc->feature->promptDesignLink  = 'https://www.zentao.net/page/enterprise.html';
 $lang->misc->feature->promptExec        = 'Prompt Execution';
-$lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec_en.png';
+$lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec_en.svg';
 
 
 /* Release Date. */
