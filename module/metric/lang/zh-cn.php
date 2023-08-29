@@ -76,23 +76,26 @@ $lang->metric->scopeList['user']      = "个人";
 $lang->metric->scopeList['code']      = "代码库";
 $lang->metric->scopeList['pipeline']  = "流水线";
 
+global $config;
 $lang->metric->objectList = array();
-$lang->metric->objectList['bug']         = "Bug";
-$lang->metric->objectList['case']        = "用例";
-$lang->metric->objectList['doc']         = "文档";
-$lang->metric->objectList['effort']      = "日志";
-$lang->metric->objectList['execution']   = "执行";
-$lang->metric->objectList['feedback']    = "反馈";
-$lang->metric->objectList['issue']       = "问题";
+$lang->metric->objectList['program']     = "项目集";
 $lang->metric->objectList['line']        = "产品线";
 $lang->metric->objectList['product']     = "产品";
-$lang->metric->objectList['productplan'] = "产品计划";
-$lang->metric->objectList['program']     = "项目集";
 $lang->metric->objectList['project']     = "项目";
+$lang->metric->objectList['productplan'] = "计划";
+$lang->metric->objectList['execution']   = "执行";
 $lang->metric->objectList['release']     = "发布";
-$lang->metric->objectList['requirement'] = "用户需求";
-$lang->metric->objectList['risk']        = "风险";
 $lang->metric->objectList['story']       = "研发需求";
+$lang->metric->objectList['requirement'] = "用户需求";
 $lang->metric->objectList['task']        = "任务";
-$lang->metric->objectList['testcase']    = "测试用例";
-$lang->metric->objectList['user']        = "用户";
+$lang->metric->objectList['bug']         = "Bug";
+$lang->metric->objectList['case']        = "用例";
+$lang->metric->objectList['user']        = "人员";
+$lang->metric->objectList['effort']      = "工时";
+$lang->metric->objectList['doc']         = "文档";
+if($config->edition != 'open')
+{
+    $lang->metric->objectList['feedback']    = "反馈";
+    $lang->metric->objectList['risk']        = "风险";
+    $lang->metric->objectList['issue']       = "问题";
+}
