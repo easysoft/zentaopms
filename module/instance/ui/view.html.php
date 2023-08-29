@@ -87,7 +87,7 @@ div
                             $type === 'store' ? img(set::src($instance->logo), setStyle(array('width' => '50px', 'height' => '50px'))) : null,
                             div
                             (
-                                setClass('ml-3 flex col gap-y-1 basis-full'),
+                                setClass(($type === 'store' ? 'ml-3' : '') . ' flex col gap-y-1 basis-full'),
                                 div
                                 (
                                     $instance->name, setClass('text-xl'),

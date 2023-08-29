@@ -384,7 +384,6 @@ $lang->devops->provider     = '服务商';
 $lang->devops->cpuBrand     = 'CPU品牌';
 $lang->devops->city         = '城市';
 $lang->devops->os           = '系统版本';
-$lang->devops->deploy       = '应用';
 $lang->devops->service      = '服务';
 
 $lang->admin->module      = '功能配置';
