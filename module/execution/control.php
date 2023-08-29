@@ -3903,7 +3903,7 @@ class execution extends control
      */
     public function importPlanStories(int $executionID, int $planID, int $productID = 0, string $extra = '')
     {
-        if($_SERVER['REQUEST_METHOD'] !== 'POST') return $this->sendError($this->lang->error->accessDenied);
+        if($_SERVER['REQUEST_METHOD'] !== 'POST') return $this->sendError($this->lang->error->unsupportedReq);
 
         $execution   = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
         $planStories = array();
