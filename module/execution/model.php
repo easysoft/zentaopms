@@ -2408,8 +2408,6 @@ class executionModel extends model
      */
     public function getTasks(int $productID, int $executionID, array $executions, string $browseType, int $queryID, int $moduleID, string $sort, object $pager): array
     {
-        $this->loadModel('task');
-
         /* Set modules and $browseType. */
         $modules = array();
         if($moduleID) $modules = $this->loadModel('tree')->getAllChildID($moduleID);
@@ -2425,7 +2423,7 @@ class executionModel extends model
                 unset($queryStatus['closed']);
                 $queryStatus = array_keys($queryStatus);
             }
-            return $this->task->getExecutionTasks($executionID, $productID, $queryStatus, $modules, $sort, $pager);
+            return $this->loadModel('task')->getExecutionTasks($executionID, $productID, $queryStatus, $modules, $sort, $pager);
         }
         else
         {
@@ -2726,6 +2724,7 @@ class executionModel extends model
     }
 
     /**
+     * 获取要导入的执行列表。
      * Get executions to import
      *
      * @param  array  $executionIds
@@ -2734,14 +2733,14 @@ class executionModel extends model
      * @access public
      * @return array
      */
-    public function getToImport($executionIds, $type, $model = '')
+    public function getToImport(array $executionIds, string $type, string $model = ''): array
     {
-        return $this->dao->select("t1.id,concat_ws(' / ', t2.name, t1.name) as name")->from(TABLE_EXECUTION)->alias('t1')
+        return $this->dao->select("t1.id, concat_ws(' / ', t2.name, t1.name) as name")->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t2.id=t1.project')
             ->where('t1.id')->in($executionIds)
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
-            ->beginIF(empty($model) or strpos(',waterfallplus,agileplus,', ",$model,") === false)->andWhere('t1.type')->eq($type)->fi()
-            ->beginIF(!empty($model) and $model == 'agileplus')->andWhere('t1.type')->in(array('sprint', 'kanban'))->fi()
+            ->beginIF(empty($model) || strpos(',waterfallplus,agileplus,', ",$model,") === false)->andWhere('t1.type')->eq($type)->fi()
+            ->beginIF(!empty($model) && $model == 'agileplus')->andWhere('t1.type')->in(array('sprint', 'kanban'))->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.id desc')
             ->fetchPairs('id', 'name');
@@ -2846,59 +2845,48 @@ class executionModel extends model
     }
 
     /**
+     * 转入任务到指定的执行。
      * Import tasks.
      *
      * @param  int    $executionID
+     * @param  array  $taskIdList
      * @access public
-     * @return void
+     * @return array
      */
-    public function importTask($executionID)
+    public function importTask(int $executionID, array $taskIdList): array
     {
-        $this->loadModel('task');
-
-        $dateExceed  = '';
+        $this->loadModel('action');
+        $dateExceed  = array();
         $taskStories = array();
         $parents     = array();
-        $execution   = $this->getByID($executionID);
-        $tasks       = $this->dao->select('id,execution,assignedTo,story,consumed,status,parent,estStarted,deadline')->from(TABLE_TASK)->where('id')->in($this->post->tasks)->fetchAll('id');
+        $execution   = $this->fetchByID($executionID);
+        $tasks       = $this->loadModel('task')->getByIdList($taskIdList);
         foreach($tasks as $task)
         {
             /* Save the assignedToes and stories, should linked to execution. */
             $assignedToes[$task->assignedTo] = $task->execution;
             $taskStories[$task->story]       = $task->story;
-
             if($task->parent < 0) $parents[$task->id] = $task->id;
 
             $data = new stdclass();
-            $data->project   = $execution->project;
-            $data->execution = $executionID;
-            $data->status    = $task->consumed > 0 ? 'doing' : 'wait';
-
-            if($task->status == 'cancel')
-            {
-                $data->canceledBy   = '';
-                $data->canceledDate = null;
-            }
+            $data->project      = $execution->project;
+            $data->execution    = $executionID;
+            $data->canceledBy   = '';
+            $data->canceledDate = null;
 
             if(!empty($this->config->limitTaskDate))
             {
-                if($task->estStarted < $execution->begin or $task->estStarted > $execution->end or $task->deadline > $execution->end or $task->deadline < $execution->begin) $dateExceed .= "#{$task->id},";
-                if($task->estStarted < $execution->begin or $task->estStarted > $execution->end) $data->estStarted = $execution->begin;
-                if($task->deadline > $execution->end or $task->deadline < $execution->begin)     $data->deadline   = $execution->end;
+                if($task->estStarted < $execution->begin || $task->estStarted > $execution->end || $task->deadline > $execution->end || $task->deadline < $execution->begin) $dateExceed[] = "#{$task->id}";
+                if($task->estStarted < $execution->begin || $task->estStarted > $execution->end) $data->estStarted = $execution->begin;
+                if($task->deadline > $execution->end || $task->deadline < $execution->begin)     $data->deadline   = $execution->end;
             }
 
-            /* Update tasks. */
+            /* Update tasks and save logs. */
+            if($task->parent < 0) $this->dao->update(TABLE_TASK)->data($data)->where('parent')->eq($task->id)->exec();
+
+            $data->status = $task->consumed > 0 ? 'doing' : 'wait';
             $this->dao->update(TABLE_TASK)->data($data)->where('id')->eq($task->id)->exec();
-            unset($data->status);
-            $this->dao->update(TABLE_TASK)->data($data)->where('parent')->eq($task->id)->exec();
-
-            $this->loadModel('action')->create('task', $task->id, 'moved', '', $task->execution);
-        }
-
-        if(!empty($dateExceed))
-        {
-            $dateExceed = trim($dateExceed, ',');
-            echo js::alert(sprintf($this->lang->task->error->dateExceed, $dateExceed));
+            $this->action->create('task', $task->id, 'moved', '', $task->execution);
         }
 
         /* Get stories of children task. */
@@ -2907,9 +2895,6 @@ class executionModel extends model
             $childrens = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->in($parents)->fetchAll('id');
             foreach($childrens as $children) $taskStories[$children->story] = $children->story;
         }
-
-        /* Remove empty story. */
-        unset($taskStories[0]);
 
         /* Add members to execution team. */
         $teamMembers = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution');
@@ -2935,19 +2920,20 @@ class executionModel extends model
         $stories          = $this->dao->select("id as story, product, version")->from(TABLE_STORY)->where('id')->in(array_keys($taskStories))->fetchAll('story');
         foreach($taskStories as $storyID)
         {
-            if(!isset($executionStories[$storyID]))
+            if(!isset($executionStories[$storyID]) && isset($stories[$storyID]))
             {
-                $story = zget($stories, $storyID, '');
-                if(empty($story)) continue;
-
                 $lastOrder ++;
 
+                $story = $stories[$storyID];
                 $story->project = $executionID;
                 $story->order   = $lastOrder;
                 $this->dao->insert(TABLE_PROJECTSTORY)->data($story)->exec();
-                if($execution->multiple or $execution->type == 'project') $this->action->create('story', $storyID, 'linked2execution', '', $executionID);
+
+                if($execution->multiple || $execution->type == 'project') $this->action->create('story', $storyID, 'linked2execution', '', $executionID);
             }
         }
+
+        return $dateExceed;
     }
 
     /**
