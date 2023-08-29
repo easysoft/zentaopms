@@ -1,6 +1,6 @@
 window.updateAverage = function()
 {
-    const $estimates = $('.story-estimate');
+    var $estimates = $('.story-estimate');
     if($('.new-estimate').length > 0) $estimates = $('.new-estimate');
 
     var summary = 0;
@@ -8,13 +8,16 @@ window.updateAverage = function()
     var average = 0;
     $estimates.each(function()
     {
-        var value = $(this).val();
+        var value = $(this).find('input[name^="estimate"]').val();
         if(value)
         {
             value = parseFloat(value);
             if(isNaN(value)) value = 0;
-            summary += value;
-            count   += 1;
+            if(value != 0)
+            {
+                summary += value;
+                count   += 1;
+            }
         }
     })
 
