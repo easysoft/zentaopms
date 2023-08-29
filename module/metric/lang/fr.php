@@ -20,6 +20,9 @@ $lang->metric->date          = "Date";
 $lang->metric->metricData    = "Metric Data";
 $lang->metric->system        = "system";
 $lang->metric->create        = "Create " . $this->lang->metric->common;
+$lang->metric->afterCreate   = "After Create";
+$lang->metric->definition    = "Definition";
+$lang->metric->customUnit    = "Custom";
 
 $lang->metric->descTip       = 'Please enter the meaning, purpose and use of the measurement item';
 $lang->metric->definitionTip = 'Please enter the calculation rules and filtering conditions of the measurement items';

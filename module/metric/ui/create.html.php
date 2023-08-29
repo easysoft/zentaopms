@@ -60,13 +60,64 @@ formPanel
         set::name('code'),
         set::required(true),
     ),
-    formGroup
+    formRow
     (
-        set::width('1/2'),
-        set::label($lang->metric->unit),
-        set::name('unit'),
-        set::items($lang->metric->unitList),
+        set::id('unitBox'),
+        formGroup
+        (
+            set::width('1/2'),
+            set::label($lang->metric->unit),
+            inputGroup
+            (
+                div
+                (
+                    setClass('grow'),
+                    picker
+                    (
+                        set::name('unit'),
+                        set::items($lang->metric->unitList),
+                    )
+                ),
+                div
+                (
+                    setClass('flex items-center pl-2 clip'),
+                    checkbox
+                    (
+                        set::name('customUnit'),
+                        set::text($lang->metric->customUnit),
+                    )
+                )
+            )
+        )
     ),
+    formRow
+    (
+        set::id('addUnitBox'),
+        setClass('hidden'),
+        formGroup
+        (
+            set::width('1/2'),
+            set::label($lang->metric->unit),
+            inputGroup
+            (
+                div
+                (
+                    setClass('grow'),
+                    input(set::name('unit')),
+                ),
+                div
+                (
+                    setClass('flex items-center pl-2 clip'),
+                    checkbox
+                    (
+                        set::name('customUnit'),
+                        set::text($lang->metric->customUnit),
+                    )
+                )
+            )
+        )
+    ),
+    on::change('[name=customUnit]', 'addUnit'),
     formGroup
     (
         set::label($lang->metric->desc),
