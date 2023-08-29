@@ -1,0 +1,14 @@
+title: table zt_kanban
+desc: "看板"
+author: Tian Shujie
+version: "1.0"
+fields:
+    - field: id
+      range: 1-100
+    - field: space
+      range: 4-100
+    - field: name
+      prefix: 看板
+      range: 1-100
+    - field: acl
+      range: open,private,extend

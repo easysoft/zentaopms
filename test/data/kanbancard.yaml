@@ -12,7 +12,7 @@ fields:
     - field: fromID
       range: 0{800},1-70,1-10,101-200,1-20
     - field: fromType
-      range: []{800},productplan{70},release{10},execution{100},build{20}
+      range: "[]{800},productplan{70},release{10},execution{100},build{20}"
     - field: name
       fields:
         - field: name1
@@ -60,11 +60,7 @@ fields:
       postfix: "\t"
     - field: lastEditedBy
       range: ""
-    - field: lastEditedDate
-      range: ""
     - field: archivedBy
-      range: ""
-    - field: archivedDate
       range: ""
     - field: assignedBy
       range: ""

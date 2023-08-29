@@ -1,0 +1,9 @@
+title: table zt_kanbangroup
+desc: "看板单元格"
+author: Tian Shujie
+version: "1.0"
+fields:
+    - field: kanban
+      range: 2-4,1-100
+    - field: region
+      range: 1-100

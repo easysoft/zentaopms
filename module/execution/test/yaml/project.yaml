@@ -1,0 +1,24 @@
+title: table zt_project
+author: Hu Fangzhou
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: name
+    range: 项目,迭代,阶段,看板{2}
+  - field: project
+    range: 0{1},1{4}
+  - field: type
+    range: project,sprint,stage,kanban{2}
+  - field: vision
+    range: rnd{4},lite
+  - field: begin
+    range: "20201101 000000:1D"
+    type: timestamp
+    format: "YY/MM/DD hh::mm:ss"
+    postfix: "\t"
+  - field: end
+    range: "20220101 000000:1D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
