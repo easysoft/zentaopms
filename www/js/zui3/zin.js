@@ -60,7 +60,7 @@
         currentCode: currentCode,
         updateApp: function(code, url, title)
         {
-            if(is18version) return;
+            if(is18version) return $.apps.updateAppUrl(appCode, url, title);
             const state    = typeof code === 'object' ? code : {url: url, title: title};
             const oldState = window.history.state;
 
