@@ -299,4 +299,35 @@ class executionZen extends execution
 
         return $dataList;
     }
+
+    /**
+     * Check if the product has multiple branch and check if the execution has a product with multiple branch.
+     *
+     * @param  int $productID
+     * @param  int $executionID
+     * @return bool
+     */
+    protected function hasMultipleBranch(int $productID, int $executionID): bool
+    {
+        /* Check if the product is multiple branch. */
+        $multiBranchProduct = false;
+        if($productID)
+        {
+            $product = $this->loadModel('product')->getByID($productID);
+            if($product->type != 'normal') $multiBranchProduct = true;
+        }
+        else
+        {
+            $executionProductList = $this->loadModel('product')->getProducts($executionID);
+            foreach($executionProductList as $executionProduct)
+            {
+                if($executionProduct->type != 'normal')
+                {
+                    $multiBranchProduct = true;
+                    break;
+                }
+            }
+        }
+        return $multiBranchProduct;
+    }
 }
