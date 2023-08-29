@@ -5,7 +5,7 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
     if(!checkedList.length) return;
 
     const form = new FormData();
-    checkedList.forEach((id) => form.append('tasks[]', id));
+    checkedList.forEach((id) => form.append('taskIdList[]', id));
 
-    postAndLoadPage($(this).data('url'), form);
+    $.ajaxSubmit({url: $(this).data('url'), data: form});
 });
