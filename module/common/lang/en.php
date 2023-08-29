@@ -88,6 +88,7 @@ $lang->noDesc             = 'No Describe';
 $lang->fullscreen         = 'Fullscreen';
 $lang->retrack            = 'Retrack';
 $lang->whitelist          = 'Access whitelist';
+$lang->whitelistNotNeed   = 'Note: Public object does not need to set whitelist.';
 $lang->globalSetting      = 'Common';
 $lang->waterfallModel     = 'Waterfall';
 $lang->scrumModel         = 'Scrum';

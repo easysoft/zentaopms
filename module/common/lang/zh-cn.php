@@ -88,6 +88,7 @@ $lang->noDesc             = '暂无描述';
 $lang->fullscreen         = '全屏';
 $lang->retrack            = '收起';
 $lang->whitelist          = '访问白名单';
+$lang->whitelistNotNeed   = '提示：公开访问的对象不需设置白名单。';
 $lang->globalSetting      = '通用';
 $lang->waterfallModel     = '瀑布模型';
 $lang->scrumModel         = '敏捷模型';
