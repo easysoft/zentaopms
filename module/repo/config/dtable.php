@@ -32,6 +32,7 @@ $config->repo->dtable->fieldList['scm']['group']    = 1;
 $config->repo->dtable->fieldList['path']['name']  = 'codePath';
 $config->repo->dtable->fieldList['path']['title'] = $lang->repo->path;
 $config->repo->dtable->fieldList['path']['type']  = 'text';
+$config->repo->dtable->fieldList['path']['hint']  = true;
 $config->repo->dtable->fieldList['path']['width'] = '260';
 $config->repo->dtable->fieldList['path']['group'] = 1;
 
