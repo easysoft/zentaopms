@@ -20,6 +20,11 @@ class set
     {
         if($prop === 'class' || strtolower($prop) === 'classname')
         {
+            global $config;
+            if($prop === 'class' && isset($config->debug) && $config->debug)
+            {
+                trigger_error("[ZIN] Use set::className() instead of set::class() to compatible with php 5.4.", E_USER_WARNING);
+            }
             return directive('prop', array('class' => $args));
         }
 
