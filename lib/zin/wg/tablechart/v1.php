@@ -54,7 +54,7 @@ class tableChart extends wg
             $chartOption[] = array('name' => $data->name, 'value' => $type == 'pie' ? $data->value : array('value' => $data->value, 'itemStyle' => array('color' => $color)));
             $tableTR[] = h::tr
             (
-                h::td(label(set::class('label-dot mr-2'), set::style(array('background-color' => $color, '--tw-ring-color' => $color))), $data->name),
+                h::td(label(set::className('label-dot mr-2'), set::style(array('background-color' => $color, '--tw-ring-color' => $color))), $data->name),
                 h::td($data->value),
                 h::td(($data->percent * 100) . '%')
             );
@@ -66,11 +66,11 @@ class tableChart extends wg
         $overflow    = $this->prop('overflow', true);
         return div
         (
-            set::class('flex border py-2'),
+            set::className('flex border py-2'),
             cell
             (
                 setClass('border-r chart flex-auto'),
-                div(set::class('center text-base font-bold py-2'), $title),
+                div(set::className('center text-base font-bold py-2'), $title),
                 echarts
                 (
                     set::color($colorList),
@@ -105,7 +105,7 @@ class tableChart extends wg
                     $overflow ? setStyle('max-height', ($chartHeight + 50) .'px') : null,
                     h::table
                     (
-                        set::class('table'),
+                        set::className('table'),
                         $this->genTableHeaders(),
                         $tableTR
                     )

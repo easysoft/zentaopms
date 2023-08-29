@@ -29,7 +29,7 @@ class sidebar extends wg
             $this->children(),
             $showToggle ? div
             (
-                set::class("sidebar-toggle sidebar-$side-toggle"),
+                set::className("sidebar-toggle sidebar-$side-toggle"),
                 icon("angle-$side"),
                 on::click("zui.toggleSidebar({side: '$side'})")
             ) : null

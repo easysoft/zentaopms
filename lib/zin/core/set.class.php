@@ -18,13 +18,13 @@ class set
 {
     public static function __callStatic($prop, $args)
     {
+        if($prop === 'class' || strtolower($prop) === 'classname')
+        {
+            return directive('prop', array('class' => $args));
+        }
+
         $value = array_shift($args);
         if(is_object($value)) $value = (array)$value;
         return directive('prop', array($prop => $value));
-    }
-
-    public static function class(/* ...$args */)
-    {
-        return directive('prop', array('class' => func_get_args()));
     }
 }

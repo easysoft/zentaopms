@@ -43,29 +43,6 @@ require_once __DIR__ . DS . 'dataset.class.php';
  */
 class style extends dataset
 {
-     /**
-     * Create an instance
-     *
-     * @param array $style - CSS style list
-     * @return style
-     */
-    public static function new(array $style = array()): style
-    {
-        return new style($style);
-    }
-
-    /**
-     * Create css from style list
-     *
-     * @access public
-     * @param array $style - CSS style list
-     * @return string
-     */
-    public static function str(array $style): string
-    {
-        return (new style($style))->toStr();
-    }
-
     /**
      * Format CSS variable name with prefix "--"
      *

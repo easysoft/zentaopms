@@ -26,28 +26,6 @@ class classlist
     private array $list = array();
 
     /**
-     * Create an classlist instance
-     *
-     * @param string|array|null $names - A string or a class name list
-     * @return classlist
-     */
-    public static function new(string|array|null $names = array()): classlist
-    {
-        return new classlist($names);
-    }
-
-    /**
-     * Stringify class list
-     *
-     * @param string|array $names - A string or a class name list
-     * @return string
-     */
-    public static function str(string|array $names): string
-    {
-        return classlist::new($names)->toStr();
-    }
-
-    /**
      * Create classname instance
      *
      * @access public
@@ -76,7 +54,7 @@ class classlist
      * Example:
      *
      *     // Set class names
-     *     $classlist = classlist::new();
+     *     $classlist = new classlist();
      *     $classlist->set('btn primary rounded');
      *
      *     // Set multiple classnames by string list
@@ -133,7 +111,7 @@ class classlist
      *
      * Example:
      *
-     *     $classlist = classlist::new();
+     *     $classlist = new classlist();
      *     $classlist->add('btn primary rounded');
      *
      *     // Add multiple classnames by string list
@@ -153,7 +131,7 @@ class classlist
      *
      * Example:
      *
-     *     $classlist = classlist::new('btn primary rounded');
+     *     $classlist = new classlist('btn primary rounded');
      *     $classlist->remove('btn primary');
      *
      *     // Add multiple classnames by string list
@@ -183,7 +161,7 @@ class classlist
      *
      * Example:
      *
-     *     $classlist = classlist::new('btn');
+     *     $classlist = new classlist('btn');
      *     $classlist->toggle('btn'); // class list is ""
      *
      *     // Toggle class name by flag
@@ -209,7 +187,7 @@ class classlist
      *
      * Example:
      *
-     *     $classlist = classlist::new('btn primary rounded');
+     *     $classlist = new classlist('btn primary rounded');
      *     echo $classlist->has('btn'); // Output true
      *
      *     // Check multiple names

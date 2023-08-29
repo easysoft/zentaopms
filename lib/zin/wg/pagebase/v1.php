@@ -95,7 +95,7 @@ class pageBase extends wg
         (
             before(html('<!DOCTYPE html>')),
             set($attrs),
-            set::class("theme-$themeName"),
+            set::className("theme-$themeName"),
             set::lang($currentLang),
             h::head
             (
@@ -108,7 +108,7 @@ class pageBase extends wg
             h::body
             (
                 set($bodyProps),
-                set::class($bodyClass),
+                set::className($bodyClass),
                 empty($imports) ? null : h::import($imports),
                 h::css($css, setClass('zin-page-css')),
                 $body,

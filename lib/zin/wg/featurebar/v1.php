@@ -129,7 +129,7 @@ class featureBar extends wg
         if(!empty($nav) && $nav[0] instanceof nav) return $nav;
         return new nav
         (
-            set::class('nav-feature'),
+            set::className('nav-feature'),
             set::items($this->getItems()),
             divorce($this->children())
         );

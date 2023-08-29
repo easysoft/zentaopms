@@ -96,13 +96,13 @@ class formBatchItem extends wg
                 set($this->getRestProps()),
                 span
                 (
-                    set::class('form-label form-batch-label', $labelClass, $strong ? 'font-bold' : null, $required ? 'required' : null),
+                    set::className('form-label form-batch-label', $labelClass, $strong ? 'font-bold' : null, $required ? 'required' : null),
                     set($labelProps),
                     $label
                 ),
                 empty($tip) ? null : new btn
                 (
-                    set::class('form-batch-tip state text-gray', $tipClass),
+                    set::className('form-batch-tip state text-gray', $tipClass),
                     set::size('sm'),
                     set::type('ghost'),
                     toggle('tooltip', array('title' => $tip)),

@@ -66,7 +66,7 @@ class formBase extends wg
 
         return toolbar
         (
-            set::class('form-actions', $this->prop('actionsClass')),
+            set::className('form-actions', $this->prop('actionsClass')),
             set::items($actions)
         );
     }
@@ -80,8 +80,8 @@ class formBase extends wg
     {
         list($url, $target, $method, $id) = $this->prop(array('url', 'target', 'method', 'id'));
         return array(
-            set::class('form load-indicator'),
-            $target === 'ajax' ? set::class('form-ajax') : null,
+            set::className('form load-indicator'),
+            $target === 'ajax' ? set::className('form-ajax') : null,
             set(array(
                 'id'     => $id,
                 'action' => empty($url) ? $_SERVER['REQUEST_URI'] : $url,
