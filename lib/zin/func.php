@@ -659,6 +659,14 @@ function cell(): cell
 }
 
 /**
+ * Divider widget.
+ */
+function divider(): divider
+{
+    return createWg('divider', func_get_args());
+}
+
+/**
  * Action item widget.
  *
  * ?string name='action'
