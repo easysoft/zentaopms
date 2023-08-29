@@ -4973,7 +4973,7 @@ class storyModel extends model
             }
 
             $story->planTitle = '';
-            $storyPlans = explode(',', trim($story->plan, ','));
+            if($story->plan) $storyPlans = explode(',', trim($story->plan, ','));
             foreach($storyPlans as $planID) $story->planTitle .= zget($plans, $planID, '') . ' ';
         }
 
