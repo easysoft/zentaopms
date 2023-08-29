@@ -112,6 +112,7 @@ $lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec
 $lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/dynamic/82835.html';
 
 /* Release Date. */
+$lang->misc->releaseDate['18.7']        = '2023-08-29';
 $lang->misc->releaseDate['18.6']        = '2023-08-15';
 $lang->misc->releaseDate['18.5']        = '2023-07-05';
 $lang->misc->releaseDate['18.4']        = '2023-06-14';
@@ -214,6 +215,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
+$lang->misc->feature->all['18.7'][]        = array('title' => 'AI提词功能', 'desc' => '');
 $lang->misc->feature->all['18.6'][]        = array('title' => '优化了常用列表性能和BI功能的细节，并完善了瀑布项目的功能细节。修复Bug。', 'desc' => '');
 $lang->misc->feature->all['18.5'][]        = array('title' => '学堂课程支持从云端导入，支持课程中PDF文件的预览，同时还优化了常用列表的加载速度，修复了多处Bug。', 'desc' => '');
 $lang->misc->feature->all['18.4'][]        = array('title' => '本次发布优化了核心列表的性能，兼容达梦数据库，修复了多处Bug。', 'desc' => '');

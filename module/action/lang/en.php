@@ -260,7 +260,6 @@ $lang->action->desc->online               = '$date, set online by <strong>$actor
 $lang->action->desc->offline              = '$date, set offline by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->linkhost             = '$date, the host is linked by <strong>$actor</strong> .' . "\n";
 
-
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
 $lang->action->desc->linkchildtask      = '$date, <strong>$actor</strong> linked a child task <strong>$extra</strong>。' . "\n";

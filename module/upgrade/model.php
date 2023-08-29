@@ -1194,7 +1194,9 @@ class upgradeModel extends model
                 if(strpos($fromVersion, 'max') !== false and version_compare($fromVersion, 'max4.5', '<')) $ipdinstall = true;
                 if($ipdinstall) $confirmContent .= file_get_contents($this->getUpgradeFile('ipdinstall'));
 
-                $confirmContent .= file_get_contents($this->getUpgradeFile('18.5')); // confirm insert position.
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.5'));
+             case '18_6':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.6')); // confirm insert position.
         }
 
         return $confirmContent;
