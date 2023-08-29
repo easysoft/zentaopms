@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `zt_marketreport` (
   `research` mediumint(8) NOT NULL DEFAULT '0',
   `maturity` varchar(30) NOT NULL DEFAULT '',
   `owner` varchar(30) NOT NULL DEFAULT '',
-  `participants` char(30) NOT NULL DEFAULT '',
+  `participants` char(255) NOT NULL DEFAULT '',
   `source` varchar(30) NOT NULL DEFAULT '',
   `desc` mediumtext NULL,
   `status` varchar(20)  NOT NULL DEFAULT '',
@@ -33,6 +33,8 @@ CREATE TABLE IF NOT EXISTS `zt_marketreport` (
   `openedDate` datetime NULL,
   `lastEditedBy` varchar(30) NOT NULL DEFAULT '',
   `lastEditedDate` datetime NULL,
+  `publishedBy` varchar(30) NOT NULL DEFAULT '',
+  `publishedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
