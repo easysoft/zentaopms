@@ -3018,4 +3018,19 @@ class executionTest
         $this->executionModel->setKanbanMenu();
         return $this->executionModel->lang->execution->menu;
     }
+
+    /**
+     * 根据条件设置执行二级导航。
+     * Set secondary navigation based on the conditions.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return object
+     */
+    public function removeMenuTest(int $executionID): object
+    {
+        $execution = $this->executionModel->fetchByID($executionID);
+        $this->executionModel->removeMenu($execution);
+        return $this->executionModel->lang->execution->menu;
+    }
 }
