@@ -1122,9 +1122,6 @@ class testcaseZen extends testcase
             $case->product        = $oldCase->product;
             $case->lastEditedBy   = $account;
             $case->lastEditedDate = $now;
-            $case->stepChange     = false;
-            $case->steps          = $oldCase->steps;
-            $case->linkBug        = $oldCase->linkBug;
         }
         return $cases;
     }

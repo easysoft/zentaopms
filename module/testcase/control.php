@@ -535,14 +535,14 @@ class testcase extends control
         if($this->post->id)
         {
             $editedCases = $this->testcaseZen->buildCasesForBathcEdit($cases);
-            $editedCases = $this->testcaseZen->checkCasesForBatchEdit($cases);
+            $editedCases = $this->testcaseZen->checkCasesForBatchEdit($editedCases);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* 更新用例。 */
             /* Update cases. */
             foreach($editedCases as $caseID => $case)
             {
-                $changes = $this->testcase->update($case, $cases[$caseID], $testtasks[$caseID]);
+                $changes = $this->testcase->update($case, $cases[$caseID], zget($testtasks, $caseID, array()));
                 $this->executeHooks($caseID);
 
                 if(empty($changes)) continue;

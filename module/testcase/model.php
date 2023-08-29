@@ -678,7 +678,7 @@ class testcaseModel extends model
             $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($fromcaseVersion)->where('`fromCaseID`')->eq($caseID)->exec();
         }
 
-        $this->testcaseTao->linkBugs($oldCase->id, array_keys($oldCase->toBugs), $case);
+        if(isset($oldCase->toBugs) && isset($case->linkBug)) $this->testcaseTao->linkBugs($oldCase->id, array_keys($oldCase->toBugs), $case);
 
         if($case->branch && !empty($testtasks)) $this->testcaseTao->unlinkCaseFromTesttask($oldCase->id, $testtasks);
 

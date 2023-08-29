@@ -81,8 +81,8 @@ $config->testcase->form->batchEdit['type']         = array('required' => false, 
 $config->testcase->form->batchEdit['precondition'] = array('required' => false, 'type' => 'string', 'default' => '');
 $config->testcase->form->batchEdit['keywords']     = array('required' => false, 'type' => 'string', 'default' => '');
 $config->testcase->form->batchEdit['stage']        = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
-$config->testcase->form->batchEdit['stepChange']   = array('required' => false, 'type' => 'bool',   'default' => false);
-$config->testcase->form->batchEdit['steps']        = array('required' => false, 'type' => 'array',   'default' => array());
+$config->testcase->form->batchEdit['stepChanged']  = array('required' => false, 'type' => 'bool',   'default' => false);
+$config->testcase->form->batchEdit['steps']        = array('required' => false, 'type' => 'array',  'default' => array());
 
 $config->testcase->form->createScene = array();
 $config->testcase->form->createScene['product']    = array('required' => false, 'type' => 'int',    'default' => 0);
