@@ -93,7 +93,7 @@ dtable
     set::onRenderCell(jsRaw('window.onRenderCell')),
     set::footPager(usePager(array
     (
-        'linkCreator' => helper::createLink('execution', 'all', "status={$status}&orderBy={$orderBy}&productID={$productID}&param=$param&recTotal={$recTotal}&recPerPage={recPerPage}&page={page}")
+        'linkCreator' => helper::createLink('execution', 'all', "status={$status}&orderBy={$orderBy}&productID={$productID}&param=$param&recTotal={recTotal}&recPerPage={recPerPage}&page={page}")
     ))),
 );
 
