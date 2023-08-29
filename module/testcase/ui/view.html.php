@@ -88,6 +88,30 @@ if($isLibCase)
         set::name($lang->testcase->lib),
         hasPriv('caselib', 'browse') ? a(set::href($this->createLink('caselib', 'browse', "libID={$case->lib}")), $libName) : $libName,
     );
+
+    $mainActions   = array();
+    $suffixActions = array();
+    if($case->needconfirm)
+    {
+        if(hasPriv('testcase', 'confirmstorychange')) $mainActions[] = array('icon' => 'view', 'text' => $lang->confirm, 'hint' => $lang->confirm, 'url' => createLink('testcase', 'confirmstorychange', "caseID={$case->id}"), 'className' => 'ajax-submit');
+    }
+    else
+    {
+        if(($this->config->testcase->needReview || !empty($this->config->testcase->forceReview)) && hasPriv('testcase', 'review')) $mainActions[] = array('icon' => 'glasses', 'text' => $lang->testcase->reviewAB, 'hint' => $lang->testcase->reviewAB, 'url' => createLink('testcase', 'review', "caseID={$case->id}"), 'className' => 'ajax-submit');
+        if(!isAjaxRequest('modal'))
+        {
+            if(hasPriv('testcase', 'edit'))
+            {
+                $editParams = "caseID={$case->id}";
+                if($this->app->tab == 'project')   $editParams .= "&comment=false&projectID={$this->session->project}";
+                if($this->app->tab == 'execution') $editParams .= "&comment=false&executionID={$this->session->execution}";
+                $suffixActions[] = array('icon' => 'edit', 'text' => '', 'hint' => $lang->testcase->edit, 'url' => createLink('testcase', 'edit', $editParams));
+            }
+        }
+        if(hasPriv('caselib', 'createCase')) $mainActions[] = array('icon' => 'copy', 'text' => '', 'hint' => $lang->testcase->copy, 'url' => createLink('caselib', 'createCase', "libID={$case->lib}&moduleID={$case->module}&param={$case->id}"));
+        $suffixActions[] = array('icon' => 'trash', 'text' => '', 'hint' => $lang->testcase->delete, 'url' => createLink('testcase', 'delete', "caseID={$case->id}"), 'className' => 'ajax-submit');
+    }
+    $actions = array('mainActions' => $mainActions, 'suffixActions' => $suffixActions);
 }
 else
 {
@@ -241,6 +265,8 @@ else
         !empty($linkCases) ? set::collapse(true) : '',
         $linkCases,
     );
+
+    $actions = $this->loadModel('common')->buildOperateMenu($case);
 }
 
 if($case->stage)
@@ -308,7 +334,6 @@ detailHeader
     ) : null
 );
 
-$actions = $this->loadModel('common')->buildOperateMenu($case);
 detailBody
 (
     on::click('.steps-section . step-change-view icon', 'toggleStepsView'),
