@@ -1,0 +1,56 @@
+:root
+{
+  /* generate from https://uicolors.app/create */
+  --color-primary-50: #faf7fd;
+  --color-primary-100: #f3ebfc;
+  --color-primary-200: #e9dbf9;
+  --color-primary-300: #d8bff3;
+  --color-primary-400: #c196ea;
+  --color-primary-500: #a86ddf;
+  --color-primary-600: #9654d0;
+  --color-primary-700: #7d3cb4;
+  --color-primary-800: #6a3594;
+  --color-primary-900: #572c77;
+  --color-primary-950: #391556;
+  --color-primary-50-rgb: 250, 247, 253;
+  --color-primary-100-rgb: 243, 235, 252;
+  --color-primary-200-rgb: 233, 219, 249;
+  --color-primary-300-rgb: 216, 191, 243;
+  --color-primary-400-rgb: 193, 150, 234;
+  --color-primary-500-rgb: 168, 109, 223;
+  --color-primary-600-rgb: 150, 84, 208;
+  --color-primary-700-rgb: 125, 60, 180;
+  --color-primary-800-rgb: 106, 53, 148;
+  --color-primary-900-rgb: 87, 44, 119;
+  --color-primary-950-rgb: 57, 21, 86;
+
+  --color-secondary-50: #fdf6fc;
+  --color-secondary-100: #fbecfa;
+  --color-secondary-200: #f7d7f5;
+  --color-secondary-300: #efb8e9;
+  --color-secondary-400: #e58dda;
+  --color-secondary-500: #d86fca;
+  --color-secondary-600: #b841a6;
+  --color-secondary-700: #983386;
+  --color-secondary-800: #7c2c6d;
+  --color-secondary-900: #67285a;
+  --color-secondary-950: #421037;
+  --color-secondary-50-rgb: 253, 246, 252;
+  --color-secondary-100-rgb: 251, 236, 250;
+  --color-secondary-200-rgb: 247, 215, 245;
+  --color-secondary-300-rgb: 239, 184, 233;
+  --color-secondary-400-rgb: 229, 141, 218;
+  --color-secondary-500-rgb: 216, 111, 202;
+  --color-secondary-600-rgb: 184, 65, 166;
+  --color-secondary-700-rgb: 152, 51, 134;
+  --color-secondary-800-rgb: 124, 44, 109;
+  --color-secondary-900-rgb: 103, 40, 90;
+  --color-secondary-950-rgb: 66, 16, 55;
+
+  --color-link: var(--color-primary-700);
+  --color-link-hover: var(--color-primary-600);
+  --color-link-visited: var(--color-primary-800);
+  --color-link-rgb: var(--color-primary-700-rgb);
+  --color-link-hover-rgb: var(--color-primary-600-rgb);
+  --color-link-visited-rgb: var(--color-primary-800-rgb);
+}

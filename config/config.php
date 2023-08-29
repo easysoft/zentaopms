@@ -164,6 +164,32 @@ $config->maxCount      = 500;
 $config->batchMaxCount = 20;
 $config->moreLinks     = array();
 
+/* 渠成平台设置。CNE Api settings. */
+$config->inQuickon    = getenv('IN_QUICKON');
+$config->inContainer  = getenv('IN_CONTAINER');
+$config->k8space      = 'quickon-system';
+$config->demoAccounts = '';  // 用于演示的账号列表，该账号安装的应用30钟后会自动删除。 In account list for demo, app instance of demo will be removed in 30 minutes.
+$config->demoAppLife  = 30; // Demo安装的应用实例存续时长(分钟)。The minutes life of instance which demo account installed.
+$config->CNE = new stdclass();
+$config->CNE->api = new stdclass();
+$config->CNE->api->host    = getenv('CNE_API_HOST');
+$config->CNE->api->auth    = 'X-Auth-Token';
+$config->CNE->api->token   = getenv('CNE_API_TOKEN'); // Please set token in my.php.
+$config->CNE->api->headers = array('Content-Type: application/json');
+$config->CNE->api->channel = 'stable';
+
+$config->CNE->app = new stdclass;
+$config->CNE->app->domain = 'dev.haogs.cn';
+
+$config->cloud = new stdclass;
+$config->cloud->api = new stdclass;
+$config->cloud->api->host          = 'https://api.qucheng.com';
+$config->cloud->api->auth          = 'X-Auth-Token';
+$config->cloud->api->token         = 'gwaN4KynqNqQoPD7eN8s'; // Please set token in my.php.
+$config->cloud->api->headers       = array('Content-Type: application/json');
+$config->cloud->api->channel       = 'stable';
+$config->cloud->api->switchChannel = false;
+
 /* 配置参数过滤。Filter param settings. */
 $filterConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'filter.php';
 if(file_exists($filterConfig)) include $filterConfig;

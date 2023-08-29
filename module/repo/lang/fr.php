@@ -28,8 +28,10 @@ $lang->repo->branch          = 'Branch';
 $lang->repo->tag             = 'Tag';
 $lang->repo->addWebHook      = 'Add Webhook';
 $lang->repo->apiGetRepoByUrl = 'API: Get repo by URL';
-$lang->repo->blameTmpl       = 'Code for line <strong>%line</strong>, <span class="tip-circular"></span> %name commited at %time, %version %comment';
+$lang->repo->blameTmpl       = 'Code for line <strong>%line</strong>: %name commited at %time, %version %comment';
 $lang->repo->notRelated      = 'There is currently no related ZenTao object';
+$lang->repo->source          = 'Criterion';
+$lang->repo->target          = 'Contrast';
 
 $lang->repo->browseAction    = 'Browse Repo';
 $lang->repo->createAction    = 'Créer Ref';
@@ -51,11 +53,13 @@ $lang->repo->import          = 'Import';
 $lang->repo->importName      = 'Name after import';
 $lang->repo->importServer    = 'Please select a server';
 $lang->repo->gitlabList      = 'Gitlab Repo';
+$lang->repo->batchCreate     = 'Batch create repo';
 
 $lang->repo->submit     = 'Soumettre';
 $lang->repo->cancel     = 'Annuler';
 $lang->repo->addComment = 'Ajout Comment.';
 $lang->repo->addIssue   = 'Add Issue';
+$lang->repo->compare    = 'Compare';
 
 $lang->repo->copy     = 'Click to copy';
 $lang->repo->copied   = 'Copy successful';
@@ -101,13 +105,13 @@ $lang->repo->diff               = 'Diff';
 $lang->repo->diffAB             = 'Diff';
 $lang->repo->diffAll            = 'Toutes Diff';
 $lang->repo->viewDiff           = 'Voir diff';
-$lang->repo->allLog             = 'Toutes Révisions';
+$lang->repo->allLog             = 'All Commits';
 $lang->repo->location           = 'Localisation';
 $lang->repo->file               = 'Fichier';
 $lang->repo->action             = 'Action';
 $lang->repo->code               = 'Code';
 $lang->repo->review             = 'Révision Ref';
-$lang->repo->acl                = 'Privilège';
+$lang->repo->acl                = 'ACL';
 $lang->repo->group              = 'Groupe';
 $lang->repo->user               = 'User';
 $lang->repo->info               = 'Info Version';
@@ -120,6 +124,7 @@ $lang->repo->linkBug            = 'Link Bug';
 $lang->repo->linkTask           = 'Link Task';
 $lang->repo->unlink             = 'Unlink';
 $lang->repo->viewBugs           = 'View Bugs';
+$lang->repo->lastSubmitTime     = 'Final submission time';
 
 $lang->repo->title      = 'Titre';
 $lang->repo->status     = 'Statut';
@@ -164,6 +169,10 @@ $lang->repo->scmList['Gitea']      = 'Gitea';
 $lang->repo->scmList['Git']        = 'Git';
 $lang->repo->scmList['Subversion'] = 'Subversion';
 
+$lang->repo->aclList['private'] = 'Private(The product and related project personnel can access it)';
+$lang->repo->aclList['open']    = 'Open(Users with privileges to DevOps can access it)';
+$lang->repo->aclList['custom']  = 'Custom';
+
 $lang->repo->gitlabHost    = 'GitLab Host';
 $lang->repo->gitlabToken   = 'GitLab Token';
 $lang->repo->gitlabProject = 'Project';
@@ -201,7 +210,7 @@ $lang->repo->error->version       = 'Version 1.8+ de https et du protocole svn e
 $lang->repo->error->path          = "L'adresse du référentiel est le chemin du fichier, ex: /home/test";
 $lang->repo->error->cmd           = 'Erreur du Client !';
 $lang->repo->error->diff          = 'Deux version doivent être sélectionnées.';
-$lang->repo->error->safe          = 'For security reasons, the client version needs to be detected. Please write the version to the file %s. <br /> Execute command: %s';
+$lang->repo->error->safe          = "For security reasons, the client version needs to be detected. Please write the version to the file %s. \n Execute command: %s";
 $lang->repo->error->product       = "Veuillez sélectionner un {$lang->productCommon}!";
 $lang->repo->error->commentText   = 'Veuillez entrer du contenu pour une révision !';
 $lang->repo->error->comment       = 'Veuillez entrer le contenu du commentaire !';
@@ -219,6 +228,10 @@ $lang->repo->error->clientPath    = "The client installation directory cannot ha
 $lang->repo->error->notFound      = "The repository %s’s URL %s does not exist. Please confirm if this repository has been deleted from the local server.";
 $lang->repo->error->noWritable    = '%s is not writable! Please check the privilege, or download will not be done.';
 $lang->repo->error->noCloneAddr   = 'The repository clone address was not found';
+$lang->repo->error->differentVersions = 'The criterion and contrast cannot be the same';
+$lang->repo->error->needTwoVersion    = 'Two branches or tags must be selected.';
+$lang->repo->error->emptyVersion      = 'Version cannot be empty';
+$lang->repo->error->versionError      = 'Wrong version format!';
 
 $lang->repo->syncTips          = '<strong>Vous pouvez trouver la référence sur la façon de définir la synchronisation Git à partir de la page se trouvant <a target="_blank" href="https://www.zentao.pm/book/zentaomanual/free-open-source-project-management-software-git-105.html">ici</a>.</strong>';
 $lang->repo->encodingsTips     = "Les encodages des commentaires de validation peuvent être des valeurs séparées par des virgules，ex: utf-8";
@@ -239,3 +252,5 @@ $lang->repo->typeList['performance'] = 'Performance';
 $lang->repo->typeList['security']    = 'Securité';
 $lang->repo->typeList['redundancy']  = 'Redondance';
 $lang->repo->typeList['logicError']  = 'Erreur Logique';
+
+$lang->repo->featureBar['maintain']['all'] = 'All';

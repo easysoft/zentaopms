@@ -17,12 +17,19 @@ $lang->gogs->all           = '全部';
 $lang->gogs->notBind       = '未绑定';
 $lang->gogs->binded        = '已绑定';
 $lang->gogs->bindDynamic   = '%s与禅道用户%s';
+$lang->gogs->bindedError   = '绑定的用户已删除或者已修改，请重新绑定';
+$lang->gogs->zentaoEmail   = '禅道用户邮箱';
+$lang->gogs->accountDesc   = '(系统会将相同邮箱地址的用户自动匹配)';
+
+$lang->gogs->bindStatus['binded']      = $lang->gogs->binded;
+$lang->gogs->bindStatus['notBind']     = "<span class='text-danger'>{$lang->gogs->notBind}</span>";
+$lang->gogs->bindStatus['bindedError'] = "<span class='text-danger'>{$lang->gogs->bindedError}</span>";
 
 $lang->gogs->browseAction = 'Gogs列表';
 $lang->gogs->deleteAction = '删除Gogs';
 
 $lang->gogs->id    = 'ID';
-$lang->gogs->name  = "服务器名称";
+$lang->gogs->name  = "应用名称";
 $lang->gogs->url   = '服务器地址';
 $lang->gogs->token = 'Token';
 

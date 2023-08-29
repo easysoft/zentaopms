@@ -1217,6 +1217,15 @@ $lang->caselib->methodOrder[40] = 'exportTemplate';
 $lang->caselib->methodOrder[45] = 'import';
 $lang->caselib->methodOrder[50] = 'showImport';
 
+$lang->resource->host = new stdclass();
+$lang->resource->host->browse       = 'browse';
+$lang->resource->host->create       = 'create';
+$lang->resource->host->edit         = 'editAction';
+$lang->resource->host->delete       = 'deleteAction';
+$lang->resource->host->view         = 'view';
+$lang->resource->host->changeStatus = 'changeStatus';
+$lang->resource->host->treemap      = 'treemap';
+
 $lang->resource->zahost = new stdclass();
 $lang->resource->zahost->browse         = 'browse';
 $lang->resource->zahost->create         = 'create';
@@ -1356,6 +1365,56 @@ $lang->job->methodOrder[10] = 'create';
 $lang->job->methodOrder[15] = 'edit';
 $lang->job->methodOrder[20] = 'delete';
 $lang->job->methodOrder[25] = 'exec';
+
+$lang->resource->account = new stdclass();
+$lang->resource->account->browse = 'browse';
+$lang->resource->account->create = 'create';
+$lang->resource->account->edit   = 'editAction';
+$lang->resource->account->delete = 'deleteAction';
+$lang->resource->account->view   = 'view';
+
+$lang->account->methodOrder[0]  = 'browse';
+$lang->account->methodOrder[5]  = 'create';
+$lang->account->methodOrder[10] = 'edit';
+$lang->account->methodOrder[15] = 'delete';
+$lang->account->methodOrder[20] = 'view';
+
+$lang->resource->serverroom = new stdclass();
+$lang->resource->serverroom->browse = 'browse';
+$lang->resource->serverroom->create = 'create';
+$lang->resource->serverroom->edit   = 'editAction';
+$lang->resource->serverroom->delete = 'delete';
+$lang->resource->serverroom->view   = 'view';
+
+$lang->serverroom->methodOrder[0]  = 'browse';
+$lang->serverroom->methodOrder[5]  = 'create';
+$lang->serverroom->methodOrder[10] = 'edit';
+$lang->serverroom->methodOrder[15] = 'delete';
+$lang->serverroom->methodOrder[20] = 'view';
+
+$lang->resource->ops = new stdclass();
+$lang->resource->ops->provider = 'provider';
+$lang->resource->ops->city     = 'city';
+$lang->resource->ops->cpuBrand = 'cpuBrand';
+$lang->resource->ops->os       = 'os';
+
+$lang->resource->instance = new stdclass();
+$lang->resource->instance->install       = 'install';
+$lang->resource->instance->view          = 'view';
+$lang->resource->instance->visit         = 'visit';
+$lang->resource->instance->ajaxStatus    = 'ajaxStatus';
+$lang->resource->instance->ajaxStart     = 'ajaxStart';
+$lang->resource->instance->ajaxStop      = 'ajaxStop';
+$lang->resource->instance->ajaxUninstall = 'ajaxUninstall';
+$lang->resource->instance->upgrade       = 'upgrade';
+
+$lang->resource->space = new stdclass();
+$lang->resource->space->browse          = 'browse';
+$lang->resource->space->getStoreAppInfo = 'getStoreAppInfo';
+
+$lang->resource->store = new stdclass();
+$lang->resource->store->browse  = 'browse';
+$lang->resource->store->appView = 'appView';
 
 /* Doc. */
 $lang->resource->doc = new stdclass();

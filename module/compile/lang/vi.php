@@ -16,3 +16,6 @@ $lang->compile->statusList['created']     = 'Ngày tạo';
 $lang->compile->statusList['building']    = 'Đang tạo';
 $lang->compile->statusList['create_fail'] = 'Tạo thất bại';
 $lang->compile->statusList['timeout']     = 'Hết giờ';
+
+$lang->compile->featureBar['browse']['job']     = 'List';
+$lang->compile->featureBar['browse']['compile'] = 'History';

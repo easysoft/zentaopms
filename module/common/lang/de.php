@@ -125,6 +125,7 @@ $lang->lineNumber      = 'Zeile Nr.';
 $lang->tutorialConfirm = 'Sie benutzen die Anleitung. Möchten Sie diese jetzt verlassen？';
 $lang->levelExceeded   = 'The level has exceeded the display range. For more information, please go to the web page or view it through search.';
 $lang->noticeOkFile    = 'Aus Sicherheitsgrü nden muss Ihr Adminkonto bestätigt werden. \n Bitte melden Sie sich an und erstellen Sie die Datei %s File.\n Hinweis:\n 1. Die Datei ist leer.\n 2. Wenn die Datei bereits existiert, löschen Sie sie und erstellen Sie eine neue Datei.';
+$lang->noticeDrag      = 'Click to add or drag to upload, no more than %s';
 
 $lang->serviceAgreement = "Service Agreement";
 $lang->privacyPolicy    = "Privacy Policy";
@@ -147,6 +148,10 @@ $lang->selectedItems = 'Seleted <strong>{0}</strong> items';
 
 $lang->future      = 'Warte';
 $lang->year        = 'Jahr';
+$lang->month       = 'Month';
+$lang->hour        = 'Hour';
+$lang->minute      = 'Minute';
+$lang->second      = 'Second';
 $lang->workingHour = 'Stunde';
 
 $lang->idAB         = 'ID';
@@ -225,6 +230,9 @@ $lang->zahost->common     = 'ZAhost';
 $lang->zanode->common     = 'ZAnode';
 $lang->dimension->common  = 'Dimension';
 $lang->contact->common    = 'Contacts';
+$lang->space->common      = 'Service';
+$lang->store->common      = 'Store';
+$lang->instance->common   = 'Instance';
 
 $lang->programstakeholder->common = 'Stakeholder';
 $lang->featureswitch->common      = 'Features On/Off';
@@ -353,12 +361,28 @@ $lang->testcase->case      = 'Test Case';
 $lang->testcase->testsuite = 'Test Suite';
 $lang->testcase->caselib   = 'Case Library';
 
-$lang->devops->compile  = 'Pipelines';
-$lang->devops->mr       = 'Merge Request';
-$lang->devops->repo     = 'Repo';
-$lang->devops->rules    = 'Rule';
-$lang->devops->settings = 'Setting Merge Request';
-$lang->devops->set      = 'Set';
+$lang->devops->compile     = 'Pipelines';
+$lang->devops->mr          = 'Merge Request';
+$lang->devops->repo        = 'Repo';
+$lang->devops->rules       = 'Rule';
+$lang->devops->settings    = 'Setting Merge Request';
+$lang->devops->platform    = 'Platform';
+$lang->devops->set         = 'Set';
+$lang->devops->artifact    = 'Artifact';
+$lang->devops->environment = 'Environment';
+$lang->devops->resource    = 'Resource';
+$lang->devops->dblist      = 'Database';
+$lang->devops->domain      = 'Domain';
+$lang->devops->oss         = 'Oss';
+$lang->devops->host        = 'Host';
+$lang->devops->account     = 'Account';
+$lang->devops->serverroom  = 'IDC';
+$lang->devops->deploy      = 'Deploy';
+$lang->devops->service     = 'Service';
+$lang->devops->provider    = 'IDC Provider';
+$lang->devops->cpuBrand    = 'CPU Brand';
+$lang->devops->city        = 'IDC Location';
+$lang->devops->os          = 'OS Version';
 
 $lang->admin->module      = 'Module';
 $lang->admin->system      = 'System';
@@ -504,6 +528,8 @@ $lang->pager->totalCount   = "Total: <strong>{recTotal}</strong> items";
 $lang->pager->pageSize     = "<strong>{recPerPage}</strong> per page";
 $lang->pager->itemsRange   = "From <strong>{start}</strong> to <strong>{end}</strong>";
 $lang->pager->pageOfTotal  = "Page <strong>{page}</strong> of <strong>{totalPage}</strong>";
+$lang->pager->totalCountAB = "Total: {recTotal} items";
+$lang->pager->pageSizeAB   = "{recPerPage} per page";
 
 $lang->colorPicker = new stdclass();
 $lang->colorPicker->errorTip = 'Not a valid color value';

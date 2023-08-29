@@ -440,15 +440,17 @@ class zahostModel extends model
     /**
      * Get pairs.
      *
-     * @param  string  $idFrom
+     * @param  int    $productID
      * @access public
      * @return array
      */
-    public function getPairs()
+    public function getPairs($productID)
     {
         return $this->dao->select("id,name")->from(TABLE_ZAHOST)
             ->where('deleted')->eq('0')
-            ->andWhere('type')->eq('zahost')
+            ->andWhere('type')->eq('normal')
+            ->andWhere('testType')->eq('kvm')
+            ->beginIF(!empty($productID))->andWhere('product')->like("%,$productID,%")->fi()
             ->orderBy('`group`')
             ->fetchPairs('id', 'name');
     }

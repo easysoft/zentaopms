@@ -29,6 +29,10 @@ $lang->gitlab->addWebhookSuccess = 'Webhook创建成功';
 $lang->gitlab->failCreateWebhook = 'Webhook创建失败，请查看日志';
 $lang->gitlab->placeholderSearch = '请输入名称';
 
+$lang->gitlab->bindStatus['binded']      = $lang->gitlab->binded;
+$lang->gitlab->bindStatus['notBind']     = "<span class='text-danger'>{$lang->gitlab->notBind}</span>";
+$lang->gitlab->bindStatus['bindedError'] = "<span class='text-danger'>{$lang->gitlab->bindedError}</span>";
+
 $lang->gitlab->browseAction         = 'GitLab列表';
 $lang->gitlab->deleteAction         = '删除GitLab';
 $lang->gitlab->gitlabProject        = "{$lang->gitlab->common}项目";
@@ -60,7 +64,7 @@ $lang->gitlab->deleteTag            = '删除标签';
 $lang->gitlab->svaeFailed           = '『%s』保存失败';
 
 $lang->gitlab->id             = 'ID';
-$lang->gitlab->name           = "服务器名称";
+$lang->gitlab->name           = "应用名称";
 $lang->gitlab->url            = '服务器地址';
 $lang->gitlab->token          = 'Token';
 $lang->gitlab->defaultProject = '默认项目';
@@ -235,3 +239,7 @@ $lang->gitlab->tag->accessLevel        = '允许创建';
 $lang->gitlab->tag->protectConfirmDel  = '确认删除该GitLab标签保护吗？';
 $lang->gitlab->tag->emptyPrivNameError = "标签不能为空";
 $lang->gitlab->tag->issetPrivNameError = "已存在该保护标签";
+
+$lang->gitlab->featureBar['binduser']['all']     = $lang->gitlab->all;
+$lang->gitlab->featureBar['binduser']['notBind'] = $lang->gitlab->notBind;
+$lang->gitlab->featureBar['binduser']['binded']  = $lang->gitlab->binded;

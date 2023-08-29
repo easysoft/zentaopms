@@ -561,7 +561,7 @@ class bugModel extends model
 
         $bug = $this->loadModel('file')->replaceImgURL($bug, 'steps');
         if($setImgSize) $bug->steps = $this->file->setImgSize($bug->steps);
-        foreach($bug as $key => $value) if(strpos($key, 'Date') !== false && $value && !(int)substr($value, 0, 4)) $bug->$key = '';
+        foreach($bug as $key => $value) if(strpos($key, 'Date') !== false && $value && !(int)substr(is_null($value) ? '' : $value, 0, 4)) $bug->$key = '';
 
         if($bug->duplicateBug) $bug->duplicateBugTitle = $this->dao->findById($bug->duplicateBug)->from(TABLE_BUG)->fields('title')->fetch('title');
         if($bug->case)         $bug->caseTitle         = $this->dao->findById($bug->case)->from(TABLE_CASE)->fields('title')->fetch('title');

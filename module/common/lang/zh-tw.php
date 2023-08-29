@@ -131,6 +131,10 @@ $lang->selectedItems = '已選擇 <strong>{0}</strong> 項';
 
 $lang->future      = '未來';
 $lang->year        = '年';
+$lang->month       = '月';
+$lang->hour        = '小时';
+$lang->minute      = '分';
+$lang->second      = '秒';
 $lang->workingHour = '工時';
 
 $lang->idAB         = 'ID';
@@ -185,6 +189,9 @@ $lang->execution->list    = "{$lang->executionCommon}列表";
 $lang->kanban->common     = '看板';
 $lang->app->common        = '應用';
 $lang->app->serverLink    = '服務器鏈接';
+$lang->space->common      = '服务管理';
+$lang->store->common      = '应用市场';
+$lang->instance->common   = '应用';
 
 $lang->personnel->common     = '人員';
 $lang->personnel->invest     = '投入人員';
@@ -270,6 +277,23 @@ $lang->devops->mr       = '合併請求';
 $lang->devops->repo     = '版本庫';
 $lang->devops->rules    = '指令';
 $lang->devops->settings = '合併請求設置';
+$lang->devops->platform    = '平臺';
+$lang->devops->set         = '設置';
+$lang->devops->artifact    = '製品庫';
+$lang->devops->environment = '環境';
+$lang->devops->resource    = '資源';
+$lang->devops->dblist      = '數據庫';
+$lang->devops->domain      = '域名';
+$lang->devops->oss         = '對象存儲';
+$lang->devops->host        = '主機';
+$lang->devops->account     = '賬號';
+$lang->devops->serverroom  = '機房';
+$lang->devops->deploy      = '上綫';
+$lang->devops->service     = '服務';
+$lang->devops->provider    = '服務商';
+$lang->devops->cpuBrand    = 'CPU品牌';
+$lang->devops->city        = '城市';
+$lang->devops->os          = '系統版本';
 
 $lang->admin->system     = '系統';
 $lang->admin->entry      = '應用';

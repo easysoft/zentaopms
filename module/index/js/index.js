@@ -228,9 +228,14 @@
                 var iframe = app.$iframe[0];
                 if(iframe && iframe.contentDocument && iframe.contentWindow && iframe.contentWindow.$)
                 {
-                    var result = iframe.contentWindow.$(iframe.contentDocument).triggerHandler('openapp.apps', [app, url]);
-                    if (result === false) {
-                        return 'cancel';
+                    var $iframeDoc = iframe.contentWindow.$(iframe.contentDocument);
+                    if ($iframeDoc.triggerHandler)
+                    {
+                        if ($iframeDoc.triggerHandler('openapp.apps', [app, url]) === false) return 'cancel';
+                    }
+                    else if($iframeDoc.trigger)
+                    {
+                        $iframeDoc.trigger('openapp.apps');
                     }
                 }
             }
@@ -414,9 +419,14 @@
             var iframe = app.$iframe[0];
             if(iframe && iframe.contentDocument && iframe.contentWindow && iframe.contentWindow.$)
             {
-                var result = iframe.contentWindow.$(iframe.contentDocument).triggerHandler('closeapp.apps', [app]);
-                if (result === false) {
-                    return 'cancel';
+                var $iframeDoc = iframe.contentWindow.$(iframe.contentDocument);
+                if ($iframeDoc.triggerHandler)
+                {
+                    if ($iframeDoc.triggerHandler('openapp.apps', [app]) === false) return 'cancel';
+                }
+                else if($iframeDoc.trigger)
+                {
+                    $iframeDoc.trigger('openapp.apps');
                 }
             }
         }

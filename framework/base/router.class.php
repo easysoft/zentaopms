@@ -348,6 +348,14 @@ class baseRouter
     public $sessionID;
 
     /**
+     * 请求开始时间。
+     * The start time of the request.
+     *
+     * @var float
+     */
+    public $startTime;
+
+    /**
      * 网站代号。
      * The code of current site.
      *
@@ -355,6 +363,14 @@ class baseRouter
      * @access public
      */
     public $siteCode;
+
+    /**
+     * zin 请求时发生的错误信息。
+     * The errors occurred when zin request.
+     *
+     * @var array
+     */
+    public $zinErrors = array();
 
     /**
      * 构造方法, 设置路径，类，超级变量等。注意：
@@ -391,6 +407,7 @@ class baseRouter
 
         $this->loadClass('front',  $static = true);
         $this->loadClass('filter', $static = true);
+        $this->loadClass('form',   $static = true);
         $this->loadClass('dbh',    $static = true);
         $this->loadClass('dao',    $static = true);
         $this->loadClass('mobile', $static = true);
@@ -434,6 +451,19 @@ class baseRouter
     {
         if(empty($className)) $className = __CLASS__;
         return new $className($appName, $appRoot);
+    }
+
+    /**
+     * 设置请求开始时间。
+     * The start time of the request.
+     *
+     * @param  float    $startTime
+     * @access public
+     * @return void
+     */
+    public function setStartTime(float $startTime)
+    {
+        $this->startTime = $startTime;
     }
 
     //-------------------- 路径相关方法(Path related methods)--------------------//
@@ -1571,7 +1601,21 @@ class baseRouter
                     $default = $param->getDefaultValue();
                 }
 
-                $defaultParams[$name] = $default;
+                $type = 'string';
+                if(isset($paramDefaultType[$appName][$className][$methodName][$name]))
+                {
+                    $type = $paramDefaultType[$appName][$className][$methodName][$name];
+                }
+                elseif(isset($paramDefaultType[$className][$methodName][$name]))
+                {
+                    $type = $paramDefaultType[$className][$methodName][$name];
+                }
+                elseif(!$isEncrypted && method_exists($param, 'hasType') && $param->hasType())
+                {
+                    $type = $param->getType()->getName();
+                }
+
+                $defaultParams[$name] = array('default' => $default, 'type' => $type);
             }
 
             /**
@@ -1674,7 +1718,7 @@ class baseRouter
      * @access  public
      * @return  string the extension path.
      */
-    public function getModuleExtPath($appName, $moduleName, $ext)
+    public function getModuleExtPath($moduleName, $ext)
     {
         $saasExtPath = $this->getExtensionRoot() . 'saas' . DS . $moduleName . DS . 'ext' . DS . $ext . DS;
 
@@ -1751,7 +1795,7 @@ class baseRouter
      */
     public function setActionExtFile()
     {
-        $moduleExtPaths = $this->getModuleExtPath('', $this->moduleName, 'control');
+        $moduleExtPaths = $this->getModuleExtPath($this->moduleName, 'control');
 
         /* 如果扩展目录为空，不包含任何扩展文件。If there's no ext paths return false.*/
         if(empty($moduleExtPaths)) return false;
@@ -1795,7 +1839,7 @@ class baseRouter
      */
     public function checkAPIFile()
     {
-        $moduleExtPaths = $this->getModuleExtPath('', $this->moduleName, 'control');
+        $moduleExtPaths = $this->getModuleExtPath($this->moduleName, 'control');
 
         /* 如果扩展目录为空，不包含任何扩展文件。If there's no ext paths return false.*/
         if(empty($moduleExtPaths)) return false;
@@ -1856,7 +1900,7 @@ class baseRouter
         $apiFiles      = array();
         $siteExtended  = false;
 
-        $targetExtPaths = $this->getModuleExtPath($appName, $moduleName, $class);
+        $targetExtPaths = $this->getModuleExtPath($moduleName, $class);
         foreach($targetExtPaths as $extType => $targetExtPath)
         {
             if(empty($targetExtPath)) continue;
@@ -2442,15 +2486,17 @@ class baseRouter
 
         $passedParams = array_values($passedParams);
         $i = 0;
-        foreach($defaultParams as $key => $defaultValue)
+        foreach($defaultParams as $key => $defaultItem)
         {
             if(isset($passedParams[$i]))
             {
-                $defaultParams[$key] = strip_tags($passedParams[$i]);
+                $defaultParams[$key] = helper::convertType(strip_tags((string) $passedParams[$i]), $defaultItem['type']);
             }
             else
             {
-                if($defaultValue === '_NOT_SET') $this->triggerError("The param '$key' should pass value. ", __FILE__, __LINE__, $exit = true);
+                if($defaultItem['default'] === '_NOT_SET') $this->triggerError("The param '$key' should pass value. ", __FILE__, __LINE__, $exit = true);
+
+                $defaultParams[$key] = $defaultItem['default'];
             }
             $i ++;
         }
@@ -2891,7 +2937,7 @@ class baseRouter
      * @access public
      * @return void
      */
-    public function saveError($level, $message, $file, $line)
+    public function saveError(int $level, string $message, string $file, int $line)
     {
         if(empty($this->config->debug))  return true;
         if(!is_dir($this->logRoot))      return true;
@@ -2901,9 +2947,9 @@ class baseRouter
          * 删除设定时间之前的日志。
          * Delete the log before the set time.
          **/
-        if(mt_rand(0, 10) == 1)
+        if(random_int(0, 10) == 1)
         {
-            $logDays = isset($this->config->framework->logDays) ? $this->config->framework->logDays : 14;
+            $logDays = $this->config->framework->logDays ?? 14;
             $dayTime = time() - $logDays * 24 * 3600;
             foreach(glob($this->getLogRoot() . '*') as $logFile)
             {
@@ -2915,7 +2961,7 @@ class baseRouter
          * 忽略该错误：Redefining already defined constructor。
          * Skip the error: Redefining already defined constructor.
          **/
-        if(strpos($message, 'Redefining') !== false) return true;
+        if(str_contains($message, 'Redefining')) return true;
 
         /*
          * 设置错误信息。
@@ -2924,8 +2970,8 @@ class baseRouter
         if(preg_match('/[^\x00-\x80]/', $message)) $message = helper::convertEncoding($message, 'gbk');
         $errorLog  = "\n" . date('H:i:s') . " $message in <strong>$file</strong> on line <strong>$line</strong> ";
 
-        $URI = $this->getURI();
-        $errorLog .= "when visiting <strong>" . (empty($URI) ? '' : htmlspecialchars($URI)) . "</strong>\n";
+        $uri = $this->getURI();
+        $errorLog .= "when visiting <strong>" . (empty($uri) ? '' : htmlspecialchars($uri)) . "</strong>\n";
 
         /*
          * 为了安全起见，对公网环境隐藏脚本路径。
@@ -2942,18 +2988,29 @@ class baseRouter
         if(!is_file($errorFile)) file_put_contents($errorFile, "<?php\n die();\n?" . ">\n");
 
         $fh = fopen($errorFile, 'a');
-        if($fh) fwrite($fh, strip_tags($errorLog)) and fclose($fh);
+        if($fh) fwrite($fh, strip_tags(htmlspecialchars_decode($errorLog))) and fclose($fh);
 
         /*
-         * 如果debug > 1，显示warning, notice级别的错误。
-         * If the debug > 1, show warning, notice error.
+         * 如果debug > 1，直接在页面显示非严重错误。
+         * If the debug > 1, show non-serious errors on page directly.
          **/
-        if($level == E_NOTICE or $level == E_WARNING or $level == E_STRICT or $level == 8192) // 8192: E_DEPRECATED
+        if(!empty($this->config->debug) && $this->config->debug > 1)
         {
-            if(!empty($this->config->debug) and $this->config->debug > 1)
+            /* Send non-serious errors to page in zin mode. */
+            $isZinRequest      = isset($this->config->zin) || isset($_SERVER['HTTP_X_ZIN_OPTIONS']);
+            $isNonSeriousError = $level !== E_ERROR && $level !== E_PARSE && $level !== E_CORE_ERROR && $level !== E_COMPILE_ERROR;
+            if($isZinRequest && $isNonSeriousError)
+            {
+                $this->zinErrors[] = array('file' => $file, 'line' => $line, 'message' => $message, 'level' => $level);
+                return;
+            }
+
+            /* Show non-serious errors to classic page. */
+            if($level == E_NOTICE or $level == E_WARNING or $level == E_STRICT or $level == 8192)
             {
                 $cmd  = "vim +$line $file";
                 $size = strlen($cmd);
+
                 echo "<pre class='alert alert-danger'>$message: ";
                 echo "<input type='text' value='$cmd' size='$size' style='border:none; background:none;' onclick='this.select();' /></pre>";
             }
@@ -2963,14 +3020,21 @@ class baseRouter
          * 如果是严重错误，停止程序。
          * If error level is serious, die.
          * */
-        if($level == E_ERROR or $level == E_PARSE or $level == E_CORE_ERROR or $level == E_COMPILE_ERROR or $level == E_USER_ERROR)
+        if(in_array($level, array(E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR, E_USER_ERROR)))
         {
-            if(empty($this->config->debug)) die();
-            if(PHP_SAPI == 'cli') die($errorLog);
+            if(empty($this->config->debug)) helper::end();
 
-            $htmlError  = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head>";
-            $htmlError .= "<body>" . nl2br($errorLog) . "</body></html>";
-            die($htmlError);
+            if(PHP_SAPI == 'cli')
+            {
+                echo $errorLog;
+            }
+            else
+            {
+                $htmlError  = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head>";
+                $htmlError .= "<body>" . nl2br($errorLog) . "</body></html>";
+                echo $htmlError;
+                helper::end();
+            }
         }
     }
 
@@ -3041,7 +3105,7 @@ class baseRouter
             $commonExtFiles = array();
             $siteExtFiles   = array();
 
-            $extPath = $this->getModuleExtPath($appName, $moduleName, $type);
+            $extPath = $this->getModuleExtPath($moduleName, $type);
             if($this->config->framework->extensionLevel >= 1)
             {
                 $clientLang = $type == 'lang' ? $this->clientLang : '';

@@ -39,8 +39,6 @@ class jenkins extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $this->view->title      = $this->lang->jenkins->common . $this->lang->colon . $this->lang->jenkins->browse;
-        $this->view->position[] = $this->lang->jenkins->common;
-        $this->view->position[] = $this->lang->jenkins->browse;
 
         $this->view->jenkinsList = $this->jenkins->getList($orderBy, $pager);
         $this->view->orderBy     = $orderBy;
@@ -59,15 +57,23 @@ class jenkins extends control
     {
         if($_POST)
         {
-            $jenkinsID = $this->jenkins->create();
+            $jenkins = form::data($this->config->jenkins->form->create)
+                ->add('type', 'jenkins')
+                ->add('private',md5(rand(10,113450)))
+                ->add('createdBy', $this->app->user->account)
+                ->add('createdDate', helper::now())
+                ->trim('url,token,account,password')
+                ->skipSpecial('url,token,account,password')
+                ->remove('appType')
+                ->get();
+            $jenkinsID = $this->loadModel('pipeline')->create($jenkins);
+
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $jenkinsID));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('space', 'browse')));
         }
 
         $this->view->title      = $this->lang->jenkins->common . $this->lang->colon . $this->lang->jenkins->create;
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->jenkins->common);
-        $this->view->position[] = $this->lang->jenkins->create;
 
         $this->display();
     }
@@ -86,12 +92,10 @@ class jenkins extends control
         {
             $this->jenkins->update($id);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $this->view->title      = $this->lang->jenkins->common . $this->lang->colon . $this->lang->jenkins->edit;
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->jenkins->common);
-        $this->view->position[] = $this->lang->jenkins->edit;
 
         $this->view->jenkins    = $jenkins;
 
@@ -99,21 +103,30 @@ class jenkins extends control
     }
 
     /**
+     * 删除一条jenkins数据。
      * Delete a jenkins.
      *
      * @param  int    $id
      * @access public
      * @return void
      */
-    public function delete($id, $confim = 'no')
+    public function delete($id)
     {
-        if($confim != 'yes') return print(js::confirm($this->lang->jenkins->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
-
         $jobs = $this->dao->select('*')->from(TABLE_JOB)->where('server')->eq($id)->andWhere('engine')->eq('jenkins')->andWhere('deleted')->eq('0')->fetchAll();
-        if($jobs) return print(js::alert($this->lang->jenkins->error->linkedJob));
+        if($jobs)
+        {
+            $response['result']   = 'fail';
+            $response['callback'] = sprintf('zui.Modal.alert("%s");', $this->lang->jenkins->error->linkedJob);
+
+            return $this->send($response);
+        }
 
         $this->jenkins->delete(TABLE_PIPELINE, $id);
-        echo js::reload('parent');
+
+        $response['load']   = true;
+        $response['result'] = 'success';
+
+        return $this->send($response);
     }
 
     /**
@@ -123,11 +136,14 @@ class jenkins extends control
      * @access public
      * @return void
      */
-    public function ajaxGetJenkinsTasks($id)
+    public function ajaxGetJenkinsTasks($id = 0)
     {
-        if(empty($id)) return print('');
+        $this->app->loadLang('job');
 
-        $this->view->tasks = $this->jenkins->getTasks($id, 3);
+        $tasks = array();
+        if($id) $tasks = $this->jenkins->getTasks($id, 3);
+
+        $this->view->tasks = $this->jenkinsZen->buildTree($tasks);
         $this->display();
     }
 }

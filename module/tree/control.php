@@ -302,6 +302,18 @@ class tree extends control
                 $this->view->root = $root;
             }
         }
+        elseif(strpos($viewType, 'host') !== false)
+        {
+            $position = array();
+            $title    = $this->lang->tree->groupMaintenance;
+            
+            $root = new stdclass();
+            $root->id   = 0;
+            $root->name = $this->lang->tree->groupMaintenance;
+            
+            $this->view->productID = 0;
+            $this->view->root      = $root;
+        }
 
         if($this->app->tab == 'project' and strpos($viewType, 'doc') === false)
         {

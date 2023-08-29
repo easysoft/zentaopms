@@ -240,6 +240,10 @@ $config->openMethods[] = 'custom.index';
 $config->openMethods[] = 'testcase.getxmindimport';
 $config->openMethods[] = 'testcase.showxmindimport';
 $config->openMethods[] = 'testcase.savexmindimport';
+$config->openMethods[] = 'search.buildzinform';
+$config->openMethods[] = 'search.buildzinquery';
+$config->openMethods[] = 'search.savezinquery';
+$config->openMethods[] = 'space.createapplication';
 $config->openMethods[] = 'ai.adminindex';
 
 $config->openModules = array();
@@ -343,6 +347,9 @@ define('TABLE_COMPILE',       '`' . $config->db->prefix . 'compile`');
 define('TABLE_MR',            '`' . $config->db->prefix . 'mr`');
 define('TABLE_MRAPPROVAL',    '`' . $config->db->prefix . 'mrapproval`');
 
+define('TABLE_SERVERROOM',   '`' . $config->db->prefix . 'serverroom`');
+define('TABLE_ACCOUNT',      '`' . $config->db->prefix . 'account`');
+define('TABLE_HOST',         '`' . $config->db->prefix . 'host`');
 define('TABLE_REPO',         '`' . $config->db->prefix . 'repo`');
 define('TABLE_RELATION',     '`' . $config->db->prefix . 'relation`');
 define('TABLE_REPOHISTORY',  '`' . $config->db->prefix . 'repohistory`');
@@ -377,9 +384,12 @@ define('TABLE_PRIVLANG',     '`' . $config->db->prefix . 'privlang`');
 define('TABLE_PRIVMANAGER',  '`' . $config->db->prefix . 'privmanager`');
 define('TABLE_PRIVRELATION', '`' . $config->db->prefix . 'privrelation`');
 
+define('TABLE_SPACE',    '`' . $config->db->prefix . 'space`');
+define('TABLE_INSTANCE', '`' . $config->db->prefix . 'instance`');
+define('TABLE_SOLUTION', '`' . $config->db->prefix . 'solution`');
+define('TABLE_ARTIFACTREPO', '`' . $config->db->prefix . 'artifactrepo`');
 define('TABLE_PROMPT', '`' . $config->db->prefix . 'prompt`');
 define('TABLE_PROMPTROLE', '`' . $config->db->prefix . 'promptrole`');
-
 
 $config->objectTables['product']      = TABLE_PRODUCT;
 $config->objectTables['productplan']  = TABLE_PRODUCTPLAN;
@@ -439,6 +449,13 @@ $config->objectTables['privlang']     = TABLE_PRIVLANG;
 $config->objectTables['privmanager']  = TABLE_PRIVMANAGER;
 $config->objectTables['privrelation'] = TABLE_PRIVRELATION;
 $config->objectTables['scene']        = TABLE_SCENE;
+$config->objectTables['account']      = TABLE_ACCOUNT;
+$config->objectTables['serverroom']   = TABLE_SERVERROOM;
+$config->objectTables['host']         = TABLE_ZAHOST;
+$config->objectTables['instance']     = TABLE_INSTANCE;
+$config->objectTables['space']        = TABLE_SPACE;
+$config->objectTables['solution']     = TABLE_SOLUTION;
+$config->objectTables['artifactrepo'] = TABLE_ARTIFACTREPO;
 $config->objectTables['prompt']       = TABLE_PROMPT;
 
 $config->newFeatures      = array('aiPrompts', 'promptDesign', 'promptExec');
@@ -476,3 +493,6 @@ $config->featureGroup->other         = array('devops', 'kanban');
 
 $config->bi = new stdclass();
 $config->bi->pickerHeight = 150;
+
+$config->hasDropmenuApps     = array('program', 'project', 'product', 'execution', 'qa', 'admin');
+$config->excludeDropmenuList = array('program-browse', 'product-all', 'product-index', 'execution-all', 'project-browse', 'product-batchedit', 'admin-index', 'product-create', 'project-create', 'execution-create', 'program-create');

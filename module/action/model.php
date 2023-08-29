@@ -928,6 +928,242 @@ class actionModel extends model
      * @access public
      * @return void
      */
+    public function renderAction($action, $desc = '')
+    {
+        if(!isset($action->objectType) || !isset($action->action)) return false;
+
+        $objectType = $action->objectType;
+        $actionType = strtolower($action->action);
+
+        /**
+         * Set the desc string of this action.
+         *
+         * 1. If the module of this action has defined desc of this actionType, use it.
+         * 2. If no defined in the module language, search the common action define.
+         * 3. If not found in the lang->action->desc, use the $lang->action->desc->common or $lang->action->desc->extra as the default.
+         */
+        if(empty($desc))
+        {
+            if($action->objectType == 'story' && $action->action == 'reviewed' && strpos($action->extra, ',') !== false)
+            {
+                $desc = $this->lang->$objectType->action->rejectreviewed;
+            }
+            elseif($action->objectType == 'productplan' && in_array($action->action, array('startedbychild','finishedbychild','closedbychild','activatedbychild', 'createchild')))
+            {
+                $desc = $this->lang->$objectType->action->changebychild;
+            }
+            elseif($action->objectType == 'module' && in_array($action->action, array('created', 'moved', 'deleted')))
+            {
+                $desc = $this->lang->$objectType->action->{$action->action};
+            }
+            elseif(strpos('createmr,editmr,removemr', $action->action) !== false && strpos($action->extra, '::') !== false)
+            {
+                $mrAction = str_replace('mr', '', $action->action) . 'Action';
+                list($mrDate, $mrActor, $mrLink) = explode('::', $action->extra);
+
+                if(isonlybody()) $mrLink .= ($this->config->requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes');
+
+                $this->app->loadLang('mr');
+                $desc = sprintf($this->lang->mr->$mrAction, $mrDate, $mrActor, $mrLink);
+            }
+            elseif($this->config->edition == 'max' && strpos($this->config->action->assetType, ",{$action->objectType},") !== false && $action->action == 'approved')
+            {
+                $desc = empty($this->lang->action->approve->{$action->extra}) ? '' : $this->lang->action->approve->{$action->extra};
+            }
+            elseif(isset($this->lang->$objectType) && isset($this->lang->$objectType->action->$actionType))
+            {
+                $desc = $this->lang->$objectType->action->$actionType;
+            }
+            elseif($action->objectType == 'instance' && isset($this->lang->action->desc->$actionType))
+            {
+                $desc  = $this->lang->action->desc->$actionType;
+                $extra = json_decode($action->extra);
+                if($actionType == 'adjustmemory')
+                {
+                    $action->newMemory = $action->comment;
+                    $action->comment = '';
+                }
+                if(!empty($extra))
+                {
+                    if(empty($extra->data)) $extra->data = new stdclass();
+                    $action->oldName    = zget($extra->data, 'oldName', '');
+                    $action->newName    = zget($extra->data, 'newName', '');
+                    $action->oldVersion = zget($extra->data, 'oldVersion', '');
+                    $action->newVersion = zget($extra->data, 'newVersion', '');
+                    $action->oldAppName = zget($extra->data, 'oldAppName', '');
+                    $action->newAppName = zget($extra->data, 'newAppName', '');
+                    $enableAutoBackup   = zget($extra->data, 'autoBackup', 0);
+
+                    if($actionType == 'saveautobackupsettings' && $enableAutoBackup) $desc = $this->lang->action->desc->closeautobackupsettings;
+                    $action->extra = '';
+
+                    if(!empty($extra->result->code) && $extra->result->code != 200 && !empty($extra->result->message)) $action->comment = $extra->result->message;
+                    if(is_string($extra->result) && $extra->result != 'fail')
+                    {
+                        $action->comment = "\n" . $extra->message;
+                    }
+                }
+            }
+            elseif(isset($this->lang->action->desc->$actionType))
+            {
+                $desc = $this->lang->action->desc->$actionType;
+            }
+            else
+            {
+                $desc = $action->extra ? $this->lang->action->desc->extra : $this->lang->action->desc->common;
+            }
+        }
+
+        $action->date = substr($action->date, 0, 19);
+        if($this->app->getViewType() == 'mhtml') $action->date = date('m-d H:i', strtotime($action->date));
+
+        /* Cycle actions, replace vars. */
+        foreach($action as $key => $value)
+        {
+            if($key == 'history') continue;
+
+            /* Desc can be an array or string. */
+            if(is_array($desc))
+            {
+                if($key == 'extra') continue;
+                if($action->objectType == 'story' && $action->action == 'reviewed' && strpos($action->extra, '|') !== false && $key == 'actor')
+                {
+                    $desc['main'] = str_replace('$actor', $this->lang->action->superReviewer . ' ' . $value, $desc['main']);
+                }
+                else
+                {
+                    $desc['main'] = str_replace('$' . $key, $value, $desc['main']);
+                }
+            }
+            else
+            {
+                if($actionType == 'restoredsnapshot' && in_array($action->objectType, array('vm', 'zanode')) && $value == 'defaultSnap') $value = $this->lang->$objectType->snapshot->defaultSnapName;
+
+                $desc = str_replace('$' . $key, $value, $desc);
+            }
+        }
+
+        /* If the desc is an array, process extra. Please bug/lang. */
+        if(!is_array($desc)) return $desc;
+
+        $extra = strtolower($action->extra);
+
+        /* Fix bug #741. */
+        if(isset($desc['extra'])) $desc['extra'] = $this->lang->$objectType->{$desc['extra']};
+
+        $actionDesc = '';
+        if(isset($desc['extra'][$extra]))
+        {
+            $actionDesc = str_replace('$extra', $desc['extra'][$extra], $desc['main']);
+        }
+        else
+        {
+            $actionDesc = str_replace('$extra', $action->extra, $desc['main']);
+        }
+
+        if($action->objectType == 'story' && $action->action == 'reviewed')
+        {
+            if(strpos($action->extra, ',') !== false)
+            {
+                list($extra, $reason) = explode(',', $extra);
+                $desc['reason'] = $this->lang->$objectType->{$desc['reason']};
+                $actionDesc = str_replace(array('$extra', '$reason'), array($desc['extra'][$extra], $desc['reason'][$reason]), $desc['main']);
+            }
+
+            if(strpos($action->extra, '|') !== false)
+            {
+                list($extra, $isSuperReviewer) = explode('|', $extra);
+                $actionDesc = str_replace('$extra', $desc['extra'][$extra], $desc['main']);
+            }
+        }
+
+        if($action->objectType == 'story' && $action->action == 'synctwins')
+        {
+            if(!empty($extra) && strpos($extra, '|') !== false)
+            {
+                list($operate, $storyID) = explode('|', $extra);
+                $desc['operate'] = $this->lang->$objectType->{$desc['operate']};
+                $link = common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$storyID"), "#$storyID ") : "#$storyID";
+                $actionDesc = str_replace(array('$extra', '$operate'), array($link, $desc['operate'][$operate]), $desc['main']);
+            }
+        }
+
+        if($action->objectType == 'module' && strpos(',created,moved,', $action->action) !== false)
+        {
+            $moduleNames = $this->loadModel('tree')->getOptionMenu($action->objectID, 'story', 0, 'all', '');
+            $modules     = explode(',', $action->extra);
+            $moduleNames = array_intersect_key($moduleNames, array_combine($modules, $modules));
+            $moduleNames = implode(', ', $moduleNames);
+            $actionDesc  = str_replace('$extra', $moduleNames, $desc['main']);
+        }
+        elseif($action->objectType == 'module' && $action->action == 'deleted')
+        {
+            $module      = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($action->objectID)->fetch();
+            $moduleNames = $this->loadModel('tree')->getOptionMenu($module->root, 'story', 0, 'all', '');
+            $actionDesc  = str_replace('$extra', zget($moduleNames, $action->objectID), $desc['main']);
+        }
+        return $actionDesc;
+    }
+
+    /**
+     * Print changes of every action.
+     *
+     * @param  string    $objectType
+     * @param  array     $histories
+     * @param  bool      $canChangeTag
+     * @access public
+     * @return void
+     */
+    public function renderChanges($objectType, $histories, $canChangeTag = true)
+    {
+        if(empty($histories)) return;
+
+        $maxLength            = 0;          // The max length of fields names.
+        $historiesWithDiff    = array();    // To save histories without diff info.
+        $historiesWithoutDiff = array();    // To save histories with diff info.
+
+        /* Diff histories by hasing diff info or not. Thus we can to make sure the field with diff show at last. */
+        foreach($histories as $history)
+        {
+            $fieldName = $history->field;
+            $history->fieldLabel = (isset($this->lang->$objectType) && isset($this->lang->$objectType->$fieldName)) ? $this->lang->$objectType->$fieldName : $fieldName;
+            if($objectType == 'module') $history->fieldLabel = $this->lang->tree->$fieldName;
+            if($fieldName == 'fileName') $history->fieldLabel = $this->lang->file->$fieldName;
+            if(($length = strlen($history->fieldLabel)) > $maxLength) $maxLength = $length;
+            $history->diff ? $historiesWithDiff[] = $history : $historiesWithoutDiff[] = $history;
+        }
+        $histories = array_merge($historiesWithoutDiff, $historiesWithDiff);
+
+        $content = '';
+
+        foreach($histories as $history)
+        {
+            $history->fieldLabel = str_pad($history->fieldLabel, $maxLength, $this->lang->action->label->space);
+            if($history->diff != '')
+            {
+                $history->diff      = str_replace(array('<ins>', '</ins>', '<del>', '</del>'), array('[ins]', '[/ins]', '[del]', '[/del]'), $history->diff);
+                $history->diff      = ($history->field != 'subversion' && $history->field != 'git') ? htmlSpecialString($history->diff) : $history->diff;   // Keep the diff link.
+                $history->diff      = str_replace(array('[ins]', '[/ins]', '[del]', '[/del]'), array('<ins>', '</ins>', '<del>', '</del>'), $history->diff);
+                $history->diff      = nl2br($history->diff);
+                $history->noTagDiff = $canChangeTag ? preg_replace('/&lt;\/?([a-z][a-z0-9]*)[^\/]*\/?&gt;/Ui', '', $history->diff) : '';
+                $content .= sprintf($this->lang->action->desc->diff2, $history->fieldLabel, $history->noTagDiff, $history->diff);
+            }
+            else
+            {
+                $content .= sprintf($this->lang->action->desc->diff1, $history->fieldLabel, $history->old, $history->new);
+            }
+        }
+        return $content;
+    }
+
+    /**
+     * Print actions of an object.
+     *
+     * @param  object    $action
+     * @param  string   $desc
+     * @access public
+     * @return void
+     */
     public function printAction($action, $desc = '')
     {
         if(!isset($action->objectType) or !isset($action->action)) return false;

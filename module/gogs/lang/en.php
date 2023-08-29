@@ -17,12 +17,19 @@ $lang->gogs->all           = 'All';
 $lang->gogs->notBind       = 'Not bind';
 $lang->gogs->binded        = 'Binded';
 $lang->gogs->bindDynamic   = '%s and Zentao user %s';
+$lang->gogs->bindedError   = 'The bound user has been deleted or modified. Please bind again.';
+$lang->gogs->zentaoEmail   = 'Zentao User\'s Email';
+$lang->gogs->accountDesc   = '(Automatically match users with the same email)';
+
+$lang->gogs->bindStatus['binded']      = $lang->gogs->binded;
+$lang->gogs->bindStatus['notBind']     = "<span class='text-danger'>{$lang->gogs->notBind}</span>";
+$lang->gogs->bindStatus['bindedError'] = "<span class='text-danger'>{$lang->gogs->bindedError}</span>";
 
 $lang->gogs->browseAction = 'Gogs List';
 $lang->gogs->deleteAction = 'Delete Gogs';
 
 $lang->gogs->id    = 'ID';
-$lang->gogs->name  = "Server Name";
+$lang->gogs->name  = "Application Name";
 $lang->gogs->url   = 'Server URL';
 $lang->gogs->token = 'Token';
 

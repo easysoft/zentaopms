@@ -82,6 +82,8 @@ class gitModel extends model
         {
             $this->updateCommit($repo, $commentGroup, true);
 
+            if($repo->SCM == 'Gitlab') $this->loadModel('gitlab')->updateCodePath((int)$repo->serviceHost, (int)$repo->serviceProject, (int)$repo->id);
+
             /* Create compile by tag. */
             $jobs = zget($tagGroup, $repoID, array());
             foreach($jobs as $job)
@@ -215,7 +217,7 @@ class gitModel extends model
                     {
                         foreach(explode(',', $job->comment) as $comment)
                         {
-                            if(strpos($log->msg, $comment) !== false) $this->loadModel('compile')->createByJob($job->id);
+                            if(strpos($log->msg, $comment) !== false) $this->loadModel('job')->exec($job->id);
                         }
                     }
                     $commits += count($logs);
@@ -402,9 +404,9 @@ class gitModel extends model
     }
 
     /**
-     * Pring log.
+     * Print log.
      *
-     * @param  sting    $log
+     * @param  string $log
      * @access public
      * @return void
      */

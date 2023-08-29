@@ -17,12 +17,19 @@ $lang->gitea->all           = 'All';
 $lang->gitea->notBind       = 'Not bind';
 $lang->gitea->binded        = 'Binded';
 $lang->gitea->bindDynamic   = '%s and Zentao user %s';
+$lang->gitea->bindedError   = 'The bound user has been deleted or modified. Please bind again.';
+$lang->gitea->zentaoEmail   = 'Zentao User\'s Email';
+$lang->gitea->accountDesc   = '(Automatically match users with the same email)';
+
+$lang->gitea->bindStatus['binded']      = $lang->gitea->binded;
+$lang->gitea->bindStatus['notBind']     = "<span class='text-danger'>{$lang->gitea->notBind}</span>";
+$lang->gitea->bindStatus['bindedError'] = "<span class='text-danger'>{$lang->gitea->bindedError}</span>";
 
 $lang->gitea->browseAction = 'Gitea List';
 $lang->gitea->deleteAction = 'Delete Gitea';
 
 $lang->gitea->id    = 'ID';
-$lang->gitea->name  = "Server Name";
+$lang->gitea->name  = "Application Name";
 $lang->gitea->url   = 'Server URL';
 $lang->gitea->token = 'Token';
 

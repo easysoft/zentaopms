@@ -21,6 +21,7 @@ $lang->mr->link         = '关联需求、Bug、任务';
 $lang->mr->createAction = '%s, 由 <strong>%s</strong> 提交了 <a href="%s">合并请求</a>。';
 $lang->mr->editAction   = '%s, 由 <strong>%s</strong> 编辑了 <a href="%s">合并请求</a>。';
 $lang->mr->removeAction = '%s, 由 <strong>%s</strong> 删除了 <a href="%s">合并请求</a>。';
+$lang->mr->submitType   = '提交方式';
 
 $lang->mr->linkList  = '浏览关联需求、Bug、任务';
 $lang->mr->linkStory = '关联需求';
@@ -66,7 +67,7 @@ $lang->mr->approvalResultList['reject']  = '拒绝';
 $lang->mr->needApproved       = '需要通过评审才能合并';
 $lang->mr->needCI             = '需要通过构建才能合并';
 $lang->mr->removeSourceBranch = '合并后删除源分支';
-$lang->mr->squash             = '合并提交';
+$lang->mr->squash             = '合并提交记录';
 
 $lang->mr->repeatedOperation = '请勿重复操作';
 
@@ -95,9 +96,9 @@ $lang->mr->mergeStatusList['cannot_merge_by_fail'] = '不可合并,检查未通�
 
 $lang->mr->description       = '描述';
 $lang->mr->confirmDelete     = '确认删除该合并请求吗？';
-$lang->mr->sourceProject     = '源项目';
+$lang->mr->sourceProject     = '源仓库';
 $lang->mr->sourceBranch      = '源分支';
-$lang->mr->targetProject     = '目标项目';
+$lang->mr->targetProject     = '目标仓库';
 $lang->mr->targetBranch      = '目标分支';
 $lang->mr->noCompileJob      = '没有构建任务';
 $lang->mr->compileUnexecuted = '还未执行';

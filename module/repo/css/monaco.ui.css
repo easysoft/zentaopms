@@ -1,0 +1,7 @@
+#fileTabs .tab-pane {display: none;}
+#fileTabs .tab-pane.active {display: block;}
+#fileTabs .nav-item {max-width: none !important;}
+.sidebar .tree{background-color: white;}
+.container .sidebar{width: 240px;}
+.tree li.tree-item.selected{color: #438EFF !important;}
+#monacoTree{overflow: auto;}

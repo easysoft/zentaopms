@@ -1,0 +1,4 @@
+#mainContent .tabs ul.nav-tabs {display: none}
+#mrMenu menu.nav {border-bottom: 1px solid #ddd}
+#mrMenu .nav-item>a.active {border-bottom-color: var(--color-primary-500) !important; border-bottom-width: 2px; margin-bottom: -1px;}
+.mr-actions {position: absolute; right: 1rem; top: 10px;}

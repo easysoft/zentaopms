@@ -27,6 +27,33 @@ class pipelineModel extends model
     }
 
     /**
+     * 根据名称及类型获取一条流水线记录
+     * Get a pipeline by name and type.
+     *
+     * @param  string $name
+     * @param  string $type
+     * @access public
+     * @return object
+     */
+    public function getByNameAndType(string $name, string $type)
+    {
+        return $this->dao->select('id')->from(TABLE_PIPELINE)->where('name')->eq($name)->andWhere('type')->eq($type)->fetch();
+    }
+
+    /**
+     * 根据url获取渠成创建的代码库。
+     * Get a pipeline by url which created by quickon.
+     *
+     * @param  string $url
+     * @access public
+     * @return object
+     */
+    public function getByUrl(string $url)
+    {
+        return $this->dao->select('id')->from(TABLE_PIPELINE)->where('url')->eq($url)->andWhere('createdBy')->eq('system')->fetch();
+    }
+
+    /**
      * Get pipeline list.
      *
      * @param  string $type jenkins|gitlab
@@ -39,7 +66,7 @@ class pipelineModel extends model
     {
         return $this->dao->select('*')->from(TABLE_PIPELINE)
             ->where('deleted')->eq('0')
-            ->AndWhere('type')->in($type)
+            ->beginIF($type)->AndWhere('type')->in($type)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -66,16 +93,9 @@ class pipelineModel extends model
      * @access public
      * @return bool
      */
-    public function create($type)
+    public function create(object $pipeline): int|false
     {
-        $pipeline = fixer::input('post')
-            ->add('type', $type)
-            ->add('private',md5(rand(10,113450)))
-            ->add('createdBy', $this->app->user->account)
-            ->add('createdDate', helper::now())
-            ->trim('url,token,account,password')
-            ->skipSpecial('url,token,account,password')
-            ->get();
+        $type = $pipeline->type;
         if($type == 'gitlab') $pipeline->url = rtrim($pipeline->url, '/');
 
         if(isset($pipeline->password)) $pipeline->password = base64_encode($pipeline->password);
@@ -157,7 +177,7 @@ class pipelineModel extends model
             if($job) return false;
         }
         $this->dao->update(TABLE_PIPELINE)->set('deleted')->eq(1)->where('id')->eq($id)->exec();
-        $this->loadModel('action')->create($object, $id, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
+        $this->loadModel('action')->create($object, $id, 'deleted', '');
 
         $actionID = $this->dao->lastInsertID();
         return $actionID;

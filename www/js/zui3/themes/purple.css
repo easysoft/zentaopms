@@ -1,0 +1,56 @@
+:root
+{
+  /* generate from https://uicolors.app/create */
+  --color-primary-50: #ecf1ff;
+  --color-primary-100: #dde4ff;
+  --color-primary-200: #c2ceff;
+  --color-primary-300: #9dadff;
+  --color-primary-400: #7680ff;
+  --color-primary-500: #5756fe;
+  --color-primary-600: #4637f4;
+  --color-primary-700: #3c2bd7;
+  --color-primary-800: #2f24a7;
+  --color-primary-900: #2c2689;
+  --color-primary-950: #1b174f;
+  --color-primary-50-rgb: 236, 241, 255;
+  --color-primary-100-rgb: 221, 228, 255;
+  --color-primary-200-rgb: 194, 206, 255;
+  --color-primary-300-rgb: 157, 173, 255;
+  --color-primary-400-rgb: 118, 128, 255;
+  --color-primary-500-rgb: 87, 86, 254;
+  --color-primary-600-rgb: 70, 55, 244;
+  --color-primary-700-rgb: 60, 43, 215;
+  --color-primary-800-rgb: 47, 36, 167;
+  --color-primary-900-rgb: 44, 38, 137;
+  --color-primary-950-rgb: 27, 23, 79;
+
+  --color-secondary-50: #f7f5fd;
+  --color-secondary-100: #f0ecfb;
+  --color-secondary-200: #e3dcf8;
+  --color-secondary-300: #cdbff3;
+  --color-secondary-400: #b49bea;
+  --color-secondary-500: #9b72e0;
+  --color-secondary-600: #905bd5;
+  --color-secondary-700: #7b42bf;
+  --color-secondary-800: #6737a0;
+  --color-secondary-900: #562e84;
+  --color-secondary-950: #361c59;
+  --color-secondary-50-rgb: 247, 245, 253;
+  --color-secondary-100-rgb: 240, 236, 251;
+  --color-secondary-200-rgb: 227, 220, 248;
+  --color-secondary-300-rgb: 205, 191, 243;
+  --color-secondary-400-rgb: 180, 155, 234;
+  --color-secondary-500-rgb: 155, 114, 224;
+  --color-secondary-600-rgb: 144, 91, 213;
+  --color-secondary-700-rgb: 123, 66, 191;
+  --color-secondary-800-rgb: 103, 55, 160;
+  --color-secondary-900-rgb: 86, 46, 132;
+  --color-secondary-950-rgb: 54, 28, 89;
+
+  --color-link: var(--color-primary-700);
+  --color-link-hover: var(--color-primary-600);
+  --color-link-visited: var(--color-primary-800);
+  --color-link-rgb: var(--color-primary-700-rgb);
+  --color-link-hover-rgb: var(--color-primary-600-rgb);
+  --color-link-visited-rgb: var(--color-primary-800-rgb);
+}

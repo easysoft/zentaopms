@@ -1,0 +1,11 @@
+.product-menu {width: 200px; max-height: 100%; margin: -5px 0; justify-content: flex-start;}
+.product-menu > .text {flex: auto; display: flex; align-items: center; justify-content: flex-start; font-weight: bold; font-size: 16px; padding: 0 4px;}
+.product-menu > .icon.is-leading {width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--color-primary-500); display: flex; align-items: center; justify-content: center; transform: rotate(90deg); transition: .2s all;}
+.product-menu.is-open > .icon.is-leading {color: var(--color-canvas); background: var(--color-primary-500); transform: rotate(-90deg);}
+.product-menu > .is-caret {width: 20px; margin-right: -8px; transition: background-color .2s; border-radius: var(--radius)}
+.product-menu[data-value=""] > .is-caret,
+.product-menu[data-value="all"] > .is-caret,
+.product-menu[data-value="0"] > .is-caret {display: none;}
+.product-menu > .is-caret:hover {color: var(--color-primary-500); background: var(--color-primary-100);}
+.product-menu > .is-caret > .caret {display: none;}
+.product-menu > .is-caret::after {content: '\e936'; font-family: ZentaoIcon;}

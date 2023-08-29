@@ -1,0 +1,23 @@
+.steps-editor {width: 100%}
+.steps-editor-header {padding-right: 40px; color: var(--color-slate-700);}
+.steps-editor-row {position: relative; display: flex; align-items: stretch; min-height: 32px; --tw-ring-color: rgba(var(--color-border-strong-rgb), 1); box-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color); margin-top: 1px; z-index: 1;}
+.steps-editor-row.is-focus {z-index: 100;}
+.steps-editor-header .steps-editor-row {border-radius: 2px 2px 0 0; background-color: var(--color-slate-100);}
+.steps-editor-col {flex: none; display: flex; align-items: stretch;}
+.steps-editor-header .steps-editor-col {padding: 0 12px; align-items: center;}
+.steps-editor-col-step {width: 50%;}
+.steps-editor-col-add {width: 80px; border-left: 1px solid var(--color-border-strong); border-right: 1px solid var(--color-border-strong); align-items: center; padding: 0!important;}
+.steps-editor-col-add > div {width: 50%; display: flex; align-items: center; justify-content: center; position: relative;}
+.steps-editor-col-expect {flex: auto;}
+.steps-editor-body {padding-right: 40px;}
+.steps-editor-col-step.form-control {padding: 0; border-radius: 0; height: auto; z-index: 100;}
+.steps-editor-step-name {padding: 6px 0 6px 8px; flex: none; text-align: right; opacity: .5;}
+.steps-editor-step-expect,
+.steps-editor-step-text {padding: 6px 12px;; flex: auto; border: none; min-height: 32px; background: none; border-radius: 0; resize: none}
+.steps-editor-step-text {outline: none;}
+.steps-editor-body .steps-editor-col-add > div + div::before {content: ' '; position: absolute; display: block; border-left: 1px solid var(--color-border-strong); top: 4px; bottom: 4px; left: 0; opacity: .7;}
+.steps-editor .btn-action {color: var(--color-slate-600);}
+.steps-editor .btn-action:hover {color: var(--color-primary-500);}
+.steps-editor-col-delete {width: 40px; height: 32px; display: flex; align-items: center; justify-content: center; position: absolute; right: -40px; top: 0}
+.steps-editor-row[data-level="1"] {margin-top: 7px;}
+.steps-editor-body > .steps-editor-row:first-child {margin-top: 1px;}

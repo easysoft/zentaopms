@@ -28,8 +28,10 @@ $lang->repo->branch          = '分支';
 $lang->repo->tag             = '标签';
 $lang->repo->addWebHook      = '添加Webhook';
 $lang->repo->apiGetRepoByUrl = '接口：通过URL获取代码库';
-$lang->repo->blameTmpl       = '第 <strong>%line</strong> 行代码相关信息，<span class="tip-circular"></span> %name 于 %time 提交 %version %comment';
+$lang->repo->blameTmpl       = '第 <strong>%line</strong> 行代码相关信息： %name 于 %time 提交 %version %comment';
 $lang->repo->notRelated      = '暂时没有关联禅道对象';
+$lang->repo->source          = '基准';
+$lang->repo->target          = '对比';
 
 $lang->repo->browseAction    = '浏览代码库';
 $lang->repo->createAction    = '添加代码库';
@@ -51,11 +53,13 @@ $lang->repo->import          = '导入';
 $lang->repo->importName      = '导入后的名称';
 $lang->repo->importServer    = '请选择服务器';
 $lang->repo->gitlabList      = 'Gitlab代码库';
+$lang->repo->batchCreate     = '批量添加代码库';
 
 $lang->repo->submit     = '提交';
 $lang->repo->cancel     = '取消';
 $lang->repo->addComment = '添加评论';
 $lang->repo->addIssue   = '提问题';
+$lang->repo->compare    = '比较';
 
 $lang->repo->copy     = '点击复制';
 $lang->repo->copied   = '复制成功';
@@ -101,13 +105,13 @@ $lang->repo->diff               = '比较差异';
 $lang->repo->diffAB             = '比较';
 $lang->repo->diffAll            = '全部比较';
 $lang->repo->viewDiff           = '查看差异';
-$lang->repo->allLog             = '所有版本';
+$lang->repo->allLog             = '所有提交';
 $lang->repo->location           = '位置';
 $lang->repo->file               = '文件';
 $lang->repo->action             = '操作';
 $lang->repo->code               = '代码';
 $lang->repo->review             = '评审';
-$lang->repo->acl                = '权限';
+$lang->repo->acl                = '访问控制';
 $lang->repo->group              = '分组';
 $lang->repo->user               = '用户';
 $lang->repo->info               = '版本信息';
@@ -120,6 +124,7 @@ $lang->repo->linkBug            = '关联Bug';
 $lang->repo->linkTask           = '关联任务';
 $lang->repo->unlink             = '取消关联';
 $lang->repo->viewBugs           = '查看Bug';
+$lang->repo->lastSubmitTime     = '最后提交时间';
 
 $lang->repo->title      = '标题';
 $lang->repo->status     = '状态';
@@ -164,6 +169,10 @@ $lang->repo->scmList['Gitea']      = 'Gitea';
 $lang->repo->scmList['Git']        = '本地 Git';
 $lang->repo->scmList['Subversion'] = 'Subversion';
 
+$lang->repo->aclList['private'] = '私有 (所属产品和相关项目人员可访问)';
+$lang->repo->aclList['open']    = '公开 (有DevOps视图权限即可访问)';
+$lang->repo->aclList['custom']  = '自定义';
+
 $lang->repo->gitlabHost    = 'GitLab Server';
 $lang->repo->gitlabToken   = 'GitLab Token';
 $lang->repo->gitlabProject = 'GitLab 项目';
@@ -201,7 +210,7 @@ $lang->repo->error->version       = "https和svn协议需要1.8及以上版本�
 $lang->repo->error->path          = '代码库地址直接填写文件路径，如：/home/test。';
 $lang->repo->error->cmd           = '客户端错误！';
 $lang->repo->error->diff          = '必须选择两个版本';
-$lang->repo->error->safe          = '因为安全原因，需要检测客户端版本，请将版本号写入文件 %s <br /> 可以执行命令：%s';
+$lang->repo->error->safe          = "因为安全原因，需要检测客户端版本，请将版本号写入文件 %s \n 可以执行命令：%s";
 $lang->repo->error->product       = "请选择{$lang->productCommon}！";
 $lang->repo->error->commentText   = '请填写评审内容';
 $lang->repo->error->comment       = '请填写内容';
@@ -219,6 +228,10 @@ $lang->repo->error->clientPath    = "客户端安装目录不能有空格和特�
 $lang->repo->error->notFound      = "代码库『%s』路径 %s 不存在，请确认此代码库是否已在本地服务器被删除";
 $lang->repo->error->noWritable    = '%s 不可写！请检查该目录权限，否则无法下载。';
 $lang->repo->error->noCloneAddr   = '该项目克隆地址未找到';
+$lang->repo->error->differentVersions = '基准和对比不能一样';
+$lang->repo->error->needTwoVersion    = '必须选择两个分支/标签';
+$lang->repo->error->emptyVersion      = '版本不能为空';
+$lang->repo->error->versionError      = '版本格式错误！';
 
 $lang->repo->syncTips          = '请参照<a target="_blank" href="https://www.zentao.net/book/zentaopmshelp/207.html">这里</a>，设置代码库定时同步。';
 $lang->repo->encodingsTips     = "提交日志的编码，可以用逗号连接起来的多个，比如utf-8。";
@@ -239,3 +252,5 @@ $lang->repo->typeList['performance'] = '性能';
 $lang->repo->typeList['security']    = '安全';
 $lang->repo->typeList['redundancy']  = '冗余';
 $lang->repo->typeList['logicError']  = '逻辑错误';
+
+$lang->repo->featureBar['maintain']['all'] = '全部';
