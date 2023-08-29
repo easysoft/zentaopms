@@ -106,20 +106,32 @@ class metricZen extends metric
         $records = array();
         foreach($calcList as $code => $calc)
         {
-            $calcResult = $calc->getResult();
-            if($records) continue;
+            $results = $calc->getResult();
 
-            foreach($calcResult as $record)
+            if(!is_array($results) || count($results) == 0) continue;
+
+            $record = (object)current($results);
+
+            $global = 1;
+            foreach($this->config->metric->excludeGlobal as $exclude)
+            {
+                if(isset($record->$exclude))
+                {
+                    $global = 0;
+                    break;
+                }
+            }
+
+            foreach($results as $record)
             {
                 $record = (object)$record;
 
+                if(empty($record->value)) $record->value = 0;
+
                 $record->metricID   = $calc->id;
                 $record->metricCode = $code;
-                $record->date       = helper::today();
-                $record->year       = date('Y');
-                $record->month      = date('Ym');
-                $record->week       = date('W');
-                $record->day        = date('Ymd');
+                $record->date       = helper::now();
+                $record->global     = $global;
 
                 $records[] = $record;
             }

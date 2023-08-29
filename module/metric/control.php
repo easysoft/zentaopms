@@ -104,11 +104,11 @@ class metric extends control
 
             $rows = $statement->fetchAll();
             $this->metricZen->calcMetric($rows, $calcGroup->calcList);
+
+            $records = $this->metricZen->prepareMetricRecord($calcGroup->calcList);
+
+            $this->metric->insertMetricLib($records);
         }
-
-        $records = $this->metricZen->prepareMetricRecord($calcList);
-
-        $this->metric->insertMetricLib($records);
     }
 
     /**

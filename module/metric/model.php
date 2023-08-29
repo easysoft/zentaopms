@@ -211,9 +211,14 @@ class metricModel extends model
      */
     public function insertmetricLib($records)
     {
-        $this->dao->insert(TABLE_METRICLIB)
-            ->data($records)
-            ->exec();
+        $this->dao->begin();
+        foreach($records as $record)
+        {
+            $this->dao->insert(TABLE_METRICLIB)
+                ->data($record)
+                ->exec();
+        }
+        $this->dao->commit();
 
         return dao::isError();
     }
@@ -311,23 +316,23 @@ class metricModel extends model
     {
         $datasetCalcGroup = array();
         $otherCalcList    = array();
-        foreach($calcList as $calc)
+        foreach($calcList as $code => $calc)
         {
             if(empty($calc->dataset))
             {
-                $otherCalcList[] = $calc;
+                $otherCalcList[$code] = $calc;
                 continue;
             }
 
             $dataset = $calc->dataset;
             if(!isset($datasetCalcGroup[$dataset])) $datasetCalcGroup[$dataset] = array();
-            $datasetCalcGroup[$dataset][] = $calc;
+            $datasetCalcGroup[$dataset][$code] = $calc;
         }
 
         $classifiedCalcGroup = array();
         foreach($datasetCalcGroup as $dataset => $calcList) $classifiedCalcGroup[] = (object)array('dataset' => $dataset, 'calcList' => $calcList);
 
-        foreach($otherCalcList as $calcList) $classifiedCalcGroup[] = (object)array('dataset' => '', 'calcList' => array($calcList));
+        foreach($otherCalcList as $code => $calc) $classifiedCalcGroup[] = (object)array('dataset' => '', 'calcList' => array($code => $calc));
         return $classifiedCalcGroup;
     }
 
