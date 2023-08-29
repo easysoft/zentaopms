@@ -308,10 +308,10 @@ class testcaseModel extends model
                 ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
                 ->where('t1.case')->eq($caseID)
                 ->fetchPairs();
-            foreach($objects as $objectID => $object)
+            foreach($objects as $objectID => $objectType)
             {
-                if($object->type == 'project') $case->project = $objectID;
-                if(in_array($object->type, array('sprint', 'stage', 'kanban'))) $case->execution = $objectID;
+                if($objectType == 'project') $case->project = $objectID;
+                if(in_array($objectType, array('sprint', 'stage', 'kanban'))) $case->execution = $objectID;
             }
         }
 
