@@ -1549,7 +1549,7 @@ class baseRouter
 
             /* Check file is encode by ioncube. */
             $isEncrypted = false;
-            if(strpos($file2Included, 'extension' . DS . $this->config->edition . DS) !== false)
+            if(strpos($file2Included, 'extension') !== false)
             {
                 $fp = fopen($file2Included, 'r');
                 $line1 = fgets($fp);
