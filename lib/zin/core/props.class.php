@@ -274,7 +274,7 @@ class props extends \zin\utils\dataset
      * @access public
      * @return props
      */
-    public function clone(): props
+    public function copy(): props
     {
         $props = new props($this->data);
         $props->style = clone $this->style;
