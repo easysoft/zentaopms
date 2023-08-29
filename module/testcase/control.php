@@ -879,12 +879,11 @@ class testcase extends control
 
         /* 构建搜索表单。*/
         /* Build the search form. */
-        $objectID = 0;
-        if($this->app->tab == 'project')   $objectID = $case->project;
-        if($this->app->tab == 'execution') $objectID = $case->execution;
-
         $queryID   = ($browseType == 'bySearch') ? (int)$param : 0;
         $actionURL = $this->createLink('testcase', 'linkCases', "caseID=$caseID&browseType=bySearch&queryID=myQueryID", '', true);
+        $objectID  = 0;
+        if($this->app->tab == 'project')   $objectID = $case->project;
+        if($this->app->tab == 'execution') $objectID = $case->execution;
 
         unset($this->config->testcase->search['fields']['product']);
         $this->testcase->buildSearchForm($case->product, $this->products, $queryID, $actionURL, $objectID);
@@ -911,6 +910,7 @@ class testcase extends control
     }
 
     /**
+     * 关联相关 bug。
      * Link related bugs.
      *
      * @param  int    $caseID
@@ -922,33 +922,36 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function linkBugs($caseID, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function linkBugs(int $caseID, string $browseType = '', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->loadModel('bug');
 
-        /* Get case and queryID. */
-        $case    = $this->testcase->getById($caseID);
-        $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
+        $case = $this->testcase->getByID($caseID);
 
+        /* 构建搜索表单。*/
         /* Build the search form. */
+        $queryID   = ($browseType == 'bySearch') ? (int)$param : 0;
         $actionURL = $this->createLink('testcase', 'linkBugs', "caseID=$caseID&browseType=bySearch&queryID=myQueryID", '', true);
         $objectID  = 0;
         if($this->app->tab == 'project')   $objectID = $case->project;
         if($this->app->tab == 'execution') $objectID = $case->execution;
 
+        /* 删除单一项目的计划字段。*/
         /* Unset search field 'plan' in single project. */
         unset($this->config->bug->search['fields']['product']);
-        if($case->project and ($this->app->tab == 'project' or $this->app->tab == 'execution'))
+        if($case->project && ($this->app->tab == 'project' || $this->app->tab == 'execution'))
         {
-            $project = $this->loadModel('project')->getById($case->project);
-            if(!$project->hasProduct and $project->model == 'waterfall') unset($this->config->bug->search['fields']['plan']);
+            $project = $this->loadModel('project')->getByID($case->project);
+            if(!$project->hasProduct && $project->model == 'waterfall') unset($this->config->bug->search['fields']['plan']);
         }
 
         $this->bug->buildSearchForm($case->product, $this->products, $queryID, $actionURL, $objectID);
 
-        /* Get cases to link. */
+        /* 获取关联的bug。*/
+        /* Get bugs to link. */
         $bugs2Link = $this->testcase->getBugs2Link($caseID, $browseType, $queryID);
 
+        /* bug 分页。*/
         /* Pager. */
         $this->app->loadClass('pager', true);
         $recTotal  = count($bugs2Link);
@@ -956,11 +959,11 @@ class testcase extends control
         $bugs2Link = array_chunk($bugs2Link, $pager->recPerPage);
 
         /* Assign. */
-        $this->view->title      = $this->lang->testcase->linkBugs;
-        $this->view->case       = $case;
-        $this->view->bugs2Link  = empty($bugs2Link) ? $bugs2Link : $bugs2Link[$pageID - 1];
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->pager      = $pager;
+        $this->view->title     = $this->lang->testcase->linkBugs;
+        $this->view->case      = $case;
+        $this->view->bugs2Link = empty($bugs2Link) ? $bugs2Link : $bugs2Link[$pageID - 1];
+        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
+        $this->view->pager     = $pager;
 
         $this->display();
     }

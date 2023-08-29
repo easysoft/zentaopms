@@ -325,6 +325,7 @@ detailBody
                 (
                     set::href(createLink('testcase', 'linkCases', "caseID={$case->id}")),
                     set('data-toggle', 'modal'),
+                    set('data-size', 'lg'),
                     $lang->testcase->linkCases,
                 )
             ) : null,
@@ -346,6 +347,7 @@ detailBody
                 (
                     set::href(createLink('testcase', 'linkBugs', "caseID={$case->id}")),
                     set('data-toggle', 'modal'),
+                    set('data-size', 'lg'),
                     $lang->testcase->linkBugs,
                 )
             ) : null,
