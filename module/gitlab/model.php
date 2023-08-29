@@ -196,9 +196,9 @@ class gitlabModel extends model
         {
             foreach($zentaoUsers as $zentaoUser)
             {
-                if($gitlabUser->account == $zentaoUser->account) $matches->accounts[$gitlabUser->account][] = $zentaoUser->account;
-                if($gitlabUser->realname == $zentaoUser->realname) $matches->names[$gitlabUser->realname][] = $zentaoUser->account;
-                if($gitlabUser->email == $zentaoUser->email) $matches->emails[$gitlabUser->email][] = $zentaoUser->account;
+                if($gitlabUser->email == $zentaoUser->email)       $matches->emails[$gitlabUser->email][]     = $zentaoUser->account;
+                if($gitlabUser->account == $zentaoUser->account)   $matches->accounts[$gitlabUser->account][] = $zentaoUser->account;
+                if($gitlabUser->realname == $zentaoUser->realname) $matches->names[$gitlabUser->realname][]   = $zentaoUser->account;
             }
         }
 
@@ -219,9 +219,9 @@ class gitlabModel extends model
             }
 
             $matchedZentaoUsers = array();
+            if(isset($matches->emails[$gitlabUser->email]))     $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->emails[$gitlabUser->email]);
+            if(isset($matches->names[$gitlabUser->realname]))   $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->names[$gitlabUser->realname]);
             if(isset($matches->accounts[$gitlabUser->account])) $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->accounts[$gitlabUser->account]);
-            if(isset($matches->emails[$gitlabUser->email])) $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->emails[$gitlabUser->email]);
-            if(isset($matches->names[$gitlabUser->realname])) $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->names[$gitlabUser->realname]);
 
             $matchedZentaoUsers = array_unique($matchedZentaoUsers);
             if(count($matchedZentaoUsers) == 1)
@@ -2971,7 +2971,8 @@ class gitlabModel extends model
         $project = $this->apiGetSingleProject($gitlabID, $projectID);
         if(is_object($project) and !empty($project->web_url))
         {
-            return $this->dao->update(TABLE_REPO)->set('path')->eq($project->web_url)->where('id')->eq($repoID)->exec();
+            $this->dao->update(TABLE_REPO)->set('path')->eq($project->web_url)->where('id')->eq($repoID)->exec();
+            return true;
         }
 
         return false;
