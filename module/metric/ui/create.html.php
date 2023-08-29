@@ -27,7 +27,6 @@ formPanel
             set::name('scope'),
             set::items($lang->metric->scopeList),
             set::value('global'),
-            set::required(true),
         ),
         formGroup
         (
@@ -36,7 +35,6 @@ formPanel
             set::name('object'),
             set::items($lang->metric->objectList),
             set::value('program'),
-            set::required(true),
         ),
         formGroup
         (
@@ -45,7 +43,6 @@ formPanel
             set::name('purpose'),
             set::items($lang->metric->purposeList),
             set::value('scale'),
-            set::required(true),
         ),
     ),
     formGroup
@@ -66,7 +63,6 @@ formPanel
         set::label($lang->metric->unit),
         set::name('unit'),
         set::items($lang->metric->unitList),
-        set::required(true),
     ),
     formGroup
     (
@@ -74,7 +70,6 @@ formPanel
         set::control(array('type' => 'textarea', 'rows' => 3)),
         set::name('desc'),
         set::placeholder($lang->metric->descTip),
-        set::required(true),
     ),
     formGroup
     (
@@ -82,7 +77,6 @@ formPanel
         set::control(array('type' => 'textarea', 'rows' => 3)),
         set::name('definition'),
         set::placeholder($lang->metric->definitionTip),
-        set::required(true),
     ),
     formGroup
     (
@@ -91,8 +85,6 @@ formPanel
         set::label($lang->metric->afterCreate),
         set::control(array('type' => 'radioList', 'inline' => true)),
         set::items($lang->metric->afterCreateList),
-        set::value('back'),
-        set::required(true),
+        set::value('finish'),
     ),
-
 );
