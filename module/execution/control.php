@@ -3887,36 +3887,6 @@ class execution extends control
     }
 
     /**
-     * Kanban setting.
-     *
-     * @param  int    $executionID
-     * @access public
-     * @return void
-     */
-    public function ajaxKanbanSetting($executionID)
-    {
-        if($_POST)
-        {
-            $this->loadModel('setting');
-            $data = fixer::input('post')->get();
-            if(common::hasPriv('execution', 'kanbanHideCols'))
-            {
-                $allCols = $data->allCols;
-                $this->setting->setItem("system.execution.kanbanSetting.allCols", $allCols);
-            }
-            if(common::hasPriv('execution', 'kanbanColsColor')) $this->setting->setItem("system.execution.kanbanSetting.colorList", json_encode($data->colorList));
-
-            return print(js::reload('parent.parent'));
-        }
-
-        $this->app->loadLang('task');
-
-        $this->view->setting   = $this->execution->getKanbanSetting();
-        $this->view->executionID = $executionID;
-        $this->display();
-    }
-
-    /**
      * Ajax reset kanban setting
      *
      * @param  int    $executionID
