@@ -1189,8 +1189,7 @@ class executionTest
     public function getTasks2ImportedTest($toExecution, $count)
     {
         $branches = $this->executionModel->getBranches($toExecution);
-
-        $object = $this->executionModel->getTasks2Imported($toExecution, $branches);
+        $object   = $this->executionModel->getTasks2Imported($toExecution, $branches);
 
         if(dao::isError())
         {

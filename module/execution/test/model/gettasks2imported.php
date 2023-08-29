@@ -24,6 +24,7 @@ $task->type->range('test,devel');
 $task->status->range('wait,doing');
 $task->estimate->range('1-10');
 $task->left->range('1-10');
+$task->story->range('0');
 $task->consumed->range('1-10');
 $task->gen(10);
 
@@ -35,20 +36,19 @@ $product->type->range('normal');
 $product->status->range('normal');
 $product->gen(3);
 
+$related = zdTable('projectproduct');
+$related->project->range('3-5');
+$related->product->range('1-3');
+$related->branch->range('1-10');
+
+zdTable('branch')->gen(10);
 su('admin');
 
 /**
 
 title=测试executionModel->getTasks2ImportedTest();
+timeout=0
 cid=1
-pid=1
-
-敏捷执行任务查看 >> 任务1
-瀑布执行任务查看 >> devel
-看板执行任务查看 >> wait
-敏捷执行任务统计 >> 4
-敏捷执行任务统计 >> 3
-敏捷执行任务统计 >> 3
 
 */
 
@@ -61,4 +61,4 @@ r($execution->getTasks2ImportedTest($executionIDList[1],$count[0])) && p('2:type
 r($execution->getTasks2ImportedTest($executionIDList[2],$count[0])) && p('3:status') && e('wait');  // 看板执行任务查看
 r($execution->getTasks2ImportedTest($executionIDList[0],$count[1])) && p()           && e('4');     // 敏捷执行任务统计
 r($execution->getTasks2ImportedTest($executionIDList[1],$count[1])) && p()           && e('3');     // 敏捷执行任务统计
-r($execution->getTasks2ImportedTest($executionIDList[2],$count[1])) && p()           && e('3');    // 敏捷执行任务统计
+r($execution->getTasks2ImportedTest($executionIDList[2],$count[1])) && p()           && e('3');     // 敏捷执行任务统计

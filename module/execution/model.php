@@ -2192,13 +2192,14 @@ class executionModel extends model
     }
 
     /**
+     * 获取执行下分支列表。
      * Get branches of execution.
      *
      * @param  int    $executionID
      * @access public
      * @return array
      */
-    public function getBranches($executionID)
+    public function getBranches(int $executionID): array
     {
         $productBranchPairs = $this->dao->select('product, branch')->from(TABLE_PROJECTPRODUCT)
             ->where('project')->eq($executionID)
@@ -2206,7 +2207,7 @@ class executionModel extends model
         $branches = $this->loadModel('branch')->getByProducts(array_keys($productBranchPairs));
         foreach($productBranchPairs as $product => $branch)
         {
-            if($branch == 0 and isset($branches[$product])) $productBranchPairs[$product] = implode(',', array_keys($branches[$product]));
+            if($branch == 0 && isset($branches[$product])) $productBranchPairs[$product] = implode(',', array_keys($branches[$product]));
         }
 
         return $productBranchPairs;
@@ -2809,6 +2810,7 @@ class executionModel extends model
     }
 
     /**
+     * 获取可被导入的任务列表。
      * Get tasks can be imported.
      *
      * @param  int    $toExecution
@@ -2837,7 +2839,7 @@ class executionModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.parent')->lt(1)
             ->andWhere('t1.execution')->in(array_keys($executions))
-            ->andWhere("(t1.story = 0 OR (t2.branch in ('0','" . implode("','", $branches) . "') and t2.product " . helper::dbIN(array_keys($branches)) . "))")
+            ->andWhere("(t1.story = 0 OR (t2.branch IN ('0','" . implode("','", $branches) . "') AND t2.product " . helper::dbIN(array_keys($branches)) . "))")
             ->orderBy($orderBy)
             ->fetchGroup('execution', 'id');
         return $tasks;

@@ -29,15 +29,8 @@ $projectProduct->gen(9);
 /**
 
 title=测试executionModel->getBranchesTest();
+timeout=0
 cid=1
-pid=1
-
-敏捷项目下根据执行查询产品分支 >> 1
-瀑布项目下根据执行查询产品分支 >> 0,1,2
-看板项目下根据执行查询产品分支 >> 2
-敏捷执行关联产品分支统计 >> 2
-瀑布执行关联产品分支统计 >> 2
-看板执行关联产品分支统计 >> 2
 
 */
 
@@ -45,9 +38,9 @@ $executionIDList = array(3, 4, 5);
 $count           = array('0','1');
 
 $executionTester = new executionTest();
-r($executionTester->getBranchesTest($executionIDList[0],$count[0])) && p('1') && e('1');     // 敏捷项目下根据执行查询产品分支
-r($executionTester->getBranchesTest($executionIDList[1],$count[0])) && p('2') && e('0,1,2'); // 瀑布项目下根据执行查询产品分支
-r($executionTester->getBranchesTest($executionIDList[2],$count[0])) && p('1') && e('2');     // 看板项目下根据执行查询产品分支
-r($executionTester->getBranchesTest($executionIDList[0],$count[1])) && p()    && e('2');    // 敏捷执行关联产品分支统计
-r($executionTester->getBranchesTest($executionIDList[1],$count[1])) && p()    && e('2');    // 瀑布执行关联产品分支统计
-r($executionTester->getBranchesTest($executionIDList[2],$count[1])) && p()    && e('2');    // 看板执行关联产品分支统计
+r($executionTester->getBranchesTest($executionIDList[0],$count[0])) && p('1')      && e('1');     // 敏捷项目下根据执行查询产品分支
+r($executionTester->getBranchesTest($executionIDList[1],$count[0])) && p('2', '|') && e('0,1,2'); // 瀑布项目下根据执行查询产品分支
+r($executionTester->getBranchesTest($executionIDList[2],$count[0])) && p('1')      && e('2');     // 看板项目下根据执行查询产品分支
+r($executionTester->getBranchesTest($executionIDList[0],$count[1])) && p()         && e('2');    // 敏捷执行关联产品分支统计
+r($executionTester->getBranchesTest($executionIDList[1],$count[1])) && p()         && e('2');    // 瀑布执行关联产品分支统计
+r($executionTester->getBranchesTest($executionIDList[2],$count[1])) && p()         && e('2');    // 看板执行关联产品分支统计
