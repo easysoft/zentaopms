@@ -112,7 +112,7 @@ class projectModel extends model
 
         $this->session->set('project', (int)$projectID, $this->app->tab);
         if($projectID) helper::setcookie('lastProject', (string)$projectID);
-        return $projectID;
+        return (int)$projectID;
     }
 
     /**
