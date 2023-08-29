@@ -13,9 +13,19 @@ pid=1
 */
 
 global $tester;
+$tester->app->moduleName = 'execution';
+$tester->app->methodName = 'task';
+$tester->app->setControlFile();
+$tester->app->setParams();
 $tester->loadModel('execution');
-ob_start();
-$tester->execution->accessDenied();
-$result = ob_get_clean();
 
-r(substr($result, 1, 4)) && p() && e('html'); // 权限不足跳转
+try
+{
+    $result = $tester->execution->accessDenied();
+}
+catch (EndResponseException $e)
+{
+    $result = $e->getContent();
+}
+
+r($result) && p() && e('fail'); // 权限不足跳转
