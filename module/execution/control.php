@@ -3634,15 +3634,16 @@ class execution extends control
     }
 
     /**
+     * 在执行需求列表内进行需求估算。
      * Story estimate.
      *
      * @param  int    $executionID
      * @param  int    $storyID
-     * @param  int    $round
+     * @param  int    $round       The round of estimate for stroy 估算的轮次
      * @access public
      * @return void
      */
-    public function storyEstimate($executionID, $storyID, $round = 0)
+    public function storyEstimate(int $executionID, int $storyID, int $round = 0)
     {
         $this->loadModel('story');
 
