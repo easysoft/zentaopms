@@ -3602,7 +3602,7 @@ class bugModel extends model
     {
         /* Set toList and ccList. */
         $toList = $bug->assignedTo;
-        $ccList = trim($bug->mailto, ',');
+        $ccList = $bug->mailto ? trim($bug->mailto, ',') : '';
         if(empty($toList))
         {
             if(empty($ccList)) return false;
