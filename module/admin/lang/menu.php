@@ -314,7 +314,7 @@ if($config->inQuickon)
     $lang->admin->menuList->platform['subMenu']['dashboard'] = array('link' => "{$dashboard}|system|dashboard|");
     $lang->admin->menuList->platform['menuOrder']['5']       = 'dashboard';
 
-    $lang->admin->menuList->system['subMenu']['backup'] = array('link' => "{$lang->backup->common}|system|browsebackup|", 'alias' => 'restorebackup');
+    //$lang->admin->menuList->system['subMenu']['backup'] = array('link' => "{$lang->backup->common}|system|browsebackup|", 'alias' => 'restorebackup');
 
     $lang->admin->menuList->platform['subMenu']['plat'] = array('link' => "{$lang->devops->platform}|system|dblist|", 'subModule' => 'system');
     $lang->admin->menuList->platform['menuOrder']['10'] = 'plat';
