@@ -3814,6 +3814,7 @@ class execution extends control
     }
 
     /**
+     * 执行列表导出数据。
      * Export execution.
      *
      * @param  string $status
@@ -3831,8 +3832,8 @@ class execution extends control
             $executionConfig = $this->config->execution;
 
             $projectID = $from == 'project' ? $this->session->project : 0;
-            $project   = $this->project->getByID($projectID);
             if($projectID) $this->project->setMenu($projectID);
+            $project = $this->project->getByID($projectID);
 
             /* Create field lists. */
             $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $executionConfig->list->exportFields);
@@ -3845,9 +3846,8 @@ class execution extends control
                 unset($fields[$key]);
             }
 
-            $executionStats = $this->execution->getStatData($projectID, $status == 'byproduct' ? 'all' : $status, $productID, 0, false, 'hasParentName', 'order_asc');
-
             $users = $this->loadModel('user')->getPairs('noletter');
+            $executionStats = $this->execution->getStatData($projectID, $status == 'byproduct' ? 'all' : $status, $productID, 0, false, 'hasParentName', $orderBy);
             foreach($executionStats as $i => $execution)
             {
                 $execution->PM            = zget($users, $execution->PM);
@@ -3873,12 +3873,10 @@ class execution extends control
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
-        $this->loadModel('project');
         $project = $this->project->getByID($this->session->project);
         if(!empty($project->model) and $project->model == 'waterfall') $this->lang->executionCommon = $this->lang->project->stage;
 
         $this->view->fileName = (in_array($status, array('all', 'undone')) ? $this->lang->execution->$status : $this->lang->execution->statusList[$status]) . $this->lang->execution->common;
-
         $this->display();
     }
 
