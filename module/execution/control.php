@@ -2883,10 +2883,11 @@ class execution extends control
     }
 
     /**
+     * 删除一个执行。
      * Delete a execution.
      *
      * @param  int    $executionID
-     * @param  string $confirm   yes|no
+     * @param  string $confirm      yes|no
      * @access public
      * @return void
      */
@@ -2895,34 +2896,27 @@ class execution extends control
         if($confirm == 'no')
         {
             /* Get the number of unfinished tasks and unresolved bugs. */
-            $unfinishedTasks = $this->dao->select('COUNT(id) AS count')->from(TABLE_TASK)
-                ->where('execution')->eq($executionID)
-                ->andWhere('deleted')->eq(0)
-                ->andWhere('status')->in('wait,doing,pause')
-                ->fetch();
-
-            $unresolvedBugs = $this->dao->select('COUNT(id) AS count')->from(TABLE_BUG)
-                ->where('execution')->eq($executionID)
-                ->andWhere('deleted')->eq(0)
-                ->andWhere('status')->eq('active')
-                ->fetch();
+            $unfinishedTasks     = $this->loadModel('task')->getUnfinishTasks($executionID);
+            $unresolvedBugs      = $this->loadModel('bug')->getActiveBugs(0, '', $executionID, array());
+            $unfinishedTaskCount = count($unfinishedTasks);
+            $unresolvedBugCount  = count($unresolvedBugs);
 
             /* Set prompt information. */
             $tips = '';
-            if($unfinishedTasks->count) $tips  = sprintf($this->lang->execution->unfinishedTask, $unfinishedTasks->count);
-            if($unresolvedBugs->count)  $tips .= sprintf($this->lang->execution->unresolvedBug,  $unresolvedBugs->count);
-            if($tips)                   $tips  = $this->lang->execution->unfinishedExecution . $tips;
+            if($unfinishedTaskCount) $tips  = sprintf($this->lang->execution->unfinishedTask, $unfinishedTaskCount);
+            if($unresolvedBugCount)  $tips .= sprintf($this->lang->execution->unresolvedBug,  $unresolvedBugCount);
+            if($tips)                $tips  = $this->lang->execution->unfinishedExecution . $tips;
 
-            $type = $this->dao->select('type')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('type');
-            if($type == 'stage')
+            $execution = $this->execution->fetchByID($executionID);
+            if($execution->type == 'stage')
             {
                 if($tips) $tips = str_replace($this->lang->executionCommon, $this->lang->project->stage, $tips);
                 $this->lang->execution->confirmDelete = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->execution->confirmDelete);
             }
-            elseif($type == 'kanban')
+            elseif($execution->type == 'kanban')
             {
                 global $lang;
-                $lang->executionCommon   = $lang->execution->kanban;
+                $lang->executionCommon = $lang->execution->kanban;
                 include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
             }
 
@@ -2931,14 +2925,13 @@ class execution extends control
         }
         else
         {
-            /* Delete execution. */
-            $execution = $this->execution->getByID($executionID);
-            $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq(1)->where('id')->eq($executionID)->exec();
-            $this->loadModel('action')->create('execution', $executionID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
+            /* Delete an execution and update the information. */
+            $execution = $this->execution->fetchByID($executionID);
+            $this->execution->delete(TABLE_EXECUTION, $executionID);
             $this->execution->updateUserView($executionID);
             $this->loadModel('common')->syncPPEStatus($executionID);
 
-            $project = $this->loadModel('project')->getById($execution->project);
+            $project = $this->loadModel('project')->getByID($execution->project);
             if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->loadModel('programplan')->computeProgress($executionID);
 
             $this->session->set('execution', '');
