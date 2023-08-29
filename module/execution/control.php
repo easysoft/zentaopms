@@ -3824,7 +3824,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function export($status, $productID, $orderBy, $from)
+    public function export(string $status, int $productID, string $orderBy, string $from)
     {
         if($_POST)
         {
