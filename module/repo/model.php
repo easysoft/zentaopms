@@ -331,12 +331,11 @@ class repoModel extends model
 
         $data = fixer::input('post')
             ->setIf($isPipelineServer, 'password', $this->post->serviceToken)
-            ->setIf($this->post->SCM == 'Gitlab', 'path', '')
+            ->setDefault('client', 'svn')
             ->setIf($this->post->SCM == 'Gitlab', 'client', '')
             ->setIf($this->post->SCM == 'Gitlab', 'extra', $this->post->serviceProject)
             ->setDefault('prefix', $repo->prefix)
             ->setIf($this->post->SCM == 'Gitlab', 'prefix', '')
-            ->setDefault('client', 'svn')
             ->setDefault('product', '')
             ->skipSpecial('path,client,account,password,desc')
             ->join('product', ',')
@@ -375,12 +374,17 @@ class repoModel extends model
 
         $this->rmClientVersionFile();
 
-        if($data->SCM == 'Gitlab') $data->path = $this->getByID($id)->path;
+        if($data->SCM == 'Gitlab')
+        {
+            $this->loadModel('gitlab')->updateCodePath($data->serviceHost, $data->serviceProject, $repo->id);
+            $data->path = $this->getByID($id)->path;
+        }
 
         if($repo->path != $data->path)
         {
             $this->dao->delete()->from(TABLE_REPOHISTORY)->where('repo')->eq($id)->exec();
             $this->dao->delete()->from(TABLE_REPOFILES)->where('repo')->eq($id)->exec();
+            $this->dao->delete()->from(TABLE_REPOBRANCH)->where('repo')->eq($id)->exec();
             return false;
         }
 

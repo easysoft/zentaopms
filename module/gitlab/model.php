@@ -2971,7 +2971,8 @@ class gitlabModel extends model
         $project = $this->apiGetSingleProject($gitlabID, $projectID);
         if(is_object($project) and !empty($project->web_url))
         {
-            return $this->dao->update(TABLE_REPO)->set('path')->eq($project->web_url)->where('id')->eq($repoID)->exec();
+            $this->dao->update(TABLE_REPO)->set('path')->eq($project->web_url)->where('id')->eq($repoID)->exec();
+            return true;
         }
 
         return false;
