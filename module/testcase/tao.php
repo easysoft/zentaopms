@@ -215,13 +215,6 @@ class testcaseTao extends testcaseModel
      */
     protected function updateStep(object $case, object $oldCase): bool
     {
-        if($oldCase->lib && empty($oldCase->product))
-        {
-            $fromcaseVersion = $this->dao->select('fromCaseVersion')->from(TABLE_CASE)->where('fromCaseID')->eq($caseID)->fetch('fromCaseVersion');
-            $fromcaseVersion = (int)$fromcaseVersion + 1;
-            $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($fromcaseVersion)->where('`fromCaseID`')->eq($caseID)->exec();
-        }
-
         if($case->steps)
         {
             $this->insertSteps($oldCase->id, $case->steps, $case->expects, (array)$case->stepType, $case->version);

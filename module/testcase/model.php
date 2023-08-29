@@ -670,6 +670,13 @@ class testcaseModel extends model
 
         if($case->stepChanged) $this->testcaseTao->updateStep($case, $oldCase);
 
+        if($oldCase->lib && empty($oldCase->product))
+        {
+            $fromcaseVersion = $this->dao->select('fromCaseVersion')->from(TABLE_CASE)->where('fromCaseID')->eq($caseID)->fetch('fromCaseVersion');
+            $fromcaseVersion = (int)$fromcaseVersion + 1;
+            $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($fromcaseVersion)->where('`fromCaseID`')->eq($caseID)->exec();
+        }
+
         $this->testcaseTao->linkBugs($oldCase->id, array_keys($oldCase->toBugs), $case);
 
         if($case->branch && !empty($testtasks)) $this->testcaseTao->unlinkCaseFromTesttask($oldCase->id, $testtasks);
