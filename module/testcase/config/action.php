@@ -4,10 +4,11 @@ $app->loadLang('testtask');
 
 $config->testcase->menu       = array(array('confirmStoryChange'), array('review', 'runCase', 'runResult', 'edit', 'createBug', 'create', 'showScript'));
 $config->testcase->actionList = array();
-$config->testcase->actionList['confirmStoryChange']['icon'] = 'ok';
-$config->testcase->actionList['confirmStoryChange']['text'] = $lang->confirm;
-$config->testcase->actionList['confirmStoryChange']['hint'] = $lang->confirm;
-$config->testcase->actionList['confirmStoryChange']['url']  = array('module' => 'testcase', 'method' => 'confirmStoryChange', 'params' => 'caseID={id}');
+$config->testcase->actionList['confirmStoryChange']['icon']      = 'ok';
+$config->testcase->actionList['confirmStoryChange']['text']      = $lang->confirm;
+$config->testcase->actionList['confirmStoryChange']['hint']      = $lang->confirm;
+$config->testcase->actionList['confirmStoryChange']['url']       = array('module'  => 'testcase', 'method' => 'confirmStoryChange', 'params' => 'caseID={id}');
+$config->testcase->actionList['confirmStoryChange']['className'] = 'ajax-submit';
 
 $config->testcase->actionList['runCase']['icon']        = 'play';
 $config->testcase->actionList['runCase']['text']        = $lang->testtask->runCase;
