@@ -43,10 +43,11 @@ $lang->metric->stageList['wait']     = "Unpublished";
 $lang->metric->stageList['released'] = "Published";
 
 $lang->metric->unitList = array();
-$lang->metric->unitList['single'] = 'Single';
-$lang->metric->unitList['hour']   = 'Hour';
-$lang->metric->unitList['day']    = 'Day';
-$lang->metric->unitList['manday'] = 'Man Day';
+$lang->metric->unitList['single']  = 'Single';
+$lang->metric->unitList['measure'] = 'Man-hour';
+$lang->metric->unitList['hour']    = 'Hour';
+$lang->metric->unitList['day']     = 'Day';
+$lang->metric->unitList['manday']  = 'Man Day';
 
 $lang->metric->dateList = array();
 $lang->metric->dateList['year']  = 'Year';

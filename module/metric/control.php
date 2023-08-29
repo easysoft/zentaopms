@@ -30,6 +30,7 @@ class metric extends control
      */
     public function create()
     {
+        $this->metricZen->processUnitList();
         $this->display();
     }
 
