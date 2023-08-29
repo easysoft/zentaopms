@@ -1155,7 +1155,7 @@ class baseControl
      * @param  array $data
      * @return void
      */
-    public function sendSuccess(array $data)
+    public function sendSuccess(array $data = array())
     {
         $data['result'] = 'success';
         if(!isset($data['message'])) $data['message'] = $this->lang->saveSuccess;
