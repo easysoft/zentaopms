@@ -3887,35 +3887,6 @@ class execution extends control
     }
 
     /**
-     * Ajax reset kanban setting
-     *
-     * @param  int    $executionID
-     * @param  string $confirm
-     * @access public
-     * @return void
-     */
-    public function ajaxResetKanban($executionID, $confirm = 'no')
-    {
-        if($confirm != 'yes') return print(js::confirm($this->lang->kanbanSetting->noticeReset, inlink('ajaxResetKanban', "executionID=$executionID&confirm=yes")));
-
-        $this->loadModel('setting');
-
-        if(common::hasPriv('execution', 'kanbanHideCols') and isset($this->config->execution->kanbanSetting->allCols))
-        {
-            $allCols = json_decode($this->config->execution->kanbanSetting->allCols, true);
-            unset($allCols[$executionID]);
-            $this->setting->setItem("system.execution.kanbanSetting.allCols", json_encode($allCols));
-        }
-
-        $account = $this->app->user->account;
-        $this->setting->deleteItems("owner={$account}&module=execution&section=kanbanSetting&key=showOption");
-
-        if(common::hasPriv('execution', 'kanbanColsColor')) $this->setting->deleteItems("owner=system&module=execution&section=kanbanSetting&key=colorList");
-
-        return print(js::reload('parent.parent'));
-    }
-
-    /**
      * 将计划中的需求关联到此项目或迭代/执行或看板中。
      * Import the stories to execution/project/kanban by product plan.
      *
