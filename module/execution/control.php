@@ -406,9 +406,17 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function importTask($toExecution, $fromExecution = 0, $orderBy = 'id_desc', $recPerPage = 20, $pageID = 1)
+    public function importTask(int $toExecution, int $fromExecution = 0, string $orderBy = 'id_desc', int $recPerPage = 20, int $pageID = 1)
     {
-        if(!empty($_POST)) $this->execution->importTask($toExecution);
+        if(!empty($_POST))
+        {
+            $taskList   = form::batchData($this->config->execution->form->importTask)->get();
+            $dateExceed = $this->execution->importTask($toExecution, array_column($taskList, 'taskIdList'));
+
+            $result = array('load' => true);
+            if($dateExceed) $result['message'] = sprintf($this->lang->task->error->dateExceed, implode(',', $dateExceed));
+            return $this->sendSuccess($result);
+        }
 
         $execution   = $this->commonAction($toExecution);
         $toExecution = $execution->id;
@@ -417,15 +425,11 @@ class execution extends control
         $tasks       = $this->execution->getTasks2Imported($toExecution, $branches, $orderBy);
         $executions  = $this->execution->getToImport(array_keys($tasks), $execution->type, $project->model);
         unset($executions[$toExecution]);
-        unset($tasks[$toExecution]);
 
+        $tasks2Imported = array();
         if($fromExecution == 0)
         {
-            $tasks2Imported = array();
-            foreach($executions as $id  => $executionName)
-            {
-                $tasks2Imported = array_merge($tasks2Imported, $tasks[$id]);
-            }
+            foreach($executions as $executionID => $executionName) $tasks2Imported = array_merge($tasks2Imported, $tasks[$executionID]);
         }
         else
         {
@@ -440,17 +444,13 @@ class execution extends control
         $tasks2ImportedList = empty($tasks2ImportedList) ? $tasks2ImportedList : $tasks2ImportedList[$pageID - 1];
         $tasks2ImportedList = $this->loadModel('task')->processTasks($tasks2ImportedList);
 
-        /* Save session. */
-        $this->app->session->set('taskList',  $this->app->getURI(true), 'execution');
-
-        $this->view->title            = $execution->name . $this->lang->colon . $this->lang->execution->importTask;
-        $this->view->pager            = $pager;
-        $this->view->tasks2Imported   = $tasks2ImportedList;
-        $this->view->executions       = $executions;
-        $this->view->executionID      = $execution->id;
-        $this->view->fromExecution    = $fromExecution;
-        $this->view->orderBy          = $orderBy;
-        $this->view->memberPairs      = $this->loadModel('user')->getPairs('noletter|pofirst');
+        $this->view->title          = $execution->name . $this->lang->colon . $this->lang->execution->importTask;
+        $this->view->pager          = $pager;
+        $this->view->orderBy        = $orderBy;
+        $this->view->executions     = $executions;
+        $this->view->fromExecution  = $fromExecution;
+        $this->view->tasks2Imported = $tasks2ImportedList;
+        $this->view->memberPairs    = $this->loadModel('user')->getPairs('noletter|pofirst');
         $this->display();
     }
 
