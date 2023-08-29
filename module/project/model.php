@@ -244,9 +244,10 @@ class projectModel extends model
         $this->app->loadClass('pager', $static = true);
         foreach($projects as $projectID => $project)
         {
-            $project->model == 'waterfall' ? ksort($executions[$projectID]) : krsort($executions[$projectID]);
+            $projectExecutions = isset($executions[$projectID]) ? $executions[$projectID] : array();
+            $project->model == 'waterfall' ? ksort($projectExecutions) : krsort($projectExecutions);
 
-            $project->executions = isset($executions[$projectID]) ? $executions[$projectID] : array();
+            $project->executions = $projectExecutions;
             $project->parentName = $projectParentNames[$project->id];
         }
         return $projects;
