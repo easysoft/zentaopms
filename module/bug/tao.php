@@ -310,7 +310,7 @@ class bugTao extends bugModel
         /* Append product condition in bug query. */
         if($object != 'bug') return $this->appendProductConditionForProject($bugQuery, $productIdList, $branch);
 
-        return $this->appendProductConditionForBug($bugQuery, $productIdList, (string)$branch);
+        return $this->appendProductConditionForBug($bugQuery, (array)$productIdList, (string)$branch);
     }
 
     /**

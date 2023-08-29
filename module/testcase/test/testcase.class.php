@@ -305,7 +305,8 @@ class testcaseTest
     }
 
     /**
-     * Test get cases 2 link.
+     * 测试获取相关用例。
+     * Test get cases to link.
      *
      * @param  int    $caseID
      * @param  string $browseType
@@ -315,6 +316,20 @@ class testcaseTest
     public function getCases2LinkTest(int $caseID, string $browseType): array
     {
         return $this->objectModel->getCases2Link($caseID, $browseType);
+    }
+
+    /**
+     * 测试获取相关 bug。
+     * Test get bugs to link.
+     *
+     * @param  int    $caseID
+     * @param  string $browseType
+     * @access public
+     * @return array
+     */
+    public function getBugs2LinkTest(int $caseID, string $browseType): array
+    {
+        return $this->objectModel->getBugs2Link($caseID, $browseType);
     }
 
     /**

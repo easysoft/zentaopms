@@ -803,7 +803,7 @@ class testcaseModel extends model
         if($browseType != 'bySearch') return array();
 
         $case      = $this->getByID($caseID);
-        $bugs2Link = $this->loadModel('bug')->getBySearch($case->product, $case->branch, $queryID, 'id');
+        $bugs2Link = $this->loadModel('bug')->getBySearch('bug', $case->product, (string)$case->branch, 0, 0, $queryID, '', 'id');
         foreach($bugs2Link as $key => $bug2Link)
         {
             if($bug2Link->case != 0) unset($bugs2Link[$key]);
