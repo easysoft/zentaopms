@@ -90,7 +90,10 @@ detailBody
             $dtable,
         )
     ),
-    history(),
+    history
+    (
+        set::commentUrl(createLink('action', 'comment', array('objectType' => 'metric', 'objectID' => $metric->id))),
+    ),
     detailSide
     (
         tabs

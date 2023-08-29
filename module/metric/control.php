@@ -132,6 +132,8 @@ class metric extends control
         $this->view->resultData     = $this->metricZen->getResultData($metric, $result);
         $this->view->legendBasic    = $this->metricZen->getBasicInfo($this->view);
         $this->view->createEditInfo = $this->metricZen->getCreateEditInfo($this->view);
+        $this->view->actions        = $this->loadModel('action')->getList('metric', $metricID);
+        $this->view->users          = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
     }
