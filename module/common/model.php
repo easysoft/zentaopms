@@ -925,6 +925,7 @@ class commonModel extends model
 
         if(!in_array($tab, array('program', 'product', 'project')))
         {
+            if(!isset($lang->mainNav->$tab)) return;
             $nav = $lang->mainNav->$tab;
             list($title, $currentModule, $currentMethod, $vars) = explode('|', $nav);
             if($tab == 'execution') $currentMethod = 'all';
