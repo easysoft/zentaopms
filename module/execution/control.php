@@ -3613,16 +3613,19 @@ class execution extends control
     }
 
     /**
-     * Story sort.
+     * 需求排序。
+     * Sort stories.
      *
      * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function storySort($executionID)
+    public function storySort(int $executionID)
     {
-        $idList   = explode(',', trim($this->post->storyList, ','));
-        $orderBy  = $this->post->orderBy;
+        if($_SERVER['REQUEST_METHOD'] !== 'POST') return $this->sendError($this->lang->error->unsupportedReq);
+
+        $idList  = explode(',', trim($this->post->storyList, ','));
+        $orderBy = $this->post->orderBy;
 
         $order = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('story')->in($idList)->andWhere('project')->eq($executionID)->orderBy('order_asc')->fetch('order');
         if(strpos($orderBy, 'order_desc') !== false) $idList = array_reverse($idList);
@@ -3631,6 +3634,9 @@ class execution extends control
             $this->dao->update(TABLE_PROJECTSTORY)->set('`order`')->eq($order)->where('story')->eq($storyID)->andWhere('project')->eq($executionID)->exec();
             $order++;
         }
+
+        if(dao::isError()) return $this->sendError(dao::getError());
+        return $this->sendSuccess();
     }
 
     /**
