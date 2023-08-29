@@ -4459,24 +4459,25 @@ class storyModel extends model
     }
 
     /**
-     * Get estimate rounds.
+     * 获取需求估算的轮次列表。
+     * Get the rounds list of the estimate for the story.
      *
      * @param  int    $storyID
      * @access public
      * @return array
      */
-    public function getEstimateRounds($storyID)
+    public function getEstimateRounds(int $storyID): array
     {
-        $lastRound = $this->dao->select('round')->from(TABLE_STORYESTIMATE)
+        $lastRoundNo = $this->dao->select('round')->from(TABLE_STORYESTIMATE)
             ->where('story')->eq($storyID)
             ->orderBy('round_desc')
             ->fetch('round');
-        if(!$lastRound) return array();
+        if(!$lastRoundNo) return array();
 
         $rounds = array();
-        for($i = 1; $i <= $lastRound; $i++)
+        for($roundNo = 1; $roundNo <= $lastRoundNo; $roundNo++)
         {
-            $rounds[$i] = sprintf($this->lang->story->storyRound, $i);
+            $rounds[$roundNo] = sprintf($this->lang->story->storyRound, $roundNo);
         }
 
         return $rounds;
