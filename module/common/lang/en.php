@@ -504,6 +504,7 @@ $lang->error->account         = "『%s』should be >= 3 letters, underline or nu
 $lang->error->passwordsame    = "The two passwords should be the same.";
 $lang->error->passwordrule    = "Password should conform to rules. It should be >= 6 characters.";
 $lang->error->accessDenied    = 'Access is denied.';
+$lang->error->unsupportedReq  = 'Unsupported request type';
 $lang->error->pasteImg        = 'Images are not allowed to be pasted in your browser!';
 $lang->error->noData          = 'No data.';
 $lang->error->editedByOther   = 'This record might have been changed. Please refresh and try to edit again!';

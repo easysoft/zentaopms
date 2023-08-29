@@ -394,6 +394,7 @@ $lang->error->account         = "『%s』只能是字母、數字或下劃線的
 $lang->error->passwordsame    = "兩次密碼應該相同。";
 $lang->error->passwordrule    = "密碼應該符合規則，長度至少為六位。";
 $lang->error->accessDenied    = '您沒有訪問權限';
+$lang->error->unsupportedReq  = '不支持的請求類型';
 $lang->error->pasteImg        = '您的瀏覽器不支持粘貼圖片！';
 $lang->error->noData          = '沒有數據';
 $lang->error->editedByOther   = '該記錄可能已經被改動。請刷新頁面重新編輯！';
