@@ -3769,6 +3769,7 @@ class execution extends control
     }
 
     /**
+     * 添加用户到白名单。
      * Adding users to the white list.
      *
      * @param  int     $executionID
@@ -3777,7 +3778,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function addWhitelist($executionID = 0, $deptID = 0, $copyID = 0)
+    public function addWhitelist(int $executionID = 0, int $deptID = 0, int $copyID = 0)
     {
         /* use first execution if executionID does not exist. */
         if(!isset($this->executions[$executionID])) $executionID = key($this->executions);
@@ -3786,7 +3787,7 @@ class execution extends control
         $this->execution->setMenu($executionID);
 
         $execution = $this->execution->getByID($executionID);
-        if(!empty($execution->acl) and $execution->acl != 'private') $this->locate($this->createLink('execution', 'task', "executionID=$executionID"));
+        if(!empty($execution->acl) and $execution->acl != 'private') return $this->sendError($this->lang->whitelistNotNeed, $this->createLink('execution', 'task', "executionID=$executionID"));
 
         echo $this->fetch('personnel', 'addWhitelist', "objectID=$executionID&dept=$deptID&copyID=$copyID&objectType=sprint&module=execution");
     }
