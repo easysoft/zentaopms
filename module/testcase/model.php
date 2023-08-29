@@ -652,7 +652,7 @@ class testcaseModel extends model
      * @access public
      * @return bool|array
      */
-    public function update(object $case, object $oldCase, array $testtasks): bool|array
+    public function update(object $case, object $oldCase, array $testtasks = array()): bool|array
     {
         /* Remove the require field named story when the case is a lib case.*/
         $requiredFields = $this->config->testcase->edit->requiredFields;
