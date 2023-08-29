@@ -3742,6 +3742,7 @@ class execution extends control
     }
 
     /**
+     * 显示白名单信息。
      * Get white list personnel.
      *
      * @param  int    $executionID
@@ -3754,7 +3755,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function whitelist($executionID = 0, $module='execution', $objectType = 'sprint', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function whitelist(int $executionID = 0, string $module='execution', string $objectType = 'sprint', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* use first execution if executionID does not exist. */
         if(!isset($this->executions[$executionID])) $executionID = key($this->executions);
