@@ -2847,19 +2847,20 @@ class execution extends control
     }
 
     /**
+     * 需求看板。
      * Story kanban.
      *
      * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function storyKanban($executionID)
+    public function storyKanban(int $executionID)
     {
         /* Compatibility IE8*/
         if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) helper::header('X-UA-Compatible', 'IE=EmulateIE7');
 
         $this->execution->setMenu($executionID);
-        $execution = $this->loadModel('execution')->getById($executionID);
+        $execution = $this->loadModel('execution')->getByID($executionID);
         $stories   = $this->loadModel('story')->getExecutionStories($executionID);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
 
