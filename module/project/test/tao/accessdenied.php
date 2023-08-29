@@ -12,17 +12,24 @@ title=测试 projectModel->accessDenied();
 timeout=0
 cid=1
 
-- 执行$_SESSION['project'] @2
-
-- 执行$_SESSION['project'] @0
-
 */
 
 global $tester;
+$tester->app->moduleName = 'project';
+$tester->app->methodName = 'browse';
+$tester->app->setControlFile();
+$tester->app->setParams();
 $tester->loadModel('project');
 
 $tester->project->checkAccess(2, array(2 => ''));
 r($_SESSION['project']) && p() && e('2');
 
-$tester->project->accessDenied();
+try
+{
+    $tester->project->accessDenied();
+}
+catch (EndResponseException $e)
+{
+}
+
 r($_SESSION['project']) && p() && e('0');

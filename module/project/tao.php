@@ -901,7 +901,7 @@ class projectTao extends projectModel
     protected function accessDenied(): string
     {
         $this->session->set('project', '');
-        return js::alert($this->lang->project->accessDenied) . js::locate(helper::createLink('project', 'index'));
+        return $this->app->control->sendError($this->lang->project->accessDenied, helper::createLink('project', 'index'));
     }
 
     /**
