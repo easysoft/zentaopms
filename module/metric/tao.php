@@ -69,6 +69,7 @@ class metricTao extends metricModel
             ->beginIF($query)->andWhere($query)->fi()
             ->beginIF(!empty($object))->andWhere('object')->eq($object)->fi()
             ->beginIF(!empty($purpose))->andWhere('purpose')->eq($purpose)->fi()
+            ->beginIF($this->config->edition == 'open')->andWhere('object')->notIN('feedback,issue,risk')
             ->orderBy($sort)
             ->page($pager)
             ->fetchAll();
@@ -89,6 +90,7 @@ class metricTao extends metricModel
         return $this->dao->select('object, purpose')->from(TABLE_METRIC)
             ->where('deleted')->eq('0')
             ->andWhere('scope')->eq($scope)
+            ->beginIF($this->config->edition == 'open')->andWhere('object')->notIN('feedback,issue,risk')
             ->groupBy('object, purpose')
             ->fetchAll();
     }
