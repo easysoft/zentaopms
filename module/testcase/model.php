@@ -692,35 +692,26 @@ class testcaseModel extends model
     }
 
     /**
-     * Review case
+     * 评审用例。
+     * Review case.
      *
-     * @param  int    $caseID
+     * @param  object $case
+     * @param  object $oldCase
      * @access public
-     * @return bool | array
+     * @return bool
      */
-    public function review($caseID)
+    public function review(object $case, object $oldCase): bool
     {
-        $oldCase = $this->getById($caseID);
-
-        $now    = helper::now();
-        $status = $this->getStatus('review', $oldCase);
-        $case   = fixer::input('post')
-            ->add('id', $caseID)
-            ->remove('result,comment')
-            ->setDefault('reviewedDate', substr($now, 0, 10))
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
-            ->stripTags($this->config->testcase->editor->review['id'], $this->config->allowedTags)
-            ->setForce('status', $status)
-            ->join('reviewedBy', ',')
-            ->get();
-
-        $case = $this->loadModel('file')->processImgURL($case, $this->config->testcase->editor->review['id'], $this->post->uid);
-        $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->checkFlow()->where('id')->eq($caseID)->exec();
-
+        $this->dao->update(TABLE_CASE)->data($case, 'result,comment')->autoCheck()->checkFlow()->where('id')->eq($oldCase->id)->exec();
         if(dao::isError()) return false;
 
-        return common::createChanges($oldCase, $case);
+        $changes = common::createChanges($oldCase, $case);
+        if(!empty($changes))
+        {
+            $actionID = $this->loadModel('action')->create('case', $caseID, 'Reviewed', $case->comment, ucfirst($case->result));
+            $this->action->logHistory($actionID, $changes);
+        }
+        return true;
     }
 
     /**

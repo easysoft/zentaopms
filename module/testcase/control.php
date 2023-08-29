@@ -709,37 +709,32 @@ class testcase extends control
     }
 
     /**
+     * 评审用例。
      * Review case.
      *
      * @param  int    $caseID
      * @access public
      * @return void
      */
-    public function review($caseID)
+    public function review(int $caseID)
     {
         if($_POST)
         {
-            if($this->post->result == false) return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->mustChooseResult));
-
-            $changes = $this->testcase->review($caseID);
+            $oldCase = $this->testcase->getByID($caseID);
+            $case    = $this->testcaseZen->prepareReviewData($caseID, $oldCase);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if(is_array($changes))
-            {
-                $result = $this->post->result;
-                $actionID = $this->loadModel('action')->create('case', $caseID, 'Reviewed', $this->post->comment, ucfirst($result));
-                $this->action->logHistory($actionID, $changes);
+            $this->testcase->review($case, $oldCase);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-                $this->executeHooks($caseID);
+            $message = $this->executeHooks($caseID);
+            if(!$message) $message = $this->lang->saveSuccess;
 
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
-            }
+            return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => true));
         }
 
-        $this->view->testcase = $this->testcase->getByID($caseID);
-        $this->view->users    = $this->user->getPairs('noletter|noclosed|nodeleted');
-        $this->view->case     = $this->testcase->getById($caseID);
-        $this->view->actions  = $this->loadModel('action')->getList('case', $caseID);
+        $this->view->title = $this->lang->testcase->review;
+        $this->view->users = $this->user->getPairs('noletter|noclosed|nodeleted');
         $this->display();
     }
 

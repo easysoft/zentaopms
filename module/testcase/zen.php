@@ -1238,6 +1238,7 @@ class testcaseZen extends testcase
         $locateLink = $this->app->tab == 'project' ? $this->createLink('project', 'testcase', "projectID={$this->session->project}") : $this->createLink('testcase', 'browse', "productID={$this->post->product}&branch={$this->post->branch}");
         return $this->send(array('result' => 'success', 'message' => $message, 'load' => $useSession ? $this->session->caseList : $locateLink));
     }
+
     /**
      * 返回批量创建 testcase 的结果。
      * Respond after batch creating testcase.
@@ -1262,5 +1263,36 @@ class testcaseZen extends testcase
         $projectParam  = $this->app->tab == 'project' ? "projectID={$this->session->project}&" : '';
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink($currentModule, $currentMethod, "{$projectParam}productID={$productID}&branch={$branch}&browseType=all&param=0&caseType=&orderBy=id_desc")));
     }
-}
 
+    /**
+     * 处理评审数据。
+     * Prepare review data.
+     *
+     * @param  int       $caseID
+     * @param  object    $oldCase
+     * @access protected
+     * @return void
+     */
+    protected function prepareReviewData(int $caseID, object $oldCase)
+    {
+        $now    = helper::now();
+        $status = $this->testcase->getStatus('review', $oldCase);
+
+        $case = form::data($this->config->testcase->form->review)->add('id', $caseID)
+            ->setForce('status', $status)
+            ->setDefault('reviewedDate', substr($now, 0, 10))
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
+            ->join('reviewedBy', ',')
+            ->stripTags($this->config->testcase->editor->review['id'], $this->config->allowedTags)
+            ->get();
+
+        if(!$case->result)
+        {
+            dao::$errors['result'] = $this->lang->testcase->mustChooseResult;
+            return false;
+        }
+
+        return $this->loadModel('file')->processImgURL($case, $this->config->testcase->editor->review['id'], $this->post->uid);
+    }
+}

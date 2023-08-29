@@ -77,3 +77,9 @@ $config->testcase->form->createScene['parent']     = array('required' => false, 
 $config->testcase->form->createScene['title']      = array('required' => true,  'type' => 'string', 'filter' => 'trim');
 $config->testcase->form->createScene['openedBy']   = array('required' => false, 'type' => 'string', 'default' => $account);
 $config->testcase->form->createScene['openedDate'] = array('required' => false, 'type' => 'date',   'default' => $now);
+
+$config->testcase->form->review = array();
+$config->testcase->form->review['reviewedDate'] = array('required' => false, 'type' => 'date',   'default' => $now);
+$config->testcase->form->review['result']       = array('required' => true,  'type' => 'string', 'default' => '');
+$config->testcase->form->review['reviewedBy']   = array('required' => false, 'type' => 'array',  'default' => array(''));
+$config->testcase->form->review['comment']      = array('required' => false, 'type' => 'string', 'default' => '');
