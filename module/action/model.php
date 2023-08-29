@@ -18,6 +18,7 @@ class actionModel extends model
     const BE_HIDDEN     = 2;    // The deleted object has been hidded.
 
     /**
+     * 创建一个操作记录。
      * Create a action.
      *
      * @param  string $objectType
@@ -678,6 +679,7 @@ class actionModel extends model
     }
 
     /**
+     * 获取已删除的对象。
      * Get deleted objects.
      *
      * @param  string    $objectType
@@ -687,7 +689,7 @@ class actionModel extends model
      * @access public
      * @return array
      */
-    public function getTrashes($objectType, $type, $orderBy, $pager)
+    public function getTrashes(string $objectType, string $type, string $orderBy, object $pager = null): array
     {
         $extra   = $type == 'hidden' ? self::BE_HIDDEN : self::CAN_UNDELETED;
         $trashes = $this->dao->select('*')->from(TABLE_ACTION)
@@ -698,6 +700,7 @@ class actionModel extends model
             ->orderBy($orderBy)->page($pager)->fetchAll();
         if(!$trashes) return array();
 
+        /* 按对象类型对已删除的对象进行分组，并获取名称字段。 */
         /* Group trashes by objectType, and get there name field. */
         foreach($trashes as $object)
         {
@@ -724,6 +727,7 @@ class actionModel extends model
             }
         }
 
+        /* 将name字段添加到回收站数据中。 */
         /* Add name field to the trashes. */
         foreach($trashes as $trash)
         {
@@ -742,6 +746,7 @@ class actionModel extends model
     }
 
     /**
+     * 通过查询获取回收站内的对象。
      * Get deleted objects by search.
      *
      * @param  string $objectType
@@ -752,10 +757,10 @@ class actionModel extends model
      * @access public
      * @return array
      */
-    public function getTrashesBySearch($objectType, $type, $queryID, $orderBy, $pager = null)
+    public function getTrashesBySearch(string $objectType, string $type, int $queryID, string $orderBy, object $pager = null): array
     {
         if($objectType == 'all') return array();
-        if($queryID and $queryID != 'myQueryID')
+        if($queryID && $queryID != 'myQueryID')
         {
             $query = $this->loadModel('search')->getQuery($queryID);
             if($query)

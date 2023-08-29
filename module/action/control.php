@@ -36,6 +36,7 @@ class action extends control
 
 
     /**
+     * 回收站。
      * Trash.
      *
      * @param  string $browseType
@@ -49,11 +50,12 @@ class action extends control
      * @access public
      * @return void
      */
-    public function trash($browseType = 'all', $type = 'all', $byQuery = false, $queryID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function trash(string $browseType = 'all', string $type = 'all', bool $byQuery = false, int $queryID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->loadModel('backup');
 
-        /* Save session. */
+        /* Url存入session。 */
+        /* Save url into session. */
         $uri = $this->app->getURI(true);
         $this->session->set('productList',        $uri, 'product');
         $this->session->set('productPlanList',    $uri, 'product');
@@ -83,24 +85,30 @@ class action extends control
         $this->session->set('practiceLibList',    $uri, 'assetlib');
         $this->session->set('componentLibList',   $uri, 'assetlib');
 
+        /* 保存用于替换搜索语言项的对象名称。 */
         /* Save the object name used to replace the search language item. */
         $this->session->set('objectName', zget($this->lang->action->objectTypes, $browseType, ''), 'admin');
 
+        /* 搭建搜索表单。*/
         /* Build the search form. */
         $queryID   = (int)$queryID;
         $actionURL = $this->createLink('action', 'trash', "browseType=$browseType&type=$type&byQuery=true&queryID=myQueryID");
         $this->action->buildTrashSearchForm($queryID, $actionURL);
 
+        /* 获取回收站内的对象。 */
         /* Get deleted objects. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
+        /* 解析排序字段。 */
         /* Append id for second sort. */
         $sort           = common::appendOrder($orderBy);
         $trashes        = $byQuery ? $this->action->getTrashesBySearch($browseType, $type, $queryID, $sort, $pager) : $this->action->getTrashes($browseType, $type, $sort, $pager);
         $objectTypeList = $this->action->getTrashObjectTypes($type);
         $objectTypeList = array_keys($objectTypeList);
 
+        /* 获取头部导航标题。 */
+        /* Build the header navigation title. */
         $preferredType       = array();
         $moreType            = array();
         $preferredTypeConfig = $this->config->action->preferredType->ALM;
@@ -116,6 +124,7 @@ class action extends control
             $preferredType   = $preferredType + $toPreferredType;
         }
 
+        /* 获取执行所属的项目名称。 */
         /* Get the projects name of executions. */
         if($browseType == 'execution')
         {
@@ -126,8 +135,9 @@ class action extends control
             $this->view->projectList = $projectList;
         }
 
+        /* 获取用户故事所属的产品名称。 */
         /* Get the products name of story. */
-        if(strpos(',story,requirement,', ",$browseType,") !== false)
+        if(in_array($browseType, array('story', 'requirement')))
         {
             $this->loadModel('story');
             $storyIdList = array();
@@ -136,6 +146,7 @@ class action extends control
             $this->view->productList = $productList;
         }
 
+        /* 获取任务的执行名称。 */
         /* Get the executions name of task. */
         if($browseType == 'task')
         {
@@ -147,14 +158,15 @@ class action extends control
             $this->view->executionList = $executionList;
         }
 
-        /* Process pivot name. */
+        /* 补充操作记录的信息。 */
+        /* Supplement the information recorded by the operation. */
         foreach($trashes as $action)
         {
             if($action->objectType == 'pivot')
             {
                 $pivotNames = json_decode($action->objectName, true);
                 $action->objectName = zget($pivotNames, $this->app->getClientLang(), '');
-                if(empty($trash->objectName))
+                if(empty($action->objectName))
                 {
                     $pivotNames = array_filter($pivotNames);
                     $action->objectName = reset($pivotNames);
@@ -181,7 +193,7 @@ class action extends control
                     $params     = "libID=0&moduelID=0&apiID={$action->objectID}";
                     $methodName = 'index';
                 }
-                if(strpos('traincourse,traincontents', $module) !== false)
+                if(in_array($module, array('traincourse','traincontents')))
                 {
                     $methodName = $module == 'traincourse' ? 'viewcourse' : 'viewchapter';
                     $module     = 'traincourse';
@@ -206,9 +218,7 @@ class action extends control
             if(!empty($executionList[$action->execution])) $action->execution = $executionList[$action->execution]->name      . ($executionList[$action->execution]->deleted     ? "<span class='label danger ml-2'>{$this->lang->execution->deleted}</span>" : '');
         }
 
-        /* Title and position. */
-        $this->view->title      = $this->lang->action->trash;
-
+        $this->view->title               = $this->lang->action->trash;
         $this->view->trashes             = $trashes;
         $this->view->type                = $type;
         $this->view->currentObjectType   = $browseType;
@@ -220,7 +230,6 @@ class action extends control
         $this->view->preferredTypeConfig = $preferredTypeConfig;
         $this->view->byQuery             = $byQuery;
         $this->view->queryID             = $queryID;
-
         $this->display();
     }
 

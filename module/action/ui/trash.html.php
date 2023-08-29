@@ -34,7 +34,12 @@ featureBar
 (
     set::current($currentObjectType),
     set::linkParams("objectType={key}&type={$type}"),
-    li(searchToggle())
+    li(
+        searchToggle
+        (
+            set::module('trash'),
+        )
+    )
 );
 
 toolbar
