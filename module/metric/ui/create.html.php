@@ -26,7 +26,8 @@ formPanel
             set::label($lang->metric->scope),
             set::name('scope'),
             set::items($lang->metric->scopeList),
-            set::value('global'),
+            set::value('system'),
+            set::required(true)
         ),
         formGroup
         (
@@ -35,6 +36,7 @@ formPanel
             set::name('object'),
             set::items($lang->metric->objectList),
             set::value('program'),
+            set::required(true)
         ),
         formGroup
         (
@@ -43,6 +45,7 @@ formPanel
             set::name('purpose'),
             set::items($lang->metric->purposeList),
             set::value('scale'),
+            set::required(true)
         ),
     ),
     formGroup
