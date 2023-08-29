@@ -42,6 +42,7 @@ class account extends control
 
         $this->view->title       = $this->lang->account->common;
         $this->view->accountList = $accountList;
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter,noempty,noclosed');
         $this->view->pager       = $pager;
         $this->view->param       = $param;
         $this->view->orderBy     = $orderBy;

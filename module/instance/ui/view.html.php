@@ -13,11 +13,23 @@ declare(strict_types=1);
 
 namespace zin;
 
+jsVar('copied',     $lang->instance->copied);
 jsVar('instanceID', $instance->id);
 
 $cpuInfo    = $this->instance->printCpuUsage($instance, $instanceMetric->cpu, 'array');
 $memoryInfo = $this->instance->printMemUsage($instance, $instanceMetric->memory, 'array');
 $actions    = $this->loadModel('common')->buildOperateMenu($instance);
+
+if($type !== 'store')
+{
+    $defaultAccount = new stdclass();
+    $defaultAccount->username = $instance->account;
+    $defaultAccount->password = $instance->password;
+    $defaultAccount->token    = $instance->token;
+
+    $lang->instance->defaultAccount  = $lang->instance->account;
+    $lang->instance->defaultPassword = $lang->instance->password;
+}
 
 $dbListWg = array();
 foreach($dbList as $db)
@@ -149,8 +161,9 @@ div
                             h::th($lang->instance->installBy),
                             h::th($lang->instance->installAt),
                             $type !== 'store' ? null : h::th($lang->instance->runDuration),
-                            $defaultAccount ? h::th($lang->instance->defaultAccount) : null,
-                            $defaultAccount ? h::th($lang->instance->defaultPassword) : null,
+                            !empty($defaultAccount->username) ? h::th($lang->instance->defaultAccount) : null,
+                            !empty($defaultAccount->password) ? h::th($lang->instance->defaultPassword) : null,
+                            !empty($defaultAccount->token)    ? h::th($lang->instance->token) : null,
                             $type === 'store' ? null : h::th($lang->instance->browseProject),
                         ),
                         h::tr
@@ -170,8 +183,17 @@ div
                             h::td(zget($users, $instance->createdBy, '')),
                             h::td(substr($instance->createdAt, 0, 16)),
                             $type !== 'store' ? null : h::td(common::printDuration($instance->runDuration)),
-                            $defaultAccount ? h::td($defaultAccount->username) : null,
-                            $defaultAccount ? h::td($defaultAccount->password) : null,
+                            !empty($defaultAccount->username) ? h::td($defaultAccount->username) : null,
+                            !empty($defaultAccount->password) ? h::td
+                            (
+                                input(set::type('text'), set::value($defaultAccount->password), set::name('password'), setStyle('display', 'none')),
+                                btn(set::class('copy-btn ghost'),set::icon('copy'))
+                            ): null,
+                            !empty($defaultAccount->token)    ? h::td
+                            (
+                                input(set::type('text'), set::value($defaultAccount->token), set::name('token'), setStyle('display', 'none')),
+                                btn(set::class('copy-btn ghost'),set::icon('copy'))
+                            ): null,
                             $type === 'store' ? null : h::td
                             (
                                 btn

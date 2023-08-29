@@ -33,11 +33,36 @@ window.afterPageUpdate = function()
         if($('#statusTD').data('reload') === true || $('#memoryRate').data('load') == true)
         {
             reloadTimes++;
-            fetchContent({url: $.createLink('instance', 'view', 'id=' + instanceID),
-            selector: '#instanceInfoContainer',
-            id: 'instanceInfoContainer',
-            target: '#instanceInfoContainer',
-        });
+            fetchContent
+            ({
+                url: $.createLink('instance', 'view', 'id=' + instanceID),
+                selector: '#instanceInfoContainer',
+                id: 'instanceInfoContainer',
+                target: '#instanceInfoContainer',
+            });
         }
     }, 4000);
 }
+
+$('.copy-btn').on('click', function()
+{
+    var copyText = $(this).parent().find('input');
+    copyText.show();
+    copyText[0].select();
+    document.execCommand("Copy");
+    copyText.hide();
+
+    var that = this;
+    $(that).tooltip
+    ({
+        trigger: 'click',
+        placement: 'bottom',
+        title: copied,
+        tipClass: 'success',
+        show:true
+    });
+    setTimeout(function()
+    {
+        $(that).tooltip('hide');
+    }, 2000)
+})
