@@ -87,7 +87,14 @@ class header extends wg
         /* The standalone lite version removes the lite interface button */
         if(trim($config->visions, ',') == 'lite') return true;
 
-        if(count($userVisions) < 2 || count($configVisions) < 2) return btn($lang->visionList[$currentVision]);
+        if(count($userVisions) < 2 || count($configVisions) < 2)
+        {
+            return btn
+            (
+                setClass('secondary ring-0 rounded'),
+                $lang->visionList[$currentVision]
+            );
+        }
 
         $items = array();
         foreach($userVisions as $vision)
@@ -109,7 +116,6 @@ class header extends wg
                 set::text($lang->visionList[$currentVision]),
                 set::caret(false)
             ),
-
             set::id('versionMenu'),
             set::trigger('hover'),
             set::placement('bottom'),
