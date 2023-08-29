@@ -659,6 +659,14 @@ function cell(): cell
 }
 
 /**
+ * Divider widget.
+ */
+function divider(): divider
+{
+    return createWg('divider', func_get_args());
+}
+
+/**
  * Action item widget.
  *
  * ?string name='action'
@@ -1054,14 +1062,6 @@ function tooltip(): tooltip
 function toolbar(): toolbar
 {
     return createWg('toolbar', func_get_args());
-}
-
-/**
- * Zentao search form widget.
- */
-function searchForm(): searchForm
-{
-    return createWg('searchForm', func_get_args());
 }
 
 /**
@@ -1628,6 +1628,15 @@ function overviewBlock(): overviewBlock
 }
 
 /**
+ * Statistic block widget.
+ *
+ */
+function statisticBlock(): statisticBlock
+{
+    return createWg('statisticBlock', func_get_args());
+}
+
+/**
  * Picker widget.
  */
 function picker(): picker
@@ -1688,4 +1697,63 @@ function stepsEditor(): stepsEditor
 function tableChart(): tableChart
 {
     return createWg('tableChart', func_get_args());
+}
+
+/**
+ * Password widget.
+ */
+function password(): password
+{
+    return createWg('password', func_get_args());
+}
+
+/**
+ * Mindmap widget.
+ */
+function mindmap(): mindmap
+{
+    return createWg('mindmap', func_get_args());
+}
+
+/**
+ * Image cutter widget.
+ */
+function imgCutter(): imgCutter
+{
+    return createWg('imgCutter', func_get_args());
+}
+
+/**
+ * Next step modal widget.
+ *
+ * string tip
+ * array  items
+ */
+function modalNextStep(): modalNextStep
+{
+    return createWg('modalNextStep', func_get_args());
+}
+
+/**
+ * Navigator widget.
+ */
+function navigator(): navigator
+{
+    return createWg('navigator', func_get_args());
+}
+
+/**
+ * Gantt widget.
+ */
+function gantt(): gantt
+{
+    return createWg('gantt', func_get_args());
+}
+
+/**
+ * road map widget.
+ */
+function roadMap(): roadMap
+{
+    return createWg('roadmap', func_get_args());
 }

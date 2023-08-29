@@ -34,6 +34,7 @@ class formRowGroup extends formRow
                 $this->prop('title'),
                 $this->block('suffix'),
             ),
+            set($this->getRestProps()),
             $this->prop('items'),
         );
     }

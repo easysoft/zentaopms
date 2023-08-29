@@ -47,7 +47,7 @@ class overviewBlock extends wg
             ),
             span
             (
-                setClass('text-center'),
+                setClass('text-center text-sm'),
                 $card->label
             )
         );
@@ -78,14 +78,14 @@ class overviewBlock extends wg
                 span
                 (
                     set::title($bar->value),
-                    setClass('block primary w-2'),
+                    setClass('block primary bg-opacity-70 w-2'),
                     setStyle(array('height' => $bar->rate))
                 )
             );
 
             $labels[] = span
             (
-                setClass('text-center'),
+                setClass('text-center text-gray text-sm'),
                 $bar->label
             );
         }
@@ -98,7 +98,7 @@ class overviewBlock extends wg
                 setClass('basis-48'),
                 span
                 (
-                    setClass('mb-2'),
+                    setClass('mb-3 text-sm text-gray'),
                     $group->title
                 ),
                 div

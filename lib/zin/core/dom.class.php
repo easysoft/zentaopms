@@ -267,7 +267,7 @@ class dom
 
         if($item instanceof dom)
         {
-            $json = $item->wg->toJsonData();
+            $json = $item->wg->toJSON();
             if(!empty($item->dataGetters))
             {
                 $output = array();

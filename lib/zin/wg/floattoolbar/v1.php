@@ -22,9 +22,9 @@ class floatToolbar extends wg
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    private function buildDivider(wg|array|null $wg): wg|null
+    private function buildDivider(wg|array|null $wg1, wg|array|null $wg2): wg|null
     {
-        if(empty($wg)) return null;
+        if(empty($wg1) || empty($wg2)) return null;
 
         return div(setClass('divider w-px h-6 mx-2'));
     }
@@ -92,9 +92,9 @@ class floatToolbar extends wg
         (
             setClass('float-toolbar inline-flex rounded p-1.5 items-center'),
             $prefixBtns,
-            $this->buildDivider($prefixBtns),
+            $this->buildDivider($prefixBtns, $mainBtns),
             $mainBtns,
-            empty($mainBtns) ? null : $this->buildDivider($suffixBtns),
+            $this->buildDivider($mainBtns, $suffixBtns),
             $suffixBtns,
         );
     }

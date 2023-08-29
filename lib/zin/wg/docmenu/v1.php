@@ -12,7 +12,6 @@ class docMenu extends wg
         'modules: array',
         'activeKey?: int',
         'settingLink?: string',
-        'closeLink: string',
         'menuLink: string',
         'title?: string',
         'linkParams?: string="%s"',
@@ -34,7 +33,7 @@ class docMenu extends wg
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
-    private function buildLink($item): string
+    private function buildLink($item, $releaseID = 0): string
     {
         $url = $item->url;
         if(!empty($url)) return $url;
@@ -88,6 +87,19 @@ class docMenu extends wg
                 $linkParams = str_replace(array('browseType=&', 'param=0'), array('browseType=byrelease&', "param={$this->release}"), $linkParams);
             }
         }
+
+        if($releaseID)
+        {
+            if($this->currentModule == 'doc')
+            {
+                $linkParams = str_replace(array('browseType=&', 'param=0'), array('browseType=byrelease&', "param={$releaseID}"), $linkParams);
+                if($this->rawMethod == 'view') $linkParams = "libID={$this->libID}&moduleID=0&browseType=byrelease&orderBy=&status,id_desc&param={$releaseID}";
+            }
+            else
+            {
+                $linkParams = "libID={$this->libID}&moduleID=0&apiID=0&version=0&release={$releaseID}";
+            }
+        }
         return helper::createLink($moduleName, $methodName, $linkParams);
     }
 
@@ -96,9 +108,12 @@ class docMenu extends wg
         if(empty($items)) $items = $this->modules;
         if(empty($items)) return array();
 
-        $activeKey = $this->prop('activeKey');
+        $activeKey   = $this->prop('activeKey');
+        $parentItems = array();
         foreach($items as $setting)
         {
+            if(!is_object($setting)) continue;
+
             $setting->parentID = $parentID;
 
             $itemID = 0;
@@ -109,8 +124,9 @@ class docMenu extends wg
                 'text'        => $setting->name,
                 'icon'        => $this->getIcon($setting),
                 'url'         => $this->buildLink($setting),
+                'attrs'       => array('data-app' => $this->tab),
                 'data-id'     => $itemID,
-                'data-lib'    => $setting->type == 'docLib' ? $itemID : $setting->libID,
+                'data-lib'    => in_array($setting->type, array('docLib', 'apiLib')) ? $itemID : $setting->libID,
                 'data-type'   => $setting->type,
                 'data-parent' => $setting->parentID,
                 'data-module' => $this->currentModule,
@@ -134,6 +150,7 @@ class docMenu extends wg
     {
         global $app, $lang;
         $this->lang          = $lang;
+        $this->tab           = $app->tab;
         $this->rawModule     = $app->rawModule;
         $this->rawMethod     = $app->rawMethod;
         $this->currentModule = $app->moduleName;
@@ -149,7 +166,7 @@ class docMenu extends wg
         $this->spaceMethod = $this->prop('spaceMethod');
 
         if($this->rawModule == 'api' && $this->rawMethod == 'view') $this->spaceType = 'api';
-        if($this->spaceType != 'project')
+        if(empty($this->modules['project']))
         {
             $this->setProp('items', $this->buildMenuTree(array(), $this->libID));
         }
@@ -189,24 +206,56 @@ class docMenu extends wg
 
     private function getActions($item): array|null
     {
-        if(isset($item->hasAction) && !$item->hasAction) return null;
-        if(in_array($item->type, array('mine', 'view', 'collect', 'createdBy', 'editedBy'))) return null;
-
-        $actions = $this->getOperateItems($item);
-        if(empty($actions)) return null;
-
-        return array(
-            array(
-                'key'      => 'more',
-                'icon'     => 'ellipsis-v',
+        $versionBtn = array();
+        if(isset($item->versions) && $item->versions)
+        {
+            global $lang;
+            $versionTitle = $lang->build->common;
+            $versionBtn = array(
+                'key'      => 'version',
+                'text'     => $versionTitle,
                 'type'     => 'dropdown',
-                'caret'    => false,
                 'dropdown' => array(
                     'placement' => 'bottom-end',
-                    'items'     => $actions,
+                    'items'     => array(),
                 )
-            )
-        );
+            );
+
+            foreach($item->versions as $version)
+            {
+                if($version->id == $this->release) $versionBtn['text'] = $version->version;
+
+                $versionBtn['dropdown']['items'][] = array(
+                    'text'   => $version->version,
+                    'href'   => $this->buildLink($item, $version->id),
+                    'active' => $version->id == $this->release,
+                );
+            }
+        }
+
+        $moreBtn = array();
+        if(!isset($item->hasAction) || $item->hasAction || in_array($item->type, array('mine', 'view', 'collect', 'createdBy', 'editedBy')))
+        {
+            $actions = $this->getOperateItems($item);
+            if($actions)
+            {
+                $moreBtn = array(
+                    'key'      => 'more',
+                    'icon'     => 'ellipsis-v',
+                    'type'     => 'dropdown',
+                    'caret'    => false,
+                    'dropdown' => array(
+                        'placement' => 'bottom-end',
+                        'items'     => $actions,
+                    )
+                );
+            }
+        }
+
+        $actions = array();
+        if($versionBtn) $actions[] = $versionBtn;
+        if($moreBtn)    $actions[] = $moreBtn;
+        return $actions ? $actions : null;
     }
 
     private function getOperateItems($item): array
@@ -357,27 +406,6 @@ class docMenu extends wg
         );
     }
 
-    private function buildCloseBtn(): ?wg
-    {
-        $activeKey = $this->prop('activeKey');
-        if(empty($activeKey)) return null;
-
-        return a
-        (
-            set('href', $this->prop('closeLink')),
-            icon('close', setStyle('color', 'var(--color-slate-600)'))
-        );
-    }
-
-    private function buildDropDownMenu()
-    {
-        return menu
-        (
-            setID('dropdownMenu'),
-            set::items(array())
-        );
-    }
-
     protected function build(): wg
     {
         $this->setMenuTreeProps();
@@ -385,32 +413,34 @@ class docMenu extends wg
         $menuLink = $this->prop('menuLink', '');
 
         return div
-        (
-            setClass('module-menu rounded shadow-sm bg-white col rounded-sm'),
-            $title && empty($menuLink) ? h::header
             (
-                setClass('h-10 flex items-center pl-4 flex-none gap-3'),
-                span
+                $menuLink ? dropmenu
                 (
-                    setClass('module-title text-lg font-semibold'),
-                    html($title)
+                    set::id('docDropmenu'),
+                    set::menuID('docDropmenuMenu'),
+                    set::text($title),
+                    set::url($menuLink),
+                ) : null,
+                div
+                (
+                    setClass('module-menu rounded shadow-sm bg-white col rounded-sm'),
+                    $title && empty($menuLink) ? h::header
+                    (
+                        setClass('h-10 flex items-center pl-4 flex-none gap-3'),
+                        span
+                        (
+                            setClass('module-title text-lg font-semibold'),
+                            html($title)
+                        ),
+                    ) : null,
+                    h::main
+                    (
+                        setClass($menuLink ? 'pt-3' : ''),
+                        setClass('col flex-auto overflow-y-auto overflow-x-hidden pl-4 pr-1'),
+                        zui::tree(set($this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'hover'))))
+                    ),
+                    $this->buildBtns()
                 ),
-                $this->buildCloseBtn(),
-            ) : null,
-            $menuLink ? dropmenu
-            (
-                set::id('docDropmenu'),
-                set::text($title),
-                set::url($menuLink),
-            ) : null,
-            h::main
-            (
-                setClass($menuLink ? 'pt-3' : ''),
-                setClass('col flex-auto overflow-y-auto overflow-x-hidden pl-4 pr-1'),
-                zui::tree(set($this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'hover'))))
-            ),
-            $this->buildBtns(),
-            $this->buildDropDownMenu(),
         );
     }
 }

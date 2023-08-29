@@ -121,8 +121,11 @@ class h extends wg
         return static::create('input', set('type', 'text'), func_get_args());
     }
 
-    public static function formHidden($name, $value, ...$args)
+    public static function formHidden(/* $name, $value, ...$args */)
     {
+        $args  = func_get_args();
+        $name  = array_shift($args);
+        $value = array_shift($args);
         return static::create('input', set('type', 'hidden'), set::name($name), set::value($value), $args);
     }
 
@@ -146,10 +149,11 @@ class h extends wg
         return static::create('input', set('type', 'file'), func_get_args());
     }
 
-    public static function textarea(...$args)
+    public static function textarea(/* ...$args */)
     {
+        $args = func_get_args();
         list($code, $args) = h::splitRawCode($args);
-        return static::create('textarea', $code, ...$args);
+        return static::create('textarea', $code, $args);
     }
 
     /**
@@ -164,18 +168,26 @@ class h extends wg
         return html("<!-- $comment -->");
     }
 
-    public static function importJs($src, ...$args)
+    public static function importJs(/* $src, ...$args */)
     {
-        return static::create('script', set('src', $src), ...$args);
+        $args = func_get_args();
+        $src = array_shift($args);
+        return static::create('script', set('src', $src), $args);
     }
 
-    public static function importCss($src, ...$args)
+    public static function importCss(/* $src, ...$args */)
     {
-        return static::create('link', set('rel', 'stylesheet'), set('href', $src), ...$args);
+        $args = func_get_args();
+        $src = array_shift($args);
+        return static::create('link', set('rel', 'stylesheet'), set('href', $src), $args);
     }
 
-    public static function import($file, $type = null, ...$args)
+    public static function import(/* $file, $type = null, ...$args */)
     {
+        $args = array_merge(func_get_args(), array(null, null));
+        $file = array_shift($args);
+        $type = array_shift($args);
+
         if(is_array($file))
         {
             $children = array();
@@ -186,40 +198,46 @@ class h extends wg
             return $children;
         }
         if($type === null) $type = pathinfo($file, PATHINFO_EXTENSION);
-        if($type == 'js' || $type == 'cjs') return static::importJs($file, ...$args);
-        if($type == 'css') return static::importCss($file, ...$args);
+        if($type == 'js' || $type == 'cjs') return static::importJs($file, $args);
+        if($type == 'css') return static::importCss($file, $args);
         return null;
     }
 
-    public static function css(...$args)
+    public static function css(/* ...$args */)
     {
-        list($code, $args) = h::splitRawCode($args);
+        list($code, $args) = h::splitRawCode(func_get_args());
         if(empty($code)) return null;
-        return static::create('style', html(implode("\n", $code)), ...$args);
+        return static::create('style', html(implode("\n", $code)), $args);
     }
 
-    public static function globalJS(...$args)
+    public static function globalJS(/* ...$args */)
     {
-        list($code, $args) = h::splitRawCode($args);
+        list($code, $args) = h::splitRawCode(func_get_args());
         if(empty($code)) return null;
-        return static::create('script', html(implode("\n", $code)), ...$args);
+        return static::create('script', html(implode("\n", $code)), $args);
     }
 
-    public static function js(...$args)
+    public static function js(/* ...$args */)
     {
 
-        list($code, $args) = h::splitRawCode($args);
+        list($code, $args) = h::splitRawCode(func_get_args());
         if(empty($code)) return null;
-        return static::create('script', html(h::createJsScopeCode($code)), ...$args);
+        return static::create('script', html(h::createJsScopeCode($code)), $args);
     }
 
-    public static function jsVar($name, $value, ...$directives)
+    public static function jsVar(/* $name, $value, ...$args */)
     {
-        return static::js(static::createJsVarCode($name, $value), ...$directives);
+        $args  = func_get_args();
+        $name  = array_shift($args);
+        $value = array_shift($args);
+        return static::js(static::createJsVarCode($name, $value), $args);
     }
 
-    public static function jsCall($funcName, ...$args)
+    public static function jsCall(/* $funcName, ...$args */)
     {
+        $args  = func_get_args();
+        $funcName  = array_shift($args);
+
         $funcArgs   = [];
         $directives = [];
         foreach($args as $arg)
@@ -228,7 +246,7 @@ class h extends wg
             else $funcArgs[] = $arg;
         }
         $code = static::createJsCallCode($funcName, $funcArgs);
-        return static::js($code, ...$directives);
+        return static::js($code, $directives);
     }
 
     public static function createJsCallCode($func, $args)

@@ -39,7 +39,8 @@ class dashboard extends wg
         'blockDefaultSize?: array',           // 区块默认大小。
         'blockSizeMap?: array',                // 区块大小映射。
         'blockMenu?: array',                  // 区块菜单。
-        'onLayoutChange?: function'           // 布局变更事件。
+        'onLayoutChange?: function',          // 布局变更事件。
+        'onClickMenu?: function'              // 布局变更事件。
     );
 
     static $dashboardID = 0;
@@ -55,6 +56,11 @@ class dashboard extends wg
      */
     protected function build(): wg
     {
-        return zui::dashboard(set($this->props->skip(array('id'))), set('_id', $this->prop('id')));
+        return zui::dashboard
+        (
+            set($this->props->skip(array('id'))),
+            set('_id', $this->prop('id')),
+            set('_props', $this->getRestProps())
+        );
     }
 }

@@ -18,12 +18,12 @@ class floatPreNextBtn extends wg
     {
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
-    protected function build(): wg
+    protected function build(): wg|array
     {
         $preLink  = $this->prop('preLink');
         $nextLink = $this->prop('nextLink');
 
-        return fragment
+        return array
         (
             !empty($preLink) ? btn
             (

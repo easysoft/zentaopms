@@ -23,8 +23,8 @@ class set
         return directive('prop', array($prop => $value));
     }
 
-    public static function class(...$args)
+    public static function class(/* ...$args */)
     {
-        return directive('prop', array('class' => $args));
+        return directive('prop', array('class' => func_get_args()));
     }
 }

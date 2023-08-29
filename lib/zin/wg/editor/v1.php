@@ -30,7 +30,7 @@ class editor extends wg
         // global $app;
         // $jsFile = $app->getWebRoot() . 'js/zeneditor/tiptap-component.esm.js';
         $jsFile = 'https://zui-dist.oop.cc/zeneditor/tiptap-component.esm.js';
-        return '$.getScript("' . $jsFile . '", {type: "module"}, () => {document.body.dataset.loadedEditor = true;});';
+        return '$.getLib("' . $jsFile . '", {type: "module", root: false}, () => {document.body.dataset.loadedEditor = true;});';
     }
 
     protected function build(): wg
@@ -38,7 +38,8 @@ class editor extends wg
         $editor = new h
         (
             setTag('tiptap-editor'),
-            setClass('form-control', 'p-0', 'h-auto'),
+            setClass('form-control', 'p-0'),
+            $this->prop('size') === 'full' ? setStyle('height', '100%') : setClass('h-auto'),
         );
         $props  = $this->props->pick(array('createInput', 'uploadUrl', 'placeholder', 'fullscreenable', 'resizable', 'exposeEditor', 'size', 'hideMenubar', 'bubbleMenu', 'menubarMode', 'collaborative', 'hocuspocus', 'docName', 'username', 'userColor'));
         foreach($props as $key => $value)
@@ -56,7 +57,8 @@ class editor extends wg
 
         return div
         (
-            setClass('editor-container'),
+            setClass('editor-container p-px'),
+            $props['size'] === 'full' ? setStyle('height', '100%') : setClass('h-auto'),
             $editor,
             textarea
             (

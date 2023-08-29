@@ -5,6 +5,7 @@ namespace zin;
 class moduleMenu extends wg
 {
     private array $modules = array();
+    private static array $filterMap = array();
 
     protected static array $defineProps = array(
         'modules: array',
@@ -12,7 +13,8 @@ class moduleMenu extends wg
         'settingLink?: string',
         'closeLink: string',
         'showDisplay?: bool=true',
-        'allText?: string'
+        'allText?: string',
+        'title?: string'
     );
 
     public static function getPageCSS(): string|false
@@ -41,12 +43,22 @@ class moduleMenu extends wg
             else unset($item['items']);
             $parentItems[] = $item;
         }
+
         return $parentItems;
     }
 
     private function getChildModule(int|string $id): array
     {
-        return array_filter($this->modules, fn($module) => $module->parent == $id);
+        return array_filter($this->modules, function($module) use($id)
+        {
+            /* Remove the rendered module. */
+            if(isset(static::$filterMap["$module->parent-$module->id"])) return false;
+
+            if($module->parent != $id) return false;
+
+            static::$filterMap["$module->parent-$module->id"] = true;
+            return true;
+        });
     }
 
     private function setMenuTreeProps(): void
@@ -57,6 +69,8 @@ class moduleMenu extends wg
 
     private function getTitle(): string
     {
+        if($this->prop('title')) return $this->prop('title');
+
         global $lang;
         $activeKey = $this->prop('activeKey');
 
@@ -117,14 +131,17 @@ class moduleMenu extends wg
         );
     }
 
-    private function buildCloseBtn(): ?wg
+    private function buildCloseBtn(): wg|null
     {
+        $closeLink = $this->prop('closeLink');
+        if(!$closeLink) return null;
+
         $activeKey = $this->prop('activeKey');
         if(empty($activeKey)) return null;
 
         return a
         (
-            set('href', $this->prop('closeLink')),
+            set('href', $closeLink),
             icon('close', setStyle('color', 'var(--color-slate-600)'))
         );
     }

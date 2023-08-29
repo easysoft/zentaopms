@@ -62,7 +62,8 @@ class modalHeader extends wg
 
         return h::div
         (
-            set::class('modal-header panel-form rounded-md canvas mx-auto size-lg'),
+            set::class('modal-header panel-form rounded-md canvas mx-auto'),
+            set::style(array('margin-bottom' => '0px')),
             $header
         );
     }

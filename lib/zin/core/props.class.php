@@ -48,10 +48,10 @@ class props extends \zin\utils\dataset
      * @access public
      * @param array $props - Properties list array
      */
-    public function __construct(?array $props = null)
+    public function __construct(array $props = array())
     {
-        $this->style       = new \zin\utils\style();
-        $this->class       = new \zin\utils\classlist();
+        $this->style = style::new();
+        $this->class = classlist::new();
 
         parent::__construct($props);
     }
@@ -208,11 +208,11 @@ class props extends \zin\utils\dataset
         return implode(' ', $pairs);
     }
 
-    public function toJsonData(bool $skipEvents = false): array
+    public function toJSON(bool $skipEvents = false): array
     {
         $data = $this->data;
         if(!empty($this->style->data)) $data['style'] = $this->style->data;
-        if(!empty($this->class->list)) $data['class'] = $this->class->toStr();
+        if(!empty($this->class->toJSON())) $data['class'] = $this->class->toStr();
 
         if($skipEvents)
         {
@@ -228,7 +228,7 @@ class props extends \zin\utils\dataset
     {
         if(is_string($skipProps)) $skipProps = explode(',', $skipProps);
 
-        $data = $this->toJsonData();
+        $data = $this->toJSON();
         foreach($data as $name => $value)
         {
             if($value === null || $name[0] === '@' || in_array($name, $skipProps)) unset($data[$name]);
@@ -242,7 +242,7 @@ class props extends \zin\utils\dataset
     {
         if(is_string($firstListProps)) $firstListProps = explode(',', $firstListProps);
 
-        $data       = $this->toJsonData();
+        $data       = $this->toJSON();
         $firstList  = array();
         $restList   = array();
         foreach($data as $name => $value)
@@ -259,7 +259,7 @@ class props extends \zin\utils\dataset
     {
         if(is_string($pickProps)) $pickProps = explode(',', $pickProps);
 
-        $data = $this->toJsonData();
+        $data = $this->toJSON();
         foreach($data as $name => $value)
         {
             if($value === null || !in_array($name, $pickProps)) unset($data[$name]);
@@ -277,8 +277,8 @@ class props extends \zin\utils\dataset
     public function clone(): props
     {
         $props = new props($this->data);
-        $props->style  = clone $this->style;
-        $props->class  = clone $this->class;
+        $props->style = clone $this->style;
+        $props->class = clone $this->class;
         return $props;
     }
 }

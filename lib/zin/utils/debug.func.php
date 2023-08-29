@@ -16,7 +16,7 @@ $logs = array();
 
 function log($type, $msg = null, $file)
 {
-    global $config;
+    global $config, $logs;
 
     if(!$config->debug) return;
 
