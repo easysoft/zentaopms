@@ -47,6 +47,7 @@ $config->metric->dtable->definition->fieldList['purpose']['group']    = 3;
 
 $config->metric->dtable->definition->fieldList['unit']['title']    = $lang->metric->unit;
 $config->metric->dtable->definition->fieldList['unit']['type']     = 'text';
+$config->metric->dtable->definition->fieldList['unit']['map']      = $lang->metric->unitList;
 $config->metric->dtable->definition->fieldList['unit']['minWidth'] = '40';
 $config->metric->dtable->definition->fieldList['unit']['required'] = true;
 $config->metric->dtable->definition->fieldList['unit']['group']    = 3;
