@@ -4040,7 +4040,7 @@ class execution extends control
      *
      * @param  int    $executionID
      * @param  int    $enterTime
-     * @param  string $browseType  story|task|bug
+     * @param  string $browseType  all|story|task|bug
      * @param  string $groupBy     default|pri|category|module|source|assignedTo|type|story|severity
      * @param  string $from        execution|RD
      * @param  string $searchValue
