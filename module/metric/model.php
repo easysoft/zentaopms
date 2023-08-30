@@ -470,7 +470,7 @@ class metricModel extends model
         }
         elseif(isset($year, $week))
         {
-            return sprintf($this->lang->metric->weekCell, $year, $month);
+            return sprintf($this->lang->metric->weekCell, $year, $week);
         }
         elseif(isset($year, $month))
         {
