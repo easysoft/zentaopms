@@ -317,7 +317,7 @@ class dbh
                 }
                 elseif(stripos($sql, 'CREATE UNIQUE INDEX') === 0 || stripos($sql, 'CREATE INDEX') === 0)
                 {
-                    preg_match('/ON\ +`([0-9a-zA-Z_]+)`/', $sql, $matches);
+                    preg_match('/ON\s+[^.`\s]+\.`([^\s`]+)`/', $sql, $matches);
 
                     $tableName = str_replace($this->config->prefix, '', $matches);
                     $sql       = preg_replace('/INDEX\ +\`/', 'INDEX `' . strtolower($tableName[1]) . '_', $sql);
