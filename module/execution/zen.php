@@ -66,6 +66,50 @@ class executionZen extends execution
     }
 
     /**
+     * 检查累计流图的日期。
+     * Check Cumulative flow diagram date.
+     *
+     * @param  string    $begin
+     * @param  string    $end
+     * @param  string    $minDate
+     * @param  string    $maxDate
+     * @access protected
+     * @return bool
+     */
+    protected function checkCFDDate(string $begin, string $end, string $minDate, string $maxDate): bool
+    {
+        $dateError = array();
+        if(empty($begin)) $dateError[] = sprintf($this->lang->error->notempty, $this->lang->execution->charts->cfd->begin);
+        if(empty($end)) $dateError[] = sprintf($this->lang->error->notempty, $this->lang->execution->charts->cfd->end);
+        if(empty($dateError))
+        {
+            if($begin < $minDate) $dateError[] = sprintf($this->lang->error->gt, $this->lang->execution->charts->cfd->begin, $minDate);
+            if($begin > $maxDate) $dateError[] = sprintf($this->lang->error->lt, $this->lang->execution->charts->cfd->begin, $maxDate);
+            if($end < $minDate)   $dateError[] = sprintf($this->lang->error->gt, $this->lang->execution->charts->cfd->end, $minDate);
+            if($end > $maxDate)   $dateError[] = sprintf($this->lang->error->lt, $this->lang->execution->charts->cfd->end, $maxDate);
+        }
+
+        foreach($dateError as $index => $error)
+        {
+            dao::$errors = str_replace(array('。', '.'), array('', ''), $error);
+            return false;
+        }
+
+        if($begin >= $end)
+        {
+            dao::$errors = $this->lang->execution->charts->cfd->errorBegin;
+            return false;
+        }
+
+        if(date("Y-m-d", strtotime("-3 months", strtotime($end))) > $begin)
+        {
+            dao::$errors = $this->lang->execution->charts->cfd->errorDateRange;
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * 处理版本列表展示数据。
      * Process build list display data.
      *

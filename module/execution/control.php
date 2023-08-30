@@ -1351,24 +1351,23 @@ class execution extends control
     }
 
     /**
-     * Kanban CFD.
+     * 累计流图。
+     * Cumulative flow diagram.
      *
      * @param  int    $executionID
-     * @param  string $type
+     * @param  string $type        story|bug|task
      * @param  string $withWeekend
      * @param  string $begin
      * @param  string $end
      * @access public
      * @return void
      */
-    public function cfd($executionID = 0, $type = 'story', $withWeekend = 'false', $begin = '', $end = '')
+    public function cfd(int $executionID = 0, string $type = 'story', string $withWeekend = 'false', string $begin = '', string $end = '')
     {
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
 
-        $this->loadModel('kanban');
         $this->app->loadClass('date');
-
         $minDate = !helper::isZeroDate($execution->openedDate) ? date('Y-m-d', strtotime($execution->openedDate)) : date('Y-m-d', strtotime($execution->begin));
         $maxDate = !helper::isZeroDate($execution->closedDate) ? date('Y-m-d', strtotime($execution->closedDate)) : helper::today();
         if($execution->lifetime == 'ops' or in_array($execution->attribute, array('request', 'review'))) $type = 'task';
@@ -1378,32 +1377,15 @@ class execution extends control
             $begin = htmlspecialchars($this->post->begin, ENT_QUOTES);
             $end   = htmlspecialchars($this->post->end, ENT_QUOTES);
 
-            $dateError = array();
-
-            if(empty($begin)) $dateError[] = sprintf($this->lang->error->notempty, $this->lang->execution->charts->cfd->begin);
-            if(empty($end)) $dateError[] = sprintf($this->lang->error->notempty, $this->lang->execution->charts->cfd->end);
-            if(empty($dateError))
-            {
-                if($begin < $minDate) $dateError[] = sprintf($this->lang->error->gt, $this->lang->execution->charts->cfd->begin, $minDate);
-                if($begin > $maxDate) $dateError[] = sprintf($this->lang->error->lt, $this->lang->execution->charts->cfd->begin, $maxDate);
-                if($end < $minDate)   $dateError[] = sprintf($this->lang->error->gt, $this->lang->execution->charts->cfd->end, $minDate);
-                if($end > $maxDate)   $dateError[] = sprintf($this->lang->error->lt, $this->lang->execution->charts->cfd->end, $maxDate);
-            }
-            if(!empty($dateError))
-            {
-                foreach($dateError as $index => $error) $dateError[$index] = str_replace(array('。', '.'), array('', ''), $error);
-                return $this->sendError(implode('; ', $dateError));
-            }
-
-            if($begin >= $end) return $this->sendError($this->lang->execution->charts->cfd->errorBegin);
-            if(date("Y-m-d", strtotime("-3 months", strtotime($end))) > $begin) return $this->sendError($this->lang->execution->charts->cfd->errorDateRange);
+            $this->executionZen->checkCFDDate($begin, $end, $minDate, $maxDate);
+            if(dao::isError()) return $this->sendError(dao::getError());
 
             $this->execution->computeCFD($executionID);
             $this->execution->checkCFDData($executionID, $begin);
             return $this->send(array('result' => 'success', 'locate' => $this->createLink('execution', 'cfd', "executionID=$executionID&type=$type&withWeekend=$withWeekend&begin=" . helper::safe64Encode(urlencode($begin)) . "&end=" . helper::safe64Encode(urlencode($end)))));
         }
 
-        if($begin and $end)
+        if($begin && $end)
         {
             $begin = urldecode(helper::safe64Decode($begin));
             $end   = urldecode(helper::safe64Decode($end));
@@ -1412,8 +1394,7 @@ class execution extends control
         {
             list($begin, $end) = $this->execution->getBeginEnd4CFD($execution);
         }
-        $dateList = date::getDateList($begin, $end, 'Y-m-d', $withWeekend == 'false'? 'noweekend' : '');
-
+        $dateList  = date::getDateList($begin, $end, 'Y-m-d', $withWeekend == 'false'? 'noweekend' : '');
         $chartData = $this->execution->buildCFDData($executionID, $dateList, $type);
         if(isset($chartData['line'])) $chartData['line'] = array_reverse($chartData['line']);
 
