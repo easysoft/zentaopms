@@ -4079,7 +4079,8 @@ class execution extends control
     }
 
     /**
-     * Ajax get copy project executions.
+     * 创建执行时，根据项目ID获取可以复制的执行。
+     * When the create an execution, get execution list that can be copied by the project ID.
      *
      * @param  int    $projectID
      * @param  int    $copyExecutionID
