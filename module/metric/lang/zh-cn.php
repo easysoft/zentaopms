@@ -12,6 +12,7 @@ $lang->metric->definition    = "定义";
 $lang->metric->formula       = "计算规则";
 $lang->metric->when          = "收集方式";
 $lang->metric->createdBy     = "创建者";
+$lang->metric->implement     = "实现";
 $lang->metric->implementedBy = "由谁实现";
 $lang->metric->offlineBy     = "由谁下架";
 $lang->metric->lastEdited    = "最后修改";
@@ -102,3 +103,11 @@ if($config->edition != 'open')
     $lang->metric->objectList['risk']        = "风险";
     $lang->metric->objectList['issue']       = "问题";
 }
+
+$lang->metric->implementInstructions = "实现说明";
+$lang->metric->implementTips = array();
+$lang->metric->implementTips[] = '1.下载度量项模板code.php，注意：文件名称要与度量代号保持一致。';
+$lang->metric->implementTips[] = '2.对文件进行编码开发操作，操作参考手册。';
+$lang->metric->implementTips[] = '3.请将开发后的code.php文件放到[用户禅道目录]/tmp/metric.php目录下。';
+$lang->metric->implementTips[] = '4.执行命令赋予文件可执行权限。';
+
