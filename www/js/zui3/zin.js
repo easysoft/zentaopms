@@ -244,7 +244,7 @@
         const render   = (options.renders ? options.renders[info.name] : null) || renderMap[info.name];
         const isHtml   = info.type === 'html';
         const selector = parseSelector(info.selector);
-        const $target  = selector ? $(selector.select) : $target;
+        let $target    = $(selector.select);
         if(render)
         {
             if(isHtml) beforeUpdate($target, info, options);
@@ -268,8 +268,15 @@
         }
 
         beforeUpdate($target, info, options);
-        if(selector.inner) $target.html(info.data);
-        else $target.replaceWith(info.data);
+        if(selector.inner)
+        {
+            $target.html(info.data);
+        }
+        else
+        {
+            $target.replaceWith(info.data);
+            $target = $(selector.select);
+        }
         afterUpdate($target, info, options);
     }
 
