@@ -195,13 +195,6 @@ $config->bug->datatable->fieldList['pri']['width']    = '50';
 $config->bug->datatable->fieldList['pri']['sortType'] = true;
 $config->bug->datatable->fieldList['pri']['show']     = true;
 
-$config->bug->datatable->fieldList['confirmed']['title']    = 'confirmedAB';
-$config->bug->datatable->fieldList['confirmed']['type']     = 'html';
-$config->bug->datatable->fieldList['confirmed']['fixed']    = 'no';
-$config->bug->datatable->fieldList['confirmed']['width']    = '70';
-$config->bug->datatable->fieldList['confirmed']['sortType'] = true;
-$config->bug->datatable->fieldList['confirmed']['show']     = true;
-
 $config->bug->datatable->fieldList['status']['title']    = 'statusAB';
 $config->bug->datatable->fieldList['status']['type']     = 'html';
 $config->bug->datatable->fieldList['status']['fixed']    = 'left';
@@ -216,6 +209,13 @@ $config->bug->datatable->fieldList['branch']['width']      = '100';
 $config->bug->datatable->fieldList['branch']['sortType']   = true;
 $config->bug->datatable->fieldList['branch']['control']    = 'select';
 $config->bug->datatable->fieldList['branch']['dataSource'] = array('module' => 'branch', 'method' => 'getPairs', 'params' => '$productID');
+
+$config->bug->datatable->fieldList['confirmed']['title']    = 'confirmedAB';
+$config->bug->datatable->fieldList['confirmed']['type']     = 'html';
+$config->bug->datatable->fieldList['confirmed']['fixed']    = 'no';
+$config->bug->datatable->fieldList['confirmed']['width']    = '70';
+$config->bug->datatable->fieldList['confirmed']['sortType'] = true;
+$config->bug->datatable->fieldList['confirmed']['show']     = true;
 
 $config->bug->datatable->fieldList['type']['title']    = 'type';
 $config->bug->datatable->fieldList['type']['type']     = 'category';
