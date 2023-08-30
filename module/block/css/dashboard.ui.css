@@ -1,5 +1,4 @@
 body {padding-bottom: 20px;}
-.block-statistic .nav-stacked {overflow: auto; max-height: 220px;}
 @media (min-width: 992px)
 {
     #dashboard > .row {display: table; width: 100%; margin: 0;}

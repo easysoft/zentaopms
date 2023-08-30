@@ -45,13 +45,9 @@ window.handleLayoutChange = function(layout)
     $.ajaxSubmit(
     {
         url:       $.createLink('block', 'layout'),
-        data:      form,
-        onSuccess: (result) =>
-        {
-            console.log('> handleLayoutChange.result', result);
-        }
+        data:      form
     });
-}
+};
 
 /**
  * Handle block menu click.
@@ -69,4 +65,13 @@ window.handleClickBlockMenu = function(info, block)
     if(type === 'edit')   return editBlock(this, data, block);
     if(type === 'create') return createBlock(this, data, block);
     if(type === 'reset')  return resetBlocks(this, data, block);
-}
+};
+
+/**
+ * Handle block load.
+ * @param {object} block
+ */
+window.handleLoadBlock = function(block)
+{
+    $('#dashboard').find(`.dashboard-block[data-id="${block.id}"]`).zuiInit();
+};

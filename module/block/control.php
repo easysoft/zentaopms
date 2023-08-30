@@ -108,6 +108,7 @@ class block extends control
         $this->view->block          = $block;
         $this->view->longBlock      = $block->width >= 2;
         $this->view->isExternalCall = $this->blockZen->isExternalCall();
+        $this->view->params         = $params;
 
         /* 根据 viewType 值 ，判断是否需要返回 json 数据。 */
         $viewType = (isset($block->params->viewType) && $block->params->viewType == 'json') ? 'json' : 'html';

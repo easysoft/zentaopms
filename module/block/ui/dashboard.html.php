@@ -36,7 +36,8 @@ dashboard
     set::blocks(array_values($blocks)),
     set::blockMenu(array('items' => $blockMenuItems)),
     set::onClickMenu(jsRaw('handleClickBlockMenu')),
-    set::onLayoutChange(jsRaw('handleLayoutChange'))
+    set::onLayoutChange(jsRaw('handleLayoutChange')),
+    set::onLoad(jsRaw('handleLoadBlock'))
 );
 
 render();
