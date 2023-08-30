@@ -3945,6 +3945,8 @@ class bugModel extends model
 
         foreach($bugs as $bug)
         {
+            $bug->actions = '<div class="c-actions">' . $this->buildOperateMenu($bug, 'browse') . '</div>';
+
             $severityValue = zget($this->lang->bug->severityList, $bug->severity);
             $severityClass = !is_numeric($severityValue) ? 'label-severity-custom' : 'label-severity';
             $bugSeverity   = !is_numeric($severityValue) ? $severityValue : '';
@@ -4030,7 +4032,6 @@ class bugModel extends model
             $bug->mailto = implode(' ', $bugMailto);
 
             $bug->assignedTo = $this->printAssignedHtml($bug, $users, false);
-            $bug->actions    = '<div class="c-actions">' . $this->buildOperateMenu($bug, 'browse') . '</div>';
 
             foreach($userFields as $field) $bug->$field = zget($users, $bug->$field);
             foreach($dateFields as $field) $bug->$field = empty($bug->$field) || helper::isZeroDate($bug->$field) ? '' : $bug->$field;
