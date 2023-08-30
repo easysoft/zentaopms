@@ -46,13 +46,14 @@ class executionModel extends model
     }
 
     /**
-     * Get features of execution.
+     * 获取系统关闭的功能。
+     * Get the system close function.
      *
-     * @param object $execution
+     * @param  object $execution
      * @access public
      * @return array
      */
-    public function getExecutionFeatures($execution)
+    public function getExecutionFeatures(object $execution): array
     {
         $features = array('story' => true, 'task' => true, 'qa' => true, 'devops' => true, 'burn' => true, 'build' => true, 'other' => true, 'plan' => true);
 
@@ -67,6 +68,8 @@ class executionModel extends model
         elseif(!empty($execution->attribute))
         {
             $features['other'] = false;
+
+            /* Product-related features are disabled during the request, design, and review stage. */
             if(in_array($execution->attribute, array('request', 'design', 'review')))
             {
                 $features['qa']     = false;
@@ -81,7 +84,8 @@ class executionModel extends model
             }
         }
 
-        if(isset($execution->projectInfo) and in_array($execution->projectInfo->model, array('waterfall', 'kanban', 'waterfallplus')) and empty($execution->projectInfo->hasProduct))
+        /* The plan function is disabled for no-product project. */
+        if(isset($execution->projectInfo) && in_array($execution->projectInfo->model, array('waterfall', 'kanban', 'waterfallplus')) && empty($execution->projectInfo->hasProduct))
         {
             $features['plan'] = false;
         }

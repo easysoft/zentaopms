@@ -3035,4 +3035,23 @@ class executionTest
         $this->executionModel->removeMenu($execution);
         return $this->executionModel->lang->execution->menu;
     }
+
+    /**
+     * 获取系统关闭的功能。
+     * Get the system close function.
+     *
+     * @param  object $execution
+     * @access public
+     * @return array
+     */
+    public function getExecutionFeaturesTest(object $execution): array
+    {
+        $features =  $this->executionModel->getExecutionFeatures($execution);
+        foreach($features as $key => $value)
+        {
+            if(!$value) $features[$key] = 0;
+        }
+
+        return $features;
+    }
 }
