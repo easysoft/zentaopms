@@ -40,6 +40,8 @@ class metric extends control
 
             return $this->send($response);
         }
+
+        $this->metric->processObjectList();
         $this->metric->processUnitList();
         $this->display();
     }

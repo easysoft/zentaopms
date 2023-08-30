@@ -530,4 +530,17 @@ class metricModel extends model
 
         $this->lang->metric->unitList['measure'] = $this->lang->custom->conceptOptions->hourPoint[$key];
     }
+
+    /**
+     * 根据后台配置的是否开启用户需求设置对象列表。
+     * Unset objectList['requirement'] if custom requirement is close.
+     *
+     * @access protected
+     * @return void
+     */
+
+    public function processObjectList()
+    {
+        if(!isset($this->config->custom->URAndSR) or !$this->config->custom->URAndSR) unset($this->lang->metric->objectList['requirement']);
+    }
 }
