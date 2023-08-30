@@ -6839,7 +6839,7 @@ class storyModel extends model
                     if(isset($branches[$story->branch]) and $showBranch and $this->config->vision != 'lite') $storyTitle .= "<span class='label label-outline label-badge' title={$branches[$story->branch]}>{$branches[$story->branch]}</span> ";
                     if($story->module and isset($modulePairs[$story->module])) $storyTitle .= "<span class='label label-gray label-badge'>{$modulePairs[$story->module]}</span> ";
                     if($story->parent > 0) $storyTitle .= '<span class="label label-badge label-light" title="' . $this->lang->story->children . '">' . $this->lang->story->childrenAB . '</span> ';
-                    $storyTitle .= $canView ? html::a($storyLink, $storyTitle . $story->title, '', "title='$story->title' style='color: $story->color' data-app='$tab'") : "<span style='color: $story->color'>{$storyTitle}{$story->title}</span>";
+                    $storyTitle .= $canView ? html::a($storyLink, $story->title, '', "title='$story->title' style='color: $story->color' data-app='$tab'") : "<span style='color: $story->color'>{$storyTitle}{$story->title}</span>";
                     if(!empty($story->children)) $storyTitle .= '<a class="story-toggle" data-id="' . $story->id . '"><i class="icon icon-angle-right"></i></a>';
                     $story->title = $storyTitle;
                 }
