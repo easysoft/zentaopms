@@ -14,29 +14,49 @@ namespace zin;
 
 require_once dirname(__DIR__) . DS . 'blockpanel' . DS . 'v1.php';
 
-class statisticBlock extends wg
+/**
+ * 统计类区块（statisticBlock）部件类
+ * The statisticBlock widget class
+ */
+class statisticBlock extends blockPanel
 {
+    /**
+     * Define widget properties.
+     *
+     * @var    array
+     * @access protected
+     */
     protected static array $defineProps = array
     (
-        'id?: string',
-        'title?: string',
-        'block?: object',
-        'longBlock?: bool',
-        'items: array', // {id: string, text: string, url: string}
-        'active?: string'
+        'items: array',   // 列表项目，格式为：{id: string, text: string, url: string, activeUrl: string}[]
+        'active?: string' // 当前激活的项目 ID。
     );
 
+    /**
+     * Get page CSS code.
+     *
+     * @return string|false
+     * @access protected
+     */
     public static function getPageCSS(): string|false
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    protected function buildNav($items, $active, $longBlock): wg|null
+    /**
+     * Build navigator.
+     *
+     * @param string $id
+     * @param array  $items
+     * @param string $active
+     * @param bool   $longBlock
+     * @return wg|null
+     */
+    protected function buildNav($id, $items, $active, $longBlock): wg|null
     {
         if(empty($items)) return null;
 
         $navItems = array();
-        $gid = $this->gid;
         foreach($items as $item)
         {
             $navItems[] = li
@@ -44,8 +64,8 @@ class statisticBlock extends wg
                 setClass('nav-item group'),
                 a
                 (
-                    toggle::tab(array('target' => "#tab_{$gid}_{$item['id']}")),
-                    setClass('block-statistic-nav-item flex-auto min-w-0', $item['id'] === $active ? 'active' : ''),
+                    toggle::tab(array('target' => "#blockTab_{$id}_{$item['id']}")),
+                    setClass('block-statistic-nav-item flex-auto min-w-0', $item['id'] == $active ? 'active scroll-into-view' : ''),
                     span(setClass('text clip'), $item['text'])
                 ),
                 (isset($item['url']) && !empty($item['url'])) ? a
@@ -59,28 +79,54 @@ class statisticBlock extends wg
 
         return div
         (
-            setClass('flex-none block-statistic-nav scrollbar-hover scrollbar-thin bg-surface overflow-y-auto overflow-x-hidden border-r', $longBlock ? 'w-52' : 'w-full'),
+            setClass('flex-none block-statistic-nav border-r', $longBlock ? 'bg-surface w-52' : 'relative w-full'),
             nav
             (
-                set::stacked(true),
+                setClass('scrollbar-thin scrollbar-hover', $longBlock ? 'overflow-y-auto overflow-x-hidden h-full' : 'overflow-x-auto overflow-y-hidden p-2'),
+                set::stacked($longBlock),
                 $navItems
-            )
+            ),
+            $longBlock ? null : array
+            (
+                btn(span(setClass('chevron-left scale-75')), setClass('block-statistic-nav-btn size-sm square w-6 transition-opacity canvas text-primary rounded-full shadow-lg absolute top-3 left-2'), setData('type', 'prev')),
+                btn(span(setClass('chevron-right scale-75')), setClass('block-statistic-nav-btn size-sm square w-6 transition-opacity canvas text-primary rounded-full shadow-lg absolute top-3 right-2'), setData('type', 'next')),
+                bind::click('.block-statistic-nav-btn', implode('', array
+                (
+                    'const disabled = "disabled";',
+                    'const type = $target.data("type");',
+                    'const $nextItem = $element.find(".nav-item>.active").parent()[type]();',
+                    'if(!$nextItem.length) return $target.addClass(disabled);',
+                    '$nextItem.scrollIntoView({block: "nearest", inline: "center", behavior: "smooth", ifNeeded: false}).find("a")[0].click();',
+                    '$element.find(".block-statistic-nav-btn[data-type=\'prev\']").toggleClass(disabled, !$nextItem.prev().length);',
+                    '$element.find(".block-statistic-nav-btn[data-type=\'next\']").toggleClass(disabled, !$nextItem.next().length);'
+                )))
+            ),
         );
     }
 
-    protected function buildPanes($items, $active, $longBlock): wg|null
+    /**
+     * Build tabs panes.
+     *
+     * @param string $id
+     * @param array  $items
+     * @param string $active
+     * @param bool   $longBlock
+     * @return wg|null
+     */
+    protected function buildPanes($id, $items, $active, $longBlock): wg|null
     {
         if(empty($items)) return null;
 
         $panes = array();
-        $gid = $this->gid;
         foreach($items as $item)
         {
-            $isActive = $item['id'] === $active;
+            $isActive = $item['id'] == $active;
             $panes[] = div
             (
-                setID("tab_{$gid}_{$item['id']}"),
-                setClass('tab-pane h-full', $isActive ? 'active' : ''),
+                isset($item['activeUrl']) ? setData('active', $item['activeUrl']) : null,
+                setData('name', $item['id']),
+                setID("blockTab_{$id}_{$item['id']}"),
+                setClass('tab-pane h-full', $isActive ? 'active' : 'need-load'),
                 $isActive ? $this->children() : null
             );
         }
@@ -88,25 +134,27 @@ class statisticBlock extends wg
         return div
         (
             setClass('flex-auto block-statistic-panes'),
-            $panes
+            $panes,
+            on::show('.tab-pane.need-load', 'const $target = $(target); const blockID = $target.closest(".dashboard-block").attr("data-id"); const url = $(target).data("active"); loadPartial(url, `#${target.id}>*`, {id: "blockTab_' . $id . '"}); $("#dashboard").dashboard("update", {id: blockID, fetch: url, needLoad: false});')
         );
     }
 
-    protected function build(): wg
+    /**
+     * Build panel body.
+     *
+     * @return wg
+     */
+    protected function buildBody(): wg
     {
-        list($id, $title, $block, $longBlock, $items, $active) = $this->prop(array('id', 'title', 'block', 'longBlock', 'items', 'active'));
+        list($id, $title, $block, $longBlock, $items, $active, $bodyProps) = $this->prop(array('id', 'title', 'block', 'longBlock', 'items', 'active', 'bodyProps'));
         if($longBlock === null) $longBlock = data('longBlock');
 
-        return new blockPanel
+        return div
         (
-            set::block($block),
-            set::title($title),
-            set::id($id),
-            set::longBlock($longBlock),
-            set::bodyClass('block-statistic flex p-0'),
-            set($this->getRestProps()),
-            $this->buildNav($items, $active, $longBlock),
-            $this->buildPanes($items, $active, $longBlock)
+            setClass('panel-body p-0 block-statistic', $longBlock ? 'row' : 'col', $this->prop('bodyClass')),
+            set($bodyProps),
+            $this->buildNav($id, $items, $active, $longBlock),
+            $this->buildPanes($id, $items, $active, $longBlock)
         );
     }
 }
