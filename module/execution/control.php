@@ -3285,7 +3285,8 @@ class execution extends control
     }
 
     /**
-     * Execution dynamic.
+     * 获取执行动态。
+     * Get the dynamic of execution.
      *
      * @param  int    $executionID
      * @param  string $type
@@ -3296,7 +3297,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function dynamic($executionID = 0, $type = 'today', $param = '', $recTotal = 0, $date = '', $direction = 'next')
+    public function dynamic(int $executionID = 0, string $type = 'today', string $param = '', int $recTotal = 0, string $date = '', string $direction = 'next')
     {
         /* Save session. */
         $uri = $this->app->getURI(true);
@@ -3314,12 +3315,8 @@ class execution extends control
 
         /* use first execution if executionID does not exist. */
         if(!isset($this->executions[$executionID])) $executionID = key($this->executions);
-
-        /* Append id for second sort. */
-        $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
-
-        /* Set the menu. If the executionID = 0, use the indexMenu instead. */
         $this->execution->setMenu($executionID);
+        $execution = $this->execution->getByID($executionID);
 
         /* Set the pager. */
         $this->app->loadClass('pager', true);
@@ -3329,31 +3326,29 @@ class execution extends control
         $account = 'all';
         if($type == 'account')
         {
-            $user = $this->loadModel('user')->getById((int)$param, 'id');
+            $user = $this->loadModel('user')->getById((int)$param, 'id'); /* 通过 id 字段获取用户。另一种是通过 account 获取。*/
             if($user) $account = $user->account;
         }
-        $period  = $type == 'account' ? 'all'  : $type;
+
+        /* 获取这个时间段的操作日志列表。*/
+        $period  = $type == 'account' ? 'all' : $type;
+        $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
         $date    = empty($date) ? '' : date('Y-m-d', $date);
         $actions = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager, 'all', 'all', $executionID, $date, $direction);
         if(empty($recTotal)) $recTotal = count($actions);
 
-        /* The header and position. */
-        $execution = $this->execution->getByID($executionID);
-        $this->view->title      = $execution->name . $this->lang->colon . $this->lang->execution->dynamic;
-
+        $this->view->title        = $execution->name . $this->lang->colon . $this->lang->execution->dynamic;
         $this->view->userIdPairs  = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted|useid');
         $this->view->accountPairs = $this->loadModel('user')->getPairs('noletter|nodeleted');
-
-        /* Assign. */
-        $this->view->executionID = $executionID;
-        $this->view->type        = $type;
-        $this->view->orderBy     = $orderBy;
-        $this->view->pager       = $pager;
-        $this->view->account     = $account;
-        $this->view->param       = $param;
-        $this->view->dateGroups  = $this->action->buildDateGroup($actions, $direction, $type);
-        $this->view->direction   = $direction;
-        $this->view->recTotal    = $recTotal;
+        $this->view->executionID  = $executionID;
+        $this->view->type         = $type;
+        $this->view->orderBy      = $orderBy;
+        $this->view->pager        = $pager;
+        $this->view->account      = $account;
+        $this->view->param        = $param;
+        $this->view->dateGroups   = $this->action->buildDateGroup($actions, $direction, $type); /* 将日志按照日期分组，以日期为索引，将日志列表作为值。*/
+        $this->view->direction    = $direction;
+        $this->view->recTotal     = $recTotal;
         $this->display();
     }
 
