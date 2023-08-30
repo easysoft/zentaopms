@@ -352,7 +352,6 @@ class repo extends control
             $content = helper::convertEncoding($content, $encoding);
         }
 
-        a($content); die;
         $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->view;
         $this->view->type        = 'view';
         $this->view->showBug     = $showBug;

@@ -75,7 +75,7 @@ if(strpos($repo->SCM, 'Subversion') === false)
     $breadcrumbItems[] = dropmenu
         (
             setID('source'),
-            set::objectID($selected),
+            set::objectID($objectID),
             set::text($oldRevision),
             set::data(array('data' => $menuData, 'tabs' => $tabs)),
         );
@@ -84,7 +84,7 @@ if(strpos($repo->SCM, 'Subversion') === false)
     $breadcrumbItems[] = dropmenu
         (
             setID('target'),
-            set::objectID($selected),
+            set::objectID($objectID),
             set::text($newRevision),
             set::data(array('data' => $menuData, 'tabs' => $tabs)),
         );
