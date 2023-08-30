@@ -704,18 +704,19 @@ class executionTest
     }
 
     /**
-     * function getList test by execution
+     * 获取执行列表信息。
+     * Get execution list information.
      *
-     * @param  string $projectID
+     * @param  int    $projectID
      * @param  string $type
-     * @param  array  $status
-     * @param  string $limit
-     * @param  string $productID
-     * @param  string $count
+     * @param  string $status
+     * @param  int    $limit
+     * @param  int    $productID
+     * @param  int    $count
      * @access public
-     * @return array
+     * @return array|int
      */
-    public function getListTest($projectID, $type, $status, $limit, $productID, $count)
+    public function getListTest(int $projectID, string $type, string $status, int $limit, int $productID, int $count): array|int
     {
         $object = $this->executionModel->getList($projectID, $type, $status, $limit, $productID);
 

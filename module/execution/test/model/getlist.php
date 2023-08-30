@@ -39,20 +39,8 @@ $projectProduct->gen(9);
 /**
 
 title=测试executionModel->getListTest();
+timeout=1
 cid=1
-pid=1
-
-敏捷项目执行列表查询 >> 2,迭代1
-瀑布项目执行列表查询 >> 3,阶段1,stage
-看板项目执行列表查询 >> 4,看板1,kanban
-产品1执行列表查询 >> 0
-敏捷执行列表查询 >> sprint,迭代2
-瀑布执行列表查询 >> stage,阶段2
-看板执行列表查询 >> kanban,看板2
-wait执行列表查询 >> 0
-doing执行列表查询 >> doing,迭代1
-执行列表2条查询 >> 0
-执行列表10条查询 >> 6
 
 */
 

@@ -1680,20 +1680,21 @@ class executionModel extends model
     }
 
     /**
-     * Get project lists.
+     * 获取执行列表信息。
+     * Get execution list information.
      *
-     * @param  int    $projectID
-     * @param  string $type    all|sprint|stage|kanban
-     * @param  string $status  all|undone|wait|running
-     * @param  int    $limit
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  object $pager
-     * @param  bool   $withChildren
+     * @param  int         $projectID
+     * @param  string      $type      all|sprint|stage|kanban
+     * @param  string      $status    all|undone|wait|running
+     * @param  int         $limit
+     * @param  int         $productID
+     * @param  int         $branch
+     * @param  object|null $pager
+     * @param  bool        $withChildren
      * @access public
      * @return array
      */
-    public function getList($projectID = 0, $type = 'all', $status = 'all', $limit = 0, $productID = 0, $branch = 0, $pager = null, $withChildren = true)
+    public function getList(int $projectID = 0, string $type = 'all',string  $status = 'all', int $limit = 0, int $productID = 0, int $branch = 0, object|null $pager = null, bool $withChildren = true)
     {
         if($status == 'involved') return $this->getInvolvedExecutionList($projectID, $status, $limit, $productID, $branch);
 
@@ -1702,10 +1703,10 @@ class executionModel extends model
             return $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project= t2.id')
                 ->where('t1.product')->eq($productID)
+                ->andWhere('t2.deleted')->eq(0)
                 ->beginIF($projectID)->andWhere('t2.project')->eq($projectID)->fi()
                 ->beginIF($type == 'all')->andWhere('t2.type')->in('sprint,stage,kanban')->fi()
                 ->beginIF($type != 'all')->andWhere('t2.type')->eq($type)->fi()
-                ->andWhere('t2.deleted')->eq(0)
                 ->beginIF($status == 'undone')->andWhere('t2.status')->notIN('done,closed')->fi()
                 ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
