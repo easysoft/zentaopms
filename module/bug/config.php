@@ -178,6 +178,7 @@ $config->bug->datatable->fieldList['title']['fixed']    = 'left';
 $config->bug->datatable->fieldList['title']['width']    = 'auto';
 $config->bug->datatable->fieldList['title']['minWidth'] = '200';
 $config->bug->datatable->fieldList['title']['sortType'] = true;
+$config->bug->datatable->fieldList['title']['flex']     = true;
 $config->bug->datatable->fieldList['title']['required'] = 'yes';
 
 $config->bug->datatable->fieldList['severity']['title']    = 'severityAB';
@@ -196,7 +197,7 @@ $config->bug->datatable->fieldList['pri']['show']     = true;
 
 $config->bug->datatable->fieldList['confirmed']['title']    = 'confirmedAB';
 $config->bug->datatable->fieldList['confirmed']['type']     = 'html';
-$config->bug->datatable->fieldList['confirmed']['width']    = '100';
+$config->bug->datatable->fieldList['confirmed']['width']    = '70';
 $config->bug->datatable->fieldList['confirmed']['sortType'] = true;
 $config->bug->datatable->fieldList['confirmed']['show']     = true;
 
@@ -260,7 +261,7 @@ $config->bug->datatable->fieldList['openedBuild']['dataSource'] = array('module'
 $config->bug->datatable->fieldList['assignedTo']['title']      = 'assignedTo';
 $config->bug->datatable->fieldList['assignedTo']['type']       = 'html';
 $config->bug->datatable->fieldList['assignedTo']['assignLink'] = array('module' => 'bug', 'method' => 'assignTo', 'params' => 'bugID={id}');
-$config->bug->datatable->fieldList['assignedTo']['width']      = '120';
+$config->bug->datatable->fieldList['assignedTo']['width']      = '90';
 $config->bug->datatable->fieldList['assignedTo']['sortType']   = true;
 $config->bug->datatable->fieldList['assignedTo']['show']       = true;
 $config->bug->datatable->fieldList['assignedTo']['dataSource'] = array('module' => 'user', 'method' =>'getPairs', 'params' => 'noclosed|noletter');
@@ -309,20 +310,20 @@ $config->bug->datatable->fieldList['activatedDate']['width']    = '90';
 $config->bug->datatable->fieldList['activatedDate']['sortType'] = true;
 
 $config->bug->datatable->fieldList['story']['title']      = 'story';
-$config->bug->datatable->fieldList['story']['type']       = 'text';
+$config->bug->datatable->fieldList['story']['type']       = 'html';
 $config->bug->datatable->fieldList['story']['width']      = '120';
 $config->bug->datatable->fieldList['story']['sortType']   = true;
 $config->bug->datatable->fieldList['story']['control']    = 'select';
 $config->bug->datatable->fieldList['story']['dataSource'] = array('module' => 'story', 'method' =>'getProductStoryPairs', 'params' => '$productID');
 
 $config->bug->datatable->fieldList['task']['title']      = 'task';
-$config->bug->datatable->fieldList['task']['type']       = 'text';
+$config->bug->datatable->fieldList['task']['type']       = 'html';
 $config->bug->datatable->fieldList['task']['width']      = '120';
 $config->bug->datatable->fieldList['task']['sortType']   = true;
 $config->bug->datatable->fieldList['task']['dataSource'] = array('module' => 'bug', 'method' =>'getRelatedObjects', 'params' => 'task&id,name');
 
 $config->bug->datatable->fieldList['toTask']['title']    = 'toTask';
-$config->bug->datatable->fieldList['toTask']['type']     = 'text';
+$config->bug->datatable->fieldList['toTask']['type']     = 'html';
 $config->bug->datatable->fieldList['toTask']['width']    = '120';
 $config->bug->datatable->fieldList['toTask']['sortType'] = true;
 
@@ -365,17 +366,11 @@ $config->bug->datatable->fieldList['lastEditedDate']['type']     = 'date';
 $config->bug->datatable->fieldList['lastEditedDate']['width']    = '90';
 $config->bug->datatable->fieldList['lastEditedDate']['sortType'] = true;
 
-$config->bug->datatable->fieldList['steps']['title']    = 'steps';
-$config->bug->datatable->fieldList['steps']['type']     = 'text';
-$config->bug->datatable->fieldList['steps']['width']    = 'auto';
-$config->bug->datatable->fieldList['steps']['sortType'] = true;
-$config->bug->datatable->fieldList['steps']['control']  = 'textarea';
-$config->bug->datatable->fieldList['steps']['display']  = false; // The configuration of datatable also used to export data, the false value means the field won't display in datatable.
+$config->bug->datatable->fieldList['steps']['title']   = 'steps';
+$config->bug->datatable->fieldList['steps']['control'] = 'textarea';
+$config->bug->datatable->fieldList['steps']['display'] = false; // The configuration of datatable also used to export data, the false value means the field won't display in datatable.
 
 $config->bug->datatable->fieldList['case']['title']      = 'case';
-$config->bug->datatable->fieldList['case']['type']       = 'text';
-$config->bug->datatable->fieldList['case']['width']      = 'auto';
-$config->bug->datatable->fieldList['case']['sortType']   = true;
 $config->bug->datatable->fieldList['case']['dataSource'] = array('module' => 'bug', 'method' =>'getRelatedObjects', 'params' => 'case&id,title');
 $config->bug->datatable->fieldList['case']['display']    = false; // The configuration of datatable also used to export data, the false value means the field won't display in datatable.
 
