@@ -15,7 +15,12 @@ namespace zin;
 jsVar('copied', $lang->repo->copied);
 
 $module = $app->tab == 'devops' ? 'repo' : $app->tab;
-dropmenu(set::module($module), set::tab($module));
+dropmenu
+(
+    set::module($module),
+    set::tab($module),
+    set::url(createLink($module, 'ajaxGetDropMenuData', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
+);
 
 /* Prepare repo select data. */
 $branchMenus = array();

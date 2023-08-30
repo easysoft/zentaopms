@@ -161,6 +161,7 @@ class repo extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
+        $this->commonAction(0, $objectID);
         $this->repoZen->buildCreateForm($objectID);
     }
 
@@ -386,6 +387,8 @@ class repo extends control
      */
     public function monaco($repoID, $objectID = 0, $entry = '', $revision = 'HEAD', $showBug = 'false', $encoding = '')
     {
+        $this->commonAction($repoID, $objectID);
+
         $file     = $entry;
         $repo     = $this->repo->getByID($repoID);
         $entry    = $this->repo->decodePath($entry);

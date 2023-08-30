@@ -10,7 +10,13 @@ declare(strict_types=1);
  */
 namespace zin;
 
-if($this->app->tab != 'devops') dropmenu(set::module('repo'), set::tab('repo'));
+$module = $app->tab == 'devops' ? 'repo' : $app->tab;
+dropmenu
+(
+    set::module($module),
+    set::tab($module),
+    set::url(createlink($module, 'ajaxgetdropmenudata', "objectid=$objectid&module={$app->rawmodule}&method={$app->rawmethod}"))
+);
 
 jsVar('pathGitTip', $lang->repo->example->path->git);
 jsVar('pathSvnTip', $lang->repo->example->path->svn);

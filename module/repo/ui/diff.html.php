@@ -12,7 +12,13 @@ declare(strict_types=1);
 
 namespace zin;
 
-dropmenu(set::module('repo'), set::tab('repo'));
+$module = $app->tab == 'devops' ? 'repo' : $app->tab;
+dropmenu
+(
+    set::module($module),
+    set::tab($module),
+    set::url(createLink($module, 'ajaxGetDropMenuData', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
+);
 
 jsVar('repo', $repo);
 jsVar('repoLang', $lang->repo);
