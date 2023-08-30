@@ -32,6 +32,7 @@ $lang->repo->blameTmpl       = 'Code for line <strong>%line</strong>: %name comm
 $lang->repo->notRelated      = 'There is currently no related ZenTao object';
 $lang->repo->source          = 'Criterion';
 $lang->repo->target          = 'Contrast';
+$lang->repo->descPlaceholder = 'One sentence description';
 
 $lang->repo->browseAction    = 'Browse Repo';
 $lang->repo->createAction    = 'Créer Ref';

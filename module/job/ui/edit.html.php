@@ -119,6 +119,7 @@ formPanel
         formGroup
         (
             set::label($lang->job->engine),
+            set::name('engine'),
             set::control('static'),
             set::value(zget($lang->job->engineList, $job->engine, '')),
         ),
