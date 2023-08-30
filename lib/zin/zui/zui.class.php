@@ -210,7 +210,7 @@ class zui extends wg
 
     public static function height($value)
     {
-        return zui::skin('h', $value, '0', 'width');
+        return zui::skin('h', $value, '0', 'height');
     }
 
     public static function ring(/* ...$args */)
