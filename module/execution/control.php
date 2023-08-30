@@ -3402,6 +3402,7 @@ class execution extends control
     }
 
     /**
+     * 通过执行ID和指派给获取团队成员。
      * AJAX: get team members of the execution.
      *
      * @param  int    $executionID
@@ -3409,7 +3410,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function ajaxGetMembers($executionID, $assignedTo = '')
+    public function ajaxGetMembers(int $executionID, string $assignedTo = '')
     {
         $users = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution');
         if($this->app->getViewType() === 'json')
