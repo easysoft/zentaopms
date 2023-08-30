@@ -3776,41 +3776,10 @@ class executionModel extends model
             ->fetchPairs();
         if(!$executions) return array();
 
-        /* Update today's data of burn. */
-        $burns = $this->dao->select("execution, '$today' AS date, sum(estimate) AS `estimate`, sum(`left`) AS `left`, SUM(consumed) AS `consumed`")
-            ->from(TABLE_TASK)
-            ->where('execution')->in(array_keys($executions))
-            ->andWhere('deleted')->eq('0')
-            ->andWhere('parent')->ge('0')
-            ->andWhere('status')->ne('cancel')
-            ->groupBy('execution')
-            ->fetchAll('execution');
-        $closedLefts = $this->dao->select('execution, sum(`left`) AS `left`')->from(TABLE_TASK)
-            ->where('execution')->in(array_keys($executions))
-            ->andWhere('deleted')->eq('0')
-            ->andWhere('parent')->ge('0')
-            ->andWhere('status')->eq('closed')
-            ->groupBy('execution')
-            ->fetchAll('execution');
-        $finishedEstimates = $this->dao->select("execution, sum(`estimate`) AS `estimate`")->from(TABLE_TASK)
-            ->where('execution')->in(array_keys($executions))
-            ->andWhere('deleted')->eq('0')
-            ->andWhere('parent')->ge('0')
-            ->andWhere('status', true)->eq('done')
-            ->orWhere('status')->eq('closed')
-            ->markRight(1)
-            ->groupBy('execution')
-            ->fetchAll('execution');
-        $storyPoints = $this->dao->select('t1.project, sum(t2.estimate) AS `storyPoint`')->from(TABLE_PROJECTSTORY)->alias('t1')
-            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
-            ->where('t1.project')->in(array_keys($executions))
-            ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t2.status')->ne('closed')
-            ->andWhere('t2.stage')->in('wait,planned,projected,developing')
-            ->groupBy('project')
-            ->fetchAll('project');
+        /* Get burn related data. */
+        list($burns, $closedLefts, $finishedEstimates, $storyPoints) = $this->executionTao->fetchBurnData(array_keys($executions));
 
+        /* Update today's data of burn. */
         foreach($burns as $executionID => $burn)
         {
             if(isset($closedLefts[$executionID]))

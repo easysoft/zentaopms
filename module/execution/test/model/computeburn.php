@@ -38,16 +38,13 @@ $task->gen(10);
 /**
 
 title=测试executionModel->computeBurnTest();
+timeout=0
 cid=1
-pid=1
-
-正常初始化 >> code3
-初始化后数据统计 >> 1
 
 */
 
-$count = array('0','1');
+$count = array(0,1);
 
 $executionTester = new executionTest();
 r($executionTester->computeBurnTest($count[0])) && p('3:executionName') && e('code3'); // 正常初始化
-r($executionTester->computeBurnTest($count[1])) && p()                    && e('1');   // 初始化后数据统计
+r($executionTester->computeBurnTest($count[1])) && p()                  && e('1');   // 初始化后数据统计
