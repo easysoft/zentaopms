@@ -32,12 +32,19 @@ class datatableModel extends model
         if($this->session->currentProductType === 'normal') unset($this->config->$module->datatable->fieldList['branch']);
         foreach($this->config->$module->datatable->fieldList as $field => $items)
         {
+            if(zget($items, 'display', true) === false)
+            {
+                unset($this->config->$module->datatable->fieldList[$field]);
+                continue;
+            }
+
             if($field === 'branch')
             {
                 if($this->session->currentProductType === 'branch')   $this->config->$module->datatable->fieldList[$field]['title'] = $this->lang->datatable->branch;
                 if($this->session->currentProductType === 'platform') $this->config->$module->datatable->fieldList[$field]['title'] = $this->lang->datatable->platform;
                 continue;
             }
+
             $title = zget($this->lang->$module, $items['title'], zget($this->lang, $items['title'], $items['title']));
             $this->config->$module->datatable->fieldList[$field]['title'] = $title;
         }
