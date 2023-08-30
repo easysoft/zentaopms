@@ -7,6 +7,7 @@ statisticSyntax="false"
 codeRootDir=$PWD
 composerDir="$(dirname "$(realpath "$0")")"
 outputDir="$PWD/tmp"
+reportHtmlFile="$PWD/misc/downgrade-report-tpl.html"
 
 helper() {
   cat << EOF
@@ -48,6 +49,7 @@ while getopts "isr:p:o:" opt; do
 done
 
 shift $((OPTIND - 1))
+statisticDataFile="$outputDir/statistic.data.json"
 
 if [ "$#" -eq 0 ];then
     echo "need at least one file or directory"
@@ -65,7 +67,6 @@ done
 # 结束命令行参数处理
 
 excludeRegexList=(
-module/holiday/ext/
 lib/purifier/HTMLPurifier.autoload-legacy.php
 lib/sqlparser/vendor/
 )
@@ -195,8 +196,7 @@ ensureSyntaxPassed() {
             echo "downgrade failed"
             echo "md5 compare (before:$beforeMD5) (after:$afterMD5)"
             if [[ "$statisticSyntax" == "true" ]];then
-              outputFile="${outputDir}/syntax-error-${phpVersion}.log"
-              syntaxCheck "$phpVersion" "$phpFilePath" >> "$outputFile" || echo "record file $phpFilePath"
+              syntaxAddErrRecord "$phpVersion" "$phpFilePath"
               return 0
             else
               return 1
@@ -292,38 +292,94 @@ DownGrade() {
     echo
 }
 
-# 设置脚本启动时间
-startPointTime=$(date +'%Y-%m-%d %H:%M:%S')
+syntaxInitReport() {
+  echo '{"versions": {}}' > "$statisticDataFile"
+}
 
-# 执行 composer 组件安装
-if [ "$installRector" = "true" ];then
-  lastDir=$PWD
-  cd "$composerDir" || exit 1
+syntaxAddErrRecord() {
+  phpVersion="$1"
+  phpFilePath="$2"
+
+  phpCli=$(which php"${phpVersion}")
+  listKey=".versions[\"$phpVersion\"]"
+
+  fileName=$(echo "$phpFilePath"| sed "s|${codeRootDir}/||")
   
-  composer config -g repo.packagist composer https://mirrors.cloud.tencent.com/composer/
-  composer install
+  lastDir=$PWD
+  cd "$codeRootDir" || exit 1
 
-  cd "$lastDir" || exit 1
-fi
+  set +e
+  errMsg=$($phpCli -l "$fileName" | jq -Rs '.')
+  set -e
 
-# 检查 -p 参数, 执行多版本降级或是单版本降级
-if [[ "$phpVer" =~ ^.*, ]];then
-    IFS=',' read -r -a verList <<< "$phpVer"
-    for v in "${verList[@]}"
+  cd "$lastDir"
+
+  jq "$listKey += [\"$fileName\", $errMsg]" "$statisticDataFile" > "$statisticDataFile.tmp"
+  mv "$statisticDataFile.tmp" "$statisticDataFile"
+}
+
+preProcess() {
+  # 初始化语法错误记录
+  if [[ "$statisticSyntax" == "true" ]];then
+    syntaxInitReport
+  fi
+
+  # 执行 composer 组件安装
+  if [ "$installRector" = "true" ];then
+    lastDir=$PWD
+    cd "$composerDir" || exit 1
+    
+    composer config -g repo.packagist composer https://mirrors.cloud.tencent.com/composer/
+    composer install
+
+    cd "$lastDir" || exit 1
+  fi
+}
+
+process() {
+  # 设置脚本启动时间
+  startPointTime=$(date +'%Y-%m-%d %H:%M:%S')
+
+  # 检查 -p 参数, 执行多版本降级或是单版本降级
+  if [[ "$phpVer" =~ ^.*, ]];then
+      IFS=',' read -r -a verList <<< "$phpVer"
+      for v in "${verList[@]}"
+      do
+          existsPHPCli "$v" || (echo "php${v} is not found, abort."; exit 3)
+      done
+
+      for v in "${verList[@]}"
+      do
+          DownGrade "$v" "$startPointTime" "${downGradeDirs[@]}"
+      done
+  else
+      existsPHPCli "$phpVer" || (echo "php${phpVer} is not found, abort."; exit 3)
+      DownGrade "$phpVer" "$startPointTime" "${downGradeDirs[@]}"
+  fi
+}
+
+postProcess() {
+  if [[ "$statisticSyntax" == "true" ]];then
+    foundSyntaxErr="false"
+    for ver in $(jq -r '.versions | keys[]' "$statisticDataFile")
     do
-        existsPHPCli "$v" || (echo "php${v} is not found, abort."; exit 3)
+      count=$(jq -r ".versions[\"$ver\"] | length" < "$statisticDataFile")
+      if [[ "$count" -gt 0 && "$foundSyntaxErr" != "true" ]];then
+        foundSyntaxErr=true
+      fi
     done
 
-    for v in "${verList[@]}"
-    do
-        DownGrade "$v" "$startPointTime" "${downGradeDirs[@]}"
-    done
-else
-    existsPHPCli "$phpVer" || (echo "php${phpVer} is not found, abort."; exit 3)
-    DownGrade "$phpVer" "$startPointTime" "${downGradeDirs[@]}"
-fi
+    if [[ "$foundSyntaxErr" == "true" ]];then
+      reportInsertLine=$(grep -n 'const jsonData' "$reportHtmlFile" | cut -d: -f1)
+      jq -c . "$statisticDataFile" | sed "${reportInsertLine}r /dev/stdin" "$reportHtmlFile" > "$outputDir/downgradeReport.html"
+    fi
+  fi
+  cat "$statisticDataFile"
+}
 
-
+preProcess
+process
+postProcess
 
 # syntaxCheck "$phpVer" /code/module/pipeline/model.php
 # downGradeDir "$phpVer" "${downGradeDirs[@]}"
