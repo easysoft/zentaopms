@@ -10,13 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$module = $app->tab == 'devops' ? 'repo' : $app->tab;
-dropmenu
-(
-    set::module($module),
-    set::tab($module),
-    set::url(createlink($module, 'ajaxgetdropmenudata', "objectid=$objectid&module={$app->rawmodule}&method={$app->rawmethod}"))
-);
+if($this->app->tab != 'devops') dropmenu(set::module('repo'), set::tab('repo'));
 
 jsVar('pathGitTip', $lang->repo->example->path->git);
 jsVar('pathSvnTip', $lang->repo->example->path->svn);
@@ -181,14 +175,6 @@ formPanel
             )
         )
     ),
-    formGroup
-    (
-        set::width('1/2'),
-        set::name("desc"),
-        set::label($lang->story->spec),
-        set::control("input"),
-        set::placeholder($lang->repo->descPlaceholder),
-    ),
     formRow
     (
         set::id('aclList'),
@@ -240,6 +226,12 @@ formPanel
             )
         ),
     ),
+    formGroup
+    (
+        set::name("desc"),
+        set::label($lang->story->spec),
+        set::control("editor")
+    )
 );
 
 render();
