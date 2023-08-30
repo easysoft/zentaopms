@@ -79,14 +79,16 @@ $config->task->datatable->fieldList['pri']['required'] = 'no';
 $config->task->datatable->fieldList['pri']['sortType'] = true;
 $config->task->datatable->fieldList['pri']['name']     = $lang->task->pri;
 
-$config->task->datatable->fieldList['assignedTo']['title']      = 'assignedTo';
-$config->task->datatable->fieldList['assignedTo']['fixed']      = 'no';
-$config->task->datatable->fieldList['assignedTo']['width']      = '100';
-$config->task->datatable->fieldList['assignedTo']['type']       = 'html';
-$config->task->datatable->fieldList['assignedTo']['required']   = 'no';
+$config->task->datatable->fieldList['assignedTo']['title']       = 'assignedTo';
+$config->task->datatable->fieldList['assignedTo']['fixed']       = 'no';
+$config->task->datatable->fieldList['assignedTo']['width']       = '100';
+$config->task->datatable->fieldList['assignedTo']['type']        = 'html';
+$config->task->datatable->fieldList['assignedTo']['required']    = 'no';
 $config->task->datatable->fieldList['assignedTo']['currentUser'] = $app->user->account;
 $config->task->datatable->fieldList['assignedTo']['assignLink']  = array('module' => 'task', 'method' => 'assignTo', 'params' => 'executionID={execution}&taskID={id}');
 $config->task->datatable->fieldList['assignedTo']['sortType']    = true;
+$config->task->datatable->fieldList['assignedTo']['control']     = 'select';
+$config->task->datatable->fieldList['assignedTo']['dataSource']  = array('module' => 'user', 'method' => 'getTeamMemberPairs', 'params' => '$executionID&execution');
 
 $config->task->datatable->fieldList['assignedDate']['title']    = 'assignedDate';
 $config->task->datatable->fieldList['assignedDate']['fixed']    = 'no';
@@ -123,6 +125,7 @@ $config->task->datatable->fieldList['deadline']['width']    = '70';
 $config->task->datatable->fieldList['deadline']['fixed']    = 'no';
 $config->task->datatable->fieldList['deadline']['sortType'] = true;
 $config->task->datatable->fieldList['deadline']['required'] = 'no';
+$config->task->datatable->fieldList['deadline']['control']  = 'date';
 
 $config->task->datatable->fieldList['estimate']['title']    = 'estimateAB';
 $config->task->datatable->fieldList['estimate']['width']    = '85';
@@ -248,12 +251,32 @@ $config->task->datatable->fieldList['story']['sortType']   = true;
 $config->task->datatable->fieldList['story']['required']   = 'no';
 $config->task->datatable->fieldList['story']['name']       = $lang->task->story;
 $config->task->datatable->fieldList['story']['type']       = 'html';
+$config->task->datatable->fieldList['story']['control']    = 'select';
+$config->task->datatable->fieldList['story']['dataSource'] = array('module' => 'story', 'method' => 'getExecutionStoryPairs', 'params' => '$executionID&0&all&&&active');
 
 $config->task->datatable->fieldList['mailto']['title']    = 'mailto';
 $config->task->datatable->fieldList['mailto']['width']    = '100';
 $config->task->datatable->fieldList['mailto']['fixed']    = 'no';
 $config->task->datatable->fieldList['mailto']['sortType'] = true;
 $config->task->datatable->fieldList['mailto']['required'] = 'no';
+
+$config->task->datatable->fieldList['module']['title']      = 'idAB';
+$config->task->datatable->fieldList['module']['control']    = 'select';
+$config->task->datatable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getTaskOptionMenu', 'params' => '$executionID');
+
+$config->task->datatable->fieldList['execution']['title']      = 'idAB';
+$config->task->datatable->fieldList['execution']['control']    = 'hidden';
+$config->task->datatable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs');
+
+$config->task->datatable->fieldList['project']['title']      = 'idAB';
+$config->task->datatable->fieldList['project']['control']    = 'hidden';
+$config->task->datatable->fieldList['project']['dataSource'] = array('module' => 'project', 'method' => 'getPairs');
+
+$config->task->datatable->fieldList['mode']['title']   = 'idAB';
+$config->task->datatable->fieldList['mode']['control'] = 'hidden';
+
+$config->task->datatable->fieldList['desc']['title']   = 'idAB';
+$config->task->datatable->fieldList['desc']['control'] = 'textarea';
 
 $config->task->datatable->fieldList['actions']['title']    = 'actions';
 $config->task->datatable->fieldList['actions']['type']     = 'html';
