@@ -7,6 +7,7 @@
 $showSwitchLink = true;
 if($currentModule == 'execution' && ($currentMethod == 'all' || $currentMethod == 'task')) $showSwitchLink = false;
 if($currentModule == 'product' && $currentMethod == 'browse') $showSwitchLink = false;
+if($currentModule == 'bug' && $currentMethod == 'browse') $showSwitchLink = false;
 ?>
 
 <style>
