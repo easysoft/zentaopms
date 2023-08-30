@@ -1334,16 +1334,19 @@ class execution extends control
     }
 
     /**
+     * 更新燃尽图数据。
      * Compute burndown datas.
      *
      * @param  string $reload
      * @access public
      * @return void
      */
-    public function computeBurn($reload = 'no')
+    public function computeBurn(string $reload = 'no')
     {
         $this->view->burns = $this->execution->computeBurn();
+
         if($reload == 'yes') return $this->send(array('load' => true, 'result' => 'success'));
+
         $this->display();
     }
 
