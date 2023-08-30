@@ -12,6 +12,18 @@
 class pivotModel extends model
 {
     /**
+     * Construct.
+     *
+     * @access public
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->loadBIDAO();
+    }
+
+    /**
      * Get pivot.
      *
      * @param  int    $pivotID

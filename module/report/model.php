@@ -14,6 +14,18 @@
 class reportModel extends model
 {
     /**
+     * Construct.
+     *
+     * @access public
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->loadBIDAO();
+    }
+
+    /**
      * Compute percent of every item.
      *
      * @param  array    $datas

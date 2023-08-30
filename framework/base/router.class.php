@@ -2819,19 +2819,31 @@ class baseRouter
         global $config, $dbh, $slaveDBH;
         if(!isset($config->installed) or !$config->installed) return;
 
-        if(isset($config->db->host))      $this->dbh      = $dbh      = $this->connectByPDO($config->db);
-        if(isset($config->slaveDB->host)) $this->slaveDBH = $slaveDBH = $this->connectByPDO($config->slaveDB);
+        if(isset($config->db->host)) $this->dbh = $dbh = $this->connectByPDO($config->db, 'MASTER');
+
+        if(!empty($config->slaveDBList))
+        {
+            $slaveDB             = $config->slaveDBList[array_rand($config->slaveDBList)];
+            $slaveDB->persistant = $config->db->persistant;
+            $slaveDB->driver     = $config->db->driver;
+            $slaveDB->encoding   = $config->db->encoding;
+            $slaveDB->strictMode = $config->db->strictMode;
+            $slaveDB->prefix     = $config->db->prefix;
+
+            $this->slaveDBH = $slaveDBH = $this->connectByPDO($slaveDB, 'SLAVE');
+        }
     }
 
     /**
      * 使用PDO连接数据库。
      * Connect database by PDO.
      *
-     * @param  object    $params    the database params.
+     * @param  object $params    the database params.
+     * @param  string $flag      the database flag.
      * @access public
      * @return object|bool
      */
-    public function connectByPDO($params)
+    public function connectByPDO($params, $flag = 'MASTER')
     {
         if(!isset($params->driver)) self::triggerError('no pdo driver defined, it should be mysql or sqlite', __FILE__, __LINE__, $exit = true);
         if(!isset($params->user)) return false;
@@ -2839,7 +2851,7 @@ class baseRouter
         {
             $dbPassword = helper::decryptPassword($params->password);
 
-            $dbh = new dbh($params);
+            $dbh = new dbh($params, true, $flag);
             $dbh->exec("SET NAMES {$params->encoding}");
 
             /*

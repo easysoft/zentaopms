@@ -14,6 +14,18 @@
 class dataviewModel extends model
 {
     /**
+     * Construct.
+     *
+     * @access public
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->loadBIDAO();
+    }
+
+    /**
      * Get module names.
      *
      * @param  string    $tables

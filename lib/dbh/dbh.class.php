@@ -20,6 +20,14 @@
 class dbh
 {
     /**
+     * Flag for database.
+     *
+     * @var string MASTER|SLAVE|BI
+     * @access private
+     */
+    private $flag;
+
+    /**
      * PDO.
      *
      * @var object
@@ -40,10 +48,11 @@ class dbh
      *
      * @param object $config
      * @param bool   $setSchema
+     * @param string $flag
      * @access public
      * @return void
      */
-    public function __construct($config, $setSchema = true)
+    public function __construct($config, $setSchema = true, $flag = 'MASTER')
     {
         $dsn = "{$config->driver}:host={$config->host};port={$config->port}";
         if($setSchema) $dsn .= ";dbname={$config->name}";
@@ -64,6 +73,7 @@ class dbh
 
         $this->pdo    = $pdo;
         $this->config = $config;
+        $this->flag   = $flag;
     }
 
     /**
@@ -78,6 +88,7 @@ class dbh
         $sql = $this->formatSQL($sql);
         if(!$sql) return true;
 
+        dao::$querys[] = "[$this->flag] " . dao::processKeywords($sql);
         return $this->pdo->exec($sql);
     }
 
@@ -90,8 +101,9 @@ class dbh
      */
     public function query($sql)
     {
-        $sql = $this->formatSQL($sql);
-        return $this->pdo->query($sql);
+        $sql    = $this->formatSQL($sql);
+        $result = $this->pdo->query($sql);
+        return $result;
     }
 
     /**
@@ -103,7 +115,11 @@ class dbh
      */
     public function rawQuery($sql)
     {
-        return $this->pdo->query($sql);
+        dao::$querys[] = "[$this->flag] " . dao::processKeywords($sql);
+
+        $result = $this->pdo->query($sql);
+
+        return $result;
     }
 
     /**
@@ -667,7 +683,6 @@ class dbh
     {
         return $this->pdo->commit();
     }
-
 
     /**
      * Prepares a statement for execution and returns a statement object.

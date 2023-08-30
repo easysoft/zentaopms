@@ -28,6 +28,9 @@ class screenModel extends model
     public function __construct()
     {
         parent::__construct();
+
+        $this->loadBIDAO();
+
         $this->filter = new stdclass();
         $this->filter->screen  = '';
         $this->filter->year    = '';
