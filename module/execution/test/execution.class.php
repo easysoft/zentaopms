@@ -2027,14 +2027,15 @@ class executionTest
     }
 
     /**
-     * function isClickable test by execution
+     * 判断操作按钮是否可以点击。
+     * Judge an action is clickable or not.
      *
-     * @param  string $execution
+     * @param  object $execution
      * @param  string $action
      * @access public
-     * @return array
+     * @return string
      */
-    public function isClickableTest($execution, $action)
+    public function isClickableTest(object $execution, string $action): string
     {
         $object = $this->executionModel->isClickable($execution, $action);
 

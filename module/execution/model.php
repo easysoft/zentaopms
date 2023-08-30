@@ -4336,6 +4336,7 @@ class executionModel extends model
     }
 
     /**
+     * 判断操作按钮是否可以点击。
      * Judge an action is clickable or not.
      *
      * @param  object    $execution
@@ -4343,17 +4344,16 @@ class executionModel extends model
      * @access public
      * @return bool
      */
-    public static function isClickable($execution, $action)
+    public static function isClickable(object $execution, string $action): bool
     {
-        $action    = strtolower($action);
-        $clickable = commonModel::hasPriv('execution', $action);
-        if(!$clickable) return false;
+        if(!commonModel::hasPriv('execution', $action)) return false;
 
+        $action = strtolower($action);
         if($action == 'start')    return $execution->status == 'wait';
         if($action == 'close')    return $execution->status != 'closed';
-        if($action == 'suspend')  return $execution->status == 'wait' or $execution->status == 'doing';
-        if($action == 'putoff')   return $execution->status == 'wait' or $execution->status == 'doing';
-        if($action == 'activate') return $execution->status == 'suspended' or $execution->status == 'closed';
+        if($action == 'suspend')  return $execution->status == 'wait' || $execution->status == 'doing';
+        if($action == 'putoff')   return $execution->status == 'wait' || $execution->status == 'doing';
+        if($action == 'activate') return $execution->status == 'suspended' || $execution->status == 'closed';
 
         return true;
     }
