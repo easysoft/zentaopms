@@ -36,7 +36,7 @@ class wg
 
     protected static array $definedPropsMap = array();
 
-    private static array $pageResources = array();
+    protected static array $pageResources = array();
 
     /**
      * The props of the element
