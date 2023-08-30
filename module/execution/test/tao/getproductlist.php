@@ -4,9 +4,9 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 zdTable('user')->gen(200);
 su('admin');
 
-zdTable('project')->config('execution', true)->gen(30);
-zdTable('product')->config('product', true)->gen(30);
-zdTable('projectproduct')->config('projectproduct', true)->gen(60);
+zdTable('project')->config('execution')->gen(30);
+zdTable('product')->config('product')->gen(30);
+zdTable('projectproduct')->config('projectproduct')->gen(60);
 
 /**
 
