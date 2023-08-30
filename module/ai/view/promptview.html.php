@@ -21,9 +21,11 @@
       <?php if($prompt->deleted) echo "<span class='label label-danger'>{$lang->ai->prompts->deleted}</span>";?>
     </div>
   </div>
-  <div class="btn-toolbar pull-right">
-    <?php if(common::hasPriv('ai', 'createprompt')) echo html::a(helper::createLink('ai', 'createprompt'), "<i class='icon icon-plus'></i> {$lang->ai->prompts->create}", '', "class='btn btn-primary iframe'");?>
-  </div>
+  <?php if($this->config->edition != 'open'): ?>
+    <div class="btn-toolbar pull-right">
+      <?php if(common::hasPriv('ai', 'createprompt')) echo html::a(helper::createLink('ai', 'createprompt'), "<i class='icon icon-plus'></i> {$lang->ai->prompts->create}", '', "class='btn btn-primary iframe'"); ?>
+    </div>
+  <?php endif; ?>
 </div>
 
 <div id="mainContent" class="main-row">
