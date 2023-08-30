@@ -78,6 +78,7 @@ div
                 /* 应用名称信息图标区块 */
                 section
                 (
+                    set::title(''),
                     div
                     (
                         setClass('flex justify-between'),
