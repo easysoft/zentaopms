@@ -6,7 +6,7 @@
  */
 function changeType()
 {
-    loadPage($.createLink('execution', 'cfd', 'executionID=' + executionID + '&type=' + $(this).val()));
+    loadPage($.createLink('execution', 'cfd', 'executionID=' + executionID + '&type=' + $('input[name=type]').val()));
 }
 
 window.randTipInfo = function(params)
@@ -20,3 +20,8 @@ window.randTipInfo = function(params)
     });
     return tooltipString.join("");
 }
+
+$(function()
+{
+    if($('#cfdHover').length) new zui.Tooltip('#cfdHover', {title: {html: cfdTip}, trigger: 'hover', placement: 'bottom'});
+})

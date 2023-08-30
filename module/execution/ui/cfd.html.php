@@ -14,6 +14,7 @@ if(!$features['story']) unset($lang->execution->cfdTypeList['story']);
 if(!$features['qa'])    unset($lang->execution->cfdTypeList['bug']);
 
 jsVar('executionID', $executionID);
+jsVar('cfdTip', $lang->execution->charts->cfd->cfdTip);
 featureBar
 (
     (!in_array($execution->status, array('wait,doing')) && hasPriv('execution', 'computeCFD')) ? btn
@@ -36,7 +37,7 @@ featureBar
     ),
     li
     (
-        setClass('nav-item w-32'),
+        setClass('nav-item mr-2 type-selecter'),
         control
         (
             set::type('picker'),
@@ -167,15 +168,8 @@ panel
             'help',
             setClass('mt-2 cfd-help'),
             set('data-toggle', 'tooltip'),
-            set('data-placement', 'bottom'),
-            set::href('cfdTip'),
+            set('id', 'cfdHover'),
         ),
-        div
-        (
-            setID('cfdTip'),
-            setClass('tooltip darker p-2 text-lg'),
-            html($lang->execution->charts->cfd->cfdTip)
-        )
     ),
     set::titleClass('article-h1 mt-2'),
     $cfdChart
