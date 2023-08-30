@@ -23,7 +23,10 @@ $options['storyStages']  = $storyStages;
 $options['isShowBranch'] = '';
 if(!empty($branchOptions)) $options['branchOptions'] = $branchOptions;
 
-$cols = $this->story->generateCol($orderBy, $storyType);
+$hasChildren = false;
+array_map(function($story) use(&$hasChildren){ if(!empty($story->children)) $hasChildren = true;}, $stories);
+
+$cols = $this->story->generateCol($orderBy, $storyType, $hasChildren);
 $rows = $this->story->generateRow($stories, $cols, $options, $project, $storyType);
 $vars = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
 if($from == 'project' and !empty($projectID)) $vars = "projectID=$projectID&productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
