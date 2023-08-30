@@ -2176,7 +2176,7 @@ class executionModel extends model
         }
         elseif($module == 'bug' and $method == 'create' and $this->app->tab == 'execution')
         {
-            $link = helper::createLink($module, $method, "productID=0&branch=0&extra=executionID=%s");
+            $link = helper::createLink($module, $method, "productID=0&branch=0&executionID=%s");
         }
         elseif(in_array($module, array('bug', 'case', 'testtask', 'testreport')) and strpos(',view,edit,', ",$method,") !== false)
         {
