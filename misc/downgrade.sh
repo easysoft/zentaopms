@@ -3,9 +3,10 @@ set -e
 
 phpVer="7.4"
 installRector="false"
+statisticSyntax="false"
 codeRootDir=$PWD
 composerDir="$(dirname "$(realpath "$0")")"
-outputDir="$PWD/build"
+outputDir="$PWD/tmp"
 
 helper() {
   cat << EOF
@@ -15,13 +16,14 @@ Arguments:
      可以指定多个版本，用逗号分隔，如 7.4,7.0,5.4
   -i 在 misc 目录执行 composer install, 安装 rector
   -r 指定要降级的代码根目录, 默认为当前目录
+  -s 校验语法时不中断, 生成统计报告
   -o 降级补丁包输出目录
 EOF
 }
 
 # 处理命令行参数, 获取要降级的目录
 [ $# -eq 0 ] && helper
-while getopts "ir:p:o:" opt; do
+while getopts "isr:p:o:" opt; do
   case $opt in
     "p")
       phpVer=$OPTARG
@@ -31,6 +33,9 @@ while getopts "ir:p:o:" opt; do
       ;;
     "i")
       installRector="true"
+      ;;
+    "s")
+      statisticSyntax="true"
       ;;
     "o")
       outputDir=$OPTARG
@@ -189,7 +194,13 @@ ensureSyntaxPassed() {
         if ! syntaxCheck "$phpVersion" "$phpFilePath";then
             echo "downgrade failed"
             echo "md5 compare (before:$beforeMD5) (after:$afterMD5)"
-            return 1
+            if [[ "$statisticSyntax" == "true" ]];then
+              outputFile="${outputDir}/syntax-error-${phpVersion}.log"
+              syntaxCheck "$phpVersion" "$phpFilePath" >> "$outputFile" || echo "record file $phpFilePath"
+              return 0
+            else
+              return 1
+            fi
         else
             echo "Syntax OK, $phpFilePath"
         fi
