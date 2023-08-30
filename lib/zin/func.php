@@ -1757,3 +1757,11 @@ function roadMap(): roadMap
 {
     return createWg('roadmap', func_get_args());
 }
+
+/**
+ * road map widget.
+ */
+function progressBar(): progressBar
+{
+    return createWg('progressBar', func_get_args());
+}
