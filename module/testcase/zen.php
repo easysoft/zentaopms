@@ -1626,7 +1626,7 @@ class testcaseZen extends testcase
 
         if($taskID)
         {
-            $this->app->loadLang('testtask')
+            $this->app->loadLang('testtask');
             $this->lang->testcase->statusList = $this->lang->testtask->statusList;
         }
 
@@ -1662,10 +1662,10 @@ class testcaseZen extends testcase
         $case->lastEditedDate = !helper::isZeroDate($case->lastEditedDate) ? substr($case->lastEditedDate, 0, 10) : '';
         $case->lastRunDate    = !helper::isZeroDate($case->lastRunDate)    ? $case->lastRunDate    : '';
 
-        $case->product = isset($products[$case->product])     ? $products[$case->product] . "(#$case->product)";    : '';
-        $case->branch  = isset($branches[$case->branch])      ? $branches[$case->branch] . "(#$case->branch)";      : '';
+        $case->product = isset($products[$case->product])     ? $products[$case->product] . "(#$case->product)"     : '';
+        $case->branch  = isset($branches[$case->branch])      ? $branches[$case->branch] . "(#$case->branch)"       : '';
         $case->module  = isset($relatedModules[$case->module])? $relatedModules[$case->module] . "(#$case->module)" : '';
-        $case->story   = isset($relatedStories[$case->story]) ? $relatedStories[$case->story] . "(#$case->story)";  : '';
+        $case->story   = isset($relatedStories[$case->story]) ? $relatedStories[$case->story] . "(#$case->story)"   : '';
 
         $case->pri           = zget($this->lang->testcase->priList, $case->pri);
         $case->type          = zget($this->lang->testcase->typeList, $case->type);
