@@ -99,16 +99,16 @@ class executionTao extends executionModel
      * 获取执行关联的产品信息。
      * Get product information of the linked execution.
      *
-     * @param  int       $projectID
+     * @param  int       $executionID
      * @access protected
      * @return array
      */
-    protected function getProductList(int $projectID): array
+    protected function getProductList(int $executionID): array
     {
         $executions = $this->dao->select('t1.id,t2.product,t3.name')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product=t3.id')
-            ->where('t1.project')->eq($projectID)
+            ->where('t1.project')->eq($executionID)
             ->andWhere('t1.type')->in('kanban,sprint,stage')
             ->fetchAll();
 
