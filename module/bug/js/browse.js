@@ -96,6 +96,8 @@ const options =
     footer: false,
     responsive: true,
     onCheckChange: setStatistics,
+    fixedLeftWidth: 550,
+    fixedRightWidth: 150,
     height: function(height)
     {
         return Math.min($(window).height() - $('#header').outerHeight() - $('#mainMenu').outerHeight() - $('.table-footer').outerHeight() - 30, height);
