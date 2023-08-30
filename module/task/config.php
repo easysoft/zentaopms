@@ -260,23 +260,28 @@ $config->task->datatable->fieldList['mailto']['fixed']    = 'no';
 $config->task->datatable->fieldList['mailto']['sortType'] = true;
 $config->task->datatable->fieldList['mailto']['required'] = 'no';
 
-$config->task->datatable->fieldList['module']['title']      = 'idAB';
+$config->task->datatable->fieldList['module']['title']      = 'module';
 $config->task->datatable->fieldList['module']['control']    = 'select';
 $config->task->datatable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getTaskOptionMenu', 'params' => '$executionID');
+$config->task->datatable->fieldList['module']['display']    = false;
 
-$config->task->datatable->fieldList['execution']['title']      = 'idAB';
+$config->task->datatable->fieldList['execution']['title']      = 'execution';
 $config->task->datatable->fieldList['execution']['control']    = 'hidden';
 $config->task->datatable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs');
+$config->task->datatable->fieldList['execution']['display']    = false;
 
-$config->task->datatable->fieldList['project']['title']      = 'idAB';
+$config->task->datatable->fieldList['project']['title']      = 'project';
 $config->task->datatable->fieldList['project']['control']    = 'hidden';
 $config->task->datatable->fieldList['project']['dataSource'] = array('module' => 'project', 'method' => 'getPairs');
+$config->task->datatable->fieldList['project']['display']    = false;
 
-$config->task->datatable->fieldList['mode']['title']   = 'idAB';
+$config->task->datatable->fieldList['mode']['title']   = 'mode';
 $config->task->datatable->fieldList['mode']['control'] = 'hidden';
+$config->task->datatable->fieldList['mode']['display'] = false;
 
-$config->task->datatable->fieldList['desc']['title']   = 'idAB';
+$config->task->datatable->fieldList['desc']['title']   = 'desc';
 $config->task->datatable->fieldList['desc']['control'] = 'textarea';
+$config->task->datatable->fieldList['desc']['display'] = false;
 
 $config->task->datatable->fieldList['actions']['title']    = 'actions';
 $config->task->datatable->fieldList['actions']['type']     = 'html';
