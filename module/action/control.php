@@ -12,6 +12,7 @@
 class action extends control
 {
     /**
+     * 创建一个动作或者删除所有的补丁动作，此方法由Ztools使用。
      * Create a action or delete all patch actions, this method is used by the Ztools.
      *
      * @param  string $objectType

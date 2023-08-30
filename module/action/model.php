@@ -38,7 +38,7 @@ class actionModel extends model
         $actor      = $actor ?? ($this->app->user->account ?? 'system');
         $actionType = strtolower($actionType);
         $actor      = ($actionType == 'openedbysystem' || $actionType == 'closedbysystem') ? '' : $actor;
-        if($actor == 'guest' and $actionType == 'logout') return false;
+        if($actor == 'guest' && $actionType == 'logout') return false;
 
         $objectType = str_replace('`', '', $objectType);
 
@@ -53,10 +53,12 @@ class actionModel extends model
 
         if($objectType == 'story' && in_array($actionType, array('reviewpassed', 'reviewrejected', 'reviewclarified', 'reviewreverted', 'synctwins'))) $action->actor = $this->lang->action->system;
 
+        /* 使用puriffer处理注解。 */
         /* Use purifier to process comment. Fix bug #2683. */
         if(empty($comment)) $comment = '';
         $action->comment = fixer::stripDataTags($comment);
 
+        /* 处理action。 */
         /* Process action. */
         if($this->post->uid)
         {
@@ -64,6 +66,7 @@ class actionModel extends model
             if($autoDelete) $this->file->autoDelete($this->post->uid);
         }
 
+        /* 获取对象的产品项目以及执行。 */
         /* Get product project and execution for this object. */
         $relation          = $this->getRelatedFields($action->objectType, $objectID, $actionType, $extra);
         $action->product   = $relation['product'];
@@ -74,9 +77,11 @@ class actionModel extends model
 
         if($this->post->uid) $this->file->updateObjectID($this->post->uid, $objectID, $objectType);
 
+        /* 调用消息通知函数。 */
         /* Call the message notification function. */
         $this->loadModel('message')->send(strtolower($objectType), $objectID, $actionType, $actionID, $actor, $extra);
 
+        /* 为全局搜索添加索引。 */
         /* Add index for global search. */
         $this->saveIndex($objectType, $objectID, $actionType);
 
