@@ -1,12 +1,12 @@
 <?php
 $lang->metric->common        = "度量项";
-$lang->metric->name          = "度量名称";
+$lang->metric->name          = "度量项名称";
 $lang->metric->stage         = "阶段";
 $lang->metric->scope         = "度量范围";
 $lang->metric->object        = "度量对象";
 $lang->metric->purpose       = "度量目的";
 $lang->metric->unit          = "度量单位";
-$lang->metric->code          = "度量代号";
+$lang->metric->code          = "度量项代号";
 $lang->metric->desc          = "度量项描述";
 $lang->metric->definition    = "定义";
 $lang->metric->formula       = "计算规则";
