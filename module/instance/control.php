@@ -48,7 +48,6 @@ class instance extends control
             $instance = $this->loadModel('gitea')->getByID($id);
             $instance->status      = '';
             $instance->source      = 'user';
-            $instance->type        = 'external';
             $instance->externalID  = $instance->id;
             $instance->runDuration = 0;
             $instance->createdAt   = $instance->createdDate;
