@@ -91,9 +91,10 @@
         if(link.hash && link.hash.indexOf('app=') === 0) return link.hash.substr(4);
 
         /* Handling special situations */
-        var moduleName      = link.moduleName;
-        var methodName      = link.methodName;
-        if (moduleName === 'index' && methodName === 'index') return 'my';
+        var moduleName        = link.moduleName;
+        var methodName        = link.methodName;
+        var moduleMethodLower = (moduleName + '-' + methodName).toLowerCase();
+        if (moduleMethodLower === 'index-index') return 'my';
 
         var methodLowerCase = methodName.toLowerCase();
         if(moduleName === 'doc')
@@ -176,7 +177,7 @@
                 return 'project';
             }
         }
-        if(moduleName === 'search' && methodLowerCase === 'buildindex') return 'admin';
+        if(['search-buildindex', 'ai-adminindex'].includes(moduleMethodLower)) return 'admin';
 
         code = window.navGroup[moduleName] || moduleName || urlOrModuleName;
         return appsMap[code] ? code : '';
