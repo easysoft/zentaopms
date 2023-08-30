@@ -12,6 +12,30 @@
 class metricModel extends model
 {
     /**
+     * 用对象数据创建度量。
+     * Create a metric.
+     *
+     * @param  object  $metric
+     * @param  string  $back
+     * @access public
+     * @return int|false
+     */
+    public function create($metric)
+    {
+        $this->dao->insert(TABLE_METRIC)->data($metric)
+            ->autoCheck()
+            ->checkIF(!empty($metric->name), 'name', 'unique', "`deleted` = '0'")
+            ->checkIF(!empty($metric->code), 'code', 'unique', "`deleted` = '0'")
+            ->exec();
+        if(dao::isError()) return false;
+        $metricID = $this->dao->lastInsertID();
+
+        $this->loadModel('action')->create('metric', $metricID, 'opened');
+
+        return $metricID;
+    }
+
+    /**
      * 获取度量项数据列表。
      * Get metric data list.
      *

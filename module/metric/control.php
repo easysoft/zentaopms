@@ -30,6 +30,16 @@ class metric extends control
      */
     public function create()
     {
+        if(!empty($_POST))
+        {
+            $metricData = $this->metricZen->buildMetricForCreate();
+            $metricID   = $this->metric->create($metricData);
+
+            if(empty($metricID) || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $response = $this->metricZen->responseAfterCreate();
+
+            return $this->send($response);
+        }
         $this->metricZen->processUnitList();
         $this->display();
     }

@@ -12,6 +12,32 @@ declare(strict_types=1);
 class metricZen extends metric
 {
     /**
+     * 构建创建度量的数据。
+     * Build metric data for create.
+     *
+     * @access protected
+     * @return object
+     */
+    protected function buildMetricForCreate()
+    {
+        return form::data($this->config->metric->form->create)
+            ->get();
+    }
+
+    /**
+     * 成功插入度量数据后，其他的额外操作。
+     * Process after create metric.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function responseAfterCreate()
+    {
+        $location = $this->createLink('metric', 'browse');
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $location);
+    }
+
+    /**
      * 根据分类后的度量项，准备数据源句柄。
      * Prepare the data source handle based on the classified measures.
      *
