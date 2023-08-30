@@ -17,3 +17,5 @@ $config->metric->actionList['delete']['hint']         = $lang->delete;
 $config->metric->actionList['delete']['url']          = helper::createLink('metric', 'delete', 'metricID={id}');
 $config->metric->actionList['delete']['class']        = 'ajax-submit';
 $config->metric->actionList['delete']['data-confirm'] = $lang->metric->confirmDelete;
+
+$config->metric->necessaryMethodList = array('getStatement', 'calculator', 'getResult');

@@ -469,6 +469,19 @@ class metricModel extends model
     }
 
     /**
+     * 检查度量项计算文件是否定义了必要的类。
+     * Check whether the necessary class exist in the file.
+     *
+     * @param  object    $row
+     * @access protected
+     * @return bool
+     */
+    protected function checkCalcClass($metric)
+    {
+        return class_exists($metric->code);
+    }
+
+    /**
      * 检查度量项计算文件中是否编写了必要的方法。
      * Check whether the necessary methods exist in the file.
      *
@@ -478,10 +491,8 @@ class metricModel extends model
      */
     protected function checkCalcMethods($metric)
     {
-        $necessaryMethodList = array('getStatement', 'calculator', 'getResult');
         $methodNameList = $this->metricTao->getMethodNameList($metric->code);
-
-        foreach($necessaryMethodList as $method)
+        foreach($this->config->metric->$necessaryMethodList as $method)
         {
             if(!in_array($method, $methodNameList)) return false;
         }
