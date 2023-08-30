@@ -99,7 +99,7 @@ if(!empty($files))
                     $cardsBox
                 ),
                 pager(
-                    setClass('flex justify-end items-center'),
+                    set::_className('flex justify-end items-center'),
                     set(usePager($linkTpl)),
                 )
             );

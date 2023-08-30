@@ -150,7 +150,7 @@ panel
         pager
         (
             set::type('short'),
-            set::className('justify-end mt-2')
+            set::_className('justify-end mt-2')
         )
     ): null
 );
