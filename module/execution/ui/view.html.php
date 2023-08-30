@@ -307,7 +307,7 @@ div
             common::hasPriv('execution', $isKanban ? 'cfd' : 'burn') ? btn
             (
                 setClass('ghost text-gray font-normal'),
-                set::url(createLink('execution', cfd, "executionID={$execution->id}")),
+                set::url(createLink('execution', 'cfd', "executionID={$execution->id}")),
                 $lang->more
             ) : null
         ) : null,
