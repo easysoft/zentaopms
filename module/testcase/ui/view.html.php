@@ -296,8 +296,8 @@ if(isset($case->fromCaseVersion) && $case->fromCaseVersion > $case->version && $
         set('title', $lang->testcase->fromCaselib),
         ' (',
         $lang->testcase->changed,
-        hasPriv('testcase', 'confirmLibcaseChange') ? a(setClass('btn size-xs primary-pale mx-1'), set::href($this->createLink('testcase', 'confirmLibcaseChange', "caseID={$case->id}&libcaseID={$case->fromCaseID}")), $lang->testcase->sync) : '',
-        hasPriv('testcase', 'ignoreLibcaseChange') ? a(setClass('btn size-xs primary-pale mx-1'), set::href($this->createLink('testcase', 'ignoreLibcaseChange', "caseID={$case->id}")), $lang->testcase->ignore) : '',
+        hasPriv('testcase', 'confirmLibcaseChange') ? a(setClass('btn size-xs primary-pale mx-1 ajax-submit'), set::href($this->createLink('testcase', 'confirmLibcaseChange', "caseID={$case->id}&libcaseID={$case->fromCaseID}")), $lang->testcase->sync) : '',
+        hasPriv('testcase', 'ignoreLibcaseChange') ? a(setClass('btn size-xs primary-pale mx-1 ajax-submit'), set::href($this->createLink('testcase', 'ignoreLibcaseChange', "caseID={$case->id}")), $lang->testcase->ignore) : '',
         ')',
     );
 }
@@ -337,7 +337,6 @@ detailHeader
 
 detailBody
 (
-    on::click('.steps-section . step-change-view icon', 'toggleStepsView'),
     sectionList
     (
         section
