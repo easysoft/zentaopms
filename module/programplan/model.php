@@ -975,7 +975,7 @@ class programplanModel extends model
             if($this->config->edition == 'max' or $this->config->edition == 'ipd')
             {
                 $data->planDuration = $this->getDuration($data->begin, $data->end);
-                $data->realDuration = $this->getDuration($data->realBegan, $data->realEnd);
+                if(isset($data->realBegan) && isset($data->realEnd)) $data->realDuration = $this->getDuration($data->realBegan, $data->realEnd);
             }
 
             $projectChanged = false;
@@ -996,7 +996,7 @@ class programplanModel extends model
                 $this->dao->update(TABLE_PROJECT)->data($data)
                     ->autoCheck()
                     ->batchCheck($this->config->programplan->edit->requiredFields, 'notempty')
-                    ->checkIF($plan->percent != '' and $setPercent, 'percent', 'float')
+                    ->checkIF(!empty($data->percent) and $setPercent, 'percent', 'float')
                     ->where('id')->eq($stageID)
                     ->exec();
 
@@ -1053,7 +1053,7 @@ class programplanModel extends model
                 $this->dao->insert(TABLE_PROJECT)->data($data)
                     ->autoCheck()
                     ->batchCheck($this->config->programplan->create->requiredFields, 'notempty')
-                    ->checkIF($plan->percent != '' and $setPercent, 'percent', 'float')
+                    ->checkIF(!empty($data->percent) and $setPercent, 'percent', 'float')
                     ->exec();
 
                 if(!dao::isError())
@@ -1258,7 +1258,7 @@ class programplanModel extends model
         if($this->config->edition == 'max' or $this->config->edition == 'ipd')
         {
             $plan->planDuration = $this->getDuration($plan->begin, $plan->end);
-            $plan->realDuration = $this->getDuration($plan->realBegan, $plan->realEnd);
+            if(isset($plan->realBegan) && isset($plan->realEnd)) $plan->realDuration = $this->getDuration($plan->realBegan, $plan->realEnd);
         }
 
         if($planChanged)  $plan->version = $oldPlan->version + 1;
