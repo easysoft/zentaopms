@@ -35,7 +35,7 @@ class storyModel extends model
         $story->title  = isset($spec->title)  ? $spec->title  : '';
         $story->spec   = isset($spec->spec)   ? $spec->spec   : '';
         $story->verify = isset($spec->verify) ? $spec->verify : '';
-        $story->files  = isset($spec->files)  ? $this->file->getByIdList($spec->files) : '';
+        $story->files  = isset($spec->files)  ? $this->file->getByIdList($spec->files) : array();
         if(!empty($story->fromStory)) $story->sourceName = $this->dao->select('title')->from(TABLE_STORY)->where('id')->eq($story->fromStory)->fetch('title');
 
         /* Check parent story. */
