@@ -1281,41 +1281,45 @@ class execution extends control
     }
 
     /**
+     * 燃尽图。
      * Browse burndown chart of a execution.
      *
-     * @param  int       $executionID
-     * @param  string    $type
-     * @param  int       $interval
+     * @param  int    $executionID
+     * @param  string $type        noweekend|withweekend
+     * @param  string $interval
+     * @param  string $burnBy      left|estimate|storyPoint
      * @access public
      * @return void
      */
-    public function burn($executionID = 0, $type = 'noweekend', $interval = 0, $burnBy = 'left')
+    public function burn(int $executionID = 0, string $type = 'noweekend', string $interval = '', string $burnBy = 'left')
     {
-        $this->loadModel('report');
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
-        $burnBy      = $this->cookie->burnBy ? $this->cookie->burnBy : $burnBy;
 
-        /* Get date list. */
-        if(((strpos('closed,suspended', $execution->status) === false and helper::today() > $execution->end)
-            or ($execution->status == 'closed'    and substr($execution->closedDate, 0, 10) > $execution->end)
-            or ($execution->status == 'suspended' and $execution->suspendedDate > $execution->end))
-            and strpos($type, 'delay') === false)
+        /* Determine whether to display delay data. */
+        if(((strpos('closed,suspended', $execution->status) === false && helper::today() > $execution->end)
+            || ($execution->status == 'closed'    && substr($execution->closedDate, 0, 10) > $execution->end)
+            || ($execution->status == 'suspended' && $execution->suspendedDate > $execution->end))
+            && strpos($type, 'delay') === false)
         $type .= ',withdelay';
 
+        /* Get burn date list and interval. */
         $deadline = $execution->status == 'closed' ? substr($execution->closedDate, 0, 10) : $execution->suspendedDate;
         $deadline = strpos('closed,suspended', $execution->status) === false ? helper::today() : $deadline;
         $endDate  = strpos($type, 'withdelay') !== false ? $deadline : $execution->end;
         list($dateList, $interval) = $this->execution->getDateList($execution->begin, $endDate, $type, $interval, 'Y-m-d', $execution->end);
 
         $executionEnd = strpos($type, 'withdelay') !== false ? $execution->end : '';
+        $burnBy       = $this->cookie->burnBy ? $this->cookie->burnBy : $burnBy;
         $chartData    = $this->execution->buildBurnData($executionID, $dateList, $burnBy, $executionEnd);
 
         $allDateList = date::getDateList($execution->begin, $endDate, 'Y-m-d', $type, $this->config->execution->weekend);
         $dayList     = array_fill(1, floor(count($allDateList) / $this->config->execution->maxBurnDay) + 5, '');
         foreach($dayList as $key => $val) $dayList[$key] = $this->lang->execution->interval . ($key + 1) . $this->lang->day;
 
-        /* Assign. */
+        unset($this->lang->TRActions);
+
+        /* Shows the variables needed to burn page. */
         $this->view->title         = $execution->name . $this->lang->colon . $this->lang->execution->burn;
         $this->view->tabID         = 'burn';
         $this->view->burnBy        = $burnBy;
@@ -1326,7 +1330,6 @@ class execution extends control
         $this->view->chartData     = $chartData;
         $this->view->dayList       = array('full' => $this->lang->execution->interval . '1' . $this->lang->day) + $dayList;
 
-        unset($this->lang->TRActions);
         $this->display();
     }
 
