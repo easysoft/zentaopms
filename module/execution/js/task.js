@@ -70,9 +70,11 @@ function setStatistics()
     if(checkedIDList.length > 0)
     {
         $('.table-footer .table-actions').show();
+        if(element.isAllRowChecked()) $('.table-footer .check-all').addClass('checked');
     }
     else
     {
+        $('.table-footer .check-all').removeClass('checked');
         $('.table-footer .table-actions').hide();
     }
 
