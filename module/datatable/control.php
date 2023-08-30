@@ -132,6 +132,7 @@ class datatable extends control
 
         $this->view->cols    = $cols;
         $this->view->setting = $setting;
+        $this->view->extra   = $extra;
         $this->display();
     }
 

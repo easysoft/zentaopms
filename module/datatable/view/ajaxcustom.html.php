@@ -67,7 +67,8 @@
         $width     = $col['width'];
         $autoWidth = $width == 'auto';
         ?>
-        <div class='clearfix col<?php echo ($required ? ' require' : '') . (' fixed-' . $fixed) ?>' data-key='<?php echo $key?>' data-fixed='<?php echo $fixed?>' data-width='<?php echo $width;?>'>
+        <?php $hidden = ($extra == 'unsetMarket' && $key == 'market') ? 'hidden' : '';?>
+        <div class='clearfix col<?php echo ($required ? ' require' : '') . (' fixed-' . $fixed) ?> <?php echo $hidden;?>' data-key='<?php echo $key?>' data-fixed='<?php echo $fixed?>' data-width='<?php echo $width;?>'>
           <div class='actions pull-right' <?php if($autoWidth) echo "style='padding-right: 11px'";?>>
             <?php if(isset($col['name'])) echo html::hidden('name', $col['name'])?>
             <span><span class='text-muted'><?php echo $lang->datatable->width?></span> <input type='text' id='width' class='form-control' value='<?php echo $width;?>'><?php echo $autoWidth ? '&nbsp;' : 'px' ?></span>
