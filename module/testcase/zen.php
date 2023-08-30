@@ -1618,17 +1618,18 @@ class testcaseZen extends testcase
      * 获取导出的字段列表。
      * Get the export fields.
      *
+     * @param  string    $productType
      * @access protected
      * @return array
      */
-    protected function getExportFields(): array
+    protected function getExportFields(string $productType): array
     {
         $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $this->config->testcase->exportFields);
         foreach($fields as $key => $fieldName)
         {
             $fieldName = trim($fieldName);
 
-            if($product->type != 'normal' || $fieldName != 'branch') $fields[$fieldName] = zget($this->lang->testcase, $fieldName);
+            if($productType != 'normal' || $fieldName != 'branch') $fields[$fieldName] = zget($this->lang->testcase, $fieldName);
 
             unset($fields[$key]);
         }
@@ -1640,11 +1641,12 @@ class testcaseZen extends testcase
      * 处理导出的用例数据。
      * Process export cases.
      *
+     * @param  array     $cases
      * @param  int       $taskID
      * @access protected
      * @return array
      */
-    protected function processCasesForExport(array $cases, int $taskID): array
+    protected function processCasesForExport(array $cases, int $productID, int $taskID): array
     {
         $products = $this->product->getPairs('', 0, '', 'all');
         $branches = $this->loadModel('branch')->getPairs($productID);
@@ -1654,8 +1656,8 @@ class testcaseZen extends testcase
         $relatedModules = $this->loadModel('tree')->getAllModulePairs('case');
         $relatedStories = $this->testcase->getRelatedStories($cases);
         $relatedCases   = $this->testcase->getRelatedCases($cases);
-        $relatedSteps   = $this->testcase->getReleatedSteps(array_keys($cases));
-        $relatedFiles   = $this->testcase->getRelatedSteps(array_keys($cases));
+        $relatedSteps   = $this->testcase->getRelatedSteps(array_keys($cases));
+        $relatedFiles   = $this->testcase->getRelatedFiles(array_keys($cases));
 
         if($taskID)
         {
@@ -1684,9 +1686,9 @@ class testcaseZen extends testcase
      * @param  array     $relatedSteps
      * @param  array     $relatedFiles
      * @access protected
-     * @return object
+     * @return void
      */
-    protected function processCaseForExport(object $case, array $products, array $branches, array $users, array $results, array $relatedModules, array $relatedStories,  array $relatedCases, array $relatedSteps, array $relatedFiles): object
+    protected function processCaseForExport(object $case, array $products, array $branches, array $users, array $results, array $relatedModules, array $relatedStories,  array $relatedCases, array $relatedSteps, array $relatedFiles): void
     {
         $case->stepDesc       = '';
         $case->stepExpect     = '';
@@ -1719,7 +1721,7 @@ class testcaseZen extends testcase
 
         $this->processStepForExport($case, $results, $relatedSteps);
         $this->processStageForExport($case);
-        $this->processFileForExportForExport($case, $relatedFiles);
+        $this->processFileForExport($case, $relatedFiles);
         if($case->linkCase) $this->processLinkCaseForExport($case);
     }
 
