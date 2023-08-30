@@ -19,14 +19,14 @@ $items   = array();     // 产品导航列表。 Product nav list.
 
 foreach($products as $productItem)
 {
-    $params = helper::safe64Encode("module={$block->module}&projectID={$projectID}&active={$productItem->id}");
-    $items[] = array
+    $projectID = isset($params['projectID']) ? $params['projectID'] : 0;
+    $params    = helper::safe64Encode("module={$block->module}&projectID={$projectID}&active={$productItem->id}");
+    $items[]   = array
     (
         'id'        => $productItem->id,
         'text'      => $productItem->name,
         'url'       => createLink('product', 'browse', "productID=$productItem->id"),
         'activeUrl' => createLink('block', 'printBlock', "blockID=$block->id&params=$params")
-
     );
     if($productItem->id == $active) $product = $productItem;
 }
