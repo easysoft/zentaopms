@@ -3830,12 +3830,6 @@ class bugModel extends model
             $order   = 1;
             foreach($setting as $key => $value)
             {
-                if(isset($fieldList[$value]['display']) && $fieldList[$value]['display'] === false)
-                {
-                    unset($setting[$key]);
-                    continue;
-                }
-
                 $id  = $value;
                 $set = new stdclass();;
                 $set->order = $order++;
@@ -3870,12 +3864,6 @@ class bugModel extends model
             foreach($setting as $key => $set)
             {
                 if(empty($set->show))
-                {
-                    unset($setting[$key]);
-                    continue;
-                }
-
-                if(isset($fieldList[$set->id]['display']) && $fieldList[$set->id]['display'] === false)
                 {
                     unset($setting[$key]);
                     continue;
