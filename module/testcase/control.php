@@ -861,12 +861,18 @@ class testcase extends control
 
         /* 更新用例步骤。 */
         /* Update case steps. */
+        $parentSteps = array();
         foreach($libCase->steps as $step)
         {
-            unset($step->id);
-            $step->case    = $caseID;
-            $step->version = $version;
-            $this->dao->insert(TABLE_CASESTEP)->data($step)->exec();
+            $data = new stdclass();
+            $data->parent  = zget($parentSteps, $step->parent, 0);
+            $data->case    = $caseID;
+            $data->version = $version;
+            $data->type    = $step->type;
+            $data->desc    = $step->desc;
+            $data->expect  = $step->expect;
+            $this->dao->insert(TABLE_CASESTEP)->data($data)->exec();
+            $parentSteps[$step->parent] = $this->dao->lastInsertID();
         }
 
         /* 更新用例文件。 */
@@ -892,21 +898,22 @@ class testcase extends control
             $this->dao->insert(TABLE_FILE)->data($file)->exec();
         }
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('testcase', 'view', "caseID={$caseID}&version={$version}"), 'closeModal' => true));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
     }
 
     /**
-     * Ignore libcase changed.
+     * 忽略用例库用例的更新。
+     * Ignore case changed in lib.
      *
      * @param  int    $caseID
      * @access public
      * @return void
      */
-    public function ignoreLibcaseChange($caseID)
+    public function ignoreLibcaseChange(int $caseID)
     {
-        $case = $this->testcase->getById($caseID);
+        $case = $this->testcase->fetchBaseInfo($caseID);
         $this->dao->update(TABLE_CASE)->set('fromCaseVersion')->eq($case->version)->where('id')->eq($caseID)->exec();
-        return $this->send(array('load' => true));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
     }
 
     /**
