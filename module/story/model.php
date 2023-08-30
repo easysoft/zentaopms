@@ -6753,7 +6753,7 @@ class storyModel extends model
         $storyStages   = zget($options, 'storyStages',   array());
         $isShowBranch  = zget($options, 'isShowBranch',  '');
 
-        $userFields  = array('assignedTo', 'openedBy', 'closedBy', 'lastEditedBy', 'reviewedBy', 'feedbackBy');
+        $userFields  = array('assignedTo', 'openedBy', 'closedBy', 'lastEditedBy', 'feedbackBy');
         $dateFields  = array('assignedDate', 'openedDate', 'closedDate', 'lastEditedDate', 'reviewedDate', 'activatedDate');
         $executionID = empty($execution) ? $this->session->execution : $execution->id;
         $showBranch  = isset($this->config->product->browse->showBranch) ? $this->config->product->browse->showBranch : 1;
@@ -6791,6 +6791,12 @@ class storyModel extends model
                 if($col->name == 'bugCount')   $story->bugCount   = $storyBugs[$story->id]  > 0 ? html::a(helper::createLink('story', 'bugs', "storyID=$story->id"),  $storyBugs[$story->id],  '', 'class="iframe" data-toggle="modal"') : '0';
                 if($col->name == 'caseCount')  $story->caseCount  = $storyCases[$story->id] > 0 ? html::a(helper::createLink('story', 'cases', "storyID=$story->id"),  $storyBugs[$story->id], '', 'class="iframe" data-toggle="modal"') : '0';
                 if($col->name == 'estimate')   $story->estimate  .= $this->config->hourUnit;
+                if($col->name == 'reviewedBy')
+                {
+                    $reviewers = array_filter(explode(',', $story->reviewedBy));
+                    $reviewers = array_map(function($reviewer) use($users){return zget($users, $reviewer);}, $reviewers);
+                    $story->reviewedBy = join(' ', $reviewers);
+                }
                 if($col->name == 'stage')
                 {
                     $maxStage = $story->stage;
