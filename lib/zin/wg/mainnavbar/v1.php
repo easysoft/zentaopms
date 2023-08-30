@@ -128,6 +128,9 @@ class mainNavbar extends nav
     {
         global $app, $config;
 
+        if(!isset($config->excludeSwitcherList)) $config->excludeSwitcherList = array();
+        if(!isset($config->hasSwitcherModules))  $config->hasSwitcherModules  = array();
+
         $moduleName = $app->rawModule;
         $methodName = $app->rawMethod;
 
