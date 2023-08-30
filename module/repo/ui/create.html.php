@@ -47,7 +47,7 @@ formPanel
         set::label($lang->repo->projects),
         set::control(array("type" => "picker","multiple" => true)),
         set::items($projects),
-        set::value($relatedProjects)
+        set::value(empty($relatedProjects) ? '' : $relatedProjects)
     ),
     formRow
     (
