@@ -12,6 +12,60 @@ declare(strict_types=1);
 class executionZen extends execution
 {
     /**
+     * 展示看板的相关变量。
+     * Show the variables associated with the kanban.
+     *
+     * @param  int       $executionID
+     * @access protected
+     * @return void
+     */
+    protected function assignKanbanVars(int $executionID)
+    {
+        /* Get user list. */
+        $userList    = array();
+        $users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $avatarPairs = $this->user->getAvatarPairs('all');
+        foreach($avatarPairs as $account => $avatar)
+        {
+            if(!isset($users[$account])) continue;
+            $userList[$account]['realname'] = $users[$account];
+            $userList[$account]['avatar']   = $avatar;
+        }
+        $userList['closed']['account']  = 'Closed';
+        $userList['closed']['realname'] = 'Closed';
+        $userList['closed']['avatar']   = '';
+
+        /* Get execution linked products. */
+        $productID    = 0;
+        $branchID     = 0;
+        $products     = $this->loadModel('product')->getProducts($executionID);
+        $productNames = array();
+        if($products)
+        {
+            $productID = key($products);
+            $branches  = $this->loadModel('branch')->getPairs($productID, '', $executionID);
+            if($branches) $branchID = key($branches);
+        }
+        foreach($products as $product) $productNames[$product->id] = $product->name;
+
+        /* Get execution linked plans. */
+        $plans    = $this->execution->getPlans($products, 'skipParent', $executionID);
+        $allPlans = array();
+        if(!empty($plans))
+        {
+            foreach($plans as $plan) $allPlans += $plan;
+        }
+
+        $this->view->users        = $users;
+        $this->view->userList     = $userList;
+        $this->view->productID    = $productID;
+        $this->view->branchID     = $branchID;
+        $this->view->productNames = $productNames;
+        $this->view->productNum   = count($products);
+        $this->view->allPlans     = $allPlans;
+    }
+
+    /**
      * 处理版本列表展示数据。
      * Process build list display data.
      *

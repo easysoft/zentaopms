@@ -2435,32 +2435,32 @@ class execution extends control
     }
 
     /**
-     * Kanban.
+     * 研发看板。
+     * Research and development Kanban.
      *
      * @param  int     $executionID
-     * @param  string  $browseType
+     * @param  string  $browseType  all|story|bug|task
      * @param  string  $orderBy
-     * @param  string  $groupBy
+     * @param  string  $groupBy     default|pri|category|module|source|assignedTo|type|story|severity
      * @access public
      * @return void
      */
-    public function kanban($executionID, $browseType = 'all', $orderBy = 'id_asc', $groupBy = 'default')
+    public function kanban(int $executionID, string $browseType = 'all', string $orderBy = 'id_asc', string $groupBy = 'default')
     {
         $this->app->loadLang('bug');
         $this->app->loadLang('kanban');
 
-        if(empty($groupBy)) $groupBy = 'default';
-
         $this->lang->execution->menu = new stdclass();
         $execution = $this->commonAction($executionID);
-        if($execution->type != 'kanban') return print(js::locate(inlink('view', "executionID=$executionID")));
+        if($execution->type != 'kanban') return $this->locate(inlink('view', "executionID=$executionID"));
 
         /* Set Session. */
+        if(empty($groupBy)) $groupBy = 'default';
         $this->session->set('execGroupBy', $groupBy);
         $this->session->set('storyList', $this->app->getURI(true), 'execution');
         $this->session->set('rdSearchValue', '');
 
-        $features         = $this->execution->getExecutionFeatures($execution);
+        /* Get kanban data and set actions. */
         $kanbanData       = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy);
         $executionActions = array();
         foreach($this->config->execution->statusActions as $action)
@@ -2469,62 +2469,25 @@ class execution extends control
         }
 
         /* Set lane type. */
+        $features = $this->execution->getExecutionFeatures($execution);
         if(!$features['story'] and !$features['qa']) $browseType = 'task';
         if(!$features['story']) unset($this->lang->kanban->group->task['story']);
         $this->session->set('execLaneType', $browseType);
 
-        $userList    = array();
-        $users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
-        $avatarPairs = $this->user->getAvatarPairs('all');
-        foreach($avatarPairs as $account => $avatar)
-        {
-            if(!isset($users[$account])) continue;
-            $userList[$account]['realname'] = $users[$account];
-            $userList[$account]['avatar']   = $avatar;
-        }
-        $userList['closed']['account']  = 'Closed';
-        $userList['closed']['realname'] = 'Closed';
-        $userList['closed']['avatar']   = '';
-
-        /* Get execution's product. */
-        $productID = 0;
-        $branchID  = 0;
-        $products  = $this->loadModel('product')->getProducts($executionID);
-        $productNames = array();
-        if($products)
-        {
-            $productID = key($products);
-            $branches  = $this->loadModel('branch')->getPairs($productID, '', $executionID);
-            if($branches) $branchID = key($branches);
-        }
-        foreach($products as $product) $productNames[$product->id] = $product->name;
-
-        $plans    = $this->execution->getPlans($products, 'skipParent', $executionID);
-        $allPlans = array();
-        if(!empty($plans))
-        {
-            foreach($plans as $plan) $allPlans += $plan;
-        }
-
         $taskToOpen = $this->cookie->taskToOpen ? $this->cookie->taskToOpen : 0;
         helper::setcookie('taskToOpen', 0, 0);
 
+        $this->executionZen->assignKanbanVars($executionID);
+
         $this->view->title            = $this->lang->kanban->view;
-        $this->view->users            = $users;
         $this->view->regions          = $kanbanData;
         $this->view->execution        = $execution;
         $this->view->executionID      = $executionID;
-        $this->view->userList         = $userList;
         $this->view->browseType       = $browseType;
         $this->view->orderBy          = $orderBy;
         $this->view->groupBy          = $groupBy;
-        $this->view->productID        = $productID;
-        $this->view->productNames     = $productNames;
-        $this->view->productNum       = count($products);
-        $this->view->branchID         = $branchID;
         $this->view->projectID        = $execution->project;
         $this->view->project          = $this->loadModel('project')->getByID($execution->project);
-        $this->view->allPlans         = $allPlans;
         $this->view->features         = $features;
         $this->view->kanbanData       = $kanbanData;
         $this->view->executionActions = $executionActions;
