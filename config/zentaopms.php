@@ -563,6 +563,7 @@ $config->objectTables['instance']     = TABLE_INSTANCE;
 $config->objectTables['space']        = TABLE_SPACE;
 $config->objectTables['solution']     = TABLE_SOLUTION;
 $config->objectTables['artifactrepo'] = TABLE_ARTIFACTREPO;
+$config->objectTables['metric']       = TABLE_METRIC;
 
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions');
 $config->disabledFeatures = '';

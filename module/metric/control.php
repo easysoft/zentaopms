@@ -148,6 +148,7 @@ class metric extends control
         $this->view->createEditInfo = $this->metricZen->getCreateEditInfo($this->view);
         $this->view->actions        = $this->loadModel('action')->getList('metric', $metricID);
         $this->view->users          = $this->loadModel('user')->getPairs('noletter');
+        $this->view->preAndNext     = $this->loadModel('common')->getPreAndNextObject('metric', $metricID);
 
         $this->display();
     }

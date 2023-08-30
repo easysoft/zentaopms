@@ -146,4 +146,13 @@ detailBody
     )
 );
 
+if(!isInModal())
+{
+    floatPreNextBtn
+    (
+        !empty($preAndNext->pre)  ? set::preLink(createLink('metric', 'view', "id={$preAndNext->pre->id}"))   : null,
+        !empty($preAndNext->next) ? set::nextLink(createLink('metric', 'view', "id={$preAndNext->next->id}")) : null
+    );
+}
+
 render();
