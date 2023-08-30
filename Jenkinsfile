@@ -34,7 +34,7 @@ pipeline {
 
     // set to blank for auto-detect from ci.json
     DOWNGRADE_ENABLED = ""
-    DOWNGRADE_VERSIONS = "7.2,7.1,7.0"
+    DOWNGRADE_VERSIONS = ""
   }
 
   stages {
@@ -239,7 +239,7 @@ pipeline {
               }
               axis {
                 name "PHPVERSION"
-                values "php7.0", "php7.1",  "php7.2_7.4", "k8s.php7.2_7.4", "php8.1", "k8s.php8.1"
+                values "php5.4_5.6", "php7.0", "php7.1",  "php7.2_7.4", "k8s.php7.2_7.4", "php8.1", "k8s.php8.1"
               }
             }
             excludes {
