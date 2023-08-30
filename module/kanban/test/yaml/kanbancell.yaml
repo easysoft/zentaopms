@@ -16,7 +16,7 @@ fields:
         - field: card1
           prefix: ","
           postfix: ","
-          range: 1-20:2{3!},1-40:2
+          range: "1-20:2{3!},1-40:2"
         - field: card2
           postfix: ","
-          range: 2-20:2{3!},2-40:2
+          range: "2-20:2{3!},2-40:2"

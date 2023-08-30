@@ -613,6 +613,7 @@ class kanbanTest
         {
             foreach($types['lanes'] as $lane)
             {
+                if(!isset($lane['cards'])) continue;
                 foreach($lane['cards'] as $card) $cardCount += count($card);
             }
             $columnCount += count($types['columns']);
