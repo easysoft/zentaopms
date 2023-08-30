@@ -3592,15 +3592,18 @@ class execution extends control
     }
 
     /**
-     * Update order.
+     * 将执行列表内的执行进行排序。
+     * Update the order of the executions.
      *
      * @access public
      * @return void
      */
     public function updateOrder()
     {
-        $idList   = explode(',', trim($this->post->executions, ','));
-        $orderBy  = $this->post->orderBy;
+        if($_SERVER['REQUEST_METHOD'] !== 'POST') return $this->sendError($this->lang->error->unsupportedReq);
+
+        $idList  = explode(',', trim($this->post->executions, ','));
+        $orderBy = $this->post->orderBy;
         if(strpos($orderBy, 'order') === false) return false;
 
         $executions = $this->dao->select('id,`order`')->from(TABLE_EXECUTION)->where('id')->in($idList)->orderBy($orderBy)->fetchPairs('order', 'id');
@@ -3609,7 +3612,10 @@ class execution extends control
             $newID = array_shift($idList);
             if($id == $newID) continue;
             $this->dao->update(TABLE_EXECUTION)->set('`order`')->eq($order)->where('id')->eq($newID)->exec();
+            if(dao::isError()) return $this->sendError(dao::getError());
         }
+
+        return $this->sendSuccess();
     }
 
     /**
