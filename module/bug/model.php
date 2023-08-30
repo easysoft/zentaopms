@@ -3994,6 +3994,7 @@ class bugModel extends model
             }
 
             $bug->type = zget($this->lang->bug->typeList, $bug->type, '');
+            $bug->resolution = zget($this->lang->bug->resolutionList, $bug->resolution, '');
 
             $bugStatus   = $this->processStatus('bug', $bug);
             $bug->status = "<span class='status-bug status-{$bug->status}' title='{$bugStatus}'> {$bugStatus}</span>";
