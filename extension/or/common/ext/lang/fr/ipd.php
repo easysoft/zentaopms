@@ -12,6 +12,12 @@ $lang->charter->common = 'Charter';
 $lang->market = new stdclass();
 $lang->market->common = 'Market';
 
+$lang->marketreport = new stdclass();
+$lang->marketreport->common = 'Report';
+
+$lang->marketresearch = new stdclass();
+$lang->marketresearch->common = 'Research';
+
 $lang->navIcons['demandpool'] = "<i class='icon icon-bars'></i>";
 $lang->navIcons['market']     = "<i class='icon icon-bars'></i>";
 
@@ -43,10 +49,13 @@ $lang->mainNav->menuOrder[25] = 'charter';
 $lang->mainNav->menuOrder[30] = 'doc';
 $lang->mainNav->menuOrder[35] = 'admin';
 
-$lang->navGroup->demandpool = 'demandpool';
-$lang->navGroup->demand     = 'demandpool';
-$lang->navGroup->roadmap    = 'product';
-$lang->navGroup->charter    = 'charter';
+$lang->navGroup->demandpool     = 'demandpool';
+$lang->navGroup->demand         = 'demandpool';
+$lang->navGroup->roadmap        = 'product';
+$lang->navGroup->charter        = 'charter';
+$lang->navGroup->market         = 'market';
+$lang->navGroup->marketreport   = 'market';
+$lang->navGroup->marketresearch = 'market';
 
 $lang->demandpool->menu = new stdclass();
 $lang->demandpool->menu->browse  = array('link' => "{$lang->demand->common}|demand|browse|poolID=%s", 'alias' => 'create,batchcreate,edit,managetree,view,tostory,showimport,review,change');
