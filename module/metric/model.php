@@ -152,6 +152,36 @@ class metricModel extends model
     }
 
     /**
+     * 根据度量项信息生成度量项php模板内容。
+     * Generante php template content from metric information.
+     *
+     * @param  int    $metricID
+     * @access public
+     * @return string
+     */
+    public function getMetricPHPTemplate(int $metricID): string
+    {
+        $metric = $this->getByID($metricID);
+
+        $metric->nameEN  = ucfirst(str_replace('_', ' ', $metric->code));
+        $metric->scope   = $this->lang->metric->scopeList[$metric->scope];
+        $metric->object  = $this->lang->metric->objectList[$metric->object];
+        $metric->purpose = $this->lang->metric->purposeList[$metric->purpose];
+
+        $replaceFields = array('name', 'nameEN', 'code', 'scope', 'object', 'purpose', 'unit', 'desc', 'definition');
+
+        $content = file_get_contents($this->app->getModuleRoot() . DS . 'metric' . DS . 'template' . DS . 'metric.php.tmp');
+
+        foreach($replaceFields as $replaceField)
+        {
+            $replaceContent = str_replace("\n", ';', $metric->$replaceField);
+            $content = str_replace("{{{$replaceField}}}", $replaceContent, $content);
+        }
+
+        return $content;
+    }
+
+    /**
      * 根据代号获取计算实时度量项的结果。
      * Get result of calculate metric by code.
      *
