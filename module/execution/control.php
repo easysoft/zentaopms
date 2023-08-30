@@ -3638,10 +3638,10 @@ class execution extends control
         foreach($idList as $storyID)
         {
             $this->dao->update(TABLE_PROJECTSTORY)->set('`order`')->eq($order)->where('story')->eq($storyID)->andWhere('project')->eq($executionID)->exec();
+            if(dao::isError()) return $this->sendError(dao::getError());
             $order++;
         }
 
-        if(dao::isError()) return $this->sendError(dao::getError());
         return $this->sendSuccess();
     }
 
