@@ -942,7 +942,11 @@ class projectModel extends model
         }
 
         $projectPairs = array();
-        foreach($allProjects as $programID => $projects) $projectPairs = array_merge($projectPairs, array_column($projects, 'name'));
+        foreach($allProjects as $programID => $projects)
+        {
+            foreach($projects as $project)
+                $projectPairs[$project->id] = $project->name;
+        }
         return $projectPairs;
     }
 
