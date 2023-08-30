@@ -121,6 +121,8 @@ class taskModel extends model
             ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
             ->setIF(is_numeric($this->post->consumed), 'consumed', (float)$this->post->consumed)
             ->setIF(is_numeric($this->post->left),     'left',     (float)$this->post->left)
+            ->setIF(!$this->post->estStarted, 'estStarted', null)
+            ->setIF(!$this->post->deadline, 'deadline', null)
             ->setDefault('openedBy',   $this->app->user->account)
             ->setDefault('openedDate', helper::now())
             ->setDefault('vision', $this->config->vision)
@@ -128,8 +130,6 @@ class taskModel extends model
             ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->remove('after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri,team,teamSource,teamEstimate,teamConsumed,teamLeft,teamMember,multiple,teams,contactListMenu,selectTestStory,testStory,testPri,testEstStarted,testDeadline,testAssignedTo,testEstimate,sync,otherLane,region,lane,estStartedDitto,deadlineDitto')
-            ->removeIF(!$this->post->estStarted, 'estStarted')
-            ->removeIF(!$this->post->deadline, 'deadline')
             ->add('version', 1)
             ->get();
 
