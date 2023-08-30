@@ -176,7 +176,7 @@ class datatableModel extends model
         $id = $col->id;
         if($col->show)
         {
-            $fixed = $col->fixed == 'no' ? 'true' : 'false';
+            $fixed = zget($col, 'fixed', 'no') == 'no' ? 'true' : 'false';
             $width = is_numeric($col->width) ? "{$col->width}px" : $col->width;
             $title = isset($col->title) ? "title='$col->title'" : '';
             $title = (isset($col->name) and $col->name) ? "title='$col->name'" : $title;
@@ -235,7 +235,7 @@ class datatableModel extends model
         $hasRightAuto = false;
         foreach($setting as $key => $value)
         {
-            if($value->fixed != 'no')
+            if(zget($value, 'fixed', 'no') != 'no')
             {
                 if($value->fixed == 'left' and $value->width == 'auto')  $hasLeftAuto  = true;
                 if($value->fixed == 'right' and $value->width == 'auto') $hasRightAuto = true;
