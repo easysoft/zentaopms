@@ -43,17 +43,14 @@ $CFD->gen(5);
 /**
 
 title=测试executionModel->buildCFDData();
+timeout=0
 cid=1
-pid=1
-
-不存在执行的累计流图信息 >> 0
-存在的执行的累计流图信息 >> 2
 
 */
 
 $executionTester = new executionTest();
 
-r(count($executionTester->buildCFDDataTest())) && p() && e('0'); // 不存在执行的累计流图信息
-
 $CFDData = $executionTester->buildCFDDataTest(3);
-r(count($CFDData['line'])) && p() && e('2');                    // 存在的执行的累计流图信息
+
+r(count($executionTester->buildCFDDataTest())) && p() && e('0'); // 不存在执行的累计流图信息
+r(count($CFDData['line']))                     && p() && e('2'); // 存在的执行的累计流图信息

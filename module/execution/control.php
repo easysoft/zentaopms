@@ -4148,7 +4148,8 @@ class execution extends control
     }
 
     /**
-     * AJAX: Get brun kanban html.
+     * 展示累计流图。
+     * Display cumulative flow diagram.
      *
      * @param  int    $executionID
      * @access public
@@ -4156,9 +4157,10 @@ class execution extends control
      */
     public function ajaxGetCFD(int $executionID)
     {
-        $this->app->loadClass('date');
 
         $execution = $this->execution->getById($executionID, true);
+
+        $this->app->loadClass('date');
         list($begin, $end) = $this->execution->getBeginEnd4CFD($execution);
         $dateList  = date::getDateList($begin, $end, 'Y-m-d', 'noweekend');
         $chartData = $this->execution->buildCFDData($executionID, $dateList, 'task');
