@@ -2620,7 +2620,7 @@ class executionModel extends model
         $execution->days          = $execution->days ? $execution->days : '';
         $execution->totalEstimate = round((float)$total->totalEstimate, 1);
         $execution->totalConsumed = round((float)$total->totalConsumed, 1);
-        $execution->totalLeft     = round((float)($total->totalLeft - $closedTotalLeft), 1);
+        $execution->totalLeft     = round((float)($total->totalLeft - (float)$closedTotalLeft), 1);
 
         $execution = $this->loadModel('file')->replaceImgURL($execution, 'desc');
         if($setImgSize) $execution->desc = $this->file->setImgSize($execution->desc);
