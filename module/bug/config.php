@@ -368,6 +368,7 @@ $config->bug->datatable->fieldList['browser']['sortType'] = true;
 $config->bug->datatable->fieldList['mailto']['title']    = 'mailto';
 $config->bug->datatable->fieldList['mailto']['type']     = 'user';
 $config->bug->datatable->fieldList['mailto']['fixed']    = 'no';
+$config->bug->datatable->fieldList['mailto']['width']    = '100';
 $config->bug->datatable->fieldList['mailto']['sortType'] = true;
 
 $config->bug->datatable->fieldList['closedBy']['title']    = 'closedBy';
