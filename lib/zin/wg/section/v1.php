@@ -5,7 +5,7 @@ namespace zin;
 class section extends wg
 {
     protected static array $defineProps = array(
-        'title: string',          // 标题
+        'title?: string',         // 标题
         'content?: string|array', // 内容
         'useHtml?: bool=false',   // 内容是否解析 HTML 标签
     );
