@@ -61,12 +61,35 @@ detailHeader
     )
 );
 
-$dtable = empty($resultData) || empty($resultData) ? null : dtable
-(
-    set::height(400),
-    set::cols($resultHeader),
-    set::data($resultData)
-);
+$fnGenerateDataDisplay = function() use($resultData, $resultHeader, $lang, $metric)
+{
+    if(empty($resultData)) return null;
+    if(count($resultData) == 1) return div
+        (
+            set::className('card-data'),
+            center
+            (
+                p
+                (
+                    set::className('card-digit'),
+                    $resultData[0]->value
+                ),
+                p
+                (
+                    set::className('card-title'),
+                    $lang->metric->objectList[$metric->object]
+                ),
+            )
+
+        );
+
+    return dtable
+        (
+            set::height(400),
+            set::cols($resultHeader),
+            set::data($resultData),
+        );
+};
 
 detailBody
 (
@@ -87,7 +110,7 @@ detailBody
         section
         (
             set::title($lang->metric->metricData),
-            $dtable,
+            $fnGenerateDataDisplay($resultData, $resultHeader, $lang, $metric),
         )
     ),
     history

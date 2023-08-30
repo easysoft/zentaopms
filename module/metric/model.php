@@ -461,7 +461,7 @@ class metricModel extends model
         {
             if(!in_array($method, $methodNameList)) return false;
         }
- 
+
         return true;
     }
 }
