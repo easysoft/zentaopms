@@ -3424,19 +3424,20 @@ class execution extends control
     }
 
     /**
+     * 通过项目ID或执行ID获取团队成员。
      * AJAX: get team members by projectID/executionID.
      *
      * @param  int    $objectID
      * @access public
      * @return string
      */
-    public function ajaxGetTeamMembers($objectID)
+    public function ajaxGetTeamMembers(int $objectID)
     {
-        $type = $this->dao->findById($objectID)->from(TABLE_PROJECT)->fetch('type');
-        if($type != 'project') $type = 'execution';
+        $objectType = $this->dao->select('`type`')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch('type');
+        if($objectType != 'project') $objectType = 'execution';
 
         $users   = $this->loadModel('user')->getPairs('nodeleted|noclosed');
-        $members = $this->user->getTeamMemberPairs($objectID, $type);
+        $members = $this->user->getTeamMemberPairs($objectID, $objectType);
 
         return print(html::select('teamMembers[]', $users, array_keys($members), "class='form-control picker-select' multiple"));
     }
