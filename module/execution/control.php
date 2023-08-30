@@ -3942,6 +3942,21 @@ class execution extends control
     }
 
     /**
+     * 获取执行下拉列表用于切换不同的执行。
+     * Drop menu page.
+     *
+     * @param  int    $executionID 已经打开的页面对应的执行ID
+     * @param  string $module 链接里要访问的模块
+     * @param  string $method 链接里要访问的方法
+     * @access public
+     * @return void
+     */
+    public function ajaxGetDropMenuData(int $executionID, string $module, string $method)
+    {
+        $this->ajaxGetDropMenu($executionID, $module, $method, '');
+    }
+
+    /**
      * Update order.
      *
      * @access public

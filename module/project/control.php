@@ -158,6 +158,21 @@ class project extends control
     }
 
     /**
+     * 设置1.5级项目下拉菜单。
+     * Ajax get project drop menu for zui3.
+     *
+     * @param  int    $projectID
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return void
+     */
+    public function ajaxGetDropMenuData(int $projectID, string $module, string $method)
+    {
+        $this->ajaxGetDropMenu($projectID, $module, $method);
+    }
+
+    /**
      * Ajax get projects.
      *
      * @access public
