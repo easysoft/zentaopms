@@ -25,7 +25,7 @@ $lang->navIcons['market']     = "<i class='icon icon-bars'></i>";
 $lang->mainNav              = new stdclass();
 $lang->mainNav->my          = "{$lang->navIcons['my']} {$lang->my->shortCommon}|my|index|";
 $lang->mainNav->demandpool  = "{$lang->navIcons['demandpool']} {$lang->demandpool->common}|demandpool|browse|";
-$lang->mainNav->market      = "{$lang->navIcons['market']} {$lang->market->common}|marketreport|browse|";
+$lang->mainNav->market      = "{$lang->navIcons['market']} {$lang->market->common}|marketreport|all|";
 $lang->mainNav->product     = "{$lang->navIcons['product']} {$lang->productCommon}|product|all|";
 $lang->mainNav->charter     = "{$lang->navIcons['project']} {$lang->charter->common}|charter|browse|";
 $lang->mainNav->doc         = "{$lang->navIcons['doc']} {$lang->doc->common}|doc|index|";
@@ -139,6 +139,6 @@ $lang->market->homeMenu->research = array('link' => "Reseach|marketresearch|all"
 $lang->market->homeMenu->market   = array('link' => "Market|market|browse|browseType=all");
 
 $lang->market->menu           = new stdclass();
-$lang->market->menu->report   = array('link' => "Report|marketreport|browse");
+$lang->market->menu->report   = array('link' => "Report|marketreport|browse|marketID=%s");
 $lang->market->menu->research = array('link' => "Research|marketresearch|browse|marketID=%s");
 $lang->market->menu->view     = array('link' => "View|market|view|marketID=%s", 'alias' => 'edit');
