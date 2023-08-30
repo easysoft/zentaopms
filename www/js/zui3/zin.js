@@ -401,8 +401,8 @@
             error: (error, type) =>
             {
                 updatePerfInfo(options, 'requestEnd', {error: error});
-                if(type === 'abort') return console.log('[ZIN] ', 'Abord fetch data from ' + url, {xhr, type, error});;
-                if(DEBUG) console.error('[ZIN] ', 'Fetch data failed from ' + url, {xhr, type, error});
+                if(type === 'abort') return console.log('[ZIN] ', 'Abord fetch data from ' + url, {type, error});;
+                if(DEBUG) console.error('[ZIN] ', 'Fetch data failed from ' + url, {type, error});
                 zui.Messager.show('ZIN: Fetch data failed from ' + url);
                 if(options.error) options.error(data, error);
                 if(onFinish) onFinish(error);
