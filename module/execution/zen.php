@@ -233,6 +233,53 @@ class executionZen extends execution
     }
 
     /**
+     * 构建执行看板的数据。
+     * Build the data to execution Kanban.
+     *
+     * @param  array     $projectIdList
+     * @param  array     $executions
+     * @access protected
+     * @return void
+     */
+    protected function buildExecutionKanbanData(array $projectIdList, array $executions)
+    {
+        $projectCount = 0;
+        $statusCount  = array();
+        $myExecutions = array();
+        $kanbanGroup  = array();
+        $teams        = $this->execution->getMembersByIdList(explode(',', $this->app->user->view->sprints));
+        foreach($projectIdList as $projectID)
+        {
+            foreach(array_keys($this->lang->execution->statusList) as $status)
+            {
+                if(!isset($statusCount[$status])) $statusCount[$status] = 0;
+
+                foreach($executions as $execution)
+                {
+                    if($execution->status == $status)
+                    {
+                        if(isset($teams[$execution->id][$this->app->user->account])) $myExecutions[$status][$execution->id] = $execution;
+                        if($execution->project == $projectID) $kanbanGroup[$projectID][$status][$execution->id] = $execution;
+                    }
+                }
+
+                $statusCount[$status] += isset($kanbanGroup[$projectID][$status]) ? count($kanbanGroup[$projectID][$status]) : 0;
+
+                /* Max 2 closed executions. */
+                if($status == 'closed')
+                {
+                    list($myExecutions, $kanbanGroup) = $this->processExecutionKanbanData($myExecutions, $kanbanGroup, $projectID, $status);
+                }
+            }
+
+            if(empty($kanbanGroup[$projectID])) continue;
+            $projectCount ++;
+        }
+
+        return array($projectCount, $statusCount, $myExecutions, $kanbanGroup);
+    }
+
+    /**
      * 获取打印看板的数据。
      * Get printed kanban data.
      *
@@ -273,6 +320,45 @@ class executionZen extends execution
         }
 
         return array($dataList, $users);
+    }
+
+    /**
+     * 处理执行看板数据。
+     * Process execution kanban data.
+     *
+     * @param  array     $myExecutions
+     * @param  array     $kanbanGroup
+     * @param  int       $projectID
+     * @param  string    $status
+     * @access protected
+     * @return array
+     */
+    protected function processExecutionKanbanData(array $myExecutions, array $kanbanGroup, int $projectID, string $status): array
+    {
+        if(isset($myExecutions[$status]) and count($myExecutions[$status]) > 2)
+        {
+            foreach($myExecutions[$status] as $executionID => $execution)
+            {
+                unset($myExecutions[$status][$executionID]);
+                $myExecutions[$status][$execution->closedDate] = $execution;
+            }
+
+            krsort($myExecutions[$status]);
+            $myExecutions[$status] = array_slice($myExecutions[$status], 0, 2, true);
+        }
+
+        if(isset($kanbanGroup[$projectID][$status]) and count($kanbanGroup[$projectID][$status]) > 2)
+        {
+            foreach($kanbanGroup[$projectID][$status] as $executionID => $execution)
+            {
+                unset($kanbanGroup[$projectID][$status][$executionID]);
+                $kanbanGroup[$projectID][$status][$execution->closedDate] = $execution;
+            }
+
+            krsort($kanbanGroup[$projectID][$status]);
+            $kanbanGroup[$projectID][$status] = array_slice($kanbanGroup[$projectID][$status], 0, 2);
+        }
+        return array($myExecutions, $kanbanGroup);
     }
 
     /**

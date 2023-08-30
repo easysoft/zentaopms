@@ -3506,20 +3506,21 @@ class executionModel extends model
     }
 
     /**
-     * Get members by execution id list.
+     * 获取给定执行的团队成员信息。
+     * Get team members information for the execution id list.
      *
-     * @param  array $executionIdList
+     * @param  array  $executionIdList
      * @access public
-     * @return void
+     * @return array
      */
-    public function getMembersByIdList($executionIdList)
+    public function getMembersByIdList(array $executionIdList): array
     {
         return $this->dao->select("t1.root, t1.account, t2.realname")->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('t1.root')->in($executionIdList)
             ->andWhere('t1.type')->eq('execution')
             ->andWhere('t2.deleted')->eq('0')
-            ->fetchGroup('root');
+            ->fetchGroup('root', 'account');
     }
 
     /**

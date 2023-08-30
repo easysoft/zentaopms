@@ -2634,6 +2634,7 @@ class execution extends control
     }
 
     /**
+     * 执行看板。
      * Execution kanban.
      *
      * @access public
@@ -2643,71 +2644,13 @@ class execution extends control
     {
         $projects   = $this->loadModel('project')->getPairsByProgram(0, 'noclosed');
         $executions = $this->execution->getStatData(0, 'all', 0, 0, false, 'withchild', 'id_desc');
-
         foreach($executions as $execution)
         {
             $execution->name = htmlspecialchars_decode($execution->name);
             $execution->team = htmlspecialchars_decode($execution->team);
         }
 
-        $teams = $this->dao->select('root,account')->from(TABLE_TEAM)
-            ->where('root')->in($this->app->user->view->sprints)
-            ->andWhere('type')->eq('execution')
-            ->fetchGroup('root', 'account');
-
-        $projectCount = 0;
-        $statusCount  = array();
-        $myExecutions = array();
-        $kanbanGroup  = array();
-        foreach(array_keys($projects) as $projectID)
-        {
-            foreach(array_keys($this->lang->execution->statusList) as $status)
-            {
-                if(!isset($statusCount[$status])) $statusCount[$status] = 0;
-
-                foreach($executions as $execution)
-                {
-                    if($execution->status == $status)
-                    {
-                        if(isset($teams[$execution->id][$this->app->user->account])) $myExecutions[$status][$execution->id] = $execution;
-                        if($execution->project == $projectID) $kanbanGroup[$projectID][$status][$execution->id] = $execution;
-                    }
-                }
-
-                $statusCount[$status] += isset($kanbanGroup[$projectID][$status]) ? count($kanbanGroup[$projectID][$status]) : 0;
-
-                /* Max 2 closed executions. */
-                if($status == 'closed')
-                {
-                    if(isset($myExecutions[$status]) and count($myExecutions[$status]) > 2)
-                    {
-                        foreach($myExecutions[$status] as $executionID => $execution)
-                        {
-                            unset($myExecutions[$status][$executionID]);
-                            $myExecutions[$status][$execution->closedDate] = $execution;
-                        }
-
-                        krsort($myExecutions[$status]);
-                        $myExecutions[$status] = array_slice($myExecutions[$status], 0, 2, true);
-                    }
-
-                    if(isset($kanbanGroup[$projectID][$status]) and count($kanbanGroup[$projectID][$status]) > 2)
-                    {
-                        foreach($kanbanGroup[$projectID][$status] as $executionID => $execution)
-                        {
-                            unset($kanbanGroup[$projectID][$status][$executionID]);
-                            $kanbanGroup[$projectID][$status][$execution->closedDate] = $execution;
-                        }
-
-                        krsort($kanbanGroup[$projectID][$status]);
-                        $kanbanGroup[$projectID][$status] = array_slice($kanbanGroup[$projectID][$status], 0, 2);
-                    }
-                }
-            }
-
-            if(empty($kanbanGroup[$projectID])) continue;
-            $projectCount++;
-        }
+        list($projectCount, $statusCount, $myExecutions, $kanbanGroup) = $this->executionZen->buildExecutionKanbanData(array_keys($projects), $executions);
 
         $this->view->title        = $this->lang->execution->executionKanban;
         $this->view->kanbanGroup  = empty($myExecutions) ? $kanbanGroup : array($myExecutions) + $kanbanGroup;
