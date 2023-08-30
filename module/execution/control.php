@@ -3352,13 +3352,14 @@ class execution extends control
     }
 
     /**
+     * 通过执行ID获取产品。
      * AJAX: get products of a execution in html select.
      *
      * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function ajaxGetProducts($executionID)
+    public function ajaxGetProducts(int $executionID)
     {
         $products = $this->loadModel('product')->getProducts($executionID, 'all', '', false);
         return print(html::select('product', $products, '', 'class="form-control"'));
