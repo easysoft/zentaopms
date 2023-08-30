@@ -33,6 +33,13 @@ class editor extends wg
         return '$.getLib("' . $jsFile . '", {type: "module", root: false}, () => {document.body.dataset.loadedEditor = true;});';
     }
 
+    protected function getDefaultValue(): array
+    {
+        return array(
+            'uploadUrl' => helper::createLink('file', 'ajaxUpload', 'uid=' . uniqid()), //uploadUrl默认值
+        );
+    }
+
     protected function build(): wg
     {
         $editor = new h
@@ -41,10 +48,14 @@ class editor extends wg
             setClass('form-control', 'p-0'),
             $this->prop('size') === 'full' ? setStyle('height', '100%') : setClass('h-auto'),
         );
-        $props  = $this->props->pick(array('createInput', 'uploadUrl', 'placeholder', 'fullscreenable', 'resizable', 'exposeEditor', 'size', 'hideMenubar', 'bubbleMenu', 'menubarMode', 'collaborative', 'hocuspocus', 'docName', 'username', 'userColor'));
+
+        $props        = $this->props->pick(array('createInput', 'uploadUrl', 'placeholder', 'fullscreenable', 'resizable', 'exposeEditor', 'size', 'hideMenubar', 'bubbleMenu', 'menubarMode', 'collaborative', 'hocuspocus', 'docName', 'username', 'userColor'));
+        $defaultValue = $this->getDefaultValue();
         foreach($props as $key => $value)
         {
-            if($value === true || (is_string($value) && !empty($value))) $editor->add(set(uncamelize($key), $value));
+            $allowedCondition = $value === true || (is_string($value) && !empty($value));
+            if(!$allowedCondition && !isset($defaultValue[$key])) continue;
+            $editor->add(set(uncamelize($key), $allowedCondition ? $value : $defaultValue[$key]));
         }
 
         $customProps = $this->getRestProps();
