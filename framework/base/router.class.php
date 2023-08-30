@@ -1765,6 +1765,7 @@ class baseRouter
         }
         if($checkedModule[$var]) return true;
         if(!$exit) return false;
+        if(!$var) return false;
         $this->triggerError("'$var' illegal. ", __FILE__, __LINE__, $exit = true);
     }
 
