@@ -27,6 +27,11 @@ class set
             }
             return directive('prop', array('class' => $args));
         }
+        // compatible with zui prop className.
+        else if($prop === '_className')
+        {
+            return directive('prop', array('className' => $args));
+        }
 
         $value = array_shift($args);
         if(is_object($value)) $value = (array)$value;

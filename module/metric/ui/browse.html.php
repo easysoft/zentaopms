@@ -16,7 +16,7 @@ $fnGenerateScopeMenu = function() use ($scope, $scopeText, $scopeList)
 
     return dropmenu
     (
-        set::className('scope-menu btn'),
+        set::_className('scope-menu btn'),
         set::defaultValue($scope),
         set::text($scopeText),
         set::caret(false),
