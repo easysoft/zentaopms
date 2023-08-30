@@ -5,8 +5,9 @@
 <?php js::set('currentModule', $this->app->rawModule)?>
 <?php
 $showSwitchLink = true;
-if($currentModule == 'execution' && ($currentMethod == 'all' || $currentMethod == 'task')) $showSwitchLink = false;
 if($currentModule == 'product' && $currentMethod == 'browse') $showSwitchLink = false;
+if($currentModule == 'project' && $currentMethod == 'bug') $showSwitchLink = false;
+if($currentModule == 'execution' && strpos(',all,task,bug,', ",{$currentMethod},") !== false) $showSwitchLink = false;
 if($currentModule == 'bug' && $currentMethod == 'browse') $showSwitchLink = false;
 ?>
 
