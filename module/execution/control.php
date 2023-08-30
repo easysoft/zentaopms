@@ -3257,13 +3257,14 @@ class execution extends control
     }
 
     /**
+     * 批量取消关联需求（移除需求）。
      * Batch unlink story.
      *
      * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function batchUnlinkStory($executionID)
+    public function batchUnlinkStory(int $executionID)
     {
         if(isset($_POST['storyIdList']))
         {
