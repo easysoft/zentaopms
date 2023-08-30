@@ -3201,59 +3201,58 @@ class execution extends control
     }
 
     /**
+     * 取消关联需求（移除需求）。
      * Unlink a story.
      *
      * @param  int    $executionID
      * @param  int    $storyID
-     * @param  string $confirm    yes|no
-     * @param  string $from taskkanban
+     * @param  string $confirm     yes|no
+     * @param  string $from        taskkanban
      * @param  int    $laneID
      * @param  int    $columnID
      * @access public
      * @return void
      */
-    public function unlinkStory($executionID, $storyID, $confirm = 'no', $from = '', $laneID = 0, $columnID = 0)
+    public function unlinkStory(int $executionID, int $storyID, string $confirm = 'no', string $from = '', int $laneID = 0, int $columnID = 0)
     {
         if($confirm == 'no')
         {
             $tip = $this->app->rawModule == 'projectstory' ? $this->lang->execution->confirmUnlinkExecutionStory : $this->lang->execution->confirmUnlinkStory;
             return print(js::confirm($tip, $this->createLink('execution', 'unlinkstory', "executionID=$executionID&storyID=$storyID&confirm=yes&from=$from&laneID=$laneID&columnID=$columnID")));
         }
-        else
+
+        $execution = $this->execution->getByID($executionID);
+        $this->execution->unlinkStory($executionID, $storyID, $laneID, $columnID);
+        if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        if($execution->type == 'kanban')
         {
-            $execution = $this->execution->getByID($executionID);
-            $this->execution->unlinkStory($executionID, $storyID, $laneID, $columnID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            if($execution->type == 'kanban')
-            {
-                /* Fix bug #29171. */
-                $executions       = $this->dao->select('*')->from(TABLE_EXECUTION)->where('parent')->eq($execution->parent)->fetchAll('id');
-                $executionStories = $this->dao->select('project,story')->from(TABLE_PROJECTSTORY)->where('story')->eq($storyID)->andWhere('project')->in(array_keys($executions))->fetchAll();
-                if(empty($executionStories)) $this->execution->unlinkStory($execution->parent, $storyID, $laneID, $columnID);
-            }
-
-            $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-            $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-            if($this->app->tab == 'execution' and $execution->type == 'kanban')
-            {
-                $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-                $kanbanData    = $this->loadModel('kanban')->getRDKanban($executionID, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
-                $kanbanData    = json_encode($kanbanData);
-                return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban($kanbanData)"));
-            }
-            elseif($from == 'taskkanban')
-            {
-                $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
-                $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($executionID, $execLaneType, $execGroupBy, $taskSearchValue);
-                $kanbanType      = $execLaneType == 'all' ? 'story' : key($kanbanData);
-                $kanbanData      = $kanbanData[$kanbanType];
-                $kanbanData      = json_encode($kanbanData);
-                return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban(\"story\", $kanbanData)"));
-            }
-
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+            /* Fix bug #29171. */
+            $executions       = $this->dao->select('*')->from(TABLE_EXECUTION)->where('parent')->eq($execution->parent)->fetchAll('id');
+            $executionStories = $this->dao->select('project,story')->from(TABLE_PROJECTSTORY)->where('story')->eq($storyID)->andWhere('project')->in(array_keys($executions))->fetchAll();
+            if(empty($executionStories)) $this->execution->unlinkStory($execution->parent, $storyID, $laneID, $columnID);
         }
+
+        $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+        $execGroupBy  = $this->session->execGroupBy  ? $this->session->execGroupBy : 'default';
+        if($this->app->tab == 'execution' and $execution->type == 'kanban')
+        {
+            $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+            $kanbanData    = $this->loadModel('kanban')->getRDKanban($executionID, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
+            $kanbanData    = json_encode($kanbanData);
+            return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban($kanbanData)"));
+        }
+        elseif($from == 'taskkanban')
+        {
+            $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
+            $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($executionID, $execLaneType, $execGroupBy, $taskSearchValue);
+            $kanbanType      = $execLaneType == 'all' ? 'story' : key($kanbanData);
+            $kanbanData      = $kanbanData[$kanbanType];
+            $kanbanData      = json_encode($kanbanData);
+            return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban(\"story\", $kanbanData)"));
+        }
+
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 
     /**
