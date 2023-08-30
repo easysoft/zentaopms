@@ -77,6 +77,13 @@ window.bindUser = function(externalID, appName)
 
 window.editApp = function(externalID, appName)
 {
-    $('#editLinkContainer').attr('href', $.createLink(appName.toLowerCase(), 'edit', 'id=' + externalID));
+    if(appName == 'Nexus')
+    {
+        $('#editLinkContainer').attr('href', $.createLink('instance', 'editExternalApp', 'id=' + externalID));
+    }
+    else
+    {
+        $('#editLinkContainer').attr('href', $.createLink(appName.toLowerCase(), 'edit', 'id=' + externalID));
+    }
     $('#editLinkContainer').trigger('click');
 }

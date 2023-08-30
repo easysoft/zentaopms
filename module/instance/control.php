@@ -433,6 +433,38 @@ class instance extends control
     }
 
     /**
+     * 编辑手工配置外部应用。
+     * Edit a external app.
+     *
+     * @param  int    $externalID
+     * @access public
+     * @return viod
+     */
+    public function editExternalApp(int $externalID)
+    {
+        $oldApp = $this->loadModel('pipeline')->getByID($externalID);
+
+        if($_POST)
+        {
+            $this->pipeline->update($externalID);
+            $app = $this->pipeline->getByID($externalID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->loadModel('action');
+            $actionID = $this->action->create($app->type, $externalID, 'edited');
+            $changes  = common::createChanges($oldApp, $app);
+            $this->action->logHistory($actionID, $changes);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
+        }
+
+        $this->app->loadLang('space');
+        $this->app->loadLang('sonarqube');
+
+        $this->view->app = $oldApp;
+        $this->display();
+    }
+
+    /**
      * (Not used at present.) Install app by custom settings.
      *
      * @param int $id
