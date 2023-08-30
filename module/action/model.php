@@ -1822,13 +1822,14 @@ class actionModel extends model
     }
 
     /**
+     * 根据给定的一段时间的参数计算日期的开始和结束。
      * Compute the begin date and end date of a period.
      *
      * @param  string    $period   all|today|yesterday|twodaysago|latest2days|thisweek|lastweek|thismonth|lastmonth
      * @access public
      * @return array
      */
-    public function computeBeginAndEnd($period)
+    public function computeBeginAndEnd(string $period): array
     {
         $this->app->loadClass('date');
 
@@ -1839,11 +1840,11 @@ class actionModel extends model
 
         $period = strtolower($period);
 
-        if($period == 'all')        return array('begin' => '1970-1-1',  'end' => '2109-1-1');
-        if($period == 'today')      return array('begin' => $today,      'end' => $tomorrow);
-        if($period == 'yesterday')  return array('begin' => $yesterday,  'end' => $today);
-        if($period == 'twodaysago') return array('begin' => $twoDaysAgo, 'end' => $yesterday);
-        if($period == 'latest3days')return array('begin' => $twoDaysAgo, 'end' => $tomorrow);
+        if($period == 'all')         return array('begin' => EPOCH_DATE,  'end' => FUTURE_DATE);
+        if($period == 'today')       return array('begin' => $today,      'end' => $tomorrow);
+        if($period == 'yesterday')   return array('begin' => $yesterday,  'end' => $today);
+        if($period == 'twodaysago')  return array('begin' => $twoDaysAgo, 'end' => $yesterday);
+        if($period == 'latest3days') return array('begin' => $twoDaysAgo, 'end' => $tomorrow);
 
         /* If the period is by week, add the end time to the end date. */
         if($period == 'thisweek' or $period == 'lastweek')
