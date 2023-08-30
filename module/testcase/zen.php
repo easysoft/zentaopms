@@ -538,6 +538,7 @@ class testcaseZen extends testcase
             $step = new stdclass();
             $step->type   = 'step';
             $step->desc   = '';
+            $step->name   = '';
             $step->expect = '';
             $case->steps[] = $step;
         }
