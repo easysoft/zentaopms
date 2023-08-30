@@ -3908,6 +3908,11 @@ class bugModel extends model
             }
         }
 
+        foreach($setting as $key => $set)
+        {
+            if(isset($set->fixed) && $set->fixed != 'left' && $set->fixed != 'right') unset($set->fixed);
+        }
+
         usort($setting, array('datatableModel', 'sortCols'));
 
         return $setting;
