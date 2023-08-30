@@ -47,7 +47,7 @@ $(function()
             $dropdown.append($dropmenu)
               .appendTo($btnToolbar)
               .on('shown.zui.dropdown', function(){$btnToolbar.closest('.table-header').css('z-index', 11);})
-              .on('hidden.zui.dropdown', function(){$btnToolbar.closest('.table-header').css('z-index', 5);});
+              .on('hidden.zui.dropdown', function(){$btnToolbar.closest('.table-header').css('z-index', 11);});
         }
     };
     $('#main .main-table').on('tableReload', addSettingButton);
