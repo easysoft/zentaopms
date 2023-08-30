@@ -165,7 +165,7 @@ div
                             !empty($defaultAccount->username) ? h::th($lang->instance->defaultAccount) : null,
                             !empty($defaultAccount->password) ? h::th($lang->instance->defaultPassword) : null,
                             !empty($defaultAccount->token)    ? h::th($lang->instance->token) : null,
-                            $type === 'store' ? null : h::th($lang->instance->browseProject),
+                            $type === 'store' || (!empty($instance->type) && $instance->type != 'gitlab') ? null : h::th($lang->instance->browseProject),
                         ),
                         h::tr
                         (
@@ -195,7 +195,7 @@ div
                                 input(set::type('text'), set::value($defaultAccount->token), set::name('token'), setStyle('display', 'none')),
                                 btn(set::className('copy-btn ghost'),set::icon('copy'))
                             ): null,
-                            $type === 'store' ? null : h::td
+                            $type === 'store' || (!empty($instance->type) && $instance->type != 'gitlab') ? null : h::td
                             (
                                 btn
                                 (
