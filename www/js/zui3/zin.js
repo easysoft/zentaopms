@@ -553,7 +553,7 @@
 
     function loadPartial(url, selector, options)
     {
-        loadPage($.extend({partial: true, url: url, selector: selector}, options));
+        loadPage($.extend({partial: true, url: url, selector: selector, target: selector}, options));
     }
 
     /** Load zui component. */
