@@ -291,19 +291,4 @@ class metricZen extends metric
 
         return $tableData;
     }
-
-    /**
-     * 根据后台配置的估算单位对列表赋值。
-     * Assign unitList['measure'] by custom hourPoint.
-     *
-     * @access protected
-     * @return void
-     */
-    protected function processUnitList()
-    {
-        $this->app->loadLang('custom');
-        $key = zget($this->config->custom, 'hourPoint', '0');
-
-        $this->lang->metric->unitList['measure'] = $this->lang->custom->conceptOptions->hourPoint[$key];
-    }
 }

@@ -499,4 +499,35 @@ class metricModel extends model
 
         return true;
     }
+
+    /**
+     * 没有度量的显示范围不做显示。
+     * Unset scope item that have no metric.
+     *
+     * @access protected
+     * @return void
+     */
+    public function processScopeList()
+    {
+        foreach($this->lang->metric->scopeList as $scope => $name)
+        {
+            $metrics = $this->metricTao->fetchMetrics($scope, '', '', '', '', null);
+            if(empty($metrics)) unset($this->lang->metric->scopeList[$scope]);
+        }
+    }
+
+    /**
+     * 根据后台配置的估算单位对列表赋值。
+     * Assign unitList['measure'] by custom hourPoint.
+     *
+     * @access protected
+     * @return void
+     */
+    public function processUnitList()
+    {
+        $this->app->loadLang('custom');
+        $key = zget($this->config->custom, 'hourPoint', '0');
+
+        $this->lang->metric->unitList['measure'] = $this->lang->custom->conceptOptions->hourPoint[$key];
+    }
 }

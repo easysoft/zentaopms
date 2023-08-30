@@ -73,7 +73,7 @@ class metricTao extends metricModel
      * @access protected
      * @return void
      */
-    protected function fetchMetrics($scope, $object, $purpose, $query, $sort, $pager)
+    protected function fetchMetrics($scope, $object = '', $purpose = '', $query = '', $sort = 'id_desc', $pager = null)
     {
         $metrics = $this->dao->select('*')->from(TABLE_METRIC)
             ->where('deleted')->eq('0')
@@ -82,8 +82,8 @@ class metricTao extends metricModel
             ->beginIF(!empty($object))->andWhere('object')->eq($object)->fi()
             ->beginIF(!empty($purpose))->andWhere('purpose')->eq($purpose)->fi()
             ->beginIF($this->config->edition == 'open')->andWhere('object')->notIN('feedback,issue,risk')
-            ->orderBy($sort)
-            ->page($pager)
+            ->beginIF($sort)->orderBy($sort)->fi()
+            ->beginIF($pager)->page($pager)->fi()
             ->fetchAll();
 
         return $metrics;

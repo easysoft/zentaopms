@@ -40,7 +40,7 @@ class metric extends control
 
             return $this->send($response);
         }
-        $this->metricZen->processUnitList();
+        $this->metric->processUnitList();
         $this->display();
     }
 
@@ -59,6 +59,7 @@ class metric extends control
     public function browse($scope = 'system', $param = 0, $type = 'bydefault', $orderBy = 'id', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('search');
+        $this->metric->processScopeList();
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
@@ -132,7 +133,7 @@ class metric extends control
      */
     public function view(int $metricID)
     {
-        $this->metricZen->processUnitList();
+        $this->metric->processUnitList();
         $metric = $this->metric->getByID($metricID);
         $result = $this->metric->getResultByCode($metric->code);
 
