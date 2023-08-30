@@ -3054,4 +3054,18 @@ class executionTest
 
         return $features;
     }
+
+    /**
+     * 将执行ID保存到session中。
+     * Save the execution ID to the session.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return int
+     */
+    public function saveSessionTest(int $executionID): int
+    {
+        $this->executionModel->saveSession($executionID);
+        return $this->executionModel->session->execution;
+    }
 }
