@@ -16,7 +16,7 @@ function loadConfig()
 {
     global $app, $config;
 
-    $config->zin = new \stdClass();
+    if(!isset($config->zin)) $config->zin = new \stdClass();
 
     $config->zin->lang     = $app->getClientLang();
     $config->zin->wgVer    = isset($config->wgVer) ? $config->wgVer : '1';
