@@ -12,6 +12,57 @@ declare(strict_types=1);
 class executionTao extends executionModel
 {
     /**
+     * 获取燃尽图相关数据。
+     * Get burn related data.
+     *
+     * @param  array     $executionIdList
+     * @access protected
+     * @return array
+     */
+    protected function fetchBurnData(array $executionIdList): array
+    {
+        $today = helper::today();
+        $burns = $this->dao->select("execution, '$today' AS date, sum(estimate) AS `estimate`, sum(`left`) AS `left`, SUM(consumed) AS `consumed`")
+            ->from(TABLE_TASK)
+            ->where('execution')->in($executionIdList)
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('parent')->ge('0')
+            ->andWhere('status')->ne('cancel')
+            ->groupBy('execution')
+            ->fetchAll('execution');
+
+        $closedLefts = $this->dao->select('execution, sum(`left`) AS `left`')->from(TABLE_TASK)
+            ->where('execution')->in($executionIdList)
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('parent')->ge('0')
+            ->andWhere('status')->eq('closed')
+            ->groupBy('execution')
+            ->fetchAll('execution');
+
+        $finishedEstimates = $this->dao->select("execution, sum(`estimate`) AS `estimate`")->from(TABLE_TASK)
+            ->where('execution')->in($executionIdList)
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('parent')->ge('0')
+            ->andWhere('status', true)->eq('done')
+            ->orWhere('status')->eq('closed')
+            ->markRight(1)
+            ->groupBy('execution')
+            ->fetchAll('execution');
+
+        $storyPoints = $this->dao->select('t1.project, sum(t2.estimate) AS `storyPoint`')->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
+            ->where('t1.project')->in($executionIdList)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.status')->ne('closed')
+            ->andWhere('t2.stage')->in('wait,planned,projected,developing')
+            ->groupBy('project')
+            ->fetchAll('project');
+
+        return array($burns, $closedLefts, $finishedEstimates, $storyPoints);
+    }
+
+    /**
      * 将执行ID保存到session中。
      * Save the execution ID to the session.
      *
