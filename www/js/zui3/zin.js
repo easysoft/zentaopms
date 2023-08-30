@@ -251,6 +251,7 @@
 
     function afterUpdate($target, info, options)
     {
+        $target.zuiInit();
         if(window.afterPageUpdate) window.afterPageUpdate($target, info, options);
     }
 
@@ -262,7 +263,7 @@
         const render   = (options.renders ? options.renders[info.name] : null) || renderMap[info.name];
         const isHtml   = info.type === 'html';
         const selector = parseSelector(info.selector);
-        const $target  = selector ? $(selector.select) : $target;
+        let $target    = $(selector.select);
         if(render)
         {
             if(isHtml) beforeUpdate($target, info, options);
@@ -286,8 +287,15 @@
         }
 
         beforeUpdate($target, info, options);
-        if(selector.inner) $target.html(info.data);
-        else $target.replaceWith(info.data);
+        if(selector.inner)
+        {
+            $target.html(info.data);
+        }
+        else
+        {
+            $target.replaceWith(info.data);
+            $target = $(selector.select);
+        }
         afterUpdate($target, info, options);
     }
 
@@ -396,9 +404,18 @@
                         }
                         else if('confirm' in data.load)
                         {
-                            const confirmed = confirm(data.load.confirm);
-                            if(confirmed) loadPage(data.load.confirmed);
-                            else          loadPage(data.load.canceled);
+                            zui.Modal.confirm({message: data.load.confirm, onResult: function(result)
+                            {
+                                loadPage(result ? data.load.confirmed : data.load.canceled);
+                            }});
+                        }
+                        else if('alert' in data.load)
+                        {
+                            zui.Modal.alert(data.load.alert);
+                            if(data.load.locate)
+                            {
+                                setTimeout(function(){openUrl(data.load.locate);}, 1500);
+                            }
                         }
                         else
                         {
@@ -407,11 +424,11 @@
                     }
                 }
             },
-            error: (xhr, type, error) =>
+            error: (error, type) =>
             {
                 updatePerfInfo(options, 'requestEnd', {error: error});
-                if(type === 'abort') return console.log('[ZIN] ', 'Abord fetch data from ' + url, {xhr, type, error});;
-                if(DEBUG) console.error('[ZIN] ', 'Fetch data failed from ' + url, {xhr, type, error});
+                if(type === 'abort') return console.log('[ZIN] ', 'Abord fetch data from ' + url, {type, error});;
+                if(DEBUG) console.error('[ZIN] ', 'Fetch data failed from ' + url, {type, error});
                 zui.Messager.show('ZIN: Fetch data failed from ' + url);
                 if(options.error) options.error(data, error);
                 if(onFinish) onFinish(error);
@@ -562,7 +579,7 @@
 
     function loadPartial(url, selector, options)
     {
-        loadPage($.extend({partial: true, url: url, selector: selector}, options));
+        loadPage($.extend({partial: true, url: url, selector: selector, target: selector}, options));
     }
 
     /** Load zui component. */
@@ -611,9 +628,10 @@
      * @param {string} [url]
      * @param {string} [target]
      * @param {Object} [options]
+     * @param {Function} [callback]
      * @returns
      */
-    function loadModal(url, target, options)
+    function loadModal(url, target, options, callback)
     {
         options = $.extend({url}, options);
         if(!target) return zui.Modal.open(options);
@@ -622,7 +640,7 @@
         if(target[0] !== '#' && target[0] !== '.') target = `#${target}`;
         const modal = zui.Modal.query(target);
         if(!modal) return;
-        modal.render(options);
+        modal.render(options).then((result) => {if(result && callback) callback(modal.dialog);});
     }
 
     function loadTarget(url, target, options)
@@ -636,6 +654,17 @@
 
         let remoteData;
         let loadError;
+        target = options.target;
+        if(target[0] !== '#' && target[0] !== '.') target = `#${target}`;
+        const $target = $(target);
+        if(!$target.length) return;
+        if(options.cache)
+        {
+            const cache = (typeof options.cache === 'number' ? options.cache : 3600) *  1000;
+            const lastLoad = $target.data('zin-target-load');
+            if(lastLoad && (Date.now() - lastLoad) < cache) return;
+        }
+
         const ajaxOptions =
         {
             url:         url,
@@ -657,22 +686,13 @@
                     if(result === false) return;
                     if(typeof result === 'string') data = result;
                 }
-                let target = options.target;
-                if(target[0] !== '#' && target[0] !== '.') target = `#${target}`;
-                const $target = $(target);
-                if($target.length)
-                {
-                    if(options.success) options.success(data, options);
-                    let $content = $(data);
-                    if(options.selector) $content = $('<div>').append($content).find(options.selector);
-                    if(options.replace) $target.replaceWith($content);
-                    else $target.empty().append($content);
-                }
-                else
-                {
-                    loadError = new Error(`ZIN: Target "${target}" not found.`);
-                    if(options.error) options.error(data, loadError);
-                }
+
+                if(options.success) options.success(data, options);
+                let $content = $(data);
+                if(options.selector) $content = $('<div>').append($content).find(options.selector);
+                if(options.replace) $target.replaceWith($content);
+                else $target.empty().append($content);
+                $target.data('zin-target-load', Date.now()).zuiInit();
             },
             error: (xhr, type, error) =>
             {
@@ -1045,7 +1065,7 @@
         parent.selectTheme(theme);
     }
 
-    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, changeAppLang, changeAppTheme: changeAppTheme});
+    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, changeAppLang, changeAppTheme: changeAppTheme, uploadFileByChunk: uploadFileByChunk});
     $.extend($.apps, {openUrl: openUrl});
     $.extend($, {ajaxSendScore: ajaxSendScore, selectLang: selectLang});
 
@@ -1053,11 +1073,11 @@
     $(document).on('click', (e) =>
     {
         if(is18version) return handleClickIn18(e); // 18+zin.
-
+        if(e.defaultPrevented) return;
         if(isInAppTab) window.parent.$('body').trigger('click');
 
         const $link = $(e.target).closest('a,.open-url');
-        if(!$link.length || $link.hasClass('ajax-submit') || $link.hasClass('not-open-url') || ($link.attr('target') || '')[0] === '_') return;
+        if(!$link.length || $link.hasClass('ajax-submit') || $link.hasClass('not-open-url') || ($link.attr('target') || '')[0] === '_' || ($link.is('a') && !$link.attr('href'))) return;
 
         const options = $link.dataset();
         if(options.toggle) return;
@@ -1166,4 +1186,57 @@
             if(!isInAppTab && !zui.store.get('Zinbar:hidden')) loadCurrentPage();
         }
     });
+
+    const getChunks = (file, chunkSize) => {
+        const chunks = [];
+        let start = 0;
+        let end = Math.min(chunkSize, file.size);
+
+        while (start < end)
+        {
+            chunks.push(file.slice(start, end));
+            start = end;
+            end = Math.min(start + chunkSize, file.size);
+        }
+
+        return chunks;
+    };
+
+    const uploadChunk = (url, chunk, headers) => {
+        return fetch(url, {
+            method: 'POST',
+            body: chunk,
+            headers,
+        }).then(response => {if(!response.ok) throw new Error('upload file failed');});
+    }
+
+    function uploadFileByChunk(url, file, chunkSize = 1024 * 1024, onProgress = null)
+    {
+        const chunks = getChunks(file, chunkSize);
+        let i = 0;
+
+        return new Promise((resolve, reject) => {
+            const uploadNextChunk = () => {
+                if(i >= chunks.length)
+                {
+                    if(typeof onProgress === 'function') onProgress(1);
+                    resolve();
+                }
+
+                const headers = {
+                    'X-Chunk-Index': chunkIndex,
+                    'X-Total-Chunks': totalChunks,
+                };
+                uploadChunk(url, chunks[i], headers)
+                    .then(() => {
+                        i++;
+                        if(typeof onProgress === 'function') onProgress(i / chunks.length);
+                        uploadNextChunk();
+                    })
+                    .catch(reject);
+            };
+
+            uploadNextChunk();
+        });
+    };
 }());
