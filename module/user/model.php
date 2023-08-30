@@ -2712,10 +2712,7 @@ class userModel extends model
         $users = array();
 
         foreach(explode(',', trim($this->app->company->admins, ',')) as $admin) $users[$admin]   = $admin;
-        if(!empty($product->reviewer))
-        {
-            foreach(explode(',', trim($product->reviewer, ',')) as $account) $users[$account] = $account;
-        }
+        foreach(explode(',', trim($product->reviewer, ',')) as $account)        $users[$account] = $account;
         if(isset($product->PMT))
         {
             foreach(explode(',', trim($product->PMT, ',')) as $account) $users[$account] = $account;
