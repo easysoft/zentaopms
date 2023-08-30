@@ -99,7 +99,7 @@ class ai extends control
             $this->loadModel('setting')->setItems('system.ai', $modelConfig);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'locate' => $this->inlink('models') . '#app=admin'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('models') . '#app=admin'));
         }
 
         $modelConfig = new stdclass();
