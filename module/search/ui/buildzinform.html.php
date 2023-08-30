@@ -16,7 +16,7 @@ $opts->onSubmit        = jsRaw("window.onSearchFormResult.bind(null, '$formName'
 
 if(empty($opts->savedQuery)) unset($opts->savedQuery);
 
-zui::searchform(set((array)$opts), set::_to($formName), set::className('shadow'));
+zui::searchform(set((array)$opts), set::_to($formName), set::_className('shadow'));
 
 jsVar('options',          isset($options) ? $options : null);
 jsVar('canSaveQuery',     !empty($_SESSION[$module . 'Query']));

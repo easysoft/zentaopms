@@ -74,7 +74,7 @@ class programMenu extends wg
         return zui::dropmenu
         (
             set('_id', 'programMenu'),
-            set::className('program-menu btn'),
+            set::_className('program-menu btn'),
             set::defaultValue($activeKey),
             set::text($this->getTitle($activeKey)),
             set::caret(true),

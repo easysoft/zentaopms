@@ -62,7 +62,7 @@ class productMenu extends wg
         return zui::dropmenu
         (
             set('_id', 'productMenu'),
-            set::className('product-menu btn'),
+            set::_className('product-menu btn'),
             set::defaultValue($activeKey),
             set::text($title),
             set::caret(true),
