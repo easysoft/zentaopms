@@ -69,7 +69,7 @@ div
     setClass('flex flex-normal gap-x-5 justify-center'),
     div
     (
-        setClass('basis-2/3'),
+        setClass('flex-none w-2/3'),
         setID('instanceInfoContainer'),
         detailBody
         (
@@ -237,7 +237,7 @@ div
     ),
     div
     (
-        setClass('basis-auto'),
+        setClass('w-1/3'),
         history
         (
             set::commentUrl(createLink('action', 'comment', array('objectType' => $type === 'store' ? 'instance' : $instance->type, 'objectID' => $instance->id))),
