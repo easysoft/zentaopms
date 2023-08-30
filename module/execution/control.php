@@ -4116,7 +4116,8 @@ class execution extends control
     }
 
     /**
-     * AJAX: Get brun kanban html.
+     * 展示燃尽图。
+     * Display burn chart.
      *
      * @param  int    $executionID
      * @access public
@@ -4124,12 +4125,12 @@ class execution extends control
      */
     public function ajaxGetBurn(int $executionID)
     {
-        $execution = $this->execution->getById($executionID, true);
+        $execution = $this->execution->getByID($executionID, true);
         $type      = 'noweekend';
-        if(((strpos('closed,suspended', $execution->status) === false and helper::today() > $execution->end)
-            or ($execution->status == 'closed'    and substr($execution->closedDate, 0, 10) > $execution->end)
-            or ($execution->status == 'suspended' and $execution->suspendedDate > $execution->end))
-            and strpos($type, 'delay') === false)
+        if(((strpos('closed,suspended', $execution->status) === false && helper::today() > $execution->end)
+            || ($execution->status == 'closed'    && substr($execution->closedDate, 0, 10) > $execution->end)
+            || ($execution->status == 'suspended' && $execution->suspendedDate > $execution->end))
+            && strpos($type, 'delay') === false)
         {
             $type .= ',withdelay';
         }
