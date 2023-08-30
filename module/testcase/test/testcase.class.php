@@ -332,6 +332,20 @@ class testcaseTest
         return $this->objectModel->getBugs2Link($caseID, $browseType);
     }
 
+    public function getRelatedStoriesTest(array $storyIdList): array
+    {
+        $cases = array();
+        foreach($storyIdList as $storyID)
+        {
+            $case = new stdclass();
+            $case->story = $storyID;
+
+            $cases[] = $case;
+        }
+
+        return $this->objectModel->getRelatedStories($cases);
+    }
+
     /**
      * 更新的测试用例。
      * Test update a case.
