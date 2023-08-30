@@ -112,6 +112,7 @@ $(function() {
     $('#testConn').click(function()
     {
         $.disableForm('#mainForm');
+        $('#testConn').attr('disabled', 'disabled');
         $.ajax(
         {
             type: 'POST',
@@ -129,7 +130,11 @@ $(function() {
                     $.zui.messager.danger(data.message);
                 }
             },
-            complete: function() {$.enableForm('#mainForm');}
+            complete: function()
+            {
+              $.enableForm('#mainForm');
+              $('#testConn').removeAttr('disabled');
+            }
         });
     });
 });
