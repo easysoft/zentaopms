@@ -4073,22 +4073,6 @@ class execution extends control
     }
 
     /**
-     * AJAX: Update the execution name.
-     *
-     * @param  int     $executionID
-     * @param  string  $newExecutionName
-     * @access public
-     * @return bool
-     */
-    public function ajaxUpdateExecutionName($executionID, $newExecutionName)
-    {
-        $this->dao->update(TABLE_EXECUTION)->set('name')->eq($newExecutionName)->where('id')->eq($executionID)->exec();
-        if(dao::isError()) echo false;
-
-        echo true;
-    }
-
-    /**
      * Ajax get copy project executions.
      *
      * @param  int    $projectID
