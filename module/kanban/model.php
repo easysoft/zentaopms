@@ -1490,15 +1490,15 @@ class kanbanModel extends model
         if($browseType == 'all' or $browseType == 'task')  $objectGroup['task']  = $this->loadModel('execution')->getKanbanTasks($executionID, "id");
 
         /* Get objects cards menus. */
-        if($browseType == 'all' or $browseType == 'story') $storyCardMenu = $this->getKanbanCardMenu($executionID, $objectGroup['story'], 'story');
-        if($browseType == 'all' or $browseType == 'bug')   $bugCardMenu   = $this->getKanbanCardMenu($executionID, $objectGroup['bug'], 'bug');
-        if($browseType == 'all' or $browseType == 'task')  $taskCardMenu  = $this->getKanbanCardMenu($executionID, $objectGroup['task'], 'task');
+        $storyCardMenu = $browseType == 'all' || $browseType == 'story' ? $this->getKanbanCardMenu($executionID, $objectGroup['story'], 'story') : array();
+        $bugCardMenu   = $browseType == 'all' || $browseType == 'bug' ? $this->getKanbanCardMenu($executionID, $objectGroup['bug'], 'bug') : array();
+        $taskCardMenu  = $browseType == 'all' || $browseType == 'task' ? $this->getKanbanCardMenu($executionID, $objectGroup['task'], 'task') : array();
 
         /* Build kanban group data. */
         $kanbanGroup = array();
         foreach($lanes as $lane)
         {
-            list($laneData, $columnData) = $this->buildExecutionGroup($lane, $columns, $bjectGroup, $searchValue, $storyCardMenu, $bugCardMenu, $taskCardMenu);
+            list($laneData, $columnData) = $this->buildExecutionGroup($lane, $columns, $objectGroup, $searchValue, $storyCardMenu, $bugCardMenu, $taskCardMenu);
 
             if($searchValue != '' && empty($laneData['cards'])) continue;
             $kanbanGroup[$lane->type]['id']              = $lane->id;
@@ -3045,6 +3045,7 @@ class kanbanModel extends model
                 foreach($this->config->kanban->taskColumnStatusList as $colType => $status)
                 {
                     if($colType == 'develop') continue;
+                    if(!isset($cardPairs[$colType])) continue;
 
                     if($task->status == $status and strpos($cardPairs[$colType], ",$taskID,") === false)
                     {
