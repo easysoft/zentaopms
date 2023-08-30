@@ -574,7 +574,7 @@ class repo extends control
             if($branchID) $this->repo->setRepoBranch($branchID);
             if(!isset($branchesAndTags[$branchID]))
             {
-                $branchID = key($branches);
+                $branchID = (string)key($branches);
                 $this->repo->setRepoBranch($branchID);
             }
         }
