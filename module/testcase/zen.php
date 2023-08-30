@@ -1642,6 +1642,7 @@ class testcaseZen extends testcase
      * Process export cases.
      *
      * @param  array     $cases
+     * @param  int       $productID
      * @param  int       $taskID
      * @access protected
      * @return array
@@ -1695,7 +1696,7 @@ class testcaseZen extends testcase
         $case->real           = '';
         $case->openedDate     = !helper::isZeroDate($case->openedDate)     ? substr($case->openedDate, 0, 10)     : '';
         $case->lastEditedDate = !helper::isZeroDate($case->lastEditedDate) ? substr($case->lastEditedDate, 0, 10) : '';
-        $case->lastRunDate    = !helper::isZeroDate($case->lastRunDate)    ? $case->lastRunDate    : '';
+        $case->lastRunDate    = !helper::isZeroDate($case->lastRunDate)    ? $case->lastRunDate                   : '';
 
         $case->product = isset($products[$case->product])     ? $products[$case->product] . "(#$case->product)"     : '';
         $case->branch  = isset($branches[$case->branch])      ? $branches[$case->branch] . "(#$case->branch)"       : '';

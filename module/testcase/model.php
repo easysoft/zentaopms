@@ -668,7 +668,7 @@ class testcaseModel extends model
 
             return $this->dao->select('*')->from(TABLE_CASE)->where($this->session->testcaseQueryCondition)
                 ->beginIF($taskID)->andWhere('id')->in($caseIdList)->fi()
-                ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
+                ->beginIF($exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
                 ->orderBy($orderBy)
                 ->beginIF($limit)->limit($limit)->fi()
                 ->fetchAll('id');
