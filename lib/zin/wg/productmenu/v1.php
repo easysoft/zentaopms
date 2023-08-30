@@ -18,7 +18,6 @@ class productMenu extends wg
 
     private function buildMenu(): array
     {
-        $link  = $this->prop('link');
         $items = $this->prop('items');
 
         $menus = array();
@@ -51,7 +50,7 @@ class productMenu extends wg
         return $lang->product->all;
     }
 
-    protected function build(): zui 
+    protected function build(): zui
     {
         $items = $this->buildMenu();
 
