@@ -3517,22 +3517,21 @@ class execution extends control
     }
 
     /**
+     * 获取执行下拉列表用于切换不同的执行。
      * Drop menu page.
      *
-     * @param  int    $executionID
-     * @param  string $module
-     * @param  string $method
-     * @param  mixed  $extra
+     * @param  int    $executionID 已经打开的页面对应的执行ID
+     * @param  string $module      链接里要访问的模块
+     * @param  string $method      链接里要访问的方法
+     * @param  string $extra       给链接传入的额外的参数
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu($executionID, $module, $method, $extra)
+    public function ajaxGetDropMenu(int $executionID, string $module, string $method, string $extra)
     {
-        $orderedExecutions = array();
-
-        $projects = $this->loadModel('program')->getProjectList(0, 'all', 0, 'order_asc', null, 0, 0, true);
-        $executionGroups = $this->dao->select('*')->from(TABLE_EXECUTION)
-            ->where('deleted')->eq(0)
+        $projects = $this->loadModel('program')->getProjectList(0, 'all', 0, 'order_asc', null, 0, 0, true); /* 获取所有项目的列表。*/
+        $executionGroups = $this->dao->select('*')->from(TABLE_EXECUTION) /* 按照项目分组，获取有权限访问的执行列表。*/
+            ->where('deleted')->eq('0')
             ->andWhere('multiple')->eq('1')
             ->andWhere('type')->in('sprint,stage,kanban')
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
@@ -3540,31 +3539,28 @@ class execution extends control
             ->orderBy('order_asc')
             ->fetchGroup('project', 'id');
 
-        $teams = $this->dao->select('root,account')->from(TABLE_TEAM)
+        $teams = $this->dao->select('root,account')->from(TABLE_TEAM) /* 按照执行ID分组，获取有权限访问的执行的团队信息。*/
             ->where('root')->in($this->app->user->view->sprints)
             ->andWhere('type')->eq('execution')
             ->fetchGroup('root', 'account');
 
-        $projectPairs = array();
+        $projectPairs      = array(); /* 项目ID为索引，项目名称为值的数组 [projectID => projectName]。 */
+        $orderedExecutions = array();
         foreach($projects as $project)
         {
             $executions = zget($executionGroups, $project->id, array());
             if(isset($project->model) and $project->model == 'waterfall') ksort($executions);
 
-            $parents         = array();
-            $firstGradeExecs = array();
+            $topExecutions = array();
             foreach($executions as $execution)
             {
-                $parents[$execution->parent] = $execution->parent;
-                if($execution->grade == 1) $firstGradeExecs[$execution->id] = $execution->id;
+                if($execution->grade == 1) $topExecutions[$execution->id] = $execution->id;
             }
 
-            $executions = $this->execution->resetExecutionSorts($executions, $firstGradeExecs);
+            /* 获取排序后的执行列表，并给每个执行设置团队信息。*/
+            $executions = $this->execution->resetExecutionSorts($executions, $topExecutions);
             foreach($executions as $execution)
             {
-                /* Only show leaf executions. */
-                if(isset($parents[$execution->id])) continue;
-
                 $execution->teams = zget($teams, $execution->id, array());
                 $orderedExecutions[$execution->id] = $execution;
             }
@@ -3572,22 +3568,21 @@ class execution extends control
             $projectPairs[$project->id] = $project->name;
         }
 
-        $nameList = $this->execution->getFullNameList($orderedExecutions);
-
-        $projectExecutions = array();
+        $executionNameList = $this->execution->getFullNameList($orderedExecutions);
+        $projectExecutions = array(); /* 项目对应的执行列表 [projectID => execution]。*/
         foreach($orderedExecutions as $execution)
         {
-            $execution->name = $nameList[$execution->id];
+            $execution->name = $executionNameList[$execution->id];
             $projectExecutions[$execution->project][] = $execution;
         }
 
         $this->view->link               = $this->execution->getLink($module, $method, $extra);
         $this->view->module             = $module;
         $this->view->method             = $method;
-        $this->view->executionID        = $executionID;
         $this->view->extra              = $extra;
-        $this->view->projects           = $projectPairs;
-        $this->view->projectExecutions  = $projectExecutions;
+        $this->view->projects           = $projectPairs;      /* 项目ID为索引，项目名称为值的数组 [projectID => projectName]。 */
+        $this->view->projectExecutions  = $projectExecutions; /* 项目对应的执行列表 [projectID => execution]。*/
+        $this->view->executionID        = $executionID;
         $this->display();
     }
 
