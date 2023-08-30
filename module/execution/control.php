@@ -3442,20 +3442,20 @@ class execution extends control
     }
 
     /**
-     * When create a execution, help the user.
+     * 在用户创建完执行后，给用户发送一个后续操作的提示（比如设置团队、关联软件需求等）方便引导用户使用。
+     * Show tips to guide the user to do something after the execution created successfully.
      *
      * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function tips($executionID)
+    public function tips(int $executionID)
     {
         $execution = $this->execution->getById($executionID);
-        $projectID = $execution->project;
 
-        $this->view->execution   = $execution;
         $this->view->executionID = $executionID;
-        $this->view->projectID   = $projectID;
+        $this->view->execution   = $execution;
+        $this->view->projectID   = $execution->project;
         $this->display();
     }
 
