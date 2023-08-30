@@ -241,6 +241,7 @@ dtable
 $encodePath  = $this->repo->encodePath($path);
 $diffLink    = $this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=" . $encodePath . "&oldrevision={oldRevision}&newRevision={newRevision}");
 
+jsVar('appTab',   $app->tab);
 jsVar('repoID',   $repoID);
 jsVar('branch',   $branchID);
 jsVar('diffLink', $diffLink);
