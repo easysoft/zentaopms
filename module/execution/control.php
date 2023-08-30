@@ -4095,13 +4095,14 @@ class execution extends control
     }
 
     /**
-     * AJAX: Get execution kanban data.
+     * 获取专业研发看板的数据。
+     * Get execution kanban data by ajax.
      *
      * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function ajaxGetExecutionKanban($executionID)
+    public function ajaxGetExecutionKanban(int $executionID)
     {
         $execution = $this->execution->getByID($executionID);
         if($this->app->tab == 'execution' and $execution->type == 'kanban')
