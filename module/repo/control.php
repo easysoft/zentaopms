@@ -1052,7 +1052,7 @@ class repo extends control
         $this->view->repoID     = $repoID;
         $this->view->objectID   = $objectID;
         $this->view->branch     = $branch;
-        $this->view->browseLink = $this->repo->createLink('browse', "repoID=" . ($this->app->tab == 'devops' ? $repoID : '') . "&branchID=" . helper::safe64Encode(base64_encode($branch)) . "&objectID=$objectID", '', false);
+        $this->view->browseLink = $this->repo->createLink('browse', "repoID=" . ($this->app->tab == 'devops' ? $repoID : '') . "&branchID=" . helper::safe64Encode(base64_encode($branch)) . "&objectID=$objectID", '', false) . "#app={$this->app->tab}";
         $this->display();
     }
 

@@ -47,7 +47,7 @@ formPanel
         set::label($lang->repo->projects),
         set::control(array("type" => "picker","multiple" => true)),
         set::items($projects),
-        set::value($relatedProjects)
+        set::value(empty($relatedProjects) ? '' : $relatedProjects)
     ),
     formRow
     (
@@ -107,6 +107,7 @@ formPanel
         setClass('hide-service hide-git'),
         formGroup
         (
+            set::width('1/2'),
             set::name("path"),
             set::label($lang->repo->path),
             set::required(true),
@@ -129,6 +130,7 @@ formPanel
         ($config->inContainer || $config->inQuickon) ? setClass('hidden') : setClass('hide-service'),
         formGroup
         (
+            set::width('1/2'),
             set::name("client"),
             set::label($lang->repo->client),
             set::required(true),
@@ -140,6 +142,7 @@ formPanel
         setClass('account-fields hide-service'),
         formGroup
         (
+            set::width('1/2'),
             set::name("account"),
             set::label($lang->user->account),
             set::control("text")
@@ -150,6 +153,7 @@ formPanel
         setClass('account-fields hide-service'),
         formGroup
         (
+            set::width('1/2'),
             set::label($lang->user->password),
             inputGroup
             (

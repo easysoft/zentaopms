@@ -76,7 +76,7 @@ class artifactrepoModel extends model
 
             $response = common::http($url, '', array(CURLOPT_USERPWD => $auth));
             $data     = json_decode($response);
-            return $data;
+            return is_array($data) ? $data : array();
         }
 
         return array();
