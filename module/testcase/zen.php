@@ -1383,6 +1383,39 @@ class testcaseZen extends testcase
     }
 
     /**
+     * 计算导入列的键值。
+     * Process import column key.
+     *
+     * @param  string    $fileName
+     * @param  array     $fields
+     * @access protected
+     * @return void
+     */
+    protected function processImportColumnKey(string $fileName, array $fields): array
+    {
+        /* 获取文件内的行，设置头。 */
+        /* Get rows and set header. */
+        $rows   = $this->loadModel('file')->parseCSV($fileName);
+        $header = array();
+        foreach($rows[0] as $i => $rowValue)
+        {
+            if(empty($rowValue)) break;
+            $header[$i] = $rowValue;
+        }
+        unset($rows[0]);
+
+        /* 设置列的键值。 */
+        /* Set column key. */
+        $columnKey = array();
+        foreach($header as $title)
+        {
+            if(isset($fields[$title])) $columnKey[] = $fields[$title];
+        }
+
+        return $columnKey;
+    }
+
+    /**
      * 获取分组用例。
      * Get group cases.
      *

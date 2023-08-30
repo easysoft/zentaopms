@@ -1073,67 +1073,58 @@ class testcase extends control
     }
 
     /**
-     * Import csv
+     * 从 csv 导入用例。
+     * Import testcases from csv.
      *
      * @param  int    $productID
+     * @param  string $branch
      * @access public
      * @return void
      */
-    public function import($productID, $branch = 0)
+    public function import(int $productID, string $branch = '0')
     {
         if($_FILES)
         {
+            /* 获取上传的文件。 */
+            /* Get file. */
             $file = $this->loadModel('file')->getUpload('file');
             $file = $file[0];
 
+            /* 移动上传的文件。 */
+            /* Move file. */
             $fileName = $this->file->savePath . $this->file->getSaveName($file['pathname']);
             move_uploaded_file($file['tmpname'], $fileName);
 
-            $rows   = $this->file->parseCSV($fileName);
-            $fields = $this->testcase->getImportFields($productID);
-            $fields = array_flip($fields);
-            $header = array();
-            foreach($rows[0] as $i => $rowValue)
-            {
-                if(empty($rowValue)) break;
-                $header[$i] = $rowValue;
-            }
-            unset($rows[0]);
+            /* 获取上传文件中的用例字段。 */
+            /* Get imported fields of the testcase. */
+            $fields    = $this->testcase->getImportFields($productID);
+            $fields    = array_flip($fields);
 
-            $columnKey = array();
-            foreach($header as $title)
-            {
-                if(!isset($fields[$title])) continue;
-                $columnKey[] = $fields[$title];
-            }
+            /* 获取字段列值。 */
+            /* Get column key. */
+            $columnKey = $this->testcaseZen->processImportColumnKey($fileName, $fields);
 
-            if(count($columnKey) <= 3 or $this->post->encode != 'utf-8')
+            /* 如果字段列少于3个，或者编码非utf-8，再次计算字段列值。 */
+            /* If there are less than 3 column keys, or if the encoding is not utf-8, process the column key again. */
+            if(count($columnKey) <= 3 || $this->post->encode != 'utf-8')
             {
+                /* 转换编码. */
+                /* Convert Encoding. */
                 $encode = $this->post->encode != "utf-8" ? $this->post->encode : 'gbk';
                 $fc     = file_get_contents($fileName);
                 $fc     = helper::convertEncoding($fc, $encode, 'utf-8');
                 file_put_contents($fileName, $fc);
 
-                $rows      = $this->file->parseCSV($fileName);
-                $columnKey = array();
-                $header    = array();
-                foreach($rows[0] as $i => $rowValue)
-                {
-                    if(empty($rowValue)) break;
-                    $header[$i] = $rowValue;
-                }
-                unset($rows[0]);
-                foreach($header as $title)
-                {
-                    if(!isset($fields[$title])) continue;
-                    $columnKey[] = $fields[$title];
-                }
-                if(count($columnKey) == 0) return print(js::alert($this->lang->testcase->errorEncode));
+                /* 获取字段列值。 */
+                /* Get column key. */
+                $columnKey = $this->testcaseZen->processImportColumnKey($fileName, $fields);
+
+                if(count($columnKey) == 0) return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->errorEncode));
             }
 
             $this->session->set('fileImport', $fileName);
 
-            return $this->send(array('load' => inlink('showImport', "productID=$productID&branch=$branch"), 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->importSuccess, 'load' => inlink('showImport', "productID={$productID}&branch={$branch}"), 'closeModal' => true));
         }
 
         $this->display();

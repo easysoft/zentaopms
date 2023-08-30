@@ -12,7 +12,7 @@ namespace zin;
 
 set::title($lang->testcase->fileImport);
 
-form
+formPanel
 (
     formGroup
     (
@@ -24,7 +24,7 @@ form
         set::label($lang->testcase->encoding),
         picker
         (
-            set::name('encoding'),
+            set::name('encode'),
             set::items($config->charsets[$this->cookie->lang]),
             set::value('utf-8'),
         )
