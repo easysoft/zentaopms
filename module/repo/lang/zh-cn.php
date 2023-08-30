@@ -32,6 +32,7 @@ $lang->repo->blameTmpl       = '第 <strong>%line</strong> 行代码相关信息
 $lang->repo->notRelated      = '暂时没有关联禅道对象';
 $lang->repo->source          = '基准';
 $lang->repo->target          = '对比';
+$lang->repo->descPlaceholder = '一句话描述';
 
 $lang->repo->browseAction    = '浏览代码库';
 $lang->repo->createAction    = '添加代码库';

@@ -175,6 +175,15 @@ formPanel
             )
         )
     ),
+    formGroup
+    (
+        set::width('1/2'),
+        set::name("desc"),
+        set::label($lang->story->spec),
+        set::control("input"),
+        set::placeholder($lang->repo->descPlaceholder),
+        set::value(strip_tags($repo->desc)),
+    ),
     formRow
     (
         set::id('aclList'),
@@ -226,15 +235,6 @@ formPanel
             )
         ),
     ),
-    formGroup
-    (
-        set::label($lang->story->spec),
-        editor
-        (
-            set::name("desc"),
-            html($repo->desc),
-        )
-    )
 );
 
 render();
