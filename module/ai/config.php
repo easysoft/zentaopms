@@ -162,7 +162,7 @@ $config->ai->menuPrint = new stdclass();
 $config->ai->menuPrint->locations = array();
 $config->ai->menuPrint->locations['story']['view'] = (object)array(
     'module'          => 'story',
-    'targetContainer' => '#mainContent .cell:first-of-type .detail:first-of-type .detail-title',
+    'targetContainer' => '#mainContent .main-col .cell:first-of-type .detail:first-of-type .detail-title',
     'class'           => 'pull-right',
     'stylesheet'      => '#mainContent .cell:first-of-type .detail:first-of-type .detail-title>button {margin-left: 10px;} #mainContent .cell:first-of-type .detail:first-of-type .detail-content {margin-top: 12px;}'
 );
