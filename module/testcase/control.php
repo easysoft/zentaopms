@@ -833,20 +833,44 @@ class testcase extends control
     }
 
     /**
-     * Confirm libcase changed.
+     * 确认用例库用例的更新。
+     * Confirm case changed in lib.
      *
      * @param  int    $caseID
-     * @param  int    $libcaseID
-     * @param  int    $version
+     * @param  int    $libCaseID
      * @access public
      * @return void
      */
-    public function confirmLibcaseChange($caseID, $libcaseID)
+    public function confirmLibcaseChange(int $caseID, int $libCaseID)
     {
+        /** 获取用例和用例库的用例，设置用例版本。 /
+        /* Get case and lib case, set case version.*/
         $case    = $this->testcase->getById($caseID);
-        $libCase = $this->testcase->getById($libcaseID);
+        $libCase = $this->testcase->getById($libCaseID);
         $version = $case->version + 1;
 
+        /* 更新用例基础信息。 */
+        /* Update case base information. */
+        $this->dao->update(TABLE_CASE)
+            ->set('version')->eq($version)
+            ->set('fromCaseVersion')->eq($version)
+            ->set('precondition')->eq($libCase->precondition)
+            ->set('title')->eq($libCase->title)
+            ->where('id')->eq($caseID)
+            ->exec();
+
+        /* 更新用例步骤。 */
+        /* Update case steps. */
+        foreach($libCase->steps as $step)
+        {
+            unset($step->id);
+            $step->case    = $caseID;
+            $step->version = $version;
+            $this->dao->insert(TABLE_CASESTEP)->data($step)->exec();
+        }
+
+        /* 更新用例文件。 */
+        /* Update case files. */
         $this->dao->delete()->from(TABLE_FILE)->where('objectType')->eq('testcase')->andWhere('objectID')->eq($caseID)->exec();
         foreach($libCase->files as $fileID => $file)
         {
@@ -868,23 +892,7 @@ class testcase extends control
             $this->dao->insert(TABLE_FILE)->data($file)->exec();
         }
 
-        $this->dao->update(TABLE_CASE)
-            ->set('version')->eq($version)
-            ->set('fromCaseVersion')->eq($version)
-            ->set('precondition')->eq($libCase->precondition)
-            ->set('title')->eq($libCase->title)
-            ->where('id')->eq($caseID)
-            ->exec();
-
-        foreach($libCase->steps as $step)
-        {
-            unset($step->id);
-            $step->case    = $caseID;
-            $step->version = $version;
-            $this->dao->insert(TABLE_CASESTEP)->data($step)->exec();
-        }
-
-        echo js::locate($this->createLink('testcase', 'view', "caseID=$caseID&version=$version"), 'parent');
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('testcase', 'view', "caseID={$caseID}&version={$version}"), 'closeModal' => true));
     }
 
     /**
