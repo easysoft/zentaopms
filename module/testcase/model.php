@@ -643,6 +643,146 @@ class testcaseModel extends model
     }
 
     /**
+     * 获取导出的用例。
+     * Get cases to export.
+     *
+     * @param  string   $exportType
+     * @param  int      $taskID
+     * @param  string   $orderBy
+     * @param  int|bool $limit
+     * @access public
+     * @return array
+     */
+    public function getCasesToExport(string $exportType, int $taskID, string $orderBy, int|bool $limit): array
+    {
+        if(strpos($orderBy, 'case') !== false)
+        {
+            list($field, $sort) = explode('_', $orderBy);
+            $orderBy = '`' . $field . '`_' . $sort;
+        }
+
+        if($this->session->testcaseOnlyCondition)
+        {
+            $caseIdList = array();
+            if($taskID) $caseIdList = $this->dao->select('`case`')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->fetchPairs();
+
+            return $this->dao->select('*')->from(TABLE_CASE)->where($this->session->testcaseQueryCondition)
+                ->beginIF($taskID)->andWhere('id')->in($caseIdList)->fi()
+                ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
+                ->orderBy($orderBy)
+                ->beginIF($limit)->limit($limit)->fi()
+                ->fetchAll('id');
+        }
+
+        $cases   = array();
+        $orderBy = " ORDER BY " . str_replace(array('|', '^A', '_'), ' ', $orderBy);
+        $stmt    = $this->dao->query($this->session->testcaseQueryCondition . $orderBy . ($limit ? ' LIMIT ' . $limit : ''));
+        while($row = $stmt->fetch())
+        {
+            $caseID = isset($row->case) ? $row->case : $row->id;
+
+            if($exportType == 'selected' && strpos(",{$this->cookie->checkedItem},", ",$caseID,") === false) continue;
+
+            $row->id        = $caseID;
+            $cases[$caseID] = $row;
+        }
+
+        return $cases;
+    }
+
+    /**
+     * 获取导出的用例的结果。
+     * Get case results for export.
+     *
+     * @param  array  $caseIdList
+     * @param  int    $taskID
+     * @access public
+     * @return array
+     */
+    public function getCaseResultsForExport(array $caseIdList, int $taskID = 0): array
+    {
+        $stmt = $this->dao->select('t1.*')->from(TABLE_TESTRESULT)->alias('t1')
+            ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.run = t2.id')
+            ->where('t1.`case`')->in($caseIdList)
+            ->beginIF($taskID)->andWhere('t2.task')->eq($taskID)->fi()
+            ->orderBy('id_desc')
+            ->query();
+
+        $results = array();
+        while($result = $stmt->fetch())
+        {
+            if(!isset($results[$result->case])) $results[$result->case] = unserialize($result->stepResults);
+        }
+
+        return $results;
+    }
+
+    /**
+     * 获取相关的需求。
+     * Get related stories.
+     *
+     * @param  array  $cases
+     * @access public
+     * @return array
+     */
+    public function getRelatedStories(array $cases): array
+    {
+        $relatedStoryIdList = array();
+        foreach($cases as $case) $relatedStoryIdList[$case->story] = $case->story;
+
+        return $this->dao->select('id, title')->from(TABLE_STORY)->where('id')->in($relatedStoryIdList)->fetchPairs();
+    }
+
+    /**
+     * 获取相关的用例。
+     * Get related cases.
+     *
+     * @param  array  $cases
+     * @access public
+     * @return array
+     */
+    public function getRelatedCases(array $cases): array
+    {
+        $relatedCaseIdList  = array();
+        foreach($cases as $case)
+        {
+            $linkCases = explode(',', $case->linkCase);
+            foreach($linkCases as $linkCaseID)
+            {
+                if($linkCaseID) $relatedCaseIdList[$linkCaseID] = trim($linkCaseID);
+            }
+        }
+
+        return $this->dao->select('id, title')->from(TABLE_CASE)->where('id')->in($relatedCaseIdList)->fetchPairs();
+    }
+
+    /**
+     * 获取相关的步骤。
+     * Get related steps.
+     *
+     * @param  array  $caseIdList
+     * @access public
+     * @return array
+     */
+    public function getRelatedSteps(array $caseIdList): array
+    {
+        return $this->dao->select('id, parent, `case`, version, type, `desc`, expect')->from(TABLE_CASESTEP)->where('`case`')->in($caseIdList)->orderBy('version desc,id')->fetchGroup('case', 'id');
+    }
+
+    /**
+     * 获取相关的附件。
+     * Get related files.
+     *
+     * @param  array  $caseIdList
+     * @access public
+     * @return array
+     */
+    public function getRelatedFiles(array $caseIdList): array
+    {
+        return $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('testcase')->andWhere('objectID')->in($caseIdList)->andWhere('extra')->ne('editor')->fetchGroup('objectID');
+    }
+
+    /**
      * 更新用例。
      * Update a case.
      *

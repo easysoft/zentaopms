@@ -969,14 +969,7 @@ class testcase extends control
      */
     public function export(int $productID, string $orderBy, int $taskID = 0, string $browseType = '')
     {
-        if(strpos($orderBy, 'case') !== false)
-        {
-            list($field, $sort) = explode('_', $orderBy);
-            $orderBy = '`' . $field . '`_' . $sort;
-        }
-
-        $product  = $this->loadModel('product')->getByID($productID);
-        $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
+        $product = $this->loadModel('product')->getByID($productID);
 
         if($product->shadow)           $this->config->testcase->exportFields = str_replace('product,', '', $this->config->testcase->exportFields);
         if($product->type == 'normal') $this->config->testcase->exportFields = str_replace('branch,', '', $this->config->testcase->exportFields);
@@ -984,204 +977,10 @@ class testcase extends control
 
         if($_POST)
         {
-            $this->loadModel('file');
-            $this->app->loadLang('testtask');
-            $caseLang   = $this->lang->testcase;
-            $caseConfig = $this->config->testcase;
+            $fields = $this->testcaseZen->getExportFields();
+            $cases  = $this->testcase->getCasesToExport($this->post->exportType, $taskID, $orderBy, $limit);
+            $cases  = $this->testcaseZen->processCasesForExport();
 
-            /* 处理要导出的字段列表。*/
-            /* Create field lists. */
-            $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $caseConfig->exportFields);
-            foreach($fields as $key => $fieldName)
-            {
-                $fieldName = trim($fieldName);
-
-                if($product->type != 'normal' || $fieldName != 'branch') $fields[$fieldName] = zget($caseLang, $fieldName);
-
-                unset($fields[$key]);
-            }
-
-            /* 获取用例列表。*/
-            /* Get cases. */
-            if($this->session->testcaseOnlyCondition)
-            {
-                $caseIdList = array();
-                if($taskID) $caseIdList = $this->dao->select('`case`')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->fetchPairs();
-
-                $cases = $this->dao->select('*')->from(TABLE_CASE)->where($this->session->testcaseQueryCondition)
-                    ->beginIF($taskID)->andWhere('id')->in($caseIdList)->fi()
-                    ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
-                    ->orderBy($orderBy)
-                    ->beginIF($this->post->limit)->limit($this->post->limit)->fi()
-                    ->fetchAll('id');
-            }
-            else
-            {
-                $cases   = array();
-                $orderBy = " ORDER BY " . str_replace(array('|', '^A', '_'), ' ', $orderBy);
-                $stmt    = $this->dao->query($this->session->testcaseQueryCondition . $orderBy . ($this->post->limit ? ' LIMIT ' . $this->post->limit : ''));
-                while($row = $stmt->fetch())
-                {
-                    $caseID = isset($row->case) ? $row->case : $row->id;
-                    if($this->post->exportType == 'selected' && strpos(",{$this->cookie->checkedItem},", ",$caseID,") === false) continue;
-                    $cases[$caseID] = $row;
-                    $row->id        = $caseID;
-                }
-            }
-
-            /* 如果有测试单，更新状态值。*/
-            /* If there is test task, update status list. */
-            if($taskID) $caseLang->statusList = $this->lang->testcase->statusList;
-
-            /* 获取用例结果。*/
-            /* Get results of case. */
-            $stmt = $this->dao->select('t1.*')->from(TABLE_TESTRESULT)->alias('t1')
-                ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.run = t2.id')
-                ->where('t1.`case`')->in(array_keys($cases))
-                ->beginIF($taskID)->andWhere('t2.task')->eq($taskID)->fi()
-                ->orderBy('id_desc')
-                ->query();
-            $results = array();
-            while($result = $stmt->fetch())
-            {
-                if(!isset($results[$result->case])) $results[$result->case] = unserialize($result->stepResults);
-            }
-
-            /* Get users, branches. */
-            $users    = $this->loadModel('user')->getPairs('noletter');
-            $branches = $this->loadModel('branch')->getPairs($productID);
-
-            /* 获取相关的需求和用例列表。*/
-            /* Get related objects id lists. */
-            $relatedStoryIdList = array();
-            $relatedCaseIdList  = array();
-            foreach($cases as $case)
-            {
-                $relatedStoryIdList[$case->story] = $case->story;
-
-                /* Process link cases. */
-                $linkCases = explode(',', $case->linkCase);
-                foreach($linkCases as $linkCaseID)
-                {
-                    if($linkCaseID) $relatedCaseIdList[$linkCaseID] = trim($linkCaseID);
-                }
-            }
-
-            /* 获取相关模块，需求，用例，步骤，附件的名称。*/
-            /* Get related objects title or names. */
-            $relatedModules = $this->loadModel('tree')->getAllModulePairs('case');
-            $relatedStories = $this->dao->select('id, title')->from(TABLE_STORY)->where('id')->in($relatedStoryIdList)->fetchPairs();
-            $relatedCases   = $this->dao->select('id, title')->from(TABLE_CASE)->where('id')->in($relatedCaseIdList)->fetchPairs();
-            $relatedSteps   = $this->dao->select('id, parent, `case`, version, type, `desc`, expect')->from(TABLE_CASESTEP)->where('`case`')->in(@array_keys($cases))->orderBy('version desc,id')->fetchGroup('case', 'id');
-            $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('testcase')->andWhere('objectID')->in(@array_keys($cases))->andWhere('extra')->ne('editor')->fetchGroup('objectID');
-
-            /* 处理用例的数据。*/
-            /* Process cases. */
-            $cases = $this->testcase->appendData($cases);
-            foreach($cases as $case)
-            {
-                $case->stepDesc       = '';
-                $case->stepExpect     = '';
-                $case->real           = '';
-                $case->openedDate     = !helper::isZeroDate($case->openedDate)     ? $case->openedDate     : '';
-                $case->lastEditedDate = !helper::isZeroDate($case->lastEditedDate) ? $case->lastEditedDate : '';
-                $case->lastRunDate    = !helper::isZeroDate($case->lastRunDate)    ? $case->lastRunDate    : '';
-
-                $result = isset($results[$case->id]) ? $results[$case->id] : array();
-                if(!empty($result) && !isset($relatedSteps[$case->id]))
-                {
-                    $firstStep  = reset($result);
-                    $case->real = $firstStep['real'];
-                }
-
-                if(isset($relatedSteps[$case->id]))
-                {
-                    $i = $childId = 0;
-                    foreach($relatedSteps[$case->id] as $step)
-                    {
-                        $stepId = 0;
-                        if($step->type == 'group' or $step->type == 'step')
-                        {
-                            $i++;
-                            $childId = 0;
-                            $stepId  = $i;
-                        }
-                        else
-                        {
-                            $stepId = $i . '.' . $childId;
-                        }
-                        if($step->version != $case->version) continue;
-                        $sign = (in_array($this->post->fileType, array('html', 'xml'))) ? '<br />' : "\n";
-                        $case->stepDesc   .= $stepId . ". " . htmlspecialchars_decode($step->desc) . $sign;
-                        $case->stepExpect .= $stepId . ". " . htmlspecialchars_decode($step->expect) . $sign;
-                        $case->real       .= $stepId . ". " . (isset($result[$step->id]) ? $result[$step->id]['real'] : '') . $sign;
-                        $childId ++;
-                    }
-                }
-                $case->stepDesc   = trim($case->stepDesc);
-                $case->stepExpect = trim($case->stepExpect);
-                $case->real       = trim($case->real);
-
-                if($this->post->fileType == 'csv')
-                {
-                    $case->stepDesc   = str_replace('"', '""', $case->stepDesc);
-                    $case->stepExpect = str_replace('"', '""', $case->stepExpect);
-                }
-
-                /* fill some field with useful value. */
-                $case->product = !isset($products[$case->product])     ? '' : $products[$case->product] . "(#$case->product)";
-                $case->branch  = !isset($branches[$case->branch])      ? '' : $branches[$case->branch] . "(#$case->branch)";
-                $case->module  = !isset($relatedModules[$case->module])? '' : $relatedModules[$case->module] . "(#$case->module)";
-                $case->story   = !isset($relatedStories[$case->story]) ? '' : $relatedStories[$case->story] . "(#$case->story)";
-
-                if(isset($caseLang->priList[$case->pri]))              $case->pri           = $caseLang->priList[$case->pri];
-                if(isset($caseLang->typeList[$case->type]))            $case->type          = $caseLang->typeList[$case->type];
-                if(isset($caseLang->statusList[$case->status]))        $case->status        = $this->processStatus('testcase', $case);
-                if(isset($users[$case->openedBy]))                     $case->openedBy      = $users[$case->openedBy];
-                if(isset($users[$case->lastEditedBy]))                 $case->lastEditedBy  = $users[$case->lastEditedBy];
-                if(isset($users[$case->lastRunner]))                   $case->lastRunner    = $users[$case->lastRunner];
-                if(isset($caseLang->resultList[$case->lastRunResult])) $case->lastRunResult = $caseLang->resultList[$case->lastRunResult];
-
-                $case->bugsAB       = $case->bugs;
-                $case->resultsAB    = $case->results;
-                $case->stepNumberAB = $case->stepNumber;
-
-                unset($case->bugs);
-                unset($case->results);
-                unset($case->stepNumber);
-                unset($case->caseFails);
-
-                $case->stage = explode(',', $case->stage);
-                foreach($case->stage as $key => $stage) $case->stage[$key] = isset($caseLang->stageList[$stage]) ? $caseLang->stageList[$stage] : $stage;
-                $case->stage = join("\n", $case->stage);
-
-                $case->openedDate     = substr($case->openedDate, 0, 10);
-                $case->lastEditedDate = substr($case->lastEditedDate, 0, 10);
-                $case->lastRunDate    = helper::isZeroDate($case->lastRunDate) ? '' : $case->lastRunDate;
-
-                if($case->linkCase)
-                {
-                    $tmpLinkCases = array();
-                    $linkCaseIdList = explode(',', $case->linkCase);
-                    foreach($linkCaseIdList as $linkCaseID)
-                    {
-                        $linkCaseID = trim($linkCaseID);
-                        $tmpLinkCases[] = isset($relatedCases[$linkCaseID]) ? $relatedCases[$linkCaseID] . "(#$linkCaseID)" : $linkCaseID;
-                    }
-                    $case->linkCase = join("; \n", $tmpLinkCases);
-                }
-
-                /* Set related files. */
-                $case->files = '';
-                if(isset($relatedFiles[$case->id]))
-                {
-                    foreach($relatedFiles[$case->id] as $file)
-                    {
-                        $fileURL = common::getSysURL() . $this->createLink('file', 'download', "fileID={$file->id}");
-                        $case->files .= html::a($fileURL, $file->title, '_blank') . '<br />';
-                    }
-                }
-            }
             if($this->config->edition != 'open') list($fields, $cases) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $cases);
 
             $this->post->set('fields', $fields);
@@ -1195,7 +994,7 @@ class testcase extends control
 
         if($taskID) $taskName = $this->dao->findById($taskID)->from(TABLE_TESTTASK)->fetch('name');
 
-        $this->view->fileName        = zget($products, $productID, '') . $this->lang->dash . ($taskID ? $taskName . $this->lang->dash : '') . $browseType . $fileName;
+        $this->view->fileName        = $product->name . $this->lang->dash . ($taskID ? $taskName . $this->lang->dash : '') . $browseType . $fileName;
         $this->view->allExportFields = $this->config->testcase->exportFields;
         $this->view->customExport    = true;
         $this->display();

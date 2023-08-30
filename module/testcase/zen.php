@@ -1580,4 +1580,226 @@ class testcaseZen extends testcase
 
         $this->bug->buildSearchForm($case->product, $this->products, $queryID, $actionURL, $objectID);
     }
+
+    /**
+     * 获取导出的字段列表。
+     * Get the export fields.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function getExportFields(): array
+    {
+        $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $this->config->testcase->exportFields);
+        foreach($fields as $key => $fieldName)
+        {
+            $fieldName = trim($fieldName);
+
+            if($product->type != 'normal' || $fieldName != 'branch') $fields[$fieldName] = zget($this->lang->testcase, $fieldName);
+
+            unset($fields[$key]);
+        }
+
+        return $fields;
+    }
+
+    /**
+     * 处理导出的用例数据。
+     * Process export cases.
+     *
+     * @param  int       $taskID
+     * @access protected
+     * @return array
+     */
+    protected function processCasesForExport(array $cases, int $taskID): array
+    {
+        $products = $this->product->getPairs('', 0, '', 'all');
+        $branches = $this->loadModel('branch')->getPairs($productID);
+        $users    = $this->loadModel('user')->getPairs('noletter');
+        $results  = $this->testcase->getCaseResultsForExport(array_keys($cases), $taskID);
+
+        $relatedModules = $this->loadModel('tree')->getAllModulePairs('case');
+        $relatedStories = $this->testcase->getRelatedStories($cases);
+        $relatedCases   = $this->testcase->getRelatedCases($cases);
+        $relatedSteps   = $this->testcase->getReleatedSteps(array_keys($cases));
+        $relatedFiles   = $this->testcase->getRelatedSteps(array_keys($cases));
+
+        if($taskID)
+        {
+            $this->app->loadLang('testtask')
+            $this->lang->testcase->statusList = $this->lang->testtask->statusList;
+        }
+
+        $cases = $this->testcase->appendData($cases);
+        foreach($cases as $case) $this->processCaseForExport($case, $products, $branches, $users, $results, $relatedModules, $relatedStories, $relatedCases, $relatedSteps, $relatedFiles);
+
+        return $cases;
+    }
+
+    /**
+     * 处理导出的某个用例。
+     * Process export case.
+     *
+     * @param  object    $case
+     * @param  array     $products
+     * @param  array     $branches
+     * @param  array     $users
+     * @param  array     $results
+     * @param  array     $relatedModules
+     * @param  array     $relatedStories
+     * @param  array     $relatedCases
+     * @param  array     $relatedSteps
+     * @param  array     $relatedFiles
+     * @access protected
+     * @return object
+     */
+    protected function processCaseForExport(object $case, array $products, array $branches, array $users, array $results, array $relatedModules, array $relatedStories,  array $relatedCases, array $relatedSteps, array $relatedFiles): object
+    {
+        $case->stepDesc       = '';
+        $case->stepExpect     = '';
+        $case->real           = '';
+        $case->openedDate     = !helper::isZeroDate($case->openedDate)     ? substr($case->openedDate, 0, 10)     : '';
+        $case->lastEditedDate = !helper::isZeroDate($case->lastEditedDate) ? substr($case->lastEditedDate, 0, 10) : '';
+        $case->lastRunDate    = !helper::isZeroDate($case->lastRunDate)    ? $case->lastRunDate    : '';
+
+        $case->product = isset($products[$case->product])     ? $products[$case->product] . "(#$case->product)";    : '';
+        $case->branch  = isset($branches[$case->branch])      ? $branches[$case->branch] . "(#$case->branch)";      : '';
+        $case->module  = isset($relatedModules[$case->module])? $relatedModules[$case->module] . "(#$case->module)" : '';
+        $case->story   = isset($relatedStories[$case->story]) ? $relatedStories[$case->story] . "(#$case->story)";  : '';
+
+        $case->pri           = zget($this->lang->testcase->priList, $case->pri);
+        $case->type          = zget($this->lang->testcase->typeList, $case->type);
+        $case->status        = $this->processStatus('testcase', $case);
+        $case->openedBy      = zget($users, $case->openedBy);
+        $case->lastEditedBy  = zget($users, $case->lastEditedBy);
+        $case->lastRunner    = zget($users, $case->lastRunner);
+        $case->lastRunResult = zget($this->lang->testcase->resultList, $case->lastRunResult);
+
+        $case->bugsAB       = $case->bugs;
+        $case->resultsAB    = $case->results;
+        $case->stepNumberAB = $case->stepNumber;
+
+        unset($case->bugs);
+        unset($case->results);
+        unset($case->stepNumber);
+        unset($case->caseFails);
+
+        $this->processStepForExport($case, $results, $relatedSteps);
+        $this->processStageForExport($case);
+        $this->processFileForExportForExport($case, $relatedFiles);
+        if($case->linkCase) $this->processLinkCaseForExport($case);
+    }
+
+    /**
+     * 处理导出的用例的步骤。
+     * Process step of case for export.
+     *
+     * @param  object    $case
+     * @param  array     $results
+     * @param  array     $relatedSteps
+     * @access protected
+     * @return void
+     */
+    protected function processStepForExport(object $case, array $results, array $relatedSteps): void
+    {
+        $case->real = '';
+        if(!empty($result) && !isset($relatedSteps[$case->id]))
+        {
+            $firstStep  = reset($result);
+            $case->real = $firstStep['real'];
+        }
+
+        if(isset($relatedSteps[$case->id]))
+        {
+            $i = $childID = 0;
+            foreach($relatedSteps[$case->id] as $step)
+            {
+                $stepID = 0;
+                if($step->type == 'group' || $step->type == 'step')
+                {
+                    $i ++;
+                    $childID = 0;
+                    $stepID  = $i;
+                }
+                else
+                {
+                    $stepID = $i . '.' . $childID;
+                }
+
+                if($step->version != $case->version) continue;
+
+                $sign = (in_array($this->post->fileType, array('html', 'xml'))) ? '<br />' : "\n";
+                $case->stepDesc   .= $stepID . ". " . htmlspecialchars_decode($step->desc) . $sign;
+                $case->stepExpect .= $stepID . ". " . htmlspecialchars_decode($step->expect) . $sign;
+                $case->real       .= $stepID . ". " . zget($result, $step->id, '') . $sign;
+                $childID ++;
+            }
+        }
+        $case->stepDesc   = trim($case->stepDesc);
+        $case->stepExpect = trim($case->stepExpect);
+        $case->real       = trim($case->real);
+
+        if($this->post->fileType == 'csv')
+        {
+            $case->stepDesc   = str_replace('"', '""', $case->stepDesc);
+            $case->stepExpect = str_replace('"', '""', $case->stepExpect);
+        }
+    }
+
+    /**
+     * 处理导出的用例的适用阶段。
+     * Process stage of case for export.
+     *
+     * @param  object    $case
+     * @access protected
+     * @return void
+     */
+    protected function processStageForExport(object $case): void
+    {
+        $case->stage = explode(',', $case->stage);
+        foreach($case->stage as $key => $stage) $case->stage[$key] = isset($this->lang->testcase->stageList[$stage]) ? $this->lang->testcase->stageList[$stage] : $stage;
+        $case->stage = join("\n", $case->stage);
+    }
+
+    /**
+     * 处理导出用例的相关用例。
+     * Process link case of the case for export.
+     *
+     * @param  object    $case
+     * @access protected
+     * @return void
+     */
+    protected function processLinkCaseForExport(object $case): void
+    {
+        $tmpLinkCases   = array();
+        $linkCaseIdList = explode(',', $case->linkCase);
+        foreach($linkCaseIdList as $linkCaseID)
+        {
+            $linkCaseID = trim($linkCaseID);
+            $tmpLinkCases[] = isset($relatedCases[$linkCaseID]) ? $relatedCases[$linkCaseID] . "(#$linkCaseID)" : $linkCaseID;
+        }
+        $case->linkCase = join("; \n", $tmpLinkCases);
+    }
+
+    /**
+     * 处理导出用例的附件。
+     * Process file of case for export.
+     *
+     * @param  object    $case
+     * @param  array     $relatedFiles
+     * @access protected
+     * @return void
+     */
+    protected function processFileForExport(object $case, array $relatedFiles): void
+    {
+        $case->files = '';
+        if(isset($relatedFiles[$case->id]))
+        {
+            foreach($relatedFiles[$case->id] as $file)
+            {
+                $fileURL = common::getSysURL() . $this->createLink('file', 'download', "fileID={$file->id}");
+                $case->files .= html::a($fileURL, $file->title, '_blank') . '<br />';
+            }
+        }
+    }
 }
