@@ -7,7 +7,7 @@
     const currentMethod = config.currentMethod;
     const isIndexPage   = currentModule === 'index' && currentMethod === 'index';
     const isInAppTab    = parent.window !== window;
-    const is18version   = true;
+    const is18version   = config.zin === 'compatible';
 
     const selfOpenList = new Set('index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-uploadimages|report-annualdata|misc-captcha|execution-printkanban|traincourse-playvideo'.split('|'));
     const isAllowSelfOpen = isIndexPage
@@ -46,7 +46,7 @@
     if(isIndexPage) return;
 
     const DEBUG       = config.debug;
-    const is18version = true;
+    const is18version = config.zin === 'compatible';
     const currentCode = window.name.substring(4);
     const isInAppTab  = parent.window !== window;
     const fetchTasks  = new Map();
