@@ -115,8 +115,8 @@ $(document).on('change', '#end', function(e)
  */
 function loadProjectExecutions(projectID)
 {
-    projectID = parseInt(projectID) ? projectID : $(this).val();
-    $('#copyExecutions').load($.createLink('execution', 'ajaxGetCopyProjectExecutions', 'projectID=' + projectID + '&copyExecutionID=' + copyExecutionID));
+    projectID = parseInt(projectID) ? projectID : $('#copyExecutionModal input[name=project]').val();
+    loadTarget($.createLink('execution', 'ajaxGetCopyProjectExecutions', 'projectID=' + projectID + '&copyExecutionID=' + copyExecutionID), '#copyExecutions');
 }
 
 $(document).off('click', '#copyExecutions button.execution-block').on('click', '#copyExecutions button.execution-block', function(e)

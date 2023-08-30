@@ -296,8 +296,8 @@ formPanel
     (
         set::width('1/2'),
         set::label($lang->execution->projectName),
+        set::required(true),
         picker(
-            set::required(true),
             setID('project'),
             set::name('project'),
             set::items($allProjects),
