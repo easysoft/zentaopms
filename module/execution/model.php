@@ -1750,17 +1750,18 @@ class executionModel extends model
     }
 
     /**
-     * Get involved execution list.
+     * 获取我参与的执行列表信息。
+     * Get involved execution list information.
      *
-     * @param  int    $projectID
-     * @param  string $status  involved
-     * @param  int    $limit
-     * @param  int    $productID
-     * @param  int    $branch
+     * @param  int      $projectID
+     * @param  string   $status  involved
+     * @param  int      $limit
+     * @param  int      $productID
+     * @param  int      $branch
      * @access public
-     * @return array
+     * @return object[]
      */
-    public function getInvolvedExecutionList($projectID = 0, $status = 'involved', $limit = 0, $productID = 0, $branch = 0)
+    public function getInvolvedExecutionList(int $projectID = 0, string $status = 'involved', int $limit = 0, int $productID = 0, int $branch = 0): array
     {
         if($productID != 0)
         {
@@ -1769,13 +1770,13 @@ class executionModel extends model
                 ->leftJoin(TABLE_TEAM)->alias('t3')->on('t3.root=t2.id')
                 ->where('t1.product')->eq($productID)
                 ->andWhere('t2.deleted')->eq(0)
+                ->andWhere('t2.type')->in('sprint,stage,kanban')
                 ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
                 ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
+                ->beginIF($projectID)->andWhere('t2.project')->eq($projectID)->fi()
                 ->andWhere('t2.openedBy', true)->eq($this->app->user->account)
                 ->orWhere('t3.account')->eq($this->app->user->account)
                 ->markRight(1)
-                ->andWhere('t2.type')->in('sprint,stage,kanban')
-                ->beginIF($projectID)->andWhere('t2.project')->eq($projectID)->fi()
                 ->orderBy('order_desc')
                 ->beginIF($limit)->limit($limit)->fi()
                 ->fetchAll('id');
@@ -1785,12 +1786,12 @@ class executionModel extends model
             return $this->dao->select("t1.*, IF(INSTR(' done,closed', t1.status) < 2, 0, 1) AS isDone")->from(TABLE_EXECUTION)->alias('t1')
                 ->leftJoin(TABLE_TEAM)->alias('t2')->on('t2.root=t1.id')
                 ->where('t1.deleted')->eq(0)
+                ->andWhere('t1.type')->in('sprint,stage,kanban')
                 ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
+                ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
                 ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
                 ->orWhere('t2.account')->eq($this->app->user->account)
                 ->markRight(1)
-                ->andWhere('t1.type')->in('sprint,stage,kanban')
-                ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
                 ->orderBy('t1.order_desc')
                 ->beginIF($limit)->limit($limit)->fi()
                 ->fetchAll('id');

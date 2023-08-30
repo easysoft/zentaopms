@@ -736,18 +736,19 @@ class executionTest
     }
 
     /**
-     * fnction getInvolvedExecutionList test by execution
+     * 获取我参与的执行列表信息。
+     * Get involved execution list information.
      *
-     * @param  string $projectID
-     * @param  string $limit
-     * @param  string $productID
-     * @param  string $count
+     * @param  int    $projectID
+     * @param  int    $limit
+     * @param  int    $productID
+     * @param  int    $count
      * @access public
-     * @return array
+     * @return array|int
      */
-    public function getInvolvedExecutionListTest($projectID, $limit, $productID, $count)
+    public function getInvolvedExecutionListTest(int $projectID, int $limit, int $productID, int $count): array|int
     {
-        $object = $this->executionModel->getInvolvedExecutionList($projectID,$status = 'involved',$limit, $productID);
+        $object = $this->executionModel->getInvolvedExecutionList($projectID, $status = 'involved', $limit, $productID);
 
         if(dao::isError())
         {

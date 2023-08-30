@@ -39,23 +39,22 @@ $projectProduct->gen(14);
 /**
 
 title=测试executionModel->getInvolvedExecutionListTest();
+timeout=0
 cid=1
-pid=1
-
-根据项目查询执行列表 >> 2,迭代1
-根据产品查询执行列表 >> 2,迭代1,sprint
-根据项目查询执行数量 >> 1
-根据产品查询执行数量 >> 1
 
 */
 
-$projectIDList = array(0, 2);
+$projectIDList = array(0, 2, 3,4);
 $productIDList = array(0, 1);
 $limit         = array(0, 2, 10);
 $count         = array(0, 1);
 
 $executionTester = new executionTest();
-r($executionTester->getInvolvedExecutionListTest($projectIDList[1],$limit[0],$productIDList[0],$count[0])) && p('5:project,name')      && e('2,迭代1');         // 根据项目查询执行列表
-r($executionTester->getInvolvedExecutionListTest($projectIDList[0],$limit[0],$productIDList[1],$count[0])) && p('5:project,name,type') && e('2,迭代1,sprint');  // 根据产品查询执行列表
-r($executionTester->getInvolvedExecutionListTest($projectIDList[1],$limit[1],$productIDList[0],$count[1])) && p()                        && e('1');                 // 根据项目查询执行数量
-r($executionTester->getInvolvedExecutionListTest($projectIDList[0],$limit[2],$productIDList[1],$count[1])) && p()                        && e('1');                 // 根据产品查询执行数量
+r($executionTester->getInvolvedExecutionListTest($projectIDList[1], $limit[0], $productIDList[0], $count[0])) && p('5:project,name')      && e('2,迭代1');        // 根据敏捷项目查询执行列表
+r($executionTester->getInvolvedExecutionListTest($projectIDList[2], $limit[0], $productIDList[0], $count[0])) && p('7:project,name')      && e('3,阶段1');        // 根据瀑布项目查询执行列表
+r($executionTester->getInvolvedExecutionListTest($projectIDList[3], $limit[0], $productIDList[0], $count[0])) && p('9:project,name')      && e('4,看板1');        // 根据看板项目查询执行列表
+r($executionTester->getInvolvedExecutionListTest($projectIDList[0], $limit[0], $productIDList[1], $count[0])) && p('5:project,name,type') && e('2,迭代1,sprint'); // 根据产品查询执行列表
+r($executionTester->getInvolvedExecutionListTest($projectIDList[1], $limit[1], $productIDList[0], $count[1])) && p()                      && e('1');              // 根据敏捷项目查询执行数量
+r($executionTester->getInvolvedExecutionListTest($projectIDList[2], $limit[1], $productIDList[0], $count[1])) && p()                      && e('1');              // 根据瀑布项目查询执行数量
+r($executionTester->getInvolvedExecutionListTest($projectIDList[3], $limit[1], $productIDList[0], $count[1])) && p()                      && e('1');              // 根据看板项目查询执行数量
+r($executionTester->getInvolvedExecutionListTest($projectIDList[0], $limit[2], $productIDList[1], $count[1])) && p()                      && e('1');              // 根据产品查询执行数量
