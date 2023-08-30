@@ -30,7 +30,7 @@ class metricModel extends model
         if(dao::isError()) return false;
         $metricID = $this->dao->lastInsertID();
 
-        $this->loadModel('action')->create('metric', $metricID, 'opened');
+        $this->loadModel('action')->create('metric', $metricID, 'opened', '', '', $this->app->user->account);
 
         return $metricID;
     }
