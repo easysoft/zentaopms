@@ -155,7 +155,7 @@ $lang->kanban->common     = '看板';
 $lang->qa->common         = '測試';
 $lang->devops->common     = 'DevOps';
 $lang->doc->common        = '文檔';
-$lang->repo->common       = '代碼';
+$lang->repo->common       = '代碼庫';
 $lang->repo->codeRepo     = '代碼庫';
 $lang->report->common     = '统计';
 $lang->system->common     = '組織';
@@ -192,6 +192,8 @@ $lang->app->serverLink    = '服務器鏈接';
 $lang->space->common      = '服务管理';
 $lang->store->common      = '应用市场';
 $lang->instance->common   = '应用';
+$lang->codereview->common = '问题';
+$lang->repocode->common   = '代码';
 
 $lang->personnel->common     = '人員';
 $lang->personnel->invest     = '投入人員';

@@ -1,6 +1,6 @@
 <?php
 $lang->artifactrepo = new stdclass();
-$lang->artifactrepo->common = '浏览制品库';
+$lang->artifactrepo->common = '制品库';
 $lang->artifactrepo->create = '添加制品库';
 $lang->artifactrepo->edit   = '编辑制品库';
 $lang->artifactrepo->delete = '删除制品库';

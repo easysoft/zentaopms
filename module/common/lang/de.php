@@ -180,7 +180,7 @@ $lang->kanban->common     = 'Kanban';
 $lang->qa->common         = 'QA';
 $lang->devops->common     = 'DevOps';
 $lang->doc->common        = 'Doc';
-$lang->repo->common       = 'Code';
+$lang->repo->common       = 'Code Repo';
 $lang->repo->codeRepo     = 'Code Repo';
 $lang->bi->common         = 'BI';
 $lang->screen->common     = 'Screen';
@@ -264,6 +264,8 @@ $lang->projectreview->common      = 'Review';
 $lang->projecttrack->common       = 'Matrix';
 $lang->projectqa->common          = 'QA';
 $lang->holidayseason->common      = 'Holiday';
+$lang->codereview->common         = 'Review';
+$lang->repocode->common           = 'Code';
 
 $lang->personnel->common     = 'Member';
 $lang->personnel->invest     = 'Investment';

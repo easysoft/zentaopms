@@ -149,6 +149,9 @@ $lang->projectreview      = new stdclass();
 $lang->projecttrack       = new stdclass();
 $lang->projectqa          = new stdclass();
 $lang->holidayseason      = new stdclass();
+$lang->codereview         = new stdclass();
+$lang->repocode           = new stdclass();
+$lang->deploy             = new stdclass();
 
 $lang->projectbuild   = new stdclass();
 $lang->projectrelease = new stdclass();

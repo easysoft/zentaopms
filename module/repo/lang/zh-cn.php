@@ -1,5 +1,5 @@
 <?php
-$lang->repo->common          = '代码';
+$lang->repo->common          = '代码库';
 $lang->repo->codeRepo        = '代码库';
 $lang->repo->browse          = '浏览';
 $lang->repo->viewRevision    = '查看修订';

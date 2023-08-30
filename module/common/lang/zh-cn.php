@@ -180,7 +180,7 @@ $lang->kanban->common     = '看板';
 $lang->qa->common         = '测试';
 $lang->devops->common     = 'DevOps';
 $lang->doc->common        = '文档';
-$lang->repo->common       = '代码';
+$lang->repo->common       = '代码库';
 $lang->repo->codeRepo     = '代码库';
 $lang->bi->common         = 'BI';
 $lang->screen->common     = '大屏';
@@ -264,6 +264,8 @@ $lang->projectreview->common      = '评审';
 $lang->projecttrack->common       = '矩阵';
 $lang->projectqa->common          = '测试';
 $lang->holidayseason->common      = '节假日';
+$lang->codereview->common         = '问题';
+$lang->repocode->common           = '代码';
 
 $lang->personnel->common     = '人员';
 $lang->personnel->invest     = '投入人员';

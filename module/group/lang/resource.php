@@ -1282,7 +1282,7 @@ $lang->zanode->methodOrder[70] = 'editSnapshot';
 $lang->zanode->methodOrder[75] = 'restoreSnapshot';
 $lang->zanode->methodOrder[80] = 'deleteSnapshot';
 
-$lang->resource->repo                  = new stdclass();
+$lang->resource->repo = new stdclass();
 $lang->resource->repo->browse          = 'browseAction';
 $lang->resource->repo->view            = 'view';
 $lang->resource->repo->log             = 'log';
@@ -1391,12 +1391,6 @@ $lang->serverroom->methodOrder[5]  = 'create';
 $lang->serverroom->methodOrder[10] = 'edit';
 $lang->serverroom->methodOrder[15] = 'delete';
 $lang->serverroom->methodOrder[20] = 'view';
-
-$lang->resource->ops = new stdclass();
-$lang->resource->ops->provider = 'provider';
-$lang->resource->ops->city     = 'city';
-$lang->resource->ops->cpuBrand = 'cpuBrand';
-$lang->resource->ops->os       = 'os';
 
 $lang->resource->instance = new stdclass();
 $lang->resource->instance->install       = 'install';
@@ -1682,7 +1676,6 @@ $lang->resource->mr->unlink    = 'unlink';
 $lang->resource->mr->approval  = 'approval';
 $lang->resource->mr->close     = 'close';
 $lang->resource->mr->reopen    = 'reopen';
-$lang->resource->mr->addReview = 'addReview';
 
 $lang->mr->methodOrder[10] = 'create';
 $lang->mr->methodOrder[15] = 'browse';
@@ -2172,6 +2165,11 @@ $lang->resource->productsettings    = new stdclass();
 $lang->resource->projectreview      = new stdclass();
 $lang->resource->projecttrack       = new stdclass();
 $lang->resource->projectqa          = new stdclass();
+$lang->resource->codereview         = new stdclass();
+$lang->resource->repocode           = new stdclass();
+$lang->resource->artifactrepo       = new stdclass();
+$lang->resource->deploy             = new stdclass();
+$lang->resource->ops                = new stdclass();
 
 global $config;
 $inUpgrade = (defined('IN_UPGRADE') and IN_UPGRADE);
