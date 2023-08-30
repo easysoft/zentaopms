@@ -1381,7 +1381,7 @@ class execution extends control
             if(dao::isError()) return $this->sendError(dao::getError());
 
             $this->execution->computeCFD($executionID);
-            $this->execution->checkCFDData($executionID, $begin);
+            $this->execution->updateCFDData($executionID, $begin);
             return $this->send(array('result' => 'success', 'locate' => $this->createLink('execution', 'cfd', "executionID=$executionID&type=$type&withWeekend=$withWeekend&begin=" . helper::safe64Encode(urlencode($begin)) . "&end=" . helper::safe64Encode(urlencode($end)))));
         }
 

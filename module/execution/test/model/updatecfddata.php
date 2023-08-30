@@ -42,17 +42,14 @@ $CFD->gen(5);
 
 /**
 
-title=测试executionModel->checkCFDData();
+title=测试executionModel->updateCFDData();
+timeout=0
 cid=1
-pid=1
-
-已有日期的情况 >> 5
-未来日期的情况 >> 0
 
 */
 
 $executionTester = new executionTest();
 $dateList        = array('2022-01-22', '2099-01-01');
 
-r(count($executionTester->checkCFDDataTest(3, $dateList[0]))) && p() && e('5'); // 已有日期的情况
-r(count($executionTester->checkCFDDataTest(3, $dateList[1]))) && p() && e('0'); // 未来日期的情况
+r(count($executionTester->updateCFDDataTest(3, $dateList[0]))) && p() && e('5'); // 已有日期的情况
+r(count($executionTester->updateCFDDataTest(3, $dateList[1]))) && p() && e('0'); // 未来日期的情况

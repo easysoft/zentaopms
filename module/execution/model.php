@@ -3878,14 +3878,15 @@ class executionModel extends model
     }
 
     /**
+     * 查看指定的执行日期是否有数据，且没有更新最新日期的数据。
      * Check whether there is data on the specified date of execution, and there is no data with the latest date added.
      *
-     * @param int    $executionID
-     * @param string $date
+     * @param  int    $executionID
+     * @param  string $date
      * @access public
      * @return void
      */
-    public function checkCFDData($executionID, $date)
+    public function updateCFDData(int $executionID, string $date)
     {
         $today = helper::today();
         if($date >= $today) return;
@@ -3894,6 +3895,7 @@ class executionModel extends model
             ->where('execution')->eq((int)$executionID)
             ->andWhere('date')->eq($date)
             ->orderBy('date DESC, id asc')->fetchGroup('name', 'date');
+
         if(!$checkData)
         {
             $closetoDate = $this->dao->select("max(date) as date")->from(TABLE_CFD)->where('execution')->eq((int)$executionID)->andWhere('date')->lt($date)->fetch('date');

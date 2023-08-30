@@ -2912,16 +2912,18 @@ class executionTest
     }
 
     /**
-     * Test check CFD data.
+     * 查看指定的执行日期是否有数据，且没有更新最新日期的数据。
+     * Check whether there is data on the specified date of execution, and there is no data with the latest date added.
      *
      * @param  int    $executionID
      * @param  string $date
      * @access public
      * @return array
      */
-    public function checkCFDDataTest($executionID, $date)
+    public function updateCFDDataTest(int $executionID, string $date): array
     {
-        $this->executionModel->checkCFDData($executionID, $date);
+        $this->executionModel->updateCFDData($executionID, $date);
+
         return $this->executionModel->dao->select("date, `count` AS value, `name`")->from(TABLE_CFD)
             ->where('execution')->eq((int)$executionID)
             ->andWhere('date')->eq($date)
