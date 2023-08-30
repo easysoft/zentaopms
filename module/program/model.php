@@ -1424,6 +1424,9 @@ class programModel extends model
         /* 6. Update projectStatsTime in config. */
         $this->loadModel('setting')->setItem('system.common.global.projectStatsTime', $now);
         $this->app->config->global->projectStatsTime = $now;
+
+        /* 7. Clear actions older than 30 days. */
+        $this->cleanActions();
     }
 
     /**

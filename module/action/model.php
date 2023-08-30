@@ -1333,8 +1333,6 @@ class actionModel extends model
      */
     public function getDynamic($account = 'all', $period = 'all', $orderBy = 'date_desc', $limit = 50, $productID = 'all', $projectID = 'all', $executionID = 'all', $date = '', $direction = 'next')
     {
-        $this->cleanActions();
-
         /* Computer the begin and end date of a period. */
         $beginAndEnd = $this->computeBeginAndEnd($period);
         extract($beginAndEnd);
@@ -2665,10 +2663,16 @@ class actionModel extends model
      * Clear dynamic records older than one month.
      *
      * @access public
-     * @return void
+     * @return bool
      */
     public function cleanActions()
     {
+        $cleanDate = zget($this->app->config->global, 'cleanActionsDate', '');
+        $today     = helper::today();
+        if($cleanDate == $today) return true;
+
+        $this->loadModel('setting')->setItem('system.common.global.cleanActionsDate', $today);
+
         $lastMonth = date('Y-m-d', strtotime('-1 month'));
         $this->dao->delete()->from(TABLE_ACTIONRECENT)->where('date')->lt($lastMonth)->exec();
         return !dao::isError();

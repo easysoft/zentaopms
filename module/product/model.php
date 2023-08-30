@@ -1905,6 +1905,9 @@ class productModel extends model
         /* 3. Update projectStatsTime in config. */
         $this->loadModel('setting')->setItem('system.common.global.productStatsTime', $now);
         $this->app->config->global->productStatsTime = $now;
+
+        /* 4. Clear actions older than 30 days. */
+        $this->cleanActions();
     }
 
     /**
