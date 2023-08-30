@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace zin;
 
-dropmenu(set::module('repo'), set::tab('repo'));
+if($app->tab == 'devops') dropmenu(set::module('repo'), set::tab('repo'));
 
 $tree = $this->repo->getFileTree($repo);
 

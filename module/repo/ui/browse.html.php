@@ -14,7 +14,7 @@ namespace zin;
 
 jsVar('copied', $lang->repo->copied);
 
-dropmenu(set::module('repo'), set::tab('repo'));
+if($app->tab == 'devops') dropmenu(set::module('repo'), set::tab('repo'));
 
 /* Prepare repo select data. */
 $branchMenus = array();

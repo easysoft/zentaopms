@@ -51,10 +51,12 @@ class repo extends control
         if($tab == 'project')
         {
             $this->loadModel('project')->setMenu($objectID);
+            $this->view->projectID = $objectID;
         }
         elseif($tab == 'execution')
         {
             $this->loadModel('execution')->setMenu($objectID);
+            $this->view->executionID = $objectID;
         }
         else
         {
