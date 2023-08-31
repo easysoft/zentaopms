@@ -227,7 +227,6 @@ class testsuiteModel extends model
             ->where('t2.suite')->eq($suiteID)
             ->beginIF($this->lang->navGroup->testsuite != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
             ->andWhere('t1.product')->eq($suite->product)
-            ->andWhere('t1.product')->eq($suite->product)
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)
             ->page($pager)
