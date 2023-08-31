@@ -63,20 +63,6 @@ class executionTao extends executionModel
     }
 
     /**
-     * 将执行ID保存到session中。
-     * Save the execution ID to the session.
-     *
-     * @param  int       $executionID
-     * @access protected
-     * @return void
-     */
-    protected function saveSession(int $executionID): void
-    {
-        $this->session->set('execution', $executionID, $this->app->tab);
-        $this->setProjectSession($executionID);
-    }
-
-    /**
      * 获取执行团队成员数量。
      * Get execution team member count.
      *
@@ -128,6 +114,20 @@ class executionTao extends executionModel
     }
 
     /**
+     * 将执行ID保存到session中。
+     * Save the execution ID to the session.
+     *
+     * @param  int       $executionID
+     * @access protected
+     * @return void
+     */
+    protected function saveSession(int $executionID): void
+    {
+        $this->session->set('execution', $executionID, $this->app->tab);
+        $this->setProjectSession($executionID);
+    }
+
+    /**
      * 设置看板执行的菜单。
      * Set kanban menu.
      *
@@ -152,5 +152,36 @@ class executionTao extends executionModel
         $this->lang->execution->menu->settings['subMenu']->products  = array('link' => "{$this->lang->productCommon}|execution|manageproducts|executionID=%s");
         $this->lang->execution->menu->settings['subMenu']->team      = array('link' => "{$this->lang->team->common}|execution|team|executionID=%s", 'alias' => 'managemembers');
         $this->lang->execution->menu->settings['subMenu']->whitelist = array('link' => "{$this->lang->whitelist}|execution|whitelist|executionID=%s", 'subModule' => 'personnel', 'alias' => 'addwhitelist');
+    }
+
+    /**
+     * 更新今日的累计流图数据。
+     * Update today's cumulative flow graph data.
+     *
+     * @param  int       $executionID
+     * @param  string    $type
+     * @param  string    $colName
+     * @param  array     $laneGroup
+     * @access protected
+     * @return void
+     */
+    protected function updateTodayCFDData(int $executionID, string $type, string $colName, array $laneGroup)
+    {
+        $cfd = new stdclass();
+        $cfd->count = 0;
+        $cfd->date  = helper::today();
+        $cfd->type  = $type;
+        foreach($laneGroup as $columnGroup)
+        {
+            foreach($columnGroup as $columnCard)
+            {
+                $cards = trim($columnCard->cards, ',');
+                $cfd->count += $cards ? count(explode(',', $cards)) : 0;
+            }
+        }
+
+        $cfd->name      = $colName;
+        $cfd->execution = $executionID;
+        $this->dao->replace(TABLE_CFD)->data($cfd)->exec();
     }
 }
