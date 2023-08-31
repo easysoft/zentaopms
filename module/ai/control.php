@@ -183,10 +183,7 @@ class ai extends control
             $data = fixer::input('post')->get();
             if(isset($data->togglePromptStatus) && isset($data->promptId))
             {
-                $modelConfig = new stdclass();
-                $storedModelConfig = $this->loadModel('setting')->getItems('owner=system&module=ai');
-                foreach($storedModelConfig as $item) $modelConfig->{$item->key} = $item->value;
-                if(empty($modelConfig->key)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'locate' => $this->inlink('models') . '#app=admin'));
+                if(!$this->ai->isModelConfigured()) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'locate' => $this->inlink('models') . '#app=admin'));
 
                 $this->ai->togglePromptStatus($data->promptId);
 
@@ -509,10 +506,7 @@ class ai extends control
      */
     public function promptExecute($promptId, $objectId)
     {
-        $modelConfig = new stdclass();
-        $storedModelConfig = $this->loadModel('setting')->getItems('owner=system&module=ai');
-        foreach($storedModelConfig as $item) $modelConfig->{$item->key} = $item->value;
-        if(empty($modelConfig->key)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'locate' => $this->inlink('models') . '#app=admin'));
+        if(!$this->ai->isModelConfigured()) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'locate' => $this->inlink('models') . '#app=admin'));
 
         $prompt = $this->ai->getPromptByID($promptId);
         if(empty($prompt) || !$this->ai->isExecutable($prompt)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noPrompt'])));
@@ -626,10 +620,7 @@ class ai extends control
      */
     public function promptPublish($id, $backToTestingLocation = false)
     {
-        $modelConfig = new stdclass();
-        $storedModelConfig = $this->loadModel('setting')->getItems('owner=system&module=ai');
-        foreach($storedModelConfig as $item) $modelConfig->{$item->key} = $item->value;
-        if(empty($modelConfig->key)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'locate' => $this->inlink('models') . '#app=admin'));
+        if(!$this->ai->isModelConfigured()) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'locate' => $this->inlink('models') . '#app=admin'));
 
         unset($_SESSION['auditPrompt']);
         $this->ai->togglePromptStatus($id, 'active');

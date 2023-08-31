@@ -55,6 +55,20 @@ class aiModel extends model
     }
 
     /**
+     * Determine model is configured or not.
+     *
+     * @access public
+     * @return bool
+     */
+    public function isModelConfigured()
+    {
+        $modelConfig = new stdclass();
+        $storedModelConfig = $this->loadModel('setting')->getItems('owner=system&module=ai');
+        foreach($storedModelConfig as $item) $modelConfig->{$item->key} = $item->value;
+        return !empty($modelConfig->key);
+    }
+
+    /**
      * Make request to OpenAI API.
      *
      * @param  string   $type     chat | completion | edit
