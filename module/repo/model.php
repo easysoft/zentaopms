@@ -541,9 +541,16 @@ class repoModel extends model
             ->fetchAll();
 
         $productIds = $productItems = array();
-        foreach($repos as $repo)
+        if($projectID)
         {
-            $productIds = array_merge($productIds, explode(',', $repo->product));
+            $productIds = $this->loadModel('product')->getProductIDByProject($projectID, false);
+        }
+        else
+        {
+            foreach($repos as $repo)
+            {
+                $productIds = array_merge($productIds, explode(',', $repo->product));
+            }
         }
         $products = $this->loadModel('product')->getByIdList(array_filter(array_unique($productIds)));
         foreach($products as $productID => $product)

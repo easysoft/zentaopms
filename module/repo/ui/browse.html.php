@@ -77,6 +77,13 @@ featureBar(
     (
         set::className('repo-select'),
         set::required(true),
+        $app->tab == 'project' ? dropmenu
+        (
+            set::id('repoDropmenu'),
+            set::module('repo'),
+            set::text($repo->name),
+            set::url(createLink('repo', 'ajaxGetDropMenu', "repoID={$repo->id}&module=repo&method=browse&projectID={$objectID}"))
+        ) : null,
         dropmenu
         (
             setID('repoBranchDropMenu'),

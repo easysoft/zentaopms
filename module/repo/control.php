@@ -1662,13 +1662,16 @@ class repo extends control
             $method = 'review';
         }
 
+        $params = '';
+        if($projectID && $method == 'browse') $params = "&branchID=&objectID=$projectID";
+
         /* Get repo group by type. */
         $repoType  = $module == 'mr' ? 'git' : '';
         $repoGroup = $this->repo->getRepoGroup('project', $projectID, $repoType);
 
         $this->view->repoID    = $repoID;
         $this->view->repoGroup = $repoGroup;
-        $this->view->link      = $this->createLink($module, $method, "repoID=%s");
+        $this->view->link      = $this->createLink($module, $method, "repoID=%s" . $params) . ($projectID ? '#app=project' : '');
 
         $this->display();
     }

@@ -374,11 +374,12 @@ class repoZen extends repo
                     }
                 }
             }
-            if($cacheFile) file_put_contents($cacheFile, serialize($infos), LOCK_EX);
+            if($cacheFile && !empty($infos)) file_put_contents($cacheFile, serialize($infos), LOCK_EX);
         }
         else
         {
             $infos = unserialize(file_get_contents($cacheFile));
+            if(empty($infos)) unlink($cacheFile);
         }
 
         foreach($infos as $info)
