@@ -131,7 +131,7 @@ else
 
 featureBar
 (
-    backBtn(set::icon('back'), setClass('bg-transparent diff-back-btn'), $lang->goback),
+    backBtn(set::icon('back'), setClass('bg-transparent diff-back-btn'), set::back('GLOBAL'), $lang->goback),
     item(set::type('divider')),
     ...$breadcrumbItems,
 );
