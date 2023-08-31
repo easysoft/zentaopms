@@ -1,6 +1,7 @@
 <?php
 $config->story = new stdclass();
 
+$config->story->defaultPriority  = 3;
 $config->story->batchCreate      = 10;
 $config->story->affectedFixedNum = 7;
 $config->story->needReview       = 1;
