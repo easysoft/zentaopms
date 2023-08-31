@@ -291,4 +291,57 @@ class metricZen extends metric
 
         return $tableData;
     }
+
+    /**
+     * 根据后台配置的估算单位对列表赋值。
+     * Assign unitList['measure'] by custom hourPoint.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function processUnitList()
+    {
+        $this->app->loadLang('custom');
+        $key = zget($this->config->custom, 'hourPoint', '0');
+
+        $this->lang->metric->unitList['measure'] = $this->lang->custom->conceptOptions->hourPoint[$key];
+    }
+
+    /**
+     * 获取度量数据表的数据。
+     * Get data of result table.
+     *
+     * @param  object    $metric
+     * @param  array     $result
+     * @access protected
+     * @return array|false
+     */
+    protected function verifyCalc($metric)
+    {
+        $verifyResult = array();
+
+        $isCalcExists = $this->metric->checkCalcExists($metric);
+        $verifyResult['exists'] = $isCalcExists ? 'success' : 'fail';
+
+        if($isCalcExists)
+        {
+            $this->metric->includeCalc($metric->code);
+            $isClassExists = $this->metric->checkCalcClass($metric) ? 'success' : 'fail';
+            $verifyResult['class'] = $isClassExists ? 'success' : 'fail';
+        }
+
+        if($isClassExists)
+        {
+            $methodsStatus = $this->metric->checkCalcMethods($metric);
+            $verifyResult['method'] = $methodsStatus ? 'success' : 'fail';
+        }
+
+        if($methodsStatus)
+        {
+            $calcResult = $this->metric->runCalc($metric);
+            $verifyResult['result'] = $calcResult;
+        }
+
+        return $verifyResult;
+    }
 }
