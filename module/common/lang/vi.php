@@ -246,11 +246,12 @@ $lang->devops->host        = 'Host';
 $lang->devops->account     = 'Account';
 $lang->devops->serverroom  = 'IDC';
 $lang->devops->deploy      = 'Deploy';
-$lang->devops->service     = 'Service';
 $lang->devops->provider    = 'IDC Provider';
 $lang->devops->cpuBrand    = 'CPU Brand';
 $lang->devops->city        = 'IDC Location';
 $lang->devops->os          = 'OS Version';
+$lang->devops->stage       = 'Stage';
+$lang->devops->service     = 'Service';
 
 $lang->searchTips = '';
 $lang->searchAB   = 'Tìm ki?m';

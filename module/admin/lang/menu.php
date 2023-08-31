@@ -199,7 +199,7 @@ $lang->admin->menuList->platform['tabMenu']['resource']['provider']   = array('l
 $lang->admin->menuList->platform['tabMenu']['resource']['city']       = array('link' => "{$lang->devops->city}|ops|city|", 'alias' => 'city');
 $lang->admin->menuList->platform['tabMenu']['resource']['cpuBrand']   = array('link' => "{$lang->devops->cpuBrand}|ops|cpuBrand|", 'alias' => 'cpubrand');
 $lang->admin->menuList->platform['tabMenu']['resource']['os']         = array('link' => "{$lang->devops->os}|ops|os|", 'alias' => 'os');
-$lang->admin->menuList->platform['tabMenu']['resource']['stage']      = array('link' => "{$lang->devops->os}|ops|stage|", 'alias' => 'stage');
+$lang->admin->menuList->platform['tabMenu']['resource']['stage']      = array('link' => "{$lang->devops->stage}|ops|stage|", 'alias' => 'stage');
 
 $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['10']  = 'host';
 $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['15'] = 'serverroom';
