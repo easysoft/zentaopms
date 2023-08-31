@@ -356,8 +356,11 @@ class header extends wg
                     }
                     else if(!defined('TUTORIAL'))
                     {
+                        $isOnlyBody          = true;
                         $params              = "programID=0&from=global";
                         $createMethod        = 'createGuide';
+                        $item['data-width']  = '50%';
+                        $item['class']       = 'iframe';
                         $item['data-toggle'] = 'iframeModal';
                     }
                     else
@@ -410,14 +413,16 @@ class header extends wg
                     $params = "parentProgramID=0&extra=from=global";
                     break;
                 case 'kanbanspace':
-                    $isOnlyBody         = true;
-                    $item['class']      = 'iframe';
-                    $item['data-width'] = '75%';
+                    $isOnlyBody          = true;
+                    $item['class']       = 'iframe';
+                    $item['data-width']  = '75%';
+                    $item['data-toggle'] = 'iframeModal';
                     break;
                 case 'kanban':
-                    $isOnlyBody         = true;
-                    $item['class']      = 'iframe';
-                    $item['data-width'] = '75%';
+                    $isOnlyBody          = true;
+                    $item['class']       = 'iframe';
+                    $item['data-width']  = '75%';
+                    $item['data-toggle'] = 'iframeModal';
                     break;
             }
 
