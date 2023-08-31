@@ -27,4 +27,23 @@ function convertCols(cols)
     return cols;
 }
 zui.DTable.defineFn();
+
+/**
+ * Get checked items.
+ *
+ * @access public
+ * @return array
+ */
+function getCheckedItems()
+{
+    var checkedItems = [];
+    const $dtable = zui.DTable.query('#mainContent [data-zui-dtable]').$;
+    $dtable.getChecks().forEach(function(id)
+    {
+        if($dtable.getRowInfo(id) == undefined) return true;
+
+        checkedItems.push(id);
+    });
+    return checkedItems;
+}
 </script>
