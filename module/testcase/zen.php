@@ -1838,4 +1838,86 @@ class testcaseZen extends testcase
             }
         }
     }
+
+    /**
+     * 获取导出模板的字段。
+     * Get fields for export template.
+     *
+     * @param  string    $productType
+     * @access protected
+     * @return array
+     */
+    protected function getFieldsForExportTemplate(string $productType): array
+    {
+        $fields = array();
+        $fields['branch']       = $this->lang->product->branchName[$productType];
+        $fields['module']       = $this->lang->testcase->module;
+        $fields['title']        = $this->lang->testcase->title;
+        $fields['precondition'] = $this->lang->testcase->precondition;
+        $fields['stepDesc']     = $this->lang->testcase->stepDesc;
+        $fields['stepExpect']   = $this->lang->testcase->stepExpect;
+        $fields['keywords']     = $this->lang->testcase->keywords;
+        $fields['pri']          = $this->lang->testcase->pri;
+        $fields['type']         = $this->lang->testcase->type;
+        $fields['stage']        = $this->lang->testcase->stage;
+        $fields['']             = '';
+        $fields['typeValue']    = $this->lang->testcase->lblTypeValue;
+        $fields['stageValue']   = $this->lang->testcase->lblStageValue;
+        $fields['branchValue']  = $this->lang->product->branchName[$productType];
+
+        if($productType == 'normal')
+        {
+            unset($fields['branch']);
+            unset($fields['branchValue']);
+        }
+
+        return $fields;
+    }
+
+    /**
+     * 获取导出模板的行。
+     * Get rows for export template.
+     *
+     * @param  object    $product
+     * @param  int       $num
+     * @access protected
+     * @return array
+     */
+    protected function getRowsForExportTemplate(object $product, int $num): array
+    {
+        $this->loadModel('tree');
+
+        $projectID = $this->app->tab == 'project' ? $this->session->project : 0;
+        $branches  = $this->loadModel('branch')->getPairs($product->id, '' , $projectID);
+        $modules   = $product->type == 'normal' ? $this->tree->getOptionMenu($product->id, 'case', 0, 0) : array();
+
+        foreach($branches as $branchID => $branchName)
+        {
+            $branches[$branchID] = $branchName . "(#$branchID)";
+            $modules += $this->tree->getOptionMenu($product->id, 'case', 0, $branchID);
+        }
+
+        $rows = array();
+        for($i = 0; $i < $num; $i++)
+        {
+            foreach($modules as $moduleID => $module)
+            {
+                $row = new stdclass();
+                $row->module     = $module . "(#$moduleID)";
+                $row->stepDesc   = "1. \n2. \n3.";
+                $row->stepExpect = "1. \n2. \n3.";
+
+                if(empty($rows))
+                {
+                    $row->typeValue  = join("\n", $this->lang->testcase->typeList);
+                    $row->stageValue = join("\n", $this->lang->testcase->stageList);
+                    if($product->type != 'normal') $row->branchValue = join("\n", $branches);
+                }
+
+                $rows[] = $row;
+            }
+        }
+
+        return $rows;
+    }
 }

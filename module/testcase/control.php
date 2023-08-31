@@ -1001,65 +1001,22 @@ class testcase extends control
     }
 
     /**
+     * 导出模板。
      * Export template.
      *
      * @param  int    $productID
      * @access public
      * @return void
      */
-    public function exportTemplate($productID)
+    public function exportTemplate(int $productID)
     {
         if($_POST)
         {
-            $product = $this->loadModel('product')->getById($productID);
-
-            if($product->type != 'normal') $fields['branch'] = $this->lang->product->branchName[$product->type];
-            $fields['module']       = $this->lang->testcase->module;
-            $fields['title']        = $this->lang->testcase->title;
-            $fields['precondition'] = $this->lang->testcase->precondition;
-            $fields['stepDesc']     = $this->lang->testcase->stepDesc;
-            $fields['stepExpect']   = $this->lang->testcase->stepExpect;
-            $fields['keywords']     = $this->lang->testcase->keywords;
-            $fields['pri']          = $this->lang->testcase->pri;
-            $fields['type']         = $this->lang->testcase->type;
-            $fields['stage']        = $this->lang->testcase->stage;
-
-            $fields[''] = '';
-            $fields['typeValue']  = $this->lang->testcase->lblTypeValue;
-            $fields['stageValue'] = $this->lang->testcase->lblStageValue;
-            if($product->type != 'normal') $fields['branchValue'] = $this->lang->product->branchName[$product->type];
-
-            $projectID = $this->app->tab == 'project' ? $this->session->project : 0;
-            $branches  = $this->loadModel('branch')->getPairs($productID, '' , $projectID);
-            $this->loadModel('tree');
-            $modules = $product->type == 'normal' ? $this->tree->getOptionMenu($productID, 'case', 0, 0) : array();
-
-            foreach($branches as $branchID => $branchName)
-            {
-                $branches[$branchID] = $branchName . "(#$branchID)";
-                $modules += $this->tree->getOptionMenu($productID, 'case', 0, $branchID);
-            }
-
-            $rows    = array();
             $num     = (int)$this->post->num;
-            for($i = 0; $i < $num; $i++)
-            {
-                foreach($modules as $moduleID => $module)
-                {
-                    $row = new stdclass();
-                    $row->module     = $module . "(#$moduleID)";
-                    $row->stepDesc   = "1. \n2. \n3.";
-                    $row->stepExpect = "1. \n2. \n3.";
+            $product = $this->loadModel('product')->getByID($productID);
 
-                    if(empty($rows))
-                    {
-                        $row->typeValue   = join("\n", $this->lang->testcase->typeList);
-                        $row->stageValue  = join("\n", $this->lang->testcase->stageList);
-                        if($product->type != 'normal') $row->branchValue = join("\n", $branches);
-                    }
-                    $rows[] = $row;
-                }
-            }
+            $fields = $this->testcaseZen->getFieldsForExportTemplate($product->type);
+            $rows   = $this->testcaseZen->getRowsForExportTemplate($product, $num);
 
             $this->post->set('fields', $fields);
             $this->post->set('kind', 'testcase');
