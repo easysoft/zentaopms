@@ -5,6 +5,21 @@ function changeDate(date)
     location.href=link;
 }
 
+/**
+ * Get checked items.
+ *
+ * @access public
+ * @return array
+ */
+function getCheckedItems()
+{
+    var checkedItems = [];
+    $('#todoForm [name^=todoIDList]:checked').each(function(index, ele)
+    {
+        checkedItems.push($(ele).val());
+    });
+    return checkedItems;
+};
 
 $(function()
 {
