@@ -69,6 +69,7 @@ done
 excludeRegexList=(
 lib/purifier/HTMLPurifier.autoload-legacy.php
 lib/sqlparser/vendor/
+lib/phpaes/phpseclib/
 )
 
 ##################################
