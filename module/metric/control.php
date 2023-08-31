@@ -83,7 +83,7 @@ class metric extends control
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'metric', true);
 
         $modules    = $this->metric->getModuleTreeList($scope);
-        $metricTree = $this->metricZen->prepareTree($scope, $modules);
+        $metricTree = $this->metricZen->prepareTree($scope, $stage, $modules);
         $scopeList  = $this->metricZen->prepareScopeList();
 
         $this->view->title       = $this->lang->metric->common;

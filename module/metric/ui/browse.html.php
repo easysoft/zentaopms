@@ -30,7 +30,7 @@ featureBar
 (
     to::before($fnGenerateScopeMenu($scope, $scopeText, $scopeList)),
     set::current($stage),
-    set::linkParams("scope=$scope&status={key}"),
+    set::linkParams("scope=$scope&status={key}&param=$param&type=$type"),
     li(searchToggle(set::open($type == 'bysearch'), set::module('metric'))),
 );
 

@@ -69,11 +69,13 @@ class metricZen extends metric
      * 构建模块树数据。
      * Prepare module tree data.
      *
-     * @param  int    $metrics
+     * @param  string $scope
+     * @param  string $stage
+     * @param  array  $modules
      * @access protected
      * @return void
      */
-    protected function prepareTree($scope, $modules)
+    protected function prepareTree($scope, $stage, $modules)
     {
         $moduleTree = array();
         foreach($modules as $module)
@@ -86,7 +88,7 @@ class metricZen extends metric
                 'id' => $object,
                 'parent' => '0',
                 'name' => $this->lang->metric->objectList[$object],
-                'url' => $this->inlink('browse', "scope=$scope&param=$object&type=byTree")
+                'url' => $this->inlink('browse', "scope=$scope&stage=$stage&param=$object&type=byTree")
             );
 
             $moduleTree["{$object}_{$purpose}"] = (object)array
@@ -94,7 +96,7 @@ class metricZen extends metric
                 'id' => "{$object}_{$purpose}",
                 'parent' => $object,
                 'name' => $this->lang->metric->purposeList[$purpose],
-                'url' => $this->inlink('browse', "scope=$scope&param={$object}_{$purpose}&type=byTree")
+                'url' => $this->inlink('browse', "scope=$scope&stage=$stage&param={$object}_{$purpose}&type=byTree")
             );
         }
 
