@@ -32,31 +32,31 @@
             <td><?php echo html::select('defaultLang', $config->langs, $app->getClientLang(), "class='form-control'");?></td><td></td>
           </tr>
           <?php if($config->edition != 'open'):?>
-          <tr>
+          <tr class='<?php if($config->inQuickon) echo 'hidden';?>'>
             <th><?php echo $lang->install->dbDriver;?></th>
             <td><?php echo html::select('dbDriver', $lang->install->dbDriverList, 'mysql', "class='form-control'");?></td><td></td>
           </tr>
           <?php else:?>
             <?php echo html::hidden('dbDriver', 'mysql');?>
           <?php endif;?>
-          <tr>
+          <tr class='<?php if($config->inQuickon) echo 'hidden';?>'>
             <th><?php echo $lang->install->dbHost;?></th>
             <td><?php echo html::input('dbHost', $dbHost, "class='form-control'");?></td>
             <td><?php echo $lang->install->dbHostNote;?></td>
           </tr>
-          <tr>
+          <tr class='<?php if($config->inQuickon) echo 'hidden';?>'>
             <th><?php echo $lang->install->dbPort;?></th>
             <td><?php echo html::input('dbPort', $dbPort, "class='form-control'");?></td><td></td>
           </tr>
-          <tr>
+          <tr class='<?php if($config->inQuickon) echo 'hidden';?>'>
             <th><?php echo $lang->install->dbEncoding;?></th>
             <td><?php echo html::input('dbEncoding', $this->config->db->encoding, "class='form-control'");?></td><td></td>
           </tr>
-          <tr>
+          <tr class='<?php if($config->inQuickon) echo 'hidden';?>'>
             <th><?php echo $lang->install->dbUser;?></th>
             <td><?php echo html::input('dbUser', $dbUser, "class='form-control'");?></td><td></td>
           </tr>
-          <tr>
+          <tr class='<?php if($config->inQuickon) echo 'hidden';?>'>
             <th><?php echo $lang->install->dbPassword;?></th>
             <td><?php echo html::input('dbPassword', $dbPassword, "class='form-control'");?></td><td></td>
           </tr>
