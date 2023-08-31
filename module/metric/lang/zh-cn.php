@@ -1,6 +1,6 @@
 <?php
 $lang->metric->common        = "度量项";
-$lang->metric->name          = "度量项名称";
+$lang->metric->name          = "名称";
 $lang->metric->stage         = "阶段";
 $lang->metric->scope         = "度量范围";
 $lang->metric->object        = "度量对象";
