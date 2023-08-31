@@ -66,16 +66,18 @@ class executionTao extends executionModel
      * 获取燃尽图数据。
      * Get burn data.
      *
-     * @param  int       $executionID
-     * @param  string    $date
+     * @param  int        $executionID
+     * @param  string     $date
+     * @param  string     $taskCount
      * @access protected
      * @return object|bool
      */
-    protected function getBurnByID(int $executionID, string $date): object|bool
+    protected function getBurnByExecution(int $executionID, string $date = '', int $taskCount = 0): object|bool
     {
         return $this->dao->select('*')->from(TABLE_BURN)
             ->where('execution')->eq($executionID)
             ->beginIF($date)->andWhere('date')->eq($date)->fi()
+            ->beginIF($taskCount)->andWhere('task')->eq($taskCount)->fi()
             ->fetch();
     }
 
