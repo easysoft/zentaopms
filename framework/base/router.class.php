@@ -3092,8 +3092,7 @@ class baseRouter
             {
                 /* Generate error stack trace info. */
                 $e     = new Exception();
-                $trace = $e->getTrace();
-                array_shift($trace); // remove call to this method.
+                $trace = $e->getTraceAsString();
 
                 $this->zinErrors[] = array('file' => $file, 'line' => $line, 'message' => $message, 'level' => $level, 'trace' => $trace);
                 return;
