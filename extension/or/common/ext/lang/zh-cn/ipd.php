@@ -19,7 +19,7 @@ $lang->marketresearch = new stdclass();
 $lang->marketresearch->common = '调研';
 
 $lang->navIcons['demandpool'] = "<i class='icon icon-bars'></i>";
-$lang->navIcons['market']     = "<i class='icon icon-bars'></i>";
+$lang->navIcons['market']     = "<i class='icon icon-market'></i>";
 
 /* Main Navigation. */
 $lang->mainNav              = new stdclass();
