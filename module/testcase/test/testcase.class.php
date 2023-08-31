@@ -332,6 +332,14 @@ class testcaseTest
         return $this->objectModel->getBugs2Link($caseID, $browseType);
     }
 
+    /**
+     * 获取关联需求的测试。
+     * Get related stories test.
+     *
+     * @param  array  $storyIdList
+     * @access public
+     * @return array
+     */
     public function getRelatedStoriesTest(array $storyIdList): array
     {
         $cases = array();
@@ -344,6 +352,28 @@ class testcaseTest
         }
 
         return $this->objectModel->getRelatedStories($cases);
+    }
+
+    /**
+     * 获取关联用例的测试。
+     * Get related cases test.
+     *
+     * @param  array  $linkCases
+     * @access public
+     * @return array
+     */
+    public function getRelatedCasesTest(array $linkCases): array
+    {
+        $cases = array();
+        foreach($linkCases as $linkCase)
+        {
+            $case = new stdclass();
+            $case->linkCase = $linkCase;
+
+            $cases[] = $case;
+        }
+
+        return $this->objectModel->getRelatedCases($cases);
     }
 
     /**
