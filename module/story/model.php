@@ -1429,6 +1429,7 @@ class storyModel extends model
         $isSuperReviewer     = $this->storyTao->isSuperReviewer();
         $cannotReviewStories = array();
         $cannotReviewTips    = $this->lang->product->reviewStory;
+        if(!$isSuperReviewer || empty($reviewerList)) return sprintf($cannotReviewTips, implode(',', $cannotReviewStories));
         foreach($storyIdList as $storyID)
         {
             if(!$storyID) continue;
