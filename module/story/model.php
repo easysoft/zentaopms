@@ -644,7 +644,7 @@ class storyModel extends model
 
                 if(!isset($story->$field)) continue;
                 if(!empty($story->$field)) continue;
-                if($field == 'estimate' and strlen(trim($story->estimate)) != 0) continue;
+                if($field == 'estimate' and (int)trim($story->estimate) != 0) continue;
 
                 dao::$errors["{$field}$i"][] = sprintf($this->lang->error->notempty, $this->lang->story->$field);
             }
