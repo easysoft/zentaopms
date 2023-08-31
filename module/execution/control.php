@@ -1335,7 +1335,7 @@ class execution extends control
 
     /**
      * 更新燃尽图数据。
-     * Compute burndown datas.
+     * Compute burndown data.
      *
      * @param  string $reload
      * @access public
@@ -1414,17 +1414,18 @@ class execution extends control
     }
 
     /**
-     * Compute cfd datas.
+     * 计算累计流图数据。
+     * Compute cfd data.
      *
      * @param  string $reload
      * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function computeCFD($reload = 'no', $executionID = 0)
+    public function computeCFD(string $reload = 'no', int $executionID = 0)
     {
         $this->execution->computeCFD($executionID);
-        if($reload == 'yes') return print(js::reload('parent'));
+        if($reload == 'yes') return $this->sendSuccess(array('load' => true));
     }
 
     /**

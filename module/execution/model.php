@@ -3809,13 +3809,14 @@ class executionModel extends model
     }
 
     /**
+     * 计算累计流图的数据。
      * Compute cfd of a execution.
      *
      * @param  int    $executionID
      * @access public
      * @return array
      */
-    public function computeCFD($executionID = 0)
+    public function computeCFD(int $executionID = 0)
     {
         $today = helper::today();
         $executions = $this->dao->select('id, code')->from(TABLE_EXECUTION)
@@ -3856,22 +3857,7 @@ class executionModel extends model
             {
                 foreach($columns as $colName => $laneGroup)
                 {
-                    $cfd = new stdclass();
-                    $cfd->count = 0;
-                    $cfd->date  = $today;
-                    $cfd->type  = $type;
-                    foreach($laneGroup as $columnGroup)
-                    {
-                        foreach($columnGroup as $columnCard)
-                        {
-                            $cards = trim($columnCard->cards, ',');
-                            $cfd->count += $cards ? count(explode(',', $cards)) : 0;
-                        }
-                    }
-
-                    $cfd->name      = $colName;
-                    $cfd->execution = $executionID;
-                    $this->dao->replace(TABLE_CFD)->data($cfd)->exec();
+                    $this->executionTao->updateTodayCFDData($executionID, $type, $colName, $laneGroup);
                 }
             }
         }
