@@ -488,7 +488,7 @@ $lang->devops->homeMenu->repos       = array('link' => "{$lang->devops->repo}|re
 $lang->devops->homeMenu->compile     = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
 $lang->devops->homeMenu->artifactrepo = array('link' => "{$lang->devops->artifactrepo}|artifactrepo|browse", 'alias' => 'create');
 
-if($config->edition != 'open') $lang->devops->homeMenu->deploy = array('link' => "{$lang->devops->deploy}|deploy|browse", 'subModule' => 'create,edit,browse,view');
+if($config->edition != 'open') $lang->devops->homeMenu->deploy = array('link' => "{$lang->devops->deploy}|deploy|browse", 'alias' => 'steps,managestep,create,edit,browse,view,scope,cases');
 
 $lang->devops->homeMenu->apps = array('link' => "{$lang->app->common}|space|browse", 'subModule' => 'instance,store,gitlab,gitea,gogs', 'alias' => 'createapplication,binduser,edit');
 
