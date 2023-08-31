@@ -158,8 +158,8 @@ zentaoxx:
 	sed -i "s/'..\/..\/common\/view\/footer.html.php'/\$$app->getModuleRoot() . 'common\/view\/footer.html.php'/g" zentaoxx/extension/xuan/conference/view/admin.html.php
 	sed -i "s/\$$this->im->userGetChangedPassword()/array()/" zentaoxx/extension/xuan/im/control.php
 	sed -i "s/->app->getModuleExtPath('', /->app->getModuleExtPath(/g" zentaoxx/extension/xuan/im/model/bot.php
-	#sed -i "s/, \$$version)$/, \$$version = '')/g" zentaoxx/extension/xuan/im/model.php
-	#sed -i "s/, \$$version)$/, \$$version = '')/g" zentaoxx/extension/xuan/im/model/conference.php
+	sed -i "s/, \$$version)\$$/, \$$version = '')/g" zentaoxx/extension/xuan/im/model.php
+	sed -i "s/, \$$version)\$$/, \$$version = '')/g" zentaoxx/extension/xuan/im/model/conference.php
 	sed -i "/.*->getAllDepts();/d" zentaoxx/extension/xuan/im/ext/bot/default.bot.php
 	sed -i "s/lang->user->status/lang->user->clientStatus/" zentaoxx/extension/xuan/im/ext/bot/default.bot.php
 	sed -i "s/.*->getRoleList();/\$$depts = \$$this->im->loadModel('dept')->getDeptPairs();\n\$$deptList = array_map(function(\$$k, \$$v) {return (object)array('id' => \$$k, 'name' => \$$v);}, array_keys(\$$depts), \$$depts);\n\$$roleList = \$$this->im->lang->user->roleList;/" zentaoxx/extension/xuan/im/ext/bot/default.bot.php
