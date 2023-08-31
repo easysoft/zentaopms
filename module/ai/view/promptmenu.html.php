@@ -13,7 +13,9 @@
  * @link        https://www.zentao.net
  */
 ?>
-<?php if($config->edition != 'ipd' && commonModel::hasPriv('ai', 'promptExecute')):?>
+<?php
+$this->loadModel('ai');
+if($this->ai->isModelConfigured() && $config->edition != 'ipd' && commonModel::hasPriv('ai', 'promptExecute')):?>
 <?php
   $this->app->loadConfig('ai');
   $module = $this->app->getModuleName();
@@ -22,7 +24,7 @@
 ?>
   <?php
     $menuOptions = $config->ai->menuPrint->locations[$module][$method];
-    $prompts     = $this->loadModel('ai')->getPromptsForUser($menuOptions->module);
+    $prompts     = $this->ai->getPromptsForUser($menuOptions->module);
     $prompts     = $this->ai->filterPromptsForExecution($prompts, true);
     if(!empty($prompts)):
   ?>
