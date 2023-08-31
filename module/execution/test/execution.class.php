@@ -1868,19 +1868,27 @@ class executionTest
      */
     public function fixFirstTest($executionID, $param = array(), $date = '')
     {
-        global $tester;
+        $burnData = new stdclass;
 
         $createFields = array('estimate' => '');
 
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
+        foreach($createFields as $field => $defaultValue) $burnData->$field = $defaultValue;
+        foreach($param as $key => $value)
+        {
+            if($key == 'withLeft' && $value)
+            {
+                $burnData->left = $burnData->estimate;
+                continue;
+            }
+            $burnData->$key = $value;
+        }
 
         $this->executionModel->computeBurn();
-        $this->executionModel->fixFirst($executionID);
+        $this->executionModel->fixFirst($burnData);
 
         unset($_POST);
 
-        $object = $tester->dao->select('*')->from(TABLE_BURN)->where('execution')->eq($executionID)->andWhere('date')->eq($date)->fetchAll();
+        $object = $this->executionModel->dao->select('*')->from(TABLE_BURN)->where('execution')->eq($executionID)->andWhere('date')->eq($date)->fetchAll();
 
         if(dao::isError())
         {

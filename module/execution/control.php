@@ -1429,6 +1429,7 @@ class execution extends control
     }
 
     /**
+     * 修改燃尽图的首天工时
      * Fix burn for first date.
      *
      * @param  int    $executionID
@@ -1437,15 +1438,24 @@ class execution extends control
      */
     public function fixFirst(int $executionID)
     {
+        $execution = $this->execution->getByID($executionID);
+
         if($_POST)
         {
-            $this->execution->fixFirst($executionID);
+            $burn     = $this->execution->getBurnByExecution($executionID, $execution->begin, 0);
+            $withLeft = $this->post->withLeft ? $this->post->withLeft : 0;
+            $burnData = form::data($this->config->execution->form->fixfirst)
+                ->add('execution', $executionID)
+                ->add('date', $execution->begin)
+                ->add('left', $withLeft ? $this->post->estimate : $burn->left)
+                ->add('consumed', empty($burn) ? 0 : $burn->consumed)
+                ->get();
+
+            if(is_numeric($burnData->estimate)) $this->execution->fixFirst($burnData);
             return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
         }
 
-        $execution = $this->execution->getById($executionID);
-
-        $this->view->firstBurn = $this->dao->select('*')->from(TABLE_BURN)->where('execution')->eq($executionID)->andWhere('date')->eq($execution->begin)->fetch();
+        $this->view->firstBurn = $this->execution->getBurnByExecution($executionID, $execution->begin);
         $this->view->execution = $execution;
         $this->display();
     }

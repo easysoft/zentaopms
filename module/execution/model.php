@@ -3901,28 +3901,17 @@ class executionModel extends model
     }
 
     /**
+     * 修改燃尽图首天工时。
      * Fix burn for first day.
      *
-     * @param  int    $executionID
+     * @param  object $burn
      * @access public
-     * @return void
+     * @return bool
      */
-    public function fixFirst($executionID)
+    public function fixFirst(object $burn): bool
     {
-        $execution  = $this->getById($executionID);
-        $burn     = $this->dao->select('*')->from(TABLE_BURN)->where('execution')->eq($executionID)->andWhere('date')->eq($execution->begin)->andWhere('task')->eq(0)->fetch();
-        $withLeft = $this->post->withLeft ? $this->post->withLeft : 0;
-
-        $data = fixer::input('post')
-            ->add('execution', $executionID)
-            ->add('date', $execution->begin)
-            ->add('left', $withLeft ? $this->post->estimate : $burn->left)
-            ->add('consumed', empty($burn) ? 0 : $burn->consumed)
-            ->remove('withLeft')
-            ->get();
-        if(!is_numeric($data->estimate)) return false;
-
-        $this->dao->replace(TABLE_BURN)->data($data)->exec();
+        $this->dao->replace(TABLE_BURN)->data($burn)->exec();
+        return !dao::isError();
     }
 
     /**

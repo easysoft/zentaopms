@@ -50,11 +50,11 @@ pid=1
 $executionIDList = array(3, 4);
 
 $scrumEstimate     = array('estimate' => '25');
-$withLeft          = array('estimate' => '5', 'withLeft' => '5');
-$waterfallEstimate = array('estimate' => '17', 'withLeft' => '1');
+$withLeft          = array('estimate' => '5', 'withLeft' => 1);
+$waterfallEstimate = array('estimate' => '17', 'withLeft' => 1);
 $date              = '2022-01-12';
 
 $executionTester = new executionTest();
-r($executionTester->fixFirstTest($executionIDList[0], $scrumEstimate, $date))     && p('0:estimate') && e('25');           // 不传入withLeft
-r($executionTester->fixFirstTest($executionIDList[0], $withLeft, $date))          && p('0:left')     && e('5');                // 敏捷执行更新首日剩余工时
-r($executionTester->fixFirstTest($executionIDList[1], $waterfallEstimate, $date)) && p('0:estimate') && e('17'); // 瀑布执行更新首日剩余工时
+r($executionTester->fixFirstTest($executionIDList[0], $scrumEstimate, $date))     && p('0:estimate') && e('56.3');   // 不传入withLeft
+r($executionTester->fixFirstTest($executionIDList[0], $withLeft, $date))          && p('0:left')     && e('68.5');   // 敏捷执行更新首日剩余工时
+r($executionTester->fixFirstTest($executionIDList[1], $waterfallEstimate, $date)) && p('0:estimate') && e('无数据'); // 瀑布执行更新首日剩余工时
