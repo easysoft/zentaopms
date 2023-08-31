@@ -465,6 +465,36 @@ class instance extends control
     }
 
     /**
+     * 删除一个外部应用。
+     * Delete a external app.
+     *
+     * @param  int    $externalID
+     * @access public
+     * @return viod
+     */
+    public function deleteExternalApp(int $externalID)
+    {
+        $oldApp = $this->loadModel('pipeline')->getByID($externalID);
+        $actionID = $this->pipeline->delete($externalID, $oldApp->type);
+        if(!$actionID)
+        {
+            $response['result']   = 'fail';
+            $response['callback'] = sprintf('zui.Modal.alert("%s");', $this->lang->pipeline->delError);
+            return $this->send($response);
+        }
+
+        $app     = $this->pipeline->getByID($externalID);
+        $changes = common::createChanges($oldApp, $app);
+        $this->loadModel('action')->logHistory($actionID, $changes);
+
+        $response['load']    = true;
+        $response['message'] = zget($this->lang->instance->notices, 'uninstallSuccess');
+        $response['result']  = 'success';
+
+        return $this->send($response);
+    }
+
+    /**
      * (Not used at present.) Install app by custom settings.
      *
      * @param int $id
@@ -586,6 +616,7 @@ class instance extends control
             $instance = $this->loadModel('pipeline')->getByID($instanceID);
             if(!$instance) return $this->send(array('result' => 'success', 'message' => $this->lang->instance->notices['success']));
 
+            if($instance->type == 'nexus') return $this->deleteExternalApp($instance->id);
             return $this->fetch($instance->type, 'delete', array('id' => $instance->id));
         }
         $instance = $this->instance->getByID($instanceID);

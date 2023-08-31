@@ -12,6 +12,7 @@ namespace zin;
 
 modalHeader
 (
+    set::title(''),
     set::entityText($MR->title . ' - ' . zget($lang->mr->approvalResultList, $action)),
     set::entityID($MR->id),
 );
@@ -30,6 +31,7 @@ formPanel
     ) : null,
     formGroup
     (
+        set::width('1/2'),
         set::label($lang->mr->assignee),
         set::name('assignedTo'),
         set::items($users),
