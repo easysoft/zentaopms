@@ -2994,7 +2994,7 @@ class baseRouter
          * 删除设定时间之前的日志。
          * Delete the log before the set time.
          **/
-        if(random_int(0, 10) == 1)
+        if(mt_rand(0, 10) == 1)
         {
             $logDays = $this->config->framework->logDays ?? 14;
             $dayTime = time() - $logDays * 24 * 3600;
