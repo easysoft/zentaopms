@@ -302,7 +302,7 @@ class testsuiteModel extends model
     }
 
     /**
-     * 删除套件和扩展。
+     * 删除套件和库。
      * Delete suite and library.
      *
      * @param  int    $suiteID
