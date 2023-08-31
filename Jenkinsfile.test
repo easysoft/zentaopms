@@ -82,7 +82,7 @@ pipeline {
             script {
               def ximUsers = sh(returnStdout: true,script: 'jq -r .notice.users < ci.json').trim()
               env.XIM_USERS = "qishiyao"
-              // env.XIM_GROUPS = sh(returnStdout: true,script: 'jq -r .notice.groups < ci.json').trim()
+              env.XIM_GROUPS = "31a0008b-6e3e-4b7f-9b7b-396a46b1f8f4"
 
               env.PMS_VERSION = sh(returnStdout: true, script: 'cat ${SRC_ZENTAOEXT_PATH}/VERSION').trim()
               env.BIZ_VERSION = sh(returnStdout: true, script: 'cat ${SRC_ZENTAOEXT_PATH}/BIZVERSION').trim()
@@ -129,7 +129,7 @@ pipeline {
 
                 container('xuanimbot') {
                   sh 'git config --global --add safe.directory $(pwd)'
-                  sh 'test -f $ZENTAO_RELEASE_PATH/downgradeReport.html || echo "No syntax found" && /usr/local/bin/xuanimbot --title "`echo -n 6ZmN57qn5aSx6LSl | base64 --decode`" --url "${RUN_DISPLAY_URL}" --content "[PHP Syntax Report]($BUILD_URL/DowngradeReport/)" --debug --custom '
+                  sh 'test -f $ZENTAO_RELEASE_PATH/downgradeReport.html && /usr/local/bin/xuanimbot --title "`echo -n 6ZmN57qn5aSx6LSl | base64 --decode`" --url "${RUN_DISPLAY_URL}" --content "[PHP Syntax Report]($BUILD_URL/DowngradeReport/)" --debug --custom || echo "No syntax found"'
                 }
 
               }
