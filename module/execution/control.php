@@ -2908,6 +2908,7 @@ class execution extends control
     }
 
     /**
+     * 维护执行的团队成员
      * Manage members of the execution.
      *
      * @param  int    $executionID
@@ -2918,25 +2919,24 @@ class execution extends control
      */
     public function manageMembers(int $executionID = 0, int $team2Import = 0, int $dept = 0)
     {
+        $execution = $this->execution->getByID($executionID);
         if(!empty($_POST))
         {
-            $this->execution->manageMembers($executionID);
+            $memberDataList = $this->executionZen->buildMembersForManageMembers($execution);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->execution->manageMembers($execution, $memberDataList);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('team', $executionID, 'managedTeam');
-            return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'load' => array('back' => true)));
+            return $this->sendSuccess(array('load' => array('back' => true)));
         }
 
-        /* Load model. */
-        $this->loadModel('user');
         $this->loadModel('dept');
-
-        $execution = $this->execution->getById($executionID);
         $deptUsers = empty($dept) ? array() : $this->dept->getDeptUserPairs($dept);
 
         $currentMembers = $this->execution->getTeamMembers($executionID);
         $members2Import = $this->execution->getMembers2Import($team2Import, array_keys($currentMembers));
-        $teams2Import   = $this->loadModel('personnel')->getCopiedObjects($executionID, 'sprint', true);
 
         /* Append users for get users. */
         $appendUsers = array();
@@ -2952,11 +2952,11 @@ class execution extends control
 
         $this->view->title          = $this->lang->execution->manageMembers . $this->lang->colon . $execution->name;
         $this->view->execution      = $execution;
-        $this->view->users          = $this->user->getPairs('noclosed|nodeleted|devfirst', $appendUsers);
+        $this->view->users          = $this->loadModel('user')->getPairs('noclosed|nodeleted|devfirst', $appendUsers);
         $this->view->roles          = $this->user->getUserRoles(array_keys($this->view->users));
         $this->view->dept           = $dept;
-        $this->view->depts          = $this->loadModel('dept')->getOptionMenu();
-        $this->view->teams2Import   = $teams2Import;
+        $this->view->depts          = $this->dept->getOptionMenu();
+        $this->view->teams2Import   = $this->loadModel('personnel')->getCopiedObjects($executionID, 'sprint', true);
         $this->view->team2Import    = $team2Import;
         $this->view->teamMembers    = $this->executionZen->buildMembers($currentMembers, $members2Import, $deptUsers, $execution->days);
         $this->display();

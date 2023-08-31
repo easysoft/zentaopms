@@ -3614,70 +3614,41 @@ class executionModel extends model
     }
 
     /**
+     * 维护执行团队成员。
      * Manage team members.
      *
-     * @param  int    $executionID
+     * @param  object $execution
+     * @param  array  $members
      * @access public
      * @return void
      */
-    public function manageMembers($executionID)
+    public function manageMembers(object $execution, array $members)
     {
-        $execution = $this->getByID($executionID);
-        $data      = (array)fixer::input('post')->get();
+        $oldJoin = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq($execution->id)->andWhere('type')->eq('execution')->fetchPairs();
+        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($execution->id)->andWhere('type')->eq('execution')->exec();
 
-        extract($data);
-        $executionID   = (int)$executionID;
-        $executionType = 'execution';
-        $accounts      = array_unique($accounts);
-        $oldJoin       = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq($executionID)->andWhere('type')->eq($executionType)->fetchPairs();
-
-        foreach($accounts as $key => $account)
-        {
-            if(empty($account)) continue;
-
-            if(!empty($execution->days) and (int)$days[$key] > $execution->days)
-            {
-                dao::$errors['days'] = sprintf($this->lang->execution->daysGreaterProject, $execution->days);
-                return false;
-            }
-            if((float)$hours[$key] > 24)
-            {
-                dao::$errors['hours'] = $this->lang->execution->errorHours;
-                return false;
-            }
-        }
-
-        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($executionID)->andWhere('type')->eq($executionType)->exec();
-
+        $accountList     = array();
         $executionMember = array();
-        foreach($accounts as $key => $account)
+        foreach($members as $member)
         {
-            if(empty($account)) continue;
+            if(in_array($member->account, $accountList)) continue;;
 
-            $member = new stdclass();
-            $member->role    = $roles[$key];
-            $member->days    = $days[$key];
-            $member->hours   = $hours[$key];
-            $member->limited = $limited[$key];
+            $member->join = isset($oldJoin[$member->account]) ? $oldJoin[$member->account] : helper::today();
+            $executionMember[$member->account] = $member;
+            $accountList[] = $member->account;
 
-            $member->root    = $executionID;
-            $member->account = $account;
-            $member->join    = isset($oldJoin[$account]) ? $oldJoin[$account] : helper::today();
-            $member->type    = $executionType;
-
-            $executionMember[$account] = $member;
             $this->dao->insert(TABLE_TEAM)->data($member)->exec();
         }
 
         /* Only changed account update userview. */
-        $oldAccounts     = array_keys($oldJoin);
-        $changedAccounts = array_diff($accounts, $oldAccounts);
-        $changedAccounts = array_merge($changedAccounts, array_diff($oldAccounts, $accounts));
-        $changedAccounts = array_unique($changedAccounts);
+        $oldAccountList     = array_keys($oldJoin);
+        $changedAccountList = array_diff($accountList, $oldAccountList);
+        $changedAccountList = array_merge($changedAccountList, array_diff($oldAccountList, $accountList));
+        $changedAccountList = array_unique($changedAccountList);
 
         /* Add the execution team members to the project. */
         if($execution->project) $this->addProjectMembers($execution->project, $executionMember);
-        if($execution->acl != 'open') $this->updateUserView($executionID, 'sprint', $changedAccounts);
+        if($execution->acl != 'open') $this->updateUserView($execution->id, 'sprint', $changedAccountList);
     }
 
     /**

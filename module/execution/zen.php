@@ -326,6 +326,35 @@ class executionZen extends execution
     }
 
     /**
+     * 构造待更新的团队成员数据。
+     * Construct the team member data to be updated.
+     *
+     * @param  object    $execution
+     * @access protected
+     * @return array
+     */
+    protected function buildMembersForManageMembers(object $execution)
+    {
+        $members = form::batchData()->get();
+
+        foreach($members as $rowIndex => $member)
+        {
+            $member->root = $execution->id;
+            if(!empty($execution->days) and $member->days > $execution->days)
+            {
+                dao::$errors["days[$rowIndex]"] = sprintf($this->lang->execution->daysGreaterProject, $execution->days);
+                return false;
+            }
+            if($member->hours > 24)
+            {
+                dao::$errors["hours[$rowIndex]"] = $this->lang->execution->errorHours;
+                return false;
+            }
+        }
+        return $members;
+    }
+
+    /**
      * 设置最近五次执行。
      * Set the recent five executions.
      *

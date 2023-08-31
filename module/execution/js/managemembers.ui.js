@@ -67,7 +67,7 @@ function choseTeam2Copy()
  */
 window.setRole = function(roleID)
 {
-    const account = $(`input[name='accounts\[${roleID}\]']`).val();
+    const account = $(`input[name='account\[${roleID}\]']`).val();
     const role    = roles[account];
     const $role   = $('#role' + roleID);
     $role.val(role);
