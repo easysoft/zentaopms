@@ -32,7 +32,7 @@ foreach($branches as $branchName)
     $base64BranchID = helper::safe64Encode(base64_encode($branchName));
     $branchLink     = $this->createLink('repo', 'browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID");
 
-    $branchMenus[] = array('text' => $branchName, 'id' => $branchName, 'keys' => zget(common::convert2Pinyin(array($branchName), $branchName), ''), 'url' => $branchLink);
+    $branchMenus[] = array('text' => $branchName, 'id' => $branchName, 'keys' => zget(common::convert2Pinyin(array($branchName), $branchName), ''), 'url' => $branchLink, 'data-app' => $app->tab);
 }
 foreach($tags as $tagName)
 {
@@ -40,7 +40,7 @@ foreach($tags as $tagName)
     $base64TagID = helper::safe64Encode(base64_encode($tagName));
     $tagLink     = $this->createLink('repo', 'browse', "repoID=$repoID&branchID=$base64TagID&objectID=$objectID&path=&revision=HEAD&refresh=0&branchOrTag=tag");
 
-    $tagMenus[] = array('text' => $tagName, 'id' => $tagName, 'keys' => zget(common::convert2Pinyin(array($tagName), $tagName), ''), 'url' => $tagLink);
+    $tagMenus[] = array('text' => $tagName, 'id' => $tagName, 'keys' => zget(common::convert2Pinyin(array($tagName), $tagName), ''), 'url' => $tagLink, 'data-app' => $app->tab);
 }
 
 $tabs = array(array('name' => 'branch', 'text' => $lang->repo->branch), array('name' => 'tag', 'text' => $lang->repo->tag));
@@ -90,9 +90,9 @@ featureBar(
 
 /* zin: Define the toolbar on main menu. */
 $refreshLink   = $this->createLink('repo', 'browse', "repoID=$repoID&branchID=" . $base64BranchID . "&objectID=$objectID&path=" . $this->repo->encodePath($path) . "&revision=$revision&refresh=1");
-$refreshItem   = array('text' => $lang->refresh, 'url' => $refreshLink, 'class' => 'primary', 'icon' => 'refresh');
+$refreshItem   = array('text' => $lang->refresh, 'url' => $refreshLink, 'class' => 'primary', 'icon' => 'refresh', 'data-app' => $app->tab);
 
-$createItem = array('text' => $lang->repo->createAction, 'url' => createLink('repo', 'create', "objectID={$objectID}"));
+$createItem = array('text' => $lang->repo->createAction, 'url' => createLink('repo', 'create', "objectID={$objectID}"), 'data-app' => $app->tab);
 
 $tableData = initTableData($infos, $config->repo->repoDtable->fieldList, $this->repo);
 
@@ -217,7 +217,7 @@ toolbar
             array($downloadWg)
         ),
     ),
-    hasPriv('repo', 'create') && $this->app->tab == 'project' ? item
+    hasPriv('repo', 'create') && $app->tab == 'project' ? item
     (
         set($createItem + array
         (
