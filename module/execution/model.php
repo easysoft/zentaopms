@@ -3762,13 +3762,14 @@ class executionModel extends model
     }
 
     /**
+     * 计算燃尽图数据。
      * Compute burn of a execution.
      *
      * @param  int    $executionID
      * @access public
      * @return array
      */
-    public function computeBurn($executionID = 0)
+    public function computeBurn(int $executionID = 0): array
     {
         $today = helper::today();
         $executions = $this->dao->select('id, code')->from(TABLE_EXECUTION)
