@@ -36,6 +36,7 @@ if($config->inQuickon)
         set::title($lang->space->install),
         $appID ? set::submitBtnText($lang->instance->install) : null,
         $appID ? set::actions(array('submit', array('text' => $lang->instance->stop, 'data-type' => 'submit', 'data-dismiss' => 'modal'))) : null,
+        set::actionsClass('w-2/3'),
         formRow
         (
             setStyle('display', $appID ? 'none' : 'block'),
