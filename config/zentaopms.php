@@ -494,5 +494,8 @@ $config->featureGroup->other         = array('devops', 'kanban');
 $config->bi = new stdclass();
 $config->bi->pickerHeight = 150;
 
-$config->hasDropmenuApps     = array('program', 'project', 'product', 'execution', 'qa', 'admin');
-$config->excludeDropmenuList = array('program-browse', 'product-all', 'product-index', 'execution-all', 'project-browse', 'product-batchedit', 'admin-index', 'product-create', 'project-create', 'execution-create', 'program-create');
+$config->hasDropmenuApps      = array('program', 'project', 'product', 'execution', 'qa', 'admin');
+$config->hasBranchMenuModules = array('product', 'story', 'release', 'bug', 'testcase');
+$config->excludeDropmenuList  = array('program-browse', 'product-all', 'product-index', 'execution-all', 'project-browse', 'product-batchedit', 'admin-index', 'product-create', 'project-create', 'execution-create', 'program-create', 'execution-batchedit');
+$config->hasSwitcherModules   = array('design');
+$config->excludeSwitcherList  = array();
