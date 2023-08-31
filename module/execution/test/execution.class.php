@@ -91,23 +91,14 @@ class executionTest
      * @param  int    $executionID
      * @param  array  $param
      * @access public
-     * @return object
+     * @return array|object
      */
-    public function setKanbanTest($executionID, $param = array())
+    public function setKanbanTest($executionID, $param = array()): array|object
     {
-        global $tester;
-        $tester->loadModel('kanban');
+        $object = $this->executionModel->dao->select('displayCards,fluidBoard,colWidth,minColWidth,maxColWidth')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
+        foreach($param as $key => $value) $object->$key = $value;
 
-        $object = $tester->dbh->query("SELECT `displayCards`,`fluidBoard`,`colWidth`,`minColWidth`,`maxColWidth` FROM zt_project WHERE id = $executionID ")->fetch();
-
-        $_POST['heightType'] = 'auto';
-        foreach($object as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $this->executionModel->setKanban($executionID);
-        $execution = $this->executionModel->getByID($executionID);
-
-        unset($_POST);
+        $this->executionModel->setKanban($executionID, $object);
 
         if(dao::isError())
         {
@@ -115,7 +106,7 @@ class executionTest
         }
         else
         {
-            return $execution;
+            return $this->executionModel->getByID($executionID);
         }
     }
 

@@ -1392,22 +1392,17 @@ class executionModel extends model
     }
 
     /**
+     * 设置看板配置。
      * Set Kanban.
      *
      * @param  int    $executionID
+     * @param  object $execution
      * @access public
      * @return void
      */
-    public function setKanban($executionID)
+    public function setKanban(int $executionID, object $execution)
     {
-        $execution = fixer::input('post')
-            ->setIF($this->post->heightType == 'auto', 'displayCards', 0)
-            ->remove('heightType')
-            ->get();
-
-        if(isset($_POST['heightType']) and $this->post->heightType == 'custom' and !$this->loadModel('kanban')->checkDisplayCards($execution->displayCards)) return;
-
-        $this->app->loadLang('kanban');
+        $this->loadModel('kanban');
         $this->lang->project->colWidth    = $this->lang->kanban->colWidth;
         $this->lang->project->minColWidth = $this->lang->kanban->minColWidth;
         $this->lang->project->maxColWidth = $this->lang->kanban->maxColWidth;
@@ -1416,7 +1411,7 @@ class executionModel extends model
             ->batchCheck($this->config->kanban->edit->requiredFields, 'notempty')
             ->checkIF(!$execution->fluidBoard, 'colWidth', 'ge', $this->config->minColWidth)
             ->batchCheckIF($execution->fluidBoard, 'minColWidth', 'ge', $this->config->minColWidth)
-            ->checkIF($execution->minColWidth >= $this->config->minColWidth and $execution->fluidBoard, 'maxColWidth', 'gt', $execution->minColWidth)
+            ->checkIF($execution->minColWidth >= $this->config->minColWidth && $execution->fluidBoard, 'maxColWidth', 'gt', $execution->minColWidth)
             ->where('id')->eq((int)$executionID)
             ->exec();
     }

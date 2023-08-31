@@ -2613,21 +2613,37 @@ class execution extends control
     }
 
     /**
+     * 设置看板配置。
      * Set Kanban.
      *
      * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function setKanban($executionID)
+    public function setKanban(int $executionID)
     {
         $execution = $this->execution->getByID($executionID);
 
         if($_POST)
         {
-            $this->execution->setKanban($executionID);
+            foreach($this->config->execution->form->setkanban as $field => $fieldConfig)
+            {
+                if(!isset($_POST[$field])) unset($this->config->execution->form->setkanban[$field]);
+            }
+
+            $executionData = form::data($this->config->execution->form->setkanban)
+                ->setIF($this->post->heightType == 'auto', 'displayCards', 0)
+                ->setDefault('minColWidth', $execution->minColWidth)
+                ->remove('heightType')
+                ->get();
+
+            if(!isset($_POST['heightType']) || $this->post->heightType != 'custom' || $this->loadModel('kanban')->checkDisplayCards($execution->displayCards))
+            {
+                $this->execution->setKanban($executionID, $executionData);
+            }
+
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            return $this->sendSuccess(array('load' => true, 'closeModal' => true));
         }
 
         $this->view->title         = $this->lang->execution->setKanban;
