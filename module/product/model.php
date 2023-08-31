@@ -1907,7 +1907,7 @@ class productModel extends model
         $this->app->config->global->productStatsTime = $now;
 
         /* 4. Clear actions older than 30 days. */
-        $this->cleanActions();
+        $this->loadModel('action')->cleanActions();
     }
 
     /**

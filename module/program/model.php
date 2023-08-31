@@ -1426,7 +1426,7 @@ class programModel extends model
         $this->app->config->global->projectStatsTime = $now;
 
         /* 7. Clear actions older than 30 days. */
-        $this->cleanActions();
+        $this->loadModel('action')->cleanActions();
     }
 
     /**
