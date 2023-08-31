@@ -354,7 +354,7 @@ class mailModel extends model
         if($this->config->mail->mta == 'smtp') $this->mta->smtpClose();
 
         /* save errors. */
-        if($this->isError()) $this->app->saveError('E_MAIL', join(' ', $this->errors), __FILE__, __LINE__, true);
+        if($this->isError()) $this->app->saveError(E_WARNING, join(' ', $this->errors), __FILE__, __LINE__);
 
         $message = ob_get_contents();
         ob_end_clean();
