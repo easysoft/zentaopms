@@ -284,7 +284,7 @@ detailBody
             item
             (
                 set::name($lang->story->pri),
-                priPicker(set::name('pri'), set::items($lang->story->priList), set::value($story->pri))
+                priPicker(set::name('pri'), set::items($lang->story->priList), set::value(!empty($story->pri) ? $story->pri : $this->config->story->defaultPriority))
             ),
             item
             (
