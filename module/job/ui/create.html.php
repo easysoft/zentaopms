@@ -29,17 +29,20 @@ formPanel
     on::click('.add-param', 'addItem'),
     on::click('.delete-param', 'deleteItem'),
     on::click('.custom', 'setValueInput'),
+    set::actionsClass('w-2/3'),
     formGroup
     (
         set::name('name'),
         set::label($lang->job->name),
         set::required(true),
+        set::width('1/2'),
     ),
     formRow
     (
         formGroup
         (
             set::name('engine'),
+            set::width('1/2'),
             set::label($lang->job->engine),
             set::required(true),
             set::items(array('' => '') + $lang->job->engineList),
@@ -61,6 +64,7 @@ formPanel
             set::required(true),
             set::name('repo'),
             set::items($repoPairs),
+            set::width('1/2'),
             on::change('changeRepo'),
         ),
         formGroup
@@ -70,6 +74,7 @@ formPanel
             set::label($lang->job->branch),
             set::required(true),
             set::name('reference'),
+            set::width('1/2'),
             set::items(array()),
         ),
     ),
@@ -77,6 +82,7 @@ formPanel
     (
         set::name('product'),
         set::label($lang->job->product),
+        set::width('1/2'),
         set::items(array()),
     ),
     formGroup
@@ -84,6 +90,7 @@ formPanel
         set::name('frame'),
         set::label($lang->job->frame),
         set::items(array()),
+        set::width('1/2'),
         on::change('changeFrame'),
     ),
     formRow
@@ -91,6 +98,7 @@ formPanel
         formGroup
         (
             set::name('triggerType'),
+            set::width('1/2'),
             set::label($lang->job->triggerType),
             set::items($lang->job->triggerTypeList),
             on::change('changeTriggerType'),
@@ -103,6 +111,7 @@ formPanel
         (
             set::id('svnDirBox'),
             set::name('svnDir[]'),
+            set::width('1/2'),
             set::label($lang->job->svnDir),
             set::control('select'),
         ),
@@ -116,6 +125,7 @@ formPanel
             set::label($lang->job->sonarqubeServer),
             set::items(array('' => '') +$sonarqubeServerList),
             set::value(''),
+            set::width('1/2'),
             set::required(true),
             on::change('changeSonarqubeServer'),
         ),
@@ -128,6 +138,7 @@ formPanel
         (
             set::name('projectKey'),
             set::label($lang->job->projectKey),
+            set::width('1/2'),
             set::items(array()),
             set::required(true),
         ),
@@ -138,6 +149,7 @@ formPanel
         formGroup
         (
             set::name('comment'),
+            set::width('1/2'),
             set::label($lang->job->comment),
             set::required(true),
         ),
@@ -164,6 +176,7 @@ formPanel
         formGroup
         (
             set::label(''),
+            set::width('1/2'),
             inputGroup
             (
                 $lang->job->atTime,
@@ -182,6 +195,7 @@ formPanel
         (
             set::label($lang->job->jkHost),
             set::required(true),
+            set::width('1/2'),
             inputGroup
             (
                 picker
@@ -212,6 +226,7 @@ formPanel
         formGroup
         (
             set::label($lang->job->customParam),
+            set::width('2/3'),
             inputGroup
             (
                 $lang->job->paramName,
