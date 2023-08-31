@@ -807,7 +807,7 @@ class storyModel extends model
         $_POST['product'] = (!empty($hasProduct) && !$hasProduct) ? $oldStory->product : $this->post->product;
 
         $story = fixer::input('post')
-            ->cleanInt('product,module,pri,duplicateStory')
+            ->cleanInt('product,module,pri,duplicateStory,parent')
             ->cleanFloat('estimate')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('reviewedBy', $oldStory->reviewedBy)
