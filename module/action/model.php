@@ -35,7 +35,7 @@ class actionModel extends model
     {
         if(strtolower($actionType) == 'commented' && empty($comment)) return false;
 
-        $actor      = $actor ?? ($this->app->user->account ?? 'system');
+        $actor      = $actor ? $actor : (!empty($this->app->user->account) ? $this->app->user->account : 'system');
         $actionType = strtolower($actionType);
         $actor      = ($actionType == 'openedbysystem' || $actionType == 'closedbysystem') ? '' : $actor;
         if($actor == 'guest' && $actionType == 'logout') return false;
