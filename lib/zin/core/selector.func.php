@@ -144,7 +144,7 @@ function parseWgSelectors(object|string|array $selectors): array
  * @param object|object[] $selector
  * @return string
  */
-function stringifyWgSelectors(array|object $selector): string
+function stringifyWgSelectors(array|object|null $selector): string
 {
     if(empty($selector)) return '';
     if(is_array($selector))
