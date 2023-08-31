@@ -1,0 +1,20 @@
+title: table zt_burn
+desc: "燃尽图"
+author: Tian Shujie
+version: "1.0"
+fields:
+    - field: execution
+      range: 101{5},106{5},107{5}
+    - field: date
+      range: "(-2M)-(+M):1D"
+      type: timestamp
+      format: "YY/MM/DD"
+      postfix: "\t"
+    - field: estimate
+      range: 94.3,56.3,55.3,37.8,33.8
+    - field: left
+      range: 95.3,68.5,73.9,40.2,36,3
+    - field: consumed
+      range: 20.1,33.4,41,56.55,59.55
+    - field: storyPoint
+      range: 0,16.5,16,11.5,9
