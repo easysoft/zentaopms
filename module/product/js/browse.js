@@ -172,7 +172,7 @@ function setStatistics()
 
         const story = element.getRowInfo(id).data;
 
-        checkedEstimate += parseInt(story.estimateNum);
+        checkedEstimate += parseFloat(story.estimateNum);
         if(story.caseCountNum > 0) checkedCase += 1;
         if(story.isParent) rateCount -= 1;
 
