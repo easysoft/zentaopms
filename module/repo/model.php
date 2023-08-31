@@ -3078,7 +3078,7 @@ class repoModel extends model
         else
         {
             $gitlabUser = $this->loadModel('gitlab')->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
-            if(!$gitlabUser) $this->send(array('message' => array()));
+            if(!$gitlabUser) $this->app->control->send(array('message' => array()));
 
             $projects    = $this->gitlab->apiGetProjects($gitlabID, $filter ? 'false' : 'true');
             $groupIDList = array(0 => 0);
