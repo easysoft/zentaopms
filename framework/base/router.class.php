@@ -2789,7 +2789,7 @@ class baseRouter
         $view->URAndSR       = zget($this->config->custom, 'URAndSR', '0');
         $view->maxUploadSize = strtoupper(ini_get('upload_max_filesize'));
 
-        $this->session->set('random', random_int(0, 10000));
+        $this->session->set('random', mt_rand(0, 10000));
         $view->sessionName = session_name();
         $view->sessionID   = session_id();
         $view->random      = $this->session->random;
@@ -3036,7 +3036,7 @@ class baseRouter
          * 删除设定时间之前的日志。
          * Delete the log before the set time.
          **/
-        if(random_int(0, 10) == 1)
+        if(mt_rand(0, 10) == 1)
         {
             $logDays = $this->config->framework->logDays ?? 14;
             $dayTime = time() - $logDays * 24 * 3600;

@@ -753,7 +753,7 @@ class baseHelper
      */
     public static function restartSession($sessionID = '')
     {
-        if(empty($sessionID)) $sessionID = sha1(random_int(0, mt_getrandmax()));
+        if(empty($sessionID)) $sessionID = sha1((string)mt_rand(0, mt_getrandmax()));
 
         session_write_close();
         session_id($sessionID);
