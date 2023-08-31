@@ -898,13 +898,14 @@ class transferModel extends model
         /* Fetch the scene's cases. */
         if($model == 'testcase') $queryCondition = preg_replace("/AND\s+t[0-9]\.scene\s+=\s+'0'/i", '', $queryCondition);
 
+        $checkedItem = $this->post->checkedItem ? $this->post->checkedItem : $this->cookie->checkedItem;
         if($onlyCondition and $queryCondition)
         {
             $table = zget($this->config->objectTables, $model);
             if(isset($this->config->$model->transfer->table)) $table = $this->config->$model->transfer->table;
             $modelDatas = $this->dao->select('*')->from($table)->alias('t1')
                 ->where($queryCondition)
-                ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($this->post->checkedItem)->fi()
+                ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($checkedItem)->fi()
                 ->fetchAll('id');
         }
         elseif($queryCondition)
@@ -914,7 +915,7 @@ class transferModel extends model
             preg_match_all('/[`"]' . $this->config->db->prefix . $model .'[`"] AS ([\w]+) /', $queryCondition, $matches);
             if(isset($matches[1][0])) $selectKey = "{$matches[1][0]}.id";
 
-            $stmt = $this->dbh->query($queryCondition . ($this->post->exportType == 'selected' ? " AND $selectKey IN(" . ($this->post->checkedItem ? $this->post->checkedItem : '0') . ")" : ''));
+            $stmt = $this->dbh->query($queryCondition . ($this->post->exportType == 'selected' ? " AND $selectKey IN(" . ($checkedItem ? $checkedItem : '0') . ")" : ''));
             while($row = $stmt->fetch())
             {
                 if($selectKey !== 't1.id' and isset($row->$model) and isset($row->id)) $row->id = $row->$model;
