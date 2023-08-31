@@ -273,10 +273,9 @@ class testsuiteModel extends model
     public function getUnlinkedCases(object $suite, int $param = 0, object $pager = null): array
     {
         if($this->session->testsuiteQuery == false) $this->session->set('testsuiteQuery', ' 1 = 1');
-        $queryID = (int)$param;
-        if($queryID)
+        if($param)
         {
-            $query = $this->loadModel('search')->getQuery($queryID);
+            $query = $this->loadModel('search')->getQuery($param);
             if($query)
             {
                 $this->session->set('testsuiteQuery', $query->sql);
