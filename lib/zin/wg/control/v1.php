@@ -34,7 +34,7 @@ class control extends wg
     protected function created()
     {
         $name = $this->prop('name');
-        if($this->prop('type') === 'static' && $name === null) $this->setProp('name', $this->gid);
+        if($this->prop('type') === 'static' && $name === null) $this->setProp('name', '');
         if($this->prop('id') === null && $name !== null)
         {
             $id = substr($name, -2) == '[]' ? substr($name, 0, - 2) : $name;
@@ -49,11 +49,12 @@ class control extends wg
      */
     protected function buildStatic(): wg
     {
+        $name = $this->prop('name');
         return div
         (
             set::className('form-control-static'),
             set($this->props->skip(array('type', 'name', 'value', 'required', 'disabled', 'placeholder', 'items', 'required'))),
-            set('data-name', $this->prop('name')),
+            $name ? set('data-name', $name) : null,
             $this->prop('value')
         );
     }
