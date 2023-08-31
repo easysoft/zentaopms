@@ -3205,6 +3205,20 @@ CREATE TABLE IF NOT EXISTS `zt_trainrecords` (
   PRIMARY KEY (`user`, `objectId`, `objectType`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- DROP TABLE IF EXISTS `zt_practice`;
+CREATE TABLE IF NOT EXISTS `zt_practice` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `module` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `code` char(50) NOT NULL DEFAULT '',
+  `title` varchar(255) NOT NULL DEFAULT '',
+  `labels` varchar(255) NOT NULL DEFAULT '',
+  `summary` mediumtext NULL,
+  `content` text NULL,
+  `contributor` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `code` ON `zt_practice`(`code`);
+
 -- DROP TABLE IF EXISTS `zt_faq`;
 CREATE TABLE IF NOT EXISTS `zt_faq` (
 `id` mediumint(9) NOT NULL AUTO_INCREMENT,
