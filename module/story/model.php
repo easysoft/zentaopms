@@ -6321,7 +6321,7 @@ class storyModel extends model
 
         /* Get stories. */
         $stories        = array();
-        $selectedIDList = $this->cookie->checkedItem ? $this->cookie->checkedItem : '0';
+        $selectedIDList = $this->post->checkedItem ? $this->post->checkedItem : '0';
         if($this->session->storyOnlyCondition)
         {
             if($this->post->exportType == 'selected')

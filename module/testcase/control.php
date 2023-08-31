@@ -1754,7 +1754,7 @@ class testcase extends control
 
                 $cases = $this->dao->select('*')->from(TABLE_CASE)->where($this->session->testcaseQueryCondition)
                     ->beginIF($taskID)->andWhere('id')->in($caseIDList)->fi()
-                    ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
+                    ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($this->post->checkedItem)->fi()
                     ->orderBy($orderBy)
                     ->beginIF($this->post->limit)->limit($this->post->limit)->fi()
                     ->fetchAll('id');
@@ -1767,7 +1767,7 @@ class testcase extends control
                 while($row = $stmt->fetch())
                 {
                     $caseID = isset($row->case) ? $row->case : $row->id;
-                    if($this->post->exportType == 'selected' and strpos(",{$this->cookie->checkedItem},", ",$caseID,") === false) continue;
+                    if($this->post->exportType == 'selected' and strpos(",{$this->post->checkedItem},", ",$caseID,") === false) continue;
                     $cases[$caseID] = $row;
                     $row->id        = $caseID;
                 }
