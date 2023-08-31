@@ -83,7 +83,7 @@ class hostModel extends model
             $modules = $param ? $this->loadModel('tree')->getAllChildId($param) : '0';
         }
 
-        $orderBy = str_replace($orderBy, 't1.', '');
+        $orderBy = str_replace('t1.', '', $orderBy);
         $host = $this->dao->select('*,id as hostID')->from(TABLE_HOST)
             ->where('deleted')->eq('0')
             ->andWhere('type')->eq('normal')
@@ -163,7 +163,7 @@ class hostModel extends model
             ->batchCheck($this->config->host->create->requiredFields, 'notempty')
             ->batchCheck('diskSize,memory', 'float');
         if(dao::isError()) return false;
-    
+
         $intFields = explode(',', $this->config->host->create->intFields);
         foreach($intFields as $field)
         {
@@ -188,7 +188,7 @@ class hostModel extends model
         $hostInfo->createdBy   = $this->app->user->account;
         $hostInfo->createdDate = helper::now();
         $this->dao->insert(TABLE_HOST)->data($hostInfo)->autoCheck()->exec();
-        if(!dao::isError()) 
+        if(!dao::isError())
         {
             $hostID = $this->dao->lastInsertID();
             $this->loadModel('action')->create('host', $hostID, 'created');
@@ -221,7 +221,7 @@ class hostModel extends model
             ->batchCheck($this->config->host->create->requiredFields, 'notempty')
             ->batchCheck('diskSize,memory', 'float');
         if(dao::isError()) return false;
-    
+
         $intFields = explode(',', $this->config->host->create->intFields);
         foreach($intFields as $field)
         {
