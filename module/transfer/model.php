@@ -817,10 +817,8 @@ class transferModel extends model
     {
         $modelDatas = $this->getQueryDatas($model);
 
-        if(isset($fieldList['files']) or property_exists($fieldList, 'files'))
-        {
-            $modelDatas = $this->getFiles($model, $modelDatas);
-        }
+        if(is_object($fieldList)) $fieldList = (array) $fieldList;
+        if(isset($fieldList['files'])) $modelDatas = $this->getFiles($model, $modelDatas);
 
         $rows = !empty($_POST['rows']) ? $_POST['rows'] : '';
         if($rows)
