@@ -3244,7 +3244,7 @@ class executionModel extends model
      * @access public
      * @return bool
      */
-    public function linkStory($executionID, $stories = array(), $extra = '', $lanes = array())
+    public function linkStory(int $executionID, array $stories = array(), string $extra = '', array $lanes = array())
     {
         if(empty($executionID)) return false;
         if(empty($stories)) $stories = $this->post->stories;
