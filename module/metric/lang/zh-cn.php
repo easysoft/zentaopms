@@ -38,7 +38,12 @@ $lang->metric->legendCreateInfo = '创建编辑信息';
 
 $lang->metric->confirmDelete = "确认要删除吗？";
 
-$lang->metric->browseAction = '度量项列表';
+$lang->metric->browse          = '浏览度量项';
+$lang->metric->browseAction    = '度量项列表';
+$lang->metric->viewAction      = '查看度量项';
+$lang->metric->editAction      = '编辑度量项';
+$lang->metric->implementAction = '实现度量项';
+$lang->metric->deleteAction    = '删除度量项';
 
 $lang->metric->stageList = array();
 $lang->metric->stageList['wait']     = "未发布";

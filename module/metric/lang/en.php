@@ -38,7 +38,12 @@ $lang->metric->legendCreateInfo = 'Creation and Editing Information';
 
 $lang->metric->confirmDelete = "Are you sure you want to delete?";
 
-$lang->metric->browseAction = 'Metric List';
+$lang->metric->browse          = 'Browse Metrics';
+$lang->metric->browseAction    = 'Metric List';
+$lang->metric->viewAction      = 'View Metric';
+$lang->metric->editAction      = 'Edit Metric';
+$lang->metric->implementAction = 'Implement Metric';
+$lang->metric->deleteAction    = 'Delete Metric';
 
 $lang->metric->stageList = array();
 $lang->metric->stageList['wait']     = "Not Released";
