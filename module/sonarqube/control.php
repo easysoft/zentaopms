@@ -197,7 +197,7 @@ class sonarqube extends control
 
         if($_POST)
         {
-            $this->checkToken($sonarqubeID);
+            $this->checkToken($oldSonarQube, $sonarqubeID);
             $this->pipeline->update($sonarqubeID);
             $sonarqube = $this->pipeline->getByID($sonarqubeID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
