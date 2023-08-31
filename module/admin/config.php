@@ -84,7 +84,7 @@ $config->admin->helpURL['message']   = 'https://www.zentao.net/book/zentaopms/em
 $config->admin->helpURL['extension'] = 'https://www.zentao.net/book/zentaopms/536.html';
 $config->admin->helpURL['dev']       = 'https://www.zentao.net/book/zentaopms/537.html';
 $config->admin->helpURL['convert']   = 'https://www.zentao.net/book/zentaopms/656.html';
-$config->admin->helpURL['platform']  = 'https://www.zentao.net/book/zentaopms/656.html';
+$config->admin->helpURL['platform']  = 'https://www.zentao.net/book/zentaopms/1064.html';
 $config->admin->helpURL['ai']        = 'https://www.zentao.net/book/zentaopms/';
 
 $config->admin->navsGroup['feature']['my']        = ',todo,block,';
