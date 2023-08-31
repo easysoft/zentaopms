@@ -157,6 +157,8 @@ class hostModel extends model
             ->setDefault('cpuNumber,cpuCores,diskSize,memory', 0)
             ->get();
 
+        $hostInfo->admin      = intval($hostInfo->admin);
+        $hostInfo->serverRoom = intval($hostInfo->serverRoom);
         $this->dao->update(TABLE_HOST)->data($hostInfo)
             ->batchCheck($this->config->host->create->requiredFields, 'notempty')
             ->batchCheck('diskSize,memory', 'float');
