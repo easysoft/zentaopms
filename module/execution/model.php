@@ -3413,14 +3413,17 @@ class executionModel extends model
                 ->andWhere('`column`')->eq($columnID)
                 ->andWhere('lane')->eq($laneID)
                 ->fetch();
-            /* Resolve signal ','. */
-            $cell->cards = str_replace(",$storyID,", ',', $cell->cards);
-            if(strlen($cell->cards) == 1) $cell->cards = '';
-            $this->dao->update(TABLE_KANBANCELL)->data($cell)
-                ->where('kanban')->eq($executionID)
-                ->andWhere('`column`')->eq($columnID)
-                ->andWhere('lane')->eq($laneID)
-                ->exec();
+            if($cell)
+            {
+                /* Resolve signal ','. */
+                $cell->cards = str_replace(",$storyID,", ',', $cell->cards);
+                if(strlen($cell->cards) == 1) $cell->cards = '';
+                $this->dao->update(TABLE_KANBANCELL)->data($cell)
+                    ->where('kanban')->eq($executionID)
+                    ->andWhere('`column`')->eq($columnID)
+                    ->andWhere('lane')->eq($laneID)
+                    ->exec();
+            }
         }
 
         /* 因为有需求被移除了，所以需要将剩余的需求重新排序。*/
