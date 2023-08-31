@@ -43,6 +43,7 @@ $fieldNameList = array_keys($items);
 $data          = array();
 foreach($stories as $storyID => $story)
 {
+    if(empty($story->pri)) $story->pri = $this->config->story->defaultPriority;
     $data[$storyID] = $story;
     foreach($fieldNameList as $fieldName)
     {
