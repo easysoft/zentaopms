@@ -29,6 +29,8 @@ $fnGenerateScopeMenu = function() use ($scope, $scopeText, $scopeList)
 featureBar
 (
     to::before($fnGenerateScopeMenu($scope, $scopeText, $scopeList)),
+    set::current($stage),
+    set::linkParams("scope=$scope&status={key}"),
     li(searchToggle(set::open($type == 'bysearch'), set::module('metric'))),
 );
 

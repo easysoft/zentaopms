@@ -46,7 +46,7 @@ class metricModel extends model
      * @access public
      * @return array|false
      */
-    public function getList($scope, $param, $type = '', $queryID = 0, $sort = '', $pager = null)
+    public function getList($scope, $stage, $param, $type = '', $queryID = 0, $sort = '', $pager = null)
     {
         if($queryID)
         {
@@ -71,7 +71,7 @@ class metricModel extends model
             if(count($object_purpose) == 2) $purpose = $object_purpose[1];
         }
 
-        $metrics = $this->metricTao->fetchMetrics($scope, $object, $purpose, $this->session->metricQuery, $sort, $pager);
+        $metrics = $this->metricTao->fetchMetrics($scope, $stage, $object, $purpose, $this->session->metricQuery, $sort, $pager);
 
         return $metrics;
     }
@@ -541,7 +541,7 @@ class metricModel extends model
     {
         foreach($this->lang->metric->scopeList as $scope => $name)
         {
-            $metrics = $this->metricTao->fetchMetrics($scope, '', '', '', '', null);
+            $metrics = $this->metricTao->fetchMetrics($scope);
             if(empty($metrics)) unset($this->lang->metric->scopeList[$scope]);
         }
     }

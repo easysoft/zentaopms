@@ -49,6 +49,10 @@ $lang->metric->stageList = array();
 $lang->metric->stageList['wait']     = "Not Released";
 $lang->metric->stageList['released'] = "Released";
 
+$lang->metric->featureBar['browse']['all']      = 'All';
+$lang->metric->featureBar['browse']['wait']     = 'Not Released';
+$lang->metric->featureBar['browse']['released'] = 'Released';
+
 $lang->metric->unitList = array();
 $lang->metric->unitList['single']  = 'Single';
 $lang->metric->unitList['measure'] = 'Man-hour';

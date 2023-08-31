@@ -49,6 +49,8 @@ class metric extends control
     /**
      * Browse metric list.
      *
+     * @param  string $scope
+     * @param  string $stage
      * @param  int    $param
      * @param  string $type
      * @param  string $orderBy
@@ -58,7 +60,7 @@ class metric extends control
      * @access public
      * @return void
      */
-    public function browse($scope = 'system', $param = 0, $type = 'bydefault', $orderBy = 'id', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($scope = 'system', $stage = 'all', $param = 0, $type = 'bydefault', $orderBy = 'id', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('search');
         $this->metric->processScopeList();
@@ -75,7 +77,7 @@ class metric extends control
         $actionURL = $this->createLink('metric', 'browse', "scope=$scope&param=myQueryID&type=bysearch");
         $this->metric->buildSearchForm($queryID, $actionURL);
 
-        $metrics = $this->metric->getList($scope, $param, $type, $queryID, $sort, $pager);
+        $metrics = $this->metric->getList($scope, $stage, $param, $type, $queryID, $sort, $pager);
 
         /* Process the sql, get the conditon partion, save it to session. */
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'metric', true);
@@ -92,6 +94,7 @@ class metric extends control
         $this->view->metricTree  = $metricTree;
         $this->view->closeLink   = $this->inlink('browse', 'scope=' . $scope);
         $this->view->type        = $type;
+        $this->view->stage       = $stage;
         $this->view->scopeList   = $scopeList;
         $this->view->scope       = $scope;
         $this->view->scopeText   = $this->lang->metric->scopeList[$scope];

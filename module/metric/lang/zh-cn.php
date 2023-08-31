@@ -49,6 +49,10 @@ $lang->metric->stageList = array();
 $lang->metric->stageList['wait']     = "未发布";
 $lang->metric->stageList['released'] = "已发布";
 
+$lang->metric->featureBar['browse']['all']      = '全部';
+$lang->metric->featureBar['browse']['wait']     = '未发布';
+$lang->metric->featureBar['browse']['released'] = '已发布';
+
 $lang->metric->unitList = array();
 $lang->metric->unitList['single']  = '个';
 $lang->metric->unitList['measure'] = '工时';
