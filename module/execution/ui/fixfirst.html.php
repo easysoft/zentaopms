@@ -40,7 +40,7 @@ formPanel
             (
                 set::name('estimate'),
                 set::value(!empty($firstBurn->estimate) ? $firstBurn->estimate : (!empty($firstBurn->left) ? $firstBurn->left : '')),
-                set::placeholder($lang->execution->begin),
+                set::placeholder($lang->execution->placeholder->totalLeft),
             ),
             checkbox
             (
