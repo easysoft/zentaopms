@@ -59,7 +59,7 @@ $config->story->datatable->defaultField = array('id', 'title', 'pri', 'plan', 's
 
 $config->story->datatable->fieldList['id']['title']    = 'idAB';
 $config->story->datatable->fieldList['id']['fixed']    = 'left';
-$config->story->datatable->fieldList['id']['width']    = '70';
+$config->story->datatable->fieldList['id']['width']    = '90';
 $config->story->datatable->fieldList['id']['required'] = 'yes';
 $config->story->datatable->fieldList['id']['type']     = 'checkID';
 $config->story->datatable->fieldList['id']['sortType'] = true;

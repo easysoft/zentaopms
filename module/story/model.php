@@ -4804,7 +4804,7 @@ class storyModel extends model
 
                 if(strpos('draft,changing', $story->status) !== false)
                 {
-                    if($canSubmitReview) $menu .= common::printIcon('story', 'submitReview', "storyID=$story->id&from=story", $story, 'list', 'confirm', '', 'iframe', true, "data-width='50%'");
+                    if($canSubmitReview) $menu .= common::buildIconButton('story', 'submitReview', "storyID=$story->id&from=story", $story, 'list', 'confirm', '', 'iframe', true, "data-width='50%'");
                 }
                 else
                 {
@@ -4812,7 +4812,7 @@ class storyModel extends model
                     {
                         $reviewDisabled = in_array($this->app->user->account, $story->notReview) and ($story->status == 'draft' or $story->status == 'changing') ? '' : 'disabled';
                         $story->from = 'execution';
-                        $menu .= common::printIcon('story', 'review', "story={$story->id}&from=execution", $story, 'list', 'search', '', $reviewDisabled, false, "data-group=execution");
+                        $menu .= common::buildIconButton('story', 'review', "story={$story->id}&from=execution", $story, 'list', 'search', '', $reviewDisabled, false, "data-group=execution");
                     }
                 }
 
@@ -4820,7 +4820,7 @@ class storyModel extends model
                 {
                     $recallDisabled = empty($story->reviewedBy) and strpos('draft,changing', $story->status) !== false and !empty($story->reviewer) ? '' : 'disabled';
                     $title  = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
-                    $menu  .= common::printIcon('story', 'recall', "story={$story->id}", $story, 'list', 'undo', 'hiddenwin', $recallDisabled, '', '', $title);
+                    $menu  .= common::buildIconButton('story', 'recall', "story={$story->id}", $story, 'list', 'undo', 'hiddenwin', $recallDisabled, '', '', $title);
                 }
 
                 $this->lang->task->create = $this->lang->execution->wbs;
@@ -4832,11 +4832,11 @@ class storyModel extends model
                 }
                 else
                 {
-                    if($hasDBPriv and $storyType == 'story') $menu .= common::printIcon('task', 'create', $param, '', 'list', 'plus', '', 'btn-task-create ' . $toTaskDisabled);
+                    if($hasDBPriv and $storyType == 'story') $menu .= common::buildIconButton('task', 'create', $param, '', 'list', 'plus', '', 'btn-task-create ' . $toTaskDisabled);
                 }
 
                 $this->lang->task->batchCreate = $this->lang->execution->batchWBS;
-                if($hasDBPriv and $storyType == 'story') $menu .= common::printIcon('task', 'batchCreate', "executionID=$executionID&story={$story->id}", '', 'list', 'pluses', '', $toTaskDisabled);
+                if($hasDBPriv and $storyType == 'story') $menu .= common::buildIconButton('task', 'batchCreate', "executionID=$executionID&story={$story->id}", '', 'list', 'pluses', '', $toTaskDisabled);
 
                 if(($canSubmitReview or $canReview or $canRecall or $canCreateTask or $canBatchCreateTask) and ($canCreateCase or $canEstimate or $canUnlinkStory))
                 {
