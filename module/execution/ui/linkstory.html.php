@@ -62,8 +62,8 @@ dtable
     set::onRenderCell(jsRaw('window.onRenderLinkStoryCell')),
     set::footPager(
         usePager(),
-        set::recPerPage($recPerPage),
-        set::recTotal($recTotal),
+        set::recPerPage("{recPerPage}"),
+        set::recTotal("{recTotal}"),
         set::linkCreator(helper::createLink($object->type, 'linkStory', "objectID={$object->id}&browseType={$browseType}&param={$param}&recPerPage={recPerPage}&page={page}&extra=$extra"))
     )
 );
