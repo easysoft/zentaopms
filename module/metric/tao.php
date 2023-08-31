@@ -61,6 +61,18 @@ class metricTao extends metricModel
     }
 
     /**
+     * 获取自定义的度量项计算文件的路径。
+     * Get path of custom calculator file.
+     *
+     * @access protected
+     * @return string
+     */
+    protected function getCustomCalcFile($code)
+    {
+        return $this->getCustomCalcRoot() . $code . '.php';
+    }
+
+    /**
      * 请求度量项数据列表。
      * Fetch metric list.
      *
@@ -126,5 +138,4 @@ class metricTao extends metricModel
 
         return $methodNameList;
     }
-
 }
