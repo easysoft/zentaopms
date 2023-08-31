@@ -3212,7 +3212,7 @@ CREATE TABLE IF NOT EXISTS `zt_practice` (
   `code` char(50) NOT NULL DEFAULT '',
   `title` varchar(255) NOT NULL DEFAULT '',
   `labels` varchar(255) NOT NULL DEFAULT '',
-  `summary` mediumtext NULL,
+  `summary` varchar(255) NOT NULL DEFAULT '',
   `content` text NULL,
   `contributor` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
