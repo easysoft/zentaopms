@@ -292,6 +292,8 @@ formPanel
     on::click('.addLine', 'addNewLine'),
     on::click('.removeLine', 'removeLine'),
     on::change('[name^=products]', 'loadBranches'),
+    on::change('[name=begin]', 'computeWorkDays'),
+    on::change('[name=end]', 'computeWorkDays'),
     formGroup
     (
         set::width('1/2'),
@@ -335,7 +337,6 @@ formPanel
                     set('id', 'begin'),
                     set::value((isset($plan) && !empty($plan->begin) ? $plan->begin : date('Y-m-d'))),
                     set::placeholder($lang->execution->begin),
-                    on::change('computeWorkDays')
                 ),
                 $lang->project->to,
                 datePicker
@@ -344,7 +345,6 @@ formPanel
                     set('id', 'end'),
                     set::value((isset($plan) && !empty($plan->end) ? $plan->end : ''),
                     set::placeholder($lang->execution->end),
-                    on::change('computeWorkDays')
                     ),
                 )
             ),

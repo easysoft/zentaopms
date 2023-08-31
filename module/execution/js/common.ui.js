@@ -68,6 +68,7 @@ function computeEndDate()
 
     $('#end').zui('datePicker').$.changeState({value: endDate});
     computeWorkDays();
+    setTimeout(function(){$('[name=delta]').val(`${delta}`)}, 0);
 }
 
 /**
