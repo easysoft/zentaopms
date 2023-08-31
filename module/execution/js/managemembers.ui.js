@@ -9,14 +9,10 @@ window.addItem = function(obj)
 {
     let item         = $('#addItem > tbody').html().replace(/%i%/g, itemIndex);
     const $currentTr = $(obj).closest('tr');
-    $currentTr.after(item);
 
+    $currentTr.after(item);
     const $newRow = $currentTr.next();
-    $('select[name^=accounts]').each(function()
-    {
-        const selectValue = $(this).val();
-        if(selectValue) $newRow.find(`option[value='${selectValue}']`).remove();
-    });
+    itemIndex ++;
 }
 
 /**
@@ -41,7 +37,7 @@ window.deleteItem = function(obj)
  */
 window.setDeptUsers = function()
 {
-    const dept = $(this).val(); // Get dept ID.
+    const dept = $('input[name=dept]').val(); // Get dept ID.
     const link = $.createLink('execution', 'manageMembers', 'executionID=' + executionID + '&team2Import=' + team2Import + '&dept=' + dept); // Create manageMembers link.
     loadPage(link);
 }
@@ -55,8 +51,8 @@ window.setDeptUsers = function()
  */
 function choseTeam2Copy()
 {
-    const team = $(this).val();
-    const dept = $('#dept').val();
+    const team = $('input[name=execution]').val();
+    const dept = $('input[name=dept]').val();
     const link = $.createLink('execution', 'manageMembers', 'executionID=' + executionID + '&team2Import=' + team + '&dept=' + dept);
     loadPage(link);
 }
@@ -69,9 +65,10 @@ function choseTeam2Copy()
  * @access public
  * @return void
  */
-window.setRole = function(account, roleID)
+window.setRole = function(roleID)
 {
-    const role  = roles[account];
-    const $role = $('#role' + roleID);
+    const account = $(`input[name='accounts\[${roleID}\]']`).val();
+    const role    = roles[account];
+    const $role   = $('#role' + roleID);
     $role.val(role);
 }

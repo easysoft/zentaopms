@@ -27,7 +27,7 @@ if(count($teams2Import) != 1)
                 set::className('flex items-center team-title'),
                 $lang->execution->copyTeam
             ),
-            select
+            picker
             (
                 set::name('execution'),
                 set::value($team2Import),
@@ -49,7 +49,7 @@ featureBar
             set::className('flex items-center dept-title'),
             $lang->execution->selectDept
         ),
-        select
+        picker
         (
             set::id('dept'),
             set::name('dept'),
@@ -85,14 +85,14 @@ foreach($teamMembers as $member)
                     set::type('hidden'),
                 ),
             ) : h::td(
-                select
+                picker
                 (
                     set::id("account{$i}"),
                     set::name("accounts[$i]"),
                     set::value($member->account),
                     set::items($users),
                     set('data-max-list-count', $config->maxCount),
-                    set('onchange', "setRole(this.value, '{$i}')"),
+                    set('onchange', "setRole('{$i}')"),
                 ),
             ),
             h::td
@@ -159,13 +159,13 @@ h::table
     set::id('addItem'),
     h::tr(
         h::td(
-            select
+            picker
             (
                 set::id("account{$i}"),
                 set::name("accounts[$i]"),
                 set::items($users),
                 set('data-max-list-count', $config->maxCount),
-                set('onchange', "setRole(this.value, '{$i}')"),
+                set('onchange', "setRole('{$i}')"),
             ),
         ),
         h::td

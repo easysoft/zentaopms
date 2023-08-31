@@ -4,4 +4,4 @@
 #teamForm .actions-list {padding-left: 0.5rem;}
 #featureBar .select-dept-box, #featureBar .select-team-box {display: inline-flex;}
 #featureBar .dept-title, #featureBar .team-title {width: 64px;}
-#featureBar .select-dept-box > select, #featureBar .select-team-box > select {width: 270px;}
+#featureBar .select-dept-box .picker, #featureBar .select-team-box .picker {width: 270px;}
