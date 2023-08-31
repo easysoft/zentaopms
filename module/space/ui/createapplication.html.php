@@ -163,6 +163,7 @@ formPanel
     set::id('createAppForm'),
     set::title($lang->space->install),
     set::url($this->createLink('gitlab', 'create')),
+    set::actionsClass('w-2/3'),
     formGroup
     (
         set::width('2/3'),
