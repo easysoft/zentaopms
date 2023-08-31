@@ -839,20 +839,25 @@ class cneModel extends model
     {
         if(empty($mappings)) $mappings = array(
             array(
-                "key" => "admin_username",
+                "key"  => "admin_username",
                 "type" => "helm",
                 "path" => "auth.username"
             ),
             array(
-                "key" => "admin_password",
-                "type" => "helm",
-                "path" => "auth.password"
+                "key"  => "z_username",
+                "path" => "z_username",
+                "type" => "secret"
             ),
             array(
-                "key" => "admin_token",
-                "type" => "secret",
-                "path" => "api_token"
+                "key"  => "z_password",
+                "path" => "z_password",
+                "type" => "secret"
             ),
+            array(
+                "key"  => "api_token",
+                "path" => "api_token",
+                "type" => "secret"
+            )
         );
  
         $apiParams = new stdclass;

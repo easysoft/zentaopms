@@ -614,13 +614,13 @@ class instance extends control
         if($type == 'external')
         {
             $instance = $this->loadModel('pipeline')->getByID($instanceID);
-            if(!$instance) return $this->send(array('result' => 'success', 'message' => $this->lang->instance->notices['success']));
+            if(!$instance) return $this->send(array('result' => 'success', 'message' => $this->lang->instance->notices['success'], 'load' => $this->createLink('space', 'browse')));
 
             if($instance->type == 'nexus') return $this->deleteExternalApp($instance->id);
             return $this->fetch($instance->type, 'delete', array('id' => $instance->id));
         }
         $instance = $this->instance->getByID($instanceID);
-        if(!$instance) return $this->send(array('result' => 'success', 'message' => $this->lang->instance->notices['success']));
+        if(!$instance) return $this->send(array('result' => 'success', 'message' => $this->lang->instance->notices['success'], 'load' => $this->createLink('space', 'browse')));
 
         $externalApp = $this->loadModel('space')->getExternalAppByApp($instance);
         if($externalApp)
@@ -631,7 +631,7 @@ class instance extends control
 
         $success = $this->instance->uninstall($instance);
         $this->action->create('instance', $instance->id, 'uninstall', '', json_encode(array('result' => $success, 'app' => array('alias' => $instance->appName, 'app_version' => $instance->version))));
-        if($success) return $this->send(array('result' => 'success', 'message' => zget($this->lang->instance->notices, 'uninstallSuccess'), 'load' => 'table'));
+        if($success) return $this->send(array('result' => 'success', 'message' => zget($this->lang->instance->notices, 'uninstallSuccess'), 'load' => $this->createLink('space', 'browse')));
 
         return $this->send(array('result' => 'fail', 'message' => zget($this->lang->instance->notices, 'uninstallFail')));
     }

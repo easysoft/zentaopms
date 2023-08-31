@@ -38,10 +38,10 @@ class instanceZen extends instance
         $pipeline->createdDate = helper::now();
         $pipeline->url         = $url;
         $pipeline->name        = $this->generatePipelineName($instance);
-        $pipeline->token       = zget($tempMappings, 'admin_token', '');
-        $pipeline->account     = zget($tempMappings, 'admin_username', '');
-        $pipeline->password    = zget($tempMappings, 'admin_password', '');
-        $pipeline->token       = zget($tempMappings, 'admin_token', '');
+        $pipeline->token       = zget($tempMappings, 'api_token', '');
+        $pipeline->account     = zget($tempMappings, 'z_username', '');
+        $pipeline->password    = zget($tempMappings, 'z_password', '');
+        if(empty($pipeline->account)) $pipeline->account = zget($tempMappings, 'admin_username', '');
 
         $this->pipeline->create($pipeline);
     }
