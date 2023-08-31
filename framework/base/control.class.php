@@ -914,7 +914,7 @@ class baseControl
      */
     public function display(string $moduleName = '', string $methodName = '')
     {
-        if($this->config->debug && $this->viewType === 'html' && (!isset($_GET['zin']) || $_GET['zin'] != '0'))
+        if($this->viewType === 'html' && (!isset($_GET['zin']) || $_GET['zin'] != '0'))
         {
             if(empty($moduleName)) $moduleName = $this->moduleName;
             if(empty($methodName)) $methodName = $this->methodName;
