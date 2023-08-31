@@ -182,7 +182,7 @@
                   common::printIcon('story', 'close',      "storyID=$child->id&from=&storyType=$child->type", $child, 'list', '', '', 'iframe showinonlybody', true);
                   common::printIcon('story', 'activate',   "storyID=$child->id&storyType=$child->type", $child, 'list', '', '', 'iframe showinonlybody', true);
                   common::printIcon('story', 'edit',       "storyID=$child->id&kanbanGroup=default&storyType=$child->type", $child, 'list');
-                  common::printIcon('testcase', 'create', "productID=$child->product&branch=$child->branch&module=0&from=&param=0&story={$child->id}", $child, 'list', 'sitemap');
+                  common::printIcon('testcase', 'create', "productID=$child->product&branch=$child->branch&module=0&from=&param=0&story={$child->id}", $child, 'list', 'sitemap', '', 'iframe showinonlybody', true);
                   ?>
                 </td>
               </tr>
