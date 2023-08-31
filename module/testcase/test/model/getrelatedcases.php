@@ -9,7 +9,11 @@ function initData()
     $casedata = zdTable('case');
     $casedata->id->range('1-10');
     $casedata->case->range('2,3{1}0{9}');
+
+    $casedata->gen(10);
 }
+
+initData();
 
 /**
 
