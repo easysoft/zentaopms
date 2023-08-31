@@ -912,6 +912,69 @@ class testcaseZen extends testcase
     }
 
     /**
+     * 指派导入的数据。
+     * Assign show imported data.
+     *
+     * @param int        $productID
+     * @param string     $branch
+     * @param array      $caseData
+     * @param int        $stepVars
+     * @param int        $pagerID
+     * @param int        $maxImport
+     * @access protected
+     * @return void
+     */
+    protected function assignShowImportVars(int $productID, string $branch, array $caseData, int $stepVars, int $pagerID, int $maxImport)
+    {
+        if(empty($caseData)) return $this->sendError($this->lang->error->noData, $this->createLink('testcase', 'browse', "productID={$productID}&branch={$branch}"));
+
+        /* 设置模块。 */
+        /* Set modules. */
+        $modules       = array();
+        $branches      = $this->loadModel('branch')->getPairs($productID, 'active');
+        $branchModules = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, empty($branches) ? array(0) : array_keys($branches));
+        foreach($branchModules as $branchID => $moduleList)
+        {
+            $modules[$branchID] = array();
+            foreach($moduleList as $moduleID => $moduleName) $modules[$branchID][$moduleID] = $moduleName;
+        }
+
+        /* 如果导入的用例数大于最大导入数，则在最大导入时截取。 */
+        /* If the number of imported cases is greater than max import, intercept at max import. */
+        $allCount = count($caseData);
+        $allPager = 1;
+        if($allCount > $this->config->file->maxImport)
+        {
+            if(empty($maxImport))
+            {
+                $this->view->allCount  = $allCount;
+                $this->view->maxImport = $maxImport;
+                $this->view->productID = $productID;
+                $this->view->branch    = $branch;
+                return print($this->display());
+            }
+
+            $allPager = ceil($allCount / $maxImport);
+            $caseData = array_slice($caseData, ($pagerID - 1) * $maxImport, $maxImport, true);
+        }
+        if(empty($caseData)) return $this->sendError($this->lang->error->noData, $this->createLink('testcase', 'browse', "productID={$productID}&branch={$branch}"));
+
+        /* 判断输入的用例是否超出限制，并设定session。 */
+        /* Judge whether the imported cases is too large and set session. */
+        $countInputVars  = count($caseData) * 12 + $stepVars;
+        $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
+        if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
+
+        $this->view->modules    = $modules;
+        $this->view->caseData   = $caseData;
+        $this->view->branches   = $branches;
+        $this->view->allCount   = $allCount;
+        $this->view->allPager   = $allPager;
+        $this->view->isEndPage  = $pagerID >= $allPager;
+        $this->view->pagerID    = $pagerID;
+    }
+
+    /**
      * Add edit action.
      *
      * @param  int       $caseID
@@ -1535,6 +1598,32 @@ class testcaseZen extends testcase
     }
 
     /**
+     * 返回展示导入 testcase 的结果。
+     * Respond after showing imported testcase.
+     *
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  int       $maxImport
+     * @access protected
+     * @return void
+     */
+    protected function responseAfterShowImport(int $productID, string $branch = '0', int $maxImport = 0): array
+    {
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        if($this->post->isEndPage)
+        {
+            unlink($tmpFile);
+            $locateLink = $this->app->tab == 'project' ? $this->createLink('project', 'testcase', "projectID={$this->session->project}&productID={$productID}") : inlink('browse', "productID={$productID}");
+        }
+        else
+        {
+            $locateLink = inlink('showImport', "productID={$productID}&branch={$branch}&pagerID=" . ((int)$this->post->pagerID + 1) . "&maxImport={$maxImport}&insert=" . zget($_POST, 'insert', ''));
+        }
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $locateLink));
+    }
+
+    /**
      * 处理评审数据。
      * Prepare review data.
      *
@@ -1635,6 +1724,167 @@ class testcaseZen extends testcase
         }
 
         return $fields;
+    }
+
+    /**
+     * 获取导入的数据。
+     * Get imported data.
+     *
+     * @param  int       $productID
+     * @param  string    $file
+     * @access protected
+     * @return void
+     */
+    protected function getImportedData(int $productID, string $file): array
+    {
+        $rows    = $this->loadModel('file')->parseCSV($file);
+        $header  = array();
+        foreach($rows[0] as $i => $rowValue)
+        {
+            if(empty($rowValue)) break;
+            $header[$i] = $rowValue;
+        }
+        unset($rows[0]);
+
+        $fields   = $this->testcase->getImportFields($productID);
+        $fields   = array_flip($fields);
+        $endField = end($fields);
+        $caseData = array();
+        $stepData = array();
+        $stepVars = 0;
+        foreach($rows as $row => $data)
+        {
+            $case = new stdclass();
+            foreach($header as $key => $title)
+            {
+                if(!isset($fields[$title]) || !isset($data[$key])) continue;
+
+                $field     = $fields[$title];
+                $cellValue = $data[$key];
+                if($field != 'stepDesc' && $field != 'stepExpect')
+                {
+                    $case = $this->getImportField($field, $cellValue, $case);
+                }
+                else
+                {
+                    $stepKey = str_replace('step', '', strtolower($field));
+                    $steps   = (array)$cellValue;
+                    if(strpos($cellValue, "\r")) $steps = explode("\r", $cellValue);
+                    if(strpos($cellValue, "\n")) $steps = explode("\n", $cellValue);
+
+                    $caseStep  = $this->getImportSteps($field, $steps, $stepData, $row);
+                    $stepVars += count($caseStep, COUNT_RECURSIVE) - count($caseStep);
+                    $stepData[$row][$stepKey] = array_values($caseStep);
+                }
+            }
+
+            if(empty($case->title)) continue;
+            $caseData[$row] = $case;
+            unset($case);
+        }
+        return array(array('caseData' => $caseData, 'stepData' => $stepData), $stepVars);
+    }
+
+    /**
+     * 获取导入的用例字段。
+     * Get imported field.
+     *
+     * @param  string    $field
+     * @param  string    $cellValue
+     * @param  object    $case
+     * @access protected
+     * @return object
+     */
+    protected function getImportField(string $field, string $cellValue, object $case): object
+    {
+        if($field == 'story' || $field == 'module' || $field == 'branch')
+        {
+            $case->{$field} = 0;
+            if(strrpos($cellValue, '(#') !== false)
+            {
+                $id = trim(substr($cellValue, strrpos($cellValue,'(#') + 2), ')');
+                $case->{$field} = $id;
+            }
+        }
+        elseif(in_array($field, $this->config->testcase->export->listFields))
+        {
+            if($field == 'stage')
+            {
+                $stages = explode("\n", $cellValue);
+                foreach($stages as $stage) $case->stage[] = array_search($stage, $this->lang->testcase->{$field . 'List'});
+                $case->stage = join(',', $case->stage);
+            }
+            else
+            {
+                $case->{$field} = array_search($cellValue, $this->lang->testcase->{$field . 'List'});
+            }
+        }
+        else
+        {
+            $case->{$field} = $cellValue;
+        }
+        return $case;
+    }
+    /**
+     * 获取导入的用例步骤。
+     * Get imported steps.
+     *
+     * @param  string    $field
+     * @param  array     $steps
+     * @param  array     $stepData
+     * @param  int       $row
+     * @access protected
+     * @return array
+     */
+    protected function getImportSteps(string $field, array $steps, array $stepData, int $row): array
+    {
+        $caseSteps = array();
+        foreach($steps as $step)
+        {
+            $step = trim($step);
+            if(empty($step)) continue;
+
+            preg_match('/^((([0-9]+)[.]([0-9]+))[.]([0-9]+))[.、](.*)$/U', $step, $out);
+            if(!$out) preg_match('/^(([0-9]+)[.]([0-9]+))[.、](.*)$/U', $step, $out);
+            if(!$out) preg_match('/^([0-9]+)[.、](.*)$/U', $step, $out);
+            if($out)
+            {
+                $count   = count($out);
+                $num     = $out[1];
+                $parent  = $count > 4 ? $out[2] : '0';
+                $grand   = $count > 6 ? $out[3] : '0';
+                $step    = trim($out[2]);
+                if($count > 4) $step = $count > 6 ? trim($out[6]) : trim($out[4]);
+
+                if(!empty($step))
+                {
+                    $caseSteps[$num]['content'] = $step;
+                    $caseSteps[$num]['number']  = $num;
+                }
+                $caseSteps[$num]['type']    = $count > 4 ? 'item' : 'step';
+                if(!empty($parent)) $caseSteps[$parent]['type'] = $count > 6 ? 'group' : 'item';
+                if(!empty($grand)) $caseSteps[$grand]['type']  = 'group';
+            }
+            elseif(isset($num))
+            {
+                $caseSteps[$num]['content'] = isset($caseSteps[$num]['content']) ? "{$caseSteps[$num]['content']}\n{$step}" : "\n{$step}";
+            }
+            elseif($field == 'stepDesc')
+            {
+                $num = 1;
+                $caseSteps[$num]['content'] = $step;
+                $caseSteps[$num]['type']    = 'step';
+                $caseSteps[$num]['number']  = $num;
+            }
+            elseif($field == 'stepExpect' && isset($stepData[$row]['desc']))
+            {
+                end($stepData[$row]['desc']);
+                $num = key($stepData[$row]['desc']);
+                $caseSteps[$num]['content'] = $step;
+                $caseSteps[$num]['number']  = $num;
+            }
+        }
+        return $caseSteps;
     }
 
     /**
