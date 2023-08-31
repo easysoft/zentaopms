@@ -2819,19 +2819,50 @@ class baseRouter
         global $config, $dbh, $slaveDBH;
         if(!isset($config->installed) or !$config->installed) return;
 
+        /* Set master db. */
         if(isset($config->db->host)) $this->dbh = $dbh = $this->connectByPDO($config->db, 'MASTER');
 
-        if(!empty($config->slaveDBList))
-        {
-            $slaveDB             = $config->slaveDBList[array_rand($config->slaveDBList)];
-            $slaveDB->persistant = $config->db->persistant;
-            $slaveDB->driver     = $config->db->driver;
-            $slaveDB->encoding   = $config->db->encoding;
-            $slaveDB->strictMode = $config->db->strictMode;
-            $slaveDB->prefix     = $config->db->prefix;
+        /* Set slave db. */
+        if(empty($config->slaveDBList)) return;
 
-            $this->slaveDBH = $slaveDBH = $this->connectByPDO($slaveDB, 'SLAVE');
+        $biIndex   = 0;
+        $slaveList = array();
+        foreach($config->slaveDBList as $index => $db)
+        {
+            if(isset($db->type) && $db->type == 'bi')
+            {
+                $biIndex = $index;
+            }
+            else
+            {
+                $slaveList[] = $index;
+            }
         }
+        $slaveIndex = empty($slaveList) ? $biIndex : $slaveList[array_rand($slaveList)];
+
+        $config->biDB   = $this->initSlaveDB($biIndex);
+        $this->slaveDBH = $slaveDBH = $this->connectByPDO($this->initSlaveDB($slaveIndex), 'SLAVE');
+    }
+
+    /**
+     * Init config of slave db.
+     *
+     * @param  int     $index
+     * @access private
+     * @return object
+     */
+    private function initSlaveDB($index = 0)
+    {
+        global $config;
+
+        $slaveDB             = $config->slaveDBList[$slaveIndex];
+        $slaveDB->persistant = $config->db->persistant;
+        $slaveDB->driver     = $config->db->driver;
+        $slaveDB->encoding   = $config->db->encoding;
+        $slaveDB->strictMode = $config->db->strictMode;
+        $slaveDB->prefix     = $config->db->prefix;
+
+        return $slaveDB;
     }
 
     /**

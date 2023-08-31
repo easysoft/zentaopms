@@ -407,20 +407,11 @@ class model extends baseModel
         global $config, $biDAO;
         if(is_object($biDAO)) return $this->dao = $biDAO;
 
+        if(!isset($config->biDB)) return;
+
         $driver = $config->db->driver;
         $biDAO = new $driver();
-
-        if(isset($config->biDB->host))
-        {
-            $slaveDB             = $config->biDB;
-            $slaveDB->persistant = $config->db->persistant;
-            $slaveDB->driver     = $config->db->driver;
-            $slaveDB->encoding   = $config->db->encoding;
-            $slaveDB->strictMode = $config->db->strictMode;
-            $slaveDB->prefix     = $config->db->prefix;
-
-            $biDAO->slaveDBH = $this->app->connectByPDO($slaveDB, 'BI');
-        }
+        $biDAO->slaveDBH = $this->app->connectByPDO($config->biDB, 'BI');
 
         $this->dao = $biDAO;
     }
