@@ -72,9 +72,9 @@ $lang->action->hasOtherType['stage']  = "当前阶段的父级现在只允许创
 $lang->action->hasOtherType['sprint'] = "当前{$lang->executionCommon}的父级现在只允许创建阶段类型的子级,故无法恢复当前{$lang->executionCommon}。";
 $lang->action->hasOtherType['kanban'] = "当前看板的父级现在只允许创建阶段类型的子级,故无法恢复当前看板。";
 
-$lang->action->repeatChange     = '系统内已有同名、同代号的%s，恢复后名称为\"%s\"、代号为\"%s\"。';
-$lang->action->nameRepeatChange = '系统内已有同名的%s，恢复后名称为\"%s\"。';
-$lang->action->codeRepeatChange = '系统内已有同代号的%s，恢复后代号为\"%s\"。';
+$lang->action->repeatChange     = '系统内已有同名、同代号的%s，恢复后名称为"%s"、代号为"%s"。';
+$lang->action->nameRepeatChange = '系统内已有同名的%s，恢复后名称为"%s"。';
+$lang->action->codeRepeatChange = '系统内已有同代号的%s，恢复后代号为"%s"。';
 
 $lang->action->history = new stdclass();
 $lang->action->history->action = '关联日志';

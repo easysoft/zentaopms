@@ -667,16 +667,18 @@ class actionModel extends model
     }
 
     /**
+     * 获取一条操作记录。
      * Get an action record.
      *
      * @param  int    $actionID
      * @access public
-     * @return object
+     * @return object|bool
      */
-    public function getById($actionID)
+    public function getById(int $actionID): object|bool
     {
-        $action = $this->dao->findById((int)$actionID)->from(TABLE_ACTION)->fetch();
+        $action = $this->actionTao->fetchBaseInfo($actionID);
 
+        /* 当action值为repocreated的时候拼接域名。 */
         /* Splice domain name for connection when the action is equal to 'repocreated'.*/
         if($action->action == 'repocreated') $action->extra = str_replace("href='", "href='" . common::getSysURL(), $action->extra);
 
@@ -2411,5 +2413,80 @@ class actionModel extends model
             $this->dao->update(TABLE_ACTION)->set('extra')->eq(ACTIONMODEL::BE_UNDELETED)->where('id')->eq($deletedAction->id)->exec();
             $this->create($deletedAction->objectType, $deletedAction->objectID, 'undeleted');
         }
+    }
+
+    /**
+     * 获取属性相同的对象。
+     * Get repeat object.
+     *
+     * @param  object $action
+     * @access public
+     * @return object|bool
+     */
+    public function getRepeatObject(object $action, object &$object): object|bool
+    {
+        if($action->objectType == 'product')
+        {
+            $object       = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->eq($action->objectID)->fetch();
+            $programID    = isset($object->program) ?? 0;
+            $repeatObject = $this->dao->select('*')->from(TABLE_PRODUCT)
+                ->where('id')->ne($action->objectID)
+                ->andWhere("(name = '{$product->name}' and program = {$programID})", true)
+                ->beginIF($product->code)->orWhere("code = '{$product->code}'")->fi()
+                ->markRight(1)
+                ->andWhere('deleted')->eq('0')
+                ->fetch();
+        }
+        else
+        {
+            $object        = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($action->objectID)->fetch();
+            $sprintProject = isset($object->project) ?? 0;
+            $repeatObject  = $this->dao->select('*')->from(TABLE_PROJECT)
+                ->where('id')->ne($action->objectID)
+                ->beginIF($action->objectType == 'program' || $action->objectType == 'project')->andWhere("(name = '{$object->name}' and parent = {$object->parent})", true)->fi()
+                ->beginIF($action->objectType == 'execution')->andWhere("(name = '{$object->name}' and project = {$sprintProject})", true)->fi()
+                ->beginIF($action->objectType == 'project' && $object->code)->orWhere("(code = '{$object->code}' and model = '$object->model')")->fi()
+                ->beginIF($action->objectType == 'execution' && $object->code)->orWhere("code = '{$object->code}'")->fi()
+                ->markRight(1)
+                ->beginIF($action->objectType == 'program')->andWhere('type')->eq('program')->fi()
+                ->beginIF($action->objectType == 'project')->andWhere('type')->eq('project')->fi()
+                ->beginIF($action->objectType == 'execution')->andWhere('type')->in('sprint,stage,kanban')->fi()
+                ->andWhere('deleted')->eq('0')
+                ->fetch();
+        }
+        return $repeatObject;
+    }
+
+    /**
+     * 获取和需求属性相近的对象。
+     * Get like object.
+     *
+     * @param  string $table
+     * @param  string $columns
+     * @param  string $param
+     * @param  string $value
+     * @access public
+     * @return void
+     */
+    public function getLikeObject(string $table, string $columns, string $param, string $value): array
+    {
+        return $this->dao->select($columns)->from($table)->where($param)->like($value)->fetchPairs();
+    }
+
+    /**
+     * 通过id更新对象。
+     * Update object by id.
+     *
+     * @param  string $table
+     * @param  int $id
+     * @param  array $params
+     * @access public
+     * @return void
+     */
+    public function updateObjectByID(string $table, int $id, array $params)
+    {
+        $updateParams = array();
+        foreach($params as $key => $value) $updateParams[] = '`' . $key . '`' . '="' . $value . '"';
+        $this->dao->update($table)->set(implode(',', $updateParams))->where('id')->eq($id)->exec();
     }
 }
