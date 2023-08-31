@@ -2963,6 +2963,7 @@ class execution extends control
     }
 
     /**
+     * 移除团队成员。
      * Unlink a memeber.
      *
      * @param  int    $executionID
@@ -2970,27 +2971,15 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function unlinkMember($executionID, $userID)
+    public function unlinkMember(int $executionID, int $userID)
     {
-        $user    = $this->loadModel('user')->getById($userID, 'id');
-        $account = $user->account;
+        $user = $this->loadModel('user')->getById($userID, 'id');
+        $this->execution->unlinkMember($executionID, $user->account);
 
-        $this->execution->unlinkMember($executionID, $account);
-        if(!dao::isError()) $this->loadModel('action')->create('team', $executionID, 'managedTeam');
+        if(dao::isError()) return $this->sendError(dao::getError());
 
-        /* if ajax request, send result. */
-        if(dao::isError())
-        {
-            $response['result']  = 'fail';
-            $response['message'] = dao::getError();
-        }
-        else
-        {
-            $response['result']  = 'success';
-            $response['message'] = '';
-            $response['load']    = helper::createLink('execution', 'team', "executionID={$executionID}");
-        }
-        return $this->send($response);
+        $this->loadModel('action')->create('team', $executionID, 'managedTeam');
+        return $this->sendSuccess(array('message' => '', 'load' => helper::createLink('execution', 'team', "executionID={$executionID}")));
     }
 
     /**

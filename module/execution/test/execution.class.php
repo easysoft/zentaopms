@@ -1799,29 +1799,30 @@ class executionTest
     }
 
     /**
-     * function unlinkMember test by execution
+     * 移除执行团队成员。
+     * Remove the user from the execution team members.
      *
-     * @param  string $sprintID
-     * @param  string $account
-     * @param  string $count
+     * @param  int             $executionID
+     * @param  string          $account
+     * @param  int             $count
      * @access public
-     * @return array
+     * @return array|object|int
      */
-    public function unlinkMemberTest($sprintID, $account, $count)
+    public function unlinkMemberTest(int $executionID, string $account, int $count): array|object|int
     {
         global $tester;
-        $oldObject = $tester->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($sprintID)->fetchAll();
+        $oldObject = $tester->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($executionID)->fetchAll();
 
-        $this->executionModel->unlinkMember($sprintID, $account);
+        $this->executionModel->unlinkMember($executionID, $account);
 
-        $object = $tester->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($sprintID)->fetchAll();
+        $object = $tester->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($executionID)->fetchAll();
 
         if(dao::isError())
         {
             $error = dao::getError();
             return $error;
         }
-        elseif($count == "1")
+        elseif($count == 1)
         {
             return count($oldObject);
         }

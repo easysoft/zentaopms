@@ -29,20 +29,14 @@ su('admin');
 /**
 
 title=测试executionModel->unlinkMember();
+timeout=0
 cid=1
-pid=1
-
-敏捷执行解除团队成员       >> user4,测试
-敏捷执行解除团队成员后统计 >> 1
-瀑布执行解除团队成员       >> user2,研发
-看板执行解除团队成员       >> 0
-看板执行解除团队成员后统计 >> 0
 
 */
 
 $accountList     = array('user1', 'user2', 'user3');
 $executionIDList = array('3', '4', '5');
-$count           = array('0','1');
+$count           = array(0, 1);
 
 $execution = new executionTest();
 r($execution->unlinkMemberTest($executionIDList[0], $accountList[0], $count[0])) && p('0:account,role') && e('user4,测试');  // 敏捷执行解除团队成员

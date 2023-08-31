@@ -3725,35 +3725,41 @@ class executionModel extends model
     }
 
     /**
-     * Unlink a member.
+     * 移除执行团队成员。
+     * Remove the user from the execution team members.
      *
-     * @param  int    $sprintID
+     * @param  int    $executionID
      * @param  string $account
      * @access public
      * @return void
      */
-    public function unlinkMember($sprintID, $account)
+    public function unlinkMember(int $executionID, string $account)
     {
-        $sprint = $this->getByID($sprintID);
-        $type   = strpos(',stage,sprint,kanban,', ",$sprint->type,") !== false ? 'execution' : $sprint->type;
+        /* Remove the user from the execution team members. */
+        $execution = $this->getByID($executionID);
+        $type   = strpos(',stage,sprint,kanban,', ",$execution->type,") !== false ? 'execution' : $execution->type;
+        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($executionID)->andWhere('type')->eq($type)->andWhere('account')->eq($account)->exec();
 
-        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$sprintID)->andWhere('type')->eq($type)->andWhere('account')->eq($account)->exec();
-        $this->updateUserView($sprintID, 'sprint', array($account));
+        /* Update the user's execution permission. */
+        $this->updateUserView($executionID, 'sprint', array($account));
 
-        /* Remove team members from the sprint or stage, and determine whether to remove team members from the execution. */
-        if(strpos(',stage,sprint,kanban,', ",$sprint->type,") !== false)
+        /* Remove team members from the sprint or stage, and determine whether to remove team members from the project. */
+        if(strpos(',stage,sprint,kanban,', ",$execution->type,") !== false)
         {
             $teamMember = $this->dao->select('t1.id, t2.account')->from(TABLE_EXECUTION)->alias('t1')
                 ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id = t2.root')
-                ->where('t1.project')->eq($sprint->project)
-                ->andWhere('t1.type')->eq($sprint->type)
+                ->where('t1.project')->eq($execution->project)
+                ->andWhere('t1.type')->eq($execution->type)
                 ->andWhere('t2.account')->eq($account)
                 ->fetch();
+
+            /* Remove the user from the project team members and update the user's product permission. */
             if(empty($teamMember))
             {
-                $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($sprint->project)->andWhere('type')->eq('project')->andWhere('account')->eq($account)->exec();
-                $this->loadModel('user')->updateUserView($sprint->project, 'project', array($account));
-                $linkedProducts = $this->loadModel('product')->getProductPairsByProject($sprint->project);
+                $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($execution->project)->andWhere('type')->eq('project')->andWhere('account')->eq($account)->exec();
+                $this->loadModel('user')->updateUserView($execution->project, 'project', array($account));
+
+                $linkedProducts = $this->loadModel('product')->getProductPairsByProject($execution->project);
                 if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', array($account));
             }
         }
