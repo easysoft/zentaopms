@@ -178,7 +178,7 @@ class host extends control
         $reason     = $this->lang->host->{$reasonKey};
         if($_SERVER['REQUEST_METHOD'] == 'POST')
         {
-            $postData = fixer::input('post')->get();
+            $postData = fixer::input('post')->skipSpecial('reason')->get();
             if(empty($postData->reason))
             {
                 dao::$errors['reason'][] = sprintf($this->lang->error->notempty, $reason);
