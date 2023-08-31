@@ -33,10 +33,11 @@ class control extends wg
 
     protected function created()
     {
-        if($this->prop('id') === null && $this->prop('name') !== null)
+        $name = $this->prop('name');
+        if($this->prop('type') === 'static' && $name === null) $this->setProp('name', $this->gid);
+        if($this->prop('id') === null && $name !== null)
         {
-            $name = $this->prop('name');
-            $id   = substr($name, -2) == '[]' ? substr($name, 0, - 2) : $name;
+            $id = substr($name, -2) == '[]' ? substr($name, 0, - 2) : $name;
             $this->setProp('id', $id);
         }
     }
