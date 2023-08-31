@@ -310,7 +310,7 @@ class testsuiteModel extends model
      * @access public
      * @return bool
      */
-    public function delete($suiteID, $table = '')
+    public function delete(int $suiteID, string $table = ''): bool
     {
         parent::delete(TABLE_TESTSUITE, $suiteID);
         $this->dao->delete()->from(TABLE_SUITECASE)->where('suite')->eq($suiteID)->exec();
