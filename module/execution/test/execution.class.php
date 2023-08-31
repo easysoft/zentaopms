@@ -1483,7 +1483,7 @@ class executionTest
      * function unlinkStory test by execution
      *
      * @param  string $executionID
-     * @param  string $count
+     * @param  string $count       1: get count of objects, other: get object.
      * @param  string $storyID
      * @param  array  $param
      * @access public
@@ -1509,12 +1509,9 @@ class executionTest
 
         $this->executionModel->unlinkStory($executionID, $storyID);
 
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error;
-        }
-        elseif($count == "1")
+        if(dao::isError()) return dao::getError();
+
+        if($count == "1")
         {
             $object = $tester->dbh->query("select * from zt_projectstory where project = $executionID")->fetchAll();
             return count($object);
@@ -1522,13 +1519,13 @@ class executionTest
         else
         {
             $object = $tester->dbh->query("select * from zt_projectstory where project = $executionID")->fetchAll();
-            if(isset($object))
+            if(!empty($object))
             {
                 return $object;
             }
             else
             {
-                return "全部需求已解除";
+                return false;
             }
         }
     }
