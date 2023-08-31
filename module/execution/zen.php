@@ -66,6 +66,58 @@ class executionZen extends execution
     }
 
     /**
+     * 展示任务看板的相关变量。
+     * Show the task Kanban related variables.
+     *
+     * @param  object    $execution
+     * @access protected
+     * @return void
+     */
+    protected function assignTaskKanbanVars(object $execution)
+    {
+        /* Get user list. */
+        $userList    = array();
+        $users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $avatarPairs = $this->user->getAvatarPairs('all');
+        foreach($avatarPairs as $account => $avatar)
+        {
+            if(!isset($users[$account])) continue;
+            $userList[$account]['realname'] = $users[$account];
+            $userList[$account]['avatar']   = $avatar;
+        }
+        $userList['closed']['account']  = 'Closed';
+        $userList['closed']['realname'] = 'Closed';
+        $userList['closed']['avatar']   = '';
+
+        /* Get execution linked products. */
+        $productID    = 0;
+        $productNames = array();
+        $products     = $this->loadModel('product')->getProducts($execution->id);
+        if($products) $productID = key($products);
+        foreach($products as $product) $productNames[$product->id] = $product->name;
+
+        $plans    = $this->execution->getPlans($products);
+        $allPlans = array();
+        if(!empty($plans))
+        {
+            foreach($plans as $plan) $allPlans += $plan;
+        }
+
+        $project = $this->project->getByID($execution->project);
+
+        $this->view->title        = $this->lang->execution->kanban;
+        $this->view->userList     = $userList;
+        $this->view->realnames    = $users;
+        $this->view->productID    = $productID;
+        $this->view->productNames = $productNames;
+        $this->view->productNum   = count($products);
+        $this->view->allPlans     = $allPlans;
+        $this->view->hiddenPlan   = $project->model !== 'scrum';
+        $this->view->execution    = $execution;
+        $this->view->canBeChanged = common::canModify('execution', $execution);
+    }
+
+    /**
      * 检查累计流图的日期。
      * Check Cumulative flow diagram date.
      *

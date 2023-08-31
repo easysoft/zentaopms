@@ -2485,101 +2485,65 @@ class execution extends control
     }
 
     /**
+     * 任务看板
      * Task kanban.
      *
      * @param  int    $executionID
-     * @param  string $browseType story|bug|task|all
+     * @param  string $browseType  story|bug|task|all
      * @param  string $orderBy
-     * @param  string $groupBy
+     * @param  string $groupBy     default|pri|category|module|source|assignedTo|type|story|severity
      * @access public
      * @return void
      */
-    public function taskKanban($executionID, $browseType = 'all', $orderBy = 'order_asc', $groupBy = '')
+    public function taskKanban(int $executionID, string $browseType = 'all', string $orderBy = 'order_asc', string $groupBy = '')
     {
-        if(empty($groupBy)) $groupBy = 'default';
-
-        /* Save to session. */
-        $this->session->set('taskSearchValue', '');
-        $uri = $this->app->getURI(true);
-        $this->app->session->set('taskList', $uri, 'execution');
-        $this->app->session->set('bugList',  $uri, 'qa');
-        $this->app->session->set('execGroupBy', $groupBy);
-
-        /* Load language. */
+        /* Load model and language. */
         $this->app->loadLang('task');
         $this->app->loadLang('bug');
         $this->loadModel('kanban');
 
-        /* Compatibility IE8. */
-        if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) helper::header('X-UA-Compatible', 'IE=EmulateIE7');
+        if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) helper::header('X-UA-Compatible', 'IE=EmulateIE7'); // Compatibility IE8.
 
         $this->execution->setMenu($executionID);
-        $execution = $this->execution->getById($executionID);
-        if($execution->lifetime == 'ops' or in_array($execution->attribute, array('request', 'review')))
+        $execution = $this->execution->getByID($executionID);
+        $features  = $this->execution->getExecutionFeatures($execution);
+        if(!$features['story'])
         {
             $browseType = 'task';
             unset($this->lang->kanban->group->task['story']);
         }
 
-        $this->app->session->set('execLaneType', $browseType);
+        /* Save to session. */
+        $uri     = $this->app->getURI(true);
+        $groupBy = empty($groupBy) ? 'default' : $groupBy;
+        $this->session->set('taskList', $uri, 'execution');
+        $this->session->set('bugList',  $uri, 'qa');
+        $this->session->set('taskSearchValue', '');
+        $this->session->set('execGroupBy', $groupBy);
+        $this->session->set('execLaneType', $browseType);
 
-        if($groupBy == 'story' and $browseType == 'task' and !isset($this->lang->kanban->orderList[$orderBy])) $orderBy = 'id_asc';
+        /* Get kanban data. */
+        $orderBy     = $groupBy == 'story' && $browseType == 'task' && !isset($this->lang->kanban->orderList[$orderBy]) ? 'id_asc' : $orderBy;
         $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, '', $orderBy);
-
         if(empty($kanbanGroup))
         {
             $this->kanban->createExecutionLane($executionID, $browseType);
             $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, '', $orderBy);
         }
 
-        /* Show lanes of the attribute: no story&bug in request, no bug in design. */
+        /* Show lanes of the attribute: no story and bug in request, no bug in design. */
         if(!isset($this->lang->execution->menu->story)) unset($kanbanGroup['story']);
         if(!isset($this->lang->execution->menu->qa))    unset($kanbanGroup['bug']);
 
-        /* Determines whether an object is editable. */
-        $canBeChanged = common::canModify('execution', $execution);
+        $this->executionZen->assignTaskKanbanVars($execution);
 
-        /* Get execution's product. */
-        $productID    = 0;
-        $productNames = array();
-        $products     = $this->loadModel('product')->getProducts($executionID);
-        if($products) $productID = key($products);
-        foreach($products as $product) $productNames[$product->id] = $product->name;
-
-        $plans    = $this->execution->getPlans($products);
-        $allPlans = array();
-        if(!empty($plans))
-        {
-            foreach($plans as $plan) $allPlans += $plan;
-        }
-
-        $userList = $this->dao->select('account, realname, avatar')->from(TABLE_USER)->where('deleted')->eq(0)->fetchAll('account');
-        $userList['closed'] = new stdclass();
-        $userList['closed']->account  = 'Closed';
-        $userList['closed']->realname = 'Closed';
-        $userList['closed']->avatar   = '';
-
-        $projectID  = $execution->project;
-        $project    = $this->project->getByID($projectID);
-        $hiddenPlan = $project->model !== 'scrum';
-
-        $this->view->title        = $this->lang->execution->kanban;
-        $this->view->realnames    = $this->loadModel('user')->getPairs('noletter');
         $this->view->storyOrder   = $orderBy;
         $this->view->orderBy      = 'id_asc';
         $this->view->executionID  = $executionID;
-        $this->view->productID    = $productID;
-        $this->view->productNames = $productNames;
-        $this->view->productNum   = count($products);
-        $this->view->allPlans     = $allPlans;
         $this->view->browseType   = $browseType;
-        $this->view->features     = $this->execution->getExecutionFeatures($execution);
+        $this->view->features     = $features;
         $this->view->kanbanGroup  = $kanbanGroup;
-        $this->view->execution    = $execution;
         $this->view->groupBy      = $groupBy;
-        $this->view->canBeChanged = $canBeChanged;
-        $this->view->userList     = $userList;
-        $this->view->hiddenPlan   = $hiddenPlan;
 
         $this->display();
     }
