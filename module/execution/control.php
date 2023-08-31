@@ -2983,7 +2983,8 @@ class execution extends control
     }
 
     /**
-     * Link stories to an execution.
+     * 在迭代中关联需求。
+     * Link stories in the execution.
      *
      * @param  int    $objectID
      * @param  string $browseType
@@ -2994,83 +2995,66 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function linkStory($objectID = 0, $browseType = '', $param = 0, $recPerPage = 50, $pageID = 1, $extra = '')
+    public function linkStory(int $objectID = 0, string $browseType = '', int $param = 0, int $recPerPage = 50, int $pageID = 1, string $extra = '')
     {
         $this->loadModel('story');
         $this->loadModel('product');
         $this->loadModel('tree');
         $this->loadModel('branch');
 
-        /* Init objectID */
+        /* Save old objectID to use later. */
         $originObjectID = $objectID;
 
-        /* Transfer object id when version lite */
+        /* Use the projectID of Kanban as objectID if vision is lite. */
         if($this->config->vision == 'lite')
         {
             $kanban  = $this->project->getByID($objectID, 'kanban');
             $objectID = $kanban->project;
         }
 
-        /* Get projects, executions and products. */
-        $object     = $this->project->getByID($objectID, 'project,sprint,stage,kanban');
-        $products   = $this->product->getProducts($objectID);
-        $queryID    = ($browseType == 'bySearch') ? (int)$param : 0;
-        $browseLink = $this->session->executionStoryList;
-        if($this->app->tab == 'project' and $object->multiple) $browseLink = $this->createLink('projectstory', 'story', "objectID=$objectID");
-        if($object->type == 'kanban' && !$object->hasProduct) $this->lang->productCommon = $this->lang->project->common;
-
-        $this->session->set('storyList', $this->app->getURI(true), $this->app->tab); // Save session.
-
-        /* Only execution can have no products. */
+        $products = $this->product->getProducts($objectID);
         if(empty($products))
         {
             echo js::alert($this->lang->execution->errorNoLinkedProducts);
             return print(js::locate($this->createLink('execution', 'manageproducts', "executionID=$objectID")));
         }
 
+        /* 通过objectID获取符合项目、执行、阶段和看板类型的对象。*/
+        $object = $this->project->getByID($objectID, 'project,sprint,stage,kanban');
+
+        $browseLink = $this->session->executionStoryList;
+        if($this->app->tab == 'project' and $object->multiple) $browseLink = $this->createLink('projectstory', 'story', "objectID=$objectID");
+
+        if($object->type == 'kanban' && !$object->hasProduct) $this->lang->productCommon = $this->lang->project->common;
+
+        $this->session->set('storyList', $this->app->getURI(true), $this->app->tab);
+
         if(!empty($_POST))
         {
             if($object->type != 'project' and $object->project != 0) $this->execution->linkStory($object->project);
             $this->execution->linkStory($objectID, array(), $extra);
 
-            if(isonlybody())
+            if(!isonlybody()) return $this->sendSuccess(array('load' => $browseLink));
+            if(!$this->app->tab !== 'execution') return $this->sendSuccess(array('closeModal' => true, 'locate' => $browseLink));
+
+            $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+            $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+            if($object->type == 'kanban')
             {
-                if($this->app->tab == 'execution')
-                {
-                    $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                    $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                    if($object->type == 'kanban')
-                    {
-                        $kanbanData = $this->loadModel('kanban')->getRDKanban($objectID, $execLaneType, 'id_desc', 0, $execGroupBy);
-                        $kanbanData = json_encode($kanbanData);
-                        return $this->sendSuccess(array('closeModal' => true, 'load' => true, 'callback' => "parent.updateKanban($kanbanData)"));
-                    }
-                    else
-                    {
-                        $kanbanData = $this->loadModel('kanban')->getExecutionKanban($objectID, $execLaneType, $execGroupBy);
-                        $kanbanType = $execLaneType == 'all' ? 'story' : key($kanbanData);
-                        $kanbanData = $kanbanData[$kanbanType];
-                        $kanbanData = json_encode($kanbanData);
-                        return $this->sendSuccess(array('closeModal' => true, 'load' => true, 'callback' => "parent.updateKanban(\"story\", $kanbanData)"));
-                    }
-                }
-                else
-                {
-                    return $this->sendSuccess(array('closeModal' => true, 'load' => true));
-                }
+                $kanbanData = $this->loadModel('kanban')->getRDKanban($objectID, $execLaneType, 'id_desc', 0, $execGroupBy);
+                $kanbanData = json_encode($kanbanData);
+                return $this->sendSuccess(array('closeModal' => true, 'load' => true, 'callback' => "parent.updateKanban($kanbanData)"));
             }
 
-            return $this->sendSuccess(array('load' => $browseLink));
+            $kanbanData = $this->loadModel('kanban')->getExecutionKanban($objectID, $execLaneType, $execGroupBy);
+            $kanbanType = $execLaneType == 'all' ? 'story' : key($kanbanData);
+            $kanbanData = $kanbanData[$kanbanType];
+            $kanbanData = json_encode($kanbanData);
+            return $this->sendSuccess(array('closeModal' => true, 'load' => true, 'callback' => "parent.updateKanban(\"story\", $kanbanData)"));
         }
 
-        if($object->type == 'project')
-        {
-            $this->project->setMenu($object->id);
-        }
-        elseif($object->type == 'sprint' or $object->type == 'stage' or $object->type == 'kanban')
-        {
-            $this->execution->setMenu($object->id);
-        }
+        if($object->type == 'project') $this->project->setMenu($object->id);
+        if(in_array($object->type, array('sprint', 'stage', 'kanban'))) $this->execution->setMenu($object->id);
 
         /* Set modules and branches. */
         $modules      = array();
@@ -3105,17 +3089,11 @@ class execution extends control
         /* Build the search form. */
         $actionURL    = $this->createLink($this->app->rawModule, 'linkStory', "objectID=$objectID&browseType=bySearch&queryID=myQueryID");
         $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
+        $queryID      = ($browseType == 'bySearch') ? (int)$param : 0;
         $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'linkStory', $object);
 
-        if($browseType == 'bySearch')
-        {
-            $allStories = $this->story->getBySearch('', '', $queryID, 'id', $objectID);
-        }
-        else
-        {
-            $allStories = $this->story->getProductStories(implode(',', array_keys($products)), $branchIDList, '0', 'active', 'story', 'id_desc', false, '', null);
-        }
-
+        if($browseType == 'bySearch') $allStories = $this->story->getBySearch('', '', $queryID, 'id', $objectID);
+        if($browseType != 'bySearch') $allStories = $this->story->getProductStories(implode(',', array_keys($products)), $branchIDList, '0', 'active', 'story', 'id_desc', false, '', null);
         $linkedStories = $this->story->getExecutionStoryPairs($objectID);
         foreach($allStories as $id => $story)
         {
@@ -3130,7 +3108,7 @@ class execution extends control
             }
         }
 
-        /* Pager. */
+        /* Set the pager. */
         $this->app->loadClass('pager', true);
         $pager      = new pager(count($allStories), $recPerPage, $pageID);
         $allStories = array_chunk($allStories, $pager->recPerPage);
@@ -3141,12 +3119,11 @@ class execution extends control
         $productPairs = array();
         foreach($products as $id => $product) $productPairs[$id] = $product->name;
 
-        /* Assign. */
         $this->view->title        = $object->name . $this->lang->colon . $this->lang->execution->linkStory;
         $this->view->objectID     = $originObjectID;
+        $this->view->param        = $param;
+        $this->view->extra        = $extra;
         $this->view->object       = $object;
-        $this->view->executionID  = $object->id;
-        $this->view->projectID    = $object->id;
         $this->view->productPairs = $productPairs;
         $this->view->allStories   = empty($allStories) ? $allStories : $allStories[$pageID - 1];
         $this->view->pager        = $pager;
@@ -3156,7 +3133,11 @@ class execution extends control
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->branchGroups = $branchGroups;
         $this->view->browseLink   = $browseLink;
+
+        /* NOT used in zin. */
         $this->view->project      = $project;
+        $this->view->executionID  = $object->id;
+        $this->view->projectID    = $object->id;
 
         $this->display();
     }
