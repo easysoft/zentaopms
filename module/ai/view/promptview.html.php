@@ -119,7 +119,7 @@
             <tbody>
             <tr>
               <th class="w-90px"><?php echo $lang->prompt->createdBy; ?></th>
-              <td><?php echo zget($users, $prompt->createdBy) . $lang->at . $prompt->createdDate;?></td>
+              <td><?php echo $prompt->createdBy == 'system' ? $lang->admin->system : zget($users, $prompt->createdBy) . $lang->at . $prompt->createdDate;?></td>
             </tr>
             <?php
               /* Search for last publish / unpublish action. */
