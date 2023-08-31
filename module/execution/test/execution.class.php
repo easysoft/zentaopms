@@ -3070,4 +3070,34 @@ class executionTest
         $this->executionModel->saveSession($executionID);
         return $this->executionModel->session->execution;
     }
+
+    /**
+     * 更新今日的累计流图数据。
+     * Update today's cumulative flow graph data.
+     *
+     * @param  int    $executionID
+     * @param  string $type
+     * @param  string $colName
+     * @param  string $cardIdList
+     * @access public
+     * @return object
+     */
+    public function updateTodayCFDDataTest(int $executionID, string $type, string $colName, string $cardIdList): object
+    {
+        $columnCard = new stdclass();
+        $columnCard->cards = $cardIdList;
+
+        $laneGroup = array(array($columnCard));
+        $count     = $cardIdList ? count(explode(',', $cardIdList)) : 0;
+
+        $this->executionModel->updateTodayCFDData($executionID, $type, $colName, $laneGroup);
+
+        return $this->executionModel->dao->select('*')->from(TABLE_CFD)
+            ->where('execution')->eq($executionID)
+            ->andWhere('date')->eq(helper::today())
+            ->andWhere('name')->eq($colName)
+            ->andWhere('type')->eq($type)
+            ->andWhere('count')->eq($count)
+            ->fetch();
+    }
 }
