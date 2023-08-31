@@ -375,7 +375,6 @@ postProcess() {
       jq -c . "$statisticDataFile" | sed "${reportInsertLine}r /dev/stdin" "$reportHtmlFile" > "$outputDir/downgradeReport.html"
     fi
   fi
-  cat "$statisticDataFile"
 }
 
 preProcess
