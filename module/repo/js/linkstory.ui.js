@@ -21,10 +21,3 @@ $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer
         data: postData
     });
 });
-
-$('#table-repo-linkstory').on('click', 'a', function(e)
-{
-    console.log(1111, e);
-    e.preventDefault();
-    return;
-})

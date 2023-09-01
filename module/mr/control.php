@@ -652,7 +652,7 @@ class mr extends control
         $linkedStories = $this->mr->getLinkList($MRID, $product->id, 'story');
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch($productID, 0, $queryID, 'id', '', 'story', array_keys($linkedStories), '', $pager);
+            $allStories = $this->story->getBySearch($productID, 0, $queryID, $orderBy, '', 'story', array_keys($linkedStories), '', $pager);
         }
         else
         {
@@ -741,16 +741,12 @@ class mr extends control
         $linkedBugs = $this->mr->getLinkList($MRID, $product->id, 'bug');
         if($browseType == 'bySearch')
         {
-            $allBugs = $this->bug->getBySearch($productID, 0, $queryID, 'id_desc', array_keys($linkedBugs), $pager);
+            $allBugs = $this->bug->getBySearch($productID, 0, $queryID, $orderBy, array_keys($linkedBugs), $pager);
         }
         else
         {
-            $allBugs = $this->bug->getActiveBugs($productID, 0, '0', array_keys($linkedBugs), $pager);
+            $allBugs = $this->bug->getActiveBugs($productID, 0, '0', array_keys($linkedBugs), $pager, $orderBy);
         }
-
-        list($order, $sort) = explode('_', $orderBy);
-        $sortCol = array_column($allBugs, $order);
-        array_multisort($sortCol, $sort == 'asc' ? SORT_ASC : SORT_DESC, $allBugs);
 
         $this->view->modules     = $modules;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');

@@ -606,7 +606,7 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getActiveBugs($products, $branch, $executions, $excludeBugs, $pager = null)
+    public function getActiveBugs($products, $branch, $executions, $excludeBugs, $pager = null, $orderBy = 'id desc')
     {
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('status')->eq('active')
@@ -617,7 +617,7 @@ class bugModel extends model
             ->beginIF(!empty($executions))->andWhere('execution')->in($executions)->fi()
             ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()
             ->andWhere('deleted')->eq(0)
-            ->orderBy('id desc')
+            ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
     }

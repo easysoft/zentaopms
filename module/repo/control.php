@@ -1221,7 +1221,7 @@ class repo extends control
         }
         else
         {
-            $allBugs = $this->bug->getActiveBugs($product->id, 0, '0', array_keys($linkedBugs), $pager);
+            $allBugs = $this->bug->getActiveBugs($product->id, 0, '0', array_keys($linkedBugs), $pager, $orderBy);
         }
 
         foreach($allBugs as $bug) $bug->statusText = $this->processStatus('bug', $bug);

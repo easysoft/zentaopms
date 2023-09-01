@@ -1973,7 +1973,7 @@ class mrModel extends model
     {
         $product = array();
 
-        if($MR->repoID)
+        if(is_object($MR) && $MR->repoID)
         {
             $productID = $this->dao->select('product')->from(TABLE_REPO)->where('id')->eq($MR->repoID)->fetch('product');
         }
