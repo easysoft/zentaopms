@@ -803,3 +803,5 @@ INSERT INTO `zt_prompt` (`name`, `model`, `module`, `source`, `targetForm`, `pur
 INSERT INTO `zt_prompt` (`name`, `model`, `module`, `source`, `targetForm`, `purpose`, `elaboration`, `role`, `characterization`, `createdBy`, `createdDate`, `status`) VALUES ('文档润色', 0, 'doc', ',doc.content,doc.title,', 'doc.edit', '我希望你能帮我润色标题和文档正文。', '要求语句要通顺，逻辑要清晰，没有错别字且更具结构化。', '你是一名文章写得很好的文案编辑。', '文笔流畅、条理清晰。精通广告文案写作和编辑，擅长创意思维和品牌策略，能够进行市场调研和竞品分析，具有敏锐的审美和语言表达能力，能够协调多部门合作和项目管理，具有良好的沟通和协调能力。', 'system', '2023-08-31 15:54:57', 'active');
 
 ALTER TABLE `zt_ticket` ADD `subStatus` varchar(30) NOT NULL DEFAULT '';
+
+REPLACE INTO `zt_privrelation` (`priv`, `type`, `relationPriv`) VALUES ('kanban-view', 'depend', 'kanban-space');
