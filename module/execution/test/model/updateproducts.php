@@ -29,20 +29,17 @@ su('admin');
 /**
 
 title=测试executionModel->updateProductsTest();
+timeout=0
 cid=1
-pid=1
-
-测试修改敏捷执行关联产品 >> 1
-测试修改瀑布执行关联产品 >> 2
-测试修改看板执行关联产品 >> 3
 
 */
 
-$executionIDList = array('3','4','5');
-$productIDlist   = array('1','2','3');
-$products        = array('products' => $productIDlist);
+$executionIdList = array(3, 4, 5);
+$productIdList   = array(1, 2, 3);
+$branchIdList    = array(1, 2, 3);
+$products        = array('products' => $productIdList, 'branch' => $branchIdList);
 
 $execution = new executionTest();
-r($execution->updateProductsTest($executionIDList[0], $products)) && p('0:product') && e('1'); // 测试修改敏捷执行关联产品
-r($execution->updateProductsTest($executionIDList[1], $products)) && p('1:product') && e('2'); // 测试修改瀑布执行关联产品
-r($execution->updateProductsTest($executionIDList[2], $products)) && p('2:product') && e('3'); // 测试修改看板执行关联产品
+r($execution->updateProductsTest($executionIdList[0], $products)) && p('0:product') && e('1'); // 测试修改敏捷执行关联产品
+r($execution->updateProductsTest($executionIdList[1], $products)) && p('1:product') && e('2'); // 测试修改瀑布执行关联产品
+r($execution->updateProductsTest($executionIdList[2], $products)) && p('2:product') && e('3'); // 测试修改看板执行关联产品

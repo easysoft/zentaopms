@@ -1135,28 +1135,23 @@ class executionTest
     }
 
     /**
-     * function updateProducts test by execution
+     * 更新执行关联的产品信息。
+     * Update products of a execution.
      *
-     * @param  string $executionID
+     * @param  int   $executionID
      * @param  array $param
      * @access public
      * @return array
      */
-    public function updateProductsTest($executionID,$param = array())
+    public function updateProductsTest(int $executionID, array $param = array()): array
     {
-        global $tester;
+        $postData = new stdclass();
+        $postData->products = array();
+        $postData->branch   = array();
 
-        $products = array();
-        $branch   = array();
+        foreach($param as $key => $value) $postData->$key = $value;
 
-        $createFields = array('products' => $products, 'branch' => $branch, 'post' => 'post');
-
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $this->executionModel->updateProducts($executionID);
-
-        unset($_POST);
+        $this->executionModel->updateProducts($executionID, $postData);
 
         if(dao::isError())
         {
@@ -1165,9 +1160,7 @@ class executionTest
         }
         else
         {
-
-            $productList  = $tester->dbh->query("select * from zt_projectproduct where project = $executionID")->fetchAll();
-            return $productList;
+            return $this->executionModel->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->fetchAll();
         }
     }
 
