@@ -585,19 +585,20 @@ class executionTest
     }
 
     /**
-     * function close test by execution
+     * 测试关闭执行。
+     * Test close execution.
      *
      * @param  string $executionID
      * @param  array  $param
-     * @param  bool   $testParent
+     * @param  bool   $testParent   是否观察父级对象的测试结果。
      * @access public
      * @return array
      */
     public function closeTest($executionID, $param = array(), $testParent = false)
     {
-        $todate = date('Y-m-d');
+        $today = date('Y-m-d');
 
-        $createFields = array('status' => 'closed', 'comment' => '关闭描述测试', 'realEnd' => $todate);
+        $createFields = array('status' => 'closed', 'comment' => '关闭描述测试', 'realEnd' => $today);
 
         foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
         foreach($param as $key => $value) $_POST[$key] = $value;
@@ -615,6 +616,8 @@ class executionTest
         {
             if($testParent)
             {
+                global $tester;
+                $tester->loadModel('programplan')->computeProgress($executionID, 'close');
                 $execution       = $this->executionModel->getByID($executionID);
                 $executionParent = $this->executionModel->getByID($execution->parent);
                 return $executionParent;
