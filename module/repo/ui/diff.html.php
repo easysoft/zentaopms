@@ -71,7 +71,7 @@ if(strpos($repo->SCM, 'Subversion') === false)
     $breadcrumbItems[] = input(set::type('hidden'), set::name('oldRevision'), set::value($oldRevision));
     $breadcrumbItems[] = input(set::type('hidden'), set::name('newRevision'), set::value($newRevision));
     $breadcrumbItems[] = input(set::type('hidden'), set::name('isBranchOrTag'), set::value($isBranchOrTag));
-    $breadcrumbItems[] = span($lang->repo->source . ':');
+    $breadcrumbItems[] = span($lang->repo->source . ':', setClass('ml-3'));
     $breadcrumbItems[] = dropmenu
         (
             setID('source'),
