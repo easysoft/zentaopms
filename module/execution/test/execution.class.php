@@ -1552,14 +1552,15 @@ class executionTest
     }
 
     /**
-     * function getTeamMembers test by execution
+     * 获取执行团队成员列表。
+     * Get team members.
      *
-     * @param  string $executionID
-     * @param  string $count
+     * @param  int       $executionID
+     * @param  int       $count
      * @access public
-     * @return array
+     * @return int|array
      */
-    public function getTeamMembersTest($executionID, $count)
+    public function getTeamMembersTest(int $executionID, int $count): int|array
     {
         $object = $this->executionModel->getTeamMembers($executionID);
 
@@ -1568,7 +1569,7 @@ class executionTest
             $error = dao::getError();
             return $error;
         }
-        elseif($count == "1")
+        elseif($count == 1)
         {
             return count($object);
         }

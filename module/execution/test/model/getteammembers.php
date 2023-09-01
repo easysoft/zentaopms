@@ -29,20 +29,13 @@ su('admin');
 /**
 
 title=测试executionModel->getTeamMembersTest();
+timeout=0
 cid=1
-pid=1
-
-敏捷执行查看team >> 3,execution,2
-瀑布执行查看team >> 4,execution,用户2
-看板执行查看team >> 5,execution,用户3
-敏捷执行team统计 >> 2
-瀑布执行team统计 >> 1
-看板执行team统计 >> 1
 
 */
 
 $executionIDList = array('3', '4', '5');
-$count           = array('0','1');
+$count           = array(0, 1);
 
 $execution = new executionTest();
 r($execution->getTeamMembersTest($executionIDList[0], $count[0])) && p('user1:root,type,userID')   && e('3,execution,2');     // 敏捷执行查看team
