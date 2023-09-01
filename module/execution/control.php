@@ -2315,6 +2315,7 @@ class execution extends control
     }
 
     /**
+     * 关闭迭代。
      * Close execution.
      *
      * @param  int    $executionID
@@ -2345,9 +2346,9 @@ class execution extends control
             return $this->sendSuccess($response);
         }
 
-        $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->execution->close;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->loadModel('action')->getList($this->objectType, $executionID);
+        $this->view->title   = $this->view->execution->name . $this->lang->colon .$this->lang->execution->close;
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->view->actions = $this->loadModel('action')->getList($this->objectType, $executionID);
         $this->display();
     }
 
