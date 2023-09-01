@@ -720,7 +720,7 @@ class mrModel extends model
             $MRObject->head = $MR->sourceBranch;
             $MRObject->base = $MR->targetBranch;
             $MRObject->body = $MR->description;
-            if($MR->assignee)
+            if(!$MR->assignee)
             {
                 $assignee = $this->{$host->type}->getUserIDByZentaoAccount($this->post->hostID, $MR->assignee);
                 if($assignee) $MRObject->assignee = $assignee;

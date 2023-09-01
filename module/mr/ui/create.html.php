@@ -17,8 +17,11 @@ jsVar('repo', $repo);
 jsVar('projectID', $project->id);
 jsVar('mrLang', $lang->mr);
 jsVar('branchPrivs', array());
+jsVar('projectNamespace', in_array($repo->SCM, array('Gitea', 'Gogs')) ? $project->name_with_namespace : '');
 
 dropmenu(set::objectID($repo->id), set::text($repo->name), set::tab('repo'));
+
+$projectItem = array($project->id => $project->name_with_namespace);
 
 formPanel
 (
@@ -39,7 +42,7 @@ formPanel
             set::label($lang->mr->sourceProject),
             set::name('sourceProject'),
             set::id('sourceProject'),
-            set::items(array($project->id => $project->name_with_namespace)),
+            set::items($projectItem),
             set::disabled(true),
         ),
         formGroup
@@ -60,7 +63,7 @@ formPanel
             set::label($lang->mr->targetProject),
             set::id('targetProject'),
             set::name('targetProject'),
-            set::items(array($project->id => $project->name_with_namespace)),
+            set::items($projectItem),
             set::disabled(true),
         ),
         formGroup
