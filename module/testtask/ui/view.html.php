@@ -107,7 +107,7 @@ detailBody
                     item
                     (
                         set::name($lang->testtask->pri),
-                        priLabel(zget($lang->testtask->priList, $task->pri))
+                        priLabel($task->pri, set::text($lang->testtask->priList))
                     ),
                     item
                     (

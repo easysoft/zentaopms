@@ -281,7 +281,7 @@ detailBody
                     item
                     (
                         set::name($lang->task->pri),
-                        priLabel(1)
+                        priLabel($task->pri, set::text($lang->task->priList))
                     )
                 )
             ),

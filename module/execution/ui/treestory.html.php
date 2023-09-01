@@ -226,7 +226,7 @@ div
             item
             (
                 set::name($lang->story->pri),
-                priLabel($story->pri)
+                priLabel($story->pri, set::text($lang->story->priList))
             ),
             item
             (

@@ -482,7 +482,7 @@ detailBody
                     item
                     (
                         set::name($lang->testcase->pri),
-                        priLabel(zget($lang->case->priList, $case->pri)),
+                        priLabel($case->pri, set::text($lang->case->priList))
                     ),
                     item
                     (

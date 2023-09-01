@@ -431,7 +431,7 @@ detailBody
             set::active(true),
             tableData
             (
-                item(set::name($lang->todo->pri),    priLabel(zget($lang->todo->priList, $todo->pri))),
+                item(set::name($lang->todo->pri),    priLabel($todo->pri, set::text($lang->todo->priList))),
                 item(set::name($lang->todo->status), zget($lang->todo->statusList, $todo->status)),
                 item(set::name($lang->todo->type),   zget($lang->todo->typeList, $todo->type)),
 

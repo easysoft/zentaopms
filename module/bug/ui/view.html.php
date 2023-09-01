@@ -97,8 +97,8 @@ foreach($legendMisc['linkCommit']['text'] as $commit)
 $legendBasic['os']['text']            = $osHTML;
 $legendBasic['browser']['text']       = $browserHTML;
 $legendBasic['mailto']['text']        = $mailtoHTML;
-$legendBasic['severity']['text']      = severityLabel(set::level(zget($lang->bug->severityList, $legendBasic['severity']['text'])), set::isIcon(true));
-$legendBasic['pri']['text']           = priLabel(zget($lang->bug->priList, $legendBasic['pri']['text']));
+$legendBasic['severity']['text']      = severityLabel($legendBasic['severity']['text'], set::text($lang->bug->severityList));
+$legendBasic['pri']['text']           = priLabel($legendBasic['pri']['text'], set::text($lang->bug->priList));
 $legendLife['openedBuild']['text']    = $buildsHTML;
 $legendLife['resolution']['text']     = div(zget($lang->bug->resolutionList, $bug->resolution), $duplicateBug);
 $legendMain['story']['text']          = $bug->story ? div
