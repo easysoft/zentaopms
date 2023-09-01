@@ -3090,4 +3090,37 @@ class executionTest
             ->andWhere('count')->eq($count)
             ->fetch();
     }
+
+    /**
+     * 根据给定条件构建执行键值对。
+     * Build execution id:name pairs through the conditions.
+     *
+     * @param  int    $projectID
+     * @param  string $mode     all|noclosed|stagefilter|withdelete|multiple|leaf|order_asc|noprefix|withobject|hideMultiple
+     * @access public
+     * @return array
+     */
+    public function buildExecutionPairsTest(int $projectID, string $mode = ''): array
+    {
+         $executions = $this->executionModel->dao->select("*, IF(INSTR('done,closed', status) < 2, 0, 1) AS isDone, INSTR('doing,wait,suspended,closed', status) AS sortStatus")->from(TABLE_EXECUTION)
+            ->where('vision')->eq($this->executionModel->config->vision)
+            ->andWhere('type')->in('stage,sprint,kanban')
+            ->andWhere('project')->eq($projectID)
+            ->beginIF(strpos($mode, 'multiple') !== false)->andWhere('multiple')->eq('1')->fi()
+            ->beginIF(strpos($mode, 'withdelete') === false)->andWhere('deleted')->eq(0)->fi()
+            ->fetchAll('id');
+
+         $allExecutions = $this->executionModel->dao->select('id,name,parent,grade')->from(TABLE_EXECUTION)
+            ->where('type')->notin(array('program', 'project'))
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('project')->eq($projectID)
+            ->fetchAll('id');
+
+         $parents = array();
+         foreach($allExecutions as $exec) $parents[$exec->parent] = true;
+
+         $projectPairs = strpos($mode, 'withobject') !== false ? $this->executionModel->dao->select('id,name')->from(TABLE_PROJECT)->fetchPairs('id') : array();
+
+         return $this->executionModel->buildExecutionPairs($mode, $allExecutions, $executions, $parents, $projectPairs);
+    }
 }
