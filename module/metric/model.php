@@ -728,4 +728,31 @@ class metricModel extends model
 
         return $metrics;
     }
+
+    /**
+     * 运行用户自定义的度量项文件。
+     * Run metric file by custom, get result.
+     *
+     * @param  string $code
+     * @access public
+     * @return array
+     */
+    public function runCustomCalc($code)
+    {
+        $metric = $this->dao->select('id,code,scope,purpose')->from(TABLE_METRIC)->where('code')->eq($code)->fetch();
+        if(!$metric) return false;
+
+        $calcPath = $this->metricTao->getCustomCalcRoot() . $code . '.php';
+        if(!is_file($calcPath)) return false;
+
+        include_once $this->metricTao->getBaseCalcPath();
+        include_once $calcPath;
+        $calculator = new $metric->code;
+
+        $statement = $this->getDataStatement($calculator);
+        $rows = $statement->fetchAll();
+
+        foreach($rows as $row) $calculator->calculate($row);
+        return $calculator->getResult();
+    }
 }
