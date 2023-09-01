@@ -62,8 +62,8 @@ $lang->metric->unitList['day']     = '天';
 $lang->metric->unitList['manday']  = '人天';
 
 $lang->metric->afterCreateList = array();
-$lang->metric->afterCreateList['back']   = '返回列表页';
-$lang->metric->afterCreateList['finish'] = '去实现度量项';
+$lang->metric->afterCreateList['back']      = '返回列表页';
+$lang->metric->afterCreateList['implement'] = '去实现度量项';
 
 $lang->metric->dateList = array();
 $lang->metric->dateList['year']  = '年';
@@ -118,6 +118,6 @@ $lang->metric->implementInstructions = "实现说明";
 $lang->metric->implementTips = array();
 $lang->metric->implementTips[] = '1.下载度量项模板code.php，注意：文件名称要与度量代号保持一致。';
 $lang->metric->implementTips[] = '2.对文件进行编码开发操作，操作参考手册。';
-$lang->metric->implementTips[] = '3.请将开发后的code.php文件放到[用户禅道目录]/tmp/metric.php目录下。';
+$lang->metric->implementTips[] = '3.请将开发后的code.php文件放到[用户禅道目录]/tmp/metric目录下。';
 $lang->metric->implementTips[] = '4.执行命令赋予文件可执行权限。';
 

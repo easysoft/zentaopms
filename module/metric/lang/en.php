@@ -62,8 +62,8 @@ $lang->metric->unitList['day']     = 'Day';
 $lang->metric->unitList['manday']  = 'Man-day';
 
 $lang->metric->afterCreateList = array();
-$lang->metric->afterCreateList['back']   = 'Back to List Page';
-$lang->metric->afterCreateList['finish'] = 'Implement Metric';
+$lang->metric->afterCreateList['back']      = 'Back to List Page';
+$lang->metric->afterCreateList['implement'] = 'Implement Metric';
 
 $lang->metric->dateList = array();
 $lang->metric->dateList['year']  = 'Year';
@@ -118,5 +118,5 @@ $lang->metric->implementInstructions = "Implementation Instructions";
 $lang->metric->implementTips = array();
 $lang->metric->implementTips[] = '1. Download the metric template code.php. Note: The file name should be consistent with the metric code.';
 $lang->metric->implementTips[] = '2. Perform coding and development operations on the file, referring to the manual for instructions.';
-$lang->metric->implementTips[] = '3. Place the developed code.php file in the [User Zentao Directory]/tmp/metric.php directory.';
+$lang->metric->implementTips[] = '3. Place the developed code.php file in the [User Zentao Directory]/tmp/metric directory.';
 $lang->metric->implementTips[] = '4. Execute the command to grant executable permissions to the file.';
