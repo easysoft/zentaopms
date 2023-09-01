@@ -204,7 +204,9 @@ function onChangeArtifactRepo(event)
     {
         if(productArtifactRepos[productID][i].id == repoID)
         {
-            $('#filePath').val(productArtifactRepos[productID][i].url);
+            var url = productArtifactRepos[productID][i].url;
+            if(url[url.length - 1] != '/') url = url + '/';
+            $('#filePath').val(url);
             datePicker.$.setValue(productArtifactRepos[productID][i].createdDate.substr(0, 10));
         }
     }
