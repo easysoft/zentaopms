@@ -188,6 +188,8 @@ class compileModel extends model
             $this->loadModel('ci');
             foreach($jobs as $gitlabJob)
             {
+                if(!is_object($gitlabJob)) continue;
+
                 if(empty($gitlabJob->duration)) $gitlabJob->duration = '-';
                 $logs .= "<font style='font-weight:bold'>&gt;&gt;&gt; Job: $gitlabJob->name, Stage: $gitlabJob->stage, Status: $gitlabJob->status, Duration: $gitlabJob->duration Sec\r\n </font>";
                 $logs .= "Job URL: <a href=\"$gitlabJob->web_url\" target='_blank'>$gitlabJob->web_url</a> \r\n";
