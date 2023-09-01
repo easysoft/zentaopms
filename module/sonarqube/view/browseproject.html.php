@@ -34,7 +34,7 @@
 <div class="table-empty-tip">
   <p>
     <span class="text-muted"><?php echo $lang->noData;?></span>
-    <?php if(empty($keyword) and common::hasPriv('sonarqube', 'createProject')):?>
+    <?php if(empty($keyword) and commonModel::hasPriv('space', 'browse')):?>
     <?php echo html::a($this->createLink('sonarqube', 'createProject', "sonarqubeID=$sonarqubeID"), "<i class='icon icon-plus'></i> " . $lang->sonarqube->createProject, '', "class='btn btn-info'");?>
     <?php endif;?>
   </p>

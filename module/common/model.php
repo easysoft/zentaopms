@@ -1747,7 +1747,9 @@ EOF;
         if(strtolower($module) == 'story'    and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
         if(strtolower($module) == 'bug'      and strtolower($method) == 'tostory')    ($module = 'story') and ($method = 'create');
         if(strtolower($module) == 'bug'      and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
-        if(!commonModel::hasPriv($module, $method, $object, $vars)) return false;
+        $currentModule = strtolower($module);
+        $currentMethod = strtolower($method);
+        if(!commonModel::hasPriv($module, $method, $object, $vars) and !in_array("$currentModule.$currentMethod", $config->openMethods)) return false;
 
         $link = helper::createLink($module, $method, $vars, '', $onlyBody, $programID);
 

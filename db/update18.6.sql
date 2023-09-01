@@ -93,6 +93,7 @@ ALTER TABLE `zt_build` ADD `artifactRepoID` MEDIUMINT(8) UNSIGNED NOT NULL AFTER
 REPLACE INTO
     `zt_privmanager` (`id`, `parent`, `code`, `type`, `edition`, `vision`, `order`)
 VALUES
+    (557, 457, 'ops', 'module', ',open,biz,max,ipd,', ',rnd,', 1920),
     (658, 557, '', 'package', ',open,biz,max,ipd,', ',rnd,', 2160),
     (126, 557, '', 'package', ',open,biz,max,ipd,', ',rnd,', 2180),
     (659, 557, '', 'package', ',open,biz,max,ipd,', ',rnd,', 2200),
@@ -136,6 +137,10 @@ VALUES
     (130, 557, '', 'package', ',biz,max,ipd,', ',rnd,lite,or,', 2270);
 
 DELETE FROM `zt_priv` WHERE id=834;
+DELETE FROM `zt_priv` WHERE `module` IN ('gitlab', 'jenkins', 'gitea', 'gogs', 'sonarqube');
+UPDATE `zt_priv` SET `edition`=',open,biz,max,ipd,' WHERE `module`='host';
+UPDATE `zt_priv` SET `edition`=',open,biz,max,ipd,' WHERE `module`='account';
+UPDATE `zt_priv` SET `edition`=',open,biz,max,ipd,' WHERE `module`='serverroom';
 REPLACE INTO
     `zt_priv` (`id`, `module`, `method`, `parent`, `edition`, `vision`, `system`, `order`)
 VALUES
@@ -143,10 +148,10 @@ VALUES
     (1285, 'system', 'dblist', 126, ',biz,max,ipd,', ',rnd,', '1', 5),
     (1286, 'system', 'configdomain', 126, ',biz,max,ipd,', ',rnd,', '1', 10),
     (2137, 'system', 'ossview', 126, ',biz,max,ipd,', ',rnd,', '1', 15),
-    (2138, 'ops', 'provide', 660, ',biz,max,ipd,', ',rnd,', '1', 20),
-    (2139, 'ops', 'city', 661, ',biz,max,ipd,', ',rnd,', '1', 25),
-    (2140, 'ops', 'cpubrand', 662, ',biz,max,ipd,', ',rnd,', '1', 30),
-    (2141, 'ops', 'os', 663, ',biz,max,ipd,', ',rnd,', '1', 35),
+    (2138, 'ops', 'provide', 660, ',open,biz,max,ipd,', ',rnd,', '1', 20),
+    (2139, 'ops', 'city', 661, ',open,biz,max,ipd,', ',rnd,', '1', 25),
+    (2140, 'ops', 'cpubrand', 662, ',open,biz,max,ipd,', ',rnd,', '1', 30),
+    (2141, 'ops', 'os', 663, ',open,biz,max,ipd,', ',rnd,', '1', 35),
     (1051, 'repo', 'maintain', 664, ',open,biz,max,ipd,', ',rnd,', '1', 0),
     (1052, 'repo', 'browse', 664, ',open,biz,max,ipd', ',rnd,', '1', 30),
     (1047, 'repo', 'create', 665, ',open,biz,max,ipd', ',rnd,', '1', 5),

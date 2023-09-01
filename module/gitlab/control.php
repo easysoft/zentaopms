@@ -20,6 +20,7 @@ class gitlab extends control
     {
         parent::__construct($moduleName, $methodName);
 
+        if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
         /* This is essential when changing tab(menu) from gitlab to repo. */
         /* Optional: common::setMenuVars('devops', $this->session->repoID); */
         $this->loadModel('ci')->setMenu();
@@ -725,7 +726,7 @@ class gitlab extends control
         if(!$this->app->user->admin)
         {
             $openID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
-            if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
+            if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('space', 'browse')));
         }
 
         $this->app->loadClass('pager', true);

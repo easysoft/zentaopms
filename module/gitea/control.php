@@ -20,6 +20,7 @@ class gitea extends control
     {
         parent::__construct($moduleName, $methodName);
 
+        if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
         /* This is essential when changing tab(menu) from gitea to repo. */
         /* Optional: common::setMenuVars('devops', $this->session->repoID); */
         if($this->app->rawMethod != 'binduser') $this->loadModel('ci')->setMenu();

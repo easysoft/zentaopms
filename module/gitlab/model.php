@@ -2977,4 +2977,18 @@ class gitlabModel extends model
 
         return false;
     }
+
+    /**
+     * 判断按钮是否可点击。
+     * Adjust the action clickable.
+     *
+     * @param  object $instance
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function isClickable(object $gitlab, string $action): bool
+    {
+        return commonModel::hasPriv('space', 'browse');
+    }
 }

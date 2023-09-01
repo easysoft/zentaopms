@@ -36,6 +36,7 @@ $config->space->dtable->fieldList['createdAt']['group'] = 'created';
 
 $config->space->dtable->fieldList['actions']['type'] = 'actions';
 $config->space->dtable->fieldList['actions']['menu'] = array('visit', 'start|stop', 'edit', 'bindUser', 'uninstall', 'upgrade');
+if(!$config->inQuickon) $config->space->dtable->fieldList['actions']['menu'] = array('visit', 'edit', 'bindUser');
 
 $config->space->dtable->fieldList['actions']['list']['start']['icon']      = 'play';
 $config->space->dtable->fieldList['actions']['list']['start']['className'] = 'ajax-submit';
