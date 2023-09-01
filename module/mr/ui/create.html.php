@@ -125,7 +125,7 @@ formPanel
     (
         set::name('description'),
         set::label($lang->mr->description),
-        set::control('editor'),
+        set::control('textarea'),
     ),
     formRow
     (

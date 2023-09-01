@@ -40,7 +40,7 @@ $config->mr->dtable->fieldList['createdBy']['sortType'] = true;
 
 $config->mr->dtable->fieldList['createdDate']['name']     = 'createdDate';
 $config->mr->dtable->fieldList['createdDate']['title']    = $lang->mr->createdDate;
-$config->mr->dtable->fieldList['createdDate']['type']     = 'date';
+$config->mr->dtable->fieldList['createdDate']['type']     = 'datetime';
 $config->mr->dtable->fieldList['createdDate']['sortType'] = true;
 
 $config->mr->dtable->fieldList['actions']['name']  = 'actions';

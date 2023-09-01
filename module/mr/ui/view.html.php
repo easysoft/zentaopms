@@ -209,7 +209,7 @@ panel
                         item
                         (
                             set::name($lang->mr->description),
-                            !empty($MR->description) ? $MR->description : $lang->noData,
+                            !empty($MR->description) ? html(nl2br($MR->description)) : $lang->noData,
                         ),
                     ),
                 ),

@@ -56,7 +56,7 @@ $config->mr->actionList['delete']['icon']         = 'trash';
 $config->mr->actionList['delete']['hint']         = $lang->mr->delete;
 $config->mr->actionList['delete']['url']          = helper::createLink('mr', 'delete', "MRID={id}&confirm=yes");
 $config->mr->actionList['delete']['data-confirm'] = $lang->mr->confirmDelete;
-$config->mr->actionList['delete']['class']        = 'ajax-submit';
+$config->mr->actionList['delete']['className']    = 'ajax-submit';
 
 $config->mr->actionList['accept']['icon']        = 'flow';
 $config->mr->actionList['accept']['text']        = $lang->mr->acceptMR;
@@ -72,15 +72,15 @@ $config->mr->actionList['reject']['text']        = $lang->mr->reject;
 $config->mr->actionList['reject']['url']         = helper::createLink('mr', 'approval', "MRID={id}&action=reject");
 $config->mr->actionList['reject']['data-toggle'] = 'modal';
 
-$config->mr->actionList['close']['icon']  = 'off';
-$config->mr->actionList['close']['text']  = $lang->mr->close;
-$config->mr->actionList['close']['url']   = helper::createLink('mr', 'close', "MRID={id}");
-$config->mr->actionList['close']['class'] = 'ajax-submit';
+$config->mr->actionList['close']['icon']      = 'off';
+$config->mr->actionList['close']['text']      = $lang->mr->close;
+$config->mr->actionList['close']['url']       = helper::createLink('mr', 'close', "MRID={id}");
+$config->mr->actionList['close']['className'] = 'ajax-submit';
 
-$config->mr->actionList['reopen']['icon']  = 'restart';
-$config->mr->actionList['reopen']['text']  = $lang->mr->reopen;
-$config->mr->actionList['reopen']['url']   = helper::createLink('mr', 'reopen', "MRID={id}");
-$config->mr->actionList['reopen']['class'] = 'ajax-submit';
+$config->mr->actionList['reopen']['icon']      = 'restart';
+$config->mr->actionList['reopen']['text']      = $lang->mr->reopen;
+$config->mr->actionList['reopen']['url']       = helper::createLink('mr', 'reopen', "MRID={id}");
+$config->mr->actionList['reopen']['className'] = 'ajax-submit';
 
 $app->loadLang('release');
 $app->loadLang('story');

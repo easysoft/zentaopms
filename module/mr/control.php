@@ -84,7 +84,6 @@ class mr extends control
         {
             $product         = $this->mr->getMRProduct($MR);
             $MR->linkButton  = empty($product) ? false : true;
-            $MR->createdDate = date('m-d H:i', strtotime($MR->createdDate));
         }
 
         /* Load lang from compile module */
@@ -119,6 +118,7 @@ class mr extends control
         $this->view->orderBy    = $orderBy;
         $this->view->openIDList = $openIDList;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->sortLink   = $this->createLink('mr', 'browse', "repoID={$repoID}&mode={$mode}&param={$param}&objectID={$objectID}&orderBy={orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}");
         $this->display();
     }
 
@@ -259,7 +259,7 @@ class mr extends control
         $this->loadModel('action')->create('mr', $MRID, 'deleted', '', $MR->title);
         $this->mr->createMRLinkedAction($MRID, 'removemr');
 
-        return $this->send(array('result' => 'success', 'reload' => inlink('browse')));
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
