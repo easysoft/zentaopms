@@ -1710,37 +1710,33 @@ class executionTest
     }
 
     /**
-     * function manageMembers test by execution
+     * 维护执行的团队成员。
+     * Manage members of the execution.
      *
-     * @param  string $executionID
-     * @param  string $count
-     * @param  array $param
+     * @param  int    $executionID
+     * @param  int    $count
+     * @param  array  $params
      * @access public
-     * @return array
+     * @return array|string|int
      */
-    public function manageMembersTest($executionID, $count, $param = array())
+    public function manageMembersTest(int $executionID, int $count, array $params = array()): array|string|int
     {
-        global $tester;
-        $tester->dbh->query("delete from zt_team where root = $executionID");
+        $this->executionModel->dao->delete()->from(TABLE_TEAM)->where('root')->eq($executionID)->exec();
 
-        $realnames = array();
-        $roles     = array();
-        $days      = array();
-        $hours     = array();
-        $accounts  = array();
-        $limited   = array();
+        $members = array();
+        foreach($params as $key => $valueList)
+        {
+            $members[$key] = new stdclass();
+            foreach($valueList as $field => $value)
+            {
+                $members[$key]->$field = $value;
+            }
+        }
 
-        $createFields = array('realnames' => $realnames, 'roles' => $roles, 'hours' => $hours, 'accounts' => $accounts,
-            'limited' => $limited, 'days' => $days);
+        $execution = $this->executionModel->getByID($executionID);
+        $this->executionModel->manageMembers($execution, $members);
 
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $object = $this->executionModel->manageMembers($executionID);
-
-        unset($_POST);
-
-        $object = $tester->dbh->query("select * from zt_team where root = $executionID")->fetchAll();
+        $objects = $this->executionModel->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($executionID)->fetchAll();
 
         if(dao::isError())
         {
@@ -1749,17 +1745,17 @@ class executionTest
         }
         elseif($count == "1")
         {
-            return count($object);
+            return count($objects);
         }
         else
         {
-            if(empty($object))
+            if(empty($objects))
             {
                 return '无数据';
             }
             else
             {
-                return $object;
+                return $objects;
             }
         }
     }
