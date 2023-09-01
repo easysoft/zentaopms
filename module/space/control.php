@@ -58,8 +58,9 @@ class space extends control
                 if($externalApp) $instance->externalID = $externalApp->id;
             }
         }
-        $pipelines = $this->loadModel('pipeline')->getList('', 'id_desc');
         $maxID     = 0;
+        $pipelines = array();
+        if($browseType == 'all' || $browseType == 'running') $pipelines = $this->loadModel('pipeline')->getList('', 'id_desc');
         if(!empty($instances)) $maxID = max(array_keys($instances));
         foreach($pipelines as $key => $pipeline)
         {
@@ -67,7 +68,7 @@ class space extends control
 
             $pipeline->createdAt  = $pipeline->createdDate;
             $pipeline->appName    = $this->lang->space->appType[$pipeline->type];
-            $pipeline->status     = '';
+            $pipeline->status     = 'running';
             $pipeline->type       = 'external';
             $pipeline->externalID = $pipeline->id;
             $pipeline->orgID      = $pipeline->id;
