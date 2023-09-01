@@ -25,6 +25,7 @@ $fnGenerateFields = function() use ($lang, $fields)
     {
         $field['name'] = $name;
         if(!empty($field['options'])) $field['items'] = $field['options'];
+        if(!empty($field['default'])) $field['value'] = $field['default'];
         unset($field['options']);
 
         return $field;
