@@ -2847,11 +2847,11 @@ class baseRouter
     /**
      * Init config of slave db.
      *
-     * @param  int     $index
+     * @param  int     $slaveIndex
      * @access private
      * @return object
      */
-    private function initSlaveDB($index = 0)
+    private function initSlaveDB($slaveIndex = 0)
     {
         global $config;
 
