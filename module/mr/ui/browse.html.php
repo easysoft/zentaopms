@@ -75,6 +75,7 @@ toolBar
 
 dtable
 (
+    set::userMap($users),
     set::cols($config->mr->dtable->fieldList),
     set::data($MRs),
     set::sortLink(jsRaw('createSortLink')),
