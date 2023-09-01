@@ -2355,82 +2355,48 @@ class execution extends control
     }
 
     /**
+     * 执行详情。
      * View a execution.
      *
      * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function view($executionID)
+    public function view(int $executionID)
     {
-        $this->app->session->set('teamList', $this->app->getURI(true), 'execution');
-
+        /* Check execution permission. */
         $executionID = $this->execution->checkAccess((int)$executionID, $this->executions);
-        $execution   = $this->execution->getById($executionID, true);
-
-        $type = $this->config->vision == 'lite' ? 'kanban' : 'stage,sprint,kanban';
-        if(empty($execution) || strpos($type, $execution->type) === false) return print(js::error($this->lang->notFound) . js::locate('back'));
-
-        $execution->projectInfo = $this->loadModel('project')->getByID($execution->project);
-
-        $programList = array_filter(explode(',', $execution->projectInfo->path));
-        array_pop($programList);
-        $this->view->programList = $this->loadModel('program')->getPairsByList($programList);
+        $execution   = $this->execution->getByID($executionID, true);
+        $type        = $this->config->vision == 'lite' ? 'kanban' : 'stage,sprint,kanban';
+        if(empty($execution) || strpos($type, $execution->type) === false) return $this->sendError($this->lang->notFound, true);
 
         if($execution->type == 'kanban' and defined('RUN_MODE') and RUN_MODE == 'api') return print($this->fetch('execution', 'kanban', "executionID=$executionID"));
 
+        /* Load lang and set session. */
         $this->app->loadLang('program');
+        $this->app->loadLang('bug');
+        $this->app->session->set('teamList', $this->app->getURI(true), 'execution');
 
-        /* Execution not found to prevent searching for .*/
+        $this->execution->setMenu($execution->id);
+
+        /* Execution not found to prevent searching for. */
         if(!isset($this->executions[$execution->id])) $this->executions = $this->execution->getPairs($execution->project, 'all', 'nocode');
 
-        $products = $this->loadModel('product')->getProducts($execution->id);
-        $linkedBranches = array();
-        foreach($products as $product)
-        {
-            if(isset($product->branches))
-            {
-                foreach($product->branches as $branchID) $linkedBranches[$branchID] = $branchID;
-            }
-        }
+        $execution->projectInfo = $this->loadModel('project')->getByID($execution->project);
+        $programList = array_filter(explode(',', $execution->projectInfo->path));
+        array_pop($programList);
 
-        /* Set menu. */
-        $this->execution->setMenu($execution->id);
-        $this->app->loadLang('bug');
-
-        /* Load pager. */
-        $this->app->loadClass('pager', true);
-        $pager = new pager(0, 30, 1);
-
-        $this->executeHooks($executionID);
         if(!$execution->projectInfo->hasProduct) $this->lang->execution->PO = $this->lang->common->story . $this->lang->execution->owner;
 
-        $userPairs = array();
-        $userList  = array();
-        $users     = $this->loadModel('user')->getList('all');
-        foreach($users as $user)
-        {
-            $userList[$user->account]  = $user;
-            $userPairs[$user->account] = $user->realname;
-        }
+        $this->executionZen->assignViewVars($executionID);
 
-        $this->view->title      = $this->lang->execution->view;
-
+        $this->view->title        = $this->lang->execution->view;
         $this->view->execution    = $execution;
-        $this->view->products     = $products;
-        $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), '', $linkedBranches);
-        $this->view->planGroups   = $this->execution->getPlans($products);
-        $this->view->actions      = $this->loadModel('action')->getList($this->objectType, $executionID);
-        $this->view->dynamics     = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, 'all', 'all', $executionID);
-        $this->view->users        = $userPairs;
-        $this->view->userList     = $userList;
-        $this->view->teamMembers  = $this->execution->getTeamMembers($executionID);
-        $this->view->docLibs      = $this->loadModel('doc')->getLibsByObject('execution', $executionID);
-        $this->view->statData     = $this->execution->statRelatedData($executionID);
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
         $this->view->type         = $type;
         $this->view->features     = $this->execution->getExecutionFeatures($execution);
-        $this->view->project      = $this->loadModel('project')->getByID($execution->project);
+        $this->view->project      = $execution->projectInfo;
+        $this->view->programList  = $this->loadModel('program')->getPairsByList($programList);
 
         $this->display();
     }

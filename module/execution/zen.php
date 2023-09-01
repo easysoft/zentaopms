@@ -171,7 +171,55 @@ class executionZen extends execution
     }
 
     /**
-     * 检查累计流图的日期。
+     * 展示执行详情的相关变量。
+     * Show the view related variables.
+     *
+     * @param  int       $executionID
+     * @access protected
+     * @return void
+     */
+    protected function assignViewVars(int $executionID)
+    {
+        $this->executeHooks($executionID);
+
+        $userPairs = array();
+        $userList  = array();
+        $users     = $this->loadModel('user')->getList('all');
+        foreach($users as $user)
+        {
+            $userList[$user->account]  = $user;
+            $userPairs[$user->account] = $user->realname;
+        }
+
+        /* Get linked branches. */
+        $products       = $this->loadModel('product')->getProducts($executionID);
+        $linkedBranches = array();
+        foreach($products as $product)
+        {
+            if(isset($product->branches))
+            {
+                foreach($product->branches as $branchID) $linkedBranches[$branchID] = $branchID;
+            }
+        }
+
+        /* Load pager. */
+        $this->app->loadClass('pager', true);
+        $pager = new pager(0, 30, 1);
+
+        $this->view->users        = $userPairs;
+        $this->view->userList     = $userList;
+        $this->view->products     = $products;
+        $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), '', $linkedBranches);
+        $this->view->planGroups   = $this->execution->getPlans($products);
+        $this->view->actions      = $this->loadModel('action')->getList('execution', $executionID);
+        $this->view->dynamics     = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, 'all', 'all', $executionID);
+        $this->view->teamMembers  = $this->execution->getTeamMembers($executionID);
+        $this->view->docLibs      = $this->loadModel('doc')->getLibsByObject('execution', $executionID);
+        $this->view->statData     = $this->execution->statRelatedData($executionID);
+    }
+
+    /**
+     * 检查累积流图的日期。
      * Check Cumulative flow diagram date.
      *
      * @param  string    $begin
