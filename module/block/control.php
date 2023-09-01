@@ -985,15 +985,14 @@ class block extends control
         $count  = isset($this->params->count) ? (int)$this->params->count : 15;
 
         /* Get projects. */
-        $excludedModel = ($this->config->edition == 'max' or $this->config->edition == 'ipd') ? '' : 'waterfall';
-        $projects      = $this->project->getOverviewList('byStatus', $status, 'order_asc', $count, $excludedModel);
+        $projects      = $this->project->getOverviewList('byStatus', $status, 'order_asc', $count, '');
         if(empty($projects))
         {
             $this->view->projects = $projects;
             return false;
         }
 
-        $cacheKey = sprintf($this->config->cacheKeys->block->projectStatistic, $status, $count, $excludedModel);
+        $cacheKey = sprintf($this->config->cacheKeys->block->projectStatistic, $status, $count, '');
         if(helper::isCacheEnabled() && $this->cache->has($cacheKey))
         {
             $projects = $this->cache->get($cacheKey);
