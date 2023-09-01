@@ -1644,22 +1644,22 @@ class executionTest
     /**
      * function getMembers2Import test by execution
      *
-     * @param  string $execution
+     * @param  int    $executionID
      * @param  array  $currentMembers
-     * @param  string $count
+     * @param  int    $count
      * @access public
-     * @return array
+     * @return int|string|array
      */
-    public function getMembers2ImportTest($execution, $currentMembers, $count)
+    public function getMembers2ImportTest(int $executionID, array $currentMembers, int $count): int|string|array
     {
-        $object = $this->executionModel->getMembers2Import($execution, $currentMembers);
+        $object = $this->executionModel->getMembers2Import($executionID, $currentMembers);
 
         if(dao::isError())
         {
             $error = dao::getError();
             return $error;
         }
-        elseif($count == "1")
+        elseif($count == 1)
         {
             return count($object);
         }

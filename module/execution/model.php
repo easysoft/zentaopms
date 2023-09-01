@@ -3553,20 +3553,21 @@ class executionModel extends model
     }
 
     /**
+     * 获取可导入的执行成员。
      * Get members of a execution who can be imported.
      *
-     * @param  int    $execution
+     * @param  int    $executionID
      * @param  array  $currentMembers
      * @access public
      * @return array
      */
-    public function getMembers2Import($execution, $currentMembers)
+    public function getMembers2Import(int $executionID, array $currentMembers): array
     {
-        if($execution == 0) return array();
+        if($executionID == 0) return array();
 
         return $this->dao->select('account, role, hours')
             ->from(TABLE_TEAM)
-            ->where('root')->eq($execution)
+            ->where('root')->eq($executionID)
             ->andWhere('type')->in('project,execution')
             ->andWhere('account')->notIN($currentMembers)
             ->fetchAll('account');
@@ -3747,7 +3748,6 @@ class executionModel extends model
      */
     public function computeBurn(int $executionID = 0): array
     {
-        $today = helper::today();
         $executions = $this->dao->select('id, code')->from(TABLE_EXECUTION)
             ->where('type')->in('sprint,stage')
             ->andWhere('lifetime')->ne('ops')
@@ -3795,7 +3795,6 @@ class executionModel extends model
      */
     public function computeCFD(int $executionID = 0)
     {
-        $today = helper::today();
         $executions = $this->dao->select('id, code')->from(TABLE_EXECUTION)
             ->where('type')->eq('kanban')
             ->andWhere('status')->notin('done,closed,suspended')
