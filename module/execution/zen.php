@@ -66,6 +66,59 @@ class executionZen extends execution
     }
 
     /**
+     * 展示维护产品相关变量。
+     * Show the manage products related variables.
+     *
+     * @param  object    $execution
+     * @access protected
+     * @return void
+     */
+    protected function assignManageProductsVars(object $execution)
+    {
+        $branches            = $this->project->getBranchesByProject($execution->id);
+        $linkedProductIdList = empty($branches) ? array() : array_keys($branches);
+        $allProducts         = $this->loadModel('product')->getProductPairsByProject($execution->project, 'all', implode(',', $linkedProductIdList));
+        $linkedProducts      = $this->product->getProducts($execution->id, 'all', '', true, $linkedProductIdList);
+        $linkedBranches      = array();
+        $executionStories    = $this->project->getStoriesByProject($execution->id);
+
+        /* If the story of the product which linked the execution, you don't allow to remove the product. */
+        $unmodifiableProducts = array();
+        $unmodifiableBranches = array();
+        $linkedStoryIDList    = array();
+        $linkedBranchIdList   = array();
+        foreach($linkedProducts as $productID => $linkedProduct)
+        {
+            $linkedBranches[$productID] = array();
+            if(!isset($allProducts[$productID])) $allProducts[$productID] = $linkedProduct->name;
+            foreach($branches[$productID] as $branchID => $branch)
+            {
+                $linkedBranches[$productID][$branchID] = $branchID;
+                $linkedBranchIdList[$branchID] = $branchID;
+                if(!empty($executionStories[$productID][$branchID]))
+                {
+                    array_push($unmodifiableProducts, $productID);
+                    array_push($unmodifiableBranches, $branchID);
+                    $linkedStoryIDList[$productID][$branchID] = $executionStories[$productID][$branchID]->storyIDList;
+                }
+            }
+        }
+
+        $this->view->title                = $this->lang->execution->manageProducts . $this->lang->colon . $execution->name;
+        $this->view->execution            = $execution;
+        $this->view->linkedProducts       = $linkedProducts;
+        $this->view->unmodifiableProducts = $unmodifiableProducts;
+        $this->view->unmodifiableBranches = $unmodifiableBranches;
+        $this->view->linkedBranches       = $linkedBranches;
+        $this->view->linkedStoryIDList    = $linkedStoryIDList;
+        $this->view->allProducts          = $allProducts;
+        $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($allProducts), $execution->project, 'ignoreNormal|noclosed', $linkedBranchIdList);
+        $this->view->allBranches          = $this->execution->getBranchByProduct(array_keys($allProducts), $execution->project, 'ignoreNormal');
+
+        $this->display();
+    }
+
+    /**
      * 展示任务看板的相关变量。
      * Show the task Kanban related variables.
      *

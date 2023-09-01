@@ -482,8 +482,6 @@ class executionModel extends model
             /* Update the path. */
             $this->setTreePath($executionID);
 
-            $this->updateProducts($executionID);
-
             /* Set team of execution. */
             $members = isset($_POST['teamMembers']) ? $_POST['teamMembers'] : array();
             array_push($members, $sprint->PO, $sprint->QD, $sprint->PM, $sprint->RD, $sprint->openedBy);
@@ -2762,17 +2760,18 @@ class executionModel extends model
     }
 
     /**
+     * 更新执行关联的产品信息。
      * Update products of a execution.
      *
      * @param  int    $executionID
-     * @param  array  $products
+     * @param  object $postData
      * @access public
      * @return void
      */
-    public function updateProducts($executionID, $products = '')
+    public function updateProducts($executionID, object $postData)
     {
         $this->loadModel('user');
-        $products    = isset($_POST['products']) ? $_POST['products'] : $products;
+        $products    = $postData->products;
         $oldProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$executionID)->fetchGroup('product', 'branch');
         $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$executionID)->exec();
         $members = array_keys($this->getTeamMembers($executionID));
@@ -2782,8 +2781,8 @@ class executionModel extends model
             return true;
         }
 
-        $branches = isset($_POST['branch']) ? $_POST['branch'] : array();
-        $plans    = isset($_POST['plans']) ? $_POST['plans'] : array();
+        $branches = isset($postData->branch) ? $postData->branch : array();
+        $plans    = isset($postData->plans) ? $postData->plans : array();
 
         $existedProducts = array();
         foreach($products as $i => $productID)
@@ -2792,9 +2791,7 @@ class executionModel extends model
             if(!isset($existedProducts[$productID])) $existedProducts[$productID] = array();
 
             $oldPlan = 0;
-            $branch  = isset($branches[$i]) ? $branches[$i] : 0;
-
-            if(!is_array($branch)) $branch = array($branch);
+            $branch  = isset($branches[$i]) ? (array) $branches[$i] : array();
 
             foreach($branch as $branchID)
             {
@@ -5416,12 +5413,16 @@ class executionModel extends model
         foreach($extendFields as $field) $_POST[$field->field] = $project->field;
         if(isset($this->config->setCode) and $this->config->setCode == 1) $_POST['code'] = $project->code;
 
-        $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchAll();
+        $updateProductsData = new stdclass();
+        $updateProductsData->products = array();
+        $updateProductsData->branch   = array();
+        $updateProductsData->plans    = array();
+        $projectProducts    = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchAll();
         foreach($projectProducts as $projectProduct)
         {
-            $_POST['products'][] = $projectProduct->product;
-            $_POST['branch'][]   = $projectProduct->branch;
-            if($projectProduct->plan) $_POST['plans'][$projectProduct->product] = explode(',', trim($projectProduct->plan, ','));
+            $updateProductsData->products[] = $projectProduct->product;
+            $updateProductsData->branch[]   = $projectProduct->branch;
+            if($projectProduct->plan) $updateProductsData->plans[$projectProduct->product] = explode(',', trim($projectProduct->plan, ','));
         }
 
         $teamMembers = $this->dao->select('*')->from(TABLE_TEAM)->where('type')->eq('project')->andWhere('root')->eq($projectID)->fetchPairs('account', 'account');
@@ -5432,7 +5433,7 @@ class executionModel extends model
         if($executionID)
         {
             $this->update($executionID);
-            $this->updateProducts($executionID);
+            $this->updateProducts($executionID, $updateProductsData);
         }
 
         $_POST = $postData;

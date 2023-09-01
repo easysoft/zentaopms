@@ -1680,10 +1680,11 @@ class execution extends control
                 $_POST['plans'] = array_filter($_POST['plans']);
             }
 
+            $postData = form::data()->get();
             $executionID = $this->execution->create($copyExecutionID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->execution->updateProducts($executionID);
+            $this->execution->updateProducts($executionID, $postData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $comment = $project->hasProduct ? implode(',', $_POST['products']) : '';
@@ -1845,12 +1846,13 @@ class execution extends control
 
         if(!empty($_POST))
         {
+            $postData    = form::data()->get();
             $oldPlans    = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->andWhere('plan')->ne(0)->fetchPairs('plan');
             $oldProducts = $this->product->getProducts($executionID, 'all', '', true, $linkedProductIdList);
             $changes     = $this->execution->update($executionID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->execution->updateProducts($executionID);
+            $this->execution->updateProducts($executionID, $postData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($action == 'undelete')
             {
@@ -2827,30 +2829,30 @@ class execution extends control
     }
 
     /**
+     * 维护关联产品。
      * Manage products.
      *
      * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function manageProducts($executionID)
+    public function manageProducts(int $executionID)
     {
-        /* use first execution if executionID does not exist. */
+        /* Use first execution if executionID does not exist. */
         if(!isset($this->executions[$executionID])) $executionID = key($this->executions);
 
-        $this->loadModel('product');
-        $execution = $this->execution->getById($executionID);
-        $project   = $this->loadModel('project')->getByID($execution->project);
-        if(!$project->hasProduct) return print(js::error($this->lang->project->cannotManageProducts) . js::locate('back'));
-        if($project->model == 'waterfall' or $project->model == 'waterfallplus') return print(js::error(sprintf($this->lang->execution->cannotManageProducts, zget($this->lang->project->modelList, $project->model))) . js::locate('back'));
+        $execution = $this->execution->getByID($executionID);
+        $project   = $this->project->getByID($execution->project);
+        if(!$project->hasProduct) return $this->sendError($this->lang->project->cannotManageProducts, true);
+        if($project->model == 'waterfall' || $project->model == 'waterfallplus') return $this->sendError(sprintf($this->lang->execution->cannotManageProducts, zget($this->lang->project->modelList, $project->model)), true);
 
         if(!empty($_POST))
         {
-            $oldProducts = $this->product->getProducts($executionID);
-
-            $this->execution->updateProducts($executionID);
+            $postData = form::data()->get();
+            $this->execution->updateProducts($executionID, $postData);
             if(dao::isError()) return $this->sendError(dao::getError());
 
+            $oldProducts  = $this->loadModel('product')->getProducts($executionID);
             $oldProducts  = array_keys($oldProducts);
             $newProducts  = $this->product->getProducts($executionID);
             $newProducts  = array_keys($newProducts);
@@ -2863,49 +2865,7 @@ class execution extends control
         /* Set menu. */
         $this->execution->setMenu($execution->id);
 
-        /* Title and position. */
-        $branches            = $this->project->getBranchesByProject($executionID);
-        $linkedProductIdList = empty($branches) ? array() : array_keys($branches);
-        $allProducts         = $this->product->getProductPairsByProject($execution->project, 'all', implode(',', $linkedProductIdList));
-        $linkedProducts      = $this->product->getProducts($execution->id, 'all', '', true, $linkedProductIdList);
-        $linkedBranches      = array();
-        $executionStories    = $this->project->getStoriesByProject($executionID);
-
-        /* If the story of the product which linked the execution, you don't allow to remove the product. */
-        $unmodifiableProducts = array();
-        $unmodifiableBranches = array();
-        $linkedStoryIDList    = array();
-        $linkedBranchIdList   = array();
-        foreach($linkedProducts as $productID => $linkedProduct)
-        {
-            $linkedBranches[$productID] = array();
-            if(!isset($allProducts[$productID])) $allProducts[$productID] = $linkedProduct->name;
-            foreach($branches[$productID] as $branchID => $branch)
-            {
-                $linkedBranches[$productID][$branchID] = $branchID;
-                $linkedBranchIdList[$branchID] = $branchID;
-                if(!empty($executionStories[$productID][$branchID]))
-                {
-                    array_push($unmodifiableProducts, $productID);
-                    array_push($unmodifiableBranches, $branchID);
-                    $linkedStoryIDList[$productID][$branchID] = $executionStories[$productID][$branchID]->storyIDList;
-                }
-            }
-        }
-
-        /* Assign. */
-        $this->view->title                = $this->lang->execution->manageProducts . $this->lang->colon . $execution->name;
-        $this->view->allProducts          = $allProducts;
-        $this->view->execution            = $execution;
-        $this->view->linkedProducts       = $linkedProducts;
-        $this->view->unmodifiableProducts = $unmodifiableProducts;
-        $this->view->unmodifiableBranches = $unmodifiableBranches;
-        $this->view->linkedBranches       = $linkedBranches;
-        $this->view->linkedStoryIDList    = $linkedStoryIDList;
-        $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($allProducts), $execution->project, 'ignoreNormal|noclosed', $linkedBranchIdList);
-        $this->view->allBranches          = $this->execution->getBranchByProduct(array_keys($allProducts), $execution->project, 'ignoreNormal');
-
-        $this->display();
+        $this->executionZen->assignManageProductsVars($execution);
     }
 
     /**

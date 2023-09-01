@@ -22,3 +22,14 @@ $config->execution->form->managemembers['hours']   = array('type' => 'float', 'r
 $config->execution->form->managemembers['limited'] = array('type' => 'string', 'required' => false, 'default' => 'no');
 $config->execution->form->managemembers['type']    = array('type' => 'string', 'required' => false, 'default' => 'execution');
 $config->execution->form->managemembers['root']    = array('type' => 'int', 'required' => false, 'default' => 0);
+
+$config->execution->form->manageproducts['products'] = array('type' => 'array', 'required' => false, 'default' => array());
+$config->execution->form->manageproducts['branch']   = array('type' => 'array', 'required' => false, 'default' => array());
+
+$config->execution->form->create['products'] = array('type' => 'array', 'required' => false, 'default' => array());
+$config->execution->form->create['branch']   = array('type' => 'array', 'required' => false, 'default' => array());
+$config->execution->form->create['plans']    = array('type' => 'array', 'required' => false, 'default' => array());
+
+$config->execution->form->edit['products'] = array('type' => 'array', 'required' => false, 'default' => array());
+$config->execution->form->edit['branch']   = array('type' => 'array', 'required' => false, 'default' => array());
+$config->execution->form->edit['plans']    = array('type' => 'array', 'required' => false, 'default' => array());
