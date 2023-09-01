@@ -1318,22 +1318,6 @@ class testcase extends control
     }
 
     /**
-     * Get status by ajax.
-     *
-     * @param  string $methodName
-     * @param  int    $caseID
-     * @access public
-     * @return void
-     */
-    public function ajaxGetStatus($methodName, $caseID = 0)
-    {
-        $case   = $this->testcase->getByID($caseID);
-        $status = $this->testcase->getStatus($methodName, $case);
-        if($methodName == 'update') $status = zget($status, 1, '');
-        echo $status;
-    }
-
-    /**
      * Ajax: Get count of need review casese.
      *
      * @access public
