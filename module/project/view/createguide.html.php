@@ -82,6 +82,13 @@
           </div>
         </div>
         <?php endif;?>
+	<?php if($config->systemMode != 'PLM'):?>
+	<div class='col col-xs-4'>
+          <div class='project-type text-center'>
+            <div class='project-type-img more-type'><span class='text-muted'><?php echo $lang->project->moreModelTitle;?></span></div>
+          </div>
+        </div>
+	<?php endif;?>
       </div>
     </div>
   </div>
