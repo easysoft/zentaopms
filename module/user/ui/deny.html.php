@@ -38,15 +38,14 @@ if($denyType == 'noview')
     $denyContent = sprintf($lang->user->errorView, $menuName);
 }
 
-set::zui(true);
+h::css("#header{display:none;}");
 panel
 (
     setID('denyBox'),
     set::title($app->user->account . ' ' . $lang->user->deny),
     set::footerActions
     (array(
-        array('data-url' => createLink('my'), 'text' => $lang->my->common, 'onclick' => 'locatePage(this)'),
-        $refererBeforeDeny ? array('data-url' => helper::safe64Decode($refererBeforeDeny), 'text' => $lang->user->goback, 'onclick' => 'locatePage(this)') : null,
+        $refererBeforeDeny ? array('url' => helper::safe64Decode($refererBeforeDeny), 'text' => $lang->user->goback) : array('back' => 'APP', 'text' => $lang->user->goback),
         array('data-url' => createLink('user', 'logout', "referer=" . helper::safe64Encode($denyPage)), 'class' => 'primary', 'text' => $lang->user->relogin, 'onclick' => 'locateLogin(this)'),
     )),
     set::footerClass('justify-center'),
@@ -58,4 +57,4 @@ panel
     ),
 );
 
-render('pagebase');
+render();

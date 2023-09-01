@@ -430,16 +430,7 @@ class commonModel extends model
         }
         $denyLink = helper::createLink('user', 'deny', $vars);
 
-        /* Fix the bug of IE: use js locate, can't get the referer. */
-        if(strpos($this->server->http_user_agent, 'Trident') !== false)
-        {
-            echo "<a href='$denyLink' id='denylink' style='display:none'>deny</a>";
-            echo "<script>document.getElementById('denylink').click();</script>";
-        }
-        else
-        {
-            echo js::locate($denyLink);
-        }
+        echo json_encode(array('load' => $denyLink));
         helper::end();
     }
 
