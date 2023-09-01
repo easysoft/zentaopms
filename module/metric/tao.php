@@ -122,6 +122,22 @@ class metricTao extends metricModel
     }
 
     /**
+     * 更新度量项。
+     * Updata metric.
+     *
+     * @param  int       $metricID
+     * @param  object    $data
+     * @access protected
+     * @return void
+     */
+    protected function updateMetric(int $metricID, object $data)
+    {
+        $this->dao->update(TABLE_METRIC)->data($data)
+            ->where('id')->eq($metricID)
+            ->exec();
+    }
+
+    /**
      * 通过反射获取类的函数列表。
      * Get method name list of class by reflection.
      *

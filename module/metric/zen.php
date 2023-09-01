@@ -345,4 +345,23 @@ class metricZen extends metric
 
         return $verifyResult ? $verifyResult : true;
     }
+
+    /**
+     * 构建操作权限。
+     *  Prepare action priv.
+     *
+     * @param  array    $metrics
+     * @access protected
+     * @return array
+     */
+    protected function prepareActionPriv(array $metrics): array
+    {
+        foreach($metrics as $metric)
+        {
+            $metric->canEdit = $metric->stage == 'wait';
+            $metric->canImplement = $metric->stage == 'wait';
+            $metric->canDelist = $metric->stage == 'released';
+        }
+        return $metrics;
+    }
 }

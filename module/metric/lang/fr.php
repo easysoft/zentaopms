@@ -26,6 +26,7 @@ $lang->metric->create        = "Create " . $this->lang->metric->common;
 $lang->metric->afterCreate   = "After Saving";
 $lang->metric->definition    = "Definition";
 $lang->metric->customUnit    = "Custom Unit";
+$lang->metric->delist        = "Delist";
 
 $lang->metric->descTip       = 'Enter the meaning, purpose, and impact of the metric';
 $lang->metric->definitionTip = 'Enter the calculation rules and filtering conditions of the metric';
@@ -38,6 +39,8 @@ $lang->metric->legendBasicInfo  = 'Basic Information';
 $lang->metric->legendCreateInfo = 'Creation and Editing Information';
 
 $lang->metric->confirmDelete = "Are you sure you want to delete?";
+$lang->metric->confirmDelist = "Are you sure you want to delist?";
+$lang->metric->notExist      = "The measure does not exist";
 
 $lang->metric->browse          = 'Browse Metrics';
 $lang->metric->browseAction    = 'Metric List';

@@ -26,6 +26,7 @@ $lang->metric->create        = "创建" . $this->lang->metric->common;
 $lang->metric->afterCreate   = "保存后";
 $lang->metric->definition    = "计算规则";
 $lang->metric->customUnit    = "自定义";
+$lang->metric->delist        = "下架";
 
 $lang->metric->descTip       = '请输入度量项含义、目的和作用等';
 $lang->metric->definitionTip = '请输入度量项的计算规则及过滤条件等';
@@ -38,6 +39,8 @@ $lang->metric->legendBasicInfo  = '基本信息';
 $lang->metric->legendCreateInfo = '创建编辑信息';
 
 $lang->metric->confirmDelete = "确认要删除吗？";
+$lang->metric->confirmDelist = "确认要下架吗？";
+$lang->metric->notExist      = "度量项不存在";
 
 $lang->metric->browse          = '浏览度量项';
 $lang->metric->browseAction    = '度量项列表';

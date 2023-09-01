@@ -688,4 +688,44 @@ class metricModel extends model
 
         return $output;
     }
+
+    /**
+     * 更新度量项。
+     * Updata metric.
+     *
+     * @param  object $metric
+     * @access public
+     * @return void
+     */
+    public function update(object $metric)
+    {
+        $this->metricTao->updateMetric($metric->id, $metric);
+    }
+
+    /**
+     * 根据数据初始化操作按钮。
+     * Init action button by data.
+     *
+     * @param  array  $metrics
+     * @access public
+     * @return array
+     */
+    public function initActionBtn(array $metrics): array
+    {
+        foreach($metrics as $metric)
+        {
+            foreach($metric->actions as $key => $action)
+            {
+                $isClick = true;
+
+                if($action['name'] == 'edit')      $isClick = $metric->canEdit;
+                if($action['name'] == 'implement') $isClick = $metric->canImplement;
+                if($action['name'] == 'delist')    $isClick = $metric->canDelist;
+
+                $metric->actions[$key]['disabled'] = !$isClick;
+            }
+        }
+
+        return $metrics;
+    }
 }

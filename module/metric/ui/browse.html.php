@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('confirmDelist', $lang->metric->confirmDelist);
+
 $fnGenerateScopeMenu = function() use ($scope, $scopeText, $scopeList)
 {
     $link = $this->createLink('metric', 'browse', "scope={key}");
@@ -58,6 +60,8 @@ sidebar
 );
 
 $tableData = initTableData($metrics, $this->config->metric->dtable->definition->fieldList, $this->loadModel('metric'));
+$tableData = $this->metric->initActionBtn($tableData);
+
 dtable
 (
     setID('metricList'),

@@ -78,6 +78,7 @@ class metric extends control
         $this->metric->buildSearchForm($queryID, $actionURL);
 
         $metrics = $this->metric->getList($scope, $stage, $param, $type, $queryID, $sort, $pager);
+        $metrics = $this->metricZen->prepareActionPriv($metrics);
 
         /* Process the sql, get the conditon partion, save it to session. */
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'metric', true);
@@ -136,7 +137,7 @@ class metric extends control
      * @access public
      * @return void
      */
-    public function view(int $metricID)
+    public function view(int $metricID): void
     {
         $this->metric->processUnitList();
         $metric = $this->metric->getByID($metricID);
@@ -154,5 +155,27 @@ class metric extends control
         $this->view->preAndNext     = $this->loadModel('common')->getPreAndNextObject('metric', $metricID);
 
         $this->display();
+    }
+
+    /**
+     * 下架度量项。
+     * Delist metric.
+     *
+     * @param  int $metricID
+     * @access public
+     * @return void
+     */
+    public function delist(int $metricID)
+    {
+        $metric = $this->metric->getByID($metricID);
+
+        if(!$metric) return $this->send(array('result' => 'fail', 'message' => $this->lang->metric->notExist));
+
+        $metric->stage = 'wait';
+        $this->metric->update($metric);
+
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 }
