@@ -675,6 +675,10 @@ class actionModel extends model
                 foreach(explode(',', $action->extra) as $id) $extra .= common::hasPriv('bug', 'view') ? html::a(helper::createLink('bug', 'view', "bugID=$id"), "#$id ") . ', ' : "#$id, ";
                 $action->extra = trim(trim($extra), ',');
             }
+            elseif($actionName == 'repocreated')
+            {
+                $action->extra = str_replace("class='iframe'", 'data-app="devops"', $action->extra);
+            }
 
             $action->comment = $this->file->setImgSize($action->comment, $this->config->action->commonImgSize);
 
