@@ -208,7 +208,7 @@ function initPage()
         parent.loadLinkPage(link);
     });
 
-    $('#relationTabs').on('click', '.unlinks', function()
+    $('#relationTabs').off('click', '.unlinks').on('click', '.unlinks', function()
     {
         var link = $(this).data('link');
         $.post(link, function(data)
