@@ -13,6 +13,7 @@ $lang->metric->formula       = "计算规则";
 $lang->metric->when          = "收集方式";
 $lang->metric->createdBy     = "创建者";
 $lang->metric->implement     = "实现";
+$lang->metric->delist        = "下架";
 $lang->metric->implementedBy = "由谁实现";
 $lang->metric->offlineBy     = "由谁下架";
 $lang->metric->lastEdited    = "最后修改";

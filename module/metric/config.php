@@ -17,9 +17,9 @@ $config->metric->actionList['implement']['text'] = $lang->metric->implement;
 $config->metric->actionList['implement']['hint'] = $lang->metric->implement;
 $config->metric->actionList['implement']['url']  = helper::createLink('metric', 'implement', 'metricID={id}');
 
-$config->metric->actionList['delist']['icon'] = 'code';
-$config->metric->actionList['delist']['text'] = $lang->metric->implement;
-$config->metric->actionList['delist']['hint'] = $lang->metric->implement;
+$config->metric->actionList['delist']['icon'] = 'ban-circle';
+$config->metric->actionList['delist']['text'] = $lang->metric->delist;
+$config->metric->actionList['delist']['hint'] = $lang->metric->delist;
 $config->metric->actionList['delist']['url']  = helper::createLink('metric', 'delist', 'metricID={id}');
 
 $config->metric->actionList['delete']['icon']         = 'trash';

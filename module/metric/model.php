@@ -449,7 +449,11 @@ class metricModel extends model
             $menuList['main'][] = $this->config->metric->actionList['delist'];
         }
 
-        $menuList['suffix'][] = $this->config->metric->actionList['delete'];
+        if(!$metric->builtin)
+        {
+            $menuList['suffix'][] = $this->config->metric->actionList['delete'];
+        }
+
 
         return $menuList;
     }
@@ -635,7 +639,7 @@ class metricModel extends model
         $lines = explode("\n", $contents);
 
         $matchedLines = array_filter($lines, function($line) use($reg) {
-            return preg_match($reg, $line); 
+            return preg_match($reg, $line);
         });
         $matchedLines = array_values($matchedLines);
 

@@ -13,6 +13,7 @@ $lang->metric->formula       = "Formula";
 $lang->metric->when          = "Collection Method";
 $lang->metric->createdBy     = "Created By";
 $lang->metric->implement     = "Implement";
+$lang->metric->delist        = "delist";
 $lang->metric->implementedBy = "Implemented By";
 $lang->metric->offlineBy     = "Offline By";
 $lang->metric->lastEdited    = "Last Edited";
