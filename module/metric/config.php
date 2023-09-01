@@ -12,10 +12,11 @@ $config->metric->actionList['edit']['text'] = $lang->edit;
 $config->metric->actionList['edit']['hint'] = $lang->edit;
 $config->metric->actionList['edit']['url']  = helper::createLink('metric', 'edit', 'metricID={id}');
 
-$config->metric->actionList['implement']['icon'] = 'code';
-$config->metric->actionList['implement']['text'] = $lang->metric->implement;
-$config->metric->actionList['implement']['hint'] = $lang->metric->implement;
-$config->metric->actionList['implement']['url']  = helper::createLink('metric', 'implement', 'metricID={id}');
+$config->metric->actionList['implement']['icon']        = 'code';
+$config->metric->actionList['implement']['text']        = $lang->metric->implement;
+$config->metric->actionList['implement']['hint']        = $lang->metric->implement;
+$config->metric->actionList['implement']['data-toggle'] = 'modal';
+$config->metric->actionList['implement']['url']         = helper::createLink('metric', 'implement', 'metricID={id}&isVerify=true');
 
 $config->metric->actionList['delist']['icon'] = 'ban-circle';
 $config->metric->actionList['delist']['text'] = $lang->metric->delist;
