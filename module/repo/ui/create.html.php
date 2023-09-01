@@ -45,7 +45,7 @@ formPanel
             set::required(true),
             set::control(array("type" => "picker","multiple" => true)),
             set::items($products),
-            set::value(empty($objectID) ? '' : array_keys($products))
+            set::value(empty($objectID) ? '' : implode(',', array_keys($products)))
         ),
     ),
     formGroup
@@ -55,7 +55,7 @@ formPanel
         set::label($lang->repo->projects),
         set::control(array("type" => "picker","multiple" => true)),
         set::items($projects),
-        set::value(empty($relatedProjects) ? '' : $relatedProjects)
+        set::value(empty($relatedProjects) ? '' : implode(',', array_values($relatedProjects)))
     ),
     formRow
     (
