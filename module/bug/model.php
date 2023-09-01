@@ -3938,7 +3938,7 @@ class bugModel extends model
             $severityValue = zget($this->lang->bug->severityList, $bug->severity);
             $severityClass = !is_numeric($severityValue) ? 'label-severity-custom' : 'label-severity';
             $bugSeverity   = !is_numeric($severityValue) ? $severityValue : '';
-            $bug->severity = "<span class='{$severityClass}' data-severity='{$bug->severity}' title='{$severityValue}'>{$bugSeverity}</span>";
+            $bug->severity = "<div class='c-severity'><span class='{$severityClass}' data-severity='{$bug->severity}' title='{$severityValue}'>{$bugSeverity}</span></div>";
 
             $bugPri   = zget($this->lang->bug->priList, $bug->pri);
             $bug->pri = $bug->pri ? "<span class='label-pri label-pri-{$bug->pri}' title='{$bugPri}'>{$bugPri}</span>" : '';
