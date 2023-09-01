@@ -3248,7 +3248,7 @@ class executionModel extends model
         $this->loadModel('action');
         $this->loadModel('kanban');
         $versions      = $this->loadModel('story')->getVersions($stories);
-        $linkedStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order_desc')->fetchPairs('story', 'order');
+        $linkedStories = $this->dao->select('story,`order`')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order_desc')->fetchPairs('story', 'order');
         $lastOrder     = reset($linkedStories);
         $storyList     = $this->dao->select('id, status, branch, product')->from(TABLE_STORY)->where('id')->in(array_values($stories))->fetchAll('id');
         $execution     = $this->getById($executionID);
