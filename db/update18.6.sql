@@ -102,7 +102,6 @@ VALUES
     (129, 557, '', 'package', ',open,biz,max,ipd,', ',rnd,', 2260),
     (131, 557, '', 'package', ',biz,max,ipd,', ',rnd,', 2280),
     (245, 557, '', 'package', ',open,biz,max,ipd,', ',rnd,', 2380),
-    (557, 457, 'ops', 'module', ',biz,max,ipd,', ',rnd,', 1920),
     (660, 557, '', 'package', ',open,biz,max,ipd,', ',rnd,', 2300),
     (661, 557, '', 'package', ',open,biz,max,ipd,', ',rnd,', 2320),
     (662, 557, '', 'package', ',open,biz,max,ipd,', ',rnd,', 2340),
