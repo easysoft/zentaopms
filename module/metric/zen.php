@@ -20,8 +20,7 @@ class metricZen extends metric
      */
     protected function buildMetricForCreate()
     {
-        return form::data($this->config->metric->form->create)
-            ->get();
+        return form::data($this->config->metric->form->create)->get();
     }
 
     /**
@@ -113,11 +112,7 @@ class metricZen extends metric
     protected function prepareScopeList()
     {
         $scopeList = array();
-        foreach($this->lang->metric->scopeList as $scope => $scopeText)
-        {
-            $scopeList[] = array('key' => $scope, 'text' => $scopeText);
-        }
-
+        foreach($this->lang->metric->scopeList as $scope => $scopeText) $scopeList[] = array('key' => $scope, 'text' => $scopeText);
         return $scopeList;
     }
 
@@ -238,13 +233,13 @@ class metricZen extends metric
 
     /**
      * 获取度量数据表的表头。
-     * Get header of result table.
+     * Get header of result table in view.
      *
-     * @param  array     $result
+     * @param  array $result
      * @access protected
      * @return array|false
      */
-    protected function getResultHeader($result)
+    protected function getViewTableHeader($result)
     {
         if(empty($result)) return false;
 
@@ -262,6 +257,33 @@ class metricZen extends metric
     }
 
     /**
+     * 获取度量数据表的表头。
+     * Get header of result table.
+     *
+     * @param  array $result
+     * @access protected
+     * @return array|false
+     */
+    protected function getResultTableHeader($result)
+    {
+        if(empty($result)) return false;
+
+        $header = array();
+        $fieldList = array_keys(current($result));
+        $scopeList = array_keys($this->lang->metric->scopeList);
+        $dateList  = array_keys($this->lang->metric->dateList);
+
+        foreach($fieldList as $field)
+        {
+            if(in_array($field, $scopeList)) $header[] = array('name' => $field, 'title' => $this->lang->metric->scopeList[$field]);
+            if(in_array($field, $dateList))  $header[] = array('name' => $field, 'title' => $this->lang->metric->dateList[$field]);
+            if($field == 'value')            $header[] = array('name' => 'value', 'title' => $this->lang->metric->value);
+        }
+
+        return $header;
+    }
+
+    /**
      * 获取度量数据表的数据。
      * Get data of result table.
      *
@@ -270,7 +292,7 @@ class metricZen extends metric
      * @access protected
      * @return array|false
      */
-    protected function getResultData($metric, $result)
+    protected function getViewTableData($metric, $result)
     {
         $scope = $metric->scope;
         if(empty($result)) return false;
@@ -286,6 +308,36 @@ class metricZen extends metric
             $row = new stdclass();
             if(!empty($dateList))  $row->date = $this->metric->buildDateCell($record);
             if($scope != 'system') $row->scope = $objectPairs[$record[$scope]];
+            $row->value = $record['value'];
+
+            $tableData[] = $row;
+        }
+
+        return $tableData;
+    }
+
+    /**
+     * 获取度量数据表的数据。
+     * Get data of result table.
+     *
+     * @param  object    $metric
+     * @param  array     $result
+     * @access protected
+     * @return array|false
+     */
+    protected function getResultTableData($metric, $result)
+    {
+        $scope = $metric->scope;
+        if(empty($result)) return false;
+
+        if($metric->scope != 'system') $objectPairs = $this->metric->getPairsByScope($scope);
+
+        foreach($result as $record)
+        {
+            $fieldList = array_keys($record);
+
+            $row = new stdclass();
+            if($scope != 'system') $row->$scope = $objectPairs[$record[$scope]];
             $row->value = $record['value'];
 
             $tableData[] = $row;
