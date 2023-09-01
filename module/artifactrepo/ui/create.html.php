@@ -13,6 +13,7 @@ namespace zin;
 formPanel
 (
     set::title($lang->artifactrepo->create),
+    set::actionsClass('w-2/3'),
     formGroup
     (
         set::width('2/3'),
