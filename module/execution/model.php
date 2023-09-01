@@ -3372,8 +3372,8 @@ class executionModel extends model
             }
         }
 
-        $this->linkStory($projectID, $stories, $planProducts);
-        $this->linkStory($executionID, $stories, $planProducts);
+        $this->linkStory($projectID, $stories);
+        $this->linkStory($executionID, $stories);
 
         return true;
     }
