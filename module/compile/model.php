@@ -188,7 +188,7 @@ class compileModel extends model
             $this->loadModel('ci');
             foreach($jobs as $gitlabJob)
             {
-                if(empty($gitlabJob->duration) or $gitlabJob->duration == '') $gitlabJob->duration = '-';
+                if(empty($gitlabJob->duration)) $gitlabJob->duration = '-';
                 $logs .= "<font style='font-weight:bold'>&gt;&gt;&gt; Job: $gitlabJob->name, Stage: $gitlabJob->stage, Status: $gitlabJob->status, Duration: $gitlabJob->duration Sec\r\n </font>";
                 $logs .= "Job URL: <a href=\"$gitlabJob->web_url\" target='_blank'>$gitlabJob->web_url</a> \r\n";
                 $logs .= $this->ci->transformAnsiToHtml($this->gitlab->apiGetJobLog($job->server, $projectID, $gitlabJob->id));
