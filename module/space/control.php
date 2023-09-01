@@ -23,7 +23,7 @@ class space extends control
        @access public
      * @return void
      */
-    public function browse($spaceID = null, $browseType = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 24, $pageID = 1)
+    public function browse($spaceID = null, $browseType = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->app->loadLang('instance');
         $this->loadModel('instance');
