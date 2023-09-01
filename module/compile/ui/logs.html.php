@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace zin;
 global $lang;
 
+jsVar('buildID', $build->id);
 detailHeader(
     to::prefix(''),
     to::title(span(setClass('font-semibold'), $lang->compile->logs)),
@@ -24,7 +25,7 @@ detailHeader(
                 set::className('mr-3 secondary'),
                 set::icon('eye'),
                 set::text($lang->compile->refresh),
-                set::url(helper::createLink('ci', "checkCompileStatus", "compileID={$build->id}"))
+                on::click('refreshLogs'),
             ) : '',
             backBtn
             (
