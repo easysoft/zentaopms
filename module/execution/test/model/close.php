@@ -17,25 +17,17 @@ $execution->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD
 $execution->gen(6);
 
 /**
-
 title=测试executionModel->closeTest();
 cid=1
 pid=1
-
-敏捷执行关闭 >> status,wait,closed
-瀑布执行关闭 >> status,wait,closed
-看板执行关闭 >> status,wait,closed
-不输入实际完成时间校验 >> 『realEnd』不能为空。
-子瀑布关闭获取父瀑布状态 >> closed
-
 */
 
 $executionIDList = array(2, 3, 4, 6);
 $noRealEnd       = array('realEnd' => '');
 
 $executionTester = new executionTest();
-r($executionTester->closeTest($executionIDList[0]))                && p('0:field,old,new') && e('status,wait,closed');    // 敏捷执行关闭
-r($executionTester->closeTest($executionIDList[1]))                && p('0:field,old,new') && e('status,wait,closed');   // 瀑布执行关闭
-r($executionTester->closeTest($executionIDList[2]))                && p('0:field,old,new') && e('status,wait,closed');   // 看板执行关闭
-r($executionTester->closeTest($executionIDList[1],$noRealEnd))     && p('realEnd:0')       && e('『realEnd』不能为空。'); // 不输入实际完成时间校验
-r($executionTester->closeTest($executionIDList[3], array(), true)) && p('status')          && e('closed');                // 子瀑布关闭获取父瀑布状态
+r($executionTester->closeTest($executionIDList[0]))                && p('0:field,old,new') && e('status,wait,closed');         // 敏捷执行关闭
+r($executionTester->closeTest($executionIDList[1]))                && p('0:field,old,new') && e('status,wait,closed');         // 瀑布执行关闭
+r($executionTester->closeTest($executionIDList[2]))                && p('0:field,old,new') && e('status,wait,closed');         // 看板执行关闭
+r($executionTester->closeTest($executionIDList[1],$noRealEnd))     && p('realEnd:0')       && e('『实际完成日期』不能为空。'); // 不输入实际完成时间校验
+r($executionTester->closeTest($executionIDList[3], array(), true)) && p('status')          && e('closed');                     // 子阶段关闭获取父阶段状态
