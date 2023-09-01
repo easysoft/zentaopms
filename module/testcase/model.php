@@ -2655,6 +2655,7 @@ class testcaseModel extends model
 
         $sceneID = $this->dao->lastInsertID();
 
+        $scene->sort  = $sceneID;
         $scene->path  = ',' . $sceneID . ',';
         $scene->grade = 1;
 
