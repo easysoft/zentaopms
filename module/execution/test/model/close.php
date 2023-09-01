@@ -10,6 +10,8 @@ $execution->id->range('1-6');
 $execution->name->range('项目1,1-5')->prefix('执行');
 $execution->type->range('project,sprint,stage,kanban,stage{2}');
 $execution->status->range('wait{4},suspended,closed,doing');
+$execution->model->range('[]{4},waterfall{2}');
+$execution->path->range('[]{4},`,5,`,`,5,6,`');
 $execution->parent->range('0{2},1,0,1,5');
 $execution->openedBy->range('admin,user1');
 $execution->begin->range('20220112 000000:0')->type('timestamp')->format('YY/MM/DD');
