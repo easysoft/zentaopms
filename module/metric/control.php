@@ -130,7 +130,7 @@ class metric extends control
     }
 
     /**
-     * 查询度量项详情页。
+     * 度量项详情页。
      * View a metric.
      *
      * @param  int    $metricID
@@ -146,8 +146,8 @@ class metric extends control
         $this->view->title          = $metric->name;
         $this->view->metric         = $metric;
         $this->view->result         = $result;
-        $this->view->resultHeader   = $this->metricZen->getResultHeader($result);
-        $this->view->resultData     = $this->metricZen->getResultData($metric, $result);
+        $this->view->resultHeader   = $this->metricZen->getViewTableHeader($result);
+        $this->view->resultData     = $this->metricZen->getViewTableData($metric, $result);
         $this->view->legendBasic    = $this->metricZen->getBasicInfo($this->view);
         $this->view->createEditInfo = $this->metricZen->getCreateEditInfo($this->view);
         $this->view->actions        = $this->loadModel('action')->getList('metric', $metricID);
@@ -177,5 +177,34 @@ class metric extends control
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         return $this->send(array('result' => 'success', 'load' => true));
+    }
+
+    /**
+     * 度量项实现页面。
+     * Implement a metric.
+     *
+     * @param  int  $metricID
+     * @param  bool $isVerify
+     * @access public
+     * @return void
+     */
+    public function implement(int $metricID, bool $isVerify = false)
+    {
+        $metric = $this->metric->getByID($metricID);
+
+        if($isVerify)
+        {
+            $verifyResult = $this->metricZen->verifyCalc($metric);
+            $result = $verifyResult ? $this->metric->runCustomCalc($metric->code) : null;
+
+            $this->view->metric       = $metric;
+            $this->view->verifyResult = $verifyResult;
+            $this->view->result       = $result;
+            $this->view->resultHeader = $this->metricZen->getResultTableHeader($result);
+            $this->view->resultData   = $this->metricZen->getResultTableData($metric, $result);
+        }
+
+        $this->view->metric = $metric;
+        $this->display();
     }
 }
