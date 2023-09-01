@@ -58,4 +58,11 @@ div
     )
 );
 
+dtable
+(
+    set::height(400),
+    set::cols($resultHeader),
+    set::data($resultData),
+);
+
 render();
