@@ -8749,7 +8749,11 @@ class upgradeModel extends model
             if(!isset($mixInserted[$type->lang . '-' . $type->vision]))
             {
                 $langFile = $this->app->getModuleRoot() . DS . 'stage' . DS . 'lang' . DS . ($type->lang == 'all' ? $this->app->clientLang : $type->lang) . '.php';
-                if(is_file($langFile)) include $langFile;
+                if(!is_file($langFile)) continue;
+
+                $lang = new stdclass();
+                $lang->stage = new stdclass();
+                include $langFile;
 
                 $this->dao->replace(TABLE_LANG)
                     ->set('module')->eq('stage')
