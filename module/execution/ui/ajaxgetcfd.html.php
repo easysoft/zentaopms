@@ -61,7 +61,7 @@ panel
                 'axisPointer'   => array('label' => array('show' => true, 'precision' => 0)),
                 'axisLine'      => array('show' => true, 'lineStyle' => array('color' => '#999', 'width' => 1))
             )))
-        )->size('100%', 500) : div
+        )->size('100%', '150%') : div
         (
             setClass('table-empty-tip text-center'),
             span
