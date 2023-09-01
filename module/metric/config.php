@@ -10,12 +10,17 @@ $config->metric->actionList = array();
 $config->metric->actionList['edit']['icon'] = 'edit';
 $config->metric->actionList['edit']['text'] = $lang->edit;
 $config->metric->actionList['edit']['hint'] = $lang->edit;
-$config->metric->actionList['edit']['url']  = array('module' => 'metric', 'method' => 'edit', 'params' => "metricID={id}");
+$config->metric->actionList['edit']['url']  = helper::createLink('metric', 'edit', 'metricID={id}');
 
 $config->metric->actionList['implement']['icon'] = 'code';
 $config->metric->actionList['implement']['text'] = $lang->metric->implement;
 $config->metric->actionList['implement']['hint'] = $lang->metric->implement;
-$config->metric->actionList['implement']['url']  = array('module' => 'metric', 'method' => 'implement', 'params' => "metricID={id}");
+$config->metric->actionList['implement']['url']  = helper::createLink('metric', 'implement', 'metricID={id}');
+
+$config->metric->actionList['delist']['icon'] = 'code';
+$config->metric->actionList['delist']['text'] = $lang->metric->implement;
+$config->metric->actionList['delist']['hint'] = $lang->metric->implement;
+$config->metric->actionList['delist']['url']  = helper::createLink('metric', 'delist', 'metricID={id}');
 
 $config->metric->actionList['delete']['icon']         = 'trash';
 $config->metric->actionList['delete']['hint']         = $lang->delete;

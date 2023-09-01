@@ -424,6 +424,37 @@ class metricModel extends model
     }
 
     /**
+     * 为度量详情页构建操作按钮
+     * Build operate menu.
+     *
+     * @param  object $metric
+     * @access public
+     * @return array
+     */
+    public function buildOperateMenu(object $metric): array
+    {
+        $menuList = array
+        (
+            'main'   => array(),
+            'suffix' => array()
+        );
+
+        if($metric->stage == 'wait')
+        {
+            $menuList['main'][] = $this->config->metric->actionList['implement'];
+            $menuList['suffix'][] = commonModel::buildActionItem('metric', 'edit', "metric=$metric->id", $metric, array('icon' => 'edit'));
+        }
+        else
+        {
+            $menuList['main'][] = $this->config->metric->actionList['delist'];
+        }
+
+        $menuList['suffix'][] = $this->config->metric->actionList['delete'];
+
+        return $menuList;
+    }
+
+    /**
      * 获取范围的对象列表。
      * Get object pairs by scope.
      *
