@@ -15,12 +15,14 @@ $config->repo->dtable->fieldList['product']['title']    = $lang->repo->product;
 $config->repo->dtable->fieldList['product']['type']     = 'text';
 $config->repo->dtable->fieldList['product']['sortType'] = false;
 $config->repo->dtable->fieldList['product']['width']    = '136';
+$config->repo->dtable->fieldList['product']['hint']     = true;
 
 $config->repo->dtable->fieldList['project']['name']     = 'projectNames';
 $config->repo->dtable->fieldList['project']['title']    = $lang->repo->projects;
 $config->repo->dtable->fieldList['project']['type']     = 'text';
 $config->repo->dtable->fieldList['project']['sortType'] = false;
 $config->repo->dtable->fieldList['project']['width']    = '136';
+$config->repo->dtable->fieldList['project']['hint']     = true;
 
 $config->repo->dtable->fieldList['scm']['name']     = 'SCM';
 $config->repo->dtable->fieldList['scm']['title']    = $lang->repo->type;
