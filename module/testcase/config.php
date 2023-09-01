@@ -272,7 +272,7 @@ $config->testcase->search['fields']['scene'] = $lang->testcase->iScene;
 $config->testcase->search['params']['scene'] = array('operator' => 'belong',  'control' => 'select', 'values' => '');
 
 $config->testcase->createscene = new stdclass();
-$config->testcase->createscene->requiredFields = 'title';
+$config->testcase->createscene->requiredFields = 'product,title';
 
 $app->loadLang('story');
 $config->testcase->zerocase = new stdclass();
