@@ -1550,15 +1550,16 @@ class executionModel extends model
     }
 
     /**
+     * 获取执行id:name的键值对。
      * Get execution pairs.
      *
      * @param  int    $projectID
-     * @param  string $type all|sprint|stage|kanban
-     * @param  string $mode all|noclosed|stagefilter|withdelete|multiple|leaf|order_asc|empty|noprefix|withobject
+     * @param  string $type      all|sprint|stage|kanban
+     * @param  string $mode      all|noclosed|stagefilter|withdelete|multiple|leaf|order_asc|empty|noprefix|withobject|hideMultiple
      * @access public
      * @return array
      */
-    public function getPairs($projectID = 0, $type = 'all', $mode = '')
+    public function getPairs(int $projectID = 0, string $type = 'all', string $mode = ''): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getExecutionPairs();
 
@@ -1566,30 +1567,29 @@ class executionModel extends model
         $orderBy = $this->config->execution->orderBy;
         if($projectID)
         {
-            $executionModel = $this->dao->select('model')->from(TABLE_EXECUTION)->where('id')->eq($projectID)->andWhere('deleted')->eq(0)->fetch('model');
-            $orderBy = in_array($executionModel, array('waterfall', 'waterfallplus')) ? 'sortStatus_asc,begin_asc,id_asc' : 'id_desc';
+            $projectModel = $this->dao->select('model')->from(TABLE_EXECUTION)->where('id')->eq($projectID)->andWhere('deleted')->eq(0)->fetch('model');
+            $orderBy = in_array($projectModel, array('waterfall', 'waterfallplus')) ? 'sortStatus_asc,begin_asc,id_asc' : 'id_desc';
 
             /* Waterfall execution, when all phases are closed, in reverse order of date. */
-            if(in_array($executionModel, array('waterfall', 'waterfallplus')))
+            if(in_array($projectModel, array('waterfall', 'waterfallplus')))
             {
-                $summary = $this->dao->select("count(id) as executions, sum(IF(INSTR('closed', status) < 1, 0, 1)) as closedExecutions")->from(TABLE_EXECUTION)->where('project')->eq($projectID)->andWhere('deleted')->eq('0')->fetch();
-                if($summary->executions == $summary->closedExecutions) $orderBy = 'sortStatus_asc,begin_desc,id_asc';
+                $statistic = $this->dao->select("count(id) as executions, sum(IF(INSTR('closed', status) < 1, 0, 1)) as closedExecutions")->from(TABLE_EXECUTION)->where('project')->eq($projectID)->andWhere('deleted')->eq('0')->fetch();
+                if($statistic->executions == $statistic->closedExecutions) $orderBy = 'sortStatus_asc,begin_desc,id_asc';
             }
         }
 
-        /* Order by status's content whether or not done */
+        /* Order by status's content whether or not done. */
         $executions = $this->dao->select("*, IF(INSTR('done,closed', status) < 2, 0, 1) AS isDone, INSTR('doing,wait,suspended,closed', status) AS sortStatus")->from(TABLE_EXECUTION)
-            ->where('deleted')->eq(0)
-            ->andWhere('vision')->eq($this->config->vision)
-            ->beginIF(!$this->session->multiple and $this->app->tab == 'execution')->andWhere('multiple')->eq('1')->fi()
-            ->beginIF(strpos($mode, 'multiple') !== false)->andWhere('multiple')->eq('1')->fi()
+            ->where('vision')->eq($this->config->vision)
+            ->beginIF((!$this->session->multiple && $this->app->tab == 'execution') || strpos($mode, 'multiple') !== false)->andWhere('multiple')->eq('1')->fi()
+            ->beginIF($type != 'all')->andWhere('type')->in($type)->fi()
             ->beginIF($type == 'all')->andWhere('type')->in('stage,sprint,kanban')->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->beginIF($type != 'all')->andWhere('type')->in($type)->fi()
             ->beginIF(strpos($mode, 'withdelete') === false)->andWhere('deleted')->eq(0)->fi()
-            ->beginIF(!$this->app->user->admin and strpos($mode, 'all') === false)->andWhere('id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF(!$this->app->user->admin && strpos($mode, 'all') === false)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->orderBy($orderBy)
             ->fetchAll('id');
+        if(strpos($mode, 'order_asc') !== false) $executions = $this->resetExecutionSorts($executions);
 
         /* If mode == leaf, only show leaf executions. */
         $allExecutions = $this->dao->select('id,name,parent,grade')->from(TABLE_EXECUTION)
@@ -1601,64 +1601,9 @@ class executionModel extends model
         $parents = array();
         foreach($allExecutions as $exec) $parents[$exec->parent] = true;
 
-        if(strpos($mode, 'order_asc') !== false) $executions = $this->resetExecutionSorts($executions);
-        if(strpos($mode, 'withobject') !== false)
-        {
-            $projectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->fetchPairs('id');
-        }
+        $projectPairs = strpos($mode, 'withobject') !== false ? $this->dao->select('id,name')->from(TABLE_PROJECT)->fetchPairs('id') : array();
 
-        $pairs       = array();
-        $noMultiples = array();
-        foreach($executions as $execution)
-        {
-            if(strpos($mode, 'leaf') !== false and isset($parents[$execution->id])) continue; // Only show leaf.
-            if(strpos($mode, 'noclosed') !== false and ($execution->status == 'done' or $execution->status == 'closed')) continue;
-            if(strpos($mode, 'stagefilter') !== false and isset($executionModel) and in_array($executionModel, array('waterfall', 'waterfallplus')) and in_array($execution->attribute, array('request', 'design', 'review'))) continue; // Some stages of waterfall and waterfallplus not need.
-
-            if(empty($execution->multiple)) $noMultiples[$execution->id] = $execution->project;
-
-            /* Set execution name. */
-            $paths = array_slice(explode(',', trim($execution->path, ',')), 1);
-            $executionName = '';
-            foreach($paths as $path)
-            {
-                if(isset($allExecutions[$path])) $executionName .= '/' . $allExecutions[$path]->name;
-            }
-
-            if(strpos($mode, 'withobject') !== false) $executionName = zget($projectPairs, $execution->project, '') . $executionName;
-            if(strpos($mode, 'noprefix') !== false) $executionName = ltrim($executionName, '/');
-
-            $pairs[$execution->id] = $executionName;
-        }
-
-        if($noMultiples)
-        {
-            if(strpos($mode, 'hideMultiple') !== false)
-            {
-                foreach($noMultiples as $executionID => $projectID) $pairs[$executionID] = '';
-            }
-            else
-            {
-                $this->app->loadLang('project');
-                $noMultipleProjects = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('id')->in($noMultiples)->fetchPairs('id', 'name');
-
-                foreach($noMultiples as $executionID => $projectID)
-                {
-                    if(isset($noMultipleProjects[$projectID])) $pairs[$executionID] = $noMultipleProjects[$projectID] . "({$this->lang->project->disableExecution})";
-                }
-            }
-        }
-
-        if(strpos($mode, 'empty') !== false) $pairs[0] = '';
-
-        /* If the pairs is empty, to make sure there's an execution in the pairs. */
-        if(empty($pairs) and isset($executions[0]))
-        {
-            $firstExecution = $executions[0];
-            $pairs[$firstExecution->id] = $firstExecution->name;
-        }
-
-        return $pairs;
+        return $this->executionTao->buildExecutionPairs($mode, $allExecutions, $executions, $parents, $projectPairs);
     }
 
     /**

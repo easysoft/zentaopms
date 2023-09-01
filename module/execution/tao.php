@@ -12,6 +12,71 @@ declare(strict_types=1);
 class executionTao extends executionModel
 {
     /**
+     * 根据给定条件构建执行键值对。
+     * Build execution id:name pairs through the conditions.
+     *
+     * @param  string    $mode          all|noclosed|stagefilter|withdelete|multiple|leaf|order_asc|noprefix|withobject|hideMultiple
+     * @param  array     $allExecutions
+     * @param  array     $executions
+     * @param  array     $parents
+     * @param  array     $projectPairs
+     * @access protected
+     * @return array
+     */
+    protected function buildExecutionPairs(string $mode = '', array $allExecutions = array(), array $executions = array(), array $parents = array(), array $projectPairs = array()): array
+    {
+        $executionPairs = array();
+        $noMultiples    = array();
+        foreach($executions as $execution)
+        {
+            if(strpos($mode, 'leaf') !== false && isset($parents[$execution->id])) continue; // Only show leaf.
+            if(strpos($mode, 'noclosed') !== false && ($execution->status == 'done' or $execution->status == 'closed')) continue;
+            if(strpos($mode, 'stagefilter') !== false && isset($projectModel) && in_array($projectModel, array('waterfall', 'waterfallplus')) && in_array($execution->attribute, array('request', 'design', 'review'))) continue; // Some stages of waterfall && waterfallplus not need.
+
+            if(empty($execution->multiple)) $noMultiples[$execution->id] = $execution->project;
+
+            /* Set execution name. */
+            $paths         = array_slice(explode(',', trim($execution->path, ',')), 1);
+            $executionName = '';
+            foreach($paths as $path)
+            {
+                if(isset($allExecutions[$path])) $executionName .= '/' . $allExecutions[$path]->name;
+            }
+
+            if(strpos($mode, 'withobject') !== false) $executionName = zget($projectPairs, $execution->project, '') . $executionName;
+            if(strpos($mode, 'noprefix') !== false) $executionName = ltrim($executionName, '/');
+
+            $executionPairs[$execution->id] = $executionName;
+        }
+
+        if($noMultiples)
+        {
+            if(strpos($mode, 'hideMultiple') !== false)
+            {
+                foreach($noMultiples as $executionID => $projectID) $executionPairs[$executionID] = '';
+            }
+            else
+            {
+                $this->app->loadLang('project');
+                $noMultipleProjects = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('id')->in($noMultiples)->fetchPairs('id', 'name');
+                foreach($noMultiples as $executionID => $projectID)
+                {
+                    if(isset($noMultipleProjects[$projectID])) $executionPairs[$executionID] = $noMultipleProjects[$projectID] . "({$this->lang->project->disableExecution})";
+                }
+            }
+        }
+
+        /* If the executionPairs is empty, to make sure there's an execution in the executionPairs. */
+        if(empty($executionPairs) and isset($executions[0]))
+        {
+            $firstExecution = $executions[0];
+            $executionPairs[$firstExecution->id] = $firstExecution->name;
+        }
+
+        return $executionPairs;
+    }
+
+    /**
      * 获取燃尽图相关数据。
      * Get burn related data.
      *

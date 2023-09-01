@@ -624,23 +624,25 @@ class executionTest
     }
 
     /**
-     * function getPairs test by execution
+     * 根据给定条件构建执行键值对。
+     * Build execution id:name pairs through the conditions.
      *
-     * @param  string $projectID
-     * @param  string $count
+     * @param  int    $projectID
+     * @param  int    $count
+     * @param  string $mode      all|noclosed|stagefilter|withdelete|multiple|leaf|order_asc|noprefix|withobject
      * @access public
-     * @return array
+     * @return array|int
      */
-    public function getPairsTest($projectID, $count)
+    public function getPairsTest(int $projectID, int $count, string $mode = ''): array|int
     {
-        $object = $this->executionModel->getPairs($projectID);
+        $object = $this->executionModel->getPairs($projectID, 'all', $mode);
 
         if(dao::isError())
         {
             $error = dao::getError();
             return $error;
         }
-        elseif($count == "1")
+        elseif($count == 1)
         {
             return count($object);
         }
