@@ -1284,6 +1284,7 @@ class testcase extends control
     }
 
     /**
+     * 自动化设置。
      * Automation test setting.
      *
      * @param  int    $productID
@@ -1292,28 +1293,21 @@ class testcase extends control
      */
     public function automation($productID = 0)
     {
-        $this->loadModel('zanode');
-        $nodeList   = $this->zanode->getPairs();
-        $automation = $this->dao->select('*')->from(TABLE_AUTOMATION)->where('product')->eq($productID)->fetch();
-
         if($_POST)
         {
             $this->zanode->setAutomationSetting();
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            // if(!empty($_POST['syncToZentao']))
-            //     $this->zanode->syncCasesToZentao($_POST['scriptPath']);
+            // if($this->post->syncToZentao) $this->zanode->syncCasesToZentao($this->post->scriptPath);
+            // if($this->post->node) $node = $this->zanode->getNodeByID($this->post->node);
 
-            // $nodeID = $_POST['node'];
-            // $node   = $this->zanode->getNodeByID($_POST['node']);
-
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('testcase', 'browse', "productID={$this->post->product}")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('testcase', 'browse', "productID={$this->post->product}")));
         }
 
         $this->view->title      = $this->lang->zanode->automation;
-        $this->view->automation = $automation;
-        $this->view->nodeList   = $nodeList;
+        $this->view->automation = $this->loadModel('zanode')->getPairs();
+        $this->view->nodeList   = $this->zanode->getAutomationByProduct($productID);
         $this->view->productID  = $productID;
         $this->view->products   = $this->product->getPairs('', 0, '', 'all');
 
