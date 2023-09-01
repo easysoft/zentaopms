@@ -304,22 +304,23 @@ class gitlab
         if(!scm::checkRevision($fromRevision) and $extra != 'isBranchOrTag') return array();
         if(!scm::checkRevision($toRevision) and $extra != 'isBranchOrTag')   return array();
 
-        $api    = "compare";
+        $sameVersion = $fromRevision == $toRevision . '^';
+        $api    = $sameVersion ? "commits/$toRevision/diff" : "compare";
         $params = array('from' => $fromRevision, 'to' => $toRevision, 'straight' => true);
         if($fromProject) $params['from_project_id'] = $fromProject;
 
         if($toRevision == 'HEAD' and $this->branch) $params['to'] = $this->branch;
-        $results = $this->fetch($api, $params);
-        if(!isset($results->diffs)) return array();
+        $results = $this->fetch($api, $sameVersion ? array() : $params);
 
-        foreach($results->diffs as $key => $diff)
-        {
-            if($path != '' and strpos($diff->new_path, $path) === false) unset($results->diffs[$key]);
-        }
-        $diffs = $results->diffs;
+        $diffs = isset($results->diffs) ? $results->diffs : array();
+        if($sameVersion && is_array($results)) $diffs = $results;
+        if(!$diffs) return array();
+
         $lines = array();
         foreach($diffs as $diff)
         {
+            if($path != '' && strpos($diff->new_path, $path) === false) continue;
+
             $lines[] = sprintf("diff --git a/%s b/%s", $diff->old_path, $diff->new_path);
             $lines[] = sprintf("index %s ... %s %s ", $fromRevision, $toRevision, $diff->b_mode);
             $lines[] = sprintf("--a/%s", $diff->old_path);
