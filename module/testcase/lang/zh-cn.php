@@ -355,5 +355,9 @@ $lang->testcase->dragModalChangeOrder = '调整排序';
 $lang->testcase->confirmBatchDeleteSceneCase = '您确认要批量删除这些场景或测试用例吗？';
 
 $lang->scene = new stdclass();
-$lang->scene->title  = '场景名称';
-$lang->scene->noCase = '暂无用例';
+$lang->scene->product = '所属产品';
+$lang->scene->branch  = '所属分支';
+$lang->scene->module  = '所属模块';
+$lang->scene->parent  = '父场景';
+$lang->scene->title   = '场景名称';
+$lang->scene->noCase  = '暂无用例';

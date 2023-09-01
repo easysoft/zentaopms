@@ -106,10 +106,14 @@ $lang->testcase->automation       = 'Automation Test';
 
 $lang->case = $lang->testcase;  // For dao checking using. Because 'case' is a php keywords, so the module name is testcase, table name is still case.
 
-$lang->testcase->stepID      = 'ID';
-$lang->testcase->stepDesc    = 'Schritt';
-$lang->testcase->stepExpect  = 'Erwartet';
-$lang->testcase->stepVersion = 'Version';
+$lang->testcase->stepID            = 'ID';
+$lang->testcase->stepDesc          = 'Schritt';
+$lang->testcase->stepExpect        = 'Erwartet';
+$lang->testcase->stepVersion       = 'Version';
+$lang->testcase->stepSameLevel     = 'Sib';
+$lang->testcase->stepSubLevel      = 'Sub';
+$lang->testcase->expectDisabledTip = 'Expect disabled when has sub steps.';
+$lang->testcase->dragNestedTip     = 'Supports up to three levels of nesting, cannot be dragged here';
 
 $lang->testcase->index                   = "Home";
 $lang->testcase->create                  = "Fall erstellen";
@@ -140,6 +144,7 @@ $lang->testcase->import                  = "Importieren";
 $lang->testcase->importAction            = "Import Case";
 $lang->testcase->importCaseAction        = "Import Case";
 $lang->testcase->fileImport              = "Importiere CSV";
+$lang->testcase->importFile              = "Import File";
 $lang->testcase->importFromLib           = "Import aus Bibliothek";
 $lang->testcase->showImport              = "Import Anzeigen";
 $lang->testcase->exportTemplate          = "Export Vorlage";
@@ -350,5 +355,9 @@ $lang->testcase->dragModalChangeOrder = 'Reorder';
 $lang->testcase->confirmBatchDeleteSceneCase = 'Are you sure you want to delete these scene or test cases in batch?';
 
 $lang->scene = new stdclass();
-$lang->scene->title  = 'Scene Name';
-$lang->scene->noCase = 'No case';
+$lang->scene->product = 'Product';
+$lang->scene->branch  = 'Branch';
+$lang->scene->module  = 'Module';
+$lang->scene->parent  = 'Parent Scene';
+$lang->scene->title   = 'Scene Name';
+$lang->scene->noCase  = 'No case';
