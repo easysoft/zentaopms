@@ -2644,10 +2644,11 @@ class testcaseModel extends model
      */
     public function createScene(object $scene): bool
     {
+        $product = zget($scene, 'product', 0);
         $this->dao->insert(TABLE_SCENE)->data($scene)
             ->autoCheck()
             ->batchCheck($this->config->testcase->createscene->requiredFields, 'notempty')
-            ->check('title', 'unique', "product = {$scene->product}")
+            ->checkIF($product, 'title', 'unique', "product = {$product}")
             ->checkFlow()
             ->exec();
         if(dao::isError()) return false;
@@ -2657,7 +2658,7 @@ class testcaseModel extends model
         $scene->path  = ',' . $sceneID . ',';
         $scene->grade = 1;
 
-        if($scene->parent)
+        if(!empty($scene->parent))
         {
             $parent = $this->getSceneByID($scene->parent);
             if($parent)
