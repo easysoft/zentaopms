@@ -1118,7 +1118,7 @@ class testcaseZen extends testcase
             ->setIF($from == 'bug', 'fromBug', $param)
             ->setIF($this->post->auto, 'auto', 'auto')
             ->setIF($this->post->auto && $this->post->script, 'script', $this->post->script ? htmlentities($this->post->script) : '')
-            ->setIF($this->testcase->forceNotReview() || $this->post->forceNotReview, 'status', 'normal')
+            ->setIF($this->testcase->forceNotReview() || !$this->post->needReview, 'status', 'normal')
             ->setIF($this->app->tab == 'project',   'project',   $this->session->project)
             ->setIF($this->app->tab == 'execution', 'execution', $this->session->execution)
             ->setIF($this->post->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))

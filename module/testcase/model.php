@@ -44,7 +44,7 @@ class testcaseModel extends model
 
         /* 插入测试用例。 */
         /* Insert testcase. */
-        $this->dao->insert(TABLE_CASE)->data($case, 'steps,expects,files,labels,stepType,forceNotReview,scriptFile,scriptName')
+        $this->dao->insert(TABLE_CASE)->data($case, 'steps,expects,files,labels,stepType,needReview,scriptFile,scriptName')
             ->autoCheck()
             ->batchCheck($this->config->testcase->create->requiredFields, 'notempty')
             ->checkFlow()
@@ -2329,7 +2329,7 @@ class testcaseModel extends model
     {
         if($methodName == 'create')
         {
-            if($this->forceNotReview() || $this->post->forceNotReview) return 'normal';
+            if($this->forceNotReview() || !$this->post->needReview) return 'normal';
             return 'wait';
         }
 

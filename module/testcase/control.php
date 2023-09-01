@@ -273,10 +273,11 @@ class testcase extends control
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
         parse_str($extras, $output);
 
-        $this->view->title            = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->create;
-        $this->view->productID        = $productID;
-        $this->view->users            = $this->user->getPairs('noletter|noclosed|nodeleted');
-        $this->view->gobackLink       = isset($output['from']) && $output['from'] == 'global' ? $this->createLink('testcase', 'browse', "productID=$productID") : '';
+        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->create;
+        $this->view->productID  = $productID;
+        $this->view->users      = $this->user->getPairs('noletter|noclosed|nodeleted');
+        $this->view->gobackLink = isset($output['from']) && $output['from'] == 'global' ? $this->createLink('testcase', 'browse', "productID=$productID") : '';
+        $this->view->needReview = $this->testcase->forceNotReview() == true ? 0 : 1;
         $this->display();
     }
 
@@ -1314,19 +1315,6 @@ class testcase extends control
         $this->view->products   = $this->product->getPairs('', 0, '', 'all');
 
         $this->display();
-    }
-
-    /**
-     * Export case getModuleByStory
-     *
-     * @params int $storyID
-     * @return void
-     */
-    public function ajaxGetStoryModule($storyID)
-    {
-        $story = $this->dao->select('module')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
-        $moduleID = !empty($story) ? $story->module : 0;
-        echo json_encode(array('moduleID'=> $moduleID));
     }
 
     /**

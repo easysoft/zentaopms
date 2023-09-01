@@ -224,7 +224,7 @@ formPanel
                 set::value($case->pri)
             ),
         ),
-        formGroup
+        $needReview ? formGroup
         (
             setClass('grow-0'),
             set::label($lang->testcase->isReviewed),
@@ -232,12 +232,12 @@ formPanel
             (
                 width('80px'),
                 set::items($lang->testcase->reviewList),
-                set::id('forceNotReview'),
-                set::name('forceNotReview'),
-                set::value('1'),
+                set::id('needReview'),
+                set::name('needReview'),
+                set::value('0'),
                 set::required(true),
             ),
-        )
+        ) : null
     ),
     formRow
     (
