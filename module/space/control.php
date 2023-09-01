@@ -94,6 +94,7 @@ class space extends control
         $this->view->instances    = (empty($allInstances) or empty($allInstances[$pageID - 1])) ? array() : $allInstances[$pageID - 1];
         $this->view->currentSpace = $space;
         $this->view->searchName   = $search;
+        $this->view->users        = $this->loadModel('user')->getPairs('noclosed,noletter');
 
         $this->display();
     }

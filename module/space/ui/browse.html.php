@@ -45,6 +45,7 @@ toolBar
 
 dtable
 (
+    set::userMap($users),
     set::cols($config->space->dtable->fieldList),
     set::data($instances),
     set::onRenderCell(jsRaw('window.renderInstanceList')),
