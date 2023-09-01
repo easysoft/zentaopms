@@ -3023,6 +3023,7 @@ class execution extends control
         $object = $this->project->getByID($objectID, 'project,sprint,stage,kanban');
 
         $browseLink = $this->session->executionStoryList;
+        if(empty($browseLink)) $browseLink = $this->createLink('execution', 'story', "executionID=$objectID");
         if($this->app->tab == 'project' and $object->multiple) $browseLink = $this->createLink('projectstory', 'story', "objectID=$objectID");
 
         if($object->type == 'kanban' && !$object->hasProduct) $this->lang->productCommon = $this->lang->project->common;
