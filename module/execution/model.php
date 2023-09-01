@@ -1340,17 +1340,18 @@ class executionModel extends model
     }
 
     /**
+     * 关闭迭代。
      * Close execution.
      *
      * @param  int    $executionID
      * @access public
-     * @return array
+     * @return array|false
      */
-    public function close($executionID)
+    public function close(int $executionID): array|false
     {
-        $oldExecution = $this->getById($executionID);
-        $now          = helper::now();
+        $oldExecution = $this->getById($executionID); /* Save previous execution to variable for later compare. */
 
+        $now = helper::now();
         $execution = fixer::input('post')
             ->add('id', $executionID)
             ->setDefault('status', 'closed')
@@ -1371,16 +1372,16 @@ class executionModel extends model
             ->checkIF($execution->realEnd != '', 'realEnd', 'le', helper::today())
             ->checkIF($execution->realEnd != '', 'realEnd', 'ge', $oldExecution->realBegan)
             ->checkFlow()
-            ->where('id')->eq((int)$executionID)
+            ->where('id')->eq($executionID)
             ->exec();
 
         /* When it has multiple errors, only the first one is prompted */
-        if(dao::isError() and count(dao::$errors['realEnd']) > 1) dao::$errors['realEnd'] = dao::$errors['realEnd'][0];
+        if(dao::isError() && count(dao::$errors['realEnd']) > 1) dao::$errors['realEnd'] = dao::$errors['realEnd'][0];
 
-        if(!dao::isError()) return false;
+        if(dao::isError()) return false;
 
         $changes = common::createChanges($oldExecution, $execution);
-        if($this->post->comment != '' or !empty($changes))
+        if($this->post->comment != '' || !empty($changes))
         {
             $this->loadModel('action');
             $actionID = $this->action->create('execution', $executionID, 'Closed', $this->post->comment);
