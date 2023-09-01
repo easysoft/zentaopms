@@ -36,7 +36,7 @@ foreach($allProducts as $productID => $productName)
                 on::click('checkUnlink'),
                 setClass('linked-product')
             ),
-            isset($allBranches[$productID][$branchID]) ? select
+            isset($allBranches[$productID][$branchID]) ? picker
             (
                 set::name("branch[{$index}]"),
                 set::value($branchID),
@@ -75,9 +75,10 @@ if($execution->grade == 1 || $execution->grade == 2)
                     set::text($productName),
                     set::value($productID),
                 ),
-                isset($branchGroups[$productID]) ? select
+                isset($branchGroups[$productID]) ? picker
                 (
                     set::name("branch[{$index}]"),
+                    set::value(key($branchGroups[$productID])),
                     set::items($branchGroups[$productID]),
                 ) : null
             );
