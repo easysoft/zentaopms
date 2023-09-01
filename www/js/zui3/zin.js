@@ -758,7 +758,7 @@
 
         if(target && target.includes('-'))
         {
-            const parts = target.split('-');
+            const parts = target.split(',')[0].split('-');
             return loadPage($.createLink(parts[0], parts[1]));
         }
         if(url) return loadPage(url);
