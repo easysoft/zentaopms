@@ -1293,6 +1293,8 @@ class testcase extends control
      */
     public function automation($productID = 0)
     {
+        $this->loadModel('zanode');
+
         if($_POST)
         {
             $this->zanode->setAutomationSetting();
@@ -1306,7 +1308,7 @@ class testcase extends control
         }
 
         $this->view->title      = $this->lang->zanode->automation;
-        $this->view->automation = $this->loadModel('zanode')->getPairs();
+        $this->view->automation = $this->zanode->getPairs();
         $this->view->nodeList   = $this->zanode->getAutomationByProduct($productID);
         $this->view->productID  = $productID;
         $this->view->products   = $this->product->getPairs('', 0, '', 'all');

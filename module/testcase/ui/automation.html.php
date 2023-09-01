@@ -29,7 +29,7 @@ to::header
    )
 );
 
-form
+formPanel
 (
     !$productID ?  formGroup
     (
