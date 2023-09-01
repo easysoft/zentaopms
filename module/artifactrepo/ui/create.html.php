@@ -51,6 +51,7 @@ formPanel
     (
         set::width('2/3'),
         set::name('type'),
+        set::required(true),
         set::label($lang->artifactrepo->type),
         set::readonly(true),
         input
@@ -63,6 +64,7 @@ formPanel
     (
         set::width('2/3'),
         set::name('status'),
+        set::required(true),
         set::label($lang->artifactrepo->status),
         set::readonly(true),
     ),
@@ -70,6 +72,7 @@ formPanel
     (
         set::width('2/3'),
         set::name('url'),
+        set::required(true),
         set::label($lang->artifactrepo->url),
         set::readonly(true),
     ),
