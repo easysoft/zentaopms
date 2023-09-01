@@ -1267,16 +1267,18 @@ class testcase extends control
     }
 
     /**
+     * 查看自动化脚本。
      * Show script.
      *
      * @param  int    $caseID
      * @access public
      * @return void
      */
-    public function showScript($caseID)
+    public function showScript(int $caseID)
     {
         $case = $this->testcase->getByID($caseID);
         if($case) $case->script = html_entity_decode($case->script);
+
         $this->view->case = $case;
         $this->display();
     }
