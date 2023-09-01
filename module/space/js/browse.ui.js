@@ -14,7 +14,6 @@ window.renderInstanceList = function (result, {col, row, value})
                 var statusClass = '';
         }
         result[0] = {html: '<span class="' + statusClass + '">' + result[0] + '</span>'};
-        return result;
     }
     else if(col.name === 'name')
     {
@@ -26,7 +25,10 @@ window.renderInstanceList = function (result, {col, row, value})
         {
             result[0] = {html: '<a href="' + $.createLink('instance', 'view', 'id=' + row.id) + '">' + result[0] + '</a>'};
         }
-        return result;
+    }
+    else if(col.name === 'createdAt')
+    {
+        if(value.includes('0000-00-00')) result[0] = '';
     }
 
     return result;
