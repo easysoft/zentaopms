@@ -287,6 +287,9 @@ $config->openMethods[] = 'gitea.edit';
 $config->openMethods[] = 'gitea.binduser';
 $config->openMethods[] = 'jenkins.create';
 $config->openMethods[] = 'jenkins.edit';
+$config->openMethods[] = 'instance.createexternalapp';
+$config->openMethods[] = 'instance.editexternalapp';
+$config->openMethods[] = 'instance.deleteexternalapp';
 
 $config->openModules = array();
 $config->openModules[] = 'install';

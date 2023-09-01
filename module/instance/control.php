@@ -410,6 +410,8 @@ class instance extends control
      */
     public function createExternalApp(string $type)
     {
+        if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
+
         $this->app->loadModuleConfig('sonarqube');
         $this->app->loadLang('pipeline');
 
@@ -442,6 +444,8 @@ class instance extends control
      */
     public function editExternalApp(int $externalID)
     {
+        if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
+
         $oldApp = $this->loadModel('pipeline')->getByID($externalID);
 
         if($_POST)
@@ -474,6 +478,8 @@ class instance extends control
      */
     public function deleteExternalApp(int $externalID)
     {
+        if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
+
         $oldApp = $this->loadModel('pipeline')->getByID($externalID);
         $actionID = $this->pipeline->delete($externalID, $oldApp->type);
         if(!$actionID)
