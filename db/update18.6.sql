@@ -569,7 +569,7 @@ CREATE TABLE IF NOT EXISTS `zt_prompt` (
   `elaboration` text DEFAULT NULL,
   `role` text DEFAULT NULL,
   `characterization` text DEFAULT NULL,
-  `status` enum('draft','active','replaced') NOT NULL DEFAULT 'draft',
+  `status` enum('draft','active') NOT NULL DEFAULT 'draft',
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   `editedBy` varchar(30) DEFAULT NULL,
