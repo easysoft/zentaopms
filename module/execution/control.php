@@ -2908,7 +2908,7 @@ class execution extends control
     }
 
     /**
-     * 维护执行的团队成员
+     * 维护执行的团队成员。
      * Manage members of the execution.
      *
      * @param  int    $executionID
