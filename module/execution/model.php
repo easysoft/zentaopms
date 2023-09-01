@@ -3652,6 +3652,7 @@ class executionModel extends model
     }
 
     /**
+     * 添加项目团队成员。
      * Add the execution team members to the project.
      *
      * @param  int    $projectID
@@ -3659,31 +3660,31 @@ class executionModel extends model
      * @access public
      * @return void
      */
-    public function addProjectMembers($projectID = 0, $members = array())
+    public function addProjectMembers(int $projectID = 0, array $members = array())
     {
         $projectType = 'project';
         $oldJoin     = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq($projectType)->fetchPairs();
 
-        $accounts = array();
+        $accountList = array();
         foreach($members as $member)
         {
             if(isset($oldJoin[$member->account])) continue;
 
-            $accounts[]   = $member->account;
+            $accountList[]   = $member->account;
             $member->root = $projectID;
             $member->type = $projectType;
             $this->dao->insert(TABLE_TEAM)->data($member)->exec();
         }
 
         /* Only changed account update userview. */
-        $oldAccounts     = array_keys($oldJoin);
-        $changedAccounts = array_diff($accounts, $oldAccounts);
-        $changedAccounts = array_merge($changedAccounts, array_diff($oldAccounts, $accounts));
-        $changedAccounts = array_unique($changedAccounts);
+        $oldAccountList     = array_keys($oldJoin);
+        $changedAccountList = array_diff($accountList, $oldAccountList);
+        $changedAccountList = array_merge($changedAccountList, array_diff($oldAccountList, $accountList));
+        $changedAccountList = array_unique($changedAccountList);
 
-        if($changedAccounts)
+        if($changedAccountList)
         {
-            $this->loadModel('user')->updateUserView($projectID, $projectType, $changedAccounts);
+            $this->loadModel('user')->updateUserView($projectID, $projectType, $changedAccountList);
             $linkedProducts = $this->dao->select("t2.id")->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
                 ->where('t2.deleted')->eq(0)
@@ -3691,7 +3692,7 @@ class executionModel extends model
                 ->andWhere('t2.vision')->eq($this->config->vision)
                 ->fetchPairs();
 
-            if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', $changedAccounts);
+            if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', $changedAccountList);
         }
     }
 

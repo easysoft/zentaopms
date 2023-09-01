@@ -1764,27 +1764,26 @@ class executionTest
      * function addProjectMembers test by execution
      *
      * @param  int    $projectID
-     * @param  string $executionID
-     * @param  string $count
+     * @param  int    $executionID
+     * @param  int    $count
      * @access public
-     * @return array
+     * @return array|int
      */
-    public function addProjectMembersTest($projectID = 0, $executionID = 0, $count = 0)
+    public function addProjectMembersTest(int $projectID = 0, int $executionID = 0, int $count = 0): array|int
     {
-        global $tester;
-        $tester->dbh->query("delete from zt_team where root = $projectID");
-        $executionMembers = $tester->dao->select('`root`,`account`,`join`,`role`,`days`,`type`,`hours`')->from(TABLE_TEAM)->where('root')->eq($executionID)->fetchAll('account');
+        $this->executionModel->dao->delete()->from(TABLE_TEAM)->where('root')->eq($projectID)->exec();
+        $executionMembers = $this->executionModel->dao->select('`root`,`account`,`join`,`role`,`days`,`type`,`hours`')->from(TABLE_TEAM)->where('root')->eq($executionID)->fetchAll('account');
 
         $this->executionModel->addProjectMembers($projectID, $executionMembers);
 
-        $object = $tester->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($projectID)->fetchAll();
+        $object = $this->executionModel->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($projectID)->fetchAll();
 
         if(dao::isError())
         {
             $error = dao::getError();
             return $error;
         }
-        elseif($count == "1")
+        elseif($count == 1)
         {
             return count($object);
         }

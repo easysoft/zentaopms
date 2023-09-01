@@ -28,21 +28,14 @@ $team->gen(6);
 /**
 
 title=测试executionModel->addProjectMembersTest();
+timeout=0
 cid=1
-pid=1
-
-敏捷项目根据执行添加团队信息 >> admin,研发
-瀑布项目根据执行添加团队信息 >> admin,研发
-看板项目根据执行添加团队信息 >> admin,研发
-敏捷项目根据执行添加团队信息统计 >> 2
-瀑布项目根据执行添加团队信息统计 >> 2
-看板项目根据执行添加团队信息统计 >> 2
 
 */
 
 $projectIDList   = array(2, 3, 4);
 $executionIDList = array(5, 6, 7);
-$count           = array('0','1');
+$count           = array(0, 1);
 
 $executionTester = new executionTest();
 r($executionTester->addProjectMembersTest($projectIDList[0], $executionIDList[0], $count[0])) && p('0:account,role') && e('admin,研发');   // 敏捷项目根据执行添加团队信息
