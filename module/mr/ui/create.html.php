@@ -21,7 +21,14 @@ jsVar('projectNamespace', in_array($repo->SCM, array('Gitea', 'Gogs')) ? $projec
 
 dropmenu(set::objectID($repo->id), set::text($repo->name), set::tab('repo'));
 
-$projectItem = array($project->id => $project->name_with_namespace);
+if(in_array($repo->SCM, array('Gitea', 'Gogs')))
+{
+    $projectItem = array($project->name_with_namespace => $project->name_with_namespace);
+}
+else
+{
+    $projectItem = array($project->id => $project->name_with_namespace);
+}
 
 formPanel
 (
