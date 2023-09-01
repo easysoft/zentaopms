@@ -5136,15 +5136,16 @@ class executionModel extends model
     }
 
     /**
-     * Update user view of execution and it's product.
+     * 更新用户可查看的执行和产品。
+     * Update the execution and product that users can view.
      *
-     * @param  int|array $executionID
-     * @param  string    $objectType
-     * @param  array     $users
+     * @param  int    $executionID
+     * @param  string $objectType
+     * @param  array  $users
      * @access public
      * @return void
      */
-    public function updateUserView($executionID, $objectType = 'sprint', $users = array())
+    public function updateUserView(int $executionID, string $objectType = 'sprint', array $users = array())
     {
         $this->loadModel('user')->updateUserView($executionID, $objectType, $users);
 

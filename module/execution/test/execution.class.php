@@ -2622,15 +2622,16 @@ class executionTest
     }
 
     /**
-     * Test Update user view of execution and it's product.
+     * 更新用户可查看的执行和产品。
+     * Update the execution and product that users can view.
      *
-     * @param int    $executionID
-     * @param string $objectType
-     * @param array $users
+     * @param  int    $executionID
+     * @param  string $objectType
+     * @param  array  $users
      * @access public
-     * @return void
+     * @return string|array
      */
-    public function updateUserViewTest($executionID, $objectType = 'sprint', $users = array())
+    public function updateUserViewTest(int $executionID, string $objectType = 'sprint', array $users = array()): string|array
     {
         $this->executionModel->updateUserView($executionID, $objectType, $users);
 
