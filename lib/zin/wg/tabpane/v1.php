@@ -6,7 +6,7 @@ class tabPane extends wg
 {
     protected static array $defineProps = array(
         'key: string',
-        'title: string',
+        'title?: string',
         'active?: bool=false',
         'param?: string',
     );
