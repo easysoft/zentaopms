@@ -2782,9 +2782,8 @@ class executionModel extends model
             return true;
         }
 
-        $branches = isset($postData->branch) ? $postData->branch : array();
-        $plans    = isset($postData->plans) ? $postData->plans : array();
-
+        $branches        = isset($postData->branch) ? $postData->branch : array();
+        $plans           = isset($postData->plans) ? $postData->plans : array();
         $existedProducts = array();
         foreach($products as $i => $productID)
         {
