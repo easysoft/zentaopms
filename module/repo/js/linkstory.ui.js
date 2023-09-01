@@ -3,7 +3,7 @@ window.createSortLink = function(col)
     var sort = col.name + '_asc';
     if(sort == orderBy) sort = col.name + '_desc';
 
-    return sortLink.replace('{orderBy}', sort);
+    return "javascript:loadModal('" + sortLink.replace('{orderBy}', sort) + "', '#table-repo-linkstory')";
 }
 
 $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer .batch-btn', function(e)
@@ -21,3 +21,10 @@ $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer
         data: postData
     });
 });
+
+$('#table-repo-linkstory').on('click', 'a', function(e)
+{
+    console.log(1111, e);
+    e.preventDefault();
+    return;
+})

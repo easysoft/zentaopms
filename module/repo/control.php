@@ -1130,7 +1130,7 @@ class repo extends control
         $linkedStories = $this->repo->getRelationByCommit($repoID, $revision, 'story');
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch($product->id, 0, $queryID, 'id', '', 'story', array_keys($linkedStories), $pager);
+            $allStories = $this->story->getBySearch($product->id, 0, $queryID, $orderBy, '', 'story', array_keys($linkedStories), $pager);
         }
         else
         {
@@ -1217,7 +1217,7 @@ class repo extends control
         $linkedBugs = $this->repo->getRelationByCommit($repoID, $revision, 'bug');
         if($browseType == 'bySearch')
         {
-            $allBugs = $this->bug->getBySearch($product->id, 0, $queryID, 'id_desc', array_keys($linkedBugs), $pager);
+            $allBugs = $this->bug->getBySearch($product->id, 0, $queryID, $orderBy, array_keys($linkedBugs), $pager);
         }
         else
         {
