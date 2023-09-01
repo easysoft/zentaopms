@@ -1248,7 +1248,7 @@ class programplanModel extends model
             if(isset($newParent) && $newParent)
             {
                 $this->dao->update(TABLE_EXECUTION)->data($newParent)->where('id')->eq($id)->exec();
-                $this->loadModel('action')->create('execution', $id, $parentAction, '', $parentAction);
+                $this->loadModel('action')->create('execution', (int)$id, $parentAction, '', $parentAction);
             }
             unset($newParent, $parentAction);
         }
