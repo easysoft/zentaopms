@@ -1063,7 +1063,7 @@ class testcaseZen extends testcase
         {
             $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
 
-            $productBranches = $this->loadModel('execution')->getBranchByProduct($productID, $this->session->project, 'noclosed|withMain');
+            $productBranches = $this->loadModel('execution')->getBranchByProduct(array($productID), $this->session->project, 'noclosed|withMain');
             $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
             $branch          = key($branches);
         }

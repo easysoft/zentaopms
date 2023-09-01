@@ -1052,23 +1052,24 @@ class executionTest
     }
 
     /**
-     * function getBranchByProduct test by execution
+     * 根据产品ID列表查询分支信息。
+     * Get branch information by the product ID list.
      *
-     * @param  string $productID
-     * @param  string $count
+     * @param  int    $productID
+     * @param  int    $count
      * @access public
-     * @return array
+     * @return array|int
      */
-    public function getBranchByProductTest($productID, $count)
+    public function getBranchByProductTest(int $productID, int $count): array|int
     {
-        $object = $this->executionModel->getBranchByProduct($productID);
+        $object = $this->executionModel->getBranchByProduct(array($productID));
 
         if(dao::isError())
         {
             $error = dao::getError();
             return $error;
         }
-        elseif($count == "1")
+        elseif($count == 1)
         {
             return isset($object[$productID]) ? count($object[$productID]) : 0;
         }

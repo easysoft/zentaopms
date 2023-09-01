@@ -2576,32 +2576,33 @@ class executionModel extends model
     }
 
     /**
-     * Get branch pairs by product id list.
+     * 根据产品ID列表查询分支信息。
+     * Get branch information by the product ID list.
      *
-     * @param  array        $products
-     * @param  int          $projectID
-     * @param  string       $param
-     * @param  string|array $appendBranch
+     * @param  array   $productIdList
+     * @param  int     $projectID
+     * @param  string  $param
+     * @param  array   $appendBranch
      * @access public
      * @return array
      */
-    public function getBranchByProduct($products, $projectID = 0, $param = 'noclosed', $appendBranch = '')
+    public function getBranchByProduct(array $productIdList, int $projectID = 0, string $param = 'noclosed', array $appendBranch = array()): array
     {
-        $branchGroups = $this->loadModel('branch')->getByProducts($products, $param, $appendBranch);
+        $branchGroup = $this->loadModel('branch')->getByProducts($productIdList, $param, $appendBranch);
 
         if($projectID)
         {
             $projectProducts = $this->loadModel('project')->getBranchesByProject($projectID);
-            foreach($branchGroups as $productID => $branchPairs)
+            foreach($branchGroup as $productID => $branchPairs)
             {
                 foreach($branchPairs as $branchID => $branchName)
                 {
                     if(strpos($param, 'withMain') !== false and $branchID == BRANCH_MAIN) continue;
-                    if(!isset($projectProducts[$productID][$branchID])) unset($branchGroups[$productID][$branchID]);
+                    if(!isset($projectProducts[$productID][$branchID])) unset($branchGroup[$productID][$branchID]);
                 }
             }
         }
-        return $branchGroups;
+        return $branchGroup;
     }
 
     /**

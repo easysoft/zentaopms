@@ -400,7 +400,7 @@ class storyZen extends story
             $product   = $this->product->getById($productID);
             if($product->type != 'normal')
             {
-                $productBranches = $this->loadModel('execution')->getBranchByProduct($productID, $objectID, 'noclosed|withMain');
+                $productBranches = $this->loadModel('execution')->getBranchByProduct(array($productID), $objectID, 'noclosed|withMain');
                 if(isset($productBranches[$productID])) $branches = $productBranches[$productID];
             }
         }
@@ -512,7 +512,7 @@ class storyZen extends story
 
         if($executionID)
         {
-            $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($productID, $executionID, 'noclosed|withMain') : array();
+            $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct(array($productID), $executionID, 'noclosed|withMain') : array();
             $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
             $branch          = empty($branches) ? '' : key($branches);
 

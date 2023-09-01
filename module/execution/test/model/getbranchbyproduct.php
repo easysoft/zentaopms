@@ -23,17 +23,13 @@ $branch->gen(2);
 /**
 
 title=executionModel->getBranchByProduct();
+timeout=0
 cid=1
-pid=1
-
-正常产品分支统计 >> 0
-分支产品分支查看 >> 分支1
-分支产品分支统计 >> 3
 
 */
 
 $productIDList = array(1, 2);
-$count         = array('0', '1');
+$count         = array(0, 1);
 
 $executionTester = new executionTest();
 r($executionTester->getBranchByProductTest($productIDList[0], $count[1])) && p()      && e('0');     // 正常产品分支统计
