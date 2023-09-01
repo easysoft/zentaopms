@@ -3216,6 +3216,7 @@ class projectModel extends model
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
             ->where('t1.execution')->in($executionIdList)
             ->andWhere('t1.status')->notIn('cancel,closed')
+    	    ->andWhere('t1.deleted')->eq(0)
             ->groupBy('t2.parent')
             ->fetchAll('project');
 
