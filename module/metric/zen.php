@@ -310,40 +310,39 @@ class metricZen extends metric
     }
 
     /**
-     * 获取度量数据表的数据。
-     * Get data of result table.
+     * 校验度量项。
+     * Verify calculator of metric.
      *
-     * @param  object    $metric
-     * @param  array     $result
+     * @param  object $metric
      * @access protected
-     * @return array|false
+     * @return array|true
      */
     protected function verifyCalc($metric)
     {
         $verifyResult = array();
 
         $isCalcExists = $this->metric->checkCalcExists($metric);
-        $verifyResult['exists'] = $isCalcExists ? 'success' : 'fail';
+        if($isCalcExists) $verifyResult['exists'] = 'fail';
 
         if($isCalcExists)
         {
             $this->metric->includeCalc($metric->code);
             $isClassExists = $this->metric->checkCalcClass($metric) ? 'success' : 'fail';
-            $verifyResult['class'] = $isClassExists ? 'success' : 'fail';
+            if($isClassExists) $verifyResult['class'] = 'fail';
         }
 
         if($isClassExists)
         {
             $methodsStatus = $this->metric->checkCalcMethods($metric);
-            $verifyResult['method'] = $methodsStatus ? 'success' : 'fail';
+            if($methodsStatus) $verifyResult['method'] = 'fail';
         }
 
         if($methodsStatus)
         {
-            $calcResult = $this->metric->runCalc($metric);
-            $verifyResult['result'] = $calcResult;
+            $calcResult = $this->metric->dryRunCalc($metric);
+            if(!empty($calcResult)) $verifyResult['result'] = $calcResult;
         }
 
-        return $verifyResult;
+        return $verifyResult ? $verifyResult : true;
     }
 }

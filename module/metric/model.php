@@ -557,7 +557,7 @@ class metricModel extends model
     public function checkCalcMethods($metric)
     {
         $methodNameList = $this->metricTao->getMethodNameList($metric->code);
-        foreach($this->config->metric->$necessaryMethodList as $method)
+        foreach($this->config->metric->necessaryMethodList as $method)
         {
             if(!in_array($method, $methodNameList)) return false;
         }

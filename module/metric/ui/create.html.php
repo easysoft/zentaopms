@@ -139,6 +139,6 @@ formPanel
         set::label($lang->metric->afterCreate),
         set::control(array('type' => 'radioList', 'inline' => true)),
         set::items($lang->metric->afterCreateList),
-        set::value('finish'),
+        set::value('implement'),
     ),
 );
