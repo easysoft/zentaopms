@@ -42,6 +42,7 @@ foreach($allProducts as $productID => $productName)
                 set::value($branchID),
                 set::items($allBranches[$productID]),
                 set::disabled(true),
+                set::required(true),
             ) : null,
             input
             (
@@ -80,6 +81,7 @@ if($execution->grade == 1 || $execution->grade == 2)
                     set::name("branch[{$index}]"),
                     set::value(key($branchGroups[$productID])),
                     set::items($branchGroups[$productID]),
+                    set::required(true),
                 ) : null
             );
 
