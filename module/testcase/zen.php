@@ -481,7 +481,7 @@ class testcaseZen extends testcase
 
         if(!empty($_FILES['scriptFile'])) unset($_FILES['scriptFile']);
 
-        $result = $this->testcase->getStatus('update', $oldCase);
+        $result = $this->getStatusForUpdate($oldCase);
         if(!$result || !is_array($result)) return $result;
 
         list($stepChanged, $status) = $result;
@@ -1114,11 +1114,13 @@ class testcaseZen extends testcase
      */
     protected function buildCaseForCase(string $from, int $param): object
     {
+        $status = $this->getStatusForCreate();
+
         return form::data($this->config->testcase->form->create)
+            ->add('status', $status)
             ->setIF($from == 'bug', 'fromBug', $param)
             ->setIF($this->post->auto, 'auto', 'auto')
             ->setIF($this->post->auto && $this->post->script, 'script', $this->post->script ? htmlentities($this->post->script) : '')
-            ->setIF($this->testcase->forceNotReview() || !$this->post->needReview, 'status', 'normal')
             ->setIF($this->app->tab == 'project',   'project',   $this->session->project)
             ->setIF($this->app->tab == 'execution', 'execution', $this->session->execution)
             ->setIF($this->post->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
@@ -1635,7 +1637,7 @@ class testcaseZen extends testcase
     protected function prepareReviewData(int $caseID, object $oldCase): bool|object
     {
         $now    = helper::now();
-        $status = $this->testcase->getStatus('review', $oldCase);
+        $status = $this->testcase->getStatusForReview($oldCase);
 
         $case = form::data($this->config->testcase->form->review)->add('id', $caseID)
             ->setForce('status', $status)
@@ -2169,5 +2171,92 @@ class testcaseZen extends testcase
         }
 
         return $rows;
+    }
+
+    /**
+     * 获取创建用例时的状态值。
+     * Get status for create.
+     *
+     * @access public
+     * @return string
+     */
+    public function getStatusForCreate(): string
+    {
+        if($this->testcase->forceNotReview() || !$this->post->needReview) return 'normal';
+        return 'wait';
+    }
+
+    /**
+     * 获取评审用例时的状态值。
+     * Get status for review.
+     *
+     * @param  object $case
+     * @access public
+     * @return string
+     */
+    public function getStatusForReview(object $case): string
+    {
+        if($this->post->result == 'pass') return 'normal';
+        return zget($case, 'status', '');
+    }
+
+    /**
+     * 获取更新的状态。
+     * Get status for update.
+     *
+     * @param  object     $case
+     * @access public
+     * @return bool|array
+     */
+    public function getStatusForUpdate(object $case): bool|array
+    {
+        if($this->post->lastEditedDate && $case->lastEditedDate != $this->post->lastEditedDate)
+        {
+            dao::$errors[] = $this->lang->error->editedByOther;
+            return false;
+        }
+
+        /* 判断步骤是否变更。*/
+        /* Judge steps changed or not. */
+        $stepChanged = false;
+        if($this->post->steps)
+        {
+            $steps = array();
+            foreach($this->post->steps as $key => $desc)
+            {
+                if(!$desc) continue;
+                $steps[] = array('desc' => trim($desc), 'type' => trim(zget($this->post->stepType, $key, 'step')), 'expect' => trim(zget($this->post->expects, $key, '')));
+            }
+
+            /* 如果步骤数量发生变化，步骤变更。*/
+            /* If step count changed, case changed. */
+            if(count($case->steps) != count($steps))
+            {
+                $stepChanged = true;
+            }
+            else
+            {
+                /* 对比步骤的每一步。*/
+                /* Compare every step. */
+                $i = 0;
+                foreach($case->steps as $key => $oldStep)
+                {
+                    if(trim($oldStep->desc) != trim($steps[$i]['desc']) || trim($oldStep->expect) != $steps[$i]['expect'] || trim($oldStep->type) != $steps[$i]['type'])
+                    {
+                        $stepChanged = true;
+                        break;
+                    }
+                    $i++;
+                }
+            }
+        }
+
+        $status = $this->post->status ? $this->post->status : $case->status;
+        if(!$this->testcase->forceNotReview() && $stepChanged) $status = 'wait';
+
+        if($this->post->title && $case->title != $this->post->title) $stepChanged = true;
+        if($this->post->precondition && $case->precondition != $this->post->precondition) $stepChanged = true;
+
+        return array($stepChanged, $status);
     }
 }
