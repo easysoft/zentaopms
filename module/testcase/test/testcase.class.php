@@ -44,6 +44,24 @@ class testcaseTest
     }
 
     /**
+     * Create a scene.
+     *
+     * @param  array  $scene
+     * @access public
+     * @return bool|array
+     */
+    public function createSceneTest(array $scene): bool|array
+    {
+        $result = $this->objectModel->createScene((object)$scene);
+        if(!$result) return $result;
+
+        $scene  = $this->objectModel->dao->select('*')->from(TABLE_SCENE)->where('deleted')->eq('0')->orderBy('id_desc')->limit(1)->fetch();
+        $action = $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(1)->fetch();
+
+        return array('scene' => $scene, 'action' => $action);
+    }
+
+    /**
      * 测试获取模块的用例。
      * Test get cases of modules.
      *
