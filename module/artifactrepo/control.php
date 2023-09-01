@@ -23,7 +23,7 @@ class artifactrepo extends control
        @access public
      * @return void
      */
-    public function browse($browseType = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 24, $pageID = 1)
+    public function browse($browseType = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 25, $pageID = 1)
     {
         /* Load pager. */
         $this->app->loadClass('pager', true);
