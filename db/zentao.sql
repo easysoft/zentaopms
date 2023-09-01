@@ -1361,7 +1361,7 @@ CREATE TABLE IF NOT EXISTS `zt_product` (
   `acl` enum('open','private','custom') NOT NULL DEFAULT 'open',
   `whitelist` text NULL,
   `reviewer` text NULL,
-  `PMT` text COLLATE 'utf8_general_ci' NOT NULL DEFAULT '',
+  `PMT` text NULL,
   `draftStories` mediumint(8) NOT NULL DEFAULT '0',
   `activeStories` mediumint(8) NOT NULL DEFAULT '0',
   `changingStories` mediumint(8) NOT NULL DEFAULT '0',
