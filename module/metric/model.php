@@ -458,11 +458,11 @@ class metricModel extends model
      * 获取范围的对象列表。
      * Get object pairs by scope.
      *
-     * @param  string    $scope
-     * @access protected
+     * @param  string $scope
+     * @access public
      * @return array
      */
-    protected function getPairsByScope($scope)
+    public function getPairsByScope($scope)
     {
         if($scope == 'global') return array();
 
@@ -487,11 +487,11 @@ class metricModel extends model
      * 获取度量项的日期字符串。
      * Build date cell.
      *
-     * @param  object    $row
-     * @access protected
+     * @param  object $row
+     * @access public
      * @return string
      */
-    protected function buildDateCell($row)
+    public function buildDateCell($row)
     {
         extract((array)$row);
 
@@ -519,11 +519,11 @@ class metricModel extends model
      * 检查度量项计算文件是否存在。
      * Check if the calculator file exists or not.
      *
-     * @param  object    $row
-     * @access protected
+     * @param  object $row
+     * @access public
      * @return bool
      */
-    protected function checkCalcExists($metric)
+    public function checkCalcExists($metric)
     {
         $calcName = $this->metricTao->getCustomCalcRoot() . $metric->code . '.php';
         return file_exists($calcName);
@@ -533,11 +533,11 @@ class metricModel extends model
      * 检查度量项计算文件是否定义了必要的类。
      * Check whether the necessary class exist in the file.
      *
-     * @param  object    $row
-     * @access protected
+     * @param  object $row
+     * @access public
      * @return bool
      */
-    protected function checkCalcClass($metric)
+    public function checkCalcClass($metric)
     {
         return class_exists($metric->code);
     }
@@ -546,11 +546,11 @@ class metricModel extends model
      * 检查度量项计算文件中是否编写了必要的方法。
      * Check whether the necessary methods exist in the file.
      *
-     * @param  object    $row
-     * @access protected
+     * @param  object $row
+     * @access public
      * @return bool
      */
-    protected function checkCalcMethods($metric)
+    public function checkCalcMethods($metric)
     {
         $methodNameList = $this->metricTao->getMethodNameList($metric->code);
         foreach($this->config->metric->$necessaryMethodList as $method)
@@ -565,7 +565,7 @@ class metricModel extends model
      * 没有度量的显示范围不做显示。
      * Unset scope item that have no metric.
      *
-     * @access protected
+     * @access public
      * @return void
      */
     public function processScopeList()
@@ -581,7 +581,7 @@ class metricModel extends model
      * 根据后台配置的估算单位对列表赋值。
      * Assign unitList['measure'] by custom hourPoint.
      *
-     * @access protected
+     * @access public
      * @return void
      */
     public function processUnitList()
@@ -596,12 +596,92 @@ class metricModel extends model
      * 根据后台配置的是否开启用户需求设置对象列表。
      * Unset objectList['requirement'] if custom requirement is close.
      *
-     * @access protected
+     * @access public
      * @return void
      */
-
     public function processObjectList()
     {
         if(!isset($this->config->custom->URAndSR) or !$this->config->custom->URAndSR) unset($this->lang->metric->objectList['requirement']);
+    }
+
+    /**
+     * 导入用户自定义的度量项计算文件。
+     * Include custom calculator file.
+     *
+     * @param  string $code
+     * @access public
+     * @return void
+     */
+    public function includeCalc($code)
+    {
+        require $this->metricTao->getBaseCalcPath();
+        require $this->metricTao->getCustomCalcFile($code);
+    }
+
+    /**
+     * 从度量项计算文件中提取代码，去除注释。
+     * Extract code from calculator file, remove the comment.
+     *
+     * @param  string $file
+     * @access public
+     * @return string
+     */
+    public function extractCode($file)
+    {
+        $reg = '/class.*extends.*baseCalc/';
+        if(basename($file) == 'calc.class.php') $reg = '/class.*baseCalc/';
+
+        $contents = file_get_contents($file);
+        $lines = explode("\n", $contents);
+
+        $matchedLines = array_filter($lines, function($line) use($reg) {
+            return preg_match($reg, $line); 
+        });
+        $matchedLines = array_values($matchedLines);
+
+        $startIndex = array_search($matchedLines[0], $lines);
+        $code = implode("\n", array_slice($lines, $startIndex));
+
+        return $code;
+    }
+
+    /**
+     * 合并度量项计算文件与基类文件。
+     * Merge the calculator file and base calculator file.
+     *
+     * @param  string $code
+     * @access public
+     * @return string
+     */
+    public function mergeBaseCalc($code)
+    {
+        $baseCalcFile = $this->metricTao->getBaseCalcPath();
+        $calcFile     = $this->metricTao->getCustomCalcFile($code);
+
+        $baseCalcScript = $this->extractCode($baseCalcFile);
+        $calcScript     = $this->extractCode($calcFile);
+
+        $phpTag = '<?php';
+        $mergedScript = $phpTag . "\n" . $baseCalcScript . "\n" . $calcScript;
+
+        return $mergedScript;
+    }
+
+    /**
+     * 试运行用户自定义的度量项计算文件，返回错误信息。
+     * Dry run custom calculator file, return error message.
+     *
+     * @param  string $code
+     * @access public
+     * @return string
+     */
+    public function dryRunCalc($code)
+    {
+        $tmpCalcFile = $this->metricTao->getCustomCalcRoot() . $code . '.php.tmp';
+
+        file_put_contents($tmpCalcFile, $calcScript);
+        exec("php $tmpCalcFile 2>&1", $output);
+
+        return $output;
     }
 }
