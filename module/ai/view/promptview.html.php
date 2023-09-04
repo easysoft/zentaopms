@@ -9,6 +9,7 @@
  * @link        https://www.zentao.net
  */
 ?>
+<?php $this->app->tab = 'admin'; // Force tab to be `admin` so that feature menu will be printed correctly. ?>
 <?php include '../../common/view/header.html.php';?>
 
 <div id="mainMenu" class="clearfix">
