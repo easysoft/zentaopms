@@ -1112,7 +1112,7 @@ class testcaseZen extends testcase
      * @access protected
      * @return void
      */
-    protected function buildCaseForCase(string $from, int $param): object
+    protected function buildCaseForCreate(string $from, int $param): object
     {
         $status = $this->getStatusForCreate();
 

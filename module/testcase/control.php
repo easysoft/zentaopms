@@ -241,7 +241,7 @@ class testcase extends control
         {
             /* 构建用例。 */
             /* Build Case. */
-            $case = $this->testcaseZen->buildCaseForCase($from, $param);
+            $case = $this->testcaseZen->buildCaseForCreate($from, $param);
 
             /* 创建测试用例前检验表单数据是否正确。 */
             /* Check from data for create case. */
