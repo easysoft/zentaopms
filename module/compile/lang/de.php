@@ -33,6 +33,7 @@ $lang->compile->statusList['create_fail'] = 'Fail to create';
 $lang->compile->statusList['timeout']     = 'Exec Timeout';
 $lang->compile->statusList['canceled']    = 'Canceled';
 $lang->compile->statusList['failed']      = 'Build failed';
+$lang->compile->statusList['skipped']     = 'Skipped';
 
 $lang->compile->featureBar['browse']['job']     = 'List';
 $lang->compile->featureBar['browse']['compile'] = 'History';
