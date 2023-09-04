@@ -2246,7 +2246,6 @@ class execution extends control
 
         if(!empty($_POST))
         {
-            $this->loadModel('action');
             $this->execution->computeBurn($executionID);
             $this->execution->suspend($executionID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
