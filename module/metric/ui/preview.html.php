@@ -9,3 +9,9 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+
+featureBar
+(
+    set::current($scope),
+    set::linkParams("scope={key}"),
+);

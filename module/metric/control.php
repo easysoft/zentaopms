@@ -49,11 +49,13 @@ class metric extends control
     /**
      * Browse metric list.
      *
+     * @param  string $scope
      * @access public
      * @return void
      */
-    public function preview()
+    public function preview($scope = 'project')
     {
+        $this->view->scope = $scope;
         $this->view->title = $this->lang->metric->preview;
         $this->display();
     }

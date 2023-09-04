@@ -58,6 +58,20 @@ $lang->metric->featureBar['browse']['all']      = 'All';
 $lang->metric->featureBar['browse']['wait']     = 'Not Released';
 $lang->metric->featureBar['browse']['released'] = 'Released';
 
+$lang->metric->featureBar['preview']['project']   = 'Project';
+$lang->metric->featureBar['preview']['product']   = 'Product';
+$lang->metric->featureBar['preview']['execution'] = 'Execution';
+$lang->metric->featureBar['preview']['dept']      = 'Team';
+$lang->metric->featureBar['preview']['user']      = 'Individual';
+$lang->metric->featureBar['preview']['program']   = 'Program';
+$lang->metric->featureBar['preview']['system']    = 'System';
+$lang->metric->featureBar['preview']['more']      = 'More';
+$lang->metric->featureBar['preview']['collect']   = 'My Collect';
+
+$lang->metric->moreSelects = array();
+$lang->metric->moreSelects['code']      = 'Code Repository';
+$lang->metric->moreSelects['pipeline']  = 'Pipeline';
+
 $lang->metric->unitList = array();
 $lang->metric->unitList['single']  = 'Single';
 $lang->metric->unitList['measure'] = 'Man-hour';
