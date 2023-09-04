@@ -2409,6 +2409,10 @@ class testcaseModel extends model
                 $scene->branch  = $parent->branch;
                 $scene->module  = $parent->module;
             }
+            else
+            {
+                $scene->parent = 0;
+            }
         }
 
         $this->dao->update(TABLE_SCENE)->data($scene)->where('id')->eq($sceneID)->exec();
