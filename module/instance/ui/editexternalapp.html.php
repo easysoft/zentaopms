@@ -23,6 +23,7 @@ formPanel
         formGroup
         (
             set::name('name'),
+            set::required(true),
             set::label($lang->sonarqube->name),
             set::value($app->name),
         )
@@ -32,6 +33,7 @@ formPanel
         formGroup
         (
             set::name('url'),
+            set::required(true),
             set::label($lang->sonarqube->url),
             set::value($app->url),
         )

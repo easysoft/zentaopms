@@ -78,8 +78,7 @@ class space extends control
 
         /* Data sort. */
         list($order, $sort) = explode('_', $orderBy);
-        $orderInstances = json_decode(json_encode($allInstances), true);
-        $createdColumn  = helper::arrayColumn($orderInstances, $order == 'id' ? 'createdAt' : $order);
+        $createdColumn  = helper::arrayColumn($allInstances, $order == 'id' ? 'createdAt' : $order);
         array_multisort($createdColumn, $sort == 'desc' ? SORT_DESC : SORT_ASC, $allInstances);
 
         /* Pager. */
