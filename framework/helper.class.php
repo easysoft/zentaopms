@@ -421,7 +421,7 @@ class helper extends baseHelper
      * @access public
      * @return array
      */
-    public static function arrayColumn(array $input, int|string|null $columnKey, int|string|null $indexKey = null): array
+    public static function arrayColumn(array $input, $columnKey, $indexKey = null): array
     {
         /* If php version greater than 7, calling system functions returns. */
         if(defined(PHP_VERSION_ID) && PHP_VERSION_ID >= 70000) return \array_column($input, $columnKey, $indexKey);
