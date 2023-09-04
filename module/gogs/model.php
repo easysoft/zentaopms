@@ -296,9 +296,9 @@ class gogsModel extends model
         $matchedUsers = array();
         foreach($gogsUsers as $gogsUser)
         {
-            if(isset($bindedUsers[$gogsUser->account]))
+            if(isset($bindedUsers[$gogsUser->id]))
             {
-                $gogsUser->zentaoAccount     = $bindedUsers[$gogsUser->account];
+                $gogsUser->zentaoAccount     = $bindedUsers[$gogsUser->id];
                 $matchedUsers[$gogsUser->id] = $gogsUser;
                 continue;
             }

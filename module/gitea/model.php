@@ -329,9 +329,9 @@ class giteaModel extends model
         $matchedUsers = array();
         foreach($giteaUsers as $giteaUser)
         {
-            if(isset($bindedUsers[$giteaUser->account]))
+            if(isset($bindedUsers[$giteaUser->id]))
             {
-                $giteaUser->zentaoAccount     = $bindedUsers[$giteaUser->account];
+                $giteaUser->zentaoAccount     = $bindedUsers[$giteaUser->id];
                 $matchedUsers[$giteaUser->id] = $giteaUser;
                 continue;
             }

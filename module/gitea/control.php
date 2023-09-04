@@ -211,7 +211,7 @@ class gitea extends control
         }
 
         $userList      = array();
-        $giteaUsers   = $this->gitea->apiGetUsers($giteaID);
+        $giteaUsers    = $this->gitea->apiGetUsers($giteaID);
         $bindedUsers   = $this->gitea->getUserAccountIdPairs($giteaID);
         $matchedResult = $this->gitea->getMatchedUsers($giteaID, $giteaUsers, $zentaoUsers);
 

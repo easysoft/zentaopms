@@ -10,7 +10,7 @@ window.setUserEmail = function()
 window.renderGitlabUser = function(result, {row})
 {
     const giteaID = row.data.giteaID;
-    result.push({html: `<input type="hidden" name='giteaUserNames[]' value='${giteaID}'>`});
+    result.push({html: '<input type="hidden" name="giteaUserNames[' + row.id + ']" value="' + giteaID + '">'});
 
     return result;
 }
