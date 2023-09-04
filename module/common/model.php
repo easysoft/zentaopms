@@ -1284,6 +1284,7 @@ class commonModel extends model
             $class = $key == $searchObject ? "class='selected'" : '';
             if($key == 'program')    $key = 'program-product';
             if($key == 'deploystep') $key = 'deploy-viewstep';
+            if($key == 'practice')   $key = 'traincourse-practiceview';
 
             echo "<li $class><a href='javascript:$.setSearchType(\"$key\");' data-value='{$key}'>{$value}</a></li>";
         }

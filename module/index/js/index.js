@@ -941,6 +941,7 @@ function changeSearchObject()
 
     if(searchType == 'program')    var searchType = 'program-product';
     if(searchType == 'deploystep') var searchType = 'deploy-viewstep';
+    if(searchType == 'practice')   var searchType = 'traincource-practiceview';
 
     $("#searchType").val(searchType);
     $('#searchTypeMenu li:first').attr('class', 'search-type-all');

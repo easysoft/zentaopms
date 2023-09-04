@@ -1364,7 +1364,7 @@ class treeModel extends model
      */
     public function createPracticeLink($type, $module)
     {
-        return html::a(helper::createLink('traincourse', $this->app->methodName, "module={$module->id}"), $module->name, '_self', "id='module{$module->id}' title='{$module->name}'");
+        return html::a(helper::createLink('traincourse', 'practicebrowse', "moduleID={$module->id}"), $module->name, '_self', "id='module{$module->id}' title='{$module->name}'");
     }
 
     /**
