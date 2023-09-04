@@ -612,6 +612,7 @@ function initTableData(array $items, array &$fieldList, object $model = null): a
         if(count($item->actions) > $maxActionCount) $maxActionCount = count($item->actions);
     }
     if(isset($fieldList['actions'])) $fieldList['actions']['minWidth'] = $maxActionCount * 24 + 24;
+    if($fieldList['actions']['minWidth'] < 48) $fieldList['actions']['minWidth'] = 48;
 
     return array_values($items);
 }
@@ -711,7 +712,7 @@ function initItemActions(object &$item, string $actionMenu, array $actionList, o
         }
     }
 
-    if(!$isClickable && (!$method || !common::hasPriv($module, $method))) return $isClickable;
+    if(!$method || !common::hasPriv($module, $method)) return $isClickable;
 
     $item->actions[] = array('name' => $action, 'disabled' => !$isClickable);
 

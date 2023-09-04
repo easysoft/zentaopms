@@ -291,6 +291,7 @@ $config->openMethods[] = 'instance.createexternalapp';
 $config->openMethods[] = 'instance.editexternalapp';
 $config->openMethods[] = 'instance.deleteexternalapp';
 $config->openMethods[] = 'search.deletezinquery';
+$config->openMethods[] = 'space.edit';
 
 $config->openModules = array();
 $config->openModules[] = 'install';

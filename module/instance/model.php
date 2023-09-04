@@ -2049,13 +2049,13 @@ class InstanceModel extends model
             return false;
         }
 
-        if($action == 'start')     return $this->canDo('start', $instance) && commonModel::hasPriv('instance', 'ajaxStart');
-        if($action == 'stop')      return $this->canDo('stop', $instance) && commonModel::hasPriv('instance', 'ajaxStop');
-        if($action == 'ajaxUninstall') return $this->canDo('uninstall', $instance) && commonModel::hasPriv('instance', 'ajaxUninstall');
-        if($action == 'visit')     return !empty($instance->domain) && $this->canDo('visit', $instance) && commonModel::hasPriv('instance', 'visit');
-        if($action == 'upgrade')   return !empty($instance->latestVersion) && commonModel::hasPriv('instance', 'upgrade');
-        if($action == 'edit')      return false;
-        if($action == 'bindUser')  return false;
+        if($action == 'ajaxStart')     return $this->canDo('start', $instance);
+        if($action == 'ajaxStop')      return $this->canDo('stop', $instance);
+        if($action == 'ajaxUninstall') return $this->canDo('uninstall', $instance);
+        if($action == 'visit')         return !empty($instance->domain) && $this->canDo('visit', $instance);
+        if($action == 'upgrade')       return !empty($instance->latestVersion);
+        if($action == 'edit')          return false;
+        if($action == 'bindUser')      return false;
 
         return true;
     }
