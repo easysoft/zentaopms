@@ -141,4 +141,5 @@ formPanel
         set::items($lang->metric->afterCreateList),
         set::value('implement'),
     ),
+    set::submitBtnText($lang->save),
 );
