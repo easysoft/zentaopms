@@ -263,10 +263,7 @@ class group extends control
                     continue;
                 }
 
-                if(!$this->config->inQuickon && in_array("{$priv->module}-{$priv->method}", $this->config->group->hiddenPriv))
-                {
-                    continue;
-                }
+                if(!$this->config->inQuickon && in_array("{$priv->module}-{$priv->method}", $this->config->group->hiddenPriv)) continue;
 
                 if(!isset($privList[$priv->parentCode])) $privList[$priv->parentCode] = array();
                 if(!is_array($privList[$priv->parentCode])) $privList[$priv->parentCode] = array();
@@ -302,6 +299,7 @@ class group extends control
                     foreach($this->lang->resource->{$module} as $method => $methodLabel)
                     {
                         if(isset($privMethods[$module][$method])) continue;
+                        if(!$this->config->inQuickon && in_array("{$module}-{$method}", $this->config->group->hiddenPriv)) continue;
                         $privMethods[$module][$method] = $method;
 
                         $privList[$module][0]["{$module}-$method"] = new stdclass();
@@ -1035,7 +1033,7 @@ class group extends control
             $privList = $this->group->getPrivByParent(trim($parentList, ','));
             foreach($privList as $privID => $priv)
             {
-                $privList["{$priv->module}-{$priv->method}"] = $priv;
+                if($this->config->inQuickon || !in_array("{$priv->module}-{$priv->method}", $this->config->group->hiddenPriv)) $privList["{$priv->module}-{$priv->method}"] = $priv;
                 unset($privList[$privID]);
             }
         }

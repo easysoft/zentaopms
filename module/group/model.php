@@ -1646,6 +1646,7 @@ class groupModel extends model
             ->andWhere('t1.edition')->like("%,{$this->config->edition},%")
             ->andWhere('t1.vision')->like("%,{$this->config->vision},%")
             ->andWhere('t2.`objectType`')->eq('priv')
+            ->andWhere('t2.lang')->eq($this->app->getClientLang())
             ->orderBy('order_asc')
             ->fetchAll('id');
     }
