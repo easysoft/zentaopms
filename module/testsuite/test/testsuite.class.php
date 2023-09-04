@@ -59,6 +59,24 @@ class testsuiteTest
     }
 
     /**
+     * Test get test suites pairs of a product.
+     *
+     * @param  int    $productID
+     * @param  string $orderBy
+     * @param  object $paper
+     * @access public
+     * @return void
+     */
+    public function getSuitePairsTest($productID, $orderBy = 'id_desc', $paper = null)
+    {
+        $relation = $this->objectModel->getSuitePairs($productID, $orderBy, $paper);
+
+        if(dao::isError()) return dao::getError();
+
+        return $relation;
+    }
+
+    /**
      * Test get unit suite.
      *
      * @param  int    $productID
@@ -153,6 +171,24 @@ class testsuiteTest
         if(dao::isError()) return dao::getError();
 
         return $objects;
+    }
+
+    /**
+     * Test get linked cases pairs for suite.
+     *
+     * @param  int    $suiteID
+     * @access public
+     * @return void
+     */
+    public function getLinkedCasePairsTest($suiteID)
+    {
+        global $tester;
+        $tester->session->set('project', 1);
+        $relation = $this->objectModel->getLinkedCasePairs($suiteID);
+
+        if(dao::isError()) return dao::getError();
+
+        return $relation;
     }
 
     /**

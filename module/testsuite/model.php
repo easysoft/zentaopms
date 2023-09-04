@@ -207,6 +207,8 @@ class testsuiteModel extends model
     public function getLinkedCasePairs(int $suiteID): array
     {
         $suite = $this->getById($suiteID);
+
+        if(!$suite) return array();
         return $this->dao->select('t1.id, t1.title')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_SUITECASE)->alias('t2')->on('t1.id=t2.case')
             ->where('t2.suite')->eq($suiteID)
