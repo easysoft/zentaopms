@@ -415,6 +415,6 @@ class testsuiteModel extends model
      */
     public function deleteCaseBySuiteID(array $cases, int $suiteID)
     {
-        $this->dao->delete()->from(TABLE_SUITECASE)->where('`case`')->in($cases)->andWhere('`suite`')->eq($suiteID)->exec();
+        return $this->dao->delete()->from(TABLE_SUITECASE)->where('`case`')->in($cases)->andWhere('`suite`')->eq($suiteID)->exec();
     }
 }

@@ -12,17 +12,17 @@ cid=1
 pid=1
 
 测试productID为1,name正常存在,type为private >> type,public,private
-测试productID为1,name为空,type为private >> 『名称』不能为空。
+测试productID为1,name为空,type为private >> 『套件名称』不能为空。
 测试productID为1,name正常存在,type为public >> type,private,public
-测试productID为1,name为空,type为public >> 『名称』不能为空。
+测试productID为1,name为空,type为public >> 『套件名称』不能为空。
 测试productID为1,name正常存在,type为空 >> type,public,
-测试productID为1,name为空,type为空 >> 『名称』不能为空。
+测试productID为1,name为空,type为空 >> 『套件名称』不能为空。
 测试productID为0,name正常存在,type为private >> 0
-测试productID为0,name为空,type为private >> 『名称』不能为空。
+测试productID为0,name为空,type为private >> 『套件名称』不能为空。
 测试productID为0,name正常存在,type为public >> 0
-测试productID为0,name为空,type为public >> 『名称』不能为空。
+测试productID为0,name为空,type为public >> 『套件名称』不能为空。
 测试productID为0,name正常存在,type为空 >> 0
-测试productID为0,name为空,type为空 >> 『名称』不能为空。
+测试productID为0,name为空,type为空 >> 『套件名称』不能为空。
 
 */
 $productID = array(1, 0);

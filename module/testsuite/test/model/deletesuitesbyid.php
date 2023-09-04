@@ -8,7 +8,7 @@ zdTable('testsuite')->gen(1);
 
 /**
 
-title=测试 testsuiteModel->delete();
+title=测试 testsuiteModel->deleteSuiteByID();
 cid=1
 pid=1
 

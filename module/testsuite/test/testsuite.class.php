@@ -245,4 +245,18 @@ class testsuiteTest
         if(dao::isError()) return dao::getError();
         return $isClickable ? 1 : 0;
     }
+
+    /**
+     * 测试根据套件id删除关联的用例。
+     * Test delete case by suiteID.
+     *
+     * @param  int    $cases
+     * @param  int    $suiteID
+     * @access public
+     * @return void
+     */
+    public function deleteCaseBySuiteIDTest($cases, $suiteID)
+    {
+        return $this->objectModel->deleteCaseBySuiteID($cases, $suiteID);
+    }
 }
