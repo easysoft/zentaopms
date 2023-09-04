@@ -31,7 +31,7 @@ $scene9  = array('product' => 1, 'title' => '测试场景1', 'parent' => 'parent
 $scene10 = array('product' => 1, 'title' => '测试场景1', 'branch' => 1, 'module' => 1, 'parent' => 0);
 $scene11 = array('product' => 1, 'title' => '测试场景2', 'branch' => 1, 'module' => 1, 'parent' => 1);
 $scene12 = array('product' => 1, 'title' => '测试场景3', 'branch' => 1, 'module' => 1, 'parent' => 2);
-$scene13 = array('product' => 1, 'title' => '测试场景3', 'branch' => 1, 'module' => 1, 'parent' => 4);
+$scene13 = array('product' => 1, 'title' => '测试场景4', 'branch' => 1, 'module' => 1, 'parent' => 5);
 
 $testcase = new testcaseTest();
 
@@ -62,7 +62,7 @@ r(dao::getError()) && p('module:0') && e('『所属模块』应当是数字。')
 r($testcase->createSceneTest($scene9)) && p() && e(0);              // 创建场景时父场景设为字符串返回 false。
 r(dao::getError()) && p('parent:0') && e('『父场景』应当是数字。'); // 创建场景时父场景设为字符串输出错误提示。
 
-r($testcase->createSceneTest($scene10)) && p('scene:id|sort|parent|grade|path;action:objectType|action', '|') && e('1|1|0|1|,1,|scene|opened');     // 获取创建场景 1 成功后检测场景信息和日志。
-r($testcase->createSceneTest($scene11)) && p('scene:id|sort|parent|grade|path;action:objectType|action', '|') && e('2|2|1|2|,1,2,|scene|opened');   // 获取创建场景 2 成功后检测场景信息和日志。
-r($testcase->createSceneTest($scene12)) && p('scene:id|sort|parent|grade|path;action:objectType|action', '|') && e('3|3|2|3|,1,2,3,|scene|opened'); // 获取创建场景 3 成功后检测场景信息和日志。
-r($testcase->createSceneTest($scene13)) && p('scene:id|sort|parent|grade|path;action:objectType|action', '|') && e('4|4|0|1|,1,|scene|opened');     // 获取创建场景 4 成功后检测场景信息和日志。
+r($testcase->createSceneTest($scene10)) && p('scene:id|sort|parent|grade|path;action:objectType|action', '|') && e('1|1|0|1|,1,;scene|opened');     // 获取创建场景 1 成功后检测场景信息和日志。
+r($testcase->createSceneTest($scene11)) && p('scene:id|sort|parent|grade|path;action:objectType|action', '|') && e('2|2|1|2|,1,2,;scene|opened');   // 获取创建场景 2 成功后检测场景信息和日志。
+r($testcase->createSceneTest($scene12)) && p('scene:id|sort|parent|grade|path;action:objectType|action', '|') && e('3|3|2|3|,1,2,3,;scene|opened'); // 获取创建场景 3 成功后检测场景信息和日志。
+r($testcase->createSceneTest($scene13)) && p('scene:id|sort|parent|grade|path;action:objectType|action', '|') && e('4|4|0|1|,4,;scene|opened');     // 获取创建场景 4 成功后检测场景信息和日志。
