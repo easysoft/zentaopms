@@ -1018,7 +1018,7 @@ class gitlabModel extends model
      * @access public
      * @return object
      */
-    public function apiGetSingleProject($gitlabID, $projectID, $useUser = false)
+    public function apiGetSingleProject($gitlabID, $projectID, $useUser = true)
     {
         if(isset($this->projects[$gitlabID][$projectID])) return $this->projects[$gitlabID][$projectID];
 
