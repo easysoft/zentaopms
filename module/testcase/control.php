@@ -1341,21 +1341,17 @@ class testcase extends control
     {
         if($_POST)
         {
-            /* 记录父场景 ID，便于下次创建场景时默认选中父场景。*/
-            /* Record the ID of the parent scene, so that the parent scene will be selected by default when creating a scene next time. */
-            helper::setcookie('lastCaseScene', (int)$this->post->parent);
-
-            $scene = form::data($this->config->testcase->form->createScene)
-                ->add('openedBy', $this->app->user->account)
-                ->add('openedDate', helper::now())
-                ->cleanInt('product,module,branch,parent')
-                ->get();
+            $scene = form::data($this->config->testcase->form->createScene)->get();
 
             $this->testcase->createScene($scene);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            /* 记录父场景 ID，便于下次创建场景时默认选中父场景。*/
+            /* Record the ID of the parent scene, so that the parent scene will be selected by default when creating a scene next time. */
+            helper::setcookie('lastCaseScene', $scene->parent);
+
             $useSession = $this->app->tab != 'qa' && $this->session->caseList && strpos($this->session->caseList, 'dynamic') === false;
-            $locate     = $useSession ? $this->session->caseList : inlink('browse', "productID={$this->post->product}&branch={$this->post->branch}&browseType=all&param={$this->post->module}");
+            $locate     = $useSession ? $this->session->caseList : inlink('browse', "productID={$scene->product}&branch={$scene->branch}&browseType=all&param={$scene->module}");
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
