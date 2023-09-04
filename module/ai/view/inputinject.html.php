@@ -137,6 +137,16 @@
           {
             /* Set injected in oreder to cancel loading class on object view (see promptmenu.html.php). */
             sessionStorage.setItem('ai-prompt-data-injected', true);
+
+            const container = window.frameElement?.closest('.load-indicator');
+            if(container && container.dataset.loading)
+            {
+              sessionStorage.removeItem('ai-prompt-data-injected');
+              delete container.dataset.loading;
+
+              container.classList.remove('loading');
+              container.classList.remove('no-delay');
+            }
           }
         });
       })();

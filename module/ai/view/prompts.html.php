@@ -175,6 +175,13 @@
 <script>
   $(function()
   {
+    const container = window.frameElement?.closest('.load-indicator');
+    if(container && container.dataset.loading)
+    {
+      delete container.dataset.loading;
+      container.classList.remove('loading');
+      container.classList.remove('no-delay');
+    }
     /* Handle clicks from audit button without auditable objects. */
     $('.prompt-audit-btn[href=""]').click(function(e)
     {
@@ -183,8 +190,10 @@
     });
     $('.prompt-audit-btn[href!=""][href!="#"]').click(function(e)
     {
-      $('body').attr('data-loading', '<?php echo $lang->ai->execute->loading;?>');
-      $('body').addClass('load-indicator loading');
+      if(!container) return;
+      container.dataset.loading = '<?php echo $lang->ai->execute->loading;?>';
+      container.classList.add('loading');
+      container.classList.add('no-delay');
 
       /* Checks for session storage to cancel loading status (see inputinject.html.php). */
       sessionStorage.removeItem('ai-prompt-data-injected');
@@ -192,7 +201,12 @@
       {
         if(sessionStorage.getItem('ai-prompt-data-injected'))
         {
-          $('body').removeClass('loading');
+          if(container && container.dataset.loading)
+          {
+            delete container.dataset.loading;
+            container.classList.remove('loading');
+            container.classList.remove('no-delay');
+          }
           sessionStorage.removeItem('ai-prompt-data-injected');
           clearInterval(loadCheckInterval);
         }
