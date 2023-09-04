@@ -626,51 +626,6 @@ class testcaseTest
     }
 
     /**
-     * Test create from import.
-     *
-     * @param  int    $productID
-     * @param  array  $param
-     * @access public
-     * @return string
-     */
-    public function createFromImportTest($productID, $param = array())
-    {
-        global $tester;
-
-        $_POST['product']      = array('1' => '1', '2' => '1');
-        $_POST['keywords']     = array('1' => '这是关键词1', '2' => '这是关键词2');
-        $_POST['title']        = array('1' => '导入测试用例1', '2' => '导入测试用例2');
-        $_POST['module']       = array('1' => '0', '2' => '0');
-        $_POST['story']        = array('1' => '2', '2' => '2');
-        $_POST['pri']          = array('1' => '1', '2' => '2');
-        $_POST['type']         = array('1' => 'performance', '2' => 'feature');
-        $_POST['stage']        = array('1' => array('0' => 'feature'), '2' => array('0' => 'unittest'));
-        $_POST['precondition'] = array('1' => '这是前置条件1', '2' => '这是前置条件2');
-        $_POST['stepType']     = array('1' => array('1' => 'step'), '2' => array('1' => 'step'));
-        $_POST['desc']         = array('1' => array('1' => '用例步骤描述1'), '2' => array('1' => '用例步骤描述2'));
-        $_POST['expect']       = array('1' => array('1' => '这是用例预期结果1'), '2' => array('1' => '这是用例预期结果2'));
-        $_POST['isEndPage']    = '1';
-        $_POST['pagerID']      = '1';
-
-        foreach($param as $field => $value) $_POST[$field] = $value;
-
-        $fileName = __DIR__ . DS . 'a.txt';
-        fopen($fileName, 'a');
-        $tester->session->fileImport = $fileName;
-
-        $this->objectModel->createFromImport($productID, 0);
-
-
-        unset($_POST);
-
-        if(dao::isError()) return dao::getError();
-
-        $objects = $tester->dao->select('*')->from(TABLE_CASE)->where('product')->eq(1)->andWhere('lib')->eq(0)->markLeft()->andWhere('id')->gt(560)->orWhere('id')->in('1,2')->markRight()->fetchAll('title');
-        $titles = implode(',', array_keys($objects));
-        return $titles;
-    }
-
-    /**
      * Test get fields for import.
      *
      * @param  int    $productID
