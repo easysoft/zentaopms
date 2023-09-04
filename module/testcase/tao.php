@@ -167,6 +167,71 @@ class testcaseTao extends testcaseModel
         return $caseSteps;
     }
 
+    /**
+     * 获取相关的需求。
+     * Get related stories.
+     *
+     * @param  array  $cases
+     * @access public
+     * @return array
+     */
+    protected function getRelatedStories(array $cases): array
+    {
+        $relatedStoryIdList = array();
+        foreach($cases as $case) $relatedStoryIdList[$case->story] = $case->story;
+
+        return $this->dao->select('id, title')->from(TABLE_STORY)->where('id')->in($relatedStoryIdList)->fetchPairs();
+    }
+
+    /**
+     * 获取相关的用例。
+     * Get related cases.
+     *
+     * @param  array  $cases
+     * @access public
+     * @return array
+     */
+    protected function getRelatedCases(array $cases): array
+    {
+        $relatedCaseIdList  = array();
+        foreach($cases as $case)
+        {
+            $linkCases = explode(',', $case->linkCase);
+            foreach($linkCases as $linkCaseID)
+            {
+                if($linkCaseID) $relatedCaseIdList[$linkCaseID] = trim($linkCaseID);
+            }
+        }
+
+        return $this->dao->select('id, title')->from(TABLE_CASE)->where('id')->in($relatedCaseIdList)->fetchPairs();
+    }
+
+    /**
+     * 获取相关的步骤。
+     * Get related steps.
+     *
+     * @param  array  $caseIdList
+     * @access public
+     * @return array
+     */
+    protected function getRelatedSteps(array $caseIdList): array
+    {
+        return $this->dao->select('id, parent, `case`, version, type, `desc`, expect')->from(TABLE_CASESTEP)->where('`case`')->in($caseIdList)->orderBy('version desc,id')->fetchGroup('case', 'id');
+    }
+
+    /**
+     * 获取相关的附件。
+     * Get related files.
+     *
+     * @param  array  $caseIdList
+     * @access public
+     * @return array
+     */
+    protected function getRelatedFiles(array $caseIdList): array
+    {
+        return $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('testcase')->andWhere('objectID')->in($caseIdList)->andWhere('extra')->ne('editor')->fetchGroup('objectID');
+    }
+
     /*
      * 处理用例和项目的关系。
      * Deal with the relationship between the case and project when edit the case.
