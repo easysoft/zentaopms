@@ -142,9 +142,7 @@ function loadProductModules(productID)
     let branch = $('[name=branch]').val();
     if(typeof(branch) == 'undefined') branch = 0;
 
-    const currentModuleID = config.currentMethod == 'edit' ? $('[name=module]').val() : 0;
-    const getModuleLink   = $.createLink('testcase', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=case&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true&extra=&currentModuleID=' + currentModuleID);
-
+    const getModuleLink = $.createLink('testcase', 'ajaxGetOptionMenu', 'rootID=' + productID + '&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=');
     $.get(getModuleLink, function(data)
     {
         if(data)

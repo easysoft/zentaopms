@@ -1388,67 +1388,34 @@ class testcase extends control
     }
 
     /**
+     * 通过 ajax 方式获取模块选项。
      * Ajax get option menu.
      *
      * @param  int    $rootID
-     * @param  string $viewType
      * @param  int    $branch
      * @param  int    $rootModuleID
      * @param  string $returnType
      * @param  string $fieldID
-     * @param  bool   $needManage
-     * @param  string $extra
-     * @param  int    $currentModuleID
      * @access public
      * @return void
      */
-    public function ajaxGetOptionMenu($rootID, $viewType = 'story', $branch = 0, $rootModuleID = 0, $returnType = 'html', $fieldID = '', $needManage = false, $extra = '', $currentModuleID = 0)
+    public function ajaxGetOptionMenu(int $rootID, int|string $branch = 0, int $rootModuleID = 0, string $returnType = 'html', string $fieldID = ''): bool
     {
-        $this->loadModel('tree');
-
-        if($viewType == 'task')
-        {
-            $optionMenu = $this->tree->getTaskOptionMenu($rootID, 0, 0, $extra);
-        }
-        else
-        {
-            $optionMenu = $this->tree->getOptionMenu((int)$rootID, $viewType, $rootModuleID, $branch);
-        }
-
-        if($returnType == 'html')
-        {
-            if($viewType == 'line')
-            {
-                $lineID = $this->dao->select('id')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->orderBy('id_desc')->limit(1)->fetch('id');
-                $output = html::select("line", $optionMenu, $lineID, "class='form-control'");
-                $output .= "<span class='input-group-addon' style='border-radius: 0px 2px 2px 0px; border-right-width: 1px;'>";
-                $output .= html::a($this->createLink('tree', 'browse', "rootID=$rootID&view=$viewType&currentModuleID=0&branch=$branch", '', true), $viewType == 'line' ? $this->lang->tree->manageLine : $this->lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
-                $output .= '</span>';
-
-                die($output);
-            }
-            else
-            {
-                $items = array();
-                foreach($optionMenu as $optionID => $optionName)
-                {
-                    $items[] = array('text' => $optionName, 'value' => $optionID);
-                }
-
-                return print(json_encode($items));
-            }
-        }
+        $optionMenu = $this->loadModel('tree')->getOptionMenu($rootID, 'case', $rootModuleID, $branch);
 
         if($returnType == 'mhtml')
         {
-            $changeFunc = '';
-            if($viewType == 'task') $changeFunc = "";
             $field  = $fieldID ? "modules[$fieldID]" : 'module';
-            $output = html::select("$field", $optionMenu, '', "class='input' $changeFunc");
+            $output = html::select("$field", $optionMenu, '', "class='input'");
             die($output);
         }
 
         if($returnType == 'json') die(json_encode($optionMenu));
+
+        $items = array();
+        foreach($optionMenu as $optionID => $optionName) $items[] = array('text' => $optionName, 'value' => $optionID);
+
+        return print(json_encode($items));
     }
 
     /**
