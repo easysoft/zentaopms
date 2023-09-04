@@ -49,16 +49,12 @@ su('admin');
 /**
 
 title=测试executionModel->statRelatedDataTest();
+timeout=0
 cid=1
-pid=1
-
-敏捷执行数据统计 >> 1
-瀑布执行数据统计 >> 3
-看板执行数据统计 >> 3
 
 */
 
-$executionIDList = array('3', '4', '5');
+$executionIDList = array(3, 4, 5);
 
 $execution = new executionTest();
 r($execution->statRelatedDataTest($executionIDList[0])) && p('storyCount') && e('1'); // 敏捷执行数据统计

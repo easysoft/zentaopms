@@ -1239,13 +1239,14 @@ class executionTest
     }
 
     /**
-     * function statRelatedData test by execution
+     * 统计执行的需求数、任务数、Bug数。
+     * Statistics the number of stories, tasks, and bugs for the execution.
      *
-     * @param  string $executionID
+     * @param  int          $executionID
      * @access public
-     * @return array
+     * @return object|array
      */
-    public function statRelatedDataTest($executionID)
+    public function statRelatedDataTest(int $executionID): object|array
     {
         $object = $this->executionModel->statRelatedData($executionID);
 

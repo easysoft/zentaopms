@@ -2910,13 +2910,14 @@ class executionModel extends model
     }
 
     /**
-     * Stat story, task, bug data for execution.
+     * 统计执行的需求数、任务数、Bug数。
+     * Statistics the number of stories, tasks, and bugs for the execution.
      *
      * @param  int    $executionID
      * @access public
-     * @return void
+     * @return object
      */
-    public function statRelatedData($executionID)
+    public function statRelatedData(int $executionID): object
     {
         $storyCount = $this->dao->select('count(t2.story) as storyCount')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id = t2.story')
