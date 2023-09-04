@@ -56,10 +56,13 @@ $config->repo->dtable->fieldList['actions']['list']['edit']['url']   = $this->cr
 $config->repo->dtable->fieldList['actions']['list']['delete']['url'] = $this->createLink('repo', 'delete', "repoID={id}&objectID={$objectID}");
 
 $repos = initTableData($repoList, $config->repo->dtable->fieldList, $this->repo);
+$queryMenuLink = createLink('repo', 'maintain', "objectID=$objectID&orderBy=&recTotal={$pager->recTotal}&pageID={$pager->pageID}&type=bySearch&param={queryID}");
 
 featureBar
 (
     set::current('all'),
+    set::linkParams("product=$product->id&branch=$branch&browseType={key}"),
+    set::queryMenuLinkCallback(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink)),
     li(searchToggle(set::open($type == 'bySearch'))),
 );
 

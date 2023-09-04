@@ -105,13 +105,12 @@ class repo extends control
         session_start();
         $this->config->repo->search['params']['product']['values']  = $products;
         $this->config->repo->search['params']['projects']['values'] = $projects;
-        $this->config->repo->search['actionURL'] = $this->createLink('repo', 'maintain', "objectID={$objectID}&orderBy={$orderBy}&recPerPage={$recPerPage}&pageID={$pageID}&type=bySearch&param=myQueryID");
-        $this->config->repo->search['queryID']   = 0;
+        $this->config->repo->search['actionURL']   = $this->createLink('repo', 'maintain', "objectID={$objectID}&orderBy={$orderBy}&recPerPage={$recPerPage}&pageID={$pageID}&type=bySearch&param=myQueryID");
+        $this->config->repo->search['queryID']     = $param;
         $this->config->repo->search['onMenuBar']   = 'yes';
         $this->loadModel('search')->setSearchParams($this->config->repo->search);
 
-        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->browse;
-
+        $this->view->title         = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->browse;
         $this->view->type          = $type;
         $this->view->orderBy       = $orderBy;
         $this->view->objectID      = $objectID;
