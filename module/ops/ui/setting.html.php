@@ -84,6 +84,7 @@ if(common::hasPriv('custom', 'restore')) $actions[] = array('class' => 'ajax-sub
 formPanel
 (
     setID('opsForm'),
+    set::size('md'),
     $hasSideBar ? setClass('ops-ml-0') : null,
     set::title($lang->$module->common . '  >   ' . $lang->$module->$field),
     set::actions($actions),
