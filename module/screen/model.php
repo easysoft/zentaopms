@@ -1055,7 +1055,7 @@ class screenModel extends model
                     {
                         foreach($results as $result)
                         {
-                            $value += $result->$field;
+                            $value += intval($result->$field);
                         }
 
                         $value = round($value);
