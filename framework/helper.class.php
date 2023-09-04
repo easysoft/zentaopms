@@ -409,6 +409,66 @@ class helper extends baseHelper
                 return (string)$value;
         }
     }
+
+    /**
+     * 获取二维数组中的某一列。
+     * Get array column to array.
+     *
+     * @param  array           $input
+     * @param  int|string|null $columnKey
+     * @param  int|string|null $indexKey
+     * @static
+     * @access public
+     * @return array
+     */
+    public static function arrayColumn(array $input, int|string|null $columnKey, int|string|null $indexKey = null): array
+    {
+        /* If php version greater than 7, calling system functions returns. */
+        if(PHP_VERSION_ID >= 70000) return \array_column($input, $columnKey, $indexKey);
+
+        $output = array();
+        foreach($input as $row)
+        {
+            $key    = $value = null;
+            $keySet = $valueSet = false;
+
+            if(null !== $indexKey && array_key_exists($indexKey, $row))
+            {
+                $keySet = true;
+                $key    = (string) $row[$indexKey];
+            }
+
+            if(null === $columnKey)
+            {
+                $valueSet = true;
+                $value    = $row;
+            }
+            elseif(\is_array($row) && \array_key_exists($columnKey, $row))
+            {
+                $valueSet = true;
+                $value    = $row[$columnKey];
+            }
+            elseif(\is_object($row) && \property_exists($row, $columnKey))
+            {
+                $valueSet = true;
+                $value    = $row->$columnKey;
+            }
+
+            if($valueSet)
+            {
+                if($keySet)
+                {
+                    $output[$key] = $value;
+                }
+                else
+                {
+                    $output[] = $value;
+                }
+            }
+        }
+
+        return $output;
+    }
 }
 
 /**
