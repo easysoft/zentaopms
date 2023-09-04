@@ -81,7 +81,7 @@ $lang->metric->purposeList['time']  = "Time Control";
 $lang->metric->purposeList['cost']  = "Cost Calculation";
 $lang->metric->purposeList['hour']  = "Hourly Statistics";
 $lang->metric->purposeList['qc']    = "Quality Control";
-$lang->metric->purposeList['rate']  = "Efficiency Improvement";
+$lang->metric->purposeList['rate']  = "Enhanced Efficiency";
 
 $lang->metric->scopeList = array();
 $lang->metric->scopeList['system']    = "System";
