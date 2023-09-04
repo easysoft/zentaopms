@@ -182,22 +182,23 @@ class execution extends control
     }
 
     /**
+     * 任务分组视图。
      * Browse tasks in group.
      *
      * @param  int    $executionID
-     * @param  string $groupBy    the field to group by
+     * @param  string $groupBy     story|status|pri|assignedTo|finishedBy|closedBy|type
      * @param  string $filter
      * @access public
      * @return void
      */
-    public function grouptask($executionID = 0, $groupBy = 'story', $filter = '')
+    public function grouptask(int $executionID = 0, string $groupBy = 'story', string $filter = '')
     {
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
 
-        /* Get tasks and group them. */
+        /* Execution of the ops type don't show group by story. */
         if(empty($groupBy))$groupBy = 'story';
-        if($groupBy == 'story' and $execution->lifetime == 'ops')
+        if($groupBy == 'story' && $execution->lifetime == 'ops')
         {
             $groupBy = 'status';
             unset($this->lang->execution->groups['story']);
@@ -206,189 +207,46 @@ class execution extends control
         $sort        = common::appendOrder($groupBy);
         $tasks       = $this->loadModel('task')->getExecutionTasks($executionID, 0, 'all', array(), $sort);
         $groupBy     = str_replace('`', '', $groupBy);
-        $taskLang    = $this->lang->task;
-        $groupByList = array();
         $groupTasks  = array();
-
-        $groupTasks = array();
-        $allCount   = 0;
+        $groupByList = array();
+        $allCount    = 0;
         foreach($tasks as $task)
         {
             if($task->mode == 'multi') $task->assignedToRealName = $this->lang->task->team;
 
             $groupTasks[] = $task;
-            $allCount++;
+            $allCount ++;
             if(isset($task->children))
             {
                 foreach($task->children as $child)
                 {
                     $groupTasks[] = $child;
-                    $allCount++;
+                    $allCount ++;
                 }
                 $task->children = true;
                 unset($task->children);
             }
         }
 
-        /* Get users. */
-        $users = $this->loadModel('user')->getPairs('noletter');
-        $tasks = $groupTasks;
-        $groupTasks = array();
-        foreach($tasks as $task)
-        {
-            if($groupBy == 'story')
-            {
-                $groupTasks[$task->story][] = $task;
-                $groupByList[$task->story]  = $task->storyTitle;
-            }
-            elseif($groupBy == 'status')
-            {
-                $groupTasks[$taskLang->statusList[$task->status]][] = $task;
-            }
-            elseif($groupBy == 'assignedTo')
-            {
-                if(isset($task->team))
-                {
-                    foreach($task->team as $team)
-                    {
-                        $cloneTask = clone $task;
-                        $cloneTask->assignedTo = $team->account;
-                        $cloneTask->estimate   = $team->estimate;
-                        $cloneTask->consumed   = $team->consumed;
-                        $cloneTask->left       = $team->left;
-                        if($team->left == 0) $cloneTask->status = 'done';
-
-                        $realname = zget($users, $team->account);
-                        $cloneTask->assignedToRealName = $realname;
-                        $groupTasks[$realname][] = $cloneTask;
-                    }
-                }
-                else
-                {
-                    $groupTasks[$task->assignedToRealName][] = $task;
-                }
-            }
-            elseif($groupBy == 'finishedBy')
-            {
-                if(isset($task->team))
-                {
-                    $task->consumed = $task->estimate = $task->left = 0;
-                    foreach($task->team as $team)
-                    {
-                        if($team->left != 0)
-                        {
-                            $task->estimate += $team->estimate;
-                            $task->consumed += $team->consumed;
-                            $task->left     += $team->left;
-                            continue;
-                        }
-
-                        $cloneTask = clone $task;
-                        $cloneTask->finishedBy = $team->account;
-                        $cloneTask->estimate   = $team->estimate;
-                        $cloneTask->consumed   = $team->consumed;
-                        $cloneTask->left       = $team->left;
-                        $cloneTask->status     = 'done';
-                        $realname = zget($users, $team->account);
-                        $groupTasks[$realname][] = $cloneTask;
-                    }
-                    if(!empty($task->left)) $groupTasks[$users[$task->finishedBy]][] = $task;
-                }
-                else
-                {
-                    $groupTasks[$users[$task->finishedBy]][] = $task;
-                }
-            }
-            elseif($groupBy == 'closedBy')
-            {
-                $groupTasks[$users[$task->closedBy]][] = $task;
-            }
-            elseif($groupBy == 'type')
-            {
-                $groupTasks[$taskLang->typeList[$task->type]][] = $task;
-            }
-            else
-            {
-                $groupTasks[$task->$groupBy][] = $task;
-            }
-        }
-        /* Process closed data when group by assignedTo. */
-        if($groupBy == 'assignedTo' and isset($groupTasks['Closed']))
-        {
-            $closedTasks = $groupTasks['Closed'];
-            unset($groupTasks['Closed']);
-            $groupTasks['closed'] = $closedTasks;
-        }
+        /* Get users and build task group data. */
+        $users      = $this->loadModel('user')->getPairs('noletter');
+        $tasks      = $groupTasks;
+        $groupTasks = $this->executionZen->buildGroupTasks($groupBy, $groupTasks, $users);
 
         /* Remove task by filter and group. */
-        $filter = (empty($filter) and isset($this->lang->execution->groupFilter[$groupBy])) ? key($this->lang->execution->groupFilter[$groupBy]) : $filter;
-        if($filter != 'all')
-        {
-            if($groupBy == 'story' and $filter == 'linked' and isset($groupTasks[0]))
-            {
-                $allCount -= count($groupTasks[0]);
-                unset($groupTasks[0]);
-            }
-            elseif($groupBy == 'pri' and $filter == 'noset')
-            {
-                foreach($groupTasks as $pri => $tasks)
-                {
-                    if($pri)
-                    {
-                        $allCount -= count($tasks);
-                        unset($groupTasks[$pri]);
-                    }
-                }
-            }
-            elseif($groupBy == 'assignedTo' and $filter == 'undone')
-            {
-                $multiTaskCount = array();
-                foreach($groupTasks as $assignedTo => $tasks)
-                {
-                    foreach($tasks as $i => $task)
-                    {
-                        if($task->status != 'wait' and $task->status != 'doing')
-                        {
-                            if($task->mode == 'multi')
-                            {
-                                if(!isset($multiTaskCount[$task->id]))
-                                {
-                                    $multiTaskCount[$task->id] = true;
-                                    $allCount -= 1;
-                                }
-                            }
-                            else
-                            {
-                                $allCount -= 1;
-                            }
-
-                            unset($groupTasks[$assignedTo][$i]);
-                        }
-                    }
-                }
-            }
-            elseif(($groupBy == 'finishedBy' or $groupBy == 'closedBy') and isset($tasks['']))
-            {
-                $allCount -= count($tasks['']);
-                unset($tasks['']);
-            }
-        }
+        $filter = (empty($filter) && isset($this->lang->execution->groupFilter[$groupBy])) ? key($this->lang->execution->groupFilter[$groupBy]) : $filter;
+        list($groupTasks, $allCount) = $this->executionZen->filterGroupTasks($groupTasks, $groupBy, $filter, $allCount, $tasks);
 
         /* Assign. */
-        $this->app->loadLang('tree');
-
         $this->view->title       = $execution->name . $this->lang->colon . $this->lang->execution->task;
         $this->view->members     = $this->execution->getTeamMembers($executionID);
         $this->view->tasks       = $groupTasks;
-        $this->view->tabID       = 'task';
         $this->view->groupByList = $groupByList;
         $this->view->browseType  = 'group';
         $this->view->groupBy     = $groupBy;
         $this->view->orderBy     = $groupBy;
         $this->view->executionID = $executionID;
         $this->view->users       = $users;
-        $this->view->moduleID    = 0;
-        $this->view->moduleName  = $this->lang->tree->all;
         $this->view->features    = $this->execution->getExecutionFeatures($execution);
         $this->view->filter      = $filter;
         $this->view->allCount    = $allCount;

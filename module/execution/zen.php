@@ -219,6 +219,118 @@ class executionZen extends execution
     }
 
     /**
+     * 构造任务分组视图数据。
+     * Build task group data.
+     *
+     * @param  string    $groupBy story|status|pri|assignedTo|finishedBy|closedBy|type
+     * @param  array     $tasks
+     * @param  array     $users
+     * @access protected
+     * @return array
+     */
+    protected function buildGroupTasks(string $groupBy = 'story', array $tasks, array $users): array
+    {
+        $groupTasks = array();
+        foreach($tasks as $task)
+        {
+            if($groupBy == 'story')
+            {
+                $groupTasks[$task->story][] = $task;
+                $groupByList[$task->story]  = $task->storyTitle;
+            }
+            elseif($groupBy == 'status')
+            {
+                $groupTasks[$this->lang->task->statusList[$task->status]][] = $task;
+            }
+            elseif($groupBy == 'assignedTo')
+            {
+                if(isset($task->team))
+                {
+                    $groupTasks = $this->buildGroupMultiTask($groupBy, $task, $users, $groupTasks);
+                }
+                else
+                {
+                    $groupTasks[$task->assignedToRealName][] = $task;
+                }
+            }
+            elseif($groupBy == 'finishedBy')
+            {
+                if(isset($task->team))
+                {
+                    $task->consumed = $task->estimate = $task->left = 0;
+                    $groupTasks = $this->buildGroupMultiTask($groupBy, $task, $users, $groupTasks);
+                }
+                else
+                {
+                    $groupTasks[$users[$task->finishedBy]][] = $task;
+                }
+            }
+            elseif($groupBy == 'closedBy')
+            {
+                $groupTasks[$users[$task->closedBy]][] = $task;
+            }
+            elseif($groupBy == 'type')
+            {
+                $groupTasks[$this->lang->task->typeList[$task->type]][] = $task;
+            }
+            else
+            {
+                $groupTasks[$task->$groupBy][] = $task;
+            }
+        }
+
+        /* Process closed data when group by assignedTo. */
+        if($groupBy == 'assignedTo' && isset($groupTasks['Closed']))
+        {
+            $closedTasks = $groupTasks['Closed'];
+            unset($groupTasks['Closed']);
+            $groupTasks['closed'] = $closedTasks;
+        }
+
+        return $groupTasks;
+    }
+
+    /**
+     * 构建多人任务的分组视图数据。
+     * Build group data for multiple task.
+     *
+     * @param  string    $groupBy
+     * @param  object    $task
+     * @param  array     $users
+     * @param  array     $groupTasks
+     * @access protected
+     * @return array
+     */
+    protected function buildGroupMultiTask(string $groupBy, object $task, array $users, array $groupTasks): array
+    {
+        foreach($task->team as $team)
+        {
+            if($team->left != 0 && $groupBy == 'finishedBy')
+            {
+                $task->estimate += $team->estimate;
+                $task->consumed += $team->consumed;
+                $task->left     += $team->left;
+                continue;
+            }
+
+            $cloneTask = clone $task;
+            $cloneTask->{$groupBy} = $team->account;
+            $cloneTask->estimate   = $team->estimate;
+            $cloneTask->consumed   = $team->consumed;
+            $cloneTask->left       = $team->left;
+            if($team->left == 0 || $groupBy == 'finishedBy') $cloneTask->status = 'done';
+
+            $realname = zget($users, $team->account);
+            $cloneTask->assignedToRealName = $realname;
+            $groupTasks[$realname][] = $cloneTask;
+        }
+
+        if($groupBy == 'finishedBy' && !empty($task->left)) $groupTasks[$users[$task->finishedBy]][] = $task;
+
+        return $groupTasks;
+    }
+
+    /**
      * 检查累积流图的日期。
      * Check Cumulative flow diagram date.
      *
@@ -453,6 +565,75 @@ class executionZen extends execution
             }
         }
         return $members;
+    }
+
+    /**
+     * 根据过滤规则，筛选任务分组数据。
+     * Filter task group data based on the filter rules.
+     *
+     * @param  array     $groupTasks
+     * @param  string    $groupBy
+     * @param  string    $filter
+     * @param  int       $allCount
+     * @param  array     $tasks
+     * @access protected
+     * @return array
+     */
+    protected function filterGroupTasks(array $groupTasks, string $groupBy, string $filter, int $allCount, array $tasks): array
+    {
+        if($filter != 'all')
+        {
+            if($groupBy == 'story' && $filter == 'linked' && isset($groupTasks[0]))
+            {
+                $allCount -= count($groupTasks[0]);
+                unset($groupTasks[0]);
+            }
+            elseif($groupBy == 'pri' && $filter == 'noset')
+            {
+                foreach($groupTasks as $pri => $tasks)
+                {
+                    if($pri)
+                    {
+                        $allCount -= count($tasks);
+                        unset($groupTasks[$pri]);
+                    }
+                }
+            }
+            elseif($groupBy == 'assignedTo' && $filter == 'undone')
+            {
+                $multiTaskCount = array();
+                foreach($groupTasks as $assignedTo => $tasks)
+                {
+                    foreach($tasks as $i => $task)
+                    {
+                        if($task->status != 'wait' && $task->status != 'doing')
+                        {
+                            if($task->mode == 'multi')
+                            {
+                                if(!isset($multiTaskCount[$task->id]))
+                                {
+                                    $multiTaskCount[$task->id] = true;
+                                    $allCount -= 1;
+                                }
+                            }
+                            else
+                            {
+                                $allCount -= 1;
+                            }
+
+                            unset($groupTasks[$assignedTo][$i]);
+                        }
+                    }
+                }
+            }
+            elseif(($groupBy == 'finishedBy' || $groupBy == 'closedBy') && isset($tasks['']))
+            {
+                $allCount -= count($tasks['']);
+                unset($tasks['']);
+            }
+        }
+
+        return array($groupTasks, $allCount);
     }
 
     /**
