@@ -45,12 +45,12 @@ class space extends control
             $search = $conditions->search;
         }
 
-        $instances = $this->space->getSpaceInstances($space->id, $browseType, $search);
+        $instances = $this->space->getSpaceInstances(0, $browseType, $search);
         foreach($instances as $instance)
         {
             $instance->externalID = 0;
             $instance->orgID      = $instance->id;
-            $instance->type       = 'app';
+            $instance->type       = 'store';
 
             if(in_array($instance->appName, $this->config->space->zentaoApps))
             {

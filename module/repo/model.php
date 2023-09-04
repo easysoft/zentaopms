@@ -3059,6 +3059,7 @@ class repoModel extends model
     {
         $action = strtolower($action);
 
+        if(!commonModel::hasPriv('repo', $action)) return false;
         if($action == 'execjob')    return $repo->exec == '';
         if($action == 'reportview') return $repo->report == '';
 

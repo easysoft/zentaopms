@@ -99,7 +99,7 @@ class spaceModel extends model
 
         $instances = $this->dao->select('*')->from(TABLE_INSTANCE)
             ->where('deleted')->eq(0)
-            ->andWhere('space')->eq($spaceID)
+            ->beginIF($spaceID)->andWhere('space')->eq($spaceID)->fi()
             ->beginIF($status !== 'all')->andWhere('status')->eq($status)->fi()
             ->beginIF(!empty($searchName))->andWhere('name')->like("%{$searchName}%")->fi()
             ->orderBy('id desc')->page($pager)->fetchAll('id');

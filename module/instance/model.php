@@ -2040,13 +2040,22 @@ class InstanceModel extends model
     public function isClickable(object $instance, string $action): bool
     {
         if(!isset($instance->type)) $instance->type = 'store';
-        if($action == 'start')     return $instance->type === 'store' ? $this->canDo('start', $instance) : false;
-        if($action == 'stop')      return $instance->type === 'store' ? $this->canDo('stop', $instance) : false;
-        if($action == 'uninstall') return $instance->type === 'store' && $this->canDo('uninstall', $instance);
-        if($action == 'visit')     return $instance->type === 'store' ? (!empty($instance->domain) && $this->canDo('visit', $instance)) : true;
-        if($action == 'upgrade')   return !empty($instance->latestVersion);
-        if($action == 'bindUser')  return ($instance->externalID && in_array($instance->appName, array('GitLab', 'Gitea', 'Gogs'))) ? true : false;
-        if($action == 'edit')      return $instance->type === 'store' ? false : true;
+
+        if($instance->type !== 'store')
+        {
+            if($action === 'edit' || $action === 'visit') return true;
+            if($action == 'bindUser')  return in_array($instance->appName, array('GitLab', 'Gitea', 'Gogs'));
+            if($action == 'ajaxUninstall') return true;
+            return false;
+        }
+
+        if($action == 'start')     return $this->canDo('start', $instance) && commonModel::hasPriv('instance', 'ajaxStart');
+        if($action == 'stop')      return $this->canDo('stop', $instance) && commonModel::hasPriv('instance', 'ajaxStop');
+        if($action == 'ajaxUninstall') return $this->canDo('uninstall', $instance) && commonModel::hasPriv('instance', 'ajaxUninstall');
+        if($action == 'visit')     return !empty($instance->domain) && $this->canDo('visit', $instance) && commonModel::hasPriv('instance', 'visit');
+        if($action == 'upgrade')   return !empty($instance->latestVersion) && commonModel::hasPriv('instance', 'upgrade');
+        if($action == 'edit')      return false;
+        if($action == 'bindUser')  return false;
 
         return true;
     }
