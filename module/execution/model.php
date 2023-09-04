@@ -1308,12 +1308,14 @@ class executionModel extends model
         {
             $beginTimeStamp = strtotime($execution->begin);
             $tasks = $this->dao->select('id,estStarted,deadline,status')->from(TABLE_TASK)
-                ->where('deadline')->ne('0000-00-00')
+                ->where('execution')->eq($executionID)
+                ->andWhere('deadline')->notNULL()
                 ->andWhere('status')->in('wait,doing')
-                ->andWhere('execution')->eq($executionID)
                 ->fetchAll();
             foreach($tasks as $task)
             {
+                if(helper::isZeroDate($task->deadline)) continue;
+
                 if($task->status == 'wait' and !helper::isZeroDate($task->estStarted))
                 {
                     $taskDays   = helper::diffDate($task->deadline, $task->estStarted);
@@ -1335,6 +1337,8 @@ class executionModel extends model
                     if($deadline > $execution->end) $deadline = $execution->end;
                     $this->dao->update(TABLE_TASK)->set('deadline')->eq($deadline)->where('id')->eq($task->id)->exec();
                 }
+
+                $this->loadModel('action')->create('task', $task->id, 'Edited', $this->lang->execution->readjustTask );
             }
         }
 
