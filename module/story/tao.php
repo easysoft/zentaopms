@@ -1541,7 +1541,7 @@ class storyTao extends storyModel
         $actions[] = array('name' => 'close', 'url' => $canClose ? $closeLink : null, 'data-toggle' => 'modal', 'disabled' => !$canClose);
 
         /* Render divider line. */
-        $actions[] = array('name' => 'divider', 'class'=>'nav-divider', 'type' => 'dropdown', 'icon' => '', 'caret' => false);
+        $actions[] = array('name' => 'divider', 'type'=>'divider');
 
         /* Edit button. */
         $canEdit = common::hasPriv('story', 'edit') && $this->isClickable($story, 'edit');
