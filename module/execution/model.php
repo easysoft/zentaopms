@@ -1204,31 +1204,32 @@ class executionModel extends model
     }
 
     /**
-     * Suspend execution.
+     * 暂停一个执行。
+     * Suspend a execution.
      *
      * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function suspend($executionID)
+    public function suspend(int $executionID): array
     {
         $oldExecution = $this->getById($executionID);
-        $now          = helper::now();
 
         $execution = fixer::input('post')
             ->add('id', $executionID)
             ->setDefault('status', 'suspended')
             ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
+            ->setDefault('lastEditedDate', helper::now())
             ->setDefault('suspendedDate', helper::today())
             ->stripTags($this->config->execution->editor->suspend['id'], $this->config->allowedTags)
-            ->remove('comment')->get();
+            ->remove('comment')
+            ->get();
 
         $execution = $this->loadModel('file')->processImgURL($execution, $this->config->execution->editor->suspend['id'], $this->post->uid);
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
             ->checkFlow()
-            ->where('id')->eq((int)$executionID)
+            ->where('id')->eq($executionID)
             ->exec();
 
         if(!dao::isError()) return common::createChanges($oldExecution, $execution);
