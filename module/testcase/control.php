@@ -241,7 +241,7 @@ class testcase extends control
         {
             /* 构建用例。 */
             /* Build Case. */
-            $case = $this->testcaseZen->buildCaseForCase($from, $param);
+            $case = $this->testcaseZen->buildCaseForCreate($from, $param);
 
             /* 创建测试用例前检验表单数据是否正确。 */
             /* Check from data for create case. */
@@ -1528,35 +1528,28 @@ class testcase extends control
      */
     public function deleteScene($sceneID, $confirm = 'no')
     {
-        $scene = $this->dao->select('*')->from(VIEW_SCENECASE)->where('id')->eq($sceneID)->andWhere('isCase')->eq(2)->fetch();
-
-        if($confirm == 'no') return print(js::confirm(sprintf($this->lang->testcase->confirmDeleteScene,addslashes($scene->title)), $this->createLink('testcase', 'deleteScene', "sceneID=$sceneID&confirm=yes")));
-
-        $childrenCount = $this->dao->select('count(*) as count')->from(VIEW_SCENECASE)->where('parent')->eq($sceneID)->andWhere('deleted')->eq(0)->fetch('count');
-        if($childrenCount)
+        $scene = $this->testcase->getSceneByID($sceneID);
+        $count = $this->dao->select('COUNT(*) AS count')->from(TABLE_SCENE)->where('deleted')->eq('0')->andWhere('parent')->eq($sceneID)->fetch('count');
+        if($count)
         {
-            if($confirm != "wait") return print(js::confirm(sprintf($this->lang->testcase->hasChildren), $this->createLink('testcase', 'deleteScene', "sceneID=$sceneID&confirm=wait")));
-            $all = $this->dao->select('id,isCase')->from(VIEW_SCENECASE)->where('path')->like($scene->path . '%')->andWhere('deleted')->eq(0)->fetchAll();
-
-            foreach($all as $v)
+            if($confirm != 'yes')
             {
-                if($v->isCase == 2)
-                {
-                    $this->testcase->delete(TABLE_SCENE, $v->id - CHANGEVALUE);
-                }
-                else
-                {
-                    $this->testcase->delete(TABLE_CASE, $v->id);
-                }
+                $confirmURL = inlink('deleteScene', "sceneID={$sceneID}&confirm=yes");
+                return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message: '{$this->lang->testcase->hasChildren}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) $.ajaxSubmit({url: '$confirmURL'});});"));
             }
+
+            $this->loadModel('action');
+            $scenes = $this->dao->select('id')->from(TABLE_SCENE)->where('deleted')->eq('0')->andWhere('path')->like($scene->path . '%')->fetchPairs();
+            $this->dao->update(TABLE_SCENE)->set('deleted')->eq('1')->where('deleted')->eq(0)->andWhere('path')->like($scene->path . '%')->exec();
+            foreach($scenes as $sceneID) $this->action->create('scene', $sceneID, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
         }
         else
         {
-
-            $this->testcase->delete(TABLE_SCENE, $sceneID-CHANGEVALUE);
+            $this->testcase->delete(TABLE_SCENE, $sceneID);
         }
 
-        echo js::reload('parent');
+        $locateLink = $this->session->caseList ? $this->session->caseList : inlink('browse', "productID={$scene->product}");
+        return $this->send(array('result' => 'success', 'load' => $locateLink));
     }
 
     /**
