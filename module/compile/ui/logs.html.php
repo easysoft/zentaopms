@@ -31,6 +31,7 @@ detailHeader(
             (
                 set::icon('back'),
                 set::type('secondary'),
+                set::back('GLOBAL'),
                 $lang->goback
             )
         )

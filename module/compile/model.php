@@ -166,7 +166,10 @@ class compileModel extends model
             $userPWD         = "$jenkinsUser:$jenkinsPassword";
 
             $infoUrl  = sprintf('%s/job/%s/api/xml?tree=builds[id,number,queueId]&xpath=//build[queueId=%s]', $jenkins->url, $job->pipeline, $compile->queue);
-            $response = common::http($infoUrl, '', array(CURLOPT_USERPWD => $userPWD));
+            $result   = common::http($infoUrl, '', array(CURLOPT_USERPWD => $userPWD), array(), 'data', 'POST', 30, true);
+            $response = $result['body'];
+            $httpCode = $result[1];
+            if($httpCode == 404) return '';
             if($response)
             {
                 $buildInfo   = simplexml_load_string($response);
