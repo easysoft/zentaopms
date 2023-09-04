@@ -173,6 +173,7 @@ CREATE TABLE IF NOT EXISTS `zt_metric` (
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime DEFAULT NULL,
   `builtin` enum('0', '1') NOT NULL DEFAULT '0',
+  `fromID` mediumint unsigned NOT NULL DEFAULT 0,
   `order` mediumint unsigned NOT NULL DEFAULT '0',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
