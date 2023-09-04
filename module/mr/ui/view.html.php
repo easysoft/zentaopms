@@ -17,7 +17,8 @@ $hasNoConflict     = $MR->synced === '1' ? $rawMR->has_conflicts : (bool)$MR->ha
 $sourceDisabled    = ($MR->status == 'merged' && $MR->removeSourceBranch == '1') ? 'disabled' : '';
 $compileNotSuccess = !empty($compile->id) && $compile->status != 'success';
 
-$mainActions = array();
+$mainActions   = array();
+$suffixActions = array();
 foreach($config->mr->view->operateList as $operate)
 {
     if(!common::hasPriv('mr', $operate == 'reject' ? 'approval' : $operate)) continue;
@@ -38,6 +39,11 @@ foreach($config->mr->view->operateList as $operate)
     }
     if($operate == 'reopen' && (!$MR->synced || $rawMR->state != 'closed')) continue;
 
+    if($operate === 'edit' || $operate === 'delete')
+    {
+        $suffixActions[] = $action;
+        continue;
+    }
     $mainActions[] = $action;
 }
 
@@ -250,6 +256,7 @@ div
         set::object($MR),
         isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), $lang->goback)),
         set::main($mainActions),
+        set::suffix($suffixActions)
     ),
 );
 
