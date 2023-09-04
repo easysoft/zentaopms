@@ -112,7 +112,7 @@ detailBody
                 h::tr
                 (
                     h::td($cloudApp->app_version),
-                    h::td(trim(implode('/', array_column($cloudApp->categories, 'alias')), '/')),
+                    h::td(trim(implode('/', helper::arrayColumn($cloudApp->categories, 'alias')), '/')),
                     h::td($cloudApp->author),
                     h::td((new \DateTime($cloudApp->publish_time))->format('Y-m-d')),
                 )

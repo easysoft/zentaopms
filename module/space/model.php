@@ -107,7 +107,7 @@ class spaceModel extends model
         $this->loadModel('store');
         foreach($instances as $instance) $instance->latestVersion = $this->store->appLatestVersion($instance->appID, $instance->version);
 
-        $solutionIDList = array_column($instances, 'solution');
+        $solutionIDList = helper::arrayColumn($instances, 'solution');
         $solutions      = $this->dao->select('*')->from(TABLE_SOLUTION)->where('id')->in($solutionIDList)->fetchAll('id');
         foreach($instances as $instance) $instance->solutionData = zget($solutions, $instance->solution, new stdclass);
 

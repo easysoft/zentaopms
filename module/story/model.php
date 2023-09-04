@@ -4955,7 +4955,7 @@ class storyModel extends model
             if($story->parent == -1)
             {
                 $childrenTitle      = $this->dao->select('title')->from(TABLE_STORY)->where('parent')->eq($story->id)->fetchAll();
-                $childrenTitle      = array_column($childrenTitle, 'title');
+                $childrenTitle      = helper::arrayColumn($childrenTitle, 'title');
                 $story->linkStories = implode(',', $childrenTitle);
             }
 

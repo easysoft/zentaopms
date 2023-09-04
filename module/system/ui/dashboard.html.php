@@ -19,7 +19,7 @@ $memoryInfo['tip'] = trim(substr($memoryInfo['tip'], strpos($memoryInfo['tip'], 
 
 jsVar('cpuInfo',        $cpuInfo);
 jsVar('memoryInfo',     $memoryInfo);
-jsVar('instanceIdList', array_column($instances, 'id'));
+jsVar('instanceIdList', helper::arrayColumn($instances, 'id'));
 
 /* 资源统计 */
 div

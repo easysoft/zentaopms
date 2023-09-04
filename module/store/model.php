@@ -144,7 +144,7 @@ class storeModel extends model
         $result  = commonModel::apiGet($apiUrl, $apiParams, $this->config->cloud->api->headers);
         if(!isset($result->code) || $result->code != 200) return array();
 
-        return array_combine(array_column($result->data, 'version'), $result->data);
+        return array_combine(helper::arrayColumn($result->data, 'version'), $result->data);
     }
 
     /**
@@ -400,7 +400,7 @@ class storeModel extends model
         if(!isset($result->code) || $result->code != 200) return null;
 
         $solution = $result->data;
-        $solution->apps = array_combine(array_column($solution->apps, 'chart'), $solution->apps);
+        $solution->apps = array_combine(helper::arrayColumn($solution->apps, 'chart'), $solution->apps);
 
         return $solution;
     }

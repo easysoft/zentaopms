@@ -6873,7 +6873,7 @@ class upgradeModel extends model
 
         if(empty($reviewIssues)) return false;
 
-        $reviewIds = array_unique(array_column($reviewIssues, 'review'));
+        $reviewIds = array_unique(helper::arrayColumn($reviewIssues, 'review'));
 
         $approvalsPairs = $this->dao->select('objectID, max(id) as approval')->from(TABLE_APPROVAL)
             ->where('objectID')->in($reviewIds)

@@ -63,7 +63,7 @@
                 <th><?php echo $lang->store->releaseDate;?>:</th>
                 <td><?php echo (new DateTime($cloudApp->publish_time))->format('Y-m-d');?></td>
                 <th><?php echo $lang->store->appType;?>:</th>
-                <td><?php echo trim(implode('/', array_column($cloudApp->categories, 'alias')), '/');?></td>
+                <td><?php echo trim(implode('/', helper::arrayColumn($cloudApp->categories, 'alias')), '/');?></td>
               </tr>
             </tbody>
           </table>

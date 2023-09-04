@@ -363,7 +363,7 @@ class repoZen extends repo
             else
             {
                 $infos        = $this->scm->ls($path, $revision);
-                $revisionList = array_column($infos, 'revision', 'revision');
+                $revisionList = helper::arrayColumn($infos, 'revision', 'revision');
                 $comments     = $this->repo->getHistory($repo->id, $revisionList);
                 foreach($infos as $info)
                 {

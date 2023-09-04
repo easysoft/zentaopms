@@ -63,10 +63,10 @@ class InstanceModel extends model
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
 
-        $spaces = $this->dao->select('*')->from(TABLE_SPACE)->where('deleted')->eq(0)->andWhere('id')->in(array_column($instances, 'space'))->fetchAll('id');
+        $spaces = $this->dao->select('*')->from(TABLE_SPACE)->where('deleted')->eq(0)->andWhere('id')->in(helper::arrayColumn($instances, 'space'))->fetchAll('id');
         foreach($instances as $instance) $instance->spaceData = zget($spaces, $instance->space, new stdclass);
 
-        $solutionIDList = array_column($instances, 'solution');
+        $solutionIDList = helper::arrayColumn($instances, 'solution');
         $solutions      = $this->dao->select('*')->from(TABLE_SOLUTION)->where('id')->in($solutionIDList)->fetchAll('id');
         foreach($instances as $instance) $instance->solutionData = zget($solutions, $instance->solution, new stdclass);
 
@@ -119,12 +119,12 @@ class InstanceModel extends model
 
         $spaces = $this->dao->select('*')->from(TABLE_SPACE)
             ->where('deleted')->eq(0)
-            ->andWhere('id')->in(array_column($instances, 'space'))
+            ->andWhere('id')->in(helper::arrayColumn($instances, 'space'))
             ->fetchAll('id');
 
         foreach($instances as $instance) $instance->spaceData = zget($spaces, $instance->space, new stdclass);
 
-        $solutionIDList = array_column($instances, 'solution');
+        $solutionIDList = helper::arrayColumn($instances, 'solution');
         $solutions      = $this->dao->select('*')->from(TABLE_SOLUTION)->where('id')->in($solutionIDList)->fetchAll('id');
         foreach($instances as $instance) $instance->solutionData = zget($solutions, $instance->solution, new stdclass);
 
@@ -143,7 +143,7 @@ class InstanceModel extends model
 
         $spaces = $this->dao->select('*')->from(TABLE_SPACE)
             ->where('deleted')->eq(0)
-            ->andWhere('id')->in(array_column($instances, 'space'))
+            ->andWhere('id')->in(helper::arrayColumn($instances, 'space'))
             ->fetchAll('id');
 
         foreach($instances as $instance) $instance->spaceData = zget($spaces, $instance->space, new stdclass);
@@ -330,7 +330,7 @@ class InstanceModel extends model
             ->andWhere("REPLACE(domain, '.$sysDomain', '')")->like("%.%")
             ->fetchAll('id');
 
-        $spaces = $this->dao->select('*')->from(TABLE_SPACE)->where('deleted')->eq(0)->andWhere('id')->in(array_column($instanceList, 'space'))->fetchAll('id');
+        $spaces = $this->dao->select('*')->from(TABLE_SPACE)->where('deleted')->eq(0)->andWhere('id')->in(helper::arrayColumn($instanceList, 'space'))->fetchAll('id');
 
         foreach($instanceList as $instance) $instance->spaceData = zget($spaces, $instance->space, new stdclass);
 
@@ -1518,8 +1518,8 @@ class InstanceModel extends model
         $backupList = $result->data;
         usort($backupList, function($backup1, $backup2){ return $backup1->create_time < $backup2->create_time; });
 
-        $accounts = array_column($backupList, 'creator');
-        foreach($backupList as $backup) $accounts = array_merge($accounts, array_column($backup->restores, 'creator'));
+        $accounts = helper::arrayColumn($backupList, 'creator');
+        foreach($backupList as $backup) $accounts = array_merge($accounts, helper::arrayColumn($backup->restores, 'creator'));
 
         $accounts = array_unique($accounts);
 
@@ -1652,7 +1652,7 @@ class InstanceModel extends model
             ->fetchAll();
         if(empty($instanceList)) return;
 
-        $spaceList = $this->dao->select('*')->from(TABLE_SPACE)->where('id')->in(array_column($instanceList, 'space'))->fetchAll('id');
+        $spaceList = $this->dao->select('*')->from(TABLE_SPACE)->where('id')->in(helper::arrayColumn($instanceList, 'space'))->fetchAll('id');
 
         foreach($instanceList as $instance)
         {

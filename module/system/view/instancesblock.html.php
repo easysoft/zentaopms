@@ -1,5 +1,5 @@
 <?php $this->app->loadLang('instance');?>
-<?php js::set('instanceIdList',  array_column($instances, 'id'));?>
+<?php js::set('instanceIdList',  helper::arrayColumn($instances, 'id'));?>
 <div class="cell main-table instance-container">
   <h3 class='text-center'><?php echo $lang->instance->runningService;?></h3>
   <?php if(empty($instances)):?>

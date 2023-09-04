@@ -123,7 +123,7 @@ class mrModel extends model
     public function getGiteaProjects($hostID = 0)
     {
         $projects = $this->loadModel('gitea')->apiGetProjects($hostID);
-        return array($hostID => array_column($projects, null, 'full_name'));
+        return array($hostID => helper::arrayColumn($projects, null, 'full_name'));
     }
 
     /**
@@ -136,7 +136,7 @@ class mrModel extends model
     public function getGogsProjects($hostID = 0)
     {
         $projects = $this->loadModel('gogs')->apiGetProjects($hostID);
-        return array($hostID => array_column($projects, null, 'full_name'));
+        return array($hostID => helper::arrayColumn($projects, null, 'full_name'));
     }
 
     /**

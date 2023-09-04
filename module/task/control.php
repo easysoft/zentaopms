@@ -1224,7 +1224,7 @@ class task extends control
             if($task->assignedTo == $currentAccount) $taskEffortFold = 1;
             if(!empty($task->team))
             {
-                $teamMember = array_column($task->team, 'account');
+                $teamMember = helper::arrayColumn($task->team, 'account');
                 if(in_array($currentAccount, $teamMember)) $taskEffortFold = 1;
             }
         }
@@ -1873,7 +1873,7 @@ class task extends control
 
         if(!empty($this->view->task->team))
         {
-            $teamAccounts = array_column($this->view->task->team, 'account');
+            $teamAccounts = helper::arrayColumn($this->view->task->team, 'account');
             $teamMembers  = array();
             foreach($this->view->members as $account => $name)
             {

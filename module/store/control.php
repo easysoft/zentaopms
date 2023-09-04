@@ -75,7 +75,7 @@ class store extends control
         $pager = pager::init($pagedApps->total, $recPerPage, $pageID);
 
         $pagedCategories = $this->store->getCategories();
-        $categories      = array_combine(array_column($pagedCategories->categories, 'id'), array_column($pagedCategories->categories, 'alias'));
+        $categories      = array_combine(helper::arrayColumn($pagedCategories->categories, 'id'), helper::arrayColumn($pagedCategories->categories, 'alias'));
 
         $this->lang->switcherMenu = $this->store->getBrowseSwitcher();
 

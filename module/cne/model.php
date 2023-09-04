@@ -50,7 +50,7 @@ class cneModel extends model
         if(empty($result) || $result->code != 200 || empty($result->data)) return array();
 
         $instanceList = $result->data;
-        return array_combine(array_column($instanceList, 'name'), $instanceList);
+        return array_combine(helper::arrayColumn($instanceList, 'name'), $instanceList);
     }
 
     /**
@@ -449,7 +449,7 @@ class cneModel extends model
 
         $apiUrl = "/api/cne/statistics/app";
         $result = $this->apiPost($apiUrl, $apiData, $this->config->CNE->api->headers);
-        if(!isset($result->code) || $result->code != 200)return array_combine(array_column($instancesMetrics, 'id'), $instancesMetrics);
+        if(!isset($result->code) || $result->code != 200)return array_combine(helper::arrayColumn($instancesMetrics, 'id'), $instancesMetrics);
 
         foreach($result->data as $k8sMetric)
         {
@@ -468,7 +468,7 @@ class cneModel extends model
             $instancesMetrics[$k8sMetric->name]->memory->rate  = $instancesMetrics[$k8sMetric->name]->memory->limit > 0 ? round($instancesMetrics[$k8sMetric->name]->memory->usage / $instancesMetrics[$k8sMetric->name]->memory->limit * 100, 2) : 0;
         }
 
-        return array_combine(array_column($instancesMetrics, 'id'), $instancesMetrics);
+        return array_combine(helper::arrayColumn($instancesMetrics, 'id'), $instancesMetrics);
     }
 
     /**
@@ -998,7 +998,7 @@ class cneModel extends model
         if(empty($result) || $result->code != 200 || empty($result->data)) return array();
 
         $dbList = $result->data;
-        return array_combine(array_column($dbList, 'name'), $dbList);
+        return array_combine(helper::arrayColumn($dbList, 'name'), $dbList);
     }
 
     /**
@@ -1062,7 +1062,7 @@ class cneModel extends model
         if(empty($result) || $result->code != 200 || empty($result->data)) return array();
 
         $dbList = $result->data;
-        return array_combine(array_column($dbList, 'name'), $dbList);
+        return array_combine(helper::arrayColumn($dbList, 'name'), $dbList);
     }
 
     /**
@@ -1082,7 +1082,7 @@ class cneModel extends model
         if(empty($result) || $result->code != 200 || empty($result->data)) return array();
 
         $dbList = $result->data;
-        return array_combine(array_column($dbList, 'name'), $dbList);
+        return array_combine(helper::arrayColumn($dbList, 'name'), $dbList);
     }
 
     /**
