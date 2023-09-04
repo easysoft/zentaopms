@@ -79,8 +79,22 @@ class metricZen extends metric
      */
     protected function prepareTree($scope, $stage, $modules)
     {
-        $moduleTree = array();
+        $sortedModules = array();
+        $groupModules  = array();
         foreach($modules as $module)
+        {
+            $groupModules[$module->object][] = $module;
+        }
+        foreach(array_keys($this->lang->metric->objectList) as $object)
+        {
+            if(isset($groupModules[$object]) and !empty($groupModules[$object]))
+            {
+                $sortedModules = array_merge($sortedModules, $groupModules[$object]);
+            }
+        }
+
+        $moduleTree = array();
+        foreach($sortedModules as $module)
         {
             $object  = $module->object;
             $purpose = $module->purpose;
