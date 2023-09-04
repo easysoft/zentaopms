@@ -28,7 +28,7 @@ class testsuiteModel extends model
             ->checkFlow()
             ->exec();
 
-        if(!dao::isError()) return false;
+        if(dao::isError()) return false;
 
         $suiteID = $this->dao->lastInsertID();
         $this->loadModel('action')->create('testsuite', $suiteID, 'opened');

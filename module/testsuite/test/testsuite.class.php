@@ -185,9 +185,9 @@ class testsuiteTest
      * @access public
      * @return int
      */
-    public function deleteTest($suiteID, $table = '')
+    public function deleteSuiteByIDTest($suiteID, $table = '')
     {
-        $objects = $this->objectModel->delete($suiteID, $table);
+        $objects = $this->objectModel->deleteSuiteByID($suiteID, $table);
 
         if(dao::isError()) return dao::getError();
 
