@@ -118,7 +118,7 @@
                 <?php if(empty($status)):?>
                   <td class='c-status'><?php echo $lang->ai->prompts->statuses[$prompt->status];?></td>
                 <?php endif;?>
-                <td class='c-createdby'><?php echo $prompt->createdBy == 'system' ? $lang->admin->system : zget($users, $prompt->createdBy);?></td>
+                <td class='c-createdby'><?php echo zget($users, $prompt->createdBy);?></td>
                 <td class='c-createddate'><?php echo $prompt->createdDate;?></td>
                 <td class='c-targetform'>
                   <?php
