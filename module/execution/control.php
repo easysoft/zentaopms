@@ -2230,7 +2230,7 @@ class execution extends control
     }
 
     /**
-     * 暂停一个执行。
+     * 挂起一个执行。
      * Suspend a execution.
      *
      * @param  int    $executionID

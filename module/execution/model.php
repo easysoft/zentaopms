@@ -1204,12 +1204,12 @@ class executionModel extends model
     }
 
     /**
-     * 暂停一个执行。
+     * 挂起一个执行。
      * Suspend a execution.
      *
      * @param  int    $executionID
      * @access public
-     * @return void
+     * @return array
      */
     public function suspend(int $executionID): array
     {
