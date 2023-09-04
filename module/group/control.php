@@ -1085,7 +1085,7 @@ class group extends control
             $privList = $this->group->getPrivByParent(trim($parentList, ','));
             foreach($privList as $privID => $priv)
             {
-                if($this->config->inQuickon || !in_array("{$priv->module}-{$priv->method}", $this->config->group->hiddenPriv)) $privList["{$priv->module}-{$priv->method}"] = $priv;
+                $privList["{$priv->module}-{$priv->method}"] = $priv;
                 unset($privList[$privID]);
             }
         }
@@ -1094,6 +1094,8 @@ class group extends control
         foreach($privList as $privKey => $priv)
         {
             if((isset($priv->parentCode) and $priv->parentCode != $module) or (strpos($parentList, ",{$priv->parent},") === false and $parentType == 'package')) unset($privList[$privKey]);
+
+            if(!$this->config->inQuickon && in_array($privKey, $this->config->group->hiddenPriv)) unset($privList[$privKey]);
         }
         $privList = $this->group->transformPrivLang($privList, true);
 
