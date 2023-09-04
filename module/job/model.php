@@ -573,7 +573,7 @@ class jobModel extends model
         $pipeline = json_decode($job->pipeline);
 
         $pipelineParams = new stdclass;
-        $pipelineParams->ref = $pipeline->reference;
+        $pipelineParams->ref = $pipeline->reference ? $pipeline->reference : 'master';
 
         $customParams = json_decode($job->customParam);
         $variables    = array();

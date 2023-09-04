@@ -145,7 +145,7 @@ class job extends control
 
             $this->loadModel('action')->create('job', $jobID, 'created');
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $jobID));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse', "repoID={$this->post->repo}")));
         }
 
         $this->loadModel('ci');
@@ -380,7 +380,7 @@ class job extends control
     public function exec($jobID)
     {
         $job = $this->job->getByID($jobID);
-        if(strtolower($job->engine) == 'gitlab' and (!isset($job->reference) or !$job->reference)) return $this->send(array('result' => 'fail', 'message' => $this->lang->job->setReferenceTips, 'locate' => inlink('edit', "id=$jobID")));
+        //if(strtolower($job->engine) == 'gitlab' and (!isset($job->reference) or !$job->reference)) return $this->send(array('result' => 'fail', 'message' => $this->lang->job->setReferenceTips, 'locate' => inlink('edit', "id=$jobID")));
 
         $compile = $this->job->exec($jobID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'callback' => sprintf('zui.Modal.alert("%s");', dao::getError())));
