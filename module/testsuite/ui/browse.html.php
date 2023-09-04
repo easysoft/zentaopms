@@ -47,6 +47,7 @@ dtable
     set::data($data),
     set::fixedLeftWidth('0.33'),
     set::onRenderCell(jsRaw('window.renderCell')),
+    set::footer(jsRaw("function(){return [{html: '{$summary}', className: 'text-dark'}, 'flex', 'pager'];}")),
     set::footPager(usePager()),
 );
 

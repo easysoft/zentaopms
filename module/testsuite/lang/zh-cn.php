@@ -48,7 +48,7 @@ $lang->testsuite->confirmUnlinkCase = '您确认要移除该用例吗？';
 $lang->testsuite->noticeNone        = '您还没有创建套件';
 $lang->testsuite->noModule          = '<div>您现在还没有模块信息</div><div>请维护用例库模块</div>';
 $lang->testsuite->noTestsuite       = '暂时没有套件。';
-$lang->testsuite->summary           = "本页共 <strong>%total%</strong> 个套件，公开 <strong>%public%</strong> 个，私有 <strong>%private%</strong> 个。";
+$lang->testsuite->summary           = "本页共 <strong>%d</strong> 个套件，公开 <strong>%d</strong> 个，私有 <strong>%d</strong> 个。";
 
 $lang->testsuite->lblCases      = '用例列表';
 $lang->testsuite->lblUnlinkCase = '移除用例';

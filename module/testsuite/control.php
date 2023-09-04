@@ -41,7 +41,7 @@ class testsuite extends control
         parent::__construct($moduleName, $methodName);
 
         $this->view->products = $this->products = $this->loadModel('product')->getPairs('', 0, '', 'all');
-        if(empty($this->products) && !helper::isAjaxRequest()) return print($this->locate($this->createLink('product', 'showErrorNone', "moduleName=qa&activeMenu=testsuite")));
+        if(empty($this->products) && !helper::isAjaxRequest()) return $this->send(array('result' => 'fail', 'locate' => $this->createLink('product', 'showErrorNone', "moduleName=qa&activeMenu=testsuite")));
     }
 
     /**
@@ -53,7 +53,7 @@ class testsuite extends control
      */
     public function index()
     {
-        $this->locate($this->createLink('testsuite', 'browse'));
+        $this->locate($this->inlink('browse'));
     }
 
     /**
@@ -76,17 +76,17 @@ class testsuite extends control
         $this->session->set('testsuiteList', $this->app->getURI(true), 'qa');
 
         /* 设置1.5级导航。 */
-        /* Set level 1.5 menu. */
+        /* Set level 1.5 navigation */
         $productID = $this->product->saveState($productID, $this->products);
         $this->loadModel('qa')->setMenu($this->products, $productID);
 
-        /* 加载分页。 */
+        /* 初始化分页。 */
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        /* 二次排序规则。 */
-        /* Append id for second sort. */
+        /* 生成排序规则。 */
+        /* Generate the sort rules. */
         $sort = common::appendOrder($orderBy);
 
         /* 根据产品名称获取套件，如果查询为空并且不在第一页，则初始化至当前页码到第一页。 */
@@ -99,23 +99,20 @@ class testsuite extends control
             $suites = $this->testsuite->getSuites($productID, $sort, $pager, $type);
         }
 
-        /* 获取私有和公开的套件数量。 */
-        /* Get the number of private and public suites. */
-        $privateNUm = count(array_map(function($v)use($privateNum){
-            return $v->type == 'private';
-        }, $suites));
+        /* 获取公共和私有的套件数量。 */
+        /* Get the number of public and private suites. */
+        $totalNum   = count($suites);
+        $privateNum = count(array_filter($suites, function($suite){return $suite->type == 'private';}));
+        $publicNum  = $totalNum - $privateNum;
+        $summary    = sprintf($this->lang->testsuite->summary, $totalNum, $publicNum, $privateNum);
 
-        $suitesNum = count($suites);
-        $publicNum = $suitesNum - $privateNum;
-        $summary   = str_replace(array('%total%', '%public%', '%private%'), array($suitesNum, $publicNum, $privateNum), $this->lang->testsuite->summary);
-
-        $this->view->title       = $productName . $this->lang->testsuite->common;
-        $this->view->orderBy     = $orderBy;
-        $this->view->suites      = $suites;
-        $this->view->type        = $type;
-        $this->view->pager       = $pager;
-        $this->view->product     = $this->product->getByID($productID);
-        $this->view->summary     = $summary;
+        $this->view->title   = $productName . $this->lang->testsuite->common;
+        $this->view->orderBy = $orderBy;
+        $this->view->suites  = $suites;
+        $this->view->type    = $type;
+        $this->view->summary = $summary;
+        $this->view->pager   = $pager;
+        $this->view->product = $this->product->getByID($productID);
         $this->display();
     }
 
@@ -131,30 +128,24 @@ class testsuite extends control
     {
         if(!empty($_POST))
         {
-            $suite = form::data($this->config->testsuite->form->create)
+            $suiteData = form::data($this->config->testsuite->form->create)
                 ->setIF($this->lang->navGroup->testsuite != 'qa', 'project', $this->session->project)
-                ->add('product', (int)$productID)
+                ->add('product', $productID)
                 ->get();
-            $suite = $this->loadModel('file')->processImgURL($suite, $this->config->testsuite->editor->create['id'], $this->post->uid);
+            $suite = $this->loadModel('file')->processImgURL($suiteData, $this->config->testsuite->editor->create['id'], $this->post->uid);
 
             $suiteID = $this->testsuite->create($suite);
-            if(dao::isError())
-            {
-                return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            }
-
-            $message = $this->lang->testsuite->successSaved;
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->file->updateObjectID($this->post->uid, $suiteID, 'testsuite');
-            $message = $this->executeHooks($suiteID);
+            $message = $this->executeHooks($suiteID) ? : $this->lang->testsuite->successSaved;
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'id' => $suiteID));
-
-            return $this->send(array('result' => 'success', 'message' => $message, 'locate' => $this->createLink('testsuite', 'browse', "productID=$productID")));
+            return $this->send(array('result' => 'success', 'message' => $message, 'locate' => $this->inlink('browse', "productID=$productID")));
         }
 
-        /* 设置1.5级菜单。 */
-        /* Set menu. */
+        /* 设置1.5级导航。 */
+        /* Set level 1.5 navigation */
         $productID  = $this->product->saveState($productID, $this->products);
         $this->loadModel('qa')->setMenu($this->products, $productID);
 
@@ -177,35 +168,31 @@ class testsuite extends control
      */
     public function view(int $suiteID, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 10, int $pageID = 1)
     {
-        $this->app->loadLang('testtask');
+        /* 检查用户访问权限。 */
+        /* Check user access rights. */
+        $suite = $this->testsuiteZen->checkTestsuiteAccess($suiteID);
 
-        /* 根据id获取测试套件信息。 */
-        /* Get test suite, and set menu. */
-        $suite = $this->testsuite->getById($suiteID, true);
-        if(!$suite) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound, 'locate' => inlink('browse'))));
-        if($suite->type == 'private' && $suite->addedBy != $this->app->user->account && !$this->app->user->admin) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound, 'locate' => inlink('browse'))));
-
-        /* 设置1.5级菜单。 */
-        /* Set product session. */
+        /* 设置1.5级导航。 */
+        /* Set level 1.5 navigation */
         $productID = $this->product->saveState($suite->product, $this->products);
         $this->loadModel('qa')->setMenu($this->products, $productID);
 
-        /* 用例列表URI存入session。 */
-        /* Save session. */
+        /* 当前URI存入session。 */
+        /* Sava the uri of current page into session. */
         $this->session->set('caseList', $this->app->getURI(true), 'qa');
 
         /* 生成排序规则。 */
-        /* Append id for second sort. */
+        /* Generate the sort rules. */
         $sort = common::appendOrder($orderBy);
 
-        /* 初始化用例列表分页。 */
-        /* Load pager. */
+        /* 初始化该套件关联用例的分页器。 */
+        /* Initalizes the paginator for this suites's associated use case. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         $this->executeHooks($suiteID);
 
-        $this->view->title      = "SUITE #$suite->id $suite->name";
+        $this->view->title        = "SUITE #$suite->id $suite->name";
         $this->view->productID    = $productID;
         $this->view->suite        = $suite;
         $this->view->users        = $this->loadModel('user')->getPairs('noclosed|noletter');
@@ -230,20 +217,18 @@ class testsuite extends control
      */
     public function edit(int $suiteID)
     {
-        $suite = $this->testsuite->getById($suiteID);
-
-        if($suite->type == 'private' && $suite->addedBy != $this->app->user->account && !$this->app->user->admin) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied, 'load' => array('locate' => inlink('browse'))));
+        /* 检查用户访问权限。 */
+        /* Check user access rights. */
+        $suite = $this->testsuiteZen->checkTestsuiteAccess($suiteID);
 
         if(!empty($_POST))
         {
             /* 根据suiteID更新数据，如果更新成功，则记录日志。 */
+            /* Update the data according to the suiteID, and record the log if the update is successful. */
             $suite   = form::data($this->config->testsuite->form->edit)->add('id', $suiteID)->get();
-            $uid     = $this->app->user->id;
+            $uid     = $this->post->uid;
             $changes = $this->testsuite->update($suite, $uid);
-            if(dao::isError())
-            {
-                return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            }
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($changes)
             {
                 $actionID = $this->loadModel('action')->create('testsuite', $suiteID, 'edited');
@@ -251,16 +236,15 @@ class testsuite extends control
             }
 
             $message = $this->executeHooks($suiteID) ? : $this->lang->testsuite->successSaved;
-
             return $this->send(array('result' => 'fail', 'message' => $message, 'locate' => inlink('view', "suiteID={$suiteID}")));
         }
 
-        /* 设置1.5级菜单。 */
-        /* Set product session. */
+        /* 设置1.5级导航。 */
+        /* Set level 1.5 navigation */
         $productID = $this->product->saveState($suite->product, $this->products);
         $this->loadModel('qa')->setMenu($this->products, $productID);
 
-        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testsuite->edit;
+        $this->view->title = $this->products[$productID] . $this->lang->colon . $this->lang->testsuite->edit;
         $this->view->suite = $suite;
         $this->display();
     }
@@ -270,23 +254,19 @@ class testsuite extends control
      * Delete a test suite.
      *
      * @param  int    $suiteID
-     * @param  string $confirm yes|no
      * @access public
      * @return void
      */
-    public function delete(int $suiteID, string $confirm = 'no')
+    public function delete(int $suiteID)
     {
-        $suite = $this->testsuite->getById($suiteID);
-        if($suite->type == 'private' && $suite->addedBy != $this->app->user->account && !$this->app->user->admin) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
+        /* 检查用户访问权限。 */
+        /* Check user access rights. */
+        $suite = $this->testsuiteZen->checkTestsuiteAccess($suiteID);
 
-        $this->testsuite->delete($suiteID);
+        $this->testsuite->deleteSuiteByID($suiteID);
 
         $message = $this->executeHooks($suiteID) ? : '';
-
-        if(dao::isError())
-        {
-            return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-        }
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         return $this->send(array('result' => 'success', 'message' => $message, 'load' => true));
     }
 
@@ -304,32 +284,32 @@ class testsuite extends control
      */
     public function linkCase(int $suiteID, int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        /* 当前页面存入session。 */
-        /* Save session. */
+        /* 当前页面URI存入session。 */
+        /* Save the URI of current page into session. */
         $this->session->set('caseList', $this->app->getURI(true), 'qa');
 
         if(!empty($_POST))
         {
             $caseData = form::data($this->config->testsuite->form->linkCase)->get();
             $this->testsuite->linkCase($suiteID, $caseData->cases, $caseData->versions);
-            if(dao::isError()) return $this->send(array('result' => 'success', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('view', "suiteID=$suiteID")));
         }
 
         $suite = $this->testsuite->getById($suiteID);
 
-        /* 设置1.5级菜单。 */
-        /* Set product session. */
+        /* 设置1.5级导航。 */
+        /* Set level 1.5 navigation */
         $productID = $this->product->saveState($suite->product, $this->products);
         $this->loadModel('qa')->setMenu($this->products, $productID);
 
-        /* 初始化一个分页器。 */
+        /* 初始化分页。 */
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        /* 创建搜索表单。 */
-        /* Build the search form. */
+        /* 初始化表单搜索参数。 */
+        /* Init form search parameters. */
         $this->loadModel('testcase');
         $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case', 0, 'all');
         $this->config->testcase->search['params']['lib']['values']    = $this->loadModel('caselib')->getLibraries();
@@ -337,7 +317,7 @@ class testsuite extends control
         $this->config->testcase->search['module']    = 'testsuite';
         $this->config->testcase->search['actionURL'] = inlink('linkCase', "suiteID=$suiteID&param=myQueryID");
 
-        $scene = $this->testcase->getSceneMenu($productID, 0, '', 0,  0,0);
+        $scene = $this->testcase->getSceneMenu($productID, 0, '', 0, 0, 0);
         $this->config->testcase->search['params']['scene']['values'] = $scene;
 
         unset($this->config->testcase->search['fields']['product']);
@@ -348,7 +328,7 @@ class testsuite extends control
         if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
 
-        $this->view->title      = $suite->name . $this->lang->colon . $this->lang->testsuite->linkCase;
+        $this->view->title   = $suite->name . $this->lang->colon . $this->lang->testsuite->linkCase;
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->view->cases   = $this->testsuite->getUnlinkedCases($suite, $param, $pager);
         $this->view->suiteID = $suiteID;
@@ -367,14 +347,11 @@ class testsuite extends control
      * @access public
      * @return void
      */
-    public function unlinkCase(int $suiteID, int $caseID, string $confirm = 'no')
+    public function unlinkCase(int $suiteID, int $caseID)
     {
         $this->testsuite->deleteCaseBysuiteID(array($caseID), $suiteID);
-        if(dao::isError())
-        {
-            return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-        }
-        return $this->send(array('result' => 'success', 'message' => '', 'load' => true));
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
@@ -389,9 +366,7 @@ class testsuite extends control
     {
         $formData = form::data($this->config->testsuite->form->batchUnlinkCases)->get();
         $this->testsuite->deleteCaseBysuiteID($formData->caseIDList, $suiteID);
-        if(dao::isError()){
-            return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-        }
-        return $this->send(array('result' => 'success', 'message' => '', 'load' => true));
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 }

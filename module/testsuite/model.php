@@ -14,43 +14,6 @@
 class testsuiteModel extends model
 {
     /**
-     * Build select string.
-     *
-     * @param  array  $products
-     * @param  int    $productID
-     * @param  string $currentModule
-     * @param  string $currentMethod
-     * @param  string $extra
-     * @access public
-     * @return string
-     */
-    public function select($products, $productID, $currentModule, $currentMethod, $extra = '')
-    {
-        if(!$productID)
-        {
-            unset($this->lang->product->setMenu->branch);
-            return;
-        }
-
-        helper::setcookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
-        $currentProduct = $this->product->getById($productID);
-
-        $dropMenuLink = helper::createLink('product', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
-        $output = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' ><span class='text'>{$currentProduct->name}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
-        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
-        $output .= "</div></div>";
-        if($currentProduct->type != 'normal')
-        {
-            $this->app->loadLang('branch');
-            $branchName = $this->lang->branch->main;
-            $output .= "<div class='btn-group'><button id='currentBranch' type='button' class='btn btn-limit'>{$branchName} </button></div></div>";
-        }
-        $output .= '</div>';
-
-        return $output;
-    }
-
-    /**
      * 创建一个测试套件。
      * Create a test suite.
      *
@@ -65,13 +28,11 @@ class testsuiteModel extends model
             ->checkFlow()
             ->exec();
 
-        if(!dao::isError())
-        {
-            $suiteID = $this->dao->lastInsertID();
-            $actionID = $this->loadModel('action')->create('testsuite', $suiteID, 'opened');
-            return $suiteID;
-        }
-        return false;
+        if(!dao::isError()) return false;
+
+        $suiteID = $this->dao->lastInsertID();
+        $this->loadModel('action')->create('testsuite', $suiteID, 'opened');
+        return $suiteID;
     }
 
     /**
@@ -87,11 +48,11 @@ class testsuiteModel extends model
      */
     public function getSuites(int $productID, string $orderBy = 'id_desc', object $pager = null, string $param = ''): array
     {
-        return $this->dao->select("*")->from(TABLE_TESTSUITE)
-            ->where('product')->eq((int)$productID)
+        return $this->dao->select('*')->from(TABLE_TESTSUITE)
+            ->where('product')->eq($productID)
             ->beginIF($this->lang->navGroup->testsuite != 'qa')->andWhere('project')->eq($this->session->project)->fi()
-            ->andWhere('deleted')->eq(0)
-            ->beginIF(strpos($param, 'all') === false)->andWhere("(`type` = 'public' OR (`type` = 'private' and addedBy = '{$this->app->user->account}'))")->fi()
+            ->andWhere('deleted')->eq('0')
+            ->beginIF(strpos($param, 'all') === false)->andWhere("(`type` = 'public' OR (`type` = 'private' AND `addedBy` = '{$this->app->user->account}'))")->fi()
             ->beginIF(strpos($param, 'review') !== false)->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewers`)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
@@ -108,11 +69,11 @@ class testsuiteModel extends model
      */
     public function getSuitePairs(int $productID): array
     {
-        return $this->dao->select("id, name")->from(TABLE_TESTSUITE)
-            ->where('product')->eq((int)$productID)
+        return $this->dao->select('id, name')->from(TABLE_TESTSUITE)
+            ->where('product')->eq($productID)
             ->beginIF($this->lang->navGroup->testsuite != 'qa')->andWhere('project')->eq($this->session->project)->fi()
-            ->andWhere('deleted')->eq(0)
-            ->andWhere("(`type` = 'public' OR (`type` = 'private' and addedBy = '{$this->app->user->account}'))")
+            ->andWhere('deleted')->eq('0')
+            ->andWhere("(`type` = 'public' OR (`type` = 'private' AND `addedBy` = '{$this->app->user->account}'))")
             ->orderBy('id_desc')
             ->fetchPairs();
     }
@@ -128,9 +89,9 @@ class testsuiteModel extends model
      */
     public function getUnitSuites(int $productID, string $orderBy = 'id_desc'): array
     {
-        return $this->dao->select("*")->from(TABLE_TESTSUITE)
-            ->where('product')->eq((int)$productID)
-            ->andWhere('deleted')->eq(0)
+        return $this->dao->select('*')->from(TABLE_TESTSUITE)
+            ->where('product')->eq($productID)
+            ->andWhere('deleted')->eq('0')
             ->andWhere('type')->eq('unit')
             ->orderBy($orderBy)
             ->fetchAll('id');
@@ -160,28 +121,26 @@ class testsuiteModel extends model
      * Update a test suite.
      *
      * @param  object $suite
-     * @param  int    $uid
+     * @param  string $uid
      * @access public
      * @return array|bool
      */
-    public function update(object $suite, int $uid): array|bool
+    public function update(object $suite, string $uid): array|bool
     {
-        $oldSuite = $this->dao->select("*")->from(TABLE_TESTSUITE)->where('id')->eq((int)$suite->id)->fetch();
+        $oldSuite = $this->dao->select('*')->from(TABLE_TESTSUITE)->where('id')->eq((int)$suite->id)->fetch();
         $suite    = $this->loadModel('file')->processImgURL($suite, $this->config->testsuite->editor->edit['id'], $uid);
 
         $this->dao->update(TABLE_TESTSUITE)->data($suite)
             ->autoCheck()
             ->batchcheck($this->config->testsuite->edit->requiredFields, 'notempty')
             ->checkFlow()
-            ->where('id')->eq($suite->id)
+            ->where('id')->eq((int)$suite->id)
             ->exec();
 
-        if(!dao::isError())
-        {
-            $this->file->updateObjectID($uid, $suite->id, 'testsuite');
-            return common::createChanges($oldSuite, $suite);
-        }
-        return false;
+        if(dao::isError()) return false;
+
+        $this->file->updateObjectID($uid, $suite->id, 'testsuite');
+        return common::createChanges($oldSuite, $suite);
     }
 
     /**
@@ -197,20 +156,19 @@ class testsuiteModel extends model
     public function linkCase(int $suiteID, array $cases, array $versions)
     {
         if(empty($cases)) return;
-
         foreach($cases as $case)
         {
             $row = new stdclass();
             $row->suite = $suiteID;
             $row->case  = $case;
-            $row->version = isset($versions[$case]) ?? 0;
+            $row->version = isset($versions[$case])? $versions[$case] : 0;
             $this->dao->replace(TABLE_SUITECASE)->data($row)->exec();
         }
     }
 
     /**
      * 获取套件下关联的测试用例。
-     * Get linked cases for suite.
+     * Get linked cases of the suite.
      *
      * @param  int    $suiteID
      * @param  string $orderBy
@@ -222,24 +180,25 @@ class testsuiteModel extends model
     public function getLinkedCases(int $suiteID, string $orderBy = 'id_desc', object $pager = null, bool $append = true): array
     {
         $suite = $this->getById($suiteID);
-        $cases = $this->dao->select('t1.*,t2.version as caseVersion,t2.suite')->from(TABLE_CASE)->alias('t1')
+        $cases = $this->dao->select('t1.*,t2.version AS caseVersion,t2.suite')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_SUITECASE)->alias('t2')->on('t1.id=t2.case')
             ->where('t2.suite')->eq($suiteID)
             ->beginIF($this->lang->navGroup->testsuite != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
             ->andWhere('t1.product')->eq($suite->product)
-            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-        if(!$append) return $cases;
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
+
+        if(!$append) return $cases;
         return $this->loadModel('testcase')->appendData($cases);
     }
 
     /**
      * 获取套件下关联的测试用例对。
-     * Get linked cases pairs of suite.
+     * Get linked cases pairs of the suite.
      *
      * @param  int    $suiteID
      * @access public
@@ -253,7 +212,7 @@ class testsuiteModel extends model
             ->where('t2.suite')->eq($suiteID)
             ->beginIF($this->lang->navGroup->testsuite != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
             ->andWhere('t1.product')->eq($suite->product)
-            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.deleted')->eq('0')
             ->orderBy('id_desc')
             ->fetchPairs('id');
     }
@@ -290,7 +249,7 @@ class testsuiteModel extends model
         $cases = $this->dao->select('*')->from(TABLE_CASE)->where($query)
             ->beginIF($linkedCases)->andWhere('id')->notIN(array_keys($linkedCases))->fi()
             ->beginIF($this->lang->navGroup->testsuite != 'qa')->andWhere('project')->eq($this->session->project)->fi()
-            ->andWhere('deleted')->eq(0)
+            ->andWhere('deleted')->eq('0')
             ->orderBy('id desc')
             ->page($pager)
             ->fetchAll();
@@ -299,15 +258,14 @@ class testsuiteModel extends model
     }
 
     /**
-     * 删除套件和库。
-     * Delete suite and library.
+     * 删除套件和所有的关联用例。
+     * Delete suite and all assiociated use cases.
      *
      * @param  int    $suiteID
-     * @param  string $table
      * @access public
      * @return bool
      */
-    public function delete(int $suiteID, string $table = ''): bool
+    public function deleteSuiteByID(int $suiteID): bool
     {
         parent::delete(TABLE_TESTSUITE, $suiteID);
         $this->dao->delete()->from(TABLE_SUITECASE)->where('suite')->eq($suiteID)->exec();
@@ -361,7 +319,8 @@ class testsuiteModel extends model
         $canImport = array();
         foreach($branches as $branchID => $branchName) $canImport += $this->getCanImportModules($productID, $libID, $branchID);
 
-        return $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)
+        return $this->dao->select('*')->from(TABLE_CASE)
+            ->where('deleted')->eq('0')
             ->beginIF($browseType != 'bysearch')->andWhere('lib')->eq($libID)->fi()
             ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
             ->andWhere('id')->in(array_keys($canImport))
@@ -372,7 +331,7 @@ class testsuiteModel extends model
     }
 
     /**
-     * 获取已经导入的用例实体。
+     * 获取。
      * Get imported case modules.
      *
      * @param  int    $productID
@@ -388,17 +347,15 @@ class testsuiteModel extends model
             ->andWhere('lib')->eq($libID)
             ->andWhere('branch')->eq($branch)
             ->andWhere('fromCaseID')->ne('')
-            ->andWhere('deleted')->eq(0)
+            ->andWhere('deleted')->eq('0')
             ->fetchGroup('fromCaseID', 'module');
         foreach($importedModules as $fromCaseID => $modules) $importedModules[$fromCaseID] = array_combine(array_keys($modules), array_keys($modules));
 
         $libCases = $this->loadModel('caselib')->getLibCases($libID, 'all');
-
-        $modules = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $branch);
+        $modules  = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $branch);
 
         $canImportModules = array();
-        foreach($libCases as $caseID => $case)
-        {
+        foreach($libCases as $caseID => $case){
             $caseModules = !empty($importedModules[$caseID]) ? $importedModules[$caseID] : array();
             $canImportModules[$caseID] = array_diff_key($modules, $caseModules);
             if(!empty($canImportModules[$caseID])) $canImportModules[$caseID]['ditto'] = $this->lang->testcase->ditto;
@@ -446,16 +403,16 @@ class testsuiteModel extends model
     }
 
     /**
-     * 移除套件下的用例。
-     * Delete suitecase.
+     * 移除一个套件下的所有用例。
+     * Remove all use cases under a suite.
      *
-     * @param  array $caseID
+     * @param  array $cases
      * @param  int   $suiteID
      * @access public
      * @return void
      */
-    public function deleteCaseBySuiteID(array $caseID, int $suiteID)
+    public function deleteCaseBySuiteID(array $cases, int $suiteID)
     {
-        $this->dao->delete()->from(TABLE_SUITECASE)->where('`case`')->in($caseID)->andWhere('suite')->eq((int)$suiteID)->exec();
+        $this->dao->delete()->from(TABLE_SUITECASE)->where('`case`')->in($cases)->andWhere('`suite`')->eq($suiteID)->exec();
     }
 }
