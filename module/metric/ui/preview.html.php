@@ -15,3 +15,34 @@ featureBar
     set::current($scope),
     set::linkParams("scope={key}"),
 );
+
+div
+(
+    setClass('side'),
+    div
+    (
+        setClass('canvas'),
+        div
+        (
+            setClass('metric-name flex items-center'),
+            span
+            (
+                setClass('name-color'),
+                $metricList
+            ),
+        ),
+        div
+        (
+            setClass('flex-none w-2/3'),
+        ),
+    ),
+);
+div
+(
+    setClass('main'),
+    div
+    (
+        setClass('canvas flex p-4'),
+    ),
+);
+render();

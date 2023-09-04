@@ -57,8 +57,9 @@ class metric extends control
     {
         $this->metric->processScopeList();
 
-        $this->view->scope = $scope;
-        $this->view->title = $this->lang->metric->preview;
+        $this->view->metricList = $this->lang->metric->metricList;
+        $this->view->scope      = $scope;
+        $this->view->title      = $this->lang->metric->preview;
         $this->display();
     }
 
