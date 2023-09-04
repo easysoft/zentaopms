@@ -20,7 +20,10 @@ class metricZen extends metric
      */
     protected function buildMetricForCreate()
     {
-        return form::data($this->config->metric->form->create)->get();
+        return form::data($this->config->metric->form->create)
+            ->setDefault('createdBy', $this->app->user->account)
+            ->setDefault('createdDate', helper::now())
+            ->get();
     }
 
     /**
