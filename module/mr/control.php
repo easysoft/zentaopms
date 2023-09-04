@@ -272,7 +272,7 @@ class mr extends control
     public function view($MRID)
     {
         $MR = $this->mr->getByID($MRID);
-        if(!$MR) return print(js::error($this->lang->notFound) . js::locate($this->createLink('mr', 'browse')));
+        if(!$MR) return $this->locate($this->createLink('mr', 'browse'));
         if(isset($MR->hostID)) $rawMR = $this->mr->apiGetSingleMR($MR->hostID, $MR->targetProject, $MR->mriid);
         if($MR->synced and (!isset($rawMR->id) or (isset($rawMR->message) and $rawMR->message == '404 Not found') or empty($rawMR))) return $this->display();
 
