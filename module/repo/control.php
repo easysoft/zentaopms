@@ -215,7 +215,7 @@ class repo extends control
 
         $products           = $this->loadModel('product')->getPairs('', 0, '', 'all');
         $linkedProducts     = $this->loadModel('product')->getByIdList(explode(',', $repo->product));
-        $linkedProductPairs = array_combine(array_keys($linkedProducts), array_column($linkedProducts, 'name'));
+        $linkedProductPairs = array_combine(array_keys($linkedProducts), array_column(json_decode(json_encode($linkedProducts), true), 'name'));
         $products           = $products + $linkedProductPairs;
 
         $this->view->title           = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->edit;
