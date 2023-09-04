@@ -861,7 +861,7 @@ class executionModel extends model
 
                 if($begin < $parentBegin)
                 {
-                    dao::$errors["begin$executionID"][] = sprintf($this->lang->execution->errorLetterParent, $parentBegin);
+                    dao::$errors["begin$executionID"][] = sprintf($this->lang->execution->errorLesserParent, $parentBegin);
                 }
 
                 if($end > $parentEnd)
@@ -886,12 +886,12 @@ class executionModel extends model
             {
                 if($executions[$executionID]->begin > $executions[$executionID]->end)
                 {
-                    dao::$errors["end{$executionID}"][] = sprintf($this->lang->execution->errorLetterPlan, $executions[$executionID]->end, $executions[$executionID]->begin);
+                    dao::$errors["end{$executionID}"][] = sprintf($this->lang->execution->errorLesserPlan, $executions[$executionID]->end, $executions[$executionID]->begin);
                 }
 
                 if($project and $executions[$executionID]->begin < $project->begin)
                 {
-                    dao::$errors["begin{$executionID}"][] = sprintf($this->lang->execution->errorLetterProject, $project->begin);
+                    dao::$errors["begin{$executionID}"][] = sprintf($this->lang->execution->errorLesserProject, $project->begin);
                 }
                 if($project and $executions[$executionID]->end > $project->end)
                 {
@@ -1209,9 +1209,9 @@ class executionModel extends model
      *
      * @param  int    $executionID
      * @access public
-     * @return array
+     * @return array|false
      */
-    public function suspend(int $executionID): array
+    public function suspend(int $executionID): array|false
     {
         $oldExecution = $this->getById($executionID);
 
@@ -1232,27 +1232,35 @@ class executionModel extends model
             ->where('id')->eq($executionID)
             ->exec();
 
-        if(!dao::isError()) return common::createChanges($oldExecution, $execution);
+        if(dao::isError()) return false;
+
+        $changes = common::createChanges($oldExecution, $execution);
+        if(!empty($changes) || $this->post->comment != '')
+        {
+            $actionID = $this->action->create($this->objectType, $executionID, 'Suspended', $this->post->comment);
+            $this->action->logHistory($actionID, $changes);
+        }
+        return $changes;
     }
 
     /**
-     * Activate execution.
+     * 激活一个执行。
+     * Activate a execution.
      *
      * @param  int    $executionID
      * @access public
-     * @return void
+     * @return array|false
      */
-    public function activate($executionID)
+    public function activate(int $executionID): array|false
     {
         $oldExecution = $this->getById($executionID);
-        $now          = helper::now();
 
         $execution = fixer::input('post')
             ->add('id', $executionID)
             ->setDefault('realEnd', null)
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
+            ->setDefault('lastEditedDate', helper::now())
             ->setDefault('closedBy', '')
             ->setDefault('closedDate', null)
             ->stripTags($this->config->execution->editor->activate['id'], $this->config->allowedTags)
@@ -1263,7 +1271,7 @@ class executionModel extends model
         $begin = $execution->begin;
         $end   = $execution->end;
 
-        if($begin > $end) dao::$errors['end'] = sprintf($this->lang->execution->errorLetterPlan, $end, $begin);
+        if($begin > $end) dao::$errors['end'] = sprintf($this->lang->execution->errorLesserPlan, $end, $begin);
 
         if($oldExecution->grade > 1)
         {
@@ -1274,7 +1282,7 @@ class executionModel extends model
             $parentEnd   = $parent->end;
             if($begin < $parentBegin)
             {
-                dao::$errors['begin'] = sprintf($this->lang->execution->errorLetterParent, $parentBegin);
+                dao::$errors['begin'] = sprintf($this->lang->execution->errorLesserParent, $parentBegin);
             }
 
             if($end > $parentEnd)

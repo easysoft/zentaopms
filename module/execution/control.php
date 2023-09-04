@@ -2248,14 +2248,8 @@ class execution extends control
         {
             $this->loadModel('action');
             $this->execution->computeBurn($executionID);
-            $changes = $this->execution->suspend($executionID);
+            $this->execution->suspend($executionID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $actionID = $this->action->create($this->objectType, $executionID, 'Suspended', $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
 
             $project = $this->loadModel('project')->getById($execution->project);
             if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->loadModel('programplan')->computeProgress($executionID, 'suspend');
@@ -2275,10 +2269,11 @@ class execution extends control
     }
 
     /**
-     * Activate execution.
+     * 激活一个执行。
+     * Activate a execution.
      *
      * @param  int    $executionID
-     * @param  string $frim
+     * @param  string $from
      * @access public
      * @return void
      */
