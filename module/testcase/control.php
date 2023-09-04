@@ -1196,8 +1196,14 @@ class testcase extends control
 
         if($_POST)
         {
-            $this->testcase->createFromImport($productID, (int)$branch);
-            return $this->testcaseZen->responseAfterShowImport($productID, $branch, $maxImport);
+            $cases = $this->testcaseZen->buildCasesForShowImport();
+            $cases = $this->testcaseZen->checkCasesForShowImport($cases);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $cases = $this->testcaseZen->importCases($cases);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->testcaseZen->responseAfterShowImport($productID, $branch, $maxImport, $tmpFile);
         }
 
         $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);

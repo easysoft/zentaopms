@@ -943,4 +943,27 @@ class testcaseTest
     {
         return $this->objectModel->fetchBaseInfo($caseID);
     }
+
+    /**
+     * 测试获取步骤。
+     * Test fetch steps by id list.
+     *
+     * @param  array  $caseIdList
+     * @access public
+     * @return string
+     */
+    public function fetchStepsByListTest(array $caseIdList): string
+    {
+        $caseSteps = $this->objectModel->fetchStepsByList($caseIdList);
+        if(dao::isError()) return dao::getError()[0];
+        $return = '';
+        foreach($caseSteps as $caseID => $steps)
+        {
+            $return .= "{$caseID}: ";
+            foreach($steps as $step) $return .= "{$step->id},";
+            $return = trim($return, ',');
+            $return .= '; ';
+        }
+        return trim($return, ' ');
+    }
 }

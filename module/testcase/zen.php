@@ -1193,6 +1193,100 @@ class testcaseZen extends testcase
     }
 
     /**
+     * 构建导入用例的数据。
+     * Build cases for showing imported.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function buildCasesForShowImport(): array
+    {
+        /* 初始化变量。 */
+        /* Initialize variables. */
+        $now               = helper::now();
+        $account           = $this->app->user->account;
+        $cases             = form::batchData($this->config->testcase->form->showImport)->get();
+        $forceNotReview    = $this->testcase->forceNotReview();
+        $insert            = $this->post->insert;
+        $caseIdList        = !$insert ? array_keys($this->post->title) : array();
+        $oldCases          = $this->testcase->getByList($caseIdList);
+        $oldSteps          = $this->testcase->fetchStepsByList($caseIdList);
+        $storyVersionPairs = $this->loadModel('story')->getVersions($this->post->story);
+
+        foreach($cases as $caseID => $case)
+        {
+            /* 构建更新的用例. */
+            /* Build updated case. */
+            if(!empty($caseID) && !$insert)
+            {
+                $oldCase     = zget($oldCases, $caseID, new stdclass());
+                $stepChanged = $this->buildUpdateCaseForShowImport($case, $oldCase, zget($oldSteps, $caseID, array()), $forceNotReview);
+
+                $case->id             = $caseID;
+                $case->lastEditedBy   = $account;
+                $case->lastEditedDate = $now;
+                if($case->story != $oldCase->story) $case->storyVersion = zget($storyVersionPairs, $case->story, 1);
+
+                $changes = common::createChanges($oldCase, $case);
+                if(!$changes && !$stepChanged) unset($cases[$caseID]);
+            }
+            /* 构建插入的用例. */
+            /* Build inserted case. */
+            else
+            {
+                $case->version    = 1;
+                $case->openedBy   = $this->app->user->account;
+                $case->openedDate = $now;
+                $case->status     = !$forceNotReview ? 'wait' : 'normal';
+                if($this->app->tab == 'project') $case->project = $this->session->project;
+                if($case->story) $case->storyVersion = zget($storyVersionPairs, $case->story, 1);
+            }
+            $case->steps     = $case->desc;
+            $case->expects   = $case->expect;
+            $case->frequency = 1;
+            unset($case->desc, $case->expect);
+        }
+
+        return $cases;
+    }
+
+
+    /**
+     * 为展示导入用例构建更新的用例。
+     * Build update case for showing import.
+     *
+     * @param  object    $case
+     * @param  object    $oldCase
+     * @param  array     $oldStep
+     * @param  bool      $forceNotReview
+     * @access protected
+     * @return bool
+     */
+    protected function buildUpdateCaseForShowImport(object $case, object $oldCase, array $oldStep, bool $forceNotReview): bool
+    {
+        $stepChanged = (count($oldStep) != count($case->desc));
+        if(!$stepChanged)
+        {
+            $desc     = array_values($case->desc);
+            $expect   = array_values($case->expect);
+            $stepType = array_values($case->stepType);
+            foreach($oldStep as $index => $step)
+            {
+                if(!isset($desc[$index]) || !isset($expect[$index]) || $step->desc != $desc[$index] || $step->expect != $expect[$index] || $step->type != $stepType[$index])
+                {
+                    $stepChanged = true;
+                    break;
+                }
+            }
+        }
+        $case->version        = $stepChanged ? (int)$oldCase->version + 1 : (int)$oldCase->version;
+        $case->stepChanged    = $stepChanged;
+        if($stepChanged && !$forceNotReview) $case->status = 'wait';
+
+        return $stepChanged;
+    }
+
+    /**
      * 创建测试用例前检验表单数据是否正确。
      * check from data for create case.
      *
@@ -1295,6 +1389,60 @@ class testcaseZen extends testcase
     }
 
     /**
+     * 导入测试用例前检验数据是否正确。
+     * Check testcases for importing.
+     *
+     * @param  array     $cases
+     * @access protected
+     * @return array
+     */
+    protected function checkCasesForShowImport(array $cases): array
+    {
+        if($this->config->edition != 'open')
+        {
+            $extendFields = $this->getFlowExtendFields();
+            $notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
+
+            foreach($extendFields as $extendField)
+            {
+                if(strpos(",$extendField->rules,", ",$notEmptyRule->id,") !== false)
+                {
+                    $this->config->testcase->create->requiredFields .= ',' . $extendField->field;
+                }
+            }
+        }
+
+        foreach($cases as $i => $case)
+        {
+            /* 检查期望对应的步骤是否填写。 */
+            /* Check the step which has expect. */
+            foreach($case->expects as $exportID => $value)
+            {
+                if(!empty($value) && empty($case->steps[$exportID]))
+                {
+                    $exportID = str_replace('.', '\.', $exportID);
+                    $caseErrors["desc[{$i}][{$exportID}]"][] = sprintf($this->lang->testcase->stepsEmpty, '');
+                }
+            }
+
+            /* 检验必填项。 */
+            /* Check reuqired. */
+            foreach(explode(',', $this->config->testcase->edit->requiredFields) as $field)
+            {
+                $field = trim($field);
+                if($field && empty($case->{$field}))
+                {
+                    $fieldName = $this->config->testcase->form->showImport[$field]['type'] != 'array' ? "{$field}[{$i}]" : "{$field}[{$i}][]";
+                    $caseErrors[$fieldName][] = sprintf($this->lang->error->notempty, $this->lang->testcase->{$field});
+                }
+            }
+        }
+
+        if(!empty($caseErrors)) dao::$errors = $caseErrors;
+        return $cases;
+    }
+
+    /**
      * 初始化用例数据。
      * Initialize the testcase.
      *
@@ -1358,6 +1506,41 @@ class testcaseZen extends testcase
         $case->steps = $this->testcase->appendSteps(!empty($case->steps) ? $case->steps : array());
 
         return $case;
+    }
+
+    /**
+     * 导入用例。
+     * Import cases.
+     *
+     * @param  array     $cases
+     * @access protected
+     * @return void
+     */
+    protected function importCases(array $cases): void
+    {
+        $this->loadModel('action');
+        foreach($cases as $case)
+        {
+            if(isset($case->id))
+            {
+                $oldCase = $this->testcase->getByID($case->id);
+                if($oldCase->product != $case->product) continue;
+
+                $changes = $this->testcase->update($case, $oldCase);
+
+                $actionID = $this->action->create('case', $case->id, 'Edited');
+                $this->action->logHistory($actionID, $changes);
+
+                $this->testcase->updateCase2Project($oldCase, $case);
+            }
+            else
+            {
+                $caseID = $this->testcase->create($case);
+
+                $this->action->create('case', $caseID, 'Opened');
+                $this->testcase->syncCase2Project($case, $caseID);
+            }
+        }
     }
 
     /**
@@ -1606,16 +1789,18 @@ class testcaseZen extends testcase
      * @param  int       $productID
      * @param  string    $branch
      * @param  int       $maxImport
+     * @param  string    $tmpFile
      * @access protected
      * @return void
      */
-    protected function responseAfterShowImport(int $productID, string $branch = '0', int $maxImport = 0): array
+    protected function responseAfterShowImport(int $productID, string $branch = '0', int $maxImport = 0, string $tmpFile = ''): array
     {
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         if($this->post->isEndPage)
         {
             unlink($tmpFile);
+            unset($_SESSION['fileImport']);
             $locateLink = $this->app->tab == 'project' ? $this->createLink('project', 'testcase', "projectID={$this->session->project}&productID={$productID}") : inlink('browse', "productID={$productID}");
         }
         else
@@ -1864,7 +2049,7 @@ class testcaseZen extends testcase
                     $caseSteps[$num]['number']  = $num;
                 }
                 $caseSteps[$num]['type']    = $count > 4 ? 'item' : 'step';
-                if(!empty($parent)) $caseSteps[$parent]['type'] = $count > 6 ? 'group' : 'item';
+                if(!empty($parent)) $caseSteps[$parent]['type'] = 'group';
                 if(!empty($grand)) $caseSteps[$grand]['type']  = 'group';
             }
             elseif(isset($num))

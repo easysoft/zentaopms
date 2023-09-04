@@ -28,6 +28,24 @@ class testcaseTao extends testcaseModel
     }
 
     /**
+     * 通过用例的 id 列表查询步骤。
+     * Fetch step by id list.
+     *
+     * @param  array     $caseIdList
+     * @access protected
+     * @return array
+     */
+    protected function fetchStepsByList(array $caseIdList): array
+    {
+        return $this->dao->select('t2.*')->from(TABLE_CASE)->alias('t1')
+            ->leftJoin(TABLE_CASESTEP)->alias('t2')->on('t1.id = t2.case')
+            ->where('t1.id')->in($caseIdList)
+            ->andWhere('t1.version=t2.version')
+            ->orderBy('t2.id')
+            ->fetchGroup('case');
+    }
+
+    /**
      * 插入用例的步骤。
      * Insert the steps of the case.
      *
