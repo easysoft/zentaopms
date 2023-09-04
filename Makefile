@@ -158,7 +158,7 @@ zentaoxx:
 	sed -i "s/'..\/..\/common\/view\/footer.html.php'/\$$app->getModuleRoot() . 'common\/view\/footer.html.php'/g" zentaoxx/extension/xuan/conference/view/admin.html.php
 	sed -i "s/\$$this->im->userGetChangedPassword()/array()/" zentaoxx/extension/xuan/im/control.php
 	sed -i "s/->app->getModuleExtPath('', /->app->getModuleExtPath(/g" zentaoxx/extension/xuan/im/model/bot.php
-	sed -i "s/\$$this->getModuleExtPath('', /->app->getModuleExtPath(/g" zentaoxx/framework/xuanxuan.class.php
+	sed -i "s/\$$this->getModuleExtPath('', /\$$this->getModuleExtPath(/g" zentaoxx/framework/xuanxuan.class.php
 	sed -i "s/, \$$version)\$$/, \$$version = '')/g" zentaoxx/extension/xuan/im/model.php
 	sed -i "s/, \$$version)\$$/, \$$version = '')/g" zentaoxx/extension/xuan/im/model/conference.php
 	sed -i "/.*->getAllDepts();/d" zentaoxx/extension/xuan/im/ext/bot/default.bot.php
