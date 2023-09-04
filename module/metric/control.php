@@ -55,6 +55,8 @@ class metric extends control
      */
     public function preview($scope = 'project')
     {
+        $this->metric->processScopeList();
+
         $this->view->scope = $scope;
         $this->view->title = $this->lang->metric->preview;
         $this->display();

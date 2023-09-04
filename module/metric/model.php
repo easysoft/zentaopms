@@ -577,8 +577,16 @@ class metricModel extends model
         foreach($this->lang->metric->scopeList as $scope => $name)
         {
             $metrics = $this->metricTao->fetchMetrics($scope);
-            if(empty($metrics)) unset($this->lang->metric->scopeList[$scope]);
+            if(empty($metrics))
+            {
+                unset($this->lang->metric->scopeList[$scope]);
+
+                unset($this->lang->metric->featureBar['preview'][$scope]);
+                unset($this->lang->metric->moreSelects[$scope]);
+            }
         }
+
+        if(empty($this->lang->metric->moreSelects)) unset($this->lang->metric->featureBar['preview']['more']);
     }
 
     /**
