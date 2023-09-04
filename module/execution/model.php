@@ -1237,7 +1237,7 @@ class executionModel extends model
         $changes = common::createChanges($oldExecution, $execution);
         if(!empty($changes) || $this->post->comment != '')
         {
-            $actionID = $this->action->create($this->objectType, $executionID, 'Suspended', $this->post->comment);
+            $actionID = $this->loadModel('action')->create($this->objectType, $executionID, 'Suspended', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
         }
         return $changes;
