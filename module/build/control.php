@@ -122,6 +122,8 @@ class build extends control
             $this->view->productArtifactRepos = $productArtifactRepos;
         }
 
+        if(isonlybody()) $_GET['zin'] = '0';
+
         $this->view->title      = $this->lang->build->create;
         $this->view->position[] = $this->lang->build->create;
 
