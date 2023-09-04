@@ -263,6 +263,11 @@ class group extends control
                     continue;
                 }
 
+                if(!$this->config->inQuickon && in_array("{$priv->module}-{$priv->method}", $this->config->group->hiddenPriv))
+                {
+                    continue;
+                }
+
                 if(!isset($privList[$priv->parentCode])) $privList[$priv->parentCode] = array();
                 if(!is_array($privList[$priv->parentCode])) $privList[$priv->parentCode] = array();
                 if(!isset($privList[$priv->parentCode][$priv->parent])) $privList[$priv->parentCode][$priv->parent] = array();

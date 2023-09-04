@@ -1,5 +1,5 @@
 <?php
-$lang->ops->common     = 'devops设置';
+$lang->ops->common     = 'DevOps设置';
 $lang->ops->setting    = '设置';
 $lang->ops->provider   = '服务商';
 $lang->ops->provider   = '服务商';
