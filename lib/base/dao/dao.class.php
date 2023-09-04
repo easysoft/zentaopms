@@ -2164,6 +2164,34 @@ class baseSQL
     }
 
     /**
+     * 字段为空。
+     * Set the field is null statement part.
+     *
+     * @access public
+     * @return static|sql the sql object.
+     */
+    public function isNULL()
+    {
+        if($this->inCondition and !$this->conditionIsTrue) return $this;
+        $this->sql .= " IS NULL ";
+        return $this;
+    }
+
+    /**
+     * 字段不为空。
+     * Set the field is not null statement part.
+     *
+     * @access public
+     * @return static|sql the sql object.
+     */
+    public function notNULL()
+    {
+        if($this->inCondition and !$this->conditionIsTrue) return $this;
+        $this->sql .= " IS NOT NULL ";
+        return $this;
+    }
+
+    /**
      * 不为空日期
      * Create not zero date.
      *
