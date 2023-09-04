@@ -4953,7 +4953,7 @@ class executionModel extends model
      * Get plan data from the ID list of the product.
      *
      * @param  array  $productID
-     * @param  string $param       withMainPlan|skipParent
+     * @param  string $param       withMainPlan|skipParent|unexpired|noclosed
      * @param  int    $executionID
      * @return array
      */
@@ -5002,11 +5002,11 @@ class executionModel extends model
      * Process product planning data.
      *
      * @param  array  $plans
-     * @param  string $param
+     * @param  string $param withmainplan|skipparent
      * @access public
      * @return array
      */
-    public function processProductPlans(array $plans, string $param): array
+    public function processProductPlans(array $plans, string $param = ''): array
     {
         if(strpos($param, 'sortedbydate') !== false)
         {

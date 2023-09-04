@@ -3128,4 +3128,25 @@ class executionTest
 
          return $this->executionModel->buildExecutionPairs($mode, $allExecutions, $executions, $parents, $projectPairs);
     }
+
+    /**
+     * 处理产品计划的数据。
+     * Process product planning data.
+     *
+     * @param  array  $productIdList
+     * @param  string $param
+     * @access public
+     * @return array
+     */
+    public function processProductPlansTest(array $productIdList, string $param = ''): array
+    {
+        $plans = $this->executionModel->dao->select('t1.id,t1.title,t1.product,t1.parent,t1.begin,t1.end,t1.branch,t2.type as productType')->from(TABLE_PRODUCTPLAN)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t2.id=t1.product')
+            ->where('t1.product')->in($productIdList)
+            ->andWhere('t1.deleted')->eq(0)
+            ->orderBy('t1.begin desc, t1.id desc')
+            ->fetchAll('id');
+
+        return $this->executionModel->processProductPlans($plans, $param);
+    }
 }
