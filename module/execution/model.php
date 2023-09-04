@@ -1268,12 +1268,14 @@ class executionModel extends model
             ->get();
 
         if(empty($oldExecution->totalConsumed) and helper::isZeroDate($oldExecution->realBegan)) $execution->status = 'wait';
+
+        /* Check the date which user input. */
         $begin = $execution->begin;
         $end   = $execution->end;
+        if($begin > $end) dao::$errors['end'] = sprintf($this->lang->execution->errorLesserPlan, $end, $begin); /* The begin date should larger than end. */
 
-        if($begin > $end) dao::$errors['end'] = sprintf($this->lang->execution->errorLesserPlan, $end, $begin);
-
-        if($oldExecution->grade > 1)
+        /* Check the begin and end date if the execution has a parent, such as a child Stage, Sprint or Kanban. */
+        if($oldExecution->parent != 0)
         {
             $parent = $this->dao->select('begin,end')->from(TABLE_PROJECT)->where('id')->eq($oldExecution->parent)->fetch();
             if(!$parent) return false;
@@ -1282,17 +1284,18 @@ class executionModel extends model
             $parentEnd   = $parent->end;
             if($begin < $parentBegin)
             {
-                dao::$errors['begin'] = sprintf($this->lang->execution->errorLesserParent, $parentBegin);
+                dao::$errors['begin'] = sprintf($this->lang->execution->errorLesserParent, $parentBegin); /* The begin date of child execution should larger than parent. */
             }
 
             if($end > $parentEnd)
             {
-                dao::$errors['end'] = sprintf($this->lang->execution->errorGreaterParent, $parentEnd);
+                dao::$errors['end'] = sprintf($this->lang->execution->errorGreaterParent, $parentEnd); /* The end date of child execution should lesser than parent. */
             }
         }
 
         if(dao::isError()) return false;
 
+        /* Do update for this execution. */
         $execution = $this->loadModel('file')->processImgURL($execution, $this->config->execution->editor->activate['id'], $this->post->uid);
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
@@ -1300,7 +1303,7 @@ class executionModel extends model
             ->where('id')->eq((int)$executionID)
             ->exec();
 
-        /* Readjust task. */
+        /* 顺延任务的起止时间。Adjust the begin and end date for tasks in this execution. */
         if($this->post->readjustTask)
         {
             $beginTimeStamp = strtotime($execution->begin);
