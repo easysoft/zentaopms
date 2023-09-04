@@ -541,7 +541,7 @@ $lang->bi->menu         = new stdclass();
 $lang->bi->menu->screen = array('link' => "{$lang->screen->common}|screen|browse");
 $lang->bi->menu->pivot  = array('link' => "{$lang->pivot->common}|pivot|preview");
 $lang->bi->menu->chart  = array('link' => "{$lang->chart->common}|chart|preview");
-$lang->bi->menu->metric = array('link' => "{$lang->metric->common}|metric|browse");
+$lang->bi->menu->metric = array('link' => "{$lang->metric->common}|metric|preview");
 
 $lang->bi->dividerMenu = ',metric,';
 

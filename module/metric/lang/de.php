@@ -27,6 +27,7 @@ $lang->metric->afterCreate   = "After Saving";
 $lang->metric->definition    = "Definition";
 $lang->metric->customUnit    = "Custom Unit";
 $lang->metric->delist        = "Delist";
+$lang->metric->preview       = "Preview";
 
 $lang->metric->descTip       = 'Enter the meaning, purpose, and impact of the metric';
 $lang->metric->definitionTip = 'Enter the calculation rules and filtering conditions of the metric';

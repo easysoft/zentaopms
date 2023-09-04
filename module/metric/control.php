@@ -49,6 +49,18 @@ class metric extends control
     /**
      * Browse metric list.
      *
+     * @access public
+     * @return void
+     */
+    public function preview()
+    {
+        $this->view->title = $this->lang->metric->preview;
+        $this->display();
+    }
+
+    /**
+     * Browse metric list.
+     *
      * @param  string $scope
      * @param  string $stage
      * @param  int    $param
