@@ -22,7 +22,7 @@ class html extends \html
 {
 }
 
-if(empty($_SESSION['installing']))
+if(class_exists('\commonModel'))
 {
     class commonModel extends \commonModel
     {
