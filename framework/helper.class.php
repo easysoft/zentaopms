@@ -432,10 +432,10 @@ class helper extends baseHelper
             $key    = $value = null;
             $keySet = $valueSet = false;
 
-            if(null !== $indexKey && array_key_exists($indexKey, $row))
+            if($indexKey !== null && array_key_exists($indexKey, (array) $row))
             {
                 $keySet = true;
-                $key    = (string) $row[$indexKey];
+                $key    = \is_object($row) ? (string) $row->$indexKey : (string) $row[$indexKey];
             }
 
             if(null === $columnKey)
