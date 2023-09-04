@@ -4,23 +4,35 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/execution.class.php';
 su('admin');
 
+zdTable('project')->config('execution')->gen(10);
+zdTable('product')->config('product')->gen(10);
+zdTable('branch')->config('branch')->gen(10);
+zdTable('productplan')->config('productplan')->gen(30);
+zdTable('projectproduct')->config('projectproduct')->gen(10);
+
 /**
 
-title=测试executionModel->getPlansTest();
+title=测试executionModel->getPlans();
+timeout=0
 cid=1
-pid=1
-
-全部执行计划查询 >> 长名称
-执行计划查询 >> 1.1
-全部执行计划查询 >> 2
 
 */
 
-$productIDList   = array('1', '21', '41');
-$executionIDList = array('0','101');
-$count           = array('0','1');
+$productIdList   = array(1, 2, 3, 4, 5, 6);
+$paramList       = array('', 'withMainPlan', 'skipParent');
+$executionIdList = array(0, 11);
+$count           = array(0, 1);
 
 $execution = new executionTest();
-r($execution->getPlansTest($productIDList, $executionIDList[0], $count[0])) && p('1:3')  && e('长名称'); // 全部执行计划查询
-r($execution->getPlansTest($productIDList, $executionIDList[1], $count[0])) && p('1:2')  && e('1.1');    // 执行计划查询
-r($execution->getPlansTest($productIDList, $executionIDList[0], $count[1])) && p()       && e('2');      // 全部执行计划查询
+r($execution->getPlansTest($productIdList, $paramList[0], $executionIdList[0], $count[0])) && p('1:3') && e('计划3 [2022-01-01 ~ 2022-01-30]');        // 查询全部执行关联计划信息
+r($execution->getPlansTest($productIdList, $paramList[0], $executionIdList[1], $count[0])) && p('1:2') && e('计划1 /计划2 [2021-06-01 ~ 2021-06-30]'); // 查询迭代1关联计划信息
+r($execution->getPlansTest($productIdList, $paramList[0], $executionIdList[0], $count[1])) && p()      && e('6');                                      // 查询全部执行关联计划数量
+r($execution->getPlansTest($productIdList, $paramList[0], $executionIdList[1], $count[1])) && p()      && e('6');                                      // 查询迭代1关联计划数量
+r($execution->getPlansTest($productIdList, $paramList[1], $executionIdList[0], $count[0])) && p('1:3') && e('计划3 [2022-01-01 ~ 2022-01-30]');        // 查询带主干的全部执行关联计划信息
+r($execution->getPlansTest($productIdList, $paramList[1], $executionIdList[1], $count[0])) && p('1:2') && e('计划1 /计划2 [2021-06-01 ~ 2021-06-30]'); // 查询带主干的迭代1关联计划信息
+r($execution->getPlansTest($productIdList, $paramList[1], $executionIdList[0], $count[1])) && p()      && e('6');                                      // 查询带主干的全部执行关联计划数量
+r($execution->getPlansTest($productIdList, $paramList[1], $executionIdList[1], $count[1])) && p()      && e('6');                                      // 查询带主干的迭代1关联计划数量
+r($execution->getPlansTest($productIdList, $paramList[2], $executionIdList[0], $count[0])) && p('1:3') && e('计划3 [2022-01-01 ~ 2022-01-30]');        // 查询非父计划全部执行关联计划信息
+r($execution->getPlansTest($productIdList, $paramList[2], $executionIdList[1], $count[0])) && p('1:2') && e('计划1 /计划2 [2021-06-01 ~ 2021-06-30]'); // 查询非父计划迭代1关联计划信息
+r($execution->getPlansTest($productIdList, $paramList[2], $executionIdList[0], $count[1])) && p()      && e('6');                                      // 查询非父计划全部执行关联计划数量
+r($execution->getPlansTest($productIdList, $paramList[2], $executionIdList[1], $count[1])) && p()      && e('6');                                      // 查询非父计划迭代1关联计划数量

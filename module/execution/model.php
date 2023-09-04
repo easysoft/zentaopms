@@ -4949,22 +4949,19 @@ class executionModel extends model
     }
 
     /**
-     * Get plans by $productID.
+     * 通过产品的ID列表获取计划数据。
+     * Get plan data from the ID list of the product.
      *
-     * @param int|array $productID
-     * @param string    $param withMainPlan|skipParent
-     * @param int       $executionID
-     * @return mixed
+     * @param  array  $productID
+     * @param  string $param       withMainPlan|skipParent
+     * @param  int    $executionID
+     * @return array
      */
-    public function getPlans($products, $param = '', $executionID = 0)
+    public function getPlans(array $productIdList, string $param = '', int $executionID = 0): array
     {
-        $this->loadModel('productplan');
-
-        $date  = date('Y-m-d');
-
         $param        = strtolower($param);
         $branchIdList = strpos($param, 'withmainplan') !== false ? array(BRANCH_MAIN => BRANCH_MAIN) : array();
-        $branchGroups = $this->getBranchByProduct(array_keys($products), $executionID, 'noclosed');
+        $branchGroups = $this->getBranchByProduct($productIdList, $executionID, 'noclosed');
         foreach($branchGroups as $branches)
         {
             foreach($branches as $branchID => $branchName) $branchIdList[] = $branchID;
@@ -4989,21 +4986,35 @@ class executionModel extends model
 
         $plans = $this->dao->select('t1.id,t1.title,t1.product,t1.parent,t1.begin,t1.end,t1.branch,t2.type as productType')->from(TABLE_PRODUCTPLAN)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t2.id=t1.product')
-            ->where('t1.product')->in(array_keys($products))
+            ->where('t1.product')->in($productIdList)
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere($branchQuery)
-            ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('t1.end')->ge($date)->fi()
+            ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('t1.end')->ge(helper::today())->fi()
             ->beginIF(strpos($param, 'noclosed')  !== false)->andWhere('t1.status')->ne('closed')->fi()
             ->orderBy('t1.begin desc, t1.id desc')
             ->fetchAll('id');
 
+        return $this->processProductPlans($plans, $param);
+    }
+
+    /**
+     * 处理产品计划的数据。
+     * Process product planning data.
+     *
+     * @param  array  $plans
+     * @param  string $param
+     * @access public
+     * @return array
+     */
+    public function processProductPlans(array $plans, string $param): array
+    {
         if(strpos($param, 'sortedbydate') !== false)
         {
             $pendPlans   = array();
             $normalPlans = array();
             foreach($plans as $plan)
             {
-                if($plan->begin == '2030-01-01' and $plan->end == '2030-01-01')
+                if($plan->begin == '2030-01-01' && $plan->end == '2030-01-01')
                 {
                     $pendPlans[$plan->id] = $plan;
                 }
@@ -5015,15 +5026,15 @@ class executionModel extends model
             $plans = array_merge($normalPlans, $pendPlans);
         }
 
-        $plans        = $this->productplan->reorder4Children($plans);
+        $plans        = $this->loadModel('productplan')->reorder4Children($plans);
         $plans        = $this->productplan->relationBranch($plans);
         $productPlans = array();
         foreach($plans as $plan)
         {
-            if($plan->parent == '-1' and strpos($param, 'skipparent') !== false) continue;
-            if($plan->parent > 0 and isset($plans[$plan->parent])) $plan->title = $plans[$plan->parent]->title . ' /' . $plan->title;
+            if($plan->parent == '-1' && strpos($param, 'skipparent') !== false) continue;
+            if($plan->parent > 0 && isset($plans[$plan->parent])) $plan->title = $plans[$plan->parent]->title . ' /' . $plan->title;
             $productPlans[$plan->product][$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
-            if($plan->begin == '2030-01-01' and $plan->end == '2030-01-01') $productPlans[$plan->product][$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
+            if($plan->begin == '2030-01-01' && $plan->end == '2030-01-01') $productPlans[$plan->product][$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
             if($plan->productType != 'normal') $productPlans[$plan->product][$plan->id] = $productPlans[$plan->product][$plan->id] . ' / ' . ($plan->branchName ? $plan->branchName : $this->lang->branch->main);
         }
 

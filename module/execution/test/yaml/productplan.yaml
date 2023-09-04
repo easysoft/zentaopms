@@ -1,0 +1,21 @@
+title: zt_productplan
+author: Shujie Tian
+version: 1.0.0
+fields:
+  - field: id
+    range: 1-100
+  - field: title
+    range: 1-100
+    prefix: '计划'
+  - field: product
+    range: 1-10{3}
+  - field: branch
+    range: 0{4},4,5,0,7,8,0{91}
+  - field: parent
+    range: '`-1`,1,0{98}'
+  - field: status
+    range: wait,doing,done,closed
+  - field: begin
+    range: '`2021-01-01`,`2021-06-01`,`2022-01-01`,`2022-07-01`,`2030-01-01`'
+  - field: end
+    range: '`2021-01-30`,`2021-06-30`,`2022-01-30`,`2022-07-30`,`2030-01-01`'

@@ -2332,17 +2332,19 @@ class executionTest
     }
 
     /**
-     * function getPlans test by execution
+     * 通过产品的ID列表获取计划数据。
+     * Get plan data from the ID list of the product.
      *
-     * @param array  $products
-     * @param string $executionID
-     * @param string $count
+     * @param  array     $productIdList
+     * @param  string    $param         withMainPlan|skipParent
+     * @param  int       $executionID
+     * @param  int       $count
      * @access public
-     * @return array
+     * @return array|int
      */
-    public function getPlansTest($products, $executionID, $count)
+    public function getPlansTest(array $productIdList, string $param, int $executionID, int $count): array|int
     {
-        $object = $this->executionModel->getPlans($products,'', $executionID);
+        $object = $this->executionModel->getPlans($productIdList, $param, $executionID);
 
         if(dao::isError())
         {
