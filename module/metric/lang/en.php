@@ -73,7 +73,7 @@ $lang->metric->moreSelects['code']      = 'Code Repository';
 $lang->metric->moreSelects['pipeline']  = 'Pipeline';
 
 $lang->metric->unitList = array();
-$lang->metric->unitList['single']  = 'Single';
+$lang->metric->unitList['count']   = 'Count';
 $lang->metric->unitList['measure'] = 'Man-hour';
 $lang->metric->unitList['hour']    = 'Hour';
 $lang->metric->unitList['day']     = 'Day';

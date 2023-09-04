@@ -45,7 +45,7 @@ $lang->metric->stageList['wait']     = "未發布";
 $lang->metric->stageList['released'] = "已發布";
 
 $lang->metric->unitList = array();
-$lang->metric->unitList['single']  = '個';
+$lang->metric->unitList['count']   = '個';
 $lang->metric->unitList['measure'] = '工時';
 $lang->metric->unitList['hour']    = '小時';
 $lang->metric->unitList['day']     = '天';

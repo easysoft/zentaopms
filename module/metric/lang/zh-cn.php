@@ -73,7 +73,7 @@ $lang->metric->moreSelects['code']      = '代码库';
 $lang->metric->moreSelects['pipeline']  = '流水线';
 
 $lang->metric->unitList = array();
-$lang->metric->unitList['single']  = '个';
+$lang->metric->unitList['count']   = '个';
 $lang->metric->unitList['measure'] = '工时';
 $lang->metric->unitList['hour']    = '小时';
 $lang->metric->unitList['day']     = '天';
