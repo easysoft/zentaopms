@@ -59,7 +59,7 @@ window.savaTestcaseReview = function()
         if(needReview == 0)
         {
             $.ajaxSubmit({
-                url: $.createLink('testcase', 'ajaxGetReviewCount'),
+                url: $.createLink('testcase', 'ajaxGetReviewAmount'),
                 onComplete: function(count)
                 {
                     stopSubmit = true;

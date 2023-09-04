@@ -1324,14 +1324,15 @@ class testcase extends control
     }
 
     /**
-     * Ajax: Get count of need review casese.
+     * 获取待审核的用例数。
+     * Ajax: Get amount of casees pending review.
      *
      * @access public
      * @return int
      */
-    public function ajaxGetReviewCount()
+    public function ajaxGetReviewAmount()
     {
-        echo $this->dao->select('count(id) as count')->from(TABLE_CASE)->where('status')->eq('wait')->fetch('count');
+        echo $this->testcaseTao->getReviewAmount();
     }
 
     /**

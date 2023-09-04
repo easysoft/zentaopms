@@ -293,4 +293,15 @@ class testcaseTao extends testcaseModel
             }
         }
     }
+
+    /**
+     * Get the amount of cases pending review.
+     *
+     * @access protected
+     * @return int
+     */
+    protected function getReviewAmount(): int
+    {
+        return $this->dao->select('COUNT(id) AS count')->from(TABLE_CASE)->where('status')->eq('wait')->fetch('count');
+    }
 }
