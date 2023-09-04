@@ -290,6 +290,7 @@ $config->openMethods[] = 'jenkins.edit';
 $config->openMethods[] = 'instance.createexternalapp';
 $config->openMethods[] = 'instance.editexternalapp';
 $config->openMethods[] = 'instance.deleteexternalapp';
+$config->openMethods[] = 'search.deletezinquery';
 
 $config->openModules = array();
 $config->openModules[] = 'install';
