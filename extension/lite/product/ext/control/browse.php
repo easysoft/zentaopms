@@ -9,7 +9,7 @@ class product extends control
         $this->loadModel('user');
 
         $projectProducts = $this->loadModel('product')->getProducts($projectID);
-        $productPlans    = $this->execution->getPlans($projectProducts);
+        $productPlans    = $this->execution->getPlans(array_keys($projectProducts));
 
         $this->products = array();
         foreach($projectProducts as $productID => $product) $this->products[$productID] = $product->name;

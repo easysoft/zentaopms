@@ -4957,7 +4957,7 @@ class executionModel extends model
      * Get plan data from the ID list of the product.
      *
      * @param  array  $productID
-     * @param  string $param       withMainPlan|skipParent|unexpired|noclosed
+     * @param  string $param       withMainPlan|skipParent|unexpired|noclosed|sortedByDate
      * @param  int    $executionID
      * @return array
      */

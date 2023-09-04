@@ -931,7 +931,7 @@ class productZen extends product
      */
     protected function getProductPlans(array $projectProducts, int $projectID, string $storyType, bool $isProjectStory): array
     {
-        if($isProjectStory && $storyType == 'story') return $this->loadModel('execution')->getPlans($projectProducts, 'skipParent,unexpired,noclosed', $projectID);
+        if($isProjectStory && $storyType == 'story') return $this->loadModel('execution')->getPlans(array_keys($projectProducts), 'skipParent,unexpired,noclosed', $projectID);
 
         return array();
     }

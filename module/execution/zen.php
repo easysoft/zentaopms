@@ -49,7 +49,7 @@ class executionZen extends execution
         foreach($products as $product) $productNames[$product->id] = $product->name;
 
         /* Get execution linked plans. */
-        $plans    = $this->execution->getPlans($products, 'skipParent', $executionID);
+        $plans    = $this->execution->getPlans(array_keys($products), 'skipParent', $executionID);
         $allPlans = array();
         if(!empty($plans))
         {
@@ -149,7 +149,7 @@ class executionZen extends execution
         if($products) $productID = key($products);
         foreach($products as $product) $productNames[$product->id] = $product->name;
 
-        $plans    = $this->execution->getPlans($products);
+        $plans    = $this->execution->getPlans(array_keys($products));
         $allPlans = array();
         if(!empty($plans))
         {
@@ -210,7 +210,7 @@ class executionZen extends execution
         $this->view->userList     = $userList;
         $this->view->products     = $products;
         $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), '', $linkedBranches);
-        $this->view->planGroups   = $this->execution->getPlans($products);
+        $this->view->planGroups   = $this->execution->getPlans(array_keys($products));
         $this->view->actions      = $this->loadModel('action')->getList('execution', $executionID);
         $this->view->dynamics     = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, 'all', 'all', $executionID);
         $this->view->teamMembers  = $this->execution->getTeamMembers($executionID);

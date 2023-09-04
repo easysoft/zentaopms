@@ -594,7 +594,7 @@ class project extends control
         $this->view->teamMembers  = $this->project->getTeamMembers($projectID);
         $this->view->statData     = $this->project->getStatData($projectID);
         $this->view->workhour     = $this->project->getWorkhour($projectID);
-        $this->view->planGroup    = $this->loadModel('execution')->getPlans($products);
+        $this->view->planGroup    = $this->loadModel('execution')->getPlans(array_keys($products));
         $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), '', $linkedBranches);
         $this->view->dynamics     = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, 'all', $projectID);
         $this->view->programList  = $this->loadModel('program')->getPairsByList($project->path);
