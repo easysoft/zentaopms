@@ -2,6 +2,7 @@
 global $lang, $app;
 $config->testcase->dtable = new stdclass();
 $config->testcase->dtable->fieldList['id']['title']    = $lang->idAB;
+$config->testcase->dtable->fieldList['id']['name']     = 'caseID';
 $config->testcase->dtable->fieldList['id']['type']     = 'checkID';
 $config->testcase->dtable->fieldList['id']['fixed']    = 'left';
 $config->testcase->dtable->fieldList['id']['sortType'] = true;
