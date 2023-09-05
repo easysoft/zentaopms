@@ -70,10 +70,11 @@ $config->testcase->actionList['editScene']['text'] = $lang->testcase->editScene;
 $config->testcase->actionList['editScene']['hint'] = $lang->testcase->editScene;
 $config->testcase->actionList['editScene']['url']  = array('module' => 'testcase', 'method' => 'editScene', 'params' => 'sceneID={id}&executionID=%executionID%');
 
-$config->testcase->actionList['deleteScene']['icon'] = 'trash';
-$config->testcase->actionList['deleteScene']['text'] = $lang->testcase->deleteScene;
-$config->testcase->actionList['deleteScene']['hint'] = $lang->testcase->deleteScene;
-$config->testcase->actionList['deleteScene']['url']  = array('module' => 'testcase', 'method' => 'deleteScene', 'params' => 'sceneID={id}');
+$config->testcase->actionList['deleteScene']['icon']      = 'trash';
+$config->testcase->actionList['deleteScene']['text']      = $lang->testcase->deleteScene;
+$config->testcase->actionList['deleteScene']['hint']      = $lang->testcase->deleteScene;
+$config->testcase->actionList['deleteScene']['url']       = array('module' => 'testcase', 'method' => 'deleteScene', 'params' => 'sceneID={id}');
+$config->testcase->actionList['deleteScene']['className'] = 'ajax-submit';
 
 $config->testcase->actionList['delete']['icon']         = 'trash';
 $config->testcase->actionList['delete']['text']         = $lang->testcase->deleteAction;
@@ -90,7 +91,8 @@ $config->scene->actionList['editScene']['text'] = $lang->testcase->editScene;
 $config->scene->actionList['editScene']['hint'] = $lang->testcase->editScene;
 $config->scene->actionList['editScene']['url']  = array('module' => 'testcase', 'method' => 'editScene', 'params' => 'sceneID={id}&executionID=%executionID%');
 
-$config->scene->actionList['deleteScene']['icon'] = 'trash';
-$config->scene->actionList['deleteScene']['text'] = $lang->testcase->deleteScene;
-$config->scene->actionList['deleteScene']['hint'] = $lang->testcase->deleteScene;
-$config->scene->actionList['deleteScene']['url']  = array('module' => 'testcase', 'method' => 'deleteScene', 'params' => 'sceneID={id}');
+$config->scene->actionList['deleteScene']['icon']      = 'trash';
+$config->scene->actionList['deleteScene']['text']      = $lang->testcase->deleteScene;
+$config->scene->actionList['deleteScene']['hint']      = $lang->testcase->deleteScene;
+$config->scene->actionList['deleteScene']['url']       = array('module' => 'testcase', 'method' => 'deleteScene', 'params' => 'sceneID={id}');
+$config->scene->actionList['deleteScene']['className'] = 'ajax-submit';
