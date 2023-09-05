@@ -217,7 +217,7 @@ class testcaseZen extends testcase
         {
             /* 在项目或执行中显示时只显示项目或执行关联的分支键值对。*/
             /* When showing in a project or execution, only the branch key-value pairs associated with the project or execution are shown. */
-            $objectID        = $this->app->tab == 'project' ? $this->session->project : $executionID;
+            $objectID        = $this->app->tab == 'project' ? $this->session->project : 0;
             $productBranches = isset($product->type) && $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct(array($productID), $objectID, 'noclosed|withMain') : array();
             $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
             $branch          = key($branches);
@@ -232,8 +232,8 @@ class testcaseZen extends testcase
         $this->setMenu((int)$this->session->project, (int)$this->session->execution, $productID, $branch);
 
         $this->view->title    = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->newScene;
-        $this->view->modules  = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, ($branch === 'all' || !isset($branches[$branch])) ? 0 : $branch);
-        $this->view->scenes   = $this->testcase->getSceneMenu($productID, $moduleID, $viewType = 'case', $startSceneID = 0, ($branch === 'all' || !isset($branches[$branch])) ? 0 : $branch);
+        $this->view->modules  = $this->tree->getOptionMenu($productID, 'case', 0, ($branch === 'all' || !isset($branches[$branch])) ? 0 : $branch);
+        $this->view->scenes   = $this->testcase->getSceneMenu($productID, $moduleID, 'case', 0, ($branch === 'all' || !isset($branches[$branch])) ? 0 : $branch);
         $this->view->moduleID = $moduleID ? (int)$moduleID : (int)$this->cookie->lastCaseModule;
         $this->view->parent   = (int)$this->cookie->lastCaseScene;
         $this->view->product  = $product;
