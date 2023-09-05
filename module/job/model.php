@@ -305,7 +305,7 @@ class jobModel extends model
             ->add('editedDate', helper::now())
             ->remove('repoType,reference')
             ->get();
-        $repo = $this->loadModel('repo')->getByID($job->gitlabRepo);
+        $repo = $this->loadModel('repo')->getByID($job->repo);
 
         if($job->engine == 'jenkins')
         {
@@ -326,7 +326,6 @@ class jobModel extends model
                 }
             }
 
-            $job->repo     = $job->gitlabRepo;
             $job->server   = (int)zget($repo, 'serviceHost', 0);
             $job->pipeline = json_encode(array('project' => $project, 'reference' => ''));
         }
