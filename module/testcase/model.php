@@ -2605,6 +2605,7 @@ class testcaseModel extends model
         $oldScene = $this->getSceneByID($sceneID);
 
         $this->dao->update(TABLE_SCENE)->data($scene)
+            ->autoCheck()
             ->batchCheck($this->config->testcase->editscene->requiredFields, 'notempty')
             ->check('title', 'unique', "product = '{$scene->product}' AND id != '{$sceneID}'")
             ->where('id')->eq($sceneID)
