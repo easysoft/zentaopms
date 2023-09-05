@@ -59,7 +59,7 @@ class metric extends control
     {
         $this->metric->processScopeList();
 
-        $metrics = $this->metric->getList($scope);
+        $metrics = $this->metric->getList($scope, 'released');
         $current = $this->metric->getByID($metricID);
         if(empty($current)) $current = current($metrics);
 

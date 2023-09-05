@@ -10,28 +10,44 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$metricTree = array();
-$metricCheckList = array();
-foreach($metrics as $key => $metric)
+$fnGenerateSide = function() use($metrics, $current, $viewType, $scope)
 {
-    $class = $metric->id == $current->id ? 'metric-current' : '';
     if($viewType == 'single')
     {
-        $metricTree[] = li
-        (
-            set::className($class . ' metric-item font-medium'),
-            a(
-                $metric->name,
-                set::href(helper::createLink('metric', 'preview', "scope=$scope&viewType=$viewType&metricID={$metric->id}")),
-            )
-        );
+        $metricList = array();
+        foreach($metrics as $key => $metric)
+        {
+            $class = $metric->id == $current->id ? 'metric-current' : '';
+            $metricList[] = li
+            (
+                set::className($class . ' metric-item font-medium'),
+                a(
+                    $metric->name,
+                    set::href(helper::createLink('metric', 'preview', "scope=$scope&viewType=$viewType&metricID={$metric->id}")),
+                )
+            );
+        }
+
+        return ul($metricList);
     }
-    else
+
+    $metricCheckList = array();
+    foreach($metrics as $key => $metric)
     {
+        $class  = $metric->id == $current->id ? 'metric-current' : '';
         $class .= ' font-medium checkbox';
         $metricCheckList[] = array('text' => $metric->name, 'value' => $key, 'typeClass' => $class, 'checked' => $metric->id == $current->id);
     }
-}
+
+    return checkList
+    (
+        set::className('check-list-metric'),
+        set::primary(true),
+        set::name('metric'),
+        set::inline(false),
+        set::items($metricCheckList),
+    );
+};
 
 $fnGenerateDataDisplay = function() use($resultData, $resultHeader, $lang, $metric)
 {
@@ -77,7 +93,7 @@ toolbar
         setClass('btn text-black ghost primary-hover-500'),
         set::icon('exchange'),
         set::iconClass('icon-18'),
-        set::url(helper::createLink('metric', 'preview', "scope=$scope&viewType=$exchangeType")),
+        set::url(helper::createLink('metric', 'preview', "scope=$scope&viewType=$exchangeType&metricID={$current->id}")),
         $lang->metric->viewType->$exchangeType,
     ),
     common::hasPriv('metric', 'preview') ? btn
@@ -106,18 +122,7 @@ div
         div
         (
             setClass('metric-tree'),
-            $viewType == 'single' ? ul
-            (
-                $metricTree,
-            ) :
-            checkList
-            (
-                set::className('check-list-metric'),
-                set::primary(true),
-                set::name('metric'),
-                set::inline(false),
-                set::items($metricCheckList),
-            ),
+            $fnGenerateSide($metrics, $current, $viewType, $scope),
         ),
     ),
 );
