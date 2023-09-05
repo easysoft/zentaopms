@@ -103,12 +103,12 @@ detailBody
                     item
                     (
                         set::name($lang->compile->time),
-                        $this->job->getTriggerConfig($job)
+                        $time
                     ),
                     item
                     (
                         set::name($lang->job->triggerType),
-                        $time
+                        $this->job->getTriggerConfig($job)
                     ),
                     item
                     (
