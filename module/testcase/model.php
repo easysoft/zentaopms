@@ -2603,6 +2603,7 @@ class testcaseModel extends model
     {
         $sceneID  = $scene->id;
         $oldScene = $this->getSceneByID($sceneID);
+        if(!$oldScene) return false;
 
         $this->dao->update(TABLE_SCENE)->data($scene)
             ->autoCheck()
@@ -2613,7 +2614,7 @@ class testcaseModel extends model
             ->exec();
         if(dao::isError()) return false;
 
-        if($scene->parent != $oldScene->parent)
+        if(isset($scene->parent) && $scene->parent != $oldScene->parent)
         {
             if($scene->parent)
             {
