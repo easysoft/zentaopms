@@ -4560,8 +4560,7 @@ class storyModel extends model
         static $hasShadow      = true;
         if($hasShadow and empty($shadowProducts[$story->product]))
         {
-            global $dbh;
-            $stmt = $dbh->query('SELECT id FROM ' . TABLE_PRODUCT . " WHERE shadow = 1")->fetchAll();
+            $stmt = $app->dbQuery('SELECT id FROM ' . TABLE_PRODUCT . " WHERE shadow = 1")->fetchAll();
             if(empty($stmt)) $hasShadow = false;
             foreach($stmt as $row) $shadowProducts[$row->id] = $row->id;
         }
@@ -6339,11 +6338,11 @@ class storyModel extends model
             $field = $executionID ? 't2.id' : 't1.id';
             if($this->post->exportType == 'selected')
             {
-                $stmt  = $this->dbh->query("SELECT * FROM " . TABLE_STORY . "WHERE `id` IN({$selectedIDList})" . " ORDER BY " . strtr($orderBy, '_', ' '));
+                $stmt  = $this->app->dbQuery("SELECT * FROM " . TABLE_STORY . "WHERE `id` IN({$selectedIDList})" . " ORDER BY " . strtr($orderBy, '_', ' '));
             }
             else
             {
-                $stmt  = $this->dbh->query($this->session->storyQueryCondition . " ORDER BY " . strtr($orderBy, '_', ' '));
+                $stmt  = $this->app->dbQuery($this->session->storyQueryCondition . " ORDER BY " . strtr($orderBy, '_', ' '));
             }
             while($row = $stmt->fetch()) $stories[$row->id] = $row;
         }

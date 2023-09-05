@@ -807,10 +807,10 @@ class baseRouter
         {
             $sql     = new sql();
             $account = $sql->quote($account);
-            $vision  = $this->dbh->query("SELECT * FROM " . TABLE_CONFIG . " WHERE owner = $account AND `key` = 'vision' LIMIT 1")->fetch();
+            $vision  = $this->dbQuery("SELECT * FROM " . TABLE_CONFIG . " WHERE owner = $account AND `key` = 'vision' LIMIT 1")->fetch();
             if($vision) $vision = $vision->value;
 
-            $user = $this->dbh->query("SELECT * FROM " . TABLE_USER . " WHERE account = $account AND deleted = '0' LIMIT 1")->fetch();
+            $user = $this->dbQuery("SELECT * FROM " . TABLE_USER . " WHERE account = $account AND deleted = '0' LIMIT 1")->fetch();
             if(!empty($user->visions))
             {
                 $userVisions = explode(',', $user->visions);
@@ -835,7 +835,7 @@ class baseRouter
      */
     public function getInstalledVersion()
     {
-        $version = $this->dbh->query("SELECT `value` FROM " . TABLE_CONFIG . " WHERE `owner` = 'system' AND `key` = 'version' AND `module` = 'common' AND `section` = 'global' LIMIT 1")->fetch();
+        $version = $this->dbQuery("SELECT `value` FROM " . TABLE_CONFIG . " WHERE `owner` = 'system' AND `key` = 'version' AND `module` = 'common' AND `section` = 'global' LIMIT 1")->fetch();
         $version = $version ? $version->value : '0.3.beta';                  // No version, set as 0.3.beta.
         if($version == '3.0.stable') $version = '3.0';    // convert 3.0.stable to 3.0.
         return $version;
@@ -2914,6 +2914,21 @@ class baseRouter
             }
             self::triggerError($message, __FILE__, __LINE__, $exit = true);
         }
+    }
+
+    /**
+     * Query from database, use master or slave db.
+     *
+     * @param  string $query
+     * @access public
+     * @return mixed
+     */
+    public function dbQuery($query)
+    {
+        if(!$this->dbh) return false;
+        if($this->slaveDBH) return $this->slaveDBH->query($query);
+
+        return $this->dbh->query($query);
     }
 
     //-------------------- 错误处理方法(Error methods) ------------------//

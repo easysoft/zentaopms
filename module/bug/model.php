@@ -168,7 +168,7 @@ class bugModel extends model
         $data   = $result['data'];
 
         /* Get pairs(moduleID => moduleOwner) for bug. */
-        $stmt         = $this->dbh->query($this->loadModel('tree')->buildMenuQuery($productID, 'bug', $startModuleID = 0, $branch));
+        $stmt         = $this->app->dbQuery($this->loadModel('tree')->buildMenuQuery($productID, 'bug', $startModuleID = 0, $branch));
         $moduleOwners = array();
         while($module = $stmt->fetch()) $moduleOwners[$module->id] = $module->owner;
 

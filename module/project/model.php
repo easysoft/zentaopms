@@ -1180,7 +1180,7 @@ class projectModel extends model
     public function getTreeMenu($projectID = 0, $userFunc = '', $param = 0)
     {
         $projectMenu = array();
-        $stmt        = $this->dbh->query($this->buildMenuQuery($projectID));
+        $stmt        = $this->app->dbQuery($this->buildMenuQuery($projectID));
 
         while($project = $stmt->fetch())
         {

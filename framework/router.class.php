@@ -78,7 +78,7 @@ class router extends baseRouter
     {
         if($this->dbh)
         {
-            $langs = $this->dbh->query('SELECT `value` FROM ' . TABLE_CONFIG . " WHERE `owner`='system' AND `module`='common' AND `section`='global' AND `key`='langs'")->fetch();
+            $langs = $this->dbQuery('SELECT `value` FROM ' . TABLE_CONFIG . " WHERE `owner`='system' AND `module`='common' AND `section`='global' AND `key`='langs'")->fetch();
             $langs = empty($langs) ? array() : json_decode($langs->value, true);
             foreach($langs as $langKey => $langData) $this->config->langs[$langKey] = $langData['name'];
         }
@@ -112,7 +112,7 @@ class router extends baseRouter
             $customMenus = array();
             try
             {
-                $customMenus = $this->dbh->query('SELECT * FROM' . TABLE_LANG . "WHERE `module`='common' AND `section`='mainNav' AND `lang`='{$this->clientLang}' AND `vision`='{$this->config->vision}'")->fetchAll();
+                $customMenus = $this->dbQuery('SELECT * FROM' . TABLE_LANG . "WHERE `module`='common' AND `section`='mainNav' AND `lang`='{$this->clientLang}' AND `vision`='{$this->config->vision}'")->fetchAll();
             }
             catch(PDOException $exception){}
 
@@ -206,7 +206,7 @@ class router extends baseRouter
 
             try
             {
-                $commonSettings = $this->dbh->query('SELECT `section`, `key`, `value` FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND (`module`='custom' or `module`='common') and `key` in ('sprintConcept', 'hourPoint', 'URSR', 'mode', 'URAndSR', 'scoreStatus', 'disabledFeatures', 'closedFeatures')")->fetchAll();
+                $commonSettings = $this->dbQuery('SELECT `section`, `key`, `value` FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND (`module`='custom' or `module`='common') and `key` in ('sprintConcept', 'hourPoint', 'URSR', 'mode', 'URAndSR', 'scoreStatus', 'disabledFeatures', 'closedFeatures')")->fetchAll();
             }
             catch (PDOException $exception)
             {
@@ -274,7 +274,7 @@ class router extends baseRouter
         {
             $sql         = new sql();
             $account     = $sql->quote($account);
-            $userSetting = $this->dbh->query('SELECT `key`, `value` FROM ' . TABLE_CONFIG . " WHERE `owner`= $account AND `module`='common' and `key` in ('programLink', 'productLink', 'projectLink', 'executionLink', 'URSR')")->fetchAll();
+            $userSetting = $this->dbQuery('SELECT `key`, `value` FROM ' . TABLE_CONFIG . " WHERE `owner`= $account AND `module`='common' and `key` in ('programLink', 'productLink', 'projectLink', 'executionLink', 'URSR')")->fetchAll();
         }
 
         foreach($userSetting as $setting)
@@ -290,7 +290,7 @@ class router extends baseRouter
         $lang->SRCommon = '';
         if($this->dbh and !empty($this->config->db->name))
         {
-            $productProject = $this->dbh->query('SELECT `value` FROM ' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' AND `key`='productProject'")->fetch();
+            $productProject = $this->dbQuery('SELECT `value` FROM ' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' AND `key`='productProject'")->fetch();
             if($productProject)
             {
                 $productProject = $productProject->value;
@@ -301,8 +301,8 @@ class router extends baseRouter
             {
                 /* Get story concept in project and product. */
                 $clientLang = $this->clientLang == 'zh-tw' ? 'zh-cn' : $this->clientLang;
-                $URSRList   = $this->dbh->query('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE `module` = 'custom' and `section` = 'URSRList' and `lang` = '{$clientLang}'")->fetchAll();
-                if(empty($URSRList)) $URSRList = $this->dbh->query('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and `section` = 'URSRList' and `key` = '{$config->URSR}'")->fetchAll();
+                $URSRList   = $this->dbQuery('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE `module` = 'custom' and `section` = 'URSRList' and `lang` = '{$clientLang}'")->fetchAll();
+                if(empty($URSRList)) $URSRList = $this->dbQuery('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and `section` = 'URSRList' and `key` = '{$config->URSR}'")->fetchAll();
 
                 /* Get UR pairs and SR pairs. */
                 $URPairs  = array();
@@ -323,7 +323,7 @@ class router extends baseRouter
             $customMenus = array();
             try
             {
-                $customMenus = $this->dbh->query('SELECT * FROM' . TABLE_LANG . "WHERE `module`='common' AND `lang`='{$this->clientLang}' AND `section`='' AND `vision`='{$config->vision}'")->fetchAll();
+                $customMenus = $this->dbQuery('SELECT * FROM' . TABLE_LANG . "WHERE `module`='common' AND `lang`='{$this->clientLang}' AND `section`='' AND `vision`='{$config->vision}'")->fetchAll();
             }
             catch(PDOException $exception){}
             foreach($customMenus as $menu) if(isset($lang->{$menu->key})) $lang->{$menu->key} = $menu->value;
@@ -484,7 +484,7 @@ class router extends baseRouter
         if($this->config->edition == 'open' or defined('IN_INSTALL') or defined('IN_UPGRADE')) return parent::setControlFile($exitIfNone);
 
         /* Check if the requested module is defined in workflow. */
-        $flow = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOW . " WHERE `module` = '$this->moduleName'")->fetch();
+        $flow = $this->dbQuery("SELECT * FROM " . TABLE_WORKFLOW . " WHERE `module` = '$this->moduleName'")->fetch();
         if(!$flow) return parent::setControlFile($exitIfNone);
         if($flow->status != 'normal') die("<html><head><meta charset='utf-8'></head><body>{$this->lang->flowNotRelease}</body></html>");
 
@@ -512,7 +512,7 @@ class router extends baseRouter
             $actionQuery = "SELECT * FROM " . TABLE_WORKFLOWACTION . " WHERE `module` = '$this->moduleName' AND `action` = '$this->methodName'";
             if(isset($this->app->user) && $this->app->user->account != 'guest') $actionQuery .= " AND `vision` = '{$this->config->vision}'";
 
-            $action = $this->dbh->query($actionQuery)->fetch();
+            $action = $this->dbQuery($actionQuery)->fetch();
             if(zget($action, 'extensionType') == 'override')
             {
                 $this->rawModule = $this->moduleName;

@@ -101,7 +101,10 @@ class dbh
      */
     public function query($sql)
     {
-        $sql    = $this->formatSQL($sql);
+        $sql = $this->formatSQL($sql);
+
+        dao::$querys[] = "[$this->flag] " . dao::processKeywords($sql);
+
         $result = $this->pdo->query($sql);
         return $result;
     }

@@ -181,7 +181,7 @@ class treeModel extends model
         $treeMenu = array();
         foreach($branches as $branchID => $branch)
         {
-            $stmt    = $this->dbh->query($this->buildMenuQuery($rootID, $type, $startModule, $branchID, $param));
+            $stmt    = $this->app->dbQuery($this->buildMenuQuery($rootID, $type, $startModule, $branchID, $param));
             $modules = array();
             while($module = $stmt->fetch())
             {
@@ -464,7 +464,7 @@ class treeModel extends model
 
         $lastMenu = '';
         $treeMenu = array();
-        $stmt     = $this->dbh->query($this->buildMenuQuery($rootID, $type, $startModule, $branch));
+        $stmt     = $this->app->dbQuery($this->buildMenuQuery($rootID, $type, $startModule, $branch));
         while($module = $stmt->fetch())
         {
             if(!$onlyGetLinked)
@@ -551,7 +551,7 @@ class treeModel extends model
                     ->andWhere('deleted')->eq(0)
                     ->orderBy('grade desc, `order`, type')
                     ->get();
-                $stmt = $this->dbh->query($query);
+                $stmt = $this->app->dbQuery($query);
                 while($module = $stmt->fetch())
                 {
                     if(!$manage and !isset($executionModules[$module->id]) and strpos($extra['extra'], 'allModule') === false) continue;
@@ -576,7 +576,7 @@ class treeModel extends model
                 ->andWhere('deleted')->eq(0)
                 ->orderBy('grade desc, `order`, type')
                 ->get();
-            $stmt  = $this->dbh->query($query);
+            $stmt  = $this->app->dbQuery($query);
             while($module = $stmt->fetch()) $this->buildTree($treeMenu, $module, 'task', $userFunc, $extra);
 
             $tree  = isset($treeMenu[0]) ? $treeMenu[0] : '';
@@ -604,7 +604,7 @@ class treeModel extends model
         if(!$this->isMergeModule($rootID, 'task') or !$products)
         {
             $extra['tip'] = false;
-            $stmt = $this->dbh->query($this->buildMenuQuery($rootID, 'task', $startModule = 0));
+            $stmt = $this->app->dbQuery($this->buildMenuQuery($rootID, 'task', $startModule = 0));
             if(empty($products)) $this->config->execution->task->allModule = 1;
             return $this->getDataStructure($stmt, 'task');
         }
@@ -627,7 +627,7 @@ class treeModel extends model
                     ->andWhere('deleted')->eq(0)
                     ->orderBy('grade desc, `order`, type')
                     ->get();
-                $stmt = $this->dbh->query($query);
+                $stmt = $this->app->dbQuery($query);
                 if($branch == 0) $productTree = $this->getDataStructure($stmt, 'task', $executionModules);
                 if($branch != 0)
                 {
@@ -646,7 +646,7 @@ class treeModel extends model
             ->andWhere('deleted')->eq(0)
             ->orderBy('grade desc, `order`, type')
             ->get();
-        $stmt       = $this->dbh->query($query);
+        $stmt       = $this->app->dbQuery($query);
         $taskTrees  = $this->getDataStructure($stmt, 'task', $executionModules);
         foreach($taskTrees as $taskModule) $fullTrees[] = $taskModule;
         return $fullTrees;
@@ -662,7 +662,7 @@ class treeModel extends model
      */
     public function getTreeStructure($rootID, $type)
     {
-        $stmt = $this->dbh->query($this->buildMenuQuery($rootID, $type, $startModule = 0));
+        $stmt = $this->app->dbQuery($this->buildMenuQuery($rootID, $type, $startModule = 0));
         return $this->getDataStructure($stmt, $type);
     }
 
@@ -721,7 +721,7 @@ class treeModel extends model
                     ->orderBy('grade desc, `order`, type')
                     ->get();
                 $treeMenu = array();
-                $stmt     = $this->dbh->query($query);
+                $stmt     = $this->app->dbQuery($query);
                 while($module = $stmt->fetch())
                 {
                     if(isset($executionModules[$module->id])) $this->buildTree($treeMenu, $module, 'bug', $userFunc, $extra, $branch);
@@ -808,7 +808,7 @@ class treeModel extends model
                     ->andWhere('deleted')->eq(0)
                     ->orderBy('grade desc, `order`, type')
                     ->get();
-                $stmt = $this->dbh->query($query);
+                $stmt = $this->app->dbQuery($query);
                 while($module = $stmt->fetch())
                 {
                     if(isset($executionModules[$module->id])) $this->buildTree($treeMenu, $module, 'case', $userFunc, $extra, $branch);
@@ -875,7 +875,7 @@ class treeModel extends model
                     ->andWhere('deleted')->eq(0)
                     ->orderBy('grade desc, branch, `order`, type')
                     ->get();
-                $stmt = $this->dbh->query($query);
+                $stmt = $this->app->dbQuery($query);
                 while($module = $stmt->fetch())
                 {
                     /* If not manage, ignore unused modules. */
@@ -2312,7 +2312,7 @@ class treeModel extends model
     public function getProductStructure($rootID, $viewType, $branchID = 'all', $currentModuleID = 0)
     {
         if($viewType == 'line') $rootID = 0;
-        $stmt  = $this->dbh->query($this->buildMenuQuery($rootID, $viewType, $currentModuleID, $branchID));
+        $stmt  = $this->app->dbQuery($this->buildMenuQuery($rootID, $viewType, $currentModuleID, $branchID));
         $trees = $this->getDataStructure($stmt, $viewType);
 
         return $trees;
@@ -2377,7 +2377,7 @@ class treeModel extends model
      */
     public function getDocStructure()
     {
-        $stmt = $this->dbh->query($this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('doc')->andWhere('deleted')->eq(0)->orderBy('`grade`_desc, `order`')->get());
+        $stmt = $this->app->dbQuery($this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('doc')->andWhere('deleted')->eq(0)->orderBy('`grade`_desc, `order`')->get());
         $parent = array();
         while($module = $stmt->fetch())
         {
