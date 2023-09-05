@@ -274,6 +274,9 @@ $config->testcase->search['params']['scene'] = array('operator' => 'belong',  'c
 $config->testcase->createscene = new stdclass();
 $config->testcase->createscene->requiredFields = 'product,title';
 
+$config->testcase->editscene = new stdclass();
+$config->testcase->editscene->requiredFields = 'product,title';
+
 $app->loadLang('story');
 $config->testcase->zerocase = new stdclass();
 $config->testcase->zerocase->actionList['change']['icon']        = 'change';
