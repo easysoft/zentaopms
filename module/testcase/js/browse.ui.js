@@ -8,8 +8,9 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
     const form = new FormData();
 
     checkedList.forEach((id) => {
-        const caseInfo = dtable.$.getRowInfo(id).data;
-        if(caseInfo.isCase != 2) form.append('caseIdList[]', id);
+        const data = dtable.$.getRowInfo(id).data;
+        if(data.isScene)  form.append('sceneIdList[]', data.caseID);
+        if(!data.isScene) form.append('caseIdList[]',  data.caseID);
     });
 
     if($(this).hasClass('ajax-btn'))
@@ -48,22 +49,29 @@ function toggleOnlyAutoCase(event)
  */
 window.onRenderCell = function(result, {row, col})
 {
-    if(result && col.name == 'title')
+    if(result)
     {
-        const data = row.data;
-        const module = this.options.customData.modules[data.module];
-        if(data.isCase == 1) // 用例
+        if(col.name == 'caseID' && row.data.isScene)
         {
-            if(data.auto == 'auto') result.unshift({html: '<span class="label lighter rounded-full">' + automated + '</span>'}); // 添加自动化标签
-            if(module) result.unshift({html: '<span class="label lighter rounded-full">' + module + '</span>'}); // 添加模块标签
+            result.shift(); // 移除场景ID
         }
-        else if(data.isCase == 2) // 场景
+        if(col.name == 'title')
         {
-            result.pop(); // 移除带链接的场景名称
-            result.push({html: data.title}); // 添加不带链接的场景名称
-            if(data.grade == 1 && module) result.unshift({html: '<span class="label lighter rounded-full">' + module + '</span>'}); // 顶级场景添加模块标签
-            result.unshift({html: '<span class="label light-outline text-gray rounded-full">' + scene + '</span>'}); // 添加场景标签
-            if(!this.options.customData.isOnlyScene && this.options.customData.caseScenes[data.id] === undefined) result.push({html: '<span class="text-gray">(' + noCase + ')</span>'}); // 添加暂无用例标签
+            const data = row.data;
+            const module = this.options.customData.modules[data.module];
+            if(data.isScene) // 场景
+            {
+                result.shift(); // 移除带链接的场景名称
+                result.push({html: data.title}); // 添加不带链接的场景名称
+                if(data.grade == 1 && module) result.unshift({html: '<span class="label lighter rounded-full">' + module + '</span>'}); // 顶级场景添加模块标签
+                result.unshift({html: '<span class="label light-outline text-gray rounded-full">' + scene + '</span>'}); // 添加场景标签
+                if(!this.options.customData.isOnlyScene && data.hasCase == false) result.push({html: '<span class="text-gray">(' + noCase + ')</span>'}); // 添加暂无用例标签
+            }
+            else // 用例
+            {
+                if(data.auto == 'auto') result.unshift({html: '<span class="label lighter rounded-full">' + automated + '</span>'}); // 添加自动化标签
+                if(module) result.unshift({html: '<span class="label lighter rounded-full">' + module + '</span>'}); // 添加模块标签
+            }
         }
     }
 
