@@ -33,7 +33,7 @@ formPanel
     on::change('#serviceHost', 'onHostChange'),
     on::change('#serviceProject', 'onProjectChange'),
     set::title($lang->repo->createAction),
-    set::back('repo-maintain'),
+    set::back('GLOBAL'),
     formRow
     (
         $this->app->tab != 'devops' ? setClass('hidden') : null,
