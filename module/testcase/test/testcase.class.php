@@ -53,6 +53,7 @@ class testcaseTest
     public function createSceneTest(array $scene): bool|array
     {
         $result = $this->objectModel->createScene((object)$scene);
+        if(dao::isError()) return dao::getError();
         if(!$result) return $result;
 
         $scene  = $this->objectModel->dao->select('*')->from(TABLE_SCENE)->where('deleted')->eq('0')->orderBy('id_desc')->limit(1)->fetch();
