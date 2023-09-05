@@ -32,7 +32,7 @@ div
         setClass('canvas'),
         div
         (
-            setClass('metric-name flex items-center'),
+            setClass('title flex items-center'),
             span
             (
                 setClass('name-color'),
@@ -41,7 +41,7 @@ div
         ),
         div
         (
-            setClass('metric-list'),
+            setClass('metric-tree'),
             $metricTree,
         ),
     ),
@@ -51,7 +51,16 @@ div
     setClass('main'),
     div
     (
-        setClass('canvas flex p-4'),
+        setClass('canvas'),
+        div
+        (
+            setClass('metric-name flex items-center'),
+            span
+            (
+                setClass('metric-name-weight'),
+                $current->name
+            ),
+        ),
     ),
 );
 render();
