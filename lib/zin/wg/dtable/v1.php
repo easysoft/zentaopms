@@ -110,8 +110,15 @@ class dtable extends wg
             foreach($pager['items'] as $index => $item)
             {
                 if($item['type'] !== 'size-menu') continue;
-                if(isset($item['itemProps'])) $pager['items'][$index]['itemProps']['data-load'] = 'table';
-                else                          $pager['items'][$index]['itemProps'] = array('data-load' => 'table');
+                if(isset($item['itemProps']))
+                {
+                    $pager['items'][$index]['itemProps']['data-load']   = 'table';
+                    $pager['items'][$index]['itemProps']['data-target'] = $this->prop('id');
+                }
+                else
+                {
+                    $pager['items'][$index]['itemProps'] = array('data-load' => 'table', 'data-target' => $this->prop('id'));
+                }
             }
             $this->setProp('footPager', $pager);
         }
