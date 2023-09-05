@@ -539,8 +539,8 @@ class projectModel extends model
             ->andWhere('t1.type')->eq('project')
             ->andWhere('t3.deleted')->eq(0)
             ->fetch('totalHours');
-        $workhour->totalEstimate = $total->totalEstimate;
-        $workhour->totalConsumed = $totalConsumed;
+        $workhour->totalEstimate = (float)$total->totalEstimate;
+        $workhour->totalConsumed = (float)$totalConsumed;
         $workhour->totalLeft     = round((float)$total->totalLeft - (float)$closedTotalLeft, 1);
 
         return $workhour;
