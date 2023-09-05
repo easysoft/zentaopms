@@ -125,7 +125,7 @@ class xmind
         {
             if(empty($case->testcaseID)) continue;
 
-            if(isset($sceneNodes[$case->sceneID])) $parentNode = $sceneNodes[$case->sceneID];
+            $parentNode = $sceneNodes[$case->sceneID];
             if(!isset($parentNode)) $parentNode = $moduleNodes[$case->moduleID];
             if(!isset($parentNode)) $parentNode = $productNode;
 
