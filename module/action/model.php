@@ -1440,6 +1440,7 @@ class actionModel extends model
 
         $actions = $this->dao->select('*')->from($actionTable)
             ->where('objectType')->notIN($this->config->action->ignoreObjectType4Dynamic)
+            ->andWhere('action')->notIN($this->config->action->ignoreActions4Dynamic)
             ->beginIF($this->config->vision == 'lite')->andWhere('objectType')->notin('product')->fi()
             ->beginIF($this->config->systemMode == 'light')->andWhere('objectType')->notin('program')->fi()
             ->andWhere('vision')->eq($this->config->vision)
