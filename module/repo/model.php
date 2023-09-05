@@ -581,6 +581,7 @@ class repoModel extends model
                 $repoItem['keys'] = zget(common::convert2Pinyin(array($repo->name)), $repo->name, '');
 
                 $repoProducts = explode(',', $repo->product);
+                $repoProducts = array_filter($repoProducts);
                 foreach($repoProducts as $productID)
                 {
                     if(($type == 'project' or $type == 'execution') and $projectID)

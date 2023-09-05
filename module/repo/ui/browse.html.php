@@ -72,7 +72,7 @@ foreach($paths as $index => $pathName)
 if($fileName) $breadcrumbItems[] = h::span($fileName);
 
 /* zin: Define the set::module('repo') feature bar on main menu. */
-featureBar(
+\zin\featureBar(
     formGroup
     (
         set::className('repo-select'),
