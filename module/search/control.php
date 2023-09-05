@@ -295,6 +295,7 @@ class search extends control
     public function ajaxRemoveMenu($queryID)
     {
         $this->dao->update(TABLE_USERQUERY)->set('shortcut')->eq(0)->where('id')->eq($queryID)->exec();
+        echo $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**

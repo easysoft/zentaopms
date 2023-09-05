@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+dropmenu(set::tab('repo'));
+
 foreach($bugs as $bug)
 {
     $bug->revisionA = $repo->SCM != 'Subversion' ? substr(strtr($bug->v2, '*', '-'), 0, 10) : $bug->v2;
