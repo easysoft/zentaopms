@@ -2702,123 +2702,59 @@ class testcaseModel extends model
     }
 
     /**
-     * Update scene.
+     * 编辑一个场景和它的子场景。
+     * Update a scene and its children.
      *
-     * @param  int $sceneID
+     * @param  object $scene
      * @access public
-     * @return string
+     * @return bool
      */
-    public function updateScene($sceneID)
+    public function updateScene(object $scene): bool
     {
-        /* Get original data. */
-        $scene = $this->dao->findById((int)$sceneID)->from(VIEW_SCENECASE)->fetch();
-        $now   = helper::now();
+        $sceneID  = $oldScene->id;
+        $oldScene = $this->getSceneByID($sceneID);
 
-        /* Collect changed data. */
-        $scenePost = fixer::input('post')
-            ->add('id', $sceneID - CHANGEVALUE)
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->add('lastEditedDate', $now)
-            ->cleanInt('product,module')
-            ->get();
-
-        /* Update scene with changed data. */
-        $this->dao->update(TABLE_SCENE)->data($scenePost)
-            ->batchCheck($this->config->testcase->createscene->requiredFields, 'notempty')
-            ->where('id')->eq((int)$sceneID - CHANGEVALUE)
+        $this->dao->update(TABLE_SCENE)->data($scene)
+            ->batchCheck($this->config->testcase->editscene->requiredFields, 'notempty')
+            ->check('title', 'unique', "product = {$scene->product} AND id != {$sceneID}")
+            ->where('id')->eq($sceneID)
             ->checkFlow()
             ->exec();
+        if(dao::isError()) return false;
 
-        /* Verify database error. */
-        if($this->dao->isError()) return;
-
-        $sceneNew    = $this->dao->findById((int)$sceneID - CHANGEVALUE)->from(TABLE_SCENE)->fetch();
-        $childPath   = "";
-        $grade       = "";
-        $viewSceneID = $sceneID;
-
-        /* Not change key fields. */
-        if($scene->parent == $sceneNew->parent and $scene->product == $sceneNew->product and $scene->branch == $sceneNew->branch and $scene->module == $sceneNew->module) return array('status' => 'updated', 'id' => $sceneID);;
-
-        if($sceneNew->parent)
+        if($scene->parent != $oldScene->parent)
         {
-            /* Update product, module, branch, path and grade field with parent scene. */
-            $resultScene = $this->dao->findById((int)$sceneNew->parent - CHANGEVALUE)->from(TABLE_SCENE)->fetch();
-            $childPath   = $resultScene->path . $viewSceneID . ',';
-            $grade       = $resultScene->grade + 1;
-            $this->dao->update(TABLE_SCENE)
-                ->set('path')->eq($childPath)
-                ->set('grade')->eq($grade)
-                ->set('product')->eq($resultScene->product)
-                ->set('module')->eq($resultScene->module)
-                ->set('branch')->eq($resultScene->branch)
-                ->where('id')->eq($sceneID - CHANGEVALUE)
-                ->exec();
-        }
-        else
-        {
-            /* Update path and grade field without parent scene. */
-            $childPath = ",$viewSceneID,";
-            $grade     = 1;
-            $this->dao->update(TABLE_SCENE)
-                ->set('path')->eq($childPath)
-                ->set('grade')->eq($grade)
-                ->where('id')->eq($sceneID - CHANGEVALUE)
-                ->exec();
-        }
-
-        /* Get children scenes and cases. */
-        $children = $this->dao->select('*')->from(VIEW_SCENECASE)
-            ->where('deleted')->eq(0)
-            ->andWhere('(path')->like($scene->path.'%')
-            ->orWhere('path')->like(",$sceneID,%")
-            ->markRight(1)
-            ->orderBy('grade asc')
-            ->fetchAll('id');
-
-        foreach($children as $id => $childScene)
-        {
-            if(!$id or $id == $sceneID or !$childScene->parent) continue;
-
-            /* Get grade of child with parent scene. */
-            $parentScene = $this->dao->findById($childScene->parent - CHANGEVALUE)->from(TABLE_SCENE)->fetch();
-
-            /* Update sub-scene. */
-            if($childScene->isCase == 2)
+            if($scene->parent)
             {
-                /* The grade of child node must be greater than parent node. */
-                if($childScene->grade <= $scene->grade) continue;
+                $parent = $this->getSceneByID($scene->parent);
 
-                $viewID    = $id;
-                $childPath = $parentScene->path . $viewID . ',';
-                $grade     = $parentScene->grade + 1;
-
-                $this->dao->update(TABLE_SCENE)
-                    ->set('path')->eq($childPath)
-                    ->set('grade')->eq($grade)
-                    ->set('product')->eq($parentScene->product)
-                    ->set('module')->eq($parentScene->module)
-                    ->set('branch')->eq($parentScene->branch)
-                    ->set('lastEditedBy')->eq($this->app->user->account)
-                    ->set('lastEditedDate')->eq($now)
-                    ->where('id')->eq($id - CHANGEVALUE)
-                    ->exec();
-
-                continue;
+                $scene->path    = $parent->path . $sceneID . ',';
+                $scene->grade   = ++$parent->grade;
+                $scene->product = $parent->product;
+                $scene->branch  = $parent->branch;
+                $scene->module  = $parent->module;
+            }
+            else
+            {
+                $scene->path  = ',' . $sceneID . ',';
+                $scene->grade = 1;
             }
 
-            /* Update case. */
-            $this->dao->update(TABLE_CASE)
-                ->set('product')->eq($parentScene->product)
-                ->set('module')->eq($parentScene->module)
-                ->set('branch')->eq($parentScene->branch)
-                ->set('lastEditedBy')->eq($this->app->user->account)
-                ->set('lastEditedDate')->eq($now)
-                ->where('id')->eq($id)
+            $this->dao->update(TABLE_SCENE)->data($scene)->where('id')->eq($sceneID)->exec();
+            $this->dao->update(TABLE_SCENE)->set("path = REPLACE(path, '{$oldScene->path}', '{$scene->path}')")
+                ->where('id')->ne($sceneID)
+                ->andWhere('path')->like("{$oldScene->path}%")
                 ->exec();
         }
 
-        return array('status' => 'updated', 'id' => $sceneID);
+        $changes = common::createChanges($oldScene, $scene);
+        if($changes)
+        {
+            $actionID = $this->loadModel('action')->create('scene', $sceneID, 'edited');
+            $this->action->logHistory($actionID, $changes);
+        }
+
+        return true;
     }
 
     /**

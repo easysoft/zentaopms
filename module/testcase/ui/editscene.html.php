@@ -47,7 +47,7 @@ formPanel
                     setID('branch'),
                     zui::width('120px'),
                     set::name('branch'),
-                    set::items($branchTagOption),
+                    set::items($branches),
                     set::value($scene->branch)
                 ) : null
             )
@@ -62,11 +62,11 @@ formPanel
                 (
                     setID('module'),
                     set::name('module'),
-                    set::items($moduleOptionMenu),
+                    set::items($modules),
                     set::value($scene->module),
                     set::required(true),
                 ),
-                count($moduleOptionMenu) == 1 ? div
+                count($modules) == 1 ? div
                 (
                     set::className('input-group-btn flex'),
                     a
@@ -93,7 +93,7 @@ formPanel
         picker
         (
             set::name('parent'),
-            set::items($sceneOptionMenu),
+            set::items($scenes),
             set::value($scene->parent),
         )
     ),
