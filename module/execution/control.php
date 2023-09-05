@@ -992,6 +992,7 @@ class execution extends control
     }
 
     /**
+     * 测试报告列表。
      * List of test reports for the execution.
      *
      * @param  int    $executionID
@@ -1004,12 +1005,13 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function testreport($executionID = 0, $objectType = 'execution', $extra = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function testreport(int $executionID = 0, string $objectType = 'execution', string $extra = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         echo $this->fetch('testreport', 'browse', "objectID=$executionID&objectType=$objectType&extra=$extra&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
     /**
+     * 版本列表。
      * Browse builds of a execution.
      *
      * @param  int    $executionID
