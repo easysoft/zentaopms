@@ -591,7 +591,11 @@ class jobModel extends model
         $compile = new stdclass;
 
         $pipeline = $this->loadModel('gitlab')->apiCreatePipeline($job->server, $pipeline->project, $pipelineParams);
-        if(empty($pipeline->id)) $compile->status = 'create_fail';
+        if(empty($pipeline->id))
+        {
+            $this->gitlab->apiErrorHandling($pipeline);
+            $compile->status = 'create_fail';
+        }
 
         if(!empty($pipeline->id))
         {
