@@ -9336,7 +9336,7 @@ class upgradeModel extends model
         foreach($oldMetrics as $oldMetric)
         {
             $metric = new stdclass();
-            $metric->scope       = $scopeMap[$oldMetric->scope] ? $scopeMap[$oldMetric->scope] : '';
+            $metric->scope       = $scopeMap[$oldMetric->scope] ? $scopeMap[$oldMetric->scope] : 'other';
             $metric->purpose     = $purposeMap[$oldMetric->purpose] ? $purposeMap[$oldMetric->purpose] : '';
             $metric->object      = $objectMap[$oldMetric->object] ? $objectMap[$oldMetric->object] : '';
             $metric->stage       = 'wait';

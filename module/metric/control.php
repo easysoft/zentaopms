@@ -30,6 +30,8 @@ class metric extends control
      */
     public function create()
     {
+        unset($this->lang->metric->scopeList['other']);
+
         if(!empty($_POST))
         {
             $metricData = $this->metricZen->buildMetricForCreate();

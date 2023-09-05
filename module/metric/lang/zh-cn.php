@@ -35,6 +35,7 @@ $lang->metric->filters       = '筛选器配置';
 $lang->metric->details       = '详情';
 $lang->metric->zAnalysis     = 'Z分析';
 $lang->metric->sqlStatement  = "SQL语句";
+$lang->metric->other         = '其他';
 
 $lang->metric->viewType = new stdclass();
 $lang->metric->viewType->single   = '单独查看';
@@ -119,6 +120,7 @@ $lang->metric->scopeList['dept']      = "团队";
 $lang->metric->scopeList['user']      = "个人";
 $lang->metric->scopeList['code']      = "代码库";
 $lang->metric->scopeList['pipeline']  = "流水线";
+$lang->metric->scopeList['other']     = "其他";
 
 global $config;
 $lang->metric->objectList = array();

@@ -58,16 +58,19 @@ toolbar
     ) : null,
 );
 
-sidebar
-(
-    moduleMenu(set(array
+if($scope !== 'other')
+{
+    sidebar
     (
-        'modules'   => $metricTree,
-        'activeKey' => $type == 'byTree' ? $param : 0,
-        'closeLink' => $closeLink,
-        'showDisplay' => false,
-    )))
-);
+        moduleMenu(set(array
+        (
+            'modules'   => $metricTree,
+            'activeKey' => $type == 'byTree' ? $param : 0,
+            'closeLink' => $closeLink,
+            'showDisplay' => false,
+        )))
+    );
+};
 
 $tableData = initTableData($metrics, $this->config->metric->dtable->definition->fieldList, $this->loadModel('metric'));
 $tableData = $this->metric->initActionBtn($tableData);

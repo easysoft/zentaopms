@@ -35,6 +35,7 @@ $lang->metric->filters       = 'Filter Settings';
 $lang->metric->details       = 'Details';
 $lang->metric->zAnalysis     = 'Z Analysis';
 $lang->metric->sqlStatement  = "SQL Statement";
+$lang->metric->other         = "Other";
 
 $lang->metric->viewType = new stdclass();
 $lang->metric->viewType->single   = 'Single view';
@@ -119,6 +120,7 @@ $lang->metric->scopeList['dept']      = "Team";
 $lang->metric->scopeList['user']      = "Individual";
 $lang->metric->scopeList['code']      = "Code Repository";
 $lang->metric->scopeList['pipeline']  = "Pipeline";
+$lang->metric->scopeList['other']     = "Other";
 
 global $config;
 $lang->metric->objectList = array();
