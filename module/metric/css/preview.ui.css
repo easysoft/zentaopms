@@ -20,8 +20,8 @@
 .main .chart-line-margin {margin-right: 16px;}
 .main .table-and-chart {height: calc(100vh - 180px); display: flex;}
 
-.table-and-chart .table-cell {flex: 0 0 40%; overflow-x: hidden; padding-left: 16px; padding-top: 8px; padding-bottom: 16px; padding-right: 2px;}
-.table-and-chart .chart-cell {flex: 0 0 60%;}
+.table-and-chart .table-side {flex: 0 0 40%; overflow-x: hidden; padding-left: 16px; padding-top: 8px; padding-bottom: 16px; padding-right: 2px;}
+.table-and-chart .chart-side {flex: 0 0 60%;}
 .table-and-chart .chart-center {display:flex; justify-content: center; align-items: center;}
 
 .icon-18 {font-size: 18px;}

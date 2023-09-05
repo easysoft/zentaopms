@@ -51,7 +51,6 @@ $fnGenerateDataDisplay = function() use($resultData, $resultHeader, $lang, $metr
 
     return dtable
         (
-            set::height(400),
             set::cols($resultHeader),
             set::data($resultData),
         );
@@ -161,12 +160,12 @@ div
             setClass('table-and-chart'),
             div
             (
-                setClass('table-cell'),
+                setClass('table-side'),
                 $fnGenerateDataDisplay($resultData, $resultHeader, $lang, $current),
             ),
             div
             (
-                setClass('chart-cell chart-center'),
+                setClass('chart-side chart-center'),
                 'chart'
             ),
         ),
