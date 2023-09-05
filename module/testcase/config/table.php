@@ -13,7 +13,7 @@ $config->testcase->dtable->fieldList['title']['title']        = $lang->testcase-
 $config->testcase->dtable->fieldList['title']['type']         = 'title';
 $config->testcase->dtable->fieldList['title']['fixed']        = 'left';
 $config->testcase->dtable->fieldList['title']['nestedToggle'] = true;
-$config->testcase->dtable->fieldList['title']['link']         = array('module' => 'testcase', 'method' => 'view', 'params' => "caseID={id}");
+$config->testcase->dtable->fieldList['title']['link']         = array('module' => 'testcase', 'method' => 'view', 'params' => "caseID={caseID}");
 $config->testcase->dtable->fieldList['title']['required']     = true;
 $config->testcase->dtable->fieldList['title']['group']        = 1;
 
@@ -89,7 +89,7 @@ $config->testcase->dtable->fieldList['lastRunResult']['show']      = true;
 $config->testcase->dtable->fieldList['lastRunResult']['group']     = 4;
 
 $config->testcase->dtable->fieldList['bugs']['title']       = $lang->testcase->bugsAB;
-$config->testcase->dtable->fieldList['bugs']['link']        = array('module' => 'testcase', 'method' => 'bugs', 'params' => "runID=0&caseID={id}");
+$config->testcase->dtable->fieldList['bugs']['link']        = array('module' => 'testcase', 'method' => 'bugs', 'params' => "runID=0&caseID={caseID}");
 $config->testcase->dtable->fieldList['bugs']['type']        = 'number';
 $config->testcase->dtable->fieldList['bugs']['data-toggle'] = 'modal';
 $config->testcase->dtable->fieldList['bugs']['data-size']   = 'lg';
