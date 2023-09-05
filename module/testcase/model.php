@@ -2711,7 +2711,7 @@ class testcaseModel extends model
      */
     public function updateScene(object $scene): bool
     {
-        $sceneID  = $oldScene->id;
+        $sceneID  = $scene->id;
         $oldScene = $this->getSceneByID($sceneID);
 
         $this->dao->update(TABLE_SCENE)->data($scene)
