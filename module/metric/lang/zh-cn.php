@@ -109,6 +109,7 @@ $lang->metric->purposeList['cost']  = "成本计算";
 $lang->metric->purposeList['hour']  = "工时统计";
 $lang->metric->purposeList['qc']    = "质量控制";
 $lang->metric->purposeList['rate']  = "效率提升";
+$lang->metric->purposeList['other'] = "其他";
 
 $lang->metric->scopeList = array();
 $lang->metric->scopeList['system']    = "系统";
@@ -141,10 +142,12 @@ $lang->metric->objectList['effort']      = "工时";
 $lang->metric->objectList['doc']         = "文档";
 if($config->edition != 'open')
 {
-    $lang->metric->objectList['feedback']    = "反馈";
-    $lang->metric->objectList['risk']        = "风险";
-    $lang->metric->objectList['issue']       = "问题";
+    $lang->metric->objectList['feedback'] = "反馈";
+    $lang->metric->objectList['risk']     = "风险";
+    $lang->metric->objectList['issue']    = "问题";
 }
+$lang->metric->objectList['review'] = "评审";
+$lang->metric->objectList['other']  = "其他";
 
 $lang->metric->implementInstructions = "实现说明";
 $lang->metric->implementTips = array();

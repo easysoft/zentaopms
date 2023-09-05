@@ -9327,6 +9327,7 @@ class upgradeModel extends model
      */
     public function processOldMetrics()
     {
+        $this->loadModel('metric');
         $scopeMap   = $this->config->metric->oldScopeMap;
         $purposeMap = $this->config->metric->oldPurposeMap;
         $objectMap  = $this->config->metric->oldObjectMap;
@@ -9337,8 +9338,8 @@ class upgradeModel extends model
         {
             $metric = new stdclass();
             $metric->scope       = $scopeMap[$oldMetric->scope] ? $scopeMap[$oldMetric->scope] : 'other';
-            $metric->purpose     = $purposeMap[$oldMetric->purpose] ? $purposeMap[$oldMetric->purpose] : '';
-            $metric->object      = $objectMap[$oldMetric->object] ? $objectMap[$oldMetric->object] : '';
+            $metric->purpose     = $purposeMap[$oldMetric->purpose] ? $purposeMap[$oldMetric->purpose] : 'other';
+            $metric->object      = $objectMap[$oldMetric->object] ? $objectMap[$oldMetric->object] : 'other';
             $metric->stage       = 'wait';
             $metric->name        = $oldMetric->name;
             $metric->code        = $oldMetric->code;

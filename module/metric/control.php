@@ -31,6 +31,9 @@ class metric extends control
     public function create()
     {
         unset($this->lang->metric->scopeList['other']);
+        unset($this->lang->metric->purposeList['other']);
+        unset($this->lang->metric->objectList['other']);
+        unset($this->lang->metric->objectList['review']);
 
         if(!empty($_POST))
         {
