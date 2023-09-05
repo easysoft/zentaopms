@@ -61,7 +61,6 @@ $queryMenuLink = createLink('repo', 'maintain', "objectID=$objectID&orderBy=&rec
 featureBar
 (
     set::current('all'),
-    set::linkParams("product=$product->id&branch=$branch&browseType={key}"),
     set::queryMenuLinkCallback(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink)),
     li(searchToggle(set::open($type == 'bySearch'))),
 );
