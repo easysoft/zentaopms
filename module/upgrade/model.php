@@ -9327,14 +9327,18 @@ class upgradeModel extends model
      */
     public function processOldMetrics()
     {
+        $scopeMap   = $this->config->metric->oldScopeMap;
+        $purposeMap = $this->config->metric->oldPurposeMap;
+        $objectMap  = $this->config->metric->oldObjectMap;
+
         $oldMetrics = $this->dao->select('*')->from(TABLE_BASICMEAS)->where('deleted')->eq('0')->orderBy('order_asc')->fetchAll();
 
         foreach($oldMetrics as $oldMetric)
         {
             $metric = new stdclass();
-            $metric->purpose     = $oldMetric->purpose;
-            $metric->scope       = $oldMetric->scope;
-            $metric->object      = $oldMetric->object;
+            $metric->scope       = $scopeMap[$oldMetric->scope] ? $scopeMap[$oldMetric->scope] : '';
+            $metric->purpose     = $purposeMap[$oldMetric->purpose] ? $purposeMap[$oldMetric->purpose] : '';
+            $metric->object      = $objectMap[$oldMetric->object] ? $objectMap[$oldMetric->object] : '';
             $metric->stage       = 'wait';
             $metric->name        = $oldMetric->name;
             $metric->code        = $oldMetric->code;

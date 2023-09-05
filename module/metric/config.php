@@ -30,3 +30,26 @@ $config->metric->actionList['delete']['class']        = 'ajax-submit';
 $config->metric->actionList['delete']['data-confirm'] = $lang->metric->confirmDelete;
 
 $config->metric->necessaryMethodList = array('getStatement', 'calculator', 'getResult');
+
+$config->metric->oldScopeMap = array();
+$config->metric->oldScopeMap['project'] = 'project';
+$config->metric->oldScopeMap['product'] = 'product';
+$config->metric->oldScopeMap['sprint']  = 'execution';
+
+$config->metric->oldPurposeMap = array();
+$config->metric->oldPurposeMap['scale']    = 'scale';
+$config->metric->oldPurposeMap['duration'] = 'time';
+$config->metric->oldPurposeMap['workload'] = 'hour';
+$config->metric->oldPurposeMap['cost']     = 'cost';
+$config->metric->oldPurposeMap['quality']  = 'qc';
+
+$config->metric->oldObjectMap = array();
+$config->metric->oldObjectMap['staff']       = 'user';
+$config->metric->oldObjectMap['finance']     = 'task';
+$config->metric->oldObjectMap['case']        = 'case';
+$config->metric->oldObjectMap['bug']         = 'bug';
+$config->metric->oldObjectMap['review']      = 'review';
+$config->metric->oldObjectMap['stage']       = 'execution';
+$config->metric->oldObjectMap['program']     = 'project';
+$config->metric->oldObjectMap['softRequest'] = 'story';
+$config->metric->oldObjectMap['userRequest'] = 'requirement';
