@@ -27,6 +27,36 @@ else
     foreach($metrics as $key => $metric) $metricCheckList[] = array('text' => $metric->name, 'value' => $key, 'checked' => in_array($key, $checkedList));
 }
 
+$fnGenerateDataDisplay = function() use($resultData, $resultHeader, $lang, $metric)
+{
+    if(empty($resultData)) return null;
+    if(count($resultData) == 1) return div
+        (
+            set::className('card-data'),
+            center
+            (
+                p
+                (
+                    set::className('card-digit'),
+                    $resultData[0]->value
+                ),
+                p
+                (
+                    set::className('card-title'),
+                    $lang->metric->objectList[$metric->object]
+                ),
+            )
+
+        );
+
+    return dtable
+        (
+            set::height(400),
+            set::cols($resultHeader),
+            set::data($resultData),
+        );
+};
+
 featureBar
 (
     set::current($scope),
@@ -124,6 +154,20 @@ div
                     ))) : null,
 
                 )
+            ),
+        ),
+        div
+        (
+            setClass('table-and-chart'),
+            div
+            (
+                setClass('table-cell'),
+                $fnGenerateDataDisplay($resultData, $resultHeader, $lang, $current),
+            ),
+            div
+            (
+                setClass('chart-cell chart-center'),
+                'chart'
             ),
         ),
     ),
