@@ -57,6 +57,8 @@ class metric extends control
     {
         $this->metric->processScopeList();
 
+        $metrics = $this->metric->getList($scope);
+        $this->view->metrics    = $metrics;
         $this->view->metricList = $this->lang->metric->metricList;
         $this->view->scope      = $scope;
         $this->view->title      = $this->lang->metric->preview;
@@ -77,7 +79,7 @@ class metric extends control
      * @access public
      * @return void
      */
-    public function browse($scope = 'system', $stage = 'all', $param = 0, $type = 'bydefault', $orderBy = 'id', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($scope = 'system', $stage = 'all', $param = 0, $type = 'bydefault', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('search');
         $this->metric->processScopeList();
@@ -86,15 +88,12 @@ class metric extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        /* Append id for second sort. */
-        $sort = common::appendOrder($orderBy);
-
         /* Build the search form. */
         $queryID   = $type == 'bydefault' ? 0 : (int)$param;
         $actionURL = $this->createLink('metric', 'browse', "scope=$scope&param=myQueryID&type=bysearch");
         $this->metric->buildSearchForm($queryID, $actionURL);
 
-        $metrics = $this->metric->getList($scope, $stage, $param, $type, $queryID, $sort, $pager);
+        $metrics = $this->metric->getList($scope, $stage, $param, $type, $queryID, $orderBy, $pager);
         $metrics = $this->metricZen->prepareActionPriv($metrics);
 
         /* Process the sql, get the conditon partion, save it to session. */

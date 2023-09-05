@@ -10,6 +10,12 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$metricTree = array();
+foreach($metrics as $metric)
+{
+    $metricTree[] = div(setClass('metric-item'), $metric->name);
+}
+
 featureBar
 (
     set::current($scope),
@@ -33,7 +39,8 @@ div
         ),
         div
         (
-            setClass('flex-none w-2/3'),
+            setClass('metric-list'),
+            $metricTree,
         ),
     ),
 );

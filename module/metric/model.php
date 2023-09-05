@@ -46,7 +46,7 @@ class metricModel extends model
      * @access public
      * @return array|false
      */
-    public function getList($scope, $stage, $param, $type = '', $queryID = 0, $sort = '', $pager = null)
+    public function getList($scope, $stage = 'all', $param = 0, $type = '', $queryID = 0, $sort = 'id_desc', $pager = null)
     {
         if($queryID)
         {
