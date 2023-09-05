@@ -30,7 +30,7 @@ foreach($config->mr->view->operateList as $operate)
     if(in_array($operate, array('approval', 'reject', 'close', 'edit')))
     {
         if(!$MR->synced || $rawMR->state != 'opened') continue;
-        if($operate == 'reject' && $MR->approvalStatus == 'rejected') continue;
+        if($operate == 'reject' && $MR->approvalStatus == 'rejected') $action['disabled'] = true;
 
         if($operate == 'approval')
         {
