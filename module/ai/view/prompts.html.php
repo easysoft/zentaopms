@@ -191,7 +191,7 @@
     $('.prompt-audit-btn[href!=""][href!="#"]').click(function(e)
     {
       if(!container) return;
-      container.dataset.loading = '<?php echo $lang->ai->execute->loading;?>';
+      container.dataset.loading = '<?php echo $lang->ai->execute->auditing;?>';
       container.classList.add('loading');
       container.classList.add('no-delay');
 
