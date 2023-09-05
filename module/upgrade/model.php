@@ -602,6 +602,9 @@ class upgradeModel extends model
             case '18_4_alpha1':
                 if($this->config->edition != 'open') $this->processDataset();
                 break;
+            //case '18.7':
+            //    if($this->config-edition == 'max') $this->processOldMetrics();
+            //    break;
         }
 
         $this->deletePatch();
@@ -9314,5 +9317,41 @@ class upgradeModel extends model
         }
 
         return true;
+    }
+
+    /**
+     * Convert old metrics to new metrics.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processOldMetrics()
+    {
+        $oldMetrics = $this->dao->select('*')->from(TABLE_BASICMEAS)->where('deleted')->eq('0')->orderBy('order_asc')->fetchAll();
+
+        foreach($oldMetrics as $oldMetric)
+        {
+            $metric = new stdclass();
+            $metric->purpose     = $oldMetric->purpose;
+            $metric->scope       = $oldMetric->scope;
+            $metric->object      = $oldMetric->object;
+            $metric->stage       = 'wait';
+            $metric->name        = $oldMetric->name;
+            $metric->code        = $oldMetric->code;
+            $metric->desc        = '';
+            $metric->definition  = $oldMetric->definition;
+            $metric->createdBy   = $oldMetric->createdBy;
+            $metric->createdDate = $oldMetric->createdDate;
+            $metric->editedBy    = $oldMetric->editedBy;
+            $metric->editedDate  = $oldMetric->editedDate;
+            $metric->builtin     = '1';
+            $metric->fromID      = $oldMetric->id;
+            $metric->order       = 0;
+            $metric->deleted     = $oldMetric->deleted;
+
+            $this->dao->insert(TABLE_METRIC)->data($metric)->exec();
+        }
+
+        return !dao::isError();
     }
 }
