@@ -30,7 +30,7 @@ class hour_of_daily_effort extends baseCalc
             ->from(TABLE_EFFORT)
             ->where('deleted')->eq('0')
             ->andWhere('year(date)')->ne('0000')
-            ->groupBy('`year`, `month`, `day`')
+            ->groupBy('`year`, `month`, `day`, date')
             ->query();
     }
 
