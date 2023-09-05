@@ -135,7 +135,7 @@ div
                 span
                 (
                     setClass('metric-name-weight'),
-                    $current->name
+                    isset($current) ? $current->name : null,
                 ),
             ),
             div
@@ -173,7 +173,7 @@ div
             div
             (
                 setClass('table-side'),
-                $fnGenerateDataDisplay($resultData, $resultHeader, $lang, $current),
+                isset($current) ? $fnGenerateDataDisplay($resultData, $resultHeader, $lang, $current) : null,
             ),
             div
             (

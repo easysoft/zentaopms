@@ -58,13 +58,15 @@ class metric extends control
         $this->metric->processScopeList();
 
         $metrics = $this->metric->getList($scope);
-        $current = $this->metric->getByID($metricID);
-        if(empty($current)) $current = current($metrics);
-
-        $metric = $this->metric->getByID($current->id);
-        $result = $this->metric->getResultByCode($metric->code);
-        $this->view->resultHeader = $this->metricZen->getViewTableHeader($result);
-        $this->view->resultData   = $this->metricZen->getViewTableData($metric, $result);
+        if(!empty($metrics))
+        {
+            $current = current($metrics);
+            $metric  = $this->metric->getByID($current->id);
+            $result  = $this->metric->getResultByCode($metric->code);
+            $this->view->current      = $current;
+            $this->view->resultHeader = $this->metricZen->getViewTableHeader($result);
+            $this->view->resultData   = $this->metricZen->getViewTableData($metric, $result);
+        }
 
         $this->view->metrics    = $metrics;
         $this->view->current    = $current;
