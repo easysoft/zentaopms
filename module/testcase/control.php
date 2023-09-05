@@ -1689,36 +1689,24 @@ class testcase extends control
     }
 
     /**
+     * 导出 xmind 格式的用例。
      * Export xmind.
      *
-     * @param  int $productID
-     * @param  int $moduleID
-     * @param  int $branch
+     * @param  int    $productID
+     * @param  int    $moduleID
+     * @param  string $branch
      * @access public
      * @return void
      */
-    public function exportXMind($productID, $moduleID, $branch)
+    public function exportXMind(int $productID, int $moduleID, string $branch)
     {
         if($_POST)
         {
-            $this->classXmind = $this->app->loadClass('xmind');
-            if (isset($_POST['imodule'])) $imoduleID = $_POST['imodule'];
-
             $configResult = $this->testcase->saveXmindConfig();
             if($configResult['result'] == 'fail') return $this->send($configResult);
 
-            $context = $this->testcase->getXmindExport($productID, $imoduleID, $branch);
-
-            $xmlDoc = new DOMDocument('1.0', 'UTF-8');
-            $xmlDoc->formatOutput = true;
-
-            $versionAttr       =  $xmlDoc->createAttribute('version');
-            $versionAttrValue  =  $xmlDoc->createTextNode('1.0.1');
-            $versionAttr->appendChild($versionAttrValue);
-
-            $mapNode = $xmlDoc->createElement('map');
-            $mapNode->appendChild($versionAttr);
-            $xmlDoc->appendChild($mapNode);
+            $imoduleID = $this->post->imodule ? $this->post->imoduleID : 0;
+            $context   = $this->testcase->getXmindExport($productID, $imoduleID, $branch);
 
             $productName = '';
             if(count($context['caseList']))
@@ -1727,35 +1715,19 @@ class testcase extends control
             }
             else
             {
-                $product     = $this->product->getById($productID);
+                $product     = $this->product->getByID($productID);
                 $productName = $product->name;
             }
 
-            $productNode   = $xmlDoc->createElement('node');
-            $textAttr      = $xmlDoc->createAttribute('TEXT');
-            $textAttrValue = $xmlDoc->createTextNode($this->classXmind->toText("$productName", $productID));
-
-            $textAttr->appendChild($textAttrValue);
-            $productNode->appendChild($textAttr);
-            $mapNode->appendChild($productNode);
-
-            $sceneNodes  = array();
-            $moduleNodes = array();
-
-            $this->classXmind->createModuleNode($xmlDoc, $context, $productNode, $moduleNodes);
-            $this->classXmind->createSceneNode($xmlDoc, $context, $productNode, $moduleNodes, $sceneNodes);
-            $this->classXmind->createTestcaseNode($xmlDoc, $context, $productNode, $moduleNodes, $sceneNodes);
+            $xmlDoc = $this->testcaseZen->createXmlDoc($productID, $productName, $context);
 
             $xmlStr = $xmlDoc->saveXML();
             $this->fetch('file', 'sendDownHeader', array('fileName' => $productName, 'mm', $xmlStr));
         }
 
-        $tree    = $moduleID ? $this->tree->getByID($moduleID) : '';
-        $product = $this->product->getById($productID);
-        $config  = $this->testcase->getXmindConfig();
+        $product = $this->product->getByID($productID);
 
-        $this->view->settings         = $config;
-        $this->view->moduleName       = $tree != '' ? $tree->name : '/';
+        $this->view->settings         = $this->testcase->getXmindConfig();
         $this->view->productName      = $product->name;
         $this->view->moduleID         = $moduleID;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, ($branch === 'all' or !isset($branches[$branch])) ? 0 : $branch);

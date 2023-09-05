@@ -2508,4 +2508,46 @@ class testcaseZen extends testcase
 
         return array($stepChanged, $status);
     }
+
+    /**
+     * 创建 xml 文档。
+     * Create xml doc.
+     *
+     * @param  int       $productID
+     * @param  string    $productName
+     * @param  array     $context
+     * @access protected
+     * @return void
+     */
+    protected function createXmlDoc(int $productID, string $productName, array $context)
+    {
+        $this->classXmind = $this->app->loadClass('xmind');
+
+        $xmlDoc = new DOMDocument('1.0', 'UTF-8');
+        $xmlDoc->formatOutput = true;
+
+        $versionAttr = $xmlDoc->createAttribute('version');
+        $versionAttr->value = '1.0.1';
+
+        $textAttr = $xmlDoc->createAttribute('TEXT');
+        $textAttr->value = $this->classXmind->toText("$productName", $productID);
+
+        $mapNode = $xmlDoc->createElement('map');
+        $mapNode->appendChild($versionAttr);
+
+        $productNode = $xmlDoc->createElement('node');
+        $productNode->appendChild($textAttr);
+
+        $mapNode->appendChild($productNode);
+
+        $xmlDoc->appendChild($mapNode);
+
+        $sceneNodes  = array();
+        $moduleNodes = array();
+        $this->classXmind->createModuleNode($xmlDoc, $context, $productNode, $moduleNodes);
+        $this->classXmind->createSceneNode($xmlDoc, $context, $productNode, $moduleNodes, $sceneNodes);
+        $this->classXmind->createTestcaseNode($xmlDoc, $context, $productNode, $moduleNodes, $sceneNodes);
+
+        return $xmlDoc;
+    }
 }

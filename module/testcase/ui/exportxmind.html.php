@@ -31,6 +31,7 @@ form
         set::label($lang->testcase->module),
         set::name('imodule'),
         set::control('picker'),
+        set::value($moduleID),
         set::items($moduleOptionMenu),
     ),
     formRowGroup
