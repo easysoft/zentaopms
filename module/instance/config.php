@@ -39,7 +39,7 @@ $config->instance->actionList['ajaxUninstall']['hint']         = $lang->instance
 $config->instance->actionList['ajaxUninstall']['text']         = $lang->instance->uninstall;
 $config->instance->actionList['ajaxUninstall']['className']    = 'ajax-submit';
 $config->instance->actionList['ajaxUninstall']['data-confirm'] = $lang->instance->notices['confirmUninstall'];
-$config->instance->actionList['ajaxUninstall']['url']          = array('module' => 'instance', 'method' => 'ajaxUninstall', 'params' => 'id={id}');
+$config->instance->actionList['ajaxUninstall']['url']          = array('module' => 'instance', 'method' => 'ajaxUninstall', 'params' => 'id={id}&type={type}');
 
 $config->instance->actionList['visit']['icon'] = 'menu-my';
 $config->instance->actionList['visit']['hint'] = $lang->instance->visit;

@@ -124,7 +124,7 @@ class jenkins extends control
 
         $this->jenkins->delete(TABLE_PIPELINE, $id);
 
-        $response['load']   = true;
+        $response['load']   = $this->createLink('space', 'browse');
         $response['result'] = 'success';
 
         return $this->send($response);

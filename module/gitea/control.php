@@ -164,7 +164,7 @@ class gitea extends control
         $changes = common::createChanges($oldGitea, $gitea);
         $this->loadModel('action')->logHistory($actionID, $changes);
 
-        $response['load']    = true;
+        $response['load']    = $this->createLink('space', 'browse');
         $response['message'] = zget($this->lang->instance->notices, 'uninstallSuccess');
         $response['result']  = 'success';
 

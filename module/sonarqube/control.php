@@ -240,7 +240,7 @@ class sonarqube extends control
         $changes   = common::createChanges($oldSonarQube, $sonarQube);
         $this->action->logHistory($actionID, $changes);
 
-        $response['load']   = true;
+        $response['load']   = $this->createLink('space', 'browse');
         $response['result'] = 'success';
 
         return $this->send($response);

@@ -164,7 +164,7 @@ class gogs extends control
         $changes = common::createChanges($oldGogs, $gogs);
         $this->loadModel('action')->logHistory($actionID, $changes);
 
-        $response['load']   = true;
+        $response['load']   = $this->createLink('space', 'browse');
         $response['result'] = 'success';
         return $this->send($response);
     }
