@@ -2093,6 +2093,7 @@ class actionModel extends model
     }
 
     /**
+     * 隐藏所有被删除的对象。
      * Hide all deleted objects.
      *
      * @access public

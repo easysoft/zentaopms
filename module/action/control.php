@@ -353,22 +353,25 @@ class action extends control
     }
 
     /**
+     * 隐藏所有被删除的对象。
      * Hide all deleted objects.
      *
      * @param  string $confirm yes|no
      * @access public
      * @return void
      */
-    public function hideAll($confirm = 'no')
+    public function hideAll(string $confirm = 'no')
     {
         if($confirm == 'no')
         {
-            echo js::confirm($this->lang->action->confirmHideAll, inlink('hideAll', "confirm=yes"));
+            $url     = inlink('hideAll', "confirm=yes");
+            $message = $this->lang->action->confirmHideAll;
+            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message: '{$message}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) $.ajaxSubmit({url: '{$url}'});});"));
         }
         else
         {
             $this->action->hideAll();
-            echo js::reload('parent');
+            return $this->send(array('result' => 'success', 'load' => true));
         }
     }
 
