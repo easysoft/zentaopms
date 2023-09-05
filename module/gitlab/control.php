@@ -196,7 +196,7 @@ class gitlab extends control
                     $this->loadModel('action')->create('gitlabuser', $openID, 'bind', '', sprintf($this->lang->gitlab->bindDynamic, $gitlabNames[$openID], $zentaoUsers[$account]->realname));
                 }
             }
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('space', 'browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
         $userList      = array();
