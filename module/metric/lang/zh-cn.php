@@ -31,7 +31,7 @@ $lang->metric->preview       = "预览";
 $lang->metric->metricList    = "度量项列表";
 $lang->metric->manage        = "管理度量项";
 $lang->metric->exitManage    = "退出管理";
-$lang->metric->settings      = '设置';
+$lang->metric->filters       = '筛选器配置';
 $lang->metric->details       = '详情';
 $lang->metric->zAnalysis     = 'Z分析';
 

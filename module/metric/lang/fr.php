@@ -31,7 +31,7 @@ $lang->metric->preview       = "Preview";
 $lang->metric->metricList    = "Metric List";
 $lang->metric->manage        = "Manage";
 $lang->metric->exitManage    = "Exit manage";
-$lang->metric->settings      = 'Settings';
+$lang->metric->filters       = 'Filter Settings';
 $lang->metric->details       = 'Details';
 $lang->metric->zAnalysis     = 'Z Analysis';
 
