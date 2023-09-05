@@ -64,11 +64,42 @@ div
         setClass('canvas'),
         div
         (
-            setClass('metric-name flex items-center'),
-            span
+            setClass('metric-name flex flex-between items-center'),
+            div
             (
-                setClass('metric-name-weight'),
-                $current->name
+                span
+                (
+                    setClass('metric-name-weight'),
+                    $current->name
+                ),
+            ),
+            div
+            (
+                setClass('flex-start'),
+                toolbar
+                (
+                    haspriv('bug', 'report') ? item(set(array
+                    (
+                        'text'  => $this->lang->metric->details,
+                        'class' => 'ghost details',
+                        'url'   => '#',
+                    ))) : null,
+                    haspriv('bug', 'report') ? item(set(array
+                    (
+                        'icon'  => 'menu-backend',
+                        'text'  => $this->lang->metric->settings,
+                        'class' => 'ghost',
+                        'url'   => '#',
+                    ))) : null,
+                    haspriv('bug', 'report') ? item(set(array
+                    (
+                        'icon'  => 'chart-line',
+                        'text'  => $this->lang->metric->zAnalysis,
+                        'class' => 'ghost chart-line-margin',
+                        'url'   => '#',
+                    ))) : null,
+
+                )
             ),
         ),
     ),
