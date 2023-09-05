@@ -102,11 +102,7 @@ class testcase extends control
         $this->testcaseZen->setBrowseSession($productID, $moduleID, $browseType, $orderBy);
         $this->testcaseZen->setBrowseMenu($productID, $branch, $browseType, $projectID);
         $this->testcaseZen->buildBrowseSearchForm($productID, $branch, $queryID, $projectID);
-
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
-        $this->testcaseZen->assignCasesAndScenesForBrowse($productID, $branch, $browseType, ($browseType == 'bysearch' ? $queryID : $suiteID), $moduleID, $caseType, $orderBy, $pager);
+        $this->testcaseZen->assignCasesAndScenesForBrowse($productID, $branch, $browseType, ($browseType == 'bysearch' ? $queryID : $suiteID), $moduleID, $caseType, $orderBy, $recTotal, $recPerPage, $pageID);
         $this->testcaseZen->assignModuleTreeForBrowse($productID, $branch, $projectID);
         $this->testcaseZen->assignProductAndBranchForBrowse($productID, $branch, $projectID);
         $this->testcaseZen->assignForBrowse($productID, $branch, $browseType, $projectID, $param, $moduleID, $suiteID, $caseType);
