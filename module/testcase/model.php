@@ -2398,6 +2398,106 @@ class testcaseModel extends model
     }
 
     /**
+     * Get scene list include sub scenes and cases.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  int    $moduleID
+     * @param  string $caseType
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getSceneGroups(int $productID, string $branch = '', string $browseType = '', int $moduleID = 0, string $caseType = '', string $orderBy = 'id_desc', object $pager = null): array
+    {
+        $modules = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
+        $scenes = $this->dao->select('*')->from(TABLE_SCENE)
+            ->where('deleted')->eq('0')
+            ->andWhere('product')->eq($productID)
+            ->beginIF($branch !== 'all')->andWhere('branch')->eq($branch)->fi()
+            ->beginIF($modules)->andWhere('module')->in($modules)->fi()
+            ->orderBy('grade_desc, sort_asc')
+            ->fetchAll('id');
+
+        $pager->recTotal = 0;
+
+        if(!$scenes) return array();
+
+        $cases = array();
+        if($scenes && $browseType != 'onlyscene')
+        {
+            $stmt = $this->dao->select('t1.*')->from(TABLE_CASE)->alias('t1');
+
+            if($this->app->tab == 'project') $stmt = $stmt->leftJoin(TABLE_PROJECTCASE)->alias('t2')->on('t1.id=t2.case');
+
+            $caseList = $stmt->where('t1.deleted')->eq('0')
+                ->andWhere('t1.scene')->ne(0)
+                ->andWhere('t1.product')->eq($productID)
+                ->beginIF($this->app->tab == 'project')->andWhere('t2.project')->eq($this->session->project)->fi()
+                ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
+                ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
+                ->beginIF($this->cookie->onlyAutoCase)->andWhere('t1.auto')->eq('auto')->fi()
+                ->beginIF(!$this->cookie->onlyAutoCase)->andWhere('t1.auto')->ne('unit')->fi()
+                ->beginIF($caseType)->andWhere('t1.type')->eq($caseType)->fi()
+                ->orderBy($orderBy)
+                ->fetchAll('id');
+
+            $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
+            $caseList = $this->loadModel('story')->checkNeedConfirm($caseList);
+            $caseList = $this->appendData($caseList);
+            foreach($caseList as $case) $cases[$case->scene][$case->id] = $case;
+        }
+
+        $this->dao->setTable(TABLE_CASE);
+        $fieldTypes = $this->dao->getFieldsType();
+
+        foreach($scenes as $id => $scene)
+        {
+            /* Set default value for the fields exist in TABLE_CASE but not in TABLE_SCENE. */
+            foreach($fieldTypes as $field => $type)
+            {
+                if(isset($scene->$field)) continue;
+                $scene->$field = $type['rule'] == 'int' ? '0' : '';
+            }
+
+            $scene->caseID     = $scene->id;
+            $scene->bugs       = 0;
+            $scene->results    = 0;
+            $scene->caseFails  = 0;
+            $scene->stepNumber = 0;
+            $scene->isScene    = true;
+
+            if(isset($cases[$id]))
+            {
+                foreach($cases[$id] as $case)
+                {
+                    $case->caseID  = $case->id;
+                    $case->id      = 'case_' . $case->id;
+                    $case->parent  = $id;
+                    $case->grade   = $scene->grade + 1;
+                    $case->path    = $scene->path . $case->id . ',';
+                    $case->isScene = false;
+
+                    $scene->cases[$case->id] = $case;
+                }
+            }
+
+            if(!isset($scenes[$scene->parent])) continue;
+
+            $parent = $scenes[$scene->parent];
+            $parent->children[$id] = $scene;
+
+            unset($scenes[$id]);
+        }
+
+        $pager->recTotal  = count($scenes);
+        $pager->pageTotal = ceil($pager->recTotal / $pager->recPerPage);
+
+        return array_slice($scenes, $pager->recPerPage * ($pager->pageID - 1), $pager->recPerPage);
+    }
+
+    /**
      * Get scene menu.
      *
      * @param  int    $rootID
