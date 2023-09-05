@@ -59,7 +59,7 @@ $config->repo->dtable->fieldList['actions']['list']['edit']['hint'] = $lang->rep
 $config->repo->dtable->fieldList['actions']['list']['execJob']['icon']        = 'sonarqube';
 $config->repo->dtable->fieldList['actions']['list']['execJob']['hint']        = $lang->sonarqube->execJob;
 $config->repo->dtable->fieldList['actions']['list']['execJob']['url']         = helper::createLink('sonarqube', 'execJob', "jobID={job}");
-$config->repo->dtable->fieldList['actions']['list']['execJob']['data-toggle'] = 'modal';
+$config->repo->dtable->fieldList['actions']['list']['execJob']['className']  = 'ajax-submit';
 
 $config->repo->dtable->fieldList['actions']['list']['reportView']['icon']        = 'audit';
 $config->repo->dtable->fieldList['actions']['list']['reportView']['hint']        = $lang->sonarqube->reportView;
