@@ -51,6 +51,7 @@ $fnGenerateDataDisplay = function() use($resultData, $resultHeader, $lang, $metr
 
     return dtable
         (
+            set::height(jsRaw('window.renderHeight')),
             set::cols($resultHeader),
             set::data($resultData),
         );
