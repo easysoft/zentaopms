@@ -544,7 +544,7 @@
         {
             const currentLink = $.parseLink(currentAppUrl);
             const urlInfo = $.parseLink(options.url);
-            if(currentLink.moduleName !== urlInfo.moduleName || currentLink.methodName !== urlInfo.methodName) return $.apps.openUrl(options.url, options);
+            if(currentLink.moduleName !== urlInfo.moduleName || currentLink.methodName !== urlInfo.methodName) return $.apps.open(options.url, options);
         }
 
         if ($.apps.isOldPage(options.url)) return loadOldPage(options.url);
@@ -587,8 +587,10 @@
     {
         if(target[0] !== '#' && target[0] !== '.') target = `#${target}`;
         options = $.extend({url: currentAppUrl, id: target, target: target}, options);
-        if(!$(target).length) return loadPage({url: options.url, id: target});
+        const $target = $(target);
+        if(!$target.length) return loadPage({url: options.url, id: target});
 
+        if($target.closest('.modal').length && options.partial === undefined) options.partial = true;
         if(!options.selector)
         {
             let name = options.component;
@@ -803,6 +805,8 @@
         }
 
         const load = options.load;
+        if(is18version && load !== 'table' && load !== 'modal') return $.apps.open(options.url, options.app); // 18+zin.
+
         if(typeof load === 'string' || load)
         {
             if(!options.target) options.target = options.loadId;
@@ -961,6 +965,36 @@
         }
 
         if(typeof options.back === 'string') return goBack(options.back, url);
+
+        if(options.loadId)
+        {
+            options.target = options.loadId;
+            delete options.loadId;
+        }
+        const $modal = $link.closest('.modal');
+        if($modal.length)
+        {
+            if(!options.load)
+            {
+                if(!url) return;
+                options.load = 'modal';
+            }
+            if(options.load === 'modal' && !options.target) options.target = $modal.attr('id');
+            if(options.load === 'table')
+            {
+                options.partial = true;
+                if(!options.url) options.url = $modal.data('zui.Modal').options.url;
+            }
+        }
+        else
+        {
+            if(options.load === 'modal' && !options.target) delete options.load;
+        }
+        if(options.load === 'modal' || options.load === 'table')
+        {
+            e.preventDefault();
+            return openUrl(url, options, e);
+        }
 
         var appCode = options.app;
         if(url)
