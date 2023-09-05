@@ -64,7 +64,6 @@ $config->repo->dtable->fieldList['actions']['list']['execJob']['data-toggle'] = 
 $config->repo->dtable->fieldList['actions']['list']['reportView']['icon']        = 'audit';
 $config->repo->dtable->fieldList['actions']['list']['reportView']['hint']        = $lang->sonarqube->reportView;
 $config->repo->dtable->fieldList['actions']['list']['reportView']['url']         = helper::createLink('sonarqube', 'reportView', "jobID={job}");
-$config->repo->dtable->fieldList['actions']['list']['reportView']['data-toggle'] = 'modal';
 
 $config->repo->dtable->fieldList['actions']['list']['delete']['icon']        = 'trash';
 $config->repo->dtable->fieldList['actions']['list']['delete']['hint']        = $lang->repo->delete;
