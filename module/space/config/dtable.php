@@ -10,16 +10,18 @@ $config->space->dtable = new stdclass();
 $config->space->dtable->fieldList['name']['title'] = $lang->instance->name;
 $config->space->dtable->fieldList['name']['type']  = 'title';
 
-$config->space->dtable->fieldList['appName']['title'] = $lang->instance->appName;
-$config->space->dtable->fieldList['appName']['type']  = 'text';
-$config->space->dtable->fieldList['appName']['width'] = '90';
+$config->space->dtable->fieldList['appName']['title']    = $lang->instance->appName;
+$config->space->dtable->fieldList['appName']['type']     = 'text';
+$config->space->dtable->fieldList['appName']['width']    = '90';
+$config->space->dtable->fieldList['appName']['sortType'] = true;
 
-$config->space->dtable->fieldList['status']['name']  = 'status';
-$config->space->dtable->fieldList['status']['title'] = $lang->space->status;
-$config->space->dtable->fieldList['status']['type']  = 'category';
-$config->space->dtable->fieldList['status']['map']   = $lang->instance->statusList;
-$config->space->dtable->fieldList['status']['group'] = 'status';
-$config->space->dtable->fieldList['status']['width'] = '80';
+$config->space->dtable->fieldList['status']['name']     = 'status';
+$config->space->dtable->fieldList['status']['title']    = $lang->space->status;
+$config->space->dtable->fieldList['status']['type']     = 'category';
+$config->space->dtable->fieldList['status']['map']      = $lang->instance->statusList;
+$config->space->dtable->fieldList['status']['group']    = 'status';
+$config->space->dtable->fieldList['status']['width']    = '80';
+$config->space->dtable->fieldList['status']['sortType'] = true;
 
 $config->space->dtable->fieldList['appVersion']['title'] = $lang->store->appVersion;
 $config->space->dtable->fieldList['appVersion']['type']  = 'text';

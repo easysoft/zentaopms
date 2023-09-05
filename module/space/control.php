@@ -90,12 +90,14 @@ class space extends control
         $this->view->title        = $this->lang->space->common;
         $this->view->position[]   = $this->lang->space->common;
         $this->view->pager        = $pager;
+        $this->view->orderBy      = $orderBy;
         $this->view->browseType   = $browseType;
         $this->view->spaceType    = $spaceType;
         $this->view->instances    = (empty($allInstances) or empty($allInstances[$pageID - 1])) ? array() : $allInstances[$pageID - 1];
         $this->view->currentSpace = $space;
         $this->view->searchName   = $search;
         $this->view->users        = $this->loadModel('user')->getPairs('noclosed,noletter');
+        $this->view->sortLink     = $this->createLink('space', 'browse', "spaceID=&browseType={$browseType}&orderBy={orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}");
 
         $this->display();
     }
