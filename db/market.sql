@@ -21,8 +21,8 @@ CREATE TABLE IF NOT EXISTS `zt_market` (
 CREATE TABLE IF NOT EXISTS `zt_marketreport` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
-  `market` mediumint(8) NOT NULL DEFAULT '0',
-  `research` mediumint(8) NOT NULL DEFAULT '0',
+  `market` mediumint(8) NOT NULL DEFAULT 0,
+  `research` mediumint(8) NOT NULL DEFAULT 0,
   `maturity` varchar(30) NOT NULL DEFAULT '',
   `owner` varchar(30) NOT NULL DEFAULT '',
   `participants` char(255) NOT NULL DEFAULT '',
@@ -38,3 +38,5 @@ CREATE TABLE IF NOT EXISTS `zt_marketreport` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `zt_project` ADD COLUMN `market` mediumint(8) NOT NULL DEFAULT 0;
