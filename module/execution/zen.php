@@ -230,7 +230,8 @@ class executionZen extends execution
      */
     protected function buildGroupTasks(string $groupBy = 'story', array $tasks, array $users): array
     {
-        $groupTasks = array();
+        $groupTasks  = array();
+        $groupByList = array();
         foreach($tasks as $task)
         {
             if($groupBy == 'story')
@@ -287,7 +288,7 @@ class executionZen extends execution
             $groupTasks['closed'] = $closedTasks;
         }
 
-        return $groupTasks;
+        return array($groupTasks, $groupByList);
     }
 
     /**

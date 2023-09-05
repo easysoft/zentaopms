@@ -208,7 +208,6 @@ class execution extends control
         $tasks       = $this->loadModel('task')->getExecutionTasks($executionID, 0, 'all', array(), $sort);
         $groupBy     = str_replace('`', '', $groupBy);
         $groupTasks  = array();
-        $groupByList = array();
         $allCount    = 0;
         foreach($tasks as $task)
         {
@@ -229,9 +228,9 @@ class execution extends control
         }
 
         /* Get users and build task group data. */
-        $users      = $this->loadModel('user')->getPairs('noletter');
-        $tasks      = $groupTasks;
-        $groupTasks = $this->executionZen->buildGroupTasks($groupBy, $groupTasks, $users);
+        $users = $this->loadModel('user')->getPairs('noletter');
+        $tasks = $groupTasks;
+        list($groupTasks, $groupByList) = $this->executionZen->buildGroupTasks($groupBy, $groupTasks, $users);
 
         /* Remove task by filter and group. */
         $filter = (empty($filter) && isset($this->lang->execution->groupFilter[$groupBy])) ? key($this->lang->execution->groupFilter[$groupBy]) : $filter;
