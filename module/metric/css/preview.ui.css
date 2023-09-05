@@ -1,6 +1,6 @@
 #mainContent {display: flex;}
-#mainContent .side {flex: 1 0 25%; overflow-x: hidden; padding-right: 2px;}
-#mainContent .main {flex: 1 0 75%; overflow-x: hidden;}
+#mainContent .side {flex: 1 0 33%; overflow-x: hidden; padding-right: 2px;}
+#mainContent .main {flex: 1 0 67%; overflow-x: hidden;}
 
 .side .metric-name {height: 48px; padding-left: 16px; margin-bottom: 8px}
 .side .name-color {color: #475569;}

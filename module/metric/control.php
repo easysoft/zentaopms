@@ -59,6 +59,7 @@ class metric extends control
 
         $metrics = $this->metric->getList($scope);
         $this->view->metrics    = $metrics;
+        $this->view->current    = current($metrics);
         $this->view->metricList = $this->lang->metric->metricList;
         $this->view->scope      = $scope;
         $this->view->title      = $this->lang->metric->preview;
