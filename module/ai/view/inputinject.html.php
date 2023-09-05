@@ -35,7 +35,7 @@
         {
           if(typeof index !== 'undefined')
           {
-            inputName = inputName + '[' + (index + 1) + ']';
+            inputName = inputName + '[' + index + ']';
           }
 
           const $input = $('[name="' + inputName + '"]');
@@ -78,12 +78,13 @@
             duelWithSpecialInputType(key, obj[key]);
             if(Array.isArray(obj[key]))
             {
+              const isStartWith0 = $('[name="' + key + '[0]' + '"]').length;
               const arr = obj[key];
               for(let i = 0; i < arr.length; i++)
               {
                 for(const key in arr[i])
                 {
-                  injectToInputElement(key, arr[i][key], i);
+                  injectToInputElement(key, arr[i][key], isStartWith0 ? i : i + 1);
                 }
               }
             }
