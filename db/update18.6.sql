@@ -804,3 +804,47 @@ INSERT INTO `zt_prompt` (`name`, `model`, `module`, `source`, `targetForm`, `pur
 ALTER TABLE `zt_ticket` ADD `subStatus` varchar(30) NOT NULL DEFAULT '';
 
 REPLACE INTO `zt_privrelation` (`priv`, `type`, `relationPriv`) VALUES ('kanban-view', 'depend', 'kanban-space');
+
+CREATE TABLE IF NOT EXISTS `zt_practice` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `module` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `code` char(50) NOT NULL DEFAULT '',
+  `title` varchar(255) NOT NULL DEFAULT '',
+  `labels` varchar(255) NOT NULL DEFAULT '',
+  `summary` varchar(255) NOT NULL DEFAULT '',
+  `content` text NULL,
+  `contributor` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `code` ON `zt_practice`(`code`);
+
+REPLACE INTO
+    `zt_priv` (`id`, `module`, `method`, `parent`, `edition`, `vision`, `system`, `order`)
+VALUES
+    (2061, 'traincourse', 'practice', 681, ',open,biz,max,', ',rnd,', '1', 5),
+    (2062, 'traincourse', 'practiceBrowse', 681, ',open,biz,max,', ',rnd,', '1', 10),
+    (2063, 'traincourse', 'practiceView', 681, ',open,biz,max,', ',rnd,', '1', 15),
+    (2064, 'traincourse', 'updatePractice', 681, ',open,biz,max,', ',rnd,', '1', 20);
+
+REPLACE INTO
+    `zt_privmanager` (`id`, `parent`, `code`, `type`, `edition`, `vision`, `order`)
+VALUES
+    (681, 566, '', 'package', ',open,biz,max,ipd,', ',rnd,', 8);
+
+REPLACE INTO
+    `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`)
+VALUES
+    (2061, 'priv', 'zh-cn', 'traincourse-practiceAction', '', ''),
+    (2062, 'priv', 'zh-cn', 'traincourse-practiceBrowse', '', ''),
+    (2063, 'priv', 'zh-cn', 'traincourse-practiceView'  , '', ''),
+    (2064, 'priv', 'zh-cn', 'traincourse-updatePractice', '', '');
+
+REPLACE INTO
+    `zt_privrelation` (`priv`, `type`, `relationPriv`)
+VALUES
+    ('traincourse-practiceBrowse', 'depend', 'traincourse-practice'),
+    ('traincourse-practiceView', 'depend', 'traincourse-practice'), ('traincourse-practiceView', 'depend', 'traincourse-practiceBrowse'),
+    ('traincourse-updatePractice', 'depend', 'traincourse-practice'), ('traincourse-updatePractice', 'depend', 'traincourse-practiceBrowse'),
+    ('traincourse-practice', 'recommend', 'traincourse-practiceBrowse'), ('traincourse-practice', 'recommend', 'traincourse-practiceView'),
+    ('traincourse-practiceBrowse', 'recommend', 'traincourse-practiceView'),
+    ('traincourse-updatePractice', 'recommend', 'traincourse-practiceView');
