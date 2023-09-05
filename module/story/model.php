@@ -6771,7 +6771,7 @@ class storyModel extends model
         foreach($stories as $story)
         {
             $menuType = 'browse';
-            if(($tab == 'execution' || ($tab == 'project' and $this->session->multiple)) && $storyType == 'story') $menuType = 'execution';
+            if(($tab == 'execution' || ($tab == 'project' and !$this->session->multiple)) && $storyType == 'story') $menuType = 'execution';
 
             if(!empty($branchOptions)) $branches = zget($branchOptions, $story->product, array());
             $story->estimateNum  = $story->estimate;;
