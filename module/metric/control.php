@@ -53,12 +53,13 @@ class metric extends control
      * @access public
      * @return void
      */
-    public function preview($scope = 'project', $viewType = 'single')
+    public function preview($scope = 'project', $viewType = 'single', $metricID = 0)
     {
         $this->metric->processScopeList();
 
         $metrics = $this->metric->getList($scope);
-        $current = current($metrics);
+        $current = $this->metric->getByID($metricID);
+        if(empty($current)) $current = current($metrics);
 
         $metric = $this->metric->getByID($current->id);
         $result = $this->metric->getResultByCode($metric->code);

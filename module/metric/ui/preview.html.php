@@ -10,21 +10,27 @@ declare(strict_types=1);
  */
 namespace zin;
 
-if($viewType == 'single')
+$metricTree = array();
+$metricCheckList = array();
+foreach($metrics as $key => $metric)
 {
-    $metricTree = array();
-    foreach($metrics as $key => $metric)
+    $class = $metric->id == $current->id ? 'metric-current' : '';
+    if($viewType == 'single')
     {
-        $class = 'metric-item';
-        if($key == 0) $class .= ' metric-current';
-        $metricTree[] = div(setClass($class), $metric->name);
+        $metricTree[] = li
+        (
+            set::className($class . ' metric-item font-medium'),
+            a(
+                $metric->name,
+                set::href(helper::createLink('metric', 'preview', "scope=$scope&viewType=$viewType&metricID={$metric->id}")),
+            )
+        );
     }
-}
-else
-{
-    $metricCheckList = array();
-    $checkedList = array($key);
-    foreach($metrics as $key => $metric) $metricCheckList[] = array('text' => $metric->name, 'value' => $key, 'checked' => in_array($key, $checkedList));
+    else
+    {
+        $class .= ' font-medium checkbox';
+        $metricCheckList[] = array('text' => $metric->name, 'value' => $key, 'typeClass' => $class, 'checked' => $metric->id == $current->id);
+    }
 }
 
 $fnGenerateDataDisplay = function() use($resultData, $resultHeader, $lang, $metric)
@@ -100,8 +106,13 @@ div
         div
         (
             setClass('metric-tree'),
-            $viewType == 'single' ? $metricTree : checkList
+            $viewType == 'single' ? ul
             (
+                $metricTree,
+            ) :
+            checkList
+            (
+                set::className('check-list-metric'),
                 set::primary(true),
                 set::name('metric'),
                 set::inline(false),

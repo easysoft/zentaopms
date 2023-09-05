@@ -118,7 +118,9 @@ class metricModel extends model
         if(is_array($fieldList)) $fieldList = implode(',', $fieldList);
         $metric = $this->dao->select($fieldList)->from(TABLE_METRIC)->where('id')->eq($metricID)->fetch();
 
-        if($metric->fromID !== 0)
+        if(!$metric) return false;
+
+        if(!empty($metric->fromID))
         {
             $oldMetric = $this->getOldMetricByID($metric->fromID);
 

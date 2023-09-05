@@ -9,7 +9,11 @@
 .side .name-color {color: var(--color-slate-600);}
 .side .metric-tree {padding-left: 24px;  height: calc(100vh - 180px); overflow-y: scroll;}
 .side .metric-item {padding-bottom: 12px;}
-.side .metric-current {color: var(--nav-active-color);}
+.side .metric-item a {color: var(--color-inherit);}
+.side .metric-item:hover, .side .checkbox-primary:hover {color: var(--color-primary-500);}
+.side .metric-current {color: var(--color-primary-600);}
+
+.side .check-list-metric {padding-top: 0; padding-bottom: 12px; gap: 12px;}
 
 .main .metric-name {height: 48px; padding-left: 16px; margin-bottom: 8px; border-bottom: 1px solid var(--color-slate-300);}
 .main .flex-between {justify-content: space-between;}
