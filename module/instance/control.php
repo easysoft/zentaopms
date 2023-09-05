@@ -770,6 +770,7 @@ class instance extends control
      */
     public function ajaxDBAuthUrl()
     {
+        if(!commonModel::hasPriv('instance', 'view')) $this->loadModel('common')->deny('instance', 'view', false);
         $post = fixer::input('post')
             ->setDefault('namespace', 'default')
             ->setDefault('instanceID', 0)
