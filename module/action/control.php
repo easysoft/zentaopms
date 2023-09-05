@@ -332,6 +332,7 @@ class action extends control
     }
 
     /**
+     * 隐藏一个已经被删除的对象。
      * Hide an deleted object.
      *
      * @param  int    $actionID
@@ -339,14 +340,14 @@ class action extends control
      * @access public
      * @return void
      */
-    public function hideOne($actionID, $browseType = 'all')
+    public function hideOne(int $actionID, string $browseType = 'all')
     {
         $oldAction = $this->action->getById($actionID);
 
         $this->action->hideOne($actionID);
 
         $sameTypeObjects = $this->action->getTrashes($oldAction->objectType, 'all', 'id_desc', null);
-        $browseType      = ($sameTypeObjects and $browseType != 'all') ? $oldAction->objectType : 'all';
+        $browseType      = ($sameTypeObjects && $browseType != 'all') ? $oldAction->objectType : 'all';
 
         return $this->send(array('result' => 'success', 'load' => $this->createLink('action', 'trash', "browseType=$browseType")));
     }

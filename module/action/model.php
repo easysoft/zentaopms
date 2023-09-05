@@ -2076,13 +2076,14 @@ class actionModel extends model
     }
 
     /**
+     * 隐藏一个对象。
      * Hide an object.
      *
      * @param  int    $actionID
      * @access public
      * @return void
      */
-    public function hideOne($actionID)
+    public function hideOne(int $actionID)
     {
         $action = $this->getById($actionID);
         if($action->action != 'deleted') return;
