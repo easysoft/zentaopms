@@ -43,3 +43,4 @@
 .repoCode .view-line-icon.add-bug .icon {font-weight: bold;}
 .repoCode .view-line-icon .bug-count {vertical-align: middle; padding-left: 5px;}
 .repoCode #bugForm {margin: 0; padding: 10px 20px 10px 0;}
+#bugContainer .panel-heading {padding-bottom: 0;}
