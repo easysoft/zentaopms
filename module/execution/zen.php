@@ -228,7 +228,7 @@ class executionZen extends execution
      * @access protected
      * @return array
      */
-    protected function buildGroupTasks(string $groupBy = 'story', array $tasks, array $users): array
+    protected function buildGroupTasks(string $groupBy = 'story', array $tasks = array(), array $users = array()): array
     {
         $groupTasks  = array();
         $groupByList = array();
