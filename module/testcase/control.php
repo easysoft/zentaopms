@@ -869,7 +869,7 @@ class testcase extends control
             $data->desc    = $step->desc;
             $data->expect  = $step->expect;
             $this->dao->insert(TABLE_CASESTEP)->data($data)->exec();
-            $parentSteps[$step->parent] = $this->dao->lastInsertID();
+            $parentSteps[$step->id] = $this->dao->lastInsertID();
         }
 
         /* 更新用例文件。 */
