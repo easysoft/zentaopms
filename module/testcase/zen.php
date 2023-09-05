@@ -2517,9 +2517,9 @@ class testcaseZen extends testcase
      * @param  string    $productName
      * @param  array     $context
      * @access protected
-     * @return void
+     * @return object
      */
-    protected function createXmlDoc(int $productID, string $productName, array $context)
+    protected function createXmlDoc(int $productID, string $productName, array $context): object
     {
         $this->classXmind = $this->app->loadClass('xmind');
 
