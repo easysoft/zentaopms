@@ -565,6 +565,7 @@ class admin extends control
                 'text'      => '',
                 'title'     => $menuGroup['name'],
                 'type'      => 'item',
+                'disabled'  => $menuGroup['disabled'],
                 'url'       => $menuGroup['disabled'] ? '' : $menuGroup['link'],
                 'active'    => $currentMenuKey == $menuKey,
                 'rootClass' => 'admin-menu-item',
