@@ -101,9 +101,10 @@ class testcaseModel extends model
             ->beginIF($this->app->tab == 'project')->andWhere('t3.project')->eq($this->session->project)->fi()
             ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
+            ->beginIF($browseType == 'all')->andWhere('t1.scene')->eq(0)->fi()
             ->beginIF($browseType == 'wait')->andWhere('t1.status')->eq($browseType)->fi()
-            ->beginIF($auto == 'unit' || $auto == 'auto')->andWhere('t1.auto')->eq($auto)->fi()
-            ->beginIF($auto != 'unit' && $auto != 'auto')->andWhere('t1.auto')->ne('unit')->fi()
+            ->beginIF($auto == 'auto' || $auto == 'unit')->andWhere('t1.auto')->eq($auto)->fi()
+            ->beginIF($auto != 'auto' && $auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
             ->beginIF($caseType)->andWhere('t1.type')->eq($caseType)->fi()
             ->andWhere('t1.deleted')->eq('0')
             ->orderBy($orderBy)
@@ -138,14 +139,14 @@ class testcaseModel extends model
             ->beginIF(!empty($productID))->andWhere('t2.product')->eq((int)$productID)->fi()
             ->beginIF(!empty($productID) and $branch !== 'all')->andWhere('t2.branch')->eq($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('t2.module')->in($moduleIdList)->fi()
+            ->beginIF($browseType == 'all')->andWhere('t2.scene')->eq(0)->fi()
             ->beginIF($browseType == 'wait')->andWhere('t2.status')->eq($browseType)->fi()
-            ->beginIF($auto == 'unit')->andWhere('t2.auto')->eq('unit')->fi()
-            ->beginIF($auto == 'auto')->andWhere('t2.auto')->eq('auto')->fi()
-            ->beginIF($auto != 'unit' && $auto != 'auto')->andWhere('t2.auto')->ne('unit')->fi()
+            ->beginIF($auto == 'auto' || $auto == 'unit')->andWhere('t1.auto')->eq($auto)->fi()
+            ->beginIF($auto != 'auto' && $auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
             ->beginIF($caseType)->andWhere('t2.type')->eq($caseType)->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy($orderBy)
-            ->page($pager, 't1.case')
+            ->page($pager, 't1.`case`')
             ->fetchAll('id');
     }
 
@@ -241,9 +242,8 @@ class testcaseModel extends model
             ->andWhere('t3.suite')->eq((int)$suiteID)
             ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
-            ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
-            ->beginIF($auto == 'auto')->andWhere('t1.auto')->eq('auto')->fi()
-            ->beginIF($auto != 'unit' && $auto != 'auto')->andWhere('t1.auto')->ne('unit')->fi()
+            ->beginIF($auto == 'auto' || $auto == 'unit')->andWhere('t1.auto')->eq($auto)->fi()
+            ->beginIF($auto != 'auto' && $auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
             ->andWhere('t1.deleted')->eq('0')
             ->orderBy($orderBy)->page($pager)->fetchAll('id');
     }
@@ -403,9 +403,8 @@ class testcaseModel extends model
                 ->beginIF($this->app->tab == 'project')->andWhere('t3.project')->eq($this->session->project)->fi()
                 ->beginIF($branch !== 'all' and !empty($productID))->andWhere('t1.branch')->eq($branch)->fi()
                 ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
-                ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
-                ->beginIF($auto == 'auto')->andWhere('t1.auto')->eq('auto')->fi()
-                ->beginIF($auto != 'unit' && $auto != 'auto')->andWhere('t1.auto')->ne('unit')->fi()
+                ->beginIF($auto == 'auto' || $auto == 'unit')->andWhere('t1.auto')->eq($auto)->fi()
+                ->beginIF($auto != 'auto' && $auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
                 ->beginIF($caseType)->andWhere('t1.type')->eq($caseType)->fi()
                 ->orderBy($sort)
                 ->page($pager, 't1.id')
@@ -476,16 +475,15 @@ class testcaseModel extends model
         if($this->app->tab == 'project') $caseQuery = str_replace('`product`', 't2.`product`', $caseQuery);
 
         /* Search criteria under compatible project. */
-        $sql = $this->dao->select('*')->from(VIEW_SCENECASE)->alias('t1');
+        $sql = $this->dao->select('*')->from(TABLE_CASE)->alias('t1');
         if($this->app->tab == 'project') $sql->leftJoin(TABLE_PROJECTCASE)->alias('t2')->on('t1.id=t2.case');
         $cases = $sql
             ->where($caseQuery)
-            ->andWhere('t1.isCase')->eq(1)
             ->beginIF($this->app->tab == 'project' and $this->config->systemMode == 'new')->andWhere('t2.project')->eq($this->session->project)->fi()
             ->beginIF($this->app->tab == 'project' and !empty($productID) and $queryProductID != 'all')->andWhere('t2.product')->eq($productID)->fi()
             ->beginIF($this->app->tab != 'project' and !empty($productID) and $queryProductID != 'all')->andWhere('t1.product')->eq($productID)->fi()
-            ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
-            ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
+            ->beginIF($auto == 'auto' || $auto == 'unit')->andWhere('t1.auto')->eq($auto)->fi()
+            ->beginIF($auto != 'auto' && $auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll('id');
 
