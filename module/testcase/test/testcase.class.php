@@ -63,6 +63,27 @@ class testcaseTest
     }
 
     /**
+     * 编辑一个场景。
+     * Edit a scene.
+     *
+     * @param  array  $scene
+     * @access public
+     * @return bool|array
+     */
+    public function updateSceneTest(array $scene): bool|array
+    {
+        $result = $this->objectModel->updateScene((object)$scene);
+        if(dao::isError()) return dao::getError();
+        if(!$result) return $result;
+
+        $scene   = $this->objectModel->getSceneById($scene['id']);
+        $action  = $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(1)->fetch();
+        $history = $this->objectModel->dao->select('*')->from(TABLE_HISTORY)->where('action')->eq($action->id)->fetchAll();
+
+        return array('scene' => $scene, 'action' => $action, 'history' => $history);
+    }
+
+    /**
      * 测试获取模块的用例。
      * Test get cases of modules.
      *
