@@ -64,6 +64,7 @@ class metric extends control
         $this->view->scope      = $scope;
         $this->view->title      = $this->lang->metric->preview;
         $this->view->viewType   = $viewType;
+        $this->view->recTotal   = count($metrics);
         $this->display();
     }
 
