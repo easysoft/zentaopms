@@ -2700,7 +2700,7 @@ class executionModel extends model
 
     /**
      * 获取要导入的执行列表。
-     * Get executions to import
+     * Get executions to import.
      *
      * @param  array  $executionIds
      * @param  string $type sprint|stage|kanban

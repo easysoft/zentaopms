@@ -1113,24 +1113,25 @@ class executionTest
     }
 
     /**
-     * function getToImport test execution
+     * 获取要导入的执行列表。
+     * Get executions to import.
      *
-     * @param  string $executionIds
+     * @param  array  $executionIdList
      * @param  string $type
-     * @param  string $count
+     * @param  int    $count
      * @access public
-     * @return array
+     * @return array|int
      */
-    public function getToImportTest($executionIds, $type, $count)
+    public function getToImportTest(array $executionIdList, string $type, int $count): array|int
     {
-        $object = $this->executionModel->getToImport($executionIds, $type);
+        $object = $this->executionModel->getToImport($executionIdList, $type);
 
         if(dao::isError())
         {
             $error = dao::getError();
             return $error;
         }
-        elseif($count == "1")
+        elseif($count == 1)
         {
             return count($object);
         }
