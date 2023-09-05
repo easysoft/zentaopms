@@ -174,50 +174,6 @@ class executionModel extends model
     }
 
     /**
-     * Create the select code of executions.
-     *
-     * @param  array     $executions
-     * @param  int       $executionID
-     * @param  int       $buildID
-     * @param  string    $currentModule
-     * @param  string    $currentMethod
-     * @param  string    $extra
-     * @access public
-     * @return string
-     */
-    public function select($executions, $executionID, $buildID, $currentModule, $currentMethod, $extra = '')
-    {
-        if(!$executions or !$executionID) return false;
-
-        $isMobile = $this->app->viewType == 'mhtml';
-
-        helper::setcookie('lastExecution', $executionID);
-        $currentExecution = $this->getById($executionID);
-
-        if(isset($currentExecution->type) and $currentExecution->type == 'program') return;
-
-        if($currentExecution->project) $project = $this->loadModel('project')->getByID($currentExecution->project);
-
-        if(isset($project) and $project->model == 'waterfall')
-        {
-            $productID   = $this->loadModel('product')->getProductIDByProject($project->id);
-            $productName = $this->dao->findByID($productID)->from(TABLE_PRODUCT)->fetch('name');
-            $currentExecution->name = $productName . '/' . $currentExecution->name;
-        }
-
-        $dropMenuLink = helper::createLink('execution', 'ajaxGetDropMenu', "executionID=$executionID&module=$currentModule&method=$currentMethod&extra=$extra");
-        $currentExecutionName = '';
-        if(isset($currentExecution->name)) $currentExecutionName = $currentExecution->name;
-
-        $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentExecutionName}'><span class='text'><i class='icon icon-{$this->lang->icons[$currentExecution->type]}'></i> {$currentExecutionName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
-        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
-        $output .= "</div></div></div>";
-        if($isMobile) $output  = "<a id='currentItem' href=\"javascript:showSearchMenu('execution', '$executionID', '$currentModule', '$currentMethod', '$extra')\"><span class='text'>{$currentExecution->name}</span> <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
-
-        return $output;
-    }
-
-    /**
      * Get execution tree menu.
      *
      * @access public
@@ -1518,51 +1474,6 @@ class executionModel extends model
             if($begin < $parent->begin) dao::$errors['begin'] = sprintf($this->lang->programplan->error->letterParent, $parent->begin);
             if($end > $parent->end)     dao::$errors['end']   = sprintf($this->lang->programplan->error->greaterParent, $parent->end);
         }
-    }
-
-    /*
-     * Get execution switcher.
-     *
-     * @param  int     $executionID
-     * @param  string  $currentModule
-     * @param  string  $currentMethod
-     * @access public
-     * @return string
-     */
-    public function getSwitcher($executionID, $currentModule, $currentMethod)
-    {
-        if($currentModule == 'execution' and in_array($currentMethod,  array('index', 'all', 'batchedit', 'create'))) return;
-
-        $projectNameSpan      = '';
-        $projectNameTitle     = '';
-        $currentExecutionName = $this->lang->execution->common;
-        if($executionID)
-        {
-            $currentExecution     = $this->getById($executionID);
-            $currentExecutionName = $currentExecution->name;
-
-            $project = $this->loadModel('project')->getByID($currentExecution->project);
-
-            if($project)
-            {
-                $projectNameTitle = $project->name . ' / ';
-                $projectNameSpan  = "<span class='text'>{$project->name}</span> / ";
-            }
-        }
-
-        if($this->app->viewType == 'mhtml' and $executionID)
-        {
-            $output  = html::a(helper::createLink('execution', 'index'), $this->lang->executionCommon) . $this->lang->colon;
-            $output .= "<a id='currentItem' href=\"javascript:showSearchMenu('execution', '$executionID', '$currentModule', '$currentMethod', '')\">{$currentExecutionName} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
-            return $output;
-        }
-
-        $dropMenuLink = helper::createLink('execution', 'ajaxGetDropMenu', "executionID=$executionID&module=$currentModule&method=$currentMethod&extra=");
-        $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$projectNameTitle}{$currentExecutionName}'>{$projectNameSpan}<span class='text'>{$currentExecutionName}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
-        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
-        $output .= "</div></div>";
-
-        return $output;
     }
 
     /**
