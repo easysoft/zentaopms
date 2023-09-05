@@ -269,6 +269,7 @@ class instance extends control
      */
     public function setting($id)
     {
+        if(!commonModel::hasPriv('instance', 'view')) $this->loadModel('common')->deny('instance', 'view', false);
         $currentResource = new stdclass;
         $instance        = $this->instance->getByID($id);
         $currentResource = $this->cne->getAppConfig($instance);

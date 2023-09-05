@@ -934,7 +934,7 @@ class actionModel extends model
      */
     public function renderAction($action, $desc = '')
     {
-        if(!isset($action->objectType) || !isset($action->action)) return false;
+        if(!isset($action->objectType) || !isset($action->action)) return;
 
         $objectType = $action->objectType;
         $actionType = strtolower($action->action);
@@ -1002,7 +1002,7 @@ class actionModel extends model
                     $action->extra = '';
 
                     if(!empty($extra->result->code) && $extra->result->code != 200 && !empty($extra->result->message)) $action->comment = $extra->result->message;
-                    if(is_string($extra->result) && $extra->result != 'fail')
+                    if(is_string($extra->result) && $extra->result != 'fail' && !empty($extra->message))
                     {
                         $action->comment = "\n" . $extra->message;
                     }
