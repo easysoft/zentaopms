@@ -642,30 +642,6 @@ class testcaseTest
     }
 
     /**
-     * Test import case from Lib.
-     *
-     * @param  int    $productID
-     * @param  array  $caseIdList
-     * @access public
-     * @return array
-     */
-    public function importFromLibTest($productID, $caseIdList = array())
-    {
-        $_POST['module']     = array('410' => 0, '409' => 'ditto', '408' => 'ditto', '407' => 'ditto', '406' => 'ditto', '405' => 'ditto', '404' => 'ditto', '403' => 'ditto', '402' => 'ditto', '401' => 'ditto');
-        $_POST['caseIdList'] = $caseIdList;
-
-        $this->objectModel->importFromLib($productID);
-
-        unset($_POST);
-
-        if(dao::isError()) return dao::getError();
-
-        global $tester;
-        $objects = $tester->dao->select('*')->from(TABLE_CASE)->where('fromCaseID')->in($caseIdList)->orderBy('id_asc')->fetchAll();
-        return $objects;
-    }
-
-    /**
      * 测试追加 bug 和执行结果信息。
      * Test append bugs and results.
      *
