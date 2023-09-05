@@ -1063,6 +1063,7 @@ class execution extends control
     }
 
     /**
+     * 测试单列表页面。
      * Browse test tasks of execution.
      *
      * @param  int    $executionID
@@ -1073,7 +1074,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function testtask($executionID = 0, $orderBy = 'product_asc,id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function testtask(int $executionID = 0, string $orderBy = 'product_asc,id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->loadModel('testtask');
         $this->app->loadLang('testreport');
@@ -1088,35 +1089,9 @@ class execution extends control
         /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
-
         $tasks = $this->testtask->getExecutionTasks($executionID, 'execution', $orderBy, $pager);
 
-        /* Compute rowspan. */
-        $productGroup = array();
-        $waitCount    = 0;
-        $testingCount = 0;
-        $blockedCount = 0;
-        $doneCount    = 0;
-        foreach($tasks as $task)
-        {
-            $productGroup[$task->product][] = $task;
-            if($task->status == 'wait')    $waitCount ++;
-            if($task->status == 'doing')   $testingCount ++;
-            if($task->status == 'blocked') $blockedCount ++;
-            if($task->status == 'done')    $doneCount ++;
-            if($task->build == 'trunk' || empty($task->buildName)) $task->buildName = $this->lang->trunk;
-        }
-
-        $lastProduct = '';
-        foreach($tasks as $taskID => $task)
-        {
-            $task->rowspan = 0;
-            if($lastProduct !== $task->product)
-            {
-                $lastProduct = $task->product;
-                if(!empty($productGroup[$task->product])) $task->rowspan = count($productGroup[$task->product]);
-            }
-        }
+        $this->executionZen->assignTesttaskVars($tasks);
 
         $this->view->title         = $this->executions[$executionID] . $this->lang->colon . $this->lang->testtask->common;
         $this->view->execution     = $execution;
@@ -1125,11 +1100,6 @@ class execution extends control
         $this->view->executionName = $this->executions[$executionID];
         $this->view->pager         = $pager;
         $this->view->orderBy       = $orderBy;
-        $this->view->tasks         = $tasks;
-        $this->view->waitCount     = $waitCount;
-        $this->view->testingCount  = $testingCount;
-        $this->view->blockedCount  = $blockedCount;
-        $this->view->doneCount     = $doneCount;
         $this->view->users         = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->products      = $this->loadModel('product')->getPairs('', 0);
         $this->view->canBeChanged  = common::canModify('execution', $execution); // Determines whether an object is editable.
