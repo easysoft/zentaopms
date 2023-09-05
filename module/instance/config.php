@@ -32,7 +32,7 @@ $config->instance->actionList['ajaxStop']['className']    = 'ajax-submit';
 $config->instance->actionList['ajaxStop']['hint']         = $lang->instance->stop;
 $config->instance->actionList['ajaxStop']['text']         = $lang->instance->stop;
 $config->instance->actionList['ajaxStop']['data-confirm'] = $lang->instance->notices['confirmStop'];
-$config->instance->actionList['stop']['url']          = array('module' => 'instance', 'method' => 'ajaxStop', 'params' => 'id={id}');
+$config->instance->actionList['ajaxStop']['url']          = array('module' => 'instance', 'method' => 'ajaxStop', 'params' => 'id={id}');
 
 $config->instance->actionList['ajaxUninstall']['icon']         = 'trash';
 $config->instance->actionList['ajaxUninstall']['hint']         = $lang->instance->uninstall;
