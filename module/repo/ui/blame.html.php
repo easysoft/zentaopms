@@ -65,7 +65,7 @@ foreach($lang->repo->encodingList as $key => $val)
 }
 $defaultEncode = $lang->repo->encodingList[$encoding];
 
-featureBar(
+\zin\featureBar(
     backBtn
     (
         setClass('mr-5'),

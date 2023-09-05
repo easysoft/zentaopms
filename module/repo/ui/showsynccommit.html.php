@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace zin;
 
-featureBar();
+\zin\featureBar();
 
 if(empty($branch))
 {

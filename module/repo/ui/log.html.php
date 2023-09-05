@@ -61,7 +61,7 @@ $logs = initTableData($logs, $config->repo->logDtable->fieldList);
 
 $footToolbar['items'][] = array('text' => $lang->repo->diff, 'className' => "btn primary size-sm btn-diff", 'btnType' => 'primary', 'onClick' => jsRaw('window.diffClick'));
 
-featureBar(
+\zin\featureBar(
     backBtn
     (
         setClass('mr-5'),

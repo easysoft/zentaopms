@@ -25,7 +25,7 @@ foreach($repoList as $repo)
     $repo->no             = $no ++;
 }
 
-featureBar
+\zin\featureBar
 (
     h::a
     (

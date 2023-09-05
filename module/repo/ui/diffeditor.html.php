@@ -27,7 +27,7 @@ jsVar('entry', $entry);
 jsVar('diffLink', $diffLink);
 jsVar('urlParams', "repoID=$repoID&objectID=$objectID&entry=%s&oldRevision=$oldRevision&newRevision=$newRevision&showBug=$showBug&encoding=$encoding");
 
-featureBar();
+\zin\featureBar();
 
 $dropMenus = array();
 if(common::hasPriv('repo', 'download')) $dropMenus[] = array('text' => $this->lang->repo->downloadDiff, 'icon' => 'download', 'data-link' => $this->repo->createLink('download', "repoID=$repoID&path={path}&fromRevision=$oldRevision&toRevision=$newRevision&type=path"), 'id' => 'repoDownloadCode');

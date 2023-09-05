@@ -35,7 +35,7 @@ jsVar('openedFiles', array($entry));
 jsVar('urlParams', "repoID=$repoID&objectID=$objectID&entry=%s&revision=$revision&showBug=$showBug&encoding=$encoding");
 jsVar('currentLink', $this->createLink('repo', 'view', "repoID=$repoID&objectID=$objectID&entry=$file"));
 
-featureBar();
+\zin\featureBar();
 
 $monacoDropMenus = array();
 if(common::hasPriv('repo', 'blame'))    $monacoDropMenus[] = array('text' => $this->lang->repo->blame,    'icon' => 'blame',    'data-link' => $this->repo->createLink('blame', "repoID=$repoID&objectID=$objectID&entry={path}&revision=$revision&encoding=$encoding"), 'class' => 'repoDropDownMenu');

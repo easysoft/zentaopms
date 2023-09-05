@@ -58,7 +58,7 @@ $config->repo->dtable->fieldList['actions']['list']['delete']['url'] = $this->cr
 $repos = initTableData($repoList, $config->repo->dtable->fieldList, $this->repo);
 $queryMenuLink = createLink('repo', 'maintain', "objectID=$objectID&orderBy=&recTotal={$pager->recTotal}&pageID={$pager->pageID}&type=bySearch&param={queryID}");
 
-featureBar
+\zin\featureBar
 (
     set::current('all'),
     set::queryMenuLinkCallback(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink)),

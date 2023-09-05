@@ -35,7 +35,7 @@ foreach($bugs as $bug)
 }
 $bugs = initTableData($bugs, $config->repo->reviewDtable->fieldList);
 
-featureBar
+\zin\featureBar
 (
     set::linkParams("repoID=$repoID&browseType={key}"),
 );
