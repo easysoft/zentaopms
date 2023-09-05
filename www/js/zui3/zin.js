@@ -561,8 +561,10 @@
     {
         if(target[0] !== '#' && target[0] !== '.') target = `#${target}`;
         options = $.extend({url: currentAppUrl, id: target, target: target}, options);
-        if(!$(target).length) return loadPage({url: options.url, id: target});
+        const $target = $(target);
+        if(!$target.length) return loadPage({url: options.url, id: target});
 
+        if($target.closest('.modal').length && options.partial === undefined) options.partial = true;
         if(!options.selector)
         {
             let name = options.component;
