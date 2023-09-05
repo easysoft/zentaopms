@@ -211,7 +211,7 @@ $config->repo->taskDtable->fieldList['finishedBy']['sortType'] = true;
 $config->repo->taskDtable->fieldList['finishedBy']['show']     = true;
 $config->repo->taskDtable->fieldList['finishedBy']['group']    = 4;
 
-$config->repo->taskDtable->fieldList['assignedTo']['type']        = 'assign';
+$config->repo->taskDtable->fieldList['assignedTo']['type']        = 'user';
 $config->repo->taskDtable->fieldList['assignedTo']['sortType']    = true;
 $config->repo->taskDtable->fieldList['assignedTo']['show']        = true;
 $config->repo->taskDtable->fieldList['assignedTo']['group']       = 3;

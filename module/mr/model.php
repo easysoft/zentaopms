@@ -842,7 +842,7 @@ class mrModel extends model
         $host = $this->loadModel('pipeline')->getByID($hostID);
         if($host->type == 'gitlab')
         {
-            $url = sprintf($this->gitlab->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID");
+            $url = sprintf($this->gitlab->getApiRoot($hostID, false), "/projects/$projectID/merge_requests/$MRID");
             $MR  = json_decode(commonModel::http($url));
         }
         elseif($host->type == 'gitea')
