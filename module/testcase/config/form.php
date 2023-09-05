@@ -93,6 +93,15 @@ $config->testcase->form->createScene['title']      = array('required' => true,  
 $config->testcase->form->createScene['openedBy']   = array('required' => false, 'type' => 'string', 'default' => $account);
 $config->testcase->form->createScene['openedDate'] = array('required' => false, 'type' => 'date',   'default' => $now);
 
+$config->testcase->form->editScene = array();
+$config->testcase->form->editScene['product']        = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->testcase->form->editScene['branch']         = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->testcase->form->editScene['module']         = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->testcase->form->editScene['parent']         = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->testcase->form->editScene['title']          = array('required' => true,  'type' => 'string', 'filter' => 'trim');
+$config->testcase->form->editScene['lastEditedBy']   = array('required' => false, 'type' => 'string', 'default' => $account);
+$config->testcase->form->editScene['lastEditedDate'] = array('required' => false, 'type' => 'date',   'default' => $now);
+
 $config->testcase->form->review = array();
 $config->testcase->form->review['reviewedDate'] = array('required' => false, 'type' => 'date',   'default' => $now);
 $config->testcase->form->review['result']       = array('required' => true,  'type' => 'string', 'default' => '');
