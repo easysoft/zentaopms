@@ -11,9 +11,11 @@ declare(strict_types=1);
 namespace zin;
 
 $metricTree = array();
-foreach($metrics as $metric)
+foreach($metrics as $key => $metric)
 {
-    $metricTree[] = div(setClass('metric-item'), $metric->name);
+    $class = 'metric-item';
+    if($key == 0) $class .= ' metric-current';
+    $metricTree[] = div(setClass($class), $metric->name);
 }
 
 featureBar
