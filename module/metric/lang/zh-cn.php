@@ -29,6 +29,8 @@ $lang->metric->customUnit    = "自定义";
 $lang->metric->delist        = "下架";
 $lang->metric->preview       = "预览";
 $lang->metric->metricList    = "度量项列表";
+$lang->metric->manage        = "管理度量项";
+$lang->metric->exitManage    = "退出管理";
 
 $lang->metric->descTip       = '请输入度量项含义、目的和作用等';
 $lang->metric->definitionTip = '请输入度量项的计算规则及过滤条件等';

@@ -38,6 +38,16 @@ featureBar
 
 toolbar
 (
+    btn
+    (
+        setClass('btn primary-outline'),
+        set::url(helper::createLink('metric', 'preview')),
+        $lang->metric->exitManage,
+    ),
+    common::hasPriv('metric', 'create') ? div
+    (
+        setClass('btn-divider'),
+    ) : null,
     common::hasPriv('metric', 'create') ? btn
     (
         setClass('btn primary'),

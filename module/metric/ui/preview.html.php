@@ -24,6 +24,16 @@ featureBar
     set::linkParams("scope={key}"),
 );
 
+toolbar
+(
+    common::hasPriv('metric', 'preview') ? btn
+    (
+        setClass('btn primary'),
+        set::url(helper::createLink('metric', 'browse')),
+        $lang->metric->manage
+    ) : null,
+);
+
 div
 (
     setClass('side'),
