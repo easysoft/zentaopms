@@ -35,6 +35,10 @@ $lang->metric->filters       = '筛选器配置';
 $lang->metric->details       = '详情';
 $lang->metric->zAnalysis     = 'Z分析';
 
+$lang->metric->viewType = new stdclass();
+$lang->metric->viewType->single   = '单独查看';
+$lang->metric->viewType->multiple = '组合查看';
+
 $lang->metric->descTip       = '请输入度量项含义、目的和作用等';
 $lang->metric->definitionTip = '请输入度量项的计算规则及过滤条件等';
 

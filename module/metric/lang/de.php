@@ -35,6 +35,10 @@ $lang->metric->filters       = 'Filter Settings';
 $lang->metric->details       = 'Details';
 $lang->metric->zAnalysis     = 'Z Analysis';
 
+$lang->metric->viewType = new stdclass();
+$lang->metric->viewType->single   = 'Single view';
+$lang->metric->viewType->multiple = 'Multiple view';
+
 $lang->metric->descTip       = 'Enter the meaning, purpose, and impact of the metric';
 $lang->metric->definitionTip = 'Enter the calculation rules and filtering conditions of the metric';
 

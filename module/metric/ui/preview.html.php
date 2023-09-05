@@ -10,12 +10,21 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$metricTree = array();
-foreach($metrics as $key => $metric)
+if($viewType == 'single')
 {
-    $class = 'metric-item';
-    if($key == 0) $class .= ' metric-current';
-    $metricTree[] = div(setClass($class), $metric->name);
+    $metricTree = array();
+    foreach($metrics as $key => $metric)
+    {
+        $class = 'metric-item';
+        if($key == 0) $class .= ' metric-current';
+        $metricTree[] = div(setClass($class), $metric->name);
+    }
+}
+else
+{
+    $metricCheckList = array();
+    $checkedList = array($key);
+    foreach($metrics as $key => $metric) $metricCheckList[] = array('text' => $metric->name, 'value' => $key, 'checked' => in_array($key, $checkedList));
 }
 
 featureBar
@@ -24,8 +33,17 @@ featureBar
     set::linkParams("scope={key}"),
 );
 
+$exchangeType = $viewType == 'single' ? 'multiple' : 'single';
 toolbar
 (
+    btn
+    (
+        setClass('btn text-black ghost primary-hover-500'),
+        set::icon('exchange'),
+        set::iconClass('icon-18'),
+        set::url(helper::createLink('metric', 'preview', "scope=$scope&viewType=$exchangeType")),
+        $lang->metric->viewType->$exchangeType,
+    ),
     common::hasPriv('metric', 'preview') ? btn
     (
         setClass('btn primary'),
@@ -52,7 +70,13 @@ div
         div
         (
             setClass('metric-tree'),
-            $metricTree,
+            $viewType == 'single' ? $metricTree : checkList
+            (
+                set::primary(true),
+                set::name('metric'),
+                set::inline(false),
+                set::items($metricCheckList),
+            ),
         ),
     ),
 );

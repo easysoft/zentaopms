@@ -53,7 +53,7 @@ class metric extends control
      * @access public
      * @return void
      */
-    public function preview($scope = 'project')
+    public function preview($scope = 'project', $viewType = 'single')
     {
         $this->metric->processScopeList();
 
@@ -63,6 +63,7 @@ class metric extends control
         $this->view->metricList = $this->lang->metric->metricList;
         $this->view->scope      = $scope;
         $this->view->title      = $this->lang->metric->preview;
+        $this->view->viewType   = $viewType;
         $this->display();
     }
 

@@ -18,3 +18,7 @@
 .main .details {position: relative; margin-right: 4px;}
 .main .details:after {content: ""; position: absolute; top: 5px; right: -2px; bottom: 5px; width: 1px; background-color: var(--color-slate-300);}
 .main .chart-line-margin {margin-right: 16px;}
+
+.icon-18 {font-size: 18px;}
+.primary-hover-500 {color: var(--color-slate-800)}
+.primary-hover-500:hover {color: var(--color-primary-500);}
