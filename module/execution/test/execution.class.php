@@ -1199,41 +1199,32 @@ class executionTest
     }
 
     /**
-     * function importTask test by execution
+     * 转入任务到指定的执行。
+     * Import tasks.
      *
-     * @param  string $executionID
-     * @param  string $count
-     * @param  array  $param
+     * @param  int       $executionID
+     * @param  int       $count
+     * @param  array     $taskIdList
      * @access public
-     * @return array
+     * @return array|int
      */
-    public function importTaskTest($executionID, $count, $param = array())
+    public function importTaskTest(int $executionID, int $count, array $taskIdList = array()): array|int
     {
-        global $tester;
-
-        $tasks        = array();
-        $createFields = array('tasks' => $tasks);
-
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $this->executionModel->importTask($executionID);
-
-        unset($_POST);
+        $this->executionModel->importTask($executionID, $taskIdList);
 
         if(dao::isError())
         {
             $error = dao::getError();
             return $error;
         }
-        elseif($count == "1")
+        elseif($count == 1)
         {
-            $taskList = $tester->dbh->query("select * from zt_task where execution = $executionID")->fetchAll();
+            $taskList = $this->executionModel->dao->select('*')->from(TABLE_TASK)->where('execution')->eq($executionID)->fetchAll();
             return count($taskList);
         }
         else
         {
-            $taskList = $tester->dbh->query("select * from zt_task where execution = $executionID")->fetchAll();
+            $taskList = $this->executionModel->dao->select('*')->from(TABLE_TASK)->where('execution')->eq($executionID)->fetchAll();
             return $taskList;
         }
     }

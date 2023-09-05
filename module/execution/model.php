@@ -2829,11 +2829,12 @@ class executionModel extends model
     public function importTask(int $executionID, array $taskIdList): array
     {
         $this->loadModel('action');
-        $dateExceed  = array();
-        $taskStories = array();
-        $parents     = array();
-        $execution   = $this->fetchByID($executionID);
-        $tasks       = $this->loadModel('task')->getByIdList($taskIdList);
+        $dateExceed   = array();
+        $taskStories  = array();
+        $parents      = array();
+        $execution    = $this->fetchByID($executionID);
+        $tasks        = $this->loadModel('task')->getByIdList($taskIdList);
+        $assignedToes = array();
         foreach($tasks as $task)
         {
             /* Save the assignedToes and stories, should linked to execution. */

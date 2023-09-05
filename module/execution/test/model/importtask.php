@@ -3,51 +3,37 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/execution.class.php';
 
-$execution = zdTable('project');
-$execution->id->range('1-5');
-$execution->name->range('项目1,项目2,迭代1,迭代2,迭代3');
-$execution->type->range('project{2},sprint,stage,kanban');
-$execution->status->range('doing');
-$execution->parent->range('0,0,1,1,2');
-$execution->grade->range('2{2},1{3}');
-$execution->path->range('1,2,`1,3`,`1,4`,`2,5`')->prefix(',')->postfix(',');
-$execution->begin->range('20230102 000000:0')->type('timestamp')->format('YY/MM/DD');
-$execution->end->range('20230212 000000:0')->type('timestamp')->format('YY/MM/DD');
-$execution->gen(5);
+zdTable('project')->config('execution')->gen(30);
+$team = zdTable('team')->config('team');
+$team->account->range('admin');
+$team->gen(30);
 
-$task = zdTable('task');
-$task->id->range('1-10');
-$task->execution->range('3');
-$task->status->range('wait,doing');
-$task->estimate->range('1-10');
-$task->left->range('1-10');
-$task->consumed->range('1-10');
-$task->gen(10);
+$task = zdTable('task')->config('task');
+$task->project->range('11,60,100');
+$task->execution->range('101,106,124');
+$task->assignedTo->range('admin');
+$task->gen(30);
 
 su('admin');
 
 /**
 
 title=测试executionModel->importTaskTest();
+timeout=0
 cid=1
-pid=1
-
-敏捷执行导入任务     >> 1,3
-瀑布执行导入任务     >> 2,4
-敏捷执行导入任务统计 >> 6
-瀑布执行导入任务统计 >> 4
 
 */
 
-$executionIDList  = array('3','4');
-$sprintTaskIDlist = array('1', '3', '5', '7');
-$stageTaskIDlist  = array('2', '4', '6', '8');
-$sprintTasks      = array('tasks' => $sprintTaskIDlist);
-$stageTasks       = array('tasks' => $stageTaskIDlist);
-$count            = array('0','1');
+$executionIDList  = array(101, 106, 124);
+$sprintTasks      = array(1, 3, 5, 10, 13, 19, 22, 28);
+$stageTasks       = array(2, 4, 6, 7, 8, 11, 14, 16);
+$kanbanTasks      = array(9, 12, 18);
+$count            = array(0, 1);
 
 $execution = new executionTest();
-r($execution->importTaskTest($executionIDList[0], $count[0], $sprintTasks)) && p('0:id,execution') && e('1,3');  // 敏捷执行导入任务
-r($execution->importTaskTest($executionIDList[1], $count[0], $stageTasks))  && p('0:id,execution') && e('2,4');  // 瀑布执行导入任务
-r($execution->importTaskTest($executionIDList[0], $count[1], $sprintTasks)) && p()                 && e('6');       // 敏捷执行导入任务统计
-r($execution->importTaskTest($executionIDList[1], $count[1], $stageTasks))  && p()                 && e('4');       // 瀑布执行导入任务统计
+r($execution->importTaskTest($executionIDList[0], $count[0], $sprintTasks)) && p('0:id,execution') && e('1,101'); // 敏捷执行导入任务
+r($execution->importTaskTest($executionIDList[1], $count[0], $stageTasks))  && p('0:id,execution') && e('2,106'); // 瀑布执行导入任务
+r($execution->importTaskTest($executionIDList[2], $count[0], $kanbanTasks)) && p('0:id,execution') && e('9,124'); // 看板执行导入任务
+r($execution->importTaskTest($executionIDList[0], $count[1], $sprintTasks)) && p()                 && e('8');     // 敏捷执行导入任务统计
+r($execution->importTaskTest($executionIDList[1], $count[1], $stageTasks))  && p()                 && e('14');    // 瀑布执行导入任务统计
+r($execution->importTaskTest($executionIDList[2], $count[1], $kanbanTasks)) && p()                 && e('8');     // 看板执行导入任务统计
