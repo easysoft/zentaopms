@@ -1650,6 +1650,7 @@ class testcase extends control
     public function getXmindImport()
     {
         if(!commonModel::hasPriv("testcase", "importXmind")) $this->loadModel('common')->deny('testcase', 'importXmind');
+
         $folder = $this->session->xmindImport;
         $type   = $this->session->xmindImportType;
 
@@ -1670,155 +1671,38 @@ class testcase extends control
     }
 
     /**
+     * 导入 xmind.
      * Import xmind.
      *
-     * @param  int $productID
-     * @param  int $branch
+     * @param  int        $productID
+     * @param  int|string $branch
      * @access public
      * @return void
      */
-    public function importXmind($productID, $branch)
+    public function importXmind(int $productID, int|string $branch)
     {
         if($_FILES)
         {
-            $this->classXmind = $this->app->loadClass('xmind');
             if($_FILES['file']['size'] == 0) return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->errorFileNotEmpty));
 
+            /* 保存xmind配置。*/
+            /* Sav xmind config. */
             $configResult = $this->testcase->saveXmindConfig();
             if($configResult['result'] == 'fail') return $this->send($configResult);
 
-            $tmpName  = $_FILES['file']['tmp_name'];
-            $fileName = $_FILES['file']['name'];
-            $extName  = trim(strtolower(pathinfo($fileName, PATHINFO_EXTENSION)));
+            /* 检查扩展名。*/
+            /* Check extension name of file. */
+            $extName = trim(strtolower(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION)));
             if($extName != 'xmind') return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->errorFileFormat));
 
-            $newPureName  = $this->app->user->id."-xmind";
-            $importFolder = $this->app->getTmpRoot() . "import";
-            if(!is_dir($importFolder)) mkdir($importFolder, 0755, true);
+            $result = $this->testcaseZen->parseUploadFile($productID, $branch);
+            if(is_array($result)) return $this->send($result);
 
-            $dest = $this->app->getTmpRoot() . "import/".$newPureName.$extName;
-            if(!move_uploaded_file($tmpName, $dest)) return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->errorXmindUpload));
-
-            $extractFolder   =  $this->app->getTmpRoot() . "import/".$newPureName;
-            $this->classFile = $this->app->loadClass('zfile');
-            if(is_dir($extractFolder)) $this->classFile->removeDir($extractFolder);
-
-            $this->app->loadClass('pclzip', true);
-            $zip = new pclzip($dest);
-
-            $files      = $zip->listContent();
-            $removePath = $files[0]['filename'];
-            if($zip->extract(PCLZIP_OPT_PATH, $extractFolder, PCLZIP_OPT_REMOVE_PATH, $removePath) == 0) return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->errorXmindUpload));
-
-            $this->classFile->removeFile($dest);
-
-            $jsonPath = $extractFolder."/content.json";
-            if(file_exists($jsonPath) == true)
-            {
-
-                $fetchResult = $this->fetchByJSON($extractFolder, $productID, $branch);
-            }
-            else
-            {
-                $fetchResult = $this->fetchByXML($extractFolder, $productID, $branch);
-            }
-
-            if($fetchResult['result'] == 'fail') return $this->send($fetchResult);
-
-            $this->session->set('xmindImport', $extractFolder);
-            $this->session->set('xmindImportType', $fetchResult['type']);
-
-            $pId = $fetchResult['pId'];
-
-            return $this->send(array('result' => 'success', 'message' => $this->lang->importSuccess, 'load' => $this->createLink('testcase', 'showXmindImport', "productID=$pId&branch=$branch"), 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->importSuccess, 'load' => $this->createLink('testcase', 'showXmindImport', "productID=$result&branch=$branch"), 'closeModal' => true));
         }
 
         $this->view->settings = $this->testcase->getXmindConfig();
-
         $this->display();
-    }
-
-    /**
-     * Fetch by xml.
-     *
-     * @param  string $extractFolder
-     * @param  int    $productID
-     * @param  int    $branch
-     * @access public
-     * @return void
-     */
-    function fetchByXML($extractFolder, $productID, $branch)
-    {
-        $filePath = $extractFolder."/content.xml";
-        $xmlNode = simplexml_load_file($filePath);
-        $title = $xmlNode->sheet->topic->title;
-        if(strlen($title) == 0)
-        {
-            return array('result'=>'fail','message'=>$this->lang->testcase->errorXmindUpload);
-        }
-
-        $pId = $productID;
-        if($this->classXmind->endsWith($title,"]") == true)
-        {
-            $tmpId = $this->classXmind->getBetween($title,"[","]");
-            if(empty($tmpId) == false)
-            {
-                $projectCount = $this->dao->select('count(*) as count')
-                    ->from(TABLE_PRODUCT)
-                    ->where('id')
-                    ->eq((int)$tmpId)
-                    ->andWhere('deleted')->eq('0')
-                    ->fetch('count');
-
-                if((int)$projectCount == 0) return array('result'=>'fail','message'=>$this->lang->testcase->errorImportBadProduct);
-
-                $pId = $tmpId;
-            }
-        }
-
-        return array('result'=>'success','pId'=>$pId, 'type'=>'xml');
-    }
-
-    /**
-     * Fetch by json.
-     *
-     * @param  string $extractFolder
-     * @param  int    $productID
-     * @param  int    $branch
-     * @access public
-     * @return void
-     */
-    function fetchByJSON($extractFolder, $productID, $branch)
-    {
-        $filePath = $extractFolder."/content.json";
-        $jsonStr = file_get_contents($filePath);
-        $jsonDatas = json_decode($jsonStr, true);
-        $title = $jsonDatas[0]['rootTopic']['title'];
-        if(strlen($title) == 0)
-        {
-            return array('result'=>'fail','message'=>$this->lang->testcase->errorXmindUpload);
-        }
-
-        $pId = $productID;
-        if($this->classXmind->endsWith($title,"]") == true)
-        {
-            $tmpId = $this->classXmind->getBetween($title,"[","]");
-            if(empty($tmpId) == false)
-            {
-                $projectCount = $this->dao->select('count(*) as count')
-                    ->from(TABLE_PRODUCT)
-                    ->where('id')
-                    ->eq((int)$tmpId)
-                    ->andWhere('deleted')->eq('0')
-                    ->fetch('count');
-
-                if((int)$projectCount == 0) return array('result'=>'fail','message'=>$this->lang->testcase->errorImportBadProduct);
-
-                $pId = $tmpId;
-            }
-        }
-
-        return array('result'=>'success','pId'=>$pId,'type'=>'json');
     }
 
     /**

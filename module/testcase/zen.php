@@ -2731,4 +2731,140 @@ class testcaseZen extends testcase
 
         return $xmlDoc;
     }
+
+    /**
+     * 解析上传的 xmind 文件。
+     * Parse the upload xmind file.
+     *
+     * @param  int        $productID
+     * @param  int|string $branch
+     * @access protected
+     * @return void
+     */
+    protected function parseUploadFile(int $productID, int|string $branch): array|int
+    {
+        /* 创建导入目录。*/
+        /* Create import Directory. */
+        $importDir = $this->app->getTmpRoot() . 'import';
+        if(!is_dir($importDir)) mkdir($importDir, 0755, true);
+
+        /* 将上传的临时文件移动到指定的临时位置。*/
+        /* Move the uploaded temporary file to the specified temporary location. */
+        $fileName = $this->app->user->id . '-xmind';
+        $filePath = $importDir . '/' . $fileName;
+        $tmpFile  = $filePath . 'tmp';
+        if(!move_uploaded_file($_FILES['file']['tmp_name'], $tmpFile)) return array('result' => 'fail', 'message' => $this->lang->testcase->errorXmindUpload);
+
+        /* 删掉已经存在的当前用户的导入目录。*/
+        /* Remove the file path. */
+        $this->classFile = $this->app->loadClass('zfile');
+        if(is_dir($filePath)) $this->classFile->removeDir($filePath);
+
+        /* 压缩临时文件。*/
+        /* Zip the temporary file. */
+        $this->app->loadClass('pclzip', true);
+        $zip = new pclzip($tmpFile);
+
+        /* 获取 ZIP 文件中的内容列表。*/
+        /* Get the content list from the zip file. */
+        $files      = $zip->listContent();
+        $removePath = $files[0]['filename'];
+        if($zip->extract(PCLZIP_OPT_PATH, $filePath, PCLZIP_OPT_REMOVE_PATH, $removePath) === 0) return array('result' => 'fail', 'message' => $this->lang->testcase->errorXmindUpload);
+
+        $this->classFile->removeFile($tmpFile);
+
+        $fetchFunction = file_exists($filePath . '/content.json') ? 'fetchByJSON' : 'fetchByXML';
+        $fetchResult   = $this->$fetchFunction($filePath, $productID, $branch);
+        if($fetchResult['result'] == 'fail') return $$fetchResult;
+
+        $this->session->set('xmindImport', $filePath);
+        $this->session->set('xmindImportType', $fetchResult['type']);
+
+        return $fetchResult['pId'];
+    }
+
+    /**
+     * Fetch by xml.
+     *
+     * @param  string $extractFolder
+     * @param  int    $productID
+     * @param  int    $branch
+     * @access public
+     * @return void
+     */
+    private function fetchByXML($extractFolder, $productID, $branch)
+    {
+        $filePath = $extractFolder."/content.xml";
+        $xmlNode = simplexml_load_file($filePath);
+        $title = $xmlNode->sheet->topic->title;
+        if(strlen($title) == 0)
+        {
+            return array('result'=>'fail','message'=>$this->lang->testcase->errorXmindUpload);
+        }
+
+        $pId = $productID;
+        if($this->classXmind->endsWith($title,"]") == true)
+        {
+            $tmpId = $this->classXmind->getBetween($title,"[","]");
+            if(empty($tmpId) == false)
+            {
+                $projectCount = $this->dao->select('count(*) as count')
+                    ->from(TABLE_PRODUCT)
+                    ->where('id')
+                    ->eq((int)$tmpId)
+                    ->andWhere('deleted')->eq('0')
+                    ->fetch('count');
+
+                if((int)$projectCount == 0) return array('result'=>'fail','message'=>$this->lang->testcase->errorImportBadProduct);
+
+                $pId = $tmpId;
+            }
+        }
+
+        return array('result'=>'success','pId'=>$pId, 'type'=>'xml');
+    }
+
+    /**
+     * Fetch by json.
+     *
+     * @param  string $extractFolder
+     * @param  int    $productID
+     * @param  int    $branch
+     * @access public
+     * @return void
+     */
+    function fetchByJSON($extractFolder, $productID, $branch)
+    {
+        $filePath = $extractFolder."/content.json";
+        $jsonStr = file_get_contents($filePath);
+        $jsonDatas = json_decode($jsonStr, true);
+        $title = $jsonDatas[0]['rootTopic']['title'];
+        if(strlen($title) == 0)
+        {
+            return array('result'=>'fail','message'=>$this->lang->testcase->errorXmindUpload);
+        }
+
+        $pId = $productID;
+
+        $this->classXmind = $this->app->loadClass('xmind');
+        if($this->classXmind->endsWith($title,"]") == true)
+        {
+            $tmpId = $this->classXmind->getBetween($title,"[","]");
+            if(empty($tmpId) == false)
+            {
+                $projectCount = $this->dao->select('count(*) as count')
+                    ->from(TABLE_PRODUCT)
+                    ->where('id')
+                    ->eq((int)$tmpId)
+                    ->andWhere('deleted')->eq('0')
+                    ->fetch('count');
+
+                if((int)$projectCount == 0) return array('result'=>'fail','message'=>$this->lang->testcase->errorImportBadProduct);
+
+                $pId = $tmpId;
+            }
+        }
+
+        return array('result'=>'success','pId'=>$pId,'type'=>'json');
+    }
 }
