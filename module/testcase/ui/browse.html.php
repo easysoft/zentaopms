@@ -12,10 +12,7 @@ namespace zin;
 
 include 'header.html.php';
 
-$caseScenes    = array_flip(array_filter(array_map(function($scene){if($scene->isCase == 1 && $scene->scene > 0) return $scene->scene;}, $scenes)));
-$topSceneCount = count(array_filter(array_map(function($scene){return $scene->isCase == 2 && $scene->grade == 1;}, $scenes)));
-$topCaseCount  = count(array_filter(array_map(function($scene){return $scene->isCase == 1 && $scene->scene == 0;}, $scenes)));
-$pageSummary   = sprintf($isOnlyScene ? $lang->testcase->summaryScene : $lang->testcase->summary, $topSceneCount, $topCaseCount);
+$topSceneCount = count(array_filter(array_map(function($case){return $case->isScene && $case->grade == 1;}, $cases)));
 
 $canBatchRun                = hasPriv('testtask', 'batchRun') && !$isOnlyScene;
 $canBatchEdit               = hasPriv('testcase', 'batchEdit') && !$isOnlyScene;
@@ -109,19 +106,19 @@ if(isset($cols['title']))  $cols['title']['nestedToggle'] = $topSceneCount > 0;
 if(isset($cols['branch'])) $cols['branch']['map']         = $branchTagOption;
 if(isset($cols['story']))  $cols['story']['map']          = $stories;
 
-foreach($scenes as $scene)
+foreach($cases as $case)
 {
-    $actionType = $scene->isCase == 1 ? 'testcase' : 'scene';
+    $actionType = $case->isScene ? 'scene' : 'testcase';
     $cols['actions']['menu'] = $config->$actionType->menu;
 
-    $scene->browseType = $browseType;
-    initTableData(array($scene), $cols, $this->testcase);
+    $case->browseType = $browseType;
+    initTableData(array($case), $cols, $this->testcase);
 
-    if($scene->isCase != 1) continue;
+    if($case->isScene) continue;
 
-    $stages = array_filter(explode(',', $scene->stage));
+    $stages = array_filter(explode(',', $case->stage));
     foreach($stages as $key => $stage) $stages[$key] = zget($lang->testcase->stageList, $stage);
-    $scene->stage = implode($lang->comma, $stages);
+    $case->stage = implode($lang->comma, $stages);
 }
 
 dtable
@@ -129,13 +126,13 @@ dtable
     set::customCols(!$isOnlyScene),
     set::userMap($users),
     set::cols($cols),
-    set::data(array_values($scenes)),
+    set::data(array_values($cases)),
     set::onRenderCell(jsRaw('window.onRenderCell')),
     set::checkable($canBatchAction),
     set::checkInfo(jsRaw('function(checks){return window.setStatistics(this, checks);}')),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
-    set::customData(array('isOnlyScene' => $isOnlyScene, 'caseScenes' => $caseScenes, 'pageSummary' => $pageSummary, 'modules' => $modulePairs))
+    set::customData(array('isOnlyScene' => $isOnlyScene, 'pageSummary' => $summary, 'modules' => $modulePairs))
 );
 
 modal
