@@ -2729,7 +2729,7 @@ class testcaseModel extends model
         if(isset($sceneIds[$tmpPId]))
         {
             $pScene = $sceneIds[$tmpPId];
-            $scene  = $pScene["id"] + CHANGEVALUE;
+            $scene  = $pScene["id"];
         }
 
         $id         = isset($testcaseData["id"]) ? $testcaseData["id"] : -1;
@@ -2886,7 +2886,7 @@ class testcaseModel extends model
             $sceneID = $this->dao->lastInsertID();
 
             $order       = new stdclass();
-            $order->sort = ($sceneID + CHANGEVALUE);
+            $order->sort = $sceneID;
 
             $this->dao->update(TABLE_SCENE)->data($order)->where('id')->eq((int)$sceneID)->exec();
         }
@@ -2911,17 +2911,17 @@ class testcaseModel extends model
         $pScene = isset($sceneIds[$tmpPId]) ? $sceneIds[$tmpPId] : array();
         $parent = 0;
         $grade  = 1;
-        $path   = ",".($sceneID + CHANGEVALUE).",";
+        $path   = ",{$sceneID},";
 
         if(isset($sceneIds[$tmpPId]))
         {
             $parent      = $pScene["id"];
             $parentScene = $this->dao->findById((int)$parent)->from(TABLE_SCENE)->fetch();
-            $path        = $parentScene->path . ($sceneID + CHANGEVALUE).",";
+            $path        = $parentScene->path . "{$sceneID},";
             $grade       = $parentScene->grade + 1;
         }
 
-        if($parent != 0) $parent = $parent + CHANGEVALUE;
+        if($parent != 0) $parent = $parent;
 
         $this->dao->update(TABLE_SCENE)
             ->set('parent')->eq($parent)
@@ -3016,7 +3016,7 @@ class testcaseModel extends model
         $caseList = $this->dao->select($fields)->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->leftJoin(TABLE_MODULE)->alias('t3')->on('t1.module = t3.id')
-            ->leftJoin(TABLE_SCENE)->alias('t4')->on('t1.scene = t4.id+' . CHANGEVALUE)
+            ->leftJoin(TABLE_SCENE)->alias('t4')->on('t1.scene = t4.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.product')->eq($productID)
             ->beginIF($moduleID > 0)->andWhere('t1.module')->eq($moduleID)->fi()

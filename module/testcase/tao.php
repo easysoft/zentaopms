@@ -24,7 +24,7 @@ class testcaseTao extends testcaseModel
      */
     protected function fetchSceneName(int $sceneID): string|null
     {
-        return $this->dao->findByID((int)$sceneID - CHANGEVALUE)->from(TABLE_SCENE)->fetch('title');
+        return $this->dao->findByID($sceneID)->from(TABLE_SCENE)->fetch('title');
     }
 
     /**
