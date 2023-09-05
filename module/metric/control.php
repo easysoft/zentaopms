@@ -162,6 +162,7 @@ class metric extends control
 
         $this->view->title          = $metric->name;
         $this->view->metric         = $metric;
+        $this->view->type           = $metric->fromID == 0 ? 'new' : 'old';
         $this->view->result         = $result;
         $this->view->resultHeader   = $this->metricZen->getViewTableHeader($result);
         $this->view->resultData     = $this->metricZen->getViewTableData($metric, $result);
