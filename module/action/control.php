@@ -88,25 +88,25 @@ class action extends control
         /* Save the object name used to replace the search language item. */
         $this->session->set('objectName', zget($this->lang->action->objectTypes, $browseType, ''), 'admin');
 
-        /* 搭建搜索表单。*/
+        /* 生成表单搜索数据。 */
         /* Build the search form. */
         $queryID   = (int)$queryID;
         $actionURL = $this->createLink('action', 'trash', "browseType=$browseType&type=$type&byQuery=true&queryID=myQueryID");
         $this->action->buildTrashSearchForm($queryID, $actionURL);
 
-        /* 获取回收站内的对象。 */
-        /* Get deleted objects. */
+        /* 分页初始化。 */
+        /* Load paper. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        /* 解析排序字段。 */
-        /* Append id for second sort. */
+        /* 生成排序规则。 */
+        /* Generate the sort rules.  */
         $sort           = common::appendOrder($orderBy);
         $trashes        = $byQuery ? $this->action->getTrashesBySearch($browseType, $type, $queryID, $sort, $pager) : $this->action->getTrashes($browseType, $type, $sort, $pager);
         $objectTypeList = $this->action->getTrashObjectTypes($type);
         $objectTypeList = array_keys($objectTypeList);
 
-        /* 获取头部导航标题。 */
+        /* 获取头部模块标题导航。 */
         /* Build the header navigation title. */
         $preferredType       = array();
         $moreType            = array();
@@ -120,7 +120,7 @@ class action extends control
         if(count($preferredType) < $this->config->action->preferredTypeNum)
         {
             $toPreferredType = array_splice($moreType, 0, $this->config->action->preferredTypeNum - count($preferredType));
-            $preferredType   = $preferredType + $toPreferredType;
+            $preferredType   = $preferredType + $toPreferredType; //填充至设定的展示数量。
         }
 
         /* 获取执行所属的项目名称。 */
@@ -272,35 +272,45 @@ class action extends control
                     }
                 }
 
-                if($repeatObject->name == $object->name && $repeatObject->code && $repeatObject->code == $object->code)
+                if($confirmChange == 'no')
                 {
-                    if($confirmChange == 'no')
+                    $message = '';
+                    if($repeatObject->name == $object->name && $repeatObject->code && $repeatObject->code == $object->code)
                     {
                         $message = sprintf($this->lang->action->repeatChange, $this->lang->{$oldAction->objectType}->common, $replaceName, $replaceCode);
-                        $url     = $this->createLink('action', 'undelete', "action={$actionID}&browseType={$browseType}&confirmChange=yes");
-                        return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message: '{$message}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) $.ajaxSubmit({url: '{$url}'});     });"));
                     }
-                    if($confirmChange == 'yes') $this->action->updateObjectByID($table, $oldAction->id, array('code' => $replaceCode, 'name' => $replaceName));
-                }
-                elseif($repeatObject->name == $object->name)
-                {
-                    if($confirmChange == 'no')
+                    elseif($repeatObject->name == $object->name)
                     {
                         $message = sprintf($this->lang->action->nameRepeatChange, $this->lang->{$oldAction->objectType}->common, $replaceName);
-                        $url     = $this->createLink('action', 'undelete', "action={$actionID}&browseType={$browseType}&confirmChange=yes");
-                        return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message: '{$message}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) $.ajaxSubmit({url: '{$url}'});     });"));
                     }
-                    if($confirmChange == 'yes') $this->action->updateObjectByID($table, $oldAction->id, array('name' => $replaceName));
-                }
-                elseif($repeatObject->code and $repeatObject->code == $object->code)
-                {
-                    if($confirmChange == 'no')
+                    elseif($repeatObject->code && $repeatObject->code == $object->code)
                     {
                         $message = sprintf($this->lang->action->codeRepeatChange, $this->lang->{$oldAction->objectType}->common, $replaceCode);
-                        $url     = $this->createLink('action', 'undelete', "action={$actionID}&browseType={$browseType}&confirmChange=yes");
+                    }
+
+                    if($message)
+                    {
+                        $url = $this->createLink('action', 'undelete', "action={$actionID}&browseType={$browseType}&confirmChange=yes");
                         return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message: '{$message}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) $.ajaxSubmit({url: '{$url}'});     });"));
                     }
-                    if($confirmChange == 'yes') $this->action->updateObjectByID($table, $oldAction->id, array('code' => $replaceCode));
+                }
+                elseif($confirmChange == 'yes')
+                {
+                    $recoverData = array();
+                    if($repeatObject->name == $object->name && $repeatObject->code && $repeatObject->code == $object->code)
+                    {
+                        $recoverData = array('code' => $replaceCode, 'name' => $replaceName);
+                    }
+                    elseif($repeatObject->name == $object->name)
+                    {
+                        $recoverData = array('name' => $replaceName);
+                    }
+                    elseif($repeatObject->code && $repeatObject->code == $object->code)
+                    {
+                        $recoverData = array('code' => $replaceCode);
+                    }
+
+                    if(!empty($recoverData)) $this->action->updateObjectByID($table, $oldAction->objectID, $recoverData);
                 }
             }
 
@@ -312,10 +322,11 @@ class action extends control
             }
         }
 
-        $this->action->undelete($actionID);
+        $result = $this->action->undelete($actionID);
+        if(true !== $result) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $result)));
 
         $sameTypeObjects = $this->action->getTrashes($oldAction->objectType, $extra, 'id_desc', null);
-        $browseType      = ($sameTypeObjects and $browseType != 'all') ? $oldAction->objectType : 'all';
+        $browseType      = ($sameTypeObjects && $browseType != 'all') ? $oldAction->objectType : 'all';
 
         return $this->send(array('result' => 'success', 'load' => $this->createLink('action', 'trash', "browseType=$browseType&type=$extra")));
     }

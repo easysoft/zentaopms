@@ -343,7 +343,6 @@ class testsuite extends control
      *
      * @param  int    $suiteID
      * @param  int    $rowID
-     * @param  string $confirm
      * @access public
      * @return void
      */

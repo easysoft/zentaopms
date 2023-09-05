@@ -1943,114 +1943,109 @@ class actionModel extends model
      *
      * @param  int      $actionID
      * @access public
-     * @return void
+     * @return string|bool
      */
-    public function undelete($actionID)
+    public function undelete(int $actionID): string|bool
     {
         $action = $this->getById($actionID);
-        if($action->action != 'deleted') return;
+        if($action->action != 'deleted') return true;
+
+        $table = $this->config->objectTables[$action->objectType];
+
+        $orderby = '';
+        $field   = '*';
+        switch($action->objectType)
+        {
+            case 'product':
+                $field   = 'id, name, code, acl';
+                break;
+            case 'program':
+            case 'project':
+            case 'execution':
+                $field   = 'id, acl, name, hasProduct';
+                break;
+            case 'doc':
+                $orderby = 'version desc';
+            default:
+                break;
+        }
+
+        $object = $this->actionTao->getObjectBaseInfo($table, array('id' => $action->objectID), $field, $orderby);
 
         if($action->objectType == 'execution')
         {
-            $execution = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($action->objectID)->fetch();
-            if($execution->deleted and empty($execution->project)) return print(js::error($this->lang->action->undeletedTips));
+            if($object->deleted && empty($object->project)) return $this->lang->action->undeletedTips;
 
-            $projectCount = $this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('id')->eq($execution->project)->andWhere('deleted')->eq('0')->fetch('count');
-            if((int)$projectCount == 0) return print(js::error($this->lang->action->executionNoProject));
+            $projectCount = $this->dao->select('count(*) AS count')->from(TABLE_PROJECT)->where('id')->eq($object->project)->andWhere('deleted')->eq('0')->fetch('count');
+            if((int)$projectCount == 0) return $this->lang->action->executionNoProject;
         }
 
-        if($action->objectType == 'repo')
+        if($action->objectType == 'repo' && in_array($object->SCM, array('Gitlab', 'Gitea', 'Gogs')))
         {
-            $repo = $this->dao->select('*')->from(TABLE_REPO)->where('id')->eq($action->objectID)->fetch();
-            if($repo and in_array($repo->SCM, array('Gitlab', 'Gitea', 'Gogs')))
+            $server = $this->dao->select('*')->from(TABLE_PIPELINE)->where('id')->eq($object->serviceHost)->andWhere('deleted')->eq('0')->fetch();
+            if(empty($server)) return $this->lang->action->repoNoServer;
+        }
+
+        if(in_array($action->objectType, array('program', 'project', 'execution', 'product')))
+        {
+            $objectType = $action->objectType == 'execution' ? 'sprint' : $action->objectType;
+            if($object->acl != 'open') $this->loadModel('user')->updateUserView($object->id, $objectType);
+
+            /* 恢复隐藏产品。 */
+            /* Resotre hidden products. */
+            if($action->objectType == 'project' && !$object->hasProduct)
             {
-                $server = $this->dao->select('*')->from(TABLE_PIPELINE)->where('id')->eq($repo->serviceHost)->andWhere('deleted')->eq('0')->fetch();
-                if(empty($server)) return print(js::error($this->lang->action->repoNoServer));
-            }
-        }
-
-        if($action->objectType == 'product')
-        {
-            $product = $this->dao->select('id,name,code,acl')->from(TABLE_PRODUCT)->where('id')->eq($action->objectID)->fetch();
-            if($product->acl != 'open') $this->loadModel('user')->updateUserView($product->id, 'product');
-        }
-        elseif(in_array($action->objectType, array('program', 'project', 'execution')))
-        {
-            $project    = $this->dao->select('id,acl,name,hasProduct')->from(TABLE_PROJECT)->where('id')->eq($action->objectID)->fetch();
-            $objecttype = $action->objectType == 'execution' ? 'sprint' : $action->objectType;
-            if($project->acl != 'open') $this->loadModel('user')->updateUserView($project->id, $objecttype);
-
-            /* Reduction shadow product. */
-            if(!$project->hasProduct and $action->objectType == 'project')
-            {
-                $productID = $this->loadModel('product')->getProductIDByProject($project->id);;
+                $productID = $this->loadModel('product')->getProductIDByProject($object->id);;
                 $this->dao->update(TABLE_PRODUCT)
-                    ->set('name')->eq($project->name)
+                    ->set('name')->eq($object->name)
                     ->set('deleted')->eq(0)
                     ->where('id')->eq($productID)
                     ->exec();
             }
         }
-        elseif($action->objectType == 'module')
+
+        if($action->objectType == 'module')
         {
-            $module     = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($action->objectID)->fetch();
-            $repeatName = $this->loadModel('tree')->checkUnique($module);
-            if($repeatName) return print(js::alert(sprintf($this->lang->tree->repeatName, $repeatName)));
-        }
-        elseif($action->objectType == 'reviewissue')
-        {
-            $issue = $this->dao->select('*')->from(TABLE_REVIEWISSUE)->where('id')->eq($action->objectID)->fetch();
-            if(!empty($issue->review))
-            {
-                $review = $this->dao->select('*')->from(TABLE_REVIEW)->where('id')->eq($issue->review)->fetch();
-                if($review->deleted)
-                {
-                    $this->app->loadLang('reviewissue');
-                    return print(js::alert($this->lang->reviewissue->undeleteAction));
-                }
-            }
-        }
-        elseif($action->objectType == 'release')
-        {
-            $release = $this->dao->select('*')->from(TABLE_RELEASE)->where('id')->eq($action->objectID)->fetch();
-            if($release->shadow) $this->dao->update(TABLE_BUILD)->set('deleted')->eq(0)->where('id')->eq($release->shadow)->exec();
+            $repeatName = $this->loadModel('tree')->checkUnique($object);
+            if($repeatName) return sprintf($this->lang->tree->repeatName, $repeatName);
         }
 
-        if($action->objectType == 'case')
+        if($action->objectType == 'reviewissue' && $object->parent)
         {
-            $case = $this->dao->select('*')->from(TABLE_CASE)->where('id')->eq($action->objectID)->fetch();
-            if($case->scene)
+            $review = $this->dao->select('*')->from(TABLE_REVIEW)->where('id')->eq($object->review)->fetch();
+            if($review->deleted)
             {
-                $scene = $this->dao->select('*')->from(VIEW_SCENECASE)->where('id')->eq($case->scene)->fetch();
-                if($scene->deleted) return print(js::error($this->lang->action->refusecase));
+                $this->app->loadLang('reviewissue');
+                return $this->lang->reviewissue->undeleteAction;
             }
         }
 
-        if($action->objectType == 'scene')
+        if($action->objectType == 'release' && $object->shadow) $this->dao->update(TABLE_BUILD)->set('deleted')->eq(0)->where('id')->eq($object->shadow)->exec();
+
+        if($action->objectType == 'case' && $object->parent)
         {
-            $scene = $this->dao->select('*')->from("zt_scene")->where('id')->eq($action->objectID)->fetch();
-            if($scene->parent)
-            {
-                $scenerow = $this->dao->select('*')->from(VIEW_SCENECASE)->where('id')->eq($scene->parent)->fetch();
-                if($scenerow->deleted) return print(js::error($this->lang->action->refusescene));
-            }
+            $scene = $this->dao->select('*')->from(VIEW_SCENECASE)->where('id')->eq($object->scene)->fetch();
+            if($scene->deleted) return $this->lang->action->refusecase;
         }
 
-        if($action->objectType == 'doc')
+        if($action->objectType == 'scene' && $object->parent)
         {
-            $docContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($action->objectID)->orderBy('version desc')->limit(1)->fetch();
-            if($docContent->files) $this->dao->update(TABLE_FILE)->set('deleted')->eq('0')->where('id')->in($docContent->files)->exec();
+            $scenerow = $this->dao->select('*')->from(VIEW_SCENECASE)->where('id')->eq($object->parent)->fetch();
+            if($scenerow->deleted) return $this->lang->action->refusescene;
         }
 
-        /* Update deleted field in object table. */
-        $table = $this->config->objectTables[$action->objectType];
+        if($action->objectType == 'doc' && $object->files) $this->dao->update(TABLE_FILE)->set('deleted')->eq('0')->where('id')->in($object->files)->exec();
+
+        /* 恢复被删除的元素。 */
+        /* Resotre deleted object. */
         $this->dao->update($table)->set('deleted')->eq(0)->where('id')->eq($action->objectID)->exec();
 
-        $this->loadModel('product');
+        /* 当还原项目或者执行的时候恢复用户的产品权限。 */
         /* Revert userView products when undelete project or execution. */
-        if($action->objectType == 'project' or $action->objectType == 'execution')
+        if($action->objectType == 'project' || $action->objectType == 'execution')
         {
-            $products = $this->product->getProducts($project->id, 'all', '', false);
+            $this->loadModel('product');
+            $products = $this->product->getProducts($object->id, 'all', '', false);
             if(!empty($products)) $this->loadModel('user')->updateUserView(array_keys($products), 'product');
 
             if($action->objectType == 'execution')
@@ -2060,21 +2055,24 @@ class actionModel extends model
             }
         }
 
+        /* 还原产品或者项目的时候恢复文档库。 */
         /* Revert doclib when undelete product or project. */
-        if($action->objectType == 'execution' or $action->objectType == 'product')
-        {
-            $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(0)->where($action->objectType)->eq($action->objectID)->exec();
-        }
+        if($action->objectType == 'execution' || $action->objectType == 'product') $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(0)->where($action->objectType)->eq($action->objectID)->exec();
 
+        /* 恢复产品计划的父级状态。 */
         /* Revert productplan parent status. */
         if($action->objectType == 'productplan') $this->loadModel('productplan')->changeParentField($action->objectID);
 
+        /* 还原子任务的时候更新任务状态。 */
         /* Update task status when undelete child task. */
         if($action->objectType == 'task') $this->loadModel('task')->updateParentStatus($action->objectID);
 
+        /* 在action表中更新action记录。 */
         /* Update action record in action table. */
         $this->dao->update(TABLE_ACTION)->set('extra')->eq(ACTIONMODEL::BE_UNDELETED)->where('id')->eq($actionID)->exec();
         $this->create($action->objectType, $action->objectID, 'undeleted');
+
+        return true;
     }
 
     /**
@@ -2382,7 +2380,7 @@ class actionModel extends model
      * @access public
      * @return void
      */
-    public function buildTrashSearchForm($queryID, $actionURL)
+    public function buildTrashSearchForm(int $queryID, string $actionURL)
     {
         $this->config->trash->search['actionURL'] = $actionURL;
         $this->config->trash->search['queryID']   = $queryID;
