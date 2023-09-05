@@ -2210,7 +2210,7 @@ class testcaseModel extends model
         $this->dao->insert(TABLE_SCENE)->data($scene)
             ->autoCheck()
             ->batchCheck($this->config->testcase->createscene->requiredFields, 'notempty')
-            ->checkIF($product, 'title', 'unique', "product = {$product}")
+            ->checkIF($product, 'title', 'unique', "product = '{$product}'")
             ->checkFlow()
             ->exec();
         if(dao::isError()) return false;
@@ -2606,7 +2606,7 @@ class testcaseModel extends model
 
         $this->dao->update(TABLE_SCENE)->data($scene)
             ->batchCheck($this->config->testcase->editscene->requiredFields, 'notempty')
-            ->check('title', 'unique', "product = {$scene->product} AND id != {$sceneID}")
+            ->check('title', 'unique', "product = '{$scene->product}' AND id != '{$sceneID}'")
             ->where('id')->eq($sceneID)
             ->checkFlow()
             ->exec();
