@@ -1031,7 +1031,7 @@ class execution extends control
         $products = $this->product->getProducts($executionID, 'all', '', false);
 
         /* Build the search form. */
-        $type    = strtolower($type);
+        $type = strtolower($type);
         $this->project->buildProjectBuildSearchForm($products, $type == 'bysearch' ? (int)$param : 0, $executionID, $param, 'execution');
 
         /* Load pager. */
