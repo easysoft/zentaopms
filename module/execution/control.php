@@ -267,8 +267,8 @@ class execution extends control
     {
         if(!empty($_POST))
         {
-            $taskList   = form::batchData($this->config->execution->form->importTask)->get();
-            $dateExceed = $this->execution->importTask($toExecution, array_column($taskList, 'taskIdList'));
+            $taskIdList = form::data($this->config->execution->form->importTask)->get('taskIdList');
+            $dateExceed = $this->execution->importTask($toExecution, $taskIdList);
 
             $result = array('load' => true);
             if($dateExceed) $result['message'] = sprintf($this->lang->task->error->dateExceed, implode(',', $dateExceed));

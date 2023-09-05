@@ -2862,6 +2862,25 @@ class executionModel extends model
             $this->action->create('task', $task->id, 'moved', '', $task->execution);
         }
 
+        /* Other data process after task batch import. */
+        $this->afterImportTask($execution, $parents, $assignedToes, $taskStories);
+
+        return $dateExceed;
+    }
+
+    /**
+     * 批量导入任务后的其他数据处理。
+     * Other data process after task batch import.
+     *
+     * @param  object $execution
+     * @param  array  $parents
+     * @param  array  $assignedToes
+     * @param  array  $taskStories
+     * @access public
+     * @return void
+     */
+    public function afterImportTask(object $execution, array $parents, array $assignedToes, array $taskStories)
+    {
         /* Get stories of children task. */
         if(!empty($parents))
         {
@@ -2870,7 +2889,8 @@ class executionModel extends model
         }
 
         /* Add members to execution team. */
-        $teamMembers = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution');
+        $teamMembers = $this->loadModel('user')->getTeamMemberPairs($execution->id, 'execution');
+        $today       = helper::today();
         foreach($assignedToes as $account => $preExecutionID)
         {
             if(!isset($teamMembers[$account]))
@@ -2881,15 +2901,15 @@ class executionModel extends model
                     ->andWhere('account')->eq($account)
                     ->fetch();
 
-                $role->root = $executionID;
-                $role->join = helper::today();
+                $role->root = $execution->id;
+                $role->join = $today;
                 $this->dao->replace(TABLE_TEAM)->data($role)->exec();
             }
         }
 
         /* Link stories. */
-        $executionStories = $this->loadModel('story')->getExecutionStoryPairs($executionID);
-        $lastOrder        = (int)$this->dao->select('`order`')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order_desc')->limit(1)->fetch('order');
+        $executionStories = $this->loadModel('story')->getExecutionStoryPairs($execution->id);
+        $lastOrder        = (int)$this->dao->select('`order`')->from(TABLE_PROJECTSTORY)->where('project')->eq($execution->id)->orderBy('order_desc')->limit(1)->fetch('order');
         $stories          = $this->dao->select("id as story, product, version")->from(TABLE_STORY)->where('id')->in(array_keys($taskStories))->fetchAll('story');
         foreach($taskStories as $storyID)
         {
@@ -2898,15 +2918,13 @@ class executionModel extends model
                 $lastOrder ++;
 
                 $story = $stories[$storyID];
-                $story->project = $executionID;
+                $story->project = $execution->id;
                 $story->order   = $lastOrder;
                 $this->dao->insert(TABLE_PROJECTSTORY)->data($story)->exec();
 
-                if($execution->multiple || $execution->type == 'project') $this->action->create('story', $storyID, 'linked2execution', '', $executionID);
+                if($execution->multiple || $execution->type == 'project') $this->action->create('story', $storyID, 'linked2execution', '', $execution->id);
             }
         }
-
-        return $dateExceed;
     }
 
     /**
