@@ -945,7 +945,7 @@ class repo extends control
         $this->view->suffix      = $suffix;
         $this->view->file        = $file;
         $this->view->repoID      = $repoID;
-        $this->view->branchID    = $this->cookie->repoBranch;
+        $this->view->branchID    = (string) $this->cookie->repoBranch;
         $this->view->objectID    = $objectID;
         $this->view->repo        = $repo;
         $this->view->encoding    = str_replace('-', '_', $encoding);
