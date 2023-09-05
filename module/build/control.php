@@ -66,6 +66,8 @@ class build extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('build', 'view', "buildID=$buildID") . "#app={$this->app->tab}"));
         }
 
+        $_GET['zin'] = '0';
+
         $status = empty($this->config->CRProduct) ? 'noclosed' : '';
         $this->loadModel('product');
         $this->loadModel('project');
@@ -121,8 +123,6 @@ class build extends control
             }
             $this->view->productArtifactRepos = $productArtifactRepos;
         }
-
-        if(isonlybody()) $_GET['zin'] = '0';
 
         $this->view->title      = $this->lang->build->create;
         $this->view->position[] = $this->lang->build->create;
