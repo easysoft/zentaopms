@@ -34,6 +34,7 @@ $lang->metric->exitManage    = "退出管理";
 $lang->metric->filters       = '筛选器配置';
 $lang->metric->details       = '详情';
 $lang->metric->zAnalysis     = 'Z分析';
+$lang->metric->sqlStatement  = "SQL语句";
 
 $lang->metric->viewType = new stdclass();
 $lang->metric->viewType->single   = '单独查看';
@@ -45,6 +46,7 @@ $lang->metric->definitionTip = '请输入度量项的计算规则及过滤条件
 $lang->metric->noDesc    = "暂无描述";
 $lang->metric->noFormula = "暂无计算规则";
 $lang->metric->noCalc    = "暂未实现度量项PHP算法";
+$lang->metric->noSQL     = "暂无";
 
 $lang->metric->legendBasicInfo  = '基本信息';
 $lang->metric->legendCreateInfo = '创建编辑信息';

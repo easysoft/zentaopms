@@ -116,7 +116,32 @@ class metricModel extends model
     public function getByID(int $metricID, string|array $fieldList = '*')
     {
         if(is_array($fieldList)) $fieldList = implode(',', $fieldList);
-        return $this->dao->select($fieldList)->from(TABLE_METRIC)->where('id')->eq($metricID)->fetch();
+        $metric = $this->dao->select($fieldList)->from(TABLE_METRIC)->where('id')->eq($metricID)->fetch();
+
+        if($metric->fromID !== 0)
+        {
+            $oldMetric = $this->getOldMetricByID($metric->fromID);
+
+            $metric->sql    = $oldMetric->configure;
+            $metric->params = $oldMetric->params;
+        }
+
+        return $metric;
+    }
+
+    /**
+     * 根据ID获取旧版度量项信息。
+     * Get old metric info by id.
+     *
+     * @param  int          $metricID
+     * @param  string|array $fieldList
+     * @access public
+     * @return object|false
+     */
+    public function getOldMetricByID(int $metricID, string|array $fieldList = '*')
+    {
+        if(is_array($fieldList)) $fieldList = implode(',', $fieldList);
+        return $this->dao->select($fieldList)->from(TABLE_BASICMEAS)->where('id')->eq($metricID)->fetch();
     }
 
     /**

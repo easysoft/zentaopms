@@ -34,6 +34,7 @@ $lang->metric->exitManage    = "Exit manage";
 $lang->metric->filters       = 'Filter Settings';
 $lang->metric->details       = 'Details';
 $lang->metric->zAnalysis     = 'Z Analysis';
+$lang->metric->sqlStatement  = "SQL Statement";
 
 $lang->metric->viewType = new stdclass();
 $lang->metric->viewType->single   = 'Single view';
@@ -45,6 +46,7 @@ $lang->metric->definitionTip = 'Enter the calculation rules and filtering condit
 $lang->metric->noDesc    = "No description available";
 $lang->metric->noFormula = "No calculation rules available";
 $lang->metric->noCalc    = "The PHP algorithm for this metric has not been implemented yet";
+$lang->metric->noSQL     = "No SQL";
 
 $lang->metric->legendBasicInfo  = 'Basic Information';
 $lang->metric->legendCreateInfo = 'Creation and Editing Information';
