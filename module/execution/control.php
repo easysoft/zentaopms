@@ -1318,17 +1318,17 @@ class execution extends control
     }
 
     /**
+     * 执行团队列表。
      * Browse team of a execution.
      *
      * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function team($executionID = 0)
+    public function team(int $executionID = 0)
     {
-        $execution = $this->commonAction($executionID);
-        $deptID    = $this->app->user->admin ? 0 : $this->app->user->dept;
-
+        $execution   = $this->commonAction($executionID);
+        $deptID      = $this->app->user->admin ? 0 : $this->app->user->dept;
         $teamMembers = array();
         foreach($this->view->teamMembers as $member)
         {
