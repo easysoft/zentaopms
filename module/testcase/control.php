@@ -462,7 +462,7 @@ class testcase extends control
     public function edit(int $caseID, bool $comment = false, int $executionID = 0)
     {
         $oldCase = $this->testcase->getByID($caseID);
-        if(!$oldCase) return print(js::error($this->lang->notFound) . js::locate('back'));
+        if(!$oldCase) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->notFound}')", 'load' => array('back' => true)));
 
         $testtasks = $this->loadModel('testtask')->getGroupByCases($caseID);
         $testtasks = empty($testtasks[$caseID]) ? array() : $testtasks[$caseID];
@@ -1649,6 +1649,7 @@ class testcase extends control
     }
 
     /**
+     * 获取 xmind 的配置项。
      * Get xmind config.
      *
      * @access public
