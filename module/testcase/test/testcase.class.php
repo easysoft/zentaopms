@@ -921,4 +921,88 @@ class testcaseTest
         }
         return trim($return, ' ');
     }
+
+    /**
+     * 测试插入步骤。
+     * Test insert steps.
+     *
+     * @param  array  $caseIdList
+     * @access public
+     * @return string
+     */
+    public function importStepsTest(int $caseID, int $oldCaseID): string
+    {
+        global $tester;
+        $steps = $tester->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->eq($oldCaseID)->fetchAll('id');
+
+        $this->objectModel->importSteps($caseID, $steps);
+
+        if(dao::isError()) return dao::getError()[0];
+
+        $return    = '';
+        $steps = $tester->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->eq($caseID)->fetchAll('id');
+        foreach($steps as $step) $return .= "{$step->id},";
+        return trim($return, ',');
+    }
+
+    /**
+     * 测试插入文件。
+     * Test insert files.
+     *
+     * @param  array  $caseIdList
+     * @access public
+     * @return string
+     */
+    public function importFilesTest(int $caseID, int $oldCaseID): string
+    {
+        global $tester;
+        $files = $tester->dao->select('*')->from(TABLE_FILE)->where('`objectID`')->eq($oldCaseID)->andWhere('objectType')->eq('testcase')->fetchAll('id');
+
+        $this->objectModel->importFiles($caseID, $files);
+
+        if(dao::isError()) return dao::getError()[0];
+
+        $return    = '';
+        $files = $tester->dao->select('*')->from(TABLE_FILE)->where('`objectID`')->eq($caseID)->andWhere('objectType')->eq('testcase')->fetchAll('id');
+        foreach($files as $file) $return .= "{$file->id},";
+        return trim($return, ',');
+    }
+
+    /**
+     * 测试创建一个用例。
+     * Test create a case.
+     *
+     * @param  array  $param
+     * @access public
+     * @return array
+     */
+    public function doCreateTest($param)
+    {
+        $case = new stdclass();
+        $case->product      = 1;
+        $case->module       = 1821;
+        $case->type         = 'feature';
+        $case->stage        = ',unittest';
+        $case->story        = 4;
+        $case->color        = '';
+        $case->pri          = 3;
+        $case->precondition = '前置条件';
+        $case->steps        = array('1' => '1','1.1' => '1.1', '1.2' => '1.2', '2' => '2', '3' => '3', '4' => '');
+        $case->stepType     = array('1' => 'group','1.1' => 'item', '1.2' => 'item', '2' => 'step', '3' => 'item', '4' => 'step');
+        $case->expects      = array('1' => '','1.1' => '', '1.2' => '', '2' => '', '3' => '', '4' => '');
+        $case->keywords     = '关键词1,关键词2';
+        $case->status       = 'normal';
+
+        foreach($param as $field => $value) $case->{$field} = $value;
+
+        $this->objectModel->doCreate($case);
+
+        unset($_POST);
+
+        if(dao::isError()) return isset($param['type']) ? dao::getError()['type'][0] : dao::getError()['title'][0];
+
+        global $tester;
+        $caseID = $tester->dao->lastInsertID();
+        return $this->objectModel->fetchBaseInfo($caseID);
+    }
 }

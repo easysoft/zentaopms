@@ -1,0 +1,9 @@
+title: table zt_file
+desc: "file"
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: objectType
+    range: testcase
+  - field: objectID
+    range: 1-10

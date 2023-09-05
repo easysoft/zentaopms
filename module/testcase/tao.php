@@ -232,6 +232,24 @@ class testcaseTao extends testcaseModel
         return $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('testcase')->andWhere('objectID')->in($caseIdList)->andWhere('extra')->ne('editor')->fetchGroup('objectID');
     }
 
+    /**
+     * 创建一个测试用例。
+     * Create a test case.
+     *
+     * @param  object    $case
+     * @access protected
+     * @return bool
+     */
+    protected function doCreate(object $case): bool
+    {
+        $this->dao->insert(TABLE_CASE)->data($case, 'steps,expects,files,labels,stepType,needReview,scriptFile,scriptName')
+            ->autoCheck()
+            ->batchCheck($this->config->testcase->create->requiredFields, 'notempty')
+            ->checkFlow()
+            ->exec();
+         return !dao::isError();
+    }
+
     /*
      * 处理用例和项目的关系。
      * Deal with the relationship between the case and project when edit the case.
@@ -368,5 +386,57 @@ class testcaseTao extends testcaseModel
     protected function getReviewAmount(): int
     {
         return $this->dao->select('COUNT(id) AS count')->from(TABLE_CASE)->where('status')->eq('wait')->fetch('count');
+    }
+
+    /**
+     * 导入步骤。
+     * Import steps.
+     *
+     * @param  int    $caseID
+     * @param  array  $steps
+     * @access public
+     * @return bool
+     */
+    public function importSteps(int $caseID, array $steps): bool
+    {
+        /* 插入步骤。 */
+        /* Insert steps. */
+        $parentSteps = array();
+        foreach($steps as $stepID => $step)
+        {
+            $step->case = $caseID;
+            if(!empty($parentSteps[$step->parent])) $step->parent = $parentSteps[$step->parent];
+            unset($step->id);
+
+            $this->dao->insert(TABLE_CASESTEP)->data($step)->exec();
+
+            $parentSteps[$stepID] = $this->dao->lastInsertID();
+        }
+        return !dao::isError();
+    }
+
+    /**
+     * 导入文件。
+     * Import files.
+     *
+     * @param  int    $caseID
+     * @param  array  $files
+     * @access public
+     * @return bool
+     */
+    public function importFiles(int $caseID, array $files): bool
+    {
+        /* 插入文件。 */
+        /* Insert files. */
+        foreach($files as $fileID => $file)
+        {
+            $file->objectID  = $caseID;
+            $file->addedBy   = $this->app->user->account;
+            $file->addedDate = helper::now();
+            $file->downloads = 0;
+            unset($file->id);
+            $this->dao->insert(TABLE_FILE)->data($file)->exec();
+        }
+        return !dao::isError();
     }
 }

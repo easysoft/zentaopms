@@ -44,11 +44,7 @@ class testcaseModel extends model
 
         /* 插入测试用例。 */
         /* Insert testcase. */
-        $this->dao->insert(TABLE_CASE)->data($case, 'steps,expects,files,labels,stepType,needReview,scriptFile,scriptName')
-            ->autoCheck()
-            ->batchCheck($this->config->testcase->create->requiredFields, 'notempty')
-            ->checkFlow()
-            ->exec();
+        $this->testcaseTao->doCreate($case);
         if(dao::isError()) return false;
 
         $caseID = $this->dao->lastInsertID();
@@ -1321,12 +1317,12 @@ class testcaseModel extends model
             {
                 if($branch != 'ditto') $prevBranch = $branch;
                 if($branch == 'ditto') $data->branch[$i] = $prevBranch;
-                if(!isset($caseModules[$data->branch[$i]])) $caseModules[$data->branch[$i]] = $this->testsuite->getCanImportModules($productID, $libID,  $data->branch[$i]);
+                if(!isset($caseModules[$data->branch[$i]])) $caseModules[$data->branch[$i]] = $this->testsuite->getCanImportModules($productID, $libID, $data->branch[$i]);
             }
         }
         else
         {
-            $caseModules[$branch] = $this->loadModel('testsuite')->getCanImportModules($productID, $libID,  $branch);
+            $caseModules[$branch] = $this->loadModel('testsuite')->getCanImportModules($productID, $libID, $branch);
         }
 
         $libCases = $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)->andWhere('id')->in($data->caseIdList)->fetchAll('id');
