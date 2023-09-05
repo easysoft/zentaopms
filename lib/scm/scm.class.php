@@ -15,9 +15,7 @@ class scm
         $className = $repo->SCM;
         if($className == 'Git') $className = 'GitRepo';
         if(!class_exists($className)) require(strtolower($className) . '.class.php');
-        $repoRoot = $repo->path;
-        if('Subversion' == $className && !empty($repo->prefix)) $repoRoot = substr($repo->path, 0, strlen($repo->path) - strlen($repo->prefix));
-        $this->engine = new $className($repo->client, $repoRoot, $repo->account, $repo->password, $repo->encoding, $repo);
+        $this->engine = new $className($repo->client, $className == 'Gitlab' ? $repo->apiPath : $repo->path, $repo->account, $repo->password, $repo->encoding, $repo);
     }
 
     /**

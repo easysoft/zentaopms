@@ -30,6 +30,14 @@ class jobModel extends model
             $job->project   = $pipeline->project;
             $job->reference = $pipeline->reference;
         }
+        elseif($job->engine == 'jenkins')
+        {
+            if(strpos($job->pipeline, '/job/') !== false)
+            {
+                $job->rawPipeline = $job->pipeline;
+                $job->pipeline    = trim(str_replace('/job/', '/', $job->pipeline), '/');
+            }
+        }
         return $job;
     }
 
@@ -46,7 +54,7 @@ class jobModel extends model
      */
     public function getList($repoID = 0, $orderBy = 'id_desc', $pager = null, $engine = '', $pipeline = '')
     {
-        $jobs = $this->dao->select('t1.*, t2.name as repoName, t3.name as jenkinsName')->from(TABLE_JOB)->alias('t1')
+        return $this->dao->select('t1.*, t2.name as repoName, t3.name as jenkinsName')->from(TABLE_JOB)->alias('t1')
             ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repo=t2.id')
             ->leftJoin(TABLE_PIPELINE)->alias('t3')->on('t1.server=t3.id')
             ->where('t1.deleted')->eq('0')
@@ -56,13 +64,6 @@ class jobModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-
-        /* Format datetime. */
-        foreach($jobs as $key => $job)
-        {
-            if(!empty($job->lastExec)) $jobs[$key]->lastExec = substr($job->lastExec, 5, 11);
-        }
-        return $jobs;
     }
 
      /**
@@ -176,7 +177,9 @@ class jobModel extends model
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->remove('repoType,reference')
+            ->cleanInt('product')
             ->get();
+        $repo = $this->loadModel('repo')->getByID($job->repo);
 
         if($job->engine == 'jenkins')
         {
@@ -186,11 +189,10 @@ class jobModel extends model
 
         if(strtolower($job->engine) == 'gitlab')
         {
-            $repo    = $this->loadModel('repo')->getRepoByID($job->repo);
             $project = zget($repo, 'project');
-            if(!empty($repo))
+            if($job->repo && !empty($repo))
             {
-                $pipeline = $this->loadModel('gitlab')->apiGetPipeline($repo->serviceHost, $repo->serviceProject, $this->post->reference);
+                $pipeline = $this->loadModel('gitlab')->apiGetPipeline($repo->serviceHost, $repo->serviceProject, '');
                 if(!is_array($pipeline) or empty($pipeline))
                 {
                     dao::$errors['repo'] = $this->lang->job->engineTips->error;
@@ -199,7 +201,7 @@ class jobModel extends model
             }
 
             $job->server   = (int)zget($repo, 'serviceHost', 0);
-            $job->pipeline = json_encode(array('project' => $project, 'reference' => $this->post->reference));
+            $job->pipeline = json_encode(array('project' => $project, 'reference' => ''));
         }
 
         unset($job->jkServer);
@@ -235,10 +237,10 @@ class jobModel extends model
             }
         }
 
-        if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : join(',', $this->post->atDay);
+        if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : implode(',', $this->post->atDay);
 
         $job->svnDir = '';
-        if($job->triggerType == 'tag' and $this->post->repoType == 'Subversion')
+        if($job->triggerType == 'tag' and $repo->SCM == 'Subversion')
         {
             $job->svnDir = array_pop($_POST['svnDir']);
             if($job->svnDir == '/' and $_POST['svnDir']) $job->svnDir = array_pop($_POST['svnDir']);
@@ -273,14 +275,14 @@ class jobModel extends model
             ->batchCheckIF($job->triggerType === 'schedule' and $job->atDay !== '0', "atDay", 'notempty')
             ->batchCheckIF($job->triggerType === 'schedule', "atTime", 'notempty')
             ->batchCheckIF($job->triggerType === 'commit', "comment", 'notempty')
-            ->batchCheckIF(($this->post->repoType == 'Subversion' and $job->triggerType == 'tag'), "svnDir", 'notempty')
+            ->batchCheckIF(($repo->SCM == 'Subversion' and $job->triggerType == 'tag'), "svnDir", 'notempty')
             ->batchCheckIF($job->frame === 'sonarqube', "sonarqubeServer,projectKey", 'notempty')
             ->autoCheck()
             ->exec();
         if(dao::isError()) return false;
 
         $id = $this->dao->lastInsertId();
-        if(strtolower($job->engine) == 'jenkins') $this->initJob($id, $job, $this->post->repoType);
+        if(strtolower($job->engine) == 'jenkins') $this->initJob($id, $job, $repo->SCM);
         return $id;
     }
 
@@ -303,6 +305,7 @@ class jobModel extends model
             ->add('editedDate', helper::now())
             ->remove('repoType,reference')
             ->get();
+        $repo = $this->loadModel('repo')->getByID($job->repo);
 
         if($job->engine == 'jenkins')
         {
@@ -312,11 +315,10 @@ class jobModel extends model
 
         if(strtolower($job->engine) == 'gitlab')
         {
-            $repo    = $this->loadModel('repo')->getRepoByID($job->gitlabRepo);
             $project = zget($repo, 'project');
             if(!empty($repo))
             {
-                $pipeline = $this->loadModel('gitlab')->apiGetPipeline($repo->serviceHost, $repo->serviceProject, $this->post->reference);
+                $pipeline = $this->loadModel('gitlab')->apiGetPipeline($repo->serviceHost, $repo->serviceProject, '');
                 if(!is_array($pipeline) or empty($pipeline))
                 {
                     dao::$errors['gitlabRepo'] = $this->lang->job->engineTips->error;
@@ -324,9 +326,8 @@ class jobModel extends model
                 }
             }
 
-            $job->repo     = $job->gitlabRepo;
             $job->server   = (int)zget($repo, 'serviceHost', 0);
-            $job->pipeline = json_encode(array('project' => $project, 'reference' => $this->post->reference));
+            $job->pipeline = json_encode(array('project' => $project, 'reference' => ''));
         }
 
         unset($job->jkServer);
@@ -362,10 +363,10 @@ class jobModel extends model
             }
         }
 
-        if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : join(',', $this->post->atDay);
+        if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : implode(',', $this->post->atDay);
 
         $job->svnDir = '';
-        if($job->triggerType == 'tag' and $this->post->repoType == 'Subversion')
+        if($job->triggerType == 'tag' and $repo->SCM == 'Subversion')
         {
             $job->svnDir = array_pop($_POST['svnDir']);
             if($job->svnDir == '/' and $_POST['svnDir']) $job->svnDir = array_pop($_POST['svnDir']);
@@ -401,14 +402,14 @@ class jobModel extends model
             ->batchCheckIF($job->triggerType === 'schedule' and $job->atDay !== '0', "atDay", 'notempty')
             ->batchCheckIF($job->triggerType === 'schedule', "atTime", 'notempty')
             ->batchCheckIF($job->triggerType === 'commit', "comment", 'notempty')
-            ->batchCheckIF(($this->post->repoType == 'Subversion' and $job->triggerType == 'tag'), "svnDir", 'notempty')
+            ->batchCheckIF(($repo->SCM == 'Subversion' and $job->triggerType == 'tag'), "svnDir", 'notempty')
             ->batchCheckIF($job->frame === 'sonarqube', "sonarqubeServer,projectKey", 'notempty')
             ->autoCheck()
             ->where('id')->eq($id)
             ->exec();
         if(dao::isError()) return false;
 
-        $this->initJob($id, $job, $this->post->repoType);
+        $this->initJob($id, $job, $repo->SCM);
         return true;
     }
 
@@ -437,7 +438,7 @@ class jobModel extends model
 
         if($job->triggerType == 'tag')
         {
-            $repo    = $this->loadModel('repo')->getRepoByID($job->repo);
+            $repo    = $this->loadModel('repo')->getByID($job->repo);
             $lastTag = '';
             if($repoType == 'Subversion')
             {
@@ -475,7 +476,7 @@ class jobModel extends model
 
         if(!$job) return false;
 
-        $repo = $this->loadModel('repo')->getRepoById($job->repo);
+        $repo = $this->loadModel('repo')->getByID($job->repo);
         $now  = helper::now();
 
         /* Save compile data. */
@@ -571,7 +572,7 @@ class jobModel extends model
         $pipeline = json_decode($job->pipeline);
 
         $pipelineParams = new stdclass;
-        $pipelineParams->ref = $pipeline->reference;
+        $pipelineParams->ref = $pipeline->reference ? $pipeline->reference : 'master';
 
         $customParams = json_decode($job->customParam);
         $variables    = array();
@@ -590,7 +591,11 @@ class jobModel extends model
         $compile = new stdclass;
 
         $pipeline = $this->loadModel('gitlab')->apiCreatePipeline($job->server, $pipeline->project, $pipelineParams);
-        if(empty($pipeline->id)) $compile->status = 'create_fail';
+        if(empty($pipeline->id))
+        {
+            $this->gitlab->apiErrorHandling($pipeline);
+            $compile->status = 'create_fail';
+        }
 
         if(!empty($pipeline->id))
         {
@@ -671,6 +676,25 @@ class jobModel extends model
             ->beginIF(!$showDeleted)->andWhere('deleted')->eq('0')->fi()
             ->beginIF(!empty($projectKeys) or !$emptyShowAll)->andWhere('projectKey')->in($projectKeys)->fi()
             ->fetchPairs();
+    }
+
+    /**
+     * 判断按钮是否可点击。
+     * Adjust the action is clickable.
+     *
+     * @param  object $object
+     * @param  string $action
+     * @param  string $module
+     * @access public
+     * @return bool
+     */
+    public static function isClickable($object, $action, $module = 'job')
+    {
+        $action = strtolower($action);
+
+        if($module == 'job' && $action == 'exec') return $object->canExec;
+
+        return true;
     }
 
     /**

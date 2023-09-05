@@ -9,6 +9,7 @@
  * @link        https://www.zentao.net
  */
 ?>
+<?php $this->app->tab = 'admin'; // Force tab to be `admin` so that feature menu will be printed correctly. ?>
 <?php include '../../common/view/header.html.php';?>
 
 <div id="mainMenu" class="clearfix">
@@ -21,9 +22,11 @@
       <?php if($prompt->deleted) echo "<span class='label label-danger'>{$lang->ai->prompts->deleted}</span>";?>
     </div>
   </div>
-  <div class="btn-toolbar pull-right">
-    <?php if(common::hasPriv('ai', 'createprompt')) echo html::a(helper::createLink('ai', 'createprompt'), "<i class='icon icon-plus'></i> {$lang->ai->prompts->create}", '', "class='btn btn-primary iframe'");?>
-  </div>
+  <?php if($this->config->edition != 'open'): ?>
+    <div class="btn-toolbar pull-right">
+      <?php if(common::hasPriv('ai', 'createprompt')) echo html::a(helper::createLink('ai', 'createprompt'), "<i class='icon icon-plus'></i> {$lang->ai->prompts->create}", '', "class='btn btn-primary iframe'"); ?>
+    </div>
+  <?php endif; ?>
 </div>
 
 <div id="mainContent" class="main-row">
@@ -157,6 +160,14 @@
 <script>
   $(function()
   {
+    const container = window.frameElement?.closest('.load-indicator');
+    if(container && container.dataset.loading)
+    {
+      delete container.dataset.loading;
+      container.classList.remove('loading');
+      container.classList.remove('no-delay');
+    }
+
     /* TODO: use new modal for these. */
     $('.deleter').click(function()
     {
@@ -186,8 +197,10 @@
 
     $('.prompt-audit-btn').click(function()
     {
-      $('body').attr('data-loading', '<?php echo $lang->ai->execute->loading;?>');
-      $('body').addClass('load-indicator loading');
+      if(!container) return;
+      container.dataset.loading = '<?php echo $lang->ai->execute->auditing;?>';
+      container.classList.add('loading');
+      container.classList.add('no-delay');
 
       /* Checks for session storage to cancel loading status (see inputinject.html.php). */
       sessionStorage.removeItem('ai-prompt-data-injected');
@@ -195,7 +208,13 @@
       {
         if(sessionStorage.getItem('ai-prompt-data-injected'))
         {
-          $('body').removeClass('loading');
+          if(container && container.dataset.loading)
+          {
+            delete container.dataset.loading;
+            container.classList.remove('loading');
+            container.classList.remove('no-delay');
+          }
+
           sessionStorage.removeItem('ai-prompt-data-injected');
           clearInterval(loadCheckInterval);
         }

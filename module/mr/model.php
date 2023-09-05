@@ -92,7 +92,7 @@ class mrModel extends model
             ->where('deleted')->eq('0')
             ->andWhere('repoID')->eq($repoID)
             ->orderBy('id')->fetchPairs('id', 'title');
-        return array('' => '') + $MR;
+        return $MR;
     }
 
     /**
@@ -123,7 +123,7 @@ class mrModel extends model
     public function getGiteaProjects($hostID = 0)
     {
         $projects = $this->loadModel('gitea')->apiGetProjects($hostID);
-        return array($hostID => array_column($projects, null, 'full_name'));
+        return array($hostID => helper::arrayColumn($projects, null, 'full_name'));
     }
 
     /**
@@ -136,7 +136,7 @@ class mrModel extends model
     public function getGogsProjects($hostID = 0)
     {
         $projects = $this->loadModel('gogs')->apiGetProjects($hostID);
-        return array($hostID => array_column($projects, null, 'full_name'));
+        return array($hostID => helper::arrayColumn($projects, null, 'full_name'));
     }
 
     /**
@@ -720,7 +720,7 @@ class mrModel extends model
             $MRObject->head = $MR->sourceBranch;
             $MRObject->base = $MR->targetBranch;
             $MRObject->body = $MR->description;
-            if($MR->assignee)
+            if(!$MR->assignee)
             {
                 $assignee = $this->{$host->type}->getUserIDByZentaoAccount($this->post->hostID, $MR->assignee);
                 if($assignee) $MRObject->assignee = $assignee;
@@ -821,7 +821,7 @@ class mrModel extends model
             foreach($response as $MR)
             {
                 if(empty($MR->source_project_id) or empty($MR->target_project_id)) return null;
-                if($MR->source_project_id == $sourceProject and $MR->target_project_id == $targetProject) return $MMRR;
+                if($MR->source_project_id == $sourceProject and $MR->target_project_id == $targetProject) return $MR;
             }
         }
         return null;
@@ -842,10 +842,10 @@ class mrModel extends model
         $host = $this->loadModel('pipeline')->getByID($hostID);
         if($host->type == 'gitlab')
         {
-            $url = sprintf($this->gitlab->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID");
+            $url = sprintf($this->gitlab->getApiRoot($hostID, false), "/projects/$projectID/merge_requests/$MRID");
             $MR  = json_decode(commonModel::http($url));
         }
-        else if($host->type == 'gitea')
+        elseif($host->type == 'gitea')
         {
             $url = sprintf($this->loadModel('gitea')->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID");
             $MR  = json_decode(commonModel::http($url));
@@ -868,7 +868,7 @@ class mrModel extends model
                 $MR->has_conflicts     = empty($diff) ? true : false;
             }
         }
-        else if($host->type == 'gogs')
+        elseif($host->type == 'gogs')
         {
             $url = sprintf($this->loadModel('gogs')->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID");
             $MR  = json_decode(commonModel::http($url));
@@ -945,7 +945,7 @@ class mrModel extends model
             $newMR->squash               = $MR->squash == '1' ? 1 : 0;
             if($MR->assignee)
             {
-                $gitlabAssignee = $this->gitlab->getUserIDByZentaoAccount($oldMR->hostID, $MR->assignee);
+                $gitlabAssignee = $this->gitlab->getUserIDByZentaoAccount($MR->hostID, $MR->assignee);
                 if($gitlabAssignee) $newMR->assignee_ids = $gitlabAssignee;
             }
             $url = sprintf($this->gitlab->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID");
@@ -1141,7 +1141,7 @@ class mrModel extends model
         $host = $this->loadModel('pipeline')->getByID($MR->hostID);
         $scm  = $host->type;
 
-        $repo = $this->loadModel('repo')->getRepoByID($MR->repoID);
+        $repo = $this->loadModel('repo')->getByID($MR->repoID);
         $repo->gitService = $host->id;
         $repo->project    = $MR->targetProject;
         $repo->password   = $host->token;
@@ -1334,7 +1334,7 @@ class mrModel extends model
                     ->exec();
                 if (dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
-                return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'parent.refresh()');
+                return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true);
             }
         }
         return array('result' => 'fail', 'message' => $this->lang->mr->repeatedOperation, 'locate' => helper::createLink('mr', 'view', "mr={$MR->id}"));
@@ -1530,7 +1530,7 @@ class mrModel extends model
         {
             $bugID = $this->dao->lastInsertID();
             $this->loadModel('file')->updateObjectID($this->post->uid, $bugID, 'bug');
-            setcookie("repoPairs[$repoID]", $data->product);
+            helper::setcookie("repoPairs[$repoID]", $data->product);
 
             $bugInfo = array();
             $bugInfo['result']     = 'success';
@@ -1796,7 +1796,7 @@ class mrModel extends model
         $host = $this->loadModel('pipeline')->getByID($MR->hostID);
         if($host->type == 'gogs')
         {
-            $repo = $this->loadModel('repo')->getRepoByID($MR->repoID);
+            $repo = $this->loadModel('repo')->getByID($MR->repoID);
             $scm  = $this->app->loadClass('scm');
             $scm->setEngine($repo);
             return $scm->getMRCommits($MR->sourceBranch, $MR->targetBranch);
@@ -1973,7 +1973,7 @@ class mrModel extends model
     {
         $product = array();
 
-        if($MR->repoID)
+        if(is_object($MR) && $MR->repoID)
         {
             $productID = $this->dao->select('product')->from(TABLE_REPO)->where('id')->eq($MR->repoID)->fetch('product');
         }
@@ -2093,16 +2093,20 @@ class mrModel extends model
     }
 
     /**
+     * 判断按钮是否可点击。
      * Adjust the action clickable.
      *
      * @param  object $MR
      * @param  string $action
      * @access public
-     * @return void
+     * @return bool
      */
-    public static function isClickable($MR, $action)
+    public static function isClickable(object $MR, string $action): bool
     {
         if($action == 'edit' and !$MR->synced) return false;
+        if($action == 'edit')   return $MR->canEdit != 'disabled';
+        if($action == 'delete') return $MR->canDelete != 'disabled';
+
         return true;
     }
 }

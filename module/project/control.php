@@ -94,7 +94,7 @@ class project extends control
                 if(!$hasProduct) $project->linkedProducts = '';
                 if($this->post->exportType == 'selected')
                 {
-                    $checkedItem = $this->cookie->checkedItem;
+                    $checkedItem = $this->post->checkedItem;
                     if(strpos(",$checkedItem,", ",{$project->id},") === false) unset($projects[$i]);
                 }
             }
@@ -155,6 +155,21 @@ class project extends control
         $this->view->programs  = $programs;
 
         $this->display();
+    }
+
+    /**
+     * 设置1.5级项目下拉菜单。
+     * Ajax get project drop menu for zui3.
+     *
+     * @param  int    $projectID
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return void
+     */
+    public function ajaxGetDropMenuData(int $projectID, string $module, string $method)
+    {
+        $this->ajaxGetDropMenu($projectID, $module, $method);
     }
 
     /**

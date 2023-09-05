@@ -78,6 +78,7 @@ $lang->admin->registerNotice->success    = "登记账户成功";
 $lang->admin->bind = new stdclass();
 $lang->admin->bind->caption = '关联社区帐号';
 $lang->admin->bind->success = "关联账户成功";
+$lang->admin->bind->submit  = "绑定";
 
 $lang->admin->setModule = new stdclass();
 $lang->admin->setModule->module         = '功能点';
@@ -180,6 +181,8 @@ $lang->admin->menuSetting['dev']['name']       = '二次开发';
 $lang->admin->menuSetting['dev']['desc']       = '支持对系统进行二次开发。';
 $lang->admin->menuSetting['convert']['name']   = '数据导入';
 $lang->admin->menuSetting['convert']['desc']   = '第三方系统的数据导入。';
+$lang->admin->menuSetting['platform']['name']  = 'DevOps设置';
+$lang->admin->menuSetting['platform']['desc']  = '资源、环境等DevOps各要素配置。';
 $lang->admin->menuSetting['ai']['name']        = 'AI 配置';
 $lang->admin->menuSetting['ai']['desc']        = '管理 AI 提词应用、配置语言模型。';
 

@@ -99,7 +99,7 @@ class ai extends control
             $this->loadModel('setting')->setItems('system.ai', $modelConfig);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'locate' => $this->inlink('models') . '#app=admin'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('models') . '#app=admin'));
         }
 
         $modelConfig = new stdclass();
@@ -175,15 +175,15 @@ class ai extends control
      */
     public function prompts($module = '', $status = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
+        $this->loadModel('user');
+        $users = $this->user->getPairs('noletter');
+
         if($_POST)
         {
             $data = fixer::input('post')->get();
             if(isset($data->togglePromptStatus) && isset($data->promptId))
             {
-                $modelConfig = new stdclass();
-                $storedModelConfig = $this->loadModel('setting')->getItems('owner=system&module=ai');
-                foreach($storedModelConfig as $item) $modelConfig->{$item->key} = $item->value;
-                if(empty($modelConfig->key)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'locate' => $this->inlink('models') . '#app=admin'));
+                if(!$this->ai->isModelConfigured()) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'locate' => $this->inlink('models') . '#app=admin'));
 
                 $this->ai->togglePromptStatus($data->promptId);
 
@@ -202,6 +202,7 @@ class ai extends control
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
         $this->view->title      = $this->lang->ai->prompts->common;
+        $this->view->users      = $users;
 
         if($this->config->edition == 'open')
         {
@@ -442,7 +443,7 @@ class ai extends control
             if(!empty($data->goTesting)) // Go to testing object view.
             {
                 $location = $this->ai->getTestingLocation($prompt);
-                return $this->send(empty($location) ? array('result' => 'fail', 'target' => '#go-test-btn', 'msg' => $this->lang->ai->prompts->goingTestingFail) : array('result' => 'success', 'target' => '#go-test-btn', 'msg' => $this->lang->ai->prompts->goingTesting, 'locate' => $location));
+                return $this->send(empty($location) ? array('result' => 'fail', 'target' => '#go-test-btn', 'message' => $this->lang->ai->prompts->goingTestingFail) : array('result' => 'success', 'target' => '#go-test-btn', 'msg' => $this->lang->ai->prompts->goingTesting, 'locate' => $location));
             }
 
             if(!empty($data->jumpToNext)) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptFinalize', "promptID=$promptID") . '#app=admin'));
@@ -505,10 +506,7 @@ class ai extends control
      */
     public function promptExecute($promptId, $objectId)
     {
-        $modelConfig = new stdclass();
-        $storedModelConfig = $this->loadModel('setting')->getItems('owner=system&module=ai');
-        foreach($storedModelConfig as $item) $modelConfig->{$item->key} = $item->value;
-        if(empty($modelConfig->key)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'locate' => $this->inlink('models') . '#app=admin'));
+        if(!$this->ai->isModelConfigured()) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'locate' => $this->inlink('models') . '#app=admin'));
 
         $prompt = $this->ai->getPromptByID($promptId);
         if(empty($prompt) || !$this->ai->isExecutable($prompt)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noPrompt'])));
@@ -523,7 +521,7 @@ class ai extends control
         if(!empty($stop))    return header("location: $location", true, 302);
 
         $response = $this->ai->executePrompt($prompt, $object);
-        if(is_int($response)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->executeErrors[$response]) . (empty($this->ai->errors) ? '' : implode(', ', $this->ai->errors))));
+        if(is_int($response)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->executeErrors["$response"]) . (empty($this->ai->errors) ? '' : implode(', ', $this->ai->errors))));
         if(empty($response))  return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noResponse'])));
 
         $this->ai->setInjectData($prompt->targetForm, $response);
@@ -622,10 +620,7 @@ class ai extends control
      */
     public function promptPublish($id, $backToTestingLocation = false)
     {
-        $modelConfig = new stdclass();
-        $storedModelConfig = $this->loadModel('setting')->getItems('owner=system&module=ai');
-        foreach($storedModelConfig as $item) $modelConfig->{$item->key} = $item->value;
-        if(empty($modelConfig->key)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'locate' => $this->inlink('models') . '#app=admin'));
+        if(!$this->ai->isModelConfigured()) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'locate' => $this->inlink('models') . '#app=admin'));
 
         unset($_SESSION['auditPrompt']);
         $this->ai->togglePromptStatus($id, 'active');

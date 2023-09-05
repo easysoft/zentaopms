@@ -1,0 +1,9 @@
+.app-name {font-size: 16px; font-weight: 700; display: inline-block;padding: 8px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle;}
+#storeTree .tree-item {cursor: pointer;}
+.store-item {justify-content: space-between;}
+.tree li.tree-item.selected{color: #438EFF !important;}
+#storePager {background: white; margin-top: 20px; padding: 6px 15px; display: flex; justify-content: end; font-weight: 700; color: rgb(131, 138, 157);}
+#storePager .ghost {color: rgb(131, 138, 157);}
+#mainContent > .icon-search {display: none;}
+#storeTree {background: white; padding: 20px;}
+#cloudAppContainer .install-btn {padding-left: 25px; padding-right: 25px;}

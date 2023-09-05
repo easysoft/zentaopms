@@ -210,7 +210,7 @@ js::set('data', json_encode($tasks));
       </p>
     </div>
     <?php else:?>
-    <form class="main-table table-task skip-iframe-modal" method="post" id='executionTaskForm'>
+    <form class="main-table table-task skip-iframe-modal not-watch" method="post" id='executionTaskForm'>
       <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right setting"></nav>
       </div>

@@ -82,6 +82,9 @@ $lang->user->submit           = '提交';
 $lang->user->resetPWD         = '重置密码';
 $lang->user->resetTitle       = '系统管理员重置密码';
 
+$lang->user->abbr = new stdclass();
+$lang->user->abbr->id = '序号';
+
 $lang->user->legendBasic        = '基本资料';
 $lang->user->legendContribution = '个人贡献';
 

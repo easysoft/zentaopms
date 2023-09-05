@@ -1,0 +1,5 @@
+.menu.menu-dtable-actions {display: flex; min-width: auto;}
+.menu.menu-dtable-actions .icon {position: static!important; opacity: 1!important;}
+.menu.menu-dtable-actions span.text {display: none;}
+.menu.menu-dtable-actions > .menu-item > a {padding: 0;}
+.menu.menu-dtable-actions > .menu-item > a:hover {background: none; color: var(--menu-hover-bg);}

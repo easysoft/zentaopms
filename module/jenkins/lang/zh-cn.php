@@ -10,7 +10,7 @@ $lang->jenkins->browseAction = 'Jenkins列表';
 $lang->jenkins->deleteAction = '删除Jenkins';
 
 $lang->jenkins->id       = 'ID';
-$lang->jenkins->name     = '服务器名称';
+$lang->jenkins->name     = '应用名称';
 $lang->jenkins->url      = '服务器地址';
 $lang->jenkins->token    = 'Token';
 $lang->jenkins->account  = '用户名';

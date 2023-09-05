@@ -55,13 +55,27 @@ class aiModel extends model
     }
 
     /**
+     * Determine model is configured or not.
+     *
+     * @access public
+     * @return bool
+     */
+    public function isModelConfigured()
+    {
+        $modelConfig = new stdclass();
+        $storedModelConfig = $this->loadModel('setting')->getItems('owner=system&module=ai');
+        foreach($storedModelConfig as $item) $modelConfig->{$item->key} = $item->value;
+        return !empty($modelConfig->key);
+    }
+
+    /**
      * Make request to OpenAI API.
      *
      * @param  string   $type     chat | completion | edit
      * @param  mixed    $data     data to send
      * @param  int      $timeout  request timeout in seconds
      * @access private
-     * @return mixed    false if error, json string if success
+     * @return object   response object, three properties: result, message (if fail), content(if success).
      */
     private function makeRequest($type, $data, $timeout = 10)
     {
@@ -117,10 +131,21 @@ class aiModel extends model
             }
         }
 
-        if(curl_errno($ch)) return false;
-        curl_close($ch);
+        $response = new stdclass();
 
-        return $result;
+        if(!$result || curl_errno($ch))
+        {
+            $response->result  = 'fail';
+            $response->message = curl_error($ch);
+        }
+        else
+        {
+            $response->result = 'success';
+            $response->content = $result;
+        }
+
+        curl_close($ch);
+        return $response;
     }
 
     /**
@@ -196,13 +221,19 @@ class aiModel extends model
     /**
      * Decode response from OpenAI API, add error to $this->errors if any.
      *
-     * @param  string   $response  json string
+     * @param  object   $response  response object
      * @access private
      * @return mixed    false if error, json object if success
      */
     private function decodeResponse($response)
     {
-        $response = json_decode($response);
+        if($response->result === 'fail')
+        {
+            $this->errors[] = empty($response->message) ? 'Unknown error' : $response->message;
+            return false;
+        }
+
+        $response = json_decode($response->content);
         if(json_last_error())
         {
             /* Polyfill for PHP 5 < 5.5.0. */
@@ -223,11 +254,6 @@ class aiModel extends model
             }
 
             $this->errors[] = 'JSON decode error: ' . json_last_error_msg();
-            return false;
-        }
-        if(isset($response->error))
-        {
-            $this->errors[] = isset($response->error->message) ? $response->error->message : 'Unknown error';
             return false;
         }
         return $response;

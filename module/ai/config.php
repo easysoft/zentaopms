@@ -56,6 +56,9 @@ $config->ai->dataSource = array();
 // $config->ai->dataSource['my']['efforts']              = array('date', 'work', 'account', 'consumed', 'left', 'objectID', 'product', 'project', 'execution');
 $config->ai->dataSource['product']['product']         = array('name', 'desc');
 // $config->ai->dataSource['product']['modules']         = array('name', 'modules');
+$config->ai->dataSource['project']['project']         = array('name', 'type', 'desc', 'begin', 'end', 'estimate');
+$config->ai->dataSource['project']['programplans']    = array('name', 'desc', 'status', 'begin', 'end', 'realBegan', 'realEnd', 'planDuration', 'progress', 'estimate', 'consumed', 'left');
+$config->ai->dataSource['project']['executions']      = array('name', 'desc', 'status', 'begin', 'end', 'realBegan', 'realEnd', 'estimate', 'consumed', 'progress');
 $config->ai->dataSource['story']['story']             = array('title', 'spec', 'verify', 'product', 'module', 'pri', 'category', 'estimate');
 $config->ai->dataSource['productplan']['productplan'] = array('title', 'desc', 'begin', 'end');
 $config->ai->dataSource['productplan']['stories']     = array('title', 'module', 'pri', 'estimate', 'status', 'stage');
@@ -63,15 +66,12 @@ $config->ai->dataSource['productplan']['bugs']        = array('title', 'pri', 's
 $config->ai->dataSource['release']['release']         = array('product', 'name', 'desc', 'date');
 $config->ai->dataSource['release']['stories']         = array('title', 'estimate');
 $config->ai->dataSource['release']['bugs']            = array('title');
-$config->ai->dataSource['project']['project']         = array('name', 'type', 'desc', 'begin', 'end', 'estimate');
-$config->ai->dataSource['project']['programplans']    = array('name', 'desc', 'status', 'begin', 'end', 'realBegan', 'realEnd', 'planDuration', 'progress', 'estimate', 'consumed', 'left');
-$config->ai->dataSource['project']['executions']      = array('name', 'desc', 'status', 'begin', 'end', 'realBegan', 'realEnd', 'estimate', 'consumed', 'progress');
 $config->ai->dataSource['execution']['execution']     = array('name', 'desc', 'estimate');
 $config->ai->dataSource['execution']['tasks']         = array('name', 'pri', 'status', 'estimate', 'consumed', 'left', 'progress', 'estStarted', 'realStarted', 'finishedDate', 'closedReason');
 $config->ai->dataSource['task']['task']               = array('name', 'desc', 'pri', 'status', 'estimate', 'consumed', 'left', 'progress', 'estStarted', 'realStarted');
-$config->ai->dataSource['bug']['bug']                 = array('title', 'steps', 'severity','pri', 'status', 'confirmed', 'type');
 $config->ai->dataSource['case']['case']               = array('title', 'precondition', 'scene', 'product', 'module', 'pri', 'type', 'lastRunResult', 'status');
 $config->ai->dataSource['case']['steps']              = array('desc', 'expect');
+$config->ai->dataSource['bug']['bug']                 = array('title', 'steps', 'severity','pri', 'status', 'confirmed', 'type');
 $config->ai->dataSource['doc']['doc']                 = array('title', 'addedBy', 'addedDate', 'editedBy', 'editedDate', 'content');
 
 /* Available target form definations. Please also update `$lang->ai->targetForm` upon changes! Some are commented out, these need extra work. */
@@ -162,7 +162,7 @@ $config->ai->menuPrint = new stdclass();
 $config->ai->menuPrint->locations = array();
 $config->ai->menuPrint->locations['story']['view'] = (object)array(
     'module'          => 'story',
-    'targetContainer' => '#mainContent .cell:first-of-type .detail:first-of-type .detail-title',
+    'targetContainer' => '#mainContent .main-col .cell:first-of-type .detail:first-of-type .detail-title',
     'class'           => 'pull-right',
     'stylesheet'      => '#mainContent .cell:first-of-type .detail:first-of-type .detail-title>button {margin-left: 10px;} #mainContent .cell:first-of-type .detail:first-of-type .detail-content {margin-top: 12px;}'
 );

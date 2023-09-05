@@ -299,7 +299,7 @@ class story extends control
             $product         = $this->product->getById(($productID and array_key_exists($productID, $products)) ? $productID : key($products));
             $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($productID, $objectID, 'noclosed|withMain') : array();
             $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
-            $branch          = key($branches);
+            $branch          = (int)key($branches);
         }
         else
         {

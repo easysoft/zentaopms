@@ -680,15 +680,21 @@ class baseHelper
      * 检查是否是AJAX请求。
      * Check is ajax request.
      *
+     * @param  ?string $type   zin|modal|fetch
      * @static
      * @access public
      * @return bool
      */
-    public static function isAjaxRequest()
+    public static function isAjaxRequest(?string $type = null): bool
     {
-        if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') return true;
-        if(isset($_GET['HTTP_X_REQUESTED_WITH'])    && $_GET['HTTP_X_REQUESTED_WITH']    == 'XMLHttpRequest') return true;
-        return false;
+        $isAjax = (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') || (isset($_GET['HTTP_X_REQUESTED_WITH']) && $_GET['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest');
+        if($isAjax === false) return false;
+
+        if($type === 'zin')   return array_key_exists('HTTP_X_ZIN_OPTIONS', $_SERVER);
+        if($type === 'modal') return isset($_SERVER['HTTP_X_ZUI_MODAL']) && $_SERVER['HTTP_X_ZUI_MODAL'] == true;
+        if($type === 'fetch') return !array_key_exists('HTTP_X_ZIN_OPTIONS', $_SERVER) && !(isset($_SERVER['HTTP_X_ZUI_MODAL']) && $_SERVER['HTTP_X_ZUI_MODAL'] == true);
+
+        return $isAjax;
     }
 
     /**
@@ -789,6 +795,101 @@ class baseHelper
     }
 
     /**
+     * Send a cookie.
+     *
+     * @param string      $name
+     * @param string      $value
+     * @param int|null    $expire
+     * @param string|null $path
+     * @param string      $domain
+     * @param bool|null   $secure
+     * @param bool        $httponly
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function setcookie(string $name, string $value = '', int $expire = null, string $path = null, string $domain = '', bool $secure = null, bool $httponly = true)
+    {
+        global $config, $app;
+
+        if($expire === null) $expire = $config->cookieLife;
+        if($path   === null) $path   = $config->webRoot;
+        if($secure === null) $secure = $config->cookieSecure;
+
+        if(isset($app->worker))
+        {
+            $app->worker->response->setCookie($name, $value, $expire, $path, $domain, $secure, $httponly);
+        }
+        else
+        {
+            return setcookie($name, $value, $expire, $path, $domain, $secure, $httponly);
+        }
+    }
+
+    /**
+     * 设置状态码。
+     * Set status code.
+     *
+     * @param int $code
+     * @static
+     * @access public
+     * @return void
+     */
+    static public function setStatus(int $code)
+    {
+        global $app;
+
+        if(isset($app->worker))
+        {
+            $app->worker->response->setStatus($code);
+        }
+        else
+        {
+            $PHRASES = array(
+                100 => 'Continue', 101 => 'Switching Protocols', 102 => 'Processing',
+                200 => 'OK', 201 => 'Created', 202 => 'Accepted', 203 => 'Non-Authoritative Information', 204 => 'No Content', 205 => 'Reset Content', 206 => 'Partial Content', 207 => 'Multi-status', 208 => 'Already Reported',
+                300 => 'Multiple Choices', 301 => 'Moved Permanently', 302 => 'Found', 303 => 'See Other', 304 => 'Not Modified', 305 => 'Use Proxy', 306 => 'Switch Proxy', 307 => 'Temporary Redirect',
+                400 => 'Bad Request', 401 => 'Unauthorized', 402 => 'Payment Required', 403 => 'Forbidden', 404 => 'Not Found', 405 => 'Method Not Allowed', 406 => 'Not Acceptable', 407 => 'Proxy Authentication Required', 408 => 'Request Time-out', 409 => 'Conflict', 410 => 'Gone', 411 => 'Length Required', 412 => 'Precondition Failed', 413 => 'Request Entity Too Large', 414 => 'Request-URI Too Large', 415 => 'Unsupported Media Type', 416 => 'Requested range not satisfiable', 417 => 'Expectation Failed', 418 => 'I\'m a teapot', 422 => 'Unprocessable Entity', 423 => 'Locked', 424 => 'Failed Dependency', 425 => 'Unordered Collection', 426 => 'Upgrade Required', 428 => 'Precondition Required', 429 => 'Too Many Requests', 431 => 'Request Header Fields Too Large', 451 => 'Unavailable For Legal Reasons',
+                500 => 'Internal Server Error', 501 => 'Not Implemented', 502 => 'Bad Gateway', 503 => 'Service Unavailable', 504 => 'Gateway Time-out', 505 => 'HTTP Version not supported', 506 => 'Variant Also Negotiates', 507 => 'Insufficient Storage', 508 => 'Loop Detected', 511 => 'Network Authentication Required',
+            );
+            header('HTTP/1.1 ' . (string)$code . ' ' . $PHRASES[$code], true, $code);
+        }
+    }
+
+    /**
+     * 发送HTTP头信息。
+     * Send http header.
+     *
+     * @param string $key
+     * @param string $value
+     * @param bool   $replace
+     * @param int    $response_code
+     * @static
+     * @access public
+     * @return void
+     */
+    static public function header(string $key, string $value, bool $replace = true, int $response_code = 0)
+    {
+        global $app;
+
+        if(isset($app->worker))
+        {
+            $key = trim(strtolower($key));
+            $app->worker->response->setHeader($key, $value);
+
+            if($key == 'location')
+            {
+                $app->worker->response->setStatus(302);
+                helper::end();
+            }
+        }
+        else
+        {
+            header($key . ': ' . $value, $replace, $response_code);
+        }
+    }
+
+    /**
      * 检查是否启用缓存。
      * Check is enable cache.
      *
@@ -799,6 +900,79 @@ class baseHelper
         if(isset($_GET['_nocache']) || isset($_SERVER['HTTP_X_ZT_REFRESH'])) return false;
         global $config;
         return $config->cache->enable;
+    }
+
+    /**
+     * Generate rand string.
+     *
+     * @param  int    $length
+     * @access public
+     * @return string
+     */
+    static public function randStr($length = 4)
+    {
+        $seeds = str_shuffle('abcdefghijklmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ123456789');
+        return substr($seeds, 0, $length);
+    }
+
+    /**
+     * 获取二维数组中的某一列。
+     * Get array column to array.
+     *
+     * @param  array           $input
+     * @param  int|string|null $columnKey
+     * @param  int|string|null $indexKey
+     * @static
+     * @access public
+     * @return array
+     */
+    public static function arrayColumn(array $input, $columnKey, $indexKey = null): array
+    {
+        /* If php version greater than 7, calling system functions returns. */
+        if(defined(PHP_VERSION_ID) && PHP_VERSION_ID >= 70000) return \array_column($input, $columnKey, $indexKey);
+
+        $output = array();
+        foreach($input as $row)
+        {
+            $key    = $value = null;
+            $keySet = $valueSet = false;
+
+            if($indexKey !== null && array_key_exists($indexKey, (array) $row))
+            {
+                $keySet = true;
+                $key    = \is_object($row) ? (string) $row->$indexKey : (string) $row[$indexKey];
+            }
+
+            if(null === $columnKey)
+            {
+                $valueSet = true;
+                $value    = $row;
+            }
+            elseif(\is_array($row) && \array_key_exists($columnKey, $row))
+            {
+                $valueSet = true;
+                $value    = $row[$columnKey];
+            }
+            elseif(\is_object($row) && \property_exists($row, $columnKey))
+            {
+                $valueSet = true;
+                $value    = $row->$columnKey;
+            }
+
+            if($valueSet)
+            {
+                if($keySet)
+                {
+                    $output[$key] = $value;
+                }
+                else
+                {
+                    $output[] = $value;
+                }
+            }
+        }
+
+        return $output;
     }
 }
 

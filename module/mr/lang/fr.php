@@ -4,7 +4,7 @@ $lang->mr->common       = "Merge Request";
 $lang->mr->server       = "Server";
 $lang->mr->view         = "Survey";
 $lang->mr->viewAction   = "{$lang->mr->common} Details";
-$lang->mr->create       = "Create";
+$lang->mr->create       = "Submit {$lang->mr->common}";
 $lang->mr->apiCreate    = "Interface: Create";
 $lang->mr->browse       = "Browse";
 $lang->mr->browseAction = "{$lang->mr->common} List";
@@ -21,6 +21,7 @@ $lang->mr->link         = 'Link of stories,Bugs,tasks';
 $lang->mr->createAction = '%s, <strong>%s</strong> submitted a <a href="%s">Merge Request</a>.';
 $lang->mr->editAction   = '%s, <strong>%s</strong> edited <a href="%s">Merge Request</a>。';
 $lang->mr->removeAction = '%s, <strong>%s</strong> deleted <a href="%s">Merge Request</a>。';
+$lang->mr->submitType   = 'Submit type';
 
 $lang->mr->linkList  = 'Link List of stories,Bugs,tasks';
 $lang->mr->linkStory = 'Link Stories';

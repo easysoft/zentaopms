@@ -299,6 +299,38 @@ class commonModel extends model
     }
 
     /**
+     * 获取表单的配置项。
+     * Obtain the config for the form.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @static
+     * @access public
+     * @return array
+     */
+    public static function formConfig(string $module, string $method): array
+    {
+        global $config, $app;
+        if($config->edition == 'open') return array();
+
+        $required   = $app->dbQuery("SELECT * FROM " . TABLE_WORKFLOWRULE . " WHERE `type` = 'system' and `rule` = 'notempty'")->fetch();
+        $fields     = (new self())->loadModel('flow')->getExtendFields($module, $method);
+        $formConfig = array();
+        $type       = 'string';
+        foreach($fields as $fieldObject)
+        {
+            if(strpos($fieldObject->type, 'int') !== false) $type = 'int';
+            if(strpos($fieldObject->type, 'date') !== false) $type = 'date';
+            if(in_array($fieldObject->type, array('float', 'decimal'))) $type = 'float';
+
+            $formConfig[$fieldObject->field] = array('type' => $type, 'default' => $fieldObject->default, 'control' => $fieldObject->control, 'rules' => $fieldObject->rules);
+            $formConfig[$fieldObject->field]['required'] = strpos(",{$fieldObject->rules},", ",{$required->id},") !== false;
+            if(in_array($fieldObject->control, array('multi-select', 'checkbox'))) $formConfig[$fieldObject->field]['filter'] = 'join';
+        }
+        return $formConfig;
+    }
+
+    /**
      * Load configs from database and save it to config->system and config->personal.
      *
      * @access public
@@ -574,12 +606,12 @@ class commonModel extends model
         $productID = isset($_SESSION['product']) ? $_SESSION['product'] : 0;
         if($productID)
         {
-            $product = $app->dbh->query("SELECT id  FROM " . TABLE_PRODUCT . " WHERE `deleted` = '0' and vision = '{$config->vision}' and id = '{$productID}'")->fetch();
+            $product = $app->dbQuery("SELECT id  FROM " . TABLE_PRODUCT . " WHERE `deleted` = '0' and vision = '{$config->vision}' and id = '{$productID}'")->fetch();
             if(empty($product)) $productID = 0;
         }
         if(!$productID and $app->user->view->products)
         {
-            $product = $app->dbh->query("SELECT id FROM " . TABLE_PRODUCT . " WHERE `deleted` = '0' and vision = '{$config->vision}' and id " . helper::dbIN($app->user->view->products) . " order by `order` desc limit 1")->fetch();
+            $product = $app->dbQuery("SELECT id FROM " . TABLE_PRODUCT . " WHERE `deleted` = '0' and vision = '{$config->vision}' and id " . helper::dbIN($app->user->view->products) . " order by `order` desc limit 1")->fetch();
             if($product) $productID = $product->id;
         }
 
@@ -588,7 +620,7 @@ class commonModel extends model
             $condition  = " WHERE `deleted` = '0' AND `vision` = 'lite' AND `model` = 'kanban'";
             if(!$app->user->admin) $condition .= " AND `id` " . helper::dbIN($app->user->view->projects);
 
-            $object = $app->dbh->query("select id from " . TABLE_PROJECT . $condition . ' LIMIT 1')->fetch();
+            $object = $app->dbQuery("select id from " . TABLE_PROJECT . $condition . ' LIMIT 1')->fetch();
             if(empty($object)) unset($lang->createIcons['story'], $lang->createIcons['task'], $lang->createIcons['execution']);
         }
 
@@ -656,7 +688,7 @@ class commonModel extends model
                         if($config->vision == 'lite')
                         {
                             $projectID = isset($_SESSION['project']) ? $_SESSION['project'] : 0;
-                            $projects  = $app->dbh->query("SELECT t2.id FROM " . TABLE_PROJECTPRODUCT . " AS t1 LEFT JOIN " . TABLE_PROJECT . " AS t2 ON t1.project = t2.id WHERE t1.`product` = '{$productID}' and t2.`type` = 'project' and t2.id " . helper::dbIN($app->user->view->projects) . " ORDER BY `order` desc")->fetchAll();
+                            $projects  = $app->dbQuery("SELECT t2.id FROM " . TABLE_PROJECTPRODUCT . " AS t1 LEFT JOIN " . TABLE_PROJECT . " AS t2 ON t1.project = t2.id WHERE t1.`product` = '{$productID}' and t2.`type` = 'project' and t2.id " . helper::dbIN($app->user->view->projects) . " ORDER BY `order` desc")->fetchAll();
 
                             $projectIdList = array();
                             foreach($projects as $project) $projectIdList[$project->id] = $project->id;
@@ -742,7 +774,7 @@ class commonModel extends model
      * @access public
      * @return string
      */
-    public static function createMenuLink($menuItem, $group)
+    public static function createMenuLink($menuItem)
     {
         global $app;
         $link = $menuItem->link;
@@ -893,6 +925,7 @@ class commonModel extends model
 
         if(!in_array($tab, array('program', 'product', 'project')))
         {
+            if(!isset($lang->mainNav->$tab)) return;
             $nav = $lang->mainNav->$tab;
             list($title, $currentModule, $currentMethod, $vars) = explode('|', $nav);
             if($tab == 'execution') $currentMethod = 'all';
@@ -1108,11 +1141,12 @@ class commonModel extends model
     /**
      * Print the main menu.
      *
+     * @param  bool   $printHtml
      * @static
      * @access public
      * @return string
      */
-    public static function printMainMenu()
+    public static function printMainMenu(bool $printHtml = true): string
     {
         global $app, $lang, $config;
 
@@ -1128,19 +1162,18 @@ class commonModel extends model
         $currentModule = $app->rawModule;
         $currentMethod = $app->rawMethod;
 
-        if($isTutorialMode and defined('WIZARD_MODULE')) $currentModule  = WIZARD_MODULE;
-        if($isTutorialMode and defined('WIZARD_METHOD')) $currentMethod  = WIZARD_METHOD;
+        if($isTutorialMode && isset($_SESSION['wizardModule'])) $currentModule = $_SESSION['wizardModule'];
+        if($isTutorialMode && isset($_SESSION['wizardMethod'])) $currentMethod = $_SESSION['wizardMethod'];
 
         /* Print all main menus. */
-        $menu     = customModel::getMainMenu();
-        $lastMenu = end($menu);
+        $menu = customModel::getMainMenu();
 
-        echo "<ul class='nav nav-default'>\n";
+        $menuHtml = "<ul class='nav nav-default'>\n";
         foreach($menu as $menuItem)
         {
             if(isset($menuItem->hidden) and $menuItem->hidden and (!isset($menuItem->tutorial) or !$menuItem->tutorial)) continue;
             if(empty($menuItem->link)) continue;
-            if($menuItem->divider) echo "<li class='divider'></li>";
+            if($menuItem->divider) $menuHtml .= "<li class='divider'></li>";
 
             /* Init the these vars. */
             $alias     = isset($menuItem->alias) ? $menuItem->alias : '';
@@ -1163,11 +1196,11 @@ class commonModel extends model
             if($menuItem->link['module'] == 'execution' and $menuItem->link['method'] == 'more')
             {
                 $executionID = $menuItem->link['vars'];
-                commonModel::buildMoreButton($executionID);
+                $menuHtml .= commonModel::buildMoreButton((int)$executionID, false);
             }
             elseif($menuItem->link['module'] == 'app' and $menuItem->link['method'] == 'serverlink')
             {
-                commonModel::buildAppButton();
+                $menuHtml .= commonModel::buildAppButton(false);
             }
             else
             {
@@ -1176,7 +1209,7 @@ class commonModel extends model
                     $target = '';
                     $module = '';
                     $method = '';
-                    $link   = commonModel::createMenuLink($menuItem, $tab);
+                    $link   = commonModel::createMenuLink($menuItem);
 
                     if($menuItem->link['module'] == 'project' and $menuItem->link['method'] == 'other') $link = 'javascript:void(0);';
 
@@ -1240,22 +1273,23 @@ class commonModel extends model
                         $label    .= "<span class='caret'></span>";
                         $dropMenu  = "<ul class='dropdown-menu'>{$dropMenu}</ul>";
 
-                        echo "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target, $misc) . $dropMenu . "</li>\n";
+                        $menuHtml .= "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target, $misc) . $dropMenu . "</li>\n";
                     }
                     else
                     {
-                        echo "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target, $misc) . "</li>\n";
+                        $menuHtml .= "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target, $misc) . "</li>\n";
                     }
                 }
                 else
                 {
-                    echo "<li class='$class $active' data-id='$menuItem->name'>$menuItem->text</li>\n";
+                    $menuHtml .= "<li class='$class $active' data-id='$menuItem->name'>$menuItem->text</li>\n";
                 }
             }
         }
 
-        echo "</ul>\n";
+        $menuHtml .= "</ul>\n";
 
+        if($printHtml) echo $menuHtml;
         return $activeMenu;
     }
 
@@ -1688,10 +1722,6 @@ EOF;
 
         global $app, $lang, $config;
 
-        /* Add data-app attribute. */
-        if(strpos($misc, 'data-app') === false) $misc .= ' data-app="' . $app->tab . '"';
-        if($onlyBody && strpos($misc, 'data-toggle') === false) $misc .= ' data-toggle="modal"';
-
         /* Judge the $method of $module clickable or not, default is clickable. */
         $clickable = true;
         if(is_bool($extraEnabled))
@@ -1710,11 +1740,17 @@ EOF;
             }
         }
 
+        /* Add data-app attribute. */
+        if(strpos($misc, 'data-app') === false) $misc .= ' data-app="' . $app->tab . '"';
+        if($onlyBody && strpos($misc, 'data-toggle') === false && $clickable) $misc .= ' data-toggle="modal"';
+
         /* Set module and method, then create link to it. */
         if(strtolower($module) == 'story'    and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
         if(strtolower($module) == 'bug'      and strtolower($method) == 'tostory')    ($module = 'story') and ($method = 'create');
         if(strtolower($module) == 'bug'      and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
-        if(!commonModel::hasPriv($module, $method, $object, $vars)) return false;
+        $currentModule = strtolower($module);
+        $currentMethod = strtolower($method);
+        if(!commonModel::hasPriv($module, $method, $object, $vars) and !in_array("$currentModule.$currentMethod", $config->openMethods)) return false;
 
         $link = helper::createLink($module, $method, $vars, '', $onlyBody, $programID);
 
@@ -1779,24 +1815,25 @@ EOF;
      * Build more executions button.
      *
      * @param  int    $executionID
+     * @param  bool   $printHtml
      * @static
      * @access public
-     * @return void
+     * @return bool
      */
-    public static function buildMoreButton($executionID)
+    public static function buildMoreButton(int $executionID, bool $printHtml = true): string
     {
-        if(defined('TUTORIAL')) return;
-
         global $lang, $app;
 
-        $object = $app->dbh->query('SELECT project,`type` FROM ' . TABLE_EXECUTION . " WHERE `id` = '$executionID'")->fetch();
-        if(empty($object)) return;
+        if(commonModel::isTutorialMode()) return '';
+
+        $object = $app->dbQuery('SELECT project,`type` FROM ' . TABLE_EXECUTION . " WHERE `id` = '$executionID'")->fetch();
+        if(empty($object)) return '';
 
         $executionPairs = array();
         $userCondition  = !$app->user->admin ? " AND `id` " . helper::dbIN($app->user->view->sprints) : '';
         $orderBy        = $object->type == 'stage' ? 'ORDER BY `id` ASC' : 'ORDER BY `id` DESC';
 
-        $executionList  = $app->dbh->query("SELECT id,name,parent,project FROM " . TABLE_EXECUTION . " WHERE `project` = '{$object->project}' AND `deleted` = '0' $userCondition $orderBy")->fetchAll();
+        $executionList  = $app->dbQuery("SELECT id,name,parent,project FROM " . TABLE_EXECUTION . " WHERE `project` = '{$object->project}' AND `deleted` = '0' $userCondition $orderBy")->fetchAll();
         $executions     = array();
         foreach($executionList as $execution) $executions[$execution->id] = $execution;
 
@@ -1808,7 +1845,7 @@ EOF;
             $executionPairs[$execution->id] = $execution->name;
         }
 
-        if(empty($executionPairs)) return;
+        if(empty($executionPairs)) return '';
 
         $html  = "<li class='divider'></li><li class='dropdown dropdown-hover'><a href='javascript:;' data-toggle='dropdown'>{$lang->more}<span class='caret'></span></a>";
         $html .= "<ul class='dropdown-menu'>";
@@ -1826,22 +1863,24 @@ EOF;
 
         $html .= "</ul></li>\n";
 
-        echo $html;
+        if($printHtml) echo $html;
+        return $html;
     }
 
     /**
      * Build devops app button.
      *
+     * @param  bool   $printHtml
      * @static
      * @access public
-     * @return void
+     * @return bool
      */
-    public static function buildAppButton()
+    public static function buildAppButton(bool $printHtml = true): string
     {
-        if(defined('TUTORIAL')) return;
         global $app, $config, $lang;
 
-        $pipelinePairs = array();
+        if(commonModel::isTutorialMode()) return '';
+
         $condition     = '';
         if(!$app->user->admin)
         {
@@ -1850,11 +1889,11 @@ EOF;
             {
                 if(commonModel::hasPriv($pipelineType, 'browse')) $types .= "'$pipelineType',";
             }
-            if(empty($types)) return;
+            if(empty($types)) return '';
             $condition .= ' AND `type` in (' . trim($types, ',') . ')';
         }
-        $pipelineList = $app->dbh->query("SELECT `type`,name,url FROM " . TABLE_PIPELINE . " WHERE `deleted` = '0' $condition order by type")->fetchAll();
-        if(empty($pipelineList)) return;
+        $pipelineList = $app->dbQuery("SELECT `type`,name,url FROM " . TABLE_PIPELINE . " WHERE `deleted` = '0' $condition order by type")->fetchAll();
+        if(empty($pipelineList)) return '';
 
         $appCommon = isset($lang->db->custom['devopsMenu']['menu']['app']) ? $lang->db->custom['devopsMenu']['menu']['app'] : $lang->app->common;
         $html  = "<li class='dropdown dropdown-hover'><a href='javascript:;' data-toggle='dropdown'>{$appCommon}<span class='caret'></span></a>";
@@ -1866,7 +1905,8 @@ EOF;
         }
         $html .= "</ul></li>\n";
 
-        echo $html;
+        if($printHtml) echo $html;
+        return $html;
     }
 
     /**
@@ -2031,12 +2071,12 @@ EOF;
 
             if($oldID and $oldStatus and $newStatus and !$newSubStatus and $oldStatus != $newStatus)
             {
-                $field = $app->dbh->query('SELECT options FROM ' . TABLE_WORKFLOWFIELD . " WHERE `module` = '$moduleName' AND `field` = 'subStatus'")->fetch();
+                $field = $app->dbQuery('SELECT options FROM ' . TABLE_WORKFLOWFIELD . " WHERE `module` = '$moduleName' AND `field` = 'subStatus'")->fetch();
                 if(!empty($field->options)) $field->options = json_decode($field->options, true);
 
                 if(!empty($field->options[$newStatus]['default']))
                 {
-                    $flow    = $app->dbh->query('SELECT `table` FROM ' . TABLE_WORKFLOW . " WHERE `module`='$moduleName'")->fetch();
+                    $flow    = $app->dbQuery('SELECT `table` FROM ' . TABLE_WORKFLOW . " WHERE `module`='$moduleName'")->fetch();
                     $default = $field->options[$newStatus]['default'];
 
                     $app->dbh->exec("UPDATE `$flow->table` SET `subStatus` = '$default' WHERE `id` = '$oldID'");
@@ -2047,7 +2087,7 @@ EOF;
 
             $dateFields = array();
             $sql        = "SELECT `field` FROM " . TABLE_WORKFLOWFIELD . " WHERE `module` = '{$moduleName}' and `control` in ('date', 'datetime')";
-            $stmt       = $app->dbh->query($sql);
+            $stmt       = $app->dbQuery($sql);
             while($row = $stmt->fetch()) $dateFields[$row->field] = $row->field;
         }
 
@@ -2504,17 +2544,17 @@ EOF;
      */
     public function checkIframe()
     {
-        /**
+        /*
          * 忽略如下情况：非 HTML 请求、Ajax 请求、特殊 GET 参数 _single。
          * Ignore the following situations: non-HTML request, Ajax request, special GET parameter _single.
          */
-        if($this->app->getViewType() != 'html' || helper::isAjaxRequest() || isset($_GET['_single'])) return;
+        if($this->app->getViewType() != 'html' || helper::isAjaxRequest() || isset($_GET['_single'])) return true;
 
         /**
          * 忽略无请求头 HTTP_SEC_FETCH_DEST 或者 HTTP_SEC_FETCH_DEST 为 iframe 的请求，较新的浏览器在启用 https 的情况下才会正确发送该请求头。
          * Ignore the request without HTTP_SEC_FETCH_DEST or HTTP_SEC_FETCH_DEST is iframe, the latest browser will send this request header correctly when enable https.
          */
-        if(!isset($_SERVER['HTTP_SEC_FETCH_DEST']) || $_SERVER['HTTP_SEC_FETCH_DEST'] == 'iframe') return;
+        if(!isset($_SERVER['HTTP_SEC_FETCH_DEST']) || $_SERVER['HTTP_SEC_FETCH_DEST'] == 'iframe') return true;
 
         /**
          * 当有 HTTP_REFERER 请求头时，忽略 safari 浏览器，因为 safari 浏览器不会正确发送 HTTP_SEC_FETCH_DEST 请求头。
@@ -2523,8 +2563,15 @@ EOF;
         if(isset($_SERVER['HTTP_REFERER']) && !empty($_SERVER['HTTP_REFERER']))
         {
             $userAgent = strtolower($_SERVER['HTTP_USER_AGENT']);
-            if(strpos($userAgent, 'chrome') === false && strpos($userAgent, 'safari') !== false) return;
+            if(strpos($userAgent, 'chrome') === false && strpos($userAgent, 'safari') !== false) return true;
         }
+
+        /**
+         * 忽略所有方法名以 ajax 开头的请求。
+         * Ignore all requests which it's method name starts with 'ajax'.
+         */
+        $method = $this->app->getMethodName();
+        if(strpos($method, 'ajax') === 0) return true;
 
         /**
          * 以下页面可以允许在非 iframe 中打开，所以要忽略这些页面。
@@ -2533,7 +2580,7 @@ EOF;
         $module    = $this->app->getModuleName();
         $method    = $this->app->getMethodName();
         $whitelist = '|index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-preview|file-uploadimages|file-ajaxwopifiles|report-annualdata|misc-captcha|execution-printkanban|traincourse-ajaxuploadlargefile|traincourse-playvideo|screen-view|zanode-create|screen-ajaxgetchart|';
-        if(strpos($whitelist, "|{$module}|") !== false || strpos($whitelist, "|{$module}-{$method}|") !== false) return;
+        if(strpos($whitelist, "|{$module}|") !== false || strpos($whitelist, "|{$module}-{$method}|") !== false) return true;
 
         /**
          * 如果以上条件都不满足，则视为当前页面必须在 iframe 中打开，使用 302 跳转实现。
@@ -2542,7 +2589,8 @@ EOF;
         $url = helper::safe64Encode($_SERVER['REQUEST_URI']);
         $redirectUrl  = helper::createLink('index', 'index');
         $redirectUrl .= strpos($redirectUrl, '?') === false ? "?open=$url" : "&open=$url";
-        die(header("location: $redirectUrl"));
+        helper::header('location', $redirectUrl);
+        return false;
     }
 
     /**
@@ -2583,6 +2631,9 @@ EOF;
 
         /* Check the parent object is closed. */
         if(!empty($method) and strpos('close|batchclose', $method) === false and !commonModel::canBeChanged($module, $object)) return false;
+
+        /* Check the method is openMethod. */
+        if(in_array("$module.$method", $config->openMethods)) return true;
 
         /* Check is the super admin or not. */
         if(!empty($app->user->admin) or strpos($app->company->admins, ",{$app->user->account},") !== false) return true;
@@ -3246,8 +3297,12 @@ EOF;
 
         commonModel::$requestErrors = array();
 
+        $requestType = 'GET';
         if(!is_array($headers)) $headers = (array)$headers;
-        $headers[] = "API-RemoteIP: " . helper::getRemoteIp();
+
+        $headers[] = 'API-RemoteIP: ' . helper::getRemoteIp(); /* Real IP of real user. */
+        $headers[] = 'API-LocalIP: ' . zget($_SERVER, 'SERVER_ADDR', ''); /* Server IP of self. */
+
         if($dataType == 'json')
         {
             $headers[] = 'Content-Type: application/json;charset=utf-8';
@@ -3260,11 +3315,11 @@ EOF;
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $timeout);
         curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_ENCODING, "");
+        curl_setopt($curl, CURLOPT_ENCODING,'');
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
-        curl_setopt($curl, CURLOPT_HEADER, false);
+        curl_setopt($curl, CURLOPT_HEADER, $httpCode);
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 2);
         curl_setopt($curl, CURLINFO_HEADER_OUT, true);
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
@@ -3275,14 +3330,36 @@ EOF;
             if(is_object($data)) $data = (array) $data;
             if($method == 'POST') curl_setopt($curl, CURLOPT_POST, true);
             if(in_array($method, array('PATCH', 'PUT'))) curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
+            $requestType = $method;
             curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
         }
 
         if($options) curl_setopt_array($curl, $options);
         $response = curl_exec($curl);
-        $errors   = curl_error($curl);
 
-        if($httpCode) $httpCode = curl_getinfo($curl,CURLINFO_HTTP_CODE);
+        $errno  = curl_errno($curl);
+        $errors = empty($errno)  ? 0 : curl_error($curl);
+        $info   = curl_getinfo($curl);
+
+        if($httpCode)
+        {
+            $httpCode     = $info['http_code'] ?? curl_getinfo($curl, CURLINFO_HTTP_CODE);
+            $headerSize   = $info['header_size'] ?? curl_getinfo($curl, CURLINFO_HEADER_SIZE);
+            $headerString = substr($response, 0, $headerSize);
+            $body         = substr($response, $headerSize);
+
+            /* Parse header. */
+            $header    = explode("\n", $headerString);
+            $newHeader = array();
+            foreach($header as $item)
+            {
+                $field = explode(':', $item);
+                if(count($field) < 2) continue;
+                $headerKey = array_shift($field);
+                $newHeader[$headerKey] = implode('', $field);
+            }
+        }
+
         curl_close($curl);
 
         if($log or $app->config->debug)
@@ -3290,21 +3367,28 @@ EOF;
             $logFile = $app->getLogRoot() . 'saas.'. date('Ymd') . '.log.php';
             if(!file_exists($logFile)) file_put_contents($logFile, '<?php die(); ?' . '>');
 
-            $fh = @fopen($logFile, 'a');
+            $fh = fopen($logFile, 'a');
             if($fh)
             {
-                fwrite($fh, date('Ymd H:i:s') . ": " . $app->getURI() . "\n");
-                fwrite($fh, "url:    " . $url . "\n");
-                if(!empty($data)) fwrite($fh, "data:   " . print_r($data, true) . "\n");
-                fwrite($fh, "results:" . print_r($response, true) . "\n");
-                if(!empty($errors)) fwrite($fh, "errors: " . $errors . "\n");
+                fwrite($fh, date('Ymd H:i:s') . ': ' . $app->getURI() . "\n");
+                fwrite($fh, "{$requestType} url:    " . $url . "\n");
+                if(!empty($data)) fwrite($fh, 'data:   ' . print_r($data, true) . "\n");
+                fwrite($fh, 'results:' . print_r($response, true) . "\n");
+
+                if(!empty($errors))
+                {
+                    fwrite($fh, 'errno: ' . $errno . "\n");
+                    fwrite($fh, 'errors: ' . $errors . "\n");
+                    fwrite($fh, 'info: ' . print_r($info, true) . "\n");
+                }
+
                 fclose($fh);
             }
         }
 
         if($errors) commonModel::$requestErrors[] = $errors;
 
-        return $httpCode ? array($response, $httpCode) : $response;
+        return $httpCode ? array($response, $httpCode, 'body' => $body, 'header' => $newHeader, 'errno' => $errno, 'info' => $info, 'response' => $response) : $response;
     }
 
     /**
@@ -3648,6 +3732,96 @@ EOF;
     }
 
     /**
+     * Get method of API.
+     *
+     * @param  string       $url
+     * @param  array|object $data
+     * @param  array        $headers example: array("key1:value1", "key2:value2")
+     * @access public
+     * @return object
+     */
+    public static function apiGet($url, $data = array(), $headers = array())
+    {
+        $url .= (strpos($url, '?') !== false ? '&' : '?') . http_build_query($data, '', '&', PHP_QUERY_RFC3986);
+
+        $result = json_decode(commonModel::http($url, $data, array(CURLOPT_CUSTOMREQUEST => 'GET'), $headers, 'json'));
+
+        if($result && $result->code == 200) return $result;
+
+        return static::apiError($result);
+    }
+
+    /**
+     * Post method of API.
+     *
+     * @param  string       $url
+     * @param  array|object $data
+     * @param  array        $headers example: array("key1:value1", "key2:value2")
+     * @access public
+     * @return object
+     */
+    public static function apiPost($url, $data, $headers = array())
+    {
+        $result     = json_decode(commonModel::http($url, $data, array(CURLOPT_CUSTOMREQUEST => 'POST'), $headers, 'json'));
+        if($result && $result->code == 200) return $result;
+
+        return static::apiError($result);
+    }
+
+    /**
+     * Put method of API.
+     *
+     * @param  string       $url
+     * @param  array|object $data
+     * @param  array        $headers example: array("key1:value1", "key2:value2")
+     * @access public
+     * @return object
+     */
+    public static function apiPut($url, $data, $headers = array())
+    {
+        $result     = json_decode(commonModel::http($url, $data, array(CURLOPT_CUSTOMREQUEST => 'PUT'), $headers, 'json'));
+        if($result && $result->code == 200) return $result;
+
+        return static::apiError($result);
+    }
+
+    /**
+     * Delete method of API.
+     *
+     * @param  string       $url
+     * @param  array|object $data
+     * @param  array        $headers example: array("key1:value1", "key2:value2")
+     * @access public
+     * @return object
+     */
+    public static function apiDelete($url, $data, $headers = array())
+    {
+        $result     = json_decode(commonModel::http($url, $data, array(CURLOPT_CUSTOMREQUEST => 'DELETE'), $headers, 'json'));
+        if($result && $result->code == 200) return $result;
+
+        return static::apiError($result);
+    }
+
+    /**
+     * Return error object of api server.
+     *
+     * @param  object|null $result
+     * @access protected
+     * @return object
+     */
+    protected static function apiError($result)
+    {
+        global $lang;
+
+        if($result && $result->code) return $result;
+
+        $error = new stdclass;
+        $error->code    = 600;
+        $error->message = $lang->error->httpServerError;
+        return $error;
+    }
+
+    /**
      * Check object priv.
      *
      * @param  string   $objectType program|project|product|execution
@@ -3663,6 +3837,123 @@ EOF;
         return false;
     }
 
+    /**
+     * 按照模块生成详情页的操作按钮。
+     * Build operate actions menu.
+     *
+     * @param  object $data
+     * @access public
+     * @return array
+     */
+    public function buildOperateMenu(object $data): array
+    {
+        global $app, $config;
+
+        /* build operate menu. */
+        $moduleName  = $app->moduleName;
+        $methodName  = $app->methodName;
+        $actionsMenu = array();
+
+        $this->loadModel($moduleName);
+        foreach($config->{$moduleName}->actions->{$methodName} as $menu => $actionList)
+        {
+            $actions = array();
+            foreach($actionList as $action)
+            {
+                $actionData = $config->{$moduleName}->actionList[$action];
+
+                if(!empty($actionData['url']) && is_array($actionData['url']))
+                {
+                    $module = $actionData['url']['module'];
+                    $method = $actionData['url']['method'];
+                    $params = $actionData['url']['params'];
+                    if(!common::hasPriv($module, $method)) continue;
+                    $actionData['url'] = helper::createLink($module, $method, $params);
+                }
+                else if(!empty($actionData['data-url']) && is_array($actionData['data-url']))
+                {
+                    $module = $actionData['data-url']['module'];
+                    $method = $actionData['data-url']['method'];
+                    $params = $actionData['data-url']['params'];
+                    if(!common::hasPriv($module, $method)) continue;
+                    $actionData['data-url'] = helper::createLink($module, $method, $params);
+                }
+                else
+                {
+                    if(!common::hasPriv($moduleName, $action)) continue;
+                }
+
+                if(method_exists($this->{$moduleName}, 'isClickable') && false === $this->{$moduleName}->isClickable($data, $action)) continue;
+
+                if($menu == 'suffixActions' && !empty($actionData['text']) && empty($actionData['showText'])) $actionData['text'] = '';
+
+                $actions[] = $actionData;
+            }
+            $actionsMenu[$menu] = $actions;
+        }
+        return $actionsMenu;
+    }
+
+    /**
+     * 计算应用运行时间。
+     * Print duration of a instance.
+     *
+     * @param  int    $seconds
+     * @param  string $format  y-m-d-h-i-s, case insensitive
+     * @static
+     * @access public
+     * @return string
+     */
+    public static function printDuration(int $seconds, string $format = 'y-m-d-h-i-s'): string
+    {
+        global $lang;
+
+        $duration = '';
+        $format = strtolower($format);
+
+        if(strpos($format, 'y') !== false)
+        {
+            $years       = intval($seconds / (3600 * 24 * 365));
+            $leftSeconds = intval($seconds % (3600 * 24 * 365));
+            if($years) $duration .= $years . $lang->year;
+        }
+
+        if(strpos($format, 'm') !== false)
+        {
+            $months      = intval($leftSeconds / (3600 * 24 * 30));
+            $leftSeconds = intval($leftSeconds % (3600 * 24 * 30));
+            if($months) $duration .= $months . $lang->month;
+        }
+
+        if(strpos($format, 'd') !== false)
+        {
+            $days        = intval($leftSeconds / (3600 * 24));
+            $leftSeconds = intval($leftSeconds % (3600 * 24));
+            if($days) $duration .= $days . trim($lang->day);
+        }
+
+        if(strpos($format, 'h') !== false)
+        {
+            $hours = intval($leftSeconds / 3600);
+            $leftSeconds = intval($leftSeconds % 3600);
+            if($hours) $duration .= $hours . $lang->hour;
+        }
+
+        if(strpos($format, 'i') !== false)
+        {
+            $minutes = intval($leftSeconds / 60);
+            $leftSeconds = intval($leftSeconds % 60);
+            if($minutes) $duration .= $minutes . $lang->minute;
+        }
+
+        if(strpos($format, 's') !== false)
+        {
+            $seconds = intval($leftSeconds % 3600);
+            if($seconds) $duration .= $seconds . $lang->second;
+        }
+
+        return $duration;
+    }
 }
 
 class common extends commonModel

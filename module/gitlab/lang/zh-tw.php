@@ -224,3 +224,7 @@ $lang->gitlab->tag->protected          = '受保護';
 $lang->gitlab->tag->accessLevel        = '允許創建';
 $lang->gitlab->tag->emptyPrivNameError = '標簽不能爲空';
 $lang->gitlab->tag->issetPrivNameError = '已存在該保護標簽';
+
+$lang->gitlab->featureBar['binduser']['all']     = $lang->gitlab->all;
+$lang->gitlab->featureBar['binduser']['notBind'] = $lang->gitlab->notBind;
+$lang->gitlab->featureBar['binduser']['binded']  = $lang->gitlab->binded;

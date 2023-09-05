@@ -97,7 +97,7 @@ foreach($fieldParams as $fieldName => $param)
           <tbody>
             <?php
             $formSessionName = $module . 'Form';
-            $formSession     = $_SESSION[$formSessionName];
+            $formSession     = $this->search->convertFormFrom20To18($_SESSION[$formSessionName]);
 
             $fieldNO = 1;
             for($i = 1; $i <= $groupItems; $i ++)
@@ -124,7 +124,7 @@ foreach($fieldParams as $fieldName => $param)
                 echo '</td>';
 
                 /* Print field. */
-                echo "<td class='fieldWidth' style='overflow: visible'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control chosen'") . '</td>';
+                echo "<td class='fieldWidth' style='overflow: visible'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control picker-select'") . '</td>';
 
                 /* Print operator. */
                 echo "<td class='operatorWidth'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control' onchange='setPlaceHolder($fieldNO)'") . '</td>';
@@ -132,7 +132,7 @@ foreach($fieldParams as $fieldName => $param)
                 /* Print value. */
                 echo "<td id='valueBox$fieldNO' style='overflow:visible'>";
                 if(isset($config->moreLinks["field{$currentField}"])) $config->moreLinks["value$fieldNO"] = $config->moreLinks["field{$currentField}"];
-                if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='form-control searchSelect chosen' data-max_drop_width='0'");
+                if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='form-control searchSelect picker-select' data-max_drop_width='0'");
                 if($param['control'] == 'input')
                 {
                     $fieldName  = $formSession["field$fieldNO"];
@@ -188,7 +188,7 @@ foreach($fieldParams as $fieldName => $param)
                 echo '</td>';
 
                 /* Print field. */
-                echo "<td class='fieldWidth' style='overflow: visible'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control chosen'") . '</td>';
+                echo "<td class='fieldWidth' style='overflow: visible'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control picker-select'") . '</td>';
 
                 /* Print operator. */
                 echo "<td class='operatorWidth'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control' onchange='setPlaceHolder($fieldNO)'") . '</td>';
@@ -200,7 +200,7 @@ foreach($fieldParams as $fieldName => $param)
                     $selected = $formSession["value$fieldNO"];
                     if(!isset($param['values'][$selected])) $config->moreLinks["value$fieldNO"] = $config->moreLinks["field{$currentField}"];
                 }
-                if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='form-control searchSelect chosen' data-max_drop_width='0'");
+                if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='form-control searchSelect picker-select' data-max_drop_width='0'");
 
                 if($param['control'] == 'input')
                 {

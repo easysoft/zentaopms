@@ -353,7 +353,7 @@ class design extends control
         $repos  = $this->loadModel('repo')->getRepoPairs('project', $design->project);
         $repoID = $repoID ? $repoID : key($repos);
 
-        $repo      = $this->loadModel('repo')->getRepoByID($repoID);
+        $repo      = $this->loadModel('repo')->getByID($repoID);
         $revisions = $this->repo->getCommits($repo, '', 'HEAD', '', '', $begin, date('Y-m-d 23:59:59', strtotime($end)));
 
         if($_POST)

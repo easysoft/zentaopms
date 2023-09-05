@@ -28,6 +28,9 @@ class screenModel extends model
     public function __construct()
     {
         parent::__construct();
+
+        $this->loadBIDAO();
+
         $this->filter = new stdclass();
         $this->filter->screen  = '';
         $this->filter->year    = '';
@@ -1052,7 +1055,7 @@ class screenModel extends model
                     {
                         foreach($results as $result)
                         {
-                            $value += $result->$field;
+                            $value += intval($result->$field);
                         }
 
                         $value = round($value);

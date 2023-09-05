@@ -1224,7 +1224,7 @@ class task extends control
             if($task->assignedTo == $currentAccount) $taskEffortFold = 1;
             if(!empty($task->team))
             {
-                $teamMember = array_column($task->team, 'account');
+                $teamMember = helper::arrayColumn($task->team, 'account');
                 if(in_array($currentAccount, $teamMember)) $taskEffortFold = 1;
             }
         }
@@ -1873,7 +1873,7 @@ class task extends control
 
         if(!empty($this->view->task->team))
         {
-            $teamAccounts = array_column($this->view->task->team, 'account');
+            $teamAccounts = helper::arrayColumn($this->view->task->team, 'account');
             $teamMembers  = array();
             foreach($this->view->members as $account => $name)
             {
@@ -2126,7 +2126,7 @@ class task extends control
             if($this->session->taskOnlyCondition)
             {
                 $tasks = $this->dao->select('*')->from(TABLE_TASK)->alias('t1')->where($this->session->taskQueryCondition)
-                    ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($this->cookie->checkedItem)->fi()
+                    ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($this->post->checkedItem)->fi()
                     ->orderBy($sort)->fetchAll('id');
 
                 foreach($tasks as $key => $task)
@@ -2149,7 +2149,7 @@ class task extends control
             }
             elseif($this->session->taskQueryCondition)
             {
-                $stmt = $this->dbh->query($this->session->taskQueryCondition . ($this->post->exportType == 'selected' ? " AND t1.id IN({$this->cookie->checkedItem})" : '') . " ORDER BY " . strtr($orderBy, '_', ' '));
+                $stmt = $this->dbh->query($this->session->taskQueryCondition . ($this->post->exportType == 'selected' ? " AND t1.id IN({$this->post->checkedItem})" : '') . " ORDER BY " . strtr($orderBy, '_', ' '));
                 while($row = $stmt->fetch()) $tasks[$row->id] = $row;
             }
 

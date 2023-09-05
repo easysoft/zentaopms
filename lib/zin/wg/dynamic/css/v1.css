@@ -1,0 +1,27 @@
+.dynamic > li {position: relative; list-style: none}
+.dynamic > li:before, .dynamic > li > div:after {position: absolute; left: -20px; display: block; width: 15px; height: 15px; content: ' '; border-radius: 50%}
+.dynamic > li:before {top: 12px; left: -17px; z-index: 3; width: 10px; height: 10px; background-color: #c4c4c4; border: none; border: 2px solid #fff;}
+.dynamic > li > div:after {top: 17px; left: -15px; z-index: 3; width: 6px; height: 6px; background-color: var(--color-gray-300); border-radius: 50%; opacity: 0}
+.dynamic > li.blue > div:after {background-color: #2e7fff;}
+.dynamic > li.green > div:after {background-color: rgb(25, 190, 131);}
+.dynamic > li.yellow > div:after {background-color: rgb(255, 210, 169);}
+.dynamic > li.trophy > div:after {background-color: unset;}
+.dynamic > li + li:after {position: absolute; top: -12px; bottom: 20px; left: -13px; z-index: 1; display: block; content: ' '; border-left: 2px solid #eee;}
+.dynamic > li > div:after {opacity: 1}
+.dynamic > li:before {top: 12px; left: -20px; width: 16px; height: 16px; background-color: var(--color-slate-100); border: none;}
+.dynamic > li.trophy:before {background: url('static/svg/trophy.svg') no-repeat; width: 18px; height: 18px; background-size: 100%; left: -21px; top: 13px; background-color: var(--color-slate-100);}
+.dynamic > li > div {display: block; padding: 3px 0px; line-height: 20px}
+.dynamic > li .dynamic-text {padding: 2px 5px;}
+.dynamic > li.trophy .dynamic-text {background: #fff;}
+.dynamic > li.trophy .dynamic-text img {opacity: 0.2; transform: rotate(6deg); position: relative; max-width: 2.25rem; top: -15px; left: -35px; width: 2.25rem; height: 2.25rem;}
+
+.dynamic-tag {position: absolute; top: 5px; left: -110px; font-size: 12px}
+.dynamic-tag-left {padding-left: 110px;}
+.dynamic-tag.has-time {left: -65px;}
+.has-time .dynamic-tag-left {padding-left: 65px;}
+
+.dynamic-sm {font-size: 12px}
+.dynamic-sm > li:before, .dynamic-sm > li > div:after {top: 10px; left: -20px; width: 11px; height: 11px}
+.dynamic-sm > li.blue:before, .dynamic-sm > li:before {top: 10px; left: -18px; width: 11px; height: 11px; background: 0 0; border: 1px solid #eee}
+.dynamic-sm > li > div {line-height: 20px}
+.dynamic-sm > li > div:after {top: 13px; left: -15px; width: 5px; height: 5px}

@@ -57,7 +57,7 @@ class sonarqubeModel extends model
      * Get sonarqube report.
      *
      * @param  int    $sonarqubeID
-     * @param  stirng $projectKey
+     * @param  string $projectKey
      * @param  string $metricKeys
      * @access public
      * @return object

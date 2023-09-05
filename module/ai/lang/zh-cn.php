@@ -778,11 +778,11 @@ $lang->ai->execute->failReasons['noObjectData'] = '对象数据获取失败';
 $lang->ai->execute->failReasons['noResponse']   = '请求返回值为空';
 $lang->ai->execute->failReasons['noTargetForm'] = '目标表单地址获取失败，或表单必要变量获取失败（可能原因为无法找到关联的对象，请检查对象间的关联关系）';
 $lang->ai->execute->executeErrors = array();
-$lang->ai->execute->executeErrors[-1] = '提词不存在';
-$lang->ai->execute->executeErrors[-2] = '对象数据获取失败';
-$lang->ai->execute->executeErrors[-3] = '序列化对象数据失败';
-$lang->ai->execute->executeErrors[-4] = '表单结构获取失败';
-$lang->ai->execute->executeErrors[-5] = 'API 返回值为空或返回了错误';
+$lang->ai->execute->executeErrors['-1'] = '提词不存在';
+$lang->ai->execute->executeErrors['-2'] = '对象数据获取失败';
+$lang->ai->execute->executeErrors['-3'] = '序列化对象数据失败';
+$lang->ai->execute->executeErrors['-4'] = '表单结构获取失败';
+$lang->ai->execute->executeErrors['-5'] = 'API 返回值为空或返回了错误';
 
 $lang->ai->audit = new stdclass();
 $lang->ai->audit->designPrompt = '提词设计';

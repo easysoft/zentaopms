@@ -56,7 +56,7 @@ class editorModel extends model
         $extensionList = array();
         foreach($this->config->editor->extSort as $ext)
         {
-            $extModulePaths = $this->app->getModuleExtPath('', $moduleName, $ext);
+            $extModulePaths = $this->app->getModuleExtPath($moduleName, $ext);
             foreach($extModulePaths as $extType => $extensionFullDir)
             {
                 if(empty($extensionFullDir) or !is_dir($extensionFullDir)) continue;

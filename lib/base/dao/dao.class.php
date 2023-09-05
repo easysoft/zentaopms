@@ -406,7 +406,6 @@ class baseDAO
         if($orderPOS) $subLength = $orderPOS;
         if($groupPOS) $subLength = $groupPOS;
         $sql = substr($sql, 0, $subLength);
-        self::$querys[] = $sql;
 
         /*
          * 获取记录数。
@@ -414,7 +413,8 @@ class baseDAO
          **/
         try
         {
-            $row = $this->dbh->rawQuery($sql)->fetch(PDO::FETCH_OBJ);
+            $dbh = $this->slaveDBH ? $this->slaveDBH : $this->dbh;
+            $row = $dbh->rawQuery($sql)->fetch(PDO::FETCH_OBJ);
         }
         catch (PDOException $e)
         {
@@ -568,7 +568,7 @@ class baseDAO
      */
     public function get()
     {
-        return $this->processKeywords($this->processSQL(false));
+        return self::processKeywords($this->processSQL());
     }
 
     /**
@@ -605,7 +605,7 @@ class baseDAO
      * @access public
      * @return string the sql string after process.
      */
-    public function processSQL($record = true)
+    public function processSQL()
     {
         $sql = $this->sqlobj->get();
 
@@ -682,7 +682,6 @@ class baseDAO
             }
         }
 
-        if($record) self::$querys[] = $this->processKeywords($sql);
         return $sql;
     }
 
@@ -694,7 +693,7 @@ class baseDAO
      * @access public
      * @return string the sql string.
      */
-    public function processKeywords($sql)
+    static public function processKeywords($sql)
     {
         return str_replace(array(DAO::WHERE, DAO::GROUPBY, DAO::HAVING, DAO::ORDERBY, DAO::LIMIT), array('WHERE', 'GROUP BY', 'HAVING', 'ORDER BY', 'LIMIT'), $sql);
     }
@@ -748,12 +747,15 @@ class baseDAO
             $method = $this->method;
             $this->reset();
 
-            if($this->slaveDBH and $method == 'select')
+            if($this->slaveDBH and in_array($method, array('select', 'desc')))
             {
                 return $this->slaveDBH->rawQuery($sql);
             }
             else
             {
+                /* Force to query from master db, if db has been changed. */
+                $this->slaveDBH = false;
+
                 return $this->dbh->rawQuery($sql);
             }
         }
@@ -847,6 +849,10 @@ class baseDAO
         {
             if($this->table) unset(dao::$cache[$this->table]);
             $this->reset();
+
+            /* Force to query from master db, if db has been changed. */
+            $this->slaveDBH = false;
+
             return $this->dbh->exec($sql);
         }
         catch (PDOException $e)

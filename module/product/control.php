@@ -387,6 +387,7 @@ class product extends control
         $this->view->projectProducts = isset($projectProducts) ? $projectProducts : array();
         $this->view->storyType       = $storyType;
         $this->view->from            = $this->app->tab;
+        $this->view->isProjectStory  = $isProjectStory;
         $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'story', $showModule) : array();
         $this->view->project         = $project;
         $this->display();
@@ -773,7 +774,7 @@ class product extends control
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->groups     = $this->loadModel('group')->getPairs();
         $this->view->branches   = $this->loadModel('branch')->getPairs($productID);
-        $this->view->reviewers  = $product->reviewer ? explode(',', $product->reviewer) : array();
+        $this->view->reviewers  = explode(',', $product->reviewer);
 
         $this->display();
     }
@@ -1551,7 +1552,7 @@ class product extends control
 
                 if($this->post->exportType == 'selected')
                 {
-                    $checkedItem = $this->cookie->checkedItem;
+                    $checkedItem = $this->post->checkedItem;
                     if(strpos(",$checkedItem,", ",{$product->id},") === false) unset($productStats[$i]);
                 }
             }

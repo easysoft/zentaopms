@@ -121,6 +121,8 @@ class taskModel extends model
             ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
             ->setIF(is_numeric($this->post->consumed), 'consumed', (float)$this->post->consumed)
             ->setIF(is_numeric($this->post->left),     'left',     (float)$this->post->left)
+            ->setIF(!$this->post->estStarted, 'estStarted', null)
+            ->setIF(!$this->post->deadline, 'deadline', null)
             ->setDefault('openedBy',   $this->app->user->account)
             ->setDefault('openedDate', helper::now())
             ->setDefault('vision', $this->config->vision)
@@ -128,8 +130,6 @@ class taskModel extends model
             ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->remove('after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri,team,teamSource,teamEstimate,teamConsumed,teamLeft,teamMember,multiple,teams,contactListMenu,selectTestStory,testStory,testPri,testEstStarted,testDeadline,testAssignedTo,testEstimate,sync,otherLane,region,lane,estStartedDitto,deadlineDitto')
-            ->removeIF(!$this->post->estStarted, 'estStarted')
-            ->removeIF(!$this->post->deadline, 'deadline')
             ->add('version', 1)
             ->get();
 
@@ -172,7 +172,7 @@ class taskModel extends model
 
             if(strpos($requiredFields, ',estStarted,') !== false and !isset($task->estStarted)) dao::$errors['estStarted'] = sprintf($this->lang->error->notempty, $this->lang->task->estStarted);
             if(strpos($requiredFields, ',deadline,') !== false and !isset($task->deadline)) dao::$errors['deadline'] = sprintf($this->lang->error->notempty, $this->lang->task->deadline);
-            if(isset($task->estStarted) and isset($task->deadline) and !helper::isZeroDate($task->deadline) and $task->deadline <= $task->estStarted) dao::$errors['deadline'] = sprintf($this->lang->error->ge, $this->lang->task->deadline, $task->estStarted);
+            if(isset($task->estStarted) and isset($task->deadline) and !helper::isZeroDate($task->deadline) and $task->deadline < $task->estStarted) dao::$errors['deadline'] = sprintf($this->lang->error->ge, $this->lang->task->deadline, $task->estStarted);
 
             if(dao::isError()) return false;
 
@@ -2409,12 +2409,12 @@ class taskModel extends model
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->fetch();
         if(!$task) return false;
-        if($task->openedDate)     $task->openedDate     = substr($task->openedDate, 0, 19);
-        if($task->finishedDate)   $task->finishedDate   = substr($task->finishedDate, 0, 19);
-        if($task->canceledDate)   $task->canceledDate   = substr($task->canceledDate, 0, 19);
-        if($task->closedDate)     $task->closedDate     = substr($task->closedDate, 0, 19);
-        if($task->lastEditedDate) $task->lastEditedDate = substr($task->lastEditedDate, 0, 19);
-        if($task->realStarted)    $task->realStarted    = substr($task->realStarted, 0, 19);
+        $task->openedDate     = substr($task->openedDate, 0, 19);
+        $task->finishedDate   = substr($task->finishedDate, 0, 19);
+        $task->canceledDate   = substr($task->canceledDate, 0, 19);
+        $task->closedDate     = substr($task->closedDate, 0, 19);
+        $task->lastEditedDate = substr($task->lastEditedDate, 0, 19);
+        $task->realStarted    = substr($task->realStarted, 0, 19);
 
         $children = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('deleted')->eq(0)->fetchAll('id');
         $task->children = $children;

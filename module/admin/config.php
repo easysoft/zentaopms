@@ -5,7 +5,7 @@ $config->admin->log->saveDays = 30;
 if(!isset($config->safe))       $config->safe = new stdclass();
 if(!isset($config->safe->weak)) $config->safe->weak = '123456,password,12345,12345678,qwerty,123456789,1234,1234567,abc123,111111,123123';
 
-$config->admin->menuGroup['system']    = array('custom|mode', 'backup', 'cron', 'action|trash', 'admin|xuanxuan', 'setting|xuanxuan', 'admin|license', 'admin|checkweak', 'admin|resetpwdsetting', 'admin|safe', 'custom|timezone', 'search|buildindex', 'admin|tableengine', 'ldap', 'custom|libreoffice', 'conference', 'client');
+$config->admin->menuGroup['system']    = array('custom|mode', 'backup', 'cron', 'action|trash', 'admin|xuanxuan', 'setting|xuanxuan', 'admin|license', 'admin|checkweak', 'admin|resetpwdsetting', 'admin|safe', 'custom|timezone', 'search|buildindex', 'admin|tableengine', 'ldap', 'custom|libreoffice', 'conference', 'client', 'system|browsebackup', 'system|restorebackup');
 $config->admin->menuGroup['company']   = array('dept', 'company', 'user', 'group', 'tutorial');
 $config->admin->menuGroup['switch']    = array('admin|setmodule');
 $config->admin->menuGroup['model']     = array('auditcl', 'stage', 'design', 'cmcl', 'reviewcl', 'custom|required', 'custom|set', 'custom|flow', 'custom|code', 'custom|percent','custom|estimate', 'custom|hours', 'subject', 'process', 'activity', 'zoutput', 'classify', 'holiday', 'reviewsetting');
@@ -15,6 +15,7 @@ $config->admin->menuGroup['message']   = array('mail', 'webhook', 'sms', 'messag
 $config->admin->menuGroup['dev']       = array('dev', 'entry', 'editor');
 $config->admin->menuGroup['extension'] = array('extension');
 $config->admin->menuGroup['convert']   = array('convert');
+$config->admin->menuGroup['platform']  = array('system', 'repo', 'account', 'host', 'serverroom', 'ops', 'tree', 'domain', 'deploy', 'service');
 $config->admin->menuGroup['ai']        = array('ai|adminindex', 'ai|prompts', 'ai|promptview', 'ai|conversations', 'ai|models', 'ai|editmodel', 'ai|promptassignrole', 'ai|promptselectdatasource', 'ai|promptsetpurpose', 'ai|promptsettargetform', 'ai|promptfinalize', 'ai|promptedit');
 
 $config->admin->menuModuleGroup['model']['custom|set']        = array('project', 'issue', 'risk', 'opportunity', 'nc');
@@ -83,7 +84,8 @@ $config->admin->helpURL['message']   = 'https://www.zentao.net/book/zentaopms/em
 $config->admin->helpURL['extension'] = 'https://www.zentao.net/book/zentaopms/536.html';
 $config->admin->helpURL['dev']       = 'https://www.zentao.net/book/zentaopms/537.html';
 $config->admin->helpURL['convert']   = 'https://www.zentao.net/book/zentaopms/656.html';
-$config->admin->helpURL['ai']        = 'https://www.zentao.net/book/zentaopms/';
+$config->admin->helpURL['platform']  = 'https://www.zentao.net/book/zentaopms/1064.html';
+$config->admin->helpURL['ai']        = 'https://www.zentao.net/book/zentaopms/1061.html';
 
 $config->admin->navsGroup['feature']['my']        = ',todo,block,';
 $config->admin->navsGroup['feature']['product']   = ',product,story,productplan,release,';

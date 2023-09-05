@@ -296,10 +296,10 @@ class gogsModel extends model
         $matchedUsers = array();
         foreach($gogsUsers as $gogsUser)
         {
-            if(isset($bindedUsers[$gogsUser->account]))
+            if(isset($bindedUsers[$gogsUser->id]))
             {
-                $gogsUser->zentaoAccount      = $bindedUsers[$gogsUser->account];
-                $matchedUsers[$giteaUser->id] = $gogsUser;
+                $gogsUser->zentaoAccount     = $bindedUsers[$gogsUser->id];
+                $matchedUsers[$gogsUser->id] = $gogsUser;
                 continue;
             }
 
@@ -311,8 +311,8 @@ class gogsModel extends model
             $matchedZentaoUsers = array_unique($matchedZentaoUsers);
             if(count($matchedZentaoUsers) == 1)
             {
-                $gogsUser->zentaoAccount      = current($matchedZentaoUsers);
-                $matchedUsers[$giteaUser->id] = $gogsUser;
+                $gogsUser->zentaoAccount     = current($matchedZentaoUsers);
+                $matchedUsers[$gogsUser->id] = $gogsUser;
             }
         }
 

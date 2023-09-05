@@ -13,7 +13,9 @@
  * @link        https://www.zentao.net
  */
 ?>
-<?php if(commonModel::hasPriv('ai', 'promptExecute')):?>
+<?php
+$this->loadModel('ai');
+if($this->ai->isModelConfigured() && $config->edition != 'ipd' && commonModel::hasPriv('ai', 'promptExecute')):?>
 <?php
   $this->app->loadConfig('ai');
   $module = $this->app->getModuleName();
@@ -22,7 +24,7 @@
 ?>
   <?php
     $menuOptions = $config->ai->menuPrint->locations[$module][$method];
-    $prompts     = $this->loadModel('ai')->getPromptsForUser($menuOptions->module);
+    $prompts     = $this->ai->getPromptsForUser($menuOptions->module);
     $prompts     = $this->ai->filterPromptsForExecution($prompts, true);
     if(!empty($prompts)):
   ?>
@@ -51,14 +53,23 @@
       $(function()
       {
         if(window.location.search.includes('onlybody')) return;
+        const container = window.frameElement?.closest('.load-indicator');
+        if(container && container.dataset.loading)
+        {
+          delete container.dataset.loading;
+          container.classList.remove('loading');
+          container.classList.remove('no-delay');
+        }
 
         $(`<?php echo $menuOptions->targetContainer;?>`).<?php echo isset($menuOptions->injectMethod) ? $menuOptions->injectMethod : 'append';?>(`<?php echo $html;?>`);
         $('[data-toggle="popover"]').popover({template: '<div class="popover"><h3 class="popover-title"></h3><div class="popover-content"></div></div>'});
 
         $('<?php echo count($prompts) > 1 ? '.prompts.dropdown ul.dropdown-menu' : '.prompt';?>').on('click', <?php if(count($prompts) > 1) echo "'button',";?> function(e)
         {
-          $('body').attr('data-loading', e.target.querySelector('.label') ? '<?php echo $lang->ai->execute->auditing;?>' : '<?php echo $lang->ai->execute->loading;?>');
-          $('body').addClass('load-indicator loading');
+          if(!container) return;
+          container.dataset.loading = e.target.querySelector('.label') ? '<?php echo $lang->ai->execute->auditing;?>' : '<?php echo $lang->ai->execute->loading;?>';
+          container.classList.add('loading');
+          container.classList.add('no-delay');
 
           /* Checks for session storage to cancel loading status (see inputinject.html.php). */
           sessionStorage.removeItem('ai-prompt-data-injected');
@@ -66,7 +77,13 @@
           {
             if(sessionStorage.getItem('ai-prompt-data-injected'))
             {
-              $('body').removeClass('loading');
+              if(container && container.dataset.loading)
+              {
+                delete container.dataset.loading;
+                container.classList.remove('loading');
+                container.classList.remove('no-delay');
+              }
+
               sessionStorage.removeItem('ai-prompt-data-injected');
               clearInterval(loadCheckInterval);
             }

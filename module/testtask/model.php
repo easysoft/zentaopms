@@ -94,6 +94,7 @@ class testtaskModel extends model
             ->beginIF($endTime)->andWhere('t1.end')->le($endTime)->fi()
             ->beginIF($branch == BRANCH_MAIN)
             ->orWhere('(t1.build')->eq('trunk')
+            ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.product')->eq((int)$productID)
             ->markRight(1)
             ->fi()

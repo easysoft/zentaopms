@@ -35,7 +35,7 @@
         {
           if(typeof index !== 'undefined')
           {
-            inputName = inputName + '[' + (index + 1) + ']';
+            inputName = inputName + '[' + index + ']';
           }
 
           const $input = $('[name="' + inputName + '"]');
@@ -78,12 +78,13 @@
             duelWithSpecialInputType(key, obj[key]);
             if(Array.isArray(obj[key]))
             {
+              const isStartWith0 = $('[name="' + key + '[0]' + '"]').length;
               const arr = obj[key];
               for(let i = 0; i < arr.length; i++)
               {
                 for(const key in arr[i])
                 {
-                  injectToInputElement(key, arr[i][key], i);
+                  injectToInputElement(key, arr[i][key], isStartWith0 ? i : i + 1);
                 }
               }
             }
@@ -137,6 +138,16 @@
           {
             /* Set injected in oreder to cancel loading class on object view (see promptmenu.html.php). */
             sessionStorage.setItem('ai-prompt-data-injected', true);
+
+            const container = window.frameElement?.closest('.load-indicator');
+            if(container && container.dataset.loading)
+            {
+              sessionStorage.removeItem('ai-prompt-data-injected');
+              delete container.dataset.loading;
+
+              container.classList.remove('loading');
+              container.classList.remove('no-delay');
+            }
           }
         });
       })();

@@ -294,7 +294,7 @@ class scoreModel extends model
      */
     public function getNotice()
     {
-        if(empty($this->config->global->scoreStatus)) return '';
+        if(empty($this->config->global->scoreStatus) or empty($this->app->user->lastTime)) return '';
         if(date('Y-m-d', $this->app->user->lastTime) == helper::today()) return '';
 
         $this->app->user->lastTime = time();

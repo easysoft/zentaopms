@@ -22,7 +22,7 @@ class compile extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
-        if($methodName != 'browse') $this->loadModel('ci')->setMenu();
+        if($this->app->rawMethod != 'browse') $this->loadModel('ci')->setMenu();
     }
 
     /**
@@ -37,8 +37,9 @@ class compile extends control
      * @access public
      * @return void
      */
-    public function browse($repoID = 0, $jobID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($repoID = 0, $jobID = 0, $orderBy = 'createdDate_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $this->loadModel('ci');
         if($jobID)
         {
             $job    = $this->loadModel('job')->getById($jobID);
@@ -47,21 +48,22 @@ class compile extends control
             $this->view->job = $job;
         }
 
-        $this->compile->syncCompile($repoID, $jobID);
+        if($repoID || $jobID) $this->compile->syncCompile($repoID, $jobID);
 
         $this->app->loadLang('job');
-        $this->loadModel('ci')->setMenu($repoID);
+        if($repoID) $this->ci->setMenu($repoID);
 
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->compile->browse;
-        $this->view->position[] = html::a($this->createLink('job', 'browse'), $this->lang->ci->job);
-        $this->view->position[] = $this->lang->compile->browse;
+        $buildList = $this->compile->getList($repoID, $jobID, $orderBy, $pager);
 
+        foreach($buildList as $build) $build->triggerType = $this->loadModel('job')->getTriggerConfig($build);
+
+        $this->view->title     = $this->lang->ci->job . $this->lang->colon . $this->lang->compile->browse;
         $this->view->repoID    = $repoID;
         $this->view->jobID     = $jobID;
-        $this->view->buildList = $this->compile->getList($repoID, $jobID, $orderBy, $pager);
+        $this->view->buildList = $buildList;
         $this->view->orderBy   = $orderBy;
         $this->view->pager     = $pager;
         $this->display();
@@ -80,17 +82,18 @@ class compile extends control
         $job   = $this->loadModel('job')->getByID($build->job);
 
         if(empty($build->logs) and !in_array($build->status, array('created', 'pending'))) $build->logs = $this->compile->getLogs($job, $build);
-        $logs = str_replace("\r\n", "<br />", $build->logs);
-        $logs = str_replace("\n", "<br />", $logs);
+        $logs        = '';
+        if($build->logs)
+        {
+            $logs = str_replace("\r\n", "<br />", $build->logs);
+            $logs = str_replace("\n", "<br />", $logs);
+        }
 
         $this->view->logs  = $logs;
         $this->view->build = $build;
         $this->view->job   = $job;
 
         $this->view->title = $this->lang->ci->job . $this->lang->colon . $this->lang->compile->logs;
-        $this->view->position[] = html::a($this->createLink('job', 'browse'), $this->lang->ci->job);
-        $this->view->position[] = html::a($this->createLink('compile', 'browse', "jobID=" . $build->job), $this->lang->compile->browse);
-        $this->view->position[] = $this->lang->compile->logs;
         $this->display();
     }
 

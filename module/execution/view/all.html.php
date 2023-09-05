@@ -174,13 +174,6 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
       }
   }
 
-  $(".export").modalTrigger({width:650, type:'iframe', shown: setCookie});
-
-  function setCookie()
-  {
-      $.cookie('checkedItem', checkItems.join(','), {expires: config.cookieLife, path: config.webRoot});
-  }
-
   $('#dtable').dtable(options);
 
   $('#batchEditBtn').click(function()

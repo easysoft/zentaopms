@@ -25,7 +25,7 @@ class gitlabWebhookEntry extends baseEntry
 
         $this->loadModel('repo');
 
-        $repo = $this->repo->getRepoByID($repoID);
+        $repo = $this->repo->getByID($repoID);
         if(empty($repo)) return;
 
         $headers = getallheaders(); /* Fetch all HTTP request headers. */

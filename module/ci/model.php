@@ -24,11 +24,12 @@ class ciModel extends model
             $this->session->set('repoID', $repoID);
             session_write_close();
         }
-        common::setMenuVars('devops', $this->session->repoID);
+        $homeMenuModule = array('gitlab', 'gogs', 'gitea', 'jenkins', 'sonarqube');
+        if(!in_array("{$this->app->moduleName}", $homeMenuModule)) common::setMenuVars('devops', $this->session->repoID);
 
         if($this->session->repoID)
         {
-            $repo = $this->loadModel('repo')->getRepoByID($this->session->repoID);
+            $repo = $this->loadModel('repo')->getByID($this->session->repoID);
             if(!empty($repo) and !in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) unset($this->lang->devops->menu->mr);
 
             $tab   = $this->app->tab;

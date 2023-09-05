@@ -1,0 +1,8 @@
+.tabs .nav-tabs>.nav-item>a {font-size: 14px; font-weight: 800; padding: 0; padding-right: 0; color: var(--color-slate-800);}
+.tabs .nav-tabs>.nav-item>a:after {border-width: 0;}
+.tabs .nav-tabs>.nav-item>a:before {background: none;}
+.tabs .nav-tabs>.nav-item>a.active {color: var(--color-primary-500);}
+.tabs .nav-tabs>.nav-item>a.active:after {border-bottom-color: var(--color-primary-500) !important; border-bottom-width: 2px;}
+.tabs .nav-tabs>.divider {height: 20px; border-right: 1px solid #DDD;}
+.tabs .tabs-collapse-btn {position: absolute; top: 3px; right: 0; width: 24px; height: 24px;}
+.tabs .tab-content {padding-top: 10px;}

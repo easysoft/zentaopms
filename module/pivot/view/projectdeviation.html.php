@@ -69,7 +69,7 @@
             </td>
             <td><?php echo round($execution->estimate, 2);?></td>
             <td><?php echo round($execution->consumed, 2);?></td>
-            <?php $deviation = round($execution->consumed - $execution->estimate, 2);?>
+            <?php $deviation = round((float)$execution->consumed - (float)$execution->estimate, 2);?>
             <td class="deviation">
             <?php
                 if($deviation > 0)

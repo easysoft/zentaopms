@@ -1,0 +1,15 @@
+$(function()
+{
+    $.get($.createLink('artifactrepo', 'ajaxUpdateArtifactRepos'), function(response)
+    {
+        data = JSON.parse(response);
+        if(data.hasUpdate) loadTable(pageLink);
+    });
+});
+
+window.createSortLink = function(col)
+{
+    var sort = col.name + '_asc';
+    if(sort == orderBy) sort = col.name + '_desc';
+    return sortLink.replace('{orderBy}', sort);
+}

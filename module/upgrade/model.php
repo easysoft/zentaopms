@@ -1194,7 +1194,9 @@ class upgradeModel extends model
                 if(strpos($fromVersion, 'max') !== false and version_compare($fromVersion, 'max4.5', '<')) $ipdinstall = true;
                 if($ipdinstall) $confirmContent .= file_get_contents($this->getUpgradeFile('ipdinstall'));
 
-                $confirmContent .= file_get_contents($this->getUpgradeFile('18.5')); // confirm insert position.
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.5'));
+             case '18_6':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.6')); // confirm insert position.
         }
 
         return $confirmContent;
@@ -6871,7 +6873,7 @@ class upgradeModel extends model
 
         if(empty($reviewIssues)) return false;
 
-        $reviewIds = array_unique(array_column($reviewIssues, 'review'));
+        $reviewIds = array_unique(helper::arrayColumn($reviewIssues, 'review'));
 
         $approvalsPairs = $this->dao->select('objectID, max(id) as approval')->from(TABLE_APPROVAL)
             ->where('objectID')->in($reviewIds)

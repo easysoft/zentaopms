@@ -30,7 +30,7 @@ js::set('vendorList', $config->ai->vendorList);
         <td><?php echo html::select('vendor', $lang->ai->models->openaiVendorList, $currentVendor, "class='form-control chosen' required");?></td>
       </tr>
       <tr class="vendor-row <?php echo in_array('key', $requiredFields) ? '' : ' hidden'; ?>" data-vendor-field="key">
-        <th><?php echo $lang->ai->models->apiKey;?></th>
+        <th><?php echo $lang->ai->models->key;?></th>
         <td><?php echo html::input('key', $modelConfig->key, "class='form-control' required");?></td>
       </tr>
       <tr class="vendor-row <?php echo in_array('resource', $requiredFields) ? '' : ' hidden'; ?>" data-vendor-field="resource">
@@ -112,6 +112,7 @@ $(function() {
     $('#testConn').click(function()
     {
         $.disableForm('#mainForm');
+        $('#testConn').attr('disabled', 'disabled');
         $.ajax(
         {
             type: 'POST',
@@ -129,7 +130,11 @@ $(function() {
                     $.zui.messager.danger(data.message);
                 }
             },
-            complete: function() {$.enableForm('#mainForm');}
+            complete: function()
+            {
+              $.enableForm('#mainForm');
+              $('#testConn').removeAttr('disabled');
+            }
         });
     });
 });

@@ -82,17 +82,6 @@ class giteaModel extends model
     }
 
     /**
-     * Create a gitea.
-     *
-     * @access public
-     * @return bool
-     */
-    public function create()
-    {
-        return $this->loadModel('pipeline')->create('gitea');
-    }
-
-    /**
      * Update a gitea.
      *
      * @param  int $id
@@ -258,8 +247,8 @@ class giteaModel extends model
     {
         $apiRoot  = rtrim($url, '/') . '/api/v1%s' . "?token={$token}";
         $url      = sprintf($apiRoot, "/admin/users") . "&limit=1";
-        $httpData = commonModel::httpWithHeader($url);
-        $users    = json_decode($httpData['body']);
+        $response = commonModel::http($url);
+        $users    = json_decode($response);
         if(empty($users)) return false;
         if(isset($users->message) or isset($users->error)) return null;
         return true;
@@ -340,9 +329,9 @@ class giteaModel extends model
         $matchedUsers = array();
         foreach($giteaUsers as $giteaUser)
         {
-            if(isset($bindedUsers[$giteaUser->account]))
+            if(isset($bindedUsers[$giteaUser->id]))
             {
-                $giteaUser->zentaoAccount     = $bindedUsers[$giteaUser->account];
+                $giteaUser->zentaoAccount     = $bindedUsers[$giteaUser->id];
                 $matchedUsers[$giteaUser->id] = $giteaUser;
                 continue;
             }
@@ -411,8 +400,8 @@ class giteaModel extends model
         for($page = 1; true; $page++)
         {
             $results = json_decode(commonModel::http($url . "&page={$page}&limit=50"));
-            if(!is_array($results->data)) break;
-            if(!empty($results->data)) $allResults = array_merge($allResults, $results->data);
+            if(empty($results) || empty($results->data) || !is_array($results->data)) break;
+            $allResults = array_merge($allResults, $results->data);
             if(count($results->data) < 50) break;
         }
 

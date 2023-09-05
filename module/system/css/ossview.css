@@ -1,0 +1,5 @@
+.btn.label-lg.label-outline {background-color: #ffffff!important;}
+.btn.label-lg.label-outline:hover, .btn-visit.btn:focus {background-color: #e5fbf3!important;}
+input#ossPassword {border:none;}
+input#ossSK{border:none;}
+

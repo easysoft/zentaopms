@@ -8,6 +8,22 @@ window.setCheckedCookie = function() {
 };
 
 /**
+ * Get checked items.
+ *
+ * @access public
+ * @return array
+ */
+function getCheckedItems()
+{
+    var checkedItems = [];
+    $('#caseForm [name^=caseIDList]:checked').each(function(index, ele)
+    {
+        checkedItems.push($(ele).val());
+    });
+    return checkedItems;
+};
+
+/**
  * Confirm batch delete cases.
  *
  * @param  string $actionLink

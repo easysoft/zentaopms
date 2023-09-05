@@ -244,9 +244,10 @@ class projectModel extends model
         $this->app->loadClass('pager', $static = true);
         foreach($projects as $projectID => $project)
         {
-            $project->model == 'waterfall' ? ksort($executions[$projectID]) : krsort($executions[$projectID]);
+            $projectExecutions = isset($executions[$projectID]) ? $executions[$projectID] : array();
+            $project->model == 'waterfall' ? ksort($projectExecutions) : krsort($projectExecutions);
 
-            $project->executions = isset($executions[$projectID]) ? $executions[$projectID] : array();
+            $project->executions = $projectExecutions;
             $project->parentName = $projectParentNames[$project->id];
         }
         return $projects;
@@ -538,9 +539,9 @@ class projectModel extends model
             ->andWhere('t1.type')->eq('project')
             ->andWhere('t3.deleted')->eq(0)
             ->fetch('totalHours');
-        $workhour->totalEstimate = $total->totalEstimate;
-        $workhour->totalConsumed = $totalConsumed;
-        $workhour->totalLeft     = round($total->totalLeft - $closedTotalLeft, 1);
+        $workhour->totalEstimate = (float)$total->totalEstimate;
+        $workhour->totalConsumed = (float)$totalConsumed;
+        $workhour->totalLeft     = round((float)$total->totalLeft - (float)$closedTotalLeft, 1);
 
         return $workhour;
     }
@@ -1179,7 +1180,7 @@ class projectModel extends model
     public function getTreeMenu($projectID = 0, $userFunc = '', $param = 0)
     {
         $projectMenu = array();
-        $stmt        = $this->dbh->query($this->buildMenuQuery($projectID));
+        $stmt        = $this->app->dbQuery($this->buildMenuQuery($projectID));
 
         while($project = $stmt->fetch())
         {
@@ -3215,6 +3216,7 @@ class projectModel extends model
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
             ->where('t1.execution')->in($executionIdList)
             ->andWhere('t1.status')->notIn('cancel,closed')
+    	    ->andWhere('t1.deleted')->eq(0)
             ->groupBy('t2.parent')
             ->fetchAll('project');
 

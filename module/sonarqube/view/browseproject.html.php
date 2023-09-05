@@ -16,7 +16,7 @@
     <?php echo html::a($this->createLink('sonarqube', 'browse'), "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "class='btn btn-secondary'");?>
   </div>
   <div id="sidebarHeader">
-    <div class="title"><?php echo $this->lang->sonarqube->common . ':' . $sonarqube->name; ?></div>
+    <div class="title" title="<?php echo $this->lang->sonarqube->common . ':' . $sonarqube->name; ?>"><?php echo $this->lang->sonarqube->common . ':' . $sonarqube->name; ?></div>
   </div>
   <div class="btn-toolbar pull-left">
     <div>
@@ -34,7 +34,7 @@
 <div class="table-empty-tip">
   <p>
     <span class="text-muted"><?php echo $lang->noData;?></span>
-    <?php if(empty($keyword) and common::hasPriv('sonarqube', 'createProject')):?>
+    <?php if(empty($keyword) and commonModel::hasPriv('space', 'browse')):?>
     <?php echo html::a($this->createLink('sonarqube', 'createProject', "sonarqubeID=$sonarqubeID"), "<i class='icon icon-plus'></i> " . $lang->sonarqube->createProject, '', "class='btn btn-info'");?>
     <?php endif;?>
   </p>
