@@ -242,6 +242,53 @@ class testcaseZen extends testcase
     }
 
     /**
+     * 处理编辑场景相关的变量。
+     * Assign variables of edit a scene.
+     *
+     * @param  object    $oldScene
+     * @access protected
+     * @return void
+     */
+    protected function assignEditSceneVars(object $oldScene): void
+    {
+        $productID = $oldScene->product;
+        $branchID  = $oldScene->branch;
+        $moduleID  = $oldScene->module;
+        $parentID  = $oldScene->parent;
+
+        /* 设置菜单。 */
+        /* Set menu. */
+        $this->setMenu((int)$this->session->project, (int)$this->session->execution, $productID, (string)$branchID);
+
+        $product = $this->product->getByID($productID);
+        if(!isset($this->products[$productID])) $this->products[$productID] = $product->name;
+
+        /* Display status of branch. */
+        $branches   = array();
+        $branchList = $this->loadModel('branch')->getList($productID, 0, 'all');
+        foreach($branchList as $branch) $branches[$branch->id] = $branch->name . ($branch->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+        if(!isset($branches[$branchID]))
+        {
+            $sceneBranch = $this->branch->getByID($branchID, $productID, '');
+            if($sceneBranch) $branches[$branchID] = $sceneBranch->name . ($sceneBranch->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+        }
+
+        $modules = $this->tree->getOptionMenu($productID, 'case', 0, $branchID);
+        if(!isset($modules[$moduleID])) $modules += $this->tree->getModulesName($moduleID);
+
+        $scenes = $this->testcase->getSceneMenu($productID, $moduleID, 'case', 0,  $branchID, $oldScene->id);
+        if(!isset($scenes[$parentID])) $scenes += $this->testcase->getScenesName($parentID);
+
+        $this->view->title    = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->editScene;
+        $this->view->products = $this->products;
+        $this->view->product  = $product;
+        $this->view->branches = $branches;
+        $this->view->modules  = $modules;
+        $this->view->scenes   = $scenes;
+        $this->view->scene    = $oldScene;
+    }
+
+    /**
      * 展示创建 testcase 的需求和模块变量。
      * Show the modules and stoires associated with the creation testcase.
      *
