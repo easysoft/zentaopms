@@ -119,6 +119,6 @@ $config->testcase->form->showImport['pri']          = array('required' => false,
 $config->testcase->form->showImport['precondition'] = array('required' => false, 'type' => 'string', 'default' => '');
 $config->testcase->form->showImport['keywords']     = array('required' => false, 'type' => 'string', 'default' => '');
 $config->testcase->form->showImport['stage']        = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
-$config->testcase->form->showImport['desc']         = array('required' => false, 'type' => 'array', 'default' => array());
-$config->testcase->form->showImport['expect']       = array('required' => false, 'type' => 'array', 'default' => array());
-$config->testcase->form->showImport['stepType']     = array('required' => false, 'type' => 'array', 'default' => array());
+$config->testcase->form->showImport['desc']         = array('required' => false, 'type' => 'array',  'default' => array());
+$config->testcase->form->showImport['expect']       = array('required' => false, 'type' => 'array',  'default' => array());
+$config->testcase->form->showImport['stepType']     = array('required' => false, 'type' => 'array',  'default' => array());

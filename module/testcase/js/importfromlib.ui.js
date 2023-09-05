@@ -1,34 +1,7 @@
 window.renderModuleItem = function(result, info)
 {
-    if(info.col.name == 'module')
-    {
-        const $module = $('#moduleSelect select').empty();
-
-        $module.attr('name', `module[${info.row.data.id}]`);
-
-        $.each(info.row.data.moduleItems, function(moduleID, moduleName)
-        {
-            $module.append('<option value="' + moduleID + '">' + moduleName + '</option>');
-        });
-
-        result[0] = null;
-        result[result.length] = {html: $('#moduleSelect').html()};
-    }
-
-    if(info.col.name == 'branch')
-    {
-        const $branch = $('#branchSelect select').empty();
-
-        $branch.attr('name', `branch[${info.row.data.id}]`);
-
-        $.each(info.row.data.branchItems, function(branchID, branchName)
-        {
-            $branch.append('<option value="' + branchID + '">' + branchName + '</option>');
-        });
-
-        result[0] = null;
-        result[result.length] = {html: $('#branchSelect').html()};
-    }
+    if(info.col.name == 'module') info.col.setting.control.props.items = info.row.data.moduleItems;
+    if(info.col.name == 'branch') info.col.setting.control.props.items = info.row.data.branchItems;
 
     return result;
 }

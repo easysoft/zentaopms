@@ -1087,87 +1087,67 @@ class testcase extends control
     /**
      * Import case from lib.
      *
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  int    $libID
-     * @param  string $orderBy
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
+     * @param  int        $productID
+     * @param  int|string $branch
+     * @param  int        $libID
+     * @param  string     $orderBy
+     * @param  int        $recTotal
+     * @param  int        $recPerPage
+     * @param  int        $pageID
      * @access public
      * @return void
      */
-    public function importFromLib($productID, $branch = 0, $libID = 0, $orderBy = 'id_desc', $browseType = '', $queryID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
+    public function importFromLib(int $productID, string $branch = '0', int $libID = 0, string $orderBy = 'id_desc', string $browseType = '', int $queryID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $projectID = 0)
     {
-        $browseType = strtolower($browseType);
-        $queryID    = (int)$queryID;
-        $product    = $this->loadModel('product')->getById($productID);
-        $branches   = array();
-        if($branch == '') $branch = 0;
-
-        $this->loadModel('branch');
-        if($product->type != 'normal') $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->branch->getPairs($productID, 'active', $projectID);
-
+        /* 获取用例库，设置用例库 id 和分支。 */
+        /* Get libraries, set lib id and branch. */
         $libraries = $this->loadModel('caselib')->getLibraries();
         if(empty($libraries)) return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->noLibrary, 'load' => $this->session->caseList));
-
         if(empty($libID) || !isset($libraries[$libID])) $libID = key($libraries);
+        if($branch == '') $branch = 0;
 
         if($_POST)
         {
-            $result = $this->testcase->importFromLib($productID, $libID, $branch);
+            list($cases, $steps, $files, $imported) = $this->testcaseZen->buildDataForImportFromLib($productID, $branch, $libID);
 
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            if(!empty($result) && is_string($result))
+            $this->loadModel('action');
+            foreach($cases as $oldCaseID => $case)
             {
-                $imported = trim($result, ',');
-                return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->testcase->importedCases, $imported)));
+                $this->testcase->doCreate($case);
+                $caseID = $this->dao->lastInsertID();
+                $this->executeHooks($caseID);
+                $this->testcase->syncCase2Project($case, $caseID);
+                $this->testcase->importSteps($caseID, zget($steps, $oldCaseID, array()));
+                $this->testcase->importFiles($caseID, zget($files, $oldCaseID, array()));
+
+                $this->action->create('case', $caseID, 'fromlib', '', $case->lib);
             }
 
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(!empty($imported) && is_string($imported)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->testcase->importedCases, trim($imported, ','))));
             return $this->send(array('result' => 'success', 'message' => $this->lang->importSuccess, 'load' => true));
         }
 
+        /* 设置菜单。 */
+        /* Set menu. */
         $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);
 
-        /* Build the search form. */
-        $actionURL = $this->createLink('testcase', 'importFromLib', "productID=$productID&branch=$branch&libID=$libID&orderBy=$orderBy&browseType=bySearch&queryID=myQueryID");
-        $this->config->testcase->search['module']    = 'testsuite';
-        $this->config->testcase->search['onMenuBar'] = 'no';
-        $this->config->testcase->search['actionURL'] = $actionURL;
-        $this->config->testcase->search['queryID']   = $queryID;
-        $this->config->testcase->search['fields']['lib'] = $this->lang->testcase->lib;
-        $this->config->testcase->search['params']['lib'] = array('operator' => '=', 'control' => 'select', 'values' => array('' => '', $libID => $libraries[$libID], 'all' => $this->lang->caselib->all));
-        $this->config->testcase->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'caselib');
-        if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
-        unset($this->config->testcase->search['fields']['product']);
-        unset($this->config->testcase->search['fields']['branch']);
-        $this->loadModel('search')->setSearchParams($this->config->testcase->search);
-
-        $this->loadModel('testsuite');
-        foreach($branches as $branchID => $branchName) $canImportModules[$branchID] = $this->testsuite->getCanImportModules($productID, $libID, $branchID);
-        if(empty($branches)) $canImportModules[0] = $this->testsuite->getCanImportModules($productID, $libID, 0);
+        $browseType = strtolower($browseType);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init(0, $recPerPage, $pageID);
 
+        /* 展示变量. */
+        /* Show the variables. */
+        $this->testcaseZen->assignForImportFromLib($productID, $branch, $libID, $orderBy, $queryID, $libraries);
+
         $this->view->title      = $this->lang->testcase->common . $this->lang->colon . $this->lang->testcase->importFromLib;
-
-        $this->view->libraries        = $libraries;
-        $this->view->libID            = $libID;
-        $this->view->product          = $product;
-        $this->view->productID        = $productID;
-        $this->view->branch           = $branch;
-        $this->view->cases            = $this->testsuite->getCanImportCases($productID, $libID, $branch, $orderBy, $pager, $browseType, $queryID);
-        $this->view->libModules       = $this->tree->getOptionMenu($libID, 'caselib');
-        $this->view->pager            = $pager;
-        $this->view->orderBy          = $orderBy;
-        $this->view->branches         = $branches;
-        $this->view->browseType       = $browseType;
-        $this->view->queryID          = $queryID;
-        $this->view->canImportModules = $canImportModules;
-
+        $this->view->libraries  = $libraries;
+        $this->view->cases      = $this->loadModel('testsuite')->getCanImportCases($productID, $libID, $branch, $orderBy, $pager, $browseType, $queryID);
+        $this->view->libModules = $this->tree->getOptionMenu($libID, 'caselib');
+        $this->view->pager      = $pager;
+        $this->view->browseType = $browseType;
         $this->display();
     }
 

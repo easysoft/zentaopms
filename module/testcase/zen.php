@@ -140,6 +140,61 @@ class testcaseZen extends testcase
     }
 
     /**
+     * 展示从用例库导入的用例。
+     * Assign the cases imported from the library.
+     *
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  int       $libID
+     * @param  string    $orderBy
+     * @param  int       $queryID
+     * @param  array     $libraries
+     * @access protected
+     * @return void
+     */
+    protected function assignForImportFromLib(int $productID, string $branch, int $libID, string $orderBy, int $queryID, array $libraries): void
+    {
+        $product    = $this->loadModel('product')->getById($productID);
+        $branches   = array();
+        if($product->type != 'normal')
+        {
+            $this->loadModel('branch');
+            $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->branch->getPairs($productID, 'active', $projectID);
+        }
+
+        $this->loadModel('testsuite');
+        foreach($branches as $branchID => $branchName) $canImportModules[$branchID] = $this->testsuite->getCanImportModules($productID, $libID, $branchID, 'items');
+        if(empty($branches)) $canImportModules[0] = $this->testsuite->getCanImportModules($productID, $libID, 0, 'items');
+
+        /* Build the search form. */
+        $actionURL = $this->createLink('testcase', 'importFromLib', "productID={$productID}&branch={$branch}&libID={$libID}&orderBy={$orderBy}&browseType=bySearch&queryID=myQueryID");
+
+        $this->config->testcase->search['module']    = 'testsuite';
+        $this->config->testcase->search['onMenuBar'] = 'no';
+        $this->config->testcase->search['actionURL'] = $actionURL;
+        $this->config->testcase->search['queryID']   = $queryID;
+
+        $this->config->testcase->search['fields']['lib'] = $this->lang->testcase->lib;
+        $this->config->testcase->search['params']['lib'] = array('operator' => '=', 'control' => 'select', 'values' => array('' => '', $libID => $libraries[$libID], 'all' => $this->lang->caselib->all));
+        $this->config->testcase->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($libID, 'caselib');
+
+        if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
+        unset($this->config->testcase->search['fields']['product']);
+        unset($this->config->testcase->search['fields']['branch']);
+
+        $this->loadModel('search')->setSearchParams($this->config->testcase->search);
+
+        $this->view->productID        = $productID;
+        $this->view->branch           = $branch;
+        $this->view->libID            = $libID;
+        $this->view->orderBy          = $orderBy;
+        $this->view->queryID          = $queryID;
+        $this->view->product          = $product;
+        $this->view->branches         = $branches;
+        $this->view->canImportModules = $canImportModules;
+    }
+
+    /**
      * 展示创建 testcase 的相关变量。
      * Show the variables associated with the creation testcase.
      *
@@ -1361,6 +1416,85 @@ class testcaseZen extends testcase
         return $cases;
     }
 
+    /**
+     * Build data for importing from lib.
+     *
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  int       $libID
+     * @access protected
+     * @return array
+     */
+    protected function buildDataForImportFromLib(int $productID, string $branch, int $libID): array
+    {
+        /* 处理模块。 */
+        /* Process modules. */
+        $preModule = 0;
+        $modules   = $this->post->module;
+        foreach($modules as $caseID => $module)
+        {
+            if($module != 'ditto') $preModule = $module;
+            if($module == 'ditto') $modules[$caseID] = $preModule;
+        }
+
+        /* 处理分支。 */
+        /* Process branches. */
+        $preBranch   = 0;
+        $caseModules = array();
+        $branches    = $this->post->branch;
+        $caseIdList  = $this->post->caseIdList;
+        if(!empty($branches))
+        {
+            foreach($branches as $caseID => $branch)
+            {
+                if($branch != 'ditto') $prevBranch = $branch;
+                if($branch == 'ditto') $branches[$caseID] = $prevBranch;
+                if(!isset($caseModules[$branch]) && in_array($caseID, $caseIdList) !== false) $caseModules[$branch] = $this->testsuite->getCanImportModules($productID, $libID, $branch);
+            }
+        }
+        else
+        {
+            $caseModules[$branch] = $this->loadModel('testsuite')->getCanImportModules($productID, $libID, $branch);
+        }
+
+        /* 构建用例。 */
+        /* Build cases. */
+        $imported  = '';
+        $cases     = array();
+        $steps     = array();
+        $files     = array();
+        $fromCases = $this->testcase->getByList($caseIdList);
+        $fromSteps = $this->testcase->getRelatedSteps($caseIdList);
+        $fromFiles = $this->testcase->getRelatedFiles($caseIdList);
+        foreach($caseIdList as $caseID)
+        {
+            if(!isset($fromCases[$caseID])) continue;
+
+            $case = clone $fromCases[$caseID];
+            $case->steps           = array();
+            $case->expects         = array();
+            $case->stepType        = array();
+            $case->product         = $productID;
+            $case->fromCaseID      = $case->id;
+            $case->fromCaseVersion = $case->version;
+            if(isset($modules[$case->id])) $case->module = $modules[$case->id];
+            if(isset($branches[$case->id])) $case->branch = $branches[$case->id];
+            unset($case->id);
+
+            if(empty($caseModules[$branch][$case->fromCaseID][$case->module]))
+            {
+                $imported .= "$case->fromCaseID,";
+            }
+            else
+            {
+                $cases[$caseID] = $case;
+                $steps[$caseID] = zget($fromSteps, $caseID, array());
+                $files[$caseID] = zget($fromFiles, $caseID, array());
+            }
+        }
+
+        return array($cases, $steps, $files, $imported);
+    }
 
     /**
      * 为展示导入用例构建更新的用例。
