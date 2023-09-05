@@ -87,7 +87,7 @@ div
                     haspriv('bug', 'report') ? item(set(array
                     (
                         'icon'  => 'menu-backend',
-                        'text'  => $this->lang->metric->settings,
+                        'text'  => $this->lang->metric->filters,
                         'class' => 'ghost',
                         'url'   => '#',
                     ))) : null,
