@@ -1229,6 +1229,39 @@ class executionTest
         }
     }
 
+
+    /**
+     * 转入任务到指定的执行。
+     * Import tasks.
+     *
+     * @param  int       $executionID
+     * @param  int       $count
+     * @param  array     $taskIdList
+     * @access public
+     * @return array|int
+     */
+    public function afterImportTaskTest(int $executionID, int $count, array $taskIdList = array()): array|int
+    {
+        $dateExceed   = array();
+        $taskStories  = array();
+        $parents      = array();
+        $execution    = $this->executionModel->fetchByID($executionID);
+        $tasks        = $this->executionModel->loadModel('task')->getByIdList($taskIdList);
+        $assignedToes = array();
+        foreach($tasks as $task)
+        {
+            /* Save the assignedToes and stories, should linked to execution. */
+            $assignedToes[$task->assignedTo] = $task->execution;
+            $taskStories[$task->story]       = $task->story;
+            if($task->parent < 0) $parents[$task->id] = $task->id;
+        }
+
+        $this->executionModel->afterImportTask($execution, $parents, $assignedToes, $taskStories);
+
+        $teams = $this->executionModel->dao->select('*')->from(TABLE_TEAM)->where('type')->eq('execution')->andWhere('root')->eq($executionID)->fetchAll();
+        return $count ? count($teams) : $teams;
+    }
+
     /**
      * 统计执行的需求数、任务数、Bug数。
      * Statistics the number of stories, tasks, and bugs for the execution.
