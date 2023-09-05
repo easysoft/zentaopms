@@ -29,7 +29,7 @@ window.afterPageUpdate = function()
 {
     setTimeout(function()
     {
-        if(reloadTimes > 60 || instanceType != 'store') return;
+        if(reloadTimes > 100 || instanceType != 'store') return;
         if($('#statusTD').data('reload') === true || $('#memoryRate').data('load') == true)
         {
             reloadTimes++;
