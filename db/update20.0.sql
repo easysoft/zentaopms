@@ -718,3 +718,15 @@ UPDATE `zt_grouppriv` SET `method` = 'batchChangeType' WHERE `method` = 'batchCa
 UPDATE `zt_priv` SET `method` = 'batchChangeType' WHERE `method` = 'batchCaseTypeChange';
 UPDATE `zt_privlang` SET `key` = 'testcase-batchChangeType' WHERE `key` = 'testcase-batchCaseTypeChange';
 UPDATE `zt_privrelation` SET `priv` = 'testcase-batchChangeType' WHERE `priv` = 'testcase-batchCaseTypeChange';
+
+CREATE INDEX `scene` ON `zt_case`(`scene`);
+UPDATE `zt_case` SET `sort` = `id` WHERE `sort` = 0;
+UPDATE `zt_case` SET `scene` = `scene` - 100000000 WHERE `scene` > 100000000;
+UPDATE `zt_scene` SET `sort` = `sort` - 100000000 WHERE `sort` > 100000000;
+UPDATE `zt_scene` SET `parent` = `parent` - 100000000 WHERE `parent` > 100000000;
+UPDATE `zt_scene` SET `path` = REPLACE(`path`, ',10000000', ',');
+UPDATE `zt_scene` SET `path` = REPLACE(`path`, ',1000000', ',');
+UPDATE `zt_scene` SET `path` = REPLACE(`path`, ',100000', ',');
+UPDATE `zt_scene` SET `path` = REPLACE(`path`, ',10000', ',');
+
+DROP VIEW IF EXISTS `ztv_scenecase`;
