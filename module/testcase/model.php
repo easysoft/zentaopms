@@ -2641,144 +2641,100 @@ class testcaseModel extends model
     }
 
     /**
-     * Save test case.
+     * 导入 xmind 时保存其中的测试用例。
+     * Save the test cases in xmind when importing it.
      *
-     * @param  array $testcaseData
-     * @param  array $sceneIds
+     * @param  object $testcase
+     * @param  array  $sceneIdList
      * @access public
      * @return array
      */
-    public function saveTestcase($testcaseData, $sceneIds)
+    public function saveTestcase(object $testcase, array $sceneIdList): array
     {
-        $tmpPId = $testcaseData["tmpPId"];
         $scene  = 0;
+        $nodeID = $testcase->tmpPId;
+        if(isset($sceneIdList[$nodeID]['id'])) $scene = $sceneIdList[$nodeID]['id'];
 
-        if(isset($sceneIds[$tmpPId]))
+        $case = new stdclass();
+        $case->scene   = $scene;
+        $case->module  = $testcase->module;
+        $case->product = $testcase->product;
+        $case->branch  = $testcase->branch;
+        $case->title   = $testcase->name;
+        $case->pri     = $testcase->pri;
+        $case->version = 1;
+
+        $case = $this->processCaseSteps($case, $testcase);
+
+        $oldCase = false;
+        $caseID  = (int)zget($testcase, 'id', 0);
+        if($caseID) $oldCase = $this->fetchBaseInfo($caseID);
+        if(empty($oldCase))
         {
-            $pScene = $sceneIds[$tmpPId];
-            $scene  = $pScene["id"];
-        }
+            $case->type       = 'feature';
+            $case->status     = 'normal';
+            $case->openedBy   = $this->app->user->account;
+            $case->openedDate = helper::now();
 
-        $id         = isset($testcaseData["id"]) ? $testcaseData["id"] : -1;
-        $module     = $testcaseData["module"];
-        $product    = $testcaseData["product"];
-        $branch     = $testcaseData["branch"];
-        $title      = $testcaseData["name"];
-        $pri        = $testcaseData["pri"];
-        $now        = helper::now();
-        $testcaseID = -1;
-        $version    = 1;
-
-        if(!isset($testcaseData["id"]))
-        {
-            $testcase             = new stdclass();
-            $testcase->scene      = $scene;
-            $testcase->module     = $module;
-            $testcase->product    = $product;
-            $testcase->branch     = $branch;
-            $testcase->title      = $title;
-            $testcase->pri        = $pri;
-            $testcase->type       = "feature";
-            $testcase->status     = "normal";
-            $testcase->version    = $version;
-            $testcase->openedBy   = $this->app->user->account;
-            $testcase->openedDate = $now;
-
-            $this->dao->insert(TABLE_CASE)->data($testcase)->autoCheck()->exec();
-            $testcaseID = $this->dao->lastInsertID();
-
-            $order = new stdclass();
-            $order->sort = $testcaseID;
-            $this->dao->update(TABLE_CASE)->data($order)->where('id')->eq((int)$testcaseID)->exec();
+            $this->create($case);
         }
         else
         {
-            $oldCase = $this->dao->select('version,id')->from(TABLE_CASE)->where('id')->eq((int)$id)->fetch();
+            $case->id             = $caseID;
+            $case->version        = $oldCase->version + 1;
+            $case->lastEditedBy   = $this->app->user->account;
+            $case->lastEditedDate = helper::now();
 
-            if(isset($oldCase->id))
-            {
-                if(!isset($oldCase->version)) return array('result' => 'fail', 'message' => 'not exist testcase');
-
-                $version  = $oldCase->version + 1;
-
-                $testcase                 = new stdclass();
-                $testcase->id             = $id;
-                $testcase->scene          = $scene;
-                $testcase->module         = $module;
-                $testcase->product        = $product;
-                $testcase->branch         = $branch;
-                $testcase->title          = $title;
-                $testcase->pri            = $pri;
-                $testcase->version        = $version;
-                $testcase->lastEditedBy   = $this->app->user->account;
-                $testcase->lastEditedDate = $now;
-
-                $testcaseID = $id;
-                $this->dao->update(TABLE_CASE)->data($testcase)->where('id')->eq((int)$id)->exec();
-            }
-            else
-            {
-                $testcase             = new stdclass();
-                $testcase->scene      = $scene;
-                $testcase->module     = $module;
-                $testcase->product    = $product;
-                $testcase->branch     = $branch;
-                $testcase->title      = $title;
-                $testcase->pri        = $pri;
-                $testcase->type       = "feature";
-                $testcase->status     = "normal";
-                $testcase->version    = $version;
-                $testcase->openedBy   = $this->app->user->account;
-                $testcase->openedDate = $now;
-
-                $this->dao->insert(TABLE_CASE)->data($testcase)->autoCheck()->exec();
-                $testcaseID = $this->dao->lastInsertID();
-
-                $order       = new stdclass();
-                $order->sort = $testcaseID;
-                $this->dao->update(TABLE_CASE)->data($order)->where('id')->eq((int)$testcaseID)->exec();
-            }
+            $this->update($case, $oldCase);
         }
 
-        if($this->dao->isError())
-        {
-            return array('result' => 'fail', 'message' => $this->dao->getError(true));
-        }
+        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError(true));
 
-        $stepList = isset($testcaseData["stepList"]) ? $testcaseData["stepList"] : array();
-        if(isset($stepList))
+        return array('result' => 'success', 'message' => 1, 'testcaseID' => $caseID);
+    }
+
+    /**
+     * 把导入 xmind 时 POST 提交的 stepList 属性转换为创建用例和编辑用例表单提交的 steps、expects 和 stepType 属性。
+     * Convert the stepList attribute submitted by POST when importing xmind into the steps, expects, and stepType attributes submitted by the form for creating and editing use cases.
+     *
+     * @param  object $case
+     * @param  object $testcase
+     * @access protected
+     * @return object
+     */
+    protected function processCaseSteps(object $case, object $testcase): object
+    {
+        $case->steps    = array();
+        $case->expects  = array();
+        $case->stepType = array();
+
+        if(isset($testcase->stepList))
         {
+            $index     = 1;
+            $postSteps = $testcase->stepList;
+            $stepList  = array_combine(array_map(function($step){return $step['tmpId'];}, $postSteps), array_map(function($step){return (object)$step;}, $postSteps));
             foreach($stepList as $step)
             {
-                $tmpPId = $step["tmpPId"];
-                $pObj   = isset($sceneIds[$tmpPId]) ? $sceneIds[$tmpPId] : array();
+                if(isset($stepList[$step->tmpPId]))
+                {
+                    $parentStep  = $stepList[$step->tmpPId];
+                    $step->index = $parentStep->index . '.' . (count($parentStep->children) + 1);
+                    $parentStep->children[] = $step;
+                }
+                else
+                {
+                    $step->index    = $index;
+                    $step->children = array();
+                    $index++;
+                }
 
-                $parent = 0;
-                if(isset($sceneIds[$tmpPId])) $parent = $pObj["id"];
-
-                $case   = $testcaseID;
-                $type   = $step["type"];
-                $desc   = $step["desc"];
-                $expect = isset($step["expect"]) ? $step["expect"] : '';
-
-                $casestep            = new stdclass();
-                $casestep->case      = $case;
-                $casestep->version   = $version;
-                $casestep->type      = $type;
-                $casestep->parent    = $parent;
-                $casestep->desc      = $desc;
-                $casestep->expect    = $expect;
-
-                $this->dao->insert(TABLE_CASESTEP)->data($casestep)->autoCheck()->exec();
-                $casestepID = $this->dao->lastInsertID();
-
-                if($this->dao->isError()) return array('result' => 'fail', 'message' => $this->dao->getError(true));
-
-                $sceneIds[$step["tmpId"]] = array("id"=>$casestepID, "tmpPId"=>$tmpPId);
+                $case->steps[$step->index]    = zget($step, 'desc', '');
+                $case->expects[$step->index]  = zget($step, 'expect', '');
+                $case->stepType[$step->index] = zget($step, 'type', 'item');
             }
         }
 
-        return array('result' => 'success', 'message' => 1,'testcaseID'=>$testcaseID);
+        return $case;
     }
 
     /**
