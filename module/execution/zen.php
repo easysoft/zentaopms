@@ -437,6 +437,82 @@ class executionZen extends execution
     }
 
     /**
+     * 将导入的Bug转为任务。
+     * Change imported bugs to the tasks.
+     *
+     * @param  object    $execution
+     * @param  array     $postData
+     * @access protected
+     * @return array
+     */
+    protected function buildTasksForImportBug(object $execution, array $postData)
+    {
+        $this->loadModel('task');
+
+        $tasks          = array();
+        $bugs           = $this->loadModel('bug')->getByIdList(array_keys($postData));
+        $showAllModule  = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
+        $modules        = $this->loadModel('tree')->getTaskOptionMenu($execution->id, 0, 0, $showAllModule ? 'allModule' : '');
+        $now            = helper::now();
+        $requiredFields = str_replace(',story,', ',', ',' . $this->config->task->create->requiredFields . ',');
+        $requiredFields = trim($requiredFields, ',');
+        foreach($postData as $bugID => $task)
+        {
+            $bug = zget($bugs, $bugID, '');
+            if(empty($bug)) continue;
+
+            unset($task->id);
+            $task->bug          = $bug;
+            $task->project      = $execution->project;
+            $task->execution    = $execution->id;
+            $task->story        = $bug->story;
+            $task->storyVersion = $bug->storyVersion;
+            $task->module       = isset($modules[$bug->module]) ? $bug->module : 0;
+            $task->fromBug      = $bugID;
+            $task->name         = $bug->title;
+            $task->type         = 'devel';
+            $task->consumed     = 0;
+            $task->status       = 'wait';
+            $task->openedDate   = $now;
+            $task->openedBy     = $this->app->user->account;
+
+            if($task->estimate !== '') $task->left = $task->estimate;
+            if(strpos($requiredFields, 'estStarted') !== false && helper::isZeroDate($task->estStarted)) $task->estStarted = '';
+            if(strpos($requiredFields, 'deadline') !== false && helper::isZeroDate($task->deadline)) $task->deadline = '';
+            if(!empty($task->assignedTo)) $task->assignedDate = $now;
+
+            /* Check task required fields. */
+            foreach(explode(',', $requiredFields) as $field)
+            {
+                if(empty($field))         continue;
+                if(!isset($task->$field)) continue;
+                if(!empty($task->$field)) continue;
+
+                if($field == 'estimate' and strlen(trim($task->estimate)) != 0) continue;
+
+                dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->task->$field);
+                return false;
+            }
+
+            if(!preg_match("/^[0-9]+(.[0-9]{1,3})?$/", (string)$task->estimate) and !empty($task->estimate))
+            {
+                dao::$errors['message'][] = $this->lang->task->error->estimateNumber;
+                return false;
+            }
+
+            if(!empty($this->config->limitTaskDate))
+            {
+                $this->task->checkEstStartedAndDeadline($executionID, $task->estStarted, $task->deadline);
+                if(dao::isError()) return false;
+            }
+
+            $tasks[$bugID] = $task;
+        }
+
+        return $tasks;
+    }
+
+    /**
      * 构建导入Bug的搜索表单数据。
      * Build the search form data to import the Bug.
      *

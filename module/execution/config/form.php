@@ -1,8 +1,6 @@
 <?php
 $config->execution->form = new stdclass();
 
-$config->execution->form->importTask = array();
-
 $config->execution->form->importTask['taskIdList'] = array('type' => 'array', 'required' => false, 'default' => array());
 
 $config->execution->form->setkanban = array();
@@ -33,3 +31,10 @@ $config->execution->form->create['plans']    = array('type' => 'array', 'require
 $config->execution->form->edit['products'] = array('type' => 'array', 'required' => false, 'default' => array());
 $config->execution->form->edit['branch']   = array('type' => 'array', 'required' => false, 'default' => array());
 $config->execution->form->edit['plans']    = array('type' => 'array', 'required' => false, 'default' => array());
+
+$config->execution->form->importBug['id']         = array('type' => 'int',    'required' => false, 'default' => 0, 'base' => true);
+$config->execution->form->importBug['pri']        = array('type' => 'int',    'required' => false, 'default' => 0);
+$config->execution->form->importBug['estStarted'] = array('type' => 'string', 'required' => false, 'default' => null);
+$config->execution->form->importBug['deadline']   = array('type' => 'string', 'required' => false, 'default' => null);
+$config->execution->form->importBug['estimate']   = array('type' => 'float',  'required' => false, 'default' => 0);
+$config->execution->form->importBug['assignedTo'] = array('type' => 'string', 'required' => false, 'default' => '');

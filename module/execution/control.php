@@ -326,9 +326,12 @@ class execution extends control
      */
     public function importBug(int $executionID = 0, string $browseType = 'all', int $param = 0, int $recTotal = 0, int $recPerPage = 30, int $pageID = 1)
     {
+        $execution = $this->execution->getByID($executionID);
         if(!empty($_POST))
         {
-            $this->execution->importBug($executionID);
+            $postData = form::batchData($this->config->execution->form->importBug)->get();
+            $tasks    = $this->executionZen->buildTasksForImportBug($execution, $postData);
+            $this->execution->importBug($tasks);
             if(dao::isError()) return $this->sendError(dao::getError());
 
             return $this->sendSuccess(array('load' => true));
@@ -339,7 +342,6 @@ class execution extends control
         /* Get users, products and executions.*/
         $users      = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
         $products   = $this->loadModel('product')->getProductPairsByProject($executionID);
-        $execution  = $this->execution->getByID($executionID);
         $executions = !empty($products) ? $this->execution->getPairsByProduct(array_keys($products)) : $executions[$executionID] = $execution->name;
 
         /* Set browseType, productID, moduleID and queryID. */
