@@ -38,7 +38,7 @@ class editor extends wg
     {
         $uid = $this->prop('uid');
         if(!$uid) $this->setProp('uid', uniqid());
-        $this->setDefaultProps(array('uploadUrl' => helper::createLink('file', 'ajaxUpload', 'uid=' . $uid)));
+        $this->setDefaultProps(array('uploadUrl' => helper::createLink('file', 'ajaxUpload', 'uid=' . $this->prop('uid'))));
     }
 
     protected function build(): wg
