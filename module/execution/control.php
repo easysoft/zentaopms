@@ -1715,36 +1715,28 @@ class execution extends control
         if(is_string($executionIdList)) $executionIdList = explode(',', $executionIdList);
 
         $pointOutStages = $this->execution->batchChangeStatus($executionIdList, $status);
-        $project        = $this->loadModel('project')->getById($projectID);
+        if(!$pointOutStages) return $this->sendSuccess(array('load' => true));
 
-        if($pointOutStages)
+        $alertLang = '';
+        if($status == 'wait')
         {
-            $alertLang = '';
-
-            if($status == 'wait')
+            $project = $this->loadModel('project')->getById($projectID);
+            /* In execution-all list or waterfall, waterfallplus project's execution list. */
+            if(empty($project) or (!empty($project) and strpos($project->model, 'waterfall') !== false))
             {
-                /* In execution-all list or waterfall, waterfallplus project's execution list. */
-                if(empty($project) or (!empty($project) and strpos($project->model, 'waterfall') !== false))
-                {
-                    $executionLang = (empty($project) or (!empty($project) and $project->model == 'waterfallplus')) ? $this->lang->execution->common : $this->lang->stage->common;
-                    $alertLang     = sprintf($this->lang->execution->hasStartedTaskOrSubStage, $executionLang, $pointOutStages);
-                }
-
-                if(!empty($project) and strpos('agileplus,scrum', $project->model) !== false)
-                {
-                    $executionLang = $project->model == 'scrum' ? $this->lang->executionCommon : $this->lang->execution->common;
-                    $alertLang     = sprintf($this->lang->execution->hasStartedTask, $executionLang, $pointOutStages);
-                }
+                $executionLang = (empty($project) or (!empty($project) and $project->model == 'waterfallplus')) ? $this->lang->execution->common : $this->lang->stage->common;
+                $alertLang     = sprintf($this->lang->execution->hasStartedTaskOrSubStage, $executionLang, $pointOutStages);
             }
-
-            if($status == 'suspended') $alertLang = sprintf($this->lang->execution->hasSuspendedOrClosedChildren, $pointOutStages);
-
-            if($status == 'closed') $alertLang = sprintf($this->lang->execution->hasNotClosedChildren, $pointOutStages);
-
-            return $this->sendSuccess(array('message' => $alertLang, 'load' => true));
+            if(!empty($project) and strpos('agileplus,scrum', $project->model) !== false)
+            {
+                $executionLang = $project->model == 'scrum' ? $this->lang->executionCommon : $this->lang->execution->common;
+                $alertLang     = sprintf($this->lang->execution->hasStartedTask, $executionLang, $pointOutStages);
+            }
         }
+        if($status == 'suspended') $alertLang = sprintf($this->lang->execution->hasSuspendedOrClosedChildren, $pointOutStages);
+        if($status == 'closed') $alertLang = sprintf($this->lang->execution->hasNotClosedChildren, $pointOutStages);
 
-        return $this->sendSuccess(array('load' => true));
+        return $this->sendSuccess(array('message' => $alertLang, 'load' => true));
     }
 
     /**
