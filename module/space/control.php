@@ -25,6 +25,7 @@ class space extends control
      */
     public function browse($spaceID = null, $browseType = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
         $this->app->loadLang('instance');
         $this->loadModel('instance');
         $this->loadModel('store');
@@ -112,7 +113,7 @@ class space extends control
      */
     public function createApplication($appID = 0)
     {
-        if(!commonModel::hasPriv('instance', 'install')) $this->loadModel('common')->deny('instance', 'install', false);
+        if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
 
         $this->app->loadLang('sonarqube');
         $this->app->loadLang('jenkins');
@@ -155,6 +156,7 @@ class space extends control
      */
     public function getStoreAppInfo(int $appID)
     {
+        if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
         $cloudApp     = $this->loadModel('store')->getAppInfo($appID);
         $versionPairs = $this->store->getVersionPairs($appID);
         $versionItems = array();

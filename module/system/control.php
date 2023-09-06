@@ -447,6 +447,7 @@ class system extends control
      */
     public function editDomain()
     {
+        if(!commonModel::hasPriv('system', 'configDomain')) $this->loadModel('common')->deny('system', 'configDomain', false);
         $this->loadModel('instance');
 
         if($_POST)

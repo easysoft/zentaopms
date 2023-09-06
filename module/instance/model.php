@@ -2061,6 +2061,21 @@ class InstanceModel extends model
     }
 
     /**
+     * 判断按钮是否显示。
+     * Adjust the action display.
+     *
+     * @param  object $instance
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function isDisplay(object $instance, string $action): bool
+    {
+        if($action !== 'visit' && !commonModel::hasPriv('instance', 'manage')) return false;
+        return true;
+    }
+
+    /**
      * Check app name unique.
      *
      * @param  string    $name

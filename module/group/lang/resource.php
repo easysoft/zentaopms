@@ -1381,24 +1381,6 @@ $lang->serverroom->methodOrder[10] = 'edit';
 $lang->serverroom->methodOrder[15] = 'delete';
 $lang->serverroom->methodOrder[20] = 'view';
 
-$lang->resource->instance = new stdclass();
-$lang->resource->instance->install       = 'install';
-$lang->resource->instance->view          = 'view';
-$lang->resource->instance->visit         = 'visit';
-$lang->resource->instance->ajaxStatus    = 'ajaxStatus';
-$lang->resource->instance->ajaxStart     = 'ajaxStart';
-$lang->resource->instance->ajaxStop      = 'ajaxStop';
-$lang->resource->instance->ajaxUninstall = 'ajaxUninstall';
-$lang->resource->instance->upgrade       = 'upgrade';
-
-$lang->resource->space = new stdclass();
-$lang->resource->space->browse          = 'browse';
-$lang->resource->space->getStoreAppInfo = 'getStoreAppInfo';
-
-$lang->resource->store = new stdclass();
-$lang->resource->store->browse  = 'browse';
-$lang->resource->store->appView = 'appView';
-
 /* Doc. */
 $lang->resource->doc = new stdclass();
 $lang->resource->doc->index          = 'index';
@@ -2039,6 +2021,8 @@ $lang->resource->repocode           = new stdclass();
 $lang->resource->artifactrepo       = new stdclass();
 $lang->resource->deploy             = new stdclass();
 $lang->resource->ops                = new stdclass();
+$lang->resource->instance           = new stdclass();
+$lang->resource->space              = new stdclass();
 
 global $config;
 $inUpgrade = (defined('IN_UPGRADE') and IN_UPGRADE);

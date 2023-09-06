@@ -60,7 +60,7 @@ window.afterPageUpdate = function()
                     {
                         clearInterval(timer);
                         statusMap[instance.id] = instance.status;
-                        loadPage();
+                        loadCurrentPage();
                     }
                 });
             }

@@ -39,6 +39,7 @@ class instance extends control
      */
     public function view($id, $type = 'store', $tab ='baseinfo' )
     {
+        if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
         if($type === 'store')
         {
             $this->storeView($id, $tab);
@@ -90,6 +91,7 @@ class instance extends control
      */
     protected function storeView($id, $tab ='baseinfo' )
     {
+        if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
         $this->loadModel('system');
         $this->app->loadLang('system');
 
@@ -269,7 +271,7 @@ class instance extends control
      */
     public function setting($id)
     {
-        if(!commonModel::hasPriv('instance', 'view')) $this->loadModel('common')->deny('instance', 'view', false);
+        if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
         $currentResource = new stdclass;
         $instance        = $this->instance->getByID($id);
         $currentResource = $this->cne->getAppConfig($instance);
@@ -347,6 +349,7 @@ class instance extends control
      */
     public function upgrade($id)
     {
+        if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
         $instance = $this->instance->getByID($id);
         $instance->latestVersion = $this->store->appLatestVersion($instance->appID, $instance->version);
 
@@ -387,6 +390,7 @@ class instance extends control
      */
     public function visit(int $id, int $externalID = 0): void
     {
+        if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
         if(!$externalID)
         {
             $instance = $this->instance->getByID($id);
@@ -411,7 +415,7 @@ class instance extends control
      */
     public function createExternalApp(string $type)
     {
-        if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
+        if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
 
         $this->app->loadModuleConfig('sonarqube');
         $this->app->loadLang('pipeline');
@@ -445,7 +449,7 @@ class instance extends control
      */
     public function editExternalApp(int $externalID)
     {
-        if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
+        if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
 
         $oldApp = $this->loadModel('pipeline')->getByID($externalID);
 
@@ -479,7 +483,7 @@ class instance extends control
      */
     public function deleteExternalApp(int $externalID)
     {
-        if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
+        if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
 
         $oldApp = $this->loadModel('pipeline')->getByID($externalID);
         $actionID = $this->pipeline->delete($externalID, $oldApp->type);
@@ -524,6 +528,7 @@ class instance extends control
      */
     public function install($appID)
     {
+        if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
         $cloudApp = $this->store->getAppInfo($appID);
         if(empty($cloudApp)) return $this->send(array('result' => 'fail', 'message' => $this->lang->instance->errors->noAppInfo));
 
@@ -618,6 +623,7 @@ class instance extends control
      */
     public function ajaxUninstall($instanceID, $type = '')
     {
+        if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
         if($type !== 'store')
         {
             $instance = $this->loadModel('pipeline')->getByID($instanceID);
@@ -652,6 +658,7 @@ class instance extends control
      */
     public function ajaxStart($instanceID)
     {
+        if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
         $instance = $this->instance->getByID($instanceID);
         if(!$instance) return $this->send(array('result' => 'fail', 'message' => $this->lang->instance->instanceNotExists));
 
@@ -672,6 +679,7 @@ class instance extends control
      */
     public function ajaxStop($instanceID)
     {
+        if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
         $instance = $this->instance->getByID($instanceID);
         if(!$instance) return $this->send(array('result' => 'fail', 'message' => $this->lang->instance->instanceNotExists));
 
@@ -690,6 +698,7 @@ class instance extends control
      */
     public function ajaxStatus()
     {
+        if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
         $postData = fixer::input('post')->setDefault('idList', array())->get();
 
         $instances  = $this->instance->getByIdList($postData->idList);
@@ -770,7 +779,7 @@ class instance extends control
      */
     public function ajaxDBAuthUrl()
     {
-        if(!commonModel::hasPriv('instance', 'view')) $this->loadModel('common')->deny('instance', 'view', false);
+        if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
         $post = fixer::input('post')
             ->setDefault('namespace', 'default')
             ->setDefault('instanceID', 0)
@@ -804,6 +813,7 @@ class instance extends control
      */
     public function ajaxAdjustMemory($instanceID)
     {
+        if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
         $postData = fixer::input('post')->get();
 
         /* Check free memory size is enough or not. */
