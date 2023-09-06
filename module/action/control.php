@@ -462,9 +462,9 @@ class action extends control
 
         /* If parent stage's attribute has changed, sub-stage's attribute need change. */
         $deletedTopParent = current($deletedStageList);
-        $checkTopStage    = $this->loadModel('programplan')->checkTopStage($deletedTopParent->id);
+        $isTopStage       = $this->loadModel('programplan')->isTopStage($deletedTopParent->id);
         $parentAttr       = $deletedTopParent->attribute;
-        if(!$checkTopStage) $parentAttr = $this->dao->select('attribute')->from(TABLE_EXECUTION)->where('id')->eq($deletedTopParent->parent)->fetch('attribute');
+        if(!$isTopStage) $parentAttr = $this->dao->select('attribute')->from(TABLE_EXECUTION)->where('id')->eq($deletedTopParent->parent)->fetch('attribute');
 
         $needChangeAttr    = false;
         $startChangedStage = $execution;

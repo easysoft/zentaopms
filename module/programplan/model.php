@@ -1275,9 +1275,7 @@ class programplanModel extends model
 
     /**
      * 检查是否为顶级。
-     * 由checkTopStage重命名为isTopStage。
      * Check whether it is the top stage.
-     * rname checkTopStage to isTopStage.
      *
      * @param  int    $planID
      * @access public

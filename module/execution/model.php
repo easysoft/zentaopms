@@ -1013,8 +1013,8 @@ class executionModel extends model
             $this->action->logHistory($actionID, $changes);
 
             /* This stage has a parent stage. */
-            $checkTopStage = $this->programplan->checkTopStage($executionID);
-            if(!$checkTopStage) $this->programplan->computeProgress($executionID);
+            $isTopStage = $this->programplan->isTopStage($executionID);
+            if(!$isTopStage) $this->programplan->computeProgress($executionID);
         }
     }
 
@@ -1040,8 +1040,8 @@ class executionModel extends model
             $this->action->logHistory($actionID, $changes);
 
             /* This stage has a parent stage. */
-            $checkTopStage = $this->programplan->checkTopStage($executionID);
-            if(!$checkTopStage) $this->programplan->computeProgress($executionID);
+            $isTopStage = $this->programplan->isTopStage($executionID);
+            if(!$isTopStage) $this->programplan->computeProgress($executionID);
         }
     }
 
@@ -1084,8 +1084,8 @@ class executionModel extends model
 
             /* Suspended: When all child stages at the same level are suspended or closed, the status of the parent stage becomes "suspended". */
             /* Closed: When all child stages at the same level are closed, the status of the parent stage becomes "closed". */
-            $checkTopStage = $this->programplan->checkTopStage($executionID);
-            if(!$checkTopStage) $this->programplan->computeProgress($executionID);
+            $isTopStage = $this->programplan->isTopStage($executionID);
+            if(!$isTopStage) $this->programplan->computeProgress($executionID);
         }
     }
 
