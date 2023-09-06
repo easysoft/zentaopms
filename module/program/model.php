@@ -574,7 +574,7 @@ class programModel extends model
         $projectList = $stmt->orderBy($orderBy)->page($pager)->fetchAll('id');
 
         /* Determine how to display the name of the program. */
-        if($programTitle and $this->config->systemMode == 'ALM')
+        if($programTitle and in_array($this->config->systemMode, array('ALM', 'PLM')))
         {
             $programList = $this->getPairs();
             foreach($projectList as $id => $project)
