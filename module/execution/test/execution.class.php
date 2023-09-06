@@ -3146,4 +3146,21 @@ class executionTest
 
         return $this->executionModel->processProductPlans($plans, $param);
     }
+
+    /**
+     * 批量导入Bug后的其他数据处理。
+     * other data process after import bugs.
+     *
+     * @param  int $taskID
+     * @param  int $bugID
+     * @access public
+     * @return bool
+     */
+    public function afterImportBugTest(int $taskID, int $bugID): bool
+    {
+        $task = $this->executionModel->loadModel('task')->getByID($taskID);
+        $bug  = $this->executionModel->loadModel('bug')->getByID($bugID);
+
+        return $this->executionModel->afterImportBug($task, $bug);
+    }
 }
