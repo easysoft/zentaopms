@@ -157,7 +157,7 @@ class testsuiteModel extends model
         if(empty($cases)) return false;
 
         $suiteCase = new stdclass();
-        $suiteCase->suite   = $suiteID;
+        $suiteCase->suite = $suiteID;
         foreach($cases as $case)
         {
             $suiteCase->case    = $case;
