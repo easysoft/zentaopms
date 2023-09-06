@@ -1716,6 +1716,7 @@ class testcase extends control
     }
 
     /**
+     * 保存导入的 xmind 文件。
      * Save imported xmind.
      *
      * @access public
@@ -1723,7 +1724,7 @@ class testcase extends control
      */
     public function saveXmindImport()
     {
-        if(!commonModel::hasPriv("testcase", "importXmind")) $this->loadModel('common')->deny('testcase', 'importXmind');
+        if(!commonModel::hasPriv('testcase', 'importXmind')) $this->loadModel('common')->deny('testcase', 'importXmind');
         if(!empty($_POST))
         {
             $result = $this->testcase->saveXmindImport();

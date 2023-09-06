@@ -2591,6 +2591,7 @@ class testcaseModel extends model
     }
 
     /**
+     * 保存 xmind 文件内容。
      * Save xmind file content to database.
      *
      * @access public
@@ -2604,18 +2605,18 @@ class testcaseModel extends model
         $sceneList = $this->post->sceneList;
         foreach($sceneList as $scene)
         {
-            $tmpId  = $scene["tmpId"];
-            $tmpPId = $scene["tmpPId"];
+            $tmpId  = $scene['tmpId'];
+            $tmpPId = $scene['tmpPId'];
 
             $result = $this->saveScene($scene,$sceneIds);
             /* Rollback. */
-            if($result["result"] == "fail")
+            if($result['result'] == 'fail')
             {
                 $this->dao->rollBack();
                 return $result;
             }
 
-            $sceneIds[$tmpId] = array("id" => $result['sceneID'], "tmpPId" => $tmpPId);
+            $sceneIds[$tmpId] = array('id' => $result['sceneID'], 'tmpPId' => $tmpPId);
         }
 
         $testcaseList = $this->post->testcaseList;
@@ -2632,7 +2633,7 @@ class testcaseModel extends model
                 return $result;
             }
 
-            $sceneIds[$tmpId] = array("id" => $result['testcaseID'], "tmpPId" => $tmpPId);
+            $sceneIds[$tmpId] = array('id' => $result['testcaseID'], 'tmpPId' => $tmpPId);
         }
 
         $this->dao->commit();
