@@ -903,11 +903,12 @@ class execution extends control
     }
 
     /**
+     * 用例列表。
      * Execution case list.
      *
      * @param  int    $executionID
      * @param  int    $productID
-     * @param  int    $branchID
+     * @param  string $branchID
      * @param  string $type
      * @param  int    $moduleID
      * @param  string $orderBy
@@ -917,11 +918,8 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function testcase($executionID = 0, $productID = 0, $branchID = 'all', $type = 'all', $moduleID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function testcase(int $executionID = 0, int $productID = 0, string $branchID = 'all', string $type = 'all', int $moduleID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $this->loadModel('testcase');
-        $this->loadModel('testtask');
-        $this->loadModel('tree');
         $this->commonAction($executionID);
         $uri = $this->app->getURI(true);
         $this->session->set('caseList', $uri, 'execution');
@@ -933,7 +931,6 @@ class execution extends control
         $execution     = $this->execution->getByID($executionID);
         $productOption = array();
         $branchOption  = array();
-        $showBranch    = $this->loadModel('branch')->showBranch($productID);
         if($execution->hasProduct)
         {
             list($productOption, $branchOption) = $this->executionZen->buildProductSwitcher($executionID, $productID, $products);
@@ -943,50 +940,21 @@ class execution extends control
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $cases = $this->loadModel('testcase')->getExecutionCases($executionID, $productID, $branchID, $moduleID, $orderBy, $pager, $type);
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
-
-        $cases = $this->testcase->appendData($cases, 'case');
-        $cases = $this->loadModel('story')->checkNeedConfirm($cases);
-
-        /* Get module tree.*/
-        if($executionID and empty($productID))
-        {
-            $moduleTree = $this->tree->getCaseTreeMenu($executionID, $productID, 0, array('treeModel', 'createCaseLink'));
-        }
-        else
-        {
-            $moduleTree = $this->tree->getTreeMenu($productID, 'case', 0, array('treeModel', 'createCaseLink'), array('projectID' => $executionID, 'productID' => $productID, 'branchID' => $branchID), $branchID);
-        }
-        $tree = $moduleID ? $this->tree->getByID($moduleID) : '';
-
         $idFieldList['title'] = $this->lang->idAB;
         $idFieldList['name']  = 'id';
         $idFieldList['type']  = 'id';
         $idFieldList['group'] = '1';
         array_unshift($this->config->testcase->dtable->fieldList, $idFieldList);
 
-        unset($this->config->testcase->dtable->fieldList['title']['checkbox']);
         unset($this->config->testcase->dtable->fieldList['title']['nestedToggle']);
+        unset($this->config->testcase->dtable->fieldList['id']);
+        if($productID && $products[$productID]->type == 'normal') unset($this->config->testcase->dtable->fieldList['branch']);
 
-        $this->view->title         = $this->lang->execution->testcase;
-        $this->view->executionID   = $executionID;
-        $this->view->productID     = $productID;
-        $this->view->product       = $this->product->getByID((int) $productID);
-        $this->view->cases         = $cases;
-        $this->view->orderBy       = $orderBy;
-        $this->view->pager         = $pager;
-        $this->view->type          = $type;
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
+        $this->executionZen->assignTestcaseVars($executionID, $productID, $branchID, $moduleID, $orderBy, $type, $pager);
+
         $this->view->execution     = $execution;
-        $this->view->moduleTree    = $moduleTree;
-        $this->view->moduleID      = $moduleID;
-        $this->view->moduleName    = $moduleID ? $tree->name : $this->lang->tree->all;
-        $this->view->branchID      = $branchID;
-        $this->view->recTotal      = $pager->recTotal;
         $this->view->productOption = $productOption;
         $this->view->branchOption  = $branchOption;
-        $this->view->showBranch    = $showBranch;
 
         $this->display();
     }

@@ -171,6 +171,67 @@ class executionZen extends execution
     }
 
     /**
+     * 展示用例列表的相关变量。
+     * Show the case list related variables.
+     *
+     * @param  int       $executionID
+     * @param  int       $productID
+     * @param  string    $branchID
+     * @param  int       $moduleID
+     * @param  string    $orderBy
+     * @param  string    $type
+     * @param  object    $pager
+     * @access protected
+     * @return void
+     */
+    protected function assignTestcaseVars(int $executionID, int $productID, string $branchID, int $moduleID, string $orderBy, string $type, object $pager)
+    {
+        $this->loadModel('tree');
+
+        /* Get cases. */
+        $cases = $this->loadModel('testcase')->getExecutionCases($executionID, $productID, $branchID, $moduleID, $orderBy, $pager, $type);
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
+        $cases = $this->testcase->appendData($cases, 'case');
+        $cases = $this->loadModel('story')->checkNeedConfirm($cases);
+
+        /* Display status of branch. */
+        $branchTagOption = array();
+        $branches        = $this->loadModel('branch')->getList($productID, 0, 'all');
+        foreach($branches as $branchInfo) $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+
+        /* Get module tree.*/
+        if($executionID and empty($productID))
+        {
+            $moduleTree = $this->tree->getCaseTreeMenu($executionID, $productID, 0, array('treeModel', 'createCaseLink'));
+        }
+        else
+        {
+            $moduleTree = $this->tree->getTreeMenu($productID, 'case', 0, array('treeModel', 'createCaseLink'), array('projectID' => $executionID, 'productID' => $productID, 'branchID' => $branchID), $branchID);
+        }
+
+        $tree = $moduleID ? $this->tree->getByID($moduleID) : '';
+
+        $this->view->cases           = $cases;
+        $this->view->users           = $this->loadModel('user')->getPairs('noletter');
+        $this->view->title           = $this->lang->execution->testcase;
+        $this->view->executionID     = $executionID;
+        $this->view->productID       = $productID;
+        $this->view->product         = $this->product->getByID((int) $productID);
+        $this->view->orderBy         = $orderBy;
+        $this->view->pager           = $pager;
+        $this->view->type            = $type;
+        $this->view->branchID        = $branchID;
+        $this->view->branchTagOption = $branchTagOption;
+        $this->view->recTotal        = $pager->recTotal;
+        $this->view->showBranch      = $this->loadModel('branch')->showBranch($productID);
+        $this->view->stories         = array( 0 => '') + $this->loadModel('story')->getPairs($productID);
+        $this->view->moduleTree      = $moduleTree;
+        $this->view->moduleID        = $moduleID;
+        $this->view->moduleName      = $moduleID ? $tree->name : $this->lang->tree->all;
+        $this->view->showBranch      = $this->loadModel('branch')->showBranch($productID);
+    }
+
+    /**
      * 展示测试单的相关变量。
      * Show the testtask related variables.
      *
@@ -514,7 +575,7 @@ class executionZen extends execution
         if($product and $product->type != 'normal')
         {
             /* Display status of branch. */
-            $branches = $this->branch->getList($productID, $executionID, 'all');
+            $branches = $this->loadModel('branch')->getList($productID, $executionID, 'all');
             foreach($branches as $branchInfo)
             {
                 $branchOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');

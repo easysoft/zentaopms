@@ -18,7 +18,7 @@ if($execution->hasProduct)
         set::title($product ? $product->name : $productOption[$productID]),
         set::items($productOption),
         set::activeKey($productID),
-        set::link(helper::createLink('execution', 'testcase', "executionID={$execution->id}&productID=%s")),
+        set::link(helper::createLink('execution', 'testcase', "executionID={$execution->id}&productID={key}")),
     );
 }
 
@@ -61,9 +61,11 @@ sidebar
     )))
 );
 
-$config->testcase->dtable->fieldList['story']['map'] = $stories;
+if(isset($config->testcase->dtable->fieldList['branch'])) $config->testcase->dtable->fieldList['branch']['map'] = $branchTagOption;
+if(isset($config->testcase->dtable->fieldList['story']))  $config->testcase->dtable->fieldList['story']['map']  = $stories;
 $config->testcase->dtable->fieldList['actions']['list']['edit']['url'] = str_replace('%executionID%', (string)$executionID, $config->testcase->dtable->fieldList['actions']['list']['edit']['url']);
 $config->testcase->dtable->fieldList['actions']['menu'] =  array(array('confirmStoryChange'), array('runCase', 'runResult', 'edit', 'createBug', 'create'));
+$this->loadModel('testcase');
 foreach($cases as $case)
 {
     initTableData(array($case), $config->testcase->dtable->fieldList, $this->testcase);
@@ -83,10 +85,7 @@ dtable
     set::data($cases),
     set::sortLink(jsRaw('createSortLink')),
     set::footPager(
-        usePager(),
-        set::recPerPage($pager->recPerPage),
-        set::recTotal($pager->recTotal),
-        set::linkCreator(helper::createLink('execution', 'testcase', "executionID={$executionID}&productID={$productID}&branchID={$branchID}&type={$type}&moduleID={$moduleID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&pageID={page}")),
+        usePager(array('linkCreator' => helper::createLink('execution', 'testcase', "executionID={$executionID}&productID={$productID}&branchID={$branchID}&type={$type}&moduleID={$moduleID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&pageID={page}"))),
     ),
 );
 
