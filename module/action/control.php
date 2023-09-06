@@ -376,6 +376,7 @@ class action extends control
     }
 
     /**
+     * 评论。
      * Comment.
      *
      * @param  string $objectType
@@ -383,28 +384,30 @@ class action extends control
      * @access public
      * @return void
      */
-    public function comment($objectType, $objectID)
+    public function comment(string $objectType, int $objectID)
     {
+        /* 当评论的是任务，需判断当前用户是否拥有任务的执行权限。 */
         if(strtolower($objectType) == 'task')
         {
             $task       = $this->loadModel('task')->getById($objectID);
             $executions = explode(',', $this->app->user->view->sprints);
-            if(!in_array($task->execution, $executions)) return print(js::error($this->lang->error->accessDenied));
+            if(!in_array($task->execution, $executions)) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
         }
+        /* 当评论的是用户故事，需判断当前用户是否有此用户故事的权限。 */
         elseif(strtolower($objectType) == 'story')
         {
             $story      = $this->loadModel('story')->getById($objectID);
             $executions = explode(',', $this->app->user->view->sprints);
             $products   = explode(',', $this->app->user->view->products);
-            if(!array_intersect(array_keys($story->executions), $executions) and !in_array($story->product, $products) and empty($story->lib)) return print(js::error($this->lang->error->accessDenied));
+            if(!array_intersect(array_keys($story->executions), $executions) && !in_array($story->product, $products) && empty($story->lib)) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
         }
 
-        $actionID = $this->action->create($objectType, $objectID, 'Commented', $this->post->comment);
-        if(defined('RUN_MODE') && RUN_MODE == 'api')
-        {
-            return $this->send(array('status' => 'success', 'data' => $actionID));
-        }
+        /* 获取评论内容并生成一条action数据。 */
+        $commentData = form::data($this->config->action->form->comment)->get();
+        $actionID    = $this->action->create($objectType, $objectID, 'Commented', $commentData->comment);
+        if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $actionID));
 
+        /* 用于ZIN的新UI。*/
         /* For new UI with ZIN. */
         return $this->send(array('status' => 'success', 'closeModal' => true, 'load' => true));
     }
