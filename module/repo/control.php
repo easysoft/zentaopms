@@ -1415,7 +1415,8 @@ class repo extends control
                 $content  = file($logFile);
                 foreach($content as $line)
                 {
-                    if($this->repo->strposAry($line, $this->config->repo->repoSyncLog->fatal) !== false or $this->repo->strposAry($line, $this->config->repo->repoSyncLog->failed) !== false) return print($this->config->repo->repoSyncLog->error);
+                    if($this->repo->strposAry($line, $this->config->repo->repoSyncLog->fatal) !== false) return print($line);
+                    if($this->repo->strposAry($line, $this->config->repo->repoSyncLog->failed) !== false) return print($line);
                 }
 
                 $lastLine = $content[count($content) - 1];

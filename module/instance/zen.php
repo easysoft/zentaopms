@@ -23,7 +23,7 @@ class instanceZen extends instance
     {
         if(empty($this->config->instance->devopsApps[$instance->appID])) return;
 
-        $url      = 'https://' . $instance->domain;
+        $url      = strstr(getWebRoot(true), ':', true) . '://' . $instance->domain;
         $pipeline = $this->loadModel('pipeline')->getByUrl($url);
         if(!empty($pipeline)) return;
 
