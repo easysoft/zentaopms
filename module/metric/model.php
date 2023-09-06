@@ -124,8 +124,9 @@ class metricModel extends model
         {
             $oldMetric = $this->getOldMetricByID($metric->fromID);
 
-            $metric->sql    = $oldMetric->configure;
-            $metric->params = $oldMetric->params;
+            $metric->sql     = $oldMetric->configure;
+            $metric->params  = $oldMetric->params;
+            $metric->oldUnit = $oldMetric->unit;
         }
 
         return $metric;

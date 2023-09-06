@@ -212,12 +212,14 @@ class metricZen extends metric
     {
         extract((array)$view);
 
+        $unit = $this->metric->isOldMetric($metric) ? $metric->oldUnit : zget($this->lang->metric->unitList, $metric->unit);
+
         $legendBasic = array();
         $legendBasic['scope']   = array('name' => $this->lang->metric->scope, 'text' => zget($this->lang->metric->scopeList, $metric->scope));
         $legendBasic['object']  = array('name' => $this->lang->metric->object, 'text' => zget($this->lang->metric->objectList, $metric->object));
         $legendBasic['purpose'] = array('name' => $this->lang->metric->purpose, 'text' => zget($this->lang->metric->purposeList, $metric->purpose));
         $legendBasic['code']    = array('name' => $this->lang->metric->code, 'text' => $metric->code);
-        $legendBasic['unit']    = array('name' => $this->lang->metric->unit, 'text' => zget($this->lang->metric->unitList, $metric->unit));
+        $legendBasic['unit']    = array('name' => $this->lang->metric->unit, 'text' => $unit);
         $legendBasic['stage']   = array('name' => $this->lang->metric->stage, 'text' => zget($this->lang->metric->stageList, $metric->stage));
 
         return $legendBasic;
