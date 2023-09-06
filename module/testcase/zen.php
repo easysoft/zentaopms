@@ -1749,6 +1749,52 @@ class testcaseZen extends testcase
     }
 
     /**
+     * 检查 xmind 配置。
+     * Build xmind config.
+     *
+     * @access protected
+     * @return array|bool
+     */
+    protected function buildXmindConfig(): array|bool
+    {
+        $configList = array();
+
+        $module = $this->post->module;
+        if(!empty($module)) $configList[] = array('key' => 'module', 'value' => $module);
+
+        $scene = $this->post->scene;
+        if(!empty($scene)) $configList[] = array('key' => 'scene', 'value' => $scene);
+
+        $case = $this->post->case;
+        if(!empty($case)) $configList[] = array('key' => 'case', 'value' => $case);
+
+        $pri = $this->post->pri;
+        if(!empty($pri)) $configList[] = array('key' => 'pri', 'value' => $pri);
+
+        $group = $this->post->group;
+        if(!empty($group)) $configList[] = array('key' => 'group', 'value' => $group);
+
+        $configErrors = array();
+        foreach($configList as $config)
+        {
+            $key   = $config['key'];
+            $value = $config['value'];
+            if(!$this->testcase->checkConfigValue($value)) $configErrors[$key][] = sprintf($this->lang->testcase->errorXmindConfig, $this->lang->testcase->{$key});
+        }
+        if(!empty($configErrors)) dao::$errors = $configErrors;
+
+        $map = array();
+        $map[strtolower($module)] = true;
+        $map[strtolower($scene)]  = true;
+        $map[strtolower($case)]   = true;
+        $map[strtolower($pri)]    = true;
+        $map[strtolower($group)]  = true;
+
+        if(count($map) < 5 && count($map) > 0) dao::$errors['message'][] = '特征字符串不能重复';
+        return !dao::isError() ? $configList : false;
+    }
+
+    /**
      * 初始化用例数据。
      * Initialize the testcase.
      *

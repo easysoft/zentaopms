@@ -2615,7 +2615,7 @@ class testcaseModel extends model
                 return $result;
             }
 
-            $sceneIds[$tmpId] = array("id"=>$result['sceneID'], "tmpPId"=>$tmpPId);
+            $sceneIds[$tmpId] = array("id" => $result['sceneID'], "tmpPId" => $tmpPId);
         }
 
         $testcaseList = $this->post->testcaseList;
@@ -2631,12 +2631,12 @@ class testcaseModel extends model
                 return $result;
             }
 
-            $sceneIds[$tmpId] = array("id"=>$result['testcaseID'], "tmpPId"=>$tmpPId);
+            $sceneIds[$tmpId] = array("id" => $result['testcaseID'], "tmpPId" => $tmpPId);
         }
 
         $this->dao->commit();
 
-        return array("result"=>"success","message"=>1);
+        return array('result' => 'success', 'message' => 1);
     }
 
     /**
@@ -3021,59 +3021,15 @@ class testcaseModel extends model
     }
 
     /**
+     * 存储 xmind 配置。
      * Save xmind config.
      *
+     * @param  array  $configList
      * @access public
      * @return array
      */
-    function saveXmindConfig()
+    function saveXmindConfig(array $configList): array
     {
-        $configList = array();
-
-        $module = $this->post->module;
-        if(isset($module) && !empty($module))
-        {
-            if(!$this->checkConfigValue($module)) return array('result' => 'fail', 'message' => '模块特征字符串只能是1-10个字母');
-            $configList[] = array('key'=>'module','value'=>$module);
-        }
-
-        $scene = $this->post->scene;
-        if(isset($scene) && !empty($scene))
-        {
-            if(!$this->checkConfigValue($scene)) return array('result' => 'fail', 'message' => '场景特征字符串只能是1-10个字母');
-            $configList[] = array('key'=>'scene','value'=>$scene);
-        }
-
-        $case = $this->post->case;
-        if(isset($case) && !empty($case))
-        {
-            if(!$this->checkConfigValue($case)) return array('result' => 'fail', 'message' => '测试用例特征字符串只能是1-10个字母');
-            $configList[] = array('key'=>'case','value'=>$case);
-        }
-
-        $pri = $this->post->pri;
-        if(isset($pri) && !empty($pri))
-        {
-            if(!$this->checkConfigValue($pri)) return array('result' => 'fail', 'message' => '优先级特征字符串只能是1-10个字母');
-            $configList[] = array('key'=>'pri','value'=>$pri);
-        }
-
-        $group = $this->post->group;
-        if(isset($group) && !empty($group))
-        {
-            if(!$this->checkConfigValue($group)) return array('result' => 'fail', 'message' => '步骤分组特征字符串只能是1-10个字母');
-            $configList[] = array('key'=>'group','value'=>$group);
-        }
-
-        $map = array();
-        $map[strtolower($module)] = true;
-        $map[strtolower($scene)]  = true;
-        $map[strtolower($case)]   = true;
-        $map[strtolower($pri)]    = true;
-        $map[strtolower($group)]  = true;
-
-        if(count($map) < 5) return array('result' => 'fail', 'message' => '特征字符串不能重复');
-
         $this->dao->begin();
 
         $this->dao->delete()->from(TABLE_CONFIG)

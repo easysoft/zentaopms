@@ -1602,8 +1602,10 @@ class testcase extends control
     {
         if($_POST)
         {
-            $configResult = $this->testcase->saveXmindConfig();
-            if($configResult['result'] == 'fail') return $this->send($configResult);
+            $configList = $this->testcaseZen->buildXmindConfig();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $configResult = $this->testcase->saveXmindConfig($configList);
 
             $imoduleID = $this->post->imodule ? $this->post->imoduleID : 0;
             $context   = $this->testcase->getXmindExport($productID, $imoduleID, $branch);
@@ -1686,7 +1688,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function importXmind(int $productID, int|string $branch)
+    public function importXmind(int $productID, string $branch)
     {
         if($_FILES)
         {
@@ -1694,8 +1696,9 @@ class testcase extends control
 
             /* 保存xmind配置。*/
             /* Sav xmind config. */
-            $configResult = $this->testcase->saveXmindConfig();
-            if($configResult['result'] == 'fail') return $this->send($configResult);
+            $configList = $this->testcaseZen->buildXmindConfig();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $configResult = $this->testcase->saveXmindConfig($configList);
 
             /* 检查扩展名。*/
             /* Check extension name of file. */

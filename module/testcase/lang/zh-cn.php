@@ -288,6 +288,7 @@ $lang->testcase->errorFileFormat       = '文件格式错误';
 $lang->testcase->moduleSelector        = '模块选择';
 $lang->testcase->errorImportBadProduct = '产品不存在，导入错误';
 $lang->testcase->errorSceneNotExist    = '场景[%d]不存在';
+$lang->testcase->errorXmindConfig      = "%s特征字符串只能是1-10个字母";
 
 $lang->testcase->save  = '保存';
 $lang->testcase->close = '关闭';

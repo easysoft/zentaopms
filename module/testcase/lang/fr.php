@@ -288,6 +288,7 @@ $lang->testcase->errorFileFormat       = 'File format error';
 $lang->testcase->moduleSelector        = 'Module Selection';
 $lang->testcase->errorImportBadProduct = 'Product does not exist, import error';
 $lang->testcase->errorSceneNotExist    = 'Scene [%d] not exists';
+$lang->testcase->errorXmindConfig      = "%s characteristic character can only be 1-10 letters.";
 
 $lang->testcase->save  = 'Save';
 $lang->testcase->close = 'Close';
