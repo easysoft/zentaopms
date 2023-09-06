@@ -83,12 +83,13 @@ $lang->metric->featureBar['preview']['dept']      = '团队';
 $lang->metric->featureBar['preview']['user']      = '个人';
 $lang->metric->featureBar['preview']['program']   = '项目集';
 $lang->metric->featureBar['preview']['system']    = '系统';
-$lang->metric->featureBar['preview']['more']      = '更多';
-$lang->metric->featureBar['preview']['collect']   = '我收藏的';
+$lang->metric->featureBar['preview']['code']      = '代码库';
+$lang->metric->featureBar['preview']['pipeline']  = '流水线';
+
+$lang->metric->more    = '更多';
+$lang->metric->collect = '我收藏的';
 
 $lang->metric->moreSelects = array();
-$lang->metric->moreSelects['code']      = '代码库';
-$lang->metric->moreSelects['pipeline']  = '流水线';
 
 $lang->metric->unitList = array();
 $lang->metric->unitList['count']   = '个';

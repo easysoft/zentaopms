@@ -610,11 +610,26 @@ class metricModel extends model
                 unset($this->lang->metric->scopeList[$scope]);
 
                 unset($this->lang->metric->featureBar['preview'][$scope]);
-                unset($this->lang->metric->moreSelects[$scope]);
             }
         }
 
-        if(empty($this->lang->metric->moreSelects)) unset($this->lang->metric->featureBar['preview']['more']);
+        if(count($this->lang->metric->featureBar['preview']) >= 7)
+        {
+            $i = 0;
+            foreach($this->lang->metric->featureBar['preview'] as $key => $name)
+            {
+                $i ++;
+                if($i >= 7)
+                {
+                    unset($this->lang->metric->featureBar['preview'][$key]);
+                    $this->lang->metric->moreSelects[$key] = $name;
+                }
+            }
+
+            $this->lang->metric->featureBar['preview']['more'] = $this->lang->metric->more;
+        }
+
+        $this->lang->metric->featureBar['preview']['collect'] = $this->lang->metric->collect;
     }
 
     /**

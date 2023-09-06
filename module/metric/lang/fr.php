@@ -81,12 +81,13 @@ $lang->metric->featureBar['preview']['dept']      = 'Team';
 $lang->metric->featureBar['preview']['user']      = 'Individual';
 $lang->metric->featureBar['preview']['program']   = 'Program';
 $lang->metric->featureBar['preview']['system']    = 'System';
-$lang->metric->featureBar['preview']['more']      = 'More';
-$lang->metric->featureBar['preview']['collect']   = 'My Collect';
+$lang->metric->featureBar['preview']['code']      = 'Code Repository';
+$lang->metric->featureBar['preview']['pipeline']  = 'Pipeline';
+
+$lang->metric->more    = 'More';
+$lang->metric->collect = 'My Collect';
 
 $lang->metric->moreSelects = array();
-$lang->metric->moreSelects['code']      = 'Code Repository';
-$lang->metric->moreSelects['pipeline']  = 'Pipeline';
 
 $lang->metric->unitList = array();
 $lang->metric->unitList['count']   = 'Count';
