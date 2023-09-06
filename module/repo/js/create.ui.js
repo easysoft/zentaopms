@@ -9,7 +9,7 @@ function onProductChange(event)
     var projects = $('[name="projects[]"]').val();
     var products = $('[name="product[]"]').val();
 
-    $.post($.createLink('repo', 'ajaxProjectsOfProducts'), {products, projects}, function(response)
+    $.post($.createLink('repo', 'ajaxProjectsOfProducts'), {'products': products.join(','), 'projects': projects.join(',')}, function(response)
     {
         var data      = JSON.parse(response);
         var $projects = $('#projects').zui('picker');
