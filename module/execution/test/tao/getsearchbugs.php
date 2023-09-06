@@ -30,7 +30,9 @@ $bug->title->range('1-10')->prefix('Bug');
 $bug->project->range('1');
 $bug->product->range('1');
 $bug->execution->range('3-5');
-$bug->status->range('active,wait,doing');
+$bug->module->range('1');
+$bug->status->range('active');
+$bug->assignedTo->range('admin');
 $bug->gen(10);
 
 $product = zdTable('product');
@@ -52,18 +54,25 @@ su('admin');
 /**
 
 title=测试executionModel->getSearchBugs();
+timeout=0
 cid=1
-pid=1
-
-查询产品1bug名称 >> Bug10
-查询执行3bug名称 >> Bug1
 
 */
 
-$productIDList   = array(1 => '正常产品1');
-$executionIDList = array('3');
-$sql             = '1=1';
+$productIDList   = array(1);
+$executionIDList = array(0, 3);
 
-$execution = new executionTest();
-r($execution->getSearchBugsTest($productIDList, 0, $sql))            && p('10:title') && e('Bug10'); // 查询产品1bug名称
-r($execution->getSearchBugsTest(array(), $executionIDList[0], $sql)) && p('1:title')  && e('Bug1');  // 查询执行3bug名称
+$sqlList[0] = '1=1';
+$sqlList[1] = '`module` = 1';
+$sqlList[2] = '`execution` = 3';
+$sqlList[3] = "`title` LIKE '%3%'";
+$sqlList[4] = "`assignedTo` = 'admin'";
+
+global $tester;
+$tester->loadModel('execution');
+r($tester->execution->getSearchBugs($productIDList, $executionIDList[0], $sqlList[0])) && p('10:title')     && e('Bug10'); // 查询产品1bug名称
+r($tester->execution->getSearchBugs(array(),        $executionIDList[1], $sqlList[0])) && p('1:title')      && e('Bug1');  // 查询执行3bug名称
+r($tester->execution->getSearchBugs($productIDList, $executionIDList[0], $sqlList[1])) && p('10:module')    && e('1');     // 查询模块1的Bug
+r($tester->execution->getSearchBugs($productIDList, $executionIDList[0], $sqlList[2])) && p('10:execution') && e('3');     // 查询执行3的Bug
+r($tester->execution->getSearchBugs($productIDList, $executionIDList[0], $sqlList[3])) && p('3:title')      && e('Bug3');  // 查询名称中有3的Bug
+r($tester->execution->getSearchBugs($productIDList, $executionIDList[0], $sqlList[4])) && p('4:assignedTo') && e('admin'); // 查询指派给admin的Bug

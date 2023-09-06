@@ -2508,32 +2508,6 @@ class executionTest
     }
 
     /**
-     * Test Get bugs by search in execution.
-     *
-     * @param array  $products
-     * @param int    $executionID
-     * @param string $sql
-     * @param object $pager
-     * @param string $orderBy
-     * @access public
-     * @return void
-     */
-    public function getSearchBugsTest($products, $executionID, $sql, $pager = null, $orderBy = 'id_desc')
-    {
-        $object = $this->executionModel->getSearchBugs($products, $executionID, $sql, $pager, $orderBy);
-
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error;
-        }
-        else
-        {
-            return $object;
-        }
-    }
-
-    /**
      * Test Get kanban group data.
      *
      * @param array $stories

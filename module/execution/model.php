@@ -4061,32 +4061,6 @@ class executionModel extends model
     }
 
     /**
-     * Get bugs by search in execution.
-     *
-     * @param  array     $products
-     * @param  int       $executionID
-     * @param  string    $sql
-     * @param  object    $pager
-     * @param  string    $orderBy
-     * @access public
-     * @return mixed
-     */
-    public function getSearchBugs($products, $executionID, $sql, $pager, $orderBy)
-    {
-        return $this->dao->select('*')->from(TABLE_BUG)
-            ->where($sql)
-            ->andWhere('status')->eq('active')
-            ->andWhere('toTask')->eq(0)
-            ->andWhere('tostory')->eq(0)
-            ->beginIF(!empty($products))->andWhere('product')->in(array_keys($products))->fi()
-            ->beginIF(empty($products))->andWhere('execution')->eq($executionID)->fi()
-            ->andWhere('deleted')->eq(0)
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll('id');
-    }
-
-    /**
      * Get the summary of execution.
      *
      * @param  array    $tasks

@@ -1040,7 +1040,7 @@ class executionZen extends execution
                 if($this->session->importBugQuery === false) $this->session->set('importBugQuery', ' 1 = 1');
             }
             $bugQuery = str_replace("`product` = 'all'", "`product`" . helper::dbIN($productIdList), $this->session->importBugQuery); // Search all execution.
-            $bugs     = $this->execution->getSearchBugs($products, $executionID, $bugQuery, $pager, 'id_desc');
+            $bugs     = $this->execution->getSearchBugs($productIdList, $executionID, $bugQuery, 'id_desc', $pager);
         }
 
         return $bugs;

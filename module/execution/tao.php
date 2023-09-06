@@ -216,6 +216,33 @@ class executionTao extends executionModel
     }
 
     /**
+     * 通过搜索获取Bug列表数据。
+     * Get bugs by search in execution.
+     *
+     * @param  array       $productIdList
+     * @param  int         $executionID
+     * @param  string      $sql
+     * @param  string      $orderBy
+     * @param  object|null $pager
+     * @access public
+     * @return object[]
+     */
+    protected function getSearchBugs(array $productIdList, int $executionID, string $sql = '1=1', string $orderBy = 'id_desc', object|null $pager = null): array
+    {
+        return $this->dao->select('*')->from(TABLE_BUG)
+            ->where($sql)
+            ->andWhere('status')->eq('active')
+            ->andWhere('toTask')->eq(0)
+            ->andWhere('tostory')->eq(0)
+            ->beginIF(!empty($productIdList))->andWhere('product')->in($productIdList)->fi()
+            ->beginIF(empty($productIdList))->andWhere('execution')->eq($executionID)->fi()
+            ->andWhere('deleted')->eq(0)
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+    }
+
+    /**
      * 将执行ID保存到session中。
      * Save the execution ID to the session.
      *
