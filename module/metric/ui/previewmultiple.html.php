@@ -10,37 +10,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('resultHeader', $resultHeader);
+jsVar('resultData',   $resultData);
 jsVar('current', $current);
-
-$fnGenerateDataDisplay = function() use($resultData, $resultHeader, $lang, $metric)
-{
-    if(empty($resultData)) return null;
-    if(count($resultData) == 1) return div
-    (
-        set::className('card-data'),
-        center
-        (
-            p
-            (
-                set::className('card-digit'),
-                $resultData[0]->value
-            ),
-            p
-            (
-                set::className('card-title'),
-                $lang->metric->objectList[$metric->object]
-            ),
-        )
-
-    );
-
-    return dtable
-    (
-        set::height(jsRaw('window.renderHeight')),
-        set::cols($resultHeader),
-        set::data($resultData),
-    );
-};
 
 $items = array();
 foreach($lang->metric->featureBar['preview'] as $value => $text)
@@ -204,7 +176,10 @@ div
             div
             (
                 setClass('table-side'),
-                isset($current) ? $fnGenerateDataDisplay($resultData, $resultHeader, $lang, $current) : null,
+                div
+                (
+                    setClass('dtable'),
+                )
             ),
             div
             (
