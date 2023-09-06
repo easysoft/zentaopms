@@ -434,15 +434,16 @@ class executionTest
     }
 
     /**
-     * function start test by execution
+     * 测试开始一个执行。
+     * Test start the execution.
      *
-     * @param  string $executionID
+     * @param  int    $executionID
      * @param  array  $param
      * @param  bool   $testParent
      * @access public
-     * @return array
+     * @return array|object|string
      */
-    public function startTest($executionID,$param = array(), $testParent = false)
+    public function startTest(int $executionID, array $param = array(), bool $testParent = false): array|object|string
     {
         $data = date('Y-m-d');
 
@@ -457,26 +458,19 @@ class executionTest
 
         if(dao::isError())
         {
-            $error = dao::getError();
-            if ($error[0] = "此任务已被启动，不能重复启动！")
-            {
-                return $error[0];
-            }
-            else
-            {
-                return $error;
-            }
+            $errors = dao::getError();
+            if(!empty($errors['realBegan'])) return $errors['realBegan'][0];
+            return $errors;
         }
-        else
+
+        if($testParent)
         {
-            if($testParent)
-            {
-                $execution       = $this->executionModel->getByID($executionID);
-                $executionParent = $this->executionModel->getByID($execution->parent);
-                return $executionParent;
-            }
-            return $obj;
+            $execution       = $this->executionModel->getByID($executionID);
+            $executionParent = $this->executionModel->getByID($execution->parent);
+            return $executionParent;
         }
+        return $obj;
+
     }
 
     /**
