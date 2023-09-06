@@ -111,6 +111,7 @@ $lang->metric->purposeList['cost']  = "Cost Calculation";
 $lang->metric->purposeList['hour']  = "Hourly Statistics";
 $lang->metric->purposeList['qc']    = "Quality Control";
 $lang->metric->purposeList['rate']  = "Enhanced Efficiency";
+$lang->metric->purposeList['other'] = "Other";
 
 $lang->metric->scopeList = array();
 $lang->metric->scopeList['system']    = "System";
@@ -147,6 +148,8 @@ if($config->edition != 'open')
     $lang->metric->objectList['risk']        = "Risk";
     $lang->metric->objectList['issue']       = "Issue";
 }
+$lang->metric->objectList['review'] = "Review";
+$lang->metric->objectList['other']  = "Other";
 
 $lang->metric->implementInstructions = "Implementation Instructions";
 $lang->metric->implementTips = array();
@@ -154,3 +157,32 @@ $lang->metric->implementTips[] = '1. Download the metric template code.php. Note
 $lang->metric->implementTips[] = '2. Perform coding and development operations on the file, referring to the manual for instructions.';
 $lang->metric->implementTips[] = '3. Place the developed code.php file in the [User Zentao Directory]/tmp/metric directory.';
 $lang->metric->implementTips[] = '4. Execute the command to grant executable permissions to the file.';
+
+$lang->metric->old = new stdclass();
+
+$lang->metric->old->scopeList = array();
+$lang->metric->old->scopeList['project'] = 'project';
+$lang->metric->old->scopeList['product'] = $lang->productCommon;
+$lang->metric->old->scopeList['sprint']  = 'stage';
+
+$lang->metric->old->purposeList = array();
+$lang->metric->old->purposeList['scale']    = 'Scale';
+$lang->metric->old->purposeList['duration'] = 'Duration';
+$lang->metric->old->purposeList['workload'] = 'Workload';
+$lang->metric->old->purposeList['cost']     = 'Cost';
+$lang->metric->old->purposeList['quality']  = 'Quality';
+
+$lang->metric->old->objectList = array();
+$lang->metric->old->objectList['staff']       = 'Staff';
+$lang->metric->old->objectList['finance']     = 'Finance';
+$lang->metric->old->objectList['case']        = 'case';
+$lang->metric->old->objectList['bug']         = 'Bug';
+$lang->metric->old->objectList['review']      = 'Review';
+$lang->metric->old->objectList['stage']       = 'Stage';
+$lang->metric->old->objectList['program']     = 'Program';
+$lang->metric->old->objectList['softRequest'] = 'SoftRequest';
+$lang->metric->old->objectList['userRequest'] = 'UserRequest';
+
+$lang->metric->old->collectTypeList = array();
+$lang->metric->old->collectTypeList['crontab'] = 'Crontab';
+$lang->metric->old->collectTypeList['action']  = 'Action';
