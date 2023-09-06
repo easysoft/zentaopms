@@ -4213,10 +4213,7 @@ class execution extends control
             {
                 $execution->PM            = zget($users, $execution->PM);
                 $execution->status        = isset($execution->delay) ? $executionLang->delayed : $this->processStatus('execution', $execution);
-                $execution->totalEstimate = $execution->hours->totalEstimate;
-                $execution->totalConsumed = $execution->hours->totalConsumed;
-                $execution->totalLeft     = $execution->hours->totalLeft;
-                $execution->progress      = $execution->hours->progress . '%';
+                $execution->progress     .= '%';
                 $execution->name          = isset($execution->title) ? $execution->title : $execution->name;
                 if($this->app->tab == 'project' and ($project->model == 'agileplus' or $project->model == 'waterfallplus')) $execution->method = zget($executionLang->typeList, $execution->type);
 
