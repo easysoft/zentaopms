@@ -1417,6 +1417,7 @@ class testcaseZen extends testcase
     }
 
     /**
+     * 构建从用例库导入的数据。
      * Build data for importing from lib.
      *
      * @param  int       $productID
@@ -1494,6 +1495,66 @@ class testcaseZen extends testcase
         }
 
         return array($cases, $steps, $files, $imported);
+    }
+
+    /**
+     * 构建导入到用例库的数据。
+     * Build data for import to lib.
+     *
+     * @param  int       $caseID
+     * @param  int       $libID
+     * @access protected
+     * @return array
+     */
+    protected function buildDataForImportToLib(int $caseID, int $libID): array
+    {
+        $cases          = array();
+        $steps          = array();
+        $files          = array();
+        $caseIdList     = !empty($caseID) ? $caseID : $this->post->caseIdList;
+        $caseIdList     = str_replace('case_' , '', $caseIdList);
+        $caseIdList     = explode(',' , $caseIdList);
+        $fromCases      = $this->testcase->getByList($caseIdList);
+        $fromSteps      = $this->testcase->fetchStepsByList($caseIdList);
+        $fromFiles      = $this->testcase->getRelatedFiles($caseIdList);
+        $libCases       = $this->loadModel('caselib')->getLibCases($libID, 'all');
+        $libCases       = $this->dao->select('*')->from(TABLE_CASE)->where('lib')->eq($libID)->andWhere('product')->eq(0)->andWhere('deleted')->eq('0')->fetchGroup('fromCaseID', 'id');
+        $maxOrder       = $this->dao->select('max(`order`) as maxOrder')->from(TABLE_CASE)->where('deleted')->eq(0)->fetch('maxOrder');
+        $maxModuleOrder = $this->dao->select('max(`order`) as maxOrder')->from(TABLE_MODULE)->where('deleted')->eq(0)->fetch('maxOrder');
+        foreach($fromCases as $caseID => $case)
+        {
+            /* 初始化用例。 */
+            /* Init case. */
+            $libCase = $this->initLibCase($case, $libID, ++ $maxOrder, $maxModuleOrder, $libCases);
+
+            /* 设置用例步骤。 */
+            /* Set case steps. */
+            $steps[$caseID] = array();
+            if(!isset($fromSteps[$caseID])) $fromSteps[$caseID] = array();
+            foreach($fromSteps[$caseID] as $step)
+            {
+                $stepID        = $step->id;
+                $step->version = zget($libCase, 'version', '0');
+                unset($step->id);
+                $steps[$caseID][$stepID] = $step;
+            }
+
+            /* 设置用例文件。 */
+            /* Set case files. */
+            $files[$caseID] = array();
+            if(!isset($fromFiles[$caseID])) $fromFiles[$caseID] = array();
+            foreach($fromFiles[$caseID] as $file)
+            {
+                $file->oldpathname = $file->pathname;
+                $file->pathname    = str_replace('.', "copy{$libCase->id}.", $file->pathname);
+
+                $files[$caseID][$file->id] = $file;
+            }
+
+            $cases[$caseID] = $libCase;
+        }
+
+        return array($cases, $steps, $files);
     }
 
     /**
@@ -1751,6 +1812,53 @@ class testcaseZen extends testcase
         $case->steps = $this->testcase->appendSteps(!empty($case->steps) ? $case->steps : array());
 
         return $case;
+    }
+
+    /**
+     * 初始化要导入到用例库的用例
+     * Init case to import to lib.
+     *
+     * @param  object    $case
+     * @param  int       $libID
+     * @param  int       $maxOrder
+     * @param  int       $maxModuleOrder
+     * @param  bool      $isImported
+     * @access protected
+     * @return object
+     */
+    protected function initLibCase(object $case, int $libID, int $maxOrder, int $maxModuleOrder, array $libCases): object
+    {
+        $libCase = new stdclass();
+        $libCase->lib             = $libID;
+        $libCase->title           = $case->title;
+        $libCase->precondition    = $case->precondition;
+        $libCase->keywords        = $case->keywords;
+        $libCase->pri             = $case->pri;
+        $libCase->type            = $case->type;
+        $libCase->stage           = $case->stage;
+        $libCase->status          = $case->status;
+        $libCase->fromCaseID      = $case->id;
+        $libCase->fromCaseVersion = $case->version;
+        $libCase->order           = $maxOrder;
+        $libCase->module          = empty($case->module) ? 0 : $this->importCaseRelatedModules($libID, $case->module, $maxModuleOrder);
+
+        if(!isset($libCases[$case->id]))
+        {
+            $libCase->openedBy   = $this->app->user->account;
+            $libCase->openedDate = helper::now();
+        }
+        else
+        {
+            $libCaseList = array_keys($libCases[$case->id]);
+            $libCaseID   = $libCaseList[0];
+
+            $libCase->id             = $libCaseID;
+            $libCase->lastEditedBy   = $this->app->user->account;
+            $libCase->lastEditedDate = helper::now();
+            $libCase->version        = (int)$libCases[$case->id][$libCaseID]->version + 1;
+        }
+
+        return $libCase;
     }
 
     /**

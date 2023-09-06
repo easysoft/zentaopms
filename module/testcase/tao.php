@@ -229,7 +229,7 @@ class testcaseTao extends testcaseModel
      */
     protected function getRelatedFiles(array $caseIdList): array
     {
-        return $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('testcase')->andWhere('objectID')->in($caseIdList)->andWhere('extra')->ne('editor')->fetchGroup('objectID');
+        return $this->dao->select('*')->from(TABLE_FILE)->where('objectType')->eq('testcase')->andWhere('objectID')->in($caseIdList)->andWhere('extra')->ne('editor')->fetchGroup('objectID');
     }
 
     /**
@@ -242,10 +242,36 @@ class testcaseTao extends testcaseModel
      */
     protected function doCreate(object $case): bool
     {
+        if(empty($case->product)) $this->config->testcase->create->requiredFields = str_replace('story', '', $this->config->testcase->create->requiredFields);
+        if(!empty($case->lib)) $this->config->testcase->create->requiredFields = str_replace('product', '', $this->config->testcase->create->requiredFields);
+
         $this->dao->insert(TABLE_CASE)->data($case, 'steps,expects,files,labels,stepType,needReview,scriptFile,scriptName')
             ->autoCheck()
             ->batchCheck($this->config->testcase->create->requiredFields, 'notempty')
             ->checkFlow()
+            ->exec();
+         return !dao::isError();
+    }
+
+    /**
+     * 更新一个测试用例。
+     * Update a test case.
+     *
+     * @param  object    $case
+     * @access protected
+     * @return bool
+     */
+    protected function doUpdate(object $case): bool
+    {
+        /* Remove the require field named story when the case is a lib case.*/
+        $requiredFields = $this->config->testcase->edit->requiredFields;
+        if(!empty($case->lib)) $requiredFields = str_replace(',story,', ',', ",$requiredFields,");
+
+        $this->dao->update(TABLE_CASE)->data($case, 'deleteFiles,uid,stepChanged,comment,steps,expects,stepType,linkBug')
+            ->autoCheck()
+            ->batchCheck($requiredFields, 'notempty')
+            ->checkFlow()
+            ->where('id')->eq((int)$case->id)
             ->exec();
          return !dao::isError();
     }
@@ -430,6 +456,22 @@ class testcaseTao extends testcaseModel
         /* Insert files. */
         foreach($files as $fileID => $file)
         {
+            if(isset($file->oldpathname))
+            {
+                if(!empty($file->oldpathname))
+                {
+                    $originName = pathinfo($file->oldpathname, PATHINFO_FILENAME);
+                    $datePath   = substr($file->oldpathname, 0, 6);
+                    $originFile = $this->app->getAppRoot() . "www/data/upload/{$this->app->company->id}/" . "{$datePath}/" . $originName;
+
+                    $copyName = $originName . 'copy' . $caseID;
+                    $copyFile = $this->app->getAppRoot() . "www/data/upload/{$this->app->company->id}/" . "{$datePath}/" .  $copyName;
+                    copy($originFile, $copyFile);
+                }
+
+                unset($file->oldpathname);
+            }
+
             $file->objectID  = $caseID;
             $file->addedBy   = $this->app->user->account;
             $file->addedDate = helper::now();

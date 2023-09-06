@@ -1211,17 +1211,24 @@ class testcase extends control
     }
 
     /**
+     * 导入用例到用例库。
      * Import cases to library.
      *
      * @param  int    $caseID
      * @access public
      * @return void
      */
-    public function importToLib($caseID = 0)
+    public function importToLib(int $caseID = 0)
     {
         if(!empty($_POST))
         {
-            $this->testcase->importToLib($caseID);
+            $libID = $this->post->lib;
+            if(empty($libID)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->error->notempty, $this->lang->testcase->caselib)));
+
+            list($cases, $steps, $files) = $this->testcaseZen->buildDataForImportToLib($caseID, $libID);
+
+            $this->testcase->importToLib($cases, $steps, $files);
+
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if(!empty($caseID)) return $this->send(array('result' => 'success', 'message' => $this->lang->importSuccess, 'closeModal' => true));
             return $this->send(array('result' => 'success', 'message' => $this->lang->importSuccess, 'load' => true, 'closeModal' => true));

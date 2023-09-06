@@ -1003,4 +1003,132 @@ class testcaseTest
         $caseID = $tester->dao->lastInsertID();
         return $this->objectModel->fetchBaseInfo($caseID);
     }
+
+    /**
+     * 测试更新一个测试用例。
+     * Test update a case.
+     *
+     * @param  int    $caseID
+     * @param  array  $param
+     * @access public
+     * @return bool|array|object
+     */
+    public function doUpdateTest(int $caseID, array $param = array()): bool|array|object
+    {
+        $oldCase = $this->objectModel->getByID($caseID);
+
+        $case = new stdclass();
+        $case->id             = $oldCase->id;
+        $case->title          = $oldCase->title;
+        $case->color          = $oldCase->color;
+        $case->precondition   = $oldCase->precondition;
+        $case->steps          = array('用例步骤描述1');
+        $case->stepType       = array('step');
+        $case->expects        = array('这是用例预期结果1');
+        $case->comment        = '';
+        $case->lastEditedDate = $oldCase->lastEditedDate;
+        $case->product        = $oldCase->product;
+        $case->module         = $oldCase->module;
+        $case->story          = $oldCase->story;
+        $case->type           = $oldCase->type;
+        $case->stage          = $oldCase->stage;
+        $case->pri            = $oldCase->pri;
+        $case->status         = $oldCase->status;
+        $case->keywords       = $oldCase->keywords;
+        $case->linkBug        = array();
+
+        foreach($param as $field => $value) $case->$field = $value;
+
+        $this->objectModel->doUpdate($case);
+
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->fetchBaseInfo($caseID);
+    }
+
+    /**
+     * 测试导入测试用例到用例库。
+     * Test import cases to lib.
+     *
+     * @param  array  $caseIdList
+     * @access public
+     * @return string
+     */
+    public function importToLibTest(array $caseIdList): string
+    {
+        $cases = $this->objectModel->getByList($caseIdList);
+
+        global $tester;
+        $files = $tester->dao->select('*')->from(TABLE_FILE)->where('`objectID`')->in($caseIdList)->andWhere('objectType')->eq('testcase')->fetchGroup('objectID', 'id');
+        $steps = $tester->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->in($caseIdList)->fetchGroup('case', 'id');
+
+        $importCases = array();
+        $libCases    = $tester->dao->select('*')->from(TABLE_CASE)->where('`fromCaseID`')->in($caseIdList)->fetchGroup('fromCaseID', 'id');
+        foreach($cases as $caseID => $case)
+        {
+            $libCase = new stdclass();
+            $libCase->lib             = '1';
+            $libCase->product         = '0';
+            $libCase->title           = $case->title;
+            $libCase->precondition    = $case->precondition;
+            $libCase->keywords        = $case->keywords;
+            $libCase->pri             = $case->pri;
+            $libCase->type            = $case->type;
+            $libCase->stage           = $case->stage;
+            $libCase->status          = $case->status;
+            $libCase->fromCaseID      = $case->id;
+            $libCase->fromCaseVersion = $case->version;
+            $libCase->order           = $case->order;
+            $libCase->module          = 0;
+
+            $libCaseID = 0;
+            if(empty($libCases[$caseID]))
+            {
+                $libCase->openedBy   = $tester->app->user->account;
+                $libCase->openedDate = helper::now();
+            }
+            else
+            {
+                $libCaseList = array_keys($libCases[$caseID]);
+                $libCaseID   = $libCaseList[0];
+
+                $libCase->id             = $libCaseID;
+                $libCase->lastEditedBy   = $tester->app->user->account;
+                $libCase->lastEditedDate = helper::now();
+                $libCase->version        = (int)$libCases[$case->id][$libCaseID]->version + 1;
+            }
+
+            if(!isset($steps[$caseID])) $steps[$caseID] = array();
+            foreach($steps[$caseID] as $stepID => $step)
+            {
+                $step->version = zget($libCase, 'version', '0');
+                unset($step->id);
+            }
+
+            if(!isset($files[$caseID])) $files[$caseID] = array();
+            foreach($files[$caseID] as $fileID => $file)
+            {
+                $file->oldpathname = $file->pathname;
+                $file->pathname    = str_replace('.', "copy{$libCaseID}.", $file->pathname);
+            }
+            $importCases[] = $libCase;
+        }
+
+        $this->objectModel->importToLib($importCases, $steps, $files);
+
+        if(dao::isError()) return dao::getError()[0];
+        $return = '';
+        $libCases = $tester->dao->select('*')->from(TABLE_CASE)->where('`fromCaseID`')->in($caseIdList)->fetchGroup('fromCaseID', 'id');
+        foreach($libCases as $caseID => $cases)
+        {
+            foreach($cases as $libCase)
+            {
+                $steps = $tester->dao->select('id')->from(TABLE_CASESTEP)->where('`case`')->eq($libCase->id)->fetchPairs();
+                $files = $tester->dao->select('id')->from(TABLE_FILE)->where('`objectID`')->eq($libCase->id)->andWhere('objectType')->eq('testcase')->fetchPairs();
+                $return .= $caseID . ': ' . implode(',', $steps) . ' ' . implode(',', $files) . '; ';
+            }
+        }
+
+        return trim($return);
+    }
 }

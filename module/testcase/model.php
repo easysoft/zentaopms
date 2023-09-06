@@ -40,8 +40,6 @@ class testcaseModel extends model
      */
     public function create(object $case): bool|int
     {
-        if(empty($case->product)) $this->config->testcase->create->requiredFields = str_replace('story', '', $this->config->testcase->create->requiredFields);
-
         /* 插入测试用例。 */
         /* Insert testcase. */
         $this->testcaseTao->doCreate($case);
@@ -723,17 +721,7 @@ class testcaseModel extends model
      */
     public function update(object $case, object $oldCase, array $testtasks = array()): bool|array
     {
-        /* Remove the require field named story when the case is a lib case.*/
-        $requiredFields = $this->config->testcase->edit->requiredFields;
-        if($oldCase->lib != 0) $requiredFields = str_replace(',story,', ',', ",$requiredFields,");
-
-        $this->dao->update(TABLE_CASE)->data($case, 'deleteFiles,uid,stepChanged,comment,steps,expects,stepType,linkBug')
-            ->autoCheck()
-            ->batchCheck($requiredFields, 'notempty')
-            ->checkFlow()
-            ->where('id')->eq((int)$case->id)
-            ->exec();
-
+        $this->testcaseTao->doUpdate($case);
         if(dao::isError()) return false;
 
         $this->testcaseTao->updateCase2Project($oldCase, $case);
@@ -1289,118 +1277,56 @@ class testcaseModel extends model
     }
 
     /**
+     * 导入测试用例到用例库。
      * Import cases to lib.
      *
-     * @param  int    $caseIdList
+     * @param  array  $cases
+     * @param  array  $steps
+     * @param  array  $files
      * @access public
-     * @return void
+     * @return bool
      */
-    public function importToLib($caseIdList = 0)
+    public function importToLib(array $cases, array $steps, array $files): bool
     {
-        if(empty($caseIdList)) $caseIdList = $this->post->caseIdList;
-        $caseIdList = explode(',' , $caseIdList);
-        $libID      = $this->post->lib;
-
-        if(empty($libID)) return dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->testcase->caselib);
-
         $this->loadModel('action');
-        $cases          = $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)->andWhere('id')->in($caseIdList)->fetchAll('id');
-        $caseSteps      = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->in($caseIdList)->orderBy('id')->fetchGroup('case');
-        $caseFiles      = $this->dao->select('*')->from(TABLE_FILE)->where('objectID')->in($caseIdList)->andWhere('objectType')->eq('testcase')->fetchGroup('objectID', 'id');
-        $libCases       = $this->loadModel('caselib')->getLibCases($libID, 'all');
-        $libFiles       = $this->dao->select('*')->from(TABLE_FILE)->where('objectID')->in(array_keys($libCases))->andWhere('objectType')->eq('testcase')->fetchGroup('objectID', 'id');
-        $libCases       = $this->dao->select('*')->from(TABLE_CASE)->where('lib')->eq($libID)->andWhere('product')->eq(0)->andWhere('deleted')->eq('0')->fetchGroup('fromCaseID', 'id');
-        $maxOrder       = $this->dao->select('max(`order`) as maxOrder')->from(TABLE_CASE)->where('deleted')->eq(0)->fetch('maxOrder');
-        $maxModuleOrder = $this->dao->select('max(`order`) as maxOrder')->from(TABLE_MODULE)->where('deleted')->eq(0)->fetch('maxOrder');
-        foreach($cases as $caseID => $case)
+        foreach($cases as $case)
         {
-            $libCase = new stdclass();
-            $libCase->lib             = $libID;
-            $libCase->title           = $case->title;
-            $libCase->precondition    = $case->precondition;
-            $libCase->keywords        = $case->keywords;
-            $libCase->pri             = $case->pri;
-            $libCase->type            = $case->type;
-            $libCase->stage           = $case->stage;
-            $libCase->status          = $case->status;
-            $libCase->fromCaseID      = $case->id;
-            $libCase->fromCaseVersion = $case->version;
-            $libCase->order           = ++ $maxOrder;
-            $libCase->module          = empty($case->module) ? 0 : $this->importCaseRelatedModules($libID, $case->module, $maxModuleOrder);
-
-            if(empty($libCases[$caseID]))
+            /* 如果用例没有 ID，插入用例。 */
+            /* If case id is not exist, insert it. */
+            if(!isset($case->id))
             {
-                $libCase->openedBy   = $this->app->user->account;
-                $libCase->openedDate = helper::now();
-                $this->dao->insert(TABLE_CASE)->data($libCase)->autoCheck()->exec();
-                if(!dao::isError()) $libCaseID = $this->dao->lastInsertID();
-                $this->action->create('case', $libCaseID, 'tolib', '', $caseID);
+                $this->testcaseTao->doCreate($case);
+                if(!dao::isError())
+                {
+                    $caseID = $this->dao->lastInsertID();
+                    $this->action->create('case', $caseID, 'tolib', '', $case->fromCaseID);
+                }
             }
+            /* 如果用例有 ID，更新用例。 */
+            /* If case id is exist, update it. */
             else
             {
-                $libCaseList = array_keys($libCases[$caseID]);
-                $libCaseID   = $libCaseList[0];
+                $caseID = $case->id;
+                $this->testcaseTao->doUpdate($case);
+                $this->action->create('case', $caseID, 'updatetolib', '', $case->fromCaseID);
 
-                $libCase->lastEditedBy   = $this->app->user->account;
-                $libCase->lastEditedDate = helper::now();
-                $libCase->version        = (int)$libCases[$caseID][$libCaseID]->version + 1;
-                $this->dao->update(TABLE_CASE)->data($libCase)->autoCheck()->where('id')->eq((int)$libCaseID)->exec();
+                $this->dao->delete()->from(TABLE_CASESTEP)->where('`case`')->eq($caseID)->exec();
 
-                $this->action->create('case', $libCaseID, 'updatetolib', '', $caseID);
-
-                $this->dao->delete()->from(TABLE_CASESTEP)->where('`case`')->eq($libCaseID)->exec();
-
-                $removeFiles = zget($libFiles, $libCaseID, array());
-                $this->dao->delete()->from(TABLE_FILE)->where('`objectID`')->eq($libCaseID)->andWhere('objectType')->eq('testcase')->exec();
+                $removeFiles = $this->dao->select('*')->from(TABLE_FILE)->where('`objectID`')->eq($caseID)->andWhere('objectType')->eq('testcase')->fetchAll('id');
+                $this->dao->delete()->from(TABLE_FILE)->where('`objectID`')->eq($caseID)->andWhere('objectType')->eq('testcase')->exec();
                 foreach($removeFiles as $fileID => $file)
                 {
+                    if(empty($file->pathname)) continue;
                     $filePath = pathinfo($file->pathname, PATHINFO_BASENAME);
                     $datePath = substr($file->pathname, 0, 6);
                     $filePath = $this->app->getAppRoot() . "www/data/upload/{$this->app->company->id}/" . "{$datePath}/" . $filePath;
                     unlink($filePath);
                 }
             }
-
-            if(!dao::isError())
-            {
-                if(isset($caseSteps[$caseID]))
-                {
-                    foreach($caseSteps[$caseID] as $index => $step)
-                    {
-                        if($step->version != $case->version) continue;
-                        $oldStepID     = $step->id;
-                        $step->case    = $libCaseID;
-                        $step->version = zget($libCase, 'version', '0');
-                        unset($step->id);
-
-                        $this->dao->insert(TABLE_CASESTEP)->data($step)->exec();
-                    }
-                }
-
-                $oldFiles = zget($caseFiles, $caseID, array());
-                foreach($oldFiles as $fileID => $file)
-                {
-                    $originName = pathinfo($file->pathname, PATHINFO_FILENAME);
-                    $datePath   = substr($file->pathname, 0, 6);
-                    $originFile = $this->app->getAppRoot() . "www/data/upload/{$this->app->company->id}/" . "{$datePath}/" . $originName;
-
-                    $copyName = $originName . 'copy' . $libCaseID;
-                    $copyFile = $this->app->getAppRoot() . "www/data/upload/{$this->app->company->id}/" . "{$datePath}/" .  $copyName;
-                    copy($originFile, $copyFile);
-
-                    $newFileName    = $file->pathname;
-                    $newFileName    = str_replace('.', "copy$libCaseID.", $newFileName);
-                    $file->pathname = $newFileName;
-
-                    $file->objectID  = $libCaseID;
-                    $file->addedBy   = $this->app->user->account;
-                    $file->addedDate = helper::now();
-                    $file->downloads = 0;
-                    unset($file->id);
-                    $this->dao->insert(TABLE_FILE)->data($file)->exec();
-                }
-            }
+            $this->testcaseTao->importSteps($caseID, zget($steps, $case->fromCaseID, array()));
+            $this->testcaseTao->importFiles($caseID, zget($files, $case->fromCaseID, array()));
         }
+        return !dao::isError();
     }
 
     /**
