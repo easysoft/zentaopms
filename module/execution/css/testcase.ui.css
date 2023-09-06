@@ -1,1 +1,1 @@
-.m-execution-testcase #mainMenu #productMenu .icon-angle-right {display: none;}
+.m-execution-testcase #mainMenu #productMenu .icon-angle-right:before {display: none;}

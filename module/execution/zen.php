@@ -6,11 +6,77 @@ declare(strict_types=1);
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian<tianshujie@easycorp.ltd>
- * @package     xxx
+ * @package     execution
  * @link        https://www.zentao.net
  */
 class executionZen extends execution
 {
+    /**
+     * 展示Bug列表的相关变量。
+     * Show the bug list related variables.
+     *
+     * @param  object    $execution
+     * @param  object    $project
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  array     $products
+     * @param  string    $orderBy
+     * @param  string    $type
+     * @param  string    $build
+     * @param  int       $param
+     * @param  array     $bugs
+     * @param  object    $pager
+     * @access protected
+     * @return void
+     */
+    protected function assignBugVars(object $execution, object $project, int $productID, string $branch, array $products, string $orderBy, string $type, int $param, string $build, array $bugs, object $pager)
+    {
+        $this->loadModel('product');
+        $this->loadModel('tree');
+
+        $moduleID = $type != 'bysearch' ? $param : 0;
+
+        /* Get module tree.*/
+        $extra = array('projectID' => $execution->id, 'orderBy' => $orderBy, 'type' => $type, 'build' => $build, 'branchID' => $branch);
+        if($execution->id and empty($productID) and count($products) > 1)
+        {
+            $moduleTree = $this->tree->getBugTreeMenu($execution->id, $productID, 0, array('treeModel', 'createBugLink'), $extra);
+        }
+        elseif(!empty($products))
+        {
+            $productID  = empty($productID) ? reset($products)->id : $productID;
+            $moduleTree = $this->tree->getTreeMenu((int)$productID, 'bug', 0, array('treeModel', 'createBugLink'), $extra + array('branchID' => $branch, 'productID' => $productID), $branch);
+        }
+        else
+        {
+            $moduleTree = array();
+        }
+        $tree       = $moduleID ? $this->tree->getByID($moduleID) : '';
+        $showModule = !empty($this->config->execution->bug->showModule) ? $this->config->execution->bug->showModule : '';
+
+        /* Assign. */
+        $this->view->title           = $execution->name . $this->lang->colon . $this->lang->execution->bug;
+        $this->view->project         = $project;
+        $this->view->orderBy         = $orderBy;
+        $this->view->type            = $type;
+        $this->view->pager           = $pager;
+        $this->view->bugs            = $bugs;
+        $this->view->summary         = $this->loadModel('bug')->summary($bugs);
+        $this->view->moduleTree      = $moduleTree;
+        $this->view->moduleID        = $moduleID;
+        $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'bug', $showModule) : array();
+        $this->view->build           = $this->loadModel('build')->getById($build);
+        $this->view->buildID         = $this->view->build ? $this->view->build->id : 0;
+        $this->view->productID       = $productID;
+        $this->view->product         = $this->product->getByID($productID);
+        $this->view->branchID        = empty($this->view->build->branch) ? $branch : $this->view->build->branch;
+        $this->view->users           = $this->loadModel('user')->getPairs('noletter');
+        $this->view->param           = $param;
+        $this->view->defaultProduct  = (empty($productID) and !empty($products)) ? current(array_keys($products)) : $productID;
+        $this->view->builds          = $this->loadModel('build')->getBuildPairs($productID);
+        $this->view->projectPairs    = $this->loadModel('project')->getPairsByProgram();
+    }
+
     /**
      * 展示看板的相关变量。
      * Show the variables associated with the kanban.
@@ -194,11 +260,6 @@ class executionZen extends execution
         $cases = $this->testcase->appendData($cases, 'case');
         $cases = $this->loadModel('story')->checkNeedConfirm($cases);
 
-        /* Display status of branch. */
-        $branchTagOption = array();
-        $branches        = $this->loadModel('branch')->getList($productID, 0, 'all');
-        foreach($branches as $branchInfo) $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
-
         /* Get module tree.*/
         if($executionID and empty($productID))
         {
@@ -221,7 +282,7 @@ class executionZen extends execution
         $this->view->pager           = $pager;
         $this->view->type            = $type;
         $this->view->branchID        = $branchID;
-        $this->view->branchTagOption = $branchTagOption;
+        $this->view->branchTagOption = $this->loadModel('branch')->getPairs($productID, 'withClosed');
         $this->view->recTotal        = $pager->recTotal;
         $this->view->showBranch      = $this->loadModel('branch')->showBranch($productID);
         $this->view->stories         = array( 0 => '') + $this->loadModel('story')->getPairs($productID);

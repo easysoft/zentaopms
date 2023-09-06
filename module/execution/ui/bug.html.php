@@ -18,7 +18,7 @@ if($execution->hasProduct)
         set::title($product ? $product->name : $productOption[$productID]),
         set::items($productOption),
         set::activeKey($productID),
-        set::link(helper::createLink('execution', 'bug', "executionID={$execution->id}&productID=%s")),
+        set::link(helper::createLink('execution', 'bug', "executionID={$execution->id}&productID={key}")),
     );
 }
 
@@ -65,19 +65,7 @@ sidebar
     )))
 );
 
-$this->bug->buildOperateMenu(null, 'browse');
-foreach($bugs as $bug)
-{
-    $actions = array();
-    foreach($this->config->bug->dtable->fieldList['actions']['actionsMap'] as $actionCode => $actionMap)
-    {
-        $isClickable = $this->bug->isClickable($bug, $actionCode);
-
-        $actions[] = $isClickable ? $actionCode : array('name' => $actionCode, 'disabled' => true);
-    }
-    $bug->actions = $actions;
-}
-
+$bugs = initTableData($bugs, $this->config->bug->dtable->fieldList, $this->bug);
 $canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');
 
 if($canBatchAssignTo)
@@ -120,10 +108,7 @@ dtable
     set::footToolbar($footToolbar),
     set::customCols(true),
     set::footPager(
-        usePager(),
-        set::recPerPage($pager->recPerPage),
-        set::recTotal($pager->recTotal),
-        set::linkCreator(helper::createLink('execution', 'bug', "executionID={$execution->id}&productID={$productID}&branch={$branchID}&orderBy={$orderBy}&build=$buildID&type=$type&param=$param&recTotal={recTotal}&recPerPage={page}")),
+        usePager(array('linkCreator' => helper::createLink('execution', 'bug', "executionID={$execution->id}&productID={$productID}&branch={$branchID}&orderBy={$orderBy}&build=$buildID&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={recPerPage}&pageID={page}"))),
     ),
     set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}'))
 );

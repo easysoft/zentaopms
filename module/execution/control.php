@@ -639,13 +639,14 @@ class execution extends control
     }
 
     /**
+     * Bug列表。
      * Browse bugs of a execution.
      *
      * @param  int    $executionID
      * @param  int    $productID
      * @param  int    $branchID
      * @param  string $orderBy
-     * @param  int    $build
+     * @param  string $build
      * @param  string $type
      * @param  int    $param
      * @param  int    $recTotal
@@ -654,21 +655,14 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function bug(int $executionID = 0, int $productID = 0, string $branch = 'all', string $orderBy = 'status,id_desc', int $build = 0, string $type = 'all', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function bug(int $executionID = 0, int $productID = 0, string $branch = 'all', string $orderBy = 'status,id_desc', string $build = '', string $type = 'all', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        /* Load these two models. */
+        /* Save session and load model. */
         $this->loadModel('bug');
-        $this->loadModel('user');
-        $this->loadModel('product');
-        $this->loadModel('datatable');
-        $this->loadModel('tree');
-
-        /* Save session. */
         $this->session->set('bugList', $this->app->getURI(true), 'execution');
         $this->session->set('buildList', $this->app->getURI(true), 'execution');
 
         $type        = strtolower($type);
-        $queryID     = ($type == 'bysearch') ? (int)$param : 0;
         $execution   = $this->commonAction($executionID);
         $project     = $this->loadModel('project')->getByID($execution->project);
         $executionID = $execution->id;
@@ -689,7 +683,6 @@ class execution extends control
                 unset($this->config->bug->search['fields']['plan']);
                 unset($this->config->bug->search['params']['plan']);
             }
-
         }
 
         /* Load pager and get bugs, user. */
@@ -697,93 +690,19 @@ class execution extends control
         if($this->app->getViewType() == 'xhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $sort  = common::appendOrder($orderBy);
-        $bugs  = $this->bug->getExecutionBugs($executionID, $productID, $branch, (string)$build, $type, $param, $sort, '', $pager);
+        $bugs  = $this->bug->getExecutionBugs($executionID, $productID, $branch, $build, $type, $param, $sort, '', $pager);
         $bugs  = $this->bug->batchAppendDelayedDays($bugs);
-        $users = $this->user->getPairs('noletter');
-
-        /* team member pairs. */
-        $memberPairs = array();
-        $memberPairs[] = "";
-        foreach($this->view->teamMembers as $key => $member)
-        {
-            $memberPairs[$key] = $member->realname;
-        }
-        $memberPairs = $this->user->processAccountSort($memberPairs);
 
         /* Build the search form. */
         $actionURL = $this->createLink('execution', 'bug', "executionID=$executionID&productID=$productID&branch=$branch&orderBy=$orderBy&build=$build&type=bysearch&queryID=myQueryID");
-        $this->execution->buildBugSearchForm($products, $queryID, $actionURL);
+        $this->execution->buildBugSearchForm($products, $param, $actionURL);
 
-        /* Get story and task id list. */
-        $storyIdList = $taskIdList = array();
-        foreach($bugs as $bug)
-        {
-            if($bug->story)  $storyIdList[$bug->story] = $bug->story;
-            if($bug->task)   $taskIdList[$bug->task]   = $bug->task;
-            if($bug->toTask) $taskIdList[$bug->toTask] = $bug->toTask;
-        }
-        $storyList = $storyIdList ? $this->loadModel('story')->getByList($storyIdList) : array();
-        $taskList  = $taskIdList  ? $this->loadModel('task')->getByIdList($taskIdList) : array();
-
-        /* Process the openedBuild and resolvedBuild fields. */
         $bugs = $this->bug->processBuildForBugs($bugs);
+        $this->assignBugVars($execution, $project, $productID, $branch, $products, $orderBy, $type, $param, $build, $bugs, $pager);
 
-        $moduleID = $type != 'bysearch' ? $param : 0;
-        $modules  = $this->tree->getAllModulePairs('bug');
-
-        /* Get module tree.*/
-        $extra = array('projectID' => $executionID, 'orderBy' => $orderBy, 'type' => $type, 'build' => $build, 'branchID' => $branch);
-        if($executionID and empty($productID) and count($products) > 1)
-        {
-            $moduleTree = $this->tree->getBugTreeMenu($executionID, $productID, 0, array('treeModel', 'createBugLink'), $extra);
-        }
-        elseif(!empty($products))
-        {
-            $productID  = empty($productID) ? reset($products)->id : $productID;
-            $moduleTree = $this->tree->getTreeMenu((int)$productID, 'bug', 0, array('treeModel', 'createBugLink'), $extra + array('branchID' => $branch, 'productID' => $productID), $branch);
-        }
-        else
-        {
-            $moduleTree = array();
-        }
-        $tree = $moduleID ? $this->tree->getByID($moduleID) : '';
-
-        $showModule = !empty($this->config->execution->bug->showModule) ? $this->config->execution->bug->showModule : '';
-
-        /* Assign. */
-        $this->view->title           = $execution->name . $this->lang->colon . $this->lang->execution->bug;
-        $this->view->bugs            = $bugs;
-        $this->view->tabID           = 'bug';
-        $this->view->build           = $this->loadModel('build')->getById($build);
-        $this->view->buildID         = $this->view->build ? $this->view->build->id : 0;
-        $this->view->pager           = $pager;
-        $this->view->orderBy         = $orderBy;
-        $this->view->users           = $users;
-        $this->view->productID       = $productID;
-        $this->view->product         = $this->product->getByID((int) $productID);
-        $this->view->project         = $project;
-        $this->view->branchID        = empty($this->view->build->branch) ? $branch : $this->view->build->branch;
-        $this->view->memberPairs     = $memberPairs;
-        $this->view->type            = $type;
-        $this->view->summary         = $this->bug->summary($bugs);
-        $this->view->param           = $param;
-        $this->view->defaultProduct  = (empty($productID) and !empty($products)) ? current(array_keys($products)) : $productID;
-        $this->view->builds          = $this->build->getBuildPairs($productID);
-        $this->view->plans           = $this->loadModel('productplan')->getPairs($productID ? $productID : array_keys($products));
-        $this->view->stories         = $storyList;
-        $this->view->tasks           = $taskList;
-        $this->view->projectPairs    = $this->loadModel('project')->getPairsByProgram();
-        $this->view->moduleTree      = $moduleTree;
-        $this->view->modules         = $modules;
-        $this->view->moduleID        = $moduleID;
-        $this->view->moduleName      = $moduleID ? $tree->name : $this->lang->tree->all;
-        $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'bug', $showModule) : array();
-        $this->view->setModule       = true;
-        $this->view->showBranch      = $showBranch;
-        $this->view->recTotal        = $pager->recTotal;
-        $this->view->productOption   = $productOption;
-        $this->view->branchOption    = $branchOption;
-
+        $this->view->showBranch    = $showBranch;
+        $this->view->productOption = $productOption;
+        $this->view->branchOption  = $branchOption;
         $this->display();
     }
 
