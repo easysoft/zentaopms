@@ -343,7 +343,7 @@ class testsuite extends control
      * Remove a case from test suite.
      *
      * @param  int    $suiteID
-     * @param  int    $rowID
+     * @param  int    $caseID
      * @access public
      * @return void
      */
