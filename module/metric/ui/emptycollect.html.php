@@ -10,11 +10,21 @@ declare(strict_types=1);
  */
 namespace zin;
 
-if($scope == 'collect' and empty($collect))
-{
-    include 'emptycollect.html.php';
-}
-else
-{
-    include 'previewmetric.html.php';
-}
+featureBar
+(
+    set::current($scope),
+    set::linkParams("scope={key}"),
+);
+
+div
+(
+    setStyle('flex', '1 1 auto'),
+    dtable
+    (
+        set::cols(array()),
+        set::data(array()),
+        set::emptyTip($lang->metric->emptyCollect),
+    ),
+);
+
+render();
