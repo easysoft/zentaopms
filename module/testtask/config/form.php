@@ -17,3 +17,19 @@ $config->testtask->form->create['name']       = array('required' => true,  'type
 $config->testtask->form->create['pri']        = array('required' => false, 'type' => 'int',    'default' => 3);
 $config->testtask->form->create['desc']       = array('required' => false, 'type' => 'string', 'default' => '', 'control' => 'editor');
 $config->testtask->form->create['mailto']     = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
+
+$config->testtask->form->edit = array();
+$config->testtask->form->edit['product']     = array('required' => true,  'type' => 'int',    'default' => '');
+$config->testtask->form->edit['execution']   = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->testtask->form->edit['build']       = array('required' => true,  'type' => 'string', 'default' => '');
+$config->testtask->form->edit['type']        = array('required' => false, 'type' => 'array',  'default' => array(), 'filter' => 'join');
+$config->testtask->form->edit['owner']       = array('required' => false, 'type' => 'string', 'default' => '');
+$config->testtask->form->edit['begin']       = array('required' => true,  'type' => 'date',   'default' => '');
+$config->testtask->form->edit['end']         = array('required' => true,  'type' => 'date',   'default' => '');
+$config->testtask->form->edit['status']      = array('required' => true,  'type' => 'string', 'default' => 'wait');
+$config->testtask->form->edit['testreport']  = array('required' => false, 'type' => 'int',    'default' => '0');
+$config->testtask->form->edit['name']        = array('required' => true,  'type' => 'string', 'default' => 0);
+$config->testtask->form->edit['pri']         = array('required' => false, 'type' => 'int',    'default' => 3);
+$config->testtask->form->edit['desc']        = array('required' => false, 'type' => 'string', 'default' => '', 'control' => 'editor');
+$config->testtask->form->edit['mailto']      = array('required' => false, 'type' => 'array',  'default' => array(), 'filter' => 'join');
+$config->testtask->form->edit['deleteFiles'] = array('required' => false, 'type' => 'array',  'default' => array(), 'filter' => 'join');

@@ -744,36 +744,22 @@ class testtaskModel extends model
     }
 
     /**
+     * 更新测试单。
      * Update a test task.
      *
-     * @param  int   $taskID
+     * @param  object $task
      * @access public
-     * @return void
+     * @return array|bool
      */
-    public function update($taskID)
+    public function update(object $task, object $oldTask): array|bool
     {
-        $oldTask = $this->getByID($taskID);
-        $task = fixer::input('post')
-            ->add('id', $taskID)
-            ->add('product', $oldTask->product)
-            ->setDefault('type', '')
-            ->setDefault('mailto', '')
-            ->setDefault('deleteFiles', array())
-            ->stripTags($this->config->testtask->editor->edit['id'], $this->config->allowedTags)
-            ->join('mailto', ',')
-            ->join('type', ',')
-            ->remove('files,labels,uid,comment,contactListMenu')
-            ->get();
-        $task = $this->loadModel('file')->processImgURL($task, $this->config->testtask->editor->edit['id'], $this->post->uid);
-
         $this->dao->update(TABLE_TESTTASK)->data($task, 'deleteFiles')
             ->autoCheck()
             ->batchcheck($this->config->testtask->edit->requiredFields, 'notempty')
             ->checkIF($task->end != '', 'end', 'ge', $task->begin)
             ->checkFlow()
-            ->where('id')->eq($taskID)
+            ->where('id')->eq($task->id)
             ->exec();
-
         if(dao::isError()) return false;
 
         $this->file->processFile4Object('testtask', $oldTask, $task);

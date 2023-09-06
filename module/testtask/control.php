@@ -709,89 +709,52 @@ class testtask extends control
     }
 
     /**
+     * 编辑一个测试单。
      * Edit a test task.
      *
      * @param  int    $taskID
      * @access public
      * @return void
      */
-    public function edit($taskID)
+    public function edit(int $taskID)
     {
-        /* Get task info. */
-        $task      = $this->testtask->getByID($taskID);
-        $productID = $this->loadModel('product')->saveState($task->product, $this->products);
-
         if(!empty($_POST))
         {
-            $changes = $this->testtask->update($taskID);
+            $oldTask = $this->testtask->getByID($taskID);
+            $task    = $this->testtaskZen->buildTaskForEdit($taskID, $oldTask->product);
+            $this->testtaskZen->checkTaskForEdit($task);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            if($changes or $this->post->comment)
+
+            $changes = $this->testtask->update($task, $oldTask);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if($changes || $this->post->comment)
             {
                 $actionID = $this->loadModel('action')->create('testtask', $taskID, 'edited', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
 
             $message = $this->executeHooks($taskID);
-            if($message) $this->lang->saveSuccess = $message;
-
-            $link = isonlybody() ? 'parent' : $this->session->testtaskList;
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
+            return $this->send(array('result' => 'success', 'message' => $message ? $message : $this->lang->saveSuccess, 'load' => $this->session->testtaskList, 'closeModal' => true));
         }
 
-        $this->loadModel('project');
+        /* Get task info. */
+        $task      = $this->testtask->getByID($taskID);
+        $productID = $this->loadModel('product')->saveState($task->product, $this->products);
 
-        /* Set menu. */
-        if($this->app->tab == 'project')
-        {
-            $this->project->setMenu($task->project);
-        }
-        elseif($this->app->tab == 'execution')
-        {
-            $this->loadModel('execution')->setMenu($task->execution);
-        }
-        else
-        {
-            $this->loadModel('qa')->setMenu($this->products, $productID, $task->branch, $taskID);
-        }
-
-        if(!isset($this->products[$productID]))
+        if(!isset($this->products[$productID]) && $productID)
         {
             $product = $this->product->getByID($productID);
             $this->products[$productID] = $product->name;
         }
 
-        /* Create testtask from testtask of test.*/
-        $productID   = $productID ? $productID : key($this->products);
-        $projectID   = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->project;
-        $executions  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
-        $executionID = $task->execution;
-        if($executionID)
-        {
-            $execution = $this->loadModel('execution')->getById($executionID);
-            if(!isset($executions[$executionID]))
-            {
-                $executions[$executionID] = $execution->name;
-                if(empty($execution->multiple))
-                {
-                    $project = $this->loadModel('project')->getById($execution->project);
-                    $executions[$executionID] = $project->name . "({$this->lang->project->disableExecution})";
-                }
-            }
-            $builds = $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,notrunk,withexecution', $executionID, 'execution', $task->build, false);
-        }
-        else
-        {
-            $builds = $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,notrunk,withexecution', $task->project, 'project', $task->build, false);
-        }
+        /* 设置菜单。 */
+        /* Set menu. */
+        $this->testtaskZen->setMenu($productID, $task->branch, $task->project, $task->execution, $taskID);
 
-        $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->edit;
-        $this->view->task         = $task;
-        $this->view->project      = $this->project->getByID($projectID);
-        $this->view->executions   = $executions;
-        $this->view->builds       = empty($productID) ? array() : $builds;
-        $this->view->testreports  = $this->loadModel('testreport')->getPairs($task->product, $task->testreport);
-        $this->view->users        = $this->loadModel('user')->getPairs('nodeleted|noclosed', $task->owner);
-        $this->view->contactLists = $this->user->getContactLists($this->app->user->account, 'withnote');
+        /* 展示相关变量。 */
+        /* Show the variables associated. */
+        $this->testtaskZen->assignForEdit($task, $productID);
 
         $this->display();
     }
