@@ -358,12 +358,14 @@ $config->bug->datatable->fieldList['os']['type']     = 'category';
 $config->bug->datatable->fieldList['os']['fixed']    = 'no';
 $config->bug->datatable->fieldList['os']['width']    = '80';
 $config->bug->datatable->fieldList['os']['sortType'] = true;
+$config->bug->datatable->fieldList['os']['control']  = 'multiple';
 
 $config->bug->datatable->fieldList['browser']['title']    = 'browser';
 $config->bug->datatable->fieldList['browser']['type']     = 'category';
 $config->bug->datatable->fieldList['browser']['fixed']    = 'no';
 $config->bug->datatable->fieldList['browser']['width']    = '80';
 $config->bug->datatable->fieldList['browser']['sortType'] = true;
+$config->bug->datatable->fieldList['browser']['control']  = 'multiple';
 
 $config->bug->datatable->fieldList['mailto']['title']    = 'mailto';
 $config->bug->datatable->fieldList['mailto']['type']     = 'user';
