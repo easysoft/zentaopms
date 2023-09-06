@@ -290,8 +290,10 @@ class testsuite extends control
         if(!empty($_POST))
         {
             $caseData = form::data($this->config->testsuite->form->linkCase)->get();
+
             $this->testsuite->linkCase($suiteID, $caseData->cases, $caseData->versions);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('view', "suiteID=$suiteID")));
         }
 
@@ -349,6 +351,7 @@ class testsuite extends control
     {
         $this->testsuite->deleteCaseBysuiteID(array($caseID), $suiteID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
         return $this->send(array('result' => 'success', 'load' => true));
     }
 
@@ -365,6 +368,7 @@ class testsuite extends control
         $formData = form::data($this->config->testsuite->form->batchUnlinkCases)->get();
         $this->testsuite->deleteCaseBysuiteID($formData->caseIDList, $suiteID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
         return $this->send(array('result' => 'success', 'load' => true));
     }
 }
