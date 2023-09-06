@@ -10,8 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$repoName = $this->dao->select('name')->from(TABLE_REPO)->where('id')->eq($MR->repoID)->fetch('name');
-dropmenu(set::objectID($MR->repoID), set::text($repoName), set::tab('repo'));
+dropmenu(set::objectID($MR->repoID), set::tab('repo'));
 
 $hasNoConflict     = $MR->synced === '1' ? $rawMR->has_conflicts : (bool)$MR->hasNoConflict;
 $sourceDisabled    = ($MR->status == 'merged' && $MR->removeSourceBranch == '1') ? 'disabled' : '';
