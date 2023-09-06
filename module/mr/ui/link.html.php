@@ -10,6 +10,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$repoName = $this->dao->select('name')->from(TABLE_REPO)->where('id')->eq($MR->repoID)->fetch('name');
+dropmenu(set::objectID($MR->repoID), set::text($repoName), set::tab('repo'));
+
 jsVar('type', $type);
 jsVar('orderBy', $orderBy);
 jsVar('sortLink', createLink('mr', 'link', "MRID={$MR->id}&type={type}&orderBy={orderBy}&recTotal=&recPerPage=&pageID="));
