@@ -16,5 +16,7 @@ if($scope == 'collect' and empty($collect))
 }
 else
 {
-    include 'previewmetric.html.php';
+    if($viewType == 'single') include 'previewsingle.html.php';
+    if($viewType == 'multiple') include 'previewmultiple.html.php';
 }
+

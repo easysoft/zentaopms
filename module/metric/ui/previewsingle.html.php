@@ -16,13 +16,11 @@ jsVar('objectList',   $lang->metric->objectList);
 
 $fnGenerateSide = function() use($metrics, $current, $viewType, $scope)
 {
-    if($viewType == 'single')
+    $metricList = array();
+    foreach($metrics as $key => $metric)
     {
-        $metricList = array();
-        foreach($metrics as $key => $metric)
-        {
-            $class = $metric->id == $current->id ? 'metric-current' : '';
-            $metricList[] = li
+        $class = $metric->id == $current->id ? 'metric-current' : '';
+        $metricList[] = li
             (
                 set::className($class . ' metric-item font-medium'),
                 a(
@@ -30,27 +28,9 @@ $fnGenerateSide = function() use($metrics, $current, $viewType, $scope)
                     set::href(helper::createLink('metric', 'preview', "scope=$scope&viewType=$viewType&metricID={$metric->id}")),
                 )
             );
-        }
-
-        return ul($metricList);
     }
 
-    $metricCheckList = array();
-    foreach($metrics as $key => $metric)
-    {
-        $class  = $metric->id == $current->id ? 'metric-current' : '';
-        $class .= ' font-medium checkbox';
-        $metricCheckList[] = array('text' => $metric->name, 'value' => $key, 'typeClass' => $class, 'checked' => $metric->id == $current->id);
-    }
-
-    return checkList
-    (
-        set::className('check-list-metric'),
-        set::primary(true),
-        set::name('metric'),
-        set::inline(false),
-        set::items($metricCheckList),
-    );
+    return ul($metricList);
 };
 
 featureBar
@@ -59,7 +39,6 @@ featureBar
     set::linkParams("scope={key}"),
 );
 
-$exchangeType = $viewType == 'single' ? 'multiple' : 'single';
 toolbar
 (
     btn
@@ -67,8 +46,8 @@ toolbar
         setClass('btn text-black ghost primary-hover-500'),
         set::icon('exchange'),
         set::iconClass('icon-18'),
-        set::url(helper::createLink('metric', 'preview', "scope=$scope&viewType=$exchangeType&metricID={$current->id}")),
-        $lang->metric->viewType->$exchangeType,
+        set::url(helper::createLink('metric', 'preview', "scope=$scope&viewType=multiple&metricID={$current->id}")),
+        $lang->metric->viewType->multiple,
     ),
     common::hasPriv('metric', 'preview') ? btn
     (
