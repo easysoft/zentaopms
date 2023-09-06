@@ -23,7 +23,7 @@ $lang->space->byCard = '卡片';
 
 $lang->space->featureBar['browse']['all']      = '全部';
 $lang->space->featureBar['browse']['running']  = '运行中';
-$lang->space->featureBar['browse']['stopped']  = '已停止';
+$lang->space->featureBar['browse']['stopped']  = '已关闭';
 $lang->space->featureBar['browse']['abnormal'] = '异常';
 
 $lang->space->appType['gitlab']    = 'GitLab';
