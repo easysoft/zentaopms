@@ -871,3 +871,6 @@ VALUES
     ('traincourse-updatePractice', 'recommend', 'traincourse-practiceView');
 
 UPDATE zt_privlang SET `key` = 'execution-computeBurn' WHERE `key` = 'execution-computeBurnAction';
+
+DELETE FROM zt_priv WHERE module='search' and method = 'select';
+DELETE FROM zt_privlang WHERE `key`='search-select';
