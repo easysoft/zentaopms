@@ -213,13 +213,14 @@ formPanel
     formRow
     (
         set::id('sonarProject'),
-        setClass('sonarqube hidden'),
+        setClass('sonarqube', $job->projectKey ? '' : 'hidden'),
         formGroup
         (
             set::name('projectKey'),
             set::width('1/2'),
             set::label($lang->job->projectKey),
-            set::items(array()),
+            set::items($sonarqubePipelines),
+            set::value($job->projectKey),
             set::required(true),
         ),
     ),
@@ -295,7 +296,7 @@ formPanel
                 (
                     set::name('jkTask'),
                     set::type('hidden'),
-                    set::value($job->rawPipeline),
+                    set::value(zget($job, 'rawPipeline', $job->pipeline)),
                 ),
                 dropmenu
                 (
