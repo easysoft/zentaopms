@@ -2422,7 +2422,7 @@ class executionModel extends model
             ->fetch('totalLeft');
 
         /* Set the hours information for the task. */
-        $execution->days          = $execution->days ? $execution->days : '';
+        $execution->days          = $execution->days ? $execution->days : 0;
         $execution->totalHours    = $this->dao->select('sum(days * hours) AS totalHours')->from(TABLE_TEAM)->where('root')->eq($execution->id)->andWhere('type')->eq('execution')->fetch('totalHours');
         $execution->totalEstimate = round((float)$total->totalEstimate, 1);
         $execution->totalConsumed = round((float)$total->totalConsumed, 1);
