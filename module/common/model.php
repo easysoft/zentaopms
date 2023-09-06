@@ -2110,7 +2110,7 @@ EOF;
             if(strtolower($key) == 'closeddate'       and $value == '') continue;
             if(strtolower($key) == 'actualcloseddate' and $value == '') continue;
 
-            if(isset($old->$key))
+            if(isset($old->$key) && is_string($old->$key))
             {
                 if($config->edition != 'open' && isset($dateFields[$key])) $old->$key = formatTime($old->$key);
 
