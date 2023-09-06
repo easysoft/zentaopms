@@ -28,6 +28,9 @@ $config->project->form->create['auth']       = array('type' => 'array',  'requir
 $config->project->form->create['model']      = array('type' => 'string', 'required' => false, 'default' => '');
 
 $config->project->form->edit = $config->project->form->create;
+$config->project->form->edit['products'] = array('type' => 'array', 'required' => false, 'default' => array());
+$config->project->form->edit['branch']   = array('type' => 'array', 'required' => false, 'default' => array());
+$config->project->form->edit['plans']    = array('type' => 'array', 'required' => false, 'default' => array());
 
 $config->project->form->start['realBegan'] = array('type' => 'date', 'required' => true, 'filter' => 'trim');
 

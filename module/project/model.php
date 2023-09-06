@@ -1263,16 +1263,17 @@ class projectModel extends model
      *
      * @param  int    $projectID
      * @param  string $stageBy
+     * @param  object $postProductData
      * @access public
      * @return bool
      */
-    public function updateProductStage(int $projectID, string $stageBy): bool
+    public function updateProductStage(int $projectID, string $stageBy, object $postProductData): bool
     {
         /* 如果项目的阶段为由按产品创建，则更新此项目下每个产品。*/
         if($stageBy == 'project') return true;
 
         $executions = $this->loadModel('execution')->getPairs($projectID);
-        foreach(array_keys($executions) as $executionID) $this->execution->updateProducts($executionID); // 更新项目下所有产品的阶段。
+        foreach(array_keys($executions) as $executionID) $this->execution->updateProducts($executionID, $postProductData); // 更新项目下所有产品的阶段。
 
         return !dao::isError();
     }
@@ -1283,10 +1284,11 @@ class projectModel extends model
      *
      * @param  object      $project
      * @param  object      $oldProject
+     * @param  object      $postProductData
      * @access public
      * @return array|false
      */
-    public function update(object $project, object $oldProject): array|false
+    public function update(object $project, object $oldProject, object $postProductData): array|false
     {
         /* 通过主键查老项目信息, 处理父节点和图片字段。*/
         /* Fetch old project's info and dispose parent and file info. */
@@ -1307,7 +1309,7 @@ class projectModel extends model
         $this->updateUserView($projectID, $project->acl);                    // 更新用户视图。
         $this->updateShadowProduct($project, $oldProject);                   // 更新影子产品关联信息。
         $this->updateWhitelist($project, $oldProject);                       // 更新关联的白名单列表。
-        $this->updateProductStage($projectID, (string)$oldProject->stageBy); // 更新关联的所有产品的阶段。
+        $this->updateProductStage($projectID, (string)$oldProject->stageBy, $postProductData); // 更新关联的所有产品的阶段。
 
         $this->file->updateObjectID((string)$this->post->uid, $projectID, 'project'); // 通过uid更新文件id。
 

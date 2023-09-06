@@ -88,6 +88,7 @@ class projectZen extends project
             ->join('whitelist', ',')
             ->join('auth', ',')
             ->stripTags($this->config->project->editor->edit['id'], $this->config->allowedTags)
+            ->remove('products,plans,branch')
             ->get();
 
         if($hasProduct)
@@ -658,8 +659,8 @@ class projectZen extends project
     }
 
     /**
-     * 为bug列表视图构造必要的变量。 
-     * 
+     * 为bug列表视图构造必要的变量。
+     *
      * @param  int       $productID
      * @param  int       $projectID
      * @param  object    $project
