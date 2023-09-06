@@ -1068,8 +1068,9 @@ class searchModel extends model
                 if($module == 'case') $module = 'testcase';
                 if(common::hasPriv($module, 'view')) $allowedObject[] = $objectType;
 
-                if($module == 'caselib'    and common::hasPriv('caselib', 'view'))     $allowedObject[] = $objectType;
-                if($module == 'deploystep' and common::haspriv('deploy',  'viewstep')) $allowedobject[] = $objectType;
+                if($module == 'caselib'    and common::hasPriv('caselib', 'view'))             $allowedObject[] = $objectType;
+                if($module == 'deploystep' and common::haspriv('deploy', 'viewstep'))          $allowedobject[] = $objectType;
+                if($module == 'practice'   and common::haspriv('traincourse', 'practiceView')) $allowedobject[] = $objectType;
             }
         }
 
@@ -1219,6 +1220,11 @@ class searchModel extends model
             {
                 $module = 'deploy';
                 $method = 'viewstep';
+            }
+            elseif($module == 'practice')
+            {
+                $module = 'traincourse';
+                $method = 'practiceview';
             }
 
             if(strpos($linkProjectModules, ",$module,") !== false)

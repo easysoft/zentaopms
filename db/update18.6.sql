@@ -804,3 +804,68 @@ INSERT INTO `zt_prompt` (`name`, `model`, `module`, `source`, `targetForm`, `pur
 ALTER TABLE `zt_ticket` ADD `subStatus` varchar(30) NOT NULL DEFAULT '';
 
 REPLACE INTO `zt_privrelation` (`priv`, `type`, `relationPriv`) VALUES ('kanban-view', 'depend', 'kanban-space');
+
+CREATE TABLE IF NOT EXISTS `zt_practice` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `module` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `code` char(50) NOT NULL DEFAULT '',
+  `title` varchar(255) NOT NULL DEFAULT '',
+  `labels` varchar(255) NOT NULL DEFAULT '',
+  `summary` varchar(255) NOT NULL DEFAULT '',
+  `content` text NULL,
+  `contributor` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `code` ON `zt_practice`(`code`);
+
+REPLACE INTO
+    `zt_priv` (`id`, `module`, `method`, `parent`, `edition`, `vision`, `system`, `order`)
+VALUES
+    (2161, 'traincourse', 'practice', 681, ',biz,max,ipd,', ',rnd,', '1', 5),
+    (2162, 'traincourse', 'practiceBrowse', 681, ',biz,max,ipd,', ',rnd,', '1', 10),
+    (2163, 'traincourse', 'practiceView', 681, ',biz,max,ipd,', ',rnd,', '1', 15),
+    (2164, 'traincourse', 'updatePractice', 681, ',biz,max,ipd,', ',rnd,', '1', 20);
+
+REPLACE INTO
+    `zt_privmanager` (`id`, `parent`, `code`, `type`, `edition`, `vision`, `order`)
+VALUES
+    (681, 566, '', 'package', ',open,biz,max,ipd,', ',rnd,', 8);
+
+REPLACE INTO
+    `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`)
+VALUES
+    (681, 'manager', 'zh-cn', '', '实践库', ''),
+    (681, 'manager', 'zh-tw', '', '實踐庫', ''),
+    (681, 'manager', 'en', '', 'Practice Library', ''),
+    (681, 'manager', 'de', '', 'Practice Library', ''),
+    (681, 'manager', 'fr', '', 'Practice Library', ''),
+    (2161, 'priv', 'zh-cn', 'traincourse-practiceAction', '', ''),
+    (2161, 'priv', 'zh-tw', 'traincourse-practiceAction', '', ''),
+    (2161, 'priv', 'en', 'traincourse-practiceAction', '', ''),
+    (2161, 'priv', 'de', 'traincourse-practiceAction', '', ''),
+    (2161, 'priv', 'fr', 'traincourse-practiceAction', '', ''),
+    (2162, 'priv', 'zh-cn', 'traincourse-practiceBrowse', '', ''),
+    (2162, 'priv', 'zh-tw', 'traincourse-practiceBrowse', '', ''),
+    (2162, 'priv', 'en', 'traincourse-practiceBrowse', '', ''),
+    (2162, 'priv', 'de', 'traincourse-practiceBrowse', '', ''),
+    (2162, 'priv', 'fr', 'traincourse-practiceBrowse', '', ''),
+    (2163, 'priv', 'zh-cn', 'traincourse-practiceView'  , '', ''),
+    (2163, 'priv', 'zh-tw', 'traincourse-practiceView'  , '', ''),
+    (2163, 'priv', 'en', 'traincourse-practiceView'  , '', ''),
+    (2163, 'priv', 'de', 'traincourse-practiceView'  , '', ''),
+    (2163, 'priv', 'fr', 'traincourse-practiceView'  , '', ''),
+    (2164, 'priv', 'zh-cn', 'traincourse-updatePractice', '', ''),
+    (2164, 'priv', 'zh-tw', 'traincourse-updatePractice', '', ''),
+    (2164, 'priv', 'en', 'traincourse-updatePractice', '', ''),
+    (2164, 'priv', 'de', 'traincourse-updatePractice', '', ''),
+    (2164, 'priv', 'fr', 'traincourse-updatePractice', '', '');
+
+REPLACE INTO
+    `zt_privrelation` (`priv`, `type`, `relationPriv`)
+VALUES
+    ('traincourse-practiceBrowse', 'depend', 'traincourse-practice'),
+    ('traincourse-practiceView', 'depend', 'traincourse-practice'), ('traincourse-practiceView', 'depend', 'traincourse-practiceBrowse'),
+    ('traincourse-updatePractice', 'depend', 'traincourse-practice'), ('traincourse-updatePractice', 'depend', 'traincourse-practiceBrowse'),
+    ('traincourse-practice', 'recommend', 'traincourse-practiceBrowse'), ('traincourse-practice', 'recommend', 'traincourse-practiceView'),
+    ('traincourse-practiceBrowse', 'recommend', 'traincourse-practiceView'),
+    ('traincourse-updatePractice', 'recommend', 'traincourse-practiceView');
