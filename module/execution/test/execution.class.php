@@ -480,17 +480,17 @@ class executionTest
     }
 
     /**
-     * function putoff test by execution
+     * function putoff test by execution.
      *
-     * @param  string $executionID
+     * @param  int    $executionID
      * @param  array  $param
      * @access public
      * @return array
      */
-    public function putoffTest($executionID, $param = array())
+    public function putoffTest(int $executionID, array $param = array()): object|string|array
     {
         $begin = date('Y-m-d');
-        $end   = date('Y-m-d',strtotime("+5 day"));
+        $end   = date('Y-m-d', strtotime("+5 day"));
 
         $createFields = array('status' => 'wait', 'days' => '5', 'comment' => '延期描述测试', 'begin' => $begin, 'end' => $end);
 
