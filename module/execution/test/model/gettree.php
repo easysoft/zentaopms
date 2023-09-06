@@ -37,13 +37,18 @@ $product->type->range('normal');
 $product->status->range('normal');
 $product->gen(3);
 
-$product = zdTable('module');
+$product = zdtable('module');
 $product->id->range('1-10');
 $product->name->range('1-10')->prefix('模块');
 $product->root->range('1-3');
 $product->parent->range('0,1{9}');
 $product->type->range('task');
 $product->gen(10);
+
+zdTable('story')->gen(10);
+$relation = zdTable('projectstory');
+$relation->project->range('3-5');
+$relation->gen(10);
 
 /**
 
@@ -57,3 +62,5 @@ pid=1
 $executionTester = new executionTest();
 
 r($executionTester->getTreeTest(3)) && p() && e('4'); // 查看返回子任务数
+r($executionTester->getTreeTest(4)) && p() && e('4'); // 查看返回子任务数
+r($executionTester->getTreeTest(5)) && p() && e('4'); // 查看返回子任务数

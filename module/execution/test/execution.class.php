@@ -868,7 +868,8 @@ class executionTest
     public function getTreeTest($executionID)
     {
         global $app;
-        $app->moduleName = 'task';
+        $app->moduleName = 'execution';
+        $app->methodName = 'tree';
         $object = $this->executionModel->getTree($executionID);
 
         if(dao::isError())
@@ -878,7 +879,7 @@ class executionTest
         }
         else
         {
-            return $object[0] ? count($object[0]->children) : 0;
+            return !empty($object[0]) ? count($object[0]->children) : 0;
         }
     }
 

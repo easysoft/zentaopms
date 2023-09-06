@@ -2120,30 +2120,37 @@ class executionModel extends model
     }
 
     /**
-     * Get executions tree data
+     * 获取执行树状图数据。
+     * Get executions tree data.
      * @param  int     $executionID
      * @access public
      * @return array
      */
-    public function getTree($executionID)
+    public function getTree(int $executionID)
     {
+        $firstTree = array(
+            'id'      => 0,
+            'name'    => '/',
+            'type'    => 'task',
+            'actions' => false,
+            'root'    => $executionID,
+        );
+
         $fullTrees = $this->loadModel('tree')->getTaskStructure($executionID, 0);
-        array_unshift($fullTrees, array('id' => 0, 'name' => '/', 'type' => 'task', 'actions' => false, 'root' => $executionID));
-        foreach($fullTrees as $i => $tree)
+        array_unshift($fullTrees, $firstTree);
+        foreach($fullTrees as $i => &$tree)
         {
-            $tree = (object)$tree;
-            if($tree->type == 'product') array_unshift($tree->children, array('id' => 0, 'name' => '/', 'type' => 'story', 'actions' => false, 'root' => $tree->root));
-            $fullTree = $this->fillTasksInTree($tree, $executionID);
-            if(empty($fullTree->children))
+            if($tree['type'] == 'product')
             {
-                unset($fullTrees[$i]);
+                $firstTree['type'] = 'story';
+                $firstTree['root'] = $tree['root'];
+                array_unshift($tree['children'], $firstTree);
             }
-            else
-            {
-                $fullTrees[$i] = $fullTree;
-            }
+
+            $tree = $this->fillTasksInTree((object)$tree, $executionID);
+            if(empty($tree->children)) unset($fullTrees[$i]);
         }
-        if(isset($fullTrees[0]) and empty($fullTrees[0]->children)) array_shift($fullTrees);
+
         return array_values($fullTrees);
     }
 
@@ -4696,152 +4703,51 @@ class executionModel extends model
     }
 
     /**
+     * 在树状图中填充任务。
      * Fill tasks in tree.
      * @param  object $tree
      * @param  int    $executionID
      * @access public
      * @return object
      */
-    public function fillTasksInTree($node, $executionID)
+    public function fillTasksInTree(object $node, int $executionID): object
     {
-        $node = (object)$node;
-        static $storyGroups, $taskGroups;
-        if(empty($storyGroups))
-        {
-            if($this->config->vision == 'lite')
-            {
-                $execution = $this->getById($executionID);
-                $stories = $this->dao->select('t2.*, t1.version as taskVersion')->from(TABLE_PROJECTSTORY)->alias('t1')
-                    ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-                    ->where('t1.project')->eq((int)$execution->project)
-                    ->andWhere('t2.deleted')->eq(0)
-                    ->orderBy('t1.`order`_desc')
-                    ->fetchAll();
-            }
-            else
-            {
-                $stories = $this->dao->select('t2.*, t1.version as taskVersion')->from(TABLE_PROJECTSTORY)->alias('t1')
-                    ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-                    ->where('t1.project')->eq((int)$executionID)
-                    ->andWhere('t2.deleted')->eq(0)
-                    ->andWhere('t2.type')->eq('story')
-                    ->orderBy('t1.`order`_desc')
-                    ->fetchAll();
-            }
-            $storyGroups = array();
-            foreach($stories as $story) $storyGroups[$story->product][$story->module][$story->id] = $story;
-        }
-        if(empty($taskGroups))
-        {
-            $tasks = $this->dao->select('*')->from(TABLE_TASK)
-                ->where('execution')->eq((int)$executionID)
-                ->andWhere('deleted')->eq(0)
-                ->andWhere('parent')->lt(1)
-                ->orderBy('id_desc')
-                ->fetchAll();
-            $childTasks = $this->dao->select('*')->from(TABLE_TASK)
-                ->where('execution')->eq((int)$executionID)
-                ->andWhere('deleted')->eq(0)
-                ->andWhere('parent')->ne(0)
-                ->orderBy('id_desc')
-                ->fetchGroup('parent');
-            $taskGroups = array();
-            foreach($tasks as $task)
-            {
-                $taskGroups[$task->module][$task->story][$task->id] = $task;
-                if(!empty($childTasks[$task->id]))
-                {
-                    $taskGroups[$task->module][$task->story][$task->id]->children = $childTasks[$task->id];
-                }
-            }
-        }
-
+        static $taskGroups;
+        if(empty($taskGroups)) $taskGroups = $this->executionTao->getTaskGroups($executionID);
         if(!empty($node->children))
         {
-            foreach($node->children as $i => $child)
+            foreach($node->children as $i => &$child)
             {
-                $subNode = $this->fillTasksInTree($child, $executionID);
+                $child = $this->fillTasksInTree((object)$child, $executionID);
                 /* Remove no children node. */
-                if($subNode->type != 'story' and $subNode->type != 'task' and empty($subNode->children))
-                {
-                    unset($node->children[$i]);
-                }
-                else
-                {
-                    $node->children[$i] = $subNode;
-                }
+                if($child->type != 'story' && $child->type != 'task' && empty($child->children)) unset($node->children[$i]);
             }
         }
 
-        if(!isset($node->id))$node->id = 0;
+        if(!isset($node->id)) $node->id = 0;
         if($node->type == 'story')
         {
-            static $users;
+            static $users, $storyGroups;
             if(empty($users)) $users = $this->loadModel('user')->getPairs('noletter');
-
-            $node->type = 'module';
-            $stories = isset($storyGroups[$node->root][$node->id]) ? $storyGroups[$node->root][$node->id] : array();
-            foreach($stories as $story)
+            if(empty($storyGroups))
             {
-                $storyItem = new stdclass();
-                $storyItem->type          = 'story';
-                $storyItem->id            = 'story' . $story->id;
-                $storyItem->title         = $story->title;
-                $storyItem->color         = $story->color;
-                $storyItem->pri           = $story->pri;
-                $storyItem->storyId       = $story->id;
-                $storyItem->openedBy      = zget($users, $story->openedBy);
-                $storyItem->assignedTo    = zget($users, $story->assignedTo);
-                $storyItem->url           = helper::createLink('execution', 'storyView', "storyID=$story->id&execution=$executionID");
-                $storyItem->taskCreateUrl = helper::createLink('task', 'batchCreate', "executionID={$executionID}&story={$story->id}");
+                if($this->config->vision == 'lite') $execution = $this->getById($executionID);
+                $stories = $this->loadModel('story')->getListByProject(isset($execution->project) ? $execution->project : $executionID);
 
-                $storyTasks = isset($taskGroups[$node->id][$story->id]) ? $taskGroups[$node->id][$story->id] : array();
-                if(!empty($storyTasks))
-                {
-                    $taskItems             = $this->formatTasksForTree($storyTasks, $story);
-                    $storyItem->tasksCount = count($taskItems);
-                    $storyItem->children   = $taskItems;
-                }
-
-                $node->children[] = $storyItem;
+                $storyGroups = array();
+                foreach($stories as $story) $storyGroups[$story->product][$story->module][$story->id] = $story;
             }
 
-            /* Append for task of no story and node is not root. */
-            if($node->id and isset($taskGroups[$node->id][0]))
-            {
-                $taskItems = $this->formatTasksForTree($taskGroups[$node->id][0]);
-                $node->tasksCount = count($taskItems);
-                foreach($taskItems as $taskItem) $node->children[] = $taskItem;
-            }
+            $node = $this->executionTao->processStoryNode($node, $storyGroups, $taskGroups, $users, $executionID);
         }
         elseif($node->type == 'task')
         {
-            $node->type       = 'module';
-            $node->tasksCount = 0;
-            if(isset($taskGroups[$node->id]))
-            {
-                foreach($taskGroups[$node->id] as $tasks)
-                {
-                    $taskItems = $this->formatTasksForTree($tasks);
-                    $node->tasksCount += count($taskItems);
-                    foreach($taskItems as $taskItem)
-                    {
-                        $node->children[$taskItem->id] = $taskItem;
-                        if(!empty($tasks[$taskItem->id]->children))
-                        {
-                            $task = $this->formatTasksForTree($tasks[$taskItem->id]->children);
-                            $node->children[$taskItem->id]->children=$task;
-                            $node->tasksCount += count($task);
-                        }
-                    }
-                }
-                $node->children = array_values($node->children);
-            }
+            $node = $this->executionTao->processTaskNode($node, $taskGroups);
         }
         elseif($node->type == 'product')
         {
             $node->title = $node->name;
-            if(isset($node->children[0]) and empty($node->children[0]->children)) array_shift($node->children);
+            if(isset($node->children[0]) && empty($node->children[0]->children)) array_shift($node->children);
         }
 
         $node->actions = false;

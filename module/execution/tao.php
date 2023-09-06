@@ -286,4 +286,124 @@ class executionTao extends executionModel
         $cfd->execution = $executionID;
         $this->dao->replace(TABLE_CFD)->data($cfd)->exec();
     }
+
+    /**
+     * 获取任务分组数据。
+     * Get task group data.
+     *
+     * @param  int       $executionID
+     * @access protected
+     * @return array
+     */
+    protected function getTaskGroups(int $executionID): array
+    {
+        $tasks = $this->dao->select('*')->from(TABLE_TASK)
+            ->where('execution')->eq((int)$executionID)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('parent')->lt(1)
+            ->orderBy('id_desc')
+            ->fetchAll();
+        $childTasks = $this->dao->select('*')->from(TABLE_TASK)
+            ->where('execution')->eq((int)$executionID)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('parent')->ne(0)
+            ->orderBy('id_desc')
+            ->fetchGroup('parent');
+
+        $taskGroups = array();
+        foreach($tasks as $task)
+        {
+            $taskGroups[$task->module][$task->story][$task->id] = $task;
+            if(!empty($childTasks[$task->id])) $taskGroups[$task->module][$task->story][$task->id]->children = $childTasks[$task->id];
+        }
+
+        return $taskGroups;
+    }
+
+    /**
+     * 处理树状图需求类型数据。
+     * Process tree chart demand type data.
+     *
+     * @param  object    $node
+     * @param  array     $storyGroups
+     * @param  array     $taskGroups
+     * @param  array     $users
+     * @param  int       $executionID
+     * @access protected
+     * @return object
+     */
+    protected function processStoryNode(object $node, array $storyGroups, array $taskGroups, array $users, int $executionID): object
+    {
+        $node->type = 'module';
+        $stories = isset($storyGroups[$node->root][$node->id]) ? $storyGroups[$node->root][$node->id] : array();
+        foreach($stories as $story)
+        {
+            $storyItem = new stdclass();
+            $storyItem->type          = 'story';
+            $storyItem->id            = 'story' . $story->id;
+            $storyItem->title         = $story->title;
+            $storyItem->color         = $story->color;
+            $storyItem->pri           = $story->pri;
+            $storyItem->storyId       = $story->id;
+            $storyItem->openedBy      = zget($users, $story->openedBy);
+            $storyItem->assignedTo    = zget($users, $story->assignedTo);
+            $storyItem->url           = helper::createLink('execution', 'storyView', "storyID=$story->id&execution=$executionID");
+            $storyItem->taskCreateUrl = helper::createLink('task', 'batchCreate', "executionID={$executionID}&story={$story->id}");
+
+            $storyTasks = isset($taskGroups[$node->id][$story->id]) ? $taskGroups[$node->id][$story->id] : array();
+            if(!empty($storyTasks))
+            {
+                $taskItems             = $this->formatTasksForTree($storyTasks, $story);
+                $storyItem->tasksCount = count($taskItems);
+                $storyItem->children   = $taskItems;
+            }
+
+            $node->children[] = $storyItem;
+        }
+
+        /* Append for task of no story && node is not root. */
+        if($node->id && isset($taskGroups[$node->id][0]))
+        {
+            $taskItems = $this->formatTasksForTree($taskGroups[$node->id][0]);
+            $node->tasksCount = count($taskItems);
+            foreach($taskItems as $taskItem) $node->children[] = $taskItem;
+        }
+
+        return $node;
+    }
+
+    /**
+     * 处理树状图任务类型数据。
+     * Process tree chart task type data.
+     *
+     * @param  object    $node
+     * @param  array     $taskGroups
+     * @access protected
+     * @return object
+     */
+    protected function processTaskNode(object $node, array $taskGroups): object
+    {
+        $node->type       = 'module';
+        $node->tasksCount = 0;
+        if(!isset($taskGroups[$node->id])) return $node;
+
+        foreach($taskGroups[$node->id] as $tasks)
+        {
+            $taskItems = $this->formatTasksForTree($tasks);
+            $node->tasksCount += count($taskItems);
+            foreach($taskItems as $taskItem)
+            {
+                $node->children[$taskItem->id] = $taskItem;
+                if(!empty($tasks[$taskItem->id]->children))
+                {
+                    $task = $this->formatTasksForTree($tasks[$taskItem->id]->children);
+                    $node->children[$taskItem->id]->children=$task;
+                    $node->tasksCount += count($task);
+                }
+            }
+        }
+        $node->children = array_values($node->children);
+
+        return $node;
+    }
 }
