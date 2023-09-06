@@ -63,7 +63,7 @@ class repo extends control
             $this->repo->setMenu($this->repos, $repoID);
         }
 
-        if(empty($this->repos) and $this->methodName != 'create') return print($this->locate($this->repo->createLink('create', "objectID=$objectID")));
+        if(empty($this->repos) and !in_array($this->methodName, array('create', 'setrules'))) return print($this->locate($this->repo->createLink('create', "objectID=$objectID")));
     }
 
     /**
