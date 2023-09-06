@@ -2621,10 +2621,11 @@ class testcaseModel extends model
         $testcaseList = $this->post->testcaseList;
         foreach($testcaseList as $testcase)
         {
-            $tmpId  = $testcase["tmpId"];
-            $tmpPId = $testcase["tmpPId"];
+            $testcase = (object)$testcase;
+            $tmpId    = $testcase->tmpId;
+            $tmpPId   = $testcase->tmpPId;
 
-            $result = $this->saveTestcase($testcase,$sceneIds);
+            $result = $this->saveTestcase($testcase, $sceneIds);
             if($result["result"] == "fail")
             {
                 $this->dao->rollBack();
