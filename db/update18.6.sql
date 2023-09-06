@@ -834,6 +834,11 @@ VALUES
 REPLACE INTO
     `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`)
 VALUES
+    (681, 'manager', 'zh-cn', '', '实践库', ''),
+    (681, 'manager', 'zh-tw', '', '實踐庫', ''),
+    (681, 'manager', 'en', '', 'Practice Library', ''),
+    (681, 'manager', 'de', '', 'Practice Library', ''),
+    (681, 'manager', 'fr', '', 'Practice Library', ''),
     (2161, 'priv', 'zh-cn', 'traincourse-practiceAction', '', ''),
     (2161, 'priv', 'zh-tw', 'traincourse-practiceAction', '', ''),
     (2161, 'priv', 'en', 'traincourse-practiceAction', '', ''),

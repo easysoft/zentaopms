@@ -490,7 +490,7 @@ class groupModel extends model
                 $data->method = $method;
                 $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
             }
-            
+
             $recommendPrivs = zget($_POST, 'recommendPrivs', array());
             foreach($recommendPrivs as $moduleMethod => $priv)
             {
