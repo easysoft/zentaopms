@@ -383,7 +383,25 @@ class job extends control
         //if(strtolower($job->engine) == 'gitlab' and (!isset($job->reference) or !$job->reference)) return $this->send(array('result' => 'fail', 'message' => $this->lang->job->setReferenceTips, 'locate' => inlink('edit', "id=$jobID")));
 
         $compile = $this->job->exec($jobID);
-        if(dao::isError()) return $this->sendError(implode('\n', dao::getError()));
+        if(dao::isError())
+        {
+            $errors = '';
+            foreach(dao::getError() as $error)
+            {
+                if(is_array($error))
+                {
+                    foreach($error as $val)
+                    {
+                        $errors .= $val . '\n';
+                    }
+                }
+                else
+                {
+                    $errors .= $error . '\n';
+                }
+            }
+            return $this->sendError($errors);
+        }
 
         $this->app->loadLang('compile');
         $this->loadModel('action')->create('job', $jobID, 'executed');

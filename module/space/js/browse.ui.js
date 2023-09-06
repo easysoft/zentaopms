@@ -39,6 +39,7 @@ window.afterPageUpdate = function()
 {
     if(timer) return;
     const postData = new FormData();
+    if(idList.length === 0) return;
     idList.forEach(function(id)
     {
         postData.append('idList[]', id)
@@ -52,6 +53,7 @@ window.afterPageUpdate = function()
             onComplete: function(res)
             {
                 if(res.result != 'success') return;
+                if(res.data.length == 0) clearInterval(timer);
                 $.each(res.data, function(index, instance)
                 {
                     if(statusMap[instance.id] != instance.status)
@@ -88,4 +90,11 @@ window.editApp = function(externalID, appName)
         $('#editLinkContainer').attr('href', $.createLink(appName.toLowerCase(), 'edit', 'id=' + externalID));
     }
     $('#editLinkContainer').trigger('click');
+}
+
+window.createSortLink = function(col)
+{
+    var sort = col.name + '_asc';
+    if(sort == orderBy) sort = col.name + '_desc';
+    return sortLink.replace('{orderBy}', sort);
 }

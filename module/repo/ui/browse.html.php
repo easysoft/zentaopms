@@ -277,7 +277,7 @@ sidebar
         set::canRowCheckable(jsRaw('function(rowID){return canRowCheckable(rowID);}')),
         set::footToolbar($footToolbar),
         set::footer(array('toolbar', 'flex', 'pager')),
-        set::footPager(usePager()),
+        set::footPager(usePager('pager', 'noTotalCount')),
         set::showToolbarOnChecked(false),
     ),
 );

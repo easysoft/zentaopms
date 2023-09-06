@@ -10,6 +10,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('orderBy',  $orderBy);
+jsVar('sortLink', $sortLink);
+
 $statusMap  = array();
 $canInstall = hasPriv('instance', 'install');
 
@@ -49,6 +52,7 @@ dtable
     set::cols($config->space->dtable->fieldList),
     set::data($instances),
     set::onRenderCell(jsRaw('window.renderInstanceList')),
+    set::sortLink(jsRaw('createSortLink')),
     set::footPager(usePager()),
 );
 

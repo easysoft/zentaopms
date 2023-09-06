@@ -618,7 +618,7 @@ class instance extends control
      */
     public function ajaxUninstall($instanceID, $type = '')
     {
-        if($type == 'external')
+        if($type !== 'store')
         {
             $instance = $this->loadModel('pipeline')->getByID($instanceID);
             if(!$instance) return $this->send(array('result' => 'success', 'message' => $this->lang->instance->notices['success'], 'load' => $this->createLink('space', 'browse')));

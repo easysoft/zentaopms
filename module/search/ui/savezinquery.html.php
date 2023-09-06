@@ -8,7 +8,7 @@ form
     set::method('post'),
     div
     (
-        setClass('flex flex-row justify-between align-items mt-6'),
+        setClass('flex flex-row justify-between items-center mt-6'),
         input
         (
             set::id('title'),

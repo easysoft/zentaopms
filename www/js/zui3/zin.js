@@ -791,8 +791,6 @@
             options.url = url;
         }
 
-        if(is18version) return $.apps.open(options.url, options.app); // 18+zin.
-
         if(DEBUG) console.log('[APP] open url', url, options);
 
         if(options.confirm)

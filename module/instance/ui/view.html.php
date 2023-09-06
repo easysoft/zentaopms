@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace zin;
 
-jsVar('copied',     $lang->instance->copied);
-jsVar('instanceID', $instance->id);
+jsVar('copied',       $lang->instance->copied);
+jsVar('instanceID',   $instance->id);
+jsVar('instanceType', $type);
 
 $cpuInfo    = $this->instance->printCpuUsage($instance, $instanceMetric->cpu, 'array');
 $memoryInfo = $this->instance->printMemUsage($instance, $instanceMetric->memory, 'array');

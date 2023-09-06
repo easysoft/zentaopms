@@ -50,6 +50,7 @@ window.afterPageUpdate = function()
 {
     if(timer) return;
     const postData = new FormData();
+    if(instanceIdList.length === 0) return;
     instanceIdList.forEach(function(id)
     {
         postData.append('idList[]', id)
@@ -63,6 +64,7 @@ window.afterPageUpdate = function()
             onComplete: function(res)
             {
                 if(res.result != 'success') return;
+                if(res.data.length == 0) clearInterval(timer);
                 $.each(res.data, function(index, instance)
                 {
                     if($("#instance-status-" + instance.id).data('status') != instance.status)

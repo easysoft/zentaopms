@@ -72,7 +72,6 @@ formPanel
     (
         set::width('2/3'),
         set::name('url'),
-        set::required(true),
         set::label($lang->artifactrepo->url),
         set::readonly(true),
     ),
