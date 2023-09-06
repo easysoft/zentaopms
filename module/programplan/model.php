@@ -842,6 +842,7 @@ class programplanModel extends model
             $plan->PM         = empty($PM[$key]) ? '' : $PM[$key];
             $plan->desc       = empty($desc[$key]) ? '' : $desc[$key];
             $plan->hasProduct = $project->hasProduct;
+            $plan->vision     = $this->config->vision;
 
             if(!empty($begin[$key]))     $plan->begin     = $begin[$key];
             if(!empty($end[$key]))       $plan->end       = $end[$key];
