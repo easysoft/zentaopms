@@ -45,14 +45,16 @@ window.handleCheckboxChange = function($el)
             className: 'p-6 bg-white text-black gap-2 messager-fail',
           });
       }
-      window.checkedList.push(value);
+      window.checkedList.push({id:value, name:$el.next().text()});
       $el.closest('.checkbox-primary').addClass('metric-current');
     }
     else
     {
-      window.checkedList = window.checkedList.filter(function(id){return id != value})
+      window.checkedList = window.checkedList.filter(function(item){return item.id != value})
       $el.closest('.checkbox-primary').removeClass('metric-current');
     }
+
+    renderCheckedLabel();
 }
 
 window.handleNavMenuClick = function($el)
@@ -75,9 +77,9 @@ window.handleNavMenuClick = function($el)
 
 window.afterPageUpdate = function($target, info, options)
 {
-  window.checkedList = [current.id + ''];
+  window.checkedList = [{id:current.id + '', name:current.name}];
   renderDTable();
-  if(viewType == 'multiple') renderCheckedLabel(metricList);
+  if(viewType == 'multiple') renderCheckedLabel();
 }
 
 function renderDTable()
@@ -96,12 +98,13 @@ function renderDTable()
     });
 }
 
-function renderCheckedLabel(labels)
+function renderCheckedLabel()
 {
   $('.checked-label-content').empty();
-  var multi = labels.length > 1;
-  var width = Math.floor($('.checked-label-content').width());
-  var left  = width;
+  var labels = JSON.parse(JSON.stringify(window.checkedList));
+  var multi  = labels.length > 1;
+  var width  = Math.floor($('.checked-label-content').width());
+  var left   = width;
 
   var labelClass = 'label circle gray-pale';
   if(multi) labelClass += ' gray-pale-withdelete';

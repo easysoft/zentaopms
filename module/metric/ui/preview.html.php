@@ -17,7 +17,6 @@ jsVar('current',      $current);
 jsVar('maxSelectNum', $config->metric->maxSelectNum);
 jsVar('maxSelectMsg', $lang->metric->maxSelect);
 jsVar('viewType', $viewType);
-jsVar('metricList', array($current));
 
 if($scope == 'collect' and empty($collect))
 {
