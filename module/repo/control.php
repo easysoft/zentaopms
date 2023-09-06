@@ -1380,7 +1380,7 @@ class repo extends control
         $gitlabList = $this->loadModel('gitlab')->getList();
         $gitlab     = empty($server) ? array_shift($gitlabList) : $this->gitlab->getById($server);
 
-        $repoList = $this->repoZen->getGitlabNotExistRepos($gitlab);
+        $repoList = $gitlab ? $this->repoZen->getGitlabNotExistRepos($gitlab) : array();
 
         $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
 
