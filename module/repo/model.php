@@ -397,10 +397,11 @@ class repoModel extends model
      * @param  int    $repoID
      * @param  string $revision
      * @param  string $type
+     * @param  string $from     repo|commit
      * @access public
      * @return void
      */
-    public function link($repoID, $revision, $type = 'story')
+    public function link($repoID, $revision, $type = 'story', $from = 'repo')
     {
         $this->loadModel('action');
         if($type == 'story') $links = $this->post->stories;
@@ -416,6 +417,7 @@ class repoModel extends model
         $revisionID = $revisionInfo->id;
         $committer  = $this->dao->select('account')->from(TABLE_USER)->where('commiter')->eq($revisionInfo->committer)->fetch('account');
         if(empty($committer)) $committer = $revisionInfo->committer;
+        if($from == 'repo') $committer = $this->app->user->account;
         foreach($links as $linkID)
         {
 
@@ -428,9 +430,9 @@ class repoModel extends model
 
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
 
-            if($type == 'story') $this->action->create('story', $linkID, 'linked2revision', '', $revisionID);
-            if($type == 'bug')   $this->action->create('bug',   $linkID, 'linked2revision', '', $revisionID);
-            if($type == 'task')  $this->action->create('task',  $linkID, 'linked2revision', '', $revisionID);
+            if($type == 'story') $this->action->create('story', $linkID, 'linked2revision', '', $revisionID, $commiter);
+            if($type == 'bug')   $this->action->create('bug',   $linkID, 'linked2revision', '', $revisionID, $commiter);
+            if($type == 'task')  $this->action->create('task',  $linkID, 'linked2revision', '', $revisionID, $commiter);
         }
     }
 

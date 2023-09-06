@@ -202,7 +202,7 @@ class gitModel extends model
                                 if(empty($objectIDs) or !isset($objectTypeMap[$objectType])) continue;
 
                                 $this->post->$objectType = $objectIDs;
-                                $this->repo->link($repo->id, $log->revision, $objectTypeMap[$objectType]);
+                                $this->repo->link($repo->id, $log->revision, $objectTypeMap[$objectType], 'commit');
                             }
                         }
                     }
