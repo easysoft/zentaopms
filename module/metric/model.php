@@ -597,14 +597,15 @@ class metricModel extends model
      * 没有度量的显示范围不做显示。
      * Unset scope item that have no metric.
      *
+     * @param  string $stage
      * @access public
      * @return void
      */
-    public function processScopeList()
+    public function processScopeList($stage = 'all')
     {
         foreach($this->lang->metric->scopeList as $scope => $name)
         {
-            $metrics = $this->metricTao->fetchMetrics($scope);
+            $metrics = $this->metricTao->fetchMetrics($scope, $stage);
             if(empty($metrics))
             {
                 unset($this->lang->metric->scopeList[$scope]);

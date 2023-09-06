@@ -60,7 +60,7 @@ class metric extends control
      */
     public function preview($scope = 'project', $viewType = 'single', $metricID = 0)
     {
-        $this->metric->processScopeList();
+        $this->metric->processScopeList('released');
 
         $metrics = $this->metric->getList($scope, 'released');
         $current = $this->metric->getByID($metricID);
