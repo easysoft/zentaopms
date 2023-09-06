@@ -2112,23 +2112,32 @@ class actionModel extends model
      * Update comment of a action.
      *
      * @param  int    $actionID
+     * @param  string $comment
+     * @param  string $uid
      * @access public
-     * @return void
+     * @return bool
      */
-    public function updateComment($actionID)
+    public function updateComment(int $actionID, string $comment, string $uid): bool
     {
         $action = $this->getById($actionID);
-        $action->comment = trim(strip_tags($this->post->lastComment, $this->config->allowedTags));
+        if(!$action) return false;
 
-        /* Process action. */
-        $action = $this->loadModel('file')->processImgURL($action, 'comment', $this->post->uid);
+        /* 只保留允许的标签。 */
+        /* Keep only allowed tags. */
+        $action->comment = trim(strip_tags($comment, $this->config->allowedTags));
+
+        /* 处理评论内的图片。*/
+        /* Handle images in comment. */
+        $action = $this->loadModel('file')->processImgURL($action, 'comment', $uid);
 
         $this->dao->update(TABLE_ACTION)
             ->set('date')->eq(helper::now())
-            ->set('comment')->eq($action->comment)
+            ->set('comment')->eq($comment)
             ->where('id')->eq($actionID)
             ->exec();
-        $this->file->updateObjectID($this->post->uid, $action->objectID, $action->objectType);
+        $this->file->updateObjectID($uid, $action->objectID, $action->objectType);
+
+        return true;
     }
 
     /**

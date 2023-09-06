@@ -413,24 +413,37 @@ class action extends control
     }
 
     /**
+     * 编辑一个action的评论。
+     *
      * Edit comment of a action.
      *
      * @param  int    $actionID
      * @access public
      * @return void
      */
-    public function editComment($actionID)
+    public function editComment(int $actionID)
     {
-        if(strlen(trim(strip_tags($this->post->lastComment, '<img>'))) != 0)
+        /* 获取表单内的数据。 */
+        /* Get form data. */
+        $commentData = form::data($this->config->action->form->editComment)->get();
+
+        $error = false;
+
+        /* 判断是否符合更新的条件。 */
+        /* Determine whether the update conditions are met. */
+        if(strlen(trim(strip_tags($commentData->lastComment, '<img>'))) != 0)
         {
-            $this->action->updateComment($actionID);
+            $error = $this->action->updateComment($actionID, $commentData->lastComment, $commentData->uid);
         }
-        else
+
+        if(!$error)
         {
+            /* 不符合更新条件，返回错误。 */
+            /* The update conditions are not met and an error is returned. */
             dao::$errors['submit'][] = $this->lang->action->historyEdit;
             return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         }
-        return $this->send(array('result' => 'success', 'locate' => 'reload'));
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
