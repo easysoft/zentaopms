@@ -259,17 +259,9 @@ class job extends control
             if($jobProduct and $jobProduct->deleted == 0) $products += array($job->product => $jobProduct->name);
         }
 
-        $sonarqubePipelines = array();
-        if($job->frame == 'sonarqube' && $job->sonarqubeServer)
+        if($job->frame == 'sonarqube' && $job->sonarqubeServer && $job->projectKey)
         {
-            $jobPairs         = $this->job->getJobBySonarqubeProject($job->sonarqubeServer, array(), true, true);
-            $existsProject    = array_diff(array_keys($jobPairs), array($job->projectKey));
-            $sonarProjectList = $this->loadModel('sonarqube')->apiGetProjects($job->sonarqubeServer);
-
-            foreach($sonarProjectList as $project)
-            {
-                if(!empty($project) and !in_array($project->key, $existsProject)) $sonarqubePipelines[$project->key] = $project->name;
-            }
+            $this->view->sonarqubeProjectPairs = $this->loadModel('sonarqube')->getProjectPairs($job->sonarqubeServer, $job->projectKey);
         }
 
         $this->view->title               = $this->lang->ci->job . $this->lang->colon . $this->lang->job->edit;
@@ -282,7 +274,6 @@ class job extends control
         $this->view->jenkinsServerList   = $this->loadModel('jenkins')->getPairs();
         $this->view->sonarqubeServerList = array('') + $this->loadModel('pipeline')->getPairs('sonarqube');
         $this->view->pipelines           = $this->jenkins->getTasks($job->server);
-        $this->view->sonarqubePipelines  = $sonarqubePipelines;
 
         $this->display();
     }

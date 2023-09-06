@@ -102,16 +102,7 @@ class sonarqube extends control
      */
     public function ajaxGetProjectList($sonarqubeID, $projectKey = '')
     {
-        $jobPairs      = $this->loadModel('job')->getJobBySonarqubeProject($sonarqubeID, array(), true, true);
-        $existsProject = array_diff(array_keys($jobPairs), array($projectKey));
-
-        $projectList = $this->sonarqube->apiGetProjects($sonarqubeID);
-
-        $projectPairs = array();
-        foreach($projectList as $project)
-        {
-            if(!empty($project) and !in_array($project->key, $existsProject)) $projectPairs[$project->key] = $project->name;
-        }
+        $projectPairs = $this->sonarqube->getProjectPairs($sonarqubeID, $projectKey);
 
         $options = array();
         foreach($projectPairs as $productKey => $projectName)

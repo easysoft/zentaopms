@@ -219,7 +219,7 @@ formPanel
             set::name('projectKey'),
             set::width('1/2'),
             set::label($lang->job->projectKey),
-            set::items($sonarqubePipelines),
+            set::items(!empty($sonarqubeProjectPairs) ? $sonarqubeProjectPairs : array()),
             set::value($job->projectKey),
             set::required(true),
         ),

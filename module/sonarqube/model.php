@@ -302,4 +302,29 @@ class sonarqubeModel extends model
             ->andWhere('projectKey')->eq($projectKey)
             ->fetch('product');
     }
+
+    /**
+     * 获取项目键值对。
+     * Get project pairs.
+     *
+     * @param  int    $sonarqubeID
+     * @param  string $projectKey
+     * @access public
+     * @return array
+     */
+    public function getProjectPairs(int $sonarqubeID, string $projectKey = ''): array
+    {
+        $jobPairs      = $this->loadModel('job')->getJobBySonarqubeProject($sonarqubeID, array(), true, true);
+        $existsProject = array_diff(array_keys($jobPairs), array($projectKey));
+
+        $projectList = $this->apiGetProjects($sonarqubeID);
+
+        $projectPairs = array();
+        foreach($projectList as $project)
+        {
+            if(!empty($project) and !in_array($project->key, $existsProject)) $projectPairs[$project->key] = $project->name;
+        }
+
+        return $projectPairs;
+    }
 }
