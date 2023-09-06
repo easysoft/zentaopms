@@ -155,7 +155,11 @@ class space extends control
      */
     public function getStoreAppInfo(int $appID)
     {
-        $cloudApp = $this->loadModel('store')->getAppInfo($appID);
+        $cloudApp     = $this->loadModel('store')->getAppInfo($appID);
+        $versionPairs = $this->store->getVersionPairs($appID);
+        $versionItems = array();
+        foreach($versionPairs as $k => $v) $versionItems[] = array('text' => $v, 'value' => $k);
+        $cloudApp->versionList = $versionItems;
 
         return print(json_encode($cloudApp));
     }

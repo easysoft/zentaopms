@@ -10,22 +10,23 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('gitlabUrlTips', $lang->gitlab->placeholder->url);
-jsVar('gitlabTokenTips', $lang->gitlab->placeholder->token);
-jsVar('sonarqubeUrlTips', $lang->sonarqube->placeholder->url);
-jsVar('sonarqubeAccountTips', $lang->sonarqube->placeholder->account);
-jsVar('jenkinsTokenTips', $lang->jenkins->tokenFirst);
-jsVar('jenkinsPasswordTips', $lang->jenkins->tips);
-jsVar('apps', $apps);
-jsVar('mysqlList', $mysqlList);
-jsVar('pgList', $pgList);
-jsVar('defaultApp', $defaultApp);
-jsVar('appID', $appID);
-jsVar('externalApps', $config->space->zentaoApps);
-
 $showVersion = getenv('ALLOW_SELECT_VERSION') && (strtolower(getenv('ALLOW_SELECT_VERSION')) == 'true' || strtolower(getenv('ALLOW_SELECT_VERSION')) == '1');
 $dbTypeItems = array();
 foreach($lang->instance->dbTypes as $type => $db) $dbTypeItems[] = array('text' => $db, 'value' => $type);
+
+jsVar('gitlabUrlTips', $lang->gitlab->placeholder->url);
+jsVar('gitlabTokenTips', $lang->gitlab->placeholder->token);
+jsVar('sonarqubeUrlTips', $lang->sonarqube->placeholder->url);
+jsVar('jenkinsTokenTips', $lang->jenkins->tokenFirst);
+jsVar('jenkinsPasswordTips', $lang->jenkins->tips);
+jsVar('sonarqubeAccountTips', $lang->sonarqube->placeholder->account);
+jsVar('apps', $apps);
+jsVar('appID', $appID);
+jsVar('pgList', $pgList);
+jsVar('mysqlList', $mysqlList);
+jsVar('defaultApp', $defaultApp);
+jsVar('showVersion', $showVersion);
+jsVar('externalApps', $config->space->zentaoApps);
 
 if($config->inQuickon)
 {

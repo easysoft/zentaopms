@@ -108,7 +108,18 @@ function onChangeStoreAppType(event)
         var app = JSON.parse(response);
 
         $('#app_version').val(app.app_version);
-        $('#version').val(app.version);
+        if(showVersion === true)
+        {
+            $('#version').picker({items: app.versionList, name: 'version', required: true});
+            setTimeout(() =>
+            {
+                $('#version').picker('setValue', app.versionList[0].value);
+            }, 300);
+        }
+        else
+        {
+            $('#version').val(app.version);
+        }
         if((app.dependencies.mysql && mysqlList) || (app.dependencies.postgresql && pgList))
         {
             $('div.dbType').removeClass('hidden');
