@@ -125,6 +125,7 @@ pipeline {
               env.ARTIFACT_PROTOCOL = "https"
               env.ARTIFACT_CRED_ID = "nexus-jenkins"
             }
+
           }
         }
 
@@ -143,6 +144,7 @@ pipeline {
                   container('package') {
                     sh 'mkdir ${ZENTAO_RELEASE_PATH} && chown 1000:1000 ${ZENTAO_RELEASE_PATH}'
                     sh 'git config --global pull.ff only'
+                    sh 'cp -av ${ZENTAO_BUILD_PATH}/adminer www/'
                     sh 'pwd && ls -l && make ciCommon'
                     sh 'ls -l ${ZENTAO_RELEASE_PATH}'
                   }
