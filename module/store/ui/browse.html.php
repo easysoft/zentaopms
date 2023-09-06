@@ -100,7 +100,7 @@ div
             set::current($sortType),
             set::linkParams("sortType={key}"),
         ),
-    
+
         toolbar
         (
             formGroup
@@ -117,7 +117,7 @@ div
             ),
         ),
     ),
-    
+
     div(...$groups),
     pager(
         setID('storePager'),
