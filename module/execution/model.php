@@ -1127,22 +1127,22 @@ class executionModel extends model
     }
 
     /**
-     * Put execution off.
+     * 延期一个迭代。
+     * Delay the execution.
      *
      * @param  int    $executionID
      * @access public
-     * @return void
+     * @return array|false
      */
-    public function putoff($executionID)
+    public function putoff(int $executionID)
     {
         $oldExecution = $this->getById($executionID);
-        $now          = helper::now();
 
         $execution = fixer::input('post')
             ->add('id', $executionID)
             ->stripTags($this->config->execution->editor->putoff['id'], $this->config->allowedTags)
             ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
+            ->setDefault('lastEditedDate', helper::now())
             ->remove('comment')
             ->get();
 
@@ -1153,10 +1153,19 @@ class executionModel extends model
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
             ->checkFlow()
-            ->where('id')->eq((int)$executionID)
+            ->where('id')->eq($executionID)
             ->exec();
 
-        if(!dao::isError()) return common::createChanges($oldExecution, $execution);
+        if(dao::isError()) return false;
+
+        $changes = common::createChanges($oldExecution, $execution);
+        if($this->post->comment != '' || !empty($changes))
+        {
+            $this->loadModel('action');
+            $actionID = $this->action->create('execution', $executionID, 'Delayed', $this->post->comment);
+            $this->action->logHistory($actionID, $changes);
+        }
+        return $changes;
     }
 
     /**
