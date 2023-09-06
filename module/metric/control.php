@@ -72,7 +72,7 @@ class metric extends control
         $this->view->resultData   = $this->metricZen->getViewTableData($metric, $result);
 
         $this->view->metrics    = $metrics;
-        $this->view->current    = $current;
+        $this->view->current    = $metric;
         $this->view->metricList = $this->lang->metric->metricList;
         $this->view->scope      = $scope;
         $this->view->title      = $this->lang->metric->preview;
