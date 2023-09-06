@@ -196,6 +196,7 @@ class testsuiteModel extends model
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
         if(!$append) return $cases;
+
         return $this->loadModel('testcase')->appendData($cases);
     }
 
@@ -210,8 +211,8 @@ class testsuiteModel extends model
     public function getLinkedCasePairs(int $suiteID): array
     {
         $suite = $this->getById($suiteID);
-
         if(!$suite) return array();
+
         return $this->dao->select('t1.id, t1.title')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_SUITECASE)->alias('t2')->on('t1.id=t2.case')
             ->where('t2.suite')->eq($suiteID)
@@ -251,15 +252,15 @@ class testsuiteModel extends model
         if(strpos($query, $allProduct) !== false) $query = str_replace($allProduct, '1', $query);
 
         $linkedCases = $this->getLinkedCases($suite->id, 'id_desc', null, $append = false);
-        $cases = $this->dao->select('*')->from(TABLE_CASE)->where($query)
+
+        return $this->dao->select('*')->from(TABLE_CASE)
+            ->where($query)
             ->beginIF($linkedCases)->andWhere('id')->notIN(array_keys($linkedCases))->fi()
             ->beginIF($this->lang->navGroup->testsuite != 'qa')->andWhere('project')->eq($this->session->project)->fi()
             ->andWhere('deleted')->eq('0')
             ->orderBy('id desc')
             ->page($pager)
             ->fetchAll();
-
-        return $cases;
     }
 
     /**
