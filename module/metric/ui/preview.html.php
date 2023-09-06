@@ -10,6 +10,13 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('resultHeader', $resultHeader);
+jsVar('resultData',   $resultData);
+jsVar('objectList',   $lang->metric->objectList);
+jsVar('current',      $current);
+jsVar('maxSelectNum', $config->metric->maxSelectNum);
+jsVar('maxSelectMsg', $lang->metric->maxSelect);
+
 if($scope == 'collect' and empty($collect))
 {
     include 'emptycollect.html.php';

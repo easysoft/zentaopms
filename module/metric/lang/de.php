@@ -50,6 +50,7 @@ $lang->metric->descTip       = 'Enter the meaning, purpose, and impact of the me
 $lang->metric->definitionTip = 'Enter the calculation rules and filtering conditions of the metric';
 $lang->metric->emptyCollect  = 'There are no collect metrics at this time.';
 $lang->metric->moveFailTip   = 'Move metric file failed';
+$lang->metric->maxSelect     = 'A maximum of %s metrics can be selected';
 
 $lang->metric->noDesc    = "No description available";
 $lang->metric->noFormula = "No calculation rules available";

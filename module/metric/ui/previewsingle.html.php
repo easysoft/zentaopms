@@ -10,10 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('resultHeader', $resultHeader);
-jsVar('resultData',   $resultData);
-jsVar('current',      $current);
-
 $fnGenerateSide = function() use($metrics, $current, $viewType, $scope)
 {
     $metricList = array();

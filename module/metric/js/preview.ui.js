@@ -14,7 +14,6 @@ window.generateCheckItem = function(text, value, typeClass, isChecked)
 
 window.renderCheckList = function(metrics)
 {
-  console.log(window.checkedList);
   $('.side .check-list-metric').empty();
   var metricsHtml = metrics.map(function(metric)
   {
@@ -26,36 +25,40 @@ window.renderCheckList = function(metrics)
   $('.side .check-list-metric').html(metricsHtml);
 }
 
-window.checkedList = [];
-
-$(document).ready()
+window.handleCheckboxChange = function($el)
 {
-  renderDTable();
-  $(document).on('change', '.checkbox-primary input[type="checkbox"]', function()
-  {
-    var isChecked = $(this).is(":checked");
-    var value = $(this).val();
+    var isChecked = $el.is(":checked");
+    var value = $el.val();
 
     if(isChecked)
     {
+      if(window.checkedList.length >= 10)
+      {
+        $el.prop('checked', false);
+        return zui.Messager.show(
+          {
+            content: maxSelectMsg.replace('%s', maxSelectNum),
+            icon: 'icon-exclamation-pure',
+            iconClass: 'center w-6 h-6 rounded-full m-0 warning',
+            contentClass: 'text-lg font-bold',
+            close: false,
+            className: 'p-6 bg-white text-black gap-2 messager-fail',
+          });
+      }
       window.checkedList.push(value);
-      $(this).closest('.checkbox-primary').addClass('metric-current');
+      $el.closest('.checkbox-primary').addClass('metric-current');
     }
     else
     {
       window.checkedList = window.checkedList.filter(function(id){return id != value})
-      $(this).closest('.checkbox-primary').removeClass('metric-current');
+      $el.closest('.checkbox-primary').removeClass('metric-current');
     }
-  });
+}
 
-  window.checkedList.push('' + current.id);
-
-  var itemSelector = 'menu.nav-ajax .nav-item a';
-  $(document).off('click', itemSelector)
-  $(document).on('click', itemSelector, function()
-  {
-    var that  = this;
-    var scope = $(this).attr('id');
+window.handleNavMenuClick = function($el)
+{
+    var scope = $el.attr('id');
+    var itemSelector = 'menu.nav-ajax .nav-item a';
     $.get($.createLink('metric', 'ajaxGetMetrics', 'scope=' + scope), function(resp)
     {
       var metrics = JSON.parse(resp);
@@ -63,12 +66,16 @@ $(document).ready()
 
       $(itemSelector).removeClass('active');
       $(itemSelector).find('span.label').remove();
-      $(that).addClass('active');
-      $(that).append(`<span class="label size-sm rounded-full white">${total}</span>`);
+      $el.addClass('active');
+      $el.append(`<span class="label size-sm rounded-full white">${total}</span>`);
 
       window.renderCheckList(metrics);
     });
-  });
+}
+
+window.afterPageUpdate = function($target, info, options)
+{
+  window.checkedList = [current.id + ''];
 }
 
 function renderDTable()

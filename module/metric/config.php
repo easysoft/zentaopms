@@ -5,6 +5,8 @@ $config->metric->purposeList   = array('scale', 'qc', 'hour', 'cost', 'rate', 't
 $config->metric->dateList      = array('year', 'month', 'week', 'day');
 $config->metric->excludeGlobal = array('program', 'project', 'product', 'execution', 'user', 'dept');
 
+$config->metric->maxSelectNum = 10;
+
 global $lang;
 $config->metric->actionList = array();
 $config->metric->actionList['edit']['icon'] = 'edit';

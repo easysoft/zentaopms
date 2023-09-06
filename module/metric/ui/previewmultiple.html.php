@@ -10,10 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('resultHeader', $resultHeader);
-jsVar('resultData',   $resultData);
-jsVar('current', $current);
-
 $items = array();
 foreach($lang->metric->featureBar['preview'] as $value => $text)
 {
@@ -25,6 +21,7 @@ foreach($lang->metric->featureBar['preview'] as $value => $text)
         set::text($text),
         set::active($isActive),
         set::badge($badge),
+        bind::click('window.handleNavMenuClick($element)')
     );
 }
 
@@ -52,12 +49,19 @@ toolbar
     ) : null,
 );
 
-$metricCheckList = array();
+$metricCheckItems = array();
 foreach($metrics as $key => $metric)
 {
     $class  = $metric->id == $current->id ? 'metric-current' : '';
     $class .= ' font-medium checkbox';
-    $metricCheckList[] = array('text' => $metric->name, 'value' => $metric->id, 'typeClass' => $class, 'checked' => $metric->id == $current->id);
+    $metricCheckItems[] = item
+    (
+        set::text($metric->name),
+        set::value($metric->id),
+        set::typeClass($class),
+        set::checked($metric->id == $current->id),
+        bind::change('window.handleCheckboxChange($element)'),
+    );
 }
 
 div
@@ -84,7 +88,7 @@ div
                 set::primary(true),
                 set::name('metric'),
                 set::inline(false),
-                set::items($metricCheckList),
+                $metricCheckItems,
             ),
         ),
     ),
