@@ -49,6 +49,7 @@ $lang->metric->viewType->multiple = 'Multiple view';
 $lang->metric->descTip       = 'Enter the meaning, purpose, and impact of the metric';
 $lang->metric->definitionTip = 'Enter the calculation rules and filtering conditions of the metric';
 $lang->metric->emptyCollect  = 'There are no collect metrics at this time.';
+$lang->metric->moveFailTip   = 'Move metric file failed';
 
 $lang->metric->noDesc    = "No description available";
 $lang->metric->noFormula = "No calculation rules available";

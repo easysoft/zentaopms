@@ -258,4 +258,22 @@ class metric extends control
         $this->view->metric = $metric;
         $this->display();
     }
+
+    /**
+     * 发布度量项。
+     * Publish a metric.
+     *
+     * @param  int $metricID
+     * @access public
+     * @return void
+     */
+    public function publish($metricID)
+    {
+        $metric = $this->metric->getByID($metricID);
+
+        $this->metric->moveCalcFile($metric);
+        $this->dao->update(TABLE_METRIC)->set('stage')->eq('released')->where('id')->eq($metricID)->exec();
+
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
+    }
 }

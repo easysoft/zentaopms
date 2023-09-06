@@ -87,14 +87,14 @@ center
         btn
         (
             set::type('primary'),
-            set::url(helper::createLink('metric', 'implement', 'isVerify=true')),
+            set::url(helper::createLink('metric', 'implement', "metricID={$metric->id}&isVerify=true")),
             $lang->metric->verifyFile,
         ),
         div(),
         btn
         (
             set::type('primary'),
-            set::url(helper::createLink('metric', 'publish')),
+            set::url(helper::createLink('metric', 'publish', "metricID={$metric->id}")),
             $lang->metric->publish,
         ),
     )

@@ -51,6 +51,7 @@ $lang->metric->descTip         = '请输入度量项含义、目的和作用等'
 $lang->metric->definitionTip   = '请输入度量项的计算规则及过滤条件等';
 $lang->metric->collectConfText = "每%s的%s的%s";
 $lang->metric->emptyCollect    = '暂时没有收藏度量项。';
+$lang->metric->moveFailTip     = '移动度量项文件失败。';
 
 $lang->metric->noDesc    = "暂无描述";
 $lang->metric->noFormula = "暂无计算规则";

@@ -821,4 +821,20 @@ class metricModel extends model
         if($metric->fromID !== 0 and $metric->stage == 'wait') return true;
         return false;
     }
+
+    /**
+     * 将用户定义的度量文件从临时目录移动到系统目录中。
+     * Move custom calculator file to calc directory
+     *
+     * @param object $metric
+     * @access public
+     * @return bool
+     */
+    public function moveCalcFile($metric)
+    {
+        $tmpCalc = $this->metricTao->getCustomCalcFile($metric->code);
+        $newCalc = $this->metricTao->getCalcRoot() . $metric->scope . DS . $metric->purpose . DS . $metric->code . '.php';
+
+        return rename($tmpCalc, $newCalc);
+    }
 }
