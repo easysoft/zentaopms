@@ -260,6 +260,11 @@ class metricZen extends metric
     {
         $oldMetric = $this->metric->getOldMetricByID($oldMetricID);
 
+        $collectConf = json_decode($oldMetric->collectConf);
+        $dateType    = $this->lang->metric->dateList[$collectConf->type];
+        $dateConf    = $collectConf->type == 'week' ? $collectConf->week : $collectConf->month;
+        $collectConfText = sprintf($this->lang->metric->collectConfText, $dateType, $dateConf, $oldMetric->execTime);
+        
         $oldMetricInfo = array();
         $oldMetricInfo['scope']       = array('name' => $this->lang->metric->scope, 'text' => zget($this->lang->metric->old->scopeList, $oldMetric->scope));
         $oldMetricInfo['object']      = array('name' => $this->lang->metric->object, 'text' => zget($this->lang->metric->old->objectList, $oldMetric->object));
@@ -267,6 +272,7 @@ class metricZen extends metric
         $oldMetricInfo['code']        = array('name' => $this->lang->metric->code, 'text' => $oldMetric->code);
         $oldMetricInfo['unit']        = array('name' => $this->lang->metric->unit, 'text' => $oldMetric->unit);
         $oldMetricInfo['collectType'] = array('name' => $this->lang->metric->collectType, 'text' => zget($this->lang->metric->old->collectTypeList, $oldMetric->collectType));
+        $oldMetricInfo['collectType'] = array('name' => $this->lang->metric->collectConf, 'text' => $collectConfText);
         $oldMetricInfo['definition']  = array('name' => $this->lang->metric->declaration, 'text' => $oldMetric->definition);
         $oldMetricInfo['sql']         = array('name' => $this->lang->metric->sqlStatement, 'text' => $oldMetric->configure);
 
