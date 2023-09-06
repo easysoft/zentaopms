@@ -1713,18 +1713,6 @@ class testcase extends control
     }
 
     /**
-     * Save xmind config.
-     *
-     * @access public
-     * @return void
-     */
-    public function saveXmindConfig()
-    {
-        $result = $this->testcase->saveXmindConfig();
-        $this->send($result);
-    }
-
-    /**
      * Save imported xmind.
      *
      * @access public
