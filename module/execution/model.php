@@ -1143,7 +1143,7 @@ class executionModel extends model
             ->stripTags($this->config->execution->editor->putoff['id'], $this->config->allowedTags)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
-            ->remove('comment')
+            ->remove('comment,delta')
             ->get();
 
         $this->checkBeginAndEndDate($oldExecution->project, $execution->begin, $execution->end);
