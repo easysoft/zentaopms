@@ -4,11 +4,12 @@ namespace zin;
 form
 (
     set::actions(array()),
+    set::formClass('save-search-form-container'),
     set::action($_SERVER['REQUEST_URI']),
     set::method('post'),
     div
     (
-        setClass('flex flex-row justify-between items-center mt-6'),
+        setClass('flex flex-row justify-between items-center mr-2 save-query-form'),
         input
         (
             set::id('title'),

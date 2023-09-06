@@ -17,6 +17,7 @@ class form extends formBase
         'grid?: bool=true', // 是否启用网格部件，禅道中所有表单都是网格布局，除非有特殊目的，无需设置此项。
         'labelWidth?: int', // 标签宽度，单位为像素。
         'actionsClass?: string="form-group no-label"', // 操作按钮栏的 CSS 类。
+        'formClass?: string=""', // form的 CSS 类。
         'submitBtnText?: string' // 提交按钮文本。
     );
 
@@ -60,9 +61,10 @@ class form extends formBase
 
     protected function buildProps(): array
     {
-        list($grid, $labelWidth) = $this->prop(array('grid', 'labelWidth'));
+        list($grid, $labelWidth, $formClass) = $this->prop(array('grid', 'labelWidth', 'formClass'));
         $props = parent::buildProps();
         if($grid)               $props[] = setClass('form-grid');
+        if($formClass)          $props[] = setClass($formClass);
         if(!empty($labelWidth)) $props[] = setCssVar('form-grid-label-width', $labelWidth);
 
         return $props;

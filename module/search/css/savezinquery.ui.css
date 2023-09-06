@@ -1,0 +1,4 @@
+.save-query-form .checkbox-primary {padding: 5px 12px; font-size: 13px; font-weight: 400; line-height: 1; color: #313c52; text-align: center; background-color: #eee; border: 1px solid #dcdcdc; flex: 1 auto; height: 2.1rem; align-items: center;}
+.save-query-form .checkbox-primary>label:after, .checkbox-primary>label:before, .radio-primary>label:after, .radio-primary>label:before {top: calc((14px - var(--checkbox-size))/2);}
+.save-query-form .primary {height: 2rem;}
+.save-search-form-container {padding-bottom: 0;}
