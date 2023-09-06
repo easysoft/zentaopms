@@ -166,6 +166,24 @@ class executionTao extends executionModel
     }
 
     /**
+     * 通过产品ID列表获取执行id:name的键值对。
+     * Get the pair for execution id:name from the product id list.
+     *
+     * @param  array     $productIdList
+     * @access protected
+     * @return array
+     */
+    protected function getPairsByProduct(array $productIdList): array
+    {
+        return $this->dao->select('t1.project, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')
+            ->on('t1.project = t2.id')
+            ->where('t1.product')->in($productIdList)
+            ->andWhere('t2.type')->in('sprint,stage,kanban')
+            ->fetchPairs('project');
+    }
+
+    /**
      * 获取执行关联的产品信息。
      * Get product information of the linked execution.
      *

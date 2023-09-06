@@ -437,6 +437,84 @@ class executionZen extends execution
     }
 
     /**
+     * 构建导入Bug的搜索表单数据。
+     * Build the search form data to import the Bug.
+     *
+     * @param  object    $execution
+     * @param  int       $queryID
+     * @param  array     $products
+     * @param  array     $executions
+     * @access protected
+     * @return void
+     */
+    protected function buildImportBugSearchForm(object $execution, int $queryID, array $products, array $executions)
+    {
+        $project = $this->loadModel('project')->getByID($execution->project);
+
+        $this->config->bug->search['actionURL'] = $this->createLink('execution', 'importBug', "executionID=$execution->id&browseType=bySearch&param=myQueryID");
+        $this->config->bug->search['queryID']   = $queryID;
+        if(!empty($products))
+        {
+            $this->config->bug->search['params']['product']['values'] = array(''=>'') + $products + array('all'=>$this->lang->execution->aboveAllProduct);
+        }
+        else
+        {
+            $this->config->bug->search['params']['product']['values'] = array(''=>'');
+        }
+        $this->config->bug->search['params']['execution']['values'] = array(''=>'') + $executions + array('all'=>$this->lang->execution->aboveAllExecution);
+        $this->config->bug->search['params']['plan']['values']      = $this->loadModel('productplan')->getPairs(array_keys($products));
+        $this->config->bug->search['module'] = 'importBug';
+        $this->config->bug->search['params']['confirmed']['values'] = $this->lang->bug->confirmedList;
+
+        $this->loadModel('tree');
+        $bugModules = array();
+        foreach($products as $productID => $productName)
+        {
+            $productModules = $this->tree->getOptionMenu($productID, 'bug', 0, 'all');
+            foreach($productModules as $moduleID => $moduleName)
+            {
+                if(empty($moduleID))
+                {
+                    $bugModules[$moduleID] = $moduleName;
+                    continue;
+                }
+                $bugModules[$moduleID] = $productName . $moduleName;
+            }
+        }
+        $this->config->bug->search['params']['module']['values'] = $bugModules;
+
+        unset($this->config->bug->search['fields']['resolvedBy']);
+        unset($this->config->bug->search['fields']['closedBy']);
+        unset($this->config->bug->search['fields']['status']);
+        unset($this->config->bug->search['fields']['toTask']);
+        unset($this->config->bug->search['fields']['toStory']);
+        unset($this->config->bug->search['fields']['severity']);
+        unset($this->config->bug->search['fields']['resolution']);
+        unset($this->config->bug->search['fields']['resolvedBuild']);
+        unset($this->config->bug->search['fields']['resolvedDate']);
+        unset($this->config->bug->search['fields']['closedDate']);
+        unset($this->config->bug->search['fields']['branch']);
+        if(empty($execution->multiple) && empty($execution->hasProduct)) unset($this->config->bug->search['fields']['plan']);
+        if(empty($project->hasProduct))
+        {
+            unset($this->config->bug->search['fields']['product']);
+            if($project->model !== 'scrum') unset($this->config->bug->search['fields']['plan']);
+        }
+        unset($this->config->bug->search['params']['resolvedBy']);
+        unset($this->config->bug->search['params']['closedBy']);
+        unset($this->config->bug->search['params']['status']);
+        unset($this->config->bug->search['params']['toTask']);
+        unset($this->config->bug->search['params']['toStory']);
+        unset($this->config->bug->search['params']['severity']);
+        unset($this->config->bug->search['params']['resolution']);
+        unset($this->config->bug->search['params']['resolvedBuild']);
+        unset($this->config->bug->search['params']['resolvedDate']);
+        unset($this->config->bug->search['params']['closedDate']);
+        unset($this->config->bug->search['params']['branch']);
+        $this->loadModel('search')->setSearchParams($this->config->bug->search);
+    }
+
+    /**
      * 检查累积流图的日期。
      * Check Cumulative flow diagram date.
      *
@@ -844,6 +922,52 @@ class executionZen extends execution
         }
 
         return array($projectCount, $statusCount, $myExecutions, $kanbanGroup);
+    }
+
+    /**
+     * 获取可以导入到执行中的Bug。
+     *
+     * @param  int       $executionID
+     * @param  array     $productIdList
+     * @param  string    $browseType
+     * @param  int       $queryID
+     * @param  object    $pager
+     * @access protected
+     * @return array
+     */
+    protected function getImportBugs(int $executionID, array $productIdList, string $browseType, int $queryID, object $pager): array
+    {
+        $this->loadModel('bug');
+
+        $bugs = array();
+        if($browseType != "bysearch")
+        {
+            $bugs = $this->bug->getActiveAndPostponedBugs($productIdList, $executionID, $pager);
+        }
+        else
+        {
+            if($queryID)
+            {
+                $query = $this->loadModel('search')->getQuery($queryID);
+                if($query)
+                {
+                    $this->session->set('importBugQuery', $query->sql);
+                    $this->session->set('importBugForm', $query->form);
+                }
+                else
+                {
+                    $this->session->set('importBugQuery', ' 1 = 1');
+                }
+            }
+            else
+            {
+                if($this->session->importBugQuery === false) $this->session->set('importBugQuery', ' 1 = 1');
+            }
+            $bugQuery = str_replace("`product` = 'all'", "`product`" . helper::dbIN($productIdList), $this->session->importBugQuery); // Search all execution.
+            $bugs     = $this->execution->getSearchBugs($products, $executionID, $bugQuery, $pager, 'id_desc');
+        }
+
+        return $bugs;
     }
 
     /**

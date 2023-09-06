@@ -312,6 +312,7 @@ class execution extends control
     }
 
     /**
+     * 导入Bug。
      * Import from Bug.
      *
      * @param  int    $executionID
@@ -325,8 +326,6 @@ class execution extends control
      */
     public function importBug(int $executionID = 0, string $browseType = 'all', int $param = 0, int $recTotal = 0, int $recPerPage = 30, int $pageID = 1)
     {
-        $this->app->loadConfig('task');
-
         if(!empty($_POST))
         {
             $this->execution->importBug($executionID);
@@ -335,153 +334,37 @@ class execution extends control
             return $this->sendSuccess(array('load' => true));
         }
 
+        $this->execution->setMenu($executionID);
+
+        /* Get users, products and executions.*/
+        $users      = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
+        $products   = $this->loadModel('product')->getProductPairsByProject($executionID);
+        $execution  = $this->execution->getByID($executionID);
+        $executions = !empty($products) ? $this->execution->getPairsByProduct(array_keys($products)) : $executions[$executionID] = $execution->name;
+
         /* Set browseType, productID, moduleID and queryID. */
         $browseType = strtolower($browseType);
-        $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
-
-        $this->loadModel('bug');
-        $executions = $this->execution->getPairs(0, 'all', 'nocode');
-        $this->execution->setMenu($executionID);
+        $queryID    = ($browseType == 'bysearch') ? $param : 0;
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $title      = $executions[$executionID] . $this->lang->colon . $this->lang->execution->importBug;
-        $position[] = html::a($this->createLink('execution', 'task', "executionID=$executionID"), $executions[$executionID]);
-        $position[] = $this->lang->execution->importBug;
-
-        /* Get users, products and executions.*/
-        $users    = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
-        $products = $this->dao->select('t1.product, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')
-            ->on('t1.product = t2.id')
-            ->where('t1.project')->eq($executionID)
-            ->fetchPairs('product');
-        if(!empty($products))
-        {
-            unset($executions);
-            $executions = $this->dao->select('t1.project, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_EXECUTION)->alias('t2')
-                ->on('t1.project = t2.id')
-                ->where('t1.product')->in(array_keys($products))
-                ->fetchPairs('project');
-        }
-        else
-        {
-            $executionName = $executions[$executionID];
-            unset($executions);
-            $executions[$executionID] = $executionName;
-        }
-
         /* Get bugs.*/
-        $bugs = array();
-        if($browseType != "bysearch")
-        {
-            $bugs = $this->bug->getActiveAndPostponedBugs(array_keys($products), $executionID, $pager);
-        }
-        else
-        {
-            if($queryID)
-            {
-                $query = $this->loadModel('search')->getQuery($queryID);
-                if($query)
-                {
-                    $this->session->set('importBugQuery', $query->sql);
-                    $this->session->set('importBugForm', $query->form);
-                }
-                else
-                {
-                    $this->session->set('importBugQuery', ' 1 = 1');
-                }
-            }
-            else
-            {
-                if($this->session->importBugQuery === false) $this->session->set('importBugQuery', ' 1 = 1');
-            }
-            $bugQuery = str_replace("`product` = 'all'", "`product`" . helper::dbIN(array_keys($products)), $this->session->importBugQuery); // Search all execution.
-            $bugs     = $this->execution->getSearchBugs($products, $executionID, $bugQuery, $pager, 'id_desc');
-        }
-
-        $execution = $this->execution->getByID($executionID);
-        $project   = $this->loadModel('project')->getByID($execution->project);
+        $bugs = $this->executionZen->getImportBugs($executionID, array_keys($products), $browseType, $queryID, $pager);
 
         /* Build the search form. */
-        $this->config->bug->search['actionURL'] = $this->createLink('execution', 'importBug', "executionID=$executionID&browseType=bySearch&param=myQueryID");
-        $this->config->bug->search['queryID']   = $queryID;
-        if(!empty($products))
-        {
-            $this->config->bug->search['params']['product']['values'] = array(''=>'') + $products + array('all'=>$this->lang->execution->aboveAllProduct);
-        }
-        else
-        {
-            $this->config->bug->search['params']['product']['values'] = array(''=>'');
-        }
-        $this->config->bug->search['params']['execution']['values'] = array(''=>'') + $executions + array('all'=>$this->lang->execution->aboveAllExecution);
-        $this->config->bug->search['params']['plan']['values']      = $this->loadModel('productplan')->getPairs(array_keys($products));
-        $this->config->bug->search['module'] = 'importBug';
-        $this->config->bug->search['params']['confirmed']['values'] = $this->lang->bug->confirmedList;
-
-        $this->loadModel('tree');
-        $bugModules = array();
-        foreach($products as $productID => $productName)
-        {
-            $productModules = $this->tree->getOptionMenu($productID, 'bug', 0, 'all');
-            foreach($productModules as $moduleID => $moduleName)
-            {
-                if(empty($moduleID))
-                {
-                    $bugModules[$moduleID] = $moduleName;
-                    continue;
-                }
-                $bugModules[$moduleID] = $productName . $moduleName;
-            }
-        }
-        $this->config->bug->search['params']['module']['values'] = $bugModules;
-
-        unset($this->config->bug->search['fields']['resolvedBy']);
-        unset($this->config->bug->search['fields']['closedBy']);
-        unset($this->config->bug->search['fields']['status']);
-        unset($this->config->bug->search['fields']['toTask']);
-        unset($this->config->bug->search['fields']['toStory']);
-        unset($this->config->bug->search['fields']['severity']);
-        unset($this->config->bug->search['fields']['resolution']);
-        unset($this->config->bug->search['fields']['resolvedBuild']);
-        unset($this->config->bug->search['fields']['resolvedDate']);
-        unset($this->config->bug->search['fields']['closedDate']);
-        unset($this->config->bug->search['fields']['branch']);
-        if(empty($execution->multiple) and empty($execution->hasProduct)) unset($this->config->bug->search['fields']['plan']);
-        if(empty($project->hasProduct))
-        {
-            unset($this->config->bug->search['fields']['product']);
-            if($project->model !== 'scrum') unset($this->config->bug->search['fields']['plan']);
-        }
-        unset($this->config->bug->search['params']['resolvedBy']);
-        unset($this->config->bug->search['params']['closedBy']);
-        unset($this->config->bug->search['params']['status']);
-        unset($this->config->bug->search['params']['toTask']);
-        unset($this->config->bug->search['params']['toStory']);
-        unset($this->config->bug->search['params']['severity']);
-        unset($this->config->bug->search['params']['resolution']);
-        unset($this->config->bug->search['params']['resolvedBuild']);
-        unset($this->config->bug->search['params']['resolvedDate']);
-        unset($this->config->bug->search['params']['closedDate']);
-        unset($this->config->bug->search['params']['branch']);
-        $this->loadModel('search')->setSearchParams($this->config->bug->search);
+        $this->executionZen->buildImportBugSearchForm($execution, $queryID, $products, $executions);
 
         /* Assign. */
-        $this->view->title          = $title;
-        $this->view->position       = $position;
-        $this->view->pager          = $pager;
-        $this->view->bugs           = $bugs;
-        $this->view->recTotal       = $pager->recTotal;
-        $this->view->recPerPage     = $pager->recPerPage;
-        $this->view->browseType     = $browseType;
-        $this->view->param          = $param;
-        $this->view->users          = $users;
-        $this->view->execution      = $execution;
-        $this->view->executionID    = $executionID;
-        $this->view->requiredFields = explode(',', $this->config->task->create->requiredFields);
+        $this->view->title       = $executions[$executionID] . $this->lang->colon . $this->lang->execution->importBug;
+        $this->view->pager       = $pager;
+        $this->view->bugs        = $bugs;
+        $this->view->browseType  = $browseType;
+        $this->view->param       = $param;
+        $this->view->users       = $users;
+        $this->view->execution   = $execution;
+        $this->view->executionID = $executionID;
         $this->display();
     }
 
