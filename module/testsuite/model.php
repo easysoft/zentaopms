@@ -181,7 +181,9 @@ class testsuiteModel extends model
     public function getLinkedCases(int $suiteID, string $orderBy = 'id_desc', object $pager = null, bool $append = true): array
     {
         $suite = $this->getById($suiteID);
-        $cases = $this->dao->select('t1.*,t2.version AS caseVersion,t2.suite')->from(TABLE_CASE)->alias('t1')
+        if(!$suite) return array();
+
+        $cases = $this->dao->select('t1.*, t2.version AS caseVersion, t2.suite')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_SUITECASE)->alias('t2')->on('t1.id=t2.case')
             ->where('t2.suite')->eq($suiteID)
             ->beginIF($this->lang->navGroup->testsuite != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
