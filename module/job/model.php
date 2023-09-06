@@ -195,7 +195,7 @@ class jobModel extends model
                 $pipeline = $this->loadModel('gitlab')->apiGetPipeline($repo->serviceHost, $repo->serviceProject, '');
                 if(!is_array($pipeline) or empty($pipeline))
                 {
-                    dao::$errors['repo'] = $this->lang->job->engineTips->error;
+                    dao::$errors['repo'][] = $this->lang->job->engineTips->error;
                     return false;
                 }
             }
@@ -211,7 +211,7 @@ class jobModel extends model
         /* SonarQube tool is only used if the engine is JenKins. */
         if($job->engine != 'jenkins' and $job->frame == 'sonarqube')
         {
-            dao::$errors[]['frame'] = $this->lang->job->mustUseJenkins;
+            dao::$errors['frame'][] = $this->lang->job->mustUseJenkins;
             return false;
         }
 
@@ -221,7 +221,7 @@ class jobModel extends model
             if(!empty($sonarqubeJob))
             {
                 $message = sprintf($this->lang->job->repoExists, $sonarqubeJob[$job->repo]->id . '-' . $sonarqubeJob[$job->repo]->name);
-                dao::$errors[]['repo'] = $message;
+                dao::$errors['repo'][] = $message;
                 return false;
             }
         }
@@ -232,7 +232,7 @@ class jobModel extends model
             if(!empty($projectList))
             {
                 $message = sprintf($this->lang->job->projectExists, $projectList[$job->projectKey]->id);
-                dao::$errors[]['projectKey'] = $message;
+                dao::$errors['projectKey'][] = $message;
                 return false;
             }
         }
@@ -253,13 +253,13 @@ class jobModel extends model
 
             if(empty($paramName) and !empty($paramValue))
             {
-                dao::$errors[] = $this->lang->job->inputName;
+                dao::$errors['paramName'][] = $this->lang->job->inputName;
                 return false;
             }
 
             if(!empty($paramName) and !validater::checkREG($paramName, '/^[A-Za-z_0-9]+$/'))
             {
-                dao::$errors[] = $this->lang->job->invalidName;
+                dao::$errors['paramName'][] = $this->lang->job->invalidName;
                 return false;
             }
 
@@ -321,7 +321,7 @@ class jobModel extends model
                 $pipeline = $this->loadModel('gitlab')->apiGetPipeline($repo->serviceHost, $repo->serviceProject, '');
                 if(!is_array($pipeline) or empty($pipeline))
                 {
-                    dao::$errors['gitlabRepo'] = $this->lang->job->engineTips->error;
+                    dao::$errors['gitlabRepo'][] = $this->lang->job->engineTips->error;
                     return false;
                 }
             }
@@ -337,7 +337,7 @@ class jobModel extends model
         /* SonarQube tool is only used if the engine is JenKins. */
         if($job->engine != 'jenkins' and $job->frame == 'sonarqube')
         {
-            dao::$errors[] = $this->lang->job->mustUseJenkins;
+            dao::$errors['engine'][] = $this->lang->job->mustUseJenkins;
             return false;
         }
 
@@ -347,7 +347,7 @@ class jobModel extends model
             if(!empty($sonarqubeJob))
             {
                 $message = sprintf($this->lang->job->repoExists, $sonarqubeJob[$job->repo]->id . '-' . $sonarqubeJob[$job->repo]->name);
-                dao::$errors[]['repo'] = $message;
+                dao::$errors['repo'][] = $message;
                 return false;
             }
         }
@@ -358,7 +358,7 @@ class jobModel extends model
             if(!empty($projectList) && $projectList[$job->projectKey] != $id)
             {
                 $message = sprintf($this->lang->job->projectExists, $projectList[$job->projectKey]);
-                dao::$errors[]['projectKey'] = $message;
+                dao::$errors['projectKey'][] = $message;
                 return false;
             }
         }
@@ -379,13 +379,13 @@ class jobModel extends model
 
             if(empty($paramName) and !empty($paramValue))
             {
-                dao::$errors[] = $this->lang->job->inputName;
+                dao::$errors['paramName'][] = $this->lang->job->inputName;
                 return false;
             }
 
             if(!empty($paramName) and !validater::checkREG($paramName, '/^[A-Za-z_0-9]+$/'))
             {
-                dao::$errors[] = $this->lang->job->invalidName;
+                dao::$errors['paramName'][] = $this->lang->job->invalidName;
                 return false;
             }
 
