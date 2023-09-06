@@ -16,6 +16,8 @@ jsVar('objectList',   $lang->metric->objectList);
 jsVar('current',      $current);
 jsVar('maxSelectNum', $config->metric->maxSelectNum);
 jsVar('maxSelectMsg', $lang->metric->maxSelect);
+jsVar('viewType', $viewType);
+jsVar('metricList', array($current));
 
 if($scope == 'collect' and empty($collect))
 {
@@ -26,4 +28,3 @@ else
     if($viewType == 'single') include 'previewsingle.html.php';
     if($viewType == 'multiple') include 'previewmultiple.html.php';
 }
-

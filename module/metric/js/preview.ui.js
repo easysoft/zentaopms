@@ -76,6 +76,8 @@ window.handleNavMenuClick = function($el)
 window.afterPageUpdate = function($target, info, options)
 {
   window.checkedList = [current.id + ''];
+  renderDTable();
+  if(viewType == 'multiple') renderCheckedLabel(metricList);
 }
 
 function renderDTable()
@@ -92,4 +94,49 @@ function renderDTable()
         cols: resultHeader,
         data: resultData,
     });
+}
+
+function renderCheckedLabel(labels)
+{
+  $('.checked-label-content').empty();
+  var multi = labels.length > 1;
+  var width = Math.floor($('.checked-label-content').width());
+  var left  = width;
+
+  var labelClass = 'label circle gray-pale';
+  if(multi) labelClass += ' gray-pale-withdelete';
+
+  for(var i = 0; i < labels.length; i++)
+  {
+    var label = labels[i];
+    var html = '<span class="' + labelClass + '" metric-id="' + label.id + '">';
+    html    += '<div class="gray-pale-div">' + label.name + '</div>';
+    if(multi) html += '<button type="button" class="btn picker-deselect-btn size-sm square ghost"><span class="close"></span></button>';
+    html    += '</span>';
+
+    $('.checked-label-content').append(html);
+
+    var $label     = $('.checked-label-content').find('[metric-id="' + label.id + '"]');
+    var labelWidth = Math.ceil($label.width() + parseInt($label.css('padding-left')) + parseInt($label.css('padding-right')) + parseInt($label.css('margin-left')) + parseInt($label.css('margin-right')));
+
+    left = left - labelWidth;
+    if(left <= 0)
+    {
+      var $div     = $('.checked-label-content').find('[metric-id="' + label.id + '"]').find('.gray-pale-div');
+      var divWidth = $div.width();
+
+      if(divWidth < -left)
+      {
+        // 如果剩下的空间一点字都显示不下了，就换行
+        left = width - labelWidth;
+      }
+      else
+      {
+        $div.width(Math.floor($div.width()) - Math.ceil(-left) - 1);
+
+        // 换行了，重置left
+        left = width;
+      }
+    }
+  }
 }
