@@ -36,6 +36,8 @@ $lang->metric->details       = '详情';
 $lang->metric->zAnalysis     = 'Z分析';
 $lang->metric->sqlStatement  = "SQL语句";
 $lang->metric->other         = '其他';
+$lang->metric->collectType   = '收集方式';
+$lang->metric->oldMetricInfo = '旧版详情';
 
 $lang->metric->viewType = new stdclass();
 $lang->metric->viewType->single   = '单独查看';
@@ -156,3 +158,31 @@ $lang->metric->implementTips[] = '2.对文件进行编码开发操作，操作�
 $lang->metric->implementTips[] = '3.请将开发后的code.php文件放到[用户禅道目录]/tmp/metric目录下。';
 $lang->metric->implementTips[] = '4.执行命令赋予文件可执行权限。';
 
+$lang->metric->old = new stdclass();
+
+$lang->metric->old->scopeList = array();
+$lang->metric->old->scopeList['project'] = '项目';
+$lang->metric->old->scopeList['product'] = '产品';
+$lang->metric->old->scopeList['sprint']  = '阶段';
+
+$lang->metric->old->purposeList = array();
+$lang->metric->old->purposeList['scale']    = '规模';
+$lang->metric->old->purposeList['duration'] = '工期';
+$lang->metric->old->purposeList['workload'] = '工作量';
+$lang->metric->old->purposeList['cost']     = '成本';
+$lang->metric->old->purposeList['quality']  = '质量';
+
+$lang->metric->old->objectList = array();
+$lang->metric->old->objectList['staff']       = '人员';
+$lang->metric->old->objectList['finance']     = '任务';
+$lang->metric->old->objectList['case']        = '用例';
+$lang->metric->old->objectList['bug']         = '缺陷';
+$lang->metric->old->objectList['review']      = '评审';
+$lang->metric->old->objectList['stage']       = '阶段';
+$lang->metric->old->objectList['program']     = '项目';
+$lang->metric->old->objectList['softRequest'] = '软件需求';
+$lang->metric->old->objectList['userRequest'] = '用户需求';
+
+$lang->metric->old->collectTypeList = array();
+$lang->metric->old->collectTypeList['crontab'] = '定时计划';
+$lang->metric->old->collectTypeList['action']  = '动作触发';

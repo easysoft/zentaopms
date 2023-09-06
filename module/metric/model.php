@@ -120,7 +120,7 @@ class metricModel extends model
 
         if(!$metric) return false;
 
-        if(!empty($metric->fromID))
+        if($this->isOldMetric($metric))
         {
             $oldMetric = $this->getOldMetricByID($metric->fromID);
 
@@ -789,5 +789,19 @@ class metricModel extends model
 
         foreach($rows as $row) $calculator->calculate($row);
         return $calculator->getResult();
+    }
+
+    /**
+     * 判断度量项是否是旧版度量项。
+     * Judge if the metric is old.
+     *
+     * @param  object $metric
+     * @access public
+     * @return bool
+     */
+    public function isOldMetric($metric)
+    {
+        if($metric->fromID !== 0 and $metric->stage == 'wait') return true;
+        return false;
     }
 }

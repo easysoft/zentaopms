@@ -177,7 +177,7 @@ class metric extends control
 
         $this->view->title          = $metric->name;
         $this->view->metric         = $metric;
-        $this->view->type           = $metric->fromID == 0 ? 'new' : 'old';
+        $this->view->type           = $this->metric->isOldMetric($metric) ? 'old' : 'new';
         $this->view->result         = $result;
         $this->view->resultHeader   = $this->metricZen->getViewTableHeader($result);
         $this->view->resultData     = $this->metricZen->getViewTableData($metric, $result);
@@ -186,6 +186,7 @@ class metric extends control
         $this->view->actions        = $this->loadModel('action')->getList('metric', $metricID);
         $this->view->users          = $this->loadModel('user')->getPairs('noletter');
         $this->view->preAndNext     = $this->loadModel('common')->getPreAndNextObject('metric', $metricID);
+        if(!$this->metric->isOldMetric($metric) && $metric->fromID !== 0) $this->view->oldMetricInfo = $this->metricZen->getOldMetricInfo($metric->fromID);
 
         $this->display();
     }

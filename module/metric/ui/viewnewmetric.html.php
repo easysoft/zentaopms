@@ -39,6 +39,22 @@ $buildItems = function($items): array
     return $itemList;
 };
 
+$oldMetricTabs = $metric->fromID === 0 ? '' : tabs
+(
+    set::collapse(true),
+    tabPane
+    (
+        set::key('oldMetricInfo'),
+        set::title($lang->metric->oldMetricInfo),
+        set::className('overflow-hidden'),
+        set::active(true),
+        tableData
+        (
+            $buildItems($oldMetricInfo)
+        )
+    )
+);
+
 detailHeader
 (
     to::title
@@ -64,7 +80,7 @@ detailHeader
 $fnGenerateDataDisplay = function() use($resultData, $resultHeader, $lang, $metric)
 {
     if(empty($resultData)) return null;
-    if(count($resultData) == 1) return div
+    if(count($resultData) == 1 && count((array)$resultData[0]) == 1) return div
         (
             set::className('card-data'),
             center
@@ -143,6 +159,7 @@ detailBody
                 )
             )
         ),
+        $oldMetricTabs,
     )
 );
 

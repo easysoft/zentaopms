@@ -249,6 +249,31 @@ class metricZen extends metric
     }
 
     /**
+     * 获取旧版详情区块。
+     * Get old metric info panel.
+     *
+     * @param  int $oldMetricID
+     * @access protected
+     * @return array
+     */
+    protected function getOldMetricInfo($oldMetricID)
+    {
+        $oldMetric = $this->metric->getOldMetricByID($oldMetricID);
+
+        $oldMetricInfo = array();
+        $oldMetricInfo['scope']       = array('name' => $this->lang->metric->scope, 'text' => zget($this->lang->metric->old->scopeList, $oldMetric->scope));
+        $oldMetricInfo['object']      = array('name' => $this->lang->metric->object, 'text' => zget($this->lang->metric->old->objectList, $oldMetric->object));
+        $oldMetricInfo['purpose']     = array('name' => $this->lang->metric->purpose, 'text' => zget($this->lang->metric->old->purposeList, $oldMetric->purpose));
+        $oldMetricInfo['code']        = array('name' => $this->lang->metric->code, 'text' => $oldMetric->code);
+        $oldMetricInfo['unit']        = array('name' => $this->lang->metric->unit, 'text' => $oldMetric->unit);
+        $oldMetricInfo['collectType'] = array('name' => $this->lang->metric->collectType, 'text' => zget($this->lang->metric->old->collectTypeList, $oldMetric->collectType));
+        $oldMetricInfo['definition']  = array('name' => $this->lang->metric->definition, 'text' => $oldMetric->definition);
+        $oldMetricInfo['sql']         = array('name' => $this->lang->metric->sqlStatement, 'text' => $oldMetric->configure);
+
+        return $oldMetricInfo;
+    }
+
+    /**
      * 获取度量数据表的表头。
      * Get header of result table in view.
      *
@@ -428,7 +453,7 @@ class metricZen extends metric
         foreach($metrics as $metric)
         {
             $metric->canEdit = $metric->stage == 'wait';
-            $metric->canImplement = $metric->stage == 'wait';
+            $metric->canImplement = ($metric->stage == 'wait' && !$this->metric->isOldMetric($metric));
             $metric->canDelist = $metric->stage == 'released';
         }
         return $metrics;

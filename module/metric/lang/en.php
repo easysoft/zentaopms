@@ -36,6 +36,8 @@ $lang->metric->details       = 'Details';
 $lang->metric->zAnalysis     = 'Z Analysis';
 $lang->metric->sqlStatement  = "SQL Statement";
 $lang->metric->other         = "Other";
+$lang->metric->collectType   = 'Collect Type';
+$lang->metric->oldMetricInfo = 'Measurement Info';
 
 $lang->metric->viewType = new stdclass();
 $lang->metric->viewType->single   = 'Single view';
