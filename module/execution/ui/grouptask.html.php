@@ -214,8 +214,10 @@ $thead = function() use($lang, $groupList, $groupBy, $allCount)
     );
 };
 
-$tbody = function() use($tasks, $lang, $groupBy, $users, $groupByList)
+$tbody = function() use($tasks, $lang, $groupBy, $users, $groupByList, $execution)
 {
+    global $app;
+
     $tbody = array();
     $groupIndex = 1;
     foreach($tasks as $groupKey => $groupTasks)

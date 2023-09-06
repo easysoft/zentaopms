@@ -249,6 +249,7 @@ class execution extends control
         $this->view->features    = $this->execution->getExecutionFeatures($execution);
         $this->view->filter      = $filter;
         $this->view->allCount    = $allCount;
+        $this->view->execution   = $execution;
         $this->display();
     }
 
