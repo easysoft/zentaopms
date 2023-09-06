@@ -949,7 +949,7 @@ class executionModel extends model
      * @param  array     $executionIdList
      * @param  string    $status
      * @access public
-     * @return string
+     * @return string    返回不符合条件被过滤了的执行，来提示执行下任务或子阶段已经开始，无法修改，已过滤。参见 story#41875。
      */
     public function batchChangeStatus(array $executionIdList, string $status): string
     {
@@ -985,6 +985,7 @@ class executionModel extends model
     }
 
     /**
+     * 设置状态为未开始。
      * Change status to wait.
      *
      * @param  int    $executionID
@@ -992,14 +993,20 @@ class executionModel extends model
      * @access public
      * @return string
      */
-    public function changeStatus2Wait($executionID, $selfAndChildren)
+    public function changeStatus2Wait(int $executionID, array $selfAndChildren): string
     {
-        $this->loadModel('programplan');
-        $this->loadModel('action');
-
         /* There are already tasks consuming work in this phase or its sub-phases already have start times. */
-        $hasStartedChildren = $this->dao->select('id')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('realBegan')->ne('0000-00-00')->andWhere('id')->in(array_keys($selfAndChildren))->andWhere('id')->ne($executionID)->fetchPairs();
-        $hasConsumedTasks   = $this->dao->select('count(consumed) as count')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('execution')->in(array_keys($selfAndChildren))->andWhere('consumed')->gt(0)->fetch('count');
+        $hasStartedChildren = $this->dao->select('id')->from(TABLE_EXECUTION)
+            ->where('deleted')->eq('0')
+            ->andWhere('realBegan')->notNULL()
+            ->andWhere('id')->in(array_keys($selfAndChildren))
+            ->andWhere('id')->ne($executionID)
+            ->fetchPairs();
+        $hasConsumedTasks   = $this->dao->select('count(consumed) AS count')->from(TABLE_TASK)
+            ->where('deleted')->eq('0')
+            ->andWhere('execution')->in(array_keys($selfAndChildren))
+            ->andWhere('consumed')->gt(0)
+            ->fetch('count');
         if($hasStartedChildren or $hasConsumedTasks) return "'{$selfAndChildren[$executionID]->name}',";
 
         $newExecution = $this->buildExecutionByStatus('wait');
@@ -1007,18 +1014,19 @@ class executionModel extends model
 
         if(!dao::isError())
         {
-            /* Action. */
             $changes  = common::createChanges($selfAndChildren[$executionID], $newExecution);
-            $actionID = $this->action->create('execution', $executionID, 'Edited');
+            $actionID = $this->loadModel('action')->create('execution', $executionID, 'Edited');
             $this->action->logHistory($actionID, $changes);
 
             /* This stage has a parent stage. */
-            $isTopStage = $this->programplan->isTopStage($executionID);
+            $isTopStage = $this->loadModel('programplan')->isTopStage($executionID);
             if(!$isTopStage) $this->programplan->computeProgress($executionID);
         }
+        return '';
     }
 
     /**
+     * 设置状态为进行中。
      * Change status to doing.
      *
      * @param  int    $executionID
@@ -1026,7 +1034,7 @@ class executionModel extends model
      * @access public
      * @return string
      */
-    public function changeStatus2Doing($executionID, $selfAndChildren)
+    public function changeStatus2Doing(int $executionID, array $selfAndChildren): string
     {
         $this->loadModel('programplan');
         $this->loadModel('action');
@@ -1043,9 +1051,11 @@ class executionModel extends model
             $isTopStage = $this->programplan->isTopStage($executionID);
             if(!$isTopStage) $this->programplan->computeProgress($executionID);
         }
+        return '';
     }
 
     /**
+     * 设置状态为暂停或者关闭。
      * Change status to suspended or closed.
      *
      * @param  int    $executionID
@@ -1054,16 +1064,13 @@ class executionModel extends model
      * @access public
      * @return string
      */
-    public function changeStatus2Inactive($executionID, $status, $selfAndChildren)
+    public function changeStatus2Inactive(int $executionID, string $status, array $selfAndChildren): string
     {
-        $this->loadModel('programplan');
-        $this->loadModel('action');
-
         $checkedStatus = $status == 'suspended' ? 'wait,doing' : 'wait,doing,suspended';
 
         /* If status is suspended, the rules is there are sub-stages under this stage, and not all sub-stages are suspended or closed. */
         /* If status is closed, the rules is there are sub-stages under this stage, and not all sub-stages are closed. */
-        $checkLeafStage = $this->programplan->checkLeafStage($executionID);
+        $checkLeafStage = $this->loadModel('programplan')->checkLeafStage($executionID);
         if(!$checkLeafStage)
         {
             foreach($selfAndChildren as $childID => $child)
@@ -1079,7 +1086,7 @@ class executionModel extends model
         if(!dao::isError())
         {
             $changes  = common::createChanges($selfAndChildren[$executionID], $newExecution);
-            $actionID = $this->action->create('execution', $executionID, strtoupper($status));
+            $actionID = $this->loadModel('action')->create('execution', $executionID, strtoupper($status));
             $this->action->logHistory($actionID, $changes);
 
             /* Suspended: When all child stages at the same level are suspended or closed, the status of the parent stage becomes "suspended". */
@@ -1087,6 +1094,8 @@ class executionModel extends model
             $isTopStage = $this->programplan->isTopStage($executionID);
             if(!$isTopStage) $this->programplan->computeProgress($executionID);
         }
+
+        return '';
     }
 
     /**
