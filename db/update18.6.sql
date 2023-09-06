@@ -869,3 +869,5 @@ VALUES
     ('traincourse-practice', 'recommend', 'traincourse-practiceBrowse'), ('traincourse-practice', 'recommend', 'traincourse-practiceView'),
     ('traincourse-practiceBrowse', 'recommend', 'traincourse-practiceView'),
     ('traincourse-updatePractice', 'recommend', 'traincourse-practiceView');
+
+UPDATE zt_privlang SET `key` = 'execution-computeBurn' WHERE `key` = 'execution-computeBurnAction';
