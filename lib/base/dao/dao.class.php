@@ -1385,9 +1385,9 @@ class baseDAO
      * Get the errors.
      *
      * @access public
-     * @return array
+     * @return array|string
      */
-    public static function getError($join = false)
+    public static function getError($join = false): array|string
     {
         $errors = dao::$errors;
         dao::$errors = array();     // 清除dao的错误信息(Must clear errors)
