@@ -18,7 +18,7 @@ featureBar
     set::linkParams("executionID={$execution->id}"),
     li
     (
-        searchToggle(set::module('bug'))
+        searchToggle(set::module('importBug'))
     )
 );
 
@@ -51,10 +51,7 @@ formBase
             )
         )),
         set::footPager(
-            usePager(),
-            set::recPerPage($recPerPage),
-            set::recTotal($recTotal),
-            set::linkCreator(helper::createLink('execution', 'importBug', "executionID={$execution->id}&browseType={$browseType}&param=$param&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}"))
+            usePager(array('linkCreator' => helper::createLink('execution', 'importBug', "executionID={$execution->id}&browseType={$browseType}&param=$param&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}"))),
         )
     )
 );
