@@ -215,7 +215,7 @@ $config->story->datatable->fieldList['category']['required'] = 'no';
 
 $config->story->datatable->fieldList['openedDate']['title']    = 'openedDate';
 $config->story->datatable->fieldList['openedDate']['fixed']    = 'no';
-$config->story->datatable->fieldList['openedDate']['type']     = 'date';
+$config->story->datatable->fieldList['openedDate']['type']     = 'datetime';
 $config->story->datatable->fieldList['openedDate']['sortType'] = true;
 $config->story->datatable->fieldList['openedDate']['width']    = '90';
 $config->story->datatable->fieldList['openedDate']['required'] = 'no';
@@ -234,7 +234,7 @@ $config->story->datatable->fieldList['closedBy']['required'] = 'no';
 
 $config->story->datatable->fieldList['closedDate']['title']    = 'closedDate';
 $config->story->datatable->fieldList['closedDate']['fixed']    = 'no';
-$config->story->datatable->fieldList['closedDate']['type']     = 'date';
+$config->story->datatable->fieldList['closedDate']['type']     = 'datetime';
 $config->story->datatable->fieldList['closedDate']['sortType'] = true;
 $config->story->datatable->fieldList['closedDate']['width']    = '90';
 $config->story->datatable->fieldList['closedDate']['required'] = 'no';
@@ -255,14 +255,14 @@ $config->story->datatable->fieldList['lastEditedBy']['required'] = 'no';
 
 $config->story->datatable->fieldList['lastEditedDate']['title']    = 'lastEditedDate';
 $config->story->datatable->fieldList['lastEditedDate']['fixed']    = 'no';
-$config->story->datatable->fieldList['lastEditedDate']['type']     = 'date';
+$config->story->datatable->fieldList['lastEditedDate']['type']     = 'datetime';
 $config->story->datatable->fieldList['lastEditedDate']['sortType'] = true;
 $config->story->datatable->fieldList['lastEditedDate']['width']    = '90';
 $config->story->datatable->fieldList['lastEditedDate']['required'] = 'no';
 
 $config->story->datatable->fieldList['activatedDate']['title']    = 'activatedDate';
 $config->story->datatable->fieldList['activatedDate']['fixed']    = 'no';
-$config->story->datatable->fieldList['activatedDate']['type']     = 'date';
+$config->story->datatable->fieldList['activatedDate']['type']     = 'datetime';
 $config->story->datatable->fieldList['activatedDate']['sortType'] = true;
 $config->story->datatable->fieldList['activatedDate']['width']    = '90';
 $config->story->datatable->fieldList['activatedDate']['required'] = 'no';
