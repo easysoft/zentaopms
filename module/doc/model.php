@@ -1905,6 +1905,9 @@ class docModel extends model
 
             $casePairs = $this->dao->select('id')->from(TABLE_CASE)->where($type)->eq($objectID)->andWhere('deleted')->eq('0')->andWhere($type)->in($userView)->fetchPairs('id');
             if(!empty($casePairs)) $caseIdList = implode(',', $casePairs);
+
+            $testResult   = $this->dao->select('id,`case`')->from(TABLE_TESTRESULT)->where('case')->in($casePairs)->fetchPairs('id', 'case');
+            $resultIdList = implode(',', array_keys($testResult));
         }
         elseif($type == 'project')
         {
@@ -1961,6 +1964,7 @@ class docModel extends model
             ->beginIF($type == 'product')
             ->orWhere("(objectType in ('story','requirement') and objectID in ($storyIdList))")
             ->orWhere("(objectType = 'release' and objectID in ($releaseIdList))")
+            ->orWhere("(objectType = 'stepResult' and objectID in ($resultIdList))")
             ->fi()
             ->beginIF($type == 'project')
             ->orWhere("(objectType = 'execution' and objectID in ($executionIdList))")
@@ -1983,6 +1987,7 @@ class docModel extends model
 
         foreach($files as $fileID => $file)
         {
+            if($file->objectType == 'stepResult') $file->caseID = $testResult[$file->objectID];
             $this->file->setFileWebAndRealPaths($file);
         }
 

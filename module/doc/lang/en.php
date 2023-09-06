@@ -213,6 +213,9 @@ $lang->doc->docSummary        = 'Total: <strong>%s</strong>.';
 $lang->doc->docCheckedSummary = 'Seleted: <strong>%total%</strong>.';
 $lang->doc->showDoc           = 'Whether to display documents';
 
+$lang->doc->fileType = new stdclass();
+$lang->doc->fileType->stepResult = 'Case Result';
+
 global $config;
 /* Query condition list. */
 $lang->doc->allProduct    = 'All' . $lang->productCommon . 's';
