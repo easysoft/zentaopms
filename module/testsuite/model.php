@@ -78,8 +78,8 @@ class testsuiteModel extends model
     }
 
     /**
-     * 获取单元套件。
-     * Get unit suite.
+     * 获取单元测试的套件。
+     * Get suites of unit test.
      *
      * @param  int    $productID
      * @param  string $orderBy
