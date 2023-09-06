@@ -1790,6 +1790,8 @@ class execution extends control
      */
     public function batchChangeStatus(string $status, int $projectID = 0)
     {
+        if($_SERVER['REQUEST_METHOD'] !== 'POST') return $this->sendError($this->lang->error->unsupportedReq);
+
         $executionIdList = $this->post->executionIDList;
         if(is_string($executionIdList)) $executionIdList = explode(',', $executionIdList);
 
