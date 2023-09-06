@@ -32,7 +32,7 @@ $(function()
             {
                 $dropmenu.append("<li><a href='<?php echo $this->createLink('datatable', 'ajaxCustom', 'id=' . $this->moduleName . '&method=' . $this->methodName . '&extra=unsetStory')?>' data-toggle='modal' data-type='ajax'><?php echo $lang->datatable->custom?></a></li>");
             }
-            else if(currentModule == 'marketreport' && currentMethod == 'browse')
+            else if((currentModule == 'marketreport' || currentModule == 'marketresearch') && currentMethod == 'browse')
             {
                 $dropmenu.append("<li><a href='<?php echo $this->createLink('datatable', 'ajaxCustom', 'id=' . $this->moduleName . '&method=' . $this->methodName . '&extra=unsetMarket')?>' data-toggle='modal' data-type='ajax'><?php echo $lang->datatable->custom?></a></li>");
             }
