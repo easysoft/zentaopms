@@ -17,6 +17,7 @@ jsVar('copied',       $lang->instance->copied);
 jsVar('instanceID',   $instance->id);
 jsVar('instanceType', $type);
 
+$instance->appName = strtolower($instance->appName);
 $cpuInfo    = $this->instance->printCpuUsage($instance, $instanceMetric->cpu, 'array');
 $memoryInfo = $this->instance->printMemUsage($instance, $instanceMetric->memory, 'array');
 $actions    = $this->loadModel('common')->buildOperateMenu($instance);
@@ -166,7 +167,7 @@ div
                             !empty($defaultAccount->username) ? h::th($lang->instance->defaultAccount) : null,
                             !empty($defaultAccount->password) ? h::th($lang->instance->defaultPassword) : null,
                             !empty($defaultAccount->token)    ? h::th($lang->instance->token) : null,
-                            $type === 'store' || (!empty($instance->type) && !in_array($instance->type, array('gitlab', 'sonarqube'))) ? null : h::th($lang->instance->browseProject),
+                            (!in_array($instance->appName, array('gitlab', 'sonarqube'))) ? null : h::th($lang->instance->browseProject),
                         ),
                         h::tr
                         (
@@ -196,13 +197,13 @@ div
                                 input(set::type('text'), set::value($defaultAccount->token), set::name('token'), setStyle('display', 'none')),
                                 btn(set::className('copy-btn ghost'),set::icon('copy'))
                             ): null,
-                            $type === 'store' || (!empty($instance->type) && !in_array($instance->type, array('gitlab', 'sonarqube'))) ? null : h::td
+                            (!in_array($instance->appName, array('gitlab', 'sonarqube'))) ? null : h::td
                             (
                                 btn
                                 (
                                     $lang->instance->management,
                                     setClass('btn text-primary ghost'),
-                                    set::url(createLink($instance->type, 'browseProject', "{$instance->type}ID={$instance->id}"))
+                                    set::url(createLink($instance->appName, 'browseProject', "{$instance->appName}ID={$instance->externalID}"))
                                 )
                             ),
                         )

@@ -51,6 +51,7 @@ class instance extends control
             $instance->source      = 'user';
             $instance->externalID  = $instance->id;
             $instance->runDuration = 0;
+            $instance->appName     = $instance->type;
             $instance->createdAt   = $instance->createdDate;
 
             $instanceMetric = new stdclass();
@@ -132,6 +133,13 @@ class instance extends control
         $customItems     = $this->cne->getCustomItems($instance);
 
         if($instance->status == 'running') $this->instanceZen->saveAuthInfo($instance);
+        if(in_array(strtolower($instance->appName), $this->config->instance->devopsApps))
+        {
+            $url      = strstr(getWebRoot(true), ':', true) . '://' . $instance->domain;
+            $pipeline = $this->loadModel('pipeline')->getByUrl($url);
+            $instance->externalID = $pipeline->id;
+            
+        }
 
         $this->view->title           = $instance->appName;
         $this->view->instance        = $instance;

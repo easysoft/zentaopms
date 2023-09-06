@@ -2055,7 +2055,7 @@ class InstanceModel extends model
         if($action == 'visit')         return !empty($instance->domain) && $this->canDo('visit', $instance);
         if($action == 'upgrade')       return !empty($instance->latestVersion);
         if($action == 'edit')          return false;
-        if($action == 'bindUser')      return false;
+        if($action == 'bindUser')      return in_array($instance->appName, array('GitLab', 'Gitea', 'Gogs'));
 
         return true;
     }
