@@ -103,13 +103,13 @@ class InstanceModel extends model
      */
     public function getByAccount($account = '', $pager = null, $pinned = '', $searchParam = '', $status = 'all')
     {
-        $defaultSpace = $this->loadModel('space')->defaultSpace($account ? $account : $this->app->user->account);
+        // $defaultSpace = $this->loadModel('space')->defaultSpace($account ? $account : $this->app->user->account);
 
         $instances = $this->dao->select('instance.*')->from(TABLE_INSTANCE)->alias('instance')
             ->leftJoin(TABLE_SPACE)->alias('space')->on('space.id=instance.space')
             ->where('instance.deleted')->eq(0)
-            ->andWhere('space.id')->eq($defaultSpace->id)
-            ->beginIF($account)->andWhere('space.owner')->eq($account)->fi()
+            // ->andWhere('space.id')->eq($defaultSpace->id)
+            // ->beginIF($account)->andWhere('space.owner')->eq($account)->fi()
             ->beginIF($pinned)->andWhere('instance.pinned')->eq((int)$pinned)->fi()
             ->beginIF($searchParam)->andWhere('instance.name')->like("%{$searchParam}%")->fi()
             ->beginIF($status != 'all')->andWhere('instance.status')->eq($status)->fi()
