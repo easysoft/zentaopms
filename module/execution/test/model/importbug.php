@@ -38,28 +38,34 @@ su('admin');
 
 /**
 
-title=测试executionModel->importBugTest();
+title=测试executionModel->importBug();
+timeout=0
 cid=1
-pid=1
-
-预计输入错误 >> 最初预计"必须为数字
-Bug转任务统计 >> 4
 
 */
 
-$executionIDList = array('3', '4', '5');
-$import          = array('273' => '273', '3' => '3', '2' => '2', '1' => '1');
-$id              = array('273' => '273', '3' => '3', '2' => '2', '1' => '1');
-$pri             = array('273' => '1', '3' => '1', '2' => '2', '1' => '2');
-$errorestimate   = array('273' => '2020-03-01', '3' => '2020-03-02', '2' => '2020-03-02', '1' => '2020-03-03');
-$estStarted      = array('273' => '2020-03-10', '3' => '2020-03-12', '2' => '2020-03-12', '1' => '2020-03-13');
-$estimate        = array('273' => '7', '3' => '6', '2' => '5', '1' => '4');
-$deadline        = array('273' => '2020-03-17', '3' => '2020-03-17', '2' => '2020-03-18', '1' => '2020-03-19');
-$count           = array('0','1');
+$executionIDList = array(3, 4, 5);
+$bugIdList       = array(273 => 273, 3 => 3, 2 => 2, 1 => 1);
+$priList         = array(273 => 1, 3 => 1, 2 => 2, 1 => 2);
+$estimateList    = array(273 => 7, 3 => 6, 2 => 5, 1 => 4);
+$estStartedList  = array(273 => '2020-03-10', 3 => '2020-03-12', 2 => '2020-03-12', 1 => '2020-03-13');
+$deadlineList    = array(273 => '2020-03-17', 3 => '2020-03-17', 2 => '2020-03-18', 1 => '2020-03-19');
 
-$errorimport = array('import' => $import, 'id' => $id, 'pri' => $pri, 'estimate' => $errorestimate, 'deadline' => $deadline, 'estStarted' => $estStarted);
-$importBugs  = array('import' => $import, 'id' => $id, 'pri' => $pri, 'estimate' => $estimate, 'deadline' => $deadline, 'estStarted' => $estStarted);
+$postData = array();
+foreach($bugIdList as $bugID)
+{
+    $postData[$bugID] = new stdclass();
+    $postData[$bugID]->pri        = $priList[$bugID];
+    $postData[$bugID]->estimate   = $estimateList[$bugID];
+    $postData[$bugID]->estStarted = $estStartedList[$bugID];
+    $postData[$bugID]->deadline   = $deadlineList[$bugID];
+}
 
-$execution = new executionTest();
-r($execution->importBugTest($executionIDList[0], $count[0], $errorimport)) && p('message:0') && e('最初预计"必须为数字');  // 预计输入错误
-r($execution->importBugTest($executionIDList[0], $count[1], $importBugs))  && p()            && e('4');                    // Bug转任务统计
+
+$executionModel = new executionTest();
+r($executionModel->importBugTest($executionIDList[0], $postData))        && p('273:taskID') && e('11'); // 测试在迭代中导入Bug
+r($executionModel->importBugTest($executionIDList[1], $postData))        && p('273:taskID') && e('15'); // 测试在阶段中导入Bug
+r($executionModel->importBugTest($executionIDList[1], $postData))        && p('273:taskID') && e('19'); // 测试在看板中导入Bug
+r(count($executionModel->importBugTest($executionIDList[0], $postData))) && p()             && e('4');  // 测试在迭代中导入Bug的数量
+r(count($executionModel->importBugTest($executionIDList[1], $postData))) && p()             && e('4');  // 测试在阶段中导入Bug的数量
+r(count($executionModel->importBugTest($executionIDList[1], $postData))) && p()             && e('4');  // 测试在看板中导入Bug的数量

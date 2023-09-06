@@ -1282,46 +1282,48 @@ class executionTest
     }
 
     /**
-     * function importBug test by execution
+     * 导入Bug。
+     * Import task from Bug.
      *
-     * @param  string $executionID
-     * @param  string $count
-     * @param  array  $param
+     * @param  int        $executionID
+     * @param  array      $postData
      * @access public
-     * @return array
+     * @return array|bool
      */
-    public function importBugTest($executionID, $count, $param = array())
+    public function importBugTest(int $executionID, array $postData): array|bool
     {
-        $import     = array();
-        $id         = array();
-        $pri        = array();
-        $assignedTo = array();
-        $estimate   = array();
-        $deadline   = array();
+        $this->executionModel->loadModel('task');
 
-        $createFields = array('import' => $import, 'id' => $id, 'pri' => $pri, 'assignedTo' => $assignedTo,
-            'estimate' => $estimate, 'deadline' => $deadline);
-
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $object = $this->executionModel->importBug($executionID);
-
-        unset($_POST);
-
-        if(dao::isError())
+        $tasks          = array();
+        $execution      = $this->executionModel->getByID($executionID);
+        $bugs           = $this->executionModel->loadModel('bug')->getByIdList(array_keys($postData));
+        $showAllModule  = isset($this->executionModel->config->execution->task->allModule) ? $this->executionModel->config->execution->task->allModule : '';
+        $modules        = $this->executionModel->loadModel('tree')->getTaskOptionMenu($execution->id, 0, 0, $showAllModule ? 'allModule' : '');
+        $now            = helper::now();
+        foreach($postData as $bugID => $task)
         {
-            $error = dao::getError();
-            return $error;
+            $bug = zget($bugs, $bugID, '');
+            if(empty($bug)) continue;
+
+            unset($task->id);
+            $task->bug          = $bug;
+            $task->project      = $execution->project;
+            $task->execution    = $execution->id;
+            $task->story        = $bug->story;
+            $task->storyVersion = $bug->storyVersion;
+            $task->module       = isset($modules[$bug->module]) ? $bug->module : 0;
+            $task->fromBug      = $bugID;
+            $task->name         = $bug->title;
+            $task->type         = 'devel';
+            $task->consumed     = 0;
+            $task->status       = 'wait';
+            $task->openedDate   = $now;
+            $task->openedBy     = $this->executionModel->app->user->account;
+
+            $tasks[$bugID] = $task;
         }
-        elseif($count == "1")
-        {
-            return count($object);
-        }
-        else
-        {
-            return $object;
-        }
+
+        return $this->executionModel->importBug($tasks);
     }
 
     /**
