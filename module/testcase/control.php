@@ -2602,6 +2602,32 @@ class testcase extends control
     }
 
     /**
+     * Ajax: get scenes module.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $moduleID
+     * @param  int    $stype
+     * @param  int    $storyID
+     * @param  string $onlyOption
+     * @param  string $status
+     * @param  int    $limit
+     * @param  string $type
+     * @param  int    $hasParent
+     * @param  string $number
+     * @param  int    $currentScene
+     * @access public
+     * @return void
+     */
+    public function ajaxGetModuleScenes($productID, $branch = 0, $moduleID = 0, $stype = 1, $storyID = 0, $onlyOption = 'false', $status = '', $limit = 0, $type = 'full', $hasParent = 1, $number = '', $currentScene = 0)
+    {
+        $optionMenu = $this->testcase->getSceneMenu($productID, $moduleID, 'case', 0, $branch, $currentScene);
+        $output     = ($stype == 1) ? html::select("parent", $optionMenu, "", "class='form-control'") : $output = html::select("scene".$number, $optionMenu, array('' => ''), "class='form-control'");
+
+        die($output);
+    }
+
+    /**
      * Ajax get module scenes.
      *
      * @param  int    $productID
