@@ -95,7 +95,8 @@ window.afterPageUpdate = function($target, info, options)
 
 window.renderDTable = function()
 {
-    $('.dtable').empty();
+    $('.dtable').remove();
+    $('.table-side').append('<div class="dtable"></div>');
 
     if(!resultHeader || !resultData) return;
     new zui.DTable('.dtable',
