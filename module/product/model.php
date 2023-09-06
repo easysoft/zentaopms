@@ -726,6 +726,7 @@ class productModel extends model
             ->setDefault('createdDate', helper::now())
             ->setDefault('createdVersion', $this->config->version)
             ->setDefault('vision', $this->config->vision)
+            ->cleanINT('program,line')
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
             ->stripTags($this->config->product->editor->create['id'], $this->config->allowedTags)
@@ -739,7 +740,7 @@ class productModel extends model
         $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->create['id'], $this->post->uid);
 
         /* Lean mode relation defaultProgram. */
-        $programID = isset($product->program) ? $product->program : 0;
+        $programID = isset($product->program) ? (int)$product->program : 0;
         if($this->config->systemMode == 'light')
         {
             $programID = $this->config->global->defaultProgram;
@@ -840,6 +841,7 @@ class productModel extends model
             ->setDefault('whitelist', '')
             ->setDefault('reviewer', '')
             ->setDefault('PMT', '')
+            ->cleanINT('program,line')
             ->join('whitelist', ',')
             ->join('reviewer', ',')
             ->join('PMT', ',')
@@ -920,7 +922,7 @@ class productModel extends model
         foreach($products as $productID => $product)
         {
             $oldProduct = $oldProducts[$productID];
-            if(in_array($this->config->systemMode, array('ALM', 'PLM'))) $programID  = !isset($product->program) ? $oldProduct->program : (empty($product->program) ? 0 : $product->program);
+            if(in_array($this->config->systemMode, array('ALM', 'PLM'))) $programID  = !isset($product->program) ? $oldProduct->program : zget($product, 'program', 0);
 
             $this->dao->update(TABLE_PRODUCT)
                 ->data($product)

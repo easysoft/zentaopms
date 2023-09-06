@@ -642,6 +642,7 @@ class programModel extends model
             ->setDefault('parent', 0)
             ->setDefault('code', '')
             ->setDefault('openedDate', helper::now())
+            ->cleanINT('parent')
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
             ->setIF($this->post->budget != 0, 'budget', round((float)$this->post->budget, 2))
@@ -666,7 +667,7 @@ class programModel extends model
             ->checkIF($program->begin != '', 'begin', 'date')
             ->checkIF($program->end != '', 'end', 'date')
             ->checkIF($program->end != '', 'end', 'gt', $program->begin)
-            ->checkIF(!empty($program->name), 'name', 'unique', "`type`='program' and `parent` = $program->parent and `deleted` = '0'")
+            ->checkIF(!empty($program->name), 'name', 'unique', "`type`='program' and `parent` = " . $this->dao->sqlobj->quote($program->parent) . " and `deleted` = '0'")
             ->checkFlow()
             ->exec();
 
@@ -706,6 +707,7 @@ class programModel extends model
             ->setDefault('end', '')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
+            ->cleanINT('parent')
             ->setIF($this->post->begin == '0000-00-00', 'begin', '')
             ->setIF($this->post->end   == '0000-00-00', 'end', '')
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
@@ -746,7 +748,7 @@ class programModel extends model
             ->checkIF($program->begin != '', 'begin', 'date')
             ->checkIF($program->end != '', 'end', 'date')
             ->checkIF($program->end != '', 'end', 'gt', $program->begin)
-            ->checkIF(!empty($program->name), 'name', 'unique', "id!=$programID and `type`='program' and `parent` = $program->parent and `deleted` = '0'")
+            ->checkIF(!empty($program->name), 'name', 'unique', "id!=$programID and `type`='program' and `parent` = " . $this->dao->sqlobj->quote($program->parent) . " and `deleted` = '0'")
             ->checkFlow()
             ->where('id')->eq($programID)
             ->limit(1)

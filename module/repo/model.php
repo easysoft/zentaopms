@@ -254,9 +254,9 @@ class repoModel extends model
             ->batchCheckIF($repo->SCM != 'Gitlab', 'path,client', 'notempty')
             ->batchCheckIF($isPipelineServer, 'serviceHost,serviceProject', 'notempty')
             ->batchCheckIF($repo->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
-            ->check('name', 'unique', "`SCM` = '{$repo->SCM}'")
-            ->checkIF($isPipelineServer && $repo->serviceProject, 'serviceProject', 'unique', "`SCM` = '{$repo->SCM}' and `serviceHost` = '{$repo->serviceHost}'")
-            ->checkIF(!$isPipelineServer, 'path', 'unique', "`SCM` = '{$repo->SCM}' and `serviceHost` = '{$repo->serviceHost}'")
+            ->check('name', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($repo->SCM))
+            ->checkIF($isPipelineServer && $repo->serviceProject, 'serviceProject', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($repo->SCM) . " and `serviceHost` = " . $this->dao->sqlobj->quote($repo->serviceHost))
+            ->checkIF(!$isPipelineServer, 'path', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($repo->SCM) . " and `serviceHost` = " . $this->dao->sqlobj->quote($repo->serviceHost))
             ->autoCheck()
             ->exec();
 
@@ -292,8 +292,8 @@ class repoModel extends model
             $this->dao->insert(TABLE_REPO)->data($repo)
                 ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
                 ->check('serviceHost,serviceProject', 'notempty')
-                ->check('name', 'unique', "`SCM` = '{$repo->SCM}'")
-                ->check('serviceProject', 'unique', "`SCM` = '{$repo->SCM}' and `serviceHost` = '{$repo->serviceHost}'")
+                ->check('name', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($repo->serviceHost))
+                ->check('serviceProject', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($repo->SCM) . " and `serviceHost` = " . $this->dao->sqlobj->quote($repo->serviceHost))
                 ->autoCheck()
                 ->exec();
 
@@ -366,9 +366,9 @@ class repoModel extends model
             ->batchCheckIF($data->SCM != 'Gitlab', 'path,client', 'notempty')
             ->batchCheckIF($isPipelineServer, 'serviceHost,serviceProject', 'notempty')
             ->batchCheckIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
-            ->check('name', 'unique', "`SCM` = '{$data->SCM}' and `id` <> $id")
-            ->checkIF($isPipelineServer && $data->serviceProject, 'serviceProject', 'unique', "`SCM` = '{$data->SCM}' and `serviceHost` = '{$data->serviceHost}' and `id` <> $id")
-            ->checkIF(!$isPipelineServer, 'path', 'unique', "`SCM` = '{$data->SCM}' and `serviceHost` = '{$data->serviceHost}' and `id` <> $id")
+            ->check('name', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($data->SCM) . " and `id` != $id")
+            ->checkIF($isPipelineServer && $data->serviceProject, 'serviceProject', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($data->SCM) . " and `serviceHost` = " . $this->dao->sqlobj->quote($data->serviceHost) . " and `id` != $id")
+            ->checkIF(!$isPipelineServer, 'path', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($data->SCM) . " and `serviceHost` = " . $this->dao->sqlobj->quote($data->serviceHost) . " and `id` != $id")
             ->autoCheck()
             ->where('id')->eq($id)->exec();
 

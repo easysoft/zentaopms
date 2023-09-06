@@ -415,6 +415,7 @@ class executionModel extends model
             ->setDefault('days', '0')
             ->setDefault('team', $this->post->name)
             ->setDefault('parent', $this->post->project)
+            ->cleanINT('project')
             ->setIF($this->post->parent, 'parent', $this->post->parent)
             ->setIF($this->post->heightType == 'auto', 'displayCards', 0)
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
@@ -467,7 +468,7 @@ class executionModel extends model
         }
 
         $this->lang->error->unique = $this->lang->error->repeat;
-        $sprintProject = isset($sprint->project) ? $sprint->project : '0';
+        $sprintProject = isset($sprint->project) ? (int)$sprint->project : '0';
         $this->dao->insert(TABLE_EXECUTION)->data($sprint)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->execution->create->requiredFields, 'notempty')
@@ -607,6 +608,7 @@ class executionModel extends model
             ->setIF($this->post->status == 'suspended' and $oldExecution->status != 'suspended', 'suspendedDate', helper::today())
             ->setIF($oldExecution->type == 'stage', 'project', $oldExecution->project)
             ->setDefault('days', '0')
+            ->cleanINT('project')
             ->setDefault('team', $this->post->name)
             ->join('whitelist', ',')
             ->stripTags($this->config->execution->editor->edit['id'], $this->config->allowedTags)
@@ -650,7 +652,7 @@ class executionModel extends model
 
         /* Update data. */
         $this->lang->error->unique = $this->lang->error->repeat;
-        $executionProject = isset($execution->project) ? $execution->project : $oldExecution->project;
+        $executionProject = isset($execution->project) ? (int)$execution->project : $oldExecution->project;
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->execution->edit->requiredFields, 'notempty')
@@ -945,7 +947,7 @@ class executionModel extends model
         {
             $oldExecution = $oldExecutions[$executionID];
             $team         = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution');
-            $projectID    = isset($execution->project) ? $execution->project : $oldExecution->project;
+            $projectID    = isset($execution->project) ? (int)$execution->project : $oldExecution->project;
 
             if(isset($execution->project))
             {
