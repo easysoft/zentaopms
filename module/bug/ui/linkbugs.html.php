@@ -10,31 +10,43 @@ declare(strict_types=1);
  */
 namespace zin;
 
-foreach($bugs2Link as $bug)
-{
-    $bug->productName = zget($products, $bug->product);
-    $bug->openedBy    = zget($users, $bug->openedBy);
-    $bug->assignedTo  = zget($users, $bug->assignedTo);
-}
-
-$cols = array_values($config->bug->linkBugs->dtable->fieldList);
-$data = array_values($bugs2Link);
+$cols = $config->bug->linkBugs->dtable->fieldList;
+$cols['product']['map'] = $products;
 
 div(setID('searchFormPanel'), set('data-module', 'bug'), searchToggle(set::open(true), set::module('bug')));
 
-form
+dtable
 (
-    $bugs2Link ? dtable
-    (
-        set::cols($cols),
-        set::data($data),
-        set::footPager(usePager()),
-        set::footer(jsRaw('window.footerGenerator'))
-    ) : null,
-    set::checkable(true),
-    set::actions(),
+    set::cols($cols),
+    set::userMap($users),
+    set::data($bugs2Link),
+    set::footPager(usePager()),
+    set::footToolbar(array('items' => array(array('text' => $lang->save, 'btnType' => 'primary', 'className' => 'size-sm', 'data-on' => 'click', 'data-call' => 'fnLinkBugs', 'data-params' => 'event')))),
+    set::footer(array('checkbox', 'toolbar')),
 );
 
-h::js('window.toggleSearchForm()');
+h::js
+(
+<<<EOD
+window.fnLinkBugs = function(e)
+{
+    const dtable      = zui.DTable.query(e.target);
+    const checkedList = dtable.$.getChecks();
+    if(!checkedList.length) return;
+
+    var checkedBugs = [];
+    checkedList.forEach(function(id)
+    {
+        var bugInfo = dtable.$.getRowInfo(id).data;
+        checkedBugs.push({text: bugInfo.title, value: bugInfo.id});
+    });
+
+    const \$relatedBugs = $('#linkBugsBox').find('.picker-box').zui('picker');
+    \$relatedBugs.render({items: checkedBugs});
+    \$relatedBugs.$.setValue(checkedList);
+    zui.Modal.hide('#' + $(e.target).closest('.modal').attr('id'));
+}
+EOD
+);
 
 render();

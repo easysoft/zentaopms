@@ -175,10 +175,11 @@ $config->bug->dtable->fieldList['actions']['menu']     = array('confirm', 'resol
 
 $config->bug->linkBugs = new stdclass();
 $config->bug->linkBugs->dtable = new stdclass();
-$config->bug->linkBugs->dtable->fieldList['id']['title'] = $lang->idAB;
-$config->bug->linkBugs->dtable->fieldList['id']['type']  = 'checkID';
-$config->bug->linkBugs->dtable->fieldList['id']['align'] = 'left';
-$config->bug->linkBugs->dtable->fieldList['id']['fixed'] = 'left';
+$config->bug->linkBugs->dtable->fieldList['id']['title']    = $lang->idAB;
+$config->bug->linkBugs->dtable->fieldList['id']['type']     = 'checkID';
+$config->bug->linkBugs->dtable->fieldList['id']['checkbox'] = true;
+$config->bug->linkBugs->dtable->fieldList['id']['align']    = 'left';
+$config->bug->linkBugs->dtable->fieldList['id']['fixed']    = 'left';
 
 $config->bug->linkBugs->dtable->fieldList['pri']['title'] = $lang->bug->pri;
 $config->bug->linkBugs->dtable->fieldList['pri']['type']  = 'pri';

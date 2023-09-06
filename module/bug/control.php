@@ -691,7 +691,7 @@ class bug extends control
      * Link related bugs.
      *
      * @param  int    $bugID
-     * @param  bool   $bySearch
+     * @param  string $bySearch
      * @param  string $excludeBugs
      * @param  int    $queryID
      * @param  int    $recTotal
@@ -700,9 +700,10 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function linkBugs(int $bugID, bool $bySearch = false, string $excludeBugs = '', int $queryID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function linkBugs(int $bugID, string $bySearch = 'false', string $excludeBugs = '', int $queryID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $bug = $this->bug->getByID($bugID);
+        $bug      = $this->bug->getByID($bugID);
+        $bySearch = $bySearch === 'true';
 
         /* 检查 bug 所属执行的权限。*/
         /* Check privilege of bug 所属执行的权限。*/
