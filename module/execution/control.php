@@ -2018,38 +2018,30 @@ class execution extends control
     }
 
     /**
-     * Delay execution.
+     * 延期一个迭代。
+     * Delay the execution.
      *
      * @param  int    $executionID
      * @param  string $from
      * @access public
      * @return void
      */
-    public function putoff($executionID, $from = 'execution')
+    public function putoff(int $executionID, string $from = 'execution')
     {
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
 
         if(!empty($_POST))
         {
-            $this->loadModel('action');
-            $changes = $this->execution->putoff($executionID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            $this->execution->putoff($executionID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $actionID = $this->action->create($this->objectType, $executionID, 'Delayed', $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
             $this->executeHooks($executionID);
-            if(isonlybody() and $from == 'kanban')
-            {
-                return print(js::closeModal('parent.parent', '', "parent.parent.changeStatus('doing')"));
-            }
-            else
-            {
-                return print(js::reload('parent.parent'));
-            }
+
+            $response['closeModal'] = true;
+            $response['load']       = true;
+            if($from == 'kanban') $response['callback'] = "changeStatus('doing')";
+            return $this->sendSuccess($response);
         }
 
         $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->execution->putoff;
