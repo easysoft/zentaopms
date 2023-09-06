@@ -152,6 +152,10 @@ div
             div
             (
                 setClass('table-side'),
+                div
+                (
+                    setClass('dtable'),
+                )
             ),
             div
             (

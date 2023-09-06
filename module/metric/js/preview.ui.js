@@ -18,11 +18,13 @@ $(document).ready()
 
 function renderDTable()
 {
-    $('.table-side').empty();
+    $('.dtable').empty();
 
     if(!resultHeader || !resultData) return;
-    new zui.DTable('.table-side', {
-        height: window.renderHeight(),
+    new zui.DTable('.dtable', {
+        responsive: true,
+        scrollbarHover: true,
+        height: function() { return $('.table-side').height(); },
         cols: resultHeader,
         data: resultData,
     });
