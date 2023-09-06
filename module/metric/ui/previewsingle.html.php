@@ -12,7 +12,7 @@ namespace zin;
 
 jsVar('resultHeader', $resultHeader);
 jsVar('resultData',   $resultData);
-jsVar('objectList',   $lang->metric->objectList);
+jsVar('current',      $current);
 
 $fnGenerateSide = function() use($metrics, $current, $viewType, $scope)
 {
