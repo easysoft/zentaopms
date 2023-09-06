@@ -17,7 +17,7 @@ detailHeader
     (
         entityLabel
         (
-            set::entityID(''),
+            set::entityID($metric->id),
             set::level(1),
             set::text($lang->metric->implement)
         )
@@ -29,7 +29,7 @@ div
     h1
     (
         setClass('font-black text-md'),
-        setStyle('margin-bottom', '16px'),
+        setStyle('margin-bottom', '5px'),
         $lang->metric->implementInstructions
     ),
     div
@@ -37,32 +37,67 @@ div
         setClass('leading-loose'),
         p
         (
-            setClass('font-semibold text-md'),
+            set::className('font-medium text-md'),
+            setStyle('padding-top', '12px'),
             $lang->metric->implementTips[0]
         ),
         p
         (
-            setClass('font-semibold text-md'),
+            set::className('font-medium text-md'),
+            setStyle('padding-top', '12px'),
             $lang->metric->implementTips[1]
         ),
         p
         (
-            setClass('font-semibold text-md'),
+            set::className('font-medium text-md'),
+            setStyle('padding-top', '12px'),
             $lang->metric->implementTips[2]
         ),
         p
         (
-            setClass('font-semibold text-md'),
+            set::className('font-medium text-md'),
+            setStyle('padding-top', '12px'),
             $lang->metric->implementTips[3]
         ),
-    )
+    ),
+    h1
+    (
+        setClass('font-black text-md'),
+        setStyle('margin-top', '10px'),
+        $lang->metric->verifyResult
+    ),
 );
 
 dtable
 (
-    set::height(400),
+    set::height(500),
     set::cols($resultHeader),
     set::data($resultData),
+);
+
+div
+(
+    setStyle('margin', '10px'),
+);
+
+center
+(
+    btnGroup
+    (
+        btn
+        (
+            set::type('primary'),
+            set::url(helper::createLink('metric', 'implement', 'isVerify=true')),
+            $lang->metric->verifyFile,
+        ),
+        div(),
+        btn
+        (
+            set::type('primary'),
+            set::url(helper::createLink('metric', 'publish')),
+            $lang->metric->publish,
+        ),
+    )
 );
 
 render();

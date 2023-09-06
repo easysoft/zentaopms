@@ -38,6 +38,9 @@ $lang->metric->sqlStatement  = "SQL Statement";
 $lang->metric->other         = "Other";
 $lang->metric->collectType   = 'Collect Type';
 $lang->metric->oldMetricInfo = 'Measurement Info';
+$lang->metric->verifyFile    = 'Verify File';
+$lang->metric->verifyResult  = 'Verify Result';
+$lang->metric->publish       = 'Publish';
 
 $lang->metric->viewType = new stdclass();
 $lang->metric->viewType->single   = 'Single view';

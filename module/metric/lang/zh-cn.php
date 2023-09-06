@@ -39,6 +39,9 @@ $lang->metric->other         = '其他';
 $lang->metric->collectType   = '收集方式';
 $lang->metric->oldMetricInfo = '旧版详情';
 $lang->metric->collectConf   = '定时设置';
+$lang->metric->verifyFile    = '校验文件';
+$lang->metric->verifyResult  = '校验结果';
+$lang->metric->publish       = '发布';
 
 $lang->metric->viewType = new stdclass();
 $lang->metric->viewType->single   = '单独查看';
