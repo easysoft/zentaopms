@@ -698,7 +698,7 @@ class execution extends control
         $this->execution->buildBugSearchForm($products, $param, $actionURL);
 
         $bugs = $this->bug->processBuildForBugs($bugs);
-        $this->assignBugVars($execution, $project, $productID, $branch, $products, $orderBy, $type, $param, $build, $bugs, $pager);
+        $this->executionZen->assignBugVars($execution, $project, $productID, $branch, $products, $orderBy, $type, $param, $build, $bugs, $pager);
 
         $this->view->showBranch    = $showBranch;
         $this->view->productOption = $productOption;
