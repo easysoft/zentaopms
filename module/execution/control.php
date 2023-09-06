@@ -1825,7 +1825,8 @@ class execution extends control
     }
 
     /**
-     * Start execution.
+     * 开始一个执行。
+     * Start the execution.
      *
      * @param  int    $executionID
      * @param  string $from
@@ -1840,15 +1841,9 @@ class execution extends control
 
         if(!empty($_POST))
         {
-            $this->loadModel('action');
-            $changes = $this->execution->start($executionID);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $actionID = $this->action->create($this->objectType, $executionID, 'Started', $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
+            $this->execution->start($executionID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $project = $this->loadModel('project')->getById($execution->project);
             if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->loadModel('programplan')->computeProgress($executionID, 'start');

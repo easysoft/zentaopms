@@ -1090,22 +1090,22 @@ class executionModel extends model
     }
 
     /**
-     * Start execution.
+     * 开始一个执行。
+     * Start the execution.
      *
      * @param  int    $executionID
      * @access public
-     * @return array
+     * @return array|false
      */
-    public function start($executionID)
+    public function start(int $executionID): array|false
     {
         $oldExecution = $this->getById($executionID);
-        $now          = helper::now();
 
         $execution = fixer::input('post')
             ->add('id', $executionID)
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
+            ->setDefault('lastEditedDate', helper::now())
             ->stripTags($this->config->execution->editor->start['id'], $this->config->allowedTags)
             ->remove('comment')
             ->get();
@@ -1116,14 +1116,26 @@ class executionModel extends model
             ->check($this->config->execution->start->requiredFields, 'notempty')
             ->checkIF($execution->realBegan != '', 'realBegan', 'le', helper::today())
             ->checkFlow()
-            ->where('id')->eq((int)$executionID)
+            ->where('id')->eq($executionID)
             ->exec();
-        $this->loadModel('project')->recordFirstEnd($executionID);
 
         /* When it has multiple errors, only the first one is prompted */
         if(dao::isError() and count(dao::$errors['realBegan']) > 1) dao::$errors['realBegan'] = dao::$errors['realBegan'][0];
+        if(dao::isError()) return false;
 
-        return common::createChanges($oldExecution, $execution);
+        /* Record the end date as firstEnd when the project is started. */
+        $this->loadModel('project')->recordFirstEnd($executionID);
+
+        $changes = common::createChanges($oldExecution, $execution);
+
+        if($this->post->comment != '' || !empty($changes))
+        {
+            $this->loadModel('action');
+            $actionID = $this->action->create('execution', $executionID, 'Started', $this->post->comment);
+            $this->action->logHistory($actionID, $changes);
+        }
+
+        return $changes;
     }
 
     /**
