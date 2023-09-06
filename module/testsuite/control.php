@@ -225,9 +225,9 @@ class testsuite extends control
             /* 根据suiteID更新数据，如果更新成功，则记录日志。 */
             /* Update the data according to the suiteID, and record the log if the update is successful. */
             $suite   = form::data($this->config->testsuite->form->edit)->add('id', $suiteID)->get();
-            $uid     = $this->post->uid;
-            $changes = $this->testsuite->update($suite, $uid);
+            $changes = $this->testsuite->update($suite, $this->post->uid);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             if($changes)
             {
                 $actionID = $this->loadModel('action')->create('testsuite', $suiteID, 'edited');
@@ -260,12 +260,12 @@ class testsuite extends control
     {
         /* 检查用户访问权限。 */
         /* Check user access rights. */
-        $suite = $this->testsuiteZen->checkTestsuiteAccess($suiteID);
+        $this->testsuiteZen->checkTestsuiteAccess($suiteID);
 
         $this->testsuite->deleteSuiteByID($suiteID);
-
         $message = $this->executeHooks($suiteID) ? : '';
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
         return $this->send(array('result' => 'success', 'message' => $message, 'load' => true));
     }
 
