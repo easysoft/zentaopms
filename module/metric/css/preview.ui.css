@@ -1,10 +1,11 @@
 #mainContent {display: flex;}
-#mainContent .side {flex: 0 0 25%; overflow-x: hidden; padding-right: 2px;}
+#mainContent .side {flex: 0 0 25%; overflow-x: hidden; padding-right: 4px;}
 #mainContent .main {flex: 0 0 75%; overflow-x: hidden;}
 
 #featureBar .nav-feature li:last-child {padding-left: 4px; position: relative;}
 #featureBar .nav-feature li:last-child:before {content: ""; position: absolute; left: 2px; top: 5px; right: 0; bottom: 5px; width: 1px; background-color: var(--color-slate-300);}
 
+.main, .side {border-radius: 2px;}
 .side .title {height: 48px; padding-left: 16px; margin-bottom: 8px;}
 .side .name-color {color: var(--color-slate-600);}
 .side .metric-tree {padding-left: 24px;  height: calc(100vh - 180px); overflow-y: scroll;}

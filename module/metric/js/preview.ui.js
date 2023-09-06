@@ -3,25 +3,44 @@ window.renderHeight = function()
     return $('.table-side').height();
 }
 
-window.generateCheckItem = function(text, value, typeClass, isChecked)
+window.generateCheckItem = function(text, value, isChecked)
 {
   var checked = isChecked ? 'checked=""' : '';
-  return `<div class="${typeClass}">
+  var currentClass = isChecked ? 'metric-current' : '';
+  return `<div class="font-medium checkbox-primary ${currentClass}">
             <input type="checkbox" id="metric${value}" name="metric" ${checked} value="${value}">
             <label for="metric${value}">${text}</label>
           </div>`;
 }
 
+window.messagerWarning = function(message)
+{
+  return zui.Messager.show(
+  {
+    content: message,
+    icon: 'icon-exclamation-pure',
+    iconClass: 'center w-6 h-6 rounded-full m-0 warning',
+    contentClass: 'text-lg font-bold',
+    close: false,
+    className: 'p-6 bg-white text-black gap-2 messager-fail',
+  });
+}
+
+window.isMetricChecked = function(id)
+{
+  return window.checkedList.filter(function(metric){return metric.id == id}).length != 0;
+}
+
 window.renderCheckList = function(metrics)
 {
   $('.side .check-list-metric').empty();
+
   var metricsHtml = metrics.map(function(metric)
   {
-    var isChecked = window.checkedList.includes(metric.id + '');
-    var typeClass = isChecked ? 'metric-current' : '';
-    typeClass += ' font-medium checkbox-primary';
-    return window.generateCheckItem(metric.name, metric.id, typeClass, isChecked);
+    var isChecked = window.isMetricChecked(metric.id);
+    return window.generateCheckItem(metric.name, metric.id, isChecked);
   }).join('');
+
   $('.side .check-list-metric').html(metricsHtml);
 }
 
@@ -35,15 +54,7 @@ window.handleCheckboxChange = function($el)
       if(window.checkedList.length >= 10)
       {
         $el.prop('checked', false);
-        return zui.Messager.show(
-          {
-            content: maxSelectMsg.replace('%s', maxSelectNum),
-            icon: 'icon-exclamation-pure',
-            iconClass: 'center w-6 h-6 rounded-full m-0 warning',
-            contentClass: 'text-lg font-bold',
-            close: false,
-            className: 'p-6 bg-white text-black gap-2 messager-fail',
-          });
+        return messagerWarning(maxSelectMsg.replace('%s', maxSelectNum));
       }
       window.checkedList.push({id:value, name:$el.next().text()});
       $el.closest('.checkbox-primary').addClass('metric-current');
@@ -78,11 +89,11 @@ window.handleNavMenuClick = function($el)
 window.afterPageUpdate = function($target, info, options)
 {
   window.checkedList = [{id:current.id + '', name:current.name}];
-  renderDTable();
+  window.renderDTable();
   if(viewType == 'multiple') renderCheckedLabel();
 }
 
-function renderDTable()
+window.renderDTable = function()
 {
     $('.dtable').empty();
 
