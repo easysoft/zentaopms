@@ -136,7 +136,7 @@ class branchModel extends model
         if(strpos($params, 'noempty') === false)
         {
             $product = $this->loadModel('product')->getById($productID);
-            if(($productID && !$product) || $product->type == 'normal') return array();
+            if(($productID && !$product) || ($product && $product->type == 'normal')) return array();
             $branches = array('0' => $this->lang->branch->main) + $branches;
         }
 
