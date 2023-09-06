@@ -1244,7 +1244,7 @@ class testcaseModel extends model
         $action = strtolower($action);
 
         if($action == 'confirmchange')      return $case->caseStatus != 'wait' && $case->version < $case->caseVersion;
-        if($action == 'confirmstorychange') return $case->needconfirm || $case->browseType == 'needconfirm';
+        if($action == 'confirmstorychange') return $case->needconfirm || (isset($case->browseType) && $case->browseType == 'needconfirm');
         if($action == 'createbug')          return !empty($case->caseFails) && $case->caseFails > 0;
         if($action == 'review')             return ($config->testcase->needReview || !empty($config->testcase->forceReview)) && (isset($case->caseStatus) ? $case->caseStatus == 'wait' : $case->status == 'wait');
         if($action == 'showscript')         return $case->auto == 'auto';
