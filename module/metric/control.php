@@ -85,6 +85,20 @@ class metric extends control
     }
 
     /**
+     * Get metric list by ajax.
+     *
+     * @param  string $scope
+     * @access public
+     * @return void
+     */
+    public function ajaxGetMetrics($scope)
+    {
+        $metrics = $this->metric->getList($scope, 'released');
+
+        echo(json_encode($metrics));
+    }
+
+    /**
      * Browse metric list.
      *
      * @param  string $scope
