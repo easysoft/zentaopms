@@ -21,7 +21,7 @@ $execution->gen(5);
 
 /**
 
-title=测试executionModel->changeStatus2Inactived();
+title=测试executionModel->changeStatus2Inactive();
 cid=1
 pid=1
 
@@ -32,6 +32,6 @@ pid=1
 */
 
 $execution = new executionTest();
-r($execution->changeStatus2InactivedObject(2, 'suspended')) && p('') && e("'阶段a',"); // 测试修改顶级父阶段执行状态为已挂起
-r($execution->changeStatus2InactivedObject(3, 'closed'))    && p('') && e("empty");    // 测试修改子阶段执行状态为已关闭
-r($execution->changeStatus2InactivedObject(4, 'closed'))    && p('') && e('empty');    // 测试修改叶子阶段执行状态为已关闭
+r($execution->changeStatus2InactiveObject(2, 'suspended')) && p('') && e("'阶段a',"); // 测试修改顶级父阶段执行状态为已挂起
+r($execution->changeStatus2InactiveObject(3, 'closed'))    && p('') && e("empty");    // 测试修改子阶段执行状态为已关闭
+r($execution->changeStatus2InactiveObject(4, 'closed'))    && p('') && e('empty');    // 测试修改叶子阶段执行状态为已关闭

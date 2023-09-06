@@ -977,7 +977,7 @@ class executionModel extends model
 
             if(($status == 'suspended' and $execution->status != 'suspended') or ($status == 'closed' and $execution->status != 'closed'))
             {
-                $pointOutStages .= $this->changeStatus2Inactived($executionID, $status, $selfAndChildren);
+                $pointOutStages .= $this->changeStatus2Inactive($executionID, $status, $selfAndChildren);
             }
         }
 
@@ -1054,7 +1054,7 @@ class executionModel extends model
      * @access public
      * @return string
      */
-    public function changeStatus2Inactived($executionID, $status, $selfAndChildren)
+    public function changeStatus2Inactive($executionID, $status, $selfAndChildren)
     {
         $this->loadModel('programplan');
         $this->loadModel('action');

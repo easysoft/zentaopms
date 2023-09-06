@@ -399,14 +399,14 @@ class executionTest
     }
 
     /**
-     * function changeStatus2Inactived test by execution
+     * function changeStatus2Inactive test by execution
      *
      * @param  int         $executionID
      * @param  string      $status       suspended|closed
      * @access public
      * @return bool|array
      */
-    public function changeStatus2InactivedObject($executionID, $status)
+    public function changeStatus2InactiveObject($executionID, $status)
     {
         global $tester;
 
@@ -421,7 +421,7 @@ class executionTest
         $siblingList = array();
         if($executionType == 'stage') $siblingList = $siblingStages[$executionID];
 
-        $result = $this->executionModel->changeStatus2Inactived($executionID, $status, $selfAndChildren, $siblingList);
+        $result = $this->executionModel->changeStatus2Inactive($executionID, $status, $selfAndChildren, $siblingList);
 
         if(dao::isError())
         {
