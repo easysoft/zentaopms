@@ -120,7 +120,7 @@ function onChangeStoreAppType(event)
         {
             $('#version').val(app.version);
         }
-        if((app.dependencies.mysql && mysqlList) || (app.dependencies.postgresql && pgList))
+        if((app.dependencies.mysql && mysqlList) || (app.dependencies.postgresql && pgList && pgList.length > 0))
         {
             $('div.dbType').removeClass('hidden');
             $('[name=dbService]').prop('disabled', false);
