@@ -943,20 +943,20 @@ class executionModel extends model
     }
 
     /**
+     * 批量更改执行的状态。
      * Batch change status.
      *
      * @param  array     $executionIdList
      * @param  string    $status
      * @access public
-     * @return void
+     * @return string
      */
-    public function batchChangeStatus($executionIdList, $status)
+    public function batchChangeStatus(array $executionIdList, string $status): string
     {
-        $this->loadModel('programplan');
-
         /* Sort the IDs, the child stage comes first, and the parent stage follows. */
         $executionIdList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->orderBy('grade_desc')->fetchPairs();
 
+        $this->loadModel('programplan');
         $pointOutStages = '';
         foreach($executionIdList as $executionID)
         {
