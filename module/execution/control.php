@@ -84,7 +84,7 @@ class execution extends control
         $project         = $this->loadModel('project')->getByID($execution->project);
 
         /* Set menu. */
-        $this->execution->setMenu($executionID, $buildID = 0, $extra);
+        $this->execution->setMenu($executionID, 0, $extra);
 
         /* Assign view data. */
         if($this->app->tab == 'project') $this->view->projectID = $executionID;
@@ -95,6 +95,7 @@ class execution extends control
         $this->view->childExecutions = $childExecutions;
         $this->view->products        = $products;
         $this->view->teamMembers     = $teamMembers;
+        $this->view->actions         = $actions;
 
         return $execution;
     }
