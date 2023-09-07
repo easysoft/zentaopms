@@ -6192,7 +6192,8 @@ class storyModel extends model
 
         if(isset($story->finalResult))
         {
-            if($story->finalResult == 'reject')  $this->action->create('story', $story->id, 'ReviewRejected');
+            $isChanged = $story->changedBy ? true : false;
+            if($story->finalResult == 'reject')  $this->action->create('story', $story->id, 'ReviewRejected', '', $isChanged ? 'changing' : 'draft');
             if($story->finalResult == 'pass')    $this->action->create('story', $story->id, 'ReviewPassed');
             if($story->finalResult == 'clarify') $this->action->create('story', $story->id, 'ReviewClarified');
             if($story->finalResult == 'revert')  $this->action->create('story', $story->id, 'ReviewReverted');
@@ -6522,10 +6523,8 @@ class storyModel extends model
             ->fetch();
 
         $lastAction = $lastRecord->action;
-        if(strpos(',closed,reviewrejected,', ",$lastAction,") !== false)
-        {
-            $status = strpos($lastRecord->extra, '|') !== false ? substr($lastRecord->extra, strpos($lastRecord->extra, '|') + 1) : 'active';
-        }
+        if($lastAction == 'reviewrejected') $status = $lastRecord->extra;
+        if($lastAction == 'closed') $status = strpos($lastRecord->extra, '|') !== false ? substr($lastRecord->extra, strpos($lastRecord->extra, '|') + 1) : 'active';
 
         /* Activate parent story. */
         if($lastAction == 'closedbysystem')
