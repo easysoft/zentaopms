@@ -424,7 +424,7 @@ formPanel
             ),
             formHidden('storyEstimate', ''),
             formHidden('storyDesc', ''),
-            formHidden('storyPri', ''),
+            formHidden('storyPri', 0),
         ),
         formGroup
         (

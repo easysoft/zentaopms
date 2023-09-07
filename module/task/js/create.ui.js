@@ -121,7 +121,7 @@ function toggleSelectTestStory(executionID)
  */
 function loadAll()
 {
-    const executionID = $(this).val();
+    const executionID = $('input[name=execution]').val();
     const fieldList   = showFields + ',';
     lifetime          = lifetimeList[executionID];
     attribute         = attributeList[executionID];
@@ -231,8 +231,12 @@ function loadExecutionMembers(executionID)
     const getAssignedToLink = $.createLink('execution', 'ajaxGetMembers', 'executionID=' + executionID + '&assignedTo=' + $('#assignedTo').val());
     $.get(getAssignedToLink, function(data)
     {
-        $('#assignedTo').replaceWith(data);
-        $('#assignedTo').attr('name', 'assignedTo[]');
+        if(data)
+        {
+            data = JSON.parse(data);
+            const $assignedToPicker = $('input[name=assignedTo]').zui('picker');
+            $assignedToPicker.render({items: data});
+        }
     });
 }
 
@@ -486,6 +490,7 @@ window.copyStoryTitle = function()
     $('#name').attr('value', storyTitle);
     $('#estimate').attr('value', $('input[name=storyEstimate]').val());
     $('#desc').attr('value', $('input[name=storyDesc]').val());
+    $('input[name=pri]').zui('pripicker').$.setValue($('input[name=storyPri]').val());
 }
 
 window.showAllModule = function()
