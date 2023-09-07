@@ -201,3 +201,18 @@ $lang->metric->old->objectList['userRequest'] = '用户需求';
 $lang->metric->old->collectTypeList = array();
 $lang->metric->old->collectTypeList['crontab'] = '定时计划';
 $lang->metric->old->collectTypeList['action']  = '动作触发';
+
+$lang->metric->tips = new stdclass();
+$lang->metric->tips->nameError        = 'Mysql 自定义函数名错误，请检查函数名。';
+$lang->metric->tips->createError      = "创建 Mysql 自定义函数失败，错误信息：<br/> %s";
+$lang->metric->tips->noticeSelect     = 'SQL语句只能是查询语句';
+$lang->metric->tips->noticeBlack      = 'SQL中含有禁用SQL关键字 %s';
+$lang->metric->tips->noticeVarName    = '变量名称没有设置';
+$lang->metric->tips->noticeVarType    = '变量 %s 的类型没有设置';
+$lang->metric->tips->noticeShowName   = '变量 %s 的显示名称没有设置';
+$lang->metric->tips->noticeQueryValue = '变量 %s 的测试值没有设置。';
+$lang->metric->tips->showNameMissed   = '变量 %s 的显示名没有设置。';
+$lang->metric->tips->errorSql         = 'SQL语句有错！错误：';
+$lang->metric->tips->click2SetParams  = '请先点击红色变量块设置参数，然后';
+$lang->metric->tips->view             = '预览';
+$lang->metric->tips->click2InsertData = "点击 <span class='ke-icon-holder'></span> 来插入度量指标或报表";
