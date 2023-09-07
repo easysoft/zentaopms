@@ -699,6 +699,9 @@ class upgradeModel extends model
 
                 if(in_array($fromVersion, array('18.5', 'biz8.5', 'max4.5'))) $this->addCreateAction4Story();
                 break;
+	    case '18_6':
+		$this->removeProductLineRequired();
+		break;
         }
 
         $this->deletePatch();
@@ -9758,5 +9761,27 @@ class upgradeModel extends model
                 $this->dao->insert(TABLE_ACTION)->data($action)->exec();
             }
         }
+    }
+
+    /**
+     * Remove product line required fields when 12.x upgrade to 18.x.
+     *
+     * @access public
+     * @return bool
+     */
+    public function removeProductLineRequired()
+    {
+	$this->loadModel('setting');
+
+	$createRequired = $this->setting->getItem('owner=system&module=product&section=create&key=requiredFields');
+	$editRequired   = $this->setting->getItem('owner=system&module=product&section=edit&key=requiredFields');
+
+	$createRequired = str_replace(',line,', ',', ",$createRequired,");
+	$editRequired   = str_replace(',line,', ',', ",$editRequired,");
+
+	$this->setting->setItem('system.product.create.requiredFields', trim($createRequired, ','));
+	$this->setting->setItem('system.product.edit.requiredFields', trim($editRequired, ','));
+
+	return true;
     }
 }
