@@ -11,5 +11,11 @@ declare(strict_types=1);
  */
 namespace zin;
 
-if($type == 'new') include 'viewphpmetric.html.php';
-if($type == 'old') include 'viewsqlmetric.html.php';
+if($isOldMetric) 
+{
+    include 'viewsqlmetric.html.php';
+}
+else
+{
+    include 'viewphpmetric.html.php';
+}
