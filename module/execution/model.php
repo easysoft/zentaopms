@@ -549,7 +549,7 @@ class executionModel extends model
         if(in_array($execution->status, array('closed', 'suspended'))) $this->computeBurn($executionID);
 
         $parentExecution = !empty($execution->parent) ? $execution : $oldExecution;
-        if(empty($execution->project) || $execution->project == $oldExecution->project) $this->checkBeginAndEndDate($oldExecution->project, $execution->begin, $execution->end, $parentExecution);
+        if(empty($execution->project) || $execution->project == $oldExecution->project) $this->checkBeginAndEndDate($oldExecution->project, $execution->begin, $execution->end, $parentExecution->parent);
         if(dao::isError()) return false;
 
         /* Child stage inherits parent stage permissions. */
@@ -1485,26 +1485,27 @@ class executionModel extends model
     }
 
     /**
+     * 检查执行开始、结束日期是否正确。
      * Check begin and end date.
      *
      * @param  int    $projectID
      * @param  string $begin
      * @param  string $end
-     * @param  object $execution
+     * @param  int    $parentID
      * @access public
      * @return void
      */
-    public function checkBeginAndEndDate($projectID, $begin, $end, $execution = null)
+    public function checkBeginAndEndDate(int $projectID, string $begin, string $end, int $parentID = 0)
     {
         $project = $this->loadModel('project')->getByID($projectID);
         if(empty($project)) return;
 
         if($begin < $project->begin) dao::$errors['begin'] = sprintf($this->lang->execution->errorCommonBegin, $project->begin);
         if($end > $project->end)     dao::$errors['end']   = sprintf($this->lang->execution->errorCommonEnd, $project->end);
-        if(($project->model == 'waterfall' or $project->model == 'waterfallplus') and isset($execution) and $execution->parent != $projectID)
+        if(($project->model == 'waterfall' || $project->model == 'waterfallplus') && $parentID != $projectID)
         {
             $this->app->loadLang('programplan');
-            $parent = $this->getByID($execution->parent);
+            $parent = $this->getByID($parentID);
             if($begin < $parent->begin) dao::$errors['begin'] = sprintf($this->lang->programplan->error->letterParent, $parent->begin);
             if($end > $parent->end)     dao::$errors['end']   = sprintf($this->lang->programplan->error->greaterParent, $parent->end);
         }

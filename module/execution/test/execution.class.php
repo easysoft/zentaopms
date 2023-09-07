@@ -46,17 +46,19 @@ class executionTest
     }
 
     /**
+     * 检查执行开始、结束日期是否正确。
      * Check begin and end date.
      *
      * @param  int    $projectID
      * @param  string $begin
      * @param  string $end
+     * @param  int    $parentID
      * @access public
      * @return bool|array
      */
-    public function checkBeginAndEndDateTest($projectID, $begin, $end)
+    public function checkBeginAndEndDateTest(int $projectID, string $begin, string $end, int $parentID): bool|array
     {
-        $this->executionModel->checkBeginAndEndDate($projectID, $begin, $end);
+        $this->executionModel->checkBeginAndEndDate($projectID, $begin, $end, $parentID);
 
         if(dao::isError()) return dao::getError();
         return true;
