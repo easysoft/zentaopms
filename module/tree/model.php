@@ -271,11 +271,13 @@ class treeModel extends model
      * Create an option menu of task in html.
      *
      * @param  int    $rootID
+     * @param  int    $productID
      * @param  int    $startModule
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function getTaskOptionMenu($rootID, $productID = 0, $startModule = 0, $extra = '')
+    public function getTaskOptionMenu(int $rootID, int $productID = 0, int $startModule = 0, string $extra = '')
     {
         /* If createdVersion <= 4.1, go to getOptionMenu(). */
         $products     = $this->loadModel('product')->getProductPairsByProject($rootID);
