@@ -377,6 +377,7 @@ class giteaModel extends model
             $gitea = $this->getByID($giteaID);
             $oauth = "oauth2:{$gitea->token}@";
             $project->tokenCloneUrl = preg_replace('/(http(s)?:\/\/)/', "\$1$oauth", $project->html_url);
+            $project->tokenCloneUrl = str_replace(array('https://', 'http://'), strstr($url, ':', true) . '://', $project->tokenCloneUrl);
         }
 
         return $project;

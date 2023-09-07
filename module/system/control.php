@@ -454,7 +454,7 @@ class system extends control
         {
             session_write_close();
             $this->system->saveDomainSettings();
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::$errors));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError(true)));
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->system->notices->updateDomainSuccess, 'locate' => $this->inlink('domainView')));
         }
