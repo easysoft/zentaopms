@@ -5367,10 +5367,10 @@ class executionModel extends model
             $title    = $execution->ipdStage['canStart'] ? '' : sprintf($this->lang->execution->disabledTip->startTip, $this->lang->stage->ipdTypeList[$execution->ipdStage['preAttribute']], $this->lang->stage->ipdTypeList[$execution->attribute]);
             $disabled = $execution->ipdStage['canStart'] ? '' : 'disabled';
         }
-        common::printIcon('execution', 'start', "executionID={$execution->id}", $execution, 'list', '', '', 'iframe', true, $disabled, $title);
+        echo $this->buildMenu('execution', 'start', "executionID={$execution->id}", $execution, 'browse', '', '', 'iframe', true, $disabled, $title);
 
         $class = !empty($execution->children) ? 'disabled' : '';
-        common::printIcon('task', 'create', "executionID={$execution->id}", '', 'list', '', '', $class, false, "data-app='execution'");
+        echo $this->buildMenu('task', 'create', "executionID={$execution->id}", '', 'browse', '', '', $class, false, "data-app='execution'");
 
         if(empty($project)) $project = $this->loadModel('project')->getByID($execution->project);
         if($execution->type == 'stage' or ($this->app->tab == 'project' and !empty($project->model) and $project->model == 'waterfallplus'))
@@ -5379,16 +5379,16 @@ class executionModel extends model
             $disabled     = ($isCreateTask and $execution->type == 'stage') ? '' : ' disabled';
             $title        = !$isCreateTask ? $this->lang->programplan->error->createdTask : $this->lang->programplan->createSubPlan;
             $title        = (!empty($disabled) and $execution->type != 'stage') ? $this->lang->programplan->error->notStage : $title;
-            common::printIcon('programplan', 'create', "program={$execution->project}&productID=$productID&planID=$execution->id", $execution, 'list', 'split', '', $disabled, '', '', $title);
+            echo $this->buildMenu('programplan', 'create', "program={$execution->project}&productID=$productID&planID=$execution->id", $execution, 'browse', 'split', '', $disabled, '', '', $title);
         }
 
         if($execution->type == 'stage')
         {
-            common::printIcon('programplan', 'edit', "stageID=$execution->id&projectID=$execution->project", $execution, 'list', '', '', 'iframe', true);
+            echo $this->buildMenu('programplan', 'edit', "stageID=$execution->id&projectID=$execution->project", $execution, 'browse', '', '', 'iframe', true);
         }
         else
         {
-            common::printIcon('execution', 'edit', "executionID=$execution->id", $execution, 'list', '', '', 'iframe', true);
+            echo $this->buildMenu('execution', 'edit', "executionID=$execution->id", $execution, 'browse', '', '', 'iframe', true);
         }
 
         $disabled = !empty($execution->children) ? ' disabled' : '';
@@ -5402,17 +5402,15 @@ class executionModel extends model
                 $ipdDisabled = ' disabled ';
                 $title       = $execution->attribute == 'launch' ? $this->lang->execution->disabledTip->launchTip : $this->lang->execution->disabledTip->closeTip;
             }
-            common::printIcon('execution', 'close', "stageID=$execution->id", $execution, 'list', 'off', 'hiddenwin' , $disabled . $ipdDisabled . ' iframe', true, '', $title);
+            echo $this->buildMenu('execution', 'close', "stageID=$execution->id", $execution, 'browse', 'off', 'hiddenwin' , $disabled . $ipdDisabled . ' iframe', true, '', $title);
         }
         elseif($execution->status == 'closed' and common::hasPriv('execution', 'activate', $execution))
         {
-            common::printIcon('execution', 'activate', "stageID=$execution->id", $execution, 'list', 'magic', 'hiddenwin' , $disabled . ' iframe', true, '', $this->lang->execution->activate);
+            echo $this->buildMenu('execution', 'activate', "stageID=$execution->id", $execution, 'browse', 'magic', 'hiddenwin' , $disabled . ' iframe', true, '', $this->lang->execution->activate);
         }
 
-        if(common::hasPriv('execution', 'delete', $execution))
-        {
-            common::printIcon('execution', 'delete', "stageID=$execution->id&confirm=no", $execution, 'list', 'trash', 'hiddenwin' , $disabled, '', '', $this->lang->delete);
-        }
+        if(common::hasPriv('execution', 'delete', $execution)) echo $this->buildMenu('execution', 'delete', "stageID=$execution->id&confirm=no", $execution, 'browse', 'trash', 'hiddenwin' , $disabled, '', '', $this->lang->delete);
+
         echo '</td>';
         echo '</tr>';
 
