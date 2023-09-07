@@ -245,7 +245,7 @@ class action extends control
     public function undelete(int $actionID, string $browseType = 'all', string $confirmChange = 'no')
     {
         $oldAction = $this->action->getById($actionID);
-        $extra     = $oldAction->extra == ACTIONMODEL::BE_HIDDEN ? 'hidden' : 'all';
+        $extra     = $oldAction->extra == actionModel::BE_HIDDEN ? 'hidden' : 'all';
 
         if(in_array($oldAction->objectType, array('program', 'project', 'execution', 'product')))
         {

@@ -924,7 +924,7 @@ class projectZen extends project
     protected function removeAssociatedExecutions(array $executionIdList): void
     {
         $this->project->deleteByTableName(TABLE_EXECUTION, array_keys($executionIdList));
-        foreach($executionIdList as $executionID => $execution) $this->loadModel('action')->create('execution', $executionID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
+        foreach($executionIdList as $executionID => $execution) $this->loadModel('action')->create('execution', $executionID, 'deleted', '', actionModel::CAN_UNDELETED);
         $this->loadModel('user')->updateUserView($executionIdList, 'sprint');
     }
 

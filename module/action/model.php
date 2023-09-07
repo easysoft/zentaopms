@@ -2069,7 +2069,7 @@ class actionModel extends model
 
         /* 在action表中更新action记录。 */
         /* Update action record in action table. */
-        $this->dao->update(TABLE_ACTION)->set('extra')->eq(ACTIONMODEL::BE_UNDELETED)->where('id')->eq($actionID)->exec();
+        $this->dao->update(TABLE_ACTION)->set('extra')->eq(actionModel::BE_UNDELETED)->where('id')->eq($actionID)->exec();
         $this->create($action->objectType, $action->objectID, 'undeleted');
 
         return true;
@@ -2419,7 +2419,7 @@ class actionModel extends model
         {
             $deletedAction = $deletedActions[$stageID][0];
             $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq('0')->where('id')->eq($stageID)->exec();
-            $this->dao->update(TABLE_ACTION)->set('extra')->eq(ACTIONMODEL::BE_UNDELETED)->where('id')->eq($deletedAction->id)->exec();
+            $this->dao->update(TABLE_ACTION)->set('extra')->eq(actionModel::BE_UNDELETED)->where('id')->eq($deletedAction->id)->exec();
             $this->create($deletedAction->objectType, $deletedAction->objectID, 'undeleted');
         }
     }

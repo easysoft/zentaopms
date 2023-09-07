@@ -132,7 +132,7 @@ class caselibModel extends model
         $this->dao->update(TABLE_TESTSUITE)->set('deleted')->eq(1)->where('id')->eq($libID)->exec();
 
         $this->loadModel('action');
-        $this->action->create('caselib', $libID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
+        $this->action->create('caselib', $libID, 'deleted', '', actionModel::CAN_UNDELETED);
     }
 
     /**

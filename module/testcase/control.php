@@ -1491,7 +1491,7 @@ class testcase extends control
             $this->loadModel('action');
             $scenes = $this->dao->select('id')->from(TABLE_SCENE)->where('deleted')->eq('0')->andWhere('path')->like($scene->path . '%')->fetchPairs();
             $this->dao->update(TABLE_SCENE)->set('deleted')->eq('1')->where('deleted')->eq(0)->andWhere('path')->like($scene->path . '%')->exec();
-            foreach($scenes as $sceneID) $this->action->create('scene', $sceneID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
+            foreach($scenes as $sceneID) $this->action->create('scene', $sceneID, 'deleted', '', actionModel::CAN_UNDELETED);
         }
         else
         {

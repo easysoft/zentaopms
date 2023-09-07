@@ -438,7 +438,7 @@ class program extends control
         $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();
 
         $this->dao->update(TABLE_PROGRAM)->set('deleted')->eq(1)->where('id')->eq($programID)->exec();
-        $this->loadModel('action')->create('program', $programID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
+        $this->loadModel('action')->create('program', $programID, 'deleted', '', actionModel::CAN_UNDELETED);
 
         return $this->send(array('result' => 'success'));
     }

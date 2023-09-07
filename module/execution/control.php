@@ -1462,7 +1462,7 @@ class execution extends control
             {
                 $this->loadModel('action');
                 $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq(0)->where('id')->eq($executionID)->exec();
-                $this->dao->update(TABLE_ACTION)->set('extra')->eq(ACTIONMODEL::BE_UNDELETED)->where('id')->eq($extra)->exec();
+                $this->dao->update(TABLE_ACTION)->set('extra')->eq(actionModel::BE_UNDELETED)->where('id')->eq($extra)->exec();
                 $this->action->create($this->objectType, $executionID, 'undeleted');
             }
 
