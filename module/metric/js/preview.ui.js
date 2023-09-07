@@ -227,11 +227,10 @@ window.renderCheckedLabel = function()
       }
       else
       {
+        // 通过设置div的宽度，减少文字的内容
         $div.width(Math.floor($div.width()) - Math.ceil(-left) - 1);
-
         // 换行了，重置left
         left = width;
-
         // 如果这个元素后面还有元素，说明行数要+1
         if(i + 1 < labels.length) lineCount ++;
       }
