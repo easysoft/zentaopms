@@ -44,28 +44,48 @@ window.renderCheckList = function(metrics)
   $('.side .check-list-metric').html(metricsHtml);
 }
 
+window.updateCheckList = function(id, name, isChecked)
+{
+  if(isChecked)
+  {
+     return window.checkedList.push({id: id, name: name});
+  }
+
+  window.checkedList = window.checkedList.filter(function(item){return item.id != id});
+}
+
+window.updateCheckbox = function(id, isChecked)
+{
+  var $el = $('.side .metric-tree .check-list input#metric' + id);
+  $el.prop('checked', isChecked);
+  if(isChecked)
+  {
+    return $el.closest('.checkbox-primary').addClass('metric-current');
+  }
+
+  $el.closest('.checkbox-primary').removeClass('metric-current');
+}
+
+window.updateCheckAction = function(id, name, isChecked)
+{
+  window.updateCheckList(id, name, isChecked);
+  window.updateCheckbox(id, isChecked);
+  window.renderCheckedLabel();
+}
+
 window.handleCheckboxChange = function($el)
 {
-    var isChecked = $el.is(":checked");
-    var value = $el.val();
+  var isChecked = $el.is(":checked");
+  var value = $el.val();
+  var text  = $el.next().text();
 
-    if(isChecked)
-    {
-      if(window.checkedList.length >= 10)
-      {
-        $el.prop('checked', false);
-        return messagerWarning(maxSelectMsg.replace('%s', maxSelectNum));
-      }
-      window.checkedList.push({id:value, name:$el.next().text()});
-      $el.closest('.checkbox-primary').addClass('metric-current');
-    }
-    else
-    {
-      window.checkedList = window.checkedList.filter(function(item){return item.id != value})
-      $el.closest('.checkbox-primary').removeClass('metric-current');
-    }
+  if(isChecked && window.checkedList.length >= 10)
+  {
+    $el.prop('checked', false);
+    return messagerWarning(maxSelectMsg.replace('%s', maxSelectNum));
+  }
 
-    renderCheckedLabel();
+  window.updateCheckAction(value, text, isChecked);
 }
 
 window.handleNavMenuClick = function($el)
@@ -110,10 +130,19 @@ window.renderDTable = function()
     });
 }
 
-function renderCheckedLabel()
+window.handleRemoveLabel = function(id)
+{
+  var checkedItem = window.checkedList.find(function(checked){return checked.id == id});
+  if(!checkedItem) return;
+
+  window.updateCheckAction(checkedItem.id, checkedItem.name, false);
+}
+
+window.renderCheckedLabel = function()
 {
   $('.checked-label-content').empty();
   var labels = JSON.parse(JSON.stringify(window.checkedList));
+  console.log(labels);
   var multi  = labels.length > 1;
   var width  = Math.floor($('.checked-label-content').width());
   var left   = width;
@@ -126,7 +155,7 @@ function renderCheckedLabel()
     var label = labels[i];
     var html = '<span class="' + labelClass + '" metric-id="' + label.id + '">';
     html    += '<div class="gray-pale-div">' + label.name + '</div>';
-    if(multi) html += '<button type="button" class="btn picker-deselect-btn size-sm square ghost"><span class="close"></span></button>';
+    if(multi) html += '<button type="button" class="btn picker-deselect-btn size-sm square ghost" onclick="window.handleRemoveLabel(' + label.id + ')"><span class="close"></span></button>';
     html    += '</span>';
 
     $('.checked-label-content').append(html);
