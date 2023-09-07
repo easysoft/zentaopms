@@ -3505,7 +3505,7 @@ class executionModel extends model
         $executionMember = array();
         foreach($members as $member)
         {
-            if(in_array($member->account, $accountList)) continue;;
+            if(in_array($member->account, $accountList)) continue;
 
             $member->join = isset($oldJoin[$member->account]) ? $oldJoin[$member->account] : helper::today();
             $executionMember[$member->account] = $member;
