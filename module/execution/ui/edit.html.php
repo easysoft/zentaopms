@@ -276,6 +276,7 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                             set::name('branch[0][]'),
                             set::control('picker'),
                             set::multiple(true),
+                            set::items(array()),
                             on::change('branchChange')
                         )
                     ),

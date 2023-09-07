@@ -1606,6 +1606,7 @@ class execution extends control
         $this->view->teamMembers          = $this->execution->getTeamMembers($executionID);
         $this->view->allProjects          = $this->project->getPairsByModel($project->model, 'noclosed', $project->id);
         $this->view->parentStageList      = isset($parentStageList) ? $parentStageList : array();
+        $this->view->isStage              = isset($project->model) && in_array($project->model, array('waterfall', 'waterfallplus'));
 
         $this->display();
     }
