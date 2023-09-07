@@ -59,6 +59,7 @@ foreach($lang->report->typeList as $type => $typeName)
     $link = createLink('task', 'report', "executionID=$executionID&browseType=$browseType&type=%s");
     $chartContents[] = tabPane
     (
+        set::key($type),
         set::title($typeName),
         set::active($type == $chartType),
         set::param(sprintf($link, $type)),
@@ -67,7 +68,7 @@ foreach($lang->report->typeList as $type => $typeName)
         (
             set::className('pb-4'),
             span(set::className('text-gray'),
-            html(str_replace('%tab%', $lang->task->wait . $lang->testcase->common, $lang->report->notice->help)))
+            html(str_replace('%tab%', $lang->task->waitTask . $lang->testcase->common, $lang->report->notice->help)))
         ),
         div($echarts)
     );
