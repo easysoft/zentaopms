@@ -80,6 +80,12 @@ window.handleCheckboxChange = function($el)
   var value = $el.val();
   var text  = $el.next().text();
 
+  if(!isChecked && window.checkedList.length == 1)
+  {
+    $el.prop('checked', true);
+    return;
+  }
+
   if(isChecked && window.checkedList.length >= 10)
   {
     $el.prop('checked', false);
