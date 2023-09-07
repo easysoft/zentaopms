@@ -2154,14 +2154,15 @@ class executionModel extends model
         array_unshift($fullTrees, $firstTree);
         foreach($fullTrees as $i => &$tree)
         {
-            if($tree['type'] == 'product')
+            $tree = (object) $tree;
+            if($tree->type == 'product')
             {
                 $firstTree['type'] = 'story';
-                $firstTree['root'] = $tree['root'];
-                array_unshift($tree['children'], $firstTree);
+                $firstTree['root'] = $tree->root;
+                array_unshift($tree->children, $firstTree);
             }
 
-            $tree = $this->fillTasksInTree((object)$tree, $executionID);
+            $tree = $this->fillTasksInTree($tree, $executionID);
             if(empty($tree->children)) unset($fullTrees[$i]);
         }
 
