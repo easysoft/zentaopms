@@ -112,8 +112,8 @@ window.afterPageUpdate = function($target, info, options)
   window.lineCount   = 1;
   window.checkedList = [{id:current.id + '', name:current.name}];
   window.renderDTable();
-  if(viewType == 'multiple') renderCheckedLabel();
-  window.addEventListener('resize', renderCheckedLabel());
+  if(viewType == 'multiple') window.renderCheckedLabel();
+  window.addEventListener('resize', window.renderCheckedLabel());
 }
 
 window.renderDTable = function()
@@ -165,7 +165,7 @@ window.setDropDown = function()
   }
 }
 
-function renderCheckedLabel()
+window.renderCheckedLabel = function()
 {
   var $content =  $('.checked-label-content');
   $content.empty();
