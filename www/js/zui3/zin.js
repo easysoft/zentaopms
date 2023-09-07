@@ -943,6 +943,7 @@
 
         const options = $link.dataset();
         const url = options.url || $link.attr('href');
+        if(url && (url.indexOf('javascript:') === 0 || url[0] === '#')) return;
         if(options.toggle)
         {
             if(options.toggle === 'iframeModal')
@@ -998,7 +999,6 @@
         if(url)
         {
             if(appCode === 'help') return $.apps.openUrl(url, {app: appCode});
-            if(url.indexOf('javascript:') === 0 || url[0] === '#') return;
             var urlInfo = $.parseLink(url);
             if(urlInfo.external || (urlInfo.moduleName === 'file' && urlInfo.methodName === 'download')) return;
             if(urlInfo.moduleName === 'index' && urlInfo.methodName === 'index')
