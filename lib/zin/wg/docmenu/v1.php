@@ -82,7 +82,7 @@ class docMenu extends wg
                 $type       = in_array(strtolower($item->type), $this->mineTypes) ? strtolower($item->type) : 'mine';
                 $linkParams = "type={$type}&libID={$this->libID}&moduleID={$moduleID}";
             }
-            if($item->type == 'module' && $item->object == 'api')
+            if($item->type == 'module' && !empty($item->object) && $item->object == 'api')
             {
                 $linkParams = str_replace(array('browseType=&', 'param=0'), array('browseType=byrelease&', "param={$this->release}"), $linkParams);
             }
