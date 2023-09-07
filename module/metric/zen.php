@@ -422,30 +422,16 @@ class metricZen extends metric
     protected function verifyCalc($metric)
     {
         $verifyResult = array();
-
-        $isCalcExists = $this->metric->checkCalcExists($metric);
-        if($isCalcExists) $verifyResult['exists'] = 'fail';
-
-        if($isCalcExists)
+        foreach($this->config->metric->verifyList as $method => $tip)
         {
-            $this->metric->includeCalc($metric->code);
-            $isClassExists = $this->metric->checkCalcClass($metric) ? 'success' : 'fail';
-            if($isClassExists) $verifyResult['class'] = 'fail';
+            $verifyItem = new stdclass();
+            $verifyItem->tip    = $tip;
+            $verifyItem->result = $this->metric->$method($metric);
+
+            $verifyResult[] = $verifyItem;
         }
 
-        if($isClassExists)
-        {
-            $methodsStatus = $this->metric->checkCalcMethods($metric);
-            if($methodsStatus) $verifyResult['method'] = 'fail';
-        }
-
-        if($methodsStatus)
-        {
-            $calcResult = $this->metric->dryRunCalc($metric);
-            if(!empty($calcResult)) $verifyResult['result'] = $calcResult;
-        }
-
-        return $verifyResult ? $verifyResult : true;
+        return $verifyResult;
     }
 
     /**

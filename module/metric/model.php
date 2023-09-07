@@ -571,6 +571,9 @@ class metricModel extends model
      */
     public function checkCalcClass($metric)
     {
+        if(!$this->checkCalcExists) return false;
+
+        $this->includeCalc($metric->code);
         return class_exists($metric->code);
     }
 
@@ -584,6 +587,8 @@ class metricModel extends model
      */
     public function checkCalcMethods($metric)
     {
+        if(!$this->checkCalcExists) return false;
+
         $methodNameList = $this->metricTao->getMethodNameList($metric->code);
         foreach($this->config->metric->necessaryMethodList as $method)
         {

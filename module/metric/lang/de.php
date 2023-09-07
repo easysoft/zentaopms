@@ -41,6 +41,7 @@ $lang->metric->oldMetricInfo = 'Measurement Info';
 $lang->metric->verifyFile    = 'Verify File';
 $lang->metric->verifyResult  = 'Verify Result';
 $lang->metric->publish       = 'Publish';
+$lang->metric->moveFailTip   = '移动度量项文件失败。';
 
 $lang->metric->viewType = new stdclass();
 $lang->metric->viewType->single   = 'Single view';
@@ -164,6 +165,11 @@ $lang->metric->implementTips[] = '1. Download the metric template code.php. Note
 $lang->metric->implementTips[] = '2. Perform coding and development operations on the file, referring to the manual for instructions.';
 $lang->metric->implementTips[] = '3. Place the developed code.php file in the [User Zentao Directory]/tmp/metric directory.';
 $lang->metric->implementTips[] = '4. Execute the command to grant executable permissions to the file.';
+
+$lang->metric->verifyList = array();
+$lang->metric->verifyList['checkCalcExists']  = 'Check whether the metric exists';
+$lang->metric->verifyList['checkCalcClass']   = 'Check the metric class name is correct';
+$lang->metric->verifyList['checkCalcMethods'] = 'Check whether the metrics defines the required methods';
 
 $lang->metric->old = new stdclass();
 

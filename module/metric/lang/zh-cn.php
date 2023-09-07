@@ -167,6 +167,11 @@ $lang->metric->implementTips[] = '2.对文件进行编码开发操作，操作�
 $lang->metric->implementTips[] = '3.请将开发后的code.php文件放到[用户禅道目录]/tmp/metric目录下。';
 $lang->metric->implementTips[] = '4.执行命令赋予文件可执行权限。';
 
+$lang->metric->verifyList = array();
+$lang->metric->verifyList['checkCalcExists']  = '检查度量项是否存在';
+$lang->metric->verifyList['checkCalcClass']   = '检查度量项类名是否正确';
+$lang->metric->verifyList['checkCalcMethods'] = '检查度量项是否定义了必须的方法';
+
 $lang->metric->old = new stdclass();
 
 $lang->metric->old->scopeList = array();
