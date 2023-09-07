@@ -2934,7 +2934,7 @@ class testcaseZen extends testcase
         $this->session->set('xmindImport', $filePath);
         $this->session->set('xmindImportType', $fetchResult['type']);
 
-        return $fetchResult['pId'];
+        return $fetchResult['pID'];
     }
 
     /**
@@ -2956,26 +2956,26 @@ class testcaseZen extends testcase
             return array('result'=>'fail','message'=>$this->lang->testcase->errorXmindUpload);
         }
 
-        $pId = $productID;
+        $pID = $productID;
         if($this->classXmind->endsWith($title,"]") == true)
         {
-            $tmpId = $this->classXmind->getBetween($title,"[","]");
-            if(empty($tmpId) == false)
+            $tmpID = $this->classXmind->getBetween($title,"[","]");
+            if(empty($tmpID) == false)
             {
                 $projectCount = $this->dao->select('count(*) as count')
                     ->from(TABLE_PRODUCT)
                     ->where('id')
-                    ->eq((int)$tmpId)
+                    ->eq((int)$tmpID)
                     ->andWhere('deleted')->eq('0')
                     ->fetch('count');
 
                 if((int)$projectCount == 0) return array('result'=>'fail','message'=>$this->lang->testcase->errorImportBadProduct);
 
-                $pId = $tmpId;
+                $pID = $tmpID;
             }
         }
 
-        return array('result'=>'success','pId'=>$pId, 'type'=>'xml');
+        return array('result'=>'success','pID'=>$pID, 'type'=>'xml');
     }
 
     /**
@@ -2998,27 +2998,27 @@ class testcaseZen extends testcase
             return array('result'=>'fail','message'=>$this->lang->testcase->errorXmindUpload);
         }
 
-        $pId = $productID;
+        $pID = $productID;
 
         $this->classXmind = $this->app->loadClass('xmind');
         if($this->classXmind->endsWith($title,"]") == true)
         {
-            $tmpId = $this->classXmind->getBetween($title,"[","]");
-            if(empty($tmpId) == false)
+            $tmpID = $this->classXmind->getBetween($title,"[","]");
+            if(empty($tmpID) == false)
             {
                 $projectCount = $this->dao->select('count(*) as count')
                     ->from(TABLE_PRODUCT)
                     ->where('id')
-                    ->eq((int)$tmpId)
+                    ->eq((int)$tmpID)
                     ->andWhere('deleted')->eq('0')
                     ->fetch('count');
 
                 if((int)$projectCount == 0) return array('result'=>'fail','message'=>$this->lang->testcase->errorImportBadProduct);
 
-                $pId = $tmpId;
+                $pID = $tmpID;
             }
         }
 
-        return array('result'=>'success','pId'=>$pId,'type'=>'json');
+        return array('result'=>'success','pID'=>$pID,'type'=>'json');
     }
 }
