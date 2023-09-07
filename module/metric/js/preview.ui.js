@@ -108,7 +108,7 @@ window.handleNavMenuClick = function($el)
 
 window.afterPageUpdate = function($target, info, options)
 {
-  window.isDrop      = false;
+  window.isDropdown  = false;
   window.lineCount   = 1;
   window.checkedList = [{id:current.id + '', name:current.name}];
   window.renderDTable();
@@ -148,12 +148,12 @@ window.setDropDown = function()
   $drop.toggleClass('rotate');
   if($drop.hasClass('rotate'))
   {
-    window.isDrop = true;
+    window.isDropdown = true;
     window.unfoldContent();
   }
   else
   {
-    window.isDrop = false;
+    window.isDropdown = false;
     window.foldContent();
   }
 }
@@ -196,7 +196,7 @@ window.renderCheckedLabel = function()
 
   for(var i = 0; i < labels.length; i++)
   {
-    if(!window.isDrop && nextLine) labelClass += ' gray-hidden';
+    if(!window.isDropdown && nextLine) labelClass += ' gray-hidden';
 
     var label = labels[i];
     var html = '<span class="' + labelClass + '" metric-id="' + label.id + '">';
@@ -219,8 +219,8 @@ window.renderCheckedLabel = function()
       {
         // 如果剩下的空间一点字都显示不下了，就换行
         left = width - labelWidth;
-        // 如果还没判定换行但是这一行一点字都显示不下，从这里加hidden类
-        if(!window.isDrop && !nextLine) $label.addClass('gray-hidden');
+        // 如果列表是折叠的还没判定换行但是这一行一点字都显示不下，从这里加hidden类
+        if(!window.isDropdown && !nextLine) $label.addClass('gray-hidden');
         // 此时已经换行了，行数加1
         lineCount ++;
       }
@@ -242,17 +242,17 @@ window.renderCheckedLabel = function()
   $('.dropdown-icon').addClass('hidden');
   if(lineCount >= 2) $('.dropdown-icon').removeClass('hidden');
 
-  if(window.lineCount != lineCount)
+  if(window.lineCount != lineCount && window.isDropdown)
   {
     // 在展开状态缩放到只有一行了
-    if(window.isDrop && lineCount == 1)
+    if(lineCount == 1)
     {
       $('.dropdown-icon').toggleClass('rotate');
-      window.isDrop = false;
+      window.isDropdown = false;
       window.foldContent();
     }
     // 在展开状态多了若干行, 或者少了若干行
-    else if(window.isDrop)
+    else
     {
       $('.checked-content').height(48 + (lineCount - 1) * 40);
     }
