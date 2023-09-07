@@ -38,4 +38,4 @@
 .main .checked-tip {line-height: 48px; height: 100%; padding-right: 32px;}
 .main .gray-pale {margin: 7px 5px; padding: 12px 10px; white-space: nowrap;}
 .main .gray-pale-div {overflow: hidden;}
-.main .gray-pale-withdelete {padding-right: 5px;}
+.main .gray-pale-withdelete {padding-right: 1px;}
