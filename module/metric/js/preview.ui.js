@@ -154,4 +154,6 @@ function renderCheckedLabel()
       }
     }
   }
+
+  $('.checked-tip').text(selectCount.replace('%s', labels.length));
 }
