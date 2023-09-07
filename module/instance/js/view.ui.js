@@ -1,4 +1,4 @@
-window.openAdminer = function()
+$('#mainContent').on('click', '.db-management', function()
 {
     var dbName     = $(this).data('dbname');
     var dbType     = $(this).data('dbtype');
@@ -22,25 +22,24 @@ window.openAdminer = function()
             }
         }
     );
-}
+});
 
 var reloadTimes = 0;
 window.afterPageUpdate = function()
 {
+    if(reloadTimes > 100 || instanceType != 'store') return;
+    if($('#statusTD').data('reload') !== true && $('#memoryRate').data('load') !== true) return;
+    // $('.db-management').addClass('disabled');
     setTimeout(function()
     {
-        if(reloadTimes > 100 || instanceType != 'store') return;
-        if($('#statusTD').data('reload') === true || $('#memoryRate').data('load') == true)
-        {
-            reloadTimes++;
-            fetchContent
-            ({
-                url: $.createLink('instance', 'view', 'id=' + instanceID),
-                selector: '#instanceInfoContainer',
-                id: 'instanceInfoContainer',
-                target: '#instanceInfoContainer',
-            });
-        }
+        reloadTimes++;
+        loadPage
+        ({
+            url: $.createLink('instance', 'view', 'id=' + instanceID),
+            selector: '#instanceInfoContainer',
+            id: 'instanceInfoContainer',
+            target: '#instanceInfoContainer',
+        });
     }, 4000);
 }
 

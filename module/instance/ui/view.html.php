@@ -52,11 +52,10 @@ foreach($dbList as $db)
             btn
             (
                 $lang->instance->management,
-                setClass('btn text-primary ghost ' .  $disabledClass),
+                setClass('btn text-primary ghost db-management ' .  $disabledClass),
                 setData('dbname', $db->name),
                 setData('dbtype', $db->db_type),
                 setData('id',   $instance->id),
-                on::click('openAdminer'),
             )
         ),
     );

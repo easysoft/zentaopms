@@ -2053,7 +2053,7 @@ class InstanceModel extends model
         if($action == 'ajaxStop')      return $this->canDo('stop', $instance);
         if($action == 'ajaxUninstall') return $this->canDo('uninstall', $instance);
         if($action == 'visit')         return !empty($instance->domain) && $this->canDo('visit', $instance);
-        if($action == 'upgrade')       return !empty($instance->latestVersion);
+        if($action == 'upgrade')       return !empty($instance->latestVersion) && in_array($instance->status, array('stopped', 'running'));
         if($action == 'edit')          return false;
         if($action == 'bindUser')      return in_array($instance->appName, array('GitLab', 'Gitea', 'Gogs'));
 
