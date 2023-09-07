@@ -47,6 +47,7 @@
             <th><?php echo $lang->programplan->PM;?> </th>
             <td colspan='2'><?php echo html::select('PM', $PMUsers, $plan->PM, "class='form-control picker-select'");?></td>
           </tr>
+          <?php if($project->model != 'research'):?>
           <?php if(isset($config->setPercent) and $config->setPercent == 1):?>
           <tr>
             <th><?php echo $lang->programplan->percent;?> </th>
@@ -61,7 +62,7 @@
           <tr id="attributeType">
             <th><?php echo $lang->programplan->attribute;?></th>
             <td colspan='2'>
-              <?php 
+              <?php
               if($project->model == 'ipd')
               {
                   echo zget($lang->stage->ipdTypeList, $plan->attribute);
@@ -95,6 +96,7 @@
             <?php $class = $plan->grade == 2 ? "disabled='disabled'" : '';?>
             <td colspan='2'><?php echo html::select('acl', $lang->execution->aclList, $plan->acl, "class='form-control' $class");?></td>
           </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->programplan->planDateRange;?> </th>
             <td colspan='2'>
