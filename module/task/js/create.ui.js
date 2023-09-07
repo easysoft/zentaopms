@@ -7,10 +7,7 @@ $(function()
         $("input[name='after'][value='toTaskList']").prop('checked', true);
     }
 
-    $('#module').on('change', function()
-    {
-        loadExecutionStories();
-    });
+    setStoryRelated();
 })
 
 /**
@@ -166,11 +163,16 @@ function loadAll()
  */
 function loadModules(executionID)
 {
-    const extra         = $('#showAllModule').prop('checked') ? 'allModule' : '';
-    const getModuleLink = $.createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + executionID + '&viewtype=task&branch=0&rootModuleID=0&returnType=html&fieldID=&needManage=0&extra=' + extra);
-    $.get(getModuleLink, function(data)
+    const extra         = $('input[name=isShowAllModule]') ? 'allModule' : '';
+    const getModuleLink = $.createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + executionID + '&viewtype=task&branch=0&rootModuleID=0&returnType=items&fieldID=&needManage=0&extra=' + extra);
+    $.get(getModuleLink, function(modules)
     {
-        $('#module').replaceWith(data);
+        if(modules)
+        {
+            modules = JSON.parse(modules);
+            const $modulePicker = $('input[name=module]').zui('picker');
+            $modulePicker.render({items: modules});
+        }
     });
 }
 
@@ -181,30 +183,28 @@ function loadModules(executionID)
  * @access public
  * @return void
  */
-function loadExecutionStories()
+window.loadExecutionStories = function()
 {
-    var   storyID      = $('[name="story"]').val();
-    const executionID  = $('[name="execution"]').val();
-    const moduleID     = $('[name="module"]').val();
+    const storyID      = $('input[name="story"]').val();
+    const executionID  = $('input[name="execution"]').val();
+    const moduleID     = $('input[name="module"]').val();
     const getStoryLink = $.createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=0&moduleID=' + moduleID + '&storyID=' + storyID + '&number=&type=full&status=active');
     $.get(getStoryLink, function(stories)
     {
-        if(!stories) stories = '<select id="story" name="story" class="form-control"></select>';
-        $('#story').replaceWith(stories);
-        $('#story').removeAttr('onchange');
-        if($('#story').length == 0 && $('#storyBox').length != 0) $('#storyBox').html(stories);
+        if(stories)
+        {
+            stories = JSON.parse(stories);
+            const $storyPicker = $('input[name=story]').zui('picker');
+            $storyPicker.render({items: stories});
+        }
 
-        $('#story').val(storyID);
         setPreview();
-        $('#story').next('.picker').remove();
 
         /* If there is no story option, select will be hidden and text will be displayed; otherwise, the opposite is true */
-        if($('#story option').length > 1 || parseInt(hasProduct) == 0)
+        if(stories.length || parseInt(hasProduct) == 0)
         {
             $('#story').closest('.form-group').removeClass('hidden');
             $('.empty-story-tip').closest('.form-group').addClass('hidden');
-
-            $('#taskCreateForm').on('change', '#story', setStoryRelated);
         }
         else
         {
@@ -262,9 +262,9 @@ function loadLanes()
  */
 function setStoryRelated()
 {
+    $('#copyButton').prop('checked', false);
     setPreview();
     setStoryModule();
-    setAfter();
 }
 
 /**
@@ -276,7 +276,7 @@ function setStoryRelated()
  */
 function setPreview()
 {
-    if(!Number($("[name='story']").val()))
+    if(!$("input[name='story']").val())
     {
         $('#preview').addClass('hidden');
         $('.title-group.required > div').removeAttr('id', 'copyStory-input').addClass('.required');
@@ -306,7 +306,7 @@ function setPreview()
  */
 function setStoryModule()
 {
-    var storyID = $('#story').val();
+    var storyID = $('input[name=story]').val();
     if(storyID)
     {
         var link = $.createLink('story', 'ajaxGetInfo', 'storyID=' + storyID);
@@ -314,12 +314,11 @@ function setStoryModule()
         {
             if(storyInfo)
             {
-                $('#module').val(storyInfo.moduleID);
-                $("#module").trigger("chosen:updated");
+                $('input[name=module]').zui('picker').$.setValue(storyInfo.moduleID);
 
-                $('#storyEstimate').val(storyInfo.estimate);
-                $('#storyPri').val(storyInfo.pri);
-                $('#storyDesc').val(storyInfo.spec);
+                $('input[name=storyEstimate]').val(storyInfo.estimate);
+                $('input[name=storyPri]').val(storyInfo.pri);
+                $('input[name=storyDesc]').val(storyInfo.spec);
             }
         });
     }
@@ -334,10 +333,10 @@ function setStoryModule()
  */
 function setAfter()
 {
-    if($("#story").length == 0 || $("#story").val() == '')
+    if($("#story").length == 0 || $("input[name=story]").val())
     {
         /* If the exeuction doesn't have stories, hide the selections of story. */
-        if($('input[value="continueAdding"]').attr('checked') == 'checked')
+        if($('input[value="continueAdding"]').prop('checked'))
         {
             $('input[value="toTaskList"]').prop('checked', true);
         }
@@ -469,3 +468,33 @@ $('#taskCreateForm').on('click', '.assignedToList .picker-multi-selection', func
 
     setLineIndex();
 })
+
+window.copyStoryTitle = function()
+{
+    let storyTitle = $('#story span.picker-single-selection').text();
+    let startPosition = storyTitle.indexOf(':') + 1;
+    if (startPosition > 0) {
+        let endPosition   = storyTitle.lastIndexOf('(');
+        storyTitle = storyTitle.substr(startPosition, endPosition - startPosition);
+    }
+
+    $('#name').attr('value', storyTitle);
+    $('#estimate').attr('value', $('input[name=storyEstimate]').val());
+    $('#desc').attr('value', $('input[name=storyDesc]').val());
+}
+
+window.showAllModule = function()
+{
+    $('input[name=isShowAllModule]').val('1');
+    const getModuleLink = $.createLink('tree', 'ajaxGetOptionMenu', "rootID=" + executionID + '&viewType=task&branch=0&rootModuleID=0&returnType=items&fieldID=&needManage=0&extra=allModule');
+
+    $.get(getModuleLink, function(modules)
+    {
+        if(modules)
+        {
+            modules = JSON.parse(modules);
+            const $modulePicker = $('input[name=module]').zui('picker');
+            $modulePicker.render({items: modules});
+        }
+    });
+}

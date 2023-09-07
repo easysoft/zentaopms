@@ -24,7 +24,7 @@ foreach($testStories as $storyID => $storyTitle)
         (
             h::td
             (
-                select
+                picker
                 (
                     set::id("testStory{$i}"),
                     set::name("testStory[$i]"),
@@ -34,44 +34,44 @@ foreach($testStories as $storyID => $storyTitle)
             ),
             h::td
             (
-                !empty($task) ? select
+                picker
                 (
                     set::id("testPri{$i}"),
                     set::name("testPri[$i]"),
                     set::required(true),
-                    set::value($task->pri),
+                    set::value(empty($task->pri) ? 3 : $task->pri),
                     set::items($lang->task->priList),
-                ) : null,
+                ),
             ),
             h::td
             (
-                !empty($task) ? input
+                datepicker
                 (
                     set::id("testEstStarted{$i}"),
                     set::name("testEstStarted[$i]"),
                     set::type('date'),
-                    set::value($task->estStarted),
-                ) : null,
+                    set::value(empty($task->estStarted) ? '' : $task->estStarted),
+                ),
             ),
             h::td
             (
-                !empty($task) ? input
+                datepicker
                 (
                     set::id("testDeadline{$i}"),
                     set::name("testDeadline[$i]"),
                     set::type('date'),
-                    set::value($task->deadline),
-                ) : null,
+                    set::value(empty($task->deadline) ? '' : $task->deadline),
+                ),
             ),
             h::td
             (
-                !empty($task) ? select
+                picker
                 (
-                        set::id("testAssignedTo{$i}"),
-                        set::name("testAssignedTo[$i]"),
-                        set::value($task->assignedTo),
-                        set::items($members),
-                ) : null,
+                    set::id("testAssignedTo{$i}"),
+                    set::name("testAssignedTo[$i]"),
+                    set::value(empty($task->assignedTo) ? '' : $task->assignedTo),
+                    set::items($members),
+                ),
             ),
             h::td
             (

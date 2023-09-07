@@ -223,10 +223,29 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            set::name('module'),
             set::label($lang->task->module),
-            set::value($task->module),
-            set::items($modulePairs)
+            inputGroup
+            (
+                picker
+                (
+                    set::name('module'),
+                    set::value($task->module),
+                    set::items($modulePairs),
+                    on::change('loadExecutionStories'),
+                ),
+                span
+                (
+                    set('class', 'input-group-addon'),
+                    a
+                    (
+                        set('id', 'showAllModuleButton'),
+                        set('href', 'javascript:;'),
+                        $lang->task->allModule,
+                        on::click('showAllModule')
+                    ),
+                    formHidden('isShowAllModule', 0),
+                )
+            )
         )
     ),
     $kanbanRow,
@@ -234,7 +253,7 @@ formPanel
     (
         formGroup
         (
-            set::width('1/4'),
+            set::width('1/2'),
             set::label($lang->task->type),
             set::required(true),
             picker
@@ -247,7 +266,7 @@ formPanel
         ),
         formGroup
         (
-            set::width('1/4'),
+            set::width('1/2'),
             set::id('selectTestStoryBox'),
             setClass('hidden items-center'),
             checkbox(
@@ -376,7 +395,6 @@ formPanel
                     set::name('name'),
                     set::value($task->name),
                 ),
-                set::suffixWidth('icon'),
                 to::suffix
                 (
                     colorPicker
@@ -385,9 +403,20 @@ formPanel
                         set::name('color'),
                         set::value($task->color),
                         set::syncColor('#name')
-                    )
-                )
-            )
+                    ),
+                    checkbox(
+                        set::id('copyButton'),
+                        set::name('copyButton'),
+                        set::value(1),
+                        set::text($lang->task->copyStoryTitle),
+                        set::rootClass('ml-2 border-l border-gray pl-2'),
+                        on::change('copyStoryTitle')
+                    ),
+                ),
+            ),
+            formHidden('storyEstimate', ''),
+            formHidden('storyDesc', ''),
+            formHidden('storyPri', ''),
         ),
         formGroup
         (

@@ -68,7 +68,7 @@ class task extends control
             if($duplicateTaskID) return $this->send(array('result' => 'success', 'message' => sprintf($this->lang->duplicate, $this->lang->task->common), 'load' => $this->createLink('task', 'view', "taskID={$duplicateTaskID}")));
 
             $this->dao->begin();
-            if($this->post->type == 'test')
+            if($this->post->type == 'test' && $this->post->selectTestStory)
             {
                 /* Prepare to create the data for the test subtask and to check the data format. */
                 $testTasks  = $this->taskZen->buildTestTasksForCreate($taskData->execution);
@@ -1191,7 +1191,8 @@ class task extends control
         }
 
         $this->view->testStories = $testStories;
-        $this->view->task        = $this->task->getByID($taskID);
+        $this->view->task        = $this->loadModel('task')->getByID($taskID);
+        $this->view->members     = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
         $this->display();
     }
 }

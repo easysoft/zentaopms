@@ -41,13 +41,12 @@ class taskZen extends task
         $this->view->task = $this->setTaskByObjectID($storyID, $moduleID, $taskID, $todoID, $bugID);
 
         /* Get module information. */
-        $executionID      = $execution->id;
-        $showAllModule    = zget($this->config->execution->task, 'allModule', '');
-        $modulePairs      = $this->tree->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
+        $executionID = $execution->id;
+        $modulePairs = $this->tree->getTaskOptionMenu($executionID);
 
         /* Display relevant variables. */
         $this->assignExecutionForCreate($execution);
-        $this->assignStoryForCreate($executionID);
+        $this->assignStoryForCreate($executionID, $moduleID);
         if($execution->type == 'kanban') $this->assignKanbanForCreate($executionID, $output);
 
         /* Set Custom fields. */
@@ -116,12 +115,13 @@ class taskZen extends task
      * Set the stories related data for the create page display.
      *
      * @param  int       $executionID
+     * @param  int       $moduleID
      * @access protected
      * @return void
      */
-    protected function assignStoryForCreate(int $executionID): void
+    protected function assignStoryForCreate(int $executionID, int $moduleID): void
     {
-        $stories         = $this->story->getExecutionStoryPairs($executionID, 0, 'all', '', '', 'active');
+        $stories         = $this->story->getExecutionStoryPairs($executionID, 0, 'all', $moduleID, 'full', 'active');
         $testStoryIdList = $this->loadModel('story')->getTestStories(array_keys($stories), $executionID);
         $testStories     = array();
         foreach($stories as $testStoryID => $storyTitle)
@@ -680,7 +680,7 @@ class taskZen extends task
     {
         /* Set data for the type of test task that has linked stories. */
         $postData = form::data($this->config->task->form->testTask->create)->get();
-        if(!isset($postData->selectTestStory)) return array();
+        if(empty($postData->selectTestStory)) return array();
 
         $testTasks = array();
         foreach($postData->testStory as $key => $storyID)
