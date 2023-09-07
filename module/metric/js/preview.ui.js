@@ -113,7 +113,7 @@ window.afterPageUpdate = function($target, info, options)
   window.checkedList = [{id:current.id + '', name:current.name}];
   window.renderDTable();
   if(viewType == 'multiple') window.renderCheckedLabel();
-  window.addEventListener('resize', window.renderCheckedLabel());
+  $(window).on('resize', window.renderCheckedLabel);
 }
 
 window.renderDTable = function()
@@ -171,7 +171,6 @@ window.renderCheckedLabel = function()
   $content.empty();
 
   var labels = JSON.parse(JSON.stringify(window.checkedList));
-  console.log(labels);
   var multi  = labels.length > 1;
   var width  = Math.floor($content.width());
   var left   = width;
