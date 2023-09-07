@@ -150,6 +150,7 @@ $config->task->datatable->fieldList['progress']['width']    = '75';
 $config->task->datatable->fieldList['progress']['type']     = 'progress';
 $config->task->datatable->fieldList['progress']['fixed']    = 'no';
 $config->task->datatable->fieldList['progress']['required'] = 'no';
+$config->task->datatable->fieldList['progress']['sortType'] = false;
 $config->task->datatable->fieldList['progress']['name']     = $lang->task->progress;
 
 $config->task->datatable->fieldList['openedBy']['title']    = 'openedByAB';
