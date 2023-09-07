@@ -5338,7 +5338,7 @@ class executionModel extends model
      * @access public
      * @return void
      */
-    public function delete(string $table, int $executionID)
+    public function delete(string $table, int $executionID): void
     {
         $this->dao->update($table)->set('deleted')->eq(1)->where('id')->eq($executionID)->exec();
         $this->loadModel('action')->create('execution', $executionID, 'deleted');
