@@ -1396,6 +1396,7 @@ class execution extends control
     }
 
     /**
+     * 编辑一个执行。
      * Edit a execution.
      *
      * @param  int    $executionID
@@ -1408,11 +1409,12 @@ class execution extends control
      */
     public function edit(int $executionID, string $action = 'edit', string $extra = '', string $newPlans = '', string $confirm = 'no')
     {
-        /* Load language files. */
         $this->loadModel('product');
+        $this->loadModel('programplan');
+        $this->loadModel('productplan');
         $this->app->loadLang('program');
         $this->app->loadLang('stage');
-        $this->app->loadLang('programplan');
+
         $execution           = $this->execution->getById($executionID);
         $branches            = $this->project->getBranchesByProject($executionID);
         $linkedProductIdList = empty($branches) ? '' : array_keys($branches);
@@ -1421,14 +1423,14 @@ class execution extends control
         {
             $newPlans = explode(',', $newPlans);
             $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
-            $this->loadModel('productplan')->linkProject($executionID, $newPlans);
+            $this->productplan->linkProject($executionID, $newPlans);
             $this->productplan->linkProject($projectID, $newPlans);
             return $this->send(array('result' => 'success', 'load' => inlink('view', "executionID=$executionID")));
         }
         elseif(!empty($newPlans))
         {
-            $executionProductList  = $this->loadModel('product')->getProducts($executionID);
-            $multiBranchProduct = false;
+            $executionProductList = $this->product->getProducts($executionID); /* 无论是迭代ID还是项目ID都会查到一个与之对应的产品。*/
+            $multiBranchProduct   = false;
             foreach($executionProductList as $executionProduct)
             {
                 if($executionProduct->type != 'normal')
@@ -1458,10 +1460,11 @@ class execution extends control
 
             $this->execution->updateProducts($executionID, $postData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->loadModel('action');
             if($action == 'undelete')
             {
-                $this->loadModel('action');
-                $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq(0)->where('id')->eq($executionID)->exec();
+                $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq('0')->where('id')->eq($executionID)->exec();
                 $this->dao->update(TABLE_ACTION)->set('extra')->eq(actionModel::BE_UNDELETED)->where('id')->eq($extra)->exec();
                 $this->action->create($this->objectType, $executionID, 'undeleted');
             }
@@ -1474,12 +1477,12 @@ class execution extends control
 
             if($changes or $diffProducts)
             {
-                $actionID = $this->loadModel('action')->create($this->objectType, $executionID, 'edited', '', $products);
+                $actionID = $this->action->create($this->objectType, $executionID, 'edited', '', $products);
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $project = $this->loadModel('project')->getById($execution->project);
-            if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->loadModel('programplan')->computeProgress($executionID, 'edit');
+            $project = $this->project->getById($execution->project);
+            if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->programplan->computeProgress($executionID, 'edit');
 
             /* Link the plan stories. */
             $oldPlans = explode(',', implode(',' ,$oldPlans));
@@ -1520,7 +1523,6 @@ class execution extends control
 
         $allProducts = $this->product->getProducts($execution->project, 'noclosed', '', false, $linkedProductIdList);
 
-        $this->loadModel('productplan');
         $productPlans     = array();
         $linkedBranches   = array();
         $linkedBranchList = array();
@@ -1578,7 +1580,7 @@ class execution extends control
         if($this->app->tab == 'project' and $project->model == 'waterfallplus')
         {
             $productID       = $this->product->getProductIDByProject($executionID);
-            $parentStageList = $this->loadModel('programplan')->getParentStageList($execution->project, $executionID, $productID);
+            $parentStageList = $this->programplan->getParentStageList($execution->project, $executionID, $productID);
             unset($parentStageList[0]);
         }
 
