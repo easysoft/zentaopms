@@ -8,7 +8,7 @@ window.generateCheckItem = function(text, value, isChecked)
   var checked = isChecked ? 'checked=""' : '';
   var currentClass = isChecked ? 'metric-current' : '';
   return `<div class="font-medium checkbox-primary ${currentClass}">
-            <input type="checkbox" id="metric${value}" name="metric" ${checked} value="${value}">
+            <input type="checkbox" id="metric${value}" name="metric" ${checked} value="${value}" onchange="window.handleCheckboxChange(this)">
             <label for="metric${value}">${text}</label>
           </div>`;
 }
@@ -75,6 +75,7 @@ window.updateCheckAction = function(id, name, isChecked)
 
 window.handleCheckboxChange = function($el)
 {
+  $el = $($el);
   var isChecked = $el.is(":checked");
   var value = $el.val();
   var text  = $el.next().text();
@@ -118,18 +119,19 @@ window.afterPageUpdate = function($target, info, options)
 
 window.renderDTable = function()
 {
-    $('.dtable').remove();
-    $('.table-side').append('<div class="dtable"></div>');
+  if(!$('.dtable').length) return;
+  $('.dtable').remove();
+  $('.table-side').append('<div class="dtable"></div>');
 
-    if(!resultHeader || !resultData) return;
-    new zui.DTable('.dtable',
+  if(!resultHeader || !resultData) return;
+  new zui.DTable('.dtable',
     {
-        responsive: true,
-        bordered: true,
-        scrollbarHover: true,
-        height: function() { return $('.table-side').height(); },
-        cols: resultHeader,
-        data: resultData,
+      responsive: true,
+      bordered: true,
+      scrollbarHover: true,
+      height: function() { return $('.table-side').height(); },
+      cols: resultHeader,
+      data: resultData,
     });
 }
 
@@ -239,6 +241,12 @@ window.renderCheckedLabel = function()
     }
   }
 
+  if(!multi)
+  {
+    var maxSelectTipText = maxSelectTip.replace('%s', maxSelectNum);
+    $content.append(`<span class="label ghost gray-pale">${maxSelectTipText}</span>`);
+  }
+
   if(!window.isDropdown) $content.find('.gray-next').addClass('gray-hidden');
 
   $('.dropdown-icon').addClass('visibility-hidden');
@@ -259,6 +267,7 @@ window.renderCheckedLabel = function()
       $('.checked-content').height(48 + (lineCount - 1) * 40);
     }
   }
+
   window.lineCount = lineCount;
 
   $('.checked-tip').text(selectCount.replace('%s', labels.length));

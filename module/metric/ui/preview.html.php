@@ -16,6 +16,7 @@ jsVar('objectList',   $lang->metric->objectList);
 jsVar('current',      $current);
 jsVar('maxSelectNum', $config->metric->maxSelectNum);
 jsVar('maxSelectMsg', $lang->metric->maxSelect);
+jsVar('maxSelectTip', $lang->metric->maxSelectTip);
 jsVar('viewType', $viewType);
 jsVar('selectCount', $lang->metric->selectCount);
 

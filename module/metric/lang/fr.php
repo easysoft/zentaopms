@@ -53,6 +53,7 @@ $lang->metric->definitionTip = 'Enter the calculation rules and filtering condit
 $lang->metric->emptyCollect  = 'There are no collect metrics at this time.';
 $lang->metric->moveFailTip   = 'Move metric file failed';
 $lang->metric->maxSelect     = 'A maximum of %s metrics can be selected';
+$lang->metric->maxSelectTip  = 'Multiple metrics can be selected across a range, up to a maximum of %s.';
 
 $lang->metric->noDesc    = "No description available";
 $lang->metric->noFormula = "No calculation rules available";
