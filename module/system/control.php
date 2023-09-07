@@ -29,9 +29,9 @@ class system extends control
         }
         else
         {
-            if(!is_writable($this->backupPath)) $this->view->error = sprintf($this->lang->system->backup->error->noWritable, $this->backupPath);
+            if(!is_writable($this->backupPath)) $this->view->error = sprintf($this->lang->backup->error->noWritable, $this->backupPath);
         }
-        if(!is_writable($this->app->getTmpRoot())) $this->view->error = sprintf($this->lang->system->backup->error->noWritable, $this->app->getTmpRoot());
+        if(!is_writable($this->app->getTmpRoot())) $this->view->error = sprintf($this->lang->backup->error->noWritable, $this->app->getTmpRoot());
 
         $this->loadModel('action');
         $this->loadModel('setting');
