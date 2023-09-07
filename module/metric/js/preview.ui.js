@@ -149,20 +149,32 @@ window.setDropDown = function()
   if($drop.hasClass('rotate'))
   {
     window.isDrop = true;
-    $content.height(48 + (window.lineCount - 1) * 40);
-    setTimeout(function()
-    {
-      $content.find('.gray-hidden').addClass('gray-visible');
-      $content.find('.gray-visible').removeClass('gray-hidden');
-    }, 300);
+    window.unfoldContent();
   }
   else
   {
     window.isDrop = false;
-    $content.height(48);
-    $content.find('.gray-visible').addClass('gray-hidden');
-    $content.find('.gray-hidden').removeClass('gray-visible');
+    window.foldContent();
   }
+}
+
+window.unfoldContent = function()
+{
+  var $content = $('.checked-content');
+  $content.height(48 + (window.lineCount - 1) * 40);
+  setTimeout(function()
+  {
+    $content.find('.gray-hidden').addClass('gray-visible');
+    $content.find('.gray-visible').removeClass('gray-hidden');
+  }, 300);
+}
+
+window.foldContent = function()
+{
+  var $content = $('.checked-content');
+  $content.height(48);
+  $content.find('.gray-visible').addClass('gray-hidden');
+  $content.find('.gray-hidden').removeClass('gray-visible');
 }
 
 window.renderCheckedLabel = function()
@@ -208,7 +220,7 @@ window.renderCheckedLabel = function()
         // 如果剩下的空间一点字都显示不下了，就换行
         left = width - labelWidth;
         // 如果还没判定换行但是这一行一点字都显示不下，从这里加hidden类
-        if(!nextLine) $label.addClass('gray-hidden');
+        if(!window.isDrop && !nextLine) $label.addClass('gray-hidden');
         // 此时已经换行了，行数加1
         lineCount ++;
       }
@@ -229,6 +241,22 @@ window.renderCheckedLabel = function()
 
   $('.dropdown-icon').addClass('hidden');
   if(lineCount >= 2) $('.dropdown-icon').removeClass('hidden');
+
+  if(window.lineCount != lineCount)
+  {
+    // 在展开状态缩放到只有一行了
+    if(window.isDrop && lineCount == 1)
+    {
+      $('.dropdown-icon').toggleClass('rotate');
+      window.isDrop = false;
+      window.foldContent();
+    }
+    // 在展开状态多了若干行, 或者少了若干行
+    else if(window.isDrop)
+    {
+      $('.checked-content').height(48 + (lineCount - 1) * 40);
+    }
+  }
   window.lineCount = lineCount;
 
   $('.checked-tip').text(selectCount.replace('%s', labels.length));
