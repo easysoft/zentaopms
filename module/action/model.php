@@ -15,23 +15,23 @@ class actionModel extends model
 {
     const BE_UNDELETED  = 0;    // The deleted object has been undeleted.
     const CAN_UNDELETED = 1;    // The deleted object can be undeleted.
-    const BE_HIDDEN     = 2;    // The deleted object has been hidded.
+    const BE_HIDDEN     = 2;    // The deleted object has been hidden.
 
     /**
      * 创建一个操作记录。
      * Create a action.
      *
-     * @param  string $objectType
-     * @param  int    $objectID
-     * @param  string $actionType
-     * @param  string $comment
-     * @param  string $extra        the extra info of this action, according to different modules and actions, can set different extra.
-     * @param  string $actor
-     * @param  bool   $autoDelete
+     * @param  string     $objectType
+     * @param  int        $objectID
+     * @param  string     $actionType
+     * @param  string     $comment
+     * @param  string|int $extra        the extra info of this action, according to different modules and actions, can set different extra.
+     * @param  string     $actor
+     * @param  bool       $autoDelete
      * @access public
      * @return int
      */
-    public function create(string $objectType, int $objectID, string $actionType, string $comment = '', string $extra = '', string $actor = '', bool $autoDelete = true): int
+    public function create(string $objectType, int $objectID, string $actionType, string $comment = '', string|int $extra = '', string $actor = '', bool $autoDelete = true): int
     {
         if(strtolower($actionType) == 'commented' && empty($comment)) return false;
 
@@ -48,12 +48,12 @@ class actionModel extends model
         $action->actor      = $actor;
         $action->action     = $actionType;
         $action->date       = helper::now();
-        $action->extra      = $extra;
+        $action->extra      = (string)$extra;
         if(!$this->app->upgrading) $action->vision = $this->config->vision;
 
         if($objectType == 'story' && in_array($actionType, array('reviewpassed', 'reviewrejected', 'reviewclarified', 'reviewreverted', 'synctwins'))) $action->actor = $this->lang->action->system;
 
-        /* 使用puriffer处理注解。 */
+        /* 使用purifier处理注解。 */
         /* Use purifier to process comment. Fix bug #2683. */
         if(empty($comment)) $comment = '';
         $action->comment = fixer::stripDataTags($comment);
