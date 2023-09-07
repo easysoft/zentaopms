@@ -21,8 +21,6 @@
 <?php $queryDom = "<div class='queryBtn query-inside hidden'> <button type='submit' id='submit' class='btn btn-primary btn-query' data-loading='Loading...'>{$lang->pivot->query}</button></div>";?>
 <?php js::set('queryDom', $queryDom);?>
 
-<style><?php include '../css/show/zentaobiz.css';?></style>
-
 <div class='cell'>
   <?php if(!$pivotTree):?>
   <hr class="space">
