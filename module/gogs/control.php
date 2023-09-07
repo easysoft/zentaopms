@@ -204,8 +204,8 @@ class gogs extends control
         if($_POST)
         {
             $this->gogs->bindUser($gogsID);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->server->http_referer));
+            if(dao::isError()) return $this->sendError(dao::getError());
+            return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'load' => helper::createLink('space', 'browse')));
         }
 
         $userList      = array();
