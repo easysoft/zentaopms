@@ -2239,7 +2239,7 @@ class execution extends control
             list($dataList, $users) = $this->executionZen->getPrintKanbanData($executionID, $stories);
 
             $originalDataList = $dataList;
-            if($this->post->content == 'increment') $dateList = $this->executionZen->processPrintKanbanData($executionID, $dateList);
+            if($this->post->content == 'increment') $dateList = $this->executionZen->processPrintKanbanData($executionID, $dataList);
 
             /* Close the page when there is no data. */
             $hasData = false;
