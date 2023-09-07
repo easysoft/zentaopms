@@ -484,16 +484,15 @@ class executionModel extends model
     }
 
     /**
+     * 更新一个迭代。
      * Update a execution.
      *
      * @param  int    $executionID
      * @access public
-     * @return array|bool
+     * @return array|false
      */
-    public function update($executionID)
+    public function update(int $executionID): array|false
     {
-        /* Convert executionID format and get oldExecution. */
-        $executionID  = (int)$executionID;
         $oldExecution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
 
         /* Judgment of required items. */
@@ -545,7 +544,7 @@ class executionModel extends model
             ->remove('products, branch, uid, plans, syncStories, contactListMenu, teamMembers, heightType, delta')
             ->get();
 
-        if($this->post->heightType == 'custom' && !$this->loadModel('kanban')->checkDisplayCards($execution->displayCards)) return;
+        if($this->post->heightType == 'custom' && !$this->loadModel('kanban')->checkDisplayCards($execution->displayCards)) return false;
 
         if(in_array($execution->status, array('closed', 'suspended'))) $this->computeBurn($executionID);
 
@@ -583,7 +582,7 @@ class executionModel extends model
         $executionProject = isset($execution->project) ? $execution->project : $oldExecution->project;
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck('begin,end')
-            ->batchcheck($this->config->execution->edit->requiredFields, 'notempty')
+            ->batchCheck($this->config->execution->edit->requiredFields, 'notempty')
             ->checkIF($execution->begin != '', 'begin', 'date')
             ->checkIF($execution->end != '', 'end', 'date')
             ->checkIF($execution->end != '', 'end', 'ge', $execution->begin)
