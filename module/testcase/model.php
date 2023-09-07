@@ -887,13 +887,13 @@ class testcaseModel extends model
         if($caseIdList)
         {
             $this->dao->update(TABLE_CASE)->set('deleted')->eq('1')->where('id')->in($caseIdList)->exec();
-            foreach($caseIdList as $caseID) $this->action->create('case', $caseID, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
+            foreach($caseIdList as $caseID) $this->action->create('case', $caseID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
         }
 
         if($sceneIdList)
         {
             $this->dao->update(TABLE_SCENE)->set('deleted')->eq('1')->where('id')->in($sceneIdList)->exec();
-            foreach($sceneIdList as $sceneID) $this->action->create('scene', $sceneID, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
+            foreach($sceneIdList as $sceneID) $this->action->create('scene', $sceneID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
         }
 
         return !dao::isError();

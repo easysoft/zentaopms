@@ -2076,7 +2076,7 @@ class treeModel extends model
         $this->dao->update(TABLE_MODULE)->set('deleted')->eq(1)->where('id')->in($childs)->exec();
         foreach($childs as $childID)
         {
-            $this->loadModel('action')->create($objectType, $childID, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
+            $this->loadModel('action')->create($objectType, $childID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
         }
 
         $this->fixModulePath($module->root, $module->type);

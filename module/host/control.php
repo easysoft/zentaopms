@@ -152,7 +152,7 @@ class host extends control
     public function delete($id)
     {
         $this->dao->update(TABLE_HOST)->set('deleted')->eq(1)->where('id')->eq($id)->exec();
-        $this->loadModel('action')->create('host', $id, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
+        $this->loadModel('action')->create('host', $id, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
 
         if(dao::isError())
         {
