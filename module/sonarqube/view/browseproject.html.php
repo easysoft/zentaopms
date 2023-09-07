@@ -15,9 +15,6 @@
   <div class='pull-left'>
     <?php echo html::a($this->createLink('sonarqube', 'browse'), "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "class='btn btn-secondary'");?>
   </div>
-  <div id="sidebarHeader">
-    <div class="title" title="<?php echo $this->lang->sonarqube->common . ':' . $sonarqube->name; ?>"><?php echo $this->lang->sonarqube->common . ':' . $sonarqube->name; ?></div>
-  </div>
   <div class="btn-toolbar pull-left">
     <div>
       <form id='sonarqubeProjectForm' method='post'>
