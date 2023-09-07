@@ -69,19 +69,27 @@ if($execution->type == 'kanban')
         formGroup
         (
             set::width('1/2'),
-            set::name('region'),
             set::label($lang->kanbancard->region),
-            set::value($regionID),
-            set::items($regionPairs),
-            on::change('loadLanes')
+            picker
+            (
+                set::name('region'),
+                set::value($regionID),
+                set::items($regionPairs),
+                on::change('loadLanes'),
+                set::required(true),
+            )
         ),
         formGroup
         (
             set::width('1/2'),
-            set::name('lane'),
             set::label($lang->kanbancard->lane),
-            set::value($laneID),
-            set::items($lanePairs),
+            picker
+            (
+                set::name('lane'),
+                set::value($laneID),
+                set::items($lanePairs),
+                set::required(true),
+            )
         ),
     );
 }

@@ -245,11 +245,16 @@ function loadExecutionMembers(executionID)
  */
 function loadLanes()
 {
-    const regionID    = $(this).val();
+    const regionID    = $('input[name=region]').val();
     const getLaneLink = $.createLink('kanban', 'ajaxGetLanes', 'regionID=' + regionID + '&type=task&field=lane');
     $.get(getLaneLink, function(data)
     {
-        $('#lane').replaceWith(data);
+        if(data)
+        {
+            data = JSON.parse(data);
+            const $lanePicker = $('input[name=lane]').zui('picker');
+            $lanePicker.render({items: data.items});
+        }
     });
 }
 
