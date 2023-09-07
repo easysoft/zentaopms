@@ -11,12 +11,19 @@ function getArtifactRepo(event)
 {
     const server = $(event.target).val();
     const url    = $.createLink('artifactrepo', 'ajaxGetArtifactRepos', 'serverID=' + server);
+    if(!server) return;
 
     toggleLoading('#repoName', true);
     $.get(url, function(response)
     {
         repoData = JSON.parse(response);
 
+        if(repoData.result !== undefined && repoData.result === 'fail')
+        {
+            zui.Modal.alert(repoData.message);
+            toggleLoading('#repoName', false);
+            return;
+        }
         var repoItems = [];
         for(i in repoData)
         {

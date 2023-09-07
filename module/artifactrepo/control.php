@@ -57,6 +57,7 @@ class artifactrepo extends control
         {
             $repo = form::data($this->config->artifactrepo->form->create)
                 ->join('products', ',')
+                ->add('editedBy',  $this->app->user->account)
                 ->add('createdBy', $this->app->user->account)
                 ->add('createdDate', helper::now())
                 ->get();
@@ -138,7 +139,9 @@ class artifactrepo extends control
     {
         $repos = $this->artifactrepo->getServerRepos($serverID);
 
-        return print(json_encode($repos));
+        if(!$repos['result']) return $this->send(array('result' => 'fail', 'message' => $this->lang->artifactrepo->loseConnect));
+
+        return print(json_encode($repos['data']));
     }
 
     public function ajaxUpdateArtifactRepos()
