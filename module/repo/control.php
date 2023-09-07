@@ -254,11 +254,11 @@ class repo extends control
         $jobs = $this->dao->select('*')->from(TABLE_JOB)->where('repo')->eq($repoID)->andWhere('deleted')->eq('0')->fetchAll();
         if($jobs) $error .= ($error ? '\n' : '') . $this->lang->repo->error->linkedJob;
 
-        if($error) return print(js::alert($error));
+        if($error) return $this->send(array('result' => 'fail', 'message' => $error));
 
         $this->repo->delete(TABLE_REPO, $repoID);
         if(dao::isError()) return print(js::error(dao::getError()));
-        return print(js::reload('parent'));
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**

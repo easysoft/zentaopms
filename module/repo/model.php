@@ -306,6 +306,7 @@ class repoModel extends model
                 /* Add webhook. */
                 $repo = $this->getByID($repoID);
                 $this->loadModel('gitlab')->addPushWebhook($repo);
+                $this->gitlab->updateCodePath($repo->serviceHost, $repo->serviceProject, $repo->id);
             }
 
             $this->loadModel('action')->create('repo', $repoID, 'created');

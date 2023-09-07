@@ -65,9 +65,10 @@ $config->repo->dtable->fieldList['actions']['list']['reportView']['icon']       
 $config->repo->dtable->fieldList['actions']['list']['reportView']['hint']        = $lang->sonarqube->reportView;
 $config->repo->dtable->fieldList['actions']['list']['reportView']['url']         = helper::createLink('sonarqube', 'reportView', "jobID={job}");
 
-$config->repo->dtable->fieldList['actions']['list']['delete']['icon']        = 'trash';
-$config->repo->dtable->fieldList['actions']['list']['delete']['hint']        = $lang->repo->delete;
-$config->repo->dtable->fieldList['actions']['list']['delete']['data-toggle'] = 'modal';
+$config->repo->dtable->fieldList['actions']['list']['delete']['icon']         = 'trash';
+$config->repo->dtable->fieldList['actions']['list']['delete']['hint']         = $lang->repo->delete;
+$config->repo->dtable->fieldList['actions']['list']['delete']['data-confirm'] = $this->lang->repo->notice->delete;
+$config->repo->dtable->fieldList['actions']['list']['delete']['className']    = 'ajax-submit';
 
 $config->repo->repoDtable = new stdclass();
 
