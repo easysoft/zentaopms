@@ -70,10 +70,9 @@ $config->mr->taskDtable->fieldList['pri']['type']     = 'pri';
 $config->mr->taskDtable->fieldList['pri']['sortType'] = true;
 $config->mr->taskDtable->fieldList['pri']['show']     = true;
 
-$config->mr->taskDtable->fieldList['assignedTo']['type']        = 'assign';
+$config->mr->taskDtable->fieldList['assignedTo']['type']        = 'desc';
 $config->mr->taskDtable->fieldList['assignedTo']['title']       = $lang->task->assignedTo;
 $config->mr->taskDtable->fieldList['assignedTo']['currentUser'] = $app->user->account;
-$config->mr->taskDtable->fieldList['assignedTo']['assignLink']  = array('module' => 'task', 'method' => 'assignTo', 'params' => 'executionID={execution}&taskID={id}');
 $config->mr->taskDtable->fieldList['assignedTo']['sortType']    = true;
 $config->mr->taskDtable->fieldList['assignedTo']['show']        = true;
 
