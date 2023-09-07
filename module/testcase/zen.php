@@ -2927,9 +2927,15 @@ class testcaseZen extends testcase
 
         $this->classFile->removeFile($tmpFile);
 
-        $fetchFunction = file_exists($filePath . '/content.json') ? 'fetchByJSON' : 'fetchByXML';
-        $fetchResult   = $this->$fetchFunction($filePath, $productID, $branch);
-        if($fetchResult['result'] == 'fail') return $$fetchResult;
+        if(file_exists($filePath . '/content.json'))
+        {
+            $fetchResult = $this->fetchByJSON($filePath, $productID, $branch);
+        }
+        else
+        {
+            $fetchResult = $this->fetchByXML($filePath, $productID);
+        }
+        if($fetchResult['result'] == 'fail') return $fetchResult;
 
         $this->session->set('xmindImport', $filePath);
         $this->session->set('xmindImportType', $fetchResult['type']);
@@ -2938,44 +2944,35 @@ class testcaseZen extends testcase
     }
 
     /**
-     * Fetch by xml.
+     * 获取 content.xml 的内容。
+     * Fetch content.xml.
      *
-     * @param  string $extractFolder
+     * @param  string $filePath
      * @param  int    $productID
-     * @param  int    $branch
      * @access public
-     * @return void
+     * @return array
      */
-    private function fetchByXML($extractFolder, $productID, $branch)
+    private function fetchByXML(string $filePath, int $productID): array
     {
-        $filePath = $extractFolder."/content.xml";
-        $xmlNode = simplexml_load_file($filePath);
-        $title = $xmlNode->sheet->topic->title;
-        if(strlen($title) == 0)
-        {
-            return array('result'=>'fail','message'=>$this->lang->testcase->errorXmindUpload);
-        }
+        $file    = $filePath . '/content.xml';
+        $xmlNode = simplexml_load_file($file);
+        $title   = $xmlNode->sheet->topic->title;
+        if(!is_string($title) || strlen($title) == 0) return array('result' => 'fail', 'message' => $this->lang->testcase->errorXmindUpload);
 
         $pID = $productID;
-        if($this->classXmind->endsWith($title,"]") == true)
+        if($this->classXmind->endsWith($title, ']'))
         {
-            $tmpID = $this->classXmind->getBetween($title,"[","]");
-            if(empty($tmpID) == false)
+            $tmpID = $this->classXmind->getBetween($title, '[', ']');
+            if(!empty($tmpID))
             {
-                $projectCount = $this->dao->select('count(*) as count')
-                    ->from(TABLE_PRODUCT)
-                    ->where('id')
-                    ->eq((int)$tmpID)
-                    ->andWhere('deleted')->eq('0')
-                    ->fetch('count');
-
-                if((int)$projectCount == 0) return array('result'=>'fail','message'=>$this->lang->testcase->errorImportBadProduct);
+                $product = $this->loadModel('product')->getByID($tmpID);
+                if(!$product || $product->deleted) return array('result' => 'fail', 'message' => $this->lang->testcase->errorImportBadProduct);
 
                 $pID = $tmpID;
             }
         }
 
-        return array('result'=>'success','pID'=>$pID, 'type'=>'xml');
+        return array('result' => 'success', 'pID' => $pID, 'type' => 'xml');
     }
 
     /**
