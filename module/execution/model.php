@@ -4210,30 +4210,27 @@ class executionModel extends model
     }
 
     /**
+     * 构造Bug的搜索表单。
      * Build bug search form.
      *
-     * @param  array     $products
-     * @param  int       $queryID
-     * @param  string    $actionURL
+     * @param  array  $products
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function buildBugSearchForm($products, $queryID, $actionURL, $type = 'execution')
+    public function buildBugSearchForm(array $products, int $queryID, string $actionURL, string $type = 'execution')
     {
         $modules = array();
         $builds  = array('' => '', 'trunk' => $this->lang->trunk);
         foreach($products as $product)
         {
             $productModules = $this->loadModel('tree')->getOptionMenu($product->id, 'bug');
+            foreach($productModules as $moduleID => $moduleName) $modules[$moduleID] = ((count($products) >= 2 and $moduleID) ? $product->name : '') . $moduleName;
+
             $productBuilds  = $this->loadModel('build')->getBuildPairs($product->id, 'all', 'noempty|notrunk|withbranch');
-            foreach($productModules as $moduleID => $moduleName)
-            {
-                $modules[$moduleID] = ((count($products) >= 2 and $moduleID) ? $product->name : '') . $moduleName;
-            }
-            foreach($productBuilds as $buildID => $buildName)
-            {
-                $builds[$buildID] = ((count($products) >= 2 and $buildID) ? $product->name . '/' : '') . $buildName;
-            }
+            foreach($productBuilds as $buildID => $buildName) $builds[$buildID] = ((count($products) >= 2 and $buildID) ? $product->name . '/' : '') . $buildName;
         }
 
         $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
@@ -4268,6 +4265,7 @@ class executionModel extends model
         $this->config->bug->search['module']    = $type == 'execution' ? 'executionBug' : 'projectBug';
         $this->config->bug->search['actionURL'] = $actionURL;
         $this->config->bug->search['queryID']   = $queryID;
+
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts($products);
         $this->config->bug->search['params']['module']['values']        = $modules;
         $this->config->bug->search['params']['openedBuild']['values']   = $builds;

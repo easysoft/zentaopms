@@ -2828,20 +2828,22 @@ class executionTest
     }
 
     /**
-     * Test build bug search form.
+     * 构造Bug的搜索表单。
+     * Build bug search form.
      *
      * @param  int    $productID
      * @param  int    $queryID
+     * @param  string $type
      * @access public
      * @return int
      */
-    public function buildBugSearchFormTest($productID, $queryID)
+    public function buildBugSearchFormTest(int $productID, int $queryID, string $type = 'execution'): int
     {
         $product = $this->productModel->getByID($productID);
-        if(empty($product)) return '0';
+        if(empty($product)) return 0;
 
         $this->executionModel->loadModel('bug');
-        $this->executionModel->buildBugSearchForm(array($productID => $product), $queryID, 'searchBug');
+        $this->executionModel->buildBugSearchForm(array($productID => $product), $queryID, 'searchBug', $type);
 
         return $_SESSION['executionBugsearchParams']['queryID'];
     }

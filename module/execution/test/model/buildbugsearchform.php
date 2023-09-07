@@ -58,21 +58,21 @@ su('admin');
 /**
 
 title=测试executionModel->buildBugSearchForm();
+timeout=0
 cid=1
-pid=1
-
-正确的产品，正确的queryID >> 1
-错误的产品，正确的queryID >> 0
-正确的产品，错误的queryID >> 0
-错误的产品，错误的queryID >> 0
 
 */
 
-$productIDList = array('1', '0');
-$queryIDList   = array('0', '1');
+$productIDList = array(1, 0);
+$queryIDList   = array(0, 1);
+$typeList      = array('execution', 'project');
 
 $execution = new executionTest();
-r($execution->buildBugSearchFormTest($productIDList[0], $queryIDList[1])) && p() && e('1'); // 正确的产品，正确的queryID
-r($execution->buildBugSearchFormTest($productIDList[1], $queryIDList[1])) && p() && e('0'); // 错误的产品，正确的queryID
-r($execution->buildBugSearchFormTest($productIDList[0], $queryIDList[0])) && p() && e('0'); // 正确的产品，错误的queryID
-r($execution->buildBugSearchFormTest($productIDList[1], $queryIDList[0])) && p() && e('0'); // 错误的产品，错误的queryID
+r($execution->buildBugSearchFormTest($productIDList[0], $queryIDList[1], $typeList[0])) && p() && e('1'); // 测试获取execution下的正确的产品，正确的queryID
+r($execution->buildBugSearchFormTest($productIDList[1], $queryIDList[1], $typeList[0])) && p() && e('0'); // 测试获取execution下的错误的产品，正确的queryID
+r($execution->buildBugSearchFormTest($productIDList[0], $queryIDList[0], $typeList[0])) && p() && e('0'); // 测试获取execution下的正确的产品，错误的queryID
+r($execution->buildBugSearchFormTest($productIDList[1], $queryIDList[0], $typeList[0])) && p() && e('0'); // 测试获取execution下的错误的产品，错误的queryID
+r($execution->buildBugSearchFormTest($productIDList[0], $queryIDList[1], $typeList[1])) && p() && e('0'); // 测试获取project下的正确的产品，正确的queryID
+r($execution->buildBugSearchFormTest($productIDList[1], $queryIDList[1], $typeList[1])) && p() && e('0'); // 测试获取project下的错误的产品，正确的queryID
+r($execution->buildBugSearchFormTest($productIDList[0], $queryIDList[0], $typeList[1])) && p() && e('0'); // 测试获取project下的正确的产品，错误的queryID
+r($execution->buildBugSearchFormTest($productIDList[1], $queryIDList[0], $typeList[1])) && p() && e('0'); // 测试获取project下的错误的产品，错误的queryID
