@@ -51,12 +51,14 @@ class moduleMenu extends wg
     {
         return array_filter($this->modules, function($module) use($id)
         {
+            if(!isset($module->parent)) return false;
+
             /* Remove the rendered module. */
-            if(isset(static::$filterMap["$module->parent-$module->id"])) return false;
+            if(isset(static::$filterMap["{$module->parent}-{$module->id}"])) return false;
 
             if($module->parent != $id) return false;
 
-            static::$filterMap["$module->parent-$module->id"] = true;
+            static::$filterMap["{$module->parent}-{$module->id}"] = true;
             return true;
         });
     }
