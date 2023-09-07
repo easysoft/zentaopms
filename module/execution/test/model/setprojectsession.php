@@ -21,15 +21,11 @@ $execution->gen(5);
 /**
 
 title=测试 executionModel::setProjectSession();
+timeout=0
 cid=1
-pid=1
-
-执行存在的情况   >> 2
-执行不存在的情况 >> 0
 
 */
 
 $executionTester = new executionTest();
-
 r($executionTester->setProjectSessionTest(3))  && p() && e('2'); // 执行存在的情况
 r($executionTester->setProjectSessionTest(10)) && p() && e('0'); // 执行不存在的情况

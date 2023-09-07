@@ -271,13 +271,14 @@ class executionModel extends model
     }
 
     /**
+     * 给执行所属的项目ID设置session。
      * Set project into session.
      *
      * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function setProjectSession($executionID)
+    public function setProjectSession(int $executionID)
     {
         $execution = $this->getByID($executionID);
         if(!empty($execution)) $this->session->set('project', $execution->project, $this->app->tab);

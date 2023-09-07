@@ -111,13 +111,14 @@ class executionTest
     }
 
     /**
+     * 给执行所属的项目ID设置session。
      * Set project into session.
      *
      * @param  int    $executionID
      * @access public
      * @return int
      */
-    public function setProjectSessionTest($executionID)
+    public function setProjectSessionTest(int $executionID): int
     {
         unset($_SESSION['project']);
         $this->executionModel->setProjectSession($executionID);
