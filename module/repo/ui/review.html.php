@@ -11,6 +11,8 @@ declare(strict_types=1);
 namespace zin;
 
 dropmenu(set::tab('repo'));
+jsVar('orderBy', $orderBy);
+jsVar('sortLink', createLink('repo', 'review', "repoID=$repoID&browseType=$browseType&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 
 foreach($bugs as $bug)
 {
@@ -45,6 +47,7 @@ dtable
     set::userMap($users),
     set::cols($config->repo->reviewDtable->fieldList),
     set::data($bugs),
+    set::sortLink(jsRaw('createSortLink')),
     set::onRenderCell(jsRaw('window.renderRepobugList')),
     set::footPager(usePager()),
 );
