@@ -131,7 +131,7 @@ class dept extends control
         }
 
         if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-        $this->dept->delete($deptID);
+        $this->dept->delete(TABLE_DEPT, $deptID);
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 

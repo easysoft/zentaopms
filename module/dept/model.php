@@ -402,19 +402,6 @@ class deptModel extends model
     }
 
     /**
-     * Delete a department.
-     *
-     * @param  int    $deptID
-     * @param  null   $null      compatible with that of model::delete()
-     * @access public
-     * @return void
-     */
-    public function delete($deptID, $null = null)
-    {
-        $this->dao->delete()->from(TABLE_DEPT)->where('id')->eq($deptID)->exec();
-    }
-
-    /**
      * Fix dept path.
      *
      * @access public
