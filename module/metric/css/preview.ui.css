@@ -40,7 +40,7 @@
 .main .gray-pale-div {overflow: hidden;}
 .main .gray-pale-withdelete {padding-right: 1px;}
 
-.gray-hidden {opacity: 0; transition: opacity 0.5s ease;}
+.gray-hidden {opacity: 0;}
 .gray-visible {opacity: 1;}
 .dropdown-icon {transform: rotate(90deg); transition: transform 0.3s ease;}
 .dropdown-icon.rotate {transform: rotate(270deg); }

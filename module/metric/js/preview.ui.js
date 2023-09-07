@@ -164,8 +164,8 @@ window.unfoldContent = function()
   $content.height(48 + (window.lineCount - 1) * 40);
   setTimeout(function()
   {
-    $content.find('.gray-hidden').addClass('gray-visible');
-    $content.find('.gray-visible').removeClass('gray-hidden');
+    $content.find('.gray-next').addClass('gray-visible');
+    $content.find('.gray-next').removeClass('gray-hidden');
   }, 300);
 }
 
@@ -173,8 +173,8 @@ window.foldContent = function()
 {
   var $content = $('.checked-content');
   $content.height(48);
-  $content.find('.gray-visible').addClass('gray-hidden');
-  $content.find('.gray-hidden').removeClass('gray-visible');
+  $content.find('.gray-next').addClass('gray-hidden');
+  $content.find('.gray-next').removeClass('gray-visible');
 }
 
 window.renderCheckedLabel = function()
@@ -196,10 +196,11 @@ window.renderCheckedLabel = function()
 
   for(var i = 0; i < labels.length; i++)
   {
-    if(!window.isDropdown && nextLine) labelClass += ' gray-hidden';
+    var classes = labelClass;
+    if(nextLine) classes += ' gray-next';
 
     var label = labels[i];
-    var html = '<span class="' + labelClass + '" metric-id="' + label.id + '">';
+    var html = '<span class="' + classes + '" metric-id="' + label.id + '">';
     html    += '<div class="gray-pale-div">' + label.name + '</div>';
     if(multi) html += '<button type="button" class="btn picker-deselect-btn size-sm square ghost" onclick="window.handleRemoveLabel(' + label.id + ')"><span class="close"></span></button>';
     html    += '</span>';
@@ -219,8 +220,8 @@ window.renderCheckedLabel = function()
       {
         // 如果剩下的空间一点字都显示不下了，就换行
         left = width - labelWidth;
-        // 如果列表是折叠的还没判定换行但是这一行一点字都显示不下，从这里加hidden类
-        if(!window.isDropdown && !nextLine) $label.addClass('gray-hidden');
+        // 如果列表是折叠的还没判定换行但是这一行一点字都显示不下，从这里加next类
+        if(!nextLine) $label.addClass('gray-next');
         // 此时已经换行了，行数加1
         lineCount ++;
       }
@@ -238,6 +239,8 @@ window.renderCheckedLabel = function()
       nextLine = true;
     }
   }
+
+  if(!window.isDropdown) $content.find('.gray-next').addClass('gray-hidden');
 
   $('.dropdown-icon').addClass('hidden');
   if(lineCount >= 2) $('.dropdown-icon').removeClass('hidden');
