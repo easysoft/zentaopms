@@ -73,13 +73,13 @@ class executionTest
      */
     public function checkWorkloadTest($executionID, $type = '', $percent = 0)
     {
-        global $tester;
+        global $tester, $config;
         $tester->loadModel('programplan');
 
-        $_POST['percent'] = $percent;
+        $_POST['products'][0] = 1;
+        $_POST['branch'][0]   = array();
         $oldExecution = empty($executionID) ? '' : $this->executionModel->getByID($executionID);
         $this->executionModel->checkWorkload($type, $percent, $oldExecution);
-        unset($_POST);
 
         if(dao::isError()) return dao::getError();
         return true;

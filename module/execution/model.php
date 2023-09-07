@@ -1418,31 +1418,33 @@ class executionModel extends model
     }
 
     /**
+     * 检查阶段的工作量占比。
      * Check the workload format and total.
      *
-     * @param  string     $type create|update
-     * @param  int        $percent
-     * @param  object|int $oldExecution
+     * @param  string $type        create|update
+     * @param  float  $percent
+     * @param  object $oldExecution
      * @access public
      * @return bool
      */
-    public function checkWorkload(string $type = '', int $percent = 0, int|object $oldExecution = null)
+    public function checkWorkload(string $type = '', float $percent = 0, object $oldExecution = null): bool
     {
+        /* Check whether the workload is positive. */
         if(!preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $percent))
         {
             dao::$errors['percent'] = $this->lang->programplan->error->percentNumber;
             return false;
         }
 
-        $oldExecutionGrade   = is_object($oldExecution) && !is_null($oldExecution) ? $oldExecution->grade : 0;
-        $oldExecutionType    = is_object($oldExecution) && !is_null($oldExecution) ? $oldExecution->type : '';
-        $oldExecutionID      = is_object($oldExecution) && !is_null($oldExecution) ? $oldExecution->id : 0;
-        $oldExecutionParent  = is_object($oldExecution) && !is_null($oldExecution) ? $oldExecution->parent : 0;
-        $oldExecutionPercent = is_object($oldExecution) && !is_null($oldExecution) ? $oldExecution->percent : 0;
-        $oldExecutionProject = is_object($oldExecution) && !is_null($oldExecution) ? $oldExecution->project : 0;
+        $oldExecutionGrade   = !empty($oldExecution->grade)   ? $oldExecution->grade   : 0;
+        $oldExecutionType    = !empty($oldExecution->type)    ? $oldExecution->type    : '';
+        $oldExecutionID      = !empty($oldExecution->id)      ? $oldExecution->id      : 0;
+        $oldExecutionParent  = !empty($oldExecution->parent)  ? $oldExecution->parent  : 0;
+        $oldExecutionPercent = !empty($oldExecution->percent) ? $oldExecution->percent : 0;
+        $oldExecutionProject = !empty($oldExecution->project) ? $oldExecution->project : 0;
 
         /* The total workload of the first stage should not exceed 100%. */
-        if($type == 'create' or ($oldExecutionGrade == 1 and isset($this->lang->execution->typeList[$oldExecutionType])))
+        if($type == 'create' || ($oldExecutionGrade == 1 && isset($this->lang->execution->typeList[$oldExecutionType])))
         {
             $oldPercentTotal = $this->dao->select('SUM(t2.percent) as total')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
@@ -1452,12 +1454,12 @@ class executionModel extends model
                 ->andWhere('t2.grade')->eq(1)
                 ->andWhere('t2.deleted')->eq(0)
                 ->beginIF($type == 'create')->andWhere('t2.parent')->eq($oldExecutionID)->fi()
-                ->beginIF(!empty($oldExecution) and isset($this->lang->execution->typeList[$oldExecutionType]))->andWhere('t2.parent')->eq($oldExecutionParent)->fi()
+                ->beginIF(!empty($oldExecution) && isset($this->lang->execution->typeList[$oldExecutionType]))->andWhere('t2.parent')->eq($oldExecutionParent)->fi()
                 ->fetch('total');
 
             if(!$oldPercentTotal) $oldPercentTotal = 0;
             if($type == 'create') $percentTotal = $percent + $oldPercentTotal;
-            if(!empty($oldExecution) and isset($this->lang->execution->typeList[$oldExecutionType])) $percentTotal = $oldPercentTotal - $oldExecutionPercent + $percent;
+            if(!empty($oldExecution) && isset($this->lang->execution->typeList[$oldExecutionType])) $percentTotal = $oldPercentTotal - $oldExecutionPercent + $percent;
 
             if($percentTotal > 100)
             {
@@ -1467,10 +1469,10 @@ class executionModel extends model
             }
         }
 
-        if($type == 'update' and $oldExecutionGrade > 1)
+        if($type == 'update' && $oldExecutionGrade > 1)
         {
             $childrenTotalPercent = $this->dao->select('SUM(percent) as total')->from(TABLE_EXECUTION)->where('parent')->eq($oldExecutionParent)->andWhere('project')->eq($oldExecutionProject)->andWhere('deleted')->eq(0)->fetch('total');
-            $childrenTotalPercent = $childrenTotalPercent - $oldExecutionPercent + $this->post->percent;
+            $childrenTotalPercent = $childrenTotalPercent - $oldExecutionPercent + $percent;
 
             if($childrenTotalPercent > 100)
             {
@@ -1478,6 +1480,8 @@ class executionModel extends model
                 return false;
             }
         }
+
+        return true;
     }
 
     /**

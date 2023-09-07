@@ -20,33 +20,29 @@ $execution->begin->range('20220112 000000:0')->type('timestamp')->format('YY/MM/
 $execution->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->gen(7);
 
+zdTable('product')->config('product')->gen(7);
+
+$projectProduct = zdTable('projectproduct');
+$projectProduct->product->range('1');
+$projectProduct->project->range('1-7');
+$projectProduct->gen(7);
+
 /**
 
 title=测试executionModel->checkWorkload();
+timeout=0
 cid=1
-pid=1
-
-检查创建执行时，填写空工作量判断 >> "工作量占比"必须为数字
-检查创建执行时，填写正确的工作量判断 >> 1
-检查创建执行时，填写错误的工作量判断 >> 工作量占比累计不应当超过100%, 当前产品下的工作量之和为0%
-检查创建执行时，填写格式错误的工作量判断 >> "工作量占比"必须为数字
-检查编辑子阶段时，填写空工作量判断 >> "工作量占比"必须为数字
-检查编辑子阶段时，填写正确的工作量判断 >> 1
-检查编辑子阶段时，填写错误的工作量判断 >> 工作量占比累计不应当超过100%, 当前产品下的工作量之和为210%
-检查编辑子阶段时，填写格式错误的工作量判断 >> "工作量占比"必须为数字
 
 */
 
 $executionIDList = array(3, 6);
 $typeList        = array('create', 'update');
-$percentList     = array(null, '10', '200', 'test');
+$percentList     = array(-1, 10, 200);
 
 $executionTester = new executionTest();
-r($executionTester->checkWorkloadTest($executionIDList[0], $typeList[0], $percentList[0])) && p('percent') && e('"工作量占比"必须为数字');                                     // 检查创建执行时，填写空工作量判断
-r($executionTester->checkWorkloadTest($executionIDList[0], $typeList[0], $percentList[1])) && p()          && e('1');                                                          // 检查创建执行时，填写正确的工作量判断
-r($executionTester->checkWorkloadTest($executionIDList[0], $typeList[0], $percentList[2])) && p('percent') && e('工作量占比累计不应当超过100%, 当前产品下的工作量之和为0%');   // 检查创建执行时，填写错误的工作量判断
-r($executionTester->checkWorkloadTest($executionIDList[0], $typeList[0], $percentList[3])) && p('percent') && e('"工作量占比"必须为数字');                                     // 检查创建执行时，填写格式错误的工作量判断
-r($executionTester->checkWorkloadTest($executionIDList[1], $typeList[1], $percentList[0])) && p('percent') && e('"工作量占比"必须为数字');                                     // 检查编辑子阶段时，填写空工作量判断
-r($executionTester->checkWorkloadTest($executionIDList[1], $typeList[1], $percentList[1])) && p()          && e('1');                                                          // 检查编辑子阶段时，填写正确的工作量判断
-r($executionTester->checkWorkloadTest($executionIDList[1], $typeList[1], $percentList[2])) && p('parent')  && e('工作量占比累计不应当超过100%, 当前产品下的工作量之和为210%'); // 检查编辑子阶段时，填写错误的工作量判断
-r($executionTester->checkWorkloadTest($executionIDList[1], $typeList[1], $percentList[3])) && p('percent') && e('"工作量占比"必须为数字');                                     // 检查编辑子阶段时，填写格式错误的工作量判断
+r($executionTester->checkWorkloadTest($executionIDList[0], $typeList[0], $percentList[0])) && p('percent', ';') && e('"工作量占比"必须为数字');                                     // 检查创建执行时，填写空工作量判断
+r($executionTester->checkWorkloadTest($executionIDList[0], $typeList[0], $percentList[1])) && p()               && e('1');                                                          // 检查创建执行时，填写正确的工作量判断
+r($executionTester->checkWorkloadTest($executionIDList[0], $typeList[0], $percentList[2])) && p('percent', ';') && e('工作量占比累计不应当超过100%, 当前产品下的工作量之和为0%');   // 检查创建执行时，填写错误的工作量判断
+r($executionTester->checkWorkloadTest($executionIDList[1], $typeList[1], $percentList[0])) && p('percent', ';') && e('"工作量占比"必须为数字');                                     // 检查编辑子阶段时，填写空工作量判断
+r($executionTester->checkWorkloadTest($executionIDList[1], $typeList[1], $percentList[1])) && p()               && e('1');                                                          // 检查编辑子阶段时，填写正确的工作量判断
+r($executionTester->checkWorkloadTest($executionIDList[1], $typeList[1], $percentList[2])) && p('percent', ';') && e('工作量占比累计不应当超过100%, 当前产品下的工作量之和为210%'); // 检查编辑子阶段时，填写错误的工作量判断
