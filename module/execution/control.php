@@ -3485,14 +3485,14 @@ class execution extends control
         $execution = $this->execution->getByID($executionID, true);
         $type      = 'noweekend';
         if(((strpos('closed,suspended', $execution->status) === false && helper::today() > $execution->end)
-            || ($execution->status == 'closed'    && substr($execution->closedDate, 0, 10) > $execution->end)
+            || ($execution->status == 'closed'    && substr($execution->closedDate ?? '', 0, 10) > $execution->end)
             || ($execution->status == 'suspended' && $execution->suspendedDate > $execution->end))
             && strpos($type, 'delay') === false)
         {
             $type .= ',withdelay';
         }
 
-        $deadline = $execution->status == 'closed' ? substr($execution->closedDate, 0, 10) : $execution->suspendedDate;
+        $deadline = $execution->status == 'closed' ? substr($execution->closedDate ?? '', 0, 10) : $execution->suspendedDate;
         $deadline = strpos('closed,suspended', $execution->status) === false ? helper::today() : $deadline;
         $endDate  = strpos($type, 'withdelay') !== false ? $deadline : $execution->end;
         list($dateList, $interval) = $this->execution->getDateList($execution->begin, $endDate, $type, 0, 'Y-m-d', $execution->end);
