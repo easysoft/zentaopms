@@ -914,7 +914,7 @@ class InstanceModel extends model
      */
     public function createInstance($app, $space, $thirdDomain, $name = '', $k8name = '', $channel = 'stable', $snippets = array())
     {
-        if(empty($k8name)) $k8name = "{$app->chart}-{$this->app->user->account}-" . date('YmdHis'); //name rule: chartName-userAccount-YmdHis;
+        if(empty($k8name)) $k8name = "{$app->chart}-" . date('YmdHis'); //name rule: chartName-userAccount-YmdHis;
 
         $instanceData = new stdclass;
         $instanceData->appId           = $app->id;
