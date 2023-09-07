@@ -219,6 +219,7 @@ class mrModel extends model
             ->setDefault('removeSourceBranch','0')
             ->setDefault('needCI', 0)
             ->setDefault('squash', 0)
+            ->setIF($this->post->needCI == 0, 'jobID', 0)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->get();
