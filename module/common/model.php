@@ -1742,7 +1742,7 @@ EOF;
 
         /* Add data-app attribute. */
         if(strpos($misc, 'data-app') === false) $misc .= ' data-app="' . $app->tab . '"';
-        if($onlyBody && strpos($misc, 'data-toggle') === false && $clickable) $misc .= ' data-toggle="modal"';
+        if($onlyBody && strpos($misc, 'data-toggle') === false && $clickable && !isonlybody()) $misc .= ' data-toggle="modal"';
 
         /* Set module and method, then create link to it. */
         if(strtolower($module) == 'story'    and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
