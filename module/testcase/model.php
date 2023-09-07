@@ -2597,48 +2597,39 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function saveXmindImport()
+    public function saveXmindImport(): array
     {
         $this->dao->begin();
 
-        $sceneIds  = array();
-        $sceneList = $this->post->sceneList;
-        foreach($sceneList as $scene)
+        $sceneIds = array();
+        foreach($this->post->sceneList as $scene)
         {
-            $tmpId  = $scene['tmpId'];
-            $tmpPId = $scene['tmpPId'];
-
-            $result = $this->saveScene($scene,$sceneIds);
-            /* Rollback. */
+            $result = $this->saveScene($scene, $sceneIds);
             if($result['result'] == 'fail')
             {
                 $this->dao->rollBack();
                 return $result;
             }
 
-            $sceneIds[$tmpId] = array('id' => $result['sceneID'], 'tmpPId' => $tmpPId);
+            $sceneIds[$scene['tmpId']] = array('id' => $result['sceneID'], 'tmpPId' => $scene['tmpPId']);
         }
 
-        $testcaseList = $this->post->testcaseList;
-        foreach($testcaseList as $testcase)
+        foreach($this->post->testcaseList as $testcase)
         {
             $testcase = (object)$testcase;
-            $tmpId    = $testcase->tmpId;
-            $tmpPId   = $testcase->tmpPId;
-
-            $result = $this->saveTestcase($testcase, $sceneIds);
-            if($result["result"] == "fail")
+            $result   = $this->saveTestcase($testcase, $sceneIds);
+            if($result['result'] == 'fail')
             {
                 $this->dao->rollBack();
                 return $result;
             }
 
-            $sceneIds[$tmpId] = array('id' => $result['testcaseID'], 'tmpPId' => $tmpPId);
+            $sceneIds[$testcase->tmpId] = array('id' => $result['testcaseID'], 'tmpPId' => $testcase->tmpPId);
         }
 
         $this->dao->commit();
 
-        return array('result' => 'success', 'message' => 1);
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess);
     }
 
     /**

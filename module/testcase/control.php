@@ -1725,13 +1725,14 @@ class testcase extends control
     public function saveXmindImport()
     {
         if(!commonModel::hasPriv('testcase', 'importXmind')) $this->loadModel('common')->deny('testcase', 'importXmind');
+
         if(!empty($_POST))
         {
             $result = $this->testcase->saveXmindImport();
             return $this->send($result);
         }
 
-        $this->send(array('result' => 'fail', 'message' => $this->lang->errorSaveXmind));
+        return $this->send(array('result' => 'fail', 'message' => $this->lang->errorSaveXmind));
     }
 
     /**
