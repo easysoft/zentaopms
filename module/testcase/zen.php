@@ -2976,46 +2976,37 @@ class testcaseZen extends testcase
     }
 
     /**
+     * 获取 content.json 的内容。
      * Fetch by json.
      *
-     * @param  string $extractFolder
-     * @param  int    $productID
-     * @param  int    $branch
+     * @param  string     $filePath
+     * @param  int        $productID
+     * @param  int|string $branch
      * @access public
-     * @return void
+     * @return array
      */
-    function fetchByJSON($extractFolder, $productID, $branch)
+    function fetchByJSON(string $filePath, int $productID, int|string $branch): array
     {
-        $filePath = $extractFolder."/content.json";
-        $jsonStr = file_get_contents($filePath);
+        $file      = $filePath . '/content.json';
+        $jsonStr   = file_get_contents($file);
         $jsonDatas = json_decode($jsonStr, true);
-        $title = $jsonDatas[0]['rootTopic']['title'];
-        if(strlen($title) == 0)
-        {
-            return array('result'=>'fail','message'=>$this->lang->testcase->errorXmindUpload);
-        }
+        $title     = $jsonDatas[0]['rootTopic']['title'];
+        if(strlen($title) == 0) return array('result' => 'fail', 'message' => $this->lang->testcase->errorXmindUpload);
 
         $pID = $productID;
-
         $this->classXmind = $this->app->loadClass('xmind');
-        if($this->classXmind->endsWith($title,"]") == true)
+        if($this->classXmind->endsWith($title, ']'))
         {
-            $tmpID = $this->classXmind->getBetween($title,"[","]");
-            if(empty($tmpID) == false)
+            $tmpID = $this->classXmind->getBetween($title, '[', ']');
+            if(!empty($tmpID))
             {
-                $projectCount = $this->dao->select('count(*) as count')
-                    ->from(TABLE_PRODUCT)
-                    ->where('id')
-                    ->eq((int)$tmpID)
-                    ->andWhere('deleted')->eq('0')
-                    ->fetch('count');
-
-                if((int)$projectCount == 0) return array('result'=>'fail','message'=>$this->lang->testcase->errorImportBadProduct);
+                $product = $this->loadModel('product')->getByID($tmpID);
+                if(!$product || $product->deleted) return array('result' => 'fail', 'message' => $this->lang->testcase->errorImportBadProduct);
 
                 $pID = $tmpID;
             }
         }
 
-        return array('result'=>'success','pID'=>$pID,'type'=>'json');
+        return array('result' => 'success', 'pID' => $pID, 'type' => 'json');
     }
 }
