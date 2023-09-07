@@ -146,7 +146,7 @@ class metricTao extends metricModel
      * @access public
      * @return array
      */
-    public function getMethodNameList($className)
+    protected function getMethodNameList($className)
     {
         $classReflection = new ReflectionClass($className);
         $methods = $classReflection->getMethods();
@@ -155,5 +155,36 @@ class metricTao extends metricModel
         foreach($methods as $index => $reflectionMethod) $methodNameList[$index] = $reflectionMethod->name;
 
         return $methodNameList;
+    }
+
+    /**
+     * 获取旧度量项的SQL函数名。
+     * Get sql function name of a old metric.
+     *
+     * @param  object $measurement
+     * @access protected
+     * @return string
+     */
+    protected function getSqlFunctionName($measurement)
+    {
+        if(!$measurement) return '';
+        return strtolower("qc_{$measurement->code}");
+    }
+
+    /**
+     * 解析SQL函数。
+     * Parsing SQL function.
+     *
+     * @param  string $sql
+     * @access protected
+     * @return string
+     */
+    protected function parseSqlFunction($sql)
+    {
+        $pattern = "/create\s+function\s+`{0,1}([\$,a-z,A-z,_,0-9,\(,|)]+`{0,1})\(+/Ui";
+        preg_match_all($pattern, $sql, $matches);
+
+        if(empty($matches[1][0])) return null;
+        return trim($matches[1][0], '`');
     }
 }
