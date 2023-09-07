@@ -1715,10 +1715,10 @@ class execution extends control
         $executionIdList = $this->post->executionIDList;
         if(is_string($executionIdList)) $executionIdList = explode(',', $executionIdList);
 
-        $pointOutStages = $this->execution->batchChangeStatus($executionIdList, $status);
-        if(!$pointOutStages) return $this->sendSuccess(array('load' => true));
+        $filteredStages = $this->execution->batchChangeStatus($executionIdList, $status);
+        if(!$filteredStages) return $this->sendSuccess(array('load' => true));
 
-        $alertLang = '';
+        $alertMsg = '';
         if($status == 'wait')
         {
             $project = $this->loadModel('project')->getById($projectID);
@@ -1726,18 +1726,18 @@ class execution extends control
             if(empty($project) or (!empty($project) and strpos($project->model, 'waterfall') !== false))
             {
                 $executionLang = (empty($project) or (!empty($project) and $project->model == 'waterfallplus')) ? $this->lang->execution->common : $this->lang->stage->common;
-                $alertLang     = sprintf($this->lang->execution->hasStartedTaskOrSubStage, $executionLang, $pointOutStages);
+                $alertMsg      = sprintf($this->lang->execution->hasStartedTaskOrSubStage, $executionLang, $filteredStages);
             }
             if(!empty($project) and strpos('agileplus,scrum', $project->model) !== false)
             {
                 $executionLang = $project->model == 'scrum' ? $this->lang->executionCommon : $this->lang->execution->common;
-                $alertLang     = sprintf($this->lang->execution->hasStartedTask, $executionLang, $pointOutStages);
+                $alertMsg      = sprintf($this->lang->execution->hasStartedTask, $executionLang, $filteredStages);
             }
         }
-        if($status == 'suspended') $alertLang = sprintf($this->lang->execution->hasSuspendedOrClosedChildren, $pointOutStages);
-        if($status == 'closed') $alertLang = sprintf($this->lang->execution->hasNotClosedChildren, $pointOutStages);
+        if($status == 'suspended') $alertMsg = sprintf($this->lang->execution->hasSuspendedOrClosedChildren, $filteredStages);
+        if($status == 'closed') $alertMsg = sprintf($this->lang->execution->hasNotClosedChildren, $filteredStages);
 
-        return $this->sendSuccess(array('message' => $alertLang, 'load' => true));
+        return $this->sendSuccess(array('message' => $alertMsg, 'load' => true));
     }
 
     /**

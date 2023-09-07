@@ -957,7 +957,7 @@ class executionModel extends model
         $executionIdList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->orderBy('grade_desc')->fetchPairs();
 
         $this->loadModel('programplan');
-        $pointOutStages = '';
+        $filteredStages = '';
         foreach($executionIdList as $executionID)
         {
             /* The state of the parent stage or the sibling stage may be affected by the child stage before the change, so it cannot be checked in advance. */
@@ -967,7 +967,7 @@ class executionModel extends model
 
             if($status == 'wait' and $execution->status != 'wait')
             {
-                $pointOutStages .= $this->changeStatus2Wait($executionID, $selfAndChildren);
+                $filteredStages .= $this->changeStatus2Wait($executionID, $selfAndChildren);
             }
 
             if($status == 'doing' and $execution->status != 'doing')
@@ -977,11 +977,11 @@ class executionModel extends model
 
             if(($status == 'suspended' and $execution->status != 'suspended') or ($status == 'closed' and $execution->status != 'closed'))
             {
-                $pointOutStages .= $this->changeStatus2Inactive($executionID, $status, $selfAndChildren);
+                $filteredStages .= $this->changeStatus2Inactive($executionID, $status, $selfAndChildren);
             }
         }
 
-        return trim($pointOutStages, ',');
+        return trim($filteredStages, ',');
     }
 
     /**
