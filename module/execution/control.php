@@ -3279,7 +3279,6 @@ class execution extends control
                 {
                     $draftCount++;
                     unset($planStory[$id]);
-                    continue;
                 }
             }
 
