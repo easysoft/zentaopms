@@ -329,11 +329,11 @@ class baseModel
      * Delete one record.
      *
      * @param  string    $table  the table name
-     * @param  string    $id     the id value of the record to be deleted
+     * @param  int       $id     the id value of the record to be deleted
      * @access public
      * @return void
      */
-    public function delete($table, $id)
+    public function delete(string $table, int $id)
     {
         $this->dao->delete()->from($table)->where('id')->eq($id)->exec();
     }
