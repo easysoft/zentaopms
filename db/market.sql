@@ -40,3 +40,4 @@ CREATE TABLE IF NOT EXISTS `zt_marketreport` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE `zt_project` ADD COLUMN `market` mediumint(8) NOT NULL DEFAULT 0;
+ALTER TABLE `zt_project` ADD COLUMN `closedReason` varchar(20) NOT NULL DEFAULT '';
