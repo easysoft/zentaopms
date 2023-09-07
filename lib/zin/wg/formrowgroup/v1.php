@@ -9,7 +9,7 @@ class formRowGroup extends formRow
 {
     protected static array $defineProps = array(
         'title: array',
-        'items: array',
+        'items?: array',
     );
 
     protected static array $defineBlocks = array(

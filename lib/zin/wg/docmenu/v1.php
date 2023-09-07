@@ -35,7 +35,7 @@ class docMenu extends wg
 
     private function buildLink($item, $releaseID = 0): string
     {
-        $url = $item->url;
+        $url = zget($item, 'url', '');
         if(!empty($url)) return $url;
         if(in_array($item->type, array('apiLib', 'docLib')))
         {
@@ -126,7 +126,7 @@ class docMenu extends wg
                 'url'         => $this->buildLink($setting),
                 'attrs'       => array('data-app' => $this->tab),
                 'data-id'     => $itemID,
-                'data-lib'    => in_array($setting->type, array('docLib', 'apiLib')) ? $itemID : $setting->libID,
+                'data-lib'    => in_array($setting->type, array('docLib', 'apiLib')) ? $itemID : zget($setting, 'libID', ''),
                 'data-type'   => $setting->type,
                 'data-parent' => $setting->parentID,
                 'data-module' => $this->currentModule,

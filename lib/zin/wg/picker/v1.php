@@ -82,6 +82,7 @@ class picker extends wg
         $pickerItems  = is_array($items) ? array() : $items;
         $hasZeroValue = false;
         $defaultValue = isset($pickerProps['value']) ? $pickerProps['value'] : (isset($pickerProps['defaultValue']) ? $pickerProps['defaultValue'] : '');
+        if(is_array($defaultValue)) $defaultValue = implode($this->prop('valueSplitter', ','), $defaultValue);
         if(!empty($items) && is_array($items))
         {
             foreach($items as $key => $item)
