@@ -57,15 +57,14 @@ class model extends baseModel
      * Delete one record.
      *
      * @param  string    $table      the table name
-     * @param  string    $id         the id value of the record to be deleted
-     * @param  string    $objectType the object type of the record to be deleted
+     * @param  int       $id         the id value of the record to be deleted
      * @access public
      * @return bool
      */
-    public function delete($table, $id, $objectType = '')
+    public function delete(string $table, int $id)
     {
         $this->dao->update($table)->set('deleted')->eq(1)->where('id')->eq($id)->exec();
-        if(!$objectType) $objectType = preg_replace('/^' . preg_quote((string) $this->config->db->prefix) . '/', '', trim($table, '`'));
+        $objectType = preg_replace('/^' . preg_quote((string) $this->config->db->prefix) . '/', '', trim($table, '`'));
         $this->loadModel('action')->create($objectType, $id, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
 
         return true;

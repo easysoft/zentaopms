@@ -5328,4 +5328,19 @@ class executionModel extends model
         }
         return $sortedExecutions;
     }
+
+    /**
+     * 删除一个执行。
+     * Delete an execution.
+     *
+     * @param  string $table
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function delete(string $table, int $executionID)
+    {
+        $this->dao->update($table)->set('deleted')->eq(1)->where('id')->eq($executionID)->exec();
+        $this->loadModel('action')->create('execution', $executionID, 'deleted');
+    }
 }
