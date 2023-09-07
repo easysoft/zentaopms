@@ -203,7 +203,7 @@ window.renderCheckedLabel = function()
 
     var label = labels[i];
     var html = '<span class="' + classes + '" metric-id="' + label.id + '">';
-    html    += '<div class="gray-pale-div">' + label.name + '</div>';
+    html    += '<div class="gray-pale-div" title="' + label.name + '">' + label.name + '</div>';
     if(multi) html += '<button type="button" class="btn picker-deselect-btn size-sm square ghost" onclick="window.handleRemoveLabel(' + label.id + ')"><span class="close"></span></button>';
     html    += '</span>';
 
