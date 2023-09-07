@@ -2358,7 +2358,7 @@ class execution extends control
         {
             /* Delete an execution and update the information. */
             $execution = $this->execution->fetchByID($executionID);
-            $this->execution->delete(TABLE_EXECUTION, $executionID);
+            $this->execution->delete(TABLE_EXECUTION, $executionID, 'execution');
             $this->execution->updateUserView($executionID);
             $this->loadModel('common')->syncPPEStatus($executionID);
 
