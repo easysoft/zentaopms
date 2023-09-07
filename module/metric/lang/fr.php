@@ -42,6 +42,7 @@ $lang->metric->verifyFile    = 'Verify File';
 $lang->metric->verifyResult  = 'Verify Result';
 $lang->metric->publish       = 'Publish';
 $lang->metric->moveFailTip   = '移动度量项文件失败。';
+$lang->metric->selectCount   = 'Select %s metrics';
 
 $lang->metric->viewType = new stdclass();
 $lang->metric->viewType->single   = 'Single view';

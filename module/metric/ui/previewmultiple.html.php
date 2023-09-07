@@ -124,12 +124,12 @@ div
                 ),
                 cell
                 (
-                    set::width(100),
+                    set::width(130),
                     set::flex('none'),
                     span
                     (
                         setClass('checked-tip'),
-                        '已选择1项',
+                        sprintf($lang->metric->selectCount, 1),
                     ),
                 ),
             ),

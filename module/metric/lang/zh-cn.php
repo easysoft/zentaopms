@@ -42,6 +42,7 @@ $lang->metric->collectConf   = '定时设置';
 $lang->metric->verifyFile    = '校验文件';
 $lang->metric->verifyResult  = '校验结果';
 $lang->metric->publish       = '发布';
+$lang->metric->selectCount   = '已选择%s项';
 
 $lang->metric->viewType = new stdclass();
 $lang->metric->viewType->single   = '单独查看';
