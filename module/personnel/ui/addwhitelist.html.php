@@ -67,7 +67,7 @@ formBatchPanel
                 set::name('object'),
                 set::value($copyID),
                 set::items($objects),
-                set('data-placeholder', $lang->execution->selectObjectTitle),
+                set('data-placeholder', $lang->personnel->selectObjectTips),
                 on::change('setObjectUsers'),
             ),
         ),

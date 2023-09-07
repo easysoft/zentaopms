@@ -119,14 +119,16 @@ class personnel extends control
 
         $this->view->title = $this->lang->personnel->whitelist;
 
-        $this->view->pager     = $pager;
-        $this->view->objectID  = $objectID;
-        $this->view->whitelist = $this->personnel->getWhitelist($objectID, $objectType, $orderBy, $pager);
-        $this->view->depts     = $this->loadModel('dept')->getOptionMenu();
-        $this->view->module    = $module;
-        $this->view->goback    = $goback;
-        $this->view->from      = $from;
+        $this->view->pager      = $pager;
+        $this->view->objectID   = $objectID;
+        $this->view->objectType = $objectType;
+        $this->view->whitelist  = $this->personnel->getWhitelist($objectID, $objectType, $orderBy, $pager);
+        $this->view->depts      = $this->loadModel('dept')->getOptionMenu();
+        $this->view->module     = $module;
+        $this->view->goback     = $goback;
+        $this->view->from       = $from;
 
+        if($this->app->tab == 'execution') $objectType = 'execution';
         $dropMenuObjectID = $objectType . 'ID';
         $this->view->{$dropMenuObjectID} = $objectID;
         $this->view->projectProgramID    = $programID;
