@@ -2547,7 +2547,7 @@ class executionModel extends model
             {
                 $mineExecutions[$execution->id] = $execution;
             }
-            elseif($execution->status != 'done' and $execution->status != 'closed' and !($execution->PM == $this->app->user->account))
+            elseif($execution->status != 'done' and $execution->status != 'closed' and $execution->PM != $this->app->user->account)
             {
                 $otherExecutions[$execution->id] = $execution;
             }
