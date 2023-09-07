@@ -625,6 +625,7 @@ class execution extends control
     }
 
     /**
+     * 查看需求详情。
      * View a story.
      *
      * @param  int    $storyID
@@ -632,7 +633,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function storyView($storyID, $executionID = 0)
+    public function storyView(int $storyID, int $executionID = 0)
     {
         $this->session->set('productList', $this->app->getURI(true), 'product');
 
