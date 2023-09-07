@@ -1384,6 +1384,8 @@ class repo extends control
 
         $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
 
+
+        $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->importAction;
         $this->view->gitlabPairs = $this->gitlab->getPairs();
         $this->view->products    = $products;
         $this->view->projects    = $this->product->getProjectPairsByProductIDList(array_keys($products));
