@@ -79,7 +79,7 @@ class editor extends wg
             (
                 set::name('uid'),
                 set::value($this->prop('uid')),
-                set::class('hidden')
+                setClass('hidden')
             )
         );
     }
