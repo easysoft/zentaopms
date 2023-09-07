@@ -9,14 +9,14 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-jsVar('productID', $productID);
+jsVar('productID', $product->id);
 jsVar('branch', $branch);
 jsVar('userConfig_module', $settings['module']);
 jsVar('userConfig_scene', $settings['scene']);
 jsVar('userConfig_case', $settings['case']);
 jsVar('userConfig_pri', $settings['pri']);
 jsVar('userConfig_group', $settings['group']);
-jsVar('jsLng',$jsLng);
+jsVar('jsLng', $this->lang->testcase->jsLng);
 
 $nodeTemplate =
 "<div  data-toggle='tooltip' data-placement='bottom' id='node-{id}' class='mindmap-node' data-type='{type}' data-id='{id}' data-parent='{parent}'>" .

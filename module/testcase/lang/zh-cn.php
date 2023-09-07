@@ -303,18 +303,19 @@ $lang->testcase->settingCase   = '测试用例';
 $lang->testcase->settingPri    = '优先级';
 $lang->testcase->settingGroup  = '步骤分组';
 
-$lang->testcase->caseNotExist =  '未识别导入数据中的用例，导入失败';
-$lang->testcase->saveFail     =  '保存失败';
-$lang->testcase->set2Scene    =  '设为场景';
-$lang->testcase->set2Testcase =  '设为测试用例';
-$lang->testcase->clearSetting =  '清除设置';
-$lang->testcase->setModule    =  '设置场景模块';
-$lang->testcase->pickModule   =  '请选择模块';
-$lang->testcase->clearBefore  =  '清除前面场景';
-$lang->testcase->clearAfter   =  '清除后面场景';
-$lang->testcase->clearCurrent =  '清除当前场景';
-$lang->testcase->removeGroup  =  '移除分组';
-$lang->testcase->set2Group    =  '设为分组';
+$lang->testcase->jsLng = new stdclass();
+$lang->testcase->jsLng->caseNotExist =  '未识别导入数据中的用例，导入失败';
+$lang->testcase->jsLng->saveFail     =  '保存失败';
+$lang->testcase->jsLng->set2Scene    =  '设为场景';
+$lang->testcase->jsLng->set2Testcase =  '设为测试用例';
+$lang->testcase->jsLng->clearSetting =  '清除设置';
+$lang->testcase->jsLng->setModule    =  '设置场景模块';
+$lang->testcase->jsLng->pickModule   =  '请选择模块';
+$lang->testcase->jsLng->clearBefore  =  '清除前面场景';
+$lang->testcase->jsLng->clearAfter   =  '清除后面场景';
+$lang->testcase->jsLng->clearCurrent =  '清除当前场景';
+$lang->testcase->jsLng->removeGroup  =  '移除分组';
+$lang->testcase->jsLng->set2Group    =  '设为分组';
 
 $lang->testcase->exportTemplet = '导出模板';
 

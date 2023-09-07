@@ -1736,66 +1736,47 @@ class testcase extends control
     }
 
     /**
+     * 展示导入的 xmind 内容。
      * Show imported xmind.
      *
-     * @param  int $productID
-     * @param  int $branch
+     * @param  int    $productID
+     * @param  string $branch
      * @access public
      * @return void
      */
-    public function showXmindImport($productID,$branch)
+    public function showXmindImport(int $productID, string $branch)
     {
-        if(!commonModel::hasPriv("testcase", "importXmind")) $this->loadModel('common')->deny('testcase', 'importXmind');
-        $product  = $this->product->getById($productID);
-        $branches = (isset($product->type) and $product->type != 'normal') ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
-        $config   = $this->testcase->getXmindConfig();
+        if(!commonModel::hasPriv('testcase', 'importXmind')) $this->loadModel('common')->deny('testcase', 'importXmind');
 
         /* Set menu. */
         if($this->app->tab == 'project') $this->loadModel('project')->setMenu(null);
         if($this->app->tab == 'qa') $this->testcase->setMenu($this->products, $productID, $branch);
 
-        $jsLng = array();
-        $jsLng['caseNotExist'] = $this->lang->testcase->caseNotExist;
-        $jsLng['saveFail']     = $this->lang->testcase->saveFail;
-        $jsLng['set2Scene']    = $this->lang->testcase->set2Scene;
-        $jsLng['set2Testcase'] = $this->lang->testcase->set2Testcase;
-        $jsLng['clearSetting'] = $this->lang->testcase->clearSetting;
-        $jsLng['setModule']    = $this->lang->testcase->setModule;
-        $jsLng['pickModule']   = $this->lang->testcase->pickModule;
-        $jsLng['clearBefore']  = $this->lang->testcase->clearBefore;
-        $jsLng['clearAfter']   = $this->lang->testcase->clearAfter;
-        $jsLng['clearCurrent'] = $this->lang->testcase->clearCurrent;
-        $jsLng['removeGroup']  = $this->lang->testcase->removeGroup;
-        $jsLng['set2Group']    = $this->lang->testcase->set2Group;
+        $product  = $this->product->getByID($productID);
+        $branches = (isset($product->type) && $product->type != 'normal') ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
 
         $folder = $this->session->xmindImport;
-        $type   = $this->session->xmindImportType;
-        $data   = array();
-        if($type == 'xml')
+        if($this->session->xmindImportType == 'xml')
         {
-            $xmlPath = "$folder/content.xml";
+            $xmlPath = $this->session->xmindImport . 'content.xml';
             $results = $this->testcase->getXmindImport($xmlPath);
-            $results = json_decode($results, true);
         }
         else
         {
-            $jsonPath = "$folder/content.json";
-            $jsonStr  = file_get_contents($jsonPath);
-            $results  = json_decode($jsonStr, true);
+            $jsonPath = $this->session->xmindImport . 'content.json';
+            $results  = file_get_contents($jsonPath);
         }
+        $results = json_decode($results, true);
 
         $scenes = array();
         if(!empty($results[0]['rootTopic'])) $scenes = $this->testcaseZen->processScene($results[0]['rootTopic']);
 
         $this->view->title            = $this->lang->testcase->xmindImport;
-        $this->view->settings         = $config;
-        $this->view->productID        = $productID;
-        $this->view->branch           = $branch;
+        $this->view->settings         = $this->testcase->getXmindConfig();
         $this->view->product          = $product;
+        $this->view->branch           = $branch;
         $this->view->scenes           = $scenes;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, ($branch === 'all' or !isset($branches[$branch])) ? 0 : $branch);
-        $this->view->gobackLink       = $this->createLink('testcase', 'browse', "productID=$productID");
-        $this->view->jsLng            = $jsLng;
 
         $this->display();
     }
