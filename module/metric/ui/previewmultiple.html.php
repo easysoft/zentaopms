@@ -120,6 +120,13 @@ div
                         setClass('checked-tip'),
                         sprintf($lang->metric->selectCount, 1),
                     ),
+                    btn
+                    (
+                        setClass('btn ghost square size-sm rounded primary-hover-500 dropdown-icon hidden'),
+                        set::icon('angle-double-right'),
+                        set::iconClass('icon-18'),
+                    ),
+                    on::click('.dropdown-icon', 'setDropDown()'),
                 ),
             ),
         ),

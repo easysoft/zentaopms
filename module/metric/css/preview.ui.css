@@ -33,9 +33,14 @@
 .primary-hover-500 {color: var(--color-slate-800)}
 .primary-hover-500:hover {color: var(--color-primary-500);}
 
-.main .checked-content {transition: height 0.5s ease; height: 48px; padding-left: 16px; border-bottom: 1px solid var(--color-slate-300);}
-.main .checked-label-content {height: 48px; padding-top: 5px; padding-bottom: 7px; display: flex; flex-wrap: wrap;}
+.main .checked-content {transition: height 0.5s ease; height: 48px; padding-left: 8px; border-bottom: 1px solid var(--color-slate-300);}
+.main .checked-label-content {height: 48px; padding-top: 3px; display: flex; flex-wrap: wrap;}
 .main .checked-tip {line-height: 48px; height: 100%; padding-right: 32px;}
-.main .gray-pale {margin: 7px 5px; padding: 12px 10px; white-space: nowrap;}
+.main .gray-pale {margin: 7px 4px; padding: 13px 12px; white-space: nowrap;}
 .main .gray-pale-div {overflow: hidden;}
 .main .gray-pale-withdelete {padding-right: 1px;}
+
+.gray-hidden {opacity: 0; transition: opacity 0.5s ease;}
+.gray-visible {opacity: 1;}
+.dropdown-icon {transform: rotate(90deg); transition: transform 0.3s ease;}
+.dropdown-icon.rotate {transform: rotate(270deg); }

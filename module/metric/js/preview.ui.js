@@ -108,9 +108,12 @@ window.handleNavMenuClick = function($el)
 
 window.afterPageUpdate = function($target, info, options)
 {
+  window.isDrop      = false;
+  window.lineCount   = 1;
   window.checkedList = [{id:current.id + '', name:current.name}];
   window.renderDTable();
   if(viewType == 'multiple') renderCheckedLabel();
+  window.addEventListener('resize', renderCheckedLabel());
 }
 
 window.renderDTable = function()
@@ -138,41 +141,77 @@ window.handleRemoveLabel = function(id)
   window.updateCheckAction(checkedItem.id, checkedItem.name, false);
 }
 
-window.renderCheckedLabel = function()
+window.setDropDown = function()
 {
-  $('.checked-label-content').empty();
+  var $drop    = $('.dropdown-icon');
+  var $content = $('.checked-content');
+  $drop.toggleClass('rotate');
+  if($drop.hasClass('rotate'))
+  {
+    window.isDrop = true;
+    $content.height(48 + (window.lineCount - 1) * 40);
+    setTimeout(function()
+    {
+      $content.find('.gray-hidden').addClass('gray-visible');
+      $content.find('.gray-visible').removeClass('gray-hidden');
+    }, 300);
+  }
+  else
+  {
+    window.isDrop = false;
+    $content.height(48);
+    $content.find('.gray-visible').addClass('gray-hidden');
+    $content.find('.gray-hidden').removeClass('gray-visible');
+  }
+}
+
+function renderCheckedLabel()
+{
+  var $content =  $('.checked-label-content');
+  $content.empty();
+
   var labels = JSON.parse(JSON.stringify(window.checkedList));
   console.log(labels);
   var multi  = labels.length > 1;
-  var width  = Math.floor($('.checked-label-content').width());
+  var width  = Math.floor($content.width());
   var left   = width;
+
+  // 当nextLine 在left <= 0 中置true后，代表接下来的元素都是换行的
+  var nextLine  = false;
+  var lineCount = 1;
 
   var labelClass = 'label circle gray-pale';
   if(multi) labelClass += ' gray-pale-withdelete';
 
   for(var i = 0; i < labels.length; i++)
   {
+    if(!window.isDrop && nextLine) labelClass += ' gray-hidden';
+
     var label = labels[i];
     var html = '<span class="' + labelClass + '" metric-id="' + label.id + '">';
     html    += '<div class="gray-pale-div">' + label.name + '</div>';
     if(multi) html += '<button type="button" class="btn picker-deselect-btn size-sm square ghost" onclick="window.handleRemoveLabel(' + label.id + ')"><span class="close"></span></button>';
     html    += '</span>';
 
-    $('.checked-label-content').append(html);
+    $content.append(html);
 
-    var $label     = $('.checked-label-content').find('[metric-id="' + label.id + '"]');
+    var $label     = $content.find('[metric-id="' + label.id + '"]');
     var labelWidth = Math.ceil($label.width() + parseInt($label.css('padding-left')) + parseInt($label.css('padding-right')) + parseInt($label.css('margin-left')) + parseInt($label.css('margin-right')));
 
     left = left - labelWidth;
     if(left <= 0)
     {
-      var $div     = $('.checked-label-content').find('[metric-id="' + label.id + '"]').find('.gray-pale-div');
+      var $div     = $content.find('[metric-id="' + label.id + '"]').find('.gray-pale-div');
       var divWidth = $div.width();
 
       if(divWidth < -left)
       {
         // 如果剩下的空间一点字都显示不下了，就换行
         left = width - labelWidth;
+        // 如果还没判定换行但是这一行一点字都显示不下，从这里加hidden类
+        if(!nextLine) $label.addClass('gray-hidden');
+        // 此时已经换行了，行数加1
+        lineCount ++;
       }
       else
       {
@@ -180,9 +219,18 @@ window.renderCheckedLabel = function()
 
         // 换行了，重置left
         left = width;
+
+        // 如果这个元素后面还有元素，说明行数要+1
+        if(i + 1 < labels.length) lineCount ++;
       }
+
+      nextLine = true;
     }
   }
+
+  $('.dropdown-icon').addClass('hidden');
+  if(lineCount >= 2) $('.dropdown-icon').removeClass('hidden');
+  window.lineCount = lineCount;
 
   $('.checked-tip').text(selectCount.replace('%s', labels.length));
 }
