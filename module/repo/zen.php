@@ -297,8 +297,8 @@ class repoZen extends repo
                 foreach($vals as $i => $project)
                 {
                     $products = array_filter($this->post->product[$i]);
-                    if(empty($products)) dao::$errors['product'][] = sprintf($this->lang->testcase->whichLine . $this->lang->error->notempty, $i, $this->lang->repo->product);
-                    if($this->post->name[$i] == '')    dao::$errors['name'][] = sprintf($this->lang->testcase->whichLine . $this->lang->error->notempty, $i, $this->lang->repo->name);
+                    if(empty($products)) dao::$errors['product'][] = sprintf($this->lang->testcase->whichLine . $this->lang->error->notempty, $i, $this->lang->repo->product) . "\n";
+                    if($this->post->name[$i] == '')    dao::$errors['name'][] = sprintf($this->lang->testcase->whichLine . $this->lang->error->notempty, $i, $this->lang->repo->name) . "\n";
                     if(dao::isError()) continue;
 
                     $data[] = array('serviceProject' => $project, 'product' => implode(',', $this->post->product[$i]), 'name' => $this->post->name[$i], 'projects' => empty($_POST['projects'][$i]) ? '' : implode(',', $this->post->projects[$i]));
