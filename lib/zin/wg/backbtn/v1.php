@@ -62,6 +62,7 @@ class backBtn extends btn
             'compile'        => 'compile-browse',
             'store'          => 'store-browse',
             'space'          => 'space-browse',
+            'instance'       => 'space-browse',
             'artifactrepo'   => 'artifactrepo-browse',
         );
 
