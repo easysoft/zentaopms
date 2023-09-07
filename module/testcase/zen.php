@@ -3000,7 +3000,7 @@ class testcaseZen extends testcase
             $tmpID = $this->classXmind->getBetween($title, '[', ']');
             if(!empty($tmpID))
             {
-                $product = $this->loadModel('product')->getByID($tmpID);
+                $product = $this->loadModel('product')->getByID((int)$tmpID);
                 if(!$product || $product->deleted) return array('result' => 'fail', 'message' => $this->lang->testcase->errorImportBadProduct);
 
                 $pID = $tmpID;
