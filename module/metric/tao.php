@@ -158,20 +158,6 @@ class metricTao extends metricModel
     }
 
     /**
-     * 获取旧度量项的SQL函数名。
-     * Get sql function name of a old metric.
-     *
-     * @param  object $measurement
-     * @access protected
-     * @return string
-     */
-    protected function getSqlFunctionName($measurement)
-    {
-        if(!$measurement) return '';
-        return strtolower("qc_{$measurement->code}");
-    }
-
-    /**
      * 解析SQL函数。
      * Parsing SQL function.
      *
