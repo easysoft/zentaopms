@@ -45,7 +45,7 @@ function setScenes()
     productID = $('#product').val();
     branch    = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
-    link = createLink('testcase', 'ajaxGetModuleScenes', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&stype=2&storyID=0&onlyOption=false&status=noclosed&limit=50&type=full&hasParent=1');
+    link = createLink('testcase', 'ajaxGetModuleScenes', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&stype=1&storyID=0&onlyOption=false&status=noclosed&limit=50&type=full&hasParent=1');
 
     $('#sceneIdBox').load(link, function()
     {
