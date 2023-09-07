@@ -5188,6 +5188,7 @@ class upgradeModel extends model
         $this->dao->update(TABLE_RELEASE)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
 
         /* Compute product acl. */
+        if($lineID) $this->dao->update(TABLE_MODULE)->set('root')->eq($programID)->where('id')->eq($lineID)->andWhere('root')->eq('0')->exec();
         $this->computeProductAcl($productIdList, $programID, $lineID);
 
         /* No project is created when there are no sprints. */
@@ -5343,7 +5344,7 @@ class upgradeModel extends model
             $data = new stdclass();
             $data->program = $programID;
             $data->acl     = $product->acl == 'custom' ? 'private' : $product->acl;
-            $data->line    = $lineID;
+            if($lineID !== null) $data->line = $lineID;
 
             $this->dao->update(TABLE_PRODUCT)->data($data)->where('id')->eq($product->id)->exec();
         }
@@ -7816,7 +7817,8 @@ class upgradeModel extends model
         $this->fixProjectPath($programID);
 
         $productIdList = $this->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq('0')->fetchPairs();
-        $this->computeProductAcl($productIdList, $programID, 0);
+        $this->dao->update(TABLE_MODULE)->set('root')->eq($programID)->where('type')->eq('line')->andWhere('root')->eq('0')->exec();
+        $this->computeProductAcl($productIdList, $programID, null);
 
         if(dao::isError()) return false;
         return true;
@@ -7892,7 +7894,8 @@ class upgradeModel extends model
         $this->fixProjectPath($programID);
 
         $productIdList = $this->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq('0')->fetchPairs();
-        $this->computeProductAcl($productIdList, $programID, 0);
+        $this->dao->update(TABLE_MODULE)->set('root')->eq($programID)->where('type')->eq('line')->andWhere('root')->eq('0')->exec();
+        $this->computeProductAcl($productIdList, $programID, null);
 
         if(dao::isError()) return false;
         return true;
