@@ -215,7 +215,7 @@ $config->story->datatable->fieldList['category']['required'] = 'no';
 
 $config->story->datatable->fieldList['openedDate']['title']    = 'openedDate';
 $config->story->datatable->fieldList['openedDate']['fixed']    = 'no';
-$config->story->datatable->fieldList['openedDate']['type']     = 'datetime';
+$config->story->datatable->fieldList['openedDate']['type']     = 'html';
 $config->story->datatable->fieldList['openedDate']['sortType'] = true;
 $config->story->datatable->fieldList['openedDate']['width']    = '90';
 $config->story->datatable->fieldList['openedDate']['required'] = 'no';
