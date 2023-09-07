@@ -110,17 +110,6 @@ div
                 (
                     setClass('checked-label-content'),
                     set::flex('auto'),
-                    set::align('flex-start'),
-                    label
-                    (
-                        'Circle',
-                        setClass('circle gray-pale')
-                    ),
-                    label
-                    (
-                        'Circle',
-                        setClass('circle gray-pale')
-                    ),
                 ),
                 cell
                 (
