@@ -35,11 +35,13 @@
 
 .main .checked-content {transition: height 0.5s ease; height: 48px; padding-left: 8px; border-bottom: 1px solid var(--color-slate-300);}
 .main .checked-label-content {height: 48px; padding-top: 3px; display: flex; flex-wrap: wrap;}
-.main .checked-tip {line-height: 48px; height: 100%; padding-right: 32px;}
+.main .checked-label-right {height: 48px; padding-right: 12px; justify-content: flex-end; display: flex; align-items: center;}
+.main .checked-tip {padding-right: 6px;}
 .main .gray-pale {margin: 7px 4px; padding: 13px 12px; white-space: nowrap;}
 .main .gray-pale-div {overflow: hidden;}
 .main .gray-pale-withdelete {padding-right: 1px;}
 
+.visibility-hidden {visibility: hidden;}
 .gray-hidden {opacity: 0;}
 .gray-visible {opacity: 1;}
 .dropdown-icon {transform: rotate(90deg); transition: transform 0.3s ease;}

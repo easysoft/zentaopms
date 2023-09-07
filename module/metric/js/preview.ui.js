@@ -241,8 +241,8 @@ window.renderCheckedLabel = function()
 
   if(!window.isDropdown) $content.find('.gray-next').addClass('gray-hidden');
 
-  $('.dropdown-icon').addClass('hidden');
-  if(lineCount >= 2) $('.dropdown-icon').removeClass('hidden');
+  $('.dropdown-icon').addClass('visibility-hidden');
+  if(lineCount >= 2) $('.dropdown-icon').removeClass('visibility-hidden');
 
   if(window.lineCount != lineCount && window.isDropdown)
   {
