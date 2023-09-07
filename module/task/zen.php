@@ -54,7 +54,6 @@ class taskZen extends task
 
         $this->view->title         = $execution->name . $this->lang->colon . $this->lang->task->create;
         $this->view->customFields  = $customFields;
-        $this->view->showAllModule = $showAllModule;
         $this->view->modulePairs   = $modulePairs;
         $this->view->showFields    = $this->config->task->custom->createFields;
         $this->view->gobackLink    = (isset($output['from']) && $output['from'] == 'global') ? $this->createLink('execution', 'task', "executionID={$executionID}") : '';
