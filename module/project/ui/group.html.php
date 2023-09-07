@@ -39,7 +39,6 @@ dtable
     set::fixedLeftWidth('30%'),
     set::cols(array_values($config->projectGroup->dtable->fieldList)),
     set::data($groups),
-    set::footToolbar($footToolbar),
 );
 
 render();

@@ -1398,7 +1398,7 @@ class project extends control
     {
         $projectID = $this->project->setMenu($projectID);
         $project   = $this->project->getByID($projectID);
-        if(isset($project->acl) and $project->acl == 'open') return $this->sendError($this->lang->whitelistNotNeed, $this->createLink('project', 'index', "projectID=$projectID"));
+        if(isset($project->acl) and $project->acl == 'open') return $this->sendError($this->lang->whitelistNotNeed, true);
 
         echo $this->fetch('personnel', 'whitelist', "objectID=$projectID&module=project&browseType=project&orderBy=id_desc&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID&from=$from");
     }
@@ -1454,7 +1454,7 @@ class project extends control
         /* If hasProduct is 0, return. */
         $projectID = (int)$projectID;
         $project   = $this->project->getById($projectID);
-        if(!$project->hasProduct) return print(js::error($this->lang->project->cannotManageProducts) . js::locate('back'));
+        if(!$project->hasProduct) return $this->sendError($this->lang->project->cannotManageProducts, true);
 
         $executions = $this->loadModel('execution')->getPairs($projectID);
         $IdList     = array_keys($executions);

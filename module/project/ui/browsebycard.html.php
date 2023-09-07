@@ -18,7 +18,7 @@ if(empty($globalDisableProgram))
         set::title($programs[$programID]),
         set::items($programs),
         set::activeKey($programID),
-        set::link(createLink('project', 'browse', "programID={key}&browseType={$browseType}&param={$param}&orderBy=order_asc&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}")),
+        set::link(createLink('project', 'browse', "programID={key}&browseType={$browseType}&param={$param}&orderBy=order_asc&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     );
 }
 featureBar
@@ -58,7 +58,7 @@ toolbar
         'icon'        => 'export',
         'text'        => $lang->project->export,
         'class'       => 'ghost export',
-        'url'         => createLink('project', 'export', "status={$status}&orderBy={$orderBy}"),
+        'url'         => createLink('project', 'export', "status={$browseType}&orderBy={$orderBy}"),
         'data-toggle' => 'modal'
     ))) : null,
     hasPriv('project', 'createGuide') ? item(set(array

@@ -54,6 +54,8 @@ $index      = 0;
 $linkedList = array();
 foreach($allProducts as $productID => $productName)
 {
+    if(empty($linkedBranches[$productID])) continue;
+
     $cannotUnlink = in_array($productID, $unmodifiableProducts) && $project->model == 'waterfall';
 
     foreach($linkedBranches[$productID] as $branchID)

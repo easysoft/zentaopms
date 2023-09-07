@@ -8,7 +8,6 @@ jsVar('weekend', $config->execution->weekend);
 jsVar('unmodifiableProducts', $unmodifiableProducts);
 jsVar('unmodifiableBranches', $unmodifiableBranches);
 jsVar('unmodifiableMainBranches', $unmodifiableMainBranches);
-jsVar('linkedProjectsTip', $linkedProjectsTip);
 jsVar('multiBranchProducts', $multiBranchProducts);
 jsVar('errorSameProducts', $lang->project->errorSameProducts);
 jsVar('beginLessThanParent', $lang->project->beginLessThanParent);

@@ -1348,7 +1348,7 @@ class blockZen extends block
         $project = zget($totalData, $projectID, new stdclass());
         $this->app->loadClass('pager', true);
         $pager = pager::init(0, 3, 1);
-        $project->progress   = $project->allStories == 0 ? 0 : round($project->doneStories / $project->allStories, 3) * 100;
+        $project->progress   = empty($project->allStories) ? 0 : round($project->doneStories / $project->allStories, 3) * 100;
         $project->executions = $this->loadModel('execution')->getStatData($projectID, 'all', 0, 0, false, '', 'id_desc', $pager);
 
         $this->view->totalData = $totalData;

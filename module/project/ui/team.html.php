@@ -46,7 +46,6 @@ jsVar('noAccess', $lang->user->error->noAccess);
 
 dtable
 (
-    set::userMap($users),
     set::cols($config->project->dtable->team->fieldList),
     set::data($teamMembers),
     set::onRenderCell(jsRaw('window.renderCell')),

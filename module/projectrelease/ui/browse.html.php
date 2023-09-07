@@ -32,7 +32,7 @@ jsVar('markerTitle', $lang->release->marker);
 jsVar('showBranch', $showBranch);
 jsVar('products', $products);
 jsVar('orderBy', $orderBy);
-jsVar('sortLink', helper::createLink('release', 'browse', "productID={$product->id}&branch={$branch}&type={$type}&orderBy={orderBy}&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
+jsVar('sortLink', helper::createLink('projectrelease', 'browse', "projectID={$project->id}&executionID={$executionID}&type={$type}&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 jsVar('pageAllSummary', $lang->release->pageAllSummary);
 jsVar('pageSummary', $lang->release->pageSummary);
 jsVar('type', $type);

@@ -341,7 +341,7 @@ formPanel
             )
         )
     ),
-    $products ? $productsBox :
+    !empty($products) ? $productsBox :
     formRow
     (
         setClass('productBox'),
@@ -383,6 +383,7 @@ formPanel
                 picker
                 (
                     set::name("branch[0][]"),
+                    set::items(array())
                 )
             ),
         ),
@@ -396,7 +397,7 @@ formPanel
                 picker
                 (
                     set::name('plans[0][]'),
-                    set::items(null),
+                    set::items(array())
                 )
             ),
             div
@@ -411,7 +412,7 @@ formPanel
                 (
                     setClass('btn ghost removeLine'),
                     icon('trash'),
-                    $i == 0 ? set::disabled(true) : null
+                    empty($i) ? set::disabled(true) : null
                 ),
             )
         ),

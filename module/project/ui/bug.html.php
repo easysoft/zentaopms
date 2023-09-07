@@ -37,7 +37,7 @@ toolbar
     ))) : null,
 );
 
-$closeLink = $type != 'bysearch' ? createLink('project', 'bug', "project={$project->id}&productID={$productID}&branch=$branch&orderBy=$orderBy&build=$buildID&type=$type&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("bugModule")';
+$closeLink = $type != 'bysearch' ? createLink('project', 'bug', "projectID={$project->id}&productID={$productID}&branchID=$branchID&orderBy=$orderBy&build=$buildID&type=$type&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("bugModule")';
 sidebar
 (
     moduleMenu(set(array
@@ -51,7 +51,6 @@ sidebar
 $canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');
 
 $config->bug->dtable->fieldList['module']['map']    = $modulePairs;
-$config->bug->dtable->fieldList['product']['map']   = $products;
 $config->bug->dtable->fieldList['story']['map']     = $stories;
 $config->bug->dtable->fieldList['task']['map']      = $tasks;
 $config->bug->dtable->fieldList['toTask']['map']    = $tasks;

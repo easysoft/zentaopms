@@ -107,6 +107,7 @@ class projectrelease extends control
         $this->view->type        = $type;
         $this->view->from        = $this->app->tab;
         $this->view->pager       = $pager;
+        $this->view->orderBy     = $orderBy;
         $this->view->showBranch  = $showBranch;
         $this->display();
     }
