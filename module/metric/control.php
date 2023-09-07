@@ -186,15 +186,58 @@ class metric extends control
      * @access public
      * @return void
      */
-    public function view(int $metricID): void
+    public function view(int $metricID)
     {
         $this->metric->processUnitList();
+
         $metric = $this->metric->getByID($metricID);
+        $isOldMetric = $this->metric->isOldMetric($metric);
+
+        if($_POST && $isOldMetric)
+        {
+            $measurementID = $metric->fromID;
+            $measurement = $this->metric->getOldMetricByID($measurementID);
+
+            $result = $this->metric->createSqlFunction($this->post->sql, $measurement);
+            if($result['result'] != 'success') return $this->send($result);
+
+            foreach($this->post->varName as $i => $varName)
+            {
+                if(empty($varName)) return $this->send(array('result' => 'fail', 'errors' => $this->lang->metric->tips->noticeVarName));
+                $params[$varName]['showName'] = zget($this->post->showName, $i, '');
+
+                $errors = array();
+                if($params[$varName]['showName'] == '') $errors[] = sprintf($this->lang->metric->tips->showNameMissed, $varName);
+                if(empty($this->post->queryValue[$i]))  $errors[] = sprintf($this->lang->metric->tips->noticeQueryValue, $varName);
+
+                if(!empty($errors)) return $this->send(array('result' => 'fail', 'errors' => join("<br>", $errors)));
+
+                $params[$varName]['varName']  = $varName;
+                $params[$varName]['varType']  = zget($this->post->varType, $i, 'input');
+                $params[$varName]['showName'] = zget($this->post->showName, $i, '');
+                $params[$varName]['options']  = $this->post->options[$i];
+                $params[$varName]['defaultValue'] = zget($this->post->defaultValue, $i, '');
+            }
+
+            $this->dao->update(TABLE_BASICMEAS)
+                ->set('configure')->eq($this->post->sql)
+                ->set('params')->eq(json_encode($params))
+                ->where('id')->eq($measurementID)
+                ->exec();
+
+            $params       = $this->metric->processPostParams();
+            $measFunction = $this->metric->getSqlFunctionName($measurement);
+            $queryResult  = $this->metric->execSqlMeasurement($measurement, $params);
+
+            if($queryResult === false) return $this->send(array('result' => 'fail', 'message' => $this->metric->errorInfo));
+            return $this->send(array('result' => 'success', 'queryResult' => sprintf($this->lang->metric->saveSqlMeasSuccess, $queryResult)));
+        }
+
         $result = $this->metric->getResultByCode($metric->code);
 
         $this->view->title          = $metric->name;
         $this->view->metric         = $metric;
-        $this->view->type           = $this->metric->isOldMetric($metric) ? 'old' : 'new';
+        $this->view->isOldMetric    = $isOldMetric;
         $this->view->result         = $result;
         $this->view->resultHeader   = $this->metricZen->getViewTableHeader($result);
         $this->view->resultData     = $this->metricZen->getViewTableData($metric, $result);

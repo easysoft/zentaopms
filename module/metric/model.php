@@ -136,15 +136,34 @@ class metricModel extends model
      * 根据ID获取旧版度量项信息。
      * Get old metric info by id.
      *
-     * @param  int          $metricID
-     * @param  string|array $fieldList
+     * @param  int $measurementID
      * @access public
      * @return object|false
      */
-    public function getOldMetricByID(int $metricID, string|array $fieldList = '*')
+    public function getOldMetricByID($measurementID)
     {
-        if(is_array($fieldList)) $fieldList = implode(',', $fieldList);
-        return $this->dao->select($fieldList)->from(TABLE_BASICMEAS)->where('id')->eq($metricID)->fetch();
+        $measurement = $this->dao->select('*')->from(TABLE_BASICMEAS)->where('id')->eq($measurementID)->fetch();
+        if(!$measurement) return false;
+
+        if($measurement->collectType == 'action')
+        {
+            $collectConf = json_decode($measurement->collectConf);
+            $measurement->collectConf         = new stdclass();
+            $measurement->collectConf->action = $collectConf->action;
+            $measurement->collectConf->type   = '';
+            $measurement->collectConf->week   = '';
+        }
+        else
+        {
+            $measurement->collectConf = json_decode($measurement->collectConf);
+            if(is_object($measurement->collectConf))
+            {
+                $measurement->collectConf->module = '';
+                $measurement->collectConf->action = '';
+            }
+        }
+
+        return $measurement;
     }
 
     /**
@@ -841,5 +860,108 @@ class metricModel extends model
         $newCalc = $this->metricTao->getCalcRoot() . $metric->scope . DS . $metric->purpose . DS . $metric->code . '.php';
 
         return rename($tmpCalc, $newCalc);
+    }
+
+    /**
+     * 创建SQL函数。
+     * Create sql function.
+     *
+     * @param  string $sql
+     * @param  object $measurement
+     * @access public
+     * @return array
+     */
+    public function createSqlFunction($sql, $measurement)
+    {
+        $measFunction = $this->getSqlFunctionName($measurement);
+        $postFunction = $this->metricTao->parseSqlFunction($sql);
+        if(!$measFunction || !$postFunction) return array('result' => 'fail', 'errors' => $this->lang->metric->tips->nameError);
+
+        $sql = str_replace($postFunction, $measFunction, $sql);
+
+        try
+        {
+            $this->dbh->exec("DROP FUNCTION IF EXISTS `$measFunction`");
+            $result = $this->dbh->exec($sql);
+        }
+        catch(PDOException $exception)
+        {
+            $message = sprintf($this->lang->metric->tips->createError, $exception->getMessage());
+            return array('result' => 'fail', 'errors' => $message);
+        }
+
+        return array('result' => 'success');
+    }
+
+    /**
+     * 获取旧度量项的SQL函数名。
+     * Get sql function name of a old metric.
+     *
+     * @param  object $measurement
+     * @access public
+     * @return string
+     */
+    public function getSqlFunctionName($measurement)
+    {
+        if(!$measurement) return '';
+        return strtolower("qc_{$measurement->code}");
+    }
+
+    /**
+     * 处理请求参数。
+     * Process post params.
+     *
+     * @access public
+     * @return array
+     */
+    public function processPostParams()
+    {
+        return array_combine($this->post->varName, $this->post->queryValue);
+    }
+
+    /**
+     * 执行旧版度量项。
+     * Execute a sql metric.
+     *
+     * @param  object $measurement
+     * @param  array  $vars
+     * @access public
+     * @return int|string
+     */
+    public function execSqlMeasurement($measurement, $vars)
+    {
+        $function = $this->getSqlFunctionName($measurement);
+        if(!$function)
+        {
+            $this->errorInfo = $this->lang->metric->tips->nameError;
+            return false;
+        }
+
+        $vars = (array) $vars;
+        foreach($vars as $key => $param)
+        {
+            if(is_object($param))
+            {
+                unset($vars[$key]);
+                continue;
+            }
+
+            $vars[$key] = $this->dbh->quote($param);
+        }
+
+        $params = join(',', $vars);
+
+        try
+        {
+            $result = $this->dbh->query("select $function($params)")->fetch(PDO::FETCH_NUM);
+        }
+        catch(PDOException $exception)
+        {
+            $this->errorInfo = $exception->getMessage();
+            return false;
+        }
+
+        $queryResult = isset($result[0]) . $measurement->unit ? $result[0] : null;
+        return $queryResult;
     }
 }
