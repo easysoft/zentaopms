@@ -44,7 +44,7 @@ class picker extends wg
         'required?: boolean',               // 是否必选（不允许空值，不可以被清除）。
         'placeholder?: string',             // 选择框上的占位文本。
         'valueSplitter?: string',           // 多个值的分隔字符串，默认为 `,`。
-        'items: array|function',            // 列表项或表项获取方法。
+        'items: string|array|function',            // 列表项或表项获取方法。
         'menu?: array',                     // 附加的菜单选项。
         'hotkey?: boolean',                 // 是否启用快捷键。
         'search?: boolean|number',          // 是否启用搜索。
@@ -79,10 +79,10 @@ class picker extends wg
     {
         list($pickerProps, $restProps) = $this->props->split(array_keys(static::definedPropsList()));
         $items = $pickerProps['items'];
-        $pickerItems  = array();
+        $pickerItems  = is_array($items) ? array() : $items;
         $hasZeroValue = false;
         $defaultValue = isset($pickerProps['value']) ? $pickerProps['value'] : (isset($pickerProps['defaultValue']) ? $pickerProps['defaultValue'] : '');
-        if(!empty($items))
+        if(!empty($items) && is_array($items))
         {
             foreach($items as $key => $item)
             {
