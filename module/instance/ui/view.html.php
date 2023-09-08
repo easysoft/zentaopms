@@ -203,6 +203,7 @@ div
                                 (
                                     $lang->instance->management,
                                     setClass('btn text-primary ghost'),
+                                    set::disabled($instance->type === 'store' && $instance->status != 'running'),
                                     set::url(createLink($instance->appName, 'browseProject', "{$instance->appName}ID={$instance->externalID}"))
                                 )
                             ),
