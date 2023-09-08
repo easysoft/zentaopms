@@ -3207,4 +3207,25 @@ class executionTest
         $taskGroups = $this->executionModel->getTaskGroups($executionID);
         return $this->executionModel->processTaskNode($node, $taskGroups);
     }
+
+    /**
+     * 批量处理执行的名称。
+     * The name of the batch process execution.
+     *
+     * @param  int    $projectID
+     * @param  int    $count
+     * @access public
+     * @return array|int
+     */
+    public function batchProcessNameTest(int $projectID, int $count): array|int
+    {
+        $project    = $this->executionModel->loadModel('project')->getByID($projectID);
+        $executions = $this->executionModel->dao->select('*')->from(TABLE_EXECUTION)
+            ->where('deleted')->eq(0)
+            ->andWhere('type')->in('sprint,stage,kanban')
+            ->andWhere('project')->eq($projectID)
+            ->fetchAll();
+
+        return $count ? count($executions) : $executions;
+    }
 }
