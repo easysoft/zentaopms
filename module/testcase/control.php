@@ -1651,6 +1651,7 @@ class testcase extends control
     }
 
     /**
+     * 获取 xmind 文件内容。
      * Get xmind content.
      *
      * @access public
@@ -1658,25 +1659,20 @@ class testcase extends control
      */
     public function getXmindImport()
     {
-        if(!commonModel::hasPriv("testcase", "importXmind")) $this->loadModel('common')->deny('testcase', 'importXmind');
+        if(!commonModel::hasPriv('testcase', 'importXmind')) $this->loadModel('common')->deny('testcase', 'importXmind');
 
-        $folder = $this->session->xmindImport;
-        $type   = $this->session->xmindImportType;
-
-        if($type == 'xml')
+        if($this->session->xmindImportType == 'xml')
         {
-            $xmlPath = "$folder/content.xml";
+            $xmlPath = $this->session->xmindImport . '/content.xml';
             $results = $this->testcase->getXmindImport($xmlPath);
-
-            echo $results;
         }
         else
         {
-            $jsonPath = "$folder/content.json";
-            $jsonStr = file_get_contents($jsonPath);
-
-            echo $jsonStr;
+            $jsonPath = $this->session->xmindImport . '/content.json';
+            $results  = file_get_contents($jsonPath);
         }
+
+        echo $results;
     }
 
     /**
