@@ -38,6 +38,8 @@ foreach($config->mr->view->operateList as $operate)
     }
     if($operate == 'reopen' && (!$MR->synced || $rawMR->state != 'closed')) continue;
 
+    if($operate == 'delete' && !$projectOwner && !$this->app->user->admin) $action['disabled'] = true;
+
     if($operate === 'edit' || $operate === 'delete')
     {
         $suffixActions[] = $action;

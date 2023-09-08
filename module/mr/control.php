@@ -288,7 +288,7 @@ class mr extends control
         $sourceBranch  = $this->$scm->apiGetSingleBranch($MR->hostID, $MR->sourceProject, $MR->sourceBranch);
         $targetBranch  = $this->$scm->apiGetSingleBranch($MR->hostID, $MR->targetProject, $MR->targetBranch);
 
-        $projectOwner = true;
+        $projectOwner = false;
         if(isset($MR->hostID) and !$this->app->user->admin)
         {
             $openID = $this->$scm->getUserIDByZentaoAccount($MR->hostID, $this->app->user->account);
