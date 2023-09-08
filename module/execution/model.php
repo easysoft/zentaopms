@@ -2490,7 +2490,6 @@ class executionModel extends model
         $this->app->loadLang('branch');
         $branchPairs  = array(BRANCH_MAIN => $this->lang->branch->main);
         $productType  = 'normal';
-        $productNum   = count($products);
         $productPairs = array(0 => '');
         $branches     = empty($execution) ? array() : $this->loadModel('project')->getBranchesByProject($execution->id);
 
@@ -2662,7 +2661,7 @@ class executionModel extends model
             ->fetchPairs('id');
 
         $branches = str_replace(',', "','", $branches);
-        $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')->from(TABLE_TASK)->alias('t1')
+        return $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
             ->where('t1.status')->in('wait,doing,pause,cancel')
@@ -2672,7 +2671,6 @@ class executionModel extends model
             ->andWhere("(t1.story = 0 OR (t2.branch IN ('0','" . implode("','", $branches) . "') AND t2.product " . helper::dbIN(array_keys($branches)) . "))")
             ->orderBy($orderBy)
             ->fetchGroup('execution', 'id');
-        return $tasks;
     }
 
     /**
@@ -4503,8 +4501,9 @@ class executionModel extends model
 
         $sets      = $this->getBurnDataFlot($executionID, $burnBy, false, $dateList);
         $firstBurn = empty($sets) ? 0 : reset($sets);
-        $firstTime = !empty($firstBurn->$burnBy) ? $firstBurn->$burnBy : (!empty($firstBurn->value) ? $firstBurn->value : 0);
-        $firstTime = $firstTime == 'null' ? 0 : $firstTime;
+        $firstTime = !empty($firstBurn->$burnBy) ? $firstBurn->$burnBy : 0;
+        if(!$firstTime && !empty($firstBurn->value)) $firstTime = $firstBurn->value;
+        if($firstTime == 'null') $firstTime = 0;
 
         /* If the $executionEnd  is passed, the guide should end of execution. */
         $days     = $executionEnd ? array_search($executionEnd, $dateList) : count($dateList) - 1;
@@ -4750,7 +4749,6 @@ class executionModel extends model
                     );
                     break;
                 case 'product':
-                    $productName = $hasProduct ? $this->lang->productCommon : $this->lang->projectCommon;
                     $treeData[$index]['content'] = array(
                         'html' => "<span class='label rounded-full p-2' title='{$tree->name}'>{$tree->name}</span>"
                     );
