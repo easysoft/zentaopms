@@ -2413,13 +2413,14 @@ class executionTest
     }
 
     /**
+     * 获取累计流图的开始、结束日期。
      * Test get begin and end for CFD.
      *
      * @param  int    $executionID
      * @access public
      * @return array
      */
-    public function getBeginEnd4CFDTest($executionID)
+    public function getBeginEnd4CFDTest(int $executionID): array
     {
         global $tester;
 

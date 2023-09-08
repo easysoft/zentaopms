@@ -3674,16 +3674,17 @@ class executionModel extends model
     }
 
     /**
+     * 获取累计流图的开始、结束日期。
      * Get begin and end for CFD.
      *
      * @param  object $execution
      * @access public
-     * @return void
+     * @return array
      */
-    public function getBeginEnd4CFD($execution)
+    public function getBeginEnd4CFD(object $execution): array
     {
-        $end   = (!helper::isZeroDate($execution->closedDate) and date('Y-m-d', strtotime($execution->closedDate)) < helper::today()) ? date('Y-m-d', strtotime($execution->closedDate)) : helper::today();
-        $begin = (!helper::isZeroDate($execution->openedDate) and date('Y-m-d', strtotime($execution->openedDate)) > date('Y-m-d', strtotime('-13 days', strtotime($end)))) ? date('Y-m-d', strtotime($execution->openedDate)) : date('Y-m-d', strtotime('-13 days', strtotime($end)));
+        $end   = (!helper::isZeroDate($execution->closedDate) && date('Y-m-d', strtotime($execution->closedDate)) < helper::today()) ? date('Y-m-d', strtotime($execution->closedDate)) : helper::today();
+        $begin = (!helper::isZeroDate($execution->openedDate) && date('Y-m-d', strtotime($execution->openedDate)) > date('Y-m-d', strtotime('-13 days', strtotime($end)))) ? date('Y-m-d', strtotime($execution->openedDate)) : date('Y-m-d', strtotime('-13 days', strtotime($end)));
         return array($begin, $end);
     }
 
