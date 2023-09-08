@@ -72,7 +72,7 @@
             <th class='c-date required'><?php echo $lang->execution->begin;?></th>
             <th class='c-date required'><?php echo $lang->execution->end;?></th>
             <th class='c-desc <?php echo zget($visibleFields, 'desc', ' hidden') . zget($requiredFields, 'desc', '', ' required');?>'><?php echo $lang->execution->$desc;?></th>
-            <th class='c-team-name <?php echo zget($visibleFields, 'teamname', ' hidden') . zget($requiredFields, 'teamname', '', ' required');?>'><?php echo $lang->execution->teamname;?></th>
+            <th class='c-team-name <?php echo zget($visibleFields, 'teamname', ' hidden') . zget($requiredFields, 'teamname', '', ' required');?>'><?php echo $lang->execution->teamName;?></th>
             <th class='c-days<?php echo zget($visibleFields, 'days', ' hidden') . zget($requiredFields, 'days', '', ' required');?>'><?php echo $lang->execution->days;?></th>
             <?php
             $extendFields = $this->execution->getFlowExtendFields();

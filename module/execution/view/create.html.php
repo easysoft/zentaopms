@@ -238,7 +238,7 @@
         </tr>
         <?php endif;?>
         <tr>
-          <th><?php echo $lang->execution->teamname;?></th>
+          <th><?php echo $lang->execution->teamName;?></th>
           <td><?php echo html::input('team', $team, "class='form-control'");?></td>
           <td colspan='2'></td>
         </tr>

@@ -292,7 +292,7 @@ class executionModel extends model
      */
     public function create()
     {
-        $this->lang->execution->team = $this->lang->execution->teamname;
+        $this->lang->execution->team = $this->lang->execution->teamName;
 
         if(empty($_POST['project']))
         {

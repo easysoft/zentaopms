@@ -138,7 +138,7 @@ formBatchPanel
     formBatchItem
     (
         set::name('team'),
-        set::label($lang->execution->teamname),
+        set::label($lang->execution->teamName),
         set::control('text'),
         set::width('136px'),
         set::hidden(true),

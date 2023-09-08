@@ -106,7 +106,7 @@
         </tr>
         <?php endif;?>
         <tr>
-          <th><?php echo $lang->execution->teamname;?></th>
+          <th><?php echo $lang->execution->teamName;?></th>
           <td><?php echo html::input('team', $execution->team, "class='form-control'");?></td>
         </tr>
         <tr>

@@ -503,7 +503,7 @@ formPanel
     (
         set::width('1/2'),
         set::name('team'),
-        set::label($lang->execution->teamname),
+        set::label($lang->execution->teamName),
         set::value($execution->team),
     ),
     formRow
