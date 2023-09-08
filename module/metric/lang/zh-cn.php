@@ -217,3 +217,18 @@ $lang->metric->tips->errorSql         = 'SQL语句有错！错误：';
 $lang->metric->tips->click2SetParams  = '请先点击红色变量块设置参数，然后';
 $lang->metric->tips->view             = '预览';
 $lang->metric->tips->click2InsertData = "点击 <span class='ke-icon-holder'></span> 来插入度量指标或报表";
+
+$lang->metric->param = new stdclass();
+$lang->metric->param->varName      = '变量名';
+$lang->metric->param->showName     = '显示名';
+$lang->metric->param->varType      = '类型';
+$lang->metric->param->defaultValue = '默认值';
+$lang->metric->param->queryValue   = '测试值';
+
+$lang->metric->param->typeList['input']  = '文本框';
+$lang->metric->param->typeList['date']   = '日期';
+$lang->metric->param->typeList['select'] = '下拉菜单';
+
+$lang->metric->param->options['project'] = $lang->projectCommon .'列表';
+$lang->metric->param->options['product'] = $lang->productCommon . '列表';
+$lang->metric->param->options['sprint']  = $lang->projectCommon . '列表';

@@ -216,3 +216,18 @@ $lang->metric->tips->errorSql         = 'SQL statement error! Error:';
 $lang->metric->tips->click2SetParams  = 'Please click on the red variable block to set parameters, and then';
 $lang->metric->tips->view             = 'View';
 $lang->metric->tips->click2InsertData = "Click <span class='ke-icon-holder'></span> to insert a metric or report";
+
+$lang->metric->param = new stdclass();
+$lang->metric->param->varName      = 'Variable Name';
+$lang->metric->param->showName     = 'Show Name';
+$lang->metric->param->varType      = 'Type';
+$lang->metric->param->defaultValue = 'Default Value';
+$lang->metric->param->queryValue   = 'Query Value';
+
+$lang->metric->param->typeList['input']   = 'Input';
+$lang->metric->param->typeList['date']    = 'Date';
+$lang->metric->param->typeList['select']  = 'Select';
+
+$lang->metric->param->options['project'] = $lang->projectCommon . 'List';
+$lang->metric->param->options['product'] = $lang->productCommon . 'List';
+$lang->metric->param->options['sprint']  = $lang->projectCommon . 'List';
