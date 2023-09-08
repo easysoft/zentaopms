@@ -876,7 +876,7 @@ class projectModel extends model
         /* If there is an execution, set the execution filter item. */
         if($type == 'project' && $project->multiple)
         {
-            $executionPairs = $this->loadModel('execution')->getByProject($project->id, 'all', '', true, $project->model == 'waterfall');
+            $executionPairs = $this->loadModel('execution')->getByProject($project->id, 'all', 0, true, $project->model == 'waterfall');
             $this->config->build->search['fields']['execution'] = zget($this->lang->project->executionList, $project->model);
             $this->config->build->search['params']['execution'] = array('operator' => '=', 'control' => 'select', 'values' => $executionPairs);
         }
