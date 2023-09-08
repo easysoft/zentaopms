@@ -663,28 +663,6 @@ class executionTest
     }
 
     /**
-     * function getByIdList test by execution
-     *
-     * @param  array $executionIdList
-     * @access public
-     * @return array
-     */
-    public function getByIdListTest($executionIdList)
-    {
-        $object = $this->executionModel->getByIdList($executionIdList);
-
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error[0];
-        }
-        else
-        {
-            return $object;
-        }
-    }
-
-    /**
      * 获取执行列表信息。
      * Get execution list information.
      *
