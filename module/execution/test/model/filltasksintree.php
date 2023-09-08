@@ -65,5 +65,5 @@ $executionIDList = array('0', '3', '4', '5');
 $execution = new executionTest();
 r($execution->fillTasksInTreeTest($executionIDList[1])) && p('name') && e('产品1'); // 敏捷执行查询
 r($execution->fillTasksInTreeTest($executionIDList[2])) && p('name') && e('产品2'); // 瀑布执行查询
-r($execution->fillTasksInTreeTest($executionIDList[3])) && p('name') && e('产品1'); // 看板执行查询
+r($execution->fillTasksInTreeTest($executionIDList[3])) && p('name') && e('产品3'); // 看板执行查询
 r($execution->fillTasksInTreeTest($executionIDList[0])) && p()       && e('0');     // 错误执行查询

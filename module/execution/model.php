@@ -4722,23 +4722,6 @@ class executionModel extends model
             $taskItem->url          = helper::createLink('task', 'view', "task=$task->id");
             $taskItem->storyChanged = $story and $story->status == 'active' and $story->version > $story->taskVersion;
 
-            $buttons  = '';
-            $buttons .= common::buildIconButton('task', 'assignTo', "executionID=$task->execution&taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-            $buttons .= common::buildIconButton('task', 'start',    "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-            $buttons .= common::buildIconButton('task', 'recordWorkhour', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true);
-            if(isset($task->children)) $taskItem->children = $this->formatTasksForTree($task->children);
-
-            if($taskItem->storyChanged)
-            {
-                $this->lang->task->confirmStoryChange = $this->lang->confirm;
-                $buttons .= common::buildIconButton('task', 'confirmStoryChange', "taskid=$task->id", '', 'list', '', 'hiddenwin');
-            }
-
-            $buttons .= common::buildIconButton('task', 'finish',  "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-            $buttons .= common::buildIconButton('task', 'close',   "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-            $buttons .= common::buildIconButton('task', 'edit',    "taskID=$task->id", '', 'list');
-            $taskItem->buttons = $buttons;
-            $taskItem->actions = false;
             $taskItems[] = $taskItem;
         }
 

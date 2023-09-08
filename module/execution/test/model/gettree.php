@@ -26,6 +26,7 @@ $task->type->range('test,devel');
 $task->status->range('wait,doing');
 $task->estimate->range('1-10');
 $task->left->range('1-10');
+$task->module->range('1-10');
 $task->consumed->range('1-10');
 $task->gen(10);
 
@@ -37,30 +38,34 @@ $product->type->range('normal');
 $product->status->range('normal');
 $product->gen(3);
 
-$product = zdtable('module');
+$product = zdTable('module');
 $product->id->range('1-10');
 $product->name->range('1-10')->prefix('模块');
-$product->root->range('1-3');
+$product->root->range('3-5');
 $product->parent->range('0,1{9}');
 $product->type->range('task');
 $product->gen(10);
 
-zdTable('story')->gen(10);
-$relation = zdTable('projectstory');
-$relation->project->range('3-5');
-$relation->gen(10);
+$branch = zdTable('branch');
+$branch->id->range('1-10');
+$branch->product->range('1-3');
+$branch->gen(5);
+
+$related = zdTable('projectproduct');
+$related->project->range('3-5');
+$related->product->range('1-3');
+$related->branch->range('0-1');
+$related->gen(5);
 
 /**
 
 title=测试 executionModel::getTree();
+timeout=0
 cid=1
-pid=1
-
-查看返回子任务数 >> 4
 
 */
 $executionTester = new executionTest();
 
-r($executionTester->getTreeTest(3)) && p() && e('4'); // 查看返回子任务数
-r($executionTester->getTreeTest(4)) && p() && e('4'); // 查看返回子任务数
-r($executionTester->getTreeTest(5)) && p() && e('4'); // 查看返回子任务数
+r($executionTester->getTreeTest(3))   && p() && e('1'); // 查看存在的执行
+r($executionTester->getTreeTest(0))   && p() && e('0'); // 查看存在的执行查询为空的执行
+r($executionTester->getTreeTest(100)) && p() && e('0'); // 查看存在的执行查询不存在的执行
