@@ -544,7 +544,7 @@
         {
             const currentLink = $.parseLink(currentAppUrl);
             const urlInfo = $.parseLink(options.url);
-            if(currentLink.moduleName !== urlInfo.moduleName || currentLink.methodName !== urlInfo.methodName) return $.apps.open(options.url, options);
+            if(currentLink.moduleName !== urlInfo.moduleName || currentLink.methodName !== urlInfo.methodName) return $.apps.open(options.url, options.app);
         }
 
         if ($.apps.isOldPage(options.url)) return loadOldPage(options.url);
