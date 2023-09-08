@@ -1592,13 +1592,14 @@ class execution extends control
     }
 
     /**
-     * Batch edit.
+     * 批量编辑多个执行。
+     * Batch edit the executions.
      *
      * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function batchEdit($executionID = 0)
+    public function batchEdit(int $executionID = 0)
     {
         $this->app->loadLang('stage');
         $this->app->loadLang('programplan');
@@ -1640,45 +1641,25 @@ class execution extends control
 
         $executionIDList = $this->post->executionIDList;
         $executions      = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($executionIDList)->fetchAll('id');
-        $projects        = $this->dao->select('id,project')->from(TABLE_PROJECT)->where('id')->in($executionIDList)->fetchPairs();
-        $projects        = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projects)->fetchAll('id');
+        $relatedProjects = $this->dao->select('id,project')->from(TABLE_PROJECT)->where('id')->in($executionIDList)->fetchPairs(); /* 获取执行所属的项目列表。*/
+        $projects        = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($relatedProjects)->fetchAll('id');        /* 获取执行所属的项目列表中每个项目的项目信息。*/
 
-        $appendPoUsers = $appendPmUsers = $appendQdUsers = $appendRdUsers = array();
-        foreach($executions as $execution)
-        {
-            $appendPoUsers[$execution->PO] = $execution->PO;
-            $appendPmUsers[$execution->PM] = $execution->PM;
-            $appendQdUsers[$execution->QD] = $execution->QD;
-            $appendRdUsers[$execution->RD] = $execution->RD;
-        }
+        list($pmUsers, $poUsers, $qdUsers, $rdUsers) = $this->executionZen->setUserMoreLink($executions);
 
-        /* Set custom. */
+        /* Set custom fields. */
         foreach(explode(',', $this->config->execution->customBatchEditFields) as $field) $customFields[$field] = str_replace($this->lang->executionCommon, $this->lang->execution->common, $this->lang->execution->$field);
+
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->execution->custom->batchEditFields;
-
-        $this->loadModel('user');
-        $pmUsers = $this->user->getPairs('noclosed|nodeleted|pmfirst', $appendPmUsers, $this->config->maxCount);
-        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PM"] = $this->config->user->moreLink;
-
-        $poUsers = $this->user->getPairs('noclosed|nodeleted|pofirst',  $appendPoUsers, $this->config->maxCount);
-        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PO"] = $this->config->user->moreLink;
-
-        $qdUsers = $this->user->getPairs('noclosed|nodeleted|qdfirst',  $appendQdUsers, $this->config->maxCount);
-        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["QD"] = $this->config->user->moreLink;
-
-        $rdUsers = $this->user->getPairs('noclosed|nodeleted|devfirst', $appendRdUsers, $this->config->maxCount);
-        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
-
-        $this->view->title       = $this->lang->execution->batchEdit;
-        $this->view->executions  = $executions;
-        $this->view->allProjects = $allProjects;
-        $this->view->projects    = $projects;
-        $this->view->pmUsers     = $pmUsers;
-        $this->view->poUsers     = $poUsers;
-        $this->view->qdUsers     = $qdUsers;
-        $this->view->rdUsers     = $rdUsers;
-        $this->view->from        = $this->app->tab;
+        $this->view->title        = $this->lang->execution->batchEdit;
+        $this->view->executions   = $executions;
+        $this->view->allProjects  = $allProjects;
+        $this->view->projects     = $projects;
+        $this->view->pmUsers      = $pmUsers;
+        $this->view->poUsers      = $poUsers;
+        $this->view->qdUsers      = $qdUsers;
+        $this->view->rdUsers      = $rdUsers;
+        $this->view->from         = $this->app->tab;
         $this->display();
     }
 
