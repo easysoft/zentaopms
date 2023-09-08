@@ -865,7 +865,7 @@ class executionModel extends model
 
             $this->dao->update(TABLE_EXECUTION)->data($execution)
                 ->autoCheck('begin,end')
-                ->batchcheck($this->config->execution->edit->requiredFields, 'notempty')
+                ->batchCheck($this->config->execution->edit->requiredFields, 'notempty')
                 ->checkIF($execution->begin != '', 'begin', 'date')
                 ->checkIF($execution->end != '', 'end', 'date')
                 ->checkIF($execution->end != '', 'end', 'ge', $execution->begin)
