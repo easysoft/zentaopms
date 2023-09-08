@@ -3477,6 +3477,18 @@ CREATE TABLE `zt_trainrecords` (
   `status` varchar(10) NOT NULL,
   PRIMARY KEY (`user`,`objectId`,`objectType`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `zt_practice` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `module` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `code` char(50) NOT NULL DEFAULT '',
+  `title` varchar(255) NOT NULL DEFAULT '',
+  `labels` varchar(255) NOT NULL DEFAULT '',
+  `summary` varchar(255) NOT NULL DEFAULT '',
+  `content` text NULL,
+  `contributor` varchar(255) NOT NULL DEFAULT '',
+  UNIQUE KEY `code` (`code`),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_trip` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `type` enum('trip','egress') NOT NULL DEFAULT 'trip',
