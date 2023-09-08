@@ -964,4 +964,49 @@ class metricModel extends model
         $queryResult = isset($result[0]) . $measurement->unit ? $result[0] : null;
         return $queryResult;
     }
+
+    /**
+     * 获取度量筛选器的下拉选项。
+     * Get options of a control.
+     *
+     * @param  string $optionType
+     * @access public
+     * @return array
+     */
+    public function getControlOptions($optionType)
+    {
+        $optionList = array();
+
+        if($optionType == 'project')
+        {
+            $options = $this->loadModel('project')->getPairsByProgram();
+        }
+        elseif($optionType == 'product')
+        {
+            $options = $this->loadModel('product')->getPairs('nocode');
+        }
+        elseif($optionType == 'sprint')
+        {
+            $options = $this->loadModel('execution')->getPairs();
+        }
+        elseif($optionType == 'user')
+        {
+            $options = $this->loadModel('user')->getPairs('noletter');
+        }
+        elseif(strpos($optionType, '.') !== false)
+        {
+            list($moduleName, $varListName) = explode('.', $optionType);
+            $this->app->loadLang($moduleName);
+            $varListName .= 'List';
+            $options = $this->lang->$moduleName->$varListName;
+            unset($options[0]);
+            unset($options['']);
+        }
+        else
+        {
+            $options = array('' => '');
+        }
+
+        return $options;
+    }
 }
