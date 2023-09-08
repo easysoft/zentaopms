@@ -968,7 +968,7 @@ class baseFixer
      * @access public
      * @return object fixer object.
      */
-    public function cleanINT($fieldName = '')
+    public function cleanInt($fieldName = '')
     {
         $fields = $this->processFields($fieldName);
         foreach($fields as $fieldName)
