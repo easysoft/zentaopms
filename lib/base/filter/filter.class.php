@@ -1012,6 +1012,9 @@ class baseFixer
      */
     public function specialArray($data)
     {
+        /* Return directly if the $data is a numeric type to make sure $this->cleanInt() works. */
+        if(is_numeric($data)) return $data;
+
         if(!is_array($data)) return htmlspecialchars($data, ENT_QUOTES);
 
         foreach($data as &$value) $value = $this->specialArray($value);
