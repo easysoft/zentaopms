@@ -14,37 +14,44 @@ $execution->parent->range('0,1{3},2,3,4');
 $execution->project->range('0{4},2,3,4');
 $execution->status->range('doing');
 $execution->vision->range('rnd');
+$execution->grade->range('1,2{3},1{3}');
+$execution->path->range('`,1,`,`,1,2,`,`,1,3,`,`,1,4,`, `1,2,5,`,`,1,3,6`,`,1,4,7,`');
 $execution->openedBy->range('admin,user1');
 $execution->begin->range('20220112 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD');
+$execution->attribute->range('[]{5},design,[]');
 $execution->gen(7);
 
 /**
 
 title=测试executionModel->getByProjectTest();
+timeout=0
 cid=1
-pid=1
-
-敏捷项目执行列表查询 >> 2,迭代1,sprint
-瀑布项目执行列表查询 >> 3,阶段1,stage
-看板项目执行列表查询 >> 4,看板1,kanban
-wait执行列表查询 >> 0
-doing执行列表查询 >> doing,看板1
-执行列表2条查询 >> 0
-执行列表10条查询 >> 3
 
 */
 
-$projectIDList = array(0, 2, 3, 4);
+$projectIdList = array(0, 2, 3, 4);
 $status        = array('all', 'wait', 'doing');
-$limit         = array('0', '2', '10');
-$count         = array('0', '1');
+$limit         = array(0, 2, 10);
+$pairsList     = array(false, true);
+$develList     = array(false, true);
+$appendIdList  = array(0, 7);
+$count         = array(0, 1);
 
 $executionTester = new executionTest();
-r($executionTester->getByProjectTest($projectIDList[1],$status[0],$limit[0],$count[0])) && p('5:project,name,type') && e('2,迭代1,sprint'); // 敏捷项目执行列表查询
-r($executionTester->getByProjectTest($projectIDList[2],$status[0],$limit[0],$count[0])) && p('6:project,name,type') && e('3,阶段1,stage');  // 瀑布项目执行列表查询
-r($executionTester->getByProjectTest($projectIDList[3],$status[0],$limit[0],$count[0])) && p('7:project,name,type') && e('4,看板1,kanban'); // 看板项目执行列表查询
-r($executionTester->getByProjectTest($projectIDList[0],$status[1],$limit[0],$count[0])) && p()                      && e('0');              // wait执行列表查询
-r($executionTester->getByProjectTest($projectIDList[0],$status[2],$limit[0],$count[0])) && p('7:status,name')       && e('doing,看板1');    // doing执行列表查询
-r($executionTester->getByProjectTest($projectIDList[0],$status[1],$limit[1],$count[1])) && p()                      && e('0');              // 执行列表2条查询
-r($executionTester->getByProjectTest($projectIDList[0],$status[2],$limit[2],$count[1])) && p()                      && e('3');              // 执行列表10条查询
+r($executionTester->getByProjectTest($projectIdList[1], $status[0], $limit[0], $pairsList[0], $develList[0], $appendIdList[0], $count[0])) && p('5:project,name,type') && e('2,迭代1,sprint');      // 敏捷项目执行列表查询
+r($executionTester->getByProjectTest($projectIdList[2], $status[0], $limit[0], $pairsList[0], $develList[0], $appendIdList[0], $count[0])) && p('6:project,name,type') && e('3,产品1/阶段1,stage'); // 瀑布项目执行列表查询
+r($executionTester->getByProjectTest($projectIdList[3], $status[0], $limit[0], $pairsList[0], $develList[0], $appendIdList[0], $count[0])) && p('7:project,name,type') && e('4,看板1,kanban');      // 看板项目执行列表查询
+r($executionTester->getByProjectTest($projectIdList[0], $status[1], $limit[0], $pairsList[0], $develList[0], $appendIdList[0], $count[0])) && p()                      && e('0');                   // wait执行列表查询
+r($executionTester->getByProjectTest($projectIdList[0], $status[2], $limit[0], $pairsList[0], $develList[0], $appendIdList[0], $count[0])) && p('7:status,name')       && e('doing,看板1');         // doing执行列表查询
+r($executionTester->getByProjectTest($projectIdList[0], $status[2], $limit[1], $pairsList[0], $develList[0], $appendIdList[0], $count[1])) && p()                      && e('2');                   // 执行列表2条查询
+r($executionTester->getByProjectTest($projectIdList[0], $status[2], $limit[2], $pairsList[0], $develList[0], $appendIdList[0], $count[1])) && p()                      && e('3');                   // 执行列表10条查询
+r($executionTester->getByProjectTest($projectIdList[1], $status[0], $limit[0], $pairsList[1], $develList[0], $appendIdList[0], $count[0])) && p('5')                   && e('项目1/迭代1');         // 敏捷项目执行键值对查询
+r($executionTester->getByProjectTest($projectIdList[2], $status[0], $limit[0], $pairsList[1], $develList[0], $appendIdList[0], $count[0])) && p('6')                   && e('项目2/产品1/阶段1');   // 瀑布项目执行键值对查询
+r($executionTester->getByProjectTest($projectIdList[3], $status[0], $limit[0], $pairsList[1], $develList[0], $appendIdList[0], $count[0])) && p('7')                   && e('项目3/看板1');         // 看板项目执行键值对查询
+r($executionTester->getByProjectTest($projectIdList[0], $status[1], $limit[0], $pairsList[1], $develList[0], $appendIdList[0], $count[0])) && p()                      && e('0');                   // wait执行键值对查询
+r($executionTester->getByProjectTest($projectIdList[0], $status[2], $limit[0], $pairsList[1], $develList[0], $appendIdList[0], $count[0])) && p('7')                   && e('项目3/看板1');         // doing执行键值对查询
+r($executionTester->getByProjectTest($projectIdList[0], $status[2], $limit[1], $pairsList[1], $develList[0], $appendIdList[0], $count[1])) && p()                      && e('2');                   // 执行键值对2条查询
+r($executionTester->getByProjectTest($projectIdList[0], $status[2], $limit[2], $pairsList[1], $develList[0], $appendIdList[0], $count[1])) && p()                      && e('3');                   // 执行键值对10条查询
+r($executionTester->getByProjectTest($projectIdList[0], $status[2], $limit[2], $pairsList[1], $develList[1], $appendIdList[0], $count[1])) && p()                      && e('0');                   // 测试获取开发阶段
+r($executionTester->getByProjectTest($projectIdList[0], $status[2], $limit[2], $pairsList[1], $develList[1], $appendIdList[1], $count[1])) && p()                      && e('1');                   // 测试获取开发阶段或id=7的执行

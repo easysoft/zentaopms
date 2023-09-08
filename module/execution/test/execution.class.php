@@ -747,25 +747,29 @@ class executionTest
     }
 
     /**
-     * function getByProject test by execution
+     * 根据项目ID获取项目下的执行信息。
+     * Get executions data by project.
      *
-     * @param  string $projectID
-     * @param  array  $status
-     * @param  string $limit
-     * @param  string $count
+     * @param  int       $projectID
+     * @param  string    $status
+     * @param  int       $limit
+     * @param  bool      $pairs
+     * @param  bool      $devel
+     * @param  int       $appendedID
+     * @param  int       $count
      * @access public
-     * @return array
+     * @return array|int
      */
-    public function getByProjectTest($projectID, $status, $limit, $count)
+    public function getByProjectTest(int $projectID, string $status, int $limit, bool $pairs = false, bool $devel = false, int $appendedID = 0, int $count = 0): array|int
     {
-        $object = $this->executionModel->getByProject($projectID, $status, $limit);
+        $object = $this->executionModel->getByProject($projectID, $status, $limit, $pairs, $devel, $appendedID);
 
         if(dao::isError())
         {
             $error = dao::getError();
             return $error[0];
         }
-        elseif($count == "1")
+        elseif($count == 1)
         {
             return count($object);
         }
@@ -902,14 +906,15 @@ class executionTest
     }
 
     /**
-     * function getChildExecutions test execution
+     * 获取子阶段列表。
+     * Get child executions.
      *
-     * @param  string $executionID
-     * @param  string $count
+     * @param  int    $executionID
+     * @param  int    $count
      * @access public
-     * @return array
+     * @return array|int
      */
-    public function getChildExecutionsTest($executionID, $count)
+    public function getChildExecutionsTest($executionID, $count): array|int
     {
         $object = $this->executionModel->getChildExecutions($executionID);
 
@@ -918,7 +923,7 @@ class executionTest
             $error = dao::getError();
             return $error;
         }
-        elseif($count == "1")
+        elseif($count == 1)
         {
             return count($object);
         }
@@ -2928,6 +2933,7 @@ class executionTest
     }
 
     /**
+     * 给执行列表重新排序。
      * Reset execution sorts.
      *
      * @param  int    $projectID
@@ -2935,7 +2941,7 @@ class executionTest
      * @access public
      * @return string
      */
-    public function resetExecutionSortsTest($projectID, $type = '')
+    public function resetExecutionSortsTest(int $projectID, string $type = ''): string
     {
         $executions           = array();
         $executionIDList      = '';
