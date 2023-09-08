@@ -225,7 +225,7 @@ class search extends control
                 echo 'success';
                 return;
             }
-            return $this->send(array('closeModal' => true, 'callback' => '$(\'#searchFormPanel form button[type="submit"]\').trigger("click")'));
+            return $this->send(array('closeModal' => true, 'callback' => 'setTimeout(() => $(\'#searchFormPanel form button[type="submit"]\').trigger("click"), 300)'));
         }
 
         $this->view->module    = $module;
