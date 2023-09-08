@@ -173,7 +173,7 @@
     {
       if(confirm('<?php echo $lang->ai->prompts->action->deleteConfirm;?>'))
       {
-        $.getJSON($(this).attr('href'), function(resp)
+        $.getJSON($(this).data('href'), function(resp)
         {
           if(resp.result != 'success') $.zui.messager.danger(resp.message);
           return location.reload();
