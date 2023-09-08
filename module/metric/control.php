@@ -271,7 +271,9 @@ class metric extends control
 
         if(!$metric) return $this->send(array('result' => 'fail', 'message' => $this->lang->metric->notExist));
 
-        $metric->stage = 'wait';
+        $metric->stage        = 'wait';
+        $metric->delistedBy   = $this->app->user->account;
+        $metric->delistedDate = helper::now();
         $this->metric->update($metric);
 
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -321,7 +323,11 @@ class metric extends control
         $metric = $this->metric->getByID($metricID);
 
         $this->metric->moveCalcFile($metric);
-        $this->dao->update(TABLE_METRIC)->set('stage')->eq('released')->where('id')->eq($metricID)->exec();
+
+        $metric->stage           = 'released';
+        $metric->implementedBy   = $this->app->user->account;
+        $metric->implementedDate = helper::now();
+        $this->metric->update($metric);
 
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
     }
