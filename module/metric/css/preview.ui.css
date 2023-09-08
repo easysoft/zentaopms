@@ -24,6 +24,7 @@
 .main .details:after {content: ""; position: absolute; top: 5px; right: -2px; bottom: 5px; width: 1px; background-color: var(--color-slate-300);}
 .main .chart-line-margin {margin-right: 16px;}
 .main .table-and-chart {height: calc(100vh - 180px); display: flex;}
+.main .table-and-chart-multiple {height: calc(100vh - 180px - 48px);}
 
 .table-and-chart .table-side {flex: 0 0 40%; overflow-x: hidden; padding-left: 16px; padding-top: 8px; padding-bottom: 16px; padding-right: 2px;}
 .table-and-chart .chart-side {flex: 0 0 60%;}
