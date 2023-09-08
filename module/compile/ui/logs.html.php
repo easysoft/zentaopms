@@ -11,6 +11,12 @@ declare(strict_types=1);
 namespace zin;
 global $lang;
 
+if(!empty($repoID))
+{
+    $repoName = $this->dao->select('name')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch('name');
+    dropmenu(set::objectID($repoID), set::text($repoName), set::tab('repo'));
+}
+
 jsVar('buildID', $build->id);
 detailHeader(
     to::prefix(''),
