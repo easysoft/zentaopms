@@ -152,7 +152,6 @@ window.handleRemoveLabel = function(id)
 window.setDropDown = function()
 {
   var $drop    = $('.dropdown-icon');
-  var $content = $('.checked-content');
   $drop.toggleClass('rotate');
   if($drop.hasClass('rotate'))
   {
@@ -168,6 +167,9 @@ window.setDropDown = function()
 
 window.unfoldContent = function()
 {
+  var tableWidth = $('.table-and-charts').height();
+  $('.table-and-charts').css('height', tableWidth - (window.lineCount - 1) * 40);
+
   var $content = $('.checked-content');
   $content.height(48 + (window.lineCount - 1) * 40);
   setTimeout(function()
@@ -183,6 +185,19 @@ window.foldContent = function()
   $content.height(48);
   $content.find('.gray-next').addClass('gray-hidden');
   $content.find('.gray-next').removeClass('gray-visible');
+
+  window.recoverMainHeight(48);
+}
+
+window.getMainSideHeight = function()
+{
+  return $('#mainContent .side .canvas').height();
+}
+
+window.recoverMainHeight = function(contentHeight)
+{
+  var sideHeight = window.getMainSideHeight();
+  $('.table-and-charts').css('height', sideHeight - contentHeight);
 }
 
 window.renderCheckedLabel = function()
