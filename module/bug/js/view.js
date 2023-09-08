@@ -2,6 +2,21 @@ $(document).ready(function()
 {
     limitIframeLevel();
     if(config.onlybody == 'yes') $('.main-actions').css({width: '100%', minWidth: '100%'});
+
+    if(config.onlybody == 'yes')
+    {
+        /* Fix bug#38422. */
+        $('.histories-list a[data-app=devops]').each(function()
+        {
+            var href = $(this).attr('href');
+            $(this).data('url', href.replace('onlybody=yes', ''));
+            $(this).attr('href', '###');
+            $(this).click(function()
+            {
+                window.parent.$.apps.open($(this).data('url'), 'devops');
+            });
+        });
+    }
 });
 
 $('#tostory').click(function()
