@@ -44,6 +44,17 @@ $product->parent->range('0,1{9}');
 $product->type->range('task');
 $product->gen(10);
 
+$branch = zdTable('branch');
+$branch->id->range('1-10');
+$branch->product->range('1-3');
+$branch->gen(5);
+
+$related = zdTable('projectproduct');
+$related->project->range('3-5');
+$related->product->range('1-3');
+$related->branch->range('0-1');
+$related->gen(5);
+
 zdTable('team')->gen(0);
 su('admin');
 

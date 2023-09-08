@@ -24,6 +24,6 @@ $tester->loadModel('execution');
 r($tester->execution->getBurnByExecution($executionIdList[0], $today))       && p()                 && e('0');              // 获取迭代的燃尽图数据
 r($tester->execution->getBurnByExecution($executionIdList[1], $today))       && p()                 && e('0');              // 获取阶段的燃尽图数据
 r($tester->execution->getBurnByExecution($executionIdList[2], $today))       && p()                 && e('0');              // 获取看板的燃尽图数据
-r($tester->execution->getBurnByExecution($executionIdList[0], '2023-07-01')) && p('execution,date') && e('101,2023-07-01'); // 获取迭代的燃尽图数据
-r($tester->execution->getBurnByExecution($executionIdList[1], '2023-07-06')) && p('execution,date') && e('106,2023-07-06'); // 获取阶段的燃尽图数据
+r($tester->execution->getBurnByExecution($executionIdList[0], '2023-07-11')) && p('execution,date') && e('101,2023-07-11'); // 获取迭代的燃尽图数据
+r($tester->execution->getBurnByExecution($executionIdList[1], '2023-07-16')) && p('execution,date') && e('106,2023-07-16'); // 获取阶段的燃尽图数据
 r($tester->execution->getBurnByExecution($executionIdList[2], '2023-07-08')) && p()                 && e('0');              // 获取看板的燃尽图数据
