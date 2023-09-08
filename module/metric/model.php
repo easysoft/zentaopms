@@ -36,6 +36,38 @@ class metricModel extends model
     }
 
     /**
+     * 更新度量项。
+     * Update a metric.
+     *
+     * @param  int    $id
+     * @param  object $metric
+     * @access public
+     * @return int|false
+     */
+    public function update($id, $metric)
+    {
+        $oldMetric = $this->getByID($id);
+
+        $this->dao->update(TABLE_METRIC)->data($metric)
+            ->autoCheck()
+            ->checkIF(!empty($metric->name), 'name', 'unique', "`deleted` = '0'")
+            ->checkIF(!empty($metric->code), 'code', 'unique', "`deleted` = '0'")
+            ->where('id')->eq($id)
+            ->exec();
+
+        if(dao::isError()) return false;
+
+        $changes = common::createChanges($oldMetric, $metric);
+        if($changes)
+        {
+            $actionID = $this->loadModel('action')->create('metric', $id, 'edited', '', '', $this->app->user->account);
+            $this->action->logHistory($actionID, $changes);
+        }
+
+        return $changes;
+    }
+
+    /**
      * 获取度量项数据列表。
      * Get metric data list.
      *
@@ -769,13 +801,15 @@ class metricModel extends model
      * 更新度量项。
      * Updata metric.
      *
-     * @param  object $metric
+     * @param  object    $data
      * @access public
      * @return void
      */
-    public function update(object $metric)
+    public function updateMetric(object $metric)
     {
-        $this->metricTao->updateMetric($metric->id, $metric);
+        $this->dao->update(TABLE_METRIC)->data($metric)
+            ->where('id')->eq($metric->id)
+            ->exec();
     }
 
     /**

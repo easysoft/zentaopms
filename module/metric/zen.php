@@ -27,6 +27,21 @@ class metricZen extends metric
     }
 
     /**
+     * 构建编辑度量的数据。
+     * Build metric data for edit.
+     *
+     * @access protected
+     * @return object
+     */
+    protected function buildMetricForEdit()
+    {
+        return form::data($this->config->metric->form->create)
+            ->setDefault('editedBy', $this->app->user->account)
+            ->setDefault('editedDate', helper::now())
+            ->get();
+    }
+
+    /**
      * 成功插入度量数据后，其他的额外操作。
      * Process after create metric.
      *
@@ -34,6 +49,19 @@ class metricZen extends metric
      * @return array
      */
     protected function responseAfterCreate()
+    {
+        $location = $this->createLink('metric', 'browse');
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $location);
+    }
+
+    /**
+     * 成功编辑度量数据后，其他的额外操作。
+     * Process after edit metric.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function responseAfterEdit()
     {
         $location = $this->createLink('metric', 'browse');
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $location);

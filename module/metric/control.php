@@ -23,6 +23,7 @@ class metric extends control
     }
 
     /**
+     * 创建度量项。
      * Create a metric.
      *
      * @access public
@@ -48,6 +49,41 @@ class metric extends control
 
         $this->metric->processObjectList();
         $this->metric->processUnitList();
+        $this->display();
+    }
+
+    /**
+     * 编辑度量项。
+     * Edit a metric.
+     *
+     * @param int $id
+     * @access public
+     * @return void
+     */
+    public function edit($id)
+    {
+        unset($this->lang->metric->scopeList['other']);
+        unset($this->lang->metric->purposeList['other']);
+        unset($this->lang->metric->objectList['other']);
+        unset($this->lang->metric->objectList['review']);
+
+        $metric = $this->metric->getByID($id);
+
+        if(!empty($_POST))
+        {
+            $metricData = $this->metricZen->buildMetricForEdit();
+            $metricID   = $this->metric->update($id, $metricData);
+
+            if(empty($metricID) || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $response = $this->metricZen->responseAfterEdit();
+
+            return $this->send($response);
+        }
+
+        $this->metric->processObjectList();
+        $this->metric->processUnitList();
+
+        $this->view->metric = $metric;
         $this->display();
     }
 
@@ -275,7 +311,7 @@ class metric extends control
         $metric->stage        = 'wait';
         $metric->delistedBy   = $this->app->user->account;
         $metric->delistedDate = helper::now();
-        $this->metric->update($metric);
+        $this->metric->updateMetric($metric);
 
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -328,7 +364,7 @@ class metric extends control
         $metric->stage           = 'released';
         $metric->implementedBy   = $this->app->user->account;
         $metric->implementedDate = helper::now();
-        $this->metric->update($metric);
+        $this->metric->updateMetric($metric);
 
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
     }

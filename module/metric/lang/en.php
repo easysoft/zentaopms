@@ -22,6 +22,7 @@ $lang->metric->metricData    = "Metric Data";
 $lang->metric->system        = "System";
 $lang->metric->weekCell      = "%s,Week %s";
 $lang->metric->create        = "Create " . $this->lang->metric->common;
+$lang->metric->edit          = "Edit " . $this->lang->metric->common;
 $lang->metric->afterCreate   = "After Saving";
 $lang->metric->definition    = "Definition";
 $lang->metric->declaration   = "Definition";

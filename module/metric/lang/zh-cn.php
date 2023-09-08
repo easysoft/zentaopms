@@ -22,6 +22,7 @@ $lang->metric->metricData    = "度量数据";
 $lang->metric->system        = "system";
 $lang->metric->weekCell      = "%s年第%s周";
 $lang->metric->create        = "创建" . $this->lang->metric->common;
+$lang->metric->edit          = "编辑" . $this->lang->metric->common;
 $lang->metric->afterCreate   = "保存后";
 $lang->metric->definition    = "计算规则";
 $lang->metric->declaration   = "度量定义";
