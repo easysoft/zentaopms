@@ -197,7 +197,7 @@ $lang->instance->actionList['autorestore']             = 'The system has perform
 $lang->instance->actionList['deleteexpiredbackup']     = 'The system has deleted expired automatic backups';
 
 $lang->instance->sourceList = array();
-$lang->instance->sourceList['cloud'] = 'Chancheng Public Market';
+$lang->instance->sourceList['cloud'] = 'Store';
 $lang->instance->sourceList['local'] = 'Local Market';
 $lang->instance->sourceList['user']  = 'User';
 

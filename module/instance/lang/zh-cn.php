@@ -197,7 +197,7 @@ $lang->instance->actionList['autorestore']             = '系统执行了自动�
 $lang->instance->actionList['deleteexpiredbackup']     = '系统删除了过期的自动备份';
 
 $lang->instance->sourceList = array();
-$lang->instance->sourceList['cloud'] = '渠成公共市场';
+$lang->instance->sourceList['cloud'] = '应用市场';
 $lang->instance->sourceList['local'] = '本地市场';
 $lang->instance->sourceList['user']  = '手工配置';
 
