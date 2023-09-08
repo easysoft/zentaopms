@@ -114,6 +114,7 @@ class metric extends control
      */
     public function browse($scope = 'system', $stage = 'all', $param = 0, $type = 'bydefault', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        unset($this->config->metric->dtable->definition->fieldList['actions']['list']['delete']);
         $this->loadModel('search');
         $this->metric->processScopeList();
 
