@@ -19,16 +19,13 @@ $execution->gen(5);
 /**
 
 title=测试executionModel->getChildExecutionsTest();
+timeout=0
 cid=1
-pid=1
-
-查询子阶段 >> 子阶段1
-查询子阶段数量 >> 2
 
 */
 
 $executionID = 3;
-$count       = array('0','1');
+$count       = array(0, 1);
 
 $executionTester = new executionTest();
 r($executionTester->getChildExecutionsTest($executionID, $count[0])) && p('4:name') && e('子阶段1'); // 查询子阶段
