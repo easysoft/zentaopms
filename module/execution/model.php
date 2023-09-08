@@ -3986,32 +3986,33 @@ class executionModel extends model
     }
 
     /**
+     * 获取累计流图的数据。
      * Get CFD data to display.
      *
      * @param  int    $executionID
-     * @param  string $type
      * @param  array  $dateList
+     * @param  string $type        story|task|bug
      * @access public
      * @return array
      */
-    public function getCFDData($executionID = 0, $dateList = array(), $type = 'story')
+    public function getCFDData(int $executionID = 0, array $dateList = array(), string $type = 'story'): array
     {
-        $execution = $this->getById($executionID);
-
-        $setGroup = $this->dao->select("date, `count` AS value, `name`")->from(TABLE_CFD)
-            ->where('execution')->eq((int)$executionID)
+        $execution = $this->getByID($executionID);
+        $nameGroup = $this->dao->select("date, `count` AS value, `name`")->from(TABLE_CFD)
+            ->where('execution')->eq($executionID)
             ->andWhere('type')->eq($type)
             ->andWhere('date')->in($dateList)
-            ->orderBy('date DESC, id asc')->fetchGroup('name', 'date');
+            ->orderBy('date DESC, id asc')
+            ->fetchGroup('name', 'date');
 
         $data = array();
-        foreach($setGroup as $name => $sets)
+        foreach($nameGroup as $name => $dateList)
         {
-            foreach($sets as $date => $set)
+            foreach($dateList as $date => $value)
             {
                 if($date < $execution->begin) continue;
 
-                $data[$name][$date] = $set;
+                $data[$name][$date] = $value;
             }
         }
 

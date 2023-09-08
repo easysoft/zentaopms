@@ -2845,13 +2845,15 @@ class executionTest
     }
 
     /**
-     * Test get CFD data.
+     * 获取累计流图的数据。
+     * Get CFD data to display.
      *
      * @param  int    $executionID
+     * @param  string $type
      * @access public
      * @return array
      */
-    public function getCFDDataTest($executionID = 0)
+    public function getCFDDataTest(int $executionID = 0, string $type = 'story'): array
     {
         $begin = strtotime('2022-01-12');
         $end   = strtotime('2022-02-12');
@@ -2859,7 +2861,7 @@ class executionTest
         $dateList = array();
         for($date = $begin; $date <= $end; $date += 24 * 3600) $dateList[] = date('Y-m-d', $date);
 
-        return $this->executionModel->getCFDData($executionID, $dateList);
+        return $this->executionModel->getCFDData($executionID, $dateList, $type);
     }
 
     /**

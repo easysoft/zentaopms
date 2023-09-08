@@ -43,15 +43,15 @@ $CFD->gen(5);
 /**
 
 title=测试executionModel->getCFDData();
+timeout=0
 cid=1
-pid=1
-
-不存在执行的累计流图信息 >> 0
-存在的执行的累计流图信息 >> 看板列3
 
 */
 
-$executionTester = new executionTest();
+$typeList = array('story', 'task', 'bug');
 
-r(count($executionTester->getCFDDataTest()))    && p()                  && e('0');       // 不存在执行的累计流图信息
-r(current($executionTester->getCFDDataTest(3))) && p('2022-01-22:name') && e('看板列3'); // 存在的执行的累计流图信息
+$executionTester = new executionTest();
+r(count($executionTester->getCFDDataTest()))                  && p()                  && e('0');       // 不存在执行的累计流图信息
+r(current($executionTester->getCFDDataTest(3, $typeList[0]))) && p('2022-01-22:name') && e('看板列3'); // 存在的执行的需求卡片累计流图信息
+r(current($executionTester->getCFDDataTest(3, $typeList[1]))) && p('2022-01-22:name') && e('看板列1'); // 存在的执行的任务卡片累计流图信息
+r(current($executionTester->getCFDDataTest(3, $typeList[2]))) && p('2022-01-22:name') && e('看板列2'); // 存在的执行的Bug卡片累计流图信息
