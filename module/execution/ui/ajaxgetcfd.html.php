@@ -9,6 +9,53 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+$cfdChart = null;
+if(hasPriv('execution', 'cfd'))
+{
+
+    $cfdChart = isset($chartData['labels']) && count($chartData['labels']) != 1 ? echarts
+    (
+        set::series($chartSeries),
+        set::tooltip(array(
+            'trigger'     => 'axis',
+            'axisPointer' => array('type' => 'cross', 'label' => array('backgroundColor' => '#6a7985')),
+            'textStyle'   => array('fontWeight' => 100),
+            'formatter'   => "RAWJS<function(rowDatas){return window.randTipInfo(rowDatas);}>RAWJS"
+        )),
+        set::legend(array(
+            'data' => array_keys(array_reverse($chartData['line']))
+        )),
+        set::grid(array(
+            'left'         => '3%',
+            'right'        => '5%',
+            'bottom'       => '3%',
+            'containLabel' => true
+        )),
+        set::xAxis(array(array(
+            'type' => 'category',
+            'boundaryGap' => false,
+            'data' => $chartData['labels'],
+            'name' => $lang->execution->burnXUnit,
+            'axisLine' => array('show' => true, 'lineStyle' =>array('color' => '#999', 'width' => 1))
+        ))),
+        set::yAxis(array(array(
+            'type'          => 'value',
+            'name'          => $lang->execution->count,
+            'minInterval'   => 1,
+            'nameTextStyle' => array('fontWeight' => 'normal'),
+            'axisPointer'   => array('label' => array('show' => true, 'precision' => 0)),
+            'axisLine'      => array('show' => true, 'lineStyle' => array('color' => '#999', 'width' => 1))
+        )))
+    )->size('100%', '150%') : div
+    (
+        setClass('table-empty-tip text-center'),
+        span
+        (
+            setClass('text-gray'),
+            $lang->execution->noPrintData
+        )
+    );
+}
 panel
 (
     div
@@ -26,51 +73,7 @@ panel
             $lang->more
         ) : null,
     ),
-    div
-    (
-        common::hasPriv('execution', 'cfd') ? isset($chartData['labels']) && count($chartData['labels']) != 1 ? echarts
-        (
-            set::series($chartSeries),
-            set::tooltip(array(
-                'trigger'     => 'axis',
-                'axisPointer' => array('type' => 'cross', 'label' => array('backgroundColor' => '#6a7985')),
-                'textStyle'   => array('fontWeight' => 100),
-                'formatter'   => "RAWJS<function(rowDatas){return window.randTipInfo(rowDatas);}>RAWJS"
-            )),
-            set::legend(array(
-                'data' => array_keys(array_reverse($chartData['line']))
-            )),
-            set::grid(array(
-                'left'         => '3%',
-                'right'        => '5%',
-                'bottom'       => '3%',
-                'containLabel' => true
-            )),
-            set::xAxis(array(array(
-                'type' => 'category',
-                'boundaryGap' => false,
-                'data' => $chartData['labels'],
-                'name' => $lang->execution->burnXUnit,
-                'axisLine' => array('show' => true, 'lineStyle' =>array('color' => '#999', 'width' =>1))
-            ))),
-            set::yAxis(array(array(
-                'type'          => 'value',
-                'name'          => $lang->execution->count,
-                'minInterval'   => 1,
-                'nameTextStyle' => array('fontWeight' => 'normal'),
-                'axisPointer'   => array('label' => array('show' => true, 'precision' => 0)),
-                'axisLine'      => array('show' => true, 'lineStyle' => array('color' => '#999', 'width' => 1))
-            )))
-        )->size('100%', '150%') : div
-        (
-            setClass('table-empty-tip text-center'),
-            span
-            (
-                setClass('text-gray'),
-                $lang->execution->noPrintData
-            )
-        ) : null
-    ),
+    div($cfdChart)
 );
 
 /* ====== Render page ====== */

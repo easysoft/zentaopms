@@ -902,56 +902,52 @@ class executionZen extends execution
      */
     protected function filterGroupTasks(array $groupTasks, string $groupBy, string $filter, int $allCount, array $tasks): array
     {
-        if($filter != 'all')
-        {
-            if($groupBy == 'story' && $filter == 'linked' && isset($groupTasks[0]))
-            {
-                $allCount -= count($groupTasks[0]);
-                unset($groupTasks[0]);
-            }
-            elseif($groupBy == 'pri' && $filter == 'noset')
-            {
-                foreach($groupTasks as $pri => $tasks)
-                {
-                    if($pri)
-                    {
-                        $allCount -= count($tasks);
-                        unset($groupTasks[$pri]);
-                    }
-                }
-            }
-            elseif($groupBy == 'assignedTo' && $filter == 'undone')
-            {
-                $multiTaskCount = array();
-                foreach($groupTasks as $assignedTo => $tasks)
-                {
-                    foreach($tasks as $i => $task)
-                    {
-                        if($task->status != 'wait' && $task->status != 'doing')
-                        {
-                            if($task->mode == 'multi')
-                            {
-                                if(!isset($multiTaskCount[$task->id]))
-                                {
-                                    $multiTaskCount[$task->id] = true;
-                                    $allCount -= 1;
-                                }
-                            }
-                            else
-                            {
-                                $allCount -= 1;
-                            }
+        if($filter == 'all') return array($groupTasks, $allCount);
 
-                            unset($groupTasks[$assignedTo][$i]);
+        if($groupBy == 'story' && $filter == 'linked' && isset($groupTasks[0]))
+        {
+            $allCount -= count($groupTasks[0]);
+            unset($groupTasks[0]);
+        }
+        elseif($groupBy == 'pri' && $filter == 'noset')
+        {
+            foreach($groupTasks as $pri => $tasks)
+            {
+                if($pri)
+                {
+                    $allCount -= count($tasks);
+                    unset($groupTasks[$pri]);
+                }
+            }
+        }
+        elseif($groupBy == 'assignedTo' && $filter == 'undone')
+        {
+            $multiTaskCount = array();
+            foreach($groupTasks as $assignedTo => $tasks)
+            {
+                foreach($tasks as $i => $task)
+                {
+                    if($task->status != 'wait' && $task->status != 'doing')
+                    {
+                        if($task->mode == 'multi' && !isset($multiTaskCount[$task->id]))
+                        {
+                            $multiTaskCount[$task->id] = true;
+                            $allCount -= 1;
                         }
+                        elseif($task->mode != 'multi')
+                        {
+                            $allCount -= 1;
+                        }
+
+                        unset($groupTasks[$assignedTo][$i]);
                     }
                 }
             }
-            elseif(($groupBy == 'finishedBy' || $groupBy == 'closedBy') && isset($tasks['']))
-            {
-                $allCount -= count($tasks['']);
-                unset($tasks['']);
-            }
+        }
+        elseif(($groupBy == 'finishedBy' || $groupBy == 'closedBy') && isset($tasks['']))
+        {
+            $allCount -= count($tasks['']);
+            unset($tasks['']);
         }
 
         return array($groupTasks, $allCount);
