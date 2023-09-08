@@ -13,9 +13,10 @@ declare(strict_types=1);
 
 namespace zin;
 
-jsVar('copied',       $lang->instance->copied);
-jsVar('instanceID',   $instance->id);
-jsVar('instanceType', $type);
+jsVar('copied',         $lang->instance->copied);
+jsVar('instanceID',     $instance->id);
+jsVar('instanceStatus', $instance->status);
+jsVar('instanceType',   $type);
 
 $instance->appName = strtolower($instance->appName);
 $cpuInfo    = $this->instance->printCpuUsage($instance, $instanceMetric->cpu, 'array');

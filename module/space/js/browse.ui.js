@@ -34,44 +34,52 @@ window.renderInstanceList = function (result, {col, row, value})
     return result;
 }
 
-var timer = null;
+var refreshTime = 0;
+var timer       = null;
+const postData  = new FormData();
+if(idList.length > 0)
+{
+    idList.forEach(function(id){postData.append('idList[]', id)});
+}
 window.afterPageUpdate = function()
 {
-    if(timer) return;
-    const postData = new FormData();
     if(idList.length === 0) return;
-    idList.forEach(function(id)
-    {
-        postData.append('idList[]', id)
-    });
-    timer = setInterval(function()
-    {
-        $.ajaxSubmit({
-            url: $.createLink('instance', 'ajaxStatus'),
-            method: 'POST',
-            data:postData,
-            onComplete: function(res)
+    refreshStatus();
+}
+
+function refreshStatus()
+{
+    if(new Date().getTime() - refreshTime < 4000) return;
+    refreshTime = new Date().getTime();
+
+    $.ajaxSubmit({
+        url: $.createLink('instance', 'ajaxStatus'),
+        method: 'POST',
+        data:postData,
+        onComplete: function(res)
+        {
+            if(res.result === 'success')
             {
-                if(res.result != 'success') return;
-                if(res.data.length == 0) clearInterval(timer);
                 $.each(res.data, function(index, instance)
                 {
                     if(statusMap[instance.id] != instance.status)
                     {
-                        clearInterval(timer);
-                        statusMap[instance.id] = instance.status;
                         loadCurrentPage();
+                        statusMap[instance.id] = instance.status;
+                        return;
                     }
                 });
             }
-        });
-    }, 10000);
+
+            timer = setTimeout(() => {refreshStatus()}, 5000);
+        }
+    });
 }
 
 window.onPageUnmount = function()
 {
-    if(timer == null) return;
-    clearInterval(timer);
+    if(!timer) return;
+    clearTimeout(timer);
 }
 
 window.bindUser = function(externalID, appName)

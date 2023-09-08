@@ -16,7 +16,7 @@ jsVar('sortLink', $sortLink);
 $statusMap  = array();
 $canInstall = hasPriv('instance', 'install');
 
-foreach($instances as $instance) if(!$instance->externalID) $statusMap[$instance->id] = $instance->status;
+foreach($instances as $instance) if('store' === $instance->type) $statusMap[$instance->id] = $instance->status;
 jsVar('statusMap', $statusMap);
 jsVar('idList',    array_keys($statusMap));
 
