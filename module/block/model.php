@@ -200,7 +200,7 @@ class blockModel extends model
         foreach($tasks as $task)
         {
             if($task->status == 'done') $doneTasks[$task->id] = true;
-            if(in_array($task->status, array('wait', 'doing')) && $task->deadline && $task->deadline < $today) $delayTasks[$task->id] = true;
+            if(in_array($task->status, array('wait', 'doing')) && !helper::isZeroDate($task->deadline) && $task->deadline < $today) $delayTasks[$task->id] = true;
             $totalTasks[$task->id] = true;
         }
         $data['tasks']     = count($totalTasks);
