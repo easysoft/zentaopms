@@ -1569,14 +1569,15 @@ class executionModel extends model
     }
 
     /**
-     * Get execution by idList.
+     * 根据执行ID列表获取执行列表信息。
+     * Get the execution list information throught the execution ID list.
      *
      * @param  array  $executionIdList
-     * @param  string $mode all
+     * @param  string $mode           all
      * @access public
      * @return array
      */
-    public function getByIdList($executionIdList = array(), $mode = ''): array
+    public function getByIdList(array $executionIdList = array(), string $mode = ''): array
     {
         return $this->dao->select('*')->from(TABLE_EXECUTION)
             ->where('id')->in($executionIdList)
@@ -1712,7 +1713,7 @@ class executionModel extends model
      * @access public
      * @return array
      */
-    public function getIdList(int $projectID, string $status = 'all')
+    public function getIdList(int $projectID, string $status = 'all'): array
     {
         return $this->dao->select('id')->from(TABLE_EXECUTION)
             ->where('type')->in('sprint,stage,kanban')

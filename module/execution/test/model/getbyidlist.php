@@ -19,19 +19,18 @@ su('admin');
 /**
 
 title=测试executionModel->getByIdListTest();
+timeout=0
 cid=1
-pid=1
-
-敏捷项目查询 >> 迭代1
-瀑布项目查询 >> stage
-看板项目查询 >> doing
 
 */
 
-$executionIDList = array('3', '4', '5');
+$executionIdList = array(3, 4, 5);
 
-$execution = new executionTest();
-$executionList = $execution->getByIdListTest($executionIDList);
+global $tester;
+$tester->loadModel('execution');
+
+$executionList = $tester->execution->getByIdList($executionIdList);
+
 r($executionList) && p('3:name')   && e('迭代1'); // 敏捷项目查询
 r($executionList) && p('4:type')   && e('stage'); // 瀑布项目查询
 r($executionList) && p('5:status') && e('doing'); // 看板项目查询
