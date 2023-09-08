@@ -32,7 +32,7 @@ $config->execution->edit->requiredFields    = 'name,code,begin,end';
 $config->execution->start->requiredFields   = 'realBegan';
 $config->execution->close->requiredFields   = 'realEnd';
 
-$config->execution->customBatchEditFields = 'days,type,teamname,desc,PO,QD,PM,RD';
+$config->execution->customBatchEditFields = 'days,type,teamName,desc,PO,QD,PM,RD';
 
 $config->execution->custom = new stdclass();
 $config->execution->custom->batchEditFields = 'days,PM';

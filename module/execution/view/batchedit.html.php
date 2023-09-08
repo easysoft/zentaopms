@@ -72,7 +72,7 @@
             <th class='c-date required'><?php echo $lang->execution->begin;?></th>
             <th class='c-date required'><?php echo $lang->execution->end;?></th>
             <th class='c-desc <?php echo zget($visibleFields, 'desc', ' hidden') . zget($requiredFields, 'desc', '', ' required');?>'><?php echo $lang->execution->$desc;?></th>
-            <th class='c-team-name <?php echo zget($visibleFields, 'teamname', ' hidden') . zget($requiredFields, 'teamname', '', ' required');?>'><?php echo $lang->execution->teamName;?></th>
+            <th class='c-team-name <?php echo zget($visibleFields, 'teamName', ' hidden') . zget($requiredFields, 'teamName', '', ' required');?>'><?php echo $lang->execution->teamName;?></th>
             <th class='c-days<?php echo zget($visibleFields, 'days', ' hidden') . zget($requiredFields, 'days', '', ' required');?>'><?php echo $lang->execution->days;?></th>
             <?php
             $extendFields = $this->execution->getFlowExtendFields();
@@ -114,7 +114,7 @@
             <td><?php echo html::input("begins[$executionID]", $executions[$executionID]->begin, "id='begins{$executionID}' class='form-control form-date' onchange='computeWorkDays(this.id)'");?></td>
             <td><?php echo html::input("ends[$executionID]", $executions[$executionID]->end, "id='ends{$executionID}' class='form-control form-date' onchange='computeWorkDays(this.id)'");?></td>
             <td class='<?php echo zget($visibleFields, 'desc', 'hidden')?>'><?php echo html::textarea("descs[$executionID]", $executions[$executionID]->desc, "rows='1' class='form-control autosize'");?></td>
-            <td class='<?php echo zget($visibleFields, 'teamname', 'hidden')?>'><?php echo html::input("teams[$executionID]", $executions[$executionID]->team, "class='form-control'");?></td>
+            <td class='<?php echo zget($visibleFields, 'teamName', 'hidden')?>'><?php echo html::input("teams[$executionID]", $executions[$executionID]->team, "class='form-control'");?></td>
             <td class='<?php echo zget($visibleFields, 'days', 'hidden')?>'>
               <div class='input-group'>
                 <?php echo html::input("dayses[$executionID]", $executions[$executionID]->days, "id='dayses{$executionID}' class='form-control'");?>
