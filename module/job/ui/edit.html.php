@@ -322,7 +322,7 @@ formPanel
                 input
                 (
                     setStyle('width', '50%'),
-                    setClass('form-control'),
+                    setClass('form-control paramName'),
                     set::name('paramName[]'),
                 ),
                 $lang->job->paramValue,

@@ -7,6 +7,7 @@ function addItem(event)
     window.customCount ++;
 
     $(inputGroup).find('input.custom').attr('id', newName);
+    $(inputGroup).find('input.paramName').val('');
     $(inputGroup).find('input[id="' + newName + '"]').next().attr('for', newName);
     obj.closest('.form-group').append($(inputGroup));
 }
