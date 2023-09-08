@@ -1674,14 +1674,15 @@ class executionTest
     }
 
     /**
-     * function getCanCopyObjects test by execution
+     * 获取可以复制团队的项目、执行列表。
+     * Get projects and executions that copy the team.
      *
-     * @param  int    $projectID
-     * @param  string $count
+     * @param  int               $projectID
+     * @param  int               $count
      * @access public
-     * @return array
+     * @return array|int|string
      */
-    public function getCanCopyObjectsTest($projectID = 0, $count = 0)
+    public function getCanCopyObjectsTest(int $projectID = 0, int $count = 0): array|int|string
     {
         $object = $this->executionModel->getCanCopyObjects($projectID);
 

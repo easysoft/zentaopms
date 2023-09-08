@@ -3356,13 +3356,14 @@ class executionModel extends model
     }
 
     /**
+     * 获取可以复制团队的项目、执行列表。
      * Get projects and executions that copy the team.
      *
      * @param  int    $projectID
      * @access public
      * @return array
      */
-    public function getCanCopyObjects($projectID = 0)
+    public function getCanCopyObjects(int $projectID = 0): array
     {
         if(empty($projectID)) return array();
 
