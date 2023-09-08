@@ -97,20 +97,109 @@ window.handleCheckboxChange = function($el)
 
 window.handleNavMenuClick = function($el)
 {
-    var scope = $el.attr('id');
-    var itemSelector = 'menu.nav-ajax .nav-item a';
-    $.get($.createLink('metric', 'ajaxGetMetrics', 'scope=' + scope), function(resp)
+  var scope = $el.attr('id');
+  var itemSelector = 'menu.nav-ajax .nav-item a';
+  window.ajaxGetMetrics(scope, '', function(metrics, total)
     {
-      var metrics = JSON.parse(resp);
-      var total = metrics.length;
-
       $(itemSelector).removeClass('active');
       $(itemSelector).find('span.label').remove();
       $el.addClass('active');
       $el.append(`<span class="label size-sm rounded-full white">${total}</span>`);
+    })
+}
+
+window.ajaxGetMetrics = function(scope, filters = '', callback)
+{
+    $.get($.createLink('metric', 'ajaxGetMetrics', 'scope=' + scope + '&filters=' + filters), function(resp)
+    {
+      var metrics = JSON.parse(resp);
+      var total = metrics.length;
 
       window.renderCheckList(metrics);
+
+      if(typeof callback == 'function') callback(metrics, total);
     });
+}
+
+window.updateFilterCheck = function()
+{
+  var selector = '.filter-panel .panel-body .check-list-inline .checkbox-primary input:checked';
+  window.filterChecked = {'scope': [], 'object': [], 'purpose': []};
+  var hasChecked = false;
+  $(selector).each(function(index, elem)
+  {
+    var name = $(elem).attr('name');
+    var value = $(elem).val();
+
+    window.filterChecked[name].push(value);
+    hasChecked = true;
+  });
+
+  if(!hasChecked)
+  {
+    $('.filter-btn .common').removeClass('hidden');
+    $('.filter-btn .checked').addClass('hidden');
+    return;
+  }
+
+  $('.filter-btn .common').addClass('hidden');
+  $('.filter-btn .checked').removeClass('hidden');
+  var checkedInfo = filterLang.checkedInfo;
+  checkedInfo = checkedInfo.replace('%s', window.filterChecked.scope.length);
+  checkedInfo = checkedInfo.replace('%s', window.filterChecked.object.length);
+  checkedInfo = checkedInfo.replace('%s', window.filterChecked.purpose.length);
+  $('.filter-btn .checked').text(checkedInfo);
+}
+
+window.handleFilterCheck = function()
+{
+  window.updateFilterCheck();
+}
+
+window.handleFilterToggle = function($el)
+{
+  $el.toggleClass('primary-600');
+  $('.filter-panel').toggleClass('hidden');
+}
+
+window.handleFilterClearItem = function($el)
+{
+  $el = $($el);
+  if(!$el.length) return;
+
+  var $checkboxList = $el.closest('.panel').find('.panel-body .check-list-inline .checkbox-primary');
+  $checkboxList.each(function(index, elem)
+  {
+    $(elem).find('input').prop('checked', false);
+  });
+
+  window.updateFilterCheck();
+}
+
+window.handleFilterClearAll = function($el)
+{
+  $el = $($el);
+  if(!$el.length) return;
+
+  var $checkboxList = $el.closest('.panel').find('.panel-body .check-list-inline .checkbox-primary');
+  $checkboxList.each(function(index, elem)
+  {
+    $(elem).find('input').prop('checked', false);
+  });
+
+  window.updateFilterCheck();
+}
+
+window.handleFilterClick = function()
+{
+  var filterBase64 = btoa(JSON.stringify(window.filterChecked));
+
+  if(viewType == 'multiple')
+  {
+    window.ajaxGetMetrics('filter', filterBase64);
+    return;
+  }
+  loadPage($.createLink('metric', 'preview', 'scope=filter&viewType=' + viewType + '&metricID=0&filters=' + filterBase64));
 }
 
 window.afterPageUpdate = function($target, info, options)
@@ -118,9 +207,25 @@ window.afterPageUpdate = function($target, info, options)
   window.isDropdown  = false;
   window.lineCount   = 1;
   window.checkedList = [{id:current.id + '', name:current.name}];
+  window.filterChecked = {};
   window.renderDTable();
   if(viewType == 'multiple') window.renderCheckedLabel();
   $(window).on('resize', window.renderCheckedLabel);
+  window.initFilterPanel();
+
+  $('.filter-btn').removeClass('primary-600');
+  if(scope == 'filter')
+  {
+    $('.filter-btn').addClass('primary-600');
+    window.updateFilterCheck();
+  }
+}
+
+window.initFilterPanel = function()
+{
+  if(!$('.filter-panel').length) return;
+
+  $('#mainMenu').after($('.filter-panel'));
 }
 
 window.renderDTable = function()

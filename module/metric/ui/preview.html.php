@@ -17,8 +17,10 @@ jsVar('current',      $current);
 jsVar('maxSelectNum', $config->metric->maxSelectNum);
 jsVar('maxSelectMsg', $lang->metric->maxSelect);
 jsVar('maxSelectTip', $lang->metric->maxSelectTip);
-jsVar('viewType', $viewType);
-jsVar('selectCount', $lang->metric->selectCount);
+jsVar('viewType',     $viewType);
+jsVar('selectCount',  $lang->metric->selectCount);
+jsVar('filterLang',   $lang->metric->filter);
+jsVar('scope',        $scope);
 
 if($scope == 'collect' and empty($collect))
 {

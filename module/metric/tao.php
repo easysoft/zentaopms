@@ -103,6 +103,28 @@ class metricTao extends metricModel
         return $metrics;
     }
 
+    protected function fetchMetricsWithFilter($filters, $stage = 'all')
+    {
+        $scopes   = null;
+        $objects  = null;
+        $purposes = null;
+
+        if(isset($filters['scope']) && !empty($filters['scope'])) $scopes = implode(',', $filters['scope']);
+        if(isset($filters['object']) && !empty($filters['object'])) $objects = implode(',', $filters['object']);
+        if(isset($filters['purpose']) && !empty($filters['purpose'])) $purposes = implode(',', $filters['purpose']);
+
+        $metrics = $this->dao->select('*')->from(TABLE_METRIC)
+            ->where('deleted')->eq('0')
+            ->beginIF($stage != 'all')->andWhere('stage')->eq($stage)->fi()
+            ->beginIF(!empty($scopes))->andWhere('scope')->in($scopes)->fi()
+            ->beginIF(!empty($objects))->andWhere('object')->in($objects)->fi()
+            ->beginIF(!empty($purposes))->andWhere('purpose')->in($purposes)->fi()
+            ->beginIF($this->config->edition == 'open')->andWhere('object')->notIN('feedback,issue,risk')
+            ->fetchAll();
+
+        return $metrics;
+    }
+
     /**
      * 请求模块数据。
      * Fetch module data.

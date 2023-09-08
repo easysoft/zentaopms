@@ -94,11 +94,20 @@ class metric extends control
      * @access public
      * @return void
      */
-    public function preview($scope = 'project', $viewType = 'single', $metricID = 0)
+    public function preview($scope = 'project', $viewType = 'single', $metricID = 0, $filters = '')
     {
         $this->metric->processScopeList('released');
 
-        $metrics = $this->metric->getList($scope, 'released');
+        if($scope == 'filter')
+        {
+            $filters = json_decode(base64_decode($filters), true);
+            if(!is_array($filters)) $filters = array();
+            $metrics = $this->metric->getListByFilter($filters, 'released');
+        }
+        else
+        {
+            $metrics = $this->metric->getList($scope, 'released');
+        }
         $current = $this->metric->getByID($metricID);
         if(empty($current)) $current = current($metrics);
 
@@ -117,6 +126,7 @@ class metric extends control
         $this->view->title      = $this->lang->metric->preview;
         $this->view->viewType   = $viewType;
         $this->view->recTotal   = count($metrics);
+        $this->view->filters    = $filters;
         $this->display();
     }
 
@@ -127,9 +137,18 @@ class metric extends control
      * @access public
      * @return void
      */
-    public function ajaxGetMetrics($scope)
+    public function ajaxGetMetrics($scope, $filters)
     {
-        $metrics = $this->metric->getList($scope, 'released');
+        if($scope == 'filter')
+        {
+            $filters = json_decode(base64_decode($filters), true);
+            if(!is_array($filters)) $filters = array();
+            $metrics = $this->metric->getListByFilter($filters, 'released');
+        }
+        else
+        {
+            $metrics = $this->metric->getList($scope, 'released');
+        }
 
         echo(json_encode($metrics));
     }

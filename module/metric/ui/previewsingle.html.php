@@ -29,10 +29,73 @@ $fnGenerateSide = function() use($metrics, $current, $viewType, $scope)
     return ul($metricList);
 };
 
+$fnGenerateFilterPanel = function($code, $filterItem) use($lang)
+{
+    $panelClass = $filterItem['class'];
+    $items      = $filterItem['items'];
+
+    $removeAction = array
+    (
+        'class' => 'text-primary ghost',
+        'text'  => sprintf($lang->metric->filter->clearAction, $lang->metric->filter->$code),
+        'onclick' => 'window.handleFilterClearItem(this)',
+    );
+    return panel
+    (
+        setClass($panelClass),
+        set::headingClass('clear-padding'),
+        set::bodyClass('clear-padding'),
+        set::title($lang->metric->filter->$code),
+        checkList
+        (
+            set::primary(true),
+            set::name($code),
+            set::inline(true),
+            set::items($items),
+        ),
+        set::headingActions(array($removeAction)),
+    );
+};
+
+$filterItems = $this->metric->buildFilterCheckList($filters);
 featureBar
 (
     set::current($scope),
     set::linkParams("scope={key}"),
+    li
+    (
+        btn
+        (
+            setClass('btn ghost filter-btn'),
+            set::icon('search'),
+            bind::click('window.handleFilterToggle($element)'),
+            span
+            (
+                setClass('common'),
+                $lang->metric->filter->common
+            ),
+            span
+            (
+                setClass('checked'),
+            ),
+        ),
+        panel
+        (
+            setClass('filter-panel hidden'),
+            set::footerClass('filter-actions'),
+            set::footerActions
+            (
+                array
+                (
+                    array('type' => 'primary', 'text' => $lang->metric->filter->common, 'onclick' => 'window.handleFilterClick(this)'),
+                    array('type' => 'default', 'text' => $lang->metric->filter->clear, 'onclick' => 'window.handleFilterClearAll(this)'),
+                )
+            ),
+            $fnGenerateFilterPanel('scope',   $filterItems['scope']),
+            $fnGenerateFilterPanel('object',  $filterItems['object']),
+            $fnGenerateFilterPanel('purpose', $filterItems['purpose']),
+        ),
+    ),
 );
 
 toolbar
@@ -52,6 +115,8 @@ toolbar
         $lang->metric->manage
     ) : null,
 );
+
+
 
 div
 (

@@ -1,9 +1,11 @@
-#mainContent {display: flex;}
+#mainContent {display: flex; padding-top: 0;}
 #mainContent .side {flex: 0 0 25%; overflow-x: hidden; padding-right: 4px;}
 #mainContent .main {flex: 0 0 75%; overflow-x: hidden;}
 
-#featureBar .nav-feature li:last-child {padding-left: 4px; position: relative;}
-#featureBar .nav-feature li:last-child:before {content: ""; position: absolute; left: 2px; top: 5px; right: 0; bottom: 5px; width: 1px; background-color: var(--color-slate-300);}
+#featureBar .nav-feature li:last-child {padding-left: 4px;}
+#featureBar .nav-feature li:nth-last-child(2):before {content: ""; position: absolute; left: 2px; top: 5px; right: 0; bottom: 5px; width: 1px; background-color: var(--color-slate-300);}
+
+.filter-btn {padding-left: 0.625rem !important; padding-right: 0.625rem !important;}
 
 .main, .side {border-radius: 2px;}
 .side .title {height: 48px; padding-left: 16px; margin-bottom: 8px;}
@@ -37,6 +39,8 @@
 .primary-hover-500 {color: var(--color-slate-800)}
 .primary-hover-500:hover {color: var(--color-primary-500);}
 
+.primary-600 {color: var(--color-primary-600); background-color: var(--color-slate-300);}
+
 .main .checked-content {transition: height 0.5s ease; height: 48px; padding-left: 8px; border-bottom: 1px solid var(--color-slate-300);}
 .main .checked-label-content {height: 48px; padding-top: 3px; display: flex; flex-wrap: wrap;}
 .main .checked-label-right {height: 48px; padding-right: 12px; justify-content: flex-end; display: flex; align-items: center;}
@@ -51,3 +55,20 @@
 .gray-visible {opacity: 1;}
 .dropdown-icon {transform: rotate(90deg); transition: transform 0.3s ease;}
 .dropdown-icon.rotate {transform: rotate(270deg); }
+
+.filter-panel {margin-bottom: 1rem;}
+.filter-panel>.panel-body {display: flex;}
+.filter-panel>.panel-body .panel {position: relative; border: none; box-shadow: none;}
+.filter-panel>.panel-body .panel.divider:after {content: ""; position: absolute; right: 0px; top: 5px; right: 0; bottom: 5px; width: 1px; background-color: var(--color-slate-300);}
+.filter-panel .flex2 {flex-basis: 20%;}
+.filter-panel .flex3 {flex-basis: 30%;}
+.filter-panel .flex5 {flex-basis: 50%;}
+.filter-panel .clear-padding {padding-top: 0; padding-bottom: 0;}
+
+.filter-panel .check-list-inline {column-gap: 0;}
+.filter-panel .flex2 .check-list-inline .checkbox-primary {flex-basis: 50%;}
+.filter-panel .flex3 .check-list-inline .checkbox-primary {flex-basis: 33.3%;}
+.filter-panel .flex5 .check-list-inline .checkbox-primary {flex-basis: 20%;}
+
+.filter-panel .filter-actions {display: flex; justify-content: center}
+.filter-panel .filter-actions .toolbar {gap: 15px;}

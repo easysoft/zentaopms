@@ -108,6 +108,11 @@ class metricModel extends model
         return $metrics;
     }
 
+    public function getListByFilter($filters, $stage)
+    {
+        return $this->metricTao->fetchMetricsWithFilter($filters, $stage);
+    }
+
     /**
      * 获取模块树数据。
      * Get module tree data.
@@ -714,6 +719,51 @@ class metricModel extends model
     public function processObjectList()
     {
         if(!isset($this->config->custom->URAndSR) or !$this->config->custom->URAndSR) unset($this->lang->metric->objectList['requirement']);
+    }
+
+    public function buildFilterCheckList($filters)
+    {
+        $filterItems = array();
+
+        $onchange = 'window.handleFilterCheck(this)';
+
+        $scopeItems = array();
+        foreach($this->lang->metric->scopeList as $value => $text)
+        {
+            $isChecked = (isset($filters['scope']) and in_array($value, $filters['scope']));
+            $scopeItems[] = array('text' => $text, 'value' => $value, 'onchange' => $onchange, 'checked' => $isChecked);
+        }
+        $filterItems['scope'] = array
+        (
+            'class' => 'flex3 divider',
+            'items' => $scopeItems
+        );
+
+        $objectItems = array();
+        foreach($this->lang->metric->objectList as $value => $text)
+        {
+            $isChecked = (isset($filters['object']) and in_array($value, $filters['object']));
+            $objectItems[] = array('text' => $text, 'value' => $value, 'onchange' => $onchange, 'checked' => $isChecked);
+        }
+        $filterItems['object'] = array
+        (
+            'class' => 'flex5 divider',
+            'items' => $objectItems
+        );
+
+        $purposeItems = array();
+        foreach($this->lang->metric->purposeList as $value => $text)
+        {
+            $isChecked = (isset($filters['purpose']) and in_array($value, $filters['purpose']));
+            $purposeItems[] = array('text' => $text, 'value' => $value, 'onchange' => $onchange, 'checked' => $isChecked);
+        }
+        $filterItems['purpose'] = array
+        (
+            'class' => 'flex2',
+            'items' => $purposeItems
+        );
+
+        return $filterItems;
     }
 
     /**
