@@ -168,7 +168,7 @@ $lang->repo->encodingList['gbk']   = 'GBK';
 
 $lang->repo->scmList['Gitlab']     = 'GitLab';
 $lang->repo->scmList['Gogs']       = 'Gogs';
-$if(!$config->inQuickon) lang->repo->scmList['Gitea']      = 'Gitea';
+if(!$config->inQuickon) $lang->repo->scmList['Gitea']      = 'Gitea';
 $lang->repo->scmList['Git']        = 'Git';
 $lang->repo->scmList['Subversion'] = 'Subversion';
 
