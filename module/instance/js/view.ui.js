@@ -49,6 +49,12 @@ function refreshStatus()
             {
                 $.each(res.data, function(index, instance)
                 {
+                    if(instance.status === 'running' && ($('#statusTD').data('reload') === true || $('#memoryRate').data('load') === true))
+                    {
+                        setTimeout(() => {loadCurrentPage();}, 3000);
+                        currentStatus = instance.status;
+                        return;
+                    }
                     if(currentStatus != instance.status)
                     {
                         loadCurrentPage();
