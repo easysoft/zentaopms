@@ -644,12 +644,13 @@ class executionModel extends model
     }
 
     /**
-     * Batch update.
+     * 批量编辑执行。
+     * Batch update executions.
      *
      * @access public
-     * @return void
+     * @return array|false
      */
-    public function batchUpdate()
+    public function batchUpdate(): array|false
     {
         $this->loadModel('user');
         $this->loadModel('project');
