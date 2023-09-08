@@ -68,8 +68,9 @@ class jenkins extends control
                 ->remove('appType')
                 ->get();
             $jenkinsID = $this->loadModel('pipeline')->create($jenkins);
-
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $actionID = $this->loadModel('action')->create('jenkins', $jenkinsID, 'created');
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $jenkinsID));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('space', 'browse')));
         }
@@ -93,6 +94,11 @@ class jenkins extends control
         {
             $this->jenkins->update($id);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $newJenkins = $this->jenkins->getByID($id);
+            $actionID   = $this->loadModel('action')->create('jenkins', $id, 'edited');
+            $changes    = common::createChanges($jenkins, $newJenkins);
+            $this->action->logHistory($actionID, $changes);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
