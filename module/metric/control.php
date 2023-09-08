@@ -173,18 +173,25 @@ class metric extends control
         $metricTree = $this->metricZen->prepareTree($scope, $stage, $modules);
         $scopeList  = $this->metricZen->prepareScopeList();
 
-        $this->view->title       = $this->lang->metric->common;
-        $this->view->metrics     = $metrics;
-        $this->view->pager       = $pager;
-        $this->view->orderBy     = $orderBy;
-        $this->view->param       = $param;
-        $this->view->metricTree  = $metricTree;
-        $this->view->closeLink   = $this->inlink('browse', 'scope=' . $scope);
-        $this->view->type        = $type;
-        $this->view->stage       = $stage;
-        $this->view->scopeList   = $scopeList;
-        $this->view->scope       = $scope;
-        $this->view->scopeText   = $this->lang->metric->scopeList[$scope];
+        $oldMetricPairs = array();
+        foreach($metrics as $metric)
+        {
+            if($this->metric->isOldMetric($metric)) $oldMetricPairs[$metric->id] = $metric->fromID;
+        }
+
+        $this->view->title          = $this->lang->metric->common;
+        $this->view->metrics        = $metrics;
+        $this->view->oldMetricPairs = $oldMetricPairs;
+        $this->view->pager          = $pager;
+        $this->view->orderBy        = $orderBy;
+        $this->view->param          = $param;
+        $this->view->metricTree     = $metricTree;
+        $this->view->closeLink      = $this->inlink('browse', 'scope=' . $scope);
+        $this->view->type           = $type;
+        $this->view->stage          = $stage;
+        $this->view->scopeList      = $scopeList;
+        $this->view->scope          = $scope;
+        $this->view->scopeText      = $this->lang->metric->scopeList[$scope];
 
         $this->display();
     }
@@ -333,11 +340,12 @@ class metric extends control
 
         if($isVerify)
         {
-            $verifyResult = $this->metricZen->verifyCalc($metric);
-            $result = $verifyResult ? $this->metric->runCustomCalc($metric->code) : null;
+            //$verifyResult = $this->metricZen->verifyCalc($metric);
+            //$result = $verifyResult ? $this->metric->runCustomCalc($metric->code) : null;
 
-            $this->view->metric       = $metric;
-            $this->view->verifyResult = $verifyResult;
+            //$this->view->metric       = $metric;
+            //$this->view->verifyResult = $verifyResult;
+            $result = $this->metric->runCustomCalc($metric->code);
             $this->view->result       = $result;
             $this->view->resultHeader = $this->metricZen->getResultTableHeader($result);
             $this->view->resultData   = $this->metricZen->getResultTableData($metric, $result);
