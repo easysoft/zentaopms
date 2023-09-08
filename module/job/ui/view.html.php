@@ -107,11 +107,6 @@ detailBody
                     ),
                     item
                     (
-                        set::name($lang->job->triggerType),
-                        $this->job->getTriggerConfig($job)
-                    ),
-                    item
-                    (
                         set::name($lang->job->customParam),
                         html($customParam),
                     ),
