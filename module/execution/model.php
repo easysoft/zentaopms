@@ -1576,7 +1576,7 @@ class executionModel extends model
      * @access public
      * @return array
      */
-    public function getByIdList($executionIdList = array(), $mode = '')
+    public function getByIdList($executionIdList = array(), $mode = ''): array
     {
         return $this->dao->select('*')->from(TABLE_EXECUTION)
             ->where('id')->in($executionIdList)
@@ -1704,21 +1704,22 @@ class executionModel extends model
     }
 
     /**
+     * 获取给定项目下所有执行的Id列表。
      * Get execution id list by project.
      *
-     * @param  int  $projectID
-     * @param  int  $status all|undone|wait|doing|suspended|closed
+     * @param  int    $projectID
+     * @param  string $status all|undone|wait|doing|suspended|closed
      * @access public
      * @return array
      */
-    public function getIdList($projectID, $status = 'all')
+    public function getIdList(int $projectID, string $status = 'all')
     {
         return $this->dao->select('id')->from(TABLE_EXECUTION)
             ->where('type')->in('sprint,stage,kanban')
             ->andWhere('deleted')->eq('0')
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
-            ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
+            ->beginIF(!in_array($status, array('all', 'undone')))->andWhere('status')->in($status)->fi()
             ->fetchPairs('id', 'id');
     }
 

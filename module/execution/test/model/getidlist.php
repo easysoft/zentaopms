@@ -35,20 +35,13 @@ $execution->gen(10);
 /**
 
 title=测试executionModel->getIdListTest();
+timeout=0
 cid=1
-pid=1
-
-敏捷项目下执行id查询 >> 5
-瀑布项目下执行id查询 >> 7
-看板项目下执行id查询 >> 9
-敏捷项目下执行id数量统计 >> 2
-敏捷项目下执行id数量统计 >> 2
-敏捷项目下执行id数量统计 >> 2
 
 */
 
 $projectIDList = array(2, 3, 4);
-$count         = array('0','1');
+$count         = array(0, 1);
 
 $executionTester = new executionTest();
 r($executionTester->getIdListTest($projectIDList[0],$count[0])) && p('5') && e('5'); // 敏捷项目下执行id查询

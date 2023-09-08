@@ -780,14 +780,15 @@ class executionTest
     }
 
     /**
-     * function getIdList test execution
+     * 获取给定项目下所有执行的Id列表。
+     * Get execution id list by project.
      *
-     * @param  string $projectID
-     * @param  string $count
+     * @param  int    $projectID
+     * @param  int    $count
      * @access public
-     * @return array
+     * @return array|int
      */
-    public function getIdListTest($projectID, $count)
+    public function getIdListTest(int $projectID, int $count): array|int
     {
         $object = $this->executionModel->getIdList($projectID);
 
