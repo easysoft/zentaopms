@@ -853,12 +853,12 @@ class executionModel extends model
                 {
                     foreach($diffProductIdList as $newProductID)
                     {
-                        $data = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)
+                        $projectProduct = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)
                             ->where('project')->eq($executionID)
                             ->andWhere('product')->eq($newProductID)
                             ->fetch();
-                        $data->project = $execution->project;
-                        $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
+                        $projectProduct->project = $execution->project;
+                        $this->dao->insert(TABLE_PROJECTPRODUCT)->data($projectProduct)->exec();
                     }
                 }
             }
