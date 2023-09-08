@@ -27,6 +27,7 @@ $canImportTask  = hasPriv('task', 'importTask');
 $canImportBug   = hasPriv('task', 'importBug');
 
 $this->loadModel('task');
+$importItems = array();
 if(common::canModify('execution', $execution))
 {
     $params          = isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : "";
@@ -41,10 +42,10 @@ if(common::canModify('execution', $execution))
     $createItem      = array('text' => $lang->task->create,      'url' => $createLink);
     $batchCreateItem = array('text' => $lang->task->batchCreate, 'url' => $batchCreateLink);
 
-    if($canImportTask && $execution->multiple) $importTaskItem = array('text' => $lang->execution->importTask, 'url' => $this->createLink('execution', 'importTask', "execution={$execution->id}"));
+    if($canImportTask && $execution->multiple) $importItems[] = array('text' => $lang->execution->importTask, 'url' => $this->createLink('execution', 'importTask', "execution={$execution->id}"));
     if($canImportBug && $execution->lifetime != 'ops' && !in_array($execution->attribute, array('request', 'review')))
     {
-        $importBugItem = array('text' => $lang->execution->importBug, 'url' => $this->createLink('execution', 'importBug', "execution={$execution->id}"));
+        $importItems[] = array('text' => $lang->execution->importBug, 'url' => $this->createLink('execution', 'importBug', "execution={$execution->id}"));
     }
 }
 
@@ -66,12 +67,12 @@ toolbar
         'url'         => createLink('task', 'export', "execution={$execution->id}&orderBy={$orderBy}&type={$browseType}"),
         'data-toggle' => 'modal'
     ))) : null,
-    (!empty($importTaskItem) || !empty($importBugItem)) ? dropdown(
+    $importItems ? dropdown(
         btn(
             setClass('ghost btn square btn-default'),
             set::icon('import')
         ),
-        set::items(array_filter(array($importTaskItem, $importBugItem))),
+        set::items($importItems),
         set::placement('bottom-end'),
     ) : null,
     $canCreate && $canBatchCreate ? btngroup
