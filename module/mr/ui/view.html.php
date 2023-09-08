@@ -242,7 +242,7 @@ panel
                 div
                 (
                     setClass('article-h1'),
-                    $lang->compile->job,
+                    $lang->mr->jobID,
                 ),
                 $job
             ),
