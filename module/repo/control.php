@@ -256,8 +256,9 @@ class repo extends control
 
         if($error) return $this->send(array('result' => 'fail', 'message' => $error));
 
-        $this->repo->delete(TABLE_REPO, $repoID);
+        $this->dao->delete()->from(TABLE_REPO)->where('id')->eq($repoID)->exec();
         if(dao::isError()) return print(js::error(dao::getError()));
+        $this->loadModel('action')->create('repo', $repoID, 'deleted', '');
         return $this->send(array('result' => 'success', 'load' => true));
     }
 
