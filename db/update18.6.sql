@@ -808,3 +808,5 @@ UPDATE zt_privlang SET `key` = 'execution-computeBurn' WHERE `key` = 'execution-
 
 DELETE FROM zt_priv WHERE module='search' and method = 'select';
 DELETE FROM zt_privlang WHERE `key`='search-select';
+
+UPDATE `zt_privlang` SET `value`='删除风险' WHERE `objectID`=197 AND `objectType`='manager' AND `lang`='zh-cn';
