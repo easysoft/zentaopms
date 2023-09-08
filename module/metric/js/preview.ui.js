@@ -378,7 +378,7 @@ window.renderCheckedLabel = function()
   $('.dropdown-icon').addClass('visibility-hidden');
   if(lineCount >= 2) $('.dropdown-icon').removeClass('visibility-hidden');
 
-  var contentHeight = $('.checked-content').height();
+  var contentHeight = 48 + (lineCount - 1) * 40;
   if(window.lineCount != lineCount && window.isDropdown)
   {
     // 在展开状态缩放到只有一行了
@@ -391,13 +391,13 @@ window.renderCheckedLabel = function()
     // 在展开状态多了若干行, 或者少了若干行
     else
     {
-      contentHeight = 48 + (lineCount - 1) * 40;
       $('.checked-content').height(contentHeight);
     }
   }
 
   window.lineCount = lineCount;
-  window.recoverMainHeight(contentHeight);
+  if(window.isDropdown) window.recoverMainHeight(contentHeight);
+  else window.recoverMainHeight(48);
 
   $('.checked-tip').text(selectCount.replace('%s', labels.length));
 }
