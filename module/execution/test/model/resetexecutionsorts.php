@@ -24,12 +24,8 @@ $execution->gen(8);
 /**
 
 title=测试executionModel->resetExecutionSorts();
+timeout=0
 cid=1
-pid=1
-
-检查没有执行时的排序 >> 0
-检查有执行时的排序 >> 3,5,7,8,6,4
-检查有执行并且传parenExecutions时的排序 >> 3,5,7,8,6,4
 
 */
 
