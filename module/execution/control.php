@@ -1331,18 +1331,7 @@ class execution extends control
             }
         }
 
-        $this->loadModel('user');
-        $poUsers = $this->user->getPairs('noclosed|nodeleted|pofirst', '', $this->config->maxCount);
-        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PM"] = $this->config->user->moreLink;
-
-        $pmUsers = $this->user->getPairs('noclosed|nodeleted|pmfirst', '', $this->config->maxCount);
-        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PO"] = $this->config->user->moreLink;
-
-        $qdUsers = $this->user->getPairs('noclosed|nodeleted|qdfirst', '', $this->config->maxCount);
-        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["QD"] = $this->config->user->moreLink;
-
-        $rdUsers = $this->user->getPairs('noclosed|nodeleted|devfirst', '', $this->config->maxCount);
-        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
+        list($pmUsers, $poUsers, $qdUsers, $rdUsers) = $this->executionZen->setUserMoreLink();
 
         $this->loadModel('product');
         $allProducts   = $this->product->getProductPairsByProject($projectID, 'noclosed');
@@ -1555,18 +1544,7 @@ class execution extends control
             }
         }
 
-        $this->loadModel('user');
-        $poUsers = $this->user->getPairs('noclosed|nodeleted|pofirst', $execution->PO, $this->config->maxCount);
-        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PM"] = $this->config->user->moreLink;
-
-        $pmUsers = $this->user->getPairs('noclosed|nodeleted|pmfirst',  $execution->PM, $this->config->maxCount);
-        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PO"] = $this->config->user->moreLink;
-
-        $qdUsers = $this->user->getPairs('noclosed|nodeleted|qdfirst',  $execution->QD, $this->config->maxCount);
-        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["QD"] = $this->config->user->moreLink;
-
-        $rdUsers = $this->user->getPairs('noclosed|nodeleted|devfirst', $execution->RD, $this->config->maxCount);
-        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
+        list($pmUsers, $poUsers, $qdUsers, $rdUsers) = $this->executionZen->setUserMoreLink($execution);
 
         $project = $this->project->getById($execution->project);
         if(!$project->hasProduct) $this->lang->execution->PO = $this->lang->common->story . $this->lang->execution->owner;
