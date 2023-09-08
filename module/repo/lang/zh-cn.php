@@ -1,4 +1,6 @@
 <?php
+global $config;
+
 $lang->repo->common          = '代码库';
 $lang->repo->codeRepo        = '代码库';
 $lang->repo->browse          = '浏览';
@@ -166,7 +168,7 @@ $lang->repo->encodingList['gbk']   = 'GBK';
 
 $lang->repo->scmList['Gitlab']     = 'GitLab';
 $lang->repo->scmList['Gogs']       = 'Gogs';
-$lang->repo->scmList['Gitea']      = 'Gitea';
+if(!$config->inQuickon) $lang->repo->scmList['Gitea']      = 'Gitea';
 $lang->repo->scmList['Git']        = '本地 Git';
 $lang->repo->scmList['Subversion'] = 'Subversion';
 

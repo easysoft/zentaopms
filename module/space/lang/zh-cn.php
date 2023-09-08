@@ -1,4 +1,6 @@
 <?php
+global $config;
+
 $lang->space->common          = '应用';
 $lang->space->browse          = '应用列表';
 $lang->space->getStoreAppInfo = '获取应用信息';
@@ -27,7 +29,7 @@ $lang->space->featureBar['browse']['stopped']  = '已关闭';
 $lang->space->featureBar['browse']['abnormal'] = '异常';
 
 $lang->space->appType['gitlab']    = 'GitLab';
-$lang->space->appType['gitea']     = 'Gitea';
+if(!$config->inQuickon) $lang->space->appType['gitea']     = 'Gitea';
 $lang->space->appType['gogs']      = 'Gogs';
 $lang->space->appType['jenkins']   = 'Jenkins';
 $lang->space->appType['sonarqube'] = 'SonarQube';
