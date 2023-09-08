@@ -35,9 +35,9 @@ foreach($repoList as $repo)
         foreach($productList as $productID)
         {
             if(!isset($products[$productID])) continue;
-            $repo->productNames .= ', ' . zget($products, $productID, $productID);
+            $repo->productNames .= '，' . zget($products, $productID, $productID);
         }
-        $repo->productNames = trim($repo->productNames, ', ');
+        $repo->productNames = trim($repo->productNames, '，');
     }
 
     $repo->projectNames = '';
@@ -47,8 +47,9 @@ foreach($repoList as $repo)
         foreach($projectList as $projectID)
         {
             if(!isset($projects[$projectID])) continue;
-            $repo->projectNames .= ' ' . zget($projects, $projectID, $projectID);
+            $repo->projectNames .= '，' . zget($projects, $projectID, $projectID);
         }
+        $repo->projectNames = trim($repo->projectNames, '，');
     }
 }
 
