@@ -495,9 +495,10 @@ class executionModel extends model
     {
         $oldExecution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
 
-        /* Judgment of required items. */
+        /* Judgment of required items, such as execution code name. */
         if($oldExecution->type != 'stage' and $this->post->code == '' and isset($this->config->setCode) and $this->config->setCode == 1)
         {
+            /* $this->config->setCode is the value get from database with system owner and common module. */
             dao::$errors['code'] = sprintf($this->lang->error->notempty, $this->lang->execution->code);
             return false;
         }
@@ -513,7 +514,6 @@ class executionModel extends model
 
         if($_POST['products'])
         {
-            $this->app->loadLang('project');
             $multipleProducts = $this->loadModel('product')->getMultiBranchPairs();
             if(is_string($_POST['branch']) !== false) $_POST['branch'] = json_decode($_POST['branch'], true);
             foreach($_POST['products'] as $index => $productID)
@@ -535,6 +535,7 @@ class executionModel extends model
             ->setIF(helper::isZeroDate($this->post->begin), 'begin', '')
             ->setIF(helper::isZeroDate($this->post->end), 'end', '')
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
+            ->join('whitelist', ',')
             ->setIF($this->post->status == 'closed' and $oldExecution->status != 'closed', 'closedDate', helper::now())
             ->setIF($this->post->status == 'suspended' and $oldExecution->status != 'suspended', 'suspendedDate', helper::today())
             ->setIF($oldExecution->type == 'stage', 'project', $oldExecution->project)
@@ -542,12 +543,14 @@ class executionModel extends model
             ->setDefault('team', $this->post->name)
             ->stripTags($this->config->execution->editor->edit['id'], $this->config->allowedTags)
             ->remove('products, branch, uid, plans, syncStories, contactListMenu, teamMembers, heightType, delta')
+            ->cleanInt('id,project')
             ->get();
 
         if($this->post->heightType == 'custom' && !$this->loadModel('kanban')->checkDisplayCards($execution->displayCards)) return false;
 
         if(in_array($execution->status, array('closed', 'suspended'))) $this->computeBurn($executionID);
 
+        /* Check the begin date and end date. */
         $parentExecution = !empty($execution->parent) ? $execution : $oldExecution;
         if(empty($execution->project) || $execution->project == $oldExecution->project) $this->checkBeginAndEndDate($oldExecution->project, $execution->begin, $execution->end, $parentExecution->parent);
         if(dao::isError()) return false;
@@ -557,7 +560,7 @@ class executionModel extends model
 
         $execution = $this->loadModel('file')->processImgURL($execution, $this->config->execution->editor->edit['id'], $this->post->uid);
 
-        /* Check the workload format and total. */
+        /* Check the workload format and total, such as check Workload Ratio if it enabled. */
         if(!empty($execution->percent) and isset($this->config->setPercent) and $this->config->setPercent == 1) $this->checkWorkload('update', $execution->percent, $oldExecution);
 
         /* Set planDuration and realDuration. */
@@ -597,48 +600,14 @@ class executionModel extends model
 
         if(isset($_POST['parent'])) $this->loadModel('programplan')->setTreePath($executionID);
 
-        /* Get team and language item. */
-        $this->loadModel('user');
-        $team    = $this->user->getTeamMemberPairs($executionID, 'execution');
-        $members = isset($_POST['teamMembers']) ? $_POST['teamMembers'] : array();
-        array_push($members, $execution->PO, $execution->QD, $execution->PM, $execution->RD);
-        $members = array_unique($members);
-        $roles   = $this->user->getUserRoles(array_values($members));
+        /* Update the team. */
+        $this->executionTao->updateTeam($executionID, $oldExecution, $execution);
 
-        $changedAccounts = array();
-        $teamMembers     = array();
-        foreach($members as $account)
-        {
-            if(empty($account) or isset($team[$account])) continue;
-
-            $member = new stdclass();
-            $member->root    = (int)$executionID;
-            $member->account = $account;
-            $member->join    = helper::today();
-            $member->role    = zget($roles, $account, '');
-            $member->days    = zget($execution, 'days', 0);
-            $member->type    = 'execution';
-            $member->hours   = $this->config->execution->defaultWorkhours;
-            $this->dao->replace(TABLE_TEAM)->data($member)->exec();
-
-            $changedAccounts[$account]  = $account;
-            $teamMembers[$account] = $member;
-        }
-        $this->dao->delete()->from(TABLE_TEAM)
-            ->where('root')->eq((int)$executionID)
-            ->andWhere('type')->eq('execution')
-            ->andWhere('account')->in(array_keys($team))
-            ->andWhere('account')->notin(array_values($members))
-            ->andWhere('account')->ne($oldExecution->openedBy)
-            ->exec();
-        if(isset($execution->project) and $execution->project) $this->addProjectMembers($execution->project, $teamMembers);
-
-        $whitelist = explode(',', $execution->whitelist);
+        /* Update whitelist. */
+        $whitelist = is_string($execution->whitelist) ? explode(',', $execution->whitelist) : $execution->whitelist;
         $this->loadModel('personnel')->updateWhitelist($whitelist, 'sprint', $executionID);
 
-        /* Fix bug#3074, Update views for team members. */
-        if($execution->acl != 'open') $this->updateUserView($executionID, 'sprint', $changedAccounts);
-
+        /* Set the product for project same to execution. */
         if(isset($execution->project))
         {
             $executionProductList   = $this->loadModel('product')->getProducts($executionID);
