@@ -2939,7 +2939,7 @@ class execution extends control
             $projectExecutions[$execution->project][] = $execution;
         }
 
-        $this->view->link               = $this->execution->getLink($module, $method, $extra);
+        $this->view->link               = $this->executionZen->getLink($module, $method, $extra);
         $this->view->module             = $module;
         $this->view->method             = $method;
         $this->view->extra              = $extra;

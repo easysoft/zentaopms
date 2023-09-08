@@ -1246,4 +1246,59 @@ class executionZen extends execution
         }
         return $multiBranchProduct;
     }
+
+    /**
+     * 通过模块，方法和类型生成执行的链接。
+     * Generate the link of execution by module, method and type.
+     *
+     * @param  string  $module
+     * @param  string  $method
+     * @param  mixed   $type
+     * @access public
+     * @return string
+     */
+    public function getLink(string $module, string $method, string $type = ''): string
+    {
+        $executionModules = array('task', 'testcase', 'build', 'bug', 'case', 'testtask', 'testreport');
+        if(in_array($module, array('task', 'testcase')) && in_array($method, array('view', 'edit', 'batchedit'))) $method = $module;
+        if(in_array($module, $executionModules) && in_array($method, array('view', 'edit')))                      $method = $module;
+        if(in_array($module, $executionModules + array('story', 'product')))                                      $module = 'execution';
+
+        if($module == 'story') $method = 'story';
+        if($module == 'product' && $method == 'showerrornone') $method = 'task';
+        if($module == 'execution' && $method == 'create') return '';
+
+        $link = helper::createLink($module, $method, "executionID=%s");
+        if($module == 'execution' && ($method == 'index' || $method == 'all'))
+        {
+            $link = helper::createLink($module, 'task', "executionID=%s");
+        }
+        elseif($module == 'bug' && $method == 'create' && $this->app->tab == 'execution')
+        {
+            $link = helper::createLink($module, $method, "productID=0&branch=0&executionID=%s");
+        }
+        elseif(in_array($module, array('bug', 'case', 'testtask', 'testreport')) && strpos(',view,edit,', ",$method,") !== false)
+        {
+            $link = helper::createLink('execution', $module, "executionID=%s");
+        }
+        elseif($module == 'repo')
+        {
+            $link = helper::createLink('repo', 'browse', "repoID=0&branchID=&executionID=%s");
+        }
+        elseif($module == 'doc')
+        {
+            $link = helper::createLink('doc', $method, "type=execution&objectID=%s&from=execution");
+        }
+        elseif(in_array($module, array('issue', 'risk', 'opportunity', 'pssp', 'auditplan', 'nc', 'meeting')))
+        {
+            $link = helper::createLink($module, 'browse', "executionID=%s&from=execution");
+        }
+        elseif($module == 'testreport' && $method == 'create')
+        {
+            $link = helper::createLink('execution', 'testtask', "executionID=%s");
+        }
+
+        if($type != '') $link .= "&type=$type";
+        return $link;
+    }
 }
