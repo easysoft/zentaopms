@@ -2157,7 +2157,7 @@ class executionModel extends model
      * @access public
      * @return array
      */
-    public function getTree(int $executionID)
+    public function getTree(int $executionID): array
     {
         $firstTree = array(
             'id'      => 0,

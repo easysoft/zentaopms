@@ -3162,4 +3162,29 @@ class executionTest
 
         return $this->executionModel->afterImportBug($task, $bug);
     }
+
+    /**
+     * 测试处理树状图需求类型数据。
+     * Test processStoryNode method.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function processStoryNodeTest(int $executionID)
+    {
+        $fullTrees = $this->treeModel->getTaskStructure($executionID, 0);
+        if(empty($fullTrees)) return '0';
+
+        global $tester;
+        $stories     = $tester->loadModel('story')->getListByProject($executionID);
+        $storyGroups = array();
+        foreach($stories as $story) $storyGroups[$story->product][$story->module][$story->id] = $story;
+
+        $taskGroups = $this->executionModel->getTaskGroups($executionID);
+
+        $node = (object)$fullTrees[0];
+        if(!isset($node->id)) $node->id = 0;
+        return $this->executionModel->processStoryNode($node, $storyGroups, $taskGroups, array(), 0);
+    }
 }
