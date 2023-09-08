@@ -272,11 +272,11 @@ window.setDropDown = function()
 
 window.unfoldContent = function()
 {
-  var tableWidth = $('.table-and-charts').height();
-  $('.table-and-charts').css('height', tableWidth - (window.lineCount - 1) * 40);
-
   var $content = $('.checked-content');
-  $content.height(48 + (window.lineCount - 1) * 40);
+  var contentHeight = 48 + (window.lineCount - 1) * 40;
+  $content.height(contentHeight);
+
+  window.recoverMainHeight(contentHeight);
   setTimeout(function()
   {
     $content.find('.gray-next').addClass('gray-visible');
@@ -378,6 +378,7 @@ window.renderCheckedLabel = function()
   $('.dropdown-icon').addClass('visibility-hidden');
   if(lineCount >= 2) $('.dropdown-icon').removeClass('visibility-hidden');
 
+  var contentHeight = $('.checked-content').height();
   if(window.lineCount != lineCount && window.isDropdown)
   {
     // 在展开状态缩放到只有一行了
@@ -390,11 +391,13 @@ window.renderCheckedLabel = function()
     // 在展开状态多了若干行, 或者少了若干行
     else
     {
-      $('.checked-content').height(48 + (lineCount - 1) * 40);
+      contentHeight = 48 + (lineCount - 1) * 40;
+      $('.checked-content').height(contentHeight);
     }
   }
 
   window.lineCount = lineCount;
+  window.recoverMainHeight(contentHeight);
 
   $('.checked-tip').text(selectCount.replace('%s', labels.length));
 }
