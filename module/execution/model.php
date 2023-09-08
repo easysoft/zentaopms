@@ -2016,15 +2016,16 @@ class executionModel extends model
     }
 
     /**
+     * 获取影子执行的ID。
      * Get no multiple execution id.
      *
      * @param  int    $projectID
      * @access public
      * @return int
      */
-    public function getNoMultipleID($projectID)
+    public function getNoMultipleID(int $projectID): int
     {
-        return $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->andWhere('multiple')->eq(0)->andWhere('deleted')->eq(0)->fetch('id');
+        return (int)$this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->andWhere('multiple')->eq(0)->andWhere('deleted')->eq(0)->fetch('id');
     }
 
     /**

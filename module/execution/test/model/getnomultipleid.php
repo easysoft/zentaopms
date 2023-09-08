@@ -21,16 +21,14 @@ $execution->gen(3);
 /**
 
 title=测试executionModel->getNoMultipleID();
+timeout=0
 cid=1
-pid=1
-
-根据正确项目ID获取被隐藏的执行id >> 3
-根据空项目ID获取被隐藏的执行id >> 0
-根据不存在的项目ID获取被隐藏的执行id >> 0
 
 */
 
-$executionTester = new executionTest();
-r($executionTester->getNoMultipleIDTest(2)) & p() && e('3'); // 根据正确项目ID获取被隐藏的执行id
-r($executionTester->getNoMultipleIDTest(0)) & p() && e('0'); // 根据空项目ID获取被隐藏的执行id
-r($executionTester->getNoMultipleIDTest(5)) & p() && e('0'); // 根据不存在的项目ID获取被隐藏的执行id
+global $tester;
+$tester->loadModel('execution');
+
+r($tester->execution->getNoMultipleID(2)) & p() && e('3'); // 根据正确项目ID获取被隐藏的执行id
+r($tester->execution->getNoMultipleID(0)) & p() && e('0'); // 根据空项目ID获取被隐藏的执行id
+r($tester->execution->getNoMultipleID(5)) & p() && e('0'); // 根据不存在的项目ID获取被隐藏的执行id
