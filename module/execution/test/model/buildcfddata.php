@@ -48,9 +48,13 @@ cid=1
 
 */
 
+$typeList = array('task', 'story', 'bug');
+
 $executionTester = new executionTest();
-
-$CFDData = $executionTester->buildCFDDataTest(3);
-
-r(count($executionTester->buildCFDDataTest())) && p() && e('0'); // 不存在执行的累计流图信息
-r(count($CFDData['line']))                     && p() && e('2'); // 存在的执行的累计流图信息
+r(count($executionTester->buildCFDDataTest()))                        && p()            && e('0'); // 不存在执行的累计流图信息
+r($executionTester->buildCFDDataTest(3, $typeList[0])['line'])        && p('看板列4:0') && e('0'); // 存在的执行的任务卡片累计流图信息
+r($executionTester->buildCFDDataTest(3, $typeList[1])['line'])        && p('看板列3:0') && e('0'); // 存在的执行的需求卡片累计流图信息
+r($executionTester->buildCFDDataTest(3, $typeList[2])['line'])        && p('看板列2:0') && e('0'); // 存在的执行的Bug卡片累计流图信息
+r(count($executionTester->buildCFDDataTest(3, $typeList[0])['line'])) && p()            && e('2'); // 存在的执行的任务卡片累计流图看板列数量
+r(count($executionTester->buildCFDDataTest(3, $typeList[1])['line'])) && p()            && e('1'); // 存在的执行的需求卡片累计流图看板列数量
+r(count($executionTester->buildCFDDataTest(3, $typeList[2])['line'])) && p()            && e('2'); // 存在的执行的Bug卡片累计流图看板列数量

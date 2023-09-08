@@ -3928,27 +3928,27 @@ class executionModel extends model
     }
 
     /**
+     * 构造累计流图数据。
      * Build CFD data.
      *
      * @param  int    $executionID
-     * @param  string $type
      * @param  array  $dateList
+     * @param  string $type        story|task|bug
      * @access public
      * @return array
      */
-    public function buildCFDData($executionID, $dateList, $type)
+    public function buildCFDData(int $executionID, array $dateList, string $type): array
     {
-        $this->loadModel('report');
-        $setGroup = $this->getCFDData($executionID, $dateList, $type);
+        $nameGroup = $this->getCFDData($executionID, $dateList, $type);
 
-        if(empty($setGroup)) return array();
+        if(empty($nameGroup)) return array();
 
-        $chartData['labels'] = $this->report->convertFormat($dateList, DT_DATE5);
+        $chartData['labels'] = $this->loadModel('report')->convertFormat($dateList, DT_DATE5);
         $chartData['line']   = array();
 
-        foreach($setGroup as $name => $sets)
+        foreach($nameGroup as $name => $value)
         {
-            $chartData['line'][$name] = $this->report->createSingleJSON($sets, $dateList);
+            $chartData['line'][$name] = $this->report->createSingleJSON($value, $dateList);
         }
 
         return $chartData;

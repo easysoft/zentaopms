@@ -2865,13 +2865,15 @@ class executionTest
     }
 
     /**
+     * 构造累计流图数据。
      * Test build CFD data.
      *
      * @param  int    $executionID
+     * @param  string $type        task|story|bug
      * @access public
      * @return array
      */
-    public function buildCFDDataTest($executionID = 0)
+    public function buildCFDDataTest($executionID = 0, string $type = 'task'): array
     {
         $begin = strtotime('2022-01-12');
         $end   = strtotime('2022-02-12');
@@ -2879,7 +2881,7 @@ class executionTest
         $dateList = array();
         for($date = $begin; $date <= $end; $date += 24 * 3600) $dateList[] = date('Y-m-d', $date);
 
-        return $this->executionModel->buildCFDData($executionID, $dateList, 'task');
+        return $this->executionModel->buildCFDData($executionID, $dateList, $type);
     }
 
     /**
