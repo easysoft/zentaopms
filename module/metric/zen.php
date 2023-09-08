@@ -417,7 +417,7 @@ class metricZen extends metric
      *
      * @param  object $metric
      * @access protected
-     * @return array|true
+     * @return string
      */
     protected function verifyCalc($metric)
     {
@@ -431,7 +431,15 @@ class metricZen extends metric
             $verifyResult[] = $verifyItem;
         }
 
-        return $verifyResult;
+        $dryRunOutput = $this->metric->dryRunCalc($metric);
+
+        $dryRunResult = new stdclass();
+        $dryRunResult->tip    = $dryRunOutput;
+        $dryRunResult->result = empty($dryRunOutput) ? true : false;
+
+        $verifyResult[] = $dryRunResult;
+
+        return json_encode($verifyResult);
     }
 
     /**
