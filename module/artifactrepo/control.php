@@ -38,7 +38,7 @@ class artifactrepo extends control
         $this->view->recTotal       = $recTotal;
         $this->view->recPerPage     = $recPerPage;
         $this->view->artifactRepos  = $artifactRepos;
-        $this->view->products       = $this->loadModel('product')->getPairs('', 0, '', 'all');
+        $this->view->products       = $this->loadModel('product')->getPairs('all', 0, '', 'all');
         $this->view->pageLink       = $this->createLink('artifactrepo', 'browse', "browseType={$browseType}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
 
         $this->display();
@@ -105,9 +105,14 @@ class artifactrepo extends control
 
         $artifactRepo = $this->artifactrepo->getByID($artifactRepoID);
 
+        $products           = $this->loadModel('product')->getPairs('', 0, '', 'all');
+        $linkedProducts     = $this->loadModel('product')->getByIdList(explode(',', $artifactRepo->products));
+        $linkedProductPairs = array_combine(array_keys($linkedProducts), helper::arrayColumn($linkedProducts, 'name'));
+        $products           = $products + $linkedProductPairs;
+
         $this->view->title        = $this->lang->artifactrepo->edit;
         $this->view->artifactRepo = $artifactRepo;
-        $this->view->products     = $this->loadModel('product')->getPairs('', 0, '', 'all');
+        $this->view->products     = $products;
 
         $this->display();
     }

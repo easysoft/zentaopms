@@ -99,7 +99,7 @@ class repo extends control
         }
         $successJobs = $this->loadModel('compile')->getSuccessJobs($jobIDList);
 
-        $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
+        $products = $this->loadModel('product')->getPairs('all', 0, '', 'all');
         $projects = $this->loadModel('project')->getPairs();
 
         session_start();
