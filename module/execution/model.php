@@ -2075,31 +2075,13 @@ class executionModel extends model
     }
 
     /**
-     * Get full name by path.
-     * @param  string $executionPath
-     * @access public
-     * @return string
-     */
-    public function getFullNameByPath($executionPath)
-    {
-        $paths         = explode(',', trim($executionPath, ','));
-        $executions    = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in($paths)->andWhere('type')->notin('program,project')->fetchPairs();
-        $executionName = array();
-        foreach($paths as $path)
-        {
-            if(isset($executions[$path])) $executionName[] = $executions[$path];
-        }
-
-        return implode('/', $executionName);
-    }
-
-    /**
-     * Get full name of executions.
+     * 获取完整路径的执行名称。
+     * Get full path name of execution.
      * @param  array $executions
      * @access public
      * @return array
      */
-    public function getFullNameList($executions)
+    public function getFullNameList(array $executions): array
     {
         $allExecutions = $this->dao->select('id,name,parent')->from(TABLE_EXECUTION)
             ->where('type')->notin(array('program', 'project'))
