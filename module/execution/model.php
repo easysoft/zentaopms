@@ -3311,30 +3311,6 @@ class executionModel extends model
     }
 
     /**
-     * Get teams which can be imported.
-     *
-     * @param  string $account
-     * @param  int    $currentExecution
-     * @access public
-     * @return array
-     */
-    public function getTeams2Import($account, $currentExecution)
-    {
-        $execution = $this->dao->findById($currentExecution)->from(TABLE_EXECUTION)->fetch();
-        return $this->dao->select('t1.root, t2.name as executionName')
-            ->from(TABLE_TEAM)->alias('t1')
-            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.root = t2.id')
-            ->where('t1.account')->eq($account)
-            ->andWhere('t1.root')->ne($currentExecution)
-            ->andWhere('t1.type')->eq('execution')
-            ->andWhere('t2.project')->eq($execution->project)
-            ->andWhere('t2.deleted')->eq('0')
-            ->groupBy('t1.root')
-            ->orderBy('t1.root DESC')
-            ->fetchPairs();
-    }
-
-    /**
      * 获取可导入的执行成员。
      * Get members of a execution who can be imported.
      *

@@ -1604,41 +1604,6 @@ class executionTest
     }
 
     /**
-     * function getTeams2Import test by execution
-     *
-     * @param  string $account
-     * @param  string $currentExecution
-     * @param  string $count
-     * @access public
-     * @return array
-     */
-    public function getTeams2ImportTest($account, $currentExecution, $count)
-    {
-        $object = $this->executionModel->getTeams2Import($account, $currentExecution);
-
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error;
-        }
-        elseif($count == "1")
-        {
-            return count($object);
-        }
-        else
-        {
-            if(empty($object))
-            {
-                return '无数据';
-            }
-            else
-            {
-                return $object;
-            }
-        }
-    }
-
-    /**
      * function getMembers2Import test by execution
      *
      * @param  int    $executionID
