@@ -1931,13 +1931,14 @@ class executionTest
     }
 
     /**
-     * Function getBurnData test by execution.
+     * 获取执行的燃尽图数据。
+     *  Get execution burn data.
      *
-     * @param  int   $executionID
+     * @param  int          $executionID
      * @access public
-     * @return int
+     * @return string|array
      */
-    public function getBurnDataTest($executionID = 0)
+    public function getBurnDataTest(int $executionID = 0): string|array
     {
         $execution = $this->executionModel->getByID($executionID);
         if(empty($execution)) return '0';

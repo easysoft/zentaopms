@@ -38,12 +38,8 @@ $task->gen(10);
 /**
 
 title=测试executionModel->getBurnDataTest();
+timeout=0
 cid=1
-pid=1
-
-敏捷执行查询统计 >> 36
-瀑布执行查询统计 >> 40.2
-看板执行查询统计 >> 3
 
 */
 

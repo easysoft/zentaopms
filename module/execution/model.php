@@ -3737,44 +3737,43 @@ class executionModel extends model
     }
 
     /**
+     * 获取执行的燃尽图数据。
      * Get execution burn data.
      *
      * @param  array  $executions
      * @access public
      * @return array
      */
-    public function getBurnData($executions)
+    public function getBurnData(array $executions): array
     {
         if(empty($executions)) return array();
 
         /* Get burndown charts datas. */
-        $burns = $this->dao->select('execution, date AS name, `left` AS value')
+        $burnList = $this->dao->select('execution, date AS name, `left` AS value')
             ->from(TABLE_BURN)
             ->where('execution')->in(array_keys($executions))
             ->andWhere('task')->eq(0)
             ->orderBy('date desc')
             ->fetchGroup('execution', 'name');
 
-        foreach($burns as $executionID => $executionBurns)
+        foreach($burnList as $executionID => $executionBurnList)
         {
-            /* If executionBurns > $itemCounts, split it, else call processBurnData() to pad burns. */
-            $begin = $executions[$executionID]->begin;
-            $end   = $executions[$executionID]->end;
-            if(helper::isZeroDate($begin)) $begin = $executions[$executionID]->openedDate;
-            $executionBurns = $this->processBurnData($executionBurns, $this->config->execution->defaultBurnPeriod, $begin, $end);
+            /* If executionBurnList > $itemCounts, split it, else call processBurnData() to pad burnList. */
+            $begin             = helper::isZeroDate($executions[$executionID]->begin) ? $executions[$executionID]->openedDate : $executions[$executionID]->begin;
+            $executionBurnList = $this->processBurnData($executionBurnList, $this->config->execution->defaultBurnPeriod, $begin, $executions[$executionID]->end);
 
             /* Shorter names. */
-            foreach($executionBurns as $executionBurn)
+            foreach($executionBurnList as $executionBurn)
             {
                 $executionBurn->name = substr($executionBurn->name, 5);
                 unset($executionBurn->execution);
             }
 
-            ksort($executionBurns);
-            $burns[$executionID] = $executionBurns;
+            ksort($executionBurnList);
+            $burnList[$executionID] = $executionBurnList;
         }
 
-        return $burns;
+        return $burnList;
     }
 
     /**
