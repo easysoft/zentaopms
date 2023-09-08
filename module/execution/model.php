@@ -3622,12 +3622,13 @@ class executionModel extends model
      * 计算燃尽图数据。
      * Compute burn of a execution.
      *
-     * @param  int    $executionID
+     * @param  int|string|array $executionID
      * @access public
      * @return array
      */
-    public function computeBurn(int $executionID = 0): array
+    public function computeBurn(int|string|array $executionID = ''): array
     {
+        if(is_int($executionID)) $executionID = (string)$executionID;
         $executions = $this->dao->select('id, code')->from(TABLE_EXECUTION)
             ->where('type')->in('sprint,stage')
             ->andWhere('lifetime')->ne('ops')
