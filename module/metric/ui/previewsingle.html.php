@@ -123,7 +123,7 @@ div
         ),
         div
         (
-            setClass('table-and-chart'),
+            setClass('table-and-chart table-and-chart-single'),
             div
             (
                 setClass('table-side'),

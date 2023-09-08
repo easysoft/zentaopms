@@ -136,59 +136,68 @@ div
         ),
         div
         (
-            setClass('metric-name flex flex-between items-center'),
+            setClass('table-and-charts'),
             div
             (
-                span
-                (
-                    setClass('metric-name-weight'),
-                    isset($current) ? $current->name : null,
-                ),
-            ),
-            div
-            (
-                setClass('flex-start'),
-                toolbar
-                (
-                    haspriv('bug', 'report') ? item(set(array
-                    (
-                        'text'  => $this->lang->metric->details,
-                        'class' => 'ghost details',
-                        'url'   => '#',
-                    ))) : null,
-                    haspriv('bug', 'report') ? item(set(array
-                    (
-                        'icon'  => 'menu-backend',
-                        'text'  => $this->lang->metric->filters,
-                        'class' => 'ghost',
-                        'url'   => '#',
-                    ))) : null,
-                    haspriv('bug', 'report') ? item(set(array
-                    (
-                        'icon'  => 'chart-line',
-                        'text'  => $this->lang->metric->zAnalysis,
-                        'class' => 'ghost chart-line-margin',
-                        'url'   => '#',
-                    ))) : null,
-
-                )
-            ),
-        ),
-        div
-        (
-            setClass('table-and-chart table-and-chart-multiple'),
-            div
-            (
-                setClass('table-side'),
+                set::id('metric' . $current->id),
+                setClass('metricBox'),
                 div
                 (
-                    setClass('dtable'),
-                )
-            ),
-            div
-            (
-                setClass('chart-side chart-center'),
-                'chart'
+                    setClass('metric-name flex flex-between items-center'),
+                    div
+                    (
+                        span
+                        (
+                            setClass('metric-name-weight'),
+                            isset($current) ? $current->name : null,
+                        ),
+                    ),
+                    div
+                    (
+                        setClass('flex-start'),
+                        toolbar
+                        (
+                            haspriv('bug', 'report') ? item(set(array
+                            (
+                                'text'  => $this->lang->metric->details,
+                                'class' => 'ghost details',
+                                'url'   => '#',
+                            ))) : null,
+                            haspriv('bug', 'report') ? item(set(array
+                            (
+                                'icon'  => 'menu-backend',
+                                'text'  => $this->lang->metric->filters,
+                                'class' => 'ghost',
+                                'url'   => '#',
+                            ))) : null,
+                            haspriv('bug', 'report') ? item(set(array
+                            (
+                                'icon'  => 'chart-line',
+                                'text'  => $this->lang->metric->zAnalysis,
+                                'class' => 'ghost chart-line-margin',
+                                'url'   => '#',
+                            ))) : null,
+
+                        )
+                    ),
+                ),
+                div
+                (
+                    setClass('table-and-chart table-and-chart-multiple'),
+                    div
+                    (
+                        setClass('table-side'),
+                        div
+                        (
+                            setClass('dtable'),
+                        )
+                    ),
+                    div
+                    (
+                        setClass('chart-side chart-center'),
+                        'chart'
+                    ),
+                ),
             ),
         ),
     ),
