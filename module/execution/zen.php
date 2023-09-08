@@ -1297,4 +1297,48 @@ class executionZen extends execution
         if($type != '') $link .= "&type=$type";
         return $link;
     }
+
+    /**
+     * Set the more link of user and return users with echo role.
+     *
+     * @param  object[]|object $execution
+     * @return array
+     */
+    public function setUserMoreLink(array|object $execution = null): array
+    {
+        $appendPo = $appendPm = $appendQd = $appendRd = array();
+        if(is_array($execution))
+        {
+            $appendPo = $appendPm = $appendQd = $appendRd = array();
+            foreach($execution as $item)
+            {
+                $appendPo[$item->PO] = $item->PO;
+                $appendPm[$item->PM] = $item->PM;
+                $appendQd[$item->QD] = $item->QD;
+                $appendRd[$item->RD] = $item->RD;
+            }
+        }
+        elseif(is_object($execution))
+        {
+            $appendPo[$execution->PO] = $execution->PO;
+            $appendPm[$execution->PM] = $execution->PM;
+            $appendQd[$execution->QD] = $execution->QD;
+            $appendRd[$execution->RD] = $execution->RD;
+        }
+
+        $this->loadModel('user');
+        $pmUsers = $this->user->getPairs('noclosed|nodeleted|pmfirst', $appendPm, $this->config->maxCount);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PM"] = $this->config->user->moreLink;
+
+        $poUsers = $this->user->getPairs('noclosed|nodeleted|pofirst',  $appendPo, $this->config->maxCount);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PO"] = $this->config->user->moreLink;
+
+        $qdUsers = $this->user->getPairs('noclosed|nodeleted|qdfirst',  $appendQd, $this->config->maxCount);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["QD"] = $this->config->user->moreLink;
+
+        $rdUsers = $this->user->getPairs('noclosed|nodeleted|devfirst', $appendRd, $this->config->maxCount);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
+
+        return array($pmUsers, $poUsers, $qdUsers, $rdUsers);
+    }
 }
