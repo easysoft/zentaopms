@@ -3780,18 +3780,20 @@ class executionModel extends model
     }
 
     /**
+     * 根据传入的条件筛选日期列表。
      * Process burndown datas when the sets is smaller than the itemCounts.
      *
-     * @param  array   $sets
+     * @param  array   $dateList
      * @param  int     $itemCounts
      * @param  string  $begin
      * @param  string  $end
-     * @param  string  $mode
+     * @param  string  $mode        noempty
      * @access public
      * @return array
      */
-    public function processBurnData($sets, $itemCounts, $begin, $end, $mode = 'noempty')
+    public function processBurnData(array $dateList, int $itemCounts, string $begin, string $end, string $mode = 'noempty'): array
     {
+        /* Get the date interval if the $end is not empty, otherwise get the $end. */
         if(!helper::isZeroDate($end))
         {
             $period = helper::diffDate($end, $begin) + 1;
@@ -3799,8 +3801,7 @@ class executionModel extends model
         }
         else
         {
-            $counts = $itemCounts;
-            $period = $itemCounts;
+            $counts = $period = $itemCounts;
             $end    = date(DT_DATE1, strtotime("+$counts days", strtotime($begin)));
         }
 
@@ -3810,37 +3811,36 @@ class executionModel extends model
         $preValue = 0;
         $todayTag = 0;
 
-        foreach($sets as $date => $set)
+        /* Removes date that are not in the current date range. */
+        foreach($dateList as $date => $value)
         {
-            if($begin > $date) unset($sets[$date]);
+            if($begin > $date) unset($dateList[$date]);
         }
 
+        /* Update date that are not in the date list and are in the date range. */
         for($i = 0; $i < $period; $i++)
         {
             $currentTime = strtotime($current);
             if($currentTime > $endTime) break;
-            if($currentTime > time() and !$todayTag)
-            {
-                $todayTag = $i + 1;
-            }
+            if($currentTime > time() && !$todayTag) $todayTag = $i + 1;
 
-            if(isset($sets[$current])) $preValue = $sets[$current]->value;
-            if(!isset($sets[$current]) and $mode == 'noempty')
+            if(isset($dateList[$current])) $preValue = $dateList[$current]->value;
+            if(!isset($dateList[$current]) && $mode == 'noempty')
             {
-                $sets[$current]  = new stdclass();
-                $sets[$current]->name  = $current;
-                $sets[$current]->value = helper::diffDate($current, $today) < 0 ? $preValue : 'null';
+                $dateList[$current] = new stdclass();
+                $dateList[$current]->name  = $current;
+                $dateList[$current]->value = helper::diffDate($current, $today) < 0 ? $preValue : 'null';
             }
 
             $nextDay = date(DT_DATE1, $currentTime + 24 * 3600);
             $current = $nextDay;
         }
-        ksort($sets);
+        ksort($dateList);
 
-        if(count($sets) <= $counts) return $sets;
-        if($endTime <= time()) return array_slice($sets, -$counts, $counts);
-        if($todayTag <= $counts) return array_slice($sets, 0, $counts);
-        if($todayTag > $counts) return array_slice($sets, $todayTag - $counts, $counts);
+        if(count($dateList) <= $counts) return $dateList;
+        if($endTime <= time()) return array_slice($dateList, -$counts, $counts);
+        if($todayTag <= $counts) return array_slice($dateList, 0, $counts);
+        if($todayTag > $counts) return array_slice($dateList, $todayTag - $counts, $counts);
     }
 
     /**

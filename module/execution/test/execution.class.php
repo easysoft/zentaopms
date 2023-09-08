@@ -1956,29 +1956,28 @@ class executionTest
     }
 
     /**
-     * function processBurnData test by execution
+     * 根据传入的条件筛选日期列表。
+     * Process burndown datas when the sets is smaller than the itemCounts.
      *
-     * @param  string $executionID
-     * @param  array  $itemCounts
-     * @param  string $begin
-     * @param  string $end
-     * @param  string $count
+     * @param  int       $executionID
+     * @param  int       $itemCounts
+     * @param  string    $begin
+     * @param  string    $end
+     * @param  int       $count
      * @access public
-     * @return array
+     * @return array|int
      */
-    public function processBurnDataTest($executionID, $itemCounts, $begin, $end, $count)
+    public function processBurnDataTest(int $executionID, int $itemCounts, string $begin, string $end, int $count): array|int
     {
-        global $tester;
-        $sets = $tester->dao->select('execution, `date` as name, `left` as value')->from(TABLE_BURN)->where('execution')->eq($executionID)->fetchAll('name');
-
-        $object = $this->executionModel->processBurnData($sets, $itemCounts, $begin, $end);
+        $dateList = $this->executionModel->dao->select('execution, `date` as name, `left` as value')->from(TABLE_BURN)->where('execution')->eq($executionID)->fetchAll('name');
+        $object   = $this->executionModel->processBurnData($dateList, $itemCounts, $begin, $end);
 
         if(dao::isError())
         {
             $error = dao::getError();
             return $error;
         }
-        elseif($count == "1")
+        elseif($count == 1)
         {
             return count($object);
         }
