@@ -192,11 +192,10 @@ class metric extends control
 
         $metric = $this->metric->getByID($metricID);
         $isOldMetric = $this->metric->isOldMetric($metric);
+        if($isOldMetric) $measurement = $this->metric->getOldMetricByID($metric->fromID);
 
         if($_POST && $isOldMetric)
         {
-            $measurementID = $metric->fromID;
-            $measurement = $this->metric->getOldMetricByID($measurementID);
 
             $result = $this->metric->createSqlFunction($this->post->sql, $measurement);
             if($result['result'] != 'success') return $this->send($result);
@@ -222,7 +221,7 @@ class metric extends control
             $this->dao->update(TABLE_BASICMEAS)
                 ->set('configure')->eq($this->post->sql)
                 ->set('params')->eq(json_encode($params))
-                ->where('id')->eq($measurementID)
+                ->where('id')->eq($metric->fromID)
                 ->exec();
 
             $params       = $this->metric->processPostParams();
@@ -247,6 +246,13 @@ class metric extends control
         $this->view->users          = $this->loadModel('user')->getPairs('noletter');
         $this->view->preAndNext     = $this->loadModel('common')->getPreAndNextObject('metric', $metricID);
         if(!$this->metric->isOldMetric($metric) && $metric->fromID !== 0) $this->view->oldMetricInfo = $this->metricZen->getOldMetricInfo($metric->fromID);
+
+        if($isOldMetric)
+        {
+            $params = json_decode($measurement->params, true);
+            $this->view->measurement = $measurement;
+            $this->view->params      = empty($params) ? array() : json_decode($measurement->params, true);
+        }
 
         $this->display();
     }

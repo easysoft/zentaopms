@@ -39,6 +39,128 @@ $buildItems = function($items): array
     return $itemList;
 };
 
+/**
+ * Build default value and query value control.
+ *
+ * @param string $name
+ * @param string $controlType
+ * @param string $value
+ * @param string $optionType
+ * @access public
+ * @return array
+ */
+$buildValueControl = function($name, $controlType, $value, $optionType)
+{
+    if($controlType == 'date')
+    {
+        $control = formGroup
+        (
+            set::width('1/5'),
+            set::label(''),
+            datePicker
+            (
+                set::id($name),
+                set::name($name),
+                set::value($value)
+            )
+        );
+    }
+    elseif($controlType == 'select')
+    {
+        $options = $this->metric->getControlOptions($optionType);
+        $control = formGroup
+        (
+            set::width('1/5'),
+            set::label(''),
+            picker
+            (
+                set::id($name),
+                set::name($name),
+                set::items($options),
+            ),
+        );
+    }
+    else
+    {
+        $control = formGroup
+        (
+            set::width('1/5'),
+            set::label(''),
+            input
+            (
+                set::id($name),
+                set::name($name),
+                set::value($value),
+            ),
+        );
+    }
+
+    return $control;
+};
+
+/**
+ * Build a param control group.
+ *
+ * @param object   $param
+ * @param callable $buildValueControl
+ * @access public
+ * @return array
+ */
+$buildParamControlGroup = function($param, $buildValueControl, $typeList, $optionList)
+{
+    $varType = zget($param, 'varType', '');
+
+    $varNameControl = formGroup
+    (
+        set::className('hidden'),
+        set::control('hidden'),
+        set::name('varName'),
+    );
+    $showNameControl = formGroup
+    (
+        set::width('1/5'),
+        set::control('input'),
+        set::name('showName'),
+        set::value($param['showName']),
+        set::label($param['varName']),
+    );
+    $varTypeControl = formGroup
+    (
+        set::width('1/5'),
+        set::name('varType'),
+        set::control('select'),
+        set::items($typeList),
+        set::value(zget($param, 'varType')),
+        set::label(''),
+    );
+    $optionsControl = formGroup
+    (
+        set::width('1/5'),
+        set::name('options'),
+        set::control('select'),
+        set::items($optionList),
+        set::value($param['options']),
+        set::label(''),
+    );
+    $defaultValueControl = $buildValueControl('defaultValue', $varType, zget($param, 'defaultValue', ''), $param['options']);
+    $queryValueControl  = $buildValueControl('queryValue', $varType, zget($param, 'queryValue', ''), $param['options']);
+
+    $paramControlGroup = formRow
+    (
+        $showNameControl,
+        $varTypeControl,
+        $optionsControl,
+        $defaultValueControl,
+        $queryValueControl,
+        $varNameControl,
+    );
+
+    return $paramControlGroup;
+};
+
+$paramControlGroups = array();
+foreach($params as $param) $paramControlGroups[] = $buildParamControlGroup($param, $buildValueControl, $lang->metric->param->typeList, $lang->metric->param->options);
+
 detailHeader
 (
     to::title
@@ -80,7 +202,11 @@ detailBody
         section
         (
             set::title($lang->metric->metricData),
-        )
+            formPanel
+            (
+                formRow($paramControlGroups)
+            )
+        ),
     ),
     history
     (
