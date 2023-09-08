@@ -433,4 +433,57 @@ class executionTao extends executionModel
 
         return $node;
     }
+
+    /**
+     * Update team of execution when it edited.
+     *
+     * @param  int    $executionID
+     * @param  object $oldExecution
+     * @param  object $execution
+     * @return void
+     */
+    protected function updateTeam(int $executionID, object $oldExecution, object $execution)
+    {
+        /* Get team and language item. */
+        $this->loadModel('user');
+        $team    = $this->user->getTeamMemberPairs($executionID, 'execution');
+        $members = isset($_POST['teamMembers']) ? $_POST['teamMembers'] : array();
+        array_push($members, $execution->PO, $execution->QD, $execution->PM, $execution->RD);
+        $members = array_unique($members);
+        $roles   = $this->user->getUserRoles(array_values($members));
+
+        /* Add the member who joined the team. */
+        $changedAccounts = array();
+        $teamMembers     = array();
+        foreach($members as $account)
+        {
+            if(empty($account) or isset($team[$account])) continue;
+
+            $member = new stdclass();
+            $member->root    = $executionID;
+            $member->account = $account;
+            $member->join    = helper::today();
+            $member->role    = zget($roles, $account, '');
+            $member->days    = zget($execution, 'days', 0);
+            $member->type    = 'execution';
+            $member->hours   = $this->config->execution->defaultWorkhours;
+            $this->dao->replace(TABLE_TEAM)->data($member)->exec();
+
+            $changedAccounts[$account] = $account;
+            $teamMembers[$account]     = $member;
+        }
+
+        /* Remove the member who left the team. */
+        $this->dao->delete()->from(TABLE_TEAM)
+            ->where('root')->eq($executionID)
+            ->andWhere('type')->eq('execution')
+            ->andWhere('account')->in(array_keys($team))
+            ->andWhere('account')->notin(array_values($members))
+            ->andWhere('account')->ne($oldExecution->openedBy)
+            ->exec();
+        if(isset($execution->project) and $execution->project) $this->addProjectMembers($execution->project, $teamMembers);
+
+        /* Fix bug#3074, Update views for team members. */
+        if($execution->acl != 'open') $this->updateUserView($executionID, 'sprint', $changedAccounts);
+    }
 }
