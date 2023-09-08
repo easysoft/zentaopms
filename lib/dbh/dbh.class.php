@@ -88,7 +88,7 @@ class dbh
         $sql = $this->formatSQL($sql);
         if(!$sql) return true;
 
-        dao::$querys[] = "[$this->flag] " . dao::processKeywords($sql);
+        if(class_exists('dao')) dao::$querys[] = "[$this->flag] " . dao::processKeywords($sql);
         return $this->pdo->exec($sql);
     }
 
@@ -103,7 +103,7 @@ class dbh
     {
         $sql = $this->formatSQL($sql);
 
-        dao::$querys[] = "[$this->flag] " . dao::processKeywords($sql);
+        if(class_exists('dao')) dao::$querys[] = "[$this->flag] " . dao::processKeywords($sql);
 
         $result = $this->pdo->query($sql);
         return $result;
@@ -118,7 +118,7 @@ class dbh
      */
     public function rawQuery($sql)
     {
-        dao::$querys[] = "[$this->flag] " . dao::processKeywords($sql);
+        if(class_exists('dao')) dao::$querys[] = "[$this->flag] " . dao::processKeywords($sql);
 
         $result = $this->pdo->query($sql);
 

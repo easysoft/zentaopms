@@ -1929,7 +1929,6 @@ class productModel extends model
      */
     public function getStats($orderBy = 'order_asc', $pager = null, $status = 'noclosed', $line = 0, $storyType = 'story', $programID = 0, $param = 0, $shadow = 0)
     {
-        $this->loadModel('report');
         $this->loadModel('story');
         $this->loadModel('bug');
 
