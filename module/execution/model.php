@@ -1911,17 +1911,19 @@ class executionModel extends model
     }
 
     /**
-     * Get executions by project.
+     * 根据项目ID获取项目下的执行信息。
+     * Get executions data by project.
      *
      * @param  int     $projectID
      * @param  string  $status
      * @param  int     $limit
-     * @param  string  $pairs
+     * @param  bool    $pairs
+     * @param  bool    $devel
      * @param  int     $appenedID
      * @access public
-     * @return array
+     * @return object[]|array
      */
-    public function getByProject($projectID, $status = 'all', $limit = 0, $pairs = false, $devel = false, $appendedID = 0)
+    public function getByProject(int $projectID, string $status = 'all', int $limit = 0, bool $pairs = false, bool $devel = false, int $appendedID = 0): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getExecutionPairs();
 
@@ -1930,10 +1932,10 @@ class executionModel extends model
             ->where('type')->in('stage,sprint,kanban')
             ->andWhere('deleted')->eq('0')
             ->andWhere('vision')->eq($this->config->vision)
-            ->beginIF($projectID)->andWhere('project')->eq((int)$projectID)->fi()
+            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF(!in_array($status, array('all', 'undone', 'noclosed')))->andWhere('status')->in($status)->fi()
             ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
-            ->beginIF($status != 'all' and $status != 'undone' and $status != 'noclosed')->andWhere('status')->in($status)->fi()
             ->beginIF($status == 'noclosed')->andWhere('status')->ne('closed')->fi()
             ->beginIF($devel === true)->andWhere('attribute')->in('dev,qa,release')->fi()
             ->beginIF($appendedID)->orWhere('id')->eq($appendedID)->fi()
@@ -1942,10 +1944,52 @@ class executionModel extends model
             ->fetchAll('id');
 
         /* Add product name and parent stage name to stage name. */
-        if(isset($project->model) and in_array($project->model, array('waterfall', 'waterfallplus')))
+        $executions = $this->executionTao->batchProcessName($executions, $project);
+        if(!$pairs) return $executions;
+
+        $projectPairs = array();
+        if(empty($projectID))
+        {
+            $projectPairs = $this->dao->select('t1.id,t1.name')->from(TABLE_PROJECT)->alias('t1')
+                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.id=t2.project')
+                ->where('t2.id')->in(array_keys($executions))
+                ->fetchPairs('id', 'name');
+        }
+        else
+        {
+            $projectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetchPairs('id', 'name');
+        }
+
+        $this->app->loadLang('project');
+        $executionPairs = array();
+        foreach($executions as $execution)
+        {
+            $executionPairs[$execution->id]  = '';
+            $executionPairs[$execution->id] .= isset($projectPairs[$execution->project]) ? ($projectPairs[$execution->project] . '/') : '';
+            $executionPairs[$execution->id] .= $execution->name;
+
+            if(empty($execution->multiple)) $executionPairs[$execution->id] = $projectPairs[$execution->project] . "({$this->lang->project->disableExecution})";
+        }
+        return $executionPairs;
+    }
+
+    /**
+     * 批量处理执行的名称。
+     * The name of the batch process execution.
+     *
+     * @param  array       $executions
+     * @param  object|bool $project
+     * @access protected
+     * @return array
+     */
+    protected function batchProcessName(array $executions, object|bool $project): array
+    {
+        if(!$project) return $executions;
+
+        if(isset($project->model) && in_array($project->model, array('waterfall', 'waterfallplus')))
         {
             $executionProducts = array();
-            if($project->hasProduct and ($project->stageBy == 'product'))
+            if($project->hasProduct && ($project->stageBy == 'product'))
             {
                 $executionProducts = $this->dao->select('t1.project, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                     ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
@@ -1957,7 +2001,7 @@ class executionModel extends model
             $allExecutions = $this->dao->select('id,name,parent,grade')->from(TABLE_EXECUTION)
                 ->where('type')->in('stage,sprint,kanban')
                 ->andWhere('deleted')->eq('0')
-                ->beginIf($projectID)->andWhere('project')->eq($projectID)->fi()
+                ->andWhere('project')->eq($project->id)
                 ->fetchAll('id');
 
             $parents = array();
@@ -1973,7 +2017,7 @@ class executionModel extends model
                 }
 
                 $executionName = '';
-                $paths = array_slice(explode(',', trim($execution->path, ',')), 1);
+                $paths         = array_slice(explode(',', trim($execution->path, ',')), 1);
                 foreach($paths as $path)
                 {
                     if(isset($allExecutions[$path])) $executionName .= '/' . $allExecutions[$path]->name;
@@ -1982,34 +2026,6 @@ class executionModel extends model
                 if($executionName) $execution->name = ltrim($executionName, '/');
                 if(isset($executionProducts[$id])) $execution->name = $executionProducts[$id] . '/' . $execution->name;
             }
-        }
-
-        $projects = array();
-        if(empty($projectID))
-        {
-            $projects = $this->dao->select('t1.id,t1.name')->from(TABLE_PROJECT)->alias('t1')
-                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.id=t2.project')
-                ->where('t2.id')->in(array_keys($executions))
-                ->fetchPairs('id', 'name');
-        }
-        else
-        {
-            $projects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetchPairs('id', 'name');
-        }
-
-        if($pairs)
-        {
-            $this->app->loadLang('project');
-            $executionPairs = array();
-            foreach($executions as $execution)
-            {
-                $executionPairs[$execution->id]  = '';
-                $executionPairs[$execution->id] .= isset($projects[$execution->project]) ? ($projects[$execution->project] . '/') : '';
-                $executionPairs[$execution->id] .= $execution->name;
-
-                if(empty($execution->multiple)) $executionPairs[$execution->id] = $projects[$execution->project] . "({$this->lang->project->disableExecution})";
-            }
-            $executions = $executionPairs;
         }
 
         return $executions;
@@ -5287,6 +5303,7 @@ class executionModel extends model
     }
 
     /**
+     * 给执行列表重新排序。
      * Reset execution orders.
      *
      * @param  array  $executions
@@ -5294,7 +5311,7 @@ class executionModel extends model
      * @access public
      * @return array
      */
-    public function resetExecutionSorts($executions, $parentExecutions = array())
+    public function resetExecutionSorts(array $executions, array $parentExecutions = array()): array
     {
         if(empty($executions)) return array();
         if(empty($parentExecutions))
