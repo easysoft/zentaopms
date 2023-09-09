@@ -53,7 +53,11 @@ foreach($blames as $key => $blame)
     $blames[$key]['content'] = htmlSpecialString($blame['content']);
 }
 
-foreach($blames as $key => $blame) $blames[$key] = (object)$blame;
+foreach($blames as $key => $blame)
+{
+    $blame['content'] = str_replace(' ', '&nbsp;&nbsp;', $blame['content']);
+    $blames[$key] = (object)$blame;
+}
 
 $blames = initTableData($blames, $config->repo->blameDtable->fieldList, $this->repo);
 
