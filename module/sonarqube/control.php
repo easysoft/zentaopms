@@ -295,6 +295,7 @@ class sonarqube extends control
         $this->view->title                = $this->lang->sonarqube->common . $this->lang->colon . $this->lang->sonarqube->browseProject;
         $this->view->sonarqubeID          = $sonarqubeID;
         $this->view->sonarqubeProjectList = (empty($sonarqubeProjectList) or empty($sonarqubeProjectList[$pageID - 1])) ? array() : $sonarqubeProjectList[$pageID - 1];
+
         $this->view->projectJobPairs      = $projectJobPairs;
         $this->view->orderBy              = $orderBy;
         $this->view->successJobs          = $successJobs;

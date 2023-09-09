@@ -40,7 +40,7 @@
 <div id='mainContent' class='main-row'>
   <form class='main-table' id='ajaxForm' method='post'>
     <table id='sonarqubeProjectList' class='table has-sort-head table-fixed'>
-      <?php $vars = "sonarqubeID={$sonarqubeID}&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+      <?php $vars = "sonarqubeID={$sonarqubeID}&orderBy=%s&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
       <thead>
         <tr>
           <th class='c-key text-left'><?php common::printOrderLink('key', $orderBy, $vars, $lang->sonarqube->projectKey);?></th>
