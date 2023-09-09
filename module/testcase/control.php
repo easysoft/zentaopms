@@ -612,7 +612,7 @@ class testcase extends control
             $modules        = $this->tree->getAllChildID($modules);
         }
 
-        $storyStatus = $this->story->getStatusList('noclosed');
+        $storyStatus = $this->story->getStatusList('active');
         $stories     = $this->story->getProductStoryPairs($productID, $branch, $modules, $storyStatus, 'id_desc', 0, 'full', 'story', false);
         if($this->app->tab != 'qa' and $this->app->tab != 'product')
         {
