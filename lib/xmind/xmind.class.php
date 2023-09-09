@@ -94,7 +94,7 @@ class xmind
 
         foreach($sceneMaps as $key => $scene)
         {
-            if($scene->parentID != $parentScene->sceneID + CHANGEVALUE) continue;
+            if($scene->parentID != $parentScene->sceneID) continue;
 
             $suffix    = $config['scene'].':'.$scene->sceneID;
             $sceneNode = $this->createNode($xmlDoc, $scene->sceneName, $suffix, array('nodeType'=>'scene'));
