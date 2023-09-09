@@ -45,7 +45,7 @@ class history extends wg
             && !empty($actions) && end($actions) == $action
             && trim($action->comment) !== ''
             && str_contains(',view,objectlibs,viewcard,', ",$methodName,")
-            && $action->actor == $app->user->account
+            && $action->account == $app->user->account
             && common::hasPriv('action', 'editComment');
     }
 
@@ -173,6 +173,7 @@ class history extends wg
         $i = 0;
         foreach($actions as $action)
         {
+            $action->account = $action->actor;
             if($action->action === 'assigned' || $action->action === 'toaudit') $action->extra = zget($users, $action->extra);
             $action->actor = zget($users, $action->actor);
             if(str_contains($action->actor, ':')) $action->actor = substr($action->actor, strpos($action->actor, ':') + 1);
