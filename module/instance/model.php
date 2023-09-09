@@ -50,6 +50,20 @@ class InstanceModel extends model
     }
 
     /**
+     * 根据应用url获取应用信息。
+     * Get a application by url.
+     *
+     * @param  string $url
+     * @access public
+     * @return object
+     */
+    public function getByUrl(string $url)
+    {
+        $url = str_replace(array('https://', 'http://'), '', trim($url));
+        return $this->dao->select('id')->from(TABLE_INSTANCE)->where('domain')->eq($url)->fetch();
+    }
+
+    /**
      * Get by id list.
      *
      * @param  array $idList

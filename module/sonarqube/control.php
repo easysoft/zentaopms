@@ -288,8 +288,18 @@ class sonarqube extends control
         /* Get success jobs of sonarqube.*/
         $projectJobPairs = $this->loadModel('job')->getJobBySonarqubeProject($sonarqubeID, $projectKeyList);
         $successJobs     = $this->loadModel('compile')->getSuccessJobs($projectJobPairs);
+        $sonarqube       = $this->loadModel('pipeline')->getByID($sonarqubeID);
+        $instance        = $this->loadModel('instance')->getByUrl($sonarqube->url);
 
-        $this->view->sonarqube            = $this->loadModel('pipeline')->getByID($sonarqubeID);
+        $sonarqube->instanceID = $sonarqube->id;
+        $sonarqube->type       = 'external';
+        if(!empty($instance->id))
+        {
+            $sonarqube->instanceID = $instance->id;
+            $sonarqube->type       = 'store';
+        }
+
+        $this->view->sonarqube            = $sonarqube;
         $this->view->keyword              = urldecode(urldecode($keyword));
         $this->view->pager                = $pager;
         $this->view->title                = $this->lang->sonarqube->common . $this->lang->colon . $this->lang->sonarqube->browseProject;

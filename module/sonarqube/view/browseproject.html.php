@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class='pull-left'>
-    <?php echo html::a($this->createLink('sonarqube', 'browse'), "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "class='btn btn-secondary'");?>
+    <?php echo html::a($this->createLink('instance', 'view', "id={$sonarqube->instanceID}&type={$sonarqube->type}"), "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "class='btn btn-secondary'");?>
   </div>
   <div class="btn-toolbar pull-left">
     <div>
