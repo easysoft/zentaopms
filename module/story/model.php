@@ -1753,8 +1753,10 @@ class storyModel extends model
             $story->reviewedDate   = $now;
             $story->lastEditedBy   = $this->app->user->account;
             $story->lastEditedDate = $now;
-            $story->reviewedBy     = $oldStory->reviewedBy . ',' . $this->app->user->account;
             $story->status         = $oldStory->status;
+
+            $reviewedBy        = array_unique(explode(',', $oldStory->reviewedBy . ',' . $this->app->user->account));
+            $story->reviewedBy = implode(',', $reviewedBy);
 
             $this->dao->update(TABLE_STORYREVIEW)->set('result')->eq($result)->set('reviewDate')->eq($now)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->eq($this->app->user->account)->exec();
 
@@ -6792,7 +6794,7 @@ class storyModel extends model
                 if($col->name == 'estimate')   $story->estimate  .= $this->config->hourUnit;
                 if($col->name == 'reviewedBy')
                 {
-                    $reviewers = array_filter(explode(',', $story->reviewedBy));
+                    $reviewers = array_unique(array_filter(explode(',', $story->reviewedBy)));
                     $reviewers = array_map(function($reviewer) use($users){return zget($users, $reviewer);}, $reviewers);
                     $story->reviewedBy = join(' ', $reviewers);
                 }
