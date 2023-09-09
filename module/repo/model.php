@@ -14,7 +14,7 @@ class repoModel extends model
         $acl     = !empty($repo->acl->acl) ? $repo->acl->acl : 'custom';
 
         if(strpos(",{$this->app->company->admins},", ",$account,") !== false || $acl == 'open') return true;
-        if($acl == 'custom' && empty($repo->acl->groups) && empty($repo->acl->users)) return true;
+        if($acl == 'custom' && empty(array_filter($repo->acl->groups)) && empty(array_filter($repo->acl->users))) return true;
 
         if($acl == 'private')
         {
