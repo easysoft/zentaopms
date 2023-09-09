@@ -828,5 +828,7 @@ $lang->action->dynamicAction->task['gitcommited'] = 'git提交';
 $lang->action->dynamicAction->bug['repocreated']  = '創建代碼評審';
 $lang->action->desc->createmr                     = '$extra';
 $lang->action->desc->mergedmr                     = '$date, 由 <strong>$actor</strong> 合併了 <a href="$extra">代碼</a>。';
+$lang->action->desc->compilefail                  = '$date, 由 <strong>$actor</strong> 構建失敗。';
+$lang->action->desc->compilepass                  = '$date, 由 <strong>$actor</strong> 構建成功。';
 $lang->action->desc->approve                      = '$date, 由 <strong>$actor</strong> 審核通過。';
 $lang->action->desc->reject                       = '$date, 由 <strong>$actor</strong> 拒絶。';
