@@ -251,22 +251,22 @@ class testreport extends control
 
             $execution     = $this->execution->getById($executionID);
             $tasks         = $this->testtask->getExecutionTasks($executionID, $objectType);
-            $task          = $objectID ? $this->testtask->getById($objectID) : key($tasks);
+            $task          = $objectID ? $this->testtask->getById($extra) : key($tasks);
             $owners        = array();
             $buildIdList   = array();
             $productIdList = array();
-            foreach($tasks as $i => $task)
+            foreach($tasks as $i => $testtask)
             {
-                if(!empty($extra) and strpos(",{$extra},", ",{$task->id},") === false)
+                if(!empty($extra) and strpos(",{$extra},", ",{$testtask->id},") === false)
                 {
                     unset($tasks[$i]);
                     continue;
                 }
 
-                $owners[$task->owner] = $task->owner;
-                $productIdList[$task->product] = $task->product;
-                $this->setChartDatas($task->id);
-                if($task->build != 'trunk') $buildIdList[$task->build] = $task->build;
+                $owners[$testtask->owner] = $testtask->owner;
+                $productIdList[$testtask->product] = $testtask->product;
+                $this->setChartDatas($testtask->id);
+                if($testtask->build != 'trunk') $buildIdList[$testtask->build] = $testtask->build;
             }
             if(count($productIdList) > 1)
             {
