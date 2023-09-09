@@ -434,6 +434,8 @@ class baseRouter
 
         if($this->config->framework->multiLanguage) $this->loadLang('common');
         if($this->config->framework->multiTheme)    $this->setClientTheme();
+
+        $this->setVisionPrefix();
     }
 
     /**
@@ -825,6 +827,23 @@ class baseRouter
         if($vision and strpos($this->config->visions, ",{$vision},") === false) $vision = $defaultVision;
 
         $this->config->vision = $vision ? $vision : $defaultVision;
+    }
+
+    /**
+     * 设置版本名称的DevOps前缀。
+     * Set prefix of version name if inQuickon is true.
+     *
+     * @access public
+     * @return void
+     */
+    public function setVisionPrefix()
+    {
+        if(!$this->config->inQuickon) return;
+        if(!in_array($this->clientLang, array('zh-cn', 'zh-tw'))) $this->config->versionPrefix .= ' ';
+        if(isset($this->lang->maxName)) $this->lang->maxName = $this->config->versionPrefix . $this->lang->maxName;
+        if(isset($this->lang->bizName)) $this->lang->bizName = $this->config->versionPrefix . $this->lang->bizName;
+        if(isset($this->lang->pmsName)) $this->lang->pmsName = $this->config->versionPrefix . $this->lang->pmsName;
+        if(isset($this->lang->ipdName)) $this->lang->ipdName = trim($this->config->versionPrefix) . ' ' . $this->lang->ipdName;
     }
 
     /**
