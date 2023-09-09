@@ -249,13 +249,26 @@ class repoModel extends model
      */
     public function create(object $repo, bool $isPipelineServer): int|false
     {
+        if($isPipelineServer)
+        {
+            $serviceProject = $this->dao->select('*')->from(TABLE_REPO)
+                ->where('`SCM`')->eq($repo->SCM)
+                ->andWhere('`serviceHost`')->eq($repo->serviceHost)
+                ->andWhere('`serviceProject`')->eq($repo->serviceProject)
+                ->fetch();
+            if($serviceProject)
+            {
+                dao::$errors['serviceProject'][] = $this->lang->repo->error->projectUnique;
+                return false;
+            }
+        }
+
         $this->dao->insert(TABLE_REPO)->data($repo, 'serviceToken')
             ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
             ->batchCheckIF($repo->SCM != 'Gitlab', 'path,client', 'notempty')
             ->batchCheckIF($isPipelineServer, 'serviceHost,serviceProject', 'notempty')
             ->batchCheckIF($repo->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
             ->check('name', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($repo->SCM))
-            ->checkIF($isPipelineServer && $repo->serviceProject, 'serviceProject', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($repo->SCM) . " and `serviceHost` = " . $this->dao->sqlobj->quote($repo->serviceHost))
             ->checkIF(!$isPipelineServer, 'path', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($repo->SCM) . " and `serviceHost` = " . $this->dao->sqlobj->quote($repo->serviceHost))
             ->autoCheck()
             ->exec();
@@ -361,6 +374,21 @@ class repoModel extends model
             $data->prefix = '';
         }
 
+        if($isPipelineServer)
+        {
+            $serviceProject = $this->dao->select('*')->from(TABLE_REPO)
+                ->where('`SCM`')->eq($data->SCM)
+                ->andWhere('`serviceHost`')->eq($data->serviceHost)
+                ->andWhere('`serviceProject`')->eq($data->serviceProject)
+                ->andWhere('id')->ne($id)
+                ->fetch();
+            if($serviceProject)
+            {
+                dao::$errors['serviceProject'][] = $this->lang->repo->error->projectUnique;
+                return false;
+            }
+        }
+
         if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
         $this->dao->update(TABLE_REPO)->data($data, 'serviceToken')
             ->batchCheck($this->config->repo->edit->requiredFields, 'notempty')
@@ -368,7 +396,6 @@ class repoModel extends model
             ->batchCheckIF($isPipelineServer, 'serviceHost,serviceProject', 'notempty')
             ->batchCheckIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
             ->check('name', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($data->SCM) . " and `id` != $id")
-            ->checkIF($isPipelineServer && $data->serviceProject, 'serviceProject', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($data->SCM) . " and `serviceHost` = " . $this->dao->sqlobj->quote($data->serviceHost) . " and `id` != $id")
             ->checkIF(!$isPipelineServer, 'path', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($data->SCM) . " and `serviceHost` = " . $this->dao->sqlobj->quote($data->serviceHost) . " and `id` != $id")
             ->autoCheck()
             ->where('id')->eq($id)->exec();

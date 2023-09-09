@@ -235,6 +235,7 @@ $lang->repo->error->differentVersions = 'The criterion and contrast cannot be th
 $lang->repo->error->needTwoVersion    = 'Two branches or tags must be selected.';
 $lang->repo->error->emptyVersion      = 'Version cannot be empty';
 $lang->repo->error->versionError      = 'Wrong version format!';
+$lang->repo->error->projectUnique     = $lang->repo->serviceProject . " exists. Go to Admin->System->Data->Recycle Bin to restore it, if you are sure it is deleted.";
 
 $lang->repo->syncTips          = '<strong>Vous pouvez trouver la référence sur la façon de définir la synchronisation Git à partir de la page se trouvant <a target="_blank" href="https://www.zentao.pm/book/zentaomanual/free-open-source-project-management-software-git-105.html">ici</a>.</strong>';
 $lang->repo->encodingsTips     = "Les encodages des commentaires de validation peuvent être des valeurs séparées par des virgules，ex: utf-8";
