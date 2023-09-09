@@ -12,6 +12,7 @@ class repoModel extends model
     {
         $account = $this->app->user->account;
         $acl     = !empty($repo->acl->acl) ? $repo->acl->acl : 'custom';
+        if(empty($repo->acl))         $repo->acl = new stdclass();
         if(empty($repo->acl->users))  $repo->acl->users  = array();
         if(empty($repo->acl->groups)) $repo->acl->groups = array();
 
