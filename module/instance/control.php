@@ -137,8 +137,7 @@ class instance extends control
         {
             $url      = strstr(getWebRoot(true), ':', true) . '://' . $instance->domain;
             $pipeline = $this->loadModel('pipeline')->getByUrl($url);
-            $instance->externalID = $pipeline->id;
-            
+            $instance->externalID = !empty($pipeline) ? $pipeline->id : 0;
         }
 
         $this->view->title           = $instance->appName;

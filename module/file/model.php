@@ -1082,7 +1082,7 @@ class fileModel extends model
         if($type == 'file' and stripos($content, $this->savePath) !== 0) helper::end();
 
         /* Append the extension name auto. */
-        $extension = '.' . $fileType;
+        $extension = $fileType ? '.' . $fileType : '';
         if(strpos($fileName, $extension) === false) $fileName .= $extension;
 
         /* urlencode the filename for ie. */

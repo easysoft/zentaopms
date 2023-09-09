@@ -41,7 +41,7 @@ class instanceZen extends instance
         $pipeline->token       = zget($tempMappings, 'api_token', '');
         $pipeline->account     = zget($tempMappings, 'z_username', '');
         $pipeline->password    = zget($tempMappings, 'z_password', '');
-        if($instance->appID === 60) $pipeline->token = base64_encode($pipeline->token . ':');
+        if($instance->appID == 60) $pipeline->token = base64_encode($pipeline->token . ':');
         if(empty($pipeline->account)) $pipeline->account = zget($tempMappings, 'admin_username', '');
 
         $this->pipeline->create($pipeline);
