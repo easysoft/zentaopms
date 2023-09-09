@@ -60,6 +60,7 @@ div(
         (
             set::arrow(false),
             set::staticMenu(true),
+            on::click('#repoDownloadCode', 'downloadCode'),
             set::className('absolute top-0 right-0 z-10 monaco-dropmenu'),
             btn
             (

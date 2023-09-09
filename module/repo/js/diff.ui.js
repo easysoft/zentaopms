@@ -42,16 +42,16 @@ window.afterPageUpdate = function()
 
         $('.btn-left').on('click', function()  {arrowTabs('monacoTabs', 1);});
         $('.btn-right').on('click', function() {arrowTabs('monacoTabs', -2);});
-
-        $('#repoDownloadCode').on('click', function()
-        {
-            var url            = $(this).data('link');
-            var activeFilePath = $('#monacoTabs .nav-item .active').attr('href').substring(5).replace(/-/g, '=');
-            window.open(url.replace('{path}', activeFilePath));
-            return;
-        })
     }, 300);
 };
+
+window.downloadCode = function()
+{
+    var url            = $(this).data('link');
+    var activeFilePath = $('#monacoTabs .nav-item .active').attr('href').substring(5).replace(/-/g, '=');
+    window.open(url.replace('{path}', activeFilePath));
+    return;
+}
 
 /**
  * 点击左侧菜单打开详情tab。
