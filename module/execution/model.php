@@ -4476,44 +4476,6 @@ class executionModel extends model
     }
 
     /**
-     * Format tasks for tree.
-     *
-     * @param  array  $tasks
-     * @param  object $story
-     * @access public
-     * @return array
-     */
-    public function formatTasksForTree($tasks, $story = '')
-    {
-        static $users;
-        if(empty($users)) $users = $this->loadModel('user')->getPairs('noletter');
-
-        $taskItems = array();
-        foreach($tasks as $task)
-        {
-            $taskItem = new stdclass();
-            $taskItem->type         = 'task';
-            $taskItem->id           = $task->id;
-            $taskItem->title        = $task->name;
-            $taskItem->color        = $task->color;
-            $taskItem->pri          = (int)$task->pri;
-            $taskItem->status       = $task->status;
-            $taskItem->parent       = $task->parent;
-            $taskItem->estimate     = $task->estimate;
-            $taskItem->consumed     = $task->consumed;
-            $taskItem->left         = $task->left;
-            $taskItem->openedBy     = zget($users, $task->openedBy);
-            $taskItem->assignedTo   = zget($users, $task->assignedTo);
-            $taskItem->url          = helper::createLink('task', 'view', "task=$task->id");
-            $taskItem->storyChanged = $story and $story->status == 'active' and $story->version > $story->taskVersion;
-
-            $taskItems[] = $taskItem;
-        }
-
-        return $taskItems;
-    }
-
-    /**
      * 通过产品的ID列表获取计划数据。
      * Get plan data from the ID list of the product.
      *

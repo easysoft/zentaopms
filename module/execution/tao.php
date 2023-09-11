@@ -486,4 +486,43 @@ class executionTao extends executionModel
         /* Fix bug#3074, Update views for team members. */
         if($execution->acl != 'open') $this->updateUserView($executionID, 'sprint', $changedAccounts);
     }
+
+    /**
+     * 格式化任务树的数据。
+     * Format tasks for tree.
+     *
+     * @param  array     $tasks
+     * @param  object    $story
+     * @access protected
+     * @return array
+     */
+    protected function formatTasksForTree(array $tasks, object $story = null): array
+    {
+        static $users;
+        if(empty($users)) $users = $this->loadModel('user')->getPairs('noletter');
+
+        $taskItems = array();
+        foreach($tasks as $task)
+        {
+            $taskItem = new stdclass();
+            $taskItem->type         = 'task';
+            $taskItem->id           = $task->id;
+            $taskItem->title        = $task->name;
+            $taskItem->color        = $task->color;
+            $taskItem->pri          = (int)$task->pri;
+            $taskItem->status       = $task->status;
+            $taskItem->parent       = $task->parent;
+            $taskItem->estimate     = $task->estimate;
+            $taskItem->consumed     = $task->consumed;
+            $taskItem->left         = $task->left;
+            $taskItem->openedBy     = zget($users, $task->openedBy);
+            $taskItem->assignedTo   = zget($users, $task->assignedTo);
+            $taskItem->url          = helper::createLink('task', 'view', "task=$task->id");
+            $taskItem->storyChanged = $story && $story->status == 'active' && $story->version > $story->taskVersion;
+
+            $taskItems[] = $taskItem;
+        }
+
+        return $taskItems;
+    }
 }
