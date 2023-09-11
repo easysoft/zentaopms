@@ -2991,4 +2991,27 @@ class gitlabModel extends model
     {
         return commonModel::hasPriv('space', 'browse');
     }
+
+    /**
+     * 判断按钮是否显示在列表页。
+     * Judge an action is displayed in browse page.
+     *
+     * @param  object $sonarqube
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public static function isDisplay(object $sonarqube, string $action): bool
+    {
+        $action = strtolower($action);
+
+        if(!commonModel::hasPriv('space', 'browse')) return false;
+
+        if(!in_array(strtolower(strtolower($action)), array('browseproject', 'browsegroup', 'browseuser', 'browsebranch', 'browsetag')))
+        {
+            if(!commonModel::hasPriv('instance', 'manage')) return false;
+        }
+
+        return true;
+    }
 }

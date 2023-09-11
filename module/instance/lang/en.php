@@ -1,6 +1,7 @@
 <?PHP
 $lang->instance = new stdclass;
 $lang->instance->common           = 'Applications';
+$lang->instance->manage           = 'Manage Applications';
 $lang->instance->view             = 'Application Detail';
 $lang->instance->ajaxStatus       = 'Get Application Status';
 $lang->instance->ajaxStart        = 'Start Application';

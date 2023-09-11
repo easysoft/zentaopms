@@ -1,6 +1,7 @@
 <?php
 $lang->instance = new stdclass;
 $lang->instance->common           = '应用';
+$lang->instance->manage           = '管理应用';
 $lang->instance->view             = '应用详情';
 $lang->instance->ajaxStatus       = '获取应用状态';
 $lang->instance->ajaxStart        = '启动应用';

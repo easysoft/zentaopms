@@ -22,7 +22,7 @@ class sonarqube extends control
 
         if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
 
-        if(!in_array($methodName, array('browseproject', 'reportview', 'browseissue')))
+        if(!in_array(strtolower(strtolower($this->methodName)), array('browseproject', 'reportview', 'browseissue')))
         {
             if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
         }

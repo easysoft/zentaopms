@@ -20,14 +20,14 @@
     </form>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if(common::hasPriv('gitlab', 'create')) common::printLink('gitlab', 'createGroup', "gitlabID=$gitlabID", "<i class='icon icon-plus'></i> " . $lang->gitlab->group->create, '', "class='btn btn-primary'");?>
+    <?php if(common::hasPriv('instance', 'manage')) common::printLink('gitlab', 'createGroup', "gitlabID=$gitlabID", "<i class='icon icon-plus'></i> " . $lang->gitlab->group->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <?php if(empty($gitlabGroupList)):?>
 <div class="table-empty-tip">
   <p>
     <span class="text-muted"><?php echo $lang->noData;?></span>
-    <?php if(common::hasPriv('gitlab', 'create')):?>
+    <?php if(common::hasPriv('instance', 'manage')):?>
     <?php echo html::a($this->createLink('gitlab', 'createGroup', "gitlabID=$gitlabID"), "<i class='icon icon-plus'></i> " . $lang->gitlab->group->create, '', "class='btn btn-info'");?>
     <?php endif;?>
   </p>
@@ -60,9 +60,9 @@
           <td class='c-actions text-left'>
             <?php
             $isAdmin = ($app->user->admin or in_array($gitlabGroup->id, $adminGroupIDList)) ? true : false;
-            common::printLink('gitlab', 'manageGroupMembers', "gitlabID=$gitlabID&groupID=$gitlabGroup->id", "<i class='icon icon-team'></i> ", '',"title='{$lang->gitlab->group->manageMembers}' class='btn'");
-            echo common::buildIconButton('gitlab', 'editGroup', "gitlabID=$gitlabID&groupID=$gitlabGroup->id", '', 'list', 'edit', '', '', false, '', '', 0, $isAdmin);
-            echo common::buildIconButton('gitlab', 'deleteGroup', "gitlabID=$gitlabID&groupID=$gitlabGroup->id", '', 'list', 'trash', 'hiddenwin', '', false, '', '', 0, $isAdmin);
+            if($this->gitlab->isDisplay($gitlab, 'manageGroupMembers')) common::printLink('gitlab', 'manageGroupMembers', "gitlabID=$gitlabID&groupID=$gitlabGroup->id", "<i class='icon icon-team'></i> ", '',"title='{$lang->gitlab->group->manageMembers}' class='btn'");
+            if($this->gitlab->isDisplay($gitlab, 'editGroup')) echo common::buildIconButton('gitlab', 'editGroup', "gitlabID=$gitlabID&groupID=$gitlabGroup->id", '', 'list', 'edit', '', '', false, '', '', 0, $isAdmin);
+            if($this->gitlab->isDisplay($gitlab, 'deleteGroup')) echo common::buildIconButton('gitlab', 'deleteGroup', "gitlabID=$gitlabID&groupID=$gitlabGroup->id", '', 'list', 'trash', 'hiddenwin', '', false, '', '', 0, $isAdmin);
             ?>
           </td>
         </tr>
