@@ -6798,6 +6798,13 @@ class storyModel extends model
                     $reviewers = array_map(function($reviewer) use($users){return zget($users, $reviewer);}, $reviewers);
                     $story->reviewedBy = join(' ', $reviewers);
                 }
+                if($col->name == 'reviewer')
+                {
+                    $reviewers = array_unique(array_filter($story->reviewer));
+                    $reviewers = array_map(function($reviewer) use($users){return zget($users, $reviewer);}, $reviewers);
+                    $story->reviewer = join(' ', $reviewers);
+                    $story->reviewer = "<span title='{$story->reviewer}'>" . $story->reviewer . '</span>';
+                }
                 if($col->name == 'stage')
                 {
                     $maxStage = $story->stage;
