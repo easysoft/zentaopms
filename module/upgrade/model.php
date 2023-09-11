@@ -7799,6 +7799,7 @@ class upgradeModel extends model
 
             $projectID = $this->dao->lastInsertId();
 
+            $this->action->create('project', $projectID, 'openedbysystem');
             if($project->status == 'closed') $this->action->create('project', $projectID, 'closedbysystem');
 
             $project->id = $projectID;
