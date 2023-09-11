@@ -769,28 +769,30 @@ class testtaskModel extends model
     /**
      * Start testtask.
      *
-     * @param  int    $taskID
+     * @param  object $task
      * @access public
-     * @return void
+     * @return bool
      */
-    public function start($taskID)
+    public function start(object $task): bool
     {
-        $oldTesttask = $this->getByID($taskID);
-        $testtask = fixer::input('post')
-            ->add('id', $taskID)
-            ->add('status', 'doing')
-            ->add('realBegan', date('Y-m-d'))
-            ->stripTags($this->config->testtask->editor->start['id'], $this->config->allowedTags)
-            ->remove('comment')->get();
+        $taskID  = (int)$task->id;
+        $oldTask = $this->getByID($taskID);
 
-        $testtask = $this->loadModel('file')->processImgURL($testtask, $this->config->testtask->editor->start['id'], $this->post->uid);
-        $this->dao->update(TABLE_TESTTASK)->data($testtask)
+        $this->dao->update(TABLE_TESTTASK)->data($task, 'comment')
             ->autoCheck()
             ->checkFlow()
-            ->where('id')->eq((int)$taskID)
+            ->where('id')->eq($taskID)
             ->exec();
+        if(dao::isError()) return false;
 
-        if(!dao::isError()) return common::createChanges($oldTesttask, $testtask);
+        $changes = common::createChanges($oldTask, $task);
+        if($changes || $task->comment)
+        {
+            $actionID = $this->loadModel('action')->create('testtask', $taskID, 'Started', $task->comment);
+            $this->action->logHistory($actionID, $changes);
+        }
+
+        return !dao::isError();
     }
 
     /**
