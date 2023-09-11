@@ -797,45 +797,40 @@ class testtaskModel extends model
     }
 
     /**
-     * Close testtask.
+     * 关闭一个测试单。
+     * Close a testtask.
      *
+     * @param  object $task
      * @access public
-     * @return void
+     * @return bool
      */
-    public function close($taskID)
+    public function close(object $task): bool
     {
-        $oldTesttask = $this->getByID($taskID);
-        $testtask = fixer::input('post')
-            ->add('id', $taskID)
-            ->add('status', 'done')
-            ->stripTags($this->config->testtask->editor->close['id'], $this->config->allowedTags)
-            ->join('mailto', ',')
-            ->remove('comment,uid')
-            ->get();
+        $taskID = (int)$task->id;
+        $oldTask = $this->fetchByID($taskID);
+        if(!$oldTask) return false;
 
-        if($testtask->realFinishedDate <= $oldTesttask->begin)
-        {
-            dao::$errors[] = sprintf($this->lang->testtask->finishedDateLess, $oldTesttask->begin);
-            return false;
-        }
-        if($testtask->realFinishedDate > date("Y-m-d 00:00:00", strtotime("+1 day")))
-        {
-            dao::$errors[] = $this->lang->testtask->finishedDateMore;
-            return false;
-        }
+        if($task->realFinishedDate <= $oldTask->begin) dao::$errors['realFinishedDate'][] = sprintf($this->lang->testtask->finishedDateLess, $oldTask->begin);
+        if($task->realFinishedDate > date("Y-m-d 00:00:00", strtotime("+1 day"))) dao::$errors['realFinishedDate'][] = $this->lang->testtask->finishedDateMore;
+        if(dao::isError()) return false;
 
-        $testtask = $this->loadModel('file')->processImgURL($testtask, $this->config->testtask->editor->close['id'], $this->post->uid);
-        $this->dao->update(TABLE_TESTTASK)->data($testtask)
+        $this->dao->update(TABLE_TESTTASK)->data($task, 'comment,uid')
             ->autoCheck()
             ->checkFlow()
             ->where('id')->eq((int)$taskID)
             ->exec();
+        if(dao::isError()) return false;
 
-        if(!dao::isError())
+        $this->loadModel('file')->updateObjectID($task->uid, $taskID, 'testtask');
+
+        $changes = common::createChanges($oldTask, $task);
+        if($changes || $task->comment)
         {
-            $this->file->updateObjectID($this->post->uid, $taskID, 'testtask');
-            return common::createChanges($oldTesttask, $testtask);
+            $actionID = $this->loadModel('action')->create('testtask', $taskID, 'Closed', $task->comment);
+            $this->action->logHistory($actionID, $changes);
         }
+
+        return !dao::isError();
     }
 
     /**
