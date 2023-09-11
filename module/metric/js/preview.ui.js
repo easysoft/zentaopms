@@ -266,7 +266,7 @@ window.renderDTable = function()
         responsive: true,
         bordered: true,
         scrollbarHover: true,
-        height: function() { return $('.table-side').height(); },
+        height: 'auto',
         cols: resultHeader,
         data: resultData,
     });
