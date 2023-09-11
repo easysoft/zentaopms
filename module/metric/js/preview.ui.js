@@ -96,13 +96,19 @@ window.handleCheckboxChange = function($el)
 window.handleNavMenuClick = function($el)
 {
     var scope = $el.attr('id');
-    var itemSelector = 'menu.nav-ajax .nav-item a';
     window.ajaxGetMetrics(scope, '', function(metrics, total){
-        $(itemSelector).removeClass('active');
-        $(itemSelector).find('span.label').remove();
+        window.deactiveNavMenu();
+        window.hideAndResetFilterPanel();
         $el.addClass('active');
         $el.append(`<span class="label size-sm rounded-full white">${total}</span>`);
     })
+}
+
+window.deactiveNavMenu = function()
+{
+    var itemSelector = 'menu.nav-ajax .nav-item a';
+    $(itemSelector).removeClass('active');
+    $(itemSelector).find('span.label').remove();
 }
 
 window.ajaxGetMetrics = function(scope, filters = '', callback)
@@ -157,6 +163,19 @@ window.handleFilterToggle = function($el)
     $('.filter-panel').toggleClass('hidden');
 }
 
+window.hideAndResetFilterPanel = function()
+{
+    $('.filter-btn').removeClass('primary-600');
+    $('.filter-panel').addClass('hidden');
+
+    var $checkboxList = $('.filter-panel .panel').find('.panel-body .check-list-inline .checkbox-primary');
+    $checkboxList.each(function(index, elem){
+        $(elem).find('input').prop('checked', false);
+    });
+
+    window.updateFilterCheck();
+}
+
 window.handleFilterClearItem = function($el)
 {
     $el = $($el);
@@ -189,7 +208,10 @@ window.handleFilterClick = function()
 
     if(viewType == 'multiple')
     {
-        window.ajaxGetMetrics('filter', filterBase64);
+        window.ajaxGetMetrics('filter', filterBase64, function()
+        {
+            window.deactiveNavMenu();
+        });
         return;
     }
     loadPage($.createLink('metric', 'preview', 'scope=filter&viewType=' + viewType + '&metricID=0&filters=' + filterBase64));
