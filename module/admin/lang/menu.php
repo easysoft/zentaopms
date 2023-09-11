@@ -186,7 +186,7 @@ $lang->admin->menuList->platform['subMenu']['resource']    = array('link' => "{$
 $lang->admin->menuList->platform['subMenu']['setrules']    = array('link' => "{$lang->devops->rules}|repo|setrules|");
 
 $lang->admin->menuList->platform['tabMenu']['resource']['host']       = array('link' => "{$lang->devops->host}|host|browse|", 'alias' => 'create,edit,browse,view,treemap,changestatus,group', 'subModule' => 'tree');
-$lang->admin->menuList->platform['tabMenu']['resource']['serverroom'] = array('link' => "{$lang->devops->serverroom}|serverroom|browse|", 'alias' => 'ccreate,edit,view,browse');
+$lang->admin->menuList->platform['tabMenu']['resource']['serverroom'] = array('link' => "{$lang->devops->serverroom}|serverroom|browse|", 'alias' => 'create,edit,view,browse');
 $lang->admin->menuList->platform['tabMenu']['resource']['service']    = array('link' => "{$lang->devops->service}|service|browse|", 'alias' => 'create,edit,view,browse,manage');
 $lang->admin->menuList->platform['tabMenu']['resource']['account']    = array('link' => "{$lang->devops->account}|account|browse|", 'alias' => 'create,edit,view,browse');
 $lang->admin->menuList->platform['tabMenu']['resource']['domain']     = array('link' => "{$lang->devops->domain}|domain|browse|", 'alias' => 'create,edit,view,browse');
