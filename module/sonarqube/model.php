@@ -327,4 +327,24 @@ class sonarqubeModel extends model
 
         return $projectPairs;
     }
+
+    /**
+     * 判断按钮是否可点击。
+     * Judge an action is clickable or not.
+     *
+     * @param  object $sonarqube
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public static function isClickable(object $sonarqube, string $action): bool
+    {
+        $action = strtolower($action);
+
+        if($action == 'execjob')    return $sonarqube->exec == '';
+        if($action == 'reportview') return $sonarqube->report == '';
+
+        return true;
+    }
+
 }
