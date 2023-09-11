@@ -2906,18 +2906,16 @@ class executionModel extends model
      * 关联需求到项目或执行。
      * Link story for project or execution.
      *
-     * @param int    $executionID projectID|executionID
-     * @param array  $stories
-     * @param string $extra
-     * @param array  $lanes
-     *
+     * @param  int    $executionID projectID|executionID
+     * @param  array  $stories
+     * @param  string $extra
+     * @param  array  $lanes
      * @access public
      * @return bool
      */
-    public function linkStory(int $executionID, array $stories = array(), string $extra = '', array $lanes = array())
+    public function linkStory(int $executionID, array $stories = array(), string $extra = '', array $lanes = array()): bool
     {
         if(empty($executionID)) return false;
-        if(empty($stories)) $stories = $this->post->stories;
         if(empty($stories)) return false;
 
         $this->loadModel('action');
@@ -2926,15 +2924,15 @@ class executionModel extends model
         $linkedStories = $this->dao->select('story,`order`')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order_desc')->fetchPairs('story', 'order');
         $lastOrder     = reset($linkedStories);
         $storyList     = $this->dao->select('id, status, branch, product')->from(TABLE_STORY)->where('id')->in(array_values($stories))->fetchAll('id');
-        $execution     = $this->getById($executionID);
+        $execution     = $this->getByID($executionID);
 
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
         foreach($stories as $storyID)
         {
+            if(isset($linkedStories[$storyID])) continue;
             $notAllowedStatus = $this->app->rawMethod == 'batchcreate' ? 'closed' : 'draft,reviewing,closed';
             if(strpos($notAllowedStatus, $storyList[$storyID]->status) !== false) continue;
-            if(isset($linkedStories[$storyID])) continue;
 
             $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
             if(!empty($lanes[$storyID])) $laneID = $lanes[$storyID];
@@ -2964,6 +2962,7 @@ class executionModel extends model
         }
 
         if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($executionID, 'story');
+        return true;
     }
 
     /**

@@ -1345,44 +1345,31 @@ class executionTest
     /**
      * function linkStory test by execution
      *
-     * @param  string $executionID
-     * @param  string $count
-     * @param  array  $param
+     * @param  int    $executionID
+     * @param  int    $count
+     * @param  array  $stories
      * @access public
-     * @return array
+     * @return array|int
      */
-    public function linkStoryTest($executionID, $count, $param = array())
+    public function linkStoryTest(int $executionID, int $count, array $stories = array()): array|int
     {
-        global $tester;
 
-        $stories  = array();
-        $products = array();
-
-        $createFields = array('stories' => $stories, 'products' => $products);
-
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $tester->dbh->query("delete from zt_projectstory where project = $executionID");
-
-        $this->executionModel->linkStory($executionID);
-
-        unset($_POST);
+        $this->executionModel->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->exec();
+        $this->executionModel->linkStory($executionID, $stories);
 
         if(dao::isError())
         {
             $error = dao::getError();
             return $error;
         }
-        elseif($count == "1")
+        elseif($count == 1)
         {
-            $object = $tester->dbh->query("select * from zt_projectstory where project = $executionID")->fetchAll();
+            $object = $this->executionModel->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->fetchAll();
             return count($object);
         }
         else
         {
-            $object = $tester->dbh->query("select * from zt_projectstory where project = $executionID")->fetchAll();
-            return $object;
+            return $this->executionModel->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->fetchAll();
         }
     }
 
