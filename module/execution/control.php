@@ -1400,7 +1400,7 @@ class execution extends control
         $this->view->pmUsers              = $pmUsers;
         $this->view->qdUsers              = $qdUsers;
         $this->view->rdUsers              = $rdUsers;
-        $this->view->users                = $this->user->getPairs('nodeleted|noclosed');
+        $this->view->users                = $this->loadModel('user')->getPairs('nodeleted|noclosed');
         $this->view->groups               = $this->loadModel('group')->getPairs();
         $this->view->allProducts          = $allProducts;
         $this->view->linkedProducts       = $linkedProducts;
