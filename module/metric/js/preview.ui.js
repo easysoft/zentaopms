@@ -291,22 +291,12 @@ window.foldContent = function()
   $content.find('.gray-next').removeClass('gray-visible');
 }
 
-window.getMainSideHeight = function()
-{
-  return $('#mainContent .side .canvas').height();
-}
-
-window.recoverMainHeight = function(contentHeight)
-{
-  var sideHeight = window.getMainSideHeight();
-  $('.table-and-charts').css('height', sideHeight - contentHeight);
-}
-
 window.renderCheckedLabel = function()
 {
   var $content =  $('.checked-label-content');
   $content.empty();
 
+  var tpl   = $('#item-tpl').html();
   var labels = JSON.parse(JSON.stringify(window.checkedList));
   var multi  = labels.length > 1;
   var width  = Math.floor($content.width());
@@ -325,10 +315,14 @@ window.renderCheckedLabel = function()
     if(nextLine) classes += ' gray-next';
 
     var label = labels[i];
-    var html = '<span class="' + classes + '" metric-id="' + label.id + '">';
-    html    += '<div class="gray-pale-div" title="' + label.name + '">' + label.name + '</div>';
-    if(multi) html += '<button type="button" class="btn picker-deselect-btn size-sm square ghost" onclick="window.handleRemoveLabel(' + label.id + ')"><span class="close"></span></button>';
-    html    += '</span>';
+    var data  = 
+    {
+        id: label.id,
+        name: label.name,
+        spanClass: classes,
+        multiple: multi ? '' : 'hidden',
+    };
+    var html = $(zui.formatString(tpl, data));
 
     $content.append(html);
 
@@ -338,7 +332,7 @@ window.renderCheckedLabel = function()
     left = left - labelWidth;
     if(left <= 0)
     {
-      var $div     = $content.find('[metric-id="' + label.id + '"]').find('.gray-pale-div');
+      var $div     = $label.find('.gray-pale-div');
       var divWidth = $div.width();
 
       if(divWidth < -left)

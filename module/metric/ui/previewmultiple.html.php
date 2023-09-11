@@ -25,6 +25,32 @@ foreach($lang->metric->featureBar['preview'] as $value => $text)
     );
 }
 
+div
+(
+    set::id('item-tpl'),
+    setClass('hidden'),
+    span
+    (
+        setClass('{spanClass}'),
+        set('metric-id', '{id}'),
+        div
+        (
+             setClass('gray-pale-div'),
+             set('title', '{name}'),
+            '{name}',
+        ),
+        button
+        (
+            setClass('picker-deselect-btn size-sm square ghost {multiple}'),
+            set('onclick', 'window.handleRemoveLabel({id})'),
+            span
+            (
+                setClass('close'),
+            ),
+        ),
+    ),
+);
+
 $fnGenerateFilterPanel = function($code, $filterItem) use($lang)
 {
     $panelClass = $filterItem['class'];
