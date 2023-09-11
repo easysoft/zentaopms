@@ -1875,7 +1875,7 @@ class docModel extends model
             if(!$this->checkPrivDoc($doc)) unset($docs[$id]);
         }
 
-        $bugIdList = $testReportIdList = $caseIdList = $storyIdList = $planIdList = $releaseIdList = $executionIdList = $taskIdList = $buildIdList = $testtaskIdList = $issueIdList = $meetingIdList = $designIdList = $reviewIdList = 0;
+        $bugIdList = $testReportIdList = $caseIdList = $storyIdList = $planIdList = $releaseIdList = $executionIdList = $taskIdList = $buildIdList = $testtaskIdList = $issueIdList = $meetingIdList = $designIdList = $reviewIdList = $resultIdList = 0;
 
         $userView = $this->app->user->view->products;
         if($type == 'project') $userView = $this->app->user->view->projects;
@@ -1906,8 +1906,8 @@ class docModel extends model
             $casePairs = $this->dao->select('id')->from(TABLE_CASE)->where($type)->eq($objectID)->andWhere('deleted')->eq('0')->andWhere($type)->in($userView)->fetchPairs('id');
             if(!empty($casePairs)) $caseIdList = implode(',', $casePairs);
 
-            $testResult   = $this->dao->select('id,`case`')->from(TABLE_TESTRESULT)->where('case')->in($casePairs)->fetchPairs('id', 'case');
-            $resultIdList = implode(',', array_keys($testResult));
+            $testResult = $this->dao->select('id,`case`')->from(TABLE_TESTRESULT)->where('case')->in($casePairs)->fetchPairs('id', 'case');
+            if(!empty($testResult)) $resultIdList = implode(',', array_keys($testResult));
         }
         elseif($type == 'project')
         {
