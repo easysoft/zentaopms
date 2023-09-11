@@ -37,4 +37,5 @@ $config->testtask->form->edit['deleteFiles'] = array('required' => false, 'type'
 $config->testtask->form->start = array();
 $config->testtask->form->start['realBegan'] = array('required' => true,  'type' => 'date',   'default' => date('Y-m-d'));
 $config->testtask->form->start['status']    = array('required' => true,  'type' => 'string', 'default' => 'doing');
+$config->testtask->form->start['uid']       = array('required' => false, 'type' => 'string', 'default' => '');
 $config->testtask->form->start['comment']   = array('required' => false, 'type' => 'string', 'default' => '', 'control' => 'editor');

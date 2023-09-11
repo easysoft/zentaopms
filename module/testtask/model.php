@@ -779,7 +779,7 @@ class testtaskModel extends model
         $oldTask = $this->fetchByID($taskID);
         if(!$oldTask || $oldTask->status != 'wait') return false;
 
-        $this->dao->update(TABLE_TESTTASK)->data($task, 'comment')
+        $this->dao->update(TABLE_TESTTASK)->data($task, 'comment,uid')
             ->autoCheck()
             ->checkFlow()
             ->where('id')->eq($taskID)

@@ -66,7 +66,7 @@ class testtaskZen extends testtask
             ->add('id', $taskID)
             ->stripTags($this->config->testtask->editor->start['id'], $this->config->allowedTags)
             ->get();
-        return $this->loadModel('file')->processImgURL($task, $this->config->testtask->editor->start['id'], $this->post->uid);
+        return $this->loadModel('file')->processImgURL($task, $this->config->testtask->editor->start['id'], $task->uid);
     }
 
     /**
