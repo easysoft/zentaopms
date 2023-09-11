@@ -106,31 +106,47 @@ class testsuiteTest
         $objects = $this->objectModel->getById($suiteID, $setImgSize);
 
         if(dao::isError()) return dao::getError();
+        if($setImgSize == true) $objects->setImgSizeResult = strpos($objects->desc, 'setImageSize') !== false;
 
         return $objects;
     }
 
     /**
+     * 测试更新一个套件。
      * Test update a test suite.
      *
-     * @param  int   $suiteID
+     * @param  int    $suiteID
+     * @param  string $name
+     * @param  string $type
+     * @param  string $desc
+     * @param  string $uid
      * @access public
      * @return bool|array
      */
-    public function updateTest($suiteID, $name, $type)
+    public function updateTest(int $suiteID, string $name, string $type, string $desc, string $uid): bool|array
     {
         $suite = new stdclass();
         $suite->id   = $suiteID;
         $suite->name = $name;
-        $suite->desc = '';
+        $suite->desc = $desc;
         $suite->type = $type;
+    
+        if(!empty($uid))
+        {
+            global $tester;
+            $tester->session->set('album', array('used' => array($uid => array(1))));
+        }
 
-        $uid = 1;
         $objects = $this->objectModel->update($suite, $uid);
 
         if(dao::isError()) return dao::getError();
-
-        return $objects;
+        
+        foreach($objects as &$object)
+        {
+            if($object['field'] == 'desc') $object['result'] = $object['new'] == $desc;
+        }
+        
+        return $objects;    
     }
 
     /**
@@ -169,7 +185,12 @@ class testsuiteTest
         $objects = $this->objectModel->getLinkedCases($suiteID, $orderBy, $pager, $append);
 
         if(dao::isError()) return dao::getError();
-
+        
+        if(!$append)
+        {
+            foreach($objects as $object) $object->results = 'a';
+        }
+    
         return $objects;
     }
 

@@ -27,5 +27,5 @@ $testsuite = new testsuiteTest();
 
 r($testsuite->getUnlinkedCasesTest($suiteID[0], $param[0])) && p('0:id,title;1:id,title') && e('2,这个是测试用例2;1,这个是测试用例1');  //测试suiteID值为1,param值为0
 r($testsuite->getUnlinkedCasesTest($suiteID[1], $param[0])) && p('0:id,title;1:id,title') && e('2,这个是测试用例2;1,这个是测试用例1');  //测试suiteID值为2,param值为0
-r($testsuite->getUnlinkedCasesTest($suiteID[1], $param[1])) && p('0:id,title') && e('1,这个是测试用例1');  //测试suiteID值为2,param值为1
-r($testsuite->getUnlinkedCasesTest($suiteID[0], $param[1])) && p('0:id,title') && e('1,这个是测试用例1');  //测试suiteID值为1,param值为1
+r($testsuite->getUnlinkedCasesTest($suiteID[1], $param[1])) && p('0:id,title')            && e('1,这个是测试用例1');                    //测试suiteID值为2,param值为1
+r($testsuite->getUnlinkedCasesTest($suiteID[0], $param[1])) && p('0:id,title')            && e('1,这个是测试用例1');                    //测试suiteID值为1,param值为1
