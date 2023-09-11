@@ -33,3 +33,8 @@ $config->testtask->form->edit['pri']         = array('required' => false, 'type'
 $config->testtask->form->edit['desc']        = array('required' => false, 'type' => 'string', 'default' => '', 'control' => 'editor');
 $config->testtask->form->edit['mailto']      = array('required' => false, 'type' => 'array',  'default' => array(), 'filter' => 'join');
 $config->testtask->form->edit['deleteFiles'] = array('required' => false, 'type' => 'array',  'default' => array(), 'filter' => 'join');
+
+$config->testtask->form->start = array();
+$config->testtask->form->start['realBegan'] = array('required' => true,  'type' => 'date',   'default' => date('Y-m-d'));
+$config->testtask->form->start['status']    = array('required' => true,  'type' => 'string', 'default' => 'doing');
+$config->testtask->form->start['comment']   = array('required' => false, 'type' => 'string', 'default' => '', 'control' => 'editor');
