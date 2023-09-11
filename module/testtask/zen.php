@@ -70,6 +70,23 @@ class testtaskZen extends testtask
     }
 
     /**
+     * 构建关闭测试单的数据。
+     * Build task for close a testtask.
+     *
+     * @param  int       $taskID
+     * @access protected
+     * @return object
+     */
+    protected function buildTaskForClose(int $taskID): object
+    {
+        $task = form::data($this->config->testtask->form->close)
+            ->add('id', $taskID)
+            ->stripTags($this->config->testtask->editor->close['id'], $this->config->allowedTags)
+            ->get();
+        return $this->loadModel('file')->processImgURL($task, $this->config->testtask->editor->close['id'], $task->uid);
+    }
+
+    /**
      * 检查编辑的测试单数据是否符合要求。
      * Check task for editing.
      *
