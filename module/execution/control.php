@@ -1957,7 +1957,7 @@ class execution extends control
         $this->view->execution   = $execution;
         $this->view->executionID = $executionID;
         $this->view->level       = $type;
-        $this->view->tree        = $this->execution->printTree($tree, $project->hasProduct);
+        $this->view->tree        = $this->execution->buildTree($tree, $project->hasProduct);
         $this->view->features    = $this->execution->getExecutionFeatures($execution);
         $this->display();
     }

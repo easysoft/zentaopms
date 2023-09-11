@@ -2628,12 +2628,12 @@ class executionTest
      * @access public
      * @return string
      */
-    public function printTreeTest($executionID)
+    public function buildTreeTest($executionID)
     {
         global $app;
         $app->moduleName = 'task';
         $tree = $this->executionModel->getTree($executionID);
-        return $this->executionModel->printTree($tree);
+        return $this->executionModel->buildTree($tree);
     }
 
     /**

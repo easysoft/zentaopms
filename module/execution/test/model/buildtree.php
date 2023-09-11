@@ -60,7 +60,7 @@ $related->gen(5);
 
 /**
 
-title=测试executionModel->printTree();
+title=测试executionModel->buildTree();
 timeout=0
 cid=1
 
@@ -69,8 +69,8 @@ cid=1
 $execution = new executionTest();
 $executionIDList = array(0, 3);
 
-r($execution->printTreeTest($executionIDList[0])) && p() && e('0'); // 查询不存在的执行
+r($execution->buildTreeTest($executionIDList[0])) && p() && e('0'); // 查询不存在的执行
 
-$tree = $execution->printTreeTest($executionIDList[1]);
+$tree = $execution->buildTreeTest($executionIDList[1]);
 r(count($tree[0]['children'])) && p()               && e('1');                                               // 查询存在的执行
 r($tree[0])                    && p('content:html') && e("<span class=' title' title='模块1'>模块1</span>"); // 查询存在的执行

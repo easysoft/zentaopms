@@ -4607,14 +4607,15 @@ class executionModel extends model
     }
 
     /**
-     * Print html for tree.
+     * 构造树状图的数据。
+     * Build tree data.
      *
      * @param  array $trees
      * @param  bool  $hasProduct
      * @access pubic
      * @return array
      */
-    public function printTree(array $trees, bool $hasProduct = true): array
+    public function buildTree(array $trees, bool $hasProduct = true): array
     {
         $treeData = array();
         foreach($trees as $index => $tree)
@@ -4658,7 +4659,7 @@ class executionModel extends model
             if(isset($tree->children))
             {
                 if($tree->type == 'task') $treeData[$index]['content']['html'] = "<div class='tree-toggle'><span class='title' title='{$tree->title}'>{$tree->title}</span></div>";
-                $treeData[$index]['children'] = $this->printTree($tree->children, $hasProduct);
+                $treeData[$index]['children'] = $this->buildTree($tree->children, $hasProduct);
             }
         }
         return $treeData;
