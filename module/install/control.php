@@ -38,7 +38,6 @@ class install extends control
 
         $this->view->title = $this->lang->install->welcome;
 
-        if($this->config->versionPrefix) $this->config->version = $this->lang->{$this->config->edition . 'Name'} . str_replace(array('max', 'biz', 'ipd'), '', $this->config->version);
         if(!isset($this->view->versionName)) $this->view->versionName = $this->config->version; // If the versionName variable has been defined in the max version, it cannot be defined here to avoid being overwritten.
         if($this->config->inQuickon)
         {
