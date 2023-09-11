@@ -35,13 +35,25 @@ class testtaskTest
         return $objects;
     }
 
-    public function startTest($taskID)
+    /**
+     * 测试开始一个测试单。
+     * Test start a testtask.
+     *
+     * param  array  $task
+     * access public
+     * return bool|array
+     */
+    public function startTest(array $task): bool|array
     {
-        $objects = $this->objectModel->start($taskID);
-
+        $result = $this->objectModel->start((object)$task);
         if(dao::isError()) return dao::getError();
+        if(!$result) return $result;
 
-        return $objects;
+        $task    = $this->objectModel->getById($task['id']);
+        $action  = $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(1)->fetch();
+        $history = $this->objectModel->dao->select('*')->from(TABLE_HISTORY)->where('action')->eq($action->id)->fetchAll();
+
+        return array('task' => $task, 'action' => $action, 'history' => $history);
     }
 
     public function closeTest($taskID)
