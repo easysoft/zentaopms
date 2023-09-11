@@ -232,197 +232,49 @@ class executionModel extends model
      * @access public
      * @return bool|int
      */
-    public function create()
+    public function create(object $execution, array $postMembers)
     {
-        $this->lang->execution->team = $this->lang->execution->teamName;
-
-        if(empty($_POST['project']))
-        {
-            dao::$errors['message'][] = $this->lang->execution->projectNotEmpty;
-            return false;
-        }
-
-        $this->checkBeginAndEndDate($_POST['project'], $_POST['begin'], $_POST['end']);
-        if(dao::isError()) return false;
-
-        if($_POST['products'])
-        {
-            $this->app->loadLang('project');
-            $multipleProducts = $this->loadModel('product')->getMultiBranchPairs();
-            foreach($_POST['products'] as $index => $productID)
-            {
-                if(isset($multipleProducts[$productID]) && !isset($_POST['branch'][$index]))
-                {
-                    dao::$errors[] = $this->lang->project->emptyBranch;
-                    return false;
-                }
-            }
-        }
-
-        /* Determine whether to add a sprint or a stage according to the model of the execution. */
-        $project = $this->loadModel('project')->getByID($_POST['project']);
-        $type    = 'sprint';
-        if($project) $type = zget($this->config->execution->modelList, $project->model, 'sprint');
-
-        if($project->model == 'waterfall' || $project->model == 'waterfallplus')
-        {
-            $_POST['products'] = array_filter($_POST['products']);
-            if(empty($_POST['products'])) dao::$errors['products0'] = $this->lang->project->errorNoProducts;
-            if(isset($this->config->setPercent) && $this->config->setPercent == 1) $this->checkWorkload('create', (int)$_POST['percent'], $project);
-            if(dao::isError()) return false;
-
-            $this->config->execution->create->requiredFields .= ',percent';
-        }
-
-        $this->config->execution->create->requiredFields .= ',project';
-
-        /* Judge workdays is legitimate. */
-        $workdays = helper::diffDate($_POST['end'], $_POST['begin']) + 1;
-        if(isset($_POST['days']) && $_POST['days'] > $workdays)
-        {
-            dao::$errors['days'] = sprintf($this->lang->project->workdaysExceed, $workdays);
-            return false;
-        }
-
-        /* Get the data from the post. */
-        $sprint = fixer::input('post')
-            ->setDefault('status', 'wait')
-            ->setDefault('openedBy', $this->app->user->account)
-            ->setDefault('openedDate', helper::now())
-            ->setDefault('openedVersion', $this->config->version)
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', helper::now())
-            ->setDefault('days', '0')
-            ->setDefault('team', $this->post->name)
-            ->setDefault('parent', $this->post->project)
-            ->setIF($this->post->parent, 'parent', $this->post->parent)
-            ->setIF($this->post->heightType == 'auto', 'displayCards', 0)
-            ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
-            ->setIF($this->post->acl == 'open', 'whitelist', '')
-            ->join('whitelist', ',')
-            ->setDefault('type', $type)
-            ->stripTags($this->config->execution->editor->create['id'], $this->config->allowedTags)
-            ->remove('products, workDays, delta, branch, uid, plans, teams, teamMembers, contactListMenu, heightType')
-            ->get();
-
-        if(!empty($sprint->parent) && ($sprint->project == $sprint->parent))
-        {
-            $project = $this->loadModel('project')->getByID($sprint->parent);
-            $sprint->hasProduct = $project->hasProduct;
-        }
-
-        if($this->post->heightType == 'custom' && !$this->loadModel('kanban')->checkDisplayCards($sprint->displayCards)) return;
-
-        /* Check the workload format and total. */
-        if(!empty($sprint->percent) && isset($this->config->setPercent) && $this->config->setPercent == 1) $this->checkWorkload('create', $sprint->percent, $sprint->project);
-
-        /* Set planDuration and realDuration. */
-        if($this->config->edition == 'max')
-        {
-            $sprint->planDuration = $this->loadModel('programplan')->getDuration($sprint->begin, $sprint->end);
-            if(!empty($sprint->realBegan) && !empty($sprint->realEnd)) $sprint->realDuration = $this->loadModel('programplan')->getDuration($sprint->realBegan, $sprint->realEnd);
-        }
-
-        $sprint = $this->loadModel('file')->processImgURL($sprint, $this->config->execution->editor->create['id'], $this->post->uid);
-
-        /* Redefines the language entries for the fields in the project table. */
-        foreach(explode(',', $this->config->execution->create->requiredFields) as $field)
-        {
-            if(isset($this->lang->execution->$field)) $this->lang->project->$field = $this->lang->execution->$field;
-        }
-
-        /* Replace required language. */
-        if($this->app->tab == 'project')
-        {
-            $this->lang->project->name = $this->lang->execution->name;
-            $this->lang->project->code = $this->lang->execution->code;
-        }
-        else
-        {
-            $this->lang->project->name = $this->lang->execution->execName;
-            $this->lang->project->code = $this->lang->execution->execCode;
-        }
-
-        $this->lang->error->unique = $this->lang->error->repeat;
-        $sprintProject = isset($sprint->project) ? $sprint->project : '0';
-        $this->dao->insert(TABLE_EXECUTION)->data($sprint)
+        $this->dao->insert(TABLE_EXECUTION)->data($execution)
             ->autoCheck('begin,end')
-            ->batchcheck($this->config->execution->create->requiredFields, 'notempty')
-            ->checkIF(!empty($sprint->name), 'name', 'unique', "`type` in ('sprint','stage', 'kanban') and `project` = $sprintProject and `deleted` = '0'")
-            ->checkIF(!empty($sprint->code), 'code', 'unique', "`type` in ('sprint','stage', 'kanban') and `deleted` = '0'")
-            ->checkIF($sprint->begin != '', 'begin', 'date')
-            ->checkIF($sprint->end != '', 'end', 'date')
-            ->checkIF($sprint->end != '', 'end', 'ge', $sprint->begin)
+            ->checkIF(!empty($execution->name), 'name', 'unique', "`type` in ('sprint','stage', 'kanban') and `project` = " . (int)$execution->project . " and `deleted` = '0'")
+            ->checkIF(!empty($execution->code), 'code', 'unique', "`type` in ('sprint','stage', 'kanban') and `deleted` = '0'")
+            ->checkIF($execution->begin != '', 'begin', 'date')
+            ->checkIF($execution->end != '', 'end', 'date')
+            ->checkIF($execution->end != '', 'end', 'ge', $execution->begin)
             ->checkFlow()
             ->exec();
 
         /* Add the creater to the team. */
-        if(!dao::isError())
+        if(dao::isError()) return false;
+
+        $executionID = $this->dao->lastInsertId();
+        $project     = $this->loadModel('project')->fetchByID($execution->project);
+        if(empty($project) || $project->model != 'kanban') $this->loadModel('kanban')->createExecutionLane($executionID);
+
+        /* Api create infinitus stages. */
+        if(isset($execution->parent) && ($execution->parent != $execution->project) && $execution->type == 'stage')
         {
-            $executionID = $this->dao->lastInsertId();
-            $today       = helper::today();
-            $teamMembers = array();
-
-            if((isset($project) && $project->model != 'kanban') || empty($project)) $this->loadModel('kanban')->createExecutionLane($executionID);
-
-            /* Api create infinitus stages. */
-            if(isset($sprint->parent) && ($sprint->parent != $sprint->project) && $sprint->type == 'stage')
-            {
-                $parent = $this->getByID($sprint->parent);
-                $grade  = $parent->grade + 1;
-                $path   = rtrim($parent->path, ',') . ",{$executionID}";
-                $this->dao->update(TABLE_EXECUTION)->set('path')->eq($path)->set('grade')->eq($grade)->where('id')->eq($executionID)->exec();
-            }
-
-            /* Save order. */
-            $this->dao->update(TABLE_EXECUTION)->set('`order`')->eq($executionID * 5)->where('id')->eq($executionID)->exec();
-            $this->file->updateObjectID($this->post->uid, $executionID, 'execution');
-
-            /* Update the path. */
-            $this->setTreePath($executionID);
-
-            /* Set team of execution. */
-            $members = isset($_POST['teamMembers']) ? $_POST['teamMembers'] : array();
-            array_push($members, $sprint->PO, $sprint->QD, $sprint->PM, $sprint->RD, $sprint->openedBy);
-            $members = array_unique($members);
-            $roles   = $this->loadModel('user')->getUserRoles(array_values($members));
-            foreach($members as $account)
-            {
-                if(empty($account)) continue;
-
-                $member = new stdClass();
-                $member->root    = $executionID;
-                $member->type    = 'execution';
-                $member->account = $account;
-                $member->role    = zget($roles, $account, '');
-                $member->join    = $today;
-                $member->days    = $sprint->days;
-                $member->hours   = $this->config->execution->defaultWorkhours;
-                $this->dao->insert(TABLE_TEAM)->data($member)->exec();
-                $teamMembers[$account] = $member;
-            }
-            $this->addProjectMembers($sprint->project, $teamMembers);
-
-            /* Create doc lib. */
-            $this->app->loadLang('doc');
-            $lib = new stdclass();
-            $lib->project   = $sprintProject;
-            $lib->execution = $executionID;
-            $lib->name      = $type == 'stage' ? str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doclib->main['execution']) : $this->lang->doclib->main['execution'];
-            $lib->type      = 'execution';
-            $lib->main      = '1';
-            $lib->acl       = 'default';
-            $lib->addedBy   = $this->app->user->account;
-            $lib->addedDate = helper::now();
-            $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
-
-            $whitelist = explode(',', $sprint->whitelist);
-            $this->loadModel('personnel')->updateWhitelist($whitelist, 'sprint', $executionID);
-            if($sprint->acl != 'open') $this->updateUserView($executionID);
-
-            if(!dao::isError()) $this->loadModel('score')->create('program', 'createguide', $executionID);
-            return $executionID;
+            $parent = $this->fetchByID($execution->parent);
+            $grade  = $parent->grade + 1;
+            $path   = rtrim($parent->path, ',') . ",{$executionID}";
+            $this->dao->update(TABLE_EXECUTION)->set('path')->eq($path)->set('grade')->eq($grade)->where('id')->eq($executionID)->exec();
         }
+
+        /* Save order. */
+        $this->dao->update(TABLE_EXECUTION)->set('`order`')->eq($executionID * 5)->where('id')->eq($executionID)->exec();
+        $this->file->updateObjectID($this->post->uid, $executionID, 'execution');
+
+        /* Update the path. */
+        $this->setTreePath($executionID);
+
+        $this->executionTao->addExecutionMembers($executionID, $execution, $postMembers);
+        $this->executionTao->createMainLib($execution->project, $executionID, $execution->type);
+
+        $this->loadModel('personnel')->updateWhitelist(explode(',', $execution->whitelist), 'execution', $executionID);
+        if($execution->acl != 'open') $this->updateUserView($executionID);
+
+        if(!dao::isError()) $this->loadModel('score')->create('program', 'createguide', $executionID);
+        return $executionID;
     }
 
     /**

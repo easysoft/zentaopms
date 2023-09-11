@@ -525,4 +525,71 @@ class executionTao extends executionModel
 
         return $taskItems;
     }
+
+    /**
+     * 添加执行的团队。
+     * Add execution members.
+     *
+     * @param  int       $executionID
+     * @param  array     $postMembers     e.g. array('admin', 'dev1')
+     * @access protected
+     * @return void
+     */
+    protected function addExecutionMembers(int $executionID, array $postMembers): void
+    {
+        $execution = $this->fetchByID($executionID);
+        array_push($postMembers, $execution->PO, $execution->QD, $execution->PM, $execution->RD, $execution->openedBy);
+        $members     = array_filter(array_unique($postMembers));
+        $roles       = $this->loadModel('user')->getUserRoles(array_values($members));
+        $today       = helper::today();
+        $teamMembers = array();
+        foreach($members as $account)
+        {
+            $member = new stdClass();
+            $member->root    = $executionID;
+            $member->type    = 'execution';
+            $member->account = $account;
+            $member->role    = zget($roles, $account, '');
+            $member->join    = $today;
+            $member->days    = $execution->days;
+            $member->hours   = $this->config->execution->defaultWorkhours;
+            $this->dao->insert(TABLE_TEAM)->data($member)->exec();
+            $teamMembers[$account] = $member;
+        }
+        $this->addProjectMembers($execution->project, $teamMembers);
+    }
+
+    /**
+     * 关联创建执行主库
+     * Create main lib for product
+     *
+     * @param int productID
+     * @access protected
+     * @return int|false
+     */
+    protected function createMainLib(int $projectID, int $executionID, $type = 'sprint'): int|false
+    {
+        if($projectID < 0 || $executionID <= 0) return false;
+
+        $existedLibID = (int)$this->dao->select('id')->from(TABLE_DOCLIB)->where('execution')->eq($executionID)
+            ->andWhere('type')->eq('execution')
+            ->andWhere('main')->eq('1')
+            ->fetch('id');
+        if($existedLibID) return $existedLibID;
+
+        $this->app->loadLang('doc');
+        $lib = new stdclass();
+        $lib->project   = $projectID;
+        $lib->execution = $executionID;
+        $lib->name      = $type == 'stage' ? str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doclib->main['execution']) : $this->lang->doclib->main['execution'];
+        $lib->type      = 'execution';
+        $lib->main      = '1';
+        $lib->acl       = 'default';
+        $lib->addedBy   = $this->app->user->account;
+        $lib->addedDate = helper::now();
+        $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
+
+        if(dao::isError())return false;
+        return $this->dao->lastInsertID();
+    }
 }

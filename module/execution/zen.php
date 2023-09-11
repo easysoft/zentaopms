@@ -651,6 +651,98 @@ class executionZen extends execution
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
     }
 
+    protected function checkPostForCreate() : bool
+    {
+        if(empty($_POST['project']))
+        {
+            dao::$errors['project'] = $this->lang->execution->projectNotEmpty;
+            return false;
+        }
+
+        $projectID = (int)$_POST['project'];
+        $project   = $this->loadModel('project')->fetchByID($projectID);
+        $this->execution->checkBeginAndEndDate($projectID, $_POST['begin'], $_POST['end']);
+        if(dao::isError()) return false;
+
+        /* Judge workdays is legitimate. */
+        $workdays = helper::diffDate($_POST['end'], $_POST['begin']) + 1;
+        if(isset($_POST['days']) && $_POST['days'] > $workdays)
+        {
+            dao::$errors['days'] = sprintf($this->lang->project->workdaysExceed, $workdays);
+            return false;
+        }
+
+        $_POST['products'] = array_filter($_POST['products']);
+        if($_POST['products'])
+        {
+            $multipleProducts  = $this->loadModel('product')->getMultiBranchPairs();
+            foreach($_POST['products'] as $index => $productID)
+            {
+                if(isset($multipleProducts[$productID]) && !isset($_POST['branch'][$index]))
+                {
+                    dao::$errors[] = $this->lang->project->emptyBranch;
+                    return false;
+                }
+            }
+        }
+
+        /* Determine whether to add a sprint or a stage according to the model of the execution. */
+        if($project->model == 'waterfall' || $project->model == 'waterfallplus')
+        {
+            if(empty($_POST['products'])) dao::$errors['products0'] = $this->lang->project->errorNoProducts;
+            if(isset($this->config->setPercent) && $this->config->setPercent == 1) $this->execution->checkWorkload('create', (int)$_POST['percent'], $project);
+            if(dao::isError()) return false;
+            $this->config->execution->create->requiredFields .= ',percent';
+        }
+
+        return true;
+    }
+
+    protected function buildExecutionForCreate(): object|false
+    {
+        if(!$this->checkPostForCreate()) return false;
+
+        $now     = helper::now();
+        $project = $this->loadModel('project')->fetchByID((int)$_POST['project']);
+        $type    = 'sprint';
+        if($project) $type = zget($this->config->execution->modelList, $project->model, 'sprint');
+
+        $fields       = $this->config->execution->form->create;
+        $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
+        foreach(explode(',', trim($this->config->execution->create->requiredFields, ',')) as $field) $fields[$field]['required'] = true;
+        $this->config->execution->create->requiredFields = implode(',', array_keys(array_filter(array_map(function($config){return $config['required'] == true;}, $fields))));
+
+        $this->correctErrorLang();
+        $execution = form::data($fields)
+            ->setDefault('openedBy', $this->app->user->account)
+            ->setDefault('openedDate', $now)
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
+            ->setDefault('team', $this->post->name)
+            ->setDefault('parent', $this->post->project)
+            ->setIF($this->post->parent, 'parent', $this->post->parent)
+            ->setIF($this->post->heightType == 'auto', 'displayCards', 0)
+            ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
+            ->setIF($this->post->acl == 'open', 'whitelist', '')
+            ->join('whitelist', ',')
+            ->setDefault('type', $type)
+            ->stripTags($editorFields, $this->config->allowedTags)
+            ->remove('products, workDays, delta, branch, uid, plans, teams, teamMembers, contactListMenu, heightType')
+            ->get();
+
+        if(!empty($execution->parent) && ($execution->project == $execution->parent)) $execution->hasProduct = $project->hasProduct;
+        if($this->post->heightType == 'custom' && !$this->loadModel('kanban')->checkDisplayCards($execution->displayCards)) return false;
+
+        /* Set planDuration and realDuration. */
+        if($this->config->edition == 'max')
+        {
+            $execution->planDuration = $this->loadModel('programplan')->getDuration($execution->begin, $execution->end);
+            if(!empty($execution->realBegan) && !empty($execution->realEnd)) $execution->realDuration = $this->programplan->getDuration($execution->realBegan, $execution->realEnd);
+        }
+
+        return $this->loadModel('file')->processImgURL($execution, $editorFields, $this->post->uid);
+    }
+
     /**
      * 检查累积流图的日期。
      * Check Cumulative flow diagram date.
@@ -1564,6 +1656,30 @@ class executionZen extends execution
         if(isset($project->hasProduct) and empty($project->hasProduct)) $this->lang->execution->PO = $this->lang->common->story . $this->lang->execution->owner;
 
         return true;;
+    }
+
+    protected function correctErrorLang(): void
+    {
+        $this->lang->execution->team = $this->lang->execution->teamName;
+        $this->lang->error->unique   = $this->lang->error->repeat;
+
+        /* Redefines the language entries for the fields in the project table. */
+        foreach(explode(',', $this->config->execution->create->requiredFields) as $field)
+        {
+            if(isset($this->lang->execution->$field)) $this->lang->project->$field = $this->lang->execution->$field;
+        }
+
+        /* Replace required language. */
+        if($this->app->tab == 'project')
+        {
+            $this->lang->project->name = $this->lang->execution->name;
+            $this->lang->project->code = $this->lang->execution->code;
+        }
+        else
+        {
+            $this->lang->project->name = $this->lang->execution->execName;
+            $this->lang->project->code = $this->lang->execution->execCode;
+        }
     }
 
     /**

@@ -1135,23 +1135,24 @@ class execution extends control
 
         if(!empty($_POST))
         {
-            if(isset($_POST['attribute']) and in_array($_POST['attribute'], array('request', 'design', 'review'))) unset($_POST['plans']);
-
             /* Filter empty plans. */
+            if(isset($_POST['attribute']) and in_array($_POST['attribute'], array('request', 'design', 'review'))) unset($_POST['plans']);
             if(!empty($_POST['plans']))
             {
                 foreach($_POST['plans'] as $key => $planItem) $_POST['plans'][$key] = array_filter($_POST['plans'][$key]);
                 $_POST['plans'] = array_filter($_POST['plans']);
             }
 
-            $postData = form::data()->get();
-            $executionID = $this->execution->create($copyExecutionID);
+            $execution= $this->storyZen->buildExecutionForCreate();
+            if(!$execution) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $executionID = $this->execution->create($execution, isset($_POST['teamMembers']) ? $_POST['teamMembers'] : array());
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->execution->updateProducts($executionID, $postData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $comment = $project->hasProduct ? implode(',', $_POST['products']) : '';
+            $comment = $execution->hasProduct ? implode(',', $_POST['products']) : '';
             $this->loadModel('action')->create($this->objectType, $executionID, 'opened', '', $comment);
 
             $this->loadModel('programplan')->computeProgress($executionID, 'create');
