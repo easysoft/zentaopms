@@ -1412,7 +1412,7 @@ class testcaseModel extends model
     public function batchChangeModule($caseIDList, $sceneIDList, $moduleID)
     {
         $caseIDList  = array_filter($caseIDList);
-        $sceneIDList = array_filter($sceneIDList);
+        $sceneIDList = $sceneIDList ? array_filter($sceneIDList) : array();
         if(!$caseIDList && !$sceneIDList) return false;
 
         $this->batchChangeCaseModule($caseIDList, $moduleID);
