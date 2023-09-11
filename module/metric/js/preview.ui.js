@@ -98,7 +98,8 @@ window.handleNavMenuClick = function($el)
     var scope = $el.attr('id');
     window.ajaxGetMetrics(scope, '', function(metrics, total){
         window.deactiveNavMenu();
-        window.hideAndResetFilterPanel();
+        window.hideFilterPanel();
+        window.resetFilterPanel();
         $el.addClass('active');
         $el.append(`<span class="label size-sm rounded-full white">${total}</span>`);
     })
@@ -163,17 +164,22 @@ window.handleFilterToggle = function($el)
     $('.filter-panel').toggleClass('hidden');
 }
 
-window.hideAndResetFilterPanel = function()
+window.hideFilterPanel = function()
 {
     $('.filter-btn').removeClass('primary-600');
     $('.filter-panel').addClass('hidden');
+}
 
+window.resetFilterPanel = function()
+{
     var $checkboxList = $('.filter-panel .panel').find('.panel-body .check-list-inline .checkbox-primary');
     $checkboxList.each(function(index, elem){
         $(elem).find('input').prop('checked', false);
     });
 
     window.updateFilterCheck();
+
+    $('.side-title').text(metricListLang);
 }
 
 window.handleFilterClearItem = function($el)
@@ -208,9 +214,10 @@ window.handleFilterClick = function()
 
     if(viewType == 'multiple')
     {
-        window.ajaxGetMetrics('filter', filterBase64, function()
+        window.ajaxGetMetrics('filter', filterBase64, function(_, total)
         {
             window.deactiveNavMenu();
+            $('.side-title').text(filterLang.filterTotal.replace('%s', total));
         });
         return;
     }
@@ -227,13 +234,6 @@ window.afterPageUpdate = function($target, info, options)
     if(viewType == 'multiple') window.renderCheckedLabel();
     $(window).on('resize', window.renderCheckedLabel);
     window.initFilterPanel();
-
-    $('.filter-btn').removeClass('primary-600');
-    if(scope == 'filter')
-    {
-        $('.filter-btn').addClass('primary-600');
-        window.updateFilterCheck();
-    }
 }
 
 window.initFilterPanel = function()
@@ -241,6 +241,18 @@ window.initFilterPanel = function()
     if(!$('.filter-panel').length) return;
 
     $('#mainMenu').after($('.filter-panel'));
+
+    $('.filter-btn').removeClass('primary-600');
+    if(scope == 'filter')
+    {
+        $('.filter-btn').addClass('primary-600');
+        $('.filter-panel').removeClass('hidden');
+        window.updateFilterCheck();
+    }
+    else
+    {
+        window.hideFilterPanel();
+    }
 }
 
 window.renderDTable = function()
@@ -307,6 +319,7 @@ window.foldContent = function()
 window.renderCheckedLabel = function()
 {
     var $content =  $('.checked-label-content');
+    if(!$content.length) return;
     $content.empty();
 
     var tpl    = $('#item-tpl').html();

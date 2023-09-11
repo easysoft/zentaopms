@@ -120,6 +120,8 @@ nav
     ),
 );
 
+$firstScope = current(array_keys($this->lang->metric->featureBar['preview']));
+$exchangeScope = $scope == 'filter' ? $firstScope : $scope;
 toolbar
 (
     btn
@@ -127,7 +129,7 @@ toolbar
         setClass('btn text-black ghost primary-hover-500'),
         set::icon('exchange'),
         set::iconClass('icon-18'),
-        set::url(helper::createLink('metric', 'preview', "scope=$scope&viewType=single&metricID={$current->id}")),
+        set::url(helper::createLink('metric', 'preview', "scope=$exchangeScope&viewType=single&metricID={$current->id}")),
         $lang->metric->viewType->single,
     ),
     common::hasPriv('metric', 'preview') ? btn
@@ -164,7 +166,7 @@ div
             setClass('title flex items-center'),
             span
             (
-                setClass('name-color'),
+                setClass('name-color side-title'),
                 $metricList
             ),
         ),

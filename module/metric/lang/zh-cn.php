@@ -172,6 +172,7 @@ $lang->metric->filter->clear    = '全部清除';
 
 $lang->metric->filter->clearAction = '清除已选%s';
 $lang->metric->filter->checkedInfo = '已筛选：范围(%s)、对象(%s)、目的(%s)';
+$lang->metric->filter->filterTotal = '筛选结果(%s)';
 
 $lang->metric->implementInstructions = "实现说明";
 $lang->metric->implementTips = array();
