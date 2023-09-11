@@ -776,7 +776,8 @@ class testtaskModel extends model
     public function start(object $task): bool
     {
         $taskID  = (int)$task->id;
-        $oldTask = $this->getByID($taskID);
+        $oldTask = $this->fetchByID($taskID);
+        if(!$oldTask || $oldTask->status != 'wait') return false;
 
         $this->dao->update(TABLE_TESTTASK)->data($task, 'comment')
             ->autoCheck()
