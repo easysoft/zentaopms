@@ -396,7 +396,7 @@ class repo extends control
         $repo     = $this->repo->getByID($repoID);
         $entry    = $this->repo->decodePath($entry);
         $entry    = urldecode($entry);
-        $pathInfo = pathinfo($entry);
+        $pathInfo = helper::mbPathinfo($entry);
 
         $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->view;
         $this->view->dropMenus   = $this->repoZen->getBranchAndTagItems($repo, $this->cookie->repoBranch);
