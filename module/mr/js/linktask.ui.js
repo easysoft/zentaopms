@@ -20,6 +20,7 @@ $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer
         url:  $(this).data('url'),
         data: postData
     });
+    $(this).prop('disabled', true);
 });
 
 window.onSearchFormResult = function(formName, response)
