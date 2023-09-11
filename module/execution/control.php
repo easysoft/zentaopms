@@ -1228,6 +1228,9 @@ class execution extends control
      */
     public function edit(int $executionID, string $action = 'edit', string $extra = '', string $newPlans = '', string $confirm = 'no')
     {
+        /* Update linked plans if confirmed and new plans added. */
+        $this->executionZen->updateLinkedPlans($executionID, $newPlans, $confirm);
+
         $this->loadModel('product');
         $this->loadModel('programplan');
         $this->loadModel('productplan');
@@ -1238,41 +1241,12 @@ class execution extends control
         $branches            = $this->project->getBranchesByProject($executionID);
         $linkedProductIdList = empty($branches) ? '' : array_keys($branches);
 
-        if(!empty($newPlans) and $confirm == 'yes')
-        {
-            $newPlans = explode(',', $newPlans);
-            $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
-            $this->productplan->linkProject($executionID, $newPlans);
-            $this->productplan->linkProject($projectID, $newPlans);
-            return $this->send(array('result' => 'success', 'load' => inlink('view', "executionID=$executionID")));
-        }
-        elseif(!empty($newPlans))
-        {
-            $executionProductList = $this->product->getProducts($executionID); /* 无论是迭代ID还是项目ID都会查到一个与之对应的产品。*/
-            $multiBranchProduct   = false;
-            foreach($executionProductList as $executionProduct)
-            {
-                if($executionProduct->type != 'normal')
-                {
-                    $multiBranchProduct = true;
-                    break;
-                }
-            }
-
-            $importEditPlanStoryTips = $multiBranchProduct ? $this->lang->execution->importBranchEditPlanStory : $this->lang->execution->importEditPlanStory;
-
-            $confirmURL = inlink('edit', "executionID=$executionID&action=edit&extra=&newPlans=$newPlans&confirm=yes");
-            $cancelURL  = inlink('view', "executionID=$executionID");
-            return $this->send(array('result' => 'success', 'load' => array('confirm' => $importEditPlanStoryTips, 'confirmed' => $confirmURL, 'canceled' => $cancelURL)));
-        }
-
         /* Set menu. */
         $this->execution->setMenu($executionID);
 
         if(!empty($_POST))
         {
             $postData    = form::data()->get();
-            $oldPlans    = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->andWhere('plan')->ne(0)->fetchPairs('plan');
             $oldProducts = $this->product->getProducts($executionID, 'all', '', true, $linkedProductIdList);
             $changes     = $this->execution->update($executionID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -1303,26 +1277,8 @@ class execution extends control
             $project = $this->project->getById($execution->project);
             if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->programplan->computeProgress($executionID, 'edit');
 
-            /* Link the plan stories. */
-            $oldPlans = explode(',', implode(',' ,$oldPlans));
-            $newPlans = array();
-            if(isset($_POST['plans']))
-            {
-                foreach($_POST['plans'] as $plans)
-                {
-                    foreach($plans as $planID)
-                    {
-                        if(array_search($planID, $oldPlans) === false) $newPlans[$planID] = $planID;
-                    }
-                }
-            }
-
-            $newPlans = array_filter($newPlans);
-            if(!empty($newPlans))
-            {
-                $newPlans = implode(',', $newPlans);
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('edit', "executionID=$executionID&action=edit&extra=&newPlans=$newPlans&confirm=no")));
-            }
+            /* Redirect to confirm page if the execution can link plan stories. */
+            $this->executionZen->checkLinkPlan($executionID);
 
             $message = $this->executeHooks($executionID);
             if($message) $this->lang->saveSuccess = $message;
