@@ -38,7 +38,7 @@ ALTER TABLE `zt_usercontact` ADD `public` tinyint(1) NOT NULL DEFAULT 0;
 UPDATE `zt_usercontact` AS t1, `zt_config` AS t2 SET t1.public = 1 WHERE t2.module = 'my' AND t2.section = 'global' AND t2.key = 'globalContacts' AND FIND_IN_SET(t1.id, t2.value); -- Change it for compatible with dameng.
 DELETE FROM `zt_config` WHERE `module` = 'my' AND `section` = 'global' AND `key` = 'globalContacts';
 
-ALTER TABLE `zt_testtask` ADD `realBegan` date NULL;
+ALTER TABLE `zt_testtask` ADD `realBegan` date NULL AFTER `end`;
 
 UPDATE `zt_config` SET `module` = 'bug', `section` = 'browse' WHERE `module` = 'datatable' AND `section` = 'bugBrowse' AND `key` = 'showModule';
 UPDATE `zt_config` SET `module` = 'caselib', `section` = 'browse' WHERE `module` = 'datatable' AND `section` = 'caselibBrowse' AND `key` = 'showModule';
