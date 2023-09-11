@@ -2656,22 +2656,24 @@ class executionTest
     }
 
     /**
-     * Test build story search form.
+     * 构造需求的搜索表单。
+     * Build story search form.
      *
      * @param  int    $executionID
      * @param  int    $queryID
      * @access public
      * @return int
      */
-    public function buildStorySearchFormTest($executionID, $queryID)
+    public function buildStorySearchFormTest(int $executionID, int $queryID): int
     {
         $execution = $this->executionModel->getByID($executionID);
-        if(empty($execution)) return '0';
+        if(empty($execution)) return 0;
 
         $this->executionModel->loadModel('story');
-        $products     = $this->productModel->getProducts($executionID);
+        $products     = $this->executionModel->loadModel('product')->getProducts($executionID);
         $branchGroups = $this->executionModel->loadModel('branch')->getByProducts(array_keys($products));
         $this->executionModel->buildStorySearchForm($products, $branchGroups, array(), $queryID, 'searchStory', 'executionStory', $execution);
+        a(json_decode($_SESSION['executionStorysearchParams']['fieldParams']));
 
         return $_SESSION['executionStorysearchParams']['queryID'];
     }

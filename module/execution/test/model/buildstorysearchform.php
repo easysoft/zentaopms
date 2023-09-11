@@ -41,11 +41,11 @@ $branch->gen(2);
 
 $story = zdTable('story');
 $story->id->range('1-10');
-$story->name->range('1-10')->prefix('需求');
+$story->title->range('1-10')->prefix('需求');
 $story->type->range('story');
 $story->product->range('1');
 $story->status->range('active');
-$story->staged->range('projected');
+$story->stage->range('projected');
 $story->version->range('1');
 $story->gen(10);
 
@@ -76,21 +76,16 @@ su('admin');
 /**
 
 title=测试executionModel->buildStorySearchForm();
+timeout=0
 cid=1
-pid=1
-
-正确的执行，正确的queryID >> 1
-错误的执行，正确的queryID >> 0
-正确的执行，错误的queryID >> 0
-错误的执行，错误的queryID >> 0
 
 */
 
-$executionIDList = array('3', '0');
-$queryIDList     = array('0', '1');
+$executionIdList = array(3, 0);
+$queryIdList     = array(0, 1);
 
 $execution = new executionTest();
-r($execution->buildStorySearchFormTest($executionIDList[0], $queryIDList[1])) && p() && e('1'); // 正确的执行，正确的queryID
-r($execution->buildStorySearchFormTest($executionIDList[1], $queryIDList[1])) && p() && e('0'); // 错误的执行，正确的queryID
-r($execution->buildStorySearchFormTest($executionIDList[0], $queryIDList[0])) && p() && e('0'); // 正确的执行，错误的queryID
-r($execution->buildStorySearchFormTest($executionIDList[1], $queryIDList[0])) && p() && e('0'); // 错误的执行，错误的queryID
+r($execution->buildStorySearchFormTest($executionIdList[0], $queryIdList[1])) && p() && e('1'); // 正确的执行，正确的queryID
+r($execution->buildStorySearchFormTest($executionIdList[1], $queryIdList[1])) && p() && e('0'); // 错误的执行，正确的queryID
+r($execution->buildStorySearchFormTest($executionIdList[0], $queryIdList[0])) && p() && e('0'); // 正确的执行，错误的queryID
+r($execution->buildStorySearchFormTest($executionIdList[1], $queryIdList[0])) && p() && e('0'); // 错误的执行，错误的queryID

@@ -2371,6 +2371,7 @@ class executionModel extends model
     }
 
     /**
+     * 构造需求的搜索表单。
      * Build story search form.
      *
      * @param  array  $products
@@ -2378,57 +2379,51 @@ class executionModel extends model
      * @param  array  $modules
      * @param  int    $queryID
      * @param  string $actionURL
-     * @param  string $type
+     * @param  string $type         executionStory
      * @param  object $execution
      * @access public
      * @return void
      */
-    public function buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, $type = 'executionStory', $execution = null)
+    public function buildStorySearchForm(array $products, array $branchGroups, array $modules, int $queryID, string $actionURL, string $type = 'executionStory', object $execution = null): void
     {
+        $this->loadModel('productplan');
         $this->app->loadLang('branch');
+
         $branchPairs  = array(BRANCH_MAIN => $this->lang->branch->main);
         $productType  = 'normal';
         $productPairs = array(0 => '');
         $branches     = empty($execution) ? array() : $this->loadModel('project')->getBranchesByProject($execution->id);
+        $planGroup    = array();
+        $planPairs    = array();
 
-        foreach($products as $product)
+        /* Get the relevant data for the search. */
+        foreach($products as $productID => $product)
         {
             $productPairs[$product->id] = $product->name;
-            if($product->type != 'normal')
+            $planGroup = $this->productplan->getBranchPlanPairs($productID, array(BRANCH_MAIN) + $product->branches, 'unexpired', true);
+            foreach($planGroup as $plans) $planPairs += $plans;
+
+            if($product->type == 'normal') continue;
+            $productType = $product->type;
+
+            if(!isset($branches[$product->id])) continue;
+            foreach($branches[$product->id] as $branchID => $branch)
             {
-                $productType = $product->type;
-                if(isset($branches[$product->id]))
-                {
-                    foreach($branches[$product->id] as $branchID => $branch)
-                    {
-                        if(!isset($branchGroups[$product->id][$branchID])) continue;
-                        if($branchID != BRANCH_MAIN) $branchPairs[$branchID] = ((count($products) > 1) ? $product->name . '/' : '') . $branchGroups[$product->id][$branchID];
-                    }
-                }
+                if(!isset($branchGroups[$product->id][$branchID])) continue;
+                if($branchID != BRANCH_MAIN) $branchPairs[$branchID] = ((count($products) > 1) ? $product->name . '/' : '') . $branchGroups[$product->id][$branchID];
             }
         }
 
         /* Build search form. */
-        if($type == 'executionStory')
-        {
-            $this->config->product->search['module'] = 'executionStory';
-        }
-
-        $this->config->product->search['fields']['title'] = str_replace($this->lang->SRCommon, $this->lang->SRCommon, $this->lang->story->title);
+        if($type == 'executionStory') $this->config->product->search['module'] = 'executionStory';
         $this->config->product->search['actionURL'] = $actionURL;
         $this->config->product->search['queryID']   = $queryID;
-        $this->config->product->search['params']['product']['values'] = $productPairs + array('all' => $this->lang->product->allProductsOfProject);
 
-        $this->loadModel('productplan');
-        $plans     = array();
-        $planPairs = array();
-        foreach($products as $productID => $product)
-        {
-            $plans = $this->productplan->getBranchPlanPairs($productID, array(BRANCH_MAIN) + $product->branches, 'unexpired', true);
-            foreach($plans as $plan) $planPairs += $plan;
-        }
-        $this->config->product->search['params']['plan']['values']   = $planPairs;
-        $this->config->product->search['params']['module']['values'] = $modules;
+        $this->config->product->search['fields']['title'] = str_replace($this->lang->SRCommon, $this->lang->SRCommon, $this->lang->story->title);
+        $this->config->product->search['params']['product']['values'] = $productPairs + array('all' => $this->lang->product->allProductsOfProject);
+        $this->config->product->search['params']['plan']['values']    = $planPairs;
+        $this->config->product->search['params']['module']['values']  = $modules;
+        $this->config->product->search['params']['status']            = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
         if($productType == 'normal')
         {
             unset($this->config->product->search['fields']['branch']);
@@ -2439,14 +2434,12 @@ class executionModel extends model
             $this->config->product->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$productType]);
             $this->config->product->search['params']['branch']['values'] = $branchPairs;
         }
-        $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
 
         $project = $execution;
-        if(strpos('sprint,stage,kanban', $execution->type) !== false) $project = $this->loadModel('project')->getByID($execution->project);
-        if(isset($project->hasProduct) && empty($project->hasProduct))
+        if(in_array($execution->type, array('sprint', 'stage', 'kanban'))) $project = $this->loadModel('project')->getByID($execution->project);
+        if(empty($project->hasProduct))
         {
             unset($this->config->product->search['fields']['product']);
-
             if($project->model != 'kanban') unset($this->config->product->search['fields']['plan']);
         }
 
@@ -2498,7 +2491,7 @@ class executionModel extends model
             return true;
         }
 
-        $branches        = isset($postData->branch) ? $postData->branch : array();
+        $branches        = isset($postData->branch) ? $postData->branch : array(0);
         $plans           = isset($postData->plans) ? $postData->plans : array();
         $existedProducts = array();
         foreach($products as $i => $productID)
