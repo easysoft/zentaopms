@@ -2119,7 +2119,8 @@ class executionModel extends model
     }
 
     /**
-     * Get tasks.
+     * 根据产品/执行等信息获取任务列表
+     * Get tasks by product/execution etc.
      *
      * @param  int    $productID
      * @param  int    $executionID
@@ -2179,15 +2180,17 @@ class executionModel extends model
     }
 
     /**
+     * 根据执行ID列表获取父任务分组信息。
      * Get the task data group by execution id list.
      *
      * @param  array  $executionIdList
      * @access public
      * @return array
      */
-    public function getTaskGroupByExecution($executionIdList = array())
+    public function getTaskGroupByExecution(array $executionIdList = array()): array
     {
         if(empty($executionIdList)) return array();
+
         $executionTasks = $this->dao->select('*')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
             ->andWhere('status')->notin('closed,cancel')

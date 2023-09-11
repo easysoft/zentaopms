@@ -32,11 +32,8 @@ su('admin');
 /**
 
 title=测试 executionModel->getTaskGroupByExecution();
+timeout=0
 cid=1
-pid=1
-
-测试空数据         >> 0
-测试获取执行的任务 >> 3
 
 */
 
