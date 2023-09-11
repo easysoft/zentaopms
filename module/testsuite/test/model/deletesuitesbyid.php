@@ -12,15 +12,15 @@ title=测试 testsuiteModel->deleteSuiteByID();
 cid=1
 pid=1
 
-测试suiteID值为1 >> 1
-测试suiteID值为1000 >> 1
-测试suiteID值为0 >> 1
+检查id为1的套件是否存在  >> 1:0
+测试suiteID值为1         >> 1
+检查id为1的套件是否存在2 >> 1:1
 
 */
-$suiteID = array(1, 1000, 0);
+$suiteID = 1;
 
 $testsuite = new testsuiteTest();
 
-r($testsuite->deleteSuiteByIDTest($suiteID[0])) && p() && e('1');  //测试suiteID值为1
-r($testsuite->deleteSuiteByIDTest($suiteID[1])) && p() && e('1');  //测试suiteID值为1000
-r($testsuite->deleteSuiteByIDTest($suiteID[2])) && p() && e('1');  //测试suiteID值为0
+r($testsuite->getByIdTest($suiteID))             && p('id;deleted') && e('1;0');  //检查id为1的套件是否存在
+r($testsuite->deleteSuiteByIDTest($suiteID))     && p('')           && e('1');    //测试suiteID值为1
+r($testsuite->getByIdTest($suiteID))             && p('id;deleted') && e('1;1');  //检查id为1的套件是否存在2
