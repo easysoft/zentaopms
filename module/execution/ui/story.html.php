@@ -254,8 +254,8 @@ if($canBatchAction)
         $footToolbar['items'][] = array(
             'type'  => 'btn-group',
             'items' => array(
-                array('text' => $lang->edit, 'class' => "btn secondary size-sm {$editClass}", 'btnType' => 'primary', 'data-url' => createLink('story', 'batchEdit', "productID=0&executionID={$execution->id}&branch=0&storyType={$storyType}")),
-                array('caret' => 'up', 'class' => 'btn btn-caret size-sm secondary', 'url' => '#batchToTask', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+                array('text' => $lang->edit, 'className' => "btn secondary size-sm {$editClass}", 'btnType' => 'primary', 'data-url' => createLink('story', 'batchEdit', "productID=0&executionID={$execution->id}&branch=0&storyType={$storyType}")),
+                array('caret' => 'up', 'className' => 'btn btn-caret size-sm secondary', 'url' => '#batchToTask', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
             )
         );
     }
@@ -266,9 +266,9 @@ if($canBatchAction)
         foreach ($users as $account => $name)
         {
             $assignedToItems[] = array(
-                'text'     => $name,
-                'class'    => 'batch-btn ajax-btn',
-                'data-url' => createLink('story', 'batchAssignTo', "toryType={$storyType}&assignedTo={$account}")
+                'text'      => $name,
+                'className' => 'batch-btn ajax-btn',
+                'data-url'  => createLink('story', 'batchAssignTo', "toryType={$storyType}&assignedTo={$account}")
             );
         }
 
@@ -285,7 +285,7 @@ if($canBatchAction)
         $footToolbar['items'][] = array(
             'caret'       => 'up',
             'text'        => $lang->story->assignedTo,
-            'class'       => 'btn btn-caret size-sm secondary',
+            'className'   => 'btn btn-caret size-sm secondary',
             'url'         => '#navAssignedTo',
             'data-toggle' => 'dropdown'
         );
@@ -294,9 +294,9 @@ if($canBatchAction)
     if($canBatchClose)
     {
         $footToolbar['items'][] = array(
-            'text'     => $lang->close,
-            'class'    => 'btn batch-btn size-sm secondary',
-            'data-url' => $this->createLink('story', 'batchClose', "productID=0&executionID={$execution->id}")
+            'text'      => $lang->close,
+            'className' => 'btn batch-btn size-sm secondary',
+            'data-url'  => $this->createLink('story', 'batchClose', "productID=0&executionID={$execution->id}")
         );
     }
 
@@ -306,9 +306,9 @@ if($canBatchAction)
         foreach($lang->story->stageList as $stageID => $stage)
         {
             $stageItems[] = array(
-                'text'     => $stage,
-                'class'    => 'batch-btn ajax-btn',
-                'data-url' => createLink('story', 'batchChangeStage', "stageID=$stageID")
+                'text'      => $stage,
+                'className' => 'batch-btn ajax-btn',
+                'data-url'  => createLink('story', 'batchChangeStage', "stageID=$stageID")
             );
         }
 
@@ -325,7 +325,7 @@ if($canBatchAction)
         $footToolbar['items'][] = array(
             'caret'          => 'up',
             'text'           => $lang->story->stageAB,
-            'class'          => 'btn btn-caret size-sm secondary',
+            'className'      => 'btn btn-caret size-sm secondary',
             'url'            => '#navStage',
             'data-toggle'    => 'dropdown',
             'data-placement' => 'top-start'
@@ -335,9 +335,9 @@ if($canBatchAction)
     if($canBatchUnlink)
     {
         $footToolbar['items'][] = array(
-            'text'  => $lang->execution->unlinkStoryAB,
-            'class' => 'btn batch-btn ajax-btn size-sm secondary',
-            'data-url' => $this->createLink('execution', 'batchUnlinkStory', "executionID={$execution->id}")
+            'text'      => $lang->execution->unlinkStoryAB,
+            'className' => 'btn batch-btn ajax-btn size-sm secondary',
+            'data-url'  => $this->createLink('execution', 'batchUnlinkStory', "executionID={$execution->id}")
         );
     }
 }
