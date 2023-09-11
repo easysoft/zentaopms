@@ -1357,38 +1357,25 @@ class executionTest
     }
 
     /**
-     * function linkCases test by execution
+     * 执行批量关联用例。
+     * Batch link cases.
      *
-     * @param  string $executionID
-     * @param  string $count
-     * @param  string $productID
-     * @param  string $storyID
+     * @param  int    $executionID
+     * @param  int    $productID
+     * @param  int    $storyID
+     * @param  int    $count
      * @access public
-     * @return array
+     * @return array|int
      */
-    public function linkCasesTest($executionID, $count, $productID, $storyID)
+    public function linkCasesTest(int $executionID, int $productID, int $storyID, int $count): array|int
     {
-        global $tester;
-
-        $tester->dbh->query("delete from zt_projectcase where project = $executionID");
-
+        $this->executionModel->dao->delete()->from(TABLE_PROJECTCASE)->where('project')->eq($executionID)->exec();
         $this->executionModel->linkCases($executionID, $productID, $storyID);
 
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error;
-        }
-        elseif($count == "1")
-        {
-            $object = $tester->dbh->query("select * from zt_projectcase where project = $executionID")->fetchAll();
-            return count($object);
-        }
-        else
-        {
-            $object = $tester->dbh->query("select * from zt_projectcase where project = $executionID")->fetchAll();
-            return $object;
-        }
+        if(dao::isError()) return dao::getError();
+
+        $objects = $this->executionModel->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($executionID)->fetchAll();
+        return $count ? count($objects) : $objects;
     }
 
     /**

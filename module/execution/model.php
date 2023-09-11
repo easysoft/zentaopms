@@ -2982,7 +2982,8 @@ class executionModel extends model
     }
 
     /**
-     * Link cases.
+     * 执行批量关联用例。
+     * Batch link cases.
      *
      * @param  int    $executionID
      * @param  int    $productID
@@ -2990,13 +2991,13 @@ class executionModel extends model
      * @access public
      * @return void
      */
-    public function linkCases($executionID, $productID, $storyID)
+    public function linkCases(int $executionID, int $productID, int $storyID): void
     {
         $this->loadModel('action');
         $linkedCases   = $this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($executionID)->orderBy('order_desc')->fetchPairs('case', 'order');
         $lastCaseOrder = empty($linkedCases) ? 0 : reset($linkedCases);
         $cases         = $this->dao->select('id, version')->from(TABLE_CASE)->where('story')->eq($storyID)->fetchPairs();
-        $execution     = $this->getById($executionID);
+        $execution     = $this->getByID($executionID);
         foreach($cases as $caseID => $version)
         {
             if(isset($linkedCases[$caseID])) continue;
@@ -3013,7 +3014,7 @@ class executionModel extends model
             $this->dao->insert(TABLE_PROJECTCASE)->data($object)->exec();
 
             $action = $execution->type == 'project' ? 'linked2project' : 'linked2execution';
-            if($execution->multiple or $execution->type == 'project') $this->action->create('case', $caseID, $action, '', $executionID);
+            if($execution->multiple || $execution->type == 'project') $this->action->create('case', $caseID, $action, '', $executionID);
         }
     }
 

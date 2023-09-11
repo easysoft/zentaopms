@@ -36,32 +36,29 @@ $stroy->type->range('story');
 $stroy->status->range('active');
 $stroy->gen(3);
 
+$case = zdTable('case');
+$case->story->range('2,170,270');
+$case->gen(9);
+
 su('admin');
 
 /**
 
 title=测试executionModel->linkCasesTest();
+timeout=0
 cid=1
-pid=1
-
-敏捷执行关联用例     >> 3,1,1
-瀑布执行关联用例     >> 4,43,169
-看板执行关联用例     >> 5,68,269
-敏捷执行关联用例统计 >> 8
-瀑布执行关联用例统计 >> 4
-看板执行关联用例统计 >> 4
 
 */
 
-$executionIDList = array('3', '4', '5');
-$products        = array('1', '43', '68');
-$stories         = array('2', '170', '270');
-$count           = array('0','1');
+$executionIdList = array(3, 4, 5);
+$productIdList   = array(1, 43, 68);
+$storyIdList     = array(2, 170, 270);
+$count           = array(0, 1);
 
 $execution = new executionTest();
-r($execution->linkCasesTest($executionIDList[0], $count[0], $products[0], $stories[0])) && p('0:project,product,case') && e('3,1,1');    // 敏捷执行关联用例
-r($execution->linkCasesTest($executionIDList[1], $count[0], $products[1], $stories[1])) && p('0:project,product,case') && e('4,43,169'); // 瀑布执行关联用例
-r($execution->linkCasesTest($executionIDList[2], $count[0], $products[2], $stories[2])) && p('0:project,product,case') && e('5,68,269'); // 看板执行关联用例
-r($execution->linkCasesTest($executionIDList[0], $count[1], $products[0], $stories[0])) && p()                         && e('8');        // 敏捷执行关联用例统计
-r($execution->linkCasesTest($executionIDList[1], $count[1], $products[1], $stories[1])) && p()                         && e('4');        // 瀑布执行关联用例统计
-r($execution->linkCasesTest($executionIDList[2], $count[1], $products[2], $stories[2])) && p()                         && e('4');        // 看板执行关联用例统计
+r($execution->linkCasesTest($executionIdList[0], $productIdList[0], $storyIdList[0], $count[0])) && p('0:project,product,case') && e('3,1,1');    // 敏捷执行关联用例
+r($execution->linkCasesTest($executionIdList[1], $productIdList[1], $storyIdList[1], $count[0])) && p('0:project,product,case') && e('4,43,169'); // 瀑布执行关联用例
+r($execution->linkCasesTest($executionIdList[2], $productIdList[2], $storyIdList[2], $count[0])) && p('0:project,product,case') && e('5,68,3');   // 看板执行关联用例
+r($execution->linkCasesTest($executionIdList[0], $productIdList[0], $storyIdList[0], $count[1])) && p()                         && e('3');        // 敏捷执行关联用例统计
+r($execution->linkCasesTest($executionIdList[1], $productIdList[1], $storyIdList[1], $count[1])) && p()                         && e('3');        // 瀑布执行关联用例统计
+r($execution->linkCasesTest($executionIdList[2], $productIdList[2], $storyIdList[2], $count[1])) && p()                         && e('3');        // 看板执行关联用例统计
