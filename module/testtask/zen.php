@@ -53,6 +53,23 @@ class testtaskZen extends testtask
     }
 
     /**
+     * 构建开始测试单的数据。
+     * Build task for start a testtask.
+     *
+     * @param  int       $taskID
+     * @access protected
+     * @return object
+     */
+    protected function buildTaskForStart(int $taskID): object
+    {
+        $task = form::data($this->config->testtask->form->start)
+            ->add('id', $taskID)
+            ->stripTags($this->config->testtask->editor->start['id'], $this->config->allowedTags)
+            ->get();
+        return $this->loadModel('file')->processImgURL($task, $this->config->testtask->editor->start['id'], $this->post->uid);
+    }
+
+    /**
      * 检查编辑的测试单数据是否符合要求。
      * Check task for editing.
      *
