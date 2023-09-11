@@ -5067,4 +5067,17 @@ class executionModel extends model
         $this->dao->update($table)->set('deleted')->eq(1)->where('id')->eq($executionID)->exec();
         $this->loadModel('action')->create('execution', $executionID, 'deleted');
     }
+
+    /*
+     * 通过父级id获取同级的所有执行类型。
+     * Get all execution types of the same level through the parent id.
+     *
+     * @param  int    $parentID
+     * @access public
+     * @return void
+     */
+    public function getSiblingsTypeByParentID($parentID)
+    {
+        return $this->dao->select('DISTINCT type')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('parent')->eq($parentID)->fetchPairs('type');
+    }
 }

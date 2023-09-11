@@ -2498,4 +2498,44 @@ class actionModel extends model
         foreach($params as $key => $value) $updateParams[] = '`' . $key . '`' . '="' . $value . '"';
         $this->dao->update($table)->set(implode(',', $updateParams))->where('id')->eq($id)->exec();
     }
+
+    /**
+     * 根据执行id获取attribute属性。
+     * Get attribute by execution id.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return string
+     */
+    public function getAttributeByExecutionID(int $executionID): string
+    {
+        return $this->actionTao->getAttributeByID($executionID);
+    }
+
+    /**
+     * 根据id获取已经删除的阶段。
+     * Get deleted stage by ids.
+     *
+     * @param  array $list
+     * @access public
+     * @return array
+     */
+    public function getDeletedStagedByList(array $list): array
+    {
+        return $this->actionTao->getDeletedStagedList($list);
+    }
+
+    /**
+     * 更新阶段的attribute属性。
+     * Update stage attribute.
+     *
+     * @param  string $attribute
+     * @param  array  $idList
+     * @access public
+     * @return int
+     */
+    public function updateStageAttribute(string $attribute, array $stages): int
+    {
+        return $this->dao->update(TABLE_EXECUTION)->set('attribute')->eq($attribute)->where('id')->in($stages)->exec();
+    }
 }

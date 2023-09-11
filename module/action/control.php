@@ -316,7 +316,7 @@ class action extends control
 
             if($oldAction->objectType == 'execution')
             {
-                $confirmLang = $this->restoreStages($oldAction, $browseType, $confirmChange);
+                $confirmLang = $this->restoreStages($oldAction, $confirmChange);
                 $url         = $this->createLink('action', 'undelete', "action={$actionID}&browseType={$browseType}&confirmChange=yes");
                 if($confirmLang !== true) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message: '{$confirmLang}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) $.ajaxSubmit({url: '{$url}'});     });"));
             }
@@ -450,60 +450,72 @@ class action extends control
      * Restore stages.
      *
      * @param  object $action
-     * @param  string $browseType
      * @param  string $confirmChange
      * @access public
      * @return bool|string
      */
-    public function restoreStages($action, $browseType, $confirmChange)
+    public function restoreStages(object $action, string $confirmChange): bool|string
     {
+        /* 检查父阶段是否创建过任务。 */
         /* Check parent stage isCreateTask. */
-        $execution      = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($action->objectID)->fetch();
+        $execution      = $this->loadModel('execution')->getByID($action->objectID);
         $hasCreatedTask = $this->loadModel('programplan')->isCreateTask($execution->parent);
-        if(!$hasCreatedTask) die(js::alert($this->lang->action->hasCreatedTask));
+        if(!$hasCreatedTask) return $this->lang->action->hasCreatedTask;
 
+        /* 检查同级执行的类型。 */
         /* Check type of siblings. */
-        $siblings = $this->dao->select('DISTINCT type')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('parent')->eq($execution->parent)->fetchPairs('type');
-        if($execution->type == 'stage' and (isset($siblings['sprint']) or isset($siblings['kanban']))) die(js::alert($this->lang->action->hasOtherType[$execution->type]));
-        if(($execution->type == 'sprint' or $execution->type == 'kanban') and isset($siblings['stage'])) die(js::alert($this->lang->action->hasOtherType[$execution->type]));
+        $siblings = $this->execution->getSiblingsTypeByParentID($execution->parent);
 
+        if($execution->type == 'stage' && (isset($siblings['sprint']) || isset($siblings['kanban']))) return $this->lang->action->hasOtherType[$execution->type];
+        if(($execution->type == 'sprint' || $execution->type == 'kanban') && isset($siblings['stage'])) return $this->lang->action->hasOtherType[$execution->type];
+
+        /* 如果父阶段不存在，你应该恢复父级阶段，并且刷新状态。 */
         /* If parent stage is not exists, you should recover its parent stages, refresh status. */
         $stagePathList    = explode(',', trim($execution->path, ','));
-        $deletedStageList = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($stagePathList)->andWhere('deleted')->eq(1)->andWhere('type')->eq('stage')->orderBy('id_asc')->fetchAll('id');
+        $deletedStageList = $this->action->getDeletedStagedByList($stagePathList);
         $deletedParents   = $deletedStageList;
         array_pop($deletedParents);
 
-        $deletedTitle = '';
-        foreach($deletedParents as $deletedParent) $deletedTitle .= "'{$deletedParent->name}',";
-
-        /* If parent stage's attribute has changed, sub-stage's attribute need change. */
-        $deletedTopParent = current($deletedStageList);
-        $isTopStage       = $this->loadModel('programplan')->isTopStage($deletedTopParent->id);
-        $parentAttr       = $deletedTopParent->attribute;
-        if(!$isTopStage) $parentAttr = $this->dao->select('attribute')->from(TABLE_EXECUTION)->where('id')->eq($deletedTopParent->parent)->fetch('attribute');
-
-        $needChangeAttr    = false;
+        $needChangeAttr    = false; //是否需要修改attribute值
+        $deletedTitle      = ''; //被删除的标题
         $startChangedStage = $execution;
-        foreach($deletedStageList as $deletedStage)
+
+        if(!empty($deletedParents))
         {
-            if($parentAttr != 'mix' and $parentAttr != $deletedStage->attribute)
+            foreach($deletedParents as $deletedParent) $deletedTitle .= "'{$deletedParent->name}',";
+
+            /* 如果父阶段的状态已经被改变，子阶段的的状态也要改变。 */
+            /* If parent stage's attribute has changed, sub-stage's attribute need change. */
+            $deletedTopParent = current($deletedStageList);
+            $isTopStage       = $this->loadModel('programplan')->isTopStage($deletedTopParent->id);
+            $parentAttr       = $deletedTopParent->attribute;
+            if(!$isTopStage) $parentAttr = $this->action->getAttributeByExecutionID();
+
+            /* 从父阶段开始逐级下查，如果发现有跟父阶段不一样的attribute，对后面所有的attrubite值进行修改。 */
+            /* Check down step by step from the parent stage, if you find that there is an attribute different from the parent stage, modify all the later attrubite values*. */
+            $startChangedStage = $execution;
+            foreach($deletedStageList as $deletedStage)
             {
-                $startChangedStage = $deletedStage;
-                $needChangeAttr    = true;
-                break;
+                if($parentAttr != 'mix' && $parentAttr != $deletedStage->attribute)
+                {
+                    $startChangedStage = $deletedStage;
+                    $needChangeAttr    = true;
+                    break;
+                }
+                $parentAttr = $deletedStage->attribute;
             }
-            $parentAttr = $deletedStage->attribute;
         }
 
-        /* Confirm. */
-        if(!empty($deletedTitle) or $needChangeAttr)
+        /* 确认是否要恢复父阶段并且修改不一样的attribute值。 */
+        /* Confirm whether you want to restore the parent stage and modify the different attribute value. */
+        if(!empty($deletedTitle) || $needChangeAttr)
         {
             $this->app->loadLang('stage');
 
             $deletedTitle = trim($deletedTitle, ',');
             $confirmLang  = sprintf($this->lang->action->hasDeletedParent, $deletedTitle) . $this->lang->action->whetherToRestore;
             if($needChangeAttr) $confirmLang = sprintf($this->lang->action->hasChangedAttr, zget($this->lang->stage->typeList, $parentAttr)) . $this->lang->action->whetherToRestore;
-            if(!empty($deletedTitle) and $needChangeAttr) $confirmLang = sprintf($this->lang->action->hasDeletedParent, $deletedTitle) . sprintf($this->lang->action->hasChangedAttr, zget($this->lang->stage->typeList, $parentAttr)) . $this->lang->action->whetherToRestore;
+            if(!empty($deletedTitle) && $needChangeAttr) $confirmLang = sprintf($this->lang->action->hasDeletedParent, $deletedTitle) . sprintf($this->lang->action->hasChangedAttr, zget($this->lang->stage->typeList, $parentAttr)) . $this->lang->action->whetherToRestore;
 
             if($confirmChange == 'no')
             {
@@ -511,12 +523,17 @@ class action extends control
             }
             else
             {
+                /* 如果被删除的标题集合不为空，则更新所有的阶段。 */
+                /* If the collection of titles being deleted is not empty, all stages are updated. */
                 if(!empty($deletedTitle)) $this->action->restoreStages($deletedParents);
+
+                /* 如果需要更新attribute的值，则恢复路径上所有的父节点以及更新attrubute值。 */
+                /* If the attribute value needs to be updated, restore all parent nodes on the path and update the attribute value. */
                 if($needChangeAttr)
                 {
                     $needChangedStages = substr($execution->path, strpos($execution->path, ",{$startChangedStage->id},"));
                     $needChangedStages = explode(',', trim($needChangedStages, ','));
-                    $this->dao->update(TABLE_EXECUTION)->set('attribute')->eq($parentAttr)->where('id')->in($needChangedStages)->exec();
+                    $this->action->updateStageAttribute($parentAttr, $needChangedStages);
                 }
             }
         }
