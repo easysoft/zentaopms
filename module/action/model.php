@@ -21,17 +21,17 @@ class actionModel extends model
      * 创建一个操作记录。
      * Create a action.
      *
-     * @param  string     $objectType
-     * @param  int        $objectID
-     * @param  string     $actionType
-     * @param  string     $comment
-     * @param  string|int $extra        the extra info of this action, according to different modules and actions, can set different extra.
-     * @param  string     $actor
-     * @param  bool       $autoDelete
+     * @param  string      $objectType
+     * @param  int         $objectID
+     * @param  string      $actionType
+     * @param  string|bool $comment
+     * @param  string|int  $extra        the extra info of this action, according to different modules and actions, can set different extra.
+     * @param  string      $actor
+     * @param  bool        $autoDelete
      * @access public
      * @return int
      */
-    public function create(string $objectType, int $objectID, string $actionType, string $comment = '', string|int $extra = '', string $actor = '', bool $autoDelete = true): int
+    public function create(string $objectType, int $objectID, string $actionType, string|bool $comment = '', string|int $extra = '', string $actor = '', bool $autoDelete = true): int
     {
         if(strtolower($actionType) == 'commented' && empty($comment)) return false;
 
