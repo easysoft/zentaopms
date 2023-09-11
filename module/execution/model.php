@@ -2270,13 +2270,14 @@ class executionModel extends model
     }
 
     /**
+     * 获取执行的产品相关负责人。
      * Get the default managers for a execution from it's related products.
      *
      * @param  int    $executionID
      * @access public
      * @return object
      */
-    public function getDefaultManagers($executionID)
+    public function getDefaultManagers(int $executionID): object
     {
         $managers = $this->dao->select('PO,QD,RD')->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')

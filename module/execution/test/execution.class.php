@@ -978,28 +978,6 @@ class executionTest
     }
 
     /**
-     * function getDefaultManagers test by execution
-     *
-     * @param  string $executionID
-     * @access public
-     * @return array
-     */
-    public function getDefaultManagersTest($executionID)
-    {
-        $object = $this->executionModel->getDefaultManagers($executionID);
-
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error;
-        }
-        else
-        {
-            return $object;
-        }
-    }
-
-    /**
      * 根据产品ID列表查询分支信息。
      * Get branch information by the product ID list.
      *

@@ -36,18 +36,15 @@ $projectProduct->gen(9);
 /**
 
 title=executionModel->getDefaultManagers();
+timeout=0
 cid=1
-pid=1
-
-敏捷查找访问人员 >> admin
-瀑布查找访问人员 >> user1
-看板查找访问人员 >> user2
 
 */
 
 $executionID = array(3, 4, 5);
 
-$executionTester = new executionTest();
-r($executionTester->getDefaultManagersTest($executionID[0])) && p('PO') && e('admin');    //敏捷查找访问人员
-r($executionTester->getDefaultManagersTest($executionID[1])) && p('QD') && e('user1'); //瀑布查找访问人员
-r($executionTester->getDefaultManagersTest($executionID[2])) && p('RD') && e('user2');  //看板查找访问人员
+global $tester;
+$tester->loadModel('execution');
+r($tester->execution->getDefaultManagers($executionID[0])) && p('PO') && e('admin'); // 获取迭代关联的产品相关负责人
+r($tester->execution->getDefaultManagers($executionID[1])) && p('QD') && e('user1'); // 获取阶段关联的产品相关负责人
+r($tester->execution->getDefaultManagers($executionID[2])) && p('RD') && e('user2'); // 获取看板关联的产品相关负责人
