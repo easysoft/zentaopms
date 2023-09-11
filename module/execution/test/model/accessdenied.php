@@ -21,7 +21,7 @@ $tester->loadModel('execution');
 
 try
 {
-    $result = $tester->execution->accessDenied();
+    $tester->execution->accessDenied();
 }
 catch (EndResponseException $e)
 {
