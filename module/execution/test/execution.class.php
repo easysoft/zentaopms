@@ -924,32 +924,6 @@ class executionTest
     }
 
     /**
-     * function getProductGroupList test execution
-     *
-     * @param  string $count
-     * @access public
-     * @return array
-     */
-    public function getProductGroupListTest($count)
-    {
-        $object = $this->executionModel->getProductGroupList();
-
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error;
-        }
-        elseif($count == "1")
-        {
-            return count($object);
-        }
-        else
-        {
-            return $object[""];
-        }
-    }
-
-    /**
      * function getTasks test by execution
      *
      * @param  string $productID

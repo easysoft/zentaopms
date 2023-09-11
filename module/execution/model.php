@@ -174,64 +174,6 @@ class executionModel extends model
     }
 
     /**
-     * Get execution tree menu.
-     *
-     * @access public
-     * @return void
-     */
-    public function tree()
-    {
-        $products     = $this->loadModel('product')->getPairs('nocode', 0);
-        $productGroup = $this->getProductGroupList();
-        $executionTree  = "<ul class='tree tree-lines'>";
-        foreach($productGroup as $productID => $executions)
-        {
-            if(!isset($products[$productID]) and $productID != '')  continue;
-            if(!isset($products[$productID]) and !count($executions)) continue;
-
-            $productName  = isset($products[$productID]) ? $products[$productID] : $this->lang->execution->noProduct;
-
-            $executionTree .= "<li>$productName<ul>";
-
-            foreach($executions as $execution)
-            {
-                if($execution->status != 'done' or $execution->status != 'closed')
-                {
-                    $executionTree .= "<li>" . html::a(inlink('task', "executionID=$execution->id"), $execution->name, '', "id='execution$execution->id'") . "</li>";
-                }
-            }
-
-            $hasDone = false;
-            foreach($executions as $execution)
-            {
-                if($execution->status == 'done' or $execution->status == 'closed')
-                {
-                    $hasDone = true;
-                    break;
-                }
-            }
-            if($hasDone)
-            {
-                $executionTree .= "<li>{$this->lang->execution->selectGroup->done}<ul>";
-                foreach($executions as $execution)
-                {
-                    if($execution->status == 'done' or $execution->status == 'closed')
-                    {
-                        $executionTree .= "<li>" . html::a(inlink('task', "executionID=$execution->id"), $execution->name, '', "id='execution$execution->id'") . "</li>";
-                    }
-                }
-                $executionTree .= "</ul></li>";
-            }
-
-            $executionTree .= "</ul></li>";
-        }
-
-        $executionTree .= "</ul>";
-
-        return $executionTree;
-    }
-
-    /**
      * 检查用户是否可以访问当前执行。
      * Check whether access to the current execution is allowed or not.
      *
@@ -2174,38 +2116,6 @@ class executionModel extends model
 
         $this->session->set('limitedExecutions', implode(',', $executions));
         return $this->session->limitedExecutions;
-    }
-
-    /**
-     * Get executions lists grouped by product.
-     *
-     * @access public
-     * @return array
-     */
-    public function getProductGroupList()
-    {
-        $list = $this->dao->select('t1.id,t1.name,t1.status,t2.product')->from(TABLE_EXECUTION)->alias('t1')
-            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
-            ->where('t1.deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
-            ->fetchGroup('product');
-
-        $noProducts = array();
-        foreach($list as $id => $product)
-        {
-            foreach($product as $ID => $execution)
-            {
-                if(!$execution->product)
-                {
-                    if($this->checkPriv($execution->id)) $noProducts[] = $execution;
-                    unset($list[$id][$ID]);
-                }
-            }
-        }
-        unset($list['']);
-        $list[''] = $noProducts;
-
-        return $list;
     }
 
     /**
