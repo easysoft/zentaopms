@@ -6141,7 +6141,7 @@ class executionModel extends model
             if(!isset($sortedExecutions[$executionID]) and isset($executions[$executionID])) $sortedExecutions[$executionID] = $executions[$executionID];
 
             $children = isset($childExecutions[$executionID]) ? $childExecutions[$executionID] : array();
-            if(!empty($children)) $sortedExecutions += $this->resetExecutionSorts($executions, $children, $childExecutions);
+            if(!empty($children)) $sortedExecutions += $this->resetExecutionSorts($executions, $children);
         }
         return $sortedExecutions;
     }
