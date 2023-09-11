@@ -13,7 +13,9 @@ title=测试 testsuiteModel->deleteCaseBySuiteIDTest();
 cid=1
 pid=1
 
-测试suiteID值为1,$cases=array(1, 2) >> 2
+检查当前套件的关联用例                >> 2
+测试suiteiD值为1,cases值为array(1, 2) >> 2
+检查当前套件的关联用例数量            >> 0
 
 */
 $suiteID    = 1;
@@ -21,4 +23,7 @@ $cases = array(1, 2);
 
 $testsuite = new testsuiteTest();
 
-r($testsuite->deleteCaseBySuiteIDTest($cases, $suiteID)) && p() && e('2'); //测试suiteID值为1
+r(count($testsuite->getLinkedCasesTest($suiteID)))       && p() && e('2');        //检查当前关联的用例数量
+r($testsuite->deleteCaseBySuiteIDTest($cases, $suiteID)) && p() && e('2');        //测试suiteID值为1
+unset(dao::$cache[TABLE_CASE]);
+r(count($testsuite->getLinkedCasesTest($suiteID)))       && p() && e('0');        //检查当前关联的用例数量
