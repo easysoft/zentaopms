@@ -27,13 +27,13 @@ fields:
   - field: desc
     note: "描述"
     range: 1-10000
-    prefix: "这是测试套件的描述"
+    prefix: "这是测试套件的描述x"
     postfix: ""
     loop: 0
     format: ""
   - field: type
     note: "类型"
-    range: public{100},library
+    range: "[public,private]{100!},library"
     prefix: ""
     postfix: ""
     loop: 0
