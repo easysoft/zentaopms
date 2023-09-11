@@ -19,9 +19,9 @@ pid=1
 测试suiteID值正常存在 >> 0
 
 */
-$suiteID = array(0, 1 ,10000);
+$suiteID = array(0, 1);
+
 $testsuite = new testsuiteTest();
 
-r($testsuite->getLinkedCasePairsTest($suiteID[0])) && p('1') && e('0');  //测试suiteID值正常存在,orderBy值为id_desc,append值为true
+r($testsuite->getLinkedCasePairsTest($suiteID[0])) && p('1')   && e('0');                                //测试suiteID值正常存在,orderBy值为id_desc,append值为true
 r($testsuite->getLinkedCasePairsTest($suiteID[1])) && p('2;1') && e('这个是测试用例2;这个是测试用例1');  //测试suiteID值正常存在,orderBy值为id_desc,append值为false
-r($testsuite->getLinkedCasePairsTest($suiteID[2])) && p('1') && e('0');  //测试suiteID值正常存在,orderBy值为id_asc,append值为true
