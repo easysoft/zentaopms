@@ -1675,4 +1675,61 @@ class executionZen extends execution
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('edit', "executionID=$executionID&action=edit&extra=&newPlans=$newPlans&confirm=no")));
         }
     }
+
+    /**
+     * 获取执行关联的对象，如关联的产品、分支、需求等。
+     * Get linked objects of this execution.
+     *
+     * @param  object $execution
+     * @return object
+     */
+    public function getLinkedObjects(object $execution): object
+    {
+        $this->loadModel('project');
+        $this->loadModel('product');
+        $this->loadModel('productplan');
+
+        $branches            = $this->project->getBranchesByProject($execution->id);
+        $linkedProductIdList = empty($branches) ? '' : array_keys($branches);
+        $allProducts = $this->product->getProducts($execution->project, 'noclosed', '', false, $linkedProductIdList);
+
+        $productPlans     = $linkedBranches = $linkedBranchList = array();
+        $linkedProducts   = $this->product->getProducts($execution->id, 'all', '', true, $linkedProductIdList, false);
+        $plans            = $this->productplan->getGroupByProduct(array_keys($linkedProducts), 'skipParent|unexpired');
+        $executionStories = $this->project->getStoriesByProject($execution->id);
+
+        /* If the story of the product which linked the execution, you don't allow to remove the product. */
+        $unmodifiableProducts = $unmodifiableBranches = $linkedStoryIDList = array();
+        foreach($linkedProducts as $productID => $linkedProduct)
+        {
+            if(!isset($allProducts[$productID])) $allProducts[$productID] = $linkedProduct->deleted ? $linkedProduct->name . "({$this->lang->product->deleted})" : $linkedProduct->name;
+            $productPlans[$productID] = array();
+
+            foreach($branches[$productID] as $branchID => $branch)
+            {
+                $productPlans[$productID] += isset($plans[$productID][$branchID]) ? $plans[$productID][$branchID] : array();
+
+                $linkedBranchList[$branchID]           = $branchID;
+                $linkedBranches[$productID][$branchID] = $branchID;
+                if($branchID != BRANCH_MAIN && isset($plans[$productID][BRANCH_MAIN])) $productPlans[$productID] += $plans[$productID][BRANCH_MAIN];
+                if(!empty($executionStories[$productID][$branchID]))
+                {
+                    array_push($unmodifiableProducts, $productID);
+                    array_push($unmodifiableBranches, $branchID);
+                    $linkedStoryIDList[$productID][$branchID] = $executionStories[$productID][$branchID]->storyIDList;
+                }
+            }
+        }
+
+        $linkedObjects = new stdclass();
+        $linkedObjects->allProducts          = $allProducts;
+        $linkedObjects->linkedProducts       = $linkedProducts;
+        $linkedObjects->productPlans         = $productPlans;
+        $linkedObjects->linkedBranches       = $linkedBranches;
+        $linkedObjects->linkedBranchList     = $linkedBranchList;
+        $linkedObjects->linkedStoryIDList    = $linkedStoryIDList;
+        $linkedObjects->unmodifiableProducts = $unmodifiableProducts;
+        $linkedObjects->unmodifiableBranches = $unmodifiableBranches;
+        return $linkedObjects;
+    }
 }
