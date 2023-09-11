@@ -2622,21 +2622,6 @@ class executionTest
     }
 
     /**
-     * Test build operate menu.
-     *
-     * @param  int    $executionID
-     * @access public
-     * @return string
-     */
-    public function buildOperateMenuTest($executionID = 0)
-    {
-        $execution = $this->executionModel->getByID($executionID);
-        if(empty($execution)) return '0';
-
-        return $this->executionModel->buildOperateMenu($execution);
-    }
-
-    /**
      * Test print nested list.
      *
      * @param  int    $executionID

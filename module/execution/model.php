@@ -4723,38 +4723,6 @@ class executionModel extends model
     }
 
     /**
-     * Build execution action menu.
-     *
-     * @param  object $execution
-     * @param  string $type
-     * @access public
-     * @return string
-     */
-    public function buildOperateMenu($execution, $type = 'view')
-    {
-        if($execution->deleted) return '';
-
-        $menu   = '';
-        $params = "executionID=$execution->id";
-
-        $menu .= "<div class='divider'></div>";
-        $menu .= $this->buildMenu('execution', 'start',    $params, $execution, $type, '', '', 'iframe', true);
-        $menu .= $this->buildMenu('execution', 'activate', $params, $execution, $type, '', '', 'iframe', true);
-        $menu .= $this->buildMenu('execution', 'putoff',   $params, $execution, $type, '', '', 'iframe', true);
-        $menu .= $this->buildMenu('execution', 'suspend',  $params, $execution, $type, '', '', 'iframe', true);
-        $menu .= $this->buildMenu('execution', 'close',    $params, $execution, $type, '', '', 'iframe', true);
-
-        $menu .= "<div class='divider'></div>";
-        $menu .= $this->buildFlowMenu('execution', $execution, 'view', 'direct');
-        $menu .= "<div class='divider'></div>";
-
-        $menu .= $this->buildMenu('execution', 'edit',   "execution=$execution->id", $execution);
-        $menu .= $this->buildMenu('execution', 'delete', "execution=$execution->id", $execution, 'button', 'trash', 'hiddenwin');
-
-        return $menu;
-    }
-
-    /**
      * Generate row for dtable.
      *
      * @param  array  $executions
