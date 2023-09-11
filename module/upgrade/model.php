@@ -7814,7 +7814,7 @@ class upgradeModel extends model
             }
 
             $productIdList = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($sprint->id)->fetchPairs();
-            $this->processMergedData($programID, $projectID, '', $productIdList, array($sprint->id));
+            $this->processMergedData($programID, $projectID, null, $productIdList, array($sprint->id));
         }
 
         $this->fixProjectPath($programID);
@@ -7891,7 +7891,7 @@ class upgradeModel extends model
             $this->createProjectDocLib($project);
 
             $productIdList = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($sprints))->fetchPairs();
-            $this->processMergedData($programID, $projectID, '', $productIdList, array_keys($sprints));
+            $this->processMergedData($programID, $projectID, null, $productIdList, array_keys($sprints));
         }
 
         $this->fixProjectPath($programID);
