@@ -26,6 +26,6 @@ cid=1
 $executionTester = new executionTest();
 $executions      = $executionTester->generateRowTest();
 
-r(count($executions)) && p()                      && e('4');                     // 判断执行数量
-r($executions)        && p("pid1:name")           && e('执行1');                 // 判断第一个执行的名称
-r($executions)        && p("pid2:begin;pid2:end") && e('2022-01-12;2022-02-12'); // 查看获取到的第三个执行的开始日期和结束日期
+r(count($executions)) && p()                 && e('4');                     // 判断执行数量
+r($executions)        && p('pid1:name')      && e('执行1');                 // 判断第一个执行的名称
+r($executions)        && p('pid2:begin,end') && e('2022-01-12,2022-02-12'); // 查看获取到的第三个执行的开始日期和结束日期
