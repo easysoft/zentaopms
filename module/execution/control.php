@@ -1238,6 +1238,7 @@ class execution extends control
         $this->app->loadLang('stage');
 
         $execution           = $this->execution->getById($executionID);
+        $project             = $this->project->getById($execution->project);
         $branches            = $this->project->getBranchesByProject($executionID);
         $linkedProductIdList = empty($branches) ? '' : array_keys($branches);
 
@@ -1275,7 +1276,6 @@ class execution extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $project = $this->project->getById($execution->project);
             if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->programplan->computeProgress($executionID, 'edit');
 
             /* Redirect to confirm page if the execution can link plan stories. */
@@ -1293,53 +1293,18 @@ class execution extends control
         }
 
         $executions = $this->executions;
+        unset($executions[$executionID]); /* Remove current execution from the executions. */
 
-        /* Remove current execution from the executions. */
-        unset($executions[$executionID]);
-
-        $allProducts = $this->product->getProducts($execution->project, 'noclosed', '', false, $linkedProductIdList);
-
-        $productPlans     = array();
-        $linkedBranches   = array();
-        $linkedBranchList = array();
-        $linkedProducts   = $this->product->getProducts($executionID, 'all', '', true, $linkedProductIdList, false);
-        $plans            = $this->productplan->getGroupByProduct(array_keys($linkedProducts), 'skipParent|unexpired');
-        $executionStories = $this->project->getStoriesByProject($executionID);
-
-        /* If the story of the product which linked the execution, you don't allow to remove the product. */
-        $unmodifiableProducts = array();
-        $unmodifiableBranches = array();
-        $linkedStoryIDList    = array();
-        foreach($linkedProducts as $productID => $linkedProduct)
-        {
-            if(!isset($allProducts[$productID])) $allProducts[$productID] = $linkedProduct->deleted ? $linkedProduct->name . "({$this->lang->product->deleted})" : $linkedProduct->name;
-            $productPlans[$productID] = array();
-
-            foreach($branches[$productID] as $branchID => $branch)
-            {
-                $productPlans[$productID] += isset($plans[$productID][$branchID]) ? $plans[$productID][$branchID] : array();
-
-                $linkedBranchList[$branchID]           = $branchID;
-                $linkedBranches[$productID][$branchID] = $branchID;
-                if($branchID != BRANCH_MAIN and isset($plans[$productID][BRANCH_MAIN])) $productPlans[$productID] += $plans[$productID][BRANCH_MAIN];
-                if(!empty($executionStories[$productID][$branchID]))
-                {
-                    array_push($unmodifiableProducts, $productID);
-                    array_push($unmodifiableBranches, $branchID);
-                    $linkedStoryIDList[$productID][$branchID] = $executionStories[$productID][$branchID]->storyIDList;
-                }
-            }
-        }
+        /* Get linked objects of this execution. */
+        $linkedObjects = $this->executionZen->getLinkedObjects($execution);
 
         list($pmUsers, $poUsers, $qdUsers, $rdUsers) = $this->executionZen->setUserMoreLink($execution);
 
-        $project = $this->project->getById($execution->project);
         if(!$project->hasProduct) $this->lang->execution->PO = $this->lang->common->story . $this->lang->execution->owner;
 
         if($project->model == 'waterfall' or $project->model == 'waterfallplus')
         {
             $parentStage = $this->project->getByID($execution->parent, 'stage');
-
             $this->view->enableOptionalAttr = (empty($parentStage) or (!empty($parentStage) and $parentStage->attribute == 'mix'));
         }
         if($this->app->tab == 'project' and $project->model == 'waterfallplus')
@@ -1359,21 +1324,20 @@ class execution extends control
         $this->view->rdUsers              = $rdUsers;
         $this->view->users                = $this->loadModel('user')->getPairs('nodeleted|noclosed');
         $this->view->groups               = $this->loadModel('group')->getPairs();
-        $this->view->allProducts          = $allProducts;
-        $this->view->linkedProducts       = $linkedProducts;
-        $this->view->linkedBranches       = $linkedBranches;
-        $this->view->linkedStoryIDList    = $linkedStoryIDList;
         $this->view->branches             = $branches;
-        $this->view->unmodifiableProducts = $unmodifiableProducts;
-        $this->view->unmodifiableBranches = $unmodifiableBranches;
         $this->view->multiBranchProducts  = $this->product->getMultiBranchPairs();
-        $this->view->productPlans         = $productPlans;
-        $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($linkedProducts), $execution->project, 'noclosed', $linkedBranchList);
+        $this->view->allProducts          = $linkedObjects->allProducts;
+        $this->view->linkedProducts       = $linkedObjects->linkedProducts;
+        $this->view->linkedBranches       = $linkedObjects->linkedBranches;
+        $this->view->linkedStoryIDList    = $linkedObjects->linkedStoryIDList;
+        $this->view->unmodifiableProducts = $linkedObjects->unmodifiableProducts;
+        $this->view->unmodifiableBranches = $linkedObjects->unmodifiableBranches;
+        $this->view->productPlans         = $linkedObjects->productPlans;
+        $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($linkedObjects->linkedProducts), $execution->project, 'noclosed', $linkedObjects->linkedBranchList);
         $this->view->teamMembers          = $this->execution->getTeamMembers($executionID);
         $this->view->allProjects          = $this->project->getPairsByModel($project->model, 'noclosed', $project->id);
         $this->view->parentStageList      = isset($parentStageList) ? $parentStageList : array();
         $this->view->isStage              = isset($project->model) && in_array($project->model, array('waterfall', 'waterfallplus'));
-
         $this->display();
     }
 
