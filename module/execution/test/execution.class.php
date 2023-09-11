@@ -1006,31 +1006,26 @@ class executionTest
     }
 
     /**
-     * function getOrderedExecutions test exection
+     * 获取排序后的执行列表信息。
+     * Get ordered executions.
      *
-     * @param  string $projectID
+     * @param  int    $executionID
      * @param  string $status
-     * @param  string $count
+     * @param  int    $count
      * @access public
-     * @return array
+     * @return array|int
      */
-    public function getOrderedExecutionsTest($projectID, $status, $count)
+    public function getOrderedExecutionsTest(int $executionID, string $status, int $count): array|int
     {
-        $object = $this->executionModel->getOrderedExecutions($projectID,$status);
+        $object = $this->executionModel->getOrderedExecutions($executionID, $status);
 
         if(dao::isError())
         {
             $error = dao::getError();
             return $error;
         }
-        elseif($count == "1")
-        {
-            return count($object);
-        }
-        else
-        {
-            return $object;
-        }
+
+        return $count == 1 ? count($object) : $object;
     }
 
     /**

@@ -2323,6 +2323,7 @@ class executionModel extends model
     }
 
     /**
+     * 获取排序后的执行列表信息。
      * Get ordered executions.
      *
      * @param  int    $executionID
@@ -2332,13 +2333,13 @@ class executionModel extends model
      * @access public
      * @return array
      */
-    public function getOrderedExecutions($executionID, $status, $num = 0, $param = '')
+    public function getOrderedExecutions(int $executionID, string $status, int $num = 0, string $param = ''): array
     {
         $executionList = $this->getList($executionID, 'all', $status);
         if(empty($executionList)) return $executionList;
 
-        $executions       = $mineExecutions = $otherExecutions = $closedExecutions = array();
-        $param            = strtolower($param);
+        $executions = array();
+        $param      = strtolower($param);
         if($param == 'skipparent')
         {
             $parentExecutions = array();
@@ -2348,23 +2349,22 @@ class executionModel extends model
         foreach($executionList as $execution)
         {
             if(empty($execution->multiple)) continue;
-            if(!$this->app->user->admin and !$this->checkPriv($execution->id)) continue;
-            if($param == 'skipparent' and isset($parentExecutions[$execution->id])) continue;
+            if(!$this->app->user->admin && !$this->checkPriv($execution->id)) continue;
+            if($param == 'skipparent' && isset($parentExecutions[$execution->id])) continue;
 
-            if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM == $this->app->user->account)
+            if($execution->status != 'done' && $execution->status != 'closed' && $execution->PM == $this->app->user->account)
             {
-                $mineExecutions[$execution->id] = $execution;
+                $executions[$execution->id] = $execution;
             }
-            elseif($execution->status != 'done' and $execution->status != 'closed' and $execution->PM != $this->app->user->account)
+            elseif($execution->status != 'done' && $execution->status != 'closed' && $execution->PM != $this->app->user->account)
             {
-                $otherExecutions[$execution->id] = $execution;
+                $executions[$execution->id] = $execution;
             }
-            elseif($execution->status == 'done' or $execution->status == 'closed')
+            elseif($execution->status == 'done' || $execution->status == 'closed')
             {
-                $closedExecutions[$execution->id] = $execution;
+                $executions[$execution->id] = $execution;
             }
         }
-        $executions = $mineExecutions + $otherExecutions + $closedExecutions;
 
         if(empty($num)) return $executions;
         return array_slice($executions, 0, $num, true);
