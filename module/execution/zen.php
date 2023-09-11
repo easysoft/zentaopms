@@ -1606,4 +1606,73 @@ class executionZen extends execution
         $this->view->executionID = $executionID;
         $this->display();
     }
+
+    /**
+     * 更新迭代关联的计划。
+     * Update linked plans.
+     *
+     * @param  int    $executionID
+     * @param  string $newPlans
+     * @param  string $confirm
+     * @return void
+     */
+    public function updateLinkedPlans(int $executionID, string $newPlans = '', string $confirm = 'no')
+    {
+        if(!empty($newPlans) and $confirm == 'yes')
+        {
+            $newPlans = explode(',', $newPlans);
+            $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
+            $this->productplan->linkProject($executionID, $newPlans);
+            $this->productplan->linkProject($projectID, $newPlans);
+            return $this->send(array('result' => 'success', 'load' => inlink('view', "executionID=$executionID")));
+        }
+        elseif(!empty($newPlans))
+        {
+            $executionProductList = $this->product->getProducts($executionID); /* 无论是迭代ID还是项目ID都会查到一个与之对应的产品。*/
+            $multiBranchProduct   = false;
+            foreach($executionProductList as $executionProduct)
+            {
+                if($executionProduct->type != 'normal')
+                {
+                    $multiBranchProduct = true;
+                    break;
+                }
+            }
+
+            $linkPlanMsg = $multiBranchProduct ? $this->lang->execution->importBranchEditPlanStory : $this->lang->execution->importEditPlanStory;
+            $confirmURL  = inlink('edit', "executionID=$executionID&action=edit&extra=&newPlans=$newPlans&confirm=yes");
+            $cancelURL   = inlink('view', "executionID=$executionID");
+            return $this->send(array('result' => 'success', 'load' => array('confirm' => $linkPlanMsg, 'confirmed' => $confirmURL, 'canceled' => $cancelURL)));
+        }
+    }
+
+    /**
+     * Check if the execution can be linked to plan stories.
+     *
+     * @param  int $executionID
+     * @return void
+     */
+    public function checkLinkPlan(int $executionID)
+    {
+        $oldPlans = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->andWhere('plan')->ne(0)->fetchPairs('plan');
+        $oldPlans = explode(',', implode(',' ,$oldPlans));
+        $newPlans = array();
+        if(isset($_POST['plans']))
+        {
+            foreach($_POST['plans'] as $plans)
+            {
+                foreach($plans as $planID)
+                {
+                    if(array_search($planID, $oldPlans) === false) $newPlans[$planID] = $planID;
+                }
+            }
+        }
+
+        $newPlans = array_filter($newPlans);
+        if(!empty($newPlans))
+        {
+            $newPlans = implode(',', $newPlans);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('edit', "executionID=$executionID&action=edit&extra=&newPlans=$newPlans&confirm=no")));
+        }
+    }
 }
