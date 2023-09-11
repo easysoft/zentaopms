@@ -1622,13 +1622,13 @@ class executionZen extends execution
         {
             $newPlans = explode(',', $newPlans);
             $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
-            $this->productplan->linkProject($executionID, $newPlans);
+            $this->loadModel('productplan')->linkProject($executionID, $newPlans);
             $this->productplan->linkProject($projectID, $newPlans);
             return $this->send(array('result' => 'success', 'load' => inlink('view', "executionID=$executionID")));
         }
         elseif(!empty($newPlans))
         {
-            $executionProductList = $this->product->getProducts($executionID); /* 无论是迭代ID还是项目ID都会查到一个与之对应的产品。*/
+            $executionProductList = $this->loadModel('product')->getProducts($executionID); /* 无论是迭代ID还是项目ID都会查到一个与之对应的产品。*/
             $multiBranchProduct   = false;
             foreach($executionProductList as $executionProduct)
             {
