@@ -6770,40 +6770,42 @@ class storyModel extends model
         if($this->config->vision == 'or') $this->app->loadLang('demand');
         foreach($stories as $story)
         {
+            $data     = new stdclass();
             $menuType = 'browse';
             if(($tab == 'execution' || ($tab == 'project' and !$this->session->multiple)) && $storyType == 'story') $menuType = 'execution';
 
             if(!empty($branchOptions)) $branches = zget($branchOptions, $story->product, array());
-            $story->estimateNum  = $story->estimate;;
-            $story->caseCountNum = zget($storyCases, $story->id, 0);
-            $story->actions      = '<div class="c-actions">' . $this->buildOperateMenu($story, $menuType, $execution, $storyType) . '</div>';
+            $data->id           = $story->id;
+            $data->estimateNum  = $story->estimate;
+            $data->caseCountNum = zget($storyCases, $story->id, 0);
+            $data->actions      = '<div class="c-actions">' . $this->buildOperateMenu($story, $menuType, $execution, $storyType) . '</div>';
             foreach($cols as $col)
             {
-                if($col->name == 'assignedTo') $story->assignedTo = $this->printAssignedHtml($story, $users, false);
-                if($col->name == 'order')      $story->order      = "<i class='icon-move'>";
-                if($col->name == 'pri')        $story->pri        = "<span class='" . ($story->pri ? "label-pri label-pri-" . $story->pri : '') . "' title='" . zget($this->lang->story->priList, $story->pri, $story->pri) . "'>" . zget($this->lang->story->priList, $story->pri, $story->pri) . "</span>";
-                if($col->name == 'plan')       $story->plan       = isset($story->planTitle) ? $story->planTitle : '';
-                if($col->name == 'branch')     $story->branch     = zget($branches, $story->branch, '');
-                if($col->name == 'source')     $story->source     = zget($this->lang->story->sourceList, $story->source);
-                if($col->name == 'category')   $story->category   = zget($this->lang->story->categoryList, $story->category);
-                if($col->name == 'duration')   $story->duration   = zget($this->lang->demand->durationList, $story->duration);
-                if($col->name == 'BSA')        $story->BSA        = zget($this->lang->demand->bsaList, $story->BSA);
-                if($col->name == 'taskCount')  $story->taskCount  = $storyTasks[$story->id] > 0 ? html::a(helper::createLink('story', 'tasks', "storyID=$story->id"), $storyTasks[$story->id], '', 'class="iframe" data-toggle="modal"') : '0';
-                if($col->name == 'bugCount')   $story->bugCount   = $storyBugs[$story->id]  > 0 ? html::a(helper::createLink('story', 'bugs', "storyID=$story->id"),  $storyBugs[$story->id],  '', 'class="iframe" data-toggle="modal"') : '0';
-                if($col->name == 'caseCount')  $story->caseCount  = $storyCases[$story->id] > 0 ? html::a(helper::createLink('story', 'cases', "storyID=$story->id"),  $storyBugs[$story->id], '', 'class="iframe" data-toggle="modal"') : '0';
-                if($col->name == 'estimate')   $story->estimate  .= $this->config->hourUnit;
+                if($col->name == 'assignedTo') $data->assignedTo = $this->printAssignedHtml($story, $users, false);
+                if($col->name == 'order')      $data->order      = "<i class='icon-move'>";
+                if($col->name == 'pri')        $data->pri        = "<span class='" . ($story->pri ? "label-pri label-pri-" . $story->pri : '') . "' title='" . zget($this->lang->story->priList, $story->pri, $story->pri) . "'>" . zget($this->lang->story->priList, $story->pri, $story->pri) . "</span>";
+                if($col->name == 'plan')       $data->plan       = isset($story->planTitle) ? $story->planTitle : '';
+                if($col->name == 'branch')     $data->branch     = zget($branches, $story->branch, '');
+                if($col->name == 'source')     $data->source     = zget($this->lang->story->sourceList, $story->source);
+                if($col->name == 'category')   $data->category   = zget($this->lang->story->categoryList, $story->category);
+                if($col->name == 'duration')   $data->duration   = zget($this->lang->demand->durationList, $story->duration);
+                if($col->name == 'BSA')        $data->BSA        = zget($this->lang->demand->bsaList, $story->BSA);
+                if($col->name == 'taskCount')  $data->taskCount  = $storyTasks[$story->id] > 0 ? html::a(helper::createLink('story', 'tasks', "storyID=$story->id"), $storyTasks[$story->id], '', 'class="iframe" data-toggle="modal"') : '0';
+                if($col->name == 'bugCount')   $data->bugCount   = $storyBugs[$story->id]  > 0 ? html::a(helper::createLink('story', 'bugs', "storyID=$story->id"),  $storyBugs[$story->id],  '', 'class="iframe" data-toggle="modal"') : '0';
+                if($col->name == 'caseCount')  $data->caseCount  = $storyCases[$story->id] > 0 ? html::a(helper::createLink('story', 'cases', "storyID=$story->id"),  $storyBugs[$story->id], '', 'class="iframe" data-toggle="modal"') : '0';
+                if($col->name == 'estimate')   $data->estimate   = (float)$story->estimate . $this->config->hourUnit;
                 if($col->name == 'reviewedBy')
                 {
                     $reviewers = array_unique(array_filter(explode(',', $story->reviewedBy)));
                     $reviewers = array_map(function($reviewer) use($users){return zget($users, $reviewer);}, $reviewers);
-                    $story->reviewedBy = join(' ', $reviewers);
+                    $data->reviewedBy = join(' ', $reviewers);
                 }
                 if($col->name == 'reviewer')
                 {
                     $reviewers = array_unique(array_filter($story->reviewer));
                     $reviewers = array_map(function($reviewer) use($users){return zget($users, $reviewer);}, $reviewers);
                     $story->reviewer = join(' ', $reviewers);
-                    $story->reviewer = "<span title='{$story->reviewer}'>" . $story->reviewer . '</span>';
+                    $data->reviewer  = "<span title='{$story->reviewer}'>" . $story->reviewer . '</span>';
                 }
                 if($col->name == 'stage')
                 {
@@ -6821,12 +6823,12 @@ class storyModel extends model
                             }
                         }
                     }
-                    $story->stage = zget($this->lang->story->stageList, $maxStage);
+                    $data->stage = zget($this->lang->story->stageList, $maxStage);
                 }
                 if($col->name == 'status')
                 {
-                    $story->status = "<span class='status-{$story->status}'>" . $this->processStatus('story', $story) . '</span>';
-                    if($story->URChanged) $story->status = "<span class='status-story status-changed'>{$this->lang->story->URChanged}</span>";
+                    $data->status = "<span class='status-{$story->status}'>" . $this->processStatus('story', $story) . '</span>';
+                    if($story->URChanged) $data->status = "<span class='status-story status-changed'>{$this->lang->story->URChanged}</span>";
                 }
                 if($col->name == 'title')
                 {
@@ -6854,27 +6856,28 @@ class storyModel extends model
                     if($story->parent > 0 and isset($story->parentName)) $storyTitle .= "{$story->parentName} / ";
                     if(isset($branches[$story->branch]) and $showBranch and $this->config->vision != 'lite') $storyTitle .= "<span class='label label-outline label-badge' title={$branches[$story->branch]}>{$branches[$story->branch]}</span> ";
                     if($story->module and isset($modulePairs[$story->module])) $storyTitle .= "<span class='label label-gray label-badge'>{$modulePairs[$story->module]}</span> ";
-                    if($story->parent > 0) $storyTitle .= '<span class="label label-badge label-light" title="' . $this->lang->story->children . '">' . $this->lang->story->childrenAB . '</span> ';
+                    if($story->parent > 0 and !($storyType == 'requirement' and $story->type == 'story')) $storyTitle .= '<span class="label label-badge label-light" title="' . $this->lang->story->children . '">' . $this->lang->story->childrenAB . '</span> ';
                     $storyTitle .= $canView ? html::a($storyLink, $story->title, '', "title='$story->title' style='color: $story->color' data-app='$tab'") : "<span style='color: $story->color'>{$storyTitle}{$story->title}</span>";
-                    $story->title = $storyTitle;
+                    $data->title = $storyTitle;
                 }
                 if($col->name == 'mailto')
                 {
                     $mailto = array_map(function($account) use($users){$account = trim($account); return zget($users, $account);}, explode(',', $story->mailto));
-                    $story->mailto = implode(' ', $mailto);
+                    $data->mailto = implode(' ', $mailto);
                 }
                 if(in_array($col->name, $userFields)) $story->{$col->name} = zget($users, $story->{$col->name});
                 if(in_array($col->name, $dateFields)) $story->{$col->name} = helper::isZeroDate($story->{$col->name}) ? '' : substr($story->{$col->name}, 5, 11);
             }
 
-            $story->isParent = false;
-            if($story->parent == -1)
+            $data->isParent = false;
+            $data->parent   = $story->parent;
+            if($data->parent == -1)
             {
-                $story->isParent = true;
-                $story->parent   = 0;
+                $data->isParent = true;
+                $data->parent   = 0;
             }
 
-            $rows[] = $story;
+            $rows[] = $data;
             if(!empty($story->children)) $rows = array_merge($rows, $this->generateRow($story->children, $cols, $options, $execution, $storyType));
         }
         return $rows;

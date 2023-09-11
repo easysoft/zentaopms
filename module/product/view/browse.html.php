@@ -24,7 +24,18 @@ $options['isShowBranch'] = '';
 if(!empty($branchOptions)) $options['branchOptions'] = $branchOptions;
 
 $hasChildren = false;
-array_map(function($story) use(&$hasChildren){ if(!empty($story->children)) $hasChildren = true;}, $stories);
+array_map(function($story) use(&$hasChildren)
+{
+    if(!empty($story->children))
+    {
+        $hasChildren = true;
+        if($story->parent == '0') $story->parent = -1;
+        foreach($story->children as $subStory)
+        {
+            if($subStory->parent == 0) $subStory->parent = $story->id;
+        }
+    }
+}, $stories);
 
 $cols = $this->story->generateCol($orderBy, $storyType, $hasChildren);
 $rows = $this->story->generateRow($stories, $cols, $options, $project, $storyType);
