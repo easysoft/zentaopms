@@ -103,7 +103,7 @@ class executionModel extends model
      */
     public function setMenu(int $executionID)
     {
-        $execution = $this->getByID($executionID);
+        $execution = $this->fetchByID($executionID);
         if(!$execution) return;
 
         if($execution->type == 'kanban') $this->executionTao->setKanbanMenu();
@@ -155,7 +155,7 @@ class executionModel extends model
      */
     public function removeMenu(object $execution)
     {
-        $project = $this->loadModel('project')->getByID($execution->project);
+        $project = $this->loadModel('project')->fetchByID($execution->project);
         if($execution->type == 'stage' || (!empty($project) && $project->model == 'waterfallplus')) unset($this->lang->execution->menu->settings['subMenu']->products);
 
         if(empty($execution->hasProduct)) unset($this->lang->execution->menu->settings['subMenu']->products);
@@ -1442,7 +1442,7 @@ class executionModel extends model
         if($projectID)
         {
             $projectModel = $this->dao->select('model')->from(TABLE_EXECUTION)->where('id')->eq($projectID)->andWhere('deleted')->eq(0)->fetch('model');
-            $orderBy = in_array($projectModel, array('waterfall', 'waterfallplus')) ? 'sortStatus_asc,begin_asc,id_asc' : 'id_desc';
+            $orderBy      = in_array($projectModel, array('waterfall', 'waterfallplus')) ? 'sortStatus_asc,begin_asc,id_asc' : 'id_desc';
 
             /* Waterfall execution, when all phases are closed, in reverse order of date. */
             if(in_array($projectModel, array('waterfall', 'waterfallplus')))
@@ -2227,7 +2227,7 @@ class executionModel extends model
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getExecution();
 
-        $execution = $this->dao->findById((int)$executionID)->from(TABLE_EXECUTION)->fetch();
+        $execution = $this->fetchByID($executionID);
         if(!$execution) return false;
 
         /* Judge whether the execution is delayed. */

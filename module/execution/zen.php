@@ -1341,4 +1341,269 @@ class executionZen extends execution
 
         return array($pmUsers, $poUsers, $qdUsers, $rdUsers);
     }
+
+    /**
+     * 初始化创建执行的字段。
+     * Init execution fields for create.
+     *
+     * @param  int       $projectID
+     * @param  array     $output
+     * @access protected
+     * @return object
+     */
+    protected function initFieldsForCreate(int $projectID, array $output = array()): object
+    {
+        $execution = new stdclass();
+        $execution->project   = $projectID;
+        $execution->type      = zget($output, 'type', 'sprint');
+        $execution->name      = '';
+        $execution->code      = '';
+        $execution->team      = '';
+        $execution->acl       = 'private';
+        $execution->whitelist = '';
+
+        return $execution;
+    }
+
+    /**
+     * 通过复制执行ID设置字段值。
+     * Set execution fields by copy execution id.
+     *
+     * @param  object    $fields
+     * @param  int       $copyExecutionID
+     * @access protected
+     * @return object
+     */
+    protected function setFieldsByCopyExecution(object $fields, int $copyExecutionID): object
+    {
+        if(empty($copyExecutionID)) return $fields;
+
+        $copyExecution     = $this->execution->fetchByID($copyExecutionID);
+        $fields->project   = (int)$copyExecution->project;
+        $fields->type      = $copyExecution->type;
+        $fields->name      = $copyExecution->name;
+        $fields->code      = $copyExecution->code;
+        $fields->team      = $copyExecution->team;
+        $fields->acl       = $copyExecution->acl;
+        $fields->whitelist = $copyExecution->whitelist;
+
+        $this->view->copyExecution = $copyExecution;
+
+        return $fields;
+    }
+
+    /**
+     * 获取已关联的产品。
+     * Get can link products.
+     *
+     * @param  int         $copyExecutionID
+     * @param  int         $planID
+     * @param  object|null $project
+     * @access protected
+     * @return array
+     */
+    protected function getLinkedProducts(int $copyExecutionID, int $planID, object|null $project): array
+    {
+        $products = array();
+        if($copyExecutionID) $products = $this->loadModel('product')->getProducts($copyExecutionID);
+        if($planID)
+        {
+            $plan     = $this->loadModel('productplan')->fetchByID($planID);
+            $products = $this->dao->select('t1.id, t1.name, t1.type, t2.branch')->from(TABLE_PRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
+                ->where('t1.id')->eq($plan->product)
+                ->fetchAll('id');
+        }
+        if(!empty($project) and $project->stageBy == 'project') $products = $this->loadModel('product')->getProducts($project->id);
+
+        return $products;
+    }
+
+    /**
+     * 获取已关联的分支。
+     * Set linked branches.
+     *
+     * @param  array       $products
+     * @param  int         $copyExecutionID
+     * @param  int         $planID
+     * @param  object|null $project
+     * @access protected
+     * @return void
+     */
+    protected function setLinkedBranches(array $products, int $copyExecutionID, int $planID, object|null $project)
+    {
+        $projectID = empty($project) ? 0 : $project->id;
+        if(!empty($copyExecutionID))
+        {
+            $branches     = $this->project->getBranchesByProject($copyExecutionID);
+            $plans        = $this->loadModel('productplan')->getGroupByProduct(array_keys($products), 'skipParent|unexpired');
+            $branchGroups = $this->execution->getBranchByProduct(array_keys($products), $projectID);
+        }
+
+        if(!empty($project) and $project->stageBy == 'project')
+        {
+            $branches = $this->project->getBranchesByProject($projectID);
+            $plans    = $this->loadModel('productplan')->getGroupByProduct(array_keys($products), 'skipParent|unexpired');
+        }
+
+        if($products and isset($branches))
+        {
+            $linkedBranches = array();
+            foreach($products as $productIndex => $product)
+            {
+                $productPlans[$productIndex] = array();
+                foreach($branches[$productIndex] as $branchID => $branch)
+                {
+                    $linkedBranches[$productIndex][$branchID] = $branchID;
+                    $productPlans[$productIndex] += isset($plans[$productIndex][$branchID]) ? $plans[$productIndex][$branchID] : array();
+                }
+            }
+
+            $this->view->productPlans   = $productPlans;
+            $this->view->linkedBranches = $linkedBranches;
+        }
+
+        if(!empty($planID))
+        {
+            $plan           = $this->loadModel('productplan')->fetchByID($planID);
+            $productPlan    = $this->productplan->getPairsForStory($plan->product, $plan->branch, 'skipParent|unexpired|withMainPlan');
+            $linkedBranches = array();
+            $linkedBranches[$plan->product][$plan->branch] = $plan->branch;
+            $this->view->linkedBranches = $linkedBranches;
+        }
+
+        $this->view->productPlan  = isset($productPlan)  ? $productPlan  : array();
+        $this->view->branchGroups = isset($branchGroups) ? $branchGroups : $this->execution->getBranchByProduct(array_keys($products), $projectID);
+        if(isset($project->hasProduct) and empty($project->hasProduct))
+        {
+            $shadowProduct = $this->loadModel('product')->getShadowProductByProject($project->id);
+            $this->view->productPlan = $this->loadModel('productplan')->getPairs($shadowProduct->id, '0,0', 'noclosed,unexpired', true);
+        }
+    }
+
+    /**
+     * 根据项目获取可关联的产品。
+     * Get all products for create.
+     *
+     * @param  object|null $project
+     * @access protected
+     * @return void
+     */
+    protected function getAllProductsForCreate(object|null $project) : array
+    {
+        if(empty($project)) return array();
+
+        $allProducts = $this->loadModel('product')->getProductPairsByProject($project->id, 'noclosed');
+        if(!empty($project->hasProduct)) $allProducts = array(0 => '') + $allProducts;
+
+        return $allProducts;
+    }
+
+    /**
+     * 设置可复制的执行。
+     * Set copy projects.
+     *
+     * @param  object|null $project
+     * @access protected
+     * @return void
+     */
+    protected function setCopyProjects(object|null $project)
+    {
+        $parentProject = 0;
+        $projectModel  = '';
+
+        if($project)
+        {
+            $parentProject = $project->parent;
+            $projectModel  = $project->model;
+            if($projectModel == 'agileplus')     $projectModel = array('scrum', 'agileplus');
+            if($projectModel == 'waterfallplus') $projectModel = array('waterfall', 'waterfallplus');
+        }
+
+        $copyProjects  = $this->loadModel('project')->getPairsByProgram($parentProject, 'noclosed', false, 'order_asc', '', $projectModel, 'multiple');
+        $copyProjectID = empty($project) ? key($copyProjects) : $project->id;
+        $this->view->copyProjects   = $copyProjects;
+        $this->view->copyProjectID  = $copyProjectID;
+        $this->view->copyExecutions = $this->execution->getList($copyProjectID, 'all', 'all', 0, 0, 0, null, false);
+    }
+
+    /**
+     * 修正executionCommon公共语言项。
+     * Correct execution common lang.
+     *
+     * @param  object    $project
+     * @param  string    $type
+     * @access protected
+     * @return bool
+     */
+    protected function correctExecutionCommonLang(object $project, string $type): bool
+    {
+        if(empty($project)) return false;
+        if($project->model == 'kanban' or ($project->model == 'agileplus' and $type == 'kanban'))
+        {
+            global $lang;
+            $executionLang           = $lang->execution->common;
+            $executionCommonLang     = $lang->executionCommon;
+            $lang->executionCommon   = $lang->execution->kanban;
+            $lang->execution->common = $lang->execution->kanban;
+            include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
+            $lang->execution->common = $executionLang;
+            $lang->executionCommon   = $executionCommonLang;
+
+            $lang->execution->typeList['sprint'] = $executionCommonLang;
+        }
+        elseif($project->model == 'waterfall' or $project->model == 'waterfallplus')
+        {
+            global $lang;
+            $lang->executionCommon = $lang->execution->stage;
+            include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
+
+            $this->config->execution->create->requiredFields .= ',products0';
+        }
+
+        if(isset($project->hasProduct) and empty($project->hasProduct)) $this->lang->execution->PO = $this->lang->common->story . $this->lang->execution->owner;
+
+        return true;;
+    }
+
+    /**
+     * 创建执行后，显示提示页面。
+     * Display after created.
+     *
+     * @param  int       $projectID
+     * @param  int       $executionID
+     * @param  int       $planID
+     * @param  string    $confirm
+     * @access protected
+     * @return void
+     */
+    protected function displayAfterCreated(int $projectID, int $executionID, int $planID, string $confirm = 'no')
+    {
+        $execution = $this->execution->fetchByID($executionID);
+        if(!empty($planID) and $execution->lifetime != 'ops')
+        {
+            if($confirm == 'yes')
+            {
+                $this->execution->linkStories($executionID);
+            }
+            else
+            {
+                $executionProductList = $this->loadModel('product')->getProducts($executionID);
+                $multiBranchProduct   = false;
+                array_map(function($executionProduct) use(&$multiBranchProduct){if($executionProduct->type != 'normal') $multiBranchProduct = true;}, $executionProductList);
+
+                $importPlanStoryTips = $multiBranchProduct ? $this->lang->execution->importBranchPlanStory : $this->lang->execution->importPlanStory;
+                $confirmURL          = inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=yes");
+                $cancelURL           = inlink('create', "projectID=$projectID&executionID=$executionID");
+                return $this->send(array('result' => 'success', 'load' => array('confirm' => $importPlanStoryTips, 'confirmed' => $confirmURL, 'canceled' => $cancelURL)));
+            }
+        }
+
+        if(!empty($projectID) and $execution->type == 'kanban' and $this->app->tab == 'project') return $this->send(array('result' => 'success', 'load' => $this->createLink('project', 'index', "projectID=$projectID")));
+        if(!empty($projectID) and $execution->type == 'kanban') return $this->send(array('result' => 'success', 'load' => inlink('kanban', "executionID=$executionID")));
+
+        $this->view->title       = $this->lang->execution->tips;
+        $this->view->executionID = $executionID;
+        $this->display();
+    }
 }

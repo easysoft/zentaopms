@@ -1100,175 +1100,38 @@ class execution extends control
     /**
      * Create a execution.
      *
-     * @param string $projectID
+     * @param int    $projectID
      * @param int    $executionID
-     * @param string $copyExecutionID
+     * @param int    $copyExecutionID
      * @param int    $planID
      * @param string $confirm
-     * @param string $productID
+     * @param int    $productID
      * @param string $extra
      *
      * @access public
      * @return void
      */
-    public function create(string $projectID = '', int $executionID = 0, string $copyExecutionID = '', int $planID = 0, string $confirm = 'no', int $productID = 0, string $extra = '')
+    public function create(int $projectID = 0, int $executionID = 0, int $copyExecutionID = 0, int $planID = 0, string $confirm = 'no', int $productID = 0, string $extra = '')
     {
-        $projectID = (int)$projectID;
-
         if($this->app->tab == 'doc')     unset($this->lang->doc->menu->execution['subMenu']);
         if($this->app->tab == 'project') $this->project->setMenu($projectID);
 
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
-        $type         = !empty($output['type']) ? $output['type'] : 'sprint';
-        $name         = '';
-        $code         = '';
-        $team         = '';
-        $products     = array();
-        $whitelist    = '';
-        $acl          = 'private';
-        $plan         = new stdClass();
-        $productPlan  = array();
-        $productPlans = array();
-        if($copyExecutionID)
-        {
-            $copyExecution = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($copyExecutionID)->fetch();
-            $type          = $copyExecution->type;
-            $name          = $copyExecution->name;
-            $code          = $copyExecution->code;
-            $team          = $copyExecution->team;
-            $acl           = $copyExecution->acl;
-            $whitelist     = $copyExecution->whitelist;
-            $projectID     = $copyExecution->project;
-            $products      = $this->loadModel('product')->getProducts($copyExecutionID);
-            $branches      = $this->project->getBranchesByProject($copyExecutionID);
-            $plans         = $this->loadModel('productplan')->getGroupByProduct(array_keys($products), 'skipParent|unexpired');
-            $branchGroups  = $this->execution->getBranchByProduct(array_keys($products), $projectID);
-
-            $linkedBranches = array();
-            foreach($products as $productIndex => $product)
-            {
-                $productPlans[$productIndex] = array();
-                foreach($branches[$productIndex] as $branchID => $branch)
-                {
-                    $linkedBranches[$productIndex][$branchID] = $branchID;
-                    $productPlans[$productIndex] += isset($plans[$productIndex][$branchID]) ? $plans[$productIndex][$branchID] : array();
-                }
-            }
-
-            $this->view->branches       = $branches;
-            $this->view->linkedBranches = $linkedBranches;
-        }
-
-        $project = $this->project->getByID($projectID);
-        if(!empty($project) and ($project->model == 'kanban' or ($project->model == 'agileplus' and $type == 'kanban')))
-        {
-            global $lang;
-            $executionLang           = $lang->execution->common;
-            $executionCommonLang     = $lang->executionCommon;
-            $lang->executionCommon   = $lang->execution->kanban;
-            $lang->execution->common = $lang->execution->kanban;
-            include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
-            $lang->execution->common = $executionLang;
-            $lang->executionCommon   = $executionCommonLang;
-
-            $lang->execution->typeList['sprint'] = $executionCommonLang;
-        }
-        elseif(!empty($project) and ($project->model == 'waterfall' or $project->model == 'waterfallplus'))
-        {
-            global $lang;
-            $lang->executionCommon = $lang->execution->stage;
-            include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
-
-            $this->config->execution->create->requiredFields .= ',products0';
-        }
+        $execution = $this->executionZen->initFieldsForCreate($projectID, $output);
+        if($copyExecutionID) $this->executionZen->setFieldsByCopyExecution($execution, $copyExecutionID);
+        $projectID = $execution->project;
 
         $this->app->loadLang('program');
         $this->app->loadLang('stage');
         $this->app->loadLang('programplan');
-        if($executionID)
-        {
-            $execution = $this->execution->getById($executionID);
-            if(!empty($planID) and $execution->lifetime != 'ops')
-            {
-                if($confirm == 'yes')
-                {
-                    $this->execution->linkStories($executionID);
-                }
-                else
-                {
-                    $executionProductList  = $this->loadModel('product')->getProducts($executionID);
-                    $multiBranchProduct = false;
-                    foreach($executionProductList as $executionProduct)
-                    {
-                        if($executionProduct->type != 'normal')
-                        {
-                            $multiBranchProduct = true;
-                            break;
-                        }
-                    }
+        if($executionID) return $this->executionZen->displayAfterCreated($projectID, $executionID, $planID, $confirm);
 
-                    $importPlanStoryTips = $multiBranchProduct ? $this->lang->execution->importBranchPlanStory : $this->lang->execution->importPlanStory;
-
-                    $confirmURL = inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=yes");
-                    $cancelURL  = inlink('create', "projectID=$projectID&executionID=$executionID");
-                    return $this->send(array('result' => 'success', 'load' => array('confirm' => $importPlanStoryTips, 'confirmed' => $confirmURL, 'canceled' => $cancelURL)));
-                }
-            }
-
-            if(!empty($projectID) and $execution->type == 'kanban' and $this->app->tab == 'project') return $this->send(array('result' => 'success', 'load' => $this->createLink('project', 'index', "projectID=$projectID")));
-            if(!empty($projectID) and $execution->type == 'kanban') return $this->send(array('result' => 'success', 'load' => inlink('kanban', "executionID=$executionID")));
-
-            $this->view->title       = $this->lang->execution->tips;
-            $this->view->executionID = $executionID;
-            return $this->display();
-        }
-
-        if(!empty($planID))
-        {
-            $plan     = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('id')->eq($planID)->fetch();
-            $products = $this->dao->select('t1.id, t1.name, t1.type, t2.branch')->from(TABLE_PRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
-                ->where('t1.id')->eq($plan->product)
-                ->fetchAll('id');
-
-            $productPlan    = $this->loadModel('productplan')->getPairsForStory($plan->product, $plan->branch, 'skipParent|unexpired|withMainPlan');
-            $linkedBranches = array();
-            $linkedBranches[$plan->product][$plan->branch] = $plan->branch;
-
-            $this->view->linkedBranches = $linkedBranches;
-        }
-
-        if(!empty($project) and $project->stageBy == 'project')
-        {
-            $products = $this->loadModel('product')->getProducts($projectID);
-            $branches = $this->project->getBranchesByProject($projectID);
-            $plans    = $this->loadModel('productplan')->getGroupByProduct(array_keys($products), 'skipParent|unexpired');
-
-            $linkedBranches = array();
-            foreach($products as $productIndex => $product)
-            {
-                $productPlans[$productIndex] = array();
-                if(isset($branches[$productIndex]))
-                {
-                    foreach($branches[$productIndex] as $branchID => $branch)
-                    {
-                        $linkedBranches[$productIndex][$branchID] = $branchID;
-                        $productPlans[$productIndex] += isset($plans[$productIndex][$branchID]) ? $plans[$productIndex][$branchID] : array();
-                    }
-                }
-            }
-
-            $this->view->branches       = $branches;
-            $this->view->linkedBranches = $linkedBranches;
-        }
-
-        if(isset($project->hasProduct) and empty($project->hasProduct))
-        {
-            $shadowProduct = $this->loadModel('product')->getShadowProductByProject($project->id);
-            $productPlan   = $this->loadModel('productplan')->getPairs($shadowProduct->id, '0,0', 'noclosed,unexpired', true);
-        }
+        $project = empty($projectID) ? null : $this->loadModel('project')->fetchByID($projectID);
+        if($project) $this->executionZen->correctExecutionCommonLang($project, $execution->type);
+        $products = $this->executionZen->getLinkedProducts($copyExecutionID, $planID, $project);
+        $this->executionZen->setLinkedBranches($products, $copyExecutionID, $planID, $project);
 
         if(!empty($_POST))
         {
@@ -1277,10 +1140,7 @@ class execution extends control
             /* Filter empty plans. */
             if(!empty($_POST['plans']))
             {
-                foreach($_POST['plans'] as $key => $planItem)
-                {
-                    $_POST['plans'][$key] = array_filter($_POST['plans'][$key]);
-                }
+                foreach($_POST['plans'] as $key => $planItem) $_POST['plans'][$key] = array_filter($_POST['plans'][$key]);
                 $_POST['plans'] = array_filter($_POST['plans']);
             }
 
@@ -1331,56 +1191,26 @@ class execution extends control
             }
         }
 
-        list($pmUsers, $poUsers, $qdUsers, $rdUsers) = $this->executionZen->setUserMoreLink();
-
-        $this->loadModel('product');
-        $allProducts   = $this->product->getProductPairsByProject($projectID, 'noclosed');
-
-        $projectModel = isset($project->model) ? $project->model : '';
-        if($projectModel == 'agileplus')     $projectModel = array('scrum', 'agileplus');
-        if($projectModel == 'waterfallplus') $projectModel = array('waterfall', 'waterfallplus');
-
-        $copyProjects  = $this->loadModel('project')->getPairsByProgram(isset($project->parent) ? $project->parent : 0, 'noclosed', '', 'order_asc', '', $projectModel, 'multiple');
-        $copyProjectID = ($projectID == 0) ? key($copyProjects) : $projectID;
-
-        if(!empty($project->hasProduct)) $allProducts = array(0 => '') + $allProducts;
-        if(isset($project->hasProduct) and $project->hasProduct == 0) $this->lang->execution->PO = $this->lang->common->story . $this->lang->execution->owner;
+        list($this->view->pmUsers, $this->view->poUsers, $this->view->qdUsers, $this->view->rdUsers) = $this->executionZen->setUserMoreLink();
+        $this->executionZen->setCopyProjects($project);
 
         $this->view->title               = $this->app->tab == 'execution' ? $this->lang->execution->createExec : $this->lang->execution->create;
         $this->view->gobackLink          = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('execution', 'all') : '';
         $this->view->groups              = $this->loadModel('group')->getPairs();
-        $this->view->allProducts         = $allProducts;
-        $this->view->acl                 = $acl;
-        $this->view->plan                = $plan;
-        $this->view->name                = $name;
-        $this->view->code                = $code;
-        $this->view->team                = $team;
-        $this->view->teams               = $this->execution->getCanCopyObjects((int)$projectID);
+        $this->view->allProducts         = array_filter($this->executionZen->getAllProductsForCreate($project));
         $this->view->allProjects         = $this->project->getPairsByModel('all', 'noclosed,multiple');
-        $this->view->copyProjects        = $copyProjects;
-        $this->view->copyProjectID       = $copyProjectID;
-        $this->view->copyExecutions      = $this->execution->getList($copyProjectID, 'all', 'all', 0, 0, 0, null, false);
-        $this->view->executionID         = $executionID;
+        $this->view->multiBranchProducts = $this->loadModel('product')->getMultiBranchPairs();
+        $this->view->products            = $products;
+        $this->view->teams               = $this->execution->getCanCopyObjects($projectID);
+        $this->view->users               = $this->loadModel('user')->getPairs('nodeleted|noclosed');
+        $this->view->copyExecutionID     = $copyExecutionID;
         $this->view->productID           = $productID;
         $this->view->projectID           = $projectID;
-        $this->view->products            = $products;
-        $this->view->multiBranchProducts = $this->product->getMultiBranchPairs();
-        $this->view->productPlan         = $productPlan;
-        $this->view->productPlans        = $productPlans;
-        $this->view->whitelist           = $whitelist;
-        $this->view->copyExecutionID     = $copyExecutionID;
-        $this->view->branchGroups        = isset($branchGroups) ? $branchGroups : $this->execution->getBranchByProduct(array_keys($products), $projectID);
-        $this->view->poUsers             = $poUsers;
-        $this->view->pmUsers             = $pmUsers;
-        $this->view->qdUsers             = $qdUsers;
-        $this->view->rdUsers             = $rdUsers;
-        $this->view->users               = $this->loadModel('user')->getPairs('nodeleted|noclosed');
-        $this->view->copyExecution       = isset($copyExecution) ? $copyExecution : '';
+        $this->view->execution           = $execution;
         $this->view->from                = $this->app->tab;
         $this->view->isStage             = isset($project->model) && in_array($project->model, array('waterfall', 'waterfallplus'));
         $this->view->project             = $project;
         $this->view->stageBy             = empty($project->stageBy) ? '' : $project->stageBy;
-        $this->view->type                = $type;
         $this->display();
     }
 

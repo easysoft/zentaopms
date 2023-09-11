@@ -19,9 +19,10 @@ jsVar('errorSameBranches', $lang->execution->errorSameBranches);
 jsVar('isStage', $isStage);
 jsVar('copyExecutionID', $copyExecutionID);
 jsVar('multiBranchProducts', $multiBranchProducts);
-jsVar('executionID', $executionID);
+jsVar('executionID', isset($executionID) ? $executionID : 0);
 
-$methodBox = null;
+$methodBox         = null;
+$showExecutionExec = !empty($from) and ($from == 'execution' || $from == 'doc');
 if(!empty($project->model) && $project->model == 'agileplus')
 {
     unset($lang->execution->typeList['stage'], $lang->execution->typeList['']);
@@ -32,7 +33,7 @@ if(!empty($project->model) && $project->model == 'agileplus')
             set::name('type'),
             set::label($lang->execution->method),
             set::items($lang->execution->typeList),
-            set::value($type),
+            set::value($execution->type),
             on::change('setType'),
         ),
         formGroup
@@ -54,7 +55,7 @@ if(!empty($project->model) && $project->model == 'agileplus')
 }
 
 $typeBox = null;
-if((empty($project) || $project->model != 'kanban') && $type != 'kanban')
+if((empty($project) || $project->model != 'kanban') && $execution->type != 'kanban')
 {
     $typeBox = formRow(
         formGroup
@@ -230,6 +231,7 @@ else
                 picker
                 (
                     set::name('branch[0][]'),
+                    set::items(array()),
                     set::multiple(true),
                     on::change("branchChange")
                 )
@@ -313,14 +315,14 @@ formPanel
         set::width('1/2'),
         set::name('name'),
         set::label($showExecutionExec ? $lang->execution->execName : $lang->execution->name),
-        set::value($name),
+        set::value($execution->name),
     ),
     isset($config->setCode) && $config->setCode == 1 ? formGroup
     (
         set::width('1/2'),
         set::name('code'),
         set::label($showExecutionExec ? $lang->execution->execCode : $lang->execution->code),
-        set::value($code),
+        set::value($execution->code),
     ) : null,
     formRow
     (
@@ -394,7 +396,7 @@ formPanel
         set::width('1/2'),
         set::name('team'),
         set::label($lang->execution->teamName),
-        set::value($team),
+        set::value($execution->team),
     ),
     formGroup
     (
@@ -484,7 +486,7 @@ formPanel
             set::label($lang->execution->acl),
             set::control('radioList'),
             set::items($lang->execution->aclList),
-            set::value($acl),
+            set::value($execution->acl),
             on::change('setWhite(this.value)'),
         )
     ),
