@@ -4671,17 +4671,22 @@ class executionModel extends model
     }
 
     /**
-     * Set stage tree path.
+     * 设置阶段的层级和父子关系。
+     * Set the level and parent-child relationship of the stage.
      *
      * @param  int    $executionID
      * @access public
      * @return bool
      */
-    public function setTreePath($executionID)
+    public function setTreePath(int $executionID): bool
     {
-        $execution = $this->dao->select('id, type, parent, path, grade')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch();
-        $parent    = $this->dao->select('id, type, parent, path, grade')->from(TABLE_PROJECT)->where('id')->eq($execution->parent)->fetch();
+        $execution = $this->fetchByID($executionID);
+        if(!$execution) return false;
 
+        $parent = $this->fetchByID($execution->parent);
+        if(!$parent) return false;
+
+        $path = array();
         if($parent->type == 'project')
         {
             $path['path']  =  ",{$parent->id},{$execution->id},";
@@ -4692,7 +4697,9 @@ class executionModel extends model
             $path['path']  = $parent->path . "{$execution->id},";
             $path['grade'] = $parent->grade + 1;
         }
-        $this->dao->update(TABLE_PROJECT)->set('path')->eq($path['path'])->set('grade')->eq($path['grade'])->where('id')->eq($execution->id)->exec();
+        $this->dao->update(TABLE_PROJECT)->data($path)->where('id')->eq($execution->id)->exec();
+
+        return !dao::isError();
     }
 
     /**

@@ -16,18 +16,14 @@ su('admin');
 /**
 
 title=测试executionModel->setTreePathTest();
+timeout=0
 cid=1
-pid=1
-
-子阶段设置path >> 0,1,,1,2,
-子阶段设置path >> 0,1,,1,4,
-子阶段设置path >> 0,2,,1,2,5,
 
 */
 
-$executionIDList  = array('2', '4', '5');
+$executionIDList = array('2', '4', '10');
 
 $execution = new executionTest();
-r($execution->setTreePathTest($executionIDList[0])) && p('2:project,parent,path') && e('0,1,,1,2,');   // 子阶段设置path
-r($execution->setTreePathTest($executionIDList[1])) && p('4:project,parent,path') && e('0,1,,1,4,');   // 子阶段设置path
-r($execution->setTreePathTest($executionIDList[2])) && p('5:project,parent,path') && e('0,2,,1,2,5,'); // 子阶段设置path
+r($execution->setTreePathTest($executionIDList[0])) && p('2:project,parent') && e('0,1');   // 子阶段设置path
+r($execution->setTreePathTest($executionIDList[1])) && p('4:path', ';')      && e(',1,4,'); // 子阶段设置path
+r($execution->setTreePathTest($executionIDList[2])) && p()                   && e('0');     // 不存在阶段设置path
