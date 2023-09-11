@@ -4982,9 +4982,10 @@ class executionModel extends model
     }
 
     /**
+     * 根据状态创建和设置迭代用于更新迭代的状态。
      * Build execution object by status.
      *
-     * @param  string    $status
+     * @param  string $status
      * @access public
      * @return object
      */
@@ -4997,26 +4998,23 @@ class executionModel extends model
 
         if($status == 'wait')
         {
-            $execution->closedBy      = '';
-            $execution->canceledBy    = '';
+            $execution->closedBy   = '';
+            $execution->canceledBy = '';
         }
-
-        if($status == 'doing')
+        elseif($status == 'doing')
         {
-            $execution->realBegan     = helper::today();
-            $execution->closedBy      = '';
-            $execution->canceledBy    = '';
+            $execution->realBegan  = helper::today();
+            $execution->closedBy   = '';
+            $execution->canceledBy = '';
         }
-
-        if($status == 'suspended')
+        elseif($status == 'suspended')
         {
             $execution->suspendedDate = helper::now();
             $execution->closedBy      = '';
         }
-
-        if($status == 'closed')
+        elseif($status == 'closed')
         {
-            $execution->closedBy   = $this->app->user->account;
+            $execution->closedBy = $this->app->user->account;
         }
 
         return $execution;
