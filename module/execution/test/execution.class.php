@@ -1248,46 +1248,6 @@ class executionTest
     }
 
     /**
-     * function updateChilds test by execution
-     *
-     * @param  string $executionID
-     * @param  string $count
-     * @param  array $param
-     * @access public
-     * @return array
-     */
-    public function updateChildsTest($executionID, $count, $param = array())
-    {
-        global $tester;
-
-        $childs = array();
-        $createFields = array('childs' => $childs);
-
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $object = $this->executionModel->updateChilds($executionID);
-
-        unset($_POST);
-
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error;
-        }
-        elseif($count == "1")
-        {
-            $childExecutions = $tester->dbh->query("select id,name,type from zt_project where parent = $executionID")->fetchAll();
-            return count($childExecutions);
-        }
-        else
-        {
-            $childExecutions = $tester->dbh->query("select id,name,type from zt_project where parent = $executionID")->fetchAll();
-            return $childExecutions;
-        }
-    }
-
-    /**
      * 修改执行的所属项目。
      * Change execution project.
      *
