@@ -121,7 +121,7 @@ $config->story->datatable->fieldList['estimate']['sortType'] = true;
 $config->story->datatable->fieldList['estimate']['width']    = '50';
 $config->story->datatable->fieldList['estimate']['required'] = 'no';
 
-$config->story->datatable->fieldList['reviewer']['title']      = 'reviewedBy';
+$config->story->datatable->fieldList['reviewer']['title']      = 'reviewer';
 $config->story->datatable->fieldList['reviewer']['type']       = 'html';
 $config->story->datatable->fieldList['reviewer']['sortType']   = true;
 $config->story->datatable->fieldList['reviewer']['control']    = 'multiple';
@@ -134,7 +134,6 @@ $config->story->datatable->fieldList['reviewedBy']['sortType']   = true;
 $config->story->datatable->fieldList['reviewedBy']['width']      = '100';
 $config->story->datatable->fieldList['reviewedBy']['required']   = 'no';
 $config->story->datatable->fieldList['reviewedBy']['control']    = 'multiple';
-$config->story->datatable->fieldList['reviewedBy']['dataSource'] = array('module' => 'story', 'method' => 'getStoriesReviewer', 'params' => '$productID');
 
 $config->story->datatable->fieldList['reviewedDate']['title']    = 'reviewedDate';
 $config->story->datatable->fieldList['reviewedDate']['fixed']    = 'no';
