@@ -2133,7 +2133,7 @@ class executionModel extends model
      * @access public
      * @return array
      */
-    public function getTasks(int $productID, int $executionID, array $executions, string $browseType, int $queryID, int $moduleID, string $sort, object $pager): array
+    public function getTasks(int $productID, int $executionID, array $executions, string $browseType, int $queryID, int $moduleID, string $sort, object $pager = null): array
     {
         /* Set modules and $browseType. */
         $modules = array();
@@ -3872,19 +3872,21 @@ class executionModel extends model
     }
 
     /**
+     * 获取任务列表的统计信息。
      * Get the summary of execution.
      *
-     * @param  array    $tasks
+     * @param  array  $tasks
      * @access public
      * @return string
      */
-    public function summary($tasks)
+    public function summary(array $tasks): string
     {
         $taskSum = 0;
         $totalEstimate = $totalConsumed = $totalLeft = 0.0;
 
         $summations = array();
         $this->app->loadLang('task');
+
         /* 当前只需要显示wait 和 doing 状态，但是从代码分析将来可能需要统计其他状态的，所以取全部状态。 */
         foreach($this->lang->task->statusList as $statusCode => $statusName) $summations[$statusCode] = 0;
 

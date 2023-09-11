@@ -29,16 +29,12 @@ su('admin');
 /**
 
 title=测试executionModel->summaryTest();
+timeout=0
 cid=1
-pid=1
-
-敏捷执行任务统计 >> 本页共 <strong>4</strong> 个任务，未开始 <strong>2</strong>，进行中 <strong>2</strong>，总预计 <strong>24</strong> 工时，已消耗 <strong>12</strong> 工时，剩余 <strong>12</strong> 工时。
-瀑布执行任务统计 >> 本页共 <strong>3</strong> 个任务，未开始 <strong>1</strong>，进行中 <strong>2</strong>，总预计 <strong>18</strong> 工时，已消耗 <strong>9</strong> 工时，剩余 <strong>9</strong> 工时。
-看板执行任务统计 >> 本页共 <strong>3</strong> 个任务，未开始 <strong>2</strong>，进行中 <strong>1</strong>，总预计 <strong>18</strong> 工时，已消耗 <strong>9</strong> 工时，剩余 <strong>9</strong> 工时。
 
 */
 
-$executionIDList = array('3', '4', '5');
+$executionIDList = range(3, 5);
 
 $execution = new executionTest();
 r($execution->summaryTest($executionIDList[0])) && p() && e('本页共 <strong>4</strong> 个任务，未开始 <strong>2</strong>，进行中 <strong>2</strong>，总预计 <strong>24</strong> 工时，已消耗 <strong>12</strong> 工时，剩余 <strong>12</strong> 工时。');  // 敏捷执行任务统计

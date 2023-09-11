@@ -1803,19 +1803,18 @@ class executionTest
     }
 
     /**
-     * function summary test by execution
+     * 获取任务列表的统计信息。
+     * Get the summary of execution.
      *
-     * @param  string $executionID
+     * @param  int    $executionID
      * @access public
-     * @return array
+     * @return string
      */
-    public function summaryTest($executionID)
+    public function summaryTest(int $executionID): string
     {
-        global $tester;
-        $execution  = $tester->dbh->query("select * from zt_project where id = $executionID")->fetch();
-        $executions = array($executionID => $execution->name);
-        $page       = 'NULL';
-        $tasks      = $this->executionModel->getTasks('0', $executionID, $executions,'all', '0', '0', 'status,id_desc', $page);
+        $executionName = $this->executionModel->dao->select('name')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch('name');
+        $executions    = array($executionID => $executionName);
+        $tasks         = $this->executionModel->getTasks('0', $executionID, $executions,'all', '0', '0', 'status,id_desc');
 
         $object = $this->executionModel->summary($tasks);
 
