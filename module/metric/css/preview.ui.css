@@ -28,7 +28,8 @@
 .main .table-and-chart {display: flex;}
 .main .table-and-chart-single {height: calc(100vh - 180px);}
 .main .table-and-chart-multiple {height: calc(100% - 56px);}
-.main .table-and-charts {height: calc(100vh - 172px); overflow-y: scroll; transition: height 0.3s ease;}
+.main .canvas {height: calc(100vh - 172px + 48px); overflow-y: scroll;}
+.main .table-and-charts {height: calc(100vh - 172px);}
 .main .metricBox {height: 80%;}
 
 .table-and-chart .table-side {flex: 0 0 40%; overflow-x: hidden; padding-left: 16px; padding-top: 8px; padding-bottom: 16px; padding-right: 2px;}
@@ -41,7 +42,7 @@
 
 .primary-600 {color: var(--color-primary-600); background-color: var(--color-slate-300);}
 
-.main .checked-content {transition: height 0.5s ease; height: 48px; padding-left: 8px; border-bottom: 1px solid var(--color-slate-300);}
+.main .checked-content {position: sticky; top: 0px; transition: height 0.5s ease; height: 48px; padding-left: 8px; border-bottom: 1px solid var(--color-slate-300); background-color: #fff; z-index: 100;}
 .main .checked-label-content {height: 48px; padding-top: 3px; display: flex; flex-wrap: wrap;}
 .main .checked-label-right {height: 48px; padding-right: 12px; justify-content: flex-end; display: flex; align-items: center;}
 .main .checked-tip {padding-right: 6px; position: relative;}

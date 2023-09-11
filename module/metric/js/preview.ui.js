@@ -276,7 +276,6 @@ window.unfoldContent = function()
   var contentHeight = 48 + (window.lineCount - 1) * 40;
   $content.height(contentHeight);
 
-  window.recoverMainHeight(contentHeight);
   setTimeout(function()
   {
     $content.find('.gray-next').addClass('gray-visible');
@@ -290,8 +289,6 @@ window.foldContent = function()
   $content.height(48);
   $content.find('.gray-next').addClass('gray-hidden');
   $content.find('.gray-next').removeClass('gray-visible');
-
-  window.recoverMainHeight(48);
 }
 
 window.getMainSideHeight = function()
@@ -396,8 +393,6 @@ window.renderCheckedLabel = function()
   }
 
   window.lineCount = lineCount;
-  if(window.isDropdown) window.recoverMainHeight(contentHeight);
-  else window.recoverMainHeight(48);
 
   $('.checked-tip').text(selectCount.replace('%s', labels.length));
 }
