@@ -1518,32 +1518,29 @@ class executionTest
     }
 
     /**
-     * function unlinkCases test by execution
+     * 解除用例跟执行的关联关系。
+     * Unlink cases.
      *
-     * @param  string $executionID
-     * @param  string $productID
-     * @param  string $storyID
+     * @param  int    $executionID
+     * @param  int    $productID
+     * @param  int    $storyID
      * @access public
      * @return array
      */
-    public function unlinkCasesTest($executionID, $productID, $storyID)
+    public function unlinkCasesTest(int $executionID, int $productID, int $storyID): array
     {
-        global $tester;
-
-        $tester->dbh->query("delete from zt_projectcase where project = $executionID");
+        $this->executionModel->dao->delete()->from(TABLE_PROJECTCASE)->where('project')->eq($executionID)->exec();
 
         $this->executionModel->linkCases($executionID, $productID, $storyID);
         $this->executionModel->unlinkCases($executionID, $storyID);
 
         if(dao::isError())
         {
-            $error = dao::getError();
-            return $error;
+            return dao::getError();
         }
         else
         {
-            $object = $tester->dbh->query("select * from zt_projectcase where project = $executionID")->fetchAll();
-            return $object;
+            return $this->executionModel->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($executionID)->fetchAll();
         }
     }
 

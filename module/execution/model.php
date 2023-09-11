@@ -3208,17 +3208,25 @@ class executionModel extends model
         }
 
         /* 取消该需求关联的所有任务。*/
-        $tasks = $this->dao->select('id')->from(TABLE_TASK)->where('story')->eq($storyID)->andWhere('execution')->eq($executionID)->andWhere('status')->in('wait,doing')->fetchPairs('id');
-        foreach($tasks as $taskID)
+        $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('story')->eq($storyID)->andWhere('execution')->eq($executionID)->andWhere('status')->in('wait,doing')->fetchAll();
+        $now   = helper::now();
+        foreach($tasks as $task)
         {
-            if(empty($taskID)) continue;
-            $changes  = $this->loadModel('task')->cancel($taskID);
-            $actionID = $this->action->create('task', $taskID, 'Canceled');
-            $this->action->logHistory($actionID, $changes);
+            if(empty($task)) continue;
+            $task->status       = 'cancel';
+            $task->assignedTo   = $task->openedBy;
+            $task->assignedDate = $now;
+            $task->canceledBy   = $task->lastEditedBy = $this->app->user->account;
+            $task->canceledDate = $task->lastEditedDate = $now;
+            $task->finishedBy   = '';
+            $task->finishedDate = null;
+
+            $this->loadModel('task')->cancel($task);
         }
     }
 
     /**
+     * 解除用例跟执行的关联关系。
      * Unlink cases.
      *
      * @param  int    $executionID
@@ -3226,22 +3234,22 @@ class executionModel extends model
      * @access public
      * @return void
      */
-    public function unlinkCases($executionID, $storyID)
+    public function unlinkCases(int $executionID, int $storyID): void
     {
         $this->loadModel('action');
         $execution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
         $cases     = $this->dao->select('id')->from(TABLE_CASE)->where('story')->eq($storyID)->fetchAll('id');
         foreach($cases as $caseID => $case)
         {
-            $this->dao->delete()->from(TABLE_PROJECTCASE)->where('project')->eq($executionID)->andWhere('`case`')->eq($caseID)->limit(1)->exec();
+            $this->dao->delete()->from(TABLE_PROJECTCASE)->where('project')->eq($executionID)->andWhere('`case`')->eq($caseID)->exec();
             $action = $execution->type == 'project' ? 'unlinkedfromproject' : 'unlinkedfromexecution';
-            if($execution->multiple or $execution->type == 'project') $this->action->create('case', $caseID, $action, '', $executionID);
+            if($execution->multiple || $execution->type == 'project') $this->action->create('case', $caseID, $action, '', $executionID);
 
             /* Sync unlink case in no multiple execution. */
-            if(empty($execution->multiple) and $execution->type != 'project')
+            if(empty($execution->multiple) && $execution->type != 'project')
             {
                 $this->dao->delete()->from(TABLE_PROJECTCASE)->where('project')->eq($execution->project)->andWhere('`case`')->eq($caseID)->limit(1)->exec();
-                $this->loadModel('action')->create('case', $caseID, 'unlinkedfromproject', '', $execution->project);
+                $this->action->create('case', $caseID, 'unlinkedfromproject', '', $execution->project);
             }
         }
 
@@ -3250,7 +3258,7 @@ class executionModel extends model
         foreach($cases as $case)
         {
             if($case->order != $order) $this->dao->update(TABLE_PROJECTCASE)->set('`order`')->eq($order)->where('project')->eq($executionID)->andWhere('`case`')->eq($case->case)->exec();
-            $order++;
+            $order ++;
         }
     }
 
