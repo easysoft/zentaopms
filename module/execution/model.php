@@ -3003,13 +3003,14 @@ class executionModel extends model
     }
 
     /**
+     * 批量关联需求。
      * Link all stories by execution.
      *
      * @param  int    $executionID
      * @access public
      * @return bool
      */
-    public function linkStories($executionID): bool
+    public function linkStories(int $executionID): bool
     {
         $plans = $this->dao->select('product, plan')->from(TABLE_PROJECTPRODUCT)
             ->where('project')->eq($executionID)
@@ -3035,7 +3036,7 @@ class executionModel extends model
                 {
                     foreach($planStories as $id => $story)
                     {
-                        if($story->status != 'active' or (!empty($story->branch) and !empty($executionBranches) and !isset($executionBranches[$story->branch])))
+                        if($story->status != 'active' || (!empty($story->branch) && !empty($executionBranches) && !isset($executionBranches[$story->branch])))
                         {
                             unset($planStories[$id]);
                             continue;

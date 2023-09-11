@@ -52,12 +52,8 @@ su('admin');
 /**
 
 title=测试executionModel->linkStoryTest();
+timeout=0
 cid=1
-pid=1
-
-敏捷执行关联需求 >> 1
-瀑布执行关联需求 >> 0
-看板执行关联需求 >> 1
 
 */
 

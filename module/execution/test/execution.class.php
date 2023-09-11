@@ -1387,6 +1387,7 @@ class executionTest
     }
 
     /**
+     * 批量关联需求。
      * Link all stories by execution.
      *
      * @param  int    $executionID
@@ -1395,13 +1396,12 @@ class executionTest
      * @access public
      * @return int
      */
-    public function linkStoriesTest($executionID, $productID = 0, $planID = 0)
+    public function linkStoriesTest(int $executionID, int $productID = 0, int $planID = 0): int
     {
-        global $tester;
-        if($planID) $tester->dao->update(TABLE_PROJECTPRODUCT)->set('plan')->eq($planID)->where('project')->eq($executionID)->andWhere('product')->eq($productID)->exec();
+        if($planID) $this->executionModel->dao->update(TABLE_PROJECTPRODUCT)->set('plan')->eq($planID)->where('project')->eq($executionID)->andWhere('product')->eq($productID)->exec();
 
         $this->executionModel->linkStories($executionID);
-        $objects = $tester->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->andWhere('product')->eq($productID)->fetchAll();
+        $objects = $this->executionModel->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->andWhere('product')->eq($productID)->fetchAll();
         return count($objects);
     }
 
