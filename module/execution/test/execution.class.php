@@ -3070,4 +3070,16 @@ class executionTest
             return $this->executionModel->dao->select('*')->from(TABLE_TASK)->where('story')->eq($storyID)->andWhere('execution')->eq($executionID)->fetchAll();
         }
     }
+
+    /**
+     * Test generateRow method.
+     *
+     * @access public
+     * @return array
+     */
+    public function generateRowTest()
+    {
+        $executions = $this->executionModel->getStatData();
+        return $this->executionModel->generateRow($executions, array(), array());
+    }
 }
