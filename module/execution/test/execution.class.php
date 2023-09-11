@@ -1428,53 +1428,33 @@ class executionTest
     }
 
     /**
-     * function unlinkStory test by execution
+     * 移除需求。
+     * Unlink a story.
      *
-     * @param  string $executionID
-     * @param  string $count       1: get count of objects, other: get object.
-     * @param  string $storyID
-     * @param  array  $param
+     * @param  int       $executionID
+     * @param  int       $storyID
+     * @param  array     $stories
+     * @param  int       $count       1: get count of objects, other: get object.
      * @access public
-     * @return array
+     * @return array|int
      */
-    public function unlinkStoryTest($executionID, $count, $storyID, $param = array())
+    public function unlinkStoryTest(int $executionID, int $storyID, array $stories, int $count): array|int
     {
-        global $tester;
+        $this->executionModel->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->exec();
 
-        $stories  = array();
-        $products = array();
-
-        $createFields = array('stories' => $stories, 'products' => $products);
-
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $tester->dbh->query("delete from zt_projectstory where project = $executionID");
-
-        $this->executionModel->linkStory($executionID);
-
-        unset($_POST);
-
+        $this->executionModel->linkStory($executionID, $stories);
         $this->executionModel->unlinkStory($executionID, $storyID);
 
         if(dao::isError()) return dao::getError();
 
-        if($count == "1")
+        if($count == 1)
         {
-            $object = $tester->dbh->query("select * from zt_projectstory where project = $executionID")->fetchAll();
+            $object = $this->executionModel->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->fetchAll();
             return count($object);
         }
         else
         {
-            $object = $tester->dbh->query("select * from zt_projectstory where project = $executionID")->fetchAll();
-            if(!empty($object))
-            {
-                return $object;
-            }
-            else
-            {
-                return false;
-            }
+            return $this->executionModel->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->fetchAll();
         }
     }
 
@@ -3089,5 +3069,32 @@ class executionTest
             ->fetchAll();
 
         return $count ? count($executions) : $executions;
+    }
+
+    /**
+     * 取消关联需求后的其他数据处理。
+     * Other data process after unlink story.
+     *
+     * @param  int       $executionID
+     * @param  int       $storyID
+     * @param  int       $count
+     * @access public
+     * @return array|int
+     */
+    public function afterUnlinkStoryTest(int $executionID, int $storyID, int $count): array|int
+    {
+        $execution = $this->executionModel->getByID($executionID);
+        $this->executionModel->afterUnlinkStory($execution, $storyID);
+        if(dao::isError()) return dao::getError();
+
+        if($count == 1)
+        {
+            $object = $this->executionModel->dao->select('*')->from(TABLE_TASK)->where('story')->eq($storyID)->andWhere('execution')->eq($executionID)->fetchAll();
+            return count($object);
+        }
+        else
+        {
+            return $this->executionModel->dao->select('*')->from(TABLE_TASK)->where('story')->eq($storyID)->andWhere('execution')->eq($executionID)->fetchAll();
+        }
     }
 }

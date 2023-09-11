@@ -3058,16 +3058,16 @@ class executionModel extends model
 
     /**
      * 移除需求。
-     * Unlink story.
+     * Unlink a story.
      *
      * @param  int    $executionID
      * @param  int    $storyID
      * @param  int    $laneID
      * @param  int    $columnID
      * @access public
-     * @return void
+     * @return array|bool
      */
-    public function unlinkStory(int $executionID, int $storyID, int $laneID = 0, int $columnID = 0)
+    public function unlinkStory(int $executionID, int $storyID, int $laneID = 0, int $columnID = 0): array|bool
     {
         $execution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
         if($execution->type == 'project')
@@ -3108,24 +3108,39 @@ class executionModel extends model
             $order++;
         }
 
+        return $this->afterUnlinkStory($execution, $storyID);
+    }
+
+    /**
+     * 取消关联需求后的其他数据处理。
+     * Other data process after unlink story.
+     *
+     * @param  object $execution
+     * @param  int    $storyID
+     * @access public
+     * @return bool
+     */
+    public function afterUnlinkStory(object $execution, int $storyID): bool
+    {
         $this->loadModel('story')->setStage($storyID);
-        $this->unlinkCases($executionID, $storyID);
+        $this->unlinkCases($execution->id, $storyID);
         $actionType = $execution->type == 'project' ? 'unlinkedFromProject' : 'unlinkedFromExecution';
-        if($execution->multiple or $execution->type == 'project') $this->loadModel('action')->create('story', $storyID, $actionType, '', $executionID);
+        if($execution->multiple || $execution->type == 'project') $this->loadModel('action')->create('story', $storyID, $actionType, '', $execution->id);
 
         /* 从迭代中移除该需求，并记录日志。*/
-        if(empty($execution->multiple) and $execution->type != 'project')
+        if(empty($execution->multiple) && $execution->type != 'project')
         {
-            $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($execution->project)->andWhere('story')->eq($storyID)->limit(1)->exec();
+            $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($execution->project)->andWhere('story')->eq($storyID)->exec();
             $this->loadModel('action')->create('story', $storyID, 'unlinkedFromProject', '', $execution->project);
         }
 
         /* 取消该需求关联的所有任务。*/
-        $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('story')->eq($storyID)->andWhere('execution')->eq($executionID)->andWhere('status')->in('wait,doing')->fetchAll();
+        $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('story')->eq($storyID)->andWhere('execution')->eq($execution->id)->andWhere('status')->in('wait,doing')->fetchAll();
         $now   = helper::now();
         foreach($tasks as $task)
         {
             if(empty($task)) continue;
+
             $task->status       = 'cancel';
             $task->assignedTo   = $task->openedBy;
             $task->assignedDate = $now;
@@ -3136,6 +3151,7 @@ class executionModel extends model
 
             $this->loadModel('task')->cancel($task);
         }
+        return !dao::isError();
     }
 
     /**

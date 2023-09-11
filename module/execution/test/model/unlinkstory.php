@@ -44,22 +44,21 @@ $cell->gen(1);
 su('admin');
 
 /**
+
 title=测试executionModel->unlinkStoryTest();
+timeout=0
 cid=1
-pid=1
+
 */
 
-$executionIDList = array('3', '4', '5');
-$stories         = array('4', '324', '364');
-$products        = array('4' => '1', '324' => '2', '364' => '3');
-$count           = array('0', '1');
-
-$story   = array('stories' => $stories, 'products' => $products);
+$executionIDList = array(3, 4, 5);
+$stories         = array(4, 324, 364);
+$count           = array(0, 1);
 
 $execution = new executionTest();
-r($execution->unlinkStoryTest($executionIDList[0], $count[0], $stories[0], $story)) && p('0:project,product,story') && e('3,1,324');  // 敏捷执行解除关联需求，移除迭代3中的需求4
-r($execution->unlinkStoryTest($executionIDList[1], $count[0], $stories[1], $story)) && p('0:project,product,story') && e('4,1,4');    // 瀑布执行解除关联需求，移除迭代4中的需求324
-r($execution->unlinkStoryTest($executionIDList[2], $count[0], $stories[2], $story)) && p('0:project,product,story') && e('5,1,4');    // 看板执行解除关联需求，移除迭代5中的需求364
-r($execution->unlinkStoryTest($executionIDList[0], $count[1], $stories[0], $story)) && p()                          && e('2');        // 敏捷执行关联需求统计
-r($execution->unlinkStoryTest($executionIDList[1], $count[1], $stories[1], $story)) && p()                          && e('2');        // 瀑布执行关联需求统计
-r($execution->unlinkStoryTest($executionIDList[2], $count[1], $stories[2], $story)) && p()                          && e('2');        // 看板执行关联需求统计
+r($execution->unlinkStoryTest($executionIDList[0], $stories[0], $stories, $count[0])) && p('0:project,product,story') && e('3,1,324'); // 敏捷执行解除关联需求，移除迭代3中的需求4
+r($execution->unlinkStoryTest($executionIDList[1], $stories[1], $stories, $count[0])) && p('0:project,product,story') && e('4,1,4');   // 瀑布执行解除关联需求，移除迭代4中的需求324
+r($execution->unlinkStoryTest($executionIDList[2], $stories[2], $stories, $count[0])) && p('0:project,product,story') && e('5,1,4');   // 看板执行解除关联需求，移除迭代5中的需求364
+r($execution->unlinkStoryTest($executionIDList[0], $stories[0], $stories, $count[1])) && p()                          && e('2');       // 敏捷执行关联需求统计
+r($execution->unlinkStoryTest($executionIDList[1], $stories[1], $stories, $count[1])) && p()                          && e('2');       // 瀑布执行关联需求统计
+r($execution->unlinkStoryTest($executionIDList[2], $stories[2], $stories, $count[1])) && p()                          && e('2');       // 看板执行关联需求统计
