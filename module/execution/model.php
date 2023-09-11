@@ -2801,26 +2801,6 @@ class executionModel extends model
     }
 
     /**
-     * Update childs.
-     *
-     * @param  int    $executionID
-     * @access public
-     * @return void
-     */
-    public function updateChilds($executionID)
-    {
-        $sql = "UPDATE " . TABLE_PROJECT . " SET parent = 0 WHERE parent = '$executionID'";
-        $this->dbh->exec($sql);
-        if(!isset($_POST['childs'])) return;
-        $childs = array_unique($_POST['childs']);
-        foreach($childs as $childExecutionID)
-        {
-            $sql = "UPDATE " . TABLE_PROJECT . " SET parent = '$executionID' WHERE id = '$childExecutionID'";
-            $this->dbh->query($sql);
-        }
-    }
-
-    /**
      * 修改执行的所属项目。
      * Change execution project.
      *
