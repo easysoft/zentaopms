@@ -4656,13 +4656,14 @@ class executionModel extends model
     }
 
     /**
+     * 获取阶段关联的产品。
      * Get the products associated with the stage.
      *
-     * @param  string    $stageIdList
+     * @param  array  $stageIdList
      * @access public
      * @return array
      */
-    public function getStageLinkProductPairs($stageIdList = array())
+    public function getStageLinkProductPairs(array $stageIdList = array()): array
     {
         return $this->dao->select('t1.project, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
@@ -4703,6 +4704,7 @@ class executionModel extends model
     }
 
     /**
+     * 生成dtable的行数据。
      * Generate row for dtable.
      *
      * @param  array  $executions
