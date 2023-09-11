@@ -2,18 +2,28 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/execution.class.php';
-su('admin');
 
+zdTable('project')->config('execution')->gen(10);
+zdTable('user')->gen(5);
+
+$team = zdTable('team');
+$team->type->range('execution');
+$team->root->range('101-103');
+$team->gen(10);
+
+su('admin');
 /**
 
 title=测试 executionModel->getLimitedExecution();
+timeout=0
 cid=1
-pid=1
-
-获取所有受限制的执行ID >> 1
 
 */
 
-$execution = new executionTest();
+global $app;
 
-r($execution->getLimitedExecutionTest()) && p() && e('1');  // 获取所有受限制的执行ID
+$execution = new executionTest();
+r($execution->getLimitedExecutionTest()) && p() && e('1');  // 判断管理员
+
+su('user4');
+r($execution->getLimitedExecutionTest()) && p() && e('103');  // 判断非管理员

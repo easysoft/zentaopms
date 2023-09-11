@@ -920,8 +920,7 @@ class executionTest
      */
     public function getLimitedExecutionTest()
     {
-        $this->executionModel->getProductGroupList();
-        return isset($_SESSION['limitedExecutions']) ? $_SESSION['limitedExecutions'] : true;
+        return $this->executionModel->getLimitedExecution();
     }
 
     /**

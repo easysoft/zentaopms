@@ -2112,22 +2112,22 @@ class executionModel extends model
     }
 
     /**
-     * Get related executions
+     * 获取执行关联的产品下的执行列表。
+     * Get related executions.
      *
      * @param  int    $executionID
      * @access public
      * @return array
      */
-    public function getRelatedExecutions($executionID)
+    public function getRelatedExecutions(int $executionID): array
     {
         $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$executionID)->fetchAll('product');
-        // $products   = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->fetchAll('product');
         if(!$products) return array();
-        $products = array_keys($products);
+
         return $this->dao->select('t1.id, t1.name')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')
             ->on('t1.id = t2.project')
-            ->where('t2.product')->in($products)
+            ->where('t2.product')->in(array_keys($products))
             ->andWhere('t1.id')->ne((int)$executionID)
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.id')
@@ -2153,7 +2153,8 @@ class executionModel extends model
     }
 
     /**
-     * Check the privilege.
+     * 获取受限执行id并保存到session中。
+     * Get limited execution id and save it to session.
      *
      * @access public
      * @return bool|string
@@ -2171,8 +2172,8 @@ class executionModel extends model
             ->orderBy('root asc')
             ->fetchPairs('root', 'root');
 
-        $_SESSION['limitedExecutions'] = implode(',', $executions);
-        return $_SESSION['limitedExecutions'];
+        $this->session->set('limitedExecutions', implode(',', $executions));
+        return $this->session->limitedExecutions;
     }
 
     /**

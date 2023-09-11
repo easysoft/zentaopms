@@ -37,15 +37,8 @@ su('admin');
 /**
 
 title=测试executionModel->getRelatedExecutionsTest();
+timeout=0
 cid=1
-pid=1
-
-查询敏捷执行关联查询 >> 项目1
-查询瀑布执行关联查询 >> 项目3
-查询看板执行关联查询 >> 项目2
-查询敏捷执行关联统计 >> 2
-查询瀑布执行关联统计 >> 3
-查询看板执行关联统计 >> 2
 
 */
 
