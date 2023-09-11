@@ -1248,6 +1248,7 @@ class execution extends control
         {
             $postData    = form::data()->get();
             $oldProducts = $this->product->getProducts($executionID, 'all', '', true, $linkedProductIdList);
+            $oldPlans    = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->andWhere('plan')->ne(0)->fetchPairs('plan');
             $changes     = $this->execution->update($executionID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -1278,7 +1279,7 @@ class execution extends control
             if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->programplan->computeProgress($executionID, 'edit');
 
             /* Redirect to confirm page if the execution can link plan stories. */
-            $this->executionZen->checkLinkPlan($executionID);
+            $this->executionZen->checkLinkPlan($executionID, $oldPlans);
 
             $message = $this->executeHooks($executionID);
             if($message) $this->lang->saveSuccess = $message;

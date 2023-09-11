@@ -1650,11 +1650,11 @@ class executionZen extends execution
      * Check if the execution can be linked to plan stories.
      *
      * @param  int $executionID
+     * @param  array $oldPlans
      * @return void
      */
-    public function checkLinkPlan(int $executionID)
+    public function checkLinkPlan(int $executionID, array $oldPlans)
     {
-        $oldPlans = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->andWhere('plan')->ne(0)->fetchPairs('plan');
         $oldPlans = explode(',', implode(',' ,$oldPlans));
         $newPlans = array();
         if(isset($_POST['plans']))
