@@ -691,6 +691,7 @@ class baseRouter
         $_POST   = validater::filterSuper($_POST);
         $_GET    = validater::filterSuper($_GET);
         $_COOKIE = validater::filterSuper($_COOKIE);
+        $_SERVER = validater::filterSuper($_SERVER);
 
         /* Filter common get and cookie vars. */
         if($this->config->framework->filterParam == 2)
