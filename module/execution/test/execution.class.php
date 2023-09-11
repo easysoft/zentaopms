@@ -2622,36 +2622,6 @@ class executionTest
     }
 
     /**
-     * Test print cell.
-     *
-     * @param  int    $executionID
-     * @access public
-     * @return void
-     */
-    public function printCellTest($executionID)
-    {
-        $col = new stdClass();
-        $col->order = 1;
-        $col->id    = 'id';
-        $col->show  = 1;
-        $col->width = 70;
-        $col->fixed = 'left';
-        $col->title = 'ID';
-        $col->sort  = 'yes';
-        $col->name  = '';
-
-        $execution = $this->executionModel->getByID($executionID);
-
-        ob_start();
-        $this->executionModel->printCell($col, $execution, array());
-        $objects = ob_get_clean();
-
-        if(dao::isError()) return dao::getError();
-
-        return strip_tags($objects);
-    }
-
-    /**
      * Test build operate menu.
      *
      * @param  int    $executionID
@@ -2678,7 +2648,7 @@ class executionTest
         global $app;
         $app->moduleName = 'task';
         $tree = $this->executionModel->getTree($executionID);
-        return str_replace(' ', '', strip_tags($this->executionModel->printTree($tree, false)));
+        return $this->executionModel->printTree($tree);
     }
 
     /**

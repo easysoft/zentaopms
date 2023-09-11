@@ -6,27 +6,30 @@ zdTable('user')->gen(5);
 su('admin');
 
 $execution = zdTable('project');
-$execution->id->range('1-6');
-$execution->name->range('项目集1,项目1,项目2,迭代1,阶段1,看板1');
-$execution->type->range('program,project{2},sprint,stage,kanban');
-$execution->code->range('1-6')->prefix('code');
-$execution->parent->range('0,1{2},2{2},3');
-$execution->project->range('0,1{2},2{2},3');
-$execution->status->range('wait{3},suspended,closed,doing');
-$execution->openedBy->range('admin,user1');
-$execution->hasProduct->range('0');
-$execution->begin->range('20220110 000000:0')->type('timestamp')->format('YY/MM/DD');
-$execution->end->range('20220220 000000:0')->type('timestamp')->format('YY/MM/DD');
-$execution->gen(6);
+$execution->id->range('1-5');
+$execution->name->range('项目1,项目2,迭代1,迭代2,迭代3');
+$execution->type->range('project{2},sprint,stage,kanban');
+$execution->status->range('doing');
+$execution->parent->range('0,0,1,1,2');
+$execution->project->range('0,0,1,1,2');
+$execution->grade->range('2{2},1{3}');
+$execution->openedVersion->range('18.0');
+$execution->path->range('1,2,`1,3`,`1,4`,`2,5`')->prefix(',')->postfix(',');
+$execution->begin->range('20230102 000000:0')->type('timestamp')->format('YY/MM/DD');
+$execution->end->range('20230212 000000:0')->type('timestamp')->format('YY/MM/DD');
+$execution->gen(5);
 
-$burn = zdTable('burn');
-$burn->execution->range('3{5},4{5},5{5}');
-$burn->date->range('20220111 000000:1D')->type('timestamp')->format('YY/MM/DD');
-$burn->estimate->range('94.3,56.3,55.3,37.8,33.8');
-$burn->left->range('95.3,68.5,73.9,40.2,36,3');
-$burn->consumed->range('20.1,33.4,41,56.55,59.55');
-$burn->storyPoint->range('0,16.5,16,11.5,9');
-$burn->gen(15);
+$task = zdTable('task');
+$task->id->range('1-10');
+$task->name->range('1-10')->prefix('任务');
+$task->execution->range('3-5');
+$task->type->range('test,devel');
+$task->status->range('wait,doing');
+$task->estimate->range('1-10');
+$task->left->range('1-10');
+$task->module->range('1-10');
+$task->consumed->range('1-10');
+$task->gen(10);
 
 $product = zdTable('product');
 $product->id->range('1-3');
@@ -36,30 +39,38 @@ $product->type->range('normal');
 $product->status->range('normal');
 $product->gen(3);
 
-$task = zdTable('task');
-$task->id->range('1-10');
-$task->execution->range('4');
-$task->status->range('wait,doing');
-$task->estimate->range('1-10');
-$task->left->range('1-10');
-$task->consumed->range('1-10');
-$task->gen(10);
+$product = zdTable('module');
+$product->id->range('1-10');
+$product->name->range('1-10')->prefix('模块');
+$product->root->range('3-5');
+$product->parent->range('0,1{9}');
+$product->type->range('task');
+$product->gen(10);
 
-zdTable('projectproduct')->gen(0);
+$branch = zdTable('branch');
+$branch->id->range('1-10');
+$branch->product->range('1-3');
+$branch->gen(5);
+
+$related = zdTable('projectproduct');
+$related->project->range('3-5');
+$related->product->range('1-3');
+$related->branch->range('0-1');
+$related->gen(5);
 
 /**
 
 title=测试executionModel->printTree();
+timeout=0
 cid=1
-pid=1
-
-查询不存在的执行 >> 0
-查询存在的执行   >> /任务10任务9任务8任务7任务6任务5任务4任务3任务2任务1
 
 */
 
-$executionIDList = array(0, 4);
-
 $execution = new executionTest();
-r($execution->printTreeTest($executionIDList[0])) && p() && e('0');                                                    // 查询不存在的执行
-r($execution->printTreeTest($executionIDList[1])) && p() && e('/任务10任务9任务8任务7任务6任务5任务4任务3任务2任务1'); // 查询存在的执行
+$executionIDList = array(0, 3);
+
+r($execution->printTreeTest($executionIDList[0])) && p() && e('0'); // 查询不存在的执行
+
+$tree = $execution->printTreeTest($executionIDList[1]);
+r(count($tree[0]['children'])) && p()               && e('1');                                               // 查询存在的执行
+r($tree[0])                    && p('content:html') && e("<span class=' title' title='模块1'>模块1</span>"); // 查询存在的执行

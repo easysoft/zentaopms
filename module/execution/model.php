@@ -4609,12 +4609,12 @@ class executionModel extends model
     /**
      * Print html for tree.
      *
-     * @param object $trees
-     * @param bool   $hasProduct true|false
+     * @param  array $trees
+     * @param  bool  $hasProduct
      * @access pubic
-     * @return string
+     * @return array
      */
-    public function printTree($trees, $hasProduct = true)
+    public function printTree(array $trees, bool $hasProduct = true): array
     {
         $treeData = array();
         foreach($trees as $index => $tree)
