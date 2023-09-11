@@ -1288,31 +1288,22 @@ class executionTest
     }
 
     /**
-     * function changeProject test by execution
+     * 修改执行的所属项目。
+     * Change execution project.
      *
-     * @param  string $newProject
-     * @param  string $oldProject
-     * @param  string $executionID
-     * @param  array  $syncStories
+     * @param  int    $newProjectID
+     * @param  int    $oldProjectID
+     * @param  int    $executionID
+     * @param  string $syncStories yes|no
      * @access public
-     * @return array
+     * @return array|object
      */
-    public function changeProjectTest($newProject, $oldProject, $executionID, $syncStories = 'no')
+    public function changeProjectTest(int $newProjectID, int $oldProjectID, int $executionID, string $syncStories = 'no'): array|object
     {
-        global $tester;
+        $this->executionModel->changeProject($newProjectID, $oldProjectID, $executionID, $syncStories);
 
-        $this->executionModel->changeProject($newProject, $oldProject, $executionID, $syncStories);
-
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error;
-        }
-        else
-        {
-            $newExecution = $tester->dbh->query("select parent,path from zt_project where id = $executionID")->fetchAll();
-            return $newExecution;
-        }
+        if(dao::isError()) return dao::getError();
+        return $this->executionModel->dao->select('parent,path')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
     }
 
     /**

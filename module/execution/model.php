@@ -2821,41 +2821,76 @@ class executionModel extends model
     }
 
     /**
+     * 修改执行的所属项目。
      * Change execution project.
      *
-     * @param  int    $newProject
-     * @param  int    $oldProject
+     * @param  int    $newProjectID
+     * @param  int    $oldProjectID
      * @param  int    $executionID
-     * @param  string $syncStories    yes|no
+     * @param  string $syncStories yes|no
      * @access public
      * @return void
      */
-    public function changeProject($newProject, $oldProject, $executionID, $syncStories = 'no')
+    public function changeProject(int $newProjectID, int $oldProjectID, int $executionID, string $syncStories = 'no'): void
     {
-        if($newProject == $oldProject) return;
+        if($newProjectID == $oldProjectID) return;
 
-        $this->dao->update(TABLE_EXECUTION)->set('parent')->eq($newProject)->set('path')->eq(",$newProject,$executionID,")->where('id')->eq($executionID)->exec();
+        $this->dao->update(TABLE_EXECUTION)->set('parent')->eq($newProjectID)->set('path')->eq(",$newProjectID,$executionID,")->where('id')->eq($executionID)->exec();
 
-        $this->dao->update(TABLE_BUILD)->set('project')->eq($newProject)->where('project')->eq($oldProject)->andWhere('execution')->eq($executionID)->exec();
-        $this->dao->update(TABLE_BUG)->set('project')->eq($newProject)->where('project')->eq($oldProject)->andWhere('execution')->eq($executionID)->exec();
-        $this->dao->update(TABLE_CASE)->set('project')->eq($newProject)->where('project')->eq($oldProject)->andWhere('execution')->eq($executionID)->exec();
-        $this->dao->update(TABLE_DOC)->set('project')->eq($newProject)->where('project')->eq($oldProject)->andWhere('execution')->eq($executionID)->exec();
-        $this->dao->update(TABLE_DOCLIB)->set('project')->eq($newProject)->where('project')->eq($oldProject)->andWhere('execution')->eq($executionID)->exec();
-        $this->dao->update(TABLE_TASK)->set('project')->eq($newProject)->where('project')->eq($oldProject)->andWhere('execution')->eq($executionID)->exec();
-        $this->dao->update(TABLE_TESTREPORT)->set('project')->eq($newProject)->where('project')->eq($oldProject)->andWhere('execution')->eq($executionID)->exec();
+        /* Update the project to which the relevant data belongs. */
+        $this->dao->update(TABLE_BUILD)->set('project')->eq($newProjectID)->where('project')->eq($oldProjectID)->andWhere('execution')->eq($executionID)->exec();
+        $this->dao->update(TABLE_BUG)->set('project')->eq($newProjectID)->where('project')->eq($oldProjectID)->andWhere('execution')->eq($executionID)->exec();
+        $this->dao->update(TABLE_CASE)->set('project')->eq($newProjectID)->where('project')->eq($oldProjectID)->andWhere('execution')->eq($executionID)->exec();
+        $this->dao->update(TABLE_DOC)->set('project')->eq($newProjectID)->where('project')->eq($oldProjectID)->andWhere('execution')->eq($executionID)->exec();
+        $this->dao->update(TABLE_DOCLIB)->set('project')->eq($newProjectID)->where('project')->eq($oldProjectID)->andWhere('execution')->eq($executionID)->exec();
+        $this->dao->update(TABLE_TASK)->set('project')->eq($newProjectID)->where('project')->eq($oldProjectID)->andWhere('execution')->eq($executionID)->exec();
+        $this->dao->update(TABLE_TESTREPORT)->set('project')->eq($newProjectID)->where('project')->eq($oldProjectID)->andWhere('execution')->eq($executionID)->exec();
 
+        /* Update the team members and whitelist of the project. */
+        $addedAccounts = $this->updateProjectUsers($executionID, $newProjectID);
+        if($addedAccounts) $this->loadModel('user')->updateUserView($newProjectID, 'project', $addedAccounts);
+
+        /* Sync stories to new project. */
+        if($syncStories == 'yes')
+        {
+            $this->loadModel('action');
+            $projectLinkedStories   = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($newProjectID)->fetchPairs('story', 'story');
+            $executionLinkedStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->fetchAll();
+            foreach($executionLinkedStories as $linkedStory)
+            {
+                if(isset($projectLinkedStories[$linkedStory->story])) continue;
+
+                $linkedStory->project = $newProjectID;
+                $this->dao->insert(TABLE_PROJECTSTORY)->data($linkedStory)->exec();
+                $this->action->create('story', $linkedStory->story, 'linked2project', '', $newProjectID);
+            }
+        }
+    }
+
+    /**
+     * 更新项目的团队成员和白名单。
+     * Update the team members and whitelist of the project.
+     *
+     * @param  int    $executionID
+     * @param  int    $newProjectID
+     * @access public
+     * @return array
+     */
+    public function updateProjectUsers(int $executionID, int $newProjectID): array
+    {
         $executionTeam = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution');
-        $projectTeam   = $this->user->getTeamMemberPairs($newProject, 'project');
+        $projectTeam   = $this->user->getTeamMemberPairs($newProjectID, 'project');
         $addedAccounts = array();
+        $today         = helper::today();
         foreach($executionTeam as $account => $realname)
         {
             if(isset($projectTeam[$account])) continue;
 
             $member = new stdclass();
-            $member->root    = (int)$newProject;
+            $member->root    = $newProjectID;
             $member->type    = 'project';
             $member->account = $account;
-            $member->join    = helper::today();
+            $member->join    = $today;
             $member->days    = 0;
             $member->hours   = $this->config->execution->defaultWorkhours;
             $this->dao->replace(TABLE_TEAM)->data($member)->exec();
@@ -2864,7 +2899,7 @@ class executionModel extends model
         }
 
         $executionWhitelist = $this->loadModel('personnel')->getWhitelistAccount($executionID, 'sprint');
-        $projectWhitelist   = $this->personnel->getWhitelistAccount($newProject, 'project');
+        $projectWhitelist   = $this->personnel->getWhitelistAccount($newProjectID, 'project');
         foreach($executionWhitelist as $account)
         {
             if(isset($projectWhitelist[$account])) continue;
@@ -2872,7 +2907,7 @@ class executionModel extends model
             $whitelist = new stdclass();
             $whitelist->account    = $account;
             $whitelist->objectType = 'project';
-            $whitelist->objectID   = (int)$newProject;
+            $whitelist->objectID   = $newProjectID;
             $whitelist->type       = 'whitelist';
             $whitelist->source     = 'sync';
             $this->dao->replace(TABLE_ACL)->data($whitelist)->exec();
@@ -2880,23 +2915,7 @@ class executionModel extends model
             $addedAccounts[$account] = $account;
         }
 
-        /* Sync stories to new project. */
-        if($syncStories == 'yes')
-        {
-            $this->loadModel('action');
-            $projectLinkedStories   = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($newProject)->fetchPairs('story', 'story');
-            $executionLinkedStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->fetchAll();
-            foreach($executionLinkedStories as $linkedStory)
-            {
-                if(isset($projectLinkedStories[$linkedStory->story])) continue;
-
-                $linkedStory->project = $newProject;
-                $this->dao->insert(TABLE_PROJECTSTORY)->data($linkedStory)->exec();
-                $this->action->create('story', $linkedStory->story, 'linked2project', '', $newProject);
-            }
-        }
-
-        if($addedAccounts) $this->loadModel('user')->updateUserView($newProject, 'project', $addedAccounts);
+        return $addedAccounts;
     }
 
     /**
