@@ -2601,30 +2601,26 @@ class testcaseModel extends model
     {
         $this->dao->begin();
 
-        $sceneIds = array();
-        foreach($this->post->sceneList as $scene)
+        $sceneList = array_combine(array_map(function($scene){return $scene['tmpId'];}, $this->post->sceneList), array_map(function($scene){return (array)$scene;}, $this->post->sceneList));
+        foreach($sceneList as $scene)
         {
-            $result = $this->saveScene($scene, $sceneIds);
+            $result = $this->testcaseTao->saveScene($scene, $sceneList);
             if($result['result'] == 'fail')
             {
                 $this->dao->rollBack();
                 return $result;
             }
-
-            $sceneIds[$scene['tmpId']] = array('id' => $result['sceneID'], 'tmpPId' => $scene['tmpPId']);
         }
 
         foreach($this->post->testcaseList as $testcase)
         {
             $testcase = (object)$testcase;
-            $result   = $this->saveTestcase($testcase, $sceneIds);
+            $result   = $this->saveTestcase($testcase);
             if($result['result'] == 'fail')
             {
                 $this->dao->rollBack();
                 return $result;
             }
-
-            $sceneIds[$testcase->tmpId] = array('id' => $result['testcaseID'], 'tmpPId' => $testcase->tmpPId);
         }
 
         $this->dao->commit();
@@ -2729,86 +2725,11 @@ class testcaseModel extends model
         return $case;
     }
 
-    /**
-     * Save scene.
-     *
-     * @param  array $sceneData
-     * @param  array $sceneIds
-     * @access public
-     * @return array
-     */
-    public function saveScene($sceneData, $sceneIds)
+    protected function processScenes(array $scenes): array
     {
-        $id      = isset($sceneData["id"]) ? $sceneData["id"] : -1;
-        $name    = $sceneData["name"];
-        $module  = isset($sceneData["module"]) ? $sceneData["module"] : 0;
-        $product = $sceneData["product"];
-        $branch  = $sceneData["branch"];
-        $now     = helper::now();
-        $sceneID = -1;
-
-        if(!isset($sceneData["id"]))
+        foreach($scenes as $scene)
         {
-            $scene             = new stdclass();
-            $scene->title      = $name;
-            $scene->module     = $module;
-            $scene->product    = $product;
-            $scene->branch     = $branch;
-            $scene->openedBy   = $this->app->user->account;
-            $scene->openedDate = $now;
-
-            $this->dao->insert(TABLE_SCENE)->data($scene)->autoCheck()->exec();
-            $sceneID = $this->dao->lastInsertID();
-
-            $order       = new stdclass();
-            $order->sort = $sceneID;
-
-            $this->dao->update(TABLE_SCENE)->data($order)->where('id')->eq((int)$sceneID)->exec();
         }
-        else
-        {
-            $scene                 = new stdclass();
-            $scene->title          = $name;
-            $scene->module         = $module;
-            $scene->product        = $product;
-            $scene->branch         = $branch;
-            $scene->lastEditedBy   = $this->app->user->account;
-            $scene->lastEditedDate = $now;
-
-            $sceneID      = $id;
-            $affectedRows = $this->dao->update(TABLE_SCENE)->data($scene)->where('id')->eq((int)$id)->exec();
-            if(empty($affectedRows)) return array('result' => 'fail', 'message' => sprintf($this->lang->testcase->errorSceneNotExist, $id));
-        }
-
-        if($this->dao->isError()) return array('result' => 'fail', 'message' => $this->dao->getError(true));
-
-        $tmpPId = $sceneData["tmpPId"];
-        $pScene = isset($sceneIds[$tmpPId]) ? $sceneIds[$tmpPId] : array();
-        $parent = 0;
-        $grade  = 1;
-        $path   = ",{$sceneID},";
-
-        if(isset($sceneIds[$tmpPId]))
-        {
-            $parent      = $pScene["id"];
-            $parentScene = $this->dao->findById((int)$parent)->from(TABLE_SCENE)->fetch();
-            $path        = $parentScene->path . "{$sceneID},";
-            $grade       = $parentScene->grade + 1;
-        }
-
-        if($parent != 0) $parent = $parent;
-
-        $this->dao->update(TABLE_SCENE)
-            ->set('parent')->eq($parent)
-            ->set('path')->eq($path)
-            ->set('grade')->eq($grade)
-            ->where('id')->eq($sceneID)
-            ->limit(1)
-            ->exec();
-
-        if($this->dao->isError()) return array('result' => 'fail', 'message' => $this->dao->getError(true));
-
-        return array('result' => 'success', 'message' => 1,"sceneID"=>$sceneID);
     }
 
     /**

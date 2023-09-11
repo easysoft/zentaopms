@@ -481,4 +481,81 @@ class testcaseTao extends testcaseModel
         }
         return !dao::isError();
     }
+
+    /**
+     * 保存场景。
+     * Save scene.
+     *
+     * @param  array     $sceneData
+     * @param  array     $sceneList
+     * @access protected
+     * @return array
+     */
+    protected function saveScene(array $sceneData, array $sceneList): array
+    {
+        $scene          = new stdclass();
+        $scene->title   = $sceneData['name'];
+        $scene->product = $sceneData['product'];
+        $scene->branch  = $sceneData['branch'];
+        $scene->module  = $sceneData['module'];
+
+        if(!isset($sceneData['id']))
+        {
+            $scene->openedBy   = $this->app->user->account;
+            $scene->openedDate = helper::now();
+
+            $this->dao->insert(TABLE_SCENE)->data($scene)->autoCheck()->exec();
+            $sceneID = $this->dao->lastInsertID();
+
+            $this->dao->update(TABLE_SCENE)->set('`order`')->eq($sceneID)->where('id')->eq($sceneID)->exec();
+        }
+        else
+        {
+            $sceneID = $sceneData['id'];
+
+            $scene->lastEditedBy   = $this->app->user->account;
+            $scene->lastEditedDate = helper::now();
+
+            $affectedRows = $this->dao->update(TABLE_SCENE)->data($scene)->where('id')->eq($sceneID)->exec();
+            if(empty($affectedRows)) return array('result' => 'fail', 'message' => sprintf($this->lang->testcase->errorSceneNotExist, $sceneID));
+        }
+
+        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+
+        $tmpPId = $sceneData['tmpPId'];
+        $pScene = zget($sceneList, $tmpPId, array());
+        $this->fixScenePath($sceneID, $pScene);
+
+        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'sceneID' => $sceneID);
+    }
+
+    /**
+     * 调整场景的路径。
+     * Fix the scene path.
+     *
+     * @param  int       $sceneID
+     * @param  array     $pScene
+     * @access protected
+     * @return bool
+     */
+    protected function fixScenePath(int $sceneID, array $pScene = array()): bool
+    {
+        $parent = 0;
+        $grade  = 1;
+        $path   = ",{$sceneID},";
+
+        if(!empty($pScene))
+        {
+            $parent      = $pScene['id'];
+            $parentScene = $this->dao->findById((int)$parent)->from(TABLE_SCENE)->fetch();
+            $path        = $parentScene->path . "{$sceneID},";
+            $grade       = $parentScene->grade + 1;
+        }
+
+        $this->dao->update(TABLE_SCENE)->set('parent')->eq($parent)->set('path')->eq($path)->set('grade')->eq($grade)->where('id')->eq($sceneID)->exec();
+
+        return !dao::isError();
+    }
 }
