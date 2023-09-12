@@ -307,8 +307,8 @@ class executionZen extends execution
             $moduleTree = $this->tree->getProjectStoryTreeMenu($execution->id, 0, array('treeModel', $createModuleLink));
         }
 
-        $this->view->moduleTree   = $moduleTree;
-        $this->view->modulePairs  = $modulePairs;
+        $this->view->moduleTree  = $moduleTree;
+        $this->view->modulePairs = $modulePairs;
     }
 
     /**
