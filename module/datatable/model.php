@@ -95,7 +95,7 @@ class datatableModel extends model
         $fieldList = $this->getFieldList($module, $method);
         if(empty($setting))
         {
-            $setting = $this->formatFields($module, $fieldList);
+            $setting = $this->formatFields($module, $fieldList, !$showAll);
         }
         else
         {
