@@ -2980,4 +2980,51 @@ class executionTest
         $tasks = $this->executionModel->processTasks($tasks);
         return $count ? count($tasks) : $tasks;
     }
+
+    /**
+     * 测试创建执行主库
+     * Test for create main lib.
+     *
+     * @param  int executionID
+     * @access public
+     * @return object|array
+     */
+    public function createMainLibTest(int $executionID, string $type = 'sprint'): object|array
+    {
+        $libID = $this->executionModel->createMainLib(1, $executionID, $type);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            if(!$libID) return array();
+            $object = $this->executionModel->dao->select('*')->from(TABLE_DOCLIB)->where('id')->eq($libID)->fetch();
+            return $object;
+        }
+    }
+
+    /**
+     * 测试添加执行团队成员
+     * Test for add execution members.
+     *
+     * @param  int   executionID
+     * @param  array members
+     * @access public
+     * @return object|array
+     */
+    public function addExecutionMembersTest(int $executionID, array $members): object|array
+    {
+        $this->executionModel->addExecutionMembers($executionID, $members);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $this->executionModel->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($executionID)->andWhere('type')->eq('execution')->fetchAll();
+        }
+    }
 }

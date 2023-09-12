@@ -538,6 +538,8 @@ class executionTao extends executionModel
     protected function addExecutionMembers(int $executionID, array $postMembers): void
     {
         $execution = $this->fetchByID($executionID);
+        if(empty($execution)) return;
+
         array_push($postMembers, $execution->PO, $execution->QD, $execution->PM, $execution->RD, $execution->openedBy);
         $members     = array_filter(array_unique($postMembers));
         $roles       = $this->loadModel('user')->getUserRoles(array_values($members));
@@ -578,6 +580,7 @@ class executionTao extends executionModel
         if($existedLibID) return $existedLibID;
 
         $this->app->loadLang('doc');
+        if($type == 'sprint') $this->app->loadLang('project');
         $lib = new stdclass();
         $lib->project   = $projectID;
         $lib->execution = $executionID;

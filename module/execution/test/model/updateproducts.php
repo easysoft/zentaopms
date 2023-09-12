@@ -36,7 +36,7 @@ cid=1
 
 $executionIdList = array(3, 4, 5);
 $productIdList   = array(1, 2, 3);
-$branchIdList    = array(1, 2, 3);
+$branchIdList    = array(array(1), array(2), array(3));
 $products        = array('products' => $productIdList, 'branch' => $branchIdList);
 
 $execution = new executionTest();
