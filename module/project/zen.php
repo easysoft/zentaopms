@@ -1474,4 +1474,30 @@ class projectZen extends project
 
         return $projects;
     }
+
+    /**
+     * 遍历执行列表及子阶段，返回ID列表。
+     * Expand executions, return id list.
+     *
+     * @param  object $stats
+     * @access public
+     * @return array
+     */
+    public function expandExecutionIdList($stats)
+    {
+        $executionIdList = array();
+        foreach($stats as $execution)
+        {
+            $executionIdList[$execution->id] = $execution->id;
+            if(empty($execution->children)) continue;
+
+            foreach($execution->children as $child)
+            {
+                $childrenIdList = $this->expandExecutionIdList(array($child));
+                foreach($childrenIdList as $childID) $executionIdList[$childID] = $childID;
+            }
+        }
+
+        return $executionIdList;
+    }
 }

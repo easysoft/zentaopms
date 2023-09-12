@@ -262,12 +262,12 @@ class executionModel extends model
 
         /* Save order. */
         $this->dao->update(TABLE_EXECUTION)->set('`order`')->eq($executionID * 5)->where('id')->eq($executionID)->exec();
-        $this->file->updateObjectID($this->post->uid, $executionID, 'execution');
+        $this->loadModel('file')->updateObjectID($this->post->uid, $executionID, 'execution');
 
         /* Update the path. */
         $this->setTreePath($executionID);
 
-        $this->executionTao->addExecutionMembers($executionID, $execution, $postMembers);
+        $this->executionTao->addExecutionMembers($executionID, $postMembers);
         $this->executionTao->createMainLib($execution->project, $executionID, $execution->type);
 
         $this->loadModel('personnel')->updateWhitelist(explode(',', $execution->whitelist), 'execution', $executionID);
@@ -4645,13 +4645,14 @@ class executionModel extends model
     }
 
     /*
-     * Build search form
+     * 构建执行列表的搜索表单。
+     * Build search form for execution list.
      *
      * @param int     $queryID
      * @param string  $actionURL
      * @return void
      * */
-    public function buildSearchForm($queryID, $actionURL)
+    public function buildSearchForm(int $queryID, string $actionURL)
     {
         $this->config->execution->all->search['queryID']   = $queryID;
         $this->config->execution->all->search['actionURL'] = $actionURL;
@@ -4664,52 +4665,49 @@ class executionModel extends model
     }
 
     /*
-     * Create default sprint.
+     * 不启用迭代的项目，创建默认迭代。
+     * Create default sprint for project which is not using sprint.
      *
      * @param  int $projectID
      * @return int
      * */
-    public function createDefaultSprint($projectID)
+    public function createDefaultSprint(int $projectID): int
     {
         $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
-        $post    = $_POST;
 
-        $_POST = array();
-
-        $_POST['project']     = $projectID;
-        $_POST['name']        = $project->name;
-        $_POST['begin']       = $project->begin;
-        $_POST['end']         = $project->end;
-        $_POST['status']      = 'wait';
-        $_POST['days']        = $project->days;
-        $_POST['team']        = $project->team;
-        $_POST['desc']        = $project->desc;
-        $_POST['teamMembers'] = array($this->app->user->account);
-        $_POST['acl']         = 'open';
-        $_POST['PO']          = $this->app->user->account;
-        $_POST['QD']          = $this->app->user->account;
-        $_POST['PM']          = $this->app->user->account;
-        $_POST['RD']          = $this->app->user->account;
-        $_POST['multiple']    = '0';
-        $_POST['hasProduct']  = $project->hasProduct;
-        if($project->code) $_POST['code'] = $project->code;
+        $executionData = new stdclass();
+        $executionData->project     = $projectID;
+        $executionData->name        = $project->name;
+        $executionData->begin       = $project->begin;
+        $executionData->end         = $project->end;
+        $executionData->status      = 'wait';
+        $executionData->days        = $project->days;
+        $executionData->team        = $project->team;
+        $executionData->desc        = $project->desc;
+        $executionData->teamMembers = array($this->app->user->account);
+        $executionData->acl         = 'open';
+        $executionData->PO          = $this->app->user->account;
+        $executionData->QD          = $this->app->user->account;
+        $executionData->PM          = $this->app->user->account;
+        $executionData->RD          = $this->app->user->account;
+        $executionData->multiple    = '0';
+        $executionData->hasProduct  = $project->hasProduct;
+        if($project->code) $executionData->code = $project->code;
 
         $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchAll();
         foreach($projectProducts as $projectProduct)
         {
-            $_POST['products'][] = $projectProduct->product;
-            $_POST['branch'][]   = $projectProduct->branch;
-            if($projectProduct->plan) $_POST['plans'][$projectProduct->product][$projectProduct->branch] = explode(',', trim($projectProduct->plan, ','));
+            if($projectProduct->product) $executionData->products[] = $projectProduct->product;
+            if($projectProduct->branch)  $executionData->branch[]   = $projectProduct->branch;
+            if($projectProduct->plan)    $executionData->plans[$projectProduct->product][$projectProduct->branch] = explode(',', trim($projectProduct->plan, ','));
         }
 
-        $executionID = $this->create();
+        $executionID = $this->create($executionData, array());
         if($project->model == 'kanban')
         {
             $execution = $this->getById($executionID);
             $this->loadModel('kanban')->createRDKanban($execution);
         }
-
-        $_POST = $post;
 
         return $executionID;
     }
@@ -4776,62 +4774,6 @@ class executionModel extends model
         $_POST = $postData;
 
         return (int)$executionID;
-    }
-
-    /**
-     * Expand executions, return id list.
-     *
-     * @param  object $stats
-     * @access public
-     * @return array
-     */
-    public function expandExecutionIdList($stats)
-    {
-        $executionIdList = array();
-        foreach($stats as $execution)
-        {
-            $executionIdList[$execution->id] = $execution->id;
-            if(!empty($execution->children))
-            {
-                foreach($execution->children as $child)
-                {
-                    $childrenIdList = $this->expandExecutionChildrenIdList($child);
-                    foreach($childrenIdList as $childID)
-                    {
-                        $executionIdList[$childID] = $childID;
-                    }
-                }
-            }
-        }
-
-        return $executionIdList;
-    }
-
-    /**
-     * Expand children of execution, return id list.
-     *
-     * @param object $execution
-     * @access public
-     * @return array
-     */
-    public function expandExecutionChildrenIdList($execution)
-    {
-        $executionIdList = array();
-        $executionIdList[$execution->id] = $execution->id;
-
-        if(!empty($execution->children))
-        {
-            foreach($execution->children as $child)
-            {
-                $childrenIdList = $this->expandExecutionChildrenIdList($child);
-                foreach($childrenIdList as $childID)
-                {
-                    $executionIdList[$childID] = $childID;
-                }
-            }
-        }
-
-        return $executionIdList;
     }
 
     /**
