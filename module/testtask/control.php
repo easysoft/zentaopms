@@ -795,41 +795,6 @@ class testtask extends control
     }
 
     /**
-     * activate testtask.
-     *
-     * @param  int    $taskID
-     * @access public
-     * @return void
-     */
-    public function activate(int $taskID)
-    {
-        if(!empty($_POST))
-        {
-            $task = $this->testtaskZen->buildTaskForActivate($taskID);
-
-            $this->testtask->activate($task);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            $message = $this->executeHooks($taskID) ?: $this->lang->saveSuccess;
-
-            return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => true));
-        }
-
-        /* Get task info. */
-        $testtask  = $this->testtask->getByID($taskID);
-        $productID = $this->product->saveState($testtask->product, $this->products);
-
-        /* Set menu. */
-        $this->loadModel('qa')->setMenu($this->products, $productID, $testtask->branch, $taskID);
-
-        $this->view->title    = $testtask->name . $this->lang->colon . $this->lang->testtask->activate;
-        $this->view->actions  = $this->loadModel('action')->getList('testtask', $taskID);
-        $this->view->users    = $this->loadModel('user')->getPairs('nodeleted', $testtask->owner);
-        $this->view->testtask = $testtask;
-        $this->display();
-    }
-
-    /**
      * Close testtask.
      *
      * @param  int    $taskID
@@ -894,6 +859,41 @@ class testtask extends control
         $this->loadModel('qa')->setMenu($this->products, $productID, $testtask->branch, $taskID);
 
         $this->view->title    = $testtask->name . $this->lang->colon . $this->lang->testtask->block;
+        $this->view->actions  = $this->loadModel('action')->getList('testtask', $taskID);
+        $this->view->users    = $this->loadModel('user')->getPairs('nodeleted', $testtask->owner);
+        $this->view->testtask = $testtask;
+        $this->display();
+    }
+
+    /**
+     * activate testtask.
+     *
+     * @param  int    $taskID
+     * @access public
+     * @return void
+     */
+    public function activate(int $taskID)
+    {
+        if(!empty($_POST))
+        {
+            $task = $this->testtaskZen->buildTaskForActivate($taskID);
+
+            $this->testtask->activate($task);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $message = $this->executeHooks($taskID) ?: $this->lang->saveSuccess;
+
+            return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => true));
+        }
+
+        /* Get task info. */
+        $testtask  = $this->testtask->getByID($taskID);
+        $productID = $this->product->saveState($testtask->product, $this->products);
+
+        /* Set menu. */
+        $this->loadModel('qa')->setMenu($this->products, $productID, $testtask->branch, $taskID);
+
+        $this->view->title    = $testtask->name . $this->lang->colon . $this->lang->testtask->activate;
         $this->view->actions  = $this->loadModel('action')->getList('testtask', $taskID);
         $this->view->users    = $this->loadModel('user')->getPairs('nodeleted', $testtask->owner);
         $this->view->testtask = $testtask;
