@@ -72,7 +72,7 @@ class baseCalc
      * @var array|float
      * @access public
      */
-    public $result = array();
+    public $result = 0;
 
     /**
      * 设置DAO 。
@@ -109,7 +109,6 @@ class baseCalc
      */
     public function calculate($data)
     {
-        $this->result += 1;
     }
 
     /**
@@ -122,7 +121,7 @@ class baseCalc
     public function getResult($options = array())
     {
         if(empty($this->result)) return null;
-        return array((object)array('value' => $this->result));
+        return array((object)array('value' => 0));
     }
 
     /**
