@@ -1247,13 +1247,17 @@ class testcaseModel extends model
     }
 
     /**
+     * 获取导入的字段。
      * Get fields for import.
      *
+     * @param  int    $productID
      * @access public
      * @return array
      */
-    public function getImportFields($productID = 0)
+    public function getImportFields(int $productID = 0): array
     {
+        /* If type of the product isn't normal, set language item of branch. */
+        /* 如果产品是多分支产品，设置分支语言项。 */
         $product = $this->loadModel('product')->getById($productID);
         if($product && $product->type != 'normal') $this->lang->testcase->branch = $this->lang->product->branchName[$product->type];
 
@@ -1262,8 +1266,10 @@ class testcaseModel extends model
         $fields     = explode(',', $caseConfig->exportFields);
         foreach($fields as $key => $fieldName)
         {
-            $fieldName = trim($fieldName);
-            $fields[$fieldName] = isset($caseLang->$fieldName) ? $caseLang->$fieldName : $fieldName;
+            /* 设置字段的语言项。 */
+            /* Set language item of the fieldName. */
+            $fieldName          = trim($fieldName);
+            $fields[$fieldName] = isset($caseLang->{$fieldName}) ? $caseLang->{$fieldName} : $fieldName;
             unset($fields[$key]);
         }
 

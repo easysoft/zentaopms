@@ -653,19 +653,20 @@ class testcaseTest
     }
 
     /**
+     * 测试获取导入的字段。
      * Test get fields for import.
      *
      * @param  int    $productID
      * @access public
      * @return array
      */
-    public function getImportFieldsTest($productID = 0)
+    public function getImportFieldsTest(int $productID = 0): array
     {
-        $object = $this->objectModel->getImportFields($productID);
+        $fields = $this->objectModel->getImportFields($productID);
 
         if(dao::isError()) return dao::getError();
 
-        return $object;
+        return $fields;
     }
 
     /**
