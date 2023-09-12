@@ -34,19 +34,19 @@ fields:
   - field: estStarted
     range: "20201101 000000:1D"
     type: timestamp
-    format: "YY/MM/DD hh::mm:ss"
+    format: "YYYY-MM-DD"
     postfix: "\t"
   - field: deadline
     range: "20210101 000000:1D"
     type: timestamp
-    format: "YY/MM/DD"
+    format: "YYYY-MM-DD"
     postfix: "\t"
   - field: finishedBy
     range: "[]{4},admin,[]{4}"
   - field: finishedDate
     range: "20210101 000000:1D"
     type: timestamp
-    format: "YY/MM/DD hh::mm:ss"
+    format: "YYYY-MM-DD"
     postfix: "\t"
   - field: closedReason
     range: "[]{4},done,[]{4}"

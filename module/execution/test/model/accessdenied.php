@@ -5,10 +5,8 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 /**
 
 title=测试 executionModel::accessDenied();
+timeout=0
 cid=1
-pid=1
-
-权限不足跳转 >> html
 
 */
 

@@ -1,9 +1,6 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/execution.class.php';
-zdTable('user')->gen(5);
-su('admin');
 
 $execution = zdTable('project');
 $execution->id->range('1-3');
@@ -18,17 +15,20 @@ $execution->begin->range('20220112 000000:0')->type('timestamp')->format('YY/MM/
 $execution->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->gen(3);
 
+zdTable('user')->gen(5);
+su('admin');
+
 /**
 
-title=测试executionModel->getNoMultipleID();
+title=测试 executionModel->getNoMultipleID();
 timeout=0
 cid=1
 
 */
 
 global $tester;
-$tester->loadModel('execution');
+$executionModel = $tester->loadModel('execution');
 
-r($tester->execution->getNoMultipleID(2)) & p() && e('3'); // 根据正确项目ID获取被隐藏的执行id
-r($tester->execution->getNoMultipleID(0)) & p() && e('0'); // 根据空项目ID获取被隐藏的执行id
-r($tester->execution->getNoMultipleID(5)) & p() && e('0'); // 根据不存在的项目ID获取被隐藏的执行id
+r($executionModel->getNoMultipleID(2)) && p() && e('3'); // 根据正确项目ID获取被隐藏的执行id
+r($executionModel->getNoMultipleID(0)) && p() && e('0'); // 根据空项目ID获取被隐藏的执行id
+r($executionModel->getNoMultipleID(5)) && p() && e('0'); // 根据不存在的项目ID获取被隐藏的执行id

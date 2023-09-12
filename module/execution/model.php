@@ -2510,6 +2510,8 @@ class executionModel extends model
         $executionStories = $this->loadModel('story')->getExecutionStoryPairs($execution->id);
         $lastOrder        = (int)$this->dao->select('`order`')->from(TABLE_PROJECTSTORY)->where('project')->eq($execution->id)->orderBy('order_desc')->limit(1)->fetch('order');
         $stories          = $this->dao->select("id as story, product, version")->from(TABLE_STORY)->where('id')->in(array_keys($taskStories))->fetchAll('story');
+
+        $this->loadModel('action');
         foreach($taskStories as $storyID)
         {
             if(!isset($executionStories[$storyID]) && isset($stories[$storyID]))
@@ -2979,6 +2981,9 @@ class executionModel extends model
             $task->canceledDate = $task->lastEditedDate = $now;
             $task->finishedBy   = '';
             $task->finishedDate = null;
+
+            if(!$task->closedDate)    unset($task->closedDate);
+            if(!$task->activatedDate) unset($task->activatedDate);
 
             $this->loadModel('task')->cancel($task);
         }
