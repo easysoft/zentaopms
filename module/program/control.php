@@ -417,28 +417,34 @@ class program extends control
     }
 
     /**
+     * 删除一个项目集。
      * Delete a program.
      *
      * @param  int    $programID
      * @access public
      * @return void
      */
-    public function delete($programID)
+    public function delete(int $programID)
     {
-        $childrenCount = $this->dao->select('count(*) as count')->from(TABLE_PROGRAM)->where('parent')->eq($programID)->andWhere('deleted')->eq(0)->fetch('count');
+        /* The program can NOT be deleted if it has a child program. */
+        $childrenCount = $this->dao->select('count(*) as count')->from(TABLE_PROGRAM)->where('parent')->eq($programID)->andWhere('deleted')->eq('0')->fetch('count');
         if($childrenCount)
         {
-            if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'fail', 'message' => 'Cannot delete the program has children'));
+            if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'fail', 'message' => 'Can not delete the program has children.'));
             return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->program->hasChildren}');"));
         }
 
-        $productCount = $this->dao->select('count(*) as count')->from(TABLE_PRODUCT)->where('program')->eq($programID)->andWhere('deleted')->eq(0)->fetch('count');
+        /* The program can NOT be deleted if it has a product. */
+        $productCount = $this->dao->select('count(*) as count')->from(TABLE_PRODUCT)->where('program')->eq($programID)->andWhere('deleted')->eq('0')->fetch('count');
         if($productCount) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->program->hasProduct}');"));
 
-        $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();
-
-        $this->dao->update(TABLE_PROGRAM)->set('deleted')->eq(1)->where('id')->eq($programID)->exec();
-        $this->loadModel('action')->create('program', $programID, 'deleted', '', actionModel::CAN_UNDELETED);
+        /* Mark the program is deleted and record the action log. */
+        $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($programID)->andWhere('deleted')->eq('0')->fetch();
+        if($program)
+        {
+            $this->dao->update(TABLE_PROGRAM)->set('deleted')->eq('1')->where('id')->eq($programID)->exec();
+            $this->loadModel('action')->create('program', $programID, 'deleted', '', actionModel::CAN_UNDELETED);
+        }
 
         return $this->send(array('result' => 'success'));
     }
