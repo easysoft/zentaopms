@@ -108,6 +108,11 @@ class taskEntry extends entry
         $fields = 'name,type,desc,assignedTo,pri,estimate,left,consumed,story,parent,execution,module,closedReason,status,estStarted,deadline,team,teamEstimate,teamConsumed,teamLeft,multiple,mailto,uid';
         $this->batchSetPost($fields, $oldTask);
 
+        if($_POST['status'] == 'done')
+        {
+            if(!empty($oldTask->finishedBy)) $this->setPost('finishedBy', $oldTask->finishedBy);
+            if(!empty($oldTask->finishedDate)) $this->setPost('finishedDate', $oldTask->finishedDate);
+        }
         $control = $this->loadController('task', 'edit');
         $control->edit($taskID);
 
