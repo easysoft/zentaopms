@@ -139,6 +139,7 @@ class testtaskZen extends testtask
         $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->edit;
         $this->view->task         = $task;
         $this->view->project      = $this->project->getByID($projectID);
+        $this->view->productID    = $productID;
         $this->view->executions   = $executions;
         $this->view->builds       = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,notrunk,withexecution', $executionID ? $executionID : $task->project, $executionID ? 'execution' : 'project', $task->build, false);
         $this->view->testreports  = $this->loadModel('testreport')->getPairs($task->product, $task->testreport);
