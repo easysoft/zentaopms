@@ -37,11 +37,11 @@ $product->gen(3);
 
 $story = zdTable('story');
 $story->id->range('1-10');
-$story->name->range('1-10')->prefix('需求');
+$story->title->range('1-10')->prefix('需求');
 $story->type->range('story');
 $story->product->range('1');
 $story->status->range('active');
-$story->staged->range('projected');
+$story->stage->range('projected');
 $story->version->range('1');
 $story->gen(10);
 
@@ -55,19 +55,14 @@ $projectStory->gen(10);
 $bug = zdTable('bug');
 $bug->id->range('1-10');
 $bug->execution->range('3');
-$bug->name->range('1-10')->prefix('Bug');
+$bug->title->range('1-10')->prefix('Bug');
 $bug->status->range('active');
 $bug->gen(10);
 
 /**
-
 title=测试executionModel->getKanbanGroupData();
 cid=1
 pid=1
-
-空数据查询           >> empty
-获取id=3执行的任务数 >> 4
-
 */
 
 $executionTester = new executionTest();
@@ -78,4 +73,4 @@ $tasks       = $executionTester->getKanbanTasksTest($executionID, false);
 $bugs        = $tester->loadModel('bug')->getExecutionBugs($executionID);
 
 r($executionTester->getKanbanGroupDataTest(array(), array(), array(), 'story')) && p('') && e('empty'); // 空数据查询
-r($executionTester->getKanbanGroupDataTest($stories, $tasks, $bugs, 'story'))   && p('') && e('1');     // 获取id=3执行的任务数
+r($executionTester->getKanbanGroupDataTest($stories, $tasks, $bugs, 'story'))   && p('') && e('4');     // 获取id=3执行的任务数
