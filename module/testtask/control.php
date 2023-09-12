@@ -1048,28 +1048,12 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function unlinkCase($runID, $confirm = 'no')
+    public function unlinkCase(int $runID)
     {
-        $response['result']  = 'success';
-        $response['message'] = $this->lang->saveSuccess;
-        $response['load']    = true;
+        $this->testtask->unlinkCase($runID);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        $testRun = $this->dao->select('t1.task,t1.`case`,t2.story')->from(TABLE_TESTRUN)->alias('t1')
-            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
-            ->where('t1.id')->eq((int)$runID)
-            ->fetch();
-
-        $linkedProject = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($testRun->story)->fetchPairs('project');
-        $this->dao->delete()->from(TABLE_PROJECTCASE)->where('`case`')->eq($testRun->case)->andWhere('project')->notin($linkedProject)->exec();
-
-        $this->dao->delete()->from(TABLE_TESTRUN)->where('id')->eq((int)$runID)->exec();
-        if(dao::isError())
-        {
-            $response['result']  = 'fail';
-            $response['message'] = dao::getError();
-        }
-        $this->loadModel('action')->create('case' ,$testRun->case, 'unlinkedfromtesttask', '', $testRun->task);
-        return $this->send($response);
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 
     /**
