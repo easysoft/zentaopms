@@ -4085,12 +4085,13 @@ class executionModel extends model
     }
 
     /**
+     * 获取看板的设置。
      * Get kanban setting.
      *
      * @access public
      * @return object
      */
-    public function getKanbanSetting()
+    public function getKanbanSetting(): object
     {
         $allCols    = '1';
         $showOption = '0';
