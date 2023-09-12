@@ -1160,13 +1160,14 @@ class testcaseModel extends model
     }
 
     /**
+     * 将步骤转为字符串，并且区分它们。
      * Join steps to a string, thus can diff them.
      *
-     * @param  array   $steps
+     * @param  array  $steps
      * @access public
      * @return string
      */
-    public function joinStep($steps)
+    public function joinStep(array $steps): string
     {
         $return = '';
         if(empty($steps)) return $return;

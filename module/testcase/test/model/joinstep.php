@@ -2,6 +2,9 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/testcase.class.php';
+
+zdTable('casestep')->gen('10');
+
 su('admin');
 
 /**
