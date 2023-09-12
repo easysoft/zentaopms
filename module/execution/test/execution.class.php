@@ -1967,7 +1967,9 @@ class executionTest
     public function getKanbanColumnsTest($count)
     {
         $kanbanSetting = $this->executionModel->getKanbanSetting();
-        $object        = $this->executionModel->getKanbanColumns($kanbanSetting);
+        $kanbanSetting->allCols = false;
+
+        $object = $this->executionModel->getKanbanColumns($kanbanSetting);
 
         if(dao::isError())
         {

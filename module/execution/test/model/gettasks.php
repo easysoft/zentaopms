@@ -72,23 +72,23 @@ $count           = array('0', '1');
 
 $execution = new executionTest();
 r($execution->getTasksTest($productIDList[0], $executionIDList[1], $browseType[0], $queryID[0], $moduleID[0], $sort[0], $count[0])) && p('1:execution,name')    && e('3,任务1'); // 敏捷执行任务查询
-r($execution->getTasksTest($productIDList[0], $executionIDList[2], $browseType[0], $queryID[0], $moduleID[0], $sort[0], $count[0])) && p('2:execution,project') && e('4,12');     // 瀑布执行任务查询
+r($execution->getTasksTest($productIDList[0], $executionIDList[2], $browseType[0], $queryID[0], $moduleID[0], $sort[0], $count[0])) && p('2:execution,project') && e('4,12');    // 瀑布执行任务查询
 r($execution->getTasksTest($productIDList[0], $executionIDList[3], $browseType[0], $queryID[0], $moduleID[0], $sort[0], $count[0])) && p('3:execution,status')  && e('5,wait');  // 看板执行任务查询
-r($execution->getTasksTest($productIDList[1], $executionIDList[1], $browseType[0], $queryID[0], $moduleID[0], $sort[0], $count[0])) && p('1:execution,name')    && e('0,0');       // 正常产品查询任务
+r($execution->getTasksTest($productIDList[1], $executionIDList[1], $browseType[0], $queryID[0], $moduleID[0], $sort[0], $count[0])) && p('1:execution,name')    && e('3,任务1'); // 正常产品查询任务
 r($execution->getTasksTest($productIDList[0], $executionIDList[1], $browseType[1], $queryID[0], $moduleID[0], $sort[0], $count[0])) && p('1:execution,status')  && e('3,wait');  // unclosed任务查询
 r($execution->getTasksTest($productIDList[0], $executionIDList[1], $browseType[2], $queryID[0], $moduleID[0], $sort[0], $count[0])) && p('1:execution,status')  && e('3,wait');  // wait任务查询
 r($execution->getTasksTest($productIDList[0], $executionIDList[1], $browseType[3], $queryID[0], $moduleID[0], $sort[0], $count[0])) && p('4:execution,status')  && e('3,doing'); // doing任务查询
 r($execution->getTasksTest($productIDList[0], $executionIDList[1], $browseType[4], $queryID[0], $moduleID[0], $sort[0], $count[0])) && p('4:execution,status')  && e('3,doing'); // undone任务查询
-r($execution->getTasksTest($productIDList[0], $executionIDList[1], $browseType[5], $queryID[0], $moduleID[0], $sort[0], $count[0])) && p('3:execution,status')  && e('0,0');       // done任务查询
+r($execution->getTasksTest($productIDList[0], $executionIDList[1], $browseType[5], $queryID[0], $moduleID[0], $sort[0], $count[0])) && p('3:execution,status')  && e('0,0');     // done任务查询
 r($execution->getTasksTest($productIDList[0], $executionIDList[1], $browseType[7], $queryID[1], $moduleID[0], $sort[0], $count[0])) && p('1:execution,name')    && e('3,任务1'); // 根据查询条件查询任务
-r($execution->getTasksTest($productIDList[0], $executionIDList[1], $browseType[0], $queryID[0], $moduleID[1], $sort[0], $count[0])) && p('1:execution,module')  && e('0,0');       // 根据模块查询任务
+r($execution->getTasksTest($productIDList[0], $executionIDList[1], $browseType[0], $queryID[0], $moduleID[1], $sort[0], $count[0])) && p('1:execution,module')  && e('0,0');     // 根据模块查询任务
 r($execution->getTasksTest($productIDList[0], $executionIDList[1], $browseType[0], $queryID[0], $moduleID[0], $sort[1], $count[0])) && p('1:execution,name')    && e('3,任务1'); // name_asc,id_asc排序查询
 r($execution->getTasksTest($productIDList[0], $executionIDList[1], $browseType[0], $queryID[0], $moduleID[0], $sort[2], $count[0])) && p('1:execution,type')    && e('3,test');  // id_asc排序查询
 r($execution->getTasksTest($productIDList[0], $executionIDList[1], $browseType[0], $queryID[0], $moduleID[0], $sort[3], $count[0])) && p('1:execution,status')  && e('3,wait');  // pri_desc,id_desc排序查询
 r($execution->getTasksTest($productIDList[0], $executionIDList[1], $browseType[0], $queryID[0], $moduleID[0], $sort[0], $count[1])) && p()                      && e('4');       // 敏捷执行任务查询统计
 r($execution->getTasksTest($productIDList[0], $executionIDList[2], $browseType[0], $queryID[0], $moduleID[0], $sort[0], $count[1])) && p()                      && e('3');       // 瀑布执行任务查询统计
 r($execution->getTasksTest($productIDList[0], $executionIDList[3], $browseType[0], $queryID[0], $moduleID[0], $sort[0], $count[1])) && p()                      && e('3');       // 看板执行任务查询统计
-r($execution->getTasksTest($productIDList[1], $executionIDList[1], $browseType[0], $queryID[0], $moduleID[0], $sort[0], $count[1])) && p()                      && e('0');       // 正常产品查询任务统计
+r($execution->getTasksTest($productIDList[1], $executionIDList[1], $browseType[0], $queryID[0], $moduleID[0], $sort[0], $count[1])) && p()                      && e('1');       // 正常产品查询任务统计
 r($execution->getTasksTest($productIDList[0], $executionIDList[1], $browseType[1], $queryID[0], $moduleID[0], $sort[0], $count[1])) && p()                      && e('4');       // unclosed任务查询统计
 r($execution->getTasksTest($productIDList[0], $executionIDList[1], $browseType[2], $queryID[0], $moduleID[0], $sort[0], $count[1])) && p()                      && e('2');       // wat任务查询统计
 r($execution->getTasksTest($productIDList[0], $executionIDList[1], $browseType[3], $queryID[0], $moduleID[0], $sort[0], $count[1])) && p()                      && e('2');       // doing任务查询统计

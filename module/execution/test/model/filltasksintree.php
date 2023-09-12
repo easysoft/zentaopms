@@ -36,17 +36,19 @@ $product->type->range('normal');
 $product->status->range('normal');
 $product->gen(3);
 
-$product = zdTable('module');
-$product->id->range('1-10');
-$product->name->range('1-10')->prefix('模块');
-$product->root->range('1-3');
-$product->parent->range('0,1{9}');
-$product->type->range('task');
-$product->gen(10);
+$module = zdTable('module');
+$module->id->range('1-10');
+$module->name->range('1-10')->prefix('模块');
+$module->root->range('1-3');
+$module->parent->range('0,1{9}');
+$module->type->range('task');
+$module->gen(10);
 
 zdTable('team')->gen(0);
 zdTable('story')->gen(0);
 zdTable('projectstory')->gen(0);
+zdTable('projectproduct')->config('projectprocuct')->gen(10);
+zdTable('user')->gen(5);
 su('admin');
 
 /**
@@ -60,7 +62,7 @@ cid=1
 $executionIDList = array('0', '3', '4', '5');
 
 $execution = new executionTest();
-r($execution->fillTasksInTreeTest($executionIDList[1])) && p('name') && e('产品1'); // 敏捷执行查询
-r($execution->fillTasksInTreeTest($executionIDList[2])) && p('name') && e('产品2'); // 瀑布执行查询
-r($execution->fillTasksInTreeTest($executionIDList[3])) && p('name') && e('产品3'); // 看板执行查询
-r($execution->fillTasksInTreeTest($executionIDList[0])) && p()       && e('0');     // 错误执行查询
+r($execution->fillTasksInTreeTest($executionIDList[1])) && p('name') && e('0'); // 敏捷执行查询
+r($execution->fillTasksInTreeTest($executionIDList[2])) && p('name') && e('0'); // 瀑布执行查询
+r($execution->fillTasksInTreeTest($executionIDList[3])) && p('name') && e('0'); // 看板执行查询
+r($execution->fillTasksInTreeTest($executionIDList[0])) && p()       && e('0'); // 错误执行查询

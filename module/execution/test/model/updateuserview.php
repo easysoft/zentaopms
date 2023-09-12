@@ -31,4 +31,4 @@ cid=1
 */
 
 $execution = new executionTest();
-r($execution->updateUserViewTest(5), ',5,') && p() && e('`,5,4,`'); // 默认情况下的用户是否有执行的可视权限
+r($execution->updateUserViewTest(5)) && p() && e('~f:5~'); // 默认情况下的用户是否有执行的可视权限

@@ -2032,7 +2032,7 @@ class executionModel extends model
             $this->session->set('taskQueryCondition', $taskQuery, $this->app->tab);
             $this->session->set('taskOnlyCondition', true, $this->app->tab);
 
-            return $this->getSearchTasks($taskQuery, $pager, $sort);
+            return $this->getSearchTasks($taskQuery, $sort, $pager);
         }
     }
 
@@ -2356,7 +2356,7 @@ class executionModel extends model
             if(!isset($existedProducts[$productID])) $existedProducts[$productID] = array();
 
             $oldPlan = 0;
-            $branch  = isset($branches[$i]) ? $branches[$i] : array();
+            $branch  = isset($branches[$i]) ? (array)$branches[$i] : array();
             foreach($branch as $branchID)
             {
                 if(isset($existedProducts[$productID][$branchID])) continue;
@@ -4786,7 +4786,7 @@ class executionModel extends model
         if($executionID)
         {
             $this->update($executionID);
-            $this->updateProducts($executionID, $updateProductsData);
+            $this->updateProducts($executionID, (array)$updateProductsData);
         }
 
         $_POST = $postData;

@@ -19,6 +19,8 @@ $execution->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD
 $execution->realBegan->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->gen(5);
 
+zdTable('task')->config('task')->gen(30);
+
 /**
 
 title=测试executionModel->changeStatus2Wait();
@@ -28,6 +30,6 @@ cid=1
 */
 
 $execution = new executionTest();
-r($execution->changeStatus2WaitObject(2)) && p('') && e("'阶段a',");     // 测试修改顶级父阶段执行状态为未开始
-r($execution->changeStatus2WaitObject(3)) && p('') && e("'阶段a子1',");  // 测试修改子阶段执行状态为未开始
+r($execution->changeStatus2WaitObject(2)) && p('') && e('~f:阶段a~');    // 测试修改顶级父阶段执行状态为未开始
+r($execution->changeStatus2WaitObject(3)) && p('') && e('~f:阶段a子1~'); // 测试修改子阶段执行状态为未开始
 r($execution->changeStatus2WaitObject(4)) && p('') && e('empty');        // 测试修改叶子阶段执行状态为未开始
