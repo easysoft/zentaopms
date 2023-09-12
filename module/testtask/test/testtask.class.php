@@ -9,9 +9,9 @@ class testtaskTest
 
     /**
      * Test create testtask.
-     * 
-     * @param  int   $projectID 
-     * @param  array $params 
+     *
+     * @param  int   $projectID
+     * @param  array $params
      * @access public
      * @return void
      */
@@ -26,13 +26,28 @@ class testtaskTest
         return $this->objectModel->getById($taskID);
     }
 
-    public function update($taskID)
+    /**
+     * 测试更新测试单。
+     * Test update a test task.
+     *
+     * @param  object $task
+     * @access public
+     * @return array|object
+     */
+    public function updateTest(object $task): array|object
     {
-        $objects = $this->objectModel->update($taskID);
+        global $tester;
+        $oldTask = $tester->dao->findByID($task->id)->from(TABLE_TESTTASK)->fetch();
+        foreach(explode(',', $tester->config->testtask->create->requiredFields) as $field)
+        {
+            if(!isset($task->{$field})) $task->{$field} = $oldTask->{$field};
+        }
+        $changes = $this->objectModel->update($task, $oldTask);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $task = $tester->dao->findByID($task->id)->from(TABLE_TESTTASK)->fetch();
+        return $task;
     }
 
     /**

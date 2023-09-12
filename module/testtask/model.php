@@ -762,7 +762,7 @@ class testtaskModel extends model
             ->exec();
         if(dao::isError()) return false;
 
-        $this->file->processFile4Object('testtask', $oldTask, $task);
+        $this->loadModel('file')->processFile4Object('testtask', $oldTask, $task);
         return common::createChanges($oldTask, $task);
     }
 
