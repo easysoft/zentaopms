@@ -17,87 +17,142 @@ detailHeader
     (
         entityLabel
         (
-            set::entityID($metric->id),
             set::level(1),
-            set::text($lang->metric->implement)
-        )
+            set::text($lang->metric->implement->common)
+        ),
+        label
+        (
+            to::before(icon
+            (
+                setClass('warning500 margin-left8'),
+                'help',
+            )),
+            set::text($lang->metric->implement->tip),
+            setClass('label ghost')
+        ),
     ),
 );
 
-div
+$fnGenerateVerifyResult = function() use($verifyResult)
+{
+    if(empty($verifyResult)) return null;
+
+    $results = array();
+    foreach($verifyResult as $result)
+    {
+        $class = 'verify-sentence';
+        $class .= $result->result ? ' pass' : ' error';
+        $icon = $result->result ? 'check' : 'close';
+        $results[] = p
+        (
+            setClass($class),
+            $result->tip,
+            icon
+            (
+                $icon
+            ),
+        );
+    }
+
+    return $results;
+};
+
+$fnGenerateInstructions = function() use($lang)
+{
+    $instructions = array();
+    foreach($lang->metric->implement->instructionTips as $tip)
+    {
+        $instructions[] = p
+        (
+            set::className('font-medium text-md'),
+            setStyle('padding-top', '12px'),
+            html($tip),
+        );
+    }
+
+    return $instructions;
+};
+
+$fnGenerateDataDisplay = function() use($resultData, $resultHeader, $lang, $metric)
+{
+    if(empty($resultData)) return null;
+    if(count($resultData) == 1 && count((array)$resultData[0]) == 1) return div
+        (
+            set::className('card-data'),
+            center
+            (
+                p
+                (
+                    set::className('card-digit'),
+                    $resultData[0]->value
+                ),
+                p
+                (
+                    set::className('card-title'),
+                    $lang->metric->objectList[$metric->object]
+                ),
+            )
+
+        );
+
+    return dtable
+        (
+            set::height(400),
+            set::cols($resultHeader),
+            set::data($resultData),
+        );
+};
+
+panel
 (
-    h1
+    setClass('clear-shadow'),
+    set::bodyClass('relative'),
+    btn
     (
-        setClass('font-black text-md'),
-        setStyle('margin-bottom', '5px'),
-        $lang->metric->implementInstructions
+        setClass('secondary-pale btn-download'),
+        $lang->metric->implement->downloadPHP,
+        set::url(helper::createLink('metric', 'downloadTemplate', "metricID={$metric->id}")),
+        set::target('_blank'),
     ),
     div
     (
-        setClass('leading-loose'),
-        p
+        h1
         (
-            set::className('font-medium text-md'),
-            setStyle('padding-top', '12px'),
-            $lang->metric->implementTips[0]
+            setClass('border-bottom margin-top24'),
+            span
+            (
+
+                $lang->metric->implement->instruction,
+                setClass('gray-pale text-md font-bold')
+            ),
         ),
-        p
+        div
         (
-            set::className('font-medium text-md'),
-            setStyle('padding-top', '12px'),
-            $lang->metric->implementTips[1]
+            setClass('leading-loose'),
+            $fnGenerateInstructions(),
         ),
-        p
+        h1
         (
-            set::className('font-medium text-md'),
-            setStyle('padding-top', '12px'),
-            $lang->metric->implementTips[2]
+            setClass('border-bottom margin-top24'),
+            span
+            (
+                $lang->metric->verifyResult,
+                setClass('gray-pale text-md font-bold')
+            ),
         ),
-        p
+        empty($result) ? div
         (
-            set::className('font-medium text-md'),
-            setStyle('padding-top', '12px'),
-            $lang->metric->implementTips[3]
-        ),
+            setClass('verify-content'),
+            $fnGenerateVerifyResult(),
+        ) : $fnGenerateDataDisplay(),
     ),
-    h1
-    (
-        setClass('font-black text-md'),
-        setStyle('margin-top', '10px'),
-        $lang->metric->verifyResult
-    ),
-);
 
-dtable
-(
-    set::height(500),
-    set::cols($resultHeader),
-    set::data($resultData),
-);
-
-div
-(
-    setStyle('margin', '10px'),
-);
-
-center
-(
-    btnGroup
-    (
-        btn
-        (
-            set::type('primary'),
-            set::url(helper::createLink('metric', 'implement', "metricID={$metric->id}&isVerify=true")),
-            $lang->metric->verifyFile,
-        ),
-        div(),
-        btn
-        (
-            set::type('primary'),
-            set::url(helper::createLink('metric', 'publish', "metricID={$metric->id}")),
-            $lang->metric->publish,
-        ),
-    )
+    set::footerClass('footer-actions'),
+    set::footerActions
+    ([
+        ['type' => 'secondary', 'text' => $lang->metric->verifyFile, 'url' => helper::createLink('metric', 'implement', "metricID={$metric->id}&isVerify=true")],
+        ['type' => 'primary', 'text' => $lang->metric->publish, 'disabled' => empty($result), 'url' => helper::createLink('metric', 'publish', "metricID={$metric->id}")],
+    ]),
 );
 
 render();

@@ -333,10 +333,13 @@ class metric extends control
 
         if(!$metric) return $this->send(array('result' => 'fail', 'message' => $this->lang->metric->notExist));
 
-        $metric->stage        = 'wait';
-        $metric->delistedBy   = $this->app->user->account;
-        $metric->delistedDate = helper::now();
-        $this->metric->updateMetric($metric);
+        $updateMetric = new stdclass();
+        $updateMetric->id = $metric->id;
+
+        $updateMetric->stage        = 'wait';
+        $updateMetric->delistedBy   = $this->app->user->account;
+        $updateMetric->delistedDate = helper::now();
+        $this->metric->updateMetric($updateMetric);
 
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -358,16 +361,21 @@ class metric extends control
 
         if($isVerify)
         {
-            //$verifyResult = $this->metricZen->verifyCalc($metric);
-            //$result = $verifyResult ? $this->metric->runCustomCalc($metric->code) : null;
+            list($hasError, $verifyResult) = $this->metricZen->verifyCalc($metric);
+            $result = !$hasError ? $this->metric->runCustomCalc($metric->code) : null;
 
-            //$this->view->metric       = $metric;
-            //$this->view->verifyResult = $verifyResult;
+            $this->view->metric       = $metric;
+            $this->view->verifyResult = $verifyResult;
             $result = $this->metric->runCustomCalc($metric->code);
             $this->view->result       = $result;
-            $this->view->resultHeader = $this->metricZen->getResultTableHeader($result);
-            $this->view->resultData   = $this->metricZen->getResultTableData($metric, $result);
+            if($result)
+            {
+                $this->view->resultHeader = $this->metricZen->getViewTableHeader($result);
+                $this->view->resultData   = $this->metricZen->getViewTableData($metric, $result);
+            }
         }
+
+        $this->metric->processImplementTips($metric->code);
 
         $this->view->metric = $metric;
         $this->display();
@@ -413,5 +421,20 @@ class metric extends control
         $response->data   = $this->metricZen->getViewTableData($metric, $result);
 
         echo json_encode($response);
+    }
+
+    /**
+     * 下载度量项模板文件。
+     * Download metric template php file.
+     *
+     * @param  int $metricID
+     * @access public
+     * @return void
+     */
+    public function downloadTemplate(int $metricID)
+    {
+        list($fileName, $content) = $this->metric->getMetricPHPTemplate($metricID);
+
+        $this->loadModel('file')->sendDownHeader($fileName, 'php', $content, 'content');
     }
 }

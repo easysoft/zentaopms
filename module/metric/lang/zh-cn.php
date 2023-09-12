@@ -177,12 +177,17 @@ $lang->metric->filter->clearAction = '清除已选%s';
 $lang->metric->filter->checkedInfo = '已筛选：范围(%s)、对象(%s)、目的(%s)';
 $lang->metric->filter->filterTotal = '筛选结果(%s)';
 
-$lang->metric->implementInstructions = "实现说明";
-$lang->metric->implementTips = array();
-$lang->metric->implementTips[] = '1.下载度量项模板code.php，注意：文件名称要与度量代号保持一致。';
-$lang->metric->implementTips[] = '2.对文件进行编码开发操作，操作参考手册。';
-$lang->metric->implementTips[] = '3.请将开发后的code.php文件放到[用户禅道目录]/tmp/metric目录下。';
-$lang->metric->implementTips[] = '4.执行命令赋予文件可执行权限。';
+$lang->metric->implement = new stdclass();
+$lang->metric->implement->common      = "实现";
+$lang->metric->implement->tip         = "请通过PHP实现该该度量项的计算逻辑。";
+$lang->metric->implement->instruction = "实现说明";
+$lang->metric->implement->downloadPHP = "下载度量模板";
+
+$lang->metric->implement->instructionTips = array();
+$lang->metric->implement->instructionTips[] = '1.下载度量项模板<span class="label primary-pale">{code}.php</span>，注意：文件名称要与度量代号保持一致。';
+$lang->metric->implement->instructionTips[] = '2.对文件进行编码开发操作，操作<a class="btn text-primary ghost" href="https://www.zentao.net/book/zentaopms/1103.html">参考手册</a>。';
+$lang->metric->implement->instructionTips[] = '3.请将开发后的<span class="label primary-pale">{code}.php</span>文件放到<span class="label important-pale">{tmpRoot}metric</span>目录下。';
+$lang->metric->implement->instructionTips[] = '4.执行命令赋予文件可执行权限：<br /><span class="label important-pale">chmod 777 {tmpRoot}metric</span><br /><span class="label important-pale">chmod 777 {tmpRoot}metric/{code}.php</span>';
 
 $lang->metric->verifyList = array();
 $lang->metric->verifyList['checkCalcExists']  = '检查度量项是否存在';

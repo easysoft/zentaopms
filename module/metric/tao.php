@@ -179,4 +179,24 @@ class metricTao extends metricModel
         if(empty($matches[1][0])) return null;
         return trim($matches[1][0], '`');
     }
+
+    /**
+     * 替换换行符和回车符为指定字符。
+     * Replace CR and LF to char.
+     *
+     * @param  string $str
+     * @param  string $replace
+     * @access protected
+     * @return string
+     */
+    protected function replaceCRLF(string $str, string $replace = ';'): string
+    {
+        $str = trim($str);
+        if(strpos($str, "\n\r") !== false) $str = str_replace("\n\r", $replace, $str);
+        if(strpos($str, "\r\n") !== false) $str = str_replace("\r\n", $replace, $str);
+        if(strpos($str, "\n") !== false)   $str = str_replace("\n",   $replace, $str);
+        if(strpos($str, "\r") !== false)   $str = str_replace("\r",   $replace, $str);
+
+        return $str;
+    }
 }

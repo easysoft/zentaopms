@@ -244,9 +244,9 @@ class metricModel extends model
      *
      * @param  int    $metricID
      * @access public
-     * @return string
+     * @return array
      */
-    public function getMetricPHPTemplate(int $metricID): string
+    public function getMetricPHPTemplate(int $metricID): array
     {
         $metric = $this->getByID($metricID);
 
@@ -261,11 +261,11 @@ class metricModel extends model
 
         foreach($replaceFields as $replaceField)
         {
-            $replaceContent = str_replace("\n", ';', $metric->$replaceField);
+            $replaceContent = $this->metricTao->replaceCRLF($metric->$replaceField);
             $content = str_replace("{{{$replaceField}}}", $replaceContent, $content);
         }
 
-        return $content;
+        return array("{$metric->code}.php", $content);
     }
 
     /**
@@ -630,7 +630,7 @@ class metricModel extends model
      */
     public function checkCalcClass($metric)
     {
-        if(!$this->checkCalcExists) return false;
+        if(!$this->checkCalcExists($metric)) return false;
 
         $this->includeCalc($metric->code);
         return class_exists($metric->code);
@@ -646,7 +646,7 @@ class metricModel extends model
      */
     public function checkCalcMethods($metric)
     {
-        if(!$this->checkCalcExists) return false;
+        if(!$this->checkCalcExists($metric)) return false;
 
         $methodNameList = $this->metricTao->getMethodNameList($metric->code);
         foreach($this->config->metric->necessaryMethodList as $method)
@@ -844,6 +844,7 @@ class metricModel extends model
     {
         $tmpCalcFile = $this->metricTao->getCustomCalcRoot() . $code . '.php.tmp';
 
+        $calcScript = $this->mergeBaseCalc($code);
         file_put_contents($tmpCalcFile, $calcScript);
         exec("php $tmpCalcFile 2>&1", $output);
 
@@ -1095,5 +1096,28 @@ class metricModel extends model
         }
 
         return $options;
+    }
+
+    /**
+     * 处理实现提示文本信息。
+     * Process implement tips.
+     *
+     * @param  string $code
+     * @access public
+     * @return void
+     */
+    public function processImplementTips(string $code): void
+    {
+        $tmpRoot = $this->app->getTmpRoot();
+
+        $instructionTips = $this->lang->metric->implement->instructionTips;
+
+        foreach($instructionTips as $index => $tip)
+        {
+            $instructionTips[$index] = str_replace("{code}", $code, $instructionTips[$index]);
+            $instructionTips[$index] = str_replace("{tmpRoot}", $tmpRoot, $instructionTips[$index]);
+        }
+
+        $this->lang->metric->implement->instructionTips = $instructionTips;
     }
 }

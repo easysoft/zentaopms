@@ -15,8 +15,8 @@ $config->metric->actionList['edit']['hint'] = $lang->edit;
 $config->metric->actionList['edit']['url']  = 'javascript:confirmEdit("{id}", "{isOldMetric}")';
 
 $config->metric->actionList['implement']['icon']        = 'code';
-$config->metric->actionList['implement']['text']        = $lang->metric->implement;
-$config->metric->actionList['implement']['hint']        = $lang->metric->implement;
+$config->metric->actionList['implement']['text']        = $lang->metric->implement->common;
+$config->metric->actionList['implement']['hint']        = $lang->metric->implement->common;
 $config->metric->actionList['implement']['data-toggle'] = 'modal';
 $config->metric->actionList['implement']['url']         = helper::createLink('metric', 'implement', 'metricID={id}&isVerify=true');
 
@@ -31,7 +31,7 @@ $config->metric->actionList['delete']['url']          = helper::createLink('metr
 $config->metric->actionList['delete']['class']        = 'ajax-submit';
 $config->metric->actionList['delete']['data-confirm'] = $lang->metric->confirmDelete;
 
-$config->metric->necessaryMethodList = array('getStatement', 'calculator', 'getResult');
+$config->metric->necessaryMethodList = array('getStatement', 'calculate', 'getResult');
 
 $config->metric->oldScopeMap = array();
 $config->metric->oldScopeMap['project'] = 'project';

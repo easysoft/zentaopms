@@ -294,7 +294,7 @@ class metricZen extends metric
         $dateType    = $this->lang->metric->dateList[$collectConf->type];
         $dateConf    = $collectConf->type == 'week' ? $collectConf->week : $collectConf->month;
         $collectConfText = sprintf($this->lang->metric->collectConfText, $dateType, $dateConf, $oldMetric->execTime);
-        
+
         $oldMetricInfo = array();
         $oldMetricInfo['scope']       = array('name' => $this->lang->metric->scope, 'text' => zget($this->lang->metric->old->scopeList, $oldMetric->scope));
         $oldMetricInfo['object']      = array('name' => $this->lang->metric->object, 'text' => zget($this->lang->metric->old->objectList, $oldMetric->object));
@@ -450,24 +450,35 @@ class metricZen extends metric
     protected function verifyCalc($metric)
     {
         $verifyResult = array();
+        $hasError = false;
         foreach($this->config->metric->verifyList as $method => $tip)
         {
             $verifyItem = new stdclass();
             $verifyItem->tip    = $tip;
             $verifyItem->result = $this->metric->$method($metric);
 
+            if(!$verifyItem->result) $hasError = true;
+
             $verifyResult[] = $verifyItem;
+
+            if(!$verifyItem->result) break;
         }
 
-        $dryRunOutput = $this->metric->dryRunCalc($metric);
+        if(count($verifyResult) != 3) return array($hasError, $verifyResult);
 
-        $dryRunResult = new stdclass();
-        $dryRunResult->tip    = $dryRunOutput;
-        $dryRunResult->result = empty($dryRunOutput) ? true : false;
+        $dryRunOutput = $this->metric->dryRunCalc($metric->code);
 
-        $verifyResult[] = $dryRunResult;
+        if(!empty($dtyRunOutput))
+        {
+            $dryRunResult = new stdclass();
+            $dryRunResult->tip    = $dryRunOutput;
+            $dryRunResult->result = false;
 
-        return json_encode($verifyResult);
+            $verifyResult[] = $dryRunResult;
+            $hasError = true;
+        }
+
+        return array($hasError, $verifyResult);
     }
 
     /**
