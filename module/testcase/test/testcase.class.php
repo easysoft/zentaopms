@@ -1157,4 +1157,38 @@ class testcaseTest
         foreach($configs as $config) $return .= "{$config->key}:{$config->value},";
         return trim($return, ',');
     }
+
+    /**
+     * 测试从 bug 的步骤创建用例步骤。
+     * Test create case steps from a bug's step.
+     *
+     * @param  string  $steps
+     * @access public
+     * @return array|string
+     */
+    public function createStepsFromBugTest(string $steps): array|string
+    {
+        $array = $this->objectModel->createStepsFromBug($steps);
+
+        if(dao::isError()) return dao::getError();
+
+        $return = '';
+        foreach($array as $key => $step)
+        {
+            if(!isset($step->type))
+            {
+                $step->desc = explode("\n", trim($step->desc));
+
+                $return .= 'step:';
+                foreach($step->desc as $desc) $return .= $desc . ' ';
+                $return .= "expect:{$step->expect}";
+            }
+            else
+            {
+                $return .= "step:{$step->desc} expect:{$step->expect} type:{$step->type}.   ";
+            }
+        }
+
+        return trim($return);
+    }
 }

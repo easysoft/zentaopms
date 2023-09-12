@@ -1176,14 +1176,17 @@ class testcaseModel extends model
     }
 
     /**
+     * 从 bug 的步骤创建用例步骤。
      * Create case steps from a bug's step.
      *
-     * @param  string    $steps
+     * @param  string $steps
      * @access public
      * @return array
      */
-    function createStepsFromBug($steps)
+    public function createStepsFromBug(string $steps): array
     {
+        /* 初始化步骤相关变量，获取步骤的描述、结果和期望，以及他们在字符串中的位置。 */
+        /* Initializes the step variable, and get the desc, result and expect of the step and its position. */
         $steps        = strip_tags($steps);
         $caseSteps    = array((object)array('desc' => $steps, 'expect' => ''));   // the default steps before parse.
         $lblStep      = strip_tags($this->lang->bug->tplStep);
@@ -1193,13 +1196,19 @@ class testcaseModel extends model
         $lblResultPos = strpos($steps, $lblResult);
         $lblExpectPos = strpos($steps, $lblExpect);
 
-        if($lblStepPos === false or $lblResultPos === false or $lblExpectPos === false) return $caseSteps;
+        /* 如果 bug 的步骤没有描述、结果或者期望，返回默认步骤。 */
+        /* If steps don't have desc, result or expect, return default steps. */
+        if($lblStepPos === false || $lblResultPos === false || $lblExpectPos === false) return $caseSteps;
 
+        /* 计算描述和期望。 */
+        /* Process desc and expect. */
         $caseSteps  = substr($steps, $lblStepPos + strlen($lblStep), $lblResultPos - strlen($lblStep) - $lblStepPos);
         $caseExpect = substr($steps, $lblExpectPos + strlen($lblExpect));
         $caseSteps  = trim($caseSteps);
         $caseExpect = trim($caseExpect);
 
+        /* 计算步骤。 */
+        /* Process steps. */
         $caseSteps = explode("\n", trim($caseSteps));
         $stepCount = count($caseSteps);
         foreach($caseSteps as $key => $caseStep)
@@ -1207,6 +1216,7 @@ class testcaseModel extends model
             $expect = $key + 1 == $stepCount ? $caseExpect : '';
             $caseSteps[$key] = (object)array('desc' => trim($caseStep), 'expect' => $expect, 'type' => 'item');
         }
+
         return $caseSteps;
     }
 

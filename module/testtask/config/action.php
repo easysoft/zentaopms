@@ -76,8 +76,8 @@ $config->testtask->cases->actionList['confirmChange']['class'] = 'ajax-submit';
 $config->testtask->cases->actionList['createBug']['icon']        = 'bug';
 $config->testtask->cases->actionList['createBug']['text']        = $lang->testcase->createBug;
 $config->testtask->cases->actionList['createBug']['hint']        = $lang->testcase->createBug;
-$config->testtask->cases->actionList['createBug']['url']         = array('module' => 'testcase', 'method' => 'createBug', 'params' => 'product={product}&branch={branch}&extra=executionID=%execution%,buildID=%build%,caseID={case},version={version},runID={id},testtask=%testtask%', 'data-width' => '90%');
-$config->testtask->cases->actionList['createBug']['data-width']  = '90%';
+$config->testtask->cases->actionList['createBug']['url']         = array('module' => 'testcase', 'method' => 'createBug', 'params' => 'product={product}&extra=executionID=%execution%,buildID=%build%,caseID={case},version={version},runID={id},testtask=%testtask%', 'data-width' => '90%');
+$config->testtask->cases->actionList['createBug']['data-width']  = 'lg';
 $config->testtask->cases->actionList['createBug']['data-toggle'] = 'modal';
 
 $config->testtask->cases->actionList['runCase']['icon']        = 'play';
