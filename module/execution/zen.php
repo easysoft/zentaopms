@@ -185,6 +185,133 @@ class executionZen extends execution
     }
 
     /**
+     * 展示需求关联的任务、Bug、用例的数量以及统计需求信息。
+     * Show the number of tasks, bugs cases linked with the stories, and statistics story information.
+     *
+     * @param  int       $executionID
+     * @param  array     $stories
+     * @param  string    $storyType
+     * @access protected
+     * @return void
+     */
+    protected function assignCountForStory(int $executionID, array $stories, string $storyType): void
+    {
+        /* Get related tasks, bugs, cases count of each story. */
+        $storyIdList = array();
+        foreach($stories as $story)
+        {
+            $storyIdList[$story->id] = $story->id;
+            if(empty($story->children)) continue;
+
+            foreach($story->children as $child) $storyIdList[$child->id] = $child->id;
+        }
+
+        $summary = $this->loadModel('product')->summary($stories);
+
+        $this->view->stories    = $stories;
+        $this->view->storyTasks = $this->loadModel('task')->getStoryTaskCounts($storyIdList, $executionID);
+        $this->view->storyBugs  = $this->loadModel('bug')->getStoryBugCounts($storyIdList, $executionID);
+        $this->view->storyCases = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
+        $this->view->summary    = $storyType == 'requirement' ? str_replace($this->lang->SRCommon, $this->lang->URCommon, $summary) : $summary;
+    }
+
+    /**
+     * 展示需求列表的相关变量。
+     * Show the story list related variables.
+     *
+     * @param  object     $execution
+     * @param  array      $products
+     * @param  int        $productID
+     * @param  string     $type
+     * @param  string     $storyType
+     * @param  int        $param
+     * @param  string     $orderBy
+     * @param  object     $pager
+     * @access protected
+     * @return void
+     */
+    protected function assignRelationForStory(object $execution, array $products, int $productID, string $type, string $storyType, int $param, string $orderBy, object $pager): void
+    {
+        $plans    = $this->execution->getPlans(array_keys($products), 'skipParent|withMainPlan|unexpired|noclosed|sortedByDate', $execution->id);
+        $allPlans = array();
+        if(!empty($plans))
+        {
+            foreach($plans as $plan) $allPlans += $plan;
+        }
+
+        if($this->cookie->storyProductParam) $this->view->product = $this->loadModel('product')->getById((int)$this->cookie->storyProductParam);
+        if($this->cookie->storyBranchParam)
+        {
+            $branchID = $this->cookie->storyBranchParam;
+            if(strpos($branchID, ',') !== false) list($productID, $branchID) = explode(',', $branchID);
+            $this->view->branch = $this->loadModel('branch')->getById($branchID, $productID);
+        }
+
+        $executionProductList = $this->loadModel('product')->getProducts($execution->id);
+        $multiBranch          = false;
+        foreach($executionProductList as $executionProduct)
+        {
+            if($executionProduct->type != 'normal')
+            {
+                $multiBranch = true;
+                break;
+            }
+        }
+
+        $productPairs = $this->loadModel('product')->getProductPairsByProject($execution->id); // Get execution's product.
+        if(empty($productID)) $productID = (int)key($productPairs);
+
+        $this->assignModuleForStory($type, $param, $storyType, $execution, $productID);
+
+        /* Assign. */
+        $this->view->title        = $execution->name . $this->lang->colon . $this->lang->execution->story;
+        $this->view->storyType    = $storyType;
+        $this->view->param        = $param;
+        $this->view->type         = $this->session->executionStoryBrowseType;
+        $this->view->orderBy      = $orderBy;
+        $this->view->pager        = $pager;
+        $this->view->product      = $this->product->getById($productID);
+        $this->view->allPlans     = $allPlans;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->multiBranch  = $multiBranch;
+        $this->view->execution    = $execution;
+        $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
+    }
+
+    /**
+     * 展示需求列表的模块变量。
+     * Show the story list module variables.
+     *
+     * @param  string    $type
+     * @param  int       $param
+     * @param  string    $storyType
+     * @param  object    $execution
+     * @param  int       $productID
+     * @access protected
+     * @return void
+     */
+    protected function assignModuleForStory(string $type, int $param, string $storyType, object $execution, int $productID): void
+    {
+        $this->loadModel('tree');
+        if($this->cookie->storyModuleParam) $this->view->module = $this->loadModel('tree')->getById($this->cookie->storyModuleParam);
+        $showModule  = !empty($this->config->execution->story->showModule) ? $this->config->execution->story->showModule : '';
+        $modulePairs = $showModule ? $this->tree->getModulePairs($type == 'byproduct' ? $param : 0, 'story', $showModule) : array();
+
+        $createModuleLink = $storyType == 'story' ? 'createStoryLink' : 'createRequirementLink';
+        if(!$execution->hasProduct && !$execution->multiple)
+        {
+            $moduleTree = $this->tree->getTreeMenu($productID, 'story', 0, array('treeModel', $createModuleLink), array('executionID' => $execution->id, 'productID' => $productID), '', "&param=$param&storyType=$storyType");
+        }
+        else
+        {
+            $moduleTree = $this->tree->getProjectStoryTreeMenu($execution->id, 0, array('treeModel', $createModuleLink));
+        }
+
+        $this->view->moduleTree   = $moduleTree;
+        $this->view->modulePairs  = $modulePairs;
+    }
+
+    /**
      * 展示任务看板的相关变量。
      * Show the task Kanban related variables.
      *
@@ -495,6 +622,53 @@ class executionZen extends execution
         if($groupBy == 'finishedBy' && !empty($task->left)) $groupTasks[$users[$task->finishedBy]][] = $task;
 
         return $groupTasks;
+    }
+
+    /**
+     * 构建需求列表的搜索表单数据。
+     * Build the search form data to story list.
+     *
+     * @param  object    $execution
+     * @param  int       $productID
+     * @param  array     $products
+     * @param  int       $queryID
+     * @param  string    $actionURL
+     * @access protected
+     * @return void
+     */
+    protected function buildStorySearchForm(object $execution, int $productID, array $products, int $queryID, string $actionURL): void
+    {
+        $modules          = array();
+        $productModules   = array();
+        $executionModules = $this->loadModel('tree')->getTaskTreeModules($execution->id, true);
+        if($productID)
+        {
+            $product = $products[$productID];
+            $productModules = $this->tree->getOptionMenu($productID, 'story', 0, $product->branches);
+        }
+        else
+        {
+            foreach($products as $product) $productModules += $this->tree->getOptionMenu($product->id, 'story', 0, $product->branches);
+        }
+
+        if(commonModel::isTutorialMode())
+        {
+            $modules = $this->loadModel('tutorial')->getModulePairs();
+        }
+        else
+        {
+            foreach($productModules as $branchID => $moduleList)
+            {
+                foreach($moduleList as $moduleID => $moduleName)
+                {
+                    if($moduleID && !isset($executionModules[$moduleID])) continue;
+                    $modules[$moduleID] = ((count($products) >= 2 && $moduleID) ? $product->name : '') . $moduleName;
+                }
+            }
+        }
+
+        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
+        $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'executionStory', $execution);
     }
 
     /**
@@ -1388,6 +1562,65 @@ class executionZen extends execution
 
         if($type != '') $link .= "&type=$type";
         return $link;
+    }
+
+    /**
+     * 设置cookie和session。
+     * Set the cookie and session.
+     *
+     * @param  string    $executionID
+     * @param  string    $type        all|byModule|byProduct|byBranch|bySearch
+     * @param  string    $param
+     * @param  string    $orderBy
+     * @access protected
+     * @return int
+     */
+    protected function setStorageForStory(string $executionID, string $type, string $param, string $orderBy): int
+    {
+        $productID = 0;
+        helper::setcookie('storyPreExecutionID', $executionID);
+        if($this->cookie->storyPreExecutionID != $executionID)
+        {
+            $_COOKIE['storyModuleParam'] = $_COOKIE['storyProductParam'] = $_COOKIE['storyBranchParam'] = 0;
+            helper::setcookie('storyModuleParam',  '0');
+            helper::setcookie('storyProductParam', '0');
+            helper::setcookie('storyBranchParam',  '0');
+        }
+        if($type == 'bymodule')
+        {
+            $module    = $this->loadModel('tree')->getByID($param);
+            $productID = isset($module->root) ? $module->root : 0;
+
+            helper::setcookie('storyModuleParam',  $param);
+            helper::setcookie('storyProductParam', '0');
+            helper::setcookie('storyBranchParam',  '0');
+        }
+        elseif($type == 'byproduct')
+        {
+            $productID = $param;
+            helper::setcookie('storyModuleParam',  '0');
+            helper::setcookie('storyProductParam', $param);
+            helper::setcookie('storyBranchParam',  '0');
+        }
+        elseif($type == 'bybranch')
+        {
+            helper::setcookie('storyModuleParam',  '0');
+            helper::setcookie('storyProductParam', '0');
+            helper::setcookie('storyBranchParam',  $param);
+        }
+        else
+        {
+            $this->session->set('executionStoryBrowseType', $type);
+            $this->session->set('storyBrowseType',          $type, 'execution');
+        }
+
+        $uri = $this->app->getURI(true);
+        $this->session->set('storyList',          $uri, $this->app->tab);
+        $this->session->set('executionStoryList', $uri, 'execution');
+
+        helper::setcookie('executionStoryOrder', $orderBy);
+
+        return (int)$productID;
     }
 
     /**

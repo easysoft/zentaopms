@@ -15,11 +15,11 @@ namespace zin;
 featureBar
 (
     set::current($this->session->storyBrowseType),
-    set::link(createLink($app->rawModule, $app->rawMethod, "&executionID=$executionID&storyType=$storyType&orderBy=$orderBy&type={key}")),
+    set::link(createLink($app->rawModule, $app->rawMethod, "&executionID=$execution->id&storyType=$storyType&orderBy=$orderBy&type={key}")),
     li(searchToggle(set::module('executionStory')))
 );
 
-jsVar('executionID', $executionID);
+jsVar('executionID', $execution->id);
 jsVar('childrenAB', $lang->story->childrenAB);
 $linkStoryByPlanTips = $multiBranch ? sprintf($lang->execution->linkBranchStoryByPlanTips, $lang->project->branch) : $lang->execution->linkNormalStoryByPlanTips;
 $linkStoryByPlanTips = $execution->multiple ? $linkStoryByPlanTips : str_replace($lang->execution->common, $lang->projectCommon, $linkStoryByPlanTips);
@@ -55,13 +55,13 @@ modal
 $canModifyProduct = common::canModify('product', $product);
 $canCreate        = $canModifyProduct && hasPriv('story', 'create');
 $canBatchCreate   = $canModifyProduct && hasPriv('story', 'canBatchCreate');
-$createLink       = createLink('story', 'create', "product={$productID}&branch=0&moduleID=0&storyID=0&objectID={$executionID}&bugID=0&planID=0&todoID=0&extra=&storyType={$storyType}");
-$batchCreateLink  = createLink('story', 'batchCreate', "productID={$productID}&branch=0&moduleID=0&storyID=0&executionID={$executionID}&plan=0&storyType={$storyType}");
+$createLink       = createLink('story', 'create', "product={$product->id}&branch=0&moduleID=0&storyID=0&objectID={$execution->id}&bugID=0&planID=0&todoID=0&extra=&storyType={$storyType}");
+$batchCreateLink  = createLink('story', 'batchCreate', "productID={$product->id}&branch=0&moduleID=0&storyID=0&executionID={$execution->id}&plan=0&storyType={$storyType}");
 
 /* Tutorial create link. */
 if(commonModel::isTutorialMode())
 {
-    $wizardParams   = helper::safe64Encode("productID={$productID}&branch=0&moduleID=0");
+    $wizardParams   = helper::safe64Encode("productID={$product->id}&branch=0&moduleID=0");
     $createLink     = $this->createLink('tutorial', 'wizard', "module=story&method=create&params={$wizardParams}");
     $canBatchCreate = false;
 }
@@ -71,11 +71,11 @@ $batchCreateItem = array('text' => $lang->story->batchCreate, 'url' => $batchCre
 
 $canLinkStory     = $canModifyProduct && hasPriv('story', 'linkStory');
 $canlinkPlanStory = $canModifyProduct && hasPriv('story', 'importPlanStories');
-$linkStoryUrl     = createLink('execution', 'linkStory', "project={$executionID}");
+$linkStoryUrl     = createLink('execution', 'linkStory', "project={$execution->id}");
 
 if(commonModel::isTutorialMode())
 {
-    $wizardParams     = helper::safe64Encode("project={$executionID}");
+    $wizardParams     = helper::safe64Encode("project={$execution->id}");
     $linkStoryUrl     = createLink('tutorial', 'wizard', "module=project&method=linkStory&params=$wizardParams");
     $canlinkPlanStory = false;
 }
@@ -90,14 +90,14 @@ toolbar
         'text'  => $lang->story->report->common,
         'icon'  => 'bar-chart',
         'class' => 'ghost',
-        'url'   => createLink('story', 'report', "productID={$productID}&branchID=&storyType={$storyType}&browseType={$type}&moduleID={$param}&chartType=pie&projectID={$execution->id}"),
+        'url'   => createLink('story', 'report', "productID={$product->id}&branchID=&storyType={$storyType}&browseType={$type}&moduleID={$param}&chartType=pie&projectID={$execution->id}"),
     ))) : null,
     hasPriv('story', 'export') ? item(set(array
     (
         'text'        => $lang->story->export,
         'icon'        => 'export',
         'class'       => 'ghost',
-        'url'         => createLink('story', 'export', "productID=$productID&orderBy=$orderBy&executionID=$executionID&browseType=$type&storyType=$storyType"),
+        'url'         => createLink('story', 'export', "productID={$product->id}&orderBy=$orderBy&executionID=$execution->id&browseType=$type&storyType=$storyType"),
         'data-toggle' => 'modal'
     ))) : null,
 
@@ -146,7 +146,7 @@ sidebar
     moduleMenu(set(array(
         'modules'     => $moduleTree,
         'activeKey'   => $param,
-        'closeLink'   => $this->createLink('execution', 'story', "executionID={$executionID}&storyType={$storyType}&orderBy={$orderBy}&type=byModule&param=0")
+        'closeLink'   => $this->createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy={$orderBy}&type=byModule&param=0")
     )))
 );
 
@@ -343,7 +343,7 @@ if($canBatchAction)
 }
 
 /* DataTable columns. */
-$setting = $this->datatable->getSetting('execution');
+$setting = $this->loadModel('datatable')->getSetting('execution');
 $cols    = array();
 foreach($setting as $col)
 {
@@ -352,7 +352,7 @@ foreach($setting as $col)
     if(!$execution->hasProduct and !$execution->multiple and $storyType == 'requirement' and $value['id'] == 'stage') continue;
 
     $col['name'] = $col['id'];
-    if($col['id'] == 'title') $col['link'] = sprintf($col['link'], createLink('execution', 'storyView', array('storyID' => '{id}', 'execution' => $executionID)));
+    if($col['id'] == 'title') $col['link'] = sprintf($col['link'], createLink('execution', 'storyView', array('storyID' => '{id}', 'execution' => $execution->id)));
 
     $cols[] = $col;
 }
