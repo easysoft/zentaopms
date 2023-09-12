@@ -282,19 +282,20 @@ class testcaseTest
     }
 
     /**
+     * 测试获取需求关联的用例。
      * Test get stories' cases.
      *
      * @param  int    $storyID
      * @access public
-     * @return array
+     * @return array|string
      */
-    public function getStoryCasesTest($storyID)
+    public function getStoryCasesTest(int $storyID): array|string
     {
         $objects = $this->objectModel->getStoryCases($storyID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return implode(',', array_keys($objects));
     }
 
     /**

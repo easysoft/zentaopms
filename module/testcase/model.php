@@ -600,13 +600,14 @@ class testcaseModel extends model
     }
 
     /**
+     * 获取关联需求的用例。
      * Get cases of a story.
      *
      * @param  int    $storyID
      * @access public
      * @return array
      */
-    public function getStoryCases($storyID)
+    public function getStoryCases(int $storyID): array
     {
         return $this->dao->select('id, project, title, pri, type, status, lastRunner, lastRunDate, lastRunResult')
             ->from(TABLE_CASE)
