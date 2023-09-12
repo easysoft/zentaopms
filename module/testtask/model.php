@@ -951,9 +951,11 @@ class testtaskModel extends model
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
             ->where('t1.id')->eq($runID)
             ->fetch();
-        $linkedProjects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($run->story)->fetchPairs();
+        if(!$run) return false;
 
-        $this->dao->delete()->from(TABLE_PROJECTCASE)->where('`case`')->eq($run->case)->andWhere('project')->notin($linkedProjects)->exec();
+        $linkedProjects = $run->story ? $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($run->story)->fetchPairs() : array();
+        if($linkedProjects) $this->dao->delete()->from(TABLE_PROJECTCASE)->where('`case`')->eq($run->case)->andWhere('project')->notin($linkedProjects)->exec();
+
         $this->dao->delete()->from(TABLE_TESTRUN)->where('id')->eq($runID)->exec();
         $this->loadModel('action')->create('case' ,$run->case, 'unlinkedfromtesttask', '', $run->task);
 
