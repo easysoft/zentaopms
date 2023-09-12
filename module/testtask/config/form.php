@@ -46,3 +46,13 @@ $config->testtask->form->close['uid']              = array('required' => false, 
 $config->testtask->form->close['comment']          = array('required' => false, 'type' => 'string',   'default' => '', 'control' => 'editor');
 $config->testtask->form->close['realFinishedDate'] = array('required' => true,  'type' => 'datetime', 'default' => date('Y-m-d H:i:s'));
 $config->testtask->form->close['mailto']           = array('required' => false, 'type' => 'array',    'default' => array(), 'filter' => 'join');
+
+$config->testtask->form->activate = array();
+$config->testtask->form->activate['status']  = array('required' => true,  'type' => 'string', 'default' => 'doing');
+$config->testtask->form->activate['uid']     = array('required' => false, 'type' => 'string', 'default' => '');
+$config->testtask->form->activate['comment'] = array('required' => false, 'type' => 'string', 'default' => '', 'control' => 'editor');
+
+$config->testtask->form->block = array();
+$config->testtask->form->block['status']    = array('required' => true,  'type' => 'string', 'default' => 'blocked');
+$config->testtask->form->block['uid']       = array('required' => false, 'type' => 'string', 'default' => '');
+$config->testtask->form->block['comment']   = array('required' => false, 'type' => 'string', 'default' => '', 'control' => 'editor');
