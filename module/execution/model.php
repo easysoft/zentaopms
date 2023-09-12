@@ -4605,6 +4605,7 @@ class executionModel extends model
     }
 
     /**
+     * 追加任务列表到执行列表。
      * Append tasks to execution list.
      *
      * @param  array  $tasks

@@ -3021,4 +3021,18 @@ class executionTest
         $executions = $this->executionModel->getStatData();
         return $this->executionModel->generateRow($executions, array(), array());
     }
+
+    /**
+     * Test appendTasks method.
+     *
+     * @access public
+     * @return array
+     */
+    public function appendTasksTest()
+    {
+        $executions = $this->executionModel->getStatData(0, 'all', 0, 0, true);
+        if(empty($executions[0]->tasks)) return false;
+
+        return $this->executionModel->appendTasks($executions[0]->tasks, array());
+    }
 }
