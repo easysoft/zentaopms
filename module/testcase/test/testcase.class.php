@@ -107,21 +107,24 @@ class testcaseTest
     }
 
     /**
+     * 测试获取某个项目的某个模块的用例。
      * Test get project cases of a module.
      *
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  int    $moduleIdList
-     * @param  string $browseType
-     * @param  string $auto
-     * @param  string $caseType
-     * @param  string $orderBy
-     * @param  object $pager
+     * @param  int        $productID
+     * @param  int|string $branch
+     * @param  int|array  $moduleIdList
+     * @param  string     $browseType
+     * @param  string     $auto
+     * @param  string     $caseType
+     * @param  string     $orderBy
+     * @param  object     $pager
      * @access public
      * @return array
      */
-    public function getModuleProjectCasesTest($productID, $branch = 0, $moduleIdList = 0, $browseType = '', $auto = 'no', $caseType = '', $orderBy = 'id_desc', $pager = null)
+    public function getModuleProjectCasesTest(int $productID, int|string $branch = 0, int|array $moduleIdList = 0, string $browseType = '', string $auto = 'no', string $caseType = '', string $orderBy = 'id_desc', object $pager = null): array
     {
+        $_SESSION['project'] = 1;
+
         $objects = $this->objectModel->getModuleProjectCases($productID, $branch, $moduleIdList, $browseType, $auto, $caseType, $orderBy, $pager);
 
         if(dao::isError()) return dao::getError();

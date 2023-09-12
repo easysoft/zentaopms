@@ -107,44 +107,6 @@ class testcaseModel extends model
     }
 
     /**
-     * Get project cases of a module.
-     *
-     * @param  int        $productID
-     * @param  int|string $branch
-     * @param  int        $moduleIdList
-     * @param  string     $browseType
-     * @param  string     $auto   no|unit
-     * @param  string     $caseType
-     * @param  string     $orderBy
-     * @param  object     $pager
-     * @access public
-     * @return array
-     */
-    public function getModuleProjectCases($productID, $branch = 0, $moduleIdList = 0, $browseType = '', $auto = 'no', $caseType = '', $orderBy = 'id_desc', $pager = null)
-    {
-        $executions = $this->loadModel('execution')->getIdList($this->session->project);
-        array_push($executions, $this->session->project);
-
-        return $this->dao->select('distinct t1.*, t2.*, t4.title as storyTitle')->from(TABLE_PROJECTCASE)->alias('t1')
-            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
-            ->leftJoin(TABLE_PROJECTSTORY)->alias('t3')->on('t3.story=t2.story')
-            ->leftJoin(TABLE_STORY)->alias('t4')->on('t3.story=t4.id')
-            ->where('t1.project')->in($executions)
-            ->beginIF(!empty($productID))->andWhere('t2.product')->eq((int)$productID)->fi()
-            ->beginIF(!empty($productID) and $branch !== 'all')->andWhere('t2.branch')->eq($branch)->fi()
-            ->beginIF($moduleIdList)->andWhere('t2.module')->in($moduleIdList)->fi()
-            ->beginIF($browseType == 'all')->andWhere('t2.scene')->eq(0)->fi()
-            ->beginIF($browseType == 'wait')->andWhere('t2.status')->eq($browseType)->fi()
-            ->beginIF($auto == 'auto' || $auto == 'unit')->andWhere('t1.auto')->eq($auto)->fi()
-            ->beginIF($auto != 'auto' && $auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
-            ->beginIF($caseType)->andWhere('t2.type')->eq($caseType)->fi()
-            ->andWhere('t2.deleted')->eq('0')
-            ->orderBy($orderBy)
-            ->page($pager, 't1.`case`')
-            ->fetchAll('id');
-    }
-
-    /**
      * Get project cases.
      *
      * @param  int    $projectID

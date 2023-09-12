@@ -46,6 +46,45 @@ class testcaseTao extends testcaseModel
     }
 
     /**
+     * 获取某个项目下某个模块的用例列表。
+     * Get project cases of a module.
+     *
+     * @param  int        $productID
+     * @param  int|string $branch
+     * @param  int        $moduleIdList
+     * @param  string     $browseType
+     * @param  string     $auto   no|unit
+     * @param  string     $caseType
+     * @param  string     $orderBy
+     * @param  object     $pager
+     * @access protected
+     * @return array
+     */
+    protected function getModuleProjectCases(int $productID, int|string $branch = 0, int|array $moduleIdList = 0, string $browseType = '', string $auto = 'no', string $caseType = '', string $orderBy = 'id_desc', object $pager = null): array
+    {
+        $executions = $this->loadModel('execution')->getIdList((int)$this->session->project);
+        array_push($executions, $this->session->project);
+
+        return $this->dao->select('distinct t1.*, t2.*, t4.title AS storyTitle')->from(TABLE_PROJECTCASE)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
+            ->leftJoin(TABLE_PROJECTSTORY)->alias('t3')->on('t3.story = t2.story')
+            ->leftJoin(TABLE_STORY)->alias('t4')->on('t3.story = t4.id')
+            ->where('t1.project')->in($executions)
+            ->beginIF(!empty($productID))->andWhere('t2.product')->eq($productID)->fi()
+            ->beginIF(!empty($productID) && $branch !== 'all')->andWhere('t2.branch')->eq($branch)->fi()
+            ->beginIF($moduleIdList)->andWhere('t2.module')->in($moduleIdList)->fi()
+            ->beginIF($browseType == 'all')->andWhere('t2.scene')->eq(0)->fi()
+            ->beginIF($browseType == 'wait')->andWhere('t2.status')->eq($browseType)->fi()
+            ->beginIF($auto == 'auto' || $auto == 'unit')->andWhere('t2.auto')->eq($auto)->fi()
+            ->beginIF($auto != 'auto' && $auto != 'unit')->andWhere('t2.auto')->ne('unit')->fi()
+            ->beginIF($caseType)->andWhere('t2.type')->eq($caseType)->fi()
+            ->andWhere('t2.deleted')->eq('0')
+            ->orderBy($orderBy)
+            ->page($pager, 't1.`case`')
+            ->fetchAll('id');
+    }
+
+    /**
      * 获取待确认的用例列表。
      * Get need fonfirm list.
      *
