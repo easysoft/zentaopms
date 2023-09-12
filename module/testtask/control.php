@@ -872,23 +872,18 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function block($taskID)
+    public function block(int $taskID)
     {
         if(!empty($_POST))
         {
-            $changes = $this->testtask->block($taskID);
+            $task = $this->testtaskZen->buildTaskForBlock($taskID);
+
+            $this->testtask->block($task);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $actionID = $this->loadModel('action')->create('testtask', $taskID, 'Blocked', $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
+            $message = $this->executeHooks($taskID) ?: $this->lang->saveSuccess;
 
-            $message = $this->executeHooks($taskID);
-            if($message) $this->lang->saveSuccess = $message;
-
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => true));
         }
 
         /* Get task info. */
@@ -898,10 +893,10 @@ class testtask extends control
         /* Set menu. */
         $this->loadModel('qa')->setMenu($this->products, $productID, $testtask->branch, $taskID);
 
-        $this->view->testtask   = $testtask;
-        $this->view->title      = $testtask->name . $this->lang->colon . $this->lang->testtask->start;
-        $this->view->users      = $this->loadModel('user')->getPairs('nodeleted', $testtask->owner);
-        $this->view->actions    = $this->loadModel('action')->getList('testtask', $taskID);
+        $this->view->title    = $testtask->name . $this->lang->colon . $this->lang->testtask->block;
+        $this->view->actions  = $this->loadModel('action')->getList('testtask', $taskID);
+        $this->view->users    = $this->loadModel('user')->getPairs('nodeleted', $testtask->owner);
+        $this->view->testtask = $testtask;
         $this->display();
     }
 
