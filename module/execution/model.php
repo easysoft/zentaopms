@@ -4206,25 +4206,27 @@ class executionModel extends model
     }
 
     /**
+     * 获取看板状态列表。
      * Get status list of kanban.
      *
      * @param  object $kanbanSetting    This param is used in the biz version, don't remove it.
      * @access public
      * @return string
      */
-    public function getKanbanStatusList($kanbanSetting)
+    public function getKanbanStatusList(object $kanbanSetting): string
     {
         return $this->lang->task->statusList;
     }
 
     /**
+     * 获取看板颜色列表。
      * Get color list of kanban.
      *
      * @param  object $kanbanSetting
      * @access public
      * @return array
      */
-    public function getKanbanColorList($kanbanSetting)
+    public function getKanbanColorList(object $kanbanSetting): array
     {
         return $kanbanSetting->colorList;
     }

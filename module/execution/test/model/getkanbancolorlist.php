@@ -18,5 +18,5 @@ pid=1
 $count = array('0', '1');
 
 $execution = new executionTest();
-r($execution->getKanbanColorListTest($count[0])) && p('wait') && e('#7EC5FF'); // 看板状态颜色查询
-r($execution->getKanbanColorListTest($count[1])) && p()       && e('6');       // 看板状态颜色数量统计
+r($execution->getKanbanColorListTest($count[0])) && p('wait') && e('~f:7EC5FF$~'); // 看板状态颜色查询
+r($execution->getKanbanColorListTest($count[1])) && p()       && e('6');           // 看板状态颜色数量统计
