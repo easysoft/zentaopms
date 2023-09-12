@@ -109,7 +109,7 @@ $lang->misc->feature->promptDesign      = 'Prompt Engineering';
 $lang->misc->feature->promptDesignImage = 'theme/default/images/main/prompt_design_en.svg';
 $lang->misc->feature->promptExec        = 'Prompt Execution';
 $lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec_en.svg';
-$lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/dynamic/82835.html';
+$lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/book/zentaopms/1097.html';
 
 /* Release Date. */
 $lang->misc->releaseDate['18.7']        = '2023-08-29';
