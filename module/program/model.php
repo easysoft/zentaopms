@@ -1314,11 +1314,11 @@ class programModel extends model
         $projects = array();
         if($updateTime < date('Y-m-d', strtotime('-14 days')) or $refreshAll)
         {
-            $projects = $this->dao->select('id,project,model,deleted')->from(TABLE_PROJECT)->fetchAll('id');
+            $projects = $this->dao->select('id,project,model')->from(TABLE_PROJECT)->fetchAll('id');
         }
         else
         {
-            $projects = $this->dao->select('distinct t1.project,t2.model,t2.deleted')->from(TABLE_ACTION)->alias('t1')
+            $projects = $this->dao->select('distinct t1.project,t2.model')->from(TABLE_ACTION)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                 ->where('t1.`date`')->ge($updateTime)
                 ->fetchAll('project');
@@ -1326,7 +1326,7 @@ class programModel extends model
         }
 
         /* 1. Get summary and members of executions to be refreshed. */
-        $summary = $this->dao->select('execution, SUM(t1.estimate) AS totalEstimate, SUM(t1.consumed) AS totalConsumed, SUM(t1.`left`) AS totalLeft, t2.deleted')->from(TABLE_TASK)->alias('t1')
+        $summary = $this->dao->select('execution, SUM(t1.estimate) AS totalEstimate, SUM(t1.consumed) AS totalConsumed, SUM(t1.`left`) AS totalLeft')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.parent')->le(0) // Ignore child task.
@@ -1356,15 +1356,10 @@ class programModel extends model
             $executionID = $execution->execution;
             foreach($executionPaths[$executionID] as $nodeID)
             {
-                if(!isset($stats[$nodeID])) $stats[$nodeID] = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'teamCount' => 0, 'totalLeftNotDel' => 0, 'totalConsumedNotDel' => 0);
+                if(!isset($stats[$nodeID])) $stats[$nodeID] = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'teamCount' => 0);
                 $stats[$nodeID]['totalEstimate'] += $execution->totalEstimate;
                 $stats[$nodeID]['totalConsumed'] += $execution->totalConsumed;
                 $stats[$nodeID]['totalLeft']     += $execution->totalLeft;
-                if(empty($execution->deleted) && !(isset($projects[$nodeID]) && !empty($projects[$nodeID]->deleted)))
-                {
-                    $stats[$nodeID]['totalConsumedNotDel'] += $execution->totalConsumed;
-                    $stats[$nodeID]['totalLeftNotDel']     += $execution->totalLeft;
-                }
             }
         }
 
@@ -1377,11 +1372,6 @@ class programModel extends model
             $stats[$projectID]['totalEstimate'] = $projectStats['PV'];
             $stats[$projectID]['totalConsumed'] = $projectStats['AC'];
             $stats[$projectID]['totalLeft']     = $projectStats['left'];
-            if(empty($project->deleted))
-            {
-                $stats[$projectID]['totalConsumedNotDel'] += $projectStats['AC'];
-                $stats[$projectID]['totalLeftNotDel']     += $projectStats['left'];
-            }
         }
 
         foreach($teamMembers as $projectID => $teamCount)
@@ -1393,8 +1383,8 @@ class programModel extends model
         /* 4. Refresh stats to db. */
         foreach($stats as $projectID => $project)
         {
-            $totalRealNotDel = $project['totalConsumedNotDel'] + $project['totalLeftNotDel'];
-            $progress        = $totalRealNotDel ? floor($project['totalConsumedNotDel'] / $totalRealNotDel * 1000) / 1000 * 100 : 0;
+            $totalReal = $project['totalConsumed'] + $project['totalLeft'];
+            $progress  = $totalReal ? floor($project['totalConsumed'] / $totalReal * 1000) / 1000 * 100 : 0;
             $this->dao->update(TABLE_PROJECT)
                 ->set('progress')->eq($progress)
                 ->set('teamCount')->eq($project['teamCount'])
@@ -1409,7 +1399,6 @@ class programModel extends model
         $projectList = $this->dao->select('id,progress,path')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('parent')->ne(0)
-            ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
         $programProgress = array();
         foreach($projectList as $projectID => $project)
