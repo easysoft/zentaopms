@@ -298,6 +298,7 @@ class testcaseTest
     }
 
     /**
+     * 测试通过产品 id 和分支获取用例键对。
      * Test get case pairs by product id and branch.
      *
      * @param  int    $productID
@@ -305,14 +306,14 @@ class testcaseTest
      * @access public
      * @return array
      */
-    public function getPairsByProductTest($productID = 0, $branch = 0)
+    public function getPairsByProductTest(int $productID = 0, int|array $branch = 0): array
     {
         $objects = $this->objectModel->getPairsByProduct($productID, $branch);
 
         if(dao::isError()) return dao::getError();
 
         if(empty($objects)) return 'empty';
-        return $objects;
+        return implode(',', $objects);
     }
 
     /**

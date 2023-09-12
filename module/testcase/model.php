@@ -581,14 +581,15 @@ class testcaseModel extends model
     }
 
     /**
+     * 通过产品 id 和分支获取用例键对。
      * Get case pairs by product id and branch.
      *
-     * @param int        $productID
-     * @param int|string $branch
+     * @param  int       $productID
+     * @param  int|array $branch
      * @access public
-     * @return void
+     * @return array
      */
-    public function getPairsByProduct($productID, $branch = 0)
+    public function getPairsByProduct(int $productID, int|array $branch = 0): array
     {
         return $this->dao->select("id, concat_ws(':', id, title) as title")->from(TABLE_CASE)
             ->where('deleted')->eq(0)
