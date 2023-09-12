@@ -545,10 +545,5 @@ modalTrigger
     )
 );
 
-modalTrigger
-(
-    modal(set::id('tipsModal'))
-);
-
 /* ====== Render page ====== */
 render();

@@ -14,4 +14,3 @@
 #copyExecutions .btn.primary-outline {background-color: var(--color-primary-50);}
 #copyExecutions .btn.primary-outline:after {position: absolute; content: '\e92f'; font-family: ZentaoIcon; font-size: 20px; right: 25px;}
 #copyExecutions .btn.primary-outline span{color: rgba(var(--color-fore-rgb),var(--tw-text-opacity));}
-#tipsModal.modal-no-backdrop {background-color: var(--modal-bg) !important; pointer-events: unset !important;}

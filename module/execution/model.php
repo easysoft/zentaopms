@@ -236,6 +236,7 @@ class executionModel extends model
     {
         $this->dao->insert(TABLE_EXECUTION)->data($execution)
             ->autoCheck('begin,end')
+            ->batchcheck($this->config->execution->create->requiredFields, 'notempty')
             ->checkIF(!empty($execution->name), 'name', 'unique', "`type` in ('sprint','stage', 'kanban') and `project` = " . (int)$execution->project . " and `deleted` = '0'")
             ->checkIF(!empty($execution->code), 'code', 'unique', "`type` in ('sprint','stage', 'kanban') and `deleted` = '0'")
             ->checkIF($execution->begin != '', 'begin', 'date')
@@ -2326,16 +2327,17 @@ class executionModel extends model
      * Update products of a execution.
      *
      * @param  int    $executionID
-     * @param  object $postData
+     * @param  array  $products
+     * @param  array  $plans
+     * @param  array  $branches
      * @access public
-     * @return void
+     * @return bool
      */
-    public function updateProducts($executionID, object $postData)
+    public function updateProducts(int $executionID, array $products, array $plans, array $branches): bool
     {
         $this->loadModel('user');
-        $products    = $postData->products;
-        $oldProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$executionID)->fetchGroup('product', 'branch');
-        $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$executionID)->exec();
+        $oldProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->fetchGroup('product', 'branch');
+        $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->exec();
         $members = array_keys($this->getTeamMembers($executionID));
         if(empty($products))
         {
@@ -2343,8 +2345,6 @@ class executionModel extends model
             return true;
         }
 
-        $branches        = isset($postData->branch) ? $postData->branch : array(0);
-        $plans           = isset($postData->plans) ? $postData->plans : array();
         $existedProducts = array();
         foreach($products as $i => $productID)
         {
@@ -2353,11 +2353,9 @@ class executionModel extends model
 
             $oldPlan = 0;
             $branch  = isset($branches[$i]) ? (array) $branches[$i] : array();
-
             foreach($branch as $branchID)
             {
                 if(isset($existedProducts[$productID][$branchID])) continue;
-
                 if(isset($oldProducts[$productID][$branchID]))
                 {
                     $oldProduct = $oldProducts[$productID][$branchID];
@@ -2366,7 +2364,7 @@ class executionModel extends model
 
                 $data = new stdclass();
                 $data->project = $executionID;
-                $data->product = $productID;
+                $data->product = (int)$productID;
                 $data->branch  = (int)$branchID;
                 $data->plan    = isset($plans[$productID]) ? implode(',', $plans[$productID]) : $oldPlan;
                 $data->plan    = trim($data->plan, ',');
@@ -2377,8 +2375,9 @@ class executionModel extends model
         }
 
         $oldProductKeys = array_keys($oldProducts);
-        $needUpdate = array_merge(array_diff($oldProductKeys, $products), array_diff($products, $oldProductKeys));
+        $needUpdate     = array_merge(array_diff($oldProductKeys, $products), array_diff($products, $oldProductKeys));
         if($needUpdate) $this->user->updateUserView($needUpdate, 'product', $members);
+        return true;
     }
 
     /**
@@ -2763,42 +2762,41 @@ class executionModel extends model
      */
     public function linkStory(int $executionID, array $stories = array(), string $extra = '', array $lanes = array()): bool
     {
-        if(empty($executionID)) return false;
-        if(empty($stories)) return false;
-
-        $this->loadModel('action');
-        $this->loadModel('kanban');
-        $versions      = $this->loadModel('story')->getVersions($stories);
-        $linkedStories = $this->dao->select('story,`order`')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order_desc')->fetchPairs('story', 'order');
-        $lastOrder     = reset($linkedStories);
-        $storyList     = $this->dao->select('id, status, branch, product')->from(TABLE_STORY)->where('id')->in(array_values($stories))->fetchAll('id');
-        $execution     = $this->getByID($executionID);
+        if(empty($executionID) || empty($stories)) return false;
 
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
+
+        $this->loadModel('action');
+        $this->loadModel('kanban');
+        $versions         = $this->loadModel('story')->getVersions($stories);
+        $linkedStories    = $this->dao->select('story,`order`')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order_desc')->fetchPairs('story', 'order');
+        $lastOrder        = (int)reset($linkedStories);
+        $storyList        = $this->dao->select('id, status, branch, product')->from(TABLE_STORY)->where('id')->in(array_values($stories))->fetchAll('id');
+        $execution        = $this->fetchByID($executionID);
+        $notAllowedStatus = $this->app->rawMethod == 'batchcreate' ? 'closed' : 'draft,reviewing,closed';
+        $laneID           = isset($output['laneID']) ? $output['laneID'] : 0;
+
         foreach($stories as $storyID)
         {
             if(isset($linkedStories[$storyID])) continue;
-            $notAllowedStatus = $this->app->rawMethod == 'batchcreate' ? 'closed' : 'draft,reviewing,closed';
             if(strpos($notAllowedStatus, $storyList[$storyID]->status) !== false) continue;
 
-            $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
+            $story = zget($storyList, $storyID, '');
+            if(empty($story)) continue;
             if(!empty($lanes[$storyID])) $laneID = $lanes[$storyID];
 
             $columnID = $this->kanban->getColumnIDByLaneID($laneID, 'backlog');
             if(empty($columnID)) $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
-
             if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'story', $storyID);
-
-            $lastOrder ++;
 
             $data = new stdclass();
             $data->project = $executionID;
-            $data->product = (int)$storyList[$storyID]->product;
-            $data->branch  = $storyList[$storyID]->branch;
+            $data->product = (int)$story->product;
+            $data->branch  = $story->branch;
             $data->story   = $storyID;
             $data->version = $versions[$storyID];
-            $data->order   = (int)$lastOrder;
+            $data->order   = ++ $lastOrder;
             $this->dao->replace(TABLE_PROJECTSTORY)->data($data)->exec();
 
             $this->story->setStage($storyID);
@@ -2827,22 +2825,19 @@ class executionModel extends model
     {
         $this->loadModel('action');
         $linkedCases   = $this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($executionID)->orderBy('order_desc')->fetchPairs('case', 'order');
-        $lastCaseOrder = empty($linkedCases) ? 0 : reset($linkedCases);
+        $lastCaseOrder = empty($linkedCases) ? 0 : (int)reset($linkedCases);
         $cases         = $this->dao->select('id, version')->from(TABLE_CASE)->where('story')->eq($storyID)->fetchPairs();
         $execution     = $this->getByID($executionID);
         foreach($cases as $caseID => $version)
         {
             if(isset($linkedCases[$caseID])) continue;
 
-            $lastCaseOrder ++;
-
             $object = new stdclass();
             $object->project = $executionID;
             $object->product = $productID;
             $object->case    = $caseID;
             $object->version = $version;
-            $object->order   = $lastCaseOrder;
-
+            $object->order   = ++ $lastCaseOrder;
             $this->dao->insert(TABLE_PROJECTCASE)->data($object)->exec();
 
             $action = $execution->type == 'project' ? 'linked2project' : 'linked2execution';
@@ -2860,39 +2855,29 @@ class executionModel extends model
      */
     public function linkStories(int $executionID): bool
     {
-        $plans = $this->dao->select('product, plan')->from(TABLE_PROJECTPRODUCT)
-            ->where('project')->eq($executionID)
-            ->fetchPairs('product', 'plan');
-
+        $stories   = array();
+        $plans     = $this->dao->select('product, plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->fetchPairs('product', 'plan');
         $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
         $this->session->set('project', $projectID);
 
-        $stories      = array();
-        $planProducts = array();
         $this->loadModel('story');
         $executionProducts = $this->loadModel('project')->getBranchesByProject($executionID);
         foreach($plans as $productID => $planIdList)
         {
             if(empty($planIdList)) continue;
 
-            $planIdList        = explode(',', $planIdList);
+            $planIdList        = array_filter(explode(',', $planIdList));
             $executionBranches = zget($executionProducts, $productID, array());
             foreach($planIdList as $planID)
             {
                 $planStories = $this->story->getPlanStories($planID);
-                if(!empty($planStories))
+                if(empty($planStories)) continue;
+
+                foreach($planStories as $id => $story)
                 {
-                    foreach($planStories as $id => $story)
-                    {
-                        if($story->status != 'active' || (!empty($story->branch) && !empty($executionBranches) && !isset($executionBranches[$story->branch])))
-                        {
-                            unset($planStories[$id]);
-                            continue;
-                        }
-                        $planProducts[$story->id] = $story->product;
-                    }
-                    $stories = array_merge($stories, array_keys($planStories));
+                    if($story->status != 'active' || (!empty($story->branch) && !empty($executionBranches) && !isset($executionBranches[$story->branch]))) unset($planStories[$id]);
                 }
+                $stories = array_merge($stories, array_keys($planStories));
             }
         }
 

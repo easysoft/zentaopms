@@ -884,6 +884,7 @@ class executionZen extends execution
         $fields       = $this->config->execution->form->create;
         $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
         foreach(explode(',', trim($this->config->execution->create->requiredFields, ',')) as $field) $fields[$field]['required'] = true;
+        if(!isset($_POST['code'])) $fields['code']['required'] = false;
         $this->config->execution->create->requiredFields = implode(',', array_keys(array_filter(array_map(function($config){return $config['required'] == true;}, $fields))));
 
         $this->correctErrorLang();
@@ -900,7 +901,7 @@ class executionZen extends execution
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->join('whitelist', ',')
             ->setDefault('type', $type)
-            ->stripTags($editorFields, $this->config->allowedTags)
+            ->stripTags(implode(',', $editorFields), $this->config->allowedTags)
             ->remove('products, workDays, delta, branch, uid, plans, teams, teamMembers, contactListMenu, heightType')
             ->get();
 
@@ -1953,7 +1954,8 @@ class executionZen extends execution
 
         $this->view->title       = $this->lang->execution->tips;
         $this->view->executionID = $executionID;
-        $this->display();
+        $this->view->execution   = $this->execution->fetchByID($executionID);
+        $this->display('execution', 'tips');
     }
 
     /**

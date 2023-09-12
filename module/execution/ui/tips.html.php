@@ -10,52 +10,58 @@ declare(strict_types=1);
  */
 namespace zin;
 
-set::className('pt-6');
-set::closeBtn(array('url' => createLink('execution', 'create'), 'class' => 'ghost'));
-div
+panel
 (
-    set::className('flex items-center'),
-    icon('check-circle text-success icon-2x mr-2'),
-    span
+    setID('tipsModal'),
+    set::title($lang->execution->tips),
+    set::headingActions(array
     (
-        set::className('article-h2 tip-title'),
-        $lang->execution->afterInfo
+        array('url' => createLink('execution', 'task', "executionID={$executionID}"), 'icon' => 'close', 'class' => 'ghost')
+    )),
+    setClass('m-auto'),
+    div
+    (
+        set::className('flex items-center'),
+        icon('check-circle text-success icon-2x mr-2'),
+        span
+        (
+            set::className('article-h2 tip-title'),
+            $lang->execution->afterInfo
+        )
+    ),
+    div
+    (
+        btn
+        (
+            set::className('mr-4 tipBtn ml-1'),
+            $lang->execution->setTeam,
+            set('data-url', createLink('execution', 'team', "executionID={$executionID}")),
+        ),
+        $execution->lifetime != 'ops' ? btn
+        (
+            set::className('mr-4 tipBtn'),
+            $lang->execution->linkStory,
+            set('data-url', createLink('execution', 'linkstory', "executionID=$executionID")),
+        ) : null,
+        btn
+        (
+            set::className('mr-4 tipBtn'),
+            $lang->execution->createTask,
+            set('data-url', createLink('task', 'create', "execution=$executionID")),
+        ),
+        btn
+        (
+            set::className('mr-4 tipBtn'),
+            $lang->execution->goback,
+            set('data-url', createLink('execution', 'task', "executionID={$executionID}")),
+        ),
+        btn
+        (
+            set::className('tipBtn'),
+            $lang->execution->gobackExecution,
+            set('data-url', createLink('execution', 'all')),
+        ),
     )
-);
-
-div
-(
-    set::className('my-4'),
-    btn
-    (
-        set::className('mr-4 tipBtn ml-1'),
-        $lang->execution->setTeam,
-        set('data-url', createLink('execution', 'team', "executionID={$executionID}")),
-    ),
-    $execution->lifetime != 'ops' ? btn
-    (
-        set::className('mr-4 tipBtn'),
-        $lang->execution->linkStory,
-        set('data-url', createLink('execution', 'linkstory', "executionID=$executionID")),
-    ) : null,
-    btn
-    (
-        set::className('mr-4 tipBtn'),
-        $lang->execution->createTask,
-        set('data-url', createLink('task', 'create', "execution=$executionID")),
-    ),
-    btn
-    (
-        set::className('mr-4 tipBtn'),
-        $lang->execution->goback,
-        set('data-url', createLink('execution', 'task', "executionID={$executionID}")),
-    ),
-    btn
-    (
-        set::className('tipBtn'),
-        $lang->execution->gobackExecution,
-        set('data-url', createLink('execution', 'all')),
-    ),
 );
 
 /* ====== Render page ====== */

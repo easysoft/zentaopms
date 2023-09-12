@@ -935,9 +935,6 @@ class execution extends control
         if($copyExecutionID) $this->executionZen->setFieldsByCopyExecution($execution, $copyExecutionID);
         $projectID = $execution->project;
 
-        $this->app->loadLang('program');
-        $this->app->loadLang('stage');
-        $this->app->loadLang('programplan');
         if($executionID) return $this->executionZen->displayAfterCreated($projectID, $executionID, $planID, $confirm);
 
         $project = empty($projectID) ? null : $this->loadModel('project')->fetchByID($projectID);
@@ -955,53 +952,36 @@ class execution extends control
                 $_POST['plans'] = array_filter($_POST['plans']);
             }
 
-            $execution= $this->storyZen->buildExecutionForCreate();
+            $execution = $this->executionZen->buildExecutionForCreate();
             if(!$execution) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $executionID = $this->execution->create($execution, isset($_POST['teamMembers']) ? $_POST['teamMembers'] : array());
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->execution->updateProducts($executionID, $postData);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            $comment = $execution->hasProduct ? implode(',', $_POST['products']) : '';
-            $this->loadModel('action')->create($this->objectType, $executionID, 'opened', '', $comment);
-
+            $this->execution->updateProducts($executionID, zget($_POST, 'products', array()), zget($_POST, 'plans', array()), zget($_POST, 'branch', array(0)));
+            $this->loadModel('action')->create($this->objectType, $executionID, 'opened', '', $execution->hasProduct ? implode(',', $_POST['products']) : '');
             $this->loadModel('programplan')->computeProgress($executionID, 'create');
+            if(!empty($projectID) and strpos(',kanban,agileplus,waterfallplus,', ",$project->model,") !== false and $execution->type == 'kanban')
+            {
+                $execution = $this->execution->fetchByID($executionID);
+                $this->loadModel('kanban')->createRDKanban($execution);
+            }
 
             $message = $this->executeHooks($executionID);
-            if($message) $this->lang->saveSuccess = $message;
+            if(empty($message)) $message = $this->lang->saveSuccess;
 
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $executionID));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'id' => $executionID));
+            if($this->app->tab == 'doc')  return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->createLink('doc', 'projectSpace', "objectID=$executionID")));
+            if(!empty($_POST['plans']))   return $this->send(array('result' => 'success', 'message' => $message, 'load' => inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=1&confirm=no")));
 
-            if($this->app->tab == 'doc')
+            if(!empty($projectID) and $project->model == 'kanban')
             {
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('doc', 'projectSpace', "objectID=$executionID")));
-            }
+                $link = $this->config->vision != 'lite' ? $this->createLink('project', 'index', "projectID=$projectID") : $this->createLink('project', 'execution', "status=all&projectID=$projectID");
+                if($this->app->tab == 'project') return $this->send(array('result' => 'success', 'message' => $message, 'load' => $link));
 
-            if(!empty($projectID) and strpos(',kanban,agileplus,waterfallplus,', ",$project->model,") !== false)
-            {
-                $execution = $this->execution->getById($executionID);
-                if($execution->type == 'kanban') $this->loadModel('kanban')->createRDKanban($execution);
+                return $this->send(array('result' => 'success', 'message' => $message, 'load' => inlink('kanban', "executionID=$executionID")));
             }
-
-            if(!empty($_POST['plans']))
-            {
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=1&confirm=no")));
-            }
-            else
-            {
-                if(!empty($projectID) and $project->model == 'kanban')
-                {
-                    if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-                    $link = $this->config->vision != 'lite' ? $this->createLink('project', 'index', "projectID=$projectID") : $this->createLink('project', 'execution', "status=all&projectID=$projectID");
-                    if($this->app->tab == 'project') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
-
-                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('kanban', "executionID=$executionID")));
-                }
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('create', "projectID=$projectID&executionID=$executionID")));
-            }
+            return $this->send(array('result' => 'success', 'message' => $message, 'load' => inlink('create', "projectID=$projectID&executionID=$executionID")));
         }
 
         list($this->view->pmUsers, $this->view->poUsers, $this->view->qdUsers, $this->view->rdUsers) = $this->executionZen->setUserMoreLink();
@@ -1023,7 +1003,6 @@ class execution extends control
         $this->view->from                = $this->app->tab;
         $this->view->isStage             = isset($project->model) && in_array($project->model, array('waterfall', 'waterfallplus'));
         $this->view->project             = $project;
-        $this->view->stageBy             = empty($project->stageBy) ? '' : $project->stageBy;
         $this->display();
     }
 
