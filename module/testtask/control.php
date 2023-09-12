@@ -905,28 +905,30 @@ class testtask extends control
     }
 
     /**
-     * Delete a test task.
+     * 删除一个测试单。
+     * Delete a testtask.
      *
      * @param  int    $taskID
      * @access public
      * @return void
      */
-    public function delete($taskID)
+    public function delete(int $taskID)
     {
         $task = $this->testtask->getByID($taskID);
+        if(!$task) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('qa', 'index'))));
+
         $this->testtask->delete(TABLE_TESTTASK, $taskID);
-
-        $message = $this->executeHooks($taskID);
-        if($message) $response['message'] = $message;
-
         if(dao::isError()) return $this->send(array('result' => 'success', 'message' => dao::getError()));
 
-        $browseList = $this->createLink('testtask', 'browse', "productID=$task->product");
-        if($this->app->tab == 'execution') $browseList = $this->createLink('execution', 'testtask', "executionID=$task->execution");
-        if($this->app->tab == 'project')   $browseList = $this->createLink('project', 'testtask', "projectID=$task->project");
+        $message = $this->executeHooks($taskID) ?: $this->lang->saveSuccess;
+
         if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->app->methodName == 'view' ? $browseList : true));
+        $browseList = inlink('browse', "productID=$task->product");
+        if($this->app->tab == 'execution') $browseList = $this->createLink('execution', 'testtask', "executionID=$task->execution");
+        if($this->app->tab == 'project')   $browseList = $this->createLink('project', 'testtask', "projectID=$task->project");
+
+        return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->app->methodName == 'view' ? $browseList : true));
     }
 
     /**
