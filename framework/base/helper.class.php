@@ -988,10 +988,10 @@ class baseHelper
         $ret = array('dirname' => '', 'basename' => '', 'extension' => '', 'filename' => '');
         preg_match('%^(.*?)[\\\\/]*(([^/\\\\]*?)(\.([^\.\\\\/]+?)|))[\\\\/\.]*$%im',$filepath,$m);
 
-        if($m[1]) $ret['dirname']   = $m[1];
-        if($m[2]) $ret['basename']  = $m[2];
-        if($m[5]) $ret['extension'] = $m[5];
-        if($m[3]) $ret['filename']  = $m[3];
+        $ret['dirname']   = !empty($m[1]) ? $m[1] : '';
+        $ret['basename']  = !empty($m[1]) ? $m[2] : '';
+        $ret['extension'] = !empty($m[1]) ? $m[5] : '';
+        $ret['filename']  = !empty($m[1]) ? $m[3] : '';
 
         return $ret;
     }
