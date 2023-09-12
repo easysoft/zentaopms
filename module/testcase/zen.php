@@ -437,13 +437,13 @@ class testcaseZen extends testcase
 
                     if($sceneCount == 0) $pager->offset = $recPerPage * ($pageID - 1) - $sceneTotal;   // 场景数为 0 表示本页查询只显示用例，需要计算用例分页的起始偏移量。
 
-                    $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $queryID, $moduleID, $caseType, $sort, $pager);
+                    $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $queryID, $moduleID, $caseType, $auto = 'no', $sort, $pager);
                     $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
                 }
                 else
                 {
                     /* 场景和用例混排，总记录数需要合并后显示，这里是为了获取用例的总记录数。*/
-                    $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $queryID, $moduleID, $caseType, $sort, $pager);
+                    $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $queryID, $moduleID, $caseType, $auto = 'no', $sort, $pager);
                     $cases = array();
                 }
 
@@ -456,7 +456,7 @@ class testcaseZen extends testcase
         }
         else
         {
-            $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $queryID, $moduleID, $caseType, $sort, $pager);
+            $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $queryID, $moduleID, $caseType, $auto = 'no', $sort, $pager);
             $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
         }
 

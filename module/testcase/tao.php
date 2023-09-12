@@ -46,6 +46,40 @@ class testcaseTao extends testcaseModel
     }
 
     /**
+     * 获取待确认的用例列表。
+     * Get need fonfirm list.
+     *
+     * @param  int        $productID
+     * @param  string|int $branch
+     * @param  array      $modules
+     * @param  string     $auto
+     * @param  string     $caseType
+     * @param  string     $sort
+     * @param  object     $pager
+     * @access protected
+     * @return array
+     */
+    protected function getNeedConfirmList(int $productID, string|int $branch, array $modules, string $auto, string $caseType, string $sort, object $pager): array
+    {
+        return $this->dao->select('distinct t1.*, t2.title AS storyTitle')->from(TABLE_CASE)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->leftJoin(TABLE_PROJECTCASE)->alias('t3')->on('t1.id = t3.case')
+            ->where('t2.status')->eq('active')
+            ->andWhere('t1.deleted')->eq('0')
+            ->andWhere('t2.version > t1.storyVersion')
+            ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
+            ->beginIF(!empty($productID) && $branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
+            ->beginIF($this->app->tab == 'project')->andWhere('t3.project')->eq($this->session->project)->fi()
+            ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
+            ->beginIF($auto == 'auto' || $auto == 'unit')->andWhere('t1.auto')->eq($auto)->fi()
+            ->beginIF($auto != 'auto' && $auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
+            ->beginIF($caseType)->andWhere('t1.type')->eq($caseType)->fi()
+            ->orderBy($sort)
+            ->page($pager, 't1.id')
+            ->fetchAll();
+    }
+
+    /**
      * 插入用例的步骤。
      * Insert the steps of the case.
      *
