@@ -4761,7 +4761,7 @@ class executionModel extends model
         if($executionID)
         {
             $this->update($executionID);
-            $this->updateProducts($executionID, $updateProductsData);
+            $this->updateProducts($executionID, (array)$updateProductsData);
         }
 
         $_POST = $postData;
