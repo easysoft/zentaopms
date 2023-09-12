@@ -2333,7 +2333,7 @@ class executionModel extends model
      * @access public
      * @return bool
      */
-    public function updateProducts(int $executionID, array $products, array $plans, array $branches): bool
+    public function updateProducts(int $executionID, array $products= array(), array $plans = array(), array $branches = array()): bool
     {
         $this->loadModel('user');
         $oldProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->fetchGroup('product', 'branch');
