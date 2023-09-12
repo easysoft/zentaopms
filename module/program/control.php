@@ -311,20 +311,24 @@ class program extends control
     }
 
     /**
-     * Start program.
+     * 启动项目集。
+     * Start a program.
      *
      * @param  int    $programID
      * @access public
      * @return void
      */
-    public function start($programID)
+    public function start(int $programID)
     {
         $this->loadModel('action');
+        $program = $this->project->getByID($programID);
 
         if(!empty($_POST))
         {
-            $changes = $this->project->start($programID, 'program');
-            if(dao::isError()) return print(js::error(dao::getError()));
+            $postData = form::data($this->config->project->form->start);
+            $postData = $this->programZen->prepareStartExtras($postData);
+            $changes  = $this->project->start($programID, $postData);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -334,11 +338,11 @@ class program extends control
 
             $this->loadModel('common')->syncPPEStatus($programID);
             $this->executeHooks($programID);
-            return print(js::reload('parent.parent'));
+            return $this->sendSuccess(array('closeModal' => true, 'load' => true));
         }
 
         $this->view->title      = $this->lang->program->start;
-        $this->view->project    = $this->project->getByID($programID, 'program');
+        $this->view->project    = $program;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions    = $this->action->getList('program', $programID);
         $this->display('project', 'start');
