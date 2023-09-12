@@ -87,6 +87,40 @@ class testtaskZen extends testtask
     }
 
     /**
+     * 构建激活测试单的数据。
+     * Build task for activate a testtask.
+     *
+     * @param  int       $taskID
+     * @access protected
+     * @return object
+     */
+    protected function buildTaskForActivate(int $taskID): object
+    {
+        $task = form::data($this->config->testtask->form->activate)
+            ->add('id', $taskID)
+            ->stripTags($this->config->testtask->editor->activate['id'], $this->config->allowedTags)
+            ->get();
+        return $this->loadModel('file')->processImgURL($task, $this->config->testtask->editor->activate['id'], $task->uid);
+    }
+
+    /**
+     * 构建阻塞测试单的数据。
+     * Build task for block a testtask.
+     *
+     * @param  int       $taskID
+     * @access protected
+     * @return object
+     */
+    protected function buildTaskForBlock(int $taskID): object
+    {
+        $task = form::data($this->config->testtask->form->block)
+            ->add('id', $taskID)
+            ->stripTags($this->config->testtask->editor->block['id'], $this->config->allowedTags)
+            ->get();
+        return $this->loadModel('file')->processImgURL($task, $this->config->testtask->editor->block['id'], $task->uid);
+    }
+
+    /**
      * 检查编辑的测试单数据是否符合要求。
      * Check task for editing.
      *
