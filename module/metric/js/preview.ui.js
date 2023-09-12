@@ -259,6 +259,8 @@ window.initFilterPanel = function()
 window.initDTable = function()
 {
     var $currentBox = $('#metricBox' + current.id);
+    if(viewType == 'single') $currentBox = $('.table-and-chart-single');
+
     if(!$currentBox.find('.dtable').length) return;
     $currentBox.find('.dtable').remove();
     $currentBox.find('.table-side').append('<div class="dtable"></div>');
