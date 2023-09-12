@@ -834,29 +834,34 @@ class testtaskModel extends model
     }
 
     /**
-     * update block testtask.
+     * 阻塞一个测试单。
+     * Block a testtask.
      *
-     * @param  int    $taskID
+     * @param  object $task
      * @access public
-     * @return void
+     * @return bool
      */
-    public function block($taskID)
+    public function block(object $task): bool
     {
-        $oldTesttask = $this->getByID($taskID);
-        $testtask = fixer::input('post')
-            ->add('id', $taskID)
-            ->add('status', 'blocked')
-            ->stripTags($this->config->testtask->editor->block['id'], $this->config->allowedTags)
-            ->remove('comment')->get();
+        $taskID = (int)$task->id;
+        $oldTask = $this->fetchByID($taskID);
+        if(!$oldTask || !self::isClickable($oldTask, 'block')) return false;
 
-        $testtask = $this->loadModel('file')->processImgURL($testtask, $this->config->testtask->editor->block['id'], $this->post->uid);
-        $this->dao->update(TABLE_TESTTASK)->data($testtask)
+        $this->dao->update(TABLE_TESTTASK)->data($task, 'comment,uid')
             ->autoCheck()
             ->checkFlow()
-            ->where('id')->eq((int)$taskID)
+            ->where('id')->eq($taskID)
             ->exec();
+        if(dao::isError()) return false;
 
-        if(!dao::isError()) return common::createChanges($oldTesttask, $testtask);
+        $changes = common::createChanges($oldTask, $task);
+        if($changes || $task->comment)
+        {
+            $actionID = $this->loadModel('action')->create('testtask', $taskID, 'Blocked', $task->comment);
+            $this->action->logHistory($actionID, $changes);
+        }
+
+        return !dao::isError();
     }
 
     /**
