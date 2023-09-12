@@ -1404,6 +1404,7 @@ class screenModel extends model
                     $result     = $this->dao->query($sql)->fetch();
                     $group      = $settings->group[0]->field;
                     $sourceData = zget($result, $group, 0);
+                    if(empty($sourceData)) $sourceData = 0;
                 }
                 $component->option->dataset = $sourceData;
             }
