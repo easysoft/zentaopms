@@ -21,7 +21,7 @@ panel
     setClass('m-auto'),
     div
     (
-        set::className('flex items-center'),
+        set::className('flex items-center mt-2'),
         icon('check-circle text-success icon-2x mr-2'),
         span
         (
@@ -31,6 +31,7 @@ panel
     ),
     div
     (
+        setClass('mt-5 mb-5'),
         btn
         (
             set::className('mr-4 tipBtn ml-1'),
