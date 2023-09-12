@@ -817,11 +817,9 @@ class testtaskModel extends model
         $this->dao->update(TABLE_TESTTASK)->data($task, 'comment,uid')
             ->autoCheck()
             ->checkFlow()
-            ->where('id')->eq((int)$taskID)
+            ->where('id')->eq($taskID)
             ->exec();
         if(dao::isError()) return false;
-
-        $this->loadModel('file')->updateObjectID($task->uid, $taskID, 'testtask');
 
         $changes = common::createChanges($oldTask, $task);
         if($changes || $task->comment)
