@@ -276,8 +276,8 @@ window.initDTable = function($obj, head, data)
         bordered: true,
         scrollbarHover: true,
         height: 'auto',
-        cols: resultHeader,
-        data: resultData,
+        cols: head,
+        data: data,
     });
 }
 
