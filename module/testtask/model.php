@@ -777,7 +777,7 @@ class testtaskModel extends model
     {
         $taskID  = (int)$task->id;
         $oldTask = $this->fetchByID($taskID);
-        if(!$oldTask || $oldTask->status != 'wait') return false;
+        if(!$oldTask || !self::isClickable($oldTask, 'start')) return false;
 
         $this->dao->update(TABLE_TESTTASK)->data($task, 'comment,uid')
             ->autoCheck()
@@ -806,9 +806,9 @@ class testtaskModel extends model
      */
     public function close(object $task): bool
     {
-        $taskID = (int)$task->id;
+        $taskID  = (int)$task->id;
         $oldTask = $this->fetchByID($taskID);
-        if(!$oldTask || $oldTask->status == 'done') return false;
+        if(!$oldTask || !self::isClickable($oldTask, 'close')) return false;
 
         if($task->realFinishedDate <= $oldTask->begin) dao::$errors['realFinishedDate'][] = sprintf($this->lang->testtask->finishedDateLess, $oldTask->begin);
         if($task->realFinishedDate > date("Y-m-d 00:00:00", strtotime("+1 day"))) dao::$errors['realFinishedDate'][] = $this->lang->testtask->finishedDateMore;
