@@ -387,26 +387,30 @@ class program extends control
     }
 
     /**
+     * 挂起项目集。
      * Suspend a program.
      *
      * @param  int     $programID
      * @access public
      * @return void
      */
-    public function suspend($programID)
+    public function suspend(int $programID)
     {
         $this->loadModel('action');
 
         if(!empty($_POST))
         {
-            $changes = $this->program->suspend($programID);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $postData = fixer::input('post')
+                ->add('id', $programID)
+                ->setDefault('status', 'suspended')
+                ->setDefault('lastEditedBy', $this->app->user->account)
+                ->setDefault('lastEditedDate', helper::now())
+                ->setDefault('suspendedDate', helper::today())
+                ->stripTags($this->config->program->editor->suspend['id'], $this->config->allowedTags)
+                ->get();
 
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $actionID = $this->action->create('program', $programID, 'Suspended', $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
+            $isSucceed = $this->program->suspend($programID, $postData);
+            if(!$isSucceed) return $this->sendError(dao::getError(), true);
 
             $this->executeHooks($programID);
             return $this->sendSuccess(array('closeModal' => true, 'load' => true));
