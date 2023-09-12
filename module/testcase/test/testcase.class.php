@@ -498,6 +498,7 @@ class testcaseTest
     }
 
     /**
+     * 测试批量用例和场景。
      * Test the batch delete method.
      *
      * @param  array  $caseIdList
@@ -505,7 +506,7 @@ class testcaseTest
      * @access public
      * @return bool
      */
-    public function batchDeleteTest($caseIdList, $sceneIdList)
+    public function batchDeleteTest(array $caseIdList, array $sceneIdList): bool
     {
         return $this->objectModel->batchDelete($caseIdList, $sceneIdList);
     }

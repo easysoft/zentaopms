@@ -845,6 +845,7 @@ class testcaseModel extends model
     }
 
     /**
+     * 批量删除用例和场景。
      * Batch delete cases and scenes.
      *
      * @param  array  $caseIdList
@@ -854,18 +855,24 @@ class testcaseModel extends model
      */
     public function batchDelete(array $caseIdList, array $sceneIdList): bool
     {
+        /* 过滤用例和场景。 */
+        /* Filter cases and scenes. */
         $caseIdList  = array_filter($caseIdList);
         $sceneIdList = array_filter($sceneIdList);
         if(!$caseIdList && !$sceneIdList) return false;
 
         $this->loadModel('action');
 
+        /* 删除用例。 */
+        /* Delete cases. */
         if($caseIdList)
         {
             $this->dao->update(TABLE_CASE)->set('deleted')->eq('1')->where('id')->in($caseIdList)->exec();
             foreach($caseIdList as $caseID) $this->action->create('case', $caseID, 'deleted', '', actionModel::CAN_UNDELETED);
         }
 
+        /* 删除场景。 */
+        /* Delete scenes. */
         if($sceneIdList)
         {
             $this->dao->update(TABLE_SCENE)->set('deleted')->eq('1')->where('id')->in($sceneIdList)->exec();
