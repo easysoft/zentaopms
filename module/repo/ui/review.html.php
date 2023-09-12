@@ -16,11 +16,12 @@ jsVar('sortLink', createLink('repo', 'review', "repoID=$repoID&browseType=$brows
 
 foreach($bugs as $bug)
 {
-    $bug->revisionA = $repo->SCM != 'Subversion' ? substr(strtr($bug->v2, '*', '-'), 0, 10) : $bug->v2;
+    $bug->revisionA = $repo->SCM != 'Subversion' ? strtr($bug->v2, '*', '-') : $bug->v2;
 
     $lines = explode(',', trim($bug->lines, ','));
     if(empty($bug->v1))
     {
+        $bug->v2   = $repo->SCM != 'Subversion' ? strtr($bug->v2, '*', '-') : $bug->v2;
         $revision  = $repo->SCM != 'Subversion' ? $this->repo->getGitRevisionName($bug->v2, zget($historys, $bug->v2)) : $bug->v2;
         $bug->link = $this->repo->createLink('view', "repoID=$repoID&objectID=0&entry={$bug->entry}&revision={$bug->v2}") . "#L$lines[0]";
     }

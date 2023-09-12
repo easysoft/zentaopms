@@ -51,13 +51,17 @@ class repo extends control
         if($tab == 'project')
         {
             $project = $this->loadModel('project')->getByID($objectID);
-            if($project->model === 'kanban')return print($this->locate($this->createLink('project', 'index', "projectID=$objectID")));
+            if($project->model === 'kanban') return print($this->locate($this->createLink('project', 'index', "projectID=$objectID")));
 
             $this->loadModel('project')->setMenu($objectID);
             $this->view->projectID = $objectID;
         }
         elseif($tab == 'execution')
         {
+            $execution = $this->loadModel('execution')->getByID($objectID);
+            $features = $this->execution->getExecutionFeatures($execution);
+            if(!$features['devops']) return print($this->locate($this->createLink('execution', 'task', "executionID=$objectID")));
+
             $this->loadModel('execution')->setMenu($objectID);
             $this->view->executionID = $objectID;
         }
