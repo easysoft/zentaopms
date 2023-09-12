@@ -3931,6 +3931,7 @@ class executionModel extends model
     }
 
     /**
+     * 构建搜索任务的表单。
      * Build task search form.
      *
      * @param  int    $executionID
@@ -3940,14 +3941,14 @@ class executionModel extends model
      * @access public
      * @return void
      */
-    public function buildTaskSearchForm($executionID, $executions, $queryID, $actionURL)
+    public function buildTaskSearchForm(int $executionID, array $executions, int $queryID, string $actionURL)
     {
         $this->config->execution->search['actionURL'] = $actionURL;
         $this->config->execution->search['queryID']   = $queryID;
         $this->config->execution->search['params']['execution']['values'] = array(''=>'', $executionID => $executions[$executionID], 'all' => $this->lang->execution->allExecutions);
 
         $showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
-        $this->config->execution->search['params']['module']['values']  = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
+        $this->config->execution->search['params']['module']['values'] = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
 
         $this->loadModel('search')->setSearchParams($this->config->execution->search);
     }
