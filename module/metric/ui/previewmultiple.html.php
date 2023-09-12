@@ -51,6 +51,73 @@ div
     ),
 );
 
+div
+(
+    set::id('metricBox-tpl'),
+    setClass('hidden'),
+    div
+    (
+        set::id('metric{id}'),
+        setClass('metricBox'),
+        div
+        (
+            setClass('metric-name flex flex-between items-center'),
+            div
+            (
+                span
+                (
+                    setClass('metric-name-weight'),
+                    "{name}",
+                ),
+                div
+                (
+                    setClass('flex-start'),
+                    toolbar
+                    (
+                        haspriv('bug', 'report') ? item(set(array
+                        (
+                            'text'  => $this->lang->metric->details,
+                            'class' => 'ghost details',
+                            'url'   => '#',
+                        ))) : null,
+                        haspriv('bug', 'report') ? item(set(array
+                        (
+                            'icon'  => 'menu-backend',
+                            'text'  => $this->lang->metric->filters,
+                            'class' => 'ghost',
+                            'url'   => '#',
+                        ))) : null,
+                        haspriv('bug', 'report') ? item(set(array
+                        (
+                            'icon'  => 'chart-line',
+                            'text'  => $this->lang->metric->zAnalysis,
+                            'class' => 'ghost chart-line-margin',
+                            'url'   => '#',
+                        ))) : null,
+                    ),
+                ),
+            ),
+        ),
+        div
+        (
+            setClass('table-and-chart table-and-chart-multiple'),
+            div
+            (
+                setClass('table-side-multi'),
+                div
+                (
+                    setClass('dtable-multi'),
+                ),
+            ),
+            div
+            (
+                setClass('chart-side chart-center'),
+                'chart',
+            )
+        ),
+    ),
+);
+
 $fnGenerateFilterPanel = function($code, $filterItem) use($lang)
 {
     $panelClass = $filterItem['class'];

@@ -69,6 +69,7 @@ window.updateCheckAction = function(id, name, isChecked)
     window.updateCheckList(id, name, isChecked);
     window.updateCheckbox(id, isChecked);
     window.renderCheckedLabel();
+    window.updateMetricBoxs(id, isChecked);
 }
 
 window.handleCheckboxChange = function($el)
@@ -230,7 +231,7 @@ window.afterPageUpdate = function($target, info, options)
     window.lineCount   = 1;
     window.checkedList = [{id:current.id + '', name:current.name}];
     window.filterChecked = {};
-    window.renderDTable();
+    window.initDTable();
     if(viewType == 'multiple') window.renderCheckedLabel();
     $(window).on('resize', window.renderCheckedLabel);
     window.initFilterPanel();
@@ -255,7 +256,7 @@ window.initFilterPanel = function()
     }
 }
 
-window.renderDTable = function()
+window.initDTable = function()
 {
     if(!$('.dtable').length) return;
     $('.dtable').remove();
@@ -314,6 +315,11 @@ window.foldContent = function()
     $content.height(48);
     $content.find('.gray-next').addClass('gray-hidden');
     $content.find('.gray-next').removeClass('gray-visible');
+}
+
+window.updateMetricBoxs = function(id, isChecked)
+{
+    if(!isChecked) $('.table-and-charts').find('#metric' + id).remove();
 }
 
 window.renderCheckedLabel = function()
