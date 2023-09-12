@@ -173,27 +173,26 @@ class executionTest
      * @access public
      * @return array
      */
-    public function createTest($param = array(), $project = '', $dayNum = '', $days = '')
+    public function createTest($param = array(), $project = '', $teamMembers = array(), $days = '')
     {
         $products  = array('');
         $plans     = array('');
         $whitelist = array('');
         $beginData = date('Y-m-d');
-        $endData   = date('Y-m-d',strtotime("+$dayNum day"));
+        $endData   = date('Y-m-d',strtotime("+$days day"));
         $delta     = intval($dayNum) + 1;
 
-        $createFields = array('project' => $project, 'name' => '', 'code' => '', 'begin' => $beginData, 'end' => $endData,
-            'lifetime' => 'short', 'status' => 'wait', 'products' => $products, 'delta' => $delta, 'days' => $days,
-            'plans' => $plans, 'team' => '', 'teams' => '0', 'PO' => '', 'QD' => '', 'PM' => '', 'RD' => '', 'whitelist' => '',
-            'desc' => '', 'acl' => 'private', 'percent' => '0');
+        $createFields = array('project' => (int)$project, 'name' => '', 'code' => '', 'begin' => $beginData, 'end' => $endData,
+            'lifetime' => 'short', 'status' => 'wait', 'products' => $products, 'days' => $days,
+            'plans' => $plans, 'team' => '', 'PO' => '', 'QD' => '', 'PM' => '', 'RD' => '', 'whitelist' => '',
+            'desc' => '', 'acl' => 'private', 'percent' => '0', 'openedBy' => 'admin', 'openedDate' => date('Y-m-d H:i:s'));
 
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
+        $execution = new stdclass();
+        foreach($createFields as $field => $defaultValue) $execution->$field = $defaultValue;
+        foreach($param as $key => $value) $execution->$key = $value;
 
-        $objectID = $this->executionModel->create();
-
-        unset($_POST);
-
+        $this->executionModel->config->execution->create->requiredFields = 'project,name,code,begin,end';
+        $objectID = $this->executionModel->create($execution, $teamMembers);
         if(dao::isError())
         {
             return dao::getError();
