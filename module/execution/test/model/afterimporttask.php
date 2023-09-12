@@ -14,6 +14,9 @@ $task->execution->range('101,106,124');
 $task->assignedTo->range('admin');
 $task->gen(30);
 
+zdTable('projectstory')->gen(0);
+zdTable('story')->gen(0);
+
 su('admin');
 
 /**
