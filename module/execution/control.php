@@ -958,9 +958,7 @@ class execution extends control
             $executionID = $this->execution->create($execution, isset($_POST['teamMembers']) ? $_POST['teamMembers'] : array());
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->execution->updateProducts($executionID, zget($_POST, 'products', array()), zget($_POST, 'plans', array()), zget($_POST, 'branch', array(0)));
             $this->loadModel('action')->create($this->objectType, $executionID, 'opened', '', $execution->hasProduct ? implode(',', $_POST['products']) : '');
-            $this->loadModel('programplan')->computeProgress($executionID, 'create');
             if(!empty($projectID) and strpos(',kanban,agileplus,waterfallplus,', ",$project->model,") !== false and $execution->type == 'kanban')
             {
                 $execution = $this->execution->fetchByID($executionID);
@@ -981,7 +979,6 @@ class execution extends control
 
         $this->view->title               = $this->app->tab == 'execution' ? $this->lang->execution->createExec : $this->lang->execution->create;
         $this->view->gobackLink          = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('execution', 'all') : '';
-        $this->view->groups              = $this->loadModel('group')->getPairs();
         $this->view->allProducts         = array_filter($this->executionZen->getAllProductsForCreate($project));
         $this->view->allProjects         = $this->project->getPairsByModel('all', 'noclosed,multiple');
         $this->view->multiBranchProducts = $this->loadModel('product')->getMultiBranchPairs();

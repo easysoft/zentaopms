@@ -229,12 +229,14 @@ class executionModel extends model
     /**
      * Create a execution.
      *
+     * @param  object $execution
+     * @param  array  $postMembers
      * @access public
-     * @return bool|int
+     * @return int|false
      */
-    public function create(object $execution, array $postMembers)
+    public function create(object $execution, array $postMembers): int|false
     {
-        $this->dao->insert(TABLE_EXECUTION)->data($execution)
+        $this->dao->insert(TABLE_EXECUTION)->data($execution, 'products,plans,branch')
             ->autoCheck('begin,end')
             ->batchcheck($this->config->execution->create->requiredFields, 'notempty')
             ->checkIF(!empty($execution->name), 'name', 'unique', "`type` in ('sprint','stage', 'kanban') and `project` = " . (int)$execution->project . " and `deleted` = '0'")
@@ -274,7 +276,9 @@ class executionModel extends model
         $this->loadModel('personnel')->updateWhitelist(explode(',', $execution->whitelist), 'execution', $executionID);
         if($execution->acl != 'open') $this->updateUserView($executionID);
 
-        if(!dao::isError()) $this->loadModel('score')->create('program', 'createguide', $executionID);
+        $this->updateProducts($executionID, $execution);
+        $this->loadModel('programplan')->computeProgress($executionID, 'create');
+        $this->loadModel('score')->create('program', 'createguide', $executionID);
         return $executionID;
     }
 
@@ -2326,16 +2330,17 @@ class executionModel extends model
      * 更新执行关联的产品信息。
      * Update products of a execution.
      *
-     * @param  int    $executionID
-     * @param  array  $products
-     * @param  array  $plans
-     * @param  array  $branches
+     * @param  int          $executionID
+     * @param  object|array $postData
      * @access public
      * @return bool
      */
-    public function updateProducts(int $executionID, array $products= array(), array $plans = array(), array $branches = array()): bool
+    public function updateProducts(int $executionID, object|array $postData): bool
     {
         $this->loadModel('user');
+        $products    = array_filter(zget($postData, 'products', array()));
+        $branches    = zget($postData, 'branch', array(0));
+        $plans       = zget($postData, 'plans',  array());
         $oldProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->fetchGroup('product', 'branch');
         $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->exec();
         $members = array_keys($this->getTeamMembers($executionID));
@@ -2348,11 +2353,10 @@ class executionModel extends model
         $existedProducts = array();
         foreach($products as $i => $productID)
         {
-            if(empty($productID)) continue;
             if(!isset($existedProducts[$productID])) $existedProducts[$productID] = array();
 
             $oldPlan = 0;
-            $branch  = isset($branches[$i]) ? (array) $branches[$i] : array();
+            $branch  = isset($branches[$i]) ? $branches[$i] : array();
             foreach($branch as $branchID)
             {
                 if(isset($existedProducts[$productID][$branchID])) continue;
@@ -4781,7 +4785,7 @@ class executionModel extends model
         if($executionID)
         {
             $this->update($executionID);
-            $this->updateProducts($executionID, (array)$updateProductsData);
+            $this->updateProducts($executionID, $updateProductsData);
         }
 
         $_POST = $postData;

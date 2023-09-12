@@ -902,7 +902,7 @@ class executionZen extends execution
             ->join('whitelist', ',')
             ->setDefault('type', $type)
             ->stripTags(implode(',', $editorFields), $this->config->allowedTags)
-            ->remove('products, workDays, delta, branch, uid, plans, teams, teamMembers, contactListMenu, heightType')
+            ->remove('workDays, delta, uid, teams, teamMembers, contactListMenu, heightType')
             ->get();
 
         if(!empty($execution->parent) && ($execution->project == $execution->parent)) $execution->hasProduct = $project->hasProduct;
@@ -1892,6 +1892,13 @@ class executionZen extends execution
         return true;;
     }
 
+    /**
+     * 修正错误提示语言。
+     * Correct error lang.
+     *
+     * @access protected
+     * @return void
+     */
     protected function correctErrorLang(): void
     {
         $this->lang->execution->team = $this->lang->execution->teamName;
@@ -2084,6 +2091,16 @@ class executionZen extends execution
         return $linkedObjects;
     }
 
+    /**
+     * 获取创建执行后的跳转地址。
+     * Get location after create.
+     *
+     * @param  int       $projectID
+     * @param  int       $executionID
+     * @param  string    $model
+     * @access protected
+     * @return string
+     */
     protected function getAfterCreateLocation(int $projectID, int $executionID, string $model = ''): string
     {
         if($this->app->tab == 'doc')  return $this->createLink('doc', 'projectSpace', "objectID=$executionID");
