@@ -1211,4 +1211,20 @@ class testcaseTest
         if(dao::isError()) return dao::getError();
         return $moduleID;
     }
+
+    /**
+     * 测试检查模块是否可以导入。
+     * Test adjust module is can import.
+     *
+     * @param  int       $libID
+     * @param  int       $oldModuleID
+     * @access public
+     * @return array|int
+     */
+    public function importCaseRelatedModulesTest(int $libID, int $oldModuleID): array|int
+    {
+        $moduleID = $this->objectModel->importCaseRelatedModules($libID, $oldModuleID);
+        if(dao::isError()) return dao::getError();
+        return $moduleID;
+    }
 }

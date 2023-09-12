@@ -1270,33 +1270,38 @@ class testcaseModel extends model
     }
 
     /**
+     * 导入用例关联的模块。
      * Import case related modules.
      *
      * @param  int    $libID
      * @param  int    $oldModuleID
      * @param  int    $maxOrder
      * @access public
-     * @return void
+     * @return int
      */
-    public function importCaseRelatedModules($libID, $oldModuleID = 0, $maxOrder = 0)
+    public function importCaseRelatedModules(int $libID, int $oldModuleID = 0, int $maxOrder = 0): int
     {
+        /* If module has been imported, return imported module id. */
         $moduleID = $this->checkModuleImported($libID, $oldModuleID);
         if($moduleID) return $moduleID;
 
+        /* Build old module, and insert it. */
         $oldModule = $this->dao->select('name, parent, grade, `order`, short')->from(TABLE_MODULE)->where('id')->eq($oldModuleID)->fetch();
-
-        $oldModule->root   = $libID;
-        $oldModule->from   = $oldModuleID;
-        $oldModule->type   = 'caselib';
+        $oldModule->root = $libID;
+        $oldModule->from = $oldModuleID;
+        $oldModule->type = 'caselib';
         if(!empty($maxOrder)) $oldModule->order = $maxOrder + $oldModule->order;
         $this->dao->insert(TABLE_MODULE)->data($oldModule)->autoCheck()->exec();
 
         if(!dao::isError())
         {
+            /* Get new module id. */
             $newModuleID = $this->dao->lastInsertID();
 
+            /* Set path and parent. */
             if($oldModule->parent)
             {
+                /* If old module has parent module, import parent module. */
                 $parentModuleID = $this->importCaseRelatedModules($libID, $oldModule->parent, !empty($maxOrder) ? $maxOrder : 0);
                 $parentModule   = $this->dao->select('id, path')->from(TABLE_MODULE)->where('id')->eq($parentModuleID)->fetch();
                 $parent         = $parentModule->id;
@@ -1308,10 +1313,13 @@ class testcaseModel extends model
                 $parent = 0;
             }
 
+            /* Update path and parent. */
             $this->dao->update(TABLE_MODULE)->set('parent')->eq($parent)->set('path')->eq($path)->where('id')->eq($newModuleID)->exec();
 
+            /* Return new module id. */
             return $newModuleID;
         }
+        return 0;
     }
 
     /**
