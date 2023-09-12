@@ -359,7 +359,7 @@ class testcaseModel extends model
      * @param  int        $moduleID
      * @param  string     $caseType
      * @param  string     $auto      no|unit
-     * @param  string     $sort
+     * @param  string     $orderBy
      * @param  object     $pager
      * @access public
      * @return array
@@ -372,14 +372,14 @@ class testcaseModel extends model
 
         if($browseType == 'bymodule' || $browseType == 'all' || $browseType == 'wait')
         {
-            if($this->app->tab == 'project') return $this->getModuleProjectCases($productID, $branch, $modules, $browseType, $auto, $caseType, $sort, $pager);
+            if($this->app->tab == 'project') return $this->getModuleProjectCases($productID, $branch, $modules, $browseType, $auto, $caseType, $orderBy, $pager);
 
-            return $this->getModuleCases($productID, $branch, $modules, $browseType, $auto, $caseType, $sort, $pager);
+            return $this->getModuleCases($productID, $branch, $modules, $browseType, $auto, $caseType, $orderBy, $pager);
         }
 
-        if($browseType == 'needconfirm') return $this->testcaseTao->getNeedConfirmList($productID, $branch, $modules, $auto, $caseType, $sort, $pager);
-        if($browseType == 'bysuite')     return $this->getBySuite($productID, $branch, $queryID, $modules, $sort, $pager, $auto);
-        if($browseType == 'bysearch')    return $this->getBySearch($productID, $queryID, $sort, $pager, $branch, $auto);
+        if($browseType == 'needconfirm') return $this->testcaseTao->getNeedConfirmList($productID, $branch, $modules, $auto, $caseType, $orderBy, $pager);
+        if($browseType == 'bysuite')     return $this->getBySuite($productID, $branch, $queryID, $modules, $orderBy, $pager, $auto);
+        if($browseType == 'bysearch')    return $this->getBySearch($productID, $queryID, $orderBy, $pager, $branch, $auto);
 
         return array();
     }
