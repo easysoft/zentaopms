@@ -9,11 +9,10 @@ $config->metric->maxSelectNum = 10;
 
 global $lang;
 $config->metric->actionList = array();
-$config->metric->actionList['edit']['icon']        = 'edit';
-$config->metric->actionList['edit']['text']        = $lang->edit;
-$config->metric->actionList['edit']['hint']        = $lang->edit;
-$config->metric->actionList['edit']['data-toggle'] = 'modal';
-$config->metric->actionList['edit']['url']         = helper::createLink('metric', 'edit', 'metricID={id}');
+$config->metric->actionList['edit']['icon'] = 'edit';
+$config->metric->actionList['edit']['text'] = $lang->edit;
+$config->metric->actionList['edit']['hint'] = $lang->edit;
+$config->metric->actionList['edit']['url']  = 'javascript:confirmEdit("{id}", "{isOldMetric}")';
 
 $config->metric->actionList['implement']['icon']        = 'code';
 $config->metric->actionList['implement']['text']        = $lang->metric->implement;

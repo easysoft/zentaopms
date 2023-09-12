@@ -13,4 +13,39 @@ window.confirmDelist = function(metricID, metricName)
     {
         if(res) $.ajaxSubmit({url: $.createLink('metric', 'delist', 'metricID=' + metricID)});
     });
+};
+
+window.onRenderCell = function(result, {row, col})
+{
+    if(col.name == 'id')
+    {
+        const url = $.createLink('metric', 'edit', 'id=' + row.data.id);
+        const modalTrigger = '<button type="button" class="btn edit-trigger hidden" data-toggle="modal" data-type="ajax" data-url=' + url + ' data-data-type="html"></button>';
+        result.push({html: modalTrigger});
+    }
+
+    return result;
+}
+
+window.confirmEdit = function(metricID, isOldMetric)
+{
+    isOldMetric = isOldMetric == 'true' ? true : false;
+    if(isOldMetric)
+    {
+        zui.Modal.confirm(upgradeTip).then((result) =>
+        {
+            if(result)
+            {
+                $('.edit-trigger').trigger('click');
+            }
+            else
+            {
+                openUrl($.createLink('metric', 'browse', 'scope=' + scope));
+            }
+        })
+    }
+    else
+    {
+        $('.edit-trigger').trigger('click');
+    }
 }

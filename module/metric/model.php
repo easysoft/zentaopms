@@ -104,6 +104,7 @@ class metricModel extends model
         }
 
         $metrics = $this->metricTao->fetchMetrics($scope, $stage, $object, $purpose, $this->session->metricQuery, $sort, $pager);
+        foreach($metrics as $index => $metric) $metrics[$index]->isOldMetric = $this->isOldMetric($metric);
 
         return $metrics;
     }

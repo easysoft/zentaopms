@@ -55,6 +55,7 @@ $lang->metric->emptyCollect  = 'There are no collect metrics at this time.';
 $lang->metric->moveFailTip   = 'Move metric file failed';
 $lang->metric->maxSelect     = 'A maximum of %s metrics can be selected';
 $lang->metric->maxSelectTip  = 'Multiple metrics can be selected across a range, up to a maximum of %s.';
+$lang->metric->upgradeTip    = 'This measure is supported by an earlier version. If you want to edit it, reconfigure it according to the rules for configuring the measure of the latest version. Also note that the new version of the measure no longer supports the SQL editor and cannot be referenced by the report template for the time being. Check whether you need to edit it.';
 
 $lang->metric->noDesc    = "No description available";
 $lang->metric->noFormula = "No calculation rules available";

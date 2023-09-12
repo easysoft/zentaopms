@@ -56,6 +56,7 @@ $lang->metric->emptyCollect    = '暂时没有收藏度量项。';
 $lang->metric->moveFailTip     = '移动度量项文件失败。';
 $lang->metric->maxSelect       = '最多选择%s个度量项';
 $lang->metric->maxSelectTip    = '可跨范围勾选多个度量项，最多选择%s个。';
+$lang->metric->upgradeTip      = '此度量项为旧版本支持的度量项，若想进行编辑，请根据新版本度量项的配置规则进行重新配置。同时请注意，新版本度量项不再支持SQL编辑器，暂时无法被报表模板引用。请确认是否需要进行编辑操作。';
 
 $lang->metric->noDesc    = "暂无描述";
 $lang->metric->noFormula = "暂无计算规则";
