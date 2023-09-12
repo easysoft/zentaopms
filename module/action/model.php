@@ -677,6 +677,7 @@ class actionModel extends model
     public function getById(int $actionID): object|bool
     {
         $action = $this->actionTao->fetchBaseInfo($actionID);
+        if(!$action) return false;
 
         /* 当action值为repocreated的时候拼接域名。 */
         /* Splice domain name for connection when the action is equal to 'repocreated'.*/
@@ -2081,15 +2082,17 @@ class actionModel extends model
      *
      * @param  int    $actionID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function hideOne(int $actionID)
+    public function hideOne(int $actionID): bool
     {
         $action = $this->getById($actionID);
-        if($action->action != 'deleted') return;
+        if($action->action != 'deleted') return false;
 
         $this->dao->update(TABLE_ACTION)->set('extra')->eq(self::BE_HIDDEN)->where('id')->eq($actionID)->exec();
         $this->create($action->objectType, $action->objectID, 'hidden');
+
+        return dao::isError();
     }
 
     /**
@@ -2097,15 +2100,17 @@ class actionModel extends model
      * Hide all deleted objects.
      *
      * @access public
-     * @return void
+     * @return bool
      */
-    public function hideAll()
+    public function hideAll(): bool
     {
         $this->dao->update(TABLE_ACTION)
             ->set('extra')->eq(self::BE_HIDDEN)
             ->where('action')->eq('deleted')
             ->andWhere('extra')->eq(self::CAN_UNDELETED)
             ->exec();
+
+        return dao::isError();
     }
 
     /**

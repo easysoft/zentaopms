@@ -8,9 +8,9 @@ class actionTao extends actionModel
      *
      * @param  int $actionID
      * @access protected
-     * @return object|null
+     * @return object|bool
      */
-    protected function fetchBaseInfo(int $actionID): object|null
+    protected function fetchBaseInfo(int $actionID): object|bool
     {
         return $this->dao->select('*')->from(TABLE_ACTION)->where('id')->eq($actionID)->fetch();
     }
