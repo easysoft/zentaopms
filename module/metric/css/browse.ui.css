@@ -10,4 +10,6 @@
 .scope-menu > .is-caret > .caret {display: none;}
 .scope-menu > .is-caret::after {content: '\e936'; font-family: ZentaoIcon;}
 
-.btn-divider {background-color: var(--color-current);height: 1rem;margin-left: 0.5rem;margin-right: 0.5rem;opacity: .3;width: 1px;}
+.btn-divider {background-color: var(--color-current); height: 1rem; margin-left: 20px; margin-right: 20px; opacity: .3; width: 1px;}
+
+.clear-gap {gap: 0 !important;}

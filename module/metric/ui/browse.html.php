@@ -38,6 +38,7 @@ featureBar
 
 toolbar
 (
+    setClass('clear-gap'),
     btn
     (
         setClass('btn primary-outline'),
