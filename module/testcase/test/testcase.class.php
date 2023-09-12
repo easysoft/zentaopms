@@ -1192,4 +1192,20 @@ class testcaseTest
 
         return trim($return);
     }
+
+    /**
+     * 测试检查模块是否可以导入。
+     * Test adjust module is can import.
+     *
+     * @param  int       $libID
+     * @param  int       $oldModuleID
+     * @access public
+     * @return array|int
+     */
+    public function checkModuleImportedTest(int $libID, int $oldModuleID): array|int
+    {
+        $moduleID = $this->objectModel->checkModuleImported($libID, $oldModuleID);
+        if(dao::isError()) return dao::getError();
+        return $moduleID;
+    }
 }

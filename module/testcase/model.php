@@ -1375,6 +1375,7 @@ class testcaseModel extends model
     }
 
     /**
+     * 检查模块是否可以导入。
      * Adjust module is can import.
      *
      * @param  int    $libID
@@ -1382,8 +1383,9 @@ class testcaseModel extends model
      * @access public
      * @return int
      */
-    public function checkModuleImported($libID, $oldModule = 0)
+    public function checkModuleImported(int $libID, int $oldModule = 0): int
     {
+        /* Get module if from is oldModule and root is libID. */
         $module = $this->dao->select('id')->from(TABLE_MODULE)
             ->where('root')->eq($libID)
             ->andWhere('`from`')->eq($oldModule)
@@ -1391,8 +1393,10 @@ class testcaseModel extends model
             ->andWhere('deleted')->eq(0)
             ->fetch();
 
-        if(!$module) return '';
+        /* If module isn't exist, return 0. */
+        if(!$module) return 0;
 
+        /* Return module id. */
         return $module->id;
     }
 

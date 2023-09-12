@@ -1,0 +1,14 @@
+title: table zt_module
+desc: "用例步骤"
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: root
+    range: 1{20},2{20},3{20},4{20},5{20}
+  - field: type
+    range: caselib
+  - field: from
+    range: 0{10},1-5,0{5},0{10},21-25,0{5},0{10},41-45,0{5},0{10},61-65,0{5},0{5},0{10},81-85,0{5}
+  - field: deleted
+    range: 0,1,1,0,0,0{5},1,0,0,1,1,0{5}
+
