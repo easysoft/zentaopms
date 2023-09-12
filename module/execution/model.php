@@ -4108,16 +4108,18 @@ class executionModel extends model
     }
 
     /**
-     * Get kanban columns.
+     * 获取看板列的列表。
+     * Get the list of kanban columns.
      *
      * @param  object $kanbanSetting
      * @access public
      * @return array
      */
-    public function getKanbanColumns($kanbanSetting)
+    public function getKanbanColumns(object $kanbanSetting): array
     {
-        if($kanbanSetting->allCols) return array('wait', 'doing', 'pause', 'done', 'cancel', 'closed');
-        return array('wait', 'doing', 'pause', 'done');
+        $kanbanColumns = array('wait', 'doing', 'pause', 'done');
+        if(!empty($kanbanSetting->allCols)) array_push($kanbanColumns, 'cancel', 'closed');
+        return $kanbanColumns;
     }
 
     /**
