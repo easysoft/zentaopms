@@ -113,13 +113,25 @@ class testtaskTest
         return array('task' => $task, 'action' => $action, 'history' => $history);
     }
 
-    public function activateTest($taskID)
+    /**
+     * 测试激活一个测试单。
+     * Test activate a testtask.
+     *
+     * param  array  $task
+     * access public
+     * return bool|array
+     */
+    public function activateTest(array $task): bool|array
     {
-        $objects = $this->objectModel->activate($taskID);
-
+        $result = $this->objectModel->activate((object)$task);
         if(dao::isError()) return dao::getError();
+        if(!$result) return $result;
 
-        return $objects;
+        $task    = $this->objectModel->fetchByID($task['id']);
+        $action  = $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(1)->fetch();
+        $history = $this->objectModel->dao->select('*')->from(TABLE_HISTORY)->where('action')->eq($action->id)->fetchAll();
+
+        return array('task' => $task, 'action' => $action, 'history' => $history);
     }
 
     public function linkCaseTest($taskID, $type)
