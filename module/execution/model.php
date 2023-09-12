@@ -5367,7 +5367,7 @@ class executionModel extends model
             $title    = $execution->ipdStage['canStart'] ? '' : sprintf($this->lang->execution->disabledTip->startTip, $this->lang->stage->ipdTypeList[$execution->ipdStage['preAttribute']], $this->lang->stage->ipdTypeList[$execution->attribute]);
             $disabled = $execution->ipdStage['canStart'] ? '' : 'disabled';
         }
-        echo $this->buildMenu('execution', 'start', "executionID={$execution->id}", $execution, 'browse', '', '', 'iframe', true, $disabled, $title);
+        echo common::buildIconButton('execution', 'start', "executionID={$execution->id}", $execution, 'list', '', '', 'iframe', true, $disabled, $title, '', empty($disabled));
 
         $class = !empty($execution->children) ? 'disabled' : '';
         echo $this->buildMenu('task', 'create', "executionID={$execution->id}", '', 'browse', '', '', $class, false, "data-app='execution'");
@@ -5402,7 +5402,7 @@ class executionModel extends model
                 $ipdDisabled = ' disabled ';
                 $title       = $execution->attribute == 'launch' ? $this->lang->execution->disabledTip->launchTip : $this->lang->execution->disabledTip->closeTip;
             }
-            echo $this->buildMenu('execution', 'close', "stageID=$execution->id", $execution, 'browse', 'off', 'hiddenwin' , $disabled . $ipdDisabled . ' iframe', true, '', $title);
+            echo common::buildIconButton('execution', 'close', "stageID={$execution->id}", $execution, 'list', 'off', 'hiddenwin', $disabled . $ipdDisabled . ' iframe', true, (!empty($disabled) || !empty($ipdDisabled)) ? ' disabled' : '', $title, 0, empty($disabled) && empty($ipdDisabled));
         }
         elseif($execution->status == 'closed' and common::hasPriv('execution', 'activate', $execution))
         {
