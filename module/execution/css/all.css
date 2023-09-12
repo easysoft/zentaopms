@@ -2,8 +2,12 @@
 #dtable .dtable-header, #executionsForm .dtable-rows {z-index: 4;}
 .table-header.fixed-right > .btn-toolbar {right: 0; background-color: #f1f5f9;}
 
+#dtable {overflow-x: auto;}
 #dtable input[type=checkbox] {margin: 0px}
+#dtable .dtable-body {z-index: 3;}
 
+#dtable .dtable-block {overflow: visible;}
+#dtable .scrollbar.is-vert {display: none;}
 .table-footer {border-top: 1px solid #fff4ea}
 .table-footer .pager{z-index: 10}
 #dtable .scrollbar {z-index: 11}
