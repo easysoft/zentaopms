@@ -3982,14 +3982,16 @@ class executionModel extends model
     }
 
     /**
-     * Get kanban group data.
+     * 获取需求看板视图的分组数据。
+     * Get group data for stories in Kanban view.
      *
+     * @param  array  $stories
      * @param  array  $tasks
      * @param  array  $bugs
      * @access public
      * @return array
      */
-    public function getKanbanGroupData($stories, $tasks, $bugs, $type = 'story')
+    public function getKanbanGroupData(array $stories, array $tasks = array(), array $bugs = array(), string $type = 'story'): array
     {
         $kanbanGroup = array();
         if($type == 'story') $kanbanGroup = $stories;
@@ -3998,7 +4000,7 @@ class executionModel extends model
         {
             $groupKey = $type == 'story' ? $task->storyID : $task->$type;
 
-            $status   = $task->status;
+            $status = $task->status;
             if(!empty($groupKey) and (($type == 'story' and isset($stories[$groupKey])) or $type != 'story'))
             {
                 if($type == 'assignedTo' and $groupKey == 'closed')
