@@ -938,6 +938,29 @@ class testtaskModel extends model
     }
 
     /**
+     * 从测试单移除一个用例。
+     * Remove a case from a testtask.
+     *
+     * @param  int   $runID
+     * @access public
+     * @return bool
+     */
+    public function unlinkCase(int $runID): bool
+    {
+        $run = $this->dao->select('t1.task,t1.`case`,t2.story')->from(TABLE_TESTRUN)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
+            ->where('t1.id')->eq($runID)
+            ->fetch();
+        $linkedProjects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($run->story)->fetchPairs();
+
+        $this->dao->delete()->from(TABLE_PROJECTCASE)->where('`case`')->eq($run->case)->andWhere('project')->notin($linkedProjects)->exec();
+        $this->dao->delete()->from(TABLE_TESTRUN)->where('id')->eq($runID)->exec();
+        $this->loadModel('action')->create('case' ,$run->case, 'unlinkedfromtesttask', '', $run->task);
+
+        return !dao::isError();
+    }
+
+    /**
      * Get test runs of a test task.
      *
      * @param  int    $taskID
