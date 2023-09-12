@@ -3841,13 +3841,14 @@ class executionModel extends model
     }
 
     /**
-     * Get total estimate.
+     * 获取当前执行下任务的总预计工时。
+     * Get the total estimate for the current execution's tasks.
      *
      * @param  int    $executionID
      * @access public
      * @return float
      */
-    public function getTotalEstimate($executionID)
+    public function getTotalEstimate(int $executionID): float
     {
         $estimate = $this->dao->select('SUM(estimate) as estimate')->from(TABLE_TASK)->where('execution')->eq($executionID)->andWhere('deleted')->eq('0')->fetch('estimate');
         return round((float)$estimate);

@@ -29,20 +29,16 @@ su('admin');
 /**
 
 title=测试executionModel->getTotalEstimateTest();
+timeout=0
 cid=1
-pid=1
-
-敏捷执行预计工时统计 >> 24
-瀑布执行预计工时统计 >> 18
-看板执行预计工时统计 >> 18
-无执行预计工时统计 >> 0
 
 */
 
-$executionIDList = array('3', '4', '5');
+$executionIDList = array(3, 4, 5);
 
-$execution = new executionTest();
-r($execution->getTotalEstimateTest($executionIDList[0])) && p() && e('24'); // 敏捷执行预计工时统计
-r($execution->getTotalEstimateTest($executionIDList[1])) && p() && e('18'); // 瀑布执行预计工时统计
-r($execution->getTotalEstimateTest($executionIDList[2])) && p() && e('18'); // 看板执行预计工时统计
-r($execution->getTotalEstimateTest(''))                  && p() && e('0');  // 无执行预计工时统计
+global $tester;
+$tester->loadModel('execution');
+r($tester->execution->getTotalEstimate($executionIDList[0])) && p() && e('24'); // 敏捷执行预计工时统计
+r($tester->execution->getTotalEstimate($executionIDList[1])) && p() && e('18'); // 瀑布执行预计工时统计
+r($tester->execution->getTotalEstimate($executionIDList[2])) && p() && e('18'); // 看板执行预计工时统计
+r($tester->execution->getTotalEstimate(0))                   && p() && e('0');  // 无执行预计工时统计

@@ -1884,28 +1884,6 @@ class executionTest
     }
 
     /**
-     * function getTotalEstimate test by execution
-     *
-     * @param  string $executionID
-     * @access public
-     * @return array
-     */
-    public function getTotalEstimateTest($executionID)
-    {
-        $object = $this->executionModel->getTotalEstimate($executionID);
-
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error[0];
-        }
-        else
-        {
-            return $object;
-        }
-    }
-
-    /**
      * 修复执行的排序顺序。
      * Fix the sort order of execution.
      *
