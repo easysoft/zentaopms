@@ -760,7 +760,8 @@ class testtask extends control
     }
 
     /**
-     * Start testtask.
+     * 开始一个测试单。
+     * Start a testtask.
      *
      * @param  int    $taskID
      * @access public
@@ -795,7 +796,8 @@ class testtask extends control
     }
 
     /**
-     * Close testtask.
+     * 关闭一个测试单。
+     * Close a testtask.
      *
      * @param  int    $taskID
      * @access public
@@ -831,7 +833,8 @@ class testtask extends control
     }
 
     /**
-     * block testtask.
+     * 阻塞一个测试单。
+     * Block a testtask.
      *
      * @param  int    $taskID
      * @access public
@@ -866,7 +869,8 @@ class testtask extends control
     }
 
     /**
-     * activate testtask.
+     * 激活一个测试单。
+     * Activate a testtask.
      *
      * @param  int    $taskID
      * @access public

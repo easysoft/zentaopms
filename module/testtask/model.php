@@ -767,6 +767,7 @@ class testtaskModel extends model
     }
 
     /**
+     * 开始一个测试单。
      * Start testtask.
      *
      * @param  object $task
