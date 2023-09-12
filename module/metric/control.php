@@ -259,8 +259,7 @@ class metric extends control
 
         if($_POST && $isOldMetric)
         {
-
-            $result = $this->metric->createSqlFunction($this->post->sql, $measurement);
+            $result = $this->metric->createSqlFunction($measurement->configure, $measurement);
             if($result['result'] != 'success') return $this->send($result);
 
             foreach($this->post->varName as $i => $varName)

@@ -11,6 +11,8 @@
  */
 class metricModel extends model
 {
+    public $errorInfo = '';
+
     /**
      * 用对象数据创建度量。
      * Create a metric.

@@ -51,6 +51,7 @@ $buildItems = function($items): array
  */
 $buildValueControl = function($name, $controlType, $value, $optionType)
 {
+    $name = $name . '[]';
     if($controlType == 'date')
     {
         $control = formGroup
@@ -75,7 +76,6 @@ $buildValueControl = function($name, $controlType, $value, $optionType)
             set::label(''),
             picker
             (
-                set::id($name),
                 set::name($name),
                 set::items($options),
             ),
@@ -90,7 +90,6 @@ $buildValueControl = function($name, $controlType, $value, $optionType)
             set::label(''),
             input
             (
-                set::id($name),
                 set::name($name),
                 set::value($value),
             ),
@@ -165,14 +164,14 @@ $buildParamControlGroup = function($param, $buildValueControl, $typeList, $optio
     (
         set::width('150px'),
         set::control('input'),
-        set::name('showName'),
+        set::name('showName[]'),
         set::value($param['showName']),
         setClass('form-body-item'),
     );
     $varTypeControl = formGroup
     (
         set::width('150px'),
-        set::name('varType'),
+        set::name('varType[]'),
         set::control('select'),
         set::items($typeList),
         set::value(zget($param, 'varType')),
@@ -181,7 +180,7 @@ $buildParamControlGroup = function($param, $buildValueControl, $typeList, $optio
     $optionsControl = formGroup
     (
         set::width('150px'),
-        set::name('options'),
+        set::name('options[]'),
         set::control('select'),
         set::items($optionList),
         set::value($param['options']),
@@ -193,7 +192,8 @@ $buildParamControlGroup = function($param, $buildValueControl, $typeList, $optio
     (
         set::className('hidden'),
         set::control('hidden'),
-        set::name('varName'),
+        set::name('varName[]'),
+        set::value($param['varName']),
         setClass('form-body-item'),
     );
 
@@ -223,6 +223,15 @@ $buildParamControlGroup = function($param, $buildValueControl, $typeList, $optio
 
 $paramControlGroups = array();
 foreach($params as $param) $paramControlGroups[] = $buildParamControlGroup($param, $buildValueControl, $lang->metric->param->typeList, $lang->metric->param->options);
+
+$formAction = array(
+    array(
+        'text' => $lang->metric->testMetric,
+        'class' => 'secondary',
+        'type' => 'submit',
+        'url' => $this->createLink('metric', 'view', "id={$metric->id}"),
+    )
+);
 
 detailHeader
 (

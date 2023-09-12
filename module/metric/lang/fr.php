@@ -44,18 +44,20 @@ $lang->metric->verifyResult  = 'Verify Result';
 $lang->metric->publish       = 'Publish';
 $lang->metric->moveFailTip   = '移动度量项文件失败。';
 $lang->metric->selectCount   = '%s metrics';
+$lang->metric->testMetric    = 'Test Metric';
 
 $lang->metric->viewType = new stdclass();
 $lang->metric->viewType->single   = 'Single view';
 $lang->metric->viewType->multiple = 'Multiple view';
 
-$lang->metric->descTip       = 'Enter the meaning, purpose, and impact of the metric';
-$lang->metric->definitionTip = 'Enter the calculation rules and filtering conditions of the metric';
-$lang->metric->emptyCollect  = 'There are no collect metrics at this time.';
-$lang->metric->moveFailTip   = 'Move metric file failed';
-$lang->metric->maxSelect     = 'A maximum of %s metrics can be selected';
-$lang->metric->maxSelectTip  = 'Multiple metrics can be selected across a range, up to a maximum of %s.';
-$lang->metric->upgradeTip    = 'This measure is supported by an earlier version. If you want to edit it, reconfigure it according to the rules for configuring the measure of the latest version. Also note that the new version of the measure no longer supports the SQL editor and cannot be referenced by the report template for the time being. Check whether you need to edit it.';
+$lang->metric->descTip            = 'Enter the meaning, purpose, and impact of the metric';
+$lang->metric->definitionTip      = 'Enter the calculation rules and filtering conditions of the metric';
+$lang->metric->emptyCollect       = 'There are no collect metrics at this time.';
+$lang->metric->moveFailTip        = 'Move metric file failed';
+$lang->metric->maxSelect          = 'A maximum of %s metrics can be selected';
+$lang->metric->maxSelectTip       = 'Multiple metrics can be selected across a range, up to a maximum of %s.';
+$lang->metric->upgradeTip         = 'This measure is supported by an earlier version. If you want to edit it, reconfigure it according to the rules for configuring the measure of the latest version. Also note that the new version of the measure no longer supports the SQL editor and cannot be referenced by the report template for the time being. Check whether you need to edit it.';
+$lang->metric->saveSqlMeasSuccess = "Query success，result is：%s";
 
 $lang->metric->noDesc    = "No description available";
 $lang->metric->noFormula = "No calculation rules available";
