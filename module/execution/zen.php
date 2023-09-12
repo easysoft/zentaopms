@@ -2083,4 +2083,18 @@ class executionZen extends execution
         $linkedObjects->unmodifiableBranches = $unmodifiableBranches;
         return $linkedObjects;
     }
+
+    protected function getAfterCreateLocation(int $projectID, int $executionID, string $model = ''): string
+    {
+        if($this->app->tab == 'doc')  return $this->createLink('doc', 'projectSpace', "objectID=$executionID");
+        if(!empty($_POST['plans']))   return inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=1&confirm=no");
+
+        if(!empty($projectID) and $model == 'kanban')
+        {
+            if($this->app->tab == 'project') return $this->config->vision != 'lite' ? $this->createLink('project', 'index', "projectID=$projectID") : $this->createLink('project', 'execution', "status=all&projectID=$projectID");
+            return inlink('kanban', "executionID=$executionID");
+        }
+
+        return inlink('create', "projectID=$projectID&executionID=$executionID");
+    }
 }

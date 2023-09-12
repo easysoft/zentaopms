@@ -34,25 +34,25 @@ panel
         setClass('mt-5 mb-5'),
         btn
         (
-            set::className('mr-4 tipBtn ml-1'),
+            set::className('mr-2 tipBtn ml-1'),
             $lang->execution->setTeam,
             set('data-url', createLink('execution', 'team', "executionID={$executionID}")),
         ),
         $execution->lifetime != 'ops' ? btn
         (
-            set::className('mr-4 tipBtn'),
+            set::className('mr-2 tipBtn'),
             $lang->execution->linkStory,
             set('data-url', createLink('execution', 'linkstory', "executionID=$executionID")),
         ) : null,
         btn
         (
-            set::className('mr-4 tipBtn'),
+            set::className('mr-2 tipBtn'),
             $lang->execution->createTask,
             set('data-url', createLink('task', 'create', "execution=$executionID")),
         ),
         btn
         (
-            set::className('mr-4 tipBtn'),
+            set::className('mr-2 tipBtn'),
             $lang->execution->goback,
             set('data-url', createLink('execution', 'task', "executionID={$executionID}")),
         ),

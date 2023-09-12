@@ -971,17 +971,9 @@ class execution extends control
             if(empty($message)) $message = $this->lang->saveSuccess;
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'id' => $executionID));
-            if($this->app->tab == 'doc')  return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->createLink('doc', 'projectSpace', "objectID=$executionID")));
-            if(!empty($_POST['plans']))   return $this->send(array('result' => 'success', 'message' => $message, 'load' => inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=1&confirm=no")));
 
-            if(!empty($projectID) and $project->model == 'kanban')
-            {
-                $link = $this->config->vision != 'lite' ? $this->createLink('project', 'index', "projectID=$projectID") : $this->createLink('project', 'execution', "status=all&projectID=$projectID");
-                if($this->app->tab == 'project') return $this->send(array('result' => 'success', 'message' => $message, 'load' => $link));
-
-                return $this->send(array('result' => 'success', 'message' => $message, 'load' => inlink('kanban', "executionID=$executionID")));
-            }
-            return $this->send(array('result' => 'success', 'message' => $message, 'load' => inlink('create', "projectID=$projectID&executionID=$executionID")));
+            $location = $this->executionZen->getAfterCreateLocation($projectID, $executionID, $project->model);
+            return $this->send(array('result' => 'success', 'message' => $message, 'load' => $location));
         }
 
         list($this->view->pmUsers, $this->view->poUsers, $this->view->qdUsers, $this->view->rdUsers) = $this->executionZen->setUserMoreLink();
