@@ -395,4 +395,24 @@ class metric extends control
 
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
     }
+
+    /**
+     * 获取数据表格的数据。
+     * Get data of datatable.
+     *
+     * @param  int $metricID
+     * @access public
+     * @return string
+     */
+    public function ajaxGetTableData($metricID)
+    {
+        $metric = $this->metric->getByID($metricID);
+        $result = $this->metric->getResultByCode($metric->code);
+
+        $response = new stdclass();
+        $response->header = $this->metricZen->getViewTableHeader($result);
+        $response->data   = $this->metricZen->getViewTableData($metric, $result);
+
+        echo json_encode($response);
+    }
 }

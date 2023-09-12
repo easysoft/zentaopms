@@ -231,7 +231,7 @@ window.afterPageUpdate = function($target, info, options)
     window.lineCount   = 1;
     window.checkedList = [{id:current.id + '', name:current.name}];
     window.filterChecked = {};
-    window.initDTable();
+    window.renderDTable();
     if(viewType == 'multiple') window.renderCheckedLabel();
     $(window).on('resize', window.renderCheckedLabel);
     window.initFilterPanel();
@@ -256,7 +256,7 @@ window.initFilterPanel = function()
     }
 }
 
-window.initDTable = function()
+window.renderDTable = function()
 {
     var $currentBox = $('#metricBox' + current.id);
     if(viewType == 'single') $currentBox = $('.table-and-chart-single');
@@ -265,8 +265,13 @@ window.initDTable = function()
     $currentBox.find('.dtable').remove();
     $currentBox.find('.table-side').append('<div class="dtable"></div>');
 
-    if(!resultHeader || !resultData) return;
-    new zui.DTable($currentBox.find('.dtable'),{
+    window.initDTable($currentBox.find('.dtable'), resultHeader, resultData);
+}
+
+window.initDTable = function($obj, head, data)
+{
+    if(!head || !data) return;
+    new zui.DTable($obj,{
         responsive: true,
         bordered: true,
         scrollbarHover: true,
@@ -338,6 +343,12 @@ window.updateMetricBoxs = function(id, isChecked)
         var html = $(zui.formatString(tpl, data));
 
         $('.table-and-charts').append(html);
+        $.get($.createLink('metric', 'ajaxGetTableData', 'metricID=' + id), function(resp)
+        {
+            var data = JSON.parse(resp);
+            if(data) window.initDTable($('#metricBox' + id).find('.dtable'), data.header, data.data);
+        });
+
     }
 }
 
