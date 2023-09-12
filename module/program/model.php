@@ -1041,32 +1041,37 @@ class programModel extends model
     }
 
     /**
+     * 挂起一个项目集。
      * Suspend a program.
      *
-     * @param  int $programID
+     * @param  int    $programID
+     * @param  object $postData
      * @access public
      * @return array
      */
-    public function suspend(int $programID) :array
+    public function suspend(int $programID, object $postData): bool
     {
         $oldProgram = $this->getByID($programID);
-        $program    = fixer::input('post')
-            ->add('id', $programID)
-            ->setDefault('status', 'suspended')
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', helper::now())
-            ->setDefault('suspendedDate', helper::today())
-            ->stripTags($this->config->program->editor->suspend['id'], $this->config->allowedTags)
-            ->remove('comment')->get();
 
-        $program = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->suspend['id'], $this->post->uid);
-        $this->dao->update(TABLE_PROJECT)->data($program)
+        $program = $this->loadModel('file')->processImgURL($postData, $this->config->program->editor->suspend['id'], $postData->uid);
+        $this->dao->update(TABLE_PROJECT)->data($program, 'comment,uid')
             ->autoCheck()
             ->checkFlow()
-            ->where('id')->eq((int)$programID)
+            ->where('id')->eq($programID)
             ->exec();
 
-        if(!dao::isError()) return common::createChanges($oldProgram, $program);
+        $newProgram = $this->getByID($programID);
+
+        if(dao::isError()) return false;
+
+        $changes = common::createChanges($oldProgram, $newProgram);
+        if($postData->comment != '' or !empty($changes))
+        {
+            $actionID = $this->loadModel('action')->create('program', $programID, 'Suspended', $postData->comment);
+            $this->action->logHistory($actionID, $changes);
+        }
+
+        return true;
     }
 
     /*
