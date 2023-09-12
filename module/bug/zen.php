@@ -1150,11 +1150,8 @@ class bugZen extends bug
             if($bug->type != $type) unset($this->lang->bug->typeList[$type]);
         }
 
-        $this->loadModel('project');
-        $this->loadModel('execution');
-
         $product   = $this->product->getByID($bug->product);
-        $execution = $this->execution->getByID($bug->execution);
+        $execution = $this->loadModel('execution')->getByID($bug->execution);
 
         /* 获取所属模块列表。*/
         /* Get module option menu. */
@@ -1171,14 +1168,14 @@ class bugZen extends bug
         /* 获取执行列表。*/
         /* Get execution pairs. */
         $executions = array('') + $this->product->getExecutionPairsByProduct($bug->product, (string)$bug->branch, (string)$bug->project);
-        if(!empty($bug->execution) and empty($executions[$bug->execution])) $executions[$execution->id] = $execution->name . "({$this->lang->bug->deleted})";
+        if(!empty($bug->execution) && empty($executions[$bug->execution])) $executions[$execution->id] = $execution->name . "({$this->lang->bug->deleted})";
 
         /* 获取项目列表。*/
         /* Get project pairs. */
         $projects = array('') + $this->product->getProjectPairsByProduct($bug->product, (string)$bug->branch);
-        if(!empty($bug->project) and empty($projects[$bug->project]))
+        if(!empty($bug->project) && empty($projects[$bug->project]))
         {
-            $project = $this->project->getByID($bug->project);
+            $project = $this->loadModel('project')->getByID($bug->project);
             $projects[$project->id] = $project->name . "({$this->lang->bug->deleted})";
         }
 
@@ -1190,21 +1187,50 @@ class bugZen extends bug
             $this->view->products = $this->products;
         }
 
+        $this->assignVarsForEdit($bug);
+
         $this->view->title            = $this->lang->bug->edit . "BUG #$bug->id $bug->title - " . $this->products[$bug->product];
-        $this->view->resolvedBuilds   = $this->loadModel('build')->getBuildPairs($bug->product, $bug->branch, 'noempty');
         $this->view->bug              = $bug;
         $this->view->product          = $product;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
-        $this->view->plans            = $this->loadModel('productplan')->getPairs($bug->product, $bug->branch, '', true);
         $this->view->projects         = $projects;
         $this->view->executions       = $executions;
-        $this->view->stories          = $bug->execution ? $this->story->getExecutionStoryPairs($bug->execution) : $this->story->getProductStoryPairs($bug->product, $bug->branch, 0, 'all', 'id_desc', 0, 'full', 'story', false);
-        $this->view->tasks            = $this->task->getExecutionTaskPairs($bug->execution);
-        $this->view->testtasks        = $this->loadModel('testtask')->getPairs($bug->product, $bug->execution, $bug->testtask);
-        $this->view->cases            = array('') + $this->loadModel('testcase')->getPairsByProduct($bug->product, array(0, $bug->branch));
-        $this->view->users            = $this->user->getPairs('', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
-        $this->view->actions          = $this->loadModel('action')->getList('bug', $bug->id);
-        $this->view->contactList      = $this->loadModel('user')->getContactLists($this->app->user->account, 'withnote');
+    }
+
+    /**
+     * 为编辑 bug 指派版本数据。
+     * Assign variables for editing bug.
+     *
+     * @param  object    $bug
+     * @access protected
+     * @return void
+     */
+    protected function assignVarsForEdit(object $bug): void
+    {
+        if($bug->execution)
+        {
+            $openedBuilds = $this->loadModel('build')->getBuildPairs($bug->product, $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased', $bug->execution, 'execution');
+        }
+        elseif($bug->project)
+        {
+            $openedBuilds = $this->loadModel('build')->getBuildPairs($bug->product, $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased', $bug->project, 'project');
+        }
+        else
+        {
+            $openedBuilds = $this->loadModel('build')->getBuildPairs($bug->product, $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased');
+        }
+
+        $this->view->openedBuilds   = $openedBuilds;
+        $this->view->resolvedBuilds = $this->build->getBuildPairs($bug->product, $bug->branch, 'noempty');
+        $this->view->plans          = $this->loadModel('productplan')->getPairs($bug->product, $bug->branch, '', true);
+        $this->view->stories        = $bug->execution ? $this->story->getExecutionStoryPairs($bug->execution) : $this->story->getProductStoryPairs($bug->product, $bug->branch, 0, 'all', 'id_desc', 0, 'full', 'story', false);
+        $this->view->tasks          = $this->task->getExecutionTaskPairs($bug->execution);
+        $this->view->testtasks      = $this->loadModel('testtask')->getPairs($bug->product, $bug->execution, $bug->testtask);
+        $this->view->cases          = $this->loadModel('testcase')->getPairsByProduct($bug->product, array(0, $bug->branch));
+        $this->view->users          = $this->user->getPairs('', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
+        $this->view->actions        = $this->loadModel('action')->getList('bug', $bug->id);
+        $this->view->contactList    = $this->loadModel('user')->getContactLists($this->app->user->account, 'withnote');
+
     }
 
     /**
