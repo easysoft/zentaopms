@@ -3632,15 +3632,16 @@ class executionModel extends model
     }
 
     /**
+     * 通过搜索条件获取任务列表信息。
      * Get taskes by search.
      *
      * @param  string $condition
-     * @param  object $pager
      * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getSearchTasks($condition, $pager, $orderBy)
+    public function getSearchTasks(string $condition, string $orderBy, object $pager = null): array
     {
         if(strpos($condition, '`assignedTo`') !== false)
         {
@@ -3673,6 +3674,19 @@ class executionModel extends model
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', true);
 
+        return $this->processTasks($tasks);
+    }
+
+    /**
+     * 批量处理任务，团队、父子层级、泳道等信息。
+     * Batch process tasks, teams, parent-child, lanes, etc.
+     *
+     * @param  array  $tasks
+     * @access public
+     * @return array
+     */
+    public function processTasks(array $tasks): array
+    {
         if(empty($tasks)) return array();
 
         $taskTeam = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($tasks))->fetchGroup('task');

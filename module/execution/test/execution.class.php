@@ -2240,47 +2240,28 @@ class executionTest
     }
 
     /**
-     * Test get taskes by search.
+     * 通过搜索条件获取任务列表信息。
+     * Get taskes by search.
      *
      * @param  string $condition
-     * @param  int    $recPerPage
      * @param  string $orderBy
+     * @param  int    $recPerPage
      * @access public
      * @return array
      */
-    public function getSearchTasksTest($condition, $recPerPage, $orderBy)
+    public function getSearchTasksTest(string $condition, string $orderBy, int $recPerPage): array
     {
-        global $tester;
-
         /* Load pager. */
+        global $tester, $app;
+        $app->moduleName = 'execution';
+        $app->methodName = 'searchtasks';
         $tester->app->loadClass('pager', $static = true);
         $pager = new pager(0, $recPerPage, 1);
 
-        $objects = $this->executionModel->getSearchTasks($condition, $pager, $orderBy);
+        $objects = $this->executionModel->getSearchTasks($condition, $orderBy, $pager);
+        if(dao::isError()) return dao::getError();
 
-        $returns = '';
-        foreach($objects as $object)
-        {
-            $returns .= "$object->id:name:$object->name";
-            if(!empty($object->team))
-            {
-                $returns .= ',team:[';
-                foreach($object->team as $team) $returns .= "$team->id,";
-                $returns = trim($returns, ',');
-                $returns .= ']';
-            }
-            $returns .= ';';
-        }
-
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error;
-        }
-        else
-        {
-            return $returns;
-        }
+        return $objects;
     }
 
     /**
@@ -3005,5 +2986,25 @@ class executionTest
         if(empty($executions[0]->tasks)) return false;
 
         return $this->executionModel->appendTasks($executions[0]->tasks, array());
+    }
+
+    /**
+     * 批量处理任务，团队、父子层级、泳道等信息。
+     * Batch process tasks, teams, parent-child, lanes, etc.
+     *
+     * @param  int    $executionID
+     * @param  int    $count
+     * @access public
+     * @return array|int
+     */
+    public function processTasksTest(int $executionID, int $count): array|int
+    {
+        $tasks = $this->executionModel->dao->select('*')->from(TABLE_TASK)
+            ->where('deleted')->eq(0)
+            ->andWhere('execution')->eq($executionID)
+            ->fetchAll('id');
+
+        $tasks = $this->executionModel->processTasks($tasks);
+        return $count ? count($tasks) : $tasks;
     }
 }
