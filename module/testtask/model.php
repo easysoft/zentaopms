@@ -860,28 +860,34 @@ class testtaskModel extends model
     }
 
     /**
-     * update activate testtask.
+     * 激活一个测试单。
+     * Activate a testtask.
      *
-     * @param  int    $taskID
+     * @param  object $task
      * @access public
-     * @return void
+     * @return bool
      */
-    public function activate($taskID)
+    public function activate(object $task): bool
     {
-        $oldTesttask = $this->getByID($taskID);
-        $testtask = fixer::input('post')
-            ->add('status', 'doing')
-            ->stripTags($this->config->testtask->editor->activate['id'], $this->config->allowedTags)
-            ->remove('comment')->get();
+        $taskID = (int)$task->id;
+        $oldTask = $this->fetchByID($taskID);
+        if(!$oldTask || !self::isClickable($oldTask, 'activate')) return false;
 
-        $testtask = $this->loadModel('file')->processImgURL($testtask, $this->config->testtask->editor->activate['id'], $this->post->uid);
-        $this->dao->update(TABLE_TESTTASK)->data($testtask)
+        $this->dao->update(TABLE_TESTTASK)->data($task, 'comment,uid')
             ->autoCheck()
             ->checkFlow()
-            ->where('id')->eq((int)$taskID)
+            ->where('id')->eq($taskID)
             ->exec();
+        if(dao::isError()) return false;
 
-        if(!dao::isError()) return common::createChanges($oldTesttask, $testtask);
+        $changes = common::createChanges($oldTask, $task);
+        if($changes || $task->comment)
+        {
+            $actionID = $this->loadModel('action')->create('testtask', $taskID, 'Activated', $task->comment);
+            $this->action->logHistory($actionID, $changes);
+        }
+
+        return !dao::isError();
     }
 
     /**
