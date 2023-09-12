@@ -119,6 +119,38 @@ class testcaseTao extends testcaseModel
     }
 
     /**
+     * 根据套件获取用例。
+     * Get cases by suite.
+     *
+     * @param  int         $productID
+     * @param  int|string  $branch
+     * @param  int         $suiteID
+     * @param  array       $moduleIdList
+     * @param  string      $auto    no|unit
+     * @param  string      $orderBy
+     * @param  object      $pager
+     * @access public
+     * @return array
+     */
+    public function getBySuite(int $productID, int|string $branch = 0, int $suiteID = 0, array|int $moduleIdList = 0, string $auto = 'no', string $orderBy = 'id_desc', object $pager = null): array
+    {
+        return $this->dao->select('t1.*, t2.title AS storyTitle, t3.version AS version')->from(TABLE_CASE)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->leftJoin(TABLE_SUITECASE)->alias('t3')->on('t1.id = t3.case')
+            ->where('t1.product')->eq($productID)
+            ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
+            ->beginIF($this->app->tab == 'project')->andWhere('t1.project')->eq($this->session->project)->fi()
+            ->andWhere('t3.suite')->eq($suiteID)
+            ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
+            ->beginIF($auto == 'auto' || $auto == 'unit')->andWhere('t1.auto')->eq($auto)->fi()
+            ->beginIF($auto != 'auto' && $auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
+            ->andWhere('t1.deleted')->eq('0')
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+    }
+
+    /**
      * 插入用例的步骤。
      * Insert the steps of the case.
      *

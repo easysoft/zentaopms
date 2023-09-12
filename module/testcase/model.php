@@ -154,35 +154,6 @@ class testcaseModel extends model
     }
 
     /**
-     * Get cases by suite.
-     *
-     * @param  int         $productID
-     * @param  int|string  $branch
-     * @param  int         $suiteID
-     * @param  array       $moduleIdList
-     * @param  string      $orderBy
-     * @param  object      $pager
-     * @param  string      $auto    no|unit
-     * @access public
-     * @return array
-     */
-    public function getBySuite($productID, $branch = 0, $suiteID = 0, $moduleIdList = 0, $orderBy = 'id_desc', $pager = null, $auto = 'no')
-    {
-        return $this->dao->select('t1.*, t2.title as storyTitle, t3.version as version')->from(TABLE_CASE)->alias('t1')
-            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
-            ->leftJoin(TABLE_SUITECASE)->alias('t3')->on('t1.id=t3.case')
-            ->where('t1.product')->eq((int)$productID)
-            ->beginIF($this->app->tab == 'project')->andWhere('t1.project')->eq($this->session->project)->fi()
-            ->andWhere('t3.suite')->eq((int)$suiteID)
-            ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
-            ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
-            ->beginIF($auto == 'auto' || $auto == 'unit')->andWhere('t1.auto')->eq($auto)->fi()
-            ->beginIF($auto != 'auto' && $auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
-            ->andWhere('t1.deleted')->eq('0')
-            ->orderBy($orderBy)->page($pager)->fetchAll('id');
-    }
-
-    /**
      * Get cases by type.
      *
      * @param  int         $productID
@@ -312,13 +283,13 @@ class testcaseModel extends model
 
         if($browseType == 'bymodule' || $browseType == 'all' || $browseType == 'wait')
         {
-            if($this->app->tab == 'project') return $this->getModuleProjectCases($productID, $branch, $modules, $browseType, $auto, $caseType, $orderBy, $pager);
+            if($this->app->tab == 'project') return $this->testcaseTao->getModuleProjectCases($productID, $branch, $modules, $browseType, $auto, $caseType, $orderBy, $pager);
 
             return $this->getModuleCases($productID, $branch, $modules, $browseType, $auto, $caseType, $orderBy, $pager);
         }
 
         if($browseType == 'needconfirm') return $this->testcaseTao->getNeedConfirmList($productID, $branch, $modules, $auto, $caseType, $orderBy, $pager);
-        if($browseType == 'bysuite')     return $this->getBySuite($productID, $branch, $queryID, $modules, $orderBy, $pager, $auto);
+        if($browseType == 'bysuite')     return $this->testcaseTao->getBySuite($productID, $branch, $queryID, $modules, $auto, $orderBy, $pager);
         if($browseType == 'bysearch')    return $this->getBySearch($productID, $queryID, $orderBy, $pager, $branch, $auto);
 
         return array();

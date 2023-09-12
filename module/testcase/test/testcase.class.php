@@ -152,21 +152,24 @@ class testcaseTest
     }
 
     /**
+     * 测试根据套件获取用例。
      * Test get cases by suite.
      *
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  int    $suiteID
-     * @param  int    $moduleIdList
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  string $auto
+     * @param  int        $productID
+     * @param  int|string $branch
+     * @param  int        $suiteID
+     * @param  int        $moduleIdList
+     * @param  string     $auto
+     * @param  string     $orderBy
+     * @param  object     $pager
      * @access public
      * @return array
      */
-    public function getBySuiteTest($productID, $branch = 0, $suiteID = 0, $moduleIdList = 0, $orderBy = 'id_desc', $pager = null, $auto = 'no')
+    public function getBySuiteTest(int $productID, int|string $branch = 0, int $suiteID = 0, int|array $moduleIdList = 0, string $auto = 'no', string $orderBy = 'id_desc', object $pager = null): array
     {
-        $objects = $this->objectModel->getBySuite($productID, $branch, $suiteID, $moduleIdList, $orderBy, $pager, $auto);
+        $_SESSION['project'] = 1;
+
+        $objects = $this->objectModel->getBySuite($productID, $branch, $suiteID, $moduleIdList, $auto, $orderBy, $pager);
 
         if(dao::isError()) return dao::getError();
 
