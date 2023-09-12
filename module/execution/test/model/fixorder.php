@@ -20,10 +20,8 @@ $execution->gen(5);
 /**
 
 title=测试executionModel->fixOrderTest();
+timeout=0
 cid=1
-pid=1
-
-重置order >> 15
 
 */
 

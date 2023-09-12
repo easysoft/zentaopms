@@ -1906,12 +1906,13 @@ class executionTest
     }
 
     /**
-     * function fixOrder test by execution
+     * 修复执行的排序顺序。
+     * Fix the sort order of execution.
      *
      * @access public
      * @return array
      */
-    public function fixOrderTest()
+    public function fixOrderTest(): array
     {
         global $tester;
 
@@ -1919,15 +1920,8 @@ class executionTest
 
         $object = $tester->dao->select('id,`order`')->from(TABLE_EXECUTION)->fetchAll('id');
 
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error;
-        }
-        else
-        {
-            return $object;
-        }
+        if(dao::isError()) return dao::getError();
+        return $object;
     }
 
     /**

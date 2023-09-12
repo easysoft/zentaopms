@@ -3850,12 +3850,13 @@ class executionModel extends model
     }
 
     /**
-     * Fix order.
+     * 修复执行的排序顺序。
+     * Fix the sort order of execution.
      *
      * @access public
      * @return void
      */
-    public function fixOrder()
+    public function fixOrder(): void
     {
         $executions = $this->dao->select('id,`order`')->from(TABLE_EXECUTION)->orderBy('order')->fetchPairs('id', 'order');
 
