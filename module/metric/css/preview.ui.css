@@ -19,6 +19,7 @@
 .side .check-list-metric {padding-top: 0; padding-bottom: 12px; gap: 12px;}
 
 .main .metric-name {height: 48px; padding-left: 16px; margin-bottom: 8px; border-bottom: 1px solid var(--color-slate-300);}
+.main .metric-name-notfirst {border-top: 1px solid var(--color-slate-300);}
 .main .flex-between {justify-content: space-between;}
 .main .flex-start {justify-content: flex-start;}
 .main .metric-name-weight {font-weight: 600; font-size: 0.9rem;}
@@ -30,7 +31,7 @@
 .main .table-and-chart-multiple {height: calc(100% - 56px);}
 .main .canvas {height: calc(100vh - 172px + 48px); overflow-y: scroll;}
 .main .table-and-charts {height: calc(100vh - 172px);}
-.main .metricBox {height: 80%;}
+.main .metricBox {height: 80%; margin-bottom: 8px;}
 
 .table-and-chart .table-side {flex: 0 0 40%; overflow-x: hidden; padding-left: 16px; padding-top: 8px; padding-bottom: 16px; padding-right: 2px;}
 .table-and-chart .chart-side {flex: 0 0 60%;}

@@ -258,12 +258,13 @@ window.initFilterPanel = function()
 
 window.initDTable = function()
 {
-    if(!$('.dtable').length) return;
-    $('.dtable').remove();
-    $('.table-side').append('<div class="dtable"></div>');
+    var $currentBox = $('#metricBox' + current.id);
+    if(!$currentBox.find('.dtable').length) return;
+    $currentBox.find('.dtable').remove();
+    $currentBox.find('.table-side').append('<div class="dtable"></div>');
 
     if(!resultHeader || !resultData) return;
-    new zui.DTable('.dtable',{
+    new zui.DTable($currentBox.find('.dtable'),{
         responsive: true,
         bordered: true,
         scrollbarHover: true,
@@ -319,7 +320,23 @@ window.foldContent = function()
 
 window.updateMetricBoxs = function(id, isChecked)
 {
-    if(!isChecked) $('.table-and-charts').find('#metric' + id).remove();
+    if(!isChecked) 
+    {
+        $('#metricBox' + id).remove();
+        $('.table-and-charts').first().find('.metric-name').removeClass('metric-name-notfirst');
+    }
+    else
+    {
+        var label = window.checkedList.find(function(checked){return checked.id == id});
+        var tpl   = $("#metricBox-tpl").html();
+        var data  = {
+            id: label.id,
+            name: label.name,
+        };
+        var html = $(zui.formatString(tpl, data));
+
+        $('.table-and-charts').append(html);
+    }
 }
 
 window.renderCheckedLabel = function()

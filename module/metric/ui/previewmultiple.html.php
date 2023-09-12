@@ -57,11 +57,11 @@ div
     setClass('hidden'),
     div
     (
-        set::id('metric{id}'),
+        set::id('metricBox{id}'),
         setClass('metricBox'),
         div
         (
-            setClass('metric-name flex flex-between items-center'),
+            setClass('metric-name metric-name-notfirst flex flex-between items-center'),
             div
             (
                 span
@@ -69,32 +69,32 @@ div
                     setClass('metric-name-weight'),
                     "{name}",
                 ),
-                div
+            ),
+            div
+            (
+                setClass('flex-start'),
+                toolbar
                 (
-                    setClass('flex-start'),
-                    toolbar
+                    haspriv('bug', 'report') ? item(set(array
                     (
-                        haspriv('bug', 'report') ? item(set(array
-                        (
-                            'text'  => $this->lang->metric->details,
-                            'class' => 'ghost details',
-                            'url'   => '#',
-                        ))) : null,
-                        haspriv('bug', 'report') ? item(set(array
-                        (
-                            'icon'  => 'menu-backend',
-                            'text'  => $this->lang->metric->filters,
-                            'class' => 'ghost',
-                            'url'   => '#',
-                        ))) : null,
-                        haspriv('bug', 'report') ? item(set(array
-                        (
-                            'icon'  => 'chart-line',
-                            'text'  => $this->lang->metric->zAnalysis,
-                            'class' => 'ghost chart-line-margin',
-                            'url'   => '#',
-                        ))) : null,
-                    ),
+                        'text'  => $this->lang->metric->details,
+                        'class' => 'ghost details',
+                        'url'   => '#',
+                    ))) : null,
+                    haspriv('bug', 'report') ? item(set(array
+                    (
+                        'icon'  => 'menu-backend',
+                        'text'  => $this->lang->metric->filters,
+                        'class' => 'ghost',
+                        'url'   => '#',
+                    ))) : null,
+                    haspriv('bug', 'report') ? item(set(array
+                    (
+                        'icon'  => 'chart-line',
+                        'text'  => $this->lang->metric->zAnalysis,
+                        'class' => 'ghost chart-line-margin',
+                        'url'   => '#',
+                    ))) : null,
                 ),
             ),
         ),
@@ -103,10 +103,10 @@ div
             setClass('table-and-chart table-and-chart-multiple'),
             div
             (
-                setClass('table-side-multi'),
+                setClass('table-side'),
                 div
                 (
-                    setClass('dtable-multi'),
+                    setClass('dtable'),
                 ),
             ),
             div
@@ -297,7 +297,7 @@ div
             setClass('table-and-charts'),
             div
             (
-                set::id('metric' . $current->id),
+                set::id('metricBox' . $current->id),
                 setClass('metricBox'),
                 div
                 (
