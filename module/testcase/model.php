@@ -107,28 +107,6 @@ class testcaseModel extends model
     }
 
     /**
-     * Get project cases.
-     *
-     * @param  int    $projectID
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  string $browseType
-     * @access public
-     * @return array
-     */
-    public function getProjectCases($projectID, $orderBy = 'id_desc', $pager = null, $browseType = '')
-    {
-        return $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')
-            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
-            ->where('t1.project')->eq((int)$projectID)
-            ->beginIF($browseType != 'all')->andWhere('t2.status')->eq($browseType)->fi()
-            ->andWhere('t2.deleted')->eq('0')
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll('id');
-    }
-
-    /**
      * Get execution cases.
      *
      * @param  int    $executionID
