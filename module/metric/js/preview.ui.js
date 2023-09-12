@@ -327,7 +327,7 @@ window.foldContent = function()
 
 window.updateMetricBoxs = function(id, isChecked)
 {
-    if(!isChecked) 
+    if(!isChecked)
     {
         $('#metricBox' + id).remove();
         $('.table-and-charts').first().find('.metric-name').removeClass('metric-name-notfirst');
@@ -449,5 +449,5 @@ window.renderCheckedLabel = function()
 
     window.lineCount = lineCount;
 
-    $('.checked-tip').text(selectCount.replace('%s', labels.length));
+    $('.checked-tip').html(selectCount.replace('%s', labels.length));
 }

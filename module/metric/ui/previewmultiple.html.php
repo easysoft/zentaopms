@@ -279,7 +279,7 @@ div
                         span
                         (
                             setClass('checked-tip'),
-                            sprintf($lang->metric->selectCount, 1),
+                            html(sprintf($lang->metric->selectCount, 1)),
                         ),
                         btn
                         (

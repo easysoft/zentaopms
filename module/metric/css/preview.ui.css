@@ -46,7 +46,8 @@
 .main .checked-content {position: sticky; top: 0px; transition: height 0.5s ease; height: 48px; padding-left: 8px; border-bottom: 1px solid var(--color-slate-300); background-color: #fff; z-index: 100;}
 .main .checked-label-content {height: 48px; padding-top: 3px; display: flex; flex-wrap: wrap;}
 .main .checked-label-right {height: 48px; padding-right: 12px; justify-content: flex-end; display: flex; align-items: center;}
-.main .checked-tip {padding-right: 6px; position: relative;}
+.main .checked-tip {padding-right: 6px; position: relative; color: var(--color-slate-600);}
+.main .checked-tip .checked-count {color: var(--color-slate-800);}
 .main .checked-tip:before {content: ""; position: absolute; top: 0px; left: -15px; bottom: 0px; width: 1px; background-color: var(--color-slate-300);}
 .main .gray-pale {margin: 7px 4px; padding: 13px 12px; white-space: nowrap;}
 .main .gray-pale-div {overflow: hidden;}
