@@ -55,14 +55,15 @@ $buildValueControl = function($name, $controlType, $value, $optionType)
     {
         $control = formGroup
         (
-            set::width('1/5'),
+            set::width('150px'),
             set::label(''),
             datePicker
             (
                 set::id($name),
                 set::name($name),
                 set::value($value)
-            )
+            ),
+            setClass('form-body-item'),
         );
     }
     elseif($controlType == 'select')
@@ -70,7 +71,7 @@ $buildValueControl = function($name, $controlType, $value, $optionType)
         $options = $this->metric->getControlOptions($optionType);
         $control = formGroup
         (
-            set::width('1/5'),
+            set::width('150px'),
             set::label(''),
             picker
             (
@@ -78,13 +79,14 @@ $buildValueControl = function($name, $controlType, $value, $optionType)
                 set::name($name),
                 set::items($options),
             ),
+            setClass('form-body-item'),
         );
     }
     else
     {
         $control = formGroup
         (
-            set::width('1/5'),
+            set::width('150px'),
             set::label(''),
             input
             (
@@ -92,11 +94,54 @@ $buildValueControl = function($name, $controlType, $value, $optionType)
                 set::name($name),
                 set::value($value),
             ),
+            setClass('form-body-item'),
         );
     }
 
     return $control;
 };
+
+$formHeader = div
+(
+    div
+    (
+        setClass('form-header-item'),
+        setStyle('width', '50px'),
+        setStyle('text-align', 'center'),
+        $lang->metric->param->varName,
+    ),
+    div
+    (
+        setClass('form-header-item'),
+        setStyle('width', '150px'),
+        setStyle('text-align', 'center'),
+        $lang->metric->param->showName,
+    ),
+    div
+    (
+        setClass('form-header-item'),
+        setStyle('width', '300px'),
+        setStyle('text-align', 'center'),
+        $lang->metric->param->varType,
+    ),
+    div
+    (
+        setClass('form-header-item'),
+        setStyle('width', '150px'),
+        $lang->metric->param->defaultValue,
+        setStyle('text-align', 'center'),
+    ),
+    div
+    (
+        setClass('form-header-item'),
+        setStyle('width', '150px'),
+        setStyle('text-align', 'center'),
+        $lang->metric->param->queryValue,
+    ),
+    setClass('flex form-header'),
+    setStyle('justify-content', 'space-between'),
+    setStyle('flex', '1'),
+);
 
 /**
  * Build a param control group.
@@ -110,23 +155,23 @@ $buildParamControlGroup = function($param, $buildValueControl, $typeList, $optio
 {
     $varType = zget($param, 'varType', '');
 
-    $varNameControl = formGroup
+    $varNameLabel = div
     (
-        set::className('hidden'),
-        set::control('hidden'),
-        set::name('varName'),
+        $param['varName'],
+        setStyle('width', '50px'),
+        setClass('form-body-item'),
     );
     $showNameControl = formGroup
     (
-        set::width('1/5'),
+        set::width('150px'),
         set::control('input'),
         set::name('showName'),
         set::value($param['showName']),
-        set::label($param['varName']),
+        setClass('form-body-item'),
     );
     $varTypeControl = formGroup
     (
-        set::width('1/5'),
+        set::width('150px'),
         set::name('varType'),
         set::control('select'),
         set::items($typeList),
@@ -135,7 +180,7 @@ $buildParamControlGroup = function($param, $buildValueControl, $typeList, $optio
     );
     $optionsControl = formGroup
     (
-        set::width('1/5'),
+        set::width('150px'),
         set::name('options'),
         set::control('select'),
         set::items($optionList),
@@ -144,15 +189,33 @@ $buildParamControlGroup = function($param, $buildValueControl, $typeList, $optio
     );
     $defaultValueControl = $buildValueControl('defaultValue', $varType, zget($param, 'defaultValue', ''), $param['options']);
     $queryValueControl  = $buildValueControl('queryValue', $varType, zget($param, 'queryValue', ''), $param['options']);
+    $varNameControl = formGroup
+    (
+        set::className('hidden'),
+        set::control('hidden'),
+        set::name('varName'),
+        setClass('form-body-item'),
+    );
 
     $paramControlGroup = formRow
     (
+        $varNameLabel,
         $showNameControl,
-        $varTypeControl,
-        $optionsControl,
+        div
+        (
+            $varTypeControl,
+            $optionsControl,
+            setClass('flex'),
+            setStyle('justify-content', 'flex-start'),
+            setClass('form-body-item'),
+        ),
         $defaultValueControl,
         $queryValueControl,
         $varNameControl,
+        setClass('flex form-body'),
+        setStyle('justify-content', 'space-between'),
+        setStyle('flex', '1'),
+        setStyle('width', '100%'),
     );
 
     return $paramControlGroup;
@@ -202,9 +265,13 @@ detailBody
         section
         (
             set::title($lang->metric->metricData),
-            formPanel
+            formBase
             (
-                formRow($paramControlGroups)
+                $formHeader,
+                $paramControlGroups,
+                setClass('flex'),
+                setStyle('flex-direction', 'column'),
+                setStyle('justify-content', 'space-between'),
             )
         ),
     ),
