@@ -989,9 +989,9 @@ class baseHelper
         preg_match('%^(.*?)[\\\\/]*(([^/\\\\]*?)(\.([^\.\\\\/]+?)|))[\\\\/\.]*$%im',$filepath,$m);
 
         $ret['dirname']   = !empty($m[1]) ? $m[1] : '';
-        $ret['basename']  = !empty($m[1]) ? $m[2] : '';
-        $ret['extension'] = !empty($m[1]) ? $m[5] : '';
-        $ret['filename']  = !empty($m[1]) ? $m[3] : '';
+        $ret['basename']  = !empty($m[2]) ? $m[2] : '';
+        $ret['extension'] = !empty($m[5]) ? $m[5] : '';
+        $ret['filename']  = !empty($m[3]) ? $m[3] : '';
 
         return $ret;
     }
