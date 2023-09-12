@@ -584,22 +584,29 @@ class testcaseModel extends model
     }
 
     /**
+     * 获取需求列表关联的用例数量数组。
      * Get counts of some stories' cases.
      *
      * @param  array  $stories
      * @access public
-     * @return int
+     * @return array
      */
-    public function getStoryCaseCounts($stories)
+    public function getStoryCaseCounts(array $stories): array
     {
         if(empty($stories)) return array();
+
         $caseCounts = $this->dao->select('story, COUNT(*) AS cases')
             ->from(TABLE_CASE)
             ->where('story')->in($stories)
             ->andWhere('deleted')->eq(0)
             ->groupBy('story')
             ->fetchPairs();
-        foreach($stories as $storyID) if(!isset($caseCounts[$storyID])) $caseCounts[$storyID] = 0;
+
+        foreach($stories as $storyID)
+        {
+            if(!isset($caseCounts[$storyID])) $caseCounts[$storyID] = 0;
+        }
+
         return $caseCounts;
     }
 

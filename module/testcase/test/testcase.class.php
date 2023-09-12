@@ -318,13 +318,14 @@ class testcaseTest
     }
 
     /**
+     * 测试获取需求列表关联的用例数量数组。
      * Test get counts of some stories' cases.
      *
      * @param  array  $stories
      * @access public
-     * @return void
+     * @return array
      */
-    public function getStoryCaseCountsTest($stories)
+    public function getStoryCaseCountsTest(array $stories): array
     {
         $counts = $this->objectModel->getStoryCaseCounts($stories);
 
