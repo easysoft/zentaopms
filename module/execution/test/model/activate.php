@@ -38,7 +38,7 @@ $readjustTime    = array();
 $executionTester = new executionTest();
 r($executionTester->activateTest($executionIDList[0]))                && p('0:field,old,new') && e('status,suspended,wait');  // 敏捷执行激活
 r($executionTester->activateTest($executionIDList[1]))                && p('0:field,old,new') && e('status,suspended,wait');  // 瀑布执行激活
-r($executionTester->activateTest($executionIDList[2]))                && p('0:field,old,new') && e('status,suspended,doing'); // 看板执行激活
+r($executionTester->activateTest($executionIDList[2]))                && p('0:field,old,new') && e('status,suspended,wait'); // 看板执行激活
 r($executionTester->activateTest($executionIDList[3],$readjustTime))  && p('1:field')         && e('begin');                  // 修改激活时间
 r($executionTester->activateTest($executionIDList[4],$readjustTask))  && p('1:field')         && e('begin');                  // 修改顺延
 r($executionTester->activateTest($executionIDList[3], array(), true)) && p('status')          && e('wait');                   // 子瀑布激活获取父瀑布状态
