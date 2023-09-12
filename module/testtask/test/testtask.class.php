@@ -144,21 +144,15 @@ class testtaskTest
      */
     public function unlinkCaseTest(int $runID): bool|array
     {
-        $run = $this->dao->select('t1.task,t1.`case`,t2.story')->from(TABLE_TESTRUN)->alias('t1')
-            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
-            ->where('t1.id')->eq($runID)
-            ->fetch();
-        $linkedProjects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($run->story)->fetchPairs();
-
         $result = $this->objectModel->unlinkCase($runID);
         if(dao::isError()) return dao::getError();
         if(!$result) return $result;
 
-        $run    = $this->objectModel->dao->select('*')->from(TABLE_TESTRUN)->where('id')->eq($runID)->fetch();
-        $cases  = $this->objectModel->dao->select('`case`')->from(TABLE_PROJECTCASE)->where('project')->in($projects)->fetchPairs();
-        $action = $this->objectModel->dao->select('*')->from(TABLE_ACTION)->where('objectType')->eq('case')->andWhere('objectID')->eq($run->case)->andWhere('extra')->eq($run->task)->orderBy('id_desc')->limit(1)->fetch();
+        $run    = $this->objectModel->dao->select('COUNT(*) AS count')->from(TABLE_TESTRUN)->where('id')->eq($runID)->fetch('count');
+        $cases  = $this->objectModel->dao->select('project, `case`')->from(TABLE_PROJECTCASE)->fetchAll();
+        $action = $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(1)->fetch();
 
-        return array('run' => $run, 'cases' => implode(',', $cases), 'action' => $action);
+        return array('run' => $run, 'cases' => implode(',', array_column($cases, 'case')), 'action' => $action);
 
     }
 

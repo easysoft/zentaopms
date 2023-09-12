@@ -1,0 +1,8 @@
+title: table zt_projectcase
+author: Gang Liu
+version: "1.0"
+fields:
+  - field: project
+    range: 1{4},2{4},3{4},4{4}
+  - field: case
+    range: 1-4{4!} 
