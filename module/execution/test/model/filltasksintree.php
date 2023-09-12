@@ -45,18 +45,15 @@ $product->type->range('task');
 $product->gen(10);
 
 zdTable('team')->gen(0);
+zdTable('story')->gen(0);
+zdTable('projectstory')->gen(0);
 su('admin');
 
 /**
 
 title=测试executionModel->fillTasksInTree();
+timeout=0
 cid=1
-pid=1
-
-敏捷执行查询 >> 产品1
-瀑布执行查询 >> 产品2
-看板执行查询 >> 产品1
-错误执行查询 >> 0
 
 */
 

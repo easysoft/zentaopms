@@ -41,7 +41,7 @@ $bug->title->range('1-4')->prefix('Bug');
 $bug->project->range('1,2,1');
 $bug->execution->range('3,4,5');
 $bug->task->range('1-10');
-$bug->status->range('wait,doing');
+$bug->status->range('active,resolved,closed');
 $bug->gen(4);
 
 $query = zdTable('userquery');

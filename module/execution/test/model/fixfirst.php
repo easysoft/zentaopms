@@ -49,9 +49,9 @@ pid=1
 
 $executionIDList = array(3, 4);
 
-$scrumEstimate     = array('estimate' => '25');
-$withLeft          = array('estimate' => '5', 'withLeft' => 1);
-$waterfallEstimate = array('estimate' => '17', 'withLeft' => 1);
+$scrumEstimate     = array('date' => '2022-01-12', 'estimate' => '25');
+$withLeft          = array('date' => '2022-01-12', 'estimate' => '5', 'withLeft' => 1);
+$waterfallEstimate = array('date' => '2022-01-12', 'estimate' => '17', 'withLeft' => 1);
 $date              = '2022-01-12';
 
 $executionTester = new executionTest();

@@ -129,21 +129,6 @@ class executionTest
     }
 
     /**
-     * Create the select code of executions.
-     *
-     * @param  int    $executionID
-     * @param  string $currentModule
-     * @param  string $currentMethod
-     * @access public
-     * @return void
-     */
-    public function selectTest($executionID, $currentModule, $currentMethod)
-    {
-        $executions = $this->executionModel->getPairs();
-        return $this->executionModel->select($executions, $executionID, 0, $currentModule, $currentMethod);
-    }
-
-    /**
      * Check the privilege.
      *
      * @param mixed $executionID
@@ -2473,19 +2458,6 @@ class executionTest
     }
 
     /**
-     * Get switcher.
-     *
-     * @param  int    $executionID
-     * @param  string $method
-     * @access public
-     * @return string
-     */
-    public function getSwitcherTest($executionID = 0, $method = '')
-    {
-        return $this->executionModel->getSwitcher($executionID, 'execution', $method);
-    }
-
-    /**
      * Test sync no multiple sprint.
      *
      * @param  int    $projectID
@@ -2610,7 +2582,6 @@ class executionTest
         $products     = $this->executionModel->loadModel('product')->getProducts($executionID);
         $branchGroups = $this->executionModel->loadModel('branch')->getByProducts(array_keys($products));
         $this->executionModel->buildStorySearchForm($products, $branchGroups, array(), $queryID, 'searchStory', 'executionStory', $execution);
-        a(json_decode($_SESSION['executionStorysearchParams']['fieldParams']));
 
         return $_SESSION['executionStorysearchParams']['queryID'];
     }
