@@ -42,7 +42,7 @@ $executionIDList = array(3, 4, 5);
 $count           = array('0','1');
 
 $executionTester = new executionTest();
-r($executionTester->getMembersByIdListTest($executionIDList, $count[0])[$executionIDList[0]]) && p('0:root,account,realname') && e('3,admin,admin'); // 批量查询敏捷执行team
-r($executionTester->getMembersByIdListTest($executionIDList, $count[0])[$executionIDList[1]]) && p('0:root,account,realname') && e('4,user1,用户1'); // 批量查询瀑布执行team
-r($executionTester->getMembersByIdListTest($executionIDList, $count[0])[$executionIDList[2]]) && p('0:root,account,realname') && e('5,admin,admin'); // 批量查询看板执行team
-r($executionTester->getMembersByIdListTest($executionIDList, $count[1]))                      && p()                          && e('3');             // 批量查询执行team统计
+r($executionTester->getMembersByIdListTest($executionIDList, $count[0])[$executionIDList[0]]) && p('admin:root,account,realname') && e('3,admin,admin'); // 批量查询敏捷执行team
+r($executionTester->getMembersByIdListTest($executionIDList, $count[0])[$executionIDList[1]]) && p('user1:root,account,realname') && e('4,user1,用户1'); // 批量查询瀑布执行team
+r($executionTester->getMembersByIdListTest($executionIDList, $count[0])[$executionIDList[2]]) && p('admin:root,account,realname') && e('5,admin,admin'); // 批量查询看板执行team
+r($executionTester->getMembersByIdListTest($executionIDList, $count[1]))                      && p()                              && e('3');             // 批量查询执行team统计

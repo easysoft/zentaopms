@@ -22,12 +22,8 @@ $execution->gen(5);
 /**
 
 title=测试executionModel->changeStatus2Wait();
+timeout=0
 cid=1
-pid=1
-
-测试修改顶级父阶段执行状态为未开始 >> '阶段a',
-测试修改子阶段执行状态为未开始 >> '阶段a子1',
-测试修改叶子阶段执行状态为未开始 >> empty
 
 */
 

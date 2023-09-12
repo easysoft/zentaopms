@@ -310,7 +310,7 @@ class executionModel extends model
         if($_POST['products'])
         {
             $multipleProducts = $this->loadModel('product')->getMultiBranchPairs();
-            if(is_string($_POST['branch']) !== false) $_POST['branch'] = json_decode($_POST['branch'], true);
+            if($this->post->branch) $_POST['branch'] = json_decode($this->post->branch, true);
             foreach($_POST['products'] as $index => $productID)
             {
                 if(isset($multipleProducts[$productID]) and !isset($_POST['branch'][$index]))
@@ -3846,7 +3846,7 @@ class executionModel extends model
     public function getTotalEstimate($executionID)
     {
         $estimate = $this->dao->select('SUM(estimate) as estimate')->from(TABLE_TASK)->where('execution')->eq($executionID)->andWhere('deleted')->eq('0')->fetch('estimate');
-        return round($estimate);
+        return round((float)$estimate);
     }
 
     /**
@@ -4222,9 +4222,9 @@ class executionModel extends model
      *
      * @param  object $kanbanSetting    This param is used in the biz version, don't remove it.
      * @access public
-     * @return string
+     * @return array
      */
-    public function getKanbanStatusList(object $kanbanSetting): string
+    public function getKanbanStatusList(object $kanbanSetting): array
     {
         return $this->lang->task->statusList;
     }
