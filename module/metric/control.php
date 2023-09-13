@@ -74,7 +74,7 @@ class metric extends control
             $metricData = $this->metricZen->buildMetricForEdit();
             $metricID   = $this->metric->update($id, $metricData);
 
-            if(empty($metricID) || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $response = $this->metricZen->responseAfterEdit();
 
             return $this->send($response);
