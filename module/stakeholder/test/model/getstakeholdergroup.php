@@ -4,7 +4,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/stakeholder.class.php';
 su('admin');
 
-zdTable('stakeholder')->gen(50);
+zdTable('stakeholder')->config('stakeholder')->gen(50);
 
 /**
 

@@ -12,7 +12,7 @@ $product->parent->range('0{10},1-10{4}');
 $product->acl->range('private');
 $product->gen(50)->fixPath();
 
-zdTable('stakeholder')->gen(50);
+zdTable('stakeholder')->config('stakeholder')->gen(50);
 
 /**
 
