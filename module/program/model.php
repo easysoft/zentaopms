@@ -266,66 +266,75 @@ class programModel extends model
     }
 
     /**
+     * 获取看板数据。
      * Get kanban group data.
      *
      * @access public
      * @return array
      */
-    public function getKanbanGroup()
+    public function getKanbanGroup(): array
     {
+        $programs = $this->getTopPairs('noclosed');
+
+        /* Group data by product. */
+        list($productGroup, $planGroup, $releaseGroup, $projectGroup, $doingExecutions, $hours, $projectHours) = $this->getKanbanStatisticData($programs);
+        $productGroup = $this->processProductsForKanban($productGroup, $planGroup, $releaseGroup, $projectGroup, $doingExecutions, $hours, $projectHours);
+
+        /* Group data by program. */
         $kanbanGroup           = array();
         $kanbanGroup['my']     = array();
         $kanbanGroup['others'] = array();
+        $involvedPrograms      = $this->getInvolvedPrograms($this->app->user->account);
+        foreach($programs as $programID => $programName)
+        {
+            $programGroup = new stdclass();
+            $programGroup->name     = $programName;
+            $programGroup->products = zget($productGroup, $programID, array());
 
-        $programs         = $this->getTopPairs('', 'noclosed');
-        $involvedPrograms = $this->getInvolvedPrograms($this->app->user->account);
+            if(in_array($programID, $involvedPrograms))
+            {
+                $kanbanGroup['my'][] = $programGroup;
+            }
+            else
+            {
+                $kanbanGroup['others'][] = $programGroup;
+            }
+        }
 
-        /* Get all products under programs. */
-        $productGroup = $this->dao->select('id, program, name, shadow')->from(TABLE_PRODUCT)
-            ->where('deleted')->eq(0)
-            ->andWhere('program')->in(array_keys($programs))
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
-            ->andWhere('status')->ne('closed')
-            ->orderBy('order_asc')
-            ->fetchGroup('program');
+        return $kanbanGroup;
+    }
 
-        $productPairs = array();
+    /**
+     * 获取看板统计的相关数据。
+     * Get Kanban statistics data.
+     *
+     * @param  array  $programs
+     * @access public
+     * @return array
+     */
+    public function getKanbanStatisticData(array $programs): array
+    {
+        $productGroup  = $this->programTao->getProductByProgram(array_keys($programs));
+        $productIdList = array();
         foreach($productGroup as $programID => $products)
         {
             foreach($products as $product)
             {
-                $productPairs[$product->id] = $product->id;
-
+                $productIdList[$product->id] = $product->id;
                 if($product->shadow) $product->name = $product->name . ' (' . $this->lang->project->common . ')';
             }
         }
 
         /* Get all plans under products. */
-        $plans = $this->dao->select('id, product, title')->from(TABLE_PRODUCTPLAN)
-            ->where('deleted')->eq(0)
-            ->andWhere('product')->in($productPairs)
-            ->andWhere('end')->ge(helper::today())
-            ->fetchGroup('product');
+        $planGroup = $this->loadModel('productplan')->getProductPlans($productIdList, helper::today());
 
         /* Get all products linked projects. */
-        $projectGroup = $this->dao->select('t1.product,t2.id,t2.name,t2.status,t2.end,t2.parent,t2.path')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->where('t2.deleted')->eq(0)
-            ->andWhere('t1.product')->in($productPairs)
-            ->andWhere('t2.type')->eq('project')
-            ->andWhere('t2.status')->in('wait,doing')
-            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
-            ->fetchGroup('product');
-
-        $projectPairs = array();
-        foreach($projectGroup as $projects) $projectPairs = array_merge($projectPairs, array_keys($projects));
+        $projectGroup = $this->loadModel('project')->getGroupByProduct($productIdList, 'wait,doing');
+        $projectIdList = array();
+        foreach($projectGroup as $projects) $projectIdList = array_merge($projectIdList, array_keys($projects));
 
         /* Get all releases under products. */
-        $releases = $this->dao->select('product, id, name, marker')->from(TABLE_RELEASE)
-            ->where('product')->in($productPairs)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('status')->eq('normal')
-            ->fetchGroup('product');
+        $releaseGroup = $this->loadModel('release')->getGroupByProduct($productIdList);
 
         /* Get doing executions. */
         $doingExecutions = $this->dao->select('id, project, name, end')->from(TABLE_EXECUTION)
@@ -344,7 +353,7 @@ class programModel extends model
         $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason, execution')
             ->from(TABLE_TASK)
             ->where('(execution')->in($executionPairs)
-            ->orWhere('project')->in($projectPairs)
+            ->orWhere('project')->in($projectIdList)
             ->markRight(1)
             ->andWhere('parent')->lt(1)
             ->andWhere('deleted')->eq(0)
@@ -353,27 +362,44 @@ class programModel extends model
         $hours        = $this->computeProjectHours($tasks);
         $projectHours = $this->getProgressList();
 
-        /* Group data by product. */
+        return array($productGroup, $planGroup, $releaseGroup, $projectGroup, $doingExecutions, $hours, $projectHours);
+    }
+
+    /**
+     * 处理项目集看板中产品数据。
+     * Process product data in program Kanban.
+     *
+     * @param  array  $productGroup
+     * @param  array  $planGroup
+     * @param  array  $releaseGroup
+     * @param  array  $projectGroup
+     * @param  array  $doingExecutions
+     * @param  array  $hours
+     * @param  array  $projectHours
+     * @access public
+     * @return array
+     */
+    public function processProductsForKanban(array $productGroup, array $planGroup, array $releaseGroup, array $projectGroup, array $doingExecutions, array $hours, array $projectHours): array
+    {
+        if(empty($productGroup)) return $productGroup;
+
+        $today = helper::today();
         foreach($productGroup as $programID => $products)
         {
             foreach($products as $product)
             {
-                $product->plans    = zget($plans, $product->id, array());
+                $product->plans = zget($planGroup, $product->id, array());
 
                 /* Convert predefined HTML entities to characters. */
-                !empty($product->plans) && array_map(function($planVal)
-                {
-                    return $planVal->title = htmlspecialchars_decode($planVal->title, ENT_QUOTES);
-                },
-                $product->plans);
+                foreach($product->plans as $plan) $plan->title = htmlspecialchars_decode($plan->title, ENT_QUOTES);
                 $product->name = htmlspecialchars_decode($product->name, ENT_QUOTES);
 
-                $product->releases = zget($releases, $product->id, array());
+                $product->releases = zget($releaseGroup, $product->id, array());
                 $projects          = zget($projectGroup, $product->id, array());
                 foreach($projects as $project)
                 {
-                    if(helper::diffDate(helper::today(), $project->end) > 0) $project->delay = 1;
-                    if($this->config->systemMode == 'ALM' and !$this->config->program->showAllProjects and $project->parent != $product->program and strpos($project->path, ",{$product->program},") !== 0) continue;
+                    if(helper::diffDate($today, $project->end) > 0) $project->delay = 1;
+                    if($this->config->systemMode == 'ALM' && !$this->config->program->showAllProjects && $project->parent != $product->program && strpos($project->path, ",{$product->program},") !== 0) continue;
 
                     $status    = $project->status == 'wait' ? 'wait' : 'doing';
                     $execution = zget($doingExecutions, $project->id, array());
@@ -381,11 +407,11 @@ class programModel extends model
                     if(!empty($execution))
                     {
                         $execution->hours = zget($hours, $execution->id, array());
-                        if(helper::diffDate(helper::today(), $execution->end) > 0) $execution->delay = 1;
+                        if(helper::diffDate($today, $execution->end) > 0) $execution->delay = 1;
                     }
 
                     $project->execution = $execution;
-                    $project->hours['progress']   = zget($projectHours, $project->id, array());
+                    $project->hours['progress'] = zget($projectHours, $project->id, array());
 
                     /* Convert predefined HTML entities to characters. */
                     $project->name = htmlspecialchars_decode($project->name, ENT_QUOTES);
@@ -393,25 +419,7 @@ class programModel extends model
                 }
             }
         }
-
-        /* Group data by program. */
-        foreach($programs as $programID => $programName)
-        {
-            $programGroup = new stdclass();
-            $programGroup->name     = $programName;
-            $programGroup->products = zget($productGroup, $programID, array());
-
-            if(in_array($programID, $involvedPrograms))
-            {
-                $kanbanGroup['my'][] = $programGroup;
-            }
-            else
-            {
-                $kanbanGroup['others'][] = $programGroup;
-            }
-        }
-
-        return $kanbanGroup;
+        return $productGroup;
     }
 
     /**
@@ -1165,6 +1173,7 @@ class programModel extends model
     }
 
     /**
+     * 获取一级项目集id:name的键值对。
      * Get top program pairs.
      *
      * @param  string $model
@@ -1173,15 +1182,14 @@ class programModel extends model
      * @access public
      * @return array
      */
-    public function getTopPairs($model = '', $mode = '', $isQueryAll = false)
+    public function getTopPairs(string $mode = '', bool $isQueryAll = false): array
     {
         $topPairs = $this->dao->select('id,name')->from(TABLE_PROGRAM)
             ->where('type')->eq('program')
             ->andWhere('grade')->eq(1)
             ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
-            ->beginIF(!$isQueryAll)->andWhere('id')->in($this->app->user->view->programs)->fi()
             ->beginIF(strpos($mode, 'withDeleted') === false)->andWhere('deleted')->eq(0)->fi()
-            ->beginIF($model)->andWhere('model')->eq($model)->fi()
+            ->beginIF(!$isQueryAll && !$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
             ->orderBy('`order` asc')
             ->fetchPairs();
 

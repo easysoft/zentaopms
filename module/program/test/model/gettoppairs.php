@@ -1,35 +1,36 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/program.class.php';
+zdTable('user')->gen(5);
 su('admin');
 
 $program = zdTable('project');
 $program->id->range('1-5');
-$program->name->range('项目集1,项目集2');
+$program->name->range('1-5')->prefix('项目集');
 $program->type->range('program');
-$program->grade->range('1,1,0{3}');
+$program->grade->range('1{4},2');
 $program->status->range('wait,closed,wait{3}');
-$program->parent->range('0,0,1,1,2');
-$program->path->range('1,2,`1,3`,`1,4`,`2,5`')->prefix(',')->postfix(',');
+$program->parent->range('0{4},1');
+$program->path->range('1,2,3,4,`1,5`')->prefix(',')->postfix(',');
 $program->begin->range('20220112 000000:0')->type('timestamp')->format('YY/MM/DD');
 $program->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD');
+$program->deleted->range('0{3},1,0');
 $program->gen(5);
 
 /**
 
 title=测试 programModel::getTopPairs();
+timeout=0
 cid=1
-pid=1
-
-获取系统中所有顶级项目集数量         >> 2
-获取系统中所有未关闭的顶级项目集数量 >> 1
-获取系统中所有顶级项目集数量         >> 2
 
 */
 
-$programTester = new programTest();
+$modeList = array('', 'noclosed', 'withDeleted');
 
-r(count($programTester->getTopPairsTest()))               && p() && e('2'); // 获取系统中所有顶级项目集数量
-r(count($programTester->getTopPairsTest('', 'noclosed'))) && p() && e('1'); // 获取系统中所有未关闭的顶级项目集数量
-r(count($programTester->getTopPairsTest('', '', true)))   && p() && e('2'); // 获取系统中所有顶级项目集数量
+$programTester = new programTest();
+global $tester;
+$tester->loadModel('program');
+r(count($tester->program->getTopPairs()))              && p() && e('3'); // 获取系统中所有顶级项目集数量
+r(count($tester->program->getTopPairs('noclosed')))    && p() && e('2'); // 获取系统中所有未关闭的顶级项目集数量
+r(count($tester->program->getTopPairs('withDeleted'))) && p() && e('4'); // 获取系统中所有包括已删除的顶级项目集数量
+r(count($tester->program->getTopPairs('', true)))      && p() && e('3'); // 获取系统中所有顶级项目集数量

@@ -312,20 +312,6 @@ class programTest
     }
 
     /**
-     * Get top pairs.
-     *
-     * @param  string $model
-     * @param  string $mode
-     * @param  bool   $isQueryAll
-     * @access public
-     * @return array
-     */
-    public function getTopPairsTest($model = '', $mode = '', $isQueryAll = false)
-    {
-        return $this->program->getTopPairs($model, $mode, $isQueryAll);
-    }
-
-    /**
      * Get kanban group.
      *
      * @access public
@@ -428,5 +414,18 @@ class programTest
             ->fetch('grade');
 
         return array('old' => empty($oldChildGrade) ? 0 : $oldChildGrade, 'new' => empty($newChildGrade) ? 0 : $newChildGrade);
+    }
+
+    /**
+     * 获取看板统计的相关数据。
+     * Get Kanban statistics data.
+     *
+     * @access public
+     * @return array
+     */
+    public function getKanbanStatisticDataTest(): array
+    {
+        $programs = $this->program->getTopPairs('noclosed');
+        return $this->program->getKanbanStatisticData($programs);
     }
 }
