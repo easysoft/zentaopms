@@ -416,7 +416,7 @@ class executionModel extends model
             {
                 $execution->parent = $execution->project;
                 $execution->path   = ",{$execution->project},{$executionID},";
-                $this->changeProject($execution->project, $oldExecution->project, $executionID, $postData->syncStories);
+                $this->changeProject($execution->project, $oldExecution->project, $executionID, $postData->syncStories ?? 'no');
             }
 
             $this->file->updateObjectID($postData->uid, $executionID, 'execution');
