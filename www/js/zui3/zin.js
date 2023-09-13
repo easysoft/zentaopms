@@ -338,8 +338,14 @@
                 if(isDebugRequest) return;
                 toggleLoading(target, true);
             },
-            success: (data) =>
+            success(data)
             {
+                const response = this.response;
+                if(response && response.redirected && currentCode !== $.apps.getAppCode(response.url))
+                {
+                    $.apps.openApp(response.url);
+                    return;
+                }
                 updatePerfInfo(options, 'requestEnd', {dataSize: data.length});
                 options.result = 'success';
                 let hasFatal = false;
