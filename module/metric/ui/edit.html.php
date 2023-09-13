@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$unit = in_array($metric->unit, array_keys($lang->metric->unitList)) ? $metric->unit : '';
+
 formPanel
 (
     set::title(''),
@@ -78,7 +80,7 @@ formPanel
                     (
                         set::name('unit'),
                         set::items($lang->metric->unitList),
-                        set::value(zget($lang->metric->unitList, $metric->unit, $metric->unit)),
+                        set::value($unit),
                     )
                 ),
                 div
