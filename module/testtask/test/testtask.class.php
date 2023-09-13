@@ -176,6 +176,28 @@ class testtaskTest
         return array('cases' => implode(',', $cases), 'actions' => $actions);
     }
 
+    /**
+     * 测试批量指派一个测试单中的用例。
+     * Test batch assign cases in a testtask.
+     *
+     * @param  int    $taskID
+     * @param  string $account
+     * @param  array  $caseIdList
+     * @access public
+     * @return bool|array
+     */
+    public function batchAssignTest(int $taskID, string $account, array $caseIdList): bool|array
+    {
+        $result = $this->objectModel->batchAssign($taskID, $account, $caseIdList);
+        if(dao::isError()) return dao::getError();
+        if(!$result) return $result;
+
+        $cases   = $this->objectModel->dao->select('`case`, assignedTo')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->fetchPairs();
+        $actions = $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(count($caseIdList))->fetchAll();
+
+        return array('cases' => implode(',', $cases), 'actions' => $actions);
+    }
+
     public function linkCaseTest($taskID, $type)
     {
         $objects = $this->objectModel->linkCase($taskID, $type);
