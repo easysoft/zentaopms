@@ -334,29 +334,30 @@ class testcaseModel extends model
     }
 
     /**
+     * 根据指派给获取用例。
      * Get cases by assignedTo.
      *
      * @param  string $account
+     * @param  string $auto  no|unit|skip
      * @param  string $orderBy
      * @param  object $pager
-     * @param  string $auto  no|unit|skip
      * @access public
      * @return array
      */
-    public function getByAssignedTo($account, $orderBy = 'id_desc', $pager = null, $auto = 'no')
+    public function getByAssignedTo(string $account, string $auto = 'no', string $orderBy = 'id_desc', object $pager = null): array
     {
-        return $this->dao->select('t1.id as run, t1.task,t1.case,t1.version,t1.assignedTo,t1.lastRunner,t1.lastRunDate,t1.lastRunResult,t1.status as lastRunStatus,t2.id as id,t2.project,t2.pri,t2.title,t2.type,t2.openedBy,t2.color,t2.product,t2.branch,t2.module,t2.status,t2.story,t2.storyVersion,t3.name as taskName')->from(TABLE_TESTRUN)->alias('t1')
+        return $this->dao->select('t1.id AS run, t1.task, t1.case, t1.version, t1.assignedTo, t1.lastRunner, t1.lastRunDate, t1.lastRunResult, t1.status AS lastRunStatus, t2.id AS id, t2.project, t2.pri, t2.title, t2.type, t2.openedBy, t2.color, t2.product, t2.branch, t2.module, t2.status, t2.story, t2.storyVersion, t3.name AS taskName')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_TESTTASK)->alias('t3')->on('t1.task = t3.id')
             ->where('t1.assignedTo')->eq($account)
-            ->andWhere('t3.deleted')->eq(0)
-            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t3.deleted')->eq('0')
+            ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t3.status')->ne('done')
-            ->beginIF(strpos($auto, 'skip') === false and $auto != 'unit')->andWhere('t2.auto')->ne('unit')->fi()
+            ->beginIF(strpos($auto, 'skip') === false && $auto != 'unit')->andWhere('t2.auto')->ne('unit')->fi()
             ->beginIF($auto == 'unit')->andWhere('t2.auto')->eq('unit')->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll(strpos($auto, 'run') !== false? 'run' : 'id');
+            ->fetchAll(strpos($auto, 'run') !== false ? 'run' : 'id');
     }
 
     /**

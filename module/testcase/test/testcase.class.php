@@ -226,23 +226,23 @@ class testcaseTest
     }
 
     /**
+     * 测试根据指派给获取用例。
      * Test get cases by assignedTo.
      *
      * @param  string $account
+     * @param  string $auto
      * @param  string $orderBy
      * @param  object $pager
-     * @param  string $auto
      * @access public
-     * @return string
+     * @return string|bool
      */
-    public function getByAssignedToTest($account, $orderBy = 'id_desc', $pager = null, $auto = 'no')
+    public function getByAssignedToTest(string $account, string $auto = 'no', string $orderBy = 'id_desc', object $pager = null): string|bool
     {
-        $objects = $this->objectModel->getByAssignedTo($account, $orderBy = 'id_desc', $pager = null, $auto = 'no');
+        $objects = $this->objectModel->getByAssignedTo($account, $auto, $orderBy, $pager);
 
-        if(dao::isError()) return dao::getError();
+        if(dao::isError()) return false;
 
-        $ids = implode(array_keys($objects), ',');
-        return $ids;
+        return implode(',', array_keys($objects));
     }
 
     /**
