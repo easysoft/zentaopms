@@ -416,7 +416,7 @@ class buildModel extends model
         $build->bugs    = '';
 
         $build = fixer::input('post')
-            ->setDefault('project,execution,product,branch', 0)
+            ->setDefault('project,execution,product,branch,artifactRepoID', 0)
             ->setDefault('builds,stories,bugs', '')
             ->cleanInt('product')
             ->add('createdBy', $this->app->user->account)
@@ -424,7 +424,7 @@ class buildModel extends model
             ->stripTags($this->config->build->editor->create['id'], $this->config->allowedTags)
             ->join('builds', ',')
             ->join('branch', ',')
-            ->remove('resolvedBy,allchecker,files,labels,isIntegrated,uid')
+            ->remove('resolvedBy,allchecker,files,labels,isIntegrated,uid,isArtifactRepo')
             ->get();
 
         if($this->post->isIntegrated == 'yes')

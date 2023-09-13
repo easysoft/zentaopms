@@ -1876,7 +1876,7 @@ class docModel extends model
             if(!$this->checkPrivDoc($doc)) unset($docs[$id]);
         }
 
-        $bugIdList = $testReportIdList = $caseIdList = $storyIdList = $planIdList = $releaseIdList = $executionIdList = $taskIdList = $buildIdList = $testtaskIdList = $issueIdList = $meetingIdList = $designIdList = $reviewIdList = 0;
+        $bugIdList = $testReportIdList = $caseIdList = $storyIdList = $planIdList = $releaseIdList = $executionIdList = $taskIdList = $buildIdList = $testtaskIdList = $issueIdList = $meetingIdList = $designIdList = $reviewIdList = $resultIdList = 0;
 
         $userView = $this->app->user->view->products;
         if($type == 'project') $userView = $this->app->user->view->projects;
@@ -1906,6 +1906,9 @@ class docModel extends model
 
             $casePairs = $this->dao->select('id')->from(TABLE_CASE)->where($type)->eq($objectID)->andWhere('deleted')->eq('0')->andWhere($type)->in($userView)->fetchPairs('id');
             if(!empty($casePairs)) $caseIdList = implode(',', $casePairs);
+
+            $testResult = $this->dao->select('id,`case`')->from(TABLE_TESTRESULT)->where('case')->in($casePairs)->fetchPairs('id', 'case');
+            if(!empty($testResult)) $resultIdList = implode(',', array_keys($testResult));
         }
         elseif($type == 'project')
         {
@@ -1962,6 +1965,7 @@ class docModel extends model
             ->beginIF($type == 'product')
             ->orWhere("(objectType in ('story','requirement') and objectID in ($storyIdList))")
             ->orWhere("(objectType = 'release' and objectID in ($releaseIdList))")
+            ->orWhere("(objectType = 'stepResult' and objectID in ($resultIdList))")
             ->fi()
             ->beginIF($type == 'project')
             ->orWhere("(objectType = 'execution' and objectID in ($executionIdList))")
@@ -1984,6 +1988,7 @@ class docModel extends model
 
         foreach($files as $fileID => $file)
         {
+            if($file->objectType == 'stepResult') $file->caseID = $testResult[$file->objectID];
             $this->file->setFileWebAndRealPaths($file);
         }
 
@@ -2869,7 +2874,7 @@ class docModel extends model
 
         $tab  = strpos(',my,doc,product,project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'doc';
         if($type == 'mine')   $type = 'my';
-        if($type == 'custom') $type = 'team';
+        if($type == 'custom')   $type = 'team';
         if($tab == 'doc' and !common::hasPriv('doc', $type . 'Space')) return print(js::locate(helper::createLink('user', 'deny', "module=doc&method={$type}Space")));
         if($tab != 'doc' and method_exists($type . 'Model', 'setMenu'))
         {

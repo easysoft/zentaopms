@@ -726,6 +726,7 @@ class productModel extends model
             ->setDefault('createdDate', helper::now())
             ->setDefault('createdVersion', $this->config->version)
             ->setDefault('vision', $this->config->vision)
+            ->cleanINT('program,line')
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
             ->stripTags($this->config->product->editor->create['id'], $this->config->allowedTags)
@@ -739,7 +740,7 @@ class productModel extends model
         $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->create['id'], $this->post->uid);
 
         /* Lean mode relation defaultProgram. */
-        $programID = isset($product->program) ? $product->program : 0;
+        $programID = isset($product->program) ? (int)$product->program : 0;
         if($this->config->systemMode == 'light')
         {
             $programID = $this->config->global->defaultProgram;
@@ -840,6 +841,7 @@ class productModel extends model
             ->setDefault('whitelist', '')
             ->setDefault('reviewer', '')
             ->setDefault('PMT', '')
+            ->cleanINT('program,line')
             ->join('whitelist', ',')
             ->join('reviewer', ',')
             ->join('PMT', ',')
@@ -920,7 +922,7 @@ class productModel extends model
         foreach($products as $productID => $product)
         {
             $oldProduct = $oldProducts[$productID];
-            if(in_array($this->config->systemMode, array('ALM', 'PLM'))) $programID  = !isset($product->program) ? $oldProduct->program : (empty($product->program) ? 0 : $product->program);
+            if(in_array($this->config->systemMode, array('ALM', 'PLM'))) $programID  = !isset($product->program) ? $oldProduct->program : zget($product, 'program', 0);
 
             $this->dao->update(TABLE_PRODUCT)
                 ->data($product)
@@ -1109,7 +1111,7 @@ class productModel extends model
         if($browseType == 'unplan')         $stories = $this->story->getByPlan($productID, $queryID, $modules, '', $type, $sort, $pager);
         if($browseType == 'allstory')       $stories = $this->story->getProductStories($productID, $branch, $modules, 'all', $type, $sort, true, '', $pager);
         if($browseType == 'bymodule')       $stories = $this->story->getProductStories($productID, $branch, $modules, 'all', $type, $sort, true, '', $pager);
-        if($browseType == 'bysearch')       $stories = $this->story->getBySearch($productID, $branch, $queryID, $sort, '', $type, '', $pager);
+        if($browseType == 'bysearch')       $stories = $this->story->getBySearch($productID, $branch, $queryID, $sort, '', $type, '', '', $pager);
         if($browseType == 'assignedtome')   $stories = $this->story->getByAssignedTo($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
         if($browseType == 'openedbyme')     $stories = $this->story->getByOpenedBy($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
         if($browseType == 'reviewedbyme')   $stories = $this->story->getByReviewedBy($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
@@ -1842,15 +1844,16 @@ class productModel extends model
             ->from(TABLE_BUG)
             ->where('deleted')->eq(0)
             ->beginIF(!empty($products))->andWhere('product')->in($products)->fi()
-            ->groupBy('product')
+            ->groupBy('product, status, resolution')
             ->fetchAll();
         $productBugs = array();
         foreach($bugs as $bug)
         {
             if(!isset($productBugs[$bug->product])) $productBugs[$bug->product] = array('unresolved' => 0, 'fixed' => 0, 'closed' => 0, 'total' => 0);
-            if($bug->status == 'active' or  $bug->resolution == 'postponed') $productBugs[$bug->product]['unresolved'] += $bug->c;
-            if($bug->status == 'closed' and $bug->resolution == 'fixed')     $productBugs[$bug->product]['fixed']      += $bug->c;
-            if($bug->status == 'closed')                                     $productBugs[$bug->product]['closed']     += $bug->c;
+            if($bug->status == 'active' || ($bug->status != 'closed' && $bug->resolution == 'postponed')) $productBugs[$bug->product]['unresolved'] += $bug->c;
+
+            if($bug->status == 'closed' && $bug->resolution == 'fixed') $productBugs[$bug->product]['fixed']  += $bug->c;
+            if($bug->status == 'closed')                                $productBugs[$bug->product]['closed'] += $bug->c;
             $productBugs[$bug->product]['total'] += $bug->c;
         }
 
@@ -1905,6 +1908,9 @@ class productModel extends model
         /* 3. Update projectStatsTime in config. */
         $this->loadModel('setting')->setItem('system.common.global.productStatsTime', $now);
         $this->app->config->global->productStatsTime = $now;
+
+        /* 4. Clear actions older than 30 days. */
+        $this->loadModel('action')->cleanActions();
     }
 
     /**
@@ -1923,7 +1929,6 @@ class productModel extends model
      */
     public function getStats($orderBy = 'order_asc', $pager = null, $status = 'noclosed', $line = 0, $storyType = 'story', $programID = 0, $param = 0, $shadow = 0)
     {
-        $this->loadModel('report');
         $this->loadModel('story');
         $this->loadModel('bug');
 

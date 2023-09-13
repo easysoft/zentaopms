@@ -82,6 +82,9 @@ $lang->user->submit           = 'Submit';
 $lang->user->resetPWD         = 'Reset Password';
 $lang->user->resetTitle       = 'Admin reset the password';
 
+$lang->user->abbr = new stdclass();
+$lang->user->abbr->id = 'ID';
+
 $lang->user->legendBasic        = 'Informations de Base';
 $lang->user->legendContribution = 'Contribution';
 

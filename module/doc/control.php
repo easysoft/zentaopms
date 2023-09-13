@@ -1156,6 +1156,7 @@ class doc extends control
         $objectType = isset($lib->type) ? $lib->type : 'custom';
         $type       = $objectType == 'execution' && $this->app->tab != 'execution' ? 'project' : $objectType;
         $objectID   = zget($doc, $type, 0);
+        if($objectType == 'custom') $this->lang->doc->menu->custom['alias'] = 'teamspace,view';
         list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($type, $objectID, $doc->lib, $appendLib);
 
         /* Get doc. */

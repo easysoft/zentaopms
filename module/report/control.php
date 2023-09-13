@@ -176,7 +176,7 @@ class report extends control
         $data = array();
         if(!$account)
         {
-            $data['users'] = $dept ? count($accounts) :  (count($users) - 1);
+            $data['users'] = $dept ? count($accounts) : (count($users) - 1);
         }
         else
         {

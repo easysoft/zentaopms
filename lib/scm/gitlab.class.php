@@ -146,7 +146,7 @@ class gitlab
         {
             $params['page'] = $page;
             $list = $this->fetch($api, $params);
-            if(empty($list)) break;
+            if(empty($list) || !is_array($list)) break;
 
             foreach($list as $tag) $tags[] = $tag->name;
             if(count($list) < $params['per_page']) break;
@@ -173,7 +173,7 @@ class gitlab
         {
             $params['page'] = $page;
             $branchList = $this->fetch("branches", $params);
-            if(empty($branchList)) break;
+            if(empty($branchList) || !is_array($branchList)) break;
 
             foreach($branchList as $branch)
             {
@@ -260,7 +260,6 @@ class gitlab
         if(empty($results) or isset($results->message)) return array();
 
         $blames   = array();
-        $revLine  = 0;
         $revision = '';
 
         $lineNumber = 1;
@@ -305,22 +304,23 @@ class gitlab
         if(!scm::checkRevision($fromRevision) and $extra != 'isBranchOrTag') return array();
         if(!scm::checkRevision($toRevision) and $extra != 'isBranchOrTag')   return array();
 
-        $api    = "compare";
-        $params = array('from' => $fromRevision, 'to' => $toRevision);
+        $sameVersion = $fromRevision == $toRevision . '^';
+        $api    = $sameVersion ? "commits/$toRevision/diff" : "compare";
+        $params = array('from' => $fromRevision, 'to' => $toRevision, 'straight' => true);
         if($fromProject) $params['from_project_id'] = $fromProject;
 
         if($toRevision == 'HEAD' and $this->branch) $params['to'] = $this->branch;
-        $results = $this->fetch($api, $params);
-        if(!isset($results->diffs)) return array();
+        $results = $this->fetch($api, $sameVersion ? array() : $params);
 
-        foreach($results->diffs as $key => $diff)
-        {
-            if($path != '' and strpos($diff->new_path, $path) === false) unset($results->diffs[$key]);
-        }
-        $diffs = $results->diffs;
+        $diffs = isset($results->diffs) ? $results->diffs : array();
+        if($sameVersion && is_array($results)) $diffs = $results;
+        if(!$diffs) return array();
+
         $lines = array();
         foreach($diffs as $diff)
         {
+            if($path != '' && strpos($diff->new_path, $path) === false) continue;
+
             $lines[] = sprintf("diff --git a/%s b/%s", $diff->old_path, $diff->new_path);
             $lines[] = sprintf("index %s ... %s %s ", $fromRevision, $toRevision, $diff->b_mode);
             $lines[] = sprintf("--a/%s", $diff->old_path);
@@ -374,7 +374,7 @@ class gitlab
             $list = $this->tree($parent, 0);
             $file = new stdclass();
 
-            foreach($list as $node) if($node->path == $entry) $file = $node;
+            if(!empty($list)) foreach($list as $node) if($node->path == $entry) $file = $node;
 
             $commits = $this->getCommitsByPath($entry);
 
@@ -789,7 +789,7 @@ class gitlab
             $allResults = array();
             if($multi)
             {
-                $results = commonModel::httpWithHeader($api . "&page=1");
+                $results = commonModel::http($api . "&page=1", null, array(), array(), 'data', 'GET', 30, true, false);
                 if(empty($results['header']['X-Total-Pages'])) return array();
 
                 $totalPages = $results['header']['X-Total-Pages'];
@@ -829,15 +829,15 @@ class gitlab
         }
         else
         {
-            list($response, $httpCode) = commonModel::http($api, null, array(), array(), 'data', 'POST', 30, true, false);
+            $response = commonModel::http($api, null, array(), array(), 'data', 'POST', 30, true, false);
             if(!empty(commonModel::$requestErrors))
             {
                 commonModel::$requestErrors = array();
                 return array();
             }
 
-            if($httpCode == 500 or $httpCode == 404) return array();
-            return json_decode($response);
+            if(in_array($response[1], array(500, 404, 401))) return array();
+            return json_decode($response['body']);
         }
     }
 
@@ -867,7 +867,6 @@ class gitlab
     public function parseLog($logs)
     {
         $parsedLogs = array();
-        $i          = 0;
         foreach($logs as $commit)
         {
             if(!isset($commit->id)) continue;

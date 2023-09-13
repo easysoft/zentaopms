@@ -17,6 +17,7 @@ $lang->compile->atTime      = 'Execution Time';
 $lang->compile->testtask    = 'Testtask';
 $lang->compile->tag         = 'Tag';
 $lang->compile->times       = 'Times';
+$lang->compile->repo        = 'Repo';
 $lang->compile->createdBy   = 'Created By';
 $lang->compile->createdDate = 'Created Date';
 $lang->compile->updateDate  = 'Update Date';
@@ -32,3 +33,7 @@ $lang->compile->statusList['create_fail'] = 'Failed to create';
 $lang->compile->statusList['timeout']     = 'Timeout';
 $lang->compile->statusList['canceled']    = 'Canceled';
 $lang->compile->statusList['failed']      = 'Build failed';
+$lang->compile->statusList['skipped']     = 'Skipped';
+
+$lang->compile->featureBar['browse']['job']     = 'List';
+$lang->compile->featureBar['browse']['compile'] = 'History';

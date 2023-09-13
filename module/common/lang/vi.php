@@ -116,6 +116,10 @@ $lang->selectedItems = 'Đã chọn <strong>{0}</strong> mục';
 
 $lang->future      = 'Đang đợi';
 $lang->year        = 'Năm';
+$lang->month       = 'Month';
+$lang->hour        = 'Hour';
+$lang->minute      = 'Minute';
+$lang->second      = 'Second';
 $lang->workingHour = 'giờ';
 
 $lang->idAB         = 'ID';
@@ -127,11 +131,14 @@ $lang->typeAB       = 'Loại';
 $lang->nameAB       = 'Name';
 
 $lang->common = new stdclass();
-$lang->common->common  = 'Module chung';
-$lang->devops->common  = 'DevOps';
-$lang->repo->codeRepo  = 'Code Repo';
-$lang->app->common     = 'APP';
-$lang->app->serverLink = 'Server Link';
+$lang->common->common   = 'Module chung';
+$lang->devops->common   = 'DevOps';
+$lang->repo->codeRepo   = 'Code Repo';
+$lang->app->common      = 'APP';
+$lang->app->serverLink  = 'Server Link';
+$lang->space->common    = 'Service';
+$lang->store->common    = 'Store';
+$lang->instance->common = 'Instance';
 
 global $config;
 list($programModule, $programMethod)     = explode('-', $config->programLink);
@@ -222,12 +229,29 @@ $lang->system->menu->calendar = array('link' => 'Calendar|my|calendar|', 'subMod
 $lang->measurement = new stdclass();
 $lang->measurement->menu = new stdclass();
 
-$lang->devops->compile  = 'Pipelines';
-$lang->devops->mr       = 'Merge Request';
-$lang->devops->repo     = 'Repo';
-$lang->devops->rules    = 'Rule';
-$lang->devops->settings = 'Setting Merge Request';
-$lang->devops->set      = 'Set';
+$lang->devops->compile     = 'Pipelines';
+$lang->devops->mr          = 'Merge Request';
+$lang->devops->repo        = 'Repo';
+$lang->devops->rules       = 'Rule';
+$lang->devops->settings    = 'Setting Merge Request';
+$lang->devops->platform    = 'Platform';
+$lang->devops->set         = 'Set';
+$lang->devops->artifact    = 'Artifact';
+$lang->devops->environment = 'Environment';
+$lang->devops->resource    = 'Resource';
+$lang->devops->dblist      = 'Database';
+$lang->devops->domain      = 'Domain';
+$lang->devops->oss         = 'Oss';
+$lang->devops->host        = 'Host';
+$lang->devops->account     = 'Account';
+$lang->devops->serverroom  = 'IDC';
+$lang->devops->deploy      = 'Deploy';
+$lang->devops->provider    = 'IDC Provider';
+$lang->devops->cpuBrand    = 'CPU Brand';
+$lang->devops->city        = 'IDC Location';
+$lang->devops->os          = 'OS Version';
+$lang->devops->stage       = 'Stage';
+$lang->devops->service     = 'Service';
 
 $lang->searchTips = '';
 $lang->searchAB   = 'Tìm ki?m';

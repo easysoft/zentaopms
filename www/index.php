@@ -42,6 +42,7 @@ $config->installedVersion = $app->getInstalledVersion();
 if($config->version != $config->installedVersion) die(header('location: upgrade.php'));
 
 /* Run the app. */
+$app->setStartTime($startTime);
 $common = $app->loadCommon();
 
 /* Check the request is getconfig or not. */

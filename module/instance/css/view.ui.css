@@ -1,0 +1,9 @@
+.detail-header .icon-info-sign {color: rgba(var(--color-secondary-500-rgb),var(--tw-bg-opacity));}
+#dynamicPager {justify-content: flex-end;}
+#dynamicPager .ghost {color: rgb(131, 138, 157);}
+#dynamicTable a {color: inherit;}
+.progress-container {word-break: keep-all; white-space: nowrap;}
+.progress-container i {margin: auto; margin-right: 6px;}
+.progress-container .progress {margin: auto; width: 100%; height: .7rem; margin-left: 6px; margin-right: 15px;}
+.label-dot {display: inline-block; width: 8px; height: 8px; padding: 0; line-height: 20px; text-indent: -9999em; border-radius: 50%;}
+#instanceInfoContainer .table>*>tr>* {padding: .5rem .3rem;}

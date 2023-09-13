@@ -3942,6 +3942,21 @@ class execution extends control
     }
 
     /**
+     * 获取执行下拉列表用于切换不同的执行。
+     * Drop menu page.
+     *
+     * @param  int    $executionID 已经打开的页面对应的执行ID
+     * @param  string $module 链接里要访问的模块
+     * @param  string $method 链接里要访问的方法
+     * @access public
+     * @return void
+     */
+    public function ajaxGetDropMenuData(int $executionID, string $module, string $method)
+    {
+        $this->ajaxGetDropMenu($executionID, $module, $method, '');
+    }
+
+    /**
      * Update order.
      *
      * @access public
@@ -4086,7 +4101,7 @@ class execution extends control
         $this->view->productID        = $productID;
         $this->view->pager            = $pager;
         $this->view->orderBy          = $orderBy;
-        $this->view->users            = $this->loadModel('user')->getPairs('noletter', '', 0, array_unique(array_column($executionStats, 'PM')));
+        $this->view->users            = $this->loadModel('user')->getPairs('noletter', '', 0, array_unique(helper::arrayColumn($executionStats, 'PM')));
         $this->view->projects         = array('') + $this->project->getPairsByProgram();
         $this->view->status           = $status;
         $this->view->from             = $from;
@@ -4198,16 +4213,13 @@ class execution extends control
             {
                 $execution->PM            = zget($users, $execution->PM);
                 $execution->status        = isset($execution->delay) ? $executionLang->delayed : $this->processStatus('execution', $execution);
-                $execution->totalEstimate = $execution->hours->totalEstimate;
-                $execution->totalConsumed = $execution->hours->totalConsumed;
-                $execution->totalLeft     = $execution->hours->totalLeft;
-                $execution->progress      = $execution->hours->progress . '%';
+                $execution->progress     .= '%';
                 $execution->name          = isset($execution->title) ? $execution->title : $execution->name;
                 if($this->app->tab == 'project' and ($project->model == 'agileplus' or $project->model == 'waterfallplus')) $execution->method = zget($executionLang->typeList, $execution->type);
 
                 if($this->post->exportType == 'selected')
                 {
-                    $checkedItem = $this->cookie->checkedItem;
+                    $checkedItem = $this->post->checkedItem;
                     if(strpos(",$checkedItem,", ",{$execution->id},") === false) unset($executionStats[$i]);
                 }
             }

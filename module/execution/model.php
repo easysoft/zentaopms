@@ -415,6 +415,7 @@ class executionModel extends model
             ->setDefault('days', '0')
             ->setDefault('team', $this->post->name)
             ->setDefault('parent', $this->post->project)
+            ->cleanINT('project')
             ->setIF($this->post->parent, 'parent', $this->post->parent)
             ->setIF($this->post->heightType == 'auto', 'displayCards', 0)
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
@@ -467,7 +468,7 @@ class executionModel extends model
         }
 
         $this->lang->error->unique = $this->lang->error->repeat;
-        $sprintProject = isset($sprint->project) ? $sprint->project : '0';
+        $sprintProject = isset($sprint->project) ? (int)$sprint->project : '0';
         $this->dao->insert(TABLE_EXECUTION)->data($sprint)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->execution->create->requiredFields, 'notempty')
@@ -607,6 +608,7 @@ class executionModel extends model
             ->setIF($this->post->status == 'suspended' and $oldExecution->status != 'suspended', 'suspendedDate', helper::today())
             ->setIF($oldExecution->type == 'stage', 'project', $oldExecution->project)
             ->setDefault('days', '0')
+            ->cleanINT('project')
             ->setDefault('team', $this->post->name)
             ->join('whitelist', ',')
             ->stripTags($this->config->execution->editor->edit['id'], $this->config->allowedTags)
@@ -650,7 +652,7 @@ class executionModel extends model
 
         /* Update data. */
         $this->lang->error->unique = $this->lang->error->repeat;
-        $executionProject = isset($execution->project) ? $execution->project : $oldExecution->project;
+        $executionProject = isset($execution->project) ? (int)$execution->project : $oldExecution->project;
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->execution->edit->requiredFields, 'notempty')
@@ -945,7 +947,7 @@ class executionModel extends model
         {
             $oldExecution = $oldExecutions[$executionID];
             $team         = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution');
-            $projectID    = isset($execution->project) ? $execution->project : $oldExecution->project;
+            $projectID    = isset($execution->project) ? (int)$execution->project : $oldExecution->project;
 
             if(isset($execution->project))
             {
@@ -2237,7 +2239,7 @@ class executionModel extends model
         }
         elseif($module == 'repo')
         {
-            $link = helper::createLink('repo', 'browse', "repoID=0&branchID=&executionID=%s");
+            $link = helper::createLink('repo', 'browse', "repoID=0&branchID=&executionID=%s") . '#app=execution';
         }
         elseif($module == 'doc')
         {
@@ -2620,7 +2622,7 @@ class executionModel extends model
         $execution->days          = $execution->days ? $execution->days : '';
         $execution->totalEstimate = round((float)$total->totalEstimate, 1);
         $execution->totalConsumed = round((float)$total->totalConsumed, 1);
-        $execution->totalLeft     = round((float)($total->totalLeft - $closedTotalLeft), 1);
+        $execution->totalLeft     = round((float)$total->totalLeft - (float)$closedTotalLeft, 1);
 
         $execution = $this->loadModel('file')->replaceImgURL($execution, 'desc');
         if($setImgSize) $execution->desc = $this->file->setImgSize($execution->desc);
@@ -5365,10 +5367,10 @@ class executionModel extends model
             $title    = $execution->ipdStage['canStart'] ? '' : sprintf($this->lang->execution->disabledTip->startTip, $this->lang->stage->ipdTypeList[$execution->ipdStage['preAttribute']], $this->lang->stage->ipdTypeList[$execution->attribute]);
             $disabled = $execution->ipdStage['canStart'] ? '' : 'disabled';
         }
-        common::printIcon('execution', 'start', "executionID={$execution->id}", $execution, 'list', '', '', 'iframe', true, $disabled, $title);
+        echo common::buildIconButton('execution', 'start', "executionID={$execution->id}", $execution, 'list', '', '', 'iframe', true, $disabled, $title, '', empty($disabled));
 
         $class = !empty($execution->children) ? 'disabled' : '';
-        common::printIcon('task', 'create', "executionID={$execution->id}", '', 'list', '', '', $class, false, "data-app='execution'");
+        echo $this->buildMenu('task', 'create', "executionID={$execution->id}", '', 'browse', '', '', $class, false, "data-app='execution'");
 
         if(empty($project)) $project = $this->loadModel('project')->getByID($execution->project);
         if($execution->type == 'stage' or ($this->app->tab == 'project' and !empty($project->model) and $project->model == 'waterfallplus'))
@@ -5377,16 +5379,16 @@ class executionModel extends model
             $disabled     = ($isCreateTask and $execution->type == 'stage') ? '' : ' disabled';
             $title        = !$isCreateTask ? $this->lang->programplan->error->createdTask : $this->lang->programplan->createSubPlan;
             $title        = (!empty($disabled) and $execution->type != 'stage') ? $this->lang->programplan->error->notStage : $title;
-            common::printIcon('programplan', 'create', "program={$execution->project}&productID=$productID&planID=$execution->id", $execution, 'list', 'split', '', $disabled, '', '', $title);
+            echo $this->buildMenu('programplan', 'create', "program={$execution->project}&productID=$productID&planID=$execution->id", $execution, 'browse', 'split', '', $disabled, '', '', $title);
         }
 
         if($execution->type == 'stage')
         {
-            common::printIcon('programplan', 'edit', "stageID=$execution->id&projectID=$execution->project", $execution, 'list', '', '', 'iframe', true);
+            echo $this->buildMenu('programplan', 'edit', "stageID=$execution->id&projectID=$execution->project", $execution, 'browse', '', '', 'iframe', true);
         }
         else
         {
-            common::printIcon('execution', 'edit', "executionID=$execution->id", $execution, 'list', '', '', 'iframe', true);
+            echo $this->buildMenu('execution', 'edit', "executionID=$execution->id", $execution, 'browse', '', '', 'iframe', true);
         }
 
         $disabled = !empty($execution->children) ? ' disabled' : '';
@@ -5400,17 +5402,15 @@ class executionModel extends model
                 $ipdDisabled = ' disabled ';
                 $title       = $execution->attribute == 'launch' ? $this->lang->execution->disabledTip->launchTip : $this->lang->execution->disabledTip->closeTip;
             }
-            common::printIcon('execution', 'close', "stageID=$execution->id", $execution, 'list', 'off', 'hiddenwin' , $disabled . $ipdDisabled . ' iframe', true, '', $title);
+            echo common::buildIconButton('execution', 'close', "stageID={$execution->id}", $execution, 'list', 'off', 'hiddenwin', $disabled . $ipdDisabled . ' iframe', true, (!empty($disabled) || !empty($ipdDisabled)) ? ' disabled' : '', $title, 0, empty($disabled) && empty($ipdDisabled));
         }
         elseif($execution->status == 'closed' and common::hasPriv('execution', 'activate', $execution))
         {
-            common::printIcon('execution', 'activate', "stageID=$execution->id", $execution, 'list', 'magic', 'hiddenwin' , $disabled . ' iframe', true, '', $this->lang->execution->activate);
+            echo $this->buildMenu('execution', 'activate', "stageID=$execution->id", $execution, 'browse', 'magic', 'hiddenwin' , $disabled . ' iframe', true, '', $this->lang->execution->activate);
         }
 
-        if(common::hasPriv('execution', 'delete', $execution))
-        {
-            common::printIcon('execution', 'delete', "stageID=$execution->id&confirm=no", $execution, 'list', 'trash', 'hiddenwin' , $disabled, '', '', $this->lang->delete);
-        }
+        if(common::hasPriv('execution', 'delete', $execution)) echo $this->buildMenu('execution', 'delete', "stageID=$execution->id&confirm=no", $execution, 'browse', 'trash', 'hiddenwin' , $disabled, '', '', $this->lang->delete);
+
         echo '</td>';
         echo '</tr>';
 
@@ -6141,7 +6141,7 @@ class executionModel extends model
             if(!isset($sortedExecutions[$executionID]) and isset($executions[$executionID])) $sortedExecutions[$executionID] = $executions[$executionID];
 
             $children = isset($childExecutions[$executionID]) ? $childExecutions[$executionID] : array();
-            if(!empty($children)) $sortedExecutions += $this->resetExecutionSorts($executions, $children, $childExecutions);
+            if(!empty($children)) $sortedExecutions += $this->resetExecutionSorts($executions, $children);
         }
         return $sortedExecutions;
     }

@@ -1,0 +1,2 @@
+#mainContent {display: flex;}
+.border-hover:hover {border-color: var(--color-primary-500)}

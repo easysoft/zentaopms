@@ -149,4 +149,5 @@ $(function()
 <?php js::set('draft', $doc->draft);?>
 <?php js::set('type', 'doc');?>
 <?php js::set('titleNotEmpty', sprintf($lang->error->notempty, $lang->doc->title));?>
+<?php include '../../ai/view/inputinject.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

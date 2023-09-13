@@ -354,4 +354,5 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
 <script>
 $(function(){parent.$('body.hide-modal-close').removeClass('hide-modal-close');})
 </script>
+<?php include '../../ai/view/inputinject.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

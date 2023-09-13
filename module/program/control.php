@@ -75,7 +75,7 @@ class program extends control
         }
 
         /* Get PM id list. */
-        $accounts   = array_unique(array_column(json_decode(json_encode($programs), true), 'PM'));
+        $accounts   = array_unique(helper::arrayColumn($programs, 'PM'));
         $hasProject = false;
         foreach($programs as $program)
         {
@@ -656,7 +656,7 @@ class program extends control
 
                 if($this->post->exportType == 'selected')
                 {
-                    $checkedItem = $this->cookie->checkedItem;
+                    $checkedItem = $this->post->checkedItem;
                     if(strpos(",$checkedItem,", ",{$program->id},") === false) unset($programs[$i]);
                 }
             }

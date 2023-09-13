@@ -1160,18 +1160,8 @@ EOT;
         return $js;
     }
 
-    /**
-     * 导出$config到js，因为js的createLink()方法需要获取config信息。
-     * Export the config vars for createLink() js version.
-     *
-     * @static
-     * @access public
-     * @return void
-     */
-    static public function exportConfigVars()
+    static function getJSConfigVars()
     {
-        if(!function_exists('json_encode')) return false;
-
         global $app, $config, $lang;
         $defaultViewType = $app->getViewType();
         $themeRoot       = $app->getWebRoot() . 'theme/';
@@ -1180,7 +1170,7 @@ EOT;
         $clientLang      = $app->getClientLang();
         $runMode         = defined('RUN_MODE') ? RUN_MODE : '';
         $requiredFields  = '';
-        if(isset($config->$moduleName->$methodName->requiredFields)) $requiredFields = str_replace(' ', '', $config->$moduleName->$methodName->requiredFields);
+        if(isset($config->$moduleName->$methodName->requiredFields)) $requiredFields = str_replace(' ', '', (string) $config->$moduleName->$methodName->requiredFields);
 
         $jsConfig = new stdclass();
         $jsConfig->webRoot        = $config->webRoot;
@@ -1199,21 +1189,41 @@ EOT;
         $jsConfig->clientLang     = $clientLang;
         $jsConfig->requiredFields = $requiredFields;
         $jsConfig->router         = $app->server->SCRIPT_NAME;
-        $jsConfig->save           = isset($lang->save) ? $lang->save : '';
+        $jsConfig->save           = $lang->save ?? '';
         $jsConfig->runMode        = $runMode;
-        $jsConfig->timeout        = isset($config->timeout) ? $config->timeout : '';
-        $jsConfig->pingInterval   = isset($config->pingInterval) ? $config->pingInterval : '';
+        $jsConfig->timeout        = $config->timeout ?? '';
+        $jsConfig->pingInterval   = $config->pingInterval ?? '';
         $jsConfig->onlybody       = zget($_GET, 'onlybody', 'no');
+        $jsConfig->version        = $config->version;
         $jsConfig->tabSession     = $config->tabSession;
         if($config->tabSession and helper::isWithTID()) $jsConfig->tid = zget($_GET, 'tid', '');
 
+        return $jsConfig;
+    }
+
+    /**
+     * 导出$config到js，因为js的createLink()方法需要获取config信息。
+     * Export the config vars for createLink() js version.
+     *
+     * @static
+     * @access public
+     * @return void
+     */
+    static public function exportConfigVars()
+    {
+        if(!function_exists('json_encode')) return false;
+
+        global $lang;
+
+        $jsConfig = static::getJSConfigVars();
+
         $jsLang = new stdclass();
-        $jsLang->submitting   = isset($lang->loading) ? $lang->loading : '';
+        $jsLang->submitting   = $lang->loading ?? '';
         $jsLang->save         = $jsConfig->save;
-        $jsLang->expand       = isset($lang->expand)  ? $lang->expand  : '';
-        $jsLang->timeout      = isset($lang->timeout) ? $lang->timeout : '';
-        $jsLang->confirmDraft = isset($lang->confirmDraft) ? $lang->confirmDraft : '';
-        $jsLang->resume       = isset($lang->resume)  ? $lang->resume  : '';
+        $jsLang->expand       = $lang->expand ?? '';
+        $jsLang->timeout      = $lang->timeout ?? '';
+        $jsLang->confirmDraft = $lang->confirmDraft ?? '';
+        $jsLang->resume       = $lang->resume ?? '';
         $jsLang->program      = zget($lang->program, 'common', '');
         $jsLang->project      = zget($lang->project, 'common', '');
         $jsLang->product      = zget($lang->product, 'common', '');
@@ -1300,12 +1310,12 @@ EOT;
         elseif(is_bool($value))
         {
             $value = $value ? 'true' : 'false';
-            $js .= "{$prefix}{$key} = $value;";
+            $js   .= "{$prefix}{$key} = $value;";
         }
         else
         {
-            $value = addslashes($value);
-            $js .= "{$prefix}{$key} = '{$value}';";
+            $value = empty($value) ? '' : addslashes($value);
+            $js   .= "{$prefix}{$key} = '{$value}';";
         }
         $js .= static::end($newline = false);
         echo $js;

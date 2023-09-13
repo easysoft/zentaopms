@@ -37,7 +37,14 @@ class install extends control
         if(!isset($this->config->installed) or !$this->config->installed) $this->session->set('installing', true);
 
         $this->view->title = $this->lang->install->welcome;
+
         if(!isset($this->view->versionName)) $this->view->versionName = $this->config->version; // If the versionName variable has been defined in the max version, it cannot be defined here to avoid being overwritten.
+        if($this->config->inQuickon)
+        {
+            $devopsName = substr($this->view->versionName, 0, 3) == 'IPD' ? 'DevOps ' : 'DevOps';
+            $this->view->versionName = $devopsName . $this->view->versionName;
+        }
+
         $this->display();
     }
 
@@ -306,6 +313,15 @@ class install extends control
         $installFile = $this->app->getAppRoot() . 'www/install.php';
         $upgradeFile = $this->app->getAppRoot() . 'www/upgrade.php';
         $installFileDeleted = ($canDelFile and file_exists($installFile)) ? unlink($installFile) : false;
+
+        if($this->config->inQuickon)
+        {
+            $this->lang->install->successLabel       = str_replace('IPD', '', $this->lang->install->successLabel);
+            $this->lang->install->successNoticeLabel = str_replace('IPD', '', $this->lang->install->successNoticeLabel);
+            $this->config->version = $this->lang->{$this->config->edition . 'Name'} . str_replace(array('max', 'biz', 'ipd'), '', $this->config->version);
+            $devopsName = substr($this->config->version, 0, 3) == 'IPD' ? 'DevOps ' : 'DevOps';
+            $this->config->version = $devopsName . $this->config->version;
+        }
 
         if($canDelFile and file_exists($upgradeFile)) unlink($upgradeFile);
         unset($_SESSION['installing']);

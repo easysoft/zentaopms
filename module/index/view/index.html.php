@@ -23,6 +23,7 @@ js::set('manualText',    $lang->manual);
 js::set('manualUrl',     ((!empty($config->isINT)) ? $config->manualUrl['int'] : $config->manualUrl['home']) . '&theme=' . $_COOKIE['theme']);
 js::set('isAdminUser',   $this->app->user->admin);
 js::set('isIntranet',    helper::isIntranet());
+js::set('showFeatures',  $showFeatures);
 ?>
 <style>
 #versionTitle {margin: 8px 3px 0px 0px; background-image: url(<?php echo $config->webRoot . 'theme/default/images/main/version-upgrade.svg';?>);}
@@ -91,7 +92,7 @@ js::set('isIntranet',    helper::isIntranet());
       <?php $versionName = $lang->liteName . $config->liteVersion;?>
       <?php else:?>
       <?php $version     = $config->version;?>
-      <?php $versionName = $lang->pmsName . $config->version;?>
+      <?php $versionName = ($config->inQuickon ? 'DevOps' : '') . $lang->pmsName . $config->version;?>
       <a href='javascript:void(0)' id='bizLink' class='btn btn-link' style='color: #B57D4F;'><span class='upgrade'><?php echo $lang->bizName;?></span> <i class='text-danger icon-pro-version'></i></a>
       <?php endif;?>
       <a href='<?php echo $lang->website;?>' class="btn btn-sm btn-link" target='_blank' title='<?php echo $version;?>'>

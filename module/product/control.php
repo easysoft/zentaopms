@@ -387,6 +387,7 @@ class product extends control
         $this->view->projectProducts = isset($projectProducts) ? $projectProducts : array();
         $this->view->storyType       = $storyType;
         $this->view->from            = $this->app->tab;
+        $this->view->isProjectStory  = $isProjectStory;
         $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'story', $showModule) : array();
         $this->view->project         = $project;
         $this->display();
@@ -1515,15 +1516,9 @@ class product extends control
             {
                 $product->line              = zget($lines, $product->line, '');
                 $product->manager           = zget($users, $product->PO, '');
-                $product->draftStories      = (int)$product->stories['draft'];
-                $product->activeStories     = (int)$product->stories['active'];
-                $product->changedStories    = (int)$product->stories['changing'];
-                $product->reviewingStories  = (int)$product->stories['reviewing'];
-                $product->closedStories     = (int)$product->stories['closed'];
-                $product->totalStories      = $product->activeStories + $product->changedStories + $product->draftStories + $product->closedStories + $product->reviewingStories;
+                $product->changedStories    = (int)$product->changingStories;
                 $product->storyCompleteRate = ($product->totalStories == 0 ? 0 : round($product->closedStories / $product->totalStories, 3) * 100) . '%';
-                $product->unResolvedBugs    = (int)$product->unResolved;
-                $product->assignToNullBugs  = (int)$product->assignToNull;
+                $product->unResolvedBugs    = (int)$product->unresolvedBugs;
                 $product->bugFixedRate      = (($product->unResolved + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unResolved + $product->fixedBugs), 3) * 100) . '%';
                 $product->program           = $product->programName;
 
@@ -1551,7 +1546,7 @@ class product extends control
 
                 if($this->post->exportType == 'selected')
                 {
-                    $checkedItem = $this->cookie->checkedItem;
+                    $checkedItem = $this->post->checkedItem;
                     if(strpos(",$checkedItem,", ",{$product->id},") === false) unset($productStats[$i]);
                 }
             }

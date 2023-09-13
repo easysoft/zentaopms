@@ -89,6 +89,10 @@
                 {
                     $commonTitle = $lang->URCommon . ' : ';
                 }
+                elseif(isset($lang->doc->fileType->{$file->objectType}))
+                {
+                    $commonTitle = $lang->doc->fileType->{$file->objectType};
+                }
                 else
                 {
                     if(!isset($lang->{$file->objectType}->common)) $app->loadLang($file->objectType);
@@ -96,10 +100,21 @@
                 }
                 echo $commonTitle;
                 ?>
-                <?php $isonlybody = $file->objectType != 'doc';?>
-                <a title='<?php if(isset($sourcePairs[$file->objectType][$file->objectID])) echo $sourcePairs[$file->objectType][$file->objectID];?>' href='<?php echo $this->createLink(($file->objectType == 'requirement' ? 'story' : $file->objectType), 'view', "objectID=$file->objectID", '', $isonlybody);?>' class='<?php if($isonlybody) echo "iframe";?>' data-width='90%'>
-                  <?php if(isset($sourcePairs[$file->objectType][$file->objectID])) echo $sourcePairs[$file->objectType][$file->objectID];?>
-                </a>
+                <?php
+                $isonlybody   = $file->objectType != 'doc';
+                $fileObjectID = isset($sourcePairs[$file->objectType][$file->objectID]) ? $sourcePairs[$file->objectType][$file->objectID] : $file->objectID;
+                $moduleName   = $file->objectType;
+                $methodName   = 'view';
+                $params       = "objectID={$file->objectID}";
+                if($file->objectType == 'requirement') $moduleName = 'story';
+                if($file->objectType == 'stepResult')
+                {
+                    $moduleName = 'testtask';
+                    $methodName = 'results';
+                    $params     = "runID=0&caseID={$file->caseID}";
+                }
+                ?>
+                <a title='<?php echo $fileObjectID;?>' href='<?php echo $this->createLink($moduleName, $methodName, $params, '', $isonlybody);?>' class='<?php if($isonlybody) echo "iframe";?>' data-width='90%'><?php echo $file->objectID;?></a>
               </td>
               <td><?php echo $file->extension;?></td>
               <td><?php echo number_format($file->size / 1024, 1) . 'K';?></td>

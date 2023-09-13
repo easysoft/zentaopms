@@ -378,4 +378,5 @@ $('#osBox').next('.table-col').remove();
 $('#typeBox').closest('tr').append('<td>' + browser + '</td>');
 </script>
 <?php endif;?>
+<?php include '../../ai/view/inputinject.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

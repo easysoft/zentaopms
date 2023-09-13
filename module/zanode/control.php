@@ -104,7 +104,7 @@ class zanode extends control
         }
 
         $this->view->title     = $this->lang->zanode->create;
-        $this->view->hostPairs = array('' => '') + $this->loadModel('zahost')->getPairs('host');
+        $this->view->hostPairs = array('' => '') + $this->loadModel('zahost')->getPairs($this->session->product);
         $this->view->hostID    = $hostID;
 
         return $this->display();

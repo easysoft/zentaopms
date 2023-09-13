@@ -1,0 +1,17 @@
+#appSearchForm input[type=text] {padding: 5px 10px;}
+#appSearchForm button[type=submit] {height: 32px;}
+#appContainer .row {min-height: calc(100vh - 130px);}
+#appContainer .card a:hover {color: #0b89b2;}
+#appContainer .card.panel {border-radius: 2px;}
+#appContainer .panel-heading {padding-right: 20px;}
+#appContainer .app-name {font-size: 18px; font-weight: 700; display: inline-block;padding: 8px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle;}
+#appContainer .app-detail {height: 80px;}
+#appContainer .app-logo {float: left;}
+#appContainer .app-logo img {width: 80px; height: 80px;}
+#appContainer .app-desc {float: left; padding-left: 20px; width: calc(100% - 80px);}
+#appContainer .app-desc {display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; vertical-align: middle;}
+#appContainer .app-footer {height: 50px; padding: 10px 20px; font-size: 14px; font-weight: bold;}
+#appContainer .app-footer span {display: inline-block; margin: 0 10px;}
+#appContainer .pagination ul {float: right;}
+#appContainer .btn-toolbar {height: 40px;}
+.sort {padding: 0 10px;}

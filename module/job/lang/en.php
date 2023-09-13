@@ -17,6 +17,7 @@ $lang->job->browseAction = 'Pipeline List';
 $lang->job->id              = 'ID';
 $lang->job->name            = 'Name';
 $lang->job->repo            = 'Repo';
+$lang->job->branch          = 'Branch';
 $lang->job->product         = $lang->productCommon;
 $lang->job->svnDir          = 'SVN Tag Watch Path';
 $lang->job->jenkins         = 'Jenkins';
@@ -60,6 +61,7 @@ $lang->job->repoExists     = 'This repository has a build task associated with i
 $lang->job->projectExists  = 'This SonarQube Project has a build task associated with it『%s』';
 $lang->job->mustUseJenkins = 'SonarQube frame is only used if the build engine is JenKins.';
 $lang->job->jobIsDeleted   = 'This repository is associated with a build task, please view the data from the recycle bin';
+$lang->job->selectPipeline = 'Please select a pipeline';
 
 $lang->job->buildTypeList['build']          = 'Only Build';
 $lang->job->buildTypeList['buildAndDeploy'] = 'Build And Deploy';

@@ -231,7 +231,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
           <?php endif;?>
           <?php endif;?>
           <tr>
-            <th><?php echo $lang->story->reviewedBy;?></th>
+            <th><?php echo $lang->story->reviewers;?></th>
             <td colspan='2' id='reviewerBox'>
               <div class="table-row">
                 <?php $required = $this->story->checkForceReview() ? 'required' : '';?>
@@ -455,4 +455,5 @@ setTimeout(() => {
 }, 600);
 
 </script>
+<?php include '../../ai/view/inputinject.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

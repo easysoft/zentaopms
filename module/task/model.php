@@ -121,6 +121,8 @@ class taskModel extends model
             ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
             ->setIF(is_numeric($this->post->consumed), 'consumed', (float)$this->post->consumed)
             ->setIF(is_numeric($this->post->left),     'left',     (float)$this->post->left)
+            ->setIF(!$this->post->estStarted, 'estStarted', null)
+            ->setIF(!$this->post->deadline, 'deadline', null)
             ->setDefault('openedBy',   $this->app->user->account)
             ->setDefault('openedDate', helper::now())
             ->setDefault('vision', $this->config->vision)
@@ -128,8 +130,6 @@ class taskModel extends model
             ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->remove('after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri,team,teamSource,teamEstimate,teamConsumed,teamLeft,teamMember,multiple,teams,contactListMenu,selectTestStory,testStory,testPri,testEstStarted,testDeadline,testAssignedTo,testEstimate,sync,otherLane,region,lane,estStartedDitto,deadlineDitto')
-            ->removeIF(!$this->post->estStarted, 'estStarted')
-            ->removeIF(!$this->post->deadline, 'deadline')
             ->add('version', 1)
             ->get();
 
@@ -172,7 +172,7 @@ class taskModel extends model
 
             if(strpos($requiredFields, ',estStarted,') !== false and !isset($task->estStarted)) dao::$errors['estStarted'] = sprintf($this->lang->error->notempty, $this->lang->task->estStarted);
             if(strpos($requiredFields, ',deadline,') !== false and !isset($task->deadline)) dao::$errors['deadline'] = sprintf($this->lang->error->notempty, $this->lang->task->deadline);
-            if(isset($task->estStarted) and isset($task->deadline) and !helper::isZeroDate($task->deadline) and $task->deadline <= $task->estStarted) dao::$errors['deadline'] = sprintf($this->lang->error->ge, $this->lang->task->deadline, $task->estStarted);
+            if(isset($task->estStarted) and isset($task->deadline) and !helper::isZeroDate($task->deadline) and $task->deadline < $task->estStarted) dao::$errors['deadline'] = sprintf($this->lang->error->ge, $this->lang->task->deadline, $task->estStarted);
 
             if(dao::isError()) return false;
 
@@ -2522,8 +2522,8 @@ class taskModel extends model
     {
         if(is_string($type)) $type = strtolower($type);
         $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
-        $fields  = "DISTINCT t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.product, t2.branch, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder";
-        ($this->config->edition == 'max' or $this->config->edition == 'ipd') && $fields .= ', t6.name as designName, t6.version as latestDesignVersion';
+        $fields  = "DISTINCT t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.product, t2.branch, t2.version AS latestStoryVersion, t2.status AS storyStatus, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder";
+        ($this->config->edition == 'max' or $this->config->edition == 'ipd') && $fields .= ', t5.name as designName, t5.version as latestDesignVersion';
 
         $actionIDList = array();
         if($type == 'assignedbyme') $actionIDList = $this->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq('task')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($this->app->user->account)->fetchPairs('objectID', 'objectID');
@@ -2531,21 +2531,20 @@ class taskModel extends model
         $tasks  = $this->dao->select($fields)
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-            ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
-            ->leftJoin(TABLE_TASKTEAM)->alias('t4')->on('t4.task = t1.id')
-            ->leftJoin(TABLE_MODULE)->alias('t5')->on('t1.module = t5.id')
-            ->beginIF($this->config->edition == 'max' or $this->config->edition == 'ipd')->leftJoin(TABLE_DESIGN)->alias('t6')->on('t1.design= t6.id')->fi()
+            ->leftJoin(TABLE_TASKTEAM)->alias('t3')->on('t3.task = t1.id')
+            ->beginIF($productID)->leftJoin(TABLE_MODULE)->alias('t4')->on('t1.module = t4.id')->fi()
+            ->beginIF($this->config->edition == 'max' or $this->config->edition == 'ipd')->leftJoin(TABLE_DESIGN)->alias('t5')->on('t1.design= t5.id')->fi()
             ->where('t1.execution')->eq((int)$executionID)
             ->beginIF($type == 'myinvolved')
-            ->andWhere("((t4.`account` = '{$this->app->user->account}') OR t1.`assignedTo` = '{$this->app->user->account}' OR t1.`finishedby` = '{$this->app->user->account}')")
+            ->andWhere("((t3.`account` = '{$this->app->user->account}') OR t1.`assignedTo` = '{$this->app->user->account}' OR t1.`finishedby` = '{$this->app->user->account}')")
             ->fi()
-            ->beginIF($productID)->andWhere("((t5.root=" . (int)$productID . " and t5.type='story') OR t2.product=" . (int)$productID . ")")->fi()
+            ->beginIF($productID)->andWhere("((t4.root=" . (int)$productID . " and t4.type='story') OR t2.product=" . (int)$productID . ")")->fi()
             ->beginIF($type == 'undone')->andWhere('t1.status')->notIN('done,closed')->fi()
             ->beginIF($type == 'needconfirm')->andWhere('t2.version > t1.storyVersion')->andWhere("t2.status = 'active'")->fi()
-            ->beginIF($type == 'assignedtome')->andWhere("(t1.assignedTo = '{$this->app->user->account}' or (t1.mode = 'multi' and t4.`account` = '{$this->app->user->account}' and t1.status != 'closed' and t4.status != 'done') )")->fi()
+            ->beginIF($type == 'assignedtome')->andWhere("(t1.assignedTo = '{$this->app->user->account}' or (t1.mode = 'multi' and t3.`account` = '{$this->app->user->account}' and t1.status != 'closed' and t3.status != 'done') )")->fi()
             ->beginIF($type == 'finishedbyme')
             ->andWhere('t1.finishedby', 1)->eq($this->app->user->account)
-            ->orWhere('t4.status')->eq("done")
+            ->orWhere('t3.status')->eq("done")
             ->markRight(1)
             ->fi()
             ->beginIF($type == 'delayed')->andWhere('t1.deadline')->gt('1970-1-1')->andWhere('t1.deadline')->lt(date(DT_DATE1))->andWhere('t1.status')->in('wait,doing')->fi()
@@ -2577,11 +2576,13 @@ class taskModel extends model
         {
             if($task->parent > 0) $parents[$task->parent] = $task->parent;
         }
-        $parents = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
+        $parents  = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
+        $userList = $this->dao->select('account,realname')->from(TABLE_USER)->fetchPairs('account');
 
         if($this->config->vision == 'lite') $tasks = $this->appendLane($tasks);
         foreach($tasks as $task)
         {
+            $task->assignedToRealName = zget($userList, $task->assignedTo);
             if($task->parent > 0)
             {
                 if(isset($tasks[$task->parent]))
@@ -3988,10 +3989,11 @@ class taskModel extends model
      *
      * @param  object $task
      * @param  array  $users
+     * @param  bool   $output
      * @access public
      * @return void
      */
-    public function printAssignedHtml($task, $users)
+    public function printAssignedHtml($task, $users, $output = true)
     {
         $btnTextClass   = '';
         $btnClass       = '';
@@ -4025,9 +4027,12 @@ class taskModel extends model
         $btnClass    .= $task->assignedTo == 'closed' ? ' disabled' : '';
         $btnClass    .= ' iframe btn btn-icon-left btn-sm';
         $assignToLink = $task->assignedTo == 'closed' ? '#' : helper::createLink('task', 'assignTo', "executionID=$task->execution&taskID=$task->id", '', true);
-        $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span title='" . $assignedToTitle . "'>{$assignedToText}</span>", '', "class='$btnClass'");
+        $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span title='" . $assignedToTitle . "'>{$assignedToText}</span>", '', "class='$btnClass' data-toggle='modal'");
 
-        echo !common::hasPriv('task', 'assignTo', $task) ? "<span style='padding-left: 21px' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml;
+        $html = !common::hasPriv('task', 'assignTo', $task) ? "<span style='padding-left: 21px' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml;
+
+        if(!$output) return $html;
+        echo $html;
     }
 
     /**
@@ -4304,17 +4309,17 @@ class taskModel extends model
         $canEdit           = common::hasPriv('task', 'edit');
         $canBatchCreate    = ($this->config->vision != 'lite' and common::hasPriv('task', 'batchCreate'));
 
-        if($task->status != 'pause') $menu .= $this->buildMenu('task', 'start',   $params, $task, 'browse', '', '', 'iframe', true);
-        if($task->status == 'pause') $menu .= $this->buildMenu('task', 'restart', $params, $task, 'browse', '', '', 'iframe', true);
-        $menu .= $this->buildMenu('task', 'finish',         $params, $task, 'browse', '', '', 'iframe', true);
-        $menu .= $this->buildMenu('task', 'close',          $params, $task, 'browse', '', '', 'iframe', true);
+        if($task->status != 'pause') $menu .= $this->buildMenu('task', 'start',   $params, $task, 'browse', '', '', 'iframe', true, 'data-toggle="modal"');
+        if($task->status == 'pause') $menu .= $this->buildMenu('task', 'restart', $params, $task, 'browse', '', '', 'iframe', true, 'data-toggle="modal"');
+        $menu .= $this->buildMenu('task', 'finish', $params, $task, 'browse', '', '', 'iframe', true, 'data-toggle="modal"');
+        $menu .= $this->buildMenu('task', 'close',  $params, $task, 'browse', '', '', 'iframe', true, 'data-toggle="modal"');
 
         if(($canStart or $canRestart or $canFinish or $canClose) and ($canRecordEstimate or $canEdit or $canBatchCreate))
         {
             $menu .= "<div class='dividing-line'></div>";
         }
 
-        $menu .= $this->buildMenu('task', 'recordEstimate', $params, $task, 'browse', 'time', '', 'iframe', true);
+        $menu .= $this->buildMenu('task', 'recordEstimate', $params, $task, 'browse', 'time', '', 'iframe', true, 'data-toggle="modal"');
         $menu .= $this->buildMenu('task', 'edit',           $params, $task, 'browse');
         if($this->config->vision != 'lite')
         {
@@ -4552,5 +4557,178 @@ class taskModel extends model
         if(!empty($estStarted) and !helper::isZeroDate($estStarted) and $estStarted > $execution->end)   dao::$errors['estStarted'][] = $pre . sprintf($this->lang->task->error->beginGtExecution, $this->lang->execution->common, $execution->end);
         if(!empty($deadline) and !helper::isZeroDate($deadline) and $deadline > $execution->end)       dao::$errors['deadline'][]   = $pre . sprintf($this->lang->task->error->endGtExecution, $this->lang->execution->common, $execution->end);
         if(!empty($deadline) and !helper::isZeroDate($deadline) and $deadline < $execution->begin)     dao::$errors['deadline'][]   = $pre . sprintf($this->lang->task->error->endLtExecution, $this->lang->execution->common, $execution->begin);
+    }
+
+    /**
+     * Generate col for dtable.
+     *
+     * @param  string $orderBy
+     * @access public
+     * @return void
+     */
+    public function generateCol($orderBy = '')
+    {
+        $setting   = $this->loadModel('datatable')->getSetting('execution');
+        $fieldList = $this->config->task->datatable->fieldList;
+
+        foreach($fieldList as $field => $items)
+        {
+            if(isset($items['title'])) continue;
+
+            $title    = $field == 'id' ? 'ID' : zget($this->lang->task, $field, zget($this->lang, $field, $field));
+            $fieldList[$field]['title'] = $title;
+        }
+
+        if(empty($setting))
+        {
+            $setting = $this->config->task->datatable->defaultField;
+            $order   = 1;
+            foreach($setting as $key => $value)
+            {
+                $set = new stdclass();;
+                $set->id    = $value;
+                $set->order = $order ++;
+                $set->show  = true;
+                $setting[$key] = $set;
+            }
+        }
+
+        foreach($setting as $key => $set)
+        {
+            if(empty($set->show))
+            {
+                unset($setting[$key]);
+                continue;
+            }
+
+            $sortType = '';
+            if(!strpos($orderBy, ',') && strpos($orderBy, $set->id) !== false)
+            {
+                $sort = str_replace("{$set->id}_", '', $orderBy);
+                $sortType = $sort == 'asc' ? 'up' : 'down';
+            }
+
+            $set->name  = $set->id;
+            $set->title = $fieldList[$set->id]['title'];
+
+            if(isset($fieldList[$set->id]['checkbox']))     $set->checkbox     = $fieldList[$set->id]['checkbox'];
+            if(isset($fieldList[$set->id]['nestedToggle'])) $set->nestedToggle = $fieldList[$set->id]['nestedToggle'];
+            if(isset($fieldList[$set->id]['fixed']))        $set->fixed        = $fieldList[$set->id]['fixed'];
+            if(isset($fieldList[$set->id]['type']))         $set->type         = $fieldList[$set->id]['type'];
+            if(isset($fieldList[$set->id]['sortType']))     $set->sortType     = $fieldList[$set->id]['sortType'];
+            if(isset($fieldList[$set->id]['flex']))         $set->flex         = $fieldList[$set->id]['flex'];
+            if(isset($fieldList[$set->id]['minWidth']))     $set->minWidth     = $fieldList[$set->id]['minWidth'];
+            if(isset($fieldList[$set->id]['maxWidth']))     $set->maxWidth     = $fieldList[$set->id]['maxWidth'];
+            if(isset($fieldList[$set->id]['pri']))          $set->pri          = $fieldList[$set->id]['pri'];
+            if(isset($fieldList[$set->id]['map']))          $set->map          = $fieldList[$set->id]['map'];
+
+            if($sortType) $set->sortType = $sortType;
+
+            if(isset($set->fixed) && $set->fixed == 'no') unset($set->fixed);
+            if(isset($set->width)) $set->width = str_replace('px', '', $set->width);
+            unset($set->id);
+        }
+
+        usort($setting, array('datatableModel', 'sortCols'));
+        return $setting;
+    }
+
+    /**
+     * Generate row for dtable.
+     *
+     * @param  array  $tasks
+     * @param  array  $users
+     * @access public
+     * @return array
+     */
+    public function generateRow($tasks, $users)
+    {
+        $userFields = array('assignedTo', 'openedBy', 'closedBy', 'lastEditedBy', 'finishedBy');
+        $dateFields = array('assignedDate', 'openedDate', 'deadline', 'finishedDate', 'closedDate', 'lastEditedDate', 'canceledDate', 'activatedDate', 'estStarted', 'realStarted', 'replacetypeDate');
+        $canView    = common::hasPriv('task', 'view');
+        $rows       = array();
+        foreach($tasks as $task)
+        {
+            $task->assignedTo = $this->printAssignedHtml($task, $users, false);
+            $task->actions    = '<div class="c-actions">' . $this->buildOperateBrowseMenu($task) . '</div>';
+
+            $taskName  = '';
+            $taskLink  = helper::createLink('task', 'view', "taskID=$task->id", '', $this->config->vision == 'lite' ? true : false);
+            $linkClass = $this->config->vision == 'lite' ? 'class="iframe"' : '';
+
+            if($task->parent > 0 and isset($task->parentName)) $task->name = "{$task->parentName} / {$task->name}";
+            if($task->module and isset($modulePairs[$task->module])) $taskName .= "<span class='label label-gray label-badge'>" . $modulePairs[$task->module] . '</span> ';
+            if($task->parent > 0) $taskName .= '<span class="label label-badge label-light" title="' . $this->lang->task->children . '">' . $this->lang->task->childrenAB . '</span> ';
+            if(!empty($task->team)) $taskName .= '<span class="label label-badge label-light" title="' . $this->lang->task->multiple . '">' . $this->lang->task->multipleAB . '</span> ';
+
+            $taskName .= $canView ? html::a($taskLink, $task->name, null, "$linkClass style='color: $task->color' title='$task->name'") : "<span style='color: $task->color'>$task->name</span>";
+            if(!empty($task->children)) $taskName .= '<a class="task-toggle" data-id="' . $task->id . '"><i class="icon icon-angle-double-right"></i></a>';
+            if($task->fromBug) $taskName .= html::a(helper::createLink('bug', 'view', "id=$task->fromBug"), "[BUG#$task->fromBug]", '', "class='bug'");
+            $task->name = $taskName;
+
+            $priClass  = $task->pri ? "label-pri label-pri-{$task->pri}" : '';
+            $task->pri = "<span class='{$priClass}'>" . zget($this->lang->task->priList, $task->pri) . '</span>';
+
+            $task->statusCode = $task->status;
+            $storyChanged     = (!empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion && !in_array($task->status, array('cancel', 'closed')));
+            $task->status     = $storyChanged ? "<span class='status-story status-changed' title='{$this->lang->story->changed}'>{$this->lang->story->changed}</span>" : "<span class='status-task status-{$task->status}' title='{$this->processStatus('task', $task)}'> " . $this->processStatus('task', $task) . "</span>";
+
+            $task->estimateNum = round($task->estimate, 1);
+            $task->consumedNum = round($task->consumed, 1);
+            $task->leftNum     = round($task->left, 1);
+
+            $task->estimate = round($task->estimate, 1) . $this->lang->execution->workHourUnit;
+            $task->consumed = round($task->consumed, 1) . $this->lang->execution->workHourUnit;
+            $task->left     = round($task->left, 1) . $this->lang->execution->workHourUnit;
+
+            $task->design = '';
+            $task->story  = '';
+            if(!empty($task->storyID))
+            {
+                if(common::hasPriv('story', 'view'))
+                {
+                    $task->story = html::a(helper::createLink('story', 'view', "storyid=$task->storyID", 'html', true), "<i class='icon icon-{$this->lang->icons['story']}'></i>", '', "class='iframe' data-width='1050' title='{$task->storyTitle}' data-toggle='modal' data-size='lg'");
+                }
+                else
+                {
+                   $task->story = "<i class='icon icon-{$this->lang->icons['story']}' title='{$task->storyTitle}'></i>";
+                }
+            }
+
+            $mailto = explode(',', $task->mailto);
+            foreach($mailto as $key => $account)
+            {
+                $account = trim($account);
+                if(empty($account))
+                {
+                    unset($mailto[$key]);
+                    continue;
+                }
+
+                $mailto[$key] = zget($users, $account);
+            }
+            $task->mailto = implode(' &nbsp;', $mailto);
+
+            foreach($userFields as $field) $task->$field = zget($users, $task->$field);
+            foreach($dateFields as $field) $task->$field = empty($task->$field) || helper::isZeroDate($task->$field) ? '' : $task->$field;
+
+            $children = isset($task->children) ? $task->children : array();
+            unset($task->children);
+
+            $task->isParent = false;
+            if($task->parent == -1)
+            {
+                $task->isParent = true;
+                $task->parent   = 0;
+            }
+
+            $rows[] = $task;
+
+            if(!empty($children))
+            {
+                $rows = array_merge($rows, $this->generateRow($children, $users));
+            }
+        }
+        return $rows;
     }
 }

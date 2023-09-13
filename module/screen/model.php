@@ -28,6 +28,9 @@ class screenModel extends model
     public function __construct()
     {
         parent::__construct();
+
+        $this->loadBIDAO();
+
         $this->filter = new stdclass();
         $this->filter->screen  = '';
         $this->filter->year    = '';
@@ -1052,7 +1055,7 @@ class screenModel extends model
                     {
                         foreach($results as $result)
                         {
-                            $value += $result->$field;
+                            $value += intval($result->$field);
                         }
 
                         $value = round($value);
@@ -1401,6 +1404,7 @@ class screenModel extends model
                     $result     = $this->dao->query($sql)->fetch();
                     $group      = $settings->group[0]->field;
                     $sourceData = zget($result, $group, 0);
+                    if(empty($sourceData)) $sourceData = 0;
                 }
                 $component->option->dataset = $sourceData;
             }

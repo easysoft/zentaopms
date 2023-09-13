@@ -5,7 +5,7 @@
 <?php endif;?>
 <div class='modal-dialog' id='guideDialog'>
   <style>
-  #guideDialog {width: 900px}
+  #guideDialog {width: 900px; box-shadow: none;}
   #guideDialog .row {margin-left: 0px;margin-right: 0px;}
   #guideDialog h2 {margin: 0px 0 20px 0; font-size: 16px; font-weight: normal}
   #guideDialog h3 {margin: 5px 0; font-size: 15px;}
@@ -82,6 +82,13 @@
           </div>
         </div>
         <?php endif;?>
+	<?php if($config->systemMode != 'PLM'):?>
+	<div class='col col-xs-4'>
+          <div class='project-type text-center'>
+            <div class='project-type-img more-type'><span class='text-muted'><?php echo $lang->project->moreModelTitle;?></span></div>
+          </div>
+        </div>
+	<?php endif;?>
       </div>
     </div>
   </div>

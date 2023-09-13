@@ -8,6 +8,15 @@ css::import($jsRoot . 'dtable/min.css');
 .dtable-header .dtable-cell {font-weight: bold;}
 </style>
 <script>
+/* set checked rows of main table in cookie */
+var oldSetCheckedCookie = window.setCheckedCookie;
+window.setCheckedCookie = function()
+{
+    var dtable = $('#mainContent [data-zui-dtable]').data('zui.DTable');
+    if(!dtable) return oldSetCheckedCookie();
+    $.cookie('checkedItem', dtable.$.getChecks().join(','), {expires: config.cookieLife, path: config.webRoot});
+};
+
 function convertCols(cols)
 {
     cols.forEach(function(col)
@@ -18,4 +27,23 @@ function convertCols(cols)
     return cols;
 }
 zui.DTable.defineFn();
+
+/**
+ * Get checked items.
+ *
+ * @access public
+ * @return array
+ */
+function getCheckedItems()
+{
+    var checkedItems = [];
+    const $dtable = zui.DTable.query('#mainContent [data-zui-dtable]').$;
+    $dtable.getChecks().forEach(function(id)
+    {
+        if($dtable.getRowInfo(id) == undefined) return true;
+
+        checkedItems.push(id);
+    });
+    return checkedItems;
+}
 </script>

@@ -1,0 +1,97 @@
+.sidebar {
+    flex: none !important;
+    position: relative;
+    transition-duration: .15s;
+    transition-property: width;
+    transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+    width: var(--zt-sidebar-width);
+}
+
+.sidebar-toggle {
+    align-items: center;
+    border-radius: var(--radius);
+    bottom: 0;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    transition-duration: 1s;
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+    width: 1rem;
+}
+
+.sidebar-toggle > .icon {
+    align-items: center;
+    background-color: rgb(var(--color-canvas-rgb));
+    border-color: rgb(212, 212, 216);
+    border-width: 1px;
+    display: flex;
+    height: 2rem;
+    justify-content: center;
+    width: 0.75rem;
+}
+
+.sidebar-toggle:hover > .icon {
+    border-color: rgba(var(--color-primary-500-rgb));
+    color: rgba(var(--color-primary-500-rgb));
+}
+
+.sidebar-left > .sidebar-toggle > .icon {
+    border-bottom-left-radius: var(--radius-lg);
+    border-top-left-radius: var(--radius-lg);
+}
+
+.sidebar-right > .sidebar-toggle > .icon {
+    border-top-right-radius: var(--radius-lg);
+    border-bottom-right-radius: var(--radius-lg);
+}
+
+.sidebar-left > .sidebar-toggle {
+    right: -1rem;
+}
+
+.sidebar-right > .sidebar-toggle {
+    left: -1rem;
+}
+
+.sidebar-toggle:hover {
+    background-color: #3341550d;
+}
+
+.hide-sidebar-left .sidebar-left > *,
+.hide-sidebar-right .sidebar-right > * {
+    display: none;
+}
+
+.hide-sidebar-left .sidebar.sidebar-left,
+.hide-sidebar-right .sidebar.sidebar-right {
+    margin-left: -0.5rem;
+    margin-right: -0.5rem;
+    width: 0;
+}
+
+.hide-sidebar-left .sidebar-left > .sidebar-toggle {
+    display: flex;
+    right: -0.5rem;
+}
+.hide-sidebar-right .sidebar-right > .sidebar-toggle {
+    display: flex;
+    left: -0.5rem;
+}
+.hide-sidebar-left .sidebar-left > .sidebar-toggle > .icon {
+    transform: rotate(180deg);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
+
+.hide-sidebar-right .sidebar-right > .sidebar-toggle > .icon {
+    transform: rotate(180deg);
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+}

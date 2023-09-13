@@ -13,11 +13,30 @@ $(function()
 
     if(storyType == 'requirement') $('#importAction').parent().hide();
 
-    $(document).ready(function(){
-        var $title = $('#storyList thead th.c-title');
-        var headerWidth = $('#storyList thead th.c-title a').innerWidth();
-        var buttonWidth = $('#storyList thead th.c-title button').innerWidth();
-        if($title.width() < headerWidth + buttonWidth + 16) $title.width(headerWidth + buttonWidth + 30);
+    $('.table-footer .check-all').on('click', function()
+    {
+        var $dtable = zui.DTable.query('#storyList').$;
+        if($(this).hasClass('checked'))
+        {
+            $(this).removeClass('checked');
+            $('.has-checkbox').click().removeClass('is-checked');
+            $('.dtable-checkbox').removeClass('checked');
+            $dtable.toggleCheckRows(false);
+        }
+        else
+        {
+            $(this).addClass('checked');
+            $('.has-checkbox').click().addClass('is-checked');
+            $('.dtable-checkbox').addClass('checked');
+            $dtable.toggleCheckRows(true);
+        }
+
+        setStatistics();
+    });
+
+    $('.dtable-cell.has-checkbox[data-row="HEADER"] .dtable-checkbox').click(function()
+    {
+        $('.table-footer .check-all').toggleClass('checked', !$('.table-footer .check-all').hasClass('checked'));
     });
 
     $('#toTaskButton').on('click', function()
@@ -28,17 +47,6 @@ $(function()
             parent.location.href = createLink('projectstory', 'importPlanStories', 'projectID=' + projectID + '&planID=' + planID + '&productID=' + productID);
         }
     })
-
-    $(document).on('click', '.story-toggle', function(e)
-    {
-        var $toggle = $(this);
-        var id = $(this).data('id');
-        var isCollapsed = $toggle.toggleClass('collapsed').hasClass('collapsed');
-        $toggle.closest('[data-ride="table"]').find('tr.parent-' + id).toggle(!isCollapsed);
-
-        e.stopPropagation();
-        e.preventDefault();
-    });
 
     // Fix state dropdown menu position
     $('.c-stage > .dropdown').each(function()
@@ -53,47 +61,36 @@ $(function()
             if(!$next.length) break;
             height += $next.outerHeight;
         }
-        if(height < menuHeight)
-        {
-            $this.addClass('dropup');
-        }
+        if(height < menuHeight) $this.addClass('dropup');
     });
-
-    toggleFold('#productStoryForm', unfoldStories, productID, 'product');
-
-    adjustTableFooter();
-    $('body').on('click', '#toggleFold', adjustTableFooter);
-    $('body').on('click', '.icon.icon-angle-double-right', adjustTableFooter);
 
     /* Get checked stories. */
     $('#importToLib').on('click', function()
     {
-        var storyIdList = '';
-        $("input[name^='storyIdList']:checked").each(function()
-        {
-            storyIdList += $(this).val() + ',';
-            $('#storyIdList').val(storyIdList);
-        });
+        var element = zui.DTable.query('#storyList').$;
+        var checkedIDList = element.getChecks();
+        var storyIdList = [];
+
+        $.each(checkedIDList, function(index, id){storyIdList.push(id);});
+        $('#storyIdList').val(storyIdList.join(','));
     });
 
     $('#reviewItem ~ ul > li').on('click', function()
     {
-        var storyIDList     = new Array();
+        var element = zui.DTable.query('#storyList').$;
+        var checkedIDList = element.getChecks();
         var storyString     = '';
         var reviewStoryTips = '';
-        $("input[name^='storyIdList']:checked").each(function()
-        {
-            storyIDList.push($(this).val());
-        });
 
-        $.each(storyIDList, function(storyKey, storyValue)
+        if(checkedIDList.length == 0) return;
+        $.each(checkedIDList, function(index, id)
         {
-            var getStoryReview = createLink('product', 'ajaxGetReviewers', "productID=" + productID + "&storyID=" + storyValue);
+            var getStoryReview = createLink('product', 'ajaxGetReviewers', "productID=" + productID + "&storyID=" + id);
 
             $.ajaxSettings.async = false;
             $.get(getStoryReview, function(data)
             {
-                var reviewer = new Array();
+                var reviewer = [];
                 $(data).find('option:selected').each(function()
                 {
                     reviewer.push($(this).val());
@@ -142,55 +139,74 @@ $(function()
     });
     if($("main").is(".hide-sidebar")) $("#sidebarHeader").hide();
 
-    /* Shift key selection. */
-    var isClickStoryToggle = false;
-    var lastStorySelected  = '';
-    $(".story-toggle").click(function()
+    $('#productStoryForm').on('click', '[data-form-action]', function()
     {
-        isClickStoryToggle = true;
+        $('#productStoryForm').attr('action', $(this).data('formAction')).submit();
     });
-    $("#storyList tbody").on("click","tr",function(e)
-    {
-      var nowCheckbox = $(this)['context'].cells[0].childNodes[0].childNodes[0];
-      if(e.shiftKey)
-      {
-          nowStorySelected = nowCheckbox.value;
-          if(lastStorySelected != '' && nowStorySelected != '' && lastStorySelected != nowStorySelected)
-          {
-              var isStartStorySelected = false;
-              var isEndStorySelected   = false;
-              $("input[name^='storyIdList']").each(function()
-              {
-                  isEndStorySelected   = ((nowStorySelected == $(this).val() || lastStorySelected == $(this).val()) && isStartStorySelected ) || isEndStorySelected ? true : false;
-
-                  $(this)['context'].checked = $(this)['context'].checked || (isStartStorySelected && !isEndStorySelected) ? true : false;
-
-                  isStartStorySelected = nowStorySelected == $(this).val() || lastStorySelected == $(this).val() || isStartStorySelected ? true : false;
-
-                  if(isEndStorySelected) return;
-              });
-          }
-      }
-      else if(!isClickStoryToggle)
-      {
-          lastStorySelected = nowCheckbox.value;
-      }
-      isClickStoryToggle = false;
-  });
 });
 
-/**
- * Adjust the table footer style.
- *
- * @access public
- * @return void
- */
-function adjustTableFooter()
+function createSortLink(col)
 {
-    if($('.main-col').height() < $(window).height())
-    {
-        $('.table.with-footer-fixed').css('margin-bottom', '0');
-        $('.table-footer').removeClass('fixed-footer');
-        $('.table-footer').css({"left":"0", "bottom":"0", "width":"unset"});
-    }
+    var sort = col.name + '_asc';
+    if(sort == orderBy) sort = col.name + '_desc';
+    return sortLink.replace('{orderBy}', sort);
 }
+
+function setStatistics()
+{
+    $('#productStoryForm').find('input[name^=storyIdList]').remove();
+
+    var element = zui.DTable.query('#storyList').$;
+    var checkedIDList = element.getChecks();
+    $('.table-footer .table-actions').toggle(checkedIDList.length > 0);
+
+    if(checkedIDList.length == 0) return $('.table-footer .table-statistic').html(pageSummary);
+
+    let checkedTotal    = checkedIDList.length;
+    let checkedEstimate = 0;
+    let checkedCase     = 0;
+    let rateCount       = checkedTotal;
+    $.each(checkedIDList, function(index, id)
+    {
+        if(element.getRowInfo(id) == undefined) return true;
+
+        const story = element.getRowInfo(id).data;
+
+        checkedEstimate += parseFloat(story.estimateNum);
+        if(story.caseCountNum > 0) checkedCase += 1;
+        if(story.isParent) rateCount -= 1;
+
+        $('#productStoryForm').append('<input type="hidden" name="storyIdList[]" value="' + id + '">');
+    });
+
+    var rate = '0%';
+    if(rateCount) rate = Math.round(checkedCase / rateCount * 10000 / 100) + '' + '%';
+
+    $('.table-footer .table-statistic').html(checkedSummary.replace('%total%', checkedTotal)
+      .replace('%estimate%', checkedEstimate.toFixed(1))
+      .replace('%rate%', rate));
+}
+
+cols = JSON.parse(cols);
+data = JSON.parse(data);
+const options =
+{
+    striped: true,
+    plugins: ['nested', 'checkable'],
+    checkOnClickRow: true,
+    sortLink: createSortLink,
+    cols: cols,
+    data: data,
+    footer: false,
+    responsive: true,
+    onCheckChange: setStatistics,
+    height: function(height)
+    {
+        return Math.min($(window).height() - $('#header').outerHeight() - $('#mainMenu').outerHeight() - $('.table-footer').outerHeight() - 30, height);
+    },
+    checkInfo: function(checkedIDList)
+    {
+        return setStatistics();
+    }
+};
+$('#storyList').dtable(options);

@@ -239,14 +239,15 @@ class projectModel extends model
             ->andWhere('status')->notin('done,closed')
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)
-            ->fetchGroup('project');
+            ->fetchGroup('project', 'id');
 
         $this->app->loadClass('pager', $static = true);
         foreach($projects as $projectID => $project)
         {
-            $orderBy = $project->model == 'waterfall' ? 'id_asc' : 'id_desc';
-            $pager   = $project->model == 'waterfall' ? null : new pager(0, 1, 1);
-            $project->executions = isset($executions[$projectID]) ? $executions[$projectID] : array();
+            $projectExecutions = isset($executions[$projectID]) ? $executions[$projectID] : array();
+            $project->model == 'waterfall' ? ksort($projectExecutions) : krsort($projectExecutions);
+
+            $project->executions = $projectExecutions;
             $project->parentName = $projectParentNames[$project->id];
         }
         return $projects;
@@ -538,9 +539,9 @@ class projectModel extends model
             ->andWhere('t1.type')->eq('project')
             ->andWhere('t3.deleted')->eq(0)
             ->fetch('totalHours');
-        $workhour->totalEstimate = $total->totalEstimate;
-        $workhour->totalConsumed = $totalConsumed;
-        $workhour->totalLeft     = round($total->totalLeft - $closedTotalLeft, 1);
+        $workhour->totalEstimate = (float)$total->totalEstimate;
+        $workhour->totalConsumed = (float)$totalConsumed;
+        $workhour->totalLeft     = round((float)$total->totalLeft - (float)$closedTotalLeft, 1);
 
         return $workhour;
     }
@@ -1179,7 +1180,7 @@ class projectModel extends model
     public function getTreeMenu($projectID = 0, $userFunc = '', $param = 0)
     {
         $projectMenu = array();
-        $stmt        = $this->dbh->query($this->buildMenuQuery($projectID));
+        $stmt        = $this->app->dbQuery($this->buildMenuQuery($projectID));
 
         while($project = $stmt->fetch())
         {
@@ -1251,6 +1252,7 @@ class projectModel extends model
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
             ->setDefault('days', '0')
+            ->cleanINT('parent')
             ->add('type', 'project')
             ->join('whitelist', ',')
             ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
@@ -1352,8 +1354,8 @@ class projectModel extends model
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->autoCheck()
             ->batchcheck($requiredFields, 'notempty')
-            ->checkIF(!empty($project->name), 'name', 'unique', "`type`='project' and `parent` = $project->parent and `model` = '{$project->model}' and `deleted` = '0'")
-            ->checkIF(!empty($project->code), 'code', 'unique', "`type`='project' and `model` = '{$project->model}' and `deleted` = '0'")
+            ->checkIF(!empty($project->name), 'name', 'unique', "`type`='project' and `parent` = " . $this->dao->sqlobj->quote($project->parent) . " and `model` =  " . $this->dao->sqlobj->quote($project->model) . " and `deleted` = '0'")
+            ->checkIF(!empty($project->code), 'code', 'unique', "`type`='project' and `model` = " . $this->dao->sqlobj->quote($project->model) . " and `deleted` = '0'")
             ->checkIF($project->end != '', 'end', 'gt', $project->begin)
             ->checkFlow()
             ->exec();
@@ -1533,6 +1535,7 @@ class projectModel extends model
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
             ->setDefault('days', '0')
+            ->cleanINT('parent')
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
             ->setIF($this->post->delta == 999, 'days', 0)
             ->setIF($this->post->begin == '0000-00-00', 'begin', '')
@@ -1605,8 +1608,8 @@ class projectModel extends model
             ->checkIF($project->begin != '', 'begin', 'date')
             ->checkIF($project->end != '', 'end', 'date')
             ->checkIF($project->end != '', 'end', 'gt', $project->begin)
-            ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type` = 'project' and `parent` = '$oldProject->parent' and `model` = '{$project->model}' and `deleted` = '0'")
-            ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type` = 'project' and `model` = '{$project->model}' and `deleted` = '0'")
+            ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type` = 'project' and `parent` = '$oldProject->parent' and `model` = " . $this->dao->sqlobj->quote($project->model) . " and `deleted` = '0'")
+            ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type` = 'project' and `model` = " . $this->dao->sqlobj->quote($project->model) . " and `deleted` = '0'")
             ->checkFlow()
             ->where('id')->eq($projectID)
             ->exec();
@@ -1676,8 +1679,8 @@ class projectModel extends model
             if($oldProject->parent != $project->parent) $this->loadModel('program')->processNode($projectID, $project->parent, $oldProject->path, $oldProject->grade);
 
             /* Fix whitelist changes. */
-            $oldWhitelist = explode(',', $oldProject->whitelist) and $oldWhitelist = array_filter($oldWhitelist);
-            $newWhitelist = explode(',', $project->whitelist) and $newWhitelist = array_filter($newWhitelist);
+            $oldWhitelist = array_filter(explode(',', $oldProject->whitelist));
+            $newWhitelist = array_filter(explode(',', $project->whitelist));
             if(count($oldWhitelist) == count($newWhitelist) and count(array_diff($oldWhitelist, $newWhitelist)) == 0) unset($project->whitelist);
 
             /* Add linkedproducts changes. */
@@ -1756,7 +1759,7 @@ class projectModel extends model
         foreach($projects as $projectID => $project)
         {
             $oldProject = $oldProjects[$projectID];
-            $parentID   = !isset($project->parent) ? $oldProject->parent : $project->parent;
+            $parentID   = !isset($project->parent) ? (int)$oldProject->parent : (int)$project->parent;
 
             $this->dao->update(TABLE_PROJECT)->data($project)
                 ->autoCheck($skipFields = 'begin,end')
@@ -1764,8 +1767,8 @@ class projectModel extends model
                 ->checkIF($project->begin != '', 'begin', 'date')
                 ->checkIF($project->end != '', 'end', 'date')
                 ->checkIF($project->end != '', 'end', 'gt', $project->begin)
-                ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type`='project' and `parent` = $parentID and `model` = '{$project->model}' and `deleted` = '0'")
-                ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type`='project' and `model` = '{$project->model}' and `deleted` = '0'")
+                ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type`='project' and `parent` = $parentID and `model` = " . $this->dao->sqlobj->quote($project->model) . " and `deleted` = '0'")
+                ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type`='project' and `model` = " . $this->dao->sqlobj->quote($project->model) . " and `deleted` = '0'")
                 ->checkFlow()
                 ->where('id')->eq($projectID)
                 ->exec();
@@ -3215,6 +3218,7 @@ class projectModel extends model
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
             ->where('t1.execution')->in($executionIdList)
             ->andWhere('t1.status')->notIn('cancel,closed')
+    	    ->andWhere('t1.deleted')->eq(0)
             ->groupBy('t2.parent')
             ->fetchAll('project');
 

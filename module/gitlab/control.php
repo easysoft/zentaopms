@@ -20,6 +20,12 @@ class gitlab extends control
     {
         parent::__construct($moduleName, $methodName);
 
+        if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
+
+        if(!in_array(strtolower(strtolower($this->methodName)), array('browseproject', 'browsegroup', 'browseuser', 'browsebranch', 'browsetag')))
+        {
+            if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
+        }
         /* This is essential when changing tab(menu) from gitlab to repo. */
         /* Optional: common::setMenuVars('devops', $this->session->repoID); */
         $this->loadModel('ci')->setMenu();
@@ -38,7 +44,7 @@ class gitlab extends control
     public function browse($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
 
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Admin user don't need bind. */
@@ -62,13 +68,22 @@ class gitlab extends control
     {
         if($_POST)
         {
-            $this->checkToken();
-            $gitlabID = $this->gitlab->create();
+            $gitlab = form::data($this->config->gitlab->form->create)
+                ->add('type', 'gitlab')
+                ->add('private',md5(rand(10,113450)))
+                ->add('createdBy', $this->app->user->account)
+                ->add('createdDate', helper::now())
+                ->trim('url,token')
+                ->skipSpecial('url,token,account,password')
+                ->remove('account,password,appType')
+                ->get();
+            $this->checkToken($gitlab);
+            $gitlabID = $this->loadModel('pipeline')->create($gitlab);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action');
             $actionID = $this->action->create('gitlab', $gitlabID, 'created');
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('space', 'browse')));
         }
 
         $this->view->title = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->lblCreate;
@@ -107,7 +122,8 @@ class gitlab extends control
 
         if($_POST)
         {
-            $this->checkToken();
+            $gitlab = fixer::input('post')->trim('url,token')->get();
+            $this->checkToken($gitlab, $id);
             $this->gitlab->update($id);
             $gitLab = $this->gitlab->getByID($id);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -116,7 +132,7 @@ class gitlab extends control
             $actionID = $this->action->create('gitlab', $id, 'edited');
             $changes  = common::createChanges($oldGitLab, $gitLab);
             $this->action->logHistory($actionID, $changes);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $this->view->title  = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->edit;
@@ -138,7 +154,7 @@ class gitlab extends control
 
         $gitlab = $this->gitlab->getByID($gitlabID);
         $user   = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);
-        if(!isset($user->is_admin) or !$user->is_admin) return print(js::alert($this->lang->gitlab->tokenLimit) . js::locate($this->createLink('gitlab', 'edit', array('gitlabID' => $gitlabID))));
+        if(!isset($user->is_admin) or !$user->is_admin) return $this->send(array('result' => 'fail', 'message' => $this->lang->gitlab->tokenLimit, 'locate' => $this->createLink('gitlab', 'edit', array('gitlabID' => $gitlabID))));
 
         $zentaoUsers = $this->dao->select('account,email,realname')->from(TABLE_USER)->where('deleted')->eq('0')->fetchAll('account');
 
@@ -185,68 +201,79 @@ class gitlab extends control
                     $this->loadModel('action')->create('gitlabuser', $openID, 'bind', '', sprintf($this->lang->gitlab->bindDynamic, $gitlabNames[$openID], $zentaoUsers[$account]->realname));
                 }
             }
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->server->http_referer));
+
+            if(dao::isError()) return $this->sendError(dao::getError());
+            return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'load' => helper::createLink('space', 'browse')));
         }
 
+        $userList      = array();
         $gitlabUsers   = $this->gitlab->apiGetUsers($gitlabID);
         $bindedUsers   = $this->gitlab->getUserAccountIdPairs($gitlabID);
         $matchedResult = $this->gitlab->getMatchedUsers($gitlabID, $gitlabUsers, $zentaoUsers);
 
-        foreach($gitlabUsers as $userID => &$user)
+        foreach($gitlabUsers as $gitlabUserID => $gitlabUser)
         {
-            $user->binded        = 0;
-            $user->zentaoUsers   = array('' => '');
-            $user->zentaoAccount = isset($matchedResult[$user->id]) ? $matchedResult[$user->id]->zentaoAccount : '';
-            if($user->zentaoAccount)
+            $user = new stdclass();
+            $user->email            = '';
+            $user->status           = 'notBind';
+            $user->gitlabID         = $gitlabUser->id;
+            $user->gitlabEmail      = $gitlabUser->email;
+            $user->gitlabUser       = $gitlabUser->realname . '@' . $gitlabUser->account;
+            $user->gitlabUserAvatar = $gitlabUser->avatar;
+
+            $user->zentaoUsers = isset($matchedResult[$gitlabUser->id]) ? $matchedResult[$gitlabUser->id]->zentaoAccount : '';
+            if($user->zentaoUsers)
             {
-                $user->zentaoUsers  += array($user->zentaoAccount => zget($userPairs, $user->zentaoAccount));
-                if(isset($bindedUsers[$user->zentaoAccount]) && $bindedUsers[$user->zentaoAccount] == $user->id)
+                if(isset($zentaoUsers[$user->zentaoUsers])) $user->email = $zentaoUsers[$user->zentaoUsers]->email;
+
+                if(isset($bindedUsers[$user->zentaoUsers]) && $bindedUsers[$user->zentaoUsers] == $gitlabUser->id)
                 {
-                    $user->binded = 1;
-                    if(!isset($bindedUsers[$user->zentaoAccount])) $user->binded = 2;
+                    $user->status = 'binded';
+                    if(!isset($bindedUsers[$user->zentaoUsers])) $user->status = 'bindedError';
                 }
             }
 
-            if($type == 'notBind' && $user->binded > 0)
-            {
-                unset($gitlabUsers[$userID]);
-            }
-            elseif($type == 'binded' && $user->binded == 0)
-            {
-                unset($gitlabUsers[$userID]);
-            }
-
+            if($type != 'all' && $user->status != $type) continue;
+            $userList[] = $user;
         }
 
         $this->view->title       = $this->lang->gitlab->bindUser;
-        $this->view->userPairs   = array('' => '') + $userPairs;
-        $this->view->gitlabUsers = $gitlabUsers;
-        $this->view->gitlabID    = $gitlabID;
         $this->view->type        = $type;
+        $this->view->gitlabID    = $gitlabID;
+        $this->view->recTotal    = count($userList);
+        $this->view->userList    = $userList;
+        $this->view->userPairs   = $userPairs;
         $this->view->zentaoUsers = $zentaoUsers;
-
         $this->display();
     }
 
     /**
+     * 删除一条gitlab记录。
      * Delete a gitlab.
      *
      * @param  int    $id
      * @access public
      * @return void
      */
-    public function delete($id, $confirm = 'no')
+    public function delete($id)
     {
-        if($confirm != 'yes') return print(js::confirm($this->lang->gitlab->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
-
         $oldGitLab = $this->loadModel('pipeline')->getByID($id);
         $actionID  = $this->pipeline->delete($id, 'gitlab');
-        if(!$actionID) return print(js::error($this->lang->pipeline->delError));
+        if(!$actionID)
+        {
+            $response['result']   = 'fail';
+            $response['callback'] = sprintf('zui.Modal.alert("%s");', $this->lang->pipeline->delError);
+
+            return $this->send($response);
+        }
 
         $gitLab   = $this->gitlab->getByID($id);
         $changes  = common::createChanges($oldGitLab, $gitLab);
         $this->loadModel('action')->logHistory($actionID, $changes);
-        echo js::reload('parent');
+
+        $response['load']   = $this->createLink('space', 'browse');
+        $response['result'] = 'success';
+        return $this->send($response);
     }
 
     /**
@@ -255,10 +282,9 @@ class gitlab extends control
      * @access protected
      * @return void
      */
-    protected function checkToken()
+    protected function checkToken(object $gitlab, int $gitlabID = 0)
     {
-        $gitlab = fixer::input('post')->trim('url,token')->get();
-        $this->dao->update('gitlab')->data($gitlab)->batchCheck($this->config->gitlab->create->requiredFields, 'notempty');
+        $this->dao->update('gitlab')->data($gitlab)->batchCheck($gitlabID ? $this->config->gitlab->edit->requiredFields : $this->config->gitlab->create->requiredFields, 'notempty');
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         if(strpos($gitlab->url, 'http') !== 0) return $this->send(array('result' => 'fail', 'message' => array('url' => array(sprintf($this->lang->gitlab->hostError, $this->config->gitlab->minCompatibleVersion)))));
@@ -606,7 +632,7 @@ class gitlab extends control
 
         $users       = $this->loadModel('user')->getList();
         $bindedUsers = $this->gitlab->getUserAccountIdPairs($gitlabID);
-        $userPairs   = array('' => '');
+        $userPairs   = array();
         $userInfos   = array();
         foreach($users as $key => $user)
         {
@@ -647,7 +673,7 @@ class gitlab extends control
 
         $users       = $this->loadModel('user')->getList();
         $bindedUsers = $this->gitlab->getUserAccountIdPairs($gitlabID);
-        $userPairs   = array('' => '');
+        $userPairs   = array();
         foreach($users as $user)
         {
             if(!isset($bindedUsers[$user->account]) or $user->account == $zentaoBindAccount) $userPairs[$user->account] = $user->realname;
@@ -707,10 +733,10 @@ class gitlab extends control
         if(!$this->app->user->admin)
         {
             $openID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
-            if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
+            if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('space', 'browse')));
         }
 
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $keyword = fixer::input('post')->setDefault('keyword', '')->get('keyword'); // Fix bug#16741.
 
@@ -727,6 +753,7 @@ class gitlab extends control
             if(!$project->adminer and isset($project->owner) and $project->owner->id == $openID) $project->adminer = true;
 
             $project->isMaintainer = $this->gitlab->checkUserAccess($gitlabID, $project->id, $project, $groupIDList, 'maintainer');
+            $project->isDeveloper  = $this->gitlab->checkUserAccess($gitlabID, $project->id, $project, $groupIDList, 'developer');
         }
 
         $gitlab    = $this->gitlab->getByID($gitlabID);
@@ -871,7 +898,7 @@ class gitlab extends control
         array_multisort($orderList, $sort == 'desc' ? SORT_DESC : SORT_ASC, $branchList);
 
         /* Pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $recTotal   = count($branchList);
         $pager      = new pager($recTotal, $recPerPage, $pageID);
         $branchList = array_chunk($branchList, $pager->recPerPage);
@@ -945,7 +972,7 @@ class gitlab extends control
         $keyword = fixer::input('post')->setDefault('keyword', '')->get('keyword');
 
         /* Pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $tagList = array();
@@ -1063,7 +1090,7 @@ class gitlab extends control
 
         $this->view->title           = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->importIssue;
         $this->view->importable      = empty($gitlabIssues) ? false : true;
-        $this->view->products        = array('' => '') + $products;
+        $this->view->products        = $products;
         $this->view->gitlabID        = $gitlabID;
         $this->view->gitlabProjectID = $projectID;
         $this->view->objectTypes     = $this->config->gitlab->objectTypes;
@@ -1088,7 +1115,7 @@ class gitlab extends control
         }
         else
         {
-            $repo = $this->loadModel('repo')->getRepoByID($repoID);
+            $repo = $this->loadModel('repo')->getByID($repoID);
             $res  = $this->gitlab->addPushWebhook($repo);
 
             if($res or is_array($res))
@@ -1118,7 +1145,7 @@ class gitlab extends control
             $accounts = array_filter($data->accounts);
             if(count($accounts) != count(array_unique($accounts))) return $this->send(array('result' => 'fail', 'message' => $this->lang->gitlab->group->repeatError));
 
-            $repo        = $this->loadModel('repo')->getRepoByID($repoID);
+            $repo        = $this->loadModel('repo')->getByID($repoID);
             $users       = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
             $bindedUsers = $this->dao->select('account,openID')
                 ->from(TABLE_OAUTH)
@@ -1220,7 +1247,7 @@ class gitlab extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => helper::createLink('repo', 'maintain')));
         }
 
-        $repo           = $this->loadModel('repo')->getRepoByID($repoID);
+        $repo           = $this->loadModel('repo')->getByID($repoID);
         $users          = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $projectMembers = $this->gitlab->apiGetProjectMembers($repo->gitService, $repo->project);
         if(!is_array($projectMembers)) $projectMembers = array();
@@ -1260,7 +1287,7 @@ class gitlab extends control
     {
         if(!$productID) return $this->send(array('message' => array()));
 
-        $executions = $this->loadModel('product')->getAllExecutionPairsByProduct($productID);
+        $executions = $this->loadModel('product')->getExecutionPairsByProduct($productID);
         $options    = "<option value=''></option>";
         foreach($executions as $index =>$execution)
         {
@@ -1282,12 +1309,14 @@ class gitlab extends control
         if(!$gitlabID or !$projectID) return $this->send(array('message' => array()));
 
         $branches = $this->gitlab->apiGetBranches($gitlabID, $projectID);
-        $options  = "<option value=''></option>";
+
+        $options = array();
+        $options[] = array('text' => '', 'value' => '');;
         foreach($branches as $branch)
         {
-            $options .= "<option value='{$branch->name}'>{$branch->name}</option>";
+            $options[] = array('text' => $branch->name, 'value' => $branch->name);
         }
-        $this->send($options);
+        return print(json_encode($options));
     }
 
     /**
@@ -1372,7 +1401,7 @@ class gitlab extends control
         /* If the status code beginning with 20 is returned or empty is returned, it is successful. */
         if(!$reponse or substr($reponse->message, 0, 2) == '20')
         {
-            $this->loadModel('action')->create('gitlabtag', $projectID, 'deleted', '', $project->name);
+            $this->loadModel('action')->create('gitlabtag', $projectID, 'deleted', '', $projectID);
             return print(js::reload('parent'));
         }
 

@@ -66,6 +66,8 @@ class build extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('build', 'view', "buildID=$buildID") . "#app={$this->app->tab}"));
         }
 
+        $_GET['zin'] = '0';
+
         $status = empty($this->config->CRProduct) ? 'noclosed' : '';
         $this->loadModel('product');
         $this->loadModel('project');
@@ -110,6 +112,17 @@ class build extends control
         }
 
         foreach($productGroups as $product) $products[$product->id] = $product->name;
+
+        if(!$this->view->hidden && $products)
+        {
+            $this->loadModel('artifactrepo');
+            $productArtifactRepos = array();
+            foreach($products as $ID => $productName)
+            {
+                $productArtifactRepos[$ID] = $this->artifactrepo->getReposByProduct($ID);
+            }
+            $this->view->productArtifactRepos = $productArtifactRepos;
+        }
 
         $this->view->title      = $this->lang->build->create;
         $this->view->position[] = $this->lang->build->create;

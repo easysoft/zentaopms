@@ -252,6 +252,169 @@ class searchModel extends model
     }
 
     /**
+     * Build the query to execute.
+     *
+     * @access public
+     * @return void
+     */
+    public function buildZinQuery()
+    {
+        /* Init vars. */
+        $where        = '';
+        $groupItems   = $this->config->search->groupItems;
+        $groupAndOr   = strtoupper($this->post->groupAndOr);
+        $module       = $this->session->searchParams['module'];
+        $searchParams = $module . 'searchParams';
+        $searchFields = json_decode($_SESSION[$searchParams]['searchFields']);
+        $fieldParams  = json_decode($_SESSION[$searchParams]['fieldParams']);
+        $scoreNum     = 0;
+
+        if($groupAndOr != 'AND' and $groupAndOr != 'OR') $groupAndOr = 'AND';
+
+        $queryForm    = $this->initZinSession($module, $searchFields, $fieldParams);
+        $queryForm[6] = array('groupAndOr' => strtolower($groupAndOr));
+
+        for($i = 1; $i <= $groupItems * 2; $i ++)
+        {
+            /* The and or between two groups. */
+            $formIndex = $i - 1;
+            if($i == 1) $where .= '(( 1  ';
+            if($i == $groupItems + 1) $where .= " ) $groupAndOr ( 1 ";
+
+            /* Set var names. */
+            $fieldName    = "field$i";
+            $andOrName    = "andOr$i";
+            $operatorName = "operator$i";
+            $valueName    = "value$i";
+
+            /* Fix bug #2704. */
+            $field = $this->post->$fieldName;
+            if(empty($field)) continue;
+            if(isset($fieldParams->$field) and $fieldParams->$field->control == 'input' and $this->post->$valueName === '0') $this->post->$valueName = 'ZERO';
+            if($field == 'id' and $this->post->$valueName === '0') $this->post->$valueName = 'ZERO';
+            $queryForm[$formIndex]['field'] = $field;
+
+            /* Set and or. */
+            $andOr = strtoupper($this->post->$andOrName);
+            if($andOr != 'AND' and $andOr != 'OR') $andOr = 'AND';
+            $queryForm[$formIndex]['andOr'] = strtolower($andOr);
+
+            /* Set operator. */
+            $operator = $this->post->$operatorName;
+            if(!isset($this->lang->search->operators[$operator])) $operator = '=';
+            $queryForm[$formIndex]['operator'] = $operator;
+
+            /* Skip empty values. */
+            if($this->post->$valueName == false) continue;
+            if($this->post->$valueName == 'ZERO') $this->post->$valueName = 0;   // ZERO is special, stands to 0.
+            if(isset($fieldParams->$field) and $fieldParams->$field->control == 'select' and $this->post->$valueName === 'null') $this->post->$valueName = '';   // Null is special, stands to empty if control is select. Fix bug #3279.
+            $value = addcslashes(trim($this->post->$valueName), '%');
+            $queryForm[$formIndex]['value'] = $value;
+
+            $scoreNum += 1;
+
+
+            /* Set condition. */
+            $condition = '';
+            if($operator == "include")
+            {
+                if($this->post->$fieldName == 'module')
+                {
+                    $allModules = $this->loadModel('tree')->getAllChildId($value);
+                    if($allModules) $condition = helper::dbIN($allModules);
+                }
+                else
+                {
+                    $condition = ' LIKE ' . $this->dbh->quote("%$value%");
+                }
+            }
+            elseif($operator == "notinclude")
+            {
+                if($this->post->$fieldName == 'module')
+                {
+                    $allModules = $this->loadModel('tree')->getAllChildId($value);
+                    if($allModules) $condition = " NOT " . helper::dbIN($allModules);
+                }
+                else
+                {
+                    $condition = ' NOT LIKE ' . $this->dbh->quote("%$value%");
+                }
+            }
+            elseif($operator == 'belong')
+            {
+                if($this->post->$fieldName == 'module')
+                {
+                    $allModules = $this->loadModel('tree')->getAllChildId($value);
+                    if($allModules) $condition = helper::dbIN($allModules);
+                }
+                elseif($this->post->$fieldName == 'dept')
+                {
+                    $allDepts = $this->loadModel('dept')->getAllChildId($value);
+                    $condition = helper::dbIN($allDepts);
+                }
+                elseif($this->post->$fieldName == 'scene')
+                {
+                    $allScenes = $value === '0' ? array() : ($value === '' ? array(0) : $this->loadModel('testcase')->getAllChildId($value));
+                    if(count($allScenes)) $condition = helper::dbIN($allScenes);
+                }
+                else
+                {
+                    $condition = ' = ' . $this->dbh->quote($value) . ' ';
+                }
+            }
+            else
+            {
+                if($operator == 'between' and !isset($this->config->search->dynamic[$value])) $operator = '=';
+                $condition = $operator . ' ' . $this->dbh->quote($value) . ' ';
+
+                if($operator == '=' and $this->post->$fieldName == 'id' and preg_match('/^[0-9]+(,[0-9]*)+$/', $value) and !preg_match('/[\x7f-\xff]+/', $value))
+                {
+                    $values = array_filter(explode(',', trim($this->dbh->quote($value), "'")));
+                    foreach($values as $value) $value = "'" . $value . "'";
+
+                    $value     = implode(',', $values);
+                    $operator  = 'IN';
+                    $condition = $operator . ' (' . $value . ') ';
+                }
+            }
+
+            /* Processing query criteria. */
+            if($operator == '=' and preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $value))
+            {
+                $condition  = '`' . $this->post->$fieldName . "` >= '$value' AND `" . $this->post->$fieldName . "` <= '$value 23:59:59'";
+                $where     .= " $andOr ($condition)";
+            }
+            elseif($operator == '!=' and preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $value))
+            {
+                $condition  = '`' . $this->post->$fieldName . "` < '$value' OR `" . $this->post->$fieldName . "` > '$value 23:59:59'";
+                $where     .= " $andOr ($condition)";
+            }
+            elseif($operator == '<=' and preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $value))
+            {
+                $where .= " $andOr " . '`' . $this->post->$fieldName . "` <= '$value 23:59:59'";
+            }
+            elseif($operator == '>' and preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $value))
+            {
+                $where .= " $andOr " . '`' . $this->post->$fieldName . "` > '$value 23:59:59'";
+            }
+            elseif($condition)
+            {
+                $where .= " $andOr " . '`' . $this->post->$fieldName . '` ' . $condition;
+            }
+        }
+
+        $where .=" ))";
+        $where  = $this->replaceDynamic($where);
+
+        /* Save to session. */
+        $querySessionName = $this->post->module . 'Query';
+        $formSessionName  = $this->post->module . 'Form';
+        $this->session->set($querySessionName, $where);
+        $this->session->set($formSessionName,  $queryForm);
+        if($scoreNum > 2 && !dao::isError()) $this->loadModel('score')->create('search', 'saveQueryAdvanced');
+    }
+
+    /**
      * Init the search session for the first time search.
      *
      * @param  string   $module
@@ -288,6 +451,36 @@ class searchModel extends model
     }
 
     /**
+     * Init the search session for the first time search.
+     *
+     * @param  string   $module
+     * @param  array    $fields
+     * @param  array    $fieldParams
+     * @access public
+     * @return array
+     */
+    public function initZinSession($module, $fields, $fieldParams)
+    {
+        if(is_object($fields)) $fields = get_object_vars($fields);
+        $formSessionName = $module . 'Form';
+
+        $queryForm       = array();
+        for($i = 1; $i <= $this->config->search->groupItems * 2; $i ++)
+        {
+            $currentField  = key($fields);
+            $currentParams = zget($fieldParams, $currentField, array());
+            $operator      = zget($currentParams, 'operator', '=');
+            $queryForm[]   = array('field' => $currentField, 'andOr' => 'and', 'operator' => $operator, 'value' => '');
+
+            if(!next($fields)) reset($fields);
+        }
+        $queryForm[] = array('groupAndOr' => 'and');
+        $this->session->set($formSessionName, $queryForm);
+
+        return $queryForm;
+    }
+
+    /**
      * Set default params for selection.
      *
      * @param  array  $fields
@@ -306,6 +499,7 @@ class searchModel extends model
         $formSessionName = $module . 'Form';
         if(isset($_SESSION[$formSessionName]))
         {
+            $_SESSION[$formSessionName] = $this->convertFormFrom20To18($_SESSION[$formSessionName]);
             for($i = 1; $i <= $this->config->search->groupItems; $i ++)
             {
                 $fieldName = 'field' . $i;
@@ -367,6 +561,154 @@ class searchModel extends model
     }
 
     /**
+     * Set default params for selection.
+     *
+     * @param  array  $fields
+     * @param  array  $params
+     * @access public
+     * @return array
+     */
+    public function setZinDefaultParams($fields, $params)
+    {
+        $hasProduct   = false;
+        $hasExecution = false;
+        $hasUser      = false;
+
+        $appendUsers     = array();
+        $module          = $_SESSION['searchParams']['module'];
+        $formSessionName = $module . 'Form';
+        if(isset($_SESSION[$formSessionName]))
+        {
+            for($i = 1; $i <= $this->config->search->groupItems; $i ++)
+            {
+                if(!isset($_SESSION[$formSessionName][$i - 1])) continue;
+
+                $fieldName = $_SESSION[$formSessionName][$i - 1]['field'];
+                if(isset($params[$fieldName]) and $params[$fieldName]['values'] == 'users')
+                {
+                    if($_SESSION[$formSessionName][$i - 1]['value']) $appendUsers[] = $_SESSION[$formSessionName][$i - 1]['value'];
+                }
+            }
+        }
+
+        $fields = array_keys($fields);
+        foreach($fields as $fieldName)
+        {
+            if(empty($params[$fieldName])) continue;
+            if($params[$fieldName]['values'] == 'products')   $hasProduct   = true;
+            if($params[$fieldName]['values'] == 'users')      $hasUser      = true;
+            if($params[$fieldName]['values'] == 'executions') $hasExecution = true;
+        }
+
+        if($hasUser)
+        {
+            $users = $this->loadModel('user')->getPairs('realname|noclosed', $appendUsers, $this->config->maxCount);
+            $users['$@me'] = $this->lang->search->me;
+        }
+        if($hasProduct) $products = $this->loadModel('product')->getPairs('', $this->session->project);
+        if($hasExecution) $executions = $this->loadModel('execution')->getPairs($this->session->project);
+
+        foreach($fields as $fieldName)
+        {
+            if(!isset($params[$fieldName])) $params[$fieldName] = array('operator' => '=', 'control' => 'input', 'values' => '');
+            if($params[$fieldName]['values'] == 'users')
+            {
+                if(!empty($this->config->user->moreLink)) $this->config->moreLinks["field{$fieldName}"] = $this->config->user->moreLink;
+                $params[$fieldName]['values'] = $users;
+            }
+            if($params[$fieldName]['values'] == 'products')   $params[$fieldName]['values'] = $products;
+            if($params[$fieldName]['values'] == 'executions') $params[$fieldName]['values'] = $executions;
+            if(is_array($params[$fieldName]['values']))
+            {
+                /* For build right sql when key is 0 and is not null.  e.g. confirmed field. */
+                if(isset($params[$fieldName]['values'][0]) and $params[$fieldName]['values'][0] !== '')
+                {
+                    $params[$fieldName]['values'] = array('ZERO' => $params[$fieldName]['values'][0]) + $params[$fieldName]['values'];
+                    unset($params[$fieldName]['values'][0]);
+                }
+                elseif(empty($params[$fieldName]['values']))
+                {
+                    $params[$fieldName]['values'] = array('' => '', 'null' => $this->lang->search->null);
+                }
+                elseif(empty($params[$fieldName]['nonull']))
+                {
+                    $params[$fieldName]['values'] = $params[$fieldName]['values'] + array('null' => $this->lang->search->null);
+                }
+            }
+        }
+        return $params;
+    }
+
+    /**
+     * 转换formSession格式。
+     * Convert format of formSession from version 18 to version 20 .
+     *
+     * @param  array  $formSession
+     * @access public
+     * @return array
+     */
+    public function convertFormFrom18To20($formSession)
+    {
+        $queryForm   = array();
+
+        $queryForm = array();
+        if(isset($formSession['field1']))
+        {
+            foreach($formSession as $field => $value)
+            {
+                $index = substr($field, -1);
+                if(is_numeric($index))
+                {
+                    $field = substr($field, 0, strlen($field) - 1);
+                    $queryForm[$index][$field] = $value;
+                }
+                elseif($field == 'groupAndOr')
+                {
+                    $queryForm[$field][$field] = $value;
+                }
+            }
+            $formSession = array_values($queryForm);
+        }
+
+        return $formSession;
+    }
+
+    /**
+     * 转换formSession格式。
+     * Convert format of formSession from version 20 to version 18 .
+     *
+     * @param  array  $formSession
+     * @access public
+     * @return array
+     */
+    public function convertFormFrom20To18($formSession)
+    {
+        $queryForm = array();
+
+        if(!isset($formSession['field1']))
+        {
+            foreach($formSession as $i => $formItem)
+            {
+                $i++;
+                if(isset($formItem['groupAndOr']))
+                {
+                    $queryForm['groupAndOr'] = $formItem['groupAndOr'];
+                }
+                elseif(isset($formItem['field']))
+                {
+                    $queryForm['field' . $i]    = $formItem['field'];
+                    $queryForm['andOr' . $i]    = $formItem['andOr'];
+                    $queryForm['operator' . $i] = $formItem['operator'];
+                    $queryForm['value' . $i]    = $formItem['value'];
+                }
+            }
+            $formSession = $queryForm;
+        }
+
+        return $formSession;
+    }
+
+    /**
      * Get a query.
      *
      * @param  int    $queryID
@@ -384,6 +726,8 @@ class searchModel extends model
 
         $hasDynamic  = strpos($query->form, '$') !== false;
         $query->form = unserialize($query->form);
+        $query->form = $this->convertFormFrom20To18($query->form);
+
         if($hasDynamic)
         {
             $_POST = $query->form;
@@ -391,6 +735,54 @@ class searchModel extends model
             $querySessionName = $query->form['module'] . 'Query';
             $query->sql = $_SESSION[$querySessionName];
         }
+        return $query;
+    }
+
+    /**
+     * Get a query.
+     *
+     * @param  int    $queryID
+     * @access public
+     * @return object
+     */
+    public function getZinQuery($queryID)
+    {
+        $query = $this->dao->findByID((int)$queryID)->from(TABLE_USERQUERY)->fetch();
+        if(!$query) return false;
+
+        /* Decode html encode. */
+        $query->form = htmlspecialchars_decode($query->form, ENT_QUOTES);
+        $query->sql  = htmlspecialchars_decode($query->sql, ENT_QUOTES);
+
+        $hasDynamic  = strpos($query->form, '$') !== false;
+        $query->form = unserialize($query->form);
+        if($hasDynamic)
+        {
+            $_POST = $query->form;
+            $this->buildQuery();
+            $querySessionName = $query->form['module'] . 'Query';
+            $query->sql = $_SESSION[$querySessionName];
+        }
+
+        $queryForm = array();
+        if(isset($query->form['field1']))
+        {
+            foreach($query->form as $field => $value)
+            {
+                $index = substr($field, -1);
+                if(is_numeric($index))
+                {
+                    $field = substr($field, 0, strlen($field) - 1);
+                    $queryForm[$index][$field] = $value;
+                }
+                elseif($field == 'groupAndOr')
+                {
+                    $queryForm[$field][$field] = $value;
+                }
+            }
+            $query->form = array_values($queryForm);
+        }
+
         return $query;
     }
 
@@ -415,6 +807,38 @@ class searchModel extends model
      * @return void
      */
     public function saveQuery()
+    {
+        $sqlVar  = $this->post->module  . 'Query';
+        $formVar = $this->post->module  . 'Form';
+        $sql     = $_SESSION[$sqlVar];
+        if(!$sql) $sql = ' 1 = 1 ';
+
+        $query = fixer::input('post')
+            ->add('account', $this->app->user->account)
+            ->add('form', serialize($_SESSION[$formVar]))
+            ->add('sql',  $sql)
+            ->skipSpecial('sql,form')
+            ->remove('onMenuBar')
+            ->get();
+        if($this->post->onMenuBar) $query->shortcut = '1';
+        $this->dao->insert(TABLE_USERQUERY)->data($query)->autoCheck()->check('title', 'notempty')->exec();
+
+        if(!dao::isError())
+        {
+            $queryID = $this->dao->lastInsertID();
+            if(!dao::isError()) $this->loadModel('score')->create('search', 'saveQuery', $queryID);
+            return $queryID;
+        }
+        return false;
+    }
+
+    /**
+     * Save current query to db of zin ui.
+     *
+     * @access public
+     * @return void
+     */
+    public function saveZinQuery()
     {
         $sqlVar  = $this->post->module  . 'Query';
         $formVar = $this->post->module  . 'Form';
@@ -644,8 +1068,9 @@ class searchModel extends model
                 if($module == 'case') $module = 'testcase';
                 if(common::hasPriv($module, 'view')) $allowedObject[] = $objectType;
 
-                if($module == 'caselib'    and common::hasPriv('caselib', 'view'))     $allowedObject[] = $objectType;
-                if($module == 'deploystep' and common::haspriv('deploy',  'viewstep')) $allowedobject[] = $objectType;
+                if($module == 'caselib'    and common::hasPriv('caselib', 'view'))             $allowedObject[] = $objectType;
+                if($module == 'deploystep' and common::haspriv('deploy', 'viewstep'))          $allowedobject[] = $objectType;
+                if($module == 'practice'   and common::haspriv('traincourse', 'practiceView')) $allowedobject[] = $objectType;
             }
         }
 
@@ -795,6 +1220,11 @@ class searchModel extends model
             {
                 $module = 'deploy';
                 $method = 'viewstep';
+            }
+            elseif($module == 'practice')
+            {
+                $module = 'traincourse';
+                $method = 'practiceview';
             }
 
             if(strpos($linkProjectModules, ",$module,") !== false)
@@ -1416,5 +1846,172 @@ class searchModel extends model
         }
 
         return $object;
+    }
+
+    /**
+     * Build search form options.
+     *
+     * @param  array $module
+     * @param  array $fieldParams
+     * @param  array $fieldsMap
+     * @param  array $queries
+     * @access public
+     * @return object
+     */
+    public function buildSearchFormOptions($module, $fieldParams, $fields, $queries, $actionURL = '')
+    {
+        $opts = new stdClass();
+        $opts->formConfig       = static::buildFormConfig();
+        $opts->fields           = static::buildFormFields($fieldParams, $fields);
+        $opts->operators        = static::buildFormOperators($this->lang->search->operators);
+        $opts->andOr            = static::buildFormAndOrs($this->lang->search->andor);
+        $opts->saveSearch       = static::buildFormSaveSearch($module);
+        $opts->searchConditions = static::buildFormSavedQuery($queries, $actionURL);
+
+        return $opts;
+    }
+
+    /**
+     * Form Configuration of buildForm action.
+     *
+     * @access public
+     * @return object
+     */
+    public static function buildFormConfig()
+    {
+        $config = new stdClass();
+        $config->action = helper::createLink('search', 'buildZinQuery');
+        $config->method = 'post';
+
+        return $config;
+    }
+
+    /**
+     * Fields options of buildForm action.
+     *
+     * @param  array $fieldParams
+     * @param  array $fieldsMap
+     * @access public
+     * @return array
+     */
+    public static function buildFormFields($fieldParams, $fieldsMap)
+    {
+        $fields = array();
+
+        foreach($fieldParams as $name => $param)
+        {
+            $field = new stdClass();
+            $field->label        = isset($fieldsMap[$name]) ? $fieldsMap[$name] : '';
+            $field->name         = $name;
+            $field->control      = $param['control'];
+            $field->operator     = $param['operator'];
+            $field->defaultValue = '';
+            $field->placeholder  = '';
+            $field->values       = $param['values'];
+
+            $fields[] = $field;
+        }
+
+        return $fields;
+    }
+
+    /**
+     * Operators of buildForm action.
+     *
+     * @param  array $operators
+     * @access public
+     * @return array
+     */
+    public static function buildFormOperators($operators)
+    {
+        $ops = array();
+
+        foreach($operators as $val => $title)
+        {
+            $op = new stdClass();
+            $op->value = $val;
+            $op->title = $title;
+
+            $ops[] = $op;
+        }
+
+        return $ops;
+    }
+
+    /**
+     * AndOr options of buildForm action.
+     *
+     * @param  array $andOrs
+     * @access public
+     * @return array
+     */
+    public static function buildFormAndOrs($andOrs)
+    {
+        $result = array();
+
+        foreach($andOrs as $val => $title)
+        {
+            $item = new stdClass();
+            $item->value = $val;
+            $item->title = $title;
+
+            $result[] = $item;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Save Search button of buildForm action.
+     *
+     * @param  array $module
+     * @access public
+     * @return object
+     */
+    public static function buildFormSaveSearch($module)
+    {
+        global $lang;
+
+        $result = new stdClass();
+        $result->text     = $lang->search->saveCondition;
+        $result->hasPriv  = common::hasPriv('search', 'saveQuery');
+        $result->config   = array(
+            'data-toggle'    => 'modal',
+            'data-type'      => 'ajax',
+            'data-data-type' => 'html',
+            'data-url'       => helper::createLink('search', 'saveZinQuery', array('module' => $module)),
+        );
+
+        return $result;
+    }
+
+    /**
+     * Saved Queries list of buildForm action.
+     *
+     * @param  array $queries
+     * @param  array $account
+     * @access public
+     * @return array
+     */
+    public static function buildFormSavedQuery($queries, $actionURL)
+    {
+        $result = array();
+        if(empty($queries)) return $result;
+
+        global $lang;
+        $hasPriv = common::hasPriv('search', 'deleteQuery');
+        foreach($queries as $query)
+        {
+            if(!is_object($query)) continue;
+
+            $item = new stdClass();
+            $item->text     = $query->title;
+            $item->applyURL = str_replace('myQueryID', $query->id, $actionURL);
+            if($hasPriv) $item->deleteProps = array('className' => 'ajax-submit', 'data-confirm' => $lang->search->confirmDelete, 'href' => helper::createLink('search', 'deleteZinQuery', "queryID={$query->id}"));
+
+            $result[] = $item;
+        }
+
+        return $result;
     }
 }

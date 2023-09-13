@@ -362,7 +362,7 @@ class block extends control
     public function dynamic()
     {
         $this->view->actions = $this->loadModel('action')->getDynamic('all', 'today', 'id_desc', 30);
-        $this->view->users   = $this->loadModel('user')->getPairs('nodeleted|noletter|all', '', 0, array_unique(array_column($this->view->actions, 'actor')));
+        $this->view->users   = $this->loadModel('user')->getPairs('nodeleted|noletter|all', '', 0, array_unique(helper::arrayColumn($this->view->actions, 'actor')));
 
         $this->display();
     }
@@ -898,7 +898,7 @@ class block extends control
         $orderBy = isset($this->params->orderBy) ? $this->params->orderBy : 'id_desc';
 
         $this->view->projects = $this->loadModel('project')->getOverviewList('byStatus', $type, $orderBy, $count);
-        $this->view->users    = $this->loadModel('user')->getPairs('noletter', '', 0, array_unique(array_column($this->view->projects, 'PM')));
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter', '', 0, array_unique(helper::arrayColumn($this->view->projects, 'PM')));
     }
 
     /**
@@ -985,15 +985,14 @@ class block extends control
         $count  = isset($this->params->count) ? (int)$this->params->count : 15;
 
         /* Get projects. */
-        $excludedModel = ($this->config->edition == 'max' or $this->config->edition == 'ipd') ? '' : 'waterfall';
-        $projects      = $this->project->getOverviewList('byStatus', $status, 'order_asc', $count, $excludedModel);
+        $projects      = $this->project->getOverviewList('byStatus', $status, 'order_asc', $count, '');
         if(empty($projects))
         {
             $this->view->projects = $projects;
             return false;
         }
 
-        $cacheKey = sprintf($this->config->cacheKeys->block->projectStatistic, $status, $count, $excludedModel);
+        $cacheKey = sprintf($this->config->cacheKeys->block->projectStatistic, $status, $count, '');
         if(helper::isCacheEnabled() && $this->cache->has($cacheKey))
         {
             $projects = $this->cache->get($cacheKey);
@@ -1572,7 +1571,7 @@ class block extends control
         $projectID = $this->session->project;
 
         $this->view->actions = $this->loadModel('action')->getDynamic('all', 'all', 'id_desc', 30, 'all', $projectID);
-        $this->view->users   = $this->loadModel('user')->getPairs('noletter', '', 0, array_unique(array_column($this->view->actions, 'actor')));
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter', '', 0, array_unique(helper::arrayColumn($this->view->actions, 'actor')));
     }
 
     /**
@@ -2109,7 +2108,7 @@ class block extends control
     public function printDocDynamicBlock()
     {
         $this->view->actions = $this->loadModel('doc')->getDynamic(30);
-        $this->view->users   = $this->loadModel('user')->getPairs('nodeleted|noletter|all', '', 0, array_unique(array_column($this->view->actions, 'actor')));
+        $this->view->users   = $this->loadModel('user')->getPairs('nodeleted|noletter|all', '', 0, array_unique(helper::arrayColumn($this->view->actions, 'actor')));
     }
 
     /**

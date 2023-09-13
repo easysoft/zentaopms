@@ -69,7 +69,7 @@ class deptModel extends model
     public function getOptionMenu($rootDeptID = 0)
     {
         $deptMenu = array();
-        $stmt = $this->dbh->query($this->buildMenuQuery($rootDeptID));
+        $stmt = $this->app->dbQuery($this->buildMenuQuery($rootDeptID));
         $depts = array();
         while($dept = $stmt->fetch()) $depts[$dept->id] = $dept;
 
@@ -137,7 +137,7 @@ class deptModel extends model
     public function getTreeMenu($rootDeptID = 0, $userFunc = '', $param = 0)
     {
         $deptMenu = array();
-        $stmt = $this->dbh->query($this->buildMenuQuery($rootDeptID));
+        $stmt = $this->app->dbQuery($this->buildMenuQuery($rootDeptID));
         while($dept = $stmt->fetch())
         {
             $linkHtml = call_user_func($userFunc, $dept, $param);

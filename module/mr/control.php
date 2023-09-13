@@ -31,7 +31,7 @@ class mr extends control
      */
     public function browse($repoID = 0, $mode = 'status', $param = 'opened', $objectID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $repoCount = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq('0')
@@ -42,16 +42,22 @@ class mr extends control
         if($repoCount == 0) $this->locate($this->loadModel('repo')->createLink('create'));
 
         $repoID = $this->loadModel('repo')->saveState($repoID, $objectID);
-        $repo   = $this->repo->getRepoByID($repoID);
+        $repo   = $this->repo->getByID($repoID);
         if(!in_array(strtolower($repo->SCM), $this->config->mr->gitServiceList))
         {
             $repoID = $this->dao->select('id')->from(TABLE_REPO)->where('deleted')->eq('0')->andWhere('SCM')->in(array('Gitlab', 'Gitea', 'Gogs'))->andWhere('synced')->eq(1)->orderBy('id')->fetch('id');
-            $repo   = $this->repo->getRepoByID($repoID);
+            $repo   = $this->repo->getByID($repoID);
         }
         $this->loadModel('ci')->setMenu($repo->id);
 
+        if($param == 'assignee' || $param == 'creator')
+        {
+            $mode  = $param;
+            $param = $this->app->user->account;
+        }
         $filterProjects = empty($repo->serviceProject) ? array() : array($repo->serviceHost => array($repo->serviceProject => $repo->serviceProject));
         $MRList         = $this->mr->getList($mode, $param, $orderBy, $pager, $filterProjects, $repoID);
+
         if($repo->SCM == 'Gitlab')
         {
             $projectIds = array();
@@ -78,7 +84,6 @@ class mr extends control
         {
             $product         = $this->mr->getMRProduct($MR);
             $MR->linkButton  = empty($product) ? false : true;
-            $MR->createdDate = date('m-d H:i', strtotime($MR->createdDate));
         }
 
         /* Load lang from compile module */
@@ -113,6 +118,7 @@ class mr extends control
         $this->view->orderBy    = $orderBy;
         $this->view->openIDList = $openIDList;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->sortLink   = $this->createLink('mr', 'browse', "repoID={$repoID}&mode={$mode}&param={$param}&objectID={$objectID}&orderBy={orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}");
         $this->display();
     }
 
@@ -122,7 +128,7 @@ class mr extends control
      * @access public
      * @return void
      */
-    public function create()
+    public function create(int $repoID = 0)
     {
         if($_POST)
         {
@@ -130,45 +136,21 @@ class mr extends control
             return $this->send($result);
         }
 
-        $repoID = $this->loadModel('repo')->saveState(0);
-        $repo   = $this->repo->getRepoByID($repoID);
+        $repoID = $this->loadModel('repo')->saveState($repoID);
+        $repo   = $this->repo->getByID($repoID);
 
-        $this->loadModel('gitlab');
-        $this->loadModel('gitea');
-        $this->loadModel('gogs');
-        if($repo->SCM == 'Gitea')
-        {
-            $project = $this->gitea->apiGetSingleProject($repo->gitService, $repo->project);
-            if(empty($project) or !$project->allow_merge_commits) $repo = array();
-        }
+        $project = $this->loadModel(strtolower($repo->SCM))->apiGetSingleProject($repo->gitService, $repo->serviceProject);
 
-        $hosts = $this->loadModel('pipeline')->getList(array('gitea', 'gitlab', 'gogs'));
-        if(!$this->app->user->admin)
-        {
-            $gitlabUsers = $this->gitlab->getGitLabListByAccount();
-            $giteaUsers  = $this->gitea->getGiteaListByAccount();
-            $gogsUsers   = $this->gogs->getGogsListByAccount();
-            foreach($hosts as $hostID => $host)
-            {
-                if($host->type == 'gitlab' and isset($gitlabUsers[$hostID])) continue;
-                if($host->type == 'gitea'  and isset($giteaUsers[$hostID]))  continue;
-                if($host->type == 'gogs'   and isset($gogsUsers[$hostID]))   continue;
+        $jobPairs = array();
+        $jobs     = $this->loadModel('job')->getListByRepoID($repoID);
+        foreach($jobs as $job) $jobPairs[$job->id] = "[{$job->id}]{$job->name}";
 
-                unset($hosts[$hostID]);
-            }
-        }
-
-        $hostPairs = array();
-        foreach($hosts as $host) $hostPairs[$host->id] = '[' . ucfirst($host->type) . "] {$host->name}";
-
-        $this->app->loadLang('repo'); /* Import lang in repo module. */
         $this->app->loadLang('compile');
         $this->view->title     = $this->lang->mr->create;
         $this->view->users     = $this->loadModel('user')->getPairs('noletter|noclosed');
-        $this->view->jobList   = $this->loadModel('job')->getList();
-        $this->view->hostPairs = $hostPairs;
-        $this->view->hosts     = $hosts;
         $this->view->repo      = $repo;
+        $this->view->project   = $project;
+        $this->view->jobPairs  = $jobPairs;
         $this->display();
     }
 
@@ -208,7 +190,6 @@ class mr extends control
         foreach($branchList as $branch) $targetBranchList[$branch] = $branch;
 
         /* Fetch user list both in Zentao and current GitLab project. */
-        $bindedUsers = $this->$scm->getUserIdRealnamePairs($MR->hostID);
         $gitUsers    = $this->$scm->getUserAccountIdPairs($MR->hostID);
 
         /* Check permissions. */
@@ -237,6 +218,8 @@ class mr extends control
         {
             $rawJobList = $this->job->getListByRepoID($MR->repoID);
             foreach($rawJobList as $rawJob) $jobList[$rawJob->id] = "[$rawJob->id] $rawJob->name";
+
+            $this->view->repo = $this->repo->getByID($MR->repoID);
         }
 
         $this->view->repoList = $repoList;
@@ -276,7 +259,7 @@ class mr extends control
         $this->loadModel('action')->create('mr', $MRID, 'deleted', '', $MR->title);
         $this->mr->createMRLinkedAction($MRID, 'removemr');
 
-        echo js::locate(inlink('browse'), 'parent');
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
@@ -289,7 +272,7 @@ class mr extends control
     public function view($MRID)
     {
         $MR = $this->mr->getByID($MRID);
-        if(!$MR) return print(js::error($this->lang->notFound) . js::locate($this->createLink('mr', 'browse')));
+        if(!$MR) return $this->locate($this->createLink('mr', 'browse'));
         if(isset($MR->hostID)) $rawMR = $this->mr->apiGetSingleMR($MR->hostID, $MR->targetProject, $MR->mriid);
         if($MR->synced and (!isset($rawMR->id) or (isset($rawMR->message) and $rawMR->message == '404 Not found') or empty($rawMR))) return $this->display();
 
@@ -305,7 +288,7 @@ class mr extends control
         $sourceBranch  = $this->$scm->apiGetSingleBranch($MR->hostID, $MR->sourceProject, $MR->sourceBranch);
         $targetBranch  = $this->$scm->apiGetSingleBranch($MR->hostID, $MR->targetProject, $MR->targetBranch);
 
-        $projectOwner = true;
+        $projectOwner = false;
         if(isset($MR->hostID) and !$this->app->user->admin)
         {
             $openID = $this->$scm->getUserIDByZentaoAccount($MR->hostID, $this->app->user->account);
@@ -395,14 +378,14 @@ class mr extends control
         if(isset($rawMR->state) and $rawMR->state == 'merged')
         {
             $this->mr->logMergedAction($MR);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->mr->mergeSuccess, 'locate' => helper::createLink('mr', 'browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->mr->mergeSuccess, 'load' => true));
         }
 
         /* The type of variable `$rawMR->message` is string. This is different with apiCreateMR. */
         if(isset($rawMR->message))
         {
             $errorMessage = $this->mr->convertApiError($rawMR->message);
-            return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->mr->apiError->sudo, $errorMessage), 'locate' => helper::createLink('mr', 'view', "mr={$MRID}")));
+            return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->mr->apiError->sudo, $errorMessage)));
         }
 
         return $this->send(array('result' => 'fail', 'message' => $this->lang->mr->mergeFailed, 'locate' => helper::createLink('mr', 'view', "mr={$MRID}")));
@@ -444,7 +427,7 @@ class mr extends control
             if($this->post->arrange)
             {
                 $arrange = $this->post->arrange;
-                setcookie('arrange', $arrange);
+                helper::setcookie('arrange', $arrange);
             }
             if($this->post->encoding) $encoding = $this->post->encoding;
         }
@@ -469,7 +452,7 @@ class mr extends control
             }
         }
 
-        $this->view->repo         = $this->loadModel('repo')->getRepoByID($MR->repoID);
+        $this->view->repo         = $this->loadModel('repo')->getByID($MR->repoID);
         $this->view->repoID       = $MR->repoID;
         $this->view->diffs        = $diffs;
         $this->view->encoding     = $encoding;
@@ -554,17 +537,22 @@ class mr extends control
      * @param  int    $pageID
      * @return void
      */
-    public function link($MRID, $type = 'story', $orderBy = 'id_desc', $link = 'false', $param = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function link($MRID, $type = 'story', $orderBy = 'id_desc', $link = 'false', $param = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->app->loadLang('productplan');
         $this->app->loadLang('bug');
         $this->app->loadLang('task');
+        $this->app->loadLang('release');
+
+        $this->app->loadModuleConfig('release');
+        $this->app->loadModuleConfig('task');
+        $this->app->loadModuleConfig('repo');
 
         $MR       = $this->mr->getByID($MRID);
         $product  = $this->mr->getMRProduct($MR);
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $storyPager = new pager(0, $recPerPage, $type == 'story' ? $pageID : 1);
         $bugPager   = new pager(0, $recPerPage, $type == 'bug' ? $pageID : 1);
         $taskPager  = new pager(0, $recPerPage, $type == 'task' ? $pageID : 1);
@@ -606,24 +594,29 @@ class mr extends control
      * @access public
      * @return void
      */
-    public function linkStory($MRID, $productID = 0, $browseType = '', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function linkStory($MRID, $productID = 0, $browseType = '', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         if(!empty($_POST['stories']))
         {
             $this->mr->link($MRID, $productID, 'story');
 
-            if(dao::isError()) return print(js::error(dao::getError()));
-            return print(js::locate(inlink('link', "MRID=$MRID&type=story&orderBy=$orderBy"), 'parent'));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $link = inlink('link', "MRID=$MRID&type=story&orderBy=$orderBy");
+            return $this->send(array('result' => 'success', 'callback' => "loadTable('$link', 'storyTable')", 'closeModal' => true));
         }
 
         $this->loadModel('story');
+        $this->app->loadLang('release');
+        $this->app->loadLang('release');
+        $this->app->loadModuleConfig('release');
         $this->app->loadLang('productplan');
 
         $product = $this->loadModel('product')->getById($productID);
         $modules = $this->loadModel('tree')->getOptionMenu($productID, 'story');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Build search form. */
@@ -632,7 +625,7 @@ class mr extends control
         $queryID         = ($browseType == 'bySearch') ? (int) $param : 0;
 
         unset($this->config->product->search['fields']['product']);
-        $this->config->product->search['actionURL']                   = $this->createLink('mr', 'link', "$MRID=$MRID&type=story&orderBy=$orderBy&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
+        $this->config->product->search['actionURL']                   = $this->createLink('mr', 'linkStory', "MRID={$MRID}&productID={$productID}&browseType=bySearch&param=myQueryID&orderBy={$orderBy}");
         $this->config->product->search['queryID']                     = $queryID;
         $this->config->product->search['style']                       = 'simple';
         $this->config->product->search['params']['product']['values'] = array($product) + array('all' => $this->lang->product->allProductsOfProject);
@@ -649,8 +642,7 @@ class mr extends control
         {
             $this->product->setMenu($productID, 0);
             $this->config->product->search['fields']['branch']           = $this->lang->product->branch;
-            $branches                                                    = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty');
-            $this->config->product->search['params']['branch']['values'] = $branches;
+            $this->config->product->search['params']['branch']['values'] = $this->loadModel('branch')->getPairs($productID, 'noempty');
         }
         $this->loadModel('search')->setSearchParams($this->config->product->search);
 
@@ -660,11 +652,11 @@ class mr extends control
         $linkedStories = $this->mr->getLinkList($MRID, $product->id, 'story');
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch($productID, 0, $queryID, 'id', '', 'story', array_keys($linkedStories), '', $pager);
+            $allStories = $this->story->getBySearch($productID, 0, $queryID, $orderBy, '', 'story', array_keys($linkedStories), '', $pager);
         }
         else
         {
-            $allStories = $this->story->getProductStories($productID, 0, '0', 'draft,reviewing,active,changing', 'story', 'id_desc', false, array_keys($linkedStories), $pager);
+            $allStories = $this->story->getProductStories($productID, 0, '0', 'draft,reviewing,active,changing', 'story', $orderBy, false, array_keys($linkedStories), $pager);
         }
 
         $this->view->modules        = $modules;
@@ -694,35 +686,39 @@ class mr extends control
      * @access public
      * @return void
      */
-    public function linkBug($MRID, $productID = 0, $browseType = '', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function linkBug($MRID, $productID = 0, $browseType = '', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         if(!empty($_POST['bugs']))
         {
             $this->mr->link($MRID, $productID, 'bug');
 
-            if(dao::isError()) return print(js::error(dao::getError()));
-            return print(js::locate(inlink('link', "MRID=$MRID&type=bug&orderBy=$orderBy"), 'parent'));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $link = inlink('link', "MRID=$MRID&type=bug&orderBy=$orderBy");
+            return $this->send(array('result' => 'success', 'callback' => "loadTable('$link', 'bugTable')", 'closeModal' => true));
         }
 
         $this->loadModel('bug');
+        $this->app->loadLang('release');
+        $this->app->loadModuleConfig('release');
         $this->app->loadLang('productplan');
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
 
         $product = $this->loadModel('product')->getById($productID);
-        $modules = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'bug');
+        $modules = $this->loadModel('tree')->getOptionMenu($productID, 'bug');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Build search form. */
-        $this->config->bug->search['actionURL']                         = $this->createLink('mr', 'link', "$MRID=$MRID&type=bug&orderBy=$orderBy&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
+        $this->config->bug->search['actionURL']                         = $this->createLink('mr', 'linkBug', "MRID={$MRID}&productID={$productID}&browseType=bySearch&param=myQueryID&orderBy={$orderBy}");
         $this->config->bug->search['queryID']                           = $queryID;
         $this->config->bug->search['style']                             = 'simple';
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($productID => $productID));
         $this->config->bug->search['params']['module']['values']        = $modules;
         $this->config->bug->search['params']['execution']['values']     = $this->product->getExecutionPairsByProduct($productID);
-        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($productID, $branch = 'all', $params = 'releasetag');
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($productID, 'all', 'releasetag');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
 
         unset($this->config->bug->search['fields']['product']);
@@ -735,7 +731,7 @@ class mr extends control
         {
             $this->product->setMenu($productID, 0);
             $this->config->bug->search['fields']['branch']           = $this->lang->product->branch;
-            $this->config->bug->search['params']['branch']['values'] = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty');
+            $this->config->bug->search['params']['branch']['values'] = $this->loadModel('branch')->getPairs($productID, 'noempty');
         }
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
 
@@ -745,11 +741,11 @@ class mr extends control
         $linkedBugs = $this->mr->getLinkList($MRID, $product->id, 'bug');
         if($browseType == 'bySearch')
         {
-            $allBugs = $this->bug->getBySearch($productID, 0, $queryID, 'id_desc', array_keys($linkedBugs), $pager);
+            $allBugs = $this->bug->getBySearch($productID, 0, $queryID, $orderBy, array_keys($linkedBugs), $pager);
         }
         else
         {
-            $allBugs = $this->bug->getActiveBugs($productID, 0, '0', array_keys($linkedBugs), $pager);
+            $allBugs = $this->bug->getActiveBugs($productID, 0, '0', array_keys($linkedBugs), $pager, $orderBy);
         }
 
         $this->view->modules     = $modules;
@@ -779,33 +775,36 @@ class mr extends control
      * @access public
      * @return void
      */
-    public function linkTask($MRID, $productID = 0, $browseType = 'unclosed', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function linkTask($MRID, $productID = 0, $browseType = 'unclosed', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         if(!empty($_POST['tasks']))
         {
             $this->mr->link($MRID, $productID, 'task');
 
-            if(dao::isError()) return print(js::error(dao::getError()));
-            return print(js::locate(inlink('link', "MRID=$MRID&type=task&orderBy=$orderBy"), 'parent'));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $link = inlink('link', "MRID=$MRID&type=task&orderBy=$orderBy");
+            return $this->send(array('result' => 'success', 'callback' => "loadTable('$link', 'taskTable')", 'closeModal' => true));
         }
 
         $this->loadModel('execution');
         $this->loadModel('product');
         $this->app->loadLang('task');
+        $this->app->loadModuleConfig('repo');
 
         /* Set browse type. */
         $browseType = strtolower($browseType);
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
 
         $product = $this->loadModel('product')->getById($productID);
-        $modules = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'task');
+        $modules = $this->loadModel('tree')->getOptionMenu($productID, 'task');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Build search form. */
-        $this->config->execution->search['actionURL']                     = $this->createLink('mr', 'link', "$MRID=$MRID&type=task&orderBy=$orderBy&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
+        $this->config->execution->search['actionURL']                     = $this->createLink('mr', 'linkTask', "MRID={$MRID}&productID={$productID}&browseType=bySearch&param=myQueryID&orderBy={$orderBy}");
         $this->config->execution->search['queryID']                       = $queryID;
         $this->config->execution->search['params']['module']['values']    = $modules;
         $this->config->execution->search['params']['execution']['values'] = $this->product->getExecutionPairsByProduct($productID);
@@ -872,35 +871,30 @@ class mr extends control
      * @access public
      * @return mix
      */
-    public function unlink($MRID, $productID, $type, $linkID, $confirm = 'no')
+    public function unlink($MRID, $productID, $type, $linkID)
     {
         $this->app->loadLang('productplan');
 
-        if($confirm == 'no')
-        {
-            return print(js::confirm($this->lang->productplan->confirmUnlinkStory, $this->createLink('mr', 'unlink', "MRID=$MRID&productID=$productID&linkID=$linkID&type=$type&confirm=yes")));
-        }
-        else
-        {
-            $this->mr->unlink($MRID, $productID, $type, $linkID);
+        $this->mr->unlink($MRID, $productID, $type, $linkID);
 
-            /* if ajax request, send result. */
-            if($this->server->ajax)
+        /* if ajax request, send result. */
+        if($this->server->ajax)
+        {
+            if(dao::isError())
             {
-                if(dao::isError())
-                {
-                    $response['result']  = 'fail';
-                    $response['message'] = dao::getError();
-                }
-                else
-                {
-                    $response['result']  = 'success';
-                    $response['message'] = '';
-                }
-                return $this->send($response);
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
             }
-            return print(js::reload('parent'));
+            else
+            {
+                $link = inlink('link', "MRID=$MRID&type=$type");
+                $response['result']  = 'success';
+                $response['message'] = '';
+                $response['load']    = $link;
+            }
+            return $this->send($response);
         }
+        return print(js::reload('parent'));
     }
 
     /**
@@ -928,7 +922,7 @@ class mr extends control
             if($result['result'] == 'fail') return print(json_encode($result));
 
             $objectID = $result['id'];
-            $repo     = $this->repo->getRepoById($repoID);
+            $repo     = $this->repo->getByID($repoID);
             /* Handle the exception that when $repo is empty. */
             if(empty($repo) or empty($result)) $this->send(json_encode(array()));
 
@@ -979,7 +973,7 @@ class mr extends control
             foreach($groups as $group) $groupIDList[] = $group->id;
             foreach($projects as $key => $project)
             {
-                if($this->$scm->checkUserAccess($hostID, 0, $project, $groupIDList, 'developer') == false) unset($projects[$key]);
+                if(!$this->$scm->checkUserAccess($hostID, 0, $project, $groupIDList, 'developer')) unset($projects[$key]);
             }
 
             if(!$projects) return $this->send(array('message' => array()));

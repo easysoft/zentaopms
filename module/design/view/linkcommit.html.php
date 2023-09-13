@@ -61,7 +61,7 @@
               <label></label>
             </div>
           </td>
-          <td class='versions c-name' title="<?php echo $repo->SCM == 'Git' ? substr($log->revision, 0, 10) : $log->revision;?>"><span class="revision"><?php echo html::a($this->repo->createLink('revision', "repoID=$repoID&objectID={$design->project}&revision={$log->revision}"), $repo->SCM == 'Git' ? substr($log->revision, 0, 10) : $log->revision);?></span></td>
+          <td class='versions c-name' title="<?php echo $repo->SCM == 'Git' ? substr($log->revision, 0, 10) : $log->revision;?>"><span class="revision"><?php echo html::a('javascript:window.parent.$.apps.open("' . $this->repo->createLink('revision', "repoID=$repoID&objectID={$design->project}&revision={$log->revision}") . '", "project");', $repo->SCM == 'Git' ? substr($log->revision, 0, 10) : $log->revision);?></span></td>
           <?php if($repo->SCM == 'Git'):?>
           <td><?php echo $log->commit?></td>
           <?php endif;?>

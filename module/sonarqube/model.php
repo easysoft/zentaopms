@@ -57,7 +57,7 @@ class sonarqubeModel extends model
      * Get sonarqube report.
      *
      * @param  int    $sonarqubeID
-     * @param  stirng $projectKey
+     * @param  string $projectKey
      * @param  string $metricKeys
      * @access public
      * @return object
@@ -301,5 +301,72 @@ class sonarqubeModel extends model
             ->andWhere('sonarqubeServer')->eq($sonarqubeID)
             ->andWhere('projectKey')->eq($projectKey)
             ->fetch('product');
+    }
+
+    /**
+     * 获取项目键值对。
+     * Get project pairs.
+     *
+     * @param  int    $sonarqubeID
+     * @param  string $projectKey
+     * @access public
+     * @return array
+     */
+    public function getProjectPairs(int $sonarqubeID, string $projectKey = ''): array
+    {
+        $jobPairs      = $this->loadModel('job')->getJobBySonarqubeProject($sonarqubeID, array(), true, true);
+        $existsProject = array_diff(array_keys($jobPairs), array($projectKey));
+
+        $projectList = $this->apiGetProjects($sonarqubeID);
+
+        $projectPairs = array();
+        foreach($projectList as $project)
+        {
+            if(!empty($project) and !in_array($project->key, $existsProject)) $projectPairs[$project->key] = $project->name;
+        }
+
+        return $projectPairs;
+    }
+
+    /**
+     * 判断按钮是否可点击。
+     * Judge an action is clickable or not.
+     *
+     * @param  object $sonarqube
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public static function isClickable(object $sonarqube, string $action): bool
+    {
+        $action = strtolower($action);
+
+        if($action == 'execjob')    return $sonarqube->exec == '';
+        if($action == 'reportview') return $sonarqube->report == '';
+
+        return true;
+    }
+
+    /**
+     * 判断按钮是否显示在列表页。
+     * Judge an action is displayed in browse page.
+     *
+     * @param  object $sonarqube
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public static function isDisplay(object $sonarqube, string $action): bool
+    {
+        $action = strtolower($action);
+
+        if(!commonModel::hasPriv('space', 'browse')) return false;
+
+        if(!in_array($action, array('browseproject', 'reportview', 'browseissue')))
+        {
+            if(!commonModel::hasPriv('instance', 'manage')) return false;
+        }
+
+        return true;
     }
 }

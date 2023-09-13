@@ -20,6 +20,7 @@ $lang->build->view             = "Build Detail";
 $lang->build->batchUnlink      = 'Batch Unlink';
 $lang->build->batchUnlinkStory = "Batch Unlink {$lang->SRCommon}";
 $lang->build->batchUnlinkBug   = 'Batch Unlink Bugs';
+$lang->build->linkArtifactRepo = 'Link Artifact Repo';
 
 $lang->build->confirmDelete      = "Do you want to delete this build?";
 $lang->build->confirmUnlinkStory = "Do you want to unlink this {$lang->SRCommon}?";
@@ -40,6 +41,7 @@ $lang->build->singled        = 'Singled';
 $lang->build->builds         = 'Included Builds';
 $lang->build->released       = 'Released';
 $lang->build->name           = 'Name';
+$lang->build->nameAB         = 'Name';
 $lang->build->date           = 'Date';
 $lang->build->builder        = 'Builder';
 $lang->build->url            = 'URL';

@@ -106,6 +106,9 @@ pipeline {
               env.GIT_TAG_BUILD_GROUP = sh(returnStdout: true, script: 'misc/parse_tag.sh $TAG_NAME group').trim()
               env.GIT_TAGGER_NAME = sh(returnStdout: true, script: 'git for-each-ref --format="%(taggername)" refs/tags/$(git tag --points-at HEAD)').trim()
 
+              env.CI_PUBLIC_IMAGE_NAMESPACE = sh(returnStdout: true,script: 'jq -r .image.public.namespace.' + env.GIT_TAG_BUILD_TYPE + ' < ci.json').trim()
+              env.CI_INTERNAL_IMAGE_NAMESPACE = sh(returnStdout: true,script: 'jq -r .image.internal.namespace.' + env.GIT_TAG_BUILD_TYPE + ' < ci.json').trim()
+
               def ximUsers = sh(returnStdout: true,script: 'jq -r .notice.users < ci.json').trim()
               env.XIM_USERS = ximUsers + ',' + env.GIT_TAGGER_NAME
               env.XIM_GROUPS = sh(returnStdout: true,script: 'jq -r .notice.groups < ci.json').trim()
@@ -115,13 +118,14 @@ pipeline {
               env.MAX_VERSION = sh(returnStdout: true, script: 'cat ${SRC_ZENTAOEXT_PATH}/MAXVERSION').trim()
               env.IPD_VERSION = sh(returnStdout: true, script: 'cat ${SRC_ZENTAOEXT_PATH}/IPDVERSION').trim()
               
-              env.DOWNGRADE_ENABLED = sh(returnStdout: true, script: 'test -n "${DOWNGRADE_ENABLED}" && echo ${DOWNGRADE_ENABLED} || (jq -r .downgrade.enabled < ci.json)').trim()
+              env.CI_DOWNGRADE_ENABLED = sh(returnStdout: true, script: 'test -n "${DOWNGRADE_ENABLED}" && echo ${DOWNGRADE_ENABLED} || (jq -r .downgrade.enabled < ci.json)').trim()
               env.QINIU_BUCKET = sh(returnStdout: true, script: 'jq -r .upload.bucket < ci.json').trim()
               env.ARTIFACT_REPOSITORY = sh(returnStdout: true, script: 'misc/parse_tag.sh $TAG_NAME type | grep release >/dev/null && echo easycorp || echo easycorp-snapshot').trim()
               env.ARTIFACT_HOST = "nexus.qc.oop.cc"
               env.ARTIFACT_PROTOCOL = "https"
               env.ARTIFACT_CRED_ID = "nexus-jenkins"
             }
+
           }
         }
 
@@ -140,6 +144,7 @@ pipeline {
                   container('package') {
                     sh 'mkdir ${ZENTAO_RELEASE_PATH} && chown 1000:1000 ${ZENTAO_RELEASE_PATH}'
                     sh 'git config --global pull.ff only'
+                    sh 'cp -av ${ZENTAO_BUILD_PATH}/adminer www/'
                     sh 'pwd && ls -l && make ciCommon'
                     sh 'ls -l ${ZENTAO_RELEASE_PATH}'
                   }
@@ -700,18 +705,7 @@ pipeline {
 
           environment {
             REGISTRY_HOST="hub.zentao.net"
-            CI_BUILD_PUBLIC_IMAGE="""${sh(
-                      returnStdout: true,
-                      script: 'test "$GIT_TAG_BUILD_TYPE" = release && echo true || echo false'
-            ).trim()}"""
-            CI_PUBLIC_IMAGE_NAMESPACE="""${sh(
-                      returnStdout: true,
-                      script: "echo $GIT_URL | grep demo/zentao >/dev/null && echo test || echo app"
-            ).trim()}"""
-            CI_INTERNAL_IMAGE_NAMESPACE="""${sh(
-                      returnStdout: true,
-                      script: "echo $GIT_URL | grep demo/zentao >/dev/null && echo test || echo app"
-            ).trim()}"""
+            CI_BUILD_PUBLIC_IMAGE="true"
           }
 
           stages() {

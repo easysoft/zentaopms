@@ -213,8 +213,23 @@ $(document).ready(function()
     $('#fileType').change();
     setTimeout(function()
     {
-        if($.cookie('checkedItem') !== '') $('#exportType').val('selected').trigger('chosen:updated');
+        if($.cookie('checkedItem') !== '') $('#exportType').val('selected').change().trigger('chosen:updated');
     }, 150);
+
+    $('#exportType').change(function()
+    {
+        const $form = $(this).closest('form');
+        $form.find('input[name=checkedItem]').remove();
+
+        const exportType = $(this).val();
+        if(exportType == 'selected' && typeof window.parent.getCheckedItems === 'function')
+        {
+            const checkedItems = window.parent.getCheckedItems();
+            $form.append($('<input>').attr({name: 'checkedItem', type: 'hidden'}).val(checkedItems));
+        }
+    });
+
+    $('#exportType').change();
 
     if($('#customFields #exportFields').length > 0)
     {

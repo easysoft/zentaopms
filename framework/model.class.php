@@ -122,7 +122,7 @@ class model extends baseModel
 
             if($action->extensionType == 'override') return $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type);
 
-            $conditions = json_decode($action->conditions);
+            $conditions = empty($action->conditions) ? array() : json_decode($action->conditions);
             if($conditions and $action->extensionType == 'extend')
             {
                 if($icon != 'copy' and $methodName != 'create') $title = $action->name;
@@ -132,6 +132,10 @@ class model extends baseModel
             {
                 if(method_exists($this, 'isClickable')) $enabled = $this->isClickable($data, $method, $module);
             }
+        }
+        elseif(strpos($misc, 'disabled') !== false)
+        {
+            $enabled = false;
         }
         else
         {
@@ -394,5 +398,25 @@ class model extends baseModel
         if(method_exists($taoClass, $method)) return call_user_func_array("{$taoClass}::{$method}", $arguments);
 
         $app->triggerError("the module {$moduleName} has no {$method} method", __FILE__, __LINE__, $exit = true);
+    }
+
+    /**
+     * Load dao of bi.
+     *
+     * @access public
+     * @return void
+     */
+    public function loadBIDAO()
+    {
+        global $config, $biDAO;
+        if(is_object($biDAO)) return $this->dao = $biDAO;
+
+        if(!isset($config->biDB)) return;
+
+        $driver = $config->db->driver;
+        $biDAO = new $driver();
+        $biDAO->slaveDBH = $this->app->connectByPDO($config->biDB, 'BI');
+
+        $this->dao = $biDAO;
     }
 }

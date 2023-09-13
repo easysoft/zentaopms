@@ -1445,9 +1445,6 @@ function handleSortCards(event)
     var fromID    = String(event.element.data('id'));
     var toID      = String(event.target.data('id'));
 
-    orders.splice(orders.indexOf(fromID), 1);
-    orders.splice(orders.indexOf(toID) + (event.insert === 'before' ?  0 : 1), 0, fromID);
-
     var url = createLink('kanban', 'sortCard', 'kanbanID=' + kanbanID + '&laneID=' + newLaneID + '&columnID=' + newColID + '&cards=' + orders.join(','));
     $.getJSON(url, function(response)
     {

@@ -1,4 +1,3 @@
-#features {padding: 10px 0;}
 #features > header {text-align: center;}
 #features > footer {text-align: center; padding-top: 18px; border-top: 1px solid #eee}
 
@@ -8,11 +7,10 @@
 #featuresNav > li.active > a {background-color: transparent; font-weight: bold; opacity: .7;}
 #featuresNav > li.active > a:hover {background-color: #f1f1f1; opacity: 1;}
 
-#featuresCarousel {padding: 0 50px;}
 #featuresCarousel .carousel-indicators {bottom: -10px;}
-#featuresCarousel .carousel-indicators li {border-color: #d8d8d8; background-color: #d8d8d8; width: 12px; height: 12px;}
+#featuresCarousel .carousel-indicators li {border-width: 0; background-color: #fff; width: 12px; height: 12px;}
 #featuresCarousel .carousel-indicators li + li {margin-left: 10px !important;}
-#featuresCarousel .carousel-indicators .active {border-color: #73b1df; background-color: #73b1df; margin: 1px;}
+#featuresCarousel .carousel-indicators .active {background-color: #D5E5FF; margin: 1px;}
 #featuresCarousel .carousel-inner .download-file {position: absolute; right: 115px; bottom: 0; font-size: 12px;}
 
 #features [data-slide-to] {pointer-events: none;}
@@ -20,3 +18,4 @@
 #features .btn-close-modal {display: none;}
 #features.is-last-item .btn-slide-next {display: none;}
 #features.is-last-item .btn-close-modal {display: inline-block;}
+#features.is-first-item .btn-slide-prev {display: none;}

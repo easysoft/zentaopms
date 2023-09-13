@@ -35,6 +35,8 @@
 .panel {padding-left: 16px;}
 .settings.panel, .plug.panel {margin-bottom: 16px;}
 .main > .panel {padding-right: 8px;}
+div.setting-box[data-id=platform] div.flex {white-space: nowrap;}
+div.setting-box[data-id=platform] > button.btn {padding-right: 5px;}
 
 .settings-list {display: flex; flex-wrap: wrap; padding: 0 4px 16px 4px;}
 .settings-list > .setting-box {border: unset; flex: 0 1 20%; padding: 8px;}

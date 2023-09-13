@@ -238,7 +238,9 @@
         <tfoot>
           <tr>
             <?php $colspan = $planID == 0 ? $colspan : $colspan - 1;?>
-            <td colspan='<?php echo $colspan?>' class='text-center form-actions'><?php echo html::submitButton() . ' ' . html::backButton(); ?></td>
+            <td colspan='<?php echo $colspan?>' class='text-center form-actions'>
+              <?php echo html::submitButton() . ' ' . html::backButton(); ?>
+            </td>
           </tr>
         </tfoot>
       </table>
@@ -299,4 +301,5 @@ var options = {
 }
 $('#planForm tbody.sortable').sortable(options);
 </script>
+<?php include '../../ai/view/inputinject.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

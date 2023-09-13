@@ -490,7 +490,7 @@ class groupModel extends model
                 $data->method = $method;
                 $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
             }
-            
+
             $recommendPrivs = zget($_POST, 'recommendPrivs', array());
             foreach($recommendPrivs as $moduleMethod => $priv)
             {
@@ -1759,6 +1759,7 @@ class groupModel extends model
             ->andWhere('t1.edition')->like("%,{$this->config->edition},%")
             ->andWhere('t1.vision')->like("%,{$this->config->vision},%")
             ->andWhere('t2.`objectType`')->eq('priv')
+            ->andWhere('t2.lang')->eq($this->app->getClientLang())
             ->orderBy('order_asc')
             ->fetchAll('id');
     }

@@ -27,7 +27,7 @@
     <form method='post' target='hiddenwin'>
       <table class='table table-form'>
         <tr>
-          <th class='w-80px'><?php echo $lang->story->reviewedBy;?></th>
+          <th class='w-80px'><?php echo $lang->story->reviewers;?></th>
           <td colspan='2' id='reviewerBox' <?php if($this->story->checkForceReview() or !empty($story->reviewer)) echo "class='required'";?>>
             <div class="table-row">
               <?php if(!$this->story->checkForceReview()):?>

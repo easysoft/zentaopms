@@ -16,7 +16,7 @@ if(!class_exists('config')){class config{}}
 if(!function_exists('getWebRoot')){function getWebRoot(){}}
 
 /* 基本设置。Basic settings. */
-$config->version       = '18.6';               // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
+$config->version       = '18.7';               // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
 $config->liteVersion   = '1.2';                // 迅捷版版本。      The version of Lite.
 $config->charset       = 'UTF-8';              // ZenTaoPHP的编码。 The encoding of ZenTaoPHP.
 $config->cookieLife    = time() + 2592000;     // Cookie的生存时间。The cookie life time.
@@ -66,10 +66,7 @@ $config->db->driver          = 'mysql';   // 目前只支持MySQL数据库。Mus
 $config->db->encoding        = 'UTF8';    // 数据库编码。           Encoding of database.
 $config->db->strictMode      = false;     // 关闭MySQL的严格模式。  Turn off the strict mode of MySQL.
 $config->db->prefix          = 'zt_';     // 数据库表名前缀。       The prefix of the table name.
-$config->slaveDB->persistant = false;
-$config->slaveDB->driver     = 'mysql';
-$config->slaveDB->encoding   = 'UTF8';
-$config->slaveDB->strictMode = false;
+$config->slaveDBList         = array();   // 支持多个从库。         Support multiple slave dbs.
 
 /* 可用域名后缀列表。Domain postfix lists. */
 $config->domainPostfix  = "|com|com.cn|com.hk|com.tw|com.vc|edu.cn|es|";
@@ -164,6 +161,32 @@ $config->maxCount      = 500;
 $config->batchMaxCount = 20;
 $config->moreLinks     = array();
 
+/* 渠成平台设置。CNE Api settings. */
+$config->inQuickon     = getenv('IN_QUICKON');
+$config->inContainer   = getenv('IN_CONTAINER');
+$config->k8space       = 'quickon-system';
+$config->demoAccounts  = '';  // 用于演示的账号列表，该账号安装的应用30钟后会自动删除。 In account list for demo, app instance of demo will be removed in 30 minutes.
+$config->demoAppLife  = 30; // Demo安装的应用实例存续时长(分钟)。The minutes life of instance which demo account installed.
+$config->CNE = new stdclass();
+$config->CNE->api = new stdclass();
+$config->CNE->api->host    = getenv('CNE_API_HOST');
+$config->CNE->api->auth    = 'X-Auth-Token';
+$config->CNE->api->token   = getenv('CNE_API_TOKEN'); // Please set token in my.php.
+$config->CNE->api->headers = array('Content-Type: application/json');
+$config->CNE->api->channel = 'stable';
+
+$config->CNE->app = new stdclass;
+$config->CNE->app->domain = 'dev.haogs.cn';
+
+$config->cloud = new stdclass;
+$config->cloud->api = new stdclass;
+$config->cloud->api->host          = 'https://api.qucheng.com';
+$config->cloud->api->auth          = 'X-Auth-Token';
+$config->cloud->api->token         = 'gwaN4KynqNqQoPD7eN8s'; // Please set token in my.php.
+$config->cloud->api->headers       = array('Content-Type: application/json');
+$config->cloud->api->channel       = 'stable';
+$config->cloud->api->switchChannel = false;
+
 /* 配置参数过滤。Filter param settings. */
 $filterConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'filter.php';
 if(file_exists($filterConfig)) include $filterConfig;
@@ -205,3 +228,8 @@ else
     unset($config->maxVersion);
     unset($config->ipdVersion);
 }
+
+/* Set zin config. */
+$config->zin = new stdClass();
+$config->zin->mode       = 'compatible';     // 启用兼容 18.x 模式。
+$config->zin->extraCSS   = 'compatible.css'; // 额外的 CSS 样式文件。

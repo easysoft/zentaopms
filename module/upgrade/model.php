@@ -699,6 +699,9 @@ class upgradeModel extends model
 
                 if(in_array($fromVersion, array('18.5', 'biz8.5', 'max4.5'))) $this->addCreateAction4Story();
                 break;
+	    case '18_6':
+		$this->removeProductLineRequired();
+		break;
         }
 
         $this->deletePatch();
@@ -1194,7 +1197,9 @@ class upgradeModel extends model
                 if(strpos($fromVersion, 'max') !== false and version_compare($fromVersion, 'max4.5', '<')) $ipdinstall = true;
                 if($ipdinstall) $confirmContent .= file_get_contents($this->getUpgradeFile('ipdinstall'));
 
-                $confirmContent .= file_get_contents($this->getUpgradeFile('18.5')); // confirm insert position.
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.5'));
+             case '18_6':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.6')); // confirm insert position.
         }
 
         return $confirmContent;
@@ -5186,6 +5191,7 @@ class upgradeModel extends model
         $this->dao->update(TABLE_RELEASE)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
 
         /* Compute product acl. */
+        if($lineID) $this->dao->update(TABLE_MODULE)->set('root')->eq($programID)->where('id')->eq($lineID)->andWhere('root')->eq('0')->exec();
         $this->computeProductAcl($productIdList, $programID, $lineID);
 
         /* No project is created when there are no sprints. */
@@ -5341,7 +5347,7 @@ class upgradeModel extends model
             $data = new stdclass();
             $data->program = $programID;
             $data->acl     = $product->acl == 'custom' ? 'private' : $product->acl;
-            $data->line    = $lineID;
+            if($lineID !== null) $data->line = $lineID;
 
             $this->dao->update(TABLE_PRODUCT)->data($data)->where('id')->eq($product->id)->exec();
         }
@@ -6871,7 +6877,7 @@ class upgradeModel extends model
 
         if(empty($reviewIssues)) return false;
 
-        $reviewIds = array_unique(array_column($reviewIssues, 'review'));
+        $reviewIds = array_unique(helper::arrayColumn($reviewIssues, 'review'));
 
         $approvalsPairs = $this->dao->select('objectID, max(id) as approval')->from(TABLE_APPROVAL)
             ->where('objectID')->in($reviewIds)
@@ -7793,6 +7799,7 @@ class upgradeModel extends model
 
             $projectID = $this->dao->lastInsertId();
 
+            $this->action->create('project', $projectID, 'openedbysystem');
             if($project->status == 'closed') $this->action->create('project', $projectID, 'closedbysystem');
 
             $project->id = $projectID;
@@ -7808,13 +7815,14 @@ class upgradeModel extends model
             }
 
             $productIdList = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($sprint->id)->fetchPairs();
-            $this->processMergedData($programID, $projectID, '', $productIdList, array($sprint->id));
+            $this->processMergedData($programID, $projectID, null, $productIdList, array($sprint->id));
         }
 
         $this->fixProjectPath($programID);
 
         $productIdList = $this->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq('0')->fetchPairs();
-        $this->computeProductAcl($productIdList, $programID, 0);
+        $this->dao->update(TABLE_MODULE)->set('root')->eq($programID)->where('type')->eq('line')->andWhere('root')->eq('0')->exec();
+        $this->computeProductAcl($productIdList, $programID, null);
 
         if(dao::isError()) return false;
         return true;
@@ -7884,13 +7892,14 @@ class upgradeModel extends model
             $this->createProjectDocLib($project);
 
             $productIdList = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($sprints))->fetchPairs();
-            $this->processMergedData($programID, $projectID, '', $productIdList, array_keys($sprints));
+            $this->processMergedData($programID, $projectID, null, $productIdList, array_keys($sprints));
         }
 
         $this->fixProjectPath($programID);
 
         $productIdList = $this->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq('0')->fetchPairs();
-        $this->computeProductAcl($productIdList, $programID, 0);
+        $this->dao->update(TABLE_MODULE)->set('root')->eq($programID)->where('type')->eq('line')->andWhere('root')->eq('0')->exec();
+        $this->computeProductAcl($productIdList, $programID, null);
 
         if(dao::isError()) return false;
         return true;
@@ -8747,7 +8756,11 @@ class upgradeModel extends model
             if(!isset($mixInserted[$type->lang . '-' . $type->vision]))
             {
                 $langFile = $this->app->getModuleRoot() . DS . 'stage' . DS . 'lang' . DS . ($type->lang == 'all' ? $this->app->clientLang : $type->lang) . '.php';
-                if(is_file($langFile)) include $langFile;
+                if(!is_file($langFile)) continue;
+
+                $lang = new stdclass();
+                $lang->stage = new stdclass();
+                include $langFile;
 
                 $this->dao->replace(TABLE_LANG)
                     ->set('module')->eq('stage')
@@ -9749,5 +9762,27 @@ class upgradeModel extends model
                 $this->dao->insert(TABLE_ACTION)->data($action)->exec();
             }
         }
+    }
+
+    /**
+     * Remove product line required fields when 12.x upgrade to 18.x.
+     *
+     * @access public
+     * @return bool
+     */
+    public function removeProductLineRequired()
+    {
+	$this->loadModel('setting');
+
+	$createRequired = $this->setting->getItem('owner=system&module=product&section=create&key=requiredFields');
+	$editRequired   = $this->setting->getItem('owner=system&module=product&section=edit&key=requiredFields');
+
+	$createRequired = str_replace(',line,', ',', ",$createRequired,");
+	$editRequired   = str_replace(',line,', ',', ",$editRequired,");
+
+	$this->setting->setItem('system.product.create.requiredFields', trim($createRequired, ','));
+	$this->setting->setItem('system.product.edit.requiredFields', trim($editRequired, ','));
+
+	return true;
     }
 }

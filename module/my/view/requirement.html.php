@@ -61,7 +61,6 @@
           <th class='c-product'>   <?php common::printOrderLink('productTitle', $orderBy, $vars, $lang->story->product);?></th>
           <th class='c-user'>      <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->story->openedByAB);?></th>
           <th class='c-hours'>     <?php common::printOrderLink('estimate',     $orderBy, $vars, $lang->story->estimateAB);?></th>
-          <th class='c-stage'>     <?php common::printOrderLink('stage',        $orderBy, $vars, $lang->story->stageAB);?></th>
           <th class='c-actions-6 text-center'> <?php echo $lang->actions;?></th>
         </tr>
       </thead>
@@ -91,7 +90,6 @@
           <td class='c-product' title="<?php echo $story->productTitle;?>"><?php echo $story->productTitle;?></td>
           <td class='c-user'><?php echo zget($users, $story->openedBy);?></td>
           <td class='c-hours' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
-          <td class='c-stage'><?php echo zget($lang->story->stageList, $story->stage);?></td>
           <td class='c-actions'>
             <?php
             if($canBeChanged)

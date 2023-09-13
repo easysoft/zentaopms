@@ -1,0 +1,6 @@
+#mainNavbar {display: none;}
+.app-status-circle {display: inline-block; height: 70px;  width: 70px; display: flex; align-items: center; justify-content: center; color: white; border-radius: 50%; background-color: #9EA3B0; box-shadow: 0 0 0 10px #EDEEF2, 0 0 0 20px #F4F5F7;}
+.status-normal {background-color: #48D1A0; box-shadow: 0 0 0 10px #D0F6E8, 0 0 0 20px #ECFFF7;}
+.status-abnormal {background-color: #FF7C7C; box-shadow: 0 0 0 10px #FFD5D5, 0 0 0 20px #FFEBEB;}
+.status-stoped {background-color: #37B2FE; box-shadow: 0 0 0 10px #CDECFF, 0 0 0 20px #E7F6FF;}
+.status-unknown {background-color: #9EA3B0; box-shadow: 0 0 0 10px #EDEEF2, 0 0 0 20px #F4F5F7;}

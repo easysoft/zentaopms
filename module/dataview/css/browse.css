@@ -27,3 +27,5 @@
 .cell> .panel> .panel-heading {padding: 5px 0px 10px;}
 .detail-title>.pull-right {position: unset;}
 .detail-title>.pull-right>a {margin: 0px 10px; font-weight: normal; font-size: 13px;}
+
+.table-code {margin-left: 12px;}

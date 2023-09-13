@@ -1,0 +1,23 @@
+.release-head {width: 120px; border: 2px solid var(--color-gray-200); border-radius: 4px; margin-left: 30px; margin-bottom: 58px;}
+.release-line > li {height: 156px;}
+.release-line > li:nth-child(even) {align-items: start;}
+.release-line > li:nth-child(odd) {align-items: end;}
+.release-line > li:nth-child(even) > a {border-bottom: 4px solid var(--color-primary-200);}
+.release-line > li:nth-child(odd) > a {border-top: 4px solid var(--color-primary-200);}
+.release-line > li:last-child > a {border-color: transparent !important;}
+.release-line > li > a {height: 80px; box-sizing: border-box;}
+.release-line > li > a:before {display: block; content: ' '; width: 12px; height: 12px; background: #fff; border: 2px solid var(--color-success-500); border-radius: 50%; position: absolute;}
+.release-line > li:nth-child(even) > a:before {bottom: -8px;}
+.release-line > li:nth-child(odd) > a:before {top: -8px;}
+.release-line > li:nth-child(odd) > a:after {top: 4px; left: 5px;}
+.release-line > li:nth-child(even) > a:after {bottom: 4px; left: 5px;}
+.release-line > li > a:after {position: absolute; display: block; width: 2px; height: 30px; content: ' '; background: var(--color-primary-200);}
+.release-line > li:nth-child(odd) > a > div {margin-top: 36px;}
+.release-line > li:nth-child(even) > a > div {margin-bottom: 36px;}
+.release-link-line {pointer-events: none; background-image: url("data:image/png;base64,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"); height: 196px; position: absolute; left: 10px; right: 100px; top: 97px; background-size: 100% 100%; background-repeat: no-repeat;}
+.release-line .icon-flag {font-size: 24px;}
+.release-line > li:nth-child(even) .icon-flag {bottom: -3px; left: 4px;}
+.release-line > li:nth-child(odd) .icon-flag {left: 4px; top: -25px;}
+.release-line > li:hover .title {color: var(--color-primary-500);}
+.release-line > li:hover > a:before {border-color: var(--color-success-700);}
+.release-line > li:hover > a:after {background: var(--color-primary-400);}

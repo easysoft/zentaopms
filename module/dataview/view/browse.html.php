@@ -65,7 +65,7 @@
   <div id='dataContent' class='main-col main-content'>
     <div class='detail'>
       <div class='detail-title'>
-        <div class='dataview-title' title='<?php echo $dataTitle;?>'><?php echo $dataTitle;?></div>
+        <div class='dataview-title' title='<?php echo $dataTitle;?>'><?php echo $dataTitle;?><?php if($type == 'table') echo "<span class='table-code'>$table</span>";?></div>
         <div class='actions pull-right'>
           <?php if($selectedTable and isset($dataview)):?>
           <?php

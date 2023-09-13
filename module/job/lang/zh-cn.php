@@ -15,8 +15,9 @@ $lang->job->execSuccess   = '执行成功';
 $lang->job->browseAction = '流水线列表';
 
 $lang->job->id              = 'ID';
-$lang->job->name            = '名称';
-$lang->job->repo            = '代码库';
+$lang->job->name            = '流水线名称';
+$lang->job->repo            = '关联代码库';
+$lang->job->branch          = '分支';
 $lang->job->product         = '关联' . $lang->productCommon;
 $lang->job->svnDir          = 'SVN监控路径';
 $lang->job->jenkins         = 'Jenkins';
@@ -60,6 +61,7 @@ $lang->job->repoExists     = '此版本库已关联构建任务『%s』';
 $lang->job->projectExists  = '此SonarQube项目已关联构建任务『%s』';
 $lang->job->mustUseJenkins = 'SonarQube工具/框架仅在构建引擎为JenKins的情况下使用';
 $lang->job->jobIsDeleted   = '此版本库已关联构建任务,请从回收站查看数据';
+$lang->job->selectPipeline = '请选择流水线';
 
 $lang->job->buildTypeList['build']          = '仅构建';
 $lang->job->buildTypeList['buildAndDeploy'] = '构建部署';
@@ -103,4 +105,4 @@ $lang->job->pipelineVariablesTips             = "指定要在此次运行中使�
 $lang->job->setReferenceTips                  = "在执行构建前，请先设置代码库的分支信息。";
 
 $lang->job->featureBar['browse']['job']     = '列表';
-$lang->job->featureBar['browse']['compile'] = '构建历史';
+$lang->job->featureBar['browse']['compile'] = '执行历史';

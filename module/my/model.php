@@ -150,7 +150,7 @@ class myModel extends model
 
         /* Sort by storyCount, get 5 records */
         $products = json_decode(json_encode($products), true);
-        array_multisort(array_column($products, 'storyEstimateCount'), SORT_DESC, $products);
+        array_multisort(helper::arrayColumn($products, 'storyEstimateCount'), SORT_DESC, $products);
         $products = array_slice($products, 0, 5);
 
         $data = new stdClass();

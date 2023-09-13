@@ -597,7 +597,7 @@ class todo extends control
 
             /* Get bugs. */
             $todos = $this->dao->select('*')->from(TABLE_TODO)->where($this->session->todoReportCondition)
-                ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
+                ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($this->post->checkedItem)->fi()
                 ->orderBy($orderBy)->fetchAll('id');
 
             /* Get users, bugs, tasks and times. */

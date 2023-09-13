@@ -1,5 +1,11 @@
 (function()
 {
+    if(showFeatures && vision == 'rnd')
+    {
+        /* Show features dialog. */
+        new $.zui.ModalTrigger({url: $.createLink('misc', 'features'), type: 'iframe', width: 800, className: 'showFeatures', showHeader: false, backdrop: 'static', keyboard: false}).show();
+    }
+
     /* Init variables */
     var openedApps      = {}; // Key-value to save appCode-app pairs
     var appsMap         = {}; // Key-value to save opened appCode-app pairs
@@ -85,9 +91,10 @@
         if(link.hash && link.hash.indexOf('app=') === 0) return link.hash.substr(4);
 
         /* Handling special situations */
-        var moduleName      = link.moduleName;
-        var methodName      = link.methodName;
-        if (moduleName === 'index' && methodName === 'index') return 'my';
+        var moduleName        = link.moduleName;
+        var methodName        = link.methodName;
+        var moduleMethodLower = (moduleName + '-' + methodName).toLowerCase();
+        if (moduleMethodLower === 'index-index') return 'my';
 
         var methodLowerCase = methodName.toLowerCase();
         if(moduleName === 'doc')
@@ -170,7 +177,7 @@
                 return 'project';
             }
         }
-        if(moduleName === 'search' && methodLowerCase === 'buildindex') return 'admin';
+        if(['search-buildindex', 'ai-adminindex'].includes(moduleMethodLower)) return 'admin';
 
         code = window.navGroup[moduleName] || moduleName || urlOrModuleName;
         return appsMap[code] ? code : '';
@@ -222,9 +229,14 @@
                 var iframe = app.$iframe[0];
                 if(iframe && iframe.contentDocument && iframe.contentWindow && iframe.contentWindow.$)
                 {
-                    var result = iframe.contentWindow.$(iframe.contentDocument).triggerHandler('openapp.apps', [app, url]);
-                    if (result === false) {
-                        return 'cancel';
+                    var $iframeDoc = iframe.contentWindow.$(iframe.contentDocument);
+                    if ($iframeDoc.triggerHandler)
+                    {
+                        if ($iframeDoc.triggerHandler('openapp.apps', [app, url]) === false) return 'cancel';
+                    }
+                    else if($iframeDoc.trigger)
+                    {
+                        $iframeDoc.trigger('openapp.apps');
                     }
                 }
             }
@@ -408,9 +420,14 @@
             var iframe = app.$iframe[0];
             if(iframe && iframe.contentDocument && iframe.contentWindow && iframe.contentWindow.$)
             {
-                var result = iframe.contentWindow.$(iframe.contentDocument).triggerHandler('closeapp.apps', [app]);
-                if (result === false) {
-                    return 'cancel';
+                var $iframeDoc = iframe.contentWindow.$(iframe.contentDocument);
+                if ($iframeDoc.triggerHandler)
+                {
+                    if ($iframeDoc.triggerHandler('openapp.apps', [app]) === false) return 'cancel';
+                }
+                else if($iframeDoc.trigger)
+                {
+                    $iframeDoc.trigger('openapp.apps');
                 }
             }
         }
@@ -935,6 +952,7 @@ function changeSearchObject()
 
     if(searchType == 'program')    var searchType = 'program-product';
     if(searchType == 'deploystep') var searchType = 'deploy-viewstep';
+    if(searchType == 'practice')   var searchType = 'traincource-practiceview';
 
     $("#searchType").val(searchType);
     $('#searchTypeMenu li:first').attr('class', 'search-type-all');

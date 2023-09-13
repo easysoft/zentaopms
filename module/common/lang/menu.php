@@ -13,6 +13,20 @@ $lang->navIcons['bi']        = "<i class='icon icon-statistic'></i>";
 $lang->navIcons['system']    = "<i class='icon icon-group'></i>";
 $lang->navIcons['admin']     = "<i class='icon icon-cog-outline'></i>";
 
+$lang->navIconNames              = array();
+$lang->navIconNames['my']        = 'menu-my';
+$lang->navIconNames['program']   = 'program';
+$lang->navIconNames['product']   = 'product';
+$lang->navIconNames['project']   = 'project';
+$lang->navIconNames['execution'] = 'run';
+$lang->navIconNames['qa']        = 'test';
+$lang->navIconNames['devops']    = 'devops';
+$lang->navIconNames['kanban']    = 'kanban';
+$lang->navIconNames['doc']       = 'doc';
+$lang->navIconNames['bi']        = 'statistic';
+$lang->navIconNames['system']    = 'group';
+$lang->navIconNames['admin']     = 'cog-outline';
+
 global $config;
 list($programModule, $programMethod)     = explode('-', $config->programLink);
 list($productModule, $productMethod)     = explode('-', $config->productLink);
@@ -39,7 +53,7 @@ $lang->mainNav->product   = "{$lang->navIcons['product']} {$lang->productCommon}
 $lang->mainNav->project   = "{$lang->navIcons['project']} {$lang->projectCommon}|$projectModule|$projectMethod|";
 $lang->mainNav->execution = "{$lang->navIcons['execution']} {$lang->execution->common}|$executionModule|$executionMethod|";
 $lang->mainNav->qa        = "{$lang->navIcons['qa']} {$lang->qa->common}|qa|index|";
-$lang->mainNav->devops    = "{$lang->navIcons['devops']} DevOps|repo|browse|";
+$lang->mainNav->devops    = "{$lang->navIcons['devops']} DevOps|repo|maintain|";
 $lang->mainNav->kanban    = "{$lang->navIcons['kanban']} {$lang->kanban->common}|kanban|space|";
 $lang->mainNav->doc       = "{$lang->navIcons['doc']} {$lang->doc->common}|doc|index|";
 $lang->mainNav->bi        = "{$lang->navIcons['bi']} {$lang->bi->common}|screen|browse|";
@@ -468,29 +482,41 @@ $lang->qa->menuOrder[45] = 'automation';
 $lang->qa->dividerMenu = ',bug,testtask,caselib,automation,';
 
 /* DevOps menu. */
+$lang->devops->homeMenu = new stdclass();
+//$lang->devops->homeMenu->dashboard   = array('link' => "{$lang->dashboard}|system|dashboard");
+$lang->devops->homeMenu->repos       = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit,import');
+$lang->devops->homeMenu->compile     = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
+$lang->devops->homeMenu->artifactrepo = array('link' => "{$lang->devops->artifactrepo}|artifactrepo|browse", 'alias' => 'create');
+
+if($config->edition != 'open') $lang->devops->homeMenu->deploy = array('link' => "{$lang->devops->deploy}|deploy|browse", 'alias' => 'steps,managestep,create,edit,browse,view,scope,cases', 'subModule' => 'ops,deploy');
+
+$lang->devops->homeMenu->apps = array('link' => "{$lang->app->common}|space|browse", 'subModule' => 'instance,store,gitlab,gitea,gogs,jenkins,sonarqube', 'alias' => 'createapplication,binduser,edit');
+
+//$lang->devops->homeMenu->environment = array('link' => "{$lang->devops->environment}|gitlab|browse", 'subModule' => 'gitlab,jenkins,sonarqube,gitea,gogs', 'alias' => 'setrules,create,edit,import');
+//$lang->devops->homeMenu->app         = array('link' => "{$lang->app->common}|app|serverlink|%s");
+
 $lang->devops->menu = new stdclass();
-$lang->devops->menu->code    = array('link' => "{$lang->repo->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,log,blame,showsynccommit');
+$lang->devops->menu->code    = array('link' => "{$lang->repocode->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,log,blame,showsynccommit');
 $lang->devops->menu->mr      = array('link' => "{$lang->devops->mr}|mr|browse|repoID=%s");
 $lang->devops->menu->compile = array('link' => "{$lang->devops->compile}|job|browse|repoID=%s", 'subModule' => 'compile,job');
-$lang->devops->menu->app     = array('link' => "{$lang->app->common}|app|serverlink|%s");
-$lang->devops->menu->set     = array('link' => "{$lang->devops->set}|repo|maintain", 'subModule' => 'gitlab,jenkins,sonarqube,gitea,gogs', 'alias' => 'setrules,create,edit,import');
 
-$lang->devops->menuOrder[5]  = 'code';
-$lang->devops->menuOrder[10] = 'mr';
-$lang->devops->menuOrder[15] = 'compile';
-$lang->devops->menuOrder[20] = 'app';
-$lang->devops->menuOrder[25] = 'set';
+//$lang->devops->menuOrder[5]  = 'dashboard';
+$lang->devops->menuOrder[10] = 'repos';
+$lang->devops->menuOrder[15] = 'code';
+$lang->devops->menuOrder[20] = 'mr';
+$lang->devops->menuOrder[25] = 'compile';
+$lang->devops->menuOrder[30] = 'apps';
+//$lang->devops->menuOrder[35] = 'environment';
+//$lang->devops->menuOrder[40] = 'app';
 
-$lang->devops->dividerMenu = ',set,';
+$lang->devops->dividerMenu = ',apps,';
 
-$lang->devops->menu->set['subMenu'] = new stdclass();
-$lang->devops->menu->set['subMenu']->repo      = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit,import');
-$lang->devops->menu->set['subMenu']->gitlab    = array('link' => 'GitLab|gitlab|browse', 'subModule' => 'gitlab');
-$lang->devops->menu->set['subMenu']->gogs      = array('link' => 'Gogs|gogs|browse', 'subModule' => 'gogs');
-$lang->devops->menu->set['subMenu']->gitea     = array('link' => 'Gitea|gitea|browse', 'subModule' => 'gitea');
-$lang->devops->menu->set['subMenu']->jenkins   = array('link' => 'Jenkins|jenkins|browse', 'subModule' => 'jenkins');
-$lang->devops->menu->set['subMenu']->sonarqube = array('link' => 'SonarQube|sonarqube|browse', 'subModule' => 'sonarqube');
-$lang->devops->menu->set['subMenu']->setrules  = array('link' => "{$lang->devops->rules}|repo|setrules");
+// $lang->devops->homeMenu->environment['subMenu'] = new stdclass();
+// $lang->devops->homeMenu->environment['subMenu']->gitlab    = array('link' => 'GitLab|gitlab|browse', 'subModule' => 'gitlab');
+// $lang->devops->homeMenu->environment['subMenu']->gogs      = array('link' => 'Gogs|gogs|browse', 'subModule' => 'gogs');
+// $lang->devops->homeMenu->environment['subMenu']->gitea     = array('link' => 'Gitea|gitea|browse', 'subModule' => 'gitea');
+// $lang->devops->homeMenu->environment['subMenu']->jenkins   = array('link' => 'Jenkins|jenkins|browse', 'subModule' => 'jenkins');
+// $lang->devops->homeMenu->environment['subMenu']->sonarqube = array('link' => 'SonarQube|sonarqube|browse', 'subModule' => 'sonarqube');
 
 /* Kanban menu. */
 $lang->kanban->menu = new stdclass();
@@ -665,6 +691,11 @@ $lang->navGroup->git              = 'devops';
 $lang->navGroup->app              = 'devops';
 $lang->navGroup->pipeline         = 'devops';
 $lang->navGroup->devopssetting    = 'devops';
+$lang->navGroup->space            = 'devops';
+$lang->navGroup->store            = 'devops';
+$lang->navGroup->instance         = 'devops';
+$lang->navGroup->deploy           = 'devops';
+$lang->navGroup->artifactrepo     = 'devops';
 
 $lang->navGroup->company        = 'system';
 $lang->navGroup->systemteam     = 'system';
@@ -708,6 +739,13 @@ $lang->navGroup->featureconfig = 'admin';
 $lang->navGroup->doctemplate   = 'admin';
 $lang->navGroup->notifysetting = 'admin';
 $lang->navGroup->holidayseason = 'admin';
+$lang->navGroup->system        = 'admin';
+$lang->navGroup->serverroom    = 'admin';
+$lang->navGroup->account       = 'admin';
+$lang->navGroup->host          = 'admin';
+$lang->navGroup->ops           = 'admin';
+$lang->navGroup->service       = 'admin';
+$lang->navGroup->domain        = 'admin';
 
 $lang->navGroup->index   = 'index';
 $lang->navGroup->misc    = 'misc';
