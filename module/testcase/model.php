@@ -280,7 +280,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getBySearch(int $productID, int|string $branch = 0, int $queryID, string $auto = 'no', string $orderBy = 'id_desc', object $pager = null): array
+    public function getBySearch(int $productID, int|string $branch = 0, int $queryID = 0, string $auto = 'no', string $orderBy = 'id_desc', object $pager = null): array
     {
         if($queryID)
         {
@@ -2088,20 +2088,21 @@ class testcaseModel extends model
     }
 
     /**
+     * 获取所有的子场景 id。
      * Get all children id.
      *
-     * @param  int $sceneID
+     * @param  int    $sceneID
      * @access public
-     * @return object
+     * @return array
      */
-    public function getAllChildId($sceneID)
+    public function getAllChildId(int $sceneID): array
     {
         if($sceneID == 0) return array();
 
-        $scene = $this->dao->findById((int)$sceneID)->from(VIEW_SCENECASE)->fetch();
+        $scene = $this->dao->findById($sceneID)->from(TABLE_SCENE)->fetch();
         if(empty($scene)) return array();
 
-        return $this->dao->select('id')->from(VIEW_SCENECASE)
+        return $this->dao->select('id')->from(TABLE_SCENE)
             ->where('path')->like($scene->path . '%')
             ->andWhere('deleted')->eq(0)
             ->fetchPairs();

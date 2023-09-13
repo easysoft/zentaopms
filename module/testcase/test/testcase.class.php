@@ -301,7 +301,7 @@ class testcaseTest
      * @access public
      * @return array
      */
-    public function getBySearchTest(string $tab = 'qa', int $projectID, int $productID, int|string $branch = 0, int $queryID = 0, string $auto = 'no', string $orderBy = 'id_desc', object $pager = null): array
+    public function getBySearchTest(string $tab = 'qa', int $projectID = 0, int $productID = 0, int|string $branch = 0, int $queryID = 0, string $auto = 'no', string $orderBy = 'id_desc', object $pager = null): array
     {
         global $tester;
         $tester->app->tab = $tab;
@@ -1330,5 +1330,20 @@ class testcaseTest
         $return = implode(',', $treeMenu);
         $return = str_replace("\n", '', $return);
         return $return;
+    }
+
+    /**
+     * 测试获取所有的子场景 id。
+     * Test get all children id.
+     *
+     * @param  int    $sceneID
+     * @access public
+     * @return string
+     */
+    public function getAllChildIdTest(int $sceneID): string
+    {
+        $idList = $this->objectModel->getAllChildId($sceneID);
+        if(dao::isError()) return dao::getError();
+        return implode(',', $idList);
     }
 }
