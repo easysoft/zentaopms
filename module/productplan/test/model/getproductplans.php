@@ -12,7 +12,7 @@ $productplan->gen(30);
 
 /**
 
-title=taskModel->getProductPlans();
+title=productplanModel->getProductPlans();
 timeout=0
 cid=1
 
