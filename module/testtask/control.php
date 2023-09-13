@@ -1065,18 +1065,10 @@ class testtask extends control
      */
     public function batchUnlinkCases(int $taskID)
     {
-        if($this->post->caseIdList)
-        {
-            $this->dao->delete()->from(TABLE_TESTRUN)
-                ->where('task')->eq($taskID)
-                ->andWhere('`case`')->in($this->post->caseIdList)
-                ->exec();
+        $this->testtask->batchUnlinkCases($taskID);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->loadModel('action');
-            foreach($this->post->caseIdList as $caseID) $this->action->create('case', $caseID, 'unlinkedfromtesttask', '', $taskID);
-        }
-
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('cases', "taskID=$taskID")));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 
     /**
