@@ -106,9 +106,22 @@ class metricModel extends model
         }
 
         $metrics = $this->metricTao->fetchMetrics($scope, $stage, $object, $purpose, $this->session->metricQuery, $sort, $pager);
-        foreach($metrics as $index => $metric) $metrics[$index]->isOldMetric = $this->isOldMetric($metric);
+        $metrics = $this->processOldMetrics($metrics);
 
         return $metrics;
+    }
+
+    /**
+     * 获取旧度量项列表。
+     * Get old metric list.
+     *
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getOldMetricList(string $orderBy = 'id_desc'): array
+    {
+        return $this->dao->select('*')->from(TABLE_BASICMEAS)->where('deleted')->eq(0)->orderby($orderBy)->fetchAll('id');
     }
 
     public function getListByFilter($filters, $stage)
@@ -1138,5 +1151,29 @@ class metricModel extends model
     public function updateMetricFields(string $metricID, object $metric): void
     {
         $this->dao->update(TABLE_METRIC)->data($metric)->where('id')->eq($metricID)->exec();
+    }
+
+    /**
+     * 将旧度量项的信息附加到度量项列表中。
+     * Append old metric info to metric list.
+     *
+     * @param  array $metrics
+     * @access public
+     * @return array
+     */
+    public function processOldMetrics($metrics)
+    {
+        $oldMetricList = $this->getOldMetricList();
+
+        $metricList = array();
+        foreach($metrics as $metric)
+        {
+            $metric->isOldMetric = $this->isOldMetric($metric);
+            if($metric->isOldMetric) $metric->unit = $oldMetricList[$metric->fromID]->unit;
+
+            $metricList[] = $metric;
+        }
+
+        return $metricList;
     }
 }
