@@ -1003,30 +1003,19 @@ class executionModel extends model
      * Activate a execution.
      *
      * @param  int    $executionID
+     * @param  object $postData
      * @access public
      * @return array|false
      */
-    public function activate(int $executionID): array|false
+    public function activate(int $executionID, object $postData): array|false
     {
         $oldExecution = $this->getById($executionID);
 
-        $execution = fixer::input('post')
-            ->add('id', $executionID)
-            ->setDefault('realEnd', null)
-            ->setDefault('status', 'doing')
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', helper::now())
-            ->setDefault('closedBy', '')
-            ->setDefault('closedDate', null)
-            ->stripTags($this->config->execution->editor->activate['id'], $this->config->allowedTags)
-            ->remove('comment,readjustTask')
-            ->get();
-
-        if(empty($oldExecution->totalConsumed) and helper::isZeroDate($oldExecution->realBegan)) $execution->status = 'wait';
+        if(empty($oldExecution->totalConsumed) and helper::isZeroDate($oldExecution->realBegan)) $postData->status = 'wait';
 
         /* Check the date which user input. */
-        $begin = $execution->begin;
-        $end   = $execution->end;
+        $begin = $postData->begin;
+        $end   = $postData->end;
         if($begin > $end) dao::$errors['end'] = sprintf($this->lang->execution->errorLesserPlan, $end, $begin); /* The begin date should larger than end. */
 
         /* Check the begin and end date if the execution has a parent, such as a child Stage, Sprint or Kanban. */
@@ -1051,15 +1040,15 @@ class executionModel extends model
         if(dao::isError()) return false;
 
         /* Do update for this execution. */
-        $execution = $this->loadModel('file')->processImgURL($execution, $this->config->execution->editor->activate['id'], $this->post->uid);
-        $this->dao->update(TABLE_EXECUTION)->data($execution)
+        $execution = $this->loadModel('file')->processImgURL($postData, $this->config->execution->editor->activate['id'], $postData->uid);
+        $this->dao->update(TABLE_EXECUTION)->data($execution, 'comment,readjustTask')
             ->autoCheck()
             ->checkFlow()
             ->where('id')->eq((int)$executionID)
             ->exec();
 
         /* 顺延任务的起止时间。Adjust the begin and end date for tasks in this execution. */
-        if($this->post->readjustTask)
+        if($postData->readjustTask)
         {
             $beginTimeStamp = strtotime($execution->begin);
             $tasks = $this->dao->select('id,estStarted,deadline,status')->from(TABLE_TASK)
@@ -1067,6 +1056,8 @@ class executionModel extends model
                 ->andWhere('deadline')->notNULL()
                 ->andWhere('status')->in('wait,doing')
                 ->fetchAll();
+
+            $this->loadModel('action');
             foreach($tasks as $task)
             {
                 if(helper::isZeroDate($task->deadline)) continue;
@@ -1093,15 +1084,15 @@ class executionModel extends model
                     $this->dao->update(TABLE_TASK)->set('deadline')->eq($deadline)->where('id')->eq($task->id)->exec();
                 }
 
-                $this->loadModel('action')->create('task', $task->id, 'Edited', $this->lang->execution->readjustTask );
+                $this->action->create('task', $task->id, 'Edited', $this->lang->execution->readjustTask );
             }
         }
 
         $changes = common::createChanges($oldExecution, $execution);
-        if($this->post->comment != '' or !empty($changes))
+        if($postData->comment != '' or !empty($changes))
         {
             $this->loadModel('action');
-            $actionID = $this->action->create('execution', $executionID, 'Activated', $this->post->comment);
+            $actionID = $this->action->create('execution', $executionID, 'Activated', $postData->comment);
             $this->action->logHistory($actionID, $changes);
         }
 
