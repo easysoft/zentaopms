@@ -1480,7 +1480,7 @@ class projectZen extends project
      * Expand executions, return id list.
      *
      * @param  object $stats
-     * @access public
+     * @access protected
      * @return array
      */
     protected function expandExecutionIdList($stats)
