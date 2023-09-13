@@ -267,6 +267,7 @@ class testcaseModel extends model
     }
 
     /**
+     * 搜索用例。
      * Get cases by search.
      *
      * @param  int         $productID

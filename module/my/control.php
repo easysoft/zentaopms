@@ -143,7 +143,7 @@ class my extends control
         $bugCount = $pager->recTotal;
 
         /* Get the number of testcases assigned to me. */
-        $cases     = $this->testcase->getByAssignedTo($this->app->user->account, 'id_desc', $pager, 'skip');
+        $cases     = $this->testcase->getByAssignedTo($this->app->user->account, $auto = 'skip', 'id_desc', $pager);
         $caseCount = $pager->recTotal;
 
         /* Get the number of testtasks assigned to me. */
@@ -681,8 +681,8 @@ EOF;
         $queryID = ($type == 'bysearch') ? (int)$param : 0;
 
         $cases = array();
-        if($type == 'assigntome') $cases = $this->testcase->getByAssignedTo($this->app->user->account, $sort, $pager, 'skip|run');
-        if($type == 'openedbyme') $cases = $this->testcase->getByOpenedBy($this->app->user->account, $sort, $pager, 'skip');
+        if($type == 'assigntome') $cases = $this->testcase->getByAssignedTo($this->app->user->account, $auto = 'skip|run', $sort, $pager);
+        if($type == 'openedbyme') $cases = $this->testcase->getByOpenedBy($this->app->user->account, $auto = 'skip', $sort, $pager);
         if($type == 'bysearch' and $this->app->rawMethod == 'contribute') $cases = $this->my->getTestcasesBySearch($queryID, 'contribute', $orderBy, $pager);
         if($type == 'bysearch' and $this->app->rawMethod == 'work')       $cases = $this->my->getTestcasesBySearch($queryID, 'work', $orderBy, $pager);
 

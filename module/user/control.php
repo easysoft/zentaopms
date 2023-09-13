@@ -303,11 +303,11 @@ class user extends control
         $cases = array();
         if($type == 'case2Him')
         {
-            $cases = $this->loadModel('testcase')->getByAssignedTo($account, $sort, $pager);
+            $cases = $this->loadModel('testcase')->getByAssignedTo($account, $auto = '', $sort, $pager);
         }
         elseif($type == 'caseByHim')
         {
-            $cases = $this->loadModel('testcase')->getByOpenedBy($account, $sort, $pager);
+            $cases = $this->loadModel('testcase')->getByOpenedBy($account, $auto = '', $sort, $pager);
         }
 
         /* Process case for check story changed. */
