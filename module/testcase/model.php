@@ -1617,19 +1617,23 @@ class testcaseModel extends model
     }
 
     /**
+     * 检查是否不需要评审。
      * Check whether force not review.
      *
      * @access public
      * @return bool
      */
-    public function forceNotReview()
+    public function forceNotReview(): bool
     {
-        if(empty($this->config->testcase->needReview))
+        if(!$this->config->testcase->needReview)
         {
             if(!isset($this->config->testcase->forceReview)) return true;
             if(strpos(",{$this->config->testcase->forceReview},", ",{$this->app->user->account},") === false) return true;
         }
-        if($this->config->testcase->needReview && isset($this->config->testcase->forceNotReview) && strpos(",{$this->config->testcase->forceNotReview},", ",{$this->app->user->account},") !== false) return true;
+        elseif(isset($this->config->testcase->forceNotReview) && strpos(",{$this->config->testcase->forceNotReview},", ",{$this->app->user->account},") !== false)
+        {
+            return true;
+        }
 
         return false;
     }

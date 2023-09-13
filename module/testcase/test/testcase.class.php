@@ -695,13 +695,22 @@ class testcaseTest
     }
 
     /**
+     * 测试检查是否不需要评审。
      * Test check whether force not review.
      *
+     * @param  bool        $needReview
+     * @param  bool|string $forceReview
+     * @param  bool|string $forceNotReview
      * @access public
      * @return int
      */
-    public function forceNotReviewTest()
+    public function forceNotReviewTest(bool $needReview, bool|string $forceReview, bool|string $forceNotReview): int
     {
+        global $tester;
+        $tester->config->testcase->needReview     = $needReview;
+        $tester->config->testcase->forceReview    = $forceReview;
+        $tester->config->testcase->forceNotReview = $forceNotReview;
+
         $object = $this->objectModel->forceNotReview();
 
         if(dao::isError()) return dao::getError();
