@@ -287,15 +287,16 @@ class executionModel extends model
      * Update a execution.
      *
      * @param  int    $executionID
+     * @param  object $postData
      * @access public
      * @return array|false
      */
-    public function update(int $executionID): array|false
+    public function update(int $executionID, object $postData): array|false
     {
         $oldExecution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
 
         /* Judgment of required items, such as execution code name. */
-        if($oldExecution->type != 'stage' and $this->post->code == '' and isset($this->config->setCode) and $this->config->setCode == 1)
+        if($oldExecution->type != 'stage' and $postData->code == '' and isset($this->config->setCode) and $this->config->setCode == 1)
         {
             /* $this->config->setCode is the value get from database with system owner and common module. */
             dao::$errors['code'] = sprintf($this->lang->error->notempty, $this->lang->execution->code);
@@ -304,20 +305,20 @@ class executionModel extends model
 
         /* Judge workdays is legitimate. */
         $this->app->loadLang('project');
-        $workdays = helper::diffDate($_POST['end'], $_POST['begin']) + 1;
-        if(isset($_POST['days']) and $_POST['days'] > $workdays)
+        $workdays = helper::diffDate($postData->end, $postData->begin) + 1;
+        if(isset($postData->days) and $postData->days > $workdays)
         {
             dao::$errors['days'] = sprintf($this->lang->project->workdaysExceed, $workdays);
             return false;
         }
 
-        if($_POST['products'])
+        if($postData->products)
         {
             $multipleProducts = $this->loadModel('product')->getMultiBranchPairs();
-            if($this->post->branch) $_POST['branch'] = json_decode($this->post->branch, true);
-            foreach($_POST['products'] as $index => $productID)
+            if($postData->branch) $postData->branch = is_array($postData->branch) ? $postData->branch : json_decode($postData->branch, true);
+            foreach($postData->products as $index => $productID)
             {
-                if(isset($multipleProducts[$productID]) and !isset($_POST['branch'][$index]))
+                if(isset($multipleProducts[$productID]) and !isset($postData->branch[$index]))
                 {
                     dao::$errors[] = $this->lang->project->emptyBranch;
                     return false;
@@ -325,39 +326,20 @@ class executionModel extends model
             }
         }
 
-        /* Get the data from the post. */
-        $execution = fixer::input('post')
-            ->add('id', $executionID)
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', helper::now())
-            ->setIF($this->post->heightType == 'auto', 'displayCards', 0)
-            ->setIF(helper::isZeroDate($this->post->begin), 'begin', '')
-            ->setIF(helper::isZeroDate($this->post->end), 'end', '')
-            ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
-            ->join('whitelist', ',')
-            ->setIF($this->post->status == 'closed' and $oldExecution->status != 'closed', 'closedDate', helper::now())
-            ->setIF($this->post->status == 'suspended' and $oldExecution->status != 'suspended', 'suspendedDate', helper::today())
-            ->setIF($oldExecution->type == 'stage', 'project', $oldExecution->project)
-            ->setDefault('days', '0')
-            ->setDefault('team', $this->post->name)
-            ->stripTags($this->config->execution->editor->edit['id'], $this->config->allowedTags)
-            ->remove('products, branch, uid, plans, syncStories, contactListMenu, teamMembers, heightType, delta')
-            ->cleanInt('id,project')
-            ->get();
 
-        if($this->post->heightType == 'custom' && !$this->loadModel('kanban')->checkDisplayCards($execution->displayCards)) return false;
+        if(!empty($postData->heightType) && $postData->heightType == 'custom' && !$this->loadModel('kanban')->checkDisplayCards($postData->displayCards)) return false;
 
-        if(in_array($execution->status, array('closed', 'suspended'))) $this->computeBurn($executionID);
+        if(in_array($postData->status, array('closed', 'suspended'))) $this->computeBurn($executionID);
 
         /* Check the begin date and end date. */
-        $parentExecution = !empty($execution->parent) ? $execution : $oldExecution;
-        if(empty($execution->project) || $execution->project == $oldExecution->project) $this->checkBeginAndEndDate($oldExecution->project, $execution->begin, $execution->end, $parentExecution->parent);
+        $parentExecution = !empty($postData->parent) ? $postData : $oldExecution;
+        if(empty($postData->project) || $postData->project == $oldExecution->project) $this->checkBeginAndEndDate($oldExecution->project, $postData->begin, $postData->end, $parentExecution->parent);
         if(dao::isError()) return false;
 
         /* Child stage inherits parent stage permissions. */
-        if(!isset($execution->acl)) $execution->acl = $oldExecution->acl;
+        if(!isset($postData->acl)) $postData->acl = $oldExecution->acl;
 
-        $execution = $this->loadModel('file')->processImgURL($execution, $this->config->execution->editor->edit['id'], $this->post->uid);
+        $execution = $this->loadModel('file')->processImgURL($postData, $this->config->execution->editor->edit['id'], $postData->uid);
 
         /* Check the workload format and total, such as check Workload Ratio if it enabled. */
         if(!empty($execution->percent) and isset($this->config->setPercent) and $this->config->setPercent == 1) $this->checkWorkload('update', $execution->percent, $oldExecution);
@@ -382,7 +364,7 @@ class executionModel extends model
         /* Update data. */
         $this->lang->error->unique = $this->lang->error->repeat;
         $executionProject = isset($execution->project) ? $execution->project : $oldExecution->project;
-        $this->dao->update(TABLE_EXECUTION)->data($execution)
+        $this->dao->update(TABLE_EXECUTION)->data($execution, 'products, branch, uid, plans, syncStories, contactListMenu, teamMembers, heightType, delta')
             ->autoCheck('begin,end')
             ->batchCheck($this->config->execution->edit->requiredFields, 'notempty')
             ->checkIF($execution->begin != '', 'begin', 'date')
@@ -397,7 +379,7 @@ class executionModel extends model
 
         if(dao::isError()) return false;
 
-        if(isset($_POST['parent'])) $this->loadModel('programplan')->setTreePath($executionID);
+        if(isset($postData->parent)) $this->loadModel('programplan')->setTreePath($executionID);
 
         /* Update the team. */
         $this->executionTao->updateTeam($executionID, $oldExecution, $execution);
@@ -434,10 +416,10 @@ class executionModel extends model
             {
                 $execution->parent = $execution->project;
                 $execution->path   = ",{$execution->project},{$executionID},";
-                $this->changeProject($execution->project, $oldExecution->project, $executionID, $this->post->syncStories);
+                $this->changeProject($execution->project, $oldExecution->project, $executionID, $postData->syncStories);
             }
 
-            $this->file->updateObjectID($this->post->uid, $executionID, 'execution');
+            $this->file->updateObjectID($postData->uid, $executionID, 'execution');
             return common::createChanges($oldExecution, $execution);
         }
     }
@@ -1048,7 +1030,7 @@ class executionModel extends model
             ->exec();
 
         /* 顺延任务的起止时间。Adjust the begin and end date for tasks in this execution. */
-        if($postData->readjustTask)
+        if(!empty($postData->readjustTask))
         {
             $beginTimeStamp = strtotime($execution->begin);
             $tasks = $this->dao->select('id,estStarted,deadline,status')->from(TABLE_TASK)
