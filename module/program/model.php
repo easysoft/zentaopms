@@ -30,7 +30,7 @@ class programModel extends model
      * @access public
      * @return int
      */
-    public function saveState(int $programID = 0, array $programs = array()): int
+    public function checkAccess(int $programID = 0, array $programs = array()): int
     {
         if($programID > 0) $this->session->set('program', $programID);
         if(!$programID && $this->cookie->lastProgram) $this->session->set('program', $this->cookie->lastProgram);

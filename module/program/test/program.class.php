@@ -365,9 +365,9 @@ class programTest
      * @access public
      * @return array
      */
-    public function saveStateTest($programID = 0, $programs = array())
+    public function checkAccessTest($programID = 0, $programs = array())
     {
-        return $this->program->saveState($programID, $programs);
+        return $this->program->checkAccess($programID, $programs);
     }
 
     /**

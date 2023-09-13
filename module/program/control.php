@@ -146,7 +146,7 @@ class program extends control
         $programPairs = $this->program->getPairs();
         if(defined('RUN_MODE') && RUN_MODE == 'api' && !isset($programPairs[$programID])) return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
 
-        $programID = $this->program->saveState($programID, $programPairs);
+        $programID = $this->program->checkAccess($programID, $programPairs);
 
         helper::setcookie("lastProgram", (string)$programID);
         common::setMenuVars('program', $programID);
@@ -466,7 +466,7 @@ class program extends control
      */
     public function project($programID = 0, $browseType = 'doing', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-        $programID = $this->program->saveState($programID, $this->program->getPairs());
+        $programID = $this->program->checkAccess($programID, $this->program->getPairs());
         setCookie("lastProgram", $programID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         common::setMenuVars('program', $programID);
@@ -783,7 +783,7 @@ class program extends control
 
         if($this->app->viewType == 'mhtml')
         {
-            $productID = $this->product->saveState(0, $this->products);
+            $productID = $this->product->checkAccess(0, $this->products);
             $this->product->setMenu($productID);
         }
 

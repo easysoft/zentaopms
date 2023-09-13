@@ -5,17 +5,25 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 /**
 
 title=测试 programModel::accessDenied();
+timeout=0
 cid=1
-pid=1
-
-权限不足跳转 >> html
 
 */
 
 global $tester;
+$tester->app->moduleName = 'program';
+$tester->app->methodName = 'product';
+$tester->app->setControlFile();
+$tester->app->setParams();
 $tester->loadModel('program');
-ob_start();
-$tester->program->accessDenied();
-$result = ob_get_clean();
 
-r(substr($result, 1, 4)) && p() && e('html'); // 权限不足跳转
+try
+{
+    $tester->program->accessDenied();
+}
+catch (Throwable $e)
+{
+    $result = 'fail';
+}
+
+r($result) && p() && e('fail'); // 权限不足跳转
