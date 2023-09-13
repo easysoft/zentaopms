@@ -223,8 +223,9 @@ class executionTest
 
         foreach($object as $field => $defaultValue) $_POST[$field] = $defaultValue;
         foreach($param as $key => $value) $_POST[$key] = $value;
+        $_POST['uid'] = 0;
 
-        $change = $this->executionModel->update($objectID);
+        $change = $this->executionModel->update($objectID, (object)$_POST);
 
         if($change == array()) $change = '没有数据更新';
 
@@ -271,8 +272,9 @@ class executionTest
 
         foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
         foreach($param as $key => $value) $_POST[$key] = $value;
+        $_POST['uid'] = 0;
 
-        $object = $this->executionModel->batchUpdate();
+        $object = $this->executionModel->batchUpdate((object)$_POST);
 
         unset($_POST);
 
@@ -422,12 +424,13 @@ class executionTest
     {
         $data = date('Y-m-d');
 
-        $createFields = array( 'comment' => '开始描述测试', 'realBegan' => $data);
+        $createFields = array('status' => 'doing', 'comment' => '开始描述测试', 'realBegan' => $data);
 
         foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
         foreach($param as $key => $value) $_POST[$key] = $value;
+        $_POST['uid'] = 0;
 
-        $obj = $this->executionModel->start($executionID);
+        $obj = $this->executionModel->start($executionID, (object)$_POST);
 
         unset($_POST);
 
@@ -444,7 +447,9 @@ class executionTest
             $executionParent = $this->executionModel->getByID($execution->parent);
             return $executionParent;
         }
-        return $obj;
+
+        foreach($obj as $change) $changes[$change['field']] = $change;
+        return $changes;
 
     }
 
@@ -465,8 +470,9 @@ class executionTest
 
         foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
         foreach($param as $key => $value) $_POST[$key] = $value;
+        $_POST['uid'] = 0;
 
-        $obj = $this->executionModel->putoff($executionID);
+        $obj = $this->executionModel->putoff($executionID, (object)$_POST);
 
         unset($_POST);
 
@@ -495,8 +501,9 @@ class executionTest
 
         foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
         foreach($param as $key => $value) $_POST[$key] = $value;
+        $_POST['uid'] = 0;
 
-        $obj = $this->executionModel->suspend($executionID);
+        $obj = $this->executionModel->suspend($executionID, (object)$_POST);
 
         unset($_POST);
 
@@ -531,8 +538,9 @@ class executionTest
 
         foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
         foreach($param as $key => $value) $_POST[$key] = $value;
+        $_POST['uid'] = 0;
 
-        $obj = $this->executionModel->activate($executionID);
+        $obj = $this->executionModel->activate($executionID, (object)$_POST);
 
         unset($_POST);
 
@@ -571,8 +579,9 @@ class executionTest
 
         foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
         foreach($param as $key => $value) $_POST[$key] = $value;
+        $_POST['uid'] = 0;
 
-        $obj = $this->executionModel->close($executionID);
+        $obj = $this->executionModel->close($executionID, (object)$_POST);
 
         unset($_POST);
 
