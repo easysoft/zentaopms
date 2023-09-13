@@ -147,18 +147,20 @@ class metricTao extends metricModel
      * 通过反射获取类的函数列表。
      * Get method name list of class by reflection.
      *
-     * @param  string $file
      * @param  string $className
-     * @access public
+     * @access protected
      * @return array
      */
     protected function getMethodNameList($className)
     {
         $classReflection = new ReflectionClass($className);
-        $methods = $classReflection->getMethods();
+        $methodList = $classReflection->getMethods();
 
         $methodNameList = array();
-        foreach($methods as $index => $reflectionMethod) $methodNameList[$index] = $reflectionMethod->name;
+        foreach($methodList as $index => $reflectionMethod) 
+        {
+            if($reflectionMethod->class == $className) $methodNameList[$index] = $reflectionMethod->name;
+        }
 
         return $methodNameList;
     }
