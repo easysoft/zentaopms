@@ -24,6 +24,8 @@ $team->join->range('20220112 000000:0')->type('timestamp')->format('YY/MM/DD');
 $team->gen(5);
 
 zdTable('user')->gen(5);
+zdTable('projectproduct')->gen(0);
+zdTable('product')->gen(0);
 su('admin');
 
 /**

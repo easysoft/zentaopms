@@ -16,6 +16,8 @@ $execution->begin->range('20220112 000000:0')->type('timestamp')->format('YY/MM/
 $execution->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->gen(5);
 
+zdTable('team')->gen(0);
+
 /**
 
 title=测试executionModel->createDefaultSprintTest();

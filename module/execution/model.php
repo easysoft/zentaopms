@@ -4699,16 +4699,17 @@ class executionModel extends model
         $executionData->begin       = $project->begin;
         $executionData->end         = $project->end;
         $executionData->status      = 'wait';
+        $executionData->type        = 'sprint';
         $executionData->days        = $project->days;
         $executionData->team        = $project->team;
         $executionData->desc        = $project->desc;
-        $executionData->teamMembers = array($this->app->user->account);
         $executionData->acl         = 'open';
         $executionData->PO          = $this->app->user->account;
         $executionData->QD          = $this->app->user->account;
         $executionData->PM          = $this->app->user->account;
         $executionData->RD          = $this->app->user->account;
         $executionData->multiple    = '0';
+        $executionData->whitelist   = '';
         $executionData->hasProduct  = $project->hasProduct;
         if($project->code) $executionData->code = $project->code;
 
@@ -4720,7 +4721,7 @@ class executionModel extends model
             if($projectProduct->plan)    $executionData->plans[$projectProduct->product][$projectProduct->branch] = explode(',', trim($projectProduct->plan, ','));
         }
 
-        $executionID = $this->create($executionData, array());
+        $executionID = $this->create($executionData, array($this->app->user->account));
         if($project->model == 'kanban')
         {
             $execution = $this->getById($executionID);
@@ -4750,8 +4751,8 @@ class executionModel extends model
         $_POST['name']      = $project->name;
         $_POST['begin']     = $project->begin;
         $_POST['end']       = $project->end;
-        $_POST['realBegan'] = $project->realBegan;
-        $_POST['realEnd']   = $project->realEnd;
+        $_POST['realBegan'] = $project->realBegan ? $project->realBegan : null;
+        $_POST['realEnd']   = $project->realEnd ? $project->realEnd : null;
         $_POST['days']      = $project->days;
         $_POST['team']      = $project->team;
         $_POST['PO']        = $project->PO;
@@ -4760,6 +4761,7 @@ class executionModel extends model
         $_POST['RD']        = $project->RD;
         $_POST['status']    = $project->status;
         $_POST['acl']       = 'open';
+        $_POST['products']  = '';
 
         /* Handle extend fields. */
         $extendFields = $this->loadModel('project')->getFlowExtendFields();

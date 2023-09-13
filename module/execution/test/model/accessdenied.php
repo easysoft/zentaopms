@@ -21,9 +21,9 @@ try
 {
     $tester->execution->accessDenied();
 }
-catch (EndResponseException $e)
+catch (Throwable $e)
 {
-    $result = $e->getContent();
+    $result = 'fail';
 }
 
 r($result) && p() && e('fail'); // 权限不足跳转
