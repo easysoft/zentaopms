@@ -912,14 +912,14 @@ class projectModel extends model
     }
 
     /**
-     * 根据项目集和模型获取项目列表。
+     * 根据项目集和模型获取项目列表(列表索引为项目编号)。
      * Get project pairs by model and project.
      *
      * @param  string  $model all|scrum|waterfall|kanban
      * @param  string  $param noclosed
      * @param  int     $projectID
      * @access public
-     * @return array
+     * @return array   array(projectID => projectName, ...)
      */
     public function getPairsByModel(string $model = 'all', string $param = '', int $projectID = 0): array
     {
