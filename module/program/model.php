@@ -123,15 +123,18 @@ class programModel extends model
     }
 
     /**
+     * 根据项目集ID获取项目集信息。
      * Get program by id.
      *
-     * @param  int  $programID
+     * @param  int          $programID
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getByID($programID = 0)
+    public function getByID(int $programID = 0): object|false
     {
-        $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();
+        $program = $this->fetchByID($programID);
+        if(!$program) return false;
+
         $program = $this->loadModel('file')->replaceImgURL($program, 'desc');
         return $program;
     }

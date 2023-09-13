@@ -151,10 +151,6 @@ class program extends control
         helper::setcookie("lastProgram", (string)$programID);
         common::setMenuVars('program', $programID);
 
-        /* Load pager and get tasks. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
         /* Get the top programID. */
         if($programID)
         {
@@ -165,6 +161,10 @@ class program extends control
 
             $this->view->program = $program;
         }
+
+        /* Load pager. */
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $products = $this->loadModel('product')->getList($programID, $browseType);
         $this->view->products = $this->product->getStats(array_keys($products), $orderBy, $pager, 'story',  $programID);
@@ -177,7 +177,6 @@ class program extends control
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
         $this->view->userIdPairs   = $this->user->getPairs('noletter|showid');
         $this->view->usersAvatar   = $this->user->getAvatarPairs('');
-        $this->view->showBatchEdit = $this->cookie->showProductBatchEdit;
         $this->display();
     }
 
@@ -492,14 +491,13 @@ class program extends control
 
         $this->view->title = $this->lang->program->project;
 
-        $this->view->projectStats  = $projectStats;
-        $this->view->pager         = $pager;
-        $this->view->programID     = $programID;
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
-        $this->view->PMList        = $this->loadModel('product')->getPMList($projectStats);
-        $this->view->browseType    = $browseType;
-        $this->view->orderBy       = $orderBy;
-        $this->view->showBatchEdit = $this->cookie->showProjectBatchEdit;
+        $this->view->projectStats = $projectStats;
+        $this->view->pager        = $pager;
+        $this->view->programID    = $programID;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
+        $this->view->PMList       = $this->loadModel('product')->getPMList($projectStats);
+        $this->view->browseType   = $browseType;
+        $this->view->orderBy      = $orderBy;
 
         $this->display();
     }
