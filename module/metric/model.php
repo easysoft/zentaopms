@@ -1120,4 +1120,18 @@ class metricModel extends model
 
         $this->lang->metric->implement->instructionTips = $instructionTips;
     }
+
+    /**
+     * 更新一个度量项的字段内容。
+     * Update metric fields
+     *
+     * @param  string $metricID
+     * @param  object $metric
+     * @access public
+     * @return void
+     */
+    public function updateMetricFields(string $metricID, object $metric): void
+    {
+        $this->dao->update(TABLE_METRIC)->data($metric)->where('id')->eq($metricID)->exec();
+    }
 }

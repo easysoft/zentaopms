@@ -29,6 +29,9 @@ $fnGenerateSide = function() use($metrics, $current, $viewType, $scope)
     return ul($metricList);
 };
 
+$star    = strpos($current->collector, ',' . $app->user->account . ',') !== false ? 'star' : 'star-empty';
+$starBtn = "<a title='{$lang->metric->collect}' onclick='window.collectMetric($current->id)' class='btn btn-link square size-sm metric-collect'>" . html::image("static/svg/{$star}.svg", "class='$star'") . '</a>';
+
 $fnGenerateFilterPanel = function($code, $filterItem) use($lang)
 {
     $panelClass = $filterItem['class'];
@@ -152,11 +155,13 @@ div
             setClass('metric-name flex flex-between items-center'),
             div
             (
+                setClass('name-and-star'),
                 span
                 (
                     setClass('metric-name-weight'),
                     isset($current) ? $current->name : null,
                 ),
+                html($starBtn),
             ),
             div
             (

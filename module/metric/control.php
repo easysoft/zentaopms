@@ -424,6 +424,43 @@ class metric extends control
     }
 
     /**
+     * 获取数据表格的数据。
+     * Get data of datatable.
+     *
+     * @param  int $metricID
+     * @access public
+     * @return string
+     */
+    public function ajaxCollectMetric($metricID)
+    {
+        $metric = $this->metric->getByID($metricID);
+
+        $isCollect = strpos($metric->collector, ',' . $this->app->user->account . ',') !== false;
+        $collector = explode(',', $metric->collector);
+
+        if($isCollect)
+        {
+            $key = array_search($this->app->user->account, $collector);
+            if($key) unset($collector[$key]);
+        }
+        else
+        {
+            $collector[] = $this->app->user->account;
+        }
+        $collector = array_filter($collector);
+
+        $metric = new stdclass();
+        $metric->collector = ',' . implode(',', $collector) . ',';
+        $this->metric->updateMetricFields($metricID, $metric);
+
+        $response = new stdclass();
+        $response->result  = 'success';
+        $response->collect = !$isCollect;
+
+        echo json_encode($response);
+    }
+
+    /**
      * 下载度量项模板文件。
      * Download metric template php file.
      *

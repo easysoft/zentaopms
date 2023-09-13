@@ -352,6 +352,22 @@ window.updateMetricBoxs = function(id, isChecked)
     }
 }
 
+window.collectMetric = function(id)
+{
+    $.get($.createLink('metric', 'ajaxCollectMetric', 'metricID=' + id), function(resp)
+    {
+        var result = JSON.parse(resp);
+        if(result.collect)
+        {
+            $('.metric-collect').find('img').attr('src', 'static/svg/star.svg');
+        }
+        else
+        {
+            $('.metric-collect').find('img').attr('src', 'static/svg/star-empty.svg');
+        }
+    });
+}
+
 window.renderCheckedLabel = function()
 {
     var $content =  $('.checked-label-content');

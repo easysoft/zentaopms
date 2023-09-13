@@ -20,6 +20,8 @@
 
 .main .metric-name {height: 48px; padding-left: 16px; margin-bottom: 8px; border-bottom: 1px solid var(--color-slate-300);}
 .main .metric-name-notfirst {border-top: 1px solid var(--color-slate-300);}
+.main .name-and-star {display: flex; align-items: center;}
+.main .metric-collect {margin-left: 12px;}
 .main .flex-between {justify-content: space-between;}
 .main .flex-start {justify-content: flex-start;}
 .main .metric-name-weight {font-weight: 600; font-size: 0.9rem;}
