@@ -53,8 +53,11 @@ fields:
   - field: grade
     range: "2"
   - field: code
-    range: 1-10,1-10000
-    prefix: "program{10},project{100}"
+    fields:
+      - field: code1
+        range: program{10},project{100}
+      - field: code2
+        range: 1-10,1-10000
   - field: begin
     range: "(-3M)-(+M):1D"
     type: timestamp

@@ -1665,36 +1665,37 @@ class testcaseModel extends model
     }
 
     /**
+     * 同步用例到项目中。
      * Sync case to project.
      *
      * @param  object $case
      * @param  int    $caseID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function syncCase2Project($case, $caseID)
+    public function syncCase2Project(object $case, int $caseID): bool
     {
         $projects = array();
         if(!empty($case->story))
         {
             $projects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($case->story)->fetchPairs();
         }
-        elseif($this->app->tab == 'project' and empty($case->story))
+        elseif($this->app->tab == 'project' && empty($case->story))
         {
             $projects = array($this->session->project);
         }
-        elseif($this->app->tab == 'execution' and empty($case->story))
+        elseif($this->app->tab == 'execution' && empty($case->story))
         {
             $projects = array($this->session->execution);
         }
-        if(empty($projects)) return;
+        if(empty($projects)) return false;
 
         $this->loadModel('action');
         $objectInfo = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projects)->fetchAll('id');
-
         foreach($projects as $projectID)
         {
             $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
+
             $data = new stdclass();
             $data->project = $projectID;
             $data->product = $case->product;
@@ -1706,8 +1707,9 @@ class testcaseModel extends model
             $object     = $objectInfo[$projectID];
             $objectType = $object->type;
             if($objectType == 'project') $this->action->create('case', $caseID, 'linked2project', '', $projectID);
-            if(in_array($objectType, array('sprint', 'stage')) and $object->multiple) $this->action->create('case', $caseID, 'linked2execution', '', $projectID);
+            if(in_array($objectType, array('sprint', 'stage')) && $object->multiple) $this->action->create('case', $caseID, 'linked2execution', '', $projectID);
         }
+        return !dao::isError();
     }
 
     /**

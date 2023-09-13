@@ -721,23 +721,23 @@ class testcaseTest
     }
 
     /**
+     * 测试将用例同步到项目。
      * Test sync case to project.
      *
-     * @param  int    $caseID
+     * @param  int          $caseID
      * @access public
-     * @return int
+     * @return array|string
      */
-    public function syncCase2ProjectTest($caseID)
+    public function syncCase2ProjectTest(int $caseID): array|string
     {
-        global $tester;
-        $tester->dao->delete()->from(TABLE_PROJECTCASE)->where('`case`')->eq($caseID)->exec();
         $case = $this->objectModel->getByID($caseID);
         $this->objectModel->syncCase2Project($case, $caseID);
 
         if(dao::isError()) return dao::getError();
 
-        $objects = $tester->dao->select('*')->from(TABLE_PROJECTCASE)->where('`case`')->eq($caseID)->fetchAll();
-        return count($objects);
+        global $tester;
+        $objects = $tester->dao->select('project')->from(TABLE_PROJECTCASE)->where('`case`')->eq($caseID)->fetchPairs();
+        return implode(',', $objects);
     }
 
     /**
