@@ -291,7 +291,7 @@ class metricZen extends metric
     {
         $oldMetric = $this->metric->getOldMetricByID($oldMetricID);
 
-        $collectConf = json_decode($oldMetric->collectConf);
+        $collectConf = $oldMetric->collectConf;
         $dateType    = $this->lang->metric->dateList[$collectConf->type];
         $dateConf    = $collectConf->type == 'week' ? $collectConf->week : $collectConf->month;
         $collectConfText = sprintf($this->lang->metric->collectConfText, $dateType, $dateConf, $oldMetric->execTime);
