@@ -233,22 +233,26 @@ class metricZen extends metric
      * Get the basic information of the metric.
      *
      * @param  object    $view
+     * @param  string    $fields
      * @access protected
      * @return array
      */
-    protected function getBasicInfo(object $view)
+    protected function getBasicInfo(object $view, string $fields = 'scope,object,purpose,code,unit,stage')
     {
         extract((array)$view);
 
         $unit = $this->metric->isOldMetric($metric) ? $metric->oldUnit : zget($this->lang->metric->unitList, $metric->unit);
 
         $legendBasic = array();
-        $legendBasic['scope']   = array('name' => $this->lang->metric->scope, 'text' => zget($this->lang->metric->scopeList, $metric->scope));
-        $legendBasic['object']  = array('name' => $this->lang->metric->object, 'text' => zget($this->lang->metric->objectList, $metric->object));
-        $legendBasic['purpose'] = array('name' => $this->lang->metric->purpose, 'text' => zget($this->lang->metric->purposeList, $metric->purpose));
-        $legendBasic['code']    = array('name' => $this->lang->metric->code, 'text' => $metric->code);
-        $legendBasic['unit']    = array('name' => $this->lang->metric->unit, 'text' => $unit);
-        $legendBasic['stage']   = array('name' => $this->lang->metric->stage, 'text' => zget($this->lang->metric->stageList, $metric->stage));
+        if(strpos($fields, 'scope') !== false)      $legendBasic['scope']      = array('name' => $this->lang->metric->scope, 'text' => zget($this->lang->metric->scopeList, $metric->scope));
+        if(strpos($fields, 'object') !== false)     $legendBasic['object']     = array('name' => $this->lang->metric->object, 'text' => zget($this->lang->metric->objectList, $metric->object));
+        if(strpos($fields, 'purpose') !== false)    $legendBasic['purpose']    = array('name' => $this->lang->metric->purpose, 'text' => zget($this->lang->metric->purposeList, $metric->purpose));
+        if(strpos($fields, 'name') !== false)       $legendBasic['name']       = array('name' => $this->lang->metric->name, 'text' => $metric->name);
+        if(strpos($fields, 'code') !== false)       $legendBasic['code']       = array('name' => $this->lang->metric->code, 'text' => $metric->code);
+        if(strpos($fields, 'unit') !== false)       $legendBasic['unit']       = array('name' => $this->lang->metric->unit, 'text' => $unit);
+        if(strpos($fields, 'desc') !== false)       $legendBasic['desc']       = array('name' => $this->lang->metric->desc, 'text' => $metric->desc);
+        if(strpos($fields, 'definition') !== false) $legendBasic['definition'] = array('name' => $this->lang->metric->definition, 'text' => $metric->definition);
+        if(strpos($fields, 'stage') !== false)      $legendBasic['stage']      = array('name' => $this->lang->metric->stage, 'text' => zget($this->lang->metric->stageList, $metric->stage));
 
         return $legendBasic;
     }
