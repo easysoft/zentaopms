@@ -1065,7 +1065,7 @@ class testtask extends control
      */
     public function batchUnlinkCases(int $taskID)
     {
-        $this->testtask->batchUnlinkCases($taskID);
+        $this->testtask->batchUnlinkCases($taskID, $this->post->caseIdList);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
