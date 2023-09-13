@@ -79,7 +79,8 @@ div
                     (
                         'text'  => $this->lang->metric->details,
                         'class' => 'ghost details',
-                        'url'   => '#',
+                        'url'         => helper::createLink('metric', 'details', "metricID=$current->id"),
+                        'data-toggle' => 'modal'
                     ))) : null,
                     haspriv('metric', 'filters') ? item(set(array
                     (
@@ -319,7 +320,8 @@ div
                             (
                                 'text'  => $this->lang->metric->details,
                                 'class' => 'ghost details',
-                                'url'   => '#',
+                                'url'         => helper::createLink('metric', 'details', "metricID=$current->id"),
+                                'data-toggle' => 'modal'
                             ))) : null,
                             haspriv('metric', 'filters') ? item(set(array
                             (
