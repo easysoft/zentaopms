@@ -965,7 +965,7 @@ class projectModel extends model
         $projectPairs = array();
         foreach($allProjects as $programID => $projects)
         {
-            foreach($projects as $project) $projectPairs[] = $project->name;
+            foreach($projects as $project) $projectPairs[$project->id] = $project->name;
         }
         return $projectPairs;
     }
