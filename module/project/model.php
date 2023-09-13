@@ -620,6 +620,27 @@ class projectModel extends model
     }
 
     /**
+     * 获取关联产品的项目列表信息。
+     * Get product list information for linked products.
+     *
+     * @param  array  $productIdList
+     * @param  string $status
+     * @access public
+     * @return array
+     */
+    public function getGroupByProduct(array $productIdList = array(), string $status = ''): array
+    {
+        return $this->dao->select('t1.product,t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t2.deleted')->eq(0)
+            ->andWhere('t2.type')->eq('project')
+            ->beginIF(!empty($productIdList))->andWhere('t1.product')->in($productIdList)->fi()
+            ->beginIF(!empty($status))->andWhere('t2.status')->in($status)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
+            ->fetchGroup('product');
+    }
+
+    /**
      * Get all the projects under the program set to which an project belongs.
      *
      * @param object $project
@@ -944,8 +965,7 @@ class projectModel extends model
         $projectPairs = array();
         foreach($allProjects as $programID => $projects)
         {
-            foreach($projects as $project)
-                $projectPairs[$project->id] = $project->name;
+            foreach($projects as $project) $projectPairs[] = $project->name;
         }
         return $projectPairs;
     }
