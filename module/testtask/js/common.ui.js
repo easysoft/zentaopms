@@ -55,13 +55,12 @@ function loadExecutionBuilds()
  */
 function loadTestReports(productID)
 {
-    $.get($.createLink('testtask', 'ajaxGetTestReports', 'productID=' + productID), function(data)
+    $.getJSON($.createLink('testtask', 'ajaxGetTestReports', 'productID=' + productID), function(result)
     {
         let $testreportPicker = $('[name="testreport"]').zui('picker');
-        if(data)
+        if(result.reports)
         {
-            data = JSON.parse(data);
-            $testreportPicker.render({items: data});
+            $testreportPicker.render({items: result.reports});
             $testreportPicker.$.changeState({value: '0'});
         }
     });

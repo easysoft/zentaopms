@@ -1453,7 +1453,8 @@ class testtask extends control
     }
 
     /**
-     * Ajax: Get test report by productID.
+     * 获取一个产品下的测试报告键值对。
+     * Get test report key-value pairs of a product by ajax.
      *
      * @param  int    $productID
      * @access public
@@ -1461,13 +1462,11 @@ class testtask extends control
      */
     public function ajaxGetTestReports(int $productID)
     {
-        /* Testreport list. */
-        $testReportPairs = $this->loadModel('testreport')->getPairs($productID);
+        $reports = array();
+        $pairs   = $this->loadModel('testreport')->getPairs($productID);
+        foreach($pairs as $id => $title) $reports[] = array('text' => $title, 'value' => $id);
 
-        $items = array();
-        foreach($testReportPairs as $testReportID => $testReportName) $items[] = array('text' => $testReportName, 'value' => $testReportID);
-
-        return print(json_encode($items));
+        return $this->send(array('result' => 'success', 'reports' => $reports));
     }
 
     /**
