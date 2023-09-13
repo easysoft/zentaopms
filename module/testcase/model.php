@@ -261,7 +261,7 @@ class testcaseModel extends model
 
         if($browseType == 'needconfirm') return $this->testcaseTao->getNeedConfirmList($productID, $branch, $modules, $auto, $caseType, $orderBy, $pager);
         if($browseType == 'bysuite')     return $this->testcaseTao->getBySuite($productID, $branch, $queryID, $modules, $auto, $orderBy, $pager);
-        if($browseType == 'bysearch')    return $this->getBySearch($productID, $queryID, $orderBy, $pager, $branch, $auto);
+        if($browseType == 'bysearch')    return $this->getBySearch($productID, $branch, $queryID, $auto, $orderBy, $pager);
 
         return array();
     }
@@ -271,15 +271,15 @@ class testcaseModel extends model
      * Get cases by search.
      *
      * @param  int         $productID
+     * @param  int|string  $branch
      * @param  int         $queryID
+     * @param  string      $auto      no|unit
      * @param  string      $orderBy
      * @param  object      $pager
-     * @param  int|string  $branch
-     * @param  string      $auto   no|unit
      * @access public
      * @return array
      */
-    public function getBySearch($productID, $queryID, $orderBy, $pager = null, $branch = 0, $auto = 'no')
+    public function getBySearch(int $productID, int|string $branch = 0, int $queryID, string $auto = 'no', string $orderBy = 'id_desc', object $pager = null): array
     {
         if($queryID)
         {
@@ -289,49 +289,52 @@ class testcaseModel extends model
                 $this->session->set('testcaseQuery', $query->sql);
                 $this->session->set('testcaseForm', $query->form);
             }
-            else
-            {
-                $this->session->set('testcaseQuery', ' 1 = 1');
-            }
-        }
-        else
-        {
-            if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
         }
 
+        if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
+
+        $caseQuery = '(' . $this->session->testcaseQuery;
+
+        /* 处理用例查询中的产品条件。*/
+        /* Process product condition in case query. */
         $queryProductID = $productID;
-        $allProduct     = "`product` = 'all'";
-        $caseQuery      = '(' . $this->session->testcaseQuery;
-        if(strpos($this->session->testcaseQuery, $allProduct) !== false)
+        if(strpos($this->session->testcaseQuery, "`product` = 'all'") !== false)
         {
-            $products  = $this->app->user->view->products;
-            $caseQuery = str_replace($allProduct, '1', $caseQuery);
-            $caseQuery = $caseQuery . ' AND `product` ' . helper::dbIN($products);
+            $caseQuery  = str_replace("`product` = 'all'", '1', $caseQuery);
+            $caseQuery .= ' AND `product` ' . helper::dbIN($this->app->user->view->products);
+
             $queryProductID = 'all';
         }
 
-        $allBranch = "`branch` = 'all'";
-        if($branch !== 'all' and strpos($caseQuery, '`branch` =') === false) $caseQuery .= " AND `branch` in('$branch')";
-        if(strpos($caseQuery, $allBranch) !== false) $caseQuery = str_replace($allBranch, '1', $caseQuery);
-        $caseQuery .= ')';
-        $caseQuery  = str_replace('`version`', 't1.`version`', $caseQuery);
+        /* 处理用例查询中的产品分支条件。*/
+        /* Process branch condition in case query. */
+        if($branch !== 'all' && strpos($caseQuery, '`branch` =') === false) $caseQuery .= " AND `branch` in ('$branch')";
+        if(strpos($caseQuery, "`branch` = 'all'") !== false) $caseQuery = str_replace("`branch` = 'all'", '1', $caseQuery);
 
+        /* 处理用例查询中的版本条件。*/
+        /* Process version condition in case query. */
+        $caseQuery = str_replace('`version`', 't1.`version`', $caseQuery);
+
+        /* 处理用例查询中的产品条件。*/
+        /* Process product condition in case query. */
         if($this->app->tab == 'project') $caseQuery = str_replace('`product`', 't2.`product`', $caseQuery);
+
+        $caseQuery .= ')';
 
         /* Search criteria under compatible project. */
         $sql = $this->dao->select('*')->from(TABLE_CASE)->alias('t1');
-        if($this->app->tab == 'project') $sql->leftJoin(TABLE_PROJECTCASE)->alias('t2')->on('t1.id=t2.case');
-        $cases = $sql
-            ->where($caseQuery)
-            ->beginIF($this->app->tab == 'project' and $this->config->systemMode == 'new')->andWhere('t2.project')->eq($this->session->project)->fi()
-            ->beginIF($this->app->tab == 'project' and !empty($productID) and $queryProductID != 'all')->andWhere('t2.product')->eq($productID)->fi()
-            ->beginIF($this->app->tab != 'project' and !empty($productID) and $queryProductID != 'all')->andWhere('t1.product')->eq($productID)->fi()
+        if($this->app->tab == 'project') $sql->leftJoin(TABLE_PROJECTCASE)->alias('t2')->on('t1.id = t2.case');
+
+        return $sql->where($caseQuery)
+            ->beginIF($this->app->tab == 'project' && $this->config->systemMode == 'ALM')->andWhere('t2.project')->eq($this->session->project)->fi()
+            ->beginIF($this->app->tab == 'project' && !empty($productID) && $queryProductID != 'all')->andWhere('t2.product')->eq($productID)->fi()
+            ->beginIF($this->app->tab != 'project' && !empty($productID) && $queryProductID != 'all')->andWhere('t1.product')->eq($productID)->fi()
             ->beginIF($auto == 'auto' || $auto == 'unit')->andWhere('t1.auto')->eq($auto)->fi()
             ->beginIF($auto != 'auto' && $auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
-            ->andWhere('t1.deleted')->eq(0)
-            ->orderBy($orderBy)->page($pager)->fetchAll('id');
-
-        return $cases;
+            ->andWhere('t1.deleted')->eq('0')
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
     }
 
     /**
@@ -703,7 +706,7 @@ class testcaseModel extends model
         if($browseType != 'bySearch') return array();
 
         $case       = $this->getByID($caseID);
-        $cases2Link = $this->getBySearch($case->product, $queryID, 'id', null, $case->branch);
+        $cases2Link = $this->getBySearch($case->product, $case->branch, $queryID, $auto = 'no', $orderBy = 'id');
         foreach($cases2Link as $key => $case2Link)
         {
             if($case2Link->id == $caseID) unset($cases2Link[$key]);

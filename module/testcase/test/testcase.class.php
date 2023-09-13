@@ -290,6 +290,34 @@ class testcaseTest
     }
 
     /**
+     * 测试搜索用例。
+     * Test get cases by search.
+     *
+     * @param  int        $productID
+     * @param  int|string $branch
+     * @param  int        $queryID
+     * @param  string     $auto
+     * @param  string     $orderBy
+     * @param  object     $pager
+     * @access public
+     * @return array
+     */
+    public function getBySearchTest(string $tab = 'qa', int $projectID, int $productID, int|string $branch = 0, int $queryID = 0, string $auto = 'no', string $orderBy = 'id_desc', object $pager = null): array
+    {
+        global $tester;
+        $tester->app->tab = $tab;
+        $tester->config->systemMode = 'ALM';
+
+        $_SESSION['project'] = $projectID;
+
+        $objects = $this->objectModel->getBySearch($productID, $branch, $queryID, $auto, $orderBy, $pager);
+
+        if(dao::isError()) return false;
+
+        return $objects;
+    }
+
+    /**
      * 测试获取需求关联的用例。
      * Test get stories' cases.
      *
