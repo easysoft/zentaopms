@@ -381,36 +381,43 @@ class testcaseModel extends model
     }
 
     /**
-     * Get cases by type
+     * 根据状态获取用例。
+     * Get cases by status.
      *
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  string $type    all|needconfirm
-     * @param  string $status  all|normal|blocked|investigate
-     * @param  int    $moduleID
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  string $auto    no|unit|skip
+     * @param  int        $productID
+     * @param  int|string $branch
+     * @param  string     $type     all|needconfirm
+     * @param  string     $status   all|normal|blocked|investigate
+     * @param  int        $moduleID
+     * @param  string     $auto     no|unit|skip
+     * @param  string     $orderBy
+     * @param  object     $pager
      * @access public
      * @return array
      */
-    public function getByStatus($productID = 0, $branch = 0, $type = 'all', $status = 'all', $moduleID = 0, $orderBy = 'id_desc', $pager = null, $auto = 'no')
+    public function getByStatus(int $productID = 0, int|string $branch = 0, string $type = 'all', string $status = 'all', int $moduleID = 0, string $auto = 'no', string $orderBy = 'id_desc', object $pager = null): array
     {
         $modules = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
 
-        $cases = $this->dao->select('t1.*, t2.title as storyTitle')->from(TABLE_CASE)->alias('t1')
+        $cases = $this->dao->select('t1.*, t2.title AS storyTitle')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-            ->beginIF($productID)->where('t1.product')->eq((int) $productID)->fi()
-            ->beginIF($productID == 0)->where('t1.product')->in($this->app->user->view->products)->fi()
+            ->where('1=1')
+            ->beginIF($productID)->andWhere('t1.product')->eq((int) $productID)->fi()
+            ->beginIF(!$productID)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
             ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
-            ->beginIF($type == 'needconfirm')->andWhere("t2.status = 'active'")->andWhere('t2.version > t1.storyVersion')->fi()
+            ->beginIF($type == 'needconfirm')
+            ->andWhere('t2.status')->eq('active')
+            ->andWhere('t2.version > t1.storyVersion')
+            ->fi()
             ->beginIF($status != 'all')->andWhere('t1.status')->eq($status)->fi()
             ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
             ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
             ->andWhere('t1.deleted')->eq('0')
-            ->orderBy($orderBy)->page($pager)
+            ->orderBy($orderBy)
+            ->page($pager)
             ->fetchAll('id');
+
         return $this->appendData($cases);
     }
 

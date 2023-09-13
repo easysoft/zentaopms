@@ -265,24 +265,25 @@ class testcaseTest
     }
 
     /**
-     * Test get cases by type.
+     * 测试根据状态获取用例。
+     * Test get cases by status.
      *
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  string $type
-     * @param  string $status
-     * @param  int    $moduleID
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  string $auto
+     * @param  int        $productID
+     * @param  int|string $branch
+     * @param  string     $type
+     * @param  string     $status
+     * @param  int        $moduleID
+     * @param  string     $orderBy
+     * @param  object     $pager
+     * @param  string     $auto
      * @access public
-     * @return int
+     * @return int|bool
      */
-    public function getByStatusTest($productID = 0, $branch = 0, $type = 'all', $status = 'all', $moduleID = 0, $orderBy = 'id_desc', $pager = null, $auto = 'no')
+    public function getByStatusTest(int $productID = 0, int|string $branch = 0, string $type = 'all', string $status = 'all', int $moduleID = 0, string $auto = 'no', string $orderBy = 'id_desc', object $pager = null): int|bool
     {
-        $objects = $this->objectModel->getByStatus($productID, $branch, $type, $status, $moduleID, $orderBy, $pager, $auto);
+        $objects = $this->objectModel->getByStatus($productID, $branch, $type, $status, $moduleID, $auto, $orderBy, $pager);
 
-        if(dao::isError()) return dao::getError();
+        if(dao::isError()) return false;
 
         return count($objects);
     }
