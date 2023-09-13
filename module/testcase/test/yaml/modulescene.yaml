@@ -1,0 +1,13 @@
+title: table zt_scene
+desc: "用例"
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: id
+    range: 1-1000
+  - field: module
+    range: 1821,1822,0,0,1825,1827,0,0,0,1829,1832,0,0,0,0{10000}
+  - field: product
+    range: 1-100{4}
+  - field: branch
+    range: 0{160},1-160{2},0{1000}

@@ -1866,33 +1866,33 @@ class testcaseModel extends model
     }
 
     /**
+     * 构建菜单查询。
      * Build menu query.
      *
      * @param  int    $rootID
      * @param  int    $moduleID
-     * @param  string $type
      * @param  int    $startScene
      * @param  string $branch
      * @access public
-     * @return object
+     * @return string
      */
-    public function buildMenuQuery($rootID, $moduleID, $type, $startScene = 0, $branch = 'all')
+    public function buildMenuQuery(int $rootID, int $moduleID, int $startScene = 0, string $branch = 'all'): string
     {
         /* Set the start module. */
         $startScenePath = '';
         if($startScene > 0)
         {
-            $startScene = $this->dao->findById((int)$startScene)->from(VIEW_SCENECASE)->fetch();
+            $startScene = $this->getSceneByID($startScene);
             if($startScene) $startScenePath = $startScene->path . '%';
         }
 
-        return $this->dao->select('*')->from(VIEW_SCENECASE)
+        /* Return scene query. */
+        return $this->dao->select('*')->from(TABLE_SCENE)
             ->where('deleted')->eq(0)
-            ->beginIF($rootID)->andWhere('product')->eq((int)$rootID)->fi()
-            ->beginIF(intval($moduleID) > 0)->andWhere('module')->eq((int)$moduleID)->fi()
+            ->beginIF($rootID)->andWhere('product')->eq($rootID)->fi()
+            ->beginIF($moduleID > 0)->andWhere('module')->eq($moduleID)->fi()
             ->beginIF($startScenePath)->andWhere('path')->like($startScenePath)->fi()
             ->beginIF($branch !== 'all' and $branch !== '' and $branch !== false)->andWhere('branch')->eq((int)$branch)->fi()
-            ->andWhere('isCase')->eq(2)
             ->orderBy('grade desc, sort')
             ->get();
     }
@@ -2268,7 +2268,7 @@ class testcaseModel extends model
         foreach($branches as $branchID => $branch)
         {
             $scenes = array();
-            $stmt   = $this->dbh->query($this->buildMenuQuery($rootID, $moduleID, $type, $startScene, $branchID));
+            $stmt   = $this->dbh->query($this->buildMenuQuery($rootID, $moduleID, $startScene, $branchID));
             while($scene = $stmt->fetch())
             {
                 if ($scene->id != $currentScene) $scenes[$scene->id] = $scene;

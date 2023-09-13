@@ -1258,4 +1258,22 @@ class testcaseTest
         if(dao::isError()) return dao::getError();
         return $summary;
     }
+
+    /**
+     * 测试构建菜单查询。
+     * Test build menu query.
+     *
+     * @param  int    $rootID
+     * @param  int    $moduleID
+     * @param  int    $startScene
+     * @param  string $branch
+     * @access public
+     * @return string
+     */
+    public function buildMenuQueryTest(int $rootID, int $moduleID, int $startScene = 0, string $branch = 'all'): string
+    {
+        $query = $this->objectModel->buildMenuQuery($rootID, $moduleID, $startScene, $branch);
+        if(dao::isError()) return dao::getError();
+        return $query;
+    }
 }
