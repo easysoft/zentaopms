@@ -1042,7 +1042,8 @@ class testtask extends control
     }
 
     /**
-     * Remove a case from test task.
+     * 从测试单中移除一个用例。
+     * Remove a case from testtask.
      *
      * @param  int    $runID
      * @access public
@@ -1057,7 +1058,8 @@ class testtask extends control
     }
 
     /**
-     * Batch unlink cases.
+     * 批量从测试单中移除用例。
+     * Batch remove cases from a testtask.
      *
      * @param  int    $taskID
      * @access public
@@ -1336,7 +1338,8 @@ class testtask extends control
     }
 
     /**
-     * Batch assign cases.
+     * 批量指派测试单中的用例。
+     * Batch assign cases in a testtask.
      *
      * @param  int    $taskID
      * @param  string $account
