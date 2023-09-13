@@ -153,7 +153,27 @@ class testtaskTest
         $action = $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(1)->fetch();
 
         return array('run' => $run, 'cases' => implode(',', array_column($cases, 'case')), 'action' => $action);
+    }
 
+    /**
+     * 测试批量从一个测试单移除用例。
+     * Test batch remove cases from a testtask.
+     *
+     * @param  int    $taskID
+     * @param  array  $caseIdList
+     * @access public
+     * @return bool|array
+     */
+    public function batchUnlinkCasesTest(int $taskID, array $caseIdList): bool|array
+    {
+        $result = $this->objectModel->batchUnlinkCases($taskID, $caseIdList);
+        if(dao::isError()) return dao::getError();
+        if(!$result) return $result;
+
+        $cases   = $this->objectModel->dao->select('`case`')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->fetchPairs();
+        $actions = $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(count($caseIdList))->fetchAll();
+
+        return array('cases' => implode(',', $cases), 'actions' => $actions);
     }
 
     public function linkCaseTest($taskID, $type)
