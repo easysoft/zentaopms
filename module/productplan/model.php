@@ -412,6 +412,24 @@ class productplanModel extends model
     }
 
     /**
+     * 获取产品下的计划列表信息。
+     * Get plan list information under the product.
+     *
+     * @param  array  $productIdList
+     * @param  string $end
+     * @access public
+     * @return array
+     */
+    public function getProductPlans(array $productIdList = array(), string $end = ''): array
+    {
+        return $this->dao->select('*')->from(TABLE_PRODUCTPLAN)
+            ->where('deleted')->eq(0)
+            ->beginIF($productIdList)->andWhere('product')->in($productIdList)->fi()
+            ->beginIF($end)->andWhere('end')->ge(helper::today())->fi()
+            ->fetchGroup('product');
+    }
+
+    /**
      * Get Children plan.
      *
      * @param  int    $planID
