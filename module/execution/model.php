@@ -238,7 +238,7 @@ class executionModel extends model
     {
         $this->dao->insert(TABLE_EXECUTION)->data($execution, 'products,plans,branch')
             ->autoCheck('begin,end')
-            ->batchcheck($this->config->execution->create->requiredFields, 'notempty')
+            ->batchCheck($this->config->execution->create->requiredFields, 'notempty')
             ->checkIF(!empty($execution->name), 'name', 'unique', "`type` in ('sprint','stage', 'kanban') and `project` = " . (int)$execution->project . " and `deleted` = '0'")
             ->checkIF(!empty($execution->code), 'code', 'unique', "`type` in ('sprint','stage', 'kanban') and `deleted` = '0'")
             ->checkIF($execution->begin != '', 'begin', 'date')
@@ -247,14 +247,14 @@ class executionModel extends model
             ->checkFlow()
             ->exec();
 
-        /* Add the creater to the team. */
+        /* Add the creator to the team. */
         if(dao::isError()) return false;
 
         $executionID = $this->dao->lastInsertId();
         $project     = $this->loadModel('project')->fetchByID($execution->project);
         if(empty($project) || $project->model != 'kanban') $this->loadModel('kanban')->createExecutionLane($executionID);
 
-        /* Api create infinitus stages. */
+        /* Api create infinites stages. */
         if(isset($execution->parent) && ($execution->parent != $execution->project) && $execution->type == 'stage')
         {
             $parent = $this->fetchByID($execution->parent);
@@ -1339,7 +1339,7 @@ class executionModel extends model
 
     /**
      * 根据执行ID列表获取执行列表信息。
-     * Get the execution list information throught the execution ID list.
+     * Get the execution list information by the execution ID list.
      *
      * @param  array  $executionIdList
      * @param  string $mode           all
@@ -1690,7 +1690,7 @@ class executionModel extends model
      * @param  int     $limit
      * @param  bool    $pairs
      * @param  bool    $devel
-     * @param  int     $appenedID
+     * @param  int     $appendedID
      * @access public
      * @return object[]|array
      */
@@ -2487,8 +2487,8 @@ class executionModel extends model
         /* Get stories of children task. */
         if(!empty($parents))
         {
-            $childrens = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->in($parents)->fetchAll('id');
-            foreach($childrens as $children) $taskStories[$children->story] = $children->story;
+            $children = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->in($parents)->fetchAll('id');
+            foreach($children as $child) $taskStories[$child->story] = $child->story;
         }
 
         /* Add members to execution team. */
@@ -3642,7 +3642,7 @@ class executionModel extends model
 
     /**
      * 通过搜索条件获取任务列表信息。
-     * Get taskes by search.
+     * Get tasks by search.
      *
      * @param  string $condition
      * @param  string $orderBy
@@ -4160,9 +4160,9 @@ class executionModel extends model
      * The basic format of the mapping relationship is map[$mode][$fromStatus][$toStatus] = $methodName.
      *
      * @param string $mode          看板内容类型，可选值 task|bug   The content mode of kanban, should be task or bug.
-     * @param string $fromStatus    拖动内容的来源泳道              The origin lane the content draged from.
-     * @param string $toStatus      拖动内容的目标泳道              The destination lane the content draged to.
-     * @param string $methodName    拖动到目标泳道后执行的方法名    The method to execute after draged the content.
+     * @param string $fromStatus    拖动内容的来源泳道              The origin lane the content dragged from.
+     * @param string $toStatus      拖动内容的目标泳道              The destination lane the content dragged to.
+     * @param string $methodName    拖动到目标泳道后执行的方法名    The method to execute after dragged the content.
      *
      * 例如 map['task']['doing']['done'] = 'close' 表示：任务(task)看板从进行中(doing)泳道拖动到已完成(done)泳道时，执行关闭(close)方法。
      * For example, map['task']['doing']['done'] = 'close' means: when the task kanban is dragged from the doing lane to the done lane,
