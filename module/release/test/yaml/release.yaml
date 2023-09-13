@@ -1,0 +1,21 @@
+title: zt_release
+author: Shujie Tian
+version: 1.0.0
+fields:
+  - field: id
+    range: 1-100
+  - field: name
+    range: 1-100
+    prefix: '发布'
+  - field: product
+    range: 1-10{3}
+  - field: branch
+    range: '0{16},2-14'
+  - field: status
+    range: 'normal{20},terminate{10}'
+  - field: date
+    range: '`2021-01-01`,`2021-06-01`,`2022-01-01`,`2022-07-01`,`2030-01-01`'
+  - field: build
+    renge: 1-30
+  - field: stories
+    range: '`,1,2,3`,`11,12,13,14`,[]{13},`,1,2,3,52,53,56,58`,`51,54,57,59,`,`62,66,68,`'

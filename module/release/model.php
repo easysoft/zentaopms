@@ -947,6 +947,23 @@ class releaseModel extends model
     }
 
     /**
+     * 获取产品下的发布列表信息。
+     * Get the release list information under the product.
+     *
+     * @param  array  $productIdList
+     * @access public
+     * @return array
+     */
+    public function getGroupByProduct(array $productIdList = array()): array
+    {
+        return $this->dao->select('*')->from(TABLE_RELEASE)
+            ->where('deleted')->eq(0)
+            ->andWhere('status')->eq('normal')
+            ->beginIF(!empty($productIdList))->andWhere('product')->in($productIdList)->fi()
+            ->fetchGroup('product');
+    }
+
+    /**
      * 通过产品ID列表获取产品下发布。
      * Get releases of the product through the product ID list.
      *
