@@ -224,6 +224,25 @@ class metric extends control
     }
 
     /**
+     * 查看度量项的详情。
+     * View metric details.
+     *
+     * @param  int    $metricID
+     * @access public
+     * @return void
+     */
+    public function details($metricID)
+    {
+        $metric = $this->metric->getByID($metricID);
+
+        $this->view->metric = $metric;
+        $this->view->legendBasic    = $this->metricZen->getBasicInfo($this->view);
+        $this->view->createEditInfo = $this->metricZen->getCreateEditInfo($this->view);
+
+        $this->display();
+    }
+
+    /**
      * 计算度量项。
      * Excute metric.
      *

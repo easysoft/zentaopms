@@ -170,9 +170,10 @@ div
                 (
                     haspriv('metric', 'details') ? item(set(array
                     (
-                        'text'  => $this->lang->metric->details,
-                        'class' => 'ghost details',
-                        'url'   => '#',
+                        'text'        => $this->lang->metric->details,
+                        'class'       => 'ghost details',
+                        'url'         => helper::createLink('metric', 'details', "metricID=$current->id"),
+                        'data-toggle' => 'modal'
                     ))) : null,
                     haspriv('metric', 'filters') ? item(set(array
                     (
