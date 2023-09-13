@@ -1343,15 +1343,10 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function batchAssign($taskID, $account)
+    public function batchAssign(int $taskID, string $account)
     {
-        $this->dao->update(TABLE_TESTRUN)
-            ->set('assignedTo')->eq($account)
-            ->where('task')->eq((int)$taskID)
-            ->andWhere('`case`')->in($this->post->caseIdList)
-            ->exec();
-        $this->loadModel('action');
-        foreach($this->post->caseIdList as $caseID) $this->action->create('case', $caseID, 'assigned', '', $account);
+        $this->testtask->batchAssign($taskID, $account, $this->post->caseIdList);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
