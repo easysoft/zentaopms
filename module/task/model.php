@@ -4302,7 +4302,7 @@ class taskModel extends model
         $canClose          = common::hasPriv('task', 'close');
         $canRecordEstimate = common::hasPriv('task', 'recordEstimate');
         $canEdit           = common::hasPriv('task', 'edit');
-        $canBatchCreate    = ($this->config->vision == 'rnd' and common::hasPriv('task', 'batchCreate'));
+        $canBatchCreate    = ($this->config->vision != 'lite' and common::hasPriv('task', 'batchCreate'));
 
         if($task->status != 'pause') $menu .= $this->buildMenu('task', 'start',   $params, $task, 'browse', '', '', 'iframe', true);
         if($task->status == 'pause') $menu .= $this->buildMenu('task', 'restart', $params, $task, 'browse', '', '', 'iframe', true);
@@ -4316,7 +4316,7 @@ class taskModel extends model
 
         $menu .= $this->buildMenu('task', 'recordEstimate', $params, $task, 'browse', 'time', '', 'iframe', true);
         $menu .= $this->buildMenu('task', 'edit',           $params, $task, 'browse');
-        if($this->config->vision == 'rnd')
+        if($this->config->vision != 'lite')
         {
             $menu .= $this->buildMenu('task', 'batchCreate', "execution=$task->execution&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=0", $task, 'browse', 'split', '', '', '', '', $this->lang->task->children);
         }
