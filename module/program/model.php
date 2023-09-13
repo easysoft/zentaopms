@@ -314,7 +314,7 @@ class programModel extends model
      */
     public function getKanbanStatisticData(array $programs): array
     {
-        $productGroup  = $this->programTao->getProductByProgram(array_keys($programs));
+        $productGroup  = $this->getProductByProgram(array_keys($programs));
         $productIdList = array();
         foreach($productGroup as $programID => $products)
         {
@@ -1295,14 +1295,15 @@ class programModel extends model
     }
 
     /**
+     * 判断操作按钮是否可以点击。
      * Judge an action is clickable or not.
      *
-     * @param  object    $program
-     * @param  string    $action
+     * @param  object $program
+     * @param  string $action
      * @access public
      * @return bool
      */
-    public static function isClickable($program, $action)
+    public static function isClickable(object $program, string $action): bool
     {
         $action = strtolower($action);
 
@@ -1825,5 +1826,24 @@ class programModel extends model
             }
         }
         return $result;
+    }
+
+    /**
+     * 获取项目集下的产品列表信息。
+     * Get product list information under the program.
+     *
+     * @param  array  $programIdList
+     * @access public
+     * @return array
+     */
+    public function getProductByProgram(array $programIdList = array()): array
+    {
+        return $this->dao->select('*')->from(TABLE_PRODUCT)
+            ->where('deleted')->eq(0)
+            ->andWhere('status')->ne('closed')
+            ->beginIF(!empty($programIdList))->andWhere('program')->in($programIdList)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
+            ->orderBy('order_asc')
+            ->fetchGroup('program');
     }
 }

@@ -31,25 +31,6 @@ class programTao extends programModel
     }
 
     /**
-     * 获取项目集下的产品列表信息。
-     * Get product list information under the program.
-     *
-     * @param  array     $programIdList
-     * @access protected
-     * @return array
-     */
-    protected function getProductByProgram(array $programIdList = array()): array
-    {
-        return $this->dao->select('*')->from(TABLE_PRODUCT)
-            ->where('deleted')->eq(0)
-            ->andWhere('status')->ne('closed')
-            ->beginIF(!empty($programIdList))->andWhere('program')->in($programIdList)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
-            ->orderBy('order_asc')
-            ->fetchGroup('program');
-    }
-
-    /**
      *获取所有根项目集基本数据。
      * Get base data of all root programs.
      *

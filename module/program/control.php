@@ -595,6 +595,7 @@ class program extends control
     }
 
     /**
+     * 导出项目集。
      * Export program.
      *
      * @param  string $status
@@ -602,36 +603,35 @@ class program extends control
      * @access public
      * @return void
      */
-    public function export($status, $orderBy)
+    public function export(string $status, string $orderBy)
     {
         if($_POST)
         {
-            $programLang   = $this->lang->program;
-            $programConfig = $this->config->program;
-
             /* Create field lists. */
-            $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $programConfig->list->exportFields);
+            $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $this->config->program->list->exportFields);
             foreach($fields as $key => $fieldName)
             {
                 $fieldName = trim($fieldName);
-                $fields[$fieldName] = zget($programLang, $fieldName);
+                $fields[$fieldName] = zget($this->lang->program, $fieldName);
                 unset($fields[$key]);
             }
 
-            $programs = $this->program->getList($status, $orderBy, null);
+            /* Get and process program list. */
             $users    = $this->loadModel('user')->getPairs('noletter');
-            foreach($programs as $i => $program)
+            $programs = $this->program->getList($status, $orderBy, null);
+            $products = $this->program->getProductByProgram(array_keys($programs));
+            foreach($programs as $programID => $program)
             {
-                $program->PM       = zget($users, $program->PM);
-                $program->status   = $this->processStatus('project', $program);
-                $program->model    = zget($this->lang->project->modelList, $program->model);
-                $program->product  = implode(",", $this->dao->select('name')->from(TABLE_PRODUCT)->where('program')->eq($program->id)->fetchPairs('name'));
-                $program->budget   = $program->budget . zget($this->lang->project->unitList, $program->budgetUnit);
+                $program->PM      = zget($users, $program->PM);
+                $program->status  = $this->processStatus('project', $program);
+                $program->model   = zget($this->lang->project->modelList, $program->model);
+                $program->product = empty($products[$programID]) ? '' : implode(",", helper::arrayColumn($products[$programID], 'name'));
+                $program->budget  = $program->budget . zget($this->lang->project->unitList, $program->budgetUnit);
 
                 if($this->post->exportType == 'selected')
                 {
                     $checkedItem = $this->cookie->checkedItem;
-                    if(strpos(",$checkedItem,", ",{$program->id},") === false) unset($programs[$i]);
+                    if(strpos(",$checkedItem,", ",{$program->id},") === false) unset($programs[$programID]);
                 }
             }
 
