@@ -807,7 +807,11 @@ class bug extends control
     {
         /* 如果没有选择的 bug，跳转到前一个页面。*/
         /* If there is no bug ID, locate to the previous step. */
-        if(!$this->post->bugIdList && !$this->post->id) $this->locate($this->session->bugList);
+        if(!$this->post->bugIdList && !$this->post->id)
+        {
+            $url = !empty($this->session->bugList) ? $this->session->bugList : $this->createLink('qa', 'index');
+            $this->locate($url);
+        }
 
         if($this->post->id)
         {
@@ -1251,7 +1255,12 @@ class bug extends control
 
         /* 如果没有要激活的bugs，跳转到上一个界面。 */
         /* If there are no bugs to activate, locate to the previous interface. */
-        if(!$this->post->bugIdList) $this->locate($this->session->bugList);
+        if(!$this->post->bugIdList)
+        {
+            $url = !empty($this->session->bugList) ? $this->session->bugList : $this->createLink('qa', 'index');
+            $this->locate($url);
+        }
+
 
         $this->qa->setMenu($this->products, $productID, $branch);
 

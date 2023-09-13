@@ -220,7 +220,11 @@ class task extends control
             return $this->send($response);
         }
 
-        if(!$this->post->taskIdList) $this->locate($this->session->taskList);
+        if(!$this->post->taskIdList)
+        {
+            $url = !empty($this->session->taskList) ? $this->session->taskList : $this->createLink('execution', 'all');
+            $this->locate($url);
+        }
 
         $this->taskZen->assignBatchEditVars($executionID);
     }
