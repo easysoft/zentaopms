@@ -360,23 +360,25 @@ class testcaseModel extends model
     }
 
     /**
+     * 根据创建者获取用例。
      * Get cases by openedBy
      *
      * @param  string $account
+     * @param  string $auto    no|unit|skip
      * @param  string $orderBy
      * @param  object $pager
-     * @param  string $auto   no|unit|skip
      * @access public
      * @return array
      */
-    public function getByOpenedBy($account, $orderBy = 'id_desc', $pager = null, $auto = 'no')
+    public function getByOpenedBy(string $account, string $auto = 'no', string $orderBy = 'id_desc', object $pager = null): array
     {
         return $this->dao->findByOpenedBy($account)->from(TABLE_CASE)
+            ->andWhere('deleted')->eq('0')
             ->beginIF($auto != 'skip')->andWhere('product')->ne(0)->fi()
-            ->andWhere('deleted')->eq(0)
-            ->beginIF($auto != 'skip' and $auto != 'unit')->andWhere('auto')->ne('unit')->fi()
+            ->beginIF($auto != 'skip' && $auto != 'unit')->andWhere('auto')->ne('unit')->fi()
             ->beginIF($auto == 'unit')->andWhere('auto')->eq('unit')->fi()
-            ->orderBy($orderBy)->page($pager)
+            ->orderBy($orderBy)
+            ->page($pager)
             ->fetchAll('id');
     }
 

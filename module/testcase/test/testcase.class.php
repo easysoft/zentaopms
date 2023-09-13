@@ -246,18 +246,19 @@ class testcaseTest
     }
 
     /**
-     * Test get cases by openedBy
+     * 测试根据创建者获取用例。
+     * Test get cases by openedBy.
      *
      * @param  string $account
+     * @param  string $auto
      * @param  string $orderBy
      * @param  object $pager
-     * @param  string $auto
      * @access public
      * @return array
      */
-    public function getByOpenedByTest($account, $orderBy = 'id_desc', $pager = null, $auto = 'no')
+    public function getByOpenedByTest(string $account, string $auto = 'no', string $orderBy = 'id_desc', object $pager = null): array
     {
-        $objects = $this->objectModel->getByOpenedBy($account, $orderBy = 'id_desc', $pager = null, $auto = 'no');
+        $objects = $this->objectModel->getByOpenedBy($account, $auto, $orderBy, $pager);
 
         if(dao::isError()) return dao::getError();
 

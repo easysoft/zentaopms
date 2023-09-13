@@ -1,0 +1,8 @@
+title: table zt_case
+desc: "case"
+author: Tingting Dai
+version: "1.0"
+fields:
+  - field: openedBy
+    range: 1-4
+    prefix: 'test'
