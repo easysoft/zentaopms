@@ -3,4 +3,4 @@ author: Gang Liu
 version: "1.0"
 fields:
   - field: task
-    range: 1{10}
+    range: 1{6}
