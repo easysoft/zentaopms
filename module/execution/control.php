@@ -1190,7 +1190,12 @@ class execution extends control
             $allProjects = $this->project->getPairsByModel('all', 'noclosed', isset($projectID) ? $projectID : 0);
         }
 
-        if(!$this->post->executionIDList) return $this->locate($this->session->executionList);
+        if(!$this->post->executionIDList)
+        {
+            /* Use a fallback link to locate in case session has no related data. */
+            $locateLink = !empty($this->session->executionList) ? $this->session->executionList : $this->createLink('execution', 'all');
+            return $this->locate($locateLink);
+        }
 
         $executionIDList = $this->post->executionIDList;
         $executions      = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($executionIDList)->fetchAll('id');
