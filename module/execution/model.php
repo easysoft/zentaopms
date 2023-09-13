@@ -854,24 +854,16 @@ class executionModel extends model
      * Start the execution.
      *
      * @param  int    $executionID
+     * @param  object $postData
      * @access public
      * @return array|false
      */
-    public function start(int $executionID): array|false
+    public function start(int $executionID, object $postData): array|false
     {
         $oldExecution = $this->getById($executionID);
 
-        $execution = fixer::input('post')
-            ->add('id', $executionID)
-            ->setDefault('status', 'doing')
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', helper::now())
-            ->stripTags($this->config->execution->editor->start['id'], $this->config->allowedTags)
-            ->remove('comment')
-            ->get();
-
-        $execution = $this->loadModel('file')->processImgURL($execution, $this->config->execution->editor->start['id'], $this->post->uid);
-        $this->dao->update(TABLE_EXECUTION)->data($execution)
+        $execution = $this->loadModel('file')->processImgURL($postData, $this->config->execution->editor->start['id'], $postData->uid);
+        $this->dao->update(TABLE_EXECUTION)->data($execution, 'comment')
             ->autoCheck()
             ->check($this->config->execution->start->requiredFields, 'notempty')
             ->checkIF($execution->realBegan != '', 'realBegan', 'le', helper::today())
@@ -888,10 +880,10 @@ class executionModel extends model
 
         $changes = common::createChanges($oldExecution, $execution);
 
-        if($this->post->comment != '' || !empty($changes))
+        if($postData->comment != '' || !empty($changes))
         {
             $this->loadModel('action');
-            $actionID = $this->action->create('execution', $executionID, 'Started', $this->post->comment);
+            $actionID = $this->action->create('execution', $executionID, 'Started', $postData->comment);
             $this->action->logHistory($actionID, $changes);
         }
 

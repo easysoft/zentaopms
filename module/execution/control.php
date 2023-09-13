@@ -1273,8 +1273,15 @@ class execution extends control
 
         if(!empty($_POST))
         {
+            $postData = fixer::input('post')
+                ->add('id', $executionID)
+                ->setDefault('status', 'doing')
+                ->setDefault('lastEditedBy', $this->app->user->account)
+                ->setDefault('lastEditedDate', helper::now())
+                ->stripTags($this->config->execution->editor->start['id'], $this->config->allowedTags)
+                ->get();
 
-            $this->execution->start($executionID);
+            $this->execution->start($executionID, $postData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $project = $this->loadModel('project')->getById($execution->project);
