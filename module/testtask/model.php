@@ -973,7 +973,7 @@ class testtaskModel extends model
      */
     public function batchUnlinkCases(int $taskID, array $caseIdList): bool
     {
-        if(!$caseIdList) return false;
+        if(!$taskID || !$caseIdList) return false;
 
         $cases = $this->dao->select('`case`')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->andWhere('`case`')->in($caseIdList)->fetchPairs();
         if(!$cases) return false;
