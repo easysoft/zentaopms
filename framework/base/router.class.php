@@ -2400,7 +2400,7 @@ class baseRouter
         }
 
         /* 调用该方法   Call the method. */
-        $module = $this->control;
+        $module = $this->control ? $this->control : $this->config->default->module;
         $method = $this->methodName ? $this->methodName : $this->config->default->method;
 
         call_user_func_array(array($module, $method), $this->params);
