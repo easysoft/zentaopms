@@ -143,4 +143,4 @@ fields:
     format: "YYYY-MM-DD hh:mm:ss"
   - field: lastRunResult
     note: "结果"
-    range: [pass,fail]
+    range: pass,fail,``{2}

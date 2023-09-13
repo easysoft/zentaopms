@@ -1239,4 +1239,21 @@ class testcaseTest
         if(dao::isError()) return dao::getError();
         return $moduleID;
     }
+
+    /**
+     * 测试获取用例总结。
+     * Test summary cases.
+     *
+     * @param  string $caseIdList
+     * @access public
+     * @return string
+     */
+    public function summaryTest(string $caseIdList): string
+    {
+        $caseIdList = explode(',', $caseIdList);
+        $cases      = $this->objectModel->getByList($caseIdList);
+        $moduleID = $this->objectModel->summary($cases);
+        if(dao::isError()) return dao::getError();
+        return $moduleID;
+    }
 }

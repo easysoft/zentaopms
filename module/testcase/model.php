@@ -1637,13 +1637,14 @@ class testcaseModel extends model
     }
 
     /**
-     * Summary cases
+     * 获取用例总结。
+     * Summary cases.
      *
-     * @param  array    $cases
+     * @param  array  $cases
      * @access public
      * @return string
      */
-    public function summary($cases)
+    public function summary(array $cases): string
     {
         $executed = 0;
         foreach($cases as $case)
