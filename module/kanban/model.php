@@ -2536,7 +2536,7 @@ class kanbanModel extends model
      * @access public
      * @return void
      */
-    public function createExecutionLane($executionID, $type = 'all')
+    public function createExecutionLane(int $executionID, string $type = 'all'): void
     {
         foreach($this->config->kanban->default as $type => $lane)
         {
@@ -2559,98 +2559,46 @@ class kanbanModel extends model
      * @param  int|array   $laneID
      * @param  string      $type story|bug|task
      * @param  int         $executionID
-     * @param  string      $groupBy
-     * @param  string      $groupValue
      * @access public
      * @return void
      */
-    public function createExecutionColumns($laneID, $type, $executionID)
+    public function createExecutionColumns(int|array $laneID, string $type, int $executionID): void
     {
         $devColumnID = $testColumnID = $resolvingColumnID = 0;
-        if($type == 'story')
+
+        $columns = array();
+        if($type == 'story') $columns = $this->lang->kanban->storyColumn;
+        if($type == 'bug')   $columns = $this->lang->kanban->bugColumn;
+        if($type == 'task')  $columns = $this->lang->kanban->taskColumn;
+        if(empty($columns)) return;
+
+        foreach($columns as $colType => $name)
         {
-            foreach($this->lang->kanban->storyColumn as $colType => $name)
+            $data = new stdclass();
+            $data->name   = $name;
+            $data->color  = '#333';
+            $data->type   = $colType;
+            $data->region = 0;
+
+            if(str_contains(',developing,developed,',   ",{$colType},")) $data->parent = $devColumnID;
+            if(str_contains(',testing,tested,',         ",{$colType},")) $data->parent = $testColumnID;
+            if(str_contains(',fixing,fixed,',           ",{$colType},")) $data->parent = $resolvingColumnID;
+            if(str_contains(',resolving,develop,test,', ",{$colType},")) $data->parent = -1;
+
+            $this->dao->insert(TABLE_KANBANCOLUMN)->data($data)->exec();
+
+            $colID = $this->dao->lastInsertId();
+            if($colType == 'develop')   $devColumnID       = $colID;
+            if($colType == 'test')      $testColumnID      = $colID;
+            if($colType == 'resolving') $resolvingColumnID = $colID;
+
+            if(is_array($laneID))
             {
-                $data = new stdclass();
-                $data->name   = $name;
-                $data->color  = '#333';
-                $data->type   = $colType;
-                $data->region = 0;
-
-                if(strpos(',developing,developed,', $colType) !== false) $data->parent = $devColumnID;
-                if(strpos(',testing,tested,', $colType) !== false)       $data->parent = $testColumnID;
-                if(strpos(',develop,test,', $colType) !== false)         $data->parent = -1;
-
-                $this->dao->insert(TABLE_KANBANCOLUMN)->data($data)->exec();
-
-                $colID = $this->dao->lastInsertId();
-                if($colType == 'develop') $devColumnID  = $colID;
-                if($colType == 'test')    $testColumnID = $colID;
-
-                if(is_array($laneID))
-                {
-                    foreach($laneID as $id) $this->addKanbanCell($executionID, $id, $colID, 'story');
-                }
-                else
-                {
-                    $this->addKanbanCell($executionID, $laneID, $colID, 'story');
-                }
+                foreach($laneID as $id) $this->addKanbanCell($executionID, $id, $colID, $type);
             }
-        }
-        elseif($type == 'bug')
-        {
-            foreach($this->lang->kanban->bugColumn as $colType => $name)
+            else
             {
-                $data = new stdclass();
-                $data->name   = $name;
-                $data->color  = '#333';
-                $data->type   = $colType;
-                $data->region = 0;
-                if(strpos(',fixing,fixed,', $colType) !== false)   $data->parent = $resolvingColumnID;
-                if(strpos(',testing,tested,', $colType) !== false) $data->parent = $testColumnID;
-                if(strpos(',resolving,test,', $colType) !== false) $data->parent = -1;
-
-                $this->dao->insert(TABLE_KANBANCOLUMN)->data($data)->exec();
-
-                $colID = $this->dao->lastInsertId();
-                if($colType == 'resolving') $resolvingColumnID = $colID;
-                if($colType == 'test')      $testColumnID      = $colID;
-
-                if(is_array($laneID))
-                {
-                    foreach($laneID as $id) $this->addKanbanCell($executionID, $id, $colID, 'bug');
-                }
-                else
-                {
-                    $this->addKanbanCell($executionID, $laneID, $colID, 'bug');
-                }
-            }
-        }
-        elseif($type == 'task')
-        {
-            foreach($this->lang->kanban->taskColumn as $colType => $name)
-            {
-                $data = new stdclass();
-                $data->name   = $name;
-                $data->color  = '#333';
-                $data->type   = $colType;
-                $data->region = 0;
-                if(strpos(',developing,developed,', $colType) !== false) $data->parent = $devColumnID;
-                if($colType == 'develop') $data->parent = -1;
-
-                $this->dao->insert(TABLE_KANBANCOLUMN)->data($data)->exec();
-
-                $colID = $this->dao->lastInsertId();
-                if($colType == 'develop') $devColumnID = $colID;
-
-                if(is_array($laneID))
-                {
-                    foreach($laneID as $id) $this->addKanbanCell($executionID, $id, $colID, 'task');
-                }
-                else
-                {
-                    $this->addKanbanCell($executionID, $laneID, $colID, 'task');
-                }
+                $this->addKanbanCell($executionID, $laneID, $colID, $type);
             }
         }
     }
@@ -2662,10 +2610,11 @@ class kanbanModel extends model
      * @param  int    $laneID
      * @param  int    $colID
      * @param  string $type story|task|bug|card
+     * @param  int    $cardID
      * @access public
      * @return void
      */
-    public function addKanbanCell($kanbanID, $laneID, $colID, $type, $cardID = 0)
+    public function addKanbanCell(int $kanbanID, int $laneID, int $colID, string $type, int $cardID = 0): void
     {
         $cell = $this->dao->select('id, cards')->from(TABLE_KANBANCELL)
             ->where('kanban')->eq($kanbanID)

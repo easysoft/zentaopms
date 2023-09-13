@@ -1,0 +1,22 @@
+title: table zt_projectadmin
+desc: ""
+author: automated export
+version: "1.0"
+fields:
+    - field: group
+      range: '1-9'
+    - field: account
+      note: "用户名"
+      fields:
+      - field: account1
+        range: admin,user{99},test{100},dev{100},pm{100},po{100},td{100},pd{100},qd{100},top{100},outside{100},others{100},a,bb,ccc,qwuiadsd?!2as@#%$aasd~aj1!@#1
+      - field: account2
+        range: "[],1-99,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,[]{4}"
+    - field: programs
+      range: 'all,1-5'
+    - field: projects
+      range: 'all,6-15'
+    - field: products
+      range: 'all,1-20'
+    - field: executions
+      range: 'all,16-30'

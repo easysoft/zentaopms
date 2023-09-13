@@ -537,7 +537,7 @@ class personnelModel extends model
      * @access public
      * @return array
      */
-    public function getWhitelistAccount($objectID = 0, $objectType = '')
+    public function getWhitelistAccount(int $objectID = 0, string $objectType = '')
     {
         return $this->dao->select('account')->from(TABLE_ACL)->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->fetchPairs('account', 'account');
     }
@@ -554,13 +554,12 @@ class personnelModel extends model
      * @access public
      * @return void
      */
-    public function updateWhitelist($users = array(), $objectType = '', $objectID = 0, $type = 'whitelist', $source = 'add', $updateType = 'replace')
+    public function updateWhitelist(array $users = array(), string $objectType = '', int $objectID = 0, string $type = 'whitelist', string $source = 'add', string $updateType = 'replace')
     {
         $oldWhitelist = $this->dao->select('account,objectType,objectID,type,source')->from(TABLE_ACL)->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->fetchAll('account');
         if($updateType == 'replace') $this->dao->delete()->from(TABLE_ACL)->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->exec();
 
-        $users = array_filter($users);
-        $users = array_unique($users);
+        $users    = array_unique(array_filter($users));
         $accounts = array();
         foreach($users as $account)
         {
@@ -646,8 +645,7 @@ class personnelModel extends model
         }
 
         /* Update user view. */
-        $this->loadModel('user');
-        foreach($deletedAccounts as $account) $this->user->updateUserView($objectID, $objectType, array($account));
+        $this->loadModel('user')->updateUserView($objectID, $objectType, $deletedAccounts);
     }
 
     /**
@@ -661,6 +659,7 @@ class personnelModel extends model
     public function addWhitelist($objectType = '', $objectID = 0)
     {
         $users = $this->post->account;
+        if(empty($users)) $users = array();
         $this->updateWhitelist($users, $objectType, $objectID);
     }
 
@@ -704,7 +703,7 @@ class personnelModel extends model
      * @access public
      * @return void
      */
-    public function deleteProgramWhitelist($programID = 0, $account = '')
+    public function deleteProgramWhitelist(int $programID = 0, string $account = '')
     {
         $program = $this->loadModel('program')->getByID($programID);
         if(empty($program)) return false;
@@ -744,10 +743,10 @@ class personnelModel extends model
      * @access public
      * @return void
      */
-    public function deleteProjectWhitelist($objectID = 0, $account = '')
+    public function deleteProjectWhitelist(int $objectID = 0, string $account = ''): void
     {
         $project = $this->dao->select('id,project,whitelist')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch();
-        if(empty($project)) return false;
+        if(empty($project)) return;
 
         $projectID = $project->project ? $project->project : $objectID;
         $sprints   = $this->dao->select('id')->from(TABLE_PROJECT)->where('project')->eq($projectID)->andWhere('deleted')->eq('0')->fetchPairs('id');

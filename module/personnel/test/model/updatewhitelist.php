@@ -3,6 +3,8 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/personnel.class.php';
 
+zdTable('acl')->gen(0);
+
 /**
 
 title=测试 personnelModel->updateWhitelist();

@@ -287,7 +287,7 @@ class stakeholderModel extends model
      * @access public
      * @return array
      */
-    public function getStakeholderGroup($objectIdList)
+    public function getStakeholderGroup(array $objectIdList): array
     {
         $stakeholders = $this->dao->select('objectID, user')->from(TABLE_STAKEHOLDER)->where('objectID')->in($objectIdList)->andWhere('deleted')->eq('0')->fetchAll();
 
@@ -307,10 +307,9 @@ class stakeholderModel extends model
      * @access public
      * @return array
      */
-    public function getParentStakeholderGroup($objectIdList)
+    public function getParentStakeholderGroup(array $objectIdList): array
     {
         $objects = $this->dao->select('id, path, parent')->from(TABLE_PROJECT)->where('id')->in($objectIdList)->andWhere('acl')->ne('open')->fetchAll('id');
-
         $parents = array();
         foreach($objects as $object)
         {
@@ -326,8 +325,7 @@ class stakeholderModel extends model
         if(empty($parents)) return array();
 
         /* Get all parent stakeholders.*/
-        $parentStakeholders = $this->dao->select('objectID, user')->from(TABLE_STAKEHOLDER)->where('objectID')->in(array_keys($parents))->andWhere('deleted')->eq('0')->fetchAll();
-
+        $parentStakeholders     = $this->dao->select('objectID, user')->from(TABLE_STAKEHOLDER)->where('objectID')->in(array_keys($parents))->andWhere('deleted')->eq('0')->fetchAll();
         $parentStakeholderGroup = array();
         foreach($parentStakeholders as $parentStakeholder)
         {

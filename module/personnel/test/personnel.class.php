@@ -264,12 +264,12 @@ class personnelTest
     public function deleteProgramWhitelistTest($programID, $account)
     {
         global $tester;
-        $this->addWhitelistTest('program', $programID, array($account));
         $tester->dao->update(TABLE_ACL)->set('source')->eq('sync')->where('objectID')->eq($programID)->andWhere('objectType')->eq('program')->exec();
-        $objects = $this->objectModel->deleteProgramWhitelist($programID, $account);
+        $this->objectModel->deleteProgramWhitelist($programID, $account);
 
         if(dao::isError()) return dao::getError();
 
+        $tester->dao->update(TABLE_ACL)->set('source')->eq('sync')->where('objectID')->eq($programID)->andWhere('objectType')->eq('program')->exec();
         return $objects;
     }
 

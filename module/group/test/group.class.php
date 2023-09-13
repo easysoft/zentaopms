@@ -435,13 +435,24 @@ class groupTest
      * @access public
      * @return void
      */
-    public function updatePrivTest($privID,$lang)
+    public function updatePrivTest($privID, $lang)
     {
         $this->objectModel->updatePrivLang($privID,$lang);
-        if(dao::isError())
-        {
-            return false;
-        }
+        if(dao::isError()) return false;
         return true;
+    }
+
+    /**
+     * 测试getAdmins方法。
+     * Test getAdmins method.
+     *
+     * @param  array  $idList
+     * @param  string $field
+     * @access public
+     * @return array
+     */
+    public function getAdminsTest(array $idList, string $field = 'programs'): array
+    {
+        return $this->objectModel->getAdmins($idList, $field);
     }
 }

@@ -4654,6 +4654,8 @@ class executionModel extends model
         $executionData->whitelist   = '';
         $executionData->plans       = array();
         $executionData->hasProduct  = $project->hasProduct;
+        $executionData->openedBy    = $this->app->user->account;
+        $executionData->openedDate  = helper::now();
         if($project->code) $executionData->code = $project->code;
 
         $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchAll();
@@ -4671,7 +4673,7 @@ class executionModel extends model
         $executionID = $this->create($executionData, array($this->app->user->account));
         if($project->model == 'kanban')
         {
-            $execution = $this->getById($executionID);
+            $execution = $this->fetchById($executionID);
             $this->loadModel('kanban')->createRDKanban($execution);
         }
 

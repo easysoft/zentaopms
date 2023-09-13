@@ -340,22 +340,21 @@ class groupModel extends model
     /**
      * Get admins by object id list.
      *
-     * @param  int    $idList
+     * @param  array  $idList
      * @param  string $field
      * @access public
-     * @return void
+     * @return array
      */
-    public function getAdmins($idList, $field = 'programs')
+    public function getAdmins(array $idList, string $field = 'programs'): array
     {
         $objects = array();
         foreach($idList as $id)
         {
-            $objects[$id] = $this->dao->select('DISTINCT account')->from(TABLE_PROJECTADMIN)
-                ->where("CONCAT(',', $field, ',')")->like("%$id%")
+            $objects[$id] = $this->dao->select('account')->from(TABLE_PROJECTADMIN)
+                ->where("FIND_IN_SET('$id', `$field`)")
                 ->orWhere($field)->eq('all')
-                ->fetchPairs();
+                ->fetchPairs('account', 'account');
         }
-
         return $objects;
     }
 

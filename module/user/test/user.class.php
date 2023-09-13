@@ -804,12 +804,13 @@ class userTest
      * @param  string $account
      * @param  array  $stakeholders
      * @param  array  $whiteList
+     * @param  array  $admins
      * @access public
-     * @return void
+     * @return bool
      */
-    public function checkProgramPrivTest($program, $account, $stakeholders, $whiteList)
+    public function checkProgramPrivTest(object $program, string $account, array $stakeholders = array(), array $whiteList = array(), array $admins = array()): bool
     {
-        return $this->objectModel->checkProgramPriv($program, $account, $stakeholders, $whiteList);
+        return $this->objectModel->checkProgramPriv($program, $account, $stakeholders, $whiteList, $admins);
     }
 
     /**
@@ -823,9 +824,9 @@ class userTest
      * @access public
      * @return void
      */
-    public function checkProjectPrivTest($project, $account, $stakeholders, $teams, $whiteList)
+    public function checkProjectPrivTest(object $project, string $account, array $stakeholders = array(), array $teams = array(), array $whiteList = array(), array $admins = array()): bool
     {
-        return $this->objectModel->checkProjectPriv($project, $account, $stakeholders, $teams, $whiteList);
+        return $this->objectModel->checkProjectPriv($project, $account, $stakeholders, $teams, $whiteList, $admins);
     }
     /**
      * Test check sprint priv.
@@ -851,12 +852,13 @@ class userTest
      * @param  array  $teams
      * @param  array  $stakeholders
      * @param  array  $whiteList
+     * @param  array  $admins
      * @access public
-     * @return void
+     * @return bool
      */
-    public function checkProductPrivTest($product, $account, $groups = '', $teams = '', $stakeholders = '', $whiteList = '')
+    public function checkProductPrivTest(object $product, string $account, array $groups = array(), array $teams = array(), array $stakeholders = array(), array $whiteList = array(), array $admins = array()): bool
     {
-        return $this->objectModel->checkProductPriv($product, $account, $groups, $teams, $stakeholders, $whiteList);
+        return $this->objectModel->checkProductPriv($product, $account, $groups, $teams, $stakeholders, $whiteList, $admins);
     }
 
     /**
@@ -884,9 +886,9 @@ class userTest
      * @param  array  $whiteList
      * @param  array  $admins
      * @access public
-     * @return void
+     * @return array
      */
-    public function getProgramAuthedUsersTest($programID, $stakeholders, $whiteList, $admins)
+    public function getProgramAuthedUsersTest(int $programID, array $stakeholders, array $whiteList, array $admins): array
     {
         global $tester;
         $program = $tester->loadModel('program')->getByID($programID);

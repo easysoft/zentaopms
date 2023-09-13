@@ -3,6 +3,8 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/personnel.class.php';
 
+zdTable('acl')->gen(100);
+
 /**
 
 title=测试 personnelModel->deleteProgramWhitelist();
@@ -18,7 +20,7 @@ $personnel = new personnelTest('admin');
 
 $programID = array();
 $programID[0] = 10;
-$programID[1] = '';
+$programID[1] = 0;
 
 $account   = array();
 $account[0]   = 'dev10';

@@ -1437,9 +1437,9 @@ class programModel extends model
      *
      * @param  array $programIdList
      * @access public
-     * @return void
+     * @return array
      */
-    public function getParentPM($programIdList)
+    public function getParentPM(array $programIdList): array
     {
         $objects = $this->dao->select('id, path, parent')->from(TABLE_PROGRAM)->where('id')->in($programIdList)->andWhere('acl')->ne('open')->fetchAll('id');
 

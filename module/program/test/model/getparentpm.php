@@ -13,7 +13,7 @@ $program->grade->range('1{5},2{5}');
 $program->parent->range('0{5},1-5');
 $program->status->range('wait,doing,suspended,closed');
 $program->openedBy->range('admin,test1');
-$program->pm->range('admin,test1');
+$program->PM->range('admin,test1');
 $program->acl->range('private');
 $program->begin->range('20220112 000000:0')->type('timestamp')->format('YY/MM/DD');
 $program->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD');

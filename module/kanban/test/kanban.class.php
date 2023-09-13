@@ -938,13 +938,12 @@ class kanbanTest
      *
      * @param  int    $executionID
      * @param  string $type
-     * @param  string $groupBy
      * @access public
      * @return int
      */
-    public function createExecutionLaneTest($executionID, $type = 'all', $groupBy = 'default')
+    public function createExecutionLaneTest($executionID, $type = 'all')
     {
-        $this->objectModel->createExecutionLane($executionID, $type, $groupBy);
+        $this->objectModel->createExecutionLane($executionID, $type);
 
         if(dao::isError()) return dao::getError();
 

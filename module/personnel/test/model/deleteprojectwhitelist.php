@@ -18,7 +18,7 @@ $personnel = new personnelTest('admin');
 
 $projectID = array();
 $projectID[0] = 15;
-$projectID[1] = '';
+$projectID[1] = 0;
 
 $account   = array();
 $account[0]   = 'dev15';

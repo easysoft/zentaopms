@@ -2107,7 +2107,7 @@ class userModel extends model
      * @access public
      * @return void
      */
-    public function updateUserView($objectIdList, $objectType, $users = array())
+    public function updateUserView(int|array $objectIdList, string $objectType, array $users = array())
     {
         if(is_numeric($objectIdList)) $objectIdList = array($objectIdList);
         if(!is_array($objectIdList)) return false;
@@ -2122,11 +2122,11 @@ class userModel extends model
      * Update program user view.
      *
      * @param  array  $programIdList
-     * @param  array  $user
+     * @param  array  $users
      * @access public
      * @return void
      */
-    public function updateProgramView($programIdList, $users)
+    public function updateProgramView(array $programIdList, array $users)
     {
         $programs = $this->dao->select('id, PM, PO, QD, RD, openedBy, acl, parent, path')->from(TABLE_PROJECT)
             ->where('id')->in($programIdList)
@@ -2215,7 +2215,7 @@ class userModel extends model
      * @access public
      * @return void
      */
-    public function updateProjectView($projectIdList, $users)
+    public function updateProjectView(array $projectIdList, array $users)
     {
         $projects = $this->dao->select('id, PM, PO, QD, RD, openedBy, acl, parent, path, type')->from(TABLE_PROJECT)
             ->where('id')->in($projectIdList)
@@ -2303,7 +2303,7 @@ class userModel extends model
      * @access public
      * @return void
      */
-    public function updateProductView($productIdList, $users)
+    public function updateProductView(array $productIdList, array $users)
     {
         $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->andWhere('acl')->ne('open')->fetchAll('id');
         if(empty($products)) return true;
@@ -2377,7 +2377,7 @@ class userModel extends model
      * @access public
      * @return void
      */
-    public function updateSprintView($sprintIdList, $users)
+    public function updateSprintView(array $sprintIdList, array $users)
     {
         $sprints = $this->dao->select('id, project, PM, PO, QD, RD, openedBy, acl, parent, path, grade, type')->from(TABLE_PROJECT)
             ->where('id')->in($sprintIdList)
@@ -2477,7 +2477,7 @@ class userModel extends model
      * @access public
      * @return bool
      */
-    public function checkProgramPriv($program, $account, $stakeholders, $whiteList, $admins = array())
+    public function checkProgramPriv(object $program, string $account, array $stakeholders = array(), array $whiteList = array(), $admins = array()): bool
     {
         if(strpos($this->app->company->admins, ',' . $account . ',') !== false) return true;
 
@@ -2512,7 +2512,7 @@ class userModel extends model
      * @access public
      * @return bool
      */
-    public function checkProjectPriv($project, $account, $stakeholders, $teams, $whiteList, $admins = array())
+    public function checkProjectPriv(object $project, string $account, array $stakeholders, array $teams, array $whiteList, array $admins = array()): bool
     {
         if(strpos($this->app->company->admins, ',' . $account . ',') !== false) return true;
         if($project->PO == $account OR $project->QD == $account OR $project->RD == $account OR $project->PM == $account) return true;
@@ -2572,7 +2572,7 @@ class userModel extends model
      * @access public
      * @return bool
      */
-    public function checkProductPriv($product, $account, $groups, $teams, $stakeholders, $whiteList, $admins = array())
+    public function checkProductPriv(object $product, string $account, array $groups, array $teams, array $stakeholders, array $whiteList, array $admins = array()): bool
     {
         if(strpos($this->app->company->admins, ',' . $account . ',') !== false) return true;
         if($product->PO == $account OR $product->QD == $account OR $product->RD == $account OR $product->createdBy == $account OR (isset($product->feedback) && $product->feedback == $account)) return true;
@@ -2597,7 +2597,7 @@ class userModel extends model
      * @access public
      * @return array
      */
-    public function getProjectAuthedUsers($project, $stakeholders, $teams, $whiteList, $admins = array())
+    public function getProjectAuthedUsers(object $project, array $stakeholders, array $teams, array $whiteList, array $admins = array()): array
     {
         $users = array();
 
@@ -2647,7 +2647,7 @@ class userModel extends model
      * @access public
      * @return array
      */
-    public function getProgramAuthedUsers($program, $stakeholders, $whiteList, $admins)
+    public function getProgramAuthedUsers(object $program, array $stakeholders, array $whiteList, array $admins): array
     {
         $users = array();
 
@@ -2660,7 +2660,7 @@ class userModel extends model
         $users += $whiteList ? $whiteList : array();
         $users += $admins ? $admins : array();
 
-        return $users;
+        return array_filter($users);
     }
 
     /**
@@ -2674,7 +2674,7 @@ class userModel extends model
      * @access public
      * @return array
      */
-    public function getSprintAuthedUsers($sprint, $stakeholders, $teams, $whiteList, $admins)
+    public function getSprintAuthedUsers(object $sprint, array $stakeholders, array $teams, array $whiteList, array $admins): array
     {
         return $this->getProjectAuthedUsers($sprint, $stakeholders, $teams, $whiteList, $admins);
     }

@@ -2,8 +2,12 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';
-zdTable('product')->gen(10);
-zdTable('user')->gen(200);
+
+$project = zdTable('project');
+$project->type->range('project');
+$project->PM->range('user1');
+$project->gen(10);
+zdTable('user')->gen(100);
 su('admin');
 
 /**
@@ -28,6 +32,8 @@ $teams['pm8'] = 'pm8';
 $whiteList['user35'] = 'user35';
 $whiteList['user35'] = 'user35';
 $whiteList['astaw']  = 'astaw';
+
+$user->objectModel->app->company->admins = ',admin,';
 
 r($user->getProjectAuthedUsersTest(1, $stakeholders, $teams, $whiteList)) && p('test9') && e('test9');  //获取对ID为1的产品有权限的用户
 r($user->getProjectAuthedUsersTest(1, $stakeholders, $teams, $whiteList)) && p('admin') && e('admin');  //获取对ID为1的产品有权限的用户

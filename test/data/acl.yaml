@@ -1,0 +1,24 @@
+title: table zt_acl
+desc: "联系人"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10000
+  - field: account
+    note: "用户名"
+    fields:
+    - field: account1
+      range: admin,user{99},test{100},dev{100},pm{100},po{100},td{100},pd{100},qd{100},top{100},outside{100},others{100},a,bb,ccc,qwuiadsd?!2as@#%$aasd~aj1!@#1
+    - field: account2
+      range: "[],1-99,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,[]{4}"
+  - field: objectType
+    note: "对象类型"
+    range: program,product,project,sprint
+  - field: objectID
+    note: "对象ID"
+    range: "1-10"
+  - field: type
+    range: "whitelist"
+  - field: source
+    range: upgrade,add,sync

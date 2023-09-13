@@ -2,9 +2,13 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';
-zdTable('project')->gen(300, 'execution');
-zdTable('user')->gen(200);
 su('admin');
+
+$project = zdTable('project');
+$project->type->range('sprint');
+$project->PM->range('user1');
+$project->gen(10);
+zdTable('user')->gen(100);
 
 /**
 
@@ -32,7 +36,9 @@ $whiteList['astaw']  = 'astaw';
 $admins['test20'] = 'test20';
 $admins['test21'] = 'test21';
 
-r($user->getSprintAuthedUsersTest(101, $stakeholders, $teams, $whiteList, array())) && p('test9')  && e('test9');  //获取对ID为101的执行有权限的用户
-r($user->getSprintAuthedUsersTest(101, $stakeholders, $teams, $whiteList, array())) && p('admin')  && e('admin');  //获取对ID为101的执行有权限的用户
-r($user->getSprintAuthedUsersTest(201, $stakeholders, $teams, $whiteList, array())) && p('astaw')  && e('astaw');  //获取对ID为201的执行有权限的用户
-r($user->getSprintAuthedUsersTest(201, $stakeholders, $teams, $whiteList, $admins)) && p('test21') && e('test21'); //获取对ID为201的执行有权限的用户
+$user->objectModel->app->company->admins = ',admin,';
+
+r($user->getSprintAuthedUsersTest(1, $stakeholders, $teams, $whiteList, array())) && p('test9')  && e('test9');  //获取对ID为101的执行有权限的用户
+r($user->getSprintAuthedUsersTest(1, $stakeholders, $teams, $whiteList, array())) && p('admin')  && e('admin');  //获取对ID为101的执行有权限的用户
+r($user->getSprintAuthedUsersTest(2, $stakeholders, $teams, $whiteList, array())) && p('astaw')  && e('astaw');  //获取对ID为201的执行有权限的用户
+r($user->getSprintAuthedUsersTest(2, $stakeholders, $teams, $whiteList, $admins)) && p('test21') && e('test21'); //获取对ID为201的执行有权限的用户
