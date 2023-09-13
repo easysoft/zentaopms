@@ -214,11 +214,10 @@ class testtaskModel extends model
      * @param  int          $productID
      * @param  int          $executionID
      * @param  string|array $appendIdList
-     * @param  string       $params         noempty
      * @access public
      * @return array
      */
-    public function getPairs(int $productID, int $executionID = 0, string|array $appendIdList = '', string $params = ''): array
+    public function getPairs(int $productID, int $executionID = 0, string|array $appendIdList = ''): array
     {
         $pairs = $this->dao->select('id, name')->from(TABLE_TESTTASK)
             ->where('deleted')->eq('0')
@@ -228,9 +227,7 @@ class testtaskModel extends model
             ->orderBy('id_desc')
             ->fetchPairs();
 
-        if($appendIdList) $pairs += $this->dao->select('id, name')->from(TABLE_TESTTASK)->where('id')->in($appendIdList)->fetchPairs();
-
-        if(strpos($params, 'noempty') === false) $pairs = array('') + $pairs;
+        if($appendIdList) $pairs += $this->dao->select('id, name')->from(TABLE_TESTTASK)->where('id')->in($appendIdList)->andWhere('auto')->ne('unit')->fetchPairs();
 
         return $pairs;
     }
