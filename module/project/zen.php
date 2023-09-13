@@ -1483,7 +1483,7 @@ class projectZen extends project
      * @access public
      * @return array
      */
-    public function expandExecutionIdList($stats)
+    protected function expandExecutionIdList($stats)
     {
         $executionIdList = array();
         foreach($stats as $execution)

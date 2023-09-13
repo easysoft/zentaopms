@@ -1517,7 +1517,7 @@ class executionZen extends execution
      * @param  string  $module
      * @param  string  $method
      * @param  mixed   $type
-     * @access public
+     * @access protected
      * @return string
      */
     public function getLink(string $module, string $method, string $type = ''): string
@@ -2011,7 +2011,7 @@ class executionZen extends execution
      * @param  array $oldPlans
      * @return void
      */
-    public function checkLinkPlan(int $executionID, array $oldPlans)
+    protected function checkLinkPlan(int $executionID, array $oldPlans)
     {
         $oldPlans = explode(',', implode(',' ,$oldPlans));
         $newPlans = array();
@@ -2041,7 +2041,7 @@ class executionZen extends execution
      * @param  object $execution
      * @return object
      */
-    public function getLinkedObjects(object $execution): object
+    protected function getLinkedObjects(object $execution): object
     {
         $this->loadModel('project');
         $this->loadModel('product');

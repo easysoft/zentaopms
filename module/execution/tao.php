@@ -224,7 +224,7 @@ class executionTao extends executionModel
      * @param  string      $sql
      * @param  string      $orderBy
      * @param  object|null $pager
-     * @access public
+     * @access protected
      * @return object[]
      */
     protected function getSearchBugs(array $productIdList, int $executionID, string $sql = '1=1', string $orderBy = 'id_desc', object|null $pager = null): array
