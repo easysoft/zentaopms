@@ -26,6 +26,8 @@ class count_of_annual_closed_top_program extends baseCalc
 
     public $fieldList = array('status', 'closedDate');
 
+    public $result = array();
+
     public function calculate($row)
     {
         if(empty($row->closedDate) or $row->status != 'closed') return false;

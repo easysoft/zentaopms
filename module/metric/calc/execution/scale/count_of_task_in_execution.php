@@ -26,6 +26,8 @@ class count_of_task_in_execution extends baseCalc
 
     public $fieldList = array('t1.execution');
 
+    public $result = array();
+
     public function calculate($row)
     {
         if(!isset($this->result[$row->execution])) $this->result[$row->execution] = 0;

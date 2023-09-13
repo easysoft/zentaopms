@@ -26,6 +26,8 @@ class estimate_of_annual_closed_project extends baseCalc
 
     public $fieldList = array('t1.estimate', 't1.parent', 't3.status', 't3.closedDate');
 
+    public $result = array();
+
     public function calculate($row)
     {
         if($row->status != 'closed' || empty($row->closedDate) || $row->parent == -1) return false;

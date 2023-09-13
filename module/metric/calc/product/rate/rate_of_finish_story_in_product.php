@@ -26,6 +26,8 @@ class rate_of_finish_story_in_product extends baseCalc
 
     public $fieldList = array('t1.product', 't1.id', 't1.status', 't1.closedReason');
 
+    public $result = array();
+
     public function calculate($row)
     {
         if(!isset($this->result[$row->product])) $this->result[$row->product] = array('finished' => 0, 'total' => 0, 'invalid' => 0);

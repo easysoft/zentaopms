@@ -26,6 +26,8 @@ class count_of_annual_finished_story extends baseCalc
 
     public $fieldList = array('t1.closedDate', 't1.closedReason');
 
+    public $result = array();
+
     public function calculate($data)
     {
         $closedDate   = $data->closedDate;

@@ -26,6 +26,8 @@ class scale_of_monthly_closed_story extends baseCalc
 
     public $fieldList = array('t1.status', 't1.closedDate', 't1.estimate');
 
+    public $result = array();
+
     public function calculate($row)
     {
         if(empty($row->closedDate) || $row->status != 'closed') return false;

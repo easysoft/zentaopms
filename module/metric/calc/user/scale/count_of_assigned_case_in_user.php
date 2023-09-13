@@ -22,6 +22,8 @@
  */
 class count_of_assigned_case_in_user extends baseCalc
 {
+    public $result = array();
+
     public function getStatement()
     {
         return $this->dao->select('t1.assignedTo')->from(TABLE_TESTRUN)->alias('t1')

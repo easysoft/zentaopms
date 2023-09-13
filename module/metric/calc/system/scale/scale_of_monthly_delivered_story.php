@@ -26,6 +26,8 @@ class scale_of_monthly_delivered_story extends baseCalc
 
     public $fieldList = array('t1.stage', 't1.releasedDate', 't1.closedReason', 't1.closedDate', 't1.estimate');
 
+    public $result = array();
+
     public function calculate($row)
      {
         $date = null;

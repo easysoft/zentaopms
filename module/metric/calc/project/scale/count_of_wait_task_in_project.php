@@ -26,6 +26,8 @@ class count_of_wait_task_in_project extends baseCalc
 
     public $fieldList = array('t1.status', 't1.project');
 
+    public $result = array();
+
     public function calculate($row)
     {
         if($row->status != 'wait') return false;

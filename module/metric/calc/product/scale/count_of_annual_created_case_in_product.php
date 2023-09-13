@@ -26,6 +26,8 @@ class count_of_annual_created_case_in_product extends baseCalc
 
     public $fieldList = array('t1.product', 't1.openedDate');
 
+    public $result = array();
+
     public function calculate($row)
     {
         $product    = $row->product;

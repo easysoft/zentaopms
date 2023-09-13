@@ -22,6 +22,8 @@
  */
 class count_of_valid_story_in_product extends baseCalc
 {
+    public $result = array();
+
     public function getStatement()
     {
         return $this->dao->select('t1.product,t1.id')->from(TABLE_STORY)->alias('t1')

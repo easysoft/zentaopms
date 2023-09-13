@@ -26,6 +26,8 @@ class count_of_undelayed_finished_execution_which_annual_finished extends baseCa
 
     public $fieldList = array('t1.status', 't1.closedDate', 't1.firstEnd');
 
+    public $result = array();
+
     public function calculate($row)
     {
         if(empty($row->closedDate) || empty($row->firstEnd)) return false;

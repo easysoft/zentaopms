@@ -26,6 +26,8 @@ class rate_of_delivery_story_in_product extends baseCalc
 
     public $fieldList = array('t1.product', 't1.closedReason', 't1.stage');
 
+    public $result = array();
+
     public function calculate($row)
     {
         if(!isset($this->result[$row->product])) $this->result[$row->product] = array('delivered' => 0, 'valid' => 0);

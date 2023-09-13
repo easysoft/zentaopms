@@ -26,6 +26,8 @@ class count_of_assigned_bug_in_user extends baseCalc
 
     public $fieldList = array('t1.assignedTo');
 
+    public $result = array();
+
     public function calculate($row)
     {
         $assignedTo = $row->assignedTo;

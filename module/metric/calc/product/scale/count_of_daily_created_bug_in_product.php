@@ -26,6 +26,8 @@ class count_of_daily_created_bug_in_product extends baseCalc
 
     public $fieldList = array('t1.product', 't1.openedDate');
 
+    public $result = array();
+
     public function calculate($row)
     {
         if(empty($row->openedDate)) return false;

@@ -26,6 +26,8 @@ class count_of_daily_closed_bug_in_product extends baseCalc
 
     public $fieldList = array('t1.product', 't1.status', 't1.closedDate');
 
+    public $result = array();
+
     public function calculate($row)
     {
         if($row->status != 'closed' || empty($row->closedDate)) return false;

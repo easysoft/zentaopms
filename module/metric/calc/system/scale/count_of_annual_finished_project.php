@@ -26,6 +26,8 @@ class count_of_annual_finished_project extends baseCalc
 
     public $fieldList = array('t1.status', 't1.realEnd');
 
+    public $result = array();
+
     public function calculate($row)
     {
         if(empty($row->realEnd)) return false;

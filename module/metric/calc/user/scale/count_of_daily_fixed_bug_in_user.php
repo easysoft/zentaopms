@@ -27,6 +27,8 @@ class count_of_daily_fixed_bug_in_user extends baseCalc
 
     public $fieldList = array('t1.resolvedBy', 't1.resolvedDate');
 
+    public $result = array();
+
     public function calculate($row)
     {
         $resolvedDate = $row->resolvedDate;

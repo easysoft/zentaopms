@@ -26,6 +26,8 @@ class count_of_annual_closed_story_in_product extends baseCalc
 
     public $fieldList = array('t1.product', 't1.closedDate', 't1.status');
 
+    public $result = array();
+
     public function calculate($row)
     {
         if($row->status != 'closed') return false;

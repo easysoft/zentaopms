@@ -26,6 +26,8 @@ class count_of_annual_finished_task extends baseCalc
 
     public $fieldList = array('t1.status', 't1.finishedDate');
 
+    public $result = array();
+
     public function calculate($data)
     {
         if(empty($data->finishedDate) or $data->status != 'done') return false;

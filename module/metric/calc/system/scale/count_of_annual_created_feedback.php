@@ -26,6 +26,8 @@ class count_of_annual_created_feedback extends baseCalc
 
     public $fieldList = array('openedDate');
 
+    public $result = array();
+
     public function calculate($row)
     {
         if(empty($row->openedDate)) return false;

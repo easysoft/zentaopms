@@ -26,6 +26,8 @@ class count_of_weekly_created_release extends baseCalc
 
     public $fieldList = array('t1.createdDate');
 
+    public $result = array();
+
     public function calculate($row)
     {
         $year = $this->getYear($row->createdDate);

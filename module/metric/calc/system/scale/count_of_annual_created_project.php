@@ -26,6 +26,8 @@ class count_of_annual_created_project extends baseCalc
 
     public $fieldList = array('t1.openedDate');
 
+    public $result = array();
+
     public function calculate($row)
     {
         if(empty($row->openedDate)) return false;

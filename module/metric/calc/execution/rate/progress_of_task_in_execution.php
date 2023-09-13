@@ -26,6 +26,8 @@ class progress_of_task_in_execution extends baseCalc
 
     public $fieldList = array('t1.consumed', 't1.left', 't1.execution');
 
+    public $result = array();
+
     public function calculate($row)
     {
         $consumed = !empty($row->consumed) ? $row->consumed : 0;

@@ -22,6 +22,8 @@
  */
 class count_of_annual_finished_productplan_in_product extends baseCalc
 {
+    public $result = array();
+
     public function getStatement()
     {
         return $this->dao->select('t1.id,t1.product,year(t1.finishedDate) as year')->from(TABLE_PRODUCTPLAN)->alias('t1')

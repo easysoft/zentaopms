@@ -26,6 +26,8 @@ class left_period_of_project extends baseCalc
 
     public $fieldList = array('t1.id', 't1.status', 't1.end');
 
+    public $result = array();
+
     public function calculate($row)
     {
         if($row->status == 'closed')

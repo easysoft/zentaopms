@@ -26,6 +26,8 @@ class scale_of_weekly_finished_story extends baseCalc
 
     public $fieldList = array('t1.status', 't1.closedReason', 't1.closedDate', 't1.estimate');
 
+    public $result = array();
+
     public function calculate($row)
     {
         $year = $this->getYear($row->closedDate);

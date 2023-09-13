@@ -26,6 +26,8 @@ class count_of_annual_delivered_story extends baseCalc
 
     public $fieldList = array('t1.stage', 't1.releasedDate', 't1.closedReason', 't1.closedDate');
 
+    public $result = array();
+
     public function calculate($data)
     {
         $stage        = $data->stage;

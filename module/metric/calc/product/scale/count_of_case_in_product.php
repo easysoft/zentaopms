@@ -26,6 +26,8 @@ class count_of_case_in_product extends baseCalc
 
     public $fieldList = array('t1.product');
 
+    public $result = array();
+
     public function calculate($row)
     {
         if(!isset($this->result[$row->product])) $this->result[$row->product] = 0;

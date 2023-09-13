@@ -26,6 +26,8 @@ class planned_period_of_project extends baseCalc
 
     public $fieldList = array('t1.id', 't1.begin', 't1.end');
 
+    public $result = array();
+
     public function calculate($row)
     {
         $this->result[$row->id] = (strtotime($row->end) - strtotime($row->begin))/86400;

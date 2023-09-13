@@ -26,6 +26,8 @@ class count_of_monthly_created_story extends baseCalc
 
     public $fieldList = array('t1.openedDate');
 
+    public $result = array();
+
     public function calculate($data)
     {
         $openedDate = $data->openedDate;

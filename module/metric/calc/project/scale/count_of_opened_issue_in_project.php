@@ -26,6 +26,8 @@ class count_of_opened_issue_in_project extends baseCalc
 
     public $fieldList = array('t1.project', 't1.status');
 
+    public $result = array();
+
     public function calculate($row)
     {
         $project = $row->project;

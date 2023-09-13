@@ -22,6 +22,8 @@
  */
 class count_of_developed_story_in_product extends baseCalc
 {
+    public $result = array();
+
     public function getStatement()
     {
         return $this->dao->select('t1.product,count(t1.id) as value')->from(TABLE_STORY)->alias('t1')

@@ -26,6 +26,8 @@ class rate_of_delayed_finished_project_which_annual_finished extends baseCalc
 
     public $fieldList = array('t1.status', 't1.closedDate', 't1.realEnd', 't1.firstEnd');
 
+    public $result = array();
+
     public function calculate($row)
     {
         if(empty($row->closedDate)) return false;

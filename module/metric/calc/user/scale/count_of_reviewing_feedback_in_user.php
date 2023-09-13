@@ -26,6 +26,8 @@ class count_of_reviewing_feedback_in_user extends baseCalc
 
     public $fieldList = array('t1.status', 't1.assignedTo');
 
+    public $result = array();
+
     public function calculate($row)
     {
         $assignedTo = $row->assignedTo;

@@ -26,6 +26,8 @@ class estimate_of_task_in_project extends baseCalc
 
     public $fieldList = array('t1.estimate', 't1.project');
 
+    public $result = array();
+
     public function calculate($row)
     {
         if(!isset($this->result[$row->project])) $this->result[$row->project] = 0;

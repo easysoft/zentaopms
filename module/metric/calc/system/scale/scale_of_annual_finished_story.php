@@ -26,6 +26,8 @@ class scale_of_annual_finished_story extends baseCalc
 
     public $fieldList = array('t1.estimate', 't1.status', 't1.closedDate', 't1.closedReason');
 
+    public $result = array();
+
     public function calculate($row)
     {
         if(empty($row->closedDate) or !isset($row->estimate)) return false;
