@@ -620,7 +620,7 @@ class custom extends control
 
         $this->view->title                 = $this->lang->custom->mode;
         $this->view->mode                  = $mode;
-        $this->view->programs              = $this->loadModel('program')->getTopPairs('', 'noclosed', true);
+        $this->view->programs              = $this->loadModel('program')->getTopPairs('noclosed', true);
         $this->view->programID             = isset($this->config->global->defaultProgram) ? $this->config->global->defaultProgram : 0;
         $this->view->disabledFeatures      = $disabledFeatures;
         $this->view->enabledScrumFeatures  = $enabledScrumFeatures;

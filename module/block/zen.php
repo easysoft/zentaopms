@@ -2461,7 +2461,7 @@ class blockZen extends block
         $this->loadModel('setting');
 
         $this->view->blockID       = $block->id;
-        $this->view->programs      = $this->loadModel('program')->getTopPairs('', 'noclosed', true);
+        $this->view->programs      = $this->loadModel('program')->getTopPairs('noclosed', true);
         $this->view->programID     = isset($this->config->global->defaultProgram) ? $this->config->global->defaultProgram : 0;
         $this->view->URSRList      = $this->loadModel('custom')->getURSRPairs();
         $this->view->URSR          = $this->setting->getURSR();

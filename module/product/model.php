@@ -881,7 +881,7 @@ class productModel extends model
 
         if($this->config->systemMode == 'ALM')
         {
-            $this->config->product->all->search['params']['program']['values'] = $this->loadModel('program')->getTopPairs('', 'noclosed');
+            $this->config->product->all->search['params']['program']['values'] = $this->loadModel('program')->getTopPairs('noclosed');
             $this->config->product->all->search['params']['line']['values']    = $this->getLinePairs();
         }
 
@@ -1246,7 +1246,7 @@ class productModel extends model
 
         /* Get base data. */
         $productList    = $this->productTao->getList();
-        $programList    = $this->program->getTopPairs('', '', true);
+        $programList    = $this->program->getTopPairs('', true);
         $projectList    = $this->program->getProjectStats(0, 'doing');
 
         $productIdList  = array_keys($productList);
