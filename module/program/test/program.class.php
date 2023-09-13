@@ -16,18 +16,6 @@ class programTest
     }
 
     /**
-     * Get switcher.
-     *
-     * @param  int   $programID
-     * @access public
-     * @return string
-     */
-    public function getSwitcherTest($programID = 0)
-    {
-        return $this->program->getSwitcher($programID);
-    }
-
-    /**
      * Get list by search.
      *
      * @param  string $orderBy
@@ -395,24 +383,6 @@ class programTest
         if(empty($program)) return '0';
 
         return $this->program->buildOperateMenu($program);
-    }
-
-    /**
-     * Test set menu.
-     *
-     * @param  int    $programID
-     * @access public
-     * @return string
-     */
-    public function setMenuTest($programID = 0)
-    {
-        $program = $this->program->getByID($programID);
-        if(empty($program)) return '0';
-
-        $this->program->setMenu($programID);
-
-        global $lang;
-        return strip_tags($lang->switcherMenu);
     }
 
     /**
