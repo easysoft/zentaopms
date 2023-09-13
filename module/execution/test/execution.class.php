@@ -180,10 +180,10 @@ class executionTest
         $whitelist = array('');
         $beginData = date('Y-m-d');
         $endData   = date('Y-m-d',strtotime("+$days day"));
-        $delta     = intval($dayNum) + 1;
+        $delta     = intval($days) + 1;
 
         $createFields = array('project' => (int)$project, 'name' => '', 'code' => '', 'begin' => $beginData, 'end' => $endData,
-            'lifetime' => 'short', 'status' => 'wait', 'products' => $products, 'days' => $days,
+            'lifetime' => 'short', 'status' => 'wait', 'products' => $products, 'days' => $days, 'type' => 'sprint',
             'plans' => $plans, 'team' => '', 'PO' => '', 'QD' => '', 'PM' => '', 'RD' => '', 'whitelist' => '',
             'desc' => '', 'acl' => 'private', 'percent' => '0', 'openedBy' => 'admin', 'openedDate' => date('Y-m-d H:i:s'));
 

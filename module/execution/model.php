@@ -4633,7 +4633,7 @@ class executionModel extends model
      * */
     public function createDefaultSprint(int $projectID): int
     {
-        $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+        $project = $this->fetchByID($projectID);
 
         $executionData = new stdclass();
         $executionData->project     = $projectID;
@@ -4652,6 +4652,7 @@ class executionModel extends model
         $executionData->RD          = $this->app->user->account;
         $executionData->multiple    = '0';
         $executionData->whitelist   = '';
+        $executionData->plans       = array();
         $executionData->hasProduct  = $project->hasProduct;
         if($project->code) $executionData->code = $project->code;
 
@@ -4660,7 +4661,11 @@ class executionModel extends model
         {
             if($projectProduct->product) $executionData->products[] = $projectProduct->product;
             if($projectProduct->branch)  $executionData->branch[]   = $projectProduct->branch;
-            if($projectProduct->plan)    $executionData->plans[$projectProduct->product][$projectProduct->branch] = explode(',', trim($projectProduct->plan, ','));
+            if($projectProduct->plan)
+            {
+                $plans = explode(',', trim($projectProduct->plan, ','));
+                $executionData->plans[$projectProduct->product] = isset($executionData->plans[$projectProduct->product]) ? array_merge($executionData->plans[$projectProduct->product], $plans) : $plans;
+            }
         }
 
         $executionID = $this->create($executionData, array($this->app->user->account));
