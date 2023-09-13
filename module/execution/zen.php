@@ -1074,10 +1074,10 @@ class executionZen extends execution
      * @param  array  $members2Import
      * @param  array  $deptUsers
      * @param  int    $days
-     * @access public
+     * @access protected
      * @return array
      */
-    public function buildMembers(array $currentMembers, array $members2Import, array $deptUsers, int $days): array
+    protected function buildMembers(array $currentMembers, array $members2Import, array $deptUsers, int $days): array
     {
         $teamMembers = array();
         foreach($currentMembers as $account => $member)
@@ -1520,7 +1520,7 @@ class executionZen extends execution
      * @access protected
      * @return string
      */
-    public function getLink(string $module, string $method, string $type = ''): string
+    protected function getLink(string $module, string $method, string $type = ''): string
     {
         $executionModules = array('task', 'testcase', 'build', 'bug', 'case', 'testtask', 'testreport');
         if(in_array($module, array('task', 'testcase')) && in_array($method, array('view', 'edit', 'batchedit'))) $method = $module;
@@ -1630,7 +1630,7 @@ class executionZen extends execution
      * @param  object[]|object $execution
      * @return array
      */
-    public function setUserMoreLink(array|object $execution = null): array
+    protected function setUserMoreLink(array|object $execution = null): array
     {
         $appendPo = $appendPm = $appendQd = $appendRd = array();
         if(is_array($execution))
@@ -1974,7 +1974,7 @@ class executionZen extends execution
      * @param  string $confirm
      * @return void
      */
-    public function updateLinkedPlans(int $executionID, string $newPlans = '', string $confirm = 'no')
+    protected function updateLinkedPlans(int $executionID, string $newPlans = '', string $confirm = 'no')
     {
         if(!empty($newPlans) and $confirm == 'yes')
         {
