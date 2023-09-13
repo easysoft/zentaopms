@@ -428,10 +428,11 @@ class executionModel extends model
      * 批量编辑执行。
      * Batch update executions.
      *
+     * @param  object $postData
      * @access public
      * @return array|false
      */
-    public function batchUpdate(): array|false
+    public function batchUpdate(object $postData): array|false
     {
         $this->loadModel('user');
         $this->loadModel('project');
@@ -439,8 +440,7 @@ class executionModel extends model
 
         $executions    = array();
         $allChanges    = array();
-        $data          = fixer::input('post')->get();
-        $oldExecutions = $this->getByIdList($this->post->id);
+        $oldExecutions = $this->getByIdList($postData->id);
         $nameList      = array();
         $codeList      = array();
 
@@ -465,42 +465,42 @@ class executionModel extends model
 
         $this->lang->error->unique = $this->lang->error->repeat;
         $extendFields = $this->getFlowExtendFields();
-        foreach($data->id as $executionID)
+        foreach($postData->id as $executionID)
         {
-            $executionName = $data->name[$executionID];
-            if(isset($data->code)) $executionCode = $data->code[$executionID];
+            $executionName = $postData->name[$executionID];
+            if(isset($postData->code)) $executionCode = $postData->code[$executionID];
 
             $executionID = (int)$executionID;
             $executions[$executionID] = new stdClass();
             $executions[$executionID]->id             = $executionID;
             $executions[$executionID]->name           = $executionName;
-            $executions[$executionID]->PM             = $data->PM[$executionID];
-            $executions[$executionID]->PO             = $data->PO[$executionID];
-            $executions[$executionID]->QD             = $data->QD[$executionID];
-            $executions[$executionID]->RD             = $data->RD[$executionID];
-            $executions[$executionID]->begin          = $data->begin[$executionID];
-            $executions[$executionID]->end            = $data->end[$executionID];
-            $executions[$executionID]->team           = $data->team[$executionID];
-            $executions[$executionID]->desc           = htmlspecialchars_decode($data->desc[$executionID]);
-            $executions[$executionID]->days           = $data->days[$executionID];
+            $executions[$executionID]->PM             = $postData->PM[$executionID];
+            $executions[$executionID]->PO             = $postData->PO[$executionID];
+            $executions[$executionID]->QD             = $postData->QD[$executionID];
+            $executions[$executionID]->RD             = $postData->RD[$executionID];
+            $executions[$executionID]->begin          = $postData->begin[$executionID];
+            $executions[$executionID]->end            = $postData->end[$executionID];
+            $executions[$executionID]->team           = $postData->team[$executionID];
+            $executions[$executionID]->desc           = htmlspecialchars_decode($postData->desc[$executionID]);
+            $executions[$executionID]->days           = $postData->days[$executionID];
             $executions[$executionID]->lastEditedBy   = $this->app->user->account;
             $executions[$executionID]->lastEditedDate = helper::now();
 
-            if(isset($data->code))    $executions[$executionID]->code    = $executionCode;
-            if(isset($data->project)) $executions[$executionID]->project = zget($data->project, $executionID, 0);
-            if(isset($data->attribute[$executionID])) $executions[$executionID]->attribute = zget($data->attribute, $executionID, '');
-            if(isset($data->lifetime[$executionID]))  $executions[$executionID]->lifetime  = $data->lifetime[$executionID];
+            if(isset($postData->code))    $executions[$executionID]->code    = $executionCode;
+            if(isset($postData->project)) $executions[$executionID]->project = zget($postData->project, $executionID, 0);
+            if(isset($postData->attribute[$executionID])) $executions[$executionID]->attribute = zget($postData->attribute, $executionID, '');
+            if(isset($postData->lifetime[$executionID]))  $executions[$executionID]->lifetime  = $postData->lifetime[$executionID];
 
             $oldExecution = $oldExecutions[$executionID];
             $projectID    = isset($executions[$executionID]->project) ? $executions[$executionID]->project : $oldExecution->project;
             $project      = $this->project->getByID($projectID);
 
             /* Check unique code for edited executions. */
-            if(isset($data->code) and empty($executionCode))
+            if(isset($postData->code) and empty($executionCode))
             {
                 dao::$errors["code$executionID"][] = sprintf($this->lang->error->notempty, $this->lang->execution->execCode);
             }
-            elseif(isset($data->code) and $executionCode)
+            elseif(isset($postData->code) and $executionCode)
             {
                 if(isset($codeList[$executionCode]))
                 {
@@ -527,7 +527,7 @@ class executionModel extends model
             $nameList[$executionName][] = $executionID;
 
             /* Attribute check. */
-            if(isset($data->attribute) && isset($project->model) && in_array($project->model, array('waterfall', 'waterfallplus')))
+            if(isset($postData->attribute) && isset($project->model) && in_array($project->model, array('waterfall', 'waterfallplus')))
             {
                 $this->app->loadLang('stage');
                 $attribute = $executions[$executionID]->attribute;
@@ -551,8 +551,8 @@ class executionModel extends model
             }
 
             /* Judge workdays is legitimate. */
-            $workdays = helper::diffDate($data->end[$executionID], $data->begin[$executionID]) + 1;
-            if(isset($data->days[$executionID]) and $data->days[$executionID] > $workdays)
+            $workdays = helper::diffDate($postData->end[$executionID], $postData->begin[$executionID]) + 1;
+            if(isset($postData->days[$executionID]) and $postData->days[$executionID] > $workdays)
             {
                 $this->app->loadLang('project');
                 dao::$errors["days{$executionID}"][] = sprintf($this->lang->project->workdaysExceed, $workdays);
@@ -579,7 +579,7 @@ class executionModel extends model
 
             foreach($extendFields as $extendField)
             {
-                $executions[$executionID]->{$extendField->field} = $this->post->{$extendField->field}[$executionID];
+                $executions[$executionID]->{$extendField->field} = $postData->{$extendField->field}[$executionID];
                 if(is_array($executions[$executionID]->{$extendField->field})) $executions[$executionID]->{$extendField->field} = implode(',', $executions[$executionID]->{$extendField->field});
 
                 $executions[$executionID]->{$extendField->field} = htmlSpecialString($executions[$executionID]->{$extendField->field});
@@ -663,7 +663,7 @@ class executionModel extends model
             {
                 $execution->parent = $execution->project;
                 $execution->path   = ",{$execution->project},{$executionID},";
-                $this->changeProject($execution->project, $oldExecution->project, $executionID, isset($_POST['syncStories'][$executionID]) ? $_POST['syncStories'][$executionID] : 'no');
+                $this->changeProject($execution->project, $oldExecution->project, $executionID, isset($postData->syncStories[$executionID]) ? $postData->syncStories[$executionID] : 'no');
             }
 
             $changedAccounts = array();
@@ -895,26 +895,19 @@ class executionModel extends model
      * Delay the execution.
      *
      * @param  int    $executionID
+     * @param  object $postData
      * @access public
      * @return array|false
      */
-    public function putoff(int $executionID)
+    public function putoff(int $executionID, object $postData): array|false
     {
         $oldExecution = $this->getById($executionID);
 
-        $execution = fixer::input('post')
-            ->add('id', $executionID)
-            ->stripTags($this->config->execution->editor->putoff['id'], $this->config->allowedTags)
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', helper::now())
-            ->remove('comment,delta')
-            ->get();
-
-        $this->checkBeginAndEndDate($oldExecution->project, $execution->begin, $execution->end);
+        $this->checkBeginAndEndDate($oldExecution->project, $postData->begin, $postData->end);
         if(dao::isError()) return false;
 
-        $execution = $this->loadModel('file')->processImgURL($execution, $this->config->execution->editor->putoff['id'], $this->post->uid);
-        $this->dao->update(TABLE_EXECUTION)->data($execution)
+        $execution = $this->loadModel('file')->processImgURL($postData, $this->config->execution->editor->putoff['id'], $postData->uid);
+        $this->dao->update(TABLE_EXECUTION)->data($execution, 'comment,delta')
             ->autoCheck()
             ->checkFlow()
             ->where('id')->eq($executionID)
@@ -923,10 +916,10 @@ class executionModel extends model
         if(dao::isError()) return false;
 
         $changes = common::createChanges($oldExecution, $execution);
-        if($this->post->comment != '' || !empty($changes))
+        if($postData->comment != '' || !empty($changes))
         {
             $this->loadModel('action');
-            $actionID = $this->action->create('execution', $executionID, 'Delayed', $this->post->comment);
+            $actionID = $this->action->create('execution', $executionID, 'Delayed', $postData->comment);
             $this->action->logHistory($actionID, $changes);
         }
         return $changes;
@@ -937,25 +930,16 @@ class executionModel extends model
      * Suspend a execution.
      *
      * @param  int    $executionID
+     * @param  object $postData
      * @access public
      * @return array|false
      */
-    public function suspend(int $executionID): array|false
+    public function suspend(int $executionID, object $postData): array|false
     {
         $oldExecution = $this->getById($executionID);
 
-        $execution = fixer::input('post')
-            ->add('id', $executionID)
-            ->setDefault('status', 'suspended')
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', helper::now())
-            ->setDefault('suspendedDate', helper::today())
-            ->stripTags($this->config->execution->editor->suspend['id'], $this->config->allowedTags)
-            ->remove('comment')
-            ->get();
-
-        $execution = $this->loadModel('file')->processImgURL($execution, $this->config->execution->editor->suspend['id'], $this->post->uid);
-        $this->dao->update(TABLE_EXECUTION)->data($execution)
+        $execution = $this->loadModel('file')->processImgURL($postData, $this->config->execution->editor->suspend['id'], $postData->uid);
+        $this->dao->update(TABLE_EXECUTION)->data($execution, 'comment')
             ->autoCheck()
             ->checkFlow()
             ->where('id')->eq($executionID)
@@ -964,9 +948,9 @@ class executionModel extends model
         if(dao::isError()) return false;
 
         $changes = common::createChanges($oldExecution, $execution);
-        if(!empty($changes) || $this->post->comment != '')
+        if(!empty($changes) || $postData->comment != '')
         {
-            $actionID = $this->loadModel('action')->create('execution', $executionID, 'Suspended', $this->post->comment);
+            $actionID = $this->loadModel('action')->create('execution', $executionID, 'Suspended', $postData->comment);
             $this->action->logHistory($actionID, $changes);
         }
         return $changes;

@@ -1158,7 +1158,8 @@ class execution extends control
 
         if($this->post->name)
         {
-            $allChanges = $this->execution->batchUpdate();
+            $postData   = fixer::input('post')->get();
+            $allChanges = $this->execution->batchUpdate($postData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if(!empty($allChanges))
@@ -1318,7 +1319,14 @@ class execution extends control
 
         if(!empty($_POST))
         {
-            $this->execution->putoff($executionID);
+            $postData = fixer::input('post')
+                ->add('id', $executionID)
+                ->stripTags($this->config->execution->editor->putoff['id'], $this->config->allowedTags)
+                ->setDefault('lastEditedBy', $this->app->user->account)
+                ->setDefault('lastEditedDate', helper::now())
+                ->get();
+
+            $this->execution->putoff($executionID, $postData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->executeHooks($executionID);
@@ -1352,8 +1360,17 @@ class execution extends control
 
         if(!empty($_POST))
         {
+            $postData = fixer::input('post')
+                ->add('id', $executionID)
+                ->setDefault('status', 'suspended')
+                ->setDefault('lastEditedBy', $this->app->user->account)
+                ->setDefault('lastEditedDate', helper::now())
+                ->setDefault('suspendedDate', helper::today())
+                ->stripTags($this->config->execution->editor->suspend['id'], $this->config->allowedTags)
+                ->get();
+
             $this->execution->computeBurn($executionID);
-            $this->execution->suspend($executionID);
+            $this->execution->suspend($executionID, $postData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $project = $this->loadModel('project')->getById($execution->project);
