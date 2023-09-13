@@ -208,27 +208,29 @@ class testtaskModel extends model
     }
 
     /**
-     * Get testtask pairs.
+     * 获取测试单键值对。
+     * Get key-value pairs of testtask.
      *
-     * @param  int    $productID
-     * @param  int    $executionID
-     * @param  string $appendIdList
-     * @param  string $params         noempty
+     * @param  int          $productID
+     * @param  int          $executionID
+     * @param  string|array $appendIdList
+     * @param  string       $params         noempty
      * @access public
      * @return array
      */
-    public function getPairs($productID, $executionID = 0, $appendIdList = '', $params = '')
+    public function getPairs(int $productID, int $executionID = 0, string|array $appendIdList = '', string $params = ''): array
     {
-        $pairs = $this->dao->select('id,name')->from(TABLE_TESTTASK)
-            ->where('product')->eq((int)$productID)
-            ->beginIF($executionID)->andWhere('execution')->eq((int)$executionID)->fi()
+        $pairs = $this->dao->select('id, name')->from(TABLE_TESTTASK)
+            ->where('deleted')->eq('0')
+            ->andWhere('product')->eq($productID)
+            ->beginIF($executionID)->andWhere('execution')->eq($executionID)->fi()
             ->andWhere('auto')->ne('unit')
-            ->andWhere('deleted')->eq(0)
             ->orderBy('id_desc')
-            ->fetchPairs('id', 'name');
+            ->fetchPairs();
 
-        if($appendIdList) $pairs += $this->dao->select('id,name')->from(TABLE_TESTTASK)->where('id')->in($appendIdList)->fetchPairs('id', 'name');
-        if(strpos($params, 'noempty') === false) $pairs = array(0 => '') + $pairs;
+        if($appendIdList) $pairs += $this->dao->select('id, name')->from(TABLE_TESTTASK)->where('id')->in($appendIdList)->fetchPairs();
+
+        if(strpos($params, 'noempty') === false) $pairs = array('') + $pairs;
 
         return $pairs;
     }
