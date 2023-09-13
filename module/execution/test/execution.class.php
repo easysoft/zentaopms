@@ -264,15 +264,14 @@ class executionTest
         $ends            = array($executionID => date('Y-m-d',strtotime("+5 day")));
         $descs           = array($executionID => '');
         $teams           = array($executionID => '');
-        $dayses          = array($executionID => '');
+        $days            = array($executionID => '');
 
-        $createFields = array('executionIDList' => $executionIDList, 'names' => $name, 'codes' => $codes, 'PMs' => $pms, 'lifetimes' => $lifetimes,
-            'begins' => $begins, 'ends' => $ends, 'descs' => $descs, 'statuses' => $statuses, 'teams' => $teams, 'dayses' => $dayses,'POs' => $pos,
-            'QDs' => $qds, 'RDs' => $rds);
+        $createFields = array('id' => $executionIDList, 'name' => $name, 'code' => $codes, 'PM' => $pms, 'lifetime' => $lifetimes,
+            'begin' => $begins, 'end' => $ends, 'desc' => $descs, 'status' => $statuses, 'team' => $teams, 'days' => $days,'PO' => $pos,
+            'QD' => $qds, 'RD' => $rds);
 
         foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
         foreach($param as $key => $value) $_POST[$key] = $value;
-        $_POST['uid'] = 0;
 
         $object = $this->executionModel->batchUpdate((object)$_POST);
 
