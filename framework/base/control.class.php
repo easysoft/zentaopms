@@ -1213,6 +1213,7 @@ class baseControl
      */
     public function locate(string $url)
     {
+        if(empty($url)) $url = $this->config->webRoot;
         helper::header('location', $url);
         helper::end();
     }
