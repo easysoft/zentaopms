@@ -1,0 +1,12 @@
+title: table zt_testtask
+author: Gang Liu
+version: "1.0"
+fields:
+  - field: product
+    range: 2
+  - field: execution
+    range: 1{6},2{6},3{3},4{3}
+  - field: auto
+    range: "[no,no,unit]{4!},unit{3},no{3}"
+  - field: deleted
+    range: 0{3},1{3}

@@ -207,6 +207,23 @@ class testtaskTest
         return $objects;
     }
 
+    /**
+     * 测试获取一个产品下的测试单键值对。
+     * Test get key-value pairs of testtasks of a product.
+     *
+     * @param  int          $productID
+     * @param  int          $executionID
+     * @param  string|array $appendIdList
+     * @access public
+     * @return int
+     */
+    public function getPairsTest(int $productID, int $executionID = 0, string|array $appendIdList = ''): int
+    {
+        $pairs = $this->objectModel->getPairs($productID, $executionID, $appendIdList);
+
+        return count($pairs);
+    }
+
     public function getRunsTest($taskID, $moduleID, $orderBy, $pager = null)
     {
         $objects = $this->objectModel->getRuns($taskID, $moduleID, $orderBy, $pager = null);
