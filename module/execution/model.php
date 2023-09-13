@@ -1104,29 +1104,18 @@ class executionModel extends model
      * Close execution.
      *
      * @param  int    $executionID
+     * @param  object $postData
      * @access public
      * @return array|false
      */
-    public function close(int $executionID): array|false
+    public function close(int $executionID, object $postData): array|false
     {
         $oldExecution = $this->getById($executionID); /* Save previous execution to variable for later compare. */
 
-        $now = helper::now();
-        $execution = fixer::input('post')
-            ->add('id', $executionID)
-            ->setDefault('status', 'closed')
-            ->setDefault('closedBy', $this->app->user->account)
-            ->setDefault('closedDate', $now)
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
-            ->stripTags($this->config->execution->editor->close['id'], $this->config->allowedTags)
-            ->remove('comment')
-            ->get();
-
         $this->lang->error->ge = $this->lang->execution->ge;
 
-        $execution = $this->loadModel('file')->processImgURL($execution, $this->config->execution->editor->close['id'], $this->post->uid);
-        $this->dao->update(TABLE_EXECUTION)->data($execution)
+        $execution = $this->loadModel('file')->processImgURL($postData, $this->config->execution->editor->close['id'], $postData->uid);
+        $this->dao->update(TABLE_EXECUTION)->data($execution, 'comment')
             ->autoCheck()
             ->check($this->config->execution->close->requiredFields,'notempty')
             ->checkIF($execution->realEnd != '', 'realEnd', 'le', helper::today())
@@ -1137,14 +1126,13 @@ class executionModel extends model
 
         /* When it has multiple errors, only the first one is prompted */
         if(dao::isError() && count(dao::$errors['realEnd']) > 1) dao::$errors['realEnd'] = dao::$errors['realEnd'][0];
-
         if(dao::isError()) return false;
 
         $changes = common::createChanges($oldExecution, $execution);
-        if($this->post->comment != '' || !empty($changes))
+        if($postData->comment != '' || !empty($changes))
         {
             $this->loadModel('action');
-            $actionID = $this->action->create('execution', $executionID, 'Closed', $this->post->comment);
+            $actionID = $this->action->create('execution', $executionID, 'Closed', $postData->comment);
             $this->action->logHistory($actionID, $changes);
         }
 

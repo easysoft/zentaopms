@@ -1417,8 +1417,19 @@ class execution extends control
 
         if(!empty($_POST))
         {
+            $now      = helper::now();
+            $postData = fixer::input('post')
+                ->add('id', $executionID)
+                ->setDefault('status', 'closed')
+                ->setDefault('closedBy', $this->app->user->account)
+                ->setDefault('closedDate', $now)
+                ->setDefault('lastEditedBy', $this->app->user->account)
+                ->setDefault('lastEditedDate', $now)
+                ->stripTags($this->config->execution->editor->close['id'], $this->config->allowedTags)
+                ->get();
+
             $this->execution->computeBurn($executionID);
-            $this->execution->close($executionID);
+            $this->execution->close($executionID, $postData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $project = $this->loadModel('project')->getById($execution->project);
