@@ -975,14 +975,14 @@ class testtaskModel extends model
     {
         if(!$caseIdList) return false;
 
-        $this->dao->delete()->from(TABLE_TESTRUN)
-            ->where('task')->eq($taskID)
-            ->andWhere('`case`')->in($caseIdList)
-            ->exec();
+        $cases = $this->dao->select('`case`')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->andWhere('`case`')->in($caseIdList)->fetchPairs();
+        if(!$cases) return false;
+
+        $this->dao->delete()->from(TABLE_TESTRUN)->where('task')->eq($taskID)->andWhere('`case`')->in($cases)->exec();
         if(dao::isError()) return false;
 
         $this->loadModel('action');
-        foreach($caseIdList as $caseID) $this->action->create('case', $caseID, 'unlinkedfromtesttask', '', $taskID);
+        foreach($cases as $caseID) $this->action->create('case', $caseID, 'unlinkedfromtesttask', '', $taskID);
 
         return !dao::isError();
     }
