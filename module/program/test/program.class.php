@@ -136,6 +136,21 @@ class programTest
     }
 
     /**
+     * Test updateChildUserView method.
+     *
+     * @param  int    $programID
+     * @param  array  $accounts
+     * @access public
+     * @return void
+     */
+    public function updateChildUserViewTest($programID, $accounts = array())
+    {
+        $stakeHolder = $this->program->updateChildUserView($programID, $accounts);
+
+        return $this->program->dao->select('*')->from(TABLE_USERVIEW)->where('account')->eq('test2')->fetch('programs');
+    }
+
+    /**
      * Create default program.
      *
      * @access public

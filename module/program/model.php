@@ -1264,45 +1264,6 @@ class programModel extends model
     }
 
     /**
-     * Create stakeholder for a program.
-     *
-     * @param  int     $programID
-     * @access public
-     * @return void
-     */
-    public function createStakeholder($programID = 0)
-    {
-        $data = (array)fixer::input('post')->get();
-
-        $accounts = array_unique($data['accounts']);
-        $oldJoin  = $this->dao->select('`user`, createdDate')->from(TABLE_STAKEHOLDER)->where('objectID')->eq((int)$programID)->andWhere('objectType')->eq('program')->fetchPairs();
-        $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('objectID')->eq((int)$programID)->andWhere('objectType')->eq('program')->exec();
-
-        foreach($accounts as $account)
-        {
-            if(empty($account)) continue;
-
-            $stakeholder = new stdclass();
-            $stakeholder->objectID    = $programID;
-            $stakeholder->objectType  = 'program';
-            $stakeholder->user        = $account;
-            $stakeholder->createdBy   = $this->app->user->account;
-            $stakeholder->createdDate = isset($oldJoin[$account]) ? $oldJoin[$account] : helper::today();
-
-            $this->dao->insert(TABLE_STAKEHOLDER)->data($stakeholder)->exec();
-        }
-
-        /* If any account changed, update his view. */
-        $oldAccounts     = array_keys($oldJoin);
-        $changedAccounts = array_diff($accounts, $oldAccounts);
-        $changedAccounts = array_merge($changedAccounts, array_diff($oldAccounts, $accounts));
-        $changedAccounts = array_unique($changedAccounts);
-
-        $this->loadModel('user')->updateUserView($programID, 'program', $changedAccounts);
-        return $this->updateChildUserView($programID, $changedAccounts);
-    }
-
-    /**
      * 更新项目集及子项的用户视图。
      * Update user view of program and its children.
      *
