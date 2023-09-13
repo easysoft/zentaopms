@@ -1505,16 +1505,16 @@ class testtask extends control
     }
 
     /**
-     * Ajax get test result info.
+     * 根据 id 获取用例的一次运行结果。
+     * Get a run result of a case by ajax.
      *
-     * @param  int    $productID
-     * @param  int    $executionID
+     * @param  int    $resultID
      * @access public
      * @return void
      */
-    public function ajaxGetResult($resultID)
+    public function ajaxGetResult(int $resultID)
     {
-        $result = $this->dao->select('*')->from(TABLE_TESTRESULT)->where('id')->eq((int)$resultID)->fetch();
-        return $this->send(array('result' => 'success', 'message' => '', 'data' => $result));
+        $result = $this->dao->select('*')->from(TABLE_TESTRESULT)->where('id')->eq($resultID)->fetch();
+        return $this->send(array('result' => 'success', 'data' => $result));
     }
 }

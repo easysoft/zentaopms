@@ -19,10 +19,9 @@ $(function()
                 clearInterval(resultInterval);
             }
 
-            $.get(link, function(task)
+            $.getJSON(link, function(result)
             {
-                task = JSON.parse(task);
-                task = task.data;
+                task = result.data;
                 if(task.ZTFResult != '')
                 {
                     clearInterval(resultInterval);
