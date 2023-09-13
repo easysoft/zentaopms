@@ -963,6 +963,31 @@ class testtaskModel extends model
     }
 
     /**
+     * 批量从测试单移除用例。
+     * Batch remove cases from a testtask.
+     *
+     * @param  int   $taskID
+     * @param  array $caseIdList
+     * @access public
+     * @return bool
+     */
+    public function batchUnlinkCases(int $taskID, array $caseIdList): bool
+    {
+        if(!$caseIdList) return false;
+
+        $this->dao->delete()->from(TABLE_TESTRUN)
+            ->where('task')->eq($taskID)
+            ->andWhere('`case`')->in($caseIdList)
+            ->exec();
+        if(dao::isError()) return false;
+
+        $this->loadModel('action');
+        foreach($caseIdList as $caseID) $this->action->create('case', $caseID, 'unlinkedfromtesttask', '', $taskID);
+
+        return !dao::isError();
+    }
+
+    /**
      * Get test runs of a test task.
      *
      * @param  int    $taskID
