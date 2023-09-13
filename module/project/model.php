@@ -1534,8 +1534,8 @@ class projectModel extends model
         if($oldProject->status != $project->status && str_contains('doing,closed', $project->status))
         {
             $productID = $this->loadModel('product')->getProductIDByProject($oldProject->id);
-            if($status == 'doing')  $this->product->activate($productID);
-            if($status == 'closed') $this->product->close($productID);
+            if($project->status == 'doing')  $this->product->activate($productID);
+            if($project->status == 'closed') $this->product->close($productID);
         }
 
         return !dao::isError();
