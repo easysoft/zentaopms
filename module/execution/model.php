@@ -451,7 +451,7 @@ class executionModel extends model
         if($this->app->tab == 'project')
         {
             $projectModel = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($this->session->project)->fetch('model');
-            if($projectModel == 'scrum')
+            if(empty($this->session->project) || $projectModel == 'scrum')
             {
                 $this->lang->project->name = $this->lang->execution->name;
                 $this->lang->project->code = $this->lang->execution->code;
@@ -461,6 +461,11 @@ class executionModel extends model
                 $this->lang->project->name = str_replace($this->lang->project->common, $this->lang->project->stage, $this->lang->project->name);
                 $this->lang->project->code = str_replace($this->lang->project->common, $this->lang->project->stage, $this->lang->project->code);
             }
+        }
+        else
+        {
+            $this->lang->project->name = $this->lang->execution->name;
+            $this->lang->project->code = $this->lang->execution->code;
         }
 
         $this->lang->error->unique = $this->lang->error->repeat;
