@@ -129,6 +129,7 @@ class program extends control
     }
 
     /**
+     * 项目集下产品列表。
      * Program products list.
      *
      * @param  int     $programID
@@ -140,20 +141,15 @@ class program extends control
      * @access public
      * @return void
      */
-    public function product($programID = 0, $browseType = 'noclosed', $orderBy = 'order_asc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function product(int $programID = 0, string $browseType = 'noclosed', string $orderBy = 'order_asc', int $recTotal = 0, int $recPerPage = 15, int $pageID = 1)
     {
         $programPairs = $this->program->getPairs();
-
-        if(defined('RUN_MODE') && RUN_MODE == 'api' && !isset($programPairs[$programID]))
-        {
-            return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
-        }
+        if(defined('RUN_MODE') && RUN_MODE == 'api' && !isset($programPairs[$programID])) return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
 
         $programID = $this->program->saveState($programID, $programPairs);
 
-        setCookie("lastProgram", $programID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
-
-        $this->program->setMenu($programID);
+        helper::setcookie("lastProgram", (string)$programID);
+        common::setMenuVars('program', $programID);
 
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);
@@ -182,7 +178,6 @@ class program extends control
         $this->view->userIdPairs   = $this->user->getPairs('noletter|showid');
         $this->view->usersAvatar   = $this->user->getAvatarPairs('');
         $this->view->showBatchEdit = $this->cookie->showProductBatchEdit;
-
         $this->display();
     }
 
@@ -474,7 +469,7 @@ class program extends control
         $programID = $this->program->saveState($programID, $this->program->getPairs());
         setCookie("lastProgram", $programID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
-        $this->program->setMenu($programID);
+        common::setMenuVars('program', $programID);
 
         $uri = $this->app->getURI(true);
         $this->app->session->set('programProject', $uri, 'program');
@@ -523,7 +518,7 @@ class program extends control
     public function stakeholder($programID = 0, $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $this->app->loadLang('stakeholder');
-        $this->program->setMenu($programID);
+        common::setMenuVars('program', $programID);
 
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -700,31 +695,6 @@ class program extends control
         $this->view->programs  = $programs;
         $this->view->link      = $this->program->getLink($module, $method, '{id}', '', 'program');
         $this->display();
-    }
-
-    /**
-     * Ajax get projects.
-     *
-     * @access public
-     * @return void
-     */
-    public function ajaxRetrieveCloneableProject()
-    {
-        $data = fixer::input('post')->get();
-        $projects = $this->dao->select('id, name')->from(TABLE_PROJECT)
-            ->where('type')->eq('project')
-            ->andWhere('deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->beginIF(trim($data->name))->andWhere('name')->like("%$data->name%")->fi()
-            ->fetchPairs();
-
-        $html = empty($projects) ? "<div class='text-center'>{$this->lang->noData}</div>" : '';
-        foreach($projects as $id => $name)
-        {
-            $active = $data->cpoyProjectID == $id ? 'active' : '';
-            $html .= "<div class='col-md-4 col-sm-6'><a href='javascript:;' data-id=$id class='nobr $active'>" . html::icon($this->lang->icons['project'], 'text-muted') . $name . "</a></div>";
-        }
-        echo $html;
     }
 
     /**

@@ -26,7 +26,7 @@ class personnel extends control
      */
     public function accessible($programID = 0, $deptID = 0, $browseType = 'browse', $param = 0, $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-        $this->loadModel('program')->setMenu($programID);
+        common::setMenuVars('program', $programID);
         $this->app->loadLang('user');
 
         $program = $this->program->getByID($programID);
@@ -75,7 +75,7 @@ class personnel extends control
      */
     public function invest($programID = 0)
     {
-        $this->loadModel('program')->setMenu($programID);
+        common::setMenuVars('program', $programID);
         $this->app->loadLang('user');
 
         $this->view->title      = $this->lang->personnel->invest;
@@ -102,7 +102,7 @@ class personnel extends control
      */
     public function whitelist($objectID = 0, $module = 'personnel', $objectType = 'program', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1, $programID = 0, $from = '')
     {
-        if($this->app->tab == 'program') $this->loadModel('program')->setMenu($objectID);
+        if($this->app->tab == 'program') common::setMenuVars('program', $objectID);
 
         /* Load lang and set session. */
         $this->app->loadLang('user');
@@ -151,7 +151,7 @@ class personnel extends control
      */
     public function addWhitelist($objectID = 0, $deptID = 0, $copyID = 0, $objectType = 'program', $module = 'personnel', $programID = 0, $from = '')
     {
-        if($this->app->tab == 'program') $this->loadModel('program')->setMenu($objectID);
+        if($this->app->tab == 'program') common::setMenuVars('program', $objectID);
 
         $this->app->loadLang('execution');
 

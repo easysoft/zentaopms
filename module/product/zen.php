@@ -61,7 +61,7 @@ class productZen extends product
      */
     protected function setCreateMenu(int $programID)
     {
-        if($this->app->tab == 'program') $this->loadModel('program')->setMenu($programID);
+        if($this->app->tab == 'program') common::setMenuVars('program', $programID);
         if($this->app->tab == 'doc')     unset($this->lang->doc->menu->product['subMenu']);
 
         if($this->app->getViewType() != 'mhtml') return;
@@ -81,7 +81,7 @@ class productZen extends product
      */
     protected function setEditMenu(int $productID, int $programID)
     {
-        if($programID) return $this->loadModel('program')->setMenu($programID);
+        if($programID) return common::setMenuVars('program', $programID);
         $this->product->setMenu($productID);
     }
 

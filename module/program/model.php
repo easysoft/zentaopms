@@ -2,25 +2,28 @@
 class programModel extends model
 {
     /**
+     * 提示权限不足并跳转页面。
      * Show accessDenied response.
      *
-     * @access private
+     * @access public
      * @return void
      */
     public function accessDenied()
     {
-        echo js::alert($this->lang->program->accessDenied);
+        if(commonModel::isTutorialMode()) return true;
 
-        if(!$this->server->http_referer) return print(js::locate(helper::createLink('my', 'index')));
+        $link = helper::createLink('program', 'browse');
+        if(!$this->server->http_referer) $link = helper::createLink('my', 'index');
 
         $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-        if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(helper::createLink('my', 'index')));
+        if(strpos($this->server->http_referer, $loginLink) !== false) $link = helper::createLink('my', 'index');
 
-        echo js::locate('back');
+        return $this->app->control->sendError($this->lang->program->accessDenied, $link);
     }
 
     /**
-     * Save program state.
+     * 设置并返回一个用户可见的项目集ID。
+     * Set and return the projects that user can see.
      *
      * @param  int    $programID
      * @param  array  $programs
@@ -29,9 +32,9 @@ class programModel extends model
      */
     public function saveState(int $programID = 0, array $programs = array()): int
     {
-        if($programID > 0) $this->session->set('program', (int)$programID);
-        if($programID == 0 and $this->cookie->lastProgram) $this->session->set('program', (int)$this->cookie->lastProgram);
-        if($programID == 0 and $this->session->program == '') $this->session->set('program', key($programs));
+        if($programID > 0) $this->session->set('program', $programID);
+        if(!$programID && $this->cookie->lastProgram) $this->session->set('program', $this->cookie->lastProgram);
+        if(!$programID && !$this->session->program)   $this->session->set('program', key($programs));
         if(!isset($programs[$this->session->program]))
         {
             $this->session->set('program', key($programs));
@@ -1074,44 +1077,6 @@ class programModel extends model
         return true;
     }
 
-    /*
-     * Get program swapper.
-     *
-     * @param  int     $programID
-     * @access private
-     * @return string
-     */
-    public function getSwitcher($programID = 0)
-    {
-        $currentProgramName = '';
-        $currentModule      = $this->app->moduleName;
-        $currentMethod      = $this->app->methodName;
-
-        if($programID)
-        {
-            setCookie("lastProgram", $programID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
-            $currentProgram     = $this->getById($programID);
-            $currentProgramName = $currentProgram->name;
-        }
-        else
-        {
-            $currentProgramName = $this->lang->program->all;
-        }
-
-        if($this->app->viewType == 'mhtml' and $programID)
-        {
-            $output  = $this->lang->program->common . $this->lang->colon;
-            $output .= "<a id='currentItem' href=\"javascript:showSearchMenu('program', '$programID', '$currentModule', '$currentMethod', '')\">{$currentProgramName} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
-            return $output;
-        }
-
-        $dropMenuLink = helper::createLink('program', 'ajaxGetDropMenu', "objectID=$programID&module=$currentModule&method=$currentMethod");
-        $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProgramName}'><span class='text'>{$currentProgramName}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
-        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>'; $output .= "</div></div>";
-
-        return $output;
-    }
-
     /**
      * Get the tree menu of program.
      *
@@ -1644,19 +1609,6 @@ class programModel extends model
       }
 
       return $users;
-    }
-
-    /*
-     * Set program menu.
-     *
-     * @param  int    $programID
-     * @access public
-     * @return void
-     */
-    public function setMenu($programID)
-    {
-        $this->lang->switcherMenu = $this->getSwitcher($programID);
-        common::setMenuVars('program', $programID);
     }
 
     /**

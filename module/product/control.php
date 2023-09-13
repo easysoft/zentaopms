@@ -321,7 +321,7 @@ class product extends control
         if(empty($productIdList)) return print(js::locate($this->session->productList, 'parent'));
 
         /* Set menu when page come from program. */
-        if($this->app->tab == 'program') $this->loadModel('program')->setMenu(0);
+        if($this->app->tab == 'program') common::setMenuVars('program', 0);
 
         /* 构造批量编辑页面表单配置数据。*/
         $this->productZen->buildBatchEditForm($programID, $productIdList);

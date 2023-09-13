@@ -73,7 +73,7 @@ class stakeholder extends control
         $members = array();
         if($this->app->tab == 'program')
         {
-            $this->loadModel('program')->setMenu($objectID);
+            common::setMenuVars('program', $objectID);
             $members = $this->loadModel('program')->getTeamMemberPairs($objectID);
         }
         else
@@ -118,7 +118,7 @@ class stakeholder extends control
 
         if($this->app->tab == 'program')
         {
-            $this->loadModel('program')->setMenu($projectID);
+            common::setMenuVars('program', $projectID);
         }
         else
         {
