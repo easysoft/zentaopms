@@ -1252,8 +1252,8 @@ class testcaseTest
     {
         $caseIdList = explode(',', $caseIdList);
         $cases      = $this->objectModel->getByList($caseIdList);
-        $moduleID = $this->objectModel->summary($cases);
+        $summary    = $this->objectModel->summary($cases);
         if(dao::isError()) return dao::getError();
-        return $moduleID;
+        return $summary;
     }
 }
