@@ -125,6 +125,16 @@ class metricTao extends metricModel
         return $metrics;
     }
 
+    protected function fetchMetricsByCollect($stage)
+    {
+        return $this->dao->select('*')->from(TABLE_METRIC)
+            ->where('deleted')->eq('0')
+            ->andWhere('collector')->like("%,{$this->app->user->account},%")
+            ->beginIF($stage!= 'all')->andWhere('stage')->eq($stage)->fi()
+            ->beginIF($this->config->edition == 'open')->andWhere('object')->notIN('feedback,issue,risk')
+            ->fetchAll();
+    }
+
     /**
      * 请求模块数据。
      * Fetch module data.

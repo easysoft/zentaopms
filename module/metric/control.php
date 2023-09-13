@@ -104,6 +104,10 @@ class metric extends control
             if(!is_array($filters)) $filters = array();
             $metrics = $this->metric->getListByFilter($filters, 'released');
         }
+        elseif($scope == 'collect')
+        {
+            $metrics = $this->metric->getListByCollect('released');
+        }
         else
         {
             $metrics = $this->metric->getList($scope, 'released');
@@ -144,6 +148,10 @@ class metric extends control
             $filters = json_decode(base64_decode($filters), true);
             if(!is_array($filters)) $filters = array();
             $metrics = $this->metric->getListByFilter($filters, 'released');
+        }
+        elseif($scope == 'collect')
+        {
+            $metrics = $this->metric->getListByCollect('released');
         }
         else
         {

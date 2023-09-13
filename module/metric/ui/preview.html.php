@@ -10,8 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('resultHeader',   $resultHeader);
-jsVar('resultData',     $resultData);
+jsVar('resultHeader',   isset($resultHeader) ? $resultHeader : array());
+jsVar('resultData',     isset($resultData)   ? $resultData   : array());
 jsVar('objectList',     $lang->metric->objectList);
 jsVar('current',        $current);
 jsVar('maxSelectNum',   $config->metric->maxSelectNum);
@@ -23,7 +23,7 @@ jsVar('filterLang',     $lang->metric->filter);
 jsVar('scope',          $scope);
 jsVar('metricListLang', $metricList);
 
-if($scope == 'collect' and empty($collect))
+if($scope == 'collect' and empty($current))
 {
     include 'emptycollect.html.php';
 }

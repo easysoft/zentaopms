@@ -116,6 +116,11 @@ class metricModel extends model
         return $this->metricTao->fetchMetricsWithFilter($filters, $stage);
     }
 
+    public function getListByCollect($stage)
+    {
+        return $this->metricTao->fetchMetricsByCollect($stage);
+    }
+
     /**
      * 获取模块树数据。
      * Get module tree data.
