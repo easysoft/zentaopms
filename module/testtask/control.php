@@ -1471,10 +1471,13 @@ class testtask extends control
     }
 
     /**
-     * Drop menu page.
+     * 获取一个产品下的测试单的下拉列表。
+     * Get drop menu of testtasks of a product by ajax.
+     *
+     * // TODO: 暂时不做大的调整，重构 1.5 级导航时可能需要此方法提供数据。
      *
      * @param  int    $productID
-     * @param  int    $branch
+     * @param  string $branch
      * @param  int    $taskID
      * @param  string $module
      * @param  string $method
@@ -1483,7 +1486,7 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu($productID, $branch, $taskID, $module, $method, $objectType = '', $objectID = 0)
+    public function ajaxGetDropMenu(int $productID, string $branch, int $taskID, string $module, string $method, string $objectType = '', int $objectID = 0)
     {
         $scope     = empty($objectType) ? 'local' : 'all';
         $testtasks = $this->testtask->getProductTasks($productID, $branch, "$scope,totalStatus", '', '', 'id_desc', null);
