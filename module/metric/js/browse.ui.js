@@ -20,7 +20,8 @@ window.onRenderCell = function(result, {row, col})
     if(col.name == 'id')
     {
         const url = $.createLink('metric', 'edit', 'id=' + row.data.id);
-        const modalTrigger = '<button type="button" class="btn edit-trigger hidden" data-toggle="modal" data-type="ajax" data-url=' + url + ' data-data-type="html"></button>';
+        const btnClass = 'class="btn hidden edit-trigger-' + row.data.id + '"';
+        const modalTrigger = '<button type="button" ' + btnClass + ' data-toggle="modal" data-type="ajax" data-url=' + url + ' data-data-type="html"></button>';
         result.push({html: modalTrigger});
     }
 
@@ -30,13 +31,14 @@ window.onRenderCell = function(result, {row, col})
 window.confirmEdit = function(metricID, isOldMetric)
 {
     isOldMetric = isOldMetric == 'true' ? true : false;
+    const triggerClass = '.edit-trigger-' + metricID;
     if(isOldMetric)
     {
         zui.Modal.confirm(upgradeTip).then((result) =>
         {
             if(result)
             {
-                $('.edit-trigger').trigger('click');
+                $(triggerClass).trigger('click');
             }
             else
             {
@@ -46,6 +48,6 @@ window.confirmEdit = function(metricID, isOldMetric)
     }
     else
     {
-        $('.edit-trigger').trigger('click');
+        $(triggerClass).trigger('click');
     }
 }

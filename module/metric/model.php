@@ -52,8 +52,8 @@ class metricModel extends model
 
         $this->dao->update(TABLE_METRIC)->data($metric)
             ->autoCheck()
-            ->checkIF(!empty($metric->name), 'name', 'unique', "`deleted` = '0'")
-            ->checkIF(!empty($metric->code), 'code', 'unique', "`deleted` = '0'")
+            ->checkIF(!empty($metric->name) && $metric->name != $oldMetric->name, 'name', 'unique', "`deleted` = '0'")
+            ->checkIF(!empty($metric->code) && $metric->code != $oldMetric->code, 'code', 'unique', "`deleted` = '0'")
             ->where('id')->eq($id)
             ->exec();
 
