@@ -133,18 +133,17 @@ class testcaseTest
     }
 
     /**
+     * 测试获取执行的用例。
      * Test get execution cases.
      *
      * @param  int    $executionID
-     * @param  string $orderBy
-     * @param  object $pager
      * @param  string $browseType
      * @access public
-     * @return string
+     * @return array|int
      */
-    public function getExecutionCasesTest($executionID, $orderBy = 'id_desc', $pager = null, $browseType = '')
+    public function getExecutionCasesTest(string $browseType = '', int $executionID): array|int
     {
-        $objects = $this->objectModel->getExecutionCases($executionID, $orderBy, $pager, $browseType);
+        $objects = $this->objectModel->getExecutionCases($browseType, $executionID);
 
         if(dao::isError()) return dao::getError();
 

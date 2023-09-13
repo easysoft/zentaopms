@@ -107,47 +107,48 @@ class testcaseModel extends model
     }
 
     /**
+     * 获取执行的用例。
      * Get execution cases.
      *
+     * @param  string $browseType   all|wait|needconfirm
      * @param  int    $executionID
      * @param  int    $productID
      * @param  int    $branchID
      * @param  int    $moduleID
      * @param  string $orderBy
      * @param  object $pager
-     * @param  string $browseType   all|wait|needconfirm
      * @access public
      * @return array
      */
-    public function getExecutionCases($executionID, $productID = 0, $branchID = 0, $moduleID = 0, $orderBy = 'id_desc', $pager = null, $browseType = '')
+    public function getExecutionCases(string $browseType = 'all', int $executionID, int $productID = 0, int|string $branchID = 0, int $moduleID = 0, string $orderBy = 'id_desc', object $pager = null): array
     {
         if($browseType == 'needconfirm')
         {
             return $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')
-                ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
+                ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
                 ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
-                ->leftJoin(TABLE_MODULE)->alias('t4')->on('t2.module=t4.id')
-                ->where('t1.project')->eq((int)$executionID)
-                ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
-                ->beginIF(!empty($moduleID))->andWhere('t4.path')->like("%,$moduleID,%")->fi()
-                ->beginIF(!empty($productID) and $branchID !== 'all')->andWhere('t2.branch')->eq($branchID)->fi()
+                ->leftJoin(TABLE_MODULE)->alias('t4')->on('t2.module = t4.id')
+                ->where('t1.project')->eq($executionID)
                 ->andWhere('t2.deleted')->eq('0')
                 ->andWhere('t3.version > t2.storyVersion')
                 ->andWhere("t3.status")->eq('active')
+                ->beginIF($productID)->andWhere('t1.product')->eq($productID)->fi()
+                ->beginIF($productID && $branchID !== 'all')->andWhere('t2.branch')->eq($branchID)->fi()
+                ->beginIF($moduleID)->andWhere('t4.path')->like("%,$moduleID,%")->fi()
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
         }
 
         return $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')
-            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
-            ->leftJoin(TABLE_MODULE)->alias('t3')->on('t2.module=t3.id')
-            ->where('t1.project')->eq((int)$executionID)
-            ->beginIF($browseType != 'all' and $browseType != 'byModule')->andWhere('t2.status')->eq($browseType)->fi()
-            ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
-            ->beginIF(!empty($moduleID))->andWhere('t3.path')->like("%,$moduleID,%")->fi()
-            ->beginIF(!empty($productID) and $branchID !== 'all')->andWhere('t2.branch')->eq($branchID)->fi()
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
+            ->leftJoin(TABLE_MODULE)->alias('t3')->on('t2.module = t3.id')
+            ->where('t1.project')->eq($executionID)
             ->andWhere('t2.deleted')->eq('0')
+            ->beginIF($browseType != 'all' && $browseType != 'byModule')->andWhere('t2.status')->eq($browseType)->fi()
+            ->beginIF($productID)->andWhere('t1.product')->eq($productID)->fi()
+            ->beginIF($productID && $branchID !== 'all')->andWhere('t2.branch')->eq($branchID)->fi()
+            ->beginIF($moduleID)->andWhere('t3.path')->like("%,$moduleID,%")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
