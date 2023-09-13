@@ -18,7 +18,7 @@ fields:
         prefix: ","
         postfix: ","
       - field: path2
-        range: 0{12},12{2},14,0{2},17,0,19{2}
+        range: 0{11},12{2},14,0{2},17,0,19{2}
         postfix: ","
       - field: path3
         range: 0{12},13,0{6},20
