@@ -564,9 +564,7 @@ class program extends control
         $account = $this->dao->select('user')->from(TABLE_STAKEHOLDER)->where('id')->eq($stakeholderID)->fetch('user');
         $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('id')->eq($stakeholderID)->exec();
 
-        $this->loadModel('user')->updateUserView($programID, 'program', array($account));
-        $this->updateChildUserView($programID, $account);
-
+        $this->program->updateChildUserView($programID, array($account));
         return $this->send(array('result' => 'success', 'load' => true));
     }
 
@@ -592,29 +590,8 @@ class program extends control
         $account = $this->dao->select('user')->from(TABLE_STAKEHOLDER)->where('id')->in($stakeholderIDList)->fetchPairs('user');
         $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('id')->in($stakeholderIDList)->exec();
 
-        $this->loadModel('user')->updateUserView($programID, 'program', $account);
-        $this->updateChildUserView($programID, $account);
-
+        $this->program->updateChildUserView($programID, $account);
         return $this->send(array('result' => 'success', 'load' => true));
-    }
-
-    /**
-     * Update children user view.
-     *
-     * @param  int    $programID
-     * @param  array  $account
-     * @access protected
-     * @return void
-     */
-    protected function updateChildUserView($programID = 0, $account = array())
-    {
-        $childPGMList  = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('program')->fetchPairs();
-        $childPRJList  = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('project')->fetchPairs();
-        $childProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq($programID)->fetchPairs();
-
-        if(!empty($childPGMList))  $this->user->updateUserView($childPGMList, 'program',  array($account));
-        if(!empty($childPRJList))  $this->user->updateUserView($childPRJList, 'project',  array($account));
-        if(!empty($childProducts)) $this->user->updateUserView($childProducts, 'product', array($account));
     }
 
     /**

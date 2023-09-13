@@ -1299,15 +1299,30 @@ class programModel extends model
         $changedAccounts = array_unique($changedAccounts);
 
         $this->loadModel('user')->updateUserView($programID, 'program', $changedAccounts);
+        return $this->updateChildUserView($programID, $changedAccounts);
+    }
 
-        /* Update children user view. */
-        $childPrograms = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('program')->fetchPairs();
-        $childProjects = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('project')->fetchPairs();
-        $childProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq($programID)->fetchPairs();
+    /**
+     * 更新项目集及子项的用户视图。
+     * Update user view of program and its children.
+     *
+     * @param  int    $programID
+     * @param  array  $account
+     * @access public
+     * @return bool
+     */
+    public function updateChildUserView(int $programID = 0, array $accounts = array()): bool
+    {
+        $this->loadModel('user')->updateUserView($programID, 'program', $accounts);
 
-        if(!empty($childPrograms)) $this->user->updateUserView($childPrograms, 'program', $changedAccounts);
-        if(!empty($childProjects)) $this->user->updateUserView($childProjects, 'project', $changedAccounts);
-        if(!empty($childProducts)) $this->user->updateUserView($childProducts, 'product', $changedAccounts);
+        $programList = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('program')->fetchPairs();
+        $projectList = $this->loadModel('project')->getPairsByProgram($programID, 'all', true);
+        $productList = $this->loadModel('product')->getPairs('', $programID);
+
+        if(!empty($programList)) $this->user->updateUserView($programList, 'program', $accounts);
+        if(!empty($projectList)) $this->user->updateUserView(array_keys($projectList), 'project', $accounts);
+        if(!empty($productList)) $this->user->updateUserView(array_keys($productList), 'product', $accounts);
+        return !dao::isError();
     }
 
     /**
