@@ -1436,7 +1436,8 @@ class testtask extends control
     }
 
     /**
-     * Ajax get test tasks.
+     * 获取一个产品下的测试单的键值对。
+     * Get testtask key-value pairs of a product by ajax.
      *
      * @param  int    $productID
      * @param  int    $executionID
@@ -1446,10 +1447,11 @@ class testtask extends control
      */
     public function ajaxGetTestTasks(int $productID, int $executionID = 0, int $appendTaskID = 0)
     {
+        $tasks = array();
         $pairs = $this->testtask->getPairs($productID, $executionID, $appendTaskID);
-        $items = array();
-        foreach($pairs as $testtaskID => $testtaskName) $items[] = array('text' => $testtaskName, 'value' => $testtaskID, 'keys' => $testtaskName);
-        return print(json_encode($items));
+        foreach($pairs as $taskID => $taskName) $tasks[] = array('text' => $taskName, 'value' => $taskID, 'keys' => $taskName);
+
+        return $this->send(array('result' => 'success', 'tasks' => $tasks));
     }
 
     /**

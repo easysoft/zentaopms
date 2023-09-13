@@ -605,14 +605,13 @@ function loadTestTasks(productID, executionID)
     if(typeof(executionID) == 'undefined') executionID = 0;
 
     const link = $.createLink('testtask', 'ajaxGetTestTasks', 'productID=' + productID + '&executionID=' + executionID + '&testtaskID=' + bug.testtask);
-    $.get(link, function(data)
+    $.getJSON(link, function(result)
     {
         let testtask        = $('[name="testtask"]').val();
         let $testtaskPicker = $('[name="testtask"]').zui('picker');
-        if(data)
+        if(result.tasks)
         {
-            data = JSON.parse(data);
-            $testtaskPicker.render({items: data});
+            $testtaskPicker.render({items: result.tasks});
             $testtaskPicker.$.setValue(testtask);
         }
     });
