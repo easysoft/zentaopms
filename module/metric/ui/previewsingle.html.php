@@ -168,24 +168,24 @@ div
                 setClass('flex-start'),
                 toolbar
                 (
-                    haspriv('bug', 'report') ? item(set(array
+                    haspriv('metric', 'details') ? item(set(array
                     (
                         'text'  => $this->lang->metric->details,
                         'class' => 'ghost details',
                         'url'   => '#',
                     ))) : null,
-                    haspriv('bug', 'report') ? item(set(array
+                    haspriv('metric', 'filters') ? item(set(array
                     (
                         'icon'  => 'menu-backend',
                         'text'  => $this->lang->metric->filters,
-                        'class' => 'ghost',
+                        'class' => 'ghost hidden',
                         'url'   => '#',
                     ))) : null,
-                    haspriv('bug', 'report') ? item(set(array
+                    haspriv('metric', 'zAnalysis') ? item(set(array
                     (
                         'icon'  => 'chart-line',
                         'text'  => $this->lang->metric->zAnalysis,
-                        'class' => 'ghost chart-line-margin',
+                        'class' => 'ghost chart-line-margin hidden',
                         'url'   => '#',
                     ))) : null,
 
