@@ -428,4 +428,18 @@ class programTest
         $programs = $this->program->getTopPairs('noclosed');
         return $this->program->getKanbanStatisticData($programs);
     }
+
+    /**
+     * 处理项目集看板中产品数据。
+     * Process product data in program Kanban.
+     *
+     * @access public
+     * @return array
+     */
+    public function processProductsForKanbanTest(): array
+    {
+        $programs = $this->program->getTopPairs('noclosed');
+        list($productGroup, $planGroup, $releaseGroup, $projectGroup, $doingExecutions, $hours, $projectHours) = $this->program->getKanbanStatisticData($programs);
+        return $this->program->processProductsForKanban($productGroup, $planGroup, $releaseGroup, $projectGroup, $doingExecutions, $hours, $projectHours);
+    }
 }
