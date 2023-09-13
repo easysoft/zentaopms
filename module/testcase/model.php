@@ -1976,6 +1976,7 @@ class testcaseModel extends model
     }
 
     /**
+     * 构建树数组。
      * Build tree array.
      *
      * @param  array  $treeMenu
@@ -1985,7 +1986,7 @@ class testcaseModel extends model
      * @access public
      * @return void
      */
-    public function buildTreeArray(& $treeMenu, $scenes, $scene, $sceneName = '/')
+    public function buildTreeArray(array &$treeMenu, array $scenes, object $scene, string $sceneName = '/'): void
     {
         $parentScenes = explode(',', $scene->path);
         foreach($parentScenes as $parentSceneID)

@@ -1304,4 +1304,32 @@ class testcaseTest
         if(dao::isError()) return dao::getError();
         return $query;
     }
+
+    /**
+     * 测试构建树数组。
+     * Test build tree array.
+     *
+     * @param  array  $treeMenu
+     * @param  array  $scenes
+     * @param  int    $sceneID
+     * @access public
+     * @return string
+     */
+    public function buildTreeArrayTest(array &$treeMenu, array $scenes, int $sceneID): string
+    {
+        $scenes = $this->objectModel->getScenesByList($scenes);
+        $scene  = $this->objectModel->getSceneByID($sceneID);
+
+        global $tester;
+        $branch     = $tester->dao->select('*')->from(TABLE_BRANCH)->where('id')->in($scene->branch)->fetch();
+        $branchName = $branch ? "/{$branch->name}/" : '/';
+
+        $this->objectModel->buildTreeArray($treeMenu, $scenes, $scene, $branchName);
+
+        if(dao::isError()) return dao::getError();
+
+        $return = implode(',', $treeMenu);
+        $return = str_replace("\n", '', $return);
+        return $return;
+    }
 }
