@@ -988,6 +988,32 @@ class testtaskModel extends model
     }
 
     /**
+     * 批量指派一个测试单中的用例。
+     * Batch assign cases in a testtask.
+     *
+     * @param  int    $taskID
+     * @param  string $account
+     * @param  array  $caseIdList
+     * @access public
+     * @return bool
+     */
+    public function batchAssign(int $taskID, string $account, array $caseIdList): bool
+    {
+        if(!$taskID || !$account || !$caseIdList) return false;
+
+        $cases = $this->dao->select('`case`')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->andWhere('`case`')->in($caseIdList)->fetchPairs();
+        if(!$cases) return false;
+
+        $this->dao->update(TABLE_TESTRUN)->set('assignedTo')->eq($account)->where('task')->eq($taskID)->andWhere('`case`')->in($cases)->exec();
+        if(dao::isError()) return false;
+
+        $this->loadModel('action');
+        foreach($cases as $caseID) $this->action->create('case', $caseID, 'assigned', '', $account);
+
+        return !dao::isError();
+    }
+
+    /**
      * Get test runs of a test task.
      *
      * @param  int    $taskID
