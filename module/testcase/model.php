@@ -415,18 +415,16 @@ class testcaseModel extends model
     }
 
     /**
+     * 根据产品获取用例。
      * Get cases by product id.
      *
      * @param  int    $productID
      * @access public
      * @return array
      */
-    public function getByProduct($productID)
+    public function getByProduct(int $productID): array
     {
-        return $this->dao->select('*')->from(TABLE_CASE)
-            ->where('deleted')->eq(0)
-            ->andWhere('product')->eq($productID)
-            ->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq('0')->andWhere('product')->eq($productID)->fetchAll('id');
     }
 
     /**
