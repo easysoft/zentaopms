@@ -9347,9 +9347,9 @@ class upgradeModel extends model
             $metric->desc        = '';
             $metric->definition  = $oldMetric->definition;
             $metric->createdBy   = $oldMetric->createdBy;
-            $metric->createdDate = $oldMetric->createdDate;
+            $metric->createdDate = helper::isZeroDate($oldMetric->createdDate) ? null : $oldMetric->createdDate;
             $metric->editedBy    = $oldMetric->editedBy;
-            $metric->editedDate  = $oldMetric->editedDate;
+            $metric->editedDate  = helper::isZeroDate($oldMetric->editedDate) ? null : $oldMetric->editedDate;
             $metric->builtin     = '1';
             $metric->fromID      = $oldMetric->id;
             $metric->order       = 0;
