@@ -110,6 +110,7 @@ class program extends control
     }
 
     /**
+     * 项目集看板。
      * Program kanban list.
      *
      * @access public
@@ -117,11 +118,10 @@ class program extends control
      */
     public function kanban()
     {
-        $this->app->loadLang('release');
-
-        $this->session->set('projectList', $this->app->getURI(true), 'project');
-        $this->session->set('productPlanList', $this->app->getURI(true), 'product');
-        $this->session->set('releaseList', $this->app->getURI(true), 'product');
+        $uri = $this->app->getURI(true);
+        $this->session->set('projectList',     $uri, 'project');
+        $this->session->set('productPlanList', $uri, 'product');
+        $this->session->set('releaseList',     $uri, 'product');
 
         $this->view->title       = $this->lang->program->kanban->common;
         $this->view->kanbanGroup = array_filter($this->program->getKanbanGroup());
