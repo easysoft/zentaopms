@@ -96,8 +96,9 @@ $lang->metric->featureBar['preview']['system']    = 'System';
 $lang->metric->featureBar['preview']['code']      = 'Code Repository';
 $lang->metric->featureBar['preview']['pipeline']  = 'Pipeline';
 
-$lang->metric->more    = 'More';
-$lang->metric->collect = 'My Collect';
+$lang->metric->more        = 'More';
+$lang->metric->collect     = 'My Collect';
+$lang->metric->collectStar = 'Collect';
 
 $lang->metric->moreSelects = array();
 

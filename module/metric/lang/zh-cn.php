@@ -97,8 +97,9 @@ $lang->metric->featureBar['preview']['system']    = '系统';
 $lang->metric->featureBar['preview']['code']      = '代码库';
 $lang->metric->featureBar['preview']['pipeline']  = '流水线';
 
-$lang->metric->more    = '更多';
-$lang->metric->collect = '我收藏的';
+$lang->metric->more        = '更多';
+$lang->metric->collect     = '我收藏的';
+$lang->metric->collectStar = '收藏';
 
 $lang->metric->moreSelects = array();
 

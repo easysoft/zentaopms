@@ -30,7 +30,7 @@ $fnGenerateSide = function() use($metrics, $current, $viewType, $scope)
 };
 
 $star    = strpos($current->collector, ',' . $app->user->account . ',') !== false ? 'star' : 'star-empty';
-$starBtn = "<a title='{$lang->metric->collect}' onclick='window.collectMetric($current->id)' class='btn btn-link square size-sm metric-collect'>" . html::image("static/svg/{$star}.svg", "class='$star'") . '</a>';
+$starBtn = "<a title='{$lang->metric->collectStar}' onclick='window.collectMetric($current->id)' class='btn btn-link square size-sm metric-collect'>" . html::image("static/svg/{$star}.svg", "class='$star'") . '</a>';
 
 $fnGenerateFilterPanel = function($code, $filterItem) use($lang)
 {
