@@ -79,7 +79,7 @@ detailHeader
 
 $fnGenerateDataDisplay = function() use($resultData, $resultHeader, $lang, $metric)
 {
-    if(empty($resultData)) return null;
+    if(empty($resultData)) $resultData = array($resultData);
     if(count($resultData) == 1 && count((array)$resultData[0]) == 1) return div
         (
             set::className('card-data'),

@@ -324,7 +324,11 @@ class metricZen extends metric
      */
     protected function getViewTableHeader($result)
     {
-        if(empty($result)) return false;
+        if(empty($result)) return array
+        (
+            array('name' => 'value', 'title' => $this->lang->metric->value),
+            array('name' => 'calcTime', 'title' => $this->lang->metric->calcTime, 'width' => 150)
+        );
 
         $fieldList = array_keys((array)current($result));
         $scopeList = array_intersect($fieldList, $this->config->metric->scopeList);
@@ -341,33 +345,6 @@ class metricZen extends metric
     }
 
     /**
-     * 获取度量数据表的表头。
-     * Get header of result table.
-     *
-     * @param  array $result
-     * @access protected
-     * @return array|false
-     */
-    protected function getResultTableHeader($result)
-    {
-        if(empty($result)) return false;
-
-        $header = array();
-        $fieldList = array_keys(current($result));
-        $scopeList = array_keys($this->lang->metric->scopeList);
-        $dateList  = array_keys($this->lang->metric->dateList);
-
-        foreach($fieldList as $field)
-        {
-            if(in_array($field, $scopeList)) $header[] = array('name' => $field, 'title' => $this->lang->metric->scopeList[$field]);
-            if(in_array($field, $dateList))  $header[] = array('name' => $field, 'title' => $this->lang->metric->dateList[$field]);
-            if($field == 'value')            $header[] = array('name' => 'value', 'title' => $this->lang->metric->value);
-        }
-
-        return $header;
-    }
-
-    /**
      * 获取度量数据表的数据。
      * Get data of result table.
      *
@@ -379,7 +356,7 @@ class metricZen extends metric
     protected function getViewTableData($metric, $result)
     {
         $scope = $metric->scope;
-        if(empty($result)) return false;
+        if(empty($result)) return array();
 
         if($metric->scope != 'system') $objectPairs = $this->metric->getPairsByScope($scope);
 
@@ -395,36 +372,6 @@ class metricZen extends metric
             if($scope != 'system') $row->scope = $objectPairs[$record[$scope]];
             $row->value = $record['value'];
             if(isset($record['date'])) $row->calcTime = $record['date'];
-
-            $tableData[] = $row;
-        }
-
-        return $tableData;
-    }
-
-    /**
-     * 获取度量数据表的数据。
-     * Get data of result table.
-     *
-     * @param  object    $metric
-     * @param  array     $result
-     * @access protected
-     * @return array|false
-     */
-    protected function getResultTableData($metric, $result)
-    {
-        $scope = $metric->scope;
-        if(empty($result)) return false;
-
-        if($metric->scope != 'system') $objectPairs = $this->metric->getPairsByScope($scope);
-
-        foreach($result as $record)
-        {
-            $fieldList = array_keys($record);
-
-            $row = new stdclass();
-            if($scope != 'system') $row->$scope = $objectPairs[$record[$scope]];
-            $row->value = $record['value'];
 
             $tableData[] = $row;
         }
