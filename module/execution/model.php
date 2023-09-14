@@ -2087,7 +2087,7 @@ class executionModel extends model
             ->fetchAll('id');
 
         /* Add product name and parent stage name to stage name. */
-        if(isset($project->model) and in_array($project->model, array('waterfall', 'waterfallplus')))
+        if(isset($project->model) and in_array($project->model, array('waterfall', 'waterfallplus', 'research')))
         {
             $executionProducts = array();
             if($project->hasProduct and $project->division)
