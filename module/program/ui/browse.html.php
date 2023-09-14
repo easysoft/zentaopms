@@ -9,6 +9,7 @@ jsVar('projectBudgetLang',   $lang->program->projectBudget);
 jsVar('sumSubBudgetLang',    $lang->program->sumSubBudget);
 jsVar('exceededBudgetLang',  $lang->program->exceededBudget);
 jsVar('remainingBudgetLang', $lang->program->remainingBudget);
+jsVar('langManDay',          $lang->program->manDay);
 
 $this->loadModel('project');
 $cols    = $this->loadModel('datatable')->getSetting('program');
@@ -48,6 +49,27 @@ foreach($programs as $program)
 
     $program->isParent = false;
     if($program->parent > 0 and isset($programs[$program->parent])) $programs[$program->parent]->isParent = true;
+    if($program->parent > 0 and !isset($programs[$program->parent]))
+    {
+        $paths = str_replace(",{$program->parent},{$program->id},", ',', $program->path);
+        $paths = explode(',', trim($paths, ','));
+        $paths = array_reverse($paths);
+        if($paths)
+        {
+            foreach($paths as $i => $parentID)
+            {
+                var_dump(isset($programs[$parentID]));
+                if(isset($programs[$parentID]))
+                {
+                    $program->parent = $parentID;
+                    break;
+                }
+                unset($paths[$i]);
+            }
+            $program->path  = ',' . implode(',', $paths) . ",{$program->id},";
+            $program->grade = count($paths) + 1;
+        }
+    }
 
     /* Set invested hours. */
     if(!isset($program->invested)) $program->invested = 0;
@@ -124,9 +146,6 @@ foreach($data as $programID => $program)
     $program->rawBudget = $this->project->getBudgetWithUnit($program->rawBudget);
 }
 
-jsVar('langManDay', $lang->program->manDay);
-jsVar('summeryTpl', $summary);
-
 featureBar
 (
     set::current($status),
@@ -153,7 +172,10 @@ toolbar
     ])),
 );
 
-$footToolbar = common::hasPriv('project', 'batchEdit') ? array('items' => array(array('text' => $lang->project->edit, 'class' => 'btn batch-btn size-sm secondary', 'data-url' => createLink('project', 'batchEdit')))) : null;
+$footToolbar  = common::hasPriv('project', 'batchEdit') ? array('items' => array(array('text' => $lang->project->edit, 'class' => 'btn batch-btn size-sm secondary', 'data-url' => createLink('project', 'batchEdit')))) : null;
+$dtableFooter = array('checkbox', 'toolbar', array('html' => $summary, 'className' => 'text-dark'), 'flex', 'pager');
+if(empty($data)) $dtableFooter = array('flex', 'pager');
+
 dtable
 (
     set::cols($cols),
@@ -162,7 +184,7 @@ dtable
     set::onRenderCell(jsRaw('window.renderCell')),
     set::canRowCheckable(jsRaw("function(rowID){return this.getRowInfo(rowID).data.type == 'project';}")),
     set::footPager(usePager()),
-    set::footer(jsRaw('function(){return window.footerGenerator.call(this);}')),
+    set::footer($dtableFooter),
     set::customCols(true),
     set::userMap($this->loadModel('user')->getPairs('noletter|pofirst')),
     set::footToolbar($footToolbar),

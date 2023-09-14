@@ -1,10 +1,3 @@
-window.footerGenerator = function()
-{
-    const count     = this.layout.allRows.filter((x) => x.data.type === "product").length;
-    const statistic = summeryTpl.replace('%s', ' ' + count + ' ');
-    return ['checkbox', 'toolbar', {html: statistic, className: "text-dark"}, "flex", "pager"];
-}
-
 window.renderCell = function(result, {col, row})
 {
     if(col.name === 'name')

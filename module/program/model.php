@@ -1415,7 +1415,7 @@ class programModel extends model
      * @access public
      * @return array
      */
-    public function getProjectStats(int $programID = 0, string $browseType = 'undone', int $queryID = 0, string $orderBy = 'id_desc', string $programTitle = '', bool $queryAll = false, object $pager = null): array
+    public function getProjectStats(int $programID = 0, string $browseType = 'undone', int $queryID = 0, string $orderBy = 'id_desc', string $programTitle = '', bool $queryAll = false, object|null $pager = null): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getProjectStats($browseType);
 
