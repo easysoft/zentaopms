@@ -1304,63 +1304,6 @@ class testcaseModel extends model
     }
 
     /**
-     * Build search form.
-     *
-     * @param  int    $productID
-     * @param  array  $products
-     * @param  int    $queryID
-     * @param  string $actionURL
-     * @param  string $projectID
-     * @access public
-     * @return void
-     */
-    public function buildSearchForm($productID, $products, $queryID, $actionURL, $projectID = 0, $moduleID = 0, $branch = 0)
-    {
-        $productList = array();
-        if($this->app->tab == 'project' and empty($productID))
-        {
-            $productList = $products;
-        }
-        else
-        {
-            $productList = array('all' => $this->lang->all);
-            if(isset($products[$productID])) $productList = array($productID => $products[$productID]) + $productList;
-        }
-        $this->config->testcase->search['params']['product']['values'] = array('') + $productList;
-
-        $module = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $branch);
-        $scene  = $this->getSceneMenu($productID, $moduleID, $viewType = 'case', $startSceneID = 0, $branch, 0, true);
-        if(!$productID)
-        {
-            $module = array();
-            foreach($products as $id => $name) $module += $this->loadModel('tree')->getOptionMenu($id, 'case', 0);
-        }
-        $this->config->testcase->search['params']['module']['values'] = $module;
-        $this->config->testcase->search['params']['scene']['values']  = $scene;
-
-        $this->config->testcase->search['params']['lib']['values'] = $this->loadModel('caselib')->getLibraries();
-
-        if($this->session->currentProductType == 'normal')
-        {
-            unset($this->config->testcase->search['fields']['branch']);
-            unset($this->config->testcase->search['params']['branch']);
-        }
-        else
-        {
-            $this->app->loadLang('branch');
-            $product = $this->loadModel('product')->getByID($productID);
-            $this->config->testcase->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
-            $this->config->testcase->search['params']['branch']['values'] = array('' => '', '0' => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($productID, '', $projectID) + array('all' => $this->lang->branch->all);
-        }
-        if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
-        $this->config->testcase->search['actionURL'] = $actionURL;
-        $this->config->testcase->search['queryID']   = $queryID;
-        $this->config->testcase->search['module']    = $this->app->rawModule;
-
-        $this->loadModel('search')->setSearchParams($this->config->testcase->search);
-    }
-
-    /**
      * Print cell data
      *
      * @param  object $col

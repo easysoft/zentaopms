@@ -136,7 +136,7 @@ class testcaseZen extends testcase
         $actionURL      = $this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $searchProducts = $this->product->getPairs('', 0, '', 'all');
 
-        $this->testcase->buildSearchForm($productID, $searchProducts, $queryID, $actionURL, $projectID);
+        $this->buildSearchForm($productID, $searchProducts, $queryID, $actionURL, $projectID);
     }
 
     /**
@@ -2259,7 +2259,7 @@ class testcaseZen extends testcase
         if($this->app->tab == 'execution') $objectID = $case->execution;
 
         unset($this->config->testcase->search['fields']['product']);
-        $this->testcase->buildSearchForm($case->product, $this->products, $queryID, $actionURL, $objectID);
+        $this->buildSearchForm($case->product, $this->products, $queryID, $actionURL, $objectID);
     }
 
     /**
@@ -2288,6 +2288,75 @@ class testcaseZen extends testcase
         }
 
         $this->bug->buildSearchForm($case->product, $this->products, $queryID, $actionURL, $objectID);
+    }
+
+    /**
+     * Build search form.
+     *
+     * @param  int    $productID
+     * @param  array  $products
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @param  string $projectID
+     * @access public
+     * @return void
+     */
+    private function buildSearchForm(int $productID, array $products, int $queryID, string $actionURL, int $projectID = 0, int $moduleID = 0, int|string $branch = 0): void
+    {
+        /* 获取产品列表。*/
+        /* Get productList. */
+        if($this->app->tab == 'project' && !$productID)
+        {
+            $productList = $products;
+        }
+        else
+        {
+            $productList = array();
+            $productList['all'] = $this->lang->all;
+            if(isset($products[$productID])) $productList[$productID] = $products[$productID];
+        }
+
+        /* 获取模块列表。*/
+        /* Get moduleList. */
+        if($productID)
+        {
+            $modules = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $branch);
+        }
+        else
+        {
+            $modules = array();
+            foreach($products as $id => $name) $modules += $this->loadModel('tree')->getOptionMenu($id, 'case', 0);
+        }
+
+        $this->config->testcase->search['params']['product']['values'] = array('') + $productList;
+        $this->config->testcase->search['params']['module']['values']  = $modules;
+        $this->config->testcase->search['params']['scene']['values']   = $this->testcase->getSceneMenu($productID, $moduleID, $viewType = 'case', $startSceneID = 0, $branch, 0, true);
+        $this->config->testcase->search['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
+
+        if($this->session->currentProductType == 'normal')
+        {
+            unset($this->config->testcase->search['fields']['branch']);
+            unset($this->config->testcase->search['params']['branch']);
+        }
+        else
+        {
+            $this->app->loadLang('branch');
+            $product = $this->loadModel('product')->getByID($productID);
+
+            $branches = $this->loadModel('branch')->getPairs($productID, '', $projectID);
+            $branches = array('') + array('0' => $this->lang->branch->main) + $branches + array('all' => $this->lang->branch->all);
+
+            $this->config->testcase->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+            $this->config->testcase->search['params']['branch']['values'] = $branches;
+        }
+
+        if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
+
+        $this->config->testcase->search['actionURL'] = $actionURL;
+        $this->config->testcase->search['queryID']   = $queryID;
+        $this->config->testcase->search['module']    = $this->app->rawModule;
+
+        $this->loadModel('search')->setSearchParams($this->config->testcase->search);
     }
 
     /**
