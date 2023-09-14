@@ -143,7 +143,7 @@ class productZen extends product
      */
     private function setShowErrorNoneMenu4QA(string $activeMenu)
     {
-        $this->loadModel('qa')->setMenu(array(), 0);
+        $this->loadModel('qa')->setMenu();
         $this->view->moduleName = 'qa';
         $this->app->rawModule   = $activeMenu;
 

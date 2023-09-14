@@ -225,8 +225,7 @@ class story extends control
         }
         elseif($this->app->tab == 'qa')
         {
-            $products = $this->product->getProductPairsByProject(0, 'noclosed');
-            $this->loadModel('qa')->setMenu($products, $story->product);
+            $this->loadModel('qa')->setMenu($story->product);
         }
         else
         {

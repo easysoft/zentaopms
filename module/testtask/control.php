@@ -88,7 +88,7 @@ class testtask extends control
         $products  = $this->testtaskZen->getProducts();
         $productID = $this->loadModel('product')->saveState($productID, $products);
         $branch    = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
-        $this->loadModel('qa')->setMenu($products, $productID, $branch, $type);
+        $this->loadModel('qa')->setMenu($productID, $branch);
         $this->session->set('branch', $branch, 'qa');
 
         /* Load pager. */
@@ -179,7 +179,7 @@ class testtask extends control
         }
         else
         {
-            $this->loadModel('qa')->setMenu($products, $productID);
+            $this->loadModel('qa')->setMenu($productID);
             $this->app->rawModule = 'testcase';
         }
 
@@ -272,7 +272,7 @@ class testtask extends control
         $productID = $this->loadModel('product')->saveState($productID, $products);
         if($this->app->tab == 'project')   $this->loadModel('project')->setMenu($projectID);
         if($this->app->tab == 'execution') $this->loadModel('execution')->setMenu($executionID);
-        if($this->app->tab == 'qa')        $this->loadModel('qa')->setMenu($products, $productID);
+        if($this->app->tab == 'qa')        $this->loadModel('qa')->setMenu($productID);
 
         $this->view->title       = $products[$productID] . $this->lang->colon . $this->lang->testtask->create;
         $this->view->product     = $this->product->getByID($productID);
@@ -324,7 +324,7 @@ class testtask extends control
             $this->loadModel('execution')->setMenu($testtask->execution);
             $this->lang->modulePageNav = $this->testtask->select($productID, $testtaskID, 'execution', $testtask->execution);
         }
-        if($this->app->tab == 'qa') $this->testtask->setMenu($products, $productID, $testtask->branch, $testtaskID);
+        if($this->app->tab == 'qa') $this->qa->setMenu($productID, $testtask->branch);
 
         $this->executeHooks($testtaskID); // 执行工作流配置的扩展动作。
 
@@ -362,7 +362,7 @@ class testtask extends control
         }
         else
         {
-            $this->loadModel('qa')->setMenu($products, $productID);
+            $this->loadModel('qa')->setMenu($productID);
             $this->app->rawModule = 'testcase';
         }
 
@@ -451,7 +451,7 @@ class testtask extends control
         }
         else
         {
-            $this->testtask->setMenu($products, $productID, $testtask->branch, $testtaskID);
+            $this->qa->setMenu($productID, $testtask->branch);
         }
 
         /* set cookie. */
@@ -580,7 +580,7 @@ class testtask extends control
         }
         else
         {
-            $this->testtask->setMenu($this->products, $productID, $branchID, $taskID);
+            $this->qa->setMenu($productID, $branchID);
         }
         unset($this->lang->testtask->report->charts['bugStageGroups']);
         unset($this->lang->testtask->report->charts['bugHandleGroups']);
@@ -644,7 +644,7 @@ class testtask extends control
         }
         else
         {
-            $this->testtask->setMenu($this->products, $productID, $task->branch, $taskID);
+            $this->qa->setMenu($productID, $task->branch);
         }
 
         /* Determines whether an object is editable. */
@@ -774,7 +774,7 @@ class testtask extends control
         $productID = $this->product->saveState($testtask->product, $this->products);
 
         /* Set menu. */
-        $this->loadModel('qa')->setMenu($this->products, $productID, $testtask->branch, $taskID);
+        $this->loadModel('qa')->setMenu($productID, $testtask->branch);
 
         $this->view->title    = $testtask->name . $this->lang->colon . $this->lang->testtask->start;
         $this->view->actions  = $this->loadModel('action')->getList('testtask', $taskID);
@@ -810,7 +810,7 @@ class testtask extends control
         $productID = $this->product->saveState((int)$testtask->product, $this->products);
 
         /* Set menu. */
-        $this->loadModel('qa')->setMenu($this->products, $productID, (string)$testtask->branch, $taskID);
+        $this->loadModel('qa')->setMenu($productID, $testtask->branch);
 
         $this->view->title        = $testtask->name . $this->lang->colon . $this->lang->close;
         $this->view->actions      = $this->loadModel('action')->getList('testtask', $taskID);
@@ -847,7 +847,7 @@ class testtask extends control
         $productID = $this->product->saveState($testtask->product, $this->products);
 
         /* Set menu. */
-        $this->loadModel('qa')->setMenu($this->products, $productID, $testtask->branch, $taskID);
+        $this->loadModel('qa')->setMenu($productID, $testtask->branch);
 
         $this->view->title    = $testtask->name . $this->lang->colon . $this->lang->testtask->block;
         $this->view->actions  = $this->loadModel('action')->getList('testtask', $taskID);
@@ -883,7 +883,7 @@ class testtask extends control
         $productID = $this->product->saveState($testtask->product, $this->products);
 
         /* Set menu. */
-        $this->loadModel('qa')->setMenu($this->products, $productID, $testtask->branch, $taskID);
+        $this->loadModel('qa')->setMenu($productID, $testtask->branch);
 
         $this->view->title    = $testtask->name . $this->lang->colon . $this->lang->testtask->activate;
         $this->view->actions  = $this->loadModel('action')->getList('testtask', $taskID);
@@ -963,7 +963,7 @@ class testtask extends control
         }
         else
         {
-            $this->testtask->setMenu($this->products, $productID, $task->branch, $taskID);
+            $this->qa->setMenu($productID, $task->branch);
         }
 
         /* Load pager. */
@@ -1212,7 +1212,7 @@ class testtask extends control
             }
             else
             {
-                $this->loadModel('qa')->setMenu($this->products, $productID, $taskID);
+                $this->loadModel('qa')->setMenu($productID);
             }
 
             $cases = $this->dao->select('*')->from(TABLE_CASE)->where('id')->in($caseIdList)->fetchAll('id');
@@ -1383,7 +1383,7 @@ class testtask extends control
         }
         else
         {
-            $this->loadModel('qa')->setMenu($this->products, $productID);
+            $this->loadModel('qa')->setMenu($productID);
             $this->app->rawModule = 'testcase';
         }
 

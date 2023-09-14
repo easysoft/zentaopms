@@ -187,7 +187,7 @@ class testcase extends control
             $this->loadModel('qa');
             $this->app->rawModule = 'testcase';
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
-            $this->qa->setMenu($products, $productID, $branchID);
+            $this->qa->setMenu($productID, $branchID);
         }
 
         /* 设置 分页。*/

@@ -92,7 +92,7 @@ class testcaseZen extends testcase
         }
         else
         {
-            $this->qa->setMenu($this->products, $productID, $branch, $browseType);
+            $this->qa->setMenu($productID, $branch);
         }
     }
 

@@ -77,7 +77,7 @@ class testsuite extends control
         /* 设置1.5级导航。 */
         /* Set level 1.5 navigation */
         $productID = $this->product->saveState($productID, $this->products);
-        $this->loadModel('qa')->setMenu($this->products, $productID);
+        $this->loadModel('qa')->setMenu($productID);
 
         /* 初始化分页。 */
         /* Load pager. */
@@ -146,7 +146,7 @@ class testsuite extends control
         /* 设置1.5级导航。 */
         /* Set level 1.5 navigation */
         $productID  = $this->product->saveState($productID, $this->products);
-        $this->loadModel('qa')->setMenu($this->products, $productID);
+        $this->loadModel('qa')->setMenu($productID);
 
         $this->view->title     = $this->products[$productID] . $this->lang->colon . $this->lang->testsuite->create;
         $this->view->productID = $productID;
@@ -174,7 +174,7 @@ class testsuite extends control
         /* 设置1.5级导航。 */
         /* Set level 1.5 navigation */
         $productID = $this->product->saveState($suite->product, $this->products);
-        $this->loadModel('qa')->setMenu($this->products, $productID);
+        $this->loadModel('qa')->setMenu($productID);
 
         /* 当前URI存入session。 */
         /* Sava the uri of current page into session. */
@@ -241,7 +241,7 @@ class testsuite extends control
         /* 设置1.5级导航。 */
         /* Set level 1.5 navigation */
         $productID = $this->product->saveState($suite->product, $this->products);
-        $this->loadModel('qa')->setMenu($this->products, $productID);
+        $this->loadModel('qa')->setMenu($productID);
 
         $this->view->title = $this->products[$productID] . $this->lang->colon . $this->lang->testsuite->edit;
         $this->view->suite = $suite;
@@ -302,7 +302,7 @@ class testsuite extends control
         /* 设置1.5级导航。 */
         /* Set level 1.5 navigation */
         $productID = $this->product->saveState($suite->product, $this->products);
-        $this->loadModel('qa')->setMenu($this->products, $productID);
+        $this->loadModel('qa')->setMenu($productID);
 
         /* 初始化分页。 */
         /* Load pager. */

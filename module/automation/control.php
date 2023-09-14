@@ -44,7 +44,7 @@ class automation extends control
         /* Set menu. */
         $productID = $this->product->saveState($productID, $this->products);
         if(empty($branch)) $branch = (int)$this->cookie->preBranch;
-        $this->loadModel('qa')->setMenu($this->products, $productID, $branch);
+        $this->loadModel('qa')->setMenu($productID, $branch);
 
         $this->view->title      = $this->lang->automation->common;
         $this->display();

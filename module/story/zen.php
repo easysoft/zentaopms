@@ -158,7 +158,7 @@ class storyZen extends story
 
         if($this->app->tab == 'qa')
         {
-            $this->loadModel('qa')->setMenu('', $productID);
+            $this->loadModel('qa')->setMenu($productID);
             return;
         }
 

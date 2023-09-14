@@ -110,7 +110,7 @@ class bug extends control
 
         /* 设置1.5级导航相关信息。*/
         /* Set the 1.5 nav. */
-        $this->qa->setMenu($this->products, $productID, $branch);
+        $this->qa->setMenu($productID, $branch);
 
         /* 设置排序字段。*/
         /* Set the order field. */
@@ -317,7 +317,7 @@ class bug extends control
             return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => true));
         }
 
-        $this->qa->setMenu($this->products, $oldBug->product, $oldBug->branch);
+        $this->qa->setMenu($oldBug->product, $oldBug->branch);
 
         /* 获取指派给的用户列表。*/
         /* Get users that can be assigned to. */
@@ -375,7 +375,7 @@ class bug extends control
             return $this->bugZen->responseAfterOperate($bugID, array(), '', zget($kanbanData, 'regionID', 0), $message);
         }
 
-        $this->qa->setMenu($this->products, $oldBug->product, $oldBug->branch);
+        $this->qa->setMenu($oldBug->product, $oldBug->branch);
 
         /* 展示相关变量。 */
         /* Show the variables associated. */
@@ -443,7 +443,7 @@ class bug extends control
 
         /* 设置菜单。 */
         /* Set menu. */
-        $this->qa->setMenu($this->products, $oldBug->product, $oldBug->branch);
+        $this->qa->setMenu($oldBug->product, $oldBug->branch);
 
         /* 展示相关变量。 */
         /* Show the variables associated. */
@@ -503,7 +503,7 @@ class bug extends control
         }
 
         $productID = $oldBug->product;
-        $this->qa->setMenu($this->products, $productID, $oldBug->branch);
+        $this->qa->setMenu($productID, $oldBug->branch);
 
         /* 展示相关变量。 */
         /* Show the variables associated. */
@@ -674,7 +674,7 @@ class bug extends control
         $project = $this->loadModel('project')->getByShadowProduct($productID);
         if(!empty($project) && !$project->multiple) unset($this->lang->bug->report->charts['bugsPerExecution']);
 
-        $this->qa->setMenu($this->products, $productID, $branchID);
+        $this->qa->setMenu($productID, $branchID);
 
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common . $this->lang->colon . $this->lang->bug->reportChart;
         $this->view->productID     = $productID;
@@ -709,7 +709,7 @@ class bug extends control
         /* Check privilege of bug 所属执行的权限。*/
         $this->bugZen->checkBugExecutionPriv($bug);
 
-        $this->qa->setMenu($this->products, $bug->product, $bug->branch);
+        $this->qa->setMenu($bug->product, $bug->branch);
 
         $this->bugZen->buildSearchFormForLinkBugs($bug, $excludeBugs, $queryID);
 
@@ -782,7 +782,7 @@ class bug extends control
         /* 设置当前分支，并且设置导航。*/
         /* Get branch and set menu. */
         if($branch === '') $branch = (int)$this->cookie->preBranch;
-        $this->qa->setMenu($this->products, $productID, $branch);
+        $this->qa->setMenu($productID, $branch);
 
         /* 展示批量创建bug的相关变量。*/
         /* Show the variables associated with the batch creation bugs. */
@@ -1262,7 +1262,7 @@ class bug extends control
         }
 
 
-        $this->qa->setMenu($this->products, $productID, $branch);
+        $this->qa->setMenu($productID, $branch);
 
         /* 展示关联的变量。 */
         /* Show the variables associated. */

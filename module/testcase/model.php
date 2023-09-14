@@ -27,7 +27,7 @@ class testcaseModel extends model
      */
     public function setMenu($products, $productID, $branch = 0, $moduleID = 0, $suiteID = 0, $orderBy = 'id_desc')
     {
-        $this->loadModel('qa')->setMenu($products, $productID, $branch, $moduleID, 'case');
+        $this->loadModel('qa')->setMenu($productID, $branch);
     }
 
     /**

@@ -830,7 +830,7 @@ class bugZen extends bug
         }
         else
         {
-            $this->qa->setMenu($this->products, $productID, $branch);
+            $this->qa->setMenu($productID, $branch);
         }
 
         $this->view->users = $this->user->getPairs('devfirst|noclosed|nodeleted');
@@ -851,7 +851,7 @@ class bugZen extends bug
     {
         if($this->app->tab == 'project')   $this->project->setMenu($bug->project);
         if($this->app->tab == 'execution') $this->execution->setMenu($bug->execution);
-        if($this->app->tab == 'qa')        $this->qa->setMenu($this->products, $bug->product, $bug->branch);
+        if($this->app->tab == 'qa')        $this->qa->setMenu($bug->product, $bug->branch);
         if($this->app->tab == 'devops')
         {
             session_write_close();
@@ -876,7 +876,7 @@ class bugZen extends bug
     {
         if($this->app->tab == 'project')   $this->loadModel('project')->setMenu($bug->project);
         if($this->app->tab == 'execution') $this->loadModel('execution')->setMenu($bug->execution);
-        if($this->app->tab == 'qa')        $this->qa->setMenu($this->products, $bug->product, $bug->branch);
+        if($this->app->tab == 'qa')        $this->qa->setMenu($bug->product, $bug->branch);
 
         if($this->app->tab == 'devops')
         {
@@ -1538,7 +1538,7 @@ class bugZen extends bug
 
         if($productID)
         {
-            $this->qa->setMenu($this->products, $productID, $branch);
+            $this->qa->setMenu($productID, $branch);
 
             $productIdList = array($productID => $productID);
         }

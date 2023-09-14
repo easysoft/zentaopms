@@ -19,7 +19,7 @@ class qaModel extends model
      * @access public
      * @return void
      */
-    public function setMenu(int $productID, int|string $branch = '')
+    public function setMenu(int $productID = 0, int|string $branch = '')
     {
         if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !commonModel::isTutorialMode())
         {
