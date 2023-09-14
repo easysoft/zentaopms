@@ -2,11 +2,11 @@
 $lang->metric->common        = "度量项";
 $lang->metric->name          = "名称";
 $lang->metric->stage         = "阶段";
-$lang->metric->scope         = "度量范围";
-$lang->metric->object        = "度量对象";
-$lang->metric->purpose       = "度量目的";
-$lang->metric->unit          = "度量单位";
-$lang->metric->code          = "度量项代号";
+$lang->metric->scope         = "范围";
+$lang->metric->object        = "对象";
+$lang->metric->purpose       = "目的";
+$lang->metric->unit          = "单位";
+$lang->metric->code          = "代号";
 $lang->metric->desc          = "描述";
 $lang->metric->formula       = "计算规则";
 $lang->metric->when          = "收集方式";
