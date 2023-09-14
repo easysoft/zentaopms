@@ -13,6 +13,8 @@ namespace zin;
 jsVar('confirmDelist', $lang->metric->confirmDelist);
 jsVar('upgradeTip', $lang->metric->upgradeTip);
 jsVar('scope', $scope);
+jsVar('metricSql', $lang->metric->oldMetric->sql);
+jsVar('metricTip', $lang->metric->oldMetric->tip);
 
 $fnGenerateScopeMenu = function() use ($scope, $scopeText, $scopeList)
 {
@@ -80,7 +82,7 @@ dtable
     setID('metricList'),
     set::cols($this->config->metric->dtable->definition->fieldList),
     set::data($tableData),
-    set::onRenderCell(jsRaw('window.onRenderCell')),
+    set::onRenderCell(jsRaw('window.rendMetricCell')),
     set::footPager(usePager()),
 );
 

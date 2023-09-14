@@ -51,3 +51,19 @@ window.confirmEdit = function(metricID, isOldMetric)
         $(triggerClass).trigger('click');
     }
 }
+
+window.rendMetricCell = function(result, {col, row})
+{
+    if(col.name == 'name' && row.data.isOldMetric)
+    {
+        var metricHtml = '<div class="dtable-name-flex">';
+        metricHtml += '<div><a href="' + $.createLink('metric', 'view', 'metricID=' + row.data.id) + '">' + row.data.name + '</a></div>';
+        metricHtml += '<div><span class="label light-pale" data-toggle="tooltip" data-title="' + metricTip + '" data-placement="bottom" data-type="white" data-class-name="text-gray border border-light">' + metricSql + '</span></div>';
+        metricHtml += '</div>';
+
+        result[0] = {html: metricHtml};
+        return result;
+    }
+    return result;
+}
+

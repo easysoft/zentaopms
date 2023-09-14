@@ -13,3 +13,5 @@
 .btn-divider {background-color: var(--color-current); height: 1rem; margin-left: 20px; margin-right: 20px; opacity: .3; width: 1px;}
 
 .clear-gap {gap: 0 !important;}
+.dtable-cell-html {width: inherit;}
+.dtable-name-flex {display: flex; justify-content: space-between;}

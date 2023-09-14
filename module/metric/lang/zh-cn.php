@@ -101,6 +101,10 @@ $lang->metric->more        = '更多';
 $lang->metric->collect     = '我收藏的';
 $lang->metric->collectStar = '收藏';
 
+$lang->metric->oldMetric      = new stdclass();
+$lang->metric->oldMetric->sql = 'SQL';
+$lang->metric->oldMetric->tip = '这是旧版度量项的实现方式';
+
 $lang->metric->moreSelects = array();
 
 $lang->metric->unitList = array();

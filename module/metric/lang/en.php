@@ -100,6 +100,10 @@ $lang->metric->more        = 'More';
 $lang->metric->collect     = 'My Collect';
 $lang->metric->collectStar = 'Collect';
 
+$lang->metric->oldMetric      = new stdclass();
+$lang->metric->oldMetric->sql = 'SQL';
+$lang->metric->oldMetric->tip = 'This is the implementation of the old metric';
+
 $lang->metric->moreSelects = array();
 
 $lang->metric->unitList = array();
