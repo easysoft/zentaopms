@@ -530,29 +530,21 @@ class program extends control
     }
 
     /**
+     * 批量移除项目集下的关系人。
      * Batch unlink program stakeholders.
      *
      * @param  int    $programID
-     * @param  string $stakeholderIDList
-     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function batchUnlinkStakeholders($programID = 0, $stakeholderIDList = '', $confirm = 'no')
+    public function batchUnlinkStakeholders(int $programID = 0)
     {
-        $stakeholderIDList = $stakeholderIDList ? $stakeholderIDList : implode(',', $this->post->stakeholderIDList);
+        if(!$this->post->stakeholderIdList) return $this->send(array('load' => true));
 
-        if($confirm == 'no')
-        {
-            $actionUrl = $this->inlink('batchUnlinkStakeholders', "programID=$programID&stakeholderIDList=$stakeholderIDList&confirm=yes");
-            return $this->send(array('result' => 'success', 'message' => $this->lang->program->confirmBatchUnlink, 'callback' => "unlinkStakeholderConfirm('{$this->lang->program->confirmBatchUnlink}', '$actionUrl')"));
-        }
+        $this->program->batchUnlinkStakeholders($programID, $this->post->stakeholderIdList);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        $account = $this->dao->select('user')->from(TABLE_STAKEHOLDER)->where('id')->in($stakeholderIDList)->fetchPairs('user');
-        $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('id')->in($stakeholderIDList)->exec();
-
-        $this->program->updateChildUserView($programID, $account);
-        return $this->send(array('result' => 'success', 'load' => true));
+        return $this->sendSuccess(array('load' => true));
     }
 
     /**

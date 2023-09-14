@@ -1631,4 +1631,24 @@ class programModel extends model
         $this->dao->update(TABLE_PROGRAM)->set('`order`')->eq($order)->where('id')->eq($programID)->exec();
         return !dao::isError();
     }
+
+    /**
+     * 批量移除项目集下的关系人。
+     * Batch unlink program stakeholders.
+     *
+     * @param  int    $programID
+     * @param  array  $stakeholderIdList
+     * @access public
+     * @return bool
+     */
+    public function batchUnlinkStakeholders(int $programID, array $stakeholderIdList): bool
+    {
+        $accountList = $this->dao->select('user')->from(TABLE_STAKEHOLDER)->where('id')->in($stakeholderIdList)->fetchPairs('user');
+        $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('id')->in($stakeholderIdList)->exec();
+
+        if(dao::isError()) return false;
+
+        $this->updateChildUserView($programID, $accountList);
+        return !dao::isError();
+    }
 }
