@@ -301,23 +301,25 @@ class program extends control
     }
 
     /**
+     * 激活一个项目集。
      * Activate a program.
      *
      * @param  int     $programID
      * @access public
      * @return void
      */
-    public function activate($programID = 0)
+    public function activate(int $programID = 0)
     {
         $this->loadModel('action');
         $program = $this->program->getByID($programID);
 
         if(!empty($_POST))
         {
-            $changes = $this->program->activate($programID);
+            $programData = form::data()->get();
+            $changes     = $this->program->activate($programData, $program);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if($this->post->comment != '' or !empty($changes))
+            if($this->post->comment != '' || !empty($changes))
             {
                 $actionID = $this->action->create('program', $programID, 'Activated', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);

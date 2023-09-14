@@ -992,32 +992,29 @@ class programModel extends model
     }
 
     /**
+     * 激活一个项目集。
      * Activate a program.
      *
-     * @param  int $programID
+     * @param  object      $program
+     * @param  object      $oldProgram
      * @access public
      * @return array|false
      */
-    public function activate(int $programID) :array|false
+    public function activate(object $program, $oldProgram) :array|false
     {
-        $oldProgram = $this->getByID($programID);
-        $now        = helper::now();
+        if($program->begin > $program->end)
+        {
+            dao::$errors['end'] = sprintf($this->lang->error->ge, $this->lang->program->end, $this->lang->program->begin);
+            return false;
+        }
 
-        $program = fixer::input('post')
-            ->setDefault('realEnd','')
-            ->setDefault('status', 'doing')
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
-            ->setIF(!helper::isZeroDate($oldProgram->realBegan), 'realBegan', helper::today())
-            ->stripTags($this->config->program->editor->activate['id'], $this->config->allowedTags)
-            ->remove('comment')
-            ->get();
-
+        if(!helper::isZeroDate($oldProgram->realBegan)) $program->realBegan = helper::today();
         $program = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->activate['id'], $this->post->uid);
+
         $this->dao->update(TABLE_PROJECT)->data($program)
             ->autoCheck()
             ->checkFlow()
-            ->where('id')->eq((int)$programID)
+            ->where('id')->eq($oldProgram->id)
             ->exec();
 
         if(dao::isError()) return false;
