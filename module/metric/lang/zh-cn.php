@@ -61,6 +61,7 @@ $lang->metric->maxSelect          = '最多选择%s个度量项';
 $lang->metric->maxSelectTip       = '可跨范围勾选多个度量项，最多选择%s个。';
 $lang->metric->upgradeTip         = '此度量项为旧版本支持的度量项，若想进行编辑，请根据新版本度量项的配置规则进行重新配置。同时请注意，新版本度量项不再支持SQL编辑器，暂时无法被报表模板引用。请确认是否需要进行编辑操作。';
 $lang->metric->saveSqlMeasSuccess = "查询成功，测试结果：%s";
+$lang->metric->monthText          = "%s号";
 
 $lang->metric->noDesc    = "暂无描述";
 $lang->metric->noFormula = "暂无计算规则";
@@ -202,6 +203,15 @@ $lang->metric->verifyList = array();
 $lang->metric->verifyList['checkCalcExists']  = '检查度量项是否存在';
 $lang->metric->verifyList['checkCalcClass']   = '检查度量项类名是否正确';
 $lang->metric->verifyList['checkCalcMethods'] = '检查度量项是否定义了必须的方法';
+
+$lang->metric->weekList = array();
+$lang->metric->weekList['1'] = '星期一';
+$lang->metric->weekList['2'] = '星期二';
+$lang->metric->weekList['3'] = '星期三';
+$lang->metric->weekList['4'] = '星期四';
+$lang->metric->weekList['5'] = '星期五';
+$lang->metric->weekList['6'] = '星期六';
+$lang->metric->weekList['0'] = '星期日';
 
 $lang->metric->old = new stdclass();
 

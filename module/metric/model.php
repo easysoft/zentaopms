@@ -182,9 +182,12 @@ class metricModel extends model
         {
             $oldMetric = $this->getOldMetricByID($metric->fromID);
 
-            $metric->sql     = $oldMetric->configure;
-            $metric->params  = $oldMetric->params;
-            $metric->oldUnit = $oldMetric->unit;
+            $metric->sql         = $oldMetric->configure;
+            $metric->params      = $oldMetric->params;
+            $metric->oldUnit     = $oldMetric->unit;
+            $metric->collectType = $oldMetric->collectType;
+            $metric->collectConf = $oldMetric->collectConf;
+            $metric->execTime    = $oldMetric->execTime;
         }
 
         return $metric;
@@ -1184,5 +1187,32 @@ class metricModel extends model
         }
 
         return $metricList;
+    }
+
+    /**
+     * 获取定时设置的标签。
+     * Get label of collect configure.
+     *
+     * @param  object $metric
+     * @access public
+     * @return string
+     */
+    public function getCollectConfText($metric)
+    {
+        $collectConf = $metric->collectConf;
+        $dateType    = $this->lang->metric->dateList[$collectConf->type];
+        $dateConf    = $collectConf->type == 'week' ? $collectConf->week : $collectConf->month;
+
+        $dateListText = '';
+        if($collectConf->type == 'week')
+        {
+            foreach(explode(',', $dateConf) as $date) $dateListText .= $this->lang->metric->weekList[$date] . ',';
+        }
+        else
+        {
+            foreach(explode(',', $dateConf) as $date) $dateListText .= sprintf($this->lang->metric->monthText, $date) . ',';
+        }
+
+        return sprintf($this->lang->metric->collectConfText, $dateType, rtrim($dateListText, ','), $metric->execTime);
     }
 }

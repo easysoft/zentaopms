@@ -338,7 +338,7 @@ class metric extends control
         $this->view->actions        = $this->loadModel('action')->getList('metric', $metricID);
         $this->view->users          = $this->loadModel('user')->getPairs('noletter');
         $this->view->preAndNext     = $this->loadModel('common')->getPreAndNextObject('metric', $metricID);
-        if(!$this->metric->isOldMetric($metric) && $metric->fromID !== 0) $this->view->oldMetricInfo = $this->metricZen->getOldMetricInfo($metric->fromID);
+        if($metric->fromID !== 0) $this->view->oldMetricInfo = $this->metricZen->getOldMetricInfo($metric->fromID);
 
         if($isOldMetric)
         {
@@ -424,7 +424,7 @@ class metric extends control
     {
         $metric = $this->metric->getByID($metricID);
 
-        //$this->metric->moveCalcFile($metric);
+        $this->metric->moveCalcFile($metric);
 
         $publishedMetric = new stdclass();
         $publishedMetric->id              = $metricID;

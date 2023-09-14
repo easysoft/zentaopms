@@ -241,18 +241,24 @@ class metricZen extends metric
     {
         extract((array)$view);
 
-        $unit = $this->metric->isOldMetric($metric) ? $metric->oldUnit : zget($this->lang->metric->unitList, $metric->unit);
+        $isOldMetric = $this->metric->isOldMetric($metric);
+        $unit = $isOldMetric ? $metric->oldUnit : zget($this->lang->metric->unitList, $metric->unit);
 
         $legendBasic = array();
-        if(strpos($fields, 'scope') !== false)      $legendBasic['scope']      = array('name' => $this->lang->metric->scope, 'text' => zget($this->lang->metric->scopeList, $metric->scope));
-        if(strpos($fields, 'object') !== false)     $legendBasic['object']     = array('name' => $this->lang->metric->object, 'text' => zget($this->lang->metric->objectList, $metric->object));
-        if(strpos($fields, 'purpose') !== false)    $legendBasic['purpose']    = array('name' => $this->lang->metric->purpose, 'text' => zget($this->lang->metric->purposeList, $metric->purpose));
-        if(strpos($fields, 'name') !== false)       $legendBasic['name']       = array('name' => $this->lang->metric->name, 'text' => $metric->name);
-        if(strpos($fields, 'code') !== false)       $legendBasic['code']       = array('name' => $this->lang->metric->code, 'text' => $metric->code);
-        if(strpos($fields, 'unit') !== false)       $legendBasic['unit']       = array('name' => $this->lang->metric->unit, 'text' => $unit);
-        if(strpos($fields, 'desc') !== false)       $legendBasic['desc']       = array('name' => $this->lang->metric->desc, 'text' => $metric->desc);
-        if(strpos($fields, 'definition') !== false) $legendBasic['definition'] = array('name' => $this->lang->metric->definition, 'text' => $metric->definition);
-        if(strpos($fields, 'stage') !== false)      $legendBasic['stage']      = array('name' => $this->lang->metric->stage, 'text' => zget($this->lang->metric->stageList, $metric->stage));
+        if(strpos($fields, 'scope') !== false)      $legendBasic['scope']       = array('name' => $this->lang->metric->scope, 'text' => zget($this->lang->metric->scopeList, $metric->scope));
+        if(strpos($fields, 'object') !== false)     $legendBasic['object']      = array('name' => $this->lang->metric->object, 'text' => zget($this->lang->metric->objectList, $metric->object));
+        if(strpos($fields, 'purpose') !== false)    $legendBasic['purpose']     = array('name' => $this->lang->metric->purpose, 'text' => zget($this->lang->metric->purposeList, $metric->purpose));
+        if(strpos($fields, 'name') !== false)       $legendBasic['name']        = array('name' => $this->lang->metric->name, 'text' => $metric->name);
+        if(strpos($fields, 'code') !== false)       $legendBasic['code']        = array('name' => $this->lang->metric->code, 'text' => $metric->code);
+        if(strpos($fields, 'unit') !== false)       $legendBasic['unit']        = array('name' => $this->lang->metric->unit, 'text' => $unit);
+        if($isOldMetric)
+        {
+            $legendBasic['collectType'] = array('name' => $this->lang->metric->collectType, 'text' => zget($this->lang->metric->old->collectTypeList, $metric->collectType));
+            $legendBasic['collectConf'] = array('name' => $this->lang->metric->collectConf, 'text' => $this->metric->getCollectConfText($metric));
+        }
+        if(strpos($fields, 'desc') !== false)       $legendBasic['desc']        = array('name' => $this->lang->metric->desc, 'text' => $metric->desc);
+        if(strpos($fields, 'definition') !== false) $legendBasic['definition']  = array('name' => $this->lang->metric->definition, 'text' => $metric->definition);
+        if(strpos($fields, 'stage') !== false)      $legendBasic['stage']       = array('name' => $this->lang->metric->stage, 'text' => zget($this->lang->metric->stageList, $metric->stage));
 
         return $legendBasic;
     }
@@ -295,14 +301,6 @@ class metricZen extends metric
     {
         $oldMetric = $this->metric->getOldMetricByID($oldMetricID);
 
-        $collectConf = $oldMetric->collectConf;
-        $dateType    = $this->lang->metric->dateList[$collectConf->type];
-        $dateConf    = $collectConf->type == 'week' ? $collectConf->week : $collectConf->month;
-
-        if($collectConf->type == 'week') $dateConf = $this->processWeekConf($dateConf);
-
-        $collectConfText = sprintf($this->lang->metric->collectConfText, $dateType, $dateConf, $oldMetric->execTime);
-
         $oldMetricInfo = array();
         $oldMetricInfo['scope']       = array('name' => $this->lang->metric->scope, 'text' => zget($this->lang->metric->old->scopeList, $oldMetric->scope));
         $oldMetricInfo['object']      = array('name' => $this->lang->metric->object, 'text' => zget($this->lang->metric->old->objectList, $oldMetric->object));
@@ -310,7 +308,7 @@ class metricZen extends metric
         $oldMetricInfo['code']        = array('name' => $this->lang->metric->code, 'text' => $oldMetric->code);
         $oldMetricInfo['unit']        = array('name' => $this->lang->metric->unit, 'text' => $oldMetric->unit);
         $oldMetricInfo['collectType'] = array('name' => $this->lang->metric->collectType, 'text' => zget($this->lang->metric->old->collectTypeList, $oldMetric->collectType));
-        $oldMetricInfo['collectConf'] = array('name' => $this->lang->metric->collectConf, 'text' => $collectConfText);
+        $oldMetricInfo['collectConf'] = array('name' => $this->lang->metric->collectConf, 'text' => $this->metric->getCollectConfText($oldMetric));
         $oldMetricInfo['definition']  = array('name' => $this->lang->metric->declaration, 'text' => $oldMetric->definition);
         $oldMetricInfo['sql']         = array('name' => $this->lang->metric->sqlStatement, 'text' => $oldMetric->configure);
 
