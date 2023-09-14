@@ -45,14 +45,15 @@ class programModel extends model
     }
 
     /**
-     * Get program pairs.
+     * 获取项目集id:name的键值对。
+     * Gets the  pair for the program id:name
      *
      * @param  bool   $isQueryAll
      * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getPairs($isQueryAll = false, $orderBy = 'id_desc')
+    public function getPairs($isQueryAll = false, $orderBy = 'id_desc'): array
     {
         return $this->dao->select('id, name')->from(TABLE_PROGRAM)
             ->where('type')->eq('program')

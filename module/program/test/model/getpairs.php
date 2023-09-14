@@ -20,12 +20,8 @@ $program->gen(20);
 /**
 
 title=测试 programModel::getPairs();
+timeout=0
 cid=1
-pid=1
-
-获取项目集个数 >> 15
-获取所有项目集个数 >> 15
-获取按照id正序的第一个项目集名称 >> 项目集1
 
 */
 
