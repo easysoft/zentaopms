@@ -395,6 +395,24 @@ class testcaseTest
     }
 
     /**
+     * 测试获取导出的用例的结果。
+     * Test Get case results for export.
+     *
+     * @param  array  $caseIdList
+     * @param  int    $taskID
+     * @access public
+     * @return string|array
+     */
+    public function getCaseResultsForExportTest(array $caseIdList, int $taskID = 0): string|array
+    {
+        $objects = $this->objectModel->getCaseResultsForExport($caseIdList, $taskID);
+
+        if(dao::isError()) return dao::getError();
+
+        return implode(',', array_keys($objects));
+    }
+
+    /**
      * Test get scenes by id list and query string.
      *
      * @param  array  $sceneIdList
