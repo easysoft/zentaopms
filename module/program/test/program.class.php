@@ -497,4 +497,31 @@ class programTest
         if(dao::isError()) return dao::getError();
         return $changes;
     }
+
+    /**
+     * 激活一个项目集。
+     * Activate a program.
+     *
+     * @param  int    $programID
+     * @param  array  $postData
+     * @access public
+     * @return array
+     */
+    public function activateTest(int $programID, array $postData): array
+    {
+        $now        = helper::now();
+        $oldProgram = $this->program->getByID($programID);
+
+        $program = new stdclass();
+        $program->status         = 'doing';
+        $program->lastEditedDate = $now;
+        $program->lastEditedBy   = 'admin';
+        $program->realEnd         = null;
+        foreach($postData as $field => $value) $program->{$field} = $value;
+
+        $changes = $this->program->activate($program, $oldProgram);
+
+        if(dao::isError()) return dao::getError();
+        return $changes;
+    }
 }
