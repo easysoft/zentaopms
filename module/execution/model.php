@@ -315,7 +315,7 @@ class executionModel extends model
         if($postData->products)
         {
             $multipleProducts = $this->loadModel('product')->getMultiBranchPairs();
-            if($postData->branch) $postData->branch = is_array($postData->branch) ? $postData->branch : json_decode($postData->branch, true);
+            if(!empty($postData->branch)) $postData->branch = is_array($postData->branch) ? $postData->branch : json_decode($postData->branch, true);
             foreach($postData->products as $index => $productID)
             {
                 if(isset($multipleProducts[$productID]) and !isset($postData->branch[$index]))
@@ -385,7 +385,8 @@ class executionModel extends model
         $this->executionTao->updateTeam($executionID, $oldExecution, $execution);
 
         /* Update whitelist. */
-        $whitelist = is_string($execution->whitelist) ? explode(',', $execution->whitelist) : $execution->whitelist;
+        $whitelist = array();
+        if(!empty($execution->whitelist))  $whitelist = is_string($execution->whitelist) ? explode(',', $execution->whitelist) : $execution->whitelist;
         $this->loadModel('personnel')->updateWhitelist($whitelist, 'sprint', $executionID);
 
         /* Set the product for project same to execution. */
