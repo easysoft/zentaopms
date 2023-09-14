@@ -139,5 +139,14 @@ formPanel
         set::value($metric->definition),
         set::placeholder($lang->metric->definitionTip),
     ),
+    formGroup
+    (
+        set::width('1/2'),
+        set::name('afterCreate'),
+        set::label($lang->metric->afterCreate),
+        set::control(array('type' => 'radioList', 'inline' => true)),
+        set::items($lang->metric->afterCreateList),
+        set::value('implement'),
+    ),
     set::submitBtnText($lang->save),
 );
