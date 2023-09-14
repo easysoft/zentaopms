@@ -28,7 +28,7 @@ formPanel
             set::label($lang->metric->scope),
             set::name('scope'),
             set::items($lang->metric->scopeList),
-            set::value(zget($lang->metric->scopeList, $metric->scope, '')),
+            set::value($metric->scope),
             set::required(true)
         ),
         formGroup
@@ -37,7 +37,7 @@ formPanel
             set::label($lang->metric->object),
             set::name('object'),
             set::items($lang->metric->objectList),
-            set::value(zget($lang->metric->objectList, $metric->object, '')),
+            set::value($metric->object),
             set::required(true)
         ),
         formGroup
@@ -46,7 +46,7 @@ formPanel
             set::label($lang->metric->purpose),
             set::name('purpose'),
             set::items($lang->metric->purposeList),
-            set::value(zget($lang->metric->purposeList, $metric->purpose, '')),
+            set::value($metric->purpose),
             set::required(true)
         ),
     ),
