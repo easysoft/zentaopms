@@ -109,7 +109,7 @@ panel
     set::bodyClass('relative'),
     btn
     (
-        setClass('secondary-pale btn-download'),
+        setClass('ghost btn-download'),
         $lang->metric->implement->downloadPHP,
         set::url(helper::createLink('metric', 'downloadTemplate', "metricID={$metric->id}")),
         set::target('_blank'),

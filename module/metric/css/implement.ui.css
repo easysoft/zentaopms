@@ -16,4 +16,4 @@
 .clear-shadow {border: none; box-shadow: none;}
 
 .panel-body .relative {position: relative;}
-.btn-download {position: absolute; right: 0;}
+.btn-download {position: absolute; right: 0; color: var(--color-primary-500); background-color: var(--color-primary-50); border-color: var(--color-primary-50);}
