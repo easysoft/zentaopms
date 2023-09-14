@@ -10,13 +10,14 @@
 .main, .side {border-radius: 2px;}
 .side .title {height: 48px; padding-left: 16px; margin-bottom: 8px;}
 .side .name-color {color: var(--color-slate-600);}
-.side .metric-tree {padding-left: 24px;  height: calc(100vh - 180px); overflow-y: scroll;}
-.side .metric-item {padding-bottom: 12px;}
+.side .metric-tree {height: calc(100vh - 180px); overflow-y: scroll;}
+.side .metric-item {padding-left: 24px; padding-top: 6px; padding-bottom: 6px;}
 .side .metric-item a {color: var(--color-inherit);}
 .side .metric-item:hover, .side .checkbox-primary:hover {color: var(--color-primary-500);}
-.side .metric-current {color: var(--color-primary-600);}
+.side .metric-current {color: var(--color-primary-600); background-color:var(--color-primary-50);}
 
-.side .check-list-metric {padding-top: 0; padding-bottom: 12px; gap: 12px;}
+.side .checkbox-primary {padding-left: 24px; padding-top: 6px; padding-bottom: 6px;}
+.side .check-list-metric {padding-top: 0; padding-bottom: 12px; gap: 0;}
 
 .main .metric-name {height: 48px; padding-left: 16px; margin-bottom: 8px; border-bottom: 1px solid var(--color-slate-300);}
 .main .metric-name-notfirst {border-top: 1px solid var(--color-slate-300);}
@@ -32,7 +33,7 @@
 .main .table-and-chart-single {height: calc(100vh - 180px); padding: 8px 16px 16px 16px;}
 .main .table-and-chart-multiple {max-height: 352px; padding: 8px 16px 16px 16px;}
 .main .canvas {height: calc(100vh - 172px + 48px); overflow-y: auto;}
-.main .table-and-charts {height: calc(100vh - 172px);}
+.main .table-and-charts {height: calc(100vh - 172px); overflow-y: scroll;}
 .main .metricBox {max-height: 408px;}
 
 .table-and-chart .table-side {flex: 0 0 40%; overflow-x: hidden;}
