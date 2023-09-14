@@ -117,4 +117,34 @@ class programZen extends program
         }
         return $result;
     }
+
+    /**
+     * 获取下拉树菜单的链接。
+     * Get link for drop tree menu.
+     *
+     * @param  string    $moduleName
+     * @param  string    $methodName
+     * @param  int       $programID
+     * @param  string    $vars
+     * @param  string    $from
+     * @access protected
+     * @return string
+     */
+    protected function getLink(string $moduleName, string $methodName, string $programID, string $vars = '', string$from = 'program'): string
+    {
+        if($from != 'program') return helper::createLink('product', 'all', "programID={$programID}" . $vars);
+
+        if($moduleName == 'project')
+        {
+            $moduleName = 'program';
+            $methodName = 'project';
+        }
+        if($moduleName == 'product')
+        {
+            $moduleName = 'program';
+            $methodName = 'product';
+        }
+
+        return helper::createLink($moduleName, $methodName, "programID={$programID}");
+    }
 }

@@ -986,7 +986,7 @@ class programModel extends model
      * @access public
      * @return array|bool
      */
-    public function close(object $program, object $oldProgram) :array|bool
+    public function close(object $program, object $oldProgram): array|bool
     {
         $program = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->close['id'], $this->post->uid);
         $this->dao->update(TABLE_PROJECT)->data($program)
@@ -1010,7 +1010,7 @@ class programModel extends model
      * @access public
      * @return array|false
      */
-    public function activate(object $program, $oldProgram) :array|false
+    public function activate(object $program, $oldProgram): array|false
     {
         if($program->begin > $program->end)
         {
@@ -1064,35 +1064,6 @@ class programModel extends model
         }
 
         return true;
-    }
-
-    /**
-     * Get link for drop tree menu.
-     *
-     * @param  string $moduleName
-     * @param  string $methodName
-     * @param  int    $programID
-     * @param  string $vars
-     * @param  string $from
-     * @access public
-     * @return string
-     */
-    public function getLink($moduleName, $methodName, $programID, $vars = '', $from = 'program')
-    {
-        if($from != 'program') return helper::createLink('product', 'all', "programID={$programID}" . $vars);
-
-        if($moduleName == 'project')
-        {
-            $moduleName = 'program';
-            $methodName = 'project';
-        }
-        if($moduleName == 'product')
-        {
-            $moduleName = 'program';
-            $methodName = 'product';
-        }
-
-        return helper::createLink($moduleName, $methodName, "programID={$programID}");
     }
 
     /**

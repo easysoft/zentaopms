@@ -627,7 +627,7 @@ class program extends control
         }
 
         $this->view->programTree = $this->programZen->buildTree($programs);
-        $this->view->link        = $this->program->getLink($module, $method, '{id}', '', 'program');
+        $this->view->link        = $this->programZen->getLink($module, $method, '{id}', '', 'program');
         $this->display();
     }
 
