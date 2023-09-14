@@ -1,5 +1,6 @@
 <?php
-$now = helper::now();
+$now   = helper::now();
+$today = helper::today();
 
 global $app;
 $config->program->form = new stdclass();
@@ -17,3 +18,7 @@ $config->program->form->activate['status']         = array('type' => 'string',  
 $config->program->form->activate['realEnd']        = array('type' => 'date',     'required' => false, 'default' => null);
 $config->program->form->activate['lastEditedDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
 $config->program->form->activate['lastEditedBy']   = array('type' => 'string',   'required' => false, 'default' => $app->user->account);
+
+$config->program->form->start['realBegan'] = array('type' => 'date',   'required' => true,  'default' => $today, 'filter'  => 'trim');
+$config->program->form->start['comment']   = array('type' => 'string', 'required' => false, 'default' => '',     'control' => 'editor');
+$config->program->form->start['uid']       = array('type' => 'string', 'required' => false, 'default' => '',     'filter'  => 'trim');
