@@ -82,7 +82,7 @@ dtable
     setID('metricList'),
     set::cols($this->config->metric->dtable->definition->fieldList),
     set::data($tableData),
-    set::onRenderCell(jsRaw('window.rendMetricCell')),
+    set::onRenderCell(jsRaw('window.onRenderCell')),
     set::footPager(usePager()),
 );
 
