@@ -308,7 +308,7 @@ class metric extends control
             }
 
             $this->dao->update(TABLE_BASICMEAS)
-                ->set('configure')->eq($this->post->sql)
+                ->set('configure')->eq($measurement->configure)
                 ->set('params')->eq(json_encode($params))
                 ->where('id')->eq($metric->fromID)
                 ->exec();
@@ -420,12 +420,14 @@ class metric extends control
     {
         $metric = $this->metric->getByID($metricID);
 
-        $this->metric->moveCalcFile($metric);
+        //$this->metric->moveCalcFile($metric);
 
-        $metric->stage           = 'released';
-        $metric->implementedBy   = $this->app->user->account;
-        $metric->implementedDate = helper::now();
-        $this->metric->updateMetric($metric);
+        $publishedMetric = new stdclass();
+        $publishedMetric->id              = $metricID;
+        $publishedMetric->stage           = 'released';
+        $publishedMetric->implementedBy   = $this->app->user->account;
+        $publishedMetric->implementedDate = helper::now();
+        $this->metric->updateMetric($publishedMetric);
 
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
     }
