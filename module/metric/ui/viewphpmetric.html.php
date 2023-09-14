@@ -107,6 +107,7 @@ $fnGenerateDataDisplay = function() use($resultData, $resultHeader, $lang, $metr
         );
 };
 
+$actionMenuList = !$metric->deleted ? $this->metric->buildOperateMenu($metric) : array();
 detailBody
 (
     sectionList
@@ -132,6 +133,13 @@ detailBody
     history
     (
         set::commentUrl(createLink('action', 'comment', array('objectType' => 'metric', 'objectID' => $metric->id))),
+    ),
+    floatToolbar
+    (
+        isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), $lang->goback)),
+        !empty($actionMenuList['main']) ? set::main($actionMenuList['main']) : null,
+        !empty($actionMenuList['suffix']) ? set::suffix($actionMenuList['suffix']) : null,
+        set::object($metric)
     ),
     detailSide
     (
@@ -171,19 +179,5 @@ if(!isInModal())
         !empty($preAndNext->next) ? set::nextLink(createLink('metric', 'view', "id={$preAndNext->next->id}")) : null
     );
 }
-
-$actionMenuList = !$metric->deleted ? $this->metric->buildOperateMenu($metric) : array();
-div
-(
-    setClass('w-2/3 text-center fixed actions-menu'),
-    setClass($metric->deleted ? 'no-divider' : ''),
-    floatToolbar
-    (
-        isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), $lang->goback)),
-        !empty($actionMenuList['main']) ? set::main($actionMenuList['main']) : null,
-        !empty($actionMenuList['suffix']) ? set::suffix($actionMenuList['suffix']) : null,
-        set::object($metric)
-    )
-);
 
 render();

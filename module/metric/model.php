@@ -569,7 +569,6 @@ class metricModel extends model
             $menuList['suffix'][] = $this->config->metric->actionList['delete'];
         }
 
-
         return $menuList;
     }
 

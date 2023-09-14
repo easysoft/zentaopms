@@ -266,6 +266,7 @@ detailHeader
     )
 );
 
+$actionMenuList = !$metric->deleted ? $this->metric->buildOperateMenu($metric) : array();
 detailBody
 (
     sectionList
@@ -304,6 +305,13 @@ detailBody
     (
         set::commentUrl(createLink('action', 'comment', array('objectType' => 'metric', 'objectID' => $metric->id))),
     ),
+    floatToolbar
+    (
+        isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), $lang->goback)),
+        !empty($actionMenuList['main']) ? set::main($actionMenuList['main']) : null,
+        !empty($actionMenuList['suffix']) ? set::suffix($actionMenuList['suffix']) : null,
+        set::object($metric)
+    ),
     detailSide
     (
         tabs
@@ -332,19 +340,5 @@ if(!isInModal())
         !empty($preAndNext->next) ? set::nextLink(createLink('metric', 'view', "id={$preAndNext->next->id}")) : null
     );
 }
-
-$actionMenuList = !$metric->deleted ? $this->metric->buildOperateMenu($metric) : array();
-div
-(
-    set::className('w-2/3 text-center fixed actions-menu'),
-    set::className($metric->deleted ? 'no-divider' : ''),
-    floatToolbar
-    (
-        isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), $lang->goback)),
-        !empty($actionMenuList['main']) ? set::main($actionMenuList['main']) : null,
-        !empty($actionMenuList['suffix']) ? set::suffix($actionMenuList['suffix']) : null,
-        set::object($metric)
-    )
-);
 
 render();
