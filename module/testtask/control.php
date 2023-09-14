@@ -1283,6 +1283,7 @@ class testtask extends control
     }
 
     /**
+     * 查看测试用例的执行结果。
      * View test results of a test run.
      *
      * @param  int    $runID
@@ -1293,19 +1294,22 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function results($runID, $caseID = 0, $version = 0, $status = 'done', $type = 'all')
+    public function results(int $runID, int $caseID = 0, int $version = 0, string $status = 'done', string $type = 'all')
     {
+        /* Set project menu. */
         if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
 
+        /* Set case and results. */
         if($runID)
         {
-            $case    = $this->testtask->getRunById($runID)->case;
+            $this->app->loadLang('testcase');
+
+            /* If runID is not empty, set testtask. */
+            $run     = $this->testtask->getRunById($runID);
+            $case    = $run->case;
             $results = $this->testtask->getResults($runID, 0, $status, $type);
 
-            $testtaskID = $this->dao->select('task')->from(TABLE_TESTRUN)->where('id')->eq($runID)->fetch('task');
-            $testtask   = $this->dao->select('id, build, execution, product')->from(TABLE_TESTTASK)->where('id')->eq($testtaskID)->fetch();
-
-            $this->view->testtask = $testtask;
+            $this->view->testtask = $this->testtask->fetchByID($run->task);
         }
         else
         {
@@ -1313,7 +1317,8 @@ class testtask extends control
             $results = $this->testtask->getResults(0, $caseID, $status, $type);
         }
 
-        if(empty($this->testcase)) $this->app->loadLang('testcase');
+
+        /* Assign. */
         $this->view->case      = $case;
         $this->view->runID     = $runID;
         $this->view->results   = $results;
