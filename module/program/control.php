@@ -61,7 +61,7 @@ class program extends control
             else
             {
                 /* Get top programs and projects. */
-                $topObjects = $this->program->getList($status == 'unclosed' ? 'doing,suspended,wait' : $status, $orderBy, $pager, 'top');
+                $topObjects = $this->program->getList($status == 'unclosed' ? 'doing,suspended,wait' : $status, $orderBy, 'top', array(), $pager);
                 if(!$topObjects) $topObjects = array(0);
                 $programs   = $this->program->getList($status, $orderBy, null, 'child', array_keys($topObjects));
 
@@ -618,7 +618,7 @@ class program extends control
 
             /* Get and process program list. */
             $users    = $this->loadModel('user')->getPairs('noletter');
-            $programs = $this->program->getList($status, $orderBy, null);
+            $programs = $this->program->getList($status, $orderBy);
             $products = $this->program->getProductByProgram(array_keys($programs));
             foreach($programs as $programID => $program)
             {

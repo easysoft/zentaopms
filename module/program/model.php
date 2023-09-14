@@ -162,13 +162,13 @@ class programModel extends model
      *
      * @param  string $status
      * @param  string $orderBy
-     * @param  object $pager
      * @param  string $type       top|child
      * @param  array  $topIdList
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getList($status = 'all', $orderBy = 'id_asc', $pager = null, $type = '', $topIdList = array())
+    public function getList(string $status = 'all', string $orderBy = 'id_asc', string $type = '', array $topIdList = array(), object $pager = null): array
     {
         $userViewIdList = trim($this->app->user->view->programs, ',') . ',' . trim($this->app->user->view->projects, ',');
         $userViewIdList = array_filter(explode(',', $userViewIdList));
@@ -185,7 +185,7 @@ class programModel extends model
 
             foreach($pathList as $path)
             {
-                if($type == 'child' and !empty($topIdList))
+                if($type == 'child' && !empty($topIdList))
                 {
                     $topID = $this->getTopByPath($path);
                     if(!in_array($topID, $topIdList)) continue;
@@ -199,11 +199,11 @@ class programModel extends model
             ->where('type')->in('program,project')
             ->andWhere('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
-            ->beginIF($status != 'all' and $status != 'unclosed')->andWhere('status')->in($status)->fi()
+            ->beginIF($status != 'all' && $status != 'unclosed')->andWhere('status')->in($status)->fi()
             ->beginIF($status == 'unclosed')->andWhere('status')->ne('closed')->fi()
-            ->beginIF($this->app->rawMethod == 'browse' and $type === 'top')->andWhere('parent')->eq(0)->fi()
-            ->beginIF($this->app->rawMethod == 'browse' and ($type === 'child' or !$this->app->user->admin))->andWhere('id')->in($objectIdList)->fi()
-            ->beginIF(!$this->app->user->admin and $this->app->rawMethod != 'browse')->andWhere('id')->in($userViewIdList)->fi()
+            ->beginIF($this->app->rawMethod == 'browse' && $type === 'top')->andWhere('parent')->eq(0)->fi()
+            ->beginIF($this->app->rawMethod == 'browse' && ($type === 'child' or !$this->app->user->admin))->andWhere('id')->in($objectIdList)->fi()
+            ->beginIF(!$this->app->user->admin && $this->app->rawMethod != 'browse')->andWhere('id')->in($userViewIdList)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');

@@ -168,16 +168,16 @@ class programTest
      *
      * @param  mixed  $status
      * @param  string $orderBy
-     * @param  object $pager
      * @param  string $type       top|child
      * @param  mixed  $idList
+     * @param  object $pager
      * @access public
      * @return void
      */
-    public function getListTest($status = 'all', $orderBy = 'id_asc', $pager = NULL, $type = '', $idList = '')
+    public function getListTest($status = 'all', $orderBy = 'id_asc', $type = '', $idList = array(), $pager = NULL)
     {
         $this->program->cookie->showClosed = 'ture';
-        $programs = $this->program->getList($status, $orderBy, $pager, $type, $idList);
+        $programs = $this->program->getList($status, $orderBy, $type, $idList, $pager);
 
         if(dao::isError()) return array('message' => dao::getError());
 

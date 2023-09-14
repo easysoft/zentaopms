@@ -19,35 +19,28 @@ $program->gen(20);
 /**
 
 title=测试 programModel::getList();
+timeout=0
 cid=1
-pid=1
-
-查看所有项目和项目集的个数 >> 20
-查看分页后项目集和项目的个数 >> 10
-查看所有'closed'的项目和项目集的个数 >> 5
-查看所有'suspended'的项目和项目集的个数 >> 5
-按照项目和项目集名称倒序获取第一个ID >> 9
-按照ID正序获取项目和项目集列表第一个ID >> 1
-获取顶级项目集个数 >> 20
-获取分页后顶级项目集个数 >> 10
-获取所有项目集个数 >> 20
 
 */
 
-global $tester;
+global $tester, $app;
 $programTester = new programTest();
-$tester->app->loadClass('pager', $static = true);
+
+$app->moduleName = 'program';
+$app->methodName = 'browse';
+$app->loadClass('pager', true);
 $pager = new pager(0, 10, 1);
 
 $allPorgrams       = $programTester->getListTest('all');
-$pagerPrograms     = $programTester->getListTest('all', 'id_asc', $pager);
+$pagerPrograms     = $programTester->getListTest('all', 'id_asc', '', array(), $pager);
 $closedPrograms    = $programTester->getListTest('closed');
 $suspendedPrograms = $programTester->getListTest('closed');
 $namedescPrograms  = $programTester->getListTest('all', 'name_desc');
 $idascPrograms     = $programTester->getListTest('all', 'id_asc');
-$topPrograms       = $programTester->getListTest('all', 'id_asc', null, 'top');
-$topPagePrograms   = $programTester->getListTest('all', 'id_asc', $pager, 'top');
-$childPrograms     = $programTester->getListTest('all', 'id_asc', null, 'child', $topPrograms);
+$topPrograms       = $programTester->getListTest('all', 'id_asc', 'top');
+$topPagePrograms   = $programTester->getListTest('all', 'id_asc', 'top', array(), $pager);
+$childPrograms     = $programTester->getListTest('all', 'id_asc', 'child', $topPrograms);
 
 r(count($allPorgrams))       && p() && e('20'); // 查看所有项目和项目集的个数
 r(count($pagerPrograms))     && p() && e('10'); // 查看分页后项目集和项目的个数
