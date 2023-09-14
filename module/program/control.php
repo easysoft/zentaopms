@@ -470,7 +470,7 @@ class program extends control
      * @access public
      * @return void
      */
-    public function stakeholder($programID = 0, $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function stakeholder(int $programID = 0, string $orderBy = 't1.id_desc', int $recTotal = 0, int $recPerPage = 15, int $pageID = 1)
     {
         $this->app->loadLang('stakeholder');
         common::setMenuVars('program', $programID);
@@ -502,26 +502,19 @@ class program extends control
     }
 
     /**
-     * Unlink program stakeholder.
+     * 解除干系人跟项目集的关联关系。
+     * Unlink stakeholder from the program.
      *
-     * @param  int    $stakeholderID
      * @param  int    $programID
-     * @param  string $confirm
+     * @param  int    $stakeholderID
      * @access public
      * @return void
      */
-    public function unlinkStakeholder($stakeholderID, $programID, $confirm = 'no')
+    public function unlinkStakeholder(int $programID, int $stakeholderID)
     {
-        if($confirm == 'no')
-        {
-            $actionUrl = $this->inlink('unlinkStakeholder', "stakeholderID=$stakeholderID&programID=$programID&confirm=yes");
-            return $this->send(array('result' => 'success', 'callback' => "unlinkStakeholderConfirm('{$this->lang->program->confirmUnlink}', '$actionUrl')"));
-        }
+        $this->program->batchUnlinkStakeholders($programID, array($stakeholderID));
 
-        $account = $this->dao->select('user')->from(TABLE_STAKEHOLDER)->where('id')->eq($stakeholderID)->fetch('user');
-        $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('id')->eq($stakeholderID)->exec();
-
-        $this->program->updateChildUserView($programID, array($account));
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         return $this->send(array('result' => 'success', 'load' => true));
     }
 
