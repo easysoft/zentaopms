@@ -45,6 +45,7 @@ $lang->metric->verifyResult  = '校验结果';
 $lang->metric->publish       = '发布';
 $lang->metric->selectCount   = '已选择<span class="font-medium checked-count">%s</span>项';
 $lang->metric->testMetric    = '测试度量';
+$lang->metric->calcTime      = '采集时间';
 
 $lang->metric->viewType = new stdclass();
 $lang->metric->viewType->single   = '单独查看';

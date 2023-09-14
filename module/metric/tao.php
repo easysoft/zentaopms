@@ -103,7 +103,32 @@ class metricTao extends metricModel
         return $metrics;
     }
 
-    protected function fetchMetricsWithFilter($filters, $stage = 'all')
+    /**
+     * 根据度量项编码获取度量项数据。
+     * Fetch metric by code.
+     *
+     * @param  string    $code
+     * @access protected
+     * @return object
+     */
+    protected function fetchMetricByCode(string $code): object
+    {
+        return $this->dao->select('*')->from(TABLE_METRIC)
+            ->where('deleted')->eq('0')
+            ->andWhere('code')->eq($code)
+            ->fetch();
+    }
+
+    /**
+     * 根据筛选条件获取度量项数据。
+     * Fetch metric by filter.
+     *
+     * @param  array    $filters
+     * @param  string $stage
+     * @access protected
+     * @return array
+     */
+    protected function fetchMetricsWithFilter(array $filters, string $stage = 'all'): array
     {
         $scopes   = null;
         $objects  = null;
@@ -125,7 +150,15 @@ class metricTao extends metricModel
         return $metrics;
     }
 
-    protected function fetchMetricsByCollect($stage)
+    /**
+     * 请求我的收藏度量项。
+     * Fetch my collect metrics.
+     *
+     * @param  string $stage
+     * @access protected
+     * @return array
+     */
+    protected function fetchMetricsByCollect(string $stage): array
     {
         return $this->dao->select('*')->from(TABLE_METRIC)
             ->where('deleted')->eq('0')
@@ -167,12 +200,59 @@ class metricTao extends metricModel
         $methodList = $classReflection->getMethods();
 
         $methodNameList = array();
-        foreach($methodList as $index => $reflectionMethod) 
+        foreach($methodList as $index => $reflectionMethod)
         {
             if($reflectionMethod->class == $className) $methodNameList[$index] = $reflectionMethod->name;
         }
 
         return $methodNameList;
+    }
+
+    /**
+     * 请求度量数据。
+     * Fetch metric data.
+     *
+     * @param  string $code
+     * @param  array $fieldList
+     * @access protected
+     * @return array
+     */
+    protected function fetchMetricRecords(string $code, array $fieldList): array
+    {
+        $dataFieldStr = implode(', ', $fieldList);
+        if(!empty($dataFieldStr)) $dataFieldStr .= ', ';
+
+        return $this->dao->select("id, {$dataFieldStr} value, date")
+            ->from(TABLE_METRICLIB)
+            ->where('metricCode')->eq($code)
+            ->fetchAll();
+    }
+
+    /**
+     * 获取度量数据的日期字段。
+     * Get date field of metric data.
+     *
+     * @param  string $code
+     * @access protected
+     * @return array
+     */
+    protected function getMetricRecordDateField(string $code): array
+    {
+        $record = $this->dao->select("year, month, week, day")
+            ->from(TABLE_METRICLIB)
+            ->where('metricCode')->eq($code)
+            ->fetch();
+
+        if(!$record) return array();
+
+        $dataFields = array();
+        $recordKeys = array_keys((array)$record);
+        foreach($recordKeys as $recordKey)
+        {
+            if(!empty($record->$recordKey)) $dataFields[] = $recordKey;
+        }
+
+        return $dataFields;
     }
 
     /**

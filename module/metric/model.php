@@ -295,9 +295,19 @@ class metricModel extends model
      * @access public
      * @return array
      */
-    public function getResultByCode($code, $options = array())
+    public function getResultByCode($code, $options = array(), $type = 'realtime')
     {
-        $metric = $this->dao->select('id,code,scope,purpose')->from(TABLE_METRIC)->where('code')->eq($code)->fetch();
+        if($type == 'cron')
+        {
+            $metric     = $this->metricTao->fetchMetricByCode($code);
+            $dataFields = $this->metricTao->getMetricRecordDateField($code);
+
+            if($metric->scope != 'system') $dataFields[] = $metric->scope;
+
+            return $this->metricTao->fetchMetricRecords($code, $dataFields);
+        }
+
+        $metric = $this->metricTao->fetchMetricByCode($code);
         if(!$metric) return false;
 
         $calcPath = $this->metricTao->getCalcRoot() . $metric->scope . DS . $metric->purpose . DS . $metric->code . '.php';

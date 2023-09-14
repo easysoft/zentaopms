@@ -326,7 +326,7 @@ class metricZen extends metric
     {
         if(empty($result)) return false;
 
-        $fieldList = array_keys(current($result));
+        $fieldList = array_keys((array)current($result));
         $scopeList = array_intersect($fieldList, $this->config->metric->scopeList);
         $dateList  = array_intersect($fieldList, $this->config->metric->dateList);
         $scope     = current($scopeList);
@@ -335,6 +335,7 @@ class metricZen extends metric
         if(!empty($scopeList)) $header[] = array('name' => 'scope', 'title' => $this->lang->metric->scopeList[$scope] . $this->lang->metric->name);
         if(!empty($dateList))  $header[] = array('name' => 'date',  'title' => $this->lang->metric->date);
         $header[] = array('name' => 'value', 'title' => $this->lang->metric->value);
+        if(in_array('date', $fieldList)) $header[] = array('name' => 'calcTime', 'title' => $this->lang->metric->calcTime);
 
         return $header;
     }
@@ -385,6 +386,7 @@ class metricZen extends metric
         $tableData = array();
         foreach($result as $record)
         {
+            $record = (array)$record;
             $fieldList = array_keys($record);
             $dateList  = array_intersect($fieldList, $this->config->metric->dateList);
 
@@ -392,6 +394,7 @@ class metricZen extends metric
             if(!empty($dateList))  $row->date = $this->metric->buildDateCell($record);
             if($scope != 'system') $row->scope = $objectPairs[$record[$scope]];
             $row->value = $record['value'];
+            if(isset($record['date'])) $row->calcTime = $record['date'];
 
             $tableData[] = $row;
         }

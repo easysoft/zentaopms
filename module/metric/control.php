@@ -118,7 +118,7 @@ class metric extends control
         if(!empty($current))
         {
             $metric = $this->metric->getByID($current->id);
-            $result = $this->metric->getResultByCode($metric->code);
+            $result = $this->metric->getResultByCode($metric->code, array(), 'cron');
             $this->view->resultHeader = $this->metricZen->getViewTableHeader($result);
             $this->view->resultData   = $this->metricZen->getViewTableData($metric, $result);
         }
@@ -321,7 +321,7 @@ class metric extends control
             return $this->send(array('result' => 'success', 'queryResult' => sprintf($this->lang->metric->saveSqlMeasSuccess, $queryResult)));
         }
 
-        $result = $this->metric->getResultByCode($metric->code);
+        $result = $this->metric->getResultByCode($metric->code, array(), 'cron');
 
         $this->view->title          = $metric->name;
         $this->view->metric         = $metric;
