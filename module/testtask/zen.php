@@ -18,7 +18,7 @@ class testtaskZen extends testtask
     {
         if($this->app->tab == 'project') return $this->loadModel('project')->setMenu($projectID);
         if($this->app->tab == 'execution') return $this->loadModel('execution')->setMenu($executionID);
-        return $this->qa->setMenu($productID, $branch);
+        return $this->loadModel('qa')->setMenu($productID, $branch);
     }
 
     /**
