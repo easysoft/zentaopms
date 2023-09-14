@@ -20,7 +20,7 @@ class projectTao extends projectModel
      */
     protected function doStart(int $projectID, object $project): bool
     {
-        $this->dao->update(TABLE_PROJECT)->data($project)
+        $this->dao->update(TABLE_PROJECT)->data($project, 'comment')
             ->autoCheck()
             ->check($this->config->project->start->requiredFields, 'notempty')
             ->checkIF($project->realBegan != '', 'realBegan', 'le', helper::today())
