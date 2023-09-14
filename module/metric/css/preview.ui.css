@@ -38,8 +38,8 @@
 .main .table-and-charts {height: calc(100vh - 172px); max-height: calc(100% - 48px); overflow-y: scroll;}
 .main .metricBox {max-height: 408px;}
 
-.table-and-chart .table-side {flex: 0 0 40%; overflow-x: hidden;}
-.table-and-chart .chart-side {flex: 0 0 60%;}
+.table-and-chart .table-side {flex: 0 0 400px; overflow-x: hidden;}
+.table-and-chart .chart-side {flex: 0 0 calc(100% - 400px);}
 .table-and-chart .chart-center {display:flex; justify-content: center; align-items: center;}
 
 .icon-18 {font-size: 18px;}
