@@ -237,7 +237,8 @@ class form extends fixer
             $data = $this->rawdata->$field;
         }
 
-        if(array_key_exists('default', $config) && !isset($this->rawdata->$field))
+        /* Assign the default value to the data if the default value exists and the data is not exist or null or empty string. */
+        if(array_key_exists('default', $config) && (!isset($this->rawdata->$field) || is_null($this->rawdata->$field) || $this->rawdata->$field === ''))
         {
             $data = $config['default'];
         }
