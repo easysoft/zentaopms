@@ -4,6 +4,8 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/action.class.php';
 su('admin');
 
+zdTable('action')->config('action')->gen(5);
+
 /**
 
 title=测试 actionModel->read();

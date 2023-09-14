@@ -89,14 +89,15 @@ class actionModel extends model
     }
 
     /**
+     * 访问任务或者bug时，更新action的read字段。
      * Update read field of action when view a task/bug.
      *
      * @param  string $objectType
      * @param  int    $objectID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function read($objectType, $objectID)
+    public function read(string $objectType, int $objectID): bool
     {
         $this->dao->update(TABLE_ACTION)
             ->set('`read`')->eq(1)
@@ -104,46 +105,8 @@ class actionModel extends model
             ->andWhere('objectID')->eq($objectID)
             ->andWhere('`read`')->eq(0)
             ->exec();
-    }
 
-    /**
-     * Get the unread actions.
-     *
-     * @param  int    $actionID
-     * @access public
-     * @return string
-     */
-    public function getUnreadActions($actionID = 0)
-    {
-        if(!is_numeric($actionID)) $actionID = 0;
-
-        $actions    = array();
-        $objectList = array('task' => TABLE_TASK, 'bug' => TABLE_BUG);
-        foreach($objectList as $object => $table)
-        {
-            $idList = $this->dao->select('id')->from($table)->where('assignedTo')->eq($this->app->user->account)->fetchPairs('id');
-
-            $tmpActions = $this->dao->select('*')->from(TABLE_ACTION)
-                ->where('objectType')->eq($object)
-                ->andWhere('objectID')->in($idList)
-                ->andWhere('`read`')->eq(0)
-                ->andWhere('id')->gt($actionID)
-                ->fetchAll('id');
-
-            if(empty($tmpActions)) continue;
-
-            $tmpActions = $this->transformActions($tmpActions);
-            foreach($tmpActions as $action)
-            {
-                $actions[$action->objectType][] = array(
-                    'actionID'   => $action->id,
-                    'objectType' => $action->objectType,
-                    'objectID'   => $action->objectID,
-                    'action'     => $action->actor . ' ' . $action->actionLabel . ' ' . $action->objectType . " #$action->objectID" . $action->objectName
-                );
-            }
-        }
-        return json_encode($actions);
+        return !dao::isError();
     }
 
     /**
