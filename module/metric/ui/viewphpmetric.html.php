@@ -50,6 +50,7 @@ $oldMetricTabs = $metric->fromID === 0 ? '' : tabs
         set::active(true),
         tableData
         (
+            set::tdClass('word-no-wrap'),
             $buildItems($oldMetricInfo)
         )
     )
