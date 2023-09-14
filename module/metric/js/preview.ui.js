@@ -321,6 +321,7 @@ window.unfoldContent = function()
     var $content = $('.checked-content');
     var contentHeight = 48 + (window.lineCount - 1) * 40;
     $content.height(contentHeight);
+    window.setMultiTableHeight(contentHeight);
 
     setTimeout(function(){
         $content.find('.gray-next').addClass('gray-visible');
@@ -331,7 +332,10 @@ window.unfoldContent = function()
 window.foldContent = function()
 {
     var $content = $('.checked-content');
-    $content.height(48);
+    var contentHeight = 48;
+    $content.height(contentHeight);
+    window.setMultiTableHeight(contentHeight);
+
     $content.find('.gray-next').addClass('gray-hidden');
     $content.find('.gray-next').removeClass('gray-visible');
 }
@@ -361,6 +365,11 @@ window.updateMetricBoxs = function(id, isChecked)
         });
 
     }
+}
+
+window.setMultiTableHeight = function(contentHeight)
+{
+    $('.table-and-charts').css('max-height', 'calc(100% - ' + contentHeight + 'px)');
 }
 
 window.collectMetric = function(id)
@@ -474,6 +483,7 @@ window.renderCheckedLabel = function()
         else
         {
             $('.checked-content').height(contentHeight);
+            window.setMultiTableHeight(contentHeight);
         }
     }
 
