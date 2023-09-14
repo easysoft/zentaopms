@@ -10,7 +10,6 @@ $config->metric->form->create['code']       = array('required' => true,  'type' 
 $config->metric->form->create['purpose']    = array('required' => true,  'type' => 'string');
 $config->metric->form->create['scope']      = array('required' => true,  'type' => 'string');
 $config->metric->form->create['object']     = array('required' => true,  'type' => 'string');
-$config->metric->form->create['unit']       = array('required' => false,  'type' => 'string');
 $config->metric->form->create['desc']       = array('required' => false,  'type' => 'string', 'filter' => 'trim');
 $config->metric->form->create['definition'] = array('required' => false,  'type' => 'string', 'filter' => 'trim');
 
@@ -22,7 +21,6 @@ $config->metric->form->edit['confirm']    = array('required' => true,  'type' =>
 $config->metric->form->edit['purpose']    = array('required' => true,  'type' => 'string');
 $config->metric->form->edit['scope']      = array('required' => true,  'type' => 'string');
 $config->metric->form->edit['object']     = array('required' => true,  'type' => 'string');
-$config->metric->form->edit['unit']       = array('required' => false,  'type' => 'string');
 $config->metric->form->edit['desc']       = array('required' => false,  'type' => 'string', 'filter' => 'trim');
 $config->metric->form->edit['definition'] = array('required' => false,  'type' => 'string', 'filter' => 'trim');
 

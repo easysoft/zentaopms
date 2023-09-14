@@ -103,7 +103,7 @@ formPanel
                 div
                 (
                     setClass('grow'),
-                    input(set::name('unit')),
+                    input(set::name('addunit')),
                 ),
                 div
                 (
