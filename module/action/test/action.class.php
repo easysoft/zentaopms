@@ -21,10 +21,17 @@ class actionTest
      * @access public
      * @return object
      */
-    public function createTest($objectType, $objectID, $actionType, $comment = '', $extra = '', $actor = '', $autoDelete = true)
+    public function createTest($objectType, $objectID, $actionType, $comment = '', $extra = '', $actor = '', $uid = '', $autoDelete = true)
     {
         $_SERVER['HTTP_HOST'] = 'pms.zentao.com';
-        $_POST['uid'] = '';
+        if($uid)
+        {
+            $_POST['uid'] = $uid;
+            global $tester;
+            $tester->session->set('album', null);
+            $tester->session->set('album', array($uid => array(1), 'used' => array($uid => array(1))));
+        }
+
         $objectID = $this->objectModel->create($objectType, $objectID, $actionType, $comment, $extra, $actor, $autoDelete);
 
         unset($_POST);
