@@ -455,13 +455,17 @@ window.renderCheckedLabel = function()
         }
     }
 
-    $(".metric-remove").removeClass('hidden');
+    $(".metric-remove").addClass('hidden');
+    $('.details').removeClass('details-after');
     if(!multi)
     {
         var maxSelectTipText = maxSelectTip.replace('%s', maxSelectNum);
         $content.append(`<span class="label ghost gray-pale">${maxSelectTipText}</span>`);
-
-        $(".metric-remove").addClass('hidden');
+    }
+    else
+    {
+        $(".metric-remove").removeClass('hidden');
+        $('.details').addClass('details-after');
     }
 
     if(!window.isDropdown) $content.find('.gray-next').addClass('gray-hidden');
