@@ -14,7 +14,7 @@ fields:
   - field: path
     fields:
       - field: path1
-        range: 1-11,11{4},15,16,18,18{3}
+        range: 1-11,11{4},16{2},18,18{3}
         prefix: ","
         postfix: ","
       - field: path2

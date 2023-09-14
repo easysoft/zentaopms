@@ -141,7 +141,7 @@ class testcaseTest
      * @access public
      * @return array|int
      */
-    public function getExecutionCasesTest(string $browseType = '', int $executionID): array|int
+    public function getExecutionCasesTest(string $browseType = '', int $executionID = 0): array|int
     {
         $objects = $this->objectModel->getExecutionCases($browseType, $executionID);
 
@@ -1345,5 +1345,20 @@ class testcaseTest
         $idList = $this->objectModel->getAllChildId($sceneID);
         if(dao::isError()) return dao::getError();
         return implode(',', $idList);
+    }
+
+    /**
+     * 测试获取所有的子场景 id。
+     * Test get all children id.
+     *
+     * @param  array  $sceneIdList
+     * @access public
+     * @return array
+     */
+    public function getScenesNameTest(array $sceneIdList, bool $fullPath = true): array
+    {
+        $return = $this->objectModel->getScenesName($sceneIdList, $fullPath);
+        if(dao::isError()) return dao::getError();
+        return $return;
     }
 }
