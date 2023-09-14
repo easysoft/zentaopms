@@ -623,13 +623,12 @@ class programModel extends model
      * @param  string      $queryID
      * @param  string      $orderBy
      * @param  string      $programTitle 0|base|end
-     * @param  int         $involved
      * @param  bool        $queryAll
      * @param  object|null $pager
      * @access public
      * @return object[]
      */
-    public function getProjectList(int $programID = 0, string $browseType = 'all', int $queryID = 0, string $orderBy = 'id_desc', string $programTitle = '', int $involved = 0, bool $queryAll = false, object $pager = null): array
+    public function getProjectList(int $programID = 0, string $browseType = 'all', int $queryID = 0, string $orderBy = 'id_desc', string $programTitle = '', bool $queryAll = false, object $pager = null): array
     {
         $path = '';
         if($programID) $path = $this->getByID($programID)->path;
@@ -647,18 +646,18 @@ class programModel extends model
             ->leftJoin(TABLE_STAKEHOLDER)->alias('t3')->on('t1.id=t3.objectID')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
-            ->beginIF($browseType == 'bysearch' and $query)->andWhere($query)->fi()
+            ->beginIF($browseType == 'bysearch' && $query)->andWhere($query)->fi()
             ->andWhere('t1.type')->eq('project')
-            ->beginIF($this->cookie->involved or $involved)->andWhere('t2.type')->eq('project')->fi()
+            ->beginIF($this->cookie->involved)->andWhere('t2.type')->eq('project')->fi()
             ->beginIF(!in_array($browseType, array('all', 'undone', 'bysearch', 'review', 'unclosed'), true))->andWhere('t1.status')->eq($browseType)->fi()
-            ->beginIF($browseType == 'undone' or $browseType == 'unclosed')->andWhere('t1.status')->in('wait,doing')->fi()
+            ->beginIF($browseType == 'undone' || $browseType == 'unclosed')->andWhere('t1.status')->in('wait,doing')->fi()
             ->beginIF($browseType == 'review')
             ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
             ->andWhere('t1.reviewStatus')->eq('doing')
             ->fi()
             ->beginIF($path)->andWhere('t1.path')->like($path . '%')->fi()
-            ->beginIF(!$queryAll and !$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
-            ->beginIF($this->cookie->involved or $involved)
+            ->beginIF(!$queryAll && !$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
+            ->beginIF($this->cookie->involved)
             ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
             ->orWhere('t1.PM')->eq($this->app->user->account)
             ->orWhere('t2.account')->eq($this->app->user->account)
@@ -753,7 +752,7 @@ class programModel extends model
         $userPRJCount  = array();
         $progressList  = array();
         $programPairs  = $this->getPairs();
-        $projectStats  = $this->getProjectStats(0, 'all', 0, 'id_desc', null, '', 0, true);
+        $projectStats  = $this->getProjectStats(0, 'all', 0, 'id_desc', '', true);
 
         /* Add program progress. */
         foreach(array_keys($programPairs) as $programID)
@@ -1412,17 +1411,16 @@ class programModel extends model
      * @param  string      $orderBy
      * @param  object|null $pager
      * @param  string      $programTitle
-     * @param  int         $involved
      * @param  bool        $queryAll
      * @access public
      * @return array
      */
-    public function getProjectStats(int $programID = 0, string $browseType = 'undone', int $queryID = 0, string $orderBy = 'id_desc', object|null $pager = null, string $programTitle = '', int $involved = 0, bool $queryAll = false)
+    public function getProjectStats(int $programID = 0, string $browseType = 'undone', int $queryID = 0, string $orderBy = 'id_desc', string $programTitle = '', bool $queryAll = false, object $pager = null): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getProjectStats($browseType);
 
         /* Init vars. */
-        $projects = $this->getProjectList($programID, $browseType, $queryID, $orderBy, $programTitle, $involved, $queryAll, $pager);
+        $projects = $this->getProjectList($programID, $browseType, $queryID, $orderBy, $programTitle, $queryAll, $pager);
         if(empty($projects)) return array();
 
         $projectKeys = array_keys($projects);

@@ -2454,7 +2454,7 @@ class execution extends control
      */
     public function ajaxGetDropMenu(int $executionID, string $module, string $method, string $extra)
     {
-        $projects = $this->loadModel('program')->getProjectList(0, 'all', 0, 'order_asc', 0, 0, true); /* 获取所有项目的列表。*/
+        $projects = $this->loadModel('program')->getProjectList(0, 'all', 0, 'order_asc', '', true); /* 获取所有项目的列表。*/
         $executionGroups = $this->dao->select('*')->from(TABLE_EXECUTION) /* 按照项目分组，获取有权限访问的执行列表。*/
             ->where('deleted')->eq('0')
             ->andWhere('multiple')->eq('1')

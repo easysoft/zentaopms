@@ -445,7 +445,7 @@ class program extends control
         $programTitle = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=program&key=programTitle');
         $order        = explode('_', $orderBy);
         $sortField    = zget($this->config->program->sortFields, $order[0], 'id') . '_' . $order[1];
-        $projectStats = $this->program->getProjectStats($programID, $browseType, 0, $sortField, $pager, $programTitle);
+        $projectStats = $this->program->getProjectStats($programID, $browseType, 0, $sortField, $programTitle, false, $pager);
 
         $allProjectsNum = $this->program->getProjectStats($programID, 'all');
         $this->view->allProjectsNum = $allProjectsNum;
