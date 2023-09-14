@@ -1866,7 +1866,7 @@ class userModel extends model
                     $manageProducts = isset($manageObjects['products']['list']) ? $manageObjects['products']['list'] : '';
                     foreach($allProducts as $id => $product)
                     {
-                        if($this->checkProductPriv($product, $account, $groups, zget($productTeams, $product->id, ''), zget($productStakeholders, $product->id, array()), zget($productWhiteList, $product->id, array()))) $products[$id] = $id;
+                        if($this->checkProductPriv($product, $account, $groups, zget($productTeams, $product->id, array()), zget($productStakeholders, $product->id, array()), zget($productWhiteList, $product->id, array()))) $products[$id] = $id;
                         if(strpos(",$manageProducts,", ",$id,") !== false) $products[$id] = $id;
                     }
                     $userView->products = join(',', $products);
