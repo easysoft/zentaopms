@@ -446,16 +446,14 @@ class program extends control
         $sortField    = zget($this->config->program->sortFields, $order[0], 'id') . '_' . $order[1];
         $projectStats = $this->program->getProjectStats($programID, $browseType, 0, $sortField, $programTitle, false, $pager);
 
-        $allProjectsNum = $this->program->getProjectStats($programID, 'all');
-        $this->view->allProjectsNum = $allProjectsNum;
-        $this->view->title          = $this->lang->program->project;
-        $this->view->projectStats   = $projectStats;
-        $this->view->pager          = $pager;
-        $this->view->programID      = $programID;
-        $this->view->users          = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
-        $this->view->PMList         = $this->loadModel('product')->getPMList($projectStats);
-        $this->view->browseType     = $browseType;
-        $this->view->orderBy        = $orderBy;
+        $this->view->title        = $this->lang->program->project;
+        $this->view->projectStats = $projectStats;
+        $this->view->pager        = $pager;
+        $this->view->programID    = $programID;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
+        $this->view->PMList       = $this->loadModel('product')->getPMList($projectStats);
+        $this->view->browseType   = $browseType;
+        $this->view->orderBy      = $orderBy;
         $this->display();
     }
 
