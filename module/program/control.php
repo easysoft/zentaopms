@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of program module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     program
- * @version     $Id
  * @link        http://www.zentao.net
  */
 class program extends control
@@ -640,15 +641,12 @@ class program extends control
     public function updateOrder()
     {
         $programs = $this->post->programs;
-        foreach($programs as $id => $order)
-        {
-            $this->dao->update(TABLE_PROJECT)
-                ->set('`order`')->eq($order)
-                ->where('id')->eq($id)
-                ->exec();
-        }
+        if(!$programs) return $this->send(array('result' => 'success'));
 
-        $this->send(array('result' => 'success'));
+        foreach($programs as $programID => $order) $this->program->updateOrder((int) $programID, (int) $order);
+
+        if(dao::isError()) return $this->sendError(dao::getError());
+        return $this->send(array('result' => 'success'));
     }
 
     /*

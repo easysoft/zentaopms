@@ -1,4 +1,14 @@
 <?php
+declare(strict_types=1);
+/**
+ * The model file of program module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     program
+ * @link        http://www.zentao.net
+ */
 class programModel extends model
 {
     /**
@@ -1782,5 +1792,20 @@ class programModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
             ->orderBy('order_asc')
             ->fetchGroup('program');
+    }
+
+    /**
+     * 更新项目集排序。
+     * Update the order of the program.
+     *
+     * @param  int    $programID
+     * @param  int    $order
+     * @access public
+     * @return bool
+     */
+    public function updateOrder(int $programID, int $order): bool
+    {
+        $this->dao->update(TABLE_PROGRAM)->set('`order`')->eq($order)->where('id')->eq($programID)->exec();
+        return !dao::isError();
     }
 }
