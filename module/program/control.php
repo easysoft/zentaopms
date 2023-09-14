@@ -460,6 +460,7 @@ class program extends control
     }
 
     /**
+     * 项目集下的干系人列表。
      * Program stakeholder list.
      *
      * @param  int    $programID

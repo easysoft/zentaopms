@@ -335,19 +335,6 @@ class programTest
     }
 
     /**
-     * Get stakeholders.
-     *
-     * @param  int    $programID
-     * @param  string $orderBy
-     * @access public
-     * @return array
-     */
-    public function getStakeholdersTest($programID, $orderBy = 'id_desc')
-    {
-        return $this->program->getStakeholders($programID, $orderBy);
-    }
-
-    /**
      * Test save state.
      *
      * @param  int    $programID

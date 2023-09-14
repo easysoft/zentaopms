@@ -704,6 +704,7 @@ class programModel extends model
     }
 
     /**
+     * 通过项目集ID获取干系人列表信息。
      * Get stakeholders by program id.
      *
      * @param  int     $programID
@@ -712,7 +713,7 @@ class programModel extends model
      * @access public
      * @return array
      */
-    public function getStakeholders($programID = 0, $orderBy = 'id_desc', $pager = null)
+    public function getStakeholders(int $programID = 0, string $orderBy = 'id_desc', object $pager = null): array
     {
         return $this->dao->select('t2.account,t2.realname,t2.role,t2.qq,t2.mobile,t2.phone,t2.weixin,t2.email,t1.id,t1.type,t1.from,t1.key')->from(TABLE_STAKEHOLDER)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')

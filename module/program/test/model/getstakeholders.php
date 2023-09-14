@@ -26,19 +26,15 @@ su('admin');
 /**
 
 title=测试 programModel::getStakeholders();
+timeout=0
 cid=1
-pid=1
-
-获取干系人数量                     >> 2
-获取干系人数量                     >> 1
-id倒序排，获取第一个干系人真实姓名 >> 用户2
-id正序排，获取第一个干系人真实姓名 >> 用户1
 
 */
 
-$programTester = new programTest();
-$stakeholders1 = $programTester->getStakeholdersTest(1, 'id_desc');
-$stakeholders2 = $programTester->getStakeholdersTest(2, 'id_asc');
+global $tester;
+$tester->loadModel('program');
+$stakeholders1 = $tester->program->getStakeholders(1, 'id_desc');
+$stakeholders2 = $tester->program->getStakeholders(2, 'id_asc');
 
 r(count($stakeholders1)) && p()             && e('2');     // 获取干系人数量
 r(count($stakeholders2)) && p()             && e('1');     // 获取干系人数量
