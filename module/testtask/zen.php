@@ -2,9 +2,10 @@
 class testtaskZen extends testtask
 {
     /**
-     * 设置菜单。
-     * Set menu.
+     * 根据不同情况设置菜单。
+     * Set menu according different situations.
      *
+     * @param  array     $products
      * @param  int       $productID
      * @param  int       $branch
      * @param  int       $projectID
@@ -13,22 +14,11 @@ class testtaskZen extends testtask
      * @access protected
      * @return void
      */
-    protected function setMenu(int $productID, int $branch, int $projectID, int $executionID, int $taskID): void
+    protected function setMenu(array $products, int $productID, int $branch, int $projectID, int $executionID, int $taskID)
     {
-        /* 设置菜单。 */
-        /* Set menu. */
-        if($this->app->tab == 'project')
-        {
-            $this->loadModel('project')->setMenu($projectID);
-        }
-        elseif($this->app->tab == 'execution')
-        {
-            $this->loadModel('execution')->setMenu($executionID);
-        }
-        else
-        {
-            $this->testtask->setMenu($this->products, $productID, $branch, $taskID);
-        }
+        if($this->app->tab == 'project') return $this->loadModel('project')->setMenu($projectID);
+        if($this->app->tab == 'execution') return $this->loadModel('execution')->setMenu($executionID);
+        return $this->testtask->setMenu($products, $productID, $branch, $taskID);
     }
 
     /**
