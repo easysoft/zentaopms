@@ -575,7 +575,7 @@ class programModel extends model
     public function appendStatToProjects(array $projects, string $appendFields = '', array $data = array()): array
     {
         if(empty($projects)) return array();
-        if(empty($appendFields) or empty($data)) return $projects;
+        if(empty($appendFields) || empty($data)) return $projects;
 
         $appendFields = explode(',', $appendFields);
         $emptyHour    = json_decode(json_encode(array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0)));
@@ -586,7 +586,7 @@ class programModel extends model
             if(helper::isZeroDate($project->end)) $project->end = '';
 
             /* Judge whether the project is delayed. */
-            if($project->status != 'done' and $project->status != 'closed' and $project->status != 'suspended')
+            if($project->status != 'done' && $project->status != 'closed' && $project->status != 'suspended')
             {
                 $delay = empty($project->end) ? 0 : helper::diffDate(helper::today(), $project->end);
                 if($delay > 0) $project->delay = $delay;
@@ -1532,7 +1532,7 @@ class programModel extends model
 
         /* Get the number of left tasks. */
         $leftTasks = array();
-        if($this->cookie->projectType and $this->cookie->projectType == 'bycard')
+        if($this->cookie->projectType && $this->cookie->projectType == 'bycard')
         {
             $leftTasks = $this->dao->select('t2.parent as project, count(*) as tasks')->from(TABLE_TASK)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
