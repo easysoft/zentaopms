@@ -12,7 +12,8 @@
 class testtask extends control
 {
     /**
-     * All products.
+     * 产品键值对。
+     * Product key-value pairs.
      *
      * @var    array
      * @access public
@@ -20,6 +21,7 @@ class testtask extends control
     public $products = array();
 
     /**
+     * 项目 ID。
      * Project id.
      *
      * @var    int
