@@ -490,13 +490,14 @@ class program extends control
     }
 
     /**
+     * 创建项目集干系人。
      * Create program stakeholder.
      *
      * @param  int    $programID
      * @access public
      * @return void
      */
-    public function createStakeholder($programID = 0)
+    public function createStakeholder(int $programID = 0)
     {
         return print($this->fetch('stakeholder', 'create', "objectID=$programID"));
     }
