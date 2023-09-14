@@ -43,7 +43,7 @@ $lang->metric->oldMetricInfo = 'Measurement Info';
 $lang->metric->verifyFile    = 'Verify File';
 $lang->metric->verifyResult  = 'Verify Result';
 $lang->metric->publish       = 'Publish';
-$lang->metric->moveFailTip   = '移动度量项文件失败。';
+$lang->metric->moveFailTip   = 'Failed to move the metric file.';
 $lang->metric->selectCount   = '%s metrics';
 $lang->metric->testMetric    = 'Test Metric';
 
