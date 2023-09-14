@@ -1,28 +1,20 @@
-window.unlinkStakeholderConfirm = function(confirmDeleteTip, actionUrl)
-{
-    zui.Modal
-    .confirm({message: confirmDeleteTip, icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'})
-    .then((confirmed) =>
-    {
-        if(confirmed) $.ajaxSubmit({url: actionUrl});
-    });
-};
-
 window.onClickBatchUnlink = function(event)
 {
-    const dtable      = zui.DTable.query(event.target);
-    const checkedList = dtable.$.getChecks();
+    zui.Modal
+    .confirm({message: confirmBatchUnlinkTip, icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'})
+    .then((confirmed) =>
+     {
+         if(confirmed)
+         {
+             const dtable      = zui.DTable.query($(this).target);
+             const checkedList = dtable.$.getChecks();
+             if(!checkedList.length) return;
 
-    if(checkedList.length === 0) return;
+             const url  = $(this).closest('button').data('url');
+             const form = new FormData();
+             checkedList.forEach((id) => form.append('stakeholderIdList[]', id));
 
-    /* Generate checked stakeholder ID list string. */
-    let idList = new Array();
-    checkedList.forEach(function(id)
-    {
-        idList.push(id);
+             $.ajaxSubmit({url, data: form});
+         }
     });
-
-    /* Set data-url for ajaxSubmit. */
-    const button = $($(event.target).parents('button'));
-    button.data('url', button.data('href').replace('%s', idList.join(',')));
 }

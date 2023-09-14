@@ -70,13 +70,14 @@ $cols = $this->loadModel('datatable')->getSetting('stakeholder');
 
 /* Set list and menu of actions to customize the actions of stakeholder in program module. */
 $cols['actions']['list'] = array('unlinkStakeholder' => array(
-    'icon'      => 'unlink',
-    'className' => 'ajax-submit',
-    'text'      => $lang->program->unlinkStakeholder,
-    'hint'      => $lang->program->unlinkStakeholder,
-    'url'       => $this->createLink('program', 'unlinkStakeholder', "id={id}&programID={$programID}&confirm=no"
+    'icon'         => 'unlink',
+    'className'    => 'ajax-submit',
+    'text'         => $lang->program->unlinkStakeholder,
+    'hint'         => $lang->program->unlinkStakeholder,
+    'url'          => $this->createLink('program', 'unlinkStakeholder', "id={id}&programID={$programID}"),
+    'data-confirm' => $lang->program->confirmUnlink,
     )
-));
+);
 $cols['actions']['menu'] = array('unlinkStakeholder');
 
 $data = initTableData($stakeholders, $cols, $this->stakeholder);
@@ -88,6 +89,7 @@ foreach($data as $rowData)
 }
 
 jsVar('summeryTpl', $lang->program->checkedProjects);
+jsVar('confirmBatchUnlinkTip', $lang->program->confirmBatchUnlink);
 
 dtable
 (
@@ -100,10 +102,10 @@ dtable
         'type'  => 'btn-group',
         'items' => array(array
         (
-            'text'      => $lang->unlink,
-            'class'     => 'btn secondary toolbar-item batch-btn size-sm ajax-submit',
-            'onClick'   => jsRaw('onClickBatchUnlink'),
-            'data-href' => createLink('program', 'batchUnlinkStakeholders', "programID={$programID}&stakeholderIDList=%s")
+            'text'     => $lang->unlink,
+            'class'    => 'btn secondary toolbar-item batch-btn size-sm ajax-submit',
+            'onClick'  => jsRaw('onClickBatchUnlink'),
+            'data-url' => createLink('program', 'batchUnlinkStakeholders', "programID={$programID}")
         ))
     )),
 );
