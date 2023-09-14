@@ -468,4 +468,32 @@ class programTest
 
         return $this->program->getProgramIDByObject($objectID, $object, $objects);
     }
+
+    /**
+     * 关闭一个项目集。
+     * Close a program.
+     *
+     * @param  int    $programID
+     * @param  array  $postData
+     * @access public
+     * @return array
+     */
+    public function closeTest(int $programID, array $postData): array
+    {
+        $now        = helper::now();
+        $oldProgram = $this->program->getByID($programID);
+
+        $program = new stdclass();
+        $program->status         = 'close';
+        $program->closedDate     = $now;
+        $program->closedBy       = 'admin';
+        $program->lastEditedDate = $now;
+        $program->lastEditedBy   = 'admin';
+        foreach($postData as $field => $value) $program->{$field} = $value;
+
+        $changes = $this->program->close($program, $oldProgram);
+
+        if(dao::isError()) return dao::getError();
+        return $changes;
+    }
 }

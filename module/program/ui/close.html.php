@@ -20,6 +20,7 @@ formPanel
         set::name('realEnd'),
         set::control('date'),
         set::value(!helper::isZeroDate($program->realEnd) ? $program->realEnd : helper::today()),
+        set::required(true)
     ),
     formGroup
     (

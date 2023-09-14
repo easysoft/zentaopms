@@ -266,13 +266,14 @@ class program extends control
     }
 
     /**
+     * 关闭一个项目集。
      * Close a program.
      *
      * @param  int    $programID
      * @access public
      * @return void
      */
-    public function close($programID)
+    public function close(int $programID)
     {
         $this->loadModel('action');
         $program = $this->program->getByID($programID);
@@ -283,10 +284,11 @@ class program extends control
             $hasUnfinished = $this->program->hasUnfinished($program);
             if($hasUnfinished) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->program->closeErrorMessage}');"));
 
-            $changes = $this->program->close($programID);
+            $programData = form::data()->get();
+            $changes     = $this->program->close($programData, $program);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if($this->post->comment != '' or !empty($changes))
+            if($this->post->comment != '' || !empty($changes))
             {
                 $actionID = $this->action->create('program', $programID, 'Closed', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
