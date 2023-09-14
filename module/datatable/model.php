@@ -121,6 +121,7 @@ class datatableModel extends model
                     continue;
                 }
 
+                if(!isset($set['name'])) $setting[$field]['name'] = $field;
                 if($field == 'actions') $setting[$field]['width'] = $fieldList[$field]['width'];
             }
         }
