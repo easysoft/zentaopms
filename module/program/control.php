@@ -61,7 +61,7 @@ class program extends control
             else
             {
                 /* Get top programs and projects. */
-                $topObjects = $this->program->getList($status == 'unclosed' ? 'doing,suspended,wait' : $status, $orderBy, 'top', array(), $pager);
+                $topObjects = $this->program->getList($status == 'unclosed' ? 'doing,suspended,wait' : $status, $orderBy, 'top', array());
                 if(!$topObjects) $topObjects = array(0);
                 $programs   = $this->program->getList($status, $orderBy, 'child', array_keys($topObjects));
 
