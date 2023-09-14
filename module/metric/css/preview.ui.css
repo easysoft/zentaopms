@@ -12,6 +12,7 @@
 .side .name-color {color: var(--color-slate-600);}
 .side .metric-tree {height: calc(100vh - 180px); overflow-y: scroll;}
 .side .metric-item {padding-left: 24px; padding-top: 6px; padding-bottom: 6px;}
+.side .metric-item:hover {background-color: var(--color-gray-100);}
 .side .metric-item a {color: var(--color-inherit);}
 .side .metric-item:hover, .side .checkbox-primary:hover {color: var(--color-primary-500);}
 .side .metric-current {color: var(--color-primary-600); background-color:var(--color-primary-50);}
