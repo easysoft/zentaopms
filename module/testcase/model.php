@@ -2583,6 +2583,7 @@ class testcaseModel extends model
     }
 
     /**
+     * 通过产品和模块获取步骤信息。
      * Get step by product and module.
      *
      * @param  int $productID
@@ -2590,7 +2591,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    function getStepByProductAndModule($productID, $moduleID)
+    function getStepByProductAndModule(int $productID, int $moduleID): array
     {
         $fields = "t1.id as testcaseID,"
             . "t2.id as stepID,"

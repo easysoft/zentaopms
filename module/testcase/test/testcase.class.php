@@ -1392,4 +1392,24 @@ class testcaseTest
         if(dao::isError()) return dao::getError();
         return $return;
     }
+
+    /**
+     * 测试通过产品和模块获取步骤信息。
+     * Test get step by product and module.
+     *
+     * @param  int          $productID
+     * @param  int          $moduleID
+     * @access public
+     * @return array|string
+     */
+    public function getStepByProductAndModuleTest(int $productID, int $moduleID): array|string
+    {
+        $array = $this->objectModel->getStepByProductAndModule($productID, $moduleID);
+
+        if(dao::isError()) return dao::getError();
+
+        $return = '';
+        foreach($array as $key => $step) $return .= "testcaseID:{$step->testcaseID} stepID: {$step->stepID}. ";
+        return trim($return);
+    }
 }
