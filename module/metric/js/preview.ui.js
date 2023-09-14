@@ -270,12 +270,14 @@ window.renderDTable = function()
 
 window.initDTable = function($obj, head, data)
 {
+    var height = 328;
+    if(viewType == 'single') height = $('.table-side').height();
     if(!head || !data) return;
     new zui.DTable($obj,{
         responsive: true,
         bordered: true,
         scrollbarHover: true,
-        height: 'auto',
+        height: height,
         cols: head,
         data: data,
     });
