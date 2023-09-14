@@ -2471,7 +2471,7 @@ class executionTest
     {
         global $app;
         $app->moduleName = 'task';
-        $tasks = $this->executionModel->getSearchTasks("execution = $executionID", null, 'id_desc');
+        $tasks = $this->executionModel->getSearchTasks("execution = $executionID", 'id_desc');
         return $this->executionModel->formatTasksForTree($tasks);
     }
 

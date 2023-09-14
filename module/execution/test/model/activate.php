@@ -3,6 +3,7 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/execution.class.php';
 zdTable('user')->gen(5);
+zdTable('task')->gen(0);
 su('admin');
 
 $execution = zdTable('project');
