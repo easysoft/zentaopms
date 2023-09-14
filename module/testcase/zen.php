@@ -1779,8 +1779,9 @@ class testcaseZen extends testcase
         {
             $key   = $config['key'];
             $value = $config['value'];
-            if(!$this->testcase->checkConfigValue($value)) $configErrors[$key][] = sprintf($this->lang->testcase->errorXmindConfig, $this->lang->testcase->{$key});
+            if(!preg_match("/^[a-zA-Z]{1,10}$/", $value)) $configErrors[$key][] = sprintf($this->lang->testcase->errorXmindConfig, $this->lang->testcase->{$key});
         }
+
         if(!empty($configErrors)) dao::$errors = $configErrors;
 
         $map = array();

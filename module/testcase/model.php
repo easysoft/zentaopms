@@ -2775,18 +2775,6 @@ class testcaseModel extends model
     }
 
     /**
-     * Check config.
-     *
-     * @param  string $str
-     * @access public
-     * @return bool
-     */
-    function checkConfigValue($str)
-    {
-        return preg_match("/^[a-zA-Z]{1,10}$/",$str);
-    }
-
-    /**
      * 存储 xmind 配置。
      * Save xmind config.
      *
