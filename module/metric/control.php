@@ -44,7 +44,7 @@ class metric extends control
             $metricID = $this->metric->create($metricData);
 
             if(empty($metricID) || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $response = $this->metricZen->responseAfterCreate();
+            $response = $this->metricZen->responseAfterCreate($metricData->scope);
 
             return $this->send($response);
         }
@@ -79,7 +79,7 @@ class metric extends control
             $metricID = $this->metric->update($id, $metricData);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $response = $this->metricZen->responseAfterEdit();
+            $response = $this->metricZen->responseAfterEdit($metricData->scope);
 
             return $this->send($response);
         }

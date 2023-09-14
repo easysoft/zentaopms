@@ -48,9 +48,9 @@ class metricZen extends metric
      * @access protected
      * @return array
      */
-    protected function responseAfterCreate()
+    protected function responseAfterCreate($scope)
     {
-        $location = $this->createLink('metric', 'browse');
+        $location = $this->createLink('metric', 'browse', "scope=$scope");
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $location);
     }
 
@@ -61,9 +61,9 @@ class metricZen extends metric
      * @access protected
      * @return array
      */
-    protected function responseAfterEdit()
+    protected function responseAfterEdit($scope)
     {
-        $location = $this->createLink('metric', 'browse');
+        $location = $this->createLink('metric', 'browse', "scope=$scope");
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $location);
     }
 

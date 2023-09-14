@@ -150,8 +150,18 @@ panel
     set::footerClass('footer-actions'),
     set::footerActions
     ([
-        ['type' => 'secondary', 'text' => $lang->metric->verifyFile, 'url' => helper::createLink('metric', 'implement', "metricID={$metric->id}&isVerify=true")],
-        ['type' => 'primary', 'text' => $lang->metric->publish, 'disabled' => empty($result), 'url' => helper::createLink('metric', 'publish', "metricID={$metric->id}")],
+        [
+            'type' => 'secondary',
+            'text' => $lang->metric->verifyFile,
+            'url' => helper::createLink('metric', 'implement', "metricID={$metric->id}&isVerify=true")
+        ],
+        [
+            'type' => 'primary',
+            'text' => $lang->metric->publish,
+            'btnType' => 'submit',
+            'disabled' => empty($result),
+            'url' => helper::createLink('metric', 'publish', "metricID={$metric->id}")
+        ],
     ]),
 );
 
