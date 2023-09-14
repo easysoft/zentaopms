@@ -2396,12 +2396,39 @@ class testcaseZen extends testcase
     {
         $caseList   = $this->testcase->getCaseByProductAndModule($productID, $moduleID);
         $stepList   = $this->testcase->getStepByProductAndModule($productID, $moduleID);
-        $moduleList = $this->testcase->getModuleByProductAndModel($productID, $moduleID, $branch);
+        $moduleList = $this->getModuleListForXmindExport($productID, $moduleID, $branch);
         $sceneInfo  = $this->testcase->getSceneByProductAndModule($productID, $moduleID);
         $config     = $this->testcase->getXmindConfig();
 
         return array('caseList' => $caseList, 'stepList' => $stepList, 'sceneMaps' => $sceneInfo['sceneMaps'], 'topScenes' => $sceneInfo['topScenes'], 'moduleList' => $moduleList, 'config' => $config);
     }
+
+    /**
+     * 导出xmind格式用例时获取模块列表。
+     * Get module list for xmind export.
+     *
+     * @param  int        $productID
+     * @param  int        $moduleID
+     * @param  int|string $branch
+     * @access public
+     * @return array
+     */
+    private function getModuleListForXmindExport(int $productID, int $moduleID, int|string $branch): array
+    {
+        if($moduleID)
+        {
+            $module = $this->loadModel('tree')->getByID($moduleID);
+            if(!$module) return array();
+
+            return array($module->id => $module->name);
+        }
+
+        $moduleList = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, ($branch === 'all' || !isset($branches[$branch])) ? 0 : $branch);
+        unset($moduleList['0']);
+
+        return $moduleList;
+    }
+
 
     /**
      * 获取导入的数据。

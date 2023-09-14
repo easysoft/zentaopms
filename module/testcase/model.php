@@ -2522,35 +2522,6 @@ class testcaseModel extends model
     }
 
     /**
-     * Get module by product.
-     *
-     * @param  int $productID
-     * @param  int $moduleID
-     * @param  int $branch
-     * @access public
-     * @return array
-     */
-    function getModuleByProductAndModel($productID, $moduleID, $branch)
-    {
-        $moduleList = array();
-
-        if($moduleID > 0)
-        {
-            $module = $this->loadModel('tree')->getByID($moduleID);
-
-            $moduleList[$module->id] = $module->name;
-        }
-        else
-        {
-            $moduleList = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, ($branch === 'all' or !isset($branches[$branch])) ? 0 : $branch);
-
-            unset($moduleList['0']);
-        }
-
-        return $moduleList;
-    }
-
-    /**
      * Get case by product and module.
      *
      * @param  int $productID
