@@ -524,4 +524,18 @@ class programTest
         if(dao::isError()) return dao::getError();
         return $changes;
     }
+
+    /**
+     * Test updateOrder method.
+     *
+     * @param  int    $programID
+     * @param  int    $order
+     * @access public
+     * @return void
+     */
+    public function updateOrderTest($programID, $order)
+    {
+        $this->program->updateOrder($programID, $order);
+        return $this->program->getByID($programID);
+    }
 }
