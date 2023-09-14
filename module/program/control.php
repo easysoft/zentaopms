@@ -34,57 +34,18 @@ class program extends control
      * @access public
      * @return void
      */
-    public function browse($status = 'unclosed', $orderBy = 'order_asc', $recTotal = 0, $recPerPage = 10, $pageID = 1, $param = 0)
+    public function browse(string $status = 'unclosed', string $orderBy = 'order_asc', int $recTotal = 0, int $recPerPage = 10, int $pageID = 1, int $param = 0)
     {
-        if(common::hasPriv('program', 'create')) $this->lang->pageActions = html::a($this->createLink('program', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->program->create, '', "class='btn btn-primary create-program-btn'");
-
-        $this->session->set('programList', $this->app->getURI(true), 'program');
-        $this->session->set('projectList', $this->app->getURI(true), 'program');
-        $this->session->set('createProjectLocate', $this->app->getURI(true), 'program');
+        $uri = $this->app->getURI(true);
+        $this->session->set('programList', $uri, 'program');
+        $this->session->set('projectList', $uri, 'program');
+        $this->session->set('createProjectLocate', $uri, 'program');
 
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $programType = $this->cookie->programType ? $this->cookie->programType : 'bylist';
-
-        if($programType === 'bygrid')
-        {
-            $programs = $this->program->getProgramStats($status, 20, $orderBy);
-        }
-        else
-        {
-            if(strtolower($status) == 'bysearch')
-            {
-                $queryID  = (int)$param;
-                $programs = $this->program->getListBySearch($orderBy, $queryID);
-            }
-            else
-            {
-                /* Get top programs and projects. */
-                $topObjects = $this->program->getList($status == 'unclosed' ? 'doing,suspended,wait' : $status, $orderBy, 'top', array());
-                if(!$topObjects) $topObjects = array(0);
-                $programs   = $this->program->getList($status, $orderBy, 'child', array_keys($topObjects));
-
-                /* Get summary. */
-                $topCount = $indCount = 0;
-                foreach($programs as $program)
-                {
-                    if($program->type == 'program' and $program->parent == 0) $topCount ++;
-                    if($program->type == 'project' and $program->parent == 0) $indCount ++;
-                }
-                $summary = sprintf($this->lang->program->summary, $topCount, $indCount);
-            }
-        }
-
-        /* Get PM id list. */
-        $accounts = array();
-        $hasProject = false;
-        foreach($programs as $program)
-        {
-            if(!empty($program->PM) and !in_array($program->PM, $accounts)) $accounts[] = $program->PM;
-            if($hasProject === false and $program->type != 'program') $hasProject = true;
-        }
-        $PMList = $this->loadModel('user')->getListByAccounts($accounts, 'account');
+        $programs = $this->programZen->getProgramsByType($status, $orderBy, $param, $pager);
+        $PMList   = $this->programZen->getPMListByPrograms($programs);
 
         /* Build the search form. */
         $actionURL = $this->createLink('program', 'browse', "status=bySearch&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}&param=myQueryID");
@@ -95,16 +56,11 @@ class program extends control
         $this->view->programs     = $programs;
         $this->view->status       = $status;
         $this->view->orderBy      = $orderBy;
-        $this->view->summary      = isset($summary) ? $summary : '';
         $this->view->pager        = $pager;
-        $this->view->users        = $this->user->getPairs('noletter');
-        $this->view->userIdPairs  = $this->user->getPairs('noletter|showid');
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->usersAvatar  = $this->user->getAvatarPairs('');
-        $this->view->programType  = $programType;
         $this->view->PMList       = $PMList;
         $this->view->progressList = $this->program->getProgressList();
-        $this->view->hasProject   = $hasProject;
-        $this->view->param        = $param;
 
         $this->display();
     }

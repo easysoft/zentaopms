@@ -26,4 +26,63 @@ class programZen extends program
             ->add('lastEditedDate', helper::now())
             ->get();
     }
+
+    /**
+     * 根据条件获取项目集。
+     * Get programs by type.
+     *
+     * @param  string      $status
+     * @param  string      $orderBy
+     * @param  int         $param
+     * @param  object|null $pager
+     * @access protected
+     * @return array
+     */
+    protected function getProgramsByType(string $status, string $orderBy, int $param = 0, object|null $pager = null): array
+    {
+        $status = strtolower($status);
+        $params = array();
+        $this->view->summary = '';
+
+        if(strtolower($status) == 'bysearch') return $this->program->getListBySearch($orderBy, $param);
+
+        /* Get top programs and projects. */
+        $topObjects = $this->program->getList($status == 'unclosed' ? 'doing,suspended,wait' : $status, $orderBy, 'top', array(), $pager);
+        if(!$topObjects) $topObjects = array(0);
+
+        $programs = $this->program->getList($status, $orderBy, 'child', array_keys($topObjects));
+
+        /* Get summary. */
+        $topCount = $indCount = 0;
+        foreach($programs as $program)
+        {
+            if($program->type == 'program' and $program->parent == 0) $topCount ++;
+            if($program->type == 'project' and $program->parent == 0) $indCount ++;
+        }
+        $this->view->summary = sprintf($this->lang->program->summary, $topCount, $indCount);
+
+        return $programs;
+    }
+
+    /**
+     * 根据项目集，获取产品经理列表。
+     * Get PM list by programs.
+     *
+     * @param  array     $programs
+     * @access protected
+     * @return array
+     */
+    protected function getPMListByPrograms(array $programs): array
+    {
+        $accounts   = array();
+        $hasProject = false;
+        foreach($programs as $program)
+        {
+            if(!empty($program->PM) and !in_array($program->PM, $accounts)) $accounts[] = $program->PM;
+            if($hasProject === false and $program->type != 'program')       $hasProject = true;
+        }
+        $this->view->hasProject = $hasProject;
+
+        return $this->loadModel('user')->getListByAccounts($accounts, 'account');
+    }
 }

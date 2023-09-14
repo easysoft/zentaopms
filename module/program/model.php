@@ -213,29 +213,23 @@ class programModel extends model
     /**
      * Get program list by search.
      *
-     * @param string $orderBy
-     * @param int $queryID
+     * @param string  $orderBy
+     * @param int     $queryID
      * @access public
-     * @return void
+     * @return array
      */
-    public function getListBySearch($orderBy = 'id_asc', $queryID = 0)
+    public function getListBySearch(string $orderBy = 'id_asc', int $queryID = 0): array
     {
+        if($this->session->programQuery == false) $this->session->set('programQuery', ' 1 = 1');
         if($queryID)
         {
+            $this->session->set('programQuery', ' 1 = 1');
             $query = $this->loadModel('search')->getQuery($queryID);
             if($query)
             {
                 $this->session->set('programQuery', $query->sql);
                 $this->session->set('programForm', $query->form);
             }
-            else
-            {
-                $this->session->set('programQuery', ' 1 = 1');
-            }
-        }
-        else
-        {
-            if($this->session->programQuery == false) $this->session->set('programQuery', ' 1 = 1');
         }
         $query = $this->session->programQuery;
 
@@ -248,16 +242,16 @@ class programModel extends model
 
             if($this->app->rawMethod == 'browse')
             {
-                $pathList = $this->dao->select('id,path')->from(TABLE_PROJECT)->where('id')->in($objectIdList)->andWhere('deleted')->eq(0)->fetchPairs('id');
+                $pathList = $this->dao->select('id,path')->from(TABLE_PROJECT)->where('id')->in($objectIdList)->andWhere('deleted')->eq(0)->fetchPairs('id', 'path');
                 foreach($pathList as $path)
                 {
                     foreach(explode(',', trim($path, ',')) as $pathID) $objectIdList[$pathID] = $pathID;
                 }
             }
+            $objectIdList = array_unique($objectIdList);
         }
 
-        return $this->dao->select('*')->from(TABLE_PROGRAM)
-            ->where('deleted')->eq(0)
+        return $this->dao->select('*')->from(TABLE_PROGRAM)->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('type')->eq('program')
             ->beginIF($query)->andWhere($query)->fi()

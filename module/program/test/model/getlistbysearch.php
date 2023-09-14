@@ -15,7 +15,7 @@ $program->status->range('wait,doing,suspended,closed');
 $program->openedBy->range('admin,user1');
 $program->begin->range('20220112 000000:0')->type('timestamp')->format('YY/MM/DD');
 $program->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD');
-$program->gen(20);
+$program->gen(20)->fixPath();
 
 $query = zdTable('userquery');
 $query->id->range('1');
@@ -44,6 +44,17 @@ $programTester = new programTest();
 $sql1 = "(( 1   AND `name`  LIKE '%项目集%' ) AND ( 1  AND `status` = 'wait'  ))";
 $sql2 = "(( 1   AND `name`  LIKE '%项目集%' ) AND ( 1  AND `status` = 'doing'  ))";
 
-r($programTester->getListBySearchTest('id_desc', 0, $sql)) && p('17:name') && e('项目集17'); // 按照id倒序查看，所有名称包含项目集并且未开始的第一个项目集
-r($programTester->getListBySearchTest('id_asc', 0, $sql))  && p('1:name')  && e('项目集1');  // 按照id正序查看，所有名称包含项目集并且进行中的第一个项目集
-r($programTester->getListBySearchTest('id_asc', 1))        && p('1:name')  && e('项目集1');  // 按照id正序查看，符合搜索条件id=1，的第一个项目集
+$programTester->program->app->user->admin = true;
+
+r($programTester->getListBySearchTest('id_desc', 0, $sql1)) && p('17:name') && e('项目集17'); // 按照id倒序查看，所有名称包含项目集并且未开始的第一个项目集
+r($programTester->getListBySearchTest('id_asc',  0, $sql2)) && p('2:name')  && e('项目集2');  // 按照id正序查看，所有名称包含项目集并且进行中的第一个项目集
+r($programTester->getListBySearchTest('id_asc',  1))        && p('1:name')  && e('项目集1');  // 按照id正序查看，符合搜索条件id=1，的第一个项目集
+
+$programTester->program->app->rawMethod            = 'browse';
+$programTester->program->app->user->admin          = false;
+$programTester->program->app->user->view->programs = ',1,2,3,4,5';
+$programTester->program->app->user->view->projects = ',19,20';
+
+r($programTester->getListBySearchTest('id_desc', 0, $sql1)) && p('1:name') && e('项目集1');  // 按照id倒序查看，所有名称包含项目集并且未开始的第一个项目集
+r($programTester->getListBySearchTest('id_asc',  0, $sql2)) && p('2:name') && e('项目集2');  // 按照id正序查看，所有名称包含项目集并且进行中的第一个项目集
+r($programTester->getListBySearchTest('id_asc',  1))        && p('1:name') && e('项目集1');  // 按照id正序查看，符合搜索条件id=1，的第一个项目集

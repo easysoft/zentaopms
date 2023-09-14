@@ -56,7 +56,7 @@ class userModel extends model
      * @access public
      * @return array
      */
-    public function getListByAccounts($accounts = array(), $keyField = 'id')
+    public function getListByAccounts(array $accounts = array(), string $keyField = 'id'): array
     {
         if(empty($accounts)) return array();
 
