@@ -481,7 +481,7 @@ class executionTao extends executionModel
             ->andWhere('account')->notin(array_values($members))
             ->andWhere('account')->ne($oldExecution->openedBy)
             ->exec();
-        if(isset($execution->project) and $execution->project) $this->addProjectMembers($execution->project, $teamMembers);
+        if(isset($execution->project) and $execution->project) $this->addProjectMembers((int)$execution->project, $teamMembers);
 
         /* Fix bug#3074, Update views for team members. */
         if($execution->acl != 'open') $this->updateUserView($executionID, 'sprint', $changedAccounts);
