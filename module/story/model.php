@@ -6865,8 +6865,8 @@ class storyModel extends model
                     $mailto = array_map(function($account) use($users){$account = trim($account); return zget($users, $account);}, explode(',', $story->mailto));
                     $data->mailto = implode(' ', $mailto);
                 }
-                if(in_array($col->name, $userFields)) $story->{$col->name} = zget($users, $story->{$col->name});
-                if(in_array($col->name, $dateFields)) $story->{$col->name} = helper::isZeroDate($story->{$col->name}) ? '' : substr($story->{$col->name}, 5, 11);
+                if(in_array($col->name, $userFields)) $data->{$col->name} = zget($users, $story->{$col->name});
+                if(in_array($col->name, $dateFields)) $data->{$col->name} = helper::isZeroDate($story->{$col->name}) ? '' : substr($story->{$col->name}, 5, 11);
             }
 
             $data->isParent = false;
