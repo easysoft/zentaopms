@@ -10,7 +10,7 @@
 .main, .side {border-radius: 2px;}
 .side .title {height: 48px; padding-left: 16px; margin-bottom: 8px;}
 .side .name-color {color: var(--color-slate-600);}
-.side .metric-tree {height: calc(100vh - 180px); overflow-y: scroll;}
+.side .metric-tree {height: calc(100vh - 180px); max-height: 864px; overflow-y: scroll;}
 .side .metric-item {padding-left: 24px; padding-top: 6px; padding-bottom: 6px;}
 .side .metric-item:hover {background-color: var(--color-gray-100);}
 .side .metric-item a {color: var(--color-inherit);}
@@ -32,10 +32,10 @@
 .main .details-after:after {content: ""; position: absolute; top: 5px; right: -2px; bottom: 5px; width: 1px; background-color: var(--color-slate-300);}
 .main .chart-line-margin {margin-right: 16px;}
 .main .table-and-chart {display: flex;}
-.main .table-and-chart-single {height: calc(100vh - 180px); padding: 8px 16px 16px 16px;}
+.main .table-and-chart-single {height: calc(100vh - 180px); max-height: 864px; padding: 8px 16px 16px 16px;}
 .main .table-and-chart-multiple {max-height: 352px; padding: 8px 16px 16px 16px;}
-.main .canvas {height: calc(100vh - 172px + 48px); overflow-y: auto;}
-.main .table-and-charts {height: calc(100vh - 172px); overflow-y: scroll;}
+.main .canvas {height: calc(100vh - 172px + 48px); max-height: 920px; overflow-y: hidden;}
+.main .table-and-charts {height: calc(100vh - 172px); max-height: calc(100% - 48px); overflow-y: scroll;}
 .main .metricBox {max-height: 408px;}
 
 .table-and-chart .table-side {flex: 0 0 40%; overflow-x: hidden;}
