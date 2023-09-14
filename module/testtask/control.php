@@ -741,7 +741,7 @@ class testtask extends control
             $this->products[$productID] = $product->name;
         }
 
-        $this->testtaskZen->setMenu($this->products, $productID, $task->branch, $task->project, $task->execution, $taskID);
+        $this->testtaskZen->setMenu($productID, $task->branch, $task->project, $task->execution);
         $this->testtaskZen->assignForEdit($task, $productID);
 
         $this->display();

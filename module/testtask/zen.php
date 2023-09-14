@@ -5,16 +5,14 @@ class testtaskZen extends testtask
      * 根据不同情况设置菜单。
      * Set menu according different situations.
      *
-     * @param  array     $products
      * @param  int       $productID
      * @param  int       $branch
      * @param  int       $projectID
      * @param  int       $executionID
-     * @param  int       $taskID
      * @access protected
      * @return void
      */
-    protected function setMenu(array $products, int $productID, int $branch, int $projectID, int $executionID, int $taskID)
+    protected function setMenu(int $productID, int $branch, int $projectID, int $executionID)
     {
         if($this->app->tab == 'project') return $this->loadModel('project')->setMenu($projectID);
         if($this->app->tab == 'execution') return $this->loadModel('execution')->setMenu($executionID);
