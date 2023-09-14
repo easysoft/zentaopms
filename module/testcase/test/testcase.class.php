@@ -1348,16 +1348,47 @@ class testcaseTest
     }
 
     /**
-     * 测试获取所有的子场景 id。
-     * Test get all children id.
+     * 测试获取场景的名称。
+     * Test get scene name.
      *
      * @param  array  $sceneIdList
+     * @param  bool   $fullPath
      * @access public
      * @return array
      */
     public function getScenesNameTest(array $sceneIdList, bool $fullPath = true): array
     {
         $return = $this->objectModel->getScenesName($sceneIdList, $fullPath);
+        if(dao::isError()) return dao::getError();
+        return $return;
+    }
+
+    /**
+     * 测试获取获取 xmind 配置。
+     * Test get xmind config.
+     *
+     * @param  array  $xmindConfig
+     * @access public
+     * @return array
+     */
+    public function getXmindConfigTest(array $xmindConfig): array
+    {
+        global $tester;
+        $tester->dao->delete()->from(TABLE_CONFIG)->where('section')->eq('xmind')->andWhere('module')->eq('testcase')->andWhere('owner')->eq($tester->app->user->account)->exec();
+
+        foreach($xmindConfig as $key => $value)
+        {
+            $data = new stdclass();
+            $data->owner   = $tester->app->user->account;
+            $data->section = 'xmind';
+            $data->module  = 'testcase';
+            $data->key     = $key;
+            $data->value   = $value;
+
+            $tester->dao->insert(TABLE_CONFIG)->data($data)->exec();
+        }
+
+        $return = $this->objectModel->getXmindConfig();
         if(dao::isError()) return dao::getError();
         return $return;
     }

@@ -2760,12 +2760,13 @@ class testcaseModel extends model
     }
 
     /**
+     * 获取 xmind 配置。
      * Get xmind config.
      *
      * @access public
      * @return array
      */
-    function getXmindConfig()
+    function getXmindConfig(): array
     {
         $configItems = $this->dao->select("`key`,value")->from(TABLE_CONFIG)
             ->where('owner')->eq($this->app->user->account)
@@ -2774,7 +2775,7 @@ class testcaseModel extends model
             ->fetchAll();
 
         $config = array();
-        foreach($configItems as $item) $config[$item -> key] = $item -> value;
+        foreach($configItems as $item) $config[$item->key] = $item->value;
 
         if(!isset($config['module'])) $config['module'] = 'M';
         if(!isset($config['scene']))  $config['scene']  = 'S';
