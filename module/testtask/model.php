@@ -1237,13 +1237,14 @@ class testtaskModel extends model
     }
 
     /**
-     * Get info of a test run.
+     * 获取执行结果信息。
+     * Get information of a test run.
      *
      * @param  int   $runID
      * @access public
-     * @return void
+     * @return object
      */
-    public function getRunById($runID)
+    public function getRunById(int $runID): object
     {
         $testRun = $this->dao->findById($runID)->from(TABLE_TESTRUN)->fetch();
         $testRun->case = $this->loadModel('testcase')->getById($testRun->case, $testRun->version);

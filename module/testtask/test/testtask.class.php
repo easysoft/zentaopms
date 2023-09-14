@@ -260,13 +260,25 @@ class testtaskTest
         return $objects;
     }
 
-    public function getRunByIdTest($runID)
+    /**
+     * 测试获取执行结果。
+     * Test get info of a test run.
+     *
+     * @param  int          $runID
+     * @param  int          $caseID
+     * @param  int          $version
+     * @param  string       $status  all|done
+     * @param  string       $type    all|fail
+     * @access public
+     * @return array|object
+     */
+    public function getRunByIdTest($runID): array|object
     {
-        $objects = $this->objectModel->getRunById($runID);
+        $object = $this->objectModel->getRunById($runID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $object;
     }
 
     public function createResultTest($runID = 0)
