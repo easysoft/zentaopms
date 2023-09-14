@@ -1870,56 +1870,6 @@ class testcaseModel extends model
     }
 
     /**
-     * Search form add scene.
-     *
-     * @param  int    $productID
-     * @param  array  $products
-     * @param  int    $queryID
-     * @param  string $actionURL
-     * @param  int    $projectID
-     * @param  int    $moduleID
-     * @access public
-     * @return void
-     */
-    public function buildSearchFormAddScene($productID, $products, $queryID, $actionURL, $projectID = 0,$moduleID = 0)
-    {
-        $product = ($this->app->tab == 'project' and empty($productID)) ? $products : array($productID => $products[$productID]) + array('all' => $this->lang->testcase->allProduct);
-        $this->config->testcase->search['params']['product']['values'] = $product;
-
-        $module = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0);
-        $scene  = $this->getSceneMenu($productID, $moduleID, $viewType = 'case', $startSceneID = 0,  0);
-
-        if(!$productID)
-        {
-            $module = array();
-            foreach($products as $id => $product) $module += $this->loadModel('tree')->getOptionMenu($id, 'case', 0);
-        }
-
-        $this->config->testcase->search['params']['module']['values'] = $module;
-        $this->config->testcase->search['params']['parent']['values'] = $scene;
-        $this->config->testcase->search['params']['lib']['values']    = $this->loadModel('caselib')->getLibraries();
-
-        if($this->session->currentProductType == 'normal')
-        {
-            unset($this->config->testcase->search['fields']['branch']);
-            unset($this->config->testcase->search['params']['branch']);
-        }
-        else
-        {
-            $productInfo = $this->loadModel('product')->getByID($productID);
-
-            $this->config->testcase->search['fields']['branch']           = sprintf($this->lang->product->branch, $this->lang->product->branchName[$productInfo->type]);
-            $this->config->testcase->search['params']['branch']['values'] = array('' => '', '0' => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($productID, '', $projectID) + array('all' => $this->lang->branch->all);
-        }
-
-        if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
-        $this->config->testcase->search['actionURL'] = $actionURL;
-        $this->config->testcase->search['queryID']   = $queryID;
-
-        $this->loadModel('search')->setSearchParams($this->config->testcase->search);
-    }
-
-    /**
      * 构建树数组。
      * Build tree array.
      *
