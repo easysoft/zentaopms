@@ -370,6 +370,31 @@ class testcaseTest
     }
 
     /**
+     * 测试获取导出的用例。
+     * Test Get cases to export.
+     *
+     * @param  bool     $testcaseOnlyCondition
+     * @param  string   $testcaseQueryCondition
+     * @param  string   $exportType
+     * @param  int      $taskID
+     * @param  string   $orderBy
+     * @param  int|bool $limit
+     * @access public
+     * @return array
+     */
+    public function getCasesToExportTest(bool $testcaseOnlyCondition, string $testcaseQueryCondition, string $exportType, int $taskID, string $orderBy = 'id_desc', int|bool $limit = 0): array
+    {
+        $_SESSION['testcaseOnlyCondition']  = $testcaseOnlyCondition;
+        $_SESSION['testcaseQueryCondition'] = $testcaseQueryCondition;
+
+        $objects = $this->objectModel->getCasesToExport($exportType, $taskID, $orderBy, $limit);
+
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
+    }
+
+    /**
      * Test get scenes by id list and query string.
      *
      * @param  array  $sceneIdList
