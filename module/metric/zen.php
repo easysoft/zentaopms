@@ -298,6 +298,9 @@ class metricZen extends metric
         $collectConf = $oldMetric->collectConf;
         $dateType    = $this->lang->metric->dateList[$collectConf->type];
         $dateConf    = $collectConf->type == 'week' ? $collectConf->week : $collectConf->month;
+
+        if($collectConf->type == 'week') $dateConf = $this->processWeekConf($dateConf);
+
         $collectConfText = sprintf($this->lang->metric->collectConfText, $dateType, $dateConf, $oldMetric->execTime);
 
         $oldMetricInfo = array();
@@ -312,6 +315,27 @@ class metricZen extends metric
         $oldMetricInfo['sql']         = array('name' => $this->lang->metric->sqlStatement, 'text' => $oldMetric->configure);
 
         return $oldMetricInfo;
+    }
+
+    /**
+     * 处理周定时配置。
+     * Process week configuration.
+     *
+     * @param  string $dateConf
+     * @access protected
+     * @return string
+     */
+    protected function processWeekConf(string $dateConf): string
+    {
+        $days = explode(',', $dateConf);
+        $dateConfNames = array();
+        foreach($days as $day)
+        {
+            $dateConfNames[] = $this->lang->metric->oldMetric->dayNames[$day];
+        }
+        $dateConf = implode('、', $dateConfNames);
+
+        return $dateConf;
     }
 
     /**

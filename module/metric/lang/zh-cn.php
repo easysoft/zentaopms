@@ -107,6 +107,8 @@ $lang->metric->oldMetric      = new stdclass();
 $lang->metric->oldMetric->sql = 'SQL';
 $lang->metric->oldMetric->tip = '这是旧版度量项的实现方式';
 
+$lang->metric->oldMetric->dayNames = array(1 => '星期一', 2 => '星期二', 3 => '星期三', 4 => '星期四', 5 => '星期五', 6 => '星期六', 0 => '星期日');
+
 $lang->metric->moreSelects = array();
 
 $lang->metric->unitList = array();
