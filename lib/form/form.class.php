@@ -117,6 +117,13 @@ class form extends fixer
             $this->batchConvertField($config);
         }
 
+        /* Append comment and uid to $this->data if it exist. */
+        $reservedPostList = array('comment', 'uid');
+        foreach($reservedPostList as $field)
+        {
+            if(isset($this->rawdata->$field)) $this->data->$field = $this->rawdata->$field;
+        }
+
         if(!empty($this->errors))
         {
             $response = array('result' => 'fail', 'message' => $this->errors);
