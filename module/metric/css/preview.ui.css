@@ -77,3 +77,5 @@
 
 .filter-panel .filter-actions {display: flex; justify-content: center}
 .filter-panel .filter-actions .toolbar {gap: 15px;}
+
+.scope-ellipsis {display: inline-block; width: 137px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}

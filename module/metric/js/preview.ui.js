@@ -280,6 +280,15 @@ window.initDTable = function($obj, head, data)
         height: height,
         cols: head,
         data: data,
+        onRenderCell: function(result, {row, col})
+        {
+            if(col.name == 'scope')
+            {
+                var scope = `<span class="scope-ellipsis" title="${row.data.scope}">${row.data.scope}</span>`;
+                result[0] = {html: scope};
+            }
+            return result;
+        }
     });
 }
 

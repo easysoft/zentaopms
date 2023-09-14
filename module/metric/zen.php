@@ -335,7 +335,7 @@ class metricZen extends metric
         if(!empty($scopeList)) $header[] = array('name' => 'scope', 'title' => $this->lang->metric->scopeList[$scope] . $this->lang->metric->name);
         if(!empty($dateList))  $header[] = array('name' => 'date',  'title' => $this->lang->metric->date);
         $header[] = array('name' => 'value', 'title' => $this->lang->metric->value);
-        if(in_array('date', $fieldList)) $header[] = array('name' => 'calcTime', 'title' => $this->lang->metric->calcTime);
+        if(in_array('date', $fieldList)) $header[] = array('name' => 'calcTime', 'title' => $this->lang->metric->calcTime, 'width' => 150);
 
         return $header;
     }
