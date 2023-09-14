@@ -6752,6 +6752,7 @@ class storyModel extends model
         $branchOptions = zget($options, 'branchOptions', array());
         $modulePairs   = zget($options, 'modulePairs',   array());
         $storyStages   = zget($options, 'storyStages',   array());
+        $products      = zget($options, 'products',      array());
         $isShowBranch  = zget($options, 'isShowBranch',  '');
 
         $userFields  = array('assignedTo', 'openedBy', 'closedBy', 'lastEditedBy', 'feedbackBy');
@@ -6781,19 +6782,27 @@ class storyModel extends model
             $data->actions      = '<div class="c-actions">' . $this->buildOperateMenu($story, $menuType, $execution, $storyType) . '</div>';
             foreach($cols as $col)
             {
-                if($col->name == 'assignedTo') $data->assignedTo = $this->printAssignedHtml($story, $users, false);
-                if($col->name == 'order')      $data->order      = "<i class='icon-move'>";
-                if($col->name == 'pri')        $data->pri        = "<span class='" . ($story->pri ? "label-pri label-pri-" . $story->pri : '') . "' title='" . zget($this->lang->story->priList, $story->pri, $story->pri) . "'>" . zget($this->lang->story->priList, $story->pri, $story->pri) . "</span>";
-                if($col->name == 'plan')       $data->plan       = isset($story->planTitle) ? $story->planTitle : '';
-                if($col->name == 'branch')     $data->branch     = zget($branches, $story->branch, '');
-                if($col->name == 'source')     $data->source     = zget($this->lang->story->sourceList, $story->source);
-                if($col->name == 'category')   $data->category   = zget($this->lang->story->categoryList, $story->category);
-                if($col->name == 'duration')   $data->duration   = zget($this->lang->demand->durationList, $story->duration);
-                if($col->name == 'BSA')        $data->BSA        = zget($this->lang->demand->bsaList, $story->BSA);
-                if($col->name == 'taskCount')  $data->taskCount  = $storyTasks[$story->id] > 0 ? html::a(helper::createLink('story', 'tasks', "storyID=$story->id"), $storyTasks[$story->id], '', 'class="iframe" data-toggle="modal"') : '0';
-                if($col->name == 'bugCount')   $data->bugCount   = $storyBugs[$story->id]  > 0 ? html::a(helper::createLink('story', 'bugs', "storyID=$story->id"),  $storyBugs[$story->id],  '', 'class="iframe" data-toggle="modal"') : '0';
-                if($col->name == 'caseCount')  $data->caseCount  = $storyCases[$story->id] > 0 ? html::a(helper::createLink('story', 'cases', "storyID=$story->id"),  $storyBugs[$story->id], '', 'class="iframe" data-toggle="modal"') : '0';
-                if($col->name == 'estimate')   $data->estimate   = (float)$story->estimate . $this->config->hourUnit;
+                if($col->name == 'assignedTo')   $data->assignedTo   = $this->printAssignedHtml($story, $users, false);
+                if($col->name == 'order')        $data->order        = "<i class='icon-move'>";
+                if($col->name == 'pri')          $data->pri          = "<span class='" . ($story->pri ? "label-pri label-pri-" . $story->pri : '') . "' title='" . zget($this->lang->story->priList, $story->pri, $story->pri) . "'>" . zget($this->lang->story->priList, $story->pri, $story->pri) . "</span>";
+                if($col->name == 'plan')         $data->plan         = isset($story->planTitle) ? $story->planTitle : '';
+                if($col->name == 'product')      $data->product      = "<span title='" . zget($products, $story->product, '') . "'>" . zget($products, $story->product, '') . '</span>';
+                if($col->name == 'branch')       $data->branch       = zget($branches, $story->branch, '');
+                if($col->name == 'module')       $data->module       = zget($modulePairs, $story->module, '');
+                if($col->name == 'source')       $data->source       = zget($this->lang->story->sourceList, $story->source);
+                if($col->name == 'sourceNote')   $data->sourceNote   = $story->sourceNote;
+                if($col->name == 'keywords')     $data->keywords     = $story->keywords;
+                if($col->name == 'version')      $data->version      = $story->version;
+                if($col->name == 'feedbackBy')   $data->feedbackBy   = $story->feedbackBy;
+                if($col->name == 'notifyEmail')  $data->notifyEmail  = $story->notifyEmail;
+                if($col->name == 'closedReason') $data->closedReason = zget($this->lang->story->reasonList, $story->closedReason, '');
+                if($col->name == 'category')     $data->category     = zget($this->lang->story->categoryList, $story->category);
+                if($col->name == 'duration')     $data->duration     = zget($this->lang->demand->durationList, $story->duration);
+                if($col->name == 'BSA')          $data->BSA          = zget($this->lang->demand->bsaList, $story->BSA);
+                if($col->name == 'taskCount')    $data->taskCount    = $storyTasks[$story->id] > 0 ? html::a(helper::createLink('story', 'tasks', "storyID=$story->id"), $storyTasks[$story->id], '', 'class="iframe" data-toggle="modal"') : '0';
+                if($col->name == 'bugCount')     $data->bugCount     = $storyBugs[$story->id]  > 0 ? html::a(helper::createLink('story', 'bugs', "storyID=$story->id"),  $storyBugs[$story->id],  '', 'class="iframe" data-toggle="modal"') : '0';
+                if($col->name == 'caseCount')    $data->caseCount    = $storyCases[$story->id] > 0 ? html::a(helper::createLink('story', 'cases', "storyID=$story->id"),  $storyBugs[$story->id], '', 'class="iframe" data-toggle="modal"') : '0';
+                if($col->name == 'estimate')     $data->estimate     = (float)$story->estimate . $this->config->hourUnit;
                 if($col->name == 'reviewedBy')
                 {
                     $reviewers = array_unique(array_filter(explode(',', $story->reviewedBy)));

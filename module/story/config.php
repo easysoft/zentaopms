@@ -137,7 +137,7 @@ $config->story->datatable->fieldList['reviewedBy']['control']    = 'multiple';
 
 $config->story->datatable->fieldList['reviewedDate']['title']    = 'reviewedDate';
 $config->story->datatable->fieldList['reviewedDate']['fixed']    = 'no';
-$config->story->datatable->fieldList['reviewedDate']['type']     = 'date';
+$config->story->datatable->fieldList['reviewedDate']['type']     = 'html';
 $config->story->datatable->fieldList['reviewedDate']['sortType'] = true;
 $config->story->datatable->fieldList['reviewedDate']['width']    = '90';
 $config->story->datatable->fieldList['reviewedDate']['required'] = 'no';
@@ -158,7 +158,7 @@ $config->story->datatable->fieldList['assignedTo']['required'] = 'no';
 
 $config->story->datatable->fieldList['assignedDate']['title']    = 'assignedDate';
 $config->story->datatable->fieldList['assignedDate']['fixed']    = 'no';
-$config->story->datatable->fieldList['assignedDate']['type']     = 'date';
+$config->story->datatable->fieldList['assignedDate']['type']     = 'html';
 $config->story->datatable->fieldList['assignedDate']['sortType'] = true;
 $config->story->datatable->fieldList['assignedDate']['width']    = '90';
 $config->story->datatable->fieldList['assignedDate']['required'] = 'no';
@@ -219,11 +219,6 @@ $config->story->datatable->fieldList['openedDate']['sortType'] = true;
 $config->story->datatable->fieldList['openedDate']['width']    = '90';
 $config->story->datatable->fieldList['openedDate']['required'] = 'no';
 
-$config->story->datatable->fieldList['needReview']['title']      = 'needReview';
-$config->story->datatable->fieldList['needReview']['type']       = 'html';
-$config->story->datatable->fieldList['needReview']['control']    = 'select';
-$config->story->datatable->fieldList['needReview']['dataSource'] = array('lang' => 'reviewList');
-
 $config->story->datatable->fieldList['closedBy']['title']    = 'closedBy';
 $config->story->datatable->fieldList['closedBy']['fixed']    = 'no';
 $config->story->datatable->fieldList['closedBy']['type']     = 'user';
@@ -233,7 +228,7 @@ $config->story->datatable->fieldList['closedBy']['required'] = 'no';
 
 $config->story->datatable->fieldList['closedDate']['title']    = 'closedDate';
 $config->story->datatable->fieldList['closedDate']['fixed']    = 'no';
-$config->story->datatable->fieldList['closedDate']['type']     = 'datetime';
+$config->story->datatable->fieldList['closedDate']['type']     = 'html';
 $config->story->datatable->fieldList['closedDate']['sortType'] = true;
 $config->story->datatable->fieldList['closedDate']['width']    = '90';
 $config->story->datatable->fieldList['closedDate']['required'] = 'no';
@@ -254,14 +249,14 @@ $config->story->datatable->fieldList['lastEditedBy']['required'] = 'no';
 
 $config->story->datatable->fieldList['lastEditedDate']['title']    = 'lastEditedDate';
 $config->story->datatable->fieldList['lastEditedDate']['fixed']    = 'no';
-$config->story->datatable->fieldList['lastEditedDate']['type']     = 'datetime';
+$config->story->datatable->fieldList['lastEditedDate']['type']     = 'html';
 $config->story->datatable->fieldList['lastEditedDate']['sortType'] = true;
 $config->story->datatable->fieldList['lastEditedDate']['width']    = '90';
 $config->story->datatable->fieldList['lastEditedDate']['required'] = 'no';
 
 $config->story->datatable->fieldList['activatedDate']['title']    = 'activatedDate';
 $config->story->datatable->fieldList['activatedDate']['fixed']    = 'no';
-$config->story->datatable->fieldList['activatedDate']['type']     = 'datetime';
+$config->story->datatable->fieldList['activatedDate']['type']     = 'html';
 $config->story->datatable->fieldList['activatedDate']['sortType'] = true;
 $config->story->datatable->fieldList['activatedDate']['width']    = '90';
 $config->story->datatable->fieldList['activatedDate']['required'] = 'no';
