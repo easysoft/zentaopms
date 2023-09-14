@@ -128,9 +128,12 @@ formPanel
     ),
     formGroup
     (
-        set::name('desc'),
         set::label($lang->program->desc),
-        set::control('editor')
+        editor
+        (
+            set::name('desc'),
+            html($program->desc)
+        ),
     ),
     formGroup
     (
