@@ -1420,11 +1420,14 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function ajaxGetUserTestTasks($userID = '', $id = '', $status = 'all')
+    public function ajaxGetUserTestTasks(int $userID = 0, string $id = '', string $status = 'all')
     {
-        if($userID == '') $userID = $this->app->user->id;
-        $user    = $this->loadModel('user')->getById($userID, 'id');
-        $account = $user->account;
+        $account = $this->app->user->account;
+        if($userID)
+        {
+            $user    = $this->loadModel('user')->getById($userID, 'id');
+            $account = $user->account;
+        }
 
         $testTasks = $this->testtask->getUserTestTaskPairs($account, 0, $status);
 
