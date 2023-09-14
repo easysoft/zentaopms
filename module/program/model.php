@@ -667,7 +667,7 @@ class programModel extends model
             ->fetchAll('id');
 
         /* Determine how to display the name of the program. */
-        if($programTitle and $this->config->systemMode == 'ALM') $projectList = $this->batchProcessProgramName($projectList, $programTitle, $programID);
+        if($programTitle and $this->config->systemMode == 'ALM') $projectList = $this->batchProcessProgramName($projectList, $programTitle);
         return $projectList;
     }
 
@@ -677,11 +677,10 @@ class programModel extends model
      *
      * @param  array  $projectList
      * @param  string $programTitle
-     * @param  int    $programID
      * @access public
      * @return object[]
      */
-    public function batchProcessProgramName(array $projectList, string $programTitle = '', int $programID = 0): array
+    public function batchProcessProgramName(array $projectList, string $programTitle = ''): array
     {
         $programList = $this->getPairs();
         foreach($projectList as $id => $project)
@@ -735,12 +734,13 @@ class programModel extends model
     }
 
     /**
+     * 计算项目和项目集的进度。
      * Get program and project progress list.
      *
      * @access public
      * @return array
      */
-    public function getProgressList()
+    public function getProgressList(): array
     {
         $totalProgress = array();
         $projectCount  = array();
@@ -771,7 +771,7 @@ class programModel extends model
             if(empty($projectCount[$programID])) continue;
 
             /* Program progress can't see when this user don't have all projects priv. */
-            if(!$this->app->user->admin and $userPRJCount[$programID] != $projectCount[$programID])
+            if(!$this->app->user->admin && $userPRJCount[$programID] != $projectCount[$programID])
             {
                 unset($progressList[$programID]);
                 continue;

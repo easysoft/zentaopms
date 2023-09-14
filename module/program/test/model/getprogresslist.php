@@ -31,20 +31,18 @@ $task->status->range('doing');
 $task->assignedTo->range('admin');
 $task->gen(3);
 
+zdTable('team')->gen(0);
+
 /**
 
 title=测试 programModee::getProgressList();
+timeout=0
 cid=1
-pid=1
-
-获取项目和项目集的个数 >> 5
-获取id=2的项目的进度   >> 25
-获取id=4的项目集的进度 >> 43
 
 */
 
 $programTester = new programTest();
-$progressList = $programTester->getProgressListTest();
+$progressList  = $programTester->getProgressListTest();
 
 r(count($progressList)) && p()    && e('5');  // 获取项目和项目集的个数
 r($progressList)        && p('2') && e('25'); // 获取id=2的项目的进度
