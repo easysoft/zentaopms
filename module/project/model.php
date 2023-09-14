@@ -1398,17 +1398,18 @@ class projectModel extends model
 
     /**
      * 开始项目并更改其状态.
+     * start and update a project.
      *
      * @param  int    $projectID
-     * @param  object $project
+     * @param  object $postData
      * @access public
      * @return array|false
      */
-    public function start(int $projectID, object $project):array|false
+    public function start(int $projectID, object $postData): array|false
     {
         $oldProject = $this->getById($projectID);
 
-        $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->start, $this->post->uid);
+        $project = $this->loadModel('file')->processImgURL($postData, $this->config->project->editor->start, $postData->uid);
 
         $this->projectTao->doStart($projectID, $project);
 
