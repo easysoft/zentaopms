@@ -692,26 +692,25 @@ class program extends control
     }
 
     /**
-     * Product View list.
+     * 以产品视图查看项目集。
+     * Show program list in product view.
      * copied from all() function of product module.
      *
      * @param  string  $browseType
      * @param  string  $orderBy
+     * @param  int     $param
      * @param  int     $recTotal
      * @param  int     $recPerPage
      * @param  int     $pageID
-     * @param  int     $param
      * @access public
      * @return void
      */
-    public function productView($browseType = 'unclosed', $orderBy = 'program_asc', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function productView(string $browseType = 'unclosed', string $orderBy = 'program_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Load module and set session. */
         $this->loadModel('product');
         $this->loadModel('user');
         $this->session->set('productList', $this->app->getURI(true), 'program');
-
-        $queryID  = ($browseType == 'bySearch') ? (int)$param : 0;
 
         if($this->app->viewType == 'mhtml')
         {
@@ -724,6 +723,7 @@ class program extends control
 
         /* Process product structure. */
         if($this->config->systemMode == 'light' and $orderBy == 'program_asc') $orderBy = 'order_asc';
+        $queryID          = ($browseType == 'bySearch') ? $param : 0;
         $products         = strtolower($browseType) == 'bysearch' ? $this->product->getListBySearch($queryID) : $this->product->getList();
         $productStats     = $this->product->getStats(array_keys($products), $orderBy, $pager);
         $productStructure = $this->product->statisticProgram($productStats);
