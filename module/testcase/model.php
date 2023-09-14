@@ -2478,13 +2478,14 @@ class testcaseModel extends model
     }
 
     /**
+     * 获取 xmind 文件内容。
      * Get xmind file content.
      *
      * @param  string $fileName
      * @access public
      * @return string
      */
-    public function getXmindImport($fileName)
+    public function getXmindImport(string $fileName): string
     {
         $xmlNode  = simplexml_load_file($fileName);
         $testData = $this->xmlToArray($xmlNode);
@@ -2854,6 +2855,7 @@ class testcaseModel extends model
     }
 
     /**
+     * 将 xml 内容转为数组。
      * Convert xml to array.
      *
      * @param  object $xml
@@ -2861,7 +2863,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    function xmlToArray($xml, $options = array())
+    function xmlToArray(object $xml, array $options = array()): array
     {
         $defaults = array(
             'namespaceRecursive' => false, // Get XML doc namespaces recursively
@@ -2897,6 +2899,32 @@ class testcaseModel extends model
         }
 
         // Get child nodes from all namespaces
+        $tagsArray = $this->getXmlTagsArray($xml, $namespaces, $options);
+
+        // Get text content of node
+        $textContentArray = array();
+        $plainText = trim((string) $xml);
+        if($plainText !== '') $textContentArray[$options['textContent']] = $plainText;
+
+        // Stick it all together
+        $propertiesArray = !$options['autoText'] || $attributesArray || $tagsArray || $plainText === '' ? array_merge($attributesArray, $tagsArray, $textContentArray) : $plainText;
+
+        // Return node as array
+        return array($xml->getName() => $propertiesArray);
+    }
+
+    /**
+     * 获取 xml 标签数组。
+     * Get xml tags array.
+     *
+     * @param  object $xml
+     * @param  array  $namespaces
+     * @param  array  $options
+     * @access public
+     * @return array
+     */
+    public function getXmlTagsArray(object $xml, array $namespaces, array $options): array
+    {
         $tagsArray = array();
         foreach($namespaces as $prefix => $namespace)
         {
@@ -2933,17 +2961,7 @@ class testcaseModel extends model
                 }
             }
         }
-
-        // Get text content of node
-        $textContentArray = array();
-        $plainText = trim((string) $xml);
-        if($plainText !== '') $textContentArray[$options['textContent']] = $plainText;
-
-        // Stick it all together
-        $propertiesArray = !$options['autoText'] || $attributesArray || $tagsArray || $plainText === '' ? array_merge($attributesArray, $tagsArray, $textContentArray) : $plainText;
-
-        // Return node as array
-        return array($xml->getName() => $propertiesArray);
+        return $tagsArray;
     }
 
     /**
