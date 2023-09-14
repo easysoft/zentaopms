@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$unit = in_array($metric->unit, array_keys($lang->metric->unitList)) ? $metric->unit : '';
+$isCustomUnit = !isset($this->lang->metric->unitList[$metric->unit]);
 
 formPanel
 (
@@ -67,6 +67,7 @@ formPanel
     formRow
     (
         set::id('unitBox'),
+        setClass($isCustomUnit ? 'hidden' : ''),
         formGroup
         (
             set::width('1/2'),
@@ -80,7 +81,7 @@ formPanel
                     (
                         set::name('unit'),
                         set::items($lang->metric->unitList),
-                        set::value($unit),
+                        set::value($isCustomUnit ? '' : $metric->unit),
                     )
                 ),
                 div
@@ -90,6 +91,7 @@ formPanel
                     (
                         set::name('customUnit'),
                         set::text($lang->metric->customUnit),
+                        set::checked($isCustomUnit),
                     )
                 )
             )
@@ -98,7 +100,7 @@ formPanel
     formRow
     (
         set::id('addUnitBox'),
-        setClass('hidden'),
+        setClass($isCustomUnit ? '' : 'hidden'),
         formGroup
         (
             set::width('1/2'),
@@ -108,7 +110,7 @@ formPanel
                 div
                 (
                     setClass('grow'),
-                    input(set::name('unit')),
+                    input(set::name('addunit'), set::value($isCustomUnit ? $metric->unit : '')),
                 ),
                 div
                 (
@@ -117,6 +119,7 @@ formPanel
                     (
                         set::name('customUnit'),
                         set::text($lang->metric->customUnit),
+                        set::checked($isCustomUnit),
                     )
                 )
             )

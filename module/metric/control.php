@@ -74,7 +74,9 @@ class metric extends control
         if(!empty($_POST))
         {
             $metricData = $this->metricZen->buildMetricForEdit();
-            $metricID   = $this->metric->update($id, $metricData);
+            $metricData->unit = isset($_POST['customUnit']) ? $_POST['addunit'] : $_POST['unit'];
+
+            $metricID = $this->metric->update($id, $metricData);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $response = $this->metricZen->responseAfterEdit();
