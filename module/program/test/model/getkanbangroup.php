@@ -16,15 +16,19 @@ $program->begin->range('20220112 000000:0')->type('timestamp')->format('YY/MM/DD
 $program->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD');
 $program->gen(3);
 
+zdTable('stakeholder')->gen(0);
+zdTable('product')->gen(0);
+zdTable('task')->gen(0);
+zdTable('projectproduct')->gen(0);
+zdTable('productplan')->gen(0);
+zdTable('release')->gen(0);
+zdTable('team')->gen(0);
+
 /**
 
 title=测试 programModel::getKanbanGroup();
+timeout=0
 cid=1
-pid=1
-
-查看当前用户负责的项目集看板数量 >> 2
-查看当前用户其他的项目集看板数量 >> 1
-查看当前用户其他的项目集看板详情 >> 项目集2
 
 */
 
@@ -34,4 +38,5 @@ $kanbanGroup = $programTester->getKanbanGroupTest();
 
 r(count($kanbanGroup['my']))     && p('')       && e('2');       //查看当前用户负责的项目集看板数量
 r(count($kanbanGroup['others'])) && p('')       && e('1');       //查看当前用户其他的项目集看板数量
+r($kanbanGroup['my'])            && p('0:name') && e('项目集1'); //查看当前用户负责的项目集看板详情
 r($kanbanGroup['others'])        && p('0:name') && e('项目集2'); //查看当前用户其他的项目集看板详情
