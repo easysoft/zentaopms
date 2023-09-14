@@ -20,8 +20,9 @@ $tester->loadModel('project');
 $data = new stdclass();
 $data->status    = 'doing';
 $data->realBegan = '2022-10-10';
+$data->uid       = null;
 
-r($tester->project->start(11, $data)) && p('0:field') && e('status'); // 挂起的项目
-r($tester->project->start(12, $data)) && p('0:new')   && e('doing');  // 关闭的项目
-r($tester->project->start(13, $data)) && p('0:old')   && e('wait');   // 未开始的项目
-r($tester->project->start(14, $data)) && p()          && e('0');      // 进行中的项目
+r($tester->project->start(11, $data)) && p('0:new')   && e('doing');      // 挂起的项目
+r($tester->project->start(12, $data)) && p('0:new')   && e('doing');      // 关闭的项目
+r($tester->project->start(13, $data)) && p('0:new')   && e('doing');      // 未开始的项目
+r($tester->project->start(14, $data)) && p('0:new')   && e('2022-10-10'); // 进行中的项目（状态没有差异只有实际开始时间不同）
