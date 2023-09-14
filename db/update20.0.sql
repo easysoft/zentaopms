@@ -190,7 +190,7 @@ CREATE TABLE IF NOT EXISTS `zt_metriclib` (
   `id` mediumint unsigned NOT NULL AUTO_INCREMENT,
   `metricID`   mediumint    NOT NULL DEFAULT 0,
   `metricCode` varchar(100) NOT NULL DEFAULT '',
-  `global`     char(30)     NOT NULL DEFAULT '0',
+  `system`     char(30)     NOT NULL DEFAULT '0',
   `program`    char(30)     NOT NULL DEFAULT '0',
   `project`    char(30)     NOT NULL DEFAULT '0',
   `product`    char(30)     NOT NULL DEFAULT '0',
