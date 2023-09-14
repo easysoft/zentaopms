@@ -739,12 +739,7 @@ class testtask extends control
             $this->products[$productID] = $product->name;
         }
 
-        /* 设置菜单。 */
-        /* Set menu. */
-        $this->testtaskZen->setMenu($productID, $task->branch, $task->project, $task->execution, $taskID);
-
-        /* 展示相关变量。 */
-        /* Show the variables associated. */
+        $this->testtaskZen->setMenu($this->products, $productID, $task->branch, $task->project, $task->execution, $taskID);
         $this->testtaskZen->assignForEdit($task, $productID);
 
         $this->display();
