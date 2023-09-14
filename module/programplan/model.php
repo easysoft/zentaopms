@@ -1585,15 +1585,19 @@ class programplanModel extends model
      */
     public function getParentStageList($executionID, $planID, $productID)
     {
-        $parentStage = $this->dao->select('t2.id, t2.name')->from(TABLE_PROJECTPRODUCT)
-            ->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->where('t1.product')->eq($productID)
-            ->andWhere('t2.project')->eq($executionID)
-            ->andWhere('t2.type')->eq('stage')
-            ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t2.path')->notlike("%,$planID,%")
-            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
-            ->orderBy('t2.id desc')
+        $parentStage = $this->dao->select('t1.id, t1.name')->from(TABLE_PROJECT)->alias('t1')
+            ->beginIF($productID)
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
+            ->fi()
+            ->where('t1.project')->eq($executionID)
+            ->beginIF($productID)
+            ->andWhere('t2.product')->eq($productID)
+            ->fi()
+            ->andWhere('t1.type')->eq('stage')
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.path')->notlike("%,$planID,%")
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
+            ->orderBy('t1.id desc')
             ->fetchPairs();
 
         $plan = $this->getByID($planID);
