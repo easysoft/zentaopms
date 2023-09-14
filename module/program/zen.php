@@ -85,4 +85,36 @@ class programZen extends program
 
         return $this->loadModel('user')->getListByAccounts($accounts, 'account');
     }
+
+    /**
+     * 构造1.5级导航的数据。
+     * Build the data of 1.5 level navigation.
+     *
+     * @param  array     $programs
+     * @param  int       $parentID
+     * @access protected
+     * @return void
+     */
+    protected function buildTree(array $programs, int $parentID = 0): array
+    {
+        $result = array();
+        foreach($programs as $program)
+        {
+            if($program->type != 'program') continue;
+            if($program->parent == $parentID)
+            {
+                $itemArray = array
+                (
+                    'id'    => $program->id,
+                    'text'  => $program->name,
+                    'keys'  => zget(common::convert2Pinyin(array($program->name)), $program->name, ''),
+                    'items' => $this->buildTree($programs, $program->id)
+                );
+
+                if(empty($itemArray['items'])) unset($itemArray['items']);
+                $result[] = $itemArray;
+            }
+        }
+        return $result;
+    }
 }

@@ -159,6 +159,7 @@ class programModel extends model
     }
 
     /**
+     * 获取项目集列表。
      * Get program list.
      *
      * @param  string $status
@@ -1765,38 +1766,6 @@ class programModel extends model
         if($program->type == 'program') return $this->programTao->buildProgramActionsMap($program);
         if($program->type == 'project') return $this->programTao->buildProjectActionsMap($program);
         return array();
-    }
-
-    /**
-     * Build tree for dropmenu.
-     *
-     * @param  array  $programs
-     * @param  int    $parentID
-     * @access public
-     * @return void
-     */
-    public function buildTree($programs, $parentID = 0)
-    {
-        $result = array();
-        foreach($programs as $program)
-        {
-            if($program->type != 'program') continue;
-
-            if($program->parent == $parentID)
-            {
-                $itemArray = array
-                    (
-                        'id'    => $program->id,
-                        'text'  => $program->name,
-                        'keys'  => zget(common::convert2Pinyin(array($program->name)), $program->name, ''),
-                        'items' => $this->buildTree($programs, $program->id)
-                    );
-
-                if(empty($itemArray['items'])) unset($itemArray['items']);
-                $result[] = $itemArray;
-            }
-        }
-        return $result;
     }
 
     /**

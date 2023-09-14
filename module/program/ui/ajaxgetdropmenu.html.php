@@ -17,17 +17,14 @@ $topItem['type']  = 'program';
 $topItem['text']  = $lang->program->common;
 $topItem['url']   = false;
 $topItem['label'] = false;
-
-$data[0] = $topItem;
-
-$data[0]['items'] = $this->program->buildTree($programs);
+$topItem['items'] = $programTree;
 
 /**
  * 定义最终的 JSON 数据。
  * Define the final json data.
  */
 $json = array();
-$json['data']       = $data;
+$json['data']       = array($topItem);
 $json['searchHint'] = $lang->searchAB;
 $json['link']       = array('program' => $link);
 $json['labelMap']   = array('program' => $lang->program->common);

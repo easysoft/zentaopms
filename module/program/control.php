@@ -605,7 +605,8 @@ class program extends control
     }
 
     /**
-     * Ajax get program drop menu.
+     * 获取项目集下1.5级导航数据。
+     * Get sub navigation data of program.
      *
      * @param  int    $programID
      * @param  string $module
@@ -613,7 +614,7 @@ class program extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu($programID, $module, $method)
+    public function ajaxGetDropMenu(int $programID, string $module, string $method)
     {
         $programs = $this->program->getList('all');
         foreach($programs as $programID => $program)
@@ -622,11 +623,8 @@ class program extends control
             if($module == 'program' && $method == 'product' && $program->parent != 0) unset($programs[$programID]);
         }
 
-        $this->view->programID = $programID;
-        $this->view->module    = $module;
-        $this->view->method    = $method;
-        $this->view->programs  = $programs;
-        $this->view->link      = $this->program->getLink($module, $method, '{id}', '', 'program');
+        $this->view->programTree = $this->programZen->buildTree($programs);
+        $this->view->link        = $this->program->getLink($module, $method, '{id}', '', 'program');
         $this->display();
     }
 
