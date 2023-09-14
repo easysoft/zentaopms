@@ -14,14 +14,12 @@ class qaModel extends model
     /**
      * Set menu.
      *
-     * @param  array       $products
      * @param  int         $productID
      * @param  int|string  $branch
-     * @param  string      $extra
      * @access public
      * @return void
      */
-    public function setMenu(array $products, int $productID, string|int $branch = '', string $extra = '')
+    public function setMenu(int $productID, int|string $branch = '')
     {
         if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !commonModel::isTutorialMode())
         {
@@ -29,14 +27,13 @@ class qaModel extends model
             return print(js::error($this->lang->product->accessDenied) . js::locate('back'));
         }
 
-        $branch = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
+        if($this->session->branch) $branch = $this->session->branch;
+        if($this->cookie->preBranch !== '' and $branch === '') ? $branch = $this->cookie->preBranch;
         helper::setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         $product = $this->loadModel('product')->getByID($productID);
         if($product and $product->type != 'normal') $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
 
-        if(!in_array($this->app->rawModule, $this->config->qa->noDropMenuModule)) $this->lang->switcherMenu = $this->product->getSwitcher($productID, $extra, $branch);
-        if($this->app->rawModule == 'product' and $this->app->rawMethod == 'showerrornone') $this->lang->switcherMenu = '';
         if(!common::hasPriv('zahost', 'browse') and !common::hasPriv('zanode', 'browse')) unset($this->lang->qa->menu->automation);
         common::setMenuVars('qa', $productID);
     }
