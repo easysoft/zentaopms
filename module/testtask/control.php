@@ -28,43 +28,34 @@ class testtask extends control
     public $projectID = 0;
 
     /**
-     * Construct function, load product module, assign products to view auto.
+     * 扩展构造方法，获取产品键值对。
+     * Extend the constructor to get product key-value pairs.
      *
+     * @param  string $moduleName
+     * @param  string $methodName
      * @access public
      * @return void
      */
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
-        $this->loadModel('product');
 
-        /* Get product data. */
-        $products = array();
-        $objectID = 0;
-        $tab      = ($this->app->tab == 'project' or $this->app->tab == 'execution') ? $this->app->tab : 'qa';
-        if(!isonlybody())
+        if(static::class == 'testtask')
         {
-            if($this->app->tab == 'project')
+            $products = $this->testtaskZen->getProducts();
+
+            /* 如果没有获取到产品键值对、并且即不是弹窗页面也不是 ajax 请求，那么跳转到错误提示页面。*/
+            /* If the product key-value pair is not obtained and it is not a pop-up page or an ajax request, then jump to the error page. */
+            if(empty($products) && !isonlybody() && !helper::isAjaxRequest())
             {
-                $objectID = $this->session->project;
-                $products  = $this->product->getProducts($objectID, 'all', '', false);
+                $tab      = ($this->app->tab == 'project' || $this->app->tab == 'execution') ? $this->app->tab : 'qa';
+                $objectID = ($tab == 'project' || $tab == 'execution') ? $this->session->$tab : 0;
+                helper::end($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$tab&activeMenu=testtask&objectID=$objectID")));
             }
-            elseif($this->app->tab == 'execution')
-            {
-                $objectID = $this->session->execution;
-                $products = $this->product->getProducts($objectID, 'all', '', false);
-            }
-            else
-            {
-                $products = $this->product->getPairs('', 0, '', 'all');
-            }
-            if(empty($products) and !helper::isAjaxRequest()) helper::end($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$tab&activeMenu=testtask&objectID=$objectID")));
+
+            $this->products       = $products;
+            $this->view->products = $products;
         }
-        else
-        {
-            $products = $this->product->getPairs('', 0, '', 'all');
-        }
-        $this->view->products = $this->products = $products;
     }
 
     /**
