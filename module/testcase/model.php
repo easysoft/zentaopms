@@ -2572,34 +2572,6 @@ class testcaseModel extends model
     }
 
     /**
-     * Get export data.
-     *
-     * @param  int $productID
-     * @param  int $moduleID
-     * @param  int $branch
-     * @access public
-     * @return array
-     */
-    public function getXmindExport($productID, $moduleID, $branch)
-    {
-        $caseList   = $this->getCaseByProductAndModule($productID, $moduleID);
-        $stepList   = $this->getStepByProductAndModule($productID, $moduleID);
-        $sceneInfo  = $this->getSceneByProductAndModule($productID, $moduleID);
-        $moduleList = $this->getModuleByProductAndModel($productID, $moduleID, $branch);
-
-        $config = $this->getXmindConfig();
-
-        return array(
-                'caseList'  =>$caseList,
-                'stepList'  =>$stepList,
-                'sceneMaps' =>$sceneInfo['sceneMaps'],
-                'topScenes' =>$sceneInfo['topScenes'],
-                'moduleList'=>$moduleList,
-                'config'    =>$config
-            );
-    }
-
-    /**
      * Get module by product.
      *
      * @param  int $productID

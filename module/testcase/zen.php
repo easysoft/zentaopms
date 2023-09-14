@@ -2383,6 +2383,27 @@ class testcaseZen extends testcase
     }
 
     /**
+     * 获取 xmind 导出的数据。
+     * Get export data.
+     *
+     * @param  int        $productID
+     * @param  int        $moduleID
+     * @param  int|string $branch
+     * @access protected
+     * @return array
+     */
+    protected function getXmindExport(int $productID, int $moduleID, int|string $branch): array
+    {
+        $caseList   = $this->testcase->getCaseByProductAndModule($productID, $moduleID);
+        $stepList   = $this->testcase->getStepByProductAndModule($productID, $moduleID);
+        $moduleList = $this->testcase->getModuleByProductAndModel($productID, $moduleID, $branch);
+        $sceneInfo  = $this->testcase->getSceneByProductAndModule($productID, $moduleID);
+        $config     = $this->testcase->getXmindConfig();
+
+        return array('caseList' => $caseList, 'stepList' => $stepList, 'sceneMaps' => $sceneInfo['sceneMaps'], 'topScenes' => $sceneInfo['topScenes'], 'moduleList' => $moduleList, 'config' => $config);
+    }
+
+    /**
      * 获取导入的数据。
      * Get imported data.
      *
