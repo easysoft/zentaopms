@@ -278,7 +278,7 @@ class program extends control
 
         if(!empty($_POST))
         {
-            $postData = form::data($this->config->project->form->start);
+            $postData = form::data($this->config->program->form->start);
             $postData = $this->programZen->prepareStartExtras($postData);
             $changes  = $this->project->start($programID, $postData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
