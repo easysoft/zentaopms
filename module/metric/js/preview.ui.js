@@ -437,10 +437,13 @@ window.renderCheckedLabel = function()
         }
     }
 
+    $(".metric-remove").removeClass('hidden');
     if(!multi)
     {
         var maxSelectTipText = maxSelectTip.replace('%s', maxSelectNum);
         $content.append(`<span class="label ghost gray-pale">${maxSelectTipText}</span>`);
+
+        $(".metric-remove").addClass('hidden');
     }
 
     if(!window.isDropdown) $content.find('.gray-next').addClass('gray-hidden');

@@ -82,6 +82,12 @@ div
                         'url'         => helper::createLink('metric', 'details', "metricID=$current->id"),
                         'data-toggle' => 'modal'
                     ))) : null,
+                    item(set(array
+                    (
+                        'text'    => $this->lang->metric->remove,
+                        'class'   => 'ghost metric-remove',
+                        'onclick' => "window.handleRemoveLabel({id})"
+                    ))),
                     haspriv('metric', 'filters') ? item(set(array
                     (
                         'icon'  => 'menu-backend',
@@ -323,6 +329,12 @@ div
                                 'url'         => helper::createLink('metric', 'details', "metricID=$current->id"),
                                 'data-toggle' => 'modal'
                             ))) : null,
+                            item(set(array
+                            (
+                                'text'    => $this->lang->metric->remove,
+                                'class'   => 'ghost metric-remove hidden',
+                                'onclick' => "window.handleRemoveLabel($current->id)"
+                            ))),
                             haspriv('metric', 'filters') ? item(set(array
                             (
                                 'icon'  => 'menu-backend',

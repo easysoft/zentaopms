@@ -25,7 +25,7 @@
 .main .flex-between {justify-content: space-between;}
 .main .flex-start {justify-content: flex-start;}
 .main .metric-name-weight {font-weight: 600; font-size: 0.9rem;}
-.main .details {position: relative; margin-right: 4px; margin-right: 16px;}
+.main .details {position: relative; margin-right: 4px;}
 .main .details-after:after {content: ""; position: absolute; top: 5px; right: -2px; bottom: 5px; width: 1px; background-color: var(--color-slate-300);}
 .main .chart-line-margin {margin-right: 16px;}
 .main .table-and-chart {display: flex;}

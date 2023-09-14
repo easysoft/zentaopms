@@ -34,6 +34,7 @@ $lang->metric->manage        = "Manage";
 $lang->metric->exitManage    = "Exit manage";
 $lang->metric->filters       = 'Filter Settings';
 $lang->metric->details       = 'Details';
+$lang->metric->remove        = 'Remove';
 $lang->metric->zAnalysis     = 'Z Analysis';
 $lang->metric->sqlStatement  = "SQL Statement";
 $lang->metric->other         = "Other";

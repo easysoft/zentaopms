@@ -34,6 +34,7 @@ $lang->metric->manage        = "管理度量项";
 $lang->metric->exitManage    = "退出管理";
 $lang->metric->filters       = '筛选器配置';
 $lang->metric->details       = '详情';
+$lang->metric->remove        = '移除';
 $lang->metric->zAnalysis     = 'Z分析';
 $lang->metric->sqlStatement  = "SQL语句";
 $lang->metric->other         = '其他';
