@@ -58,9 +58,9 @@ class cv_in_waterfall extends baseCalc
         $project = $row->project;
         $ac      = $row->ac;
 
-        $estimate = $row->estimate;
-        $consumed = $row->consumed;
-        $left     = $row->left;
+        $estimate = (float)$row->estimate;
+        $consumed = (float)$row->consumed;
+        $left     = (float)$row->left;
         $total    = $consumed + $left;
 
         $ev = $total == 0 ? 0 : round($consumed / $total * $estimate, 2);
@@ -77,8 +77,8 @@ class cv_in_waterfall extends baseCalc
         $records = array();
         foreach($this->result as $project => $value)
         {
-            $ac = $value['ac'];
-            $ev = $value['ev'];
+            $ac = (float)$value['ac'];
+            $ev = (float)$value['ev'];
 
             $ratio = $ac == 0 ? 0 : round(($ev - $ac) / $ac, 4);
 

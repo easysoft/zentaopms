@@ -36,8 +36,10 @@ class count_of_daily_fixed_bug_in_user extends baseCalc
 
         if(empty($resolvedDate) || empty($resolvedBy)) return false;
 
-        $date = date('Y-m-d', strtotime($resolvedDate));
-        list($year, $month, $day) = explode('-', $date);
+        $year = substr($resolvedDate, 0, 4);
+        if($year == '0000') return false;
+        $month = substr($resolvedDate, 5, 2);
+        $day   = substr($resolvedDate, 8, 2);
 
         if(!isset($this->result[$resolvedBy]))                      $this->result[$resolvedBy] = array();
         if(!isset($this->result[$resolvedBy][$year]))               $this->result[$resolvedBy][$year] = array();

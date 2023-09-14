@@ -180,12 +180,12 @@ class metricZen extends metric
 
             $record = (object)current($results);
 
-            $global = 1;
+            $system = 1;
             foreach($this->config->metric->excludeGlobal as $exclude)
             {
                 if(isset($record->$exclude))
                 {
-                    $global = 0;
+                    $system = 0;
                     break;
                 }
             }
@@ -199,7 +199,7 @@ class metricZen extends metric
                 $record->metricID   = $calc->id;
                 $record->metricCode = $code;
                 $record->date       = helper::now();
-                $record->global     = $global;
+                $record->system     = $system;
 
                 $records[] = $record;
             }

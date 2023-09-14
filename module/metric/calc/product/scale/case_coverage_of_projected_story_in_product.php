@@ -24,6 +24,8 @@ class case_coverage_of_projected_story_in_product extends baseCalc
 {
     public $idList = array();
 
+    public $result = array();
+
     public function getStatement()
     {
        return $this->dao->select('t1.id,t1.product,t3.id as caseID')->from(TABLE_STORY)->alias('t1')

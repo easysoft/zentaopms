@@ -48,9 +48,9 @@ class sv_in_waterfall extends baseCalc
     public function calculate($row)
     {
         $project  = $row->project;
-        $estimate = $row->estimate;
-        $consumed = $row->consumed;
-        $left     = $row->left;
+        $estimate = (float)$row->estimate;
+        $consumed = (float)$row->consumed;
+        $left     = (float)$row->left;
         $total    = $consumed + $left;
 
         $ev = $total == 0 ? 0 : round($consumed / $total * $estimate, 2);
