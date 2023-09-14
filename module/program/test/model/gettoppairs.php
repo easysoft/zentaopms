@@ -27,7 +27,6 @@ cid=1
 
 $modeList = array('', 'noclosed', 'withDeleted');
 
-$programTester = new programTest();
 global $tester;
 $tester->loadModel('program');
 r(count($tester->program->getTopPairs()))              && p() && e('3'); // 获取系统中所有顶级项目集数量

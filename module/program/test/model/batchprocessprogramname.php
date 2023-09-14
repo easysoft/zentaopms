@@ -40,10 +40,10 @@ cid=1
 
 $programTester = new programTest();
 
-$allProjects         = $programTester->getProjectListTest(0);
-$undoneProjects      = $programTester->getProjectListTest(0, 'undone');
-$withProgramProjects = $programTester->getProjectListTest(0, 'undone', 0, 'id_desc', null, 1);
-$involvedProjects    = $programTester->getProjectListTest(0, 'undone', 0, 'id_desc', null, 1, true);
+$allProjects         = $programTester->program->getProjectList(0);
+$undoneProjects      = $programTester->program->getProjectList(0, 'undone');
+$withProgramProjects = $programTester->program->getProjectList(0, 'undone', 0, 'id_desc', null, 1);
+$involvedProjects    = $programTester->program->getProjectList(0, 'undone', 0, 'id_desc', null, 1, true);
 
 r($programTester->program->batchProcessProgramName($allProjects))         && p('3:name') && e('项目集1/项目1');         // 测试处理所有项目
 r($programTester->program->batchProcessProgramName($undoneProjects))      && p('3:name') && e('项目集1/项目1');         // 测试处理未关闭项目
