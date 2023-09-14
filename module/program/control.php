@@ -629,6 +629,7 @@ class program extends control
     }
 
     /**
+     * 更新项目集排序。
      * Update program order.
      *
      * @access public
@@ -649,45 +650,45 @@ class program extends control
     }
 
     /*
+     * 移除项目集白名单成员。
      * Removing users from the white list.
      *
-     * @param  int     $id
-     * @param  string  $confirm
+     * @param  int    $aclID
      * @access public
      * @return void
      */
-    public function unbindWhitelist($id = 0, $confirm = 'no')
+    public function unbindWhitelist(int $aclID)
     {
-        echo $this->fetch('personnel', 'unbindWhitelist', "id=$id&confirm=$confirm");
+        echo $this->fetch('personnel', 'unbindWhitelist', "id={$aclID}&confirm=yes");
     }
 
     /**
-     * View a program.
+     * 查看项目集详情。
+     * View program detail.
      *
-     * @param int $programID
+     * @param  int    $programID
      * @access public
      * @return void
      */
     public function view(int $programID)
     {
-        $programID = (int)$programID;
-        $program   = $this->program->getByID($programID);
-        if(!$program) return print(js::error($this->lang->notFound) . js::locate('back'));
+        $program = $this->program->getByID($programID);
+        if(!$program) return $this->sendError($this->lang->notFound, true);
 
         if(common::hasPriv('program', 'product')) $this->locate(inlink('product', "programID=$programID"));
         if(common::hasPriv('program', 'project')) $this->locate(inlink('project', "programID=$programID"));
     }
 
     /**
-     * Ajax set show setting.
+     * 设置显示非当前项目集的项目信息。
+     * Set to display project information other than the current project set.
      *
      * @access public
      * @return void
      */
     public function ajaxSetShowSetting()
     {
-        $data = fixer::input('post')->get();
-        $this->loadModel('setting')->updateItem("{$this->app->user->account}.program.showAllProjects", $data->showAllProjects);
+        if($this->post->showAllProjects !== false) $this->loadModel('setting')->updateItem("{$this->app->user->account}.program.showAllProjects", $this->post->showAllProjects);
     }
 
     /**
