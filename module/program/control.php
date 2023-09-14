@@ -184,7 +184,7 @@ class program extends control
      * @access public
      * @return void
      */
-    public function edit($programID = 0)
+    public function edit(int $programID = 0)
     {
         if($_POST)
         {
