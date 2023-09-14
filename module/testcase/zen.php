@@ -2394,7 +2394,7 @@ class testcaseZen extends testcase
      */
     protected function getXmindExport(int $productID, int $moduleID, int|string $branch): array
     {
-        $caseList   = $this->testcase->getCaseByProductAndModule($productID, $moduleID);
+        $caseList   = $this->testcase->getCaseListForXmindExport($productID, $moduleID);
         $stepList   = $this->testcase->getStepByProductAndModule($productID, $moduleID);
         $moduleList = $this->getModuleListForXmindExport($productID, $moduleID, $branch);
         $sceneInfo  = $this->testcase->getSceneByProductAndModule($productID, $moduleID);

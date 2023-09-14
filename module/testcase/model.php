@@ -2522,35 +2522,25 @@ class testcaseModel extends model
     }
 
     /**
-     * Get case by product and module.
+     * 导出 xmind 格式的用例时获取用例列表。
+     * Get case list for export xmind.
      *
-     * @param  int $productID
-     * @param  int $moduleID
+     * @param  int    $productID
+     * @param  int    $moduleID
      * @access public
      * @return array
      */
-    function getCaseByProductAndModule($productID, $moduleID)
+    function getCaseListForXmindExport(int $productID, int $moduleID): array
     {
-        $fields = "t2.id as productID,"
-            . "t2.`name` as productName,"
-            . "t3.id as moduleID,"
-            . "t3.`name` as moduleName,"
-            . "t4.id as sceneID,"
-            . "t4.title as sceneName,"
-            . "t1.id as testcaseID,"
-            . "t1.title as `name`,"
-            . "t1.pri";
-
-        $caseList = $this->dao->select($fields)->from(TABLE_CASE)->alias('t1')
+        $fields = 't1.id AS testcaseID, t1.title AS `name`, t1.pri, t2.id AS productID, t2.`name` AS productName, t3.id AS moduleID, t3.`name` AS moduleName, t4.id AS sceneID, t4.title AS sceneName';
+        return $this->dao->select($fields)->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->leftJoin(TABLE_MODULE)->alias('t3')->on('t1.module = t3.id')
             ->leftJoin(TABLE_SCENE)->alias('t4')->on('t1.scene = t4.id')
-            ->where('t1.deleted')->eq(0)
+            ->where('t1.deleted')->eq('0')
             ->andWhere('t1.product')->eq($productID)
-            ->beginIF($moduleID > 0)->andWhere('t1.module')->eq($moduleID)->fi()
+            ->beginIF($moduleID)->andWhere('t1.module')->eq($moduleID)->fi()
             ->fetchAll();
-
-        return $caseList;
     }
 
     /**
