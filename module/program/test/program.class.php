@@ -442,4 +442,30 @@ class programTest
         list($productGroup, $planGroup, $releaseGroup, $projectGroup, $doingExecutions, $hours, $projectHours) = $this->program->getKanbanStatisticData($programs);
         return $this->program->processProductsForKanban($productGroup, $planGroup, $releaseGroup, $projectGroup, $doingExecutions, $hours, $projectHours);
     }
+
+    /**
+     * 获取项目/执行的所属项目集ID。
+     * Get the programID of the project/execution.
+     *
+     * @param  int    $objectID
+     * @param  int    $exist
+     * @access public
+     * @return int
+     */
+    public function getProgramIDByObjectTest(int $objectID, int $exist): int
+    {
+        $objects = array();
+        $object  = $this->program->loadModel('project')->getByID($objectID);
+        if($exist)
+        {
+            $objects[$objectID] = $object;
+            if(in_array($object->type, array('sprint', 'stage', 'kanban')))
+            {
+                $project = $this->program->loadModel('project')->getByID($object->project);
+                $objects[$object->project] = $project;
+            }
+        }
+
+        return $this->program->getProgramIDByObject($objectID, $object, $objects);
+    }
 }

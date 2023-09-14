@@ -2,6 +2,7 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/program.class.php';
+zdTable('user')->gen(5);
 su('admin');
 
 $program = zdTable('project');
@@ -15,16 +16,15 @@ $program->begin->range('20220112 000000:0')->type('timestamp')->format('YY/MM/DD
 $program->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD');
 $program->gen(3);
 
+zdTable('stakeholder')->gen(0);
+zdTable('team')->gen(0);
+zdTable('product')->gen(0);
+
 /**
 
 title=测试 programModel::getInvolvedPrograms();
+timeout=0
 cid=1
-pid=1
-
-获取admin参与的项目集数量 >> 2
-获取test1参与的项目集数量 >> 1
-获取admin参与的项目集ID >> 1
-获取test1参与的项目集ID >> 2
 
 */
 

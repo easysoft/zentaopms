@@ -329,7 +329,7 @@ class programModel extends model
         $planGroup = $this->loadModel('productplan')->getProductPlans($productIdList, helper::today());
 
         /* Get all products linked projects. */
-        $projectGroup = $this->loadModel('project')->getGroupByProduct($productIdList, 'wait,doing');
+        $projectGroup  = $this->loadModel('project')->getGroupByProduct($productIdList, 'wait,doing');
         $projectIdList = array();
         foreach($projectGroup as $projects) $projectIdList = array_merge($projectIdList, array_keys($projects));
 
@@ -423,92 +423,49 @@ class programModel extends model
     }
 
     /**
+     * 获取用户参与的项目集列表信息。
      * Get involved programs by user.
      *
      * @param  string $account
      * @access public
      * @return array
      */
-    public function getInvolvedPrograms($account)
+    public function getInvolvedPrograms(string $account): array
     {
-        $involvedPrograms = array();
+        $involvedProgramIdList = array();
 
         /* All objects in program table. */
         $objects = $this->dao->select('id,type,project,parent,path,openedBy,PM')->from(TABLE_PROGRAM)->where('deleted')->eq(0)->fetchAll('id');
-
         foreach($objects as $id => $object)
         {
-            if($object->openedBy != $account and $object->PM != $account) continue;
+            if($object->openedBy != $account && $object->PM != $account) continue;
 
-            if($object->type == 'program') $involvedPrograms[$id] = $id;
-            if($object->type == 'project')
-            {
-                $programID = $this->getTopByPath($object->path);
-                $involvedPrograms[$programID] = $programID;
-            }
-            if($object->type == 'sprint' or $object->type == 'stage')
-            {
-                $parentProject = zget($objects, $object->parent, array());
-                if(!$parentProject) continue;
-
-                $programID = $this->getTopByPath($parentProject->path);
-                $involvedPrograms[$programID] = $programID;
-            }
+            $programID = $this->getProgramIDByObject($id, $object, $objects);
+            if($programID) $involvedProgramIdList[$programID] = $programID;
         }
 
         /* All involves in stakeholder table. */
         $stakeholders = $this->dao->select('t1.objectID, t2.type')->from(TABLE_STAKEHOLDER)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')
-            ->on('t1.objectID = t2.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.objectID = t2.id')
             ->where('t1.objectType')->in("program,project")
             ->andWhere('t1.user')->eq($account)
             ->fetchAll('objectID');
-
         foreach($stakeholders as $objectID => $object)
         {
-            if($object->type == 'program')
-            {
-                $involvedPrograms[$objectID] = $objectID;
-            }
-            if($object->type == 'project')
-            {
-                $project = zget($objects, $objectID, array());
-                if(!$project) continue;
-
-                $programID = $this->getTopByPath($project->path);
-                $involvedPrograms[$programID] = $programID;
-            }
+            $programID = $this->getProgramIDByObject($objectID, $object, $objects);
+            if($programID) $involvedProgramIdList[$programID] = $programID;
         }
 
         /* All involves in team table. */
         $teams = $this->dao->select('t1.root, t2.project, t2.type')->from(TABLE_TEAM)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')
-            ->on('t1.root = t2.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.root = t2.id')
             ->where('t1.account')->eq($account)
             ->andWhere('t1.type')->in('project,execution')
             ->fetchAll('root');
-
         foreach($teams as $objectID => $object)
         {
-            if($object->type == 'project')
-            {
-                $project = zget($objects, $objectID, array());
-                if(!$project) continue;
-
-                $programID = $this->getTopByPath($project->path);
-                $involvedPrograms[$programID] = $programID;
-            }
-            if($object->type == 'sprint' or $object->type == 'stage')
-            {
-                $execution = zget($objects, $objectID, array());
-                if(!$execution) continue;
-
-                $project   = zget($objects, $execution->parent, array());
-                if(!$project) continue;
-
-                $programID = $this->getTopByPath($project->path);
-                $involvedPrograms[$programID] = $programID;
-            }
+            $programID = $this->getProgramIDByObject($objectID, $object, $objects);
+            if($programID) $involvedProgramIdList[$programID] = $programID;
         }
 
         /* All involves in products table. */
@@ -516,18 +473,47 @@ class programModel extends model
             ->where('deleted')->eq(0)
             ->andWhere("(createdBy = '$account' or PO = '$account' or QD = '$account' or RD = '$account')")
             ->fetchAll('id');
+        foreach($products as $id => $product) $involvedProgramIdList[$product->program] = $product->program;
 
-        foreach($products as $id => $product) $involvedPrograms[$product->program] = $product->program;
-
-        /* Check priv. */
-        $involvedPrograms = $this->dao->select('id')->from(TABLE_PROGRAM)
+        return $this->dao->select('id')->from(TABLE_PROGRAM)
             ->where('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
-            ->andWhere('id')->in($involvedPrograms)
+            ->andWhere('id')->in($involvedProgramIdList)
             ->andWhere('grade')->eq(1)
             ->fetchPairs();
+    }
 
-        return $involvedPrograms;
+    /**
+     * 获取项目/执行的所属项目集ID。
+     * Get the programID of the project/execution.
+     *
+     * @param  int    $objectID
+     * @param  object $object
+     * @param  array  $objects
+     * @access public
+     * @return int
+     */
+    public function getProgramIDByObject(int $objectID, object $object, array $objects): int
+    {
+        if($object->type == 'program') return $objectID;
+        if($object->type == 'project')
+        {
+            $project = zget($objects, $objectID, array());
+            if(!$project || !$project->parent) return 0;
+
+            return $this->getTopByPath($project->path);
+        }
+        if(in_array($object->type, array('sprint', 'stage', 'kanban')))
+        {
+            $execution = zget($objects, $objectID, array());
+            if(!$execution) return 0;
+
+            $project = zget($objects, $execution->project, array());
+            if(!$project || !$project->parent) return 0;
+
+            return $this->getTopByPath($project->path);
+        }
+        return 0;
     }
 
     /**
