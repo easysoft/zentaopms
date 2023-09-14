@@ -1412,4 +1412,30 @@ class testcaseTest
         foreach($array as $key => $step) $return .= "testcaseID:{$step->testcaseID} stepID: {$step->stepID}. ";
         return trim($return);
     }
+
+    /**
+     * 测试通过产品和模块获取场景信息。
+     * Test get scene by product and module.
+     *
+     * @param  int          $productID
+     * @param  int          $moduleID
+     * @access public
+     * @return array|string
+     */
+    public function getSceneByProductAndModuleTest(int $productID, int $moduleID): array|string
+    {
+        $array = $this->objectModel->getSceneByProductAndModule($productID, $moduleID);
+
+        if(dao::isError()) return dao::getError();
+
+        $sceneMaps = array_keys($array['sceneMaps']);
+        $topScenes = array_column($array['topScenes'], 'sceneID');
+        $sceneMaps = implode(' ', $sceneMaps);
+        $topScenes = implode(' ', $topScenes);
+
+        $return = '';
+        if($sceneMaps) $return .= "sceneMaps:{$sceneMaps};";
+        if($topScenes) $return .= "topScenes:{$topScenes};";
+        return $return;
+    }
 }

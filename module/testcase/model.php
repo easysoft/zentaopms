@@ -2612,15 +2612,17 @@ class testcaseModel extends model
     }
 
     /**
+     * 通过产品和模块获取场景。
      * Get scene by product and module.
      *
-     * @param  int $productID
-     * @param  int $moduleID
+     * @param  int    $productID
+     * @param  int    $moduleID
      * @access public
      * @return array
      */
-    function getSceneByProductAndModule($productID, $moduleID)
+    function getSceneByProductAndModule($productID, $moduleID): array
     {
+        /* Get scenes by product and module. */
         $sceneList = $this->dao->select('id as sceneID, title as sceneName, path, parent as parentID, product as productID, module as moduleID')
             ->from(TABLE_SCENE)
             ->where('deleted')->eq(0)
@@ -2632,12 +2634,14 @@ class testcaseModel extends model
         $topScenes = array();
         foreach($sceneList as $one)
         {
+            /* If scene parent is zero, append it to topScenes. */
             if($one->parentID == 0) $topScenes[] = $one;
 
+            /* Append it to sceneMaps. */
             $sceneMaps[$one->sceneID] = $one;
         }
 
-        return array('sceneMaps'=>$sceneMaps,'topScenes'=>$topScenes);
+        return array('sceneMaps' => $sceneMaps,'topScenes' => $topScenes);
     }
 
     /**
