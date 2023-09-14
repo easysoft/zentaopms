@@ -1866,7 +1866,7 @@ class userModel extends model
                     $manageProducts = isset($manageObjects['products']['list']) ? $manageObjects['products']['list'] : '';
                     foreach($allProducts as $id => $product)
                     {
-                        if($this->checkProductPriv($product, $account, $groups, zget($productTeams, $product->id, array()), zget($productStakeholders, $product->id, array()), zget($productWhiteList, $product->id, array()))) $products[$id] = $id;
+                        if($this->checkProductPriv($product, $account, $groups, zget($productTeams, $product->id, ''), zget($productStakeholders, $product->id, array()), zget($productWhiteList, $product->id, array()))) $products[$id] = $id;
                         if(strpos(",$manageProducts,", ",$id,") !== false) $products[$id] = $id;
                     }
                     $userView->products = join(',', $products);
@@ -2572,7 +2572,7 @@ class userModel extends model
      * @access public
      * @return bool
      */
-    public function checkProductPriv(object $product, string $account, array $groups, array $teams, array $stakeholders, array $whiteList, array $admins = array()): bool
+    public function checkProductPriv(object $product, string $account, string $groups, array $teams, array $stakeholders, array $whiteList, array $admins = array()): bool
     {
         if(strpos($this->app->company->admins, ',' . $account . ',') !== false) return true;
         if($product->PO == $account OR $product->QD == $account OR $product->RD == $account OR $product->createdBy == $account OR (isset($product->feedback) && $product->feedback == $account)) return true;
