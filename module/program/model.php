@@ -753,7 +753,7 @@ class programModel extends model
         $userPRJCount  = array();
         $progressList  = array();
         $programPairs  = $this->getPairs();
-        $projectStats  = $this->getProjectStats(0, 'all', 0, 'id_desc', null, 0, 0, true);
+        $projectStats  = $this->getProjectStats(0, 'all', 0, 'id_desc', null, '', 0, true);
 
         /* Add program progress. */
         foreach(array_keys($programPairs) as $programID)
