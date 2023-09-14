@@ -1,0 +1,16 @@
+title: zt_stakeholder
+author: Shujie Tian
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: user
+    fields:
+      - field: user1
+        range: 'admin,user{99}'
+      - field: user2
+        range: '[],1-99'
+  - field: objectType
+    range: 'program{80},project{40}'
+  - field: objectID
+    range: '1-10{8},11{10},60{10},61{10},100{10}'
