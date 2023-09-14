@@ -727,8 +727,8 @@ class testtask extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $message = $this->executeHooks($taskID);
-            return $this->send(array('result' => 'success', 'message' => $message ? $message : $this->lang->saveSuccess, 'load' => $this->session->testtaskList, 'closeModal' => true));
+            $message = $this->executeHooks($taskID) ?: $this->lang->saveSuccess;
+            return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->session->testtaskList, 'closeModal' => true));
         }
 
         /* Get task info. */
