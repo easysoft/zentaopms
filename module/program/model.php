@@ -622,14 +622,14 @@ class programModel extends model
      * @param  string      $browseType all|wait|undone|doing|suspended|closed|bysearch|review
      * @param  string      $queryID
      * @param  string      $orderBy
-     * @param  object|null $pager
      * @param  string      $programTitle 0|base|end
      * @param  int         $involved
      * @param  bool        $queryAll
+     * @param  object|null $pager
      * @access public
      * @return object[]
      */
-    public function getProjectList(int $programID = 0, string $browseType = 'all', int $queryID = 0, string $orderBy = 'id_desc', object|null $pager = null, string $programTitle = '', int $involved = 0, bool $queryAll = false): array
+    public function getProjectList(int $programID = 0, string $browseType = 'all', int $queryID = 0, string $orderBy = 'id_desc', string $programTitle = '', int $involved = 0, bool $queryAll = false, object $pager = null): array
     {
         $path = '';
         if($programID) $path = $this->getByID($programID)->path;
@@ -1067,61 +1067,6 @@ class programModel extends model
     }
 
     /**
-     * Get the tree menu of program.
-     *
-     * @param  int    $programID
-     * @param  string $from
-     * @param  string $vars
-     * @param  string $moduleName
-     * @param  string $methodName
-     * @access public
-     * @return string
-     */
-    public function getTreeMenu($programID = 0, $from = 'program', $vars = '', $moduleName = '', $methodName = '')
-    {
-        $programMenu = array();
-        $query = $this->dao->select('*')->from(TABLE_PROJECT)
-            ->where('deleted')->eq('0')
-            ->beginIF($from == 'program')
-            ->andWhere('type')->eq('program')
-            ->andWhere('id')->in($this->app->user->view->programs)
-            ->fi()
-            ->beginIF($from == 'product')
-            ->andWhere('type')->eq('program')
-            ->andWhere('grade')->eq(1)
-            ->andWhere('id')->in($this->app->user->view->programs)
-            ->fi()
-            ->beginIF(!$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
-            ->orderBy('grade desc, `order`')->get();
-        $stmt = $this->dbh->query($query);
-
-        while($program = $stmt->fetch())
-        {
-            $link     = $this->getLink($moduleName, $methodName, $program->id, $vars, $from);
-            $linkHtml = html::a($link, $program->name, '', "id='program$program->id' class='text-ellipsis programName' title=$program->name");
-
-            if(isset($programMenu[$program->id]) and !empty($programMenu[$program->id]))
-            {
-                if(!isset($programMenu[$program->parent])) $programMenu[$program->parent] = '';
-                $programMenu[$program->parent] .= "<li>$linkHtml";
-                $programMenu[$program->parent] .= "<ul>" . $programMenu[$program->id] . "</ul>\n";
-            }
-            else
-            {
-                if(empty($programMenu[$program->parent])) $programMenu[$program->parent] = '';
-                $programMenu[$program->parent] .= "<li>$linkHtml\n";
-            }
-            $programMenu[$program->parent] .= "</li>\n";
-        }
-
-        krsort($programMenu);
-        $programMenu = array_pop($programMenu);
-        $lastMenu    = "<ul class='tree tree-simple' data-ride='tree' id='programTree' data-name='tree-program'>{$programMenu}</ul>\n";
-
-        return $lastMenu;
-    }
-
-    /**
      * Get link for drop tree menu.
      *
      * @param  string $moduleName
@@ -1506,7 +1451,7 @@ class programModel extends model
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getProjectStats($browseType);
 
         /* Init vars. */
-        $projects = $this->getProjectList($programID, $browseType, $queryID, $orderBy, $pager, $programTitle, $involved, $queryAll);
+        $projects = $this->getProjectList($programID, $browseType, $queryID, $orderBy, $programTitle, $involved, $queryAll, $pager);
         if(empty($projects)) return array();
 
         $projectKeys = array_keys($projects);
@@ -1576,97 +1521,6 @@ class programModel extends model
       }
 
       return $users;
-    }
-
-    /**
-     * Build program action menu.
-     *
-     * @param  object $program
-     * @param  string $type
-     * @access public
-     * @return string
-     */
-    public function buildOperateMenu($program, $type = 'view')
-    {
-        $menu   = '';
-        $params = "programID=$program->id";
-        if($program->type == 'program' && strpos(",{$this->app->user->view->programs},", ",$program->id,") !== false)
-        {
-            if($program->status == 'wait' || $program->status == 'suspended')
-            {
-                $menu .= $this->buildMenu('program', 'start', $params, $program, $type, 'play', '', 'iframe', true, '', $this->lang->program->start);
-            }
-            if($program->status == 'doing')
-            {
-                $menu .= $this->buildMenu('program', 'close', $params, $program, $type, 'off', '', 'iframe', true);
-            }
-            if($program->status == 'closed')
-            {
-                $menu .= $this->buildMenu('program', 'activate', $params, $program, $type, 'magic', '', 'iframe', true);
-            }
-            if(common::hasPriv('program', 'suspend') || (common::hasPriv('program', 'close') && $program->status != 'doing') || (common::hasPriv('program', 'activate') && $program->status != 'closed'))
-            {
-                $menu .= "<div class='btn-group'>";
-                $menu .= "<button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}' style='width: 16px; padding-left: 0px;'></button>";
-                $menu .= "<ul class='dropdown-menu pull-right text-center' role='menu'>";
-                $menu .= $this->buildMenu('program', 'suspend', $params, $program, $type, 'pause', '', 'iframe btn-action btn', true, '', $this->lang->program->suspend);
-                if($program->status != 'doing')  $menu .= $this->buildMenu('program', 'close',    $params, $program, $type, 'off', '',   'iframe btn-action btn', true);
-                if($program->status != 'closed') $menu .= $this->buildMenu('program', 'activate', $params, $program, $type, 'magic', '', 'iframe btn-action btn', true);
-                $menu .= "</ul>";
-                $menu .= "</div>";
-            }
-
-            $disabled = $program->status == 'closed' ? " disabled='disabled' style='pointer-events: none;'" : '';
-            $menu .= $this->buildMenu('program', 'edit',   $params, $program, $type, 'edit');
-            $menu .= $this->buildMenu('program', 'create', $params, $program, $type, 'split', '', '', '', $disabled, $this->lang->program->children);
-            if(common::hasPriv('program', 'delete'))
-            {
-                $menu .= $this->buildMenu('program', 'delete', $params, $program, $type, 'trash', 'hiddenwin', '', '', '', $this->lang->program->delete);
-            }
-        }
-        elseif($program->type == 'project')
-        {
-            if($program->status == 'wait' || $program->status == 'suspended')
-            {
-                $menu .= $this->buildMenu('project', 'start', $params, $program, $type, 'play', '', 'iframe', true);
-            }
-            if($program->status == 'doing')  $menu .= $this->buildMenu('project', 'close',    $params, $program, $type, 'off',   '', 'iframe', true);
-            if($program->status == 'closed') $menu .= $this->buildMenu('project', 'activate', $params, $program, $type, 'magic', '', 'iframe', true);
-            if(common::hasPriv('project', 'suspend') || (common::hasPriv('project', 'close') && $program->status != 'doing') || (common::hasPriv('project', 'activate') && $program->status != 'closed'))
-            {
-                $menu .= "<div class='btn-group'>";
-                $menu .= "<button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}' style='width: 16px; padding-left: 0px;'></button>";
-                $menu .= "<ul class='dropdown-menu pull-right text-center' role='menu'>";
-                $menu .= $this->buildMenu('project', 'suspend', $params, $program, $type, 'pause', '', 'iframe btn-action btn', true);
-                if($program->status != 'doing')  $menu .= $this->buildMenu('project', 'close',    $params, $program, $type, 'off',   '', 'iframe btn-action btn', true);
-                if($program->status != 'closed') $menu .= $this->buildMenu('project', 'activate', $params, $program, $type, 'magic', '', 'iframe btn-action btn', true);
-                $menu .= "</ul>";
-                $menu .= "</div>";
-            }
-
-            $menu .= $this->buildMenu('project', 'edit',  $params, $program, $type, 'edit',  '', 'iframe', true);
-            $menu .= $this->buildMenu('project', 'team',  $params, $program, $type, 'group', '', '',   '', 'data-app="project"');
-
-            $disabledGroup = $program->model == 'kanban' ? " disabled='disabled' style='pointer-events: none;'" : '';
-            $menu         .= $this->buildMenu('project', 'group', $params, $program, $type, 'lock',  '', '',   '', 'data-app="project"' . $disabledGroup);
-            if(common::hasPriv('project', 'manageProducts') || common::hasPriv('project', 'whitelist') || common::hasPriv('project', 'delete'))
-            {
-                $menu .= "<div class='btn-group'>";
-                $menu .= "<button type='button' class='btn dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'><i class='icon-ellipsis-v'></i></button>";
-                $menu .= "<ul class='dropdown-menu pull-right text-center' role='menu'>";
-                $menu .= $this->buildMenu('project', 'manageProducts', $params, $program, $type, 'link', '', 'btn-action', '', "data-app='project'" . ($program->hasProduct ? '' : " disabled='disabled'"));
-
-                $disabledWhitelist = $program->acl == 'open' ? " disabled='disabled' style='pointer-events: none;'" : '';
-                $menu             .= $this->buildMenu('project', 'whitelist', "$params&module=project&from=browse", $program, $type, 'shield-check', '', 'btn-action', '', "data-app='project'" . $disabledWhitelist);
-                if(common::hasPriv('project','delete'))
-                {
-                    $menu .= $this->buildMenu("project", "delete", $params, $program, $type, 'trash', 'hiddenwin', 'btn-action', '', "data-group='program'", $this->lang->delete);
-                }
-                $menu .= "</ul>";
-                $menu .= "</div>";
-            }
-        }
-        return $menu;
     }
 
     /**

@@ -300,18 +300,6 @@ class programTest
         return $this->program->getInvolvedPrograms($account);
     }
 
-    /*
-     * Get Tree menu.
-     *
-     * @param  string $programID
-     * @access public
-     * @return array
-     */
-    public function getTreeMenuTest($programID)
-    {
-        return $this->program->getTreeMenu($programID);
-    }
-
     /**
      * Get kanban group.
      *
@@ -370,21 +358,6 @@ class programTest
     public function checkAccessTest($programID = 0, $programs = array())
     {
         return $this->program->checkAccess($programID, $programs);
-    }
-
-    /**
-     * Test build operate menu.
-     *
-     * @param  int    $programID
-     * @access public
-     * @return string
-     */
-    public function buildOperateMenuTest($programID = 0)
-    {
-        $program = $this->program->getByID($programID);
-        if(empty($program)) return '0';
-
-        return $this->program->buildOperateMenu($program);
     }
 
     /**
