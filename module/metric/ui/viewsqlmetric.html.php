@@ -11,6 +11,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('metricID', $metric->id);
+
 /**
  * Build content of table data.
  *
@@ -38,6 +40,15 @@ $buildItems = function($items): array
 
     return $itemList;
 };
+
+$formAction = array(
+    array(
+        'text' => $lang->metric->testMetric,
+        'class' => 'secondary',
+        'type' => 'submit',
+        'onclick' => 'window.testMetric()',
+    )
+);
 
 /**
  * Build default value and query value control.
@@ -229,7 +240,7 @@ $formAction = array(
         'text' => $lang->metric->testMetric,
         'class' => 'secondary',
         'type' => 'submit',
-        'url' => $this->createLink('metric', 'view', "id={$metric->id}"),
+        'onclick' => 'testMetric({id})',
     )
 );
 
@@ -278,9 +289,14 @@ detailBody
             (
                 $formHeader,
                 $paramControlGroups,
-                setClass('flex'),
+                setClass('flex params-form'),
                 setStyle('flex-direction', 'column'),
                 setStyle('justify-content', 'space-between'),
+                set::actions($formAction),
+                div
+                (
+                    setClass('response-box'),
+                ),
             )
         ),
     ),
