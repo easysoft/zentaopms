@@ -119,9 +119,9 @@ class stakeholderModel extends model
                 $childProjects = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('project')->fetchPairs();
                 $childProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq($programID)->fetchPairs();
 
-                if(!empty($childPrograms)) $this->user->updateUserView($childPrograms, 'program', $stakeholder->user);
-                if(!empty($childProjects)) $this->user->updateUserView($childProjects, 'project', $stakeholder->user);
-                if(!empty($childProducts)) $this->user->updateUserView($childProducts, 'product', $stakeholder->user);
+                if(!empty($childPrograms)) $this->user->updateUserView($childPrograms, 'program', array($stakeholder->user));
+                if(!empty($childProjects)) $this->user->updateUserView($childProjects, 'project', array($stakeholder->user));
+                if(!empty($childProducts)) $this->user->updateUserView($childProducts, 'product', array($stakeholder->user));
             }
 
             return $stakeholderID;
