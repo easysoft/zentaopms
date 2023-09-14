@@ -47,6 +47,20 @@ foreach($fields as $field => $attr)
             ),
         );
     }
+    elseif($control['type'] == 'editor')
+    {
+        $formGroup = formGroup
+        (
+            set::width($attr['width']),
+            set::label($attr['title']),
+            set::required($attr['required']),
+            editor
+            (
+                set::name($fieldName),
+                html($attr['default'])
+            ),
+        );
+    }
     else
     {
         $formGroup = formGroup
