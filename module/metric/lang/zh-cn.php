@@ -192,7 +192,7 @@ $lang->metric->implement->downloadPHP = "下载度量模板";
 
 $lang->metric->implement->instructionTips = array();
 $lang->metric->implement->instructionTips[] = '1.下载度量项模板<span class="label primary-pale">{code}.php</span>，注意：文件名称要与度量代号保持一致。';
-$lang->metric->implement->instructionTips[] = '2.对文件进行编码开发操作，操作<a class="btn text-primary ghost" href="https://www.zentao.net/book/zentaopms/1103.html">参考手册</a>。';
+$lang->metric->implement->instructionTips[] = '2.对文件进行编码开发操作，操作<a class="btn text-primary ghost" target="_blank" href="https://www.zentao.net/book/zentaopms/1103.html">参考手册</a>。';
 $lang->metric->implement->instructionTips[] = '3.请将开发后的<span class="label primary-pale">{code}.php</span>文件放到<span class="label important-pale">{tmpRoot}metric</span>目录下。';
 $lang->metric->implement->instructionTips[] = '4.执行命令赋予文件可执行权限：<br /><span class="label important-pale">chmod 777 {tmpRoot}metric</span><br /><span class="label important-pale">chmod 777 {tmpRoot}metric/{code}.php</span>';
 
