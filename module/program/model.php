@@ -1290,9 +1290,10 @@ class programModel extends model
     }
 
     /**
+     * 根据项目集ID列表获取父项目集的负责人。
      * Get parent PM by programIdList.
      *
-     * @param  array $programIdList
+     * @param  array  $programIdList
      * @access public
      * @return array
      */
