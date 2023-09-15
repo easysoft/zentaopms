@@ -17,3 +17,4 @@
 
 .panel-body .relative {position: relative;}
 .btn-download {position: absolute; right: 0; color: var(--color-primary-500); background-color: var(--color-primary-50); border-color: var(--color-primary-50);}
+.code-slate {color: var(--color-slate-900); background-color: var(--color-slate-100); border: 1px solid var(--color-slate-300); box-shadow: none; padding: 2px 8px;}
