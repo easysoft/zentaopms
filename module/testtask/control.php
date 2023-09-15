@@ -156,7 +156,6 @@ class testtask extends control
 
         /* Set menu. */
         $productID = $this->loadModel('product')->saveState($productID, $this->products);
-        $product   = $this->product->getByID($productID);
         if($this->app->tab == 'project')
         {
             $this->lang->scrum->menu->qa['subMenu']->testcase['subModule'] = 'testtask';
@@ -290,16 +289,15 @@ class testtask extends control
         if(!$testtask) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('qa', 'index'))));
 
         /* When the session changes, you need to query the related products again. */
-        $this->loadModel('product');
         $products = $this->products;
-        if($this->session->project != $testtask->project) $products = $this->product->getProductPairsByProject($testtask->project);
+        if($this->session->project != $testtask->project) $products = $this->loadModel('product')->getProductPairsByProject($testtask->project);
         $this->session->project = $testtask->project;
 
         /* 如果该测试单的所属产品不在products里，则把所属产品塞入到products里。 */
         $productID = $testtask->product;
         if(!isset($products[$productID]))
         {
-            $product = $this->product->getByID($productID);
+            $product = $this->loadModel('product')->getByID($productID);
             $products[$productID] = $product->name;
         }
 
@@ -330,7 +328,7 @@ class testtask extends control
     {
         /* Set browseType, productID, moduleID and queryID. */
         $testtask  = $this->testtask->getByID($testtaskID);
-        $productID = $this->product->saveState($testtask->product, $this->products);
+        $productID = $this->loadModel('product')->saveState($testtask->product, $this->products);
         if($this->app->tab == 'project')
         {
             $this->lang->scrum->menu->qa['subMenu']->testcase['subModule'] = 'testtask';
@@ -540,7 +538,7 @@ class testtask extends control
 
         if(!isset($this->products[$productID]))
         {
-            $product = $this->product->getByID($productID);
+            $product = $this->loadModel('product')->getByID($productID);
             $this->products[$productID] = $product->name;
         }
 
@@ -581,7 +579,7 @@ class testtask extends control
         $productID = $task->product;
         if(!isset($this->products[$productID]))
         {
-            $product = $this->product->getByID($productID);
+            $product = $this->loadModel('product')->getByID($productID);
             $this->products[$productID] = $product->name;
         }
 
@@ -711,7 +709,7 @@ class testtask extends control
 
         /* Get task info. */
         $testtask  = $this->testtask->getByID($taskID);
-        $productID = $this->product->saveState($testtask->product, $this->products);
+        $productID = $this->loadModel('product')->saveState($testtask->product, $this->products);
 
         /* Set menu. */
         $this->loadModel('qa')->setMenu($productID, $testtask->branch);
@@ -747,7 +745,7 @@ class testtask extends control
 
         /* Get task info. */
         $testtask  = $this->testtask->getByID($taskID);
-        $productID = $this->product->saveState((int)$testtask->product, $this->products);
+        $productID = $this->loadModel('product')->saveState((int)$testtask->product, $this->products);
 
         /* Set menu. */
         $this->loadModel('qa')->setMenu($productID, $testtask->branch);
@@ -784,7 +782,7 @@ class testtask extends control
 
         /* Get task info. */
         $testtask  = $this->testtask->getByID($taskID);
-        $productID = $this->product->saveState($testtask->product, $this->products);
+        $productID = $this->loadModel('product')->saveState($testtask->product, $this->products);
 
         /* Set menu. */
         $this->loadModel('qa')->setMenu($productID, $testtask->branch);
@@ -820,7 +818,7 @@ class testtask extends control
 
         /* Get task info. */
         $testtask  = $this->testtask->getByID($taskID);
-        $productID = $this->product->saveState($testtask->product, $this->products);
+        $productID = $this->loadModel('product')->saveState($testtask->product, $this->products);
 
         /* Set menu. */
         $this->loadModel('qa')->setMenu($productID, $testtask->branch);
@@ -885,7 +883,7 @@ class testtask extends control
 
         /* Get task and product id. */
         $task      = $this->testtask->getByID($taskID);
-        $productID = $this->product->saveState($task->product, $this->products);
+        $productID = $this->loadModel('product')->saveState($task->product, $this->products);
         $product   = $this->product->getByID($productID);
 
         if(!isset($this->products[$productID])) $this->products[$productID] = $product->name;
