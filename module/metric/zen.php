@@ -45,6 +45,7 @@ class metricZen extends metric
      * 成功插入度量数据后，其他的额外操作。
      * Process after create metric.
      *
+     * @param  string    $scope
      * @access protected
      * @return array
      */
@@ -71,10 +72,9 @@ class metricZen extends metric
      * 根据分类后的度量项，准备数据源句柄。
      * Prepare the data source handle based on the classified measures.
      *
-     * @param  object    $classifiedCalc
-     * @param  object    $dataset
+     * @param  object    $calcGroup
      * @access protected
-     * @return object
+     * @return array
      */
     protected function prepareDataset($calcGroup)
     {
@@ -460,9 +460,9 @@ class metricZen extends metric
 
     /**
      * 构建操作权限。
-     *  Prepare action priv.
+     * Prepare action priv.
      *
-     * @param  array    $metrics
+     * @param  array     $metrics
      * @access protected
      * @return array
      */

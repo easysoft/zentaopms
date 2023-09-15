@@ -17,8 +17,7 @@ class metricModel extends model
      * 用对象数据创建度量。
      * Create a metric.
      *
-     * @param  object  $metric
-     * @param  string  $back
+     * @param  object $metric
      * @access public
      * @return int|false
      */
@@ -73,6 +72,9 @@ class metricModel extends model
      * 获取度量项数据列表。
      * Get metric data list.
      *
+     * @param  string $scope
+     * @param  string $stage
+     * @param  int    $param
      * @param  string $type
      * @param  int    $queryID
      * @param  string $sort
@@ -138,7 +140,7 @@ class metricModel extends model
      * 获取模块树数据。
      * Get module tree data.
      *
-     * @param string  $scope
+     * @param  string $scope
      * @access public
      * @return void
      */
@@ -232,6 +234,7 @@ class metricModel extends model
      * Get data source statement of calculator.
      *
      * @param  object $calculator
+     * @param  string $returnType
      * @access public
      * @return PDOStatement|string
      */
@@ -375,9 +378,10 @@ class metricModel extends model
     }
 
     /**
-     * insertmetricLib
+     * 插入度量库数据。
+     * Insert into metric lib.
      *
-     * @param  int    $records
+     * @param  array  $records
      * @access public
      * @return void
      */
@@ -640,7 +644,7 @@ class metricModel extends model
      * 检查度量项计算文件是否存在。
      * Check if the calculator file exists or not.
      *
-     * @param  object $row
+     * @param  object $metric
      * @access public
      * @return bool
      */
@@ -885,7 +889,7 @@ class metricModel extends model
      * 更新度量项。
      * Updata metric.
      *
-     * @param  object    $data
+     * @param  object $metric
      * @access public
      * @return void
      */
@@ -968,7 +972,7 @@ class metricModel extends model
      * 将用户定义的度量文件从临时目录移动到系统目录中。
      * Move custom calculator file to calc directory
      *
-     * @param object $metric
+     * @param  object $metric
      * @access public
      * @return bool
      */

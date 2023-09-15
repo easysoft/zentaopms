@@ -213,7 +213,7 @@ class metricTao extends metricModel
      * Fetch metric data.
      *
      * @param  string $code
-     * @param  array $fieldList
+     * @param  array  $fieldList
      * @access protected
      * @return array
      */

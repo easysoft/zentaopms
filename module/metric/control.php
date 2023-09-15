@@ -58,7 +58,7 @@ class metric extends control
      * 编辑度量项。
      * Edit a metric.
      *
-     * @param int $id
+     * @param  int $id
      * @access public
      * @return void
      */
@@ -92,9 +92,13 @@ class metric extends control
     }
 
     /**
-     * Browse metric list.
+     * 度量项预览列表。
+     * Preview metric list.
      *
      * @param  string $scope
+     * @param  string $viewType
+     * @param  int    $metricID
+     * @param  string $filters
      * @access public
      * @return void
      */
@@ -139,9 +143,11 @@ class metric extends control
     }
 
     /**
+     * 获取度量项列表。
      * Get metric list by ajax.
      *
      * @param  string $scope
+     * @param  string $filters
      * @access public
      * @return void
      */
@@ -166,6 +172,7 @@ class metric extends control
     }
 
     /**
+     * 查看度量项列表。
      * Browse metric list.
      *
      * @param  string $scope
@@ -248,7 +255,7 @@ class metric extends control
 
     /**
      * 计算度量项。
-     * Excute metric.
+     * Execute metric.
      *
      * @access public
      * @return void
@@ -304,10 +311,10 @@ class metric extends control
 
                 if(!empty($errors)) return $this->send(array('result' => 'fail', 'errors' => join("<br>", $errors)));
 
-                $params[$varName]['varName']  = $varName;
-                $params[$varName]['varType']  = zget($this->post->varType, $i, 'input');
-                $params[$varName]['showName'] = zget($this->post->showName, $i, '');
-                $params[$varName]['options']  = $this->post->options[$i];
+                $params[$varName]['varName']      = $varName;
+                $params[$varName]['varType']      = zget($this->post->varType, $i, 'input');
+                $params[$varName]['showName']     = zget($this->post->showName, $i, '');
+                $params[$varName]['options']      = $this->post->options[$i];
                 $params[$varName]['defaultValue'] = zget($this->post->defaultValue, $i, '');
             }
 
