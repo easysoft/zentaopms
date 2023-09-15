@@ -165,7 +165,7 @@ class program extends control
 
         $this->view->title      = $this->lang->program->create;
 
-        $this->view->gobackLink     = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('program', 'browse') : '';
+        $this->view->gobackLink     = (isset($output['from']) && $output['from'] == 'global') ? $this->createLink('program', 'browse') : '';
         $this->view->pmUsers        = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
         $this->view->poUsers        = $this->user->getPairs('noclosed|nodeleted|pofirst');
         $this->view->users          = $this->user->getPairs('noclosed|nodeleted');
@@ -173,7 +173,7 @@ class program extends control
         $this->view->parents        = $this->program->getParentPairs();
         $this->view->programList    = $this->program->getList();
         $this->view->budgetUnitList = $this->project->getBudgetUnitList();
-        $this->view->budgetLeft     = $this->program->getBudgetLeft($parentProgram);
+        $this->view->budgetLeft     = empty($parentProgram) ? 0 : $this->program->getBudgetLeft($parentProgram);
 
         $this->display();
     }
