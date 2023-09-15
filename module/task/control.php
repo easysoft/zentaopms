@@ -855,7 +855,15 @@ class task extends control
             return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
-        $members = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
+        // Ipd or vision research-stage module does not have team, so get research team members.
+        if($this->config->vision == 'or')
+        {
+            $members = $this->loadModel('user')->getTeamMemberPairs($executionID, 'project', 'nodeleted');
+        }
+        else
+        {
+            $members = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
+        }
 
         /* Compute next assignedTo. */
         if(!empty($task->team) and strpos('done,cencel,closed', $task->status) === false)
