@@ -222,8 +222,10 @@ class admin extends control
             $this->loadModel('setting')->setItems('system.common.safe', $data);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
         }
+
         $this->view->title      = $this->lang->admin->safe->common . $this->lang->colon . $this->lang->admin->safe->set;
         $this->view->position[] = $this->lang->admin->safe->common;
+        $this->view->gdInfo     = function_exists('gd_info') ? gd_info() : array();
         $this->display();
     }
 
