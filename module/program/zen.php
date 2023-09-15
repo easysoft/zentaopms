@@ -173,4 +173,39 @@ class programZen extends program
 
         return helper::createLink($moduleName, $methodName, "programID={$programID}");
     }
+
+    /**
+     * 在产品视角查看项目时通过浏览类型获取产品聊表。
+     * Get products by browse type of the program for product view in program list.
+     *
+     * @param  string $browseType
+     * @param  array  $products
+     * @return array
+     */
+    protected function getProductsByBrowseType(string $browseType, array $products): array
+    {
+        /* Filter the program by browse type. */
+        foreach($products as $index => $product)
+        {
+            $programID = $product->program;
+            /* The product associated with the program. */
+            if(!empty($programID))
+            {
+                $program = $this->program->getByID($programID);
+                if(!empty($program) && in_array($browseType, array('all', 'unclosed', 'wait', 'doing', 'suspended', 'closed')))
+                {
+                    if($browseType == 'unclosed' && $program->status == 'closed')
+                        unset($products[$index]);
+                    elseif($browseType != 'unclosed' && $browseType != 'all' && $program->status != $browseType)
+                        unset($products[$index]);
+                }
+            }
+            else
+            {
+                /* The product without program only can be viewed when browse type is all and not closed. */
+                if($browseType != 'all' and $browseType != 'unclosed') unset($products[$index]);
+            }
+        }
+        return $products;
+    }
 }
