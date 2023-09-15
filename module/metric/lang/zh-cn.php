@@ -267,6 +267,6 @@ $lang->metric->param->typeList['input']  = '文本框';
 $lang->metric->param->typeList['date']   = '日期';
 $lang->metric->param->typeList['select'] = '下拉菜单';
 
-$lang->metric->param->options['project'] = $lang->projectCommon .'列表';
+$lang->metric->param->options['project'] = '项目列表';
 $lang->metric->param->options['product'] = $lang->productCommon . '列表';
-$lang->metric->param->options['sprint']  = $lang->projectCommon . '列表';
+$lang->metric->param->options['sprint']  = $lang->executionCommon . '列表';
