@@ -1108,18 +1108,6 @@ class programModel extends model
     }
 
     /**
-     * Get children by program id.
-     *
-     * @param  int  $programID
-     * @access public
-     * @return int
-     */
-    public function getChildren($programID = 0)
-    {
-        return $this->dao->select('count(*) as count')->from(TABLE_PROGRAM)->where('parent')->eq($programID)->fetch('count');
-    }
-
-    /**
      * 该项目集下未关闭的子项目集或项目的数量。
      * Judge whether there is an unclosed programs or projects.
      *
