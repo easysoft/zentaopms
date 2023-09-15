@@ -117,21 +117,18 @@ class testtask extends control
             if($testtask->build == 'trunk' || empty($testtask->buildName)) $testtask->buildName = $this->lang->trunk;
         }
 
-        $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->common;
-        $this->view->productID    = $productID;
-        $this->view->product      = $product;
-        $this->view->branch       = $branch;
-        $this->view->tasks        = $testtasks;
-        $this->view->users        = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $this->view->pager        = $pager;
-        $this->view->beginTime    = $beginTime;
-        $this->view->endTime      = $endTime;
-        $this->view->type         = $type;
-        $this->view->orderBy      = $orderBy;
-        $this->view->waitCount    = $waitCount;
-        $this->view->testingCount = $testingCount;
-        $this->view->blockedCount = $blockedCount;
-        $this->view->doneCount    = $doneCount;
+        $this->view->title       = $product->name . $this->lang->colon . $this->lang->testtask->common;
+        $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->allSummary  = sprintf($this->lang->testtask->allSummary, count($testtasks), $waitCount, $testingCount, $blockedCount, $doneCount);
+        $this->view->pageSummary = sprintf($this->lang->testtask->pageSummary, count($testtasks));
+        $this->view->tasks       = $testtasks;
+        $this->view->product     = $product;
+        $this->view->branch      = $branch;
+        $this->view->type        = $type;
+        $this->view->orderBy     = $orderBy;
+        $this->view->pager       = $pager;
+        $this->view->beginTime   = $beginTime;
+        $this->view->endTime     = $endTime;
         $this->display();
     }
 

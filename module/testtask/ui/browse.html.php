@@ -13,7 +13,7 @@ $scopeAndStatus = explode(',', $type);
 $scope          = !empty($scopeAndStatus[0]) ? $scopeAndStatus[0] : '';
 $status         = !empty($scopeAndStatus[1]) ? $scopeAndStatus[1] : '';
 $viewName       = $scope == 'local'? \zget($products, $productID) : $lang->testtask->all;
-jsVar('condition', "productID=$productID&branch=$branch&type=$scope,$status&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}&pageID=1");
+jsVar('condition', "productID=$productID&branch=$branch&type=$type&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}&pageID=1");
 
 $productDropdown = productMenu
 (
@@ -66,7 +66,7 @@ toolbar
     ) : null
 );
 
-$footerHTML = strtolower($status) == 'totalstatus' ? sprintf($lang->testtask->allSummary, count($tasks), $waitCount, $testingCount, $blockedCount, $doneCount) : sprintf($lang->testtask->pageSummary, count($tasks));
+$footerHTML = strtolower($status) == 'totalstatus' ? $allSummary : $pageSummary;
 dtable
 (
     set::cols($cols),
