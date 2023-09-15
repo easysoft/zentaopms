@@ -118,22 +118,6 @@ class programTest
     }
 
     /**
-     * Create stakeholder.
-     *
-     * @param  int    $programID
-     * @param  array  $accounts
-     * @access public
-     * @return void
-     */
-    public function createStakeholderTest($programID, $accounts = array())
-    {
-        $_POST['accounts'] = $accounts;
-        $stakeHolder = $this->program->createStakeholder($programID);
-
-        return $this->program->getStakeholdersByPrograms((int)$programID);
-    }
-
-    /**
      * Test updateChildUserView method.
      *
      * @param  int    $programID
