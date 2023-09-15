@@ -182,6 +182,6 @@ class testtaskZen extends testtask
         if(!isonlybody() && ($tab == 'project' || $tab == 'execution')) return $this->loadModel('product')->getProducts($this->session->$tab, 'all', '', false);
 
         /* 如果是在弹窗页面或者测试应用下打开的测试单，则获取所有产品。 */
-        return $this->product->getPairs('', 0, '', 'all');
+        return $this->loadModel('product')->getPairs('', 0, '', 'all');
     }
 }
