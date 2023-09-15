@@ -53,13 +53,13 @@ $config->testsuite->dtable->fieldList['addedDate']['title']    = $lang->testsuit
 $config->testsuite->dtable->fieldList['addedDate']['type']     = 'datetime';
 $config->testsuite->dtable->fieldList['addedDate']['sortType'] = true;
 
-$config->testsuite->dtable->fieldList['actions']['name']       = 'actions';
-$config->testsuite->dtable->fieldList['actions']['title']      = $lang->actions;
-$config->testsuite->dtable->fieldList['actions']['type']       = 'actions';
-$config->testsuite->dtable->fieldList['actions']['fixed']      = 'right';
-$config->testsuite->dtable->fieldList['actions']['sortType']   = false;
-$config->testsuite->dtable->fieldList['actions']['list']       = $config->testsuite->actionList;
-$config->testsuite->dtable->fieldList['actions']['menu']       = array('linkCase', 'edit', 'delete');
+$config->testsuite->dtable->fieldList['actions']['name']     = 'actions';
+$config->testsuite->dtable->fieldList['actions']['title']    = $lang->actions;
+$config->testsuite->dtable->fieldList['actions']['type']     = 'actions';
+$config->testsuite->dtable->fieldList['actions']['fixed']    = 'right';
+$config->testsuite->dtable->fieldList['actions']['sortType'] = false;
+$config->testsuite->dtable->fieldList['actions']['list']     = $config->testsuite->actionList;
+$config->testsuite->dtable->fieldList['actions']['menu']     = array('linkCase', 'edit', 'delete');
 
 global $app;
 $app->loadLang('testcase');
