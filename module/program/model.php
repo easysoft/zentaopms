@@ -1523,7 +1523,7 @@ class programModel extends model
     public function buildActions($program)
     {
         $actionsMap = $this->programTao->buildProgramActionsMap($program);
-        if($program->type == 'project') $actionsMap += $this->programTao->buildProjectActionsMap($program);
+        if($program->type == 'project') $actionsMap = array_merge($actionsMap, $this->programTao->buildProjectActionsMap($program));
         return $actionsMap;
     }
 

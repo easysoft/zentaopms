@@ -107,7 +107,20 @@ class programTao extends programModel
 
             $actionsMap[] = $other;
         }
+        return array_merge($actionsMap, $this->getNormalActions($program));
+    }
 
+    /**
+     * 获取基础操作的按钮数据。
+     * Get normal actions.
+     *
+     * @param  object $program
+     * @access protected
+     * @return array
+     */
+    protected function getNormalActions(object $program): array
+    {
+        $actionsMap    = array();
         $normalActions = $program->type == 'project' ? array('edit') : array('edit', 'create', 'delete');
         foreach($normalActions as $action)
         {
@@ -182,4 +195,3 @@ class programTao extends programModel
         return $actionsMap;
     }
 }
-
