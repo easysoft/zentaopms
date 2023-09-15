@@ -33,12 +33,10 @@ pid=1
 */
 
 $programTester = new programTest();
-$programIdList = array('1', '1,2,3', array(1), array(1,2,3), '', '0', '11');
+$programIdList = array(array(1), array(1,2,3), '', '0', '11');
 
 r($programTester->getPairsByListTest($programIdList[0])) && p('1')     && e('项目集1');                 // 通过字符串'1'获取项目集名称
 r($programTester->getPairsByListTest($programIdList[1])) && p('1,2,3') && e('项目集1,项目集2,项目集3'); // 通过字符串'1,2,3'获取项目集名称
-r($programTester->getPairsByListTest($programIdList[2])) && p('1')     && e('项目集1');                 // 通过数组array(1)获取项目集名称
-r($programTester->getPairsByListTest($programIdList[3])) && p('1,2,3') && e('项目集1,项目集2,项目集3'); // 通过数组array(1,2,3)获取项目集名称
-r($programTester->getPairsByListTest($programIdList[4])) && p('')      && e('0');                       // 通过id为空获取项目集名称
-r($programTester->getPairsByListTest($programIdList[5])) && p('')      && e('0');                       // 通过id=0获取项目集名称
-r($programTester->getPairsByListTest($programIdList[6])) && p('')      && e('0');                       // 通过id=11获取项目集名称
+r($programTester->getPairsByListTest($programIdList[2])) && p('')      && e('0');                       // 通过id为空获取项目集名称
+r($programTester->getPairsByListTest($programIdList[3])) && p('')      && e('0');                       // 通过id=0获取项目集名称
+r($programTester->getPairsByListTest($programIdList[4])) && p('')      && e('0');                       // 通过id=11获取项目集名称

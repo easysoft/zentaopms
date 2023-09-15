@@ -152,14 +152,15 @@ class programModel extends model
     }
 
     /**
+     * 根据项目集ID列表获取项目集信息。
      * Get program pairs by id list.
      *
-     * @param  string|array $programIDList
-     * @param  string       $orderBy
+     * @param  array  $programIDList
+     * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getPairsByList($programIDList = '', $orderBy = 'order_asc')
+    public function getPairsByList(array $programIDList = array(), string $orderBy = 'order_asc'): array
     {
         return $this->dao->select('id, name')->from(TABLE_PROGRAM)
             ->where('id')->in($programIDList)
@@ -223,6 +224,7 @@ class programModel extends model
     }
 
     /**
+     * 根据查询ID获取项目集列表。
      * Get program list by search.
      *
      * @param string  $orderBy

@@ -51,9 +51,9 @@ class programTest
      * @access public
      * @return array
      */
-    public function getPairsByListTest($programIDList = '')
+    public function getPairsByListTest($programIDList = array())
     {
-        return $this->program->getPairsByList($programIDList);
+        return $this->program->getPairsByList((array)$programIDList);
     }
 
     /**
