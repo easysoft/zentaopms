@@ -1522,9 +1522,9 @@ class programModel extends model
      */
     public function buildActions($program)
     {
-        if($program->type == 'program') return $this->programTao->buildProgramActionsMap($program);
-        if($program->type == 'project') return $this->programTao->buildProjectActionsMap($program);
-        return array();
+        $actionsMap = $this->programTao->buildProgramActionsMap($program);
+        if($program->type == 'project') $actionsMap += $this->programTao->buildProjectActionsMap($program);
+        return $actionsMap;
     }
 
     /**

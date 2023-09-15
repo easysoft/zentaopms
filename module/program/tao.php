@@ -60,21 +60,23 @@ class programTao extends programModel
     {
         if($program->type == 'program' && !str_contains(",{$this->app->user->view->programs},", ",$program->id,")) return array();
 
+        if($program->type == 'project') $this->loadModel('project');
+
         $actionsMap         = array();
-        $canStartProgram    = common::hasPriv('program', 'start');
-        $canSuspendProgram  = common::hasPriv('program', 'suspend');
-        $canCloseProgram    = common::hasPriv('program', 'close');
-        $canActivateProgram = common::hasPriv('program', 'activate');
+        $canStartProgram    = common::hasPriv($program->type, 'start');
+        $canSuspendProgram  = common::hasPriv($program->type, 'suspend');
+        $canCloseProgram    = common::hasPriv($program->type, 'close');
+        $canActivateProgram = common::hasPriv($program->type, 'activate');
         $normalActions      = array('start', 'close', 'activate');
         foreach($normalActions as $action)
         {
-            if($action == 'start' && (!$canStartProgram || ($program->status != 'wait' && $program->status != 'suspended'))) continue;
             if($action == 'close' && (!$canCloseProgram || $program->status != 'doing')) continue;
             if($action == 'activate' && (!$canActivateProgram || $program->status != 'closed')) continue;
+            if($action == 'start' && (!$canStartProgram || ($program->status != 'wait' && $program->status != 'suspended'))) continue;
 
             $item = new stdclass();
             $item->name   = $action;
-            $item->url    = helper::createLink('program', $action, "programID={$program->id}");
+            $item->url    = helper::createLink($program->type, $action, "programID={$program->id}");
             $actionsMap[] = $item;
             break;
         }
@@ -88,33 +90,34 @@ class programTao extends programModel
             $otherActions = array('suspend', 'close', 'activate');
             foreach($otherActions as $action)
             {
+                if(!common::hasPriv($program->type, $action)) continue;
                 if($action == 'close' && $program->status == 'doing') continue;
-                if(!common::hasPriv('program', $action)) continue;
 
                 $item = new stdclass();
-                $item->name = $action;
-                $item->url  = helper::createLink('program', $action, "programID={$program->id}");
-                if(!static::isClickable($program, $action)) $item->disabled = true;
-                if($action == 'close' && $program->status == 'closed')      $item->hint = $this->lang->program->tip->closed;
-                if($action == 'suspend' && $program->status == 'closed')    $item->hint = $this->lang->program->tip->notSuspend;
-                if($action == 'suspend' && $program->status == 'suspended') $item->hint = $this->lang->program->tip->suspended;
-                if($action == 'activate' && $program->status == 'doing')    $item->hint = $this->lang->program->tip->actived;
+                $item->name     = $action;
+                $item->url      = helper::createLink($program->type, $action, "programID={$program->id}");
+                $item->disabled = !static::isClickable($program, $action);
 
+                if($action == 'close' && $program->status == 'closed')      $item->hint = $this->lang->{$program->type}->tip->closed;
+                if($action == 'activate' && $program->status == 'doing')    $item->hint = $this->lang->{$program->type}->tip->actived;
+                if($action == 'suspend' && $program->status == 'suspended') $item->hint = $this->lang->{$program->type}->tip->suspended;
+                if($action == 'suspend' && $program->status == 'closed')    $item->hint = $this->lang->{$program->type}->tip->notSuspend;
                 $other->items[] = $item;
             }
 
             $actionsMap[] = $other;
         }
 
-        $normalActions = array('edit', 'create', 'delete');
+        $normalActions = $program->type == 'project' ? array('edit') : array('edit', 'create', 'delete');
         foreach($normalActions as $action)
         {
-            if(!common::hasPriv('program', $action)) continue;
+            if(!common::hasPriv($program->type, $action)) continue;
+
             $item = new stdclass();
             $item->name = $action;
-            if($action != 'delete') $item->url  = helper::createLink('program', $action, "programID={$program->id}");
+            if($action != 'delete') $item->url  = helper::createLink($program->type, $action, "programID={$program->id}");
             if($action == 'delete') $item->url = "javascript:confirmDelete({$program->id}, 'program', '{$program->name}')";
-            if($action == 'create' and $program->status == 'closed')
+            if($action == 'create' && $program->status == 'closed')
             {
                 $item->disabled = true;
                 $item->hint     = $this->lang->program->tip->notCreate;
@@ -137,58 +140,7 @@ class programTao extends programModel
     protected function buildProjectActionsMap(object $project): array
     {
         $this->loadModel('project');
-        $actionsMap         = array();
-        $canStartProject    = common::hasPriv('project', 'start');
-        $canSuspendProject  = common::hasPriv('project', 'suspend');
-        $canCloseProject    = common::hasPriv('project', 'close');
-        $canActivateProject = common::hasPriv('project', 'activate');
-        $normalActions      = array('start', 'close', 'activate');
-        foreach($normalActions as $action)
-        {
-            if($action == 'start' && (!$canStartProject || ($project->status != 'wait' && $project->status != 'suspended'))) continue;
-            if($action == 'close' && (!$canCloseProject || $project->status != 'doing')) continue;
-            if($action == 'activate' && (!$canActivateProject || $project->status != 'closed')) continue;
-
-            $item = new stdclass();
-            $item->name   = $action;
-            $item->url    = helper::createLink('project', $action, "projectID={$project->id}");
-            $actionsMap[] = $item;
-            break;
-        }
-
-        if($canSuspendProject || ($canCloseProject && $project->status != 'doing') || ($canActivateProject && $project->status != 'closed'))
-        {
-            $other = new stdclass();
-            $other->name  = 'other';
-            $other->items = array();
-
-            $otherActions = array('suspend', 'close', 'activate');
-            foreach($otherActions as $action)
-            {
-                if($action == 'close' and $project->status == 'doing') continue;
-                if(!common::hasPriv('project', $action)) continue;
-
-                $item = new stdclass();
-                $item->name = $action;
-                $item->url  = helper::createLink('project', $action, "projectID={$project->id}");
-                if(!projectModel::isClickable($project, $action)) $item->disabled = true;
-                if($action == 'close' && $project->status == 'closed')      $item->hint = $this->lang->project->tip->closed;
-                if($action == 'suspend' && $project->status == 'closed')    $item->hint = $this->lang->project->tip->notSuspend;
-                if($action == 'suspend' && $project->status == 'suspended') $item->hint = $this->lang->project->tip->suspended;
-                if($action == 'activate' && $project->status == 'doing')    $item->hint = $this->lang->project->tip->actived;
-
-                $other->items[] = $item;
-            }
-
-            $actionsMap[] = $other;
-        }
-        if(common::hasPriv('project', 'edit'))
-        {
-            $item = new stdclass();
-            $item->name   = 'edit';
-            $item->url    = helper::createLink('project', 'edit', "projectID={$project->id}");
-            $actionsMap[] = $item;
-        }
+        $actionsMap = array();
         if(common::hasPriv('project', 'team'))
         {
             $item = new stdclass();
@@ -196,6 +148,7 @@ class programTao extends programModel
             $item->url    = helper::createLink('project', 'team', "projectID={$project->id}");
             $actionsMap[] = $item;
         }
+
         if(common::hasPriv('project', 'manageProducts') || common::hasPriv('project', 'whitelist') || common::hasPriv('project', 'delete'))
         {
             $more = new stdclass();
