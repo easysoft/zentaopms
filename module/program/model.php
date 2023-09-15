@@ -1348,7 +1348,10 @@ class programModel extends model
         /* Process child node path and grade field. */
         foreach($childNodes as $childNode)
         {
-            $path = substr($childNode->path, strpos($childNode->path, ",{$programID},"));
+            $hasProgram = strpos($childNode->path, ",{$programID},");
+            if($hasProgram === false) continue;
+
+            $path = substr($childNode->path, $hasProgram);
 
             /* Only program and project sets update grade. */
             $grade = in_array($childNode->type, array('program', 'project')) ? $childNode->grade - $oldGrade + 1 : $childNode->grade;
@@ -1426,13 +1429,14 @@ class programModel extends model
     }
 
     /**
+     * 根据项目集ID获取团队成员。
      * Get program team member pairs.
      *
      * @param  int  $programID
      * @access public
      * @return array
      */
-    public function getTeamMemberPairs($programID = 0)
+    public function getTeamMemberPairs(int $programID = 0): array
     {
       $projectList = $this->getProjectList($programID);
       if(!$projectList) return array();
@@ -1445,11 +1449,13 @@ class programModel extends model
           ->fetchAll('account');
       if(!$users) return array();
 
+      $firstLetter = '';
       foreach($users as $account => $user)
       {
-        $firstLetter = ucfirst(substr($user->account, 0, 1)) . ':';
-        if(!empty($this->config->isINT)) $firstLetter = '';
-        $users[$account] = $firstLetter . ($user->realname ? $user->realname : $user->account);
+          if(empty($this->config->isINT)) $firstLetter = ucfirst(substr($user->account, 0, 1)) . ':';
+
+          $users[$account]  = $firstLetter;
+          $users[$account] .= $user->realname ? $user->realname : $user->account;
       }
 
       return $users;
