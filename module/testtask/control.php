@@ -414,7 +414,7 @@ class testtask extends control
         $this->loadModel('execution');
         $products  = $this->products;
         $productID = $testtask->product;
-        $product   = $this->product->getByID($productID);
+        $product   = $this->loadModel('product')->getByID($productID);
         if(!isset($products[$productID])) $products[$productID] = $product->name;
 
         $this->testtaskZen->setMenu($productID, $testtask->branch, $testtask->project, $testtask->execution);
