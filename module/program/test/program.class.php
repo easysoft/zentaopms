@@ -130,7 +130,7 @@ class programTest
         $_POST['accounts'] = $accounts;
         $stakeHolder = $this->program->createStakeholder($programID);
 
-        return $this->program->getStakeholdersByPrograms($programID);
+        return $this->program->getStakeholdersByPrograms((int)$programID);
     }
 
     /**

@@ -728,21 +728,6 @@ class programModel extends model
     }
 
     /**
-     * Get stakeholders by program id list.
-     *
-     * @param  string $programIdList
-     * @access public
-     * @return array
-     */
-    public function getStakeholdersByPrograms($programIdList = 0)
-    {
-        return $this->dao->select('distinct user as account')->from(TABLE_STAKEHOLDER)
-            ->where('objectID')->in($programIdList)
-            ->andWhere('objectType')->eq('program')
-            ->fetchAll();
-    }
-
-    /**
      * 计算项目和项目集的进度。
      * Get program and project progress list.
      *
