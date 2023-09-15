@@ -674,7 +674,7 @@ class program extends control
     }
 
     /**
-     * 以产品视图查看项目集。
+     * 以产品视角查看项目集。
      * Show program list in product view.
      * copied from all() function of product module.
      *
@@ -705,9 +705,33 @@ class program extends control
 
         /* Process product structure. */
         if($this->config->systemMode == 'light' and $orderBy == 'program_asc') $orderBy = 'order_asc';
-        $queryID          = ($browseType == 'bySearch') ? $param : 0;
-        $products         = strtolower($browseType) == 'bysearch' ? $this->product->getListBySearch($queryID) : $this->product->getList();
-        $productStats     = $this->product->getStats(array_keys($products), $orderBy, $pager);
+        $queryID  = strtolower($browseType) == 'bysearch' ? $param : 0;
+        $products = strtolower($browseType) == 'bysearch' ? $this->product->getListBySearch($queryID) : $this->product->getList();
+
+        /* Filter the program by browse type. */
+        foreach($products as $index => $product)
+        {
+            $programID = $product->program;
+            /* The product associated with the program. */
+            if(!empty($programID))
+            {
+                $program = $this->program->getByID($programID);
+                if(!empty($program) && in_array($browseType, array('all', 'unclosed', 'wait', 'doing', 'suspended', 'closed')))
+                {
+                    if($browseType == 'unclosed' && $program->status == 'closed')
+                        unset($products[$index]);
+                    elseif($browseType != 'unclosed' && $browseType != 'all' && $program->status != $browseType)
+                        unset($products[$index]);
+                }
+            }
+            else
+            {
+                /* The product without program only can be viewed when browse type is all and not closed. */
+                if($browseType != 'all' and $browseType != 'unclosed') unset($products[$index]);
+            }
+        }
+
+        $productStats     = $this->product->getStats(array_keys($products), $orderBy, $pager); /* The product stats list with program data and product data. */
         $productStructure = $this->product->statisticProgram($productStats);
         $productLines     = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->orderBy('`order` asc')->fetchAll();
         $programLines     = array();
@@ -723,7 +747,6 @@ class program extends control
         $this->loadModel('search')->setSearchParams($this->config->program->search);
 
         $this->view->title              = $this->lang->product->common;
-        $this->view->recTotal           = $pager->recTotal;
         $this->view->productStats       = $productStats;
         $this->view->productStructure   = $productStructure;
         $this->view->productLines       = $productLines;
