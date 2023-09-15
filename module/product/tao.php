@@ -393,7 +393,7 @@ class productTao extends productModel
      * 获取用于统计的产品列表。
      * Get products list for statistic.
      *
-     * @param  int[]       $roductIdList
+     * @param  int[]       $productIdList
      * @param  bool        $appendProgram
      * @param  string      $orderBy
      * @param  object|null $pager
@@ -1272,7 +1272,7 @@ class productTao extends productModel
 
     /**
      * 获取需求关联所有模块的树形结构数组。
-     * Get the tree structure of stories releated modules.
+     * Get the tree structure of stories related modules.
      *
      * @param  int       $productID
      * @param  string    $branch
