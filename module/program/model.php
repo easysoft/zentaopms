@@ -68,12 +68,13 @@ class programModel extends model
         return $this->dao->select('id, name')->from(TABLE_PROGRAM)
             ->where('type')->eq('program')
             ->andWhere('deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin and !$isQueryAll)->andWhere('id')->in($this->app->user->view->programs)->fi()
+            ->beginIF(!$this->app->user->admin && !$isQueryAll)->andWhere('id')->in($this->app->user->view->programs)->fi()
             ->orderBy($orderBy)
             ->fetchPairs();
     }
 
     /**
+     * 获取项目集关联的产品列表。
      * Get the product associated with the program.
      *
      * @param  int          $programID
@@ -85,7 +86,7 @@ class programModel extends model
      * @access public
      * @return array
      */
-    public function getProductPairs($programID = 0, $mode = 'assign', $status = 'all', $append = '', $shadow = 0, $withProgram = false)
+    public function getProductPairs(int $programID = 0, string $mode = 'assign', string $status = 'all', string $append = '', int|string $shadow = 0, bool $withProgram = false): array
     {
         /* Get the top programID. */
         if($programID)
@@ -96,7 +97,7 @@ class programModel extends model
         }
 
         /* When mode equals assign and programID equals 0, you can query the standalone product. */
-        if(!empty($append) and is_array($append)) $append = implode(',', $append);
+        if(!empty($append) && is_array($append)) $append = implode(',', $append);
         $views = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
 
         $dao = $this->dao->select('id, name, program')->from(TABLE_PRODUCT)
@@ -109,18 +110,18 @@ class programModel extends model
 
         if(!$withProgram) return $dao->fetchPairs('id', 'name');
 
-        $products = $dao->orderBy('program,order')->fetchGroup('program');
-        $productPrograms = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('type')->eq('program')->andWhere('deleted')->eq('0')->fetchPairs();
-
         /* Put products of current program first.*/
-        if(!empty($products) and isset($products[$programID]) and $mode != 'assign' and $programID)
+        $products = $dao->orderBy('program,order')->fetchGroup('program');
+        if(!empty($products) && isset($products[$programID]) && $mode != 'assign' && $programID)
         {
             $currentProgramProducts = $products[$programID];
             unset($products[$programID]);
+
             array_unshift($products, $currentProgramProducts);
         }
 
-        $productPairs = array();
+        $productPairs    = array();
+        $productPrograms = $this->getPairs(true);
         foreach($products as $programProducts)
         {
             foreach($programProducts as $product)
