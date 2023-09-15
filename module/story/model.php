@@ -6874,6 +6874,12 @@ class storyModel extends model
                     $mailto = array_map(function($account) use($users){$account = trim($account); return zget($users, $account);}, explode(',', $story->mailto));
                     $data->mailto = implode(' ', $mailto);
                 }
+		if($col->name == 'URS')
+		{
+                    $link      = helper::createLink('story', 'relation', "storyID=$story->id&storyType=$story->type");
+                    $storySR   = $this->getStoryRelationCounts($story->id, $story->type);
+                    $data->URS = $storySR > 0 ? html::a($link, $storySR, '', 'class="iframe" data-toggle="modal"') : 0;
+		}
                 if(in_array($col->name, $userFields)) $data->{$col->name} = zget($users, $story->{$col->name});
                 if(in_array($col->name, $dateFields)) $data->{$col->name} = helper::isZeroDate($story->{$col->name}) ? '' : substr($story->{$col->name}, 5, 11);
             }
