@@ -47,7 +47,7 @@ $programTester = new programTest();
 $teams1 = $programTester->getTeamMemberPairsTest(1);
 $teams2 = $programTester->getTeamMemberPairsTest(2);
 
-r(count($teams1)) && p()        && e('5');           // 获取项目集1下所有团队成员数量
-r(count($teams2)) && p()        && e('2');           // 获取项目集2下所有团队成员数量
+r(count($teams1)) && p()        && e('4');           // 获取项目集1下所有团队成员数量
+r(count($teams2)) && p()        && e('1');           // 获取项目集2下所有团队成员数量
 r($teams1)        && p('admin') && e('A:admin');     // 获取项目集1下所有团队成员真实姓名
 r($teams2)        && p('user2') && e('U:用户2');     // 获取项目集2下所有团队成员真实姓名

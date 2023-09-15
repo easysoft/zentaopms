@@ -54,8 +54,7 @@ $undoneProjects           = $programTester->getProjectList(0, 'undone');
 $sortProjects             = $programTester->getProjectList(0, 'undone');
 $withProgramProjects      = $programTester->getProjectList(0, 'undone', 0, 'begin_desc', 'end');
 $withBaseProgramProjects  = $programTester->getProjectList(0, 'undone', 0, 'begin_desc', 'base');
-$involvedProjects         = $programTester->getProjectList(0, 'undone', 0, 'id_desc', 'end', true);
-$queryAllProjects         = $programTester->getProjectList(0, 'undone', 0, 'id_desc', 'end', true, true);
+$queryAllProjects         = $programTester->getProjectList(0, 'undone', 0, 'id_desc', 'end', true);
 $programAllProjects       = $programTester->getProjectList(1, 'all');
 $programWaitProjects      = $programTester->getProjectList(1, 'wait');
 $programUndoneProjects    = $programTester->getProjectList(1, 'undone');
@@ -69,8 +68,7 @@ r(count($undoneProjects))           && p() && e('3'); // 获取未完成项目�
 r(count($sortProjects))             && p() && e('3'); // 获取按照开始日期倒序排列的项目列表数量
 r(count($withProgramProjects))      && p() && e('3'); // 带项目集名称的项目列表数量
 r(count($withBaseProgramProjects))  && p() && e('3'); // 带项目集名称的项目列表数量
-r(count($involvedProjects))         && p() && e('1'); // 获取我参与的项目列表数量
-r(count($queryAllProjects))         && p() && e('1'); // 获取数据库所有项目列表数量
+r(count($queryAllProjects))         && p() && e('3'); // 获取数据库所有项目列表数量
 r(count($programAllProjects))       && p() && e('5'); // 获取项目集1下全部项目的数量
 r(count($programWaitProjects))      && p() && e('1'); // 获取项目集1下未开始项目的数量
 r(count($programUndoneProjects))    && p() && e('2'); // 获取项目集1下未关闭项目的数量
@@ -84,7 +82,6 @@ r($undoneProjects)           && p('8:name') && e('项目6');         // 获取�
 r($sortProjects)             && p('8:name') && e('项目6');         // 获取按照开始日期倒序排列的项目名称
 r($withProgramProjects)      && p('5:name') && e('项目集2/项目3'); // 带项目集名称的项目名称
 r($withBaseProgramProjects)  && p('5:name') && e('项目集2/项目3'); // 带项目集名称的项目名称
-r($involvedProjects)         && p('3:name') && e('项目集1/项目1'); // 我参与的项目的名称
 r($queryAllProjects)         && p('3:name') && e('项目集1/项目1'); // 获取数据库所有项目的名称
 r($programAllProjects)       && p('3:name') && e('项目1');         // 获取项目集1下全部项目的名称
 r($programWaitProjects)      && p('8:name') && e('项目6');         // 获取项目集1下未开始项目的名称
