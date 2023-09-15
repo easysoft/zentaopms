@@ -608,7 +608,7 @@ class testcaseModel extends model
 
         if(isset($oldCase->toBugs) && isset($case->linkBug)) $this->testcaseTao->linkBugs($oldCase->id, array_keys($oldCase->toBugs), $case);
 
-        if($case->branch && !empty($testtasks)) $this->testcaseTao->unlinkCaseFromTesttask($oldCase->id, $testtasks);
+        if($case->branch && !empty($testtasks)) $this->testcaseTao->unlinkCaseFromTesttask($oldCase->id, $case->branch, $testtasks);
 
         $this->loadModel('file')->processFile4Object('testcase', $oldCase, $case);
 
@@ -644,7 +644,7 @@ class testcaseModel extends model
         $changes = common::createChanges($oldCase, $case);
         if(!empty($changes))
         {
-            $actionID = $this->loadModel('action')->create('case', $caseID, 'Reviewed', $case->comment, ucfirst($case->result));
+            $actionID = $this->loadModel('action')->create('case', $oldCase->id, 'Reviewed', $case->comment, ucfirst($case->result));
             $this->action->logHistory($actionID, $changes);
         }
         return true;

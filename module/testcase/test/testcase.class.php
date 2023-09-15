@@ -880,6 +880,37 @@ class testcaseTest
     }
 
     /**
+     * 测试测试单取消关联用例。
+     * Test unlink case from testtask.
+     *
+     * @param  int    $caseID
+     * @param  int    $branch
+     * @param  array  $testtasks
+     * @access public
+     * @return bool|int
+     */
+    public function unlinkCaseFromTesttaskTest(int $caseID, int $branch): bool|int
+    {
+        global $tester;
+        $testtasks = $tester->loadModel('testtask')->getGroupByCases($caseID);
+        $testtasks = empty($testtasks[$caseID]) ? array() : $testtasks[$caseID];
+
+        foreach($testtasks as $testtaskID => $testtask)
+        {
+            if($testtask->branch == $branch) unset($testtasks[$testtaskID]);
+        }
+
+        if(empty($testtasks)) return true;
+
+
+        $this->objectModel->unlinkCaseFromTesttask($caseID, $branch, $testtasks);
+
+        if(dao::isError()) return false;
+
+        return $tester->dao->select('count(*) AS count')->from(TABLE_TESTRUN)->where('`case`')->eq($caseID)->andWhere('task')->in(array_keys($testtasks))->fetch('count');
+    }
+
+    /**
      * Test get status for different method.
      *
      * @param  string $methodName

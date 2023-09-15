@@ -495,17 +495,19 @@ class testcaseTao extends testcaseModel
      * @access protected
      * @return bool
      */
-    protected function unlinkCaseFromTesttask($caseID, $testtasks): bool
+    protected function unlinkCaseFromTesttask(int $caseID, int $branch, array $testtasks): bool
     {
         $this->loadModel('action');
         foreach($testtasks as $taskID => $testtask)
         {
-            if($testtask->branch != $case->branch && $taskID)
+            if($testtask->branch != $branch && $taskID)
             {
                 $this->dao->delete()->from(TABLE_TESTRUN)->where('task')->eq($taskID)->andWhere('`case`')->eq($caseID)->exec();
                 $this->action->create('case' ,$caseID, 'unlinkedfromtesttask', '', $taskID);
             }
         }
+
+        return !dao::isError();
     }
 
     /**
