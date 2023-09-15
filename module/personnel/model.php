@@ -578,7 +578,7 @@ class personnelModel extends model
             $acl->type       = $type;
             $acl->source     = $source;
             $this->dao->insert(TABLE_ACL)->data($acl)->autoCheck()->exec();
-            if(!dao::isError()) $this->loadModel('user')->updateUserView($acl->objectID, $acl->objectType, $acl->account);
+            if(!dao::isError()) $this->loadModel('user')->updateUserView($acl->objectID, $acl->objectType, array($acl->account));
         }
 
         /* Update whitelist field. */

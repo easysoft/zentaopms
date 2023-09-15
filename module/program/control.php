@@ -145,13 +145,14 @@ class program extends control
      * @access public
      * @return void
      */
-    public function create($parentProgramID = 0, $extra = '')
+    public function create(int $parentProgramID = 0, string $extra = '')
     {
         $parentProgram = $this->program->getByID($parentProgramID);
 
         if($_POST)
         {
-            $programID = $this->program->create();
+            $program   = $this->programZen->buildProgramForCreate();
+            $programID = $this->program->create($program);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('program', $programID, 'opened');

@@ -28,6 +28,32 @@ class programZen extends program
     }
 
     /**
+     * 获取创建项目集的数据。
+     * Build program data for create.
+     *
+     * @access protected
+     * @return object
+     */
+    protected function buildProgramForCreate(): object
+    {
+        $fields  = $this->config->program->form->create;
+        $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
+        foreach(explode(',', trim($this->config->program->create->requiredFields, ',')) as $field) $fields[$field]['required'] = true;
+
+        $program = form::data($fields)
+            ->setDefault('openedBy', $this->app->user->account)
+            ->setDefault('openedDate', helper::now())
+            ->setDefault('code', '')
+            ->setIF($this->post->acl == 'open', 'whitelist', '')
+            ->setIF($this->post->delta == 999, 'end', LONG_TIME)
+            ->setIF($this->post->budget != 0, 'budget', round((float)$this->post->budget, 2))
+            ->add('type', 'program')
+            ->get();
+
+        return $this->loadModel('file')->processImgURL($program, $editorFields, $this->post->uid);
+    }
+
+    /**
      * 根据条件获取项目集。
      * Get programs by type.
      *

@@ -96,9 +96,7 @@ class programTest
      */
     public function createTest($data)
     {
-        $_POST = $data;
-
-        $programID = $this->program->create();
+        $programID = $this->program->create((object)$data);
 
         if(dao::isError()) return array('message' => dao::getError());
 

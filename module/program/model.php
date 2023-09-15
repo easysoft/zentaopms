@@ -798,32 +798,15 @@ class programModel extends model
      * @access private
      * @return int|bool
      */
-    public function create()
+    public function create(object $program)
     {
-        $program = fixer::input('post')
-            ->setDefault('status', 'wait')
-            ->setDefault('openedBy', $this->app->user->account)
-            ->setDefault('parent', 0)
-            ->setDefault('code', '')
-            ->setDefault('openedDate', helper::now())
-            ->setIF($this->post->acl == 'open', 'whitelist', '')
-            ->setIF($this->post->delta == 999, 'end', LONG_TIME)
-            ->setIF($this->post->budget != 0, 'budget', round((float)$this->post->budget, 2))
-            ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
-            ->add('type', 'program')
-            ->join('whitelist', ',')
-            ->stripTags($this->config->program->editor->create['id'], $this->config->allowedTags)
-            ->remove('delta,future,contactListMenu,uid')
-            ->get();
-
         /* Redefines the language entries for the fields in the project table. */
+        $this->lang->error->unique = $this->lang->error->repeat;
         foreach(explode(',', $this->config->program->create->requiredFields) as $field)
         {
             if(isset($this->lang->program->$field)) $this->lang->project->$field = $this->lang->program->$field;
         }
 
-        $this->lang->error->unique = $this->lang->error->repeat;
-        $program = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PROGRAM)->data($program)
             ->autoCheck()
             ->batchcheck($this->config->program->create->requiredFields, 'notempty')
@@ -842,7 +825,7 @@ class programModel extends model
             $whitelist = explode(',', $program->whitelist);
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'program', $programID);
 
-            $this->file->updateObjectID($this->post->uid, $programID, 'program');
+            $this->loadModel('file')->updateObjectID($this->post->uid, $programID, 'program');
             $this->setTreePath($programID);
 
             if($program->acl != 'open') $this->loadModel('user')->updateUserView($programID, 'program');

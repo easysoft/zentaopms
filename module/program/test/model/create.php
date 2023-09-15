@@ -34,11 +34,14 @@ $data = array(
     'name'       => '测试新增项目集一',
     'budget'     => '',
     'budgetUnit' => 'CNY',
+    'status'     => 'wait',
     'begin'      => '2022-01-12',
     'end'        => '2022-02-12',
     'desc'       => '测试项目集描述',
     'acl'        => 'private',
-    'whitelist'  => ''
+    'whitelist'  => '',
+    'openedBy'   => 'admin',
+    'openedDate' => '2022-01-12 08:11:23',
 );
 
 $normalProgram = $data;

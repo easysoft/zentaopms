@@ -73,16 +73,15 @@ window.computeWorkDays = function(e)
     }
     else
     {
-        beginDate = $('#begin').val();
-        endDate   = $('#end').val();
+        beginDate = $('#begin').zui('datepicker').$.state.value;
+        endDate   = $('#end').zui('datepicker').$.state.value;
 
-        var begin    = zui.createDate(beginDate);
-        var end      = zui.createDate(endDate);
-        var time     = end.getTime() - begin.getTime();
-        var days     = String(parseInt(time / zui.TIME_DAY) + 1);
-        var $checked = $("input[name='delta']:checked");
+        var begin = zui.createDate(beginDate);
+        var end   = zui.createDate(endDate);
+        var time  = end.getTime() - begin.getTime();
+        var days  = String(parseInt(time / zui.TIME_DAY) + 1);
 
-        if(days !== $checked.val()) $checked.prop('checked', false);
+        $("#delta" + days).prop('checked', true);
         if(endDate === longTime) $("#delta999").prop('checked', true);
     }
 
@@ -99,18 +98,21 @@ window.computeWorkDays = function(e)
  */
 function computeEndDate(delta)
 {
-    let beginDate = $('#begin').val();
+    let $begin = $('#begin').zui('datepicker');
+    let $end   = $('#end').zui('datepicker');
+    let beginDate = $begin.$.state.value;
     if(!beginDate) return;
 
     delta = parseInt(delta);
     if(delta == 999)
     {
-        $('#end').val('').attr('disabled', true);
+        $end.$.setDate('');
+        $end.render({disabled: true});
         outOfDateTip();
         return false;
     }
 
-    $('#end').removeAttr('disabled');
+    $end.render({disabled: false});
     $('#days').closest('.form-row').removeClass('hidden');
 
     beginDate = zui.createDate(beginDate);
@@ -120,7 +122,7 @@ function computeEndDate(delta)
     }
 
     const endDate = zui.formatDate(zui.addDate(beginDate, delta - 1), 'yyyy-MM-dd');
-    $('#end').val(endDate).trigger('change');
+    $end.$.setDate(endDate);
     computeWorkDays();
 }
 
@@ -173,9 +175,9 @@ function compareChildDate()
     if(window.ignoreTips['dateTip']) return;
     if(page == 'create') return;
 
-    var end               = $('#end').val();
-    var begin             = $('#begin').val();
-    var selectedProgramID = $('#parent').val();
+    let begin = $('#begin').zui('datepicker').$.state.value;
+    let end   = $('#end').zui('datepicker').$.state.value;
+    let selectedProgramID = $('#parent').val();
     if($('#dateTip').length > 0) $('#dateTip').closest('.form-row').remove();
 
     if(end == longTime) end = LONG_TIME;
@@ -221,8 +223,8 @@ function outOfDateTip(currentID)
 {
     if(window.ignoreTips['dateTip']) return;
 
-    var end   = $('#end').val();
-    var begin = $('#begin').val();
+    let begin = $('#begin').zui('datepicker').$.state.value;
+    let end   = $('#end').zui('datepicker').$.state.value;
     if($('#dateTip').length > 0) $('#dateTip').closest('.form-row').remove();
 
     if(end == longTime) end = LONG_TIME;

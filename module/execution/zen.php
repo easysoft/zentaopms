@@ -897,12 +897,8 @@ class executionZen extends execution
             ->setDefault('parent', $this->post->project)
             ->setIF($this->post->parent, 'parent', $this->post->parent)
             ->setIF($this->post->heightType == 'auto', 'displayCards', 0)
-            ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
             ->setIF($this->post->acl == 'open', 'whitelist', '')
-            ->join('whitelist', ',')
             ->setDefault('type', $type)
-            ->stripTags(implode(',', $editorFields), $this->config->allowedTags)
-            ->remove('workDays, delta, uid, teams, teamMembers, contactListMenu, heightType')
             ->get();
 
         if(!empty($execution->parent) && ($execution->project == $execution->parent)) $execution->hasProduct = $project->hasProduct;
