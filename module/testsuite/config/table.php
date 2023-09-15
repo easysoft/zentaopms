@@ -1,6 +1,4 @@
 <?php
-$config->testsuite->dtable = new stdclass();
-
 global $lang;
 
 $config->testsuite->actionList['linkCase']['icon']  = 'link';
@@ -25,6 +23,8 @@ $config->testsuite->actionList['delete']['order']        = 10;
 $config->testsuite->actionList['delete']['show']         = 'clickable';
 $config->testsuite->actionList['delete']['data-confirm'] = $lang->testsuite->confirmDelete;
 $config->testsuite->actionList['delete']['className']    = 'ajax-submit';
+
+$config->testsuite->dtable = new stdclass();
 
 $config->testsuite->dtable->fieldList['id']['name']  = 'id';
 $config->testsuite->dtable->fieldList['id']['title'] = $lang->idAB;
