@@ -267,12 +267,9 @@ class testtask extends control
             if($project && !$project->multiple) $this->view->noMultipleExecutionID = $this->loadModel('execution')->getNoMultipleID($project->id);
         }
 
-        /* Set menu. */
-        $products  = $this->testtaskZen->getProducts();
+        $products  = $this->products;
         $productID = $this->loadModel('product')->saveState($productID, $products);
-        if($this->app->tab == 'project')   $this->loadModel('project')->setMenu($projectID);
-        if($this->app->tab == 'execution') $this->loadModel('execution')->setMenu($executionID);
-        if($this->app->tab == 'qa')        $this->loadModel('qa')->setMenu($productID);
+        $this->testtaskZen->setMenu($productID, 0, $projectID, $executionID);
 
         $this->view->title       = $products[$productID] . $this->lang->colon . $this->lang->testtask->create;
         $this->view->product     = $this->product->getByID($productID);
@@ -302,7 +299,7 @@ class testtask extends control
 
         /* When the session changes, you need to query the related products again. */
         $this->loadModel('product');
-        $products = $this->testtaskZen->getProducts();
+        $products = $this->products;
         if($this->session->project != $testtask->project) $products = $this->product->getProductPairsByProject($testtask->project);
         $this->session->project = $testtask->project;
 
@@ -314,17 +311,7 @@ class testtask extends control
             $products[$productID] = $product->name;
         }
 
-        if($this->app->tab == 'project')
-        {
-            $this->loadModel('project')->setMenu($testtask->project);
-            $this->lang->modulePageNav = $this->testtask->select($productID, $testtaskID, 'project', $testtask->project);
-        }
-        if($this->app->tab == 'execution')
-        {
-            $this->loadModel('execution')->setMenu($testtask->execution);
-            $this->lang->modulePageNav = $this->testtask->select($productID, $testtaskID, 'execution', $testtask->execution);
-        }
-        if($this->app->tab == 'qa') $this->qa->setMenu($productID, $testtask->branch);
+        $this->testtaskZen->setMenu($productID, $testtask->branch, $testtask->project, $testtask->execution);
 
         $this->executeHooks($testtaskID); // 执行工作流配置的扩展动作。
 
@@ -435,36 +422,24 @@ class testtask extends control
 
         /* set menu. */
         $this->loadModel('execution');
-        $products  = $this->testtaskZen->getProducts();
+        $products  = $this->products;
         $productID = $testtask->product;
         $product   = $this->product->getByID($productID);
         if(!isset($products[$productID])) $products[$productID] = $product->name;
-        if($this->app->tab == 'project')
-        {
-            $this->loadModel('project')->setMenu($testtask->project);
-            $this->lang->modulePageNav = $this->testtask->select($productID, $testtaskID, 'project', $testtask->project);
-        }
-        elseif($this->app->tab == 'execution')
-        {
-            $this->execution->setMenu($testtask->execution);
-            $this->lang->modulePageNav = $this->testtask->select($productID, $testtaskID, 'execution', $testtask->execution);
-        }
-        else
-        {
-            $this->qa->setMenu($productID, $testtask->branch);
-        }
+
+        $this->testtaskZen->setMenu($productID, $testtask->branch, $testtask->project, $testtask->execution);
 
         /* set cookie. */
-        helper::setcookie('preTaskID', $testtaskID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        helper::setcookie('preTaskID', $testtaskID);
         if($this->cookie->preTaskID != $testtaskID)
         {
             $_COOKIE['taskCaseModule'] = 0;
-            helper::setcookie('taskCaseModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+            helper::setcookie('taskCaseModule', 0, 0);
         }
 
         /* 根据检索标签获取不同的数据。 */
         $browseType = strtolower($browseType);
-        if($browseType == 'bymodule') helper::setcookie('taskCaseModule', (int)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        if($browseType == 'bymodule') helper::setcookie('taskCaseModule', (int)$param, 0);
         if($browseType != 'bymodule') $this->session->set('taskCaseBrowseType', $browseType);
         if($browseType == 'bysuite')  $suiteName = $this->loadModel('testsuite')->getById($param)->name;
 
@@ -568,20 +543,8 @@ class testtask extends control
             }
         }
 
-        if($this->app->tab == 'project')
-        {
-            $this->loadModel('project')->setMenu($task->project);
-            $this->lang->modulePageNav = $this->testtask->select($productID, $taskID, 'project', $task->project);
-        }
-        elseif($this->app->tab == 'execution')
-        {
-            $this->loadModel('execution')->setMenu($task->execution);
-            $this->lang->modulePageNav = $this->testtask->select($productID, $taskID, 'execution', $task->execution);
-        }
-        else
-        {
-            $this->qa->setMenu($productID, $branchID);
-        }
+        $this->testtaskZen->setMenu($productID, $branchID, $task->project, $task->execution);
+
         unset($this->lang->testtask->report->charts['bugStageGroups']);
         unset($this->lang->testtask->report->charts['bugHandleGroups']);
 
@@ -632,20 +595,7 @@ class testtask extends control
             $this->products[$productID] = $product->name;
         }
 
-        if($this->app->tab == 'project')
-        {
-            $this->loadModel('project')->setMenu($this->session->project);
-            $this->lang->modulePageNav = $this->testtask->select($productID, $taskID, 'project', $task->project);
-        }
-        elseif($this->app->tab == 'execution')
-        {
-            $this->loadModel('execution')->setMenu($task->execution);
-            $this->lang->modulePageNav = $this->testtask->select($productID, $taskID, 'execution', $task->execution);
-        }
-        else
-        {
-            $this->qa->setMenu($productID, $task->branch);
-        }
+        $this->testtaskZen->setMenu($productID, $task->branch, $task->project, $task->execution);
 
         /* Determines whether an object is editable. */
         $canBeChanged = common::canBeChanged('testtask', $task);
@@ -950,21 +900,7 @@ class testtask extends control
 
         if(!isset($this->products[$productID])) $this->products[$productID] = $product->name;
 
-        /* Save session. */
-        if($this->app->tab == 'project')
-        {
-            $this->loadModel('project')->setMenu($task->project);
-            $this->lang->modulePageNav = $this->testtask->select($productID, $taskID, 'project', $task->project);
-        }
-        elseif($this->app->tab == 'execution')
-        {
-            $this->loadModel('execution')->setMenu($task->execution);
-            $this->lang->modulePageNav = $this->testtask->select($productID, $taskID, 'execution', $task->execution);
-        }
-        else
-        {
-            $this->qa->setMenu($productID, $task->branch);
-        }
+        $this->testtaskZen->setMenu($productID, $task->branch, $task->project, $task->execution);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -1202,18 +1138,7 @@ class testtask extends control
         /* The case of tasks of qa. */
         if($productID or ($this->app->tab == 'project' and empty($productID)))
         {
-            if($this->app->tab == 'project')
-            {
-                $this->loadModel('project')->setMenu($this->session->project);
-            }
-            elseif($this->app->tab == 'execution')
-            {
-                $this->loadModel('execution')->setMenu($this->session->execution);
-            }
-            else
-            {
-                $this->loadModel('qa')->setMenu($productID);
-            }
+            $this->testtaskZen->setMenu($productID, 0, $this->session->project, $this->session->execution);
 
             $cases = $this->dao->select('*')->from(TABLE_CASE)->where('id')->in($caseIdList)->fetchAll('id');
         }
