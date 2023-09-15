@@ -85,8 +85,7 @@ class testtask extends control
         $this->session->set('buildList',    $uri, 'execution');
 
         /* Set menu. */
-        $products  = $this->testtaskZen->getProducts();
-        $productID = $this->loadModel('product')->saveState($productID, $products);
+        $productID = $this->loadModel('product')->saveState($productID, $this->products);
         $branch    = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
         $this->loadModel('qa')->setMenu($productID, $branch);
         $this->session->set('branch', $branch, 'qa');
@@ -119,7 +118,7 @@ class testtask extends control
             if($testtask->build == 'trunk' || empty($testtask->buildName)) $testtask->buildName = $this->lang->trunk;
         }
 
-        $this->view->title        = $products[$productID] . $this->lang->colon . $this->lang->testtask->common;
+        $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->common;
         $this->view->productID    = $productID;
         $this->view->product      = $product;
         $this->view->branch       = $branch;
@@ -160,8 +159,7 @@ class testtask extends control
         $this->session->set('buildList',    $this->app->getURI(true) . '#app=' . $this->app->tab, 'execution');
 
         /* Set menu. */
-        $products  = $this->testtaskZen->getProducts();
-        $productID = $this->loadModel('product')->saveState($productID, $products);
+        $productID = $this->loadModel('product')->saveState($productID, $this->products);
         $product   = $this->product->getByID($productID);
         if($this->app->tab == 'project')
         {
@@ -175,7 +173,7 @@ class testtask extends control
             }
 
             $this->loadModel('project')->setMenu($projectID);
-            if(!$product->shadow) $this->lang->modulePageNav = $this->product->select($products, $productID, 'testtask', 'browseUnits', "projectID=$projectID", '', false);
+            if(!$product->shadow) $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits', "projectID=$projectID", '', false);
         }
         else
         {
@@ -194,7 +192,7 @@ class testtask extends control
         $this->app->loadLang('testcase');
         $this->lang->testcase->featureBar['browseunits'] = $this->lang->testtask->unitTag;
 
-        $this->view->title      = $products[$productID] . $this->lang->colon . $this->lang->testtask->common;
+        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->common;
         $this->view->productID  = $productID;
         $this->view->orderBy    = $orderBy;
         $this->view->browseType = $browseType;
@@ -267,11 +265,10 @@ class testtask extends control
             if($project && !$project->multiple) $this->view->noMultipleExecutionID = $this->loadModel('execution')->getNoMultipleID($project->id);
         }
 
-        $products  = $this->products;
-        $productID = $this->loadModel('product')->saveState($productID, $products);
+        $productID = $this->loadModel('product')->saveState($productID, $this->products);
         $this->testtaskZen->setMenu($productID, 0, $projectID, $executionID);
 
-        $this->view->title       = $products[$productID] . $this->lang->colon . $this->lang->testtask->create;
+        $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->create;
         $this->view->product     = $this->product->getByID($productID);
         $this->view->projectID   = $projectID;
         $this->view->executionID = $executionID;
@@ -338,14 +335,13 @@ class testtask extends control
     {
         /* Set browseType, productID, moduleID and queryID. */
         $testtask  = $this->testtask->getByID($testtaskID);
-        $products  = $this->testtaskZen->getProducts();
-        $productID = $this->product->saveState($testtask->product, $products);
+        $productID = $this->product->saveState($testtask->product, $this->products);
         if($this->app->tab == 'project')
         {
             $this->lang->scrum->menu->qa['subMenu']->testcase['subModule'] = 'testtask';
             $this->lang->scrum->menu->qa['subMenu']->testtask['subModule'] = '';
             $this->loadModel('project')->setMenu($this->session->project);
-            $this->lang->modulePageNav = $this->product->select($products, $productID, 'testtask', 'browseUnits', '', '', false);
+            $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits', '', '', false);
         }
         else
         {
@@ -389,7 +385,7 @@ class testtask extends control
         }
 
         /* Assign. */
-        $this->view->title       = $products[$productID] . $this->lang->colon . $this->lang->testcase->common;
+        $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
         $this->view->productID   = $productID;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->view->runs        = $filterRuns;
@@ -1320,7 +1316,6 @@ class testtask extends control
         $builds     = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk', 0, 'execution', '', false);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->importUnitResult;
-
         $this->view->executions = $executions;
         $this->view->builds     = $builds;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted|noclosed');
