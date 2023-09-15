@@ -456,7 +456,7 @@ class testcaseTao extends testcaseModel
             foreach($oldCase->steps as $step)
             {
                 unset($step->id);
-                $step->version = $version;
+                $step->version = $case->version;
                 $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
             }
         }
