@@ -28,7 +28,7 @@ class qaModel extends model
         }
 
         if($this->session->branch) $branch = $this->session->branch;
-        if($this->cookie->preBranch !== '' and $branch === '') ? $branch = $this->cookie->preBranch;
+        if($this->cookie->preBranch !== '' and $branch === '') $branch = $this->cookie->preBranch;
         helper::setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         $product = $this->loadModel('product')->getByID($productID);
