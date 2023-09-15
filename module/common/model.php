@@ -3725,7 +3725,12 @@ EOF;
         foreach($postData as $key => $value)
         {
             if(!is_array($value) or strpos($this->config->$objectType->excludeCheckFileds, ",$key,") !== false) continue;
-            if(isset($value[$index]) and !empty($value[$index]) and $value[$index] != 'ditto') return true;
+            if(isset($value[$index]) and !empty($value[$index]) and $value[$index] != 'ditto')
+            {
+                /* Judgment of multi-select fields. */
+                if(is_array($value[$index]) and join(',', $value[$index]) == '') continue;
+                return true;
+            }
         }
 
         return false;
