@@ -10,12 +10,12 @@ $config->testsuite->actionList['linkCase']['url']   = array('module' => 'testsui
 $config->testsuite->actionList['linkCase']['order'] = 5;
 $config->testsuite->actionList['linkCase']['show']  = 'clickable';
 
-$config->testsuite->actionList['edit']['icon']        = 'edit';
-$config->testsuite->actionList['edit']['hint']        = $lang->testsuite->edit;
-$config->testsuite->actionList['edit']['text']        = $lang->testsuite->edit;
-$config->testsuite->actionList['edit']['url']         = array('module' => 'testsuite', 'method' => 'edit', 'params' => 'suiteID={id}');
-$config->testsuite->actionList['edit']['order']       = 5;
-$config->testsuite->actionList['edit']['show']        = 'clickable';
+$config->testsuite->actionList['edit']['icon']  = 'edit';
+$config->testsuite->actionList['edit']['hint']  = $lang->testsuite->edit;
+$config->testsuite->actionList['edit']['text']  = $lang->testsuite->edit;
+$config->testsuite->actionList['edit']['url']   = array('module' => 'testsuite', 'method' => 'edit', 'params' => 'suiteID={id}');
+$config->testsuite->actionList['edit']['order'] = 5;
+$config->testsuite->actionList['edit']['show']  = 'clickable';
 
 $config->testsuite->actionList['delete']['icon']         = 'trash';
 $config->testsuite->actionList['delete']['hint']         = $lang->testsuite->delete;
