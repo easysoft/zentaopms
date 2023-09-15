@@ -33,7 +33,7 @@ class actionItem extends wg
 
     protected function buildDividerItem()
     {
-        return null;
+        return setClass('divider');
     }
 
     protected function buildHeadingItem()
