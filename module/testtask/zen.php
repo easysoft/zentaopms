@@ -179,6 +179,7 @@ class testtaskZen extends testtask
     protected function getProducts(): array
     {
         /* 如果是在非弹窗页面的项目或执行应用下打开的测试单，则获取当前项目或执行对应的产品。 */
+        $tab = $this->app->tab;
         if(!isonlybody() && ($tab == 'project' || $tab == 'execution')) return $this->loadModel('product')->getProducts($this->session->$tab, 'all', '', false);
 
         /* 如果是在弹窗页面或者测试应用下打开的测试单，则获取所有产品。 */
