@@ -29,7 +29,7 @@ class qaModel extends model
 
         if($this->session->branch) $branch = $this->session->branch;
         if($this->cookie->preBranch !== '' and $branch === '') $branch = $this->cookie->preBranch;
-        helper::setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        helper::setcookie('preBranch', $branch);
 
         $product = $this->loadModel('product')->getByID($productID);
         if($product and $product->type != 'normal') $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
