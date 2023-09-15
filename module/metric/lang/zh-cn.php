@@ -177,11 +177,11 @@ $lang->metric->objectList['review'] = "评审";
 $lang->metric->objectList['other']  = "其他";
 
 $lang->metric->filter = new stdclass();
-$lang->metric->filter->common   = '筛选';
-$lang->metric->filter->scope    = '范围';
-$lang->metric->filter->object   = '对象';
-$lang->metric->filter->purpose  = '目的';
-$lang->metric->filter->clear    = '全部清除';
+$lang->metric->filter->common  = '筛选';
+$lang->metric->filter->scope   = '范围';
+$lang->metric->filter->object  = '对象';
+$lang->metric->filter->purpose = '目的';
+$lang->metric->filter->clear   = '全部清除';
 
 $lang->metric->filter->clearAction = '清除已选%s';
 $lang->metric->filter->checkedInfo = '已筛选：范围(%s)、对象(%s)、目的(%s)';

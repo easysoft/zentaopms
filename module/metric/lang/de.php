@@ -46,6 +46,7 @@ $lang->metric->publish       = 'Publish';
 $lang->metric->moveFailTip   = 'Failed to move the metric file.';
 $lang->metric->selectCount   = '%s metrics';
 $lang->metric->testMetric    = 'Test Metric';
+$lang->metric->calcTime      = 'Calculate Time';
 
 $lang->metric->viewType = new stdclass();
 $lang->metric->viewType->single   = 'Single view';
@@ -76,6 +77,8 @@ $lang->metric->browse          = 'Browse Metrics';
 $lang->metric->browseAction    = 'Metric List';
 $lang->metric->viewAction      = 'View Metric';
 $lang->metric->editAction      = 'Edit Metric';
+$lang->metric->implementAction = 'Implement Metric';
+$lang->metric->deleteAction    = 'Delete Metric';
 $lang->metric->implementAction = 'Implement Metric';
 $lang->metric->deleteAction    = 'Delete Metric';
 
@@ -171,6 +174,17 @@ if($config->edition != 'open')
 $lang->metric->objectList['review'] = "Review";
 $lang->metric->objectList['other']  = "Other";
 
+$lang->metric->filter = new stdclass();
+$lang->metric->filter->common  = 'Filter';
+$lang->metric->filter->scope   = 'Scope';
+$lang->metric->filter->object  = 'Object';
+$lang->metric->filter->purpose = 'Purpose';
+$lang->metric->filter->clear   = 'Clear All';
+
+$lang->metric->filter->clearAction = 'Clear selected %s';
+$lang->metric->filter->checkedInfo = 'Selected：Scope(%s)、Object(%s)、Purpose(%s)';
+$lang->metric->filter->filterTotal = 'Filter Result(%s)';
+
 $lang->metric->implementInstructions = "Implementation Instructions";
 $lang->metric->implementTips = array();
 $lang->metric->implementTips[] = '1. Download the metric template code.php. Note: The file name should be consistent with the metric code.';
@@ -182,6 +196,15 @@ $lang->metric->verifyList = array();
 $lang->metric->verifyList['checkCalcExists']  = 'Check whether the metric exists';
 $lang->metric->verifyList['checkCalcClass']   = 'Check the metric class name is correct';
 $lang->metric->verifyList['checkCalcMethods'] = 'Check whether the metrics defines the required methods';
+
+$lang->metric->weekList = array();
+$lang->metric->weekList['1'] = 'Monday';
+$lang->metric->weekList['2'] = 'Tuesday';
+$lang->metric->weekList['3'] = 'Wednesday';
+$lang->metric->weekList['4'] = 'Thursday';
+$lang->metric->weekList['5'] = 'Friday';
+$lang->metric->weekList['6'] = 'Saturday';
+$lang->metric->weekList['0'] = 'Sunday';
 
 $lang->metric->old = new stdclass();
 
