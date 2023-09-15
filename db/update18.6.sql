@@ -810,3 +810,8 @@ DELETE FROM zt_priv WHERE module='search' and method = 'select';
 DELETE FROM zt_privlang WHERE `key`='search-select';
 
 UPDATE `zt_privlang` SET `value`='删除风险' WHERE `objectID`=197 AND `objectType`='manager' AND `lang`='zh-cn';
+
+DELETE FROM `zt_config` WHERE `module` = 'datatable' and `section` = 'productBrowse';
+DELETE FROM `zt_config` WHERE `module` = 'datatable' and `section` = 'executionTask';
+DELETE FROM `zt_config` WHERE `module` = 'datatable' and `section` = 'bugBrowse';
+DELETE FROM `zt_config` WHERE `module` = 'datatable' and `section` = 'executionAll';
