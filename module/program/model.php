@@ -1462,6 +1462,7 @@ class programModel extends model
     }
 
     /**
+     * 创建默认的项目集。
      * Create default program.
      *
      * @access public
@@ -1510,47 +1511,6 @@ class programModel extends model
         $this->loadModel('action')->create('program', $programID, 'openedbysystem');
 
         return $programID;
-    }
-
-    /*
-     * Build row data.
-     *
-     * @param  string $program
-     * @param  array  $PMList
-     * @param  array  $progressList
-     * @access public
-     * @return object
-     */
-    public function buildRowData($program, $PMList, $progressList)
-    {
-        $row = new stdclass();
-
-        $manager       = isset($PMList[$program->PM]) ? $PMList[$program->PM] : '';
-        $programBudget = $this->project->getBudgetWithUnit($program->budget);
-        $link          = $program->type == 'program' ? helper::createLink('program', 'product', "programID=$program->id") : helper::createLink('project', 'index', "projectID=$program->id");
-        $name          = html::a($link, $program->name, '', "title=$program->name");
-        if($program->status != 'done' and $program->status != 'closed' and $program->status != 'suspended')
-        {
-            $delay = helper::diffDate(helper::today(), $program->end);
-            if($delay > 0) $name .= "<span class='label label-danger label-badge'>{$this->lang->project->statusList['delay']}</span>";
-        }
-
-        $row->id       = $program->id;
-        $row->parent   = $program->parent ? $program->parent : '';
-        $row->asParent = $program->type == 'program';
-        $row->type     = $program->type;
-        $row->model    = $program->model;
-        $row->name     = $name;
-        $row->status   = $program->status;
-        $row->PM       = empty($manager) ? '' : $manager->realname;
-        $row->PMAvatar = empty($manager) ? '' : $manager->avatar;
-        $row->budget   = $program->budget != 0 ? zget($this->lang->project->currencySymbol, $program->budgetUnit) . ' ' . $programBudget : $this->lang->project->future;
-        $row->begin    = $program->begin;
-        $row->end      = $program->end == LONG_TIME ? $this->lang->program->longTime : $program->end;
-        $row->progress = isset($progressList[$program->id]) ? round($progressList[$program->id]) : 0;
-        $row->actions  = $this->buildActions($program);
-
-        return $row;
     }
 
     /**
