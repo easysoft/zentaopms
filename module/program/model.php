@@ -1200,16 +1200,17 @@ class programModel extends model
     }
 
     /**
-     * Get budget left.
+     * 获取项目集的预算剩余。
+     * Get budget left of program.
      *
-     * @param  int    $parentProgram
+     * @param  object $parentProgram
      * @param  int    $leftBudget
      * @access public
-     * @return int
+     * @return float
      */
-    public function getBudgetLeft($parentProgram, $leftBudget = 0)
+    public function getBudgetLeft(object $parentProgram, int $leftBudget = 0): float
     {
-        if(empty($parentProgram->id)) return;
+        if(empty($parentProgram->id)) return 0;
 
         $childGrade     = $parentProgram->grade + 1;
         $childSumBudget = $this->dao->select("sum(budget) as sumBudget")->from(TABLE_PROGRAM)
@@ -1220,18 +1221,17 @@ class programModel extends model
 
         $leftBudget += (float)$parentProgram->budget - (float)$childSumBudget;
 
-        if($parentProgram->budget == 0 and $parentProgram->parent)
+        if($parentProgram->budget == 0 && $parentProgram->parent)
         {
             $parentParent = $this->getById($parentProgram->parent);
             return $this->getBudgetLeft($parentParent, $leftBudget);
         }
-        else
-        {
-            return $leftBudget;
-        }
+
+        return $leftBudget;
     }
 
     /**
+     * 获取父项目集列表。
      * Get program parent pairs
      *
      * @param  string $model
@@ -1240,48 +1240,50 @@ class programModel extends model
      * @access public
      * @return array
      */
-    public function getParentPairs($model = '', $mode = 'noclosed', $showRoot = true)
+    public function getParentPairs(string $model = '', string $mode = 'noclosed', bool $showRoot = true): array
     {
-        $modules = $this->dao->select('id,name,parent,path,grade')->from(TABLE_PROGRAM)
+        $programList = $this->dao->select('id,name,parent,path,grade')->from(TABLE_PROGRAM)
             ->where('type')->eq('program')
-            ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->andWhere('deleted')->eq(0)
             ->beginIF($model)->andWhere('model')->eq($model)->fi()
+            ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->orderBy('grade desc, `order`')
             ->fetchAll('id');
 
         $treeMenu = array();
-        foreach($modules as $module)
+        foreach($programList as $program)
         {
-            if(strpos($mode, 'all') !== false and strpos(",{$this->app->user->view->programs},", ",{$module->id},") === false and (!$this->app->user->admin)) continue;
+            if(!$this->app->user->admin && strpos($mode, 'all') !== false && strpos(",{$this->app->user->view->programs},", ",{$program->id},") === false) continue;
 
-            $moduleName    = $showRoot ? '/' : '';
-            $parentModules = explode(',', $module->path);
-            foreach($parentModules as $parentModuleID)
+            $programName = $showRoot ? '/' : '';
+            $parentList  = explode(',', trim($program->path, ','));
+            foreach($parentList as $parentID)
             {
-                if(empty($parentModuleID)) continue;
-                if(empty($modules[$parentModuleID])) continue;
-                $moduleName .= $modules[$parentModuleID]->name . '/';
+                if(empty($parentID) || empty($programList[$parentID])) continue;
+
+                $programName .= $programList[$parentID]->name . '/';
             }
-            $moduleName  = str_replace('|', '&#166;', rtrim($moduleName, '/'));
-            $moduleName .= "|$module->id\n";
+            $programName  = str_replace('|', '&#166;', rtrim($programName, '/'));
+            $programName .= "|$program->id\n";
 
-            if(!isset($treeMenu[$module->parent])) $treeMenu[$module->parent] = '';
-            $treeMenu[$module->parent] .= $moduleName;
+            if(!isset($treeMenu[$program->parent])) $treeMenu[$program->parent] = '';
+            $treeMenu[$program->parent] .= $programName;
 
-            if(isset($treeMenu[$module->id]) and !empty($treeMenu[$module->id])) $treeMenu[$module->parent] .= $treeMenu[$module->id];
+            if(isset($treeMenu[$program->id]) && !empty($treeMenu[$program->id])) $treeMenu[$program->parent] .= $treeMenu[$program->id];
         }
 
         ksort($treeMenu);
         $topMenu = array_shift($treeMenu);
-        $topMenu = empty($topMenu) ? '' : $topMenu;
-        $topMenu = explode("\n", trim($topMenu));
-        $showRoot ? $lastMenu[] = '/' : $lastMenu = array();
+        $topMenu = empty($topMenu) ? '' : trim($topMenu);
+        $topMenu = explode("\n", $topMenu);
+
+        $lastMenu = $showRoot ? array('/') : array();
         foreach($topMenu as $menu)
         {
             if(strpos($menu, '|') === false) continue;
+
             list($label, $moduleID) = explode('|', $menu);
-            $lastMenu[$moduleID] = str_replace('&#166;', '|', $label);
+            $lastMenu[$moduleID]    = str_replace('&#166;', '|', $label);
         }
 
         return $lastMenu;
