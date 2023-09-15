@@ -193,9 +193,9 @@ $lang->metric->implementTips[] = '3. Place the developed code.php file in the [U
 $lang->metric->implementTips[] = '4. Execute the command to grant executable permissions to the file.';
 
 $lang->metric->verifyList = array();
-$lang->metric->verifyList['checkCalcExists']  = 'Check whether the metric exists';
-$lang->metric->verifyList['checkCalcClass']   = 'Check the metric class name is correct';
-$lang->metric->verifyList['checkCalcMethods'] = 'Check whether the metrics defines the required methods';
+$lang->metric->verifyList['checkCustomCalcExists'] = 'Check whether the metric exists';
+$lang->metric->verifyList['checkCalcClass']        = 'Check the metric class name is correct';
+$lang->metric->verifyList['checkCalcMethods']      = 'Check whether the metrics defines the required methods';
 
 $lang->metric->weekList = array();
 $lang->metric->weekList['1'] = 'Monday';

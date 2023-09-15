@@ -199,9 +199,9 @@ $lang->metric->implement->instructionTips[] = '2.请将开发后的文件放到�
 $lang->metric->implement->instructionTips[] = '3.执行命令赋予文件可执行权限：<p><span class="label code-slate">chmod 777 {tmpRoot}metric</span></p><p><span class="label code-slate">chmod 777 {tmpRoot}metric/{code}.php</span></p>';
 
 $lang->metric->verifyList = array();
-$lang->metric->verifyList['checkCalcExists']  = '检查度量项是否存在';
-$lang->metric->verifyList['checkCalcClass']   = '检查度量项类名是否正确';
-$lang->metric->verifyList['checkCalcMethods'] = '检查度量项是否定义了必须的方法';
+$lang->metric->verifyList['checkCustomCalcExists'] = '检查度量项是否存在';
+$lang->metric->verifyList['checkCalcClass']        = '检查度量项类名是否正确';
+$lang->metric->verifyList['checkCalcMethods']      = '检查度量项是否定义了必须的方法';
 
 $lang->metric->weekList = array();
 $lang->metric->weekList['1'] = '星期一';

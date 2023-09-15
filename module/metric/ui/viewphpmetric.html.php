@@ -108,6 +108,23 @@ $fnGenerateDataDisplay = function() use($resultData, $resultHeader, $lang, $metr
         );
 };
 
+if(!$this->metric->checkCalcExists($metric))
+{
+    $metricDataSection = section
+    (
+        set::title($lang->metric->metricData),
+        set::content($lang->metric->noCalc),
+    );
+}
+else
+{
+    $metricDataSection = section
+    (
+        set::title($lang->metric->metricData),
+        $fnGenerateDataDisplay($resultData, $resultHeader, $lang, $metric),
+    );
+}
+
 $actionMenuList = !$metric->deleted ? $this->metric->buildOperateMenu($metric) : array();
 detailBody
 (
@@ -125,11 +142,7 @@ detailBody
             set::content(empty(trim($metric->definition)) ? $lang->metric->noFormula : $metric->definition),
             set::useHtml(true)
         ),
-        section
-        (
-            set::title($lang->metric->metricData),
-            $fnGenerateDataDisplay($resultData, $resultHeader, $lang, $metric),
-        )
+        $metricDataSection,
     ),
     history
     (

@@ -337,6 +337,7 @@ class metric extends control
         $this->view->title          = $metric->name;
         $this->view->metric         = $metric;
         $this->view->isOldMetric    = $isOldMetric;
+        $this->view->isCalcExists   = $this->metric->checkCalcExists($metric);
         $this->view->result         = $result;
         $this->view->resultHeader   = $this->metricZen->getViewTableHeader($result);
         $this->view->resultData     = $this->metricZen->getViewTableData($metric, $result);

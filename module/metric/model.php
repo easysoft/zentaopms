@@ -640,6 +640,12 @@ class metricModel extends model
         return false;
     }
 
+    public function checkCalcExists($metric)
+    {
+        $calcName = $this->metricTao->getCalcRoot() . $metric->scope . DS . $metric->purpose . DS . $metric->code . '.php';
+        return file_exists($calcName);
+    }
+
     /**
      * 检查度量项计算文件是否存在。
      * Check if the calculator file exists or not.
@@ -648,7 +654,7 @@ class metricModel extends model
      * @access public
      * @return bool
      */
-    public function checkCalcExists($metric)
+    public function checkCustomCalcExists($metric)
     {
         $calcName = $this->metricTao->getCustomCalcRoot() . $metric->code . '.php';
         return file_exists($calcName);
@@ -664,7 +670,7 @@ class metricModel extends model
      */
     public function checkCalcClass($metric)
     {
-        if(!$this->checkCalcExists($metric)) return false;
+        if(!$this->checkCustomCalcExists($metric)) return false;
 
         $this->includeCalc($metric->code);
         return class_exists($metric->code);
@@ -680,7 +686,7 @@ class metricModel extends model
      */
     public function checkCalcMethods($metric)
     {
-        if(!$this->checkCalcExists($metric)) return false;
+        if(!$this->checkCustomCalcExists($metric)) return false;
 
         $methodNameList = $this->metricTao->getMethodNameList($metric->code);
         foreach($this->config->metric->necessaryMethodList as $method)

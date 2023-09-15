@@ -57,6 +57,6 @@ $config->metric->oldObjectMap['softRequest'] = 'story';
 $config->metric->oldObjectMap['userRequest'] = 'requirement';
 
 $config->metric->verifyList = array();
-$config->metric->verifyList['checkCalcExists']  = $lang->metric->verifyList['checkCalcExists'];
-$config->metric->verifyList['checkCalcClass']   = $lang->metric->verifyList['checkCalcClass'];
-$config->metric->verifyList['checkCalcMethods'] = $lang->metric->verifyList['checkCalcMethods'];
+$config->metric->verifyList['checkCustomCalcExists'] = $lang->metric->verifyList['checkCustomCalcExists'];
+$config->metric->verifyList['checkCalcClass']        = $lang->metric->verifyList['checkCalcClass'];
+$config->metric->verifyList['checkCalcMethods']      = $lang->metric->verifyList['checkCalcMethods'];
