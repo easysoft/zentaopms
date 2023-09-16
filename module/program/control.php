@@ -179,9 +179,10 @@ class program extends control
     }
 
     /**
-     * Edit a program.
+     * 编辑项目集。
+     * Edit the program.
      *
-     * @param  int $programID
+     * @param  int    $programID
      * @access public
      * @return void
      */
@@ -189,7 +190,27 @@ class program extends control
     {
         if($_POST)
         {
-            $changes = $this->program->update($programID);
+            $oldProgram = $this->dao->findById($programID)->from(TABLE_PROGRAM)->fetch();
+
+            $postData = fixer::input('post')
+            ->add('id', $programID)
+            ->setDefault('team', $this->post->name)
+            ->setDefault('end', '')
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', helper::now())
+            ->setIF($this->post->begin == '0000-00-00', 'begin', '')
+            ->setIF($this->post->end   == '0000-00-00', 'end', '')
+            ->setIF($this->post->delta == 999, 'end', LONG_TIME)
+            ->setIF($this->post->realBegan != '' and $oldProgram->status == 'wait', 'status', 'doing')
+            ->setIF($this->post->future, 'budget', 0)
+            ->setIF($this->post->budget != 0, 'budget', round((float)$this->post->budget, 2))
+            ->setIF(!isset($_POST['budgetUnit']), 'budgetUnit', $oldProgram->budgetUnit)
+            ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
+            ->join('whitelist', ',')
+            ->stripTags($this->config->program->editor->edit['id'], $this->config->allowedTags)
+            ->get();
+
+            $changes = $this->program->update($programID, $postData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($changes)
             {
@@ -201,15 +222,14 @@ class program extends control
         }
 
         $program       = $this->program->getByID($programID);
-        $parentProgram = $program->parent ? $this->program->getByID($program->parent) : '';
+        $parentProgram = $program->parent ? $this->program->getByID($program->parent) : new stdclass();
         $parents       = $this->program->getParentPairs();
 
         /* Remove children program from parents. */
         $children = $this->dao->select('*')->from(TABLE_PROGRAM)->where('path')->like("%,$programID,%")->fetchPairs('id', 'id');
         foreach($children as $childID) unset($parents[$childID]);
 
-        $this->view->title      = $this->lang->program->edit;
-
+        $this->view->title           = $this->lang->program->edit;
         $this->view->pmUsers         = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $program->PM);
         $this->view->poUsers         = $this->user->getPairs('noclosed|nodeleted|pofirst');
         $this->view->users           = $this->user->getPairs('noclosed|nodeleted');

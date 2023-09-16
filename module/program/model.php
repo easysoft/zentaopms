@@ -823,45 +823,26 @@ class programModel extends model
     }
 
     /**
-     * Update program.
+     * 更新项目集。
+     * Update the program.
      *
      * @param  int    $programID
+     * @param  object $postData
      * @access public
-     * @return array|bool
+     * @return array|false
      */
-    public function update($programID)
+    public function update(int $programID, object $postData): array|false
     {
         $this->app->loadLang('project');
-        $programID  = (int)$programID;
         $oldProgram = $this->dao->findById($programID)->from(TABLE_PROGRAM)->fetch();
-
-        $program = fixer::input('post')
-            ->add('id', $programID)
-            ->setDefault('team', $this->post->name)
-            ->setDefault('end', '')
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', helper::now())
-            ->setIF($this->post->begin == '0000-00-00', 'begin', '')
-            ->setIF($this->post->end   == '0000-00-00', 'end', '')
-            ->setIF($this->post->delta == 999, 'end', LONG_TIME)
-            ->setIF($this->post->realBegan != '' and $oldProgram->status == 'wait', 'status', 'doing')
-            ->setIF($this->post->future, 'budget', 0)
-            ->setIF($this->post->budget != 0, 'budget', round($this->post->budget, 2))
-            ->setIF(!isset($_POST['budgetUnit']), 'budgetUnit', $oldProgram->budgetUnit)
-            ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
-            ->join('whitelist', ',')
-            ->stripTags($this->config->program->editor->edit['id'], $this->config->allowedTags)
-            ->remove('id,uid,delta,future,syncPRJUnit,exchangeRate,contactListMenu')
-            ->get();
-
-        $program  = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->edit['id'], $this->post->uid);
+        $program    = $this->loadModel('file')->processImgURL($postData, $this->config->program->editor->edit['id'], $postData->uid);
 
         if($program->parent)
         {
             $this->dao->update(TABLE_MODULE)
                 ->set('root')->eq($program->parent)
                 ->where('root')->eq($programID)
-                ->andwhere('type')->eq('line')
+                ->andWhere('type')->eq('line')
                 ->exec();
         }
         if(dao::isError()) return false;
@@ -873,9 +854,9 @@ class programModel extends model
         }
 
         $this->lang->error->unique = $this->lang->error->repeat;
-        $this->dao->update(TABLE_PROGRAM)->data($program)
-            ->autoCheck($skipFields = 'begin,end')
-            ->batchcheck($this->config->program->edit->requiredFields, 'notempty')
+        $this->dao->update(TABLE_PROGRAM)->data($program, 'id,uid,delta,future,syncPRJUnit,exchangeRate,contactListMenu')
+            ->autoCheck('begin,end')
+            ->batchCheck($this->config->program->edit->requiredFields, 'notempty')
             ->checkIF($program->begin != '', 'begin', 'date')
             ->checkIF($program->end != '', 'end', 'date')
             ->checkIF($program->end != '', 'end', 'gt', $program->begin)
@@ -888,17 +869,17 @@ class programModel extends model
         if(!dao::isError())
         {
             /* If the program changes, the budget unit will be updated to the project and sub-programs simultaneously. */
-            if($program->budgetUnit != $oldProgram->budgetUnit and $_POST['syncPRJUnit'] == 'true')
+            if($program->budgetUnit != $oldProgram->budgetUnit and $postData->syncPRJUnit == 'true')
             {
                 $this->dao->update(TABLE_PROJECT)
                     ->set('budgetUnit')->eq($program->budgetUnit)
-                    ->beginIF(!empty($_POST['exchangeRate']))->set("budget = {$_POST['exchangeRate']} * `budget`")->fi()
+                    ->beginIF(!empty($postData->exchangeRate))->set("budget = {$postData->exchangeRate} * `budget`")->fi()
                     ->where('path')->like(",{$programID},%")
                     ->andWhere('type')->in('program,project')
                     ->exec();
             }
 
-            $this->file->updateObjectID($this->post->uid, $programID, 'project');
+            $this->file->updateObjectID($postData->uid, $programID, 'project');
             $whitelist = explode(',', $program->whitelist);
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'program', $programID);
             $this->loadModel('user');
@@ -946,6 +927,7 @@ class programModel extends model
 
             return common::createChanges($oldProgram, $program);
         }
+        return false;
     }
 
     /**
