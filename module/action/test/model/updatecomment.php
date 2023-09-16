@@ -2,7 +2,11 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/action.class.php';
+include dirname(__FILE__, 4) . '/file/test/file.class.php';
 su('admin');
+
+zdTable('action')->gen(2);
+zdTable('file')->gen(1);
 
 /**
 
@@ -12,18 +16,17 @@ pid=1
 
 测试更新action 1的备注 >> 备注1
 测试更新action 2的备注 >> 备注2
-测试更新action 3的备注 >> 备注3
-测试更新action 4的备注 >> 备注4
-测试更新action 5的备注 >> 备注5
+检测文件是否更新成功   >> story;2
 
-*/
-$actionIDList = array('1', '2', '3', '4', '5');
-$commentList  = array('备注1', '备注2', '备注3', '备注4', '备注5');
+ */
+
+$actionIDList = array('1', '2');
+$commentList  = array('备注1', '备注2', '<p><img src="uupdatecomment.php?m=file&amp;f=read&amp;t=jpeg&amp;fileID=1"></p>');
+$uidList      = array('', uniqid());
 
 $action = new actionTest();
+$file   = new fileTest();
 
-r($action->updateCommentTest($actionIDList[0], $commentList[0])) && p('comment') && e('备注1'); // 测试更新action 1的备注
-r($action->updateCommentTest($actionIDList[1], $commentList[1])) && p('comment') && e('备注2'); // 测试更新action 2的备注
-r($action->updateCommentTest($actionIDList[2], $commentList[2])) && p('comment') && e('备注3'); // 测试更新action 3的备注
-r($action->updateCommentTest($actionIDList[3], $commentList[3])) && p('comment') && e('备注4'); // 测试更新action 4的备注
-r($action->updateCommentTest($actionIDList[4], $commentList[4])) && p('comment') && e('备注5'); // 测试更新action 5的备注
+r($action->updateCommentTest($actionIDList[0], $commentList[0], $uidList[0])) && p('comment')             && e('备注1');    // 测试更新action 1的备注
+r($action->updateCommentTest($actionIDList[1], $commentList[1], $uidList[1])) && p('comment')             && e('备注2');    // 测试更新action 2的备注
+r($file->getByIdTest(1))                                                      && p('objectType;objectID') && e('story;2');  //测试文件是否更新成功

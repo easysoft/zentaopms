@@ -110,6 +110,7 @@ class actionModel extends model
     }
 
     /**
+     * 获取对象的产品
      * Get product, project, execution of the object.
      *
      * @param  string $objectType
@@ -119,7 +120,7 @@ class actionModel extends model
      * @access public
      * @return array
      */
-    public function getRelatedFields($objectType, $objectID, $actionType = '', $extra = '')
+    public function getRelatedFields(string $objectType, int $objectID, string $actionType = '', string $extra = ''): array
     {
         $emptyRecord = array('product' => ',0,', 'project' => 0, 'execution' => 0);
 
@@ -148,7 +149,7 @@ class actionModel extends model
 
                 return $relation;
         }
-
+        /* 只处理这些对象。 */
         /* Only process these object types. */
         if(strpos($this->config->action->needGetRelateField, ",{$objectType},") !== false)
         {

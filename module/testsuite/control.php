@@ -350,8 +350,8 @@ class testsuite extends control
     public function unlinkCase(int $suiteID, int $caseID)
     {
         $this->testsuite->deleteCaseBysuiteID(array($caseID), $suiteID);
+        
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
         return $this->send(array('result' => 'success', 'load' => true));
     }
 
@@ -367,8 +367,8 @@ class testsuite extends control
     {
         $formData = form::data($this->config->testsuite->form->batchUnlinkCases)->get();
         $this->testsuite->deleteCaseBysuiteID($formData->caseIDList, $suiteID);
+        
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
         return $this->send(array('result' => 'success', 'load' => true));
     }
 }

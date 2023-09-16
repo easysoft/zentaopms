@@ -484,17 +484,22 @@ class actionTest
      * Test update comment of a action.
      *
      * @param  int    $actionID
-     * @param  string $comment
-     * @access public
-     * @return object
+     
      */
-    public function updateCommentTest($actionID, $comment)
+    public function updateCommentTest(int $actionID, string $comment, string $uid = '')
     {
-        $_POST['lastComment'] = $comment;
+        if($uid)
+        {
+            $_POST['uid'] = $uid;
+            global $tester;
+            $tester->session->set('album', null);
+            $tester->session->set('album', array($uid => array(1), 'used' => array($uid => array(1))));
+        }
 
-        $this->objectModel->updateComment($actionID);
-
+        $this->objectModel->updateComment($actionID, $comment, $uid);
+        
         unset($_POST);
+
         if(dao::isError()) return dao::getError();
 
         $object = $this->objectModel->getByID($actionID);
