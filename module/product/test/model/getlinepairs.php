@@ -3,28 +3,25 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 
-function initData()
-{
-    $module = zdTable('module');
-    $module->id->range('1-1000');
-    $module->root->range('1-5');  //产品线所属项目集
-    $module->name->prefix("产品线")->range('1-1000');
-    $module->type->range("line");
-    $module->parent->range('`0`');
+zdTable('user')->gen(5);
 
-    $module->gen(10);
-}
-initData();
+$module = zdTable('module');
+$module->id->range('1-1000');
+$module->root->range('1-5');
+$module->name->prefix("产品线")->range('1-1000');
+$module->type->range("line");
+$module->parent->range('`0`');
+$module->gen(10);
 
 /**
 
 title=productModel->getLinePairs();
+timeout=0
 cid=1
-pid=1
 
 */
-$product = new productTest('admin');
 
+$product = new productTest('admin');
 r($product->getLinePairsTest(-1))       && p()      && e('0');                 // 测试获取程序集-1的信息
 r(count($product->getLinePairsTest(0))) && p()      && e('10');                // 获取所有未删除的产品线
 r($product->getLinePairsTest(1))        && p('1,6') && e('产品线1,产品线6');   // 测试获取程序集1的信息

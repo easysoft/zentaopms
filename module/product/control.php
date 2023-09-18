@@ -1023,6 +1023,7 @@ class product extends control
     }
 
     /**
+     * 获取产品线的下拉组件数据。
      * Ajax get product lines.
      *
      * @param  int    $programID
