@@ -4710,7 +4710,15 @@ class taskModel extends model
             $task->mailto = implode(' &nbsp;', $mailto);
 
             foreach($userFields as $field) $task->$field = zget($users, $task->$field);
-            foreach($dateFields as $field) $task->$field = empty($task->$field) || helper::isZeroDate($task->$field) ? '' : $task->$field;
+	    foreach($dateFields as $field)
+	    {
+                $task->$field = empty($task->$field) || helper::isZeroDate($task->$field) ? '' : $task->$field;
+	        if($field == 'deadline')
+	        {
+	            $delayed = isset($task->delay) ? "class='delayed'" : '';
+                    $task->deadline = "<span $delayed>" . substr($task->deadline, 5, 6) . '</span>';
+	        }
+	    }
 
             $children = isset($task->children) ? $task->children : array();
             unset($task->children);
