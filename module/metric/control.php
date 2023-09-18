@@ -515,4 +515,22 @@ class metric extends control
 
         $this->loadModel('file')->sendDownHeader($fileName, 'php', $content, 'content');
     }
+
+    /**
+     * 获取度量项默认值和测试值的的下拉选项。
+     * Get options of default value and query value.
+     *
+     * @param  string $optionType
+     * @access public
+     * @return string
+     */
+    public function ajaxGetControlOptions($optionType)
+    {
+        $options = $this->metric->getControlOptions($optionType);
+
+        $optionList = array();
+        foreach($options as $value => $option) $optionList[] = array('value' => $value, 'text' => $option, 'keys' => $option);
+
+        return $this->send($optionList);
+    }
 }
