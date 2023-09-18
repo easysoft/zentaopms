@@ -12,8 +12,8 @@ $projectProduct->gen(28);
 /**
 
 title=productModel->getExecutionPairsByProduct();
+timeout=0
 cid=1
-pid=1
 
 */
 
@@ -38,10 +38,10 @@ r(!isset($executions[101])) && p() && e('1'); // 只传入产品，不传入项�
 $executions = $product->getExecutionPairsByProductTest($productIDList[1], 0, 'multiple');
 r(!isset($executions[104])) && p() && e('1'); // 只传入产品，不传入项目，是否包含不启用迭代的执行。
 
-r(count($product->getExecutionPairsByProductTest($productIDList[1], $projectIDList[0])))  && p() && e('5'); // 传入产品，传入敏捷项目。
-r(count($product->getExecutionPairsByProductTest($productIDList[1], $projectIDList[1])))  && p() && e('0'); // 传入产品，传入无关联数据的项目。
-r(count($product->getExecutionPairsByProductTest($productIDList[1], $projectIDList[2])))  && p() && e('6'); // 传入产品，传入有子阶段的瀑布项目。
-r(count($product->getExecutionPairsByProductTest($productIDList[1], $projectIDList[3])))  && p() && e('6'); // 传入产品，传入无子阶段的瀑布项目。
-r(count($product->getExecutionPairsByProductTest($productIDList[1], $projectIDList[4])))  && p() && e('4'); // 传入产品，传入看板项目。
+r(count($product->getExecutionPairsByProductTest($productIDList[1], $projectIDList[0]))) && p() && e('5'); // 传入产品，传入敏捷项目。
+r(count($product->getExecutionPairsByProductTest($productIDList[1], $projectIDList[1]))) && p() && e('0'); // 传入产品，传入无关联数据的项目。
+r(count($product->getExecutionPairsByProductTest($productIDList[1], $projectIDList[2]))) && p() && e('6'); // 传入产品，传入有子阶段的瀑布项目。
+r(count($product->getExecutionPairsByProductTest($productIDList[1], $projectIDList[3]))) && p() && e('6'); // 传入产品，传入无子阶段的瀑布项目。
+r(count($product->getExecutionPairsByProductTest($productIDList[1], $projectIDList[4]))) && p() && e('4'); // 传入产品，传入看板项目。
 
 r($product->getExecutionPairsByProductTest($productIDList[2])) && p() && e('0'); // 传入无关联关系的产品。

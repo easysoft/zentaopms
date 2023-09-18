@@ -682,26 +682,21 @@ class productTest
     }
 
     /**
+     * 获取关联了某产品的执行列表。
      * Test get executions by product and project.
      *
      * @param  int    $productID
-     * @param  string $projectID
+     * @param  int    $projectID
      * @param  string $mode
      * @access public
      * @return array
      */
-    public function getExecutionPairsByProductTest(int $productID, string $projectID = '', string $mode = ''): array
+    public function getExecutionPairsByProductTest(int $productID, int $projectID = 0, string $mode = ''): array
     {
         $objects = $this->objectModel->getExecutionPairsByProduct($productID, 0, $projectID, $mode);
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $objects;
-        }
+        if(dao::isError()) return dao::getError();
+        return $objects;
     }
 
     /**

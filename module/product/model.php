@@ -917,19 +917,19 @@ class productModel extends model
      *
      * @param  int    $productID
      * @param  string $branch
-     * @param  string $projectID
+     * @param  int    $projectID
      * @param  string $mode      stagefilter|noclosed|multiple
      * @access public
      * @return array
      */
-    public function getExecutionPairsByProduct(int $productID, string $branch = '', string $projectID = '0', string $mode = ''): array
+    public function getExecutionPairsByProduct(int $productID, string $branch = '', int $projectID = 0, string $mode = ''): array
     {
         if(empty($productID)) return array();
 
         /* Determine executions order. */
         $projects         = $this->loadModel('project')->getByIdList(array($projectID));
-        $hasWaterfall     = in_array('waterfall',     array_column($projects, 'model'));
-        $hasWaterfallplus = in_array('waterfallplus', array_column($projects, 'model'));
+        $hasWaterfall     = in_array('waterfall',     helper::arrayColumn($projects, 'model'));
+        $hasWaterfallplus = in_array('waterfallplus', helper::arrayColumn($projects, 'model'));
         $waterfallOrderBy = ($hasWaterfall || $hasWaterfallplus) ? 't2.begin_asc,t2.id_asc' : 't2.begin_desc,t2.id_desc';
 
         $executions = $this->dao->select('t2.id,t2.name,t2.project,t2.grade,t2.path,t2.parent,t2.attribute,t2.multiple,t3.name as projectName')->from(TABLE_PROJECTPRODUCT)->alias('t1')
