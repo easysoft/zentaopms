@@ -479,7 +479,7 @@ class actionModel extends model
                 }
                 $action->extra = trim(trim($action->extra), ',');
             }
-            
+
             /* 瀑布模型相关的代码。 */
             /* Code for wataerfall mode. */
             elseif($actionName == 'createrequirements')
@@ -594,7 +594,7 @@ class actionModel extends model
                 foreach(explode(',', $action->extra) as $id) $extra .= common::hasPriv('bug', 'view') ? html::a(helper::createLink('bug', 'view', "bugID=$id"), "#$id ") . ', ' : "#$id, ";
                 $action->extra = trim(trim($extra), ',');
             }
-        
+
             $this->loadModel('file');
             $action->comment = $this->file->setImgSize($action->comment, $this->config->action->commonImgSize);
 
@@ -1534,6 +1534,7 @@ class actionModel extends model
     }
 
     /**
+     * 获取对象的标签。
      * Get object label.
      *
      * @param  string $objectType
@@ -1543,20 +1544,21 @@ class actionModel extends model
      * @access public
      * @return string
      */
-    public function getObjectLabel($objectType, $objectID, $actionType, $requirements)
+    public function getObjectLabel(string $objectType, int $objectID, string $actionType, array $requirements): string
     {
         $actionObjectLabel = $objectType;
         if(isset($this->lang->action->label->$objectType))
         {
             $objectLabel = $this->lang->action->label->$objectType;
 
+            /* 用户故事替换为需求。 */
             /* Replace story to requirement. */
-            if(isset($requirements[$objectID]) and is_string($objectLabel)) $objectLabel = str_replace($this->lang->SRCommon, $this->lang->URCommon, $objectLabel);
+            if(isset($requirements[$objectID]) && is_string($objectLabel)) $objectLabel = str_replace($this->lang->SRCommon, $this->lang->URCommon, $objectLabel);
 
             if(!is_array($objectLabel)) $actionObjectLabel = $objectLabel;
-            if(is_array($objectLabel) and isset($objectLabel[$actionType])) $actionObjectLabel = $objectLabel[$actionType];
+            if(is_array($objectLabel) && isset($objectLabel[$actionType])) $actionObjectLabel = $objectLabel[$actionType];
 
-            if($objectType == 'module' and $actionType == 'deleted')
+            if($objectType == 'module' && $actionType == 'deleted')
             {
                 $moduleType = $this->dao->select('type')->from(TABLE_MODULE)->where('id')->eq($objectID)->fetch('type');
                 if($moduleType == 'doc')
@@ -1567,7 +1569,7 @@ class actionModel extends model
             }
         }
 
-        if($this->config->edition == 'max' and $objectType == 'assetlib')
+        if($this->config->edition == 'max' && $objectType == 'assetlib')
         {
             $libType = $this->dao->select('type')->from(TABLE_ASSETLIB)->where('id')->eq($objectID)->fetch('type');
             if(strpos('story,issue,risk,opportunity,practice,component', $libType) !== false) $actionObjectLabel = $this->lang->action->label->{$libType . 'assetlib'};

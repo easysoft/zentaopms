@@ -22,7 +22,7 @@ pid=1
 测试获取objectType case objectId 10的动态信息 >> 用例|testcase|view|caseID=%s
 测试获取objectType testtask objectId 11的动态信息 >> 测试单|testtask|view|caseID=%s
 测试获取objectType user objectId 12的动态信息 >> 用户|user|view|account=%s
-测试获取objectType doclib objectId 14的动态信息 >> 文档库|doc|tablecontents|type=%s&objectID=%s&libID=%s
+测试获取objectType doclib objectId 14的动态信息 >> 文档库|doc|teamspace|objectID=%s&libID=%s
 测试获取objectType todo objectId 15的动态信息 >> 待办|todo|view|todoID=%s
 测试获取objectType branch objectId 16的动态信息 >> branch
 测试获取objectType module objectId 17的动态信息 >> 模块|tree|browse|productid=%s&type=story&currentModuleID=0&branch=all
@@ -55,7 +55,7 @@ r($action->getObjectLabelTest($objectType[8],  $objectId[8],  $actionType[8],  $
 r($action->getObjectLabelTest($objectType[9],  $objectId[9],  $actionType[9],  $requirements)) && p() && e('用例|testcase|view|caseID=%s');                                          // 测试获取objectType case objectId 10的动态信息
 r($action->getObjectLabelTest($objectType[10], $objectId[10], $actionType[10], $requirements)) && p() && e('测试单|testtask|view|caseID=%s');                                        // 测试获取objectType testtask objectId 11的动态信息
 r($action->getObjectLabelTest($objectType[11], $objectId[11], $actionType[11], $requirements)) && p() && e('用户|user|view|account=%s');                                             // 测试获取objectType user objectId 12的动态信息
-r($action->getObjectLabelTest($objectType[13], $objectId[13], $actionType[13], $requirements)) && p() && e('文档库|doc|tablecontents|type=%s&objectID=%s&libID=%s');                 // 测试获取objectType doclib objectId 14的动态信息
+r($action->getObjectLabelTest($objectType[13], $objectId[13], $actionType[13], $requirements)) && p() && e('文档库|doc|teamspace|objectID=%s&libID=%s');                             // 测试获取objectType doclib objectId 14的动态信息
 r($action->getObjectLabelTest($objectType[14], $objectId[14], $actionType[14], $requirements)) && p() && e('待办|todo|view|todoID=%s');                                              // 测试获取objectType todo objectId 15的动态信息
 r($action->getObjectLabelTest($objectType[15], $objectId[15], $actionType[15], $requirements)) && p() && e('branch');                                                                // 测试获取objectType branch objectId 16的动态信息
 r($action->getObjectLabelTest($objectType[16], $objectId[16], $actionType[16], $requirements)) && p() && e('模块|tree|browse|productid=%s&type=story&currentModuleID=0&branch=all'); // 测试获取objectType module objectId 17的动态信息
