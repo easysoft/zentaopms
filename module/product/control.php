@@ -975,6 +975,7 @@ class product extends control
     }
 
     /**
+     * 获取关联产品的执行下拉数据。
      * AJAX: get executions of a product in html select.
      *
      * @param  int    $productID
@@ -986,7 +987,7 @@ class product extends control
     public function ajaxGetExecutionsByProject(int $productID, int $projectID = 0, string $branch = '')
     {
         $noMultipleExecutionID = $projectID ? $this->loadModel('execution')->getNoMultipleID($projectID) : '';
-        $executions            = $this->product->getExecutionPairsByProduct($productID, $branch, (string)$projectID, 'multiple,stagefilter');
+        $executions            = $this->product->getExecutionPairsByProduct($productID, $branch, $projectID, 'multiple,stagefilter');
 
         $executionList = array();
         foreach($executions as $executionID => $executionName) $executionList[] = array('value' => $executionID, 'text' => $executionName);
