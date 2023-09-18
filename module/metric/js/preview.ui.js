@@ -232,6 +232,7 @@ window.afterPageUpdate = function($target, info, options)
     window.checkedList = [{id:current.id + '', name:current.name}];
     window.filterChecked = {};
     window.renderDTable();
+    window.renderChart();
     if(viewType == 'multiple') window.renderCheckedLabel();
     $(window).on('resize', window.renderCheckedLabel);
     window.initFilterPanel();
@@ -268,6 +269,15 @@ window.renderDTable = function()
     window.initDTable($currentBox.find('.dtable'), resultHeader, resultData);
 }
 
+window.renderChart = function()
+{
+    var $currentBox = $('#metricBox' + current.id);
+    if(viewType == 'single') $currentBox = $('.table-and-chart-single');
+    if(!$currentBox.find('.chart').length) return;
+
+    window.initChart($currentBox.find('.chart')[0], resultHeader, resultData);
+}
+
 window.initDTable = function($obj, head, data)
 {
     var height = 328;
@@ -290,6 +300,56 @@ window.initDTable = function($obj, head, data)
             return result;
         }
     });
+}
+
+window.initChart = function($obj, head, data, chartType = 'line') 
+{
+    if(head.length == 3)
+    {
+        var x = head[0].name;
+        var y = head[1].name;
+    }
+    if(!x || !y) return;
+
+    var type  = (chartType == 'barX' || chartType == 'barY') ? 'bar' : chartType;
+    var xAxis = {
+        type: 'category',
+        data: data.map(function(item){return item[x]})
+    };
+    var yAxis = {
+        type: 'value'
+    };
+
+    $.getLib(config.webRoot + 'js/echarts/echarts.common.min.js', {root: false}, function() {
+
+        var myChart = echarts.init($obj);
+        var option = {
+            tooltip: {
+                trigger: 'axis'
+            },
+            xAxis: chartType == 'barY' ? yAxis : xAxis,
+            yAxis: chartType == 'barY' ? xAxis : yAxis,
+            series: [
+                {
+                    data: data.map(function(item){return item[y]}),
+                    type: type
+                }
+            ]
+        };
+
+        option && myChart.setOption(option);
+    });
+
+}
+
+window.handleChartTypeChange = function($el)
+{
+    if(viewType == 'single') 
+    {
+        var chartType = $('[name=chartType]').val();
+
+        window.initChart($('.table-and-chart-single').find('.chart')[0], resultHeader, resultData, chartType);
+    }
 }
 
 window.handleRemoveLabel = function(id)
@@ -363,7 +423,6 @@ window.updateMetricBoxs = function(id, isChecked)
             var data = JSON.parse(resp);
             if(data) window.initDTable($('#metricBox' + id).find('.dtable'), data.header, data.data);
         });
-
     }
 }
 

@@ -176,6 +176,11 @@ if($config->edition != 'open')
 $lang->metric->objectList['review'] = "评审";
 $lang->metric->objectList['other']  = "其他";
 
+$lang->metric->chartTypeList = array();
+$lang->metric->chartTypeList['line'] = '折线图';
+$lang->metric->chartTypeList['barX'] = '柱形图';
+$lang->metric->chartTypeList['barY'] = '条形图';
+
 $lang->metric->filter = new stdclass();
 $lang->metric->filter->common  = '筛选';
 $lang->metric->filter->scope   = '范围';
