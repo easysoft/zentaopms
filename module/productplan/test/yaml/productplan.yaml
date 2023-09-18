@@ -10,7 +10,7 @@ fields:
   - field: product
     range: 1-10{3}
   - field: branch
-    range: 0{4},4,5,0,7,8,0{91}
+    range: '0{16},2-14'
   - field: parent
     range: '`-1`,1,0{98}'
   - field: status

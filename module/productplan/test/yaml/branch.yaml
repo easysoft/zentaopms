@@ -8,6 +8,6 @@ fields:
     range: 1-30
     prefix: '分支'
   - field: product
-    range: 1-10{3}
+    range: 6-10{3}
   - field: status
     range: 'active{20},closed{10}'

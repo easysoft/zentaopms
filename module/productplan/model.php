@@ -225,23 +225,23 @@ class productplanModel extends model
     }
 
     /**
-     * Get plan pairs.
+     * 获取计划id:name的键值对。
+     * Get the key-value pair for plan id:name
      *
-     * @param  array|int        $product
+     * @param  array|int        $productIdList
      * @param  int|string|array $branch
-     * @param  string           $param unexpired|noclosed
+     * @param  string           $param         unexpired|noclosed
      * @param  bool             $skipParent
      * @access public
      * @return array
      */
-    public function getPairs($product = 0, $branch = '', $param = '', $skipParent = false)
+    public function getPairs(array|int $productIdList = 0, int|string|array $branch = '', string $param = '', bool $skipParent = false): array
     {
         $this->app->loadLang('branch');
 
-        $date = date('Y-m-d');
-
+        /* Get the query condition for the branch. */
         $branchQuery = '';
-        if($branch !== '' and $branch != 'all')
+        if($branch !== '' && $branch != 'all')
         {
             $branchQuery .= '(';
             $branchCount = count(explode(',', $branch));
@@ -255,23 +255,27 @@ class productplanModel extends model
 
         $plans = $this->dao->select('t1.id,t1.title,t1.parent,t1.begin,t1.end,t3.type as productType,t1.branch')->from(TABLE_PRODUCTPLAN)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t3.id=t1.product')
-            ->where('t1.product')->in($product)
+            ->where('t1.product')->in($productIdList)
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF(!empty($branchQuery))->andWhere($branchQuery)->fi()
-            ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('t1.end')->ge($date)->fi()
+            ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('t1.end')->ge(date('Y-m-d'))->fi()
             ->beginIF(strpos($param, 'noclosed')  !== false)->andWhere('t1.status')->ne('closed')->fi()
             ->orderBy('t1.begin desc')
             ->fetchAll('id');
 
+        /* Build the plan name based on the condition. */
         $plans     = $this->reorder4Children($plans);
         $plans     = $this->relationBranch($plans);
         $planPairs = array();
         foreach($plans as $plan)
         {
-            if($skipParent and $plan->parent == '-1') continue;
-            if($plan->parent > 0 and isset($plans[$plan->parent])) $plan->title = $plans[$plan->parent]->title . ' /' . $plan->title;
+            if($skipParent && $plan->parent == '-1') continue;
+
+            if($plan->parent > 0 && isset($plans[$plan->parent])) $plan->title = $plans[$plan->parent]->title . ' /' . $plan->title;
+
             $planPairs[$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
-            if($plan->begin == $this->config->productplan->future and $plan->end == $this->config->productplan->future) $planPairs[$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
+
+            if($plan->begin == $this->config->productplan->future && $plan->end == $this->config->productplan->future) $planPairs[$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
             if($plan->productType != 'normal') $planPairs[$plan->id] = $planPairs[$plan->id] . ' / ' . ($plan->branchName ? $plan->branchName : $this->lang->branch->main);
         }
         return $planPairs;

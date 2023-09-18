@@ -16,3 +16,5 @@ fields:
     range: 'normal{20},closed{10}'
   - field: PO
     range: 'admin{10},user1{10},user2{10}'
+  - field: type
+    range: 'normal{5},branch{5},normal{20}'
