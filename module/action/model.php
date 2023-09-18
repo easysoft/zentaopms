@@ -298,12 +298,12 @@ class actionModel extends model
     /**
      * Get actions of an object.
      *
-     * @param  int    $objectType
+     * @param  string $objectType
      * @param  int    $objectID
      * @access public
      * @return array
      */
-    public function getList($objectType, $objectID)
+    public function getList(string $objectType, int $objectID): array
     {
         $objectID  = is_array($objectID) ? $objectID : (int)$objectID;
         $modules   = $objectType == 'module' ? $this->dao->select('id')->from(TABLE_MODULE)->where('root')->in($objectID)->fetchPairs('id') : array();
@@ -334,32 +334,29 @@ class actionModel extends model
             ->fetchAll('id');
 
         $histories = $this->getHistory(array_keys($actions));
-        $this->loadModel('file');
 
         if($objectType == 'project')
         {
-            $this->app->loadLang('build');
-            $this->app->loadLang('testtask');
             $actions = $this->processProjectActions($actions);
         }
 
         foreach($actions as $actionID => $action)
         {
             $actionName = strtolower($action->action);
-            if($actionName == 'svncommited' and isset($commiters[$action->actor]))
+            if($actionName == 'svncommited' && isset($commiters[$action->actor]))
             {
                 $action->actor = $commiters[$action->actor];
             }
-            elseif($actionName == 'gitcommited' and isset($commiters[$action->actor]))
+            elseif($actionName == 'gitcommited' && isset($commiters[$action->actor]))
             {
                 $action->actor = $commiters[$action->actor];
             }
-            elseif($actionName == 'linked2execution' or $actionName == 'linked2kanban')
+            elseif($actionName == 'linked2execution' || $actionName == 'linked2kanban')
             {
                 $execution = $this->dao->select('name,type,multiple')->from(TABLE_PROJECT)->where('id')->eq($action->extra)->fetch();
                 if(!empty($execution))
                 {
-                    if($execution->type != 'project' and empty($execution->multiple))
+                    if($execution->type != 'project' && empty($execution->multiple))
                     {
                         unset($actions[$actionID]);
                         continue;
@@ -367,7 +364,7 @@ class actionModel extends model
 
                     $name   = $execution->name;
                     $method = $execution->type == 'kanban' ? 'kanban' : 'view';
-                    $action->extra = (!common::hasPriv('execution', $method) or ($method == 'kanban' and isonlybody())) ? $name : html::a(helper::createLink('execution', $method, "executionID=$action->execution"), $name, '', "data-app='execution'");
+                    $action->extra = (!common::hasPriv('execution', $method) || ($method == 'kanban' && isonlybody())) ? $name : html::a(helper::createLink('execution', $method, "executionID=$action->execution"), $name, '', "data-app='execution'");
                 }
             }
             elseif($actionName == 'linked2project')
@@ -403,7 +400,7 @@ class actionModel extends model
                 $name = $this->dao->select('name')->from(TABLE_TESTTASK)->where('id')->eq($action->extra)->fetch('name');
                 if($name) $action->extra = common::hasPriv('testtask', 'view') ? html::a(helper::createLink('testtask', 'view', "taskID=$action->extra"), $name) : $name;
             }
-            elseif($actionName == 'linked2revision' or $actionName == 'unlinkedfromrevision')
+            elseif($actionName == 'linked2revision' || $actionName == 'unlinkedfromrevision')
             {
                 $commit = $this->dao->select('repo,revision')->from(TABLE_REPOHISTORY)->where('id')->eq($action->extra)->fetch();
                 if($commit)
@@ -412,12 +409,12 @@ class actionModel extends model
                     $action->extra = common::hasPriv('repo', 'revision') ? html::a(helper::createLink('repo', 'revision', "repoID=$commit->repo&objectID=0&revision=$commit->revision"), $revision) : $revision;
                 }
             }
-            elseif($actionName == 'moved' and $action->objectType != 'module')
+            elseif($actionName == 'moved' && $action->objectType != 'module')
             {
                 $name = $this->dao->select('name')->from(TABLE_PROJECT)->where('id')->eq($action->extra)->fetch('name');
                 if($name) $action->extra = common::hasPriv('execution', 'task') ? html::a(helper::createLink('execution', 'task', "executionID=$action->extra"), "#$action->extra " . $name) : "#$action->extra " . $name;
             }
-            elseif($actionName == 'frombug' and common::hasPriv('bug', 'view'))
+            elseif($actionName == 'frombug' && common::hasPriv('bug', 'view'))
             {
                 $action->extra = html::a(helper::createLink('bug', 'view', "bugID=$action->extra"), $action->extra);
             }
@@ -452,7 +449,7 @@ class actionModel extends model
                 $name = $this->dao->select('name')->from(TABLE_TESTTASK)->where('id')->eq($action->extra)->fetch('name');
                 if($name) $action->extra = common::hasPriv('testtask', 'view') ? html::a(helper::createLink('testtask', 'view', "taskID=$action->extra"), $name) : $name;
             }
-            elseif(strpos('feedback,ticket', $action->objectType) === false and $actionName == 'tostory')
+            elseif(strpos('feedback,ticket', $action->objectType) === false && $actionName == 'tostory')
             {
                 $productShadow = $this->dao->select('shadow')->from(TABLE_PRODUCT)->where('id')->in(trim($action->product, ','))->fetch('shadow');
                 $title         = $this->dao->select('title')->from(TABLE_STORY)->where('id')->eq($action->extra)->fetch('title');
@@ -460,7 +457,7 @@ class actionModel extends model
                 if($productShadow)
                 {
                     $projectID = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($action->extra)->fetch('project');
-                    if($title) $action->extra = (common::hasPriv('projectstory', 'view') and $projectID) ? html::a(helper::createLink('projectstory', 'view', "storyID={$action->extra}&projectID=$projectID"), $defaultExtra) : $defaultExtra;
+                    if($title) $action->extra = (common::hasPriv('projectstory', 'view') && $projectID) ? html::a(helper::createLink('projectstory', 'view', "storyID={$action->extra}&projectID=$projectID"), $defaultExtra) : $defaultExtra;
                 }
                 else
                 {
@@ -470,7 +467,7 @@ class actionModel extends model
             elseif($actionName == 'importedcard')
             {
                 $title = $this->dao->select('name')->from(TABLE_KANBAN)->where('id')->eq($action->extra)->fetch('name');
-                if($title) $action->extra = (common::hasPriv('kanban', 'view') and !isonlybody()) ? html::a(helper::createLink('kanban', 'view', "kanbanID=$action->extra"), "#$action->extra " . $title) : "#$action->extra " . $title;
+                if($title) $action->extra = (common::hasPriv('kanban', 'view') && !isonlybody()) ? html::a(helper::createLink('kanban', 'view', "kanbanID=$action->extra"), "#$action->extra " . $title) : "#$action->extra " . $title;
             }
             elseif($actionName == 'createchildren')
             {
@@ -482,7 +479,9 @@ class actionModel extends model
                 }
                 $action->extra = trim(trim($action->extra), ',');
             }
-            /* Code for waterfall. */
+            
+            /* 瀑布模型相关的代码。 */
+            /* Code for wataerfall mode. */
             elseif($actionName == 'createrequirements')
             {
                 $names = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($action->extra)->fetchPairs('id', 'title');
@@ -493,12 +492,12 @@ class actionModel extends model
                 }
                 $action->extra = trim(trim($action->extra), ',');
             }
-            elseif($action->objectType != 'feedback' and (strpos(',totask,linkchildtask,unlinkchildrentask,linkparenttask,unlinkparenttask,deletechildrentask,', ",$actionName,") !== false))
+            elseif($action->objectType != 'feedback' && (strpos(',totask,linkchildtask,unlinkchildrentask,linkparenttask,unlinkparenttask,deletechildrentask,', ",$actionName,") !== false))
             {
                 $name = $this->dao->select('name')->from(TABLE_TASK)->where('id')->eq($action->extra)->fetch('name');
                 if($name) $action->extra = common::hasPriv('task', 'view') ? html::a(helper::createLink('task', 'view', "taskID=$action->extra"), "#$action->extra " . $name) : "#$action->extra " . $name;
             }
-            elseif($actionName == 'linkchildstory' or $actionName == 'unlinkchildrenstory' or $actionName == 'linkparentstory' or $actionName == 'unlinkparentstory' or $actionName == 'deletechildrenstory')
+            elseif($actionName == 'linkchildstory' || $actionName == 'unlinkchildrenstory' || $actionName == 'linkparentstory' || $actionName == 'unlinkparentstory' || $actionName == 'deletechildrenstory')
             {
                 $name = $this->dao->select('title')->from(TABLE_STORY)->where('id')->eq($action->extra)->fetch('title');
                 if($name) $action->extra = common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$action->extra"), "#$action->extra " . $name) : "#$action->extra " . $name;
@@ -508,22 +507,22 @@ class actionModel extends model
                 $name = $this->dao->select('name')->from(TABLE_BUILD)->where('id')->eq($action->objectID)->fetch('name');
                 if($name) $action->extra = common::hasPriv('build', 'view') ? html::a(helper::createLink('build', 'view', "buildID=$action->objectID"), "#$action->objectID " . $name) : "#$action->objectID " . $name;
             }
-            elseif($actionName == 'testtaskopened' or $actionName == 'testtaskstarted' or $actionName == 'testtaskclosed')
+            elseif($actionName == 'testtaskopened' || $actionName == 'testtaskstarted' || $actionName == 'testtaskclosed')
             {
                 $name = $this->dao->select('name')->from(TABLE_TESTTASK)->where('id')->eq($action->objectID)->fetch('name');
                 if($name) $action->extra = common::hasPriv('testtask', 'view') ? html::a(helper::createLink('testtask', 'view', "testtaskID=$action->objectID"), "#$action->objectID " . $name) : "#$action->objectID " . $name;
             }
-            elseif($actionName == 'fromlib' and $action->objectType == 'case')
+            elseif($actionName == 'fromlib' && $action->objectType == 'case')
             {
                 $name = $this->dao->select('name')->from(TABLE_TESTSUITE)->where('id')->eq($action->extra)->fetch('name');
                 if($name) $action->extra = common::hasPriv('caselib', 'browse') ? html::a(helper::createLink('caselib', 'browse', "libID=$action->extra"), $name) : $name;
             }
-            elseif(strpos(',importfromstorylib,importfromrisklib,importfromissuelib,importfromopportunitylib,', ",{$actionName},") !== false and $this->config->edition == 'max')
+            elseif(strpos(',importfromstorylib,importfromrisklib,importfromissuelib,importfromopportunitylib,', ",{$actionName},") !== false && $this->config->edition == 'max')
             {
                 $name = $this->dao->select('name')->from(TABLE_ASSETLIB)->where('id')->eq($action->extra)->fetch('name');
                 if($name) $action->extra = common::hasPriv('assetlib', $action->objectType) ? html::a(helper::createLink('assetlib', $action->objectType, "libID=$action->extra"), $name) : $name;
             }
-            elseif(($actionName == 'closed' and $action->objectType == 'story') or ($actionName == 'resolved' and $action->objectType == 'bug'))
+            elseif(($actionName == 'closed' && $action->objectType == 'story') || ($actionName == 'resolved' && $action->objectType == 'bug'))
             {
                 $action->appendLink = '';
                 if(strpos($action->extra, '|') !== false) $action->extra = substr($action->extra, 0, strpos($action->extra, '|'));
@@ -539,7 +538,7 @@ class actionModel extends model
                     }
                 }
             }
-            elseif($actionName == 'finished' and $objectType == 'todo')
+            elseif($actionName == 'finished' && $objectType == 'todo')
             {
                 $action->appendLink = '';
                 if(strpos($action->extra, ':')!== false)
@@ -555,12 +554,12 @@ class actionModel extends model
                     }
                 }
             }
-            elseif(($actionName == 'opened' or $actionName == 'managed' or $actionName == 'edited') and ($objectType == 'execution' || $objectType == 'project'))
+            elseif(($actionName == 'opened' || $actionName == 'managed' || $actionName == 'edited') && ($objectType == 'execution' || $objectType == 'project'))
             {
                 $this->app->loadLang('execution');
                 $linkedProducts = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->in($action->extra)->fetchPairs('id', 'name');
                 $action->extra  = '';
-                if($linkedProducts and $this->config->vision == 'rnd')
+                if($linkedProducts && $this->config->vision == 'rnd')
                 {
                     foreach($linkedProducts as $productID => $productName) $linkedProducts[$productID] = html::a(helper::createLink('product', 'browse', "productID=$productID"), "#{$productID} {$productName}");
                     $action->extra = sprintf($this->lang->execution->action->extra, '<strong>' . join(', ', $linkedProducts) . '</strong>');
@@ -595,7 +594,8 @@ class actionModel extends model
                 foreach(explode(',', $action->extra) as $id) $extra .= common::hasPriv('bug', 'view') ? html::a(helper::createLink('bug', 'view', "bugID=$id"), "#$id ") . ', ' : "#$id, ";
                 $action->extra = trim(trim($extra), ',');
             }
-
+        
+            $this->loadModel('file');
             $action->comment = $this->file->setImgSize($action->comment, $this->config->action->commonImgSize);
 
             $actions[$actionID] = $action;
@@ -611,8 +611,9 @@ class actionModel extends model
      * @access public
      * @return array
      */
-    public function processProjectActions($actions)
+    public function processProjectActions(array $actions): array
     {
+        /* 定义行动映射表。 */
         /* Define the action map table. */
         $map = array();
         $map['testtask']['opened']  = 'testtaskopened';
@@ -620,7 +621,8 @@ class actionModel extends model
         $map['testtask']['closed']  = 'testtaskclosed';
         $map['build']['opened']     = 'buildopened';
 
-        /* Process actions. */
+        /* 处理action数据。 */
+        /* Process actions data. */
         foreach($actions as $key => $action)
         {
             if($action->objectType != 'project' and !isset($map[$action->objectType][$action->action])) unset($actions[$key]);
