@@ -302,9 +302,9 @@ class testcaseTest
      * @param  string     $orderBy
      * @param  object     $pager
      * @access public
-     * @return array
+     * @return array|string
      */
-    public function getBySearchTest(string $tab = 'qa', int $projectID = 0, int $productID = 0, int|string $branch = 0, int $queryID = 0, string $auto = 'no', string $orderBy = 'id_desc', object $pager = null): array
+    public function getBySearchTest(string $tab = 'qa', int $projectID = 0, int $productID = 0, int|string $branch = 0, int $queryID = 0, string $auto = 'no', string $orderBy = 'id_desc', object $pager = null): array|string
     {
         global $tester;
         $tester->app->tab = $tab;
@@ -316,7 +316,7 @@ class testcaseTest
 
         if(dao::isError()) return false;
 
-        return $objects;
+        return implode(',', array_keys($objects));
     }
 
     /**
