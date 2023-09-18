@@ -23,13 +23,13 @@ $lang->space->notice->toInstall = 'Please go to the application market to instal
 $lang->space->byList = 'List';
 $lang->space->byCard = 'Card';
 
-$lang->space->featureBar['browse']['all']      = 'All';
-$lang->space->featureBar['browse']['running']  = 'Running';
-$lang->space->featureBar['browse']['stopped']  = 'Stopped';
-$lang->space->featureBar['browse']['abnormal'] = 'Abnormal';
+$lang->space->featureBar['browse']['all'] = 'All';
+if($config->inQuickon) $lang->space->featureBar['browse']['running']  = 'Running';
+if($config->inQuickon) $lang->space->featureBar['browse']['stopped']  = 'Stopped';
+if($config->inQuickon) $lang->space->featureBar['browse']['abnormal'] = 'Abnormal';
 
 $lang->space->appType['gitlab']    = 'GitLab';
-if(!$config->inQuickon) $lang->space->appType['gitea']     = 'Gitea';
+$lang->space->appType['gitea']     = 'Gitea';
 $lang->space->appType['gogs']      = 'Gogs';
 $lang->space->appType['jenkins']   = 'Jenkins';
 $lang->space->appType['sonarqube'] = 'SonarQube';
