@@ -2,9 +2,11 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/testsuite.class.php';
-su('admin');
 
 zdTable('testsuite')->config('testsuite')->gen(4);
+zdTable('user')->gen(2);
+
+su('admin');
 
 /**
 
@@ -35,7 +37,7 @@ r($testsuite->getSuitesTest($productID[0], $orderBy[1], null, '')) && p('1:name;
 r($testsuite->getSuitesTest($productID[0], $orderBy[2], null, '')) && p('1:name;3:name;2') && e('这是测试套件名称1;这是测试套件名称3;~~');  //测试productID值为1,orderBy为name_desc,id_desc
 r($testsuite->getSuitesTest($productID[0], $orderBy[3], null, '')) && p('3:name;1:name;2') && e('这是测试套件名称3;这是测试套件名称1;~~');  //测试productID值为1,orderBy为name_asc,id_desc
 
-su('dev1');
+su('user1');
 
 r($testsuite->getSuitesTest($productID[1], $orderBy[0], null, '')) && p()                && e('0');                                    //测试productID值为1,orderBy为id_desc
 r($testsuite->getSuitesTest($productID[0], $orderBy[0], null, '')) && p('2')             && e('~~');                                   //测试productID值为1,orderBy为id_desc
