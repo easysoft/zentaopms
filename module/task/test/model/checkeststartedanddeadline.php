@@ -17,8 +17,8 @@ $execution->code->setFields(array(
 $execution->type->range('project{2},sprint{5},waterfall{2},kanban{2}');
 $execution->status->range('doing{11}');
 $execution->parent->range('0');
-$execution->begin->range('20230102 000000:0')->type('timestamp')->format('YY/MM/DD');
-$execution->end->range('20230212 000000:0')->type('timestamp')->format('YY/MM/DD');
+$execution->begin->range('20230102 000000:0')->type('timestamp')->format('YYYY-MM-DD');
+$execution->end->range('20230212 000000:0')->type('timestamp')->format('YYYY-MM-DD');
 $execution->gen(11);
 
 

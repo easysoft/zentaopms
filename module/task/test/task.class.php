@@ -210,6 +210,7 @@ class taskTest
         foreach($task as $field => $value)
         {
             if(in_array($field, array_keys($param))) $task->$field = $param[$field];
+            if(strpos($field, 'Date') && !$task->$field) $task->$field = null;
         }
 
         $this->objectModel->doUpdate($task, $oldTask, $this->objectModel->config->task->edit->requiredFields);

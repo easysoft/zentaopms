@@ -65,8 +65,8 @@ $execution->parent->range('0');
 $execution->path->range('1-9');
 $execution->status->range('doing');
 $execution->openedBy->range('admin,user1');
-$execution->begin->range('(-3M)-(+M):1D')->type('timestamp')->format('YY/MM/DD');
-$execution->end->range('(+5w)-(+2M):1D')->type('timestamp')->format('YY/MM/DD');
+$execution->begin->range('(-3M)-(+M):1D')->type('timestamp')->format('YYYY-MM-DD');
+$execution->end->range('(+5w)-(+2M):1D')->type('timestamp')->format('YYYY-MM-DD');
 $execution->gen(9);
 
 $task = zdTable('task');
