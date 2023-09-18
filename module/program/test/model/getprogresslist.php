@@ -16,8 +16,8 @@ $program->parent->range('0,0,1,1,2,3,4,5');
 $program->grade->range('1{2},2{3},1{3}');
 $program->project->range('0{5},3-5');
 $program->path->range('1,2,`1,3`,`1,4`,`2,5`,`3,6`,`4,7`,`5,8`')->prefix(',')->postfix(',');
-$program->begin->range('20220112 000000:0')->type('timestamp')->format('YY/MM/DD');
-$program->end->range('20230212 000000:0')->type('timestamp')->format('YY/MM/DD');
+$program->begin->range('20220112 000000:0')->type('timestamp')->format('YYYY-MM-DD');
+$program->end->range('20230212 000000:0')->type('timestamp')->format('YYYY-MM-DD');
 $program->gen(8);
 
 $task = zdTable('task');

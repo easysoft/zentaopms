@@ -12,8 +12,8 @@ $program->path->range('1-10')->prefix(',')->postfix(',');
 $program->grade->range('1');
 $program->status->range('wait,doing,suspended,closed');
 $program->openedBy->range('admin,test1');
-$program->begin->range('20220112 000000:0')->type('timestamp')->format('YY/MM/DD');
-$program->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD');
+$program->begin->range('20220112 000000:0')->type('timestamp')->format('YYYY-MM-DD');
+$program->end->range('20220212 000000:0')->type('timestamp')->format('YYYY-MM-DD');
 $program->gen(10);
 
 /**

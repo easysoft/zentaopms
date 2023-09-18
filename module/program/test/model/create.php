@@ -9,8 +9,8 @@ $program->id->range('1');
 $program->name->range('父项目集1');
 $program->type->range('program');
 $program->path->range('1')->prefix(',')->postfix(',');
-$program->begin->range('20220112 000000:0')->type('timestamp')->format('YY/MM/DD');
-$program->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD');
+$program->begin->range('20220112 000000:0')->type('timestamp')->format('YYYY-MM-DD');
+$program->end->range('20220212 000000:0')->type('timestamp')->format('YYYY-MM-DD');
 $program->gen(1);
 
 /**

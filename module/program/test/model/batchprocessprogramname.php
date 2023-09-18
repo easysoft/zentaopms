@@ -11,8 +11,8 @@ $program->status->range('doing{3},closed,doing');
 $program->parent->range('0,0,1,1,2');
 $program->grade->range('1{2},2{3}');
 $program->path->range('1,2,`1,3`,`1,4`,`2,5`')->prefix(',')->postfix(',');
-$program->begin->range('20220112 000000:0')->type('timestamp')->format('YY/MM/DD');
-$program->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD');
+$program->begin->range('20220112 000000:0')->type('timestamp')->format('YYYY-MM-DD');
+$program->end->range('20220212 000000:0')->type('timestamp')->format('YYYY-MM-DD');
 $program->gen(5);
 
 $team = zdTable('team');

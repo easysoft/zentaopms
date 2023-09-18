@@ -10,8 +10,8 @@ $program->name->range('项目集1');
 $program->type->range('program');
 $program->parent->range('0,1');
 $program->path->range('1,10')->prefix(',')->postfix(',');
-$program->begin->range('20220112 000000:0')->type('timestamp')->format('YY/MM/DD');
-$program->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD');
+$program->begin->range('20220112 000000:0')->type('timestamp')->format('YYYY-MM-DD');
+$program->end->range('20220212 000000:0')->type('timestamp')->format('YYYY-MM-DD');
 $program->gen(2);
 
 /**
