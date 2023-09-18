@@ -545,16 +545,15 @@ class testcaseTest
         $oldCase = $this->objectModel->getByID($caseID);
 
         $case = new stdclass();
+        $case->id             = $caseID;
         $case->title          = $oldCase->title;
         $case->color          = $oldCase->color;
         $case->precondition   = $oldCase->precondition;
         $case->steps          = array('用例步骤描述1');
-        $case->stepType       = array('step');
-        $case->expects        = array('这是用例预期结果1');
         $case->comment        = '';
-        $case->labels         = '';
         $case->lastEditedDate = $oldCase->lastEditedDate;
         $case->product        = $oldCase->product;
+        $case->branch         = $oldCase->branch;
         $case->module         = $oldCase->module;
         $case->story          = $oldCase->story;
         $case->type           = $oldCase->type;
@@ -563,6 +562,7 @@ class testcaseTest
         $case->status         = $oldCase->status;
         $case->keywords       = $oldCase->keywords;
         $case->linkBug        = array();
+        $case->stepChanged    = isset($param['steps']);
 
         foreach($param as $field => $value) $case->$field = $value;
 
