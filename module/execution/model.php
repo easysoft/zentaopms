@@ -4694,29 +4694,29 @@ class executionModel extends model
         $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
         if(empty($project)) return 0;
 
-        $postData = $_POST;
-
-        $_POST = array();
-        $_POST['project']   = $projectID;
-        $_POST['name']      = $project->name;
-        $_POST['begin']     = $project->begin;
-        $_POST['end']       = $project->end;
-        $_POST['realBegan'] = $project->realBegan ? $project->realBegan : null;
-        $_POST['realEnd']   = $project->realEnd ? $project->realEnd : null;
-        $_POST['days']      = $project->days;
-        $_POST['team']      = $project->team;
-        $_POST['PO']        = $project->PO;
-        $_POST['QD']        = $project->QD;
-        $_POST['PM']        = $project->PM;
-        $_POST['RD']        = $project->RD;
-        $_POST['status']    = $project->status;
-        $_POST['acl']       = 'open';
-        $_POST['products']  = '';
+        $postData = new stdclass();
+        $postData->project   = $projectID;
+        $postData->name      = $project->name;
+        $postData->begin     = $project->begin;
+        $postData->end       = $project->end;
+        $postData->realBegan = $project->realBegan ? $project->realBegan : null;
+        $postData->realEnd   = $project->realEnd ? $project->realEnd : null;
+        $postData->days      = $project->days;
+        $postData->team      = $project->team;
+        $postData->PO        = $project->PO;
+        $postData->QD        = $project->QD;
+        $postData->PM        = $project->PM;
+        $postData->RD        = $project->RD;
+        $postData->status    = $project->status;
+        $postData->acl       = 'open';
+        $postData->products  = '';
+        $postData->code      = '';
+        $postData->uid       = '';
 
         /* Handle extend fields. */
         $extendFields = $this->loadModel('project')->getFlowExtendFields();
         foreach($extendFields as $field) $_POST[$field->field] = $project->field;
-        if(isset($this->config->setCode) and $this->config->setCode == 1) $_POST['code'] = $project->code;
+        if(isset($this->config->setCode) and $this->config->setCode == 1) $postData->code = $project->code;
 
         $updateProductsData = new stdclass();
         $updateProductsData->products = array();
@@ -4731,17 +4731,15 @@ class executionModel extends model
         }
 
         $teamMembers = $this->dao->select('*')->from(TABLE_TEAM)->where('type')->eq('project')->andWhere('root')->eq($projectID)->fetchPairs('account', 'account');
-        $_POST['teamMembers'] = array_values($teamMembers);
+        $postData->teamMembers = array_values($teamMembers);
 
         /* Update execution and linked product. */
         $executionID = $this->dao->select('*')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->andWhere('type')->in('sprint,kanban')->andWhere('multiple')->eq(0)->fetch('id');
         if($executionID)
         {
-            $this->update($executionID);
+            $this->update($executionID, $postData);
             $this->updateProducts($executionID, (array)$updateProductsData);
         }
-
-        $_POST = $postData;
 
         return (int)$executionID;
     }
