@@ -22,21 +22,21 @@ r($testcase->batchChangeTypeTest($caseIdList[1], '')) && p() && e('0'); // 用�
 r($testcase->batchChangeTypeTest($caseIdList[2], 1))  && p() && e('0'); // 用例参数对应的用例不存在，返回 false。
 
 r($testcase->batchChangeTypeTest($caseIdList[1], 'other'))        && p() && e('1');                // 批量修改用例类型为 other 成功，返回 true。
-r($testcase->getByListTest($caseIdList[1])) && p('1:type;2:type') && e('other,other');             // 批量修改用例类型后类型为 other。
+r($testcase->objectModel->getByList($caseIdList[1])) && p('1:type;2:type') && e('other,other');             // 批量修改用例类型后类型为 other。
 r($testcase->batchChangeTypeTest($caseIdList[1], 'interface'))    && p() && e('1');                // 批量修改用例类型为 interface 成功，返回 true。
-r($testcase->getByListTest($caseIdList[1])) && p('1:type;2:type') && e('interface,interface');     // 批量修改用例类型后类型为 interface。
+r($testcase->objectModel->getByList($caseIdList[1])) && p('1:type;2:type') && e('interface,interface');     // 批量修改用例类型后类型为 interface。
 r($testcase->batchChangeTypeTest($caseIdList[1], 'feature'))      && p() && e('1');                // 批量修改用例类型为 feature 成功，返回 true。
-r($testcase->getByListTest($caseIdList[1])) && p('1:type;2:type') && e('feature,feature');         // 批量修改用例类型后类型为 feature。
+r($testcase->objectModel->getByList($caseIdList[1])) && p('1:type;2:type') && e('feature,feature');         // 批量修改用例类型后类型为 feature。
 r($testcase->batchChangeTypeTest($caseIdList[1], 'install'))      && p() && e('1');                // 批量修改用例类型为 install 成功，返回 true。
-r($testcase->getByListTest($caseIdList[1])) && p('1:type;2:type') && e('install,install');         // 批量修改用例类型后类型为 install。
+r($testcase->objectModel->getByList($caseIdList[1])) && p('1:type;2:type') && e('install,install');         // 批量修改用例类型后类型为 install。
 r($testcase->batchChangeTypeTest($caseIdList[1], 'config'))       && p() && e('1');                // 批量修改用例类型为 config 成功，返回 true。
-r($testcase->getByListTest($caseIdList[1])) && p('1:type;2:type') && e('config,config');           // 批量修改用例类型后类型为 config。
+r($testcase->objectModel->getByList($caseIdList[1])) && p('1:type;2:type') && e('config,config');           // 批量修改用例类型后类型为 config。
 r($testcase->batchChangeTypeTest($caseIdList[1], 'performance'))  && p() && e('1');                // 批量修改用例类型为 performance 成功，返回 true。
-r($testcase->getByListTest($caseIdList[1])) && p('1:type;2:type') && e('performance,performance'); // 批量修改用例类型后类型为 performance。
+r($testcase->objectModel->getByList($caseIdList[1])) && p('1:type;2:type') && e('performance,performance'); // 批量修改用例类型后类型为 performance。
 r($testcase->batchChangeTypeTest($caseIdList[1], 'security'))     && p() && e('1');                // 批量修改用例类型为 security 成功，返回 true。
-r($testcase->getByListTest($caseIdList[1])) && p('1:type;2:type') && e('security,security');       // 批量修改用例类型后类型为 security。
+r($testcase->objectModel->getByList($caseIdList[1])) && p('1:type;2:type') && e('security,security');       // 批量修改用例类型后类型为 security。
 r($testcase->batchChangeTypeTest($caseIdList[1], 'other'))        && p() && e('1');                // 批量修改用例类型为 other 成功，返回 true。
-r($testcase->getByListTest($caseIdList[1])) && p('1:type;2:type') && e('other,other');             // 批量修改用例类型后类型为 other。
+r($testcase->objectModel->getByList($caseIdList[1])) && p('1:type;2:type') && e('other,other');             // 批量修改用例类型后类型为 other。
 
 $actions = $testcase->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(14)->fetchAll();
 r($actions) && p('0:objectType,objectID,action,extra;1:objectType,objectID,action,extra')   && e('case,2,edited,Other,case,1,edited,Other');             // 批量修改用例类型后记录日志。

@@ -619,7 +619,7 @@ class testcaseTest
      * @access public
      * @return bool
      */
-    public function batchChangeCaseBranchTest($caseIdList, $branchID)
+    public function batchChangeCaseBranchTest(array $caseIdList, int $branchID): bool
     {
         return $this->objectModel->batchChangeCaseBranch($caseIdList, $branchID);
     }

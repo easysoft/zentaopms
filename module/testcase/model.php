@@ -213,6 +213,7 @@ class testcaseModel extends model
     }
 
     /**
+     * 测试通过 id 列表和查询语句获取用例。
      * Get cases by id list and query string.
      *
      * @param  array  $caseIdList
