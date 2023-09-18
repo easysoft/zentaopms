@@ -304,21 +304,72 @@ window.initDTable = function($obj, head, data)
 
 window.initChart = function($obj, head, data, chartType = 'line') 
 {
-    if(head.length == 3)
-    {
+    console.log(head)
+    console.log(data);
+    if(head.length == 3) {
         var x = head[0].name;
         var y = head[1].name;
+    }
+    else if(head.length == 4) {
+        var x = head[1].name;
+        var y = head[2].name;
     }
     if(!x || !y) return;
 
     var type  = (chartType == 'barX' || chartType == 'barY') ? 'bar' : chartType;
-    var xAxis = {
-        type: 'category',
-        data: data.map(function(item){return item[x]})
-    };
-    var yAxis = {
-        type: 'value'
-    };
+
+    if(head.length == 3) {
+        var xAxis = {
+            type: 'category',
+            data: data.map(item => item[x])
+        };
+        var yAxis = {
+            type: 'value'
+        };
+        var series = [{
+            data: data.map(item => item[y]),
+            type: type
+        }];
+    }
+    else if(head.length == 4) {
+        var xAxis = {
+            type: 'category',
+            data: data.map(item => item[x]),
+        };
+        xAxis.data = xAxis.data.filter((value, index, self) => {
+            return self.indexOf(value) === index;
+        });
+        var yAxis = {
+            type: 'value'
+        };
+        var series = [];
+
+        var groupedData = data.reduce((accumulator, currentValue) => {
+            var scope = currentValue.scope;
+            var date  = currentValue.date;
+            var value = currentValue.value;
+
+            var group = accumulator.find(item => item.scope === scope);
+            if (group) {
+                group.date.push({date: date, value: value});
+            } else {
+                accumulator.push({ scope, date: [{date: date, value: value}] });
+            }
+            return accumulator;
+        }, []);
+
+        for(key in groupedData) {
+            var scope = groupedData[key].scope;
+            var dates = groupedData[key].date;
+
+            var seriesData = [];
+            xAxis.data.forEach(function(date) {
+                seriesData.push(dates.find(item => item.date === date) ? dates.find(item => item.date === date).value : null);
+            });
+
+            series.push({data: seriesData, type: type, name: scope});
+        }
+    }
 
     $.getLib(config.webRoot + 'js/echarts/echarts.common.min.js', {root: false}, function() {
 
@@ -329,12 +380,7 @@ window.initChart = function($obj, head, data, chartType = 'line')
             },
             xAxis: chartType == 'barY' ? yAxis : xAxis,
             yAxis: chartType == 'barY' ? xAxis : yAxis,
-            series: [
-                {
-                    data: data.map(function(item){return item[y]}),
-                    type: type
-                }
-            ]
+            series: series,
         };
 
         option && myChart.setOption(option);
