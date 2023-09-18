@@ -744,11 +744,11 @@ class testcaseTest
      * 测试将步骤转为字符串，并且区分它们。
      * Test join steps to a string, thus can diff them.
      *
-     * @param  array  $stepIDList
+     * @param  string $stepIDList
      * @access public
      * @return string
      */
-    public function joinStepTest(array $stepIDList): string
+    public function joinStepTest(string $stepIDList): string
     {
         global $tester;
         $steps = $tester->dao->select('*')->from(TABLE_CASESTEP)->where('id')->in($stepIDList)->fetchAll();
@@ -757,8 +757,7 @@ class testcaseTest
 
         if(dao::isError()) return dao::getError();
 
-        $string = str_replace("\n", ' ', $string);
-        return $string;
+        return str_replace("\n", ' ', $string);
     }
 
     /**
