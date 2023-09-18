@@ -187,6 +187,11 @@ $config->cloud->api->headers       = array('Content-Type: application/json');
 $config->cloud->api->channel       = 'stable';
 $config->cloud->api->switchChannel = false;
 
+/* Set zin config. */
+$config->zin = new stdClass();
+$config->zin->mode     = 'compatible';     // 启用兼容 18.x 模式。
+$config->zin->extraCSS = 'compatible.css'; // 额外的 CSS 样式文件。
+
 /* 配置参数过滤。Filter param settings. */
 $filterConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'filter.php';
 if(file_exists($filterConfig)) include $filterConfig;
@@ -228,8 +233,3 @@ else
     unset($config->maxVersion);
     unset($config->ipdVersion);
 }
-
-/* Set zin config. */
-$config->zin = new stdClass();
-$config->zin->mode       = 'compatible';     // 启用兼容 18.x 模式。
-$config->zin->extraCSS   = 'compatible.css'; // 额外的 CSS 样式文件。
