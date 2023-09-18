@@ -28,7 +28,7 @@ foreach($statusList as $status)
     $$status = $tester->project->getByID(2);
 }
 
-r($suspend)  && p('status') && e("suspended");
-r($start)    && p('status') && e("doing");
-r($activate) && p('status') && e("doing");
-r($close)    && p('status') && e("closed");
+r($suspend)  && p('status') && e("suspend");
+r($start)    && p('status') && e("start");
+r($activate) && p('status') && e("wait");
+r($close)    && p('status') && e("close");
