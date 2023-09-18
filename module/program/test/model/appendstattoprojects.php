@@ -6,6 +6,7 @@ zdTable('user')->gen(5);
 su('admin');
 
 zdTable('project')->gen(50);
+zdTable('team')->gen(0);
 
 $task = zdTable('task');
 $task->project->range('1-20');
@@ -44,18 +45,17 @@ $leftTasks = $tester->program->dao->select('t2.parent as project, count(*) as ta
     ->groupBy('t2.parent')
     ->fetchAll('project');
 
-
-r($tester->program->appendStatToProjects(array()))   && p() && e('0');    //不传入任何数据
-r($tester->program->appendStatToProjects($projects)) && p('11:id') && e('11'); //只传入项目数据
+r($tester->program->appendStatToProjects(array()))   && p()        && e('0');  // 不传入任何数据
+r($tester->program->appendStatToProjects($projects)) && p('11:id') && e('11'); // 只传入项目数据
 
 $stats = $tester->program->appendStatToProjects($projects, 'hours');
-r(isset($stats[$projectID]->hours)) && p() && e('0');      //只传入项目数据和hours追加字段
+r(isset($stats[$projectID]->hours))                                        && p() && e('0'); // 只传入项目数据和hours追加字段
 $stats = $tester->program->appendStatToProjects($projects, 'teamCount');
-r(isset($stats[$projectID]->teamCount)) && p() && e('0');  //只传入项目数据和teamCount追加字段
+r(isset($stats[$projectID]->teamCount))                                    && p() && e('1'); // 只传入项目数据和teamCount追加字段
 $stats = $tester->program->appendStatToProjects($projects, 'teamMembers');
-r(isset($stats[$projectID]->teamMembers)) && p() && e('0'); //只传入项目数据和teamMembers追加字段
+r(isset($stats[$projectID]->teamMembers))                                  && p() && e('0'); // 只传入项目数据和teamMembers追加字段
 $stats = $tester->program->appendStatToProjects($projects, 'leftTasks');
-r(isset($stats[$projectID]->leftTasks)) && p() && e('0'); //只传入项目数据和leftTasks追加字段
+r(isset($stats[$projectID]->leftTasks))                                    && p() && e('0'); // 只传入项目数据和leftTasks追加字段
 
 $stats = $tester->program->appendStatToProjects($projects, 'hours,teamCount,teamMembers,leftTasks', array('hours' => $hours, 'teams' => $teams, 'leftTasks' => $leftTasks));
 $stat  = $stats[$projectID];
