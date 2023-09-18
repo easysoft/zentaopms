@@ -217,14 +217,20 @@ class metricTao extends metricModel
      * @access protected
      * @return array
      */
-    protected function fetchMetricRecords(string $code, array $fieldList): array
+    protected function fetchMetricRecords(string $code, array $fieldList, string $date = null): array
     {
         $dataFieldStr = implode(', ', $fieldList);
         if(!empty($dataFieldStr)) $dataFieldStr .= ', ';
 
+        if(!$date)
+        {
+            $maxDate = $this->dao->select("max(date) maxDate")->from(TABLE_METRICLIB)->fetch('maxDate');
+            $date    = substr($maxDate, 0, 10);
+        }
         return $this->dao->select("id, {$dataFieldStr} value, date")
             ->from(TABLE_METRICLIB)
             ->where('metricCode')->eq($code)
+            ->andWhere('date')->gt($date)
             ->fetchAll();
     }
 

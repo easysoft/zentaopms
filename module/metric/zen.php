@@ -171,6 +171,7 @@ class metricZen extends metric
      */
     protected function prepareMetricRecord($calcList)
     {
+        $now     = helper::now();
         $records = array();
         foreach($calcList as $code => $calc)
         {
@@ -198,7 +199,7 @@ class metricZen extends metric
 
                 $record->metricID   = $calc->id;
                 $record->metricCode = $code;
-                $record->date       = helper::now();
+                $record->date       = $now;
                 $record->system     = $system;
 
                 $records[] = $record;
