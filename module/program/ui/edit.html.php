@@ -99,7 +99,7 @@ formPanel
                     set::type('date'),
                     set::name('begin'),
                     set::id('begin'),
-                    set::value(date('Y-m-d')),
+                    set::value($program->begin),
                     set::placeholder($lang->project->begin),
                     set::required(true),
                     on::change('computeWorkDays')
@@ -110,6 +110,7 @@ formPanel
                     set::type('date'),
                     set::name('end'),
                     set::id('end'),
+                    set::value($program->end),
                     set::placeholder($lang->project->end),
                     set::required(true),
                     $program->end == LONG_TIME ? set::disabled(true) : null,
@@ -139,22 +140,23 @@ formPanel
     (
         set::name('acl'),
         set::label($lang->program->acl),
-        set::value('open'),
+        set::value($program->acl),
         set::items($aclList),
         set::control('radioList'),
     ),
-    formRow
+    formGroup
     (
         set::id('whitelistRow'),
-        setClass('hidden'),
-        formGroup
+        set::className($program->acl == 'open' ? 'hidden' : ''),
+        set::label($lang->whitelist),
+        picker
         (
-            set::width('3/4'),
             set::name('whitelist'),
-            set::label($lang->whitelist),
-            set::control('select')
+            set::items($users),
+            set::value($program->whitelist),
+            set::multiple(true),
         )
-    )
+    ),
 );
 
 render();
