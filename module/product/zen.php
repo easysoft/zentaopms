@@ -1410,4 +1410,55 @@ class productZen extends product
 
         return helper::createLink($module, $method, "productID=%s{$branchParam}");
     }
+
+    /**
+     * 设置需求列表数据。
+     * Set the data of requirement list.
+     *
+     * @param  array       $stories
+     * @param  string      $browseType
+     * @param  string      $storyType
+     * @param  bool        $isProjectStory
+     * @param  object      $product
+     * @param  object|null $project
+     * @param  string      $branch
+     * @param  string      $branchID
+     * @access protected
+     * @return void
+     */
+    protected function assignBrowseData(array $stories, string $browseType, string $storyType, bool $isProjectStory, object $product, object|null $project, string $branch, string $branchID)
+    {
+        $productID       = $product ? $product->id : 0;
+        $projectID       = $project ? $project->id : 0;
+        $productName     = ($isProjectStory && empty($product)) ? $this->lang->product->all : $this->products[$productID];
+        $storyIdList     = $this->getStoryIdList($stories);
+        $projectProducts = $this->getProjectProductList($projectID, $storyType, $isProjectStory);
+        list($branchOpt, $branchTagOpt) = $this->getBranchAndTagOption($projectID, $product, $isProjectStory);
+
+        $this->view->title           = $productName . $this->lang->colon . ($storyType === 'story' ? $this->lang->product->browse : $this->lang->product->requirement);
+        $this->view->productID       = $productID;
+        $this->view->product         = $product;
+        $this->view->projectID       = $projectID;
+        $this->view->project         = $project;
+        $this->view->stories         = $stories;
+        $this->view->storyType       = $storyType;
+        $this->view->browseType      = $browseType;
+        $this->view->isProjectStory  = $isProjectStory;
+        $this->view->branch          = $branch;
+        $this->view->branchID        = $branchID;
+        $this->view->modulePairs     = !empty($this->config->product->browse->showModule) ? $this->tree->getModulePairs($productID, 'story', $this->config->product->browse->showModule) : array();
+        $this->view->showBranch      = $this->canShowBranch($projectID, $productID, $storyType, $isProjectStory);
+        $this->view->branchOptions   = (empty($product) && $isProjectStory) ? $this->productZen->getBranchOptions($projectProducts, $projectID) : array($productID => $branchOpt);
+        $this->view->branchTagOption = $branchTagOpt;
+
+        $this->view->summary    = $this->product->summary($stories, $storyType);
+        $this->view->plans      = $this->loadModel('productplan')->getPairs($productID, ($branch === 'all' || empty($branch)) ? '' : $branch, 'unexpired,noclosed,cleantitle');
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
+        $this->view->modules    = $this->tree->getOptionMenu($productID, 'story', 0, $branchID);
+        $this->view->storyTasks = $this->loadModel('task')->getStoryTaskCounts($storyIdList);
+        $this->view->storyBugs  = $this->loadModel('bug')->getStoryBugCounts($storyIdList);
+        $this->view->storyCases = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
+
+        $this->display();
+    }
 }

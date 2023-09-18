@@ -60,6 +60,7 @@ class product extends control
     }
 
     /**
+     * 产品下项目列表。
      * The projects which linked the product.
      *
      * @param  string $status
@@ -92,11 +93,11 @@ class product extends control
 
         $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->product->project;
         $this->view->projectStats = $projectStats;
-        $this->view->PMList       = $this->product->getPMList($projectStats);
+        $this->view->PMList       = $this->loadModel('user')->getListByAccounts(helper::arrayColumn($projectStats, 'PM'), 'account');
         $this->view->product      = $product;
         $this->view->projects     = $projects;
         $this->view->status       = $status;
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->users        = $this->user->getPairs('noletter');
         $this->view->branchID     = $branch;
         $this->view->branchStatus = $this->loadModel('branch')->getByID($branch, 0, 'status');
         $this->view->pager        = $pager;
@@ -125,12 +126,9 @@ class product extends control
         $browseType = strtolower($browseType);
 
         /* Pre process. */
-        $this->loadModel('datatable');
-        $this->loadModel('execution');
         $this->loadModel('tree');
         $isProjectStory = $this->app->rawModule == 'projectstory';
-        $cookieOrderBy  = zget($this->cookie, 'productStoryOrder', 'id_desc');
-        $showModule     = !empty($this->config->product->browse->showModule) ? $this->config->product->browse->showModule : '';
+        $cookieOrderBy  = $this->cookie->productStoryOrder ? $this->cookie->productStoryOrder : 'id_desc';
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
@@ -142,7 +140,7 @@ class product extends control
         $product   = $this->productZen->getBrowseProduct($productID);
         $project   = $projectID ? $this->loadModel('project')->getByID($projectID) : null;
         $branchID  = $this->productZen->getBranchID($product, $branch);
-        $orderBy   = $orderBy ? $orderBy : $cookieOrderBy;
+        $orderBy   = $orderBy  ? $orderBy  : $cookieOrderBy;
         $branch    = $branchID ? $branchID : $branch;
 
         /* ATTENTION: be careful to change the order of follow sentences. */
@@ -152,27 +150,10 @@ class product extends control
 
         /* Generate data. */
         $moduleID        = $this->productZen->getModuleId($param, $browseType);
-        $moduleTree      = $this->productZen->getModuleTree($projectID, $productID, $branch, $param, $storyType, $browseType);
-        $showBranch      = $this->productZen->canShowBranch($projectID, $productID, $storyType, $isProjectStory);
-        $projectProducts = $this->productZen->getProjectProductList($projectID, $storyType, $isProjectStory);
-        $productPlans    = $this->productZen->getProductPlans($projectProducts, $projectID, $storyType, $isProjectStory);
         $stories         = $this->productZen->getStories($projectID, $productID, $branchID, $moduleID, $param, $storyType, $browseType, $orderBy, $pager);
 
         /* Process the sql, get the condition partition, save it to session. */
-        $queryCondition = $this->dao->get();
-        $this->loadModel('common')->saveQueryCondition($queryCondition, 'story', (strpos('bysearch,reviewbyme,bymodule', $browseType) === false and !$isProjectStory));
-
-        /* Collect story ID list. */
-        $storyIdList = $this->productZen->getStoryIdList($stories);
-
-        /* Generate data. */
-        list($branchOpt, $branchTagOpt) = $this->productZen->getBranchAndTagOption($projectID, $product, $isProjectStory);
-        $branchOptions                  = (empty($product) && $isProjectStory) ? $this->productZen->getBranchOptions($projectProducts, $projectID) : array($productID => $branchOpt);
-        $storyTasks                     = $this->loadModel('task')->getStoryTaskCounts($storyIdList);
-        $storyBugs                      = $this->loadModel('bug')->getStoryBugCounts($storyIdList);
-        $storyCases                     = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
-        $productName                    = ($isProjectStory and empty($productID)) ? $this->lang->product->all : $this->products[$productID];
-        $modulePairs                    = $showModule ? $this->tree->getModulePairs($productID, 'story', $showModule) : array();
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', (strpos('bysearch,reviewbyme,bymodule', $browseType) === false && !$isProjectStory));
 
         /* Save session. */
         $this->productZen->saveSession4Browse($product, $storyType, $browseType, $isProjectStory);
@@ -181,47 +162,14 @@ class product extends control
         $this->productZen->buildSearchFormForBrowse($project, $projectID, $productID, $branch, $param, $storyType, $browseType, $isProjectStory);
 
         /* Assign. */
-        $this->view->title           = $productName . $this->lang->colon . ($storyType === 'story' ? $this->lang->product->browse : $this->lang->product->requirement);
-        $this->view->productID       = $productID;
-        $this->view->product         = $product;
-        $this->view->productName     = $productName;
-        $this->view->moduleID        = $moduleID;
-        $this->view->stories         = $stories;
-        $this->view->plans           = $this->loadModel('productplan')->getPairs($productID, ($branch === 'all' or empty($branch)) ? '' : $branch, 'unexpired,noclosed,cleantitle');
-        $this->view->productPlans    = !empty($productPlans) ? array(0 => '') + $productPlans : array();
-        $this->view->summary         = $this->product->summary($stories, $storyType);
-        $this->view->moduleTree      = $moduleTree;
-        $this->view->parentModules   = $this->tree->getParents($moduleID);
-        $this->view->pager           = $pager;
-        $this->view->users           = $this->user->getPairs('noletter|pofirst|nodeleted');
-        $this->view->orderBy         = $orderBy;
-        $this->view->browseType      = $browseType;
-        $this->view->modules         = $this->tree->getOptionMenu($productID, 'story', 0, $branchID);
-        $this->view->moduleID        = $moduleID;
-        $this->view->moduleName      = ($moduleID and $moduleID !== 'all') ? $this->tree->getByID($moduleID)->name : $this->lang->tree->all;
-        $this->view->branch          = $branch;
-        $this->view->branchID        = $branchID;
-        $this->view->branchOptions   = $branchOptions;
-        $this->view->branchOption    = $branchOpt;
-        $this->view->branchTagOption = $branchTagOpt;
-        $this->view->showBranch      = $showBranch;
-        $this->view->storyStages     = $this->product->batchGetStoryStage($stories);
-        $this->view->setModule       = true;
-        $this->view->storyTasks      = $storyTasks;
-        $this->view->storyBugs       = $storyBugs;
-        $this->view->storyCases      = $storyCases;
-        $this->view->param           = $param;
-        $this->view->projectID       = $projectID;
-        $this->view->products        = $this->products;
-        $this->view->projectProducts = !empty($projectProducts) ? $projectProducts : array();
-        $this->view->storyType       = $storyType;
-        $this->view->from            = $this->app->tab;
-        $this->view->modulePairs     = $modulePairs;
-        $this->view->project         = $project;
-        $this->view->recTotal        = $pager->recTotal;
-        $this->view->isProjectStory  = $isProjectStory;
+        $this->view->moduleID   = $moduleID;
+        $this->view->pager      = $pager;
+        $this->view->orderBy    = $orderBy;
+        $this->view->moduleID   = $moduleID;
+        $this->view->param      = $param;
+        $this->view->moduleTree = $this->productZen->getModuleTree($projectID, $productID, $branch, $param, $storyType, $browseType);
 
-        $this->display();
+        $this->productZen->assignBrowseData($stories, $browseType, $storyType, $isProjectStory, $product, $project, $branch, $branchID);
     }
 
     /**
