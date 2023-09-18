@@ -1308,7 +1308,7 @@ class projectModel extends model
      * @access public
      * @return array|false
      */
-    public function update(object $project, object $oldProject, object $postProductData): array|false
+    public function update(object $project, object $oldProject, object $postProductData = null): array|false
     {
         /* 通过主键查老项目信息, 处理父节点和图片字段。*/
         /* Fetch old project's info and dispose parent and file info. */
@@ -1329,7 +1329,7 @@ class projectModel extends model
         $this->updateUserView($projectID, $project->acl);                    // 更新用户视图。
         $this->updateShadowProduct($project, $oldProject);                   // 更新影子产品关联信息。
         $this->updateWhitelist($project, $oldProject);                       // 更新关联的白名单列表。
-        $this->updateProductStage($projectID, (string)$oldProject->stageBy, $postProductData); // 更新关联的所有产品的阶段。
+        if($postProductData) $this->updateProductStage($projectID, (string)$oldProject->stageBy, $postProductData); // 更新关联的所有产品的阶段。
 
         $this->file->updateObjectID((string)$this->post->uid, $projectID, 'project'); // 通过uid更新文件id。
 
@@ -1610,6 +1610,7 @@ class projectModel extends model
                 if(!$product) continue;
 
                 unset($product->id);
+                if(empty($product->closedDate)) unset($product->closedDate);
                 $product->program = $newTopProgram;
                 $this->product->update($productID, $product);
             }
