@@ -470,6 +470,20 @@ class programTest
     }
 
     /**
+     * 构建项目视角中项目的操作数据。
+     * Build actions map for project.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return array
+     */
+    public function buildProgramActionsMapTest(int $programID): array
+    {
+        $program = $this->program->getByID($programID);
+        return $this->program->buildProgramActionsMap($program);
+    }
+
+    /**
      * Test getNormalActions method.
      *
      * @param  int    $programID
