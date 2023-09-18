@@ -30,12 +30,17 @@ foreach($programs as $program)
         }
     }
 
-    /* PM. */
+    /* Set the program manager and avatar. */
     if(!empty($program->PM))
     {
-        $userName = zget($users, $program->PM);
+        $userName = zget($users, $program->PM, '');
         $program->PMAvatar = $usersAvatar[$program->PM];
         $program->PM       = $userName;
+    }
+    else
+    {
+        $program->PMAvatar = '';
+        $program->PM       = '';
     }
 
     /* Calculate budget.*/
