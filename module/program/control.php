@@ -203,7 +203,7 @@ class program extends control
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
             ->setIF($this->post->realBegan != '' and $oldProgram->status == 'wait', 'status', 'doing')
             ->setIF($this->post->future, 'budget', 0)
-            ->setIF($this->post->budget != 0, 'budget', round((float)$this->post->budget, 2))
+            ->setIF($this->post->budget != 0, 'budget', round((float)$this->post->budget * $this->config->project->budget->tenThousand, $this->config->project->budget->precision))
             ->setIF(!isset($_POST['budgetUnit']), 'budgetUnit', $oldProgram->budgetUnit)
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
             ->join('whitelist', ',')
@@ -221,7 +221,9 @@ class program extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->session->programList ? $this->session->programList : inLink('browse')));
         }
 
-        $program       = $this->program->getByID($programID);
+        $program = $this->program->getByID($programID);
+        $program->budget = round($program->budget / $this->config->project->budget->tenThousand, $this->config->project->budget->precision);
+
         $parentProgram = $program->parent ? $this->program->getByID($program->parent) : new stdclass();
         $parents       = $this->program->getParentPairs();
 
