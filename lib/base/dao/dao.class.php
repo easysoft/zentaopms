@@ -1430,6 +1430,7 @@ class baseDAO
         foreach($rawFields as $rawField)
         {
             $firstPOS = strpos($rawField->type, '(');
+            if(!$firstPOS) $firstPOS = strpos($rawField->type, ' ');
             $type     = substr($rawField->type, 0, $firstPOS > 0 ? $firstPOS : strlen($rawField->type));
             $type     = str_replace(array('big', 'small', 'medium', 'tiny', 'var'), '', $type);
             $field    = array();
@@ -1473,6 +1474,7 @@ class baseDAO
             }
             $fields[$rawField->field] = $field;
         }
+
         return $fields;
     }
 
