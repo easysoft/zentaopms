@@ -167,6 +167,53 @@ class testtaskZen extends testtask
     }
 
     /**
+     * 分配变量给一个测试单的用例列表页。
+     * Assign variables for cases page of a testtask.
+     *
+     * @param  object    $produc
+     * @param  object    $testtask
+     * @param  array     $runs
+     * @param  string    $browseType
+     * @param  int       $param
+     * @param  string    $orderBy
+     * @param  object    $pager
+     * @access protected
+     * @return void
+     */
+    protected function assignForCases(object $product, object $testtask, array $runs, string $browseType, int $param, string $orderBy, object $pager): void
+    {
+        $suites = $this->loadModel('testsuite')->getSuitePairs($product->id);
+
+        /* Get assignedToList based on the execution. */
+        $execution = $this->loadModel('execution')->getById($testtask->execution);
+        if($execution and $execution->acl == 'private')
+        {
+            $assignedToList = $this->loadModel('user')->getTeamMemberPairs($execution->id, 'execution', 'nodeleted');
+        }
+        else
+        {
+            $assignedToList = $this->loadModel('user')->getPairs('noclosed|noletter|nodeleted|qafirst');
+        }
+
+        $this->view->title          = $product->name . $this->lang->colon . $this->lang->testtask->cases;
+        $this->view->runs           = $this->loadModel('testcase')->appendData($runs, 'run');
+        $this->view->users          = $this->loadModel('user')->getPairs('noclosed|qafirst|noletter');
+        $this->view->moduleTree     = $this->loadModel('tree')->getTreeMenu($product->id, 'case', 0, array('treeModel', 'createTestTaskLink'), $testtask->id, $testtask->branch);
+        $this->view->automation     = $this->loadModel('zanode')->getAutomationByProduct($product->id);
+        $this->view->suiteName      = $browseType == 'bysuite' ? zget($suites, $param, $this->lang->testtask->browseBySuite) : $this->lang->testtask->browseBySuite;
+        $this->view->canBeChanged   = common::canBeChanged('testtask', $testtask);
+        $this->view->assignedToList = $assignedToList;
+        $this->view->suites         = $suites;
+        $this->view->productID      = $product->id;
+        $this->view->task           = $testtask;
+        $this->view->browseType     = $browseType;
+        $this->view->param          = $param;
+        $this->view->orderBy        = $orderBy;
+        $this->view->pager          = $pager;
+        $this->view->setModule      = false;
+    }
+
+    /**
      * Assign variables for editing test task.
      *
      * @param  object    $task
