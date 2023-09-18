@@ -827,6 +827,8 @@ class baseHelper
         if($path   === null) $path   = $config->webRoot;
         if($secure === null) $secure = $config->cookieSecure;
 
+        $_COOKIE[$name] = $value;
+
         if(isset($app->worker))
         {
             $app->worker->response->setCookie($name, $value, $expire, $path, $domain, $secure, $httponly);
