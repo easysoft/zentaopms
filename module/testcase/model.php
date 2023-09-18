@@ -1694,6 +1694,7 @@ class testcaseModel extends model
     }
 
     /**
+     * 创建一个场景。
      * Create a scene.
      *
      * @access public
