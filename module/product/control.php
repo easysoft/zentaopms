@@ -882,6 +882,7 @@ class product extends control
     }
 
     /**
+     * 通过产品ID获取产品信息。
      * Ajax get product by id.
      *
      * @param  int    $productID
