@@ -32,14 +32,16 @@ class testtaskZen extends testtask
      */
     protected function setSearchParamsForCases(object $product, int $moduleID, int $testtaskID, int $queryID): void
     {
+        $this->loadModel('testcase');
+
         $searchConfig = $this->config->testcase->search;
         $searchConfig['module']    = 'testtask';
         $searchConfig['queryID']   = $queryID;
         $searchConfig['actionURL'] = helper::createLink('testtask', 'cases', "taskID=$testtaskID&browseType=bySearch&queryID=myQueryID");
 
-        $searchConfig['params']['scene']['values']   = $this->loadModel('testcase')->getSceneMenu($product->id, $moduleID, 'case', 0,  0);
         $searchConfig['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($product->id, $viewType = 'case');
         $searchConfig['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
+        $searchConfig['params']['scene']['values']   = $this->testcase->getSceneMenu($product->id, $moduleID, 'case', 0,  0);
         $searchConfig['params']['status']['values']  = $this->lang->testcase->statusList;
         $searchConfig['params']['product']['values'] = array($product->id => $product->name, 'all' => $this->lang->testcase->allProduct);
 
