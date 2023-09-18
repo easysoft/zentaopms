@@ -214,6 +214,7 @@ formPanel
                 (
                     setStyle('width', '150px'),
                     set::id('pipelineDropmenu'),
+                    set::popPlacement('top'),
                     set::text($lang->job->selectPipeline),
                     set::url($this->createLink('jenkins', 'ajaxGetJenkinsTasks')),
                 ),
