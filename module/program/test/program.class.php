@@ -178,7 +178,7 @@ class programTest
     public function updateTest($programID, $data)
     {
         $_POST = $data;
-        $this->program->update($programID);
+        $this->program->update($programID, (object)$data);
         if(dao::isError()) return array('message' => dao::getError());
 
         return $this->program->getByID($programID);
