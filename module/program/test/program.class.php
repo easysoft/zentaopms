@@ -468,4 +468,17 @@ class programTest
         $this->program->updateOrder($programID, $order);
         return $this->program->getByID($programID);
     }
+
+    /**
+     * Test getNormalActions method.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return array
+     */
+    public function getNormalActionsTest($programID)
+    {
+        $program = $this->program->getByID($programID);
+        return $this->program->getNormalActions($program);
+    }
 }
