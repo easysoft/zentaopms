@@ -7,7 +7,7 @@ su('admin');
 $project = zdTable('project');
 $project->id->range('1-3');
 $project->type->range('project');
-$project->realBegan->range('20220427 000000:1w')->type('timestamp')->format('YY/MM/DD');
+$project->realBegan->range('20220427 000000:1w')->type('timestamp')->format('YYYY-MM-DD');
 $project->gen(3);
 
 /**

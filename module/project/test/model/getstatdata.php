@@ -12,8 +12,8 @@ $execution->parent->range('0,0,1,1,2');
 $execution->project->range('0,0,1,1,2');
 $execution->grade->range('2{2},1{3}');
 $execution->path->range('1,2,`1,3`,`1,4`,`2,5`')->prefix(',')->postfix(',');
-$execution->begin->range('20230102 000000:0')->type('timestamp')->format('YY/MM/DD');
-$execution->end->range('20230212 000000:0')->type('timestamp')->format('YY/MM/DD');
+$execution->begin->range('20230102 000000:0')->type('timestamp')->format('YYYY-MM-DD');
+$execution->end->range('20230212 000000:0')->type('timestamp')->format('YYYY-MM-DD');
 $execution->gen(5);
 
 $task = zdTable('task');
