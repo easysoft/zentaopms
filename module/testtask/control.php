@@ -425,8 +425,8 @@ class testtask extends control
         $moduleID = ($browseType == 'bymodule') ? $param : ($browseType == 'bysearch' ? 0 : ($this->cookie->taskCaseModule ?: 0));
         $sort     = common::appendOrder($orderBy, 't2.id');
 
-        /* 从数据库中查询一个测试单下的测试用例。*/
-        /* Get cases of a testtask from database. */
+        /* 从数据库中查询一个测试单下关联的测试用例。*/
+        /* Query the cases associated with a testtask from the database. */
         $runs = $this->testtask->getTaskCases($productID, $browseType, $queryID, $moduleID, $sort, $pager, $testtask);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
