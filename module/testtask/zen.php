@@ -57,6 +57,58 @@ class testtaskZen extends testtask
     }
 
     /**
+     * 设置测试单关联用例页面搜索表单的参数。
+     * Set congiruration of search form in linkCase page of testtask.
+     *
+     * @param  object    $product
+     * @param  object    $task
+     * @param  string    $type
+     * @param  int       $param
+     * @access protected
+     * @return void
+     */
+    protected function setSearchParamsForLinkCase(object $product, object $task, string $type, int $param): void
+    {
+        $this->loadModel('testcase');
+
+        $searchConfig = $this->config->testcase->search;
+        $searchConfig['style']                       = 'simple';
+        $searchConfig['actionURL']                   = inlink('linkcase', "taskID={$task->id}&type={$type}&param={$param}");
+        $searchConfig['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($product->id, 'case', 0, $task->branch);
+        $searchConfig['params']['scene']['values']   = $this->testcase->getSceneMenu($product->id, 0, 'case', 0, 0);
+        $searchConfig['params']['product']['values'] = array($product->id => $product->name);
+
+        $build = $this->loadModel('build')->getByID($task->build);
+        if($build)
+        {
+            $searchConfig['params']['story']['values'] = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($build->stories)->fetchPairs();
+            $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
+        }
+
+        if($type != 'bystory')
+        {
+            unset($searchConfig['fields']['story']);
+            unset($searchConfig['params']['story']);
+        }
+        if($product->shadow) unset($searchConfig['fields']['product']);
+        if($product->type == 'normal')
+        {
+            unset($searchConfig['fields']['branch']);
+            unset($searchConfig['params']['branch']);
+        }
+        else
+        {
+            $branchName = $this->loadModel('branch')->getById($task->branch);
+            $branches   = array('' => '', BRANCH_MAIN => $this->lang->branch->main, $task->branch => $branchName);
+            $searchConfig['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+            $searchConfig['params']['branch']['values'] = $branches;
+        }
+        if(!$this->config->testcase->needReview) unset($searchConfig['params']['status']['values']['wait']);
+
+        $this->loadModel('search')->setSearchParams($searchConfig);
+    }
+
+    /**
      * 构建编辑的测试单数据。
      * Build task for editing.
      *
