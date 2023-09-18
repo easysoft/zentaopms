@@ -2279,14 +2279,14 @@ class storyModel extends model
 
         if($story->status == 'active')
         {
-            $twinsIdList = $storyID . ($oldStory->twins ? ",{$oldStory->twins}" : '');
+            $twinsIdList = $storyID . (!empty($oldStory->twins) ? ",{$oldStory->twins}" : '');
             $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->in($twinsIdList)->exec();
         }
 
         $this->setStage($storyID);
 
         /* Update parent story status. */
-        if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
+        if(!empty($oldStory->parent) && $oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
 
         $changes = common::createChanges($oldStory, $story);
         if(!empty($oldStory->twins)) $this->syncTwins($storyID, $oldStory->twins, $changes, 'Activated');
@@ -5043,9 +5043,9 @@ class storyModel extends model
      * @param  int    $storyID
      * @param  bool   $hasTwins
      * @access public
-     * @return void
+     * @return string
      */
-    public function getActivateStatus($storyID, $hasTwins = true)
+    public function getActivateStatus(int $storyID, bool $hasTwins = true): string
     {
         $status     = 'active';
         $action     = 'closed,reviewrejected,closedbysystem';
@@ -5056,6 +5056,8 @@ class storyModel extends model
             ->andWhere('action')->in($action)
             ->orderBy('id_desc')
             ->fetch();
+
+        if(empty($lastRecord->action)) return $status;
 
         $lastAction = $lastRecord->action;
         if(strpos(',closed,reviewrejected,', ",$lastAction,") !== false)
