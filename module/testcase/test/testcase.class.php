@@ -235,20 +235,24 @@ class testcaseTest
     /**
      * Test get test cases.
      *
-     * @param  int    $productID
-     * @param  string $browseType
-     * @param  int    $queryID
-     * @param  string $auto
+     * @param  int        $productID
+     * @param  int|string $branch
+     * @param  string     $browseType
+     * @param  int        $queryID
+     * @param  int        $moduleID
+     * @param  string     $caseType
+     * @param  string     $auto
+     * @param  string     $orderBy
      * @access public
-     * @return array
+     * @return array|string
      */
-    public function getTestCasesTest($productID, $browseType, $queryID, $auto = 'no')
+    public function getTestCasesTest(int $productID, int|string $branch, string $browseType, int $moduleID = 0, string $caseType = '', string $auto = 'no', string $orderBy = 'id_desc'): array|string
     {
-        $objects = $this->objectModel->getTestCases($productID, 0, $browseType, $queryID, $moduleID, '', 'id_desc', null, $auto);
+        $cases = $this->objectModel->getTestCases($productID, $branch, $browseType, 0, $moduleID, $caseType, $auto, $orderBy);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return implode(',', array_keys($cases));
     }
 
     /**
