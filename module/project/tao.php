@@ -921,7 +921,15 @@ class projectTao extends projectModel
         $executionID = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->andWhere('multiple')->eq('0')->fetch('id');
         if(!$executionID) return false;
 
-        return $this->loadModel('execution')->$status($executionID);
+        $postData = new stdclass();
+        $postData->status    = $status;
+        $postData->uid       = '';
+        $postData->comment   = '';
+        $postData->realBegan = null;
+        $postData->begin     = null;
+        $postData->end       = null;
+        $postData->realEnd   = null;
+        return $this->loadModel('execution')->$status($executionID, $postData);
     }
 
     /**
