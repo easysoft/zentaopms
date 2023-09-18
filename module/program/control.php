@@ -449,7 +449,7 @@ class program extends control
         $this->view->pager        = $pager;
         $this->view->programID    = $programID;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
-        $this->view->PMList       = $this->loadModel('product')->getPMList($projectStats);
+        $this->view->PMList       = $this->user->getListByAccounts(helper::arrayColumn($projectStats, 'PM'), 'account');
         $this->view->browseType   = $browseType;
         $this->view->orderBy      = $orderBy;
         $this->display();
