@@ -222,10 +222,28 @@ class metricTao extends metricModel
         $dataFieldStr = implode(', ', $fieldList);
         if(!empty($dataFieldStr)) $dataFieldStr .= ', ';
 
+        $record = $this->dao->select("id, {$dataFieldStr} value, date")
+            ->from(TABLE_METRICLIB)
+            ->where('metricCode')->eq($code)
+            ->fetch();
+        if(!$record) return array();
+
+        $fieldList = array_keys((array)($record));
+        $scopeList = array_intersect($fieldList, $this->config->metric->scopeList);
+        $dateList  = array_intersect($fieldList, $this->config->metric->dateList);
+
         if(!$date)
         {
-            $maxDate = $this->dao->select("max(date) maxDate")->from(TABLE_METRICLIB)->fetch('maxDate');
-            $date    = substr($maxDate, 0, 10);
+            // 如果二者为空，说明最终需要的数据只有两列，而这作为全局数据的标记，所以要取所有的数据，而不是最后一次生成的
+            if(empty($scopeList) and empty($dateList))
+            {
+                $date = date('Y-m-d H:i:s', 0);
+            }
+            else
+            {
+                $maxDate = $this->dao->select("max(date) maxDate")->from(TABLE_METRICLIB)->fetch('maxDate');
+                $date    = substr($maxDate, 0, 10);
+            }
         }
         return $this->dao->select("id, {$dataFieldStr} value, date")
             ->from(TABLE_METRICLIB)

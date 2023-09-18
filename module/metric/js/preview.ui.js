@@ -308,7 +308,12 @@ window.initChart = function($obj, head, data, chartType = 'line')
 {
     console.log(head)
     console.log(data);
-    if(head.length == 3) {
+
+    if(head.length == 2) {
+        var x = head[1].name;
+        var y = head[0].name;
+    }
+    else if(head.length == 3) {
         var x = head[0].name;
         var y = head[1].name;
     }
@@ -320,11 +325,12 @@ window.initChart = function($obj, head, data, chartType = 'line')
 
     var type  = (chartType == 'barX' || chartType == 'barY') ? 'bar' : chartType;
 
-    if(head.length == 3) {
+    if(head.length <= 3) {
         var xAxis = {
             type: 'category',
             data: data.map(item => item[x])
         };
+        if(head.length == 2) xAxis.data = xAxis.data.map(item => item.slice(0, 10));
         var yAxis = {
             type: 'value'
         };
