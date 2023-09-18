@@ -10,12 +10,15 @@ function initData()
     $bugdata->id->range('1-3');
     $bugdata->case->range('0');
 
+    zdTable('case')->gen(10);
     $bugdata->gen(3);
 }
 
+initData();
+
 /**
 
-title=测试 testcaseModel->linkBug();
+title=测试 testcaseModel->linkBugs();
 timeout=0
 cid=1
 
