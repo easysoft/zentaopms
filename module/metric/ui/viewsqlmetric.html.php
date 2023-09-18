@@ -272,7 +272,7 @@ detailHeader
 $actionMenuList = !$metric->deleted ? $this->metric->buildOperateMenu($metric) : array();
 detailBody
 (
-    on::change('#varType', 'toggleSelectList'),
+    on::change('#varType', 'toggleVarType'),
     on::change('#options', 'toggleOptionsList'),
     sectionList
     (
