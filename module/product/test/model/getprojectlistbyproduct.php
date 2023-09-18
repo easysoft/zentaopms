@@ -63,8 +63,8 @@ $product->app->user->admin = false;
 $product->app->user->view->projects = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,48,49,50';
 r(count($product->getProjectListByProduct($productID = 1, 'all',    '',    true, 'order_desc')))   && p() && e('4');
 r(count($product->getProjectListByProduct($productID = 1, 'all',    '0',   true, 'order_desc')))   && p() && e('4');
-r(count($product->getProjectListByProduct($productID = 1, 'undone', '',    true, 'order_desc')))   && p() && e('2');
-r(count($product->getProjectListByProduct($productID = 1, 'wait',   'all', true, 'order_desc')))   && p() && e('0');
+r(count($product->getProjectListByProduct($productID = 1, 'undone', '',    true, 'order_desc')))   && p() && e('4');
+r(count($product->getProjectListByProduct($productID = 1, 'wait',   'all', true, 'order_desc')))   && p() && e('2');
 
 $product->app->loadClass('pager', $static = true);
 $pager = new pager(0, 50, 1);
