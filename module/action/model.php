@@ -1798,6 +1798,9 @@ class actionModel extends model
      */
     public function computeBeginAndEnd(string $period): array
     {
+        $period = strtolower($period);
+        if($period == 'all') return array('begin' => EPOCH_DATE,  'end' => FUTURE_DATE);
+
         $this->app->loadClass('date');
 
         $today      = date('Y-m-d');
@@ -1805,9 +1808,6 @@ class actionModel extends model
         $yesterday  = date::yesterday();
         $twoDaysAgo = date::twoDaysAgo();
 
-        $period = strtolower($period);
-
-        if($period == 'all')         return array('begin' => EPOCH_DATE,  'end' => FUTURE_DATE);
         if($period == 'today')       return array('begin' => $today,      'end' => $tomorrow);
         if($period == 'yesterday')   return array('begin' => $yesterday,  'end' => $today);
         if($period == 'twodaysago')  return array('begin' => $twoDaysAgo, 'end' => $yesterday);
@@ -1823,6 +1823,8 @@ class actionModel extends model
 
         if($period == 'thismonth')  return date::getThisMonth();
         if($period == 'lastmonth')  return date::getLastMonth();
+
+        return array('begin' => EPOCH_DATE,  'end' => FUTURE_DATE);
     }
 
     /**
