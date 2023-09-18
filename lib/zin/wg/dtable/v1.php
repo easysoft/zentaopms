@@ -162,32 +162,21 @@ class dtable extends wg
 
     protected function build(): wg
     {
-        if(empty($this->prop('data')))
+        if(empty($this->prop('data')) && !$this->hasProp('emptyTip'))
         {
             global $lang;
             $createLink = !empty($this->prop('createLink')) ? $this->getLink($this->prop('createLink')) : '';
-            return div
-            (
-                setClass('canvas text-center py-8'),
-                p
-                (
-                    setClass('py-8 my-8'),
-                    span
-                    (
-                        setClass('text-gray'),
-                        !empty($this->prop('emptyTip')) ? $this->prop('emptyTip') : $lang->noData,
-                    ),
-                    !empty($createLink)
-                        ? a
-                        (
-                            setClass('btn primary-pale bd-primary ml-0.5'),
-                            set::href($createLink),
-                            icon('plus'),
-                            !empty($this->prop('createTip')) ? $this->prop('createTip') : $lang->create,
-                        )
-                        : '',
-                )
-            );
+            $emptyTip = $lang->noData;
+            if(!empty($createLink))
+            {
+                $createTip = $this->prop('createTip', $lang->create);
+                $emptyTip = array('html' => "<div class='text-gray'>$emptyTip</div><a class='btn primary-pale border-primary' href='$createLink'><i class='icon icon-plus'></i> $createTip</a>", 'className' => 'row gap-4 items-center');
+            }
+            else
+            {
+                $emptyTip = array('html' => "$emptyTip", 'className' => 'text-gray');
+            }
+            $this->setProp('emptyTip', $emptyTip);
         }
         return zui::dtable(inherit($this));
     }
