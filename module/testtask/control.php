@@ -156,24 +156,8 @@ class testtask extends control
 
         /* Set menu. */
         $productID = $this->loadModel('product')->saveState($productID, $this->products);
-        if($this->app->tab == 'project')
-        {
-            $this->lang->scrum->menu->qa['subMenu']->testcase['subModule'] = 'testtask';
-            $this->lang->scrum->menu->qa['subMenu']->testtask['subModule'] = '';
-
-            if($this->config->edition == 'max')
-            {
-                $this->lang->waterfall->menu->qa['subMenu']->testcase['subModule'] = 'testtask';
-                $this->lang->waterfall->menu->qa['subMenu']->testtask['subModule'] = '';
-            }
-
-            $this->loadModel('project')->setMenu($projectID);
-        }
-        else
-        {
-            $this->loadModel('qa')->setMenu($productID);
-            $this->app->rawModule = 'testcase';
-        }
+        $this->loadModel('qa')->setMenu($productID);
+        $this->app->rawModule = 'testcase';
 
         /* Load pager. */
         if($browseType == 'newest') $recPerPage = '10';
