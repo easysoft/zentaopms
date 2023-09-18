@@ -7,11 +7,11 @@ zdTable('project')->gen(20);
 su('admin');
 
 /**
-title=programTao->getNormalActions();
+title=测试programTao::getNormalActions();
 timeout=0
 cid=1
 
- */
+*/
 
 $tester = new programTest();
 

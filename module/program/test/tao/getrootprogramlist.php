@@ -3,20 +3,17 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/program.class.php';
 
-function initData()
-{
-    zdTable('project')->config('program')->gen(40);
-}
-initData();
+zdTable('project')->config('program')->gen(40);
+su('admin');
 
 /**
-title=programTao->getRootProgramList();
-cid=2
+title=测试programTao::getRootProgramList();
+timteout=0
+cid=1
 
- */
+*/
 
-$tester = new programTest('admin');
-
+$tester = new programTest();
 $programList = $tester->program->getRootProgramList();
 
 r(count($programList)) && p('') && e('10');
