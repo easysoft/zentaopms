@@ -12,6 +12,7 @@
 class caselib extends control
 {
     /**
+     * 主页，跳转到浏览页面。
      * Index page, header to browse.
      *
      * @access public
