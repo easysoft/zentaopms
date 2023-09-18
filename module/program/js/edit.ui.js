@@ -20,4 +20,3 @@ window.onAclChange = () =>
 {
     $('#whitelistRow').toggleClass('hidden', $('#aclopen').prop('checked'));
 };
-onAclChange();

@@ -154,7 +154,8 @@ formPanel
             set::width('3/4'),
             set::name('whitelist[]'),
             set::label($lang->whitelist),
-            set::control(array('type' => 'picker', 'multiple' => true, 'items' => $pmUsers)),
+            set::multiple(true),
+            set::items($pmUsers),
             set::value($program->whitelist),
         )
     ),
