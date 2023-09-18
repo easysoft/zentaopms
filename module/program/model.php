@@ -831,7 +831,7 @@ class programModel extends model
      * @access public
      * @return array|false
      */
-    public function update(int $programID, object $program)
+    public function update(int $programID, object $program): array|false
     {
         $oldProgram = $this->fetchByID($programID);
 
@@ -847,9 +847,9 @@ class programModel extends model
             if(isset($this->lang->program->$field)) $this->lang->project->$field = $this->lang->program->$field;
         }
 
-        $this->dao->update(TABLE_PROGRAM)->data($program)
-            ->autoCheck($skipFields = 'begin,end')
-            ->batchcheck($this->config->program->edit->requiredFields, 'notempty')
+        $this->dao->update(TABLE_PROGRAM)->data($program, 'syncPRJUnit,exchangeRate')
+            ->autoCheck('begin,end')
+            ->batchCheck($this->config->program->edit->requiredFields, 'notempty')
             ->checkIF($program->begin != '', 'begin', 'date')
             ->checkIF($program->end != '', 'end', 'date')
             ->checkIF($program->end != '', 'end', 'gt', $program->begin)
