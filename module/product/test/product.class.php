@@ -1021,59 +1021,6 @@ class productTest
     }
 
     /**
-     * 测试 getSwitcher 方法。
-     * Test getSwitcher.
-     *
-     * @param  int        $productID
-     * @param  string     $extra
-     * @param  string|int $branch
-     * @access public
-     * @return array
-     */
-    public function getSwitcherTest(int $productID, string $extra = '', string|int $branch = ''): array
-    {
-        $this->objectModel->lang->product->menu->settings['subMenu']->branch = array('link' => "@branch@|branch|manage|product=%s", 'subModule' => 'branch');
-
-        $switcher = $this->objectModel->getSwitcher($productID, $extra, $branch);
-
-        $product    = $this->objectModel->dao->select('*')->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch();
-        $hasProduct = $product ? (int)(strpos($switcher, $product->name) !== false) : (int)(strpos($switcher, '产品') !== false);
-        $hasBranch  = (int)(strpos($switcher, 'currentBranch') !== false);
-
-        return array('hasProduct' => $hasProduct, 'hasBranch' => $hasBranch);
-    }
-
-    /**
-     * 测试 select 方法。
-     * Test select method.
-     *
-     * @param  array      $products
-     * @param  int        $productID
-     * @param  string     $currentModule
-     * @param  string     $currentMethod
-     * @param  string     $extra
-     * @param  string|int $branch
-     * @param  bool       $withBranch
-     * @access public
-     * @return array
-     */
-    public function selectTest(array $products, int $productID, string $currentModule, string $currentMethod, string $extra = '', string|int $branch = '', bool $withBranch = true): array
-    {
-        $this->objectModel->lang->product->menu->settings['subMenu']->branch = array('link' => "@branch@|branch|manage|product=%s", 'subModule' => 'branch');
-
-        $select = $this->objectModel->select($products, $productID, $currentModule, $currentMethod, $extra, $branch, $withBranch);
-
-        $productName = zget($products, $productID, reset($products));
-        $branchName  = '所有';
-        if(is_numeric($branch)) $branchName = $this->objectModel->dao->select('*')->from(TABLE_BRANCH)->where('id')->eq($branch)->fetch('name');
-
-        $hasProduct = (int)(strpos($select, 'currentItem')   !== false and strpos($select, $productName) !== false);
-        $hasBranch  = (int)(strpos($select, 'currentBranch') !== false and strpos($select, $branchName)  !== false);
-
-        return array('hasProduct' => $hasProduct, 'hasBranch' => $hasBranch);
-    }
-
-    /**
      * 测试 updateOrder 方法。
      * Test updateOrder method.
      *
