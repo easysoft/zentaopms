@@ -306,26 +306,22 @@ class testcaseModel extends model
 
             $queryProductID = 'all';
         }
+        if($this->app->tab == 'project') $caseQuery = str_replace('`product`', 't2.`product`', $caseQuery);
 
         /* 处理用例查询中的产品分支条件。*/
         /* Process branch condition in case query. */
         if($branch !== 'all' && strpos($caseQuery, '`branch` =') === false) $caseQuery .= " AND `branch` in ('$branch')";
-        if(strpos($caseQuery, "`branch` = 'all'") !== false) $caseQuery = str_replace("`branch` = 'all'", '1', $caseQuery);
+        if(strpos($caseQuery, "`branch` = 'all'") !== false) $caseQuery = str_replace("`branch` = 'all'", '1 = 1', $caseQuery);
 
         /* 处理用例查询中的版本条件。*/
         /* Process version condition in case query. */
         $caseQuery = str_replace('`version`', 't1.`version`', $caseQuery);
-
-        /* 处理用例查询中的产品条件。*/
-        /* Process product condition in case query. */
-        if($this->app->tab == 'project') $caseQuery = str_replace('`product`', 't2.`product`', $caseQuery);
 
         $caseQuery .= ')';
 
         /* Search criteria under compatible project. */
         $sql = $this->dao->select('*')->from(TABLE_CASE)->alias('t1');
         if($this->app->tab == 'project') $sql->leftJoin(TABLE_PROJECTCASE)->alias('t2')->on('t1.id = t2.case');
-
         return $sql->where($caseQuery)
             ->beginIF($this->app->tab == 'project' && $this->config->systemMode == 'ALM')->andWhere('t2.project')->eq($this->session->project)->fi()
             ->beginIF($this->app->tab == 'project' && !empty($productID) && $queryProductID != 'all')->andWhere('t2.product')->eq($productID)->fi()
