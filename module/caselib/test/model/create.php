@@ -2,6 +2,10 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/caselib.class.php';
+
+zdTable('testsuite')->gen(0);
+zdTable('user')->gen(1);
+
 su('admin');
 
 /**
@@ -16,7 +20,7 @@ $caselib = new caselibTest();
 
 $lib_noname = array('name' => '');
 $lib_normal = array('name' => 'lib name', 'desc' => 'lib desc');
-$lib_repeat = array('name' => 'lib_name');
+$lib_repeat = array('name' => 'lib name');
 
 r($caselib->createTest($lib_noname)) && p('name:0') && e('『名称』不能为空。'); // 测试名称是空时候添加
 r($caselib->createTest($lib_normal)) && p('name')   && e('lib name');           // 测试添加的名称信息

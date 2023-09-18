@@ -114,14 +114,14 @@ class caselibTest
      * 创建用例库单元测试方法。
      * Create case lib test function.
      *
-     * @param  array $params
+     * @param  array        $params
      * @access public
      * @return array|object
      */
-    public function createTest($params = array()): array|object
+    public function createTest(array $params = array()): array|object
     {
         $lib = new stdclass();
-        foreach($params as $key => $value) $lib->$key = $value;
+        foreach($params as $key => $value) $lib->{$key} = $value;
 
         $libID = $this->objectModel->create($lib);
 

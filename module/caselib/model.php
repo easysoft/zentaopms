@@ -191,14 +191,12 @@ class caselibModel extends model
             ->checkFlow()
             ->exec();
 
-        if(!dao::isError())
-        {
-            $libID = $this->dao->lastInsertID();
-            $this->loadModel('file')->updateObjectID($this->post->uid, $libID, 'caselib');
-            $this->loadModel('action')->create('caselib', $libID, 'opened');
-            return $libID;
-        }
-        return false;
+        if(dao::isError()) return false;
+
+        $libID = $this->dao->lastInsertID();
+        $this->loadModel('file')->updateObjectID($this->post->uid, $libID, 'caselib');
+        $this->loadModel('action')->create('caselib', $libID, 'opened');
+        return $libID;
     }
 
     /**
