@@ -177,11 +177,10 @@ class caselibModel extends model
      * Create a lib case, insert a lib object into database.
      *
      * @param  object $lib
-     * @param  string $uid
      * @access public
      * @return int|false
      */
-    public function create(object $lib, string $uid = ''): int|false
+    public function create(object $lib): int|false
     {
         $this->lang->testsuite->name = $this->lang->caselib->name;
         $this->lang->testsuite->desc = $this->lang->caselib->desc;
@@ -195,7 +194,7 @@ class caselibModel extends model
         if(!dao::isError())
         {
             $libID = $this->dao->lastInsertID();
-            $this->loadModel('file')->updateObjectID($uid, $libID, 'caselib');
+            $this->loadModel('file')->updateObjectID($this->post->uid, $libID, 'caselib');
             $this->loadModel('action')->create('caselib', $libID, 'opened');
             return $libID;
         }

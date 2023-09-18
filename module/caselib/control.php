@@ -34,19 +34,30 @@ class caselib extends control
     {
         if(!empty($_POST))
         {
-            /* TODO:getExtendFields. */
+            /* Set case lib. */
             $data = form::data($this->config->caselib->form->create);
-            $lib  = $this->caselibZen->prepareCreateExtras($data, $this->post->uid);
+            $lib  = $data->setForce('type', 'library')
+                ->add('addedBy', $this->app->user->account)
+                ->add('addedDate', helper::now())
+                ->setIF($this->lang->navGroup->caselib != 'qa', 'project', (int)$this->session->project)
+                ->stripTags($this->config->caselib->editor->create['id'], $this->config->allowedTags)
+                ->get();
+            $lib = $this->loadModel('file')->processImgURL($lib, $this->config->caselib->editor->create['id'], $this->post->uid);
 
-            $libID = $this->caselib->create($lib, $this->post->uid);
+            /* Insert case lib. */
+            $libID = $this->caselib->create($lib);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($this->viewType == 'json') return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $libID);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('caselib', 'browse', "libID=$libID")));
         }
 
-        $this->caselibZen->setCreateMenu();
-        $this->caselibZen->buildCreateForm();
+        $libraries = $this->caselib->getLibraries();
+        $libID     = $this->caselib->saveLibState(0, $libraries);
+        $this->caselib->setLibMenu($libraries, $libID);
+
+        $this->view->title = $this->lang->caselib->common . $this->lang->colon . $this->lang->caselib->create;
+        $this->display();
     }
 
     /**
