@@ -221,8 +221,8 @@ class actionTest
         $objects = $this->objectModel->getHistory($actionID);
 
         if(dao::isError()) return dao::getError();
-
-        return $objects[$actionID];
+            
+        return isset($objects[$actionID])? $objects[$actionID] : false;
     }
 
     /**
