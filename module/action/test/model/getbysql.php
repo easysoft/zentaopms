@@ -4,6 +4,8 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/action.class.php';
 su('admin');
 
+zdTable('action')->gen(50);
+
 /**
 
 title=测试 actionModel->getBySQL();
@@ -26,8 +28,8 @@ $sql5 = "`read` = '0'";
 
 $action = new actionTest();
 
-r($action->getBySQLTest($sql1)) && p() && e('12'); // 查询id like %1的动作个数
-r($action->getBySQLTest($sql2)) && p() && e('5');  // 查询objectType = product的动作个数
+r($action->getBySQLTest($sql1)) && p() && e('11'); // 查询id like %1的动作个数
+r($action->getBySQLTest($sql2)) && p() && e('3');  // 查询objectType = product的动作个数
 r($action->getBySQLTest($sql3)) && p() && e('9');  // 查询objectID < 10的动作个数
-r($action->getBySQLTest($sql4)) && p() && e('3');  // 查询action = opend的动作个数
-r($action->getBySQLTest($sql5)) && p() && e('50'); // 查询read = 0的动作个数
+r($action->getBySQLTest($sql4)) && p() && e('2');  // 查询action = opend的动作个数
+r($action->getBySQLTest($sql5)) && p() && e('25'); // 查询read = 0的动作个数

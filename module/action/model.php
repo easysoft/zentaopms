@@ -1278,6 +1278,7 @@ class actionModel extends model
     }
 
     /**
+     * 通过sql获取actions。
      * Get actions by SQL.
      *
      * @param  string $sql
@@ -1286,12 +1287,12 @@ class actionModel extends model
      * @access public
      * @return array
      */
-    public function getBySQL($sql, $orderBy, $pager = null)
+    public function getBySQL(string $sql, string $orderBy, object $pager = null): array
     {
         $actionCondition = $this->getActionCondition();
         if(is_array($actionCondition)) return array();
 
-        return $actions = $this->dao->select('*')->from(TABLE_ACTION)
+        return $this->dao->select('*')->from(TABLE_ACTION)
             ->where($sql)
             ->beginIF(!empty($actionCondition))->andWhere("($actionCondition)")->fi()
             ->orderBy($orderBy)
