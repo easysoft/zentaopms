@@ -934,6 +934,7 @@ class product extends control
     }
 
     /**
+     * 获取关联产品的执行下拉数据。
      * AJAX: get executions of a product in html select.
      *
      * @param  int    $productID
@@ -958,7 +959,7 @@ class product extends control
 
         $mode .= ($from == 'bugToTask' || empty($this->config->CRExecution)) ? 'noclosed' : '';
         $mode .= !$projectID ? ',multiple' : '';
-        $executions = $this->product->getExecutionPairsByProduct($productID, $branch, (string)$projectID, $from == 'showImport' ? '' : $mode);
+        $executions = $this->product->getExecutionPairsByProduct($productID, $branch, $projectID, $from == 'showImport' ? '' : $mode);
         if($this->app->getViewType() == 'json') return print(json_encode($executions));
 
         $executionList = array();
