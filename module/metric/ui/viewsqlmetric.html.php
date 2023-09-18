@@ -60,53 +60,54 @@ $formAction = array(
  * @access public
  * @return array
  */
-$buildValueControl = function($name, $controlType, $value, $optionType)
+$buildValueControl = function($paramName, $controlType, $value, $optionType, $varID)
 {
-    $name = $name . '[]';
-    if($controlType == 'date')
-    {
-        $control = formGroup
+    $name = $paramName . '[]';
+    $options = $this->metric->getControlOptions($optionType);
+    $dateControl = formGroup
+    (
+        set::width('150px'),
+        set::label(''),
+        datePicker
         (
-            set::width('150px'),
-            set::label(''),
-            datePicker
-            (
-                set::id($name),
-                set::name($name),
-                set::value($value)
-            ),
-            setClass('form-body-item'),
-        );
-    }
-    elseif($controlType == 'select')
-    {
-        $options = $this->metric->getControlOptions($optionType);
-        $control = formGroup
+            set::name($name),
+            set::value($value),
+        ),
+        setClass("form-body-item {$paramName}-{$varID}-date"),
+        setClass($controlType !== 'date' ? 'hidden' : ''),
+    );
+    $selectControl = formGroup
+    (
+        set::width('150px'),
+        set::label(''),
+        picker
         (
-            set::width('150px'),
-            set::label(''),
-            picker
-            (
-                set::name($name),
-                set::items($options),
-            ),
-            setClass('form-body-item'),
-        );
-    }
-    else
-    {
-        $control = formGroup
+            set::name($name),
+            set::items($options),
+        ),
+        setClass("form-body-item {$paramName}-{$varID}-select"),
+        setClass($controlType !== 'select' ? 'hidden' : ''),
+    );
+    $inputControl = formGroup
+    (
+        set::width('150px'),
+        set::label(''),
+        input
         (
-            set::width('150px'),
-            set::label(''),
-            input
-            (
-                set::name($name),
-                set::value($value),
-            ),
-            setClass('form-body-item'),
-        );
-    }
+            set::name($name),
+            set::value($value),
+        ),
+        setClass("form-body-item {$paramName}-{$varID}-input"),
+        setClass($controlType !== 'input' ? 'hidden' : ''),
+    );
+
+    return div
+    (
+        $dateControl,
+        $selectControl,
+        $inputControl,
+        setClass("{$paramName}-{$varID}-group"),
+    );
 
     return $control;
 };
@@ -163,13 +164,14 @@ $formHeader = div
  */
 $buildParamControlGroup = function($param, $buildValueControl, $typeList, $optionList)
 {
+    $varID   = ltrim($param['varName'], '$');
     $varType = zget($param, 'varType', '');
 
     $varNameLabel = div
     (
         $param['varName'],
         setStyle('width', '50px'),
-        setClass('form-body-item'),
+        setClass("form-body-item varName-{$varID}"),
     );
     $showNameControl = formGroup
     (
@@ -177,7 +179,7 @@ $buildParamControlGroup = function($param, $buildValueControl, $typeList, $optio
         set::control('input'),
         set::name('showName[]'),
         set::value($param['showName']),
-        setClass('form-body-item'),
+        setClass("form-body-item showName-{$varID}"),
     );
     $varTypeControl = formGroup
     (
@@ -187,6 +189,7 @@ $buildParamControlGroup = function($param, $buildValueControl, $typeList, $optio
         set::items($typeList),
         set::value(zget($param, 'varType')),
         set::label(''),
+        setClass("form-body-item varType-{$varID}"),
     );
     $optionsControl = formGroup
     (
@@ -195,17 +198,18 @@ $buildParamControlGroup = function($param, $buildValueControl, $typeList, $optio
         set::control('select'),
         set::items($optionList),
         set::value($param['options']),
+        setClass("form-body-item options-{$varID}"),
         set::label(''),
     );
-    $defaultValueControl = $buildValueControl('defaultValue', $varType, zget($param, 'defaultValue', ''), $param['options']);
-    $queryValueControl  = $buildValueControl('queryValue', $varType, zget($param, 'queryValue', ''), $param['options']);
+    $defaultValueControl = $buildValueControl('defaultValue', $varType, zget($param, 'defaultValue', ''), $param['options'], $varID);
+    $queryValueControl  = $buildValueControl('queryValue', $varType, zget($param, 'queryValue', ''), $param['options'], $varID);
     $varNameControl = formGroup
     (
         set::className('hidden'),
         set::control('hidden'),
         set::name('varName[]'),
         set::value($param['varName']),
-        setClass('form-body-item'),
+        setClass("form-body-item varNameLabel-{$varID}"),
     );
 
     $paramControlGroup = formRow
@@ -216,9 +220,8 @@ $buildParamControlGroup = function($param, $buildValueControl, $typeList, $optio
         (
             $varTypeControl,
             $optionsControl,
-            setClass('flex'),
+            setClass('flex form-body-group'),
             setStyle('justify-content', 'flex-start'),
-            setClass('form-body-item'),
         ),
         $defaultValueControl,
         $queryValueControl,
@@ -269,6 +272,8 @@ detailHeader
 $actionMenuList = !$metric->deleted ? $this->metric->buildOperateMenu($metric) : array();
 detailBody
 (
+    on::change('#varType', 'toggleSelectList'),
+    on::change('#options', 'toggleOptionsList'),
     sectionList
     (
         section
