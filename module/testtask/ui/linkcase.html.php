@@ -16,9 +16,9 @@ foreach($lang->testtask->featureBar['linkcase'] as $key => $label)
     $isActive = $key == $type;
     if($key == 'bysuite' || $key == 'bybuild')
     {
-        if($isActive) $label = $key == 'bysuite' ? $suiteList[$param]->name : zget($testTask, $param);
+        if($isActive) $label = $key == 'bysuite' ? $suites[$param]->name : zget($relatedTasks, $param);
         $subItems = array();
-        $dataList = $key == 'bysuite' ? $suiteList : $testTask;
+        $dataList = $key == 'bysuite' ? $suites : $relatedTasks;
         if($dataList)
         {
             foreach($dataList as $dataID => $data)
@@ -29,7 +29,7 @@ foreach($lang->testtask->featureBar['linkcase'] as $key => $label)
                 (
                     'text'   => $text,
                     'active' => $key == $type && $dataID == $param,
-                    'url'    => createLink('testtask', 'linkCase', "taskID={$taskID}&type={$key}&param={$dataID}"),
+                    'url'    => createLink('testtask', 'linkCase', "taskID={$task->id}&type={$key}&param={$dataID}"),
                     'badge'  => $dataID == $param && !empty($pager->recTotal) ? array('text' => $pager->recTotal, 'class' => 'size-sm rounded-full white') : null,
                     'props'  => ['data-id' => $text, 'data-load' => 'table']
                 );
@@ -56,7 +56,7 @@ foreach($lang->testtask->featureBar['linkcase'] as $key => $label)
         (
             'text'   => $label,
             'active' => $isActive,
-            'url'    => createLink('testtask', 'linkCase', "taskID={$taskID}&type={$key}"),
+            'url'    => createLink('testtask', 'linkCase', "taskID={$task->id}&type={$key}"),
             'badge'  => $isActive && !empty($pager->recTotal) ? array('text' => $pager->recTotal, 'class' => 'size-sm rounded-full white') : null,
             'props'  => ['data-id' => $label, 'data-load' => 'table']
         );
@@ -66,14 +66,14 @@ featureBar
 (
     set::items($items),
     set::current($type),
-    set::linkParams("taskID=$taskID&type={key}"),
+    set::linkParams("taskID={$task->id}&type={key}"),
     to::before(backBtn(set::icon('back'), set::className('btn secondary'), $lang->goback)),
     li(searchToggle())
 );
 
 $footToolbar = array('items' => array
 (
-    array('text' => $lang->save, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testtask', 'linkCase', "taskID={$taskID}&type={$type}&param={$param}"))
+    array('text' => $lang->save, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testtask', 'linkCase', "taskID={$task->id}&type={$type}&param={$param}"))
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
 
 div
@@ -86,12 +86,11 @@ div
         $lang->testtask->unlinkedCases . "({$pager->recTotal})"
     )
 );
-$cases = initTableData($cases, $config->testtask->linkcase->dtable->fieldList, $this->testcase);
-$data  = array_values($cases);
+
 dtable
 (
     set::userMap($users),
-    set::data($data),
+    set::data(array_values($cases)),
     set::cols($config->testtask->linkcase->dtable->fieldList),
     set::fixedLeftWidth('33%'),
     set::checkable(true),

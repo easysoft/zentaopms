@@ -795,6 +795,7 @@ class testtask extends control
     }
 
     /**
+     * 关联测试用例到一个测试单。
      * Link cases to a test task.
      *
      * @param  int    $taskID
@@ -806,7 +807,7 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function linkCase($taskID, $type = 'all', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function linkCase(int $taskID, string $type = 'all', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         if(!empty($_POST))
         {
@@ -815,78 +816,41 @@ class testtask extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('cases', "taskID={$taskID}")));
         }
 
+        /* 保存部分内容到 session 中供后面使用。*/
         /* Save session. */
         $this->session->set('caseList', $this->app->getURI(true), 'qa');
 
-        /* Get task and product id. */
-        $task      = $this->testtask->getByID($taskID);
-        $productID = $this->loadModel('product')->checkAccess($task->product, $this->products);
-        $product   = $this->product->getByID($productID);
+        /* 获取测试单信息。*/
+        /* Get testtask info. */
+        $task = $this->testtask->getByID($taskID);
 
-        if(!isset($this->products[$productID])) $this->products[$productID] = $product->name;
+        /* 检查是否有权限访问测试单所属产品。*/
+        /* Check if user have permission to access the product to which the testtask belongs. */
+        $productID = $this->loadModel('product')->checkAccess($task->product, $this->products);
 
         $this->testtaskZen->setMenu($productID, $task->branch, $task->project, $task->execution);
+        $this->testtaskZen->setSearchParamsForLinkCase($product, $task, $type, $param);
 
-        /* Load pager. */
+        /* 如果测试单所属产品在产品键值对中不存在，将其加入。*/
+        /* Prepare the product key-value pairs. */
+        $product = $this->product->getByID($productID);
+        if(!isset($this->products[$productID])) $this->products[$productID] = $product->name;
+
+        /* 从数据库中查询一个测试单下可以关联的测试用例。*/
+        /* Query the cases that can be associated with a testtask from the database. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
-
-        /* Build the search form. */
-        $this->loadModel('testcase');
-        $this->config->testcase->search['params']['product']['values'] = array($productID => $this->products[$productID]);
-        $this->config->testcase->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $task->branch);
-        $this->config->testcase->search['actionURL']                   = inlink('linkcase', "taskID=$taskID&type=$type&param=$param");
-        $this->config->testcase->search['params']['scene']['values']   = $this->testcase->getSceneMenu($productID, 0, $viewType = 'case', $startSceneID = 0,  0);
-        $this->config->testcase->search['style']                       = 'simple';
-
-        $build   = $this->loadModel('build')->getByID($task->build);
-        $stories = array();
-        if($build)
-        {
-            $stories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($build->stories)->fetchPairs();
-            $this->config->testcase->search['params']['story']['values'] = $stories;
-            $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
-        }
-
-        if($product->shadow) unset($this->config->testcase->search['fields']['product']);
-        if($type != 'bystory')
-        {
-            unset($this->config->testcase->search['fields']['story']);
-            unset($this->config->testcase->search['params']['story']);
-        }
-        if($task->productType == 'normal')
-        {
-            unset($this->config->testcase->search['fields']['branch']);
-            unset($this->config->testcase->search['params']['branch']);
-        }
-        else
-        {
-            $this->config->testcase->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$task->productType]);
-            $branchName = $this->loadModel('branch')->getById($task->branch);
-            $branches   = array('' => '', BRANCH_MAIN => $this->lang->branch->main, $task->branch => $branchName);
-            $this->config->testcase->search['params']['branch']['values'] = $branches;
-        }
-
-        if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
-        $this->loadModel('search')->setSearchParams($this->config->testcase->search);
-
-        $this->view->title      = $task->name . $this->lang->colon . $this->lang->testtask->linkCase;
-
-        $testTask = $this->testtask->getRelatedTestTasks($productID, $taskID);
-
-        /* Get cases. */
         $cases = $this->testtask->getLinkableCases($productID, $task, $taskID, $type, $param, $pager);
 
-        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
-        $this->view->cases     = $cases;
-        $this->view->taskID    = $taskID;
-        $this->view->testTask  = $testTask;
-        $this->view->pager     = $pager;
-        $this->view->task      = $task;
-        $this->view->type      = $type;
-        $this->view->param     = $param;
-        $this->view->suiteList = $this->loadModel('testsuite')->getSuites($task->product);
-
+        $this->view->title        = $task->name . $this->lang->colon . $this->lang->testtask->linkCase;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->suites       = $this->loadModel('testsuite')->getSuites($task->product);
+        $this->view->relatedTasks = $this->testtask->getRelatedTestTasks($productID, $taskID);
+        $this->view->cases        = $cases;
+        $this->view->task         = $task;
+        $this->view->type         = $type;
+        $this->view->param        = $param;
+        $this->view->pager        = $pager;
         $this->display();
     }
 
