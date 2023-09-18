@@ -781,12 +781,13 @@ class programModel extends model
     }
 
     /**
+     * 创建项目集。
      * Create a program.
      *
      * @access private
      * @return int|bool
      */
-    public function create(object $program)
+    public function create(object $program): int|false
     {
         /* Redefines the language entries for the fields in the project table. */
         $this->lang->error->unique = $this->lang->error->repeat;
@@ -804,22 +805,20 @@ class programModel extends model
             ->checkIF(!empty($program->name), 'name', 'unique', "`type`='program' and `parent` = $program->parent and `deleted` = '0'")
             ->checkFlow()
             ->exec();
+        if(dao::isError()) return false;
 
-        if(!dao::isError())
-        {
-            $programID = $this->dao->lastInsertId();
-            $this->dao->update(TABLE_PROGRAM)->set('`order`')->eq($programID * 5)->where('id')->eq($programID)->exec(); // Save order.
+        $programID = $this->dao->lastInsertId();
+        $this->dao->update(TABLE_PROGRAM)->set('`order`')->eq($programID * 5)->where('id')->eq($programID)->exec(); // Save order.
 
-            $whitelist = explode(',', $program->whitelist);
-            $this->loadModel('personnel')->updateWhitelist($whitelist, 'program', $programID);
+        $whitelist = explode(',', $program->whitelist);
+        $this->loadModel('personnel')->updateWhitelist($whitelist, 'program', $programID);
 
-            $this->loadModel('file')->updateObjectID($this->post->uid, $programID, 'program');
-            $this->setTreePath($programID);
+        $this->loadModel('file')->updateObjectID($this->post->uid, $programID, 'program');
+        $this->setTreePath($programID);
 
-            if($program->acl != 'open') $this->loadModel('user')->updateUserView($programID, 'program');
+        if($program->acl != 'open') $this->loadModel('user')->updateUserView($programID, 'program');
 
-            return $programID;
-        }
+        return $programID;
     }
 
     /**
