@@ -1088,4 +1088,18 @@ class productTest
         $products = $this->objectModel->dao->select('id')->from(TABLE_PRODUCT)->orderBy('`order`')->fetchAll('id');
         return implode('|', array_keys($products));
     }
+
+    /**
+     * 删除一个产品线。
+     * Delete a product line.
+     *
+     * @param  int    $lineID
+     * @access public
+     * @return object
+     */
+    public function deleteLineTest(int $lineID): object
+    {
+        $this->objectModel->deleteLine($lineID);
+        return $this->objectModel->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($lineID)->fetch();
+    }
 }

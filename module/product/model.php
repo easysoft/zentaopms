@@ -1801,4 +1801,20 @@ class productModel extends model
         }
         return $data;
     }
+
+    /**
+     * 删除一个产品线。
+     * Delete a product line.
+     *
+     * @param  int    $lineID
+     * @access public
+     * @return bool
+     */
+    public function deleteLine(int $lineID): bool
+    {
+        $this->dao->update(TABLE_MODULE)->set('deleted')->eq(1)->where('id')->eq($lineID)->exec();
+        $this->dao->update(TABLE_PRODUCT)->set('line')->eq('0')->where('line')->eq($lineID)->exec();
+
+        return !dao::isError();
+    }
 }

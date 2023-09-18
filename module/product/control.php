@@ -1122,6 +1122,7 @@ class product extends control
     }
 
     /**
+     * 删除一个产品线。
      * Delete a product line.
      *
      * @param  int    $lineID
@@ -1130,8 +1131,7 @@ class product extends control
      */
     public function ajaxDeleteLine(int $lineID)
     {
-        $this->dao->update(TABLE_MODULE)->set('deleted')->eq(1)->where('id')->eq($lineID)->exec();
-        $this->dao->update(TABLE_PRODUCT)->set('line')->eq('0')->where('line')->eq($lineID)->exec();
+        $this->product->deleteLine($lineID);
 
         $link = inlink('manageLine');
         return $this->send(array('result' => 'success', 'callback' => "loadModal(\"$link\", 'manageLineModal');"));
