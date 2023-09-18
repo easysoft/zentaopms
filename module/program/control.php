@@ -205,8 +205,7 @@ class program extends control
             ->setIF($this->post->future, 'budget', 0)
             ->setIF($this->post->budget != 0, 'budget', round((float)$this->post->budget * $this->config->project->budget->tenThousand, $this->config->project->budget->precision))
             ->setIF(!isset($_POST['budgetUnit']), 'budgetUnit', $oldProgram->budgetUnit)
-            ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
-            ->join('whitelist', ',')
+            ->setIF(!isset($_POST['whitelist']), 'whitelist', array())
             ->stripTags($this->config->program->editor->edit['id'], $this->config->allowedTags)
             ->get();
 

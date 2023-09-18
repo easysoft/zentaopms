@@ -880,8 +880,7 @@ class programModel extends model
             }
 
             $this->file->updateObjectID($postData->uid, $programID, 'project');
-            $whitelist = explode(',', $program->whitelist);
-            $this->loadModel('personnel')->updateWhitelist($whitelist, 'program', $programID);
+            $this->loadModel('personnel')->updateWhitelist($program->whitelist, 'program', $programID);
             $this->loadModel('user');
             if($program->acl != 'open') $this->user->updateUserView($programID, 'program');
 
