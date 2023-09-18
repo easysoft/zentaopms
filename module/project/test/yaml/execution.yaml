@@ -32,12 +32,12 @@ fields:
   - field: begin
     range: "20201101 000000:1D"
     type: timestamp
-    format: "YY/MM/DD"
+    format: "YYYY-MM-DD"
     postfix: "\t"
   - field: end
     range: "20220101 000000:1D"
     type: timestamp
-    format: "YY/MM/DD"
+    format: "YYYY-MM-DD"
     postfix: "\t"
   - field: grade
     range: 1{4},1{5},1{6},2{6},1{6},1{5}

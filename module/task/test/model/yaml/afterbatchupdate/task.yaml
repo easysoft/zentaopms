@@ -27,11 +27,11 @@ fields:
     - field: estStarted
       range: "20230102 000000:0"
       type: timestamp
-      format: "YY/MM/DD"
+      format: "YYYY-MM-DD"
     - field: deadline
       range: "20230110 000000:0"
       type: timestamp
-      format: "YY/MM/DD"
+      format: "YYYY-MM-DD"
     - field: execution
       range: 2
     - field: assignedTo
@@ -43,4 +43,4 @@ fields:
     - field: openedDate
       range: "20220101 000000:1W"   # 生成从2021年1月1日0时0分0秒到当前时间的数据，步长为1周
       type: timestamp
-      format: "YY/MM/DD hh:mm:ss"
+      format: "YYYY-MM-DD hh:mm:ss"

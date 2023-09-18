@@ -10,16 +10,16 @@ fields:
   - field: realStarted
     range: "20210102 000000-20220101 230000:360000"
     type: timestamp
-    format: "YY/MM/DD hh:mm:ss"
+    format: "YYYY-MM-DD hh:mm:ss"
   - field: estStarted
     range: "20201101 000000:1D"
     type: timestamp
-    format: "YY/MM/DD hh::mm:ss"
+    format: "YYYY-MM-DD hh::mm:ss"
     postfix: "\t"
   - field: deadline
     range: "20210101 000000:1D"
     type: timestamp
-    format: "YY/MM/DD"
+    format: "YYYY-MM-DD"
     postfix: "\t"
 ...
 

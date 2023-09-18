@@ -33,12 +33,12 @@ fields:
   - field: begin
     range: "(-2M)-(+M):1D"
     type: timestamp
-    format: "YY/MM/DD"
+    format: "YYYY-MM-DD"
     postfix: "\t"
   - field: end
     range: "(+1w)-(+2M):1D"
     type: timestamp
-    format: "YY/MM/DD"
+    format: "YYYY-MM-DD"
     postfix: "\t"
   - field: grade
     range: 1

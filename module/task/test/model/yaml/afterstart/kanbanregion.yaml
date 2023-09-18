@@ -12,6 +12,6 @@ fields:
 - field: lastEditedDate
   range: "20220101 000000"
   type: timestamp
-  format: "YY/MM/DD hh:mm:ss"
+  format: "YYYY-MM-DD hh:mm:ss"
 ...
 
