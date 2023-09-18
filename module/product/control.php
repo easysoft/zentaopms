@@ -186,7 +186,7 @@ class product extends control
         $this->view->productName     = $productName;
         $this->view->moduleID        = $moduleID;
         $this->view->stories         = $stories;
-        $this->view->plans           = $this->loadModel('productplan')->getPairsForStory($productID, ($branch === 'all' or empty($branch)) ? '' : $branch, 'unexpired,noclosed,cleantitle');
+        $this->view->plans           = $this->loadModel('productplan')->getPairs($productID, ($branch === 'all' or empty($branch)) ? '' : $branch, 'unexpired,noclosed,cleantitle');
         $this->view->productPlans    = !empty($productPlans) ? array(0 => '') + $productPlans : array();
         $this->view->summary         = $this->product->summary($stories, $storyType);
         $this->view->moduleTree      = $moduleTree;
@@ -994,7 +994,8 @@ class product extends control
     }
 
     /**
-     * AJAX: get plans of a product in html select.
+     * 获取产品下的计划下拉数据。
+     * Get plan drop-down data under product.
      *
      * @param  int    $productID
      * @param  string $branch
@@ -1009,14 +1010,7 @@ class product extends control
     public function ajaxGetPlans(int $productID, string $branch = '', int $planID = 0, string $fieldID = '', int $needCreate = 0, string $expired = '', string $param = '')
     {
         $param = strtolower($param);
-        if(strpos($param, 'forstory') === false)
-        {
-            $plans = $this->loadModel('productplan')->getPairs($productID, empty($branch) ? 'all' : $branch, $expired, strpos($param, 'skipparent') !== false);
-        }
-        else
-        {
-            $plans = $this->loadModel('productplan')->getPairsForStory($productID, $branch == '0' ? 'all' : $branch, $param);
-        }
+        $plans = $this->loadModel('productplan')->getPairs($productID, empty($branch) ? 'all' : $branch, $expired, strpos($param, 'skipparent') !== false);
 
         $items = array();
         foreach($plans as $id => $name)
