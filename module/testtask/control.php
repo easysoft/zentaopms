@@ -370,11 +370,11 @@ class testtask extends control
     }
 
     /**
-     * 查看非单测测试单的用例列表。
-     * Browse cases of a test task.
+     * 查看非单元测试的测试单的用例列表。
+     * Browse cases of a test task which isn't unit test.
      *
-     * @param  int    $testtaskID
-     * @param  string $browseType  bymodule|all|assignedtome
+     * @param  int    $taskID
+     * @param  string $browseType  all|assignedtome|bysuite|byModule
      * @param  string $orderBy
      * @param  int    $param
      * @param  int    $recTotal
@@ -383,17 +383,31 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function cases(int $testtaskID, string $browseType = 'all', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function cases(int $taskID, string $browseType = 'all', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
+        /* 获取测试单基本信息。*/
         /* Get testtask info. */
-        $testtask = $this->testtask->getByID($testtaskID);
+        $testtask = $this->testtask->fetchByID($taskID);
         if(!$testtask) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->testtask->checkLinked, 'locate' => array('back' => true))));
 
-        /* Save the session. */
-        $this->session->set('caseList', $this->app->getURI(true), 'qa');
+        /* 预处理部分变量供后面使用。*/
+        /* Prepare variables. */
+        $browseType = strtolower($browseType);
+        $param      = (int)$param;
 
-        /* set menu. */
-        $this->loadModel('execution');
+        /* 保存部分内容到 session 中供后面使用。*/
+        /* Save session. */
+        $this->session->set('caseList', $this->app->getURI(true), 'qa');
+        if($browseType != 'bymodule') $this->session->set('taskCaseBrowseType', $browseType);
+
+        /* 保存部分内容到 cookie 中供后面使用。*/
+        /* Save cookies. */
+        helper::setcookie('preTaskID', $taskID);
+        if($this->cookie->preTaskID != $taskID) helper::setcookie('taskCaseModule', 0, 0);
+        if($browseType == 'bymodule') helper::setcookie('taskCaseModule', $param, 0);
+
+        /* 如果测试单所属产品在产品键值对中不存在，将其加入。*/
+        /* Prepare the product key-value pairs. */
         $products  = $this->products;
         $productID = $testtask->product;
         $product   = $this->loadModel('product')->getByID($productID);
@@ -401,84 +415,21 @@ class testtask extends control
 
         $this->testtaskZen->setMenu($productID, $testtask->branch, $testtask->project, $testtask->execution);
 
-        /* set cookie. */
-        helper::setcookie('preTaskID', $testtaskID);
-        if($this->cookie->preTaskID != $testtaskID)
-        {
-            $_COOKIE['taskCaseModule'] = 0;
-            helper::setcookie('taskCaseModule', 0, 0);
-        }
-
-        /* 根据检索标签获取不同的数据。 */
-        $browseType = strtolower($browseType);
-        if($browseType == 'bymodule') helper::setcookie('taskCaseModule', (int)$param, 0);
-        if($browseType != 'bymodule') $this->session->set('taskCaseBrowseType', $browseType);
-        if($browseType == 'bysuite')  $suiteName = $this->loadModel('testsuite')->getById($param)->name;
-
-        /* Append id for second sort. */
-        $sort = common::appendOrder($orderBy, 't2.id');
-
-        /* Set the moduleID and queryID. */
-        $moduleID = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->taskCaseModule ? $this->cookie->taskCaseModule : 0));
-        $queryID  = ($browseType == 'bysearch' or $browseType == 'bysuite') ? (int)$param : 0;
-
-        /* Load pager. */
+        /* 预处理部分变量供查询使用。*/
+        /* Prepare variables for query. */
         $this->app->loadClass('pager', $static = true);
-        $pager = pager::init($recTotal, $recPerPage, $pageID);
+        $pager    = pager::init($recTotal, $recPerPage, $pageID);
+        $queryID  = ($browseType == 'bysearch' or $browseType == 'bysuite') ? $param : 0;
+        $moduleID = ($browseType == 'bymodule') ? $param : ($browseType == 'bysearch' ? 0 : ($this->cookie->taskCaseModule ?: 0));
+        $sort     = common::appendOrder($orderBy, 't2.id');
 
-        /* Get test cases. */
+        /* 从数据库中查询一个测试单下的测试用例。*/
+        /* Get cases of a testtask from database. */
         $runs = $this->testtask->getTaskCases($productID, $browseType, $queryID, $moduleID, $sort, $pager, $testtask);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
-        /* Build the search form. */
-        $this->loadModel('testcase');
-        $this->config->testcase->search['module']                      = 'testtask';
-        $this->config->testcase->search['params']['product']['values'] = array($productID => $products[$productID], 'all' => $this->lang->testcase->allProduct);
-        $this->config->testcase->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
-        $this->config->testcase->search['params']['status']['values']  = $this->lang->testcase->statusList;
-        $this->config->testcase->search['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
-        $this->config->testcase->search['params']['scene']['values']   = $this->testcase->getSceneMenu($productID, $moduleID, 'case', 0,  0);
-
-        $this->config->testcase->search['queryID']              = $queryID;
-        $this->config->testcase->search['fields']['assignedTo'] = $this->lang->testtask->assignedTo;
-        $this->config->testcase->search['params']['assignedTo'] = array('operator' => '=', 'control' => 'select', 'values' => 'users');
-        $this->config->testcase->search['actionURL']            = inlink('cases', "taskID=$testtaskID&browseType=bySearch&queryID=myQueryID");
-        if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
-        if($product->shadow) unset($this->config->testcase->search['fields']['product']);
-        unset($this->config->testcase->search['fields']['branch']);
-        unset($this->config->testcase->search['params']['branch']);
-        $this->loadModel('search')->setSearchParams($this->config->testcase->search);
-
-        /* Append bugs and results. */
-        $runs = $this->testcase->appendData($runs, 'run');
-
-        /* Get execution type and set assignedToList. */
-        $execution = $this->execution->getById($testtask->execution);
-        if($execution and $execution->acl == 'private')
-        {
-            $assignedToList = $this->loadModel('user')->getTeamMemberPairs($execution->id, 'execution', 'nodeleted');
-        }
-        else
-        {
-            $assignedToList = $this->loadModel('user')->getPairs('noclosed|noletter|nodeleted|qafirst');
-        }
-
-        $this->view->title          = $products[$productID] . $this->lang->colon . $this->lang->testtask->cases;
-        $this->view->productID      = $productID;
-        $this->view->task           = $testtask;
-        $this->view->runs           = $runs;
-        $this->view->users          = $this->loadModel('user')->getPairs('noclosed|qafirst|noletter');
-        $this->view->assignedToList = $assignedToList;
-        $this->view->moduleTree     = $this->loadModel('tree')->getTreeMenu($productID, 'case', 0, array('treeModel', 'createTestTaskLink'), $testtaskID, $testtask->branch);
-        $this->view->browseType     = $browseType;
-        $this->view->param          = $param;
-        $this->view->orderBy        = $orderBy;
-        $this->view->pager          = $pager;
-        $this->view->setModule      = false;
-        $this->view->suites         = $this->loadModel('testsuite')->getSuitePairs($productID);
-        $this->view->suiteName      = isset($suiteName) ? $suiteName : $this->lang->testtask->browseBySuite;
-        $this->view->canBeChanged   = common::canBeChanged('testtask', $testtask);
-        $this->view->automation     = $this->loadModel('zanode')->getAutomationByProduct($productID);
+        $this->testtaskZen->setSearchParamsForCases($product, $moduleID, $taskID, $queryID);
+        $this->testtaskZen->assignForCases($product, $testtask, $runs, $browseType, $param, $orderBy, $pager);
         $this->display();
     }
 
