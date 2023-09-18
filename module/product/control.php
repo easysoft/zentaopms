@@ -898,6 +898,7 @@ class product extends control
     }
 
     /**
+      * 获取关联产品的项目下拉数据。
      * AJAX: get projects of a product in html select.
      *
      * @param  int    $productID
