@@ -1044,7 +1044,8 @@ class product extends control
     }
 
     /**
-     * Ajax get reviewers.
+     * 获取产品的评审人下拉列表。
+     * Ajax: Get a drop-down list of reviewers for the product..
      *
      * @param  int    $productID
      * @param  int    $storyID
@@ -1068,7 +1069,9 @@ class product extends control
 
         $reviewers = $this->user->getPairs('noclosed|nodeleted', $storyReviewers, 0, $productReviewers);
 
-        echo html::select("reviewer[]", $reviewers, $storyReviewers, "class='form-control chosen' multiple");
+        $items = array();
+        foreach($reviewers as $account => $realname) $items[] = array('text' => $realname, 'value' => $account, 'keys' => $realname);
+        return print(json_encode(array('multiple' => true, 'defaultValue' => $storyReviewers, 'name' => "reviewer", 'items' => $items)));
     }
 
     /**
