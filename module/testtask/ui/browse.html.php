@@ -12,23 +12,23 @@ namespace zin;
 $scopeAndStatus = explode(',', $type);
 $scope          = !empty($scopeAndStatus[0]) ? $scopeAndStatus[0] : '';
 $status         = !empty($scopeAndStatus[1]) ? $scopeAndStatus[1] : '';
-$viewName       = $scope == 'local'? \zget($products, $productID) : $lang->testtask->all;
-jsVar('condition', "productID=$productID&branch=$branch&type=$type&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}&pageID=1");
+$viewName       = $scope == 'local'? \zget($products, $product->id) : $lang->testtask->all;
+jsVar('condition', "productID=$product->id&branch=$branch&type=$type&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}&pageID=1");
 
 $productDropdown = productMenu
 (
     set::title($viewName),
     set::items(array
     (
-        array('text' => $lang->testtask->all, 'url' => helper::createLink('testtask', 'browse', "productID=$productID&branch=0&type=all,$status")),
-        array('text' => \zget($products, $productID), 'url' => helper::createLink('testtask', 'browse', "productID=$productID&branch=$branch&type=local,$status"))
+        array('text' => $lang->testtask->all, 'url' => helper::createLink('testtask', 'browse', "productID=$product->id&branch=0&type=all,$status")),
+        array('text' => \zget($products, $product->id), 'url' => helper::createLink('testtask', 'browse', "productID=$product->id&branch=$branch&type=local,$status"))
     )),
     set::link(createLink('qa', 'index')),
 );
 featureBar
 (
     set::current($status),
-    set::linkParams("productID={$productID}&branch={$branch}&type={$scope},{key}"),
+    set::linkParams("productID={$product->id}&branch={$branch}&type={$scope},{key}"),
     to::before($productDropdown),
     inputGroup
     (
@@ -61,7 +61,7 @@ toolbar
     (
         setClass('btn primary'),
         set::icon('plus'),
-        set::url(helper::createLink('testtask', 'create', "product=$productID")),
+        set::url(helper::createLink('testtask', 'create', "product=$product->id")),
         $lang->testtask->create
     ) : null
 );
