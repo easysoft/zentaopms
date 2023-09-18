@@ -8,6 +8,30 @@ class testcaseTest
     }
 
     /**
+     * 初始化结果。
+     * Init test results.
+     *
+     * @access public
+     * @return void
+     */
+    public function initResult(): void
+    {
+        global $tester;
+        $testResults = $tester->dao->select('*')->from(TABLE_TESTRESULT)->fetchAll();
+        foreach($testResults as $testResult)
+        {
+            if($testResult->caseResult == 'fail')
+            {
+                $tester->dao->update(TABLE_TESTRESULT)->set('`stepResults`')->eq('a:1:{i:'.$testResult->run.';a:2:{s:6:"result";s:4:"fail";s:4:"real";s:0:"";}}')->where('id')->eq($testResult->id)->exec();
+            }
+            else
+            {
+                $tester->dao->update(TABLE_TESTRESULT)->set('`stepResults`')->eq('a:1:{i:'.$testResult->run.';a:2:{s:6:"result";s:4:"pass";s:4:"real";s:0:"";}}')->where('id')->eq($testResult->id)->exec();
+            }
+        }
+    }
+
+    /**
      * 测试创建一个用例。
      * Test create a case.
      *
