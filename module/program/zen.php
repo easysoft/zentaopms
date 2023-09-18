@@ -40,13 +40,14 @@ class programZen extends program
         $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
         foreach(explode(',', trim($this->config->program->create->requiredFields, ',')) as $field) $fields[$field]['required'] = true;
 
+        $this->app->loadConfig('project');
         $program = form::data($fields)
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', helper::now())
             ->setDefault('code', '')
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
-            ->setIF($this->post->budget != 0, 'budget', round((float)$this->post->budget, 2))
+            ->setIF($this->post->budget != 0, 'budget', round((float)$this->post->budget * $this->config->project->budget->tenThousand, 2))
             ->add('type', 'program')
             ->get();
 
@@ -68,6 +69,7 @@ class programZen extends program
         $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
         foreach(explode(',', trim($this->config->program->edit->requiredFields, ',')) as $field) $fields[$field]['required'] = true;
 
+        $this->app->loadConfig('project');
         $program = form::data($fields)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
@@ -76,7 +78,7 @@ class programZen extends program
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
             ->setIF($this->post->realBegan != '' and $oldProgram->status == 'wait', 'status', 'doing')
             ->setIF($this->post->future, 'budget', 0)
-            ->setIF($this->post->budget != 0, 'budget', round((float)$this->post->budget, 2))
+            ->setIF($this->post->budget != 0, 'budget', round((float)$this->post->budget * $this->config->project->budget->tenThousand, 2))
             ->setIF(!isset($_POST['budgetUnit']), 'budgetUnit', $oldProgram->budgetUnit)
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
             ->join('whitelist', ',')
