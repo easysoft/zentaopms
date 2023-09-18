@@ -796,6 +796,7 @@ class product extends control
     }
 
     /**
+     * 设置是否展示非当前项目集的项目信息。
      * Ajax set show setting.
      *
      * @access public
@@ -803,8 +804,7 @@ class product extends control
      */
     public function ajaxSetShowSetting()
     {
-        $data = fixer::input('post')->get();
-        $this->loadModel('setting')->updateItem("{$this->app->user->account}.product.showAllProjects", $data->showAllProjects);
+        $this->loadModel('setting')->updateItem("{$this->app->user->account}.product.showAllProjects", $this->post->showAllProjects);
     }
 
     /**
