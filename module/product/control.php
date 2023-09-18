@@ -808,6 +808,7 @@ class product extends control
     }
 
     /**
+     * 获取关联某个执行的产品下拉数据。
      * Ajax get products.
      *
      * @param  int    $executionID
