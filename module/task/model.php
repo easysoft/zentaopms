@@ -550,8 +550,13 @@ class taskModel extends model
         $oldTasks   = $taskData ? $this->getByIdList(array_keys($taskData)) : array();
         foreach($taskData as $taskID => $task)
         {
+            foreach($this->config->task->dateFields as $field)
+            {
+                if(in_array($field, explode(',', $this->config->task->batchedit->requiredFields))) continue;
+                if(empty($task->$field)) unset($task->$field);
+            }
+
             /* Update a task.*/
-            $oldTask = zget($oldTasks, $taskID);
             $this->dao->update(TABLE_TASK)->data($task)
                 ->autoCheck()
                 ->batchCheck($this->config->task->batchedit->requiredFields, 'notempty')
@@ -566,6 +571,7 @@ class taskModel extends model
             }
 
             /* Create the task description of the current version in the database. */
+            $oldTask = zget($oldTasks, $taskID);
             if($task->version > $oldTask->version)
             {
                 $taskSpec = new stdclass();
@@ -2562,6 +2568,7 @@ class taskModel extends model
         /* Update task and do other operations. */
         if($allChanges)
         {
+            foreach($this->config->task->dateFields as $field) if(empty($task->$field)) unset($task->$field);
             $this->dao->update(TABLE_TASK)->data($task, 'team')->where('id')->eq($taskID)->exec();
 
             if($task->parent > 0) $this->updateParentStatus($task->id);

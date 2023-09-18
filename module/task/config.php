@@ -64,6 +64,8 @@ $config->task->custom->batchEditFields   = 'module,assignedTo,status,pri,estimat
 
 $config->task->excludeCheckFields = ',pri,estStartedDitto,deadlineDitto,parent,regions,lanes,vision,region,';
 
+$config->task->dateFields = array('assignedDate', 'finishedDate', 'canceledDate', 'closedDate', 'lastEditedDate', 'activatedDate', 'deadline', 'openedDate', 'realStarted', 'estStarted');
+
 $config->task->create->template = new stdclass();
 $config->task->create->template->module     = 0;
 $config->task->create->template->mode       = '';

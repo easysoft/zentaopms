@@ -14,8 +14,7 @@ fields:
   - field: estStarted
     range: "20201101 000000:1D"
     type: timestamp
-    format: "YYYY-MM-DD hh::mm:ss"
-    postfix: "\t"
+    format: "YYYY-MM-DD"
   - field: deadline
     range: "20210101 000000:1D"
     type: timestamp

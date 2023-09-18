@@ -10,60 +10,6 @@ title=测试记录任务的工时
 timeout=0
 cid=1
 
-- 任务未开始时记录工时，查看已消耗工时
- - 属性field @consumed
- - 属性old @3
- - 属性new @8
-
-- 任务未开始时记录工时，查看剩余工时
- - 属性field @left
- - 属性old @1
- - 属性new @5
-
-- 任务未开始时记录工时，查看状态是否变化
- - 属性field @status
- - 属性old @wait
- - 属性new @doing
-
-- 不在多人任务团队中的用户记录工时，直接返回false @0
-
-- 在多人任务团队中的用户记录工时，查看返回的最初预计工时
- - 属性field @estimate
- - 属性old @1
- - 属性new @25
-
-- 在多人任务团队中的用户记录工时，查看返回的消耗工时
- - 属性field @consumed
- - 属性old @4
- - 属性new @2
-
-- 在多人任务团队中的用户记录工时，查看返回的剩余工时
- - 属性field @left
- - 属性old @2
- - 属性new @25
-
-- 通过记录日志直接完成任务的情况
- - 第0条的field属性 @consumed
- - 第0条的old属性 @5
- - 第0条的new属性 @10
-
-- 正常记录工时
- - 第2条的field属性 @status
- - 第2条的old属性 @done
- - 第2条的new属性 @doing
-
-- 正常记录工时
- - 第2条的field属性 @status
- - 第2条的old属性 @cancel
- - 第2条的new属性 @doing
-
-- 正常记录工时
- - 第2条的field属性 @status
- - 第2条的old属性 @closed
- - 第2条的new属性 @doing
-
-- 无消耗时返回提示信息 @请填写"消耗"。
-
 */
 
 $execution = zdTable('project');

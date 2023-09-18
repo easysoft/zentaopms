@@ -445,6 +445,11 @@ class taskTao extends taskModel
         $copyTask->parent = $task->id;
         unset($copyTask->id);
 
+        foreach($this->config->task->dateFields as $dateField)
+        {
+            if(!$copyTask->$dateField) unset($copyTask->$dateField);
+        }
+
         $copyTaskID = $this->dao->insert(TABLE_TASK)->data($copyTask)->autoCheck()->exec();
         if(dao::isError()) return false;
 
@@ -691,8 +696,9 @@ class taskTao extends taskModel
         if(empty($task)) return $task;
         foreach($task as $key => $value)
         {
-            if(!in_array($key, array('deadline', 'openedDate', 'assignedDate', 'estStarted', 'realStarted', 'finishedDate', 'canceledDate', 'closedDate', 'lastEditedDate', 'activatedDate'))) continue;
+            if(!in_array($key, $this->config->task->dateFields)) continue;
             if(!empty($value) && is_string($value) && helper::isZeroDate($value)) $task->$key = null;
+            if(isset($task->$key) && empty($value)) $task->$key = null;
         }
         return $task;
     }
