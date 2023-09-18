@@ -1544,18 +1544,17 @@ class productModel extends model
      * @access private
      * @return void
      */
-    public function accessDenied(string $tips)
+    public function accessDenied(string $tips): bool
     {
         if(commonModel::isTutorialMode()) return true;
 
-        echo js::alert($tips);
 
-        if(!$this->server->http_referer) return print(js::locate(helper::createLink('product', 'index')));
+        $link = helper::createLink('product', 'index');
 
         $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-        if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(helper::createLink('product', 'index')));
+        if(strpos($this->server->http_referer, $loginLink) !== false) $link = helper::createLink('product', 'index');
 
-        echo js::locate('back');
+        return $this->app->control->sendError($tips, $link);
     }
 
     /**
@@ -1566,14 +1565,14 @@ class productModel extends model
      * @param  string|int  $branch    all|''|int
      * @param  string      $extra     requirement|story
      * @access public
-     * @return void
+     * @return bool
      */
-    public function setMenu(int $productID = 0, string|int $branch = '', string $extra = ''): void
+    public function setMenu(int $productID = 0, string|int $branch = '', string $extra = ''): bool
     {
         if(!commonModel::isTutorialMode() and $productID != 0 and !$this->checkPriv($productID))
         {
             $this->accessDenied($this->lang->product->accessDenied);
-            return;
+            return true;
         }
 
         /* 用真实数据替换导航配置的占位符，并删除无用配置项。 */
@@ -1582,7 +1581,7 @@ class productModel extends model
         if(strpos($extra, 'requirement') !== false) unset($this->lang->product->moreSelects['willclose']);
 
         $product = $this->getByID($productID);
-        if(!$product) return;
+        if(!$product) return false;
 
         /* 设置1.5级导航数据。*/
         $this->lang->switcherMenu = $this->getSwitcher($productID, $extra, $branch);
@@ -1592,13 +1591,14 @@ class productModel extends model
         if($product->type == 'normal')
         {
             unset($this->lang->product->menu->settings['subMenu']->branch);
-            return;
+            return true;
         }
 
         /* 如果产品类型是多分支、多平台的，将真实数据替换@branch@匹配符。*/
         $branchLink = $this->lang->product->menu->settings['subMenu']->branch['link'];
         $this->lang->product->menu->settings['subMenu']->branch['link'] = str_replace('@branch@', $this->lang->product->branchName[$product->type], $branchLink);
         $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+        return true;
     }
 
     /**
