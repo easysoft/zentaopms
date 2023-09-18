@@ -4,6 +4,8 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/testcase.class.php';
 su('admin');
 
+zdTable('case')->gen(10);
+
 /**
 
 title=测试 testcaseModel->review();
@@ -28,12 +30,14 @@ $case1->result       = 'pass';
 $case1->status       = 'normal';
 $case1->reviewedBy   = 'test1';
 $case1->reviewedDate = '2023-08-29';
+$case1->comment      = '';
 
 $case2 = new stdclass();
 $case2->result       = 'clarify';
 $case2->status       = 'wait';
 $case2->reviewedBy   = 'test2';
 $case2->reviewedDate = '2023-08-29';
+$case2->comment      = '';
 
 $testcase = new testcaseTest();
 
