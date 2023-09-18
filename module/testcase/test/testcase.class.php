@@ -942,50 +942,6 @@ class testcaseTest
     }
 
     /**
-     * Test get status for different method.
-     *
-     * @param  string $methodName
-     * @param  object $case
-     * @param  array  $param
-     * @access public
-     * @return array
-     */
-    public function getStatusTest($methodName, $case = null, $param = array())
-    {
-        if($methodName == 'update')
-        {
-            $case = $this->objectModel->getByID(1);
-            $_POST['title']          = $case->title;
-            $_POST['color']          = $case->color;
-            $_POST['precondition']   = $case->precondition;
-            $_POST['steps']          = array('用例步骤描述1');
-            $_POST['stepType']       = array('step');
-            $_POST['expects']        = array('这是用例预期结果1');
-            $_POST['comment']        = '';
-            $_POST['labels']         = '';
-            $_POST['lastEditedDate'] = $case->lastEditedDate;
-            $_POST['product']        = $case->product;
-            $_POST['module']         = $case->module;
-            $_POST['story']          = $case->story;
-            $_POST['type']           = $case->type;
-            $_POST['stage']          = $case->stage;
-            $_POST['pri']            = $case->pri;
-            $_POST['status']         = $case->status;
-            $_POST['keywords']       = $case->keywords;
-
-            foreach($param as $field => $value) $_POST[$field] = $value;
-        }
-
-        $objects = $this->objectModel->getStatus($methodName, $case);
-
-        unset($_POST);
-
-        if(dao::isError()) return dao::getError()[0];
-
-        return $objects;
-    }
-
-    /**
      * 测试添加步骤。
      * Test append steps.
      *
