@@ -406,12 +406,14 @@ class testtask extends control
         if($this->cookie->preTaskID != $taskID) helper::setcookie('taskCaseModule', 0, 0);
         if($browseType == 'bymodule') helper::setcookie('taskCaseModule', $param, 0);
 
+        /* 检查是否有权限访问测试单所属产品。*/
+        /* Check if user have permission to access the product to which the testtask belongs. */
+        $productID = $this->loadModel('product')->checkAccess($testtask->product, $this->products);
+
         /* 如果测试单所属产品在产品键值对中不存在，将其加入。*/
         /* Prepare the product key-value pairs. */
-        $products  = $this->products;
-        $productID = $testtask->product;
-        $product   = $this->loadModel('product')->getByID($productID);
-        if(!isset($products[$productID])) $products[$productID] = $product->name;
+        $product = $this->loadModel('product')->getByID($productID);
+        if(!isset($this->products[$productID])) $this->products[$productID] = $product->name;
 
         $this->testtaskZen->setMenu($productID, $testtask->branch, $testtask->project, $testtask->execution);
 
