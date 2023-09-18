@@ -485,6 +485,16 @@ function initPageEntity(object $object): array
  */
 function initTableData(array $items, array &$fieldList, object $model = null): array
 {
+    if(!empty($_GET['orderBy'])) list($orderField, $orderVaule) = explode('_', $_GET['orderBy']);
+    if(!empty($orderField) && !empty($orderVaule) && !empty($fieldList[$orderField]))
+    {
+        $sortType = false;
+        $col      = $fieldList[$orderField];
+        if(empty($col['sortType']) && !empty($col['type']) && in_array($col['type'], array('id', 'title'))) $sortType = true;
+        if(!empty($col['sortType'])) $sortType = $col['sortType'];
+        if(is_bool($sortType)) $fieldList[$orderField]['sortType'] = $orderVaule;
+    }
+
     $items = setParent($items);
     if(empty($fieldList['actions'])) return $items;
 
