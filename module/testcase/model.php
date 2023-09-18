@@ -1317,13 +1317,13 @@ class testcaseModel extends model
         /* 查询用例的 bugs 和结果。 */
         /* Get bugs and results. */
         $queryField = $type == 'case' ? '`case`' : '`result`';
-        $caseBugs   = $this->dao->select('count(*) as count, `case`')->from(TABLE_BUG)->where($queryField)->in($caseIdList)->andWhere('deleted')->eq(0)->groupBy('`case`')->fetchPairs('case', 'count');
-        $results    = $this->dao->select('count(*) as count, `case`')->from(TABLE_TESTRESULT)->where('`case`')->in($caseIdList)->groupBy('`case`')->fetchPairs('case', 'count');
+        $caseBugs   = $this->dao->select('COUNT(*) AS count, `case`')->from(TABLE_BUG)->where($queryField)->in($caseIdList)->andWhere('deleted')->eq(0)->groupBy('`case`')->fetchPairs('case', 'count');
+        $results    = $this->dao->select('COUNT(*) AS count, `case`')->from(TABLE_TESTRESULT)->where('`case`')->in($caseIdList)->groupBy('`case`')->fetchPairs('case', 'count');
 
         /* 查询用例的失败结果。 */
         /* Get result fails of the the testcases. */
         if($type != 'case') $queryField = '`run`';
-        $caseFails  = $this->dao->select('count(*) as count, `case`')->from(TABLE_TESTRESULT)
+        $caseFails  = $this->dao->select('COUNT(*) AS count, `case`')->from(TABLE_TESTRESULT)
             ->where('caseResult')->eq('fail')
             ->andWhere($queryField)->in($caseIdList)
             ->groupBy('`case`')
@@ -1334,7 +1334,7 @@ class testcaseModel extends model
         $queryTable = $type == 'case' ? TABLE_CASE : TABLE_TESTRUN;
         $queryOn    = $type == 'case' ? 't1.`case`=t2.`id`' : 't1.`case`=t2.`case`';
         $queryField = $type == 'case' ? 't1.`case`' : 't2.`id`';
-        $steps = $this->dao->select('count(distinct t1.id) as count, t1.`case`')->from(TABLE_CASESTEP)->alias('t1')
+        $steps = $this->dao->select('COUNT(DISTINCT t1.id) AS count, t1.`case`')->from(TABLE_CASESTEP)->alias('t1')
             ->leftJoin($queryTable)->alias('t2')->on($queryOn)
             ->where($queryField)->in($caseIdList)
             ->andWhere('t1.type')->ne('group')
@@ -1344,13 +1344,14 @@ class testcaseModel extends model
 
         /* 设置测试用例的 bugs 执行结果和步骤。 */
         /* Set related bugs, results and steps of the testcases. */
-        foreach($cases as $key => $case)
+        foreach($cases as $case)
         {
             $caseID = $type == 'case' ? $case->id : $case->case;
-            $case->bugs       = isset($caseBugs[$caseID])  ? $caseBugs[$caseID]   : 0;
-            $case->results    = isset($results[$caseID])   ? $results[$caseID]    : 0;
-            $case->caseFails  = isset($caseFails[$caseID]) ? $caseFails[$caseID]  : 0;
-            $case->stepNumber = isset($steps[$caseID])     ? $steps[$caseID]      : 0;
+
+            $case->bugs       = zget($caseBugs, $caseID, 0);
+            $case->results    = zget($results, $caseID, 0);
+            $case->caseFails  = zget($caseFails, $caseID, 0);
+            $case->stepNumber = zget($steps, $caseID, 0);
         }
         return $cases;
     }
