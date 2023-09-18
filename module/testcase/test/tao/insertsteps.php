@@ -12,9 +12,14 @@ su('admin');
 /**
 
 title=测试 testcaseModel->insertSteps();
+timeout=0
 cid=1
-pid=1
 
+- 测试插入用例 1 的用例步骤 @1,2,3
+
+- 测试插入用例 2 的用例步骤 @4,5,6
+
+- 测试插入用例 3 的用例步骤 @7,8,9,10,11,12
 
 */
 
@@ -32,9 +37,8 @@ $stepTypes3 = array('1' => 'group', '1.1' => 'group', '1.1.1' => 'item','2' => '
 
 $caseIdList = array(1, 2, 3);
 
-
 $testcase = new testcaseTest();
 
-r($testcase->insertStepsTest($caseIdList[0], $steps1, $expects1, $stepTypes1)) && p('status') && e('1,2,3');          // 测试插入用例 1 的用例步骤
-r($testcase->insertStepsTest($caseIdList[1], $steps2, $expects2, $stepTypes2)) && p('status') && e('4,5,6');          // 测试插入用例 2 的用例步骤
-r($testcase->insertStepsTest($caseIdList[2], $steps3, $expects3, $stepTypes3)) && p('status') && e('7,8,9,10,11,12'); // 测试插入用例 3 的用例步骤
+r($testcase->insertStepsTest($caseIdList[0], $steps1, $expects1, $stepTypes1)) && p() && e('1,2,3');          // 测试插入用例 1 的用例步骤
+r($testcase->insertStepsTest($caseIdList[1], $steps2, $expects2, $stepTypes2)) && p() && e('4,5,6');          // 测试插入用例 2 的用例步骤
+r($testcase->insertStepsTest($caseIdList[2], $steps3, $expects3, $stepTypes3)) && p() && e('7,8,9,10,11,12'); // 测试插入用例 3 的用例步骤

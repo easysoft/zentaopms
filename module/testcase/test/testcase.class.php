@@ -993,8 +993,10 @@ class testcaseTest
     {
         $objects = $this->objectModel->insertSteps($caseID, $steps, $expects, $stepTypes);
         if(dao::isError()) return dao::getError()[0];
+
         global $tester;
-        $steps  = $tester->dao->select('id')->from(TABLE_CASESTEP)->where('case')->eq($caseID)->fetchAll('id');
+        $steps = $tester->dao->select('id')->from(TABLE_CASESTEP)->where('case')->eq($caseID)->fetchAll('id');
+
         return implode(',', array_keys($steps));
     }
 
