@@ -42,7 +42,7 @@ class automation extends control
     public function browse($productID = 0, $branch = 0)
     {
         /* Set menu. */
-        $productID = $this->product->saveState($productID, $this->products);
+        $productID = $this->product->checkAccess($productID, $this->products);
         if(empty($branch)) $branch = (int)$this->cookie->preBranch;
         $this->loadModel('qa')->setMenu($productID, $branch);
 

@@ -96,19 +96,6 @@ class productModel extends model
     }
 
     /**
-     * 获取可访问的产品，并保存到session中。
-     * Get accessible product and save it to session.
-     *
-     * @param  int   $productID
-     * @param  array $products
-     * @return int
-     */
-    public function checkAccess(int $productID, array $products): int
-    {
-        return $this->saveState($productID, $products);
-    }
-
-    /**
      * 检查是否有权限访问该产品。
      * Check privilege.
      *
@@ -1494,7 +1481,7 @@ class productModel extends model
      * @access public
      * @return int
      */
-    public function saveState(int $productID, array $products): int
+    public function checkAccess(int $productID, array $products): int
     {
         if(commonModel::isTutorialMode()) return $productID;
 

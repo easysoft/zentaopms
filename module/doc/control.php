@@ -1333,7 +1333,7 @@ class doc extends control
     public function productSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'status,id_desc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $products = $this->product->getPairs('nocode');
-        $objectID = $this->product->saveState($objectID, $products);
+        $objectID = $this->product->checkAccess($objectID, $products);
 
         echo $this->fetch('doc', 'tableContents', "type=product&objectID=$objectID&libID=$libID&moduleID=$moduleID&browseType=$browseType&orderBy=$orderBy&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }

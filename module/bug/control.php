@@ -103,7 +103,7 @@ class bug extends control
     {
         /* 把访问的产品ID等状态信息保存到session和cookie中。*/
         /* Save the product id user last visited to session and cookie. */
-        $productID  = $this->product->saveState($productID, $this->products);
+        $productID  = $this->product->checkAccess($productID, $this->products);
         $product    = $this->product->getByID($productID);
         $branch     = $this->bugZen->getBrowseBranch($branch, $product->type);
         $browseType = $browseType ? strtolower($browseType) : 'unclosed';
@@ -223,7 +223,7 @@ class bug extends control
             return $this->responseAfterCreate($bug, $params, $message);
         }
 
-        $productID = $this->product->saveState($productID, $this->products);
+        $productID = $this->product->checkAccess($productID, $this->products);
         $product   = $this->product->getByID($productID);
         if($branch === '') $branch = (string)$this->cookie->preBranch;
         $this->bugZen->setCreateMenu($productID, $branch, $params);
@@ -776,7 +776,7 @@ class bug extends control
 
         /* 把访问的产品ID等状态信息保存到session和cookie中。*/
         /* Save the product id user last visited to session and cookie. */
-        $productID = $this->product->saveState($productID, $this->products);
+        $productID = $this->product->checkAccess($productID, $this->products);
         $product   = $this->product->getByID($productID);
 
         /* 设置当前分支，并且设置导航。*/

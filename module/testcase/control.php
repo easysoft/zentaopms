@@ -91,7 +91,7 @@ class testcase extends control
     {
         /* 把访问的产品ID等状态信息保存到session和cookie中。*/
         /* Save the product id user last visited to session and cookie. */
-        $productID  = $this->app->tab != 'project' ? $this->product->saveState($productID, $this->products) : $productID;
+        $productID  = $this->app->tab != 'project' ? $this->product->checkAccess($productID, $this->products) : $productID;
         $branch     = ($this->cookie->preBranch !== '' && $branch === '') ? $this->cookie->preBranch : $branch;
         $browseType = strtolower($browseType);
         $moduleID   = ($browseType == 'bymodule') ? $param : ($browseType == 'bysearch' ? 0 : ($this->cookie->caseModule ? $this->cookie->caseModule : 0));
@@ -126,7 +126,7 @@ class testcase extends control
     {
         /* 设置SESSION和COOKIE，获取产品信息。 */
         /* Set session and cookie, and get product. */
-        $productID = $this->product->saveState($productID, $this->products);
+        $productID = $this->product->checkAccess($productID, $this->products);
         $product   = $this->product->getByID($productID);
         $this->session->set('caseList', $this->app->getURI(true), $this->app->tab);
 
@@ -178,12 +178,12 @@ class testcase extends control
         {
             $this->loadModel('project')->setMenu($this->session->project);
             $products  = $this->product->getProducts($this->session->project, 'all', '', false);
-            $productID = $this->product->saveState($productID, $products);
+            $productID = $this->product->checkAccess($productID, $products);
         }
         else
         {
             $products  = $this->product->getPairs();
-            $productID = $this->product->saveState($productID, $products);
+            $productID = $this->product->checkAccess($productID, $products);
             $this->loadModel('qa');
             $this->app->rawModule = 'testcase';
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
@@ -255,7 +255,7 @@ class testcase extends control
 
         /* 设置产品id和分支。 */
         /* Set productID and branch. */
-        $productID = $this->product->saveState($productID, $this->products);
+        $productID = $this->product->checkAccess($productID, $this->products);
         if($branch === '') $branch = $this->cookie->preBranch;
 
         $moduleID = $this->testcaseZen->assignCreateVars($productID, $branch, $moduleID, $from, $param, $storyID);
@@ -310,7 +310,7 @@ class testcase extends control
 
         /* 设置 session 和 cookie, 并且设置产品 id、分支。 */
         /* Set session and cookie, and set product id, branch. */
-        $productID = $this->product->saveState($productID, $this->products);
+        $productID = $this->product->checkAccess($productID, $this->products);
         if($branch === '') $branch = $this->cookie->preBranch;
 
         /* 设置菜单。 */

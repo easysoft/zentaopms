@@ -27,7 +27,7 @@ class productZen extends product
         /* Set activated menu for mobile view. */
         if($this->app->viewType == 'mhtml')
         {
-            $productID = $this->saveState(0, $this->products);
+            $productID = $this->product->checkAccess(0, $this->products);
             $this->product->setMenu($productID);
         }
     }
@@ -110,7 +110,7 @@ class productZen extends product
 
         if($projectID) return $this->loadModel('project')->setMenu($projectID);
 
-        $productID = $this->product->saveState($productID, $this->products);
+        $productID = $this->product->checkAccess($productID, $this->products);
         $this->product->setMenu($productID, $branch);
     }
 

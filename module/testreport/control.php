@@ -261,7 +261,7 @@ class testreport extends control
 
             if($this->app->tab == 'qa')
             {
-                $productID = $this->product->saveState(key($productIdList), $this->products);
+                $productID = $this->product->checkAccess(key($productIdList), $this->products);
                 $this->loadModel('qa')->setMenu($productID);
             }
             elseif($this->app->tab == 'project')
@@ -601,7 +601,7 @@ class testreport extends control
     {
         if($objectType == 'product')
         {
-            $productID = $this->product->saveState($objectID, $this->products);
+            $productID = $this->product->checkAccess($objectID, $this->products);
             $this->loadModel('qa')->setMenu($productID);
             return $productID;
         }

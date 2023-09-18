@@ -26,7 +26,7 @@ class programplan extends control
         $this->loadModel('project');
         $products  = $this->product->getProductPairsByProject($projectID);
 
-        $productID = $this->product->saveState($productID, $products);
+        $productID = $this->product->checkAccess($productID, $products);
         $project = $this->project->getByID($projectID);
 
         $this->session->set('hasProduct', $project->hasProduct);

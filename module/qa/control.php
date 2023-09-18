@@ -27,7 +27,7 @@ class qa extends control
         if(empty($products)) return print($this->locate($this->createLink('product', 'showErrorNone', "moduleName=qa&activeMenu=index")));
         if($locate == 'yes') $this->locate($this->createLink('bug', 'browse'));
 
-        $productID = $this->product->saveState($productID, $products);
+        $productID = $this->product->checkAccess($productID, $products);
         $branch    = (int)$this->cookie->preBranch;
         $this->qa->setMenu($productID, $branch);
 
