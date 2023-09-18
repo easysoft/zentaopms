@@ -37,65 +37,6 @@ class productModel extends model
     }
 
     /**
-     * 获取1.5级导航。
-     * Create the select code of products.
-     *
-     * @param  array       $products
-     * @param  int         $productID
-     * @param  string      $currentModule
-     * @param  string      $currentMethod
-     * @param  string      $extra
-     * @param  int|string  $branch
-     * @param  int         $module
-     * @param  string      $moduleType
-     * @param  bool        $withBranch      true|false
-     *
-     * @access public
-     * @return string
-     */
-    public function select(array $products, int $productID, string $currentModule, string $currentMethod, string $extra = '', string|int $branch = '', bool $withBranch = true): string
-    {
-        /* 处理数据。*/
-        if(isset($products[0])) unset($products[0]);
-        if(empty($products)) return '';
-        if(!isset($products[$productID])) $productID = (int)key($products);
-
-        /* 检测当前页面是否在项目或执行的测试二级导航中。*/
-        $isQaModule = (strpos(',project,execution,', ",{$this->app->tab},") !== false and stripos(',bug,testcase,testtask,ajaxselectstory,', ",{$this->app->rawMethod},") !== false) ? true : false;
-        if($this->app->tab == 'project' and stripos(',zeroCase,browseUnits,groupCase,', ",$currentMethod,") !== false) $isQaModule = true;
-        if($isQaModule)
-        {
-            if($this->app->tab == 'project')   $extra = strpos(',testcase,groupCase,zeroCase,', ",$currentMethod,") !== false ? $extra : (string)$this->session->project;
-            if($this->app->tab == 'execution') $extra = (string)$this->session->execution;
-        }
-
-        /* 查询产品数据。*/
-        $product = $this->getByID($productID);
-        $this->session->set('currentProductType', $product->type);
-
-        /* 生成异步获取下拉菜单的链接。*/
-        $moduleName = $isQaModule ? 'bug' : 'product';
-        if($this->app->tab == 'feedback') $moduleName = 'feedback';
-        $dropMenuLink = helper::createLink($moduleName, 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
-
-        /* 构建移动端产品1.5级导航代码。 */
-        if($this->app->viewType == 'mhtml')
-        {
-            $output  = "<a id='currentItem' href=\"javascript:showSearchMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\"><span class='text'>{$product->name}</span> <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
-            $output .= $this->productTao->getBranchDropMenu4Select($product, $branch, $currentModule, $currentMethod, $extra, $withBranch);
-            return $output;
-        }
-
-        /* 构建PC端产品1.5级导航代码。 */
-        $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$product->name}' style='width: 90%'><span class='text'>{$product->name}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
-        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div></div></div>';
-        $output .= $this->productTao->getBranchDropMenu4Select($product, $branch, $currentModule, $currentMethod, $extra, $withBranch);
-        $output .= '</div>';
-
-        return $output;
-    }
-
-    /**
      * 检查是否有权限访问该产品。
      * Check privilege.
      *
@@ -418,47 +359,6 @@ class productModel extends model
         foreach($products as $product) $productGroup[$product->program][$product->id] = zget($programs, $product->program, '') . '/' . $product->name;
 
         return $productGroup;
-    }
-
-    /*
-     * 获取1.5级导航数据。
-     * Get product switcher.
-     *
-     * @param  int         $productID
-     * @param  string      $extra
-     * @param  string|int  $branch
-     * @access public
-     * @return string
-     */
-    public function getSwitcher(int $productID = 0, string $extra = '', string|int $branch = ''): string
-    {
-        /* 获取产品名称，产品类型。 */
-        $currentProduct     = new stdclass();
-        $currentProductName = $this->lang->productCommon;
-        if($productID)
-        {
-            $currentProduct     = $this->getByID($productID);
-            $currentProductName = $currentProduct->name;
-            $this->session->set('currentProductType', $currentProduct->type);
-        }
-
-        if($this->app->viewType == 'mhtml') return $this->getDropMenu4Mobile(array($productID => $currentProductName), $productID, $extra, $branch);
-
-        /* Init locateModule and locateMethod for report and story. */
-        list($locateModule, $locateMethod) = $this->productTao->computeLocate4DropMenu();
-
-        /* 生成异步获取产品下拉菜单的链接。*/
-        $fromModule     = $this->app->tab == 'qa' ? 'qa' : '';
-        $dropMenuModule = $this->app->tab == 'qa' ? 'product' : $this->app->tab;
-        $dropMenuLink   = helper::createLink($dropMenuModule, 'ajaxGetDropMenu', "objectID=$productID&module=$locateModule&method=$locateMethod&extra=$extra&from=$fromModule");
-
-        /* 构建产品1.5级导航数据。 */
-        $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProductName}'><span class='text'>{$currentProductName}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
-        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
-        $output .= "</div></div>";
-        $output .= $this->productTao->getBranchDropMenu4Switch($currentProduct, $branch, $locateModule, $locateMethod, $extra);
-
-        return $output;
     }
 
     /**
@@ -1582,9 +1482,6 @@ class productModel extends model
 
         $product = $this->getByID($productID);
         if(!$product) return false;
-
-        /* 设置1.5级导航数据。*/
-        $this->lang->switcherMenu = $this->getSwitcher($productID, $extra, $branch);
 
         /* 设置导航中分支的显示数据。*/
         /* 如果产品类型是正常的，隐藏导航中分支的显示。*/
