@@ -193,16 +193,19 @@ class testcaseTest
     }
 
     /**
+     * 测试获取用例列表。
      * Test get case list.
      *
      * @param  array  $caseIdList
      * @param  string $query
      * @access public
-     * @return array
+     * @return array|string
      */
-    public function getByListTest($caseIdList, $query = '')
+    public function getByListTest(array $caseIdList, string $query = ''): array|string
     {
-        return $this->objectModel->getByList($caseIdList, $query);
+        $cases = $this->objectModel->getByList($caseIdList, $query);
+        if(dao::isError()) return dao::getError();
+        return implode(',', array_keys($cases));
     }
 
     /**
