@@ -47,7 +47,7 @@ formPanel
     ),
     formGroup
     (
-        set::width('1/4'),
+        set::width('1/3'),
         set::name('PM'),
         set::label($lang->program->PM),
         set::items($pmUsers)
@@ -57,18 +57,20 @@ formPanel
         set::id('budgetRow'),
         formGroup
         (
-            set::width('1/4'),
-            set::name('budget'),
+            set::width('1/3'),
             set::label($lang->project->budget),
-            set::control(array
+            inputGroup
             (
-                'type'        => 'inputControl',
-                'prefix'      => zget($lang->project->currencySymbol, $currency),
-                'prefixWidth' => 'icon',
-                'suffix'      => $lang->project->tenThousandYuan,
-                'suffixWidth' => 60,
-            )),
-            $parentProgram ? null : formHidden('budgetUnit', $config->project->defaultCurrency)
+                inputControl
+                (
+                    $parentProgram ? set::prefix(zget($lang->project->currencySymbol, $currency)) : null,
+                    $parentProgram ? set::prefixWidth('icon') : null,
+                    input(set::name('budget')),
+                    set::suffix($lang->project->tenThousandYuan),
+                    set::suffixWidth(50),
+                ),
+                $parentProgram ? formHidden('budgetUnit', $parentProgram->budgetUnit) : picker(set::name('budgetUnit'), set::items($budgetUnitList), set::value($config->project->defaultCurrency)),
+            ),
         ),
         formGroup
         (

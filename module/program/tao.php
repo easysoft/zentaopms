@@ -193,4 +193,45 @@ class programTao extends programModel
         }
         return $actionsMap;
     }
+
+    /**
+     * 如果修改了父项目集，修改新节点和顶级项目集。
+     * If change parent, then fix node path and top program.
+     *
+     * @param  int       $programID
+     * @param  int       $parent
+     * @param  int       $oldParent
+     * @param  string    $oldPath
+     * @param  int       $oldGrade
+     * @access protected
+     * @return void
+     */
+    protected function changeParent(int $programID, int $parent, int $oldParent, string $oldPath, int $oldGrade): void
+    {
+        if($parent == $oldParent) return;
+
+        $this->processNode($programID, $parent, $oldPath, $oldGrade);
+
+        /* Move product to new top program. */
+        $oldTopProgram = $this->getTopByPath($oldPath);
+        $newTopProgram = $this->getTopByID($programID);
+        if($oldTopProgram == $newTopProgram) return;
+
+        if($oldParent == 0)
+        {
+            $this->dao->update(TABLE_PRODUCT)->set('program')->eq($newTopProgram)->where('program')->eq($oldTopProgram)->exec();
+            return;
+        }
+
+        /* Get the shadow products that produced by the program's no product projects. */
+        $shadowProducts = $this->dao->select('t1.id')->from(TABLE_PRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.product')
+            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project=t3.id')
+            ->where('t3.path')->like("%,$programID,%")
+            ->andWhere('t3.type')->eq('project')
+            ->andWhere('t3.hasProduct')->eq('0')
+            ->andWhere('t1.shadow')->eq('1')
+            ->fetchPairs();
+        if($shadowProducts) $this->dao->update(TABLE_PRODUCT)->set('program')->eq($newTopProgram)->where('id')->in($shadowProducts)->exec();
+    }
 }

@@ -73,6 +73,8 @@ formPanel
                 'suffix'      => $lang->project->tenThousandYuan,
                 'suffixWidth' => 60,
             )),
+            formHidden('syncPRJUnit', 'false'),
+            formHidden('exchangeRate', ''),
         ),
         formGroup
         (
@@ -94,9 +96,8 @@ formPanel
             inputGroup
             (
                 set::seg(true),
-                input
+                datePicker
                 (
-                    set::type('date'),
                     set::name('begin'),
                     set::id('begin'),
                     set::value($program->begin),
@@ -105,9 +106,8 @@ formPanel
                     on::change('computeWorkDays')
                 ),
                 $lang->project->to,
-                input
+                datePicker
                 (
-                    set::type('date'),
                     set::name('end'),
                     set::id('end'),
                     set::value($program->end),
@@ -151,10 +151,11 @@ formPanel
         set::label($lang->whitelist),
         picker
         (
-            set::name('whitelist'),
-            set::items($users),
+            set::width('3/4'),
+            set::name('whitelist[]'),
+            set::label($lang->whitelist),
+            set::control(array('type' => 'picker', 'multiple' => true, 'items' => $pmUsers)),
             set::value($program->whitelist),
-            set::multiple(true),
         )
     ),
 );

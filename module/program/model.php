@@ -827,103 +827,54 @@ class programModel extends model
      * Update the program.
      *
      * @param  int    $programID
-     * @param  object $postData
+     * @param  object $program
      * @access public
      * @return array|false
      */
-    public function update(int $programID, object $postData): array|false
+    public function update(int $programID, object $program)
     {
-        $this->app->loadLang('project');
-        $oldProgram = $this->dao->findById($programID)->from(TABLE_PROGRAM)->fetch();
-        $program    = $this->loadModel('file')->processImgURL($postData, $this->config->program->editor->edit['id'], $postData->uid);
+        $oldProgram = $this->fetchByID($programID);
 
-        if($program->parent)
-        {
-            $this->dao->update(TABLE_MODULE)
-                ->set('root')->eq($program->parent)
-                ->where('root')->eq($programID)
-                ->andWhere('type')->eq('line')
-                ->exec();
-        }
+        /* Update line root to top program. */
+        if($program->parent) $this->dao->update(TABLE_MODULE)->set('root')->eq($program->parent)->where('root')->eq($programID)->andwhere('type')->eq('line')->exec();
         if(dao::isError()) return false;
 
         /* Redefines the language entries for the fields in the project table. */
+        $this->app->loadLang('project');
+        $this->lang->error->unique = $this->lang->error->repeat;
         foreach(explode(',', $this->config->program->edit->requiredFields) as $field)
         {
             if(isset($this->lang->program->$field)) $this->lang->project->$field = $this->lang->program->$field;
         }
 
-        $this->lang->error->unique = $this->lang->error->repeat;
-        $this->dao->update(TABLE_PROGRAM)->data($program, 'id,uid,delta,future,syncPRJUnit,exchangeRate,contactListMenu')
-            ->autoCheck('begin,end')
-            ->batchCheck($this->config->program->edit->requiredFields, 'notempty')
+        $this->dao->update(TABLE_PROGRAM)->data($program)
+            ->autoCheck($skipFields = 'begin,end')
+            ->batchcheck($this->config->program->edit->requiredFields, 'notempty')
             ->checkIF($program->begin != '', 'begin', 'date')
             ->checkIF($program->end != '', 'end', 'date')
             ->checkIF($program->end != '', 'end', 'gt', $program->begin)
-            ->checkIF(!empty($program->name), 'name', 'unique', "id!=$programID and `type`='program' and `parent` = $program->parent and `deleted` = '0'")
+            ->checkIF(!empty($program->name), 'name', 'unique', "id!=$programID and `type`='program' and `parent` = " . (int)$program->parent . " and `deleted` = '0'")
             ->checkFlow()
             ->where('id')->eq($programID)
-            ->limit(1)
             ->exec();
 
         if(!dao::isError())
         {
-            /* If the program changes, the budget unit will be updated to the project and sub-programs simultaneously. */
-            if($program->budgetUnit != $oldProgram->budgetUnit and $postData->syncPRJUnit == 'true')
-            {
-                $this->dao->update(TABLE_PROJECT)
-                    ->set('budgetUnit')->eq($program->budgetUnit)
-                    ->beginIF(!empty($postData->exchangeRate))->set("budget = {$postData->exchangeRate} * `budget`")->fi()
-                    ->where('path')->like(",{$programID},%")
-                    ->andWhere('type')->in('program,project')
-                    ->exec();
-            }
-
-            $this->file->updateObjectID($postData->uid, $programID, 'project');
-            $this->loadModel('personnel')->updateWhitelist($program->whitelist, 'program', $programID);
             $this->loadModel('user');
+            $this->loadModel('file')->updateObjectID($this->post->uid, $programID, 'project');
+            if($program->whitelist) $this->loadModel('personnel')->updateWhitelist(explode(',', $program->whitelist), 'program', $programID);
             if($program->acl != 'open') $this->user->updateUserView($programID, 'program');
 
             /* If the program changes, the authorities of programs and projects under the program should be refreshed. */
-            $children = $this->dao->select('id, type')->from(TABLE_PROGRAM)->where('path')->like("%,{$programID},%")->andWhere('id')->ne($programID)->andWhere('acl')->eq('program')->fetchPairs('id', 'type');
-            foreach($children as $id => $type) $this->user->updateUserView($id, $type);
+            $children = $this->dao->select('id, type')->from(TABLE_PROGRAM)->where('path')->like("%,{$programID},%")->andWhere('id')->ne($programID)->andWhere('acl')->eq('program')->fetchGroup('type', 'id');
+            foreach($children as $type => $idList) $this->user->updateUserView(array_keys($idList), $type);
             if(isset($program->PM) and $program->PM != $oldProgram->PM)
             {
                 $productIdList = $this->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq($programID)->fetchPairs('id');
-                foreach($productIdList as $productID) $this->user->updateUserView($productID, 'product');
+                $this->user->updateUserView($productIdList, 'product');
             }
 
-            if($oldProgram->parent != $program->parent)
-            {
-                $this->processNode($programID, $program->parent, $oldProgram->path, $oldProgram->grade);
-
-                /* Move product to new top program. */
-                $oldTopProgram = $this->getTopByPath($oldProgram->path);
-                $newTopProgram = $this->getTopByID($programID);
-
-                if($oldTopProgram != $newTopProgram)
-                {
-                    if($oldProgram->parent == 0)
-                    {
-                        $this->dao->update(TABLE_PRODUCT)->set('program')->eq($newTopProgram)->where('program')->eq($oldTopProgram)->exec();
-                    }
-                    else
-                    {
-                        /* Get the shadow products that produced by the program's no product projects. */
-                        $shadowProducts = $this->dao->select('t1.id')->from(TABLE_PRODUCT)->alias('t1')
-                            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.product')
-                            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project=t3.id')
-                            ->where('t3.path')->like("%,$programID,%")
-                            ->andWhere('t3.type')->eq('project')
-                            ->andWhere('t3.hasProduct')->eq('0')
-                            ->andWhere('t1.shadow')->eq('1')
-                            ->fetchPairs();
-                        $this->dao->update(TABLE_PRODUCT)->set('program')->eq($newTopProgram)->where('id')->in($shadowProducts)->exec();
-                    }
-
-                }
-            }
-
+            if($oldProgram->parent != $program->parent) $this->programTao->changeParent($programID, $program->parent, $oldProgram->parent, $oldProgram->path, $oldProgram->grade);
             return common::createChanges($oldProgram, $program);
         }
         return false;
@@ -1082,7 +1033,7 @@ class programModel extends model
      * @access public
      * @return int
      */
-    public function getTopByPath($path): int
+    public function getTopByPath(string $path): int
     {
         $paths = explode(',', trim($path, ','));
         return (int)$paths[0];

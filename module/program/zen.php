@@ -54,6 +54,46 @@ class programZen extends program
     }
 
     /**
+     * 获取编辑项目集的数据。
+     * Build program for edit.
+     *
+     * @param  int       $programID
+     * @access protected
+     * @return object
+     */
+    protected function buildProgramForEdit(int $programID): object
+    {
+        $oldProgram   = $this->program->fetchByID($programID);
+        $fields       = $this->config->program->form->edit;
+        $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
+        foreach(explode(',', trim($this->config->program->edit->requiredFields, ',')) as $field) $fields[$field]['required'] = true;
+
+        $program = form::data($fields)
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', helper::now())
+            ->setIF(helper::isZeroDate($this->post->begin), 'begin', '')
+            ->setIF(helper::isZeroDate($this->post->end), 'end', '')
+            ->setIF($this->post->delta == 999, 'end', LONG_TIME)
+            ->setIF($this->post->realBegan != '' and $oldProgram->status == 'wait', 'status', 'doing')
+            ->setIF($this->post->future, 'budget', 0)
+            ->setIF($this->post->budget != 0, 'budget', round((float)$this->post->budget, 2))
+            ->setIF(!isset($_POST['budgetUnit']), 'budgetUnit', $oldProgram->budgetUnit)
+            ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
+            ->join('whitelist', ',')
+            ->get();
+
+        return $this->loadModel('file')->processImgURL($program, $editorFields, $this->post->uid);
+    }
+
+    protected function removeSubjectToCurrent(array $parents, int $programID): array
+    {
+        $children = $this->dao->select('*')->from(TABLE_PROGRAM)->where('path')->like("%,$programID,%")->fetchPairs('id', 'id');
+        foreach($children as $childID) unset($parents[$childID]);
+
+        return $parents;
+    }
+
+    /**
      * 根据条件获取项目集。
      * Get programs by type.
      *

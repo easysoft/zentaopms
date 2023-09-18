@@ -7,7 +7,9 @@ function onParentChange(event)
 
 window.onFutureChange = (event) =>
 {
-    $('#budget,#budgetUnit').attr('disabled', $(event.target).prop('checked') ? 'disabled' : null);
+    let checked = $(event.target).prop('checked');
+    $('#budget').attr('disabled', checked ? 'disabled' : null);
+    $('[name=budgetUnit]').zui('picker').render({'disabled': checked});
     $('#budgetTip').remove();
 };
 
@@ -18,5 +20,5 @@ window.outOfDateTip = function()
 
 window.onAclChange = () =>
 {
-    $('#whitelistRow').toggleClass('hidden', $('#acl_open').prop('checked'));
+    $('#whitelistRow').toggleClass('hidden', $('#aclopen').prop('checked'));
 };

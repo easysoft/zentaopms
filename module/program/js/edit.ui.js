@@ -18,5 +18,6 @@ window.outOfDateTip = function()
 
 window.onAclChange = () =>
 {
-    $('#whitelistRow').toggleClass('hidden', $('#acl_open').prop('checked'));
+    $('#whitelistRow').toggleClass('hidden', $('#aclopen').prop('checked'));
 };
+onAclChange();
