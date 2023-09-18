@@ -20,6 +20,41 @@ class testtaskZen extends testtask
     }
 
     /**
+     * 设置测试单用例列表页面搜索表单的参数。
+     * Set congiruration of search form in cases page of testtask.
+     *
+     * @param  object    $product
+     * @param  int       $moduleID
+     * @param  int       $testtaskID
+     * @param  int       $queryID
+     * @access protected
+     * @return void
+     */
+    protected function setSearchParamsForCases(object $product, int $moduleID, int $testtaskID, int $queryID): void
+    {
+        $searchConfig = $this->config->testcase->search;
+        $searchConfig['module']    = 'testtask';
+        $searchConfig['queryID']   = $queryID;
+        $searchConfig['actionURL'] = helper::createLink('testtask', 'cases', "taskID=$testtaskID&browseType=bySearch&queryID=myQueryID");
+
+        $searchConfig['params']['scene']['values']   = $this->loadModel('testcase')->getSceneMenu($product->id, $moduleID, 'case', 0,  0);
+        $searchConfig['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($product->id, $viewType = 'case');
+        $searchConfig['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
+        $searchConfig['params']['status']['values']  = $this->lang->testcase->statusList;
+        $searchConfig['params']['product']['values'] = array($product->id => $product->name, 'all' => $this->lang->testcase->allProduct);
+
+        $searchConfig['fields']['assignedTo'] = $this->lang->testtask->assignedTo;
+        $searchConfig['params']['assignedTo'] = array('operator' => '=', 'control' => 'select', 'values' => 'users');
+
+        if(!$this->config->testcase->needReview) unset($searchConfig['params']['status']['values']['wait']);
+        if($product->shadow) unset($searchConfig['fields']['product']);
+        unset($searchConfig['fields']['branch']);
+        unset($searchConfig['params']['branch']);
+
+        $this->loadModel('search')->setSearchParams($searchConfig);
+    }
+
+    /**
      * 构建编辑的测试单数据。
      * Build task for editing.
      *
