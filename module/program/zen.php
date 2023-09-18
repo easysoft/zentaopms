@@ -175,7 +175,7 @@ class programZen extends program
     }
 
     /**
-     * 在产品视角查看项目时通过浏览类型获取产品聊表。
+     * 在产品视角查看项目时通过浏览类型获取产品列表。
      * Get products by browse type of the program for product view in program list.
      *
      * @param  string $browseType
