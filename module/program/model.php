@@ -1496,13 +1496,14 @@ class programModel extends model
     }
 
     /**
+     * 构造项目集列表的操作列数据。
      * Build actions data.
      *
      * @param  object $program
      * @access public
      * @return array
      */
-    public function buildActions($program)
+    public function buildActions(object $program): array
     {
         $actionsMap = $this->programTao->buildProgramActionsMap($program);
         if($program->type == 'project') $actionsMap = array_merge($actionsMap, $this->programTao->buildProjectActionsMap($program));

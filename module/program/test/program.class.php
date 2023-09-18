@@ -470,8 +470,8 @@ class programTest
     }
 
     /**
-     * 构建项目视角中项目的操作数据。
-     * Build actions map for project.
+     * 构建项目视角中项目集的操作数据。
+     * Build actions map for program.
      *
      * @param  int    $programID
      * @access public
@@ -494,5 +494,33 @@ class programTest
     {
         $program = $this->program->getByID($programID);
         return $this->program->getNormalActions($program);
+    }
+
+    /**
+     * 构建项目视角中项目的操作数据。
+     * Build actions map for project.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function buildProjectActionsMapTest(int $projectID): array
+    {
+        $project = $this->program->getByID($projectID);
+        return $this->program->buildProjectActionsMap($project);
+    }
+
+    /**
+     * 构造项目集列表的操作列数据。
+     * Build actions data.
+     *
+     * @param  int    $objectID
+     * @access public
+     * @return array
+     */
+    public function buildActionsTest(int $objectID): array
+    {
+        $object = $this->program->getByID($objectID);
+        return $this->program->buildActions($object);
     }
 }
