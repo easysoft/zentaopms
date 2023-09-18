@@ -348,6 +348,26 @@ class programTest
     }
 
     /**
+     * 测试 fixLinkedProduct。
+     * Test fixLinkedProduct.
+     *
+     * @param  int    $programID
+     * @param  int    $parentID
+     * @param  int    $oldParentID
+     * @param  string $oldPath
+     * @access public
+     * @return int
+     */
+    public function fixLinkedProductTest(int $programID, int $parentID, int $oldParentID, string $oldPath): int
+    {
+        $newTopProgram = $this->program->getTopByID($programID);
+        $this->program->fixLinkedProduct($programID, $parentID, $oldParentID, $oldPath);
+        $newProduct = $this->program->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq($newTopProgram)->fetch('id');
+
+        return empty($newProduct) ? 0 : $newProduct;
+    }
+
+    /**
      * 获取看板统计的相关数据。
      * Get Kanban statistics data.
      *

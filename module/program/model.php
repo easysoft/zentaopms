@@ -873,7 +873,11 @@ class programModel extends model
                 $this->user->updateUserView($productIdList, 'product');
             }
 
-            if($oldProgram->parent != $program->parent) $this->programTao->changeParent($programID, $program->parent, $oldProgram->parent, $oldProgram->path, $oldProgram->grade);
+            if($oldProgram->parent != $program->parent)
+            {
+                $this->processNode($programID, $program->parent, $oldProgram->path, $oldProgram->grade);
+                $this->programTao->fixLinkedProduct($programID, $program->parent, $oldProgram->parent, $oldProgram->path);
+            }
             return common::createChanges($oldProgram, $program);
         }
         return false;
@@ -1289,7 +1293,7 @@ class programModel extends model
             if($parent)
             {
                 $path  = rtrim($parent->path, ',') . $path;
-                $grade =  in_array($childNode->type, array('program', 'project'))? $parent->grade + $grade : $grade;
+                $grade = in_array($childNode->type, array('program', 'project')) ? $parent->grade + $grade : $grade;
             }
 
             $this->dao->update(TABLE_PROGRAM)->set('path')->eq($path)->set('grade')->eq($grade)->where('id')->eq($childNode->id)->exec();

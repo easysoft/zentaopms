@@ -195,22 +195,19 @@ class programTao extends programModel
     }
 
     /**
-     * 如果修改了父项目集，修改新节点和顶级项目集。
-     * If change parent, then fix node path and top program.
+     * 如果修改了父项目集，修改关联的产品。
+     * If change parent, then fix linked product.
      *
      * @param  int       $programID
      * @param  int       $parent
      * @param  int       $oldParent
      * @param  string    $oldPath
-     * @param  int       $oldGrade
      * @access protected
      * @return void
      */
-    protected function changeParent(int $programID, int $parent, int $oldParent, string $oldPath, int $oldGrade): void
+    protected function fixLinkedProduct(int $programID, int $parent, int $oldParent, string $oldPath): void
     {
         if($parent == $oldParent) return;
-
-        $this->processNode($programID, $parent, $oldPath, $oldGrade);
 
         /* Move product to new top program. */
         $oldTopProgram = $this->getTopByPath($oldPath);
