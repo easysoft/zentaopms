@@ -253,8 +253,8 @@ class productplanModel extends model
             $branchQuery .= ')';
         }
 
-        $plans = $this->dao->select('t1.id,t1.title,t1.parent,t1.begin,t1.end,t3.type as productType,t1.branch')->from(TABLE_PRODUCTPLAN)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t3.id=t1.product')
+        $plans = $this->dao->select('t1.id,t1.title,t1.parent,t1.begin,t1.end,t2.type as productType,t1.branch')->from(TABLE_PRODUCTPLAN)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t2.id=t1.product')
             ->where('t1.product')->in($productIdList)
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF(!empty($branchQuery))->andWhere($branchQuery)->fi()
@@ -276,64 +276,9 @@ class productplanModel extends model
             $planPairs[$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
 
             if($plan->begin == $this->config->productplan->future && $plan->end == $this->config->productplan->future) $planPairs[$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
+            if(str_contains($param, 'cleantitle')) $planPairs[$plan->id] = $plan->title;
             if($plan->productType != 'normal') $planPairs[$plan->id] = $planPairs[$plan->id] . ' / ' . ($plan->branchName ? $plan->branchName : $this->lang->branch->main);
         }
-        return $planPairs;
-    }
-
-    /**
-     * Get plan pairs for story.
-     *
-     * @param  array|int    $product
-     * @param  int          $branch
-     * @param  string       $param skipParent|withMainPlan|unexpired|noclosed
-     * @access public
-     * @return array
-     */
-    public function getPairsForStory($product = 0, $branch = '', $param = '')
-    {
-        $date   = date('Y-m-d');
-        $param  = strtolower($param);
-        $branch = strpos($param, 'withmainplan') !== false ? "0,$branch" : $branch;
-
-        $branchQuery = '';
-        if($branch !== '' and $branch != 'all')
-        {
-            $branchQuery .= '(';
-            $branchCount = count(explode(',', $branch));
-            foreach(explode(',', $branch) as $index => $branchID)
-            {
-                $branchQuery .= "FIND_IN_SET('$branchID', branch)";
-                if($index < $branchCount - 1) $branchQuery .= ' OR ';
-            }
-            $branchQuery .= ')';
-        }
-
-        $plans  = $this->dao->select('id,title,parent,begin,end')->from(TABLE_PRODUCTPLAN)
-            ->where('product')->in($product)
-            ->andWhere('deleted')->eq(0)
-            ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('end')->ge($date)->fi()
-            ->beginIF(strpos($param, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
-            ->beginIF($branch !== 'all' and $branch !== '' and !empty($branchQuery))->andWhere($branchQuery)->fi()
-            ->orderBy('begin desc')
-            ->fetchAll('id');
-
-        $plans       = $this->reorder4Children($plans);
-        $planPairs   = array();
-        $parentTitle = array();
-        foreach($plans as $plan)
-        {
-            if($plan->parent == '-1')
-            {
-                $parentTitle[$plan->id] = $plan->title;
-                if(strpos($param, 'skipparent') !== false) continue;
-            }
-            if($plan->parent > 0 and isset($parentTitle[$plan->parent])) $plan->title = $parentTitle[$plan->parent] . ' /' . $plan->title;
-            $planPairs[$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
-            if(str_contains($param, 'cleantitle')) $planPairs[$plan->id] = $plan->title;
-            if($plan->begin == $this->config->productplan->future and $plan->end == $this->config->productplan->future) $planPairs[$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
-        }
-
         return $planPairs;
     }
 

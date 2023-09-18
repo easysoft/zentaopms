@@ -90,22 +90,6 @@ class productPlan
     }
 
     /**
-     * Get pairs for story
-     *
-     * @param array|int $product
-     * @param int       $branch
-     * @param string    $param
-     * @access public
-     * @return int
-     */
-    public function getPairsForStory($product, $branch, $param)
-    {
-        $productplans = $this->productplan->getPairsForStory($product, $branch, $param);
-        if(dao::isError()) return dao::getError();
-        return count($productplans) - 1;
-    }
-
-    /**
      * Get for products
      *
      * @param  array  $products

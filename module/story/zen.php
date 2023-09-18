@@ -445,7 +445,7 @@ class storyZen extends story
         $product     = $this->product->getByID($productID);
         $users       = $this->user->getPairs('pdfirst|noclosed|nodeleted');
         $stories     = $this->story->getParentStoryPairs($productID);
-        $plans       = $this->loadModel('productplan')->getPairsForStory($productID, $branch == 0 ? '' : $branch, 'skipParent|unexpired|noclosed');
+        $plans       = $this->loadModel('productplan')->getPairs($productID, $branch == 0 ? '' : $branch, 'unexpired|noclosed', true);
         $plans       = array_map(function($planName){return str_replace(FUTURE_TIME, $this->lang->story->undetermined, $planName);}, $plans);
         $forceReview = $this->story->checkForceReview();
         $needReview  = ($account == $product->PO || $objectID > 0 || $this->config->story->needReview == 0 || !$forceReview);
@@ -530,7 +530,7 @@ class storyZen extends story
         }
         $branch    = current(explode(',', $branch));
         $modules   = $this->tree->getOptionMenu($productID, 'story', 0, $branch === 'all' ? 0 : $branch);
-        $plans     = $this->loadModel('productplan')->getPairsForStory($productID, ($branch === 'all' or empty($branch)) ? '' : $branch, 'skipParent|unexpired|noclosed');
+        $plans     = $this->loadModel('productplan')->getPairs($productID, ($branch === 'all' or empty($branch)) ? '' : $branch, 'unexpired|noclosed', true);
         $reviewers = $this->story->getProductReviewers($productID);
         $users     = $this->user->getPairs('pdfirst|noclosed|nodeleted');
         $stories   = $this->story->getParentStoryPairs($productID);

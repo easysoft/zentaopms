@@ -385,7 +385,7 @@ class story extends control
         $this->view->stories          = $stories;
         $this->view->users            = $users;
         $this->view->product          = $product;
-        $this->view->plans            = $this->loadModel('productplan')->getPairsForStory($story->product, $story->branch == 0 ? 'all' : $story->branch, 'skipParent');
+        $this->view->plans            = $this->loadModel('productplan')->getPairs($story->product, $story->branch == 0 ? 'all' : $story->branch, '', true);
         $this->view->products         = $products;
         $this->view->productStories   = $productStories;
         $this->view->branchOption     = $branchOption;

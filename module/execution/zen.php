@@ -1788,7 +1788,7 @@ class executionZen extends execution
         if(!empty($planID))
         {
             $plan           = $this->loadModel('productplan')->fetchByID($planID);
-            $productPlan    = $this->productplan->getPairsForStory($plan->product, $plan->branch, 'skipParent|unexpired|withMainPlan');
+            $productPlan    = $this->productplan->getPairs($plan->product, $plan->branch, 'unexpired|withMainPlan', true);
             $linkedBranches = array();
             $linkedBranches[$plan->product][$plan->branch] = $plan->branch;
             $this->view->linkedBranches = $linkedBranches;
