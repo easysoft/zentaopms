@@ -1075,7 +1075,8 @@ class product extends control
     }
 
     /**
-     * Drop menu page.
+     * 获取产品下1.5级下拉数据。
+     * Get 1.5 level drop-down data under product.
      *
      * @param  int    $productID
      * @param  string $module
@@ -1094,7 +1095,7 @@ class product extends control
         $programProducts = array();
         foreach($products as $product) $programProducts[$product->program][] = $product;
 
-        $this->view->link      = $this->product->getProductLink($module, $method, $extra);
+        $this->view->link      = $this->productZen->getProductLink($module, $method, $extra);
         $this->view->productID = $productID;
         $this->view->module    = $module;
         $this->view->method    = $method;

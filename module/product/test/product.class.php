@@ -203,20 +203,6 @@ class productTest
     }
 
     /**
-     * Test get product list.
-     *
-     * @param  int    $programID
-     * @param  string $status
-     * @param  int    $line
-     * @access public
-     * @return array
-     */
-    public function getProductList($programID, $status = 'all', $line = 0)
-    {
-        return $this->objectModel->getList($programID, $status, 0, $line);
-    }
-
-    /**
      * Test get product count.
      *
      * @param  int    $programID
