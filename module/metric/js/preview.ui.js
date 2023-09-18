@@ -274,6 +274,8 @@ window.renderChart = function()
     var $currentBox = $('#metricBox' + current.id);
     if(viewType == 'single') $currentBox = $('.table-and-chart-single');
     if(!$currentBox.find('.chart').length) return;
+    $currentBox.find('.chart').remove();
+    $currentBox.find('.chart-side').append('<div class="chart chart-container"></div>');
 
     window.initChart($currentBox.find('.chart')[0], resultHeader, resultData);
 }
