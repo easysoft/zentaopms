@@ -1108,7 +1108,8 @@ class product extends control
     }
 
     /**
-     * Set product id to session in ajax
+     * 保存产品ID到session中。
+     * Save the product ID to the session.
      *
      * @param  int    $productID
      * @access public
