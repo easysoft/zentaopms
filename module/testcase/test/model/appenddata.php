@@ -8,15 +8,196 @@ zdTable('casestep')->gen('100');
 zdTable('bug')->config('casebug')->gen('50');
 zdTable('testresult')->gen('50');
 zdTable('user')->gen('1');
+zdTable('testrun')->gen('10');
 
 su('admin');
 
 /**
 
 title=测试 testcaseModel->appendData();
+timeout=0
 cid=1
-pid=1
 
+- 获取case 1 2 可以加入的数据
+ - 第1条的bugs属性 @6
+ - 第1条的results属性 @1
+ - 第1条的caseFails属性 @0
+ - 第1条的stepNumber属性 @1
+ - 第2条的bugs属性 @6
+ - 第2条的results属性 @1
+ - 第2条的caseFails属性 @1
+ - 第2条的stepNumber属性 @1
+- 获取case 3 4 可以加入的数据
+ - 第3条的bugs属性 @6
+ - 第3条的results属性 @1
+ - 第3条的caseFails属性 @0
+ - 第3条的stepNumber属性 @1
+ - 第4条的bugs属性 @0
+ - 第4条的results属性 @1
+ - 第4条的caseFails属性 @1
+ - 第4条的stepNumber属性 @1
+- 获取case 5 6 可以加入的数据
+ - 第5条的bugs属性 @0
+ - 第5条的results属性 @1
+ - 第5条的caseFails属性 @0
+ - 第5条的stepNumber属性 @1
+ - 第6条的bugs属性 @6
+ - 第6条的results属性 @1
+ - 第6条的caseFails属性 @1
+ - 第6条的stepNumber属性 @1
+- 获取case 7 8 可以加入的数据
+ - 第7条的bugs属性 @6
+ - 第7条的results属性 @1
+ - 第7条的caseFails属性 @0
+ - 第7条的stepNumber属性 @1
+ - 第8条的bugs属性 @5
+ - 第8条的results属性 @1
+ - 第8条的caseFails属性 @1
+ - 第8条的stepNumber属性 @1
+- 获取case 9 10 可以加入的数据
+ - 第9条的bugs属性 @5
+ - 第9条的results属性 @1
+ - 第9条的caseFails属性 @0
+ - 第9条的stepNumber属性 @1
+ - 第10条的bugs属性 @0
+ - 第10条的results属性 @1
+ - 第10条的caseFails属性 @1
+ - 第10条的stepNumber属性 @1
+- 获取run 1 2 可以加入的数据
+ - 第1条的bugs属性 @0
+ - 第1条的results属性 @1
+ - 第1条的caseFails属性 @0
+ - 第1条的stepNumber属性 @1
+ - 第2条的bugs属性 @0
+ - 第2条的results属性 @1
+ - 第2条的caseFails属性 @1
+ - 第2条的stepNumber属性 @1
+- 获取run 3 4 可以加入的数据
+ - 第3条的bugs属性 @2
+ - 第3条的results属性 @1
+ - 第3条的caseFails属性 @0
+ - 第3条的stepNumber属性 @1
+ - 第4条的bugs属性 @0
+ - 第4条的results属性 @1
+ - 第4条的caseFails属性 @1
+ - 第4条的stepNumber属性 @1
+- 获取run 5 6 可以加入的数据
+ - 第5条的bugs属性 @0
+ - 第5条的results属性 @1
+ - 第5条的caseFails属性 @0
+ - 第5条的stepNumber属性 @1
+ - 第6条的bugs属性 @1
+ - 第6条的results属性 @1
+ - 第6条的caseFails属性 @1
+ - 第6条的stepNumber属性 @1
+- 获取run 7 8 可以加入的数据
+ - 第7条的bugs属性 @2
+ - 第7条的results属性 @1
+ - 第7条的caseFails属性 @0
+ - 第7条的stepNumber属性 @1
+ - 第8条的bugs属性 @1
+ - 第8条的results属性 @1
+ - 第8条的caseFails属性 @1
+ - 第8条的stepNumber属性 @1
+- 获取run 9 10 可以加入的数据
+ - 第9条的bugs属性 @0
+ - 第9条的results属性 @1
+ - 第9条的caseFails属性 @0
+ - 第9条的stepNumber属性 @1
+ - 第10条的bugs属性 @0
+ - 第10条的results属性 @1
+ - 第10条的caseFails属性 @1
+ - 第10条的stepNumber属性 @1
+- 获取case 1 2 case id 1 3 5 7 可以加入的数据
+ - 第1条的bugs属性 @6
+ - 第1条的results属性 @1
+ - 第1条的caseFails属性 @0
+ - 第1条的stepNumber属性 @1
+ - 第2条的bugs属性 @0
+ - 第2条的results属性 @0
+ - 第2条的caseFails属性 @0
+ - 第2条的stepNumber属性 @0
+- 获取case 3 4 case id 1 3 5 7 可以加入的数据
+ - 第3条的bugs属性 @6
+ - 第3条的results属性 @1
+ - 第3条的caseFails属性 @0
+ - 第3条的stepNumber属性 @1
+ - 第4条的bugs属性 @0
+ - 第4条的results属性 @0
+ - 第4条的caseFails属性 @0
+ - 第4条的stepNumber属性 @0
+- 获取case 5 6 case id 1 3 5 7 可以加入的数据
+ - 第5条的bugs属性 @0
+ - 第5条的results属性 @1
+ - 第5条的caseFails属性 @0
+ - 第5条的stepNumber属性 @1
+ - 第6条的bugs属性 @0
+ - 第6条的results属性 @0
+ - 第6条的caseFails属性 @0
+ - 第6条的stepNumber属性 @0
+- 获取case 7 8 case id 1 3 5 7 可以加入的数据
+ - 第7条的bugs属性 @6
+ - 第7条的results属性 @1
+ - 第7条的caseFails属性 @0
+ - 第7条的stepNumber属性 @1
+ - 第8条的bugs属性 @0
+ - 第8条的results属性 @0
+ - 第8条的caseFails属性 @0
+ - 第8条的stepNumber属性 @0
+- 获取case 9 10 case id 1 3 5 7 可以加入的数据
+ - 第9条的bugs属性 @0
+ - 第9条的results属性 @0
+ - 第9条的caseFails属性 @0
+ - 第9条的stepNumber属性 @0
+ - 第10条的bugs属性 @0
+ - 第10条的results属性 @0
+ - 第10条的caseFails属性 @0
+ - 第10条的stepNumber属性 @0
+- 获取run 1 2 run id 1 3 5 7 可以加入的数据
+ - 第1条的bugs属性 @3
+ - 第1条的results属性 @1
+ - 第1条的caseFails属性 @0
+ - 第1条的stepNumber属性 @1
+ - 第2条的bugs属性 @3
+ - 第2条的results属性 @0
+ - 第2条的caseFails属性 @0
+ - 第2条的stepNumber属性 @0
+- 获取run 3 4 run id 1 3 5 7 可以加入的数据
+ - 第3条的bugs属性 @3
+ - 第3条的results属性 @1
+ - 第3条的caseFails属性 @0
+ - 第3条的stepNumber属性 @1
+ - 第4条的bugs属性 @0
+ - 第4条的results属性 @0
+ - 第4条的caseFails属性 @0
+ - 第4条的stepNumber属性 @0
+- 获取run 5 6 run id 1 3 5 7 可以加入的数据
+ - 第5条的bugs属性 @0
+ - 第5条的results属性 @1
+ - 第5条的caseFails属性 @0
+ - 第5条的stepNumber属性 @1
+ - 第6条的bugs属性 @3
+ - 第6条的results属性 @0
+ - 第6条的caseFails属性 @0
+ - 第6条的stepNumber属性 @0
+- 获取run 7 8 run id 1 3 5 7 可以加入的数据
+ - 第7条的bugs属性 @3
+ - 第7条的results属性 @1
+ - 第7条的caseFails属性 @0
+ - 第7条的stepNumber属性 @1
+ - 第8条的bugs属性 @3
+ - 第8条的results属性 @0
+ - 第8条的caseFails属性 @0
+ - 第8条的stepNumber属性 @0
+- 获取run 9 10 run id 1 3 5 7 可以加入的数据
+ - 第9条的bugs属性 @3
+ - 第9条的results属性 @0
+ - 第9条的caseFails属性 @0
+ - 第9条的stepNumber属性 @0
+ - 第10条的bugs属性 @0
+ - 第10条的results属性 @0
+ - 第10条的caseFails属性 @0
+ - 第10条的stepNumber属性 @0
 
 */
 $case1 = new stdclass();
