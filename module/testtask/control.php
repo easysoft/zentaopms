@@ -385,9 +385,9 @@ class testtask extends control
      */
     public function cases(int $taskID, string $browseType = 'all', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        /* 获取测试单基本信息。*/
+        /* 获取测试单信息。*/
         /* Get testtask info. */
-        $testtask = $this->testtask->fetchByID($taskID);
+        $testtask = $this->testtask->getByID($taskID);
         if(!$testtask) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->testtask->checkLinked, 'locate' => array('back' => true))));
 
         /* 预处理部分变量供后面使用。*/
