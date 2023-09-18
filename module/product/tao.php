@@ -636,11 +636,11 @@ class productTao extends productModel
      * @param  string|array $append    '1,2,3'
      * @param  string       $status
      * @param  string       $orderBy
-     * @param  bool         $noDeleted
+     * @param  bool         $withDeleted
      * @access protected
      * @return int[]
      */
-    protected function getProductsByProjectID(int $projectID, string|array $append, string $status, string $orderBy, bool $noDeleted = true): array
+    protected function getProductsByProjectID(int $projectID, string|array $append, string $status, string $orderBy, bool $withDeleted = false): array
     {
         /* 处理要用的到变量信息。 */
         $append  = $this->formatAppendParam($append);
@@ -648,11 +648,10 @@ class productTao extends productModel
 
         return $this->dao->select("t1.branch, t1.plan, t2.*")->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-            ->where('(1=1')
-            ->beginIF($noDeleted)->andWhere('t2.deleted')->eq(0)->fi()
+            ->where('(t2.vision')->eq($this->config->vision)
+            ->beginIF(!$withDeleted)->andWhere('t2.deleted')->eq(0)->fi()
             ->beginIF(!empty($projectID))->andWhere('t1.project')->eq($projectID)->fi()
             ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t2.id')->in($this->app->user->view->products)->fi()
-            ->andWhere('t2.vision')->eq($this->config->vision)
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
             ->markRight(1)
             ->beginIF($append)->orWhere('t2.id')->in($append)->fi()
