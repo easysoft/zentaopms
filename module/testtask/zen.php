@@ -173,6 +173,7 @@ class testtaskZen extends testtask
      * @param  object    $produc
      * @param  object    $testtask
      * @param  array     $runs
+     * @param  int       $moduleID
      * @param  string    $browseType
      * @param  int       $param
      * @param  string    $orderBy
@@ -180,7 +181,7 @@ class testtaskZen extends testtask
      * @access protected
      * @return void
      */
-    protected function assignForCases(object $product, object $testtask, array $runs, string $browseType, int $param, string $orderBy, object $pager): void
+    protected function assignForCases(object $product, object $testtask, array $runs, int $moduleID, string $browseType, int $param, string $orderBy, object $pager): void
     {
         $suites = $this->loadModel('testsuite')->getSuitePairs($product->id);
 
@@ -206,6 +207,7 @@ class testtaskZen extends testtask
         $this->view->suites         = $suites;
         $this->view->productID      = $product->id;
         $this->view->task           = $testtask;
+        $this->view->moduleID       = $moduleID;
         $this->view->browseType     = $browseType;
         $this->view->param          = $param;
         $this->view->orderBy        = $orderBy;

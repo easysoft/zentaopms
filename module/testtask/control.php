@@ -429,7 +429,7 @@ class testtask extends control
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
         $this->testtaskZen->setSearchParamsForCases($product, $moduleID, $taskID, $queryID);
-        $this->testtaskZen->assignForCases($product, $testtask, $runs, $browseType, $param, $orderBy, $pager);
+        $this->testtaskZen->assignForCases($product, $testtask, $runs, $moduleID, $browseType, $param, $orderBy, $pager);
         $this->display();
     }
 
