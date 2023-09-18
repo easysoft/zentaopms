@@ -991,6 +991,26 @@ class testcaseTest
     }
 
     /**
+     * 测试更新步骤。
+     * Test update steps.
+     *
+     * @param  int        $caseID
+     * @param  object     $case
+     * @access public
+     * @return bool|array
+     */
+    public function updateStepTest(int $caseID, object $case): bool|array
+    {
+        $oldCase = $this->objectModel->getByID($caseID);
+
+        $this->objectModel->updateStep($case, $oldCase);
+        if(dao::isError()) return false;
+
+        global $tester;
+        return $tester->dao->select('*')->from(TABLE_CASESTEP)->where('case')->eq($caseID)->andWhere('version')->eq($case->version)->fetchAll();
+    }
+
+    /**
      * 测试获取步骤。
      * Test get steps.
      *

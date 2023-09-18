@@ -200,9 +200,7 @@ class testcaseTao extends testcaseModel
             $step->desc    = rtrim(htmlSpecialString($stepDesc));
             $step->expect  = $stepType == 'group' ? '' : rtrim(htmlSpecialString(zget($expects, $stepKey, '')));
 
-            $this->dao->insert(TABLE_CASESTEP)->data($step)
-                ->autoCheck()
-                ->exec();
+            $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
 
             /* 如果步骤类型是group，将祖父ID设置为父ID，父ID设置为当前步骤ID。 */
             /* If step type is group, set grand step id to parent step id and set parent step id to current step id. */
@@ -251,6 +249,7 @@ class testcaseTao extends testcaseModel
                 }
                 $key[$grade - 1] ++;
             }
+
             $name = implode('.', $key);
             $name = str_replace('.0', '', $name);
 
@@ -456,6 +455,11 @@ class testcaseTao extends testcaseModel
             foreach($oldCase->steps as $step)
             {
                 unset($step->id);
+                unset($step->name);
+                unset($step->step);
+                unset($step->grade);
+
+                $step->case    = $oldCase->id;
                 $step->version = $case->version;
                 $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
             }
