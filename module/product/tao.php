@@ -1160,7 +1160,7 @@ class productTao extends productModel
         /* 根据条件整理数据，将子阶段放到父阶段中。 */
         foreach($executions as $id => $execution)
         {
-            if($execution->grade == 2 and isset($stages[$execution->parent]))
+            if($execution->grade == 2 && isset($stages[$execution->parent]))
             {
                 $executionName = (!$withProjectName ? '' : $execution->projectName) . '/' . $stages[$execution->parent]->name . '/' . $execution->name;
                 if(isset($executions[$execution->parent]))

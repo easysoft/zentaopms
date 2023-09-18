@@ -3,6 +3,7 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 
+zdTable('user')->gen(5);
 zdTable('project')->config('execution')->gen(32);
 $projectProduct = zdTable('projectproduct');
 $projectProduct->project->range('101-150');
