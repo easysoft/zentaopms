@@ -24,7 +24,7 @@ $runIdList = array(1, 2, 3, 4, 5);
 $testtask = new testtaskTest();
 
 r($testtask->getRunByIdTest($runIdList[0])) && p('id,task') && e('1,1'); // 查询run 1 的信息
-r($testtask->getRunByIdTest($runIdList[1])) && p('id,task') && e('2,1'); // 查询run 1 的信息
-r($testtask->getRunByIdTest($runIdList[2])) && p('id,task') && e('3,1'); // 查询run 1 的信息
-r($testtask->getRunByIdTest($runIdList[3])) && p('id,task') && e('4,1'); // 查询run 1 的信息
-r($testtask->getRunByIdTest($runIdList[4])) && p('id,task') && e('5,2'); // 查询run 1 的信息
+r($testtask->getRunByIdTest($runIdList[1])) && p('id,task') && e('2,1'); // 查询run 2 的信息
+r($testtask->getRunByIdTest($runIdList[2])) && p('id,task') && e('3,1'); // 查询run 3 的信息
+r($testtask->getRunByIdTest($runIdList[3])) && p('id,task') && e('4,1'); // 查询run 4 的信息
+r($testtask->getRunByIdTest($runIdList[4])) && p('id,task') && e('5,2'); // 查询run 5 的信息

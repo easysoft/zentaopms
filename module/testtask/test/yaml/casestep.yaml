@@ -1,0 +1,14 @@
+title: table zt_casestep
+desc: "用例步骤"
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: parent
+    range: 0,1,2,0,4,5,5,4,9,0,11,0{1000}
+  - field: case
+    range: 1{12},2-1000
+  - field: type
+    range: group,group,item,group,group,item,item,group,item,group,item,step{1000}
+  - field: version
+    range: 1{3},2{9},1{1000}
+

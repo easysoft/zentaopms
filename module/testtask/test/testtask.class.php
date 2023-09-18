@@ -8,6 +8,30 @@ class testtaskTest
     }
 
     /**
+     * 初始化结果。
+     * Init test results.
+     *
+     * @access public
+     * @return void
+     */
+    public function initResult(): void
+    {
+        global $tester;
+        $testResults = $tester->dao->select('*')->from(TABLE_TESTRESULT)->fetchAll();
+        foreach($testResults as $testResult)
+        {
+            if($testResult->caseResult == 'fail')
+            {
+                $tester->dao->update(TABLE_TESTRESULT)->set('`stepResults`')->eq('a:1:{i:'.$testResult->run.';a:2:{s:6:"result";s:4:"fail";s:4:"real";s:0:"";}}')->where('id')->eq($testResult->id)->exec();
+            }
+            else
+            {
+                $tester->dao->update(TABLE_TESTRESULT)->set('`stepResults`')->eq('a:1:{i:'.$testResult->run.';a:2:{s:6:"result";s:4:"pass";s:4:"real";s:0:"";}}')->where('id')->eq($testResult->id)->exec();
+            }
+        }
+    }
+
+    /**
      * Test create testtask.
      *
      * @param  int   $projectID
@@ -265,10 +289,6 @@ class testtaskTest
      * Test get info of a test run.
      *
      * @param  int          $runID
-     * @param  int          $caseID
-     * @param  int          $version
-     * @param  string       $status  all|done
-     * @param  string       $type    all|fail
      * @access public
      * @return array|object
      */
@@ -299,9 +319,24 @@ class testtaskTest
         return $objects;
     }
 
-    public function getResultsTest($runID, $caseID = 0)
+    /**
+     * 测试获取用例执行结果。
+     * Test get results.
+     *
+     * @param  int    $runID
+     * @param  int    $caseID
+     * @param  string $status
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function getResultsTest(int $runID, int $caseID = 0, string $status = 'all', string $type = 'all'): array
     {
-        $objects = $this->objectModel->getResults($runID, $caseID = 0);
+        $objects = $this->objectModel->getResults($runID, $caseID, $status, $type);
+        foreach($objects as $object)
+        {
+            if($object->stepResults) $object->stepResults = implode(',', array_keys($object->stepResults));
+        }
 
         if(dao::isError()) return dao::getError();
 
@@ -378,5 +413,72 @@ class testtaskTest
         if(dao::isError()) return dao::getError();
 
         return $objects;
+    }
+
+    /**
+     * 测试计算用例执行结果的步骤
+     * Test process result steps.
+     *
+     * @param  int    $resultID
+     * @access public
+     * @return string|array
+     */
+    public function processResultStepsTest(int $resultID): string|array
+    {
+        global $tester;
+
+        $result = $tester->dao->select('*')->from(TABLE_TESTRESULT)->where('id')->eq($resultID)->fetch();
+
+        $relatedSteps = $tester->dao->select('*')->from(TABLE_CASESTEP)->where('case')->eq($result->case)->orderBy('id')->fetchAll('id');
+        $result->stepResults = unserialize($result->stepResults);
+
+        $objects = $this->objectModel->processResultSteps($result, $relatedSteps);
+
+        $return = '';
+        foreach($objects as $object)
+        {
+            $return .= "{$object['id']}, {$object['name']}, {$object['grade']}";
+            if(isset($object['result'])) $return .= ", {$object['result']}, {$object['real']}";
+            $return = trim($return) . '; ';
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        return trim($return);
+    }
+
+    /**
+     * 测试结果的文件。
+     * Test get files of the results
+     *
+     * @param  array  $resultIdList
+     * @access public
+     * @return array
+     */
+    public function getResultsFilesTest(array $resultIdList): array
+    {
+        list($resultFiles, $stepFiles) = $this->objectModel->getResultsFiles($resultIdList);
+
+        if(dao::isError()) return dao::getError();
+
+        $return = array('result' => '', 'step' => '');
+
+        foreach($resultFiles as $resultID => $files)
+        {
+            $return['result'] .= "{$resultID}: ";
+            $return['result'] .= implode(',', array_keys($files));
+            $return['result'] .= " ";
+        }
+        $return['result'] = trim($return['result']);
+
+        foreach($stepFiles as $stepID => $extraFiles)
+        {
+            $return['step'] .= "{$stepID}: ";
+            foreach($extraFiles as $files) $return['step'] .= implode(',', array_keys($files));
+            $return['step'] .= " ";
+        }
+        $return['step'] = trim($return['step']);
+
+        return $return;
     }
 }

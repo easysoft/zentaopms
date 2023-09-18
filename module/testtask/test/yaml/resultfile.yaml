@@ -1,0 +1,11 @@
+title: table zt_file
+desc: "用例步骤"
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: objectType
+    range: caseResult,stepResult
+  - field: objectID
+    range: 1-20
+  - field: extra
+    range: "[],0-4,editor"

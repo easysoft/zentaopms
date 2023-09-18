@@ -1471,6 +1471,7 @@ class testtaskModel extends model
     }
 
     /**
+     * 通过执行 ID 或用例 ID 获取用例的执行结果。
      * Get results by runID or caseID
      *
      * @param  int    $runID
@@ -1480,41 +1481,27 @@ class testtaskModel extends model
      * @access public
      * @return void
      */
-    public function getResults($runID, $caseID = 0, $status = 'all', $type = 'all')
+    public function getResults(int $runID, int $caseID = 0, string $status = 'all', string $type = 'all'): array
     {
-        if($runID > 0)
-        {
-            $results = $this->dao->select('*')->from(TABLE_TESTRESULT)
-                ->where('run')->eq($runID)
-                ->beginIF($status == 'done')->andWhere('caseResult')->ne('')->fi()
-                ->beginIF($type != 'all')->andWhere('caseResult')->eq($type)->fi()
-                ->orderBy('id desc')
-                ->fetchAll('id');
-        }
-        else
-        {
-            $results = $this->dao->select('*')->from(TABLE_TESTRESULT)
-                ->where('`case`')->eq($caseID)
-                ->beginIF($status == 'done')->andWhere('caseResult')->ne('')->fi()
-                ->beginIF($type != 'all')->andWhere('caseResult')->eq($type)->fi()
-                ->orderBy('id desc')
-                ->fetchAll('id');
-        }
-
+        $results = $this->dao->select('*')->from(TABLE_TESTRESULT)
+            ->beginIF($runID > 0)->where('run')->eq($runID)->fi()
+            ->beginIF($runID <= 0)->where('`case`')->eq($caseID)->fi()
+            ->beginIF($status == 'done')->andWhere('caseResult')->ne('')->fi()
+            ->beginIF($type != 'all')->andWhere('caseResult')->eq($type)->fi()
+            ->orderBy('id desc')
+            ->fetchAll('id');
         if(!$results) return array();
 
-        $relatedVersions = array();
-        $runIdList       = array();
-        $nodeIdList      = array();
+        list($resultFiles, $stepFiles) = $this->getResultsFiles(array_keys($results));
+
+        $runIdList = $nodeIdList = $relatedVersions = array();
         foreach($results as $result)
         {
-            $runIdList[$result->run] = $result->run;
-            $relatedVersions[]       = $result->version;
-            $runCaseID               = $result->case;
-            if(!empty($result->node)) $nodeIdList[] = $result->node;
+            $runIdList[$result->run]           = $result->run;
+            $nodeIdList[$result->node]         = $result->node;
+            $relatedVersions[$result->version] = $result->version;
+            $runCaseID                         = $result->case;
         }
-        $relatedVersions = array_unique($relatedVersions);
-
         $relatedSteps = $this->dao->select('*')->from(TABLE_CASESTEP)
             ->where('`case`')->eq($runCaseID)
             ->andWhere('version')->in($relatedVersions)
@@ -1524,19 +1511,105 @@ class testtaskModel extends model
             ->leftJoin(TABLE_TESTTASK)->alias('t2')->on('t1.task=t2.id')
             ->where('t1.id')->in($runIdList)
             ->fetchPairs();
-        $nodes = $this->dao->select('id,name')->from(TABLE_ZAHOST)
-            ->where('id')->in(array_unique($nodeIdList))
-            ->fetchPairs();
+        $nodes = $this->dao->select('id,name')->from(TABLE_ZAHOST)->where('id')->in($nodeIdList)->fetchPairs();
 
-        $this->loadModel('file');
-        $files = $this->dao->select('*')->from(TABLE_FILE)
+        foreach($results as $resultID => $result)
+        {
+            if($result->stepResults) $result->stepResults = '';
+            $result->stepResults = unserialize($result->stepResults);
+            $result->build       = $result->run && !empty($runs[$result->run]->build) ? $runs[$result->run]->build : 0;
+            $result->task        = $result->run && !empty($runs[$result->run]->task) ? $runs[$result->run]->task : 0;
+            $result->nodeName    = zget($nodes, $result->node, '');
+            $result->files       = zget($resultFiles, $resultID, array()); //Get files of case result.
+            if(isset($relatedSteps[$result->version])) $result->stepResults = $this->processResultSteps($result, $relatedSteps[$result->version]);
+            if(!empty($result->ZTFResult)) $result->ZTFResult = $this->formatZtfLog($result->ZTFResult, $result->stepResults);
+
+            /* Get files of step result. */
+            if(!empty($result->stepResults))
+            {
+                foreach(array_keys($result->stepResults) as $stepID) $result->stepResults[$stepID]['files'] = isset($stepFiles[$resultID][$stepID]) ? $stepFiles[$resultID][$stepID] : array();
+            }
+        }
+        return $results;
+    }
+
+    /**
+     * 计算用例执行结果的步骤。
+     * Process steps of result.
+     *
+     * @param  object $result
+     * @param  array  $relatedStep
+     * @access public
+     * @return array
+     */
+    public function processResultSteps(object $result, array $relatedStep): array
+    {
+        $this->loadModel('testcase');
+
+        $preGrade    = 1;
+        $parentSteps = array();
+        $key         = array(0, 0, 0);
+        foreach($relatedStep as $stepID => $step)
+        {
+            $parentSteps[$step->id] = $step->parent;
+            $grade = 1;
+            if(isset($parentSteps[$step->parent]))
+            {
+                $grade = isset($parentSteps[$parentSteps[$step->parent]]) ? 3 : 2;
+            }
+
+            if($grade > $preGrade)
+            {
+                $key[$grade - 1] = 1;
+            }
+            else
+            {
+                if($grade < $preGrade)
+                {
+                    if($grade < 2) $key[1] = 0;
+                    if($grade < 3) $key[2] = 0;
+                }
+                $key[$grade - 1] ++;
+            }
+            $name = implode('.', $key);
+            $name = str_replace('.0', '', $name);
+
+            $relatedStep[$stepID] = (array)$step;
+            $relatedStep[$stepID]['name']   = $name;
+            $relatedStep[$stepID]['grade']  = $grade;
+            $relatedStep[$stepID]['desc']   = html_entity_decode($relatedStep[$stepID]['desc']);
+            $relatedStep[$stepID]['expect'] = html_entity_decode($relatedStep[$stepID]['expect']);
+            if(isset($result->stepResults[$stepID]))
+            {
+                $relatedStep[$stepID]['result'] = $result->stepResults[$stepID]['result'];
+                $relatedStep[$stepID]['real']   = $result->stepResults[$stepID]['real'];
+            }
+
+            $preGrade = $grade;
+        }
+        return $relatedStep;
+    }
+
+    /**
+     * 获取结果的文件。
+     * Get files of the results.
+     *
+     * @param  array  $resultIdList
+     * @access public
+     * @return array
+     */
+    public function getResultsFiles(array $resultIdList): array
+    {
+        $resultFiles = array();
+        $stepFiles   = array();
+        $files       = $this->dao->select('*')->from(TABLE_FILE)
             ->where("(objectType = 'caseResult' or objectType = 'stepResult')")
-            ->andWhere('objectID')->in(array_keys($results))
+            ->andWhere('objectID')->in($resultIdList)
             ->andWhere('extra')->ne('editor')
             ->orderBy('id')
             ->fetchAll();
-        $resultFiles = array();
-        $stepFiles   = array();
+
+        $this->loadModel('file');
         foreach($files as $file)
         {
             $this->file->setFileWebAndRealPaths($file);
@@ -1544,75 +1617,13 @@ class testtaskModel extends model
             {
                 $resultFiles[$file->objectID][$file->id] = $file;
             }
-            elseif($file->objectType == 'stepResult' and $file->extra !== '')
+            elseif($file->objectType == 'stepResult' && $file->extra !== '')
             {
                 $stepFiles[$file->objectID][(int)$file->extra][$file->id] = $file;
             }
         }
-        foreach($results as $resultID => $result)
-        {
-            $result->stepResults = unserialize($result->stepResults);
-            $result->build       = $result->run && !empty($runs[$result->run]->build) ? $runs[$result->run]->build : 0;
-            $result->task        = $result->run && !empty($runs[$result->run]->task) ? $runs[$result->run]->task : 0;
-            $result->nodeName    = $result->node ? zget($nodes, $result->node, '') : '';
 
-            if(!empty($result->ZTFResult))
-            {
-                $result->ZTFResult = $this->formatZtfLog($result->ZTFResult, $result->stepResults);
-            }
-
-            $result->files = zget($resultFiles, $resultID, array()); //Get files of case result.
-            if(isset($relatedSteps[$result->version]))
-            {
-                $preGrade    = 1;
-                $parentSteps = array();
-                $key         = array(0, 0, 0);
-                $relatedStep = $relatedSteps[$result->version];
-                foreach($relatedStep as $stepID => $step)
-                {
-                    $parentSteps[$step->id] = $step->parent;
-                    $grade = 1;
-                    if(isset($parentSteps[$step->parent]))
-                    {
-                        $grade = isset($parentSteps[$parentSteps[$step->parent]]) ? 3 : 2;
-                    }
-
-                    if($grade > $preGrade)
-                    {
-                        $key[$grade - 1] = 1;
-                    }
-                    else
-                    {
-                        if($grade < $preGrade)
-                        {
-                            if($grade < 2) $key[1] = 0;
-                            if($grade < 3) $key[2] = 0;
-                        }
-                        $key[$grade - 1] ++;
-                    }
-                    $name = implode('.', $key);
-                    $name = str_replace('.0', '', $name);
-
-                    $relatedStep[$stepID] = (array)$step;
-                    $relatedStep[$stepID]['name']   = $name;
-                    $relatedStep[$stepID]['grade']  = $grade;
-                    $relatedStep[$stepID]['desc']   = html_entity_decode($relatedStep[$stepID]['desc']);
-                    $relatedStep[$stepID]['expect'] = html_entity_decode($relatedStep[$stepID]['expect']);
-                    if(isset($result->stepResults[$stepID]))
-                    {
-                        $relatedStep[$stepID]['result'] = $result->stepResults[$stepID]['result'];
-                        $relatedStep[$stepID]['real']   = $result->stepResults[$stepID]['real'];
-                    }
-
-                    $preGrade = $grade;
-                }
-                $result->stepResults = $relatedStep;
-            }
-
-            /* Get files of step result. */
-            if(!empty($result->stepResults)) foreach($result->stepResults as $stepID => $stepResult) $result->stepResults[$stepID]['files'] = isset($stepFiles[$resultID][$stepID]) ? $stepFiles[$resultID][$stepID] : array();
-        }
-        return $results;
+        return array($resultFiles, $stepFiles);
     }
 
     /**
