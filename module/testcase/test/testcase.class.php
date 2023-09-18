@@ -446,11 +446,16 @@ class testcaseTest
      * @param  int    $caseID
      * @param  string $browseType
      * @access public
-     * @return array
+     * @return string|array
      */
-    public function getBugs2LinkTest(int $caseID, string $browseType): array
+    public function getBugs2LinkTest(int $caseID, string $browseType): string|array
     {
-        return $this->objectModel->getBugs2Link($caseID, $browseType);
+        $bugs = $this->objectModel->getBugs2Link($caseID, $browseType);
+
+        if(dao::isError()) return dao::getError();
+
+        $bugIdList = array_column($bugs, 'id');
+        return implode(',', $bugIdList);
     }
 
     /**
