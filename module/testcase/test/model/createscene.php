@@ -42,15 +42,15 @@ $scene18 = array('product' => 2, 'title' => '这个是测试场景1');
 $testcase = new testcaseTest();
 
 r($testcase->createSceneTest($scene1))  && p('product:0') && e('『所属产品』不能为空。');                           // 所属产品设为数字 0 输出错误提示。
-r($testcase->createSceneTest($scene2))  && p('product:0') && e('『所属产品』不能为空。');                           // 所属产品设为空字符串输出错误提示。
-// r($testcase->createSceneTest($scene3))  && p('product:0') && e('『所属产品』应当是数字。');                      // 所属产品设为字符串输出错误提示。
+r($testcase->createSceneTest($scene2))  && p('product:0') && e('『所属产品』应当是数字。');                         // 所属产品设为空字符串输出错误提示。
+r($testcase->createSceneTest($scene3))  && p('product:0') && e('『所属产品』应当是数字。');                         // 所属产品设为字符串输出错误提示。
 r($testcase->createSceneTest($scene4))  && p('title:0')   && e('『场景名称』不能为空。');                           // 场景标题设为空字符串输出错误提示。
 r($testcase->createSceneTest($scene5))  && p('title:0')   && e('『场景名称』不能为空。');                           // 场景标题设为字符串 0 输出错误提示。
 r($testcase->createSceneTest($scene6))  && p('title:0')   && e('『场景名称』长度应当不超过『255』，且大于『0』。'); // 场景标题超过数据库字段长度输出错误提示。
-// r($testcase->createSceneTest($scene7))  && p('branch:0')  && e('『所属分支』应当是数字。');                      // 所属分支设为空字符串输出错误提示。
-// r($testcase->createSceneTest($scene8))  && p('branch:0')  && e('『所属分支』应当是数字。');                      // 所属分支设为字符串输出错误提示。
-// r($testcase->createSceneTest($scene9))  && p('module:0')  && e('『所属模块』应当是数字。');                      // 所属模块设为空字符串输出错误提示。
-// r($testcase->createSceneTest($scene10)) && p('module:0')  && e('『所属模块』应当是数字。');                      // 所属模块设为字符串输出错误提示。
+r($testcase->createSceneTest($scene7))  && p('branch:0')  && e('『所属分支』应当是数字。');                         // 所属分支设为空字符串输出错误提示。
+r($testcase->createSceneTest($scene8))  && p('branch:0')  && e('『所属分支』应当是数字。');                         // 所属分支设为字符串输出错误提示。
+r($testcase->createSceneTest($scene9))  && p('module:0')  && e('『所属模块』应当是数字。');                         // 所属模块设为空字符串输出错误提示。
+r($testcase->createSceneTest($scene10)) && p('module:0')  && e('『所属模块』应当是数字。');                         // 所属模块设为字符串输出错误提示。
 r($testcase->createSceneTest($scene11)) && p('parent:0')  && e('『父场景』应当是数字。');                           // 父场景设为空字符串输出错误提示。
 r($testcase->createSceneTest($scene12)) && p('parent:0')  && e('『父场景』应当是数字。');                           // 父场景设为字符串输出错误提示。
 
