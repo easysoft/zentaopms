@@ -13,11 +13,9 @@ title=测试 actionModel->getHistory();
 cid=1
 pid=1
 
-查找actionID为1的历史记录 >> resolution,1,2
-查找actionID为2的历史记录 >> resolvedBuild,2,3
-查找actionID为3的历史记录 >> resolvedDate,2020-01-01,2020-01-17
-查找actionID为4的历史记录 >> status,doing,done
-查找actionID为5的历史记录 >> resolution,1,2
+查找actionID为1的历史记录     >> resolution,1,2
+查找actionID为2的历史记录     >> resolvedBuild,2,3
+查找actionID为10000的历史记录 >> 0
 
 */
 

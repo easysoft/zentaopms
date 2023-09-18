@@ -393,11 +393,11 @@ class actionTest
         $date = $this->objectModel->computeBeginAndEnd($period);
 
         $today      = date('Y-m-d');
-        $tomorrow   = date::tomorrow();
-        $yesterday  = date::yesterday();
-        $twoDaysAgo = date::twoDaysAgo();
+        $tomorrow   = date('Y-m-d', strtotime('+1 days'));
+        $yesterday  = date('Y-m-d', strtotime('-1 days'));
+        $twoDaysAgo = date('Y-m-d', strtotime('-2 days'));
 
-        if($period == 'all')         return $date['begin'] == '1970-1-1' and $date['end'] == '2109-1-1';
+        if($period == 'all')         return $date['begin'] == '1970-01-01' and $date['end'] == '2030-01-01';
         if($period == 'today')       return $date['begin'] == $today and $date['end'] == $tomorrow;
         if($period == 'yesterday')   return $date['begin'] == $yesterday and $date['end'] == $today;
         if($period == 'twodaysago')  return $date['begin'] == $twoDaysAgo and $date['end'] == $yesterday;
