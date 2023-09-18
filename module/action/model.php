@@ -31,7 +31,7 @@ class actionModel extends model
      * @access public
      * @return int
      */
-    public function create(string $objectType, int $objectID, string $actionType, string|bool $comment = '', string|int $extra = '', string $actor = '', bool $autoDelete = true): int
+    public function create(string $objectType, int $objectID, string $actionType, string|bool $comment = '', string|float $extra = '', string $actor = '', bool $autoDelete = true): int
     {
         if(strtolower($actionType) == 'commented' && empty($comment)) return false;
 
