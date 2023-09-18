@@ -1256,4 +1256,16 @@ class storyZen extends story
 
         return $showFields;
     }
+
+    /**
+     * Build story post data for activating the story.
+     *
+     * @return object
+     */
+    protected function buildStoryForActivate(): object
+    {
+        $postData = form::data($this->config->story->form->activate)->get();
+        $story    = $this->loadModel('file')->processImgURL($postData, $this->config->story->editor->activate['id'], $this->post->uid);
+        return $story;
+    }
 }

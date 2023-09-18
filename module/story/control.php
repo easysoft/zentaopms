@@ -626,6 +626,7 @@ class story extends control
     }
 
     /**
+     * 激活需求。
      * Activate a story.
      *
      * @param  int    $storyID
@@ -633,11 +634,13 @@ class story extends control
      * @access public
      * @return void
      */
-    public function activate($storyID, $storyType = 'story')
+    public function activate(int $storyID, string $storyType = 'story')
     {
         if(!empty($_POST))
         {
-            $changes = $this->story->activate($storyID);
+            $postData = $this->storyZen->buildStoryForActivate();
+            $changes  = $this->story->activate($storyID, $postData);
+
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($changes)

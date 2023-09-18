@@ -2260,38 +2260,22 @@ class storyModel extends model
     }
 
     /**
+     * 激活需求。
      * Activate a story.
      *
      * @param  int    $storyID
      * @access public
-     * @return bool
+     * @return array|false
      */
-    public function activate($storyID)
+    public function activate(int $storyID, object $postData): array|false
     {
         $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
-        $now      = helper::now();
-        $story = fixer::input('post')
-            ->add('id', $storyID)
-            ->add('closedBy', '')
-            ->add('closedReason', '')
-            ->add('closedDate', null)
-            ->add('reviewedBy', '')
-            ->add('reviewedDate', null)
-            ->add('duplicateStory', 0)
-            ->add('childStories', '')
-            ->setDefault('lastEditedBy',   $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
-            ->setDefault('assignedDate',   $now)
-            ->setDefault('activatedDate', $now)
-            ->stripTags($this->config->story->editor->activate['id'], $this->config->allowedTags)
-            ->remove('comment')
-            ->get();
 
         /* Get status after activation. */
+        $story = $postData;
         $story->status = $this->getActivateStatus($storyID);
 
-        $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->activate['id'], $this->post->uid);
-        $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->checkFlow()->where('id')->eq($storyID)->exec();
+        $this->dao->update(TABLE_STORY)->data($story, 'comment')->autoCheck()->checkFlow()->where('id')->eq($storyID)->exec();
 
         if($story->status == 'active')
         {
