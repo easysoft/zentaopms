@@ -367,15 +367,14 @@ class testcaseTest
      * @param  int    $productID
      * @param  int    $branch
      * @access public
-     * @return array
+     * @return array|string
      */
-    public function getPairsByProductTest(int $productID = 0, int|array $branch = 0): array
+    public function getPairsByProductTest(int $productID = 0, int|array $branch = 0): array|string
     {
         $objects = $this->objectModel->getPairsByProduct($productID, $branch);
 
         if(dao::isError()) return dao::getError();
 
-        if(empty($objects)) return 'empty';
         return implode(',', $objects);
     }
 

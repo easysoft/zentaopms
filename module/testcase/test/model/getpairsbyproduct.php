@@ -3,7 +3,7 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/testcase.class.php';
 
-zdTable('case')->gen('100');
+zdTable('case')->gen('200');
 
 su('admin');
 
@@ -21,10 +21,10 @@ $productIDList = array(1, 2, 3, 4, 5, 41);
 $branch        = array(1, array(0, 1));
 
 $testcase = new testcaseTest();
-r($testcase->getPairsByProductTest($productIDList[0]))             && p() && e('4:这个是测试用例4,3:这个是测试用例3,2:这个是测试用例2,1:这个是测试用例1');         // 获取产品1的case
-r($testcase->getPairsByProductTest($productIDList[1]))             && p() && e('8:这个是测试用例8,7:这个是测试用例7,6:这个是测试用例6,5:这个是测试用例5');         // 获取产品2的case
-r($testcase->getPairsByProductTest($productIDList[2]))             && p() && e('12:这个是测试用例12,11:这个是测试用例11,10:这个是测试用例10,9:这个是测试用例9');   // 获取产品3的case
-r($testcase->getPairsByProductTest($productIDList[3]))             && p() && e('16:这个是测试用例16,15:这个是测试用例15,14:这个是测试用例14,13:这个是测试用例13'); // 获取产品4的case
-r($testcase->getPairsByProductTest($productIDList[4]))             && p() && e('20:这个是测试用例20,19:这个是测试用例19,18:这个是测试用例18,17:这个是测试用例17'); // 获取产品5的case
-r($testcase->getPairsByProductTest($productIDList[5], $branch[0])) && p() && e('empty'); // 获取产品41分支 1 的case
-r($testcase->getPairsByProductTest($productIDList[5], $branch[1])) && p() && e('empty'); // 获取产品41分支 0 1 的case
+r($testcase->getPairsByProductTest($productIDList[0]))             && p() && e('4:这个是测试用例4,3:这个是测试用例3,2:这个是测试用例2,1:这个是测试用例1');                 // 获取产品1的case
+r($testcase->getPairsByProductTest($productIDList[1]))             && p() && e('8:这个是测试用例8,7:这个是测试用例7,6:这个是测试用例6,5:这个是测试用例5');                 // 获取产品2的case
+r($testcase->getPairsByProductTest($productIDList[2]))             && p() && e('12:这个是测试用例12,11:这个是测试用例11,10:这个是测试用例10,9:这个是测试用例9');           // 获取产品3的case
+r($testcase->getPairsByProductTest($productIDList[3]))             && p() && e('16:这个是测试用例16,15:这个是测试用例15,14:这个是测试用例14,13:这个是测试用例13');         // 获取产品4的case
+r($testcase->getPairsByProductTest($productIDList[4]))             && p() && e('20:这个是测试用例20,19:这个是测试用例19,18:这个是测试用例18,17:这个是测试用例17');         // 获取产品5的case
+r($testcase->getPairsByProductTest($productIDList[5], $branch[0])) && p() && e('0');                                                                                       // 获取产品41分支 1 的case
+r($testcase->getPairsByProductTest($productIDList[5], $branch[1])) && p() && e('164:这个是测试用例164,163:这个是测试用例163,162:这个是测试用例162,161:这个是测试用例161'); // 获取产品41分支 0 1 的case
