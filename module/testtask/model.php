@@ -1013,26 +1013,28 @@ class testtaskModel extends model
     }
 
     /**
-     * Get test runs of a test task.
+     * 获取一个测试单关联的测试用例及相关需求。
+     * Get cases associated with a testtask.
      *
      * @param  int    $taskID
      * @param  int    $moduleID
+     * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getRuns($taskID, $moduleID, $orderBy, $pager = null)
+    public function getRuns(int $taskID, int $moduleID, string $orderBy, object $pager = null): array
     {
         /* Select the table for these special fields. */
         $specialFields = ',assignedTo,status,lastRunResult,lastRunner,lastRunDate,';
         $fieldToSort   = substr($orderBy, 0, strpos($orderBy, '_'));
         $orderBy       = strpos($specialFields, ',' . $fieldToSort . ',') !== false ? ('t1.' . $orderBy) : ('t2.' . $orderBy);
 
-        return $this->dao->select('t2.*,t1.*,t2.version as caseVersion,t3.title as storyTitle,t2.status as caseStatus')->from(TABLE_TESTRUN)->alias('t1')
+        return $this->dao->select('t2.*, t1.*, t2.version AS caseVersion, t3.title AS storyTitle, t2.status AS caseStatus')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
-            ->where('t1.task')->eq((int)$taskID)
-            ->andWhere('t2.deleted')->eq(0)
+            ->where('t1.task')->eq($taskID)
+            ->andWhere('t2.deleted')->eq('0')
             ->beginIF($moduleID)->andWhere('t2.module')->in($moduleID)->fi()
             ->orderBy($orderBy)
             ->page($pager)
