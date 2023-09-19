@@ -1000,7 +1000,6 @@ class productTest
     public function setMenuTest(int $productID, string|int $branch = '', string $extra = ''): array
     {
         /* Reset data. */
-        unset($this->objectModel->lang->switcherMenu);
         $this->objectModel->lang->product->moreSelects['willclose'] = 'willcose';
         $this->objectModel->lang->product->menu->settings['link'] = "Settings|product|view|productID=%s";
         $this->objectModel->lang->product->menu->settings['subMenu']->branch = array('link' => "@branch@|branch|manage|product=%s", 'subModule' => 'branch');
@@ -1009,11 +1008,10 @@ class productTest
 
         $hasBranch      = (int) isset($this->objectModel->lang->product->menu->settings['subMenu']->branch);
         $requirement    = (int)!isset($this->objectModel->lang->product->moreSelects['willclose']);
-        $hasSwitch      = (int)!empty($this->objectModel->lang->switcherMenu);
         $idReplaced     = (int)(strpos($this->objectModel->lang->product->menu->settings['link'], '%s') === false);
         $branchReplaced = (int)($hasBranch and strpos($this->objectModel->lang->product->menu->settings['subMenu']->branch['link'], '@branch@') === false);
 
-        return array('idReplaced' => $idReplaced, 'branchReplaced' => $branchReplaced, 'hasBranch' => $hasBranch, 'requirement' => $requirement, 'hasSwitch' => $hasSwitch);
+        return array('idReplaced' => $idReplaced, 'branchReplaced' => $branchReplaced, 'hasBranch' => $hasBranch, 'requirement' => $requirement);
     }
 
     /**

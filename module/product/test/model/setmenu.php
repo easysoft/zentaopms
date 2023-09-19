@@ -15,11 +15,11 @@ cid=1
 
 $product = new productTest('admin');
 
-r($product->setMenuTest(0))                    && p('idReplaced,branchReplaced,hasBranch,requirement,hasSwitch') && e('1,0,1,0,0');
-r($product->setMenuTest(1))                    && p('idReplaced,branchReplaced,hasBranch,requirement,hasSwitch') && e('1,0,0,0,1');
-r($product->setMenuTest(0, '', 'requirement')) && p('idReplaced,branchReplaced,hasBranch,requirement,hasSwitch') && e('1,0,1,1,0');
-r($product->setMenuTest(1, '', 'requirement')) && p('idReplaced,branchReplaced,hasBranch,requirement,hasSwitch') && e('1,0,0,1,1');
-r($product->setMenuTest(0,  'all'))            && p('idReplaced,branchReplaced,hasBranch,requirement,hasSwitch') && e('1,0,1,0,0');
-r($product->setMenuTest(41, 'all'))            && p('idReplaced,branchReplaced,hasBranch,requirement,hasSwitch') && e('1,1,1,0,1');
-r($product->setMenuTest(0,  0, 'requirement')) && p('idReplaced,branchReplaced,hasBranch,requirement,hasSwitch') && e('1,0,1,1,0');
-r($product->setMenuTest(41, 0, 'requirement')) && p('idReplaced,branchReplaced,hasBranch,requirement,hasSwitch') && e('1,1,1,1,1');
+r($product->setMenuTest(0))                    && p('idReplaced,branchReplaced,hasBranch,requirement') && e('1,0,1,0');
+r($product->setMenuTest(1))                    && p('idReplaced,branchReplaced,hasBranch,requirement') && e('1,0,0,0');
+r($product->setMenuTest(0, '', 'requirement')) && p('idReplaced,branchReplaced,hasBranch,requirement') && e('1,0,1,1');
+r($product->setMenuTest(1, '', 'requirement')) && p('idReplaced,branchReplaced,hasBranch,requirement') && e('1,0,0,1');
+r($product->setMenuTest(0,  'all'))            && p('idReplaced,branchReplaced,hasBranch,requirement') && e('1,0,1,0');
+r($product->setMenuTest(41, 'all'))            && p('idReplaced,branchReplaced,hasBranch,requirement') && e('1,1,1,0');
+r($product->setMenuTest(0,  0, 'requirement')) && p('idReplaced,branchReplaced,hasBranch,requirement') && e('1,0,1,1');
+r($product->setMenuTest(41, 0, 'requirement')) && p('idReplaced,branchReplaced,hasBranch,requirement') && e('1,1,1,1');

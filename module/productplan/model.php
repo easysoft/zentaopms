@@ -1064,7 +1064,7 @@ class productplanModel extends model
      * @access public
      * @return array
      */
-    public function reorder4Children($plans)
+    public function reorder4Children(array $plans): array
     {
         /* Get children and unset. */
         $childrenPlans = array();
@@ -1103,7 +1103,7 @@ class productplanModel extends model
      * @access public
      * @return array
      */
-    public function relationBranch($plans)
+    public function relationBranch(array $plans): array
     {
         if(empty($plans)) return $plans;
 
@@ -1116,20 +1116,15 @@ class productplanModel extends model
 
         foreach($plans as &$plan)
         {
+            $plan->branchName = $this->lang->branch->main;
             if($plan->branch)
             {
-                $branchName = '';
+                $branchName = array();
                 foreach(explode(',', $plan->branch) as $planBranch)
                 {
-                    $branchName .= isset($branchMap[$planBranch]) ? $branchMap[$planBranch] : '';
-                    $branchName .= ',';
+                    if(isset($branchMap[$planBranch])) $branchName[] = $branchMap[$planBranch];
                 }
-
-                $plan->branchName = trim($branchName, ',');
-            }
-            else
-            {
-                $plan->branchName = $this->lang->branch->main;
+                if($branchName) $plan->branchName = implode(',', $branchName);
             }
         }
 

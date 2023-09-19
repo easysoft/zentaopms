@@ -404,7 +404,7 @@ class productPlan
      * @access public
      * @return array
      */
-    public function reorder4Children($plans)
+    public function reorder4ChildrenTest(array $plans): array
     {
         $plan = $this->productplan->dao->select('*')->from(TABLE_PRODUCTPLAN)
             ->where('id')->in($plans)
@@ -412,6 +412,28 @@ class productPlan
             ->fetchAll('id');
 
         $productplans = $this->productplan->reorder4Children($plan);
+
+        if(dao::isError()) return dao::getError();
+
+        return $productplans;
+    }
+
+    /**
+     * 测试 relationBranch.
+     * Test relationBranch.
+     *
+     * @param  array  $plans
+     * @access public
+     * @return array
+     */
+    public function relationBranchTest(array $plans): array
+    {
+        $plan = $this->productplan->dao->select('*')->from(TABLE_PRODUCTPLAN)
+            ->where('id')->in($plans)
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll('id');
+
+        $productplans = $this->productplan->relationBranch($plan);
 
         if(dao::isError()) return dao::getError();
 

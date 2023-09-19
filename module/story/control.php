@@ -209,7 +209,7 @@ class story extends control
     public function commonAction(int $storyID, int $projectID = 0)
     {
         /* Get datas. */
-        $story = $this->story->getByID($storyID);
+        $story = $this->story->fetchByID($storyID);
         $this->story->replaceURLang($story->type);
 
         /* Set menu. */

@@ -1,0 +1,26 @@
+title: zt_productplan
+author: Yidong Wang
+version: 1.0.0
+fields:
+  - field: id
+    range: 1-100
+  - field: title
+    range: 1-100
+    prefix: '计划'
+  - field: product
+    range: '1'
+  - field: branch
+    fields:
+      - field: branch1
+        range: '0{3},1-10'
+      - field: branch2
+        prefix: ","
+        range: "[]{10},11-20"
+  - field: parent
+    range: '`-1`,1,0{98}'
+  - field: status
+    range: wait,doing,done,closed
+  - field: begin
+    range: '`2021-01-01`,`2021-06-01`,`2022-01-01`,`2022-07-01`,`2030-01-01`'
+  - field: end
+    range: '`2021-01-30`,`2021-06-30`,`2022-01-30`,`2022-07-30`,`2030-01-01`'

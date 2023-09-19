@@ -64,7 +64,7 @@ class productModel extends model
     public function getByID(int $productID): object|false
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getProduct();
-        $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
+        $product = $this->fetchById($productID);
         if(!$product) return false;
 
         return $this->loadModel('file')->replaceImgURL($product, 'desc');
@@ -1448,11 +1448,9 @@ class productModel extends model
     {
         if(commonModel::isTutorialMode()) return true;
 
-
-        $link = helper::createLink('product', 'index');
-
         $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-        if(strpos($this->server->http_referer, $loginLink) !== false) $link = helper::createLink('product', 'index');
+        $link      = helper::createLink('product', 'index');
+        if($this->server->http_referer && strpos($this->server->http_referer, $loginLink) !== false) $link = helper::createLink('product', 'index');
 
         return $this->app->control->sendError($tips, $link);
     }
@@ -1480,7 +1478,7 @@ class productModel extends model
         common::setMenuVars('product', $productID, $params);
         if(strpos($extra, 'requirement') !== false) unset($this->lang->product->moreSelects['willclose']);
 
-        $product = $this->getByID($productID);
+        $product = $this->fetchByID($productID);
         if(!$product) return false;
 
         /* 设置导航中分支的显示数据。*/
