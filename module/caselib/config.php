@@ -31,3 +31,5 @@ $config->caselib->actionList['delete']['text']         = $lang->caselib->delete;
 $config->caselib->actionList['delete']['url']          = helper::createLink('caselib', 'delete', 'libID={id}');
 $config->caselib->actionList['delete']['class']        = 'ajax-submit';
 $config->caselib->actionList['delete']['data-confirm'] = $lang->testcase->confirmDelete;
+
+$config->caselib->exportTemplateFields = array('module', 'title', 'precondition', 'stepDesc', 'stepExpect', 'keywords', 'pri', 'type', 'stage');

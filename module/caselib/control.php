@@ -348,45 +348,15 @@ class caselib extends control
      * @access public
      * @return void
      */
-    public function exportTemplate($libID)
+    public function exportTemplate(int $libID)
     {
-        $this->loadModel('testcase');
         if($_POST)
         {
-            $fields['module']       = $this->lang->testcase->module;
-            $fields['title']        = $this->lang->testcase->title;
-            $fields['precondition'] = $this->lang->testcase->precondition;
-            $fields['stepDesc']     = $this->lang->testcase->stepDesc;
-            $fields['stepExpect']   = $this->lang->testcase->stepExpect;
-            $fields['keywords']     = $this->lang->testcase->keywords;
-            $fields['pri']          = $this->lang->testcase->pri;
-            $fields['type']         = $this->lang->testcase->type;
-            $fields['stage']        = $this->lang->testcase->stage;
-
-            $fields[''] = '';
-            $fields['typeValue']   = $this->lang->testcase->lblTypeValue;
-            $fields['stageValue']  = $this->lang->testcase->lblStageValue;
+            $this->loadModel('testcase');
 
             $modules = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'caselib', $startModuleID = 0);
-            $rows    = array();
-            $num     = (int)$this->post->num;
-            for($i = 0; $i < $num; $i++)
-            {
-                foreach($modules as $moduleID => $module)
-                {
-                    $row = new stdclass();
-                    $row->module     = $module . "(#$moduleID)";
-                    $row->stepDesc   = "1. \n2. \n3.";
-                    $row->stepExpect = "1. \n2. \n3.";
-
-                    if(empty($rows))
-                    {
-                        $row->typeValue   = join("\n", $this->lang->testcase->typeList);
-                        $row->stageValue  = join("\n", $this->lang->testcase->stageList);
-                    }
-                    $rows[] = $row;
-                }
-            }
+            $fields  = $this->caselibZen->getFieldsForExportTemplate();
+            $rows    = $this->caselibZen->getRowsForExportTemplate($this->post->num ? $this->post->num : 0, $modules);
 
             $this->post->set('fields', $fields);
             $this->post->set('kind', 'testcase');

@@ -208,4 +208,57 @@ class caselibZen extends caselib
 
         return $this->loadModel('file')->processImgURL($lib, $this->config->caselib->editor->edit['id'], $lib->uid);
     }
+
+    /**
+     * 获取导出模板的字段。
+     * Get fields for export template.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function getFieldsForExportTemplate(): array
+    {
+        $fields = array();
+        foreach($this->config->caselib->exportTemplateFields as $field) $fields[$field] = $this->lang->testcase->$field;
+
+        $fields[''] = '';
+        $fields['typeValue']  = $this->lang->testcase->lblTypeValue;
+        $fields['stageValue'] = $this->lang->testcase->lblStageValue;
+
+        return $fields;
+    }
+
+    /**
+     * 获取导出模板的数据。
+     * Get rows for export template.
+     *
+     * @param  int       $num
+     * @param  array     $modules
+     * @access protected
+     * @return array
+     */
+    protected function getRowsForExportTemplate(int $num = 0, array $modules): array
+    {
+        $rows = array();
+        for($i = 0; $i < $num; $i++)
+        {
+            foreach($modules as $moduleID => $module)
+            {
+                $row = new stdclass();
+                $row->module     = $module . "(#$moduleID)";
+                $row->stepDesc   = "1. \n2. \n3.";
+                $row->stepExpect = "1. \n2. \n3.";
+
+                if(empty($rows))
+                {
+                    $row->typeValue  = join("\n", $this->lang->testcase->typeList);
+                    $row->stageValue = join("\n", $this->lang->testcase->stageList);
+                }
+
+                $rows[] = $row;
+            }
+        }
+
+        return $rows;
+    }
 }
