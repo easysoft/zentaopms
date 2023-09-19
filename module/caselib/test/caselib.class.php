@@ -147,4 +147,24 @@ class caselibTest
 
         return $objects;
     }
+
+    /**
+     * 测试获取用例库 1.5 级下拉的链接。
+     * Test get lib link.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return array
+     */
+    public function getLibLinkTest(string $module, string $method): array
+    {
+        $link = $this->objectModel->getLibLink($module, $method);
+
+        if(dao::isError()) return dao::getError();
+
+        $isCaselibBrowse = preg_match('/caselib.*browse/', $link) ? 1 : 0;
+        $isItself        = preg_match("/{$module}.*{$method}/", $link) ? 1 : 0;
+        return array('isCaselibBrowse' => $isCaselibBrowse, 'isItself' => $isItself);
+    }
 }

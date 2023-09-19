@@ -245,31 +245,23 @@ class caselibModel extends model
     }
 
     /**
+     * 获取用例库 1.5 级下拉的链接。
      * Get lib link.
      *
      * @param  string $module
      * @param  string $method
-     * @param  string $extra
      * @access public
      * @return string
      */
-    public function getLibLink($module, $method, $extra)
+    public function getLibLink(string $module, string $method): string
     {
-        $link = '';
-        if($module == 'caselib')
-        {
-            if($module == 'caselib' && ($method == 'create'))
-            {
-                $link = helper::createLink($module, 'browse', "libID=%s");
-            }
-            else
-            {
-                $link = helper::createLink($module, $method, "libID=%s");
-            }
-        }
-        elseif($module == 'tree')
+        if($module == 'tree')
         {
             $link = helper::createLink($module, $method, "libID=%s&type=caselib&currentModuleID=0");
+        }
+        elseif($module == 'caselib' && $method != 'create')
+        {
+            $link = helper::createLink($module, $method, "libID=%s");
         }
         else
         {
