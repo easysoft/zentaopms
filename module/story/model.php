@@ -1763,7 +1763,7 @@ class storyModel extends model
                 $isChanged = $oldStory->changedBy ? true : false;
                 if($preStatus == 'reviewing') $preStatus = $isChanged ? 'changing' : 'draft';
 
-                $actionID = $this->action->create('story', $storyID, 'Closed', $story->comment, ucfirst($story->closedReason) . ($story->duplicateStory ? ':' . (int)$story->duplicateStory : '') . "|{$preStatus}");
+                $actionID = $this->action->create('story', $storyID, 'Closed', $story->comment ?? '', ucfirst($story->closedReason) . (!empty($story->duplicateStory) ? ':' . (int)$story->duplicateStory : '') . "|{$preStatus}");
                 $this->action->logHistory($actionID, $changes);
 
                 if(!empty($oldStory->twins)) $this->syncTwins($storyID, $oldStory->twins, $changes, 'Closed');
