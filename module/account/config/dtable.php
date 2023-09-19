@@ -50,6 +50,7 @@ $config->account->actionList['edit']['icon']        = 'edit';
 $config->account->actionList['edit']['text']        = $lang->edit;
 $config->account->actionList['edit']['hint']        = $lang->edit;
 $config->account->actionList['edit']['data-toggle'] = 'modal';
+$config->account->actionList['edit']['data-size']   = 'sm';
 $config->account->actionList['edit']['showText']    = true;
 $config->account->actionList['edit']['url']         = array('module' => 'account', 'method' => 'edit', 'params' => 'id={id}');
 
