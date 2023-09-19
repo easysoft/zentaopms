@@ -148,20 +148,4 @@ class caselibTest
 
         return $objects;
     }
-
-    /**
-     * Batch create case test.
-     *
-     * @param mixed $libID
-     * @access public
-     * @return void
-     */
-    public function batchCreateCaseTest($libID)
-    {
-        $objects = $this->objectModel->batchCreateCase($libID);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
 }
