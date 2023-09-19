@@ -8,23 +8,6 @@ class caselibTest
     }
 
     /**
-     * Save lib state test.
-     *
-     * @param int $libID
-     * @param array $libraries
-     * @access public
-     * @return void
-     */
-    public function saveLibStateTest($libID = 0, $libraries = array())
-    {
-        $objects = $this->objectModel->saveLibState($libID, $libraries);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
      * Get by ID test.
      *
      * @param mixed $libID
