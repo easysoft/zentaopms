@@ -253,7 +253,7 @@ window.afterPageUpdate = function($target, info, options)
     }
     window.filterChecked = {};
     window.renderDTable(current.id, resultHeader, resultData);
-    window.renderChart();
+    window.renderChart(current.id, resultHeader, resultData);
     if(viewType == 'multiple') window.renderCheckedLabel();
     $(window).on('resize', window.renderCheckedLabel);
     window.initFilterPanel();
@@ -295,11 +295,13 @@ window.renderChart = function(metricID = current.id, header = resultHeader, data
     var $currentBox = $('#metricBox' + metricID);
     if(viewType == 'single') $currentBox = $('.table-and-chart-single');
     if(!$currentBox.find('.chart').length) return;
-    $currentBox.find('.chart').remove();
-    $currentBox.find('.chart-side').append('<div class="chart chart-container"></div>');
 
-    window.initChart($currentBox.find('.chart')[0], header, data, chartType);
+    var classes = viewType == 'single' ? 'chart chart-single' : 'chart chart-multiple';
+    $currentBox.find('.chart').remove();
+    $currentBox.find('.chart-side').append('<div class="' + classes + '"></div>');
+
     window.initPicker($currentBox.find('.chart-type'), window.chartList, header.length);
+    window.initChart($currentBox.find('.chart')[0], header, data, chartType);
 }
 
 window.initDTable = function($obj, head, data)

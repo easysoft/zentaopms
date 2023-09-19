@@ -323,7 +323,7 @@ div
                 ),
                 div
                 (
-                    setClass('chart chart-container'),
+                    setClass('chart chart-single'),
                 ),
             ),
         ),
