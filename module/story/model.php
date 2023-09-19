@@ -2425,6 +2425,7 @@ class storyModel extends model
     }
 
     /**
+     * 通过产品获取需求ID和需求信息的键值对。
      * Get stories pairs of a product.
      *
      * @param  int           $productID
@@ -2439,7 +2440,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getProductStoryPairs($productID = 0, $branch = 'all', $moduleIdList = 0, $status = 'all', $order = 'id_desc', $limit = 0, $type = 'full', $storyType = 'story', $hasParent = true)
+    public function getProductStoryPairs(int $productID = 0, string|int $branch = 'all', array|string $moduleIdList = '', string $status = 'all', string $order = 'id_desc', int $limit = 0, string $type = 'full', string $storyType = 'story', bool|string $hasParent = true): array
     {
         $stories = $this->dao->select('t1.id, t1.title, t1.module, t1.pri, t1.estimate, t2.name AS product')
             ->from(TABLE_STORY)->alias('t1')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
@@ -3144,15 +3145,16 @@ class storyModel extends model
     }
 
     /**
-     * Format stories
+     * 格式化需求的概要信息。
+     * Format stories pairs.
      *
-     * @param  array    $stories
-     * @param  string   $type
-     * @param  int      $limit
+     * @param  array  $stories
+     * @param  string $type
+     * @param  int    $limit
      * @access public
-     * @return void
+     * @return array
      */
-    public function formatStories($stories, $type = 'full', $limit = 0)
+    public function formatStories(array $stories, string $type = 'full', int $limit = 0): array
     {
         /* Format these stories. */
         $storyPairs = array(0 => '');
