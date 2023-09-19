@@ -302,6 +302,7 @@ class caselib extends control
     }
 
     /**
+     * 通过 AJAX 获取用例库的 1.5 级菜单。
      * Ajax get drop menu.
      *
      * @param  int    $libID
