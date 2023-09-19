@@ -340,6 +340,7 @@ class productTest
 
         $newProduct = clone $oldProduct;
         foreach($data as $field => $value) $newProduct->$field = $value;
+        foreach($newProduct as $field => $value) if(strpos($field, 'Date') && empty($data[$field])) unset($newProduct->$field);
         $change = $objectModel->update($objectID, $newProduct);
 
         if(dao::isError())
