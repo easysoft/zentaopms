@@ -408,10 +408,11 @@ class projectModel extends model
      * Get waterfall project progress.
      *
      * @param  array  $projectIDList
+     * @param  string $mode waterfall|research
      * @access public
      * @return int
      */
-    public function getWaterfallProgress($projectIDList)
+    public function getWaterfallProgress($projectIDList, $mode = 'waterfall')
     {
         $projectList = $this->dao->select('t1.*')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
@@ -419,7 +420,7 @@ class projectModel extends model
             ->andWhere('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.project')->in($projectIDList)
-            ->andWhere('t2.model')->eq('waterfall')
+            ->andWhere('t2.model')->eq($mode)
             ->fetchGroup('project', 'id');
 
         $totalHour = $this->dao->select("t1.project, t1.execution, ROUND(SUM(if(t1.status !='closed' && t1.status !='cancel', t1.`left`, 0)), 2) AS totalLeft, ROUND(SUM(t1.consumed), 1) AS totalConsumed")->from(TABLE_TASK)->alias('t1')
