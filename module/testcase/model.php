@@ -2248,6 +2248,26 @@ class testcaseModel extends model
     }
 
     /**
+     * 分组获取用例的步骤信息。
+     * Get steps grouped by case id.
+     *
+     * @param  array  $caseID
+     * @access public
+     * @return array
+     */
+    public function getStepGroupByIdList(array $caseIdList): array
+    {
+        if(!$caseIdList) return array();
+
+        return $this->dao->select('t1.*')->from(TABLE_CASESTEP)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
+            ->where('t2.id')->in($caseIdList)
+            ->andWhere('t1.version=t2.version')
+            ->andWhere('t2.status')->ne('wait')
+            ->fetchGroup('case', 'id');
+    }
+
+    /**
      * 通过产品和模块获取场景。
      * Get scene by product and module.
      *
