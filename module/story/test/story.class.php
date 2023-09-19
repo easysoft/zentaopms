@@ -352,21 +352,19 @@ class storyTest
     }
 
     /**
-     * Test batch close story.
+     * 测试批量关闭需求。
+     * Test batch close the stories.
      *
-     * @param  array $params
+     * @param  array  $stories
      * @access public
-     * @return void
+     * @return array
      */
-    public function batchCloseTest($params)
+    public function batchCloseTest($stories)
     {
-        $_POST   = $params;
-        $changes = $this->objectModel->batchClose();
-        unset($_POST);
-
+        $this->objectModel->batchClose($stories);
         if(dao::isError()) return dao::getError();
 
-        $storyIdList = array_keys($changes);
+        $storyIdList = array_keys($stories);
         return $this->objectModel->getByList($storyIdList);
     }
 
