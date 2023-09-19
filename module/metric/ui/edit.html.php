@@ -11,6 +11,17 @@ declare(strict_types=1);
 namespace zin;
 
 $isCustomUnit = !isset($this->lang->metric->unitList[$metric->unit]);
+$isDisabled   = $metric->stage == 'wait' && $metric->builtin === '1';
+
+$afterEdit = $isDisabled ? '' : formGroup
+(
+    set::width('1/2'),
+    set::name('afterEdit'),
+    set::label($lang->metric->afterCreate),
+    set::control(array('type' => 'radioList', 'inline' => true)),
+    set::items($lang->metric->afterCreateList),
+    set::value('implement'),
+);
 
 formPanel
 (
@@ -29,7 +40,8 @@ formPanel
             set::name('scope'),
             set::items($lang->metric->scopeList),
             set::value($metric->scope),
-            set::required(true)
+            set::required(true),
+            set::disabled($isDisabled),
         ),
         formGroup
         (
@@ -38,7 +50,8 @@ formPanel
             set::name('object'),
             set::items($lang->metric->objectList),
             set::value($metric->object),
-            set::required(true)
+            set::required(true),
+            set::disabled($isDisabled),
         ),
         formGroup
         (
@@ -47,7 +60,8 @@ formPanel
             set::name('purpose'),
             set::items($lang->metric->purposeList),
             set::value($metric->purpose),
-            set::required(true)
+            set::required(true),
+            set::disabled($isDisabled),
         ),
     ),
     formGroup
@@ -63,6 +77,7 @@ formPanel
         set::name('code'),
         set::value($metric->code),
         set::required(true),
+        set::disabled($isDisabled),
     ),
     formRow
     (
@@ -82,6 +97,7 @@ formPanel
                         set::name('unit'),
                         set::items($lang->metric->unitList),
                         set::value($isCustomUnit ? '' : $metric->unit),
+                        set::disabled($isDisabled),
                     )
                 ),
                 div
@@ -92,6 +108,7 @@ formPanel
                         set::name('customUnit'),
                         set::text($lang->metric->customUnit),
                         set::checked($isCustomUnit),
+                        set::disabled($isDisabled),
                     )
                 )
             )
@@ -141,15 +158,8 @@ formPanel
         set::name('definition'),
         set::value($metric->definition),
         set::placeholder($lang->metric->definitionTip),
+        set::disabled($isDisabled),
     ),
-    formGroup
-    (
-        set::width('1/2'),
-        set::name('afterCreate'),
-        set::label($lang->metric->afterCreate),
-        set::control(array('type' => 'radioList', 'inline' => true)),
-        set::items($lang->metric->afterCreateList),
-        set::value('implement'),
-    ),
+    $afterEdit,
     set::submitBtnText($lang->save),
 );
