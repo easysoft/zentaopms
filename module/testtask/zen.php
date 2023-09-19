@@ -323,4 +323,44 @@ class testtaskZen extends testtask
         /* 如果是在弹窗页面或者测试应用下打开的测试单，则获取所有产品。 */
         return $this->loadModel('product')->getPairs('', 0, '', 'all');
     }
+
+    /**
+     * 处理测试用例的跨行合并属性供前端组件分组使用。
+     * Process the rowspan property of cases for use by front-end component groupings.
+     *
+     * @param  array     $cases
+     * @param  int       $build
+     * @access protected
+     * @return array
+     */
+    protected function processRowspanOfCases(array $cases, int $build): array
+    {
+        $groupCases = array();
+        $cases       = $this->loadModel('testcase')->appendData($cases, 'run');
+        foreach($cases as $case) $groupCases[$case->story][] = $case;
+
+        if($build)
+        {
+            $buildStories = $this->dao->select('stories')->from(TABLE_BUILD)->where('id')->eq($build)->fetch('stories');
+            $storyIdList  = array_filter(array_diff(explode(',', $buildStories), array_keys($groupCases)));
+            if($storyIdList)
+            {
+                $stories = $this->dao->select('id,title')->from(TABLE_STORY)->where('deleted')->eq('0')->andWhere('id')->in($storyIdList)->fetchAll();
+                foreach($stories as $story) $groupCases[$story->id][] = $story;
+            }
+        }
+
+        $story = null;
+        foreach($cases as $case)
+        {
+            $case->rowspan = 0;
+            if($story !== $case->story)
+            {
+                $story = $case->story;
+                if(!empty($groupCases[$case->story])) $case->rowspan = count($groupCases[$case->story]);
+            }
+        }
+
+        return $cases;
+    }
 }
