@@ -816,29 +816,30 @@ class testtask extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('cases', "taskID={$taskID}")));
         }
 
-        /* 保存部分内容到 session 中供后面使用。*/
-        /* Save session. */
-        $this->session->set('caseList', $this->app->getURI(true), 'qa');
-
         /* 获取测试单信息。*/
         /* Get testtask info. */
         $task = $this->testtask->getByID($taskID);
+        if(!$task) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->testtask->checkLinked, 'locate' => array('back' => true))));
 
         /* 检查是否有权限访问测试单所属产品。*/
         /* Check if user have permission to access the product to which the testtask belongs. */
         $productID = $this->loadModel('product')->checkAccess($task->product, $this->products);
-
-        $this->testtaskZen->setMenu($productID, $task->branch, $task->project, $task->execution);
-        $this->testtaskZen->setSearchParamsForLinkCase($product, $task, $type, $param);
 
         /* 如果测试单所属产品在产品键值对中不存在，将其加入。*/
         /* Prepare the product key-value pairs. */
         $product = $this->product->getByID($productID);
         if(!isset($this->products[$productID])) $this->products[$productID] = $product->name;
 
+        /* 保存部分内容到 session 中供后面使用。*/
+        /* Save session. */
+        $this->session->set('caseList', $this->app->getURI(true), 'qa');
+
+        $this->testtaskZen->setMenu($productID, $task->branch, $task->project, $task->execution);
+        $this->testtaskZen->setSearchParamsForLinkCase($product, $task, $type, $param);
+
         /* 从数据库中查询一个测试单下可以关联的测试用例。*/
         /* Query the cases that can be associated with a testtask from the database. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
         $cases = $this->testtask->getLinkableCases($productID, $task, $taskID, $type, $param, $pager);
 
