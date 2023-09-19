@@ -114,24 +114,23 @@ class caselibTest
     }
 
     /**
+     * 测试获取用例库的用例。
      * Get libcases test.
      *
-     * @param mixed $libID
-     * @param mixed $browseType
-     * @param int $queryID
-     * @param int $moduleID
-     * @param string $sort
-     * @param mixed $pager
+     * @param  int          $libID
+     * @param  string       $browseType
+     * @param  int          $moduleID
+     * @param  string       $sort
      * @access public
-     * @return void
+     * @return array|string
      */
-    public function getLibCasesTest($libID, $browseType, $queryID = 0, $moduleID = 0, $sort = 'id_desc', $pager = null)
+    public function getLibCasesTest(int $libID, string $browseType, int $moduleID = 0, string $sort = 'id_desc'): array|string
     {
-        $objects = $this->objectModel->getLibCases($libID, $browseType, $queryID, $moduleID, $sort, $pager);
+        $objects = $this->objectModel->getLibCases($libID, $browseType, 0, $moduleID, $sort);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return implode(',', array_keys($objects));
     }
 
     /**
