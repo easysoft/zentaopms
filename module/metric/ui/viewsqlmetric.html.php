@@ -279,7 +279,7 @@ detailBody
     (
         section
         (
-            set::title($lang->metric->definition),
+            set::title($lang->metric->declaration),
             set::content(empty(trim($metric->definition)) ? $lang->metric->noFormula : $metric->definition),
             set::useHtml(true)
         ),
