@@ -3751,7 +3751,7 @@ class storyModel extends model
      * @param  array   $storyBugs
      * @param  array   $storyCases
      * @param  string  $mode
-     * @param  string  $stotyType
+     * @param  string  $storyType
      * @param  object  $execution
      * @param  string  $isShowBranch
      * @access public
