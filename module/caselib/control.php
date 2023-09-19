@@ -262,6 +262,7 @@ class caselib extends control
     }
 
     /**
+     * 批量创建用例。
      * Batch create case.
      *
      * @param  int    $libID
@@ -269,12 +270,16 @@ class caselib extends control
      * @access public
      * @return void
      */
-    public function batchCreateCase($libID, $moduleID = 0)
+    public function batchCreateCase(int $libID, int $moduleID = 0)
     {
         $this->loadModel('testcase');
         if(!empty($_POST))
         {
-            $caseID = $this->caselib->batchCreateCase($libID);
+            $cases = $this->caselibZen->prepareCasesForBathcCreate($libID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            foreach($cases as $case) $this->testcase->create($case);
+
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('caselib', 'browse', "libID={$libID}&browseType=byModule&param={$moduleID}"), 'closeModal' => true));
@@ -288,9 +293,8 @@ class caselib extends control
 
         $this->view->title            = $libraries[$libID] . $this->lang->colon . $this->lang->testcase->batchCreate;
         $this->view->libID            = $libID;
-        $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'caselib', $startModuleID = 0);
-        $this->view->currentModuleID  = (int)$moduleID;
-
+        $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'caselib', 0);
+        $this->view->currentModuleID  = $moduleID;
         $this->display();
     }
 

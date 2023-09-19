@@ -131,4 +131,61 @@ class caselibZen extends caselib
         $this->view->keywords         = $keywords;
         $this->view->steps            = $this->testcase->appendSteps($steps);
     }
+
+    /**
+     * 为批量创建用例提前处理用例数据。
+     * Prepare cases for batch creating cases.
+     *
+     * @param  int    $libID
+     * @access public
+     * @return array
+     */
+    public function prepareCasesForBathcCreate(int $libID): array
+    {
+        $this->loadModel('common');
+        $this->loadModel('testcase');
+        unset($this->config->testcase->form->batchCreate['review']);
+
+        $now            = helper::now();
+        $account        = $this->app->user->account;
+        $forceNotReview = $this->loadModel('testcase')->forceNotReview();
+        $testcases      = form::batchData($this->config->testcase->form->batchCreate)->get();
+        foreach($testcases as $i => $testcase)
+        {
+            $result = $this->common->removeDuplicate('testcase', $testcase, "lib={$libID}");
+            if(zget($result, 'stop', false) !== false)
+            {
+                unset($testcases[$i]);
+                continue;
+            }
+
+            $testcase->lib        = $libID;
+            $testcase->project    = $this->lang->navGroup->caselib != 'qa' && $this->session->project ? $this->session->project : 0;
+            $testcase->openedBy   = $account;
+            $testcase->openedDate = $now;
+            $testcase->status     = $forceNotReview ? 'normal' : 'wait';
+            $testcase->version    = 1;
+            $testcase->steps      = array();
+            $testcase->expects    = array();
+            $testcase->stepType   = array();
+        }
+
+        $requiredErrors = array();
+        foreach($testcases as $i => $testcase)
+        {
+            /* Check required fields. */
+            foreach(explode(',', $this->config->testcase->create->requiredFields) as $field)
+            {
+                $field = trim($field);
+                if($field && empty($testcase->{$field}))
+                {
+                    $fieldName = $this->config->testcase->form->batchCreate[$field]['type'] != 'array' ? "{$field}[{$i}]" : "{$field}[{$i}][]";
+                    $requiredErrors[$fieldName] = sprintf($this->lang->error->notempty, $this->lang->testcase->{$field});
+                }
+            }
+        }
+        if(!empty($requiredErrors)) dao::$errors = $requiredErrors;
+
+        return $testcases;
+    }
 }
