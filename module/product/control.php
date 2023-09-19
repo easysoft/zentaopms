@@ -173,8 +173,8 @@ class product extends control
     }
 
     /**
-     * Create a product.
      * 创建产品。可以是顶级产品，也可以是项目集下的产品。
+     * Create a product.
      *
      * @param  int    $programID
      * @param  string $extra
@@ -187,8 +187,8 @@ class product extends control
         {
             $productData = $this->productZen->buildProductForCreate();
 
-            $productID = $this->product->create($productData, zget($_POST, 'lineName', ''));
-            if(empty($productID) || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $productID = $this->product->create($productData, (string) $this->post->lineName);
+            if(dao::isError()) return $this->sendError(dao::getError());
 
             $response = $this->productZen->responseAfterCreate($productID, $productData->program);
             return $this->send($response);
@@ -200,7 +200,6 @@ class product extends control
         $this->view->gobackLink = $this->productZen->getBackLink4Create($extra);
         $this->view->programID  = $programID;
         $this->view->fields     = $this->productZen->getFormFields4Create($programID);
-        unset($this->lang->product->typeList['']);
         $this->display();
     }
 

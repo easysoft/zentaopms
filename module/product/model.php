@@ -375,11 +375,12 @@ class productModel extends model
         /* Insert product and get the product ID. */
         $this->lang->error->unique = $this->lang->error->repeat;
         $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()
-            ->checkIF(!empty($product->name), 'name', 'unique', "`program` = {$product->program} and `deleted` = '0'")
+            ->checkIF(!empty($product->name), 'name', 'unique', "`program` = {$product->program} AND `deleted` = '0'")
             ->checkIF(!empty($product->code), 'code', 'unique', "`deleted` = '0'")
             ->checkFlow()
             ->exec();
         if(dao::isError()) return false;
+
         $productID = $this->dao->lastInsertID();
 
         /* Fix order and line fields for product. */
@@ -414,7 +415,7 @@ class productModel extends model
      */
     public function update(int $productID, object $product): array|false
     {
-        $oldProduct = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
+        $oldProduct = $this->fetchByID($productID);
 
         $this->lang->error->unique = $this->lang->error->repeat;
         $result = $this->productTao->doUpdate($product, $productID, (int)$product->program);
