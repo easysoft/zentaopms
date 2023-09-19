@@ -569,8 +569,8 @@ class metricModel extends model
             $this->config->metric->actionList['edit']['data-toggle'] = 'modal';
             $this->config->metric->actionList['edit']['url']         = helper::createLink('metric', 'edit', "metricID={$metric->id}");
 
-            $menuList['main'][]   = $this->config->metric->actionList['implement'];
             $menuList['suffix'][] = $this->config->metric->actionList['edit'];
+            if($metric->fromID === 0) $menuList['main'][]   = $this->config->metric->actionList['implement'];
         }
         else
         {
