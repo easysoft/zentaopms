@@ -102,8 +102,9 @@ class tree extends control
         elseif(strpos($viewType, 'caselib') !== false)
         {
             $this->loadModel('caselib');
-            $lib              = $this->caselib->getById($rootID);
-            $this->view->root = $lib;
+            $lib               = $this->caselib->getById($rootID);
+            $this->view->root  = $lib;
+            $this->view->libID = $rootID;
         }
 
         if($viewType == 'story')
