@@ -214,42 +214,6 @@ class caselibModel extends model
     }
 
     /**
-     * Build search form.
-     *
-     * @param  int    $libID
-     * @param  array  $libraries
-     * @param  int    $queryID
-     * @param  string $actionURL
-     * @access public
-     * @return void
-     */
-    public function buildSearchForm($libID, $libraries, $queryID, $actionURL)
-    {
-        $this->config->testcase->search['fields']['lib']              = $this->lang->testcase->lib;
-        $this->config->testcase->search['params']['lib']['values']    = array('' => '', $libID => $libraries[$libID], 'all' => $this->lang->caselib->all);
-        $this->config->testcase->search['params']['lib']['operator']  = '=';
-        $this->config->testcase->search['params']['lib']['control']   = 'select';
-        $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($libID, 'caselib');
-        if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
-        unset($this->config->testcase->search['fields']['product']);
-        unset($this->config->testcase->search['params']['product']);
-        unset($this->config->testcase->search['fields']['branch']);
-        unset($this->config->testcase->search['params']['branch']);
-        unset($this->config->testcase->search['fields']['lastRunner']);
-        unset($this->config->testcase->search['params']['lastRunner']);
-        unset($this->config->testcase->search['fields']['lastRunResult']);
-        unset($this->config->testcase->search['params']['lastRunResult']);
-        unset($this->config->testcase->search['fields']['lastRunDate']);
-        unset($this->config->testcase->search['params']['lastRunDate']);
-
-        $this->config->testcase->search['module']    = 'caselib';
-        $this->config->testcase->search['actionURL'] = $actionURL;
-        $this->config->testcase->search['queryID']   = $queryID;
-
-        $this->loadModel('search')->setSearchParams($this->config->testcase->search);
-    }
-
-    /**
      * Get lib link.
      *
      * @param  string $module

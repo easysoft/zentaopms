@@ -172,7 +172,7 @@ class caselib extends control
 
         /* Build the search form. */
         $actionURL = $this->createLink('caselib', 'browse', "libID={$libID}&browseType=bySearch&queryID=myQueryID");
-        $this->caselib->buildSearchForm($libID, $libraries, $queryID, $actionURL);
+        $this->caselibZen->buildSearchForm($libID, $libraries, $queryID, $actionURL);
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
