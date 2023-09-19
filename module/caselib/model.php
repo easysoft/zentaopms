@@ -104,6 +104,7 @@ class caselibModel extends model
     }
 
     /**
+     * 删除用例库。
      * Delete library.
      *
      * @param  int    $libID
@@ -111,12 +112,13 @@ class caselibModel extends model
      * @access public
      * @return bool
      */
-    public function delete($libID, $table = '')
+    public function delete($libID, $table = ''): bool
     {
-        $this->dao->update(TABLE_TESTSUITE)->set('deleted')->eq(1)->where('id')->eq($libID)->exec();
+        $this->dao->update(TABLE_TESTSUITE)->set('deleted')->eq('1')->where('id')->eq($libID)->exec();
 
-        $this->loadModel('action');
-        $this->action->create('caselib', $libID, 'deleted', '', actionModel::CAN_UNDELETED);
+        $this->loadModel('action')->create('caselib', $libID, 'deleted', '', actionModel::CAN_UNDELETED);
+
+        return !dao::isError();
     }
 
     /**

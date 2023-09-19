@@ -96,43 +96,23 @@ class caselib extends control
     }
 
     /**
+     * 删除一个用例库。
      * Delete a case lib.
      *
      * @param  int    $libID
-     * @param  string $confirm yes|no
      * @access public
      * @return void
      */
-    public function delete($libID, $confirm = 'no')
+    public function delete(int $libID)
     {
-        if($confirm == 'no')
-        {
-            return print(js::confirm($this->lang->caselib->libraryDelete, inlink('delete', "libID=$libID&confirm=yes")));
-        }
-        else
-        {
-            $this->caselib->delete($libID);
+        $this->caselib->delete($libID);
 
-            $message = $this->executeHooks($libID);
-            if($message) $response['message'] = $message;
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            /* if ajax request, send result. */
-            if($this->server->ajax)
-            {
-                if(dao::isError())
-                {
-                    $response['result']  = 'fail';
-                    $response['message'] = dao::getError();
-                }
-                else
-                {
-                    $response['result']  = 'success';
-                    $response['message'] = '';
-                }
-                return $this->send($response);
-            }
-            return print(js::reload('parent'));
-        }
+        $message = $this->executeHooks($libID);
+        if(!$message) $message = $this->lang->saveSuccess;
+
+        return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->createLink('caselib', 'browse')));
     }
 
     /**
