@@ -123,13 +123,6 @@ div
                 div
                 (
                     setClass('chart-type'),
-                    picker
-                    (
-                        set::required(true),
-                        set::name('chartType'),
-                        set::items($lang->metric->chartTypeList),
-                        set('onchange', 'window.handleChartTypeChange(this)'),
-                    )
                 ),
                 div
                 (
@@ -385,19 +378,11 @@ div
                         div
                         (
                             setClass('chart-type'),
-                            picker
-                            (
-                                set::required(true),
-                                set::name('chartType'),
-                                set::items($lang->metric->chartTypeList),
-                                set('onchange', 'window.handleChartTypeChange(this)'),
-                            )
                         ),
                         div
                         (
                             setClass('chart chart-container'),
                         )
-
                     ),
                 ),
             ),
