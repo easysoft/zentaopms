@@ -30,6 +30,8 @@
 .main .metric-name-weight {font-weight: 600; font-size: 0.9rem;}
 .main .details {position: relative; margin-right: 4px;}
 .main .details-after:after {content: ""; position: absolute; top: 5px; right: -2px; bottom: 5px; width: 1px; background-color: var(--color-slate-300);}
+.details:hover {color: var(--color-primary-500);}
+.metric-remove:hover {color: var(--color-primary-500);}
 .main .chart-line-margin {margin-right: 16px;}
 .main .table-and-chart {display: flex;}
 .main .table-and-chart-single {height: calc(100vh - 180px); max-height: 864px; padding: 8px 16px 16px 16px;}
