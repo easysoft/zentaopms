@@ -1502,12 +1502,13 @@ class productModel extends model
      *
      * @param  int       $productID
      * @access protected
-     * @return void
+     * @return bool
      */
-    protected function deleteByID(int $productID): void
+    protected function deleteByID(int $productID): bool
     {
         $this->delete(TABLE_PRODUCT, $productID);
         $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('product')->eq($productID)->exec();
+        return !dao::isError();
     }
 
     /**

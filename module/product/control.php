@@ -228,15 +228,14 @@ class product extends control
             return $this->send($response);
         }
 
+        $productID = $this->product->checkAccess($productID, $this->products);
         $this->productZen->setEditMenu($productID, $programID);
 
-        $product   = $this->product->getByID($productID);
-        $productID = $this->product->checkAccess($productID, $this->products);
+        $product = $this->product->getByID($productID);
 
         $this->view->title   = $this->lang->product->edit . $this->lang->colon . $product->name;
         $this->view->product = $product;
         $this->view->fields  = $this->productZen->getFormFields4Edit($product);
-        unset($this->lang->product->typeList['']);
 
         $this->display();
     }
@@ -367,9 +366,8 @@ class product extends control
         /* Response JSON message. */
         $message = $this->executeHooks($productID);
         if($message) $this->lang->saveSuccess = $message;
-        if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
 
-        return $this->send(array('result' => 'success', 'load' => $this->createLink('product', 'all')));
+        return $this->sendSuccess(array('load' => $this->createLink('product', 'all')));
     }
 
     /**
