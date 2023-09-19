@@ -54,7 +54,7 @@ class caselib extends control
 
         $libraries = $this->caselib->getLibraries();
         $libID     = $this->caselibZen->saveLibState(0, $libraries);
-        $this->caselib->setLibMenu($libraries, $libID);
+        $this->caselibZen->setLibMenu($libraries, $libID);
 
         $this->view->title = $this->lang->caselib->common . $this->lang->colon . $this->lang->caselib->create;
         $this->display();
@@ -90,7 +90,7 @@ class caselib extends control
         /* Set lib menu. */
         $libraries = $this->caselib->getLibraries();
         $libID     = $this->caselibZen->saveLibState($libID, $libraries);
-        $this->caselib->setLibMenu($libraries, $libID);
+        $this->caselibZen->setLibMenu($libraries, $libID);
 
         $this->view->title = $libraries[$libID] . $this->lang->colon . $this->lang->caselib->edit;
         $this->view->lib   = $this->caselib->getById($libID);
@@ -164,7 +164,7 @@ class caselib extends control
         $this->caselibZen->setBrowseSessionAndCookie($libID, $browseType, $param);
 
         /* Set lib menu. */
-        $this->caselib->setLibMenu($libraries, $libID);
+        $this->caselibZen->setLibMenu($libraries, $libID);
 
         /* Set module and query id. */
         $moduleID = ($browseType == 'bymodule') ? $param : ($browseType == 'bysearch' ? 0 : ($this->cookie->libCaseModule ? $this->cookie->libCaseModule : 0));
@@ -242,7 +242,7 @@ class caselib extends control
         /* Set lib menu. */
         $libraries = $this->caselib->getLibraries();
         $libID     = $this->caselibZen->saveLibState($libID, $libraries);
-        $this->caselib->setLibMenu($libraries, $libID);
+        $this->caselibZen->setLibMenu($libraries, $libID);
 
         $type         = 'feature';
         $stage        = '';
@@ -318,7 +318,7 @@ class caselib extends control
         if(empty($libraries)) $this->locate(inlink('create'));
 
         /* Set lib menu. */
-        $this->caselib->setLibMenu($libraries, $libID);
+        $this->caselibZen->setLibMenu($libraries, $libID);
 
         $this->view->title            = $libraries[$libID] . $this->lang->colon . $this->lang->testcase->batchCreate;
         $this->view->libID            = $libID;
@@ -343,7 +343,7 @@ class caselib extends control
 
         /* Set lib menu. */
         $libraries = $this->caselib->getLibraries();
-        $this->caselib->setLibMenu($libraries, $libID);
+        $this->caselibZen->setLibMenu($libraries, $libID);
 
         $this->loadModel('testcase');
         $this->view->title      = $lib->name . $this->lang->colon . $this->lang->caselib->view;
@@ -557,7 +557,7 @@ class caselib extends control
         $libraries = $this->caselib->getLibraries();
         if(empty($libraries)) $this->locate(inlink('create'));
 
-        $this->caselib->setLibMenu($libraries, $libID);
+        $this->caselibZen->setLibMenu($libraries, $libID);
 
         $caseLang   = $this->lang->testcase;
         $caseConfig = $this->config->testcase;
