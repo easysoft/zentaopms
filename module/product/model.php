@@ -1121,14 +1121,11 @@ class productModel extends model
     {
         /* Get base data. */
         $productList    = $this->productTao->getList();
-        $programList    = $this->loadModel('program')->getTopPairs('', true);
-        $projectList    = $this->program->getProjectStats(0, 'doing');
-
+        $projectList    = $this->loadModel('program')->getProjectStats(0, 'doing');
         $productIdList  = array_keys($productList);
-        $projectIdList  = array_keys($projectList);
         $projectProduct = $this->productTao->getProjectProductList($productList);
         $planList       = $this->productTao->getPlanList($productIdList);
-        $executionList  = $this->productTao->getExecutionList($projectIdList, $productIdList);
+        $executionList  = $this->productTao->getExecutionList(array_keys($projectList), $productIdList);
         $releaseList    = $this->productTao->getReleaseList($productIdList);
 
         /* Filter latest executions. */
@@ -1157,7 +1154,7 @@ class productModel extends model
         $hourList = $this->loadModel('project')->computeProgress($latestExecutionList);
 
         /* Build result. */
-        $statsData = array($programList, $productList, $planList, $projectList, $executionList, $projectProduct, $projectLatestExecutions, $hourList, $releaseList);
+        $statsData = array($productList, $planList, $projectList, $executionList, $projectProduct, $projectLatestExecutions, $hourList, $releaseList);
         /* Convert predefined HTML entities to characters. */
         $statsData = $this->convertHtmlSpecialChars($statsData);
 

@@ -594,7 +594,7 @@ class product extends control
         $this->productZen->saveBackUriSession4Kanban();
 
         /* Generate data. */
-        list( , $productList, $planList, $projectList, $executionList, $projectProduct, $projectLatestExecutions, $hourList, $releaseList) = $this->product->getStats4Kanban();
+        list($productList, $planList, $projectList, $executionList, $projectProduct, $projectLatestExecutions, $hourList, $releaseList) = $this->product->getStats4Kanban();
 
         $programPairs = $this->loadModel('program')->getPairs(true);
         $kanbanList   = $this->productZen->getProductList4Kanban($productList);
