@@ -192,11 +192,12 @@ class storyZen extends story
      *
      * @param  int       $productID
      * @param  int       $executionID
-     * @param  string    $from
+     * @param  string    $from        work|contribute
+     * @param  string    $storyType   story|requirement
      * @access protected
      * @return void
      */
-    protected function setMenuForBatchClose(int $productID, int $executionID = 0, string $from = ''): void
+    protected function setMenuForBatchClose(int $productID, int $executionID = 0, string $from = '', string $storyType = 'story')
     {
         /* The stories of a product. */
         if($this->app->tab == 'product')
@@ -204,6 +205,7 @@ class storyZen extends story
             $this->product->setMenu($productID);
             $product = $this->product->getByID($productID);
             $this->view->title = $product->name . $this->lang->colon . $this->lang->story->batchClose;
+            $this->session->set('storyList',  $this->createLink('product', 'browse', "productID={$productID}"), $this->app->tab);
         }
         /* The stories of a execution. */
         elseif($executionID)
@@ -213,13 +215,15 @@ class storyZen extends story
             $this->execution->setMenu($executionID);
             $execution = $this->execution->getByID($executionID);
             $this->view->title = $execution->name . $this->lang->colon . $this->lang->story->batchClose;
+            $this->session->set('storyList', $this->createLink('execution', 'story', "executionID={$executionID}"), $this->app->tab);
         }
         else
         {
             if($this->app->tab == 'project')
             {
-                $this->project->setMenu($this->session->project);
+                $this->project->setMenu(!empty($this->session->project) ? $this->session->project : $executionID);
                 $this->view->title = $this->lang->story->batchClose;
+                $this->session->set('storyList', $this->createLink('projectstory', 'story', "projectID={$executionID}"), $this->app->tab);
             }
             else
             {
@@ -230,6 +234,7 @@ class storyZen extends story
                 if($from == 'contribute') $this->lang->my->menu->contribute['subModule'] = 'story';
 
                 $this->view->title = $this->lang->story->batchClose;
+                if(!empty($form)) $this->session->set('storyList', $this->createLink('my', $from, "mode=$storyType"), $this->app->tab);
             }
         }
     }

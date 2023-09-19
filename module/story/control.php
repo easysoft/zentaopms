@@ -1096,12 +1096,13 @@ class story extends control
     }
 
     /**
-     * Batch close story.
+     * 批量关闭需求。
+     * Batch close the stories.
      *
      * @param  int    $productID
      * @param  int    $executionID
-     * @param  string $storyType
-     * @param  string $from
+     * @param  string $storyType   story|requirement
+     * @param  string $from        contribute|work
      * @access public
      * @return void
      */
@@ -1111,7 +1112,6 @@ class story extends control
         $storyIdList = $this->post->storyIdList;
         $storyIdList = array_unique($storyIdList);
 
-        $this->app->loadLang('bug');
         $this->story->replaceURLang($storyType);
 
         if($this->post->comment)
@@ -1126,7 +1126,7 @@ class story extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->storyList));
         }
 
-        $this->storyZen->setMenuForBatchClose($productID, $executionID, $from);
+        $this->storyZen->setMenuForBatchClose($productID, $executionID, $from, $storyType);
 
         /* Get edited stories. */
         $stories     = $this->story->getByList($storyIdList);
