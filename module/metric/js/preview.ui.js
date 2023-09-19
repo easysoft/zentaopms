@@ -278,9 +278,9 @@ window.initFilterPanel = function()
     }
 }
 
-window.renderDTable = function(header, data)
+window.renderDTable = function(metricID = current.id, header = resultHeader, data = resultData)
 {
-    var $currentBox = $('#metricBox' + current.id);
+    var $currentBox = $('#metricBox' + metricID);
     if(viewType == 'single') $currentBox = $('.table-and-chart-single');
 
     if(!$currentBox.find('.dtable').length) return;
@@ -290,9 +290,9 @@ window.renderDTable = function(header, data)
     window.initDTable($currentBox.find('.dtable'), header, data);
 }
 
-window.renderChart = function(header = resultHeader, data = resultData)
+window.renderChart = function(metricID = current.id, header = resultHeader, data = resultData)
 {
-    var $currentBox = $('#metricBox' + current.id);
+    var $currentBox = $('#metricBox' + metricID);
     if(viewType == 'single') $currentBox = $('.table-and-chart-single');
     if(!$currentBox.find('.chart').length) return;
     $currentBox.find('.chart').remove();
