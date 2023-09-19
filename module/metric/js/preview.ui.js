@@ -290,7 +290,7 @@ window.renderDTable = function(metricID = current.id, header = resultHeader, dat
     window.initDTable($currentBox.find('.dtable'), header, data);
 }
 
-window.renderChart = function(metricID = current.id, header = resultHeader, data = resultData)
+window.renderChart = function(metricID = current.id, header = resultHeader, data = resultData, chartType = 'line')
 {
     var $currentBox = $('#metricBox' + metricID);
     if(viewType == 'single') $currentBox = $('.table-and-chart-single');
@@ -298,7 +298,7 @@ window.renderChart = function(metricID = current.id, header = resultHeader, data
     $currentBox.find('.chart').remove();
     $currentBox.find('.chart-side').append('<div class="chart chart-container"></div>');
 
-    window.initChart($currentBox.find('.chart')[0], header, data);
+    window.initChart($currentBox.find('.chart')[0], header, data, chartType);
     window.initPicker($currentBox.find('.chart-type'), window.chartList, header.length);
 }
 
@@ -326,7 +326,7 @@ window.initDTable = function($obj, head, data)
     });
 }
 
-window.initChart = function($obj, head, data, chartType = 'line')
+window.initChart = function($obj, head, data, chartType)
 {
     if(chartType == 'pie') return window.initPieChart($obj, head, data);
     if(head.length == 2) {
@@ -586,8 +586,9 @@ window.ajaxGetRecords = function(id)
             }
             else
             {
+                var chartType = $('[name=chartType]').val();
                 window.renderDTable(id, data.header, data.data);
-                window.renderChart(id, data.header, data.data);
+                window.renderChart(id, data.header, data.data, chartType);
             }
         }
     });
