@@ -3149,7 +3149,7 @@ class storyModel extends model
      * Format stories pairs.
      *
      * @param  array  $stories
-     * @param  string $type
+     * @param  string $type    full|short|story|requirement
      * @param  int    $limit
      * @access public
      * @return array
