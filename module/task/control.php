@@ -1936,6 +1936,8 @@ class task extends control
                 return print(js::closeModal('parent', '', "parent.updateKanban(\"task\", $kanbanData)"));
             }
 
+            if($from == 'market') return print(js::locate($this->createLink('marketresearch', 'stage', "researchID=$task->project"), 'parent'));
+
             $locateLink = $this->session->taskList ? $this->session->taskList : $this->createLink('execution', 'task', "executionID={$task->execution}");
             return print(js::locate($locateLink, 'parent'));
         }

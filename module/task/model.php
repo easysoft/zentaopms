@@ -4739,7 +4739,7 @@ class taskModel extends model
 
             if(!empty($children))
             {
-                $rows = array_merge($rows, $this->generateRow($children, $users));
+                $rows = array_merge($rows, $this->generateRow($children, $users, $executionID, $showBranch, $branchGroups, $modulePairs));
             }
         }
         return $rows;
