@@ -626,7 +626,12 @@ class gitlab extends control
         {
             $this->gitlab->createUser($gitlabID);
 
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError())
+            {
+                $message = dao::getError();
+                foreach($message as &$msg) if(is_string($msg)) $msg = zget($this->lang->gitlab->errorResonse, $msg, $msg);
+                return $this->send(array('result' => 'fail', 'message' => $message));   
+            }
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseUser', "gitlabID=$gitlabID")));
         }
 

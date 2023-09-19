@@ -118,6 +118,9 @@ $lang->gitlab->errorLang[4] = 'Branch already exists.';
 $lang->gitlab->errorLang[5] = 'Failed to save group, path has already been taken.';
 $lang->gitlab->errorLang[6] = $lang->gitlab->noAccess;
 
+$lang->gitlab->errorResonse['Email has already been taken']    = 'Email has already been taken';
+$lang->gitlab->errorResonse['Username has already been taken'] = 'Username has already been taken';
+
 $lang->gitlab->project = new stdclass;
 $lang->gitlab->project->id                         = "Project ID";
 $lang->gitlab->project->name                       = "Project name";

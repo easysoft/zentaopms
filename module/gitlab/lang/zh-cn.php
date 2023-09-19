@@ -118,6 +118,9 @@ $lang->gitlab->errorLang[4] = '分支名已存在。';
 $lang->gitlab->errorLang[5] = '保存失败，群组URL路径已经被使用。';
 $lang->gitlab->errorLang[6] = $lang->gitlab->noAccess;
 
+$lang->gitlab->errorResonse['Email has already been taken']    = '邮箱已存在';
+$lang->gitlab->errorResonse['Username has already been taken'] = '用户名已存在';
+
 $lang->gitlab->project = new stdclass;
 $lang->gitlab->project->id                         = "项目ID";
 $lang->gitlab->project->name                       = "项目名称";

@@ -106,6 +106,9 @@ $lang->gitlab->errorLang[3] = "只能包含字母、數字、'.'-'和'.'。不�
 $lang->gitlab->errorLang[4] = '分支名已存在。';
 $lang->gitlab->errorLang[5] = '保存失敗，群組URL路徑已經被使用。';
 
+$lang->gitlab->errorResonse['Email has already been taken']    = '邮箱已存在';
+$lang->gitlab->errorResonse['Username has already been taken'] = '用户名已存在';
+
 $lang->gitlab->project = new stdclass;
 $lang->gitlab->project->id                         = "項目ID";
 $lang->gitlab->project->name                       = "項目名稱";
