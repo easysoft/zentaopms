@@ -2269,10 +2269,9 @@ class story extends control
      */
     public function ajaxGetDuplicatedStory(int $storyID)
     {
-        $this->app->loadLang('bug');
         $story   = $this->story->getByID($storyID);
         $stories = $this->story->getProductStoryPairs($story->product, $story->branch, 0, 'all', 'id_desc', 0, '', $story->type);
 
-        return print html::select("duplicateStory[$storyID]", $stories, '', "class='form-control' placeholder='{$this->lang->bug->placeholder->duplicate}'");
+        return print html::select("duplicateStory[$storyID]", $stories, '', "class='form-control' placeholder='{$this->lang->searchAB}'");
     }
 }
