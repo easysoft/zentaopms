@@ -37,7 +37,7 @@ window.getDuplicateStories = function(obj)
     if(options <= 1)
     {
         var storyID = $this.data('id');
-        var link    = $.createLink('story', 'ajaxGetStoryPairs', 'storyID=' + storyID);
+        var link    = $.createLink('story', 'ajaxGetDuplicatedStory', 'storyID=' + storyID);
 
         $this.closest('.duplicateStoryBox').load(link, function()
         {

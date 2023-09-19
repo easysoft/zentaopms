@@ -2260,13 +2260,14 @@ class story extends control
     }
 
     /**
-     * Ajax get story pairs.
+     * 获取需求ID和需求概要信息键值对的html信息。批量关闭时如果原因是重复了，需要选择重复的需求。
+     * AJAX: Get the html with story pairs to choose the duplicated story.
      *
      * @param  int    $storyID
      * @access public
      * @return void
      */
-    public function ajaxGetStoryPairs($storyID)
+    public function ajaxGetDuplicatedStory(int $storyID)
     {
         $this->app->loadLang('bug');
         $story   = $this->story->getByID($storyID);

@@ -34,7 +34,7 @@ $(function()
         {
             var id = $(this).attr('id');
             var storyID = id.replace('duplicateStoryIDList', '');
-            var link = createLink('story', 'ajaxGetStoryPairs', 'storyID=' + storyID);
+            var link = createLink('story', 'ajaxGetDuplicatedStory', 'storyID=' + storyID);
             var that = $(this);
 
             $.get(link, function(data)
