@@ -383,7 +383,7 @@ class productZen extends product
             $fieldName = trim($fieldName);
             $fieldPairs[$fieldName] = zget($productLang, $fieldName);
 
-            if($this->config->systemMode == 'light' and ($fieldName == 'line' or $fieldName == 'program')) unset($fieldPairs[$fieldName]);
+            if($this->config->systemMode == 'light' && ($fieldName == 'line' or $fieldName == 'program')) unset($fieldPairs[$fieldName]);
         }
 
         return $fieldPairs;
