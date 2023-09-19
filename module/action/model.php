@@ -1046,6 +1046,7 @@ class actionModel extends model
     }
 
     /**
+     * 动态的获取action。
      * Get actions as dynamic.
      *
      * @param  string $account
@@ -1060,34 +1061,40 @@ class actionModel extends model
      * @access public
      * @return array
      */
-    public function getDynamic($account = 'all', $period = 'all', $orderBy = 'date_desc', $pager = null, $productID = 'all', $projectID = 'all', $executionID = 'all', $date = '', $direction = 'next')
+    public function getDynamic(string $account = 'all', string $period = 'all', string $orderBy = 'date_desc', object $pager = null, string|int $productID = 'all', string|int $projectID = 'all', string|int $executionID = 'all', string $date = '', string $direction = 'next'): array
     {
+        /* 计算时间段的开始和结束时间。 */
         /* Computer the begin and end date of a period. */
         $beginAndEnd = $this->computeBeginAndEnd($period);
         extract($beginAndEnd);
 
-        /* Build has priv condition. */
+        /* 构建权限搜索条件。 */
+        /* Build has priv search condition. */
         $condition  = '1=1';
         $executions = array();
         if(!$this->app->user->admin)
         {
+            /* 验证用户的产品/项目/执行权限。 */
+            /* Verify user's product/project/execution permissions。*/
             $aclViews = isset($this->app->user->rights['acls']['views']) ? $this->app->user->rights['acls']['views'] : array();
-            if($productID == 'all')   $authedProducts   = (empty($aclViews) or (!empty($aclViews) and !empty($aclViews['product'])))   ? $this->app->user->view->products : '0';
-            if($projectID == 'all')   $authedProjects   = (empty($aclViews) or (!empty($aclViews) and !empty($aclViews['project'])))   ? $this->app->user->view->projects : '0';
-            if($executionID == 'all') $authedExecutions = (empty($aclViews) or (!empty($aclViews) and !empty($aclViews['execution']))) ? $this->app->user->view->sprints : '0';
+            if($productID == 'all')   $authedProducts   = (empty($aclViews) || (!empty($aclViews) && !empty($aclViews['product'])))   ? $this->app->user->view->products : '0';
+            if($projectID == 'all')   $authedProjects   = (empty($aclViews) || (!empty($aclViews) && !empty($aclViews['project'])))   ? $this->app->user->view->projects : '0';
+            if($executionID == 'all') $authedExecutions = (empty($aclViews) || (!empty($aclViews) && !empty($aclViews['execution']))) ? $this->app->user->view->sprints  : '0';
 
             if(empty($authedProducts)) $authedProducts = '0';
 
-            if($productID == 'all' and $projectID == 'all')
+            /* 组建产品/项目/执行搜索条件。 */
+            /* Build product/project/execution search condition. */
+            if($productID == 'all' && $projectID == 'all')
             {
                 $productCondition = '';
-                foreach(explode(',', $authedProducts) as $product) $productCondition = empty($productCondition) ? "(execution = '0' and project = '0' and (product LIKE '%,$product,%'" : "$productCondition OR product LIKE '%,$product,%'";
+                foreach(explode(',', $authedProducts) as $product) $productCondition = empty($productCondition) ? "(execution = '0' AND project = '0' AND (product LIKE '%,$product,%'" : "$productCondition OR product LIKE '%,$product,%'";
                 if(!empty($productCondition)) $productCondition .= '))';
 
-                $projectCondition   = "(execution = '0' and project != '0' and project " . helper::dbIN($authedProjects) . ')';
-                $executionCondition = isset($authedExecutions) ? "(execution != 0 and execution " . helper::dbIN($authedExecutions) . ')' : "(execution != 0 and execution = '$executionID')";
+                $projectCondition   = "(execution = '0' AND project != '0' AND project " . helper::dbIN($authedProjects) . ')';
+                $executionCondition = isset($authedExecutions) ? "(execution != 0 AND execution " . helper::dbIN($authedExecutions) . ')' : "(execution != 0 AND execution = '$executionID')";
             }
-            elseif($productID == 'all' and is_numeric($projectID))
+            elseif($productID == 'all' && is_numeric($projectID))
             {
                 $products   = $this->loadModel('product')->getProductPairsByProject($projectID);
                 $executions = $this->loadModel('execution')->getPairs($projectID) + array(0 => 0);
@@ -1095,13 +1102,13 @@ class actionModel extends model
                 $authedExecutions = isset($authedExecutions) ? array_intersect(array_keys($executions), explode(',', $authedExecutions)) : array_keys($executions);
 
                 $productCondition = '';
-                foreach(array_keys($products) as $product) $productCondition = empty($productCondition) ? "(execution = '0' and project = '0' and (product LIKE '%,$product,%'" : "$productCondition OR product LIKE '%,$product,%'";
+                foreach(array_keys($products) as $product) $productCondition = empty($productCondition) ? "(execution = '0' AND project = '0' AND (product LIKE '%,$product,%'" : "$productCondition OR product LIKE '%,$product,%'";
                 if(!empty($productCondition)) $productCondition .= '))';
 
-                $projectCondition   = "(execution = '0' and project = '$projectID')";
-                $executionCondition = "(execution != '0' and execution " . helper::dbIN($authedExecutions) . ')';
+                $projectCondition   = "(execution = '0' AND project = '$projectID')";
+                $executionCondition = "(execution != '0' AND execution " . helper::dbIN($authedExecutions) . ')';
             }
-            elseif(is_numeric($productID) and $projectID == 'all')
+            elseif(is_numeric($productID) && $projectID == 'all')
             {
                 $this->loadModel('product');
                 $projects   = $this->product->getProjectPairsByProduct($productID);
@@ -1110,27 +1117,29 @@ class actionModel extends model
                 $authedProjects   = array_intersect(array_keys($projects), explode(',', $authedProjects));
                 $authedExecutions = isset($authedExecutions) ? array_intersect(array_keys($executions), explode(',', $authedExecutions)) : array_keys($executions);
 
-                $productCondition   = "(execution = '0' and project = '0' and product like '%,$productID,%')";
-                $projectCondition   = "(execution = '0' and project != '0' and project " . helper::dbIN($authedProjects) . ')';
-                $executionCondition = "(execution != '0' and execution " . helper::dbIN($authedExecutions) . ')';
+                $productCondition   = "(execution = '0' AND project = '0' AND product LIKE '%,$productID,%')";
+                $projectCondition   = "(execution = '0' AND project != '0' AND project " . helper::dbIN($authedProjects) . ')';
+                $executionCondition = "(execution != '0' AND execution " . helper::dbIN($authedExecutions) . ')';
             }
 
-            $condition = "((product =',0,' or product = '0' or product=',,') AND project = '0' AND execution = '0')";
+            $condition = "((product =',0,' OR product = '0' OR product=',,') AND project = '0' AND execution = '0')";
             if(!empty($productCondition))   $condition .= " OR $productCondition";
             if(!empty($projectCondition))   $condition .= " OR $projectCondition";
             if(!empty($executionCondition)) $condition .= " OR $executionCondition";
         }
 
         $actionCondition = $this->getActionCondition();
-        if(!$actionCondition and !$this->app->user->admin and isset($this->app->user->rights['acls']['actions'])) return array();
+        if(!$actionCondition && !$this->app->user->admin && isset($this->app->user->rights['acls']['actions'])) return array();
 
-        /* Restrict query data in this year when no limit for big data. */
+        /* 用户不传入时间的情况下，限定只能查询今年的数据。 */
+        /* If the user does not enter the time, only this year's data can be queried. */
         $beginDate = '';
         if($period == 'all')
         {
             $year = date('Y');
             $beginDate = $year . '-01-01';
-
+            
+            /* 查询所有动态时最多查询最后两年的数据。 */
             /* When query all dynamic then query the data of the last two years at most. */
             if($this->app->getMethodName() == 'dynamic') $beginDate = $year - 1 . '-01-01';
         }
@@ -1144,10 +1153,11 @@ class actionModel extends model
 
         $condition = "(`objectType` IN ('doc', 'doclib') OR ($condition)) AND `objectType` NOT IN ('program', 'effort', 'execution')";
         if($noMultipleExecutions) $condition .= " OR (`objectID` NOT " . helper::dbIN($noMultipleExecutions) . " AND `objectType` = 'execution')";
-        $condition .= " OR (`objectID` in ($programCondition) AND `objectType` = 'program')";
-        $condition .= " OR (`objectID` in ($efforts) AND `objectType` = 'effort')";
+        $condition .= " OR (`objectID` IN ($programCondition) AND `objectType` = 'program')";
+        $condition .= " OR (`objectID` IN ($efforts) AND `objectType` = 'effort')";
         $condition  = "($condition)";
-
+    
+        /* 获取action数据。 */
         /* Get actions. */
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('objectType')->notIN($this->config->action->ignoreObjectType4Dynamic)
@@ -1163,6 +1173,7 @@ class actionModel extends model
             ->beginIF(!empty($executions))->andWhere('execution')->in(array_keys($executions))->fi()
             ->beginIF(is_numeric($executionID))->andWhere('execution')->eq($executionID)->fi()
             ->markRight(1)
+            /* lite模式下需要排除的一些类型。 */
             /* Types excluded from Lite. */
             ->beginIF($this->config->vision == 'lite')->andWhere('objectType')->notin('product')->fi()
             ->beginIF($this->config->systemMode == 'light')->andWhere('objectType')->notin('program')->fi()
@@ -1171,6 +1182,7 @@ class actionModel extends model
             ->beginIF($executionID == 'notzero')->andWhere('execution')->gt(0)->fi()
             ->andWhere($condition)
             ->beginIF($actionCondition)->andWhere("($actionCondition)")->fi()
+            /* 过滤客户端的登陆登出操作。 */
             /* Filter out client login/logout actions. */
             ->andWhere('action')->notin('disconnectxuanxuan,reconnectxuanxuan,loginxuanxuan,logoutxuanxuan,editmr,removemr')
             ->orderBy($orderBy)
@@ -1301,23 +1313,26 @@ class actionModel extends model
     }
 
     /**
+     * 转换actions用于显示。
      * Transform the actions for display.
      *
-     * @param  array    $actions
+     * @param  array  $actions
      * @access public
-     * @return object
+     * @return array
      */
-    public function transformActions($actions)
+    public function transformActions($actions): array
     {
         $this->app->loadLang('todo');
         $this->app->loadLang('stakeholder');
         $this->app->loadLang('branch');
         $this->app->loadLang('execution');
-
+        
+        /* 获取评论用户以及受信任的部门用户。 */
         /* Get commiters and the same department users. */
         $commiters = $this->loadModel('user')->getCommiters();
         $deptUsers = isset($this->app->user->dept) ? $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id') : '';
 
+        /* 通过action获取对象名称，所属项目以及需求。 */
         /* Get object names, object projects and requirements by actions. */
         $relatedData     = $this->getRelatedDataByActions($actions);
         $objectNames     = $relatedData['objectNames'];
@@ -1327,6 +1342,8 @@ class actionModel extends model
         $projectIdList = array();
         foreach($relatedProjects as $objectType => $idList) $projectIdList += $idList;
 
+        /* 获取需要验证的元素列表。 */
+        /* Get the list of elements that need to be verified. */
         $shadowProducts   = $this->dao->select('id')->from(TABLE_PRODUCT)->where('shadow')->eq(1)->fetchPairs();
         $projectMultiples = $this->dao->select('id,type,multiple')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
         $docList          = $this->loadModel('doc')->getPrivDocs('', 0, 'all');
@@ -1335,23 +1352,26 @@ class actionModel extends model
 
         foreach($actions as $i => $action)
         {
-            if($action->objectType == 'doc' and !isset($docList[$action->objectID])) unset($actions[$i]);
-            if($action->objectType == 'api' and !isset($apiList[$action->objectID])) unset($actions[$i]);
-            if($action->objectType == 'doclib' and !isset($docLibList[$action->objectID])) unset($actions[$i]);
-            if($action->objectType == 'product' AND isset($shadowProducts[$action->objectID]))
+            /* 如果doc,api,doclib,product类型对应的对象不存在，则从actions中删除。*/
+            /* If the object corresponding to the doc, api, doclib, and product types does not exist, it will be deleted from actions. */
+            if($action->objectType == 'doc' && !isset($docList[$action->objectID])) unset($actions[$i]);
+            if($action->objectType == 'api' && !isset($apiList[$action->objectID])) unset($actions[$i]);
+            if($action->objectType == 'doclib' && !isset($docLibList[$action->objectID])) unset($actions[$i]);
+            if($action->objectType == 'product' && isset($shadowProducts[$action->objectID]))
             {
                 unset($actions[$i]);
                 continue;
             }
-
-            /* Add name field to the actions. */
+    
+            /* 为action添加objectName属性。 */
+            /* Add objectName field to the action. */
             $action->objectName = isset($objectNames[$action->objectType][$action->objectID]) ? $objectNames[$action->objectType][$action->objectID] : '';
 
-            if($action->objectType == 'program' and strpos('syncexecution,syncproject,syncprogram', $action->action) !== false)
+            if($action->objectType == 'program' && strpos('syncexecution,syncproject,syncprogram', $action->action) !== false)
             {
                 $action->objectName .= $this->lang->action->label->startProgram;
             }
-            elseif($action->objectType == 'branch' and $action->action == 'mergedbranch')
+            elseif($action->objectType == 'branch' && $action->action == 'mergedbranch')
             {
                 if($action->objectID == 0) $action->objectName = $this->lang->branch->main;
                 $action->objectName = '"' . $action->extra . ' "' . $this->lang->action->to . ' "' . $action->objectName . '"';
@@ -1361,19 +1381,19 @@ class actionModel extends model
                 $user = $this->dao->select('id,realname')->from(TABLE_USER)->where('id')->eq($action->objectID)->fetch();
                 if($user) $action->objectName = $user->realname;
             }
-            elseif($action->objectType == 'kanbancard' and strpos($action->action, 'imported') !== false and $action->action != 'importedcard')
+            elseif($action->objectType == 'kanbancard' && strpos($action->action, 'imported') !== false && $action->action != 'importedcard')
             {
                 $objectType  = str_replace('imported', '', $action->action);
                 $objectTable = zget($this->config->objectTables, $objectType);
-                $objectName  = ($objectType == 'productplan' or $objectType == 'ticket') ? 'title' : 'name';
+                $objectName  = ($objectType == 'productplan' || $objectType == 'ticket') ? 'title' : 'name';
                 $action->objectName = $this->dao->select($objectName)->from($objectTable)->where('id')->eq($action->extra)->fetch($objectName);
             }
-            elseif(strpos(',module,chartgroup,', ",$action->objectType,") !== false and !empty($action->extra) and $action->action != 'deleted')
+            elseif(strpos(',module,chartgroup,', ",$action->objectType,") !== false && !empty($action->extra) && $action->action != 'deleted')
             {
                 $modules = $this->dao->select('id,name')->from(TABLE_MODULE)->where('id')->in(explode(',', $action->extra))->fetchPairs('id');
                 $action->objectName = implode(',', $modules);
             }
-            elseif($action->objectType == 'mr' and $action->action == 'deleted')
+            elseif($action->objectType == 'mr' && $action->action == 'deleted')
             {
                 $action->objectName = $action->extra;
             }
@@ -1398,18 +1418,22 @@ class actionModel extends model
             $action->actionLabel  = isset($this->lang->$objectType->$actionType) ? $this->lang->$objectType->$actionType : $action->action;
             $action->actionLabel  = isset($this->lang->action->label->$actionType) ? $this->lang->action->label->$actionType : $action->actionLabel;
             $action->objectLabel  = $this->getObjectLabel($objectType, $action->objectID, $actionType, $requirements);
-
+            
+            /* 如果action的类型为login或者logout，则不需要链接。*/
             /* If action type is login or logout, needn't link. */
-            if($actionType == 'svncommited' or $actionType == 'gitcommited') $action->actor = zget($commiters, $action->actor);
+            if($actionType == 'svncommited' || $actionType == 'gitcommited') $action->actor = zget($commiters, $action->actor);
 
+            /* 获取gitlab,gitea,或者gogs的对象名称。 */
             /* Get gitlab, gitea or gogs objectname. */
-            if(empty($action->objectName) and (substr($objectType, 0, 6) == 'gitlab' or substr($objectType, 0, 5) == 'gitea' or substr($objectType, 0, 4) == 'gogs')) $action->objectName = $action->extra;
+            if(empty($action->objectName) && (substr($objectType, 0, 6) == 'gitlab' || substr($objectType, 0, 5) == 'gitea' || substr($objectType, 0, 4) == 'gogs')) $action->objectName = $action->extra;
 
-            /* Other actions, create a link. */
+            /* 其它类型的action，设置action的objectLink属性。 */
+            /* For other types of actions, set the objectLink attribute of the action. */
             $this->setObjectLink($action, $deptUsers, $shadowProducts, zget($projectMultiples, $projectID, ''));
 
-            /* Set merge request link. */
-            if((empty($action->objectName) or $action->action == 'deleted') and $action->objectType == 'mr') $action->objectLink = '';
+            /* 设置合并请求的objectLink属性。 */
+            /* Set merge request objectLink. */
+            if((empty($action->objectName) || $action->action == 'deleted') && $action->objectType == 'mr') $action->objectLink = '';
 
             $action->major = (isset($this->config->action->majorList[$action->objectType]) && in_array($action->action, $this->config->action->majorList[$action->objectType])) ? 1 : 0;
         }
@@ -1579,6 +1603,7 @@ class actionModel extends model
     }
 
     /**
+     * 设置对象的链接。
      * Set objectLink
      *
      * @param  object   $action
@@ -2117,6 +2142,7 @@ class actionModel extends model
     }
 
     /**
+     * 根据actions构建日期组。
      * Build date group by actions
      *
      * @param  array  $actions
