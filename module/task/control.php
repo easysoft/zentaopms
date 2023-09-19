@@ -401,10 +401,6 @@ class task extends control
         $taskConsumed = 0;
         if($taskID) $taskConsumed = $this->dao->select('consumed')->from(TABLE_TASK)->where('id')->eq($taskID)->andWhere('parent')->eq(0)->fetch('consumed');
 
-        /* When common task are child tasks, query whether common task are consumed. */
-        $taskConsumed = 0;
-        if($taskID) $taskConsumed = $this->dao->select('consumed')->from(TABLE_TASK)->where('id')->eq($taskID)->andWhere('parent')->eq(0)->fetch('consumed');
-
         if(!empty($_POST))
         {
             $mails = $this->task->batchCreate($executionID, $extra);
