@@ -252,7 +252,7 @@ window.afterPageUpdate = function($target, info, options)
         chartList.push({value: key, text: chartTypeList[key]});
     }
     window.filterChecked = {};
-    window.renderDTable(resultHeader, resultData);
+    window.renderDTable(current.id, resultHeader, resultData);
     window.renderChart();
     if(viewType == 'multiple') window.renderCheckedLabel();
     $(window).on('resize', window.renderCheckedLabel);
@@ -586,8 +586,8 @@ window.ajaxGetRecords = function(id)
             }
             else
             {
-                window.renderDTable(data.header, data.data);
-                window.renderChart(data.header, data.data);
+                window.renderDTable(id, data.header, data.data);
+                window.renderChart(id, data.header, data.data);
             }
         }
     });
