@@ -15,7 +15,7 @@ include '../../common/view/header.html.php';
 include '../../common/view/datatable.fix.html.php';
 include '../../common/view/zui3dtable.html.php';
 $cols     = $this->task->generateCol($orderBy);
-$tasks    = $this->task->generateRow($tasks, $users, $productID);
+$tasks    = $this->task->generateRow($tasks, $users, $executionID, $showBranch, $branchGroups, $modulePairs);
 $sortLink = helper::createLink('execution', 'task', "executionID={$execution->id}&status={$status}&param={$param}&orderBy={orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}");
 js::set('moduleID', $moduleID);
 js::set('productID', $productID);
