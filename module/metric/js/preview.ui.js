@@ -290,7 +290,7 @@ window.renderDTable = function(header, data)
     window.initDTable($currentBox.find('.dtable'), header, data);
 }
 
-window.renderChart = function()
+window.renderChart = function(header = resultHeader, data = resultData)
 {
     var $currentBox = $('#metricBox' + current.id);
     if(viewType == 'single') $currentBox = $('.table-and-chart-single');
@@ -298,8 +298,8 @@ window.renderChart = function()
     $currentBox.find('.chart').remove();
     $currentBox.find('.chart-side').append('<div class="chart chart-container"></div>');
 
-    window.initChart($currentBox.find('.chart')[0], resultHeader, resultData);
-    window.initPicker($currentBox.find('.chart-type'), window.chartList, resultHeader.length);
+    window.initChart($currentBox.find('.chart')[0], header, data);
+    window.initPicker($currentBox.find('.chart-type'), window.chartList, header.length);
 }
 
 window.initDTable = function($obj, head, data)
@@ -587,6 +587,7 @@ window.ajaxGetRecords = function(id)
             else
             {
                 window.renderDTable(data.header, data.data);
+                window.renderChart(data.header, data.data);
             }
         }
     });
