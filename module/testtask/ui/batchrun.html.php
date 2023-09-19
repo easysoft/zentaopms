@@ -13,7 +13,6 @@ namespace zin;
 $caseItems = array();
 foreach($cases as $caseID => $case)
 {
-    if($case->auto == 'auto' && $confirm == 'yes') continue;
     if($case->status == 'wait') continue;
 
     $stepItems = array();
@@ -101,7 +100,7 @@ foreach($cases as $caseID => $case)
             h::span
             (
                 set::hint(true),
-                $moduleOptionMenu[$case->module]
+                $modules[$case->module]
             )
         ),
         h::td

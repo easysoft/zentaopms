@@ -965,7 +965,8 @@ class testtask extends control
     }
 
     /**
-     * Batch run case.
+     * 批量执行用例。
+     * Batch run cases.
      *
      * @param  int    $productID
      * @param  string $orderBy
@@ -975,11 +976,9 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function batchRun($productID, $orderBy = 'id_desc', $from = 'testcase', $taskID = 0, $confirm = '')
+    public function batchRun(int $productID, string $orderBy = 'id_desc', string $from = 'testcase', int $taskID = 0, string $confirm = '')
     {
-        $this->loadModel('tree');
-        $url = $this->session->caseList ? $this->session->caseList : $this->createLink('testcase', 'browse', "productID=$productID");
-        $automation = $this->loadModel('zanode')->getAutomationByProduct($productID);
+        $url = $this->session->caseList ?: inlink('browse', "productID=$productID");
 
         if($this->post->results)
         {
@@ -988,82 +987,29 @@ class testtask extends control
             $this->loadModel('action');
             foreach(array_keys($this->post->results) as $caseID) $this->action->create('case', $caseID, 'run', '', $taskID);
 
-            return $this->send(array('result' => 'success', 'load' => $url));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $url));
         }
 
-        if(!$this->post->caseIdList) return print(js::locate($url, 'parent'));
+        if(!$this->post->caseIdList) return $this->send(array('result' => 'fail', 'load' => $url));
 
+        /* 根据不同情况获取要批量执行的用例。*/
+        /* Get cases to run according to different situations. */
         $caseIdList = array_unique($this->post->caseIdList);
+        $cases      = $this->testtaskZen->prepareCasesForBatchRun($productID, $orderBy, $from, $taskID, $confirm, $caseIdList);
+        if(empty($cases)) return $this->send(array('result' => 'fail', 'load' => $url));
 
-        /* The case of tasks of qa. */
-        if($productID or ($this->app->tab == 'project' and empty($productID)))
-        {
-            $this->testtaskZen->setMenu($productID, 0, $this->session->project, $this->session->execution);
+        /* 获取用例所属模块的键值对。*/
+        /* Get key-value pairs of case module. */
+        $this->loadModel('tree');
+        $modules = array('/');
+        foreach($cases as $case) $modules += $this->tree->getModulesName((array)$case->module);
 
-            $cases = $this->dao->select('*')->from(TABLE_CASE)->where('id')->in($caseIdList)->fetchAll('id');
-        }
-        /* The case of my. */
-        else
-        {
-            if($this->app->tab == 'project')
-            {
-                $this->loadModel('project')->setMenu($this->session->project);
-                $cases = $this->dao->select('t1.*,t2.id as runID')->from(TABLE_CASE)->alias('t1')
-                    ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
-                    ->where('t2.id')->in($caseIdList)
-                    ->fetchAll('id');
-            }
-            else
-            {
-                $this->lang->testtask->menu = $this->lang->my->menu->work;
-                $this->lang->my->menu->work['subModule'] = 'testtask';
-
-                $cases = $this->dao->select('t1.*,t2.id as runID')->from(TABLE_CASE)->alias('t1')
-                    ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
-                    ->where('t1.id')->in($caseIdList)
-                    ->fetchAll('id');
-            }
-
-            $this->view->title = $this->lang->testtask->batchRun;
-        }
-
-        /* Set modules. */
-        $moduleOptionMenu = array(0 => '/');
-        foreach($cases as $caseID => $case)
-        {
-            if($case->auto == 'auto' and $confirm == 'yes') unset($cases[$caseID]);
-            $moduleOptionMenu += $this->tree->getModulesName((array)$case->module);
-        }
-        if(empty($cases)) return print(js::locate($url));
-
-        $this->view->moduleOptionMenu = $moduleOptionMenu;
-
-        /* If case has changed and not confirmed, remove it. */
-        if($from == 'testtask')
-        {
-            $runs = $this->dao->select('`case`, version')->from(TABLE_TESTRUN)
-                ->where('`case`')->in($caseIdList)
-                ->andWhere('task')->eq($taskID)
-                ->fetchPairs();
-            foreach($cases as $caseID => $case)
-            {
-                if(isset($runs[$caseID]) && $runs[$caseID] < $case->version) unset($cases[$caseID]);
-            }
-        }
-
-        $this->view->cases = $cases;
-        $this->view->steps = $this->dao->select('t1.*')->from(TABLE_CASESTEP)->alias('t1')
-            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
-            ->where('t2.id')->in($caseIdList)
-            ->andWhere('t1.version=t2.version')
-            ->andWhere('t2.status')->ne('wait')
-            ->fetchGroup('case', 'id');
-
-        $this->view->caseIdList = array_keys($cases);
-        $this->view->productID  = $productID;
-        $this->view->title      = $this->lang->testtask->batchRun;
-        $this->view->from       = $from;
-        $this->view->confirm    = $confirm;
+        $this->view->title     = $this->lang->testtask->batchRun;
+        $this->view->steps     = $this->loadModel('testcase')->getStepGroupByIdList($caseIdList);
+        $this->view->modules   = $modules;
+        $this->view->cases     = $cases;
+        $this->view->productID = $productID;
+        $this->view->from      = $from;
         $this->display();
     }
 
