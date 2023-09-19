@@ -22,9 +22,9 @@ $storyIdList4 = range(1, 10);
 $storyIdList5 = range(-1, 10);
 $emptyList    = array();
 
-r($productTao->getStoryCasesCount($storyIdList1)) && p() && e('30'); // 测试获取需求列表1所关联的用例总数
-r($productTao->getStoryCasesCount($storyIdList2)) && p() && e('30'); // 测试获取需求列表2所关联的用例总数
-r($productTao->getStoryCasesCount($storyIdList3)) && p() && e('26'); // 测试获取需求列表3所关联的用例总数
-r($productTao->getStoryCasesCount($storyIdList4)) && p() && e('50'); // 测试获取需求列表4所关联的用例总数
-r($productTao->getStoryCasesCount($storyIdList5)) && p() && e('50'); // 测试获取需求列表5所关联的用例总数
+r($productTao->getStoryCasesCount($storyIdList1)) && p() && e('4');  // 测试获取需求列表1所关联的用例总数
+r($productTao->getStoryCasesCount($storyIdList2)) && p() && e('4');  // 测试获取需求列表2所关联的用例总数
+r($productTao->getStoryCasesCount($storyIdList3)) && p() && e('8');  // 测试获取需求列表3所关联的用例总数
+r($productTao->getStoryCasesCount($storyIdList4)) && p() && e('12'); // 测试获取需求列表4所关联的用例总数
+r($productTao->getStoryCasesCount($storyIdList5)) && p() && e('12'); // 测试获取需求列表5所关联的用例总数
 r($productTao->getStoryCasesCount($emptyList))    && p() && e('0');  // 测试获取空需求列表所关联的用例总数

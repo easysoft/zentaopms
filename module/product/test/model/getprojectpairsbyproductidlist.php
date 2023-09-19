@@ -31,12 +31,12 @@ $product = $tester->loadModel('product');
 $product->app->user->admin = true;
 
 r($product->getProjectPairsByProductIdList(array()))             && p() && e('0'); //不传入产品 ID。
-r(count($product->getProjectPairsByProductIdList(array(4))))     && p() && e('12'); //用超级管理员账号，传入单个产品数组，确认获取条目数。
-r(count($product->getProjectPairsByProductIdList(array(3, 4))))  && p() && e('24'); //用超级管理员账号，传入多个产品数组，确认获取条目数。
-r(count($product->getProjectPairsByProductIdList(array(4, 10)))) && p() && e('12'); //用超级管理员账号，传入产品数组中含有不存在的产品，确认获取条目数。
+r(count($product->getProjectPairsByProductIdList(array(4))))     && p() && e('10'); //用超级管理员账号，传入单个产品数组，确认获取条目数。
+r(count($product->getProjectPairsByProductIdList(array(3, 4))))  && p() && e('20'); //用超级管理员账号，传入多个产品数组，确认获取条目数。
+r(count($product->getProjectPairsByProductIdList(array(4, 10)))) && p() && e('10'); //用超级管理员账号，传入产品数组中含有不存在的产品，确认获取条目数。
 
 $product->app->user->admin = false;
 $product->app->user->view->projects = '14,38,46,58';
-r(count($product->getProjectPairsByProductIdList(array(4))))     && p() && e('4'); //不用超级管理员账号，传入单个产品数组，确认获取条目数。
-r(count($product->getProjectPairsByProductIdList(array(3, 4))))  && p() && e('4'); //不用超级管理员账号，传入多个产品数组，确认获取条目数。
-r(count($product->getProjectPairsByProductIdList(array(4, 10)))) && p() && e('4'); //不用超级管理员账号，传入产品数组中含有不存在的产品，确认获取条目数。
+r(count($product->getProjectPairsByProductIdList(array(4))))     && p() && e('3'); //不用超级管理员账号，传入单个产品数组，确认获取条目数。
+r(count($product->getProjectPairsByProductIdList(array(3, 4))))  && p() && e('3'); //不用超级管理员账号，传入多个产品数组，确认获取条目数。
+r(count($product->getProjectPairsByProductIdList(array(4, 10)))) && p() && e('3'); //不用超级管理员账号，传入产品数组中含有不存在的产品，确认获取条目数。

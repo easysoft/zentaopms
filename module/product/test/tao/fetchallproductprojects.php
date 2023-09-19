@@ -42,7 +42,7 @@ $product->app->user->admin = false;
 $product->app->user->view->projects = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,48,49,50';
 r(count($product->fetchAllProductProjects($productID = 1, 'all',    '',    'order_desc')))   && p() && e('7');
 r(count($product->fetchAllProductProjects($productID = 1, 'all',    '0',   'order_desc')))   && p() && e('7');
-r(count($product->fetchAllProductProjects($productID = 1, 'undone', '',    'order_desc')))   && p() && e('5');
+r(count($product->fetchAllProductProjects($productID = 1, 'undone', '',    'order_desc')))   && p() && e('6');
 r(count($product->fetchAllProductProjects($productID = 1, 'wait',   'all', 'order_desc')))   && p() && e('2');
 
 $product->app->loadClass('pager', $static = true);

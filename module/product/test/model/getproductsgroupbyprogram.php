@@ -21,6 +21,6 @@ global $tester;
 $product = $tester->loadModel('product');
 
 $productGroup = $product->getProductsGroupByProgram();
-r(count($productGroup)) && p() && e('10');               //检查获取项目集条目数。
-r($productGroup[0][1])  && p() && e('/正常产品1');       //检查项目集 0 的产品名称。
-r($productGroup[5][6])  && p() && e('项目5/正常产品6');  //检查项目集 5 的产品名称。
+r(count($productGroup)) && p() && e('10');                 //检查获取项目集条目数。
+r($productGroup[0][1])  && p() && e('/正常产品1');         //检查项目集 0 的产品名称。
+r($productGroup[5][6])  && p() && e('项目集5/正常产品6');  //检查项目集 5 的产品名称。

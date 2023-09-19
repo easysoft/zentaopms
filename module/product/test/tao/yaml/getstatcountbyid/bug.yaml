@@ -101,8 +101,6 @@ fields:
     range: "[]{50},admin{30}"
   - field: duplicateBug
     range: 0{55},1-5,0{40},10-15
-  - field: linkBug
-    range:
   - field: case
     range: 0
   - field: caseVersion

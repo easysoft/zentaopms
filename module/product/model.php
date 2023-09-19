@@ -1119,11 +1119,9 @@ class productModel extends model
      */
     public function getStats4Kanban(): array
     {
-        $this->loadModel('program');
-
         /* Get base data. */
         $productList    = $this->productTao->getList();
-        $programList    = $this->program->getTopPairs('', true);
+        $programList    = $this->loadModel('program')->getTopPairs('', true);
         $projectList    = $this->program->getProjectStats(0, 'doing');
 
         $productIdList  = array_keys($productList);
