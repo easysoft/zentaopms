@@ -1043,4 +1043,17 @@ class productTest
         $this->objectModel->deleteLine($lineID);
         return $this->objectModel->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($lineID)->fetch();
     }
+
+    /**
+     * Test deleteByID method.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function deleteByIdTest(int $productID)
+    {
+        $this->objectModel->deleteByID($productID);
+        return $this->objectModel->getByID($productID);
+    }
 }
