@@ -7,15 +7,13 @@ su('admin');
 /**
 
 title=测试 caselibModel->delete();
+timeout=0
 cid=1
-pid=1
 
-测试删除之后deleted值是否为1 >> 1
+- 测试删除之后deleted值是否为1属性deleted @1
 
 */
 
 $caselib = new caselibTest();
-$lib     = $caselib->deleteTest(201);
 
-r($lib) && p('deleted') && e('1');  //测试删除之后deleted值是否为1
-
+r($caselib->deleteTest(1)) && p('deleted') && e('1');  //测试删除之后deleted值是否为1

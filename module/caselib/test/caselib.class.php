@@ -43,22 +43,21 @@ class caselibTest
     }
 
     /**
+     * 测试删除用例库。
      * Delete test.
      *
-     * @param mixed $libID
-     * @param string $table
+     * @param mixed         $libID
+     * @param string        $table
      * @access public
-     * @return void
+     * @return array|object
      */
-    public function deleteTest($libID, $table = '')
+    public function deleteTest(int $libID, string $table = ''): array|object
     {
         $objects = $this->objectModel->delete($libID, $table);
 
         if(dao::isError()) return dao::getError();
 
-        $objects = $this->objectModel->getById($libID);
-
-        return $objects;
+        return $this->objectModel->getByID($libID);
     }
 
     /**
