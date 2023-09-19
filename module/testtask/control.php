@@ -492,87 +492,57 @@ class testtask extends control
     }
 
     /**
-     * Group case.
+     * 分组浏览一个测试单关联的用例。
+     * Browse the cases associated with a testtask in groups.
      *
      * @param  int    $taskID
      * @param  string $groupBy
      * @access public
      * @return void
      */
-    public function groupCase($taskID, $groupBy = 'story')
+    public function groupCase(int $taskID, string $groupBy = 'story')
     {
-        /* Save the session. */
-        $this->loadModel('testcase');
-        $this->app->loadLang('execution');
-        $this->app->loadLang('task');
+        /* 检查测试单是否存在。*/
+        /* Check if the testtask exists. */
+        $task = $this->testtask->getByID($taskID);
+        if(!$task) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('qa', 'index'))));
+
+        /* 检查是否有权限访问测试单所属产品。*/
+        /* Check if user have permission to access the product to which the testtask belongs. */
+        $productID = $this->loadModel('product')->checkAccess($task->product, $this->products);
+
+        $this->testtaskZen->setMenu($productID, $task->branch, $task->project, $task->execution);
+
+        /* 保存部分内容到 session 和 cookie 中供后面使用。*/
+        /* Save session and cookie. */
         $this->session->set('caseList', $this->app->getURI(true), 'qa');
-        helper::setcookie('taskCaseModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        helper::setcookie('taskCaseModule', 0, 0);
 
-        /* Get task and product info, set menu. */
-        $groupBy = empty($groupBy) ? 'story' : $groupBy;
-        $task    = $this->testtask->getByID($taskID);
-        if(!$task) return print(js::error($this->lang->notFound) . js::locate('back'));
-
-        $productID = $task->product;
+        /* 如果测试单所属产品在产品键值对中不存在，将其加入。*/
+        /* Prepare the product key-value pairs. */
         if(!isset($this->products[$productID]))
         {
             $product = $this->loadModel('product')->getByID($productID);
             $this->products[$productID] = $product->name;
         }
 
-        $this->testtaskZen->setMenu($productID, $task->branch, $task->project, $task->execution);
-
-        /* Determines whether an object is editable. */
-        $canBeChanged = common::canBeChanged('testtask', $task);
-
-        $runs = $this->testtask->getRuns($taskID, 0, $groupBy);
+        /* 从数据库中查询一个测试单下关联的测试用例。*/
+        /* Query the cases associated with a testtask from the database. */
+        $groupBy = $groupBy ?: 'story';
+        $cases   = $this->testtask->getRuns($taskID, 0, $groupBy);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
-        $runs = $this->testcase->appendData($runs, 'run');
-        $groupCases  = array();
-        foreach($runs as $run)
-        {
-            if($groupBy == 'story')
-            {
-                $groupCases[$run->story][] = $run;
-            }
-            elseif($groupBy == 'assignedTo')
-            {
-                $groupCases[$run->assignedTo][] = $run;
-            }
-        }
 
-        if($groupBy == 'story' && $task->build)
-        {
-            $buildStoryIdList = $this->dao->select('stories')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch('stories');
-            $buildStories     = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($buildStoryIdList)->andWhere('deleted')->eq(0)->andWhere('id')->notin(array_keys($groupCases))->fetchAll('id');
-            foreach($buildStories as $buildStory)
-            {
-                $groupCases[$buildStory->id][] = $buildStory;
-            }
-        }
+        /* 处理测试用例的跨行合并属性供前端组件分组使用。*/
+        /* Process the rowspan property of cases for use by front-end component groupings. */
+        $cases = $this->testtaskZen->processRowspanOfCases($cases, $task->build);
 
-        $story = null;
-        foreach($runs as $run)
-        {
-            $run->rowspan = 0;
-            if($story !== $run->story)
-            {
-                $story = $run->story;
-                if(!empty($groupCases[$run->story])) $run->rowspan = count($groupCases[$run->story]);
-            }
-        }
-
-        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->cases;
-
+        $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->cases;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->canBeChanged = common::canBeChanged('testtask', $task);
         $this->view->productID    = $productID;
+        $this->view->cases        = $cases;
         $this->view->task         = $task;
-        $this->view->taskID       = $taskID;
-        $this->view->browseType   = 'group';
         $this->view->groupBy      = $groupBy;
-        $this->view->runs         = $runs;
-        $this->view->account      = 'all';
-        $this->view->canBeChanged = $canBeChanged;
         $this->display();
     }
 

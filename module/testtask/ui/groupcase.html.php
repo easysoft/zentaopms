@@ -74,7 +74,7 @@ toolbar
     (
         set::className('ghost'),
         set::icon('bar-chart'),
-        set::url(inlink('report', "productID=$productID&taskID=$task->id&browseType=$browseType&branchID=$task->branch&moduleID=" . (empty($moduleID) ? '' : $moduleID))),
+        set::url(inlink('report', "productID=$productID&taskID=$task->id&browseType=group&branchID=$task->branch&moduleID=" . (empty($moduleID) ? '' : $moduleID))),
         $lang->testtask->report->common
     ) : null,
     $canView ? btn
@@ -96,14 +96,14 @@ $config->testcase->group->dtable->fieldList['actions']['menu']         = array('
 $config->testcase->group->dtable->fieldList['title']['link']['params'] = 'caseID={case}';
 $config->testcase->group->dtable->fieldList['bugs']['link']['params']  = 'runID={id}&caseID={case}';
 
-$runs = initTableData($runs, $config->testcase->group->dtable->fieldList);
+$cases = initTableData($cases, $config->testcase->group->dtable->fieldList);
 
 dtable
 (
     set::id('groupCaseTable'),
     set::userMap($users),
     set::cols($config->testcase->group->dtable->fieldList),
-    set::data($runs),
+    set::data($cases),
     set::plugins(array('cellspan')),
     set::onRenderCell(jsRaw('window.onRenderCell')),
     set::getCellSpan(jsRaw('window.getCellSpan')),
