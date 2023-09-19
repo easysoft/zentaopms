@@ -8,20 +8,21 @@ class caselibTest
     }
 
     /**
+     * 测试通过 id 获取用例库信息。
      * Get by ID test.
      *
-     * @param mixed $libID
-     * @param mixed $setImgSize
+     * @param  int                $libID
+     * @param  bool               $setImgSize
      * @access public
-     * @return void
+     * @return array|object|false
      */
-    public function getByIdTest($libID, $setImgSize = false)
+    public function getByIdTest(int $libID, bool $setImgSize = false): array|object|false
     {
-        $objects = $this->objectModel->getById($libID, $setImgSize);
+        $object = $this->objectModel->getById($libID, $setImgSize);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $object;
     }
 
     /**

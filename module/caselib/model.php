@@ -53,16 +53,17 @@ class caselibModel extends model
     }
 
     /**
+     * 通过 id 获取用例库信息。
      * Get caselib info by id.
      *
-     * @param  int   $libID
-     * @param  bool  $setImgSize
+     * @param  int         $libID
+     * @param  bool        $setImgSize
      * @access public
-     * @return object|bool
+     * @return object|false
      */
-    public function getById($libID, $setImgSize = false)
+    public function getById(int $libID, bool $setImgSize = false): object|false
     {
-        $lib = $this->dao->select('*')->from(TABLE_TESTSUITE)->where('id')->eq((int)$libID)->fetch();
+        $lib = $this->dao->select('*')->from(TABLE_TESTSUITE)->where('id')->eq($libID)->fetch();
         if(!$lib) return false;
 
         $lib = $this->loadModel('file')->replaceImgURL($lib, 'desc');
