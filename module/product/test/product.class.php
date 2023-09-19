@@ -817,6 +817,7 @@ class productTest
      */
     public function getStats4KanbanTest($type, $getCount = false)
     {
+        $this->objectModel->config->product->showAllProjects = true;
         $objects = $this->objectModel->getStats4Kanban();
 
         if(dao::isError())

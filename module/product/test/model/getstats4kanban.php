@@ -3,24 +3,34 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 
+$project = zdTable('project');
+$project->type->range('program{10},project{10},sprint{10}');
+$project->project->range('0{10},1-10,11-20');
+$project->gen(30);
+
+zdTable('product')->gen(30);
+zdTable('projectproduct')->gen(30);
+zdTable('productplan')->gen(30);
+zdTable('team')->gen(30);
+zdTable('release')->gen(30);
+
 /**
 
 title=productModel->getStats4Kanban();
+timeout=0
 cid=1
-pid=1
 
 */
 
 $product = new productTest('admin');
 
-$typeList = array('programList', 'productList', 'planList', 'projectList', 'executionList', 'projectProduct', 'projectLatestExecutions', 'hourList', 'releaseList');
+// return data format: array('productList', 'planList', 'projectList', 'executionList', 'projectProduct', 'projectLatestExecutions', 'hourList', 'releaseList');
 
-r($product->getStats4KanbanTest($typeList[0]))       && p('1,2,3')                                         && e('项目集1,项目集2,项目集3');       // 测试获取产品的看板stats信息
-r($product->getStats4KanbanTest($typeList[1]))       && p('1:name;2:name;3:name')                          && e('正常产品1;正常产品2;正常产品3'); // 测试获取产品的看板stats信息
-r($product->getStats4KanbanTest($typeList[3]))       && p('13:name;14:name;15:name')                       && e('项目3;项目4;项目5');             // 测试获取产品的看板stats信息
-r($product->getStats4KanbanTest($typeList[6]))       && p('14:name;16:name;22:name')                       && e('迭代544;迭代546;迭代552');       // 测试获取产品的看板stats信息
-r($product->getStats4KanbanTest($typeList[7]))       && p('612:progress,totalReal;618:progress,totalReal') && e('44.44,9;100,10');                // 测试获取产品的看板stats信息
-r($product->getStats4KanbanTest($typeList[2], true)) && p()                                                && e('13');                            // 测试获取产品的看板stats信息
-r($product->getStats4KanbanTest($typeList[4], true)) && p()                                                && e('22');                            // 测试获取产品的看板stats信息
-r($product->getStats4KanbanTest($typeList[5], true)) && p()                                                && e('72');                            // 测试获取产品的看板stats信息
-r($product->getStats4KanbanTest($typeList[8], true)) && p()                                                && e('2');                             // 测试获取产品的看板stats信息
+r($product->getStats4KanbanTest(0))       && p('1:name;2:name;3:name') && e('正常产品1;正常产品2;正常产品3');
+r($product->getStats4KanbanTest(2))       && p('13:name;14:name')      && e('项目13;项目14');
+r($product->getStats4KanbanTest(5))       && p('11:name;19:name')      && e('项目21,项目29');
+r($product->getStats4KanbanTest(6))       && p()                       && e('0');
+r($product->getStats4KanbanTest(1, true)) && p()                       && e('1');
+r($product->getStats4KanbanTest(3, true)) && p()                       && e('4');
+r($product->getStats4KanbanTest(4, true)) && p()                       && e('6');
+r($product->getStats4KanbanTest(7, true)) && p()                       && e('1');
