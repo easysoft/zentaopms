@@ -61,7 +61,7 @@ class caselibModel extends model
      * @access public
      * @return object|false
      */
-    public function getById(int $libID, bool $setImgSize = false): object|false
+    public function getByID(int $libID, bool $setImgSize = false): object|false
     {
         $lib = $this->dao->select('*')->from(TABLE_TESTSUITE)->where('id')->eq($libID)->fetch();
         if(!$lib) return false;
@@ -130,13 +130,7 @@ class caselibModel extends model
      */
     public function getLibraries(): array
     {
-        return $this->dao->select('id,name')
-            ->from(TABLE_TESTSUITE)
-            ->where('product')->eq(0)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('type')->eq('library')
-            ->orderBy('order_desc, id_desc')
-            ->fetchPairs('id', 'name');
+        return $this->dao->select('id, name')->from(TABLE_TESTSUITE)->where('product')->eq(0)->andWhere('deleted')->eq(0)->andWhere('type')->eq('library')->orderBy('order_desc, id_desc')->fetchPairs();
     }
 
     /**

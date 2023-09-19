@@ -286,7 +286,7 @@ class caselib extends control
      */
     public function view(int $libID)
     {
-        $lib = $this->caselib->getById($libID, true);
+        $lib = $this->caselib->getByID($libID, true);
         if(!$lib) return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('qa', 'index'))));
 
         /* Set lib menu. */
