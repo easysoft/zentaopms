@@ -273,7 +273,13 @@ class metricTao extends metricModel
             ->where('metricCode')->eq($code)
             ->beginIF(!empty($scope))->andWhere($scopeKey)->eq($scopeValue)->fi()
             ->beginIF(!empty($dateBegin) and $dateType == 'year')->andWhere('`year`')->ge($yearBegin)->fi()
-            ->beginIF(!empty($dateEnd) and $dateType == 'year')->andWhere('`year`')->le($yearEnd)->fi()
+            ->beginIF(!empty($dateEnd)   and $dateType == 'year')->andWhere('`year`')->le($yearEnd)->fi()
+            ->beginIF(!empty($dateBegin) and $dateType == 'month')->andWhere('CONCAT(`year`, `month`)')->ge($monthBegin)->fi()
+            ->beginIF(!empty($dateEnd)   and $dateType == 'month')->andWhere('CONCAT(`year`, `month`)')->le($monthEnd)->fi()
+            ->beginIF(!empty($dateBegin) and $dateType == 'week')->andWhere('CONCAT(`year`, `week`)')->ge($weekBegin)->fi()
+            ->beginIF(!empty($dateEnd)   and $dateType == 'week')->andWhere('CONCAT(`year`, `week`)')->le($weekEnd)->fi()
+            ->beginIF(!empty($dateBegin) and $dateType == 'day')->andWhere('CONCAT(`year`, `month`, `day`)')->ge($dayBegin)->fi()
+            ->beginIF(!empty($dateEnd)   and $dateType == 'day')->andWhere('CONCAT(`year`, `month`, `day`)')->le($dayEnd)->fi()
             ->beginIF(!empty($calcTime))->andWhere('left(date, 10)')->eq($calcTime)->fi()
             ->beginIF(!empty($calcBegin))->andWhere('left(date, 10)')->ge($calcBegin)->fi()
             ->beginIF(!empty($calcEnd))->andWhere('left(date, 10)')->le($calcEnd)->fi()
@@ -300,13 +306,15 @@ class metricTao extends metricModel
         if($type == 'date')
         {
             list($year, $month, $day) = explode('-', $query[$key]);
+
             $timestamp = strtotime($query[$key]);
+            $week      = date('W', $timestamp);
 
             $dateParse = new stdClass();
             $dateParse->year  = $year;
-            $dateParse->month = $month;
-            $dateParse->week  = date('W', $timestamp);
-            $dateParse->day   = $day;
+            $dateParse->month = "{$year}{$month}";
+            $dateParse->week  = "{$year}{$week}";
+            $dateParse->day   = "{$year}{$month}{$day}";
 
             return $dateParse;
         }

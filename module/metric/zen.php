@@ -392,7 +392,7 @@ class metricZen extends metric
 
             $row = new stdclass();
             if(!empty($dateList))  $row->date = $this->metric->buildDateCell($record);
-            if($scope != 'system') $row->scope = $objectPairs[$record[$scope]];
+            if($scope != 'system') $row->scope = isset($objectPairs[$record[$scope]]) ? $objectPairs[$record[$scope]] : $record[$scope];
             $row->value = $record['value'];
             if(isset($record['date'])) $row->calcTime = $record['date'];
 
