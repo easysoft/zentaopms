@@ -5461,4 +5461,23 @@ class storyModel extends model
             ->orderBy('t1.`order`_desc')
             ->fetchAll();
     }
+
+    /**
+     * 获取产品所有状态对应的需求总数。
+     * Get stories count of each status by product ID.
+     *
+     * @param  int    $productID
+     * @param  string $storyType
+     * @access public
+     * @return array
+     */
+    public function getStoriesCountByProductID(int $productID, string $storyType = 'requirement'): array
+    {
+        return $this->dao->select('product, status, count(status) AS count')->from(TABLE_STORY)
+            ->where('deleted')->eq(0)
+            ->andWhere('type')->eq($storyType)
+            ->andWhere('product')->eq($productID)
+            ->groupBy('product, status')
+            ->fetchAll('status');
+    }
 }

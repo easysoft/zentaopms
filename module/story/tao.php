@@ -165,25 +165,6 @@ class storyTao extends storyModel
     }
 
     /**
-     * 获取产品所有状态对应的需求总数。
-     * Get stories count of each status by product ID.
-     *
-     * @param  int       $productID
-     * @param  string    $storyType
-     * @access protected
-     * @return array
-     */
-    protected function getStoriesCountByProductID(int $productID, string $storyType = 'requirement'): array
-    {
-        return $this->dao->select('product, status, count(status) AS count')->from(TABLE_STORY)
-            ->where('deleted')->eq(0)
-            ->andWhere('type')->eq($storyType)
-            ->andWhere('product')->eq($productID)
-            ->groupBy('product, status')
-            ->fetchAll('status');
-    }
-
-    /**
      * 获取所有完成的需求数量。
      * Get the count of closed stories.
      *
