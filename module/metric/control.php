@@ -135,7 +135,7 @@ class metric extends control
         $this->view->current    = $current;
         $this->view->metricList = $this->lang->metric->metricList;
         $this->view->scope      = $scope;
-        $this->view->title      = $this->lang->metric->preview;
+        $this->view->title      = $this->lang->metric->common;
         $this->view->viewType   = $viewType;
         $this->view->recTotal   = count($metrics);
         $this->view->filters    = $filters;
