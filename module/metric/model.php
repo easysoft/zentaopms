@@ -570,7 +570,7 @@ class metricModel extends model
             $this->config->metric->actionList['edit']['url']         = helper::createLink('metric', 'edit', "metricID={$metric->id}");
 
             $menuList['suffix'][] = $this->config->metric->actionList['edit'];
-            if($metric->fromID === 0) $menuList['main'][]   = $this->config->metric->actionList['implement'];
+            if($metric->stage == 'wait' && !$this->isOldMetric($metric) && $metric->builtin === '0') $menuList['main'][]   = $this->config->metric->actionList['implement'];
         }
         else
         {

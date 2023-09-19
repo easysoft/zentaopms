@@ -471,9 +471,9 @@ class metricZen extends metric
     {
         foreach($metrics as $metric)
         {
-            $metric->canEdit = $metric->stage == 'wait';
-            $metric->canImplement = ($metric->stage == 'wait' && !$this->metric->isOldMetric($metric));
-            $metric->canDelist = $metric->stage == 'released';
+            $metric->canEdit      = $metric->stage == 'wait';
+            $metric->canImplement = ($metric->stage == 'wait' && !$this->metric->isOldMetric($metric) && $metric->builtin === '0');
+            $metric->canDelist    = $metric->stage == 'released';
         }
         return $metrics;
     }
