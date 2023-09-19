@@ -61,24 +61,22 @@ class caselib extends control
     }
 
     /**
+     * 编辑用例库。
      * Edit a case lib.
      *
-     * @param  int    $lib
+     * @param  int    $libID
      * @access public
      * @return void
      */
-    public function edit($libID)
+    public function edit(int $libID)
     {
         if(!empty($_POST))
         {
-            $changes = $this->caselib->update($libID);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $formData = form::data($this->config->caselib->form->edit);
+            $lib      = $this->caselibZen->prepareEditExtras($formData, $libID);
 
-            if($changes)
-            {
-                $actionID = $this->loadModel('action')->create('caselib', $libID, 'edited');
-                $this->action->logHistory($actionID, $changes);
-            }
+            $this->caselib->update($lib);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $message = $this->executeHooks($libID);
             if(!$message) $message = $this->lang->saveSuccess;
@@ -93,7 +91,7 @@ class caselib extends control
         $this->caselib->setLibMenu($libraries, $libID);
 
         $this->view->title = $libraries[$libID] . $this->lang->colon . $this->lang->caselib->edit;
-        $this->view->lib   = $this->caselib->getById($libID);
+        $this->view->lib   = $this->caselib->getByID($libID);
         $this->display();
     }
 

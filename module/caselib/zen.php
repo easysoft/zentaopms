@@ -188,4 +188,24 @@ class caselibZen extends caselib
 
         return $testcases;
     }
+
+    /**
+     * 准备编辑用例库的数据。
+     * Prepare data for edit caselib.
+     *
+     * @param  object    $formData
+     * @param  int       $libID
+     * @access protected
+     * @return object
+     */
+    protected function prepareEditExtras(object $formData, int $libID): object
+    {
+        $lib = $formData->add('id', $libID)
+            ->add('lastEditedBy', $this->app->user->account)
+            ->add('lastEditedDate', helper::now())
+            ->stripTags($this->config->caselib->editor->edit['id'], $this->config->allowedTags)
+            ->get();
+
+        return $this->loadModel('file')->processImgURL($lib, $this->config->caselib->editor->edit['id'], $lib->uid);
+    }
 }

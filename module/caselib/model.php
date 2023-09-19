@@ -71,36 +71,35 @@ class caselibModel extends model
     }
 
     /**
+     * 更新用例库。
      * Update a caselib.
      *
-     * @param  int   $libID
+     * @param  object $lib
      * @access public
-     * @return bool|array
+     * @return bool
      */
-    public function update($libID)
+    public function update(object $lib): bool
     {
-        $oldLib = $this->dao->select("*")->from(TABLE_TESTSUITE)->where('id')->eq((int)$libID)->fetch();
-        $lib    = fixer::input('post')
-            ->stripTags($this->config->caselib->editor->edit['id'], $this->config->allowedTags)
-            ->add('id', $libID)
-            ->add('lastEditedBy', $this->app->user->account)
-            ->add('lastEditedDate', helper::now())
-            ->remove('uid')
-            ->get();
-        $lib = $this->loadModel('file')->processImgURL($lib, $this->config->caselib->editor->edit['id'], $this->post->uid);
-        $this->dao->update(TABLE_TESTSUITE)->data($lib)
+        $oldLib = $this->dao->select('*')->from(TABLE_TESTSUITE)->where('id')->eq($lib->id)->fetch();
+
+        $this->dao->update(TABLE_TESTSUITE)->data($lib, $skip = 'uid')
             ->autoCheck()
             ->batchcheck($this->config->caselib->edit->requiredFields, 'notempty')
             ->checkFlow()
-            ->where('id')->eq($libID)
+            ->where('id')->eq($lib->id)
             ->checkFlow()
             ->exec();
-        if(!dao::isError())
-        {
-            $this->file->updateObjectID($this->post->uid, $libID, 'caselib');
-            return common::createChanges($oldLib, $lib);
-        }
-        return false;
+        if(dao::isError()) return false;
+
+        $this->loadModel('file')->updateObjectID($lib->uid, $lib->id, 'caselib');
+
+        $changes = common::createChanges($oldLib, $lib);
+        if(!$changes) return true;
+
+        $actionID = $this->loadModel('action')->create('caselib', $lib->id, 'edited');
+        $this->action->logHistory($actionID, $changes);
+
+        return true;
     }
 
     /**

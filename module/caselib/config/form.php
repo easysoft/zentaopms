@@ -5,6 +5,11 @@ $config->caselib->form->create = array();
 $config->caselib->form->create['name'] = array('type' => 'string',  'control' => 'text',   'required' => true,  'default' => '', 'filter' => 'trim');
 $config->caselib->form->create['desc'] = array('type' => 'string',  'control' => 'editor', 'required' => false, 'default' => '', 'width' => 'full');
 
+$config->caselib->form->edit = array();
+$config->caselib->form->edit['name'] = array('type' => 'string', 'control' => 'text',   'required' => true,  'default' => '', 'filter' => 'trim');
+$config->caselib->form->edit['desc'] = array('type' => 'string', 'control' => 'editor', 'required' => false, 'default' => '', 'width' => 'full');
+$config->caselib->form->edit['uid']  = array('type' => 'string', 'required' => false, 'default' => '');
+
 global $app, $lang;
 $app->loadLang('testcase');
 $app->loadModuleConfig('testcase');
