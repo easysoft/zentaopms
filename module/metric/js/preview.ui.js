@@ -468,13 +468,8 @@ window.initPicker = function($obj, items, headLength = 3)
         defaultValue: 'line',
         name: 'chartType',
         required: true,
-        afterRender: () => window.addChange($obj),
+        onChange: function() { window.handleChartTypeChange(this) },
     });
-}
-
-window.addChange = function($obj) 
-{
-    $obj.find('[name=chartType]').attr('onchange', 'window.handleChartTypeChange(this)');
 }
 
 window.handleChartTypeChange = function($el)
@@ -487,8 +482,7 @@ window.handleChartTypeChange = function($el)
     }
     else
     {
-        $el = $($el);
-        var $metricBox = $($el.closest('.metricBox'));
+        var $metricBox = $($el.base.closest('.metricBox'));
         var metricID   = $metricBox.attr('metric-id');
         var chartType  = $metricBox.find('[name=chartType]').val();
 
