@@ -200,7 +200,7 @@ class storyZen extends story
     protected function setMenuForBatchClose(int $productID, int $executionID = 0, string $from = '', string $storyType = 'story')
     {
         /* The stories of a product. */
-        if($this->app->tab == 'product')
+        if($this->app->tab == 'product' and !empty($productID))
         {
             $this->product->setMenu($productID);
             $product = $this->product->getByID($productID);
