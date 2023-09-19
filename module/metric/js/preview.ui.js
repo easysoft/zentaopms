@@ -495,8 +495,7 @@ window.handleChartTypeChange = function($el)
         $.get($.createLink('metric', 'ajaxGetTableData', 'metricID=' + metricID), function(resp)
         {
             var data = JSON.parse(resp);
-            if(data)
-            {
+            if(data) {
                 window.renderChart(metricID, data.header, data.data, chartType);
             }
         });
@@ -583,16 +582,9 @@ window.ajaxGetRecords = function(id)
         var data = JSON.parse(resp);
         if(data)
         {
-            if(viewType == 'multiple')
-            {
-                window.initDTable($('#metricBox' + id).find('.dtable'), data.header, data.data);
-            }
-            else
-            {
-                var chartType = $('[name=chartType]').val();
-                window.renderDTable(id, data.header, data.data);
-                window.renderChart(id, data.header, data.data, chartType);
-            }
+            var chartType = viewType == 'multiple' ? $('#metricBox' + id).find('[name=chartType]').val() : $('[name=chartType]').val();
+            window.renderDTable(id, data.header, data.data);
+            window.renderChart(id, data.header, data.data, chartType);
         }
     });
 }
