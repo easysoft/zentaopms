@@ -261,4 +261,33 @@ class caselibZen extends caselib
 
         return $rows;
     }
+
+    /**
+     * 获取导入文件的表头字段和列。
+     * Get header and columns from import file.
+     *
+     * @param  string     $fileName
+     * @access protected
+     * @return array
+     */
+    protected function getImportHeaderAndColumns(string $fileName): array
+    {
+        $rows = $this->loadModel('file')->parseCSV($fileName);
+
+        $header = array();
+        foreach($rows[0] as $i => $rowValue)
+        {
+            if(empty($rowValue)) break;
+            $header[$i] = $rowValue;
+        }
+
+        $columns = array();
+        foreach($header as $title)
+        {
+            if(!isset($fields[$title])) continue;
+            $columns[] = $fields[$title];
+        }
+
+        return array($header, $columns);
+    }
 }

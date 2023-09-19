@@ -370,15 +370,17 @@ class caselib extends control
     }
 
     /**
-     * Import case csv file.
+     * 导入用例。
+     * Import case by csv file.
      *
      * @param  int    $libID
      * @access public
      * @return void
      */
-    public function import($libID)
+    public function import(int $libID)
     {
         $this->loadModel('testcase');
+
         if($_FILES)
         {
             $file = $this->loadModel('file')->getUpload('file');
@@ -387,51 +389,27 @@ class caselib extends control
             $fileName = $this->file->savePath . $this->file->getSaveName($file['pathname']);
             move_uploaded_file($file['tmpname'], $fileName);
 
-            $rows     = $this->file->parseCSV($fileName);
-            $fields   = $this->testcase->getImportFields();
-            $fields   = array_flip($fields);
-            $header   = array();
-            foreach($rows[0] as $i => $rowValue)
-            {
-                if(empty($rowValue)) break;
-                $header[$i] = $rowValue;
-            }
-            unset($rows[0]);
+            $fields = $this->testcase->getImportFields();
+            $fields = array_flip($fields);
 
-            $columnKey = array();
-            foreach($header as $title)
-            {
-                if(!isset($fields[$title])) continue;
-                $columnKey[] = $fields[$title];
-            }
+            list($header, $columns) = $this->caselibZen->getImportHeaderAndColumns($fileName);
 
-            if(count($columnKey) != count($header) or $this->post->encode != 'utf-8')
+            if(count($columns) != count($header) || $this->post->encode != 'utf-8')
             {
                 $fc     = file_get_contents($fileName);
-                $encode = $this->post->encode != "utf-8" ? $this->post->encode : 'gbk';
+                $encode = $this->post->encode != 'utf-8' ? $this->post->encode : 'gbk';
                 $fc     = helper::convertEncoding($fc, $encode, 'utf-8');
                 file_put_contents($fileName, $fc);
 
-                $rows      = $this->file->parseCSV($fileName);
-                $columnKey = array();
-                $header   = array();
-                foreach($rows[0] as $i => $rowValue)
-                {
-                    if(empty($rowValue)) break;
-                    $header[$i] = $rowValue;
-                }
-                unset($rows[0]);
-                foreach($header as $title)
-                {
-                    if(!isset($fields[$title])) continue;
-                    $columnKey[] = $fields[$title];
-                }
-                if(count($columnKey) != count($header))  return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->errorEncode));
+                list($header, $colums) = $this->caseZen->getImportHeaderAndColumns($fileName);
+
+                if(count($columns) != count($header)) return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->errorEncode));
             }
 
             $this->session->set('fileImport', $fileName);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('showImport', "libID={$libID}"), 'closeModal' => true));
         }
+
         $this->display();
     }
 
