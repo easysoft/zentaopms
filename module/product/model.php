@@ -14,29 +14,6 @@ declare(strict_types=1);
 class productModel extends model
 {
     /**
-     * 获取移动端1.5级导航。
-     * Get product drop menu in mobile.
-     *
-     * @param  array      $products
-     * @param  int        $productID
-     * @param  string     $extra
-     * @param  string|int $branch
-     *
-     * @access public
-     * @return string
-     */
-    public function getDropMenu4Mobile(array $products, int $productID, string $extra = '', string|int $branch = ''): string
-    {
-        list($locateModule, $locateMethod) = $this->productTao->computeLocate4DropMenu();
-
-        $selectHtml = $this->select($products, $productID, $locateModule, $locateMethod, $extra, $branch);
-        $pageNav    = html::a(helper::createLink('product', 'index'), $this->lang->product->index) . $this->lang->colon;
-        $pageNav   .= $selectHtml;
-
-        return $pageNav;
-    }
-
-    /**
      * 检查是否有权限访问该产品。
      * Check privilege.
      *
@@ -1309,7 +1286,7 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function buildOperateMenu(object $product, string $type = 'view'): array
+    public function buildOperateMenu(object $product): array
     {
         /* Declare menu list. */
         $menuList = array
@@ -1320,11 +1297,10 @@ class productModel extends model
 
         $params = "product=$product->id";
 
-        if($type == 'view' && $product->status != 'closed') $menuList['main'][] = $this->config->product->actionList['close'];
+        if($product->status != 'closed') $menuList['main'][] = $this->config->product->actionList['close'];
 
         $menuList['suffix'][] = $this->buildMenu('product', 'edit', $params, $product, $type);
-
-        if($type == 'view') $menuList['suffix'][] = $this->config->product->actionList['delete'];
+        $menuList['suffix'][] = $this->config->product->actionList['delete'];
 
         return $menuList;
     }
