@@ -170,49 +170,6 @@ class productTao extends productModel
     }
 
     /**
-     * 获取产品列表。
-     * Get products list.
-     *
-     * @param  int        $programID
-     * @param  string     $status
-     * @param  int        $limit
-     * @param  int        $line
-     * @param  string|int $shadow    all | 0 | 1
-     * @access protected
-     * @return array
-     */
-    protected function getList(int $programID = 0, string $status = 'all', int $limit = 0, int $line = 0, string|int $shadow = 0)
-    {
-        return $this->dao->select('DISTINCT t1.*,t2.order')->from(TABLE_PRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
-            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t3.product = t1.id')
-            ->leftJoin(TABLE_TEAM)->alias('t4')->on("t4.root = t3.project and t4.type='project'")
-            ->where('t1.deleted')->eq(0)
-            ->beginIF($shadow !== 'all')->andWhere('t1.shadow')->eq((int)$shadow)->fi()
-            ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
-            ->beginIF($line > 0)->andWhere('t1.line')->eq($line)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
-            ->andWhere('t1.vision')->eq($this->config->vision)->fi()
-            ->beginIF($status == 'noclosed')->andWhere('t1.status')->ne('closed')->fi()
-            ->beginIF(!in_array($status, array('all', 'noclosed', 'involved', 'review'), true))->andWhere('t1.status')->in($status)->fi()
-            ->beginIF($status == 'involved')
-            ->andWhere('t1.PO', true)->eq($this->app->user->account)
-            ->orWhere('t1.QD')->eq($this->app->user->account)
-            ->orWhere('t1.RD')->eq($this->app->user->account)
-            ->orWhere('t1.createdBy')->eq($this->app->user->account)
-            ->orWhere('t4.account')->eq($this->app->user->account)
-            ->markRight(1)
-            ->fi()
-            ->beginIF($status == 'review')
-            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
-            ->andWhere('t1.reviewStatus')->eq('doing')
-            ->fi()
-            ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
-            ->beginIF($limit > 0)->limit($limit)->fi()
-            ->fetchAll('id');
-    }
-
-    /**
      * 获取在需求列表页面的搜索表单中，模块字段的下拉选项。包括产品、项目下的需求页面。
      * Get modules for search form, in product, project story page.
      *

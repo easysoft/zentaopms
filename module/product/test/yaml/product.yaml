@@ -18,3 +18,5 @@ fields:
     range: 'admin{10},user1{10},user2{10}'
   - field: type
     range: 'normal{5},branch{5},normal{20}'
+  - field: shadow
+    range: 0{25},1{5},0{5},1{5}
