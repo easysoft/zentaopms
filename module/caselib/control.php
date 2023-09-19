@@ -53,7 +53,7 @@ class caselib extends control
         }
 
         $libraries = $this->caselib->getLibraries();
-        $libID     = $this->caselib->saveLibState(0, $libraries);
+        $libID     = $this->caselibZen->saveLibState(0, $libraries);
         $this->caselib->setLibMenu($libraries, $libID);
 
         $this->view->title = $this->lang->caselib->common . $this->lang->colon . $this->lang->caselib->create;
@@ -89,7 +89,7 @@ class caselib extends control
 
         /* Set lib menu. */
         $libraries = $this->caselib->getLibraries();
-        $libID     = $this->caselib->saveLibState($libID, $libraries);
+        $libID     = $this->caselibZen->saveLibState($libID, $libraries);
         $this->caselib->setLibMenu($libraries, $libID);
 
         $this->view->title = $libraries[$libID] . $this->lang->colon . $this->lang->caselib->edit;
@@ -158,7 +158,7 @@ class caselib extends control
 
         /* Set browse type. */
         $browseType = strtolower($browseType);
-        $libID = $this->caselib->saveLibState($libID, $libraries);
+        $libID = $this->caselibZen->saveLibState($libID, $libraries);
 
         /* Save session and cookie. */
         $this->caselibZen->setBrowseSessionAndCookie($libID, $browseType, $param);
@@ -241,7 +241,7 @@ class caselib extends control
         }
         /* Set lib menu. */
         $libraries = $this->caselib->getLibraries();
-        $libID     = $this->caselib->saveLibState($libID, $libraries);
+        $libID     = $this->caselibZen->saveLibState($libID, $libraries);
         $this->caselib->setLibMenu($libraries, $libID);
 
         $type         = 'feature';

@@ -48,27 +48,6 @@ class caselibModel extends model
     }
 
     /**
-     * Save lib state.
-     *
-     * @param  int    $libID
-     * @param  array  $libraries
-     * @access public
-     * @return int
-     */
-    public function saveLibState($libID = 0, $libraries = array())
-    {
-        if($libID > 0) $this->session->set('caseLib', (int)$libID);
-        if($libID == 0 and $this->cookie->lastCaseLib) $this->session->set('caseLib', $this->cookie->lastCaseLib);
-        if($libID == 0 and $this->session->caseLib == '') $this->session->set('caseLib', key($libraries));
-        if(!isset($libraries[$this->session->caseLib]))
-        {
-            $this->session->set('caseLib', key($libraries));
-            $libID = $this->session->caseLib;
-        }
-        return $this->session->caseLib;
-    }
-
-    /**
      * Get caselib info by id.
      *
      * @param  int   $libID
