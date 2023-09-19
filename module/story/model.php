@@ -1728,7 +1728,8 @@ class storyModel extends model
     }
 
     /**
-     * Batch close story.
+     * 批量关闭需求。
+     * Batch close the stories.
      *
      * @param  array $stories
      * @access public
@@ -1746,7 +1747,8 @@ class storyModel extends model
 
             $this->dao->update(TABLE_STORY)->data($story, 'comment')->autoCheck()
                 ->checkIF($story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
-                ->where('id')->eq($storyID)->exec();
+                ->where('id')->eq($storyID)
+                ->exec();
 
             if(dao::isError()) return dao::$errors[] = 'story#' . $storyID . dao::getError(true);
 

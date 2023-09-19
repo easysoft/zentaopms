@@ -1116,7 +1116,7 @@ class story extends control
 
         if($this->post->comment)
         {
-            $stories = $this->storyZen->buildStoriesForBatchClose();
+            $stories = $this->storyZen->buildStoriesForBatchClose(); /* Get the stories which need to be closed. */
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->story->batchClose($stories);
@@ -1128,7 +1128,7 @@ class story extends control
 
         $this->storyZen->setMenuForBatchClose($productID, $executionID, $from, $storyType);
 
-        /* Get edited stories. */
+        /* Get the skipped and already closed stories, and the count of stories which have a twin. */
         $stories     = $this->story->getByList($storyIdList);
         $ignoreTwins = array();
         $twinsCount  = array();
@@ -1140,8 +1140,8 @@ class story extends control
                 continue;
             }
 
-            if($story->parent == -1)       $skipStory[]   = $story->id;
-            if($story->status == 'closed') $closedStory[] = $story->id;
+            if($story->parent == -1)       $skippedStory[] = $story->id;
+            if($story->status == 'closed') $closedStory[]  = $story->id;
             if($story->parent == -1 || $story->status == 'closed') unset($stories[$story->id]);
 
             if(!empty($story->twins))
@@ -1156,15 +1156,14 @@ class story extends control
         }
 
         $errorTips = '';
-        if(isset($closedStory)) $errorTips .= sprintf($this->lang->story->closedStory, implode(',', $closedStory));
-        if(isset($skipStory))   $errorTips .= sprintf($this->lang->story->skipStory, implode(',', $skipStory));
+        if(isset($closedStory))  $errorTips .= sprintf($this->lang->story->closedStory, implode(',', $closedStory));
+        if(isset($skippedStory)) $errorTips .= sprintf($this->lang->story->skipStory,   implode(',', $skippedStory));
 
-        $this->view->productID        = $productID;
-        $this->view->stories          = $stories;
-        $this->view->storyType        = $storyType;
-        $this->view->twinsCount       = $twinsCount;
-        $this->view->errorTips        = $errorTips;
-
+        $this->view->productID  = $productID;
+        $this->view->stories    = $stories;
+        $this->view->storyType  = $storyType;
+        $this->view->twinsCount = $twinsCount;
+        $this->view->errorTips  = $errorTips;
         $this->display();
     }
 

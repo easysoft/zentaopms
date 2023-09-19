@@ -941,7 +941,7 @@ class storyZen extends story
     }
 
     /**
-     * 构建批量关闭需求数据。
+     * 构建批量关闭需求数据，跳过有子需求的父需求以及已经关闭了的需求。
      * Build stories for batch close.
      *
      * @access protected
@@ -961,8 +961,8 @@ class storyZen extends story
         foreach($data as $storyID => $story)
         {
             $oldStory = $oldStories[$storyID];
-            if($oldStory->parent == -1) continue;
-            if($oldStory->status == 'closed') continue;
+            if($oldStory->parent == -1) continue;       /* Skip the story which has any child story. */
+            if($oldStory->status == 'closed') continue; /* Skip the story which has been closed. */
 
             $story->lastEditedBy   = $account;
             $story->lastEditedDate = $now;
