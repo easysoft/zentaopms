@@ -311,17 +311,11 @@ class caselib extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu($libID, $module, $method, $extra = '')
+    public function ajaxGetDropMenu(int $libID, string $module, string $method, string $extra = '')
     {
-        $this->view->link      = $this->caselib->getLibLink($module, $method, $extra);
-        $this->view->libID     = $libID;
-        $this->view->module    = $module;
-        $this->view->method    = $method;
-        $this->view->extra     = $extra;
-
-        $libraries = $this->caselib->getLibraries();
-
-        $this->view->libraries       = $libraries;
+        $this->view->link            = $this->caselib->getLibLink($module, $method, $extra);
+        $this->view->libID           = $libID;
+        $this->view->libraries       = $this->caselib->getLibraries();
         $this->view->librariesPinyin = common::convert2Pinyin($libraries);
         $this->display();
     }

@@ -125,6 +125,8 @@ class dropmenu extends wg
             $menuID         = 'admin-menu';
         }
 
+        if($tab == 'caselib') $objectID = data('libID');
+
         if(empty($url) && empty($data)) $url = createLink($tab, 'ajaxGetDropMenu', "objectID=$objectID&module=$module&method=$method&extra=$extra");
         if(empty($text) && !empty($tab) && !empty($objectID))
         {
