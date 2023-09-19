@@ -472,8 +472,8 @@ class product extends control
         $this->product->setMenu($productID);
 
         /* Get product. */
-        $product   = $this->product->getStatByID($productID);
-        if(!$product) return print(js::locate('product', 'all'));
+        $product = $this->product->getStatByID($productID);
+        if(!$product) return $this->locate('product', 'all');
 
         $this->view->title = $product->name . $this->lang->colon . $this->lang->product->view;
         echo $this->fetch('block', 'dashboard', 'dashboard=singleproduct');
