@@ -3,7 +3,7 @@ class testtaskZen extends testtask
 {
     /**
      * 根据不同情况设置菜单。
-     * Set menu according different situations.
+     * Set menu according to different situations.
      *
      * @param  int       $productID
      * @param  int       $branch
@@ -322,6 +322,43 @@ class testtaskZen extends testtask
 
         /* 如果是在弹窗页面或者测试应用下打开的测试单，则获取所有产品。 */
         return $this->loadModel('product')->getPairs('', 0, '', 'all');
+    }
+
+    /**
+     * 获取批量执行的用例。
+     * Get cases to run.
+     *
+     * @param  int       $productID
+     * @param  string    $orderBy
+     * @param  string    $from
+     * @param  int       $testID
+     * @param  string    $confirm
+     * @param  array     $caseIdList
+     * @access protected
+     * @return array
+     */
+    protected function prepareCasesForBatchRun(int $productID, string $orderBy, string $from, int $taskID, string $confirm, array $caseIdList): array
+    {
+        $this->setMenu($productID, 0, $this->session->project, $this->session->execution);
+
+        $cases = $this->dao->select('*')->from(TABLE_CASE)
+            ->where('id')->in($caseIdList)
+            ->beginIF($confirm == 'yes')->andWhere('auto')->ne('auto')->fi()
+            ->orderBy($orderBy)
+            ->fetchAll('id');
+        if($from != 'testtask') return $cases;
+
+        /* 如果批量执行的用例来自测试单，检查这些用例的版本，如果不是最新版就移除它们。*/
+        /* If cases come from a testtask, check the version of these cases, if not the latest version, remove them. */
+        $runs = $this->dao->select('`case`, version')->from(TABLE_TESTRUN)
+            ->where('`case`')->in(array_keys($cases))
+            ->andWhere('task')->eq($taskID)
+            ->fetchPairs();
+        foreach($cases as $caseID => $case)
+        {
+            if(isset($runs[$caseID]) && $runs[$caseID] < $case->version) unset($cases[$caseID]);
+        }
+        return $cases;
     }
 
     /**
