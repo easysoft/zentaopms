@@ -232,7 +232,7 @@ class caselib extends control
             $result = $this->loadModel('common')->removeDuplicate('case', $case, "id!='$param'");
             if($result and $result['stop']) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->duplicate, $this->lang->testcase->common), 'locate' => $this->createLink('testcase', 'view', "caseID={$result['duplicate']}")));
 
-            $caseID = $this->testcase->create($case);
+            $this->testcase->create($case);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* If link from no head then reload. */
@@ -244,54 +244,20 @@ class caselib extends control
         $libID     = $this->caselibZen->saveLibState($libID, $libraries);
         $this->caselib->setLibMenu($libraries, $libID);
 
-        $type         = 'feature';
-        $stage        = '';
-        $pri          = 3;
-        $caseTitle    = '';
-        $precondition = '';
-        $keywords     = '';
-        $steps        = array();
-
-        $this->loadModel('testcase');
-        if($param)
-        {
-            $testcase     = $this->testcase->getById((int)$param);
-            $type         = $testcase->type ? $testcase->type : 'feature';
-            $stage        = $testcase->stage;
-            $pri          = $testcase->pri;
-            $storyID      = $testcase->story;
-            $caseTitle    = $testcase->title;
-            $precondition = $testcase->precondition;
-            $keywords     = $testcase->keywords;
-            $steps        = $testcase->steps;
-        }
-
-        if(count($steps) < $this->config->testcase->defaultSteps)
-        {
-            $paddingCount = $this->config->testcase->defaultSteps - count($steps);
-            $step = new stdclass();
-            $step->type   = 'item';
-            $step->desc   = '';
-            $step->expect = '';
-            for($i = 1; $i <= $paddingCount; $i ++) $steps[] = $step;
-        }
-
-        $this->view->title      = $libraries[$libID] . $this->lang->colon . $this->lang->testcase->create;
+        /* Assign case params. */
+        $this->caselibZen->assignCaseParamsForCreateCase($param);
 
         foreach(explode(',', $this->config->caselib->customCreateFields) as $field) $customFields[$field] = $this->lang->testcase->$field;
+
+        /* Show the variables associated. */
+        $this->app->loadLang('testcase');
+        $this->view->title            = $libraries[$libID] . $this->lang->colon . $this->lang->testcase->create;
         $this->view->showFields       = $this->config->caselib->custom->createFields;
         $this->view->customFields     = $customFields;
         $this->view->libraries        = $libraries;
         $this->view->libID            = $libID;
-        $this->view->currentModuleID  = $moduleID ? (int)$moduleID : $this->cookie->lastLibCaseModule;
-        $this->view->caseTitle        = $caseTitle;
-        $this->view->type             = $type;
-        $this->view->stage            = $stage;
-        $this->view->pri              = $pri;
-        $this->view->precondition     = $precondition;
-        $this->view->keywords         = $keywords;
-        $this->view->steps            = $steps;
-        $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'caselib', $startModuleID = 0);
+        $this->view->currentModuleID  = $moduleID ? $moduleID : $this->cookie->lastLibCaseModule;
+        $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'caselib', 0);
         $this->display();
     }
 

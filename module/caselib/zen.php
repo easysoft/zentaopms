@@ -48,7 +48,7 @@ class caselibZen extends caselib
             $_COOKIE['libCaseModule'] = 0;
             helper::setcookie('libCaseModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
         }
-        if($browseType == 'bymodule') helper::setcookie('libCaseModule', $param, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        if($browseType == 'bymodule') helper::setcookie('libCaseModule', (string)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
     }
 
     /**
@@ -90,5 +90,45 @@ class caselibZen extends caselib
         $this->config->testcase->search['queryID']   = $queryID;
 
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
+    }
+
+    /**
+     * 为创建用例分配用例变量。
+     * Assign case params for creating case.
+     *
+     * @param  int    $param
+     * @access public
+     * @return void
+     */
+    public function assignCaseParamsForCreateCase(int $param): void
+    {
+        $caseTitle    = '';
+        $type         = 'feature';
+        $stage        = '';
+        $pri          = 3;
+        $precondition = '';
+        $keywords     = '';
+        $steps        = array();
+
+        $this->loadModel('testcase');
+        if($param)
+        {
+            $testcase     = $this->testcase->getById($param);
+            $type         = $testcase->type ? $testcase->type : 'feature';
+            $stage        = $testcase->stage;
+            $pri          = $testcase->pri;
+            $caseTitle    = $testcase->title;
+            $precondition = $testcase->precondition;
+            $keywords     = $testcase->keywords;
+            $steps        = $testcase->steps;
+        }
+
+        $this->view->caseTitle        = $caseTitle;
+        $this->view->type             = $type;
+        $this->view->stage            = $stage;
+        $this->view->pri              = $pri;
+        $this->view->precondition     = $precondition;
+        $this->view->keywords         = $keywords;
+        $this->view->steps            = $this->testcase->appendSteps($steps);
     }
 }
