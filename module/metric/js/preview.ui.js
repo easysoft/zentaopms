@@ -230,6 +230,10 @@ window.afterPageUpdate = function($target, info, options)
     window.isDropdown  = false;
     window.lineCount   = 1;
     window.checkedList = [{id:current.id + '', name:current.name}];
+    window.chartList   = [];
+    for(key in chartTypeList) {
+        chartList.push({value: key, text: chartTypeList[key]});
+    }
     window.filterChecked = {};
     window.renderDTable();
     window.renderChart();
@@ -278,6 +282,7 @@ window.renderChart = function()
     $currentBox.find('.chart-side').append('<div class="chart chart-container"></div>');
 
     window.initChart($currentBox.find('.chart')[0], resultHeader, resultData);
+    window.initPicker($currentBox.find('.chart-type'), window.chartList, resultHeader.length);
 }
 
 window.initDTable = function($obj, head, data)
@@ -306,9 +311,7 @@ window.initDTable = function($obj, head, data)
 
 window.initChart = function($obj, head, data, chartType = 'line') 
 {
-    console.log(head)
-    console.log(data);
-
+    if(chartType == 'pie') return window.initPieChart($obj, head, data);
     if(head.length == 2) {
         var x = head[1].name;
         var y = head[0].name;
@@ -393,7 +396,61 @@ window.initChart = function($obj, head, data, chartType = 'line')
 
         option && myChart.setOption(option);
     });
+}
 
+window.initPieChart = function($obj, head, data) 
+{
+    var x = head[0].name;
+    var y = head[1].name;
+    var datas = [];
+    data.forEach(function(item) {
+        datas.push({name: item[x], value: item[y]});
+    });
+
+    $.getLib(config.webRoot + 'js/echarts/echarts.common.min.js', {root: false}, function() {
+
+        var myChart = echarts.init($obj);
+        option = {
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left'
+            },
+            series: [
+                {
+                    type: 'pie',
+                    radius: '50%',
+                    data: datas,
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        option && myChart.setOption(option);
+    });
+}
+
+window.initPicker = function($obj, items, headLength = 3)
+{
+    if(headLength != 3) {
+        items = items.filter(item => item.value != 'pie');
+    }
+    if($obj.zui('picker')) return;
+    new zui.Picker($obj, {
+        items,
+        defaultValue: 'line',
+        name: 'chartType',
+        required: true,
+        onChange: () => window.handleChartTypeChange(this),
+    });
 }
 
 window.handleChartTypeChange = function($el)
@@ -401,8 +458,11 @@ window.handleChartTypeChange = function($el)
     if(viewType == 'single') 
     {
         var chartType = $('[name=chartType]').val();
+        var $currentBox = $('.table-and-chart-single');
+        $currentBox.find('.chart').remove();
+        $currentBox.find('.chart-side').append('<div class="chart chart-container"></div>');
 
-        window.initChart($('.table-and-chart-single').find('.chart')[0], resultHeader, resultData, chartType);
+        window.initChart($currentBox.find('.chart')[0], resultHeader, resultData, chartType);
     }
     else
     {
@@ -413,7 +473,12 @@ window.handleChartTypeChange = function($el)
         $.get($.createLink('metric', 'ajaxGetTableData', 'metricID=' + metricID), function(resp)
         {
             var data = JSON.parse(resp);
-            if(data) window.initChart($metricBox.find('.chart')[0], data.header, data.data, chartType);
+            if(data) 
+            {
+                $currentBox.find('.chart').remove();
+                $currentBox.find('.chart-side').append('<div class="chart chart-container"></div>');
+                window.initChart($metricBox.find('.chart')[0], data.header, data.data, chartType);
+            }
         });
     }
 }

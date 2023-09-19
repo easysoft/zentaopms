@@ -22,6 +22,7 @@ jsVar('selectCount',    $lang->metric->selectCount);
 jsVar('filterLang',     $lang->metric->filter);
 jsVar('scope',          $scope);
 jsVar('metricListLang', $metricList);
+jsVar('chartTypeList',  $lang->metric->chartTypeList);
 
 if($scope == 'collect' and empty($current))
 {

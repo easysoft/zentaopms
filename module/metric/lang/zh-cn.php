@@ -180,6 +180,7 @@ $lang->metric->chartTypeList = array();
 $lang->metric->chartTypeList['line'] = '折线图';
 $lang->metric->chartTypeList['barX'] = '柱形图';
 $lang->metric->chartTypeList['barY'] = '条形图';
+$lang->metric->chartTypeList['pie']  = '饼图';
 
 $lang->metric->filter = new stdclass();
 $lang->metric->filter->common  = '筛选';
