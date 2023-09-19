@@ -49,7 +49,7 @@
                 <?php echo html::select("closedReasons[$storyID]", $reasonList, 'done', "class=form-control onchange=setDuplicateAndChild(this.value,$storyID) style='min-width: 80px'");?>
               </td>
               <td class='pd-0 w-p60 text-left' id='<?php echo 'duplicateStoryBox' . $storyID;?>' <?php if($story->closedReason != 'duplicate') echo "style='display:none'";?>>
-                <?php echo html::select("duplicateStoryIDList[$storyID]", '', '', "class='form-control' placeholder='{$lang->bug->placeholder->duplicate}'");?>
+                <?php echo html::select("duplicateStoryIDList[$storyID]", '', '', "class='form-control' placeholder='{$lang->searchAB}'");?>
               </td>
               <td class='pd-0' id='<?php echo 'childStoryBox' . $storyID;?>' <?php if($story->closedReason != 'subdivided') echo "style='display:none'";?>>
               <?php echo html::input("childStoriesIDList[$storyID]", '', "class='form-control' placeholder='{$lang->idAB}'");?>
