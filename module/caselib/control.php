@@ -138,6 +138,7 @@ class caselib extends control
     }
 
     /**
+     * 展示用例库的用例。
      * Show library case.
      *
      * @param  int    $libID
@@ -150,66 +151,47 @@ class caselib extends control
      * @access public
      * @return void
      */
-    public function browse($libID = 0, $browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse(int $libID = 0, string $browseType = 'all', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        /* Set browse type. */
-        $browseType = strtolower($browseType);
-
         $libraries = $this->caselib->getLibraries();
         if(empty($libraries)) $this->locate(inlink('create'));
 
-        /* Save session. */
-        $this->session->set('caseList', $this->app->getURI(true), 'qa');
-        $this->session->set('caselibList', $this->app->getURI(true), 'qa');
-
-        /* Set menu. */
+        /* Set browse type. */
+        $browseType = strtolower($browseType);
         $libID = $this->caselib->saveLibState($libID, $libraries);
-        helper::setcookie('preCaseLibID', $libID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
-        if($this->cookie->preCaseLibID != $libID)
-        {
-            $_COOKIE['libCaseModule'] = 0;
-            helper::setcookie('libCaseModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
-        }
 
-        if($browseType == 'bymodule') helper::setcookie('libCaseModule', (int)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
-        if($browseType != 'bymodule') $this->session->set('libBrowseType', $browseType);
-        $moduleID = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->libCaseModule ? $this->cookie->libCaseModule : 0));
-        $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
+        /* Save session and cookie. */
+        $this->caselibZen->setBrowseSessionAndCookie($libID, $browseType, $param);
 
         /* Set lib menu. */
         $this->caselib->setLibMenu($libraries, $libID);
 
-        /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = pager::init($recTotal, $recPerPage, $pageID);
+        /* Set module and query id. */
+        $moduleID = ($browseType == 'bymodule') ? $param : ($browseType == 'bysearch' ? 0 : ($this->cookie->libCaseModule ? $this->cookie->libCaseModule : 0));
+        $queryID  = ($browseType == 'bysearch') ? $param : 0;
 
         /* Build the search form. */
-        $this->loadModel('testcase');
-        $actionURL = $this->createLink('caselib', 'browse', "libID=$libID&browseType=bySearch&queryID=myQueryID");
+        $actionURL = $this->createLink('caselib', 'browse', "libID={$libID}&browseType=bySearch&queryID=myQueryID");
         $this->caselib->buildSearchForm($libID, $libraries, $queryID, $actionURL);
 
-        /* Append id for second sort. */
-        $sort = common::appendOrder($orderBy);
+        /* Load pager. */
+        $this->app->loadClass('pager', true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        /* save session .*/
+        /* Save query session .*/
+        $sort  = common::appendOrder($orderBy);
         $cases = $this->caselib->getLibCases($libID, $browseType, $queryID, $moduleID, $sort, $pager);
-
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', true);
 
-        $this->loadModel('datatable');
-        $this->loadModel('tree');
-        $showModule = !empty($this->config->caselib->browse->showModule) ? $this->config->caselib->browse->showModule : '';
-        $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($libID, 'caselib', $showModule) : array();
-
-        $this->view->title      = $this->lang->caselib->common . $this->lang->colon . $libraries[$libID];
-
+        $this->view->title         = $this->lang->caselib->common . $this->lang->colon . $libraries[$libID];
         $this->view->libID         = $libID;
         $this->view->libName       = $libraries[$libID];
         $this->view->cases         = $cases;
         $this->view->orderBy       = $orderBy;
         $this->view->users         = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $this->view->modules       = $this->tree->getOptionMenu($libID, $viewType = 'caselib', $startModuleID = 0);
-        $this->view->moduleTree    = $this->tree->getTreeMenu($libID, $viewType = 'caselib', $startModuleID = 0, array('treeModel', 'createCaseLibLink'));
+        $this->view->modules       = $this->loadModel('tree')->getOptionMenu($libID, 'caselib', 0);
+        $this->view->moduleTree    = $this->tree->getTreeMenu($libID, 'caselib', 0, array('treeModel', 'createCaseLibLink'));
+        $this->view->modulePairs   = !empty($this->config->caselib->browse->showModule) ? $this->tree->getModulePairs($libID, 'caselib', $this->config->caselib->browse->showModule) : array();
         $this->view->pager         = $pager;
         $this->view->browseType    = $browseType;
         $this->view->moduleID      = $moduleID;
@@ -217,7 +199,6 @@ class caselib extends control
         $this->view->param         = $param;
         $this->view->setModule     = true;
         $this->view->showBranch    = false;
-
         $this->display();
     }
 
