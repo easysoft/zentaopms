@@ -8,8 +8,8 @@ zdTable('product')->gen(10);
 /**
 
 title=productModel->buildOperateMenu();
+timeout=0
 cid=1
-pid=1
 
 */
 
@@ -20,11 +20,6 @@ $productModel->app->moduleName  = 'product';
 $productModel->app->methodName  = 'view';
 
 $product = $productModel->getByID(1);
-$menu    = $productModel->buildOperateMenu($product, 'view');
-r(str_contains($menu, '关闭'))     && p() && e('1'); //检查是否有关闭链接。
-r(str_contains($menu, '编辑产品')) && p() && e('1'); //检查是否有编辑链接。
-r(str_contains($menu, '删除产品')) && p() && e('1'); //检查是否有删除链接。
-
-$menu = $productModel->buildOperateMenu($product, 'browse');
-r(str_contains($menu, '编辑产品')) && p() && e('1'); //检查是否有编辑链接。
-r(str_contains($menu, '删除产品')) && p() && e('0'); //检查是否有删除链接。
+$menu    = $productModel->buildOperateMenu($product);
+r($menu['main'])          && p('0:text') && e('关闭'); // 检查是否有关闭链接。
+r(count($menu['suffix'])) && p()         && e('2');    // 检查是否有编辑和删除链接。
