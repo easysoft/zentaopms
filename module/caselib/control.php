@@ -299,25 +299,24 @@ class caselib extends control
     }
 
     /**
-     * View library
+     * 查看用例库信息。
+     * View a library.
      *
      * @param  int    $libID
      * @access public
      * @return void
      */
-    public function view($libID)
+    public function view(int $libID)
     {
-        $libID = (int)$libID;
-        $lib   = $this->caselib->getById($libID, true);
-        if(!isset($lib->id)) return print(js::error($this->lang->notFound) . js::locate($this->createLink('qa', 'index')));
+        $lib = $this->caselib->getById($libID, true);
+        if(!$lib) return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('qa', 'index'))));
 
         /* Set lib menu. */
         $libraries = $this->caselib->getLibraries();
         $this->caselib->setLibMenu($libraries, $libID);
 
-        $this->loadModel('testcase');
-        $this->view->title      = $lib->name . $this->lang->colon . $this->lang->caselib->view;
-
+        $this->app->loadLang('testcase');
+        $this->view->title   = $lib->name . $this->lang->colon . $this->lang->caselib->view;
         $this->view->lib     = $lib;
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->actions = $this->loadModel('action')->getList('caselib', $libID);
