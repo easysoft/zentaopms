@@ -563,8 +563,14 @@ class metricModel extends model
 
         if($metric->stage == 'wait')
         {
-            $menuList['main'][] = $this->config->metric->actionList['implement'];
-            $menuList['suffix'][] = commonModel::buildActionItem('metric', 'edit', "metric=$metric->id", $metric, array('icon' => 'edit'));
+            $this->config->metric->actionList['edit']['icon']        = 'edit';
+            $this->config->metric->actionList['edit']['text']        = $lang->edit;
+            $this->config->metric->actionList['edit']['hint']        = $lang->edit;
+            $this->config->metric->actionList['edit']['data-toggle'] = 'modal';
+            $this->config->metric->actionList['edit']['url']         = helper::createLink('metric', 'edit', "metricID={$metric->id}");
+
+            $menuList['main'][]   = $this->config->metric->actionList['implement'];
+            $menuList['suffix'][] = $this->config->metric->actionList['edit'];
         }
         else
         {
