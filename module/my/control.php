@@ -1449,7 +1449,8 @@ EOF;
             $this->view->list       = $this->user->getContactListByID($listID);
         }
 
-        $users = $this->user->getPairs('noletter|noempty|noclosed|noclosed', $mode == 'new' ? '' : $this->view->list->userList, $this->config->maxCount);
+        $userParams = empty($this->config->user->showDeleted) ? 'noletter|noempty|noclosed|noclosed|nodeleted' : 'noletter|noempty|noclosed|noclosed';
+        $users      = $this->user->getPairs($userParams, $mode == 'new' ? '' : $this->view->list->userList, $this->config->maxCount);
         if(isset($this->config->user->moreLink)) $this->config->moreLinks['users[]'] = $this->config->user->moreLink;
 
         $this->view->mode           = $mode;

@@ -21,6 +21,7 @@ $options['branchOption'] = $branchOption;
 $options['modulePairs']  = $modulePairs;
 $options['storyStages']  = $storyStages;
 $options['isShowBranch'] = '';
+$options['products']     = $products;
 if(!empty($branchOptions)) $options['branchOptions'] = $branchOptions;
 
 $hasChildren = false;

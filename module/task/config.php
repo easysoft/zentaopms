@@ -120,7 +120,7 @@ $config->task->datatable->fieldList['finishedBy']['sortType'] = true;
 $config->task->datatable->fieldList['finishedBy']['required'] = 'no';
 
 $config->task->datatable->fieldList['deadline']['title']    = 'deadlineAB';
-$config->task->datatable->fieldList['deadline']['type']     = 'date';
+$config->task->datatable->fieldList['deadline']['type']     = 'html';
 $config->task->datatable->fieldList['deadline']['width']    = '70';
 $config->task->datatable->fieldList['deadline']['fixed']    = 'no';
 $config->task->datatable->fieldList['deadline']['sortType'] = true;

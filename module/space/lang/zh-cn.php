@@ -23,13 +23,13 @@ $lang->space->notice->toInstall = '请到应用市场安装';
 $lang->space->byList = '列表';
 $lang->space->byCard = '卡片';
 
-$lang->space->featureBar['browse']['all']      = '全部';
-$lang->space->featureBar['browse']['running']  = '运行中';
-$lang->space->featureBar['browse']['stopped']  = '已关闭';
-$lang->space->featureBar['browse']['abnormal'] = '异常';
+$lang->space->featureBar['browse']['all'] = '全部';
+if($config->inQuickon) $lang->space->featureBar['browse']['running']  = '运行中';
+if($config->inQuickon) $lang->space->featureBar['browse']['stopped']  = '已关闭';
+if($config->inQuickon) $lang->space->featureBar['browse']['abnormal'] = '异常';
 
 $lang->space->appType['gitlab']    = 'GitLab';
-if(!$config->inQuickon) $lang->space->appType['gitea']     = 'Gitea';
+$lang->space->appType['gitea']     = 'Gitea';
 $lang->space->appType['gogs']      = 'Gogs';
 $lang->space->appType['jenkins']   = 'Jenkins';
 $lang->space->appType['sonarqube'] = 'SonarQube';

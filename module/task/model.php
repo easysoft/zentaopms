@@ -4638,15 +4638,20 @@ class taskModel extends model
      *
      * @param  array  $tasks
      * @param  array  $users
+     * @param  int    $executionID
+     * @param  bool   $showBranch
+     * @param  array  $branchGroups
+     * @param  array  $modulePairs
      * @access public
      * @return array
      */
-    public function generateRow($tasks, $users)
+    public function generateRow($tasks, $users, $executionID, $showBranch, $branchGroups, $modulePairs)
     {
         $userFields = array('assignedTo', 'openedBy', 'closedBy', 'lastEditedBy', 'finishedBy');
         $dateFields = array('assignedDate', 'openedDate', 'deadline', 'finishedDate', 'closedDate', 'lastEditedDate', 'canceledDate', 'activatedDate', 'estStarted', 'realStarted', 'replacetypeDate');
         $canView    = common::hasPriv('task', 'view');
         $rows       = array();
+        if($showBranch) $showBranch = isset($this->config->execution->task->showBranch) ? $this->config->execution->task->showBranch : 1;
         foreach($tasks as $task)
         {
             $task->assignedTo = $this->printAssignedHtml($task, $users, false);
@@ -4657,10 +4662,10 @@ class taskModel extends model
             $linkClass = $this->config->vision == 'lite' ? 'class="iframe"' : '';
 
             if($task->parent > 0 and isset($task->parentName)) $task->name = "{$task->parentName} / {$task->name}";
+            if(!empty($task->product) and isset($branchGroups[$task->product][$task->branch]) and $showBranch) $taskName .= "<span class='label label-badge label-outline'>" . $branchGroups[$task->product][$task->branch] . '</span> ';
             if($task->module and isset($modulePairs[$task->module])) $taskName .= "<span class='label label-gray label-badge'>" . $modulePairs[$task->module] . '</span> ';
             if($task->parent > 0) $taskName .= '<span class="label label-badge label-light" title="' . $this->lang->task->children . '">' . $this->lang->task->childrenAB . '</span> ';
             if(!empty($task->team)) $taskName .= '<span class="label label-badge label-light" title="' . $this->lang->task->multiple . '">' . $this->lang->task->multipleAB . '</span> ';
-
             $taskName .= $canView ? html::a($taskLink, $task->name, null, "$linkClass style='color: $task->color' title='$task->name'") : "<span style='color: $task->color'>$task->name</span>";
             if(!empty($task->children)) $taskName .= '<a class="task-toggle" data-id="' . $task->id . '"><i class="icon icon-angle-double-right"></i></a>';
             if($task->fromBug) $taskName .= html::a(helper::createLink('bug', 'view', "id=$task->fromBug"), "[BUG#$task->fromBug]", '', "class='bug'");
@@ -4710,7 +4715,15 @@ class taskModel extends model
             $task->mailto = implode(' &nbsp;', $mailto);
 
             foreach($userFields as $field) $task->$field = zget($users, $task->$field);
-            foreach($dateFields as $field) $task->$field = empty($task->$field) || helper::isZeroDate($task->$field) ? '' : $task->$field;
+            foreach($dateFields as $field)
+            {
+                $task->$field = empty($task->$field) || helper::isZeroDate($task->$field) ? '' : $task->$field;
+                if($field == 'deadline')
+                {
+                    $delayed = isset($task->delay) ? "class='delayed'" : '';
+                    $task->deadline = "<span $delayed>" . substr($task->deadline, 5, 6) . '</span>';
+                }
+            }
 
             $children = isset($task->children) ? $task->children : array();
             unset($task->children);

@@ -64,6 +64,7 @@ class backBtn extends btn
             'space'          => 'space-browse',
             'instance'       => 'space-browse',
             'artifactrepo'   => 'artifactrepo-browse',
+            'job'            => 'action-trash,job-browse',
         );
 
         $props = parent::getProps();

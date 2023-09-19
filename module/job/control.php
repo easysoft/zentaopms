@@ -95,7 +95,7 @@ class job extends control
             $job->buildSpec   = urldecode($job->pipeline) . '@' . $job->jenkinsName;
             $job->engine      = zget($this->lang->job->engineList, $job->engine);
             $job->frame       = zget($this->lang->job->frameList, $job->frame);
-            $job->productName = $products[$job->product];
+            $job->productName = zget($products, $job->product, '');
         }
 
         $this->view->title   = $this->lang->ci->job . $this->lang->colon . $this->lang->job->browse;
