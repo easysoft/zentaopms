@@ -404,6 +404,18 @@ window.handleChartTypeChange = function($el)
 
         window.initChart($('.table-and-chart-single').find('.chart')[0], resultHeader, resultData, chartType);
     }
+    else
+    {
+        var $metricBox = $($el.closest('.metricBox'));
+        var metricID   = $metricBox.attr('metric-id');
+        var chartType  = $metricBox.find('[name=chartType]').val();
+
+        $.get($.createLink('metric', 'ajaxGetTableData', 'metricID=' + metricID), function(resp)
+        {
+            var data = JSON.parse(resp);
+            if(data) window.initChart($metricBox.find('.chart')[0], data.header, data.data, chartType);
+        });
+    }
 }
 
 window.handleRemoveLabel = function(id)

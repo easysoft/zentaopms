@@ -58,6 +58,7 @@ div
     div
     (
         set::id('metricBox{id}'),
+        set('metric-id', '{id}'),
         setClass('metricBox'),
         div
         (
@@ -118,8 +119,22 @@ div
             ),
             div
             (
-                setClass('chart-side chart-center'),
-                'chart',
+                setClass('chart-side'),
+                div
+                (
+                    setClass('chart-type'),
+                    picker
+                    (
+                        set::required(true),
+                        set::name('chartType'),
+                        set::items($lang->metric->chartTypeList),
+                        set('onchange', 'window.handleChartTypeChange(this)'),
+                    )
+                ),
+                div
+                (
+                    setClass('chart chart-container'),
+                )
             )
         ),
     ),
@@ -305,6 +320,7 @@ div
             div
             (
                 set::id('metricBox' . $current->id),
+                set('metric-id', $current->id),
                 setClass('metricBox'),
                 div
                 (
@@ -365,8 +381,23 @@ div
                     ),
                     div
                     (
-                        setClass('chart-side chart-center'),
-                        'chart'
+                        setClass('chart-side'),
+                        div
+                        (
+                            setClass('chart-type'),
+                            picker
+                            (
+                                set::required(true),
+                                set::name('chartType'),
+                                set::items($lang->metric->chartTypeList),
+                                set('onchange', 'window.handleChartTypeChange(this)'),
+                            )
+                        ),
+                        div
+                        (
+                            setClass('chart chart-container'),
+                        )
+
                     ),
                 ),
             ),
