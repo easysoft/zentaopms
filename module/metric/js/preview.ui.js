@@ -330,6 +330,7 @@ window.initDTable = function($obj, head, data)
 
 window.initChart = function($obj, head, data, chartType)
 {
+    if(!data.length) return;
     if(chartType == 'pie') return window.initPieChart($obj, head, data);
     if(head.length == 2) {
         var x = head[1].name;
@@ -462,7 +463,9 @@ window.initPicker = function($obj, items, headLength = 3)
     if(headLength != 3) {
         items = items.filter(item => item.value != 'pie');
     }
-    if($obj.zui('picker')) return;
+    if($obj.zui('picker')) {
+        $obj.zui('picker').destroy();
+    }
     new zui.Picker($obj, {
         items,
         defaultValue: 'line',
