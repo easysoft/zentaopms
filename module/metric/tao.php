@@ -217,7 +217,7 @@ class metricTao extends metricModel
      * @access protected
      * @return array
      */
-    protected function fetchMetricRecords(string $code, array $fieldList, string $date = null): array
+    protected function fetchMetricRecords(string $code, array $fieldList, array $query = array()): array
     {
         $dataFieldStr = implode(', ', $fieldList);
         if(!empty($dataFieldStr)) $dataFieldStr .= ', ';
@@ -232,7 +232,8 @@ class metricTao extends metricModel
         $scopeList = array_intersect($fieldList, $this->config->metric->scopeList);
         $dateList  = array_intersect($fieldList, $this->config->metric->dateList);
 
-        if(!$date)
+        $date = '';
+        if(empty($query))
         {
             // 如果二者为空，说明最终需要的数据只有两列，而这作为全局数据的标记，所以要取所有的数据，而不是最后一次生成的
             if(empty($scopeList) and empty($dateList))
@@ -245,11 +246,71 @@ class metricTao extends metricModel
                 $date    = substr($maxDate, 0, 10);
             }
         }
-        return $this->dao->select("id, {$dataFieldStr} value, date")
+
+        $scope     = $this->processRecordQuery($query, 'scope');
+        $dateBegin = $this->processRecordQuery($query, 'dateBegin', 'date');
+        $dateEnd   = $this->processRecordQuery($query, 'dateEnd', 'date');
+        $calcTime  = $this->processRecordQuery($query, 'calcTime');
+        $calcBegin = $this->processRecordQuery($query, 'calcBegin');
+        $calcEnd   = $this->processRecordQuery($query, 'calcEnd');
+
+        $dateType = empty($dateList) ? '' : $this->getDateType($dateList);
+
+        $yearBegin  = empty($dateBegin) ? '' : $dateBegin->year;
+        $yearEnd    = empty($dateEnd)   ? '' : $dateEnd->year;
+        $monthBegin = empty($dateBegin) ? '' : $dateBegin->month;
+        $monthEnd   = empty($dateEnd)   ? '' : $dateEnd->month;
+        $weekBegin  = empty($dateBegin) ? '' : $dateBegin->week;
+        $weekEnd    = empty($dateEnd)   ? '' : $dateEnd->week;
+        $dayBegin   = empty($dateBegin) ? '' : $dateBegin->day;
+        $dayEnd     = empty($dateEnd)   ? '' : $dateEnd->day;
+
+        $scopeKey   = current($scopeList);
+        $scopeValue = $scope;
+
+        $records =  $this->dao->select("id, {$dataFieldStr} value, date")
             ->from(TABLE_METRICLIB)
             ->where('metricCode')->eq($code)
-            ->andWhere('date')->gt($date)
+            ->beginIF(!empty($scope))->andWhere($scopeKey)->eq($scopeValue)->fi()
+            ->beginIF(!empty($dateBegin) and $dateType == 'year')->andWhere('`year`')->ge($yearBegin)->fi()
+            ->beginIF(!empty($dateEnd) and $dateType == 'year')->andWhere('`year`')->le($yearEnd)->fi()
+            ->beginIF(!empty($calcTime))->andWhere('left(date, 10)')->eq($calcTime)->fi()
+            ->beginIF(!empty($calcBegin))->andWhere('left(date, 10)')->ge($calcBegin)->fi()
+            ->beginIF(!empty($calcEnd))->andWhere('left(date, 10)')->le($calcEnd)->fi()
+            ->beginIF(empty($query))->andWhere('date')->gt($date)->fi()
             ->fetchAll();
+
+        return $records;
+    }
+
+    /**
+     * 处理度量数据查询条件。
+     * Process metric data query.
+     *
+     * @param  array     $query
+     * @param  string    $key
+     * @param  string    $type
+     * @access protected
+     * @return object|string|false
+     */
+    protected function processRecordQuery(array $query, string $key, string $type = 'common'): object|string|false
+    {
+        if(!isset($query[$key]) || empty($query[$key])) return false;
+
+        if($type == 'date')
+        {
+            list($year, $month, $day) = explode('-', $query[$key]);
+            $timestamp = strtotime($query[$key]);
+
+            $dateParse = new stdClass();
+            $dateParse->year  = $year;
+            $dateParse->month = $month;
+            $dateParse->week  = date('W', $timestamp);
+            $dateParse->day   = $day;
+
+            return $dateParse;
+        }
+        return $query[$key];
     }
 
     /**
@@ -277,6 +338,22 @@ class metricTao extends metricModel
         }
 
         return $dataFields;
+    }
+
+    /**
+     * 获取度量数据的日期类型。
+     * Get date type of metric data.
+     *
+     * @param  array    $dateFields
+     * @access protected
+     * @return string
+     */
+    protected function getDateType(array $dateFields): string
+    {
+        if(in_array('day', $dateFields)) return 'day';
+        if(in_array('week', $dateFields)) return 'week';
+        if(in_array('month', $dateFields)) return 'month';
+        if(in_array('year', $dateFields)) return 'year';
     }
 
     /**

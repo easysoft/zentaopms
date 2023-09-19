@@ -277,6 +277,13 @@ class metric extends control
 
             $this->metric->insertMetricLib($records);
         }
+
+        if(dao::isError())
+        {
+            echo dao::getError();
+            return false;
+        }
+        echo 'success';
     }
 
     /**
@@ -455,7 +462,7 @@ class metric extends control
     public function ajaxGetTableData($metricID)
     {
         $metric = $this->metric->getByID($metricID);
-        $result = $this->metric->getResultByCode($metric->code, array(), 'cron');
+        $result = $this->metric->getResultByCode($metric->code, $_POST, 'cron');
 
         $response = new stdclass();
         $response->header = $this->metricZen->getViewTableHeader($result);

@@ -47,6 +47,8 @@ $lang->metric->publish       = '发布';
 $lang->metric->selectCount   = '已选<span class="font-medium checked-count">%s</span>项';
 $lang->metric->testMetric    = '测试度量';
 $lang->metric->calcTime      = '采集时间';
+$lang->metric->to            = '至';
+$lang->metric->query         = '查询';
 
 $lang->metric->viewType = new stdclass();
 $lang->metric->viewType->single   = '单独查看';
@@ -201,7 +203,7 @@ $lang->metric->implement->downloadPHP = "下载度量模板";
 
 $lang->metric->implement->instructionTips = array();
 $lang->metric->implement->instructionTips[] = '1.下载度量项模板文件，对文件进行编码开发操作，操作参考手册。<a class="btn text-primary ghost" target="_blank" href="https://www.zentao.net/book/zentaopms/1103.html">查看参考手册>></a>';
-$lang->metric->implement->instructionTips[] = '2.请将开发后的文件放到下方目录，<strong>需保持文件名称要与度量代号一致</strong>。<br/> <span class="label code-slate">{tmpRoot}metric</span>';
+$lang->metric->implement->instructionTips[] = '2.请将开发后的文件放到下方目录，<strong>需保持文件名称与度量代号一致</strong>。<br/> <span class="label code-slate">{tmpRoot}metric</span>';
 $lang->metric->implement->instructionTips[] = '3.执行命令赋予文件可执行权限：<p><span class="label code-slate">chmod 777 {tmpRoot}metric</span></p><p><span class="label code-slate">chmod 777 {tmpRoot}metric/{code}.php</span></p>';
 
 $lang->metric->verifyList = array();

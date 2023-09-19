@@ -3,6 +3,18 @@ window.renderHeight = function()
     return $('.table-side').height();
 }
 
+window.parseSerialize = function(serialize)
+{
+    var result = {};
+    var items = serialize.split('&');
+    for(var i = 0; i < items.length; i++)
+    {
+        var item = items[i].split('=');
+        result[item[0]] = item[1];
+    }
+    return result;
+}
+
 window.generateCheckItem = function(text, value, isChecked)
 {
     var checked = isChecked ? 'checked=""' : '';
@@ -104,6 +116,11 @@ window.handleNavMenuClick = function($el)
         $el.addClass('active');
         $el.append(`<span class="label size-sm rounded-full white">${total}</span>`);
     })
+}
+
+window.handleQueryClick = function()
+{
+    window.ajaxGetRecords(current.id);
 }
 
 window.deactiveNavMenu = function()
@@ -235,7 +252,7 @@ window.afterPageUpdate = function($target, info, options)
         chartList.push({value: key, text: chartTypeList[key]});
     }
     window.filterChecked = {};
-    window.renderDTable();
+    window.renderDTable(resultHeader, resultData);
     window.renderChart();
     if(viewType == 'multiple') window.renderCheckedLabel();
     $(window).on('resize', window.renderCheckedLabel);
@@ -261,7 +278,7 @@ window.initFilterPanel = function()
     }
 }
 
-window.renderDTable = function()
+window.renderDTable = function(header, data)
 {
     var $currentBox = $('#metricBox' + current.id);
     if(viewType == 'single') $currentBox = $('.table-and-chart-single');
@@ -270,7 +287,7 @@ window.renderDTable = function()
     $currentBox.find('.dtable').remove();
     $currentBox.find('.table-side').append('<div class="dtable"></div>');
 
-    window.initDTable($currentBox.find('.dtable'), resultHeader, resultData);
+    window.initDTable($currentBox.find('.dtable'), header, data);
 }
 
 window.renderChart = function()
@@ -309,7 +326,7 @@ window.initDTable = function($obj, head, data)
     });
 }
 
-window.initChart = function($obj, head, data, chartType = 'line') 
+window.initChart = function($obj, head, data, chartType = 'line')
 {
     if(chartType == 'pie') return window.initPieChart($obj, head, data);
     if(head.length == 2) {
@@ -398,7 +415,7 @@ window.initChart = function($obj, head, data, chartType = 'line')
     });
 }
 
-window.initPieChart = function($obj, head, data) 
+window.initPieChart = function($obj, head, data)
 {
     var x = head[0].name;
     var y = head[1].name;
@@ -455,7 +472,7 @@ window.initPicker = function($obj, items, headLength = 3)
 
 window.handleChartTypeChange = function($el)
 {
-    if(viewType == 'single') 
+    if(viewType == 'single')
     {
         var chartType = $('[name=chartType]').val();
         var $currentBox = $('.table-and-chart-single');
@@ -473,7 +490,7 @@ window.handleChartTypeChange = function($el)
         $.get($.createLink('metric', 'ajaxGetTableData', 'metricID=' + metricID), function(resp)
         {
             var data = JSON.parse(resp);
-            if(data) 
+            if(data)
             {
                 $currentBox.find('.chart').remove();
                 $currentBox.find('.chart-side').append('<div class="chart chart-container"></div>');
@@ -549,12 +566,44 @@ window.updateMetricBoxs = function(id, isChecked)
         var html = $(zui.formatString(tpl, data));
 
         $('.table-and-charts').append(html);
-        $.get($.createLink('metric', 'ajaxGetTableData', 'metricID=' + id), function(resp)
-        {
-            var data = JSON.parse(resp);
-            if(data) window.initDTable($('#metricBox' + id).find('.dtable'), data.header, data.data);
-        });
+
+        window.ajaxGetRecords(id);
     }
+}
+
+window.ajaxGetRecords = function(id)
+{
+    var formData = window.getFormData($('#queryForm'));
+
+    $.post($.createLink('metric', 'ajaxGetTableData', 'metricID=' + id),formData, function(resp)
+    {
+        var data = JSON.parse(resp);
+        if(data)
+        {
+            if(viewType == 'multiple')
+            {
+                window.initDTable($('#metricBox' + id).find('.dtable'), data.header, data.data);
+            }
+            else
+            {
+                window.renderDTable(data.header, data.data);
+            }
+        }
+    });
+}
+
+window.getFormData = function($form)
+{
+    var formSerialize = $form.serialize();
+    var formObj = window.parseSerialize(formSerialize);
+
+    var formData = new FormData();
+    for(var key in formObj)
+    {
+        formData.append(key, formObj[key]);
+    }
+
+    return formData;
 }
 
 window.setMultiTableHeight = function(contentHeight)

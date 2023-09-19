@@ -83,4 +83,8 @@
 .filter-panel .filter-actions {display: flex; justify-content: center}
 .filter-panel .filter-actions .toolbar {gap: 15px;}
 
-.scope-ellipsis {display: inline-block; width: 137px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.scope-ellipsis {display: inline-block; width: 60px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+
+.query-inline {padding-left: 80px !important;}
+.query-inline>label {justify-content: flex-start !important; width: 80px !important;}
+.query-btn {padding-left: 20px !important;}

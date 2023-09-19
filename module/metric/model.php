@@ -310,7 +310,7 @@ class metricModel extends model
 
             if($metric->scope != 'system') $dataFields[] = $metric->scope;
 
-            return $this->metricTao->fetchMetricRecords($code, $dataFields);
+            return $this->metricTao->fetchMetricRecords($code, $dataFields, $options);
         }
 
         $metric = $this->metricTao->fetchMetricByCode($code);
@@ -1230,5 +1230,24 @@ class metricModel extends model
         }
 
         return sprintf($this->lang->metric->collectConfText, $dateType, rtrim($dateListText, ','), $metric->execTime);
+    }
+
+    /**
+     * 获取度量项的数据类型。
+     * Get data type of metric.
+     *
+     * @param  object    $tableData
+     * @access public
+     * @return string|false
+     */
+    public function getMetricRecordType(object|bool $tableData): string|false
+    {
+        if(!$tableData) return false;
+        $type = array();
+        if(isset($tableData->scope)) $type[] = 'scope';
+        if(isset($tableData->date)) $type[] = 'date';
+
+        if(empty($type)) $type[] = 'system';
+        return implode('-', $type);
     }
 }

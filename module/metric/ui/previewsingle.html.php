@@ -121,6 +121,115 @@ toolbar
     ) : null,
 );
 
+$metricRecordType = $this->metric->getMetricRecordType(current($resultData));
+
+$fnGenerateQueryForm = function() use($metricRecordType, $current)
+{
+    if(!$metricRecordType) return null;
+    $formGroups = array();
+    if($current->scope != 'system') $objectPairs = $this->metric->getPairsByScope($current->scope);
+
+    if($metricRecordType == 'scope' || $metricRecordType == 'scope-date')
+    {
+        $formGroups[] = formGroup
+        (
+            setClass('query-inline'),
+            set::width('248px'),
+            set::label($this->lang->metric->scope),
+            set::name('scope'),
+            set::items($objectPairs),
+        );
+    }
+
+    if($metricRecordType == 'date' || $metricRecordType == 'scope-date')
+    {
+        $formGroups[] = formGroup
+        (
+            setClass('query-inline'),
+            set::width('360px'),
+            set::label($this->lang->metric->date),
+            inputGroup
+            (
+                datePicker
+                (
+                    set::name('dateBegin'),
+                    set('id', 'dateBegin'),
+                ),
+                $this->lang->metric->to,
+                datePicker
+                (
+                    set::name('dateEnd'),
+                    set('id', 'dateEnd'),
+                ),
+            ),
+        );
+    }
+
+    if($metricRecordType == 'system')
+    {
+        $formGroups[] = formGroup
+        (
+            setClass('query-inline'),
+            set::width('360px'),
+            set::label($this->lang->metric->calcTime),
+            inputGroup
+            (
+                datePicker
+                (
+                    set::name('calcBegin'),
+                    set('id', 'calcBegin'),
+                ),
+                $this->lang->metric->to,
+                datePicker
+                (
+                    set::name('calcEnd'),
+                    set('id', 'calcEnd'),
+                ),
+            ),
+        );
+    }
+    else
+    {
+        $formGroups[] = formGroup
+        (
+            setClass('query-inline'),
+            set::width('200px'),
+            set::label($this->lang->metric->calcTime),
+            inputGroup
+            (
+                datePicker
+                (
+                    set::name('calcTime'),
+                    set('id', 'calcTime'),
+                    set::required(true),
+                    set::value(helper::today()),
+                ),
+            ),
+        );
+    }
+
+    return form
+    (
+        set::id('queryForm'),
+        formRow
+        (
+            set::width('full'),
+            $formGroups,
+            formGroup
+            (
+                setClass('query-btn'),
+                btn
+                (
+                    setClass('btn secondary'),
+                    set::text($this->lang->metric->query),
+                ),
+                on::click('.query-btn button', 'window.handleQueryClick'),
+            )
+        ),
+        set::actions(array()),
+    );
+};
+
 $sideTitle = $scope == 'filter' ? sprintf($lang->metric->filter->filterTotal, count($metrics)) : $metricList;
 div
 (
@@ -193,6 +302,7 @@ div
                 )
             ),
         ),
+        $fnGenerateQueryForm(),
         div
         (
             setClass('table-and-chart table-and-chart-single'),
