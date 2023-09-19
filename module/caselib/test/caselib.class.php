@@ -26,21 +26,20 @@ class caselibTest
     }
 
     /**
-     * Update test.
+     * 测试更新用例库。
+     * Update case lib test.
      *
-     * @param mixed $libID
+     * @param  object $lib
      * @access public
      * @return void
      */
-    public function updateTest($libID)
+    public function updateTest(object $lib)
     {
-        $objects = $this->objectModel->update($libID);
+        $this->objectModel->update($lib);
 
         if(dao::isError()) return dao::getError();
 
-        $objects = $this->objectModel->getById($libID);
-
-        return $objects;
+        return $this->objectModel->getByID($lib->id);
     }
 
     /**

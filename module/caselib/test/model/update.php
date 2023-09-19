@@ -4,29 +4,39 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/caselib.class.php';
 su('admin');
 
+function initData()
+{
+    $caselib = zdTable('testsuite');
+    $caselib->type->range('[library]');
+    $caselib->gen(10);
+}
+
+initData();
+
 /**
 
 title=测试 caselibModel->update();
+timeout=0
 cid=1
-pid=1
 
-测试更新名称为空时候返回 >> 『name』不能为空。
-测试更新之后名称信息 >> 测试修改名称
-测试更新之后描述信息 >> 测试修改描述
+- 测试更新名称为空时候返回第name条的0属性 @『name』不能为空。
+- 测试更新之后名称信息
+ - 属性name @测试修改名称
+ - 属性desc @测试修改描述
 
 */
 
-$caselib       = new caselibTest();
+$lib1 = new stdclass();
+$lib1->id   = 1;
+$lib1->name = '';
+$lib1->uid  = '';
 
-$_POST['name'] = '';
-$lib1          = $caselib->updateTest(201);
+$lib2 = new stdclass();
+$lib2->id   = 2;
+$lib2->name = '测试修改名称';
+$lib2->desc = '测试修改描述';
+$lib2->uid  = '';
 
-$_POST['name'] = '测试修改名称';
-$_POST['desc'] = '测试修改描述';
-$lib2          = $caselib->updateTest(201);
-unset($_POST);
-
-r($lib1) && p('name:0') && e('『name』不能为空。'); //测试更新名称为空时候返回
-r($lib2) && p('name')   && e('测试修改名称');       //测试更新之后名称信息
-r($lib2) && p('desc')   && e('测试修改描述');       //测试更新之后描述信息
-
+$caselib = new caselibTest();
+r($caselib->updateTest($lib1)) && p('name:0')    && e('『name』不能为空。');        //测试更新名称为空时候返回
+r($caselib->updateTest($lib2)) && p('name;desc') && e('测试修改名称;测试修改描述'); //测试更新之后名称信息
