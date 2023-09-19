@@ -219,7 +219,7 @@ function printSteps()
 
         if(empty($keys)) $stepDesc .= " @{$expectStr}\n";
 
-        if(str_contains($expectStr, ';'))
+        if(str_contains($keys, ';') && str_contains($expectStr, ';'))
         {
             $expectList = explode(';', $expectStr);
             $expectList = array_map(function($item) use ($delimiter)
