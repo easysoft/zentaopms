@@ -1049,25 +1049,19 @@ class productModel extends model
     {
         if(empty($productIdList)) return array();
 
-        $this->loadModel('story');
-
         /* Get stats data. */
-        $appendProgram = $programID == 0;
-        $products      = $this->productTao->getStatsProducts($productIdList, $appendProgram, $orderBy, $pager);
+        $products          = $this->productTao->getStatsProducts($productIdList, $programID == 0, $orderBy, $pager);
+        $unclosedStory     = $this->loadModel('story')->getUnClosedTotal();
+        $finishClosedStory = $this->story->getFinishClosedTotal();
 
-        $finishClosedStory    = $this->story->getFinishClosedTotal();
-        $unclosedStory        = $this->story->getUnClosedTotal();
-        $plans                = $this->productTao->getPlansTODO($productIdList);
-        $releases             = $this->productTao->getReleasesTODO($productIdList);
-        $latestReleases       = $this->productTao->getLatestReleasesTODO($productIdList);
-        $bugs                 = $this->productTao->getBugsTODO($productIdList);
-        $unResolved           = $this->productTao->getUnResolvedTODO($productIdList);
-        $activeBugs           = $this->productTao->getActiveBugsTODO($productIdList);
-        $fixedBugs            = $this->productTao->getFixedBugsTODO($productIdList);
-        $closedBugs           = $this->productTao->getClosedBugsTODO($productIdList);
-        $thisWeekBugs         = $this->productTao->getThisWeekBugsTODO($productIdList);
-        $assignToNull         = $this->productTao->getAssignToNullTODO($productIdList);
-        list($stories, $reqs) = $this->productTao->getStatsStoriesAndRequirements($productIdList, $storyType);
+        $modules = array('plans', 'releases', 'latestReleases', 'bugs', 'unResolved', 'activeBugs', 'fixedBugs', 'closedBugs', 'thisWeekBugs', 'assignToNull');
+        foreach($modules as $module)
+        {
+            $method = 'get' . ucfirst($module) . 'TODO';
+            $$module = $this->productTao->$method($productIdList);
+        }
+
+        list($stories, $requirements) = $this->productTao->getStatsStoriesAndRequirements($productIdList, $storyType);
         $executionCountPairs  = $this->productTao->getExecutionCountPairs($productIdList);
         $coveragePairs        = $this->productTao->getCaseCoveragePairs($productIdList);
         $projectsPairs        = $this->productTao->getProjectCountPairs($productIdList);
@@ -1076,24 +1070,16 @@ class productModel extends model
         $stats = array();
         foreach($products as $productID => $product)
         {
-            $product->stories                 = $stories[$product->id];
-            $product->stories['finishClosed'] = isset($finishClosedStory[$product->id]) ? $finishClosedStory[$product->id] : 0;
-            $product->stories['unclosed']     = isset($unclosedStory[$product->id])     ? $unclosedStory[$product->id]     : 0;
-            $product->activeStories           = isset($stories[$product->id])           ? $stories[$product->id]['active'] : 0;
+            foreach($modules as $field) $product->$field = zget($$field, $productID, 0);
 
-            $product->requirements = $reqs[$product->id];
-            $product->plans        = isset($plans[$product->id])               ? $plans[$product->id]               : 0;
-            $product->releases     = isset($releases[$product->id])            ? $releases[$product->id]            : 0;
-            $product->bugs         = isset($bugs[$product->id])                ? $bugs[$product->id]                : 0;
-            $product->unResolved   = isset($unResolved[$product->id])          ? $unResolved[$product->id]          : 0;
-            $product->activeBugs   = isset($activeBugs[$product->id])          ? $activeBugs[$product->id]          : 0;
-            $product->closedBugs   = isset($closedBugs[$product->id])          ? $closedBugs[$product->id]          : 0;
-            $product->fixedBugs    = isset($fixedBugs[$product->id])           ? $fixedBugs[$product->id]           : 0;
-            $product->thisWeekBugs = isset($thisWeekBugs[$product->id])        ? $thisWeekBugs[$product->id]        : 0;
-            $product->assignToNull = isset($assignToNull[$product->id])        ? $assignToNull[$product->id]        : 0;
-            $product->executions   = isset($executionCountPairs[$product->id]) ? $executionCountPairs[$product->id] : 0;
-            $product->coverage     = isset($coveragePairs[$product->id])       ? $coveragePairs[$product->id]       : 0;
-            $product->projects     = isset($projectsPairs[$product->id])       ? $projectsPairs[$product->id]       : 0;
+            $product->stories                 = zget($stories, $product->id, array());
+            $product->stories['finishClosed'] = zget($finishClosedStory, $product->id, 0);
+            $product->stories['unclosed']     = zget($unclosedStory, $product->id, 0);
+            $product->activeStories           = zget($product->stories, 'active', 0);
+            $product->requirements            = zget($requirements, $product->id, array());
+            $product->executions              = zget($executionCountPairs, $product->id, 0);
+            $product->coverage                = zget($coveragePairs, $product->id, 0);
+            $product->projects                = zget($projectsPairs, $product->id, 0);
 
             $latestRelease = isset($latestReleases[$product->id]) ? $latestReleases[$product->id][0] : null;
             $product->latestRelease     = $latestRelease ? $latestRelease->name : '';
@@ -1277,7 +1263,6 @@ class productModel extends model
      * Build operate menu.
      *
      * @param  object $product
-     * @param  string $type
      * @access public
      * @return array
      */
@@ -1294,7 +1279,7 @@ class productModel extends model
 
         if($product->status != 'closed') $menuList['main'][] = $this->config->product->actionList['close'];
 
-        $menuList['suffix'][] = $this->buildMenu('product', 'edit', $params, $product, $type);
+        $menuList['suffix'][] = $this->buildMenu('product', 'edit', $params, $product, 'view');
         $menuList['suffix'][] = $this->config->product->actionList['delete'];
 
         return $menuList;
@@ -1316,6 +1301,7 @@ class productModel extends model
     }
 
     /**
+     * 将预定义的HTML实体转换为字符。
      * Convert predefined HTML entities to characters.
      *
      * @param  array $statsData
@@ -1615,6 +1601,7 @@ class productModel extends model
     }
 
     /**
+     * 构建路线图页面数据。
      * Build roadmap for UI.
      *
      * @param  array  $roadmaps
