@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('metricID', $metric->id);
+jsVar('params', $params);
 
 /**
  * Build content of table data.
@@ -84,6 +85,7 @@ $buildValueControl = function($paramName, $controlType, $value, $optionType, $va
         (
             set::name($name),
             set::items($options),
+            set::disabled($controlType !== 'select' ? true : false),
         ),
         setClass("form-body-item {$paramName}-{$varID}-select"),
         setClass($controlType !== 'select' ? 'hidden' : ''),
@@ -96,6 +98,7 @@ $buildValueControl = function($paramName, $controlType, $value, $optionType, $va
         (
             set::name($name),
             set::value($value),
+            set::disabled($controlType !== 'input' ? true : false),
         ),
         setClass("form-body-item {$paramName}-{$varID}-input"),
         setClass($controlType !== 'input' ? 'hidden' : ''),

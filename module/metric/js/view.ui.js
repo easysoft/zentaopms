@@ -62,28 +62,45 @@ function toggleOptionsControl(controlName, paramName, controlType, optionsType)
 {
     let name = controlName + '-' + paramName;
 
-    let selectControl = $('.' + name + '-select');
-    let dateControl   = $('.' + name + '-date');
-    let inputControl  = $('.' + name + '-input');
+    let selectBox = $('.' + name + '-select');
+    let dateBox   = $('.' + name + '-date');
+    let inputBox  = $('.' + name + '-input');
+
+    let selectControl = selectBox.find('input.pick-value');
+    let dateControl   = dateBox.find('input.pick-value');
+    let inputControl  = inputBox.find('input.form-control');
 
     if(controlType == 'select')
     {
-        dateControl.addClass('hidden');
-        inputControl.addClass('hidden');
-        selectControl.removeClass('hidden');
-        loadOptionsList(optionsType, selectControl);
+        dateBox.addClass('hidden');
+        inputBox.addClass('hidden');
+        selectBox.removeClass('hidden');
+
+        dateControl.attr('disabled', true);
+        inputControl.attr('disabled', true);
+        selectControl.removeAttr('disabled');
+
+        loadOptionsList(optionsType, selectBox);
     }
     else if(controlType == 'date')
     {
-        selectControl.addClass('hidden');
-        inputControl.addClass('hidden');
-        dateControl.removeClass('hidden');
+        selectBox.addClass('hidden');
+        inputBox.addClass('hidden');
+        dateBox.removeClass('hidden');
+
+        selectControl.attr('disabled', true);
+        inputControl.attr('disabled', true);
+        dateControl.removeAttr('disabled');
     }
     else if(controlType == 'input')
     {
-        selectControl.addClass('hidden');
-        dateControl.addClass('hidden');
-        inputControl.removeClass('hidden');
+        selectBox.addClass('hidden');
+        dateBox.addClass('hidden');
+        inputBox.removeClass('hidden');
+
+        selectControl.attr('disabled', true);
+        dateControl.attr('disabled', true);
+        inputControl.removeAttr('disabled');
     }
 }
 
