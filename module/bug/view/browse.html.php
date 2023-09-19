@@ -16,7 +16,7 @@
 <?php
 $cols     = $this->bug->generateCol($orderBy);
 $rows     = $this->bug->generateRow($bugs, $branchOption, $modulePairs, $projectPairs, $plans, $executions, $stories, $tasks, $users);
-$sortLink = $this->createLink('bug', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=$orderBy&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID");
+$sortLink = $this->createLink('bug', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy={orderBy}&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID");
 
 js::set('cols',          json_encode($cols));
 js::set('data',          json_encode($rows));
