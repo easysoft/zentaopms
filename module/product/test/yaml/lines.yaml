@@ -25,7 +25,7 @@ fields:
   - field: type
     range: line
   - field: from
-    range: ''
+    range: 0
   - field: owner
     range: ''
   - field: collector
