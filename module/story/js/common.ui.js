@@ -96,10 +96,10 @@ window.toggleFeedback = function(obj)
 
 window.loadURS = function(allURS)
 {
-    var productID       = $('#product').val();
-    var branchID        = $('#branch').val();
-    var moduleID        = typeof(allURS) == 'undefined' ? $('#module').val() : 0;
-    var requirementList = $('#URS').val();
+    var productID       = $('#product').zui('picker').$.state.value;
+    var branchID        = $('#branch').length == 0 ? 0 : $('#branch').zui('picker').$.state.value;
+    var moduleID        = typeof(allURS) == 'undefined' ? $('#module').zui('picker').$.state.value : 0;
+    var requirementList = $('#URS').zui('picker').$.state.value;
     requirementList     = requirementList ? encodeURIComponent(requirementList.join(',')) : '';
     if(typeof(branchID) == 'undefined') branchID = 0;
 

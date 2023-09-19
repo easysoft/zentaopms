@@ -64,7 +64,7 @@ class story extends control
             $storyData = $this->storyZen->buildStoryForCreate($objectID, $bugID);
             if(!$storyData) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $response  = $this->storyZen->checkRepeatStory($storyData, $objectID);
+            $response = $this->storyZen->checkRepeatStory($storyData, $objectID);
             if($response) return $this->send($response);
 
             /* Insert story data. */
@@ -2216,9 +2216,9 @@ class story extends control
      * @param  int    $moduleID
      * @param  string $requirementList
      * @access public
-     * @return string
+     * @return void
      */
-    public function ajaxGetURS($productID, $branchID = 0, $moduleID = 0, $requirementList = 0)
+    public function ajaxGetURS(int $productID, string|int $branchID = 0, int $moduleID = 0, string $requirementList = '0')
     {
         $moduleIdList = $this->loadModel('tree')->getAllChildId($moduleID);
 

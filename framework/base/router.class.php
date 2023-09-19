@@ -1700,7 +1700,8 @@ class baseRouter
                 }
                 elseif(!$isEncrypted && method_exists($param, 'hasType') && $param->hasType())
                 {
-                    $type = $param->getType()->getName();
+                    $paramType = $param->getType();
+                    if(method_exists($paramType, 'getName')) $type = $paramType->getName();
                 }
 
                 $defaultParams[$name] = array('default' => $default, 'type' => $type);

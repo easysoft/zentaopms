@@ -149,7 +149,7 @@ formPanel
                     picker(setID('plan'), set::name('plan'), set::items($fields['plan']['options']), set::value($fields['plan']['default'])),
                 ),
                 empty($fields['plan']['options']) ? btn(set::url($this->createLink('productplan', 'create', "productID=$productID&branch=$branch")), set('data-toggle', 'modal'), set::title($lang->productplan->create), icon('plus')) : null,
-                empty($fields['plan']['options']) ? btn(setClass('refresh'), set('data-toggle', 'modal'), set::title($lang->refresh), set('data-on', 'click'), set('data-call', 'loadProductPlans'), set('data-params', $productID), icon('refresh')) : null,
+                empty($fields['plan']['options']) ? btn(setClass('refresh'), set::title($lang->refresh), set('onclick', "loadProductPlans($productID)"), icon('refresh')) : null,
             ),
         ),
         formGroup
