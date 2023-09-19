@@ -228,6 +228,7 @@ $buildParamControlGroup = function($param, $buildValueControl, $typeList, $optio
         $varNameControl,
         setClass('flex form-body'),
         setStyle('justify-content', 'space-between'),
+        setStyle('align-items', 'center'),
         setStyle('flex', '1'),
         setStyle('width', '100%'),
     );
