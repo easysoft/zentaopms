@@ -775,20 +775,18 @@ class product extends control
         /* Set menu. The projectstory module does not execute. */
         $this->productZen->setTrackMenu($productID, $branch, $projectID);
 
-        /* Load pager and get tracks. */
+        /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager  = new pager($recTotal, $recPerPage, $pageID);
-        $tracks = $this->loadModel('story')->getTracks($productID, $branch, $projectID, $pager);
-
-        /* Get project products. */
-        $projectProducts = array();
-        if($projectID) $projectProducts = $this->product->getProducts($projectID);
 
         $this->view->title           = $this->lang->story->track;
-        $this->view->tracks          = $tracks;
+        $this->view->tracks          = $this->loadModel('story')->getTracks($productID, $branch, $projectID, $pager);
         $this->view->pager           = $pager;
         $this->view->productID       = $productID;
-        $this->view->projectProducts = $projectProducts;
+        $this->view->projectProducts = $this->product->getProductPairsByProject($projectID);
+        $this->view->branch          = $branch;
+        $this->view->projectID       = $projectID;
+
         $this->display();
     }
 

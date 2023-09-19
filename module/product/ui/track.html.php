@@ -12,288 +12,228 @@ declare(strict_types=1);
 
 namespace zin;
 
-dropmenu();
-
-/* No data. */
-if(empty($tracks))
+if($config->URAndSR && $this->app->rawModule == 'projectstory' && $this->session->hasProduct)
 {
-    div
-    (
-        setClass('shadow canvas p-8 text-center'),
-        $lang->noData
-    );
-    render();
-    return;
-}
-
-/* Table column headers. */
-function generateHeaderList($self, $config, $lang, $projectProducts, $productID)
-{
-    $fnGenerateTH = function(string $label): wg
+    $productItems = array();
+    $projectProducts = $this->product->getPairs();
+    foreach($projectProducts as $id => $name)
     {
-        return h::th(setClass('border border-slate-300 py-0.5 px-2 leading-8'), $label);
-    };
-
-    $cols = array();
-
-    if($config->URAndSR)
-    {
-        if($self->app->rawModule == 'projectstory' && $self->session->hasProduct)
-        {
-            /* Project story list. */
-            $items = array();
-            foreach($projectProducts as $product)
-            {
-                $items[] = array
-                (
-                    'text'   => $product->name,
-                    'url'    => createLink('projectstory', 'track', "projectID={$self->session->project}&productID={$product->id}"),
-                    'active' => $productID == $product->id
-                );
-            }
-
-            $cols[] = dropdown
-            (
-                to::trigger(btn($projectProducts[$productID]->name)),
-                set::items($items)
-            );
-        }
-        else
-        {
-            $cols[] = $fnGenerateTH($lang->story->requirement);
-        }
+        $productItems[] = array('text' => $name, 'url' => createLink('projectstory', 'track', "projectID={$this->session->project}&productID={$id}"), 'active' => $productID == $id);
     }
-
-    $cols[] = $fnGenerateTH($lang->story->story);
-    $cols[] = $fnGenerateTH($lang->story->tasks);
-    $cols[] = $config->edition == 'max' ? $fnGenerateTH($lang->story->design) : null;
-    $cols[] = $fnGenerateTH($lang->story->case);
-    $cols[] = ($config->edition == 'max' && helper::hasFeature('devops')) ? $fnGenerateTH($lang->story->repoCommit) : null;
-    $cols[] = $fnGenerateTH($lang->story->bug);
-
-    return $cols;
 }
 
-/* Generate table rows. */
-function generateRowList($self, $lang, $config, $tracks, $module, $tab)
+$getRequirements = function($tracks)
 {
-    $fnGenerateTD = function(): wg
-    {
-        return h::td
-        (
-            setClass('border border-slate-300 py-0.5 px-2'),
-            func_get_args()
-        );
-    };
-
-    $rowList  = array();
-    $cellList = array();
+    global $app, $config, $lang;
+    $requirementItems = array();
+    $tab              = $app->rawModule == 'projectstory' ? 'project' : 'product';
+    $module           = $app->rawModule == 'projectstory' ? 'projectstory' : 'story';
     foreach($tracks as $key => $requirement)
     {
         $track   = ($key == 'noRequirement') ? $requirement : $requirement->track;
         $rowspan = count($track);
         $title   = $lang->story->noRequirement;
+        if($config->URAndSR && $key != 'noRequirement') $title = common::hasPriv($requirement->type, 'view') ? a(
+            set('href', createLink('story', 'view', "storyID={$requirement->id}")),
+            set('title', $requirement->title),
+            set('data-app', $tab),
+            $requirement->title,
+       ) : $requirement->title;
 
-        /* If with the setting to show requirement, then attach the requirement title. */
-        if($config->URAndSR)
-        {
-            if($key != 'noRequirement')
-            {
-                if(common::hasPriv($requirement->type, 'view'))
-                {
-                    $title = btn
-                    (
-                        set::url(createLink('story', 'view', "storyID=$requirement->id")),
-                        $requirement->title
-                    );
-                }
-                else
-                {
-                    $title = $requirement->title;
-                }
-            }
-
-            $cellList[] = $fnGenerateTD
-            (
-                $rowspan != 0 ? set::rowspan($rowspan) : null,
-                set::title($key != 'noRequirement' ? $requirement->title : $lang->story->noRequirement),
-                ($key != 'noRequirement') ? span(zget($lang->story->statusList, $requirement->status)) : null,
-                $title
-            );
-        }
-
-        /* If current row without track data, then skip current row. */
-        if(count($track) == 0)
-        {
-            $rowList[] = h::tr($cellList);
-            continue;
-        }
-
-        /* Attach fields to current row. */
-        $textClass = 'ghost px-2';
-        $i         = 0;
-        foreach($track as $storyID => $story)
-        {
-            $tpCellList = array();
-
-            /* Story title. */
-            $tpCellList[] = $fnGenerateTD
-            (
-                (isset($story->parent) && $story->parent > 0) ? span
-                (
-                    set::title($self->lang->story->children),
-                    $self->lang->story->childrenAB
+        $requirementItems[] = h::tr(
+            $config->URAndSR ? h::td(
+                $rowspan != 0 ? set('rowspan', $rowspan) : null,
+                setClass('requirement'),
+                $key != 'noRequirement' ? label(
+                    setClass('primary-pale ring-primary mr-1'),
+                    zget($lang->story->statusList, $requirement->status)
                 ) : null,
-                btn
-                (
-                    setClass($textClass),
-                    set::url(createLink($module, 'view', "storyID=$storyID")),
-                    set::title($story->title),
-                    set('data-app', $tab),
-                    $story->title
-                )
+                set('title', $key != 'noRequirement' ? $requirement->title : $lang->story->noRequirement),
+                $title
+            ) : null,
+            count($track) != 0 ? getStoryTrack($track, $tab, $module) : null
             );
-            /* Task list. */
-            $taskCount = count($story->tasks);
-            $tpCellList[] = $fnGenerateTD
-            (
-                array_map(function($taskID, $task) use($textClass, $taskCount)
-                {
-                    $wg = btn
-                    (
-                        setClass($textClass),
-                        set::url(createLink('task', 'view', "taskID=$taskID")),
-                        set::title($task->name),
-                        $task->name
-                    );
-
-                    if($taskCount > 1) return array($wg, br());
-
-                    return $wg;
-                }, array_keys($story->tasks), array_values($story->tasks))
-            );
-            /* Design field for Max edition. */
-            $tpCellList[] = ($config->edition == 'max') ? $fnGenerateTD(array_map
-            (
-                function($designID, $design) use($textClass)
-                {
-                    return btn
-                    (
-                        setClass($textClass),
-                        set::url(createLink('design', 'view', "designID=$designID")),
-                        set::title($design->name),
-                        $design->name
-                    );
-                },
-                array_keys($story->designs),
-                array_values($story->designs)
-            )) : null;
-            /* Case list. */
-            $tpCellList[] = $fnGenerateTD
-            (
-                array_map(function($caseID, $case) use($textClass)
-                {
-                    return btn
-                    (
-                        setClass($textClass),
-                        set::url(createLink('testcase', 'view', "caseID=$caseID")),
-                        set::title($case->title),
-                        $case->title
-                    );
-                }, array_keys($story->cases), array_values($story->cases))
-            );
-            /* Revision field for Max edition. */
-            if($config->edition == 'max' and helper::hasFeature('devops'))
-            {
-                $tpCellList[] = $fnGenerateTD
-                (
-                    array_map(function($repoID, $repoComment) use($textClass)
-                    {
-                        return btn
-                        (
-                            setClass($textClass),
-                            set::url(createLink('design', 'revision', "repoID=$repoID")),
-                            set('data-app', 'devops'),
-                            "#$repoID-$repoComment"
-                        );
-                    }, array_keys($story->revisions), array_values($story->revisions))
-                );
-            }
-            /* Bug list. */
-            $tpCellList[] = $fnGenerateTD
-            (
-                array_map(function($bugID, $bug) use($textClass)
-                {
-                    return btn
-                    (
-                        setClass($textClass),
-                        set::url(createLink('bug', 'view', "bugID=$bugID")),
-                        set::title($bug->title),
-                        $bug->title
-                    );
-                }, array_keys($story->bugs), array_values($story->bugs))
-            );
-
-            if($i > 0)
-            {
-                /* Wrap multiple rows. */
-                $cellList[] = h::tr($tpCellList);
-            }
-            else
-            {
-                $cellList[] = $tpCellList;
-            }
-
-            $i++;
-        }
-
-        $rowList[] = h::tr($cellList);
     }
+    return $requirementItems;
+};
 
-    return $rowList;
-}
+function getStoryTrack($track, $tab, $module)
+{
+    $i          = 0;
+    $storyItems = array();
+    foreach($track as $storyID => $story)
+    {
+        if($i > 0)
+        {
+            $storyItems[] = h::tr(getTrackTd($storyID, $story, $tab, $module));
+        }
+        else
+        {
+            $storyItems[] = getTrackTd($storyID, $story, $tab, $module);
+        }
+        $i ++;
+    }
+    return $storyItems;
+};
 
-$tab          = $this->app->rawModule == 'projectstory' ? 'project' : 'product';
-$module       = $this->app->rawModule == 'projectstory' ? 'projectstory' : 'story';
-$linkTemplate = createLink('product', 'track', array('productID' => $productID, 'branch' => $branch, 'projectID' => $projectID, 'recTotal' => $pager->recTotal, 'recPerPage' => '{recPerPage}', 'page' => '{page}'));
+function getTrackTd($storyID, $story, $tab, $module)
+{
+    global $lang, $config;
+    $trackItem = array();
+
+    /* Story. */
+    $trackItem[] = h::td(
+        isset($story->parent) && $story->parent > 0 ? label(
+            setClass('rounded-full light mr-1'),
+            set('title', $lang->story->children),
+            $lang->story->childrenAB,
+        ) : null,
+        a(
+            set('href', createLink($module, 'view', "storyID={$storyID}")),
+            set('title', $story->title),
+            set('data-app', $tab),
+            $story->title
+        )
+    );
+
+    $trackItem[] = h::td(getTaskTd($story->tasks)); // Task
+
+    if($config->edition == 'max') $trackItem[] = h::td(getDesignTd($story->designs)); // Design
+
+    $trackItem[] = h::td(getCaseTd($story->cases)); // Case
+
+    if($config->edition == 'max' && helper::hasFeature('devops')) $trackItem[] = h::td(getRevisionTd($story->revisions)); // Revision
+
+    $trackItem[] = h::td(getBugTd($story->bugs)); // Bug
+
+    return $trackItem;
+};
+
+function getTaskTd($tasks)
+{
+    $taskItems = array();
+    foreach($tasks as $task)
+    {
+        $taskItems[] = a(
+            set('href', createLink('task', 'view', "taskID={$task->id}")),
+            set('title', $task->name),
+            $task->name
+        );
+        $taskItems[] = br();
+    }
+    return $taskItems;
+};
+
+function getDesignTd($designs)
+{
+    $designItems = array();
+    foreach($designs as $design)
+    {
+        $designItems[] = a(
+            set('href', createLink('design', 'view', "designID={$design->id}")),
+            set('title', $design->name),
+            $design->name
+        );
+        $designItems[] = br();
+    }
+    return $designItems;
+};
+
+function getCaseTd($cases)
+{
+    $caseItems = array();
+    foreach($cases as $case)
+    {
+        $caseItems[] = a(
+            set('href', createLink('testcase', 'view', "caseID={$case->id}")),
+            set('title', $case->title),
+            $case->title
+        );
+        $caseItems[] = br();
+    }
+    return $caseItems;
+};
+
+function getRevisionTd($revisions)
+{
+    $revisionItems = array();
+    foreach($revisions as $revision => $repoComment)
+    {
+        $revisionItems[] = a(
+            set('href', createLink('design', 'revision', "revisionID={$revision}")),
+            set('title', $repoComment),
+            '#'. $revision . '-' . $repoComment
+        );
+        $revisionItems[] = br();
+    }
+    return $revisionItems;
+};
+
+function getBugTd($bugs)
+{
+    $bugItems = array();
+    foreach($bugs as $bug)
+    {
+        $bugItems[] = a(
+            set('href', createLink('bug', 'view', "bugID={$bug->id}")),
+            set('title', $bug->title),
+            $bug->title
+        );
+        $bugItems[] = br();
+    }
+    return $bugItems;
+};
 
 div
 (
-    setClass('shadow canvas'),
-
-    h::table
-    (
-        setClass('w-full text-left border-collapse border border-slate-400'),
-        h::thead
+    setClass('main-col'),
+    empty($tracks) ? div(
+        setClass('table-empty-tip'),
+        span
         (
-            h::tr(generateHeaderList($this, $config, $lang, $projectProducts, $productID))
+            setClass('text-gray'),
+            $lang->noData
+        )
+    ) : div(
+        setClass('main-table'),
+        h::table
+        (
+            setID('trackList'),
+            setClass('table table-bordered'),
+            h::thead
+            (
+                $config->URAndSR ? h::th(
+                    !empty($productItems) ? dropdown(
+                        btn(
+                            setClass('ghost btn square btn-default'),
+                            set::icon('product'),
+                            $projectProducts[$productID]
+                        ),
+                        set::items($productItems),
+                        set::placement('bottom-start'),
+                    ) : $lang->story->requirement
+                ) : null,
+                h::th($lang->story->story),
+                h::th($lang->story->tasks),
+                $config->edition == 'max' ? h::th($lang->story->design) : null,
+                h::th($lang->story->case),
+                $config->edition == 'max' && helper::hasFeature('devops') ? h::th($lang->story->repoCommit) : null,
+                h::th($lang->story->bug),
+            ),
+            h::tbody
+            (
+                $getRequirements($tracks),
+            )
         ),
-        h::tbody(
-            generateRowList($this, $lang, $config, $tracks, $module, $tab)
+        div
+        (
+            setClass('table-footer'),
+            pager(
+                set::_className('flex justify-end items-center'),
+                set::linkCreator(createLink($app->rawModule, $app->rawMethod, "productID={$productID}&branch={$branch}&projectID={$projectID}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&pagerID={page}")),
+            )
         )
     ),
-
-    div
-    (
-        setClass('flex justify-end py-1.5 px-4'),
-        pager
-        (
-            set::page($pager->pageID),
-            set::recTotal($pager->recTotal),
-            set::recPerPage($pager->recPerPage),
-            set::linkCreator($linkTemplate),
-            set::items(array
-            (
-                array('type' => 'info',      'text' => $lang->pager->totalCountAB),
-                array('type' => 'size-menu', 'text' => $lang->pager->pageSizeAB),
-                array('type' => 'link',      'hint' => $lang->pager->firstPage,    'page' => 'first', 'icon' => 'icon-first-page'),
-                array('type' => 'link',      'hint' => $lang->pager->previousPage, 'page' => 'prev',  'icon' => 'icon-angle-left'),
-                array('type' => 'info',      'text' => '{page}/{pageTotal}'),
-                array('type' => 'link',      'hint' => $lang->pager->nextPage,     'page' => 'next',  'icon' => 'icon-angle-right'),
-                array('type' => 'link',      'hint' => $lang->pager->lastPage,     'page' => 'last',  'icon' => 'icon-last-page'),
-            ))
-        )
-    )
 );
 
 render();

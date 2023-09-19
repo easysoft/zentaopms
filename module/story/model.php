@@ -4237,6 +4237,7 @@ class storyModel extends model
             $trackStories = array();
             foreach($stories as $id => $story)
             {
+                if(empty($story)) continue;
                 if($projectStories and !isset($projectStories[$id])) continue;
                 $trackStories[$id] = $this->storyTao->buildStoryTrack($story, $projectID);
             }
