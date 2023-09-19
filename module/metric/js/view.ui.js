@@ -39,20 +39,20 @@ function toggleVarType(event)
 
     if(varType == 'select')
     {
-        optionsControl.removeClass('hidden');
+        optionsControl.removeAttr('disabled');
         toggleOptionsControl('defaultValue', varName, 'select', optionsControl.val());
         toggleOptionsControl('queryValue', varName, 'select', optionsControl.val());
 
     }
     else if(varType == 'date')
     {
-        optionsControl.addClass('hidden');
+        optionsControl.attr('disabled', true);
         toggleOptionsControl('defaultValue', varName, 'date', optionsControl.val());
         toggleOptionsControl('queryValue', varName, 'date', optionsControl.val());
     }
     else if(varType == 'input')
     {
-        optionsControl.addClass('hidden');
+        optionsControl.attr('disabled', true);
         toggleOptionsControl('defaultValue', varName, 'input',optionsControl.val());
         toggleOptionsControl('queryValue', varName, 'input', optionsControl.val());
     }
