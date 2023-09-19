@@ -136,14 +136,16 @@ class caselibModel extends model
     }
 
     /**
+     * 获取用例库键对。
      * Get libraries.
      *
      * @access public
      * @return array
      */
-    public function getLibraries()
+    public function getLibraries(): array
     {
-        return $this->dao->select("id,name")->from(TABLE_TESTSUITE)
+        return $this->dao->select('id,name')
+            ->from(TABLE_TESTSUITE)
             ->where('product')->eq(0)
             ->andWhere('deleted')->eq(0)
             ->andWhere('type')->eq('library')

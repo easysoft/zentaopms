@@ -79,12 +79,13 @@ class caselibTest
     }
 
     /**
+     * 测试获取用例库键对。
      * Get libraries test.
      *
      * @access public
-     * @return void
+     * @return array
      */
-    public function getLibrariesTest()
+    public function getLibrariesTest(): array
     {
         $objects = $this->objectModel->getLibraries();
 
