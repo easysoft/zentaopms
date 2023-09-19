@@ -1,0 +1,55 @@
+title: table zt_productplan
+desc: "产品计划"
+author: sgm
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-10000
+  - field: product
+    note: "所属产品"
+    range: 1-10{3},41-60{2}
+  - field: branch
+    note: "所属分支"
+    range: 0{30},1-40
+  - field: parent
+    note: "父计划"
+    range: 0
+  - field: title
+    note: "名称"
+    range: 1-10000
+    prefix: "产品计划"
+  - field: desc
+    note: "描述"
+    range: <div>
+             <p>asdxxxfa阿萨德开机as家世界发卡机发设计费啥登记卡设计费卡加斯加附件阿峰</p>
+             <p>123a阿士大夫姐姐姐经历过反对派呸呸呸史蒂夫接收到付款纪委第三方乐山大佛量减少地方</p>
+             <p>IU风格就叫阿萨德奥斯丁哦IG是DAU发加速度快哦哦阿萨德几年内发，，，奥斯丁，，，切，，，请问加十多年你</p>
+             <p>IUIG是DAU发加速度快哦哦阿萨德几年内发，，，奥斯丁，，，切，，，请问加十多年你</p>
+             <p>IU风格就叫阿萨德奥斯丁哦IG是DAU，，，奥斯丁，，，切，，，请问加十多年你</p>
+           </div>
+  - field: begin
+    note: "开始日期"
+    range: "(-10M)-(-7M):7D"
+    type: timestamp
+    format: "YYYY-MM-DD"
+  - field: end
+    note: "结束日期"
+    range: "(-6M)-(+6M):7D"
+    type: timestamp
+    format: "YYYY-MM-DD"
+  - field: createdBy
+    note: "由谁创建"
+    range: "admin"
+  - field: createdDate
+    note: "创建日期"
+    range: "(M)-(w)"
+    type: timestamp
+    postfix: ""
+    format: "YY/MM/DD"
+  - field: order
+    note: "排序"
+    value: "$id * 5"
+  - field: deleted
+    note: "是否删除"
+    range: 0{359},1

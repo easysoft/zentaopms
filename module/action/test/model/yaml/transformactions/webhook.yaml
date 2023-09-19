@@ -1,0 +1,134 @@
+title: table zt_webhook
+desc: ""
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: ""
+    range: 1-100
+    prefix: ""
+    postfix: ""
+    format: ""
+  - field: type
+    note: ""
+    range: dinggroup,dinguser,wechatgroup,wechatuser,feishugroup,feishuuser,default
+    prefix: ""
+    postfix: ""
+    format: ""
+  - field: name
+    note: ""
+    range: 钉钉群机器人,钉钉工作消息,企业微信机器人,企业微信应用,飞书群机器人,飞书工作消息,其他
+    prefix: ""
+    postfix: ""
+    format: ""
+  - field: url
+    note: ""
+    range: [https://oapi.dinggroup.com/, https://oapi.dingtalk.com/,https://qyapi.weixin.qq.com/cgi-bin/,https://qyapi.weixin.qq.com/cgi-bin/,https://open.feishu.cn/open-apis/, https://open.feishu.cn/open-apis/,http://qita.com/]
+    prefix: ""
+    postfix: ""
+    format: ""
+  - field: domain
+    note: ""
+    range: "http://127.0.0.1"
+    prefix: ""
+    postfix: ""
+    format: ""
+  - field: secret
+    note: ""
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: contentType
+    note: ""
+    range: "application/json"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: sendType
+    note: ""
+    range: "sync"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: products
+    note: ""
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: executions
+    note: ""
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: params
+    note: ""
+    range: "text"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: actions
+    note: ""
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: desc
+    note: ""
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: createdBy
+    note: ""
+    range: "admin"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: createdDate
+    note: ""
+    range: "(M)-(w):60"
+    type: timestamp
+    prefix: ""
+    postfix: ""
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: editedBy
+    note: ""
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: editedDate
+    note: ""
+    range: "(-1M)-(+1w):60"
+    prefix: ""
+    postfix: ""
+    format: ""
+  - field: deleted
+    note: ""
+    range: "0"
+    prefix: ""
+    postfix: ""
+    format: ""

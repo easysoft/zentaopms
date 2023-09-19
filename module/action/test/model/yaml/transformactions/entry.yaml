@@ -1,0 +1,100 @@
+title: table zt_entry
+desc: "应用"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-10000
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: name
+    note: "名称"
+    range: 1-10000
+    prefix: "这是应用名称"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: account
+    note: "账号"
+    range: admin
+    prefix: "account"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: code
+    note: "代号"
+    range: 1-10000
+    prefix: "code"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: key
+    note: "密钥"
+    range: 792b9b972157d2d8531b43e04c0af021
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: freePasswd
+    note: "免密登录"
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: ip
+    note: "IP"
+    range: "*"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: desc
+    note: "描述"
+    range: 1-10000
+    prefix: "这是应用描述"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: createdBy
+    note: "创建者"
+    range: "admin"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: createdDate
+    note: "创建日期"
+    range: "(-1M)-(+1w):60"
+    type: timestamp
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: calledTime
+    note: "调用时间戳"
+    range: "0"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: editedBy
+    note: "编辑者"
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: editedDate
+    note: "编辑日期"
+    range: "(-1M)-(+1w):60"
+  - field: deleted
+    note: "是否删除"
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

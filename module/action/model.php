@@ -1313,7 +1313,7 @@ class actionModel extends model
     }
 
     /**
-     * 转换actions用于显示。
+     * 转换动态用于显示。
      * Transform the actions for display.
      *
      * @param  array  $actions
