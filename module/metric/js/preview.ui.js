@@ -468,8 +468,13 @@ window.initPicker = function($obj, items, headLength = 3)
         defaultValue: 'line',
         name: 'chartType',
         required: true,
-        onChange: () => window.handleChartTypeChange(this),
+        afterRender: () => window.addChange($obj),
     });
+}
+
+window.addChange = function($obj) 
+{
+    $obj.find('[name=chartType]').attr('onchange', 'window.handleChartTypeChange(this)');
 }
 
 window.handleChartTypeChange = function($el)
@@ -477,14 +482,12 @@ window.handleChartTypeChange = function($el)
     if(viewType == 'single')
     {
         var chartType = $('[name=chartType]').val();
-        var $currentBox = $('.table-and-chart-single');
-        $currentBox.find('.chart').remove();
-        $currentBox.find('.chart-side').append('<div class="chart chart-container"></div>');
 
-        window.initChart($currentBox.find('.chart')[0], resultHeader, resultData, chartType);
+        window.renderChart(current.id, resultHeader, resultData, chartType);
     }
     else
     {
+        $el = $($el);
         var $metricBox = $($el.closest('.metricBox'));
         var metricID   = $metricBox.attr('metric-id');
         var chartType  = $metricBox.find('[name=chartType]').val();
@@ -494,9 +497,7 @@ window.handleChartTypeChange = function($el)
             var data = JSON.parse(resp);
             if(data)
             {
-                $currentBox.find('.chart').remove();
-                $currentBox.find('.chart-side').append('<div class="chart chart-container"></div>');
-                window.initChart($metricBox.find('.chart')[0], data.header, data.data, chartType);
+                window.renderChart(metricID, data.header, data.data, chartType);
             }
         });
     }
