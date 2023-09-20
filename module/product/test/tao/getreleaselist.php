@@ -3,7 +3,7 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 
-zdTable('case')->config('case')->gen(50);
+zdTable('case')->gen(50);
 
 /**
 
