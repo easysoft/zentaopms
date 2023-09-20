@@ -946,51 +946,6 @@ class productTao extends productModel
     }
 
     /**
-     * 获取多个产品关联需求用例覆盖率的键值对。
-     * Get K-V pairs of product ID and test case coverage.
-     *
-     * @param  int[]     $productIdList
-     * @access protected
-     * @return array
-     */
-    protected function getCaseCoveragePairs(array $productIdList): array
-    {
-        if(empty($productIdList)) return array();
-
-        /* Get storie list by product ID list. */
-        $storyList = $this->loadModel('story')->getStoriesByProductIdList($productIdList);
-
-        /* Get case count of each story. */
-        $storyIdList      = array();
-        $productStoryList = array();
-        foreach($storyList as $story)
-        {
-            $storyIdList[] = $story->id;
-
-            if(!isset($productStoryList[$story->product])) $productStoryList[$story->product] = array();
-            $productStoryList[$story->product][] = $story->id;
-        }
-        $caseCountPairs = $this->getCaseCountByStoryIdList($storyIdList);
-
-        /* Calculate coverage. */
-        $coveragePairs = array();
-        foreach($productStoryList as $productID => $list)
-        {
-            $total = count($list);
-
-            $totalCovered = 0;
-            foreach($list as $storyID)
-            {
-                if(isset($caseCountPairs[$storyID])) $totalCovered++;
-            }
-
-            $coveragePairs[$productID] = $total ? round($totalCovered * 100 / $total) : 0;
-        }
-
-        return $coveragePairs;
-    }
-
-    /**
      * 通过需求ID列表获取每个需求关联的用例数。
      * Get case count of each story in the story list.
      *

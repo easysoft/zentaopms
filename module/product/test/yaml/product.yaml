@@ -4,7 +4,7 @@ version: 1.0.0
 
 fields:
   - field: id
-    range: 1-30
+    range: 1-100
   - field: name
     range: 1-30
     prefix: '产品'

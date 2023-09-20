@@ -1063,7 +1063,7 @@ class productModel extends model
 
         list($stories, $requirements) = $this->getStatsStoriesAndRequirements($productIdList, $storyType);
         $executionCountPairs  = $this->productTao->getExecutionCountPairs($productIdList);
-        $coveragePairs        = $this->productTao->getCaseCoveragePairs($productIdList);
+        $coveragePairs        = $this->getCaseCoveragePairs($productIdList);
         $projectsPairs        = $this->productTao->getProjectCountPairs($productIdList);
 
         /* Render statistic result to each product. */
@@ -1699,5 +1699,50 @@ class productModel extends model
         if($storyType == 'requirement') $stories = $requirements;
 
         return array($stories, $requirements);
+    }
+
+    /**
+     * 获取多个产品关联需求用例覆盖率的键值对。
+     * Get K-V pairs of product ID and test case coverage.
+     *
+     * @param  int[]  $productIdList
+     * @access public
+     * @return array
+     */
+    public function getCaseCoveragePairs(array $productIdList): array
+    {
+        if(empty($productIdList)) return array();
+
+        /* Get storie list by product ID list. */
+        $storyList = $this->loadModel('story')->getStoriesByProductIdList($productIdList);
+
+        /* Get case count of each story. */
+        $storyIdList      = array();
+        $productStoryList = array();
+        foreach($storyList as $story)
+        {
+            $storyIdList[] = $story->id;
+
+            if(!isset($productStoryList[$story->product])) $productStoryList[$story->product] = array();
+            $productStoryList[$story->product][] = $story->id;
+        }
+        $caseCountPairs = $this->productTao->getCaseCountByStoryIdList($storyIdList);
+
+        /* Calculate coverage. */
+        $coveragePairs = array();
+        foreach($productStoryList as $productID => $list)
+        {
+            $total = count($list);
+
+            $totalCovered = 0;
+            foreach($list as $storyID)
+            {
+                if(isset($caseCountPairs[$storyID])) $totalCovered++;
+            }
+
+            $coveragePairs[$productID] = $total ? round($totalCovered * 100 / $total) : 0;
+        }
+
+        return $coveragePairs;
     }
 }
