@@ -584,9 +584,15 @@ class actionTest
 
         if(dao::isError()) return dao::getError();
 
+        $firstGroupColumn = current(current($objects));
+        $endGroupColumn   = current(end($objects));
+
+        if(($direction == 'next' && $orderBy == 'date_desc') && strtotime($firstGroupColumn->originalDate) < strtotime($endGroupColumn->originalDate)) return array('count' => 0, 'sort' => false);   
+        if(($direction == 'pre' && $orderBy == 'date_asc') && strtotime($firstGroupColumn->originalDate) > strtotime($endGroupColumn->originalDate)) return array('count' => 0, 'sort' => false);
+
         $count = 0;
         foreach($objects as $object) $count += count($object);
-        return $count;
+        return array('count' => $count, 'sort' => true);
     }
 
     /**
