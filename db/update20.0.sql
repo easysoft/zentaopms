@@ -159,6 +159,7 @@ CREATE TABLE IF NOT EXISTS `zt_metric` (
   `scope` char(30) NOT NULL DEFAULT '',
   `object` char(30) NOT NULL DEFAULT '',
   `stage` enum('wait','released') NULL DEFAULT 'wait',
+  `type` enum('php', 'sql') NULL DEFAULT 'php',
   `name` varchar(90) NOT NULL DEFAULT '',
   `code` varchar(90) NOT NULL DEFAULT '',
   `unit` varchar(10) NOT NULL DEFAULT '',

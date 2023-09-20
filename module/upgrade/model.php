@@ -9342,6 +9342,7 @@ class upgradeModel extends model
             $metric->purpose     = $purposeMap[$oldMetric->purpose] ? $purposeMap[$oldMetric->purpose] : 'other';
             $metric->object      = $objectMap[$oldMetric->object] ? $objectMap[$oldMetric->object] : 'other';
             $metric->stage       = 'wait';
+            $metric->type        = 'sql';
             $metric->name        = $oldMetric->name;
             $metric->code        = $oldMetric->code;
             $metric->desc        = '';
