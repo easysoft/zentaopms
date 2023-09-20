@@ -1091,8 +1091,7 @@ class story extends control
         $branch         = $product->type == 'branch' ? $storyBranch : 'all';
         $productStories = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '', $storyType);
 
-        $this->view->title      = $this->lang->story->close . "STORY" . $this->lang->colon . $story->title;
-
+        $this->view->title          = $this->lang->story->close . "STORY" . $this->lang->colon . $story->title;
         $this->view->product        = $product;
         $this->view->story          = $story;
         $this->view->productStories = $productStories;
