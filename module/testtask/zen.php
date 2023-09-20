@@ -478,4 +478,40 @@ class testtaskZen extends testtask
             $this->zanode->runZTFScript($automation->id, $caseID, $resultID);
         }
     }
+
+    /**
+     * 根据测试用例的执行结果返回不同的内容。
+     * Return different content based on the execution results of the test case.
+     *
+     * @param  string    $caseResult
+     * @param  object    $preAndNext
+     * @param  int       $runID
+     * @param  int       $caseID
+     * @param  int       $version
+     * @access protected
+     * @return void
+     */
+    protected function responseAfterRunCase(string $caseResult, object $preAndNext, int $runID, int $caseID, int $version)
+    {
+        if($caseResult == 'fail')
+        {
+            $link = inlink('results',"runID=$runID&caseID=$caseID&version=$version");
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "loadModal('$link', 'runCaseModal')"));
+        }
+
+        /* set cookie for ajax load caselist when close colorbox. */
+        helper::setcookie('selfClose', 1, 0);
+
+        if($preAndNext->next && $this->app->tab != 'my')
+        {
+            $nextRunID   = $runID ? $preAndNext->next->id : 0;
+            $nextCaseID  = $runID ? $preAndNext->next->case : $preAndNext->next->id;
+            $nextVersion = $preAndNext->next->version;
+            $link        = inlink('runCase', "runID={$nextRunID}&caseID={$nextCaseID}&version={$nextVersion}");
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "loadModal('$link', 'runCaseModal')"));
+        }
+
+        return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
+    }
 }
