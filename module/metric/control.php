@@ -258,6 +258,21 @@ class metric extends control
     }
 
     /**
+     * 删除度量项。
+     * View metric details.
+     *
+     * @param  int    $metricID
+     * @access public
+     * @return void
+     */
+    public function delete($metricID)
+    {
+        $this->dao->update(TABLE_METRIC)->set('deleted')->eq(1)->where('id')->eq($metricID)->exec();
+        $locateLink = $this->createLink('metric', 'browse');
+        return $this->send(array('result' => 'success', 'load' => $locateLink, 'closeModal' => true));
+    }
+
+    /**
      * 计算度量项。
      * Execute metric.
      *
