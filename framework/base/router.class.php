@@ -821,7 +821,7 @@ class baseRouter
 
         list($defaultVision) = explode(',', trim($this->config->visions, ','));
 
-        if($defaultVision != 'lite') $defaultVision = 'rnd';
+        if($defaultVision != 'lite' && $defaultVision != 'or') $defaultVision = 'rnd';
         if($vision and strpos($this->config->visions, ",{$vision},") === false) $vision = $defaultVision;
 
         $this->config->vision = $vision ? $vision : $defaultVision;
