@@ -1061,7 +1061,7 @@ class productModel extends model
             $$module = $this->productTao->$method($productIdList);
         }
 
-        list($stories, $requirements) = $this->productTao->getStatsStoriesAndRequirements($productIdList, $storyType);
+        list($stories, $requirements) = $this->getStatsStoriesAndRequirements($productIdList, $storyType);
         $executionCountPairs  = $this->productTao->getExecutionCountPairs($productIdList);
         $coveragePairs        = $this->productTao->getCaseCoveragePairs($productIdList);
         $projectsPairs        = $this->productTao->getProjectCountPairs($productIdList);
@@ -1656,5 +1656,48 @@ class productModel extends model
         }
 
         return $products;
+    }
+
+    /**
+     * 获取用于数据统计的研发需求和用户需求列表。
+     * Get dev stories and user requirements for statistics.
+     *
+     * @param  array   $productIdList
+     * @param  string  $storyType
+     * @access public
+     * @return array[]
+     */
+    public function getStatsStoriesAndRequirements(array $productIdList, string $storyType): array
+    {
+        $this->loadModel('story');
+        $stories      = $this->story->getStoriesCountByProductIDs($productIdList, 'story');
+        $requirements = $this->story->getStoriesCountByProductIDs($productIdList);
+
+        /* Padding the stories to sure all products have records. */
+        $defaultStory = array_keys($this->lang->story->statusList);
+        foreach($productIdList as $productID)
+        {
+            if(!isset($stories[$productID]))      $stories[$productID]      = $defaultStory;
+            if(!isset($requirements[$productID])) $requirements[$productID] = $defaultStory;
+        }
+
+        /* Collect count for each status of stories. */
+        foreach($stories as $key => $story)
+        {
+            foreach(array_keys($this->lang->story->statusList) as $status) $story[$status] = isset($story[$status]) ? $story[$status]->count : 0;
+            $stories[$key] = $story;
+        }
+
+        /* Collect count for each status of requirements. */
+        foreach($requirements as $key => $requirement)
+        {
+            foreach(array_keys($this->lang->story->statusList) as $status) $requirement[$status] = isset($requirement[$status]) ? $requirement[$status]->count : 0;
+            $requirements[$key] = $requirement;
+        }
+
+        /* Story type is 'requirement'. */
+        if($storyType == 'requirement') $stories = $requirements;
+
+        return array($stories, $requirements);
     }
 }

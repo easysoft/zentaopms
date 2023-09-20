@@ -347,49 +347,6 @@ class productTao extends productModel
     }
 
     /**
-     * 获取用于数据统计的研发需求和用户需求列表。
-     * Get dev stories and user requirements for statistics.
-     *
-     * @param  array     $productIDs
-     * @param  string    $storyType
-     * @access protected
-     * @return array[]
-     */
-    protected function getStatsStoriesAndRequirements(array $productIDs, string $storyType): array
-    {
-        $this->loadModel('story');
-        $stories      = $this->story->getStoriesCountByProductIDs($productIDs, 'story');
-        $requirements = $this->story->getStoriesCountByProductIDs($productIDs);
-
-        /* Padding the stories to sure all products have records. */
-        $emptyStory = array_keys($this->lang->story->statusList);
-        foreach($productIDs as $productID)
-        {
-            if(!isset($stories[$productID]))      $stories[$productID]      = $emptyStory;
-            if(!isset($requirements[$productID])) $requirements[$productID] = $emptyStory;
-        }
-
-        /* Collect count for each status of stories. */
-        foreach($stories as $key => $story)
-        {
-            foreach(array_keys($this->lang->story->statusList) as $status) $story[$status] = isset($story[$status]) ? $story[$status]->count : 0;
-            $stories[$key] = $story;
-        }
-
-        /* Collect count for each status of requirements. */
-        foreach($requirements as $key => $requirement)
-        {
-            foreach(array_keys($this->lang->story->statusList) as $status) $requirement[$status] = isset($requirement[$status]) ? $requirement[$status]->count : 0;
-            $requirements[$key] = $requirement;
-        }
-
-        /* Story type is 'requirement'. */
-        if($storyType == 'requirement') $stories = $requirements;
-
-        return array($stories, $requirements);
-    }
-
-    /**
      * 计算在点击1.5级导航下拉选项后，跳转的模块名和方法名。
      * Compute locate for drop menu in PC.
      *
