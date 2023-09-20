@@ -347,47 +347,6 @@ class productTao extends productModel
     }
 
     /**
-     * 获取用于统计的产品列表。
-     * Get products list for statistic.
-     *
-     * @param  int[]       $productIdList
-     * @param  bool        $appendProgram
-     * @param  string      $orderBy
-     * @param  object|null $pager
-     * @access protected
-     * @return array
-     */
-    protected function getStatsProducts(array $productIdList, bool $appendProgram, string $orderBy, object|null $pager = null): array
-    {
-        if($orderBy == 'program_asc')
-        {
-            $products = $this->getPagerProductsWithProgramIn($productIdList, $pager);
-        }
-        else
-        {
-            $products = $this->getPagerProductsIn($productIdList, $pager, $orderBy);
-        }
-
-        /* Fetch product lines. */
-        $linePairs = $this->getLinePairs();
-        foreach($products as $product) $product->lineName = zget($linePairs, $product->line, '');
-
-        if(!$appendProgram) return $products;
-
-        $programIdList = array();
-        foreach($products as $product) $programIdList[] = $product->program;
-        $programs = $this->loadModel('program')->getBaseDataList(array_unique($programIdList));
-
-        foreach($products as $product)
-        {
-            $product->programName = isset($programs[$product->program]) ? $programs[$product->program]->name : '';
-            $product->programPM   = isset($programs[$product->program]) ? $programs[$product->program]->PM : '';
-        }
-
-        return $products;
-    }
-
-    /**
      * 获取用于数据统计的研发需求和用户需求列表。
      * Get dev stories and user requirements for statistics.
      *
