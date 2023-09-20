@@ -935,44 +935,6 @@ class productTao extends productModel
     }
 
     /**
-     * 从产品统计数据中统计项目集。
-     * Statistics program data from statistics data of product.
-     *
-     * @param  array     $productStats
-     * @access protected
-     * @return array
-     */
-    protected function statisticProgram(array $productStats): array
-    {
-        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getProductStats();
-
-        $programStructure = array();
-
-        foreach($productStats as $product)
-        {
-            $programStructure[$product->program][$product->line]['products'][$product->id] = $product;
-
-            /* Generate line data. */
-            if($product->line)
-            {
-                $programStructure[$product->program][$product->line]['lineName'] = $product->lineName;
-                $programStructure[$product->program][$product->line] = $this->statisticProductData('line', $programStructure, $product);
-            }
-
-            /* Generate program data. */
-            if($product->program)
-            {
-                $programStructure[$product->program]['programName'] = $product->programName;
-                $programStructure[$product->program]['programPM']   = $product->programPM;
-                $programStructure[$product->program]['id']          = $product->program;
-                $programStructure[$product->program]                = $this->statisticProductData('program', $programStructure, $product);
-            }
-        }
-
-        return $programStructure;
-    }
-
-    /**
      * 统计项目集内的产品数据
      * Statistic product data.
      *
