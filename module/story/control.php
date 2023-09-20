@@ -2240,6 +2240,7 @@ class story extends control
     }
 
     /**
+     * 移除需求的孪生需求。
      * AJAX: Deleted story twin.
      *
      * @access public
@@ -2253,15 +2254,15 @@ class story extends control
 
         if(empty($story->twins)) return $this->send(array('result' => 'fail'));
 
-        /* batchUnset twinID from twins.*/
+        /* Batch unset twinID from twins for the story by the product. */
         $replaceSql = "UPDATE " . TABLE_STORY . " SET twins = REPLACE(twins,',$twinID,', ',') WHERE `product` = $story->product";
         $this->dbh->exec($replaceSql);
 
-        /* Update twins to empty by twinID and if twins eq ','.*/
+        /* Update twins to empty by twinID and if twins eq ','. */
         $this->dao->update(TABLE_STORY)->set('twins')->eq('')->where('id')->eq($twinID)->orWhere('twins')->eq(',')->exec();
 
         if(!dao::isError()) $this->loadModel('action')->create('story', $twinID, 'relieved');
-        return $this->send(array('result' => 'success', 'silbingsCount' => count($twins)-1));
+        return $this->send(array('result' => 'success', 'twinsCount' => count($twins)-1));
     }
 
     /**

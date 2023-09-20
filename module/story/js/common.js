@@ -154,8 +154,8 @@ function relieve(index)
 
         if(data.result == 'success')
         {
-            if(data.silbingsCount != 0) $('[data-id="' + index + '"]').parent('li').remove();
-            if(data.silbingsCount == 0 || index == storyID)
+            if(data.twinsCount != 0) $('[data-id="' + index + '"]').parent('li').remove();
+            if(data.twinsCount == 0 || index == storyID)
             {
                 $('[href="#legendTwins"]').parent('li').next('li').addClass('active');;
                 $('[href="#legendTwins"]').parent('li').remove();
