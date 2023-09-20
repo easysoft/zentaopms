@@ -323,25 +323,6 @@ class caselib extends control
     }
 
     /**
-     * The results page of search.
-     *
-     * @param  string  $keywords
-     * @param  string  $module
-     * @param  string  $method
-     * @param  mixed   $extra
-     * @access public
-     * @return void
-     */
-    public function ajaxGetMatchedItems($keywords, $module, $method, $extra)
-    {
-        $libraries = $this->dao->select('*')->from(TABLE_TESTSUITE)->where('deleted')->eq(0)->andWhere('name')->like("%$keywords%")->andWhere('type')->eq('library')->orderBy('`id` desc')->fetchAll();
-        $this->view->link      = $this->caselib->getLibLink($module, $method, $extra);
-        $this->view->libraries = $libraries;
-        $this->view->keywords  = $keywords;
-        $this->display();
-    }
-
-    /**
      * Export template.
      *
      * @param  int    $libID
