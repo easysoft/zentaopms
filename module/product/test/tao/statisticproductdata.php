@@ -13,6 +13,7 @@ zdTable('project')->config('program')->gen(20);
 zdTable('projectproduct')->gen(30);
 zdTable('bug')->gen(20);
 zdTable('doc')->gen(20);
+zdTable('user')->gen(5);
 
 
 /**
