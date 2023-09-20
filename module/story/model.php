@@ -1683,6 +1683,7 @@ class storyModel extends model
             ->checkFlow()
             ->where('id')->eq($storyID)
             ->exec();
+        if(dao::isError()) return false;
 
         /* Update parent story status and stage. */
         if($oldStory->parent > 0)
