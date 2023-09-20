@@ -1524,4 +1524,26 @@ class testcaseTest
         if($topScenes) $return .= "topScenes:{$topScenes};";
         return $return;
     }
+
+    /**
+     * 测试追加用例执行失败次数。
+     * Test append case fails.
+     *
+     * @param  int           $case
+     * @param  string        $from
+     * @param  int           $taskID
+     * @access public
+     * @return array|object
+     */
+    public function appendCaseFailsTest(int $caseID, string $from, int $taskID): array|object
+    {
+        $case = new stdClass();
+        $case->id = $caseID;
+
+        $object = $this->objectModel->appendCaseFails($case, $from, $taskID);
+
+        if(dao::isError()) return dao::getError();
+
+        return $object;
+    }
 }

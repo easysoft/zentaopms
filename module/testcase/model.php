@@ -2480,6 +2480,7 @@ class testcaseModel extends model
     }
 
     /**
+     * 追加用例执行失败次数。
      * Append case fails.
      *
      * @param  object $case
