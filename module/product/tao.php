@@ -935,33 +935,6 @@ class productTao extends productModel
     }
 
     /**
-     * 获取需求关联所有模块的树形结构数组。
-     * Get the tree structure of stories related modules.
-     *
-     * @param  int       $productID
-     * @param  string    $branch
-     * @param  array     $userFunc
-     * @param  array     $extra
-     * @access protected
-     * @return array
-     */
-    protected function getModuleTree($productID, $branch, $userFunc, $extra): array
-    {
-        $moduleTree = array();
-        $extra['branchID'] = $branch;
-
-        $this->loadModel('tree');
-        $stmt = $this->dbh->query($this->tree->buildMenuQuery($productID, 'story', 0, $branch));
-        while($module = $stmt->fetch())
-        {
-            $module->url  = call_user_func_array(array($this->tree, $userFunc[1]), array('story', $module, 0, $extra));
-            $moduleTree[] = $module;
-        }
-
-        return $moduleTree;
-    }
-
-    /**
      * 从产品统计数据中统计项目集。
      * Statistics program data from statistics data of product.
      *
