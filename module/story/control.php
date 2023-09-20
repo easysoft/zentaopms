@@ -2113,14 +2113,15 @@ class story extends control
     }
 
     /**
-     * Ajax get story status.
+     * 通过AJAX方式获取需求的状态。
+     * AJAX: get story status.
      *
      * @param  string $method
      * @param  string $params
      * @access public
      * @return void
      */
-    public function ajaxGetStatus($method, $params = '')
+    public function ajaxGetStatus(string $method, string $params = '')
     {
         parse_str(str_replace(',', '&', $params), $params);
         $status = '';
