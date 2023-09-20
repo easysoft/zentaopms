@@ -450,56 +450,6 @@ class productTao extends productModel
     }
 
     /**
-     * 获取产品路线图的分组数据。
-     * Get group roadmap data of product.
-     *
-     * @param  int       $productID
-     * @param  string    $branch    all|0|1
-     * @param  int       $count
-     * @access protected
-     * @return [array, bool]
-     */
-    protected function getGroupRoadmapData(int $productID, string $branch, int $count): array
-    {
-        $roadmap = array();
-        $return  = false;
-
-        /* Get product plans. */
-        $planList = $this->loadModel('productplan')->getList($productID, $branch);
-
-        /* Filter the valid plans, then get the ordered and parents plans. */
-        list($orderedPlans, $parentPlans) = $this->filterOrderedAndParentPlans($planList);
-
-        /* Get roadmaps of product plans. */
-        list($roadmap, $total, $return) = $this->getRoadmapOfPlans($orderedPlans, $parentPlans, $branch, $count);
-        if($return) return array($roadmap, $return);
-
-        /* Get roadmpas of product releases. */
-        $releases = $this->loadModel('release')->getList($productID, $branch);
-        list($roadmap, $subTotal, $return) = $this->getRoadmapOfReleases($roadmap, $releases, $branch, $count);
-        if($return) return array($roadmap, $return);
-        $total += $subTotal;
-
-        /* Re-group with branch ID. */
-        $groupRoadmap = array();
-        foreach($roadmap as $year => $branchRoadmap)
-        {
-            foreach($branchRoadmap as $branch => $roadmapItems)
-            {
-                /* Split roadmap items into multiple lines. */
-                $totalData = count($roadmapItems);
-                $rows      = ceil($totalData / 8);
-                $maxPerRow = ceil($totalData / $rows);
-
-                $groupRoadmap[$year][$branch] = array_chunk($roadmapItems, (int)$maxPerRow);
-                foreach(array_keys($groupRoadmap[$year][$branch]) as $row) krsort($groupRoadmap[$year][$branch][$row]);
-            }
-        }
-
-        return array($groupRoadmap, $return);
-    }
-
-    /**
      * 过滤有效的产品计划, 并返回所有父级计划。
      * Filter valid product plans.
      *
