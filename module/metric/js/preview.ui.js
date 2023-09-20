@@ -120,6 +120,8 @@ window.handleNavMenuClick = function($el)
 
 window.handleQueryClick = function()
 {
+    var check = window.checkForm($('#queryForm'));
+    if(!check) return;
     window.ajaxGetRecords(current.id);
 }
 
@@ -607,6 +609,29 @@ window.ajaxGetRecords = function(id)
             window.renderChart(id, data.header, data.data, chartType);
         }
     });
+}
+
+window.checkForm = function($form)
+{
+    var formSerialize = $form.serialize();
+    var formObj = window.parseSerialize(formSerialize);
+
+    var dateBegin = formObj.dateBegin?.length ? new Date(formObj.dateBegin) : false;
+    var dateEnd   = formObj.dateEnd?.length ? new Date(formObj.dateEnd) : false;
+    var calcBegin = formObj.calcBegin?.length ? new Date(formObj.calcBegin) : false;
+    var calcEnd   = formObj.calcEnd?.length ? new Date(formObj.calcEnd) : false;
+
+    if(dateBegin && dateEnd && dateBegin > dateEnd)
+    {
+        zui.Messager.show(errorDateRange, {type: 'danger', time: 2000});
+        return false;
+    }
+    if(calcBegin && calcEnd && calcBegin > calcEnd)
+    {
+        zui.Messager.show(errorCalcTimeRange, {type: 'danger', time: 2000});
+        return false;
+    }
+    return true;
 }
 
 window.getFormData = function($form)

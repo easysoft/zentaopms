@@ -10,19 +10,21 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('resultHeader',   isset($resultHeader) ? $resultHeader : array());
-jsVar('resultData',     isset($resultData)   ? $resultData   : array());
-jsVar('objectList',     $lang->metric->objectList);
-jsVar('current',        $current);
-jsVar('maxSelectNum',   $config->metric->maxSelectNum);
-jsVar('maxSelectMsg',   $lang->metric->maxSelect);
-jsVar('maxSelectTip',   $lang->metric->maxSelectTip);
-jsVar('viewType',       $viewType);
-jsVar('selectCount',    $lang->metric->selectCount);
-jsVar('filterLang',     $lang->metric->filter);
-jsVar('scope',          $scope);
-jsVar('metricListLang', $metricList);
-jsVar('chartTypeList',  $lang->metric->chartTypeList);
+jsVar('resultHeader',       isset($resultHeader) ? $resultHeader : array());
+jsVar('resultData',         isset($resultData)   ? $resultData   : array());
+jsVar('objectList',         $lang->metric->objectList);
+jsVar('current',            $current);
+jsVar('maxSelectNum',       $config->metric->maxSelectNum);
+jsVar('maxSelectMsg',       $lang->metric->maxSelect);
+jsVar('maxSelectTip',       $lang->metric->maxSelectTip);
+jsVar('viewType',           $viewType);
+jsVar('selectCount',        $lang->metric->selectCount);
+jsVar('filterLang',         $lang->metric->filter);
+jsVar('scope',              $scope);
+jsVar('metricListLang',     $metricList);
+jsVar('chartTypeList',      $lang->metric->chartTypeList);
+jsVar('errorDateRange',     $lang->metric->errorDateRange);
+jsVar('errorCalcTimeRange', $lang->metric->errorCalcTimeRange);
 
 if($scope == 'collect' and empty($current))
 {
