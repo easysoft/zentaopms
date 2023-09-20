@@ -484,54 +484,6 @@ class productTao extends productModel
     }
 
     /**
-     * 获取计划的路线图数据。
-     * Get roadmap of plans.
-     *
-     * @param  array   $orderedPlans
-     * @param  array   $parents
-     * @param  string  $branch
-     * @param  int     $count
-     * @access public
-     * @return [array, int, bool]
-     */
-    public function getRoadmapOfPlans(array $orderedPlans, array $parents, string $branch, int $count): array
-    {
-        $return  = false;
-        $total   = 0;
-        $roadmap = array();
-
-        foreach($orderedPlans as $plans)
-        {
-            krsort($plans);
-            foreach($plans as $plan)
-            {
-                /* Attach parent plan. */
-                if($plan->parent > 0 and isset($parents[$plan->parent])) $plan->title = $parents[$plan->parent] . ' / ' . $plan->title;
-
-                $year         = substr($plan->end, 0, 4);
-                $branchIdList = explode(',', trim($plan->branch, ','));
-                $branchIdList = array_unique($branchIdList);
-                foreach($branchIdList as $branchID)
-                {
-                    if($branchID === '') continue;
-                    $roadmap[$year][$branchID][] = $plan;
-                }
-                $total++;
-
-                /* Exceed requested count. */
-                if($count > 0 and $total >= $count)
-                {
-                    $roadmap = $this->processRoadmap($roadmap, $branch);
-                    $return  = true;
-                    break;
-                }
-            }
-        }
-
-        return array($roadmap, $total, $return);
-    }
-
-    /**
      * 通过产品ID查询产品关联的统计数据。
      * Get stat count by product ID.
      *
