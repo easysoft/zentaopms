@@ -106,6 +106,7 @@ class metric extends control
     {
         $this->metric->processScopeList('released');
 
+        $filters = array();
         if($scope == 'filter')
         {
             $filters = json_decode(base64_decode($filtersBase64), true);

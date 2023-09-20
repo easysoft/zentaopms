@@ -309,6 +309,9 @@ window.initDTable = function($obj, head, data)
     var height = 328;
     if(viewType == 'single') height = $('.table-side').height();
     if(!head || !data) return;
+
+    var commonWidth = 140;
+
     new zui.DTable($obj,{
         responsive: true,
         bordered: true,
@@ -318,11 +321,31 @@ window.initDTable = function($obj, head, data)
         data: data,
         onRenderCell: function(result, {row, col})
         {
-            if(col.name == 'scope')
+            var colCount = Object.keys(row.data).length;
+            if(colCount == 3) commonWidth = 86;
+            if(colCount == 4) commonWidth = 64;
+
+            if(col.name != 'calcTime')
             {
-                var scope = `<span class="scope-ellipsis" title="${row.data.scope}">${row.data.scope}</span>`;
-                result[0] = {html: scope};
+                var html = `<span class="cell-ellipsis" style="width: ${commonWidth}px;" title="${row.data[col.name]}">${row.data[col.name]}</span>`;
+                result[0] = {html: html};
             }
+
+            if(colCount == 4)
+            {
+                if(col.name == 'date')
+                {
+                    var html = `<span class="cell-ellipsis" style="width: 75px;" title="${row.data[col.name]}">${row.data[col.name]}</span>`;
+                    result[0] = {html: html};
+                }
+
+                if(col.name == 'value')
+                {
+                    var html = `<span class="cell-ellipsis" style="width: 53px;" title="${row.data[col.name]}">${row.data[col.name]}</span>`;
+                    result[0] = {html: html};
+                }
+            }
+
             return result;
         }
     });
