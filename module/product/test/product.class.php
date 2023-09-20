@@ -852,25 +852,21 @@ class productTest
     }
 
     /**
-     * Test statistics program data.
+     * 从产品统计数据中统计项目集。
+     * Statistics program data from statistics data of product.
      *
-     * @param  object $productStats
+     * @param  array  $productIdList
      * @param  int    $index
      * @access public
      * @return array
      */
-    public function statisticProgramTest($productStats, $index)
+    public function statisticProgramTest(array $productIdList, int $index): array
     {
-        $objects = $this->objectModel->statisticProgram($productStats);
+        $productStats = $this->objectModel->getStats($productIdList);
+        $objects      = $this->objectModel->statisticProgram($productStats);
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $objects[$index][$index]['products'];
-        }
+        if(dao::isError()) return dao::getError();
+        return $index ? $objects[$index][$index]['products'] : $objects;
     }
 
     /**
