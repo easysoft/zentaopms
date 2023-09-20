@@ -149,8 +149,8 @@ class product extends control
         if($browseType == '') $browseType = 'unclosed';
 
         /* Generate data. */
-        $moduleID        = $this->productZen->getModuleId($param, $browseType);
-        $stories         = $this->productZen->getStories($projectID, $productID, $branchID, $moduleID, $param, $storyType, $browseType, $orderBy, $pager);
+        $moduleID = $this->productZen->getModuleId($param, $browseType);
+        $stories  = $this->productZen->getStories($projectID, $productID, $branchID, $moduleID, $param, $storyType, $browseType, $orderBy, $pager);
 
         /* Process the sql, get the condition partition, save it to session. */
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', (strpos('bysearch,reviewbyme,bymodule', $browseType) === false && !$isProjectStory));
