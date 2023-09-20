@@ -962,7 +962,7 @@ class productZen extends product
         if(!isset($this->story)) $this->loadModel('story');
 
         /* Get stories. */
-        if($isProjectStory and $storyType == 'story')
+        if($isProjectStory && $storyType == 'story')
         {
             $this->products = $this->product->getProducts($projectID, 'all', '', false);
 
