@@ -308,6 +308,49 @@ class testtaskZen extends testtask
     }
 
     /**
+     * 分配变量给一个测试用例的执行页面。
+     * Assign variables for runCase page of a test case.
+     *
+     * @param  object    $run
+     * @param  object    $preAndNext
+     * @param  int       $runID
+     * @param  int       $caseID
+     * @param  int       $version
+     * @param  string    $confirm
+     * @access protected
+     * @return void
+     */
+    protected function assignForRunCase(object $run, object $preAndNext, int $runID, int $caseID, int $version, string $confirm): void
+    {
+        $preLink  = '';
+        $nextLink = '';
+        if($preAndNext->pre && $this->app->tab != 'my')
+        {
+            $runID   = $runID ? $preAndNext->pre->id : 0;
+            $caseID  = $runID ? $preAndNext->pre->case : $preAndNext->pre->id;
+            $version = $preAndNext->pre->version;
+            $preLink = inlink('runCase', "runID={$runID}&caseID={$caseID}&version={$version}");
+        }
+        if($preAndNext->next && $this->app->tab != 'my')
+        {
+            $runID    = $runID ? $preAndNext->next->id : 0;
+            $caseID   = $runID ? $preAndNext->next->case : $preAndNext->next->id;
+            $version  = $preAndNext->next->version;
+            $nextLink = inlink('runCase', "runID={$runID}&caseID={$caseID}&version={$version}");
+        }
+
+        $this->view->title    = $this->lang->testtask->lblRunCase;
+        $this->view->users    = $this->loadModel('user')->getPairs('noclosed, noletter');
+        $this->view->run      = $run;
+        $this->view->runID    = $runID;
+        $this->view->caseID   = $caseID;
+        $this->view->version  = $version;
+        $this->view->confirm  = $confirm;
+        $this->view->preLink  = $preLink;
+        $this->view->nextLink = $nextLink;
+    }
+
+    /**
      * 根据不同情况获取产品键值对，大多用于1.5级导航。
      * Get product key-value pairs according to different situations.
      *
