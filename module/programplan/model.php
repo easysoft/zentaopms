@@ -1163,10 +1163,9 @@ class programplanModel extends model
         {
             $path['path']  = $parent->path . "{$stage->id},";
             $path['grade'] = $parent->grade + 1;
-
-            $children = $this->execution->getChildExecutions($planID);
         }
 
+        $children = $this->execution->getChildExecutions($planID);
         $this->dao->update(TABLE_PROJECT)->set('path')->eq($path['path'])->set('grade')->eq($path['grade'])->where('id')->eq($stage->id)->exec();
 
         if(!empty($children))
