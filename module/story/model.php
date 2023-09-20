@@ -1658,9 +1658,9 @@ class storyModel extends model
      * @param  int    $storyID
      * @param  object $postData
      * @access public
-     * @return bool
+     * @return array|false
      */
-    public function close($storyID, $postData)
+    public function close(int $storyID, object $postData): array|false
     {
         $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
         $story    = $postData;
@@ -1681,7 +1681,8 @@ class storyModel extends model
             ->batchCheck($this->config->story->close->requiredFields, 'notempty')
             ->checkIF($story->closedReason == 'duplicate', 'duplicateStory', 'notempty')
             ->checkFlow()
-            ->where('id')->eq($storyID)->exec();
+            ->where('id')->eq($storyID)
+            ->exec();
 
         /* Update parent story status and stage. */
         if($oldStory->parent > 0)
@@ -1698,7 +1699,7 @@ class storyModel extends model
         }
 
         $changes = common::createChanges($oldStory, $story);
-        if($postData->closeSync)
+        if(!empty($postData->closeSync))
         {
             /* batchUnset twinID from twins.*/
             $replaceSql = "UPDATE " . TABLE_STORY . " SET twins = REPLACE(twins,',$storyID,', ',') WHERE `product` = $oldStory->product";
@@ -1709,7 +1710,7 @@ class storyModel extends model
 
             if(!dao::isError()) $this->loadModel('action')->create('story', $storyID, 'relieved');
         }
-        if(!empty($oldStory->twins) and !$postData->closeSync) $this->syncTwins($storyID, $oldStory->twins, $changes, 'Closed');
+        if(!empty($oldStory->twins) and empty($postData->closeSync)) $this->syncTwins($storyID, $oldStory->twins, $changes, 'Closed');
         return $changes;
     }
 
