@@ -1546,4 +1546,24 @@ class testcaseTest
 
         return $object;
     }
+
+    /**
+     * 测试导出 xmind 格式的用例时获取用例列表。
+     * Test get case list for export xmind.
+     *
+     * @param  int          $productID
+     * @param  int          $moduleID
+     * @access public
+     * @return array|string
+     */
+    public function getCaseListForXmindExportTest(int $productID, int $moduleID): array|string
+    {
+        $cases = $this->objectModel->getCaseListForXmindExport($productID, $moduleID);
+
+        if(dao::isError()) return dao::getError();
+
+        $return = '';
+        foreach($cases as $case) $return .= "{$case->testcaseID}: {$case->productName}, {$case->moduleName}, {$case->sceneName} ";
+        return trim($return, ' ');
+    }
 }

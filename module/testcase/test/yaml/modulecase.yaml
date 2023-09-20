@@ -7,3 +7,5 @@ fields:
     range: 1821,1822,0,0,1825,1827,0,0,0,1829,1832,0,0,0,0{10000}
   - field: auto
     range: no{2},unit
+  - field: scene
+    range: 1-50
