@@ -1107,6 +1107,14 @@ class productTest
         return $_SESSION['storysearchParams']['queryID'];
     }
 
+    public function formatDataForListTest($productID)
+    {
+        $product = $this->objectModel->getStats(array($productID));
+        if(!$product) return false;
+
+        return $this->objectModel->formatDataForList($product[$productID], array());
+    }
+
     /**
      * Test summary method.
      *
