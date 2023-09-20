@@ -1277,10 +1277,15 @@ class productModel extends model
 
         $params = "product=$product->id";
 
-        if($product->status != 'closed') $menuList['main'][] = $this->config->product->actionList['close'];
+        if($product->status != 'closed' && common::hasPriv('product', 'close')) $menuList['main'][] = $this->config->product->actionList['close'];
 
-        $menuList['suffix'][] = $this->buildMenu('product', 'edit', $params, $product, 'view');
-        $menuList['suffix'][] = $this->config->product->actionList['delete'];
+        if(common::hasPriv('product', 'edit'))
+        {
+            unset($this->config->product->actionList['edit']['text']);
+            $menuList['suffix'][] = $this->config->product->actionList['edit'];
+        }
+
+        if(common::hasPriv('product', 'delete')) $menuList['suffix'][] = $this->config->product->actionList['delete'];
 
         return $menuList;
     }
@@ -1508,96 +1513,6 @@ class productModel extends model
         if(isset($product->actions)) $item->actions = $product->actions;
 
         return $item;
-    }
-
-    /**
-     * Build menu of a module.
-     *
-     * Copy of model class within framework/mode.class.php
-     *
-     * @param  string $moduleName
-     * @param  string $methodName
-     * @param  string $params
-     * @param  object $data
-     * @param  string $type
-     * @param  string $icon
-     * @param  string $target
-     * @param  string $class
-     * @param  bool   $onlyBody
-     * @param  string $misc
-     * @param  string $title
-     * @param  bool   $returnHtml
-     * @access public
-     * @return string
-     */
-    public function buildMenu($moduleName, $methodName, $params, $data, $type = 'view', $icon = '', $target = '', $class = '', $onlyBody = false, $misc = '' , $title = '', $returnHtml = true)
-    {
-        if(str_contains($moduleName, '.')) [$appName, $moduleName] = explode('.', $moduleName);
-
-        if(str_contains($methodName, '_') && strpos($methodName, '_') > 0) [$module, $method] = explode('_', $methodName);
-
-        if(empty($module)) $module = $moduleName;
-        if(empty($method)) $method = $methodName;
-
-        static $actions = array();
-        if($this->config->edition != 'open')
-        {
-            if(empty($actions[$moduleName]))
-            {
-                $actions[$moduleName] = $this->dao->select('*')->from(TABLE_WORKFLOWACTION)
-                    ->where('module')->eq($moduleName)
-                    ->andWhere('buildin')->eq('1')
-                    ->andWhere('status')->eq('enable')
-                    ->beginIF(!empty($this->config->vision))->andWhere('vision')->eq($this->config->vision)->fi()
-                    ->fetchAll('action');
-            }
-        }
-
-        $enabled = true;
-        if(!empty($actions) and isset($actions[$moduleName][$methodName]))
-        {
-            $action = $actions[$moduleName][$methodName];
-
-            if($action->extensionType == 'override') return $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type);
-
-            $conditions = json_decode((string) $action->conditions);
-            if($conditions and $action->extensionType == 'extend')
-            {
-                if($icon != 'copy' and $methodName != 'create') $title = $action->name;
-                if($conditions) $enabled = $this->loadModel('flow')->checkConditions($conditions, $data);
-            }
-            else
-            {
-                if(method_exists($this, 'isClickable')) $enabled = $this->isClickable($data, $method, $module);
-            }
-        }
-        else
-        {
-            if(method_exists($this, 'isClickable')) $enabled = $this->isClickable($data, $method, $module);
-        }
-
-        if(!$returnHtml) return $enabled;
-
-        global $lang, $app;
-        if(!$icon) $icon = isset($lang->icons[$method]) ? $lang->icons[$method] : $method;
-        if(empty($title))
-        {
-            $title = $method;
-            if($method == 'create' && $icon == 'copy') $method = 'copy';
-            if(isset($lang->$method) && is_string($lang->$method)) $title = $lang->$method;
-            if((isset($lang->$module->$method) || $app->loadLang($module)) && isset($lang->$module->$method))
-            {
-                $title = $method == 'report' ? $lang->$module->$method->common : $lang->$module->$method;
-            }
-        }
-
-        return array
-        (
-            'icon' => $icon,
-            'text' => in_array($method, array('edit', 'delete')) ? '' : $title,
-            'hint' => $title,
-            'url'  => helper::createLink($module, $method, $params, '', $onlyBody)
-        );
     }
 
     /**
