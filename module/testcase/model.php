@@ -1762,6 +1762,7 @@ class testcaseModel extends model
     }
 
     /**
+     * 通过 ID 列表和查询语句获取场景。
      * Get scenes by id list and query string.
      *
      * @param  array  $sceneIdList
