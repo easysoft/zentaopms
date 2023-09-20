@@ -102,13 +102,13 @@ class metric extends control
      * @access public
      * @return void
      */
-    public function preview($scope = 'project', $viewType = 'single', $metricID = 0, $filters = '')
+    public function preview($scope = 'project', $viewType = 'single', $metricID = 0, $filtersBase64 = '')
     {
         $this->metric->processScopeList('released');
 
         if($scope == 'filter')
         {
-            $filters = json_decode(base64_decode($filters), true);
+            $filters = json_decode(base64_decode($filtersBase64), true);
             if(!is_array($filters)) $filters = array();
             $metrics = $this->metric->getListByFilter($filters, 'released');
         }
@@ -133,16 +133,17 @@ class metric extends control
             $resultData   = $this->metricZen->getViewTableData($metric, $result);
         }
 
-        $this->view->metrics      = $metrics;
-        $this->view->current      = $current;
-        $this->view->metricList   = $this->lang->metric->metricList;
-        $this->view->scope        = $scope;
-        $this->view->title        = $this->lang->metric->common;
-        $this->view->viewType     = $viewType;
-        $this->view->recTotal     = count($metrics);
-        $this->view->filters      = $filters;
-        $this->view->resultHeader = $resultHeader;
-        $this->view->resultData   = $resultData;
+        $this->view->metrics       = $metrics;
+        $this->view->current       = $current;
+        $this->view->metricList    = $this->lang->metric->metricList;
+        $this->view->scope         = $scope;
+        $this->view->title         = $this->lang->metric->common;
+        $this->view->viewType      = $viewType;
+        $this->view->recTotal      = count($metrics);
+        $this->view->filters       = $filters;
+        $this->view->filtersBase64 = $filtersBase64;
+        $this->view->resultHeader  = $resultHeader;
+        $this->view->resultData    = $resultData;
         $this->display();
     }
 

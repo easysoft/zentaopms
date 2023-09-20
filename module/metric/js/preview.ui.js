@@ -239,7 +239,7 @@ window.handleFilterClick = function()
         });
         return;
     }
-    loadPage($.createLink('metric', 'preview', 'scope=filter&viewType=' + viewType + '&metricID=0&filters=' + filterBase64));
+    loadPage($.createLink('metric', 'preview', 'scope=filter&viewType=' + viewType + '&metricID=0&filtersBase64=' + filterBase64));
 }
 
 window.afterPageUpdate = function($target, info, options)

@@ -10,18 +10,21 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$fnGenerateSide = function() use($metrics, $current, $viewType, $scope)
+$fnGenerateSide = function() use($metrics, $current, $viewType, $scope, $filtersBase64)
 {
     $metricList = array();
     foreach($metrics as $key => $metric)
     {
         $class = $metric->id == $current->id ? 'metric-current' : '';
+        $params = "scope=$scope&viewType=$viewType&metricID={$metric->id}";
+        if(!empty($filtersBase64)) $params .= "&filtersBase64={$filtersBase64}";
+
         $metricList[] = li
             (
                 set::className($class . ' metric-item font-medium'),
                 a(
                     $metric->name,
-                    set::href(helper::createLink('metric', 'preview', "scope=$scope&viewType=$viewType&metricID={$metric->id}")),
+                    set::href(helper::createLink('metric', 'preview', $params)),
                 )
             );
     }
