@@ -2149,18 +2149,18 @@ class story extends control
     }
 
     /**
-     * Ajax get story assignee.
+     * 用AJAX方式获取需求的指派给。
+     * AJAX: get story assignee.
      *
-     * @param  string $type create|review|change
-     * @param  int    $storyID
-     * @param  array  $assignees
-     *
+     * @param  string        $type      create|review|change
+     * @param  int           $storyID
+     * @param  array|string  $assignees
      * @access public
-     * @return void
+     * @return mixed
      */
-    public function ajaxGetAssignedTo($type = '', $storyID = 0, $assignees = '')
+    public function ajaxGetAssignedTo(string $type = '', int $storyID = 0, array|string $assignees = '')
     {
-        $users = $this->loadModel('user')->getPairs('noclosed');
+        $users = $this->loadModel('user')->getPairs('noclosed|nodeleted');
 
         if($type == 'create')
         {
@@ -2174,7 +2174,8 @@ class story extends control
             $story           = $this->story->getByID($storyID);
             $reviewers       = $this->story->getReviewerPairs($storyID, $story->version);
             $isChanged       = $story->changedBy ? true : false;
-            $isSuperReviewer = strpos(',' . trim(zget($this->config->story, 'superReviewers', ''), ',') . ',', ',' . $this->app->user->account . ',');
+            $superReviewers  = trim(zget($this->config->story, 'superReviewers', ''), ',');
+            $isSuperReviewer = strpos(",{$superReviewers},", ",{$this->app->user->account},") !== false;
 
             if(count($reviewers) == 1)
             {
@@ -2185,7 +2186,7 @@ class story extends control
                 unset($reviewers[$this->app->user->account]);
                 foreach($reviewers as $account => $result)
                 {
-                    if(!$reviewers[$account])
+                    if(empty($result))
                     {
                         $selectUser = $account;
                         break;
