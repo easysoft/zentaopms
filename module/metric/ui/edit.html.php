@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 $isCustomUnit = !isset($this->lang->metric->unitList[$metric->unit]);
-$isDisabled   = $metric->stage == 'wait' && $metric->builtin === '1';
+$isDisabled   = $metric->stage == 'wait' && $metric->builtin === '1' && !$this->metric->isOldMetric($metric);
 
 $afterEdit = $isDisabled ? '' : formGroup
 (
