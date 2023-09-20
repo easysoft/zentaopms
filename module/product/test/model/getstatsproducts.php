@@ -12,7 +12,7 @@ su('admin');
 
 /**
 
-title=productTao->getstatsproducts();
+title=productModel->getstatsproducts();
 timeout=0
 cid=1
 
