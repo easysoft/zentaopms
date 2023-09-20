@@ -1516,4 +1516,22 @@ class programModel extends model
         $this->updateChildUserView($programID, $accountList);
         return !dao::isError();
     }
+
+    /**
+     * 通过项目集ID列表批量获取项目集基本数据。
+     * Get program base data with program ID array.
+     *
+     * @param  array     $programIdList
+     * @access protected
+     * @return array
+     */
+    protected function getBaseDataList(array $programIdList): array
+    {
+        return $this->dao->select('id,name,PM,path,parent,type')
+            ->from(TABLE_PROGRAM)
+            ->where('id')->in($programIdList)
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('type')->eq('program')
+            ->fetchAll('id');
+    }
 }
