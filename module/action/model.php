@@ -1257,24 +1257,15 @@ class actionModel extends model
 
         /* 如果sql语句中不包含'prodcut', 则添加产品权限检查。 */
         /* If the sql not include 'product', add check purview for product. */
-        if(strpos($actionQuery, $allProducts) !== false)
-        {
-            $actionQuery = str_replace($allProducts, '1', $actionQuery);
-        }
+        if(strpos($actionQuery, $allProducts) !== false) $actionQuery = str_replace($allProducts, '1', $actionQuery);
 
         /* 如果sql语句中不包含'project', 则添加项目权限检查。 */
         /* If the sql not include 'project', add check purview for project. */
-        if(strpos($actionQuery, $allProjects) !== false)
-        {
-            $actionQuery = str_replace($allProjects, '1', $actionQuery);
-        }
+        if(strpos($actionQuery, $allProjects) !== false) $actionQuery = str_replace($allProjects, '1', $actionQuery);
 
         /* 如果sql语句中不包含'execution', 则添加执行权限检查。 */
         /* If the sql not include 'execution', add check purview for execution. */
-        if(strpos($actionQuery, $allExecutions) !== false)
-        {
-            $actionQuery = str_replace($allExecutions, '1', $actionQuery);
-        }
+        if(strpos($actionQuery, $allExecutions) !== false) $actionQuery = str_replace($allExecutions, '1', $actionQuery);
 
         $actionQuery = str_replace("`product` = '$productID'", "`product` LIKE '%,$productID,%'", $actionQuery);
 
@@ -1286,7 +1277,7 @@ class actionModel extends model
 
         $actionQuery .= " AND vision = '" . $this->config->vision . "'";
         $actions      = $this->getBySQL($actionQuery, $orderBy, $pager);
-
+        
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
         if(!$actions) return array();
         return $this->transformActions($actions);
