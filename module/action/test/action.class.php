@@ -568,6 +568,7 @@ class actionTest
     }
 
     /**
+     * 测试搭建动态的日期分组。
      * Test build date group by actions.
      *
      * @param  string $direction

@@ -110,7 +110,7 @@ class actionModel extends model
     }
 
     /**
-     * 获取对象的产品
+     * 获取对象的产品项目以及执行。
      * Get product, project, execution of the object.
      *
      * @param  string $objectType
@@ -296,6 +296,7 @@ class actionModel extends model
     }
 
     /**
+     * 获取一个对象的操作记录。
      * Get actions of an object.
      *
      * @param  string $objectType
@@ -605,6 +606,7 @@ class actionModel extends model
     }
 
     /**
+     * 修改项目的动作为项目的操作类型。
      * Process Project Actions change actionStype.
      *
      * @param  array  $actions
@@ -656,10 +658,10 @@ class actionModel extends model
      * 获取已删除的对象。
      * Get deleted objects.
      *
-     * @param  string    $objectType
-     * @param  string    $type all|hidden
-     * @param  string    $orderBy
-     * @param  object    $pager
+     * @param  string $objectType
+     * @param  string $type all|hidden
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
@@ -793,39 +795,42 @@ class actionModel extends model
     }
 
     /**
+     * 获取回收站的对象类型列表。
      * Get object type list of trashes.
      *
-     * @param  string  $type
+     * @param  string $type
      * @access public
      * @return array
      */
-    public function getTrashObjectTypes($type)
+    public function getTrashObjectTypes(string $type): array
     {
         $extra = $type == 'hidden' ? self::BE_HIDDEN : self::CAN_UNDELETED;
         return $this->dao->select('objectType')->from(TABLE_ACTION)->where('action')->eq('deleted')->andWhere('extra')->eq($extra)->andWhere('vision')->eq($this->config->vision)->fetchAll('objectType');
     }
 
     /**
+     * 获取一个操作的历史记录。
      * Get histories of an action.
      *
      * @param  int    $actionID
      * @access public
      * @return array
      */
-    public function getHistory($actionID)
+    public function getHistory(int $actionID): array
     {
         return $this->dao->select()->from(TABLE_HISTORY)->where('action')->in($actionID)->fetchGroup('action');
     }
 
     /**
+     * 记录操作的历史记录。
      * Log histories for an action.
      *
      * @param  int    $actionID
      * @param  array  $changes
      * @access public
-     * @return void
+     * @return bool
      */
-    public function logHistory($actionID, $changes)
+    public function logHistory(int $actionID, array $changes): bool
     {
         if(empty($actionID)) return false;
         foreach($changes as $change)
@@ -839,18 +844,21 @@ class actionModel extends model
                 $change['action'] = $actionID;
             }
             $this->dao->insert(TABLE_HISTORY)->data($change)->exec();
+            if(dao::isError()) return false;
         }
+        return true;
     }
 
     /**
+     * 打印一个对象的所有操作记录。
      * Print actions of an object.
      *
-     * @param  object    $action
-     * @param  string   $desc
+     * @param  object $action
+     * @param  string $desc
      * @access public
      * @return void
      */
-    public function renderAction($action, $desc = '')
+    public function renderAction(object $action, string $desc = '')
     {
         if(!isset($action->objectType) || !isset($action->action)) return false;
 
@@ -858,6 +866,13 @@ class actionModel extends model
         $actionType = strtolower($action->action);
 
         /**
+         *
+         * 设置操作的描述。
+         *
+         * 1. 如果模块中定义了操作的描述，使用模块中定义的。
+         * 2. 如果模块中没有定义，使用公共的操作描述。
+         * 3. 如果公共的操作描述中没有定义，使用默认的操作描述。
+         *
          * Set the desc string of this action.
          *
          * 1. If the module of this action has defined desc of this actionType, use it.
@@ -937,12 +952,14 @@ class actionModel extends model
 
         $action->date = substr($action->date, 0, 19);
         if($this->app->getViewType() == 'mhtml') $action->date = date('m-d H:i', strtotime($action->date));
-
+    
+        /* 遍历actions, 替换变量。 */
         /* Cycle actions, replace vars. */
         foreach($action as $key => $value)
         {
             if($key == 'history') continue;
 
+            /* 如果desc是数组，替换变量。 */
             /* Desc can be an array or string. */
             if(is_array($desc))
             {
@@ -964,6 +981,7 @@ class actionModel extends model
             }
         }
 
+        /* 如果desc是数组，处理extra。 */
         /* If the desc is an array, process extra. Please bug/lang. */
         if(!is_array($desc)) return $desc;
 
@@ -1027,6 +1045,7 @@ class actionModel extends model
     }
 
     /**
+     * 打印一个对象的所有操作记录。
      * Print actions of an object.
      *
      * @param  object    $action
@@ -1034,19 +1053,18 @@ class actionModel extends model
      * @access public
      * @return void
      */
-    public function printAction($action, $desc = '')
+    public function printAction(object $action, string $desc = '')
     {
         $content = $this->renderAction($action, $desc);
         if(is_string($content))
         {
             echo $content;
-            return;
         }
-        return false;
+        return;
     }
 
     /**
-     * 动态的获取action。
+     * 获取动态。
      * Get actions as dynamic.
      *
      * @param  string $account
@@ -1196,11 +1214,12 @@ class actionModel extends model
     }
 
     /**
-     * Get dynamic show action.
+     * 获取权限内的操作记录搜索条件。
+     * Get search conditions for operation records within permissions.
      *
      * @return String
      */
-    public function getActionCondition()
+    public function getActionCondition(): string
     {
         if($this->app->user->admin) return '';
 
@@ -1435,13 +1454,14 @@ class actionModel extends model
     }
 
     /**
+     * 通过actions获取关联的数据。
      * Get related data by actions.
      *
-     * @param  array    $actions
+     * @param  array  $actions
      * @access public
      * @return array
      */
-    public function getRelatedDataByActions($actions)
+    public function getRelatedDataByActions($actions): array
     {
         $this->loadModel('user');
 
@@ -1597,17 +1617,17 @@ class actionModel extends model
     }
 
     /**
-     * 设置对象的链接。
-     * Set objectLink
+     * 设置action的objectLink属性。
+     * Set the objectLink attribute of action.
      *
-     * @param  object   $action
-     * @param  array    $deptUsers
-     * @param  array    $shadowProducts
-     * @param  object   $project
+     * @param  object $action
+     * @param  array  $deptUsers
+     * @param  array  $shadowProducts
+     * @param  object $project
      * @access public
      * @return object|bool
      */
-    public function setObjectLink($action, $deptUsers, $shadowProducts, $project = null)
+    public function setObjectLink(object $action, array $deptUsers, array $shadowProducts, object $project = null): object|bool
     {
         $this->app->loadConfig('doc');
 
@@ -1852,7 +1872,8 @@ class actionModel extends model
     }
 
     /**
-     * Print changes of every action.
+     * 渲染每一个action的变更。
+     * Render changes of every action.
      *
      * @param  string    $objectType
      * @param  array     $histories
@@ -1860,7 +1881,7 @@ class actionModel extends model
      * @access public
      * @return void
      */
-    public function renderChanges($objectType, $histories, $canChangeTag = true)
+    public function renderChanges(string $objectType, array $histories, bool $canChangeTag = true)
     {
         if(empty($histories)) return;
 
@@ -1868,6 +1889,7 @@ class actionModel extends model
         $historiesWithDiff    = array();    // To save histories without diff info.
         $historiesWithoutDiff = array();    // To save histories with diff info.
 
+        /* 区别是否有diff信息，以便于将有diff信息的字段放在最后。 */
         /* Diff histories by hasing diff info or not. Thus we can to make sure the field with diff show at last. */
         foreach($histories as $history)
         {
@@ -1903,6 +1925,7 @@ class actionModel extends model
     }
 
     /**
+     * 打印每一个action的变更。
      * Print changes of every action.
      *
      * @param  string    $objectType
@@ -1911,25 +1934,27 @@ class actionModel extends model
      * @access public
      * @return void
      */
-    public function printChanges($objectType, $histories, $canChangeTag = true)
+    public function printChanges(string $objectType, array $histories, bool $canChangeTag = true)
     {
         $content = $this->renderChanges($objectType, $histories, $canChangeTag);
         if(is_string($content)) echo $content;
     }
 
     /**
+     * 通过对象类型删除action。
      * Delete action by objectType.
      *
      * @param  string $objectType
      * @access public
      * @return void
      */
-    public function deleteByType($objectType)
+    public function deleteByType(string $objectType)
     {
         $this->dao->delete()->from(TABLE_ACTION)->where('objectType')->eq($objectType)->exec();
     }
 
     /**
+     * 恢复一条记录。
      * Undelete a record.
      *
      * @param  int      $actionID
@@ -2104,6 +2129,7 @@ class actionModel extends model
     }
 
     /**
+     * 更新一个action的评论。
      * Update comment of a action.
      *
      * @param  int    $actionID
@@ -2146,7 +2172,7 @@ class actionModel extends model
      * @access public
      * @return array
      */
-    public function buildDateGroup($actions, $direction = 'next', $type = 'today', $orderBy = 'date_desc')
+    public function buildDateGroup(array $actions, string $direction = 'next', string $type = 'today', string $orderBy = 'date_desc'): array
     {
         $dateGroup = array();
         foreach($actions as $action)
@@ -2156,7 +2182,9 @@ class actionModel extends model
             $action->time = date(DT_TIME2, $timeStamp);
             $dateGroup[$date][] = $action;
         }
-
+        
+        /* 查询数据并且写入日期分组中。 */
+        /* Query data and write into data packets. */
         if($dateGroup)
         {
             $lastDateActions = $this->dao->select('*')->from(TABLE_ACTION)->where($this->session->actionQueryCondition)->andWhere("(LEFT(`date`, 10) = '" . substr($action->originalDate, 0, 10) . "')")->orderBy($this->session->actionOrderBy)->fetchAll('id');
@@ -2174,15 +2202,16 @@ class actionModel extends model
             }
         }
 
+        /* 将日期的顺序修改正确。 */
         /* Modify date to the corrret order. */
-        if($this->app->rawModule != 'company' and $direction != 'next')
+        if($this->app->rawModule != 'company' && $direction != 'next')
         {
             $dateGroup = array_reverse($dateGroup);
         }
         elseif($this->app->rawModule == 'company')
         {
             if($direction == 'pre') $dateGroup = array_reverse($dateGroup);
-            if(($direction == 'next' and $orderBy == 'date_asc') or ($direction == 'pre' and $orderBy == 'date_desc'))
+            if(($direction == 'next' && $orderBy == 'date_asc') or ($direction == 'pre' && $orderBy == 'date_desc'))
             {
                 foreach($dateGroup as $key => $dateItem) $dateGroup[$key] = array_reverse($dateItem);
             }
@@ -2191,6 +2220,7 @@ class actionModel extends model
     }
 
     /**
+     * 检查是否有上一条或者下一条。
      * Check Has pre or next.
      *
      * @param  string $date
@@ -2198,7 +2228,7 @@ class actionModel extends model
      * @access public
      * @return bool
      */
-    public function hasPreOrNext($date, $direction = 'next')
+    public function hasPreOrNext($date, $direction = 'next'): bool
     {
         $condition = $this->session->actionQueryCondition;
 
@@ -2211,6 +2241,7 @@ class actionModel extends model
     }
 
     /**
+     * 保存全局搜索对象索引信息。
      * Save global search object index information.
      *
      * @param  string $objectType
@@ -2219,7 +2250,7 @@ class actionModel extends model
      * @access public
      * @return bool
      */
-    public function saveIndex($objectType, $objectID, $actionType)
+    public function saveIndex(string $objectType, int $objectID, string $actionType): bool
     {
         $this->loadModel('search');
         $actionType = strtolower($actionType);
@@ -2262,13 +2293,14 @@ class actionModel extends model
     }
 
     /**
+     * 打印API（极狐）对象上的操作。
      * Print actions of an object for API(JIHU).
      *
      * @param  object    $action
      * @access public
      * @return void
      */
-    public function printActionForGitLab($action)
+    public function printActionForGitLab(object $action)
     {
         if(!isset($action->objectType) or !isset($action->action)) return false;
 
@@ -2301,6 +2333,7 @@ class actionModel extends model
     }
 
     /**
+     * 处理操作记录用于API。
      * Process action for API.
      *
      * @param  array  $actions
@@ -2309,7 +2342,7 @@ class actionModel extends model
      * @access public
      * @return array
      */
-    public function processActionForAPI($actions, $users = array(), $objectLang = array())
+    public function processActionForAPI(array $actions, array $users = array(), array $objectLang = array()): array
     {
         $actions = (array)$actions;
         foreach($actions as $action)
@@ -2336,13 +2369,14 @@ class actionModel extends model
     }
 
     /**
+     * 处理动态用于API。
      * Process dynamic for API.
      *
      * @param  array    $dynamics
      * @access public
      * @return array
      */
-    public function processDynamicForAPI($dynamics)
+    public function processDynamicForAPI($dynamics): array
     {
         $users = $this->loadModel('user')->getList();
         $simplifyUsers = array();
@@ -2357,7 +2391,7 @@ class actionModel extends model
         }
 
         $actions = array();
-        foreach($dynamics as $key => $dynamic)
+        foreach($dynamics as $dynamic)
         {
             if($dynamic->objectType == 'user') continue;
 
@@ -2380,7 +2414,8 @@ class actionModel extends model
     }
 
     /**
-     * Build search form.
+     * 构建搜索表单数据。
+     * Build search form data.
      *
      * @param  int    $queryID
      * @param  string $actionURL
@@ -2396,13 +2431,14 @@ class actionModel extends model
     }
 
     /**
+     * 恢复阶段。
      * Restore stages.
      *
      * @param  array  $stageList
      * @access public
-     * @return void
+     * @return bool
      */
-    public function restoreStages($stageList)
+    public function restoreStages(array $stageList): bool
     {
         $deletedActions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('objectID')->in(array_keys($stageList))
@@ -2417,7 +2453,9 @@ class actionModel extends model
             $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq('0')->where('id')->eq($stageID)->exec();
             $this->dao->update(TABLE_ACTION)->set('extra')->eq(actionModel::BE_UNDELETED)->where('id')->eq($deletedAction->id)->exec();
             $this->create($deletedAction->objectType, $deletedAction->objectID, 'undeleted');
+            if(dao::isError()) return false;
         }
+        return true;
     }
 
     /**
@@ -2471,7 +2509,7 @@ class actionModel extends model
      * @param  string $param
      * @param  string $value
      * @access public
-     * @return void
+     * @return array
      */
     public function getLikeObject(string $table, string $columns, string $param, string $value): array
     {
@@ -2486,13 +2524,15 @@ class actionModel extends model
      * @param  int $id
      * @param  array $params
      * @access public
-     * @return void
+     * @return bool
      */
-    public function updateObjectByID(string $table, int $id, array $params)
+    public function updateObjectByID(string $table, int $id, array $params): bool
     {
         $updateParams = array();
         foreach($params as $key => $value) $updateParams[] = '`' . $key . '`' . '="' . $value . '"';
         $this->dao->update($table)->set(implode(',', $updateParams))->where('id')->eq($id)->exec();
+
+        return dao::isError();
     }
 
     /**
