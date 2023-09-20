@@ -1675,6 +1675,12 @@ class storyModel extends model
             }
         }
 
+        if($story->closedReason == 'duplicate' and empty($story->duplicateStory))
+        {
+            dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->story->duplicateStory);
+            return false;
+        }
+
         $this->lang->story->comment = $this->lang->comment;
         $this->dao->update(TABLE_STORY)->data($story, 'comment,closeSync')
             ->autoCheck()
