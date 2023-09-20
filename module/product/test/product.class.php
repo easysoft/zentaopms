@@ -1088,6 +1088,26 @@ class productTest
     }
 
     /**
+     * 构造需求的搜索表单。
+     * Build story search form.
+     *
+     * @param  int    $productID
+     * @param  int    $queryID
+     * @access public
+     * @return int
+     */
+    public function buildSearchFormTest(int $productID, int $queryID): int
+    {
+        $product = $this->objectModel->getByID($productID);
+        if(empty($product)) return 0;
+
+        $products = $this->objectModel->loadModel('product')->getProducts($productID);
+        $this->objectModel->buildSearchForm($productID, $products, $queryID, 'searchStory', 'productStory');
+
+        return $_SESSION['storysearchParams']['queryID'];
+    }
+
+    /**
      * Test summary method.
      *
      * @param  int    $productID
