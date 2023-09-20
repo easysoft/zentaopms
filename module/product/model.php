@@ -1023,7 +1023,7 @@ class productModel extends model
         if($storyDeliveryRate)
         {
             $storyDeliveryRate = current($storyDeliveryRate);
-            $product->storyDeliveryRate = $storyDeliveryRate->value * 100;
+            $product->storyDeliveryRate = $storyDeliveryRate['value'] * 100;
         }
         else
         {
