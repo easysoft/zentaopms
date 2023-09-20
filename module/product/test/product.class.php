@@ -1144,4 +1144,19 @@ class productTest
 
         return $this->objectModel->getProjectProductList($productList);
     }
+
+    /**
+     * 过滤有效的产品计划, 并返回所有父级计划。
+     * Filter valid product plans.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @access public
+     * @return array
+     */
+    public function filterOrderedAndParentPlansTest(int $productID, string $branch): array
+    {
+        $planList = $this->objectModel->loadModel('productplan')->getList($productID, $branch);
+        return $this->objectModel->filterOrderedAndParentPlans($planList);
+    }
 }

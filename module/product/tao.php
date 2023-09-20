@@ -503,11 +503,11 @@ class productTao extends productModel
      * 过滤有效的产品计划, 并返回所有父级计划。
      * Filter valid product plans.
      *
-     * @param  array   $planList
-     * @access private
+     * @param  array     $planList
+     * @access protected
      * @return array[]
      */
-    private function filterOrderedAndParentPlans(array $planList): array
+    protected function filterOrderedAndParentPlans(array $planList): array
     {
         $parentPlans  = array();
         $orderedPlans = array();
