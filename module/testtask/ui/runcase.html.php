@@ -70,7 +70,7 @@ if($confirm != 'yes')
                 picker
                 (
                     on::change('checkStepValue'),
-                    set::name("steps[{$step->id}]"),
+                    set::name("result[{$step->id}]"),
                     set::items($lang->testcase->resultList),
                     set::value($step->type != 'group' ? 'pass' : ''),
                     set::required($step->type != 'group'),
@@ -94,7 +94,7 @@ if($confirm != 'yes')
                                 on::keyup('realChange'),
                                 setClass('leading-4 w-60' ),
                                 set('rows', '1'),
-                                set::name("reals[{$step->id}]"),
+                                set::name("real[{$step->id}]"),
                                 nl2br(zget($step, 'real', '')),
                                 $step->type == 'group' ? set('disabled', 'disabled') : '',
                             )
@@ -209,11 +209,11 @@ form
                     div
                     (
                         setClass('text-center'),
-                        $preCase ? a
+                        $preLink ? a
                         (
                             setClass('btn btn-wide w-24'),
                             set::id('pre'),
-                            set::href(createLink('testtask', 'runCase', "runID={$preCase['runID']}&caseID={$preCase['caseID']}&version={$preCase['version']}")),
+                            set::href($preLink),
                             $lang->testtask->pre,
                         ) : '',
                         $run->case->status != 'wait' && $confirm != 'yes' ? btn
@@ -222,11 +222,11 @@ form
                             set::btnType('submit'),
                             $lang->save,
                         ) : '',
-                        $nextCase ? a
+                        $nextLink ? a
                         (
                             setClass('btn btn-wide w-24'),
                             set::id('next'),
-                            set::href(createLink('testtask', 'runCase', "runID={$nextCase['runID']}&caseID={$nextCase['caseID']}&version={$nextCase['version']}")),
+                            set::href($nextLink),
                             $lang->testtask->next,
                         ) : '',
                         input
