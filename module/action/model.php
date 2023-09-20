@@ -952,7 +952,7 @@ class actionModel extends model
 
         $action->date = substr($action->date, 0, 19);
         if($this->app->getViewType() == 'mhtml') $action->date = date('m-d H:i', strtotime($action->date));
-    
+
         /* 遍历actions, 替换变量。 */
         /* Cycle actions, replace vars. */
         foreach($action as $key => $value)
@@ -1156,7 +1156,7 @@ class actionModel extends model
         {
             $year = date('Y');
             $beginDate = $year . '-01-01';
-            
+
             /* 查询所有动态时最多查询最后两年的数据。 */
             /* When query all dynamic then query the data of the last two years at most. */
             if($this->app->getMethodName() == 'dynamic') $beginDate = $year - 1 . '-01-01';
@@ -1174,7 +1174,7 @@ class actionModel extends model
         $condition .= " OR (`objectID` IN ($programCondition) AND `objectType` = 'program')";
         $condition .= " OR (`objectID` IN ($efforts) AND `objectType` = 'effort')";
         $condition  = "($condition)";
-    
+
         /* 获取action数据。 */
         /* Get actions. */
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
@@ -1296,7 +1296,7 @@ class actionModel extends model
 
         $actionQuery .= " AND vision = '" . $this->config->vision . "'";
         $actions      = $this->getBySQL($actionQuery, $orderBy, $pager);
-        
+
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
         if(!$actions) return array();
         return $this->transformActions($actions);
@@ -1339,7 +1339,7 @@ class actionModel extends model
         $this->app->loadLang('stakeholder');
         $this->app->loadLang('branch');
         $this->app->loadLang('execution');
-        
+
         /* 获取评论用户以及受信任的部门用户。 */
         /* Get commiters and the same department users. */
         $commiters = $this->loadModel('user')->getCommiters();
@@ -1375,7 +1375,7 @@ class actionModel extends model
                 unset($actions[$i]);
                 continue;
             }
-    
+
             /* 为action添加objectName属性。 */
             /* Add objectName field to the action. */
             $action->objectName = isset($objectNames[$action->objectType][$action->objectID]) ? $objectNames[$action->objectType][$action->objectID] : '';
@@ -1431,7 +1431,7 @@ class actionModel extends model
             $action->actionLabel  = isset($this->lang->$objectType->$actionType) ? $this->lang->$objectType->$actionType : $action->action;
             $action->actionLabel  = isset($this->lang->action->label->$actionType) ? $this->lang->action->label->$actionType : $action->actionLabel;
             $action->objectLabel  = $this->getObjectLabel($objectType, $action->objectID, $actionType, $requirements);
-            
+
             /* 如果action的类型为login或者logout，则不需要链接。*/
             /* If action type is login or logout, needn't link. */
             if($actionType == 'svncommited' || $actionType == 'gitcommited') $action->actor = zget($commiters, $action->actor);
@@ -2182,7 +2182,7 @@ class actionModel extends model
             $action->time = date(DT_TIME2, $timeStamp);
             $dateGroup[$date][] = $action;
         }
-        
+
         /* 查询数据并且写入日期分组中。 */
         /* Query data and write into data packets. */
         if($dateGroup)
@@ -2290,6 +2290,8 @@ class actionModel extends model
         }
 
         $this->search->saveIndex($objectType, $data);
+
+        return !dao::isError();
     }
 
     /**
