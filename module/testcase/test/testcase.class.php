@@ -200,6 +200,7 @@ class testcaseTest
     }
 
     /**
+     * 测试通过 ID 获取用例。
      * Test get case info by ID.
      *
      * @param  int $caseID
@@ -1565,5 +1566,22 @@ class testcaseTest
         $return = '';
         foreach($cases as $case) $return .= "{$case->testcaseID}: {$case->productName}, {$case->moduleName}, {$case->sceneName} ";
         return trim($return, ' ');
+    }
+
+    /**
+     * 测试通过 ID 获取场景。
+     * Test get scene info by ID.
+     *
+     * @param  int                $sceneID
+     * @access public
+     * @return object|array|false
+     */
+    public function getSceneByIDTest($sceneID): object|array|false
+    {
+        $object = $this->objectModel->getSceneByID($sceneID);
+
+        if(dao::isError()) return dao::getError();
+
+        return $object;
     }
 }
