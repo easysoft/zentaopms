@@ -938,7 +938,7 @@ class productTao extends productModel
      * 统计项目集内的产品数据
      * Statistic product data.
      *
-     * @param  string    $type line|program
+     * @param  string    $type             line|program
      * @param  array     $programStructure
      * @param  object    $product
      * @access protected

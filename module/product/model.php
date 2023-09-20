@@ -1764,7 +1764,7 @@ class productModel extends model
             if($product->line)
             {
                 $programStructure[$product->program][$product->line]['lineName'] = $product->lineName;
-                $programStructure[$product->program][$product->line] = $this->statisticProductData('line', $programStructure, $product);
+                $programStructure[$product->program][$product->line] = $this->productTao->statisticProductData('line', $programStructure, $product);
             }
 
             /* Generate program data. */
@@ -1773,7 +1773,7 @@ class productModel extends model
                 $programStructure[$product->program]['programName'] = $product->programName;
                 $programStructure[$product->program]['programPM']   = $product->programPM;
                 $programStructure[$product->program]['id']          = $product->program;
-                $programStructure[$product->program]                = $this->statisticProductData('program', $programStructure, $product);
+                $programStructure[$product->program]                = $this->productTao->statisticProductData('program', $programStructure, $product);
             }
         }
 

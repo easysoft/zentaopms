@@ -1053,4 +1053,23 @@ class productTest
         $this->objectModel->deleteByID($productID);
         return $this->objectModel->getByID($productID);
     }
+
+    /**
+     * 统计项目集内的产品数据。
+     * Statistic product data.
+     *
+     * @param  string $type
+     * @param  array  $productIdList
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function statisticProductDataTest(string $type, array $productIdList, int $productID)
+    {
+        $productStats     = $this->objectModel->getStats($productIdList);
+        $product          = zget($productStats, $productID, null);
+        $programStructure = $this->objectModel->statisticProgram($productStats);
+
+        return $this->objectModel->statisticProductData($type, $programStructure, $product);
+    }
 }
