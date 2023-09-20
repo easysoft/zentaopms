@@ -14,7 +14,7 @@ class productTest
      * @access public
      * @return void
      */
-    public function __construct($user)
+    public function __construct($user = 'admin')
     {
         global $tester;
         su($user);
@@ -1071,6 +1071,20 @@ class productTest
         $programStructure = $this->objectModel->statisticProgram($productStats);
 
         return $this->objectModel->statisticProductData($type, $programStructure, $product);
+    }
+
+    /**
+     * Test build search form.
+     *
+     * @param  int    $queryID
+     * @access public
+     * @return void
+     */
+    public function buildProductSearchFormTest($queryID)
+    {
+        $this->objectModel->buildProductSearchForm($queryID, 'searchUrl');
+
+        return $_SESSION['productsearchParams']['queryID'];
     }
 
     /**
