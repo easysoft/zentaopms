@@ -240,7 +240,8 @@ class productTao extends productModel
 
         $fields    = 'product,count(*) AS count';
         $tableName = zget($this->config->objectTables, $type, TABLE_BUG);
-        if($type == 'plans') $tableName = TABLE_PRODUCTPLAN;
+        if($type == 'plans')    $tableName = TABLE_PRODUCTPLAN;
+        if($type == 'releases') $tableName = TABLE_RELEASE;
         if($type == 'latestReleases')
         {
             $fields    = 'product, name, date';

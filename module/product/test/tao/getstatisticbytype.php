@@ -31,7 +31,7 @@ cid=1
 global $tester;
 $product = $tester->loadModel('product');
 
-$typeList = array('plans', 'release', 'latestReleases', 'bugs', 'unResolved', 'activeBugs', 'fixedBugs', 'closedBugs', 'thisWeekBugs', 'assignToNull');
+$typeList = array('plans', 'releases', 'latestReleases', 'bugs', 'unResolved', 'activeBugs', 'fixedBugs', 'closedBugs', 'thisWeekBugs', 'assignToNull');
 
 r($product->getStatisticByType(array(1, 2, 3), $typeList[0])) && p('1') && e('3'); // 获取计划数量
 r($product->getStatisticByType(array(1, 2, 3), $typeList[1])) && p('2') && e('3'); // 获取发布数量

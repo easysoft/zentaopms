@@ -1054,7 +1054,7 @@ class productModel extends model
         $unclosedStory     = $this->loadModel('story')->getUnClosedTotal();
         $finishClosedStory = $this->story->getFinishClosedTotal();
 
-        $modules = array('plans', 'release', 'latestReleases', 'bugs', 'unResolved', 'activeBugs', 'fixedBugs', 'closedBugs', 'thisWeekBugs', 'assignToNull');
+        $modules = array('plans', 'releases', 'latestReleases', 'bugs', 'unResolved', 'activeBugs', 'fixedBugs', 'closedBugs', 'thisWeekBugs', 'assignToNull');
         foreach($modules as $module) $$module = $this->productTao->getStatisticByType($productIdList, $module);
 
         list($stories, $requirements) = $this->getStatsStoriesAndRequirements($productIdList, $storyType);
