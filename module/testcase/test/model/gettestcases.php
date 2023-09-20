@@ -48,8 +48,8 @@ r($testcase->getTestCasesTest($productIdList[0], $branchList[1], $browseTypeList
 r($testcase->getTestCasesTest($productIdList[0], $branchList[1], $browseTypeList[4], $moduleIdList[0], $caseTypeList[0], $unitList[0], $orderByList[0])) && p() && e('0');           // 测试查询产品 1 分支 0 browseType bysuite 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例
 r($testcase->getTestCasesTest($productIdList[0], $branchList[1], $browseTypeList[5], $moduleIdList[0], $caseTypeList[0], $unitList[0], $orderByList[0])) && p() && e('4,2,1');       // 测试查询产品 1 分支 0 browseType bysearch 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例
 
-r($testcase->getTestCasesTest($productIdList[0], $branchList[0], $browseTypeList[0], $moduleIdList[1], $caseTypeList[0], $unitList[0], $orderByList[0])) && p() && e('1');           // 测试查询产品 1 分支 all browseType all 模块 1821 用例类型 空 自动化 no 排序 id_desc 的测试用例
-r($testcase->getTestCasesTest($productIdList[0], $branchList[1], $browseTypeList[0], $moduleIdList[1], $caseTypeList[0], $unitList[0], $orderByList[0])) && p() && e('1');           // 测试查询产品 1 分支 0 browseType all 模块 1821 用例类型 空 自动化 no 排序 id_desc 的测试用例
+r($testcase->getTestCasesTest($productIdList[0], $branchList[0], $browseTypeList[0], $moduleIdList[1], $caseTypeList[0], $unitList[0], $orderByList[0])) && p() && e('4,2,1');       // 测试查询产品 1 分支 all browseType all 模块 1821 用例类型 空 自动化 no 排序 id_desc 的测试用例
+r($testcase->getTestCasesTest($productIdList[0], $branchList[1], $browseTypeList[0], $moduleIdList[1], $caseTypeList[0], $unitList[0], $orderByList[0])) && p() && e('4,2,1');       // 测试查询产品 1 分支 0 browseType all 模块 1821 用例类型 空 自动化 no 排序 id_desc 的测试用例
 r($testcase->getTestCasesTest($productIdList[0], $branchList[2], $browseTypeList[0], $moduleIdList[1], $caseTypeList[0], $unitList[0], $orderByList[0])) && p() && e('0');           // 测试查询产品 1 分支 1 browseType all 模块 1821 用例类型 空 自动化 no 排序 id_desc 的测试用例
 
 r($testcase->getTestCasesTest($productIdList[0], $branchList[0], $browseTypeList[0], $moduleIdList[0], $caseTypeList[1], $unitList[0], $orderByList[0])) && p() && e('1');           // 测试查询产品 1 分支 all browseType all 模块 0 用例类型 feature 自动化 no 排序 id_desc 的测试用例
@@ -82,8 +82,8 @@ r($testcase->getTestCasesTest($productIdList[1], $branchList[1], $browseTypeList
 r($testcase->getTestCasesTest($productIdList[1], $branchList[1], $browseTypeList[4], $moduleIdList[0], $caseTypeList[0], $unitList[0], $orderByList[0])) && p() && e('0');           // 测试查询产品 41 分支 0 browseType bysuite 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例
 r($testcase->getTestCasesTest($productIdList[1], $branchList[1], $browseTypeList[5], $moduleIdList[0], $caseTypeList[0], $unitList[0], $orderByList[0])) && p() && e('164,163,161'); // 测试查询产品 41 分支 0 browseType bysearch 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例
 
-r($testcase->getTestCasesTest($productIdList[1], $branchList[0], $browseTypeList[0], $moduleIdList[1], $caseTypeList[0], $unitList[0], $orderByList[0])) && p() && e('161');         // 测试查询产品 41 分支 all browseType all 模块 1821 用例类型 空 自动化 no 排序 id_desc 的测试用例
-r($testcase->getTestCasesTest($productIdList[1], $branchList[1], $browseTypeList[0], $moduleIdList[1], $caseTypeList[0], $unitList[0], $orderByList[0])) && p() && e('161');         // 测试查询产品 41 分支 0 browseType all 模块 1821 用例类型 空 自动化 no 排序 id_desc 的测试用例
+r($testcase->getTestCasesTest($productIdList[1], $branchList[0], $browseTypeList[0], $moduleIdList[1], $caseTypeList[0], $unitList[0], $orderByList[0])) && p() && e('164,163,161'); // 测试查询产品 41 分支 all browseType all 模块 1821 用例类型 空 自动化 no 排序 id_desc 的测试用例
+r($testcase->getTestCasesTest($productIdList[1], $branchList[1], $browseTypeList[0], $moduleIdList[1], $caseTypeList[0], $unitList[0], $orderByList[0])) && p() && e('164,163,161'); // 测试查询产品 41 分支 0 browseType all 模块 1821 用例类型 空 自动化 no 排序 id_desc 的测试用例
 r($testcase->getTestCasesTest($productIdList[1], $branchList[2], $browseTypeList[0], $moduleIdList[1], $caseTypeList[0], $unitList[0], $orderByList[0])) && p() && e('0');           // 测试查询产品 41 分支 1 browseType all 模块 1821 用例类型 空 自动化 no 排序 id_desc 的测试用例
 
 r($testcase->getTestCasesTest($productIdList[1], $branchList[0], $browseTypeList[0], $moduleIdList[0], $caseTypeList[1], $unitList[0], $orderByList[0])) && p() && e('0');           // 测试查询产品 41 分支 all browseType all 模块 0 用例类型 feature 自动化 no 排序 id_desc 的测试用例

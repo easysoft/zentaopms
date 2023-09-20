@@ -1584,4 +1584,87 @@ class testcaseTest
 
         return $object;
     }
+
+    /**
+     * 测试获取包含子场景和子用例的场景列表。
+     * Test get scene list include sub scenes and cases.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  string $browseType
+     * @param  int    $moduleID
+     * @param  string $caseType
+     * @param  string $orderBy
+     * @access public
+     * @return string
+     */
+    public function getSceneGroupsTest(int $productID, string $branch = '', string $browseType = '', int $moduleID = 0, string $caseType = '', string $orderBy = 'id_desc'): string
+    {
+        global $tester;
+        $tester->app->loadClass('pager', true);
+        $tester->app->moduleName = 'testcase';
+        $tester->app->methodName = 'getSceneGroups';
+        $pager = new pager(0, 50, 1);
+
+        $scenes = $this->objectModel->getSceneGroups($productID, $branch, $browseType, $moduleID, $caseType, $orderBy, $pager);
+
+        if(dao::isError()) return dao::getError();
+        return implode(',', array_column($scenes, 'id'));
+    }
+
+    /**
+     * 测试获取用场景 ID 分组的用例。
+     * Test get cases by scene id.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  int    $moduleID
+     * @param  string $caseType
+     * @param  string $orderBy
+     * @access public
+     * @return string
+     */
+    public function getSceneGroupCasesTest(int $productID, string $branch = '', int $moduleID = 0, string $caseType = '', string $orderBy = 'id_desc'): string
+    {
+        global $tester;
+        $modules = $moduleID ? $tester->loadModel('tree')->getAllChildId($moduleID) : array();
+        $caseGroup = $this->objectModel->getSceneGroupCases($productID, $branch, $modules, $caseType, $orderBy);
+
+        if(dao::isError()) return dao::getError();
+
+        $return = '';
+        foreach($caseGroup as $sceneID => $cases) $return .= "{$sceneID}: " . implode(',', array_keys($cases)) . '; ';
+        return trim($return);
+    }
+
+    /**
+     * 测试基于用例构建场景数据。
+     * Test build scene base on case.
+     *
+     * @param  int    $sceneID
+     * @param  array  $fieldTypes
+     * @param  array  $caseIdList
+     * @access public
+     * @return string
+     */
+    public function buildSceneBaseOnCaseTest(int $sceneID, array $fieldTypes, array $caseIdList): string
+    {
+        $scene = $this->objectModel->getSceneByID($sceneID);
+        $cases = array();
+        foreach($caseIdList as $caseID)
+        {
+            $case = new stdclass();
+            $case->id = $caseID;
+            $cases[] = $case;
+        }
+
+        $caseGroup = $this->objectModel->buildSceneBaseOnCase($scene, $fieldTypes, $cases);
+
+        if(dao::isError()) return dao::getError();
+
+        $scene  = json_decode(json_encode($scene), true);
+        $return = $scene['id'] . ': ' . implode(', ', array_keys($scene));
+        if(isset($scene['cases'])) $return .= ' cases: ' . implode(',', array_column($scene['cases'], 'id')) . '; ';
+        return trim($return);
+    }
 }

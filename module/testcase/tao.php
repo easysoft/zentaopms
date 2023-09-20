@@ -669,4 +669,46 @@ class testcaseTao extends testcaseModel
 
         return !dao::isError();
     }
+
+    /**
+     * 基于用例构建场景数据。
+     * Build scene base on case.
+     *
+     * @param  object $scene
+     * @param  array  $fieldTypes
+     * @param  array  $cases
+     * @access public
+     * @return object
+     */
+    public function buildSceneBaseOnCase(object $scene, array $fieldTypes, array $cases): object
+    {
+        /* Set default value for the fields exist in TABLE_CASE but not in TABLE_SCENE. */
+        foreach($fieldTypes as $field => $type)
+        {
+            if(!isset($scene->{$field})) $scene->{$field} = $type['rule'] == 'int' ? '0' : '';
+        }
+
+        $scene->caseID     = $scene->id;
+        $scene->bugs       = 0;
+        $scene->results    = 0;
+        $scene->caseFails  = 0;
+        $scene->stepNumber = 0;
+        $scene->isScene    = true;
+
+        if(!empty($cases))
+        {
+            foreach($cases as $case)
+            {
+                $case->caseID  = $case->id;
+                $case->id      = 'case_' . $case->id;
+                $case->parent  = $scene->id;
+                $case->grade   = $scene->grade + 1;
+                $case->path    = $scene->path . $case->id . ',';
+                $case->isScene = false;
+            }
+            $scene->cases = $cases;
+        }
+
+        return $scene;
+    }
 }
