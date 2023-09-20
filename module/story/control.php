@@ -130,8 +130,8 @@ class story extends control
 
         if(!empty($_POST))
         {
-            $result = $this->loadModel('common')->removeDuplicate('story', (object)$_POST, "product={$productID}");
-            $_POST  = (array)$result['data'];
+            $result = $this->loadModel('common')->removeDuplicate('story', $_POST, "product={$productID}");
+            $_POST  = $result['data'];
 
             $stories = $this->storyZen->buildStoriesForBatchCreate($productID, $storyType);
             if(empty($stories)) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->noData));

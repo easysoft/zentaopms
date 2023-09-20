@@ -4089,7 +4089,7 @@ class storyModel extends model
      * @access public
      * @return string
      */
-    public function reportCondition()
+    public function reportCondition(): string
     {
         if(isset($_SESSION['storyQueryCondition']))
         {
@@ -4100,7 +4100,7 @@ class storyModel extends model
             }
             return $this->session->storyQueryCondition;
         }
-        return true;
+        return '1=1';
     }
 
     /**
@@ -4109,7 +4109,7 @@ class storyModel extends model
      * @access public
      * @return bool
      */
-    public function checkForceReview()
+    public function checkForceReview(): bool
     {
         $forceReview = false;
 
@@ -4124,7 +4124,7 @@ class storyModel extends model
         {
             $users = $this->dao->select('account')->from(TABLE_USER)
                 ->where('deleted')->eq(0)
-                ->andWhere(0, true)
+                ->andWhere('1!=1', true)
                 ->beginIF(!empty($forceReviewRoles))
                 ->orWhere('(role', true)->in($forceReviewRoles)
                 ->andWhere('role')->ne('')

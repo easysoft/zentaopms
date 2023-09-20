@@ -589,36 +589,39 @@ detailBody
     )
 );
 
-modal
-(
-    set::id('importToLib'),
-    set::title($lang->story->importToLib),
-    form
+if(isset($libs))
+{
+    modal
     (
-        set::action($this->createLink('story', 'importToLib', "storyID=$story->id")),
-        formGroup
+        set::id('importToLib'),
+        set::title($lang->story->importToLib),
+        form
         (
-            set::label($lang->story->lib),
-            picker
+            set::action($this->createLink('story', 'importToLib', "storyID=$story->id")),
+            formGroup
             (
-                set::name('lib'),
-                set::items($libs),
-                set::required(true),
-            )
-        ),
-        (!common::hasPriv('assetlib', 'approveStory') && !common::hasPriv('assetlib', 'batchApproveStory')) ? formGroup
-        (
-            set::label($lang->story->approver),
-            picker
+                set::label($lang->story->lib),
+                picker
+                (
+                    set::name('lib'),
+                    set::items($libs),
+                    set::required(true),
+                )
+            ),
+            (!common::hasPriv('assetlib', 'approveStory') && !common::hasPriv('assetlib', 'batchApproveStory')) ? formGroup
             (
-                set::name('assignedTo'),
-                set::items($approvers),
-            )
-        ) : null,
-        set::submitBtnText($lang->import),
-        set::actions(array('submit')),
-    )
-);
+                set::label($lang->story->approver),
+                picker
+                (
+                    set::name('assignedTo'),
+                    set::items($approvers),
+                )
+            ) : null,
+            set::submitBtnText($lang->import),
+            set::actions(array('submit')),
+        )
+    );
+}
 
 if(!isInModal())
 {
