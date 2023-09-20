@@ -56,7 +56,7 @@ class commonModel extends model
             $project   = $this->syncProjectStatus($execution);
             $this->syncProgramStatus($project);
         }
-        if($rawModule == 'execution')
+        if($rawModule == 'execution' or $rawModule == 'marketresearch')
         {
             $executionID = $objectID;
             $execution   = $this->dao->select('id, project, grade, parent, status, deleted')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
@@ -113,8 +113,9 @@ class commonModel extends model
      */
     public function syncProjectStatus($execution)
     {
-        $projectID = $execution->project;
-        $project   = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+        $projectID  = $execution->project;
+        $project    = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+        $objectType = 'project';
 
         $today = helper::today();
         if($project->status == 'wait')
@@ -126,7 +127,8 @@ class commonModel extends model
                  ->exec();
 
             $actionType = $project->multiple ? 'syncproject' : 'syncmultipleproject';
-            $this->loadModel('action')->create('project', $projectID, $actionType);
+            if($project->model == 'research') $objectType = 'marketresearch';
+            $this->loadModel('action')->create($objectType, $projectID, $actionType);
         }
         return $project;
     }

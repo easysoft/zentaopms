@@ -1629,7 +1629,7 @@ class programplanModel extends model
     {
         $stage   = $this->loadModel('execution')->getByID($stageID);
         $project = $this->loadModel('project')->getByID($stage->project);
-        if(empty($stage) or empty($stage->path) or (!in_array($project->model, array('waterfall','waterfallplus','ipd')))) return false;
+        if(empty($stage) or empty($stage->path) or (!in_array($project->model, array('waterfall','waterfallplus','ipd', 'research')))) return false;
 
         $this->loadModel('execution');
         $this->loadModel('action');
