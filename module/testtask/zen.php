@@ -284,7 +284,7 @@ class testtaskZen extends testtask
         $productID   = $productID ? $productID : key($this->products);
         $projectID   = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->project;
         $executionID = $task->execution;
-        $executions  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
+        $executions  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, $projectID);
         if($executionID && !isset($executions[$executionID]))
         {
             $execution = $this->loadModel('execution')->getById($executionID);

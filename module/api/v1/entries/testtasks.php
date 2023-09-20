@@ -86,7 +86,7 @@ class testtasksEntry extends entry
         if(empty($buildID))     return $this->sendError(400, 'need build id!');
 
         /* Check whether executionID and buildID is valid. */
-        $executions = $this->loadModel('product')->getExecutionPairsByProduct($productID, '', 'id_desc', $projectID);
+        $executions = $this->loadModel('product')->getExecutionPairsByProduct($productID, '', $projectID);
         $builds     = $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk');
         if(!isset($executions[$executionID])) return $this->sendError(400, 'error execution id!');
         if(!isset($builds[$buildID]))         return $this->sendError(400, 'error build id!');

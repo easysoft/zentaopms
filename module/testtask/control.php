@@ -250,7 +250,7 @@ class testtask extends control
         $this->view->product     = $this->product->getByID($productID);
         $this->view->projectID   = $projectID;
         $this->view->executionID = $executionID;
-        $this->view->executions  = $productID ? $this->loadModel('product')->getExecutionPairsByProduct($productID, '', 'id_desc', $projectID, 'stagefilter') : array();
+        $this->view->executions  = $productID ? $this->loadModel('product')->getExecutionPairsByProduct($productID, '', $projectID, 'stagefilter') : array();
         $this->view->builds      = $productID ? $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk,withexecution', $projectID, 'project', '', false) : array();
         $this->view->build       = $build;
         $this->view->testreports = array('') + $this->loadModel('testreport')->getPairs($productID);
@@ -1057,7 +1057,7 @@ class testtask extends control
         $this->app->rawModule = 'testcase';
 
         $projectID  = $this->app->tab == 'qa' ? 0 : $this->session->project;
-        $executions = empty($productID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID, '', 'id_desc', $projectID);
+        $executions = empty($productID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID, '', $projectID);
         $builds     = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk', 0, 'execution', '', false);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->importUnitResult;

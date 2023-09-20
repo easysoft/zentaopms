@@ -421,7 +421,7 @@ class bugZen extends bug
         $execution   = null;
 
         $execution   = '';
-        $executions += $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : '0', (string)$projectID, !$projectID ? 'multiple|stagefilter' : 'stagefilter');
+        $executions += $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : '0', (int)$projectID, !$projectID ? 'multiple|stagefilter' : 'stagefilter');
         if($executionID)
         {
             $execution  = $this->loadModel('execution')->getByID($executionID);
@@ -1167,7 +1167,7 @@ class bugZen extends bug
 
         /* 获取执行列表。*/
         /* Get execution pairs. */
-        $executions = array('') + $this->product->getExecutionPairsByProduct($bug->product, (string)$bug->branch, (string)$bug->project);
+        $executions = array('') + $this->product->getExecutionPairsByProduct($bug->product, (string)$bug->branch, (int)$bug->project);
         if(!empty($bug->execution) && empty($executions[$bug->execution])) $executions[$execution->id] = $execution->name . "({$this->lang->bug->deleted})";
 
         /* 获取项目列表。*/
@@ -1345,7 +1345,7 @@ class bugZen extends bug
         $this->view->projects         = $this->product->getProjectPairsByProduct($product->id, $branch ? "0,{$branch}" : '0');
         $this->view->project          = $project;
         $this->view->projectID        = $projectID;
-        $this->view->executions       = $this->product->getExecutionPairsByProduct($product->id, $branch ? "0,{$branch}" : '0', (string)$projectID, 'multiple,stagefilter');
+        $this->view->executions       = $this->product->getExecutionPairsByProduct($product->id, $branch ? "0,{$branch}" : '0', (int)$projectID, 'multiple,stagefilter');
         $this->view->executionID      = $executionID;
         $this->view->stories          = $stories;
         $this->view->builds           = $builds;
