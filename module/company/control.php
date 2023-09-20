@@ -262,7 +262,7 @@ class company extends control
         }
         else
         {
-            $actions = $this->action->getDynamicBySearch($products, $projects, $executions, $queryID, $orderBy, $pager, $date, $direction);
+            $actions = $this->action->getDynamicBySearch($queryID, $orderBy, $pager, $date, $direction);
         }
 
         /* Build search form. */

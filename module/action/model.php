@@ -1220,11 +1220,9 @@ class actionModel extends model
     }
 
     /**
+     * 搜索获取动态。
      * Get dynamic by search.
      *
-     * @param  array  $products
-     * @param  array  $projects
-     * @param  array  $executions
      * @param  int    $queryID
      * @param  string $orderBy
      * @param  object $pager
@@ -1233,10 +1231,11 @@ class actionModel extends model
      * @access public
      * @return array
      */
-    public function getDynamicBySearch($products, $projects, $executions, $queryID, $orderBy = 'date_desc', $pager = null, $date = '', $direction = 'next')
+    public function getDynamicBySearch(int $queryID, string $orderBy = 'date_desc', object $pager = null, string $date = '', string $direction = 'next'): array
     {
         $query = $queryID ? $this->loadModel('search')->getQuery($queryID) : '';
 
+        /* 获取sql和表单状态。 */
         /* Get the sql and form status from the query. */
         if($query)
         {
@@ -1256,18 +1255,21 @@ class actionModel extends model
             $productID = $out[1];
         }
 
+        /* 如果sql语句中不包含'prodcut', 则添加产品权限检查。 */
         /* If the sql not include 'product', add check purview for product. */
         if(strpos($actionQuery, $allProducts) !== false)
         {
             $actionQuery = str_replace($allProducts, '1', $actionQuery);
         }
 
+        /* 如果sql语句中不包含'project', 则添加项目权限检查。 */
         /* If the sql not include 'project', add check purview for project. */
         if(strpos($actionQuery, $allProjects) !== false)
         {
             $actionQuery = str_replace($allProjects, '1', $actionQuery);
         }
 
+        /* 如果sql语句中不包含'execution', 则添加执行权限检查。 */
         /* If the sql not include 'execution', add check purview for execution. */
         if(strpos($actionQuery, $allExecutions) !== false)
         {
@@ -1278,6 +1280,7 @@ class actionModel extends model
 
         if($date) $actionQuery = "($actionQuery) AND " . ('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'");
 
+        /* 如果当前版本为lite，则过滤掉产品相关的动态。 */
         /* If this vision is lite, delete product actions. */
         if($this->config->vision == 'lite') $actionQuery .= " AND objectType != 'product'";
 

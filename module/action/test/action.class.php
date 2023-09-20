@@ -260,7 +260,8 @@ class actionTest
     }
 
     /**
-     * Get dynamic by search.
+     * 测试通过查询条件获取动态
+     * Test get dynamic by search.
      *
      * @param  array  $products
      * @param  array  $projects
@@ -273,9 +274,16 @@ class actionTest
      * @access public
      * @return array
      */
-    public function getDynamicBySearchTest($products, $projects, $executions, $queryID, $orderBy = 'date_desc', $pager = null, $date = '', $direction = 'next')
+    public function getDynamicBySearchTest(int $queryID, string $orderBy = 'date_desc', object $pager = null, string $date = '', string $direction = 'next')
     {
-        $objects = $this->objectModel->getDynamicBySearch($products, $projects, $executions, $queryID, $orderBy, $pager, $date, $direction);
+        if($queryID)
+        {
+            global $tester;
+            $tester->session->set('actionQuery', null);
+        }
+
+        $date = $date == 'today' ? date('Y-m-d', time()) : $date;
+        $objects = $this->objectModel->getDynamicBySearch($queryID, $orderBy, $pager, $date, $direction);
 
         if(dao::isError()) return dao::getError();
 
