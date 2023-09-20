@@ -1003,7 +1003,8 @@ class story extends control
     }
 
     /**
-     * Close a story.
+     * 关闭需求。
+     * Close the story.
      *
      * @param  int    $storyID
      * @param  string $from      taskkanban
@@ -1011,25 +1012,31 @@ class story extends control
      * @access public
      * @return void
      */
-    public function close($storyID, $from = '', $storyType = 'story')
+    public function close(int $storyID, string $from = '', string $storyType = 'story')
     {
-        $this->app->loadLang('bug');
         $story = $this->story->getById($storyID);
         $this->commonAction($storyID);
 
         if(!empty($_POST))
         {
-            $changes = $this->story->close($storyID);
+            $postData = form::data($this->config->story->form->close)
+                ->stripTags($this->config->story->editor->close['id'], $this->config->allowedTags)
+                ->removeIF($this->post->closedReason != 'duplicate', 'duplicateStory')
+                ->removeIF($this->post->closedReason != 'subdivided', 'childStories')
+                ->get();
+            $postData = $this->loadModel('file')->processImgURL($postData, $this->config->story->editor->close['id'], $this->post->uid);
+
+            $changes = $this->story->close($storyID, $postData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->story->closeParentRequirement($storyID);
 
             if($changes)
             {
                 $preStatus = $story->status;
-                $isChanged = $story->changedBy ? true : false;
+                $isChanged = !empty($story->changedBy) ? true : false;
                 if($preStatus == 'reviewing') $preStatus = $isChanged ? 'changing' : 'draft';
 
-                $actionID  = $this->action->create('story', $storyID, 'Closed', $this->post->comment, ucfirst($this->post->closedReason) . ($this->post->duplicateStory ? ':' . (int)$this->post->duplicateStory : '') . "|$preStatus");
+                $actionID = $this->action->create('story', $storyID, 'Closed', $this->post->comment, ucfirst($this->post->closedReason) . ($this->post->duplicateStory ? ':' . (int)$this->post->duplicateStory : '') . "|$preStatus");
                 $this->action->logHistory($actionID, $changes);
             }
 

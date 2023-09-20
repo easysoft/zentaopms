@@ -16,15 +16,15 @@ modalHeader();
 formPanel
 (
     set::submitBtnText($lang->story->closeAction),
-    on::change('#closedReasonBox', 'setStory'),
     formGroup
     (
-        set::id('closedReasonBox'),
+        set::id('closedReason'),
         set::name('closedReason'),
         set::label($lang->story->closedReason),
         set::width('1/2'),
         set::value(''),
         set::items($reasonList),
+        on::change('#closedReason', 'setStory'),
     ),
     formRow
     (
@@ -43,9 +43,10 @@ formPanel
     formGroup
     (
         set::label($lang->comment),
-        set::name('comment'),
-        set::control('editor'),
-        set::rows(6),
+        editor
+        (
+            set::name('comment')
+        )
     ),
 );
 hr();

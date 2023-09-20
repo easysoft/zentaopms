@@ -1652,31 +1652,18 @@ class storyModel extends model
     }
 
     /**
-     * Close a story.
+     * 关闭需求。
+     * Close the story.
      *
      * @param  int    $storyID
+     * @param  object $postData
      * @access public
      * @return bool
      */
-    public function close($storyID)
+    public function close($storyID, $postData)
     {
         $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
-        $now      = helper::now();
-        $story = fixer::input('post')
-            ->add('id', $storyID)
-            ->add('status', 'closed')
-            ->add('stage', 'closed')
-            ->setDefault('lastEditedBy',   $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
-            ->setDefault('closedDate',     $now)
-            ->setDefault('closedBy',       $this->app->user->account)
-            ->setDefault('assignedDate',   $now)
-            ->setDefault('duplicateStory', 0)
-            ->stripTags($this->config->story->editor->close['id'], $this->config->allowedTags)
-            ->removeIF($this->post->closedReason != 'duplicate', 'duplicateStory')
-            ->removeIF($this->post->closedReason != 'subdivided', 'childStories')
-            ->remove('closeSync')
-            ->get();
+        $story    = $postData;
 
         if(!empty($story->duplicateStory))
         {
@@ -1689,8 +1676,7 @@ class storyModel extends model
         }
 
         $this->lang->story->comment = $this->lang->comment;
-        $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->close['id'], $this->post->uid);
-        $this->dao->update(TABLE_STORY)->data($story, 'comment')
+        $this->dao->update(TABLE_STORY)->data($story, 'comment,closeSync')
             ->autoCheck()
             ->batchCheck($this->config->story->close->requiredFields, 'notempty')
             ->checkIF($story->closedReason == 'duplicate', 'duplicateStory', 'notempty')
@@ -1712,7 +1698,7 @@ class storyModel extends model
         }
 
         $changes = common::createChanges($oldStory, $story);
-        if($this->post->closeSync)
+        if($postData->closeSync)
         {
             /* batchUnset twinID from twins.*/
             $replaceSql = "UPDATE " . TABLE_STORY . " SET twins = REPLACE(twins,',$storyID,', ',') WHERE `product` = $oldStory->product";
@@ -1723,7 +1709,7 @@ class storyModel extends model
 
             if(!dao::isError()) $this->loadModel('action')->create('story', $storyID, 'relieved');
         }
-        if(!empty($oldStory->twins) and !$this->post->closeSync) $this->syncTwins($storyID, $oldStory->twins, $changes, 'Closed');
+        if(!empty($oldStory->twins) and !$postData->closeSync) $this->syncTwins($storyID, $oldStory->twins, $changes, 'Closed');
         return $changes;
     }
 
@@ -2864,13 +2850,14 @@ class storyModel extends model
     }
 
     /**
-     * Close requirement if all son story for segmentation has been closed.
+     * 关闭用户需求，如果所有细分的软件需求已被关闭。
+     * Close the parent user requirement if all divided stories has been closed.
      *
      * @param  int    $storyID
      * @access public
      * @return void
      */
-    public function closeParentRequirement($storyID)
+    public function closeParentRequirement(int $storyID)
     {
         $parentID = $this->dao->select('BID')->from(TABLE_RELATION)->where('AID')->eq($storyID)->fetch();
         if(empty($parentID)) return;
