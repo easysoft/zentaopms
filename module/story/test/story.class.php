@@ -357,14 +357,11 @@ class storyTest
      * @param  int    $storyID
      * @param  object $postData
      * @access public
-     * @return object|false
+     * @return object|array|false
      */
     public function closeTest(int $storyID, object $postData)
     {
         $this->objectModel->close($storyID, $postData);
-
-        if(dao::isError()) return dao::getError();
-
         return $this->objectModel->getByID($storyID);
     }
 
