@@ -224,126 +224,44 @@ class productTao extends productModel
         return $modules;
     }
 
-
-    /* TODO move to productplan module. */
-    protected function getPlansTODO(array $productIDs): array
-    {
-        return $this->dao->select('product, count(*) AS count')
-            ->from(TABLE_PRODUCTPLAN)
-            ->where('deleted')->eq(0)
-            ->andWhere('product')->in($productIDs)
-            ->andWhere('end')->gt(helper::now())
-            ->groupBy('product')
-            ->fetchPairs();
-    }
-
-    /* TODO move to release module. */
-    protected function getReleasesTODO(array $productIDs): array
-    {
-        return $this->dao->select('product, count(*) AS count')
-            ->from(TABLE_RELEASE)
-            ->where('deleted')->eq(0)
-            ->andWhere('product')->in($productIDs)
-            ->groupBy('product')
-            ->fetchPairs();
-    }
-
-    /* TODO move to release module. */
-    protected function getLatestReleasesTODO(array $productIDs): array
-    {
-        return $this->dao->select('product, name, date')
-            ->from(TABLE_RELEASE)
-            ->where('deleted')->eq(0)
-            ->andWhere('product')->in($productIDs)
-            ->orderBy('id_desc')
-            ->fetchGroup('product');
-    }
-
-    /* TODO move to bug module. */
-    protected function getBugsTODO(array $productIDs): array
-    {
-        return $this->dao->select('product,count(*) AS conut')
-            ->from(TABLE_BUG)
-            ->where('product')->in($productIDs)
-            ->andWhere('deleted')->eq(0)
-            ->groupBy('product')
-            ->fetchPairs();
-    }
-
-    /* TODO move to bug module. */
-    protected function getUnResolvedTODO(array $productIDs): array
-    {
-        return $this->dao->select('product,count(*) AS count')
-            ->from(TABLE_BUG)
-            ->where('status')->eq('active')
-            ->orWhere('resolution')->eq('postponed')
-            ->andWhere('product')->in($productIDs)
-            ->andWhere('deleted')->eq(0)
-            ->groupBy('product')
-            ->fetchPairs();
-    }
-
-    /* TODO move to bug module. */
-    protected function getActiveBugsTODO(array $productIDs): array
-    {
-        return $this->dao->select('product,count(*) AS count')
-            ->from(TABLE_BUG)
-            ->where('status')->eq('active')
-            ->andWhere('product')->in($productIDs)
-            ->andWhere('deleted')->eq(0)
-            ->groupBy('product')
-            ->fetchPairs();
-    }
-
-    /* TODO move to bug module. */
-    protected function getFixedBugsTODO(array $productIDs): array
-    {
-        return $this->dao->select('product,count(*) AS count')
-            ->from(TABLE_BUG)
-            ->where('status')->eq('closed')
-            ->andWhere('product')->in($productIDs)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('resolution')->eq('fixed')
-            ->groupBy('product')
-            ->fetchPairs();
-    }
-
-    /* TODO move to bug module. */
-    protected function getClosedBugsTODO(array $productIDs): array
-    {
-        return $this->dao->select('product,count(*) AS count')
-            ->from(TABLE_BUG)
-            ->where('status')->eq('closed')
-            ->andWhere('product')->in($productIDs)
-            ->andWhere('deleted')->eq(0)
-            ->groupBy('product')
-            ->fetchPairs();
-    }
-
-    /* TODO move to bug module. */
-    protected function getThisWeekBugsTODO(array $productIDs): array
+    /**
+     * 根据产品ID列表和类型，获取统计数据。
+     * Get statistic data by product ID list and type.
+     *
+     * @param  array     $productIdList
+     * @param  string    $type
+     * @access protected
+     * @return array
+     */
+    protected function getStatisticByType(array $productIdList, string $type): array
     {
         $this->app->loadClass('date', true);
-        $weekDate     = date::getThisWeek();
-        return $this->dao->select('product,count(*) AS count')
-            ->from(TABLE_BUG)
-            ->where('openedDate')->between($weekDate['begin'], $weekDate['end'])
-            ->andWhere('product')->in($productIDs)
-            ->andWhere('deleted')->eq(0)
-            ->groupBy('product')
-            ->fetchPairs();
-    }
+        $weekDate = date::getThisWeek();
 
-    /* TODO move to bug module. */
-    protected function getAssignToNullTODO(array $productIDs): array
-    {
-        return $this->dao->select('product,count(*) AS count')
-            ->from(TABLE_BUG)
-            ->where('assignedTo')->eq('')
-            ->andWhere('product')->in($productIDs)
+        $fields    = 'product,count(*) AS count';
+        $tableName = zget($this->config->objectTables, $type, TABLE_BUG);
+        if($type == 'plans') $tableName = TABLE_PRODUCTPLAN;
+        if($type == 'latestReleases')
+        {
+            $fields    = 'product, name, date';
+            $tableName = TABLE_RELEASE;
+        }
+
+        $dao = $this->dao->select($fields)
+            ->from($tableName)
+            ->where('product')->in($productIdList)
             ->andWhere('deleted')->eq(0)
-            ->groupBy('product')
-            ->fetchPairs();
+            ->beginIF($type == 'plans')->andWhere('end')->gt(helper::now())->fi()
+            ->beginIF($type == 'assignToNull')->andWhere('assignedto')->eq('')->fi()
+            ->beginIF($type == 'fixedBugs')->andWhere('resolution')->eq('fixed')->fi()
+            ->beginIF($type == 'unResolved')->orWhere('resolution')->eq('postponed')->fi()
+            ->beginIF($type == 'closedBugs' || $type == 'fixedBugs')->andWhere('status')->eq('closed')->fi()
+            ->beginIF($type == 'unResolved' || $type == 'activeBugs')->andWhere('status')->eq('active')->fi()
+            ->beginIF($type == 'thisWeekBugs')->andWhere('openedDate')->between($weekDate['begin'], $weekDate['end'])->fi()
+            ->beginIF($type != 'latestReleases')->groupBy('product')->fi()
+            ->beginIF($type == 'latestReleases')->orderBy('id_desc')->fi();
+
+        return $type == 'latestReleases' ? $dao->fetchGroup('product') : $dao->fetchPairs();
     }
 
     /**
