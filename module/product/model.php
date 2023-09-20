@@ -9,8 +9,6 @@ declare(strict_types=1);
  * @package     product
  * @link        https://www.zentao.net
  */
-?>
-<?php
 class productModel extends model
 {
     /**
@@ -1202,7 +1200,7 @@ class productModel extends model
             $allCount ++;
 
             /* When the status is not closed or closedReason is done or postponed then add cases rate..*/
-            if(empty($story->children)) $story->children = array($story);
+            if(empty($story->children)) $story->children[] = clone $story;
             foreach($story->children as $child)
             {
                 if($child->type != $storyType) continue;
