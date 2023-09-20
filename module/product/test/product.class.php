@@ -16,7 +16,12 @@ class productTest
      */
     public function __construct($user = 'admin')
     {
-        global $tester;
+        global $tester, $app, $config, $lang;
+        $app->loadLang('custom');
+        $lang->hourCommon = $lang->custom->conceptOptions->hourPoint['0'];
+        $lang->SRCommon   = '研发需求';
+        $lang->URCommon   = '用户需求';
+
         su($user);
         $this->objectModel = $tester->loadModel('product');
         $tester->app->loadClass('dao');
@@ -1125,7 +1130,6 @@ class productTest
      */
     public function summaryTest($productID, $type)
     {
-        $this->objectModel->loadModel('setting')->setItem('system.custom.hourPoint', 0);
         $stories = $this->objectModel->getStories($productID, 'all', 'unclosed', 0, 0, $type);
 
         return str_replace('%', '%%', $this->objectModel->summary($stories, $type));
