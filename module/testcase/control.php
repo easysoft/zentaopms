@@ -454,12 +454,12 @@ class testcase extends control
      * Edit a case.
      *
      * @param  int    $caseID
-     * @param  bool   $comment
+     * @param  string $comment
      * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function edit(int $caseID, bool $comment = false, int $executionID = 0)
+    public function edit(int $caseID, string $comment = 'false', int $executionID = 0)
     {
         $oldCase = $this->testcase->getByID($caseID);
         if(!$oldCase) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->notFound}')", 'load' => array('back' => true)));
@@ -474,7 +474,7 @@ class testcase extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $changes = array();
-            if(!$comment)
+            if($comment != 'true')
             {
                 $changes = $this->testcase->update($case, $oldCase, $testtasks);
                 if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
