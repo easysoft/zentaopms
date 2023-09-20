@@ -491,10 +491,10 @@ class productTao extends productModel
      * @param  array   $parents
      * @param  string  $branch
      * @param  int     $count
-     * @access private
+     * @access public
      * @return [array, int, bool]
      */
-    private function getRoadmapOfPlans(array $orderedPlans, array $parents, string $branch, int $count): array
+    public function getRoadmapOfPlans(array $orderedPlans, array $parents, string $branch, int $count): array
     {
         $return  = false;
         $total   = 0;
@@ -539,10 +539,10 @@ class productTao extends productModel
      * @param  array   $parents
      * @param  string  $branch
      * @param  int     $count
-     * @access private
+     * @access public
      * @return [array, int, bool]
      */
-    private function getRoadmapOfReleases(array $roadmap, array $releases, string $branch, int $count): array
+    public function getRoadmapOfReleases(array $roadmap, array $releases, string $branch, int $count): array
     {
         $total           = 0;
         $return          = false;
