@@ -408,6 +408,8 @@ class metric extends control
 
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+        $actionID = $this->loadModel('action')->create('metric', $metricID, 'delist', '', '', $this->app->user->account);
+
         return $this->send(array('result' => 'success', 'load' => true));
     }
 
@@ -466,6 +468,8 @@ class metric extends control
         $publishedMetric->implementedBy   = $this->app->user->account;
         $publishedMetric->implementedDate = helper::now();
         $this->metric->updateMetric($publishedMetric);
+
+        $this->loadModel('action')->create('metric', $metricID, 'publish', '', '', $this->app->user->account);
 
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
     }
