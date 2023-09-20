@@ -2430,19 +2430,19 @@ class storyModel extends model
      * 通过产品获取需求ID和需求信息的键值对。
      * Get stories pairs of a product.
      *
-     * @param  int           $productID
-     * @param  string|int    $branch
-     * @param  array|string  $moduleIdList
-     * @param  string        $status
-     * @param  string        $order
-     * @param  int           $limit
-     * @param  string        $type
-     * @param  string        $storyType    requirement|story
-     * @param  bool|string   $hasParent
+     * @param  int              $productID
+     * @param  string|int       $branch
+     * @param  array|string|int $moduleIdList
+     * @param  string           $status
+     * @param  string           $order
+     * @param  int              $limit
+     * @param  string           $type
+     * @param  string           $storyType    requirement|story
+     * @param  bool|string      $hasParent
      * @access public
      * @return array
      */
-    public function getProductStoryPairs(int $productID = 0, string|int $branch = 'all', array|string $moduleIdList = '', string $status = 'all', string $order = 'id_desc', int $limit = 0, string $type = 'full', string $storyType = 'story', bool|string $hasParent = true): array
+    public function getProductStoryPairs(int $productID = 0, string|int $branch = 'all', array|string|int $moduleIdList = '', string $status = 'all', string $order = 'id_desc', int $limit = 0, string $type = 'full', string $storyType = 'story', bool|string $hasParent = true): array
     {
         $stories = $this->dao->select('t1.id, t1.title, t1.module, t1.pri, t1.estimate, t2.name AS product')
             ->from(TABLE_STORY)->alias('t1')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
