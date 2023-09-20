@@ -5064,10 +5064,12 @@ class storyModel extends model
 
         if(empty($lastRecord->action)) return $status;
 
+        /* Set the status of the story to previous status in latest action log. */
         $lastAction = $lastRecord->action;
         if(strpos(',closed,reviewrejected,', ",$lastAction,") !== false)
         {
             $status = strpos($lastRecord->extra, '|') !== false ? substr($lastRecord->extra, strpos($lastRecord->extra, '|') + 1) : 'active';
+            if($status == 'closed') $status = 'active'; /* Set the status to active if last status before close it is closed as well. */
         }
 
         /* Activate parent story. */
