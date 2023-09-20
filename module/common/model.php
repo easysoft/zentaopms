@@ -2315,13 +2315,15 @@ EOF;
      * @access public
      * @return array
      */
-    public function removeDuplicate($type, $data = '', $condition = '')
+    public function removeDuplicate(string $type, object|array $data, string $condition = ''): array
     {
-        $table      = $this->config->objectTables[$type];
+        $table = zget($this->config->objectTables, $type, '');
+        if(empty($table)) return array('stop' => false, 'data' => $data);
+
         $titleField = $type == 'task' ? 'name' : 'title';
         $date       = date(DT_DATETIME1, time() - $this->config->duplicateTime);
         $dateField  = $type == 'doc' ? 'addedDate' : 'openedDate';
-        $titles     = $data->$titleField;
+        $titles     = zget($data, $titleField, array());
 
         if(empty($titles)) return false;
         $duplicate = $this->dao->select("id,$titleField")->from($table)
@@ -2338,7 +2340,9 @@ EOF;
             {
                 if(in_array($title, $duplicate)) unset($titles[$i]);
             }
-            $data->$titleField = $titles;
+
+            if(is_object($data)) $data->$titleField = $titles;
+            if(is_array($data))  $data[$titleField] = $titles;
         }
         return array('stop' => false, 'data' => $data);
     }
