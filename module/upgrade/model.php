@@ -9357,6 +9357,10 @@ class upgradeModel extends model
             $metric->deleted     = $oldMetric->deleted;
 
             $this->dao->insert(TABLE_METRIC)->data($metric)->exec();
+
+            $metricID = $this->dao->lastInsertID();
+
+            $this->loadModel('action')->create('metric', $metricID, 'created', '', '', 'system');
         }
 
         return !dao::isError();
