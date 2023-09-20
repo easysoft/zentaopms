@@ -123,22 +123,26 @@ class metric extends control
         $current = $this->metric->getByID($metricID);
         if(empty($current)) $current = current($metrics);
 
+        $resultHeader = array();
+        $resultData   = array();
         if(!empty($current))
         {
             $metric = $this->metric->getByID($current->id);
             $result = $this->metric->getResultByCode($metric->code, array(), 'cron');
-            $this->view->resultHeader = $this->metricZen->getViewTableHeader($result);
-            $this->view->resultData   = $this->metricZen->getViewTableData($metric, $result);
+            $resultHeader = $this->metricZen->getViewTableHeader($result);
+            $resultData   = $this->metricZen->getViewTableData($metric, $result);
         }
 
-        $this->view->metrics    = $metrics;
-        $this->view->current    = $current;
-        $this->view->metricList = $this->lang->metric->metricList;
-        $this->view->scope      = $scope;
-        $this->view->title      = $this->lang->metric->common;
-        $this->view->viewType   = $viewType;
-        $this->view->recTotal   = count($metrics);
-        $this->view->filters    = $filters;
+        $this->view->metrics      = $metrics;
+        $this->view->current      = $current;
+        $this->view->metricList   = $this->lang->metric->metricList;
+        $this->view->scope        = $scope;
+        $this->view->title        = $this->lang->metric->common;
+        $this->view->viewType     = $viewType;
+        $this->view->recTotal     = count($metrics);
+        $this->view->filters      = $filters;
+        $this->view->resultHeader = $resultHeader;
+        $this->view->resultData   = $resultData;
         $this->display();
     }
 
@@ -198,7 +202,7 @@ class metric extends control
 
         /* Build the search form. */
         $queryID   = $type == 'bydefault' ? 0 : (int)$param;
-        $actionURL = $this->createLink('metric', 'browse', "scope=$scope&param=myQueryID&type=bysearch");
+        $actionURL = $this->createLink('metric', 'browse', "scope=$scope&stage=$stage&param=myQueryID&type=bysearch");
         $this->metric->buildSearchForm($queryID, $actionURL);
 
         $metrics = $this->metric->getList($scope, $stage, $param, $type, $queryID, $orderBy, $pager);

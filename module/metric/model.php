@@ -107,7 +107,9 @@ class metricModel extends model
             if(count($object_purpose) == 2) $purpose = $object_purpose[1];
         }
 
-        $metrics = $this->metricTao->fetchMetrics($scope, $stage, $object, $purpose, $this->session->metricQuery, $sort, $pager);
+        $query = $type == 'bysearch' ? $this->session->metricQuery : '';
+
+        $metrics = $this->metricTao->fetchMetrics($scope, $stage, $object, $purpose, $query, $sort, $pager);
         $metrics = $this->processOldMetrics($metrics);
 
         return $metrics;
