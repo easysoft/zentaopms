@@ -4607,7 +4607,8 @@ class storyModel extends model
     }
 
     /**
-     * Get story reviewer pairs.
+     * 通过需求编号和版本获取评审人和评审结果的键值对。
+     * Get story reviewer pairs. array(reviewer => result, ...)
      *
      * @param  int  $storyID
      * @param  int  version
