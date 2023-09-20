@@ -359,8 +359,6 @@ class productTao extends productModel
      */
     protected function getStatsProducts(array $productIdList, bool $appendProgram, string $orderBy, object|null $pager = null): array
     {
-        $this->loadModel('program');
-
         if($orderBy == 'program_asc')
         {
             $products = $this->getPagerProductsWithProgramIn($productIdList, $pager);
@@ -378,7 +376,7 @@ class productTao extends productModel
 
         $programIdList = array();
         foreach($products as $product) $programIdList[] = $product->program;
-        $programs = $this->program->getBaseDataList(array_unique($programIdList));
+        $programs = $this->loadModel('program')->getBaseDataList(array_unique($programIdList));
 
         foreach($products as $product)
         {
