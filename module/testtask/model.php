@@ -1295,90 +1295,68 @@ class testtaskModel extends model
     }
 
     /**
-     * Create test result
+     * 保存一个测试用例的执行结果。
+     * Save the execution results of a test case.
      *
-     * @param  int   $runID
+     * @param  int    $runID
+     * @param  int    $caseID
+     * @param  int    $version
+     * @param  array  $stepResults
      * @access public
-     * @return void
+     * @return bool|string
      */
-    public function createResult($runID = 0)
+    public function createResult(int $runID = 0, int $caseID, int $version, array $stepResults): bool|string
     {
-        /* Compute the test result.
-         *
-         * 1. if there result in the post, use it.
-         * 2. if no result, set default is pass.
-         * 3. then check the steps to compute result.
-         *
-         * */
-        $postData   = fixer::input('post')->get();
-        $caseResult = isset($postData->result) ? $postData->result : 'pass';
-        if(isset($postData->steps) and $postData->steps)
+        /* 根据测试用例步骤的执行结果获取测试用例的执行结果。*/
+        /* Get the execution results of the test case based on the execution results of the test case steps. */
+        $caseResult = 'pass';
+        foreach($stepResults as $stepResult)
         {
-            foreach($postData->steps as $stepID => $stepResult)
-            {
-                if($stepResult != 'pass' and $stepResult != 'n/a') $caseResult = $stepResult;
-                if($stepResult == 'fail')
-                {
-                    $caseResult = $stepResult;
-                    break;
-                }
-            }
+            if($stepResult->result == 'fail' || $stepResult->result == 'blocked') $caseResult = $stepResult;
+            if($stepResult->result == 'fail') break;
         }
 
-        /* Create result of every step. */
-        foreach($postData->steps as $stepID => $stepResult)
-        {
-            $step['result'] = $stepResult;
-            $step['real']   = zget($postData->reals, $stepID, '');
-            $stepResults[$stepID] = $step;
-        }
-
-        /* Insert into testResult table. */
-        $now = helper::now();
-        $result = fixer::input('post')
-            ->add('run', $runID)
-            ->add('caseResult', $caseResult)
-            ->setForce('stepResults', serialize($stepResults))
-            ->setDefault('lastRunner', $this->app->user->account)
-            ->setDefault('date', $now)
-            ->skipSpecial('stepResults')
-            ->remove('steps,reals,result')
-            ->get();
-
-        /* Remove files and labels field when uploading files for case result or step result. */
-        foreach($result as $fieldName => $field)
-        {
-            if((strpos($fieldName, 'files') !== false) or (strpos($fieldName, 'labels') !== false)) unset($result->$fieldName);
-        }
-
+        /* 保存测试用例的执行结果。*/
+        /* Save the execution results of the test case. */
+        $now    = helper::now();
+        $result = new stdclass();
+        $result->run         = $runID;
+        $result->case        = $caseID;
+        $result->version     = $version;
+        $result->caseResult  = $caseResult;
+        $result->stepResults = serialize($stepResults);
+        $result->lastRunner  = $this->app->user->account;
+        $result->date        = $now;
         $this->dao->insert(TABLE_TESTRESULT)->data($result)->autoCheck()->exec();
+        if(dao::isError()) return false;
 
-        /* Save upload files for case result or step result. */
-        if(!dao::isError())
-        {
-            $resultID = $this->dao->lastInsertID();
-            foreach($stepResults as $stepID => $stepResult) $this->loadModel('file')->saveUpload('stepResult', $resultID, $stepID, "files{$stepID}", "labels{$stepID}");
-        }
-        $this->dao->update(TABLE_CASE)->set('lastRunner')->eq($this->app->user->account)->set('lastRunDate')->eq($now)->set('lastRunResult')->eq($caseResult)->where('id')->eq($postData->case)->exec();
+        /* 把上传的文件关联到到执行结果的用例步骤中。*/
+        /* Associated the uploaded files to the test case steps of the execution results. */
+        $resultID = $this->dao->lastInsertID();
+        foreach($stepResults as $stepID => $stepResult) $this->loadModel('file')->saveUpload('stepResult', $resultID, $stepID, "files{$stepID}", "labels{$stepID}");
+
+        /* 更新测试用例的执行结果。*/
+        /* Update the execution results of the test case. */
+        $case = new stdclass();
+        $case->lastRunner    = $this->app->user->account;
+        $case->lastRunDate   = $now;
+        $case->lastRunResult = $caseResult;
+        $this->dao->update(TABLE_CASE)->data($case)->where('id')->eq($caseID)->exec();
+        if(dao::isError()) return false;
 
         if($runID)
         {
-            /* Update testRun's status. */
-            if(!dao::isError())
-            {
-                $runStatus = $caseResult == 'blocked' ? 'blocked' : 'normal';
-                $this->dao->update(TABLE_TESTRUN)
-                    ->set('lastRunResult')->eq($caseResult)
-                    ->set('status')->eq($runStatus)
-                    ->set('lastRunner')->eq($this->app->user->account)
-                    ->set('lastRunDate')->eq($now)
-                    ->where('id')->eq($runID)
-                    ->exec();
-            }
+            /* 更新测试单中测试用例的执行结果。*/
+            /* Update the execution results of the test case in testtask. */
+            $run = new stdclass();
+            $run->status        = $caseResult == 'blocked' ? 'blocked' : 'normal';
+            $run->lastRunResult = $caseResult;
+            $run->lastRunner    = $this->app->user->account;
+            $run->lastRunDate   = $now;
+            $this->dao->update(TABLE_TESTRUN)->data($run)->where('id')->eq($runID)->exec();
         }
 
-        if(!dao::isError()) $this->loadModel('score')->create('testtask', 'runCase', $runID);
-
+        $this->loadModel('score')->create('testtask', 'runCase', $runID);
         return $caseResult;
     }
 
