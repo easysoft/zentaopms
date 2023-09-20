@@ -978,8 +978,7 @@ class metricModel extends model
      */
     public function isOldMetric($metric)
     {
-        if($metric->fromID !== 0 and $metric->stage == 'wait') return true;
-        return false;
+        return $metric->type == 'sql';
     }
 
     /**

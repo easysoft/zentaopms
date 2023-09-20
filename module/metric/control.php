@@ -76,6 +76,12 @@ class metric extends control
             $metricData = $this->metricZen->buildMetricForEdit();
             $metricData->unit = isset($_POST['customUnit']) ? $_POST['addunit'] : $_POST['unit'];
 
+            if($metric->type == 'sql')
+            {
+                $metricData->type = 'php';
+                $metricData->builtin = 0;
+            }
+
             $metricID = $this->metric->update($id, $metricData);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
