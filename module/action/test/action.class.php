@@ -605,7 +605,15 @@ class actionTest
 
         $actionList = array();
         foreach($actionIdList as $actionID) $actionList[$actionID] = $this->objectModel->getByID($actionID);
+        global $tester;
+        foreach($stageList as $stageId)
+        {
+            $stage = $tester->dao->select('id, deleted')->from(TABLE_STAGE)->where('id')->eq($stageId)->fetch();
+            if(!$stage || $stage->deleted) return false;
+        }
 
-        return $actionList;
+        if(isset($actionList[2]) && $actionList[2]->extra == '0') return true;
+
+        return false;
     }
 }

@@ -1620,14 +1620,14 @@ class actionModel extends model
      * 设置action的objectLink属性。
      * Set the objectLink attribute of action.
      *
-     * @param  object $action
-     * @param  array  $deptUsers
-     * @param  array  $shadowProducts
-     * @param  object $project
+     * @param  object     $action
+     * @param  array      $deptUsers
+     * @param  array      $shadowProducts
+     * @param  object|int $project
      * @access public
      * @return object|bool
      */
-    public function setObjectLink(object $action, array $deptUsers, array $shadowProducts, object $project = null): object|bool
+    public function setObjectLink(object $action, array $deptUsers, array $shadowProducts, object|string $project = ""): object|bool
     {
         $this->app->loadConfig('doc');
 
@@ -2107,7 +2107,7 @@ class actionModel extends model
         $this->dao->update(TABLE_ACTION)->set('extra')->eq(self::BE_HIDDEN)->where('id')->eq($actionID)->exec();
         $this->create($action->objectType, $action->objectID, 'hidden');
 
-        return dao::isError();
+        return !dao::isError();
     }
 
     /**
@@ -2125,7 +2125,7 @@ class actionModel extends model
             ->andWhere('extra')->eq(self::CAN_UNDELETED)
             ->exec();
 
-        return dao::isError();
+        return !dao::isError();
     }
 
     /**
@@ -2449,7 +2449,7 @@ class actionModel extends model
             ->orderBy('id_desc')
             ->fetchGroup('objectID');
 
-        foreach($stageList as $stageID => $stage)
+        foreach($stageList as $stageID)
         {
             $deletedAction = $deletedActions[$stageID][0];
             $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq('0')->where('id')->eq($stageID)->exec();
@@ -2523,8 +2523,8 @@ class actionModel extends model
      * Update object by id.
      *
      * @param  string $table
-     * @param  int $id
-     * @param  array $params
+     * @param  int    $id
+     * @param  array  $params
      * @access public
      * @return bool
      */

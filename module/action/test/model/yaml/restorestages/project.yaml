@@ -1,0 +1,37 @@
+title: table zt_project
+author: Zhu Jinyong
+version: "1.0"
+fields:
+  - field: id
+    range: 1-5
+  - field: project
+    range: 0,1{4}
+  - field: name
+    note: "名称"
+    range: 瀑布项目1,阶段a,阶段a子1,阶段a子1子1,阶段b
+  - field: type
+    range: program,stage{4}
+  - field: status
+    range: doing,doing,doing,closed,suspended
+  - field: parent
+    range: 0,1,2,3,1
+  - field: grade
+    range: "2"
+  - field: begin
+    range: "20220112 000000:0"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
+  - field: end
+    range: "20220112 000000:0"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
+  - field: acl
+    range: open,private,program
+  - field: order
+    range: 5-10000:5
+  - field: openedBy
+    range: admin,user1
+  - field: deleted
+    range: 0,1{4}

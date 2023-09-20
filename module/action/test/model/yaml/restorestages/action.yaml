@@ -1,0 +1,25 @@
+title: table zt_action
+desc: "系统日志"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100000
+  - field: objectType
+    note: "对象类型"
+    range: execution
+  - field: objectID
+    note: "对象ID"
+    range: 2,3,4,5,6-100000
+  - field: project
+    note: "项目"
+    range: 1
+  - field: actor
+    note: "操作者"
+    range: admin
+  - field: action
+    note: "动作"
+    range: deleted
+  - field: extra
+    note: "附加参数"
+    range: 1
