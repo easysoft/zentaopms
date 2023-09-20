@@ -5043,6 +5043,7 @@ class storyModel extends model
     }
 
     /**
+     * 获取需求激活后的状态。
      * Get the story status after activation.
      *
      * @param  int    $storyID
