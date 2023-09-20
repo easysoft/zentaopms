@@ -107,11 +107,11 @@ class metricTao extends metricModel
      * 根据度量项编码获取度量项数据。
      * Fetch metric by code.
      *
-     * @param  string    $code
+     * @param  string       $code
      * @access protected
-     * @return object
+     * @return object|false
      */
-    protected function fetchMetricByCode(string $code): object
+    protected function fetchMetricByCode(string $code): object|false
     {
         return $this->dao->select('*')->from(TABLE_METRIC)
             ->where('deleted')->eq('0')
