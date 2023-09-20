@@ -77,6 +77,7 @@ class caselibTest
     }
 
     /**
+     * 测试获取用例库列表。
      * Get list test.
      *
      * @param string $orderBy
@@ -86,7 +87,7 @@ class caselibTest
      */
     public function getListTest($orderBy = 'id_desc', $pager = null)
     {
-        $objects = $this->objectModel->getList($orderBy, $pager);
+        $objects = $this->objectModel->getList('all', $orderBy, $pager);
 
         if(dao::isError()) return dao::getError();
 

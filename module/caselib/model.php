@@ -134,6 +134,7 @@ class caselibModel extends model
     }
 
     /**
+     * 获取用例库列表。
      * Get library list.
      *
      * @param  string $type
@@ -142,7 +143,7 @@ class caselibModel extends model
      * @access public
      * @return array
      */
-    public function getList($type = 'all', $orderBy = 'id_desc', $pager = null)
+    public function getList(string $type = 'all', string $orderBy = 'id_desc', object $pager = null): array
     {
         return $this->dao->select('*')->from(TABLE_TESTSUITE)
             ->where('product')->eq(0)
