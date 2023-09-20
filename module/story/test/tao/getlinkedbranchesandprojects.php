@@ -6,6 +6,7 @@ su('admin');
 
 zdTable('story')->gen(2);
 $project = zdTable('project');
+$project->id->range('11-20');
 $project->type->range('project,project,sprint,kanban');
 $project->model->range('scrum,kanban,``{2}');
 $project->gen(4);

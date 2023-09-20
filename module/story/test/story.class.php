@@ -130,6 +130,25 @@ class storyTest
     }
 
     /**
+     * Test create twins story.
+     *
+     * @param  object $story
+     * @param  int    $executionID
+     * @param  int    $bugID
+     * @param  string $extra
+     * @access public
+     * @return object|array
+     */
+    public function createTwinsTest(object $story, int $executionID = 0, int $bugID = 0, string $extra = ''): object|array
+    {
+        $storyID = $this->objectModel->createTwins($story, $executionID, $bugID, $extra);
+        if(dao::isError()) return dao::getError();
+
+        $story = $this->objectModel->loadModel('story')->getByID($storyID);
+        return $story;
+    }
+
+    /**
      * Test create story from gitlab issue.
      *
      * @param  int    $story

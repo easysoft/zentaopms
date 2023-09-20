@@ -805,6 +805,9 @@ class storyTao extends storyModel
         {
             if(!isset($requirements[$URID])) continue;
 
+            $requirement = $requirements[$URID];
+            if($requirement->type != 'requirement') continue;
+
             $requirement    = $requirements[$URID];
             $data->product  = $requirement->product;
             $data->AType    = 'requirement';
@@ -864,13 +867,13 @@ class storyTao extends storyModel
             $columnID = $this->loadModel('kanban')->getColumnIDByLaneID($laneID, 'backlog');
             if(empty($columnID)) $columnID = zget($extra, 'columnID', 0);
 
-            if(!empty($laneID) && !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'story', $storyID);
+            if(!empty($laneID) && !empty($columnID)) $this->kanban->addKanbanCell($executionID, (int)$laneID, (int)$columnID, 'story', $storyID);
             if(empty($laneID)  || empty($columnID))  $this->kanban->updateLane($executionID, 'story');
         }
 
         $actionType = $object->type == 'kanban' ? 'linked2kanban' : 'linked2execution';
-        $this->action->create('story', $storyID, 'linked2project', '', $object->project);
-        if($object->multiple) $this->action->create('story', $storyID, $actionType, '', $executionID);
+        $this->action->create('story', $storyID, 'linked2project', '', (string)$object->project);
+        if($object->multiple) $this->action->create('story', $storyID, $actionType, '', (string)$executionID);
     }
 
     /**

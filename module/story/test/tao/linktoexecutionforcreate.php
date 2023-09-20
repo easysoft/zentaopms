@@ -5,6 +5,7 @@ include dirname(__FILE__, 2) . '/story.class.php';
 
 zdTable('story')->gen(5);
 $project = zdTable('project');
+$project->id->range('11-20');
 $project->project->range('0,1{3}');
 $project->type->range('project,kanban,sprint,sprint');
 $project->multiple->range('1{3},0');
