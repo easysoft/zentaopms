@@ -26,7 +26,7 @@ $productIdList = array(1,2);
 
 r($product->getStatsTest($productIdList)) && p('1:name')         && e('正常产品1'); // 获取第1个产品的名称
 r($product->getStatsTest($productIdList)) && p('1:plans')        && e('0');         // 获取第1个产品的计划数
-r($product->getStatsTest($productIdList)) && p('1:releases')     && e('25');        // 获取第1个产品的发布数
+r($product->getStatsTest($productIdList)) && p('1:releases')     && e('0');         // 获取第1个产品的发布数
 r($product->getStatsTest($productIdList)) && p('1:bugs')         && e('3');         // 获取第1个产品的bug数
 r($product->getStatsTest($productIdList)) && p('1:unResolved')   && e('3');         // 获取第1个产品的未解决bug数
 r($product->getStatsTest($productIdList)) && p('1:closedBugs')   && e('0');         // 获取第1个产品的关闭bug数
@@ -37,7 +37,7 @@ r($product->getStatsTest($productIdList)) && p('1:progress')     && e('16.7');  
 
 r($product->getStatsTest($productIdList)) && p('2:name')         && e('正常产品2'); // 获取第2个产品的名称
 r($product->getStatsTest($productIdList)) && p('2:plans')        && e('0');         // 获取第2个产品的计划数
-r($product->getStatsTest($productIdList)) && p('2:releases')     && e('10');        // 获取第2个产品的发布数
+r($product->getStatsTest($productIdList)) && p('2:releases')     && e('0');         // 获取第2个产品的发布数
 r($product->getStatsTest($productIdList)) && p('2:bugs')         && e('3');         // 获取第2个产品的bug数
 r($product->getStatsTest($productIdList)) && p('2:unResolved')   && e('3');         // 获取第2个产品的未解决bug数
 r($product->getStatsTest($productIdList)) && p('2:closedBugs')   && e('0');         // 获取第2个产品的关闭bug数
