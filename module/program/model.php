@@ -1388,7 +1388,7 @@ class programModel extends model
 
         foreach($teamMembers as $projectID => $teamCount)
         {
-            if(!isset($stats[$projectID])) $stats[$projectID] = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'teamCount' => 0);
+            if(!isset($stats[$projectID])) $stats[$projectID] = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'teamCount' => 0, 'totalConsumedNotDel' => 0, 'totalLeftNotDel' => 0);
             $stats[$projectID]['teamCount'] = $teamCount;
         }
 

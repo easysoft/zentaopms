@@ -48,6 +48,10 @@ class commonModel extends model
     {
         global $app;
         $rawModule = $app->rawModule;
+        $rawMethod = strtolower($app->rawMethod);
+
+        if($rawModule == 'marketresearch' and strpos($rawMethod, 'task') !== false)  $rawModule = 'task';
+        if($rawModule == 'marketresearch' and strpos($rawMethod, 'stage') !== false) $rawModule = 'execution';
 
         if($rawModule == 'task' or $rawModule == 'effort')
         {
@@ -56,7 +60,7 @@ class commonModel extends model
             $project   = $this->syncProjectStatus($execution);
             $this->syncProgramStatus($project);
         }
-        if($rawModule == 'execution' or $rawModule == 'marketresearch')
+        if($rawModule == 'execution')
         {
             $executionID = $objectID;
             $execution   = $this->dao->select('id, project, grade, parent, status, deleted')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
