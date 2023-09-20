@@ -1121,4 +1121,19 @@ class productTest
 
         return str_replace('%', '%%', $this->objectModel->summary($stories, $type));
     }
+
+    /**
+     * 获取产品与项目关联的项目集数据列表。
+     * Get the progam info of the releated project and product by product list.
+     *
+     * @param  array  $productIdList
+     * @access public
+     * @return array
+     */
+    public function getProjectProductListTest(array $productIdList): array
+    {
+        $productList = $this->objectModel->getByIdList($productIdList);
+
+        return $this->objectModel->getProjectProductList($productList);
+    }
 }
