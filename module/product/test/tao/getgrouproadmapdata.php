@@ -5,6 +5,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 zdTable('user')->gen(5);
 zdTable('productplan')->config('productplan')->gen(30);
 zdTable('release')->config('release')->gen(30);
+su('admin');
 
 /**
 
