@@ -320,9 +320,10 @@ class product extends control
         /* Get product. */
         $product = $this->product->getStatByID($productID);
         if(!$product) return $this->productZen->responseNotFound4View();
+
         $product->desc = $this->loadModel('file')->setImgSize($product->desc);
+        if($product->line)    $product->lineName    = $this->loadModel('tree')->getByID($product->line)->name;
         if($product->program) $product->programName = $this->loadModel('program')->getByID($product->program)->name;
-        if($product->line) $product->lineName = $this->loadModel('tree')->getByID($product->line)->name;
 
         /* Set navigation menu. */
         $this->product->setMenu($productID);
