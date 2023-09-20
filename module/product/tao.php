@@ -532,61 +532,6 @@ class productTao extends productModel
     }
 
     /**
-     * 获取计划的路线图数据。
-     * Get roadmap of plans.
-     *
-     * @param  array   $roadmap
-     * @param  array   $parents
-     * @param  string  $branch
-     * @param  int     $count
-     * @access public
-     * @return [array, int, bool]
-     */
-    public function getRoadmapOfReleases(array $roadmap, array $releases, string $branch, int $count): array
-    {
-        $total           = 0;
-        $return          = false;
-        $orderedReleases = array();
-
-        /* Collect releases. */
-        foreach($releases as $release) $orderedReleases[$release->date][] = $release;
-
-        krsort($orderedReleases);
-        foreach($orderedReleases as $releases)
-        {
-            krsort($releases);
-            foreach($releases as $release)
-            {
-                $year         = substr($release->date, 0, 4);
-                $branchIdList = explode(',', trim($release->branch, ','));
-                $branchIdList = array_unique($branchIdList);
-                foreach($branchIdList as $branchID)
-                {
-                    if($branchID === '') continue;
-                    $roadmap[$year][$branchID][] = $release;
-                }
-                $total++;
-
-                /* Exceed required count .*/
-                if($count > 0 and $total >= $count)
-                {
-                    $roadmap = $this->processRoadmap($roadmap, $branch);
-                    $return  = true;
-                    return array($roadmap, $total, $return);
-                }
-            }
-        }
-
-        if($count > 0)
-        {
-            $roadmap = $this->processRoadmap($roadmap, $branch);
-            $return = true;
-        }
-
-        return array($roadmap, $total, $return);
-    }
-
-    /**
      * 通过产品ID查询产品关联的统计数据。
      * Get stat count by product ID.
      *

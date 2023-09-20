@@ -1160,4 +1160,20 @@ class productTest
         $planList = $this->objectModel->loadModel('productplan')->getList($productID, $branch);
         return $this->objectModel->filterOrderedAndParentPlans($planList);
     }
+
+    /**
+     * 获取发布的路线图数据。
+     * Get roadmap of releases
+     *
+     * @param  int $productID
+     * @param  string $branch
+     * @param  int $count
+     * @access public
+     * @return array
+     */
+    public function getRoadmapOfReleasesTest(int $productID, string $branch, int $count): array
+    {
+        $releases = $this->objectModel->loadModel('release')->getList($productID, $branch);
+        return $this->objectModel->getRoadmapOfReleases(array(), $releases, $branch, $count);
+    }
 }
