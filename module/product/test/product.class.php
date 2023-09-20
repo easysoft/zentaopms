@@ -1125,6 +1125,7 @@ class productTest
      */
     public function summaryTest($productID, $type)
     {
+        $this->objectModel->loadModel('setting')->setItem('system.custom.hourPoint', 0);
         $stories = $this->objectModel->getStories($productID, 'all', 'unclosed', 0, 0, $type);
 
         return str_replace('%', '%%', $this->objectModel->summary($stories, $type));
