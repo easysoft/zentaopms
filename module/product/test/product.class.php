@@ -1072,4 +1072,19 @@ class productTest
 
         return $this->objectModel->statisticProductData($type, $programStructure, $product);
     }
+
+    /**
+     * Test summary method.
+     *
+     * @param  int    $productID
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function summaryTest($productID, $type)
+    {
+        $stories = $this->objectModel->getStories($productID, 'all', 'unclosed', 0, 0, $type);
+
+        return str_replace('%', '%%', $this->objectModel->summary($stories, $type));
+    }
 }

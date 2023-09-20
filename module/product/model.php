@@ -1202,27 +1202,18 @@ class productModel extends model
             $allCount ++;
 
             /* When the status is not closed or closedReason is done or postponed then add cases rate..*/
-            if(empty($story->children))
-            {
-                if($story->status != 'closed' or ($story->status == 'closed' and in_array($story->closedReason, ['done', 'postponed'])))
-                {
-                    $storyIdList[] = $story->id;
-                    $rateCount ++;
-                }
-
-                continue;
-            }
-
+            if(empty($story->children)) $story->children = array($story);
             foreach($story->children as $child)
             {
                 if($child->type != $storyType) continue;
 
-                if($story->status != 'closed' or ($story->status == 'closed' and in_array($story->closedReason, ['done', 'postponed'])))
+                if($story->status != 'closed' || in_array($story->closedReason, array('done', 'postponed')))
                 {
                     $storyIdList[] = $child->id;
                     $rateCount ++;
                 }
-                $allCount ++;
+
+                if($child->id != $story->id) $allCount ++;
             }
         }
 
@@ -1231,7 +1222,6 @@ class productModel extends model
 
         $storyCommon = $this->lang->SRCommon;
         if($storyType == 'requirement') $storyCommon = $this->lang->URCommon;
-        if($storyType == 'story')       $storyCommon = $this->lang->SRCommon;
 
         return sprintf($this->lang->product->storySummary, $allCount,  $storyCommon, $totalEstimate, $rate * 100 . "%");
     }
