@@ -1050,7 +1050,7 @@ class productModel extends model
         if(empty($productIdList)) return array();
 
         /* Get stats data. */
-        $products          = $this->productTao->getStatsProducts($productIdList, $programID == 0, $orderBy, $pager);
+        $products          = $this->getStatsProducts($productIdList, $programID == 0, $orderBy, $pager);
         $unclosedStory     = $this->loadModel('story')->getUnClosedTotal();
         $finishClosedStory = $this->story->getFinishClosedTotal();
 
@@ -1615,5 +1615,46 @@ class productModel extends model
             ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->fetchAll('id');
+    }
+
+    /**
+     * 获取用于统计的产品列表。
+     * Get products list for statistic.
+     *
+     * @param  int[]       $productIdList
+     * @param  bool        $appendProgram
+     * @param  string      $orderBy
+     * @param  object|null $pager
+     * @access public
+     * @return array
+     */
+    public function getStatsProducts(array $productIdList, bool $appendProgram, string $orderBy, object|null $pager = null): array
+    {
+        if($orderBy == 'program_asc')
+        {
+            $products = $this->productTao->getPagerProductsWithProgramIn($productIdList, $pager);
+        }
+        else
+        {
+            $products = $this->productTao->getPagerProductsIn($productIdList, $pager, $orderBy);
+        }
+
+        /* Fetch product lines. */
+        $linePairs = $this->getLinePairs();
+        foreach($products as $product) $product->lineName = zget($linePairs, $product->line, '');
+
+        if(!$appendProgram) return $products;
+
+        $programIdList = array();
+        foreach($products as $product) $programIdList[] = $product->program;
+        $programs = $this->loadModel('program')->getBaseDataList(array_unique($programIdList));
+
+        foreach($products as $product)
+        {
+            $product->programName = isset($programs[$product->program]) ? $programs[$product->program]->name : '';
+            $product->programPM   = isset($programs[$product->program]) ? $programs[$product->program]->PM : '';
+        }
+
+        return $products;
     }
 }
