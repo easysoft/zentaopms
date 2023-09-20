@@ -638,26 +638,4 @@ class caselib extends control
         $this->view->dataInsert = $insert;
         $this->display();
     }
-
-    /**
-     * For lib sort
-     *
-     * @access public
-     * @return void
-     */
-    public function libSort()
-    {
-        $idList = explode(',', trim($this->post->caselib, ','));
-        $order  = $this->dao->select('*')->from(TABLE_TESTSUITE)->where('id')->in($idList)->andWhere('type')->eq('library')->orderBy('order_asc')->fetch('order');
-        $idList = array_reverse($idList);
-
-        /* Init Order. */
-        if(empty($order)) $order = 1;
-
-        foreach($idList as $caselibID)
-        {
-            $this->dao->update(TABLE_TESTSUITE)->set('`order`')->eq($order)->where('id')->eq($caselibID)->andWhere('type')->eq('library')->exec();
-            $order++;
-        }
-    }
 }
