@@ -182,6 +182,7 @@ class caselibModel extends model
     }
 
     /**
+     * 获取用例库的用例。
      * Get lib cases.
      *
      * @param  int    $libID
@@ -451,69 +452,5 @@ class caselibModel extends model
             if($this->session->fileImport) @unlink($this->session->fileImport);
             unset($_SESSION['fileImport']);
         }
-    }
-
-    /**
-     * Build case lib menu.
-     *
-     * @param  object $object
-     * @param  string $type
-     * @access public
-     * @return string
-     */
-    public function buildOperateMenu($object, $type = 'view')
-    {
-        $function = 'buildOperate' . ucfirst($type) . 'Menu';
-        return $this->$function($object);
-    }
-
-    /**
-     * Build case lib view menu.
-     *
-     * @param  object $lib
-     * @access public
-     * @return string
-     */
-    public function buildOperateViewMenu($lib)
-    {
-        if($lib->deleted) return '';
-
-        $menu   = '';
-        $params = "libID=$lib->id";
-        $menu  .= $this->buildFlowMenu('caselib', $lib, 'view', 'direct');
-        $menu  .= "<div class='divider'></div>";
-        $menu  .= $this->buildMenu('caselib', 'edit', $params, $lib, 'view');
-        $menu  .= $this->buildMenu('caselib', 'delete', $params, $lib, 'view', 'trash', 'hiddenwin');
-
-        return $menu;
-    }
-
-    /**
-     * Build case lib browse menu.
-     *
-     * @param  object $case
-     * @access public
-     * @return string
-     */
-    public function buildOperateBrowseMenu($case)
-    {
-        $menu   = '';
-        $params = "caseID=$case->id";
-
-        if($case->status == 'wait' and ($this->config->testcase->needReview or !empty($this->config->testcase->forceReview)))
-        {
-            $menu .= $this->buildMenu('testcase', 'review', $params, $case, 'browse', 'glasses', '', 'iframe');
-        }
-        $menu .= $this->buildMenu('testcase', 'edit', $params, $case, 'browse');
-        $clickable = $this->buildMenu('testcase', 'delete', $params, $case, 'browse', '', '', '', '', '', '', false);
-        if(common::hasPriv('testcase', 'delete'))
-        {
-            $deleteURL = helper::createLink('testcase', 'delete', "$params&confirm=yes");
-            $class = 'btn';
-            if(!$clickable) $class .= ' disabled';
-            $menu .= html::a("javascript:ajaxDelete(\"$deleteURL\", \"caseList\", confirmDelete)", '<i class="icon icon-trash"></i>', '', "title='{$this->lang->testcase->delete}' class='{$class}'");
-        }
-
-        return $menu;
     }
 }
