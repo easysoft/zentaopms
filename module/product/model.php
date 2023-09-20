@@ -942,7 +942,7 @@ class productModel extends model
     public function getRoadmap(int $productID, string $branch = '0', int $count = 0): array
     {
         /* Get group roadmap data. */
-        list($groupRoadmap, $return) = $this->productTao->getGroupRoadmapData($productID, $branch, $count);
+        list($groupRoadmap, $return) = $this->getGroupRoadmapData($productID, $branch, $count);
         if($return) return $groupRoadmap;
 
         /* Get last 5 roadmap. */
