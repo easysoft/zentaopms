@@ -443,4 +443,39 @@ class testtaskZen extends testtask
 
         return $cases;
     }
+
+    /**
+     * 检测要执行的测试用例是否是自动化测试用例并根据用户确认结果执行不同的操作。
+     * Detect whether the test case to be executed is an automated test case and perform different operations based on the user confirmation results.
+     *
+     * @param  object    $run
+     * @param  int       $runID
+     * @param  int       $caseID
+     * @param  int       $version
+     * @param  string    $confirm
+     * @access protected
+     * @return void
+     */
+    protected function checkAndExecuteAutomatedTest(object $run, int $runID, int $caseID, int $version, string $confirm)
+    {
+        /* 如果要执行的测试用例是自动化测试用例，并且设置了自动化测试的参数配置，并且用户尚未确认，则弹窗让用户确认。*/
+        /* If the test case to be executed is an automated test case, and the parameter configuration of the automated test is set, and the user has not confirmed it, a pop-up window will pop up for the user to confirm. */
+        $automation = $this->loadModel('zanode')->getAutomationByProduct($run->case->product);
+        if($run->case->auto == 'auto'&& $automation && $confirm == '')
+        {
+            $confirmURL = inlink('runCase', "runID=$runID&caseID=$caseID&version=$version&confirm=yes");
+            $cancelURL  = inlink('runCase', "runID=$runID&caseID=$caseID&version=$version&confirm=no");
+            return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->zanode->runCaseConfirm, 'confirmed' => $confirmURL, 'canceled' => $cancelURL)));
+        }
+
+        /* 用户确认后执行自动化测试的相关操作。*/
+        /* Perform automated testing related operations after user confirmation. */
+        if($confirm == 'yes')
+        {
+            $resultID = $this->testtask->initResult($runID, $caseID, $run->case->version, $automation->node);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError(), 'load' => $this->createLink('zanode', 'browse')));
+
+            $this->zanode->runZTFScript($automation->id, $caseID, $resultID);
+        }
+    }
 }
