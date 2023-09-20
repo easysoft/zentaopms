@@ -4,28 +4,39 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
 
+$stories = zdTable('story');
+$stories->status->range('draft,active');
+$stories->closedReason->range('{2}');
+$stories->gen(5);
+
+zdTable('storystage')->gen(5);
+zdTable('project')->gen(5);
+
 /**
 
 title=测试 storyModel->close();
 cid=1
 pid=1
-
-关闭一个用户需求，查看变更的字段1 >> assigedTo,,closed
-关闭一个用户需求，查看变更的字段2 >> status,active,closed
-关闭一个用户需求，查看变更的字段3 >> stage,wait,closed
-关闭一个软件需求，查看变更的字段1 >> closedReason,subdivided,willnotdo
-关闭一个软件需求，查看变更的字段2 >> assignedTo,,closed
-关闭一个软件需求，查看变更的字段3 >> status,active,closed
-
 */
 
-$story = new storyTest();
-$changes1 = $story->closeTest(1, array('closedReason' => 'done'));
-$changes2 = $story->closeTest(2, array('closedReason' => 'willnotdo'));
+$postData1 = new stdclass();
+$postData1->status = 'closed';
+$postData1->closedReason = 'done';
 
-r($changes1) && p('0:field,old,new') && e('assigedTo,,closed');    // 关闭一个用户需求，查看变更的字段1
-r($changes1) && p('1:field,old,new') && e('status,active,closed'); // 关闭一个用户需求，查看变更的字段2
-r($changes1) && p('2:field,old,new') && e('stage,wait,closed');    // 关闭一个用户需求，查看变更的字段3
-r($changes2) && p('0:field,old,new') && e('closedReason,subdivided,willnotdo'); // 关闭一个软件需求，查看变更的字段1
-r($changes2) && p('1:field,old,new') && e('assignedTo,,closed');                // 关闭一个软件需求，查看变更的字段2
-r($changes2) && p('2:field,old,new') && e('status,active,closed');              // 关闭一个软件需求，查看变更的字段3
+$postData2 = new stdclass();
+$postData2->status = 'closed';
+$postData2->closedReason = 'willnotdo';
+
+$postData3 = new stdclass();
+$postData3->status = 'closed';
+$postData3->closedReason   = 'duplicate';
+$postData3->duplicateStory = 5;
+
+$story = new storyTest();
+$story1 = $story->closeTest(1, $postData1);
+$story2 = $story->closeTest(2, $postData2);
+$story3 = $story->closeTest(3, $postData3);
+
+r($story1) && p('status,closedReason')                 && e('closed,done');        // 关闭一个用户需求，查看状态
+r($story2) && p('status,closedReason')                 && e('closed,willnotdo');   // 关闭一个软件需求，查看状态
+r($story3) && p('status,closedReason,duplicateStory')  && e('closed,duplicate,5'); // 关闭一个重复了的需求，查看状态

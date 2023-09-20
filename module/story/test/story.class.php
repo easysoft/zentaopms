@@ -355,19 +355,17 @@ class storyTest
      * Test close a story.
      *
      * @param  int    $storyID
-     * @param  array  $params
+     * @param  object $postData
      * @access public
-     * @return void
+     * @return object|false
      */
-    public function closeTest($storyID, $params)
+    public function closeTest(int $storyID, object $postData)
     {
-        $_POST   = $params;
-        $changes = $this->objectModel->close($storyID);
-        unset($_POST);
+        $this->objectModel->close($storyID, $postData);
 
         if(dao::isError()) return dao::getError();
 
-        return $changes;
+        return $this->objectModel->getByID($storyID);
     }
 
     /**
