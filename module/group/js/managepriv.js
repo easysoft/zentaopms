@@ -16,7 +16,7 @@ function setModulePackages(module)
     $('#packageBox select').val('');                                 // Unselect all select.
     $("select[data-module='" + module + "']").removeClass('hidden'); // Show the action control for current module.
 
-    updatePrivList('module', module);
+    updatePrivList(module, '');
 }
 
 /**
@@ -29,9 +29,10 @@ function setActions()
 {
     $('#actionBox select').val('');
 
-    var hasSelectedPackage = ',' + $('#packageBox select').not('.hidden').val().join(',') + ',';
+    var selectedModule   = $('#module').val();
+    var selectedPackages = ',' + $('#packageBox select').not('.hidden').val().join(',') + ',';
 
-    updatePrivList('package', hasSelectedPackage);
+    updatePrivList(selectedModule, selectedPackages);
 
 }
 
@@ -48,15 +49,14 @@ function setNoChecked()
 /**
  * Update the action box when module or package selected.
  *
- * @param  string  parentType  module|package
- * @param  string  parentList
+ * @param  string  selectedModule
+ * @param  string  selectedPackages
  * @access public
  * @return void
  */
-function updatePrivList(parentType, parentList)
+function updatePrivList(selectedModule, selectedPackages)
 {
-    var selectedModule = $('#module').val();
-    $.get(createLink('group', 'ajaxGetPrivByParents', 'module=' + selectedModule + '&parentType=' + parentType + '&parentList=' + parentList), function(data)
+    $.get(createLink('group', 'ajaxGetPrivByParents', 'module=' + selectedModule + '&packages=' + selectedPackages), function(data)
     {
         $('#actions').replaceWith(data);
     })
@@ -136,9 +136,9 @@ function initRecomendTree(data)
         initialState: 'expand',
         itemCreator: function($li, item)
         {
-            var index = item.relationPriv ? recommedSelect.indexOf(item.relationPriv.toString()) : -1;
-            if(item.relationPriv === undefined) item.relationPriv = '';
-            $li.append('<div class="checkbox-primary ' + (item.children ? 'check-all' : '') + '"><input ' + (index >= 0 ? 'checked="checked"' : '') + 'data-has-children="' + (item.children ? !!item.children.length : false) + '"' + (item.children ? '' : 'data-type="recommend" data-privid="' + item.privID + '" data-relationpriv="' + item.relationPriv + '"') + 'type="checkbox" name="recommendPrivs[]" value="' + item.relationPriv + '" title="' + item.title + '" id="recommendPrivs[' + item.module + ']' + item.method + '" data-module="' + item.module + '" data-method="' + item.method + '"><label>' + item.title + '</label></div>');
+            var privID = item.module + '-' + item.method;
+            var index = recommendSelect.indexOf(privID);
+            $li.append('<div class="checkbox-primary ' + (item.children ? 'check-all' : '') + '"><input ' + (index >= 0 ? 'checked="checked"' : '') + 'data-has-children="' + (item.children ? !!item.children.length : false) + '"' + (item.children ? '' : 'data-type="recommend" data-privid="' + privID + '" data-relationpriv="' + privID + '"') + 'type="checkbox" name="recommendPrivs[]" value="' + privID + '" title="' + item.title + '" id="recommendPrivs[' + item.module + ']' + item.method + '" data-module="' + item.module + '" data-method="' + item.method + '"><label>' + item.title + '</label></div>');
         }
     });
     $('.menuTree.recommend i.list-toggle').remove();
@@ -159,7 +159,8 @@ function initDependTree(data)
         initialState: 'expand',
         itemCreator: function($li, item)
         {
-            $li.append('<div class="checkbox-primary"><input disabled="disabled" checked="checked" data-has-children="' + (item.children ? !!item.children.length : false) + '"' + (item.children ? '' : 'data-type="depend" data-privid="' + item.privID + '" data-relationpriv="' + item.relationPriv + '"') + 'type="checkbox" name="dependPrivs[]" value="' + item.relationPriv + '" title="' + item.title + '" id="dependPrivs[' + item.module + ']' + item.method + '" data-module="' + item.module + '" data-method="' + item.method + '"><label>' + item.title + '</label></div>');
+            var privID = item.module + '-' + item.method;
+            $li.append('<div class="checkbox-primary"><input disabled="disabled" checked="checked" data-has-children="' + (item.children ? !!item.children.length : false) + '"' + (item.children ? '' : 'data-type="depend" data-privid="' + privID + '" data-relationpriv="' + item.relationPriv + '"') + 'type="checkbox" name="dependPrivs[]" value="' + item.relationPriv + '" title="' + item.title + '" id="dependPrivs[' + item.module + ']' + item.method + '" data-module="' + item.module + '" data-method="' + item.method + '"><label>' + item.title + '</label></div>');
         }
     });
     $('.menuTree.depend i.list-toggle').remove();
@@ -190,7 +191,7 @@ function updatePrivTree(privList)
         url: createLink('group', 'ajaxGetRelatedPrivs'),
         dataType: 'json',
         method: 'post',
-        data: {"privList" : privList.toString(), "recommedSelect": recommedSelect.toString(), "excludePrivList": Object.values(excludePrivList).toString()},
+        data: {"selectPrivList": privList.toString(), "recommendSelect": recommendSelect.toString(), "allPrivList": Object.values(allPrivList).toString()},
         success: function(data)
         {
             if(data.depend == undefined || data.depend.length == 0)
@@ -385,10 +386,10 @@ function recommendChange($item, checked)
         if(priv && index < 0 && checked) selectedPrivList.push(priv);
         if(priv && index > -1 && !checked) selectedPrivList.splice(index, 1);
 
-        index = recommedSelect.indexOf(priv);
+        index = recommendSelect.indexOf(priv);
 
-        if(priv && index < 0 && checked) recommedSelect.push(priv);
-        if(priv && index > -1 && !checked) recommedSelect.splice(index, 1);
+        if(priv && index < 0 && checked) recommendSelect.push(priv);
+        if(priv && index > -1 && !checked) recommendSelect.splice(index, 1);
     }
 }
 
@@ -413,7 +414,7 @@ $(function()
 
     selectedPrivList = Object.values(selectedPrivList);
 
-    recommedSelect = new Array();
+    recommendSelect = new Array();
 
     relatedPrivData = $.parseJSON(relatedPrivData);
     initDependTree(relatedPrivData.depend);
