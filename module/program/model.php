@@ -1521,11 +1521,11 @@ class programModel extends model
      * 通过项目集ID列表批量获取项目集基本数据。
      * Get program base data with program ID array.
      *
-     * @param  array     $programIdList
-     * @access protected
+     * @param  array  $programIdList
+     * @access public
      * @return array
      */
-    protected function getBaseDataList(array $programIdList): array
+    public function getBaseDataList(array $programIdList): array
     {
         return $this->dao->select('id,name,PM,path,parent,type')
             ->from(TABLE_PROGRAM)
