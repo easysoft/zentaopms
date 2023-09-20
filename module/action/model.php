@@ -812,11 +812,11 @@ class actionModel extends model
      * 获取一个操作的历史记录。
      * Get histories of an action.
      *
-     * @param  int    $actionID
+     * @param  array  $actionID
      * @access public
      * @return array
      */
-    public function getHistory(int $actionID): array
+    public function getHistory(array $actionID): array
     {
         return $this->dao->select()->from(TABLE_HISTORY)->where('action')->in($actionID)->fetchGroup('action');
     }
