@@ -398,25 +398,22 @@ class branchTest
     }
 
     /**
+     * 将多个分支合并到一个分支。
      * Test merge multiple branches into one branch.
      *
-     * @param  int    $productID
-     * @param  string $mergedBranches
+     * @param  int       $productID
+     * @param  string    $mergedBranches
+     * @param  object    $data
      * @access public
-     * @return int
+     * @return array|int
      */
-    public function mergeBranchTest($productID, $mergedBranches, $param)
+    public function mergeBranchTest(int $productID, string $mergedBranches, object $data): array|int
     {
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $objectID = $this->objectModel->mergeBranch($productID, $mergedBranches);
-
-        unset($_POST);
+        $objectID = $this->objectModel->mergeBranch($productID, $mergedBranches, $data);
 
         if(dao::isError()) return dao::getError();
 
-        global $tester;
-        $modules = $tester->dao->select('*')->from(TABLE_MODULE)->where('branch')->eq($objectID)->andWhere('root')->eq($productID)->andWhere('type')->eq('story')->fetchAll();
-        return count($modules);
+        $branches = $this->objectModel->dao->select('*')->from(TABLE_BRANCH)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetchAll();
+        return count($branches);
     }
 }
