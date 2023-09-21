@@ -1046,7 +1046,7 @@ class product extends control
         $programProducts = array();
         foreach($products as $product) $programProducts[$product->program][] = $product;
 
-        $this->view->link      = $this->productZen->getProductLink($module, $method, $extra);
+        $this->view->link      = $this->product->getProductLink($module, $method, $extra);
         $this->view->productID = $productID;
         $this->view->module    = $module;
         $this->view->method    = $method;
