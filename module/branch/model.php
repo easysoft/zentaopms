@@ -555,13 +555,14 @@ class branchModel extends model
     }
 
     /**
-     * Get product bype by branch.
+     * 根据分支ID获取产品类型。
+     * Get product type by branch ID.
      *
-     * @param  int    $branchID
+     * @param  int          $branchID
      * @access public
-     * @return void
+     * @return string|false
      */
-    public function getProductType($branchID)
+    public function getProductType(int $branchID): string|false
     {
         return $this->dao->select('t2.type')->from(TABLE_BRANCH)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')

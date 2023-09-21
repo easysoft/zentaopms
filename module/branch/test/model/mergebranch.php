@@ -4,7 +4,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/branch.class.php';
 
 zdTable('product')->config('product')->gen(10);
-zdTable('branch')->config('branch')->gen(30);
+zdTable('branch')->config('branch')->gen(10);
 zdTable('user')->gen(5);
 su('admin');
 
@@ -36,6 +36,6 @@ $mergeBranch3->mergedBranchIDList = array(4, 5);
 $mergeBranch3->targetBranch       = 0;
 
 $branch = new branchTest();
-r($branch->mergeBranchTest($productID[0], $mergedBranches[0], $mergeBranch1)) && p() && e('5'); // 测试合并分支 1 到 分支 2
-r($branch->mergeBranchTest($productID[0], $mergedBranches[1], $mergeBranch2)) && p() && e('6'); // 测试合并分支 2 到 新建分支
-r($branch->mergeBranchTest($productID[1], $mergedBranches[2], $mergeBranch3)) && p() && e('4'); // 测试合并分支 3 4 到 主干
+r($branch->mergeBranchTest($productID[0], $mergedBranches[0], $mergeBranch1)) && p() && e('2'); // 测试合并分支 1 到 分支 2
+r($branch->mergeBranchTest($productID[0], $mergedBranches[1], $mergeBranch2)) && p() && e('3'); // 测试合并分支 2 到 新建分支
+r($branch->mergeBranchTest($productID[1], $mergedBranches[2], $mergeBranch3)) && p() && e('1'); // 测试合并分支 3 4 到 主干
