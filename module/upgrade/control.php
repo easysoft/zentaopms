@@ -1066,4 +1066,24 @@ class upgrade extends control
 
         $this->display();
     }
+
+    /**
+     * Process old metrics in order to easy of test.
+     *
+     * @param  bool $isDelete
+     * @access public
+     * @return void
+     */
+    public function processOldMetrics($isDelete = false)
+    {
+        if($isDelete)
+        {
+            $this->dao->delete()->from(TABLE_METRIC)->where('fromID')->ne(0)->exec();
+        }
+        else
+        {
+            $this->upgrade->processOldMetrics();
+        }
+        echo 'ok';
+    }
 }
