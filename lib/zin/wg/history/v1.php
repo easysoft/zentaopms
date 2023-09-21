@@ -7,8 +7,10 @@ require_once dirname(__DIR__) . DS . 'section' . DS . 'v1.php';
 class history extends wg
 {
     protected static array $defineProps = array(
+        'id?: string',
         'actions?: array',
         'users?: array',
+        'moduleName?: string',
         'methodName?: string',
         'commentUrl?: string',
         'commentBtn?: bool',
@@ -26,6 +28,15 @@ class history extends wg
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
+    protected function created()
+    {
+        global $app;
+
+        if(!$this->hasProp('moduleName')) $this->setProp('moduleName', $app->rawModule);
+        if(!$this->hasProp('methodName')) $this->setProp('methodName', $app->rawMethod);
+        if(!$this->hasProp('id'))         $this->setProp('id', 'history_' . $this->prop('moduleName') . '-' . $this->prop('methodName'));
+    }
+
     private function marker(int|string $content): wg
     {
         return span
@@ -38,7 +49,7 @@ class history extends wg
     private function checkEditCommentPriv(object $action): bool
     {
         global $app;
-        $methodName = $this->prop('methodName') !== null ? $this->prop('methodName') : $app->rawMethod;
+        $methodName = $this->prop('methodName');
         $actions    = $this->prop('actions') !== null ? $this->prop('actions') : data('actions');
 
         return (!isset($canBeChanged) || !empty($canBeChanged))
@@ -149,6 +160,8 @@ class history extends wg
         return form
         (
             setClass('comment-edit-form hidden mt-2 ml-6'),
+            setData('load', 'modal'),
+            setData('close-modal', false),
             set::method('post'),
             set::submitBtnText($lang->save),
             set::action(createLink('action', 'editComment', "actionID=$action->id")),
@@ -235,6 +248,7 @@ class history extends wg
         return panel
         (
             setClass('history', 'pt-4', 'h-full', $padding),
+            setID($this->prop('id')),
             set::headingClass('p-0'),
             set::bodyClass("p-0 {$bodyClass}"),
             set::shadow(false),
