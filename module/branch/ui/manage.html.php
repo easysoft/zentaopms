@@ -59,7 +59,7 @@ modal
             set::label($lang->branch->mergeTo),
             inputGroup
             (
-                setClass('input-control has-suffix'),
+                setClass('input-control has-suffix text-left'),
                 picker
                 (
                     set::name('targetBranch'),
