@@ -118,11 +118,12 @@ window.handleNavMenuClick = function($el)
     })
 }
 
-window.handleQueryClick = function()
+window.handleQueryClick = function(id)
 {
-    var check = window.checkForm($('#queryForm'));
+    var $form = id ? $('#queryForm' + id) : $('#queryForm');
+    var check = window.checkForm($form);
     if(!check) return;
-    window.ajaxGetRecords(current.id);
+    window.ajaxGetRecords(id ?? current.id);
 }
 
 window.deactiveNavMenu = function()
@@ -290,6 +291,77 @@ window.renderDTable = function(metricID = current.id, header = resultHeader, dat
     $currentBox.find('.table-side').append('<div class="dtable"></div>');
 
     window.initDTable($currentBox.find('.dtable'), header, data);
+    if(viewType == 'multiple') window.initQueryForm(metricID, $currentBox.find('.metric-name'), header, data);
+}
+
+window.getMetricRecordType = function(recordRow)
+{
+    if(!recordRow) return false;
+    var type = [];
+    if(recordRow.scope) type.push('scope');
+    if(recordRow.date) type.push('date');
+    if(type.length == 0) type.push('system');
+    return type.join('-');
+}
+
+window.initQueryForm = function(id, $el, header = resultHeader, data = resultData)
+{
+    var $form = id ? $('#queryForm' + id) : $('#queryForm');
+    var formData = window.getFormData($form);
+
+    $el.siblings('form#queryForm' + id).remove();
+    var $form = $('#queryFormTpl').clone();
+    $form.attr('id', 'queryForm' + id);
+    $form.removeClass('hidden');
+    $form.find('script').remove();
+
+    var recordType = window.getMetricRecordType(data.length ? data[0] : false);
+
+    if(!recordType) return;
+
+    $el.after($form);
+
+    if(recordType == 'scope' || recordType == 'scope-date')
+    {
+        $form.find('.query-scope').removeClass('hidden');
+        $form.find('.query-scope #scope').attr('id', 'scope' + id);
+        var scopeUnique = {};
+        var scopeItems = [];
+        data.forEach(function(item) {
+            if(scopeUnique[item.scopeID]) return;
+            scopeUnique[item.scopeID] = item.scope;
+            scopeItems.push({text: item.scope, value: item.scopeID});
+        });
+        zui.create("picker","#scope" + id,{"multiple":false,"name":"scope","required":false,"items":scopeItems, "defaultValue": formData.get('scope'),"emptyValue":""});
+    }
+    if(recordType == 'date' || recordType == 'scope-date')
+    {
+        $form.find('.query-date-range').removeClass('hidden');
+        $form.find('.query-date-range #dateBegin').attr('id', 'dateBegin' + id);
+        $form.find('.query-date-range #dateEnd').attr('id', 'dateEnd' + id);
+        zui.create("datePicker","#dateBegin" + id,{"multiple":false,"icon":"calendar","name":"dateBegin", "defaultValue": formData.get('dateBegin')})
+        zui.create("datePicker","#dateEnd" + id,{"multiple":false,"icon":"calendar","name":"dateEnd", "defaultValue": formData.get('dateEnd')})
+    }
+
+    if(recordType == 'system')
+    {
+        $form.find('.query-calc-time-range').removeClass('hidden');
+        $form.find('.query-calc-time-range #calcBegin').attr('id', 'calcBegin' + id);
+        $form.find('.query-calc-time-range #calcEnd').attr('id', 'calcEnd' + id);
+        zui.create("datePicker","#calcBegin" + id,{"multiple":false,"icon":"calendar","name":"calcBegin", "defaultValue": formData.get('calcBegin')})
+        zui.create("datePicker","#calcEnd" + id,{"multiple":false,"icon":"calendar","name":"calcEnd", "defaultValue": formData.get('calcEnd')})
+    }
+    else
+    {
+        $form.find('.query-calc-time').removeClass('hidden');
+        $form.find('.query-calc-time #calcTime').attr('id', 'calcTime' + id);
+        zui.create("datePicker","#calcTime" + id,{"multiple":false,"icon":"calendar","name":"calcTime", "defaultValue": formData.get('calcTime')})
+    }
+
+    $form.find('.query-btn button').attr('onclick', 'window.handleQueryClick(' + id + ')');
+
+    $form.find('.form-group.hidden').remove();
+
 }
 
 window.renderChart = function(metricID = current.id, header = resultHeader, data = resultData, chartType = 'line', initPicker = true)
@@ -308,7 +380,7 @@ window.renderChart = function(metricID = current.id, header = resultHeader, data
 
 window.initDTable = function($obj, head, data)
 {
-    var height = 328;
+    var height = 310;
     if(viewType == 'single') height = $('.table-side').height();
     if(!head || !data) return;
 
@@ -321,6 +393,8 @@ window.initDTable = function($obj, head, data)
         height: height,
         cols: head,
         data: data,
+        // footPager: pager,
+        // footer: ['pager'],
         onRenderCell: function(result, {row, col})
         {
             var colCount = Object.keys(row.data).length;
@@ -597,7 +671,8 @@ window.updateMetricBoxs = function(id, isChecked)
 
 window.ajaxGetRecords = function(id)
 {
-    var formData = window.getFormData($('#queryForm'));
+    var $form = id ? $('#queryForm' + id) : $('#queryForm');
+    var formData = window.getFormData($form);
 
     $.post($.createLink('metric', 'ajaxGetTableData', 'metricID=' + id),formData, function(resp)
     {
