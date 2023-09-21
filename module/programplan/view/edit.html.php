@@ -18,6 +18,12 @@
 <?php js::set('isTopStage', $isTopStage);?>
 <?php js::set('isLeafStage', $isLeafStage);?>
 <?php js::set('projectModel', $project->model);?>
+<?php if($project->model == 'research'):?>
+<style>
+.body-modal #mainContent {padding-top: 90px;}
+.table-form>tbody>tr>td {padding: 9px;}
+</style>
+<?php endif;?>
 <div id="mainContent" class="main-content fade">
   <div class="center-block">
     <div class="main-header">
