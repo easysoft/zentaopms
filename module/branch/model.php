@@ -514,29 +514,31 @@ class branchModel extends model
     }
 
     /**
+     * 按照产品分组获取分支数据。
      * Get branch group by products
      *
-     * @param  array  $products
-     * @param  string $params
+     * @param  array  $productIdList
+     * @param  string $params        ignoreNormal|noempty|noclosed
      * @param  array  $appendBranch
      * @access public
      * @return array
      */
-    public function getByProducts($products, $params = '', $appendBranch = '')
+    public function getByProducts(array $productIdList, string $params = '', array $appendBranch = array()): array
     {
         $branches = $this->dao->select('*')->from(TABLE_BRANCH)
-            ->where('product')->in($products)
+            ->where('product')->in($productIdList)
             ->andWhere('deleted')->eq(0)
             ->beginIF(strpos($params, 'noclosed') !== false)->andWhere('status')->eq('active')->fi()
             ->orderBy('`order`')
             ->fetchAll('id');
 
         if(!empty($appendBranch)) $branches += $this->dao->select('*')->from(TABLE_BRANCH)->where('id')->in($appendBranch)->orderBy('`order`')->fetchAll('id');
-        $products = $this->loadModel('product')->getByIdList($products);
+        $products = $this->loadModel('product')->getByIdList($productIdList);
 
         $branchGroups = array();
         foreach($branches as $branch)
         {
+            if(!isset($products[$branch->product]->type)) continue;
             if($products[$branch->product]->type == 'normal')
             {
                 if(strpos($params, 'ignoreNormal') === false) $branchGroups[$branch->product][0] = '';

@@ -241,17 +241,18 @@ class branchTest
     }
 
     /**
+     * 按照产品分组获取分支数据。
      * Test get branch group by products.
      *
-     * @param  int    $products
-     * @param  string $params
-     * @param  string $appendBranch
+     * @param  array        $productIdList
+     * @param  string       $params
+     * @param  array        $appendBranch
      * @access public
-     * @return string
+     * @return array|string
      */
-    public function getByProductsTest($products, $params = '', $appendBranch = '')
+    public function getByProductsTest(array $productIdList, string $params = '', array $appendBranch = array()): array|string
     {
-        $objects = $this->objectModel->getByProducts($products, $params, $appendBranch);
+        $objects = $this->objectModel->getByProducts($productIdList, $params, $appendBranch);
 
         if(dao::isError()) return dao::getError();
 
@@ -259,7 +260,7 @@ class branchTest
         foreach($objects as $productID => $branches)
         {
             $ids .= "$productID:";
-            foreach($branches as $branchID => $branchName) $ids .= ",$branchID";
+            foreach($branches as $branchID => $branchName) $ids .= "|$branchID";
             $ids .= ';';
         }
         return $ids;

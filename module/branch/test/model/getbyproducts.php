@@ -2,50 +2,64 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/branch.class.php';
+
+zdTable('product')->config('product')->gen(10);
+zdTable('branch')->config('branch')->gen(30);
+zdTable('user')->gen(5);
 su('admin');
 
 /**
 
 title=测试 branchModel->getByProducts();
+timeout=0
 cid=1
-pid=1
-
-测试获取产品 41 42 的分支信息 >> 41:,0,1,2;42:,0,3,4;1:,0;
-测试获取产品 41 42 的分支信息 >> 41:,0,1,2;42:,0,3,4;1:,0;
-测试获取产品 41 42 的分支信息 >> 41:,0,1;42:,0,3;1:,0;
-测试获取产品 41 42 的分支信息 >> 41:,0,1,2;42:,0,3,4;
-测试获取产品 41 42 的分支信息 >> 41:,1,2;42:,3,4;1:,0;
-测试获取产品 41 42 的分支信息 >> 41:,0,1;42:,0,3;
-测试获取产品 41 42 的分支信息 >> 41:,1,2;42:,3,4;
-测试获取产品 41 42 追加branch20 21 的分支信息 >> 41:,0,1,2;42:,0,3,4;1:,0;
-测试获取产品 41 42 noclosed 追加branch20 21 的分支信息 >> 41:,0,1;42:,0,3;1:,0;
-测试获取产品 41 42 ignoreNormal 追加branch20 21 的分支信息 >> 41:,0,1,2;42:,0,3,4;
-测试获取产品 41 42 noempty 追加branch20 21 的分支信息 >> 41:,1,2;42:,3,4;1:,0;
-测试获取产品 41 42 noclosed,ignoreNormal 追加branch20 21 的分支信息 >> 41:,0,1;42:,0,3;
-测试获取产品 41 42 ignoreNormal,noempty 追加branch20 21 的分支信息 >> 41:,1,2;42:,3,4;
-测试获取产品 81 82 的分支信息 >> 81:,0,81,82;82:,0,83,84;2:,0;
-测试获取产品 43 83 的分支信息 >> 43:,0,5,6;83:,0,85,86;
 
 */
 
-$products = array('1,41,42', '2,81,82', '43,83');
-$params   = array('', 'noclosed', 'ignoreNormal', 'noempty', 'noclosed,ignoreNormal', 'ignoreNormal,noempty');
-$appendBranch = '';
+$productIdList[0] = array();
+$productIdList[1] = range(1, 10);
+$productIdList[2] = range(11, 20);
 
-$branch = new branchTest();
+$paramList        = array('', 'noclosed', 'ignoreNormal', 'noempty', 'noclosed,ignoreNormal', 'ignoreNormal,noempty');
 
-r($branch->getByProductsTest($products[0]))                            && p() && e('41:,0,1,2;42:,0,3,4;1:,0;');     // 测试获取产品 41 42 的分支信息
-r($branch->getByProductsTest($products[0], $params[0]))                && p() && e('41:,0,1,2;42:,0,3,4;1:,0;');     // 测试获取产品 41 42 的分支信息
-r($branch->getByProductsTest($products[0], $params[1]))                && p() && e('41:,0,1;42:,0,3;1:,0;');         // 测试获取产品 41 42 的分支信息
-r($branch->getByProductsTest($products[0], $params[2]))                && p() && e('41:,0,1,2;42:,0,3,4;');          // 测试获取产品 41 42 的分支信息
-r($branch->getByProductsTest($products[0], $params[3]))                && p() && e('41:,1,2;42:,3,4;1:,0;');         // 测试获取产品 41 42 的分支信息
-r($branch->getByProductsTest($products[0], $params[4]))                && p() && e('41:,0,1;42:,0,3;');              // 测试获取产品 41 42 的分支信息
-r($branch->getByProductsTest($products[0], $params[5]))                && p() && e('41:,1,2;42:,3,4;');              // 测试获取产品 41 42 的分支信息
-r($branch->getByProductsTest($products[0], $params[0], $appendBranch)) && p() && e('41:,0,1,2;42:,0,3,4;1:,0;');     // 测试获取产品 41 42 追加branch20 21 的分支信息
-r($branch->getByProductsTest($products[0], $params[1], $appendBranch)) && p() && e('41:,0,1;42:,0,3;1:,0;');         // 测试获取产品 41 42 noclosed 追加branch20 21 的分支信息
-r($branch->getByProductsTest($products[0], $params[2], $appendBranch)) && p() && e('41:,0,1,2;42:,0,3,4;');          // 测试获取产品 41 42 ignoreNormal 追加branch20 21 的分支信息
-r($branch->getByProductsTest($products[0], $params[3], $appendBranch)) && p() && e('41:,1,2;42:,3,4;1:,0;');         // 测试获取产品 41 42 noempty 追加branch20 21 的分支信息
-r($branch->getByProductsTest($products[0], $params[4], $appendBranch)) && p() && e('41:,0,1;42:,0,3;');              // 测试获取产品 41 42 noclosed,ignoreNormal 追加branch20 21 的分支信息
-r($branch->getByProductsTest($products[0], $params[5], $appendBranch)) && p() && e('41:,1,2;42:,3,4;');              // 测试获取产品 41 42 ignoreNormal,noempty 追加branch20 21 的分支信息
-r($branch->getByProductsTest($products[1]))                            && p() && e('81:,0,81,82;82:,0,83,84;2:,0;'); // 测试获取产品 81 82 的分支信息
-r($branch->getByProductsTest($products[2]))                            && p() && e('43:,0,5,6;83:,0,85,86;');        // 测试获取产品 43 83 的分支信息
+$appendBranchList[0] = array();
+$appendBranchList[1] = array(20, 21);
+
+$branchTester = new branchTest();
+r($branchTester->getByProductsTest($productIdList[0], $paramList[0], $appendBranchList[0])) && p() && e('0');                                                                        // 获取空产品列表下的分支数据
+r($branchTester->getByProductsTest($productIdList[1], $paramList[0], $appendBranchList[0])) && p() && e('6:|0|1|3|2;7:|0|5|4|6;8:|0|7|9|8;9:|0|11|10|12;10:|0|13|15|14;1:|0;2:|0;'); // 获取产品列表下的分支数据
+r($branchTester->getByProductsTest($productIdList[2], $paramList[0], $appendBranchList[0])) && p() && e('0');                                                                        // 获取不存在产品列表下的分支数据
+r($branchTester->getByProductsTest($productIdList[0], $paramList[1], $appendBranchList[0])) && p() && e('0');                                                                        // 获取空产品列表下的未关闭分支数据
+r($branchTester->getByProductsTest($productIdList[1], $paramList[1], $appendBranchList[0])) && p() && e('6:|0|1|2;7:|0|5|4;8:|0|7|8;9:|0|11|10;10:|0|13|14;2:|0;1:|0;');             // 获取产品列表下的未关闭分支数据
+r($branchTester->getByProductsTest($productIdList[2], $paramList[1], $appendBranchList[0])) && p() && e('0');                                                                        // 获取不存在产品列表下的未关闭分支数据
+r($branchTester->getByProductsTest($productIdList[0], $paramList[2], $appendBranchList[0])) && p() && e('0');                                                                        // 获取空产品列表下的忽略正常分支数据
+r($branchTester->getByProductsTest($productIdList[1], $paramList[2], $appendBranchList[0])) && p() && e('6:|0|1|3|2;7:|0|5|4|6;8:|0|7|9|8;9:|0|11|10|12;10:|0|13|15|14;');           // 获取产品列表下的忽略正常分支数据
+r($branchTester->getByProductsTest($productIdList[2], $paramList[2], $appendBranchList[0])) && p() && e('0');                                                                        // 获取不存在产品列表下的忽略正常分支数据
+r($branchTester->getByProductsTest($productIdList[0], $paramList[3], $appendBranchList[0])) && p() && e('0');                                                                        // 获取空产品列表下的非主干分支数据
+r($branchTester->getByProductsTest($productIdList[1], $paramList[3], $appendBranchList[0])) && p() && e('6:|1|3|2;7:|5|4|6;8:|7|9|8;9:|11|10|12;10:|13|15|14;1:|0;2:|0;');           // 获取产品列表下的非主干分支数据
+r($branchTester->getByProductsTest($productIdList[2], $paramList[3], $appendBranchList[0])) && p() && e('0');                                                                        // 获取不存在产品列表下的非主干分支数据
+r($branchTester->getByProductsTest($productIdList[0], $paramList[4], $appendBranchList[0])) && p() && e('0');                                                                        // 获取空产品列表下的未关闭且忽略正常分支数据
+r($branchTester->getByProductsTest($productIdList[1], $paramList[4], $appendBranchList[0])) && p() && e('6:|0|1|2;7:|0|5|4;8:|0|7|8;9:|0|11|10;10:|0|13|14;');                       // 获取产品列表下的未关闭且忽略正常分支数据
+r($branchTester->getByProductsTest($productIdList[2], $paramList[4], $appendBranchList[0])) && p() && e('0');                                                                        // 获取不存在产品列表下的未关闭且忽略正常分支数据
+r($branchTester->getByProductsTest($productIdList[0], $paramList[5], $appendBranchList[0])) && p() && e('0');                                                                        // 获取空产品列表下的未关闭且忽略正常且非主干分支数据
+r($branchTester->getByProductsTest($productIdList[1], $paramList[5], $appendBranchList[0])) && p() && e('6:|1|3|2;7:|5|4|6;8:|7|9|8;9:|11|10|12;10:|13|15|14;');                     // 获取产品列表下的未关闭且忽略正常且非主干分支数据
+r($branchTester->getByProductsTest($productIdList[2], $paramList[5], $appendBranchList[0])) && p() && e('0');                                                                        // 获取不存在产品列表下的未关闭且忽略正常且非主干分支数据
+
+r($branchTester->getByProductsTest($productIdList[0], $paramList[0], $appendBranchList[1])) && p() && e('0');                                                                        // 获取追加分支20和21和空产品列表下的分支数据
+r($branchTester->getByProductsTest($productIdList[1], $paramList[0], $appendBranchList[1])) && p() && e('6:|0|1|3|2;7:|0|5|4|6;8:|0|7|9|8;9:|0|11|10|12;10:|0|13|15|14;1:|0;2:|0;'); // 获取追加分支20和21和产品列表下的分支数据
+r($branchTester->getByProductsTest($productIdList[2], $paramList[0], $appendBranchList[1])) && p() && e('0');                                                                        // 获取追加分支20和21和不存在产品列表下的分支数据
+r($branchTester->getByProductsTest($productIdList[0], $paramList[1], $appendBranchList[1])) && p() && e('0');                                                                        // 获取追加分支20和21和空产品列表下的未关闭分支数据
+r($branchTester->getByProductsTest($productIdList[1], $paramList[1], $appendBranchList[1])) && p() && e('6:|0|1|2;7:|0|5|4;8:|0|7|8;9:|0|11|10;10:|0|13|14;2:|0;1:|0;');             // 获取追加分支20和21和产品列表下的未关闭分支数据
+r($branchTester->getByProductsTest($productIdList[2], $paramList[1], $appendBranchList[1])) && p() && e('0');                                                                        // 获取追加分支20和21和不存在产品列表下的未关闭分支数据
+r($branchTester->getByProductsTest($productIdList[0], $paramList[2], $appendBranchList[1])) && p() && e('0');                                                                        // 获取追加分支20和21和空产品列表下的忽略正常分支数据
+r($branchTester->getByProductsTest($productIdList[1], $paramList[2], $appendBranchList[1])) && p() && e('6:|0|1|3|2;7:|0|5|4|6;8:|0|7|9|8;9:|0|11|10|12;10:|0|13|15|14;');           // 获取追加分支20和21和产品列表下的忽略正常分支数据
+r($branchTester->getByProductsTest($productIdList[2], $paramList[2], $appendBranchList[1])) && p() && e('0');                                                                        // 获取追加分支20和21和不存在产品列表下的忽略正常分支数据
+r($branchTester->getByProductsTest($productIdList[0], $paramList[3], $appendBranchList[1])) && p() && e('0');                                                                        // 获取追加分支20和21和空产品列表下的非主干分支数据
+r($branchTester->getByProductsTest($productIdList[1], $paramList[3], $appendBranchList[1])) && p() && e('6:|1|3|2;7:|5|4|6;8:|7|9|8;9:|11|10|12;10:|13|15|14;1:|0;2:|0;');           // 获取追加分支20和21和产品列表下的非主干分支数据
+r($branchTester->getByProductsTest($productIdList[2], $paramList[3], $appendBranchList[1])) && p() && e('0');                                                                        // 获取追加分支20和21和不存在产品列表下的非主干分支数据
+r($branchTester->getByProductsTest($productIdList[0], $paramList[4], $appendBranchList[1])) && p() && e('0');                                                                        // 获取追加分支20和21和空产品列表下的未关闭且忽略正常分支数据
+r($branchTester->getByProductsTest($productIdList[1], $paramList[4], $appendBranchList[1])) && p() && e('6:|0|1|2;7:|0|5|4;8:|0|7|8;9:|0|11|10;10:|0|13|14;');                       // 获取追加分支20和21和产品列表下的未关闭且忽略正常分支数据
+r($branchTester->getByProductsTest($productIdList[2], $paramList[4], $appendBranchList[1])) && p() && e('0');                                                                        // 获取追加分支20和21和不存在产品列表下的未关闭且忽略正常分支数据
+r($branchTester->getByProductsTest($productIdList[0], $paramList[5], $appendBranchList[1])) && p() && e('0');                                                                        // 获取追加分支20和21和空产品列表下的未关闭且忽略正常且非主干分支数据
+r($branchTester->getByProductsTest($productIdList[1], $paramList[5], $appendBranchList[1])) && p() && e('6:|1|3|2;7:|5|4|6;8:|7|9|8;9:|11|10|12;10:|13|15|14;');                     // 获取追加分支20和21和产品列表下的未关闭且忽略正常且非主干分支数据
+r($branchTester->getByProductsTest($productIdList[2], $paramList[5], $appendBranchList[1])) && p() && e('0');                                                                        // 获取不存在产20和21和品列表下的未关闭且忽略正常且非主干分支数据
