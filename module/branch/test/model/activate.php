@@ -2,20 +2,16 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/branch.class.php';
+
+zdTable('product')->config('product')->gen(10);
+zdTable('branch')->config('branch')->gen(10);
 su('admin');
 
 /**
 
 title=测试 branchModel->activate();
+timeout=0
 cid=1
-pid=1
-
-测试激活分支 2 >> 2,active
-测试激活分支 4 >> 4,active
-测试激活分支 6 >> 6,active
-测试激活分支 8 >> 8,active
-测试激活分支 10 >> 10,active
-测试激活分支 1 >> 1,active
 
 */
 

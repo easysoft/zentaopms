@@ -2,22 +2,20 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/branch.class.php';
+
+zdTable('product')->config('product')->gen(10);
+zdTable('branch')->config('branch')->gen(10);
 su('admin');
 
 /**
 
 title=测试 branchModel->setDefault();
+timeout=0
 cid=1
-pid=1
-
-测试将productID 0, branchID 0的分支设为默认分支 >> 0
-测试将productID 0, branchID 1的分支设为默认分支 >> 分支1,1
-测试将productID 41, branchID 0的分支设为默认分支 >> 主干
-测试将productID 41, branchID 0的分支设为默认分支 >> 分支1,1
 
 */
 
-$productIdList = array(0, 41);
+$productIdList = array(0, 6);
 $branchIdList  = array(0, 1);
 
 $branch = new branchTest();

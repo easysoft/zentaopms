@@ -111,8 +111,7 @@ class branchTest
     public function updateTest($param)
     {
         $branchID = 1;
-
-        $branch = $this->objectModel->getByID($branchID, 0, '');
+        $branch   = $this->objectModel->getByID((string)$branchID, 0, '');
 
         $newBranch = new stdclass();
         $newBranch->name   = $branch->name;
@@ -330,7 +329,7 @@ class branchTest
      * @access public
      * @return int
      */
-    public function setDefaultTest($productID, $branchID)
+    public function setDefaultTest(int $productID,  int $branchID)
     {
         $this->objectModel->setDefault($productID, $branchID);
 
