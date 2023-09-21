@@ -16,6 +16,7 @@ class testcaseTao extends testcaseModel
     }
 
     /**
+     * 查询场景名称。
      * Fetch scene name.
      *
      * @param  int       $sceneID

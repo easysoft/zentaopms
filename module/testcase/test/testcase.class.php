@@ -1747,4 +1747,21 @@ class testcaseTest
 
         return $isClickable ? 1 : 0;
     }
+
+    /**
+     * 测试获取场景名称。
+     * Test fetch scene name.
+     *
+     * @param  int                $sceneID
+     * @access public
+     * @return string|array|false
+     */
+    public function fetchSceneNameTest($sceneID): string|array|false
+    {
+        $title = $this->objectModel->fetchSceneName($sceneID);
+
+        if(dao::isError()) return dao::getError();
+
+        return $title;
+    }
 }
