@@ -250,6 +250,7 @@ class branch extends control
     }
 
     /**
+     * 获取分支下拉列表。
      * Ajax get branches.
      *
      * @param  int    $productID
