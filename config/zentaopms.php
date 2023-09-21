@@ -453,6 +453,10 @@ define('TABLE_ARTIFACTREPO', '`' . $config->db->prefix . 'artifactrepo`');
 define('TABLE_PROMPT', '`' . $config->db->prefix . 'prompt`');
 define('TABLE_PROMPTROLE', '`' . $config->db->prefix . 'promptrole`');
 
+define('TABLE_METRIC', '' . $config->db->prefix . 'metric');
+define('TABLE_METRICLIB', '' . $config->db->prefix . 'metriclib');
+define('TABLE_METRICRECORDS', '' . $config->db->prefix . 'metricrecords');
+
 $config->objectTables['product']      = TABLE_PRODUCT;
 $config->objectTables['productplan']  = TABLE_PRODUCTPLAN;
 $config->objectTables['story']        = TABLE_STORY;
@@ -519,6 +523,7 @@ $config->objectTables['space']        = TABLE_SPACE;
 $config->objectTables['solution']     = TABLE_SOLUTION;
 $config->objectTables['artifactrepo'] = TABLE_ARTIFACTREPO;
 $config->objectTables['prompt']       = TABLE_PROMPT;
+$config->objectTables['metric']       = TABLE_METRIC;
 
 $config->newFeatures      = array('aiPrompts', 'promptDesign', 'promptExec');
 $config->disabledFeatures = '';

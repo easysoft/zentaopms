@@ -1,0 +1,32 @@
+---
+title: zt_task
+author: qixinzhi
+version: "1.0"
+fields:
+- field: id
+  range: 1-10000
+- field: project
+  range: 1-10{12}
+- field: closedDate
+  range: "20110101 000000-20210101 000000:10D"
+  type: timestamp
+  format: YYYY-MM-DD
+- field: openedDate
+  range: "20100101 000000-20210101 230000:10D"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: finishedDate
+  range: "20100101 000000-20210101 230000:10D"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: estimate
+  range: 1{10},2{9},4{8},5{7},6{5},8{4},10{1},
+- field: consumed
+  range: 10{10},8{9},7{8},6{7},4{5},2{4},1{1},
+- field: left
+  range: 1{10},2{9},4{8},5{7},6{5},8{4},10{1},
+- field: status
+  range: wait{1},doing{1},done{1},pause{1},cancel{1},closed{1}
+- field: deleted
+  range: 0{6},1{6}
+...

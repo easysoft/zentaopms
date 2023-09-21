@@ -1,0 +1,11 @@
+---
+title: zt_product
+author: qixinzhi
+version: "1.0"
+fields:
+- field: id
+  range: 1-10
+- field: deleted
+  range: 0{1},1{1}
+...
+

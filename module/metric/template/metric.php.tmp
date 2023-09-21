@@ -1,0 +1,60 @@
+<?php
+/**
+ * {{name}}。
+ * {{nameEN}}.
+ *
+ * 范围：{{scope}}
+ * 对象：{{object}}
+ * 目的：{{purpose}}
+ * 度量名称：{{name}}
+ * 单位：{{unit}}
+ * 描述：{{desc}}
+ * 定义：{{definition}}
+ */
+class {{code}} extends baseCalc
+{
+    /**
+     * 度量项计算临时结果。
+     */
+    public $result = 1;
+    // public $result = array();
+
+    /**
+     * 获取自定义数据源pdo句柄。
+     *
+     * @access public
+     * @return PDOStatement
+     */
+    public function getStatement()
+    {
+        return $this->dao->XXX->query();
+    }
+
+    /**
+     * 计算度量项。
+     *
+     * 对数据源查询得到的数据集进行逐行计算，该函数实现对于一行数据的计算逻辑
+     * 计算完成后将数据临时记录到$this->result上
+     *
+     * @param object $row 数据源的一行数据
+     * @access public
+     * @return void|false
+     */
+    public function calculate($row)
+    {
+        $this->result += 1;
+    }
+
+    /**
+     * 汇总并获取度量项计算结果。
+     *
+     * @param array $options 筛选参数
+     * @access public
+     * @return array 度量数据
+     */
+    public function getResult($options = array())
+    {
+        $records = $this->getRecords(array('value'));
+        return $this->filterByOptions($records, $options);
+    }
+}

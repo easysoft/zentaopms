@@ -1,0 +1,17 @@
+.scope-menu {width: 200px; max-height: 100%; margin: -5px 0; justify-content: flex-start;}
+.scope-menu > .text {flex: auto; display: flex; align-items: center; justify-content: flex-start; font-weight: bold; font-size: 16px; padding: 0 4px;}
+.scope-menu > .icon.is-leading {width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--color-primary-500); display: flex; align-items: center; justify-content: center; transform: rotate(90deg); transition: .2s all;}
+.scope-menu.is-open > .icon.is-leading {color: var(--color-canvas); background: var(--color-primary-500); transform: rotate(-90deg);}
+.scope-menu > .is-caret {width: 20px; margin-right: -8px; transition: background-color .2s; border-radius: var(--radius)}
+.scope-menu[data-value=""] > .is-caret,
+.scope-menu[data-value="all"] > .is-caret,
+.scope-menu[data-value="0"] > .is-caret {display: none;}
+.scope-menu > .is-caret:hover {color: var(--color-primary-500); background: var(--color-primary-100);}
+.scope-menu > .is-caret > .caret {display: none;}
+.scope-menu > .is-caret::after {content: '\e936'; font-family: ZentaoIcon;}
+
+.btn-divider {background-color: var(--color-current); height: 1rem; margin-left: 20px; margin-right: 20px; opacity: .3; width: 1px;}
+
+.clear-gap {gap: 0 !important;}
+.dtable-cell-html {width: inherit;}
+.dtable-name-flex {display: flex; justify-content: space-between;}

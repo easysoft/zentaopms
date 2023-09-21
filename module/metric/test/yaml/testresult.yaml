@@ -1,0 +1,15 @@
+---
+title: zt_testresult
+author: qixinzhi
+version: "1.0"
+fields:
+- field: id
+  range: 1-10000
+- field: case
+  range: 1-400{1}
+- field: date
+  range: "20100101 000000-20210101 230000:10D"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+...
+

@@ -1,0 +1,20 @@
+---
+title: zt_release
+author: zhouxin
+version: "1.0"
+fields:
+- field: id
+  range: 1-10000
+- field: product
+  range: 1-10{2}
+- field: date
+  range: "20100101 000000-20210101 000000:10D"
+  type: timestamp
+  format: YYYY-MM-DD
+- field: createdDate
+  range: "20100101 000000-20210101 230000:10D"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: deleted
+  range: 0{1},1{1}
+...

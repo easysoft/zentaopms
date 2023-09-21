@@ -1,0 +1,34 @@
+---
+title: zt_project
+author: qixinzhi
+version: "1.0"
+fields:
+- field: id
+  range: 1-10000
+- field: type
+  range: project
+- field: status
+  range: closed{1},doing{1},suspended{1},wait{1}
+- field: deleted
+  range: 0{4},1{4}
+- field: begin
+  range: "20200101 000000-20230101 000000:10D"
+  type: timestamp
+  format: YYYY-MM-DD
+- field: end
+  range: "20210101 000000-20250101 000000:10D"
+  type: timestamp
+  format: YYYY-MM-DD
+- field: realBegan
+  range: "20210101 000000-20240101 000000:10D"
+  type: timestamp
+  format: YYYY-MM-DD
+- field: realEnd
+  range: "20220101 000000-20260101 000000:10D"
+  type: timestamp
+  format: YYYY-MM-DD
+- field: firstEnd
+  range: "20210101 000000-20250101 000000:10D"
+  type: timestamp
+  format: YYYY-MM-DD
+...

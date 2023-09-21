@@ -1,0 +1,18 @@
+---
+title: zt_doc
+author: qixinzhi
+version: "1.0"
+fields:
+- field: id
+  range: 1-10000
+- field: addedDate
+  range: "20100101 000000-20210101 230000:10D"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: editedDate
+  range: "20110101 000000-20220101 230000:10D"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: deleted
+  range: 0{1},1{3}
+...
