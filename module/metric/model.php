@@ -1192,15 +1192,26 @@ class metricModel extends model
      */
     public function processOldMetrics($metrics)
     {
-        $oldMetricList = $this->getOldMetricList();
-
         $metricList = array();
-        foreach($metrics as $metric)
+        if(!in_array($this->config->edition, array('max', 'ipd')))
         {
-            $metric->isOldMetric = $this->isOldMetric($metric);
-            if($metric->isOldMetric) $metric->unit = $oldMetricList[$metric->fromID]->unit;
+            foreach($metrics as $metric)
+            {
+                $metric->isOldMetric = false;
+                $metricList[] = $metric;
+            }
+        }
+        else
+        {
+            $oldMetricList = $this->getOldMetricList();
 
-            $metricList[] = $metric;
+            foreach($metrics as $metric)
+            {
+                $metric->isOldMetric = $this->isOldMetric($metric);
+                if($metric->isOldMetric) $metric->unit = $oldMetricList[$metric->fromID]->unit;
+
+                $metricList[] = $metric;
+            }
         }
 
         return $metricList;
