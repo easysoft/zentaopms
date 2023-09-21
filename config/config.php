@@ -176,7 +176,7 @@ $config->CNE->api->headers = array('Content-Type: application/json');
 $config->CNE->api->channel = 'stable';
 
 $config->CNE->app = new stdclass;
-$config->CNE->app->domain = 'dev.haogs.cn';
+$config->CNE->app->domain = '';
 
 $config->cloud = new stdclass;
 $config->cloud->api = new stdclass;

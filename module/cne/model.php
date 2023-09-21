@@ -335,7 +335,7 @@ class cneModel extends model
         $customDomain = $this->loadModel('setting')->getItem('owner=system&module=common&section=domain&key=customDomain');
         if($customDomain) return $customDomain;
 
-        return  getenv('APP_DOMAIN') ? getenv('APP_DOMAIN') : $this->config->CNE->app->domain;
+        return  getenv('APP_DOMAIN');
     }
 
     /**
@@ -859,7 +859,7 @@ class cneModel extends model
                 "type" => "secret"
             )
         );
- 
+
         $apiParams = new stdclass;
         $apiParams->cluster   = '';
         $apiParams->namespace = $instance->spaceData->k8space;
