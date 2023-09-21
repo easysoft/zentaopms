@@ -1419,14 +1419,14 @@ class productZen extends product
      * @param  string      $browseType
      * @param  string      $storyType
      * @param  bool        $isProjectStory
-     * @param  object      $product
+     * @param  object|null $product
      * @param  object|null $project
      * @param  string      $branch
      * @param  string      $branchID
      * @access protected
      * @return void
      */
-    protected function assignBrowseData(array $stories, string $browseType, string $storyType, bool $isProjectStory, object $product, object|null $project, string $branch, string $branchID)
+    protected function assignBrowseData(array $stories, string $browseType, string $storyType, bool $isProjectStory, object|null $product, object|null $project, string $branch, string $branchID)
     {
         $productID       = $product ? $product->id : 0;
         $projectID       = $project ? $project->id : 0;
@@ -1448,7 +1448,7 @@ class productZen extends product
         $this->view->branchID        = $branchID;
         $this->view->modulePairs     = !empty($this->config->product->browse->showModule) ? $this->tree->getModulePairs($productID, 'story', $this->config->product->browse->showModule) : array();
         $this->view->showBranch      = $this->canShowBranch($projectID, $productID, $storyType, $isProjectStory);
-        $this->view->branchOptions   = (empty($product) && $isProjectStory) ? $this->productZen->getBranchOptions($projectProducts, $projectID) : array($productID => $branchOpt);
+        $this->view->branchOptions   = (empty($product) && $isProjectStory) ? $this->getBranchOptions($projectProducts, $projectID) : array($productID => $branchOpt);
         $this->view->branchTagOption = $branchTagOpt;
 
         $this->view->summary    = $this->product->summary($stories, $storyType);
