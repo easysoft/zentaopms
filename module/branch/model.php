@@ -187,13 +187,14 @@ class branchModel extends model
     }
 
     /**
-     * Get all pairs.
+     * 获取系统内所有分支id:name的键值对。
+     * Get the key-value pairs of id:name for all branches in the system.
      *
      * @param  string $params
      * @access public
      * @return array
      */
-    public function getAllPairs($params = '')
+    public function getAllPairs(string $params = ''): array
     {
         $branchGroups = $this->dao->select('*')->from(TABLE_BRANCH)->where('deleted')->eq(0)->orderBy('product,`order`')->fetchGroup('product', 'id');
         $products     = $this->loadModel('product')->getByIdList(array_keys($branchGroups));
