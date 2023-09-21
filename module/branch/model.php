@@ -601,28 +601,33 @@ class branchModel extends model
     }
 
     /**
+     * 检查分支数据。
      * Check branch data.
      *
      * @param  int    $branchID
      * @access public
      * @return bool
      */
-    public function checkBranchData($branchID)
+    public function checkBranchData(int $branchID): bool
     {
-        $module  = $this->dao->select('id')->from(TABLE_MODULE)->where('branch')->eq($branchID)->andWhere('deleted')->eq(0)->limit(1)->fetch();
-        $story   = $this->dao->select('id')->from(TABLE_STORY)->where('branch')->eq($branchID)->andWhere('deleted')->eq(0)->limit(1)->fetch();
-        $plan    = $this->dao->select('id')->from(TABLE_PRODUCTPLAN)->where('branch')->eq($branchID)->andWhere('deleted')->eq(0)->limit(1)->fetch();
-        $bug     = $this->dao->select('id')->from(TABLE_BUG)->where('branch')->eq($branchID)->andWhere('deleted')->eq(0)->limit(1)->fetch();
-        $case    = $this->dao->select('id')->from(TABLE_CASE)->where('branch')->eq($branchID)->andWhere('deleted')->eq(0)->limit(1)->fetch();
-        $release = $this->dao->select('id')->from(TABLE_RELEASE)->where('branch')->eq($branchID)->andWhere('deleted')->eq(0)->limit(1)->fetch();
-        $build   = $this->dao->select('id')->from(TABLE_BUILD)->where('branch')->eq($branchID)->andWhere('deleted')->eq(0)->limit(1)->fetch();
+        $modules = array('module', 'story', 'productplan', 'bug', 'case', 'release', 'build');
+        foreach($modules as $module)
+        {
+            $firstData = $this->dao->select('id')->from($this->config->objectTables[$module])
+                ->where('branch')->eq($branchID)
+                ->andWhere('deleted')->eq(0)
+                ->fetch();
+
+            if($firstData) return false;
+        }
+
         $project = $this->dao->select('t1.id')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
             ->where('t2.branch')->eq($branchID)
             ->andWhere('t1.deleted')->eq(0)
             ->limit(1)
             ->fetch();
-        return empty($module) && empty($story) && empty($bug) && empty($case) && empty($release) && empty($build) && empty($plan) && empty($project);
+        return empty($project);
     }
 
     /**
