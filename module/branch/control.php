@@ -214,7 +214,7 @@ class branch extends control
     {
         parse_str($extra, $output);
 
-        $isQaModule = (strpos(',project,execution,', ",{$this->app->tab},") !== false and strpos(',bug,testcase,groupCase,zeroCase,', ",$method,") !== false and !empty($productID)) ? true : false;
+        $isQaModule = (strpos(',project,execution,', ",{$this->app->tab},") !== false && strpos(',bug,testcase,groupCase,zeroCase,', ",$method,") !== false && !empty($productID)) ? true : false;
         $param      = $isQaModule ? $extra : 0;
         $param      = isset($output['projectID']) ? $output['projectID'] : $param;
         $branches   = $this->branch->getPairs($productID, 'all', $param);
