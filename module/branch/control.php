@@ -320,13 +320,14 @@ class branch extends control
     }
 
     /**
+     * 将多个分支合并到一个分支。
      * Merge multiple branches into one branch.
      *
      * @param  int    $productID
      * @access public
      * @return object
      */
-    public function mergeBranch($productID)
+    public function mergeBranch(int $productID)
     {
         if($this->post->mergedBranchIDList)
         {
@@ -338,10 +339,11 @@ class branch extends control
                 return $branch != 0 and $branch != $mergeToBranch;
             });
 
-            $mergedBranchIDList = implode(',', $mergedBranches);
-            $mergedBranches     = $this->dao->select('id,name')->from(TABLE_BRANCH)->where('id')->in($mergedBranchIDList)->fetchPairs();
+            $mergedBranches = $this->branch->getPairsByIdList($mergedBranches);
 
-            $targetBranch = $this->branch->mergeBranch($productID, $mergedBranchIDList);
+            $postData     = form::data()->get();
+            $branchIdList = implode(',', array_keys($mergedBranches));
+            $targetBranch = $this->branch->mergeBranch($productID, $branchIdList, $postData);
             if(dao::isError()) return $this->sendError(dao::getError());
 
             $this->loadModel('action')->create('branch', $targetBranch, 'MergedBranch', '', implode(',', $mergedBranches));

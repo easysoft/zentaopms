@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of branch module of ZenTaoCMS.
  *
@@ -160,6 +161,19 @@ class branchModel extends model
             }
         }
         return $branches;
+    }
+
+    /**
+     * 通过分支ID列表获取分支名称列表。
+     * Get the list of branch name from the branch ID list.
+     *
+     * @param  array  $branchIdList
+     * @access public
+     * @return array
+     */
+    public function getPairsByIdList(array $branchIdList): array
+    {
+        return $this->dao->select('id,name')->from(TABLE_BRANCH)->where('id')->in($branchIdList)->fetchPairs();
     }
 
     /**
@@ -726,92 +740,33 @@ class branchModel extends model
     }
 
     /**
+     * 将多个分支合并到一个分支。
      * Merge multiple branches into one branch.
      *
-     * @param  int       $productID
-     * @param  string    $mergedBranches
+     * @param  int      $productID
+     * @param  string   $mergedBranches
+     * @param  object   $data
      * @access public
      * @return int|bool
      */
-    public function mergeBranch($productID, $mergedBranches)
+    public function mergeBranch(int $productID, string $mergedBranches, object $data): int|bool
     {
-        $data = fixer::input('post')->get();
-        if(empty($data->targetBranch) && empty($data->name))
+        if($data->createBranch && empty($data->name))
         {
             $this->changeBranchLanguage($productID);
-            if($this->post->createBranch)
-            {
-                dao::$errors['name'] = sprintf($this->lang->error->notempty, $this->lang->branch->name);
-            }
-            else
-            {
-                dao::$errors['targetBranch'] = sprintf($this->lang->error->notempty, $this->lang->branch->mergeBranch);
-            }
+            dao::$errors['name'] = sprintf($this->lang->error->notempty, $this->lang->branch->name);
             return false;
         }
 
         /* Get the target branch. */
         $targetBranch = $data->createBranch ? $this->create($productID, true) : $data->targetBranch;
-
         if($data->createBranch) $this->loadModel('action')->create('branch', $targetBranch, 'Opened');
 
         /* Branch. */
         $this->dao->delete()->from(TABLE_BRANCH)->where('id')->in($mergedBranches)->exec();
 
-        /* Release. */
-        $this->dao->update(TABLE_RELEASE)->set('branch')->eq($targetBranch)->where('branch')->in($mergedBranches)->exec();
-
-        /* Build. */
-        $this->dao->update(TABLE_BUILD)->set('branch')->eq($targetBranch)->where('branch')->in($mergedBranches)->exec();
-
-        /* Plan. */
-        $this->dao->update(TABLE_PRODUCTPLAN)->set('branch')->eq($targetBranch)->where('branch')->in($mergedBranches)->exec();
-
-        /* Module. */
-        $this->dao->update(TABLE_MODULE)->set('branch')->eq($targetBranch)->where('branch')->in($mergedBranches)->exec();
-
-        /* Story. */
-        $this->dao->update(TABLE_STORY)->set('branch')->eq($targetBranch)->where('branch')->in($mergedBranches)->exec();
-        $this->dao->update(TABLE_PROJECTSTORY)->set('branch')->eq($targetBranch)->where('branch')->in($mergedBranches)->exec();
-
-        /* Bug. */
-        $this->dao->update(TABLE_BUG)->set('branch')->eq($targetBranch)->where('branch')->in($mergedBranches)->exec();
-
-        /* Case. */
-        $this->dao->update(TABLE_CASE)->set('branch')->eq($targetBranch)->where('branch')->in($mergedBranches)->exec();
-
-        /* Linked project or execution. */
-        $linkedProject = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)
-            ->where('branch')->in($mergedBranches . ",$targetBranch")
-            ->andWhere('product')->eq($productID)
-            ->fetchGroup('project');
-
-        $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('branch')->in($mergedBranches . ",$targetBranch")
-            ->andWhere('product')->eq($productID)
-            ->exec();
-        foreach($linkedProject as $projectID => $projectProducts)
-        {
-            $plan = 0;
-            if(!$data->createBranch)
-            {
-                /* Get the linked plan of the target branch. */
-                foreach($projectProducts as $projectProduct)
-                {
-                    if($projectProduct->branch == $targetBranch)
-                    {
-                        $plan = $projectProduct->plan;
-                        break;
-                    }
-                }
-            }
-
-            $projectProduct = new stdClass();
-            $projectProduct->project = $projectID;
-            $projectProduct->product = $productID;
-            $projectProduct->branch  = $targetBranch;
-            $projectProduct->plan    = $plan;
-            $this->dao->insert(TABLE_PROJECTPRODUCT)->data($projectProduct)->autoCheck()->exec();
-        }
+        $this->branchTao->afterMerge($productID, $targetBranch, $mergedBranches, $data);
+        if(dao::isError()) return false;
 
         return $targetBranch;
     }
