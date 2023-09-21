@@ -13,7 +13,8 @@ declare(strict_types=1);
 class branch extends control
 {
     /**
-     * Manage branch.
+     * 管理分支列表。
+     * Manage branch list.
      *
      * @param  int    $productID
      * @param  string $browseType
