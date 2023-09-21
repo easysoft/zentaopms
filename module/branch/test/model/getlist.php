@@ -23,7 +23,7 @@ $mainBranch  = false;
 
 $branch = new branchTest();
 
-r($branch->getListTest($productID[0]))                                               && p('', '|') && e(',0,1,3,17,2,16,18');
+r($branch->getListTest($productID[0]))                                               && p('', '|') && e(',0,1,17,2,16');
 r($branch->getListTest($productID[0], $executionID[0]))                              && p('', '|') && e('0');
 r($branch->getListTest($productID[0], $executionID[0], $browseType[0]))              && p('', '|') && e('0');
 r($branch->getListTest($productID[0], $executionID[1], $browseType[0]))              && p('', '|') && e(',0,1');

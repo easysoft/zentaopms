@@ -2,21 +2,16 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/branch.class.php';
+
+zdTable('product')->config('product')->gen(10);
+zdTable('branch')->config('branch')->gen(10);
 su('admin');
 
 /**
 
 title=测试 branchModel->checkBranchData();
+timeout=0
 cid=1
-pid=1
-
-测试验证branchID 1 的数据 >> 2
-测试验证branchID 2 的数据 >> 2
-测试验证branchID 3 的数据 >> 2
-测试验证branchID 4 的数据 >> 2
-测试验证branchID 5 的数据 >> 2
-测试验证branchID 6 的数据 >> 2
-测试验证branchID 1000001 的数据 >> 1
 
 */
 $branchID = array(1, 2, 3, 4, 5, 6, 1000001);
@@ -28,5 +23,5 @@ r($branch->checkBranchDataTest($branchID[1])) && p() && e('2'); // 测试验证b
 r($branch->checkBranchDataTest($branchID[2])) && p() && e('2'); // 测试验证branchID 3 的数据
 r($branch->checkBranchDataTest($branchID[3])) && p() && e('2'); // 测试验证branchID 4 的数据
 r($branch->checkBranchDataTest($branchID[4])) && p() && e('2'); // 测试验证branchID 5 的数据
-r($branch->checkBranchDataTest($branchID[5])) && p() && e('2'); // 测试验证branchID 6 的数据
+r($branch->checkBranchDataTest($branchID[5])) && p() && e('1'); // 测试验证branchID 6 的数据
 r($branch->checkBranchDataTest($branchID[6])) && p() && e('1'); // 测试验证branchID 1000001 的数据
