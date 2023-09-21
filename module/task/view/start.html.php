@@ -41,7 +41,7 @@
         <?php endif;?>
       </h2>
     </div>
-    <form method='post' target='hiddenwin' <?php if($app->rawMethod == 'start') echo "onsubmit='return checkLeft();'"?>>
+    <form method='post' target='hiddenwin' <?php if($app->rawMethod == 'start' or $app->rawMethod == 'starttask') echo "onsubmit='return checkLeft();'"?>>
       <table class='table table-form'>
         <tr class='<?php if($task->mode == 'multi') echo 'hidden'?>'>
           <th class='w-90px'><?php echo $lang->task->assignedTo;?></th>
