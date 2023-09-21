@@ -642,7 +642,7 @@
             url = lasShowModal.options.url;
             target = lasShowModal.id;
         }
-        options = $.extend({url}, options);
+        options = $.extend(url ? {url: url} : {}, options);
         if(!target) return zui.Modal.open(options);
         else if(target === 'current') target = zui.Modal.query().id;
 
