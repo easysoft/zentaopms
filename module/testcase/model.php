@@ -1113,6 +1113,7 @@ class testcaseModel extends model
     }
 
     /**
+     * 判断当前动作是否可以点击。
      * Adjust the action is clickable.
      *
      * @param  object $case
@@ -1129,9 +1130,9 @@ class testcaseModel extends model
 
         $action = strtolower($action);
 
-        if($action == 'confirmchange')      return $case->caseStatus != 'wait' && $case->version < $case->caseVersion;
-        if($action == 'confirmstorychange') return $case->needconfirm || (isset($case->browseType) && $case->browseType == 'needconfirm');
-        if($action == 'createbug')          return !empty($case->caseFails) && $case->caseFails > 0;
+        if($action == 'confirmchange')      return isset($case->caseStatus) && isset($case->caseVersion) && $case->caseStatus != 'wait' && $case->version < $case->caseVersion;
+        if($action == 'confirmstorychange') return !empty($case->needconfirm) || (isset($case->browseType) && $case->browseType == 'needconfirm');
+        if($action == 'createbug')          return isset($case->caseFails) && $case->caseFails > 0;
         if($action == 'review')             return ($config->testcase->needReview || !empty($config->testcase->forceReview)) && (isset($case->caseStatus) ? $case->caseStatus == 'wait' : $case->status == 'wait');
         if($action == 'showscript')         return $case->auto == 'auto';
 

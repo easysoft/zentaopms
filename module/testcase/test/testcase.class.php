@@ -1720,4 +1720,31 @@ class testcaseTest
         if(dao::isError()) return dao::getError();
         return implode(',', array_keys($modules));
     }
+
+    /**
+     * 测试判断动作是否可点击。
+     * Test adjust the action is clickable.
+     *
+     * @param  string    $action
+     * @param  array     $params
+     * @param  array     $configs
+     * @access public
+     * @return array|int
+     */
+    public function isClickableTest(string $action, array $params = array(), array $configs = array()): array|int
+    {
+        global $tester;
+        $tester->config->testcase->needReview  = false;
+        $tester->config->testcase->forceReview = false;
+        foreach($configs as $key => $value) $tester->config->testcase->{$key} = $value;
+
+        $case = $this->objectModel->getByID(1);
+        foreach($params as $key => $value) $case->{$key} = $value;
+
+        $isClickable = $this->objectModel->isClickable($case, $action);
+
+        if(dao::isError()) return dao::getError();
+
+        return $isClickable ? 1 : 0;
+    }
 }
