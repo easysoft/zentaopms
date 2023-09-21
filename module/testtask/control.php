@@ -159,7 +159,7 @@ class testtask extends control
 
         /* Load pager. */
         if($browseType == 'newest') $recPerPage = '10';
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Append id for second sort. */
