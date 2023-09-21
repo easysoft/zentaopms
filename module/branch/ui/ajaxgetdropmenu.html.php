@@ -21,7 +21,7 @@ foreach($branches as $branchID => $branchName)
     $item['type'] = 'branch';
     $item['keys'] = zget($branchesPinyin, $branchName, '');
 
-    if($branchID == 'all' or empty($branchID) or $statusList[$branchID] == 'active')
+    if($branchID == 'all' || empty($branchID) || $statusList[$branchID] == 'active')
     {
         $data['active'][] = $item;
     }

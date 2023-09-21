@@ -199,24 +199,26 @@ class branch extends control
     }
 
     /**
+     * 分支下拉菜单。
      * Ajax get drop menu.
      *
      * @param  int    $productID
-     * @param  int    $branch
-     * @param  string $module
+     * @param  string $branch
+     * @param  int    $module
      * @param  string $method
      * @param  string $extra
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu($productID, $branch, $module, $method, $extra = '')
+    public function ajaxGetDropMenu(int $productID, string $branch, int $module, string $method, string $extra = '')
     {
         parse_str($extra, $output);
+
         $isQaModule = (strpos(',project,execution,', ",{$this->app->tab},") !== false and strpos(',bug,testcase,groupCase,zeroCase,', ",$method,") !== false and !empty($productID)) ? true : false;
         $param      = $isQaModule ? $extra : 0;
         $param      = isset($output['projectID']) ? $output['projectID'] : $param;
         $branches   = $this->branch->getPairs($productID, 'all', $param);
-        $statusList = $this->dao->select('id,status')->from(TABLE_BRANCH)->where('product')->eq($productID)->fetchPairs();
+        $statusList = $this->branch->getStatusList($productID);
 
         $this->view->link            = $this->loadModel('product')->getProductLink($module, $method, $extra, true);
         $this->view->productID       = $productID;

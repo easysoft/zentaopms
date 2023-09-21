@@ -16,13 +16,13 @@ class branchModel extends model
      * 通过分支ID获取分支信息。
      * Get name by id.
      *
-     * @param  int                 $branchID
+     * @param  string              $branchID
      * @param  int                 $productID
      * @param  string              $field
      * @access public
      * @return object|string|false
      */
-    public function getByID(int $branchID, int $productID = 0, string $field = 'name'): object|string|false
+    public function getByID(string $branchID, int $productID = 0, string $field = 'name'): object|string|false
     {
         if($branchID == 'all') return false;
         if(empty($branchID))
@@ -97,6 +97,19 @@ class branchModel extends model
 
         array_unshift($branchList, $mainBranch);
         return $branchList;
+    }
+
+    /**
+     * 根据产品ID获取分支状态信息。
+     * Get branch status information based on product ID.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
+    public function getStatusList(int $productID): array
+    {
+        return $this->dao->select('id,status')->from(TABLE_BRANCH)->where('product')->eq($productID)->fetchPairs();
     }
 
     /**
