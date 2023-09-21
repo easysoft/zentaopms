@@ -114,10 +114,10 @@ $footToolbar  = array();
 if($canBatchEdit)
 {
     $footToolbar['items'][] = array(
-        'text'     => $lang->edit,
-        'class'    => 'btn batch-btn secondary size-sm',
-        'btnType'  => 'primary',
-        'data-url' => createLink('branch', 'batchEdit', "productID={$product->id}")
+        'text'      => $lang->edit,
+        'className' => 'btn batch-btn secondary size-sm',
+        'btnType'   => 'primary',
+        'data-url'  => createLink('branch', 'batchEdit', "productID={$product->id}")
     );
 }
 
