@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of branch of ZenTaoPMS.
  *
@@ -346,19 +347,5 @@ class branch extends control
             if(dao::isError()) return $this->sendError(dao::getError());
         }
         return $this->sendSuccess(array('load' => true, 'closeModel' => true));
-    }
-
-    /**
-     * AJAX: Get target branches for merge branch.
-     *
-     * @param  int    $productID
-     * @param  string $mergedBranches
-     * @access public
-     * @return string
-     */
-    public function ajaxGetTargetBranches($productID, $mergedBranches = '')
-    {
-        $branchPairs = $this->branch->getPairs($productID, 'active', 0, $mergedBranches);
-        return print(html::select('targetBranch', $branchPairs, '', "class='form-control chosen'"));
     }
 }
