@@ -58,10 +58,7 @@ class branchModel extends model
         $executionBranches = array();
         if($executionID)
         {
-            $executionBranches = $this->dao->select('branch')->from(TABLE_PROJECTPRODUCT)
-                ->where('project')->eq($executionID)
-                ->andWhere('product')->eq($productID)
-                ->fetchPairs('branch');
+            $executionBranches = $this->branchTao->getIdListByRelation($productID, $executionID);
             if(empty($executionBranches)) return array();
 
             if(in_array(BRANCH_MAIN, $executionBranches)) $withMainBranch = true;
@@ -100,7 +97,8 @@ class branchModel extends model
     }
 
     /**
-     * Get pairs.
+     * 根据产品ID获取分支列表键值对。
+     * Get branch pairs by product id.
      *
      * @param  int    $productID
      * @param  string $params active|noempty|all|withClosed
@@ -109,17 +107,14 @@ class branchModel extends model
      * @access public
      * @return array
      */
-    public function getPairs($productID, $params = '', $executionID = 0, $mergedBranches = '')
+    public function getPairs(int $productID, string $params = '', int $executionID = 0, string $mergedBranches = ''): array
     {
         if(!$productID) $productID = 0;
 
         $executionBranches = array();
         if($executionID)
         {
-            $executionBranches = $this->dao->select('branch')->from(TABLE_PROJECTPRODUCT)
-                ->where('project')->eq($executionID)
-                ->andWhere('product')->eq($productID)
-                ->fetchAll('branch');
+            $executionBranches = $this->branchTao->getIdListByRelation($productID, $executionID);
             if(empty($executionBranches)) return array();
         }
 

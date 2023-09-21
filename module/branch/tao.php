@@ -69,4 +69,21 @@ class branchTao extends branchModel
 
         return !dao::isError();
     }
+
+    /**
+     * 根据产品和执行ID获取分支ID列表。
+     * Get branch ID list by product and execution ID.
+     *
+     * @param  int       $productID
+     * @param  int       $executionID
+     * @access protected
+     * @return array
+     */
+    protected function getIdListByRelation(int $productID, int $executionID): array
+    {
+        return $this->dao->select('branch')->from(TABLE_PROJECTPRODUCT)
+            ->where('project')->eq($executionID)
+            ->andWhere('product')->eq($productID)
+            ->fetchAll('branch');
+    }
 }
