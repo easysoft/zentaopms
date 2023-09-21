@@ -119,7 +119,16 @@ else
 
     foreach($caseData as $case)
     {
-        if(empty($case->id) || !isset($cases[$case->id])) $case->id = 0;
+        if(empty($case->id) || !isset($cases[$case->id]))
+        {
+            $case->id = 0;
+            continue;
+        }
+
+        if(!isset($case->module)) $case->module = $cases[$case->id]->module;
+        if(!isset($case->pri))    $case->pri    = $cases[$case->id]->pri;
+        if(!isset($case->type))   $case->type   = $cases[$case->id]->type;
+        if(empty($case->stage))   $case->stage  = $cases[$case->id]->stage;
     }
 
     formBatchPanel
