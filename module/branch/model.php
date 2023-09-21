@@ -37,6 +37,7 @@ class branchModel extends model
     }
 
     /**
+     * 获取分支列表。
      * Get branch list.
      *
      * @param  int    $productID
@@ -48,8 +49,11 @@ class branchModel extends model
      * @access public
      * @return array
      */
-    public function getList($productID, $executionID = 0, $browseType = 'active', $orderBy = 'order', $pager = null, $withMainBranch = true)
+    public function getList(int $productID, int $executionID = 0, string $browseType = 'active', string $orderBy = 'order', object|null $pager = null, bool $withMainBranch = true): array
     {
+        $product = $this->loadModel('product')->getById($productID);
+        if(!$product) return array();
+
         $executionBranches = array();
         if($executionID)
         {
@@ -57,22 +61,22 @@ class branchModel extends model
                 ->where('project')->eq($executionID)
                 ->andWhere('product')->eq($productID)
                 ->fetchPairs('branch');
-            if(in_array(BRANCH_MAIN, $executionBranches)) $withMainBranch = true;
             if(empty($executionBranches)) return array();
+
+            if(in_array(BRANCH_MAIN, $executionBranches)) $withMainBranch = true;
         }
 
+        /* Get branch list. */
         $branchList = $this->dao->select('*')->from(TABLE_BRANCH)
             ->where('deleted')->eq(0)
             ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
-            ->beginIF($productID and $executionID)->andWhere('id')->in(array_keys($executionBranches))->fi()
+            ->beginIF($productID && $executionID)->andWhere('id')->in(array_keys($executionBranches))->fi()
             ->beginIF(!in_array($browseType, array('withClosed', 'all')))->andWhere('status')->eq($browseType)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-
         if($browseType == 'closed') return $branchList;
 
-        $product       = $this->loadModel('product')->getById($productID);
         $defaultBranch = BRANCH_MAIN;
         foreach($branchList as $branch) $defaultBranch = $branch->default ? $branch->id : $defaultBranch;
 
@@ -90,7 +94,8 @@ class branchModel extends model
         $mainBranch->desc        = sprintf($this->lang->branch->mainBranch, $this->lang->product->branchName[$product->type]);
         $mainBranch->order       = 0;
 
-        return array($mainBranch) + $branchList;
+        array_unshift($branchList, $mainBranch);
+        return $branchList;
     }
 
     /**
