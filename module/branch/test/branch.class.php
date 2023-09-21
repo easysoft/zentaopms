@@ -208,18 +208,17 @@ class branchTest
     /**
      * Test unlink branches for projects when product type is normal.
      *
-     * @param  string $productIDList
+     * @param  array     $productIDList
      * @access public
-     * @return int
+     * @return array|int
      */
-    public function unlinkBranch4ProjectTest($productIDList)
+    public function unlinkBranch4ProjectTest(array $productIDList): array|int
     {
         $this->objectModel->unlinkBranch4Project($productIDList);
 
         if(dao::isError()) return dao::getError();
 
-        global $tester;
-        $objects = $tester->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('product')->in($productIDList)->andWhere('branch')->gt(0)->fetchAll();
+        $objects = $this->objectModel->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('product')->in($productIDList)->andWhere('branch')->gt(0)->fetchAll();
         return count($objects);
     }
 

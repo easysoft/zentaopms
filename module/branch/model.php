@@ -396,13 +396,14 @@ class branchModel extends model
     }
 
     /**
+     * 将产品改为正常类型时，解除分支与项目的关联。
      * Unlink branches for projects when product type is normal.
      *
-     * @param  int|array $productIDList
+     * @param  array   $productIDList
      * @access public
-     * @return void
+     * @return bool
      */
-    public function unlinkBranch4Project($productIDList)
+    public function unlinkBranch4Project(array $productIDList): bool
     {
         $productLinkedProject = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)
             ->where('product')->in($productIDList)
@@ -427,6 +428,8 @@ class branchModel extends model
                 $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
             }
         }
+
+        return !dao::isError();
     }
 
     /**
