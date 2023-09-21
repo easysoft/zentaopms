@@ -1899,190 +1899,289 @@ class testtaskModel extends model
     }
 
     /**
-     * Import unit results.
+     * 导入单元测试结果。
+     * Import unit test results.
      *
-     * @param  int    $productID
+     * @param  object $task
      * @access public
-     * @return string
+     * @return bool|int
      */
-    public function importUnitResult($productID)
+    public function importUnitResult(object $task): bool|int
     {
-        $file = $this->loadModel('file')->getUpload('resultFile');
-        if(empty($file))
+        /* 获取上传的单元测试文件。*/
+        /* Get uploaded unit test file. */
+        $files = $this->loadModel('file')->getUpload('resultFile');
+        if(empty($files[0]))
         {
-            dao::$errors[] = $this->lang->testtask->unitXMLFormat;
+            dao::$errors['resultFile'][] = $this->lang->testtask->unitXMLFormat;
             return false;
         }
 
-        $file     = $file[0];
-        $fileName = $this->file->savePath . $this->file->getSaveName($file['pathname']);
-        move_uploaded_file($file['tmpname'], $fileName);
-        if(simplexml_load_file($fileName) === false)
+        /* 使用 simplexml 读取文件。*/
+        /* Use simplexml to read file. */
+        $file     = $files[0];
+        $filePath = $this->file->savePath . $this->file->getSaveName($file['pathname']);
+        move_uploaded_file($file['tmpname'], $filePath);
+        $parsedXML = simplexml_load_file($filePath);
+        if($parsedXML === false)
         {
-            dao::$errors[] = $this->lang->testtask->cannotBeParsed;
+            dao::$errors['resultFile'][] = $this->lang->testtask->cannotBeParsed;
             return false;
         }
 
-        $frame = $this->post->frame;
-        unset($_POST['frame']);
+        /* 解析 xml 文件。*/
+        /* Parse xml file. */
+        $data = $this->parseXMLResult($parsedXML, $task->product, $task->frame);
+        if(empty($data['cases']) && $task->frame == 'cppunit') $data = $this->parseCppXMLResult($parsedXML, $task->product, $task->frame);
+        if(empty($data['cases']))
+        {
+            dao::$errors['resultFile'][] = $this->lang->testtask->noImportData;
+            return false;
+        }
 
-        $data     = $this->parseXMLResult($fileName, $productID, $frame);
-        if($frame == 'cppunit' and empty($data['cases'])) $data = $this->parseCppXMLResult($fileName, $productID, $frame);
-
-        /* Create task. */
-        $this->post->set('auto', 'unit');
-        $testtaskID = $this->create();
-
-        unlink($fileName);
-        unset($_SESSION['resultFile']);
+        /* 创建测试单。*/
+        /* Create test task. */
+        unset($task->frame);
+        //$taskID = $this->create($task);
+        $taskID = 620;
         if(dao::isError()) return false;
 
-        return $this->processAutoResult($testtaskID, $productID, $data['suites'], $data['cases'], $data['results'], $data['suiteNames'], $data['caseTitles'], 'unit');
+        $this->loadModel('action')->create('testtask', $taskID, 'opened');
+
+        unlink($filePath);
+        unset($_SESSION['resultFile']);
+
+        /* 导入单元测试结果文件中包含的数据。*/
+        /* Import data in the unit test results. */
+        $this->importDataOfUnitResult($taskID, $task->product, $data['suites'], $data['cases'], $data['results'], $data['suiteNames'], $data['caseTitles'], 'unit');
+
+        return $taskID;
     }
 
     /**
-     * Process auto test result.
+     * 导入单元测试结果文件中包含的数据。
+     * Import data in the unit test results.
      *
-     * @param  int    $testtaskID
+     * @param  int    $taskID
      * @param  int    $productID
      * @param  array  $suites
      * @param  array  $cases
      * @param  array  $results
      * @param  array  $suiteNames
      * @param  array  $caseTitles
-     * @param  string $auto     unit|func
+     * @param  string $auto      unit|func
      * @access public
-     * @return int
+     * @return bool
      */
-    public function processAutoResult($testtaskID, $productID, $suites, $cases, $results, $suiteNames = array(), $caseTitles = array(), $auto = 'unit')
+    public function importDataOfUnitResult(int $taskID, int $productID, array $suites, array $cases, array $results, array $suiteNames, array $caseTitles, string $auto = 'unit'): bool
     {
-        if(empty($cases)) return print(js::alert($this->lang->testtask->noImportData));
-
-        /* Import cases and link task and insert result. */
         $this->loadModel('action');
-        $existSuites = $this->dao->select('*')->from(TABLE_TESTSUITE)->where('name')->in($suiteNames)->andWhere('product')->eq($productID)->andWhere('type')->eq($auto)->andWhere('deleted')->eq(0)->fetchPairs('name', 'id');
+
+        /* 初始化对象便于在循环中使用。*/
+        /* Initialize the object for use in loops. */
+        $suiteCase = new stdclass();
+        $testRun   = new stdclass();
+        $testRun->task   = $taskID;
+        $testRun->status = 'done';
+
+        $existSuites = $suiteNames ? $this->getExistSuitesOfUnitResult($suiteNames, $productID, $auto) : array();
+
         foreach($suites as $suiteIndex => $suite)
         {
             $suiteID = 0;
-            if($suite)
+            if($suite) $suiteID = isset($existSuites[$suite->name]) ? $existSuites[$suite->name] : $this->importSuiteOfUnitResult($suite);
+
+            $suiteCase->suite = $suiteID;
+
+            $importCases = zget($cases, $suiteIndex, array());
+            $existCases  = !empty($caseTitles[$suiteIndex]) ? $this->getExistCasesOfUnitResult($caseTitles[$suiteIndex], $suiteID, $productID, $auto) : array();
+            foreach($importCases as $key => $case)
             {
-                if(!isset($existSuites[$suite->name]))
-                {
-                    $this->dao->insert(TABLE_TESTSUITE)->data($suite)->exec();
-                    $suiteID = $this->dao->lastInsertID();
-                    $this->action->create('testsuite', $suiteID, 'opened');
-                }
-                else
-                {
-                    $suiteID = $existSuites[$suite->name];
-                }
-            }
+                $caseID = $this->importCaseOfUnitResult($case, $existCases);
+                $runID  = $this->importRunOfUnitResult($case, $caseID, $testRun);
+                if($suiteID) $this->linkImportedCaseToSuite($case, $caseID, $suiteCase);
 
-            if($suiteID)
-            {
-                $existCases = $this->dao->select('t1.*')->from(TABLE_CASE)->alias('t1')
-                    ->leftJoin(TABLE_SUITECASE)->alias('t2')->on('t1.id=t2.case')
-                    ->where('t1.title')->in($caseTitles[$suiteIndex])
-                    ->andWhere('t1.product')->eq($productID)
-                    ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq($auto)->fi()
-                    ->andWhere('t1.deleted')->eq(0)
-                    ->orderBy('id')
-                    ->fetchPairs('title', 'id');
-            }
-            else
-            {
-                $existCases = $this->dao->select('*')->from(TABLE_CASE)
-                    ->where('title')->in($caseTitles[$suiteIndex])
-                    ->beginIF($auto == 'unit')->andWhere('auto')->eq($auto)->fi()
-                    ->andWhere('product')->eq($productID)
-                    ->andWhere('deleted')->eq(0)
-                    ->orderBy('id')
-                    ->fetchPairs('title', 'id');
-            }
-
-            foreach($cases[$suiteIndex] as $i => $case)
-            {
-                if(isset($case->id))
-                {
-                    unset($case->steps);
-
-                    $caseID  = $case->id;
-                    $oldCase = $this->dao->select('*')->from(TABLE_CASE)->where('id')->eq($caseID)->fetch();
-                    $case->version    = $oldCase->version;
-                    $case->openedDate = $oldCase->openedDate;
-
-                    $changes = common::createChanges($oldCase, $case);
-                    if($changes)
-                    {
-                        $this->dao->update(TABLE_CASE)->data($case)->where('id')->eq($caseID)->exec();
-                        $actionID = $this->action->create('case', $caseID, 'Edited');
-                        $this->action->logHistory($actionID, $changes);
-                    }
-                }
-                elseif(!isset($existCases[$case->title]))
-                {
-                    $this->dao->insert(TABLE_CASE)->data($case, 'steps')->exec();
-                    $caseID      = $this->dao->lastInsertID();
-                    $case->steps = isset($case->steps) ? $case->steps : array();
-                    foreach($case->steps as $caseStep)
-                    {
-                        $caseStep->case    = $caseID;
-                        $caseStep->version = 1;
-                        $this->dao->insert(TABLE_CASESTEP)->data($caseStep)->exec();
-                    }
-                    $this->action->create('case', $caseID, 'Opened');
-                }
-                else
-                {
-                    $caseID = $existCases[$case->title];
-                }
-
-                $testrun = new stdclass();
-                $testrun->task          = $testtaskID;
-                $testrun->case          = $caseID;
-                $testrun->version       = $case->version;
-                $testrun->lastRunner    = $case->lastRunner;
-                $testrun->lastRunDate   = $case->lastRunDate;
-                $testrun->lastRunResult = $case->lastRunResult;
-                $testrun->status        = 'done';
-
-                $this->dao->replace(TABLE_TESTRUN)->data($testrun)->exec();
-                $runID = $this->dao->lastInsertID();
-
-                if($suiteID)
-                {
-                    $suitecase = new stdclass();
-                    $suitecase->suite   = $suiteID;
-                    $suitecase->case    = $caseID;
-                    $suitecase->version = $case->version;
-                    $suitecase->product = $case->product;
-                    $this->dao->replace(TABLE_SUITECASE)->data($suitecase)->exec();
-                }
-
-                $testresult = $results[$suiteIndex][$i];
+                $testresult = $results[$suiteIndex][$key];
                 $testresult->run  = $runID;
                 $testresult->case = $caseID;
                 $this->dao->insert(TABLE_TESTRESULT)->data($testresult)->exec();
             }
         }
 
-        return $testtaskID;
+        return !dao::isError();
+    }
+
+    /**
+     * 导入单元测试结果文件中的测试套件。
+     * Import test suite in the unit test results.
+     *
+     * @param  object  $suite
+     * @access private
+     * @return int
+     */
+    private function importSuiteOfUnitResult(object $suite): int
+    {
+        $this->dao->insert(TABLE_TESTSUITE)->data($suite)->exec();
+        $suiteID = $this->dao->lastInsertID();
+        $this->action->create('testsuite', $suiteID, 'opened');
+
+        return $suiteID;
+    }
+
+    /**
+     * 导入单元测试结果文件中的测试用例。
+     * Import test case in the unit test results.
+     *
+     * @param  object  $case
+     * @param  array   $existCases
+     * @access private
+     * @return int
+     */
+    private function importCaseOfUnitResult(object &$case, array $existCases): int
+    {
+        if(!empty($case->id))
+        {
+            unset($case->steps);
+
+            $caseID  = $case->id;
+            $oldCase = $this->dao->select('*')->from(TABLE_CASE)->where('id')->eq($caseID)->fetch();
+            $case->version    = $oldCase->version;
+            $case->openedDate = $oldCase->openedDate;
+
+            $changes = common::createChanges($oldCase, $case);
+            if($changes)
+            {
+                $this->dao->update(TABLE_CASE)->data($case)->where('id')->eq($caseID)->exec();
+                $actionID = $this->action->create('case', $caseID, 'Edited');
+                $this->action->logHistory($actionID, $changes);
+            }
+
+            return $caseID;
+        }
+
+        if(!isset($existCases[$case->title]))
+        {
+            $this->dao->insert(TABLE_CASE)->data($case, 'steps')->exec();
+            $caseID = $this->dao->lastInsertID();
+            $steps  = zget($case, 'steps', array());
+            foreach($steps as $step)
+            {
+                $step->case    = $caseID;
+                $step->version = 1;
+                $this->dao->insert(TABLE_CASESTEP)->data($step)->exec();
+            }
+            $this->action->create('case', $caseID, 'Opened');
+
+            return $caseID;
+        }
+
+        return $existCases[$case->title];
+    }
+
+    /**
+     * 导入单元测试结果文件中的测试结果。
+     * Import test result in the unit test results.
+     *
+     * @param  object  $case
+     * @param  int     $caseID
+     * @param  object  $testRun
+     * @access private
+     * @return int
+     */
+    private function importRunOfUnitResult(object $case, int $caseID, object $testRun): int
+    {
+        $testRun->case          = $caseID;
+        $testRun->version       = $case->version;
+        $testRun->lastRunner    = $case->lastRunner;
+        $testRun->lastRunDate   = $case->lastRunDate;
+        $testRun->lastRunResult = $case->lastRunResult;
+
+        $this->dao->replace(TABLE_TESTRUN)->data($testRun)->exec();
+
+        return $this->dao->lastInsertID();
+    }
+
+    /**
+     * 将导入的测试用例关联到测试套件。
+     * Link imported case to suite.
+     *
+     * @param  object  $case
+     * @param  int     $caseID
+     * @param  object  $suiteCase
+     * @access private
+     * @return bool
+     */
+    private function linkImportedCaseToSuite(object $case, int $caseID, object $suiteCase): bool
+    {
+        $suiteCase->case    = $caseID;
+        $suiteCase->version = $case->version;
+        $suiteCase->product = $case->product;
+
+        $this->dao->replace(TABLE_SUITECASE)->data($suiteCase)->exec();
+
+        return !dao::isError();
+    }
+
+    /**
+     * 获取单元测试结果文件中已存在的测试套件。
+     * Get exist suites in the unit test results.
+     *
+     * @param  array  $names
+     * @param  int    $productID
+     * @param  string $auto
+     * @access public
+     * @return array
+     */
+    private function getExistSuitesOfUnitResult(array $names, int $productID, string $auto): array
+    {
+        if(!$names) return array();
+
+        return $this->dao->select('name, id')->from(TABLE_TESTSUITE)
+            ->where('name')->in($names)
+            ->andWhere('product')->eq($productID)
+            ->andWhere('type')->eq($auto)
+            ->andWhere('deleted')->eq('0')
+            ->fetchPairs();
+    }
+
+    /**
+     * 获取单元测试结果文件中已存在的测试用例。
+     * Get exist cases in the unit test results.
+     *
+     * @param  array  $titles
+     * @param  int    $suiteID
+     * @param  int    $productID
+     * @param  string $auto
+     * @access public
+     * @return array
+     */
+    private function getExistCasesOfUnitResult(array $titles, int $suiteID, int $productID, string $auto): array
+    {
+        if(!$titles) return array();
+
+        $this->dao->select('t1.title, t1.id')->from(TABLE_CASE)->alias('t1');
+
+        if($suiteID) $this->dao->leftJoin(TABLE_SUITECASE)->alias('t2')->on('t1.id=t2.case');
+
+        return $this->dao->where('t1.title')->in($titles)
+            ->andWhere('t1.product')->eq($productID)
+            ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq($auto)->fi()
+            ->andWhere('t1.deleted')->eq('0')
+            ->orderBy('t1.id')
+            ->fetchPairs();
     }
 
     /**
      * Parse cppunit XML result.
      *
-     * @param  string $fileName
+     * @param  object $parsedXML
      * @param  int    $productID
      * @param  string $frame
      * @access public
      * @return array
      */
-    public function parseCppXMLResult($fileName, $productID, $frame)
+    public function parseCppXMLResult(object $parsedXML, int $productID, string $frame): array
     {
-        /* Parse result xml. */
-        $parsedXML = simplexml_load_file($fileName);
-
         /* Get testcase node. */
         $failNodes  = $parsedXML->xpath('FailedTests/FailedTest');
         $passNodes  = $parsedXML->xpath('SuccessfulTests/Test');
@@ -2144,17 +2243,16 @@ class testtaskModel extends model
     /**
      * Parse unit result from xml.
      *
-     * @param  string $fileName
+     * @param  object $parsedXML
      * @param  int    $productID
      * @param  string $frame
      * @access public
      * @return array
      */
-    public function parseXMLResult($fileName, $productID, $frame)
+    public function parseXMLResult(object $parsedXML, int $productID, string $frame): array
     {
         /* Parse result xml. */
-        $rules     = zget($this->config->testtask->unitResultRules, $frame, $this->config->testtask->unitResultRules->common);
-        $parsedXML = simplexml_load_file($fileName);
+        $rules = zget($this->config->testtask->unitResultRules, $frame, $this->config->testtask->unitResultRules->common);
 
         /* Get testcase node. */
         $matchPaths = $rules['path'];

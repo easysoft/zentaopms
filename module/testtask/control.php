@@ -1013,57 +1013,39 @@ class testtask extends control
     }
 
     /**
+     * 导入单元测试结果。
      * Import unit results.
      *
      * @param  int    $productID
      * @access public
      * @return void
      */
-    public function importUnitResult($productID)
+    public function importUnitResult(int $productID)
     {
+        /* 检查是否有权限访问要导入单元测试结果的产品。*/
+        /* Check if user have permission to access the product into which unit test results are to be imported. */
+        $productID = $this->loadModel('product')->checkAccess($productID, $this->products);
+
         if($_POST)
         {
-            $taskID = $this->testtask->importUnitResult($productID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            $task   = $this->testtaskZen->buildTaskForImportUnitResult($productID);
+            $taskID = $this->testtask->importUnitResult($task);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->loadModel('action')->create('testtask', $taskID, 'opened');
-            return print(js::locate($this->createLink('testtask', 'unitCases', "taskID=$taskID"), 'parent'));
-        }
-
-        /* Set menu. */
-        $productID = $this->loadModel('product')->checkAccess($productID, $this->products);
-        if($this->app->tab == 'project')
-        {
-            $this->lang->scrum->menu->qa['subMenu']->testcase['subModule'] = 'testtask';
-            $this->lang->scrum->menu->qa['subMenu']->testtask['subModule'] = '';
-            $this->loadModel('project')->setMenu($this->session->project);
-
-            /* Replace language. */
-            $project = $this->project->getByID($this->session->project);
-            if(!empty($project->model) and $project->model == 'waterfall')
-            {
-                $this->lang->testtask->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->testtask->execution);
-            }
-        }
-        else
-        {
-            $this->loadModel('qa')->setMenu($productID);
-            $this->app->rawModule = 'testcase';
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('unitCases', "taskID=$taskID")));
         }
 
         $this->app->loadLang('job');
         $this->app->rawModule = 'testcase';
+        $this->loadModel('qa')->setMenu($productID);
 
-        $projectID  = $this->app->tab == 'qa' ? 0 : $this->session->project;
-        $executions = empty($productID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID, '', $projectID);
+        $executions = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID);
         $builds     = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk', 0, 'execution', '', false);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->importUnitResult;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted|noclosed');
         $this->view->executions = $executions;
         $this->view->builds     = $builds;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted|noclosed');
-        $this->view->productID  = $productID;
-        $this->view->projectID  = $projectID;
         $this->display();
     }
 
