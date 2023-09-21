@@ -1,0 +1,13 @@
+title: zt_branch
+author: Shujie Tian
+version: 1.0.0
+fields:
+  - field: id
+    range: 1-30
+  - field: name
+    range: 1-30
+    prefix: '分支'
+  - field: product
+    range: 6-10{3}
+  - field: status
+    range: 'active{20},closed{10}'
