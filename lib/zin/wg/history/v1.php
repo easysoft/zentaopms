@@ -230,7 +230,7 @@ class history extends wg
         if(!$showCommentBtn && !str_contains(',view,objectlibs,viewcard,', ",$methodName,")) return null;
         return commentBtn
         (
-            set::dataTarget('#comment-dialog'),
+            set::dataTarget('#comment-dialog_'. $this->prop('moduleName') . '-' . $this->prop('methodName')),
             setClass('btn-comment ml-4 size-sm ghost'),
             set::icon('chat-line'),
             set::iconClass('text-primary'),
@@ -275,8 +275,10 @@ class history extends wg
             div(setClass('mt-3'), $this->historyList()),
             $hasComment !== false ? commentDialog
             (
+                set::id('comment-dialog_'. $this->prop('moduleName') . '-' . $this->prop('methodName')),
                 set::name('comment'),
                 set::url($commentUrl),
+                $isInModal ? set::load('modal') : null,
             ) : null
         );
     }
