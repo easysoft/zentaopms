@@ -699,9 +699,11 @@ class upgradeModel extends model
 
                 if(in_array($fromVersion, array('18.5', 'biz8.5', 'max4.5'))) $this->addCreateAction4Story();
                 break;
-	    case '18_6':
-		$this->removeProductLineRequired();
-		break;
+            case '18_6':
+                $this->removeProductLineRequired();
+                break;
+            case '18_7':
+                $this->processOldMetric();
         }
 
         $this->deletePatch();
@@ -9772,17 +9774,63 @@ class upgradeModel extends model
      */
     public function removeProductLineRequired()
     {
-	$this->loadModel('setting');
+        $this->loadModel('setting');
 
-	$createRequired = $this->setting->getItem('owner=system&module=product&section=create&key=requiredFields');
-	$editRequired   = $this->setting->getItem('owner=system&module=product&section=edit&key=requiredFields');
+        $createRequired = $this->setting->getItem('owner=system&module=product&section=create&key=requiredFields');
+        $editRequired   = $this->setting->getItem('owner=system&module=product&section=edit&key=requiredFields');
 
-	$createRequired = str_replace(',line,', ',', ",$createRequired,");
-	$editRequired   = str_replace(',line,', ',', ",$editRequired,");
+        $createRequired = str_replace(',line,', ',', ",$createRequired,");
+        $editRequired   = str_replace(',line,', ',', ",$editRequired,");
 
-	$this->setting->setItem('system.product.create.requiredFields', trim($createRequired, ','));
-	$this->setting->setItem('system.product.edit.requiredFields', trim($editRequired, ','));
+        $this->setting->setItem('system.product.create.requiredFields', trim($createRequired, ','));
+        $this->setting->setItem('system.product.edit.requiredFields', trim($editRequired, ','));
 
-	return true;
+        return true;
+    }
+
+    /**
+     * Convert old metrics to new metrics.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processOldMetrics()
+    {
+        $this->loadModel('metric');
+        $scopeMap   = $this->config->metric->oldScopeMap;
+        $purposeMap = $this->config->metric->oldPurposeMap;
+        $objectMap  = $this->config->metric->oldObjectMap;
+
+        $oldMetrics = $this->dao->select('*')->from(TABLE_BASICMEAS)->where('deleted')->eq('0')->orderBy('order_asc')->fetchAll();
+
+        foreach($oldMetrics as $oldMetric)
+        {
+            $metric = new stdclass();
+            $metric->scope       = $scopeMap[$oldMetric->scope] ? $scopeMap[$oldMetric->scope] : 'other';
+            $metric->purpose     = $purposeMap[$oldMetric->purpose] ? $purposeMap[$oldMetric->purpose] : 'other';
+            $metric->object      = $objectMap[$oldMetric->object] ? $objectMap[$oldMetric->object] : 'other';
+            $metric->stage       = 'wait';
+            $metric->type        = 'sql';
+            $metric->name        = $oldMetric->name;
+            $metric->code        = $oldMetric->code;
+            $metric->desc        = '';
+            $metric->definition  = $oldMetric->definition;
+            $metric->createdBy   = $oldMetric->createdBy;
+            $metric->createdDate = helper::isZeroDate($oldMetric->createdDate) ? null : $oldMetric->createdDate;
+            $metric->editedBy    = $oldMetric->editedBy;
+            $metric->editedDate  = helper::isZeroDate($oldMetric->editedDate) ? null : $oldMetric->editedDate;
+            $metric->builtin     = '1';
+            $metric->fromID      = $oldMetric->id;
+            $metric->order       = 0;
+            $metric->deleted     = $oldMetric->deleted;
+
+            $this->dao->insert(TABLE_METRIC)->data($metric)->exec();
+
+            $metricID = $this->dao->lastInsertID();
+
+            $this->loadModel('action')->create('metric', $metricID, 'created', '', '', 'system');
+        }
+
+        return !dao::isError();
     }
 }
