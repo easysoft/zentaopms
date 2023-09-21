@@ -139,24 +139,35 @@ class branchTest
     {
         global $tester;
 
-        $productID = 45;
+        $productID = 6;
         $branches  = $tester->dao->select('*')->from(TABLE_BRANCH)->where('product')->eq($productID)->fetchAll('id');
 
-        $_POST['IDList']  = array('0' => 0, '9' => 9, '10' => 10);
-        $_POST['default'] = 0;
-        $_POST['name']    = array('9' => $branches['9']->name, '10' => $branches['10']->name);
-        $_POST['desc']    = array('9' => $branches['9']->desc, '10' => $branches['10']->desc);
-        $_POST['status']  = array('9' => $branches['9']->status, '10' => $branches['10']->status);
+        $newBranches = array();
+        foreach($branches as $branch)
+        {
+            $newBranch = new stdclass();
+            $newBranch->branchID = $branch->id;
+            $newBranch->name     = $branch->name;
+            $newBranch->desc     = $branch->desc;
+            $newBranch->status   = $branch->status;
 
-        foreach($param as $key => $value) $_POST[$key] = $value;
+            foreach($param as $key => $setting)
+            {
+                foreach($setting as $id => $value)
+                {
+                    if($id != $branch->id) continue;
 
-        $objects = $this->objectModel->batchUpdate($productID);
+                    $newBranch->$key = $value;
+                }
+            }
 
-        unset($_POST);
+            $newBranches[$branch->id] = $newBranch;
+        }
+
+        $objects = $this->objectModel->batchUpdate($productID, $newBranches);
 
         if(dao::isError()) return dao::getError();
-
-        return $objects[9][0];
+        return $objects[1];
     }
 
     /**
