@@ -1764,4 +1764,24 @@ class testcaseTest
 
         return $title;
     }
+
+    /**
+     * 测试调整场景的路径。。
+     * Test fix the scene path.
+     *
+     * @param  int          $sceneID
+     * @access public
+     * @return string|array
+     */
+    public function fixScenePathTest($sceneID, $pSceneID): string|array
+    {
+        $pScene = array('id' => $pSceneID);
+        $this->objectModel->fixScenePath($sceneID, $pScene);
+
+        if(dao::isError()) return dao::getError();
+
+        $scene = $this->objectModel->getSceneByID($sceneID);
+        $return = "id:{$scene->id}, parent:{$scene->parent}, path:{$scene->path}, grade:{$scene->grade}";
+        return $return;
+    }
 }
