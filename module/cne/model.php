@@ -335,7 +335,7 @@ class cneModel extends model
         $customDomain = $this->loadModel('setting')->getItem('owner=system&module=common&section=domain&key=customDomain');
         if($customDomain) return $customDomain;
 
-        return  getenv('APP_DOMAIN');
+        return getenv('APP_DOMAIN');
     }
 
     /**
