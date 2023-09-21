@@ -108,6 +108,7 @@ class branch extends control
     }
 
     /**
+     * 批量编辑分支。
      * Batch edit branch.
      *
      * @param  int    $productID
@@ -116,18 +117,17 @@ class branch extends control
      */
     public function batchEdit(int $productID)
     {
-        $this->loadModel('action');
         $this->loadModel('product')->setMenu($productID);
-
         if($this->post->branchID)
         {
-            $changes = $this->branch->batchUpdate($productID);
+            $branches = form::batchData($this->config->branch->form->batchedit)->get();
+            $changes  = $this->branch->batchUpdate($productID, $branches);
             if(dao::isError()) return $this->sendError(dao::getError());
 
             foreach($changes as $branchID => $change)
             {
                 $extra = $branchID == BRANCH_MAIN ? $productID : '';
-                if($change) $this->action->create('branch', $branchID, 'Edited', '', $extra);
+                if($change) $this->loadModel('action')->create('branch', $branchID, 'Edited', '', $extra);
             }
 
             return $this->sendSuccess(array('load' => $this->session->branchManage));
@@ -135,19 +135,18 @@ class branch extends control
 
         $branchList   = array_values($this->branch->getList($productID, 0, 'all'));
         $branchIDList = $this->post->branchIDList;
-        if(empty($branchIDList)) return print(js::locate($this->session->branchManage, 'parent'));
+        if(empty($branchIDList)) return $this->sendError($this->session->branchManage, inLink('manage', "productID=$productID"));
 
         foreach($branchList as $index => $branch)
         {
             if(!in_array($branch->id, $branchIDList))
             {
                 unset($branchList[$index]);
+                continue;
             }
-            else
-            {
-                $branchList[$index]->branchID = $branch->id;
-                $branchList[$index]->id       = $index + 1;
-            }
+
+            $branchList[$index]->branchID = $branch->id;
+            $branchList[$index]->id       = $index + 1;
         }
 
         $this->view->product    = $this->product->getById($productID);

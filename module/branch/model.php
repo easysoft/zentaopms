@@ -95,8 +95,7 @@ class branchModel extends model
         $mainBranch->desc        = sprintf($this->lang->branch->mainBranch, $this->lang->product->branchName[$product->type]);
         $mainBranch->order       = 0;
 
-        array_unshift($branchList, $mainBranch);
-        return $branchList;
+        return array($mainBranch) + $branchList;
     }
 
     /**
@@ -277,18 +276,17 @@ class branchModel extends model
      * Batch update branch.
      *
      * @param  int         $productID
+     * @param  array       $productID
      * @access public
      * @return array|false
      */
-    public function batchUpdate(int $productID): array|false
+    public function batchUpdate(int $productID, array $branches): array|false
     {
-        $branches = form::batchData($this->config->branch->form->batchedit)->get();
-        $oldBranchList = $this->getList($productID, 0, 'all');
-
         $this->app->loadLang('product');
         $productType = $this->dao->select('`type`')->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch('type');
         $this->lang->error->unique = str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->existName);
 
+        $oldBranchList = $this->getList($productID, 0, 'all');
         foreach($branches as $index => $branch)
         {
             $branchID = $branch->branchID;
@@ -305,12 +303,12 @@ class branchModel extends model
                 $newBranch->name       = $branch->name;
                 $newBranch->desc       = $branch->desc;
                 $newBranch->status     = $branch->status;
-                $newBranch->default    = (isset($branch->default) and $branchID == $branch->default) ? 1 : 0;
+                $newBranch->default    = (isset($branch->default) && $branchID == $branch->default) ? 1 : 0;
                 $newBranch->closedDate = $branch->status == 'closed' ? helper::today() : null;
 
                 $this->dao->update(TABLE_BRANCH)->data($newBranch)
                     ->batchCheck($this->config->branch->create->requiredFields, 'notempty')
-                    ->checkIF(!empty($branch->name) and $branch->name != $oldBranchList[$branchID]->name, 'name', 'unique', "product = $productID")
+                    ->checkIF(!empty($branch->name) && $branch->name != $oldBranchList[$branchID]->name, 'name', 'unique', "product = $productID")
                     ->where('id')->eq($branchID)
                     ->exec();
 
@@ -323,7 +321,6 @@ class branchModel extends model
         if(dao::isError()) return false;
 
         if(isset($branch->default)) $this->setDefault($productID, $branch->default);
-
         return $changes;
     }
 
