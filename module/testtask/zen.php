@@ -198,6 +198,24 @@ class testtaskZen extends testtask
     }
 
     /**
+     * 构建导入单元测试结果的数据。
+     * Build task for import unit result.
+     *
+     * @param  int       $productID
+     * @access protected
+     * @return object
+     */
+    protected function buildTaskForImportUnitResult(int $productID): object
+    {
+        $task = form::data($this->config->testtask->form->importUnitResult)
+            ->add('product', $productID)
+            ->add('auto', 'unit')
+            ->stripTags($this->config->testtask->editor->importunitresult['id'], $this->config->allowedTags)
+            ->get();
+        return $this->loadModel('file')->processImgURL($task, $this->config->testtask->editor->importunitresult['id'], $task->uid);
+    }
+
+    /**
      * 检查编辑的测试单数据是否符合要求。
      * Check task for editing.
      *
