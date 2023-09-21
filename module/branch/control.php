@@ -190,6 +190,7 @@ class branch extends control
     }
 
     /**
+     * 分支排序。
      * Sort branch.
      *
      * @access public
@@ -197,7 +198,8 @@ class branch extends control
      */
     public function sort()
     {
-        $this->branch->sort();
+        $postData = form::data()->get();
+        $this->branch->sort($postData);
     }
 
     /**

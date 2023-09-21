@@ -569,15 +569,17 @@ class branchModel extends model
     }
 
     /**
+     * 分支排序。
      * Sort branch.
      *
+     * @param  object $data
      * @access public
-     * @return void
+     * @return bool
      */
-    public function sort()
+    public function sort(object $data): bool
     {
-        $orderBy      = $this->post->orderBy;
-        $branchIDList = explode(',', trim($this->post->branches, ','));
+        $orderBy      = $data->orderBy;
+        $branchIDList = explode(',', trim($data->branches, ','));
 
         if(strpos($orderBy, 'order') === false) return false;
         if(in_array(BRANCH_MAIN, $branchIDList)) unset($branchIDList[array_search(BRANCH_MAIN, $branchIDList)]);
@@ -589,6 +591,8 @@ class branchModel extends model
             if($id == $newID) continue;
             $this->dao->update(TABLE_BRANCH)->set('`order`')->eq($order)->where('id')->eq($newID)->exec();
         }
+
+        return !dao::isError();
     }
 
     /**
