@@ -159,7 +159,7 @@ class actionModel extends model
             switch($objectType)
             {
                 case 'story':
-                    if($actionType == 'linked2build' or $actionType == 'unlinkedfrombuild')
+                    if($actionType == 'linked2build' || $actionType == 'unlinkedfrombuild')
                     {
                         $build = $this->dao->select('project,execution')->from(TABLE_BUILD)->where('id')->eq((int)$extra)->fetch();
                         $record['project']   = $build->project;
@@ -197,7 +197,7 @@ class actionModel extends model
                     $record['product']   = $result->product;
                     $record['project']   = $result->project;
                     $record['execution'] = $result->execution;
-                    if(strpos(',linked2testtask,unlinkedfromtesttask,assigned,run,', ',' . $actionType . ',') !== false and (int)$extra)
+                    if(strpos(',linked2testtask,unlinkedfromtesttask,assigned,run,', ',' . $actionType . ',') !== false && (int)$extra)
                     {
                         $testtask = $this->dao->select('project,execution')->from(TABLE_TESTTASK)->where('id')->eq((int)$extra)->fetch();
                         $record['project']   = $testtask->project;
@@ -253,12 +253,12 @@ class actionModel extends model
                 case 'whitelist':
                     if($extra == 'product') $record['product'] = $objectID;
                     if($extra == 'project') $record['project'] = $objectID;
-                    if($extra == 'sprint' or $extra == 'stage') $record['execution'] = $objectID;
+                    if($extra == 'sprint' || $extra == 'stage') $record['execution'] = $objectID;
                     break;
                 case 'module':
                     if(strpos(',deleted,', ",$actionType,") === false) $module = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in($extra)->fetch();
                     if(strpos(',deleted,', ",$actionType,") !== false) $module = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($objectID)->fetch();
-                    if(!empty($module) and $module->type == 'story') $record['product'] = $module->root;
+                    if(!empty($module) && $module->type == 'story') $record['product'] = $module->root;
                     break;
                 case 'review':
                     $result = $this->dao->select('*')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
@@ -276,7 +276,7 @@ class actionModel extends model
                     $record['execution'] = zget($result, 'execution', 0);
             }
 
-            if($actionType == 'unlinkedfromproject' or $actionType == 'linked2project') $record['project'] = (int)$extra ;
+            if($actionType == 'unlinkedfromproject' || $actionType == 'linked2project') $record['project'] = (int)$extra ;
             if(in_array($actionType, array('unlinkedfromexecution', 'linked2execution', 'linked2kanban'))) $record['execution'] = (int)$extra;
 
             if($record)
@@ -285,7 +285,7 @@ class actionModel extends model
                 if(empty($record['project']))   $record['project']   = 0;
                 if(empty($record['execution'])) $record['execution'] = 0;
 
-                if(!empty($record['execution']) and empty($record['project'])) $record['project'] = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($record['execution'])->fetch('project');
+                if(!empty($record['execution']) && empty($record['project'])) $record['project'] = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($record['execution'])->fetch('project');
                 return $record;
             }
 
@@ -589,7 +589,7 @@ class actionModel extends model
                 foreach(explode(',', $action->extra) as $id) $extra .= common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$id"), "#$id ") . ', ' : "#$id, ";
                 $action->extra = trim(trim($extra), ',');
             }
-            elseif($actionName == 'linkbug' or $actionName == 'unlinkbug')
+            elseif($actionName == 'linkbug' || $actionName == 'unlinkbug')
             {
                 $extra = '';
                 foreach(explode(',', $action->extra) as $id) $extra .= common::hasPriv('bug', 'view') ? html::a(helper::createLink('bug', 'view', "bugID=$id"), "#$id ") . ', ' : "#$id, ";
@@ -627,7 +627,7 @@ class actionModel extends model
         /* Process actions data. */
         foreach($actions as $key => $action)
         {
-            if($action->objectType != 'project' and !isset($map[$action->objectType][$action->action])) unset($actions[$key]);
+            if($action->objectType != 'project' && !isset($map[$action->objectType][$action->action])) unset($actions[$key]);
             if(isset($map[$action->objectType][$action->action])) $action->action = $map[$action->objectType][$action->action];
         }
 
@@ -1230,7 +1230,7 @@ class actionModel extends model
 
             foreach($this->app->user->rights['acls']['actions'] as $moduleName => $actions)
             {
-                if(isset($this->lang->mainNav->$moduleName) and !empty($this->app->user->rights['acls']['views']) and !isset($this->app->user->rights['acls']['views'][$moduleName])) continue;
+                if(isset($this->lang->mainNav->$moduleName) && !empty($this->app->user->rights['acls']['views']) && !isset($this->app->user->rights['acls']['views'][$moduleName])) continue;
                 $actionCondition .= "(`objectType` = '$moduleName' and `action` " . helper::dbIN($actions) . ") or ";
             }
             $actionCondition = trim($actionCondition, 'or ');
@@ -1473,7 +1473,7 @@ class actionModel extends model
         foreach($actions as $object) $objectTypes[$object->objectType][$object->objectID] = $object->objectID;
         foreach($objectTypes as $objectType => $objectIdList)
         {
-            if(!isset($this->config->objectTables[$objectType]) and $objectType != 'makeup') continue;    // If no defination for this type, omit it.
+            if(!isset($this->config->objectTables[$objectType]) && $objectType != 'makeup') continue;    // If no defination for this type, omit it.
 
             $table = $objectType == 'makeup' ? '`' . $this->config->db->prefix . 'overtime`' : $this->config->objectTables[$objectType];
             $field = zget($this->config->action->objectNameFields, $objectType, '');
@@ -1493,7 +1493,7 @@ class actionModel extends model
                         $relatedProject[$object->id] = $object->project;
                     }
                 }
-                elseif($objectType == 'project' or $objectType == 'execution')
+                elseif($objectType == 'project' || $objectType == 'execution')
                 {
                     $objectInfo = $this->dao->select("id, project, $field AS name")->from($table)->where('id')->in($objectIdList)->fetchAll();
                     foreach($objectInfo as $object)
@@ -1559,7 +1559,7 @@ class actionModel extends model
                     if($todo->type == 'bug')  $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_BUG)->fetch('title');
 
                     $objectNames[$objectType][$id] = $todo->name;
-                    if($todo->private == 1 and $todo->account != $this->app->user->account) $objectNames[$objectType][$id] = $this->lang->todo->thisIsPrivate;
+                    if($todo->private == 1 && $todo->account != $this->app->user->account) $objectNames[$objectType][$id] = $this->lang->todo->thisIsPrivate;
                 }
             }
         }
@@ -1639,7 +1639,7 @@ class actionModel extends model
             list($objectLabel, $moduleName, $methodName, $vars) = explode('|', $action->objectLabel);
 
             /* Fix bug #2961. */
-            $isLoginOrLogout = $action->objectType == 'user' and ($action->action == 'login' or $action->action == 'logout');
+            $isLoginOrLogout = $action->objectType == 'user' && ($action->action == 'login' || $action->action == 'logout');
 
             $action->objectLabel = $objectLabel;
             $action->product     = trim($action->product, ',');
@@ -1653,8 +1653,8 @@ class actionModel extends model
             }
 
             if($this->config->edition == 'max'
-               and strpos($this->config->action->assetType, ",{$action->objectType},") !== false
-               and empty($action->project) and empty($action->product) and empty($action->execution))
+               && strpos($this->config->action->assetType, ",{$action->objectType},") !== false
+               && empty($action->project) && empty($action->product) && empty($action->execution))
             {
                 if($action->objectType == 'doc')
                 {
@@ -1681,7 +1681,7 @@ class actionModel extends model
 
                     $libObjectID = $type != 'custom' ? $action->$type : '';
                     $libObjectID = trim($libObjectID, ',');
-                    if(empty($libObjectID) and $type != 'custom') return false;
+                    if(empty($libObjectID) && $type != 'custom') return false;
 
                     $params = sprintf($vars, $type, $libObjectID, $libID);
                 }
@@ -1699,11 +1699,11 @@ class actionModel extends model
                     $kanbanSpace = $this->dao->select('type')->from(TABLE_KANBANSPACE)->where('id')->eq($action->objectID)->fetch();
                     $params = sprintf($vars, $kanbanSpace->type);
                 }
-                elseif($action->objectType == 'kanbancolumn' or $action->objectType == 'kanbanlane')
+                elseif($action->objectType == 'kanbancolumn' || $action->objectType == 'kanbanlane')
                 {
                     $params = sprintf($vars, $action->extra);
                 }
-                elseif($action->objectType == 'module' and $action->action == 'deleted')
+                elseif($action->objectType == 'module' && $action->action == 'deleted')
                 {
                     $params = sprintf($vars, trim($action->product, ','));
                 }
@@ -1716,7 +1716,7 @@ class actionModel extends model
                 if($action->objectType == 'execution')
                 {
                     $execution = $this->loadModel('execution')->getById($action->objectID);
-                    if(!empty($execution) and $execution->type == 'kanban') $action->objectLink = helper::createLink('execution', 'kanban', "executionID={$action->objectID}");
+                    if(!empty($execution) && $execution->type == 'kanban') $action->objectLink = helper::createLink('execution', 'kanban', "executionID={$action->objectID}");
                 }
 
                 if($action->objectType == 'story')
@@ -1739,7 +1739,7 @@ class actionModel extends model
                         $module = 'api';
                         $method = 'index';
                         $params = "libID={$action->objectID}&moduleID=0&apiID=0&version=0&release=0&appendLib={$appendLib}";
-                        if(!empty($docLib->project) or !empty($docLib->product))
+                        if(!empty($docLib->project) || !empty($docLib->product))
                         {
                             $module = 'doc';
                             if(!empty($docLib->product))
@@ -1771,7 +1771,7 @@ class actionModel extends model
                     $action->objectLink = !isset($deptUsers[$action->objectID]) ? 'javascript:void(0)' : helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID));
                 }
             }
-            if(!common::hasPriv($moduleName, $methodName) and !$isLoginOrLogout) $action->objectLink = '';
+            if(!common::hasPriv($moduleName, $methodName) && !$isLoginOrLogout) $action->objectLink = '';
         }
         elseif($action->objectType == 'team')
         {
@@ -1787,10 +1787,10 @@ class actionModel extends model
             $action->objectLink = '';
         }
 
-        if($action->objectType == 'stakeholder' and $action->project == 0) $action->objectLink = '';
+        if($action->objectType == 'stakeholder' && $action->project == 0) $action->objectLink = '';
 
-        if($action->objectType == 'story' and $action->action == 'import2storylib') $action->objectLink = helper::createLink('assetlib', 'storyView', "storyID=$action->objectID");
-        if($action->objectType == 'story' and $this->config->vision == 'lite') $action->objectLink = helper::createLink('projectstory', 'view', "storyID=$action->objectID");
+        if($action->objectType == 'story' && $action->action == 'import2storylib') $action->objectLink = helper::createLink('assetlib', 'storyView', "storyID=$action->objectID");
+        if($action->objectType == 'story' && $this->config->vision == 'lite') $action->objectLink = helper::createLink('projectstory', 'view', "storyID=$action->objectID");
 
         if(strpos(',kanbanregion,kanbancard,', ",{$action->objectType},") !== false)
         {
@@ -1800,7 +1800,7 @@ class actionModel extends model
             $action->objectLink = helper::createLink('kanban', 'view', "kanbanID=$kanbanID");
         }
 
-        if(strpos(',kanbanlane,kanbancolumn,', ",{$action->objectType},") !== false and empty($action->extra))
+        if(strpos(',kanbanlane,kanbancolumn,', ",{$action->objectType},") !== false && empty($action->extra))
         {
             $table    = $this->config->objectTables[$action->objectType];
             $kanbanID = $this->dao->select('t2.kanban')->from($table)->alias('t1')
@@ -1812,7 +1812,7 @@ class actionModel extends model
         }
 
         if($action->objectType == 'chartgroup') $action->objectLink = '';
-        if($action->objectType == 'branch' and $action->action == 'mergedbranch') $action->objectLink = 'javascript:void(0)';
+        if($action->objectType == 'branch' && $action->action == 'mergedbranch') $action->objectLink = 'javascript:void(0)';
         if($action->objectType == 'module')
         {
             $moduleType = $this->dao->select('type')->from(TABLE_MODULE)->where('id')->eq($action->objectID)->fetch('type');
@@ -1826,8 +1826,8 @@ class actionModel extends model
         if($action->objectType == 'review') $action->objectLink = helper::createLink('review', 'view', "reviewID=$action->objectID");
 
         /* Set app for no multiple project. */
-        if(!empty($action->objectLink) and !empty($project) and empty($project->multiple)) $action->objectLink .= '#app=project';
-        if($this->config->vision == 'lite' and $action->objectType == 'module') $action->objectLink .= '#app=project';
+        if(!empty($action->objectLink) && !empty($project) && empty($project->multiple)) $action->objectLink .= '#app=project';
+        if($this->config->vision == 'lite' && $action->objectType == 'module') $action->objectLink .= '#app=project';
 
         return $action;
     }
@@ -1858,7 +1858,7 @@ class actionModel extends model
         if($period == 'latest3days') return array('begin' => $twoDaysAgo, 'end' => $tomorrow);
 
         /* If the period is by week, add the end time to the end date. */
-        if($period == 'thisweek' or $period == 'lastweek')
+        if($period == 'thisweek' || $period == 'lastweek')
         {
             $func = "get$period";
             extract(date::$func());
@@ -2255,7 +2255,7 @@ class actionModel extends model
         $this->loadModel('search');
         $actionType = strtolower($actionType);
         if(!isset($this->config->search->fields->$objectType)) return true;
-        if(strpos($this->config->search->buildAction, ",{$actionType},") === false and empty($_POST['comment'])) return true;
+        if(strpos($this->config->search->buildAction, ",{$actionType},") === false && empty($_POST['comment'])) return true;
         if($actionType == 'deleted' or $actionType == 'erased') return $this->search->deleteIndex($objectType, $objectID);
 
         $field = $this->config->search->fields->$objectType;
@@ -2264,7 +2264,7 @@ class actionModel extends model
         if(empty($data)) return true;
 
         $data->comment = '';
-        if($objectType == 'effort' and $data->objectType == 'task') return true;
+        if($objectType == 'effort' && $data->objectType == 'task') return true;
         if($objectType == 'case')
         {
             $caseStep     = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->eq($objectID)->andWhere('version')->eq($data->version)->fetchAll();
@@ -2304,12 +2304,12 @@ class actionModel extends model
      */
     public function printActionForGitLab(object $action)
     {
-        if(!isset($action->objectType) or !isset($action->action)) return false;
+        if(!isset($action->objectType) || !isset($action->action)) return false;
 
         $objectType = $action->objectType;
         $actionType = strtolower($action->action);
 
-        if(isset($this->lang->action->apiTitle->$actionType) and isset($action->extra))
+        if(isset($this->lang->action->apiTitle->$actionType) && isset($action->extra))
         {
             /* If extra column is a username, then assemble link to that. */
             if($action->action == "assigned")
@@ -2324,7 +2324,7 @@ class actionModel extends model
 
             echo sprintf($this->lang->action->apiTitle->$actionType, $action->extra);
         }
-        elseif(isset($this->lang->action->apiTitle->$actionType) and !isset($action->extra))
+        elseif(isset($this->lang->action->apiTitle->$actionType) && !isset($action->extra))
         {
             echo $this->lang->action->apiTitle->$actionType;
         }

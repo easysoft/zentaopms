@@ -21,7 +21,7 @@ pid=1
 查找用户test18动态 >> 30
 查找今天的动态     >> 2
 查找昨天的动态     >> 2
-查找上周的动态     >> 18
+查找上周的动态     >> 19
 查找产品1的动态    >> 1
 查找产品2的动态    >> 1
 查找产品3的动态    >> 1
@@ -50,7 +50,7 @@ r($action->getDynamicTest($accountList[2]))                                     
 r($action->getDynamicTest($accountList[3]))                                                                                        && p() && e('30');  // 查找用户test18动态
 r($action->getDynamicTest($accountList[0], $typeList[1]))                                                                          && p() && e('2');   // 查找今天的动态
 r($action->getDynamicTest($accountList[0], $typeList[2]))                                                                          && p() && e('2');   // 查找昨天的动态
-r($action->getDynamicTest($accountList[0], $typeList[3]))                                                                          && p() && e('18');  // 查找上周的动态
+r($action->getDynamicTest($accountList[0], $typeList[3]))                                                                          && p() && e('19');  // 查找上周的动态
 r($action->getDynamicTest($accountList[0], $typeList[0], $productIDList[1]))                                                       && p() && e('1');   // 查找产品1的动态
 r($action->getDynamicTest($accountList[0], $typeList[0], $productIDList[2]))                                                       && p() && e('1');   // 查找产品2的动态
 r($action->getDynamicTest($accountList[0], $typeList[0], $productIDList[3]))                                                       && p() && e('1');   // 查找产品3的动态
