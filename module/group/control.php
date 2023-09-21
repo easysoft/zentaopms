@@ -231,6 +231,15 @@ class group extends control
             $subsetCode  = $priv->subset;
             $packageCode = $priv->package;
             if(!isset($packages[$subsetCode])) $packages[$subsetCode] = array();
+            if(!isset($subsets[$subsetCode]))
+            {
+                $subset = new stdclass();
+                $subset->code        = $subsetCode;
+                $subset->allCount    = 0;
+                $subset->selectCount = 0;
+
+                $subsets[$subsetCode] = $subset;
+            }
 
             if(!isset($packages[$subsetCode][$packageCode]))
             {
@@ -322,8 +331,11 @@ class group extends control
             {
                 if(isset($privs["$module-$method"])) continue;
 
-                if(!isset($subsets[$module])) $subsets[$module] = isset($this->lang->$module) && isset($this->lang->$module->common) ? $this->lang->$module->common : $module;
-                $packages[$subset]['other'] = $this->lang->group->other;
+                if(!isset($subsets[$module]))
+                {
+                    $subsets[$module]  = isset($this->lang->$module) && isset($this->lang->$module->common) ? $this->lang->$module->common : $module;
+                    $packages[$module] = array('other' => $this->lang->group->other);
+                }
             }
         }
 

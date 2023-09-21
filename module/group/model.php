@@ -1770,7 +1770,7 @@ class groupModel extends model
                 if(isset($allPrivs["$module-$method"])) continue;
 
                 if(!isset($this->lang->$module->$methodLang)) $this->app->loadLang($module);
-                $priv = (object)array('subset' => $module, 'package' => 'other', 'module' => $module, 'method' => $method, 'selected' => false, 'name' => $this->lang->$moduleName->$methodLang);
+                $priv = (object)array('subset' => $module, 'package' => 'other', 'module' => $module, 'method' => $method, 'selected' => false, 'name' => $this->lang->$module->$methodLang);
 
                 $privList["$module-$method"] = $priv;
             }
@@ -2319,6 +2319,8 @@ class groupModel extends model
      */
     public function getRelatedPrivs($allPrivList, $selectedPrivList, $recommendSelect = array())
     {
+        foreach($this->lang->resource as $moduleName => $action) $this->app->loadLang($moduleName);
+
         $privSubsets  = array();
         $relatedPrivs = array('depend' => array(), 'recommend' => array());
         foreach($this->config->group->package as $packagePage => $package)

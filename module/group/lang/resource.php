@@ -82,12 +82,6 @@ $lang->moduleOrder[250] = 'holiday';
 
 $lang->resource = new stdclass();
 
-/* Index module. */
-$lang->resource->index = new stdclass();
-$lang->resource->index->index = 'index';
-
-$lang->index->methodOrder[0] = 'index';
-
 /* My module. */
 $lang->resource->my = new stdclass();
 $lang->resource->my->index           = 'indexAction';
