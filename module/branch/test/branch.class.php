@@ -416,4 +416,25 @@ class branchTest
         $branches = $this->objectModel->dao->select('*')->from(TABLE_BRANCH)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetchAll();
         return count($branches);
     }
+
+    /**
+     * 合并分支后的其他数据处理。
+     * other data process after merge branch.
+     *
+     * @param  int       $productID
+     * @param  string    $mergedBranches
+     * @param  object    $data
+     * @access public
+     * @return array|int
+     */
+    public function afterMergeTest(int $productID, string $mergedBranches, object $data): array|int
+    {
+        $targetBranch = $data->targetBranch;
+        $objectID     = $this->objectModel->afterMerge($productID, $targetBranch, $mergedBranches, $data);
+
+        if(dao::isError()) return dao::getError();
+
+        $releases = $this->objectModel->dao->select('*')->from(TABLE_RELEASE)->where('deleted')->eq(0)->andWhere('branch')->in($data->mergedBranchIDList)->fetchAll();
+        return count($releases);
+    }
 }
