@@ -188,7 +188,11 @@ function setStatistics()
 }
 
 cols = JSON.parse(cols);
-data = JSON.parse(data);
+data = JSON.parse(data).map(function(row)
+{
+    row.key = row.parent ? (row.parent + '-' + row.id) : row.id;
+    return row;
+});
 const options =
 {
     striped: true,
@@ -197,6 +201,7 @@ const options =
     sortLink: createSortLink,
     cols: cols,
     data: data,
+    rowKey: 'key',
     footer: false,
     responsive: true,
     onCheckChange: setStatistics,
