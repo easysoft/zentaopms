@@ -137,6 +137,7 @@ dtable
     set::cols($config->branch->dtable->fieldList),
     set::data($tableData),
     set::checkable(true),
+    set::canRowCheckable(jsRaw("(rowID) => {return rowID == '0' ? 'disabled' : true}")),
     set::sortLink(jsRaw('createSortLink')),
     set::onCheckChange(jsRaw('checkedChange')),
     set::footToolbar($footToolbar),
