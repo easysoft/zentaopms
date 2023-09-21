@@ -1374,21 +1374,22 @@ class testcaseTest
     }
 
     /**
-     * 测试构建菜单查询。
-     * Test build menu query.
+     * 为构建场景菜单获取场景。
+     * Get scenes for menu.
      *
-     * @param  int    $rootID
+     * @param  int    $productID
      * @param  int    $moduleID
      * @param  int    $startScene
      * @param  string $branch
+     * @param  int    $currentScene
      * @access public
      * @return string
      */
-    public function buildMenuQueryTest(int $rootID, int $moduleID, int $startScene = 0, string $branch = 'all'): string
+    public function getScenesForMenuTest(int $productID, int $moduleID, int $startScene = 0, string $branch = 'all', int $currentScene = 0): string
     {
-        $query = $this->objectModel->buildMenuQuery($rootID, $moduleID, $startScene, $branch);
+        $scenes = $this->objectModel->getScenesForMenu($productID, $moduleID, $startScene, $branch, $currentScene);
         if(dao::isError()) return dao::getError();
-        return $query;
+        return implode(',', array_keys($scenes));
     }
 
     /**
@@ -1666,5 +1667,25 @@ class testcaseTest
         $return = $scene['id'] . ': ' . implode(', ', array_keys($scene));
         if(isset($scene['cases'])) $return .= ' cases: ' . implode(',', array_column($scene['cases'], 'id')) . '; ';
         return trim($return);
+    }
+
+    /**
+     * 测试获取场景菜单。
+     * Test get scene menu.
+     *
+     * @param  int    $productID
+     * @param  int    $moduleID  
+     * @param  int    $startScene
+     * @param  int    $branch      
+     * @param  int    $currentScene      
+     * @param  bool   $emptyMenu
+     * @access public
+     * @return array|string
+     */
+    public function getSceneMenuTest(int $productID, int $moduleID, int $startScene = 0, int|string $branch = 0, int $currentScene = 0, bool $emptyMenu = false): array|string
+    {
+        $scenes = $this->objectModel->getSceneMenu($productID, $moduleID, $startScene, $branch, $currentScene, $emptyMenu);
+        if(dao::isError()) return dao::getError();
+        return implode(',', $scenes);
     }
 }

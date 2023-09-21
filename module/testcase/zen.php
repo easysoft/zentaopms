@@ -288,7 +288,7 @@ class testcaseZen extends testcase
 
         $this->view->title    = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->newScene;
         $this->view->modules  = $this->tree->getOptionMenu($productID, 'case', 0, ($branch === 'all' || !isset($branches[$branch])) ? 0 : $branch);
-        $this->view->scenes   = $this->testcase->getSceneMenu($productID, $moduleID, 'case', 0, ($branch === 'all' || !isset($branches[$branch])) ? 0 : $branch);
+        $this->view->scenes   = $this->testcase->getSceneMenu($productID, $moduleID, 0, ($branch === 'all' || !isset($branches[$branch])) ? 0 : $branch);
         $this->view->moduleID = $moduleID ? (int)$moduleID : (int)$this->cookie->lastCaseModule;
         $this->view->parent   = (int)$this->cookie->lastCaseScene;
         $this->view->product  = $product;
@@ -331,7 +331,7 @@ class testcaseZen extends testcase
         $modules = $this->tree->getOptionMenu($productID, 'case', 0, $branchID);
         if(!isset($modules[$moduleID])) $modules += $this->tree->getModulesName($moduleID);
 
-        $scenes = $this->testcase->getSceneMenu($productID, $moduleID, 'case', 0,  $branchID, $oldScene->id);
+        $scenes = $this->testcase->getSceneMenu($productID, $moduleID, 0, $branchID, $oldScene->id);
         if(!isset($scenes[$parentID])) $scenes += $this->testcase->getScenesName($parentID);
 
         $this->view->title    = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->editScene;
@@ -387,7 +387,7 @@ class testcaseZen extends testcase
         $this->view->stories          = $stories;
         $this->view->currentModuleID  = $currentModuleID;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, 'case', 0, $branch === 'all' || !isset($branches[$branch]) ? 0 : $branch);
-        $this->view->sceneOptionMenu  = $this->testcase->getSceneMenu($productID, $moduleID, 'case', 0, $branch === 'all' || !isset($branches[$branch]) ? 0 : $branch);
+        $this->view->sceneOptionMenu  = $this->testcase->getSceneMenu($productID, $moduleID, 0, $branch === 'all' || !isset($branches[$branch]) ? 0 : $branch);
     }
 
     /**
@@ -568,7 +568,7 @@ class testcaseZen extends testcase
         $this->view->caseType    = $caseType;
         $this->view->users       = $this->user->getPairs('noletter');
         $this->view->modules     = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch == 'all' ? '0' : $branch);
-        $this->view->iscenes     = $this->testcase->getSceneMenu($productID, $moduleID, $viewType = 'case', $startSceneID = 0,  0);
+        $this->view->iscenes     = $this->testcase->getSceneMenu($productID, $moduleID, 0,  0);
         $this->view->suiteList   = $this->loadModel('testsuite')->getSuites($productID);
         $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'case', $showModule) : array();
         $this->view->libraries   = $this->loadModel('caselib')->getLibraries();
@@ -886,7 +886,7 @@ class testcaseZen extends testcase
      */
     protected function assignForEdit(int $productID, object $case, array $testtasks): void
     {
-        $sceneOptionMenu = $this->testcase->getSceneMenu($productID, $case->module, $viewType = 'case', $startSceneID = 0, 0);
+        $sceneOptionMenu = $this->testcase->getSceneMenu($productID, $case->module, 0, 0);
         if(!isset($sceneOptionMenu[$case->scene])) $sceneOptionMenu += $this->testcase->getScenesName($case->scene);
 
         $forceNotReview = $this->testcase->forceNotReview();
@@ -1067,7 +1067,7 @@ class testcaseZen extends testcase
             if(!isset($moduleScenesPairs[$case->module]))
             {
                 $moduleScenesPairs[$case->module] = array();
-                $moduleScenes                 = $this->testcase->getSceneMenu($productID, $case->module, 'case', 0, $branch === 'all' || !isset($branches[$branch]) ? 0 : $branch);
+                $moduleScenes                 = $this->testcase->getSceneMenu($productID, $case->module, 0, $branch === 'all' || !isset($branches[$branch]) ? 0 : $branch);
                 foreach($moduleScenes as $sceneID => $scene) $moduleScenesPairs[$case->module][] = array('text' => $scene, 'value' => $sceneID);
             }
             $scenePairs[$case->id][] = $moduleScenesPairs[$case->module];
@@ -1265,7 +1265,7 @@ class testcaseZen extends testcase
         $this->view->showFields      = $showFields;
         $this->view->story           = $story;
         $this->view->storyPairs      = $storyPairs;
-        $this->view->sceneOptionMenu = $this->testcase->getSceneMenu($productID, $moduleID, 'case', 0, $branch === 'all' || !isset($branches[$branch]) ? 0 : $branch);
+        $this->view->sceneOptionMenu = $this->testcase->getSceneMenu($productID, $moduleID, 0, $branch === 'all' || !isset($branches[$branch]) ? 0 : $branch);
         $this->view->currentModuleID = $moduleID;
     }
 
@@ -2330,7 +2330,7 @@ class testcaseZen extends testcase
 
         $this->config->testcase->search['params']['product']['values'] = array('') + $productList;
         $this->config->testcase->search['params']['module']['values']  = $modules;
-        $this->config->testcase->search['params']['scene']['values']   = $this->testcase->getSceneMenu($productID, $moduleID, $viewType = 'case', $startSceneID = 0, $branch, 0, true);
+        $this->config->testcase->search['params']['scene']['values']   = $this->testcase->getSceneMenu($productID, $moduleID, 0, $branch, 0, true);
         $this->config->testcase->search['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
 
         if($this->session->currentProductType == 'normal')

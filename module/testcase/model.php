@@ -1597,19 +1597,20 @@ class testcaseModel extends model
     }
 
     /**
-     * 构建菜单查询。
-     * Build menu query.
+     * 为构建场景菜单获取场景。
+     * Get scenes for menu.
      *
-     * @param  int    $rootID
+     * @param  int    $productID
      * @param  int    $moduleID
      * @param  int    $startScene
      * @param  string $branch
+     * @param  int    $currentScene
      * @access public
-     * @return string
+     * @return array
      */
-    public function buildMenuQuery(int $rootID, int $moduleID, int $startScene = 0, string $branch = 'all'): string
+    public function getScenesForMenu(int $productID, int $moduleID, int $startScene = 0, string $branch = 'all', int $currentScene = 0): array
     {
-        /* Set the start module. */
+        /* Set the start scene. */
         $startScenePath = '';
         if($startScene > 0)
         {
@@ -1617,15 +1618,16 @@ class testcaseModel extends model
             if($startScene) $startScenePath = $startScene->path . '%';
         }
 
-        /* Return scene query. */
+        /* Return scenes. */
         return $this->dao->select('*')->from(TABLE_SCENE)
             ->where('deleted')->eq(0)
-            ->beginIF($rootID)->andWhere('product')->eq($rootID)->fi()
+            ->andWhere('id')->ne($currentScene)
+            ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
             ->beginIF($moduleID > 0)->andWhere('module')->eq($moduleID)->fi()
             ->beginIF($startScenePath)->andWhere('path')->like($startScenePath)->fi()
-            ->beginIF($branch !== 'all' and $branch !== '' and $branch !== false)->andWhere('branch')->eq((int)$branch)->fi()
+            ->beginIF($branch !== 'all' && $branch !== '')->andWhere('branch')->eq((int)$branch)->fi()
             ->orderBy('grade desc, sort')
-            ->get();
+            ->fetchAll('id');
     }
 
     /**
@@ -1646,10 +1648,8 @@ class testcaseModel extends model
         {
             if(empty($parentSceneID)) continue;
             if(empty($scenes[$parentSceneID])) continue;
-
             $sceneName .= $scenes[$parentSceneID]->title . '/';
         }
-
         $sceneName  = rtrim($sceneName, '/');
         $sceneName .= "|$scene->id\n";
 
@@ -1872,11 +1872,11 @@ class testcaseModel extends model
     }
 
     /**
+     * 获取场景菜单。
      * Get scene menu.
      *
-     * @param  int    $rootID
+     * @param  int    $productID
      * @param  int    $moduleID
-     * @param  string $type
      * @param  int    $startScene
      * @param  int    $branch
      * @param  int    $currentScene
@@ -1884,31 +1884,20 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getSceneMenu($rootID, $moduleID, $type = '', $startScene = 0, $branch = 0, $currentScene = 0, $emptyMenu = false)
+    public function getSceneMenu(int $productID, int $moduleID, int $startScene = 0, int|string $branch = 0, int $currentScene = 0, bool $emptyMenu = false): array
     {
         if(empty($branch)) $branch = 0;
 
-        /* If type of $branch is array, get scenes of these branches. */
-        if(is_array($branch))
-        {
-            $scenes = array();
-            foreach($branch as $branchID) $scenes[$branchID] = $this->getOptionMenu($rootID,$moduleID, $type, $startScene, $branchID,$currentScene);
-
-            return $scenes;
-        }
-
-        if($type == 'line') $rootID = 0;
-
         $branches = array($branch => '');
-        if($branch != 'all' and strpos('story|bug|case', $type) !== false)
+        if($branch != 'all')
         {
-            $product = $this->loadModel('product')->getById($rootID);
-            if($product and $product->type != 'normal')
+            $product = $this->loadModel('product')->getById($productID);
+            if($product && $product->type != 'normal')
             {
-                $branchPairs = $this->loadModel('branch')->getPairs($rootID, 'all');
+                $branchPairs = $this->loadModel('branch')->getPairs($productID, 'all');
                 $branches    = array($branch => $branchPairs[$branch]);
             }
-            elseif($product and $product->type == 'normal')
+            elseif($product && $product->type == 'normal')
             {
                 $branches = array(0 => '');
             }
@@ -1917,17 +1906,10 @@ class testcaseModel extends model
         $treeMenu = array();
         foreach($branches as $branchID => $branch)
         {
-            $scenes = array();
-            $stmt   = $this->dbh->query($this->buildMenuQuery($rootID, $moduleID, $startScene, $branchID));
-            while($scene = $stmt->fetch())
-            {
-                if ($scene->id != $currentScene) $scenes[$scene->id] = $scene;
-            }
-
+            $scenes = $this->getScenesForMenu($productID, $moduleID, $startScene, $branchID, $currentScene);
             foreach($scenes as $scene)
             {
-                $branchName = (!empty($product) and $product->type != 'normal' and $scene->branch === BRANCH_MAIN) ? $this->lang->branch->main : $branch;
-
+                $branchName = !empty($product) && $product->type != 'normal' && $scene->branch === BRANCH_MAIN ? $this->lang->branch->main : $branch;
                 $this->buildTreeArray($treeMenu, $scenes, $scene, (empty($branchName)) ? '/' : "/$branchName/");
             }
         }
@@ -1945,7 +1927,6 @@ class testcaseModel extends model
 
         /* Attach empty option. */
         if($emptyMenu) $lastMenu['null'] = $this->lang->null;
-
         return $lastMenu;
     }
 
