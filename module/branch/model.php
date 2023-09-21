@@ -27,7 +27,7 @@ class branchModel extends model
         if($branchID == 'all') return false;
         if(empty($branchID))
         {
-            if(empty($productID)) $productID = $this->session->product;
+            if(empty($productID)) $productID = (int)$this->session->product;
             $product = $this->loadModel('product')->getByID($productID);
 
             if(empty($product) || !isset($this->lang->product->branchName[$product->type])) return false;
@@ -251,7 +251,7 @@ class branchModel extends model
      */
     public function update(int $branchID, object $branch): array|false
     {
-        $oldBranch   = $this->getById($branchID, 0, '');
+        $oldBranch   = $this->getById((string)$branchID, 0, '');
         $productType = $this->getProductType($branchID);
         if(!$productType) $productType = 'branch';
 
@@ -617,20 +617,38 @@ class branchModel extends model
     }
 
     /**
+     * Setting parameters for link.
+     *
+     * @param  string $module
+     * @param  string $link
+     * @param  int    $projectID
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function setParamsForLink($module, $link, $projectID, $productID)
+    {
+        $linkHtml = strpos('programplan', $module) !== false ? sprintf($link, $projectID, $productID, '{id}') : sprintf($link, $productID, '{id}');
+        return $linkHtml;
+    }
+
+    /**
+     * 设置默认分支。
      * Set default branch.
      *
      * @param   int    $productID
      * @param   int    $branchID
      * @accesss public
-     * @return  void
+     * @return  bool
      */
-    public function setDefault($productID, $branchID)
+    public function setDefault(int $productID, int $branchID): bool
     {
         $this->dao->update(TABLE_BRANCH)->set('`default`')->eq('0')
             ->where('product')->eq($productID)
             ->exec();
 
         if($branchID) $this->dao->update(TABLE_BRANCH)->set('`default`')->eq('1')->where('id')->eq($branchID)->exec();
+        return !dao::isError();
     }
 
     /**
