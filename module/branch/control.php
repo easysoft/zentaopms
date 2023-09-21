@@ -228,28 +228,6 @@ class branch extends control
     }
 
     /**
-     * Delete branch
-     *
-     * @param  int    $branchID
-     * @param  string $confirm
-     * @access public
-     * @return void
-     */
-    public function delete($branchID, $confirm = 'no')
-    {
-        $this->app->loadLang('product');
-        $productType = $this->branch->getProductType($branchID);
-        if(!$this->branch->checkBranchData($branchID)) return print(js::alert(str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->canNotDelete)));
-        if($confirm == 'no')
-        {
-            return print(js::confirm(str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->confirmDelete), inlink('delete', "branchID=$branchID&confirm=yes")));
-        }
-
-        $this->branch->delete(TABLE_BRANCH, $branchID);
-        return print(js::reload('parent'));
-    }
-
-    /**
      * 获取分支下拉列表。
      * Ajax get branches.
      *
