@@ -285,6 +285,10 @@ $config->group->subset->dimension = new stdclass();
 $config->group->subset->dimension->order = 880;
 $config->group->subset->dimension->nav   = 'bi';
 
+$config->group->subset->metric = new stdclass();
+$config->group->subset->metric->order = 890;
+$config->group->subset->metric->nav   = 'bi';
+
 $config->group->subset->systemteam = new stdclass();
 $config->group->subset->systemteam->order = 920;
 $config->group->subset->systemteam->nav   = 'system';
@@ -3496,6 +3500,12 @@ $config->group->package->deleteDataview->order  = 15;
 $config->group->package->deleteDataview->subset = 'dataview';
 $config->group->package->deleteDataview->privs  = array();
 $config->group->package->deleteDataview->privs['dataview-delete'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('dataview-browse'), 'recommend' => array());
+
+$config->group->package->browseMetric = new stdclass();
+$config->group->package->browseMetric->order  = 5;
+$config->group->package->browseMetric->subset = 'metric';
+$config->group->package->browseMetric->privs  = array();
+$config->group->package->browseMetric->privs['metric-preview'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->browseDoc = new stdclass();
 $config->group->package->browseDoc->order  = 10;

@@ -520,6 +520,7 @@ $lang->group->package->exportChart           = 'Export Chart';
 $lang->group->package->browseDataview        = 'Browse Dataview';
 $lang->group->package->manageDataview        = 'Manage Dataview';
 $lang->group->package->deleteDataview        = 'Delete Dataview';
+$lang->group->package->browseMetric          = 'Browse Metric';
 $lang->group->package->browseDoc             = 'Browse Doc';
 $lang->group->package->manageDoc             = 'Manage Doc';
 $lang->group->package->deleteDoc             = 'Delete Doc';
