@@ -2690,7 +2690,7 @@ class userModel extends model
      * @access public
      * @return array
      */
-    public function getProductViewListUsers($product, $teams, $stakeholders, $whiteList, $admins)
+    public function getProductViewListUsers(object $product, array|null $teams = null, array|null $stakeholders = null, array|null $whiteList = null, array|null $admins = null): array
     {
         $users = array();
 
@@ -2702,14 +2702,14 @@ class userModel extends model
         $users[$product->createdBy] = $product->createdBy;
         if(isset($product->feedback)) $users[$product->feedback] = $product->feedback;
 
-        if($teams === '' and $stakeholders === '')
+        if($teams === null and $stakeholders === null)
         {
             list($productTeams, $productStakeholders) = $this->getProductMembers(array($product->id => $product));
             $teams        = isset($productTeams[$product->id])        ? $productTeams[$product->id]        : array();
             $stakeholders = isset($productStakeholders[$product->id]) ? $productStakeholders[$product->id] : array();
         }
 
-        if($whiteList === '')
+        if($whiteList === null)
         {
             $whiteList = $this->dao->select('account')->from(TABLE_ACL)
                 ->where('objectType')->eq('product')
@@ -2717,7 +2717,7 @@ class userModel extends model
                 ->fetchPairs();
         }
 
-        if($admins === '')
+        if($admins === null)
         {
             $admins = $this->dao->select('account')->from(TABLE_PROJECTADMIN)
                 ->where("CONCAT(',', products, ',')")->like("%,$product->id,%")

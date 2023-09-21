@@ -21,7 +21,7 @@ $multiplePlan = ($this->session->currentProductType != 'normal' && empty($story-
 $minStage    = $story->stage;
 $stageList   = implode(',', array_keys($this->lang->story->stageList));
 $minStagePos = strpos($stageList, $minStage);
-if($story->stages and $branchTagOption)
+if(!empty($story->stages) and $branchTagOption)
 {
     foreach($story->stages as $branch => $stage)
     {
@@ -81,7 +81,7 @@ detailBody
             formGroup
             (
                 set::name('title'),
-                set::value($story->title),
+                set::value($fields['title']['default']),
                 set::disabled(!$canEditContent)
             )
         ),
@@ -100,8 +100,8 @@ detailBody
                         (
                             set::id('reviewer'),
                             set::name('reviewer[]'),
-                            set::items($hiddenProduct ? $teamUsers : $productReviewers),
-                            set::value($reviewers),
+                            set::items($fields['reviewer']['options']),
+                            set::value($fields['reviewer']['default']),
                             set::multiple(true),
                             on::change('changeReviewer'),
                         ),
@@ -110,7 +110,7 @@ detailBody
                     (
                         set::id('needNotReview'),
                         set::name('needNotReview'),
-                        set::checked(empty($reviewers)),
+                        set::checked(empty($fields['reviewer']['default'])),
                         set::value(1),
                         set::text($lang->story->needNotReview),
                         on::change('changeNeedNotReview(e.target)'),
@@ -136,9 +136,8 @@ detailBody
             to::suffix(set::title($lang->story->syncTip), icon('help')),
             h::ul
             (
-                array_values(array_map(function($twin) use($story, $branches)
+                array_values(array_map(function($twin) use($story, $branches, $lang)
                 {
-                    global $lang;
                     $branch     = isset($branches[$twin->branch]) ? $branches[$twin->branch] : '';
                     $stage      = $lang->story->stageList[$twin->stage];
                     $labelClass = $story->branch == $twin->branch ? 'primary' : '';
@@ -183,7 +182,7 @@ detailBody
             set::title($lang->story->legendBasicInfo),
             $story->parent <= 0 ? item
             (
-                set::trClass($hiddenProduct ? 'hidden' : ''),
+                set::trClass(zget($fields['product'], 'className', '')),
                 set::name($lang->story->product),
                 row
                 (
@@ -191,8 +190,8 @@ detailBody
                     (
                         set::id('product'),
                         set::name('product'),
-                        set::items($products),
-                        set::value($story->product),
+                        set::items($fields['product']['options']),
+                        set::value($fields['product']['default']),
                         on::change('loadProduct'),
                     ),
                     span
@@ -203,8 +202,8 @@ detailBody
                         (
                             set::id('branch'),
                             set::name('branch'),
-                            set::items($branchTagOption),
-                            set::value($story->branch),
+                            set::items($fields['branch']['options']),
+                            set::value($fields['branch']['default']),
                             on::change('loadBranch'),
                         ) : null
                     )
@@ -213,7 +212,7 @@ detailBody
             $story->parent > 0 && $product->type != 'normal' ? item
             (
                 set::name(sprintf($lang->product->branch, $lang->product->branchName[$product->type])),
-                picker(setID('branch'), set::name('branch'), set::items($branchTagOption), set::value($story->branch))
+                picker(setID('branch'), set::name('branch'), set::items($fields['branch']['options']), set::value($fields['branch']['default']))
             ) : null,
             item
             (
@@ -226,39 +225,39 @@ detailBody
                         picker
                         (
                             set::name('module'),
-                            set::items($moduleOptionMenu),
-                            set::value($story->module)
+                            set::items($fields['module']['options']),
+                            set::value($fields['module']['default'])
                         ),
                     ),
                     count($moduleOptionMenu) == 1 ? btn(set::url($this->createLink('tree', 'browse', "rootID={$story->product}&view=story&currentModuleID=0&branch={$story->branch}")), set('data-toggle', 'modal'), $lang->tree->manage) : null,
-                    count($moduleOptionMenu) == 1 ? btn(set('data-on', 'click'), set('data-call', 'loadProductModules'), set('data-params', $story->product), setClass('refresh'), icon('refresh')) : null,
+                    count($moduleOptionMenu) == 1 ? btn(set('onclick', "loadProductModules({$story->product})"), setClass('refresh'), icon('refresh')) : null,
                 )
             ),
             $story->parent >= 0 && $story->type == 'story' ? item
             (
-                set::trClass($hiddenParent ? 'hidden' : null),
+                set::trClass(zget($fields['parent'], 'className', '')),
                 set::name($lang->story->parent),
-                picker(setID('parent'), set::name('parent'), set::items(array_filter($stories)), set::value($story->parent)),
+                picker(setID('parent'), set::name('parent'), set::items($fields['parent']['options']), set::value($fields['parent']['default'])),
             ) : null,
             item
             (
-                set::trClass($hiddenPlan ? 'hidden' : null),
+                set::trClass(zget($fields['plan'], 'className', '')),
                 set::name($lang->story->plan),
                 inputGroup
                 (
                     span
                     (
                         set::id('planIdBox'),
-                        picker(setID('plan'), set::name($multiplePlan ? 'plan[]' : 'plan'), set::items($plans), set::value($story->plan), set::multiple($multiplePlan)),
+                        picker(setID('plan'), set::name($multiplePlan ? 'plan[]' : 'plan'), set::items($fields['plan']['options']), set::value($fields['parent']['default']), set::multiple($multiplePlan)),
                     ),
                     empty($plans) ? btn(set::url($this->createLink('productplan', 'create', "productID={$story->product}&branch={$story->branch}")), set('data-toggle', 'modal'), icon('plus')) : null,
-                    empty($plans) ? btn(set('data-on', 'click'), set('data-call', 'loadProductPlans'), set('data-params', $story->product), setClass('refresh'), icon('refresh')) : null,
+                    empty($plans) ? btn(set('onclick', "loadProductPlans({$story->product})"), setClass('refresh'), icon('refresh')) : null,
                 )
             ),
             item
             (
                 set::name($lang->story->source),
-                picker(setID('source'), set::name('source'), set::items($lang->story->sourceList), set::value($story->source), on::change('toggleFeedback(e.target)'))
+                picker(setID('source'), set::name('source'), set::items($fields['source']['options']), set::value($fields['source']['default']), on::change('toggleFeedback(e.target)'))
             ),
             item
             (
@@ -274,17 +273,17 @@ detailBody
             $story->type == 'story' ? item
             (
                 set::name($lang->story->stage),
-                picker(setID('stage'), set::name('stage'), set::items($lang->story->stageList), set::value($minStage))
+                picker(setID('stage'), set::name('stage'), set::items($fields['stage']['options']), set::value($minStage))
             ) : null,
             item
             (
                 set::name($lang->story->category),
-                picker(setID('category'), set::name('category'), set::items($lang->story->categoryList), set::value($story->category))
+                picker(setID('category'), set::name('category'), set::items($fields['category']['options']), set::value($fields['category']['default']))
             ),
             item
             (
                 set::name($lang->story->pri),
-                priPicker(set::name('pri'), set::items($lang->story->priList), set::value(!empty($story->pri) ? $story->pri : $this->config->story->defaultPriority))
+                priPicker(set::name('pri'), set::items($fields['pri']['options']), set::value(fields['pri']['default']))
             ),
             item
             (
@@ -315,7 +314,7 @@ detailBody
                 set::name($lang->story->mailto),
                 inputGroup
                 (
-                    picker(setID('mailto'), set::name('mailto[]'), set::items($users), set::value(empty($story->mailto) ? '' : $story->mailto), set::multiple(true)),
+                    picker(setID('mailto'), set::name('mailto[]'), set::items($fields['mailto']['options']), set::value(empty($story->mailto) ? '' : $story->mailto), set::multiple(true)),
                     $contactList ? picker
                     (
                         setID('contactListMenu'),
@@ -353,8 +352,8 @@ detailBody
                 (
                     setID('assignedTo'),
                     set::name('assignedTo'),
-                    set::items($hiddenProduct ? $teamUsers : $assignedToList),
-                    set::value($story->assignedTo)
+                    set::items($fields['assignedTo']['options']),
+                    set::value($fields['assignedTo']['default'])
                 )
             ),
             $story->status == 'reviewing' ? item
@@ -364,8 +363,8 @@ detailBody
                 (
                     set::id('reviewer'),
                     set::name('reviewer[]'),
-                    set::items($hiddenProduct ? $teamUsers : $productReviewers),
-                    set::value($reviewers),
+                    set::items($fields['reviewer']['options']),
+                    set::value($fields['reviewer']['default']),
                     set::multiple(true),
                     on::change('changeReviewer'),
                 )
@@ -373,12 +372,12 @@ detailBody
             $story->status == 'closed' ? item
             (
                 set::name($lang->story->closedBy),
-                picker(setID('closedBy'), set::name('closedBy'), set::items($users), set::value($story->closedBy))
+                picker(setID('closedBy'), set::name('closedBy'), set::items($fields['closedBy']['options']), set::value($fields['closedBy']['default']))
             ) : null,
             $story->status == 'closed' ? item
             (
                 set::name($lang->story->closedReason),
-                picker(setID('closedReason'), set::name('closedReason'), set::items($lang->story->reasonList), set::value($story->closedReason), on::change('setStory'))
+                picker(setID('closedReason'), set::name('closedReason'), set::items($fields['closedReason']['options']), set::value($$fields['closedReason']['default']), on::change('setStory'))
             ) : null,
         ),
         tableData
@@ -388,7 +387,7 @@ detailBody
             (
                 set::trClass('duplicateStoryBox'),
                 set::name($lang->story->duplicateStory),
-                picker(setID('duplicateStory'), set::name('duplicateStory'), set::items($productStories), set::value($story->duplicateStory), set::placeholder($lang->bug->placeholder->duplicate))
+                picker(setID('duplicateStory'), set::name('duplicateStory'), set::items($fields['duplicateStory']['options']), set::value($fields['duplicateStory']['default']), set::placeholder($lang->bug->placeholder->duplicate))
             ) : null,
             item
             (

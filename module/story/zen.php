@@ -422,6 +422,23 @@ class storyZen extends story
         return array($products, $branches);
     }
 
+    protected function getProductsForEdit(): array
+    {
+        $account        = $this->app->user->account;
+        $myProducts     = array();
+        $othersProducts = array();
+        $products       = $this->loadModel('product')->getList();
+
+        foreach($products as $product)
+        {
+            if($product->status == 'normal' and $product->PO == $account) $myProducts[$product->id]     = $product->name;
+            if($product->status == 'normal' and $product->PO != $account) $othersProducts[$product->id] = $product->name;
+        }
+        $products = $myProducts + $othersProducts;
+
+        return $products;
+    }
+
     /**
      * 获取创建需求的表单字段。
      * Get form fields for create
@@ -496,6 +513,68 @@ class storyZen extends story
         $this->view->objectID    = $objectID;
         $this->view->forceReview = $forceReview;
         $this->view->needReview  = $needReview;
+
+        return $fields;
+    }
+
+    protected function getFormFieldsForEdit(int $storyID): array
+    {
+        $account = $this->app->user->account;
+        $fields  = $this->config->story->form->edit;
+
+        /* 准备数据。*/
+        $story        = $this->view->story;
+        $product      = $this->view->product;
+        $users        = $this->loadModel('user')->getPairs('pofirst|nodeleted|noclosed', "$story->assignedTo,$story->openedBy,$story->closedBy");
+        $stories      = $this->story->getParentStoryPairs($story->product, $story->parent);
+        $plans        = $this->loadModel('productplan')->getPairs($story->product, $story->branch == 0 ? 'all' : $story->branch, '', true);
+        $reviewerList = $this->story->getReviewerPairs($story->id, $story->version);
+
+        $reviewers = $product->reviewer;
+        if(!$reviewers and $product->acl != 'open') $reviewers = $this->user->getProductViewListUsers($product);
+        $reviewers = $this->user->getPairs('noclosed|nodeleted', array_keys($reviewerList), 0, $reviewers);
+
+        $products = $this->getProductsForEdit();
+        if($this->app->tab == 'project' or $this->app->tab == 'execution')
+        {
+            $objectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
+            $products = $this->product->getProductPairsByProject($objectID);
+            $this->view->objectID = $objectID;
+        }
+
+        $branches = $this->loadModel('branch')->getList($product->id, isset($objectID) ? $objectID : 0, 'all');
+        $branchTagOption = array();
+        foreach($branches as $branchInfo) $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+
+        $moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($story->product, 'story', 0, $story->branch);
+        if($product->type == 'normal' and !empty($story->branch)) $moduleOptionMenu += $this->tree->getModulesName(array($story->module));
+
+        $storyBranch    = $story->branch > 0 ? $story->branch : '0';
+        $branch         = $product->type == 'branch' ? $storyBranch : 'all';
+        $productStories = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '', $story->type);
+
+        /* 追加字段的name、title属性，展开user数据。 */
+        foreach($fields as $field => $attr)
+        {
+            if(isset($attr['options']) and $attr['options'] == 'users') $fields[$field]['options'] = $users;
+            if(isset($story->$field))            $fields[$field]['default'] = $story->$field;
+            if(!isset($fields[$field]['name']))  $fields[$field]['name']    = $field;
+            if(!isset($fields[$field]['title'])) $fields[$field]['title']   = zget($this->lang->story, $field);
+        }
+
+        /* 设置下拉菜单内容。 */
+        if(isset($stories[$storyID])) unset($stories[$storyID]);
+        $fields['product']['options']        = $products;
+        $fields['branch']['options']         = $branchTagOption;
+        $fields['module']['options']         = $moduleOptionMenu;
+        $fields['plan']['options']           = $plans;
+        $fields['reviewer']['options']       = $reviewers;
+        $fields['parent']['options']         = array_filter($stories);
+        $fields['duplicateStory']['options'] = $productStories;
+        $fields['assignedTo']['options']    += array('closed' => 'Closed');
+
+        /* 设置默认值。 */
+        if(empty($fields['reviewer']['default'])) $fields['reviewer']['default'] = $reviewers;
 
         return $fields;
     }
@@ -733,6 +812,42 @@ class storyZen extends story
         return $fields;
     }
 
+    protected function removeFormFieldsForEdit(int $storyID, array $fields): array
+    {
+        $story   = $this->view->story;
+        $product = $this->view->product;
+
+        $hiddenProduct = $hiddenParent = $hiddenPlan = $hiddenURS = false;
+        $teamUsers     = array();
+        if($product->shadow)
+        {
+            $this->loadModel('project');
+            $project       = $this->project->getByShadowProduct($product->id);
+            $teamUsers     = $this->project->getTeamMemberPairs($project->id);
+            $hiddenProduct = true;
+            $hiddenParent  = true;
+
+            if($project->model !== 'scrum') $hiddenPlan = true;
+            if(!$project->multiple)
+            {
+                $hiddenPlan = true;
+                unset($this->lang->story->stageList[''], $this->lang->story->stageList['wait'], $this->lang->story->stageList['planned']);
+            }
+            if($project->model === 'kanban') $hiddenURS  = true;
+        }
+
+        if($hiddenProduct)
+        {
+            $fields['product']['className']  = 'hidden';
+            $fields['reviewer']['options']   = $teamUsers;
+            $fields['assignedTo']['options'] = $teamUsers;
+        }
+        if($hiddenParent) $fields['parent']['className'] = 'hidden';
+        if($hiddenPlan)   $fields['plan']['className']   = 'hidden';
+
+        return $fields;
+    }
+
     /**
      * 根据配置，删除非必要的表单字段配置。
      * Remove form fields for batch create.
@@ -809,6 +924,77 @@ class storyZen extends story
 
         if($storyData->status != 'draft' and $this->story->checkForceReview()) $storyData->status = 'reviewing';
         return $this->loadModel('file')->processImgURL($storyData, $editorFields, $this->post->uid);
+    }
+
+    protected function buildStoryForEdit(int $storyID): object|false
+    {
+        $storyPlan = array();
+        $oldStory  = $this->fetchByID($storyID);
+
+        if(!empty($_POST['lastEditedDate']) and $oldStory->lastEditedDate != $this->post->lastEditedDate) dao::$errors[] = $this->lang->error->editedByOther;
+        if(strpos('draft,changing', $oldStory->status) !== false and $this->story->checkForceReview() and empty($_POST['reviewer'])) dao::$errors[] = $this->lang->story->notice->reviewerNotEmpty;
+        if(!empty($_POST['plan'])) $storyPlan = is_array($_POST['plan']) ? array_filter($_POST['plan']) : array($_POST['plan']);
+        if(count($storyPlan) > 1)
+        {
+            $oldStoryPlan  = !empty($oldStory->plan) ? array_filter(explode(',', $oldStory->plan)) : array();
+            $oldPlanDiff   = array_diff($storyPlan, $oldStoryPlan);
+            $storyPlanDiff = array_diff($oldStoryPlan, $storyPlan);
+            if(!empty($oldPlanDiff) or !empty($storyPlanDiff)) dao::$errors[] = $this->lang->story->notice->changePlan;
+        }
+        if(dao::isError()) return false;
+
+        $hasProduct = $this->dao->select('t2.hasProduct')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t1.product')->eq($oldStory->product)
+            ->andWhere('t2.deleted')->eq(0)
+            ->fetch('hasProduct');
+        $_POST['product'] = (!empty($hasProduct) && !$hasProduct) ? $oldStory->product : $this->post->product;
+
+        $now          = helper::now();
+        $fields       = $this->config->story->form->edit;
+        $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
+        foreach(explode(',', trim($this->config->story->edit->requiredFields, ',')) as $field) $fields[$field]['required'] = true;
+
+        $storyData = form::data($fields)
+            ->add('lastEditedBy', $this->app->user->account)
+            ->add('lastEditedDate', $now)
+            ->setDefault('deleteFiles', array())
+            ->setDefault('reviewedBy', $oldStory->reviewedBy)
+            ->setDefault('deleteFiles', array())
+            ->setDefault('product', $oldStory->product)
+            ->setDefault('branch', $oldStory->branch)
+            ->setIF($this->post->assignedTo   != $oldStory->assignedTo, 'assignedDate', $now)
+            ->setIF($this->post->closedBy     && $oldStory->closedDate == '', 'closedDate', $now)
+            ->setIF($this->post->closedReason && $oldStory->closedDate == '', 'closedDate', $now)
+            ->setIF($this->post->closedBy     || $this->post->closedReason != false, 'status', 'closed')
+            ->setIF($this->post->closedReason && $this->post->closedBy     == false, 'closedBy', $this->app->user->account)
+            ->setIF($this->post->stage == 'released', 'releasedDate', $now)
+            ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'feedbackBy', '')
+            ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'notifyEmail', '')
+            ->setIF(!empty($_POST['plan'][0]) and $oldStory->stage == 'wait', 'stage', 'planned')
+            ->setIF(!isset($_POST['title']), 'title', $oldStory->title)
+            ->setIF(!isset($_POST['spec']), 'spec', $oldStory->spec)
+            ->setIF(!isset($_POST['verify']), 'verify', $oldStory->verify)
+            ->get();
+
+        if($this->post->linkStories)      $storyData->linkStories      = implode(',', array_unique($this->post->linkStories));
+        if($this->post->linkRequirements) $storyData->linkRequirements = implode(',', array_unique($this->post->linkRequirements));
+
+        return $this->loadModel('file')->processImgURL($storyData, $editorFields, $this->post->uid);
+    }
+
+    protected function processDataForEdit(int $storyID, object $story)
+    {
+        $oldStory = $this->fetchByID($storyID);
+
+        if($oldStory->type == 'story' and !isset($story->linkStories)) $story->linkStories = '';
+        if($oldStory->type == 'requirement' and !isset($story->linkRequirements)) $story->linkRequirements = '';
+        if($oldStory->status == 'changing' and $story->status == 'draft') $story->status = 'changing';
+
+        if(isset($_POST['plan']) and is_array($_POST['plan'])) $story->plan   = trim(implode(',', $_POST['plan']), ',');
+        if(isset($_POST['branch']) and $_POST['branch'] == 0)  $story->branch = 0;
+        if(isset($story->stage) and $oldStory->stage != $story->stage) $story->stagedBy = (strpos('tested|verified|released|closed', $story->stage) !== false) ? $this->app->user->account : '';
+        if(isset($_POST['reviewer']) or isset($_POST['needNotReview'])) $this->story->doUpdateReviewer($storyID, isset($_POST['needNotReview']) ? array() : array_filter($_POST['reviewer']));
     }
 
     /**

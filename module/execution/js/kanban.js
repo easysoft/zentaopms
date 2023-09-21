@@ -1232,8 +1232,9 @@ function deleteCard(objectType, objectID, regionID)
  * @access public
  * @return void
  */
-function updateKanban(kanbanData, regionID = 0)
+function updateKanban(kanbanData, regionID)
 {
+    if(typeof(regionID) == 'undefined') regionID = 0;
     setTimeout(function()
     {
         $.zui.closeModal();

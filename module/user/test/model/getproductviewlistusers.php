@@ -34,6 +34,8 @@ $whiteList['astaw']  = 'astaw';
 $admins['test20'] = 'test20';
 $admins['test21'] = 'test21';
 
+$user->objectModel->app->user->account   = 'admin';
+$user->objectModel->app->company->admins = ',admin,';
 r(count($user->getProductViewListUsersTest(1, $stakeholders, $teams, $whiteList, array()))) && p()         && e('11');     //获取对ID为1的产品有权限的用户
 r($user->getProductViewListUsersTest(1, $stakeholders, $teams, $whiteList, array()))        && p('test9')  && e('test9');  //获取对ID为1的产品有权限的用户
 r($user->getProductViewListUsersTest(1, $stakeholders, $teams, $whiteList, array()))        && p('admin')  && e('admin');  //获取对ID为1的产品有权限的用户

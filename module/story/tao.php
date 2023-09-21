@@ -218,7 +218,7 @@ class storyTao extends storyModel
         $product   = $this->loadModel('product')->getByID($productID);
         $reviewers = $product->reviewer;
 
-        if(!$reviewers and $product->acl != 'open') $reviewers = $this->user->getProductViewListUsers($product, '', '', '', '');
+        if(!$reviewers and $product->acl != 'open') $reviewers = $this->user->getProductViewListUsers($product);
         return $this->user->getPairs('noclosed|nodeleted', $storyReviewers, 0, $reviewers);
     }
 
@@ -783,6 +783,156 @@ class storyTao extends storyModel
             $reviewData->reviewer = $reviewer;
             $reviewData->result   = '';
             $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+        }
+    }
+
+    protected function doUpdateReviewer(int $storyID, array $reviewers = array())
+    {
+        $oldStory     = $this->fetchByID($storyID);
+        $oldReviewer  = $this->getReviewerPairs($storyID, $oldStory->version);
+        $twins        = explode(',', trim($oldStory->twins, ','));
+        $reviewerList = implode(',', $reviewers);
+
+        /* Update story reviewer. */
+        $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)
+            ->andWhere('version')->eq($oldStory->version)
+            ->beginIF($oldStory->status == 'reviewing')->andWhere('reviewer')->notIN($reviewerList)
+            ->exec();
+
+        /* Sync twins. */
+        if(!empty($twins))
+        {
+            foreach($twins as $twinID)
+            {
+                $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($twinID)
+                    ->andWhere('version')->eq($oldStory->version)
+                    ->beginIF($oldStory->status == 'reviewing')->andWhere('reviewer')->notin($reviewerList)
+                    ->exec();
+            }
+        }
+
+        foreach($reviewers as $reviewer)
+        {
+            if($oldStory->status == 'reviewing' and isset($oldReviewer[$reviewer])) continue;
+
+            $reviewData = new stdclass();
+            $reviewData->story    = $storyID;
+            $reviewData->version  = $oldStory->version;
+            $reviewData->reviewer = $reviewer;
+            $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+
+            /* Sync twins. */
+            if(!empty($twins))
+            {
+                foreach($twins as $twinID)
+                {
+                    $reviewData->story = $twinID;
+                    $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+                }
+            }
+        }
+
+        if($oldStory->status == 'reviewing') $story = $this->updateStoryByReview($storyID, $oldStory, $story);
+        if(strpos('draft,changing', $oldStory->status) != false) $story->reviewedBy = '';
+    }
+
+    protected function doUpdateSpec(int $storyID, object $story, array $addedFiles)
+    {
+        if($story->spec == $oldStory->spec and $story->verify == $oldStory->verify and $story->title == $oldStory->title and empty($story->deleteFiles) and empty($addedFiles)) return true;
+
+        $oldStory   = $this->getByID($storyID);
+        $addedFiles = empty($addedFiles) ? '' : implode(',', array_keys($addedFiles)) . ',';
+        $storyFiles = $oldStory->files = implode(',', array_keys($oldStory->files));
+        foreach($story->deleteFiles as $fileID) $storyFiles = str_replace(",$fileID,", ',', ",$storyFiles,");
+
+        $data = new stdclass();
+        $data->title  = $story->title;
+        $data->spec   = $story->spec;
+        $data->verify = $story->verify;
+        $data->files  = $story->files = $addedFiles . trim($storyFiles, ',');
+        $this->dao->update(TABLE_STORYSPEC)->data($data)->where('story')->eq((int)$storyID)->andWhere('version')->eq($oldStory->version)->exec();
+
+        /* Sync twins. */
+        if(!empty($oldStory->twins))
+        {
+            foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
+            {
+                $this->dao->update(TABLE_STORYSPEC)->data($data)
+                    ->where('story')->eq((int)$twinID)
+                    ->andWhere('version')->eq($oldStory->version)
+                    ->exec();
+            }
+        }
+    }
+
+    protected function doChangeParent(int $storyID, object $story, int $oldStoryParent)
+    {
+        if($story->product == $oldStoryParent) return;
+
+        $this->loadModel('action');
+        $this->updateStoryProduct($storyID, $story->product);
+        if($oldStoryParent == '-1')
+        {
+            $childStories = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($storyID)->andWhere('deleted')->eq(0)->fetchPairs('id');
+            foreach($childStories as $childStoryID) $this->updateStoryProduct($childStoryID, $story->product);
+        }
+
+        if($oldStoryParent > 0)
+        {
+            $oldParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($oldStoryParent)->fetch();
+            $oldChildren    = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($oldStoryParent)->andWhere('deleted')->eq(0)->fetchPairs('id', 'id');
+            $newParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($oldStoryParent)->fetch();
+            if(empty($oldChildren)) $this->dao->update(TABLE_STORY)->set('parent')->eq(0)->where('id')->eq($oldStoryParent)->exec();
+            $this->dao->update(TABLE_STORY)->set('childStories')->eq(implode(',', $oldChildren))->set('lastEditedBy')->eq($this->app->user->account)->set('lastEditedDate')->eq(helper::now())->where('id')->eq($oldStoryParent)->exec();
+
+            $this->action->create('story', $storyID, 'unlinkParentStory', '', $oldStoryParent, '', false);
+            $actionID = $this->action->create('story', $oldStoryParent, 'unLinkChildrenStory', '', $storyID, '', false);
+            $changes  = common::createChanges($oldParentStory, $newParentStory);
+            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+        }
+
+        if($story->parent > 0)
+        {
+            $parentStory    = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($story->parent)->fetch();
+            $children       = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($story->parent)->andWhere('deleted')->eq(0)->fetchPairs('id', 'id');
+            $newParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($story->parent)->fetch();
+            $this->dao->update(TABLE_STORY)->set('parent')->eq('-1')
+                ->set('childStories')->eq(implode(',', $children))
+                ->set('lastEditedBy')->eq($this->app->user->account)
+                ->set('lastEditedDate')->eq(helper::now())
+                ->where('id')->eq($story->parent)
+                ->exec();
+
+            $this->action->create('story', $storyID, 'linkParentStory', '', $story->parent, '', false);
+            $actionID = $this->action->create('story', $story->parent, 'linkChildStory', '', $storyID, '', false);
+            $changes  = common::createChanges($parentStory, $newParentStory);
+            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+        }
+    }
+
+    protected function doUpdateLinkStories(object $story, object $oldStory)
+    {
+        $linkStoryField = $oldStory->type == 'story' ? 'linkStories' : 'linkRequirements';
+        $linkStories    = explode(',', $story->{$linkStoryField});
+        $oldLinkStories = explode(',', $oldStory->{$linkStoryField});
+        $addStories     = array_diff($linkStories, $oldLinkStories);
+        $removeStories  = array_diff($oldLinkStories, $linkStories);
+        $changeStories  = array_merge($addStories, $removeStories);
+        $changeStories  = $this->dao->select("id,$linkStoryField")->from(TABLE_STORY)->where('id')->in(array_filter($changeStories))->fetchPairs();
+        foreach($changeStories as $changeStoryID => $changeStory)
+        {
+            if(in_array($changeStoryID, $addStories))
+            {
+                $stories = empty($changeStory) ? $storyID : $changeStory . ',' . $storyID;
+                $this->dao->update(TABLE_STORY)->set($linkStoryField)->eq($stories)->where('id')->eq((int)$changeStoryID)->exec();
+            }
+
+            if(in_array($changeStoryID, $removeStories))
+            {
+                $linkedStories = str_replace(",$storyID,", ',', ",$changeStory,");
+                $linkedStories = trim($linkedStories, ',');
+                $this->dao->update(TABLE_STORY)->set($linkStoryField)->eq($linkedStories)->where('id')->eq((int)$changeStoryID)->exec();
+            }
         }
     }
 

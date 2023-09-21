@@ -768,77 +768,9 @@ class storyModel extends model
      * @access public
      * @return array  the changes of the story.
      */
-    public function update($storyID)
+    public function update(int $storyID, object $story, string $comment = ''): bool
     {
-        $now      = helper::now();
-        $oldStory = $this->getById($storyID);
-        if(!empty($_POST['lastEditedDate']) and $oldStory->lastEditedDate != $this->post->lastEditedDate)
-        {
-            dao::$errors[] = $this->lang->error->editedByOther;
-            return false;
-        }
-
-        if(strpos('draft,changing', $oldStory->status) !== false and $this->checkForceReview() and empty($_POST['reviewer']))
-        {
-            dao::$errors[] = $this->lang->story->notice->reviewerNotEmpty;
-            return false;
-        }
-
-        $storyPlan = array();
-        if(!empty($_POST['plan'])) $storyPlan = is_array($_POST['plan']) ? array_filter($_POST['plan']) : array($_POST['plan']);
-        if(count($storyPlan) > 1)
-        {
-            $oldStoryPlan  = !empty($oldStory->planTitle) ? array_keys($oldStory->planTitle) : array();
-            $oldPlanDiff   = array_diff($storyPlan, $oldStoryPlan);
-            $storyPlanDiff = array_diff($oldStoryPlan, $storyPlan);
-            if(!empty($oldPlanDiff) or !empty($storyPlanDiff))
-            {
-                dao::$errors[] = $this->lang->story->notice->changePlan;
-                return false;
-            }
-        }
-
-        /* Unchanged product when editing requirements on site. */
-        $hasProduct = $this->dao->select('t2.hasProduct')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->where('t1.product')->eq($oldStory->product)
-            ->andWhere('t2.deleted')->eq(0)
-            ->fetch('hasProduct');
-        $_POST['product'] = (!empty($hasProduct) && !$hasProduct) ? $oldStory->product : $this->post->product;
-
-        $story = fixer::input('post')
-            ->cleanInt('product,module,pri,duplicateStory,parent')
-            ->cleanFloat('estimate')
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('reviewedBy', $oldStory->reviewedBy)
-            ->setDefault('mailto', '')
-            ->setDefault('deleteFiles', array())
-            ->add('id', $storyID)
-            ->add('lastEditedDate', $now)
-            ->setDefault('plan,notifyEmail', '')
-            ->setDefault('product', $oldStory->product)
-            ->setDefault('branch', $oldStory->branch)
-            ->setIF(!$this->post->linkStories, 'linkStories', '')
-            ->setIF($this->post->assignedTo   != $oldStory->assignedTo, 'assignedDate', $now)
-            ->setIF($this->post->closedBy     && $oldStory->closedDate == '', 'closedDate', $now)
-            ->setIF($this->post->closedReason && $oldStory->closedDate == '', 'closedDate', $now)
-            ->setIF($this->post->closedBy     || $this->post->closedReason != false, 'status', 'closed')
-            ->setIF($this->post->closedReason && $this->post->closedBy     == false, 'closedBy', $this->app->user->account)
-            ->setIF($this->post->stage == 'released', 'releasedDate', $now)
-            ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'feedbackBy', '')
-            ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'notifyEmail', '')
-            ->setIF(!empty($_POST['plan'][0]) and $oldStory->stage == 'wait', 'stage', 'planned')
-            ->setIF(!isset($_POST['title']), 'title', $oldStory->title)
-            ->setIF(!isset($_POST['spec']), 'spec', $oldStory->spec)
-            ->setIF(!isset($_POST['verify']), 'verify', $oldStory->verify)
-            ->stripTags($this->config->story->editor->edit['id'], $this->config->allowedTags)
-            ->join('mailto', ',')
-            ->join('childStories', ',')
-            ->remove('files,labels,comment,contactListMenu,reviewer,needNotReview')
-            ->get();
-
-        if($this->post->linkStories)      $story->linkStories      = implode(',', array_unique($this->post->linkStories));
-        if($this->post->linkRequirements) $story->linkRequirements = implode(',', array_unique($this->post->linkRequirements));
+        $oldStory = $this->fetchByID($storyID);
 
         /* Relieve twins when change product. */
         if(!empty($oldStory->twins) and $story->product != $oldStory->product)
@@ -848,71 +780,7 @@ class storyModel extends model
             $oldStory->twins = '';
         }
 
-        if($oldStory->type == 'story' and !isset($story->linkStories)) $story->linkStories = '';
-        if($oldStory->type == 'requirement' and !isset($story->linkRequirements)) $story->linkRequirements = '';
-        if($oldStory->status == 'changing' and $story->status == 'draft') $story->status = 'changing';
-
-        if(isset($story->plan) and is_array($story->plan)) $story->plan = trim(implode(',', $story->plan), ',');
-        if(isset($_POST['branch']) and $_POST['branch'] == 0) $story->branch = 0;
-
-        if(isset($story->stage) and $oldStory->stage != $story->stage) $story->stagedBy = (strpos('tested|verified|released|closed', $story->stage) !== false) ? $this->app->user->account : '';
-        $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->edit['id'], $this->post->uid);
-
-        if(isset($_POST['reviewer']) or isset($_POST['needNotReview']))
-        {
-            $_POST['reviewer'] = isset($_POST['needNotReview']) ? array() : array_filter($_POST['reviewer']);
-            $oldReviewer       = $this->getReviewerPairs($storyID, $oldStory->version);
-
-            /* Update story reviewer. */
-            $this->dao->delete()->from(TABLE_STORYREVIEW)
-                ->where('story')->eq($storyID)
-                ->andWhere('version')->eq($oldStory->version)
-                ->beginIF($oldStory->status == 'reviewing')->andWhere('reviewer')->notin(implode(',', $_POST['reviewer']))
-                ->exec();
-
-            /* Sync twins. */
-            if(!empty($oldStory->twins))
-            {
-                foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
-                {
-                    $this->dao->delete()->from(TABLE_STORYREVIEW)
-                        ->where('story')->eq($twinID)
-                        ->andWhere('version')->eq($oldStory->version)
-                        ->beginIF($oldStory->status == 'reviewing')->andWhere('reviewer')->notin(implode(',', $_POST['reviewer']))
-                        ->exec();
-                }
-            }
-
-            foreach($_POST['reviewer'] as $reviewer)
-            {
-                if($oldStory->status == 'reviewing' and in_array($reviewer, array_keys($oldReviewer))) continue;
-
-                $reviewData = new stdclass();
-                $reviewData->story    = $storyID;
-                $reviewData->version  = $oldStory->version;
-                $reviewData->reviewer = $reviewer;
-                $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
-
-                /* Sync twins. */
-                if(!empty($oldStory->twins))
-                {
-                    foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
-                    {
-                        $reviewData->story = $twinID;
-                        $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
-                    }
-                }
-            }
-
-            if($oldStory->status == 'reviewing') $story = $this->updateStoryByReview($storyID, $oldStory, $story);
-            if(strpos('draft,changing', $oldStory->status) != false) $story->reviewedBy = '';
-
-            $oldStory->reviewers = implode(',', array_keys($oldReviewer));
-            $story->reviewers    = implode(',', array_keys($this->getReviewerPairs($storyID, $oldStory->version)));
-        }
-
-        $this->dao->update(TABLE_STORY)
-            ->data($story, 'reviewers,spec,verify,finalResult,deleteFiles')
+        $this->dao->update(TABLE_STORY)->data($story, 'reviewer,spec,verify,deleteFiles')
             ->autoCheck()
             ->checkIF(isset($story->closedBy), 'closedReason', 'notempty')
             ->checkIF(isset($story->closedReason) and $story->closedReason == 'done', 'stage', 'notempty')
@@ -922,167 +790,58 @@ class storyModel extends model
             ->where('id')->eq((int)$storyID)->exec();
         if(dao::isError()) return false;
 
-        if(!dao::isError())
+        $this->loadModel('action');
+        $this->loadModel('file')->updateObjectID($this->post->uid, $storyID, 'story');
+        $addedFiles = $this->file->saveUpload($oldStory->type, $storyID, $oldStory->version);
+        $this->storyTao->doUpdateSpec($storyID, $story, $addedFiles);
+        $this->storyTao->doUpdateLinkStories($story, $oldStory);
+
+        $changed = $story->parent != $oldStory->parent;
+        if($changed) $this->doChangeParent($storyID, $story, $oldStory->parent);
+        if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent, !$changed);
+        if($story->parent > 0)
         {
-            $this->file->updateObjectID($this->post->uid, $storyID, 'story');
-            $addedFiles = $this->file->saveUpload($oldStory->type, $storyID, $oldStory->version);
-
-            if($story->spec != $oldStory->spec or $story->verify != $oldStory->verify or $story->title != $oldStory->title or !empty($story->deleteFiles) or !empty($addedFiles))
-            {
-                $addedFiles = empty($addedFiles) ? '' : implode(',', array_keys($addedFiles)) . ',';
-                $storyFiles = $oldStory->files = implode(',', array_keys($oldStory->files));
-                foreach($story->deleteFiles as $fileID) $storyFiles = str_replace(",$fileID,", ',', ",$storyFiles,");
-
-                $data = new stdclass();
-                $data->title  = $story->title;
-                $data->spec   = $story->spec;
-                $data->verify = $story->verify;
-                $data->files  = $story->files = $addedFiles . trim($storyFiles, ',');
-                $this->dao->update(TABLE_STORYSPEC)->data($data)->where('story')->eq((int)$storyID)->andWhere('version')->eq($oldStory->version)->exec();
-
-                /* Sync twins. */
-                if(!empty($oldStory->twins))
-                {
-                    foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
-                    {
-                        $this->dao->update(TABLE_STORYSPEC)->data($data)
-                            ->where('story')->eq((int)$twinID)
-                            ->andWhere('version')->eq($oldStory->version)
-                            ->exec();
-                    }
-                }
-            }
-
-            if($story->product != $oldStory->product)
-            {
-                $this->updateStoryProduct($storyID, $story->product);
-                if($oldStory->parent == '-1')
-                {
-                    $childStories = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($storyID)->andWhere('deleted')->eq(0)->fetchPairs('id');
-                    foreach($childStories as $childStoryID) $this->updateStoryProduct($childStoryID, $story->product);
-                }
-            }
-
-            $this->loadModel('action');
-
-            if($story->plan != $oldStory->plan)
-            {
-                if(!empty($oldStory->plan)) $this->action->create('productplan', $oldStory->plan, 'unlinkstory', '', $storyID);
-                if(!empty($story->plan)) $this->action->create('productplan', $story->plan, 'linkstory', '', $storyID);
-            }
-
-            $changed = $story->parent != $oldStory->parent;
-            if($oldStory->parent > 0)
-            {
-                $oldParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($oldStory->parent)->fetch();
-                $this->updateParentStatus($storyID, $oldStory->parent, !$changed);
-
-                if($changed)
-                {
-                    $oldChildren = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($oldStory->parent)->andWhere('deleted')->eq(0)->fetchPairs('id', 'id');
-                    if(empty($oldChildren)) $this->dao->update(TABLE_STORY)->set('parent')->eq(0)->where('id')->eq($oldStory->parent)->exec();
-                    $this->dao->update(TABLE_STORY)->set('childStories')->eq(implode(',', $oldChildren))->set('lastEditedBy')->eq($this->app->user->account)->set('lastEditedDate')->eq(helper::now())->where('id')->eq($oldStory->parent)->exec();
-                    $this->action->create('story', $storyID, 'unlinkParentStory', '', $oldStory->parent, '', false);
-
-                    $actionID = $this->action->create('story', $oldStory->parent, 'unLinkChildrenStory', '', $storyID, '', false);
-
-                    $newParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($oldStory->parent)->fetch();
-                    $changes = common::createChanges($oldParentStory, $newParentStory);
-                    if(!empty($changes)) $this->action->logHistory($actionID, $changes);
-                }
-            }
-
-            if($story->parent > 0)
-            {
-                $parentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($story->parent)->fetch();
-                $this->dao->update(TABLE_STORY)->set('parent')->eq(-1)->where('id')->eq($story->parent)->exec();
-                $this->updateParentStatus($storyID, $story->parent, !$changed);
-
-                if($changed)
-                {
-                    $children = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($story->parent)->andWhere('deleted')->eq(0)->fetchPairs('id', 'id');
-                    $this->dao->update(TABLE_STORY)
-                        ->set('parent')->eq('-1')
-                        ->set('childStories')->eq(implode(',', $children))
-                        ->set('lastEditedBy')->eq($this->app->user->account)
-                        ->set('lastEditedDate')->eq(helper::now())
-                        ->where('id')->eq($story->parent)
-                        ->exec();
-
-                    $this->action->create('story', $storyID, 'linkParentStory', '', $story->parent, '', false);
-                    $actionID = $this->action->create('story', $story->parent, 'linkChildStory', '', $storyID, '', false);
-
-                    $newParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($story->parent)->fetch();
-                    $changes = common::createChanges($parentStory, $newParentStory);
-                    if(!empty($changes)) $this->action->logHistory($actionID, $changes);
-                }
-            }
-
-            if(isset($story->closedReason) and $story->closedReason == 'done') $this->loadModel('score')->create('story', 'close');
-
-            /* Set new stage and update story sort of plan when story plan has changed. */
-            if($oldStory->plan != $story->plan)
-            {
-                $this->updateStoryOrderOfPlan($storyID, $story->plan, $oldStory->plan); // Insert a new story sort in this plan.
-
-                if(empty($oldStory->plan) or empty($story->plan)) $this->setStage($storyID); // Set new stage for this story.
-            }
-
-            if(isset($story->stage) and $oldStory->stage != $story->stage)
-            {
-                $executionIdList = $this->dao->select('t1.project')->from(TABLE_PROJECTSTORY)->alias('t1')
-                    ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-                    ->where('t1.story')->eq($storyID)
-                    ->andWhere('t2.deleted')->eq(0)
-                    ->andWhere('t2.type')->in('sprint,stage,kanban')
-                    ->fetchPairs();
-
-                $this->loadModel('kanban');
-                foreach($executionIdList as $executionID) $this->kanban->updateLane($executionID, 'story', $storyID);
-            }
-
-            unset($oldStory->parent);
-            unset($story->parent);
-            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
-
-            $linkStoryField = $oldStory->type == 'story' ? 'linkStories' : 'linkRequirements';
-            $linkStories    = explode(',', $story->{$linkStoryField});
-            $oldLinkStories = explode(',', $oldStory->{$linkStoryField});
-            $addStories     = array_diff($linkStories, $oldLinkStories);
-            $removeStories  = array_diff($oldLinkStories, $linkStories);
-            $changeStories  = array_merge($addStories, $removeStories);
-            $changeStories  = $this->dao->select("id,$linkStoryField")->from(TABLE_STORY)->where('id')->in(array_filter($changeStories))->fetchPairs();
-            foreach($changeStories as $changeStoryID => $changeStory)
-            {
-                if(in_array($changeStoryID, $addStories))
-                {
-                    $stories = empty($changeStory) ? $storyID : $changeStory . ',' . $storyID;
-                    $this->dao->update(TABLE_STORY)->set($linkStoryField)->eq($stories)->where('id')->eq((int)$changeStoryID)->exec();
-                }
-
-                if(in_array($changeStoryID, $removeStories))
-                {
-                    $linkedStories = str_replace(",$storyID,", ',', ",$changeStory,");
-                    $linkedStories = trim($linkedStories, ',');
-                    $this->dao->update(TABLE_STORY)->set($linkStoryField)->eq($linkedStories)->where('id')->eq((int)$changeStoryID)->exec();
-                }
-            }
-
-            $changes = common::createChanges($oldStory, $story);
-
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $action   = !empty($changes) ? 'Edited' : 'Commented';
-                $actionID = $this->action->create('story', $storyID, $action, $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-
-                if(isset($story->finalResult)) $this->recordReviewAction($story);
-            }
-
-            if(!empty($oldStory->twins)) $this->syncTwins($oldStory->id, $oldStory->twins, $changes, 'Edited');
-
-            return true;
+            $this->dao->update(TABLE_STORY)->set('parent')->eq('-1')->where('id')->eq($story->parent)->exec();
+            $this->updateParentStatus($storyID, $story->parent, !$changed);
         }
+
+        /* Set new stage and update story sort of plan when story plan has changed. */
+        if($oldStory->plan != $story->plan)
+        {
+            $this->updateStoryOrderOfPlan($storyID, $story->plan, $oldStory->plan); // Insert a new story sort in this plan.
+            if(empty($oldStory->plan) or empty($story->plan)) $this->setStage($storyID); // Set new stage for this story.
+            if(!empty($oldStory->plan)) $this->action->create('productplan', $oldStory->plan, 'unlinkstory', '', $storyID);
+            if(!empty($story->plan))    $this->action->create('productplan', $story->plan, 'linkstory', '', $storyID);
+        }
+
+        if(isset($story->stage) and $oldStory->stage != $story->stage)
+        {
+            $executionIdList = $this->dao->select('t1.project')->from(TABLE_PROJECTSTORY)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                ->where('t1.story')->eq($storyID)
+                ->andWhere('t2.deleted')->eq(0)
+                ->andWhere('t2.type')->in('sprint,stage,kanban')
+                ->fetchPairs('project', 'project');
+
+            $this->loadModel('kanban');
+            foreach($executionIdList as $executionID) $this->kanban->updateLane($executionID, 'story', $storyID);
+        }
+
+        unset($oldStory->parent, $story->parent);
+        if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
+
+        $changes = common::createChanges($oldStory, $story);
+        if(!empty($comment) or !empty($changes))
+        {
+            $action   = !empty($changes) ? 'Edited' : 'Commented';
+            $actionID = $this->action->create('story', $storyID, $action, $comment);
+            $this->action->logHistory($actionID, $changes);
+        }
+
+        if(isset($story->closedReason) and $story->closedReason == 'done') $this->loadModel('score')->create('story', 'close');
+        if(!empty($oldStory->twins)) $this->syncTwins($oldStory->id, $oldStory->twins, $changes, 'Edited');
+
+        return true;
     }
 
     /**
@@ -5111,7 +4870,7 @@ class storyModel extends model
         $this->loadModel('user');
         $product   = $this->loadModel('product')->getByID($productID);
         $reviewers = $product->reviewer;
-        if(!$reviewers and $product->acl != 'open') $reviewers = $this->user->getProductViewListUsers($product, '', '', '', '');
+        if(!$reviewers and $product->acl != 'open') $reviewers = $this->user->getProductViewListUsers($product);
         return $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
     }
 
