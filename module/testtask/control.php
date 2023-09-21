@@ -133,13 +133,11 @@ class testtask extends control
     }
 
     /**
-     *
      * 单元测试列表页面。
      * Browse unit tasks.
      *
      * @param  int    $productID
      * @param  string $browseType
-     * @param  int    $projectID
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -147,7 +145,7 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function browseUnits(int $productID = 0, string $browseType = 'newest', int $projectID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function browseUnits(int $productID = 0, string $browseType = 'newest', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Save session. */
         $this->session->set('testtaskList', $this->app->getURI(true), 'qa');
