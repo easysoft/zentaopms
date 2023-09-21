@@ -2,62 +2,47 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/branch.class.php';
+
+zdTable('product')->config('product')->gen(10);
+zdTable('branch')->config('branch')->gen(20);
+zdTable('project')->config('execution')->gen(20);
+zdTable('projectproduct')->config('projectproduct')->gen(20);
 su('admin');
 
 /**
 
 title=测试 branchModel->getList();
+timeout=0
 cid=1
-pid=1
-
-测试获取产品 41的分支信息 >> ,0,1
-测试获取产品 41 执行 141的分支信息 >> ,0
-测试获取产品 41 执行 141 all 没有主干 的分支信息 >> ,0
-测试获取产品 41 all 没有主干 的分支信息 >> ,0,1,2
-测试获取产品 41 执行 141 closed 没有主干 的分支信息 >> ,2
-测试获取产品 41 执行 141 active 没有主干 的分支信息 >> ,0,1
-测试获取产品 41 执行 141 all 没有主干 的分支信息 >> ,1,2
-测试获取产品 42的分支信息 >> ,0,3
-测试获取产品 42 执行 142的分支信息 >> ,0
-测试获取产品 42 执行 142 all 没有主干 的分支信息 >> ,0
-测试获取产品 42 all 没有主干 的分支信息 >> ,0,3,4
-测试获取产品 42 执行 142 closed 没有主干 的分支信息 >> ,4
-测试获取产品 42 执行 142 active 没有主干 的分支信息 >> ,0,3
-测试获取产品 42 执行 142 all 没有主干 的分支信息 >> ,3,4
-测试获取产品 43的分支信息 >> ,0,5
-测试获取产品 43 执行 143的分支信息 >> ,0
-测试获取产品 43 执行 143 all 没有主干 的分支信息 >> ,0
-测试获取产品 43 all 没有主干 的分支信息 >> ,0,5,6
-测试获取产品 43 执行 143 closed 没有主干 的分支信息 >> ,6
-测试获取产品 43 执行 143 active 没有主干 的分支信息 >> ,0,5
-测试获取产品 43 执行 143 all 没有主干 的分支信息 >> ,5,6
 
 */
-$productID   = array(41, 42, 43);
-$executionID = array(141, 142, 143, null);
+$productID   = array(6, 5, 11);
+$executionID = array(101, 102, 103, 0);
 $browseType  = array('all', 'closed', 'active');
 $mainBranch  = false;
 
 $branch = new branchTest();
 
-r($branch->getListTest($productID[0]))                                               && p() && e(',0,1');   // 测试获取产品 41的分支信息
-r($branch->getListTest($productID[0], $executionID[0]))                              && p() && e(',0');     // 测试获取产品 41 执行 141的分支信息
-r($branch->getListTest($productID[0], $executionID[0], $browseType[0]))              && p() && e(',0');     // 测试获取产品 41 执行 141 all 没有主干 的分支信息
-r($branch->getListTest($productID[0], $executionID[3], $browseType[0]))              && p() && e(',0,1,2'); // 测试获取产品 41 all 没有主干 的分支信息
-r($branch->getListTest($productID[0], $executionID[3], $browseType[1]))              && p() && e(',2');     // 测试获取产品 41 执行 141 closed 没有主干 的分支信息
-r($branch->getListTest($productID[0], $executionID[3], $browseType[2]))              && p() && e(',0,1');   // 测试获取产品 41 执行 141 active 没有主干 的分支信息
-r($branch->getListTest($productID[0], $executionID[3], $browseType[0], $mainBranch)) && p() && e(',1,2');   // 测试获取产品 41 执行 141 all 没有主干 的分支信息
-r($branch->getListTest($productID[1]))                                               && p() && e(',0,3');   // 测试获取产品 42的分支信息
-r($branch->getListTest($productID[1], $executionID[1]))                              && p() && e(',0');     // 测试获取产品 42 执行 142的分支信息
-r($branch->getListTest($productID[1], $executionID[1], $browseType[0]))              && p() && e(',0');     // 测试获取产品 42 执行 142 all 没有主干 的分支信息
-r($branch->getListTest($productID[1], $executionID[3], $browseType[0]))              && p() && e(',0,3,4'); // 测试获取产品 42 all 没有主干 的分支信息
-r($branch->getListTest($productID[1], $executionID[3], $browseType[1]))              && p() && e(',4');     // 测试获取产品 42 执行 142 closed 没有主干 的分支信息
-r($branch->getListTest($productID[1], $executionID[3], $browseType[2]))              && p() && e(',0,3');   // 测试获取产品 42 执行 142 active 没有主干 的分支信息
-r($branch->getListTest($productID[1], $executionID[3], $browseType[0], $mainBranch)) && p() && e(',3,4');   // 测试获取产品 42 执行 142 all 没有主干 的分支信息
-r($branch->getListTest($productID[2]))                                               && p() && e(',0,5');   // 测试获取产品 43的分支信息
-r($branch->getListTest($productID[2], $executionID[2]))                              && p() && e(',0');     // 测试获取产品 43 执行 143的分支信息
-r($branch->getListTest($productID[2], $executionID[2], $browseType[0]))              && p() && e(',0');     // 测试获取产品 43 执行 143 all 没有主干 的分支信息
-r($branch->getListTest($productID[2], $executionID[3], $browseType[0]))              && p() && e(',0,5,6'); // 测试获取产品 43 all 没有主干 的分支信息
-r($branch->getListTest($productID[2], $executionID[3], $browseType[1]))              && p() && e(',6');     // 测试获取产品 43 执行 143 closed 没有主干 的分支信息
-r($branch->getListTest($productID[2], $executionID[3], $browseType[2]))              && p() && e(',0,5');   // 测试获取产品 43 执行 143 active 没有主干 的分支信息
-r($branch->getListTest($productID[2], $executionID[3], $browseType[0], $mainBranch)) && p() && e(',5,6');   // 测试获取产品 43 执行 143 all 没有主干 的分支信息
+r($branch->getListTest($productID[0]))                                               && p('', '|') && e(',0,1,3,17,2,16,18');
+r($branch->getListTest($productID[0], $executionID[0]))                              && p('', '|') && e('0');
+r($branch->getListTest($productID[0], $executionID[0], $browseType[0]))              && p('', '|') && e('0');
+r($branch->getListTest($productID[0], $executionID[1], $browseType[0]))              && p('', '|') && e(',0,1');
+r($branch->getListTest($productID[0], $executionID[1], $browseType[1]))              && p('', '|') && e('0');
+r($branch->getListTest($productID[0], $executionID[1], $browseType[2]))              && p('', '|') && e(',0,1');
+r($branch->getListTest($productID[0], $executionID[1], $browseType[0], $mainBranch)) && p('', '|') && e(',1');
+
+r($branch->getListTest($productID[1]))                                               && p('', '|') && e(',0');
+r($branch->getListTest($productID[1], $executionID[1]))                              && p('', '|') && e('0');
+r($branch->getListTest($productID[1], $executionID[1], $browseType[0]))              && p('', '|') && e('0');
+r($branch->getListTest($productID[1], $executionID[3], $browseType[0]))              && p('', '|') && e(',0');
+r($branch->getListTest($productID[1], $executionID[3], $browseType[1]))              && p('', '|') && e('0');
+r($branch->getListTest($productID[1], $executionID[3], $browseType[2]))              && p('', '|') && e(',0');
+r($branch->getListTest($productID[1], $executionID[3], $browseType[0], $mainBranch)) && p('', '|') && e('0');
+
+r($branch->getListTest($productID[2]))                                               && p('', '|') && e('0');
+r($branch->getListTest($productID[2], $executionID[2]))                              && p('', '|') && e('0');
+r($branch->getListTest($productID[2], $executionID[2], $browseType[0]))              && p('', '|') && e('0');
+r($branch->getListTest($productID[2], $executionID[3], $browseType[0]))              && p('', '|') && e('0');
+r($branch->getListTest($productID[2], $executionID[3], $browseType[1]))              && p('', '|') && e('0');
+r($branch->getListTest($productID[2], $executionID[3], $browseType[2]))              && p('', '|') && e('0');
+r($branch->getListTest($productID[2], $executionID[3], $browseType[0], $mainBranch)) && p('', '|') && e('0');
