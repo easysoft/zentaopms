@@ -205,34 +205,27 @@ class branchModel extends model
     /**
      * Create a branch.
      *
-     * @param  int    $productID
-     * @param  bool   $withMerge
+     * @param  int       $productID
+     * @param  object    $branch
      * @access public
-     * @return int|bool
+     * @return int|false
      */
-    public function create($productID, $withMerge = false)
+    public function create(int $productID, object $branch): int|false
     {
-        $branch = fixer::input('post')
-            ->add('product', $productID)
-            ->add('createdDate', helper::today())
-            ->add('status', 'active')
-            ->removeIF($withMerge, 'createBranch,mergedBranchIDList,targetBranch')
-            ->get();
-
-        $lastOrder = (int)$this->dao->select('`order`')->from(TABLE_BRANCH)->where('product')->eq($productID)->orderBy('order_desc')->limit(1)->fetch('order');
-        $branch->order = empty($lastOrder) ? 1 : $lastOrder + 1;
-
         $this->app->loadLang('product');
         $productType = $this->dao->select('`type`')->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch('type');
         $this->lang->error->unique = str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->existName);
 
+        $lastOrder = (int)$this->dao->select('`order`')->from(TABLE_BRANCH)->where('product')->eq($productID)->orderBy('order_desc')->limit(1)->fetch('order');
+        $branch->order   = $lastOrder + 1;
+        $branch->product = $productID;
         $this->dao->insert(TABLE_BRANCH)->data($branch)
             ->batchCheck($this->config->branch->create->requiredFields, 'notempty')
             ->checkIF(!empty($branch->name), 'name', 'unique', "product = $productID")
             ->exec();
 
-        if(!dao::isError()) return $this->dao->lastInsertID();
-        return false;
+        if(dao::isError()) return false;
+        return $this->dao->lastInsertID();
     }
 
     /**

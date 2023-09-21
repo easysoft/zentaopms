@@ -56,17 +56,21 @@ class branch extends control
     }
 
     /**
+     * 创建一个分支。
      * Create a branch.
      *
      * @param  int    $productID
      * @access public
      * @return void
      */
-    public function create($productID)
+    public function create(int $productID)
     {
+        $this->branch->changeBranchLanguage($productID);
+
         if($_POST)
         {
-            $branchID = $this->branch->create($productID);
+            $branch = form::data()->get();
+            $branchID = $this->branch->create($productID, $branch);
             if(dao::isError()) return $this->sendError(dao::getError());
 
             $this->loadModel('action')->create('branch', $branchID, 'Opened');

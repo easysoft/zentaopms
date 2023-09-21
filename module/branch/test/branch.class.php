@@ -93,13 +93,11 @@ class branchTest
      */
     public function createTest($productID, $param = array())
     {
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $objectID = $this->objectModel->create($productID, $withMerge = false);
-
-        unset($_POST);
-
-        if(dao::isError()) return dao::getError()['name'][0];
+        $objectID = $this->objectModel->create($productID, (object) $param);
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
 
         global $tester;
         $object = $tester->dao->select('*')->from(TABLE_BRANCH)->where('id')->eq($objectID)->fetch();
