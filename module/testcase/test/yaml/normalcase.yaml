@@ -1,0 +1,9 @@
+title: table zt_case
+desc: "用例"
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: status
+    range: 'normal'
+  - field: version
+    range: 2,1{1000}

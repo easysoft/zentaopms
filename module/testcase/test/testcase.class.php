@@ -1674,10 +1674,10 @@ class testcaseTest
      * Test get scene menu.
      *
      * @param  int    $productID
-     * @param  int    $moduleID  
+     * @param  int    $moduleID
      * @param  int    $startScene
-     * @param  int    $branch      
-     * @param  int    $currentScene      
+     * @param  int    $branch
+     * @param  int    $currentScene
      * @param  bool   $emptyMenu
      * @access public
      * @return array|string
@@ -1687,5 +1687,22 @@ class testcaseTest
         $scenes = $this->objectModel->getSceneMenu($productID, $moduleID, $startScene, $branch, $currentScene, $emptyMenu);
         if(dao::isError()) return dao::getError();
         return implode(',', $scenes);
+    }
+
+    /**
+     * 测试分组获取用例的步骤信息。
+     * Test get steps grouped by case id.
+     *
+     * @param  string       $caseIdList
+     * @access public
+     * @return array|string
+     */
+    public function getStepGroupByIdListTest(string $caseIdList): array|string
+    {
+        $caseSteps = $this->objectModel->getStepGroupByIdList(explode(',', $caseIdList));
+        if(dao::isError()) return dao::getError();
+        $return = '';
+        foreach($caseSteps as $caseID => $steps) $return .= $caseID . ':' . implode(',', array_keys($steps)) . '; ';
+        return $return;
     }
 }
