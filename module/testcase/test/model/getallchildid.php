@@ -24,7 +24,7 @@ $sceneIdList = array(1, 11, 12, 13, 18, 19, 20);
 
 $testcase = new testcaseTest();
 
-r($testcase->getAllChildIdTest($sceneIdList[0])) && p() && e('1');              // 测试获取场景 1 所有的子场景 id
+r($testcase->getAllChildIdTest($sceneIdList[0])) && p() && e('1,2');            // 测试获取场景 1 所有的子场景 id
 r($testcase->getAllChildIdTest($sceneIdList[1])) && p() && e('11,12,13,14,15'); // 测试获取场景 11 所有的子场景 id
 r($testcase->getAllChildIdTest($sceneIdList[2])) && p() && e('12,13,14');       // 测试获取场景 12 所有的子场景 id
 r($testcase->getAllChildIdTest($sceneIdList[3])) && p() && e('13,14');          // 测试获取场景 13 所有的子场景 id
