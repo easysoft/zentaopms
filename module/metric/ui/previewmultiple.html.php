@@ -399,7 +399,7 @@ form
         set::width('full'),
         formGroup
         (
-            setClass('query-inline query-scope hidden'),
+            setClass('query-inline query-scope hidden picker-nowrap'),
             set::width('248px'),
             set::label($this->lang->metric->scope),
             set::name('scope'),

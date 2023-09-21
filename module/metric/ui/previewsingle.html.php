@@ -136,10 +136,11 @@ $fnGenerateQueryForm = function() use($metricRecordType, $current)
     {
         $formGroups[] = formGroup
         (
-            setClass('query-inline'),
+            setClass('query-inline picker-nowrap'),
             set::width('248px'),
             set::label($this->lang->metric->scope),
             set::name('scope'),
+            set::control(array('type' => 'picker', 'multiple' => true)),
             set::items($objectPairs),
         );
     }
@@ -225,8 +226,8 @@ $fnGenerateQueryForm = function() use($metricRecordType, $current)
                 (
                     setClass('btn secondary'),
                     set::text($this->lang->metric->query),
+                    set::onclick('window.handleQueryClick()'),
                 ),
-                on::click('.query-btn button', 'window.handleQueryClick'),
             )
         ),
         set::actions(array()),

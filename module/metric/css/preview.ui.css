@@ -91,3 +91,4 @@
 .query-inline {padding-left: 80px !important;}
 .query-inline>label {justify-content: flex-start !important; width: 80px !important;}
 .query-btn {padding-left: 20px !important;}
+.picker-nowrap .picker-multi-selections {flex-wrap: nowrap !important; overflow: hidden !important;}

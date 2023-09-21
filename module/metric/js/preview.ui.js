@@ -6,11 +6,22 @@ window.renderHeight = function()
 window.parseSerialize = function(serialize)
 {
     var result = {};
+    serialize = serialize.replaceAll('%5B%5D', '');
     var items = serialize.split('&');
     for(var i = 0; i < items.length; i++)
     {
         var item = items[i].split('=');
-        result[item[0]] = item[1];
+        var key   = item[0];
+        var value = item[1];
+        if(!result[key]) result[key] = [];
+        if(key.startsWith('scope'))
+        {
+            result[key].push(value);
+        }
+        else
+        {
+            result[key] = value;
+        }
     }
     return result;
 }
@@ -123,7 +134,7 @@ window.handleQueryClick = function(id)
     var $form = id ? $('#queryForm' + id) : $('#queryForm');
     var check = window.checkForm($form);
     if(!check) return;
-    window.ajaxGetRecords(id ?? current.id);
+    window.ajaxGetRecords(id);
 }
 
 window.deactiveNavMenu = function()
@@ -332,7 +343,7 @@ window.initQueryForm = function(id, $el, header = resultHeader, data = resultDat
             scopeUnique[item.scopeID] = item.scope;
             scopeItems.push({text: item.scope, value: item.scopeID});
         });
-        zui.create("picker","#scope" + id,{"multiple":false,"name":"scope","required":false,"items":scopeItems, "defaultValue": formData.get('scope'),"emptyValue":""});
+        zui.create("picker","#scope" + id,{"multiple":10,"name":"scope","required":false,"items":scopeItems, "defaultValue": formData.get('scope'),"emptyValue":""});
     }
     if(recordType == 'date' || recordType == 'scope-date')
     {
@@ -673,6 +684,8 @@ window.ajaxGetRecords = function(id)
 {
     var $form = id ? $('#queryForm' + id) : $('#queryForm');
     var formData = window.getFormData($form);
+
+    id = id ?? current.id;
 
     $.post($.createLink('metric', 'ajaxGetTableData', 'metricID=' + id),formData, function(resp)
     {
