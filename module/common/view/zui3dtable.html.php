@@ -22,10 +22,16 @@ function convertCols(cols)
     cols.forEach(function(col)
     {
         if(col.fixed == 'no') col.fixed = false;
+        if(col.type === 'html' && col.flex === undefined) col.flex = col.width === 'auto' ? 1 : false;
     });
 
     return cols;
 }
+zui.DTable.definePlugin(
+{
+    name: 'zentao18',
+    options: function(options){return $.extend({fixedLeftWidth: '40%'}, options, {cols: convertCols(options.cols)});}
+}, {buildIn: true})
 zui.DTable.defineFn();
 
 /**
