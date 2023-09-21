@@ -1266,6 +1266,7 @@ class productModel extends model
         if(common::hasPriv('product', 'edit'))
         {
             unset($this->config->product->actionList['edit']['text']);
+            $this->config->product->actionList['edit']['url'] = helper::createLink('product', 'edit', $params);
             $menuList['suffix'][] = $this->config->product->actionList['edit'];
         }
 
