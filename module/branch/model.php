@@ -617,22 +617,6 @@ class branchModel extends model
     }
 
     /**
-     * Setting parameters for link.
-     *
-     * @param  string $module
-     * @param  string $link
-     * @param  int    $projectID
-     * @param  int    $productID
-     * @access public
-     * @return void
-     */
-    public function setParamsForLink($module, $link, $projectID, $productID)
-    {
-        $linkHtml = strpos('programplan', $module) !== false ? sprintf($link, $projectID, $productID, '{id}') : sprintf($link, $productID, '{id}');
-        return $linkHtml;
-    }
-
-    /**
      * Set default branch.
      *
      * @param   int    $productID

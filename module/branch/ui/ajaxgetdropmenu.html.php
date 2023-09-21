@@ -39,7 +39,6 @@ $tabs[] = array('name' => 'closed', 'text' => $lang->branch->closed);
  * 定义最终的 JSON 数据。
  * Define the final json data.
  */
-$link = $this->branch->setParamsForLink($module, $link, $projectID, $productID);
 
 $json = array();
 $json['data']       = $data;

@@ -211,7 +211,7 @@ class branch extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu(int $productID, string $branch, int $module, string $method, string $extra = '')
+    public function ajaxGetDropMenu(int $productID, string $branch, string $module, string $method, string $extra = '')
     {
         parse_str($extra, $output);
 
@@ -220,10 +220,10 @@ class branch extends control
         $param      = isset($output['projectID']) ? $output['projectID'] : $param;
         $branches   = $this->branch->getPairs($productID, 'all', $param);
         $statusList = $this->branch->getStatusList($productID);
+        $link       = $this->loadModel('product')->getProductLink($module, $method, $extra, true);
 
-        $this->view->link            = $this->loadModel('product')->getProductLink($module, $method, $extra, true);
+        $this->view->link            = $this->branchZen->setParamsForLink($module, $link, $this->session->project, $productID);
         $this->view->productID       = $productID;
-        $this->view->projectID       = $this->session->project;
         $this->view->module          = $module;
         $this->view->method          = $method;
         $this->view->extra           = $extra;
