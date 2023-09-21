@@ -703,7 +703,7 @@ class upgradeModel extends model
                 $this->removeProductLineRequired();
                 break;
             case '18_7':
-                $this->processOldMetric();
+                $this->processOldMetrics();
         }
 
         $this->deletePatch();
