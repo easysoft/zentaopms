@@ -1784,4 +1784,20 @@ class testcaseTest
         $return = "id:{$scene->id}, parent:{$scene->parent}, path:{$scene->path}, grade:{$scene->grade}";
         return $return;
     }
+
+    /**
+     * 测试获取待评审的用例数量。
+     * Test get the amount of cases pending review.
+     *
+     * @access public
+     * @return int|array
+     */
+    public function getReviewAmountTest(): int|array
+    {
+        $count = $this->objectModel->getReviewAmount();
+
+        if(dao::isError()) return dao::getError();
+
+        return $count;
+    }
 }

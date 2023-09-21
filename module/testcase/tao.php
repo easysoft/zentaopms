@@ -516,6 +516,7 @@ class testcaseTao extends testcaseModel
     }
 
     /**
+     * 获取待评审的用例数量。
      * Get the amount of cases pending review.
      *
      * @access protected
