@@ -407,6 +407,8 @@ class branchTest
      */
     public function mergeBranchTest(int $productID, string $mergedBranches, object $data): array|int
     {
+        $data->status      = 'active';
+        $data->createdDate = helper::today();
         $objectID = $this->objectModel->mergeBranch($productID, $mergedBranches, $data);
 
         if(dao::isError()) return dao::getError();

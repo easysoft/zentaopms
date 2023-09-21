@@ -763,8 +763,18 @@ class branchModel extends model
         }
 
         /* Get the target branch. */
-        $targetBranch = $data->createBranch ? $this->create($productID, true) : $data->targetBranch;
-        if($data->createBranch) $this->loadModel('action')->create('branch', $targetBranch, 'Opened');
+        if($data->createBranch)
+        {
+            $branch = new stdclass();
+            foreach($this->config->branch->form->create as $field => $setting) $branch->$field = $data->$field;
+
+            $targetBranch = $this->create($productID, $branch);
+            $this->loadModel('action')->create('branch', $targetBranch, 'Opened');
+        }
+        else
+        {
+            $targetBranch = $data->targetBranch;
+        }
 
         /* Branch. */
         $this->dao->delete()->from(TABLE_BRANCH)->where('id')->in($mergedBranches)->exec();
