@@ -295,31 +295,6 @@ class branch extends control
     }
 
     /**
-     * Set default branch.
-     *
-     * @param  int    $productID
-     * @param  int    $branchID
-     * @param  string $confirm    yes|no
-     * @access public
-     * @return void
-     */
-    public function setDefault($productID, $branchID, $confirm = 'no')
-    {
-        if($confirm == 'no')
-        {
-            $this->app->loadLang('product');
-            $productType = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch('type');
-            return print(js::confirm(str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->confirmSetDefault), inlink('setDefault', "productID=$productID&branchID=$branchID&confirm=yes")));
-        }
-
-        $this->branch->setDefault($productID, $branchID);
-
-        $this->loadModel('action')->create('branch', $branchID, 'SetDefaultBranch', '', $productID);
-
-        return print(js::reload('parent'));
-    }
-
-    /**
      * 将多个分支合并到一个分支。
      * Merge multiple branches into one branch.
      *
