@@ -268,7 +268,7 @@ class branch extends control
         $product = $this->loadModel('product')->getByID($productID);
         if(empty($product) || $product->type == 'normal') return false;
 
-        $branches        = $this->loadModel('branch')->getList($productID, $projectID, $browseType, 'order', null, $withMainBranch);
+        $branches        = $this->branch->getList($productID, $projectID, $browseType, 'order', null, $withMainBranch);
         $branchTagOption = array();
         foreach($branches as $branchInfo)
         {
