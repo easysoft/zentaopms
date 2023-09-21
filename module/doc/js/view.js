@@ -166,6 +166,7 @@ $(function()
         $('.outline').css({'min-width' : '180px', 'border-left' : '2px solid #efefef'});
         $(this).removeClass('icon-menu-arrow-left').addClass('icon-menu-arrow-right').css('left', '-9px');
         $('.outline').removeClass('hidden');
+        $('#content').css('padding-right', '180px');
         $('.outline-content').show();
         if($('#sidebar>.cell').is(':visible')) $('#sidebar .icon.icon-menu-arrow-right').trigger("click");
     }).on('click', '.outline-toggle i.icon-menu-arrow-right', function()
@@ -173,6 +174,7 @@ $(function()
         $(this).removeClass('icon-menu-arrow-right').addClass('icon-menu-arrow-left');
         $('.outline').css({'min-width' : '180px', 'border-left' : 'none'});
         $('.outline').addClass('hidden');
+        $('#content').css('padding-right', '0px');
     }).on('click', '#outline li', function(e)
     {
         $('#outline li.active').removeClass('active');
