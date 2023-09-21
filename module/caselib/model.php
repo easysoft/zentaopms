@@ -257,19 +257,9 @@ class caselibModel extends model
      */
     public function getLibLink(string $module, string $method): string
     {
-        if($module == 'tree')
-        {
-            $link = helper::createLink($module, $method, "libID=%s&type=caselib&currentModuleID=0");
-        }
-        elseif($module == 'caselib' && $method != 'create')
-        {
-            $link = helper::createLink($module, $method, "libID=%s");
-        }
-        else
-        {
-            $link = helper::createLink('caselib', 'browse', "libID=%s");
-        }
-        return $link;
+        if($module == 'tree') return helper::createLink($module, $method, "libID=%s&type=caselib&currentModuleID=0");
+        if($module == 'caselib' && $method != 'create') return helper::createLink($module, $method, "libID=%s");
+        return helper::createLink('caselib', 'browse', "libID=%s");
     }
 
     /**
