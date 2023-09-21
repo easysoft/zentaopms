@@ -686,16 +686,17 @@ class branchModel extends model
     }
 
     /**
-     * Change branch language.
+     * 设置分支/平台名称。
+     * Set branch/platform name.
      *
      * @param  int    $productID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function changeBranchLanguage($productID)
+    public function changeBranchLanguage(int $productID): bool
     {
         $product = $this->loadModel('product')->getByID($productID);
-        if($product->type == 'normal') return;
+        if(!$product || $product->type == 'normal') return false;
 
         $productType = $product->type;
 
@@ -716,6 +717,7 @@ class branchModel extends model
         $this->lang->branch->existName         = str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->existName);
         $this->lang->branch->mergeTips         = str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->mergeTips);
         $this->lang->branch->targetBranchTips  = str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->targetBranchTips);
+        return true;
     }
 
     /**

@@ -385,7 +385,7 @@ class branchTest
         global $tester;
         global $lang;
 
-        $filePath = dirname(dirname(dirname(__FILE__))) . DS . 'module' . DS . 'branch' . DS . 'lang' . DS . 'zh-cn.php';
+        $filePath = dirname(__FILE__, 2) . DS . 'lang' . DS . 'zh-cn.php';
         include $filePath;
 
         $this->objectModel->changeBranchLanguage($productID);
