@@ -13,28 +13,31 @@ declare(strict_types=1);
 class branchModel extends model
 {
     /**
+     * 通过分支ID获取分支信息。
      * Get name by id.
      *
-     * @param  int    $branchID
-     * @param  int    $productID
-     * @param  string $field
+     * @param  int                 $branchID
+     * @param  int                 $productID
+     * @param  string              $field
      * @access public
-     * @return string|array
+     * @return object|string|false
      */
-    public function getById($branchID, $productID = 0, $field = 'name')
+    public function getByID(int $branchID, int $productID = 0, string $field = 'name'): object|string|false
     {
         if($branchID == 'all') return false;
         if(empty($branchID))
         {
             if(empty($productID)) $productID = $this->session->product;
-            $product = $this->loadModel('product')->getById($productID);
-            if(empty($product) or !isset($this->lang->product->branchName[$product->type])) return false;
+            $product = $this->loadModel('product')->getByID($productID);
+
+            if(empty($product) || !isset($this->lang->product->branchName[$product->type])) return false;
             return $this->lang->branch->main;
         }
 
-        if(empty($field)) return $this->dao->select('*')->from(TABLE_BRANCH)->where('id')->eq($branchID)->fetch();
+        $branch = $this->dao->select('*')->from(TABLE_BRANCH)->where('id')->eq($branchID)->fetch();
 
-        return htmlspecialchars_decode($this->dao->select('*')->from(TABLE_BRANCH)->where('id')->eq($branchID)->fetch($field));
+        if(!$branch) return false;
+        return $field ? htmlspecialchars_decode($branch->{$field}) : $branch;
     }
 
     /**
