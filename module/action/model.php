@@ -1973,6 +1973,11 @@ class actionModel extends model
                 {
                     $execution = $this->loadModel('execution')->getById($action->objectID);
                     if(!empty($execution) and $execution->type == 'kanban') $action->objectLink = helper::createLink('execution', 'kanban', "executionID={$action->objectID}");
+                    if($execution->type == 'stage' and $execution->attribute == 'research' and $action->vision == 'or') 
+                    {
+                        $action->objectLink  = '';
+                        $action->objectLabel = $this->lang->execution->stage;   
+                    }
                 }
 
                 if($action->objectType == 'story')
@@ -2084,6 +2089,12 @@ class actionModel extends model
         /* Set app for no multiple project. */
         if(!empty($action->objectLink) and !empty($project) and empty($project->multiple)) $action->objectLink .= '#app=project';
         if($this->config->vision == 'lite' and $action->objectType == 'module') $action->objectLink .= '#app=project';
+
+        if($action->objectType == 'task' and $this->config->vision == 'or')
+        {
+            $task = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($action->objectID)->fetch();
+            if($task->type == 'research') $action->objectLink = helper::createLink('marketresearch', 'viewTask', "objectID=$action->objectID");
+        }
 
         return $action;
     }
