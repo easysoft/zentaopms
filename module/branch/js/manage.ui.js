@@ -63,17 +63,16 @@ $(document).on('click', '.batch-btn', function()
 /**
  * Set create branch form.
  *
- * @param  element obj
  * @access public
  * @return void
  */
-function createBranch(obj)
+function createBranch()
 {
     $('#createForm input, #createForm textarea').attr('disabled', true);
     $('input[name=targetBranch]').removeAttr('disabled');
     $('#createForm').addClass('hidden');
 
-    const createNew = $(obj).is(':checked');
+    const createNew = $(this).is(':checked');
     if(createNew)
     {
         $('#createForm input, #createForm textarea').removeAttr('disabled');

@@ -60,11 +60,11 @@ modal
             inputGroup
             (
                 setClass('input-control has-suffix'),
-                select
+                picker
                 (
                     set::name('targetBranch'),
                     set::items($branchPairs),
-                    set::type('picker'),
+                    set::required(true),
                 ),
                 div
                 (
@@ -75,7 +75,7 @@ modal
                         set::name('createBranch'),
                         set::text($lang->branch->create),
                         set::value(1),
-                        on::change('createBranch(this)'),
+                        on::change('createBranch'),
                     )
                 )
             ),
@@ -124,9 +124,9 @@ if($canBatchEdit)
 if($canMerge && $browseType != 'closed')
 {
     $footToolbar['items'][] = array(
-        'id'          => 'mergeBranch',
+        'attrs'       => array('id' => 'mergeBranch'),
         'text'        => $lang->branch->merge,
-        'class'       => 'btn secondary size-sm',
+        'className'   => 'btn secondary size-sm',
         'data-target' => '#mergeModal',
         'data-toggle' => 'modal'
     );
