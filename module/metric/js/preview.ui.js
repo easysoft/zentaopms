@@ -292,7 +292,7 @@ window.renderDTable = function(metricID = current.id, header = resultHeader, dat
     window.initDTable($currentBox.find('.dtable'), header, data);
 }
 
-window.renderChart = function(metricID = current.id, header = resultHeader, data = resultData, chartType = 'line')
+window.renderChart = function(metricID = current.id, header = resultHeader, data = resultData, chartType = 'line', initPicker = true)
 {
     var $currentBox = $('#metricBox' + metricID);
     if(viewType == 'single') $currentBox = $('.table-and-chart-single');
@@ -302,7 +302,7 @@ window.renderChart = function(metricID = current.id, header = resultHeader, data
     $currentBox.find('.chart').remove();
     $currentBox.find('.chart-side').append('<div class="' + classes + '"></div>');
 
-    window.initPicker($currentBox.find('.chart-type'), window.chartList, header.length);
+    if(initPicker) window.initPicker($currentBox.find('.chart-type'), window.chartList, header.length);
     window.initChart($currentBox.find('.chart')[0], header, data, chartType);
 }
 
@@ -506,7 +506,7 @@ window.handleChartTypeChange = function($el)
     {
         var chartType = $('[name=chartType]').val();
 
-        window.renderChart(current.id, resultHeader, resultData, chartType);
+        window.renderChart(current.id, resultHeader, resultData, chartType, false);
     }
     else
     {
@@ -518,7 +518,7 @@ window.handleChartTypeChange = function($el)
         {
             var data = JSON.parse(resp);
             if(data) {
-                window.renderChart(metricID, data.header, data.data, chartType);
+                window.renderChart(metricID, data.header, data.data, chartType, false);
             }
         });
     }
