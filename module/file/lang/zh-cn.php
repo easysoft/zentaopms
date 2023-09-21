@@ -56,7 +56,7 @@ $lang->file->childTaskTips       = "任务名称前有'>'标记的为子任务";
 $lang->file->uploadImagesExplain = '注：请上传"jpg, jpeg, gif, png"格式的图片，程序会以文件名作为标题，以图片作为内容。';
 $lang->file->saveAndNext         = '保存并跳转下一页';
 $lang->file->importPager         = '共有<strong>%s</strong>条记录，当前第<strong>%s</strong>页，共有<strong>%s</strong>页';
-$lang->file->importSummary       = "本次导入共有<strong id='allCount'>%s</strong>条记录，每页导入%s条，需要导入<strong id='times'>%s</strong>次";
+$lang->file->importSummary       = "本次导入共有<strong id='totalAmount'>%s</strong>条记录，每页导入%s条，需要导入<strong id='times'>%s</strong>次";
 $lang->file->accessDenied        = '您无权下载该附件！';
 
 $lang->file->errorNotExists   = "<span class='text-red'>文件夹 '%s' 不存在</span>";

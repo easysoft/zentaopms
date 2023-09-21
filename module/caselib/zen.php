@@ -507,7 +507,7 @@ class caselibZen extends caselib
      * @access protected
      * @return bool
      */
-    protected function responseAfterShowImport(int $libID, array $caseData, int $maxImport, int $pageID, int $stepVars)
+    protected function responseAfterShowImport(int $libID, array $caseData, int $maxImport, int $pageID, int $stepVars): bool
     {
         /* 如果没有用例数据时返回。*/
         /* Response when there is no case. */
@@ -532,7 +532,7 @@ class caselibZen extends caselib
                 $this->view->maxImport   = $maxImport;
                 $this->view->libID       = $libID;
 
-                return print($this->display());
+                die($this->display());
             }
 
             $caseData = array_slice($caseData, ($pageID - 1) * $maxImport, $maxImport, true);
@@ -546,8 +546,7 @@ class caselibZen extends caselib
         if($showSuhosinInfo)
         {
             $this->view->suhosinInfo = sprintf((extension_loaded('suhosin') ? $this->lang->suhosinInfo : $this->lang->maxVarsInfo), $countInputVars);
-
-            return $this->display();
+            die($this->display());
         }
 
         return true;

@@ -24,3 +24,18 @@ window.handleRenderRow = function($row, index, row)
     $row.find('td[data-name=stepDesc]').html(stepDesc);
     $row.find('td[data-name=stepExpect]').html(stepExpect);
 }
+
+function computeImportTimes()
+{
+    if(parseInt($(this).val()))
+    {
+        console.log(Math.ceil(parseInt($("#totalAmount").html()) / parseInt($(this).val())));
+
+        $('#times').html(Math.ceil(parseInt($("#totalAmount").html()) / parseInt($(this).val())));
+    }
+}
+
+function importNextPage()
+{
+    return location.href = $.createLink('caselib', 'showImport', "libID='" + libID + "'&pageID=" + $('#pageID').val() + '&maxImport=' + $('#maxImport').val());
+}

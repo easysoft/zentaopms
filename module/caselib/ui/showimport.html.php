@@ -9,106 +9,131 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-jsVar('stepData', $stepData);
-jsVar('libID', $libID);
-
-$items[] = array
-(
-    'name'  => 'id',
-    'label' => $lang->idAB,
-    'control' => 'index',
-    'width' => '32px'
-);
-
-$items[] = array
-(
-    'name'  => 'title',
-    'label' => $lang->testcase->title,
-    'width' => '240px',
-);
-
-$items[] = array
-(
-    'name'    => 'module',
-    'label'   => $lang->testcase->module,
-    'control' => 'picker',
-    'items'   => $modules,
-    'width'   => '200px',
-);
-
-$items[] = array
-(
-    'name'    => 'type',
-    'label'   => $lang->testcase->type,
-    'control' => 'picker',
-    'items'   => $lang->testcase->typeList,
-    'width'   => '160px',
-);
-
-$items[] = array
-(
-    'name'    => 'pri',
-    'label'   => $lang->testcase->pri,
-    'control' => 'pripicker',
-    'items'   => $lang->testcase->priList,
-    'width'   => '80px',
-);
-
-$items[] = array
-(
-    'name'    => 'precondition',
-    'label'   => $lang->testcase->precondition,
-    'control' => 'textarea',
-    'width'   => '240px',
-);
-
-$items[] = array
-(
-    'name'  => 'keywords',
-    'label' => $lang->testcase->keywords,
-    'width' => '240px',
-);
-
-$items[] = array
-(
-    'name'    => 'stage',
-    'label'   => $lang->testcase->stage,
-    'control' => 'picker',
-    'multiple' => true,
-    'items'   => $lang->testcase->stageList,
-    'width'   => '240px',
-);
-
-$items[] = array
-(
-    'name'  => 'stepDesc',
-    'label' => $lang->testcase->stepDesc,
-    'width' => '320px'
-);
-
-$items[] = array
-(
-    'name'  => 'stepExpect',
-    'label' => $lang->testcase->stepExpect,
-    'width' => '320px'
-);
-
-foreach($caseData as $case)
+if(isset($suhosinInfo))
 {
-    if(empty($case->id) || !isset($cases[$case->id])) $case->id = 0;
+    div
+    (
+        setClass('alert secondary-pale'),
+        html($suhosinInfo)
+    );
 }
+elseif(empty($maxImport) && $totalAmount > $this->config->file->maxImport)
+{
+    $importActions[] = array('id' => 'import', 'type' => 'primary', 'text' => $lang->import);
+    $maxImportInput  = html::input('maxImport', $config->file->maxImport, "style='width:50px' class='border'");
 
-formBatchPanel
-(
-    set::title($lang->caselib->import),
-    set::items($items),
-    set::data(array_values($caseData)),
-    set::mode('edit'),
-    set::actionsText(false),
-    set::onRenderRow(jsRaw('handleRenderRow')),
-    input(set::className('hidden'), set::name('isEndPage'), set::value($isEndPage ? '1' : '0')),
-    input(set::className('hidden'), set::name('pageID'), set::value($pageID)),
-    $dataInsert !== '' ? input(set::className('hidden'), set::name('insert'), set::value($dataInsert)) : null
-);
+    panel
+    (
+        on::change('#maxImport', 'computeImportTimes'),
+        on::click('#import', 'importNextPage'),
+        set::title($lang->caselib->import),
+        html(sprintf($lang->file->importSummary, $totalAmount, $maxImportInput, ceil($totalAmount / $config->file->maxImport))),
+        set::footerActions($importActions)
+    );
+}
+else
+{
+    jsVar('stepData', $stepData);
+    jsVar('libID', $libID);
+
+    $items[] = array
+    (
+        'name'  => 'id',
+        'label' => $lang->idAB,
+        'control' => 'index',
+        'width' => '32px'
+    );
+
+    $items[] = array
+    (
+        'name'  => 'title',
+        'label' => $lang->testcase->title,
+        'width' => '240px',
+    );
+
+    $items[] = array
+    (
+        'name'    => 'module',
+        'label'   => $lang->testcase->module,
+        'control' => 'picker',
+        'items'   => $modules,
+        'width'   => '200px',
+    );
+
+    $items[] = array
+    (
+        'name'    => 'type',
+        'label'   => $lang->testcase->type,
+        'control' => 'picker',
+        'items'   => $lang->testcase->typeList,
+        'width'   => '160px',
+    );
+
+    $items[] = array
+    (
+        'name'    => 'pri',
+        'label'   => $lang->testcase->pri,
+        'control' => 'pripicker',
+        'items'   => $lang->testcase->priList,
+        'width'   => '80px',
+    );
+
+    $items[] = array
+    (
+        'name'    => 'precondition',
+        'label'   => $lang->testcase->precondition,
+        'control' => 'textarea',
+        'width'   => '240px',
+    );
+
+    $items[] = array
+    (
+        'name'  => 'keywords',
+        'label' => $lang->testcase->keywords,
+        'width' => '240px',
+    );
+
+    $items[] = array
+    (
+        'name'    => 'stage',
+        'label'   => $lang->testcase->stage,
+        'control' => 'picker',
+        'multiple' => true,
+        'items'   => $lang->testcase->stageList,
+        'width'   => '240px',
+    );
+
+    $items[] = array
+    (
+        'name'  => 'stepDesc',
+        'label' => $lang->testcase->stepDesc,
+        'width' => '320px'
+    );
+
+    $items[] = array
+    (
+        'name'  => 'stepExpect',
+        'label' => $lang->testcase->stepExpect,
+        'width' => '320px'
+    );
+
+    foreach($caseData as $case)
+    {
+        if(empty($case->id) || !isset($cases[$case->id])) $case->id = 0;
+    }
+
+    formBatchPanel
+    (
+        set::title($lang->caselib->import),
+        set::items($items),
+        set::data(array_values($caseData)),
+        set::mode('edit'),
+        set::actionsText(false),
+        set::onRenderRow(jsRaw('handleRenderRow')),
+        input(set::className('hidden'), set::name('isEndPage'), set::value($isEndPage ? '1' : '0')),
+        input(set::className('hidden'), set::name('pageID'), set::value($pageID)),
+        $dataInsert !== '' ? input(set::className('hidden'), set::name('insert'), set::value($dataInsert)) : null
+    );
+}
 
 render();

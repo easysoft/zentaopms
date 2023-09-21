@@ -56,7 +56,7 @@ $lang->file->childTaskTips       = 'It\'s a child task if there is a \'>\' befor
 $lang->file->uploadImagesExplain = 'Note: upload .jpg, .jpeg, .gif, or .png images. The image name will be the name of the story and the image will be the description.';
 $lang->file->saveAndNext         = 'Save and Next';
 $lang->file->importPager         = 'Total: <strong>%s</strong>. Page <strong>%s</strong> of <strong>%s</strong>';
-$lang->file->importSummary       = "Import <strong id='allCount'>%s</strong> items  You can <strong>%s</strong> items/page, so you have to import <strong id='times'>%s</strong> times.";
+$lang->file->importSummary       = "Import <strong id='totalAmount'>%s</strong> items  You can <strong>%s</strong> items/page, so you have to import <strong id='times'>%s</strong> times.";
 $lang->file->accessDenied        = 'Access denied to this file!';
 
 $lang->file->errorNotExists   = "<span class='text-red'>'%s' is not found.</span>";
