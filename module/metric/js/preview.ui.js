@@ -694,7 +694,7 @@ window.ajaxGetRecords = function(id)
         {
             var chartType = viewType == 'multiple' ? $('#metricBox' + id).find('[name=chartType]').val() : $('[name=chartType]').val();
             window.renderDTable(id, data.header, data.data);
-            window.renderChart(id, data.header, data.data, chartType);
+            window.renderChart(id, data.header, data.data, chartType, false);
         }
     });
 }
