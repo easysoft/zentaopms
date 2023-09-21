@@ -373,7 +373,7 @@ class caselib extends control
             $fields = $this->testcase->getImportFields();
             $fields = array_flip($fields);
 
-            list($header, $columns) = $this->caselibZen->getImportHeaderAndColumns($fileName);
+            list($header, $columns) = $this->caselibZen->getImportHeaderAndColumns($fileName, $fields);
 
             if(count($columns) != count($header) || $this->post->encode != 'utf-8')
             {
@@ -382,7 +382,7 @@ class caselib extends control
                 $fc     = helper::convertEncoding($fc, $encode, 'utf-8');
                 file_put_contents($fileName, $fc);
 
-                list($header, $colums) = $this->caseZen->getImportHeaderAndColumns($fileName);
+                list($header, $columns) = $this->caselibZen->getImportHeaderAndColumns($fileName, $fields);
 
                 if(count($columns) != count($header)) return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->errorEncode));
             }
@@ -395,16 +395,17 @@ class caselib extends control
     }
 
     /**
+     * 展示导入的用例记录。
      * Show import case.
      *
      * @param  int        $libID
-     * @param  int        $pagerID
+     * @param  int        $pageID
      * @param  int        $maxImport
      * @param  string|int $insert  0 is covered old, 1 is insert new.
      * @access public
      * @return void
      */
-    public function showImport($libID, $pagerID = 1, $maxImport = 0, $insert = '')
+    public function showImport(int $libID, int $pageID = 1, int $maxImport = 0, string|int $insert = '')
     {
         $this->loadModel('testcase');
 
@@ -415,15 +416,11 @@ class caselib extends control
         if($_POST)
         {
             $this->caselib->createFromImport($libID);
-            if($this->post->isEndPage)
-            {
-                @unlink($tmpFile);
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browse', "libID=$libID")));
-            }
-            else
-            {
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('showImport', "libID=$libID&pagerID=" . ((int)$this->post->pagerID + 1) . "&maxImport=$maxImport&insert=" . zget($_POST, 'insert', ''))));
-            }
+
+            if(!$this->post->isEndPage) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('showImport', "libID=$libID&pageID=" . ((int)$this->post->pageID + 1) . "&maxImport=$maxImport&insert=" . zget($_POST, 'insert', ''))));
+
+            @unlink($tmpFile);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browse', "libID=$libID")));
         }
 
         $libraries = $this->caselib->getLibraries();
@@ -431,211 +428,33 @@ class caselib extends control
 
         $this->caselib->setLibMenu($libraries, $libID);
 
-        $caseLang   = $this->lang->testcase;
-        $caseConfig = $this->config->testcase;
-        $modules    = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'caselib', $startModuleID = 0);
+        $fields = $this->caselibZen->getFieldsForImport();
 
-        $fields = explode(',', $caseConfig->exportFields);
-        foreach($fields as $key => $fieldName)
+        list($caseData, $stepData, $stepVars) = $this->caselibZen->getDataForImport($maxImport, $tmpFile, $fields);
+
+        if(empty($maxImport) || !file_exists($tmpFile)) $pageID = 1;
+        $this->caselibZen->responseAfterShowImport($libID, $caseData, $maxImport, $pageID, $stepVars);
+
+        $totalPages  = 1;
+        $totalAmount = count($caseData);
+        if($totalAmount > $this->config->file->maxImport && $maxImport)
         {
-            $fieldName = trim($fieldName);
-            $fields[$fieldName] = isset($caseLang->$fieldName) ? $caseLang->$fieldName : $fieldName;
-            unset($fields[$key]);
+            $totalPages = ceil($totalAmount / $maxImport);
+            $caseData   = array_slice($caseData, ($pageID - 1) * $maxImport, $maxImport, true);
         }
 
-        $fields = array_flip($fields);
-
-        if(!empty($maxImport) and file_exists($tmpFile))
-        {
-            $data = unserialize(file_get_contents($tmpFile));
-            $caseData = $data['caseData'];
-            $stepData = $data['stepData'];
-        }
-        else
-        {
-            $pagerID = 1;
-            $rows    = $this->loadModel('file')->parseCSV($file);
-            $header  = array();
-            foreach($rows[0] as $i => $rowValue)
-            {
-                if(empty($rowValue)) break;
-                $header[$i] = $rowValue;
-            }
-            unset($rows[0]);
-
-            foreach($header as $title)
-            {
-                if(!isset($fields[$title])) continue;
-                $columnKey[] = $fields[$title];
-            }
-
-            $endField = end($fields);
-            $caseData = array();
-            $stepData = array();
-            $stepVars = 0;
-            foreach($rows as $row => $data)
-            {
-                $case = new stdclass();
-                foreach($columnKey as $key => $field)
-                {
-                    if(!isset($data[$key])) continue;
-                    $cellValue = $data[$key];
-                    if($field == 'module')
-                    {
-                        $case->$field = 0;
-                        if(strrpos($cellValue, '(#') !== false)
-                        {
-                            $id = trim(substr($cellValue, strrpos($cellValue,'(#') + 2), ')');
-                            $case->$field = $id;
-                        }
-                    }
-                    elseif(in_array($field, $caseConfig->export->listFields))
-                    {
-                        if($field == 'stage')
-                        {
-                            $stages = explode("\n", $cellValue);
-                            foreach($stages as $stage) $case->stage[] = array_search($stage, $caseLang->{$field . 'List'});
-                            $case->stage = join(',', $case->stage);
-                        }
-                        else
-                        {
-                            $case->$field = array_search($cellValue, $caseLang->{$field . 'List'});
-                        }
-                    }
-                    elseif($field != 'stepDesc' and $field != 'stepExpect')
-                    {
-                        $case->$field = $cellValue;
-                    }
-                    else
-                    {
-                        $steps = (array)$cellValue;
-                        if(strpos($cellValue, "\n"))
-                        {
-                            $steps = explode("\n", $cellValue);
-                        }
-                        elseif(strpos($cellValue, "\r"))
-                        {
-                            $steps = explode("\r", $cellValue);
-                        }
-
-                        $stepKey  = str_replace('step', '', strtolower($field));
-                        $caseStep = array();
-
-                        foreach($steps as $step)
-                        {
-                            $step = trim($step);
-                            if(empty($step)) continue;
-                            if(preg_match('/^(([0-9]+)\.[0-9]+)([.、]{1})/U', $step, $out))
-                            {
-                                $num     = $out[1];
-                                $parent  = $out[2];
-                                $sign    = $out[3];
-                                $signbit = $sign == '.' ? 1 : 3;
-                                $step    = trim(substr($step, strlen($num) + $signbit));
-                                if(!empty($step))
-                                {
-                                    $caseStep[$num]['content'] = $step;
-                                    $caseStep[$num]['number']  = $num;
-                                }
-                                $caseStep[$num]['type']    = 'item';
-                                $caseStep[$parent]['type'] = 'group';
-                            }
-                            elseif(preg_match('/^([0-9]+)([.、]{1})/U', $step, $out))
-                            {
-                                $num     = $out[1];
-                                $sign    = $out[2];
-                                $signbit = $sign == '.' ? 1 : 3;
-                                $step    = trim(substr($step, strlen($num) + $signbit));
-                                if(!empty($step))
-                                {
-                                    $caseStep[$num]['content'] = $step;
-                                    $caseStep[$num]['number']  = $num;
-                                }
-                                $caseStep[$num]['type'] = 'step';
-                            }
-                            elseif(isset($num))
-                            {
-                                if(!isset($caseStep[$num]['content'])) $caseStep[$num]['content'] = '';
-                                $caseStep[$num]['content'] .= "\n" . $step;
-                            }
-                            else
-                            {
-                                if($field == 'stepDesc')
-                                {
-                                    $num = 1;
-                                    $caseStep[$num]['content'] = $step;
-                                    $caseStep[$num]['type']    = 'step';
-                                    $caseStep[$num]['number']  = $num;
-                                }
-                                if($field == 'stepExpect' and isset($stepData[$row]['desc']))
-                                {
-                                    end($stepData[$row]['desc']);
-                                    $num = key($stepData[$row]['desc']);
-                                    $caseStep[$num]['content'] = $step;
-                                    $caseStep[$num]['number']  = $num;
-                                }
-                            }
-                        }
-                        unset($num);
-                        unset($sign);
-                        $stepVars += count($caseStep, COUNT_RECURSIVE) - count($caseStep);
-                        $stepData[$row][$stepKey] = array_values($caseStep);
-                    }
-                }
-
-                if(empty($case->title)) continue;
-                $caseData[$row] = $case;
-                unset($case);
-            }
-
-            $data['caseData'] = $caseData;
-            $data['stepData'] = $stepData;
-            file_put_contents($tmpFile, serialize($data));
-        }
-
-        if(empty($caseData))
-        {
-            unlink($this->session->fileImport);
-            unset($_SESSION['fileImport']);
-            echo js::alert($this->lang->error->noData);
-            return print(js::locate($this->createLink('caselib', 'browse', "libID=$libID")));
-        }
-
-        $allCount = count($caseData);
-        $allPager = 1;
-        if($allCount > $this->config->file->maxImport)
-        {
-            if(empty($maxImport))
-            {
-                $this->view->allCount  = $allCount;
-                $this->view->maxImport = $maxImport;
-                $this->view->libID     = $libID;
-                return print($this->display());
-            }
-
-            $allPager = ceil($allCount / $maxImport);
-            $caseData = array_slice($caseData, ($pagerID - 1) * $maxImport, $maxImport, true);
-        }
-        if(empty($caseData)) return print(js::locate(inlink('browse', "libID=$libID")));
-
-        /* Judge whether the items is too large and set session. */
-        $countInputVars  = count($caseData) * 9 + (isset($stepVars) ? $stepVars : 0);
-        $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
-        if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
-
-        $this->view->title      = $this->lang->caselib->common . $this->lang->colon . $this->lang->testcase->showImport;
-
-        $this->view->modules    = $modules;
-        $this->view->cases      = $this->dao->select('id,module,stage,status,pri,type')->from(TABLE_CASE)->where('lib')->eq($libID)->andWhere('deleted')->eq(0)->andWhere('product')->eq(0)->fetchAll('id');
-        $this->view->caseData   = $caseData;
-        $this->view->stepData   = $stepData;
-        $this->view->libID      = $libID;
-        $this->view->isEndPage  = $pagerID >= $allPager;
-        $this->view->allCount   = $allCount;
-        $this->view->allPager   = $allPager;
-        $this->view->pagerID    = $pagerID;
-        $this->view->maxImport  = $maxImport;
-        $this->view->dataInsert = $insert;
+        $this->view->title       = $this->lang->caselib->common . $this->lang->colon . $this->lang->testcase->showImport;
+        $this->view->cases       = $this->dao->select('id,module,stage,status,pri,type')->from(TABLE_CASE)->where('lib')->eq($libID)->andWhere('deleted')->eq(0)->andWhere('product')->eq(0)->fetchAll('id');
+        $this->view->modules     = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'caselib', $startModuleID = 0);
+        $this->view->caseData    = $caseData;
+        $this->view->stepData    = $stepData;
+        $this->view->libID       = $libID;
+        $this->view->isEndPage   = $pageID >= $totalPages;
+        $this->view->totalAmount = $totalAmount;
+        $this->view->totalPages  = $totalPages;
+        $this->view->pageID      = $pageID;
+        $this->view->maxImport   = $maxImport;
+        $this->view->dataInsert  = $insert;
         $this->display();
     }
 }

@@ -93,6 +93,11 @@ $items[] = array
     'width' => '320px'
 );
 
+foreach($caseData as $case)
+{
+    if(empty($case->id) || !isset($cases[$case->id])) $case->id = 0;
+}
+
 formBatchPanel
 (
     set::title($lang->caselib->import),
@@ -102,7 +107,7 @@ formBatchPanel
     set::actionsText(false),
     set::onRenderRow(jsRaw('handleRenderRow')),
     input(set::className('hidden'), set::name('isEndPage'), set::value($isEndPage ? '1' : '0')),
-    input(set::className('hidden'), set::name('pagerID'), set::value($pagerID)),
+    input(set::className('hidden'), set::name('pageID'), set::value($pageID)),
     $dataInsert !== '' ? input(set::className('hidden'), set::name('insert'), set::value($dataInsert)) : null
 );
 

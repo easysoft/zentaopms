@@ -237,7 +237,7 @@ class caselibZen extends caselib
      * @access protected
      * @return array
      */
-    protected function getRowsForExportTemplate(int $num = 0, array $modules): array
+    protected function getRowsForExportTemplate(int $num, array $modules): array
     {
         $rows = array();
         for($i = 0; $i < $num; $i++)
@@ -266,11 +266,12 @@ class caselibZen extends caselib
      * 获取导入文件的表头字段和列。
      * Get header and columns from import file.
      *
-     * @param  string     $fileName
+     * @param  string    $fileName
+     * @param  array     $fields
      * @access protected
      * @return array
      */
-    protected function getImportHeaderAndColumns(string $fileName): array
+    protected function getImportHeaderAndColumns(string $fileName, array $fields): array
     {
         $rows = $this->loadModel('file')->parseCSV($fileName);
 
@@ -289,5 +290,266 @@ class caselibZen extends caselib
         }
 
         return array($header, $columns);
+    }
+
+    /**
+     * 获得用例的步骤和预期结果。
+     * Get steps and expects from import file.
+     * 
+     * @param  string    $field
+     * @param  int       $row 
+     * @param  string    $cellValue 
+     * @access protected
+     * @return array
+     */
+    protected function getStepsAndExpectsFromImportFile(string $field, int $row, string $cellValue): array
+    {
+        if(strpos($cellValue, "\n")) $steps = explode("\n", $cellValue);
+        if(strpos($cellValue, "\r")) $steps = explode("\r", $cellValue);
+
+        $caseStep = array();
+        foreach($steps as $step)
+        {
+            $step = trim($step);
+            if(empty($step)) continue;
+
+            if(preg_match('/^(([0-9]+)\.[0-9]+)([.、]{1})/U', $step, $out))
+            {
+                $num    = $out[1];
+                $parent = $out[2];
+                $sign   = $out[3] == '.' ? 1 : 3;
+                $step   = trim(substr($step, strlen($num) + $sign));
+                if(!empty($step))
+                {
+                    $caseStep[$num]['content'] = $step;
+                    $caseStep[$num]['number']  = $num;
+                }
+                $caseStep[$num]['type']    = 'item';
+                $caseStep[$parent]['type'] = 'group';
+            }
+            elseif(preg_match('/^([0-9]+)([.、]{1})/U', $step, $out))
+            {
+                $num  = $out[1];
+                $sign = $out[2] == '.' ? 1 : 3;
+                $step = trim(substr($step, strlen($num) + $sign));
+                if(!empty($step))
+                {
+                    $caseStep[$num]['content'] = $step;
+                    $caseStep[$num]['number']  = $num;
+                }
+                $caseStep[$num]['type'] = 'step';
+            }
+            elseif(isset($num))
+            {
+                if(!isset($caseStep[$num]['content'])) $caseStep[$num]['content'] = '';
+                $caseStep[$num]['content'] .= "\n" . $step;
+            }
+            else
+            {
+                if($field == 'stepDesc')
+                {
+                    $num = 1;
+                    $caseStep[$num]['content'] = $step;
+                    $caseStep[$num]['type']    = 'step';
+                    $caseStep[$num]['number']  = $num;
+                }
+                if($field == 'stepExpect' && isset($stepData[$row]['desc']))
+                {
+                    end($stepData[$row]['desc']);
+
+                    $num = key($stepData[$row]['desc']);
+                    $caseStep[$num]['content'] = $step;
+                    $caseStep[$num]['number']  = $num;
+                }
+            }
+        }
+
+        unset($num);
+        unset($sign);
+
+        return $caseStep;
+    }
+
+    /**
+     * 获取导入用例的字段。
+     * Get fields for import test case.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function getFieldsForImport(): array
+    {
+        $fields = explode(',', $this->config->testcase->exportFields);
+        foreach($fields as $key => $fieldName)
+        {
+            $fieldName = trim($fieldName);
+            $fields[$fieldName] = zget($this->lang->testcase, $fieldName);
+            unset($fields[$key]);
+        }
+
+        return array_flip($fields);
+    }
+
+    /**
+     * 获取展示导入用例的列。
+     * Get columns for show import.
+     * 
+     * @param  array     $firstRow 
+     * @param  array     $fields 
+     * @access protected
+     * @return array
+     */
+    protected function getColumnsForShowImport(array $firstRow, array $fields): array
+    {
+        /* 获取表头和列。*/
+        $header = array();
+        foreach($firstRow as $i => $rowValue)
+        {
+            if(empty($rowValue)) break;
+            $header[$i] = $rowValue;
+        }
+
+        $columns = array();
+        foreach($header as $title)
+        {
+            if(!isset($fields[$title])) continue;
+            $columns[] = $fields[$title];
+        }
+
+        return $columns;
+    }
+
+    /**
+     * 获取导入用例的数据。
+     * Get data for import testcase.
+     *
+     * @param  int       $maxImport
+     * @param  string    $tmpFile
+     * @param  array     $fields
+     * @access protected
+     * @return array
+     */
+    protected function getDataForImport(int $maxImport, string $tmpFile, array $fields): array
+    {
+        $stepVars = 0;
+
+        if(!empty($maxImport) && file_exists($tmpFile))
+        {
+            $data = unserialize(file_get_contents($tmpFile));
+            return array($data['caseData'], $data['stepData'], $stepVars);
+        }
+
+        $rows    = $this->loadModel('file')->parseCSV($this->session->fileImport);
+        $columns = $this->getColumnsForShowImport($rows[0],$fields);
+        unset($rows[0]);
+
+        $caseData = array();
+        $stepData = array();
+        foreach($rows as $row => $data)
+        {
+            $case = new stdclass();
+            foreach($columns as $key => $field)
+            {
+                if(!isset($data[$key])) continue;
+
+                $cellValue = $data[$key];
+                $case->$field = $cellValue;
+
+                if($field == 'module') $case->$field = strrpos($cellValue, '(#') !== false ? trim(substr($cellValue, strrpos($cellValue, '(#') + 2), ')') : 0;
+
+                if(in_array($field, $this->config->testcase->export->listFields))
+                {
+                    if($field == 'stage')
+                    {
+                        $stages = explode("\n", $cellValue);
+
+                        $case->stage = array();
+                        foreach($stages as $stage) $case->stage[] = array_search($stage, $this->lang->testcase->stageList);
+                        $case->stage = join(',', $case->stage);
+                    }
+                    else
+                    {
+                        $case->$field = array_search($cellValue, $this->lang->testcase->{$field . 'List'});
+                    }
+                }
+
+                if($field == 'stepDesc' || $field == 'stepExpect')
+                {
+                    $caseStep = $this->getStepsAndExpectsFromImportFile($field, $row, $cellValue);
+                    $stepKey  = str_replace('step', '', strtolower($field));
+                    $stepData[$row][$stepKey] = array_values($caseStep);
+
+                    $stepVars += count($caseStep, COUNT_RECURSIVE) - count($caseStep);
+
+                    unset($case->$field);
+                }
+            }
+
+            if(empty($case->title)) continue;
+            $caseData[$row] = $case;
+        }
+
+        $data = array('caseData' => $caseData, 'stepData' => $stepData);
+        file_put_contents($tmpFile, serialize($data));
+
+        return array($caseData, $stepData, $stepVars);
+    }
+
+    /**
+     * 导入用例的返回。
+     * Response after show import.
+     *
+     * @param  int       $libID
+     * @param  array     $caseData
+     * @param  int       $maxImport
+     * @param  int       $pageID
+     * @param  int       $stepVars
+     * @access protected
+     * @return bool
+     */
+    protected function responseAfterShowImport(int $libID, array $caseData, int $maxImport, int $pageID, int $stepVars)
+    {
+        /* 如果没有用例数据时返回。*/
+        /* Response when there is no case. */
+        if(empty($caseData))
+        {
+            unlink($this->session->fileImport);
+            unset($_SESSION['fileImport']);
+
+            return $this->send(array('result'=>'fail', 'message' => $this->lang->error->noData, 'load' => $this->createLink('caselib', 'browse', "libID=$libID")));
+        }
+
+        /* 如果导入的用例多余设置的最大导入数。*/
+        /* If the total amount of the import case is more than the max import. */
+        $totalAmount = count($caseData);
+        if($totalAmount > $this->config->file->maxImport)
+        {
+            /* 如果没有限制每页的导入数量，按照默认最大导入数分页导入。*/
+            /* If there is no limit for import, limit as the max import in config. */
+            if(empty($maxImport))
+            {
+                $this->view->totalAmount = $totalAmount;
+                $this->view->maxImport   = $maxImport;
+                $this->view->libID       = $libID;
+
+                return print($this->display());
+            }
+
+            $caseData = array_slice($caseData, ($pageID - 1) * $maxImport, $maxImport, true);
+        }
+
+        if(empty($caseData)) return $this->send(array('result'=>'success', 'load' => $this->createLink('caselib', 'browse', "libID=$libID")));
+
+        $countInputVars  = count($caseData) * 9 + (isset($stepVars) ? $stepVars : 0);
+        $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
+
+        if($showSuhosinInfo)
+        {
+            $this->view->suhosinInfo = sprintf((extension_loaded('suhosin') ? $this->lang->suhosinInfo : $this->lang->maxVarsInfo), $countInputVars);
+
+            return $this->display();
+        }
+
+        return true;
     }
 }
