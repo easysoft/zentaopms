@@ -1705,4 +1705,19 @@ class testcaseTest
         foreach($caseSteps as $caseID => $steps) $return .= $caseID . ':' . implode(',', array_keys($steps)) . '; ';
         return $return;
     }
+
+    /**
+     * 测试为 datable 获取模块。
+     * Test get modules for datatable.
+     *
+     * @param  int          $productID
+     * @access public
+     * @return array|string
+     */
+    public function getDatatableModulesTest(int $productID): array|string
+    {
+        $modules = $this->objectModel->getDatatableModules($productID);
+        if(dao::isError()) return dao::getError();
+        return implode(',', array_keys($modules));
+    }
 }

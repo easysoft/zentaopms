@@ -1,0 +1,9 @@
+title: table zt_module
+desc: "bug"
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: root
+    range: 1-10{4},41-50{4}
+  - field: type
+    range: story,bug,doc,case
