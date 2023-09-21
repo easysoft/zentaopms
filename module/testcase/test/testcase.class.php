@@ -1684,7 +1684,7 @@ class testcaseTest
      */
     public function getSceneMenuTest(int $productID, int $moduleID, int $startScene = 0, int|string $branch = 0, int $currentScene = 0, bool $emptyMenu = false): array|string
     {
-        $scenes = $this->objectModel->getSceneMenu($productID, $moduleID, $startScene, $branch, $currentScene, $emptyMenu);
+        $scenes = $this->objectModel->getSceneMenu($productID, $moduleID, $branch, $startScene, $currentScene, $emptyMenu);
         if(dao::isError()) return dao::getError();
         return implode(',', $scenes);
     }

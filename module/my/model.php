@@ -416,7 +416,7 @@ class myModel extends model
             ->orderBy('order_asc')
             ->fetchPairs();
 
-        $scene = $this->loadModel('testcase')->getSceneMenu(0, 0);
+        $scene = $this->loadModel('testcase')->getSceneMenu(0);
 
         $queryName = $type == 'contribute' ? 'contributeTestcase' : 'workTestcase';
         $this->app->loadModuleConfig('testcase');

@@ -1362,7 +1362,7 @@ class testcase extends control
      */
     public function ajaxGetScenes(int $productID, int $branch = 0, int $moduleID = 0, int $sceneID = 0)
     {
-        $optionMenu = $this->testcase->getSceneMenu($productID, $moduleID, 'case', 0, $branch, $sceneID);
+        $optionMenu = $this->testcase->getSceneMenu($productID, $moduleID, $branch, 0, $sceneID);
 
         $items = array();
         foreach($optionMenu as $optionID => $optionName) $items[] = array('text' => $optionName, 'value' => $optionID);

@@ -1877,16 +1877,16 @@ class testcaseModel extends model
      * 获取场景菜单。
      * Get scene menu.
      *
-     * @param  int    $productID
-     * @param  int    $moduleID
-     * @param  int    $startScene
-     * @param  int    $branch
-     * @param  int    $currentScene
-     * @param  bool   $emptyMenu
+     * @param  int        $productID
+     * @param  int        $moduleID
+     * @param  int|string $branch
+     * @param  int        $startScene
+     * @param  int        $currentScene
+     * @param  bool       $emptyMenu
      * @access public
      * @return array
      */
-    public function getSceneMenu(int $productID, int $moduleID, int $startScene = 0, int|string $branch = 0, int $currentScene = 0, bool $emptyMenu = false): array
+    public function getSceneMenu(int $productID, int $moduleID = 0, int|string $branch = 0, int $startScene = 0, int $currentScene = 0, bool $emptyMenu = false): array
     {
         if(empty($branch)) $branch = 0;
 

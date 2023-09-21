@@ -41,7 +41,7 @@ class testtaskZen extends testtask
 
         $searchConfig['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($product->id, $viewType = 'case');
         $searchConfig['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
-        $searchConfig['params']['scene']['values']   = $this->testcase->getSceneMenu($product->id, $moduleID, 'case', 0,  0);
+        $searchConfig['params']['scene']['values']   = $this->testcase->getSceneMenu($product->id, $moduleID);
         $searchConfig['params']['status']['values']  = $this->lang->testcase->statusList;
         $searchConfig['params']['product']['values'] = array($product->id => $product->name, 'all' => $this->lang->testcase->allProduct);
 
@@ -75,7 +75,7 @@ class testtaskZen extends testtask
         $searchConfig['style']                       = 'simple';
         $searchConfig['actionURL']                   = inlink('linkcase', "taskID={$task->id}&type={$type}&param={$param}");
         $searchConfig['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($product->id, 'case', 0, $task->branch);
-        $searchConfig['params']['scene']['values']   = $this->testcase->getSceneMenu($product->id, 0, 'case', 0, 0);
+        $searchConfig['params']['scene']['values']   = $this->testcase->getSceneMenu($product->id);
         $searchConfig['params']['product']['values'] = array($product->id => $product->name);
 
         $build = $this->loadModel('build')->getByID($task->build);
