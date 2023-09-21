@@ -3506,6 +3506,19 @@ $config->group->package->browseMetric->order  = 5;
 $config->group->package->browseMetric->subset = 'metric';
 $config->group->package->browseMetric->privs  = array();
 $config->group->package->browseMetric->privs['metric-preview'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
+$config->group->package->browseMetric->privs['metric-details'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
+
+$config->group->package->manageMetric = new stdclass();
+$config->group->package->manageMetric->order  = 10;
+$config->group->package->manageMetric->subset = 'metric';
+$config->group->package->manageMetric->privs  = array();
+$config->group->package->manageMetric->privs['metric-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
+$config->group->package->manageMetric->privs['metric-create'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
+$config->group->package->manageMetric->privs['metric-edit'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array()); 
+$config->group->package->manageMetric->privs['metric-view'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array()); 
+$config->group->package->manageMetric->privs['metric-implement'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
+$config->group->package->manageMetric->privs['metric-delist'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
+$config->group->package->manageMetric->privs['metric-delete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->browseDoc = new stdclass();
 $config->group->package->browseDoc->order  = 10;

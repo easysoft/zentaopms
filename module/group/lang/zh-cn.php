@@ -521,6 +521,7 @@ $lang->group->package->browseDataview        = '浏览数据表';
 $lang->group->package->manageDataview        = '创建维护数据表';
 $lang->group->package->deleteDataview        = '删除数据表';
 $lang->group->package->browseMetric          = '浏览度量项';
+$lang->group->package->manageMetric          = '管理度量项';
 $lang->group->package->browseDoc             = '浏览文档';
 $lang->group->package->manageDoc             = '创建与维护文档';
 $lang->group->package->deleteDoc             = '删除文档';

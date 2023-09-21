@@ -1717,9 +1717,25 @@ $lang->resource->chart->preview = 'preview';
 $lang->chart->methodOrder[2] = 'preview';
 
 $lang->resource->metric = new stdclass();
-$lang->resource->metric->preview = 'preview';
+$lang->resource->metric->preview   = 'preview';
+$lang->resource->metric->browse    = 'browse';
+$lang->resource->metric->create    = 'create';
+$lang->resource->metric->edit      = 'edit';
+$lang->resource->metric->view      = 'view';
+$lang->resource->metric->implement = 'implementAction';
+$lang->resource->metric->delist    = 'delistAction';
+$lang->resource->metric->delete    = 'deleteAction';
+$lang->resource->metric->details   = 'detailsAction';
 
-$lang->metric->methodOrder[2] = 'preview';
+$lang->metric->methodOrder[5]  = 'preview';
+$lang->metric->methodOrder[6]  = 'details';
+$lang->metric->methodOrder[10] = 'browse';
+$lang->metric->methodOrder[15] = 'create';
+$lang->metric->methodOrder[20] = 'edit';
+$lang->metric->methodOrder[25] = 'view';
+$lang->metric->methodOrder[30] = 'implement';
+$lang->metric->methodOrder[35] = 'delist';
+$lang->metric->methodOrder[40] = 'delete';
 /* Report . */
 $lang->resource->report = new stdclass();
 
