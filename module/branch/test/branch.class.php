@@ -283,26 +283,24 @@ class branchTest
     }
 
     /**
+     * 分支排序。
      * Test sort branch.
      *
-     * @param  string $branches
-     * @param  string $order
+     * @param  string       $branches
+     * @param  string       $order
      * @access public
-     * @return string
+     * @return array|string
      */
-    public function sortTest($branches, $order = '')
+    public function sortTest(string $branches, string $order = ''): array|string
     {
-        $_POST['orderBy']  = $order;
-        $_POST['branches'] = $branches;
-
-        $this->objectModel->sort();
-
-        unset($_POST);
+        $data = new stdclass();
+        $data->orderBy  = $order;
+        $data->branches = $branches;
+        $this->objectModel->sort($data);
 
         if(dao::isError()) return dao::getError();
 
-        global $tester;
-        $objects = $tester->dao->select('*')->from(TABLE_BRANCH)->where('id')->in($branches)->orderBy('order asc')->fetchAll('id');
+        $objects = $this->objectModel->dao->select('*')->from(TABLE_BRANCH)->where('id')->in($branches)->orderBy('order asc')->fetchAll('id');
         return implode(',', array_keys($objects));
     }
 
