@@ -81,7 +81,7 @@ class branchTao extends branchModel
      */
     protected function getIdListByRelation(int $productID, int $executionID): array
     {
-        return $this->dao->select('branch')->from(TABLE_PROJECTPRODUCT)
+        return $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)
             ->where('project')->eq($executionID)
             ->andWhere('product')->eq($productID)
             ->fetchAll('branch');

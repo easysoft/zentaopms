@@ -650,6 +650,7 @@ class branchModel extends model
     }
 
     /**
+     * 获取关联到项目的产品分支。
      * Get branches of product which linked project.
      *
      * @param  int    $projectID
@@ -657,7 +658,7 @@ class branchModel extends model
      * @access public
      * @return array
      */
-    public function getPairsByProjectProduct($projectID, $productID)
+    public function getPairsByProjectProduct(int $projectID, int $productID): array
     {
         $branches = $this->dao->select('branch,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_BRANCH)->alias('t2')->on('t1.branch=t2.id')
@@ -666,8 +667,7 @@ class branchModel extends model
             ->andWhere('t2.deleted')->eq('0')
             ->fetchPairs('branch', 'name');
 
-        $projectProduct = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->andWhere('product')->eq($productID)->fetchAll('branch');
-
+        $projectProduct = $this->branchTao->getIdListByRelation($productID, $projectID);
         if(isset($projectProduct[BRANCH_MAIN])) $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $branches;
 
         return $branches;
