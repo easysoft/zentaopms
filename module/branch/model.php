@@ -242,31 +242,34 @@ class branchModel extends model
     }
 
     /**
-     * Update branch.
+     * 更新一个分支。
+     * Update a branch.
      *
-     * @param  int    $branchID
+     * @param  int         $branchID
+     * @param  object      $branch
      * @access public
-     * @return array|bool
+     * @return array|false
      */
-    public function update($branchID)
+    public function update(int $branchID, object $branch): array|false
     {
-        $oldBranch = $this->getById($branchID, 0, '');
-
-        $newBranch = fixer::input('post')->get();
-        $newBranch->closedDate = $newBranch->status == 'closed' ? helper::today() : null;
+        $oldBranch   = $this->getById($branchID, 0, '');
+        $productType = $this->getProductType($branchID);
+        if(!$productType) $productType = 'branch';
 
         $this->app->loadLang('product');
-        $productType = $this->getProductType($branchID);
         $this->lang->error->unique = str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->existName);
 
-        $this->dao->update(TABLE_BRANCH)->data($newBranch)
+        $branch->closedDate = $branch->status == 'closed' ? helper::today() : null;
+        $this->dao->update(TABLE_BRANCH)->data($branch)
             ->where('id')->eq($branchID)
             ->batchCheck($this->config->branch->edit->requiredFields, 'notempty')
-            ->checkIF(!empty($newBranch->name) and $newBranch->name != $oldBranch->name, 'name', 'unique', "product = $oldBranch->product")
+            ->checkIF(!empty($branch->name)&& $branch->name != $oldBranch->name, 'name', 'unique', "product = $oldBranch->product")
             ->exec();
+        if(dao::isError()) return false;
 
-        if(!dao::isError()) return common::createChanges($oldBranch, $newBranch);
-        return false;
+        $changes = common::createChanges($oldBranch, $branch);
+        if($changes) $this->loadModel('action')->create('branch', $branchID, 'Edited');
+        return $changes;
     }
 
     /**

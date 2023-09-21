@@ -13,6 +13,10 @@ $config->branch->form->create['desc']        = array('type' => 'string', 'requir
 $config->branch->form->create['status']      = array('type' => 'string', 'required' => false, 'default' => 'active');
 $config->branch->form->create['createdDate'] = array('type' => 'string', 'required' => false, 'default' => helper::today());
 
+$config->branch->form->edit['name']   = array('type' => 'string', 'required' => true,  'default' => '');
+$config->branch->form->edit['desc']   = array('type' => 'string', 'required' => false, 'default' => '');
+$config->branch->form->edit['status'] = array('type' => 'string', 'required' => true,  'default' => '');
+
 $config->branch->form->mergebranch = $config->branch->form->create;
 $config->branch->form->mergebranch['createBranch']       = array('type' => 'int',    'required' => false, 'default' => 0);
 $config->branch->form->mergebranch['targetBranch']       = array('type' => 'int',    'required' => false, 'default' => 0);

@@ -15,7 +15,6 @@ namespace zin;
 formPanel
 (
     set::title(sprintf($lang->branch->edit, $lang->product->branchName[$product->type])),
-    set::shadow(!isonlybody()),
     formGroup
     (
         set::label(sprintf($lang->branch->name, $lang->product->branchName[$product->type])),
@@ -45,5 +44,3 @@ formPanel
         )
     ),
 );
-
-render();

@@ -69,7 +69,7 @@ class branch extends control
 
         if($_POST)
         {
-            $branch = form::data()->get();
+            $branch   = form::data()->get();
             $branchID = $this->branch->create($productID, $branch);
             if(dao::isError()) return $this->sendError(dao::getError());
 
@@ -82,6 +82,7 @@ class branch extends control
     }
 
     /**
+     * 编辑一个分支。
      * Edit a branch.
      *
      * @param  int    $branchID
@@ -91,12 +92,13 @@ class branch extends control
      */
     public function edit(int $branchID, int $productID)
     {
+        $this->branch->changeBranchLanguage($productID);
         if($_POST)
         {
-            $changes = $this->branch->update($branchID);
+            $branch  = form::data()->get();
+            $changes = $this->branch->update($branchID, $branch);
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            if($changes) $this->loadModel('action')->create('branch', $branchID, 'Edited');
             return $this->sendSuccess(array('load' => true, 'closeModal' => true));
         }
 
