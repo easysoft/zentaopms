@@ -137,7 +137,7 @@ class branchModel extends model
         $branches = $this->dao->select('*')->from(TABLE_BRANCH)
             ->where('deleted')->eq(0)
             ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
-            ->beginIF($productID and $executionID)->andWhere('id')->in(array_keys($executionBranches))->fi()
+            ->beginIF($productID && $executionID)->andWhere('id')->in(array_keys($executionBranches))->fi()
             ->beginIF(strpos($params, 'active') !== false)->andWhere('status')->eq('active')->fi()
             ->beginIF(!empty($mergedBranches))->andWhere('id')->notIN($mergedBranches)->fi()
             ->orderBy('`order`')
