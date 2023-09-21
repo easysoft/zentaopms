@@ -1,63 +1,88 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/branch.class.php';
+
+zdTable('branch')->config('branch')->gen(30);
+zdTable('product')->config('product')->gen(30);
+zdTable('projectproduct')->config('projectproduct')->gen(30);
+zdTable('user')->gen(5);
 su('admin');
 
 /**
 
 title=测试 branchModel->getPairs();
+timeout=0
 cid=1
-pid=1
-
-测试获取 产品41 的分支信息对 >> ,0,1,2
-测试获取 产品41 active 的分支信息对 >> ,0,1
-测试获取 产品41 noempty 的分支信息对 >> ,1,2
-测试获取 产品41 all 的分支信息对 >> ,all,0,1,2
-测试获取 产品41 withClosed 的分支信息对 >> ,0,1,2
-测试获取 产品41 active 执行141 的分支信息对 >> ,0
-测试获取 产品41 active 执行141 合并分支1 4 的分支信息对 >> ,0
-测试获取 产品41 的分支信息对 >> ,0,3,4
-测试获取 产品41 active 的分支信息对 >> ,0,3
-测试获取 产品41 noempty 的分支信息对 >> ,3,4
-测试获取 产品41 all 的分支信息对 >> ,all,0,3,4
-测试获取 产品41 withClosed 的分支信息对 >> ,0,3,4
-测试获取 产品41 active 执行141 的分支信息对 >> 0
-测试获取 产品41 active 执行141 合并分支1 4 的分支信息对 >> 0
-测试获取 产品41 的分支信息对 >> ,0,5,6
-测试获取 产品41 active 的分支信息对 >> ,0,5
-测试获取 产品41 noempty 的分支信息对 >> ,5,6
-测试获取 产品41 all 的分支信息对 >> ,all,0,5,6
-测试获取 产品41 withClosed 的分支信息对 >> ,0,5,6
-测试获取 产品41 active 执行141 的分支信息对 >> 0
-测试获取 产品41 active 执行141 合并分支1 4 的分支信息对 >> 0
 
 */
-$productID      = array(41, 42, 43);
-$param          = array('active', 'noempty', 'all', 'withClosed');
-$executionID    = array(141, 142, 143, null);
-$mergedBranches = '1,4';
 
-$branch = new branchTest();
+$productIdList      = array(1, 6, 11);
+$paramList          = array('', 'all', 'active', 'noempty', 'withClosed');
+$executionIdList    = array(0, 101, 200);
+$mergedBranchesList = array('', '1,2');
 
-r($branch->getPairsTest($productID[0]))                                              && p() && e(',0,1,2');     // 测试获取 产品41 的分支信息对
-r($branch->getPairsTest($productID[0], $param[0]))                                   && p() && e(',0,1');       // 测试获取 产品41 active 的分支信息对
-r($branch->getPairsTest($productID[0], $param[1]))                                   && p() && e(',1,2');       // 测试获取 产品41 noempty 的分支信息对
-r($branch->getPairsTest($productID[0], $param[2]))                                   && p() && e(',all,0,1,2'); // 测试获取 产品41 all 的分支信息对
-r($branch->getPairsTest($productID[0], $param[3]))                                   && p() && e(',0,1,2');     // 测试获取 产品41 withClosed 的分支信息对
-r($branch->getPairsTest($productID[0], $param[0], $executionID[0]))                  && p() && e(',0');         // 测试获取 产品41 active 执行141 的分支信息对
-r($branch->getPairsTest($productID[0], $param[0], $executionID[0], $mergedBranches)) && p() && e(',0');         // 测试获取 产品41 active 执行141 合并分支1 4 的分支信息对
-r($branch->getPairsTest($productID[1]))                                              && p() && e(',0,3,4');     // 测试获取 产品41 的分支信息对
-r($branch->getPairsTest($productID[1], $param[0]))                                   && p() && e(',0,3');       // 测试获取 产品41 active 的分支信息对
-r($branch->getPairsTest($productID[1], $param[1]))                                   && p() && e(',3,4');       // 测试获取 产品41 noempty 的分支信息对
-r($branch->getPairsTest($productID[1], $param[2]))                                   && p() && e(',all,0,3,4'); // 测试获取 产品41 all 的分支信息对
-r($branch->getPairsTest($productID[1], $param[3]))                                   && p() && e(',0,3,4');     // 测试获取 产品41 withClosed 的分支信息对
-r($branch->getPairsTest($productID[1], $param[0], $executionID[0]))                  && p() && e('0');          // 测试获取 产品41 active 执行141 的分支信息对
-r($branch->getPairsTest($productID[1], $param[0], $executionID[0], $mergedBranches)) && p() && e('0');          // 测试获取 产品41 active 执行141 合并分支1 4 的分支信息对
-r($branch->getPairsTest($productID[2]))                                              && p() && e(',0,5,6');     // 测试获取 产品41 的分支信息对
-r($branch->getPairsTest($productID[2], $param[0]))                                   && p() && e(',0,5');       // 测试获取 产品41 active 的分支信息对
-r($branch->getPairsTest($productID[2], $param[1]))                                   && p() && e(',5,6');       // 测试获取 产品41 noempty 的分支信息对
-r($branch->getPairsTest($productID[2], $param[2]))                                   && p() && e(',all,0,5,6'); // 测试获取 产品41 all 的分支信息对
-r($branch->getPairsTest($productID[2], $param[3]))                                   && p() && e(',0,5,6');     // 测试获取 产品41 withClosed 的分支信息对
-r($branch->getPairsTest($productID[2], $param[0], $executionID[0]))                  && p() && e('0');          // 测试获取 产品41 active 执行141 的分支信息对
-r($branch->getPairsTest($productID[2], $param[0], $executionID[0], $mergedBranches)) && p() && e('0');          // 测试获取 产品41 active 执行141 合并分支1 4 的分支信息对
+global $tester;
+$tester->loadModel('branch');
+r($tester->branch->getPairs($productIdList[0], $paramList[0], $executionIdList[0], $mergedBranchesList[0])) && p()    && e('0');     // 获取正常产品下的分支信息
+r($tester->branch->getPairs($productIdList[1], $paramList[0], $executionIdList[0], $mergedBranchesList[0])) && p('1') && e('分支1'); // 获取多分支产品下的分支信息
+r($tester->branch->getPairs($productIdList[2], $paramList[0], $executionIdList[0], $mergedBranchesList[0])) && p()    && e('0');     // 获取不存在产品下的分支信息
+r($tester->branch->getPairs($productIdList[0], $paramList[1], $executionIdList[0], $mergedBranchesList[0])) && p()    && e('0');     // 获取正常产品下的所有分支信息
+r($tester->branch->getPairs($productIdList[1], $paramList[1], $executionIdList[0], $mergedBranchesList[0])) && p('1') && e('分支1'); // 获取多分支产品的所有分支信息
+r($tester->branch->getPairs($productIdList[2], $paramList[1], $executionIdList[0], $mergedBranchesList[0])) && p()    && e('0');     // 获取不存在产品的所有分支信息
+r($tester->branch->getPairs($productIdList[0], $paramList[2], $executionIdList[0], $mergedBranchesList[0])) && p()    && e('0');     // 获取正常产品下的激活分支信息
+r($tester->branch->getPairs($productIdList[1], $paramList[2], $executionIdList[0], $mergedBranchesList[0])) && p('1') && e('分支1'); // 获取多分支产品的激活分支信息
+r($tester->branch->getPairs($productIdList[2], $paramList[2], $executionIdList[0], $mergedBranchesList[0])) && p()    && e('0');     // 获取不存在产品的激活分支信息
+r($tester->branch->getPairs($productIdList[0], $paramList[3], $executionIdList[0], $mergedBranchesList[0])) && p()    && e('0');     // 获取正常产品下的非主干分支信息
+r($tester->branch->getPairs($productIdList[1], $paramList[3], $executionIdList[0], $mergedBranchesList[0])) && p('1') && e('分支1'); // 获取多分支产品的非主干分支信息
+r($tester->branch->getPairs($productIdList[2], $paramList[3], $executionIdList[0], $mergedBranchesList[0])) && p()    && e('0');     // 获取不存在产品的非主干分支信息
+r($tester->branch->getPairs($productIdList[0], $paramList[4], $executionIdList[0], $mergedBranchesList[0])) && p()    && e('0');     // 获取正常产品下的包括关闭的分支信息
+r($tester->branch->getPairs($productIdList[1], $paramList[4], $executionIdList[0], $mergedBranchesList[0])) && p('1') && e('分支1'); // 获取多分支产品的包括关闭的分支信息
+r($tester->branch->getPairs($productIdList[2], $paramList[4], $executionIdList[0], $mergedBranchesList[0])) && p()    && e('0');     // 获取不存在产品的包括关闭的分支信息
+
+r($tester->branch->getPairs($productIdList[0], $paramList[0], $executionIdList[1], $mergedBranchesList[0])) && p() && e('0'); // 获取执行下正常产品下的分支信息
+r($tester->branch->getPairs($productIdList[1], $paramList[0], $executionIdList[1], $mergedBranchesList[0])) && p() && e('0'); // 获取执行下多分支产品下的分支信息
+r($tester->branch->getPairs($productIdList[2], $paramList[0], $executionIdList[1], $mergedBranchesList[0])) && p() && e('0'); // 获取执行下不存在产品下的分支信息
+r($tester->branch->getPairs($productIdList[0], $paramList[1], $executionIdList[1], $mergedBranchesList[0])) && p() && e('0'); // 获取执行下正常产品下的所有分支信息
+r($tester->branch->getPairs($productIdList[1], $paramList[1], $executionIdList[1], $mergedBranchesList[0])) && p() && e('0'); // 获取执行下多分支产品的所有分支信息
+r($tester->branch->getPairs($productIdList[2], $paramList[1], $executionIdList[1], $mergedBranchesList[0])) && p() && e('0'); // 获取执行下不存在产品的所有分支信息
+r($tester->branch->getPairs($productIdList[0], $paramList[2], $executionIdList[1], $mergedBranchesList[0])) && p() && e('0'); // 获取执行下正常产品下的激活分支信息
+r($tester->branch->getPairs($productIdList[1], $paramList[2], $executionIdList[1], $mergedBranchesList[0])) && p() && e('0'); // 获取执行下多分支产品的激活分支信息
+r($tester->branch->getPairs($productIdList[2], $paramList[2], $executionIdList[1], $mergedBranchesList[0])) && p() && e('0'); // 获取执行下不存在产品的激活分支信息
+r($tester->branch->getPairs($productIdList[0], $paramList[3], $executionIdList[1], $mergedBranchesList[0])) && p() && e('0'); // 获取执行下正常产品下的非主干分支信息
+r($tester->branch->getPairs($productIdList[1], $paramList[3], $executionIdList[1], $mergedBranchesList[0])) && p() && e('0'); // 获取执行下多分支产品的非主干分支信息
+r($tester->branch->getPairs($productIdList[2], $paramList[3], $executionIdList[1], $mergedBranchesList[0])) && p() && e('0'); // 获取执行下不存在产品的非主干分支信息
+r($tester->branch->getPairs($productIdList[0], $paramList[4], $executionIdList[1], $mergedBranchesList[0])) && p() && e('0'); // 获取执行下正常产品下的包括关闭的分支信息
+r($tester->branch->getPairs($productIdList[1], $paramList[4], $executionIdList[1], $mergedBranchesList[0])) && p() && e('0'); // 获取执行下多分支产品的包括关闭的分支信息
+r($tester->branch->getPairs($productIdList[2], $paramList[4], $executionIdList[1], $mergedBranchesList[0])) && p() && e('0'); // 获取执行下不存在产品的包括关闭的分支信息
+r($tester->branch->getPairs($productIdList[0], $paramList[0], $executionIdList[1], $mergedBranchesList[0])) && p() && e('0'); // 获取执行下正常产品下的分支信息
+
+r($tester->branch->getPairs($productIdList[1], $paramList[0], $executionIdList[2], $mergedBranchesList[0])) && p() && e('0'); // 获取不存在执行下多分支产品下的分支信息
+r($tester->branch->getPairs($productIdList[2], $paramList[0], $executionIdList[2], $mergedBranchesList[0])) && p() && e('0'); // 获取不存在执行下不存在产品下的分支信息
+r($tester->branch->getPairs($productIdList[0], $paramList[1], $executionIdList[2], $mergedBranchesList[0])) && p() && e('0'); // 获取不存在执行下正常产品下的所有分支信息
+r($tester->branch->getPairs($productIdList[1], $paramList[1], $executionIdList[2], $mergedBranchesList[0])) && p() && e('0'); // 获取不存在执行下多分支产品的所有分支信息
+r($tester->branch->getPairs($productIdList[2], $paramList[1], $executionIdList[2], $mergedBranchesList[0])) && p() && e('0'); // 获取不存在执行下不存在产品的所有分支信息
+r($tester->branch->getPairs($productIdList[0], $paramList[2], $executionIdList[2], $mergedBranchesList[0])) && p() && e('0'); // 获取不存在执行下正常产品下的激活分支信息
+r($tester->branch->getPairs($productIdList[1], $paramList[2], $executionIdList[2], $mergedBranchesList[0])) && p() && e('0'); // 获取不存在执行下多分支产品的激活分支信息
+r($tester->branch->getPairs($productIdList[2], $paramList[2], $executionIdList[2], $mergedBranchesList[0])) && p() && e('0'); // 获取不存在执行下不存在产品的激活分支信息
+r($tester->branch->getPairs($productIdList[0], $paramList[3], $executionIdList[2], $mergedBranchesList[0])) && p() && e('0'); // 获取不存在执行下正常产品下的非主干分支信息
+r($tester->branch->getPairs($productIdList[1], $paramList[3], $executionIdList[2], $mergedBranchesList[0])) && p() && e('0'); // 获取不存在执行下多分支产品的非主干分支信息
+r($tester->branch->getPairs($productIdList[2], $paramList[3], $executionIdList[2], $mergedBranchesList[0])) && p() && e('0'); // 获取不存在执行下不存在产品的非主干分支信息
+r($tester->branch->getPairs($productIdList[0], $paramList[4], $executionIdList[2], $mergedBranchesList[0])) && p() && e('0'); // 获取不存在执行下正常产品下的包括关闭的分支信息
+r($tester->branch->getPairs($productIdList[1], $paramList[4], $executionIdList[2], $mergedBranchesList[0])) && p() && e('0'); // 获取不存在执行下多分支产品的包括关闭的分支信息
+r($tester->branch->getPairs($productIdList[2], $paramList[4], $executionIdList[2], $mergedBranchesList[0])) && p() && e('0'); // 获取不存在执行下不存在产品的包括关闭的分支信息
+
+r($tester->branch->getPairs($productIdList[0], $paramList[0], $executionIdList[0], $mergedBranchesList[1])) && p()    && e('0');     // 获取不包括分支1、2正常产品下的分支信息
+r($tester->branch->getPairs($productIdList[1], $paramList[0], $executionIdList[0], $mergedBranchesList[1])) && p('3') && e('分支3'); // 获取不包括分支1、2多分支产品下的分支信息
+r($tester->branch->getPairs($productIdList[2], $paramList[0], $executionIdList[0], $mergedBranchesList[1])) && p()    && e('0');     // 获取不包括分支1、2不存在产品下的分支信息
+r($tester->branch->getPairs($productIdList[0], $paramList[1], $executionIdList[0], $mergedBranchesList[1])) && p()    && e('0');     // 获取不包括分支1、2正常产品下的所有分支信息
+r($tester->branch->getPairs($productIdList[1], $paramList[1], $executionIdList[0], $mergedBranchesList[1])) && p('3') && e('分支3'); // 获取不包括分支1、2多分支产品的所有分支信息
+r($tester->branch->getPairs($productIdList[2], $paramList[1], $executionIdList[0], $mergedBranchesList[1])) && p()    && e('0');     // 获取不包括分支1、2不存在产品的所有分支信息
+r($tester->branch->getPairs($productIdList[0], $paramList[2], $executionIdList[0], $mergedBranchesList[1])) && p()    && e('0');     // 获取不包括分支1、2正常产品下的激活分支信息
+r($tester->branch->getPairs($productIdList[1], $paramList[2], $executionIdList[0], $mergedBranchesList[1])) && p('3') && e('分支3'); // 获取不包括分支1、2多分支产品的激活分支信息
+r($tester->branch->getPairs($productIdList[2], $paramList[2], $executionIdList[0], $mergedBranchesList[1])) && p()    && e('0');     // 获取不包括分支1、2不存在产品的激活分支信息
+r($tester->branch->getPairs($productIdList[0], $paramList[3], $executionIdList[0], $mergedBranchesList[1])) && p()    && e('0');     // 获取不包括分支1、2正常产品下的非主干分支信息
+r($tester->branch->getPairs($productIdList[1], $paramList[3], $executionIdList[0], $mergedBranchesList[1])) && p('3') && e('分支3'); // 获取不包括分支1、2多分支产品的非主干分支信息
+r($tester->branch->getPairs($productIdList[2], $paramList[3], $executionIdList[0], $mergedBranchesList[1])) && p()    && e('0');     // 获取不包括分支1、2不存在产品的非主干分支信息
+r($tester->branch->getPairs($productIdList[0], $paramList[4], $executionIdList[0], $mergedBranchesList[1])) && p()    && e('0');     // 获取不包括分支1、2正常产品下的包括关闭的分支信息
+r($tester->branch->getPairs($productIdList[1], $paramList[4], $executionIdList[0], $mergedBranchesList[1])) && p('3') && e('分支3'); // 获取不包括分支1、2多分支产品的包括关闭的分支信息
+r($tester->branch->getPairs($productIdList[2], $paramList[4], $executionIdList[0], $mergedBranchesList[1])) && p()    && e('0');     // 获取不包括分支1、2不存在产品的包括关闭的分支信息
