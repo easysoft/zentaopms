@@ -660,6 +660,7 @@ class branchModel extends model
     }
 
     /**
+     * 判断是否展示分支标签。
      * Display of branch label.
      *
      * @param  int $productID
@@ -772,7 +773,8 @@ class branchModel extends model
     }
 
     /**
-     * Judge an action is clickable or not..
+     * 获取分支的可操作动作。
+     * Judge an action is clickable or not.
      *
      * @param object $branch
      * @param string $action
@@ -782,7 +784,7 @@ class branchModel extends model
      */
     public static function isClickable($branch, $action)
     {
-        if(!$branch->id) return false;
+        if(empty($branch->id)) return false;
         if($branch->status == 'active' && $action == 'activate') return false;
         if($branch->status == 'closed' && $action == 'close')    return false;
 

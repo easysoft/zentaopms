@@ -443,4 +443,18 @@ class branchTest
         $releases = $this->objectModel->dao->select('*')->from(TABLE_RELEASE)->where('deleted')->eq(0)->andWhere('branch')->in($data->mergedBranchIDList)->fetchAll();
         return count($releases);
     }
+
+    /**
+     * Test for judge a action is clickable.
+     *
+     * @param  int    $branchID
+     * @param  string $status
+     * @access public
+     * @return bool
+     */
+    public function testIsClickable(int $branchID, string $status): bool
+    {
+        $branch = $this->objectModel->dao->select('*')->from(TABLE_BRANCH)->where('id')->eq($branchID)->fetch();
+        return $this->objectModel->isClickable($branch, $status);
+    }
 }
