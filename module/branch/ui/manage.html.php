@@ -12,7 +12,7 @@ namespace zin;
 /* zin: Define the set::module('branch') feature bar on main menu. */
 featureBar
 (
-    set::current($type),
+    set::current($browseType),
     set::linkParams("productID={$product->id}&browseType={key}"),
 );
 

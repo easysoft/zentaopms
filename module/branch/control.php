@@ -24,7 +24,7 @@ class branch extends control
      * @access public
      * @return void
      */
-    public function manage($productID, $browseType = 'active', $orderBy = 'order', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function manage(int $productID, string $browseType = 'active', string $orderBy = 'order', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $product = $this->loadModel('product')->getById($productID);
         if($product->type == 'normal') $this->locate($this->createLink('product', 'view', "productID=$productID"));
