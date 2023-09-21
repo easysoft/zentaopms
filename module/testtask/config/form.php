@@ -2,6 +2,9 @@
 declare(strict_types=1);
 global $lang, $app;
 
+$account = isset($app->user->account) ? $app->user->account : '';
+$now     = helper::now();
+
 $config->testtask->form = new stdclass();
 $config->testtask->form->create = array();
 $config->testtask->form->create['product']    = array('required' => true,  'type' => 'int',    'default' => '');
@@ -60,3 +63,19 @@ $config->testtask->form->activate['comment'] = array('required' => false, 'type'
 $config->testtask->form->runCase = array();
 $config->testtask->form->runCase['result'] = array('required' => true,  'type' => 'string', 'default' => '', 'base' => true);
 $config->testtask->form->runCase['real']   = array('required' => false, 'type' => 'string', 'default' => '');
+
+$config->testtask->form = new stdclass();
+$config->testtask->form->importUnitResult = array();
+$config->testtask->form->importUnitResult['execution']   = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->testtask->form->importUnitResult['build']       = array('required' => true,  'type' => 'int',    'default' => '');
+$config->testtask->form->importUnitResult['frame']       = array('required' => false, 'type' => 'string', 'default' => '');
+$config->testtask->form->importUnitResult['owner']       = array('required' => false, 'type' => 'string', 'default' => '');
+$config->testtask->form->importUnitResult['begin']       = array('required' => true,  'type' => 'date',   'default' => '');
+$config->testtask->form->importUnitResult['end']         = array('required' => true,  'type' => 'date',   'default' => '');
+$config->testtask->form->importUnitResult['name']        = array('required' => true,  'type' => 'string', 'default' => 0);
+$config->testtask->form->importUnitResult['pri']         = array('required' => false, 'type' => 'int',    'default' => 3);
+$config->testtask->form->importUnitResult['desc']        = array('required' => false, 'type' => 'string', 'default' => '', 'control' => 'editor');
+$config->testtask->form->importUnitResult['mailto']      = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
+$config->testtask->form->importUnitResult['createdBy']   = array('required' => false, 'type' => 'string', 'default' => $account);
+$config->testtask->form->importUnitResult['createdDate'] = array('required' => false, 'type' => 'date',   'default' => $now);
+$config->testtask->form->importUnitResult['uid']         = array('required' => false, 'type' => 'string', 'default' => '');
