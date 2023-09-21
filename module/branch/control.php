@@ -135,7 +135,7 @@ class branch extends control
 
         $branchList   = array_values($this->branch->getList($productID, 0, 'all'));
         $branchIDList = $this->post->branchIDList;
-        if(empty($branchIDList)) return $this->sendError($this->session->branchManage, inLink('manage', "productID=$productID"));
+        if(empty($branchIDList)) return $this->sendError($this->lang->branch->noData, inLink('manage', "productID=$productID"));
 
         foreach($branchList as $index => $branch)
         {
@@ -149,6 +149,7 @@ class branch extends control
             $branchList[$index]->id       = $index + 1;
         }
 
+        $this->view->title      = $this->lang->branch->edit;
         $this->view->product    = $this->product->getById($productID);
         $this->view->branchList = array_values($branchList);
         $this->display();
@@ -239,7 +240,7 @@ class branch extends control
      * Ajax get branches.
      *
      * @param  int    $productID
-     * @param  int    $oldBranch
+     * @param  string $oldBranch
      * @param  string $browseType
      * @param  int    $projectID
      * @param  bool   $withMainBranch
@@ -249,7 +250,7 @@ class branch extends control
      * @access public
      * @return void
      */
-    public function ajaxGetBranches(int $productID, int $oldBranch = 0, string $browseType = 'all', int $projectID = 0, bool $withMainBranch = true, string $isTwins = 'no', string $fieldID = '0', string $multiple = '')
+    public function ajaxGetBranches(int $productID, string $oldBranch = 0, string $browseType = 'all', int $projectID = 0, bool $withMainBranch = true, string $isTwins = 'no', string $fieldID = '0', string $multiple = '')
     {
         $product = $this->loadModel('product')->getByID($productID);
         if(empty($product) || $product->type == 'normal') return false;
