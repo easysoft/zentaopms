@@ -182,68 +182,47 @@ class testtask extends control
      */
     public function create(int $productID, int $executionID = 0, int $build = 0, int $projectID = 0)
     {
+        /* 检查是否有权限访问测试单所属产品。*/
+        /* Check if user have permission to access the product to which the testtask belongs. */
+        $productID = $this->loadModel('product')->checkAccess($productID, $this->products);
+
         if(!empty($_POST))
         {
             /* 表单数据的收集和组装。 */
-            $formData = form::data($this->config->testtask->form->create)
-                ->setDefault('project', $projectID)
-                ->setDefault('createdBy', $this->app->user->account)
-                ->setDefault('createdDate', helper::now())
-                ->get();
-
+            $formData = form::data($this->config->testtask->form->create)->add('project', $projectID)->get();
             $formData = $this->loadModel('file')->processImgURL($formData, $this->config->testtask->editor->create['id'], $this->post->uid);
             if($formData->execution)
             {
-                $execution = $this->loadModel('execution')->getByID($formData->execution);
+                $execution = $this->loadModel('execution')->fetchByID($formData->execution);
                 $formData->projectID = $execution->project;
             }
 
-            /* 进行测试单数据插入操作。 */
+            /* 创建测试单。*/
+            /* Create a testtask. */
             $testtaskID = $this->testtask->create($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            /* 插入数据后对上传的文件进行处理。 */
+            /* 处理上传的文件。*/
+            /* Process uploaded files. */
             $this->loadModel('file')->updateObjectID($this->post->uid, $testtaskID, 'testtask');
             $this->file->saveUpload('testtask', $testtaskID);
 
-            /* 执行工作流的扩展动作并返回提示消息。 */
-            $message = $this->executeHooks($testtaskID);
-            if(!$message) $message = $this->lang->saveSuccess;
+            /* 执行工作流的扩展动作并返回提示消息。*/
+            /* Execute the extended action of the workflow and return a prompt message. */
+            $message = $this->executeHooks($testtaskID) ?: $this->lang->saveSuccess;
 
-            /* 根据不同的应用生成不同的跳转链接。 */
-            $testtask = $this->dao->findById($testtaskID)->from(TABLE_TESTTASK)->fetch();
-            if($this->app->tab == 'project')   $link = $this->createLink('project', 'testtask', "projectID=$testtask->project");
-            if($this->app->tab == 'execution') $link = $this->createLink('execution', 'testtask', "executionID=$testtask->execution");
-            if($this->app->tab == 'qa')        $link = $this->createLink('testtask', 'browse', "productID=" . $this->post->product);
+            /* 根据不同的应用生成不同的跳转链接。*/
+            /* Create different links according to different applications. */
+            $testtask = $this->testtask->fetchByID($testtaskID);
+            if($this->app->tab == 'project')   $link = $this->createLink('project', 'testtask', "projectID={$testtask->project}");
+            if($this->app->tab == 'execution') $link = $this->createLink('execution', 'testtask', "executionID={$testtask->execution}");
+            if($this->app->tab == 'qa')        $link = $this->createLink('testtask', 'browse', "productID={$this->post->product}");
             return $this->send(array('result' => 'success', 'message' => $message, 'load' => $link, 'id' => $testtaskID));
         }
 
-        if($executionID)
-        {
-            /* 根据所选迭代的类型，调整表单字段的文本显示。 */
-            $execution = $this->loadModel('execution')->getByID($executionID);
-            if(!empty($execution) and $execution->type == 'kanban') $this->lang->testtask->execution = str_replace($this->lang->execution->common, $this->lang->kanban->common, $this->lang->testtask->execution);
-        }
-
-        if($projectID)
-        {
-            /* 如果是无迭代项目， 则获取影子迭代的迭代ID */
-            $project = $this->loadModel('project')->getByID($projectID);
-            if($project && !$project->multiple) $this->view->noMultipleExecutionID = $this->loadModel('execution')->getNoMultipleID($project->id);
-        }
-
-        $productID = $this->loadModel('product')->checkAccess($productID, $this->products);
         $this->testtaskZen->setMenu($productID, 0, $projectID, $executionID);
+        $this->testtaskZen->assignForCreate($productID, $projectID, $executionID, $build);
 
-        $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->create;
-        $this->view->product     = $this->product->getByID($productID);
-        $this->view->projectID   = $projectID;
-        $this->view->executionID = $executionID;
-        $this->view->executions  = $productID ? $this->loadModel('product')->getExecutionPairsByProduct($productID, '', $projectID, 'stagefilter') : array();
-        $this->view->builds      = $productID ? $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk,withexecution', $projectID, 'project', '', false) : array();
-        $this->view->build       = $build;
-        $this->view->testreports = array('') + $this->loadModel('testreport')->getPairs($productID);
-        $this->view->users       = $this->loadModel('user')->getPairs('noclosed|qdfirst|nodeleted');
         $this->display();
     }
 
