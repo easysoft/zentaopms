@@ -560,3 +560,9 @@ INSERT INTO `zt_metric`(`purpose`, `scope`, `object`, `stage`, `name`, `code`, `
 INSERT INTO `zt_metric`(`purpose`, `scope`, `object`, `stage`, `name`, `code`, `unit`, `desc`, `definition`, `when`, `event`, `cronCFG`, `time`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `order`, `deleted`) VALUES ('scale', 'user', 'feedback', 'released', '按人员统计的每日评审反馈数', 'count_of_daily_review_feedback_in_user', 'count', '按人员统计的日评审反馈数表示每个人每日评审的反馈数量之和。反映了每个人每日评审的反馈的规模。该数值越大，说明工作量越大。', '所有反馈个数求和\n由谁评审为某人\n评审时间为某日\n过滤已删除的反馈\n过滤已删除产品的反馈', 'realtime', '', '', '', 'system', '2023-08-22 08:00:00', '', NULL, 0, '0');
 
 ALTER TABLE `zt_repo` ADD `lastCommit` DATETIME NULL DEFAULT NULL AFTER `lastSync`;
+
+ALTER TABLE `zt_story` ADD `releasedDate` datetime DEFAULT NULL AFTER `reviewedDate`;
+ALTER TABLE `zt_project` ADD `firstEnd` date DEFAULT NULL AFTER `end`;
+ALTER TABLE `zt_product` ADD `closedDate` date DEFAULT NULL AFTER `createdVersion`;
+ALTER TABLE `zt_productplan` ADD `finishedDate` datetime DEFAULT NULL AFTER `end`;
+ALTER TABLE `zt_productplan` ADD `closedDate` datetime DEFAULT NULL AFTER `finishedDate`;
