@@ -177,7 +177,11 @@ class searchModel extends model
                 if($this->post->$fieldName == 'module')
                 {
                     $allModules = $this->loadModel('tree')->getAllChildId($value);
-                    if($allModules) $condition = " NOT " . helper::dbIN($allModules);
+                    if($allModules)
+                    {
+                        if(count($allModules) > 1) $condition = " NOT " . helper::dbIN($allModules);
+                        else $condition = " !" . helper::dbIN($allModules);
+                    }
                 }
                 else
                 {

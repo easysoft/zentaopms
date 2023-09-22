@@ -1130,7 +1130,8 @@ class bugModel extends model
         if(empty($executionIdList)) return array();
 
         $executions = $this->dao->select('id,type,begin')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->fetchAll('id');
-        $condition  = 'execution NOT ' . helper::dbIN($executionIdList);
+        if(count($executionIdList) > 1)  $condition  = 'execution NOT ' . helper::dbIN($executionIdList);
+        else $condition  = 'execution !' . helper::dbIN($executionIdList);
         $minBegin   = '';
         foreach($executions as $execution)
         {

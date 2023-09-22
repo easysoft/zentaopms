@@ -1175,7 +1175,11 @@ class actionModel extends model
         $noMultipleExecutions = $this->dao->select('id')->from(TABLE_PROJECT)->where('multiple')->eq(0)->andWhere('type')->in('sprint,kanban')->fetchPairs('id', 'id');
 
         $condition = "(`objectType` IN ('doc', 'doclib') OR ($condition)) AND `objectType` NOT IN ('program', 'effort', 'execution')";
-        if($noMultipleExecutions) $condition .= " OR (`objectID` NOT " . helper::dbIN($noMultipleExecutions) . " AND `objectType` = 'execution')";
+        if($noMultipleExecutions)
+        {
+            if(count($noMultipleExecutions) > 1) $condition .= " OR (`objectID` NOT " . helper::dbIN($noMultipleExecutions) . " AND `objectType` = 'execution')";
+            else $condition .= " OR (`objectID` !" . helper::dbIN($noMultipleExecutions) . " AND `objectType` = 'execution')";
+        }
         $condition .= " OR (`objectID` IN ($programCondition) AND `objectType` = 'program')";
         $condition .= " OR (`objectID` IN ($efforts) AND `objectType` = 'effort')";
         $condition  = "($condition)";
