@@ -72,7 +72,7 @@ class productplanZen extends productplan
         }
         else
         {
-            $planGroup = $this->productplan->getGroupByProduct($product->id, 'skipParent', '', $orderBy);
+            $planGroup = $this->productplan->getGroupByProduct(array($product->id), 'skipparent', $orderBy);
             $branches  = $this->branch->getPairs($product->id, 'active');
 
             foreach($branches as $id => $name)
