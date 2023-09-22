@@ -2,16 +2,11 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/caselib.class.php';
+
+zdTable('testsuite')->gen(10);
+zdTable('user')->gen(1);
+
 su('admin');
-
-function initData()
-{
-    $caselib = zdTable('testsuite');
-    $caselib->type->range('[library]');
-    $caselib->gen(10);
-}
-
-initData();
 
 /**
 
