@@ -35,6 +35,7 @@ $caseIdList = array(1, 2, 3);
 
 $case1 = new stdclass();
 $case1->version = 2;
+$case1->steps   = array();
 
 $case2 = new stdclass();
 $case2->version  = 3;
