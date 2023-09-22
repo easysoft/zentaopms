@@ -2349,7 +2349,7 @@ class repoModel extends model
      * @access public
      * @return object
      */
-    public function processGitService($repo, $getCodePath = true)
+    public function processGitService($repo, $getCodePath = false)
     {
         $service = $this->loadModel('pipeline')->getByID($repo->serviceHost);
         if($repo->SCM == 'Gitlab')

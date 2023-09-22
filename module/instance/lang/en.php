@@ -225,6 +225,7 @@ $lang->instance->statusList['destroyed']        = 'Destroyed';
 $lang->instance->statusList['abnormal']         = 'Abnormal';
 $lang->instance->statusList['upgrading']        = 'Updating';
 $lang->instance->statusList['unknown']          = 'unknown';
+$lang->instance->statusList['scheduling']       = 'Scheduling';
 
 $lang->instance->htmlStatusesClass = array();
 $lang->instance->htmlStatusesClass['running']          = 'success';
