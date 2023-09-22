@@ -55,20 +55,21 @@ class productplan extends control
     }
 
     /**
+     * 创建一个计划。
      * Create a plan.
      *
-     * @param string $productID
-     * @param int    $branchID
-     * @param int    $parent
-     *
+     * @param  int    $productID
+     * @param  int    $branchID
+     * @param  int    $parent
      * @access public
      * @return void
      */
-    public function create(string $productID = '', int $branchID = 0, int $parent = 0)
+    public function create(int $productID = 0, int $branchID = 0, int $parent = 0)
     {
         if(!empty($_POST))
         {
-            $planID = $this->productplan->create();
+            $planData = form::data()->get();
+            $planID   = $this->productplan->create($planData, $this->post->future);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('productplan', $planID, 'opened');
 
@@ -84,36 +85,24 @@ class productplan extends control
 
         $this->commonAction($productID, $branchID);
         $lastPlan = $this->productplan->getLast($productID, '', $parent);
-        $product  = $this->loadModel('product')->getById($productID);
-
+        $product  = $this->loadModel('product')->getByID($productID);
         if($lastPlan)
         {
             $timestamp = strtotime($lastPlan->end);
             $weekday   = date('w', $timestamp);
             $delta     = 1;
-            if($weekday == '5' or $weekday == '6') $delta = 8 - $weekday;
+            if($weekday == '5' || $weekday == '6') $delta = 8 - $weekday;
 
             $begin = date('Y-m-d', strtotime("+$delta days", $timestamp));
         }
         $this->view->begin = $lastPlan ? $begin : date('Y-m-d');
-        if($parent) $this->view->parentPlan = $this->productplan->getById($parent);
-        $branchPairs = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID, 'active');
+        if($parent) $this->view->parentPlan = $this->productplan->getByID($parent);
 
-        /*Get default branch.*/
-        $branchList = $this->loadModel('branch')->getList($productID);
-        foreach($branchList as $branch)
-        {
-            if($branch->default) $defaultBranch = $branch->id;
-        }
-
-        $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->productplan->create;
-
-        $this->view->productID       = $productID;
+        $this->view->title           = $this->view->product->name . $this->lang->colon . $this->lang->productplan->create;
         $this->view->product         = $product;
         $this->view->lastPlan        = $lastPlan;
         $this->view->branch          = $branchID;
-        $this->view->branches        = $branchPairs;
-        $this->view->defaultBranch   = $defaultBranch;
+        $this->view->branches        = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID, 'active');
         $this->view->parent          = $parent;
         $this->view->parentPlanPairs = $this->productplan->getTopPlanPairs($productID, 'done,closed');
         $this->display();

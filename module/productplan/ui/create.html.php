@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('weekend', $config->execution->weekend);
-jsVar('productID', $productID);
+jsVar('productID', $product->id);
 jsVar('lastLang', $lang->productplan->last);
 jsVar('parentPlanID', $parent);
 
@@ -46,7 +46,7 @@ formPanel
         set::name('parent'),
         set::items($parentPlanPairs),
         $product->type != 'normal' ? on::change('loadBranches') : '',
-    ) : null,
+    ) : formHidden('parent', $parent),
     !$product->shadow && $product->type != 'normal' ? formGroup
     (
         set::width('1/2'),
@@ -136,7 +136,6 @@ formPanel
         )
     ),
     formHidden('product', $product->id),
-    formHidden('parent', $parent)
 );
 
 /* ====== Render page ====== */

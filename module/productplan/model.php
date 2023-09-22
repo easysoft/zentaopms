@@ -460,26 +460,18 @@ class productplanModel extends model
     }
 
     /**
+     * 创建一个计划。
      * Create a plan.
      *
+     * @param  object    $plan
+     * @param  bool      $isFuture
      * @access public
-     * @return int
+     * @return int|false
      */
-    public function create()
+    public function create(object $plan, bool $isFuture): int|false
     {
-        $plan = fixer::input('post')->stripTags($this->config->productplan->editor->create['id'], $this->config->allowedTags)
-            ->setIF($this->post->future || empty($_POST['begin']), 'begin', $this->config->productplan->future)
-            ->setIF($this->post->future || empty($_POST['end']), 'end', $this->config->productplan->future)
-            ->setDefault('createdBy', $this->app->user->account)
-            ->setDefault('createdDate', helper::now())
-            ->setDefault('branch,order', 0)
-            ->cleanINT('parent')
-            ->join('branch', ',')
-            ->remove('delta,uid,future')
-            ->get();
-
         $product = $this->loadModel('product')->getByID($plan->product);
-        if($product->type != 'normal' and empty($plan->branch))
+        if($product->type != 'normal' && $plan->branch == '')
         {
             $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
             dao::$errors['branch[]'] = sprintf($this->lang->error->notempty, $this->lang->product->branch);
@@ -488,45 +480,35 @@ class productplanModel extends model
         if($plan->parent > 0)
         {
             $parentPlan = $this->getByID($plan->parent);
-            if($parentPlan->begin != $this->config->productplan->future)
-            {
-                if($plan->begin < $parentPlan->begin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLessThanParent, $parentPlan->begin);
-            }
-            if($parentPlan->end != $this->config->productplan->future)
-            {
-                if($plan->end !== $this->config->productplan->future and $plan->end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreatThanParent, $parentPlan->end);
-            }
+            if($parentPlan->begin != $this->config->productplan->future && $plan->begin < $parentPlan->begin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLessThanParent, $parentPlan->begin);
+            if($parentPlan->end != $this->config->productplan->future && $plan->end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreatThanParent, $parentPlan->end);
         }
 
-        if(!$this->post->future and strpos($this->config->productplan->create->requiredFields, 'begin') !== false and empty($_POST['begin']))
-        {
-            dao::$errors['begin'] = sprintf($this->lang->error->notempty, $this->lang->productplan->begin);
-        }
-        if(!$this->post->future and strpos($this->config->productplan->create->requiredFields, 'end') !== false and empty($_POST['end']))
-        {
-            dao::$errors['end'] = sprintf($this->lang->error->notempty, $this->lang->productplan->end);
-        }
+        if(!$isFuture && strpos($this->config->productplan->create->requiredFields, 'begin') !== false && empty($plan->begin)) dao::$errors['begin'] = sprintf($this->lang->error->notempty, $this->lang->productplan->begin);
+        if(!$isFuture && strpos($this->config->productplan->create->requiredFields, 'end') !== false && empty($plan->end)) dao::$errors['end'] = sprintf($this->lang->error->notempty, $this->lang->productplan->end);
         if(dao::isError()) return false;
+
+        $plan->begin = $isFuture || empty($plan->begin) ? $this->config->productplan->future : $plan->begin;
+        $plan->end   = $isFuture || empty($plan->end)   ? $this->config->productplan->future : $plan->end;
 
         $plan = $this->loadModel('file')->processImgURL($plan, $this->config->productplan->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PRODUCTPLAN)->data($plan)
             ->autoCheck()
             ->batchCheck($this->config->productplan->create->requiredFields, 'notempty')
-            ->checkIF(!$this->post->future && !empty($_POST['begin']) && !empty($_POST['end']), 'end', 'ge', $plan->begin)
+            ->checkIF(!$isFuture, 'end', 'ge', $plan->begin)
             ->checkFlow()
             ->exec();
-        if(!dao::isError())
+        if(dao::isError()) return false;
+
+        $planID = $this->dao->lastInsertID();
+        $this->file->updateObjectID($this->post->uid, $planID, 'plan');
+        $this->loadModel('score')->create('productplan', 'create', $planID);
+        if(!empty($plan->parent) && $parentPlan->parent == '0')
         {
-            $planID = $this->dao->lastInsertID();
-            $this->file->updateObjectID($this->post->uid, $planID, 'plan');
-            $this->loadModel('score')->create('productplan', 'create', $planID);
-            if(!empty($plan->parent) and $parentPlan->parent == '0')
-            {
-                $plan->id = $planID;
-                $this->transferStoriesAndBugs($plan);
-            }
-            return $planID;
+            $plan->id = $planID;
+            $this->transferStoriesAndBugs($plan);
         }
+        return $planID;
     }
 
     /**
