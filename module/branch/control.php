@@ -39,8 +39,7 @@ class branch extends control
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
-        $recTotal   = count($branchList);
-        $pager      = new pager($recTotal, $recPerPage, $pageID);
+        $pager      = new pager($recTotal ? $recTotal : count($branchList), $recPerPage, $pageID);
         $branchList = array_chunk($branchList, $pager->recPerPage);
 
         $this->view->title       = $this->lang->branch->manage;
