@@ -13,15 +13,15 @@ declare(strict_types=1);
 class productplan extends control
 {
     /**
+     * 设置公共属性。
      * Common actions.
      *
-     * @param  int $productID
-     * @param  int $branch
-     *
+     * @param  int    $productID
+     * @param  int    $branch
      * @access public
      * @return void
      */
-    public function commonAction($productID, $branch = 0)
+    public function commonAction(int $productID, int $branch = 0)
     {
         $product = $this->loadModel('product')->getById($productID);
         if(empty($product)) $this->locate($this->createLink('product', 'create'));
@@ -43,7 +43,8 @@ class productplan extends control
 
         if($product->shadow)
         {
-            $projectID = $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($productID)->fetch('project');
+            $projectList = $this->product->getProjectPairsByProductIdList(array($productID));
+            $projectID   = (int) key($projectList);
             $this->loadModel('project')->setMenu($projectID);
         }
 
