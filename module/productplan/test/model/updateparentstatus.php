@@ -1,31 +1,26 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/productplan.class.php';
-
 /**
 
 title=productpanModel->updateParentStatus();
+timout=0
 cid=1
-pid=1
-
-将id为1的计划改为wait状态 >> 0
-将id为2的计划改为doing状态 >> 1
-将id为3的计划改为closed状态 >> 1
-将id为4的计划改为done状态 >> 1
 
 */
-$plan = new productPlan('admin');
 
-$parentId = array();
-$parentid[0] = 1;
-$parentid[1] = 2;
-$parentid[2] = 3;
-$parentid[3] = 4;
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/productplan.class.php';
 
-#此方法将父级plan状态改为与子plan相同的状态
-r($plan->updateParentStatus($parentid[0])) && p() && e('0'); //将id为1的计划改为wait状态
-r($plan->updateParentStatus($parentid[1])) && p() && e('1'); //将id为2的计划改为doing状态
-r($plan->updateParentStatus($parentid[2])) && p() && e('1'); //将id为3的计划改为closed状态
-r($plan->updateParentStatus($parentid[3])) && p() && e('1'); //将id为4的计划改为done状态
-?>
+$plan = zdTable('productplan')->config('productplan');
+$plan->parent->range('0,`-1`,2,`-1`,4,`-1`,6,`-1`,8');
+$plan->status->range('doing,doing,wait,doing,closed,doing,done,wait,doing');
+$plan->gen(9);
+
+$parentIdList = array(1, 2, 4, 6, 8);
+
+$planTester = new productPlan('admin');
+r($planTester->updateParentStatusTest($parentIdList[0])) && p('0:field,old,new') && e('status,doing,wait');   // 测试将计划1的状态更新为wait
+r($planTester->updateParentStatusTest($parentIdList[1])) && p()                  && e('0');                   // 测试不更新计划2的状态
+r($planTester->updateParentStatusTest($parentIdList[2])) && p('0:field,old,new') && e('status,doing,closed'); // 测试将计划4的状态更新为closed
+r($planTester->updateParentStatusTest($parentIdList[3])) && p('0:field,old,new') && e('status,doing,done');   // 测试将计划4的状态更新为done
+r($planTester->updateParentStatusTest($parentIdList[4])) && p('0:field,old,new') && e('status,wait,doing');   // 测试将计划4的状态更新为doing

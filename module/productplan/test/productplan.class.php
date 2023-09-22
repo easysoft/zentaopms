@@ -240,17 +240,23 @@ class productPlan
     }
 
     /**
-     * Update parent status
+     * 更新父计划的状态。
+     * Update a parent plan's status.
      *
-     * @param  int $parentID
+     * @param  int    $parentID
      * @access public
      * @return bool
      */
-    public function updateParentStatus($parentID)
+    public function updateParentStatusTest(int $parentID): array
     {
-        $productplans = $this->productplan->updateParentStatus($parentID);
+        $this->productplan->app->rawMethod = 'create';
+        $oldPlan = $this->productplan->getByID($parentID);
+
+        $this->productplan->updateParentStatus($parentID);
         if(dao::isError()) return dao::getError();
-        return $productplans;
+
+        $newPlan = $this->productplan->getByID($parentID);
+        return common::createChanges($oldPlan, $newPlan);
     }
 
     /**

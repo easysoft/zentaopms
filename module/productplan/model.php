@@ -677,13 +677,14 @@ class productplanModel extends model
     }
 
     /**
+     * 更新父计划的状态。
      * Update a parent plan's status.
      *
      * @param  int    $parentID
      * @access public
      * @return bool
      */
-    public function updateParentStatus($parentID)
+    public function updateParentStatus(int $parentID): bool
     {
         $oldPlan     = $this->getByID($parentID);
         $childStatus = $this->dao->select('status')->from(TABLE_PRODUCTPLAN)->where('parent')->eq($parentID)->andWhere('deleted')->eq(0)->fetchPairs();
@@ -696,8 +697,8 @@ class productplanModel extends model
         }
 
         $plan = new stdclass();
-        if(count($childStatus) == 1 and isset($childStatus['wait'])) return;
-        if(count($childStatus) == 1 and isset($childStatus['closed']))
+        if(count($childStatus) == 1 && isset($childStatus['wait'])) return true;
+        if(count($childStatus) == 1 && isset($childStatus['closed']))
         {
             if($oldPlan->status != 'closed')
             {
@@ -705,7 +706,7 @@ class productplanModel extends model
                 $parentAction = 'closedbychild';
             }
         }
-        elseif(!isset($childStatus['wait']) and !isset($childStatus['doing']))
+        elseif(!isset($childStatus['wait']) && !isset($childStatus['doing']))
         {
             if($oldPlan->status != 'done')
             {
@@ -713,13 +714,10 @@ class productplanModel extends model
                 $parentAction = 'finishedbychild';
             }
         }
-        else
+        elseif($oldPlan->status != 'doing')
         {
-            if($oldPlan->status != 'doing')
-            {
-                $status       = 'doing';
-                $parentAction = $this->app->rawMethod == 'create' ? 'createchild' : 'activatedbychild';
-            }
+            $status       = 'doing';
+            $parentAction = $this->app->rawMethod == 'create' ? 'createchild' : 'activatedbychild';
         }
 
         if(!empty($status))
