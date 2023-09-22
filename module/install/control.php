@@ -41,8 +41,11 @@ class install extends control
         if(!isset($this->view->versionName)) $this->view->versionName = $this->config->version; // If the versionName variable has been defined in the max version, it cannot be defined here to avoid being overwritten.
         if($this->config->inQuickon)
         {
-            $devopsName = substr($this->view->versionName, 0, 3) == 'IPD' ? 'DevOps ' : 'DevOps';
-            $this->view->versionName = $devopsName . $this->view->versionName;
+            $editionName = $this->config->edition === 'open' ? $this->lang->pmsName : $this->lang->{$this->config->edition . 'Name'};
+            if($this->config->edition === 'max') $editionName = '';
+            $this->view->versionName   = $editionName . str_replace(array('max', 'biz', 'ipd'), '', $this->view->versionName);
+            $this->view->versionName   = $this->lang->devopsPrefix . $this->view->versionName;
+            $this->lang->install->desc = $this->lang->install->desc . "\n" . $this->lang->install->devopsDesc;
         }
 
         $this->display();
@@ -284,11 +287,12 @@ class install extends control
 
             if($this->config->edition != 'open') $this->loadModel('upgrade')->processDataset();
 
-            return print(js::locate(inlink('step6'), 'parent'));
+            $link = $this->config->inQuickon ? inlink('app') : inlink('step6');
+            return print(js::locate($link, 'parent'));
         }
 
+        if($this->config->inQuickon) $this->install->saveConfigFile();
         $this->app->loadLang('upgrade');
-
         $this->view->title = $this->lang->install->getPriv;
         if(!isset($this->config->installed) or !$this->config->installed)
         {
@@ -316,11 +320,11 @@ class install extends control
 
         if($this->config->inQuickon)
         {
+            $editionName = $this->config->edition === 'open' ? $this->lang->pmsName : $this->lang->{$this->config->edition . 'Name'};
             $this->lang->install->successLabel       = str_replace('IPD', '', $this->lang->install->successLabel);
             $this->lang->install->successNoticeLabel = str_replace('IPD', '', $this->lang->install->successNoticeLabel);
-            $this->config->version = $this->lang->{$this->config->edition . 'Name'} . str_replace(array('max', 'biz', 'ipd'), '', $this->config->version);
-            $devopsName = substr($this->config->version, 0, 3) == 'IPD' ? 'DevOps ' : 'DevOps';
-            $this->config->version = $devopsName . $this->config->version;
+            $this->config->version                   = $editionName . str_replace(array('max', 'biz', 'ipd'), '', $this->config->version);
+            $this->config->version                   = $this->lang->devopsPrefix . $this->config->version;
         }
 
         if($canDelFile and file_exists($upgradeFile)) unlink($upgradeFile);
@@ -330,5 +334,150 @@ class install extends control
         $this->view->installFileDeleted = $installFileDeleted;
         $this->view->title              = $this->lang->install->success;
         $this->display();
+    }
+
+    /**
+     * Install apps of devops.
+     * 安装devops相关应用。
+     *
+     * @access public
+     * @return void
+     */
+    public function app()
+    {
+        $this->loadModel('common');
+        $this->loadModel('solution');
+        $cloudSolution = $this->loadModel('store')->getSolution('name', 'devops');
+        $components    = $this->loadModel('store')->solutionConfig('name', 'devops');
+
+        if($_POST)
+        {
+            $solution = $this->solution->create($cloudSolution, $components);
+            if(dao::isError()) $this->send(array('result' => 'failure', 'message' => dao::getError()));
+
+            $this->send(array('result' => 'success', 'message' => $this->lang->solution->notices->success, 'data' => $solution, 'locate' => $this->inLink('progress', "id={$solution->id}&install=true")));
+        }
+
+        $clusterResource = $this->loadModel('cne')->cneMetrics();
+        $freeMemory      = intval($clusterResource->metrics->memory->allocatable * 0.9);
+        $appMap          = $this->loadModel('store')->getAppMapByNames(array_keys($cloudSolution->apps));
+        $category        = helper::arrayColumn($components->category, 'name');
+        $category        = array_filter($category, function($cate){return $cate !== 'pms';});
+
+        $this->view->title         = $this->lang->solution->install;
+        $this->view->cloudSolution = $cloudSolution;
+        $this->view->components    = $components;
+        $this->view->appMap        = $appMap;
+        $this->view->freeMemory    = $freeMemory;
+        $this->view->category      = $category;
+
+        $this->display();
+    }
+
+    /**
+     * Show installation progress of solution.
+     * 应用安装进度。
+     *
+     * @param  int    $id
+     * @param  bool   $install
+     * @access public
+     * @return void
+     */
+    public function progress($id, $install = false)
+    {
+        $solution  = $this->loadModel('solution')->getByID($id);
+
+        $this->view->title    = $this->lang->solution->progress;
+        $this->view->install  = $install;
+        $this->view->solution = $solution;
+
+        $this->display();
+    }
+
+    /**
+     * Get installing progress of solution by ajax.
+     * 获取安装进度。
+     *
+     * @param  int    $id
+     * @access public
+     * @return void
+     */
+    public function ajaxProgress($id)
+    {
+        $this->loadModel('common');
+        $solution = $this->loadModel('solution')->getByID($id);
+        $logs     = array();
+        if(in_array($solution->status, array('installing', 'installed')))
+        {
+            $result  = 'success';
+            $message = '';
+
+            if($solution->status == 'installing')
+            {
+                if((time() - strtotime($solution->updatedDate)) > 60 * 20)
+                {
+                    $this->solution->saveStatus($id, 'timeout');
+                    $result  = 'fail';
+                    $message = $this->lang->solution->errors->timeout;
+                }
+
+                if($result == 'success')
+                {
+                    $components = json_decode($solution->components);
+                    foreach($components as $categorty => $componentApp)
+                    {
+                        if($componentApp->status == 'installing')
+                        {
+                            $instance = $this->loadModel('instance')->instanceOfSolution($solution, $componentApp->chart);
+                            if($instance)
+                            {
+                                $chartLogs = $this->loadModel('cne')->getAppLogs($instance);
+                                $logs[$componentApp->chart] = !empty($chartLogs->data) ? $chartLogs->data : array();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            $result  = 'fail';
+            $message = zget($this->lang->solution->installationErrors, $solution->status, $this->lang->solution->errors->hasInstallationError);
+        }
+
+        $this->send(array('result' => $result, 'message' => $message, 'data' => json_decode($solution->components), 'logs' => $logs));
+    }
+
+    /**
+     * Start install by ajax.
+     * 安装应用。
+     *
+     * @param  int    $solutionID
+     * @access public
+     * @return void
+     */
+    public function ajaxInstall($solutionID)
+    {
+        $this->loadModel('solution')->install($solutionID);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        $this->send(array('result' => 'success', 'message' => '', 'locate' => $this->inLink('step6')));
+    }
+
+    /**
+     * Uninstall app by ajax.
+     * 取消安装时卸载应用。
+     *
+     * @param  int    $solutionID
+     * @access public
+     * @return void
+     */
+    public function ajaxUninstall($solutionID)
+    {
+        $this->loadModel('common');
+        $this->loadModel('solution')->uninstall($solutionID);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        $this->send(array('result' => 'success', 'message' => '', 'locate' => $this->inLink('index')));
     }
 }

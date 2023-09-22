@@ -1149,8 +1149,12 @@ class cneModel extends model
     public function apiPost($url, $data, $header = array(), $host = '')
     {
         $requestUri = ($host ? $host : $this->config->CNE->api->host) . $url;
-        $result     = json_decode(commonModel::http($requestUri, $data, array(CURLOPT_CUSTOMREQUEST => 'POST'), $header, 'json', 20));
-        if($result && $result->code == 200) return $result;
+        $result     = json_decode(commonModel::http($requestUri, $data, array(CURLOPT_CUSTOMREQUEST => 'POST'), $header, 'json', 'POST', 20));
+        if($result && in_array($result->code, array(200, 201)))
+        {
+            $result->code = 200;
+            return $result;
+        }
         if($result) return $this->translateError($result);
 
         return $this->cneServerError();
