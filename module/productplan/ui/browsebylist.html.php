@@ -223,9 +223,9 @@ featureBar
             'browseType' => '{key}',
             'queryID'    => $queryID,
             'orderBy'    => $orderBy,
-            'recTotal'   => $recTotal,
-            'recPerPage' => $recPerPage,
-            'pageID'     => $pageID
+            'recTotal'   => $pager->recTotal,
+            'recPerPage' => $pager->recPerPage,
+            'pageID'     => $pager->pageID
         )
     )),
     li(searchToggle(set::open($browseType == 'bySearch'))),
@@ -260,7 +260,7 @@ dtable
     set::nested(true),
     set::checkable(true),
     set::onRenderCell(jsRaw('window.renderProductPlanList')),
-    set::sortLink(createLink('product', 'all', "browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$recTotal}&recPerPage={$recPerPage}")),
+    set::sortLink(createLink('product', 'all', "browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
     set::footToolbar(array
     (
         'type'  => 'btn-group',
