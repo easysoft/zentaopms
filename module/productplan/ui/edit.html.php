@@ -42,8 +42,9 @@ formPanel
         set::width('1/2'),
         set::label($lang->productplan->branch),
         set::required(true),
-        select
+        picker
         (
+            setID('branch'),
             set::name('branch[]'),
             set::items($branchTagOption),
             set::value($plan->branch),
@@ -73,9 +74,9 @@ formPanel
             set::width('1/4'),
             set::label($lang->productplan->begin),
             set::control('date'),
+            setID('begin'),
             set::name('begin'),
             set::value($plan->begin != $config->productplan->future ? formatTime($plan->begin) : ''),
-            set::disabled($plan->begin  == $config->productplan->future && $plan->end == $config->productplan->future),
         ),
         formGroup
         (
@@ -99,6 +100,7 @@ formPanel
             set::width('1/4'),
             set::label($lang->productplan->end),
             set::control('date'),
+            setID('end'),
             set::name('end'),
             set::value($plan->end != $config->productplan->future ? formatTime($plan->end) : ''),
         ),
