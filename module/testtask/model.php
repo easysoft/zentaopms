@@ -1305,7 +1305,7 @@ class testtaskModel extends model
      * @access public
      * @return bool|string
      */
-    public function createResult(int $runID = 0, int $caseID, int $version, array $stepResults): bool|string
+    public function createResult(int $runID, int $caseID, int $version, array $stepResults): bool|string
     {
         /* 根据测试用例步骤的执行结果获取测试用例的执行结果。*/
         /* Get the execution results of the test case based on the execution results of the test case steps. */
