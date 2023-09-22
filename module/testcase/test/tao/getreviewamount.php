@@ -18,4 +18,4 @@ pid=1
 
 $testcase = new testcaseTest();
 
-r($testcase->getReviewAmountTest()) && p() && e('7'); // 测试查询待评审的用例数量
+r($testcase->getReviewAmountTest()) && p() && e('8'); // 测试查询待评审的用例数量
