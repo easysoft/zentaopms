@@ -310,7 +310,7 @@ class productplan extends control
 
         if($viewType == 'kanban') $this->productplanZen->assignKanbanData($product, $branchID, $orderBy);
 
-        $plans = $this->productplan->getList($productID, $branch, $browseType, $pager, $sort, "", $queryID);
+        $plans = $this->productplan->getList($productID, (string) $branch, $browseType, $pager, $sort, "", $queryID);
 
         $this->view->title      = $productName . $this->lang->colon . $this->lang->productplan->browse;
         $this->view->productID  = $productID;

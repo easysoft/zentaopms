@@ -68,7 +68,7 @@ class productplanZen extends productplan
         {
             $planGroup = $this->productplan->getList($product->id, 0, 'all', '', $orderBy, 'skipparent');
 
-            $this->view->planCount  = count(array_filter($planGroup));
+            $this->view->planCount = count(array_filter($planGroup));
         }
         else
         {
