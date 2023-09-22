@@ -2100,9 +2100,9 @@ class story extends control
      * @access public
      * @return string
      */
-    public function ajaxGetUserStories($userID = '', $id = '', $appendID = 0)
+    public function ajaxGetUserStories(int $userID = 0, string $id = '', int $appendID = 0)
     {
-        if($userID == '') $userID = $this->app->user->id;
+        if(empty($userID)) $userID = $this->app->user->id;
         $user    = $this->loadModel('user')->getById($userID, 'id');
         $stories = $this->story->getUserStoryPairs($user->account, 10, 'story', '', $appendID);
 
