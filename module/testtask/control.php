@@ -140,12 +140,16 @@ class testtask extends control
         /* Check if user have permission to access the product to which the testtask belongs. */
         $productID = $this->loadModel('product')->checkAccess($productID, $this->products);
 
+        /* 保存部分内容到 session 中供后面使用。*/
         /* Save session. */
         $this->session->set('testtaskList', $this->app->getURI(true), 'qa');
         $this->session->set('caseList',     $this->app->getURI(true), $this->app->tab);
         $this->session->set('buildList',    $this->app->getURI(true) . '#app=' . $this->app->tab, 'execution');
 
         $this->loadModel('qa')->setMenu($productID);
+
+        /* 确保二级导航高亮的是测试用例。*/
+        /* Make sure the secondary navigation highlights test cases. */
         $this->app->rawModule = 'testcase';
 
         /* 预处理部分变量供查询使用。*/
