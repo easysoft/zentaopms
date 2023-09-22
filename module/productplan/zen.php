@@ -51,13 +51,13 @@ class productplanZen extends productplan
      * 设置计划看板页面数据。
      * Set kanban page data.
      *
-     * @param  object     $product
-     * @param  string|int $branchID
-     * @param  string     $orderBy
+     * @param  object    $product
+     * @param  string    $branchID
+     * @param  string    $orderBy
      * @access protected
      * @return void
      */
-    protected function assignKanbanData(object $product, string|int $branchID = 0, string $orderBy = 'pri')
+    protected function assignKanbanData(object $product, string $branchID, string $orderBy)
     {
         $branches    = array();
         $branchPairs = array();

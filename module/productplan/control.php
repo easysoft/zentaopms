@@ -280,6 +280,7 @@ class productplan extends control
     }
 
     /**
+     * 计划列表。
      * Browse plans.
      *
      * @param  int    $productID
@@ -309,37 +310,28 @@ class productplan extends control
         $viewType = $this->cookie->viewType ? $this->cookie->viewType : 'list';
 
         $this->commonAction($productID, $branch);
-        $product          = $this->product->getById($productID);
-        $productName      = empty($product) ? '' : $product->name;
-        $branchList       = $this->branch->getList($productID, 0, 'all');
-        $branchStatusList = array();
-        foreach($branchList as $productBranch) $branchStatusList[$productBranch->id] = $productBranch->status;
+        $product     = $this->product->getById($productID);
+        $productName = empty($product) ? '' : $product->name;
 
         /* Build the search form. */
         $queryID   = $browseType == 'bySearch' ? (int)$queryID : 0;
         $actionURL = $this->createLink($this->app->rawModule, 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
         $this->productplan->buildSearchForm($queryID, $actionURL, $product);
 
-        if($viewType == 'kanban') $this->productplanZen->assignKanbanData($productID, $branch, $orderBy);
+        if($viewType == 'kanban') $this->productplanZen->assignKanbanData($product, $branchID, $orderBy);
 
         $plans = $this->productplan->getList($productID, $branch, $browseType, $pager, $sort, "", $queryID);
 
-        $this->view->title            = $productName . $this->lang->colon . $this->lang->productplan->browse;
-        $this->view->productID        = $productID;
-        $this->view->branch           = $branch;
-        $this->view->branchID         = $branchID;
-        $this->view->branchStatusList = $branchStatusList;
-        $this->view->productPlansNum  = $this->productplan->getList($productID, $branch, 'all');
-        $this->view->browseType       = $browseType;
-        $this->view->viewType         = $viewType;
-        $this->view->orderBy          = $orderBy;
-        $this->view->users            = $this->loadModel('user')->getPairs('noletter|nodeleted');
-        $this->view->plans            = $plans;
-        $this->view->pager            = $pager;
-        $this->view->projects         = $this->product->getProjectPairsByProduct($productID, (string)$branch, '', 'noclosed', 'multiple');
-        $this->view->statusList       = $this->lang->productplan->featureBar['browse'];
-        $this->view->queryID          = $queryID;
-        $this->view->summary          = $this->productplan->getSummary($plans);
+        $this->view->title      = $productName . $this->lang->colon . $this->lang->productplan->browse;
+        $this->view->productID  = $productID;
+        $this->view->branchID   = $branchID;
+        $this->view->browseType = $browseType;
+        $this->view->viewType   = $viewType;
+        $this->view->orderBy    = $orderBy;
+        $this->view->plans      = $plans;
+        $this->view->pager      = $pager;
+        $this->view->queryID    = $queryID;
+        $this->view->summary    = $this->productplan->getSummary($plans);
         $this->display();
     }
 
