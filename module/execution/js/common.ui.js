@@ -57,7 +57,7 @@ function computeEndDate()
     let beginDate = $('input[name=begin]').val();
     if(!beginDate) return;
 
-    delta     = parseInt(delta);
+    delta     = currentDelta = parseInt(delta);
     beginDate = convertStringToDate(beginDate);
     if((delta == 7 || delta == 14) && (beginDate.getDay() == 1))
     {
@@ -68,7 +68,7 @@ function computeEndDate()
 
     $('#end').zui('datePicker').$.changeState({value: endDate});
     computeWorkDays();
-    setTimeout(function(){$('[name=delta]').val(`${delta}`)}, 0);
+    setTimeout(function(){$('[name=delta]').val(`${currentDelta}`)}, 0);
 }
 
 /**
