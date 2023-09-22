@@ -87,7 +87,7 @@ class testcaseTao extends testcaseModel
 
     /**
      * 获取待确认的用例列表。
-     * Get need fonfirm list.
+     * Get need confirm case list.
      *
      * @param  int        $productID
      * @param  string|int $branch

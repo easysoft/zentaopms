@@ -1800,4 +1800,26 @@ class testcaseTest
 
         return $count;
     }
+
+    /**
+     * 测试根据套件获取用例。
+     * Test get need confirm case list.
+     *
+     * @param  int        $productID
+     * @param  int|string $branch
+     * @param  int        $moduleID
+     * @param  string     $auto
+     * @param  string     $caseType
+     * @param  string     $orderBy
+     * @access public
+     * @return array|string
+     */
+    public function getNeedConfirmListTest(int $productID, int|string $branch = 0, int $moduleID = 0, string $auto = 'no', string $caseType = '', string $orderBy = 'id_desc'): array|string
+    {
+        $objects = $this->objectModel->getNeedConfirmList($productID, $branch, $moduleID ? array($moduleID) : array(), $auto, $caseType, $orderBy);
+
+        if(dao::isError()) return dao::getError();
+
+        return implode(',', array_column($objects, 'id'));
+    }
 }

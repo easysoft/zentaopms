@@ -1,0 +1,7 @@
+title: table zt_story
+desc: "bug"
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: version
+    range: 1,3
