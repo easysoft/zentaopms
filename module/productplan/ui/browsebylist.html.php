@@ -233,11 +233,11 @@ featureBar
 
 toolbar
 (
-    div
-    (
-        btn(setClass($viewType == 'list'   ? 'text-primary' : 'text-darker'), set::icon('format-list-bulleted')),
-        btn(setClass($viewType == 'kanban' ? 'text-primary' : 'text-darker'), set::icon('kanban'))
-    ),
+    //div
+    //(
+    //    btn(setClass($viewType == 'list'   ? 'text-primary' : 'text-darker'), set::icon('format-list-bulleted')),
+    //    btn(setClass($viewType == 'kanban' ? 'text-primary' : 'text-darker'), set::icon('kanban'))
+    //),
     common::canModify('product', $product) ? btn
     (
         set::icon('plus'),
