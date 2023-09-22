@@ -82,30 +82,29 @@ class productplanModel extends model
     }
 
     /**
-     * Get list
+     * 获取产品计划列表。
+     * Get plan list.
      *
-     * @param  int    $product
-     * @param  int    $branch
+     * @param  int    $productID
+     * @param  string $branch
      * @param  string $browseType all|undone|wait|doing|done|closed
      * @param  object $pager
      * @param  string $orderBy
-     * @param  string $param skipparent
+     * @param  string $param      skipparent|noproduct
      * @param  int    $queryID
      * @access public
      * @return object
      */
-    public function getList($product = 0, $branch = 0, $browseType = 'undone', $pager = null, $orderBy = 'begin_desc', $param = '', $queryID = 0)
+    public function getList(int $productID = 0, string $branch = '', string $browseType = 'undone', object|null $pager = null, string $orderBy = 'begin_desc', string $param = '', int $queryID = 0)
     {
         $this->loadModel('search')->setQuery('productplan', $queryID);
 
-        $date     = date('Y-m-d');
-        $products = (strpos($param, 'noproduct') !== false and empty($product)) ? $this->loadModel('product')->getList() : array(0);
+        $products = (strpos($param, 'noproduct') !== false && empty($productID)) ? $this->loadModel('product')->getPairs() : array($productID => $productID);
         $plans    = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)
             ->where('deleted')->eq(0)
-            ->beginIF(strpos($param, 'noproduct') === false or !empty($product))->andWhere('product')->eq($product)->fi()
-            ->beginIF(strpos($param, 'noproduct') !== false and empty($product))->andWhere('product')->in(array_keys($products))->fi()
-            ->beginIF(!empty($branch) and $branch != 'all')->andWhere('branch')->eq($branch)->fi()
-            ->beginIF(strpos(',all,undone,bySearch,review,', ",$browseType,") === false)->andWhere('status')->eq($browseType)->fi()
+            ->andWhere('product')->in(array_keys($products))
+            ->beginIF(!empty($branch) && $branch != 'all')->andWhere('branch')->eq($branch)->fi()
+            ->beginIF(!in_array($browseType, array('all', 'undone', 'bySearch', 'review')))->andWhere('status')->eq($browseType)->fi()
             ->beginIF($browseType == 'undone')->andWhere('status')->in('wait,doing')->fi()
             ->beginIF($browseType == 'bySearch')->andWhere($this->session->productplanQuery)->fi()
             ->beginIF($browseType == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', reviewers)")->fi()
@@ -113,8 +112,7 @@ class productplanModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-
-        if(empty($plans)) return $plans;
+        if(empty($plans)) return array();
 
         $plans        = $this->reorder4Children($plans);
         $planIdList   = array_keys($plans);
@@ -125,7 +123,7 @@ class productplanModel extends model
             $planProjects[$planID] = $this->dao->select('t1.project,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                 ->where('1=1')
-                ->beginIF(strpos($param, 'noproduct') === false or !empty($product))->andWhere('t1.product')->eq($product)->fi()
+                ->beginIF(strpos($param, 'noproduct') === false || !empty($productID))->andWhere('t1.product')->eq($productID)->fi()
                 ->andWhere('t2.deleted')->eq(0)
                 ->andWhere('t1.plan')->like("%,$planID,%")
                 ->andWhere('t2.type')->in('sprint,stage,kanban')
@@ -134,7 +132,7 @@ class productplanModel extends model
         }
 
         $storyCountInTable = $this->dao->select('plan,count(story) as count')->from(TABLE_PLANSTORY)->where('plan')->in($planIdList)->groupBy('plan')->fetchPairs('plan', 'count');
-        $product = $this->loadModel('product')->getById($product);
+        $product = $this->loadModel('product')->getById($productID);
         if(!empty($product) and $product->type == 'normal')
         {
             $storyGroups = $this->dao->select('id,plan,estimate')->from(TABLE_STORY)
@@ -164,7 +162,7 @@ class productplanModel extends model
             $plan->bugs     = isset($bugs[$plan->id]) ? count($bugs[$plan->id]) : 0;
             $plan->hour     = array_sum($storyPairs);
             $plan->projects = zget($planProjects, $plan->id, '');
-            $plan->expired  = $plan->end < $date ? true : false;
+            $plan->expired  = $plan->end < helper::today();
 
             /* Sync linked stories. */
             if(!isset($storyCountInTable[$plan->id]) or $storyCountInTable[$plan->id] != $plan->stories)
@@ -1025,9 +1023,10 @@ class productplanModel extends model
     }
 
     /**
+     * 根据子计划重新排序。
      * Reorder for children plans.
      *
-     * @param  array    $plans
+     * @param  array  $plans
      * @access public
      * @return array
      */
