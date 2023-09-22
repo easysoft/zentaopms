@@ -424,5 +424,21 @@ class repoZen extends repo
 
         return array('branchMenus' => $branchMenus, 'tagMenus' => $tagMenus, 'selected' => $selected);
     }
+
+    /**
+     * 更新版本库最后提交时间。
+     * Update repo last commited date.
+     *
+     * @param  object    $repo
+     * @param  object    $lastRevision
+     * @access protected
+     * @return void
+     */
+    protected function updateLastCommit(object $repo, object $lastRevision): void
+    {
+        if(empty($lastRevision->committed_date)) return;
+        $lastCommitDate = date('Y-m-d H:i:s', strtotime($lastRevision->committed_date));
+        if(empty($repo->lastCommit) || $lastCommitDate > $repo->lastCommit) $this->dao->update(TABLE_REPO)->set('lastCommit')->eq($lastCommitDate)->where('id')->eq($repo->id)->exec();
+    }
 }
 
