@@ -136,33 +136,31 @@ class testtask extends control
      */
     public function browseUnits(int $productID = 0, string $browseType = 'newest', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
+        /* 检查是否有权限访问测试单所属产品。*/
+        /* Check if user have permission to access the product to which the testtask belongs. */
+        $productID = $this->loadModel('product')->checkAccess($productID, $this->products);
+
         /* Save session. */
         $this->session->set('testtaskList', $this->app->getURI(true), 'qa');
         $this->session->set('caseList',     $this->app->getURI(true), $this->app->tab);
         $this->session->set('buildList',    $this->app->getURI(true) . '#app=' . $this->app->tab, 'execution');
 
-        /* Set menu. */
-        $productID = $this->loadModel('product')->checkAccess($productID, $this->products);
         $this->loadModel('qa')->setMenu($productID);
         $this->app->rawModule = 'testcase';
 
-        /* Load pager. */
+        /* 预处理部分变量供查询使用。*/
+        /* Prepare variables for query. */
         if($browseType == 'newest') $recPerPage = '10';
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
-
-        /* Append id for second sort. */
-        $sort = common::appendOrder($orderBy);
-
-        $this->app->loadLang('testcase');
-        $this->lang->testcase->featureBar['browseunits'] = $this->lang->testtask->unitTag;
+        $sort  = common::appendOrder($orderBy);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->common;
-        $this->view->productID  = $productID;
-        $this->view->orderBy    = $orderBy;
-        $this->view->browseType = $browseType;
         $this->view->tasks      = $this->testtask->getProductUnitTasks($productID, $browseType, $sort, $pager);
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->product    = $this->product->getByID($productID);
+        $this->view->browseType = $browseType;
+        $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
         $this->display();
     }

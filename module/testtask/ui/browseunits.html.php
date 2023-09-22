@@ -10,11 +10,59 @@ declare(strict_types=1);
  */
 namespace zin;
 
-include '../../testcase/ui/header.html.php';
+$canSwitch = $this->app->tab == 'qa';
+if($canSwitch)
+{
+    $caseTypeItems = array();
+    foreach($lang->testcase->typeList as $type => $typeName)
+    {
+        if($type == 'unit')
+        {
+            $url = createLink('testtask', 'browseUnits', "productID={$product->id}&browseType=newest&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1");
+        }
+        else
+        {
+            $url = createLink('testcase', 'browse', "productID={$product->id}&branch=&browseType=all&param=0&caseType={$type}");
+        }
 
-$cols  = $this->config->testtask->browseUnits->dtable->fieldList;
-$tasks = initTableData($tasks, $cols, $this->testtask);
+        $caseTypeItems[] = array('text' => $typeName ?: $lang->testcase->allType, 'url' => $url);
+    }
+}
 
+$lang->testcase->featureBar['browseunits'] = $lang->testtask->featureBar['browseunits'];
+featureBar
+(
+    $canSwitch ? to::before
+    (
+        productMenu
+        (
+            set::title($lang->testcase->typeList['unit']),
+            set::items($caseTypeItems),
+            set::activeKey('unit'),
+            set::link(createLink('testcase', 'browse', "productID={$product->id}&branch=&browseType=all&param=0&caseType={key}")),
+        )
+    ) : null,
+    set::link(createLink('testtask', 'browseUnits', "productID={$product->id}&browseType={key}"))
+);
+
+$canModify = common::canModify('product', $product);
+$canImport = hasPriv('testtask', 'importUnitResult');
+if($canImport && (empty($product) || $canModify))
+{
+    toolbar
+    (
+        btn
+        (
+            set::className('btn primary'),
+            set::icon('import'),
+            set::url(createLink('testtask', 'importUnitResult', "product={$product->id}")),
+            $lang->testtask->importUnitResult,
+        )
+    );
+}
+
+$cols    = $this->config->testtask->browseUnits->dtable->fieldList;
+$tasks   = initTableData($tasks, $cols, $this->testtask);
 $summary = sprintf($lang->testtask->unitSummary, $pager->recTotal);
 
 dtable
@@ -24,14 +72,7 @@ dtable
     set::emptyTip($lang->testtask->emptyUnitTip),
     set::userMap($users),
     set::footer(array(array('html' => $summary), 'flex', 'pager')),
-    set::footPager
-    (
-        usePager(),
-        set::page($pager->pageID),
-        set::recPerPage($pager->recPerPage),
-        set::recTotal($pager->recTotal),
-        set::linkCreator(helper::createLink('testtask', 'browseunits', "productID={$productID}&browseType={$browseType}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}"))
-    ),
+    set::footPager(usePager())
 );
 
 render();
