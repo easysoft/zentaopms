@@ -416,6 +416,7 @@ class caselib extends control
         if($_POST)
         {
             $this->caselib->createFromImport($libID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if(!$this->post->isEndPage) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('showImport', "libID=$libID&pageID=" . ((int)$this->post->pageID + 1) . "&maxImport=$maxImport&insert=" . zget($_POST, 'insert', ''))));
 
