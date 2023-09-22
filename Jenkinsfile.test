@@ -10,8 +10,6 @@ pipeline {
                             returnStdout: true,
                             script: 'cat VERSION'
     ).trim()}"""
-    MYSQL_SERVER_HOST   = 'ci-mysql-0'
-    MYSQL_ROOT_PASSWORD = 'pass4ci'
 
     MIDDLE_IMAGE_REPO = 'hub.qc.oop.cc/zentao-ztf'
     MIDDLE_IMAGE_TAG = """${sh(
@@ -61,7 +59,7 @@ pipeline {
             stage('Build Image') {
               steps {
                 container('docker') {
-                  sh 'docker build --pull . -f Dockerfile.test --build-arg VERSION=${ZENTAO_VERSION} --build-arg MIRROR=true --build-arg MYSQL_HOST=${MYSQL_SERVER_HOST} --build-arg MYSQL_PASSWORD=${MYSQL_ROOT_PASSWORD} -t ${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG}'
+                  sh 'docker build --pull . -f Dockerfile.test --build-arg VERSION=${ZENTAO_VERSION} --build-arg MIRROR=true -t ${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG}'
                   sh 'docker push ${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG}'
                 }
               }
@@ -85,7 +83,7 @@ pipeline {
                   containerTemplate {
                     name 'zentao'
                     image "${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG}"
-                    args 'sleep 99d'
+                    command "/usr/bin/entrypoint.sh"
                   }
                 }
                 }
@@ -93,7 +91,7 @@ pipeline {
 
                 steps {
                   container('zentao') {
-                    sh 'apachectl start ; initdb.php > /apps/zentao/unittestdb ;/apps/zentao/test/runtime/ztf /apps/zentao/module -C 11 | tee /apps/zentao/test/${MIDDLE_IMAGE_TAG}.log ;chmod -R 777 /root ; parsehtml.php ; initdb.php /apps/zentao/unittestdb'
+                    sh '. /etc/s6/s6-init/envs; . /opt/easysoft/scripts/libmysql.sh; wait_for_mysql && initdb.php > /apps/zentao/unittestdb ;/apps/zentao/test/runtime/ztf /apps/zentao/module -C 11 | tee /apps/zentao/test/${MIDDLE_IMAGE_TAG}.log ;chmod -R 777 /root ; parsehtml.php ; initdb.php /apps/zentao/unittestdb'
                     publishHTML (target : [allowMissing: false,alwaysLinkToLastBuild: false,keepAll: true,reportDir: 'coverage',reportFiles: 'index.html',reportName: 'UT Coverage Report',reportTitles: 'UT Coverage Report'])
                     sh 'pipeline-unittest.sh /apps/zentao/test/${MIDDLE_IMAGE_TAG}.log'
                   }
