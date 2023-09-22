@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of productplan module of ZenTaoPMS.
  *
@@ -292,7 +293,7 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = '', $browseType = 'undone', $queryID = 0, $orderBy = 'begin_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse(int $productID = 0, string $branch = '', string $browseType = 'undone', int $queryID = 0, string $orderBy = 'begin_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $branchID = $branch === '' ? 'all' : $branch;
         if(!$branch) $branch = 0;
@@ -319,36 +320,7 @@ class productplan extends control
         $actionURL = $this->createLink($this->app->rawModule, 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
         $this->productplan->buildSearchForm($queryID, $actionURL, $product);
 
-        if($viewType == 'kanban')
-        {
-            $branches    = array();
-            $branchPairs = array();
-            $planCount   = 0;
-            if(!in_array($orderBy, array_keys($this->lang->productplan->orderList))) $orderBy = key($this->lang->productplan->orderList);
-
-            if($product->type == 'normal')
-            {
-                $planGroup = $this->productplan->getList($product->id, 0, 'all', '', $orderBy, 'skipparent');
-
-                $this->view->planCount  = count(array_filter($planGroup));
-            }
-            else
-            {
-                $planGroup = $this->productplan->getGroupByProduct($product->id, 'skipParent', '', $orderBy);
-                $branches  = $this->branch->getPairs($product->id, 'active');
-
-                foreach($branches as $id => $name)
-                {
-                    $plans            = isset($planGroup[$product->id][$id]) ? array_filter($planGroup[$product->id][$id]) : array();
-                    $branchPairs[$id] = $name . ' ' . count($plans);
-                    $planCount       += count($plans);
-                }
-
-                $this->view->branches = array('all' => $this->lang->productplan->allAB . ' ' . $planCount) + $branchPairs;
-            }
-
-            $this->view->kanbanData = $this->loadModel('kanban')->getPlanKanban($product, $branchID, $planGroup);
-        }
+        if($viewType == 'kanban') $this->productplanZen->assignKanbanData($productID, $branch, $orderBy);
 
         $plans = $this->productplan->getList($productID, $branch, $browseType, $pager, $sort, "", $queryID);
 
@@ -364,7 +336,7 @@ class productplan extends control
         $this->view->users            = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->plans            = $plans;
         $this->view->pager            = $pager;
-        $this->view->projects         = $this->product->getProjectPairsByProduct($productID, $branch, '', 'noclosed', 'multiple');
+        $this->view->projects         = $this->product->getProjectPairsByProduct($productID, (string)$branch, '', 'noclosed', 'multiple');
         $this->view->statusList       = $this->lang->productplan->featureBar['browse'];
         $this->view->queryID          = $queryID;
         $this->view->summary          = $this->productplan->getSummary($plans);

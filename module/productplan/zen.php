@@ -46,5 +46,46 @@ class productplanZen extends productplan
 
         return $plans;
     }
+
+    /**
+     * 设置计划看板页面数据。
+     * Set kanban page data.
+     *
+     * @param  object     $product
+     * @param  string|int $branchID
+     * @param  string     $orderBy
+     * @access protected
+     * @return void
+     */
+    protected function assignKanbanData(object $product, string|int $branchID = 0, string $orderBy = 'pri')
+    {
+        $branches    = array();
+        $branchPairs = array();
+        $planCount   = 0;
+        if(!in_array($orderBy, array_keys($this->lang->productplan->orderList))) $orderBy = key($this->lang->productplan->orderList);
+
+        if($product->type == 'normal')
+        {
+            $planGroup = $this->productplan->getList($product->id, 0, 'all', '', $orderBy, 'skipparent');
+
+            $this->view->planCount  = count(array_filter($planGroup));
+        }
+        else
+        {
+            $planGroup = $this->productplan->getGroupByProduct($product->id, 'skipParent', '', $orderBy);
+            $branches  = $this->branch->getPairs($product->id, 'active');
+
+            foreach($branches as $id => $name)
+            {
+                $plans            = isset($planGroup[$product->id][$id]) ? array_filter($planGroup[$product->id][$id]) : array();
+                $branchPairs[$id] = $name . ' ' . count($plans);
+                $planCount       += count($plans);
+            }
+
+            $this->view->branches = array('all' => $this->lang->productplan->allAB . ' ' . $planCount) + $branchPairs;
+        }
+
+        $this->view->kanbanData = $this->loadModel('kanban')->getPlanKanban($product, $branchID, $planGroup);
+    }
 }
 
