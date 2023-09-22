@@ -45,15 +45,16 @@ class productplanModel extends model
     }
 
     /**
+     * 获取创建的最后一个计划。
      * Get last plan.
      *
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  int    $parent
+     * @param  int          $productID
+     * @param  string       $branch
+     * @param  int          $parent
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getLast($productID, $branch = '', $parent = 0)
+    public function getLast(int $productID, string $branch = '', int $parent = 0): object|false
     {
         $branchQuery = '';
         if($branch !== '')
@@ -70,11 +71,11 @@ class productplanModel extends model
 
         return $this->dao->select('*')->from(TABLE_PRODUCTPLAN)
             ->where('deleted')->eq(0)
-            ->beginIF($parent <= 0)->andWhere('parent')->le((int)$parent)->fi()
-            ->beginIF($parent > 0)->andWhere('parent')->eq((int)$parent)->fi()
-            ->andWhere('product')->eq((int)$productID)
+            ->beginIF($parent <= 0)->andWhere('parent')->le($parent)->fi()
+            ->beginIF($parent > 0)->andWhere('parent')->eq($parent)->fi()
+            ->andWhere('product')->eq($productID)
             ->andWhere('end')->ne($this->config->productplan->future)
-            ->beginIF($branch !== '' and !empty($branchQuery))->andWhere($branchQuery)->fi()
+            ->beginIF($branch !== '' && !empty($branchQuery))->andWhere($branchQuery)->fi()
             ->orderBy('end desc')
             ->limit(1)
             ->fetch();

@@ -38,22 +38,6 @@ class productPlan
     }
 
     /**
-     * Get last
-     *
-     * @param  int $productID
-     * @param  int $branch
-     * @param  int $parent
-     * @access public
-     * @return array
-     */
-    public function getLast($productID, $branch = 0, $parent = 0)
-    {
-        $productplans = $this->productplan->getLast($productID, $parent);
-        if(dao::isError()) return dao::getError();
-        return $productplans;
-    }
-
-    /**
      * Get list
      *
      * @param int    $product
