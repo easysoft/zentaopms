@@ -1,0 +1,18 @@
+title: table zt_action
+desc: "系统日志"
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: objectType
+    note: "类型"
+    range: story,testcase
+    format: ""
+  - field: action
+    note: "动作"
+    range: deleted
+    postfix: ""
+    loop: 0
+    format: ""  
+  - field: extra
+    note: "注释"
+    range: "[1,2]{100!}"
