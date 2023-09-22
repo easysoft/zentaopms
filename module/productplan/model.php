@@ -14,16 +14,17 @@
 class productplanModel extends model
 {
     /**
+     * 通过ID获取计划信息。
      * Get plan by id.
      *
-     * @param  int    $planID
-     * @param  bool   $setImgSize
+     * @param  int          $planID
+     * @param  bool         $setImgSize
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getByID($planID, $setImgSize = false)
+    public function getByID(int $planID, bool $setImgSize = false): object|false
     {
-        $plan = $this->dao->findByID((int)$planID)->from(TABLE_PRODUCTPLAN)->fetch();
+        $plan = $this->dao->findByID($planID)->from(TABLE_PRODUCTPLAN)->fetch();
         if(!$plan) return false;
 
         $plan = $this->loadModel('file')->replaceImgURL($plan, 'desc');
