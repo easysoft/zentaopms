@@ -1,7 +1,7 @@
 <?php
 class productPlan
 {
-    public function __construct($user)
+    public function __construct($user = 'admin')
     {
         global $tester;
         su($user);
@@ -463,5 +463,20 @@ class productPlan
         return $productplans;
     }
 
+    /**
+     * Test build search form.
+     *
+     * @param  int    $queryID
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function buildSearchFormTest($queryID, $productID)
+    {
+        $product = $this->productplan->loadModel('product')->getByID($productID);
+        $this->productplan->buildSearchForm($queryID, 'searchUrl', $product);
+
+        return $_SESSION['productplansearchParams']['queryID'];
+    }
 }
 ?>

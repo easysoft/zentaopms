@@ -1204,7 +1204,8 @@ class productplanModel extends model
     }
 
     /**
-     * Build search form.
+     * 构造计划搜索功能数据。
+     * Build search form for plan.
      *
      * @param  int    $queryID
      * @param  string $actionURL
@@ -1212,8 +1213,10 @@ class productplanModel extends model
      * @access public
      * @return void
      */
-    public function buildSearchForm($queryID, $actionURL, $product)
+    public function buildSearchForm(int $queryID, string $actionURL, object $product)
     {
+        global $app;
+        $app->loadLang('branch');
         $this->config->productplan->search['actionURL'] = $actionURL;
         $this->config->productplan->search['queryID']   = $queryID;
 
