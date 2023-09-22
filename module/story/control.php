@@ -2091,6 +2091,7 @@ class story extends control
     }
 
     /**
+     * 通过AJAX方式获取用户需要处理的需求。
      * AJAX: get stories of a user in html select.
      *
      * @param  int    $userID
