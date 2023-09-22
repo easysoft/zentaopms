@@ -5,8 +5,8 @@ $(document).on('change', 'input[name=begin],input[name=end]', function()
 
 $(document).on('click', 'button[type=submit]', function()
 {
-    const parentPlan = $('#parent').val();
-    let branches     = $('#branch').val();
+    const parentPlan = $('input[name=parent]').val();
+    let branches     = $('[name^=branch]').val();
     if(parentPlan > 0 && branches)
     {
         const link = $.createLink('productplan', 'ajaxGetDiffBranchesTip', "productID=" + productID + "&parentID=" + parentPlan + "&branches=" + branches.toString());
@@ -19,6 +19,10 @@ $(document).on('click', 'button[type=submit]', function()
                 zui.Modal.confirm(diffBranchesTip).then((res) => {
                     if(res) $.ajaxSubmit({url: formUrl, data: formData})
                 });
+            }
+            else
+            {
+                $.ajaxSubmit({url: formUrl, data: formData});
             }
         });
         return false;
