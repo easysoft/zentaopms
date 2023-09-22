@@ -288,6 +288,46 @@ class testtaskZen extends testtask
     }
 
     /**
+     * 分配变量给场景测试单页面。
+     * Assign variables for create page.
+     *
+     * @param  int       $productID$product
+     * @param  int       $projectID
+     * @param  int       $executionID
+     * @param  int       $build
+     * @access protected
+     * @return void
+     */
+    protected function assignForCreate(int $productID, int $projectID, int $executionID, int $build): void
+    {
+        if($projectID)
+        {
+            /* 如果是无迭代项目，则获取影子迭代的迭代ID。*/
+            /* If there is no sprint in the project, get the ID of the shadow sprint. */
+            $project = $this->loadModel('project')->getByID($projectID);
+            if($project && !$project->multiple) $this->view->noMultipleExecutionID = $this->loadModel('execution')->getNoMultipleID($project->id);
+        }
+
+        if($executionID)
+        {
+            /* 根据所选迭代的类型，调整表单字段的文本显示。*/
+            /* Adjust the display value based on the type of sprint selected. */
+            $execution = $this->loadModel('execution')->getByID($executionID);
+            if(!empty($execution) && $execution->type == 'kanban') $this->lang->testtask->execution = str_replace($this->lang->execution->common, $this->lang->kanban->common, $this->lang->testtask->execution);
+        }
+
+        $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->create;
+        $this->view->product     = $this->loadModel('product')->getByID($productID);
+        $this->view->executions  = $productID ? $this->product->getExecutionPairsByProduct($productID, '', $projectID, 'stagefilter') : array();
+        $this->view->builds      = $productID ? $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk,withexecution', $projectID, 'project', '', false) : array();
+        $this->view->testreports = array('') + $this->loadModel('testreport')->getPairs($productID);
+        $this->view->users       = $this->loadModel('user')->getPairs('noclosed|qdfirst|nodeleted');
+        $this->view->projectID   = $projectID;
+        $this->view->executionID = $executionID;
+        $this->view->build       = $build;
+    }
+
+    /**
      * Assign variables for editing test task.
      *
      * @param  object    $task
