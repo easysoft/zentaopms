@@ -138,10 +138,10 @@ $lang->searchTips                      = '编号(ctrl+g)';
 
 $lang->market->homeMenu           = new stdclass();
 $lang->market->homeMenu->report   = array('link' => "报告|marketreport|all", 'subModule' => 'marketreport');
-$lang->market->homeMenu->research = array('link' => "调研|marketresearch|all", 'subModule' => 'marketresearch');
+$lang->market->homeMenu->research = array('link' => "调研|marketresearch|all", 'subModule' => 'marketresearch', 'exclude' => 'marketresearch-reports');
 $lang->market->homeMenu->market   = array('link' => "市场|market|browse|browseType=all");
 
 $lang->market->menu           = new stdclass();
 $lang->market->menu->report   = array('link' => "报告|marketreport|browse|marketID=%s", 'subModule' => 'marketreport');
-$lang->market->menu->research = array('link' => "调研|marketresearch|browse|marketID=%s", 'subModule' => 'marketresearch');
+$lang->market->menu->research = array('link' => "调研|marketresearch|browse|marketID=%s", 'subModule' => 'marketresearch', 'exclude' => 'marketresearch-reports');
 $lang->market->menu->view     = array('link' => "概况|market|view|marketID=%s", 'alias' => 'edit');

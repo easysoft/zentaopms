@@ -138,10 +138,10 @@ $lang->searchTips                      = 'ID(ctrl+g)';
 
 $lang->market->homeMenu           = new stdclass();
 $lang->market->homeMenu->report   = array('link' => "Report|marketreport|all",'subModule' => 'marketreport');
-$lang->market->homeMenu->research = array('link' => "Reseach|marketresearch|all", 'subModule' => 'marketresearch');
+$lang->market->homeMenu->research = array('link' => "Reseach|marketresearch|all", 'subModule' => 'marketresearch', 'exclude' => 'marketresearch-reports');
 $lang->market->homeMenu->market   = array('link' => "Market|market|browse|browseType=all");
 
 $lang->market->menu           = new stdclass();
 $lang->market->menu->report   = array('link' => "Report|marketreport|browse|marketID=%s", 'subModule' => 'marketreport');
-$lang->market->menu->research = array('link' => "Research|marketresearch|browse|marketID=%s", 'subModule' => 'marketresearch');
+$lang->market->menu->research = array('link' => "Research|marketresearch|browse|marketID=%s", 'subModule' => 'marketresearch', 'exclude' => 'marketresearch-reports');
 $lang->market->menu->view     = array('link' => "View|market|view|marketID=%s", 'alias' => 'edit');
