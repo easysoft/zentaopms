@@ -185,10 +185,8 @@ $canBatchEdit         = common::hasPriv('productplan', 'batchEdit');
 $canBatchChangeStatus = common::hasPriv('productplan', 'batchChangeStatus');
 
 /* Generate dropdown menu for the batch change status button on footbar. */
-$fnGenerateDropdownMenu = function() use($lang, $canBatchChangeStatus, $productID)
+if($canBatchChangeStatus)
 {
-    if(!$canBatchChangeStatus) return;
-
     $items = array();
     foreach($lang->productplan->statusList as $statusKey => $statusText)
     {
@@ -201,10 +199,10 @@ $fnGenerateDropdownMenu = function() use($lang, $canBatchChangeStatus, $productI
         if($statusKey == 'closed') $items[$statusKey]['data-page'] = 'batch';
     }
 
-    zui::menu
+    menu
     (
         set::id('footbarActionMenu'),
-        set::className('menu dropdown-menu'),
+        set::className('dropdown-menu'),
         set::items(array_values($items))
     );
 };
@@ -233,11 +231,11 @@ featureBar
 
 toolbar
 (
-    //div
-    //(
-    //    btn(setClass($viewType == 'list'   ? 'text-primary' : 'text-darker'), set::icon('format-list-bulleted')),
-    //    btn(setClass($viewType == 'kanban' ? 'text-primary' : 'text-darker'), set::icon('kanban'))
-    //),
+    div
+    (
+        btn(setClass($viewType == 'list'   ? 'text-primary' : 'text-darker'), set::icon('format-list-bulleted')),
+        btn(setClass($viewType == 'kanban' ? 'text-primary' : 'text-darker'), set::icon('kanban'))
+    ),
     common::canModify('product', $product) ? btn
     (
         set::icon('plus'),
@@ -246,9 +244,6 @@ toolbar
         $lang->productplan->create
     ) : null
 );
-
-/* Render popup menu for the bution on the toolbar of datatable. */
-$fnGenerateDropdownMenu();
 
 dtable
 (
@@ -263,7 +258,6 @@ dtable
     set::sortLink(createLink('product', 'all', "browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
     set::footToolbar(array
     (
-        'type'  => 'btn-group',
         'items' => array(
             $canBatchEdit ? array
             (
@@ -277,9 +271,9 @@ dtable
             (
                 'text'           => $lang->statusAB,
                 'btnType'        => 'secondary',
-                'type'           => 'dropdown',
                 'caret'          => 'up',
                 'url'            => '#footbarActionMenu',
+                'data-toggle'    => 'dropdown',
                 'data-placement' => 'top-start',
             ) : null
         )
