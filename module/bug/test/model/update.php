@@ -68,7 +68,7 @@ $t_titleRequire    = array('title'       => '');
 $t_unnotifyEmail   = array('notifyEmail' => '123');
 $t_resolution1     = array('resolvedBy'  => 'john',      'resolution'    => '');
 $t_resolution2     = array('closedBy'    => 'john',      'resolution'    => '');
-$t_unduplicateBug  = array('resolution'  => 'duplicate', 'duplicateBug'  => '');
+$t_unduplicateBug  = array('resolution'  => 'duplicate', 'duplicateBug'  => 0);
 $t_unresolvedBuild = array('resolution'  => 'fixed',     'resolvedBuild' => '');
 
 $bug = new bugTest();

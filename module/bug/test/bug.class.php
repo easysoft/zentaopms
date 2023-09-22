@@ -316,7 +316,7 @@ class bugTest
             {
                 $bug->$field = $param[$field];
             }
-            else
+            elseif(strpos($field, 'Date') === false)
             {
                 $bug->$field = $value;
             }
