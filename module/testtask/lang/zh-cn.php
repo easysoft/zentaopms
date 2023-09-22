@@ -219,12 +219,12 @@ $lang->testtask->featureBar['linkcase']['bysuite'] = $lang->testtask->linkBySuit
 $lang->testtask->featureBar['linkcase']['bybuild'] = $lang->testtask->linkByBuild;
 $lang->testtask->featureBar['linkcase']['bybug']   = $lang->testtask->linkByBug;
 
-$lang->testtask->unitTag['all']       = '全部';
-$lang->testtask->unitTag['newest']    = '最近';
-$lang->testtask->unitTag['thisWeek']  = '本周';
-$lang->testtask->unitTag['lastWeek']  = '上周';
-$lang->testtask->unitTag['thisMonth'] = '本月';
-$lang->testtask->unitTag['lastMonth'] = '上月';
+$lang->testtask->featureBar['browseunits']['all']       = '全部';
+$lang->testtask->featureBar['browseunits']['newest']    = '最近';
+$lang->testtask->featureBar['browseunits']['thisWeek']  = '本周';
+$lang->testtask->featureBar['browseunits']['lastWeek']  = '上周';
+$lang->testtask->featureBar['browseunits']['thisMonth'] = '本月';
+$lang->testtask->featureBar['browseunits']['lastMonth'] = '上月';
 
 $lang->testtask->typeList['integrate']   = '集成测试';
 $lang->testtask->typeList['system']      = '系统测试';

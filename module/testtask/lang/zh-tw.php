@@ -203,12 +203,12 @@ $lang->testtask->featureBar['browse']['done']        = $lang->testtask->done;
 $lang->testtask->featureBar['cases']['all']          = $lang->testtask->allCases;
 $lang->testtask->featureBar['cases']['assignedtome'] = $lang->testtask->assignedToMe;
 
-$lang->testtask->unitTag['all']       = '所有';
-$lang->testtask->unitTag['newest']    = '最近';
-$lang->testtask->unitTag['thisWeek']  = '本週';
-$lang->testtask->unitTag['lastWeek']  = '上周';
-$lang->testtask->unitTag['thisMonth'] = '本月';
-$lang->testtask->unitTag['lastMonth'] = '上月';
+$lang->testtask->featureBar['browseunits']['all']       = '所有';
+$lang->testtask->featureBar['browseunits']['newest']    = '最近';
+$lang->testtask->featureBar['browseunits']['thisWeek']  = '本週';
+$lang->testtask->featureBar['browseunits']['lastWeek']  = '上周';
+$lang->testtask->featureBar['browseunits']['thisMonth'] = '本月';
+$lang->testtask->featureBar['browseunits']['lastMonth'] = '上月';
 
 $lang->testtask->typeList['integrate']   = '整合測試';
 $lang->testtask->typeList['system']      = '系統測試';

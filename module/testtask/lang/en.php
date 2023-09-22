@@ -219,12 +219,12 @@ $lang->testtask->featureBar['linkcase']['bysuite'] = $lang->testtask->linkBySuit
 $lang->testtask->featureBar['linkcase']['bybuild'] = $lang->testtask->linkByBuild;
 $lang->testtask->featureBar['linkcase']['bybug']   = $lang->testtask->linkByBug;
 
-$lang->testtask->unitTag['all']       = 'All';
-$lang->testtask->unitTag['newest']    = 'Recently';
-$lang->testtask->unitTag['thisWeek']  = 'This week';
-$lang->testtask->unitTag['lastWeek']  = 'Last week';
-$lang->testtask->unitTag['thisMonth'] = 'This month';
-$lang->testtask->unitTag['lastMonth'] = 'Last month';
+$lang->testtask->featureBar['browseunits']['all']       = 'All';
+$lang->testtask->featureBar['browseunits']['newest']    = 'Recently';
+$lang->testtask->featureBar['browseunits']['thisWeek']  = 'This week';
+$lang->testtask->featureBar['browseunits']['lastWeek']  = 'Last week';
+$lang->testtask->featureBar['browseunits']['thisMonth'] = 'This month';
+$lang->testtask->featureBar['browseunits']['lastMonth'] = 'Last month';
 
 $lang->testtask->typeList['integrate']   = 'Integration';
 $lang->testtask->typeList['system']      = 'System';
