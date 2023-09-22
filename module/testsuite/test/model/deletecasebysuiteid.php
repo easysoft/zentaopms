@@ -2,10 +2,13 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/testsuite.class.php';
-su('admin');
 
+zdTable('case')->gen(20);
 zdTable('suitecase')->gen(3);
 zdTable('testsuite')->gen(1);
+zdTable('user')->gen(1);
+
+su('admin');
 
 /**
 
