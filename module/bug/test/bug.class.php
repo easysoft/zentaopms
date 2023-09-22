@@ -878,6 +878,7 @@ class bugTest
     {
         global $tester;
         $tester->loadModel('report');
+        $tester->session->set('project', 0);
 
         $datas = $this->objectModel->getDataOfBugsPerExecution();
 
