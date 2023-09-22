@@ -206,14 +206,15 @@ class productplanModel extends model
     }
 
     /**
+     * 获取产品下的父计划。
      * Get top plan pairs.
      *
-     * @param int    $productID
-     * @param int    $exclude
+     * @param  int    $productID
+     * @param  string $exclude
      * @access public
      * @return array
      */
-    public function getTopPlanPairs($productID, $exclude = '')
+    public function getTopPlanPairs(int $productID, string $exclude = ''): array
     {
         return $this->dao->select("id,title")->from(TABLE_PRODUCTPLAN)
             ->where('product')->eq($productID)
