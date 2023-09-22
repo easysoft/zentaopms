@@ -281,13 +281,13 @@ class story extends control
         if($story->type == 'requirement') $this->lang->story->notice->reviewerNotEmpty = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->notice->reviewerNotEmpty);
 
         $fields = $this->storyZen->getFormFieldsForEdit($storyID);
-        $fields = $this->storyZen->removeFormFieldsForEdit($fields);
+        $fields = $this->storyZen->hiddenFormFieldsForEdit($fields);
 
         $this->view->title        = $this->lang->story->edit . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->story        = $story;
         $this->view->twins        = empty($story->twins) ? array() : $this->story->getByList($story->twins);
         $this->view->fields       = $fields;
-        $this->view->branches     = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($story->product);
+        $this->view->branches     = $this->view->product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($story->product);
         $this->view->lastReviewer = $this->story->getLastReviewer($story->id);
 
         $this->display();

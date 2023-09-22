@@ -786,9 +786,19 @@ class storyTao extends storyModel
         }
     }
 
-    protected function doUpdateReviewer(int $storyID, array $reviewers = array())
+    /**
+     * Do update reviewer.
+     *
+     * @param  int       $storyID
+     * @param  array     $reviewers
+     * @access protected
+     * @return void
+     */
+    protected function doUpdateReviewer(int $storyID, array $reviewers = array()): void
     {
-        $oldStory     = $this->fetchByID($storyID);
+        $oldStory = $this->fetchByID($storyID);
+        if(empty($oldStory)) return;
+
         $oldReviewer  = $this->getReviewerPairs($storyID, $oldStory->version);
         $twins        = explode(',', trim($oldStory->twins, ','));
         $reviewerList = implode(',', $reviewers);
@@ -836,11 +846,22 @@ class storyTao extends storyModel
         if(strpos('draft,changing', $oldStory->status) != false) $story->reviewedBy = '';
     }
 
-    protected function doUpdateSpec(int $storyID, object $story, array $addedFiles)
+    /**
+     * 更新需求描述。
+     * Do update story spec.
+     *
+     * @param  int       $storyID
+     * @param  object    $story
+     * @param  array     $addedFiles
+     * @access protected
+     * @return void
+     */
+    protected function doUpdateSpec(int $storyID, object $story, array $addedFiles = array()): void
     {
-        if($story->spec == $oldStory->spec and $story->verify == $oldStory->verify and $story->title == $oldStory->title and empty($story->deleteFiles) and empty($addedFiles)) return true;
+        $oldStory = $this->getByID($storyID);
+        if(empty($oldStory)) return;
+        if($story->spec == $oldStory->spec and $story->verify == $oldStory->verify and $story->title == $oldStory->title and empty($story->deleteFiles) and empty($addedFiles)) return;
 
-        $oldStory   = $this->getByID($storyID);
         $addedFiles = empty($addedFiles) ? '' : implode(',', array_keys($addedFiles)) . ',';
         $storyFiles = $oldStory->files = implode(',', array_keys($oldStory->files));
         foreach($story->deleteFiles as $fileID) $storyFiles = str_replace(",$fileID,", ',', ",$storyFiles,");
@@ -849,7 +870,7 @@ class storyTao extends storyModel
         $data->title  = $story->title;
         $data->spec   = $story->spec;
         $data->verify = $story->verify;
-        $data->files  = $story->files = $addedFiles . trim($storyFiles, ',');
+        $data->files  = $story->files = trim($addedFiles . trim($storyFiles, ','), ',');
         $this->dao->update(TABLE_STORYSPEC)->data($data)->where('story')->eq((int)$storyID)->andWhere('version')->eq($oldStory->version)->exec();
 
         /* Sync twins. */
@@ -857,14 +878,20 @@ class storyTao extends storyModel
         {
             foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
             {
-                $this->dao->update(TABLE_STORYSPEC)->data($data)
-                    ->where('story')->eq((int)$twinID)
-                    ->andWhere('version')->eq($oldStory->version)
-                    ->exec();
+                $this->dao->update(TABLE_STORYSPEC)->data($data)->where('story')->eq((int)$twinID)->andWhere('version')->eq($oldStory->version)->exec();
             }
         }
     }
 
+    /**
+     * Do string when change parent.
+     *
+     * @param  int       $storyID
+     * @param  object    $story
+     * @param  int       $oldStoryParent
+     * @access protected
+     * @return void
+     */
     protected function doChangeParent(int $storyID, object $story, int $oldStoryParent)
     {
         if($story->product == $oldStoryParent) return;
@@ -910,7 +937,16 @@ class storyTao extends storyModel
         }
     }
 
-    protected function doUpdateLinkStories(object $story, object $oldStory)
+    /**
+     * Do update link stories.
+     *
+     * @param  int       $storyID
+     * @param  object    $story
+     * @param  object    $oldStory
+     * @access protected
+     * @return void
+     */
+    protected function doUpdateLinkStories(int $storyID, object $story, object $oldStory)
     {
         $linkStoryField = $oldStory->type == 'story' ? 'linkStories' : 'linkRequirements';
         $linkStories    = explode(',', $story->{$linkStoryField});
@@ -924,14 +960,14 @@ class storyTao extends storyModel
             if(in_array($changeStoryID, $addStories))
             {
                 $stories = empty($changeStory) ? $storyID : $changeStory . ',' . $storyID;
-                $this->dao->update(TABLE_STORY)->set($linkStoryField)->eq($stories)->where('id')->eq((int)$changeStoryID)->exec();
+                $this->dao->update(TABLE_STORY)->set($linkStoryField)->eq((string)$stories)->where('id')->eq((int)$changeStoryID)->exec();
             }
 
             if(in_array($changeStoryID, $removeStories))
             {
                 $linkedStories = str_replace(",$storyID,", ',', ",$changeStory,");
                 $linkedStories = trim($linkedStories, ',');
-                $this->dao->update(TABLE_STORY)->set($linkStoryField)->eq($linkedStories)->where('id')->eq((int)$changeStoryID)->exec();
+                $this->dao->update(TABLE_STORY)->set($linkStoryField)->eq((string)$linkedStories)->where('id')->eq((int)$changeStoryID)->exec();
             }
         }
     }

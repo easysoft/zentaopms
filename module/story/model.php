@@ -782,7 +782,7 @@ class storyModel extends model
 
         $this->dao->update(TABLE_STORY)->data($story, 'reviewer,spec,verify,deleteFiles')
             ->autoCheck()
-            ->checkIF(isset($story->closedBy), 'closedReason', 'notempty')
+            ->checkIF(!empty($story->closedBy), 'closedReason', 'notempty')
             ->checkIF(isset($story->closedReason) and $story->closedReason == 'done', 'stage', 'notempty')
             ->checkIF(isset($story->closedReason) and $story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
             ->checkIF($story->notifyEmail, 'notifyEmail', 'email')
@@ -794,7 +794,7 @@ class storyModel extends model
         $this->loadModel('file')->updateObjectID($this->post->uid, $storyID, 'story');
         $addedFiles = $this->file->saveUpload($oldStory->type, $storyID, $oldStory->version);
         $this->storyTao->doUpdateSpec($storyID, $story, $addedFiles);
-        $this->storyTao->doUpdateLinkStories($story, $oldStory);
+        $this->storyTao->doUpdateLinkStories($storyID, $story, $oldStory);
 
         $changed = $story->parent != $oldStory->parent;
         if($changed) $this->doChangeParent($storyID, $story, $oldStory->parent);
@@ -4392,7 +4392,7 @@ class storyModel extends model
      */
     public function getReviewResult(array $reviewerList): string
     {
-        $results      = '';
+        $results      = array();
         $passCount    = 0;
         $rejectCount  = 0;
         $revertCount  = 0;
@@ -4405,7 +4405,7 @@ class storyModel extends model
             $revertCount  = $result == 'revert'  ? $revertCount  + 1 : $revertCount;
             $clarifyCount = $result == 'clarify' ? $clarifyCount + 1 : $clarifyCount;
 
-            $results .= $result . ',';
+            $results[$result] = $result;
         }
 
         $finalResult = '';
@@ -4418,9 +4418,9 @@ class storyModel extends model
             if($revertCount  >= floor(count($reviewerList) / 2) + 1) return 'revert';
             if($rejectCount  >= floor(count($reviewerList) / 2) + 1) return 'reject';
 
-            if(str_contains($results, 'clarify')) return 'clarify';
-            if(str_contains($results, 'revert'))  return 'revert';
-            if(str_contains($results, 'reject'))  return 'reject';
+            if(isset($results['clarify'])) return 'clarify';
+            if(isset($results['revert']))  return 'revert';
+            if(isset($results['reject']))  return 'reject';
         }
 
         return $finalResult;

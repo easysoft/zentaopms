@@ -43,7 +43,7 @@ $config->story->form->edit['product']        = array('type' => 'int',     'contr
 $config->story->form->edit['branch']         = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => 0,  'options' => array());
 $config->story->form->edit['module']         = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => 0,  'options' => array());
 $config->story->form->edit['parent']         = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => 0,  'options' => array());
-$config->story->form->edit['title']          = array('type' => 'string',  'control' => 'text',         'required' => true,  'filter'  => 'trim');
+$config->story->form->edit['title']          = array('type' => 'string',  'control' => 'text',         'required' => false, 'default' => '', 'filter'  => 'trim');
 $config->story->form->edit['spec']           = array('type' => 'string',  'control' => 'editor',       'required' => false, 'default' => '');
 $config->story->form->edit['verify']         = array('type' => 'string',  'control' => 'editor',       'required' => false, 'default' => '');
 $config->story->form->edit['plan']           = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => 0,  'options' => array());

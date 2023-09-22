@@ -168,10 +168,7 @@ detailBody
         section
         (
             set::title($lang->story->comment),
-            formGroup
-            (
-                editor(set::name('comment'))
-            )
+            formGroup(editor(set::name('comment')))
         )
     ),
     history(),
@@ -283,7 +280,7 @@ detailBody
             item
             (
                 set::name($lang->story->pri),
-                priPicker(set::name('pri'), set::items($fields['pri']['options']), set::value(fields['pri']['default']))
+                priPicker(set::name('pri'), set::items($fields['pri']['options']), set::value($fields['pri']['default']))
             ),
             item
             (
@@ -314,8 +311,8 @@ detailBody
                 set::name($lang->story->mailto),
                 inputGroup
                 (
-                    picker(setID('mailto'), set::name('mailto[]'), set::items($fields['mailto']['options']), set::value(empty($story->mailto) ? '' : $story->mailto), set::multiple(true)),
-                    $contactList ? picker
+                    picker(setID('mailto'), set::name('mailto[]'), set::items($fields['mailto']['options']), set::value($fields['mailto']['default']), set::multiple(true)),
+                    isset($contactList) ? picker
                     (
                         setID('contactListMenu'),
                         set::name('contactListMenu'),
@@ -328,7 +325,7 @@ detailBody
                         set('data-toggle', 'modal'),
                         icon('cog'),
                     ),
-                    $contactList ? null : btn
+                    isset($contactList) ? null : btn
                     (
                         set('id', 'refreshMailto'),
                         set('class', 'text-black'),

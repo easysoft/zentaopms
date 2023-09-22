@@ -4,6 +4,8 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
 
+zdTable('story')->gen(1);
+
 /**
 
 title=测试 storyModel->updateStoryProduct();

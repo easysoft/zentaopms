@@ -422,6 +422,13 @@ class storyZen extends story
         return array($products, $branches);
     }
 
+    /**
+     * 获取产品列表，并排序，将我负责的产品排前面。
+     * Get products for edit.
+     *
+     * @access protected
+     * @return array
+     */
     protected function getProductsForEdit(): array
     {
         $account        = $this->app->user->account;
@@ -517,6 +524,14 @@ class storyZen extends story
         return $fields;
     }
 
+    /**
+     * 为编辑页面获取字段配置。
+     * Get form fields for edit.
+     *
+     * @param  int       $storyID
+     * @access protected
+     * @return array
+     */
     protected function getFormFieldsForEdit(int $storyID): array
     {
         $account = $this->app->user->account;
@@ -575,6 +590,9 @@ class storyZen extends story
 
         /* 设置默认值。 */
         if(empty($fields['reviewer']['default'])) $fields['reviewer']['default'] = $reviewers;
+
+        $this->view->users     = $users;
+        $this->view->reviewers = $reviewers;
 
         return $fields;
     }
@@ -812,7 +830,15 @@ class storyZen extends story
         return $fields;
     }
 
-    protected function removeFormFieldsForEdit(int $storyID, array $fields): array
+    /**
+     * 隐藏不显示的字段。
+     * Hide form fields for edi.
+     *
+     * @param  array     $fields
+     * @access protected
+     * @return array
+     */
+    protected function hiddenFormFieldsForEdit(array $fields): array
     {
         $story   = $this->view->story;
         $product = $this->view->product;
@@ -926,10 +952,18 @@ class storyZen extends story
         return $this->loadModel('file')->processImgURL($storyData, $editorFields, $this->post->uid);
     }
 
+    /**
+     * 构建编辑需求数据。
+     * Build story for edit
+     *
+     * @param  int       $storyID
+     * @access protected
+     * @return object|false
+     */
     protected function buildStoryForEdit(int $storyID): object|false
     {
         $storyPlan = array();
-        $oldStory  = $this->fetchByID($storyID);
+        $oldStory  = $this->story->getByID($storyID);
 
         if(!empty($_POST['lastEditedDate']) and $oldStory->lastEditedDate != $this->post->lastEditedDate) dao::$errors[] = $this->lang->error->editedByOther;
         if(strpos('draft,changing', $oldStory->status) !== false and $this->story->checkForceReview() and empty($_POST['reviewer'])) dao::$errors[] = $this->lang->story->notice->reviewerNotEmpty;
@@ -953,7 +987,6 @@ class storyZen extends story
         $now          = helper::now();
         $fields       = $this->config->story->form->edit;
         $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
-        foreach(explode(',', trim($this->config->story->edit->requiredFields, ',')) as $field) $fields[$field]['required'] = true;
 
         $storyData = form::data($fields)
             ->add('lastEditedBy', $this->app->user->account)
@@ -963,6 +996,7 @@ class storyZen extends story
             ->setDefault('deleteFiles', array())
             ->setDefault('product', $oldStory->product)
             ->setDefault('branch', $oldStory->branch)
+            ->setDefault('estimate', $oldStory->estimate)
             ->setIF($this->post->assignedTo   != $oldStory->assignedTo, 'assignedDate', $now)
             ->setIF($this->post->closedBy     && $oldStory->closedDate == '', 'closedDate', $now)
             ->setIF($this->post->closedReason && $oldStory->closedDate == '', 'closedDate', $now)
@@ -983,9 +1017,18 @@ class storyZen extends story
         return $this->loadModel('file')->processImgURL($storyData, $editorFields, $this->post->uid);
     }
 
-    protected function processDataForEdit(int $storyID, object $story)
+    /**
+     * 处理编辑需求数据。
+     * Process data for edit.
+     *
+     * @param  int       $storyID
+     * @param  object    $story
+     * @access protected
+     * @return void
+     */
+    protected function processDataForEdit(int $storyID, object $story): void
     {
-        $oldStory = $this->fetchByID($storyID);
+        $oldStory = $this->story->fetchByID($storyID);
 
         if($oldStory->type == 'story' and !isset($story->linkStories)) $story->linkStories = '';
         if($oldStory->type == 'requirement' and !isset($story->linkRequirements)) $story->linkRequirements = '';

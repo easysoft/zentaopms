@@ -712,7 +712,7 @@ class storyTest
 
     /**
      * 测试 doCreateReviewer 方法。
-     * 测u8 doCreateReviewer method.
+     * Test doCreateReviewer method.
      *
      * @param  int    $storyID
      * @param  array  $reviewer
@@ -726,6 +726,21 @@ class storyTest
 
         if(dao::isError()) return dao::getError();
         return $this->objectModel->dao->select('*')->from(TABLE_STORYREVIEW)->fetchAll();
+    }
+
+    /**
+     * 测试 doUpdateReviewer 方法。
+     * Test doUpdateReviewer method.
+     *
+     * @param  int    $storyID
+     * @param  array  $reviewer
+     * @access public
+     * @return array
+     */
+    public function doUpdateReviewerTest(int $storyID, array $reviewer): array
+    {
+        $this->objectModel->doUpdateReviewer($storyID, $reviewer);
+        return $this->objectModel->dao->select('*')->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->fetchAll();
     }
 
     /**
@@ -745,6 +760,24 @@ class storyTest
 
         if(dao::isError()) return dao::getError();
         return $this->objectModel->dao->select('*')->from(TABLE_STORYSPEC)->fetchAll();
+    }
+
+    /**
+     * 测试 doUpdateSpec 方法。
+     * Test doUpdateSpec method.
+     *
+     * @param  int    $storyID
+     * @param  object $story
+     * @param  array  $addedFiles
+     * @access public
+     * @return object|array
+     */
+    public function doUpdateSpecTest(int $storyID, object $story, array $addedFiles = array()): object|array
+    {
+        $this->objectModel->doUpdateSpec($storyID, $story, $addedFiles);
+
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->dao->select('*')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->fetch();
     }
 
     /**
