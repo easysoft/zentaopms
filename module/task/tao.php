@@ -447,7 +447,7 @@ class taskTao extends taskModel
 
         foreach($this->config->task->dateFields as $dateField)
         {
-            if(!$copyTask->$dateField) unset($copyTask->$dateField);
+            if(empty($copyTask->$dateField)) unset($copyTask->$dateField);
         }
 
         $copyTaskID = $this->dao->insert(TABLE_TASK)->data($copyTask)->autoCheck()->exec();
