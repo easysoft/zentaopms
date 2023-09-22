@@ -300,7 +300,7 @@ class productplan extends control
         $viewType = $this->cookie->viewType ? $this->cookie->viewType : 'list';
 
         $this->commonAction($productID, $branch);
-        $product     = $this->product->getById($productID);
+        $product     = $this->view->product;
         $productName = empty($product) ? '' : $product->name;
 
         /* Build the search form. */
