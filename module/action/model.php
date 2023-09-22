@@ -730,15 +730,15 @@ class actionModel extends model
      * 通过查询获取回收站内的对象。
      * Get deleted objects by search.
      *
-     * @param  string $objectType
-     * @param  string $type all|hidden
-     * @param  int    $queryID
-     * @param  string $orderBy
-     * @param  object $pager
+     * @param  string     $objectType
+     * @param  string     $type all|hidden
+     * @param  string|int $queryID
+     * @param  string     $orderBy
+     * @param  object     $pager
      * @access public
      * @return array
      */
-    public function getTrashesBySearch(string $objectType, string $type, int $queryID, string $orderBy, object $pager = null): array
+    public function getTrashesBySearch(string $objectType, string $type, string|int $queryID, string $orderBy, object $pager = null): array
     {
         if($objectType == 'all') return array();
         if($queryID && $queryID != 'myQueryID')
@@ -758,7 +758,7 @@ class actionModel extends model
         {
             if($this->session->trashQuery == false) $this->session->set('trashQuery', ' 1 = 1');
         }
-
+        
         $extra      = $type == 'hidden' ? self::BE_HIDDEN : self::CAN_UNDELETED;
         $trashQuery = $this->session->trashQuery;
         $trashQuery = str_replace(array('`objectID`', '`actor`', '`date`'), array('t1.`objectID`', 't1.`actor`', 't1.`date`'), $trashQuery);
@@ -769,7 +769,7 @@ class actionModel extends model
 
         if($objectType != 'pipeline')
         {
-            $trashes = $this->dao->select("t1.*, $nameField as objectName")->from(TABLE_ACTION)->alias('t1')
+            $trashes = $this->dao->select("t1.*, $nameField AS objectName")->from(TABLE_ACTION)->alias('t1')
                 ->leftJoin($table)->alias('t2')->on('t1.objectID=t2.id')
                 ->where('t1.action')->eq('deleted')
                 ->andWhere($trashQuery)
@@ -782,7 +782,7 @@ class actionModel extends model
         }
         else
         {
-            $trashes = $this->dao->select("t1.*, t1.objectType as type, t2.name as objectName, t2.type as objectType")->from(TABLE_ACTION)->alias('t1')
+            $trashes = $this->dao->select("t1.*, t1.objectType AS type, t2.name AS objectName, t2.type AS objectType")->from(TABLE_ACTION)->alias('t1')
                 ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.objectID=t2.id')
                 ->where('t1.action')->eq('deleted')
                 ->andWhere($trashQuery)
@@ -795,7 +795,7 @@ class actionModel extends model
                 ->page($pager)
                 ->fetchAll('objectID');
         }
-
+        
         return $trashes;
     }
 

@@ -1,0 +1,12 @@
+title: table zt_testsuite
+desc: "测试套件"
+author: automated export
+version: "1.0"
+fields:
+  - field: type
+    note: "类型"
+    range: public,library
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

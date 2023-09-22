@@ -1,0 +1,13 @@
+title: table zt_entry
+desc: "应用"
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: editedDate
+    note: "编辑日期"
+    range: "(-1M)-(+1w):60"
+    type: timestamp
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: "YYYY-MM-DD hh:mm:ss"

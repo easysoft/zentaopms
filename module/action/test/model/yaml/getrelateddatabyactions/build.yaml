@@ -1,0 +1,10 @@
+title: table zt_build
+author: Wang XuePeng
+desc: ""
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10000
+  - field: artifactRepoID
+    range: 1
+

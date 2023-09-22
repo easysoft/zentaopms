@@ -156,17 +156,18 @@ class actionTest
     }
 
     /**
-     * getTrashesBySearchTest
+     * 测试通过搜索获取回收站内容。
+     * Test get trashes by search.
      *
-     * @param  string $objectType
-     * @param  string $type all|hidden
-     * @param  int    $queryID
-     * @param  string $orderBy
-     * @param  object $pager
+     * @param  string     $objectType
+     * @param  string     $type all|hidden
+     * @param  string|int $queryID
+     * @param  string     $orderBy
+     * @param  object     $pager
      * @access public
-     * @return void
+     * @return array
      */
-    public function getTrashesBySearchTest($objectType, $type, $queryID, $orderBy, $pager = null)
+    public function getTrashesBySearchTest(string $objectType, string $type, string|int $queryID, string $orderBy, object $pager = null): array
     {
         $objects = $this->objectModel->getTrashesBySearch($objectType, $type, $queryID, $orderBy, $pager);
 
