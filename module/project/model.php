@@ -1837,6 +1837,8 @@ class projectModel extends model
             ->where('id')->eq((int)$projectID)
             ->exec();
 
+        $this->recordFirstEnd($projectID);
+
         /* When it has multiple errors, only the first one is prompted */
         if(dao::isError() and count(dao::$errors['realBegan']) > 1) dao::$errors['realBegan'] = dao::$errors['realBegan'][0];
 
@@ -3223,5 +3225,21 @@ class projectModel extends model
             ->fetchAll('project');
 
         return $leftTasks;
+    }
+
+
+    /**
+     * 记录项目启动时的计划完成日期。
+     * Record the end date when the project is started.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return bool
+     */
+    public function recordFirstEnd(int $projectID): bool
+    {
+        $project = $this->dao->select('end')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+        $this->dao->update(TABLE_PROJECT)->set('firstEnd')->eq($project->end)->where('id')->eq($projectID)->exec();
+        return !dao::isError();
     }
 }

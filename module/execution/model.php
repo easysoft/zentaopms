@@ -1209,6 +1209,7 @@ class executionModel extends model
             ->checkFlow()
             ->where('id')->eq((int)$executionID)
             ->exec();
+        $this->loadModel('project')->recordFirstEnd($executionID);
 
         /* When it has multiple errors, only the first one is prompted */
         if(dao::isError() and count(dao::$errors['realBegan']) > 1) dao::$errors['realBegan'] = dao::$errors['realBegan'][0];
