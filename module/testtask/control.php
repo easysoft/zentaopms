@@ -78,57 +78,46 @@ class testtask extends control
      */
     public function browse(int $productID = 0, string $branch = '', string $type = 'local,totalStatus', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $beginTime = '', string $endTime = '')
     {
+        /* 检查是否有权限访问测试单所属产品。*/
+        /* Check if user have permission to access the product to which the testtask belongs. */
+        $productID = $this->loadModel('product')->checkAccess($productID, $this->products);
+
+        /* 保存部分内容到 session 中供后面使用。*/
         /* Save session. */
         $uri = $this->app->getURI(true);
         $this->session->set('testtaskList', $uri, 'qa');
         $this->session->set('reportList',   $uri, 'qa');
         $this->session->set('buildList',    $uri, 'execution');
-
-        /* Set menu. */
-        $productID = $this->loadModel('product')->checkAccess($productID, $this->products);
-        $this->loadModel('qa')->setMenu($productID, $branch);
         $this->session->set('branch', $branch, 'qa');
 
-        /* Load pager. */
+        $this->loadModel('qa')->setMenu($productID, $branch);
+
+        /* 预处理部分变量供查询使用。*/
+        /* Prepare variables for query. */
         $this->app->loadClass('pager', $static = true);
-        $pager = pager::init($recTotal, $recPerPage, $pageID);
-
-        /* Append id for second sort. */
-        $sort = common::appendOrder($orderBy);
-
-        /* Get tasks. */
+        $pager     = pager::init($recTotal, $recPerPage, $pageID);
         $beginTime = $beginTime ? date('Y-m-d', strtotime($beginTime)) : '';
         $endTime   = $endTime   ? date('Y-m-d', strtotime($endTime))   : '';
+        $sort      = common::appendOrder($orderBy);
         $product   = $this->product->getById($productID);
         if($product->type == 'normal') $branch = 'all';
+
+        /* 从数据库中查询符合条件的测试单。*/
+        /* Query the testtasks from the database. */
         $testtasks = $this->testtask->getProductTasks($productID, $branch, $type, $beginTime, $endTime, $sort, $pager);
 
-        /* 获取不同状态测试单的数量，用于列表底部统计信息展示。 */
-        $waitCount    = 0;
-        $testingCount = 0;
-        $blockedCount = 0;
-        $doneCount    = 0;
-        foreach($testtasks as $testtask)
-        {
-            if($testtask->status == 'wait')    $waitCount ++;
-            if($testtask->status == 'doing')   $testingCount ++;
-            if($testtask->status == 'blocked') $blockedCount ++;
-            if($testtask->status == 'done')    $doneCount ++;
-            if($testtask->build == 'trunk' || empty($testtask->buildName)) $testtask->buildName = $this->lang->trunk;
-        }
+        $this->testtaskZen->prepareSummaryForBrowse($testtasks);
 
-        $this->view->title       = $product->name . $this->lang->colon . $this->lang->testtask->common;
-        $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $this->view->allSummary  = sprintf($this->lang->testtask->allSummary, count($testtasks), $waitCount, $testingCount, $blockedCount, $doneCount);
-        $this->view->pageSummary = sprintf($this->lang->testtask->pageSummary, count($testtasks));
-        $this->view->tasks       = $testtasks;
-        $this->view->product     = $product;
-        $this->view->branch      = $branch;
-        $this->view->type        = $type;
-        $this->view->orderBy     = $orderBy;
-        $this->view->pager       = $pager;
-        $this->view->beginTime   = $beginTime;
-        $this->view->endTime     = $endTime;
+        $this->view->title     = $product->name . $this->lang->colon . $this->lang->testtask->common;
+        $this->view->users     = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->tasks     = $testtasks;
+        $this->view->product   = $product;
+        $this->view->branch    = $branch;
+        $this->view->type      = $type;
+        $this->view->orderBy   = $orderBy;
+        $this->view->pager     = $pager;
+        $this->view->beginTime = $beginTime;
+        $this->view->endTime   = $endTime;
         $this->display();
     }
 
