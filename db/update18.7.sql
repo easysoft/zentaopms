@@ -566,3 +566,5 @@ ALTER TABLE `zt_project` ADD `firstEnd` date DEFAULT NULL AFTER `end`;
 ALTER TABLE `zt_product` ADD `closedDate` date DEFAULT NULL AFTER `createdVersion`;
 ALTER TABLE `zt_productplan` ADD `finishedDate` datetime DEFAULT NULL AFTER `end`;
 ALTER TABLE `zt_productplan` ADD `closedDate` datetime DEFAULT NULL AFTER `finishedDate`;
+
+INSERT INTO `zt_cron`(`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES ('59', '23', '*', '*', '*', 'moduleName=metric&methodName=updateMetricLib', '计算度量数据', 'system', 1, 'normal', '0000-00-00 00:00:00');
