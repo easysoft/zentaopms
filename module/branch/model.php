@@ -124,8 +124,6 @@ class branchModel extends model
      */
     public function getPairs(int $productID, string $params = '', int $executionID = 0, string $mergedBranches = ''): array
     {
-        if(!$productID) $productID = 0;
-
         $executionBranches = array();
         if($executionID)
         {
@@ -133,7 +131,7 @@ class branchModel extends model
             if(empty($executionBranches)) return array();
         }
 
-        $branches = $this->dao->select('*')->from(TABLE_BRANCH)
+        $branches = $this->dao->select('id, name')->from(TABLE_BRANCH)
             ->where('deleted')->eq(0)
             ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
             ->beginIF($productID && $executionID)->andWhere('id')->in(array_keys($executionBranches))->fi()
@@ -153,7 +151,7 @@ class branchModel extends model
         {
             $product = $this->loadModel('product')->getById($productID);
             if(($productID && !$product) || ($product && $product->type == 'normal')) return array();
-            $branches = array('0' => $this->lang->branch->main) + $branches;
+            $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $branches;
         }
 
         if(strpos($params, 'all') !== false)

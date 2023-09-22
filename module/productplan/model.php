@@ -311,51 +311,36 @@ class productplanModel extends model
     }
 
     /**
+     * 根据产品ID获取计划分组。
      * Get plan group by product id list.
      *
-     * @param  string|array $products
-     * @param  string       $param skipParent|unexpired
-     * @param  string       $field name
-     * @param  string       $orderBy id_desc|begin_desc
+     * @param  array  $productIdList
+     * @param  string $param         skipparent|unexpired
+     * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getGroupByProduct($products = '', $param = '', $field = 'name', $orderBy = 'id_desc')
+    public function getGroupByProduct(array $productIdList = array(), string $param = '', string $orderBy = 'id_desc'): array
     {
-        $date  = date('Y-m-d');
-        $param = strtolower($param);
         $plans = $this->dao->select('t1.*,t2.type as productType')->from(TABLE_PRODUCTPLAN)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t2.id=t1.product')
             ->where('t1.deleted')->eq(0)
-            ->beginIF($products)->andWhere('t1.product')->in($products)->fi()
-            ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('t1.end')->ge($date)->fi()
+            ->beginIF($productIdList)->andWhere('t1.product')->in($productIdList)->fi()
+            ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('t1.end')->ge(helper::today())->fi()
             ->orderBy('t1.' . $orderBy)
             ->fetchAll('id');
-
-        if(!empty($plans) and $field == 'name') $plans = $this->reorder4Children($plans);
-
         $plans = $this->relationBranch($plans);
 
-        $planGroup   = array();
+        $planGroup = array();
         foreach($plans as $plan)
         {
             foreach(explode(',', $plan->branch) as $branch)
             {
                 if(!isset($planGroup[$plan->product][$branch])) $planGroup[$plan->product][$branch] = array();
 
-                if($plan->parent == '-1' and strpos($param, 'skipparent') !== false) continue 2;
+                if($plan->parent == '-1' && strpos($param, 'skipparent') !== false) continue 2;
 
-                if($field == 'name')
-                {
-                    if($plan->parent > 0 and isset($plans[$plan->parent])) $plan->title = $plans[$plan->parent]->title . ' /' . $plan->title;
-                    $planGroup[$plan->product][$branch][$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
-                    if($plan->begin == $this->config->productplan->future and $plan->end == $this->config->productplan->future) $planGroup[$plan->product][$branch][$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
-                    if($plan->productType != 'normal') $planGroup[$plan->product][$branch][$plan->id] = $planGroup[$plan->product][$branch][$plan->id] . ' / ' . ($plan->branchName ? $plan->branchName : $this->lang->branch->main);
-                }
-                else
-                {
-                    $planGroup[$plan->product][$branch][$plan->id] = $plan;
-                }
+                $planGroup[$plan->product][$branch][$plan->id] = $plan;
             }
         }
         return $planGroup;
@@ -1080,24 +1065,19 @@ class productplanModel extends model
     }
 
     /**
-     * Get relation branch for plans.
+     * 获取计划关联的分支信息。
+     * Get relation branch for plan list.
      *
-     * @param  array    $plans
+     * @param  array  $planList
      * @access public
      * @return array
      */
-    public function relationBranch(array $plans): array
+    public function relationBranch(array $planList): array
     {
-        if(empty($plans)) return $plans;
+        if(empty($planList)) return $planList;
 
-        $this->app->loadLang('branch');
-        $branchMap = $this->dao->select('id, name')->from(TABLE_BRANCH)
-            ->where('status')->eq('active')
-            ->andWhere('deleted')->eq('0')
-            ->fetchPairs('id', 'name');
-        $branchMap[BRANCH_MAIN] = $this->lang->branch->main;
-
-        foreach($plans as &$plan)
+        $branchMap = $this->loadModel('branch')->getPairs(0, 'active');
+        foreach($planList as &$plan)
         {
             $plan->branchName = $this->lang->branch->main;
             if($plan->branch)
@@ -1111,7 +1091,7 @@ class productplanModel extends model
             }
         }
 
-        return $plans;
+        return $planList;
     }
 
     /**

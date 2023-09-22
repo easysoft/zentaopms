@@ -1758,14 +1758,14 @@ class executionZen extends execution
         if(!empty($copyExecutionID))
         {
             $branches     = $this->project->getBranchesByProject($copyExecutionID);
-            $plans        = $this->loadModel('productplan')->getGroupByProduct(array_keys($products), 'skipParent|unexpired');
+            $plans        = $this->loadModel('productplan')->getGroupByProduct(array_keys($products), 'skipparent|unexpired');
             $branchGroups = $this->execution->getBranchByProduct(array_keys($products), $projectID);
         }
 
         if(!empty($project) and $project->stageBy == 'project')
         {
             $branches = $this->project->getBranchesByProject($projectID);
-            $plans    = $this->loadModel('productplan')->getGroupByProduct(array_keys($products), 'skipParent|unexpired');
+            $plans    = $this->loadModel('productplan')->getGroupByProduct(array_keys($products), 'skipparent|unexpired');
         }
 
         if($products and isset($branches))
@@ -2049,7 +2049,7 @@ class executionZen extends execution
 
         $productPlans     = $linkedBranches = $linkedBranchList = array();
         $linkedProducts   = $this->product->getProducts($execution->id, 'all', '', true, $linkedProductIdList, false);
-        $plans            = $this->productplan->getGroupByProduct(array_keys($linkedProducts), 'skipParent|unexpired');
+        $plans            = $this->productplan->getGroupByProduct(array_keys($linkedProducts), 'skipparent|unexpired');
         $executionStories = $this->project->getStoriesByProject($execution->id);
 
         /* If the story of the product which linked the execution, you don't allow to remove the product. */

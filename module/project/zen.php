@@ -310,7 +310,7 @@ class projectZen extends project
         $branches         = $this->project->getBranchesByProject($projectID);
         $linkedProducts   = $this->loadModel('product')->getProducts($projectID, 'all', '', true);
         $projectBranches  = $this->project->getBranchGroup($projectID, array_keys($linkedProducts));
-        $plans            = $this->loadModel('productplan')->getGroupByProduct(array_keys($linkedProducts), 'skipParent|unexpired');
+        $plans            = $this->loadModel('productplan')->getGroupByProduct(array_keys($linkedProducts), 'skipparent|unexpired');
         $withProgram      = $this->config->systemMode == 'ALM';
         $allProducts      = $this->program->getProductPairs($project->parent, 'all', 'noclosed', '', 0, $withProgram);
 
