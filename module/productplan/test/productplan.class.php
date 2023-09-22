@@ -474,5 +474,21 @@ class productPlan
 
         return $_SESSION['productplansearchParams']['queryID'];
     }
+
+    /**
+     * 将父计划下的需求和Bug转移到子计划下。
+     * Transfer stories and bugs to new plan.
+     *
+     * @param  int    $planID
+     * @access public
+     * @return int
+     */
+    public function transferStoriesAndBugsTest(int $planID): int
+    {
+        $plan = $this->productplan->getByID($planID);
+        $this->productplan->transferStoriesAndBugs($plan);
+
+        return $this->productplan->dao->select('plan')->from(TABLE_BUG)->where('id')->eq(1)->fetch('plan');
+    }
 }
 ?>
