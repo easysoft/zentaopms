@@ -1,18 +1,18 @@
 #!/usr/bin/env php
 <?php
+/**
+
+title=productplanModel->relationBranch();
+timeout=0
+cid=1
+
+*/
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/productplan.class.php';
 
 zdTable('branch')->config('relationbranch_branch')->gen(20);
 zdTable('productplan')->config('relationbranch_productplan')->gen(50);
-
-/**
-
-title=productplanModel->relationBranch();
-cid=1
-pid=1
-
-*/
 
 $plan = new productPlan('admin');
 

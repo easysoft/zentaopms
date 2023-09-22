@@ -113,9 +113,9 @@ class productPlan
      * @access public
      * @return count
      */
-    public function getGroupByProduct($products, $param, $field = 'name', $orderBy = 'id_desc')
+    public function getGroupByProduct($products, $param, $orderBy = 'id_desc')
     {
-        $productplans = $this->productplan->getGroupByProduct($products, $param, $field, $orderBy);
+        $productplans = $this->productplan->getGroupByProduct($products, $param, $orderBy);
         if(dao::isError()) return dao::getError();
         return count($productplans);
     }
