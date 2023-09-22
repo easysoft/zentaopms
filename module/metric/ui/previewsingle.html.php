@@ -260,6 +260,7 @@ div
 div
 (
     setClass('main'),
+    empty($current) ? div(setClass('canvas')) :
     div
     (
         setClass('canvas'),
