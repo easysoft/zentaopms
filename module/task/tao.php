@@ -406,7 +406,7 @@ class taskTao extends taskModel
                 $currentTask->assignedTo   = $oldTask->openedBy;
                 $currentTask->assignedDate = helper::now();
                 $currentTask->finishedBy   = $this->app->user->account;
-                $currentTask->finishedDate = $task->finishedDate;
+                $currentTask->finishedDate = zget($task, 'finishedDate', null);
             }
         }
 
