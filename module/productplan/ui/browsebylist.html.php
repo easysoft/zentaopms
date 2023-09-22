@@ -255,7 +255,7 @@ dtable
     set::nested(true),
     set::checkable(true),
     set::onRenderCell(jsRaw('window.renderProductPlanList')),
-    set::sortLink(createLink('product', 'all', "browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
+    set::sortLink(createLink('productplan', 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&orderBy={name}_{sortType}&queryID={$queryID}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
     set::footToolbar(array
     (
         'items' => array(
