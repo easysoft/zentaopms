@@ -175,6 +175,8 @@ class actionModel extends model
                 return $emptyRecord;
             case 'product':
                 return array('product' => ",$objectID,", 'project' => 0, 'execution' => 0);
+            case 'marketresearch':
+                return array('product' => ',0,', 'project' => $objectID, 'execution' => 0);
             case 'project':
             case 'execution':
                 $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectID)->fetchPairs('product');
@@ -1973,10 +1975,10 @@ class actionModel extends model
                 {
                     $execution = $this->loadModel('execution')->getById($action->objectID);
                     if(!empty($execution) and $execution->type == 'kanban') $action->objectLink = helper::createLink('execution', 'kanban', "executionID={$action->objectID}");
-                    if($execution->type == 'stage' and $execution->attribute == 'research' and $action->vision == 'or') 
+                    if($execution->type == 'stage' and $execution->attribute == 'research' and $action->vision == 'or')
                     {
                         $action->objectLink  = '';
-                        $action->objectLabel = $this->lang->execution->stage;   
+                        $action->objectLabel = $this->lang->execution->stage;
                     }
                 }
 
