@@ -512,7 +512,6 @@ class repoModel extends model
         if($from == 'repo') $committer = $this->app->user->account;
         foreach($links as $linkID)
         {
-
             $relation           = new stdclass;
             $relation->AType    = 'revision';
             $relation->AID      = $revisionID;

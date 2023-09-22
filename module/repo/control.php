@@ -156,7 +156,7 @@ class repo extends control
             {
                 /* Add webhook. */
                 $repo = $this->repo->getByID($repoID);
-                $this->gitlab->updateCodePath($repo->serviceHost, $repo->serviceProject, $repo->id);
+                $this->loadModel('gitlab')->updateCodePath($repo->serviceHost, $repo->serviceProject, $repo->id);
                 $this->repo->updateCommitDate($repoID);
             }
 
