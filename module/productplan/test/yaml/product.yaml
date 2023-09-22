@@ -4,7 +4,7 @@ version: 1.0.0
 
 fields:
   - field: id
-    range: 1-30
+    range: 1-100
   - field: name
     range: 1-30
     prefix: '产品'
@@ -17,4 +17,6 @@ fields:
   - field: PO
     range: 'admin{10},user1{10},user2{10}'
   - field: type
-    range: 'normal{5},branch{5},normal{20}'
+    range: 'normal{5},branch{5},platform{5},normal{15}'
+  - field: shadow
+    range: 0{25},1{5},0{5},1{5}
