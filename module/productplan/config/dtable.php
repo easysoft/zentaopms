@@ -94,11 +94,6 @@ $config->productplan->dtable->fieldList['actions']['width']    = 'auto';
 $config->productplan->dtable->fieldList['actions']['type']     = 'actions';
 $config->productplan->dtable->fieldList['actions']['minWidth'] = 200;
 
-$config->productplan->dtable->fieldList['actions']['actionsMap']['divider']['icon']  = '';
-$config->productplan->dtable->fieldList['actions']['actionsMap']['divider']['class'] = 'nav-divider';
-$config->productplan->dtable->fieldList['actions']['actionsMap']['divider']['type']  = 'dropdown';
-$config->productplan->dtable->fieldList['actions']['actionsMap']['divider']['caret'] = false;
-
 $config->productplan->dtable->fieldList['actions']['actionsMap']['start']['icon'] = 'play';
 $config->productplan->dtable->fieldList['actions']['actionsMap']['start']['hint'] = $this->lang->productplan->startAB;
 $config->productplan->dtable->fieldList['actions']['actionsMap']['start']['url']  = 'javascript:startProductPlan("{planID}")';

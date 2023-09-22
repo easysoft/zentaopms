@@ -1333,11 +1333,6 @@ class productplanModel extends model
                 $actions[] = $this->buildActionBtn('none', 'plus', $params, $plan, $type, '', '', '', false, 'disabled', $this->lang->productplan->createExecution);
             }
 
-            if($type == 'browse' and in_array(true, array($canStart, $canFinish, $canClose, $canCreateExec)) and in_array(true, array($canLinkStory, $canLinkBug, $canEdit, $canCreateChild, $canDelete)))
-            {
-                $actions[] = $this->buildActionBtn('none', 'divider', $params, $plan, $type);
-            }
-
             if($canLinkStory and $plan->parent >= 0)
             {
                 $actions[] = $this->buildActionBtn($this->app->rawModule, 'view', "{$params}&type=story&orderBy=id_desc&link=true", $plan, $type, 'link', '', '', '', '', $this->lang->productplan->linkStory);
@@ -1363,10 +1358,6 @@ class productplanModel extends model
 
         if($type == 'browse')
         {
-            if(in_array(true, array($canLinkStory, $canLinkBug, $canEdit, $canCreateChild)) and $canDelete)
-            {
-                $actions[] = $this->buildActionBtn('none', 'divider', $params, $plan, $type);
-            }
             $actions[] = $this->buildActionBtn('productplan', 'delete', "{$params}&confirm=no", $plan, $type, 'trash', 'hiddenwin', '', '', $this->lang->productplan->delete);
         }
 

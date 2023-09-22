@@ -168,7 +168,7 @@ function rearrangeActionBtns($actions)
     }
 
     $result[] = $actionMap['plus'];
-    $result[] = $actionMap['divider'];
+    $result[] = array('type' => 'divider');
     $result[] = $actionMap['link'];
     $result[] = $actionMap['bug'];
     $result[] = $actionMap['edit'];
