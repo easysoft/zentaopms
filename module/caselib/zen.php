@@ -440,7 +440,7 @@ class caselibZen extends caselib
         }
 
         $rows    = $this->loadModel('file')->parseCSV($this->session->fileImport);
-        $columns = $this->getColumnsForShowImport($rows[0],$fields);
+        $columns = $this->getColumnsForShowImport($rows[0], $fields);
         unset($rows[0]);
 
         $caseData = array();
