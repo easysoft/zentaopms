@@ -3,59 +3,51 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/productplan.class.php';
 
+
+zdTable('productplan')->gen(0);
+
 /**
 
 title=productpanModel->create();
+timeout=0
 cid=1
-pid=1
-
-测试正常创建 >> 110
-测试不传入名称的情况 >> 『名称』不能为空。
-测试不传开始时间的情况 >> 111
-测试不传结束时间的情况 >> 112
-测试不传开始时间及结束时间的情况 >> 113
-测试不传UID的情况 >> 114
-测试不传关联产品的情况 >> 『产品』应当是数字。
-测试不传父级计划的情况 >> 『父计划』应当是数字。
 
 */
-$plan = new productPlan('admin');
 
-$posts = array();
-$posts['title']   = '测试创建1';
-$posts['begin']   = '2021-10-25';
-$posts['end']     = '2021-10-29';
-$posts['uid']     = '623927843dd9b';
-$posts['product'] = '2';
-$posts['parent']  = '0';
+$postData = new stdclass();
+$postData->title   = '测试创建1';
+$postData->begin   = '2021-10-25';
+$postData->end     = '2021-10-29';
+$postData->uid     = '623927843dd9b';
+$postData->product = '2';
+$postData->parent  = '0';
 
-$noTitle = $posts;
-$noTitle['title']  = '';
+$noTitle = clone $postData;
+$noTitle->title  = '';
 
-$noBegin = $posts;
-$noBegin['begin']  = '';
+$noBegin = clone $postData;
+$noBegin->begin = '';
 
-$noEnd   = $posts;
-$noEnd['end']      = '';
+$noEnd =  clone$postData;
+$noEnd->end  = '';
 
-$noBeginEnd = $noBegin;
-$noBeginEnd['end'] = '';
+$noBeginEnd = clone $noBegin;
+$noBeginEnd->end = '';
 
-$noUid   = $posts;
-$noUid['uid']      = '';
+$noUid = clone $postData;
+$noUid->uid = '';
 
-$noProduct = $posts;
-$noProduct['product'] = '';
+$parent = clone $postData;
+$parent->parent = 1;
 
-$noParent = $posts;
-$noParent['parent'] = '';
+$isFutureList = array(false, true);
 
-r($plan->create($posts))      && p()            && e('110');                    //测试正常创建
-r($plan->create($noTitle))    && p('title:0')   && e('『名称』不能为空。');     //测试不传入名称的情况
-r($plan->create($noBegin))    && p()            && e('111');                    //测试不传开始时间的情况
-r($plan->create($noEnd))      && p()            && e('112');                    //测试不传结束时间的情况
-r($plan->create($noBeginEnd)) && p()            && e('113');                    //测试不传开始时间及结束时间的情况
-r($plan->create($noUid))      && p()            && e('114');                    //测试不传UID的情况
-r($plan->create($noProduct))  && p('product:0') && e('『产品』应当是数字。');   //测试不传关联产品的情况
-r($plan->create($noParent))   && p('parent:0')  && e('『父计划』应当是数字。'); //测试不传父级计划的情况
-?>
+$planTester = new productPlan('admin');
+r($planTester->createTest($postData,   $isFutureList[0])) && p('title')   && e('测试创建1');              // 测试正常创建
+r($planTester->createTest($postData,   $isFutureList[1])) && p('title')   && e('测试创建1');              // 测试正常创建
+r($planTester->createTest($noTitle,    $isFutureList[0])) && p('title:0') && e('『名称』不能为空。');     // 测试不填名称创建失败
+r($planTester->createTest($noBegin,    $isFutureList[0])) && p('begin')   && e('『开始日期』不能为空。'); // 测试不填开始时间创建失败
+r($planTester->createTest($noEnd,      $isFutureList[0])) && p('end')     && e('『结束日期』不能为空。'); // 测试不填结束日期创建失败
+r($planTester->createTest($noBeginEnd, $isFutureList[0])) && p('begin')   && e('『开始日期』不能为空。'); // 测试不填开始日期和结束日期创建失败
+r($planTester->createTest($noUid,      $isFutureList[0])) && p('title')   && e('测试创建1');              // 测试没有uid
+r($planTester->createTest($parent,     $isFutureList[0])) && p('parent')  && e('1');                      // 测试创建子计划

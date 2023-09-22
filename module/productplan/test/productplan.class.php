@@ -186,25 +186,21 @@ class productPlan
     }
 
     /**
-     * Create
+     * 创建一个计划。
+     * Create a productplan.
      *
-     * @param  array $param
+     * @param  object $param
+     * @param  bool   $isFuture
      * @access public
-     * @return array
+     * @return object|array
      */
-    public function create($param)
+    public function createTest(object $postData, bool $isFuture = false): object|array
     {
-        //初始化传的参数，这里可以设置默认值
-        $createPlan = array('title' => '', 'begin' => '', 'end' => '', 'delta' => '', 'desc' => '', 'uid' => '', 'product' => '', 'parent' => '');
-        //设置foreach循环，将初始化参数传给全局变量$_POST中，通过此方式将传的参数提供给源码create方法
-        foreach($createPlan as $field => $defaultvalue) $_POST[$field] = $defaultvalue;
-        //二次遍历数组将此方法的形参传入$_POST中，这行可以替换掉初始化参数，做到以传入参数为最终结果的目的。同时不传参数的话取默认值
-        foreach($param as $key => $value) $_POST[$key] = $value;
-        //这行代码的作用是调用源码中的方法(参数通过$_POST直接取，具体原理可以不知道)
-        $productPlans = $this->productplan->create();
-        //将方法返回内容返回
+        $this->productplan->config->productplan->create->requiredFields = 'title,begin,end';
+        $planID = $this->productplan->create($postData, $isFuture);
+
         if(dao::isError()) return dao::getError();
-        return $productPlans;
+        return $this->productplan->getByID($planID);
     }
 
     /**

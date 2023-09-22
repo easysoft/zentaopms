@@ -495,7 +495,7 @@ class productplanModel extends model
         $this->dao->insert(TABLE_PRODUCTPLAN)->data($plan)
             ->autoCheck()
             ->batchCheck($this->config->productplan->create->requiredFields, 'notempty')
-            ->checkIF(!$isFuture, 'end', 'ge', $plan->begin)
+            ->checkIF(!$isFuture && $plan->begin != $this->config->productplan->future, 'end', 'ge', $plan->begin)
             ->checkFlow()
             ->exec();
         if(dao::isError()) return false;
