@@ -7,10 +7,10 @@
 function computeEndDate(e)
 {
     let delta     = $(e.target).val();
-    let beginDate = $('#begin').val();
+    let beginDate = $('input[name=begin]').val();
     if(!beginDate) return;
 
-    delta     = parseInt(delta);
+    delta     = currentDelta = parseInt(delta);
     beginDate = convertStringToDate(beginDate);
     if((delta == 7 || delta == 14) && (beginDate.getDay() == 1))
     {
@@ -20,8 +20,9 @@ function computeEndDate(e)
     let currentBeginDate = window.zui.formatDate(beginDate, 'yyyy-MM-dd');
     let endDate          = formatDate(beginDate, delta - 1);
 
-    $('#begin').val(currentBeginDate);
-    $('#end').val(endDate);
+    $('#begin').zui('datePicker').$.changeState({value: currentBeginDate});
+    $('#end').zui('datePicker').$.changeState({value: endDate});
+    setTimeout(function(){$('[name=delta]').val(`${currentDelta}`)}, 0);
 }
 
 /**
@@ -86,10 +87,16 @@ function toggleDateBox(e)
 function loadBranches(e)
 {
     let parentID        = $(e.target).val();
-    let currentBranches = $('#branch').val() ? $('#branch').val().toString() : '';
-    $.get($.createLink('productplan', 'ajaxGetParentBranches', "productID=" + productID + "&parentID=" + parentID + "&currentBranches=" + currentBranches), function(data)
+    let currentBranches = $('select[name^=branch]').val() ? $('select[name^=branch]').val().toString() : '';
+    $.get($.createLink('productplan', 'ajaxGetParentBranches', "productID=" + productID + "&parentID=" + parentID), function(data)
     {
-        $('#branch').replaceWith(data);
+        if(data)
+        {
+            data = JSON.parse(data);
+            const $branchPicker = $('select[name^=branch]').zui('picker');
+            $branchPicker.render({items: data, multiple: true});
+            $branchPicker.$.setValue(currentBranches);
+        }
     })
 }
 

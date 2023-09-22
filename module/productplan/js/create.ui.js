@@ -1,4 +1,4 @@
-$(document).on('change', '#begin, #end', function()
+$(document).on('change', 'input[name=begin],input[name=end]', function()
 {
     $("input[name='delta']").prop('checked', false);
 });
