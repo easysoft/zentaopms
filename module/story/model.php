@@ -2925,11 +2925,12 @@ class storyModel extends model
     }
 
     /**
-     * Get story pairs of a user.
+     * 通过用户获取需求ID和需求信息的键值对。array(storyID => storyTitle, ...)
+     * Get story pairs by account name of the user.
      *
      * @param  string    $account
      * @param  string    $limit
-     * @param  string    $type requirement|story
+     * @param  string    $type              requirement|story
      * @param  array     $skipProductIDList
      * @param  int|array $appendStoryID
      * @access public
@@ -2937,13 +2938,12 @@ class storyModel extends model
      */
     public function getUserStoryPairs($account, $limit = 10, $type = 'story', $skipProductIDList = array(), $appendStoryID = 0)
     {
-        return $this->dao->select('id, title')
-            ->from(TABLE_STORY)
-            ->where('deleted')->eq(0)
-            ->andWhere('status')->ne('closed')
+        return $this->dao->select('id, title')->from(TABLE_STORY)
+            ->where('deleted')->eq('0')
             ->andWhere('type')->eq($type)
-            ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('assignedTo')->eq($account)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('status')->ne('closed')
             ->andWhere('product')->ne(0)
             ->beginIF(!empty($skipProductIDList))->andWhere('product')->notin($skipProductIDList)->fi()
             ->beginIF(!empty($appendStoryID))->orWhere('id')->in($appendStoryID)->fi()
