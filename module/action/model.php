@@ -2237,15 +2237,18 @@ class actionModel extends model
      * @access public
      * @return bool
      */
-    public function hasPreOrNext($date, $direction = 'next'): bool
+    public function hasPreOrNext(string $date, string $direction = 'next'): bool
     {
+        if(empty($date)) return false;
         $condition = $this->session->actionQueryCondition;
 
-        /* Remove date condition for direction. */
+        /* 移除搜索中的时间筛选条件。 */
+        /* Remove time filter from search. */
         $condition = preg_replace("/AND +date[\<\>]'\d{4}\-\d{2}\-\d{2}'/", '', $condition);
         $count     = $this->dao->select('count(*) as count')->from(TABLE_ACTION)->where($condition)
             ->andWhere('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'")
             ->fetch('count');
+
         return $count > 0;
     }
 

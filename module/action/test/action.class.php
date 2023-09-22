@@ -517,6 +517,7 @@ class actionTest
     }
 
     /**
+     * 检查是否有上一条或下一条动态。
      * Check Has pre or next.
      *
      * @param  string $date
@@ -524,10 +525,11 @@ class actionTest
      * @access public
      * @return bool
      */
-    public function hasPreOrNextTest($date, $direction = 'next')
+    public function hasPreOrNextTest(string $date, string $direction = 'next'): bool
     {
         global $tester;
         $tester->session->set('actionQueryCondition', '1=1');
+        if($date == 'today') $date = date('Y-m-d');
         $result = $this->objectModel->hasPreOrNext($date, $direction);
 
         if(dao::isError()) return dao::getError();
