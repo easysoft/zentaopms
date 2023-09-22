@@ -939,15 +939,15 @@ class productplan extends control
     }
 
     /**
+     * 获取父计划的分支。
      * AJAX: Get parent branches.
      *
      * @param  int    $productID
      * @param  int    $parentID
-     * @param  string $currentBranches
      * @access public
      * @return void
      */
-    public function ajaxGetParentBranches($productID = 0, $parentID = 0, $currentBranches = '')
+    public function ajaxGetParentBranches(int $productID = 0, int $parentID = 0)
     {
         $branchPairs = $this->loadModel('branch')->getPairs($productID, 'active');
         if(!empty($parentID))
@@ -958,10 +958,17 @@ class productplan extends control
             {
                 if(!isset($branchPairs[$parentBranchID])) continue;
                 $parentBranches[$parentBranchID] = $branchPairs[$parentBranchID];
-                if(!empty($currentBranches) and strpos(",$currentBranches,", ",$parentBranchID,") === false) $currentBranches = str_replace(",$parentBranchID,", ',', $currentBranches);
             }
         }
-        return print(html::select('branch[]', empty($parentID) ? $branchPairs : $parentBranches, trim($currentBranches, ','), "class='form-control chosen' multiple"));
+
+        $branches = empty($parentID) ? $branchPairs : $parentBranches;
+        $items    = array();
+        foreach($branches as $id => $name)
+        {
+            if($id == '') continue;
+            $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
+        }
+        return print(json_encode($items));
     }
 
     /**
