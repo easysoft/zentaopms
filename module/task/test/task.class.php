@@ -5,6 +5,8 @@ class taskTest
     {
         global $tester;
         $this->objectModel = $tester->loadModel('task');
+
+        $this->objectModel->lang->task->story = '相关研发需求';
     }
 
     /**

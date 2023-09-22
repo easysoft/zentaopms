@@ -6,6 +6,7 @@ include dirname(__FILE__, 2) . '/task.class.php';
 zdTable('user')->gen(5);
 su('admin');
 
+zdTable('effort')->gen(0);
 zdTable('project')->config('project')->gen(6);
 zdTable('task')->config('task')->gen(9);
 zdTable('taskteam')->config('taskteam')->gen(6);
