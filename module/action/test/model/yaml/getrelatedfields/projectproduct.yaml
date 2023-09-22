@@ -1,0 +1,9 @@
+title: zt_projectproduct
+author: Wang XuePeng
+desc: 项目关联产品表
+version: 1.0
+fields:
+  - field: project
+    range: 3, 4
+  - field: product
+    range: 1{2}

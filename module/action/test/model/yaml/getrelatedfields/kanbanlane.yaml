@@ -1,0 +1,7 @@
+title: table zt_kanbanlane
+desc: "看板泳道"
+author: Wang XuePeng
+version: "1.0"
+fields:
+    - field: execution
+      range: 1

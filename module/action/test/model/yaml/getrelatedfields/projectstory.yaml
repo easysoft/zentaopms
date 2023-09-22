@@ -1,0 +1,26 @@
+title: table zt_projectstory
+desc: "项目需求关系"
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: project
+    note: "项目ID"
+    range: 11{100}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: product
+    note: "产品ID"
+    range: 1{100}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: story
+    note: "需求ID"
+    range: 8
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

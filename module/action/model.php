@@ -122,11 +122,12 @@ class actionModel extends model
      */
     public function getRelatedFields(string $objectType, int $objectID, string $actionType = '', string $extra = ''): array
     {
-        $emptyRecord = array('product' => ',0,', 'project' => 0, 'execution' => 0);
+        $emptyRecord = array('product' => '0', 'project' => 0, 'execution' => 0);
 
         switch($objectType)
         {
             case 'program':
+                $emptyRecord['product'] = ',0,';
                 return $emptyRecord;
             case 'product':
                 return array('product' => ",$objectID,", 'project' => 0, 'execution' => 0);
@@ -149,8 +150,9 @@ class actionModel extends model
 
                 return $relation;
         }
-        /* 只处理这些对象。 */
-        /* Only process these object types. */
+
+        /* 过滤不在配置项中的类型。 */
+        /* Filter object types not in configuration items。 */
         if(strpos($this->config->action->needGetRelateField, ",{$objectType},") !== false)
         {
             if(!isset($this->config->objectTables[$objectType])) return $emptyRecord;
@@ -265,7 +267,7 @@ class actionModel extends model
                     if($result)
                     {
                         $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($result->project)->fetchPairs('product');
-                        $record['product']   = join(',', array_keys($products));
+                        $record['product']   = join(',', !empty($products) ? array_keys($products) : array(0));
                         $record['project']   = zget($result, 'project', 0);
                     }
                     break;
@@ -288,7 +290,10 @@ class actionModel extends model
                 if(!empty($record['execution']) && empty($record['project'])) $record['project'] = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($record['execution'])->fetch('project');
                 return $record;
             }
-
+        }
+        else
+        {
+            $emptyRecord['product'] = ',0,';
             return $emptyRecord;
         }
 

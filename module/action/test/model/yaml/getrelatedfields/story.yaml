@@ -1,0 +1,8 @@
+title: table zt_story
+desc: "需求"
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: id
+    note: "id"
+    range: 1,5-100

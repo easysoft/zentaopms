@@ -77,6 +77,7 @@ class actionTest
     }
 
     /**
+     * 测试获取对象的产品、项目、执行。
      * Test get product, project, execution of the object.
      *
      * @param string $objectType
@@ -86,9 +87,9 @@ class actionTest
      * @access public
      * @return array
      */
-    public function getRelatedFieldsTest($objectType, $objectID, $actionType = '', $extra = '')
+    public function getRelatedFieldsTest(string $objectType, int $objectID, string $actionType = '', string $extra = ''): array
     {
-        $objects = $this->objectModel->getRelatedFields($objectType, $objectID, $actionType = '', $extra = '');
+        $objects = $this->objectModel->getRelatedFields($objectType, $objectID, $actionType, $extra);
 
         if(dao::isError()) return dao::getError();
 
