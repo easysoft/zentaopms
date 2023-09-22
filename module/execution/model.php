@@ -4845,4 +4845,17 @@ class executionModel extends model
     {
         return $this->dao->select('DISTINCT type')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('parent')->eq($parentID)->fetchPairs('type');
     }
+
+    /**
+     * 通过 ID 列表获取执行键对。
+     * Get execution pairs by id list.
+     *
+     * @param  array  $executionIdList
+     * @access public
+     * @return array
+     */
+    public function getPairsByList(array $executionIdList): array
+    {
+        return $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->fetchPairs();
+    }
 }

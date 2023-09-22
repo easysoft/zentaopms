@@ -74,11 +74,12 @@ class testreport extends control
     }
 
     /**
+     * 浏览测试报告。
      * Browse report.
      *
      * @param  int    $objectID
      * @param  string $objectType
-     * @param  string $extra
+     * @param  int    $extra
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -86,41 +87,22 @@ class testreport extends control
      * @access public
      * @return void
      */
-    public function browse($objectID = 0, $objectType = 'product', $extra = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse(int $objectID = 0, string $objectType = 'product', int $extra = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        if(strpos('product|execution|project', $objectType) === false) return print('Type Error!');
+        if(strpos('product|execution|project', $objectType) === false) return $this->send(array('result' => 'fail', 'message' => 'Type Error!'));
 
         $objectID = $this->commonAction($objectID, $objectType);
         $object   = $this->$objectType->getById($objectID);
         if($extra) $task = $this->testtask->getByID($extra);
 
-        $title = $extra ? $task->name : $object->name;
-
-        /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
-        if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
-        $pager = pager::init($recTotal, $recPerPage, $pageID);
-
-        $reports = $this->testreport->getList($objectID, $objectType, $extra, $orderBy, $pager);
-
-        if(strpos('project|execution', $objectType) !== false and ($extra or isset($_POST['taskIdList'])))
-        {
-            $taskIdList = isset($_POST['taskIdList']) ? $_POST['taskIdList'] : array($extra);
-            foreach($reports as $reportID => $report)
-            {
-                $tasks = explode(',', $report->tasks);
-                if(count($tasks) != count($taskIdList) or array_diff($tasks, $taskIdList)) unset($reports[$reportID]);
-            }
-            $pager->setRecTotal(count($reports));
-        }
-
-        if(empty($reports) and common::hasPriv('testreport', 'create'))
+        $reports = $this->testreportZen->getReportsForBrowse($objectID, $objectType, $extra, $orderBy, $recTotal, $recPerPage, $pageID);
+        if(empty($reports) && common::hasPriv('testreport', 'create'))
         {
             $param = '';
-            if($objectType == 'product' and $extra) $param = "objectID=$extra&objectType=testtask";
-            if(($objectType == 'project' or $objectType == 'execution') and ($extra or !empty($_POST['taskIdList'])))
+            if($objectType == 'product' && $extra) $param = "objectID={$extra}&objectType=testtask";
+            if(strpos('|project|execution|', $objectType) !== false && ($extra || !empty($_POST['taskIdList'])))
             {
-                $param  = "objectID=$objectID&objectType=$objectType";
+                $param  = "objectID={$objectID}&objectType={$objectType}";
                 $param .= isset($_POST['taskIdList']) ? '&extra=' . join(',', $_POST['taskIdList']) : '&extra=' . $extra;
             }
             if($param) $this->locate($this->createLink('testreport', 'create', $param));
@@ -135,21 +117,17 @@ class testreport extends control
             $executions[$report->execution] = $report->execution;
             foreach(explode(',', $report->tasks) as $taskID) $tasks[$taskID] = $taskID;
         }
-        if($executions) $executions = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($executions)->fetchPairs();
-        if($tasks)      $tasks      = $this->dao->select('id,name')->from(TABLE_TESTTASK)->where('id')->in($tasks)->fetchPairs('id', 'name');
 
-        $this->view->title      = $title . $this->lang->colon . $this->lang->testreport->common;
-
+        $this->view->title        = ($extra ? $task->name : $object->name) . $this->lang->colon . $this->lang->testreport->common;
         $this->view->reports      = $reports;
         $this->view->orderBy      = $orderBy;
         $this->view->objectID     = $objectID;
         $this->view->objectType   = $objectType;
         $this->view->object       = $object;
         $this->view->extra        = $extra;
-        $this->view->pager        = $pager;
         $this->view->users        = $this->user->getPairs('noletter|noclosed|nodeleted');
-        $this->view->tasks        = $tasks;
-        $this->view->executions   = $executions;
+        $this->view->tasks        = $tasks ? $this->loadModel('testtask')->getPairsByList($tasks) : array();
+        $this->view->executions   = $executions ? $this->loadModel('execution')->getPairsByList($executions) : array();
         $this->view->canBeChanged = common::canModify($objectType, $object); // Determines whether an object is editable.
         $this->display();
     }

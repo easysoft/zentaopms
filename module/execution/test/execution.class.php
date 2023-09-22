@@ -3035,4 +3035,20 @@ class executionTest
             return $this->executionModel->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($executionID)->andWhere('type')->eq('execution')->fetchAll();
         }
     }
+
+    /**
+     * 测试通过 ID 列表获取执行键对。
+     * Test get execution pairs by id list.
+     *
+     * @param  string       $executionIdList
+     * @access public
+     * @return string|array
+     */
+    public function getPairsByListTest(string $executionIdList): string|array
+    {
+        $executions = $this->executionModel->getPairsByList(explode(',', $executionIdList));
+
+        if(dao::isError()) return dao::getError();
+        return implode(',', $executions);
+    }
 }

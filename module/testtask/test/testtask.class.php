@@ -481,4 +481,20 @@ class testtaskTest
 
         return $return;
     }
+
+    /**
+     * 测试通过 ID 列表获取测试单键对。
+     * Test get testtask pairs by id list.
+     *
+     * @param  string       $taskIdList
+     * @access public
+     * @return string|array
+     */
+    public function getPairsByListTest(string $taskIdList): string|array
+    {
+        $tasks = $this->objectModel->getPairsByList(explode(',', $taskIdList));
+
+        if(dao::isError()) return dao::getError();
+        return implode(',', $tasks);
+    }
 }
