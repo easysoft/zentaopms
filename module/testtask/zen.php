@@ -386,6 +386,33 @@ class testtaskZen extends testtask
     }
 
     /**
+     * 统计不同状态测试单的数量，用于列表底部信息展示。
+     * Count the number of testtasks in different statuses for information display at the bottom of the browse page.
+     *
+     * @param  array     $testtasks
+     * @access protected
+     * @return void
+     */
+    protected function prepareSummaryForBrowse(array $testtasks): void
+    {
+        $waitCount    = 0;
+        $testingCount = 0;
+        $blockedCount = 0;
+        $doneCount    = 0;
+        foreach($testtasks as $testtask)
+        {
+            if($testtask->status == 'wait')    $waitCount ++;
+            if($testtask->status == 'doing')   $testingCount ++;
+            if($testtask->status == 'blocked') $blockedCount ++;
+            if($testtask->status == 'done')    $doneCount ++;
+            if($testtask->build == 'trunk' || empty($testtask->buildName)) $testtask->buildName = $this->lang->trunk;
+        }
+
+        $this->view->allSummary  = sprintf($this->lang->testtask->allSummary, count($testtasks), $waitCount, $testingCount, $blockedCount, $doneCount);
+        $this->view->pageSummary = sprintf($this->lang->testtask->pageSummary, count($testtasks));
+    }
+
+    /**
      * 获取批量执行的用例。
      * Get cases to run.
      *
