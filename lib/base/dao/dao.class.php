@@ -2131,7 +2131,11 @@ class baseSQL
     public function notin($ids)
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
-        $this->sql .= ' NOT ' . helper::dbIN($ids);
+
+        $dbIN = helper::dbIN($ids);
+        if(strpos($dbIN, '=') === 0) $this->sql .= ' !' . helper::dbIN($ids);
+        else $this->sql .= ' NOT ' . helper::dbIN($ids);
+
         return $this;
     }
 

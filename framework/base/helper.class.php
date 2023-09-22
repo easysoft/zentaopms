@@ -254,12 +254,15 @@ class baseHelper
         if(is_array($idList))
         {
             foreach($idList as $key=>$value) $idList[$key] = addslashes((string) $value);
+            if(count($idList) <= 1) return "= '" . join("','", $idList) . "'";
             return "IN ('" . join("','", $idList) . "')";
         }
 
         if(!is_string($idList)) $idList = json_encode($idList);
-        $idList = addslashes($idList);
-        return "IN ('" . str_replace(',', "','", str_replace(' ', '', $idList)) . "')";
+
+        $idList = str_replace(',', "','", str_replace(' ', '', addslashes($idList)));
+        if(substr_count($idList, ',') != 0) return "IN ('" . $idList . "')";
+        return "= '$idList'";
     }
 
     /**
