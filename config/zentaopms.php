@@ -557,6 +557,7 @@ $config->objectTables['requirement']  = TABLE_STORY;
 $config->objectTables['release']      = TABLE_RELEASE;
 $config->objectTables['program']      = TABLE_PROJECT;
 $config->objectTables['project']      = TABLE_PROJECT;
+$config->objectTables['projectstory'] = TABLE_PROJECTSTORY;
 $config->objectTables['execution']    = TABLE_PROJECT;
 $config->objectTables['task']         = TABLE_TASK;
 $config->objectTables['build']        = TABLE_BUILD;

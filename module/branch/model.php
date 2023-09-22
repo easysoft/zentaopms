@@ -433,13 +433,14 @@ class branchModel extends model
     }
 
     /**
+     * 产品改为多分支类型时，处理分支关联项目。
      * Link branches for projects when product type is not normal.
      *
-     * @param  int    $productID
+     * @param  int|array $productID
      * @access public
      * @return void
      */
-    public function linkBranch4Project($productID)
+    public function linkBranch4Project(int|array $productID): void
     {
         if(is_array($productID))
         {
@@ -447,55 +448,33 @@ class branchModel extends model
             return;
         }
 
+        /* Get the branch of story, bug and case linked the project and execution. */
         $linkedBranchProject = array();
-
-        $storyLinkedBranchProject = $this->dao->select('project,branch')->from(TABLE_PROJECTSTORY)
-            ->where('product')->eq($productID)
-            ->andWhere('branch')->gt(0)
-            ->fetchGroup('project', 'branch');
-        foreach($storyLinkedBranchProject as $projectID => $branchList)
+        $objectList          = array('projectstory', 'bug', 'case');
+        foreach($objectList as $objectType)
         {
-            foreach($branchList as $branchID => $branch) $linkedBranchProject[$projectID][$branchID] = $branchID;
-        }
+            $table               = $this->config->objectTables[$objectType];
+            $linkedBranchProject = $this->dao->select('project,branch')->from($table)
+                ->where('product')->eq($productID)
+                ->andWhere('branch')->gt(0)
+                ->beginIF($objectType != 'projectstory')->andWhere('project')->ne('0')->fi()
+                ->fetchGroup('project', 'branch');
+            foreach($linkedBranchProject as $projectID => $branchList)
+            {
+                foreach($branchList as $branchID => $branch) $linkedBranchProject[$projectID][$branchID] = $branchID;
+            }
 
-        $bugLinkedBranchProject = $this->dao->select('project,branch')->from(TABLE_BUG)
-            ->where('product')->eq($productID)
-            ->andWhere('branch')->gt(0)
-            ->andWhere('project')->ne(0)
-            ->fetchGroup('project', 'branch');
-        foreach($bugLinkedBranchProject as $projectID => $branchList)
-        {
-            foreach($branchList as $branchID => $branch) $linkedBranchProject[$projectID][$branchID] = $branchID;
-        }
+            if($objectType == 'projectstory') continue;
 
-        $bugLinkedBranchExecution = $this->dao->select('execution,branch')->from(TABLE_BUG)
-            ->where('product')->eq($productID)
-            ->andWhere('branch')->gt(0)
-            ->andWhere('execution')->ne(0)
-            ->fetchGroup('execution', 'branch');
-        foreach($bugLinkedBranchExecution as $executionID => $branchList)
-        {
-            foreach($branchList as $branchID => $branch) $linkedBranchProject[$executionID][$branchID] = $branchID;
-        }
-
-        $caseLinkedBranchProject = $this->dao->select('project,branch')->from(TABLE_CASE)
-            ->where('product')->eq($productID)
-            ->andWhere('branch')->gt(0)
-            ->andWhere('project')->ne(0)
-            ->fetchGroup('project', 'branch');
-        foreach($caseLinkedBranchProject as $projectID => $branchList)
-        {
-            foreach($branchList as $branchID => $branch) $linkedBranchProject[$projectID][$branchID] = $branchID;
-        }
-
-        $caseLinkedBranchExecution = $this->dao->select('execution,branch')->from(TABLE_CASE)
-            ->where('product')->eq($productID)
-            ->andWhere('branch')->gt(0)
-            ->andWhere('execution')->ne(0)
-            ->fetchGroup('execution', 'branch');
-        foreach($caseLinkedBranchExecution as $executionID => $branchList)
-        {
-            foreach($branchList as $branchID => $branch) $linkedBranchProject[$executionID][$branchID] = $branchID;
+            $linkedBranchExecution = $this->dao->select('execution,branch')->from($table)
+                ->where('product')->eq($productID)
+                ->andWhere('branch')->gt(0)
+                ->andWhere('execution')->ne(0)
+                ->fetchGroup('execution', 'branch');
+            foreach($linkedBranchExecution as $executionID => $branchList)
+            {
+                foreach($branchList as $branchID => $branch) $linkedBranchProject[$executionID][$branchID] = $branchID;
+            }
         }
 
         foreach($linkedBranchProject as $projectID => $branchList)

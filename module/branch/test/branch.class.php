@@ -223,20 +223,20 @@ class branchTest
     }
 
     /**
+     * 产品改为多分支类型时，处理分支关联项目。
      * Test link branches for projects when product type is not normal.
      *
-     * @param  int    $productID
+     * @param  int|array $productID
      * @access public
-     * @return int
+     * @return int|array
      */
-    public function linkBranch4ProjectTest($productID)
+    public function linkBranch4ProjectTest(int|array $productID): array|int
     {
         $this->objectModel->linkBranch4Project($productID);
 
         if(dao::isError()) return dao::getError();
 
-        global $tester;
-        $objects = $tester->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($productID)->andWhere('branch')->gt(0)->fetchAll();
+        $objects = $this->objectModel->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('product')->in($productID)->andWhere('branch')->gt(0)->fetchAll();
         return count($objects);
     }
 

@@ -1,0 +1,17 @@
+title: zt_case
+author: Shujie Tian
+version: 1.0.0
+fields:
+  - field: id
+    range: 1-100
+  - field: title
+    range: 1-100
+    prefix: '用例'
+  - field: product
+    range: 1-10{10}
+  - field: branch
+    range: '0{55},2-15{5}'
+  - field: project
+    range: 11,60,61,100,0{96}
+  - field: execution
+    range: 0{4},101-700
