@@ -35,13 +35,14 @@ else
 {
     jsVar('stepData', $stepData);
     jsVar('libID', $libID);
+    jsVar('newTestcase', $lang->testcase->new);
 
     $items[] = array
     (
         'name'  => 'id',
         'label' => $lang->idAB,
         'control' => 'index',
-        'width' => '32px'
+        'width' => '50px'
     );
 
     $items[] = array
@@ -117,18 +118,23 @@ else
         'width' => '320px'
     );
 
-    foreach($caseData as $case)
+    $insert = true;
+    foreach($caseData as $key => $case)
     {
         if(empty($case->id) || !isset($cases[$case->id]))
         {
-            $case->id = 0;
-            continue;
+            $case->new = true;
+            $case->id  = $key;
         }
+        else
+        {
+            $insert = false;
 
-        if(!isset($case->module)) $case->module = $cases[$case->id]->module;
-        if(!isset($case->pri))    $case->pri    = $cases[$case->id]->pri;
-        if(!isset($case->type))   $case->type   = $cases[$case->id]->type;
-        if(empty($case->stage))   $case->stage  = $cases[$case->id]->stage;
+            if(!isset($case->module)) $case->module = $cases[$case->id]->module;
+            if(!isset($case->pri))    $case->pri    = $cases[$case->id]->pri;
+            if(!isset($case->type))   $case->type   = $cases[$case->id]->type;
+            if(empty($case->stage))   $case->stage  = $cases[$case->id]->stage;
+        }
     }
 
     formBatchPanel
