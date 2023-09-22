@@ -1760,7 +1760,7 @@ class groupModel extends model
             }
         }
 
-        if($version || ($nav && $nav != 'general')) return $privList;
+        if($version) return $privList;
 
         /* Privs in resource but not in package. */
         foreach($this->lang->resource as $module => $methodList)
@@ -1768,6 +1768,8 @@ class groupModel extends model
             foreach($methodList as $method => $methodLang)
             {
                 if(isset($allPrivs["$module-$method"])) continue;
+
+                if(!$this->checkNavModule($nav, $module)) continue;
 
                 if(!isset($this->lang->$module->$methodLang)) $this->app->loadLang($module);
                 $priv = (object)array('subset' => $module, 'package' => 'other', 'module' => $module, 'method' => $method, 'selected' => false, 'name' => $this->lang->$module->$methodLang);
@@ -2391,18 +2393,7 @@ class groupModel extends model
      */
     public function getPrivListByGroup($groupID)
     {
-        $actions    = $this->dao->select("CONCAT(module, '-',  method) AS action")->from(TABLE_GROUPPRIV)->where('`group`')->eq($groupID)->fetchPairs();
-        $actions    = implode("','", $actions);
-        $privIdList = $this->dao->select("*")->from(TABLE_PRIV)
-            ->where("CONCAT(module, '-',  method) IN ('$actions')")
-            ->andWhere('edition')->like("%,{$this->config->edition},%")
-            ->andWhere('vision')->like("%,{$this->config->vision},%")
-            ->fetchAll('id');
-
-        $privs = array();
-        foreach($privIdList as $priv) $privs["{$priv->module}-{$priv->method}"] = "{$priv->module}-{$priv->method}";
-
-        return $privs;
+        return $this->dao->select("CONCAT(module, '-',  method) AS action")->from(TABLE_GROUPPRIV)->where('`group`')->eq($groupID)->fetchPairs();
     }
 
     /**

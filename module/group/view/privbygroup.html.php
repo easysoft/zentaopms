@@ -113,23 +113,8 @@
                 <label class='text-left <?php if($package->selectCount != 0 && $package->allCount != $package->selectCount) echo 'checkbox-indeterminate-block';?>' for='allCheckerPackage<?php echo $packageCode;?>'><?php echo $lang->group->package->$packageCode;?></label>
               </div>
             </th>
-            <?php if(isset($lang->$subsetName->menus)):?>
-            <?php
-            $menusPrivs  = count($lang->$subsetName->menus);
-            $menusSelect = count(array_intersect(array_keys($lang->$subsetName->menus), array_keys(zget($groupPrivs, $subsetName, array()))));
-            ?>
-            <td class='menus <?php echo $subsetName;?>' all-privs='<?php echo $menusPrivs;?>' select-privs='<?php echo $menusSelect;?>' data-module='<?php echo $subsetName;?>' data-package='0'>
-              <div class="checkbox-primary checkbox-inline checkbox-left check-all">
-                <input type='checkbox' name='<?php echo "actions[$subsetName][]"?>' value='browse' id='<?php echo "actions[$subsetName]browse"?>' <?php if($menusPrivs == $menusSelect) echo 'checked';?>>
-                <label class='text-left <?php if(!empty($menusSelect) and $menusPrivs != $menusSelect) echo 'checkbox-indeterminate-block';?>' for='actions[<?php echo $subsetName;?>]browse'><?php echo $lang->$subsetName->browse;?></label>
-              </div>
-              <a href='javascript:;'><i class='icon icon-plus'></i></a>
-              <?php echo html::checkbox("actions[$subsetName]", $lang->$subsetName->menus, isset($groupPrivs[$subsetName]) ? $groupPrivs[$subsetName] : array());?>
-            </td>
-            <?php endif;?>
-            <td id='<?php echo $subsetName;?>' class='pv-10px' colspan='<?php echo !empty($lang->$subsetName->menus) ? 1 : 2?>'>
+            <td id='<?php echo $subsetName;?>' class='pv-10px' colspan='2'>
               <?php foreach($package->privs as $privCode => $priv):?>
-              <?php if(!empty($lang->$subsetName->menus) and ($priv->method == 'browse' or in_array($priv->method, array_keys($lang->$subsetName->menus)))) continue;?>
               <div class="group-item" data-module='<?php echo $subsetName;?>' data-package='<?php echo $packageCode;?>' data-id='<?php echo $privCode;?>'>
                 <div class="checkbox-primary">
                   <?php echo html::checkbox("actions[$priv->module]", array($priv->method => $priv->name), isset($groupPrivs[$priv->module][$priv->method]) ? $priv->method : '', "title='{$priv->name}' id='actions[$priv->module]$priv->method' data-id='$privCode'");?>
