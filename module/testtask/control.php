@@ -385,30 +385,28 @@ class testtask extends control
     }
 
     /**
-     * The report page.
+     * 查看一个测试单的报表。
+     * The report page of a testtask.
      *
      * @param  int    $productID
+     * @param  int    $taskID
      * @param  string $browseType
      * @param  int    $branchID
      * @param  int    $moduleID
+     * @param  string $chartType
      * @access public
      * @return void
      */
-    public function report($productID, $taskID, $browseType, $branchID, $moduleID = 0, $chartType = 'pie')
+    public function report(int $productID, int $taskID, string $browseType, int $branchID, int $moduleID = 0, string $chartType = 'pie')
     {
         $this->loadModel('report');
-        $this->view->charts = array();
-
-        $task = $this->testtask->getByID($taskID);
-
         if(!empty($_POST))
         {
             $this->app->loadLang('testcase');
-            $bugInfo = $this->testtask->getBugInfo($taskID, $productID);
             foreach($this->post->charts as $chart)
             {
                 $chartFunc   = 'getDataOf' . $chart;
-                $chartData   = isset($bugInfo[$chart]) ? $bugInfo[$chart] : $this->testtask->$chartFunc($taskID);
+                $chartData   = $this->testtask->$chartFunc($taskID);
                 $chartOption = $this->testtask->mergeChartOption($chart);
                 if(!empty($chartType)) $chartOption->type = $chartType;
 
@@ -417,25 +415,24 @@ class testtask extends control
             }
         }
 
+        $task = $this->testtask->getByID($taskID);
         $this->testtaskZen->setMenu($productID, $branchID, $task->project, $task->execution);
 
-        unset($this->lang->testtask->report->charts['bugStageGroups']);
-        unset($this->lang->testtask->report->charts['bugHandleGroups']);
-
+        /* 如果测试单所属产品在产品键值对中不存在，将其加入。*/
+        /* Prepare the product key-value pairs. */
         if(!isset($this->products[$productID]))
         {
             $product = $this->loadModel('product')->getByID($productID);
             $this->products[$productID] = $product->name;
         }
 
-        $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->common . $this->lang->colon . $this->lang->testtask->reportChart;
-        $this->view->productID     = $productID;
-        $this->view->taskID        = $taskID;
-        $this->view->browseType    = $browseType;
-        $this->view->moduleID      = $moduleID;
-        $this->view->branchID      = $branchID;
-        $this->view->chartType     = $chartType;
-        $this->view->checkedCharts = $this->post->charts ? join(',', $this->post->charts) : '';
+        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->common . $this->lang->colon . $this->lang->testtask->reportChart;
+        $this->view->productID  = $productID;
+        $this->view->taskID     = $taskID;
+        $this->view->browseType = $browseType;
+        $this->view->moduleID   = $moduleID;
+        $this->view->branchID   = $branchID;
+        $this->view->chartType  = $chartType;
 
         $this->display();
     }
