@@ -14,10 +14,6 @@ title=测试 testreportModel->getById();
 cid=1
 pid=1
 
-正常查询 >> 1,user3,1,2,3,4
-reportID为空查询 >> 0
-reportID不存在查询 >> 0
-
 */
 $reportID = array(1, 2, 3, 0, 16);
 
