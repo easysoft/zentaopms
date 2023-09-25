@@ -160,36 +160,6 @@ class metric extends control
         echo 'success';
     }
 
-    
-    /**
-     * 下架度量项。
-     * Delist metric.
-     *
-     * @param  int $metricID
-     * @access public
-     * @return void
-     */
-    public function delist(int $metricID)
-    {
-        $metric = $this->metric->getByID($metricID);
-
-        if(!$metric) return $this->send(array('result' => 'fail', 'message' => $this->lang->metric->notExist));
-
-        $updateMetric = new stdclass();
-        $updateMetric->id = $metric->id;
-
-        $updateMetric->stage        = 'wait';
-        $updateMetric->delistedBy   = $this->app->user->account;
-        $updateMetric->delistedDate = helper::now();
-        $this->metric->updateMetric($updateMetric);
-
-        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-        $actionID = $this->loadModel('action')->create('metric', $metricID, 'delist', '', '', $this->app->user->account);
-
-        return $this->send(array('result' => 'success', 'load' => true));
-    }
-
     /**
      * 获取数据表格的数据。
      * Get data of datatable.
