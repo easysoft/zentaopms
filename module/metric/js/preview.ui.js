@@ -431,6 +431,12 @@ window.initChart = function($obj, head, data, chartType)
 
         var myChart = echarts.init($obj);
         var option = {
+            grid: {
+                left: '10%', // 左边距
+                right: '10%', // 右边距
+                bottom: '10%', // 下边距
+                containLabel: true // 自动计算和预留坐标轴标签的空间
+            },
             tooltip: {
                 trigger: 'axis'
             },
@@ -458,10 +464,6 @@ window.initPieChart = function($obj, head, data)
         option = {
             tooltip: {
                 trigger: 'item'
-            },
-            legend: {
-                orient: 'vertical',
-                left: 'left'
             },
             series: [
                 {
