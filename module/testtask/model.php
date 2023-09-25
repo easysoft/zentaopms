@@ -232,6 +232,19 @@ class testtaskModel extends model
     }
 
     /**
+     * 通过 ID 列表获取测试单键对。
+     * Get key-value pairs of testtasks by id list.
+     *
+     * @param  array  $taskIdList
+     * @access public
+     * @return array
+     */
+    public function getPairsByList(array $taskIdList): array
+    {
+        return $this->dao->select('id,name')->from(TABLE_TESTTASK)->where('id')->in($taskIdList)->fetchPairs();
+    }
+
+    /**
      * 根据 ID 获取单条测试单的数据。
      * Get a testtask by id.
      *
@@ -2473,18 +2486,5 @@ class testtaskModel extends model
         }
 
         return array('suites' => $suites, 'cases' => $cases, 'results' => $results, 'suiteNames' => $suiteNames, 'caseTitles' => $caseTitles);
-    }
-
-    /**
-     * 通过 ID 列表获取测试单键对。
-     * Get task pairs by id list.
-     *
-     * @param  array  $taskIdList
-     * @access public
-     * @return array
-     */
-    public function getPairsByList(array $taskIdList): array
-    {
-        return $this->dao->select('id,name')->from(TABLE_TESTTASK)->where('id')->in($taskIdList)->fetchPairs();
     }
 }
