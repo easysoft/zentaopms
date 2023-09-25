@@ -972,13 +972,14 @@ class storyModel extends model
     }
 
     /**
-     * If story changed, update relation table version filed.
+     * 如果软件需求变更了，则更新软件需求和用户需求关系表中的版本。
+     * If the story changed, update the version filed of the requirement in relation table.
      *
      * @param  object $story
      * @access public
      * @return void
      */
-    public function updateStoryVersion($story)
+    public function updateStoryVersion(object $story): void
     {
         $changedStories = $this->getChangedStories($story);
 
@@ -2813,13 +2814,14 @@ class storyModel extends model
     }
 
     /**
-     * Get changed stories.
+     * 根据变更了的软件需求查找对应的用户需求。
+     * Get the requirements by the changed stories.
      *
      * @param  object $story
      * @access public
      * @return array
      */
-    public function getChangedStories($story): array
+    public function getChangedStories(object $story): array
     {
         if($story->type == 'requirement') return array();
 
