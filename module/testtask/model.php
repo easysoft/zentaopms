@@ -1936,43 +1936,22 @@ class testtaskModel extends model
         $cases      = array();
         $results    = array();
         $caseTitles = array();
-        $suiteNames = array();
         $suiteIndex = 0;
         $suites     = array($suiteIndex => '');
         foreach($matchNodes as $caseIndex => $matchNode)
         {
-            $case = new stdclass();
-            $case->product    = $productID;
-            $case->title      = (string)$matchNode->Name;
-            $case->pri        = 3;
-            $case->type       = 'unit';
-            $case->stage      = 'unittest';
-            $case->status     = 'normal';
-            $case->openedBy   = $this->app->user->account;
-            $case->openedDate = $now;
-            $case->version    = 1;
-            $case->auto       = 'unit';
-            $case->frame      = $frame ? $frame : 'junit';
-
-            $result = new stdclass();
-            $result->case       = 0;
-            $result->version    = 1;
-            $result->caseResult = 'pass';
-            $result->lastRunner = $this->app->user->account;
-            $result->date       = $now;
-            $result->duration   = 0;
-            $result->xml        = $matchNode->asXML();
-            $result->stepResults[0]['result'] = 'pass';
-            $result->stepResults[0]['real']   = '';
+            $result = $this->initResult($now);
+            $result->duration = 0;
+            $result->xml      = $matchNode->asXML();
             if(isset($matchNode->Message))
             {
-                $result->caseResult = 'fail';
+                $result->caseResult               = 'fail';
                 $result->stepResults[0]['result'] = 'fail';
                 $result->stepResults[0]['real']   = (string)$matchNode->Message;
             }
             $result->stepResults = serialize($result->stepResults);
-            $case->lastRunner    = $this->app->user->account;
-            $case->lastRunDate   = $now;
+
+            $case = $this->initCase($productID, (string)$matchNode->name, $now, 'unit', $frame ?: 'junit');
             $case->lastRunResult = $result->caseResult;
 
             $caseTitles[$suiteIndex][]        = $case->title;
@@ -1980,7 +1959,7 @@ class testtaskModel extends model
             $results[$suiteIndex][$caseIndex] = $result;
         }
 
-        return array('suites' => $suites, 'cases' => $cases, 'results' => $results, 'suiteNames' => $suiteNames, 'caseTitles' => $caseTitles);
+        return array('suites' => $suites, 'cases' => $cases, 'results' => $results, 'suiteNames' => array(), 'caseTitles' => $caseTitles);
     }
 
     /**
@@ -2038,13 +2017,8 @@ class testtaskModel extends model
             $suite      = '';
             if(isset($attributes[$suiteField]))
             {
-                $suite = new stdclass();
-                $suite->product   = $productID;
-                $suite->name      = (string)$attributes[$suiteField];
-                $suite->type      = 'unit';
-                $suite->addedBy   = $this->app->user->account;
-                $suite->addedDate = $now;
-                $suiteNames[]     = $suite->name;
+                $suite = $this->initSuite($productID, (string)$attributes[$suiteField], $now);
+                $suiteNames[] = $suite->name;
             }
             else
             {
@@ -2053,13 +2027,8 @@ class testtaskModel extends model
                 {
                     if(isset($attributes[$alias]))
                     {
-                        $suite = new stdclass();
-                        $suite->product   = $productID;
-                        $suite->name      = (string)$attributes[$alias];
-                        $suite->type      = 'unit';
-                        $suite->addedBy   = $this->app->user->account;
-                        $suite->addedDate = $now;
-                        $suiteNames[]     = $suite->name;
+                        $suite = $this->initSuite($productID, (string)$attributes[$alias], $now);
+                        $suiteNames[] = $suite->name;
                         break;
                     }
                 }
@@ -2068,18 +2037,7 @@ class testtaskModel extends model
 
             foreach($caseNodes as $caseIndex => $matchNode)
             {
-                $case = new stdclass();
-                $case->product    = $productID;
-                $case->title      = '';
-                $case->pri        = 3;
-                $case->type       = 'unit';
-                $case->stage      = 'unittest';
-                $case->status     = 'normal';
-                $case->openedBy   = $this->app->user->account;
-                $case->openedDate = $now;
-                $case->version    = 1;
-                $case->auto       = 'unit';
-                $case->frame      = $frame ? $frame : 'junit';
+                $case = $this->initCase($productID, '', $now, 'unit', $frame ?: 'junit');
 
                 $attributes = $matchNode->attributes();
                 foreach($nameFields as $field)
@@ -2099,43 +2057,11 @@ class testtaskModel extends model
                 }
                 if(empty($case->title)) continue;
 
-                $result = new stdclass();
-                $result->case       = 0;
-                $result->version    = 1;
-                $result->caseResult = 'pass';
-                $result->lastRunner = $this->app->user->account;
-                $result->date       = $now;
-                $result->duration   = isset($attributes['time']) ? (float)$attributes['time'] : 0;
-                $result->xml        = $matchNode->asXML();
-                $result->stepResults[0]['result'] = 'pass';
-                $result->stepResults[0]['real']   = '';
-                if(isset($matchNode->$failure))
-                {
-                    $result->caseResult = 'fail';
-                    $result->stepResults[0]['result'] = 'fail';
-                    if(is_string($matchNode->$failure))
-                    {
-                        $result->stepResults[0]['real'] = (string)$matchNode->$failure;
-                    }
-                    elseif(isset($matchNode->{$failure}[0]))
-                    {
-                        $result->stepResults[0]['real'] = (string)$matchNode->{$failure}[0];
-                    }
-                    else
-                    {
-                        $failureAttrs = $matchNode->$failure->attributes();
-                        $result->stepResults[0]['real'] = (string)$failureAttrs['message'];
-                    }
-                }
-                elseif(isset($matchNode->$skipped))
-                {
-                    $result->caseResult = 'n/a';
-                    $result->stepResults[0]['result'] = 'n/a';
-                    $result->stepResults[0]['real']   = '';
-                }
+                $result = $this->initResult($now);
+                $result->duration = isset($attributes['time']) ? (float)$attributes['time'] : 0;
+                $result->xml      = $matchNode->asXML();
+                $result = $this->processResult($result, $matchNode, $failure, $skipped);
                 $result->stepResults = serialize($result->stepResults);
-                $case->lastRunner    = $this->app->user->account;
-                $case->lastRunDate   = $now;
                 $case->lastRunResult = $result->caseResult;
 
                 $caseTitles[$suiteIndex][]        = $case->title;
@@ -2172,53 +2098,30 @@ class testtaskModel extends model
             $suite = '';
             if(isset($caseResult->testSuite) and !isset($suiteNames[$caseResult->testSuite]))
             {
-                $suite = new stdclass();
-                $suite->product   = $productID;
-                $suite->name      = $caseResult->testSuite;
-                $suite->type      = 'unit';
-                $suite->addedBy   = $this->app->user->account;
-                $suite->addedDate = $now;
+                $suite = $this->initSuite($productID, $caseResult->testSuite, $now);
 
                 $suiteNames[$suite->name] = $suite->name;
                 $suiteIndex ++;
             }
             if(!isset($suites[$suiteIndex])) $suites[$suiteIndex] = $suite;
 
-            $case = new stdclass();
-            if(!empty($caseResult->id)) $case->id = $caseResult->id;
-            $case->product    = $productID;
-            if(empty($caseResult->id)) $case->title = $caseResult->title;
-            $case->pri        = 3;
-            $case->type       = 'unit';
-            $case->stage      = 'unittest';
-            $case->status     = 'normal';
-            $case->openedBy   = $this->app->user->account;
-            $case->openedDate = $now;
-            $case->version    = 1;
-            if(empty($caseResult->id)) $case->auto = 'unit';
-            $case->frame      = $frame;
-
-            $result = new stdclass();
-            $result->case       = 0;
-            $result->version    = 1;
-            $result->caseResult = 'pass';
-            $result->lastRunner = $this->app->user->account;
-            $result->job        = $jobID;
-            $result->compile    = $compileID;
-            $result->date       = $now;
-            $result->duration   = zget($caseResult, 'duration', 0);
-            $result->stepResults[0]['result'] = 'pass';
-            $result->stepResults[0]['real']   = '';
+            $result = $this->initResult($now);
+            $result->job      = $jobID;
+            $result->compile  = $compileID;
+            $result->duration = zget($caseResult, 'duration', 0);
             if(!empty($caseResult->failure))
             {
-                $result->caseResult = 'fail';
+                $result->caseResult               = 'fail';
                 $result->stepResults[0]['result'] = 'fail';
                 $result->stepResults[0]['real']   = zget($caseResult->failure, 'desc', '');
             }
             $result->stepResults = serialize($result->stepResults);
-            $case->lastRunner    = $this->app->user->account;
-            $case->lastRunDate   = $now;
+
+            $case = $this->initCase($productID, '', $now, '', $frame);
             $case->lastRunResult = $result->caseResult;
+            if(!empty($caseResult->id)) $case->id    = $caseResult->id;
+            if(empty($caseResult->id))  $case->title = $caseResult->title;
+            if(empty($caseResult->id))  $case->auto  = 'unit';
 
             $caseTitles[$suiteIndex][]        = $case->title;
             $cases[$suiteIndex][$caseIndex]   = $case;
@@ -2253,31 +2156,10 @@ class testtaskModel extends model
             $suite = '';
             if(!isset($suites[$suiteIndex])) $suites[$suiteIndex] = $suite;
 
-            $case = new stdclass();
-            if(isset($caseResult->id)) $case->id = $caseResult->id;
-            if(!isset($caseResult->id)) $case->product = $productID;
-            $case->title      = $caseResult->title;
-            $case->pri        = 3;
-            $case->type       = 'feature';
-            $case->stage      = 'feature';
-            $case->status     = 'normal';
-            $case->openedBy   = $this->app->user->account;
-            $case->openedDate = $now;
-            $case->version    = 1;
-            $case->auto       = 'func';
-            $case->frame      = $frame;
-            $case->steps      = array();
-
-            $result = new stdclass();
-            $result->case       = 0;
-            $result->version    = 1;
-            $result->caseResult = 'pass';
-            $result->lastRunner = $this->app->user->account;
-            $result->job        = $jobID;
-            $result->compile    = $compileID;
-            $result->date       = $now;
-            $result->stepResults[0]['result'] = 'pass';
-            $result->stepResults[0]['real']   = '';
+            $steps  = array();
+            $result = $this->initResult($now);
+            $result->job     = $jobID;
+            $result->compile = $compileID;
             if(!empty($caseResult->steps))
             {
                 $result->stepResults = array();
@@ -2295,14 +2177,17 @@ class testtaskModel extends model
                     $caseStep->desc   = $step->name;
                     $caseStep->expect = $step->checkPoints[0]->expect;
 
-                    $case->steps[] = $caseStep;
+                    $steps[] = $caseStep;
                 }
                 $result->caseResult = $stepStatus;
             }
             $result->stepResults = serialize($result->stepResults);
-            $case->lastRunner    = $this->app->user->account;
-            $case->lastRunDate   = $now;
+
+            $case = $this->initCase(0, $caseResult->title, $now, 'func', $frame, 'feature', 'feature');
+            $case->steps         = $steps;
             $case->lastRunResult = $result->caseResult;
+            if(isset($caseResult->id))  $case->id      = $caseResult->id;
+            if(!isset($caseResult->id)) $case->product = $productID;
 
             $caseTitles[$suiteIndex][]        = $case->title;
             $cases[$suiteIndex][$caseIndex]   = $case;
