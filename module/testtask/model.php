@@ -120,7 +120,8 @@ class testtaskModel extends model
             ->where('t1.task')->in(array_keys($tasks))
             ->fetchGroup('task', 'run');
 
-        /* 计算本测试单执行的用例数、成功数、失败数。 */
+        /* 计算本测试单执行的用例数、成功数、失败数。*/
+        /* Calculate the number of test cases executed by this test, the number of successes, and the number of failures. */
         foreach($tasks as $taskID => $task)
         {
             $results = zget($resultGroups, $taskID, array());
@@ -139,7 +140,8 @@ class testtaskModel extends model
     }
 
     /**
-     * Get test tasks of a project.
+     * 获取一个项目的测试单列表。
+     * Get testtasks of a project.
      *
      * @param  int    $projectID
      * @param  string $orderBy
@@ -296,34 +298,34 @@ class testtaskModel extends model
             ->fetchAll();
     }
 
-
-
     /**
-     * Get taskrun by case id.
+     * 根据测试单 ID 和用例 ID 获取一个测试执行。
+     * Get a testrun by testtask ID and case ID.
      *
      * @param  int    $taskID
      * @param  int    $caseID
      * @access public
-     * @return void
+     * @return object
      */
-    public function getRunByCase($taskID, $caseID)
+    public function getRunByCase(int $taskID, int $caseID): object
     {
         return $this->dao->select('*')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->andWhere('`case`')->eq($caseID)->fetch();
     }
 
     /**
-     * Get linkable casses.
+     * 根据不同类型获取可关联的测试用例。
+     * Get linkable cases according to different typs.
      *
      * @param  int    $productID
      * @param  object $task
      * @param  int    $taskID
      * @param  string $type
-     * @param  string $param
+     * @param  int    $param
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getLinkableCases($productID, $task, $taskID, $type, $param, $pager)
+    public function getLinkableCases(int $productID, object $task, int $taskID, string $type, int $param, object $pager): array
     {
         if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
         $query = $this->session->testcaseQuery;
@@ -494,14 +496,15 @@ class testtaskModel extends model
     }
 
     /**
-     * Get related test tasks.
+     * 按条件获取获取产品下的测试单。
+     * Get testtasks under a product by condition.
      *
      * @param  int    $productID
      * @param  int    $testtaskID
      * @access public
      * @return array
      */
-    public function getRelatedTestTasks($productID, $testTaskID)
+    public function getRelatedTestTasks(int $productID, int $testTaskID): array
     {
         $beginDate = $this->dao->select('begin')->from(TABLE_TESTTASK)->where('id')->eq($testTaskID)->fetch('begin');
 
@@ -565,13 +568,14 @@ class testtaskModel extends model
     }
 
     /**
-     * Get report data of test task per module
+     * 按模块统计测试单中的用例。
+     * Get report data of a testtask by case module.
      *
-     * @param  int     $taskID
+     * @param  int    $taskID
      * @access public
      * @return array
      */
-    public function getDataOfTestTaskPerModule($taskID)
+    public function getDataOfTestTaskPerModule(int $taskID): array
     {
         $datas = $this->dao->select('t2.module as name,count(*) as value')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
@@ -589,9 +593,10 @@ class testtaskModel extends model
     }
 
     /**
-     * Get report data of test task per runner
+     * 按执行人统计测试单中的用例。
+     * Get report data of a testtask by executor.
      *
-     * @param  int     $taskID
+     * @param  int    $taskID
      * @access public
      * @return array
      */
@@ -639,6 +644,7 @@ class testtaskModel extends model
      * Update a test task.
      *
      * @param  object $task
+     * @param  object $oldTask
      * @access public
      * @return array|bool
      */
