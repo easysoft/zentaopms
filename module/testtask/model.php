@@ -17,14 +17,14 @@ class testtaskModel extends model
      * 创建一个测试单。
      * Create a test task.
      *
-     * @param  object    $testtask
+     * @param  object $testtask
      * @access public
      * @return int|false
      */
     function create(object $testtask): int|false
     {
         $this->dao->insert(TABLE_TESTTASK)->data($testtask)
-            ->autoCheck($skipFields = 'begin,end')
+            ->autoCheck('begin,end')
             ->batchcheck($this->config->testtask->create->requiredFields, 'notempty')
             ->checkIF(!empty($testtask->begin) && $testtask->begin != '', 'begin', 'date')
             ->checkIF(!empty($testtask->end)   && $testtask->end   != '', 'end',   'date')
