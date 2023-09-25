@@ -167,14 +167,14 @@ class caselibTao extends caselibModel
     protected function updateImportedCase(int $key, object $caseData, object $data, bool $forceNotReview): bool
     {
         $caseID   = $data->id[$key];
-        $oldCases = $this->loadModel('testcase')->getByList($this->post->id);
+        $oldCases = $this->loadModel('testcase')->getByList($data->id);
         $oldCase  = $oldCases[$caseID];
 
         /* 如果已经存在的用例和导入的用例的用例库不同，不导入。*/
         /* Ignore updating cases for different libs. */
         if($oldCase->lib != $caseData->lib) return false;
 
-        $stepsGroupByCase = $this->testcase->getStepGroupByIdList($this->post->id, 'all');
+        $stepsGroupByCase = $this->testcase->getStepGroupByIdList($data->id, 'all');
 
         $steps       = $this->processSteps(zget($data->desc, $key, array()), zget($data->stepType, $key, array()), zget($data->expect, $key, array()));
         $oldSteps    = zget($stepsGroupByCase, $caseID, array());

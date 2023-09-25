@@ -188,4 +188,26 @@ class caselibTest
         global $tester;
         return $tester->loadModel('testcase')->getByID($caseID);
     }
+
+    /**
+     * 测试导入的用例覆盖已存在的用例。
+     * Test update a imported case.
+     *
+     * @param  int     $key
+     * @param  object  $caseData
+     * @param  object  $data
+     * @param  bool    $forceNotReview
+     * @access public
+     * @return array|object|false
+     */
+    public function updateImportedCaseTest(int $key, object $caseData, object $data, bool $forceNotReview): array|object|false
+    {
+        $caseID = $data->id[$key];
+
+        $this->objectModel->updateImportedCase($key, $caseData, $data, $forceNotReview);
+        if(dao::isError()) return dao::getError();
+
+        global $tester;
+        return $tester->loadModel('testcase')->getByID($caseID);
+    }
 }
