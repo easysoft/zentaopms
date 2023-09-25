@@ -1717,16 +1717,17 @@ class story extends control
     /**
      * AJAX: search stories of a product as json
      *
-     * @param  string $key
+     * @param  string $key       #storyID|storyID|keyword
      * @param  int    $productID
+     * @param  int    $branch
      * @param  int    $moduleID
      * @param  int    $storyID
-     * @param  string $status
-     * @param  int    $limit
+     * @param  string $status    noclosed
+     * @param  int    $limit     50|0
      * @access public
      * @return void
      */
-    public function ajaxSearchProductStories($key, $productID, $branch = 0, $moduleID = 0, $storyID = 0, $status = 'noclosed', $limit = 50)
+    public function ajaxSearchProductStories(string $key, int $productID, int $branch = 0, int $moduleID = 0, int $storyID = 0, string $status = 'noclosed', int $limit = 50)
     {
         if($moduleID)
         {
@@ -1734,7 +1735,7 @@ class story extends control
             $moduleID = $this->tree->getAllChildID($moduleID);
         }
 
-        $storyStatus = '';
+        $storyStatus = array();
         if($status == 'noclosed')
         {
             $storyStatus = $this->lang->story->statusList;
@@ -1742,22 +1743,19 @@ class story extends control
             $storyStatus = array_keys($storyStatus);
         }
 
-        $stories = $this->story->getProductStoryPairs($productID, $branch, $moduleID, $storyStatus, 'id_desc');
-        $result = array();
-        $i = 0;
+        $stories     = $this->story->getProductStoryPairs($productID, $branch, $moduleID, $storyStatus);
+        $result      = array();
+        $resultCount = 0;
         foreach ($stories as $id => $story)
         {
-            if($limit > 0 && $i > $limit) break;
+            if($limit > 0 && $resultCount > $limit) break;
             if(('#' . $id) === $key || stripos($story,  $key) !== false)
             {
                 $result[$id] = $story;
-                $i++;
+                $resultCount++;
             }
         }
-        if($i < 1)
-        {
-            $result['info'] = $this->lang->noResultsMatch;
-        }
+        if($resultCount < 1) $result['info'] = $this->lang->noResultsMatch;
 
         echo json_encode($result);
     }
