@@ -6870,7 +6870,7 @@ class storyModel extends model
                     if(isset($branches[$story->branch]) and $showBranch and $this->config->vision != 'lite') $storyTitle .= "<span class='label label-outline label-badge' title={$branches[$story->branch]}>{$branches[$story->branch]}</span> ";
                     if($story->module and isset($modulePairs[$story->module])) $storyTitle .= "<span class='label label-gray label-badge'>{$modulePairs[$story->module]}</span> ";
                     if($story->parent > 0 and !($storyType == 'requirement' and $story->type == 'story')) $storyTitle .= '<span class="label label-badge label-light" title="' . $this->lang->story->children . '">' . $this->lang->story->childrenAB . '</span> ';
-                    $storyTitle .= $canView ? html::a($storyLink, $story->title, '', "title='$story->title' style='color: $story->color' data-app='$tab'") : "<span style='color: $story->color'>{$storyTitle}{$story->title}</span>";
+                    $storyTitle .= $canView ? html::a($storyLink, $story->title, '', "title='$story->title' style='color: $story->color' data-app='$tab'") : "<span style='color: $story->color'>{$story->title}</span>";
                     $data->title = $storyTitle;
                 }
                 if($col->name == 'mailto')
@@ -6878,12 +6878,12 @@ class storyModel extends model
                     $mailto = array_map(function($account) use($users){$account = trim($account); return zget($users, $account);}, explode(',', $story->mailto));
                     $data->mailto = implode(' ', $mailto);
                 }
-		if($col->name == 'URS' || $col->name == 'SRS')
-		{
+                if($col->name == 'URS' || $col->name == 'SRS')
+                {
                     $link    = helper::createLink('story', 'relation', "storyID=$story->id&storyType=$story->type");
                     $storySR = $this->getStoryRelationCounts($story->id, $story->type);
                     $data->{$col->name} = $storySR > 0 ? html::a($link, $storySR, '', 'class="iframe" data-toggle="modal"') : 0;
-		}
+                }
                 if(in_array($col->name, $userFields)) $data->{$col->name} = zget($users, $story->{$col->name});
                 if(in_array($col->name, $dateFields)) $data->{$col->name} = helper::isZeroDate($story->{$col->name}) ? '' : substr($story->{$col->name}, 5, 11);
             }
