@@ -449,11 +449,11 @@ class productplanModel extends model
      * Create a plan.
      *
      * @param  object    $plan
-     * @param  bool      $isFuture
+     * @param  int       $isFuture
      * @access public
      * @return int|false
      */
-    public function create(object $plan, bool $isFuture): int|false
+    public function create(object $plan, int $isFuture): int|false
     {
         $product = $this->loadModel('product')->getByID($plan->product);
         if($product->type != 'normal' && $plan->branch == '')
@@ -497,34 +497,80 @@ class productplanModel extends model
     }
 
     /**
+     * 更新一个计划。
      * Update a plan.
      *
-     * @param  int    $planID
+     * @param  object      $plan
+     * @param  object      $oldPlan
      * @access public
-     * @return array
+     * @return array|false
      */
-    public function update($planID)
+    public function update($plan, $oldPlan): array|false
     {
-        $oldPlan = $this->getByID($planID);
-        $plan = fixer::input('post')->stripTags($this->config->productplan->editor->edit['id'], $this->config->allowedTags)
-            ->setIF($this->post->future or empty($_POST['begin']), 'begin', $this->config->productplan->future)
-            ->setIF($this->post->future or empty($_POST['end']), 'end', $this->config->productplan->future)
-            ->setDefault('branch', 0)
-            ->cleanINT('parent')
-            ->join('branch', ',')
-            ->add('id', $planID)
-            ->remove('delta,uid,future')
-            ->get();
+        $plan = $this->buildPlanByStatus($plan->status, '', $plan);
+        $this->checkDataForUpdate($plan, $oldPlan);
+        if(dao::isError()) return false;
 
-        $plan = $this->buildPlanByStatus($this->post->status, '', $plan);
+        $parentPlan = $this->getByID($plan->parent);
+        $futureTime = $this->config->productplan->future;
+        if($plan->parent > 0)
+        {
+            if($parentPlan->begin !== $futureTime && $plan->begin < $parentPlan->begin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLessThanParent, $parentPlan->begin);
+            if($parentPlan->end !== $futureTime && $plan->end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreatThanParent, $parentPlan->end);
+        }
+        elseif($oldPlan->parent == -1 && ($plan->begin != $futureTime || $plan->end != $futureTime))
+        {
+            $childPlans = $this->getChildren($oldPlan->id);
+            $minBegin   = $plan->begin;
+            $maxEnd     = $plan->end;
+            foreach($childPlans as $childPlan)
+            {
+                if($childPlan->begin < $minBegin) $minBegin = $childPlan->begin;
+                if($childPlan->end > $maxEnd) $maxEnd = $childPlan->end;
+            }
+            if($minBegin < $plan->begin && $minBegin != $futureTime) dao::$errors['begin'] = sprintf($this->lang->productplan->beginGreaterChildTip, $oldPlan->title, $plan->begin, $minBegin);
+            if($maxEnd > $plan->end && $maxEnd != $futureTime) dao::$errors['end'] = sprintf($this->lang->productplan->endLessThanChildTip, $oldPlan->title, $plan->end, $maxEnd);
+        }
+        if(dao::isError()) return false;
 
+        $plan = $this->loadModel('file')->processImgURL($plan, $this->config->productplan->editor->edit['id'], $this->post->uid);
+        $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)
+            ->autoCheck()
+            ->batchCheck($this->config->productplan->edit->requiredFields, 'notempty')
+            ->checkIF($plan->begin != $futureTime && $plan->end != $futureTime, 'end', 'ge', $plan->begin)
+            ->checkFlow()
+            ->where('id')->eq($oldPlan->id)
+            ->exec();
+        if(dao::isError()) return false;
+
+        if($plan->parent > 0) $this->updateParentStatus($plan->parent);
+        if($oldPlan->parent > 0) $this->updateParentStatus($oldPlan->parent);
+        if(dao::isError()) return false;
+
+        $this->file->updateObjectID($this->post->uid, $oldPlan->id, 'plan');
+        if(!empty($plan->parent) && $parentPlan->parent == '0') $this->transferStoriesAndBugs($plan);
+        return common::createChanges($oldPlan, $plan);
+    }
+
+    /**
+     * 检查更新计划的数据。
+     * Check data for update plan.
+     *
+     * @param  object $plan
+     * @param  object $oldPlan
+     * @access public
+     * @return bool
+     */
+    public function checkDataForUpdate(object $plan, object $oldPlan): bool
+    {
         $product = $this->loadModel('product')->getByID($oldPlan->product);
         if($product->type != 'normal')
         {
-            if(empty($plan->branch))
+            if($plan->branch == '')
             {
                 $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
                 dao::$errors['branch[]'] = sprintf($this->lang->error->notempty, $this->lang->product->branch);
+                return false;
             }
             else
             {
@@ -544,68 +590,24 @@ class productplanModel extends model
                     $deleteBranches  = '';
                     foreach(explode(',', $oldPlan->branch) as $oldBranchID)
                     {
-                        if(strpos(",$plan->branch,", ",$oldBranchID,") === false and isset($childBranches[$oldBranchID]))
+                        if(strpos(",$plan->branch,", ",$oldBranchID,") === false && isset($childBranches[$oldBranchID]))
                         {
                             $canDeleteBranch = false;
                             if(isset($branchPairs[$oldBranchID])) $deleteBranches .= "{$branchPairs[$oldBranchID]},";
                         }
                     }
 
-                    $this->lang->productplan->deleteBranchTip = str_replace('@branch@', $this->lang->product->branchName[$product->type], $this->lang->productplan->deleteBranchTip);
-                    if(!$canDeleteBranch) dao::$errors[] = sprintf($this->lang->productplan->deleteBranchTip, trim($deleteBranches, ','));
+                    if(!$canDeleteBranch)
+                    {
+                        $this->lang->productplan->deleteBranchTip = str_replace('@branch@', $this->lang->product->branchName[$product->type], $this->lang->productplan->deleteBranchTip);
+                        dao::$errors[] = sprintf($this->lang->productplan->deleteBranchTip, trim($deleteBranches, ','));
+                        return false;
+                    }
                 }
             }
         }
-        if(dao::isError()) return false;
 
-        $parentPlan = $this->getByID($plan->parent);
-        $futureTime = $this->config->productplan->future;
-
-        if($plan->parent > 0)
-        {
-            if($parentPlan->begin !== $futureTime)
-            {
-                if($plan->begin < $parentPlan->begin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLessThanParent, $parentPlan->begin);
-            }
-            if($parentPlan->end !== $futureTime)
-            {
-                if($plan->end !== $futureTime and $plan->end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreatThanParent, $parentPlan->end);
-            }
-        }
-        elseif($oldPlan->parent == -1 and ($plan->begin != $futureTime or $plan->end != $futureTime))
-        {
-            $childPlans = $this->getChildren($planID);
-            $minBegin   = $plan->begin;
-            $maxEnd     = $plan->end;
-            foreach($childPlans as $childPlan)
-            {
-                if($childPlan->begin < $minBegin) $minBegin = $childPlan->begin;
-                if($childPlan->end > $maxEnd) $maxEnd = $childPlan->end;
-            }
-            if($minBegin < $plan->begin and $minBegin != $futureTime) dao::$errors['begin'] = sprintf($this->lang->productplan->beginGreaterChildTip, $oldPlan->title, $plan->begin, $minBegin);
-            if($maxEnd > $plan->end and $maxEnd != $futureTime) dao::$errors['end'] = sprintf($this->lang->productplan->endLessThanChildTip, $oldPlan->title, $plan->end, $maxEnd);
-        }
-
-        if(dao::isError()) return false;
-        $plan = $this->loadModel('file')->processImgURL($plan, $this->config->productplan->editor->edit['id'], $this->post->uid);
-        $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)
-            ->autoCheck()
-            ->batchCheck($this->config->productplan->edit->requiredFields, 'notempty')
-            ->checkIF(!$this->post->future && !empty($_POST['begin']) && !empty($_POST['end']), 'end', 'ge', $plan->begin)
-            ->checkFlow()
-            ->where('id')->eq((int)$planID)
-            ->exec();
-        if(dao::isError()) return false;
-
-        if($plan->parent > 0) $this->updateParentStatus($plan->parent);
-        if($oldPlan->parent > 0) $this->updateParentStatus($oldPlan->parent);
-
-        if(!dao::isError())
-        {
-            $this->file->updateObjectID($this->post->uid, $planID, 'plan');
-            if(!empty($plan->parent) and $parentPlan->parent == '0') $this->transferStoriesAndBugs($plan);
-            return common::createChanges($oldPlan, $plan);
-        }
+        return true;
     }
 
     /**

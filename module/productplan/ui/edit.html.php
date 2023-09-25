@@ -65,6 +65,7 @@ formPanel
         set::name('status'),
         set::items(array_slice($lang->productplan->statusList, ($plan->status == 'wait' ? 0 : 1))),
         set::value($plan->status),
+        set::required(true),
         set::disabled($plan->parent == -1)
     ),
     formRow

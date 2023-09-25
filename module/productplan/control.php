@@ -70,7 +70,7 @@ class productplan extends control
         if(!empty($_POST))
         {
             $planData = form::data()->get();
-            $planID   = $this->productplan->create($planData, $this->post->future);
+            $planID   = $this->productplan->create($planData, (int)$this->post->future);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('productplan', $planID, 'opened');
 
@@ -110,19 +110,25 @@ class productplan extends control
     }
 
     /**
+     * 编辑一个计划。
      * Edit a plan.
      *
-     * @param int $planID
-     *
+     * @param  int    $planID
      * @access public
      * @return void
      */
     public function edit(int $planID)
     {
+        $plan = $this->productplan->getByID($planID);
         if(!empty($_POST))
         {
-            $changes = $this->productplan->update($planID);
+            $planData = form::data()
+                ->setIF($this->post->future || empty($_POST['begin']), 'begin', $this->config->productplan->future)
+                ->setIF($this->post->future || empty($_POST['end']), 'end', $this->config->productplan->future)
+                ->get();
+            $changes  = $this->productplan->update($planData, $plan);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             $this->productplan->unlinkOldBranch(array($planID => $changes));
             if($changes)
             {
@@ -134,7 +140,6 @@ class productplan extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink($this->app->rawModule, 'view', "planID=$planID")));
         }
 
-        $plan = $this->productplan->getByID($planID);
         $oldBranch = array($planID => $plan->branch);
 
         /* Get the parent plan pair exclusion itself. */
@@ -142,7 +147,7 @@ class productplan extends control
         unset($parentPlanPairs[$planID]);
         $this->view->parentPlanPairs = $parentPlanPairs;
 
-        $this->commonAction($plan->product, $plan->branch);
+        $this->commonAction((int)$plan->product, (int)$plan->branch);
 
         if($plan->parent > 0)
         {
@@ -151,10 +156,10 @@ class productplan extends control
             foreach(explode(',', $parentPlan->branch) as $parentBranchID) $branchPairs[$parentBranchID] = $this->view->branchTagOption[$parentBranchID];
             $this->view->branchTagOption = $branchPairs;
         }
-        $this->view->title           = $this->view->product->name . $this->lang->colon . $this->lang->productplan->edit;
-        $this->view->productID       = $plan->product;
-        $this->view->oldBranch       = $oldBranch;
-        $this->view->plan            = $plan;
+        $this->view->title     = $this->view->product->name . $this->lang->colon . $this->lang->productplan->edit;
+        $this->view->productID = $plan->product;
+        $this->view->oldBranch = $oldBranch;
+        $this->view->plan      = $plan;
         $this->display();
     }
 
@@ -827,6 +832,7 @@ class productplan extends control
     }
 
     /**
+     * 获取分支冲突的需求和Bug。
      * AJAX: Get conflict story and bug.
      *
      * @param  int    $planID
@@ -834,7 +840,7 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function ajaxGetConflict($planID, $newBranch)
+    public function ajaxGetConflict(int $planID, int $newBranch)
     {
         $plan        = $this->productplan->getByID($planID);
         $oldBranch   = $plan->branch;
@@ -878,15 +884,16 @@ class productplan extends control
     }
 
     /**
+     * 获取最近一次创建的计划。
      * AJAX: Get last plan.
      *
      * @param  int    $productID
      * @param  int    $branch
      * @param  int    $parent
      * @access public
-     * @return object
+     * @return string
      */
-    public function ajaxGetLast($productID, $branch = 0, $parent = 0)
+    public function ajaxGetLast(int $productID, int $branch = 0, int $parent = 0)
     {
         $lastPlan = $this->productplan->getLast($productID, $branch, $parent);
         echo json_encode($lastPlan);
@@ -934,7 +941,7 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDiffBranchesTip($productID = 0, $parentID = 0, $branches = '')
+    public function ajaxGetDiffBranchesTip(int $productID = 0, int $parentID = 0, string $branches = '')
     {
         if(empty($parentID) or empty($productID)) return;
 
