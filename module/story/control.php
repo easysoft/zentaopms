@@ -870,6 +870,8 @@ class story extends control
         $story = $this->story->getById($storyID, 0, true);
         $this->commonAction($storyID);
 
+        if($story->status != 'draft' and $story->status != 'changing') unset($this->config->story->edit->requiredFields);
+
         if(!empty($_POST))
         {
             $this->story->update($storyID);

@@ -1083,6 +1083,7 @@ class storyModel extends model
         $this->dao->update(TABLE_STORY)
             ->data($story, 'reviewers,spec,verify,finalResult,deleteFiles')
             ->autoCheck()
+            ->batchCheck($this->config->story->edit->requiredFields, 'notempty')
             ->checkIF(isset($story->closedBy), 'closedReason', 'notempty')
             ->checkIF(isset($story->closedReason) and $story->closedReason == 'done', 'stage', 'notempty')
             ->checkIF(isset($story->closedReason) and $story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
