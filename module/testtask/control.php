@@ -188,7 +188,8 @@ class testtask extends control
 
         if(!empty($_POST))
         {
-            /* 表单数据的收集和组装。 */
+            /* 生成表单数据。*/
+            /* Generate form data. */
             $formData = form::data($this->config->testtask->form->create)->add('project', $projectID)->get();
             $formData = $this->loadModel('file')->processImgURL($formData, $this->config->testtask->editor->create['id'], $this->post->uid);
             if($formData->execution)
@@ -227,8 +228,8 @@ class testtask extends control
     }
 
     /**
-     * 查看当前测试单的概要信息。
-     * View a test task.
+     * 查看当前测试单的详细信息。
+     * View detail of a test task.
      *
      * @param  int    $testtaskID
      * @access public
@@ -236,16 +237,21 @@ class testtask extends control
      */
     public function view(int $testtaskID)
     {
-        /* Get test task. */
+        /* 查询测试单详细信息。 */
+        /* Query detail of a test task. */
         $testtask = $this->testtask->getByID($testtaskID, true);
         if(!$testtask) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('qa', 'index'))));
 
-        /* When the session changes, you need to query the related products again. */
+        $this->testtaskZen->setMenu($testtask->product, $testtask->branch, $testtask->project, $testtask->execution);
+
+        /* session 改变时重新查询关联的产品。*/
+        /* When the session changes, query the related products again. */
         $products = $this->products;
         if($this->session->project != $testtask->project) $products = $this->loadModel('product')->getProductPairsByProject($testtask->project);
         $this->session->project = $testtask->project;
 
-        /* 如果该测试单的所属产品不在products里，则把所属产品塞入到products里。 */
+        /* 如果测试单所属产品在产品键值对中不存在，将其加入。*/
+        /* Prepare the product key-value pairs. */
         $productID = $testtask->product;
         if(!isset($products[$productID]))
         {
@@ -253,17 +259,17 @@ class testtask extends control
             $products[$productID] = $product->name;
         }
 
-        $this->testtaskZen->setMenu($productID, $testtask->branch, $testtask->project, $testtask->execution);
-
-        $this->executeHooks($testtaskID); // 执行工作流配置的扩展动作。
+        /* 执行工作流配置的扩展动作。*/
+        /* Execute extended actions configured in the workflow. */
+        $this->executeHooks($testtaskID);
 
         if($testtask->execution) $this->view->execution = $this->loadModel('project')->getByID($testtask->execution);
 
         $this->view->title      = "TASK #$testtask->id $testtask->name/" . $products[$productID];
-        $this->view->task       = $testtask;
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->actions    = $this->loadModel('action')->getList('testtask', $testtaskID);
         $this->view->testreport = $this->loadModel('testreport')->getById($testtask->testreport);
+        $this->view->task       = $testtask;
         $this->display();
     }
 
