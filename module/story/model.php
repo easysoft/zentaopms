@@ -88,14 +88,17 @@ class storyModel extends model
      * Get story pairs.
      *
      * @param  int    $productID
+     * @param  int    $planID
+     * @param  string $field
      * @access public
      * @return array
      */
-    public function getPairs(int $productID = 0): array
+    public function getPairs(int $productID = 0, int $planID = 0, string $field = 'title'): array
     {
-        return $this->dao->select('id, title')->from(TABLE_STORY)
+        return $this->dao->select("id, {$field}")->from(TABLE_STORY)
             ->where('deleted')->eq('0')
             ->beginIF($productID)->andWhere('product')->eq($productID)
+            ->beginIF($planID)->andWhere("CONCAT(',', plan, ',')")->like("%,{$planID},%")->fi()
             ->fetchPairs();
     }
 
