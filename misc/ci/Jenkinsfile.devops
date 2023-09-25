@@ -98,7 +98,7 @@ pipeline {
               env.GIT_COMMIT = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
               env.GIT_TAG_BUILD_TYPE = 'snapshot'
               env.GIT_TAG_BUILD_GROUP = sh(returnStdout: true, script: 'echo `date +%Y%m%d`.devops').trim()
-              env.GIT_TAGGER_NAME = sh(returnStdout: true, script: 'git for-each-ref --format="%(taggername)" refs/tags/$(git tag --points-at HEAD)').trim()
+              env.GIT_TAGGER_NAME = sh(returnStdout: true, script: 'git show -s --format=%an').trim()
 
               env.CI_PUBLIC_IMAGE_NAMESPACE = sh(returnStdout: true,script: 'jq -r .image.public.namespace.' + env.GIT_TAG_BUILD_TYPE + ' < ci.json').trim()
               env.CI_INTERNAL_IMAGE_NAMESPACE = sh(returnStdout: true,script: 'jq -r .image.internal.namespace.' + env.GIT_TAG_BUILD_TYPE + ' < ci.json').trim()
