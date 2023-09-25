@@ -21,16 +21,16 @@ class projectplan extends control
     }
 
     /**
+     * 创建一个计划。
      * Create a plan.
      *
-     * @param string $productID
-     * @param int    $branchID
-     * @param int    $parent
-     *
+     * @param  int    $productID
+     * @param  int    $branchID
+     * @param  int    $parent
      * @access public
      * @return void
      */
-    public function create($productID = '', $branchID = 0, $parent = 0)
+    public function create(int $productID = 0, int $branchID = 0, int $parent = 0)
     {
         echo $this->fetch('productplan', 'create', "productID=$productID&branchID=$branchID&parent=$parent");
     }
