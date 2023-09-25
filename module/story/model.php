@@ -2597,25 +2597,26 @@ class storyModel extends model
     }
 
     /**
+     * 获取某产品下的父需求的键值对列表。
      * Get parent story pairs.
      *
      * @param  int    $productID
-     * @param  string $append
+     * @param  string $appendedStories
      * @access public
-     * @return void
+     * @return array
      */
-    public function getParentStoryPairs($productID, $append = '')
+    public function getParentStoryPairs(int $productID, string $appendedStories = '')
     {
         $stories = $this->dao->select('id, title')->from(TABLE_STORY)
-            ->where('deleted')->eq(0)
+            ->where('deleted')->eq('0')
+            ->andWhere('product')->eq($productID)
             ->andWhere('parent')->le(0)
             ->andWhere('type')->eq('story')
             ->andWhere('stage')->eq('wait')
             ->andWhere('status')->eq('active')
-            ->andWhere('product')->eq($productID)
             ->andWhere('plan')->in('0,')
             ->andWhere('twins')->eq('')
-            ->beginIF($append)->orWhere('id')->in($append)->fi()
+            ->beginIF(!empty($appendedStories))->orWhere('id')->in($appendedStories)->fi()
             ->fetchPairs();
         return array(0 => '') + $stories ;
     }
