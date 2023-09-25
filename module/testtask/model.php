@@ -2311,4 +2311,82 @@ class testtaskModel extends model
 
         return array('suites' => $suites, 'cases' => $cases, 'results' => $results, 'suiteNames' => $suiteNames, 'caseTitles' => $caseTitles);
     }
+
+    /**
+     * 初始化测试套件。
+     * Initialize the test suite.
+     *
+     * @param  int     $product
+     * @param  string  $name
+     * @param  string  $now
+     * @access private
+     * @return object
+     */
+    private function initSuite(int $product, string $name, string $now)
+    {
+        $suite = new stdclass();
+        $suite->product   = $product;
+        $suite->name      = $name;
+        $suite->type      = 'unit';
+        $suite->addedBy   = $this->app->user->account;
+        $suite->addedDate = $now;
+
+        return $suite;
+    }
+
+    /**
+     * 初始化测试用例。
+     * Initialize the test case.
+     *
+     * @param  int     $product
+     * @param  string  $title
+     * @param  string  $now
+     * @param  string  $auto
+     * @param  string  $frame
+     * @param  string  $type
+     * @param  string  $stage
+     * @access private
+     * @return object
+     */
+    private function initCase(int $product, string $title, string $now, string $auto, string $frame, string $type = 'unit', string $stage = 'unittest'): object
+    {
+        $case = new stdclass();
+        $case->product     = $product;
+        $case->title       = $title;
+        $case->pri         = 3;
+        $case->type        = $type;
+        $case->stage       = $stage;
+        $case->status      = 'normal';
+        $case->openedBy    = $this->app->user->account;
+        $case->openedDate  = $now;
+        $case->version     = 1;
+        $case->auto        = $auto;
+        $case->frame       = $frame;
+        $case->lastRunner  = $this->app->user->account;
+        $case->lastRunDate = $now;
+
+        return $case;
+    }
+
+    /**
+     * 初始化测试用例执行结果。
+     * Initialize the execution result of the test case.
+     *
+     * @param  string  $now
+     * @access private
+     * @return object
+     */
+    private function initResult(string $now): object
+    {
+        $result = new stdclass();
+        $result->case                     = 0;
+        $result->version                  = 1;
+        $result->caseResult               = 'pass';
+        $result->lastRunner               = $this->app->user->account;
+        $result->date                     = $now;
+        $result->stepResults[0]['result'] = 'pass';
+        $result->stepResults[0]['real']   = '';
+
+        return $result;
+    }
 }
