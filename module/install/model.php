@@ -630,7 +630,7 @@ class installModel extends model
     {
         $configRoot   = $this->app->getConfigRoot();
         $myConfigFile = $configRoot . 'my.php';
-        if(file_exists($myConfigFile)) return;
+        if(file_exists($myConfigFile) && trim(file_get_contents($myConfigFile))) return;
 
         /* Set the session save path when the session save path is null. */
         $customSession = $this->setSessionPath();
