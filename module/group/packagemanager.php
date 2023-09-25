@@ -565,7 +565,6 @@ $config->group->package->browseProgram->subset = 'program';
 $config->group->package->browseProgram->privs  = array();
 $config->group->package->browseProgram->privs['program-browse']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
 $config->group->package->browseProgram->privs['program-kanban']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array(), 'recommend' => array());
-$config->group->package->browseProgram->privs['program-view']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array(), 'recommend' => array());
 $config->group->package->browseProgram->privs['program-product'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array(), 'recommend' => array());
 $config->group->package->browseProgram->privs['program-project'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array(), 'recommend' => array());
 
@@ -575,10 +574,10 @@ $config->group->package->manageProgram->subset = 'program';
 $config->group->package->manageProgram->privs  = array();
 $config->group->package->manageProgram->privs['program-create']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('program-browse'), 'recommend' => array('program-edit', 'program-start', 'program-updateOrder'));
 $config->group->package->manageProgram->privs['program-edit']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('program-browse'), 'recommend' => array('program-activate', 'program-close', 'program-create', 'program-start', 'program-suspend', 'program-updateOrder'));
-$config->group->package->manageProgram->privs['program-start']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('program-browse', 'program-view'), 'recommend' => array('program-activate', 'program-close', 'program-create', 'program-delete', 'program-edit'));
-$config->group->package->manageProgram->privs['program-suspend']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('program-browse', 'program-view'), 'recommend' => array('program-activate', 'program-close', 'program-create', 'program-delete', 'program-edit', 'program-start'));
-$config->group->package->manageProgram->privs['program-activate']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 45, 'depend' => array('program-browse', 'program-view'), 'recommend' => array('program-close', 'program-create', 'program-delete', 'program-edit', 'program-start'));
-$config->group->package->manageProgram->privs['program-close']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 50, 'depend' => array('program-browse', 'program-view'), 'recommend' => array('program-activate', 'program-create', 'program-delete', 'program-edit', 'program-start'));
+$config->group->package->manageProgram->privs['program-start']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('program-browse'), 'recommend' => array('program-activate', 'program-close', 'program-create', 'program-delete', 'program-edit'));
+$config->group->package->manageProgram->privs['program-suspend']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('program-browse'), 'recommend' => array('program-activate', 'program-close', 'program-create', 'program-delete', 'program-edit', 'program-start'));
+$config->group->package->manageProgram->privs['program-activate']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 45, 'depend' => array('program-browse'), 'recommend' => array('program-close', 'program-create', 'program-delete', 'program-edit', 'program-start'));
+$config->group->package->manageProgram->privs['program-close']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 50, 'depend' => array('program-browse'), 'recommend' => array('program-activate', 'program-create', 'program-delete', 'program-edit', 'program-start'));
 $config->group->package->manageProgram->privs['program-updateOrder'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 90, 'depend' => array('program-browse'), 'recommend' => array('program-create', 'program-edit'));
 
 $config->group->package->deleteProgram = new stdclass();
