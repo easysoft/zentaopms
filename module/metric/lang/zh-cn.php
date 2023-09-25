@@ -97,13 +97,13 @@ $lang->metric->featureBar['browse']['all']      = '全部';
 $lang->metric->featureBar['browse']['wait']     = '未发布';
 $lang->metric->featureBar['browse']['released'] = '已发布';
 
-$lang->metric->featureBar['preview']['project']   = '项目';
+$lang->metric->featureBar['preview']['system']    = '系统';
+$lang->metric->featureBar['preview']['program']   = '项目集';
 $lang->metric->featureBar['preview']['product']   = '产品';
+$lang->metric->featureBar['preview']['project']   = '项目';
 $lang->metric->featureBar['preview']['execution'] = '执行';
 $lang->metric->featureBar['preview']['dept']      = '团队';
 $lang->metric->featureBar['preview']['user']      = '个人';
-$lang->metric->featureBar['preview']['program']   = '项目集';
-$lang->metric->featureBar['preview']['system']    = '系统';
 $lang->metric->featureBar['preview']['code']      = '代码库';
 $lang->metric->featureBar['preview']['pipeline']  = '流水线';
 
