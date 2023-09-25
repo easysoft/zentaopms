@@ -188,43 +188,32 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
             </td>
           </tr>
           <?php else:?>
-          <?php if($config->systemMode == 'PLM'):?>
-          <tr class='sourceBox <?php echo $hiddenSource;?>'>
-            <th><?php echo $lang->story->source;?></th>
-            <td colspan='2'>
-              <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control chosen'");?>
-            </td>
-            <td colspan="2" class="sourceTd">
-              <div class="input-group">
-                <div class='input-group-addon' id='sourceNoteBox'><?php echo $lang->story->sourceNote;?></div>
-                <?php echo html::input('sourceNote', $sourceNote, "class='form-control'");?>
-              </div>
-            </td>
-            <td colspan="2" id='feedbackBox' class='hidden'>
-              <div class="input-group">
-                <div class="input-group">
-                  <div class="input-group-addon" style="min-width: 77px;"><?php echo $lang->story->feedbackBy;?></div>
-                  <?php echo html::input('feedbackBy', '', "class='form-control'");?>
-                  <span class='input-group-addon'><?php echo $lang->story->notifyEmail;?></span>
-                  <?php echo html::input('notifyEmail', '', "class='form-control'");?>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <?php else:?>
           <tr>
             <th class='planTh'><?php echo $lang->story->assignedTo;?></th>
             <td colspan='2' id='assignedToBox'>
               <?php echo html::select('assignedTo', $hiddenProduct ? $teamUsers : $users, '', "class='form-control picker-select'");?>
             </td>
-            <td colspan="<?php echo $showFeedbackBox ? 1 : 2;?>" class="sourceTd <?php echo $hiddenSource?> sourceBox">
+            <td colspan="2" class="sourceTd <?php echo $hiddenSource?> sourceBox">
               <div class="input-group">
                 <div class="input-group">
                   <div class="input-group-addon" style="min-width: 77px;"><?php echo $lang->story->source;?></div>
                   <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control chosen'");?>
                   <span class='input-group-addon' id="sourceNoteBox"><?php echo $lang->story->sourceNote;?></span>
-                  <?php echo html::input('sourceNote', $sourceNote, "class='form-control' style='width:140px;'");?>
+                  <?php echo html::input('sourceNote', $sourceNote, "class='form-control'");?>
                 </div>
+              </div>
+            </td>
+          </tr>
+          <?php if($config->systemMode == 'PLM'):?>
+          <tr id='feedbackBox' class='hidden'>
+            <th><?php echo $lang->story->feedbackBy;?></th>
+            <td colspan='2'>
+              <?php echo html::input('feedbackBy', '', "class='form-control'");?>
+            </td>
+            <td colspan="2" class="sourceTd">
+              <div class="input-group">
+                <div class='input-group-addon'><?php echo $lang->story->notifyEmail;?></div>
+                <?php echo html::input('notifyEmail', '', "class='form-control'");?>
               </div>
             </td>
           </tr>

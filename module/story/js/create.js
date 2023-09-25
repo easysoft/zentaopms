@@ -38,12 +38,10 @@ $(function()
         if($.inArray(source, feedbackSource) != -1)
         {
             $('#feedbackBox').removeClass('hidden');
-            $('#source, #sourceNoteBox').closest('td').attr('colspan', 1);
         }
         else
         {
             $('#feedbackBox').addClass('hidden');
-            $('#source, #sourceNoteBox').closest('td').attr('colspan', 2);
         }
     });
 
