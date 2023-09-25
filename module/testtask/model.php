@@ -2389,4 +2389,50 @@ class testtaskModel extends model
 
         return $result;
     }
+
+    /**
+     * 根据导入的 xml 文件内容处理测试用例的执行结果。
+     * Process the execution result of the test case according to the imported xml file content.
+     *
+     * @param  object  $result
+     * @param  object  $matchNode
+     * @param  string  $failure
+     * @param  string  $skipped
+     * @access private
+     * @return object
+     */
+    private function processResult(object $result, object $matchNode, string $failure, string $skipped): object
+    {
+        if(isset($matchNode->$failure))
+        {
+            $result->caseResult               = 'fail';
+            $result->stepResults[0]['result'] = 'fail';
+            if(is_string($matchNode->$failure))
+            {
+                $result->stepResults[0]['real'] = (string)$matchNode->$failure;
+                return $result;
+            }
+
+            if(isset($matchNode->{$failure}[0]))
+            {
+                $result->stepResults[0]['real'] = (string)$matchNode->{$failure}[0];
+                return $result;
+            }
+
+            $failureAttrs = $matchNode->$failure->attributes();
+            $result->stepResults[0]['real'] = (string)$failureAttrs['message'];
+            return $result;
+        }
+
+        if(isset($matchNode->$skipped))
+        {
+            $result->caseResult = 'n/a';
+            $result->stepResults[0]['result'] = 'n/a';
+            $result->stepResults[0]['real']   = '';
+
+            return $result;
+        }
+
+        return $result;
+    }
 }
