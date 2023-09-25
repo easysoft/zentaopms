@@ -1777,12 +1777,13 @@ class story extends control
     }
 
     /**
+     * 获取需求的信息。
      * AJAX: get module of a story.
      *
      * @param  int    $storyID
      * @param  string $pageType batch
      * @access public
-     * @return string|void
+     * @return mixed
      */
     public function ajaxGetInfo(int $storyID, string $pageType = '')
     {
@@ -1795,14 +1796,9 @@ class story extends control
         $storyInfo['spec']     = html_entity_decode($story->spec, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8');
         $storyInfo['status']   = $story->status;
 
-        if($pageType == 'batch')
-        {
-            return $this->send(array('storyInfo' => $storyInfo));
-        }
-        else
-        {
-            echo json_encode($storyInfo);
-        }
+        if($pageType == 'batch') return $this->send(array('storyInfo' => $storyInfo));
+
+        return print(json_encode($storyInfo));
     }
 
     /**
