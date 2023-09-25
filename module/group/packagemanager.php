@@ -3508,6 +3508,7 @@ $config->group->package->browseMetric->privs  = array();
 $config->group->package->browseMetric->privs['metric-preview'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
 $config->group->package->browseMetric->privs['metric-details'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
 
+/*
 $config->group->package->manageMetric = new stdclass();
 $config->group->package->manageMetric->order  = 10;
 $config->group->package->manageMetric->subset = 'metric';
@@ -3519,6 +3520,7 @@ $config->group->package->manageMetric->privs['metric-view'] = array('edition' =>
 $config->group->package->manageMetric->privs['metric-implement'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
 $config->group->package->manageMetric->privs['metric-delist'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
 $config->group->package->manageMetric->privs['metric-delete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
+ */
 
 $config->group->package->browseDoc = new stdclass();
 $config->group->package->browseDoc->order  = 10;
