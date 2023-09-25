@@ -275,7 +275,7 @@ class testtask extends control
 
     /**
      * 查看单元测试测试单的用例列表。
-     * Browse unit cases.
+     * Browse cases of a testtask which is unit test.
      *
      * @param  int    $testtaskID
      * @param  string $orderBy
@@ -284,62 +284,37 @@ class testtask extends control
      */
     public function unitCases(int $testtaskID, string $orderBy = 't1.id_asc')
     {
-        /* Set browseType, productID, moduleID and queryID. */
-        $testtask  = $this->testtask->getByID($testtaskID);
+        $testtask = $this->testtask->getByID($testtaskID);
+
+        /* 检查是否有权限访问测试单所属产品。*/
+        /* Check if user have permission to access the product to which the testtask belongs. */
         $productID = $this->loadModel('product')->checkAccess($testtask->product, $this->products);
-        if($this->app->tab == 'project')
-        {
-            $this->lang->scrum->menu->qa['subMenu']->testcase['subModule'] = 'testtask';
-            $this->lang->scrum->menu->qa['subMenu']->testtask['subModule'] = '';
-            $this->loadModel('project')->setMenu($this->session->project);
-        }
-        else
-        {
-            $this->loadModel('qa')->setMenu($productID);
-            $this->app->rawModule = 'testcase';
-        }
 
-        /* Save session. */
+        $this->loadModel('qa')->setMenu($productID);
+        $this->app->rawModule = 'testcase';
+
+        /* 根据测试套件获取测试用例执行结果。*/
+        /* Get testrun of test cases by suite. */
+        $suiteRuns = $this->testtask->groupRunsBySuite($testtaskID, "t4.suite_asc,$orderBy");
+
+        /* 保存部分内容到 session 中供后面使用。*/
+        /* Save session .*/
         $this->session->set('caseList', $this->app->getURI(true), 'qa');
-
-        /* Get test cases. */
-        $runs = $this->testtask->groupRunsBySuite($testtaskID, "t4.suite_asc,$orderBy");
-
-        /* 因为套件和测试单是多堆垛关系，所以要过滤掉相同ID的测试单执行数据。 */
-        $filterRuns = array();
-        foreach($runs as $run)
-        {
-            if(empty($filterRuns[$run->id])) $filterRuns[$run->id] = $run;
-        }
-
-        /* save session .*/
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
-        /* append run case result to runs. */
-        $filterRuns = $this->loadModel('testcase')->appendData($filterRuns, 'testrun');
+        /* 因为套件和测试单是多对多关系，所以要过滤掉相同ID的测试单执行数据。 */
+        /* Filter out the testrun data with the same ID because the suite and testtask have a many-to-many relationship. */
+        $runs = array();
+        foreach($suiteRuns as $run) $runs[$run->id] = $run;
 
-        /* 将测试单执行数据按照套件进行分组，方便按套件计算数量。 */
-        $groupCases = array();
-        foreach($filterRuns as $run) $groupCases[$run->suite][] = $run;
+        $runs = $this->loadModel('testcase')->appendData($runs, 'testrun');
+        $runs = $this->testtaskZen->processRowspanForUnitCases($runs);
 
-        /* 将每个套件下的总执行数量赋予每个套件的第一条执行记录。 */
-        $suite = null;
-        foreach($filterRuns as $run)
-        {
-            $run->rowspan = 0;
-            if($suite !== $run->suite)
-            {
-                $suite = $run->suite;
-                if(!empty($groupCases[$run->suite])) $run->rowspan = count($groupCases[$run->suite]);
-            }
-        }
-
-        /* Assign. */
-        $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
-        $this->view->productID   = $productID;
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-        $this->view->runs        = $filterRuns;
-        $this->view->taskID      = $testtaskID;
+        $this->view->title     = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
+        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
+        $this->view->runs      = $runs;
+        $this->view->productID = $productID;
+        $this->view->taskID    = $testtaskID;
         $this->display();
     }
 
