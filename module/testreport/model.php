@@ -61,13 +61,14 @@ class testreportModel extends model
     }
 
     /**
+     * 通过 id 获取测试报告。
      * Get report by id.
      *
      * @param  int    $reportID
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getById($reportID)
+    public function getById(int $reportID): object|false
     {
         $report = $this->dao->select('*')->from(TABLE_TESTREPORT)->where('id')->eq($reportID)->fetch();
         if(!$report) return false;

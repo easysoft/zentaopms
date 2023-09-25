@@ -68,21 +68,23 @@ class testreportTest
     }
 
     /**
-     * Get report by id.
+     * 测试通过 id 获取测试报告。
+     * Test get report by id.
      *
-     * @param  int    $reportID
+     * @param  int          $reportID
      * @access public
-     * @return object
+     * @return array|object
      */
 
-    public function getByIdTest($reportID)
+    public function getByIdTest(int $reportID): array|object
     {
-        $objects = $this->objectModel->getById($reportID);
+        $object = $this->objectModel->getById($reportID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $object;
     }
+
     /**
      * Get report list.
      *
