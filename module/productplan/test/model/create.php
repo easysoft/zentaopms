@@ -40,7 +40,7 @@ $noUid->uid = '';
 $parent = clone $postData;
 $parent->parent = 1;
 
-$isFutureList = array(false, true);
+$isFutureList = array(0, 1);
 
 $planTester = new productPlan('admin');
 r($planTester->createTest($postData,   $isFutureList[0])) && p('title')   && e('测试创建1');              // 测试正常创建
