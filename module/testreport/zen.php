@@ -229,7 +229,7 @@ class testreportZen extends testreport
      * @access protected
      * @return void
      */
-    protected function assignReportData(array $reportData, string $method): void
+    protected function assignReportData(array $reportData, string $method, object $pager = null): void
     {
         foreach($reportData as $key => $value)
         {
@@ -246,14 +246,11 @@ class testreportZen extends testreport
         {
             $this->view->members = $this->dao->select('DISTINCT lastRunner')->from(TABLE_TESTRUN)->where('task')->in(array_keys($reportData['tasks']))->fetchPairs('lastRunner', 'lastRunner');
         }
-        elseif($method == 'edit')
-        {
-        }
 
         $this->view->storySummary = $this->product->summary($reportData['stories']);
         $this->view->users        = $this->user->getPairs('noletter|noclosed|nodeleted');
 
-        $cases = $this->testreport->getTaskCases($reportData['tasks'], $reportData['begin'], $reportData['end']);
+        $cases = $method != 'view' ? $this->testreport->getTaskCases($reportData['tasks'], $reportData['begin'], $reportData['end']) : $this->testreport->getTaskCases($reportData['tasks'], $reportData['begin'], $reportData['end'], $reportData['cases'], $pager);
         $this->view->cases        = $cases;
         $this->view->caseSummary  = $this->testreport->getResultSummary($reportData['tasks'], $cases, $reportData['begin'], $reportData['end']);
 
@@ -271,9 +268,37 @@ class testreportZen extends testreport
         $this->view->datas['testTaskPerRunner']    = $this->report->computePercent($perCaseRunner);
 
         list($bugInfo, $bugSummary) = $this->testreport->getBug4Report($reportData['tasks'], $reportData['productIdList'], $reportData['begin'], $reportData['end'], $reportData['builds']);
+        if($method == 'view') $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
         $this->view->bugInfo    = $bugInfo;
         $this->view->legacyBugs = $bugSummary['legacyBugs'];
         $this->view->bugSummary = $bugSummary;
+
+        if($method == 'view') $this->view->pager = $pager;
+    }
+
+    /**
+     * 为创建查看测试报告数据构建报告数据。
+     * Build testreport data for view.
+     *
+     * @param  object    $report
+     * @access protected
+     * @return array
+     */
+    protected function buildReportDataForView(object $report): array
+    {
+        $reportData = array();
+        $reportData['begin']         = $report->begin;
+        $reportData['end']           = $report->end;
+        $reportData['cases']         = $report->cases;
+        $reportData['productIdList'] = array($report->product);
+        $reportData['execution']     = $this->execution->getById($report->execution);
+        $reportData['stories']       = $report->stories ? $this->story->getByList($report->stories)  : array();
+        $reportData['tasks']         = $report->tasks   ? $this->testtask->getByList(explode(',', $report->tasks)) : array();
+        $reportData['builds']        = $report->builds  ? $this->build->getByList($report->builds)   : array();
+        $reportData['bugs']          = $report->bugs    ? $this->bug->getByIdList($report->bugs)     : array();
+        $reportData['report']        = $report;
+        return $reportData;
+
     }
 
     /**
