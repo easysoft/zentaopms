@@ -1763,13 +1763,14 @@ class story extends control
     }
 
     /**
-     * AJAX: get spec and verify of a story. for web app.
+     * 获取需求详情和操作日志。
+     * AJAX: get the actions and detail of the story for web app.
      *
      * @param  int    $storyID
      * @access public
      * @return void
      */
-    public function ajaxGetDetail($storyID)
+    public function ajaxGetDetail(int $storyID)
     {
         $this->view->actions = $this->action->getList('story', $storyID);
         $this->view->story   = $this->story->getByID($storyID);
