@@ -836,7 +836,7 @@ class productplan extends control
      * AJAX: Get conflict story and bug.
      *
      * @param  int    $planID
-     * @param  int    $branch
+     * @param  int    $newBranch
      * @access public
      * @return void
      */
