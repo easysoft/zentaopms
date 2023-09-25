@@ -113,7 +113,7 @@ class testtaskModel extends model
         if($browseType == 'newest') $orderBy = 'end_desc,' . $orderBy;
 
         $projectID = $this->lang->navGroup->testtask != 'qa' ? $this->session->project : 0;
-        $tasks     = $this->fetchTesttaskList($productID, '', 0, 'unit', 'local', '', $begin, $end, $orderBy, $pager);
+        $tasks     = $this->fetchTesttaskList($productID, '', $projectID, 'unit', 'local', '', $begin, $end, $orderBy, $pager);
 
         $resultGroups = $this->dao->select('t1.task, t2.*')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_TESTRESULT)->alias('t2')->on('t1.id=t2.run')
