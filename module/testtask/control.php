@@ -62,7 +62,7 @@ class testtask extends control
 
     /**
      * 测试单的列表。
-     * Browse test tasks.
+     * Browse testtasks.
      *
      * @param  int    $productID
      * @param  string $branch
@@ -171,7 +171,7 @@ class testtask extends control
 
     /**
      * 创建测试单页面和创建表单的提交。
-     * Create a test task.
+     * Create a testtask.
      *
      * @param  int    $productID
      * @param  int    $executionID
@@ -229,7 +229,7 @@ class testtask extends control
 
     /**
      * 查看当前测试单的详细信息。
-     * View detail of a test task.
+     * View detail of a testtask.
      *
      * @param  int    $testtaskID
      * @access public
@@ -238,7 +238,7 @@ class testtask extends control
     public function view(int $testtaskID)
     {
         /* 查询测试单详细信息。 */
-        /* Query detail of a test task. */
+        /* Query detail of a testtask. */
         $testtask = $this->testtask->getByID($testtaskID, true);
         if(!$testtask) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('qa', 'index'))));
 
@@ -345,7 +345,7 @@ class testtask extends control
 
     /**
      * 查看非单元测试的测试单的用例列表。
-     * Browse cases of a test task which isn't unit test.
+     * Browse cases of a testtask which isn't unit test.
      *
      * @param  int    $taskID
      * @param  string $browseType  all|assignedtome|bysuite|byModule
@@ -522,7 +522,7 @@ class testtask extends control
 
     /**
      * 编辑一个测试单。
-     * Edit a test task.
+     * Edit a testtask.
      *
      * @param  int    $taskID
      * @access public
@@ -740,7 +740,7 @@ class testtask extends control
 
     /**
      * 关联测试用例到一个测试单。
-     * Link cases to a test task.
+     * Link cases to a testtask.
      *
      * @param  int    $taskID
      * @param  string $type
@@ -1026,7 +1026,7 @@ class testtask extends control
     }
 
     /**
-     * AJAX: return test tasks of a user in html select.
+     * AJAX: return testtasks of a user in html select.
      *
      * @param  int    $userID
      * @param  string $id
