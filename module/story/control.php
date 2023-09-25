@@ -1588,6 +1588,7 @@ class story extends control
     }
 
     /**
+     * 处理需求变更。
      * Process story change.
      *
      * @param  int    $storyID
@@ -1595,7 +1596,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function processStoryChange($storyID, $result = 'yes')
+    public function processStoryChange(int $storyID, string $result = 'yes')
     {
         $this->commonAction($storyID);
         $story = $this->story->getByID($storyID);
