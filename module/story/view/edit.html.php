@@ -151,9 +151,9 @@
                 <td id='productBox'>
                   <div class='input-group'>
                     <?php $class = $hiddenProduct ? 'disabled' : ''?>
-                    <?php echo html::select('product', $products, $story->product, "onchange='loadProduct(this.value);' class='form-control chosen control-product $class'");?>
+                    <?php echo html::select('product', $products, $story->product, "onchange='loadProduct(this.value);' class='form-control chosen control-product $class' data-max_drop_width=100%");?>
                     <span class='input-group-addon fix-border fix-padding'></span>
-                    <?php if($product->type != 'normal') echo html::select('branch', $branchTagOption, $story->branch, "onchange='loadBranch();' class='form-control chosen control-branch'");?>
+                    <?php if($product->type != 'normal') echo html::select('branch', $branchTagOption, $story->branch, "onchange='loadBranch();' class='form-control chosen control-branch' data-max_drop_width=100%");?>
                   </div>
                 </td>
               </tr>
@@ -161,7 +161,7 @@
               <tr>
                 <th class='thWidth'><?php echo $lang->product->branch = sprintf($lang->product->branch, $lang->product->branchName['branch']);?></th>
                 <td>
-                  <div class='input-group'><?php if($product->type != 'normal') echo html::select('branch', $branchTagOption, $story->branch, "onchange='loadBranch();' class='form-control chosen control-branch'");?></div>
+                  <div class='input-group'><?php if($product->type != 'normal') echo html::select('branch', $branchTagOption, $story->branch, "onchange='loadBranch();' class='form-control chosen control-branch' data-max_drop_width=100%");?></div>
                 </td>
               </tr>
               <?php endif;?>
@@ -170,7 +170,7 @@
                 <td>
                   <div class='input-group' id='moduleIdBox'>
                   <?php
-                  echo html::select('module', $moduleOptionMenu, $story->module, "class='form-control chosen'");
+                  echo html::select('module', $moduleOptionMenu, $story->module, "class='form-control chosen' data-max_drop_width=100%");
                   if(count($moduleOptionMenu) == 1)
                   {
                       echo "<span class='input-group-addon'>";
@@ -187,7 +187,7 @@
               <?php if($app->tab == 'product'):?>
               <tr class="<?php if($hiddenParent) echo 'hidden';?>">
                 <th><?php echo $lang->story->parent;?></th>
-                <td><?php echo html::select('parent', $stories, $story->parent, "class='form-control chosen'");?></td>
+                <td><?php echo html::select('parent', $stories, $story->parent, "class='form-control chosen' data-max_drop_width=100%");?></td>
               </tr>
               <?php endif;?>
               <tr class="<?php if($hiddenPlan) echo 'hidden';?>">
@@ -196,7 +196,7 @@
                   <div class='input-group' id='planIdBox'>
                   <?php $planCount = !empty($story->planTitle) ? count($story->planTitle) : 0?>
                   <?php $multiple  = ($this->session->currentProductType != 'normal' and empty($story->branch) and $planCount > 1) ? 'multiple' : '';?>
-                  <?php echo html::select(!empty($multiple) ? 'plan[]' : 'plan', $plans, $story->plan, "class='form-control chosen' " . $multiple);
+                  <?php echo html::select(!empty($multiple) ? 'plan[]' : 'plan', $plans, $story->plan, "class='form-control chosen' data-max_drop_width=100% " . $multiple);
                   if(count($plans) == 1)
                   {
                       echo "<span class='input-group-addon'>";
@@ -211,7 +211,7 @@
               <?php endif;?>
               <tr>
                 <th><?php echo $lang->story->source;?></th>
-                <td><?php echo html::select('source', $lang->story->sourceList, $story->source, "class='form-control chosen'");?></td>
+                <td><?php echo html::select('source', $lang->story->sourceList, $story->source, "class='form-control chosen' data-max_drop_width=100%");?></td>
               </tr>
               <tr>
                 <th id='sourceNoteBox'><?php echo $lang->story->sourceNote;?></th>
@@ -244,14 +244,14 @@
                         }
                     }
                 }
-                echo html::select('stage', $lang->story->stageList, $maxStage, "class='form-control chosen'");
+                echo html::select('stage', $lang->story->stageList, $maxStage, "class='form-control chosen' data-max_drop_width=100%");
                 ?>
                 </td>
               </tr>
               <?php endif;?>
               <tr>
                 <th><?php echo $lang->story->category;?></th>
-                <td><?php echo html::select('category', $lang->story->categoryList, $story->category, "class='form-control chosen'");?></td>
+                <td><?php echo html::select('category', $lang->story->categoryList, $story->category, "class='form-control chosen' data-max_drop_width=100%");?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->story->pri;?></th>
