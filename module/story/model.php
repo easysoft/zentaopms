@@ -317,14 +317,15 @@ class storyModel extends model
     }
 
     /**
+     * 获取执行下的需求键值对。
      * Get stories pairs of a execution.
      *
      * @param  int              $executionID
      * @param  int              $productID
-     * @param  string|int       $branch
+     * @param  string|int       $branch       0|all|integer
      * @param  array|string|int $moduleIdList
-     * @param  string           $type full|short
-     * @param  string           $status all|unclosed|review
+     * @param  string           $type         full|short
+     * @param  string           $status       all|noclosed|changing|active|draft|closed|reviewing
      * @access public
      * @return array
      */
@@ -337,7 +338,7 @@ class storyModel extends model
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->where('t1.project')->eq($executionID)
-            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t2.type')->eq('story')
             ->beginIF($productID)->andWhere('t2.product')->eq($productID)->fi()
             ->beginIF($branch !== 'all')->andWhere('t2.branch')->in("0,$branch")->fi()
