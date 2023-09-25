@@ -82,7 +82,9 @@ class main extends wg
         {
             foreach($sidebars as $sidebar)
             {
-                if($sidebar instanceof wg && $sidebar->prop('side') === 'left') $leftSides[] = $sidebar;
+                if(!($sidebar instanceof wg)) continue;
+                $sidebar->setDefaultProps(array('parent' => '#mainContainer'));
+                if($sidebar->prop('side') === 'left') $leftSides[] = $sidebar;
                 else $rightSides[] = $sidebar;
             }
         }
@@ -127,7 +129,8 @@ class main extends wg
             $this->buildMainNavbar(),
             div
             (
-                set::className('container'),
+                setID('mainContainer'),
+                setClass('container'),
                 $this->buildMenu(),
                 $this->buildContent()
             )

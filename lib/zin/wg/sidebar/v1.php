@@ -8,17 +8,13 @@ class sidebar extends wg
         'side?:string="left"',
         'width?:string|number=40',
         'showToggle?:bool=true',
+        'parent?:string',
         'preserve?:string'
     );
 
-    public static function getPageCSS(): string|false
-    {
-        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
-    }
-
     protected function build(): wg
     {
-        list($side, $showToggle, $width, $preserve) = $this->prop(array('side', 'showToggle', 'width', 'preserve'));
+        list($side, $showToggle, $width, $preserve, $parent) = $this->prop(array('side', 'showToggle', 'width', 'preserve', 'parent'));
         if($preserve === null)
         {
             global $app;
@@ -28,7 +24,7 @@ class sidebar extends wg
         (
             setClass('sidebar'),
             width($width),
-            setData(array('zui' => 'sidebar', 'side' => $side, 'toggleBtn' => $showToggle, 'preserve' => $preserve)),
+            setData(array('zui' => 'sidebar', 'side' => $side, 'toggleBtn' => $showToggle, 'preserve' => $preserve, 'parent' => $parent)),
             set($this->getRestProps()),
             $this->children(),
         );
