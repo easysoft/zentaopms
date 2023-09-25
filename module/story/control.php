@@ -1613,27 +1613,30 @@ class story extends control
     }
 
     /**
+     * 获取执行的需求列表信息用于html下拉列表。
      * AJAX: get stories of a execution in html select.
      *
-     * @param  int    $executionID
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  int    $moduleID
-     * @param  int    $storyID
-     * @param  string $pageType batch
-     * @param  string $type full
-     * @param  string $status all|unclosed
+     * @param  int        $executionID
+     * @param  int        $productID
+     * @param  int|string $branch      0|all|integer
+     * @param  int        $moduleID
+     * @param  int        $storyID
+     * @param  string     $pageType    batch
+     * @param  string     $type        full|short
+     * @param  string     $status      all|unclosed
      * @access public
      * @return void
      */
-    public function ajaxGetExecutionStories($executionID, $productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $pageType = '', $type = 'full', $status = 'all')
+    public function ajaxGetExecutionStories(int $executionID, int $productID = 0, int|string $branch = 0, int $moduleID = 0, int $storyID = 0, string $pageType = '', string $type = 'full', string $status = 'all')
     {
         if($moduleID)
         {
             $moduleID = $this->loadModel('tree')->getStoryModule($moduleID);
             $moduleID = $this->tree->getAllChildID($moduleID);
         }
+
         $stories = $this->story->getExecutionStoryPairs($executionID, $productID, $branch, $moduleID, $type, $status);
+
         if($this->app->getViewType() === 'json')
         {
             return print(json_encode($stories));
