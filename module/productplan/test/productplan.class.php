@@ -474,5 +474,19 @@ class productPlan
 
         return $result;
     }
+
+    /**
+     * Test syncLinkedStories method.
+     *
+     * @param  array  $storyIdList
+     * @access public
+     * @return array
+     */
+    public function syncLinkedStoriesTest($storyIdList): array
+    {
+        $this->productplan->syncLinkedStories(1, $storyIdList);
+
+        return $this->productplan->dao->select('*')->from(TABLE_PLANSTORY)->fetchAll();
+    }
 }
 ?>
