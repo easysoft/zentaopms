@@ -11,7 +11,7 @@ zdTable('suitecase')->gen(100);
 
 /**
 
-title=测试 testtaskModel->groupRunsBySuite();
+title=测试 testtaskModel->getRunsForUnitCases();
 timeout=0
 cid=1
 
@@ -48,5 +48,5 @@ cid=1
 global $tester;
 $tester->loadModel('testtask');
 
-r($tester->testtask->groupRunsBySuite(1)) && p('0:id,project,execution,title,precondition,keywords,type,case,storyTitle,caseStatus,suite,suiteTitle') && e('4,0,101,这个是测试用例4,这是前置条件4,这是关键词4,install,4,软件需求2,investigate,2,这是测试套件名称2');   // 查询测试单ID为1的第一条测试执行结果
-r($tester->testtask->groupRunsBySuite(1)) && p('1:id,project,execution,title,precondition,keywords,type,case,storyTitle,caseStatus,suite,suiteTitle') && e('3,0,101,这个是测试用例3,这是前置条件3,这是关键词3,config,3,软件需求2,blocked,2,这是测试套件名称2');        // 查询测试单ID为2的第一条测试执行结果
+r($tester->testtask->getRunsForUnitCases(1)) && p('0:id,project,execution,title,precondition,keywords,type,case,storyTitle,caseStatus,suite,suiteTitle') && e('4,0,101,这个是测试用例4,这是前置条件4,这是关键词4,install,4,软件需求2,investigate,2,这是测试套件名称2');   // 查询测试单ID为1的第一条测试执行结果
+r($tester->testtask->getRunsForUnitCases(1)) && p('1:id,project,execution,title,precondition,keywords,type,case,storyTitle,caseStatus,suite,suiteTitle') && e('3,0,101,这个是测试用例3,这是前置条件3,这是关键词3,config,3,软件需求2,blocked,2,这是测试套件名称2');        // 查询测试单ID为2的第一条测试执行结果

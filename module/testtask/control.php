@@ -295,7 +295,7 @@ class testtask extends control
 
         /* 根据测试套件获取测试用例执行结果。*/
         /* Get testrun of test cases by suite. */
-        $suiteRuns = $this->testtask->groupRunsBySuite($testtaskID, "t4.suite_asc,$orderBy");
+        $suiteRuns = $this->testtask->getRunsForUnitCases($testtaskID, "t4.suite_asc,$orderBy");
 
         /* 保存部分内容到 session 中供后面使用。*/
         /* Save session .*/
