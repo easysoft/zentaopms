@@ -104,7 +104,7 @@ pipeline {
               env.CI_INTERNAL_IMAGE_NAMESPACE = sh(returnStdout: true,script: 'jq -r .image.internal.namespace.' + env.GIT_TAG_BUILD_TYPE + ' < ci.json').trim()
 
               // def ximUsers = sh(returnStdout: true,script: 'jq -r .notice.users < ci.json').trim()
-              // env.XIM_USERS = ximUsers + ',' + env.GIT_TAGGER_NAME
+              env.XIM_USERS = 'qishiyao,zhaoke,zhengyuansheng'
               // env.XIM_GROUPS = sh(returnStdout: true,script: 'jq -r .notice.groups < ci.json').trim()
 
               env.PMS_VERSION = sh(returnStdout: true, script: 'cat ${SRC_ZENTAOEXT_PATH}/VERSION').trim()
