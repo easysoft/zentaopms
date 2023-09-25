@@ -928,11 +928,14 @@ class storyModel extends model
         $now      = helper::now();
         $oldStory = $this->getById($storyID);
 
-        if(isset($_POST['reviewer'])) $_POST['reviewer'] = array_filter($_POST['reviewer']);
-        if(!$this->post->needNotReview and empty($_POST['reviewer']))
+        if($oldStory->status == 'draft' or $oldStory->status == 'changing')
         {
-            dao::$errors['reviewer'] = sprintf($this->lang->error->notempty, $this->lang->story->reviewers);
-            return false;
+            if(isset($_POST['reviewer'])) $_POST['reviewer'] = array_filter($_POST['reviewer']);
+            if(!$this->post->needNotReview and empty($_POST['reviewer']))
+            {
+                dao::$errors['reviewer'] = sprintf($this->lang->error->notempty, $this->lang->story->reviewers);
+                return false;
+            }
         }
 
         if(!empty($_POST['lastEditedDate']) and $oldStory->lastEditedDate != $this->post->lastEditedDate)
