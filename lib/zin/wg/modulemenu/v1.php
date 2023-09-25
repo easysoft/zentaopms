@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace zin;
 
+require_once dirname(__DIR__) . DS . 'btn' . DS . 'v1.php';
+
 class moduleMenu extends wg
 {
     private array $modules = array();
@@ -22,29 +24,28 @@ class moduleMenu extends wg
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    private function buildMenuTree(array $parentItems, int|string $parentID): array
+    private function buildMenuTree(int|string $parentID = 0): array
     {
         $children = $this->getChildModule($parentID);
         if(count($children) === 0) return [];
 
         $activeKey = $this->prop('activeKey');
+        $treeItems = array();
 
         foreach($children as $child)
         {
             $item = array(
                 'key' => $child->id,
                 'text' => $child->name,
-                'url' => $child->url,
-                'items' => array(),
-                'active' => $child->id == $activeKey,
+                'url' => $child->url
             );
-            $items = $this->buildMenuTree($item['items'], $child->id);
-            if(count($items) !== 0) $item['items'] = $items;
-            else unset($item['items']);
-            $parentItems[] = $item;
+            $items = $this->buildMenuTree($child->id);
+            if(count($items) !== 0)      $item['items'] = $items;
+            if($child->id == $activeKey) $item['active'] = true;
+            $treeItems[] = $item;
         }
 
-        return $parentItems;
+        return $treeItems;
     }
 
     private function getChildModule(int|string $id): array
@@ -66,7 +67,7 @@ class moduleMenu extends wg
     private function setMenuTreeProps(): void
     {
         $this->modules = $this->prop('modules');
-        $this->setProp('items', $this->buildMenuTree(array(), 0));
+        $this->setProp('items', $this->buildMenuTree());
     }
 
     private function getTitle(): string
@@ -91,7 +92,7 @@ class moduleMenu extends wg
         return '';
     }
 
-    private function buildBtns(): wg|null
+    private function buildActions(): wg|null
     {
         $settingLink = $this->prop('settingLink');
         $settingText = $this->prop('settingText');
@@ -110,26 +111,21 @@ class moduleMenu extends wg
         return div
         (
             setClass('col gap-2 py-3 px-7'),
-            $settingLink
-                ? a
-                (
-                    setClass('btn'),
-                    setStyle('background', '#EEF5FF'),
-                    setStyle('box-shadow', 'none'),
-                    set('data-app', $app->tab),
-                    set::href($settingLink),
-                    $settingText
-                )
-                : null,
-            $showDisplay
-                ? a
-                (
-                    setClass('btn white'),
-                    set('data-toggle', 'modal'),
-                    set::href(helper::createLink('datatable', 'ajaxDisplay', "datatableId=$datatableId&moduleName=$app->moduleName&methodName=$app->methodName&currentModule=$currentModule&currentMethod=$currentMethod")),
-                    $lang->displaySetting
-                )
-                : null,
+            $settingLink ? btn
+            (
+                set::type('primary-pale'),
+                set::url($settingLink),
+                set::size('md'),
+                $settingText
+            ) : null,
+            $showDisplay ? btn
+            (
+                toggle::modal(),
+                set::size('md'),
+                set::type('ghost text-gray'),
+                set::url(createLink('datatable', 'ajaxDisplay', "datatableId=$datatableId&moduleName=$app->moduleName&methodName=$app->methodName&currentModule=$currentModule&currentMethod=$currentMethod")),
+                $lang->displaySetting
+            ) : null
         );
     }
 
@@ -153,9 +149,11 @@ class moduleMenu extends wg
         $this->setMenuTreeProps();
         $title = $this->getTitle();
 
+        $treeProps = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu'));
+
         return div
         (
-            setClass('module-menu rounded shadow-sm bg-white col rounded-sm'),
+            setClass('module-menu shadow-sm rounded bg-canvas col rounded-sm'),
             h::header
             (
                 setClass('h-10 flex items-center pl-4 flex-none gap-3'),
@@ -166,12 +164,14 @@ class moduleMenu extends wg
                 ),
                 $this->buildCloseBtn(),
             ),
-            h::main
+            zui::tree
             (
-                setClass('col flex-auto overflow-y-auto overflow-x-hidden pl-4 pr-1'),
-                zui::tree(set($this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu'))))
+                set::_class('col flex-auto scrollbar-hover overflow-y-auto overflow-x-hidden pl-4 pr-1'),
+                set::nestedShow(true),
+                set::preserve(true),
+                set($treeProps)
             ),
-            $this->buildBtns(),
+            $this->buildActions(),
         );
     }
 }
