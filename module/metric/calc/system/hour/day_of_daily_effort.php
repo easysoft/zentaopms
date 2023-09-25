@@ -32,8 +32,6 @@ class day_of_daily_effort extends baseCalc
             ->andWhere('key')->eq('defaultWorkhours')
             ->fetch('value');
 
-        if(empty($defaultHours)) $defaultHours = 7;
-
         return $this->dao->select("year(date) as year, month(date) as month, day(date) as day, date, sum(consumed) as consumed, $defaultHours as defaultHours")
             ->from(TABLE_EFFORT)
             ->where('deleted')->eq('0')
