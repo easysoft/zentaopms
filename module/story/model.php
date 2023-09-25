@@ -2189,7 +2189,7 @@ class storyModel extends model
      * @param  int              $productID
      * @param  string|int       $branch
      * @param  array|string|int $moduleIdList
-     * @param  string           $status
+     * @param  string|array     $status
      * @param  string           $order
      * @param  int              $limit
      * @param  string           $type
@@ -2198,7 +2198,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getProductStoryPairs(int $productID = 0, string|int $branch = 'all', array|string|int $moduleIdList = '', string $status = 'all', string $order = 'id_desc', int $limit = 0, string $type = 'full', string $storyType = 'story', bool|string $hasParent = true): array
+    public function getProductStoryPairs(int $productID = 0, string|int $branch = 'all', array|string|int $moduleIdList = '', string|array $status = 'all', string $order = 'id_desc', int $limit = 0, string $type = 'full', string $storyType = 'story', bool|string $hasParent = true): array
     {
         $stories = $this->dao->select('t1.id, t1.title, t1.module, t1.pri, t1.estimate, t2.name AS product')
             ->from(TABLE_STORY)->alias('t1')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
