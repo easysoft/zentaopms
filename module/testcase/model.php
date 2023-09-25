@@ -2226,10 +2226,11 @@ class testcaseModel extends model
      * Get steps grouped by case id.
      *
      * @param  array  $caseID
+     * @param  string $status
      * @access public
      * @return array
      */
-    public function getStepGroupByIdList(array $caseIdList): array
+    public function getStepGroupByIdList(array $caseIdList, $status = ''): array
     {
         if(!$caseIdList) return array();
 
@@ -2237,7 +2238,7 @@ class testcaseModel extends model
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
             ->where('t2.id')->in($caseIdList)
             ->andWhere('t1.version=t2.version')
-            ->andWhere('t2.status')->ne('wait')
+            ->beginIF($status != 'all')->andWhere('t2.status')->ne('wait')->fi()
             ->fetchGroup('case', 'id');
     }
 
