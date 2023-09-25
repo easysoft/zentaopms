@@ -165,4 +165,61 @@ class productplanZen extends productplan
 
         return sprintf($this->lang->productplan->summary, count($planList), $totalParent, $totalChild, $totalIndependent);
     }
+
+    /**
+     * 设置计划详情页面session信息。
+     * Set session for view page.
+     *
+     * @param  int       $planID
+     * @param  string    $type
+     * @param  string    $orderBy
+     * @param  int       $pageID
+     * @param  int       $recPerPage
+     * @access protected
+     * @return void
+     */
+    protected function setSessionForViewPage(int $planID, string $type, string $orderBy, int $pageID, int $recPerPage)
+    {
+        if(in_array($type, array('story', 'bug')) && ($orderBy != 'order_desc' || $pageID != 1 || $recPerPage != 100))
+        {
+            if($type == 'story')
+            {
+                $this->session->set('storyList', $this->app->getURI(true), 'product');
+            }
+            elseif($type == 'bug')
+            {
+                $this->session->set('bugList', $this->app->getURI(true), 'qa');
+            }
+            else
+            {
+                $this->session->set('storyList', $this->createLink('productplan', 'view', "planID={$planID}&type={$type}"), $type == 'story' ? 'product' : 'qa');
+            }
+        }
+    }
+
+    /**
+     * 设置详情页面的属性。
+     * Set attributes for view page.
+     *
+     * @param  object    $plan
+     * @access protected
+     * @return void
+     */
+    protected function assignViewData(object $plan)
+    {
+        if($plan->parent > 0)     $this->view->parentPlan    = $this->productplan->getById($plan->parent);
+        if($plan->parent == '-1') $this->view->childrenPlans = $this->productplan->getChildren($plan->id);
+
+        $this->view->plan         = $plan;
+        $this->view->actions      = $this->loadModel('action')->getList('productplan', $plan->id);
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->plans        = $this->productplan->getPairs($plan->product, $plan->branch, '', true);
+        $this->view->modules      = $this->tree->getOptionMenu($plan->product);
+
+        if($this->app->getViewType() == 'json')
+        {
+            unset($this->view->storyPager);
+            unset($this->view->bugPager);
+        }
+    }
 }

@@ -47,6 +47,7 @@ $bugCols['actions']['menu']         = array('unlinkBug');
 $storyCols['actions']['minWidth']   = 60;
 $bugCols['actions']['minWidth']     = 60;
 
+$canBeChanged              = common::canBeChanged('plan', $plan);
 $canBatchUnlinkStory       = common::hasPriv('productPlan', 'batchUnlinkStory');
 $canBatchCloseStory        = common::hasPriv('story', 'batchClose');
 $canBatchEditStory         = common::hasPriv('story', 'batchEdit');
@@ -60,8 +61,8 @@ $canBatchUnlinkBug         = common::hasPriv('productPlan', 'batchUnlinkBug');
 $canBatchEditBug           = common::hasPriv('bug', 'batchEdit');
 $canBatchChangePlanBug     = common::hasPriv('bug', 'batchChangePlan');
 
-$canBatchActionStory = ($canBeChanged and ($canBatchUnlinkStory or $canBatchCloseStory or $canBatchEditStory or $canBatchReviewStory or $canBatchChangeBranchStory or $canBatchChangeModuleStory or $canBatchChangePlanStory or $canBatchChangeStageStory or $canBatchAssignToStory));
-$canBatchActionBug   = ($canBeChanged and ($canBatchUnlinkBug or $canBatchEditBug or $canBatchChangePlanBug));
+$canBatchActionStory = ($canBeChanged && ($canBatchUnlinkStory || $canBatchCloseStory || $canBatchEditStory || $canBatchReviewStory || $canBatchChangeBranchStory || $canBatchChangeModuleStory || $canBatchChangePlanStory || $canBatchChangeStageStory || $canBatchAssignToStory));
+$canBatchActionBug   = ($canBeChanged && ($canBatchUnlinkBug || $canBatchEditBug || $canBatchChangePlanBug));
 
 $bugFootToolbar   = array();
 $storyFootToolbar = array();
@@ -71,8 +72,8 @@ if($canBatchActionStory)
     (
         array('type' => 'btn-group', 'items' => array
         (
-            array('text' => $lang->productplan->unlinkStoryAB, 'className' => 'batch-btn size-sm primary', 'disabled' => ($canBatchUnlinkStory ? '' : 'disabled'), 'data-type' => 'story', 'data-formaction' => helper::createLink('productplan', 'batchUnlinkStory', "planID=$plan->id&orderBy=$orderBy")),
-            array('caret' => 'up', 'className' => 'size-sm primary', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start', 'url' => '#navStoryActions'),
+            array('text' => $lang->productplan->unlinkStoryAB, 'className' => 'batch-btn size-sm secondary', 'disabled' => ($canBatchUnlinkStory ? '' : 'disabled'), 'btnType' => 'primary', 'data-type' => 'story', 'data-formaction' => helper::createLink('productplan', 'batchUnlinkStory', "planID=$plan->id&orderBy=$orderBy")),
+            array('caret' => 'up', 'className' => 'size-sm secondary', 'btnType' => 'primary', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start', 'url' => '#navStoryActions'),
         )),
     ));
 }
@@ -82,8 +83,8 @@ if($canBatchActionBug)
     (
         array('type' => 'btn-group', 'items' => array
         (
-            $canBatchUnlinkBug ? array('text' => $lang->productplan->unlinkAB, 'className' => 'batch-btn size-sm primary', 'data-type' => 'bug', 'data-formaction' => helper::createLink('productplan', 'batchUnlinkBug', "planID=$plan->id&orderBy=$orderBy")) : null,
-            array('caret' => 'up', 'className' => 'size-sm primary', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start', 'url' => '#navBugActions'),
+            $canBatchUnlinkBug ? array('text' => $lang->productplan->unlinkAB, 'className' => 'batch-btn size-sm secondary', 'btnType' => 'primary', 'data-type' => 'bug', 'data-formaction' => helper::createLink('productplan', 'batchUnlinkBug', "planID=$plan->id&orderBy=$orderBy")) : null,
+            array('caret' => 'up', 'className' => 'size-sm secondary', 'btnType' => 'primary', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start', 'url' => '#navBugActions'),
         )),
     ));
 }
@@ -117,7 +118,7 @@ if($canBatchChangePlanStory)   $navStoryActionItems[] = array('class' => 'not-hi
 if($canBatchChangeStageStory)  $navStoryActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->story->stageAB, 'items' => $stageItems);
 if($canBatchAssignToStory)     $navStoryActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->story->assignedTo, 'items' => $assignItems);
 
-zui::menu
+menu
 (
     set::id('navStoryActions'),
     set::className('menu dropdown-menu'),
@@ -130,7 +131,7 @@ foreach($plans as $planID => $planName) $planItems[] = array('text' => $planName
 $navBugActionItems = array();
 if($canBatchEditBug)       $navBugActionItems[] = array('text' => $lang->edit, 'class' => 'batch-btn', 'data-type' => 'bug', 'data-page' => 'batch', 'data-formaction' => helper::createLink('bug', 'batchEdit', "productID=$plan->product&branch=$branch"));
 if($canBatchChangePlanBug) $navBugActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->story->planAB, 'items' => $planItems);
-zui::menu
+menu
 (
     set::id('navBugActions'),
     set::className('menu dropdown-menu'),
@@ -147,8 +148,7 @@ $batchCreateStoryLink = common::hasPriv('story', 'batchCreate') ? $this->createL
 $branchNames = '';
 if($product->type != 'normal')
 {
-    foreach(explode(',', $branch) as $branchID) $branchNames .= "{$branchOption[$branchID]},";
-    $branchNames = trim($branches, ',');
+    foreach(explode(',', (string)$branch) as $branchID) $branchNames .= "{$branchOption[$branchID]},";
 }
 
 $fnGetChildrenPlans = function($childrenPlans)
@@ -257,7 +257,7 @@ detailBody
             ),
             tabPane
             (
-                to::prefix(icon(setClass('text-info'), $lang->icons['info'])),
+                to::prefix(icon(setClass('text-info'), 'info')),
                 set::key('planInfo'),
                 set::title($lang->productplan->view),
                 set::active($type == 'planInfo'),

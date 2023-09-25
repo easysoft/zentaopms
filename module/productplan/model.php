@@ -29,6 +29,9 @@ class productplanModel extends model
 
         $plan = $this->loadModel('file')->replaceImgURL($plan, 'desc');
         if($setImgSize) $plan->desc = $this->file->setImgSize((string)$plan->desc);
+
+        $plan->isParent = 0;
+        if($plan->parent == -1) $plan->isParent = 1;
         return $plan;
     }
 

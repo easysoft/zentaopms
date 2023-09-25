@@ -327,7 +327,8 @@ class productplan extends control
     }
 
     /**
-     * View plan.
+     * 查看计划详情。
+     * View a plan.
      *
      * @param  int    $planID
      * @param  string $type
@@ -337,99 +338,55 @@ class productplan extends control
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
-     *
      * @access public
      * @return void
      */
-    public function view($planID = 0, $type = 'story', $orderBy = 'order_desc', $link = 'false', $param = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function view(int $planID = 0, string $type = 'story', string $orderBy = 'order_desc', string $link = 'false', string $param = '', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
     {
-        $planID = (int)$planID;
-        $plan   = $this->productplan->getByID($planID, true);
+        $plan = $this->productplan->getByID($planID, true);
         if(!$plan)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
-            return print(js::error($this->lang->notFound) . js::locate($this->createLink('product', 'index')));
+            return $this->sendError($this->lang->notFound, $this->createLink('product', 'index'));
         }
-
-        if($type == 'story' and ($orderBy != 'order_desc' or $pageID != 1 or $recPerPage != 100))
-        {
-            $this->session->set('storyList', $this->app->getURI(true), 'product');
-        }
-        else
-        {
-            $this->session->set('storyList', $this->createLink('productplan', 'view', "planID=$planID&type=story"), 'product');
-        }
-        if($type == 'bug' and ($orderBy != 'order_desc' or $pageID != 1 or $recPerPage != 100))
-        {
-            $this->session->set('bugList', $this->app->getURI(true), 'qa');
-        }
-        else
-        {
-            $this->session->set('bugList', $this->createLink('productplan', 'view', "planID=$planID&type=bug"), 'qa');
-        }
-
-        /* Determines whether an object is editable. */
-        $canBeChanged = common::canBeChanged('plan', $plan);
-
-        /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
-        if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
-        if($this->app->getViewType() == 'xhtml') $recPerPage = 10;
 
         /* Append id for second sort. */
-        $orderBy = ($type == 'bug' and $orderBy == 'order_desc') ? 'id_desc' : $orderBy;
+        $orderBy = ($type == 'bug' && $orderBy == 'order_desc') ? 'id_desc' : $orderBy;
         $sort    = common::appendOrder($orderBy);
         if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
 
-        $this->commonAction($plan->product, $plan->branch);
-        $products = $this->product->getProductPairsByProject($this->session->project);
+        $this->commonAction($plan->product, (int)$plan->branch);
+        $products = $this->product->getProductPairsByProject((int)$this->session->project);
 
+        /* Load pager. */
+        $this->app->loadClass('pager', true);
+        if(in_array($this->app->getViewType(), array('mhtml', 'xhtml'))) $recPerPage = 10;
         $bugPager   = new pager(0, $recPerPage, $type == 'bug' ? $pageID : 1);
         $storyPager = new pager(0, $recPerPage, $type == 'story' ? $pageID : 1);
 
         /* Get stories of plan. */
-        $this->loadModel('story');
-        $planStories = $this->story->getPlanStories($planID, 'all', $type == 'story' ? $sort : 'id_desc', $storyPager);
-
-        $this->executeHooks($planID);
-
-        if($plan->parent > 0)     $this->view->parentPlan    = $this->productplan->getById($plan->parent);
-        if($plan->parent == '-1') $this->view->childrenPlans = $this->productplan->getChildren($plan->id);
-
-        $storyIdList = array();
         $modulePairs = $this->loadModel('tree')->getOptionMenu($plan->product, 'story', 0, 'all');
+        $planStories = $this->loadModel('story')->getPlanStories($planID, 'all', $type == 'story' ? $sort : 'id_desc', $storyPager);
         foreach($planStories as $story)
         {
             if(!isset($modulePairs[$story->module])) $modulePairs += $this->tree->getModulesName((array)$story->module);
-            $storyIdList[] = $story->id;
         }
 
-        $this->loadModel('datatable');
-        $this->view->modulePairs  = $modulePairs;
+        $this->executeHooks($planID);
+        $this->productplanZen->setSessionForViewPage($planID, $type, $orderBy, $pageID, $recTotal);
+        $this->productplanZen->assignViewData($plan);
+
         $this->view->title        = "PLAN #$plan->id $plan->title/" . zget($products, $plan->product, '');
+        $this->view->modulePairs  = $modulePairs;
         $this->view->planStories  = $planStories;
         $this->view->planBugs     = $this->loadModel('bug')->getPlanBugs($planID, 'all', $type == 'bug' ? $sort : 'id_desc', $bugPager);
-        $this->view->products     = $products;
-        $this->view->summary      = $this->product->summary($this->view->planStories);
-        $this->view->plan         = $plan;
-        $this->view->actions      = $this->loadModel('action')->getList('productplan', $planID);
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
-        $this->view->plans        = $this->productplan->getPairs($plan->product, $plan->branch, '', true);
-        $this->view->modules      = $this->loadModel('tree')->getOptionMenu($plan->product);
+        $this->view->summary      = $this->product->summary($planStories);
         $this->view->type         = $type;
         $this->view->orderBy      = $orderBy;
         $this->view->link         = $link;
         $this->view->param        = $param;
         $this->view->storyPager   = $storyPager;
         $this->view->bugPager     = $bugPager;
-        $this->view->canBeChanged = $canBeChanged;
-        $this->view->storyCases   = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
-
-        if($this->app->getViewType() == 'json')
-        {
-            unset($this->view->storyPager);
-            unset($this->view->bugPager);
-        }
         $this->display();
     }
 
