@@ -236,6 +236,7 @@ class productplan extends control
     }
 
     /**
+     * 删除一个计划。
      * Delete a plan.
      *
      * @param  int    $planID
@@ -248,7 +249,7 @@ class productplan extends control
         $response['result']  = 'fail';
         $response['message'] = '';
 
-        $plan = $this->productplan->getById($planID);
+        $plan = $this->productplan->getByID($planID);
         if($plan->parent < 0)
         {
             $response['message'] = $this->lang->productplan->cannotDeleteParent;
@@ -262,16 +263,8 @@ class productplan extends control
         if($message) $this->lang->saveSuccess = $message;
 
         /* if ajax request, send result. */
-        if(dao::isError())
-        {
-            $response['message'] = dao::getError();
-        }
-        else
-        {
-            $response['result']  = 'success';
-            $response['load']    = true;
-        }
-        return $this->send($response);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        return $this->sendSuccess(array('message' => $message, 'load' => true));
     }
 
     /**
@@ -307,6 +300,8 @@ class productplan extends control
         $this->commonAction($productID, $branch);
         $product     = $this->view->product;
         $productName = empty($product) ? '' : $product->name;
+        if($product->type != 'normal') $this->config->productplan->dtable->fieldList['branch']['title'] = $this->lang->product->branch;
+        if($product->type == 'normal') unset($this->config->productplan->dtable->fieldList['branch']);
 
         /* Build the search form. */
         $queryID   = $browseType == 'bySearch' ? (int)$queryID : 0;
@@ -316,6 +311,7 @@ class productplan extends control
         if($viewType == 'kanban') $this->productplanZen->assignKanbanData($product, $branchID, $orderBy);
 
         $plans = $this->productplan->getList($productID, (string) $branch, $browseType, $pager, $sort, "", $queryID);
+        $plans = $this->productplanZen->buildDataForBrowse($plans, $this->view->branchOption);
 
         $this->view->title      = $productName . $this->lang->colon . $this->lang->productplan->browse;
         $this->view->productID  = $productID;
@@ -326,7 +322,7 @@ class productplan extends control
         $this->view->plans      = $plans;
         $this->view->pager      = $pager;
         $this->view->queryID    = $queryID;
-        $this->view->summary    = $this->productplan->getSummary($plans);
+        $this->view->summary    = $this->productplanZen->getSummary($plans);
         $this->display();
     }
 

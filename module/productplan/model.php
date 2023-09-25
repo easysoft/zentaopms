@@ -1036,39 +1036,57 @@ class productplanModel extends model
     }
 
     /**
+     * 判断操作是否可点击。
      * Judge an action is clickable or not.
      *
      * @param  object $plan
      * @param  string $action
-     * @param  string $module
      * @access public
-     * @return void
+     * @return bool
      */
-    public static function isClickable($plan, $action, $module = 'productplan')
+    public static function isClickable(object $plan, string $action): bool
     {
-        $action    = strtolower($action);
-        $clickable = commonModel::hasPriv($module, $action);
-        if(!$clickable) return false;
-
+        global $app;
         switch($action)
         {
             case 'create' :
-                if($plan->parent > 0 or strpos('done,closed', $plan->status) !== false) return false;
+                if($plan->parent > 0 || strpos('done,closed', $plan->status) !== false) return false;
                 break;
             case 'start' :
-                if($plan->status != 'wait' or $plan->parent < 0) return false;
+                if($plan->status != 'wait' || $plan->isParent) return false;
                 break;
             case 'finish' :
-                if($plan->status != 'doing' or $plan->parent < 0) return false;
+                if($plan->status != 'doing' || $plan->isParent) return false;
                 break;
             case 'close' :
-                if($plan->status == 'closed' or $plan->parent < 0) return false;
+                if($plan->status == 'closed' || $plan->isParent) return false;
                 break;
             case 'activate' :
-                if($plan->status == 'wait' or $plan->status == 'doing' or $plan->parent < 0) return false;
+                if($plan->status == 'wait' || $plan->status == 'doing' || $plan->isParent) return false;
                 break;
             case 'delete' :
-                if($plan->parent < 0) return false;
+                if($plan->isParent) return false;
+                break;
+            case 'createExecution' :
+                if($plan->isParent || $plan->expired || in_array($plan->status, array('done', 'closed')) || !common::hasPriv('execution', 'create', $plan)) return false;
+
+                $product          = $app->control->loadModel('product')->getByID($plan->product);
+                $branchList       = $app->control->loadModel('branch')->getList($plan->product, 0, 'all');
+                $branchStatusList = array();
+                foreach($branchList as $productBranch) $branchStatusList[$productBranch->id] = $productBranch->status;
+
+                if($product->type != 'normal')
+                {
+                    $branchStatus = isset($branchStatusList[$plan->branch]) ? $branchStatusList[$plan->branch] : '';
+                    if($branchStatus == 'closed') return false;
+                }
+
+                break;
+            case 'linkStory' :
+                if($plan->isParent) return false;
+                break;
+            case 'linkBug' :
+                if($plan->isParent) return false;
                 break;
         }
 
@@ -1190,27 +1208,6 @@ class productplanModel extends model
         if($order) $plans = $this->relationBranch($plans);
 
         return $plans;
-    }
-
-    /**
-     * Get the total count of parent plan, child plan and indepentdent plan.
-     *
-     * @param  array  $planList
-     * @access public
-     * @return string
-     */
-    public function getSummary(array $planList): string
-    {
-        $totalParent = $totalChild = $totalIndependent = 0;
-
-        foreach($planList as $plan)
-        {
-            if($plan->parent == -1) $totalParent ++;
-            if($plan->parent > 0)   $totalChild ++;
-            if($plan->parent == 0)  $totalIndependent ++;
-        }
-
-        return sprintf($this->lang->productplan->summary, count($planList), $totalParent, $totalChild, $totalIndependent);
     }
 
     /**

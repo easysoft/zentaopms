@@ -87,5 +87,82 @@ class productplanZen extends productplan
 
         $this->view->kanbanData = $this->loadModel('kanban')->getPlanKanban($product, $branchID, $planGroup);
     }
-}
 
+    /**
+     * 构造计划列表页面数据。
+     * Build data for browse page.
+     *
+     * @param  array     $plans
+     * @param  array     $branchOption
+     * @access protected
+     * @return array
+     */
+    protected function buildDataForBrowse(array $plans, array $branchOption): array
+    {
+        if(empty($plans)) return $plans;
+        foreach($plans as $plan)
+        {
+            $plan->branchName = '';
+            if(!empty($branchOption))
+            {
+                foreach(explode(',', $plan->branch) as $branchID) $plan->branchName .= $branchOption[$branchID] . ',';
+                $plan->branchName = trim($plan->branchName, ',');
+            }
+            $plan->begin   = $plan->begin == $this->config->productplan->future ? $this->lang->productplan->future : $plan->begin;
+            $plan->end     = $plan->end == $this->config->productplan->future ? $this->lang->productplan->future : $plan->end;
+            $plan->actions = $this->buildActionsList($plan);
+        }
+
+        return array_values($plans);
+    }
+
+    /**
+     * 构造计划列表页面操作。
+     * Build actions for browse page.
+     *
+     * @param  object    $plan
+     * @access protected
+     * @return array
+     */
+    protected function buildActionsList(object $plan): array
+    {
+        $actions = array();
+        if(common::hasPriv('productplan', 'start'))     $actions[] = 'start';
+        if(common::hasPriv('productplan', 'finish'))    $actions[] = 'finish';
+        if(common::hasPriv('productplan', 'close'))     $actions[] = 'close';
+        if(common::hasPriv('productplan', 'activate'))  $actions[] = 'activate';
+        if(common::hasPriv('execution', 'create'))      $actions[] = 'createExecution';
+
+        if(count($actions) > 0) $actions[] = 'divider';
+
+        if(common::hasPriv('productplan', 'linkStory')) $actions[] = 'linkStory';
+        if(common::hasPriv('productplan', 'linkBug'))   $actions[] = 'linkBug';
+        if(common::hasPriv('productplan', 'edit'))      $actions[] = 'edit';
+        if(common::hasPriv('productplan', 'create'))    $actions[] = 'create';
+        if(common::hasPriv('productplan', 'delete'))    $actions[] = 'delete';
+
+        return $actions;
+    }
+
+    /**
+     * 统计父计划、子计划和独立计划的总数。
+     * Get the total count of parent plan, child plan and indepentdent plan.
+     *
+     * @param  array     $planList
+     * @access protected
+     * @return string
+     */
+    protected function getSummary(array $planList): string
+    {
+        $totalParent = $totalChild = $totalIndependent = 0;
+
+        foreach($planList as $plan)
+        {
+            if($plan->parent == -1) $totalParent ++;
+            if($plan->parent > 0)   $totalChild ++;
+            if($plan->parent == 0)  $totalIndependent ++;
+        }
+
+        return sprintf($this->lang->productplan->summary, count($planList), $totalParent, $totalChild, $totalIndependent);
+    }
+}

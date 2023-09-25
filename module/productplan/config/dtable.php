@@ -29,7 +29,7 @@ $config->productplan->dtable->fieldList['status']['statusMap'] = $lang->productp
 $config->productplan->dtable->fieldList['status']['group']     = 'g2';
 $config->productplan->dtable->fieldList['status']['show']      = true;
 
-$config->productplan->dtable->fieldList['branch']['name']     = 'branch';
+$config->productplan->dtable->fieldList['branch']['name']     = 'branchName';
 $config->productplan->dtable->fieldList['branch']['title']    = '';
 $config->productplan->dtable->fieldList['branch']['type']     = 'text';
 $config->productplan->dtable->fieldList['branch']['sortType'] = true;
@@ -93,37 +93,5 @@ $config->productplan->dtable->fieldList['actions']['required'] = true;
 $config->productplan->dtable->fieldList['actions']['width']    = 'auto';
 $config->productplan->dtable->fieldList['actions']['type']     = 'actions';
 $config->productplan->dtable->fieldList['actions']['minWidth'] = 200;
-
-$config->productplan->dtable->fieldList['actions']['actionsMap']['start']['icon'] = 'play';
-$config->productplan->dtable->fieldList['actions']['actionsMap']['start']['hint'] = $this->lang->productplan->startAB;
-$config->productplan->dtable->fieldList['actions']['actionsMap']['start']['url']  = 'javascript:startProductPlan("{planID}")';
-
-$config->productplan->dtable->fieldList['actions']['actionsMap']['finish']['icon'] = 'checked';
-$config->productplan->dtable->fieldList['actions']['actionsMap']['finish']['hint'] = $this->lang->productplan->finishAB;
-$config->productplan->dtable->fieldList['actions']['actionsMap']['finish']['url']  = 'javascript:finishProductPlan("{planID}")';
-
-$config->productplan->dtable->fieldList['actions']['actionsMap']['close']['icon']        = 'off';
-$config->productplan->dtable->fieldList['actions']['actionsMap']['close']['hint']        = $this->lang->productplan->closeAB;
-$config->productplan->dtable->fieldList['actions']['actionsMap']['close']['data-toggle'] = 'modal';
-
-$config->productplan->dtable->fieldList['actions']['actionsMap']['activate']['icon'] = 'active';
-$config->productplan->dtable->fieldList['actions']['actionsMap']['activate']['hint'] = $this->lang->productplan->activateAB;
-$config->productplan->dtable->fieldList['actions']['actionsMap']['activate']['url']  = 'javascript:activateProductPlan("{planID}")';
-
-$config->productplan->dtable->fieldList['actions']['actionsMap']['plus']['icon'] = 'plus';
-
-$config->productplan->dtable->fieldList['actions']['actionsMap']['link']['icon'] = 'link';
-$config->productplan->dtable->fieldList['actions']['actionsMap']['link']['hint'] = $this->lang->productplan->linkStory;
-
-$config->productplan->dtable->fieldList['actions']['actionsMap']['bug']['icon'] = 'bug';
-$config->productplan->dtable->fieldList['actions']['actionsMap']['bug']['hint'] = $this->lang->productplan->linkBug;
-
-$config->productplan->dtable->fieldList['actions']['actionsMap']['edit']['icon'] = 'edit';
-
-$config->productplan->dtable->fieldList['actions']['actionsMap']['split']['icon'] = 'split';
-$config->productplan->dtable->fieldList['actions']['actionsMap']['split']['hint'] = $lang->productplan->createChildren;
-$config->productplan->dtable->fieldList['actions']['actionsMap']['split']['text'] = $lang->productplan->createChildren;
-
-$config->productplan->dtable->fieldList['actions']['actionsMap']['trash']['icon'] = 'trash';
-$config->productplan->dtable->fieldList['actions']['actionsMap']['trash']['url']  = 'javascript:deleteProductPlan("{planID}")';
-$config->productplan->dtable->fieldList['actions']['actionsMap']['delete']['url'] = 'javascript:deleteProductPlan("{planID}")';
+$config->productplan->dtable->fieldList['actions']['list']     = $config->productplan->actionList;
+$config->productplan->dtable->fieldList['actions']['menu']     = array(array('start|activate|close', 'other' => array('finish', 'close', 'activate')), 'createExecution', 'divider', 'linkStory', 'linkBug', 'edit', 'more' => array('create', 'delete'));
