@@ -12,38 +12,27 @@
 class testreportModel extends model
 {
     /**
-     * Create report.
+     * 创建一个测试报告。
+     * Create a test report.
      *
+     * @param  object    $testreport
      * @access public
-     * @return int
+     * @return int|false
      */
-    public function create()
+    public function create(object $testreport): int|false
     {
-        $execution = $this->loadModel('execution')->getByID($this->post->execution);
-        $data = fixer::input('post')
-            ->stripTags($this->config->testreport->editor->create['id'], $this->config->allowedTags)
-            ->setDefault('project', empty($execution) ? 0 : ($execution->type == 'project' ? $execution->id : $execution->project))
-            ->add('createdBy', $this->app->user->account)
-            ->add('createdDate', helper::now())
-            ->join('stories', ',')
-            ->join('builds', ',')
-            ->join('bugs', ',')
-            ->join('cases', ',')
-            ->join('members', ',')
-            ->remove('files,labels,uid,selectTask')
-            ->get();
-        $data->members = trim($data->members, ',');
-
-        $data = $this->loadModel('file')->processImgURL($data, $this->config->testreport->editor->create['id'], $this->post->uid);
-        $this->dao->insert(TABLE_TESTREPORT)->data($data)->autocheck()
+        $this->dao->insert(TABLE_TESTREPORT)->data($testreport)->autocheck()
              ->batchCheck($this->config->testreport->create->requiredFields, 'notempty')
              ->batchCheck('begin,end', 'notempty')
-             ->check('end', 'ge', $data->begin)
+             ->check('end', 'ge', $testreport->begin)
              ->exec();
+
         if(dao::isError()) return false;
+
         $reportID = $this->dao->lastInsertID();
-        $this->file->updateObjectID($this->post->uid, $reportID, 'testreport');
+        $this->loadModel('file')->updateObjectID($this->post->uid, $reportID, 'testreport');
         $this->file->saveUpload('testreport', $reportID);
+
         return $reportID;
     }
 
@@ -529,15 +518,15 @@ class testreportModel extends model
     /**
      * Get bugs for test
      *
-     * @param  array  $builds
-     * @param  array  $product
-     * @param  string $begin
-     * @param  string $end
-     * @param  string $type
+     * @param  array     $builds
+     * @param  int|array $product
+     * @param  string    $begin
+     * @param  string    $end
+     * @param  string    $type
      * @access public
      * @return void
      */
-    public function getBugs4Test($builds, $product, $begin, $end, $type = 'build')
+    public function getBugs4Test(array $builds, int|array $product, string $begin, string $end, string $type = 'build')
     {
         $bugIdList = '';
         if(is_array($builds))
@@ -546,11 +535,11 @@ class testreportModel extends model
         }
         return $this->dao->select('*')->from(TABLE_BUG)->where('deleted')->eq(0)
             ->andWhere('product')->in($product)
-            ->andWhere('openedDate')->lt("$begin 23:59:59")
-            ->beginIF(is_array($builds) and $type == 'build')->andWhere('id')->in(trim($bugIdList, ','))->fi()
-            ->beginIF(!is_array($builds) and $type == 'build')->andWhere("(resolvedBuild = 'trunk' and resolvedDate >= '$begin' and resolvedDate <= '$end 23:59:59')")->fi()
-            ->beginIF($type == 'project')->andWhere("(id " . helper::dbIN(trim($bugIdList, ',')) . " OR (resolvedBuild = 'trunk' and resolvedDate >= '$begin' and resolvedDate <= '$end 23:59:59'))")
-            ->beginIF($type == 'execution')->andWhere("(id " . helper::dbIN(trim($bugIdList, ',')) . " OR (resolvedBuild = 'trunk' and resolvedDate >= '$begin' and resolvedDate <= '$end 23:59:59'))")
+            ->andWhere('openedDate')->lt("{$begin} 23:59:59")
+            ->beginIF(is_array($builds) && $type == 'build')->andWhere('id')->in(trim($bugIdList, ','))->fi()
+            ->beginIF(!is_array($builds) && $type == 'build')->andWhere("(resolvedBuild = 'trunk' and resolvedDate >= '{$begin}' and resolvedDate <= '{$end} 23:59:59')")->fi()
+            ->beginIF($type == 'project')->andWhere("(id " . helper::dbIN(trim($bugIdList, ',')) . " OR (resolvedBuild = 'trunk' and resolvedDate >= '{$begin}' and resolvedDate <= '{$end} 23:59:59'))")
+            ->beginIF($type == 'execution')->andWhere("(id " . helper::dbIN(trim($bugIdList, ',')) . " OR (resolvedBuild = 'trunk' and resolvedDate >= '{$begin}' and resolvedDate <= '{$end} 23:59:59'))")
             ->fetchAll('id');
     }
 

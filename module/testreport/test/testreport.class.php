@@ -12,27 +12,28 @@ class testreportTest
     }
 
     /**
-     * Create report.
+     * 测试创建一个测试报告。
+     * Test create a test report.
      *
+     * @param  array        $param
      * @access public
-     * @return int
+     * @return array|object
      */
-    public function createTest($param)
+    public function createTest(array $param): array|object
     {
         $begin_date = date('Y-m-d');
         $end_date   = date('Y-m-d',strtotime("+7 day"));
-        $builds     = array('11');
-        $labels     = array();
+        $builds     = '11';
 
-        $createFields = array('begin' => $begin_date, 'end' => $end_date, 'product' => '1', 'execution' => '101', 'tasks' => '1', 'objectID' => '1', 'objectType' => 'testtask', 'owner' => '', 'title' => '', 'report' => '', 'labels' => $labels, 'builds' => $builds, 'cases' => '');
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
+        $testreport = new stdclass();
+        $createFields = array('begin' => $begin_date, 'end' => $end_date, 'product' => '1', 'execution' => '101', 'tasks' => '1', 'objectID' => '1', 'objectType' => 'testtask', 'owner' => '', 'title' => '', 'report' => '', 'builds' => $builds, 'cases' => '');
+        foreach($createFields as $field => $defaultValue) $testreport->{$field} = $defaultValue;
+        foreach($param as $key => $value) $testreport->{$key} = $value;
 
-        $reportID = $this->objectModel->create();
-        unset($_POST);
+        $reportID = $this->objectModel->create($testreport);
         if(dao::isError()) return dao::getError();
-        $objects = $this->objectModel->getByID($reportID);
-        return $objects;
+        $object = $this->objectModel->getByID($reportID);
+        return $object;
     }
 
     public function updateTest($reportID, $param)

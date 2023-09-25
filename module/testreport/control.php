@@ -133,171 +133,54 @@ class testreport extends control
     }
 
     /**
-     * Create report.
+     * 创建一个测试报告。
+     * Create a report.
      *
      * @param  int    $objectID
      * @param  string $objectType
-     * @param  string $extra
+     * @param  int    $extra
      * @param  string $begin
      * @param  string $end
      * @access public
      * @return void
      */
-    public function create($objectID = 0, $objectType = 'testtask', $extra = '', $begin = '', $end = '')
+    public function create(int $objectID = 0, string $objectType = 'testtask', int $extra = 0, string $begin = '', string $end = '')
     {
         if($_POST)
         {
-            $reportID = $this->testreport->create();
+            $testreport = $this->testreportZen->prepareTestreportForCreate();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $reportID = $this->testreport->create($testreport);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('testreport', $reportID, 'Opened');
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('view', "reportID=$reportID"), 'id' => $reportID));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('view', "reportID={$reportID}"), 'id' => $reportID));
         }
+
+        if($objectType == 'testtask') list($objectID, $task, $productID) = $this->testreportZen->assignTaskParisForCreate($objectID, $extra);
+
+        if(!$objectID) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->testreport->noObjectID, 'confirmed' => inlink('browse', "proudctID={$productID}"), 'canceled' => inlink('browse', "proudctID={$productID}"))));
 
         if($objectType == 'testtask')
         {
-            if(empty($objectID) and $extra) $productID = $extra;
-            if($objectID)
-            {
-                $task      = $this->testtask->getByID($objectID);
-                $productID = $this->commonAction($task->product, 'product');
-            }
+            if($productID != $task->product) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->error->accessDenied, 'confirmed' => inlink('browse', "proudctID={$productID}"), 'canceled' => inlink('browse', "proudctID={$productID}"))));
+            if($task->build == 'trunk')      return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->testreport->errorTrunk, 'confirmed' => inlink('browse', "proudctID={$productID}"), 'canceled' => inlink('browse', "proudctID={$productID}"))));
 
-            $taskPairs         = array();
-            $scopeAndStatus[0] = 'local';
-            $scopeAndStatus[1] = 'totalStatus';
-            $tasks = $this->testtask->getProductTasks($productID, empty($objectID) ? 'all' : $task->branch, $scopeAndStatus, '', '', 'id_desc', null);
-            foreach($tasks as $testTask)
-            {
-                if($testTask->build == 'trunk') continue;
-                $taskPairs[$testTask->id] = $testTask->name;
-            }
-            if(empty($taskPairs)) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->testreport->noTestTask, 'confirmed' => $this->createLink('testtask', 'create', "proudctID=$productID"), 'canceled' => inlink('browse', "proudctID=$productID"))));
-
-            if(empty($objectID))
-            {
-                $objectID  = key($taskPairs);
-                $task      = $this->testtask->getByID($objectID);
-                $productID = $this->commonAction($task->product, 'product');
-            }
-            $this->view->taskPairs = $taskPairs;
-
-            if($this->app->tab == 'execution') $this->execution->setMenu($task->execution);
-            if($this->app->tab == 'project') $this->project->setMenu($task->project);
+            $reportData = $this->testreportZen->assignTesttaskReportDataForCreate($objectID, $begin, $end, $productID, $task);
         }
-
-        if(empty($objectID)) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->testreport->noObjectID, 'confirmed' => inlink('browse', "proudctID=$productID"), 'canceled' => inlink('browse', "proudctID=$productID"))));
-        if($objectType == 'testtask')
-        {
-            if($productID != $task->product) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->error->accessDenied, 'confirmed' => inlink('browse', "proudctID=$productID"), 'canceled' => inlink('browse', "proudctID=$productID"))));
-            if($task->build == 'trunk')      return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->testreport->errorTrunk, 'confirmed' => inlink('browse', "proudctID=$productID"), 'canceled' => inlink('browse', "proudctID=$productID"))));
-            $productIdList[$productID] = $productID;
-
-            $begin     = !empty($begin) ? date("Y-m-d", strtotime($begin)) : $task->begin;
-            $end       = !empty($end) ? date("Y-m-d", strtotime($end)) : $task->end;
-            $execution = $this->execution->getById($task->execution);
-            $builds    = array();
-            $build   = $this->build->getById($task->build);
-            $stories = empty($build->stories) ? array() : $this->story->getByList($build->stories);
-
-            if(!empty($build->id)) $builds[$build->id] = $build;
-            $bugs = $this->testreport->getBugs4Test($builds, $productID, $begin, $end);
-
-            $tasks = array($task->id => $task);
-            $owner = $task->owner;
-
-            $this->setChartDatas($objectID);
-
-            $this->view->title       = $task->name . $this->lang->testreport->create;
-            $this->view->reportTitle = date('Y-m-d') . " TESTTASK#{$task->id} {$task->name} {$this->lang->testreport->common}";
-        }
-        elseif($objectType == 'execution' or $objectType == 'project')
+        elseif($objectType == 'execution' || $objectType == 'project')
         {
             $executionID = $this->commonAction($objectID, $objectType);
-            if($executionID != $objectID) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->error->accessDenied, 'confirmed' => inlink('browse', "proudctID=$productID"), 'canceled' => inlink('browse', "proudctID=$productID"))));
+            if($executionID != $objectID) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->error->accessDenied, 'confirmed' => inlink('browse', "proudctID={$productID}"), 'canceled' => inlink('browse', "proudctID={$productID}"))));
 
-            $execution     = $this->execution->getById($executionID);
-            $tasks         = $this->testtask->getExecutionTasks($executionID, $objectType);
-            $task          = $objectID ? $this->testtask->getByID($objectID) : key($tasks);
-            $owners        = array();
-            $buildIdList   = array();
-            $productIdList = array();
-            foreach($tasks as $i => $task)
-            {
-                if(!empty($extra) and strpos(",{$extra},", ",{$task->id},") === false)
-                {
-                    unset($tasks[$i]);
-                    continue;
-                }
+            $reportData = $this->testreportZen->assignProjectReportDataForCreate($objectID, $objectType, $extra, $begin, $end, $executionID);
 
-                $owners[$task->owner] = $task->owner;
-                $productIdList[$task->product] = $task->product;
-                $this->setChartDatas($task->id);
-                if($task->build != 'trunk') $buildIdList[$task->build] = $task->build;
-            }
-            if(count($productIdList) > 1) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->testreport->moreProduct, 'confirmed' => inlink('browse', "proudctID=$productID"), 'canceled' => inlink('browse', "proudctID=$productID"))));
-
-            if($this->app->tab == 'qa')
-            {
-                $productID = $this->product->checkAccess(key($productIdList), $this->products);
-                $this->loadModel('qa')->setMenu($productID);
-            }
-            elseif($this->app->tab == 'project')
-            {
-                $projects  = $this->project->getPairsByProgram();
-                $projectID = $this->project->checkAccess($execution->id, $projects);
-                $this->project->setMenu($projectID);
-            }
-
-            $builds  = $this->build->getByList($buildIdList);
-            $stories = !empty($builds) ? $this->testreport->getStories4Test($builds) : $this->story->getExecutionStories($execution->id);;
-
-            $begin = !empty($begin) ? date("Y-m-d", strtotime($begin)) : $task->begin;
-            $end   = !empty($end) ? date("Y-m-d", strtotime($end)) : $task->end;
-            $owner = current($owners);
-            $bugs  = $this->testreport->getBugs4Test($builds, $productIdList, $begin, $end, 'execution');
-
-            $this->view->title       = $execution->name . $this->lang->testreport->create;
-            $this->view->reportTitle = date('Y-m-d') . ' ' . strtoupper($objectType) . "#{$execution->id} {$execution->name} {$this->lang->testreport->common}";
+            if(count($reportData['productIdList']) > 1) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->testreport->moreProduct, 'confirmed' => inlink('browse', "proudctID={$productID}"), 'canceled' => inlink('browse', "proudctID=$productID"))));
         }
 
-        $cases = $this->testreport->getTaskCases($tasks, $begin, $end);
+        $this->testreportZen->assignReportData($reportData, 'create');
 
-        list($bugInfo, $bugSummary) = $this->testreport->getBug4Report($tasks, $productIdList, $begin, $end, $builds);
-
-        $this->view->begin   = $begin;
-        $this->view->end     = $end;
-        $this->view->members = $this->dao->select('DISTINCT lastRunner')->from(TABLE_TESTRUN)->where('task')->in(array_keys($tasks))->fetchPairs('lastRunner', 'lastRunner');
-        $this->view->owner   = $owner;
-
-        $this->view->stories       = $stories;
-        $this->view->bugs          = $bugs;
-        $this->view->execution     = $execution;
-        $this->view->productIdList = join(',', array_keys($productIdList));
-        $this->view->tasks         = join(',', array_keys($tasks));
-        $this->view->storySummary  = $this->product->summary($stories);
-
-        $this->view->builds  = $builds;
-        $this->view->users   = $this->user->getPairs('noletter|noclosed|nodeleted');
-
-        $this->view->cases       = $cases;
-        $this->view->caseSummary = $this->testreport->getResultSummary($tasks, $cases, $begin, $end);
-
-        $caseList = array();
-        foreach($cases as $taskID => $casesList)
-        {
-            foreach($casesList as $caseID => $case) $caseList[$caseID] = $case;
-        }
-        $perCaseResult = $this->testreport->getPerCaseResult4Report($tasks, array_keys($caseList), $begin, $end);
-        $perCaseRunner = $this->testreport->getPerCaseRunner4Report($tasks, array_keys($caseList), $begin, $end);
-        $this->view->datas['testTaskPerRunResult'] = $this->loadModel('report')->computePercent($perCaseResult);
-        $this->view->datas['testTaskPerRunner']    = $this->report->computePercent($perCaseRunner);
-
-        $this->view->bugInfo    = $bugInfo;
-        $this->view->legacyBugs = $bugSummary['legacyBugs'];
-        $this->view->bugSummary = $bugSummary;
-
-        $this->view->caseList   = $caseList;
         $this->view->objectID   = $objectID;
         $this->view->objectType = $objectType;
         $this->view->extra      = $extra;
