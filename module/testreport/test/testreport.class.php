@@ -73,10 +73,10 @@ class testreportTest
      *
      * @param  int          $reportID
      * @access public
-     * @return array|object
+     * @return array|object|false
      */
 
-    public function getByIdTest(int $reportID): array|object
+    public function getByIdTest(int $reportID): array|object|false
     {
         $object = $this->objectModel->getById($reportID);
 
