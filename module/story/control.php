@@ -1475,11 +1475,11 @@ class story extends control
     }
 
     /**
-     * 处理需求变更。
-     * Process story change.
+     * 当软件需求关联的用户需求有变更时，让用户决定是否变更软件需求。
+     * Ask user to decide to whether change related story after the user requirement changed.
      *
      * @param  int    $storyID
-     * @param  string $result   yes|no
+     * @param  string $result  yes|no
      * @access public
      * @return void
      */
