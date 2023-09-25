@@ -117,11 +117,7 @@ detailBody
                 set::key('job-result'),
                 set::title($lang->compile->result),
                 set::active(true),
-                tableData
-                (
-                    //TODO;
-                    div('等待 testtask/view/unitgroup.html.php 重构完成，直接替换')
-                )
+                div(setID('jobCases'), setData('task', $compile->testtask))
             ) : '',
             $hasLog ? tabPane
             (

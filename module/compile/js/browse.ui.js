@@ -18,5 +18,12 @@ window.renderCell = function(result, {col, row})
         return result;
     }
 
+    if(col.name === 'name')
+    {
+        if(row.data.testtask) result[0].props['data-size'] = 'lg';
+
+        return result;
+    }
+
     return result;
 };
