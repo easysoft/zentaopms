@@ -449,6 +449,7 @@ class productplan extends control
     }
 
     /**
+     * 激活一个计划。
      * Activate a plan.
      *
      * @param  int    $planID
@@ -459,9 +460,9 @@ class productplan extends control
     public function activate(int $planID)
     {
         $this->productplan->updateStatus($planID, 'doing', 'activated');
+        if(dao::isError()) return $this->sendError(dao::getError());
 
-        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-        return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
+        return $this->sendSuccess(array('load' => true, 'closeModal' => true));
     }
 
     /**
