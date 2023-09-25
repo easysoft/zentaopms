@@ -33,7 +33,6 @@ class productplanTao extends productplanModel
             ->beginIF(!in_array($browseType, array('all', 'undone', 'bySearch', 'review')))->andWhere('status')->eq($browseType)->fi()
             ->beginIF($browseType == 'undone')->andWhere('status')->in('wait,doing')->fi()
             ->beginIF($browseType == 'bySearch')->andWhere($this->session->productplanQuery)->fi()
-            ->beginIF($browseType == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', reviewers)")->fi()
             ->beginIF(strpos($param, 'skipparent') !== false)->andWhere('parent')->ne(-1)->fi()
             ->orderBy($orderBy)
             ->page($pager)
@@ -58,7 +57,7 @@ class productplanTao extends productplanModel
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                 ->where('t2.deleted')->eq(0)
                 ->andWhere('t2.type')->in('sprint,stage,kanban')
-                ->andWhere('t1.plan')->like("%,$planID,%")
+                ->andWhere("CONCAT(',', t1.plan, ',')")->like("%,$planID,%")
                 ->beginIF(!is_null($productID))->andWhere('t1.product')->eq($productID)->fi()
                 ->orderBy('project_desc')
                 ->fetchAll('project');
