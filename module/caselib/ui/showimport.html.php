@@ -137,6 +137,7 @@ else
         }
     }
 
+   $submitText = $isEndPage ? $this->lang->save : $this->lang->file->saveAndNext;
     formBatchPanel
     (
         set::title($lang->caselib->import),
@@ -147,8 +148,11 @@ else
         set::onRenderRow(jsRaw('handleRenderRow')),
         input(set::className('hidden'), set::name('isEndPage'), set::value($isEndPage ? '1' : '0')),
         input(set::className('hidden'), set::name('pageID'), set::value($pageID)),
-        $dataInsert !== '' ? input(set::className('hidden'), set::name('insert'), set::value($dataInsert)) : null
+        input(set::className('hidden'), set::name('insert'), set::value($dataInsert)),
+        (!$insert && $dataInsert === '') ? set::actions(array(array('text' => $submitText, 'data-toggle' => 'modal', 'data-target' => '#importNoticeModal', 'class' => 'primary showNotice'), 'cancel')) : null
     );
+
+    if(!$insert && $dataInsert === '') include '../../common/ui/noticeimport.html.php';
 }
 
 render();

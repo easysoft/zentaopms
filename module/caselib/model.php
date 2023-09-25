@@ -282,17 +282,17 @@ class caselibModel extends model
         $forceNotReview = $this->loadModel('testcase')->forceNotReview();
         foreach($cases as $key => $caseData)
         {
-            if($this->post->insert)
-            {
-                $this->caselibTao->insertImportedCase($key, $caseData, $data, $forceNotReview);
-            }
-            else
+            if(!empty($data->id[$key]) && !$this->post->insert)
             {
                 $this->caselibTao->updateImportedCase($key, $caseData, $data, $forceNotReview);
             }
+            else
+            {
+                $this->caselibTao->insertImportedCase($key, $caseData, $data, $forceNotReview);
+            }
         }
 
-        if($this->post->isEndPage)
+        if($data->isEndPage)
         {
             if($this->session->fileImport) @unlink($this->session->fileImport);
             unset($_SESSION['fileImport']);

@@ -35,7 +35,7 @@ class caselibTao extends caselibModel
                 {
                     $requiredField = trim($requiredField);
                     if(!isset($caseData->$requiredField)) continue;
-                    if(empty($caseData->$requiredField)) dao::$errors[] = sprintf($this->lang->testcase->noRequire, $line, $this->lang->testcase->$requiredField);
+                    if(empty($caseData->$requiredField)) dao::$errors[$requiredField][] = sprintf($this->lang->testcase->noRequire, $line, $this->lang->testcase->$requiredField);
                 }
             }
 
