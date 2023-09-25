@@ -97,7 +97,8 @@ $lang->misc->feature->youngBlueImage    = 'theme/default/images/main/new_theme_e
 $lang->misc->feature->visions           = "Interface switching";
 $lang->misc->feature->nextStep          = 'Next step';
 $lang->misc->feature->prevStep          = 'Previous step';
-$lang->misc->feature->close             = 'Learn More';
+$lang->misc->feature->close             = 'Close';
+$lang->misc->feature->learnMore         = 'Learn More';
 $lang->misc->feature->downloadFile      = 'Download introduction';
 $lang->misc->feature->tutorialDesc      = '<p>ZenTao 15.0 has new functions, and you know how to use it through the "<strong>Tutorial</strong>".</p><p>Click your [<span style="color: #0c60e1">Avatar-Theme-Young Blue</span>] to set it.</p>';
 $lang->misc->feature->themeDesc         = '<p>ZenTao 15.0+ a new "Youth Blue" theme, the pages are more beautiful and the experience is more friendly.</p><p>Click your [<span style="color: #0c60e1">Avatar-Theme-Young Blue</span>] to set it.</p>';
