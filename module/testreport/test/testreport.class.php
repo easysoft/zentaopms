@@ -86,20 +86,24 @@ class testreportTest
     }
 
     /**
-     * Get report list.
+     * 测试获取测试报告列表。
+     * Test get report list.
      *
      * @param  int    $objectID
      * @param  string $objectType
+     * @param  int    $extra
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
-     * @return array
+     * @return array|string
      */
-    public function getListTest($objectID, $objectType, $extra = '', $orderBy = 'id_desc', $pager = null)
+    public function getListTest(int $objectID, string $objectType, int $extra = 0, string $orderBy = 'id_desc', object $pager = null): array|string
     {
         $objects = $this->objectModel->getList($objectID, $objectType, $extra, $orderBy, $pager);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return implode(',', array_keys($objects));
     }
 
     /**

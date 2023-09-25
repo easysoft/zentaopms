@@ -126,14 +126,14 @@ fields:
     format: ""
   - field: objectType
     note: "对象类型"
-    range: execution
+    range: testtask{10},project{10},execution{10}
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: objectID
     note: "对象ID"
-    range: 101-110
+    range: 1-10,11-20,101-110
     prefix: ""
     postfix: ""
     loop: 0

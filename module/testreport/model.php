@@ -79,25 +79,25 @@ class testreportModel extends model
     }
 
     /**
+     * 获取报告列表。
      * Get report list.
      *
      * @param  int    $objectID
      * @param  string $objectType
-     * @param  string $extra
+     * @param  int    $extra
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getList($objectID, $objectType, $extra = '', $orderBy = 'id_desc', $pager = null)
+    public function getList(int $objectID, string $objectType, int $extra = 0, string $orderBy = 'id_desc', object $pager = null): array
     {
-        $objectID = (int)$objectID;
         return $this->dao->select('*')->from(TABLE_TESTREPORT)
             ->where('deleted')->eq(0)
             ->beginIF($objectType == 'execution')->andWhere('execution')->eq($objectID)->fi()
             ->beginIF($objectType == 'project')->andWhere('project')->eq($objectID)->fi()
-            ->beginIF($objectType == 'product' and $extra)->andWhere('objectID')->eq((int)$extra)->andWhere('objectType')->eq('testtask')->fi()
-            ->beginIF($objectType == 'product' and empty($extra))->andWhere('product')->eq($objectID)->fi()
+            ->beginIF($objectType == 'product' && $extra)->andWhere('objectID')->eq($extra)->andWhere('objectType')->eq('testtask')->fi()
+            ->beginIF($objectType == 'product' && !$extra)->andWhere('product')->eq($objectID)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
