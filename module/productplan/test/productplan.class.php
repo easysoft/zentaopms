@@ -152,11 +152,11 @@ class productPlan
      * Create a productplan.
      *
      * @param  object $param
-     * @param  bool   $isFuture
+     * @param  int    $isFuture
      * @access public
      * @return object|array
      */
-    public function createTest(object $postData, bool $isFuture = false): object|array
+    public function createTest(object $postData, int $isFuture = 0): object|array
     {
         $this->productplan->config->productplan->create->requiredFields = 'title,begin,end';
         $planID = $this->productplan->create($postData, $isFuture);
@@ -166,22 +166,20 @@ class productPlan
     }
 
     /**
-     * Update
+     * 更新一个计划。
+     * Update a plan.
      *
-     * @param  int   $planID
-     * @param  array $values
+     * @param  int    $planID
+     * @param  object $plan
      * @access public
      * @return array
      */
-    public function update($planID, $values)
+    public function updateTest(int $planID, object $plan): array
     {
-        $updatePlan = array('title' => '', 'status' => '', 'begin' => '', 'end' => '', 'desc' => '', 'uid' => '', 'product' => '');
-
-        foreach($updatePlan as $field => $defaultvalue) $_POST[$field] = $defaultvalue;
-        foreach($values as $key =>$value) $_POST[$key] = $value;
-
-        $productplans = $this->productplan->update($planID);
+        $oldPlan = $this->productplan->getByID($planID);
+        $productplans = $this->productplan->update($plan, $oldPlan);
         if(dao::isError()) return dao::getError();
+
         return $productplans;
     }
 
