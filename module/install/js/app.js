@@ -46,22 +46,26 @@ $(function()
  */
 function checkMemory()
 {
-    var memory = 0;
+    var apps = [];
     $.each(category, (index, cate) => 
     {
         var item = $('#' + cate).val();
-        memory += appMap[item].memory;
+        apps.push(item);
     });
 
-    if(freeMemory < memory)
+    $.post(createLink('install', 'ajaxCheck'), {apps: apps}).done(function(response)
     {
-        $('#skipBtn').show();
-        $('#overMemoryNotice').show();
-        $('#submitBtn').attr('disabled', true);
-        return;
-    }
+        var res = JSON.parse(response);
+        if(res.code == undefined || res.code == 41010)
+        {
+            $('#skipBtn').show();
+            $('#overMemoryNotice').show();
+            $('#submitBtn').attr('disabled', true);
+            return;
+        }
 
-    $('#skipBtn').hide();
-    $('#overMemoryNotice').hide();
-    $('#submitBtn').attr('disabled', false);
+        $('#skipBtn').hide();
+        $('#overMemoryNotice').hide();
+        $('#submitBtn').attr('disabled', false);
+    });
 }

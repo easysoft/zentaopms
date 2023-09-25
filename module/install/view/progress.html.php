@@ -48,7 +48,7 @@
       </div>
       <div class='error-message text-red text-center'></div>
       <div class='form-actions text-center'>
-        <?php echo html::a(inlink('step6'), $lang->install->solution->skip, 'id="skipInstallBtn"', "class='btn btn-install btn-wide' style='display: none;'");?>
+        <?php echo html::a(inlink('step6'), $lang->install->solution->skip, '', "class='btn btn-install btn-wide' style='display: none;' id='skipInstallBtn'");?>
         <?php echo html::commonButton($lang->solution->retryInstall, "id='retryInstallBtn' class='hide'", 'btn btn-primary btn-wide');?>
         <?php echo html::commonButton($lang->solution->cancelInstall, "id='cancelInstallBtn'", 'btn btn-primary btn-wide');?>
       </div>

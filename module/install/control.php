@@ -358,17 +358,12 @@ class install extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->solution->notices->success, 'data' => $solution, 'locate' => $this->inLink('progress', "id={$solution->id}&install=true")));
         }
 
-        $clusterResource = $this->loadModel('cne')->cneMetrics();
-        $freeMemory      = intval($clusterResource->metrics->memory->allocatable * 0.9);
-        $appMap          = $this->loadModel('store')->getAppMapByNames(array_keys($cloudSolution->apps));
-        $category        = helper::arrayColumn($components->category, 'name');
-        $category        = array_filter($category, function($cate){return $cate !== 'pms';});
+        $category = helper::arrayColumn($components->category, 'name');
+        $category = array_filter($category, function($cate){return $cate !== 'pms';});
 
         $this->view->title         = $this->lang->solution->install;
         $this->view->cloudSolution = $cloudSolution;
         $this->view->components    = $components;
-        $this->view->appMap        = $appMap;
-        $this->view->freeMemory    = $freeMemory;
         $this->view->category      = $category;
 
         $this->display();
@@ -479,5 +474,26 @@ class install extends control
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $this->send(array('result' => 'success', 'message' => '', 'locate' => $this->inLink('index')));
+    }
+
+    /**
+     * Check memory and cpu.
+     * 检查内存与CPU是否满足安装所需。
+     *
+     * @param  int    $solutionID
+     * @access public
+     * @return void
+     */
+    public function ajaxCheck()
+    {
+        $this->loadModel('common');
+        $data      = fixer::input('post')->get();
+        $appMap    = $this->loadModel('store')->getAppMapByNames($data->apps);
+        $resources = array();
+
+        foreach($data->apps as $app) $resources[] = array('cpu' => $appMap->$app->cpu, 'memory' => $appMap->$app->memory);
+        $result = $this->loadModel('cne')->tryAllocate($resources);
+
+        $this->send(array('result' => 'success', 'message' => '', 'code' => $result->code));
     }
 }

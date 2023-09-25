@@ -68,6 +68,7 @@ $(function()
             {
                 $('#retryInstallBtn').show();
                 $('#skipInstallBtn').show();
+                $('#cancelInstallBtn').hide();
                 $('.progress.loading').hide();
 
                 var errMessage = res.message;
@@ -116,6 +117,8 @@ $(function()
             if(!result) return;
 
             $('#retryInstallBtn').hide();
+            $('#skipInstallBtn').hide();
+            $('#cancelInstallBtn').show();
             $('.error-message').text('');
             $('.progress.loading').show();
 
@@ -138,18 +141,11 @@ $(function()
         });
     });
 
-    if(hasError && !startInstall)
-    {
-        $('#retryInstallBtn').show();
-        $('#skipInstallBtn').show();
-    }
-    else
-    {
-        $('#retryInstallBtn').hide();
-        $('#skipInstallBtn').hide();
-    }
+    $('#retryInstallBtn').hide();
+    $('#skipInstallBtn').hide();
+    $('#cancelInstallBtn').show();
 
-    if(startInstall)
+    if('true' === startInstall)
     {
         $.get(createLink('install', 'ajaxInstall', 'id=' + solutionID)).done(function(response){});
     }
