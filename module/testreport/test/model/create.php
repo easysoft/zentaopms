@@ -29,6 +29,6 @@ $endLtBegin   = array('owner' => 'user3', 'members' => $members, 'title' => $tit
 
 r($testreport->createTest($normalReport)) && p('id,title') && e('1,正常新增');                             // 正常新增
 r($testreport->createTest($noOwner))      && p('owner:0')  && e('『负责人』不能为空。');                   // 负责人为空测试
-r($testreport->createTest($noTitle))      && p('title:0')  && e('『标题』不能为空。');                     // 标题为空测试
+r($testreport->createTest($noTitle))      && p('title:0')  && e('『报告标题』不能为空。');                 // 标题为空测试
 r($testreport->createTest($noMembers))    && p('id,title') && e('2,参与人员为空测试');                     // 参与人员测试
 r($testreport->createTest($endLtBegin))   && p('end:0')    && e('『结束时间』应当不小于『2017-01-01』。'); // 结束时间小于开始时间测试
