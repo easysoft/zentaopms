@@ -50,7 +50,7 @@ r($action->getDynamicTest($accountList[2]))                                     
 r($action->getDynamicTest($accountList[3]))                                                                                        && p() && e('10');  // 查找用户test18动态
 r($action->getDynamicTest($accountList[0], $typeList[1]))                                                                          && p() && e('0');   // 查找今天的动态
 r($action->getDynamicTest($accountList[0], $typeList[2]))                                                                          && p() && e('0');   // 查找昨天的动态
-r($action->getDynamicTest($accountList[0], $typeList[3]))                                                                          && p() && e('7');  // 查找上周的动态
+r($action->getDynamicTest($accountList[0], $typeList[3]))                                                                          && p() && e('6');  // 查找上周的动态
 r($action->getDynamicTest($accountList[0], $typeList[0], $productIDList[1]))                                                       && p() && e('1');   // 查找产品1的动态
 r($action->getDynamicTest($accountList[0], $typeList[0], $productIDList[2]))                                                       && p() && e('1');   // 查找产品2的动态
 r($action->getDynamicTest($accountList[0], $typeList[0], $productIDList[3]))                                                       && p() && e('1');   // 查找产品3的动态

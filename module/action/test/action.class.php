@@ -120,6 +120,7 @@ class actionTest
     }
 
     /**
+     * 测试将项目日志类型转换为动态类型。
      * Test process Project Actions change actionStype.
      *
      * @param  array  $actions

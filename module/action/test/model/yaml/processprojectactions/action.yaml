@@ -1,0 +1,18 @@
+title: table zt_action
+desc: "系统日志"
+author: automated export
+version: "1.0"
+fields:
+  - field: objectType
+    note: "对象类型"
+    range: product{6},testtask{3},build,project,user,testsuite
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: action
+    note: "动作"
+    range: common{6},opened,started,closed,opened
+    postfix: ""
+    loop: 0
+    format: ""

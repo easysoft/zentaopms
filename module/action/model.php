@@ -611,7 +611,7 @@ class actionModel extends model
     }
 
     /**
-     * 修改项目的动作为项目的操作类型。
+     * 将项目行动类型转换为通用行动类型。
      * Process Project Actions change actionStype.
      *
      * @param  array  $actions
@@ -2392,6 +2392,8 @@ class actionModel extends model
      */
     public function processDynamicForAPI($dynamics): array
     {
+        /* 获取用户列表。 */
+        /* Get user list. */
         $users = $this->loadModel('user')->getList();
         $simplifyUsers = array();
         foreach($users as $user)
@@ -2407,7 +2409,7 @@ class actionModel extends model
         $actions = array();
         foreach($dynamics as $dynamic)
         {
-            if($dynamic->objectType == 'user') continue;
+            if($dynamic->objectType == 'user') continue; //过滤掉用户动态。
 
             $simplifyUser = zget($simplifyUsers, $dynamic->actor, '');
             $actor = $simplifyUser;
