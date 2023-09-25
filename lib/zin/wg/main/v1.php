@@ -87,11 +87,13 @@ class main extends wg
             }
         }
 
+        $hasLeftSide = !empty($leftSides);
+        $hasRightSide = !empty($rightSides);
         return div
         (
             set::id('mainContent'),
             $leftSides,
-            set::className(empty($leftSides) && empty($rightSides) ? '' : 'row', empty($leftSides) ? '' : 'has-sidebar-left', empty($rightSides) ? '' : 'has-sidebar-right'),
+            ($hasLeftSide || $hasRightSide) ? setClass('row', array('has-sidebar-left' => $hasLeftSide, 'has-sidebar-right' => $hasRightSide)) : null,
             $this->children(),
             $rightSides
         );
