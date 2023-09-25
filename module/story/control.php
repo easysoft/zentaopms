@@ -1657,24 +1657,27 @@ class story extends control
     }
 
     /**
-     * AJAX: get stories of a product in html select.
+     * 获取产品的需求列表信息用于html下拉列表。
+     * AJAX: get the stories of a product in html select.
      *
      * @param  int    $productID
      * @param  int    $branch
      * @param  int    $moduleID
      * @param  int    $storyID
      * @param  string $onlyOption
-     * @param  string $status
+     * @param  string $status      ''|all|noclosed|changing|active|draft|closed|reviewing
      * @param  int    $limit
-     * @param  string $type
-     * @param  bool   $hasParent
+     * @param  string $type        full|all
+     * @param  int    $hasParent   0|1
      * @param  int    $executionID
-     * @param  int    $isHTML
+     * @param  int    $isHTML      0|1
      * @access public
      * @return void
      */
-    public function ajaxGetProductStories($productID, $branch = 0, $moduleID = 0, $storyID = 0, $onlyOption = 'false', $status = '', $limit = 0, $type = 'full', $hasParent = 1, $executionID = 0, $isHTML = 1)
+    public function ajaxGetProductStories(int $productID, int $branch = 0, int $moduleID = 0, int $storyID = 0, string $onlyOption = 'false', string $status = '', int $limit = 0, string $type = 'full', int $hasParent = 1, int $executionID = 0, int $isHTML = 1)
     {
+        $hasParent = $hasParent >= 1 ? true : false;
+
         if($moduleID)
         {
             $moduleID = $this->loadModel('tree')->getStoryModule($moduleID);
@@ -1688,8 +1691,10 @@ class story extends control
             unset($storyStatus['closed']);
             $storyStatus = array_keys($storyStatus);
         }
-
-        if($status == 'active') $storyStatus = $status;
+        elseif($status == 'active')
+        {
+            $storyStatus = $status;
+        }
 
         if($executionID)
         {
