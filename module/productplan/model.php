@@ -554,6 +554,7 @@ class productplanModel extends model
     }
 
     /**
+     * 更新计划和父计划的状态。
      * Update a plan's status.
      *
      * @param  int    $planID
@@ -562,20 +563,17 @@ class productplanModel extends model
      * @access public
      * @return bool
      */
-    public function updateStatus(int $planID, string $status = '', string $action = '')
+    public function updateStatus(int $planID, string $status = '', string $action = ''): bool
     {
         $oldPlan = $this->getByID($planID);
+        if(!$oldPlan) return false;
 
-        $closedReason = $this->post->closedReason ? $this->post->closedReason : '';
-        $plan = $this->buildPlanByStatus($status, $closedReason);
-
+        $plan = $this->buildPlanByStatus($status, (string)$this->post->closedReason);
         $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->where('id')->eq($planID)->exec();
         if(dao::isError()) return false;
 
         $changes  = common::createChanges($oldPlan, $plan);
-
-        $comment = $this->post->comment ? $this->post->comment : '';
-        $actionID = $this->loadModel('action')->create('productplan', $planID, $action, $comment);
+        $actionID = $this->loadModel('action')->create('productplan', $planID, $action, (string)$this->post->comment);
         $this->action->logHistory($actionID, $changes);
 
         if($oldPlan->parent > 0) $this->updateParentStatus($oldPlan->parent);

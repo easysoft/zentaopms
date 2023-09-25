@@ -214,7 +214,7 @@ class productplanZen extends productplan
         $this->view->actions      = $this->loadModel('action')->getList('productplan', $plan->id);
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->plans        = $this->productplan->getPairs($plan->product, $plan->branch, '', true);
-        $this->view->modules      = $this->tree->getOptionMenu($plan->product);
+        $this->view->modules      = $this->loadModel('tree')->getOptionMenu($plan->product);
 
         if($this->app->getViewType() == 'json')
         {

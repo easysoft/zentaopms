@@ -391,6 +391,7 @@ class productplan extends control
     }
 
     /**
+     * 开始计划。
      * Start a plan.
      *
      * @param  int    $planID
@@ -400,11 +401,13 @@ class productplan extends control
     public function start(int $planID)
     {
         $this->productplan->updateStatus($planID, 'doing', 'started');
-        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-        return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
+        if(dao::isError()) return $this->sendError(dao::getError());
+
+        return $this->sendSuccess(array('load' => true, 'closeModal' => true));
     }
 
     /**
+     * 完成一个计划。
      * Finish a plan.
      *
      * @param  int    $planID
@@ -414,21 +417,13 @@ class productplan extends control
     public function finish(int $planID)
     {
         $this->productplan->updateStatus($planID, 'done', 'finished');
-        if(dao::isError())
-        {
-            $response['result']  = 'fail';
-            $response['message'] = dao::getError();
-        }
-        else
-        {
-            $response['result']  = 'success';
-            $response['message'] = '';
-            $response['load']    = array('back' => 'true');
-        }
-        return $this->send($response);
+        if(dao::isError()) return $this->sendError(dao::getError());
+
+        return $this->sendSuccess(array('load' => true, 'closeModal' => true));
     }
 
     /**
+     * 关闭一个计划。
      * Close a plan.
      *
      * @param  int    $planID
@@ -440,9 +435,9 @@ class productplan extends control
         if(!empty($_POST))
         {
             $this->productplan->updateStatus($planID, 'closed', 'closed');
+            if(dao::isError()) return $this->sendError(dao::getError());
 
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
+            return $this->sendSuccess(array('load' => true, 'closeModal' => true));
         }
 
         $this->view->productplan = $this->productplan->getById($planID);
