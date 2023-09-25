@@ -32,7 +32,10 @@ global $tester;
 $tester->loadModel('story');
 $stories = $tester->story->getParentStoryPairs(5);
 
-r($stories) && p('0:0') && e('~~'); // 第一个元素是 0 => ''
+r($stories) && p('0') && e('~~'); // 第一个元素是 0 => ''
 
 array_pop($stories); /* remove empty item at array top. */
 r(count($stories)) && p() && e(5);  // 获取符合条件的需求数
+
+$storiesWithAppended = $tester->story->getParentStoryPairs(5, 1);
+r($storiesWithAppended) && p('1') && e('~f:1$~'); // 测试附加的需求ID1，需求1以数字1结尾
