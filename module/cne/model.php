@@ -1334,7 +1334,7 @@ class cneModel extends model
     public function tryAllocate(array $resources): object
     {
         $apiParams = new stdclass();
-        $apiParams->resources = $resources;
+        $apiParams->requests = $resources;
 
         $apiUrl = "/api/cne/system/resource/try-allocate";
         return $this->apiPost($apiUrl, $apiParams, $this->config->CNE->api->headers);

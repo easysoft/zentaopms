@@ -29,6 +29,7 @@ jsVar('mysqlList', $mysqlList);
 jsVar('defaultApp', $defaultApp);
 jsVar('showVersion', $showVersion);
 jsVar('externalApps', $config->space->zentaoApps);
+jsVar('resourceAlert', $lang->instance->notices['notEnoughResource']);
 
 if($config->inQuickon)
 {
