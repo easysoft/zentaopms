@@ -2914,7 +2914,7 @@ class storyModel extends model
      *
      * @param  array  $stories
      * @param  string $type    full|short|story|requirement
-     * @param  int    $limit
+     * @param  int    $limit   0|integer
      * @access public
      * @return array
      */
@@ -2938,7 +2938,9 @@ class storyModel extends model
             }
             $storyPairs[$story->id] = $story->id . ':' . $story->title . ' ' . $property;
         }
-        return $storyPairs;
+
+        if($limit == 0) return $storyPairs;
+        return array_slice($storyPairs, 0, $limit, true);
     }
 
     /**
