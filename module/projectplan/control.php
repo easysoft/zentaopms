@@ -36,16 +36,16 @@ class projectplan extends control
     }
 
     /**
+     * 编辑一个计划。
      * Edit a plan.
      *
      * @param int $planID
-     *
      * @access public
      * @return void
      */
-    public function edit($planID)
+    public function edit(int $planID)
     {
-        echo $this->fetch('productplan', 'edit', "planID=$planID");
+        echo $this->fetch('productplan', 'edit', "planID={$planID}");
     }
 
     /**
