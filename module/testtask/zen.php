@@ -490,6 +490,36 @@ class testtaskZen extends testtask
     }
 
     /**
+     * 处理单元测试用例列表页面的测试用例的跨行合并属性供前端组件分页使用。
+     * Process the rowspan property of cases for unitCases page for use by front-end component groupings.
+     *
+     * @param  array     $runs
+     * @access protected
+     * @return array
+     */
+    protected function processRowspanForUnitCases(array $runs): array
+    {
+        /* 将测试用例数据按照套件进行分组，方便按套件计算数量。 */
+        /* Group test cases according to suites to facilitate calculation of quantities by suite. */
+        $groupCases = array();
+        foreach($runs as $run) $groupCases[$run->suite][] = $run;
+
+        /* 将每个套件下的总用例数量赋予每个套件的第一条测试用例。*/
+        /* Assign the total number of test cases under each suite to the first test case of each suite. */
+        $suite = null;
+        foreach($runs as $run)
+        {
+            $run->rowspan = 0;
+            if($suite !== $run->suite && !empty($groupCases[$run->suite]))
+            {
+                $suite = $run->suite;
+                $run->rowspan = count($groupCases[$run->suite]);
+            }
+        }
+        return $runs;
+    }
+
+    /**
      * 处理测试用例的跨行合并属性供前端组件分组使用。
      * Process the rowspan property of cases for use by front-end component groupings.
      *
