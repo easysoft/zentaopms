@@ -57,9 +57,9 @@ class caselibTao extends caselibModel
      * @param  object    $data
      * @param  bool      $forceNotReview 
      * @access protected
-     * @return bool
+     * @return bool|int
      */
-    protected function insertImportedCase(int $key, object $caseData, object $data, bool $forceNotReview): bool
+    protected function insertImportedCase(int $key, object $caseData, object $data, bool $forceNotReview): bool|int
     {
         $caseData->project    = (int)$this->session->project;
         $caseData->version    = 1;
@@ -96,7 +96,7 @@ class caselibTao extends caselibModel
 
         $this->loadModel('action')->create('case', $caseID, 'Opened');
 
-        return !dao::isError();
+        return $caseID;
     }
 
     /**

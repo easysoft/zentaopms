@@ -168,4 +168,24 @@ class caselibTest
         $isItself        = preg_match("/{$module}.*{$method}/", $link) ? 1 : 0;
         return array('isCaselibBrowse' => $isCaselibBrowse, 'isItself' => $isItself);
     }
+
+    /**
+     * 测试插入一条导入的用例。
+     * Test insert a imported case.
+     *
+     * @param  int     $key
+     * @param  object  $caseData
+     * @param  object  $data
+     * @param  bool    $forceNotReview
+     * @access public
+     * @return array|object|false
+     */
+    public function insertImportedCaseTest(int $key, object $caseData, object $data, bool $forceNotReview): array|object|false
+    {
+        $caseID = $this->objectModel->insertImportedCase($key, $caseData, $data, $forceNotReview);
+        if(dao::isError()) return dao::getError();
+
+        global $tester;
+        return $tester->loadModel('testcase')->getByID($caseID);
+    }
 }
