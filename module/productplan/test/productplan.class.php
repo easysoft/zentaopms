@@ -456,5 +456,23 @@ class productPlan
 
         return $this->productplan->dao->select('plan')->from(TABLE_BUG)->where('id')->eq(1)->fetch('plan');
     }
+
+    /**
+     * 检查更新计划的数据。
+     * Check data for update.
+     *
+     * @param  int       $planID
+     * @param  object    $plan
+     * @access public
+     * @return array|bool
+     */
+    public function checkDataForUpdateTest(int $planID, object $plan): array|bool
+    {
+        $oldPlan = $this->productplan->getByID($planID);
+        $result  = $this->productplan->checkDataForUpdate($plan, $oldPlan);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
 ?>

@@ -600,7 +600,7 @@ class productplanModel extends model
                     if(!$canDeleteBranch)
                     {
                         $this->lang->productplan->deleteBranchTip = str_replace('@branch@', $this->lang->product->branchName[$product->type], $this->lang->productplan->deleteBranchTip);
-                        dao::$errors[] = sprintf($this->lang->productplan->deleteBranchTip, trim($deleteBranches, ','));
+                        dao::$errors['branch[]'] = sprintf($this->lang->productplan->deleteBranchTip, trim($deleteBranches, ','));
                         return false;
                     }
                 }
