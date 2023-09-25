@@ -466,33 +466,32 @@ class productplan extends control
     }
 
     /**
+     * 根据产品获取计划列表。
      * Ajax: Get product plans.
      *
      * @param  int    $productID
      * @param  int    $branch
-     * @param  string $number
-     * @param  string $expired
      * @access public
      * @return void
      */
-    public function ajaxGetProductplans($productID, $branch = 0, $number = '', $expired = '')
+    public function ajaxGetProductplans(int $productID, int $branch = 0)
     {
-        $plans = $this->productplan->getPairs($productID, empty($branch) ? '' : $branch, $expired, true);
-        $plans = empty($plans) ? array() : $plans;
+        $plans = $this->productplan->getPairs($productID, empty($branch) ? '' : $branch, '', true);
+
         $items = array();
         foreach($plans as $planID => $planName) $items[] = array('text' => $planName, 'value' => $planID, 'keys' => $planName);
         return print(json_encode($items));
     }
 
     /**
+     * 设置需求排序。
      * Sort story for productplan.
      *
-     * @param int $planID
-     *
+     * @param  int    $planID
      * @access public
      * @return bool
      */
-    public function ajaxStorySort($planID = 0)
+    public function ajaxStorySort(int $planID = 0)
     {
         if(empty($planID)) return true;
 
@@ -504,6 +503,7 @@ class productplan extends control
     }
 
     /**
+     * 根据产品和分支获取项目。
      * Get projects by product id.
      *
      * @param  int    $productID
@@ -511,10 +511,13 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function ajaxGetProjects($productID, $branch = 0)
+    public function ajaxGetProjects(int $productID, int $branch = 0)
     {
         $projects = $this->loadModel('product')->getProjectPairsByProduct($productID, $branch, '', $status = 'noclosed', 'multiple');
-        echo html::select('project', $projects, key($projects), "class='form-control chosen'");
+
+        $items = array();
+        foreach($projects as $projectID => $projectName) $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
+        return print(json_encode($items));
     }
 
     /**
