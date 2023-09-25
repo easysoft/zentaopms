@@ -1196,9 +1196,9 @@ class testtaskModel extends model
      * @param  int    $version
      * @param  int    $nodeID
      * @access public
-     * @return void
+     * @return int|false
      */
-    public function initResult($runID = 0, $caseID = 0, $version = 0, $nodeID = 0)
+    public function createResultForAutomatedTest(int $runID = 0, int $caseID = 0, int $version = 0, int $nodeID = 0): int|false
     {
         $result = new stdClass();
         $result->run        = $runID;
@@ -1209,8 +1209,9 @@ class testtaskModel extends model
         $result->lastRunner = $this->app->user->account;
 
         $this->dao->insert(TABLE_TESTRESULT)->data($result)->autoCheck()->exec();
-        if(!dao::isError()) return $resultID = $this->dao->lastInsertID();
-        return false;
+        if(dao::isError()) return false;
+
+        return $this->dao->lastInsertID();
     }
 
     /**

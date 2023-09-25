@@ -590,7 +590,7 @@ class testtaskZen extends testtask
         /* Perform automated testing related operations after user confirmation. */
         if($confirm == 'yes')
         {
-            $resultID = $this->testtask->initResult($runID, $caseID, $run->case->version, $automation->node);
+            $resultID = $this->testtask->createResultForAutomatedTest($runID, $caseID, $run->case->version, $automation->node);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError(), 'load' => $this->createLink('zanode', 'browse')));
 
             $this->zanode->runZTFScript($automation->id, $caseID, $resultID);
