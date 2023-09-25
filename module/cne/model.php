@@ -1322,4 +1322,21 @@ class cneModel extends model
         $apiUrl = "/api/cne/platform/restore/status";
         return $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);
     }
+
+    /**
+     * app资源调度尝试。
+     * Try allocate for apps.
+     *
+     * @param  array $apps
+     * @access public
+     * @return object
+     */
+    public function tryAllocate(array $resources): object
+    {
+        $apiParams = new stdclass();
+        $apiParams->resources = $resources;
+
+        $apiUrl = "/api/cne/system/resource/try-allocate";
+        return $this->apiPost($apiUrl, $apiParams, $this->config->CNE->api->headers);
+    }
 }
