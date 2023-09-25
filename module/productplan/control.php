@@ -323,6 +323,7 @@ class productplan extends control
         $this->view->pager      = $pager;
         $this->view->queryID    = $queryID;
         $this->view->summary    = $this->productplanZen->getSummary($plans);
+        $this->view->projects   = $this->product->getProjectPairsByProduct($productID, (string)$branch, '', 'closed', 'multiple');
         $this->display();
     }
 

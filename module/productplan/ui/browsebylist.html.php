@@ -35,3 +35,57 @@ dtable
         usePager(array('linkCreator' => createLink($app->rawModule, 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&queryID={$queryID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&pageID={page}"))),
     )
 );
+
+modal
+(
+    setID('createExecutionModal'),
+    set::modalProps(array('title' => $lang->productplan->selectProjects)),
+    form
+    (
+        setID('createExecutionForm'),
+        setClass('py-4'),
+        set::actions
+        (
+            array(
+                array
+                (
+                    'text' => !empty($projects) ? $lang->productplan->nextStep : $lang->productplan->enterProjectList,
+                    'id'   => !empty($projects) ? 'createExecutionButton' : '',
+                    'type' => 'primary',
+                    'url'  => !empty($projects) ? '###' : createLink('product', 'project', "status=all&productID={$productID}&branch={$branch}")
+                ),
+                array
+                (
+                    'text' => $lang->cancel,
+                    'data-dismiss' => 'modal',
+                ),
+            )
+        ),
+        formGroup
+        (
+            set::label($lang->productplan->project),
+            picker
+            (
+                set::name('project'),
+                set::items($projects),
+                set::required(true),
+                set::disabled(empty($projects)),
+            )
+        ),
+        formRow
+        (
+            !empty($projects) ? setClass('hidden') : null,
+            setClass('projectTips'),
+            formGroup
+            (
+                set::label(''),
+                span
+                (
+                    setClass('text-danger'),
+                    $lang->productplan->noLinkedProject
+                ),
+                formHidden('planID', ''),
+            )
+        ),
+    )
+);

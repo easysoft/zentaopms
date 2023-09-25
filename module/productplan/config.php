@@ -64,9 +64,11 @@ $config->productplan->actionList['activate']['text']        = $lang->productplan
 $config->productplan->actionList['activate']['url']         = helper::createLink('productplan', 'activate', 'planID={id}');
 $config->productplan->actionList['activate']['data-toggle'] = 'modal';
 
-$config->productplan->actionList['createExecution']['icon'] = 'plus';
-$config->productplan->actionList['createExecution']['hint'] = $lang->productplan->createExecution;
-$config->productplan->actionList['createExecution']['text'] = $lang->productplan->createExecution;
+$config->productplan->actionList['createExecution']['icon']        = 'plus';
+$config->productplan->actionList['createExecution']['hint']        = $lang->productplan->createExecution;
+$config->productplan->actionList['createExecution']['text']        = $lang->productplan->createExecution;
+$config->productplan->actionList['createExecution']['data-target'] = '#createExecutionModal';
+$config->productplan->actionList['createExecution']['data-toggle'] = 'modal';
 
 $config->productplan->actionList['linkStory']['icon'] = 'link';
 $config->productplan->actionList['linkStory']['hint'] = $lang->productplan->linkStory;

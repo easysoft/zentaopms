@@ -106,3 +106,18 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
         $.ajaxSubmit({"url": $(this).data('formaction'), "data": postData});
     }
 });
+
+$(document).on('click', 'button[data-target="#createExecutionModal"]', function()
+{
+    const planID = $(this).closest('.dtable-cell').data('row');
+    $('#createExecutionModal [name=planID]').val(planID);
+});
+
+$(document).on('click', '#createExecutionButton', function()
+{
+    const projectID = $('input[name=project]').val();
+    const planID    = $('input[name=planID]').val();
+
+    openUrl($.createLink('execution', 'create', 'projectID=' + projectID + '&executionID=&copyExecutionID=&planID=' + planID + '&confirm=&productID=' + productID), {'app': 'execution'});
+    zui.Modal.hide('#createExecutionModal');
+});

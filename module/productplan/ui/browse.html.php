@@ -10,4 +10,5 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('productID', $productID);
 include("browseby{$viewType}.html.php");
