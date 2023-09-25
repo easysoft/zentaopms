@@ -39,7 +39,7 @@ class testtaskZen extends testtask
         $searchConfig['queryID']   = $queryID;
         $searchConfig['actionURL'] = helper::createLink('testtask', 'cases', "taskID=$testtaskID&browseType=bySearch&queryID=myQueryID");
 
-        $searchConfig['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($product->id, $viewType = 'case');
+        $searchConfig['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($product->id, 'case');
         $searchConfig['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
         $searchConfig['params']['scene']['values']   = $this->testcase->getSceneMenu($product->id, $moduleID);
         $searchConfig['params']['status']['values']  = $this->lang->testcase->statusList;
@@ -109,8 +109,8 @@ class testtaskZen extends testtask
     }
 
     /**
-     * 构建编辑的测试单数据。
-     * Build task for editing.
+     * 构建编辑测试单的数据。
+     * Build data for editing a testtask.
      *
      * @param  int       $taskID
      * @param  int       $productID
@@ -131,7 +131,7 @@ class testtaskZen extends testtask
 
     /**
      * 构建开始测试单的数据。
-     * Build task for start a testtask.
+     * Build data for starting a testtask.
      *
      * @param  int       $taskID
      * @access protected
@@ -148,7 +148,7 @@ class testtaskZen extends testtask
 
     /**
      * 构建关闭测试单的数据。
-     * Build task for close a testtask.
+     * Build data for closing a testtask.
      *
      * @param  int       $taskID
      * @access protected
@@ -165,7 +165,7 @@ class testtaskZen extends testtask
 
     /**
      * 构建激活测试单的数据。
-     * Build task for activate a testtask.
+     * Build data for activating a testtask.
      *
      * @param  int       $taskID
      * @access protected
@@ -182,7 +182,7 @@ class testtaskZen extends testtask
 
     /**
      * 构建阻塞测试单的数据。
-     * Build task for block a testtask.
+     * Build data for blocking a testtask.
      *
      * @param  int       $taskID
      * @access protected
@@ -199,7 +199,7 @@ class testtaskZen extends testtask
 
     /**
      * 构建导入单元测试结果的数据。
-     * Build task for import unit result.
+     * Build data for importing unit test result.
      *
      * @param  int       $productID
      * @access protected
@@ -217,7 +217,7 @@ class testtaskZen extends testtask
 
     /**
      * 检查编辑的测试单数据是否符合要求。
-     * Check task for editing.
+     * Check data for editing a testtask.
      *
      * @param  object    $task
      * @access protected
@@ -288,8 +288,8 @@ class testtaskZen extends testtask
     }
 
     /**
-     * 分配变量给场景测试单页面。
-     * Assign variables for create page.
+     * 分配变量给创建测试单页面。
+     * Assign variables for creating page.
      *
      * @param  int       $productID$product
      * @param  int       $projectID
@@ -328,7 +328,8 @@ class testtaskZen extends testtask
     }
 
     /**
-     * Assign variables for editing test task.
+     * 分配变量给编辑测试单页面。
+     * Assign variables for editing page.
      *
      * @param  object    $task
      * @param  int       $productID
@@ -337,7 +338,6 @@ class testtaskZen extends testtask
      */
     protected function assignForEdit(object $task, int $productID): void
     {
-        /* Create testtask from testtask of test.*/
         $this->loadModel('project');
         $productID   = $productID ? $productID : key($this->products);
         $projectID   = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->project;
@@ -417,11 +417,13 @@ class testtaskZen extends testtask
      */
     protected function getProducts(): array
     {
-        /* 如果是在非弹窗页面的项目或执行应用下打开的测试单，则获取当前项目或执行对应的产品。 */
+        /* 如果是在非弹窗页面的项目或执行应用下打开的测试单，则获取当前项目或执行对应的产品。*/
+        /* If the testtask is opened under a project or execution application on a non-pop-up page, get the current project or execution corresponding product. */
         $tab = $this->app->tab;
         if(!isonlybody() && ($tab == 'project' || $tab == 'execution')) return $this->loadModel('product')->getProducts($this->session->$tab, 'all', '', false);
 
-        /* 如果是在弹窗页面或者测试应用下打开的测试单，则获取所有产品。 */
+        /* 如果是在弹窗页面或者测试应用下打开的测试单，则获取所有产品。*/
+        /* If the testtask is opened on a pop-up page or test application, get all products. */
         return $this->loadModel('product')->getPairs('', 0, '', 'all');
     }
 
