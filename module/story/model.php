@@ -225,7 +225,7 @@ class storyModel extends model
         if(isset($_POST['reviewer'])) $_POST['reviewer'] = array_filter($_POST['reviewer']);
         if(!$this->post->needNotReview and empty($_POST['reviewer']))
         {
-            dao::$errors['reviewer'] = sprintf($this->lang->error->notempty, $this->lang->story->reviewedBy);
+            dao::$errors['reviewer'] = sprintf($this->lang->error->notempty, $this->lang->story->reviewers);
             return false;
         }
 
@@ -927,6 +927,14 @@ class storyModel extends model
     {
         $now      = helper::now();
         $oldStory = $this->getById($storyID);
+
+        if(isset($_POST['reviewer'])) $_POST['reviewer'] = array_filter($_POST['reviewer']);
+        if(!$this->post->needNotReview and empty($_POST['reviewer']))
+        {
+            dao::$errors['reviewer'] = sprintf($this->lang->error->notempty, $this->lang->story->reviewers);
+            return false;
+        }
+
         if(!empty($_POST['lastEditedDate']) and $oldStory->lastEditedDate != $this->post->lastEditedDate)
         {
             dao::$errors[] = $this->lang->error->editedByOther;
