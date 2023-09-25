@@ -100,106 +100,46 @@ class productplanModel extends model
         $this->loadModel('search')->setQuery('productplan', $queryID);
 
         $products = (strpos($param, 'noproduct') !== false && empty($productID)) ? $this->loadModel('product')->getPairs() : array($productID => $productID);
-        $plans    = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)
-            ->where('deleted')->eq(0)
-            ->andWhere('product')->in(array_keys($products))
-            ->beginIF(!empty($branch) && $branch != 'all')->andWhere('branch')->eq($branch)->fi()
-            ->beginIF(!in_array($browseType, array('all', 'undone', 'bySearch', 'review')))->andWhere('status')->eq($browseType)->fi()
-            ->beginIF($browseType == 'undone')->andWhere('status')->in('wait,doing')->fi()
-            ->beginIF($browseType == 'bySearch')->andWhere($this->session->productplanQuery)->fi()
-            ->beginIF($browseType == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', reviewers)")->fi()
-            ->beginIF(strpos($param, 'skipparent') !== false)->andWhere('parent')->ne(-1)->fi()
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll('id');
+        $plans    = $this->productplanTao->getPlanList(array_keys($products), $branch, $browseType, $param, $orderBy, $pager);
         if(empty($plans)) return array();
 
         $plans        = $this->reorder4Children($plans);
         $planIdList   = array_keys($plans);
-        $planProjects = array();
+        $planProjects = $this->productplanTao->getPlanProjects($planIdList, strpos($param, 'noproduct') === false || $productID ? $productID : null);
 
-        foreach($planIdList as $planID)
-        {
-            $planProjects[$planID] = $this->dao->select('t1.project,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-                ->where('1=1')
-                ->beginIF(strpos($param, 'noproduct') === false || !empty($productID))->andWhere('t1.product')->eq($productID)->fi()
-                ->andWhere('t2.deleted')->eq(0)
-                ->andWhere('t1.plan')->like("%,$planID,%")
-                ->andWhere('t2.type')->in('sprint,stage,kanban')
-                ->orderBy('project_desc')
-                ->fetchAll('project');
-        }
-
-        $storyCountInTable = $this->dao->select('plan,count(story) as count')->from(TABLE_PLANSTORY)->where('plan')->in($planIdList)->groupBy('plan')->fetchPairs('plan', 'count');
         $product = $this->loadModel('product')->getById($productID);
-        if(!empty($product) and $product->type == 'normal')
-        {
-            $storyGroups = $this->dao->select('id,plan,estimate')->from(TABLE_STORY)
-                ->where("plan")->in($planIdList)
-                ->andWhere('deleted')->eq(0)
-                ->fetchGroup('plan', 'id');
-        }
+        $this->loadModel('story');
+        if(!empty($product) && $product->type == 'normal') $storyGroups = $this->story->getStoriesByPlanIdList($planIdList);
+        $storyCountInTable = $this->dao->select('plan,count(story) as count')->from(TABLE_PLANSTORY)->where('plan')->in($planIdList)->groupBy('plan')->fetchPairs('plan', 'count');
 
-        $bugs = $this->dao->select('*')->from(TABLE_BUG)->where("plan")->in($planIdList)->andWhere('deleted')->eq(0)->fetchGroup('plan', 'id');
-        $parentStories = $parentBugs = $parentHour = array();
+        $bugs = $this->dao->select('plan, id')->from(TABLE_BUG)->where("plan")->in($planIdList)->andWhere('deleted')->eq(0)->fetchGroup('plan', 'id');
         foreach($plans as $plan)
         {
-            if(!empty($product) and $product->type == 'normal')
+            $storyPairs = array();
+            if(!empty($product) && $product->type == 'normal')
             {
-                $stories    = zget($storyGroups, $plan->id, array());
-                $storyPairs = array();
+                $stories = zget($storyGroups, $plan->id, array());
                 foreach($stories as $story) $storyPairs[$story->id] = $story->estimate;
             }
             else
             {
-                $storyPairs = $this->dao->select('id,estimate')->from(TABLE_STORY)
-                    ->where("CONCAT(',', plan, ',')")->like("%,{$plan->id},%")
-                    ->andWhere('deleted')->eq(0)
-                    ->fetchPairs('id', 'estimate');
+                $storyPairs = $this->story->getPairs(0, $plan->id, 'estimate');
             }
-            $plan->stories  = count($storyPairs);
-            $plan->bugs     = isset($bugs[$plan->id]) ? count($bugs[$plan->id]) : 0;
-            $plan->hour     = array_sum($storyPairs);
+
+            $bugCount = isset($bugs[$plan->id]) ? count($bugs[$plan->id]) : 0;
+            $plan->bugs     = zget($plan, 'bugs', 0)    + $bugCount;
+            $plan->hour     = zget($plan, 'hour', 0)    + array_sum($storyPairs);
+            $plan->stories  = zget($plan, 'stories', 0) + count($storyPairs);
             $plan->projects = zget($planProjects, $plan->id, '');
             $plan->expired  = $plan->end < helper::today();
 
             /* Sync linked stories. */
-            if(!isset($storyCountInTable[$plan->id]) or $storyCountInTable[$plan->id] != $plan->stories)
-            {
-                $this->dao->delete()->from(TABLE_PLANSTORY)->where('plan')->eq($plan->id)->exec();
+            if(!isset($storyCountInTable[$plan->id]) || $storyCountInTable[$plan->id] != $plan->stories) $this->productplanTao->syncLinkedStories($plan->id, array_keys($storyPairs));
 
-                $order = 1;
-                foreach($storyPairs as $storyID => $estimate)
-                {
-                    $order ++;
-                    $planStory = new stdclass();
-                    $planStory->plan  = $plan->id;
-                    $planStory->story = $storyID;
-                    $planStory->order = $order;
-                    $this->dao->replace(TABLE_PLANSTORY)->data($planStory)->exec();
-                }
-            }
-
-            if(!isset($parentStories[$plan->parent])) $parentStories[$plan->parent] = 0;
-            if(!isset($parentBugs[$plan->parent]))    $parentBugs[$plan->parent]    = 0;
-            if(!isset($parentHour[$plan->parent]))    $parentHour[$plan->parent]    = 0;
-
-            $parentStories[$plan->parent] += $plan->stories;
-            $parentBugs[$plan->parent]    += $plan->bugs;
-            $parentHour[$plan->parent]    += $plan->hour;
-        }
-
-        unset($parentStories[0]);
-        unset($parentBugs[0]);
-        unset($parentHour[0]);
-        foreach($parentStories as $parentID => $count)
-        {
-            if(!isset($plans[$parentID])) continue;
-            $plan = $plans[$parentID];
-            $plan->stories += $count;
-            $plan->bugs    += $parentBugs[$parentID];
-            $plan->hour    += $parentHour[$parentID];
+            if(!$plan->parent || !isset($plans[$plan->parent])) continue;
+            $plans[$plan->parent]->bugs    = zget($plans[$plan->parent], 'bugs', 0)    + $plan->bugs;
+            $plans[$plan->parent]->hour    = zget($plans[$plan->parent], 'hour', 0)    + $plan->hour;
+            $plans[$plan->parent]->stories = zget($plans[$plan->parent], 'stories', 0) + $plan->stories;
         }
 
         return $plans;
