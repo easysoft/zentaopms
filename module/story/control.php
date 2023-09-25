@@ -1806,6 +1806,7 @@ class story extends control
     }
 
     /**
+     * 获取某产品下的父需求列表。
      * AJAX: get the parent story.
      *
      * @param  int    $productID
@@ -1813,7 +1814,7 @@ class story extends control
      * @access public
      * @return string
      */
-    public function ajaxGetParentStory($productID, $labelName = '')
+    public function ajaxGetParentStory(int $productID, string $labelName = '')
     {
         $stories = $this->story->getParentStoryPairs($productID);
 
