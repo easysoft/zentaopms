@@ -41,7 +41,8 @@ class testtaskModel extends model
     }
 
     /**
-     * Get test tasks of a product.
+     * 获取一个产品的测试单列表。
+     * Get testtasks of a product.
      *
      * @param  int    $productID
      * @param  string $branch
@@ -59,24 +60,32 @@ class testtaskModel extends model
         $scope          = !empty($scopeAndStatus[0]) ? $scopeAndStatus[0] : '';
         $status         = !empty($scopeAndStatus[1]) ? $scopeAndStatus[1] : '';
         $branch         = $scope == 'all' ? 'all' : $branch;
-
         $tasks = $this->fetchTesttaskList($productID, $branch, 0, '', $scope, $status, $begin, $end, $orderBy, $pager);
+        return $this->processExecutionName($tasks);
+    }
 
-        foreach($tasks as $taskID => $task)
+    /**
+     * 根据项目名称和执行名称来更新执行名称。
+     * Update the execution name based on the project name and execution name.
+     *
+     * @param  array   $tasks
+     * @access private
+     * @return array
+     */
+    private function processExecutionName(array $tasks): array
+    {
+        foreach($tasks as $task)
         {
-            if($task->multiple)
-            {
-                if($task->projectName and $task->executionName)
-                {
-                    $task->executionName = $task->projectName . '/' . $task->executionName;
-                }
-                elseif(!$task->executionName)
-                {
-                    $task->executionName = $task->projectName;
-                }
-            }
-        }
+            if(!$task->multiple) continue;
 
+            if($task->projectName && $task->executionName)
+            {
+                $task->executionName = $task->projectName . '/' . $task->executionName;
+                continue;
+            }
+
+            if(!$task->executionName) $task->executionName = $task->projectName;
+        }
         return $tasks;
     }
 
@@ -124,21 +133,9 @@ class testtaskModel extends model
                 if($result->caseResult == 'pass') $task->passCount ++;
                 if($result->caseResult == 'fail') $task->failCount ++;
             }
-
-            if($task->multiple)
-            {
-                if($task->projectName and $task->executionName)
-                {
-                    $task->executionName = $task->projectName . '/' . $task->executionName;
-                }
-                elseif(!$task->executionName)
-                {
-                    $task->executionName = $task->projectName;
-                }
-            }
         }
 
-        return $tasks;
+        return $this->processExecutionName($tasks);
     }
 
     /**
@@ -165,22 +162,7 @@ class testtaskModel extends model
             ->page($pager)
             ->fetchAll('id');
 
-        foreach($tasks as $taskID => $task)
-        {
-            if($task->multiple)
-            {
-                if($task->projectName and $task->executionName)
-                {
-                    $tasks[$taskID]->executionName = $task->projectName . '/' . $task->executionName;
-                }
-                elseif(!$task->executionName)
-                {
-                    $tasks[$taskID]->executionName = $task->projectName;
-                }
-            }
-        }
-
-        return $tasks;
+        return $this->processExecutionName($tasks);
     }
 
     /**
