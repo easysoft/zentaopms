@@ -1003,7 +1003,8 @@ class testtask extends control
     }
 
     /**
-     * AJAX: return testtasks of a user in html select.
+     * 获取用户负责的测试单的键值对。在创建或编辑测试单类型的待办时使用。
+     * Get the key-value pair of the testtask that the user is responsible for. Used when creating or editing a testtask type backlog.
      *
      * @param  int    $userID
      * @param  string $id
