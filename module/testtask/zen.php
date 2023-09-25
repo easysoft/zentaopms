@@ -520,18 +520,17 @@ class testtaskZen extends testtask
     }
 
     /**
-     * 处理测试用例的跨行合并属性供前端组件分组使用。
-     * Process the rowspan property of cases for use by front-end component groupings.
+     * 处理分组查看页面的测试用例的跨行合并属性供前端组件分组使用。
+     * Process the rowspan property of cases for groupCase page for use by front-end component groupings.
      *
      * @param  array     $cases
      * @param  int       $build
      * @access protected
      * @return array
      */
-    protected function processRowspanOfCases(array $cases, int $build): array
+    protected function processRowspanForGroupCase(array $cases, int $build): array
     {
         $groupCases = array();
-        $cases       = $this->loadModel('testcase')->appendData($cases, 'run');
         foreach($cases as $case) $groupCases[$case->story][] = $case;
 
         if($build)
@@ -545,14 +544,16 @@ class testtaskZen extends testtask
             }
         }
 
+        /* 将每个需求的总用例数量赋予每个需求的第一条测试用例。*/
+        /* Assign the total number of test cases under each story to the first test case of each story. */
         $story = null;
         foreach($cases as $case)
         {
             $case->rowspan = 0;
-            if($story !== $case->story)
+            if($story !== $case->story && !empty($groupCases[$case->story]))
             {
                 $story = $case->story;
-                if(!empty($groupCases[$case->story])) $case->rowspan = count($groupCases[$case->story]);
+                $case->rowspan = count($groupCases[$case->story]);
             }
         }
 

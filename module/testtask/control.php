@@ -480,10 +480,11 @@ class testtask extends control
         $groupBy = $groupBy ?: 'story';
         $cases   = $this->testtask->getRuns($taskID, 0, $groupBy);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
+        $cases = $this->loadModel('testcase')->appendData($cases, 'run');
 
         /* 处理测试用例的跨行合并属性供前端组件分组使用。*/
         /* Process the rowspan property of cases for use by front-end component groupings. */
-        $cases = $this->testtaskZen->processRowspanOfCases($cases, $task->build);
+        $cases = $this->testtaskZen->processRowspanForGroupCase($cases, $task->build);
 
         $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->cases;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
