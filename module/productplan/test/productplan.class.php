@@ -3,8 +3,12 @@ class productPlan
 {
     public function __construct($user = 'admin')
     {
-        global $tester;
+        global $tester, $app;
         su($user);
+        $app->rawModule  = 'productplan';
+        $app->rawMethod  = 'browse';
+        $app->moduleName = 'productplan';
+        $app->methodName = 'browse';
         $this->productplan = $tester->loadModel('productplan');
     }
 

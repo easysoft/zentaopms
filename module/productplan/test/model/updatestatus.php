@@ -1,19 +1,15 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/productplan.class.php';
-
 /**
 
 title=productpanModel->updateStatus();
 cid=1
-pid=1
-
-修改id=5的状态为doing >> 1
-修改状态为done >> 1
-修改状态为closed >> 1
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/productplan.class.php';
+
+zdTable('productplan')->config('productplan')->gen(10);
 $plan = new productPlan('admin');
 
 $planId = array();

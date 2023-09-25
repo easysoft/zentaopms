@@ -16,7 +16,10 @@ su('admin');
 $statusList       = array('doing', 'done', 'closed');
 $closedReasonList = array('', 'done', 'cancel');
 
-global $tester;
+global $tester, $app;
+$app->rawModule  = 'productplan';
+$app->moduleName = 'productplan';
+
 $tester->loadModel('productplan');
 r($tester->productplan->buildPlanByStatus($statusList[0], $closedReasonList[0])) && p('status,closedReason') && e('doing,~~');      // 测试构造doing状态的计划
 r($tester->productplan->buildPlanByStatus($statusList[1], $closedReasonList[0])) && p('status,closedReason') && e('done,~~');       // 测试构造done状态的计划
