@@ -16,12 +16,16 @@ pipeline {
                             returnStdout: true,
                             script: 'echo $BUILD_ID-${GIT_COMMIT}'
     ).trim()}"""
+    
+    XIM_USERS = ""
+    XIM_GROUPS = ""
   }
 
   stages {
     stage('checkout code') {
       steps {
         echo 'checkout code success'
+        sh 'env'
       }
     }
 
@@ -42,13 +46,13 @@ pipeline {
             success {
               container('xuanimbot') {
                 sh 'git config --global --add safe.directory $(pwd)'
-                sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%ae)" --title "sonar scanner" --url "https://sonar.qc.oop.cc/dashboard?id=zentaopms&branch=${GIT_BRANCH}" --content "sonar scanner success" --debug --custom'
+                sh '/usr/local/bin/xuanimbot --title "sonar scanner" --url "https://sonar.qc.oop.cc/dashboard?id=zentaopms&branch=${GIT_BRANCH#*/}" --content "sonar scanner success" --debug --custom'
               }
             }
             failure {
               container('xuanimbot') {
                 sh 'git config --global --add safe.directory $(pwd)'
-                sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%ae)" --title "sonar scanner" --url "https://sonar.qc.oop.cc/dashboard?id=zentaopms&branch=${GIT_BRANCH}" --content "sonar scanner failure" --debug --custom'
+                sh '/usr/local/bin/xuanimbot --title "sonar scanner" --url "https://sonar.qc.oop.cc/dashboard?id=zentaopms&branch=${GIT_BRANCH#*/}" --content "sonar scanner failure" --debug --custom'
               }
             }
           }
@@ -88,10 +92,22 @@ pipeline {
                 }
                 }
                 options { skipDefaultCheckout() }
+                
+                environment {
+                    DATA_REPORT_TOKEN = credentials('data_report_token')
+                }
 
                 steps {
                   container('zentao') {
-                    sh '. /etc/s6/s6-init/envs; . /opt/easysoft/scripts/libmysql.sh; wait_for_mysql && initdb.php > /apps/zentao/unittestdb ;/apps/zentao/test/runtime/ztf /apps/zentao/module -C 11 | tee /apps/zentao/test/${MIDDLE_IMAGE_TAG}.log ;chmod -R 777 /root ; parsehtml.php ; initdb.php /apps/zentao/unittestdb'
+                    sh 'rm -f /bin/sh && ln -s /bin/bash /bin/sh'
+                    sh '''
+                      . /etc/s6/s6-init/envs
+                      . /opt/easysoft/scripts/libmysql.sh
+                      wait_for_mysql && initdb.php > /apps/zentao/unittestdb
+                      /apps/zentao/test/runtime/ztf /apps/zentao/module -C 11 | tee /apps/zentao/test/${MIDDLE_IMAGE_TAG}.log
+                      chmod -R 777 /root
+                      parsehtml.php
+                      initdb.php /apps/zentao/unittestdb'''
                     publishHTML (target : [allowMissing: false,alwaysLinkToLastBuild: false,keepAll: true,reportDir: 'coverage',reportFiles: 'index.html',reportName: 'UT Coverage Report',reportTitles: 'UT Coverage Report'])
                     sh 'pipeline-unittest.sh /apps/zentao/test/${MIDDLE_IMAGE_TAG}.log'
                   }
@@ -101,13 +117,13 @@ pipeline {
                 success {
                   container('xuanimbot') {
                     sh 'git config --global --add safe.directory /home/jenkins/agent/workspace/pangu_pangu_xuanimbot_master'
-                    sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%ae)" --title "unittest" --url "${RUN_DISPLAY_URL}" --content "Unit test passed" --debug --custom'
+                    sh '/usr/local/bin/xuanimbot --title "unittest" --url "${RUN_DISPLAY_URL}" --content "Unit test passed" --debug --custom'
                   }
                 }
                 failure {
                   container('xuanimbot') {
                     sh 'git config --global --add safe.directory $(pwd)'
-                    sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%ae)" --title "unittest" --url "${RUN_DISPLAY_URL}" --content "Unit test failed" --debug --custom'
+                    sh '/usr/local/bin/xuanimbot --title "unittest" --url "${RUN_DISPLAY_URL}" --content "Unit test failed" --debug --custom'
                   }
                 }
               }
@@ -118,4 +134,5 @@ pipeline {
     }
   }// End Root Stages
 } // End pipeline
+
 
