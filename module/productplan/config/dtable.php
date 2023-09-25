@@ -81,7 +81,7 @@ $config->productplan->dtable->fieldList['execution']['show']     = true;
 
 $config->productplan->dtable->fieldList['desc']['name']     = 'desc';
 $config->productplan->dtable->fieldList['desc']['title']    = $lang->productplan->desc;
-$config->productplan->dtable->fieldList['desc']['type']     = 'text';
+$config->productplan->dtable->fieldList['desc']['type']     = 'html';
 $config->productplan->dtable->fieldList['desc']['sortType'] = false;
 $config->productplan->dtable->fieldList['desc']['group']    = 'g7';
 $config->productplan->dtable->fieldList['desc']['show']     = true;
