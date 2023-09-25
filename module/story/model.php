@@ -2189,11 +2189,11 @@ class storyModel extends model
      * @param  int              $productID
      * @param  string|int       $branch
      * @param  array|string|int $moduleIdList
-     * @param  string|array     $status
+     * @param  string|array     $status       ''|all|changing|active|draft|closed|reviewing
      * @param  string           $order
      * @param  int              $limit
-     * @param  string           $type
-     * @param  string           $storyType    requirement|story
+     * @param  string           $type         full|all
+     * @param  string           $storyType    requirement|story|demand
      * @param  bool|string      $hasParent
      * @access public
      * @return array
@@ -2208,8 +2208,8 @@ class storyModel extends model
             ->beginIF($branch !== 'all')->andWhere('t1.branch')->in("0,$branch")->fi()
             ->beginIF(!$hasParent or $hasParent == 'false')->andWhere('t1.parent')->ge(0)->fi()
             ->beginIF($status and $status != 'all')->andWhere('t1.status')->in($status)->fi()
-            ->andWhere('t1.type')->eq($storyType)
-            ->andWhere('t1.deleted')->eq(0)
+            ->beginIF($type != 'full' || $type != 'all')->andWhere('t1.type')->eq($storyType)->fi()
+            ->andWhere('t1.deleted')->eq('0')
             ->orderBy($order)
             ->fetchAll();
         if(!$stories) return array();
