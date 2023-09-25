@@ -88,18 +88,19 @@ class testreportZen extends testreport
     }
 
     /**
-     * 获取创建测试单的测试报告数据。
-     * Get testtask report data for creation.
+     * 获取测试单的测试报告数据。
+     * Get testtask report data.
      *
      * @param  int       $objectID
      * @param  string    $begin
      * @param  string    $end
      * @param  int       $productID
      * @param  object    $task
+     * @param  string    $method
      * @access protected
      * @return array
      */
-    protected function assignTesttaskReportDataForCreate(int $objectID, string $begin = '', string $end = '', int $productID = 0, object $task = null): array
+    protected function assignTesttaskReportData(int $objectID, string $begin = '', string $end = '', int $productID = 0, object $task = null, string $method = 'create'): array
     {
         $begin = !empty($begin) ? date("Y-m-d", strtotime($begin)) : $task->begin;
         $end   = !empty($end) ? date("Y-m-d", strtotime($end)) : $task->end;
@@ -117,13 +118,18 @@ class testreportZen extends testreport
 
         $this->setChartDatas($objectID);
 
-        if($this->app->tab == 'execution') $this->execution->setMenu($task->execution);
-        if($this->app->tab == 'project') $this->project->setMenu($task->project);
+        if($method == 'create')
+        {
+            if($this->app->tab == 'execution') $this->execution->setMenu($task->execution);
+            if($this->app->tab == 'project') $this->project->setMenu($task->project);
 
-        $this->view->title       = $task->name . $this->lang->testreport->create;
-        $this->view->reportTitle = date('Y-m-d') . " TESTTASK#{$task->id} {$task->name} {$this->lang->testreport->common}";
+            $this->view->title       = $task->name . $this->lang->testreport->create;
+            $this->view->reportTitle = date('Y-m-d') . " TESTTASK#{$task->id} {$task->name} {$this->lang->testreport->common}";
+        }
 
-        return array('begin' => $begin, 'end' => $end, 'builds' => $builds, 'tasks' => $tasks, 'owner' => $owner, 'stories' => $stories, 'bugs' => $bugs, 'execution' => $execution, 'productIdList' => $productIdList);
+        $reportData = array('begin' => $begin, 'end' => $end, 'builds' => $builds, 'tasks' => $tasks, 'owner' => $owner, 'stories' => $stories, 'bugs' => $bugs, 'execution' => $execution, 'productIdList' => $productIdList);
+        if($method == 'create') unset($reportData['owner']);
+        return $reportData;
     }
 
     /**
@@ -187,6 +193,34 @@ class testreportZen extends testreport
     }
 
     /**
+     * 获取编辑项目 / 执行的测试报告数据。
+     * Get project or execution report data for edit.
+     *
+     * @param  object    $report
+     * @param  string    $begin
+     * @param  string    $end
+     * @access protected
+     * @return array
+     */
+    protected function assignProjectReportDataForEdit(object $report, string $begin = '', string $end = ''): array
+    {
+        $begin = !empty($begin) ? date("Y-m-d", strtotime($begin)) : $report->begin;
+        $end   = !empty($end) ? date("Y-m-d", strtotime($end)) : $report->end;
+
+        $productIdList[$report->product] = $report->product;
+
+        $tasks = $this->testtask->getByList($report->tasks);
+        foreach($tasks as $task) $this->setChartDatas($task->id);
+
+        $execution = $this->execution->getById($report->execution);
+        $builds    = $this->build->getByList($report->builds);
+        $stories   = !empty($builds) ? $this->testreport->getStories4Test($builds) : $this->story->getExecutionStories($report->execution);
+        $bugs      = $this->testreport->getBugs4Test($builds, $productIdList, $begin, $end, 'execution');
+
+        return array('begin' => $begin, 'end' => $end, 'builds' => $builds, 'tasks' => $tasks, 'stories' => $stories, 'bugs' => $bugs, 'execution' => $execution, 'productIdList' => $productIdList);
+    }
+
+    /**
      * 展示测试报告数据。
      * Assign report data.
      *
@@ -210,14 +244,18 @@ class testreportZen extends testreport
         }
         if($method == 'create')
         {
-            $this->view->members      = $this->dao->select('DISTINCT lastRunner')->from(TABLE_TESTRUN)->where('task')->in(array_keys($reportData['tasks']))->fetchPairs('lastRunner', 'lastRunner');
-            $this->view->storySummary = $this->product->summary($reportData['stories']);
-            $this->view->users        = $this->user->getPairs('noletter|noclosed|nodeleted');
-
-            $cases = $this->testreport->getTaskCases($reportData['tasks'], $reportData['begin'], $reportData['end']);
+            $this->view->members = $this->dao->select('DISTINCT lastRunner')->from(TABLE_TESTRUN)->where('task')->in(array_keys($reportData['tasks']))->fetchPairs('lastRunner', 'lastRunner');
         }
-        $this->view->cases       = $cases;
-        $this->view->caseSummary = $this->testreport->getResultSummary($reportData['tasks'], $cases, $reportData['begin'], $reportData['end']);
+        elseif($method == 'edit')
+        {
+        }
+
+        $this->view->storySummary = $this->product->summary($reportData['stories']);
+        $this->view->users        = $this->user->getPairs('noletter|noclosed|nodeleted');
+
+        $cases = $this->testreport->getTaskCases($reportData['tasks'], $reportData['begin'], $reportData['end']);
+        $this->view->cases        = $cases;
+        $this->view->caseSummary  = $this->testreport->getResultSummary($reportData['tasks'], $cases, $reportData['begin'], $reportData['end']);
 
         $caseList = array();
         foreach($cases as $casesList)
@@ -258,6 +296,38 @@ class testreportZen extends testreport
         /* Check reuqired. */
         $reportErrors = array();
         foreach(explode(',', $this->config->testreport->create->requiredFields) as $field)
+        {
+            $field = trim($field);
+            if($field && empty($testreport->{$field}))
+            {
+                $fieldName = $this->config->testreport->form->showImport[$field]['type'] != 'array' ? "{$field}" : "{$field}[]";
+                $reportErrors[$fieldName][] = sprintf($this->lang->error->notempty, $this->lang->testreport->{$field});
+            }
+         }
+        if($testreport->end < $testreport->begin) $reportErrors['end'][] = sprintf($this->lang->error->ge, $this->lang->testreport->end, $testreport->begin);
+        if(!empty($reportErrors)) dao::$errors = $reportErrors;
+
+        return $testreport;
+    }
+
+    /**
+     * 为编辑准备测试报告数据。
+     * Prepare testreport data for edit.
+     *
+     * @param  int       $reportID
+     * @access protected
+     * @return object
+     */
+    protected function prepareTestreportForEdit(int $reportID): object
+    {
+        /* Build testreport. */
+        $testreport = form::data($this->config->testreport->form->edit)->add('id', $reportID)->get();
+        $testreport = $this->loadModel('file')->processImgURL($testreport, $this->config->testreport->editor->edit['id'], $this->post->uid);
+        $testreport->members = trim($testreport->members, ',');
+
+        /* Check reuqired. */
+        $reportErrors = array();
+        foreach(explode(',', $this->config->testreport->edit->requiredFields) as $field)
         {
             $field = trim($field);
             if($field && empty($testreport->{$field}))

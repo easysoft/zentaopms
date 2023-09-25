@@ -56,8 +56,32 @@ formPanel
             (
                 set::className('hidden'),
                 set::name('tasks'),
-                set::value($tasks)
-            )
+                set::value($report->tasks)
+            ),
+            input
+            (
+                set::className('hidden'),
+                set::name('bugs'),
+                set::value(implode(',', array_keys($bugs)))
+            ),
+            input
+            (
+                set::className('hidden'),
+                set::name('builds'),
+                set::value(implode(',', array_keys($builds)))
+            ),
+            input
+            (
+                set::className('hidden'),
+                set::name('cases'),
+                set::value(implode(',', array_keys($caseList)))
+            ),
+            input
+            (
+                set::className('hidden'),
+                set::name('stories'),
+                set::value(implode(',', array_keys($stories)))
+            ),
         ),
         formGroup
         (
@@ -74,11 +98,13 @@ formPanel
         formGroup
         (
             set::label($lang->testreport->members),
-            set::control('picker'),
-            set::multiple(true),
-            set::name('members[]'),
-            set::items($users),
-            set::value($report->members)
+            picker
+            (
+                set::multiple(true),
+                set::name('members[]'),
+                set::items($users),
+                set::value($report->members)
+            ),
         )
     ),
     formRow

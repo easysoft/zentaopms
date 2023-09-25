@@ -36,26 +36,35 @@ class testreportTest
         return $object;
     }
 
-    public function updateTest($reportID, $param)
+    /**
+     * 测试更新一个测试报告。
+     * Test update a test report.
+     *
+     * @param  int    $reportID
+     * @param  array  $param
+     * @access public
+     * @return array|object
+     */
+    public function updateTest(int $reportID, array $param): array|object
     {
-        $report = $this->objectModel->getByID($reportID);
+        $report = $oldReport = $this->objectModel->getByID($reportID);
 
         $begin_date = $report->begin;
         $end_date   = $report->end;
         $builds     = $report->builds;
-        $labels     = array();
 
-        $createFields = array('begin' => $begin_date, 'end' => $end_date, 'product' => $report->product, 'execution' => $report->execution, 'tasks' => $report->tasks, 'objectID' => $report->objectID, 'objectType' => $report->objectType, 'owner' => '', 'title' => '', 'report' => '', 'labels' => $labels, 'builds' => $builds, 'cases' => '');
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
+        $createFields = array('begin' => $begin_date, 'end' => $end_date, 'product' => $report->product, 'execution' => $report->execution, 'tasks' => $report->tasks, 'objectID' => $report->objectID, 'objectType' => $report->objectType, 'owner' => '', 'title' => '', 'report' => '', 'builds' => $builds, 'cases' => '');
+        foreach($createFields as $field => $defaultValue) $report->{$field} = $defaultValue;
+        foreach($param as $key => $value) $report->{$key} = $value;
 
-        $this->objectModel->update($reportID);
-        unset($_POST);
+        unset($report->files);
+        unset($oldReport->files);
+        $this->objectModel->update($report, $oldReport);
 
         if(dao::isError()) return dao::getError();
 
-        $objects = $this->objectModel->getByID($reportID);
-        return $objects;
+        $object = $this->objectModel->getByID($reportID);
+        return $object;
     }
 
     /**

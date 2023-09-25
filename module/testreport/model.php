@@ -37,38 +37,27 @@ class testreportModel extends model
     }
 
     /**
-     * Update report.
+     * 更新一个测试报告。
+     * Update a report.
      *
-     * @param  int    $reportID
+     * @param  object     $report
+     * @param  object     $oldReport
      * @access public
-     * @return array
+     * @return array|bool
      */
-    public function update($reportID)
+    public function update(object $report, object $oldReport): array|bool
     {
-        $report = $this->getById($reportID);
-        $data   = fixer::input('post')
-            ->stripTags($this->config->testreport->editor->edit['id'], $this->config->allowedTags)
-            ->join('stories', ',')
-            ->join('builds', ',')
-            ->join('bugs', ',')
-            ->join('cases', ',')
-            ->join('members', ',')
-            ->remove('files,labels,uid')
-            ->get();
-        $data->members = trim($data->members, ',');
-        if(empty($data->bugs)) $data->bugs = '';
-
-        $data = $this->loadModel('file')->processImgURL($data, $this->config->testreport->editor->edit['id'], $this->post->uid);
-        $this->dao->update(TABLE_TESTREPORT)->data($data)->autocheck()
+        $this->dao->update(TABLE_TESTREPORT)->data($report)->autocheck()
              ->batchCheck($this->config->testreport->edit->requiredFields, 'notempty')
              ->batchCheck('begin,end', 'notempty')
-             ->check('end', 'ge', $data->begin)
-             ->where('id')->eq($reportID)
+             ->check('end', 'ge', $report->begin)
+             ->where('id')->eq($report->id)
              ->exec();
         if(dao::isError()) return false;
 
-        $this->file->updateObjectID($this->post->uid, $reportID, 'testreport');
-        return common::createChanges($report, $data);
+        $this->loadModel('file')->processFile4Object('testreport', $oldReport, $report);
+
+        return common::createChanges($oldReport, $report);
     }
 
     /**

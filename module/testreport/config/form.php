@@ -22,3 +22,18 @@ $config->testreport->form->create['cases']       = array('type' => 'string',   '
 $config->testreport->form->create['stories']     = array('type' => 'string',   'required' => false, 'default' => '', 'filter' => 'trim');
 $config->testreport->form->create['createdBy']   = array('type' => 'string',   'required' => false, 'default' => $app->user->account);
 $config->testreport->form->create['createdDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
+
+$config->testreport->form->edit = common::formConfig('testreport', 'edit');
+$config->testreport->form->edit['tasks']       = array('type' => 'string',   'required' => true,  'default' => '0');
+$config->testreport->form->edit['begin']       = array('type' => 'string',   'required' => false, 'default' => '');
+$config->testreport->form->edit['end']         = array('type' => 'string',   'required' => false, 'default' => '');
+$config->testreport->form->edit['product']     = array('type' => 'int',      'required' => true,  'default' => 0);
+$config->testreport->form->edit['execution']   = array('type' => 'int',      'required' => true,  'default' => 0);
+$config->testreport->form->edit['owner']       = array('type' => 'string',   'required' => true,  'default' => '');
+$config->testreport->form->edit['members']     = array('type' => 'array',    'required' => false, 'default' => array(''), 'filter' => 'join');
+$config->testreport->form->edit['title']       = array('type' => 'string',   'required' => true,  'default' => '');
+$config->testreport->form->edit['report']      = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor');
+$config->testreport->form->edit['bugs']        = array('type' => 'string',   'required' => false, 'default' => '', 'filter' => 'trim');
+$config->testreport->form->edit['builds']      = array('type' => 'string',   'required' => false, 'default' => '', 'filter' => 'trim');
+$config->testreport->form->edit['cases']       = array('type' => 'string',   'required' => false, 'default' => '', 'filter' => 'trim');
+$config->testreport->form->edit['stories']     = array('type' => 'string',   'required' => false, 'default' => '', 'filter' => 'trim');

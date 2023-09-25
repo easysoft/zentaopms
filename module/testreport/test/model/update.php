@@ -2,6 +2,10 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/testreport.class.php';
+
+zdTable('testreport')->gen(5);
+zdTable('user')->gen(1);
+
 su('admin');
 
 /**
@@ -16,9 +20,9 @@ pid=1
 标题为空测试 >> 『标题』不能为空。
 
 */
-$reportID = '1';
-$members  = array('dev1','dev11');
-$cases    = array(1,2,3,4);
+$reportID = 1;
+$members  = 'dev1,dev11';
+$cases    = '1,2,3,4';
 $title    = array('正常修改', '负责人为空测试', '参与人员为空测试', '');
 
 $testreport = new testreportTest();
@@ -27,9 +31,10 @@ $normalReport = array('owner' => 'user3', 'members' => $members, 'title' => $tit
 $noOwner      = array('owner' => '',      'members' => $members, 'title' => $title[1], 'report' => '', 'cases' => $cases);
 $noMembers    = array('owner' => 'user3', 'members' => '',       'title' => $title[2], 'report' => '', 'cases' => $cases);
 $noTitle      = array('owner' => 'user3', 'members' => $members, 'title' => $title[3], 'report' => '', 'cases' => $cases);
+$endLtBegin   = array('owner' => 'user3', 'members' => $members, 'title' => $title[0], 'report' => '', 'cases' => $cases, 'begin' => '2017-01-01', 'end' => '2016-01-01') ;
 
-r($testreport->updateTest($reportID, $normalReport)) && p('id,title')         && e('1,正常修改');           //正常修改
-r($testreport->updateTest($reportID, $noOwner))      && p('owner:0')          && e('『负责人』不能为空。'); //负责人为空测试
-r($testreport->updateTest($reportID, $noMembers))    && p('id,title,members') && e('1,参与人员为空测试,');  //参与人员为空测试
-r($testreport->updateTest($reportID, $noTitle))      && p('title:0')          && e('『标题』不能为空。');   //标题为空测试
-
+r($testreport->updateTest($reportID, $normalReport)) && p('id,title') && e('1,正常修改');                             // 正常修改
+r($testreport->updateTest($reportID, $noOwner))      && p('owner:0')  && e('『负责人』不能为空。');                   // 负责人为空测试
+r($testreport->updateTest($reportID, $noMembers))    && p('id,title') && e('1,参与人员为空测试,');                    // 参与人员为空测试
+r($testreport->updateTest($reportID, $noTitle))      && p('title:0')  && e('『报告标题』不能为空。');                 // 标题为空测试
+r($testreport->updateTest($reportID, $endLtBegin))   && p('end:0')    && e('『结束时间』应当不小于『2017-01-01』。'); // 结束时间小于开始时间测试
