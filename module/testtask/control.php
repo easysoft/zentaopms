@@ -524,9 +524,14 @@ class testtask extends control
         }
 
         /* Get task info. */
-        $task      = $this->testtask->getByID($taskID);
+        $task = $this->testtask->getByID($taskID);
+
+        /* 检查是否有权限访问测试单所属产品。*/
+        /* Check if user have permission to access the product to which the testtask belongs. */
         $productID = $this->loadModel('product')->checkAccess($task->product, $this->products);
 
+        /* 如果测试单所属产品在产品键值对中不存在，将其加入。*/
+        /* Prepare the product key-value pairs. */
         if(!isset($this->products[$productID]) && $productID)
         {
             $product = $this->product->getByID($productID);
@@ -930,7 +935,6 @@ class testtask extends control
             $case    = $this->loadModel('testcase')->getByID($caseID, $version);
             $results = $this->testtask->getResults(0, $caseID, $status, $type);
         }
-
 
         /* Assign. */
         $this->view->case      = $case;
