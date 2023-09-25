@@ -32,9 +32,9 @@ class storyTest
      * @access public
      * @return void
      */
-    public function getByListTest($storyIdList = 0)
+    public function getByListTest($storyIdList = 0, $mode = '')
     {
-        $stories = $this->objectModel->getByList($storyIdList);
+        $stories = $this->objectModel->getByList($storyIdList, $mode);
 
         if(dao::isError()) return dao::getError();
 
@@ -436,7 +436,7 @@ class storyTest
         if(dao::isError()) return dao::getError();
 
         $storyIdList = array_keys($changes);
-        return $this->objectModel->getByList($storyIdList);
+        return $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('id')->in($storyIdList)->fetchAll();
     }
 
     /**
@@ -449,12 +449,11 @@ class storyTest
      */
     public function batchChangeStageTest($storyIdList, $stage)
     {
-        $changes = $this->objectModel->batchChangeStage($storyIdList, $stage);
+        $this->objectModel->batchChangeStage($storyIdList, $stage);
 
         if(dao::isError()) return dao::getError();
 
-        $storyIdList = array_keys($changes);
-        return $this->objectModel->getByList($storyIdList);
+        return $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('id')->in($storyIdList)->fetchAll();
     }
 
     /**

@@ -119,7 +119,7 @@ class storyModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
             ->where('t1.version=t2.version')
             ->andWhere('t1.id')->in($storyIdList)
-            ->beginIF($mode != 'all')->andWhere('t1.deleted')->eq(0)->fi()
+            ->beginIF($mode != 'all')->andWhere('t1.deleted')->eq('0')->fi()
             ->fetchAll('id');
     }
 

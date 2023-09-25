@@ -319,144 +319,31 @@ class story extends control
             $this->story->batchUpdate($stories);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->storyList));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => array('back' => true)));
         }
 
-        if(!$this->post->storyIdList) return $this->send(array('result' => 'success', 'load' => $this->session->storyList));
-        $storyIdList = $this->post->storyIdList;
-        $storyIdList = array_unique($storyIdList);
-
-        /* Get edited stories. */
-        $stories = $this->story->getByList($storyIdList);
-        if(empty($stories)) return $this->send(array('result' => 'success', 'load' => $this->session->storyList));
-
-        /* Filter twins. */
-        $twins = '';
-        foreach($stories as $id => $story)
-        {
-            if(empty($story->twins)) continue;
-            $twins .= "#$id ";
-            unset($stories[$id]);
-        }
-        if(!empty($twins)) $this->view->twinsTip = sprintf($this->lang->story->batchEditTip, $twins);
-
-        $this->loadModel('branch');
-        if($productID and !$executionID)
-        {
-            $product       = $this->product->getByID($productID);
-            $branchProduct = $product->type == 'normal' ? false : true;
-
-            $branches        = 0;
-            $branchTagOption = array();
-            if($branchProduct)
-            {
-                $branches = $this->branch->getList($productID, $executionID, 'all');
-                foreach($branches as $branchInfo) $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
-                $branches = array_keys($branches);
-            }
-
-            $modulePairs = $this->tree->getOptionMenu($productID, 'story', 0, $branches);
-            $moduleList  = $branchProduct ? $modulePairs : array(0 => $modulePairs);
-
-            $modules         = array($productID => $moduleList);
-            $plans           = array($productID => $this->productplan->getBranchPlanPairs($productID, '', 'unexpired', true));
-            $products        = array($productID => $product);
-            $branchTagOption = array($productID => $branchTagOption);
-        }
-        else
-        {
-            $branchProduct   = false;
-            $modules         = array();
-            $branchTagOption = array();
-            $products        = array();
-            $plans           = array();
-
-            /* Get product id list by the stories. */
-            $productIdList = array();
-            foreach($stories as $story) $productIdList[$story->product] = $story->product;
-            $products = $this->product->getByIdList($productIdList);
-
-            foreach($products as $storyProduct)
-            {
-                $branches = 0;
-                if($storyProduct->type != 'normal')
-                {
-                    $branches = $this->branch->getList($storyProduct->id, $executionID, 'all');
-                    foreach($branches as $branchInfo) $branches[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
-                    $branchTagOption[$storyProduct->id] = array(BRANCH_MAIN => $this->lang->branch->main) + $branches;
-
-                    $branches = array_keys($branches);
-                }
-
-                $modulePairs = $this->tree->getOptionMenu($storyProduct->id, 'story', 0, $branches);
-                $modules[$storyProduct->id] = $storyProduct->type != 'normal' ? $modulePairs : array(0 => $modulePairs);
-
-                $plans[$storyProduct->id] = $this->productplan->getBranchPlanPairs($storyProduct->id, $branches, 'unexpired', true);
-                if(empty($plans[$storyProduct->id])) $plans[$storyProduct->id][0] = $plans[$storyProduct->id];
-
-                if($storyProduct->type != 'normal') $branchProduct = true;
-            }
-        }
-
-        /* Set ditto option for users. */
-        $users = $this->loadModel('user')->getPairs('nodeleted|noclosed');
+        $stories = $this->storyZen->getStoriesByChecked();
+        if(!$stories) return $this->send(array('result' => 'success', 'load' => $this->session->storyList));
 
         /* Set Custom*/
         foreach(explode(',', $this->config->story->list->customBatchEditFields) as $field) $customFields[$field] = $this->lang->story->$field;
         $showFields = $this->config->story->custom->batchEditFields;
         if($storyType == 'requirement')
         {
-            unset($customFields['plan']);
-            unset($customFields['stage']);
-            $showFields = str_replace('plan',  '', $showFields);
-            $showFields = str_replace('stage', '', $showFields);
+            unset($customFields['plan'], $customFields['stage']);
+            $showFields = str_replace(array('plan', 'stage'),  '', $showFields);
         }
         $this->view->customFields = $customFields;
         $this->view->showFields   = $showFields;
 
-        /* Append module when change product type. */
-        $moduleList       = array(0 => '/');
-        $productStoryList = array();
-        foreach($stories as $story)
-        {
-            if(isset($modules[$story->product][$story->branch]))
-            {
-                $moduleList[$story->id] = $modules[$story->product][$story->branch];
-            }
-            else
-            {
-                $moduleList[$story->id] = $modules[$story->product][0] + $this->tree->getModulesName($story->module);
-            }
+        $this->storyZen->setFormOptionsForBatchEdit($productID, $executionID, $stories);
 
-            if($story->status == 'closed')
-            {
-                $storyProduct = $products[$story->product];
-                $storyBranch = $story->branch > 0 ? $story->branch : '0';
-                $branch      = $storyProduct->type == 'branch' ? $storyBranch: 'all';
-                if(!isset($productStoryList[$story->product][$story->branch])) $productStoryList[$story->product][$story->branch] = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '', $story->type);
-            }
-
-            if(!empty($story->plan) and !isset($plans[$story->product][$story->branch][$story->plan]))
-            {
-                $plan = $this->dao->select('id,title,begin,end')->from(TABLE_PRODUCTPLAN)->where('id')->eq($story->plan)->fetch();
-                $plans[$story->product][$story->branch][$story->plan] = $plan->title . ' [' . $plan->begin . '~' . $plan->end . ']';
-            }
-        }
-
-        $this->view->title             = $this->lang->story->batchEdit;
-        $this->view->users             = $users;
-        $this->view->productID         = $productID;
-        $this->view->products          = $products;
-        $this->view->branchProduct     = $branchProduct;
-        $this->view->storyIdList       = $storyIdList;
-        $this->view->branch            = $branch;
-        $this->view->plans             = $plans;
-        $this->view->storyType         = $storyType;
-        $this->view->stories           = $stories;
-        $this->view->executionID       = $executionID;
-        $this->view->branchTagOption   = $branchTagOption;
-        $this->view->moduleList        = $moduleList;
-        $this->view->productStoryList  = $productStoryList;
+        $this->view->title       = $this->lang->story->batchEdit;
+        $this->view->productID   = $productID;
+        $this->view->branch      = $branch;
+        $this->view->storyType   = $storyType;
+        $this->view->stories     = $stories;
+        $this->view->executionID = $executionID;
         $this->display();
     }
 
