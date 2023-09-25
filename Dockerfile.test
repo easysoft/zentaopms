@@ -8,4 +8,5 @@ ENV EASYSOFT_APP_NAME="ZenTao $ZENTAO_VER"
 ENV MYSQL_INTERNAL="true"
 
 # Copy ZenTao
-COPY --chown=33:33 . /apps/zentao/
+COPY --chown=nobody:nogroup . /apps/zentao/
+RUN mkdir /apps/zentao/tmp && chmod 777 /apps/zentao/tmp
