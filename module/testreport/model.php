@@ -385,7 +385,7 @@ class testreportModel extends model
      * @access public
      * @return array
      */
-    public function getCaseIdList($reportID): array
+    public function getCaseIdList(int $reportID): array
     {
         return $this->dao->select('`case`')->from(TABLE_TESTREPORT)->alias('t1')
             ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.tasks = t2.task')
