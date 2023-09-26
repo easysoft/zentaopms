@@ -26,7 +26,6 @@ $cols['title']['nestedToggle'] = false;
 $cols['title']['flex']         = 1;
 $cols = array_map(function($col){unset($col['sortType']); return $col;}, $cols);
 
-$stories2Link[] = $story;
 $data = array();
 foreach($stories2Link as $story) $data[] = $this->story->formatStoryForList($story);
 
