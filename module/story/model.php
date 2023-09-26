@@ -2101,9 +2101,9 @@ class storyModel extends model
      *
      * @param  int     $storyID
      * @param  string  $type           linkStories|linkRelateSR|linkRelateUR
-     * @param  string  $browseType
+     * @param  string  $browseType     bySearch
      * @param  int     $queryID
-     * @param  string  $storyType
+     * @param  string  $storyType      story|requirement
      * @param  object  $pager
      * @param  string  $excludeStories
      * @access public
