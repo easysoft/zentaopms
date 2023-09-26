@@ -339,7 +339,8 @@ class projectZen extends project
         $productPlansOrder = array();
         foreach($productPlans as $productID => $plan)
         {
-            $orderPlans    = $this->loadModel('productPlan')->getListByIds(array_keys($plan), true);
+            $orderPlans    = $this->loadModel('productPlan')->getByIDList(array_keys($plan));
+            $orderPlans    = $this->productPlan->relationBranch($orderPlans);
             $orderPlansMap = array_keys($orderPlans);
             foreach($orderPlansMap as $planMapID)
             {
