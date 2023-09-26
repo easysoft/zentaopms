@@ -419,7 +419,7 @@ class testreportZen extends testreport
 
             $chartFunc   = 'getDataOf' . $chart;
             $chartData   = $this->testtask->$chartFunc($taskID);
-            $chartOption = $this->testtask->mergeChartOption($chart);
+            $chartOption = $this->config->testtask->report->options;
 
             $this->view->charts[$chart] = $chartOption;
 
