@@ -1,25 +1,21 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(Dirname(dirname(__FILE__))) . '/class/productplan.class.php';
-
 /**
 
 title=productplanModel->changeParentField();
+timeout=0
 cid=1
-pid=1
-
-传入ID为1的情况，返回true >> 1
-传入ID为5的情况，返回true，如不存在函数会报错 >> 1
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/productplan.class.php';
 
-$plan = new productPlan('admin');
+zdTable('user')->gen(5);
+zdTable('productplan')->config('productplan')->gen(5);
 
-$planID = array();
-$planID[0] = 1;
-$planID[1] = 5;
+$planIdList = array(1, 2, 3);
 
-r($plan->changeParentField($planID[0])) && p() && e('1'); //传入ID为1的情况，返回true
-r($plan->changeParentField($planID[1])) && p() && e('1'); //传入ID为5的情况，返回true，如不存在函数会报错
-?>
+$planTester = new productplan('admin');
+r($planTester->changeParentFieldTest($planIdList[0])) && p('parent') && e('-1'); // 测试更新父计划的parent字段
+r($planTester->changeParentFieldTest($planIdList[1])) && p('parent') && e('1');  // 测试更新子计划的parent字段
+r($planTester->changeParentFieldTest($planIdList[2])) && p('parent') && e('0');  // 测试更新普通计划的parent字段

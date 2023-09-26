@@ -208,17 +208,19 @@ class productPlan
     }
 
     /**
-     * Change parent field
+     * 将父计划的parent改为-1, 没有子计划的父计划的parent改为0。
+     * Change parent field by planID.
      *
-     * @param  int    $planID
+     * @param  int          $planID
      * @access public
-     * @return true
+     * @return array|object
      */
-    public function changeParentField($planID)
+    public function changeParentFieldTest(int $planID): array|object
     {
-        $productplans = $this->productplan->changeParentField($planID);
+        $this->productplan->changeParentField($planID);
+
         if(dao::isError()) return dao::getError();
-        return $productplans;
+        return $this->productplan->getByID($planID);
     }
 
     /**

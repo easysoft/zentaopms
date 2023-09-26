@@ -804,13 +804,14 @@ class productplanModel extends model
     }
 
     /**
+     * 将父计划的parent改为-1, 没有子计划的父计划的parent改为0。
      * Change parent field by planID.
      *
      * @param  int    $planID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function changeParentField($planID)
+    public function changeParentField(int $planID): bool
     {
         $plan = $this->getById($planID);
         if($plan->parent <= 0) return true;
@@ -818,8 +819,7 @@ class productplanModel extends model
         $childCount = count($this->getChildren($plan->parent));
         $parent     = $childCount == 0 ? '0' : '-1';
 
-        $parentPlan = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('id')->eq($plan->parent)->andWhere('deleted')->eq(0)->fetch();
-        if($parentPlan)
+        if($childCount > 0)
         {
             $this->dao->update(TABLE_PRODUCTPLAN)->set('parent')->eq($parent)->where('id')->eq((int)$plan->parent)->exec();
         }
@@ -827,6 +827,8 @@ class productplanModel extends model
         {
             $this->dao->update(TABLE_PRODUCTPLAN)->set('parent')->eq('0')->where('id')->eq((int)$planID)->exec();
         }
+
+        return !dao::isError();
     }
 
     /**
