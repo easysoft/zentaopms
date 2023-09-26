@@ -1335,13 +1335,14 @@ class story extends control
     }
 
     /**
+     * 关联需求。
      * If type is linkStories, link related stories else link child stories.
      *
      * @param  int    $storyID
      * @param  string $type
      * @param  string $browseType
      * @param  int    $queryID
-     * @param  string $storyType story|requirement
+     * @param  string $storyType  story|requirement
      * @access public
      * @return void
      */
@@ -1406,6 +1407,7 @@ class story extends control
     }
 
     /**
+     * 关联软件需求。
      * Link related stories.
      *
      * @param  int    $storyID
@@ -1418,7 +1420,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function linkStories($storyID, $browseType = '', $excludeStories = '', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function linkStories(int $storyID, string $browseType = '', string $excludeStories = '', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Load pager. */
         $this->app->loadClass('pager', true);
@@ -1428,7 +1430,7 @@ class story extends control
         $story    = $this->story->getById($storyID);
         $products = $this->product->getPairs('', 0, '', 'all');
         $product  = $this->product->getByID($story->product);
-        $queryID  = ($browseType == 'bySearch') ? (int)$param : 0;
+        $queryID  = ($browseType == 'bySearch') ? $param : 0;
         $type     = $story->type == 'story' ? 'linkRelateSR' : 'linkRelateUR';
         $method   = $story->type == 'story' ? 'linkStories'  : 'linkRequirements';
 
@@ -1445,13 +1447,14 @@ class story extends control
         $this->view->story        = $story;
         $this->view->stories2Link = $this->story->getStories2Link($storyID, $type, $browseType, $queryID, $story->type, $pager, $excludeStories);
         $this->view->products     = $products;
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->users        = $this->user->getPairs('noletter');
         $this->view->pager        = $pager;
 
         $this->display();
     }
 
     /**
+     * 关联用户需求。
      * Link related requirements.
      *
      * @param  int    $storyID
@@ -1464,7 +1467,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function linkRequirements($storyID, $browseType = '', $excludeStories = '', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function linkRequirements(int $storyID, string $browseType = '', string $excludeStories = '', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->lang->story->title  = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
         $this->config->product->search['fields']['title'] = $this->lang->story->title;
