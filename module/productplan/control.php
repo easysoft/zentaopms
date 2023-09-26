@@ -882,6 +882,7 @@ class productplan extends control
     }
 
     /**
+     * 获取未关联计划的分支的提示信息。
      * AJAX: Get diff branches tips.
      *
      * @param  int    $productID
@@ -892,7 +893,7 @@ class productplan extends control
      */
     public function ajaxGetDiffBranchesTip(int $productID = 0, int $parentID = 0, string $branches = '')
     {
-        if(empty($parentID) or empty($productID)) return;
+        if(empty($parentID) || empty($productID)) return;
 
         /* If it has children, return. */
         $parentBranch = $this->productplan->getByID($parentID);
@@ -915,9 +916,9 @@ class productplan extends control
         if(empty($diffBranchesTip)) return;
 
         /* Find stories and bugs in diff branches. */
-        $unlinkStories = $this->dao->select('*')->from(TABLE_STORY)->where('branch')->in($diffBranches)->andWhere("CONCAT(',', plan, ',')")->like("%,{$parentID},%")->fetchAll('id');
-        $unlinkBugs    = $this->dao->select('*')->from(TABLE_BUG)->where('branch')->in($diffBranches)->andWhere('plan')->eq($parentID)->fetchAll('id');
-        if(empty($unlinkStories) and empty($unlinkBugs)) return;
+        $unlinkStories = $this->productplanTao->checkUnlinkObjects($diffBranches, $parentID, 'story');
+        $unlinkBugs    = $this->productplanTao->checkUnlinkObjects($diffBranches, $parentID, 'bug');
+        if(empty($unlinkStories) && empty($unlinkBugs)) return;
 
         $this->lang->productplan->diffBranchesTip = str_replace('@branch@', $this->lang->product->branchName[$product->type], $this->lang->productplan->diffBranchesTip);
         printf($this->lang->productplan->diffBranchesTip, trim($diffBranchesTip, ','));
