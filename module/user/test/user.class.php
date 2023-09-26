@@ -931,18 +931,18 @@ class userTest
     }
 
     /**
-     * Test get product view list users.
+     * Test get team member pairs of the object.
      *
-     * @param  int    $productID
-     * @param  string $type
-     * @param  string $params
-     * @param  array  $usersToAppended
+     * @param  string|array|int $objectIds
+     * @param  string           $type            project|execution
+     * @param  string           $params
+     * @param  string|array     $usersToAppended
      * @access public
-     * @return void
+     * @return array
      */
-    public function getTeamMemberPairsTest($objectID, $type, $params = '', $usersToAppended = array())
+    public function getTeamMemberPairsTest(string|array|int $objectIds, string $type = 'project', string $params = '', string|array $usersToAppended = '')
     {
-        return $this->objectModel->getTeamMemberPairs($objectID, $type, $params, $usersToAppended);
+        return $this->objectModel->getTeamMemberPairs($objectIds, $type, $params, $usersToAppended);
     }
 
     /**
