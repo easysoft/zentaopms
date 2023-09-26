@@ -4112,16 +4112,18 @@ class storyModel extends model
     }
 
     /**
-     * Link stories.
+     * 关联软件需求和用户需求。
+     * Create a relationship between the story and the requirement.
      *
-     * @param  int $storyID
+     * @param  int          $storyID
+     * @param  array|object storyList  postedData
      * @access public
      * @return void
      */
-    public function linkStories($storyID)
+    public function linkStories(int $storyID, array|object $storyList = array())
     {
         $story   = $this->getByID($storyID);
-        $stories = $this->post->stories;
+        $stories = empty($storyList) ? $this->post->stories : $storyList;
         $isStory = ($story->type == 'story');
 
         foreach($stories as $id)
