@@ -167,25 +167,26 @@ class testreportTest
         return $objects;
     }
    /**
+     * 获取报告的概况。
      * Get result summary.
      *
-     * @param  int    $taskID
-     * @param  int    $reportID
+     * @param  int          $taskID
+     * @param  int          $reportID
      * @access public
-     * @return string
+     * @return string|array
      */
 
-    public function getResultSummaryTest($taskID, $reportID)
+    public function getResultSummaryTest(int $taskID, int $reportID): array|string
     {
-        $tasks   = $taskID ? $this->testtask->getByList($taskID) : array();
+        $tasks   = $taskID ? $this->testtask->getByList((array)$taskID) : array();
         $report = $this->objectModel->getByID($reportID);
         $cases  = $this->objectModel->getTaskCases($tasks, $report->begin, $report->end);
 
-        $objects = $this->objectModel->getResultSummary($tasks, $cases, $report->begin, $report->end);
+        $resultSummary = $this->objectModel->getResultSummary($tasks, $cases, $report->begin, $report->end);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $resultSummary;
     }
 
     /**

@@ -4,17 +4,23 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/testreport.class.php';
 su('admin');
 
+zdTable('case')->gen(10);
+zdTable('testtask')->gen(10);
+zdTable('testrun')->gen(10);
+zdTable('testresult')->gen(10);
+zdTable('testreport')->gen(10);
+
 /**
 
 title=测试 testreportModel->getResultSummary();
+timeout=0
 cid=1
-pid=1
 
-正常查询 >> 共有<strong>4</strong>个用例，共执行<strong>4</strong>个用例，产生了<strong>4</strong>个结果，失败的用例有<strong>2</strong>个。
-taskID为空查询 >> 共有<strong>0</strong>个用例，共执行<strong>0</strong>个用例，产生了<strong>0</strong>个结果，失败的用例有<strong>0</strong>个。
+- 正常查询 @共有<strong>4</strong>个用例，共执行<strong>4</strong>个用例，产生了<strong>4</strong>个结果，失败的用例有<strong>2</strong>个。
+- taskID为空查询 @共有<strong>0</strong>个用例，共执行<strong>0</strong>个用例，产生了<strong>0</strong>个结果，失败的用例有<strong>0</strong>个。
 
 */
-$taskID   = array('1', '');
+$taskID   = array(1, 0);
 $reportID = '1';
 
 $testreport = new testreportTest();

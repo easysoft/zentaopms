@@ -401,7 +401,8 @@ class testreportModel extends model
     }
 
     /**
-     * Get result summary.
+     * 获取报告概况。
+     * Get report summary.
      *
      * @param  array    $tasks
      * @param  array    $cases
@@ -410,23 +411,24 @@ class testreportModel extends model
      * @access public
      * @return string
      */
-    public function getResultSummary($tasks, $cases, $begin, $end)
+    public function getResultSummary(array $tasks, array $cases, string $begin, string $end): string
     {
         $caseCount = 0;
-        $casesList = array();
-        foreach($cases as $taskID => $caseList)
+        $caseIdList = array();
+        foreach($cases as $caseList)
         {
             foreach($caseList as $caseID => $case)
             {
-                $casesList[$caseID] = $case;
+                $caseIdList[] = $caseID;
+
                 $caseCount++;
             }
         }
 
         $results = $this->dao->select('t1.*')->from(TABLE_TESTRESULT)->alias('t1')
-            ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.run=t2.id')
+            ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.run = t2.id')
             ->where('t2.task')->in(array_keys($tasks))
-            ->andWhere('t1.`case`')->in(array_keys($casesList))
+            ->andWhere('t1.`case`')->in($caseIdList)
             ->andWhere('t1.date')->ge($begin)
             ->andWhere('t1.date')->le($end . " 23:59:59")
             ->orderBy('date')
