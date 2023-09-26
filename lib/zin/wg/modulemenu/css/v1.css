@@ -2,4 +2,3 @@
 .module-menu .active {color: var(--color-primary-600); font-weight: 500;}
 .module-menu header a:hover > .icon {color: var(--color-primary-600) !important;}
 .module-menu .tree-item * {white-space: nowrap;}
-.module-menu .item-title:not(:hover) {color: var(--text-fore)}
