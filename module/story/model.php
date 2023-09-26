@@ -3933,15 +3933,16 @@ class storyModel extends model
     }
 
     /**
-     * Obtain the direct relationship between UR and SR.
+     * 通过关系表查询UR关联的SR或SR关联的UR。
+     * Get SR or UR with the relationship between UR and SR.
      *
      * @param  int    $storyID
-     * @param  string $storyType
+     * @param  string $storyType story|requirement
      * @param  array  $fields
      * @access public
      * @return array
      */
-    public function getStoryRelation($storyID, $storyType, $fields = array())
+    public function getStoryRelation(int $storyID, string $storyType = 'story', array $fields = array()): array
     {
         $conditionField = $storyType == 'story' ? 'BID' : 'AID';
         $storyType      = $storyType == 'story' ? 'AID' : 'BID';
@@ -3958,7 +3959,7 @@ class storyModel extends model
         $fields = empty($fields) ? '*' : implode(',', $fields);
         return $this->dao->select($fields)->from(TABLE_STORY)
             ->where('id')->in($relations)
-            ->andWhere('deleted')->eq(0)
+            ->andWhere('deleted')->eq('0')
             ->orderBy('id_desc')
             ->fetchAll();
     }
