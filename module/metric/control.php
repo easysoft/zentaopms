@@ -141,6 +141,8 @@ class metric extends control
 
         foreach($classifiedCalcGroup as $calcGroup)
         {
+            if($this->config->edition == 'open' and in_array($calcGroup->dataset, array('getFeedbacks', 'getIssues', 'getRisks'))) continue;
+
             $statement = $this->metricZen->prepareDataset($calcGroup);
             if(empty($statement)) continue;
 
