@@ -172,7 +172,7 @@ div
         panel
         (
             set::title($title),
-            tree
+            treeEditor
             (
                 set('type', 'task'),
                 set('items', $tree),

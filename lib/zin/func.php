@@ -1140,7 +1140,7 @@ function tree(): Tree
  *
  * ?array items
  */
-function treeEditor(): Tree
+function treeEditor(): TreeEditor
 {
     return createWg('treeEditor', func_get_args());
 }

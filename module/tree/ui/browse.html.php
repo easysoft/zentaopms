@@ -176,7 +176,7 @@ div
                     $lang->history
                 ),
             ) : null,
-            tree
+            treeEditor
             (
                 set('type', $viewType),
                 set('items', $tree),
