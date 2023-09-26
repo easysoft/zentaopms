@@ -189,24 +189,26 @@ class testreportTest
     }
 
     /**
+     * 测试为测试报告获取用例执行结果。
      * Get per run result for testreport.
      *
-     * @param  int     $taskID
-     * @param  int     $reportID
+     * @param  string       $taskIdList
+     * @param  int          $reportID
      * @access public
-     * @return string
+     * @return string|array
      */
-
-    public function getPerCaseResult4ReportTest($taskID, $reportID)
+    public function getPerCaseResult4ReportTest(string $taskIdList, int $reportID): string|array
     {
-        $tasks   = $taskID ? $this->testtask->getByList($taskID) : array();
+        $tasks  = $taskIdList ? $this->testtask->getByList(explode(',', $taskIdList)) : array();
         $report = $this->objectModel->getByID($reportID);
 
-        $objects = $this->objectModel->getPerCaseResult4Report($tasks, $report->cases, $report->begin, $report->end);
+        $objects = $this->objectModel->getPerCaseResult4Report($tasks, explode(',', $report->cases), $report->begin, $report->end);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $return = '';
+        foreach($objects as $object) $return .= "{$object->name}:{$object->value},";
+        return trim($return, ',');
     }
     /**
      * Get per case runner for testreport.

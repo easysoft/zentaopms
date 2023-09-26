@@ -1,0 +1,13 @@
+title: table zt_testresult
+desc: "测试执行"
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: date
+    note: "最后执行时间"
+    range: "(M)-(w)"
+    type: timestamp
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: "YYYY-MM-DD hh:mm:ss"

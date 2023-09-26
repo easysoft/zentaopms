@@ -441,17 +441,19 @@ class testreportModel extends model
     }
 
     /**
+     * 获取测试报告的用例执行结果。
      * Get per run result for testreport.
      *
-     * @param  array    $tasks
-     * @param  array    $cases
-     * @param  string   $begin
-     * @param  string   $end
+     * @param  array        $tasks
+     * @param  array|string $cases
+     * @param  string       $begin
+     * @param  string       $end
      * @access public
      * @return string
      */
-    public function getPerCaseResult4Report($tasks, $cases, $begin, $end)
+    public function getPerCaseResult4Report(array $tasks, array|string $cases, string $begin, string $end): array
     {
+        /* Get case result. */
         $datas = $this->dao->select("t1.caseResult AS name, COUNT('t1.*') AS value")->from(TABLE_TESTRESULT)->alias('t1')
             ->leftJoin(TABLE_TESTRUN)->alias('t2')
             ->on('t1.run= t2.id')
@@ -466,6 +468,7 @@ class testreportModel extends model
 
         if(!$datas) return array();
 
+        /* Set case result language item. */
         $this->app->loadLang('testcase');
         foreach($datas as $result => $data) $data->name = isset($this->lang->testcase->resultList[$result])? $this->lang->testcase->resultList[$result] : $this->lang->testtask->unexecuted;
 
