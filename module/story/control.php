@@ -1256,6 +1256,7 @@ class story extends control
     }
 
     /**
+     * 查看需求的相关任务。
      * Tasks of a story.
      *
      * @param  int    $storyID
@@ -1263,7 +1264,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function tasks($storyID, $executionID = 0)
+    public function tasks(int $storyID, int $executionID = 0)
     {
         $this->loadModel('task');
         $tasks = $this->task->getListByStory($storyID, $executionID);
