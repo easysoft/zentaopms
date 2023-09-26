@@ -6,37 +6,23 @@ include dirname(__FILE__, 2) . '/productplan.class.php';
 /**
 
 title=productplanModel->linkBug()
+timeout=0
 cid=1
-pid=1
-
-id为100的计划关联id为3的bug >> 0
-id为100的计划关联id为1和2的bug >> 0
-传入不存在的id >> 0
-解除bugid为1的关联关系 >> 0
-解除bugid为2的关联关系 >> 0
-解除不存在的id >> 0
 
 */
 
-$plan = new productPlan('admin');
+zdTable('bug')->gen(10);
+$planID = 1;
 
-$planID = array();
-$planID[0] = 100;
+$bugIdList[0] = array(3);
+$bugIdList[1] = array(1, 2);
+$bugIdList[2] = array(10000);
 
-$bugID = array();
-$bugID[0] = array('bugs' => array(3));
-$bugID[1] = array('bugs' => array(1, 2));
-$bugID[2] = array('bugs' => array(10000));
+global $tester,$app;
+$app->moduleName = 'productplan';
+$app->rawModule  = 'productplan';
+$tester->loadModel('productplan');
 
-$unbugID = array();
-$unbugID[0] = 1;
-$unbugID[1] = 2;
-$unbugID[2] = 10000;
-
-r($plan->linkBug($planID[0], $bugID[0]))     && p() && e('0'); //id为100的计划关联id为3的bug
-r($plan->linkBug($planID[0], $bugID[1]))     && p() && e('0'); //id为100的计划关联id为1和2的bug
-r($plan->linkBug($planID[0], $bugID[2]))     && p() && e('0'); //传入不存在的id
-r($plan->unlinkBug($planID[0], $unbugID[0])) && p() && e('0'); //解除bugid为1的关联关系
-r($plan->unlinkBug($planID[0], $unbugID[1])) && p() && e('0'); //解除bugid为2的关联关系
-r($plan->unlinkBug($planID[0], $unbugID[2])) && p() && e('0'); //解除不存在的id
-?>
+r($tester->productplan->linkBug($planID, $bugIdList[0])) && p() && e('1'); // id为1的计划关联id为3的bug
+r($tester->productplan->linkBug($planID, $bugIdList[1])) && p() && e('1'); // id为1的计划关联id为1和2的bug
+r($tester->productplan->linkBug($planID, $bugIdList[2])) && p() && e('1'); // 传入不存在的id

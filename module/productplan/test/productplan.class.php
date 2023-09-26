@@ -270,26 +270,6 @@ class productPlan
     }
 
     /**
-     * Link bug
-     *
-     * @param  int   $planID
-     * @param  array $bugID
-     * @access public
-     * @return void
-     */
-    public function linkBug($planID, $bugID)
-    {
-
-        foreach($bugID as $key => $value) $_POST[$key] = $value;
-
-        $productPlans = $this->productplan->linkBug($planID);
-
-        if(dao::isError()) return dao::getError();
-
-        return $productPlans;
-    }
-
-    /**
      * Unlink bug
      *
      * @param  int   $bugID
