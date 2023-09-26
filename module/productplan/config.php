@@ -96,3 +96,11 @@ $config->productplan->actionList['delete']['text']         = $lang->productplan-
 $config->productplan->actionList['delete']['url']          = helper::createLink('productplan', 'delete', 'planID={id}');
 $config->productplan->actionList['delete']['data-confirm'] = $lang->productplan->confirmDelete;
 $config->productplan->actionList['delete']['class']        = 'ajax-submit';
+
+$config->productplan->actionList['unlinkBug']['icon'] = 'unlink';
+$config->productplan->actionList['unlinkBug']['hint'] = $lang->productplan->unlinkBug;
+$config->productplan->actionList['unlinkBug']['url']  = 'javascript:unlinkObject("bug", "{id}")';
+
+$config->productplan->actionList['unlinkStory']['icon'] = 'unlink';
+$config->productplan->actionList['unlinkStory']['hint'] = $lang->productplan->unlinkStory;
+$config->productplan->actionList['unlinkStory']['url']  = 'javascript:unlinkObject("story", "{id}")';
