@@ -1336,10 +1336,14 @@ class story extends control
 
     /**
      * 关联需求。
-     * If type is linkStories, link related stories else link child stories.
+     * Link story and requirement.
+     *
+     * 引用1：软件需求列表页，关联用户需求，将软件需求关联到用户需求。
+     * 引用2：用户需求列表页，关联软件需求，将用户需求关联到软件需求。
      *
      * @param  int    $storyID
      * @param  string $type
+     * @param  int    $linkedStoryID
      * @param  string $browseType
      * @param  int    $queryID
      * @param  string $storyType  story|requirement
