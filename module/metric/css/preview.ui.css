@@ -40,7 +40,7 @@
 .main .table-and-charts {height: calc(100vh - 172px); max-height: calc(100% - 48px); overflow-y: scroll;}
 .main .metricBox {max-height: 408px;}
 .chart-single {height: calc(100% - 32px); width: 100%;}
-.chart-multiple {height: 290px; width: 100%;}
+.chart-multiple {height: 285px; width: 100%;}
 .chart-type {width: 30%; padding-left: 50px;}
 
 .table-and-chart .table-side {flex: 0 0 480px; overflow-x: hidden;}

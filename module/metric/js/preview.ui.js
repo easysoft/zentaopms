@@ -419,8 +419,6 @@ window.initDTable = function($obj, head, data)
         cellWidth[col] = Math.floor(cellWidth[col] / colsWidth * width);
     });
 
-    console.log(cellWidth);
-
     new zui.DTable($obj,{
         responsive: true,
         bordered: true,
@@ -540,7 +538,7 @@ window.initChart = function($obj, head, data, chartType)
             grid: {
                 left: '10%',
                 right: '10%',
-                bottom: '10%',
+                bottom: '15%',
                 containLabel: true
             },
             legend: {
