@@ -330,6 +330,7 @@ class testreportModel extends model
     }
 
     /**
+     * 获取测试单的用例列表。
      * Get task cases.
      *
      * @param  array  $tasks
@@ -340,41 +341,36 @@ class testreportModel extends model
      * @access public
      * @return array
      */
-    public function getTaskCases($tasks, $begin, $end, $idList = '', $pager = null)
+    public function getTaskCases(array $tasks, string $begin, string $end, string $idList = '', object $pager = null): array
     {
-        $cases = $this->dao->select('t2.*,t1.task,t1.assignedTo,t1.status')->from(TABLE_TESTRUN)->alias('t1')
-            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
+        $cases = $this->dao->select('t2.*, t1.task, t1.assignedTo, t1.status')->from(TABLE_TESTRUN)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->where('t1.task')->in(array_keys($tasks))
+            ->andWhere('t2.deleted')->eq('0')
             ->beginIF($idList)->andWhere('t2.id')->in($idList)->fi()
-            ->andWhere('t2.deleted')->eq(0)
             ->page($pager)
-            ->fetchGroup('task','id');
+            ->fetchGroup('task', 'id');
+
+        $results = $this->dao->select('t1.*, t2.task')->from(TABLE_TESTRESULT)->alias('t1')
+            ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.run = t2.id')
+            ->where('t2.task')->in(array_keys($tasks))
+            ->andWhere('t1.date')->ge($begin)
+            ->andWhere('t1.date')->le($end . " 23:59:59")
+            ->orderBy('date')
+            ->fetchGroup('task', 'case');
 
         foreach($cases as $taskID => $caseList)
         {
-            $results = $this->dao->select('t1.*')->from(TABLE_TESTRESULT)->alias('t1')
-                ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.run=t2.id')
-                ->where('t2.task')->eq($taskID)
-                ->andWhere('t1.`case`')->in(array_keys($caseList))
-                ->andWhere('t1.date')->ge($begin)
-                ->andWhere('t1.date')->le($end . " 23:59:59")
-                ->orderBy('date')
-                ->fetchAll('case');
+            $results = zget($results, $taskID, array());
 
             foreach($caseList as $caseID => $case)
             {
-                $case->lastRunner    = '';
-                $case->lastRunDate   = '';
-                $case->lastRunResult = '';
-                $case->status        = 'normal';
-                if(isset($results[$caseID]))
-                {
-                    $result = $results[$caseID];
-                    $case->lastRunner    = $result->lastRunner;
-                    $case->lastRunDate   = $result->date;
-                    $case->lastRunResult = $result->caseResult;
-                    $case->status        = $result->caseResult == 'blocked' ? 'blocked' : 'normal';
-                }
+                $result = zget($results, $caseID, '');
+
+                $case->lastRunner    = $result ? $result->lastRunner : '';
+                $case->lastRunDate   = $result ? $result->date : '';
+                $case->lastRunResult = $result ? $result->caseResult : '';
+                $case->status        = ($result && $result->caseResult == 'blocked') ? 'blocked' : 'normal';
             }
         }
 

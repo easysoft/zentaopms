@@ -7,20 +7,28 @@ su('admin');
 /**
 
 title=测试 testreportModel->getTaskCases();
+timeout=0
 cid=1
-pid=1
 
-正常查询 >> 1;2
-tasksID为空查询 >> 0
-idList为空查询 >> 1;3
+- 正常查询
+ - 第1条的id属性 @1
+ - 第1条的lastRunResult属性 @pass
+ - 第2条的id属性 @2
+ - 第2条的lastRunResult属性 @fail
+- idList为空查询
+ - 第1条的id属性 @1
+ - 第2条的id属性 @2
+ - 第3条的id属性 @3
+ - 第4条的id属性 @4
+- tasksID为空查询 @0
 
 */
-$tasksID  = array('1', '');
-$reportID = '1';
-$idList   = array('1,2', '');
+$taskIdList = array(1, 0);
+$reportID   = 1;
+$idList     = array('1,2', '');
 
 $testreport = new testreportTest();
 
-r($testreport->getTaskCasesTest($tasksID[0], $reportID, $idList[0])[1]) && p('1:id;2:id') && e('1;2'); //正常查询
-r($testreport->getTaskCasesTest($tasksID[1], $reportID, $idList[0]))    && p()            && e('0'); //tasksID为空查询
-r($testreport->getTaskCasesTest($tasksID[0], $reportID, $idList[1])[1]) && p('1:id;3:id') && e('1;3'); //idList为空查询
+r($testreport->getTaskCasesTest($taskIdList[0], $reportID, $idList[0])[1]) && p('1:id;1:lastRunResult;2:id;2:lastRunResult') && e('1;pass;2;fail'); //正常查询
+r($testreport->getTaskCasesTest($taskIdList[0], $reportID, $idList[1])[1]) && p('1:id;2:id;3:id;4:id')                       && e('1;2;3;4');       //idList为空查询
+r($testreport->getTaskCasesTest($taskIdList[1], $reportID, $idList[0]))    && p()                                            && e('0');             //tasksID为空查询

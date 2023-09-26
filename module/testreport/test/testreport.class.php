@@ -130,20 +130,23 @@ class testreportTest
     }
 
     /**
-     * Get task cases.
+     * 测试获取测试单的用例。
+     * Test get task cases.
      *
-     * @param  array  $taskID
+     * @param  int    $taskID
      * @param  int    $reportID
+     * @param  string $idList
+     * @param  object $pager
      * @access public
      * @return array
      */
 
-    public function getTaskCasesTest($taskID, $reportID, $idList = '', $pager = null)
+    public function getTaskCasesTest(int $taskID, int $reportID, string $idList = '', object $pager = null): array
     {
-        $task   = $taskID ? $this->testtask->getByList($taskID) : array();
-        $report  = $this->objectModel->getByID($reportID);
+        $tasks  = $taskID ? $this->testtask->getByList((array)$taskID) : array();
+        $report = $this->objectModel->getByID($reportID);
 
-        $objects = $this->objectModel->getTaskCases($task, $report->begin, $report->end, $idList, $pager);
+        $objects = $this->objectModel->getTaskCases($tasks, $report->begin, $report->end, $idList, $pager);
 
         if(dao::isError()) return dao::getError();
 
