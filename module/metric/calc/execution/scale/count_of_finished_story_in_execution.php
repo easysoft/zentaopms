@@ -30,14 +30,14 @@ class count_of_finished_story_in_execution extends baseCalc
 
     public function calculate($row)
     {
-        $project = $row->project;
-        if(!isset($this->result[$project])) $this->result[$project] = 0;
-        if($row->closedReason == 'done') $this->result[$project] += 1;
+        $execution = $row->project;
+        if(!isset($this->result[$execution])) $this->result[$execution] = 0;
+        if($row->closedReason == 'done') $this->result[$execution] += 1;
     }
 
     public function getResult($options = array())
     {
-        $records = $this->getRecords(array('project', 'value'));
+        $records = $this->getRecords(array('execution', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }

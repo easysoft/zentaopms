@@ -30,27 +30,27 @@ class rate_of_finished_story_in_execution extends baseCalc
 
     public function calculate($row)
     {
-        $project      = $row->project;
+        $execution    = $row->project;
         $closedReason = $row->closedReason;
 
-        if(!isset($this->result[$project]))
+        if(!isset($this->result[$execution]))
         {
-            $this->result[$project]['finished'] = 0;
-            $this->result[$project]['valid']    = 0;
+            $this->result[$execution]['finished'] = 0;
+            $this->result[$execution]['valid']    = 0;
         }
-        if($closedReason == 'done') $this->result[$project]['finished'] += 1;
-        if(!in_array($row->closedReason, array('duplicate','willnotdo','bydesign'))) $this->result[$project]['valid'] += 1;
+        if($closedReason == 'done') $this->result[$execution]['finished'] += 1;
+        if(!in_array($row->closedReason, array('duplicate','willnotdo','bydesign'))) $this->result[$execution]['valid'] += 1;
     }
 
     public function getResult($options = array())
     {
         $records = array();
-        foreach($this->result as $project => $value)
+        foreach($this->result as $execution => $value)
         {
             $finished = $value['finished'];
             $valid    = $value['valid'];
             $ratio    = $valid == 0 ? 0 : round($finished / $valid, 4);
-            $records[] = array('project' => $project, 'value' => $ratio);
+            $records[] = array('execution' => $execution, 'value' => $ratio);
         }
         return $this->filterByOptions($records, $options);
     }

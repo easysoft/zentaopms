@@ -30,14 +30,14 @@ class count_of_valid_story_in_execution extends baseCalc
 
     public function calculate($row)
     {
-        $project = $row->project;
-        if(!isset($this->result[$project])) $this->result[$project] = 0;
-        if(!in_array($row->closedReason, array('duplicate','willnotdo','bydesign'))) $this->result[$project] += 1;
+        $execution = $row->project;
+        if(!isset($this->result[$execution])) $this->result[$execution] = 0;
+        if(!in_array($row->closedReason, array('duplicate','willnotdo','bydesign'))) $this->result[$execution] += 1;
     }
 
     public function getResult($options = array())
     {
-        $records = $this->getRecords(array('project', 'value'));
+        $records = $this->getRecords(array('execution', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }
