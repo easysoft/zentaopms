@@ -246,18 +246,25 @@ class productPlan
      * Batch change status
      *
      * @param  string $status
+     * @param  bool   $hasReson
      * @access public
      * @return array
      */
-    public function batchChangeStatus($status, $planIDList = array('planIDList' => array(4, 5)))
+    public function batchChangeStatus($status, $hasReson = false)
     {
-        $planID = $planIDList;
-
-        foreach($planID as $field => $defaultvalue) $_POST[$field] = $defaultvalue;
-
-        $productplans = $this->productplan->batchChangeStatus($status);
+        $planIdList = array(3, 5);
+        if($hasReson)
+        {
+            $planIdList = array(7, 8);
+            $_POST['closedReason'] = array(
+                7 => 'reason1',
+                8 => 'reason2',
+            );
+        }
+        $this->productplan->batchChangeStatus($planIdList, $status);
         if(dao::isError()) return dao::getError();
-        return $productplans;
+
+        return $this->productplan->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('id')->in($planIdList)->fetchAll('id');
     }
 
     /**
