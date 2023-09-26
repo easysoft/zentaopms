@@ -438,6 +438,19 @@ window.initDTable = function($obj, head, data)
     });
 }
 
+window.genDataZoom = function(dataLength, initZoom = 10, axis = 'x')
+{
+    var percent = initZoom / dataLength * 100;
+    percent = percent > 100 ? 100 : percent;
+    var dataZoom = {
+        start: 0,
+        end: percent,
+    };
+    if(axis == 'x') dataZoom.xAxisIndex = [0];
+    if(axis == 'y') dataZoom.yAxisIndex = [0];
+    return [dataZoom];
+}
+
 window.initChart = function($obj, head, data, chartType)
 {
     if(!data.length) return;
@@ -529,6 +542,10 @@ window.initChart = function($obj, head, data, chartType)
             yAxis: chartType == 'barY' ? xAxis : yAxis,
             series: series,
         };
+
+        var dataLength = option.series[0].data.length;
+        if(dataLength > 15) option.dataZoom = window.genDataZoom(dataLength, 15, chartType == 'barY' ? 'y' : 'x');
+
 
         option && myChart.setOption(option);
     });
