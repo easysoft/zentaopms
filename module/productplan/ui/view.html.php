@@ -10,8 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$unlinkURL['story'] = helper::createLink('productplan', 'unlinkStory', "storyID=%s&planID={$plan->id}&confirm=yes");
-$unlinkURL['bug']   = helper::createLink('productplan', 'unlinkBug',   "bugID=%s&planID={$plan->id}&confirm=yes");
+$unlinkURL['story'] = helper::createLink('productplan', 'unlinkStory', "storyID=%s&planID={$plan->id}");
+$unlinkURL['bug']   = helper::createLink('productplan', 'unlinkBug',   "bugID=%s&planID={$plan->id}");
 
 $confirmLang['story']    = $lang->productplan->confirmUnlinkStory;
 $confirmLang['bug']      = $lang->productplan->confirmUnlinkBug;

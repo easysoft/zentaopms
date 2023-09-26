@@ -614,28 +614,21 @@ class productplan extends control
     }
 
     /**
-     * Unlink story
+     * 移除计划中的需求。
+     * Unlink story.
      *
      * @param  int    $storyID
      * @param  int    $planID
-     * @param  string $confirm  yes|no
      * @access public
      * @return void
      */
-    public function unlinkStory($storyID, $planID, $confirm = 'no')
+    public function unlinkStory(int $storyID, int $planID)
     {
-        if($confirm == 'no')
-        {
-            return print(js::confirm($this->lang->productplan->confirmUnlinkStory, inlink('unlinkstory', "storyID=$storyID&planID=$planID&confirm=yes")));
-        }
-        else
-        {
-            $this->productplan->unlinkStory($storyID, $planID);
-            $this->loadModel('action')->create('productplan', $planID, 'unlinkstory', '', $storyID);
+        $this->productplan->unlinkStory($storyID, $planID);
+        $this->loadModel('action')->create('productplan', $planID, 'unlinkstory', '', $storyID);
 
-            if($this->session->storyList) return $this->send(array('result' => 'success', 'load' => $this->session->storyList));
-            return $this->send(array('result' => 'success', 'load' => $this->createLink('productplan', 'view', "planID=$planID&type=story")));
-        }
+        if($this->session->storyList) return $this->sendSuccess(array('load' => $this->session->storyList));
+        return $this->sendSuccess(array('load' => $this->createLink('productplan', 'view', "planID=$planID&type=story")));
     }
 
     /**
@@ -746,26 +739,20 @@ class productplan extends control
     }
 
     /**
-     * Unlink story
+     * 移除计划中的Bug。
+     * Remove bug from plan.
      *
      * @param  int    $bugID
-     * @param  string $confirm  yes|no
+     * @param  int    $planID
      * @access public
      * @return void
      */
-    public function unlinkBug($bugID, $planID, $confirm = 'no')
+    public function unlinkBug(int $bugID, int $planID)
     {
-        if($confirm == 'no')
-        {
-            return print(js::confirm($this->lang->productplan->confirmUnlinkBug, inlink('unlinkbug', "bugID=$bugID&planID=$planID&confirm=yes")));
-        }
-        else
-        {
-            $this->productplan->unlinkBug($bugID);
-            $this->loadModel('action')->create('productplan', $planID, 'unlinkbug', '', $bugID);
+        $this->productplan->unlinkBug($bugID);
+        $this->loadModel('action')->create('productplan', $planID, 'unlinkbug', '', $bugID);
 
-            return $this->send(array('result' => 'success', 'load' => true));
-        }
+        return $this->sendSuccess(array('load' => true));
     }
 
     /**
