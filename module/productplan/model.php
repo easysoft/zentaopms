@@ -735,23 +735,32 @@ class productplanModel extends model
     }
 
     /**
+     * 批量更新计划的状态。
      * Batch change the status of productplan.
      *
-     * @param  array   $planIdList
-     * @param  string  $status
+     * @param  array  $planIdList
+     * @param  string $status
      * @access public
-     * @return array
+     * @return bool
      */
-    public function batchChangeStatus(string $status): array|bool
+    public function batchChangeStatus(array $planIdList, string $status): bool
     {
-        $planIdList    = $this->post->planIdList;
-        $closedReasons = $status == 'closed' ? $this->post->closedReason : array();
-
         if($status == 'closed')
         {
+            $closedReasons = $this->post->closedReason ? $this->post->closedReason : array();
+            if(empty($closedReasons))
+            {
+                dao::$errors['closedReason[]'] = sprintf($this->lang->error->notempty, $this->lang->productplan->closedReason);
+                return false;
+            }
+
             foreach($closedReasons as $planID => $reason)
             {
-                if(empty($reason)) return dao::$errors['closedReason[]'] = sprintf($this->lang->error->notempty, $this->lang->productplan->closedReason);
+                if(empty($reason))
+                {
+                    dao::$errors['closedReason[]'] = sprintf($this->lang->error->notempty, $this->lang->productplan->closedReason);
+                    return false;
+                }
             }
         }
 
@@ -760,7 +769,7 @@ class productplanModel extends model
         {
             if($status == $oldPlan->status) continue;
 
-            $plan = $this->buildPlanByStatus($status, $closedReasons[$planID]);
+            $plan = $this->buildPlanByStatus($status, $status == 'closed' ? $closedReasons[$planID] : '');
 
             $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->autoCheck()->where('id')->eq((int)$planID)->exec();
             if(dao::isError()) return false;
@@ -775,7 +784,7 @@ class productplanModel extends model
             $this->action->logHistory($actionID, $changes);
         }
 
-        return true;
+        return !dao::isError();
     }
 
     /**
