@@ -407,8 +407,12 @@ class testtask extends control
             {
                 $chartFunc   = 'getDataOf' . $chart;
                 $chartData   = $this->testtask->$chartFunc($taskID);
-                $chartOption = $this->testtask->mergeChartOption($chart);
-                if(!empty($chartType)) $chartOption->type = $chartType;
+                $chartOption = $this->lang->testtask->report->options;
+                if(!empty($chartType))
+                {
+                    $chartOption->type           = $chartType;
+                    $chartOption->graph->caption = $this->lang->testtask->report->charts[$chartType];
+                }
 
                 $this->view->charts[$chart] = $chartOption;
                 $this->view->datas[$chart]  = $this->report->computePercent($chartData);
