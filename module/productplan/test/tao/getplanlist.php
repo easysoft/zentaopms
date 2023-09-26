@@ -12,7 +12,11 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 zdTable('productplan')->config('productplan')->gen(20);
 
-global $tester;
+global $tester, $app;
+$app->rawModule  = 'productplan';
+$app->rawMethod  = 'browse';
+$app->moduleName = 'productplan';
+$app->methodName = 'browse';
 $productplan = $tester->loadModel('productplan');
 
 r($productplan->getPlanList(array()))                               && p()          && e('0');       // 获取空数据

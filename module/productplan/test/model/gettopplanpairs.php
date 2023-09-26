@@ -21,7 +21,11 @@ $plan->gen(10);
 $productIdList = array(0, 1, 2);
 $statusList    = array('', 'wait', 'doing', 'done', 'closed');
 
-global $tester;
+global $tester, $app;
+$app->rawModule  = 'productplan';
+$app->rawMethod  = 'browse';
+$app->moduleName = 'productplan';
+$app->methodName = 'browse';
 $tester->loadModel('productplan');
 r($tester->productplan->getTopPlanPairs($productIdList[0], $statusList[0])) && p()    && e('0');     // 测试产品ID为空时，所有的父计划
 r($tester->productplan->getTopPlanPairs($productIdList[0], $statusList[1])) && p()    && e('0');     // 测试产品ID为空时，所有不包括未开始的父计划

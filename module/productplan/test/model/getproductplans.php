@@ -21,7 +21,11 @@ cid=1
 $productIdList = array(array(), array(1, 2, 3));
 $endList       = array('', $today, '2022-01-30');
 
-global $tester;
+global $tester, $app;
+$app->rawModule  = 'productplan';
+$app->rawMethod  = 'browse';
+$app->moduleName = 'productplan';
+$app->methodName = 'browse';
 $tester->loadModel('productplan');
 r(current($tester->productplan->getProductPlans($productIdList[0], $endList[0]))) && p('0:product,title') && e('1,计划1'); // 获取系统内所有产品下的计划
 r(current($tester->productplan->getProductPlans($productIdList[0], $endList[1]))) && p('0:product,title') && e('2,计划6'); // 获取系统内所有产品下的未过期的计划

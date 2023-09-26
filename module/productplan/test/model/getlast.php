@@ -16,7 +16,11 @@ $productIdList = array(1, 2, 100);
 $branchIdList  = array('', '1');
 $parentList    = array(0, 1);
 
-global $tester;
+global $tester, $app;
+$app->rawModule  = 'productplan';
+$app->rawMethod  = 'browse';
+$app->moduleName = 'productplan';
+$app->methodName = 'browse';
 $tester->loadModel('productplan');
 r($tester->productplan->getLast($productIdList[0], $branchIdList[0], $parentList[0])) && p('title') && e('计划3'); //获取产品1的最后一个创建的计划
 r($tester->productplan->getLast($productIdList[1], $branchIdList[0], $parentList[0])) && p('title') && e('计划4'); //获取产品2的最后一个创建的计划

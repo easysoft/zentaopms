@@ -15,7 +15,11 @@ $projectproduct = zdTable('projectproduct')->config('projectproduct');
 $projectproduct->project->range('101-120');
 $projectproduct->gen(20);
 
-global $tester;
+global $tester, $app;
+$app->rawModule  = 'productplan';
+$app->rawMethod  = 'browse';
+$app->moduleName = 'productplan';
+$app->methodName = 'browse';
 $productplan = $tester->loadModel('productplan');
 
 r($productplan->getPlanProjects(array()))                 && p()                   && e('0');         // 获取空数据

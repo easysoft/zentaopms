@@ -374,13 +374,8 @@ class productPlan
      */
     public function isClickable($planID, $action)
     {
-        $plan = $this->productplan->dao->select('*')->from(TABLE_PRODUCTPLAN)
-            ->where('id')->eq($planID)
-            ->andWhere('deleted')->eq(0)
-            ->fetchAll('id');
-
-        $plans = $plan[$planID];
-        $productplans = $this->productplan->isClickable($plans, $action);
+        $plan         = $this->productplan->getByID($planID);
+        $productplans = $this->productplan->isClickable($plan, $action);
 
         if(dao::isError()) return dao::getError();
 
