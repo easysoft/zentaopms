@@ -1200,11 +1200,11 @@ class story extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
-        /* Get story and product. */
-        $story    = $this->story->getById($storyID);
-        $products = $this->product->getPairs();
+        /* Get story and product to render the view. */
+        $story   = $this->story->getById($storyID);
+        $product = $this->product->getByID($story->product);
 
-        $this->view->title      = zget($products, $story->product, '') . $this->lang->colon . $this->lang->story->assign;
+        $this->view->title      = zget($product, 'name', $story->title) . " {$this->lang->colon} {$this->lang->story->assign}";
         $this->view->story      = $story;
         $this->view->storyType  = $storyType;
         $this->view->actions    = $this->action->getList('story', $storyID);
