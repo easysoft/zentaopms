@@ -1,0 +1,9 @@
+title: table zt_build
+author: XuePeng Wang
+desc: ""
+version: "1.0"
+fields:
+  - field: artifactRepoID
+    range: 1
+  - field: deleted
+    range: 1

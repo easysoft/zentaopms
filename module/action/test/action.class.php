@@ -441,20 +441,28 @@ class actionTest
     }
 
     /**
+     * 测试恢复一条记录。
      * Test undelete a record.
      *
      * @param  int    $actionID
      * @access public
-     * @return object
+     * @return object|bool
      */
-    public function undeleteTest($actionID)
+    public function undeleteTest(int $actionID): string|bool
     {
-        $this->objectModel->undelete($actionID);
+        $result = $this->objectModel->undelete($actionID);
 
         if(dao::isError()) return dao::getError();
+        if(is_string($result) || !$result) return $result;
 
         $object = $this->objectModel->getByID($actionID);
-        return $object;
+
+        global $tester;
+        $table = $tester->config->objectTables[$object->objectType];
+
+        $recoverObject = $tester->dao->select('*')->from($table)->where('id')->eq($object->objectID)->fetch();
+
+        return isset($recoverObject->deleted) ? !$recoverObject->deleted : false;
     }
 
     /**

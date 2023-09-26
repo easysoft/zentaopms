@@ -1,0 +1,8 @@
+title: table zt_product
+desc: "产品"
+author: XuePeng Wang
+version: "1.0"
+fields:
+  - field: acl
+    note: "访问控制"
+    range: private{10},open{10},private{10},open{10},private{10},open{10},private{10},open{10},private{10},open{10},private{10},open{5},private{5},open{5},private{5},open{5},private{5},open{5},private{5},open{5},private{5},open{5},private{5},open{20}

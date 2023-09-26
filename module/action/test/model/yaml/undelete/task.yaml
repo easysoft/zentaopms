@@ -1,0 +1,19 @@
+title: table zt_task
+desc: "任务"
+author: XuePeng Wang
+version: "1.0"
+fields:
+  - field: parent
+    note: "父任务"
+    range: 0,1
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: deleted
+    note: "是否删除"
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

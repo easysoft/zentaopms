@@ -1,0 +1,7 @@
+title: table zt_release
+author: XuePeng Wang
+desc: ""
+version: "1.0"
+fields:
+  - field: shadow
+    range: 0,1{2}

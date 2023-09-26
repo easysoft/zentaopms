@@ -1,0 +1,11 @@
+title: table zt_scene
+desc: "测试场景"
+author: XuePeng Wang
+version: "1.0"
+fields:
+  - field: deleted
+    note: "是否删除"
+    range: 1,0{100}
+  - field: parent
+    note: "父场景"
+    range: 0{1},1{1},2{1}

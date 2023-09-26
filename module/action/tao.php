@@ -24,9 +24,9 @@ class actionTao extends actionModel
      * @param  string $field
      * @param  string $orderby
      * @access protected
-     * @return object
+     * @return object|bool
      */
-    protected function getObjectBaseInfo(string $table, array $queryParam, string $field = '*', string $orderby = ''): object
+    protected function getObjectBaseInfo(string $table, array $queryParam, string $field = '*', string $orderby = ''): object|bool
     {
         $querys = array_map(function($key, $query){return "`{$key}` = '{$query}'";}, array_keys($queryParam), $queryParam);
         return $this->dao->select($field)->from($table)->where(implode(' and ', $querys))->orderby($orderby)->fetch();

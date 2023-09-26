@@ -1966,17 +1966,19 @@ class actionModel extends model
      * 恢复一条记录。
      * Undelete a record.
      *
-     * @param  int      $actionID
+     * @param  int    $actionID
      * @access public
      * @return string|bool
      */
     public function undelete(int $actionID): string|bool
     {
+        if($actionID <= 0) return false;
+        
         $action = $this->getById($actionID);
-        if($action->action != 'deleted') return true;
+        if(!$action || $action->action != 'deleted') return false;
 
         $table = $this->config->objectTables[$action->objectType];
-
+        
         $orderby = '';
         $field   = '*';
         switch($action->objectType)
@@ -1986,17 +1988,21 @@ class actionModel extends model
                 break;
             case 'program':
             case 'project':
-            case 'execution':
                 $field   = 'id, acl, name, hasProduct';
                 break;
+            case 'execution':
+                $field   = '*';
+                break;
             case 'doc':
+                $table = TABLE_DOCCONTENT;
                 $orderby = 'version desc';
             default:
                 break;
         }
 
         $object = $this->actionTao->getObjectBaseInfo($table, array('id' => $action->objectID), $field, $orderby);
-
+        if(empty($object)) return false;
+        
         if($action->objectType == 'execution')
         {
             if($object->deleted && empty($object->project)) return $this->lang->action->undeletedTips;
@@ -2035,7 +2041,7 @@ class actionModel extends model
             if($repeatName) return sprintf($this->lang->tree->repeatName, $repeatName);
         }
 
-        if($action->objectType == 'reviewissue' && $object->parent)
+        if($action->objectType == 'reviewissue' && !empty($object->review))
         {
             $review = $this->dao->select('*')->from(TABLE_REVIEW)->where('id')->eq($object->review)->fetch();
             if($review->deleted)
@@ -2047,19 +2053,23 @@ class actionModel extends model
 
         if($action->objectType == 'release' && $object->shadow) $this->dao->update(TABLE_BUILD)->set('deleted')->eq(0)->where('id')->eq($object->shadow)->exec();
 
-        if($action->objectType == 'case' && $object->parent)
+        if($action->objectType == 'case' && $object->scene)
         {
-            $scene = $this->dao->select('*')->from(VIEW_SCENECASE)->where('id')->eq($object->scene)->fetch();
+            $scene = $this->dao->select('*')->from(TABLE_SCENE)->where('id')->eq($object->scene)->fetch();
             if($scene->deleted) return $this->lang->action->refusecase;
         }
 
         if($action->objectType == 'scene' && $object->parent)
         {
-            $scenerow = $this->dao->select('*')->from(VIEW_SCENECASE)->where('id')->eq($object->parent)->fetch();
+            $scenerow = $this->dao->select('*')->from(TABLE_SCENE)->where('id')->eq($object->parent)->fetch();
             if($scenerow->deleted) return $this->lang->action->refusescene;
         }
 
-        if($action->objectType == 'doc' && $object->files) $this->dao->update(TABLE_FILE)->set('deleted')->eq('0')->where('id')->in($object->files)->exec();
+        if($action->objectType == 'doc') 
+        {
+            $table = TABLE_DOC;
+            if($object->files) $this->dao->update(TABLE_FILE)->set('deleted')->eq('0')->where('id')->in($object->files)->exec();
+        }
 
         /* 恢复被删除的元素。 */
         /* Resotre deleted object. */

@@ -1,0 +1,29 @@
+title: table zt_reviewissue
+desc: "评审问题"
+author: XuePeng Wang
+version: "1.0"
+fields:
+  - field: opinionDate
+    note: "意见日期"
+    range: "(-1M)-(w):1D"
+    type: timestamp
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: resolutionDate
+    note: "解决日期"
+    range: "(-1M)-(w):1D"
+    type: timestamp
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: createdDate
+    note: "创建日期"
+    range: "(-1M)-(w):1D"
+    type: timestamp
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: "YYYY-MM-DD hh:mm:ss"

@@ -1,0 +1,40 @@
+title: table zt_doclib
+desc: "文档库"
+author: XuePeng Wang
+version: "1.0"
+fields:
+  - field: type
+    note: "文档类型"
+    range: product,execution
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: product
+    note: "产品库"
+    range: 1,0{100}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: execution
+    note: "执行库"
+    range: 0,4
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: name
+    note: "文档库名称"
+    range: 执行主库{1},产品主库{1}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: deleted
+    note: "是否删除"
+    range: 1
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

@@ -1,0 +1,11 @@
+title: table zt_productplan
+desc: "产品计划"
+author: XuePeng Wang
+version: "1.0"
+fields:
+  - field: parent
+    note: "父计划"
+    range: 0,1
+  - field: deleted
+    note: "是否删除"
+    range: 0,1

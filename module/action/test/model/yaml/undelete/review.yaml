@@ -1,0 +1,52 @@
+title: table zt_review
+desc: "项目评审"
+author: XuePeng Wang
+version: "1.0"
+fields:
+  - field: createdDate
+    note: "创建日期"
+    range: "(-1M)-(w):1D"
+    type: timestamp
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: deadline
+    note: "计划完成时间"
+    range: "(-1M)-(w):1D"
+    type: timestamp
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: lastReviewedDate
+    note: "最后评审日期"
+    range: "(-1M)-(w):1D"
+    type: timestamp
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: lastAuditedDate
+    note: "最后审计日期"
+    range: "(-1M)-(w):1D"
+    type: timestamp
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: lastEditedDate
+    note: "最后编辑日期"
+    range: "(-1M)-(w):1D"
+    type: timestamp
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: deleted
+    note: "是否删除"
+    range: 1
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

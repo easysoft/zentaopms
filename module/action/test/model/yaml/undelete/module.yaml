@@ -1,0 +1,15 @@
+title: table zt_module
+desc: "模块"
+author: XuePeng Wang
+version: "1.0"
+fields:
+  - field: type
+    range: story
+  - field: name
+    note: "模块名称"
+    range: 模块{1},模块{1},模块1{1}
+  - field: parent
+    range: 1,1,2
+  - field: deleted
+    note: "是否删除"
+    range: 0,1,1

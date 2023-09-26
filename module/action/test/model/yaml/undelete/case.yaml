@@ -1,0 +1,7 @@
+title: table zt_case
+desc: "测试用例"
+author: XuePeng Wang
+version: "1.0"
+fields:
+  - field: scene
+    range: 1,2{5}

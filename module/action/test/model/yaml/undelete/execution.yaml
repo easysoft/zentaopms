@@ -1,0 +1,21 @@
+title: table zt_execution
+author: XuePeng Wang
+version: "1.0"
+fields:
+  - field: name
+    note: "名称"
+    fields:
+    - field: name1
+      range: 项目集,执行{3},项目集{2},项目{2}
+    - field: name2
+      range: 1-10000
+  - field: project
+    range: 0{2},10000,1{10}
+  - field: type
+    range: program,sprint{3},program{2},project{2}
+  - field: acl
+    range: open{3},private,open,private{2},open,private
+  - field: deleted
+    range: 0,1{10}
+  - field: parent
+    range: 1
