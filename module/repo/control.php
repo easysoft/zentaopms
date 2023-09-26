@@ -571,14 +571,16 @@ class repo extends control
         }
         if(!$repo->synced) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID"));
 
+        if($repo->SCM == 'Gitlab') list($branchInfo, $tagInfo) = $this->repoZen->getBrowseInfo($repo);
+
         /* Set branch or tag for git. */
         $branches = $tags = $branchesAndTags = array();
         if(in_array($repo->SCM, $this->config->repo->gitTypeList))
         {
             $scm = $this->app->loadClass('scm');
             $scm->setEngine($repo);
-            $branches = $scm->branch();
-            $initTags = $scm->tags('');
+            $branches = isset($branchInfo) && $branchInfo !== false ? $branchInfo : $scm->branch();
+            $initTags = isset($tagInfo) && $tagInfo !== false ? $tagInfo : $scm->tags('');
             foreach($initTags as $tag) $tags[$tag] = $tag;
             $branchesAndTags = $branches + $tags;
 

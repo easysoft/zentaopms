@@ -442,6 +442,21 @@ class gitlabModel extends model
     }
 
     /**
+     * 设置项目信息。
+     * Set project data.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  object $project
+     * @access public
+     * @return void
+     */
+    public function setProject(int $gitlabID, int $projectID, object $project): void
+    {
+        $this->projects[$gitlabID][$projectID] = $project;
+    }
+
+    /**
      * Send an api get request.
      *
      * @param  int|string $host gitlab server ID | gitlab host url.
