@@ -611,158 +611,78 @@ class storyModel extends model
      * Change a story.
      *
      * @param  int    $storyID
+     * @param  object $story
      * @access public
      * @return array  the change of the story.
      */
-    public function change($storyID)
+    public function change(int $storyID, object $story): array|false
     {
-        $specChanged = false;
-        $oldStory    = $this->getById($storyID);
-
-        if(!empty($_POST['lastEditedDate']) and $oldStory->lastEditedDate != $this->post->lastEditedDate)
-        {
-            dao::$errors[] = $this->lang->error->editedByOther;
-            return false;
-        }
-
-        if(strpos($this->config->story->change->requiredFields, 'comment') !== false and !$this->post->comment)
-        {
-            dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->comment);
-            return false;
-        }
-
-        if(isset($_POST['reviewer'])) $_POST['reviewer'] = array_filter($_POST['reviewer']);
-        if(!$this->post->needNotReview and empty($_POST['reviewer']))
-        {
-            dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
-            return false;
-        }
-
-        $story = fixer::input('post')->stripTags($this->config->story->editor->change['id'], $this->config->allowedTags)->get();
-
-        $oldStoryReviewers  = $this->getReviewerPairs($storyID, $oldStory->version);
-        $_POST['reviewer']  = isset($_POST['reviewer']) ? $_POST['reviewer'] : array();
-        $reviewerHasChanged = (array_diff(array_keys($oldStoryReviewers), $_POST['reviewer']) or array_diff($_POST['reviewer'], array_keys($oldStoryReviewers)));
-        if($story->spec != $oldStory->spec or $story->verify != $oldStory->verify or $story->title != $oldStory->title or $this->loadModel('file')->getCount() or $reviewerHasChanged or isset($story->deleteFiles)) $specChanged = true;
-
-        $now   = helper::now();
-        $story = fixer::input('post')
-            ->callFunc('title', 'trim')
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('deleteFiles', array())
-            ->add('id', $storyID)
-            ->add('lastEditedDate', $now)
-            ->setIF($specChanged, 'version', (int)$oldStory->version + 1)
-            ->setIF($specChanged, 'reviewedBy', '')
-            ->setIF($specChanged, 'changedBy', $this->app->user->account)
-            ->setIF($specChanged, 'changedDate', $now)
-            ->setIF($specChanged, 'closedBy', '')
-            ->setIF($specChanged, 'closedReason', '')
-            ->setIF($specChanged and $oldStory->reviewedBy, 'reviewedDate', null)
-            ->setIF($specChanged and $oldStory->closedBy, 'closedDate', null)
-            ->setIF(!$specChanged, 'status', $oldStory->status)
-            ->stripTags($this->config->story->editor->change['id'], $this->config->allowedTags)
-            ->remove('files,labels,reviewer,comment,needNotReview,uid')
-            ->get();
-
-        $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->change['id'], $this->post->uid);
-        $this->dao->update(TABLE_STORY)->data($story, 'spec,verify,deleteFiles,relievedTwins')
+        $oldStory = $this->getById($storyID);
+        $this->dao->update(TABLE_STORY)->data($story, 'spec,verify,deleteFiles,relievedTwins,reviewer,reviewerHasChanged')
             ->autoCheck()
             ->batchCheck($this->config->story->change->requiredFields, 'notempty')
             ->checkFlow()
-            ->where('id')->eq((int)$storyID)->exec();
+            ->where('id')->eq($storyID)->exec();
+        if(dao::isError()) return false;
 
-        if(!dao::isError())
+        $specChanged = $oldStory->version != $story->version;
+        $this->loadModel('file')->updateObjectID($this->post->uid, $storyID, 'story');
+        if($specChanged)
         {
-            if($specChanged)
+            $addedFiles = $this->file->saveUpload($oldStory->type, $storyID, $story->version);
+            $addedFiles = empty($addedFiles) ? '' : implode(',', array_keys($addedFiles)) . ',';
+            $storyFiles = $oldStory->files = implode(',', array_keys($oldStory->files));
+            foreach($story->deleteFiles as $fileID) $storyFiles = str_replace(",$fileID,", ',', ",$storyFiles,");
+
+            $story->files = $addedFiles . trim($storyFiles, ',');
+            $this->storyTao->doCreateSpec($storyID, $story, $story->files);
+            if(!empty($story->reviewer)) $this->storyTao->doCreateReviewer($storyID, $story->reviewer, $story->version);
+
+            /* Sync twins. */
+            if(!isset($story->relievedTwins) and !empty($oldStory->twins))
             {
-                $this->file->updateObjectID($this->post->uid, $storyID, 'story');
-                $addedFiles = $this->file->saveUpload($oldStory->type, $storyID, $story->version);
-                $addedFiles = empty($addedFiles) ? '' : implode(',', array_keys($addedFiles)) . ',';
-                $storyFiles = $oldStory->files = implode(',', array_keys($oldStory->files));
-                foreach($story->deleteFiles as $fileID) $storyFiles = str_replace(",$fileID,", ',', ",$storyFiles,");
-
-                $data          = new stdclass();
-                $data->story   = $storyID;
-                $data->version = $story->version;
-                $data->title   = $story->title;
-                $data->spec    = $story->spec;
-                $data->verify  = $story->verify;
-                $data->files   = $story->files = $addedFiles . trim($storyFiles, ',');
-                $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
-
-                /* Sync twins. */
-                if(!isset($story->relievedTwins) and !empty($oldStory->twins))
+                foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
                 {
-                    foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
-                    {
-                        $data->story = $twinID;
-                        $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
-                    }
-                }
-
-                /* IF is story and has changed, update its relation version to new. */
-                if($oldStory->type == 'story')
-                {
-                    $newStory = $this->getById($storyID);
-                    $this->dao->update(TABLE_STORY)->set('URChanged')->eq(0)->where('id')->eq($oldStory->id)->exec();
-                    $this->updateStoryVersion($newStory);
-                }
-                else
-                {
-                    /* IF is requirement changed, notify its relation. */
-                    $relations = $this->dao->select('BID')->from(TABLE_RELATION)
-                        ->where('AType')->eq('requirement')
-                        ->andWhere('BType')->eq('story')
-                        ->andWhere('relation')->eq('subdivideinto')
-                        ->andWhere('AID')->eq($storyID)
-                        ->fetchPairs();
-
-                    foreach($relations as $relationID) $this->dao->update(TABLE_STORY)->set('URChanged')->eq(1)->where('id')->eq($relationID)->exec();
-                }
-
-                /* Update the reviewer. */
-                foreach($_POST['reviewer'] as $reviewer)
-                {
-                    $reviewData = new stdclass();
-                    $reviewData->story    = $storyID;
-                    $reviewData->version  = $story->version;
-                    $reviewData->reviewer = $reviewer;
-                    $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
-
-                    /* Sync twins. */
-                    if(!isset($story->relievedTwins) and !empty($oldStory->twins))
-                    {
-                        foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
-                        {
-                            $reviewData->story = $twinID;
-                            $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
-                        }
-                    }
-                }
-
-                if($reviewerHasChanged)
-                {
-                    $oldStory->reviewers = implode(',', array_keys($oldStoryReviewers));
-                    $story->reviewers    = implode(',', $_POST['reviewer']);
+                    $this->storyTao->doCreateSpec($twinID, $story, $story->files);
+                    if(!empty($story->reviewer)) $this->storyTao->doCreateReviewer($twinID, $story->reviewer, $story->version);
                 }
             }
 
-            $changes = common::createChanges($oldStory, $story);
-
-            if(isset($story->relievedTwins))
+            /* IF is story and has changed, update its relation version to new. */
+            if($oldStory->type == 'story')
             {
-                $this->dbh->exec("UPDATE " . TABLE_STORY . " SET twins = REPLACE(twins, ',$storyID,', ',') WHERE `product` = $oldStory->product");
-                $this->dao->update(TABLE_STORY)->set('twins')->eq('')->where('id')->eq($storyID)->orWhere('twins')->eq(',')->exec();
-                if(!dao::isError()) $this->loadModel('action')->create('story', $storyID, 'relieved');
+                $newStory = $this->fetchById($storyID);
+                $this->dao->update(TABLE_STORY)->set('URChanged')->eq(0)->where('id')->eq($oldStory->id)->exec();
+                $this->updateStoryVersion($newStory);
             }
-            elseif(!empty($oldStory->twins))
+            else
             {
-                $this->syncTwins($oldStory->id, $oldStory->twins, $changes, 'Changed');
+                /* IF is requirement changed, notify its relation. */
+                $relations = $this->storyTao->getRelation($storyID, 'requirement');
+                $this->dao->update(TABLE_STORY)->set('URChanged')->eq(1)->where('id')->in($relations)->exec();
             }
 
-            return $changes;
+            if($story->reviewerHasChanged)
+            {
+                $oldStoryReviewers   = $this->getReviewerPairs($storyID, $oldStory->version);
+                $oldStory->reviewers = implode(',', array_keys($oldStoryReviewers));
+                $story->reviewers    = implode(',', $story->reviewer);
+            }
         }
+
+        $changes = common::createChanges($oldStory, $story);
+        if(isset($story->relievedTwins))
+        {
+            $this->dbh->exec("UPDATE " . TABLE_STORY . " SET twins = REPLACE(twins, ',$storyID,', ',') WHERE `product` = $oldStory->product");
+            $this->dao->update(TABLE_STORY)->set('twins')->eq('')->where('id')->eq($storyID)->orWhere('twins')->eq(',')->exec();
+            if(!dao::isError()) $this->loadModel('action')->create('story', $storyID, 'relieved');
+        }
+        elseif(!empty($oldStory->twins))
+        {
+            $this->syncTwins($oldStory->id, $oldStory->twins, $changes, 'Changed');
+        }
+
+        return $changes;
     }
 
     /**
@@ -797,7 +717,7 @@ class storyModel extends model
         $this->loadModel('action');
         $this->loadModel('file')->updateObjectID($this->post->uid, $storyID, 'story');
         $addedFiles = $this->file->saveUpload($oldStory->type, $storyID, $oldStory->version);
-        $this->storyTao->doUpdateSpec($storyID, $story, $addedFiles);
+        $this->storyTao->doUpdateSpec($storyID, $story, $oldStory, $addedFiles);
         $this->storyTao->doUpdateLinkStories($storyID, $story, $oldStory);
 
         $changed = $story->parent != $oldStory->parent;
@@ -982,20 +902,18 @@ class storyModel extends model
     public function updateStoryVersion(object $story): void
     {
         $changedStories = $this->getChangedStories($story);
+        if(empty($changedStories)) return;
 
-        if(!empty($changedStories))
+        foreach($changedStories as $changedStory)
         {
-            foreach($changedStories as $changedStory)
-            {
-                $this->dao->update(TABLE_RELATION)
-                    ->set('AVersion')->eq($changedStory->version)
-                    ->where('AType')->eq('requirement')
-                    ->andWhere('BType')->eq('story')
-                    ->andWhere('relation')->eq('subdivideinto')
-                    ->andWhere('AID')->eq($changedStory->id)
-                    ->andWhere('BID')->eq($story->id)
-                    ->exec();
-            }
+            $this->dao->update(TABLE_RELATION)
+                ->set('AVersion')->eq($changedStory->version)
+                ->where('AType')->eq('requirement')
+                ->andWhere('BType')->eq('story')
+                ->andWhere('relation')->eq('subdivideinto')
+                ->andWhere('AID')->eq($changedStory->id)
+                ->andWhere('BID')->eq($story->id)
+                ->exec();
         }
     }
 
@@ -2122,9 +2040,7 @@ class storyModel extends model
         }
         else
         {
-            $linkedStories = $this->storyTao->getRelation($storyID, $story->type);
-            $linkedStories = empty($linkedStories) ? array() : $linkedStories;
-            $storyIDList   = array_keys($linkedStories);
+            $storyIDList = $this->storyTao->getRelation($storyID, $story->type);
         }
 
         if($browseType == 'bySearch')
@@ -2606,12 +2522,12 @@ class storyModel extends model
      * 获取某产品下的父需求的键值对列表。
      * Get parent story pairs.
      *
-     * @param  int    $productID
-     * @param  string $appendedStories
+     * @param  int        $productID
+     * @param  string|int $appendedStories
      * @access public
      * @return array
      */
-    public function getParentStoryPairs(int $productID, string $appendedStories = '')
+    public function getParentStoryPairs(int $productID, string|int $appendedStories = '')
     {
         $stories = $this->dao->select('id, title')->from(TABLE_STORY)
             ->where('deleted')->eq('0')
@@ -2843,26 +2759,6 @@ class storyModel extends model
         }
 
         return $stories;
-    }
-
-    public function getAllStorySort($planID, $planOrder)
-    {
-        $orderBy = $this->post->orderBy;
-        if(strpos($orderBy, 'order') !== false) $orderBy = str_replace('order', 'id', $orderBy);
-
-        $stories     = $this->loadModel('story')->getPlanStories($planID, 'all');
-        $storyIDList = array_keys($stories);
-
-        if(strpos($this->post->orderBy, 'order') !== false and !empty($planOrder)) $stories = $this->sortPlanStory($stories, $planOrder, $orderBy);
-
-        $frontCount   = (int)$this->post->recPerPage * ((int)$this->post->pageID - 1);
-        $behindCount  = (int)$this->post->recPerPage * (int)$this->post->pageID;
-        $frontIDList  = array_slice($storyIDList, 0, $frontCount);
-        $behindIDList = array_slice($storyIDList, $behindCount, count($storyIDList) - $behindCount);
-
-        $frontIDList  = !empty($frontIDList)  ? implode(',', $frontIDList) . ',' : '';
-        $behindIDList = !empty($behindIDList) ? implode(',', $behindIDList) : '';
-        return $frontIDList . $this->post->stories . $behindIDList;
     }
 
     /**
@@ -4028,8 +3924,9 @@ class storyModel extends model
         $requirement = $this->getByID($storyID);
 
         /* 获取该用户需求细分的研发需求，并构造跟踪矩阵信息。 */
-        $stories = $this->storyTao->getRelation($requirement->id, 'requirement', array('id', 'title', 'parent'));
-        $track   = array();
+        $storIdList = $this->storyTao->getRelation($requirement->id, 'requirement');
+        $stories    = $this->dao->select('id,title,parent')->from(TABLE_STORY)->where('id')->in($storyIdList)->andWhere('deleted')->eq(0)->fetchAll('id');
+        $track      = array();
         foreach($stories as $id => $story) $track[$id] = $this->storyTao->buildStoryTrack($story);
 
         return $track;

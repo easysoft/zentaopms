@@ -111,11 +111,12 @@ $config->story->form->batchClose['closedReason'] = array('type' => 'string', 'wi
 $config->story->form->batchClose['comment']      = array('type' => 'string', 'control' => 'text', 'required' => false, 'default' => '', 'filter' => 'trim');
 
 $config->story->form->change = array();
-$config->story->form->change['reviewer']       = array('type' => 'array',   'control' => 'multi-select', 'required' => true,  'default' => '', 'filter' => 'join', 'options' => '');
+$config->story->form->change['reviewer']       = array('type' => 'array',   'control' => 'multi-select', 'required' => true,  'default' => '', 'options' => '');
 $config->story->form->change['title']          = array('type' => 'string',  'control' => 'text',         'required' => true,  'filter'  => 'trim');
 $config->story->form->change['color']          = array('type' => 'string',  'control' => 'color',        'required' => false, 'default' => '');
 $config->story->form->change['spec']           = array('type' => 'string',  'control' => 'editor',       'required' => false, 'default' => '');
 $config->story->form->change['verify']         = array('type' => 'string',  'control' => 'editor',       'required' => false, 'default' => '');
+$config->story->form->change['relievedTwins']  = array('type' => 'string',  'control' => 'text',         'required' => false, 'default' => '1');
 $config->story->form->change['status']         = array('type' => 'string',  'control' => 'hidden',       'required' => false, 'default' => '');
 $config->story->form->change['lastEditedDate'] = array('type' => 'string',  'control' => 'hidden',       'required' => false, 'default' => '');
 

@@ -679,6 +679,7 @@ class storyZen extends story
     {
         $story  = $this->view->story;
         $fields = $this->config->story->form->change;
+        unset($fields['relievedTwins']);
 
         foreach(array_keys($fields) as $field)
         {
@@ -1164,6 +1165,58 @@ class storyZen extends story
         if($this->post->linkRequirements) $storyData->linkRequirements = implode(',', array_unique($this->post->linkRequirements));
 
         return $this->loadModel('file')->processImgURL($storyData, $editorFields, $this->post->uid);
+    }
+
+    /**
+     * 构建变更需求数据。
+     * Build story for change
+     *
+     * @param  int       $storyID
+     * @access protected
+     * @return object|false
+     */
+    protected function buildStoryForChange(int $storyID): object|false
+    {
+        $oldStory = $this->story->getByID($storyID);
+        if(!empty($_POST['lastEditedDate']) and $oldStory->lastEditedDate != $this->post->lastEditedDate) dao::$errors[] = $this->lang->error->editedByOther;
+        if(strpos($this->config->story->change->requiredFields, 'comment') !== false and !$this->post->comment) dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->comment);
+
+        if(isset($_POST['reviewer'])) $_POST['reviewer'] = array_filter($_POST['reviewer']);
+        if(!$this->post->needNotReview and empty($_POST['reviewer'])) dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
+        if(dao::isError()) return false;
+
+        $now          = helper::now();
+        $fields       = $this->config->story->form->change;
+        $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
+        $story        = form::data($fields)
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('deleteFiles', array())
+            ->setDefault('lastEditedDate', $now)
+            ->setDefault('status', $oldStory->status)
+            ->setDefault('version', $oldStory->version)
+            ->get();
+
+        $specChanged        = false;
+        $oldStoryReviewers  = array_keys($this->story->getReviewerPairs($storyID, $oldStory->version));
+        $_POST['reviewer']  = isset($_POST['reviewer']) ? $_POST['reviewer'] : array();
+        $reviewerHasChanged = (array_diff($oldStoryReviewers, $_POST['reviewer']) || array_diff($_POST['reviewer'], $oldStoryReviewers));
+        if($story->spec != $oldStory->spec or $story->verify != $oldStory->verify or $story->title != $oldStory->title or $this->loadModel('file')->getCount() or $reviewerHasChanged or !empty($story->deleteFiles)) $specChanged = true;
+
+        $story->reviewerHasChanged = $reviewerHasChanged;
+        if($specChanged)
+        {
+            $story->version      = (int)$oldStory->version + 1;
+            $story->reviewedBy   = '';
+            $story->changedBy    = $this->app->user->account;
+            $story->changedDate  = $now;
+            $story->closedBy     = '';
+            $story->closedReason = '';
+            if($oldStory->reviewedBy) $story->reviewedDate = null;
+            if($oldStory->closedBy)   $story->closedDate   = null;
+        }
+
+        if(!isset($_POST['relievedTwins'])) unset($story->relievedTwins);
+        return $this->loadModel('file')->processImgURL($story, $editorFields, $this->post->uid);
     }
 
     /**

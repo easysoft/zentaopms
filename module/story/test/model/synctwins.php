@@ -31,5 +31,12 @@ pid=1
 
 */
 
+$changes = array();
+$changes[] = array('field' => 'pri', 'old' => '3', 'new' => '5', 'diff' => '');
+$changes[] = array('field' => 'estimate', 'old' => '10', 'new' => '100', 'diff' => '');
+
 $story = new storyTest();
-r($story->updateStoryVersionTest(12)) && p('AVersion') && e('2');
+$twins = $story->syncTwinsTest(5, '6,7', $changes);
+
+r($twins[0]) && p('id,pri,estimate') && e('6,5,100');
+r($twins[1]) && p('id,pri,estimate') && e('7,5,100');

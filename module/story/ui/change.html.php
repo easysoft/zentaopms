@@ -111,12 +111,14 @@ $formItems['hidden'] = formRow
 $formItems['spec'] = formGroup
 (
     set::width('full'),
-    set::name('spec'),
     set::label($fields['spec']['title']),
-    set::control($fields['spec']['control']),
-    set::value($fields['spec']['default']),
     set::required($fields['spec']['required']),
-    set::tip($lang->story->specTemplate)
+    set::tip($lang->story->specTemplate),
+    editor
+    (
+        set::name('spec'),
+        html($fields['spec']['default']),
+    ),
 );
 unset($fields['reviewer'], $fields['title'], $fields['color'], $fields['status'], $fields['lastEditedDate'], $fields['spec']);
 
@@ -127,25 +129,39 @@ foreach($fields as $field => $attr)
     $control['type'] = $attr['control'];
     if(!empty($attr['options'])) $control['items'] = $attr['options'];
 
-    $formItems[$field] = formGroup
-    (
-        set::width('full'),
-        set::name($fieldName),
-        set::label($attr['title']),
-        set::control($control),
-        set::value($attr['default']),
-        set::required($attr['required'])
-    );
+    if($attr['control'] == 'editor')
+    {
+        $formItems[$field] = formGroup
+        (
+            set::width('full'),
+            set::label($attr['title']),
+            set::required($attr['required']),
+            editor
+            (
+                set::name($fieldName),
+                html($attr['default']),
+            ),
+        );
+    }
+    else
+    {
+        $formItems[$field] = formGroup
+        (
+            set::width('full'),
+            set::name($fieldName),
+            set::label($attr['title']),
+            set::control($control),
+            set::value($attr['default']),
+            set::required($attr['required'])
+        );
+    }
+
 }
 $formItems['file'] = formGroup
 (
     set::width('full'),
     set::label($lang->attach),
-    input
-    (
-        set::type('file'),
-        set::name('files[]'),
-    )
+    upload()
 );
 $formItems['affected'] = $getAffectedTabs($story, $users);
 

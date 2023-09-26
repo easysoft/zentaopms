@@ -209,7 +209,7 @@ class story extends control
     public function commonAction(int $storyID, int $projectID = 0)
     {
         /* Get datas. */
-        $story = $this->story->fetchByID($storyID);
+        $story = $this->story->getByID($storyID);
         $this->story->replaceURLang($story->type);
 
         /* Set menu. */
@@ -358,15 +358,13 @@ class story extends control
      */
     public function change(int $storyID, string $from = '', string $storyType = 'story')
     {
-        $this->loadModel('file');
         if(!empty($_POST))
         {
-            $changes = $this->story->change($storyID);
-            if(dao::isError())
-            {
-                if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => dao::getError()));
-                return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            }
+            $storyData = $this->storyZen->buildStoryForChange($storyID);
+            if(!$storyData) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $changes = $this->story->change($storyID, $storyData);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -375,19 +373,16 @@ class story extends control
                 $this->action->logHistory($actionID, $changes);
 
                 /* Record submit review action. */
-                $story = $this->dao->findById((int)$storyID)->from(TABLE_STORY)->fetch();
+                $story = $this->story->fetchByID($storyID);
                 if($story->status == 'reviewing') $this->action->create('story', $storyID, 'submitReview');
             }
 
             $message = $this->executeHooks($storyID);
             if(empty($message)) $message = $this->lang->saveSuccess;
-
-            if(isonlybody())
-            {
-                $response = $this->storyZen->responseAfterCreateInModal($message);
-                if($response) return $this->send($response);
-            }
             if(defined('RUN_MODE') and RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $storyID));
+
+            $response = $this->storyZen->responseAfterCreateInModal($message);
+            if($response) return $this->send($response);
 
             $location = $this->storyZen->getAfterChangeLocation($storyID, $storyType);
             return $this->send(array('result' => 'success', 'message' => $message, 'load' => $location));

@@ -85,19 +85,12 @@ class storyTao extends storyModel
         $queryFields = empty($fields) ? 'id,title' : implode(',', $fields);
 
         /* 获取对应的关联数据。*/
-        $relations = $this->dao->select('BID')->from(TABLE_RELATION)
+        return $this->dao->select('BID')->from(TABLE_RELATION)
             ->where('AType')->eq($storyType)
             ->andWhere('BType')->eq($BType)
             ->andWhere('relation')->eq($relation)
             ->andWhere('AID')->eq($storyID)
             ->fetchPairs();
-
-        if(empty($relations)) return array();
-
-        /* 根据关联数据查询详细信息。 */
-        $query = $this->dao->select($queryFields)->from(TABLE_STORY)->where('id')->in($relations)->andWhere('deleted')->eq(0);
-        if(!empty($fields)) return $query ->fetchAll('id');
-        return $query->fetchPairs();
     }
 
     /**
@@ -700,7 +693,7 @@ class storyTao extends storyModel
      * @access protected
      * @return void
      */
-    protected function doCreateSpec(int $storyID, object $story, array $files = array()): void
+    protected function doCreateSpec(int $storyID, object $story, array|string $files = array()): void
     {
         if(empty($storyID)) return;
 
@@ -710,7 +703,7 @@ class storyTao extends storyModel
         $spec->title   = $story->title;
         $spec->spec    = $story->spec;
         $spec->verify  = $story->verify;
-        $spec->files   = implode(',', array_keys($files));
+        $spec->files   = is_string($files) ? $files : implode(',', array_keys($files));
 
         if(isset($story->uploadImage)) $spec = $this->doSaveUploadImage($storyID, $fileName, $spec);
 
@@ -766,10 +759,11 @@ class storyTao extends storyModel
      *
      * @param  int       $storyID
      * @param  array     $reviewers
+     * @param  int       $storyVersion
      * @access protected
      * @return void
      */
-    protected function doCreateReviewer(int $storyID, array $reviewers): void
+    protected function doCreateReviewer(int $storyID, array $reviewers, int $storyVersion = 1): void
     {
         if(empty($storyID) or empty($reviewers)) return;
 
@@ -779,7 +773,7 @@ class storyTao extends storyModel
 
             $reviewData = new stdclass();
             $reviewData->story    = $storyID;
-            $reviewData->version  = 1;
+            $reviewData->version  = $storyVersion;
             $reviewData->reviewer = $reviewer;
             $reviewData->result   = '';
             $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
@@ -852,13 +846,13 @@ class storyTao extends storyModel
      *
      * @param  int       $storyID
      * @param  object    $story
+     * @param  object    $oldStory
      * @param  array     $addedFiles
      * @access protected
      * @return void
      */
-    protected function doUpdateSpec(int $storyID, object $story, array $addedFiles = array()): void
+    protected function doUpdateSpec(int $storyID, object $story, object $oldStory, array $addedFiles = array()): void
     {
-        $oldStory = $this->getByID($storyID);
         if(empty($oldStory)) return;
         if($story->spec == $oldStory->spec and $story->verify == $oldStory->verify and $story->title == $oldStory->title and empty($story->deleteFiles) and empty($addedFiles)) return;
 
@@ -1491,11 +1485,11 @@ class storyTao extends storyModel
         $this->app->loadLang('task');
         $this->config->story->affect = new stdclass();
         $this->config->story->affect->projects = new stdclass();
-        $this->config->story->affect->projects->fields[] = array('name' => 'id', 'title' => $this->lang->task->id);
-        $this->config->story->affect->projects->fields[] = array('name' => 'name', 'title' => $this->lang->task->name, 'link' => helper::createLink('task', 'view', 'id={id}'));
+        $this->config->story->affect->projects->fields[] = array('name' => 'id',         'title' => $this->lang->task->id);
+        $this->config->story->affect->projects->fields[] = array('name' => 'name',       'title' => $this->lang->task->name, 'link' => helper::createLink('task', 'view', 'id={id}'));
         $this->config->story->affect->projects->fields[] = array('name' => 'assignedTo', 'title' => $this->lang->task->assignedTo);
-        $this->config->story->affect->projects->fields[] = array('name' => 'consumed', 'title' => $this->lang->task->consumed);
-        $this->config->story->affect->projects->fields[] = array('name' => 'left', 'title' => $this->lang->task->left);
+        $this->config->story->affect->projects->fields[] = array('name' => 'consumed',   'title' => $this->lang->task->consumed);
+        $this->config->story->affect->projects->fields[] = array('name' => 'left',       'title' => $this->lang->task->left);
 
         if(empty($story->executions)) return $story;
         foreach($story->executions as $executionID => $execution) if($execution->status == 'done') unset($story->executions[$executionID]);
@@ -1525,19 +1519,20 @@ class storyTao extends storyModel
     {
         $this->app->loadLang('bug');
         $this->app->loadLang('execution');
+        if(!isset($this->config->story->affect)) $this->config->story->affect = new stdclass();
         $this->config->story->affect->bugs = new stdclass();
-        $this->config->story->affect->bugs->fields[] = array('name' => 'id', 'title' => $this->lang->idAB);
-        $this->config->story->affect->bugs->fields[] = array('name' => 'title', 'title' => $this->lang->bug->title, 'link' => helper::createLink('bug', 'view', 'id={id}'));
-        $this->config->story->affect->bugs->fields[] = array('name' => 'status', 'title' => $this->lang->statusAB);
-        $this->config->story->affect->bugs->fields[] = array('name' => 'openedBy', 'title' => $this->lang->bug->openedBy);
-        $this->config->story->affect->bugs->fields[] = array('name' => 'resolvedBy', 'title' => $this->lang->bug->resolvedBy);
-        $this->config->story->affect->bugs->fields[] = array('name' => 'resolution', 'title' => $this->lang->bug->resolution);
+        $this->config->story->affect->bugs->fields[] = array('name' => 'id',           'title' => $this->lang->idAB);
+        $this->config->story->affect->bugs->fields[] = array('name' => 'title',        'title' => $this->lang->bug->title, 'link' => helper::createLink('bug', 'view', 'id={id}'));
+        $this->config->story->affect->bugs->fields[] = array('name' => 'status',       'title' => $this->lang->statusAB);
+        $this->config->story->affect->bugs->fields[] = array('name' => 'openedBy',     'title' => $this->lang->bug->openedBy);
+        $this->config->story->affect->bugs->fields[] = array('name' => 'resolvedBy',   'title' => $this->lang->bug->resolvedBy);
+        $this->config->story->affect->bugs->fields[] = array('name' => 'resolution',   'title' => $this->lang->bug->resolution);
         $this->config->story->affect->bugs->fields[] = array('name' => 'lastEditedBy', 'title' => $this->lang->bug->lastEditedBy);
 
         /* Get affected bugs. */
+        $twinsIdList = $story->id . ($story->twins ? ",{$story->twins}" : '');
         $story->bugs = $this->dao->select('*')->from(TABLE_BUG)->where('status')->ne('closed')
-            ->beginIF($story->twins)->andWhere('story')->in(ltrim($story->twins, ',') . $story->id)
-            ->beginIF(!$story->twins)->andWhere('story')->in($story->id)
+            ->andWhere('story')->in($twinsIdList)
             ->andWhere('status')->ne('closed')
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')->fetchAll();
@@ -1566,17 +1561,18 @@ class storyTao extends storyModel
     protected function getAffectedCases(object $story, array $users): object
     {
         $this->app->loadLang('testcase');
+        if(!isset($this->config->story->affect)) $this->config->story->affect = new stdclass();
         $this->config->story->affect->cases = new stdclass();
-        $this->config->story->affect->cases->fields[] = array('name' => 'id', 'title' => $this->lang->idAB);
-        $this->config->story->affect->cases->fields[] = array('name' => 'title', 'title' => $this->lang->testcase->title, 'link' => helper::createLink('testcase', 'view', 'id={id}'));
-        $this->config->story->affect->cases->fields[] = array('name' => 'status', 'title' => $this->lang->statusAB);
-        $this->config->story->affect->cases->fields[] = array('name' => 'openedBy', 'title' => $this->lang->testcase->openedBy);
+        $this->config->story->affect->cases->fields[] = array('name' => 'id',           'title' => $this->lang->idAB);
+        $this->config->story->affect->cases->fields[] = array('name' => 'title',        'title' => $this->lang->testcase->title, 'link' => helper::createLink('testcase', 'view', 'id={id}'));
+        $this->config->story->affect->cases->fields[] = array('name' => 'status',       'title' => $this->lang->statusAB);
+        $this->config->story->affect->cases->fields[] = array('name' => 'openedBy',     'title' => $this->lang->testcase->openedBy);
         $this->config->story->affect->cases->fields[] = array('name' => 'lastEditedBy', 'title' => $this->lang->testcase->lastEditedBy);
 
         /* Get affected cases. */
+        $twinsIdList = $story->id . ($story->twins ? ",{$story->twins}" : '');
         $story->cases = $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)
-            ->beginIF($story->twins)->andWhere('story')->in(ltrim($story->twins, ',') . $story->id)
-            ->beginIF(!$story->twins)->andWhere('story')->in($story->id)
+            ->andWhere('story')->in($twinsIdList)
             ->fetchAll();
         foreach($story->cases as $case)
         {
@@ -1601,16 +1597,17 @@ class storyTao extends storyModel
     {
         if(empty($story->twins)) return $story;
 
+        if(!isset($this->config->story->affect)) $this->config->story->affect = new stdclass();
         $this->config->story->affect->twins = new stdclass();
-        $this->config->story->affect->twins->fields[] = array('name' => 'id', 'title' => $this->lang->idAB);
-        $this->config->story->affect->twins->fields[] = array('name' => 'branch', 'title' => $this->lang->story->branch);
-        $this->config->story->affect->twins->fields[] = array('name' => 'title', 'title' => $this->lang->story->title, 'link' => helper::createLink('story', 'view', 'id={id}'));
-        $this->config->story->affect->twins->fields[] = array('name' => 'status', 'title' => $this->lang->statusAB);
-        $this->config->story->affect->twins->fields[] = array('name' => 'stage', 'title' => $this->lang->story->stageAB);
-        $this->config->story->affect->twins->fields[] = array('name' => 'openedBy', 'title' => $this->lang->story->openedBy);
+        $this->config->story->affect->twins->fields[] = array('name' => 'id',           'title' => $this->lang->idAB);
+        $this->config->story->affect->twins->fields[] = array('name' => 'branch',       'title' => $this->lang->story->branch);
+        $this->config->story->affect->twins->fields[] = array('name' => 'title',        'title' => $this->lang->story->title, 'link' => helper::createLink('story', 'view', 'id={id}'));
+        $this->config->story->affect->twins->fields[] = array('name' => 'status',       'title' => $this->lang->statusAB);
+        $this->config->story->affect->twins->fields[] = array('name' => 'stage',        'title' => $this->lang->story->stageAB);
+        $this->config->story->affect->twins->fields[] = array('name' => 'openedBy',     'title' => $this->lang->story->openedBy);
         $this->config->story->affect->twins->fields[] = array('name' => 'lastEditedBy', 'title' => $this->lang->story->lastEditedBy);
 
-        $story->twins = $this->story->getByList($story->twins);
+        $story->twins = $this->getByList($story->twins);
         $branches     = $this->loadModel('branch')->getPairs($story->product);
         foreach($story->twins as $twin)
         {

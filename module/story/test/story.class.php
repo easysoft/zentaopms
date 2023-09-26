@@ -93,6 +93,70 @@ class storyTest
     }
 
     /**
+     * 测试 getAffectedProjects 方法
+     * Test getAffectedProjects method
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return object
+     */
+    public function getAffectedProjectsTest(int $storyID): object
+    {
+        global $tester;
+        $users['admin'] = '管理员';
+        $story = $tester->loadModel('story')->getById($storyID);
+        return $this->objectModel->getAffectedProjects($story, $users);
+    }
+
+    /**
+     * 测试 getAffectedBugs 方法
+     * Test getAffectedBugs method
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return object
+     */
+    public function getAffectedBugsTest(int $storyID): object
+    {
+        global $tester;
+        $users['admin'] = '管理员';
+        $story = $tester->loadModel('story')->getById($storyID);
+        return $this->objectModel->getAffectedBugs($story, $users);
+    }
+
+    /**
+     * 测试 getAffectedCases 方法
+     * Test getAffectedCases method
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return object
+     */
+    public function getAffectedCasesTest(int $storyID): object
+    {
+        global $tester;
+        $users['admin'] = '管理员';
+        $story = $tester->loadModel('story')->getById($storyID);
+        return $this->objectModel->getAffectedCases($story, $users);
+    }
+
+    /**
+     * 测试 getAffectedTwins 方法
+     * Test getAffectedTwins method
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return object
+     */
+    public function getAffectedTwinsTest(int $storyID): object
+    {
+        global $tester;
+        $users['admin'] = '管理员';
+        $story = $tester->loadModel('story')->getById($storyID);
+        return $this->objectModel->getAffectedTwins($story, $users);
+    }
+
+    /**
      * Test get requierements.
      *
      * @param  int    $productID
@@ -902,5 +966,28 @@ class storyTest
     public function fetchBaseInfoTest(int $storyID): object|false
     {
         return $this->objectModel->fetchBaseInfo($storyID);
+    }
+
+    /**
+     * 测试 updateStoryVersion 方法
+     * Test updateStoryVersion method
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return object
+     */
+    public function updateStoryVersionTest(int $storyID): object
+    {
+        $story = $this->objectModel->fetchByID($storyID);
+        $this->objectModel->dao->update(TABLE_STORY)->set('version')->eq(2)->where('id')->eq(3)->exec();
+        $this->objectModel->updateStoryVersion($story);
+
+        return $this->objectModel->dao->select('*')->from(TABLE_RELATION)->where('AType')->eq('requirement')->andWhere('BType')->eq('story')->andWhere('relation')->eq('subdivideinto')->andWhere('AID')->eq(3)->andWhere('BID')->eq($storyID)->fetch();
+    }
+
+    public function syncTwinsTest(int $storyID, string $twins, array $changes): array
+    {
+        $this->objectModel->syncTwins($storyID, $twins, $changes, 'changed');
+        return $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('id')->in($twins)->orderBy('id')->fetchAll();
     }
 }

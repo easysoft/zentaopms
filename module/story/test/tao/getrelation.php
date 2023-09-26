@@ -22,10 +22,6 @@ r($storyModel->getRelation(0, 'requirement')) && p() && e('0');
 
 r(key($storyModel->getRelation(1, 'requirement'))) && p() && e('11');
 r($storyModel->getRelation(9, 'requirement')) && p() && e('0');
-$group = $storyModel->getRelation(1, 'requirement', array('id', 'parent'));
-r(isset($group['11']->parent)) && p() && e('1');
 
 r(key($storyModel->getRelation(11, 'story'))) && p() && e('1');
 r($storyModel->getRelation(19, 'story')) && p() && e('0');
-$group = $storyModel->getRelation(11, 'story', array('id', 'parent'));
-r(isset($group['1']->parent)) && p() && e('1');
