@@ -286,20 +286,22 @@ class productPlan
     }
 
     /**
-     * Link project
+     * 关联项目。
+     * Link project.
      *
-     * @param  int   $projectID
-     * @param  array $newPlans
+     * @param  int    $projectID
+     * @param  array  $newPlans
      * @access public
-     * @return void
+     * @return array
      */
-    public function linkProject($projectID, $newPlans)
+    public function linkProjectTest(int $projectID, array $newPlans): array
     {
-        $productplans = $this->productplan->linkProject($projectID, $newPlans);
+        $this->productplan->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->exec();
+
+        $this->productplan->linkProject($projectID, $newPlans);
 
         if(dao::isError()) return dao::getError();
-
-        return $productplans;
+        return $this->productplan->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->fetchAll();
     }
 
     /**

@@ -938,6 +938,7 @@ class productplanModel extends model
     }
 
     /**
+     * 关联项目。
      * Link project.
      *
      * @param  int    $projectID
@@ -945,21 +946,23 @@ class productplanModel extends model
      * @access public
      * @return void
      */
-    public function linkProject($projectID, $newPlans)
+    public function linkProject(int $projectID, array $newPlans): void
     {
         $this->loadModel('execution');
+        $this->loadModel('story');
+        $this->loadModel('project');
         foreach($newPlans as $planID)
         {
             $planStories = $planProducts = array();
-            $planStory   = $this->loadModel('story')->getPlanStories($planID);
+            $planStory   = $this->story->getPlanStories($planID);
             if(!empty($planStory))
             {
-                $projectProducts = $this->loadModel('project')->getBranchesByProject($projectID);
+                $projectProducts = $this->project->getBranchesByProject($projectID);
 
                 foreach($planStory as $id => $story)
                 {
                     $projectBranches = zget($projectProducts, $story->product, array());
-                    if($story->status != 'active' or (!empty($story->branch) and !empty($projectBranches) and !isset($projectBranches[$story->branch])))
+                    if($story->status != 'active' || (!empty($story->branch) && !empty($projectBranches) && !isset($projectBranches[$story->branch])))
                     {
                         unset($planStory[$id]);
                         continue;
