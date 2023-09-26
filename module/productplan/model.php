@@ -827,20 +827,21 @@ class productplanModel extends model
     }
 
     /**
-     * Link stories.
+     * 批量关联需求。
+     * Batch link story.
      *
      * @param  int    $planID
+     * @param  array  $storyIdList
      * @access public
-     * @return void
+     * @return bool
      */
-    public function linkStory($planID)
+    public function linkStory(int $planID, array $storyIdList): bool
     {
-        $this->loadModel('story');
+        $stories = $this->loadModel('story')->getByList($storyIdList);
+        if(!$stories) return false;
+
         $this->loadModel('action');
-
-        $stories = $this->story->getByList($this->post->stories);
-
-        foreach($this->post->stories as $storyID)
+        foreach($storyIdList as $storyID)
         {
             if(!isset($stories[$storyID])) continue;
 
@@ -857,6 +858,8 @@ class productplanModel extends model
         }
 
         $this->action->create('productplan', $planID, 'linkstory', '', implode(',', $this->post->stories));
+
+        return !dao::isError();
     }
 
     /**

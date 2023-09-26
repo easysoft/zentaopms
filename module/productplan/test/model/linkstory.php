@@ -1,45 +1,27 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/productplan.class.php';
-
 /**
 
 title=productplanModel->linkStory();
+timeout=0
 cid=1
-pid=1
-
-关联计划id为100的需求4 >> 0
-关联计划id为101的需求8 >> 0
-传入不存在id的情况 >> 0
-解除id为100关联需求4 >> 0
-解除id为101关联需求8 >> 0
 
 */
+
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/productplan.class.php';
+
+zdTable('story')->gen(20);
 
 $plan = new productPlan('admin');
 
 $planID = array();
-$planID[0] = 100;
-$planID[1] = 101;
-$planID[2] = 10000;
+$planID[] = 1;
+$planID[] = 100;
 
-$storyID = array();
-$storyID[0] = array('stories' => array(4));
-$storyID[1] = array('stories' => array(8));
-$storyID[2] = array('stories' => array(1111));
+$storyIdList = array();
+$storyIdList[] = array(4);
+$storyIdList[] = array(1111);
 
-$unstoryID = array();
-$unstoryID[0] = 4;
-$unstoryID[1] = 8;
-$unstoryID[2] = 1111;
-
-#方法没有return返回结果，页面上看关联成功了,成功失败均返回空
-r($plan->linkStory($planID[0], $storyID[0])) && p() && e('0'); //关联计划id为100的需求4
-r($plan->linkStory($planID[1], $storyID[1])) && p() && e('0'); //关联计划id为101的需求8
-r($plan->linkStory($planID[2], $storyID[2])) && p() && e('0'); //传入不存在id的情况
-
-#这里将另一个同类方法unlinkStory放在这里调用
-r($plan->unlinkStory($unstoryID[0], $planID[0])) && p() && e('0'); //解除id为100关联需求4
-r($plan->unlinkStory($unstoryID[1], $planID[1])) && p() && e('0'); //解除id为101关联需求8
-?>
+r($plan->linkStory($planID[0], $storyIdList[0])) && p('4:plan,story,order') && e('1,4,3'); //关联计划id为1的需求4
+r($plan->linkStory($planID[1], $storyIdList[1])) && p()                     && e('0');     //传入不存在id的情况

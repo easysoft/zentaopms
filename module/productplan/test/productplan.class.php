@@ -257,19 +257,17 @@ class productPlan
      * Link story
      *
      * @param  int    $planID
-     * @param  array  $storyID
+     * @param  array  $storyIdList
      * @access public
      * @return void
      */
-    public function linkStory($planID, $storyID)
+    public function linkStory($planID, $storyIdList)
     {
 
-        foreach($storyID as $key => $value) $_POST[$key] = $value;
-
-        $productplans = $this->productplan->linkStory($planID);
+        $productplans = $this->productplan->linkStory($planID, $storyIdList);
 
         if(dao::isError()) return dao::getError();
-        return $productplans;
+        return $this->productplan->dao->select('*')->from(TABLE_PLANSTORY)->where('plan')->eq($planID)->fetchAll('story');
     }
 
     /**

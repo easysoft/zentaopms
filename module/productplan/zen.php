@@ -245,4 +245,47 @@ class productplanZen extends productplan
             unset($this->view->bugPager);
         }
     }
+
+    /**
+     * 构建关联需求页面的搜索表单。
+     * Build search form for link story page.
+     *
+     * @param  object    $plan
+     * @param  int       $queryID
+     * @param  string    $orderBy
+     * @access protected
+     * @return void
+     */
+    protected function buildLinkStorySearchForm(object $plan, int $queryID, string $orderBy)
+    {
+        $this->app->loadLang('story');
+        $products = $this->loadModel('product')->getProductPairsByProject((int)$this->session->project);
+
+        /* Build search form. */
+        $this->config->product->search['actionURL'] = $this->createLink('productplan', 'view', "planID=$plan->id&type=story&orderBy=$orderBy&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
+        $this->config->product->search['queryID']   = $queryID;
+        $this->config->product->search['style']     = 'simple';
+        $this->config->product->search['params']['product']['values'] = $products + array('all' => $this->lang->product->allProductsOfProject);
+        $this->config->product->search['params']['plan']['values']    = $this->productplan->getPairs($plan->product, $plan->branch, 'withMainPlan', true);
+        $this->config->product->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($plan->product, 'story', 0, 'all');
+        $storyStatusList = $this->lang->story->statusList;
+        unset($storyStatusList['closed']);
+        $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $storyStatusList);
+        if($this->session->currentProductType == 'normal')
+        {
+            unset($this->config->product->search['fields']['branch']);
+            unset($this->config->product->search['params']['branch']);
+        }
+        else
+        {
+            $this->config->product->search['fields']['branch'] = $this->lang->product->branch;
+
+            $branchPairs = $this->loadModel('branch')->getPairsByIdList(explode(',', trim($plan->branch, ',')));
+            $branches    = array('' => '', BRANCH_MAIN => $this->lang->branch->main) + $branchPairs;
+            $this->config->product->search['params']['branch']['values'] = $branches;
+        }
+
+        unset($this->config->product->search['fields']['product']);
+        $this->loadModel('search')->setSearchParams($this->config->product->search);
+    }
 }

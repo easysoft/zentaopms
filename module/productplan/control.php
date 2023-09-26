@@ -515,69 +515,44 @@ class productplan extends control
     }
 
     /**
+     * 关联需求。
      * Link stories.
      *
-     * @param int    $planID
-     * @param string $browseType
-     * @param int    $param
-     * @param string $orderBy
-     * @param int    $recTotal
-     * @param int    $recPerPage
-     * @param int    $pageID
-     *
+     * @param  int    $planID
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function linkStory($planID = 0, $browseType = '', $param = 0, $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function linkStory(int $planID = 0, string $browseType = '', int $param = 0, string $orderBy = 'order_desc', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
     {
         if(!empty($_POST['stories']))
         {
-            $this->productplan->linkStory($planID);
-            if($this->viewType == 'json') return $this->send(array('result' => 'success'));
+            $this->productplan->linkStory($planID, $this->post->stories);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
             return $this->send(array('result' => 'success', 'load' => inlink('view', "planID=$planID&type=story&orderBy=$orderBy")));
         }
 
         $this->session->set('storyList', inlink('view', "planID=$planID&type=story&orderBy=$orderBy&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), 'product');
 
-        $this->loadModel('story');
-        $this->loadModel('tree');
         $plan = $this->productplan->getByID($planID);
-        $this->commonAction($plan->product, $plan->branch);
-        $products = $this->product->getProductPairsByProject($this->session->project);
+        if(!$plan) return $this->sendError($this->lang->notFound, true);
+
+        $this->commonAction($plan->product, (int)$plan->branch);
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Build search form. */
-        $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
-        unset($this->config->product->search['fields']['product']);
-        $this->config->product->search['actionURL'] = $this->createLink('productplan', 'view', "planID=$planID&type=story&orderBy=$orderBy&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
-        $this->config->product->search['queryID']   = $queryID;
-        $this->config->product->search['style']     = 'simple';
-        $this->config->product->search['params']['product']['values'] = $products + array('all' => $this->lang->product->allProductsOfProject);
-        $this->config->product->search['params']['plan']['values'] = $this->productplan->getPairs($plan->product, $plan->branch, 'withMainPlan', true);
-        $this->config->product->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($plan->product, 'story', 0, 'all');
-        $storyStatusList = $this->lang->story->statusList;
-        unset($storyStatusList['closed']);
-        $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $storyStatusList);
-        if($this->session->currentProductType == 'normal')
-        {
-            unset($this->config->product->search['fields']['branch']);
-            unset($this->config->product->search['params']['branch']);
-        }
-        else
-        {
-            $this->config->product->search['fields']['branch'] = $this->lang->product->branch;
+        $this->productplanZen->buildLinkStorySearchForm($plan, $browseType == 'bySearch' ? (int)$param : 0, $orderBy);
 
-            $branchPairs = $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($plan->branch)->fetchPairs();
-            $branches   = array('' => '', BRANCH_MAIN => $this->lang->branch->main) + $branchPairs;
-            $this->config->product->search['params']['branch']['values'] = $branches;
-        }
-        $this->loadModel('search')->setSearchParams($this->config->product->search);
-
-        $planStories = $this->story->getPlanStories($planID);
-
+        $planStories = $this->loadModel('story')->getPlanStories($planID);
         if($browseType == 'bySearch')
         {
             $allStories = $this->story->getBySearch($plan->product, "0,{$plan->branch}", $queryID, 'id', '', 'story', array_keys($planStories), $pager);
@@ -593,17 +568,14 @@ class productplan extends control
             if(!isset($modules[$story->module])) $modules += $this->tree->getModulesName($story->module);
         }
 
-        $this->view->allStories  = $allStories;
-        $this->view->planStories = $planStories;
-        $this->view->products    = $products;
-        $this->view->plan        = $plan;
-        $this->view->plans       = $this->dao->select('id, end')->from(TABLE_PRODUCTPLAN)->fetchPairs();
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-        $this->view->browseType  = $browseType;
-        $this->view->modules     = $modules;
-        $this->view->param       = $param;
-        $this->view->orderBy     = $orderBy;
-        $this->view->pager       = $pager;
+        $this->view->allStories = $allStories;
+        $this->view->plan       = $plan;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->browseType = $browseType;
+        $this->view->modules    = $modules;
+        $this->view->param      = $param;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
         $this->display();
     }
 
