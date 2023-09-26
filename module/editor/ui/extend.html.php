@@ -20,7 +20,7 @@ panel
     div
     (
         setClass('extend-content'),
-        tree(set(array('items' => $tree, 'canEdit' => false, 'canDelete' => false, 'canSplit' => false)))
+        treeEditor(set(array('items' => $tree, 'canEdit' => false, 'canDelete' => false, 'canSplit' => false)))
     )
 );
 render('pagebase');

@@ -134,7 +134,7 @@ if(in_array($type, $config->dev->navTypes))
                 set::suffixWidth('18'),
             ),
         ),
-        tree(set(array('items' => $menuTree, 'canEdit' => false, 'canDelete' => false, 'canSplit' => false)))
+        treeEditor(set(array('items' => $menuTree, 'canEdit' => false, 'canDelete' => false, 'canSplit' => false)))
     );
 }
 
