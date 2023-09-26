@@ -29,7 +29,7 @@ class hour_of_annual_effort extends baseCalc
         return $this->dao->select("year(date) as year,sum(consumed) as consumed")
             ->from(TABLE_EFFORT)
             ->where('deleted')->eq('0')
-            ->andWhere('year(date)')->ne('0000')
+            ->andWhere('date')->notZeroDate()
             ->groupBy('`year`')
             ->query();
     }

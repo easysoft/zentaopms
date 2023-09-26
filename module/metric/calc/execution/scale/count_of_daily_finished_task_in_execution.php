@@ -32,6 +32,7 @@ class count_of_daily_finished_task_in_execution extends baseCalc
     {
         if($row->status != 'done' || empty($row->finishedDate)) return false;
 
+        if(empty($row->finishedDate)) return false;
         $date = substr($row->finishedDate, 0, 10);
         list($year, $month, $day) = explode('-', $date);
         if($year == '0000') return false;

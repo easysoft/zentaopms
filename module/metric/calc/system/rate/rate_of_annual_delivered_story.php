@@ -39,7 +39,7 @@ class rate_of_annual_delivered_story extends baseCalc
         if($closedReason == 'done') $date = $closedDate;
         if($stage == 'released' && !empty($closedDate)) $date = $releasedDate;
 
-        if($date === null) return false;
+        if(empty($date)) return false;
 
         $year = substr($date, 0, 4);
         if($year == '0000') return false;

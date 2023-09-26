@@ -43,8 +43,7 @@ class consume_of_annual_closed_project extends baseCalc
             ->where('t1.type')->eq('project')
             ->andWhere('t1.status')->eq('closed')
             ->andWhere('t1.deleted')->eq('0')
-            ->andWhere('t1.closedDate IS NOT NULL')
-            ->andWhere('LEFT(t1.closedDate, 4)')->ne('0000')
+            ->andWhere('t1.closedDate')->notZeroDatetime()
             ->query();
     }
 

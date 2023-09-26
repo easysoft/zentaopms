@@ -32,7 +32,7 @@ class count_of_daily_run_case extends baseCalc
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product=t3.id')
             ->where('t2.deleted')->eq('0')
             ->andWhere('t3.deleted')->eq('0')
-            ->andWhere('YEAR(t1.date)')->ne('0000')
+            ->andWhere('t1.date')->notZeroDatetime()
             ->groupBy('`year`, `month`, `day`')
             ->query();
     }

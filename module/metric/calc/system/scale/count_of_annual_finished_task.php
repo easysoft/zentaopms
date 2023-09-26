@@ -34,6 +34,7 @@ class count_of_annual_finished_task extends baseCalc
 
         $finishedDate = $data->finishedDate;
 
+        if(empty($finishedDate)) return false;
         $year = substr($finishedDate, 0, 4);
         if($year == '0000') return false;
 

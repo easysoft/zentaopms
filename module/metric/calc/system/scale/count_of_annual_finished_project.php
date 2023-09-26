@@ -32,6 +32,7 @@ class count_of_annual_finished_project extends baseCalc
     {
         if(empty($row->realEnd)) return false;
 
+        if(empty($row->realEnd)) return false;
         $year = substr($row->realEnd, 0, 4);
 
         if($year == '0000' || $row->status != 'closed') return false;
