@@ -1922,4 +1922,54 @@ class bugModel extends model
         /* Return the statistics of the bugs. */
         return sprintf($this->lang->bug->notice->summary, count($bugs), $unresolved);
     }
+
+    /**
+     * 搜索 bug。
+     * Search bugs.
+     *
+     * @param  string     $object
+     * @param  array|int  $productIdList
+     * @param  int|string $branch
+     * @param  int        $projectID
+     * @param  int        $executionID
+     * @param  int        $queryID
+     * @param  string     $excludeBugs
+     * @param  string     $orderBy
+     * @param  object     $pager
+     * @access public
+     * @return array
+     */
+    protected function getBySearch(string $object = 'bug', array|int $productIdList = array(), int|string $branch = 0, int $projectID = 0, int $executionID = 0, int $queryID = 0, string $excludeBugs = '', string $orderBy = '', object $pager = null): array
+    {
+        $bugQuery = $this->processSearchQuery($object, $queryID, $productIdList, (string)$branch);
+
+        return $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) AS priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) AS severityOrder")->from(TABLE_BUG)
+            ->where($bugQuery)
+            ->andWhere('deleted')->eq('0')
+            ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()
+
+            ->beginIF($object == 'bug' && !$this->app->user->admin)
+            ->andWhere('project')->in('0,' . $this->app->user->view->projects)
+            ->andWhere('execution')->in('0,' . $this->app->user->view->sprints)
+            ->fi()
+
+            ->beginIF($projectID)
+            ->andWhere('project', true)->eq($projectID)
+            ->fi()
+            ->beginIF($projectID && $object == 'bug')
+            ->orWhere('project')->eq(0)
+            ->andWhere('openedBuild')->eq('trunk')
+            ->fi()
+            ->beginIF($projectID)
+            ->markRight(1)
+            ->fi()
+
+            ->beginIF($object == 'execution')
+            ->andWhere('execution')->eq($executionID)
+            ->fi()
+
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
+    }
 }

@@ -5,7 +5,7 @@ su('admin');
 
 /**
 
-title=bugTao->getBySearch();
+title=bugModel->getBySearch();
 timeout=0
 cid=1
 
