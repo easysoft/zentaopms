@@ -202,6 +202,7 @@ class baseCalc
      */
     public function printSQL($dao)
     {
+        a($dao);
         echo $this->getSQL($dao);
     }
 

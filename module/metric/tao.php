@@ -271,7 +271,7 @@ class metricTao extends metricModel
         $records =  $this->dao->select("id, {$dataFieldStr} value, date")
             ->from(TABLE_METRICLIB)
             ->where('metricCode')->eq($code)
-            ->beginIF(!empty($scope))->andWhere($scopeKey)->eq($scopeValue)->fi()
+            ->beginIF(!empty($scope))->andWhere($scopeKey)->in($scopeValue)->fi()
             ->beginIF(!empty($dateBegin) and $dateType == 'year')->andWhere('`year`')->ge($yearBegin)->fi()
             ->beginIF(!empty($dateEnd)   and $dateType == 'year')->andWhere('`year`')->le($yearEnd)->fi()
             ->beginIF(!empty($dateBegin) and $dateType == 'month')->andWhere('CONCAT(`year`, `month`)')->ge($monthBegin)->fi()

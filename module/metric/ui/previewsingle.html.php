@@ -117,13 +117,13 @@ toolbar
         $lang->metric->viewType->multiple,
     ),
     /*
-    common::hasPriv('metric', 'browse') ? btn
+    common::hasPriv('metric', 'preview') ? btn
     (
         setClass('btn primary'),
         set::url(helper::createLink('metric', 'browse')),
         $lang->metric->manage
     ) : null,
-     */
+    */
 );
 
 $metricRecordType = $this->metric->getMetricRecordType(current($resultData));
@@ -138,10 +138,11 @@ $fnGenerateQueryForm = function() use($metricRecordType, $current)
     {
         $formGroups[] = formGroup
         (
-            setClass('query-inline'),
+            setClass('query-inline picker-nowrap'),
             set::width('248px'),
             set::label($this->lang->metric->scope),
             set::name('scope'),
+            set::control(array('type' => 'picker', 'multiple' => true)),
             set::items($objectPairs),
         );
     }
@@ -227,8 +228,8 @@ $fnGenerateQueryForm = function() use($metricRecordType, $current)
                 (
                     setClass('btn secondary'),
                     set::text($this->lang->metric->query),
+                    set::onclick('window.handleQueryClick()'),
                 ),
-                on::click('.query-btn button', 'window.handleQueryClick'),
             )
         ),
         set::actions(array()),
@@ -261,6 +262,7 @@ div
 div
 (
     setClass('main'),
+    empty($current) ? div(setClass('canvas')) :
     div
     (
         setClass('canvas'),

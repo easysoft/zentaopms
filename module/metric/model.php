@@ -512,7 +512,7 @@ class metricModel extends model
      */
     public function getPairsByScope($scope)
     {
-        if($scope == 'global') return array();
+        if(empty($scope) || $scope == 'system') return array();
 
         $objectPairs = array();
         switch($scope)
@@ -522,6 +522,28 @@ class metricModel extends model
                 break;
             case 'user':
                 $objectPairs = $this->loadModel('user')->getPairs('noletter');
+                break;
+            case 'program':
+                $objectPairs = $this->dao->select('id, name')->from(TABLE_PROGRAM)
+                    ->where('deleted')->eq(0)
+                    ->andWhere('type')->eq('program')
+                    ->fetchPairs();
+                break;
+            case 'product':
+                $objectPairs = $this->dao->select('id, name')->from(TABLE_PRODUCT)
+                    ->where('deleted')->eq(0)->fetchPairs();
+                break;
+            case 'project':
+                $objectPairs = $this->dao->select('id, name')->from(TABLE_PROJECT)
+                    ->where('deleted')->eq(0)
+                    ->andWhere('type')->eq('project')
+                    ->fetchPairs();
+                break;
+            case 'execution':
+                $objectPairs = $this->dao->select('id, name')->from(TABLE_PROJECT)
+                    ->where('deleted')->eq(0)
+                    ->andWhere('type')->in('sprint,stage')
+                    ->fetchPairs();
                 break;
             default:
                 $objectPairs = $this->loadModel($scope)->getPairs();

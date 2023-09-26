@@ -29,7 +29,7 @@ $lang->metric->definition    = "计算规则";
 $lang->metric->declaration   = "度量定义";
 $lang->metric->customUnit    = "自定义";
 $lang->metric->delist        = "下架";
-$lang->metric->preview       = "查看度量项";
+$lang->metric->preview       = "预览";
 $lang->metric->metricList    = "度量项列表";
 $lang->metric->manage        = "管理度量项";
 $lang->metric->exitManage    = "退出管理";
@@ -97,13 +97,13 @@ $lang->metric->featureBar['browse']['all']      = '全部';
 $lang->metric->featureBar['browse']['wait']     = '未发布';
 $lang->metric->featureBar['browse']['released'] = '已发布';
 
-$lang->metric->featureBar['preview']['system']    = '系统';
-$lang->metric->featureBar['preview']['program']   = '项目集';
-$lang->metric->featureBar['preview']['product']   = '产品';
 $lang->metric->featureBar['preview']['project']   = '项目';
+$lang->metric->featureBar['preview']['product']   = '产品';
 $lang->metric->featureBar['preview']['execution'] = '执行';
 $lang->metric->featureBar['preview']['dept']      = '团队';
 $lang->metric->featureBar['preview']['user']      = '个人';
+$lang->metric->featureBar['preview']['program']   = '项目集';
+$lang->metric->featureBar['preview']['system']    = '系统';
 $lang->metric->featureBar['preview']['code']      = '代码库';
 $lang->metric->featureBar['preview']['pipeline']  = '流水线';
 
