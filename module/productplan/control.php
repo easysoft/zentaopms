@@ -632,19 +632,23 @@ class productplan extends control
     }
 
     /**
+     * 批量移除计划中的需求。
      * Batch unlink story.
      *
-     * @param int    $planID
-     * @param string $orderBy
-     *
+     * @param  int    $planID
+     * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function batchUnlinkStory($planID, $orderBy = 'id_desc')
+    public function batchUnlinkStory(int $planID, string $orderBy = 'id_desc')
     {
-        foreach($this->post->storyIdList as $storyID) $this->productplan->unlinkStory($storyID, $planID);
-        $this->loadModel('action')->create('productplan', $planID, 'unlinkstory', '', implode(',', $this->post->storyIdList));
-        return $this->send(array('result' => 'success', 'load' => $this->createLink('productplan', 'view', "planID=$planID&type=story&orderBy=$orderBy")));
+        if($this->post->storyIdList)
+        {
+            foreach($this->post->storyIdList as $storyID) $this->productplan->unlinkStory($storyID, $planID);
+
+            $this->loadModel('action')->create('productplan', $planID, 'unlinkstory', '', implode(',', $this->post->storyIdList));
+        }
+        return $this->sendSuccess(array('load' => $this->createLink('productplan', 'view', "planID=$planID&type=story&orderBy=$orderBy")));
     }
 
     /**
@@ -756,19 +760,24 @@ class productplan extends control
     }
 
     /**
-     * Batch unlink story.
+     * 批量移除计划中的Bug。
+     * Batch unlink bug.
      *
-     * @param int    $planID
-     * @param string $orderBy
-     *
+     * @param  int    $planID
+     * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function batchUnlinkBug($planID, $orderBy = 'id_desc')
+    public function batchUnlinkBug(int $planID, string $orderBy = 'id_desc')
     {
-        foreach($this->post->bugIdList as $bugID) $this->productplan->unlinkBug($bugID);
-        $this->loadModel('action')->create('productplan', $planID, 'unlinkbug', '', implode(',', $this->post->bugIdList));
-        return $this->send(array('result' => 'success', 'load' => $this->createLink('productplan', 'view', "planID=$planID&type=bug&orderBy=$orderBy")));
+        if($this->post->bugIdList)
+        {
+            foreach($this->post->bugIdList as $bugID) $this->productplan->unlinkBug($bugID);
+
+            $this->loadModel('action')->create('productplan', $planID, 'unlinkbug', '', implode(',', $this->post->bugIdList));
+        }
+
+        return $this->sendSuccess(array('load' => $this->createLink('productplan', 'view', "planID=$planID&type=bug&orderBy=$orderBy")));
     }
 
     /**
