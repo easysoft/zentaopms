@@ -498,7 +498,7 @@ class productPlan
      *
      * @param  int    $bugID
      * @access public
-     * @return void
+     * @return object|false
      */
     public function unlinkBugTest($bugID)
     {
@@ -512,12 +512,29 @@ class productPlan
      *
      * @param  int    $storyID
      * @access public
-     * @return void
+     * @return object|false
      */
     public function unlinkStoryTest($storyID, $planID)
     {
         $this->productplan->unlinkStory($storyID, $planID);
 
         return $this->productplan->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
+    }
+
+    /**
+     * Test unlinkOldBranch method.
+     *
+     * @param  int    $changeBranch
+     * @access public
+     * @return array
+     */
+    public function unlinkOldBranchTest($changeBranch = false)
+    {
+        $changes = array(
+            1 => array(array('field' => $changeBranch ? 'branch' : 'name', 'old' => 1, 'new' => 2))
+        );
+        $this->productplan->unlinkOldBranch($changes);
+
+        return $this->productplan->dao->select('*')->from(TABLE_BUG)->fetchAll('id');
     }
 }
