@@ -188,12 +188,6 @@ $lang->testtask->report->charts['testTaskPerType']      = '按用例類型統計
 $lang->testtask->report->charts['testTaskPerModule']    = '按用例模組統計';
 $lang->testtask->report->charts['testTaskPerRunner']    = '按用例執行人統計';
 
-$lang->testtask->report->options = new stdclass();
-$lang->testtask->report->options->graph  = new stdclass();
-$lang->testtask->report->options->type   = 'pie';
-$lang->testtask->report->options->width  = 500;
-$lang->testtask->report->options->height = 140;
-
 $lang->testtask->featureBar['browse']['totalStatus'] = $lang->testtask->totalStatus;
 $lang->testtask->featureBar['browse']['wait']        = $lang->testtask->wait;
 $lang->testtask->featureBar['browse']['doing']       = $lang->testtask->testing;

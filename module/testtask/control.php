@@ -407,7 +407,7 @@ class testtask extends control
             {
                 $chartFunc   = 'getDataOf' . $chart;
                 $chartData   = $this->testtask->$chartFunc($taskID);
-                $chartOption = $this->lang->testtask->report->options;
+                $chartOption = $this->config->testtask->report->options;
                 if(!empty($chartType))
                 {
                     $chartOption->type           = $chartType;
