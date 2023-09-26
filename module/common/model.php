@@ -1112,6 +1112,26 @@ class commonModel extends model
                 }
             }
 
+            if($display == false and isset($lang->$group->homeMenu))
+            {
+                foreach($lang->$group->homeMenu as $menu)
+                {
+                    if(!isset($menu['link'])) continue;
+
+                    $linkPart = explode('|', $menu['link']);
+                    if(count($linkPart) < 3) continue;
+                    list($label, $module, $method) = $linkPart;
+
+                    if(common::hasPriv($module, $method))
+                    {
+                        $display       = true;
+                        $currentModule = $module;
+                        $currentMethod = $method;
+                        if(!isset($menu['target'])) break;
+                    }
+                }
+            }
+
             if(!$display) continue;
 
             /* Assign vars. */
