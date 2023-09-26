@@ -17,7 +17,8 @@ detailHeader
     to::title(
         entityLabel(
             set(array('entityID' => $job->id, 'level' => 1, 'text' => $job->name))
-        )
+        ),
+        $job->deleted ? span(setClass('label danger'), $lang->product->deleted) : null,
     ),
 );
 
@@ -98,12 +99,12 @@ detailBody
                     item
                     (
                         set::name($lang->compile->status),
-                        $status
+                        !empty($status) ? $status : ''
                     ),
                     item
                     (
                         set::name($lang->compile->time),
-                        $time
+                        !empty($time) ? $time : ''
                     ),
                     item
                     (
