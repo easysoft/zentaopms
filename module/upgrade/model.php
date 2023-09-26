@@ -9772,17 +9772,17 @@ class upgradeModel extends model
      */
     public function removeProductLineRequired()
     {
-	$this->loadModel('setting');
+        $this->loadModel('setting');
 
-	$createRequired = $this->setting->getItem('owner=system&module=product&section=create&key=requiredFields');
-	$editRequired   = $this->setting->getItem('owner=system&module=product&section=edit&key=requiredFields');
+        $createRequired = $this->setting->getItem('owner=system&module=product&section=create&key=requiredFields');
+        $editRequired   = $this->setting->getItem('owner=system&module=product&section=edit&key=requiredFields');
 
-	$createRequired = str_replace(',line,', ',', ",$createRequired,");
-	$editRequired   = str_replace(',line,', ',', ",$editRequired,");
+        $createRequired = str_replace(',line,', ',', ",$createRequired,");
+        $editRequired   = str_replace(',line,', ',', ",$editRequired,");
 
-	$this->setting->setItem('system.product.create.requiredFields', trim($createRequired, ','));
-	$this->setting->setItem('system.product.edit.requiredFields', trim($editRequired, ','));
+        $this->setting->setItem('system.product.create.requiredFields', trim($createRequired, ','));
+        $this->setting->setItem('system.product.edit.requiredFields', trim($editRequired, ','));
 
-	return true;
+        return true;
     }
 }
