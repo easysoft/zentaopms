@@ -394,10 +394,32 @@ window.renderChart = function(metricID = current.id, header = resultHeader, data
 window.initDTable = function($obj, head, data)
 {
     var height = 310;
+    var width  = 480;
     if(viewType == 'single') height = $('.table-side').height();
     if(!head || !data) return;
 
-    var commonWidth = 140;
+    var commonWidth = {
+        scope: 160,
+        date: 96,
+        value: 96,
+        calcTime: 128,
+    };
+
+    var cols = head.map(function(col){ return col.name; });
+
+    var cellWidth = {};
+    cols.forEach(function(col) {
+        if(commonWidth[col]) {
+            cellWidth[col] = commonWidth[col];
+        }
+    });
+
+    colsWidth = Object.values(cellWidth).reduce((a, b) => a + b, 0);
+    Object.keys(cellWidth).forEach(function(col) {
+        cellWidth[col] = Math.floor(cellWidth[col] / colsWidth * width);
+    });
+
+    console.log(cellWidth);
 
     new zui.DTable($obj,{
         responsive: true,
@@ -410,30 +432,8 @@ window.initDTable = function($obj, head, data)
         // footer: ['pager'],
         onRenderCell: function(result, {row, col})
         {
-            var colCount = Object.keys(row.data).length;
-            if(colCount == 3) commonWidth = 86;
-            if(colCount == 4) commonWidth = 64;
-
-            if(col.name != 'calcTime')
-            {
-                var html = `<span class="cell-ellipsis" style="width: ${commonWidth}px;" title="${row.data[col.name]}">${row.data[col.name]}</span>`;
-                result[0] = {html: html};
-            }
-
-            if(colCount == 4)
-            {
-                if(col.name == 'date')
-                {
-                    var html = `<span class="cell-ellipsis" style="width: 75px;" title="${row.data[col.name]}">${row.data[col.name]}</span>`;
-                    result[0] = {html: html};
-                }
-
-                if(col.name == 'value')
-                {
-                    var html = `<span class="cell-ellipsis" style="width: 53px;" title="${row.data[col.name]}">${row.data[col.name]}</span>`;
-                    result[0] = {html: html};
-                }
-            }
+            var html = `<span class="cell-ellipsis" style="width: ${cellWidth[col.name] - 24}px;" title="${row.data[col.name]}">${row.data[col.name]}</span>`;
+            result[0] = {html: html};
 
             return result;
         }

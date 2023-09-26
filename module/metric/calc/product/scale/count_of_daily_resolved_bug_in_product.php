@@ -30,7 +30,7 @@ class count_of_daily_resolved_bug_in_product extends baseCalc
 
     public function calculate($row)
     {
-        if($row->status != 'resolved' || empty($row->resolvedDate)) return false;
+        if($row->status == 'active' || empty($row->resolvedDate)) return false;
 
         $date = substr($row->resolvedDate, 0, 10);
         list($year, $month, $day) = explode('-', $date);

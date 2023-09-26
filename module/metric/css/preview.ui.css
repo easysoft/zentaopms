@@ -43,8 +43,8 @@
 .chart-multiple {height: 290px; width: 100%;}
 .chart-type {width: 30%; padding-left: 50px;}
 
-.table-and-chart .table-side {flex: 0 0 400px; overflow-x: hidden;}
-.table-and-chart .chart-side {flex: 0 0 calc(100% - 400px);}
+.table-and-chart .table-side {flex: 0 0 480px; overflow-x: hidden;}
+.table-and-chart .chart-side {flex: 0 0 calc(100% - 480px);}
 .table-and-chart .chart-center {display:flex; justify-content: center; align-items: center;}
 
 .icon-18 {font-size: 18px;}

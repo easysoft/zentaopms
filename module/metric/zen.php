@@ -359,10 +359,10 @@ class metricZen extends metric
         $scope     = current($scopeList);
 
         $header = array();
-        if(!empty($scopeList)) $header[] = array('name' => 'scope', 'title' => $this->lang->metric->scopeList[$scope] . $this->lang->metric->name);
-        if(!empty($dateList))  $header[] = array('name' => 'date',  'title' => $this->lang->metric->date);
-        $header[] = array('name' => 'value', 'title' => $this->lang->metric->value);
-        if(in_array('date', $fieldList)) $header[] = array('name' => 'calcTime', 'title' => $this->lang->metric->calcTime, 'width' => 150);
+        if(!empty($scopeList)) $header[] = array('name' => 'scope', 'title' => $this->lang->metric->scopeList[$scope] . $this->lang->metric->name, 'width' => 160);
+        if(!empty($dateList))  $header[] = array('name' => 'date',  'title' => $this->lang->metric->date, 'width' => 96);
+        $header[] = array('name' => 'value', 'title' => $this->lang->metric->value, 'width' => 96);
+        if(in_array('date', $fieldList)) $header[] = array('name' => 'calcTime', 'title' => $this->lang->metric->calcTime, 'width' => 128);
 
         return $header;
     }
@@ -398,7 +398,7 @@ class metricZen extends metric
                 $row->scopeID = $record[$scope];
             }
             $row->value = is_numeric($record['value']) ? round((float)$record['value'], 2) : $record['value'];
-            if(isset($record['date'])) $row->calcTime = $record['date'];
+            if(isset($record['date'])) $row->calcTime = date("Y-m-d H:m", strtotime($record['date']));
 
             $tableData[] = $row;
         }
