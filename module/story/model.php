@@ -2096,10 +2096,11 @@ class storyModel extends model
     }
 
     /**
-     * Get stories to link.
+     * 获取可关联的需求列表。
+     * Get the stories to link.
      *
      * @param  int     $storyID
-     * @param  string  $type linkStories|linkRelateSR|linkRelateUR
+     * @param  string  $type           linkStories|linkRelateSR|linkRelateUR
      * @param  string  $browseType
      * @param  int     $queryID
      * @param  string  $storyType
@@ -2108,7 +2109,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getStories2Link($storyID, $type = 'linkStories', $browseType = 'bySearch', $queryID = 0, $storyType = 'story', $pager = null, $excludeStories = '')
+    public function getStories2Link(int $storyID, string $type = 'linkStories', string $browseType = 'bySearch', int $queryID = 0, string $storyType = 'story', object $pager = null, string $excludeStories = ''): array
     {
         $story         = $this->getById($storyID);
         $tmpStoryType  = $storyType == 'story' ? 'requirement' : 'story';
