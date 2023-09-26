@@ -228,7 +228,7 @@ class productplanZen extends productplan
      * @access protected
      * @return void
      */
-    protected function assignViewData(object $plan)
+    protected function assignViewData(object $plan): void
     {
         if($plan->parent > 0)     $this->view->parentPlan    = $this->productplan->getById($plan->parent);
         if($plan->parent == '-1') $this->view->childrenPlans = $this->productplan->getChildren($plan->id);
@@ -256,7 +256,7 @@ class productplanZen extends productplan
      * @access protected
      * @return void
      */
-    protected function buildLinkStorySearchForm(object $plan, int $queryID, string $orderBy)
+    protected function buildLinkStorySearchForm(object $plan, int $queryID, string $orderBy): void
     {
         $this->app->loadLang('story');
         $products = $this->loadModel('product')->getProductPairsByProject((int)$this->session->project);
@@ -287,5 +287,46 @@ class productplanZen extends productplan
 
         unset($this->config->product->search['fields']['product']);
         $this->loadModel('search')->setSearchParams($this->config->product->search);
+    }
+
+    /**
+     * 构造关联bug页面的搜索表单。
+     * Build search form for link bug page.
+     *
+     * @param  object    $plan
+     * @param  int       $queryID
+     * @param  string    $orderBy
+     * @access protected
+     * @return void
+     */
+    protected function buildBugSearchForm(object $plan, int $queryID, string $orderBy): void
+    {
+        $this->config->bug->search['actionURL'] = $this->createLink('productplan', 'view', "planID={$plan->id}&type=bug&orderBy={$orderBy}&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
+        $this->config->bug->search['queryID']   = $queryID;
+        $this->config->bug->search['style']     = 'simple';
+
+        $modulePairs = $this->loadModel('tree')->getOptionMenu($plan->product, 'bug', 0, 'all');
+        $this->config->bug->search['params']['plan']['values']          = $this->productplan->getPairs($plan->product, $plan->branch, 'withMainPlan', true);
+        $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($plan->product, $plan->branch);
+        $this->config->bug->search['params']['module']['values']        = $modulePairs;
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($plan->product, 'all', 'releasetag');
+        $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
+        $this->config->bug->search['params']['module']['values']        = $modulePairs;
+        $this->config->bug->search['params']['project']['values']       = $this->product->getProjectPairsByProduct($plan->product, $plan->branch);
+
+        unset($this->config->bug->search['fields']['product']);
+        if($this->session->currentProductType == 'normal')
+        {
+            unset($this->config->bug->search['fields']['branch']);
+            unset($this->config->bug->search['params']['branch']);
+        }
+        else
+        {
+            $this->config->bug->search['fields']['branch'] = $this->lang->product->branch;
+
+            $branchPairs = $this->loadModel('branch')->getPairsByIdList(explode(',', trim($plan->branch, ',')));
+            $this->config->bug->search['params']['branch']['values'] = array('' => '', BRANCH_MAIN => $this->lang->branch->main) + $branchPairs;
+        }
+        $this->loadModel('search')->setSearchParams($this->config->bug->search);
     }
 }

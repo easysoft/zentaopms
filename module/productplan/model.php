@@ -890,19 +890,20 @@ class productplanModel extends model
     }
 
     /**
+     * 关联Bug。
      * Link bugs.
      *
      * @param  int    $planID
+     * @param  array  $bugIdList
      * @access public
-     * @return void
+     * @return bool
      */
-    public function linkBug($planID)
+    public function linkBug(int $planID, array $bugIdList): bool
     {
-        $this->loadModel('story');
         $this->loadModel('action');
 
-        $bugs = $this->loadModel('bug')->getByIdList($this->post->bugs);
-        foreach($this->post->bugs as $bugID)
+        $bugs = $this->loadModel('bug')->getByIdList($bugIdList);
+        foreach($bugIdList as $bugID)
         {
             if(!isset($bugs[$bugID])) continue;
 
@@ -913,7 +914,9 @@ class productplanModel extends model
             $this->action->create('bug', $bugID, 'linked2plan', '', $planID);
         }
 
-        $this->action->create('productplan', $planID, 'linkbug', '', implode(',', $this->post->bugs));
+        $this->action->create('productplan', $planID, 'linkbug', '', implode(',', $bugIdList));
+
+        return !dao::isError();
     }
 
     /**
