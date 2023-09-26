@@ -1,30 +1,26 @@
 #!/usr/bin/env php
 <?php
+/**
+
+title=productpanModel->getByIDList();
+timeout=0
+cid=1
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/productplan.class.php';
 
-/**
+zdTable('productplan')->config('productplan')->gen(10);
+zdTable('user')->gen(5);
+su('admin');
 
-title=cid=1
-cid=1
-pid=1
+$planIdList = array(array(), array(1), array(100));
 
-传入一个数组，取值id为3的数据 >> 3
-传入一个数组，取值id为1的数据 >> 1
-传入一个数值，正常取值 >> 1
-传入一个不存在的值返回布尔值 >> 0
+global $tester,$app;
+$app->moduleName = 'productplan';
+$app->rawModule = 'productplan';
+$tester->loadModel('productplan');
 
-*/
-
-$plan = new productPlan('admin');
-
-$IDlist = array();
-$IDlist[0] = 1;
-$IDlist[1] = 1000;
-$IDlist[2] = 3;
-
-r($plan->getByIDList($IDlist))    && p('3:id') && e('3'); //传入一个数组，取值id为3的数据
-r($plan->getByIDList($IDlist))    && p('1:id') && e('1'); //传入一个数组，取值id为1的数据
-r($plan->getByIDList($IDlist[0])) && p('1:id') && e('1'); //传入一个数值，正常取值
-r($plan->getByIDList($IDlist[1])) && p()       && e('0'); //传入一个不存在的值返回布尔值
-?>
+r($tester->productplan->getByIDList($planIdList[0])) && p()                     && e('0');         // 测试传入空的ID列表，获取计划列表信息
+r($tester->productplan->getByIDList($planIdList[1])) && p('1:id,product,title') && e('1,1,计划1'); // 测试传入一个ID列表，获取计划列表信息
+r($tester->productplan->getByIDList($planIdList[2])) && p()                     && e('0');         // 测试传入一个不存在的ID列表，获取计划列表信息

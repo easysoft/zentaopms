@@ -36,13 +36,14 @@ class productplanModel extends model
     }
 
     /**
+     * 获取计划列表信息。
      * Get plans by idList
      *
-     * @param  int    $planIdList
+     * @param  array  $planIdList
      * @access public
      * @return array
      */
-    public function getByIDList($planIdList)
+    public function getByIDList(array $planIdList): array
     {
         return $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('id')->in($planIdList)->orderBy('begin desc')->fetchAll('id');
     }

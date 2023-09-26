@@ -28,20 +28,6 @@ class productPlan
     }
 
     /**
-     * Get by ID list
-     *
-     * @param  array  $planIDList
-     * @access public
-     * @return array
-     */
-    public function getByIDList($planIDList)
-    {
-        $productplans = $this->productplan->getByIDList($planIDList);
-        if(dao::isError()) return dao::getError();
-        return $productplans;
-    }
-
-    /**
      * Get list
      *
      * @param int    $product
