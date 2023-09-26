@@ -778,7 +778,7 @@ $.get($.createLink('index', 'app'), html =>
         const params = $.parseUrlParams(location.hash.substring(1));
         defaultOpenUrl = params.app;
     }
-    openApp.apply(null, defaultOpenUrl.split(','));
+    openApp.apply(null, defaultOpenUrl.split(' '));
 });
 
 $.apps = $.extend(apps,
