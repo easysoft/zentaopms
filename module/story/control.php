@@ -1342,11 +1342,11 @@ class story extends control
      * 引用2：用户需求列表页，关联软件需求，将用户需求关联到软件需求。
      *
      * @param  int    $storyID
-     * @param  string $type
+     * @param  string $type          linkStories|linkRelateUR|linkRelateSR
      * @param  int    $linkedStoryID
-     * @param  string $browseType
-     * @param  int    $queryID
-     * @param  string $storyType  story|requirement
+     * @param  string $browseType    ''|bySearch
+     * @param  int    $queryID       0|
+     * @param  string $storyType     story|requirement
      * @access public
      * @return void
      */
