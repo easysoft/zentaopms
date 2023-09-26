@@ -281,7 +281,7 @@ data('storyBrowseType', $storyBrowseType);
 
 jsVar('projectID',      $projectID);
 jsVar('modulePairs',    $modulePairs);
-jsVar('pageSummary',    $summary);
+jsVar('+pageSummary',   $summary);
 jsVar('checkedSummary', str_replace('%storyCommon%', $storyCommon, $lang->product->checkedSummary));
 
 featureBar

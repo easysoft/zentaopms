@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('pageSummary', $summary);
+jsVar('+pageSummary', $summary);
 jsVar('checkedSummary', $lang->productplan->checkedSummary);
 
 /* zin: Define the set::module('productplan') feature bar on main menu. */

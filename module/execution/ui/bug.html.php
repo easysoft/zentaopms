@@ -87,7 +87,7 @@ if($canBatchAssignTo)
 
 jsVar('orderBy', $orderBy);
 jsVar('sortLink', helper::createLink('execution', 'bug', "executionID={$execution->id}&productID={$productID}&branch={$branchID}&orderBy={orderBy}&build=$buildID&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
-jsVar('pageSummary', $summary);
+jsVar('+pageSummary', $summary);
 jsVar('checkedSummary', $lang->selectedItems);
 
 $cols = $this->loadModel('datatable')->getSetting('execution');
