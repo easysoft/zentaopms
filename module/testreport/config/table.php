@@ -10,12 +10,14 @@ $config->testreport->actionList['edit']['url']         = array('module' => 'test
 $config->testreport->actionList['edit']['order']       = 5;
 $config->testreport->actionList['edit']['show']        = 'clickable';
 
-$config->testreport->actionList['delete']['icon']  = 'trash';
-$config->testreport->actionList['delete']['hint']  = $lang->testreport->delete;
-$config->testreport->actionList['delete']['text']  = $lang->testreport->delete;
-$config->testreport->actionList['delete']['url']   = array('module' => 'testreport', 'method' => 'delete', 'params' => 'reportID={id}');
-$config->testreport->actionList['delete']['order'] = 10;
-$config->testreport->actionList['delete']['show']  = 'clickable';
+$config->testreport->actionList['delete']['icon']         = 'trash';
+$config->testreport->actionList['delete']['hint']         = $lang->testreport->delete;
+$config->testreport->actionList['delete']['text']         = $lang->testreport->delete;
+$config->testreport->actionList['delete']['url']          = array('module' => 'testreport', 'method' => 'delete', 'params' => 'reportID={id}');
+$config->testreport->actionList['delete']['order']        = 10;
+$config->testreport->actionList['delete']['show']         = 'clickable';
+$config->testreport->actionList['delete']['class']        = 'ajax-submit';
+$config->testreport->actionList['delete']['data-confirm'] = $lang->testreport->confirmDelete;
 
 $config->testreport->dtable->fieldList['id']['name']  = 'id';
 $config->testreport->dtable->fieldList['id']['title'] = $lang->idAB;

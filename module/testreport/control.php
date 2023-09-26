@@ -296,27 +296,22 @@ class testreport extends control
     }
 
     /**
+     * 删除一个测试报告。
      * Delete report.
      *
      * @param  int    $reportID
-     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function delete($reportID, $confirm = 'no')
+    public function delete($reportID)
     {
-        if($confirm == 'no')
-        {
-            return print(js::confirm($this->lang->testreport->confirmDelete, inlink('delete', "reportID=$reportID&confirm=yes")));
-        }
-        else
-        {
-            $testreport = $this->testreport->getById($reportID);
-            $locateLink = $this->session->reportList ? $this->session->reportList : inlink('browse', "productID={$testreport->product}");
+        $testreport = $this->testreport->getByID($reportID);
+        $locateLink = $this->session->reportList ? $this->session->reportList : inlink('browse', "productID={$testreport->product}");
 
-            $this->testreport->delete(TABLE_TESTREPORT, $reportID);
-            return print(js::locate($locateLink, 'parent'));
-        }
+        $this->testreport->delete(TABLE_TESTREPORT, $reportID);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $locateLink));
     }
 
     /**
