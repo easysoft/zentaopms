@@ -1362,7 +1362,7 @@ class story extends control
 
         if($_POST)
         {
-            $this->story->linkStories($storyID);
+            $this->story->linkStories($storyID, $this->post->stories);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'callback' => 'loadCurrentPage()', 'closeModal' => true));
