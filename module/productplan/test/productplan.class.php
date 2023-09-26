@@ -118,7 +118,7 @@ class productPlan
      */
     public function getBranchPlanPairs($productID, $branches)
     {
-        $productplans = $this->productplan->getBranchPlanPairs($productID, $branches);
+        $productplans = $this->productplan->getBranchPlanPairs($productID, array($branches));
         if(dao::isError()) return dao::getError();
         return $productplans;
     }
