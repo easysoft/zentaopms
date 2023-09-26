@@ -177,6 +177,8 @@ foreach(array('generated', 'legacy', 'resolved') as $field)
 
 for($time = $beginTime; $time <= $endTime; $time += 86400)
 {
+    $date = date('m-d', $time);
+
     $generated = !empty($infoValue['generated'][$date]) ? $infoValue['generated'][$date] : 0;
     $legacy    = !empty($infoValue['legacy'][$date])    ? $infoValue['legacy'][$date]    : 0;
     $resolved  = !empty($infoValue['resolved'][$date])  ? $infoValue['resolved'][$date]  : 0;
@@ -185,7 +187,6 @@ for($time = $beginTime; $time <= $endTime; $time += 86400)
     $chartOption['legacy']['data'][]    = $legacy;
     $chartOption['resolved']['data'][]  = $resolved;
 
-    $date         = date('m-d', $time);
     $xAxisData[]  = $date;
     $tableTR[]    = h::tr
     (
@@ -244,7 +245,7 @@ $bugHandleChart = div
 $bugCharts = array();
 foreach($bugInfo as $infoKey => $infoValue)
 {
-    if($infokey == 'bugStageGroups' || $infoKey == 'bugHandleGroups') continue;
+    if($infoKey == 'bugStageGroups' || $infoKey == 'bugHandleGroups') continue;
     $list = $infoValue;
     if($infoKey == 'bugSeverityGroups')   $list = $lang->bug->severityList;
     if($infoKey == 'bugStatusGroups')     $list = $lang->bug->statusList;
