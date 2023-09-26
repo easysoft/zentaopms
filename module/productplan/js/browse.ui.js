@@ -115,21 +115,21 @@ window.deleteProductPlan = function(planID)
 
 $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
 {
-    const $this  = $(this);
-    const dtable = zui.DTable.query($('#planList'));
+    const dtable = zui.DTable.query($(this).target);
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
 
-    const postData = new FormData();
-    checkedList.forEach((id) => postData.append('planIdList[]', id));
+    const url  = $(this).data('url');
+    const form = new FormData();
+    checkedList.forEach((id) => form.append('planIdList[]', id));
 
-    if($(this).data('page') == 'batch')
+    if($(this).hasClass('ajax-btn'))
     {
-        postAndLoadPage($(this).data('formaction'), postData);
+        $.ajaxSubmit({url, data: form});
     }
     else
     {
-        $.ajaxSubmit({"url": $(this).data('formaction'), "data": postData});
+        postAndLoadPage(url, form);
     }
 });
 
@@ -182,7 +182,6 @@ window.renderCell = function(result, info)
             content = content.replace(/"/g, '&quot;');
 
             const buttonHtml = `<button type='button' data-toggle='popover' data-trigger='click' data-content="${content}" data-close-btn='false' data-placement='right'><i class='icon-run text-primary'></i></button>`;
-            console.log(buttonHtml);
             result[0] = {html: buttonHtml};
         }
     }

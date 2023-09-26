@@ -29,12 +29,62 @@ $canCreatePlan ? toolbar
 
 $cols      = $this->loadModel('datatable')->getSetting('productplan');
 $tableData = initTableData($plans, $cols, $this->productplan);
+
+$canBatchEdit         = common::hasPriv('productplan', 'batchEdit');
+$canBatchChangeStatus = common::hasPriv('productplan', 'batchChangeStatus');
+$canBatchAction       = $canBatchEdit || $canBatchChangeStatus;
+
+$footToolbar = array();
+if($canBatchAction)
+{
+    if($canBatchEdit)
+    {
+        $footToolbar['items'][] = array(
+            'text'      => $lang->edit,
+            'className' => 'btn batch-btn size-sm secondary',
+            'data-url'  => $this->createLink('productplan', 'batchEdit', "productID={$productID}&branch={$branch}")
+        );
+    }
+
+    if($canBatchChangeStatus)
+    {
+        $items = array();
+        foreach($lang->productplan->statusList as $statusKey => $statusText)
+        {
+            $items[$statusKey] = array
+                (
+                    'text'     => $statusText,
+                    'class'    => 'batch-btn',
+                    'data-url' => createLink('productplan', 'batchChangeStatus', "status={$statusKey}&productID={$productID}"),
+                );
+            if($statusKey == 'closed') $items[$statusKey]['data-page'] = 'batch';
+        }
+
+        menu
+        (
+            set::id('navStatus'),
+            set::className('dropdown-menu'),
+            set::items(array_values($items))
+        );
+
+        $footToolbar['items'][] = array(
+            'text'           => $lang->statusAB,
+            'btnType'        => 'secondary',
+            'caret'          => 'up',
+            'url'            => '#navStatus',
+            'data-toggle'    => 'dropdown',
+            'data-placement' => 'top-start',
+        );
+    }
+}
+
 dtable
 (
     set::cols($cols),
     set::data($tableData),
     set::customCols(true),
     set::onRenderCell(jsRaw('window.renderCell')),
+    set::footToolbar($footToolbar),
     set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
     set::footPager(
         usePager(array('linkCreator' => createLink($app->rawModule, 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&queryID={$queryID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&pageID={page}"))),
