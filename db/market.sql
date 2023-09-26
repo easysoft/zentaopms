@@ -42,4 +42,4 @@ CREATE TABLE IF NOT EXISTS `zt_marketreport` (
 ALTER TABLE `zt_project` ADD COLUMN `market` mediumint(8) NOT NULL DEFAULT 0;
 ALTER TABLE `zt_project` ADD COLUMN `closedReason` varchar(20) NOT NULL DEFAULT '';
 
-ALTER TABLE `zt_market` ADD COLUMN `businessPos` varchar(20) NOT NULL DEFAULT '';
+ALTER TABLE `zt_market` ADD COLUMN `ppm` varchar(20) NOT NULL DEFAULT '';
