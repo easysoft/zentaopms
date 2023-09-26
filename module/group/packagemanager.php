@@ -3391,7 +3391,7 @@ $config->group->package->manageScreen->privs  = array();
 $config->group->package->manageScreen->privs['screen-create']  = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('screen-browse'), 'recommend' => array('screen-design', 'screen-edit', 'screen-publish'));
 $config->group->package->manageScreen->privs['screen-edit']    = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('screen-browse'), 'recommend' => array('screen-create', 'screen-design', 'screen-publish'));
 $config->group->package->manageScreen->privs['screen-design']  = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('screen-browse'), 'recommend' => array('screen-create', 'screen-edit', 'screen-publish'));
-$config->group->package->manageScreen->privs['screen-publish'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('screen-browse'), 'recommend' => array('screen-create', 'screen-design', 'screen-edit'));
+$config->group->package->manageScreen->privs['screen-publish'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('screen-design', 'screen-browse'), 'recommend' => array('screen-create', 'screen-design', 'screen-edit'));
 
 $config->group->package->deleteScreen = new stdclass();
 $config->group->package->deleteScreen->order  = 15;
