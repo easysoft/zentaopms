@@ -11,7 +11,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$items = array_merge(array('id' => array('name' => 'id', 'label' => $lang->idAB, 'control' => 'index', 'width' => '60px')), $config->productplan->form->batchEdit);
+$items = array_merge(array('idIndex' => array('name' => 'idIndex', 'label' => $lang->idAB, 'control' => 'index', 'width' => '60px')), $config->productplan->form->batchEdit);
 $items['future'] = array('name' => 'future', 'label' => $lang->productplan->future, 'control' => 'checkList', 'width' => '80px', 'items' => array(1 => $lang->productplan->future));
 
 $items['branch']['multiple'] = true;
@@ -53,6 +53,7 @@ jsVar('noWaitPickerItems', $noWaitPickerItems);
 
 formBatchPanel
 (
+    setID('bachEditForm'),
     set::title($lang->product->batchEdit),
     set::mode('edit'),
     set::items($items),

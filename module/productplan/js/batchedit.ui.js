@@ -8,27 +8,36 @@ window.renderRowData = function($row, index, plan)
 
     if($branch.length > 0)
     {
-        $branchPicker = $branch.find('.picker-box');
-        branchOptions = {name: 'branch[' + plan.id + '][]', 'multiple': true, defaultValue: plan.branch, onChange: function(){getConflictStories(index)}, 'items': branchPickerItems};
+        let branchOptions = {name: 'branch', 'multiple': true, defaultValue: plan.branch, onChange: function(){getConflictStories(index)}, 'items': branchPickerItems};
         if(plan.parent > 0 && typeof parentBranches[plan.parent] != 'undefined') branchOptions = $.extend({}, branchOptions, {items: parentBranches[plan.parent]});
-        $branchPicker.picker(branchOptions);
+        $row.find('[data-name="branch"]').find('.picker-box').on('inited', function(e, info)
+        {
+            let $branch = info[0];
+            $branch.render(branchOptions);
+            $branch.$.setValue(plan.branch);
+        });
+
     }
 
     if($status.length > 0)
     {
-        $statusPicker = $status.find('.picker-box');
-        statusOptions = {name: 'status[' + plan.id + ']', defaultValue: plan.status, 'items': statusPickerItems};
+        let statusOptions = {name: 'status', defaultValue: plan.status, 'items': statusPickerItems, required: true};
         if(plan.parent == '-1')   statusOptions = $.extend({}, statusOptions, {disabled: true});
         if(plan.status != 'wait') statusOptions = $.extend({}, statusOptions, {items: noWaitPickerItems});
-        $statusPicker.picker(statusOptions);
+        $row.find('[data-name="status"]').find('.picker-box').on('inited', function(e, info)
+        {
+            let $status = info[0];
+            $status.render(statusOptions);
+            $status.$.setValue(plan.status);
+        });
     }
 
     let disabled = ((plan.begin == futureConfig && plan.end == futureConfig));
     if(plan.parent == -1 && (plan.begin == futureConfig && plan.end == futureConfig)) disabled = true;
-    $beginPicker = $begin.find('#begin');
-    $endPicker   = $end.find('#end');
-    beginOptions = {defaultValue: plan.begin, name: 'begin[' + plan.id + ']'};
-    endOptions   = {defaultValue: plan.end,   name: 'end[' + plan.id + ']'};
+    let $beginPicker = $begin.find('#begin');
+    let $endPicker   = $end.find('#end');
+    let beginOptions = {defaultValue: plan.begin, name: 'begin[' + plan.id + ']'};
+    let endOptions   = {defaultValue: plan.end,   name: 'end[' + plan.id + ']'};
     if(disabled)
     {
         $beginOptions = $.extend({}, $beginOptions, {disabled: true});
@@ -63,15 +72,21 @@ window.changeDate = function(index)
 window.getConflictStories = function(index)
 {
     let $row          = $('tr[data-index="' + index + '"]');
-    let $branch       = $row.find('.form-batch-control[data-name="branch"]');
-    let planID        = parseInt($row.find('.form-batch-control[data-name="id"] .form-control-static[data-name="id"]').text()).toString();
-    let $branchPicker = $branch.find('[name^=branch]').zui('picker');
-    let newBranch     = $branchPicker.length == 0 ? '' : $branchPicker.$.value.toString();
+    let $branch       = $row.find('[name^="branch"]');
+    let planID        = parseInt($row.find('.form-control-static[data-name="idIndex"]').text()).toString();
+    let newBranch     = $branch.length == 0 ? '' : $branch.val();
     $.get($.createLink('productplan', 'ajaxGetConflict', 'planID=' + planID + '&newBranch=' + newBranch), function(conflictStories)
     {
-        if(conflictStories != '' && !confirm(conflictStories))
+        if(conflictStories != '')
         {
-            $branchPicker.render($.extend({}, $branchPicker.options, {defaultValue: oldBranch[planID]}));
+            zui.Modal.confirm({message: conflictStories, icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
+            {
+                if(!res)
+                {
+                    const $branchPicker = $branch.zui('picker');
+                    $branchPicker.$.setValue(oldBranch[planID]);
+                }
+            });
         }
     });
 }
