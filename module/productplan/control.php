@@ -209,6 +209,7 @@ class productplan extends control
     }
 
     /**
+     * 批量更新计划的状态。
      * Batch change the status of productplan.
      *
      * @param  string $status
@@ -221,11 +222,11 @@ class productplan extends control
 
         if($status !== 'closed' || $this->post->comment)
         {
-            $this->productplan->batchChangeStatus($status);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $this->productplan->batchChangeStatus($planIdList, $status);
+            if(dao::isError()) return $this->sendError(dao::getError());
 
-            if($status !== 'closed') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
-            if($this->post->comment) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browse', "product=$productID")));
+            if($status !== 'closed') return $this->sendSuccess(array('load' => true));
+            if($this->post->comment) return $this->sendSuccess(array('load' => inlink('browse', "product=$productID")));
         }
 
         $this->commonAction($productID);
