@@ -11,6 +11,7 @@
 class projectBuild extends control
 {
     /**
+     * 获取项目的版本列表。
      * Browse builds of a project.
      *
      * @param  int    $projectID
@@ -23,36 +24,39 @@ class projectBuild extends control
      * @access public
      * @return void
      */
-    public function browse($projectID = 0, $type = 'all', $param = 0, $orderBy = 't1.date_desc,t1.id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse(int $projectID = 0, string $type = 'all', int $param = 0, string $orderBy = 't1.date_desc,t1.id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         echo $this->fetch('project', 'build', "projectID={$projectID}&type={$type}&param={$param}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
     }
 
     /**
+     * 创建项目版本。
      * Create a build for project.
      *
      * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function create($projectID = 0)
+    public function create(int $projectID = 0)
     {
         echo $this->fetch('build', 'create', "executionID=0&productID=0&projectID=$projectID");
     }
 
     /**
+     * 编辑项目版本。
      * Edit a build for project.
      *
      * @param  int    $buildID
      * @access public
      * @return void
      */
-    public function edit($buildID)
+    public function edit(int $buildID)
     {
         echo $this->fetch('build', 'edit', "buildID=$buildID");
     }
 
     /**
+     * 查看项目版本。
      * View a build for project.
      *
      * @param  int    $buildID
@@ -66,24 +70,26 @@ class projectBuild extends control
      * @access public
      * @return void
      */
-    public function view($buildID, $type = 'story', $link = 'false', $param = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function view(int $buildID, string $type = 'story', string $link = 'false', string $param = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
     {
         echo $this->fetch('build', 'view', "buildID=$buildID&type=$type&link=$link&param=$param&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
     /**
+     * 删除项目版本。
      * Delete a build for project.
      *
      * @param  int    $buildID
      * @access public
      * @return void
      */
-    public function delete($buildID)
+    public function delete(int $buildID)
     {
         $this->locate($this->createLink('build', 'delete', "buildID={$buildID}&from=project"));
     }
 
     /**
+     * 项目版本关联需求。
      * Link stories.
      *
      * @param  int    $buildID
@@ -95,37 +101,40 @@ class projectBuild extends control
      * @access public
      * @return void
      */
-    public function linkStory($buildID = 0, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function linkStory(int $buildID = 0, string $browseType = '', int $param = 0, int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
     {
         echo $this->fetch('build', 'linkStory', "buildID=$buildID&browseType=$browseType&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
     /**
-     * Unlink story
+     * 移除关联的需求。
+     * Unlink story.
      *
+     * @param  int    $buildID
      * @param  int    $storyID
-     * @param  string $confirm  yes|no
      * @access public
      * @return void
      */
-    public function unlinkStory($buildID, $storyID)
+    public function unlinkStory(int $buildID, int $storyID)
     {
         echo $this->fetch('build', 'unlinkStory', "buildID=$buildID&storyID=$storyID");
     }
 
     /**
+     * 批量移除关联的需求。
      * Batch unlink story.
      *
-     * @param  string $confirm
+     * @param  int    $buildID
      * @access public
      * @return void
      */
-    public function batchUnlinkStory($buildID)
+    public function batchUnlinkStory(int $buildID)
     {
         echo $this->fetch('build', 'batchUnlinkStory', "buildID=$buildID");
     }
 
     /**
+     * 项目版本关联Bug。
      * Link bugs.
      *
      * @param  int    $buildID
@@ -137,32 +146,34 @@ class projectBuild extends control
      * @access public
      * @return void
      */
-    public function linkBug($buildID = 0, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function linkBug(int $buildID = 0, string $browseType = '', int $param = 0, int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
     {
         echo $this->fetch('build', 'linkBug', "buildID=$buildID&browseType=$browseType&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
     /**
-     * Unlink story
+     * 移除关联的Bug。
+     * Unlink bug.
      *
      * @param  int    $buildID
      * @param  int    $bugID
      * @access public
      * @return void
      */
-    public function unlinkBug($buildID, $bugID)
+    public function unlinkBug(int $buildID, int $bugID)
     {
         echo $this->fetch('build', 'unlinkBug', "buildID=$buildID&bugID=$bugID");
     }
 
     /**
-     * Batch unlink story.
+     * 批量移除关联的Bug。
+     * Batch unlink bug.
      *
-     * @param  int $buildID
+     * @param  int    $buildID
      * @access public
      * @return void
      */
-    public function batchUnlinkBug($buildID)
+    public function batchUnlinkBug(int $buildID)
     {
         echo $this->fetch('build', 'batchUnlinkBug', "buildID=$buildID");
     }
