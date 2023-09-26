@@ -31,6 +31,7 @@ class day_of_annual_effort extends baseCalc
             ->where('module')->eq('execution')
             ->andWhere('key')->eq('defaultWorkhours')
             ->fetch('value');
+        if(empty($defaultHours)) $defaultHours = 7;
 
         return $this->dao->select("year(date) as year,sum(consumed) as consumed, $defaultHours as defaultHours")
             ->from(TABLE_EFFORT)
