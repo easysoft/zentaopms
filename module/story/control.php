@@ -1203,13 +1203,13 @@ class story extends control
         /* Get story and product to render the view. */
         $story   = $this->story->getById($storyID);
         $product = $this->product->getByID($story->product);
+        $users   = $this->config->vision == 'lite' ? $this->user->getTeamMemberPairs($this->session->project) : $this->user->getPairs('nodeleted|noclosed|pofirst|noletter');
 
-        $this->view->title      = zget($product, 'name', $story->title) . " {$this->lang->colon} {$this->lang->story->assign}";
-        $this->view->story      = $story;
-        $this->view->storyType  = $storyType;
-        $this->view->actions    = $this->action->getList('story', $storyID);
-        $this->view->users      = $this->config->vision == 'lite' ? $this->loadModel('user')->getTeamMemberPairs($this->session->project) : $this->loadModel('user')->getPairs('nodeleted|noclosed|pofirst|noletter');
-
+        $this->view->title     = zget($product, 'name', $story->title) . " {$this->lang->colon} {$this->lang->story->assign}";
+        $this->view->story     = $story;
+        $this->view->storyType = $storyType;
+        $this->view->actions   = $this->action->getList('story', $storyID);
+        $this->view->users     = $users;
         $this->display();
     }
 
