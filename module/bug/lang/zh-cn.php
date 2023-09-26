@@ -83,6 +83,7 @@ $lang->bug->relatedBug       = '相关Bug';
 $lang->bug->case             = '相关用例';
 $lang->bug->linkMR           = '相关合并请求';
 $lang->bug->linkCommit       = '相关代码版本';
+$lang->bug->productplan      = $lang->bug->plan;
 
 $lang->bug->abbr = new stdclass();
 $lang->bug->abbr->module         = '模块';

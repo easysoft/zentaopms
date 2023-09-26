@@ -83,6 +83,7 @@ $lang->bug->relatedBug       = 'Related Bugs';
 $lang->bug->case             = 'Cases';
 $lang->bug->linkMR           = 'Related MRs';
 $lang->bug->linkCommit       = 'Related Commits';
+$lang->bug->productplan      = $lang->bug->plan;
 
 $lang->bug->abbr = new stdclass();
 $lang->bug->abbr->module         = 'Module';
