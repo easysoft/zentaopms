@@ -174,7 +174,7 @@ detailHeader
         span(setClass('label circle primary'), ($plan->begin == FUTURE_TIME || $plan->end == FUTURE_TIME) ? $lang->productplan->future : $plan->begin . '~' . $plan->end),
         $plan->deleted ? span(setClass('label danger'), $lang->product->deleted) : null,
     ),
-    (!$plan->deleted && !isonlybody() && $actionMenus) ? to::suffix(btnGroup(setClass('text-primary'), set::items($actionMenus))) : null
+    (!$plan->deleted && $actionMenus) ? to::suffix(btnGroup(set::items($actionMenus))) : null
 );
 
 detailBody

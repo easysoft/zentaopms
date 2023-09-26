@@ -1,7 +1,6 @@
 .menu-nested {height:150px; overflow-x:hidden; overflow-y:auto;}
 .tabnActions {float:right; margin-top: -55px;}
 .tabnActions .primary {margin-left:8px;}
-#mainContent .detail-header .btn-group .icon {--tw-text-opacity: 1; color: rgba(var(--color-primary-500-rgb),var(--tw-text-opacity));}
 #mainContent .detail-body .section-list .tabs ul {border-bottom-width: 1px; border-bottom-style: solid;}
 #mainContent .detail-body .section-list .tab-content .table-data caption {padding-top: 16px;}
 #planInfo table caption {font-size: 1rem; font-weight: bold;}
