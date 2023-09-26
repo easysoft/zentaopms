@@ -15,32 +15,54 @@ class productplanZen extends productplan
      * 构建批量编辑计划数据。
      * Build plans for batch edit.
      *
+     * @param  int          $productID
      * @access protected
-     * @return array
+     * @return array|string
      */
-    protected function buildPlansForBatchEdit(): array
+    protected function buildPlansForBatchEdit(int $productID): array|string
     {
-        $fields   = $this->config->productplan->form->batchEdit;
-        $plans    = form::batchData($fields)->get();
-        $oldPlans = $this->productplan->getByIDList(array_keys($plans));
+        $plans        = form::batchData($this->config->productplan->form->batchEdit)->get();
+        $oldPlans     = $this->productplan->getByIDList(array_keys($plans));
+        $futureConfig = $this->config->productplan->future;
+        $product      = $this->loadModel('product')->getByID($productID);
         foreach($plans as $planID => $plan)
         {
-            $oldPlan = $oldPlans[$planID];
+            $oldPlan  = $oldPlans[$planID];
+            $parentID = $oldPlan->parent;
 
-            $plan->parent = $oldPlan->parent;
             if(empty($plan->begin))  $plan->begin  = $oldPlan->begin;
             if(empty($plan->end))    $plan->end    = $oldPlan->end;
             if(empty($plan->status)) $plan->status = $oldPlan->status;
 
-            if(empty($plan->title)) dao::$errors[] = sprintf($this->lang->productplan->errorNoTitle, $planID);
-            if($plan->begin > $plan->end && !empty($plan->end)) dao::$errors[] = sprintf($this->lang->productplan->beginGeEnd, $planID);;
-
+            if($plan->begin > $plan->end && !empty($plan->end)) return dao::$errors["begin[{$planID}]"] = sprintf($this->lang->productplan->beginGeEnd, $planID);;
             if($plan->begin == '') $plan->begin = $this->config->productplan->future;
             if($plan->end   == '') $plan->end   = $this->config->productplan->future;
             if(!empty($_POST['future'][$planID]))
             {
                 $plan->begin = $this->config->productplan->future;
                 $plan->end   = $this->config->productplan->future;
+            }
+
+            /* Determine whether the begin and end dates of the parent plan and the child plan are correct. */
+            if($parentID > 0)
+            {
+                $parent = zget($plans, $parentID, $this->productplan->getByID($parentID));
+                if($parent->begin != $futureConfig && $plan->begin != $futureConfig && $plan->begin < $parent->begin) return dao::$errors["begin[{$planID}]"] = sprintf($this->lang->productplan->beginLessThanParentTip, $planID, $plan->begin, $parent->begin);
+                if($parent->end != $futureConfig && $plan->end != $futureConfig && $plan->end > $parent->end)         return dao::$errors["end[{$planID}]"]   = sprintf($this->lang->productplan->endGreatThanParentTip, $planID, $plan->end, $parent->end);
+            }
+            elseif($parentID == -1 && $plan->begin != $futureConfig)
+            {
+                $childPlans = $this->productplan->getChildren($parentID);
+                $minBegin   = $plan->begin;
+                $maxEnd     = $plan->end;
+                foreach($childPlans as $childID => $childPlan)
+                {
+                    $childPlan = isset($plans[$childID]) ? $plans[$childID] : $childPlan;
+                    if($childPlan->begin < $minBegin && $minBegin != $this->config->productplan->future) $minBegin = $childPlan->begin;
+                    if($childPlan->end > $maxEnd && $maxEnd != $this->config->productplan->future)       $maxEnd   = $childPlan->end;
+                }
+                if($minBegin < $plan->begin && $minBegin != $futureConfig) return dao::$errors["begin[{$planID}]"] = sprintf($this->lang->productplan->beginGreaterChildTip, $planID, $plan->begin, $minBegin);
+                if($maxEnd > $plan->end     && $maxEnd != $futureConfig)   return dao::$errors["end[{$planID}]"]   = sprintf($this->lang->productplan->endLessThanChildTip, $planID, $plan->end, $maxEnd);
             }
         }
 

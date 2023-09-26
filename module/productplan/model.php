@@ -308,15 +308,16 @@ class productplanModel extends model
     }
 
     /**
+     * 获取计划下的所有子计划。
      * Get Children plan.
      *
      * @param  int    $planID
      * @access public
      * @return array
      */
-    public function getChildren($planID)
+    public function getChildren(int $planID)
     {
-        return $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('parent')->eq((int)$planID)->andWhere('deleted')->eq('0')->fetchAll();
+        return $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('parent')->eq($planID)->andWhere('deleted')->eq('0')->fetchAll('id');
     }
 
     /**
@@ -693,32 +694,11 @@ class productplanModel extends model
         {
             $oldPlan  = $oldPlans[$planID];
             $parentID = $oldPlan->parent;
-            /* Determine whether the begin and end dates of the parent plan and the child plan are correct. */
-            if($parentID > 0)
-            {
-                $parent = zget($plans, $parentID, $this->getByID($parentID));
-                if($parent->begin != $futureConfig and $plan->begin != $futureConfig and $plan->begin < $parent->begin) return dao::$errors[] = sprintf($this->lang->productplan->beginLessThanParentTip, $planID, $plan->begin, $parent->begin);
-                if($parent->end != $futureConfig and $plan->end != $futureConfig and $plan->end > $parent->end)         return dao::$errors[] = sprintf($this->lang->productplan->endGreatThanParentTip, $planID, $plan->end, $parent->end);
-            }
-            elseif($parentID == -1 and $plan->begin != $futureConfig)
-            {
-                $childPlans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('parent')->eq($planID)->andWhere('deleted')->eq(0)->fetchAll('id');
-                $minBegin   = $plan->begin;
-                $maxEnd     = $plan->end;
-                foreach($childPlans as $childID => $childPlan)
-                {
-                    $childPlan = isset($plans[$childID]) ? $plans[$childID] : $childPlan;
-                    if($childPlan->begin < $minBegin and $minBegin != $this->config->productplan->future) $minBegin = $childPlan->begin;
-                    if($childPlan->end > $maxEnd and $maxEnd != $this->config->productplan->future)       $maxEnd   = $childPlan->end;
-                }
-                if($minBegin < $plan->begin and $minBegin != $futureConfig) return dao::$errors[] = sprintf($this->lang->productplan->beginGreaterChildTip, $planID, $plan->begin, $minBegin);
-                if($maxEnd > $plan->end     and $maxEnd != $futureConfig)   return dao::$errors[] = sprintf($this->lang->productplan->endLessThanChildTip, $planID, $plan->end, $maxEnd);
-            }
 
             $change = common::createChanges($oldPlan, $plan);
             if(empty($change)) continue;
 
-            if($parentID > 0 and !isset($parents[$parentID])) $parents[$parentID] = $parentID;
+            if($parentID > 0 && !isset($parents[$parentID])) $parents[$parentID] = $parentID;
 
             $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->autoCheck()->checkFlow()->where('id')->eq($planID)->exec();
             if(dao::isError()) return false;

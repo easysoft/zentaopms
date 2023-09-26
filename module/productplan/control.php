@@ -164,23 +164,25 @@ class productplan extends control
     }
 
     /**
+     * 批量编辑计划。
      * Batch edit plan.
      *
-     * @param int $productID
-     * @param int $branch
-     *
+     * @param  int    $productID
+     * @param  int    $branch
      * @access public
      * @return void
      */
-    public function batchEdit($productID, $branch = 0)
+    public function batchEdit(int $productID, int $branch = 0)
     {
         if(!empty($_POST['title']))
         {
             /* 从POST中获取数据。 */
-            $plans = $this->productplanZen->buildPlansForBatchEdit();
+            $plans = $this->productplanZen->buildPlansForBatchEdit($productID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->productplan->batchUpdate($productID, $plans);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             $this->loadModel('score')->create('ajax', 'batchOther');
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->productPlanList));
         }
@@ -225,8 +227,7 @@ class productplan extends control
             $this->productplan->batchChangeStatus($planIdList, $status);
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            if($status !== 'closed') return $this->sendSuccess(array('load' => true));
-            if($this->post->comment) return $this->sendSuccess(array('load' => inlink('browse', "product=$productID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browse', "product=$productID")));
         }
 
         $this->commonAction($productID);
@@ -509,7 +510,7 @@ class productplan extends control
         $projects = $this->loadModel('product')->getProjectPairsByProduct($productID, $branch, '', $status = 'noclosed', 'multiple');
 
         $items = array();
-        foreach($projects as $projectID => $projectName) $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
+        foreach($projects as $projectID => $projectName) $items[] = array('text' => $projectName, 'value' => $projectID, 'keys' => $projectName);
         return print(json_encode($items));
     }
 
