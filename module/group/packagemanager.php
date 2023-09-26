@@ -3381,7 +3381,7 @@ $config->group->package->browseScreen->order  = 5;
 $config->group->package->browseScreen->subset = 'screen';
 $config->group->package->browseScreen->privs  = array();
 $config->group->package->browseScreen->privs['screen-browse']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
-$config->group->package->browseScreen->privs['screen-view']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(), 'recommend' => array());
+$config->group->package->browseScreen->privs['screen-view']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('screen-browse'), 'recommend' => array());
 $config->group->package->browseScreen->privs['screen-annualData'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('screen-browse'), 'recommend' => array());
 
 $config->group->package->manageScreen = new stdclass();
