@@ -170,6 +170,23 @@ class caselibTest
     }
 
     /**
+     * 测试初始化导入的用例
+     * Test init imported case.
+     *
+     * @param  object $data
+     * @access public
+     * @return array|bool
+     */
+    public function initImportedCaseTest(object $data): bool|array
+    {
+        $cases = $this->objectModel->initImportedCase($data);
+
+        if(dao::isError()) return dao::getError();
+
+        return $cases;
+    }
+
+    /**
      * 测试插入一条导入的用例。
      * Test insert a imported case.
      *
