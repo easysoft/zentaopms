@@ -1448,4 +1448,23 @@ class productplanModel extends model
 
         return !dao::isError();
     }
+
+    /**
+     * 检查是否有未取消关联的需求和Bug。
+     * Check if there are unlinked stories and bugs.
+     *
+     * @param  array  $branchIdList
+     * @param  int    $planID
+     * @param  string $type
+     * @access public
+     * @return int
+     */
+    public function checkUnlinkObjects(array $branchIdList, int $planID, string $type = 'story'): int
+    {
+        return (int) $this->dao->select('id')->from(zget($this->config->objectTables, $type, TABLE_STORY))
+            ->where('branch')->in($branchIdList)
+            ->beginIF($type == 'story')->andWhere("CONCAT(',', plan, ',')")->like("%,{$planID},%")->fi()
+            ->beginIF($type == 'bug')->andWhere('plan')->eq($planID)->fi()
+            ->fetch('id');
+    }
 }
