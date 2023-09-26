@@ -11,3 +11,9 @@ fields:
     postfix: ""
     loop: 0
     format: "YYYY-MM-DD hh:mm:ss"
+  - field: lastRunner
+    fields:
+      - field: lastRunner1
+        range: admin{2},user{3}
+      - field: lastRunner2
+        range: "[]{2},2-4"

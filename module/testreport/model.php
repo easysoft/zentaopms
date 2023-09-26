@@ -476,17 +476,19 @@ class testreportModel extends model
     }
 
     /**
+     * 获取测试报告的用例执行人。
      * Get per case runner for testreport.
      *
-     * @param  array    $tasks
-     * @param  array    $cases
-     * @param  string   $begin
-     * @param  string   $end
+     * @param  array        $tasks
+     * @param  array|string $cases
+     * @param  string       $begin
+     * @param  string       $end
      * @access public
-     * @return string
+     * @return array
      */
-    public function getPerCaseRunner4Report($tasks, $cases, $begin, $end)
+    public function getPerCaseRunner4Report(array $tasks, array|string $cases, string $begin, string $end): array
     {
+        /*  Get the last runner and the number of runs. */
         $datas = $this->dao->select("t1.lastRunner AS name, COUNT('t1.*') AS value")->from(TABLE_TESTRESULT)->alias('t1')
             ->leftJoin(TABLE_TESTRUN)->alias('t2')
             ->on('t1.run= t2.id')
@@ -501,6 +503,7 @@ class testreportModel extends model
 
         if(!$datas) return array();
 
+        /* Set the realname of the last runner. */
         $users = $this->loadModel('user')->getPairs('noclosed|noletter');
         foreach($datas as $result => $data) $data->name = $result ? zget($users, $result, $result) : $this->lang->testtask->unexecuted;
 
