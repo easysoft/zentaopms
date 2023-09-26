@@ -17,7 +17,6 @@ $config->productplan->laneColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#F
 $config->productplan->future = '2030-01-01';
 
 global $app, $lang;
-$app->loadLang('productplan');
 $config->productplan->search['module'] = 'productplan';
 $config->productplan->browse = new stdclass();
 

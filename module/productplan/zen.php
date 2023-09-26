@@ -338,7 +338,7 @@ class productplanZen extends productplan
      * @access public
      * @return array
      */
-    public function buildOperateMenu(object $plan): array
+    public function buildViewActions(object $plan): array
     {
         $params = "planID=$plan->id";
 
