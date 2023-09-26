@@ -1,13 +1,39 @@
 const executionDropdownMap = new Map();
 
-window.footerSummary = function(checkedIdList)
+/**
+ * 计算表格计划信息的统计。
+ * Set plan summary for table footer.
+ *
+ * @param  element element
+ * @param  array   checkedIDList
+ * @access public
+ * @return object
+ */
+window.setStatistics = function(element, checkedIDList)
 {
-    if(!checkedIdList.length)
+    if(!checkedIDList.length)
     {
         return {html: pageSummary, className: 'text-dark'};
     }
 
-    var summary = checkedSummary.replace('%total%', checkedIdList.length);
+    let total            = checkedIDList.length;
+    let totalParent      = 0;
+    let totalChild       = 0;
+    let totalIndependent = 0;
+    const rows  = element.layout.allRows;
+    rows.forEach((row) => {
+        if(checkedIDList.length == 0 || checkedIDList.includes(row.id))
+        {
+            const plan = row.data;
+
+            if(plan.parent > 0) totalChild ++;
+            if(plan.isParent)   totalParent ++;
+        }
+    });
+
+    totalIndependent = total - totalParent - totalChild;
+
+    let summary = checkedSummary.replace('%total%', total);
     summary     = summary.replace('%parent%', totalParent);
     summary     = summary.replace('%child%', totalChild);
     summary     = summary.replace('%independent%', totalIndependent);
@@ -121,3 +147,45 @@ $(document).on('click', '#createExecutionButton', function()
     openUrl($.createLink('execution', 'create', 'projectID=' + projectID + '&executionID=&copyExecutionID=&planID=' + planID + '&confirm=&productID=' + productID), {'app': 'execution'});
     zui.Modal.hide('#createExecutionModal');
 });
+
+/**
+ * 对部分列进行重定义。
+ * Redefine the partial column.
+ *
+ * @param  array  result
+ * @param  array  info
+ * @access public
+ * @return string|array
+ */
+window.renderCell = function(result, info)
+{
+    if(info.col.name == 'execution')
+    {
+        const projects     = info.row.data.projects;
+        const projectCount = projects.length;
+        if(projectCount == 0) return result;
+
+        if(projectCount == 1)
+        {
+            result[0] = {html: '<a href=' + $.createLink('execution', 'task', 'executionID=' + projects[0].project) + ' title="' + projects[0].name + '"><i class="icon-run text-primary"></i></a>'};
+        }
+        else
+        {
+            let contentHtml = "<ul class='execution-tip'>";
+            projects.forEach((project) => {
+                contentHtml += `<li><a title='${project.name}' href='` + $.createLink('execution', 'task', 'executionID=' + project.project) + `'>${project.name}</a></li>`;
+            });
+            contentHtml += "</ul>";
+
+            let content = {html: contentHtml};
+            content = JSON.stringify(content);
+            content = content.replace(/"/g, '&quot;');
+
+            const buttonHtml = `<button type='button' data-toggle='popover' data-trigger='click' data-content="${content}" data-close-btn='false' data-placement='right'><i class='icon-run text-primary'></i></button>`;
+            console.log(buttonHtml);
+            result[0] = {html: buttonHtml};
+        }
+    }
+
+    return result;
+}
