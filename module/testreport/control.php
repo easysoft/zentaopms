@@ -91,7 +91,7 @@ class testreport extends control
     {
         if(strpos('product|execution|project', $objectType) === false) return $this->send(array('result' => 'fail', 'message' => 'Type Error!'));
 
-        $objectID = $this->commonAction($objectID, $objectType);
+        $objectID = $this->testreportZen->commonAction($objectID, $objectType);
         $object   = $this->$objectType->getById($objectID);
         if($extra) $task = $this->testtask->getByID($extra);
 
@@ -171,7 +171,7 @@ class testreport extends control
         }
         elseif($objectType == 'execution' || $objectType == 'project')
         {
-            $executionID = $this->commonAction($objectID, $objectType);
+            $executionID = $this->testreportZen->commonAction($objectID, $objectType);
             if($executionID != $objectID) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->error->accessDenied, 'confirmed' => inlink('browse', "proudctID={$productID}"), 'canceled' => inlink('browse', "proudctID={$productID}"))));
 
             $reportData = $this->testreportZen->assignProjectReportDataForCreate($objectID, $objectType, $extra, $begin, $end, $executionID);
@@ -215,7 +215,7 @@ class testreport extends control
         if($this->app->tab == 'execution' || $this->app->tab == 'project') $objectType = $this->app->tab;
         if(isset($objectType))
         {
-            $objectID = $this->commonAction($oldReport->{$objectType}, $objectType);
+            $objectID = $this->testreportZen->commonAction($oldReport->{$objectType}, $objectType);
             if($objectID != $oldReport->{$objectType}) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied, 'load' => array('alter' => $this->lang->error->accessDenied, 'back' => true))); ;
         }
 
@@ -264,7 +264,7 @@ class testreport extends control
         if($this->app->tab == 'execution' || $this->app->tab == 'project') $objectType = $this->app->tab;
         if(isset($objectType))
         {
-            $objectID = $this->commonAction($oldReport->{$objectType}, $objectType);
+            $objectID = $this->testreportZen->commonAction($oldReport->{$objectType}, $objectType);
             if($objectID != $oldReport->{$objectType}) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied, 'load' => array('alter' => $this->lang->error->accessDenied, 'back' => true))); ;
         }
 
@@ -312,38 +312,6 @@ class testreport extends control
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $locateLink));
-    }
-
-    /**
-     * Common action.
-     *
-     * @param  int    $objectID
-     * @param  string $objectType
-     * @access public
-     * @return int
-     */
-    public function commonAction($objectID, $objectType = 'product')
-    {
-        if($objectType == 'product')
-        {
-            $productID = $this->product->checkAccess($objectID, $this->products);
-            $this->loadModel('qa')->setMenu($productID);
-            return $productID;
-        }
-        elseif($objectType == 'execution')
-        {
-            $executions  = $this->execution->getPairs();
-            $executionID = $this->execution->checkAccess($objectID, $executions);
-            $this->execution->setMenu($executionID);
-            return $executionID;
-        }
-        elseif($objectType == 'project')
-        {
-            $projects  = $this->project->getPairsByProgram();
-            $projectID = $this->project->checkAccess($objectID, $projects);
-            $this->project->setMenu($projectID);
-            return $projectID;
-        }
     }
 
     /**

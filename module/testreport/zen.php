@@ -366,5 +366,39 @@ class testreportZen extends testreport
 
         return $testreport;
     }
-}
 
+    /**
+     * 检查相关权限，并且设置相关菜单。
+     * Check related access and set menu.
+     *
+     * @param  int    $objectID
+     * @param  string $objectType
+     * @access public
+     * @return int
+     */
+    protected function commonAction(int $objectID, string $objectType = 'product'): int
+    {
+        if($objectType == 'product')
+        {
+            $productID = $this->product->checkAccess($objectID, $this->products);
+            $this->loadModel('qa')->setMenu($productID);
+            return $productID;
+        }
+
+        if($objectType == 'execution')
+        {
+            $executions  = $this->execution->getPairs();
+            $executionID = $this->execution->checkAccess($objectID, $executions);
+            $this->execution->setMenu($executionID);
+            return $executionID;
+        }
+
+        if($objectType == 'project')
+        {
+            $projects  = $this->project->getPairsByProgram();
+            $projectID = $this->project->checkAccess($objectID, $projects);
+            $this->project->setMenu($projectID);
+            return $projectID;
+        }
+    }
+}
