@@ -339,6 +339,7 @@ class productplanModel extends model
     }
 
     /**
+     * 获取分支计划的对应关系。
      * Get branch plan pairs.
      *
      * @param  int    $productID
@@ -348,13 +349,12 @@ class productplanModel extends model
      * @access public
      * @return array
      */
-    public function getBranchPlanPairs($productID, $branches = '', $param = '', $skipParent = false)
+    public function getBranchPlanPairs(int $productID, array $branches = array(), string $param = '', bool $skipParent = false): array
     {
         $branchQuery = '';
         if($branches !== '' and $branches !== 'all')
         {
             $branchQuery .= '(';
-            if(!is_array($branches)) $branches = explode(',', $branches);
             foreach($branches as $branchID)
             {
                 $branchQuery .= "CONCAT(',', branch, ',') LIKE '%,$branchID,%'";
@@ -363,14 +363,13 @@ class productplanModel extends model
             $branchQuery .= ')';
         }
 
-        $date  = date('Y-m-d');
         $param = strtolower($param);
         $plans = $this->dao->select('parent,branch,id,title,begin,end')->from(TABLE_PRODUCTPLAN)
             ->where('product')->eq($productID)
             ->andWhere('deleted')->eq(0)
             ->beginIF(!empty($branchQuery))->andWhere($branchQuery)->fi()
             ->beginIF($branches != '')->andWhere('branch')->in($branches)->fi()
-            ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('end')->ge($date)->fi()
+            ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('end')->ge(helper::today())->fi()
             ->orderBy('begin desc')
             ->fetchAll('id');
 
@@ -1216,112 +1215,6 @@ class productplanModel extends model
         if($order) $plans = $this->relationBranch($plans);
 
         return $plans;
-    }
-
-    /**
-     * Build action button list.
-     *
-     * Copied form the 'buildOperateMenu' funciton.
-     *
-     * @param  object $plan
-     * @param  string $type
-     * @access public
-     * @return array
-     */
-    public function buildActionBtnList(object $plan, string $type = 'view'): array
-    {
-        $params  = "planID=$plan->id";
-        $actions = [];
-
-        $canStart       = common::hasPriv('productplan', 'start');
-        $canFinish      = common::hasPriv('productplan', 'finish');
-        $canClose       = common::hasPriv('productplan', 'close');
-        $canCreateExec  = common::hasPriv('execution',   'create');
-        $canLinkStory   = common::hasPriv('productplan', 'linkStory', $plan);
-        $canLinkBug     = common::hasPriv('productplan', 'linkBug', $plan);
-        $canEdit        = common::hasPriv('productplan', 'edit');
-        $canCreateChild = common::hasPriv('productplan', 'create');
-        $canDelete      = common::hasPriv('productplan', 'delete');
-
-        $actions[] = $this->buildActionBtn('productplan', 'start',    $params, $plan, $type, 'start',    'hiddenwin', '',       false, '', $this->lang->productplan->startAB);
-        $actions[] = $this->buildActionBtn('productplan', 'finish',   $params, $plan, $type, 'finish',   'hiddenwin', '',       false, '', $this->lang->productplan->finishAB);
-        $actions[] = $this->buildActionBtn('productplan', 'close',    $params, $plan, $type, 'close',    'hiddenwin', 'iframe', true,  '', $this->lang->productplan->closeAB);
-        $actions[] = $this->buildActionBtn('productplan', 'activate', $params, $plan, $type, 'activate', 'hiddenwin', '',       false, '', $this->lang->productplan->activateAB);
-
-        if($type == 'browse')
-        {
-            $canClickExecution = true;
-            if($plan->parent < 0 || $plan->expired || in_array($plan->status, array('done', 'closed')) || !common::hasPriv('execution', 'create', $plan))
-            {
-                $canClickExecution = false;
-            }
-
-            if($canClickExecution)
-            {
-                $product     = $this->loadModel('product')->getById($plan->product);
-                $branchList  = $this->loadModel('branch')->getList($plan->product, 0, 'all');
-
-                $branchStatusList = array();
-                foreach($branchList as $productBranch) $branchStatusList[$productBranch->id] = $productBranch->status;
-
-                if($product->type != 'normal')
-                {
-                    $branchStatus = isset($branchStatusList[$plan->branch]) ? $branchStatusList[$plan->branch] : '';
-                    if($branchStatus == 'closed') $canClickExecution = false;
-                }
-            }
-
-            if($canClickExecution)
-            {
-                $actions[] = $this->buildActionBtn('none', 'plus', $params, $plan, $type, '', '', '', false, '', $this->lang->productplan->createExecution);
-            }
-            elseif($canCreateExec)
-            {
-                $actions[] = $this->buildActionBtn('none', 'plus', $params, $plan, $type, '', '', '', false, 'disabled', $this->lang->productplan->createExecution);
-            }
-
-            if($canLinkStory and $plan->parent >= 0)
-            {
-                $actions[] = $this->buildActionBtn($this->app->rawModule, 'view', "{$params}&type=story&orderBy=id_desc&link=true", $plan, $type, 'link', '', '', '', '', $this->lang->productplan->linkStory);
-            }
-            elseif($canLinkStory)
-            {
-                $actions[] = $this->buildActionBtn('none', 'link', $params, $plan, $type, '', '', '', false, 'disabled', $this->lang->productplan->linkStory);
-            }
-
-            if($canLinkBug and $plan->parent >= 0)
-            {
-                $actions[] = $this->buildActionBtn($this->app->rawModule, 'view', "{$params}&type=bug&orderBy=id_desc&link=true", $plan, $type, 'bug', '', '', '', '',  $this->lang->productplan->linkBug);
-            }
-            elseif($canLinkBug)
-            {
-                $actions[] = $this->buildActionBtn('none', 'bug', $params, $plan, $type, '', '', '', false, 'disabled', $this->lang->productplan->linkBug);
-            }
-
-            $actions[] = $this->buildActionBtn($this->app->rawModule, 'edit', $params, $plan, $type);
-        }
-
-        if($canCreateChild) $actions[] = $this->buildActionBtn($this->app->rawModule, 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}", $plan, $type, 'split', '', '', '', '', $this->lang->productplan->children);
-
-        if($type == 'browse')
-        {
-            $actions[] = $this->buildActionBtn('productplan', 'delete', "{$params}&confirm=no", $plan, $type, 'trash', 'hiddenwin', '', '', $this->lang->productplan->delete);
-        }
-
-        if($type == 'view')
-        {
-            $actions[] = $this->buildActionBtn('none', 'divider', $params, $plan, $type);
-            /* TODO attach the buttons of workflow module. */
-            $actions[] = $this->buildActionBtn('none', 'divider', $params, $plan, $type);
-
-            /* Refactor the original business loggic. */
-            $editClickable   = $this->buildActionBtn($this->app->rawModule, 'edit',   $params, $plan, $type, '', '', '', '', '', $this->lang->edit, false);
-            $deleteClickable = $this->buildActionBtn('productplan', 'delete', $params, $plan, $type, 'trash', '', '', '', '', $this->lang->delete, false);
-            if($canEdit and $editClickable) $actions[] = $editClickable;
-            if($canDelete and $deleteClickable) $actions[] = $deleteClickable;
-        }
-
-        return $actions;
     }
 
     /**
