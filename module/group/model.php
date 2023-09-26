@@ -2322,6 +2322,28 @@ class groupModel extends model
     }
 
     /**
+     * Load language of resource.
+     *
+     * @param string $nav
+     * @access public
+     * @return void
+     */
+    public function loadResourceLang($nav = '')
+    {
+        foreach($this->lang->resource as $moduleName => $action)
+        {
+            if($nav and !$this->group->checkNavModule($nav, $moduleName)) continue;
+            $this->app->loadLang($moduleName);
+
+            $this->lang->custom->common = $this->lang->group->config;
+            $this->lang->doc->common    = $this->lang->doc->manage;
+            $this->lang->api->common    = $this->lang->api->manage;
+
+            if(($this->config->edition == 'max' or $this->config->edition == 'ipd') and $this->config->vision == 'rnd' and isset($this->lang->baseline)) $this->lang->baseline->common = $this->lang->group->docTemplate;
+        }
+    }
+
+    /**
      * Get related privs.
      *
      * @param  array  $allPrivList
@@ -2332,7 +2354,7 @@ class groupModel extends model
      */
     public function getRelatedPrivs($allPrivList, $selectedPrivList, $recommendSelect = array())
     {
-        foreach($this->lang->resource as $moduleName => $action) $this->app->loadLang($moduleName);
+        $this->loadResourceLang();
 
         $privSubsets  = array();
         $relatedPrivs = array('depend' => array(), 'recommend' => array());

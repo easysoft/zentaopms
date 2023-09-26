@@ -201,9 +201,6 @@ class group extends control
      */
     protected function managePrivByGroup($groupID = 0, $nav = '', $version = '')
     {
-        $this->lang->custom->common = $this->lang->group->config;
-        if(($this->config->edition == 'max' or $this->config->edition == 'ipd') and $this->config->vision == 'rnd' and isset($this->lang->baseline)) $this->lang->baseline->common = $this->lang->group->docTemplate;
-
         $this->group->sortResource();
         $group        = $this->group->getById($groupID);
         $groupPrivs   = $this->group->getPrivs($groupID);
@@ -293,6 +290,8 @@ class group extends control
      */
     protected function managePrivByModule()
     {
+        $this->group->loadResourceLang();
+
         $subsets  = array();
         $packages = array();
         $privs    = array();
@@ -363,10 +362,6 @@ class group extends control
         if($type == 'byGroup' or $type == 'byPackage') $groupID = $param;
 
         $this->view->type = $type;
-        foreach($this->lang->resource as $moduleName => $action)
-        {
-            if($this->group->checkNavModule($nav, $moduleName) || ($type != 'byGroup' && $type != 'byPackage')) $this->app->loadLang($moduleName);
-        }
 
         if(!empty($_POST))
         {
