@@ -316,7 +316,7 @@ class productplanModel extends model
      * @access public
      * @return array
      */
-    public function getChildren(int $planID)
+    public function getChildren(int $planID): array
     {
         return $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('parent')->eq($planID)->andWhere('deleted')->eq('0')->fetchAll('id');
     }

@@ -95,20 +95,6 @@ class productPlan
     }
 
     /**
-     * Get children
-     *
-     * @param  int $planID
-     * @access public
-     * @return count
-     */
-    public function getChildren($planID)
-    {
-        $productplans = $this->productplan->getChildren($planID);
-        if(dao::isError()) return dao::getError();
-        return count($productplans);
-    }
-
-    /**
      * Get plans by stories
      *
      * @param  array  $storyIdList

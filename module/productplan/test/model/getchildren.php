@@ -1,24 +1,28 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/productplan.class.php';
-
 /**
 
 title=productpanModel->getChildren();
+timeout=0
 cid=1
-pid=1
-
-这里统计了取出所有的数量 >> 61
-这里统计不存在的情况 >> 1
 
 */
-$plan = new productPlan('admin');
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/productplan.class.php';
 
-$planid = array();
-$planid[0] = 0;
-$planid[1] = 1;
+zdTable('user')->gen(5);
+zdTable('productplan')->config('productplan')->gen(5);
+su('admin');
 
-r($plan->getChildren(0)) && p() && e('61'); //这里统计了取出所有的数量
-r($plan->getChildren(1)) && p() && e('1');  //这里统计不存在的情况
-?>
+$planIdList = array(0, 1, 2, 3, 11);
+
+global $tester, $app;
+$app->moduleName = 'productplan';
+$app->rawModule = 'productplan';
+$tester->loadModel('productplan');
+
+r($tester->productplan->getChildren($planIdList[0])) && p('3:title,parent') && e('计划3,0'); // 测试传入空的PlanID获取子计划
+r($tester->productplan->getChildren($planIdList[1])) && p('2:title,parent') && e('计划2,1'); // 测试传入PlanID=1获取子计划
+r($tester->productplan->getChildren($planIdList[2])) && p()                 && e('0');       // 测试传入子计划ID=2获取子计划
+r($tester->productplan->getChildren($planIdList[3])) && p()                 && e('0');       // 测试传入普通计划ID=3获取子计划
+r($tester->productplan->getChildren($planIdList[4])) && p()                 && e('0');       // 测试传入不存在计划ID=11获取子计划
