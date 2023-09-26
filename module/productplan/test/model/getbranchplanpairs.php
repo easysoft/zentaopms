@@ -1,32 +1,26 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/productplan.class.php';
-
 /**
 
 title=productpanModel->getBranchPlanPairs();
+timeout=0
 cid=1
-pid=1
-
-传入存在的数据，返回相应信息 >> 1.0 [2021-11-18~2022-09-30]
-传入不存在的分支 >> 0
-传入不存在的产品id >> 0
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/productplan.class.php';
+
+zdTable('productplan')->config('productplan')->gen(20);
 $plan = new productPlan('admin');
 
 $product = array();
-$product[0] = 41;
-$product[1] = 1;
-$product[2] = 111;
+$product[0] = 6;
+$product[1] = 111;
 
 $branch  = array();
-$branch[0]  = 1;
+$branch[0]  = 2;
 $branch[1]  = 111;
-$branch[2]  = 1;
 
-r($plan->getBranchPlanPairs($product[0], $branch[0])) && p('1:31') && e('1.0 [2021-11-18~2022-09-30]'); //传入存在的数据，返回相应信息
-r($plan->getBranchPlanPairs($product[1], $branch[1])) && p('1:31') && e('0');                           //传入不存在的分支
-r($plan->getBranchPlanPairs($product[2], $branch[2])) && p('1:31') && e('0');                           //传入不存在的产品id
-?>
+r($plan->getBranchPlanPairs($product[0], $branch[0])) && p('2:17') && e('计划17 [2021-06-01~2021-06-15]'); //传入存在的数据，返回相应信息
+r($plan->getBranchPlanPairs($product[1], $branch[1])) && p() && e('0');                                    //传入不存在的分支
+r($plan->getBranchPlanPairs($product[1], $branch[0])) && p() && e('0');                                    //传入不存在的产品id

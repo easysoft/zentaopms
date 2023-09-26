@@ -135,6 +135,7 @@ class productPlan
     public function createTest(object $postData, int $isFuture = 0): object|array
     {
         $this->productplan->config->productplan->create->requiredFields = 'title,begin,end';
+        $postData->branch = 0;
         $planID = $this->productplan->create($postData, $isFuture);
 
         if(dao::isError()) return dao::getError();
