@@ -493,6 +493,7 @@ window.initChart = function($obj, head, data, chartType)
         xAxis.data = xAxis.data.filter((value, index, self) => {
             return self.indexOf(value) === index;
         });
+        xAxis.data.sort();
         var yAxis = {
             type: 'value'
         };
@@ -512,6 +513,8 @@ window.initChart = function($obj, head, data, chartType)
             return accumulator;
         }, []);
 
+        var selectedScope = {};
+
         for(key in groupedData) {
             var scope = groupedData[key].scope;
             var dates = groupedData[key].date;
@@ -522,7 +525,10 @@ window.initChart = function($obj, head, data, chartType)
             });
 
             series.push({data: seriesData, type: type, name: scope});
+            selectedScope[scope] = false;
         }
+
+        selectedScope[Object.keys(selectedScope)[0]] = true;
     }
 
     $.getLib(config.webRoot + 'js/echarts/echarts.common.min.js', {root: false}, function() {
@@ -534,6 +540,9 @@ window.initChart = function($obj, head, data, chartType)
                 right: '10%',
                 bottom: '10%',
                 containLabel: true
+            },
+            legend: {
+                type: 'scroll'
             },
             tooltip: {
                 trigger: 'axis',
@@ -552,9 +561,14 @@ window.initChart = function($obj, head, data, chartType)
             series: series,
         };
 
+        if(selectedScope)
+        {
+            option.legend.selector = true;
+            option.legend.selected = selectedScope;
+        }
+
         var dataLength = option.series[0].data.length;
         if(dataLength > 15) option.dataZoom = window.genDataZoom(dataLength, 15, chartType == 'barY' ? 'y' : 'x');
-
 
         option && myChart.setOption(option);
     });
