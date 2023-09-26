@@ -144,17 +144,29 @@ foreach ($memberPairs as $key => $value)
     $assignedToItems[] = array('text' => $value, 'class' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('bug', 'batchAssignTo', "assignedTo=$key&productID={$product->id}&type=product"));
 }
 
-$footToolbar = $canBatchAction ? array('items' => array
-(
-    array('type' => 'btn-group', 'items' => array
+$footToolbar = array();
+if($canBatchAction)
+{
+    $footToolbar['items'] = array();
+    $footToolbar['items'][] = array('type' => 'btn-group', 'items' => array
     (
         array('text' => $lang->edit, 'className' => 'primary batch-btn not-open-url', 'disabled' => ($canBatchEdit ? '': 'disabled'), 'data-url' => createLink('bug', 'batchEdit', "productID={$product->id}&branch=$branch")),
         array('caret' => 'up', 'data-placement' => 'top-start', 'class' => 'btn btn-caret size-sm primary not-open-url', 'items' => $batchItems),
-    )),
-    $canBatchChangeBranch && $this->session->currentProductType != 'normal' ? array('caret' => 'up', 'text' => $lang->product->branchName[$this->session->currentProductType], 'type' => 'dropdown', 'data-placement' => 'top-start', 'items' => $branchItems) : null,
-    $canBatchChangeModule ? array('caret' => 'up', 'text' => $lang->bug->abbr->module, 'type' => 'dropdown', 'data-placement' => 'top-start', 'items' => $moduleItems) : null,
-    $canBatchAssignTo ? array('caret' => 'up', 'text' => $lang->bug->assignedTo, 'type' => 'dropdown', 'data-placement' => 'top-start', 'items' => $assignedToItems) : null,
-), 'btnProps' => array('size' => 'sm', 'btnType' => 'primary')) : null;
+    ));
+    if($canBatchChangeBranch && $this->session->currentProductType && $this->session->currentProductType != 'normal')
+    {
+        $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->product->branchName[$this->session->currentProductType], 'type' => 'dropdown', 'data-placement' => 'top-start', 'items' => $branchItems);
+    }
+    if($canBatchChangeModule)
+    {
+        $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->bug->abbr->module, 'type' => 'dropdown', 'data-placement' => 'top-start', 'items' => $moduleItems);
+    }
+    if($canBatchAssignTo)
+    {
+        $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->bug->assignedTo, 'type' => 'dropdown', 'data-placement' => 'top-start', 'items' => $assignedToItems);
+    }
+    $footToolbar['btnProps'] = array('size' => 'sm', 'btnType' => 'primary');
+}
 
 $cols = $this->loadModel('datatable')->getSetting('bug');
 if(isset($cols['branch']))    $cols['branch']['map']    = $branchTagOption;
