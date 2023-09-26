@@ -228,16 +228,17 @@ class productplanModel extends model
     }
 
     /**
-     * Get plans for products
+     * 通过产品ID列表获取计划信息。
+     * Get plan info by product id list.
      *
-     * @param  array  $products
+     * @param  array  $productIdList
      * @access public
-     * @return void
+     * @return array
      */
-    public function getForProducts($products)
+    public function getForProducts(array $productIdList): array
     {
         $plans = $this->dao->select('id,title,parent,begin,end')->from(TABLE_PRODUCTPLAN)
-            ->where('product')->in(array_keys($products))
+            ->where('product')->in($productIdList)
             ->andWhere('deleted')->eq(0)
             ->orderBy('begin desc')
             ->fetchAll('id');

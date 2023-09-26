@@ -64,20 +64,6 @@ class productPlan
     }
 
     /**
-     * Get for products
-     *
-     * @param  array  $products
-     * @access public
-     * @return count
-     */
-    public function getForProducts($products)
-    {
-        $productplans = $this->productplan->getForProducts($products);
-        if(dao::isError()) return dao::getError();
-        return $productplans;
-    }
-
-    /**
      * Get group by product
      *
      * @param  array  $products
