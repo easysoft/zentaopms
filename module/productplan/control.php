@@ -194,7 +194,6 @@ class productplan extends control
         $plans        = $this->productplan->getByIDList($this->post->planIdList);
         $oldBranch    = array();
         $parentIdList = array();
-
         foreach($plans as $plan)
         {
             $oldBranch[$plan->id]        = $plan->branch;
@@ -204,7 +203,7 @@ class productplan extends control
         $this->view->title      = $this->lang->productplan->batchEdit;
         $this->view->plans      = $plans;
         $this->view->oldBranch  = $oldBranch;
-        $this->view->product    = $this->loadModel('product')->getById($productID);
+        $this->view->product    = $this->loadModel('product')->getByID($productID);
         $this->view->parentList = $this->productplan->getByIDList($parentIdList);
 
         $this->display();

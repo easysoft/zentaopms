@@ -196,25 +196,6 @@ class productPlan
     }
 
     /**
-     * Batch update
-     *
-     * @param  int    $productID
-     * @access public
-     * @return array(array)
-     */
-    public function batchUpdate($productID, $bratch)
-    {
-        $batch = array('id' => array(), 'title' => array(), 'begin' => array(), 'end' => array());
-
-        foreach($batch as $field => $defaultvalue) $_POST[$field] = $defaultvalue;
-        foreach($bratch as $key => $value) $_POST[$key] = $value;
-
-        $productplans = $this->productplan->batchUpdate($productID);
-        if(dao::isError()) return dao::getError();
-        return $productplans;
-    }
-
-    /**
      * Batch change status
      *
      * @param  string $status
@@ -513,5 +494,29 @@ class productPlan
         $this->productplan->unlinkOldBranch($changes);
 
         return $this->productplan->dao->select('*')->from(TABLE_BUG)->fetchAll('id');
+    }
+
+    /**
+     * 批量更新计划。
+     * Batch update plan list.
+     *
+     * @param  int    $prodcutID
+     * @param  array  $plans
+     * @access public
+     * @return array
+     */
+    public function batchUpdateTest(int $prodcutID, array $plans): array
+    {
+        $oldPlans = $this->productplan->getByIDList(array_keys($plans));
+        $this->productplan->batchUpdate($prodcutID, $plans);
+        if(dao::isError()) return dao::getError();
+
+        $changes = array();
+        foreach($plans as $planID => $plan)
+        {
+            $oldPlan = $oldPlans[$planID];
+            $changes[$planID] = common::createChanges($oldPlan, $plan);
+        }
+        return $changes;
     }
 }

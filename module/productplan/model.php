@@ -675,7 +675,8 @@ class productplanModel extends model
     }
 
     /**
-     * Batch update plan.
+     * 批量更新计划。
+     * Batch update plan list.
      *
      * @param  int    $productID
      * @param  array  $plans
@@ -694,11 +695,10 @@ class productplanModel extends model
         foreach($plans as $planID => $plan)
         {
             $oldPlan  = $oldPlans[$planID];
-            $parentID = $oldPlan->parent;
-
-            $change = common::createChanges($oldPlan, $plan);
+            $change   = common::createChanges($oldPlan, $plan);
             if(empty($change)) continue;
 
+            $parentID = $oldPlan->parent;
             if($parentID > 0 && !isset($parents[$parentID])) $parents[$parentID] = $parentID;
 
             $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->autoCheck()->checkFlow()->where('id')->eq($planID)->exec();
@@ -712,6 +712,8 @@ class productplanModel extends model
 
         foreach($parents as $parent) $this->updateParentStatus($parent);
         if($changes) $this->unlinkOldBranch($changes);
+
+        if(dao::isError()) return false;
         return true;
     }
 
