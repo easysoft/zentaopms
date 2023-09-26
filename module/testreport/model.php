@@ -534,12 +534,14 @@ class testreportModel extends model
     }
 
     /**
-     * Get stories for test
+     * 获取测试报告的需求。
+     * Get stories for test.
      *
      * @param  array  $builds
-     * @return void
+     * @access public
+     * @return array
      */
-    public function getStories4Test($builds)
+    public function getStories4Test(array $builds): array
     {
         $storyIdList = '';
         foreach($builds as $build) $storyIdList .= $build->stories . ',';

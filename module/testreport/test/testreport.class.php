@@ -232,7 +232,7 @@ class testreportTest
      * 测试获取测试报告的 bugs。
      * Get bugs for test.
      *
-     * @param  array              $buildIdList
+     * @param  string             $buildIdList
      * @param  int                $product
      * @param  int                $taskID
      * @param  string             $type
@@ -251,20 +251,23 @@ class testreportTest
 
         return implode(',', array_keys($objects));
     }
+
     /**
+     * 测试获取测试报告的需求。
      * Get stories for test
      *
+     * @param  string             $buildIdList
      * @param  array  $builds
-     * @return void
+     * @return array|string|false
      */
-    public function getStories4TestTest($buildIdList)
+    public function getStories4TestTest(string $buildIdList): array|string|false
     {
-        $builds  = $this->build->getByList($buildIdList);
+        $builds  = $this->build->getByList(explode(',', $buildIdList));
         $objects = $this->objectModel->getStories4Test($builds);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return implode(',', array_keys($objects));
     }
 
     /**
