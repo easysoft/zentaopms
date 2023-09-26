@@ -3503,7 +3503,7 @@ $config->group->package->browseMetric->order  = 5;
 $config->group->package->browseMetric->subset = 'metric';
 $config->group->package->browseMetric->privs  = array();
 $config->group->package->browseMetric->privs['metric-preview'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
-$config->group->package->browseMetric->privs['metric-details'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
+$config->group->package->browseMetric->privs['metric-details'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('metric-preview'), 'recommend' => array());
 
 /*
 $config->group->package->manageMetric = new stdclass();
