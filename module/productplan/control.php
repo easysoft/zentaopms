@@ -245,16 +245,8 @@ class productplan extends control
      */
     public function delete(int $planID)
     {
-        $response = array();
-        $response['result']  = 'fail';
-        $response['message'] = '';
-
         $plan = $this->productplan->getByID($planID);
-        if($plan->parent < 0)
-        {
-            $response['message'] = $this->lang->productplan->cannotDeleteParent;
-            return $this->send($response);
-        }
+        if(!$plan || $plan->parent < 0) return $this->sendError($this->lang->productplan->cannotDeleteParent);
 
         $this->productplan->delete(TABLE_PRODUCTPLAN, $planID);
         if($plan->parent > 0) $this->productplan->changeParentField($planID);
