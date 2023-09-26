@@ -109,6 +109,7 @@ $lang->gitlab->apiError[3] = "can contain only letters, digits, '_', '-' and '.'
 $lang->gitlab->apiError[4] = 'Branch already exists';
 $lang->gitlab->apiError[5] = 'Failed to save group {:path=>["has already been taken"]}';
 $lang->gitlab->apiError[6] = '403 Forbidden';
+$lang->gitlab->apiError[7] = 'is invalid';
 
 $lang->gitlab->errorLang[0] = '私有分组的项目，可见性级别不能设为内部。';
 $lang->gitlab->errorLang[1] = '私有分组的项目，可见性级别不能设为公开。';
@@ -117,6 +118,7 @@ $lang->gitlab->errorLang[3] = "只能包含字母、数字、'.'-'和'.'。不�
 $lang->gitlab->errorLang[4] = '分支名已存在。';
 $lang->gitlab->errorLang[5] = '保存失败，群组URL路径已经被使用。';
 $lang->gitlab->errorLang[6] = $lang->gitlab->noAccess;
+$lang->gitlab->errorLang[7] = '格式错误';
 
 $lang->gitlab->errorResonse['Email has already been taken']    = '邮箱已存在';
 $lang->gitlab->errorResonse['Username has already been taken'] = '用户名已存在';
