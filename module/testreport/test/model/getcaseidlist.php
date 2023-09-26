@@ -7,12 +7,16 @@ su('admin');
 /**
 
 title=测试 testreportModel->getCaseIdList();
+timeout=0
 cid=1
-pid=1
 
-正常查询 >> 1,4
-查询创建者不为自己的数据 >> 5,8
-查询reportID为空的数据 >> 0
+- 正常查询
+ - 属性1 @1
+ - 属性4 @4
+- 查询创建者不为自己的数据
+ - 属性5 @5
+ - 属性8 @8
+- 查询reportID为空的数据 @0
 
 */
 $reportID = array('1', '2', '');

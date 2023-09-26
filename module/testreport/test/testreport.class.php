@@ -150,6 +150,7 @@ class testreportTest
         return $objects;
     }
      /**
+     * 测试获取测试报告的 caseID 列表。
      * Get caseID list.
      *
      * @param  int    $reportID
@@ -157,7 +158,7 @@ class testreportTest
      * @return array
      */
 
-    public function getCaseIdListTest($reportID)
+    public function getCaseIdListTest($reportID): array
     {
         $objects = $this->objectModel->getCaseIdList($reportID);
 
