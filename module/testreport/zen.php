@@ -10,7 +10,7 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 class testreportZen extends testreport
-
+{
     /**
      * 检查相关权限，并且设置相关菜单。
      * Check related access and set menu.
@@ -45,7 +45,7 @@ class testreportZen extends testreport
             return $projectID;
         }
     }
-{
+
     /**
      * 为浏览页面获取报告
      * Get reports for browse.
