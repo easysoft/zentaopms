@@ -26,12 +26,12 @@ window.parseSerialize = function(serialize)
     return result;
 }
 
-window.generateCheckItem = function(text, value, isChecked)
+window.generateCheckItem = function(text, value, scope, isChecked)
 {
     var checked = isChecked ? 'checked=""' : '';
     var currentClass = isChecked ? 'metric-current' : '';
     return `<div class="font-medium checkbox-primary ${currentClass}">
-            <input type="checkbox" id="metric${value}" name="metric" ${checked} value="${value}" onchange="window.handleCheckboxChange(this)">
+            <input type="checkbox" id="metric${value}" name="metric" ${checked} value="${value}" scope="${scope}" onchange="window.handleCheckboxChange(this)">
             <label for="metric${value}">${text}</label>
           </div>`;
 }
@@ -59,7 +59,7 @@ window.renderCheckList = function(metrics)
 
     var metricsHtml = metrics.map(function(metric){
         var isChecked = window.isMetricChecked(metric.id);
-        return window.generateCheckItem(metric.name, metric.id, isChecked);
+        return window.generateCheckItem(metric.name, metric.id, metric.scope, isChecked);
     }).join('');
 
     $('.side .check-list-metric').html(metricsHtml);
@@ -334,8 +334,10 @@ window.initQueryForm = function(id, $el, header = resultHeader, data = resultDat
 
     if(recordType == 'scope' || recordType == 'scope-date')
     {
+        var scope = $('.metric-tree .checkbox-primary input#metric' + id).attr('scope');
         $form.find('.query-scope').removeClass('hidden');
         $form.find('.query-scope #scope').attr('id', 'scope' + id);
+        $form.find('.query-scope label').text(queryScopeLang[scope]);
         var scopeUnique = {};
         var scopeItems = [];
         data.forEach(function(item) {

@@ -49,7 +49,16 @@ $lang->metric->selectCount   = '已选<span class="font-medium checked-count">%s
 $lang->metric->testMetric    = '测试度量';
 $lang->metric->calcTime      = '采集时间';
 $lang->metric->to            = '至';
-$lang->metric->query         = '查询';
+
+$lang->metric->query = new stdclass();
+$lang->metric->query->action = '查询';
+$lang->metric->query->scope = array();
+$lang->metric->query->scope['project']   = '项目';
+$lang->metric->query->scope['product']   = '产品';
+$lang->metric->query->scope['execution'] = '执行';
+$lang->metric->query->scope['dept']      = '团队';
+$lang->metric->query->scope['user']      = '姓名';
+$lang->metric->query->scope['program']   = '项目集';
 
 $lang->metric->viewType = new stdclass();
 $lang->metric->viewType->single   = '单独查看';

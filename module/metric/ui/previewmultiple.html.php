@@ -233,6 +233,7 @@ foreach($metrics as $key => $metric)
     (
         set::text($metric->name),
         set::value($metric->id),
+        set::scope($metric->scope),
         set::typeClass($class),
         set::checked($metric->id == $current->id),
         bind::change('window.handleCheckboxChange($element)'),
@@ -469,7 +470,7 @@ form
             btn
             (
                 setClass('btn secondary'),
-                set::text($this->lang->metric->query),
+                set::text($this->lang->metric->query->action),
             ),
         )
     ),
