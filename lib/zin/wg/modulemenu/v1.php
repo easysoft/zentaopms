@@ -6,7 +6,6 @@ require_once dirname(__DIR__) . DS . 'btn' . DS . 'v1.php';
 
 class moduleMenu extends wg
 {
-    private array $modules = array();
     private static array $filterMap = array();
 
     protected static array $defineProps = array(
@@ -23,6 +22,8 @@ class moduleMenu extends wg
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
+
+    private array $modules = array();
 
     private function buildMenuTree(int|string $parentID = 0): array
     {
@@ -168,6 +169,7 @@ class moduleMenu extends wg
             (
                 set::_class('col flex-auto scrollbar-hover overflow-y-auto overflow-x-hidden pl-4 pr-1'),
                 set::nestedShow(true),
+                set::hover(true),
                 set::preserve(true),
                 set($treeProps)
             ),
