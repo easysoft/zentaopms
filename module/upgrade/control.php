@@ -1086,4 +1086,10 @@ class upgrade extends control
         }
         echo 'ok';
     }
+
+    public function processHistoryDataForMetric()
+    {
+        $this->upgrade->processHistoryDataForMetric();
+        echo 'ok';
+    }
 }
