@@ -102,7 +102,6 @@ $lang->resource->my->manageContacts  = 'manageContacts';
 $lang->resource->my->deleteContacts  = 'deleteContacts';
 $lang->resource->my->score           = 'score';
 $lang->resource->my->team            = 'team';
-$lang->resource->my->doc             = 'doc';
 $lang->resource->my->execution       = 'execution';
 
 $lang->my->methodOrder[1]  = 'index';

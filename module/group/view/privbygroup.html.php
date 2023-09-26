@@ -49,7 +49,7 @@
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <span id='groupName'><i class='icon-lock'></i> <?php echo $group->name;?> <i class="icon icon-chevron-right"></i></span>
-    <?php $params = "type=byGroup&param=$groupID&menu=%s&version=$version";?>
+    <?php $params = "type=byGroup&param=$groupID&nav=%s&version=$version";?>
     <?php $active = empty($nav) ? 'btn-active-text' : '';?>
     <?php echo html::a(inlink('managePriv', sprintf($params, '')), "<span class='text'>{$lang->group->all}</span>", '', "class='btn btn-link $active'")?>
 
@@ -80,8 +80,8 @@
   <div id='mainContainer'>
     <div class='main main-content'>
       <div class="btn-group">
-        <?php echo html::a(inlink('managePriv', "type=byPackage&param=$groupID&menu=$menu&version=$version"), "<i class='icon-has-authority-pack'></i>", '', "class='btn btn-icon switchBtn'");?>
-        <?php echo html::a(inlink('managePriv', "type=byGroup&param=$groupID&menu=$menu&version=$version"), "<i class='icon-without-authority-pack'></i>", '', "class='btn btn-icon switchBtn text-primary'");?>
+        <?php echo html::a(inlink('managePriv', "type=byPackage&param=$groupID&nav=$nav&version=$version"), "<i class='icon-has-authority-pack'></i>", '', "class='btn btn-icon switchBtn'");?>
+        <?php echo html::a(inlink('managePriv', "type=byGroup&param=$groupID&nav=$nav&version=$version"), "<i class='icon-without-authority-pack'></i>", '', "class='btn btn-icon switchBtn text-primary'");?>
       </div>
       <table class='table table-hover table-striped table-bordered' id='privList'>
         <thead>
@@ -172,7 +172,6 @@
 <?php endif;?>
 <?php js::set('type', $type);?>
 <?php js::set('groupID', $groupID);?>
-<?php js::set('menu', $menu);?>
 <?php js::set('relatedPrivData', json_encode($relatedPrivData));?>
 <?php js::set('selectedPrivList', $selectedPrivList);?>
 <?php js::set('allPrivList', $allPrivList);?>
