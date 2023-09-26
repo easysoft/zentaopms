@@ -178,7 +178,6 @@ $config->bug->datatable->fieldList['title']['fixed']    = 'left';
 $config->bug->datatable->fieldList['title']['width']    = 'auto';
 $config->bug->datatable->fieldList['title']['minWidth'] = '200';
 $config->bug->datatable->fieldList['title']['sortType'] = true;
-$config->bug->datatable->fieldList['title']['flex']     = true;
 $config->bug->datatable->fieldList['title']['required'] = 'yes';
 
 $config->bug->datatable->fieldList['severity']['title']    = 'severityAB';
