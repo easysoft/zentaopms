@@ -2869,7 +2869,7 @@ $config->group->package->docTemplate->privs['baseline-delete']         = array('
 
 $config->group->package->importStoryLib = new stdclass();
 $config->group->package->importStoryLib->order  = 30;
-$config->group->package->importStoryLib->subset = 'story';
+$config->group->package->importStoryLib->subset = 'projectstory';
 $config->group->package->importStoryLib->privs  = array();
 $config->group->package->importStoryLib->privs['story-importToLib']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 165, 'depend' => array('story-view'), 'recommend' => array('story-batchImportToLib'));
 $config->group->package->importStoryLib->privs['story-batchImportToLib'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 170, 'depend' => array('product-browse'), 'recommend' => array('story-importToLib'));
