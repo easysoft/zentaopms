@@ -1312,21 +1312,24 @@ class story extends control
     }
 
     /**
-     * URS of a story.
+     * 展示用户需求关联的软件需求，或软件需求关联的用户需求。
+     * Show the URs/SRs of the SR/UR.
      *
      * @param  int    $storyID
-     * @param  string $storyType
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function relation($storyID, $storyType = '')
+    public function relation(int $storyID, string $storyType = 'story')
     {
+        $story        = $this->story->getById($storyID);
+        $storyType    = $storyType != $story->type ? $story->type : $storyType;
         $selectFields = array('id', 'pri', 'title', 'plan', 'openedBy', 'assignedTo', 'estimate', 'status');
 
         $this->view->relation  = $this->story->getStoryRelation($storyID, $storyType, $selectFields);
         $this->view->users     = $this->user->getPairs('noletter');
         $this->view->storyType = $storyType;
-        $this->view->story     = $this->story->getById($storyID);
+        $this->view->story     = $story;
         $this->display();
     }
 
