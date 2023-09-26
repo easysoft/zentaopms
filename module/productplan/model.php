@@ -1101,37 +1101,6 @@ class productplanModel extends model
     }
 
     /**
-     * Build operate menu.
-     *
-     * @param  object $plan
-     * @access public
-     * @return string
-     */
-    public function buildOperateMenu($plan)
-    {
-        $params = "planID=$plan->id";
-
-        $canStart       = common::hasPriv('productplan', 'start')    && static::isClickable($plan, 'start');
-        $canFinish      = common::hasPriv('productplan', 'finish')   && static::isClickable($plan, 'finish');
-        $canClose       = common::hasPriv('productplan', 'close')    && static::isClickable($plan, 'close');
-        $canActivate    = common::hasPriv('productplan', 'activate') && static::isClickable($plan, 'activate');
-        $canEdit        = common::hasPriv('productplan', 'edit');
-        $canCreateChild = common::hasPriv('productplan', 'create') && static::isClickable($plan, 'create');
-        $canDelete      = common::hasPriv('productplan', 'delete') && static::isClickable($plan, 'delete');
-
-        $menu = array();
-        if($canStart)       $menu[] = array('icon' => 'play',    'class' => 'ghost', 'text' => $this->lang->productplan->startAB,    'data-url' => helper::createLink('productplan', 'start', $params . '&confirm=yes'), 'data-action' => 'start', 'onclick' => 'ajaxConfirmLoad(this)');
-        if($canFinish)      $menu[] = array('icon' => 'checked', 'class' => 'ghost', 'text' => $this->lang->productplan->finishAB,   'data-url' => helper::createLink('productplan', 'finish', $params . '&confirm=yes'), 'data-action' => 'finish', 'onclick' => 'ajaxConfirmLoad(this)');
-        if($canClose)       $menu[] = array('icon' => 'off',     'class' => 'ghost', 'text' => $this->lang->productplan->closeAB,    'url' => helper::createLink('productplan', 'close', $params, '', true), 'data-toggle' => 'modal');
-        if($canActivate)    $menu[] = array('icon' => 'magic',   'class' => 'ghost', 'text' => $this->lang->productplan->activateAB, 'data-url' => helper::createLink('productplan', 'activate', $params . '&confirm=yes'), 'data-action' => 'activate', 'onclick' => 'ajaxConfirmLoad(this)');
-        if($canCreateChild) $menu[] = array('icon' => 'split',   'class' => 'ghost', 'text' => $this->lang->productplan->children,   'url' => helper::createLink('productplan', 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}"));
-        if($canEdit)        $menu[] = array('icon' => 'edit',    'class' => 'ghost', 'text' => $this->lang->edit,   'url' => helper::createLink('productplan', 'edit', $params));
-        if($canDelete)      $menu[] = array('icon' => 'trash',   'class' => 'ghost', 'text' => $this->lang->delete, 'data-url' => helper::createLink('productplan', 'delete', $params . '&confirm=yes'), 'data-action' => 'delete', 'onclick' => 'ajaxConfirmLoad(this)');
-
-        return $menu;
-    }
-
-    /**
      * 构造计划搜索功能数据。
      * Build search form for plan.
      *

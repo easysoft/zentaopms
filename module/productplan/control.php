@@ -375,6 +375,7 @@ class productplan extends control
         $this->view->planStories  = $planStories;
         $this->view->planBugs     = $this->loadModel('bug')->getPlanBugs($planID, 'all', $type == 'bug' ? $sort : 'id_desc', $bugPager);
         $this->view->summary      = $this->product->summary($planStories);
+        $this->view->actionMenus  = $this->productplanZen->buildOperateMenu($plan);
         $this->view->type         = $type;
         $this->view->orderBy      = $orderBy;
         $this->view->link         = $link;
