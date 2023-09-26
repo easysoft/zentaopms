@@ -551,6 +551,7 @@ class testreportModel extends model
     }
 
     /**
+     * 获取测试报告键对。
      * Get pairs.
      *
      * @param  int    $productID
@@ -558,7 +559,7 @@ class testreportModel extends model
      * @access public
      * @return array
      */
-    public function getPairs($productID = 0, $appendID = 0)
+    public function getPairs(int $productID = 0, int $appendID = 0): array
     {
         return $this->dao->select('id,title')->from(TABLE_TESTREPORT)
             ->where('deleted')->eq(0)

@@ -265,19 +265,21 @@ class testreportTest
 
         return $objects;
     }
+
     /**
-     * Get pairs.
+     * 测试获取测试报告键对。
+     * Test get pairs.
      *
-     * @param  int    $productID
+     * @param  int          $productID
+     * @param  int          $appendID
      * @access public
-     * @return array
+     * @return array|string
      */
-    public function getPairsTest($productID = 0)
+    public function getPairsTest(int $productID = 0, int $appendID = 0): array|string
     {
-        $objects = $this->objectModel->getPairs($productID);
+        $objects = $this->objectModel->getPairs($productID, $appendID);
         if(dao::isError()) return dao::getError();
-        if($objects) $objects = array_keys($objects);
-        return $objects;
+        return implode(',', array_keys($objects));
     }
 
     /**
