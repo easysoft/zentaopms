@@ -93,12 +93,13 @@ toolbar
 /* zin: Define the sidebar in main content. */
 sidebar
 (
-    moduleMenu(set(array(
-        'modules'     => $moduleTree,
-        'activeKey'   => $moduleID,
-        'settingLink' => $this->createLink('tree', 'browsetask', "rootID=$execution->id&productID=0"),
-        'closeLink'   => $this->createLink('execution', 'task'),
-    )))
+    moduleMenu
+    (
+        set::modules($moduleTree),
+        set::activeKey($moduleID),
+        set::settingLink(createLink('tree', 'browsetask', "rootID=$execution->id&productID=0")),
+        set::closeLink(createLink('execution', 'task'))
+    )
 );
 
 $firstTask            = reset($tasks);
