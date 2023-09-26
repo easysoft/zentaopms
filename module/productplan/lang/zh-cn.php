@@ -34,6 +34,7 @@ $lang->productplan->to         = '至';
 $lang->productplan->more       = '更多操作';
 $lang->productplan->comment    = '备注';
 
+$lang->productplan->batchEditAction   = '批量编辑计划';
 $lang->productplan->batchUnlink       = "批量移除";
 $lang->productplan->batchClose        = "批量关闭";
 $lang->productplan->batchChangeStatus = "批量修改状态";

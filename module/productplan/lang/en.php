@@ -34,6 +34,7 @@ $lang->productplan->to         = 'To';
 $lang->productplan->more       = 'More';
 $lang->productplan->comment    = 'Comment';
 
+$lang->productplan->batchEditAction   = 'Batch Edit Plan';
 $lang->productplan->batchUnlink       = "Batch Unlink";
 $lang->productplan->batchClose        = "Batch Close";
 $lang->productplan->batchChangeStatus = "Batch Change Status";
