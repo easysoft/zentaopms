@@ -409,8 +409,9 @@ class docMenu extends wg
     protected function build(): wg
     {
         $this->setMenuTreeProps();
-        $title    = $this->getTitle();
-        $menuLink = $this->prop('menuLink', '');
+        $title     = $this->getTitle();
+        $menuLink  = $this->prop('menuLink', '');
+        $treeProps = set($this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'hover')));
 
         return div
             (
@@ -437,7 +438,7 @@ class docMenu extends wg
                     (
                         setClass($menuLink ? 'pt-3' : ''),
                         setClass('col flex-auto overflow-y-auto overflow-x-hidden pl-4 pr-1'),
-                        zui::tree(set($this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'hover'))))
+                        zui::tree(set::_tag('ul'), $treeProps)
                     ),
                     $this->buildBtns()
                 ),
