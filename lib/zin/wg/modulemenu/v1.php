@@ -147,10 +147,12 @@ class moduleMenu extends wg
 
     protected function build(): wg
     {
+        global $app;
         $this->setMenuTreeProps();
-        $title = $this->getTitle();
 
+        $title     = $this->getTitle();
         $treeProps = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu'));
+        $preserve  = $app->getModuleName() . '-' . $app->getMethodName();
 
         return div
         (
@@ -171,7 +173,7 @@ class moduleMenu extends wg
                 set::_class('col flex-auto scrollbar-hover overflow-y-auto overflow-x-hidden pl-4 pr-1'),
                 set::defaultNestedShow(true),
                 set::hover(true),
-                set::preserve(true),
+                set::preserve($preserve),
                 set($treeProps)
             ),
             $this->buildActions(),
