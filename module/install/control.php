@@ -379,12 +379,14 @@ class install extends control
      */
     public function progress($id, $install = false)
     {
-        $solution  = $this->loadModel('solution')->getByID($id);
+        $solution = $this->loadModel('solution')->getByID($id);
 
         $this->view->title    = $this->lang->solution->progress;
         $this->view->install  = $install;
         $this->view->solution = $solution;
 
+        $this->app->loadConfig('message');
+        $this->config->message->browser->turnon = 0;
         $this->display();
     }
 
