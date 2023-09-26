@@ -863,7 +863,7 @@ class storyZen extends story
         $modules         = array($productID => $moduleList);
         $branchTagOption = array($productID => $branchTagOption);
         $products        = array($productID => $product);
-        $plans           = array($productID => $this->productplan->getBranchPlanPairs($productID, '', 'unexpired', true));
+        $plans           = array($productID => $this->productplan->getBranchPlanPairs($productID, array(), 'unexpired', true));
 
         return array('branchProduct' => $branchProduct, 'modules' => $modules, 'branchTagOption' => $branchTagOption, 'products' => $products, 'plans' => $plans);
 
