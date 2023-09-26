@@ -226,29 +226,29 @@ class testreportTest
 
         return $objects;
     }
+
     /**
-     * Get bugs for test
+     * 测试获取测试报告的 bugs。
+     * Get bugs for test.
      *
-     * @param  array  $builds
-     * @param  array  $product
-     * @param  string $begin
-     * @param  string $end
-     * @param  string $type
+     * @param  array              $buildIdList
+     * @param  int                $product
+     * @param  int                $taskID
+     * @param  string             $type
      * @access public
-     * @return void
+     * @return array|string|false
      */
 
-    public function getBugs4TestTest($buildIdList, $product, $taskID, $type = 'build')
+    public function getBugs4TestTest(string $buildIdList, int $productID, int $taskID, string $type = 'build'): array|string|false
     {
         $task    = $this->testtask->getByID($taskID);
         $builds  = $this->build->getByList($buildIdList);
-        $begin   = !empty($begin) ? date("Y-m-d", strtotime($begin)) : $task->begin;
-        $end     = !empty($end) ? date("Y-m-d", strtotime($end)) : $task->end;
-        $objects = $this->objectModel->getBugs4Test($builds, $product, $begin, $end, $type);
+        if(empty($builds)) $builds = false;
+        $objects = $this->objectModel->getBugs4Test($builds, $productID, $task->begin, $task->end, $type);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return implode(',', array_keys($objects));
     }
     /**
      * Get stories for test

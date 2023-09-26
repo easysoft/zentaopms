@@ -506,17 +506,18 @@ class testreportModel extends model
     }
 
     /**
+     * 为测试报告获取 bugs。
      * Get bugs for test
      *
-     * @param  array     $builds
-     * @param  int|array $product
-     * @param  string    $begin
-     * @param  string    $end
-     * @param  string    $type
+     * @param  array|bool  $builds
+     * @param  int|array   $product
+     * @param  string      $begin
+     * @param  string      $end
+     * @param  string      $type
      * @access public
-     * @return void
+     * @return array|false
      */
-    public function getBugs4Test(array $builds, int|array $product, string $begin, string $end, string $type = 'build')
+    public function getBugs4Test(array|bool $builds, int|array $product, string $begin, string $end, string $type = 'build'): array|false
     {
         $bugIdList = '';
         if(is_array($builds))
