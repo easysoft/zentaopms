@@ -859,7 +859,7 @@ class productplanModel extends model
             $this->story->setStage($storyID);
         }
 
-        $this->action->create('productplan', $planID, 'linkstory', '', implode(',', $this->post->stories));
+        $this->action->create('productplan', $planID, 'linkstory', '', implode(',', $storyIdList));
 
         return !dao::isError();
     }
