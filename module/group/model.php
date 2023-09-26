@@ -766,10 +766,27 @@ class groupModel extends model
     }
 
     /**
+     * Check nav have subset.
+     *
+     * @param  string $nav
+     * @param  string $subset
+     * @access public
+     * @return bool
+     */
+    public function checkNavSubset($nav, $subset)
+    {
+        if(empty($nav)) return true;
+
+        if($nav == 'general') return !isset($this->config->group->subset->$subset) || !isset($this->config->group->subset->$subset->nav) || $this->config->group->subset->$subset->nav == 'general';
+
+        return isset($this->config->group->subset->$subset) && $this->config->group->subset->$subset->nav == $nav;
+    }
+
+    /**
      * Check nav have module.
      *
-     * @param  string    $nav
-     * @param  string    $moduleName
+     * @param  string $nav
+     * @param  string $moduleName
      * @access public
      * @return bool
      */
@@ -1756,7 +1773,7 @@ class groupModel extends model
                 if(strpos(',' . $priv['edition'] . ',', ',' . $this->config->edition . ',') === false) continue;
                 if(strpos(',' . $priv['vision'] . ',',  ',' . $this->config->vision . ',')  === false) continue;
 
-                if(!$this->checkNavModule($nav, $moduleName, $methodName)) continue;
+                if(!$this->checkNavSubset($nav, $packageData->subset)) continue;
 
                 /* If version is selected, only show privs before the version. */
                 if(!empty($version) and strpos($versionPrivs, ",$privCode,") === false) continue;
@@ -2324,15 +2341,13 @@ class groupModel extends model
     /**
      * Load language of resource.
      *
-     * @param string $nav
      * @access public
      * @return void
      */
-    public function loadResourceLang($nav = '')
+    public function loadResourceLang()
     {
         foreach($this->lang->resource as $moduleName => $action)
         {
-            if($nav and !$this->group->checkNavModule($nav, $moduleName)) continue;
             $this->app->loadLang($moduleName);
 
             $this->lang->custom->common = $this->lang->group->config;
