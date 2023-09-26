@@ -580,8 +580,8 @@ $lang->group->package->artifactrepo          = '制品库';
 $lang->group->package->browseArtifactrepo    = '浏览制品库';
 $lang->group->package->manageArtifactrepo    = '创建维护制品库';
 $lang->group->package->deleteArtifactrepo    = '删除制品库';
-$lang->group->package->browseInstance        = '浏览应用';
-$lang->group->package->browseInstance        = '管理应用';
+$lang->group->package->browseApplication     = '浏览应用';
+$lang->group->package->mangeApplication      = '管理应用';
 $lang->group->package->trainPracticeLib      = '实践库';
 $lang->group->package->other                 = '其他';
 

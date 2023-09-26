@@ -1311,7 +1311,6 @@ $lang->repo->methodOrder[45]  = 'log';
 $lang->repo->methodOrder[50]  = 'revision';
 $lang->repo->methodOrder[55]  = 'blame';
 $lang->repo->methodOrder[60]  = 'download';
-$lang->repo->methodOrder[65]  = 'setRules';
 $lang->repo->methodOrder[70]  = 'apiGetRepoByUrl';
 $lang->repo->methodOrder[75]  = 'downloadCode';
 $lang->repo->methodOrder[80]  = 'linkStory';
@@ -1375,6 +1374,24 @@ $lang->serverroom->methodOrder[5]  = 'create';
 $lang->serverroom->methodOrder[10] = 'edit';
 $lang->serverroom->methodOrder[15] = 'delete';
 $lang->serverroom->methodOrder[20] = 'view';
+
+$lang->resource->instance = new stdclass();
+$lang->resource->instance->manage = 'manage';
+
+$lang->resource->space = new stdclass();
+$lang->resource->space->browse = 'browse';
+
+$lang->resource->system = new stdclass();
+$lang->resource->system->dashboard    = 'dashboard';
+$lang->resource->system->dblist       = 'dbList';
+$lang->resource->system->configdomain = 'configDomain';
+$lang->resource->system->ossview      = 'ossView';
+
+$lang->resource->ops = new stdclass();
+$lang->resource->ops->provide  = 'provider';
+$lang->resource->ops->city     = 'city';
+$lang->resource->ops->cpubrand = 'cpuBrand';
+$lang->resource->ops->os       = 'os';
 
 /* Doc. */
 $lang->resource->doc = new stdclass();
@@ -1542,9 +1559,6 @@ $lang->mr->methodOrder[95] = 'addReview';
 
 /* App. */
 $lang->resource->app = new stdclass();
-$lang->resource->app->serverlink = 'serverLink';
-
-$lang->app->methodOrder[10] = 'link';
 
 /* Git. */
 $lang->resource->git = new stdclass();
@@ -2019,9 +2033,6 @@ $lang->resource->codereview         = new stdclass();
 $lang->resource->repocode           = new stdclass();
 $lang->resource->artifactrepo       = new stdclass();
 $lang->resource->deploy             = new stdclass();
-$lang->resource->ops                = new stdclass();
-$lang->resource->instance           = new stdclass();
-$lang->resource->space              = new stdclass();
 
 global $config;
 $inUpgrade = (defined('IN_UPGRADE') and IN_UPGRADE);

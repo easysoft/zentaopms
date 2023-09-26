@@ -1627,6 +1627,12 @@ $config->group->package->manageTrainCourse->privs['traincourse-uploadCourse'] = 
 $config->group->package->manageTrainCourse->privs['traincourse-batchImport']  = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array(), 'recommend' => array());
 $config->group->package->manageTrainCourse->privs['traincourse-cloudImport']  = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(), 'recommend' => array());
 
+$config->group->package->dashboard = new stdclass();
+$config->group->package->dashboard->order  = 2160;
+$config->group->package->dashboard->subset = 'ops';
+$config->group->package->dashboard->privs  = array();
+$config->group->package->dashboard->privs['system-dashboard'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
+
 $config->group->package->system = new stdclass();
 $config->group->package->system->order  = 2180;
 $config->group->package->system->subset = 'ops';
@@ -2689,12 +2695,6 @@ $config->group->package->gitea->subset = 'repo';
 $config->group->package->sonarqube = new stdclass();
 $config->group->package->sonarqube->order  = 30;
 $config->group->package->sonarqube->subset = 'repo';
-
-$config->group->package->repoRules = new stdclass();
-$config->group->package->repoRules->order  = 2380;
-$config->group->package->repoRules->subset = 'ops';
-$config->group->package->repoRules->privs  = array();
-$config->group->package->repoRules->privs['repo-setRules'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->browseJob = new stdclass();
 $config->group->package->browseJob->order  = 5;
@@ -3822,12 +3822,6 @@ $config->group->package->deletePrompt->subset = 'ai';
 $config->group->package->deletePrompt->privs  = array();
 $config->group->package->deletePrompt->privs['ai-promptDelete'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('ai-prompts', 'ai-promptView'), 'recommend' => array());
 
-$config->group->package->dashboard = new stdclass();
-$config->group->package->dashboard->order  = 2160;
-$config->group->package->dashboard->subset = 'ops';
-$config->group->package->dashboard->privs  = array();
-$config->group->package->dashboard->privs['system-dashboard'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
-
 $config->group->package->resource = new stdclass();
 $config->group->package->resource->order  = 2200;
 $config->group->package->resource->subset = 'ops';
@@ -3855,6 +3849,12 @@ $config->group->package->manageOS->order  = 2360;
 $config->group->package->manageOS->subset = 'ops';
 $config->group->package->manageOS->privs  = array();
 $config->group->package->manageOS->privs['ops-os'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array(), 'recommend' => array());
+
+$config->group->package->repoRules = new stdclass();
+$config->group->package->repoRules->order  = 2380;
+$config->group->package->repoRules->subset = 'ops';
+$config->group->package->repoRules->privs  = array();
+$config->group->package->repoRules->privs['repo-setRules'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->browseRepo = new stdclass();
 $config->group->package->browseRepo->order  = 2420;
@@ -3947,17 +3947,16 @@ $config->group->package->deleteArtifactrepo->subset = 'artifactrepo';
 $config->group->package->deleteArtifactrepo->privs  = array();
 $config->group->package->deleteArtifactrepo->privs['artifactrepo-delete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
 
-$config->group->package->application = new stdclass();
-$config->group->package->application->order  = 2840;
-$config->group->package->application->subset = 'app';
-$config->group->package->application->privs  = array();
-$config->group->package->application->privs['space-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
-
-$config->group->package->application = new stdclass();
-$config->group->package->application->order  = 2860;
-$config->group->package->application->subset = 'app';
-$config->group->package->application->privs  = array();
-$config->group->package->application->privs['instance-manage'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(), 'recommend' => array());
+$config->group->package->browseApplication = new stdclass();
+$config->group->package->browseApplication->order  = 2840;
+$config->group->package->browseApplication->subset = 'app';
+$config->group->package->browseApplication->privs  = array();
+$config->group->package->browseApplication->privs['space-browse']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
+$config->group->package->mangeApplication = new stdclass();
+$config->group->package->mangeApplication->order  = 2840;
+$config->group->package->mangeApplication->subset = 'app';
+$config->group->package->mangeApplication->privs  = array();
+$config->group->package->mangeApplication->privs['instance-manage'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->trainPracticeLib = new stdclass();
 $config->group->package->trainPracticeLib->order  = 8;

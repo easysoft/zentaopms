@@ -1,9 +1,12 @@
 <?php
+$lang->system->common          = 'Dashboard';
 $lang->system->dashboard       = 'Dashboard';
 $lang->system->systemInfo      = 'System information';
 $lang->system->dbManagement    = 'Database management';
 $lang->system->ldapManagement  = 'LDAP';
 $lang->system->dbList          = 'Database list';
+$lang->system->configDomain    = 'Config Domain';
+$lang->system->ossview         = 'OSS';
 $lang->system->dbName          = 'Name';
 $lang->system->dbStatus        = 'Status';
 $lang->system->dbType          = 'Type';

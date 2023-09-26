@@ -771,14 +771,24 @@ class groupModel extends model
      * @param  string    $nav
      * @param  string    $moduleName
      * @access public
-     * @return void
+     * @return bool
      */
-    public function checkNavModule($nav, $moduleName)
+    public function checkNavModule($nav, $moduleName, $methodName = '')
     {
         if(empty($nav)) return true;
 
         if($nav == 'general' and (isset($this->lang->navGroup->$moduleName) or isset($this->lang->mainNav->$moduleName))) return false;
-        if($nav != 'general' and !($moduleName == $nav or (isset($this->lang->navGroup->$moduleName) and $this->lang->navGroup->$moduleName == $nav))) return false;
+        if($nav != 'general')
+        {
+            if($moduleName === $nav) return true;
+            if(isset($this->lang->navGroup->{$moduleName . '_' . $methodName}))
+            {
+                if($this->lang->navGroup->{$moduleName . '_' . $methodName} === $nav) return true;
+                return false;
+            }
+            if(isset($this->lang->navGroup->$moduleName) and $this->lang->navGroup->$moduleName == $nav) return true;
+            return false;
+        }
         if($nav == 'project' and strpos('caselib|testsuite|report', $moduleName) !== false) return false;
 
         return true;
@@ -1742,18 +1752,19 @@ class groupModel extends model
                 list($moduleName, $methodName) = explode('-', $privCode);
                 $allPrivs[$privCode] = $privCode;
 
+                if(!$this->config->inQuickon && in_array("{$moduleName}-{$methodName}", $this->config->group->hiddenPriv)) continue;
                 if(strpos(',' . $priv['edition'] . ',', ',' . $this->config->edition . ',') === false) continue;
                 if(strpos(',' . $priv['vision'] . ',',  ',' . $this->config->vision . ',')  === false) continue;
 
-                if(!$this->checkNavModule($nav, $moduleName)) continue;
+                if(!$this->checkNavModule($nav, $moduleName, $methodName)) continue;
 
                 /* If version is selected, only show privs before the version. */
                 if(!empty($version) and strpos($versionPrivs, ",$privCode,") === false) continue;
 
                 /* Remove privs unused in the edition. */
                 if(!isset($this->lang->resource->$moduleName) || !isset($this->lang->resource->$moduleName->$methodName)) continue;
-
                 $methodLang = $this->lang->resource->$moduleName->$methodName;
+                if(!isset($this->lang->$moduleName->$methodLang)) $this->app->loadLang($moduleName);
                 $priv = (object)array('subset' => $packageData->subset, 'package' => $packageCode, 'module' => $moduleName, 'method' => $methodName, 'selected' => false, 'name' => $this->lang->$moduleName->$methodLang);
 
                 $privList[$privCode] = $priv;

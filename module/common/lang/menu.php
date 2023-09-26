@@ -681,6 +681,7 @@ $lang->navGroup->caselib       = 'qa';
 
 $lang->navGroup->devops           = 'devops';
 $lang->navGroup->repo             = 'devops';
+$lang->navGroup->repo_setRules    = 'admin';
 $lang->navGroup->job              = 'devops';
 $lang->navGroup->jenkins          = 'devops';
 $lang->navGroup->mr               = 'devops';

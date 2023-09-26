@@ -580,8 +580,8 @@ $lang->group->package->artifactrepo          = 'Artifact Repo';
 $lang->group->package->browseArtifactrepo    = 'Artifact Repo List';
 $lang->group->package->manageArtifactrepo    = 'Manage Artifact Repo';
 $lang->group->package->deleteArtifactrepo    = 'Delete Artifact Repo';
-$lang->group->package->browseInstance        = 'Application List';
-$lang->group->package->browseInstance        = 'Manage Application';
+$lang->group->package->browseApplication     = 'Application List';
+$lang->group->package->mangeApplication      = 'Manage Application';
 $lang->group->package->trainPracticeLib      = 'Practice Library';
 $lang->group->package->other                 = 'Other';
 

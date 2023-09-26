@@ -1,9 +1,12 @@
 <?php
-$lang->system->dashboard       = '仪表盘';
+$lang->system->common          = '仪表盘';
+$lang->system->dashboard       = 'DevOps平台仪表盘';
 $lang->system->systemInfo      = '系统信息';
 $lang->system->dbManagement    = '数据库管理';
 $lang->system->ldapManagement  = 'LDAP';
 $lang->system->dbList          = '数据库列表';
+$lang->system->configDomain    = '域名管理';
+$lang->system->ossView         = '对象存储管理';
 $lang->system->dbName          = '名称';
 $lang->system->dbStatus        = '状态';
 $lang->system->dbType          = '类型';
