@@ -1147,16 +1147,17 @@ class story extends control
     }
 
     /**
-     * Assign to.
+     * 需求的指派给页面。
+     * Assign the story to a user.
      *
      * @param  int    $storyID
      * @param  string $kanbanGroup
-     * @param  string $from taskkanban
-     * @param  string $storyType story|requirement
+     * @param  string $from        ''|taskkanban
+     * @param  string $storyType   story|requirement
      * @access public
      * @return void
      */
-    public function assignTo($storyID, $kanbanGroup = 'default', $from = '', $storyType = 'story')
+    public function assignTo(int $storyID, string $kanbanGroup = 'default', string $from = '', string $storyType = 'story')
     {
         if(!empty($_POST))
         {
