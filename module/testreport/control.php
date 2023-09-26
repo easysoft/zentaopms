@@ -273,11 +273,11 @@ class testreport extends control
 
         if($report->objectType == 'testtask')
         {
-            $this->setChartDatas($report->objectID);
+            $this->testreportZen->setChartDatas($report->objectID);
         }
         elseif($reportData['tasks'])
         {
-            foreach($reportData['tasks'] as $task) $this->setChartDatas($task->id);
+            foreach($reportData['tasks'] as $task) $this->testreportZen->setChartDatas($task->id);
         }
 
         /* Load pager. */
@@ -312,58 +312,5 @@ class testreport extends control
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $locateLink));
-    }
-
-    /**
-     * Set chart datas of cases.
-     *
-     * @param  int    $taskID
-     * @access public
-     * @return void
-     */
-    public function setChartDatas($taskID)
-    {
-        $this->loadModel('report');
-        $task   = $this->loadModel('testtask')->getByID($taskID);
-        foreach($this->lang->testtask->report->charts as $chart => $title)
-        {
-            if(strpos($chart, 'testTask') === false) continue;
-
-            $chartFunc   = 'getDataOf' . $chart;
-            $chartData   = $this->testtask->$chartFunc($taskID);
-            $chartOption = $this->testtask->mergeChartOption($chart);
-            if(isset($chartType) && !empty($chartType)) $chartOption->type = $chartType;
-
-            $this->view->charts[$chart] = $chartOption;
-            if(isset($this->view->datas[$chart]))
-            {
-                $existDatas = $this->view->datas[$chart];
-                $sum        = 0;
-                foreach($chartData as $key => $data)
-                {
-                    if(isset($existDatas[$key]))
-                    {
-                        $data->value += $existDatas[$key]->value;
-                        unset($existDatas[$key]);
-                    }
-                    $sum += $data->value;
-                }
-                foreach($existDatas as $key => $data)
-                {
-                    $sum += $data->value;
-                    $chartData[$key] = $data;
-                }
-                if($sum)
-                {
-                    foreach($chartData as $data) $data->percent = round($data->value / $sum, 2);
-                }
-                ksort($chartData);
-                $this->view->datas[$chart] = $chartData;
-            }
-            else
-            {
-                $this->view->datas[$chart] = $this->report->computePercent($chartData);
-            }
-        }
     }
 }

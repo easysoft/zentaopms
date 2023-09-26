@@ -401,4 +401,59 @@ class testreportZen extends testreport
             return $projectID;
         }
     }
+
+    /**
+     * 设置用例的报告数据。
+     * Set chart datas of cases.
+     *
+     * @param  int    $taskID
+     * @access public
+     * @return void
+     */
+    protected function setChartDatas(int $taskID): void
+    {
+        $this->loadModel('report');
+        foreach($this->lang->testtask->report->charts as $chart => $title)
+        {
+            if(strpos($chart, 'testTask') === false) continue;
+
+            $chartFunc   = 'getDataOf' . $chart;
+            $chartData   = $this->testtask->$chartFunc($taskID);
+            $chartOption = $this->testtask->mergeChartOption($chart);
+
+            $this->view->charts[$chart] = $chartOption;
+
+            if(isset($this->view->datas[$chart]))
+            {
+                $existDatas = $this->view->datas[$chart];
+                $sum        = 0;
+                foreach($chartData as $key => $data)
+                {
+                    if(isset($existDatas[$key]))
+                    {
+                        $data->value += $existDatas[$key]->value;
+                        unset($existDatas[$key]);
+                    }
+                    $sum += $data->value;
+                }
+                foreach($existDatas as $key => $data)
+                {
+                    $chartData[$key] = $data;
+                    $sum += $data->value;
+                }
+
+                if($sum)
+                {
+                    foreach($chartData as $data) $data->percent = round($data->value / $sum, 2);
+                }
+
+                ksort($chartData);
+                $this->view->datas[$chart] = $chartData;
+            }
+            else
+            {
+                $this->view->datas[$chart] = $this->report->computePercent($chartData);
+            }
+        }
+    }
 }
