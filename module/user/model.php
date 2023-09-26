@@ -2734,26 +2734,27 @@ class userModel extends model
     }
 
     /**
+     * 获取项目、执行等对象的团队成员。
      * Get team members in object.
      *
-     * @param  string $objectIds
-     * @param  string $type     project|execution
-     * @param  string $params
-     * @param  string $usersToAppended
+     * @param  string|array|int $objectIds
+     * @param  string           $type            project|execution
+     * @param  string           $params
+     * @param  string|array     $usersToAppended
      * @access public
      * @return array
      */
-    public function getTeamMemberPairs($objectIds, $type = 'project', $params = '', $usersToAppended = '')
+    public function getTeamMemberPairs(string|array|int $objectIds, string $type = 'project', string $params = '', string|array $usersToAppended = ''): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getTeamMembersPairs();
 
         $keyField = strpos($params, 'useid') !== false ? 'id' : 'account';
         $users = $this->dao->select("t2.id, t2.account, t2.realname")->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
-            ->where('t1.root')->in($objectIds)
-            ->andWhere('t1.type')->eq($type)
+            ->where('t1.type')->eq($type)
+            ->beginIF(!empty($objectIds))->andWhere('t1.root')->in($objectIds)->fi()
             ->beginIF($params == 'nodeleted' or empty($this->config->user->showDeleted))
-            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq('0')
             ->fi()
             ->fetchAll($keyField);
 
