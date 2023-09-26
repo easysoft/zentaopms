@@ -134,7 +134,7 @@ window.handleQueryClick = function(id)
     var $form = id ? $('#queryForm' + id) : $('#queryForm');
     var check = window.checkForm($form);
     if(!check) return;
-    window.ajaxGetRecords(id);
+    window.ajaxGetRecords(id, 'filter');
 }
 
 window.deactiveNavMenu = function()
@@ -725,11 +725,19 @@ window.updateMetricBoxs = function(id, isChecked)
 
         $('.table-and-charts').append(html);
 
-        window.ajaxGetRecords(id);
+        window.ajaxGetRecords(id, 'add');
     }
 }
 
-window.ajaxGetRecords = function(id)
+/**
+ * 多选添加一个度量项到展示区，或者使用筛选器更新一个度量项的展示内容。
+ * Add a metricBox or use filter to change metricBox.
+ *
+ * @param  string mode add|filter
+ * @access public
+ * @return void
+ */
+window.ajaxGetRecords = function(id, mode = 'add')
 {
     var $form = id ? $('#queryForm' + id) : $('#queryForm');
     var formData = window.getFormData($form);
@@ -743,7 +751,9 @@ window.ajaxGetRecords = function(id)
         {
             var chartType = viewType == 'multiple' ? $('#metricBox' + id).find('[name=chartType]').val() : $('[name=chartType]').val();
             window.renderDTable(id, data.header, data.data);
-            window.renderChart(id, data.header, data.data, chartType, false);
+
+            var initPicker = (mode == 'add');
+            window.renderChart(id, data.header, data.data, chartType, initPicker);
         }
     });
 }
