@@ -1,0 +1,28 @@
+#!/usr/bin/env php
+<?php
+/**
+
+title=productpanModel->checkDate4Plan();
+timeout=0
+cid=1
+
+*/
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/productplan.class.php';
+
+zdTable('productplan')->config('productplan')->gen(5);
+zdTable('user')->gen(5);
+
+$planIdList = array(1, 2, 3);
+$beginList  = array('2030-01-01', '2021-06-02', '2020-01-01');
+$endList    = array('2030-01-01', '2021-06-14', '2021-07-30');
+
+$planTester = new productplan('admin');
+r($planTester->checkDate4PlanTest($planIdList[0], $beginList[0], $endList[0])) && p('0')     && e('测试通过');                                                       // 父计划输入正确的开始日期，检查通过
+r($planTester->checkDate4PlanTest($planIdList[0], $beginList[0], $endList[0])) && p('0')     && e('测试通过');                                                       // 父计划输入正确的结束日期，检查通过
+r($planTester->checkDate4PlanTest($planIdList[0], $beginList[1], $endList[0])) && p('begin') && e('子计划的开始日期：2021-06-01，开始日期不能大于子计划的开始日期'); // 父计划输入错误的开始日期，检查报错提示信息
+r($planTester->checkDate4PlanTest($planIdList[0], $beginList[0], $endList[1])) && p('end')   && e('子计划的完成日期：2021-06-15，完成日期不能小于子计划的完成日期'); // 父计划输入错误的结束日期，检查报错提示信息
+r($planTester->checkDate4PlanTest($planIdList[1], $beginList[1], $endList[1])) && p('0')     && e('测试通过');                                                       // 子计划输入正确的开始日期，检查通过
+r($planTester->checkDate4PlanTest($planIdList[1], $beginList[1], $endList[1])) && p('0')     && e('测试通过');                                                       // 子计划输入正确的结束日期，检查通过
+r($planTester->checkDate4PlanTest($planIdList[1], $beginList[2], $endList[1])) && p('begin') && e('父计划的开始日期：2021-01-01，开始日期不能小于父计划的开始日期'); // 子计划输入错误的开始日期，检查报错提示信息
+r($planTester->checkDate4PlanTest($planIdList[1], $beginList[1], $endList[2])) && p('end')   && e('父计划的完成日期：2021-06-30，完成日期不能大于父计划的完成日期'); // 子计划输入错误的结束日期，检查报错提示信息

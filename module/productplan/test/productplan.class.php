@@ -497,4 +497,23 @@ class productPlan
         }
         return $changes;
     }
+
+    /**
+     * 检查计划的日期。
+     * Check date for plan.
+     *
+     * @param  int    $planID
+     * @param  string $begin
+     * @param  string $end
+     * @access public
+     * @return array
+     */
+    public function checkDate4PlanTest(int $planID, string $begin, string $end): array
+    {
+        $plan = $this->productplan->getByID($planID);
+        $this->productplan->checkDate4Plan($plan, $begin, $end);
+
+        if(dao::isError()) return dao::getError();
+        return array('测试通过');
+    }
 }
