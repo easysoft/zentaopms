@@ -518,7 +518,7 @@ window.initChart = function($obj, head, data, chartType)
 
             var seriesData = [];
             xAxis.data.forEach(function(date) {
-                seriesData.push(dates.find(item => item.date === date) ? dates.find(item => item.date === date).value : null);
+                seriesData.push(dates.find(item => item.date === date) ? dates.find(item => item.date === date).value : 0);
             });
 
             series.push({data: seriesData, type: type, name: scope});
@@ -536,7 +536,16 @@ window.initChart = function($obj, head, data, chartType)
                 containLabel: true
             },
             tooltip: {
-                trigger: 'axis'
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    label: {
+                        backgroundColor: '#6a7985'
+                    }
+                },
+                confine:true,//限制tooltip在图表范围内展示
+                extraCssText: 'max-height:60%;overflow-y:scroll',//最大高度以及超出处理
+                enterable:true//鼠标可以进入tooltip区域，使用滚动条
             },
             xAxis: chartType == 'barY' ? yAxis : xAxis,
             yAxis: chartType == 'barY' ? xAxis : yAxis,
@@ -569,7 +578,8 @@ window.initPieChart = function($obj, head, data)
             },
             legend: {
                 orient: 'vertical',
-                left: 'left'
+                left: 'left',
+                type: 'scroll'
             },
             series: [
                 {
