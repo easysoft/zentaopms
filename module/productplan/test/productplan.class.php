@@ -492,5 +492,32 @@ class productPlan
 
         return $this->productplan->dao->select('*')->from(TABLE_PLANSTORY)->fetchAll();
     }
+
+    /**
+     * Test unlinkBug method.
+     *
+     * @param  int    $bugID
+     * @access public
+     * @return void
+     */
+    public function unlinkBugTest($bugID)
+    {
+        $this->productplan->unlinkBug($bugID);
+
+        return $this->productplan->dao->select('*')->from(TABLE_BUG)->where('id')->eq($bugID)->fetch();
+    }
+
+    /**
+     * Test unlinkStory method.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return void
+     */
+    public function unlinkStoryTest($storyID, $planID)
+    {
+        $this->productplan->unlinkStory($storyID, $planID);
+
+        return $this->productplan->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
+    }
 }
-?>

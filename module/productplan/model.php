@@ -870,24 +870,28 @@ class productplanModel extends model
     }
 
     /**
-     * Unlink story
+     * 取消关联需求。
+     * Unlink story.
      *
      * @param  int    $storyID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function unlinkStory($storyID, $planID)
+    public function unlinkStory(int $storyID, int $planID): bool
     {
         $story = $this->dao->findByID($storyID)->from(TABLE_STORY)->fetch();
+        if(!$story) return false;
+
         $plans = array_unique(explode(',', trim(str_replace(",$planID,", ',', ',' . trim($story->plan) . ','). ',')));
         $this->dao->update(TABLE_STORY)->set('plan')->eq(implode(',', $plans))->where('id')->eq((int)$storyID)->exec();
 
         /* Delete the story in the sort of the plan. */
-        $this->loadModel('story');
-        $this->story->updateStoryOrderOfPlan($storyID, '', $planID);
+        $this->loadModel('story')->updateStoryOrderOfPlan($storyID, '', $planID);
 
         $this->story->setStage($storyID);
         $this->loadModel('action')->create('story', $storyID, 'unlinkedfromplan', '', $planID);
+
+        return !dao::isError();
     }
 
     /**
@@ -918,17 +922,22 @@ class productplanModel extends model
     }
 
     /**
+     * 取消关联Bug。
      * Unlink bug.
      *
      * @param  int    $bugID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function unlinkBug($bugID)
+    public function unlinkBug(int $bugID): bool
     {
         $planID = $this->dao->findByID($bugID)->from(TABLE_BUG)->fetch('plan');
+        if(!$planID) return false;
+
         $this->dao->update(TABLE_BUG)->set('plan')->eq(0)->where('id')->eq((int)$bugID)->exec();
+
         $this->loadModel('action')->create('bug', $bugID, 'unlinkedfromplan', '', $planID);
+        return !dao::isError();
     }
 
     /**
@@ -1399,15 +1408,15 @@ class productplanModel extends model
     }
 
     /**
+     * 当编辑计划分支时，取消计划关联的需求和Bug。
      * Unlink story and bug when edit branch of plan.
-     * @param  int    $planID
-     * @param  int    $oldBranch
+     * @param  array     $changeList
      * @access protected
-     * @return void
+     * @return bool
      */
-    public function unlinkOldBranch($changes)
+    public function unlinkOldBranch(array $changeList): bool
     {
-        foreach($changes as $planID => $changes)
+        foreach($changeList as $planID => $changes)
         {
             $oldBranch = '';
             $newBranch = '';
@@ -1427,14 +1436,16 @@ class productplanModel extends model
             {
                 foreach($planStories as $storyID => $story)
                 {
-                    if($story->branch and str_contains(",$newBranch,", ",$story->branch,")) $this->unlinkStory($storyID, $planID);
+                    if($story->branch && str_contains(",$newBranch,", ",$story->branch,")) $this->unlinkStory($storyID, $planID);
                 }
 
                 foreach($planBugs as $bugID => $bug)
                 {
-                    if($bug->branch and str_contains(",$newBranch,", ",$bug->branch,")) $this->unlinkBug($bugID, $planID);
+                    if($bug->branch && str_contains(",$newBranch,", ",$bug->branch,")) $this->unlinkBug($bugID, $planID);
                 }
             }
         }
+
+        return !dao::isError();
     }
 }
