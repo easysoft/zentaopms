@@ -1,6 +1,6 @@
 $(function()
 {
-    var timerID = setInterval(function()
+    setInterval(function()
     {
         $.get(createLink('install', 'ajaxProgress', 'id='+ solutionID)).done(function(response)
         {
@@ -61,7 +61,7 @@ $(function()
                 if(installed)
                 {
                     $('.progress-message').text(notices.installationSuccess);
-                    parent.window.location.href = createLink('install', 'step6');
+                    window.location.href = createLink('install', 'step6');
                 }
             }
             else

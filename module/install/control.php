@@ -324,7 +324,6 @@ class install extends control
             $this->lang->install->successLabel       = str_replace('IPD', '', $this->lang->install->successLabel);
             $this->lang->install->successNoticeLabel = str_replace('IPD', '', $this->lang->install->successNoticeLabel);
             $this->config->version                   = $editionName . str_replace(array('max', 'biz', 'ipd'), '', $this->config->version);
-            $this->config->version                   = $this->lang->devopsPrefix . $this->config->version;
         }
 
         if($canDelFile and file_exists($upgradeFile)) unlink($upgradeFile);
