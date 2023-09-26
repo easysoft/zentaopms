@@ -2,11 +2,14 @@ $(function()
 {
     var fileName = dataview != '' ? dataview.name : '';
     var exportModal = new $.zui.ModalTrigger({url: createLink('dataview', 'export', 'type=query&table=&fileName=' + fileName, '', true), type: 'iframe', width: 900});
-    document.getElementById('exportDataview').addEventListener('click', function(e)
+    if(document.getElementById('exportDataview'))
     {
-        tryQuery(e);
-        showModel(exportModal);
-    });
+        document.getElementById('exportDataview').addEventListener('click', function(e)
+        {
+            tryQuery(e);
+            showModel(exportModal);
+        });
+    }
 
     if(rawMethod !== 'create') return;
     var createModal = new $.zui.ModalTrigger({url: createLink('dataview', 'create', 'step=create', '', true), type: 'iframe', width: 480});
