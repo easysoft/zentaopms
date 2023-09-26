@@ -17,7 +17,7 @@ $queryMenuLink = createLink('bug', 'browse', "productID={$product->id}&branch={$
 featureBar
 (
     set::current($browseType == 'bysearch' ? $param : $browseType),
-    set::linkParams("product=$product->id&branch=$branch&browseType={key}"),
+    set::linkParams("product={$product->id}&branch={$branch}&browseType={key}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
     set::queryMenuLinkCallback(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink)),
     li(searchToggle())
 );
