@@ -3,7 +3,8 @@ declare(strict_types=1);
 class projectreleaseZen extends projectrelease
 {
     /**
-     * Common actions.
+     * 获取当前项目的所有产品，当前产品，分支，项目
+     * Get products of the project and current product, branch, project.
      *
      * @param  int    $projectID
      * @param  int    $productID
@@ -11,13 +12,17 @@ class projectreleaseZen extends projectrelease
      * @access public
      * @return void
      */
-    public function commonAction($projectID = 0, $productID = 0, $branch = 0)
+    public function commonAction(int $projectID = 0, int $productID = 0, int $branch = 0)
     {
-        /* Get product and product list by project. */
+        /* 获取当前项目的所有产品。*/
+        /* Get product list by project. */
         $this->products = $this->product->getProductPairsByProject($projectID);
         if(empty($this->products)) return print($this->locate($this->createLink('product', 'showErrorNone', 'moduleName=project&activeMenu=projectrelease&projectID=' . $projectID)));
+
+        /* 获取当前的产品。*/
+        /*  Get current product. */
         if(!$productID) $productID = key($this->products);
-        $product = $this->product->getById($productID);
+        $product = $this->product->getByID($productID);
 
         $this->view->products = $this->products;
         $this->view->product  = $product;
