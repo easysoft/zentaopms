@@ -1781,7 +1781,11 @@ class groupModel extends model
                 /* Remove privs unused in the edition. */
                 if(!isset($this->lang->resource->$moduleName) || !isset($this->lang->resource->$moduleName->$methodName)) continue;
                 $methodLang = $this->lang->resource->$moduleName->$methodName;
-                if(!isset($this->lang->$moduleName->$methodLang)) $this->app->loadLang($moduleName);
+                if(!isset($this->lang->$moduleName->$methodLang))
+                {
+                    $this->app->loadLang($moduleName);
+                    if($moduleName == 'requirement') $this->app->loadLang('story');
+                }
                 $priv = (object)array('subset' => $packageData->subset, 'package' => $packageCode, 'module' => $moduleName, 'method' => $methodName, 'selected' => false, 'name' => $this->lang->$moduleName->$methodLang);
 
                 $privList[$privCode] = $priv;
