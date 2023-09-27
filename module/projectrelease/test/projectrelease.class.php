@@ -57,38 +57,4 @@ class projectreleaseTest
         if(dao::isError()) return dao::getError();
         return implode(',', $objects);
     }
-
-    /**
-    * Test update a release.
-    *
-    * @param  int    $releaseID
-    * @param  string $name
-    * @param  string $date
-    * @access public
-    * @return array
-    */
-    public function updateTest($releaseID, $name = '', $date = '')
-    {
-        global $app;
-        $app->loadConfig('release');
-
-        $updateFields['name']    = $name;
-        $updateFields['build']   = 1;
-        $updateFields['date']    = $date;
-        $updateFields['status']  = 'normal';
-        $updateFields['desc']    = '';
-        $updateFields['labels']  = array();
-        $updateFields['files']   = array();
-        $updateFields['uid']     = '62450877d0a27';
-        $updateFields['product'] = 1;
-        foreach($updateFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-
-        $objects = $this->objectModel->update($releaseID);
-        if($objects == array()) $objects = '没有数据更新';
-        unset($_POST);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
 }
