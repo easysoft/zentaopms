@@ -157,7 +157,7 @@ class actionModel extends model
         {
             if(!isset($this->config->objectTables[$objectType]))
             {
-                $emptyRecord['prodcut'] = ',0,';
+                $emptyRecord['product'] = ',0,';
                 return $emptyRecord;
             }
 
