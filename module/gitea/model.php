@@ -116,7 +116,7 @@ class giteaModel extends model
 
         if(count($repeatUsers))
         {
-            dao::$errors[] = sprintf($this->lang->gitea->bindUserError, join(',', $repeatUsers));
+            dao::$errors = sprintf($this->lang->gitea->bindUserError, join(',', $repeatUsers));
             return false;
         }
 

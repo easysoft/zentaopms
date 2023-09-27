@@ -288,11 +288,30 @@ class mr extends control
         $sourceBranch  = $this->$scm->apiGetSingleBranch($MR->hostID, $MR->sourceProject, $MR->sourceBranch);
         $targetBranch  = $this->$scm->apiGetSingleBranch($MR->hostID, $MR->targetProject, $MR->targetBranch);
 
-        $projectOwner = false;
+        $projectOwner = $projectEdit = false;
         if(isset($MR->hostID) and !$this->app->user->admin)
         {
             $openID = $this->$scm->getUserIDByZentaoAccount($MR->hostID, $this->app->user->account);
             if(!$projectOwner and isset($sourceProject->owner->id) and $sourceProject->owner->id == $openID) $projectOwner = true;
+        }
+
+        if($scm == 'gitlab')
+        {
+            $gitUsers    = $this->gitlab->getUserAccountIdPairs($MR->hostID);
+            $groupIDList = array(0 => 0);
+            $groups      = $this->gitlab->apiGetGroups($MR->hostID, 'name_asc', 'developer');
+            foreach($groups as $group) $groupIDList[] = $group->id;
+            $isDeveloper = $this->gitlab->checkUserAccess($MR->hostID, 0, $sourceProject, $groupIDList, 'developer');
+
+            if(isset($gitUsers[$this->app->user->account]) && $isDeveloper) $projectEdit = true;
+        }
+        elseif($scm == 'gitea')
+        {
+            $projectEdit = (isset($sourceProject->allow_merge_commits) and $sourceProject->allow_merge_commits == true) ? true : false;
+        }
+        elseif($scm == 'gogs')
+        {
+            $projectEdit = (isset($sourceProject->permissions->push) and $sourceProject->permissions->push) ? true : false;
         }
 
         $this->view->sourceProjectName = $sourceProject->name_with_namespace;
@@ -311,6 +330,7 @@ class mr extends control
         $this->view->compile      = $this->loadModel('compile')->getById($MR->compileID);
         $this->view->compileJob   = $MR->jobID ? $this->job->getById($MR->jobID) : false;
         $this->view->projectOwner = $projectOwner;
+        $this->view->projectEdit  = $projectEdit;
 
         $this->view->title   = $this->lang->mr->view;
         $this->view->MR      = $MR;

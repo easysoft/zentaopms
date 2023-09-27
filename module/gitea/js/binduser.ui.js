@@ -14,3 +14,23 @@ window.renderGitlabUser = function(result, {row})
 
     return result;
 }
+
+window.bindUser = function()
+{
+    const myDTable = $('#table-gitea-binduser').zui('dtable');
+    const formData = myDTable.$.getFormData();
+
+    var bindData = $('#table-gitea-binduser').zui('dtable').$.props.data;
+    var postData = {};
+    postData['giteaUserNames[]'] = [];
+    for(i in bindData)
+    {
+        postData['giteaUserNames[]'].push(bindData[i].giteaID);
+        postData['zentaoUsers[' + bindData[i].giteaID + ']'] = formData['zentaoUsers[' + bindData[i].giteaID + ']'];
+    }
+
+    $.ajaxSubmit({
+        url: $.createLink('gitea', 'bindUser', 'giteaID=' + giteaID + '&type=' + type),
+        data: postData
+    });
+}

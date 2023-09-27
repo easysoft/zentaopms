@@ -630,7 +630,7 @@ class gitlab extends control
             {
                 $message = dao::getError();
                 foreach($message as &$msg) if(is_string($msg)) $msg = zget($this->lang->gitlab->errorResonse, $msg, $msg);
-                return $this->send(array('result' => 'fail', 'message' => $message));   
+                return $this->send(array('result' => 'fail', 'message' => $message));
             }
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseUser', "gitlabID=$gitlabID")));
         }
