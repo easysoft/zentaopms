@@ -427,21 +427,21 @@ class buildModel extends model
     }
 
     /**
-     * Get last build.
+     * 获取最后一次创建的版本信息。
+     * Get the last build.
      *
-     * @param  int    $executionID
-     * @param  int    $projectID
+     * @param  int          $executionID
+     * @param  int          $projectID
      * @access public
-     * @return bool | object
+     * @return object|false
      */
-    public function getLast($executionID = 0, $projectID = 0)
+    public function getLast(int $executionID = 0, int $projectID = 0): object|false
     {
         return $this->dao->select('id, name')->from(TABLE_BUILD)
             ->where('deleted')->eq(0)
-            ->andWhere('execution')->eq((int)$executionID)
-            ->beginIF($projectID)->andWhere('project')->eq((int)$projectID)->fi()
+            ->andWhere('execution')->eq($executionID)
+            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->orderBy('date DESC,id DESC')
-            ->limit(1)
             ->fetch();
     }
 
