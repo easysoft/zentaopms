@@ -198,6 +198,7 @@ class projectrelease extends control
     }
 
     /**
+     * 查看一个发布。
      * View a release.
      *
      * @param  int    $releaseID
