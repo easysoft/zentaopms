@@ -125,44 +125,44 @@ class projectreleaseModel extends model
     }
 
     /**
+     * 获取最新的发布。
      * Get last release.
      *
-     * @param  int    $projectID
+     * @param  int         $projectID
      * @access public
-     * @return bool | object
+     * @return bool|object
      */
-    public function getLast($projectID)
+    public function getLast(int $projectID): object|bool
     {
-        $project = (int)$projectID;
         return $this->dao->select('id, name')->from(TABLE_RELEASE)
             ->where('deleted')->eq(0)
-            ->andWhere("FIND_IN_SET($projectID, project)")
+            ->andWhere("FIND_IN_SET({$projectID}, project)")
             ->orderBy('date DESC')
             ->limit(1)
             ->fetch();
     }
 
     /**
+     * 获取项目已发布的版本。
      * Get released builds from project.
      *
      * @param  int    $projectID
      * @access public
      * @return array
      */
-    public function getReleasedBuilds($projectID)
+    public function getReleasedBuilds(int $projectID): array
     {
+        /* Get release. */
         $releases = $this->dao->select('shadow,build')->from(TABLE_RELEASE)
             ->where('deleted')->eq(0)
-            ->andWhere("FIND_IN_SET($projectID, project)")
+            ->andWhere("FIND_IN_SET({$projectID}, project)")
             ->fetchAll();
 
-        $buildIdList = array();
-        foreach($releases as $release)
-        {
-            $buildIdList   = array_merge($buildIdList, explode(',', trim($release->build, ',')));
-            $buildIdList[] = $release->shadow;
-        }
-        return $buildIdList;
+        /* Get released builds. */
+        $buildIdList = '';
+        foreach($releases as $release) $buildIdList .= ",{$release->build},{$release->shadow}";
+        $buildIdList = explode(',', trim($buildIdList, ','));
+        return array_unique($buildIdList);
     }
 
     /**

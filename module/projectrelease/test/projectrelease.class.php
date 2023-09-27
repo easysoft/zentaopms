@@ -49,49 +49,36 @@ class projectreleaseTest
     }
 
     /**
-    * Test get last release.
-    *
-    * @param  int    $projectID
-    * @access public
-    * @return object
-    */
-    public function getLastTest($projectID)
+     * 测试获取项目的最新发布。
+     * Test get last release.
+     *
+     * @param  int               $projectID
+     * @access public
+     * @return object|array|bool
+     */
+    public function getLastTest(int $projectID): object|array|bool
     {
-        $objects = $this->objectModel->getLast($projectID);
+        $object = $this->objectModel->getLast($projectID);
 
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error[0];
-        }
+        if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $object;
     }
 
     /**
-    * Test get released builds from project.
-    *
-    * @param  int    $projectID
-    * @access public
-    * @return array
-    */
-    public function getReleasedBuildsTest($projectID)
+     * 测试获取项目已经发布的版本。
+     * Test get released builds from project.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return string|array
+     */
+    public function getReleasedBuildsTest($projectID): string|array
     {
         $objects = $this->objectModel->getReleasedBuilds($projectID);
 
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error[0];
-        }
-        if(count($objects) == 1)
-        {
-            return count($objects);
-        }
-        else
-        {
-            return $objects;
-        }
+        if(dao::isError()) return dao::getError();
+        return implode(',', $objects);
     }
 
     /**
