@@ -231,53 +231,34 @@ class projectrelease extends control
     }
 
     /**
+     * 删除一个发布。
      * Delete a release.
      *
      * @param  int    $releaseID
-     * @param  string $confirm      yes|no
      * @access public
      * @return void
      */
-    public function delete($releaseID, $confirm = 'no')
+    public function delete(int $releaseID)
     {
-        if($confirm == 'no')
+        /* Delete release. */
+        $this->release->delete(TABLE_RELEASE, $releaseID);
+
+        /* Delete release's shadow build. */
+        $release = $this->release->getByID($releaseID);
+        $builds  = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll('id');
+        $this->loadModel('build')->delete(TABLE_BUILD, $release->shadow);
+        foreach($builds as $build)
         {
-            return print(js::confirm($this->lang->release->confirmDelete, $this->createLink('projectrelease', 'delete', "releaseID=$releaseID&confirm=yes")));
+            if(empty($build->execution) and $build->createdDate == $release->createdDate) $this->build->delete(TABLE_BUILD, $build->id);
         }
-        else
-        {
-            $this->loadModel('build');
-            $this->release->delete(TABLE_RELEASE, $releaseID);
 
-            $release = $this->dao->select('*')->from(TABLE_RELEASE)->where('id')->eq((int)$releaseID)->fetch();
-            $builds  = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll('id');
-            $this->loadModel('build')->delete(TABLE_BUILD, $release->shadow);
-            foreach($builds as $build)
-            {
-                if(empty($build->execution) and $build->createdDate == $release->createdDate) $this->build->delete(TABLE_BUILD, $build->id);
-            }
+        $message = $this->executeHooks($releaseID);
 
-            $message = $this->executeHooks($releaseID);
-            if($message) $response['message'] = $message;
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            /* if ajax request, send result. */
-            if($this->server->ajax)
-            {
-                if(dao::isError())
-                {
-                    $response['result']  = 'fail';
-                    $response['message'] = dao::getError();
-                }
-                else
-                {
-                    $response['result']  = 'success';
-                    $response['message'] = '';
-                }
-                return $this->send($response);
-            }
-            return print(js::locate($this->session->releaseList, 'parent'));
-        }
-    }
+        if(!$message) $message = $this->lang->release->deleted;
+        return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->session->releaseList ? $this->session->releaseList : inlink('browse', "projectID={$release->project}") , 'closeModal' => true));
+}
 
     /**
      * Export the stories of release to HTML.
