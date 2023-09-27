@@ -2881,19 +2881,20 @@ class storyModel extends model
     }
 
     /**
+     * 将默认的图表设置和当前图表的设置合并。
      * Merge the default chart settings and the settings of current chart.
      *
-     * @param  string    $chartType
+     * @param  string $chartType
      * @access public
      * @return void
      */
-    public function mergeChartOption($chartType)
+    public function mergeChartOption(string $chartType)
     {
         $chartOption  = $this->lang->story->report->$chartType;
         $commonOption = $this->lang->story->report->options;
 
         $chartOption->graph->caption = $this->lang->story->report->charts[$chartType];
-        if(!isset($chartOption->type))    $chartOption->type    = $commonOption->type;
+        if(!isset($chartOption->type))   $chartOption->type   = $commonOption->type;
         if(!isset($chartOption->width))  $chartOption->width  = $commonOption->width;
         if(!isset($chartOption->height)) $chartOption->height = $commonOption->height;
 
