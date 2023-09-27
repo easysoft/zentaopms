@@ -565,6 +565,8 @@ ALTER TABLE `zt_product` ADD `closedDate` date DEFAULT NULL AFTER `createdVersio
 ALTER TABLE `zt_productplan` ADD `finishedDate` datetime DEFAULT NULL AFTER `end`;
 ALTER TABLE `zt_productplan` ADD `closedDate` datetime DEFAULT NULL AFTER `finishedDate`;
 
+UPDATE `zt_case` SET `sort` = `id` WHERE `sort` = 0;
+UPDATE `zt_scene` SET `sort` = `id` WHERE `sort` = 0;
 UPDATE `zt_project` SET `firstEnd` = `end`;
 UPDATE `zt_product` AS t1 JOIN `zt_action` AS t2 ON t2.`objectID` = t1.`id` AND t2.`action` = 'closed' AND t2.`objectType` = 'product' SET t1.`closedDate` = t2.`date`
 UPDATE `zt_productplan` AS t1 JOIN `zt_action` AS t2 ON t2.`objectID` = t1.`id` AND t2.`action` LIKE 'close%' AND t2.`objectType` = 'productplan' SET t1.`closedDate` = t2.`date`;
