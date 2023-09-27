@@ -25,13 +25,16 @@ class buildTao extends buildModel
      */
     protected function fetchBuilds(array $productIdList, string $params, int $objectID, string $objectType, array $shadows): array
     {
-        return $this->dao->select('t1.id, t1.name, t1.branch, t1.execution, t1.date, t1.deleted, t2.status as objectStatus, t3.id as releaseID, t3.status as releaseStatus, t4.type as productType')->from(TABLE_BUILD)->alias('t1')
+        $fieldList = 't1.id, t1.name, t1.branch, t1.execution, t1.date, t1.deleted, t3.status as releaseStatus, t4.type as productType';
+        if($objectType == 'execution' || $objectType == 'project') $fieldList .= ', t2.status as objectStatus';
+
+        return $this->dao->select($fieldList)->from(TABLE_BUILD)->alias('t1')
             ->beginIF($objectType === 'execution')->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')->fi()
             ->beginIF($objectType === 'project')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')->fi()
             ->leftJoin(TABLE_RELEASE)->alias('t3')->on("FIND_IN_SET(t1.id,t3.build)")
             ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t1.product = t4.id')
             ->where('1=1')
-            ->beginIf(!empty($shadows))->andWhere('t1.id')->notIN($shadows)->fi()
+            ->beginIF(!empty($shadows))->andWhere('t1.id')->notIN($shadows)->fi()
             ->beginIF(strpos($params, 'hasdeleted') === false)->andWhere('t1.deleted')->eq(0)->fi()
             ->beginIF(strpos($params, 'hasproject') !== false)->andWhere('t1.project')->ne(0)->fi()
             ->beginIF(strpos($params, 'singled') !== false)->andWhere('t1.execution')->ne(0)->fi()
