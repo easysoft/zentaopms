@@ -3924,7 +3924,7 @@ class bugModel extends model
     public function generateRow($bugs, $branches, $modulePairs, $projectPairs, $plans, $executions, $stories, $tasks, $users)
     {
         $rows         = array();
-        $userFields   = array('openedBy', 'assignedTo', 'resolvedBy', 'closedBy', 'lastEditedBy');
+        $userFields   = array('openedBy', 'resolvedBy', 'closedBy', 'lastEditedBy');
         $dateFields   = array('activatedDate', 'openedDate', 'assignedDate', 'deadline', 'resolvedDate', 'closedDate', 'lastEditedDate');
         $canViewBug   = common::hasPriv('bug',   'view');
         $canViewCase  = common::hasPriv('case',  'view');
@@ -3948,9 +3948,9 @@ class bugModel extends model
 
             $bugTitle   = '';
             $showBranch = isset($this->config->bug->browse->showBranch) ? $this->config->bug->browse->showBranch : 1;
-            if($showBranch && !empty($branches[$bug->branch])) $bugTitle .= "<span class='label label-outline label-badge' title={$branches[$bug->branch]}>{$branches[$bug->branch]}</span> ";
-            if($bug->module && !empty($modulePairs[$bug->module])) $bugTitle .= "<span class='label label-gray label-badge'>{$modulePairs[$bug->module]}</span> ";
-            $bugTitle .= $canViewBug ? html::a(helper::createLink('bug', 'view', "bugID={$bug->id}"), $bug->title, null, "style='color: {$bug->color}' data-app={$this->app->tab}") : "<span style='color: {$bug->color}'>{$bug->title}</span>";
+            if($showBranch && !empty($branches[$bug->branch])) $bugTitle .= "<span class='label label-outline label-badge' title='{$branches[$bug->branch]}'>{$branches[$bug->branch]}</span> ";
+            if($bug->module && !empty($modulePairs[$bug->module])) $bugTitle .= "<span class='label label-gray label-badge' title='{$modulePairs[$bug->module]}'>{$modulePairs[$bug->module]}</span> ";
+            $bugTitle .= $canViewBug ? html::a(helper::createLink('bug', 'view', "bugID={$bug->id}"), $bug->title, null, "style='color: {$bug->color}' data-app='{$this->app->tab}' title='{$bug->title}'") : "<span style='color: {$bug->color}' title='{$bug->title}'>{$bug->title}</span>";
             if($bug->case)
             {
                 $bugCase   = "[{$this->lang->testcase->common}#{$bug->case}]";
@@ -3958,31 +3958,23 @@ class bugModel extends model
             }
             $bug->title = $bugTitle;
 
-            $bug->branch    = zget($branches, $bug->branch, '');
-            $bug->project   = zget($projectPairs, $bug->project, '');
-            $bug->plan      = zget($plans, $bug->plan, '');
-            $bug->execution = zget($executions, $bug->execution, '');
-
             if($bug->story && !empty($stories[$bug->story]))
             {
                 $story = $stories[$bug->story];
-                $bug->story = $canViewStory ? html::a(helper::createLink('story', 'view', "storyID={$story->id}", 'html', true), $story->title, '', "class='iframe'") : $story->title;
+                $bug->story = $canViewStory ? html::a(helper::createLink('story', 'view', "storyID={$story->id}", 'html', true), $story->title, '', "class='iframe' title='{$story->title}'") : "<span title='{$story->title}'>{$story->title}</span>";
             }
 
             if($bug->task && !empty($tasks[$bug->task]))
             {
                 $task = $tasks[$bug->task];
-                $bug->task = $canViewTask ? html::a(helper::createLink('task', 'view', "taskID={$task->id}", 'html', true), $task->name, '', "class='iframe'") : $task->name;
+                $bug->task = $canViewTask ? html::a(helper::createLink('task', 'view', "taskID={$task->id}", 'html', true), $task->name, '', "class='iframe' title='{$task->name}'") : "<span title='{$task->name}'>{$task->name}</span>";
             }
 
             if($bug->toTask && !empty($tasks[$bug->toTask]))
             {
                 $task = $tasks[$bug->toTask];
-                $bug->toTask = $canViewTask ? html::a(helper::createLink('task', 'view', "taskID={$task->id}", 'html', true), $task->name, '', "class='iframe'") : $task->name;
+                $bug->toTask = $canViewTask ? html::a(helper::createLink('task', 'view', "taskID={$task->id}", 'html', true), $task->name, '', "class='iframe' title='{$task->name}'") : "<span title='{$task->name}'>{$task->name}</span>";
             }
-
-            $bug->type = zget($this->lang->bug->typeList, $bug->type, '');
-            $bug->resolution = zget($this->lang->bug->resolutionList, $bug->resolution, '');
 
             $bugStatus   = $this->processStatus('bug', $bug);
             $bug->status = "<span class='status-bug status-{$bug->status}' title='{$bugStatus}'> {$bugStatus}</span>";
@@ -4020,10 +4012,21 @@ class bugModel extends model
             }
             $bug->mailto = implode(' ', $bugMailto);
 
+            $bug->branch     = zget($branches, $bug->branch, '');
+            $bug->project    = zget($projectPairs, $bug->project, '');
+            $bug->plan       = zget($plans, $bug->plan, '');
+            $bug->execution  = zget($executions, $bug->execution, '');
+            $bug->type       = zget($this->lang->bug->typeList, $bug->type, '');
+            $bug->resolution = zget($this->lang->bug->resolutionList, $bug->resolution, '');
             $bug->assignedTo = $this->printAssignedHtml($bug, $users, false);
 
             foreach($userFields as $field) $bug->$field = zget($users, $bug->$field);
-            foreach($dateFields as $field) $bug->$field = empty($bug->$field) || helper::isZeroDate($bug->$field) ? '' : $bug->$field;
+            foreach($dateFields as $field) $bug->$field = (empty($bug->$field) || helper::isZeroDate($bug->$field)) ? '' : substr($bug->$field, 5, 11);
+
+            foreach(array_merge(array('os', 'browser', 'mailto', 'branch', 'project', 'plan', 'execution', 'type', 'resolution', 'keywords', 'openedBuild', 'resolvedBuild', 'activatedCount'), $userFields, $dateFields) as $field)
+            {
+                if($bug->$field) $bug->$field = "<span title='{$bug->$field}'>{$bug->$field}<span>";
+            }
 
             $rows[] = $bug;
         }

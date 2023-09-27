@@ -202,7 +202,7 @@ $config->bug->datatable->fieldList['status']['sortType'] = true;
 $config->bug->datatable->fieldList['status']['show']     = true;
 
 $config->bug->datatable->fieldList['branch']['title']      = 'branch';
-$config->bug->datatable->fieldList['branch']['type']       = 'text';
+$config->bug->datatable->fieldList['branch']['type']       = 'html';
 $config->bug->datatable->fieldList['branch']['fixed']      = 'left';
 $config->bug->datatable->fieldList['branch']['width']      = '100';
 $config->bug->datatable->fieldList['branch']['sortType']   = true;
@@ -217,13 +217,13 @@ $config->bug->datatable->fieldList['confirmed']['sortType'] = true;
 $config->bug->datatable->fieldList['confirmed']['show']     = true;
 
 $config->bug->datatable->fieldList['type']['title']    = 'type';
-$config->bug->datatable->fieldList['type']['type']     = 'category';
+$config->bug->datatable->fieldList['type']['type']     = 'html';
 $config->bug->datatable->fieldList['type']['fixed']    = 'no';
 $config->bug->datatable->fieldList['type']['width']    = '90';
 $config->bug->datatable->fieldList['type']['sortType'] = true;
 
 $config->bug->datatable->fieldList['project']['title']      = 'project';
-$config->bug->datatable->fieldList['project']['type']       = 'text';
+$config->bug->datatable->fieldList['project']['type']       = 'html';
 $config->bug->datatable->fieldList['project']['fixed']      = 'no';
 $config->bug->datatable->fieldList['project']['width']      = '120';
 $config->bug->datatable->fieldList['project']['sortType']   = true;
@@ -231,34 +231,34 @@ $config->bug->datatable->fieldList['project']['control']    = 'hidden';
 $config->bug->datatable->fieldList['project']['dataSource'] = array('module' => 'project', 'method' => 'getPairs');
 
 $config->bug->datatable->fieldList['execution']['title']      = 'execution';
-$config->bug->datatable->fieldList['execution']['type']       = 'text';
+$config->bug->datatable->fieldList['execution']['type']       = 'html';
 $config->bug->datatable->fieldList['execution']['fixed']      = 'no';
 $config->bug->datatable->fieldList['execution']['width']      = '120';
 $config->bug->datatable->fieldList['execution']['sortType']   = true;
 $config->bug->datatable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' =>'getPairs');
 
 $config->bug->datatable->fieldList['plan']['title']    = 'plan';
-$config->bug->datatable->fieldList['plan']['type']     = 'text';
+$config->bug->datatable->fieldList['plan']['type']     = 'html';
 $config->bug->datatable->fieldList['plan']['fixed']    = 'no';
 $config->bug->datatable->fieldList['plan']['width']    = '120';
 $config->bug->datatable->fieldList['plan']['sortType'] = true;
 
 $config->bug->datatable->fieldList['openedBy']['title']    = 'openedByAB';
-$config->bug->datatable->fieldList['openedBy']['type']     = 'user';
+$config->bug->datatable->fieldList['openedBy']['type']     = 'html';
 $config->bug->datatable->fieldList['openedBy']['fixed']    = 'no';
 $config->bug->datatable->fieldList['openedBy']['width']    = '80';
 $config->bug->datatable->fieldList['openedBy']['sortType'] = true;
 $config->bug->datatable->fieldList['openedBy']['show']     = true;
 
 $config->bug->datatable->fieldList['openedDate']['title']    = 'openedDateAB';
-$config->bug->datatable->fieldList['openedDate']['type']     = 'date';
+$config->bug->datatable->fieldList['openedDate']['type']     = 'html';
 $config->bug->datatable->fieldList['openedDate']['fixed']    = 'no';
 $config->bug->datatable->fieldList['openedDate']['width']    = '90';
 $config->bug->datatable->fieldList['openedDate']['sortType'] = true;
 $config->bug->datatable->fieldList['openedDate']['show']     = true;
 
 $config->bug->datatable->fieldList['openedBuild']['title']      = 'openedBuild';
-$config->bug->datatable->fieldList['openedBuild']['type']       = 'text';
+$config->bug->datatable->fieldList['openedBuild']['type']       = 'html';
 $config->bug->datatable->fieldList['openedBuild']['fixed']      = 'no';
 $config->bug->datatable->fieldList['openedBuild']['width']      = '120';
 $config->bug->datatable->fieldList['openedBuild']['sortType']   = true;
@@ -268,45 +268,44 @@ $config->bug->datatable->fieldList['openedBuild']['dataSource'] = array('module'
 $config->bug->datatable->fieldList['assignedTo']['title']      = 'assignedTo';
 $config->bug->datatable->fieldList['assignedTo']['type']       = 'html';
 $config->bug->datatable->fieldList['assignedTo']['fixed']      = 'no';
-$config->bug->datatable->fieldList['assignedTo']['assignLink'] = array('module' => 'bug', 'method' => 'assignTo', 'params' => 'bugID={id}');
 $config->bug->datatable->fieldList['assignedTo']['width']      = '90';
 $config->bug->datatable->fieldList['assignedTo']['sortType']   = true;
 $config->bug->datatable->fieldList['assignedTo']['show']       = true;
 $config->bug->datatable->fieldList['assignedTo']['dataSource'] = array('module' => 'user', 'method' =>'getPairs', 'params' => 'noclosed|noletter');
 
 $config->bug->datatable->fieldList['assignedDate']['title']    = 'assignedDate';
-$config->bug->datatable->fieldList['assignedDate']['type']     = 'date';
+$config->bug->datatable->fieldList['assignedDate']['type']     = 'html';
 $config->bug->datatable->fieldList['assignedDate']['fixed']    = 'no';
 $config->bug->datatable->fieldList['assignedDate']['width']    = '90';
 $config->bug->datatable->fieldList['assignedDate']['sortType'] = true;
 
 $config->bug->datatable->fieldList['deadline']['title']    = 'deadline';
-$config->bug->datatable->fieldList['deadline']['type']     = 'date';
+$config->bug->datatable->fieldList['deadline']['type']     = 'html';
 $config->bug->datatable->fieldList['deadline']['fixed']    = 'no';
 $config->bug->datatable->fieldList['deadline']['width']    = '90';
 $config->bug->datatable->fieldList['deadline']['sortType'] = true;
 
 $config->bug->datatable->fieldList['resolvedBy']['title']    = 'resolvedBy';
-$config->bug->datatable->fieldList['resolvedBy']['type']     = 'user';
+$config->bug->datatable->fieldList['resolvedBy']['type']     = 'html';
 $config->bug->datatable->fieldList['resolvedBy']['fixed']    = 'no';
 $config->bug->datatable->fieldList['resolvedBy']['width']    = '100';
 $config->bug->datatable->fieldList['resolvedBy']['sortType'] = true;
 
 $config->bug->datatable->fieldList['resolution']['title']    = 'resolutionAB';
-$config->bug->datatable->fieldList['resolution']['type']     = 'category';
+$config->bug->datatable->fieldList['resolution']['type']     = 'html';
 $config->bug->datatable->fieldList['resolution']['fixed']    = 'no';
 $config->bug->datatable->fieldList['resolution']['width']    = '110';
 $config->bug->datatable->fieldList['resolution']['sortType'] = true;
 $config->bug->datatable->fieldList['resolution']['show']     = true;
 
 $config->bug->datatable->fieldList['resolvedDate']['title']    = 'resolvedDateAB';
-$config->bug->datatable->fieldList['resolvedDate']['type']     = 'date';
+$config->bug->datatable->fieldList['resolvedDate']['type']     = 'html';
 $config->bug->datatable->fieldList['resolvedDate']['fixed']    = 'no';
 $config->bug->datatable->fieldList['resolvedDate']['width']    = '120';
 $config->bug->datatable->fieldList['resolvedDate']['sortType'] = true;
 
 $config->bug->datatable->fieldList['resolvedBuild']['title']      = 'resolvedBuild';
-$config->bug->datatable->fieldList['resolvedBuild']['type']       = 'text';
+$config->bug->datatable->fieldList['resolvedBuild']['type']       = 'html';
 $config->bug->datatable->fieldList['resolvedBuild']['fixed']      = 'no';
 $config->bug->datatable->fieldList['resolvedBuild']['width']      = '120';
 $config->bug->datatable->fieldList['resolvedBuild']['sortType']   = true;
@@ -314,13 +313,13 @@ $config->bug->datatable->fieldList['resolvedBuild']['control']    = 'select';
 $config->bug->datatable->fieldList['resolvedBuild']['dataSource'] = array('module' => 'bug', 'method' =>'getRelatedObjects', 'params' => 'resolvedBuild&id,name');
 
 $config->bug->datatable->fieldList['activatedCount']['title']    = 'activatedCountAB';
-$config->bug->datatable->fieldList['activatedCount']['type']     = 'count';
+$config->bug->datatable->fieldList['activatedCount']['type']     = 'html';
 $config->bug->datatable->fieldList['activatedCount']['fixed']    = 'no';
 $config->bug->datatable->fieldList['activatedCount']['width']    = '80';
 $config->bug->datatable->fieldList['activatedCount']['sortType'] = true;
 
 $config->bug->datatable->fieldList['activatedDate']['title']    = 'activatedDate';
-$config->bug->datatable->fieldList['activatedDate']['type']     = 'date';
+$config->bug->datatable->fieldList['activatedDate']['type']     = 'html';
 $config->bug->datatable->fieldList['activatedDate']['fixed']    = 'no';
 $config->bug->datatable->fieldList['activatedDate']['width']    = '90';
 $config->bug->datatable->fieldList['activatedDate']['sortType'] = true;
@@ -347,51 +346,51 @@ $config->bug->datatable->fieldList['toTask']['width']    = '120';
 $config->bug->datatable->fieldList['toTask']['sortType'] = true;
 
 $config->bug->datatable->fieldList['keywords']['title']    = 'keywords';
-$config->bug->datatable->fieldList['keywords']['type']     = 'text';
+$config->bug->datatable->fieldList['keywords']['type']     = 'html';
 $config->bug->datatable->fieldList['keywords']['fixed']    = 'no';
 $config->bug->datatable->fieldList['keywords']['width']    = '100';
 $config->bug->datatable->fieldList['keywords']['sortType'] = true;
 
 $config->bug->datatable->fieldList['os']['title']    = 'os';
-$config->bug->datatable->fieldList['os']['type']     = 'category';
+$config->bug->datatable->fieldList['os']['type']     = 'html';
 $config->bug->datatable->fieldList['os']['fixed']    = 'no';
 $config->bug->datatable->fieldList['os']['width']    = '80';
 $config->bug->datatable->fieldList['os']['sortType'] = true;
 $config->bug->datatable->fieldList['os']['control']  = 'multiple';
 
 $config->bug->datatable->fieldList['browser']['title']    = 'browser';
-$config->bug->datatable->fieldList['browser']['type']     = 'category';
+$config->bug->datatable->fieldList['browser']['type']     = 'html';
 $config->bug->datatable->fieldList['browser']['fixed']    = 'no';
 $config->bug->datatable->fieldList['browser']['width']    = '80';
 $config->bug->datatable->fieldList['browser']['sortType'] = true;
 $config->bug->datatable->fieldList['browser']['control']  = 'multiple';
 
 $config->bug->datatable->fieldList['mailto']['title']    = 'mailto';
-$config->bug->datatable->fieldList['mailto']['type']     = 'user';
+$config->bug->datatable->fieldList['mailto']['type']     = 'html';
 $config->bug->datatable->fieldList['mailto']['fixed']    = 'no';
 $config->bug->datatable->fieldList['mailto']['width']    = '100';
 $config->bug->datatable->fieldList['mailto']['sortType'] = true;
 
 $config->bug->datatable->fieldList['closedBy']['title']    = 'closedBy';
-$config->bug->datatable->fieldList['closedBy']['type']     = 'user';
+$config->bug->datatable->fieldList['closedBy']['type']     = 'html';
 $config->bug->datatable->fieldList['closedBy']['fixed']    = 'no';
 $config->bug->datatable->fieldList['closedBy']['width']    = '80';
 $config->bug->datatable->fieldList['closedBy']['sortType'] = true;
 
 $config->bug->datatable->fieldList['closedDate']['title']    = 'closedDate';
-$config->bug->datatable->fieldList['closedDate']['type']     = 'date';
+$config->bug->datatable->fieldList['closedDate']['type']     = 'html';
 $config->bug->datatable->fieldList['closedDate']['fixed']    = 'no';
 $config->bug->datatable->fieldList['closedDate']['width']    = '90';
 $config->bug->datatable->fieldList['closedDate']['sortType'] = true;
 
 $config->bug->datatable->fieldList['lastEditedBy']['title']    = 'lastEditedBy';
-$config->bug->datatable->fieldList['lastEditedBy']['type']     = 'user';
+$config->bug->datatable->fieldList['lastEditedBy']['type']     = 'html';
 $config->bug->datatable->fieldList['lastEditedBy']['fixed']    = 'no';
 $config->bug->datatable->fieldList['lastEditedBy']['width']    = '90';
 $config->bug->datatable->fieldList['lastEditedBy']['sortType'] = true;
 
 $config->bug->datatable->fieldList['lastEditedDate']['title']    = 'lastEditedDateAB';
-$config->bug->datatable->fieldList['lastEditedDate']['type']     = 'date';
+$config->bug->datatable->fieldList['lastEditedDate']['type']     = 'html';
 $config->bug->datatable->fieldList['lastEditedDate']['fixed']    = 'no';
 $config->bug->datatable->fieldList['lastEditedDate']['width']    = '90';
 $config->bug->datatable->fieldList['lastEditedDate']['sortType'] = true;
