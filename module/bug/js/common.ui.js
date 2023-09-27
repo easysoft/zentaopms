@@ -474,7 +474,7 @@ function loadExecutionBuilds(executionID, num)
 
     if(config.currentMethod == 'create')
     {
-        const link = $.createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + "&branch=" + branch + "&index=0&needCreate=true");
+        const link = $.createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + "&branch=" + branch + "&needCreate=true");
         $.get(link, function(data)
         {
             let $buildPicker = $('[name^="openedBuild"]').zui('picker');
@@ -489,7 +489,7 @@ function loadExecutionBuilds(executionID, num)
     }
     else
     {
-        const openedLink = $.createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch + '&index=0&needCreate=false&type=normal&number=' + num);
+        const openedLink = $.createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch + '&needCreate=false&type=normal&number=' + num);
         $.get(openedLink, function(data)
         {
             let $buildPicker = $('[name^="openedBuild"]').zui('picker');
