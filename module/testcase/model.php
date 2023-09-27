@@ -88,34 +88,35 @@ class testcaseModel extends model
         /* Value of story may be showmore. */
         $case->story = (int)$case->story;
         $this->dao->insert(TABLE_CASE)->data($case)->autoCheck()->batchCheck($this->config->testcase->create->requiredFields, 'notempty')->checkFlow()->exec();
-        if(!$this->dao->isError())
+        if(dao::isError()) return false;
+
+        $caseID = $this->dao->lastInsertID();
+        $this->dao->update(TABLE_CASE)->set('sort')->eq($caseID)->where('id')->eq($caseID)->exec();
+
+        $this->config->dangers = '';
+        $this->loadModel('file')->saveUpload('testcase', $caseID, 'autoscript', 'script', 'scriptName');
+        $this->loadModel('file')->saveUpload('testcase', $caseID);
+        $this->loadModel('score')->create('testcase', 'create', $caseID);
+
+        $parentStepID = 0;
+        $data = fixer::input('post')->get();
+        foreach($data->steps as $stepID => $stepDesc)
         {
-            $caseID = $this->dao->lastInsertID();
-            $this->config->dangers = '';
-            $this->loadModel('file')->saveUpload('testcase', $caseID, 'autoscript', 'script', 'scriptName');
-            $this->loadModel('file')->saveUpload('testcase', $caseID);
-            $parentStepID = 0;
-            $this->loadModel('score')->create('testcase', 'create', $caseID);
-
-            $data = fixer::input('post')->get();
-            foreach($data->steps as $stepID => $stepDesc)
-            {
-                if(empty($stepDesc)) continue;
-                $stepType      = $this->post->stepType;
-                $step          = new stdClass();
-                $step->type    = ($stepType[$stepID] == 'item' and $parentStepID == 0) ? 'step' : $stepType[$stepID];
-                $step->parent  = ($step->type == 'item') ? $parentStepID : 0;
-                $step->case    = $caseID;
-                $step->version = 1;
-                $step->desc    = rtrim(htmlSpecialString($stepDesc));
-                $step->expect  = $step->type == 'group' ? '' : rtrim(htmlSpecialString($data->expects[$stepID]));
-                $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
-                if($step->type == 'group') $parentStepID = $this->dao->lastInsertID();
-                if($step->type == 'step')  $parentStepID = 0;
-            }
-
-            return array('status' => 'created', 'id' => $caseID, 'caseInfo' => $case);
+            if(empty($stepDesc)) continue;
+            $stepType      = $this->post->stepType;
+            $step          = new stdClass();
+            $step->type    = ($stepType[$stepID] == 'item' and $parentStepID == 0) ? 'step' : $stepType[$stepID];
+            $step->parent  = ($step->type == 'item') ? $parentStepID : 0;
+            $step->case    = $caseID;
+            $step->version = 1;
+            $step->desc    = rtrim(htmlSpecialString($stepDesc));
+            $step->expect  = $step->type == 'group' ? '' : rtrim(htmlSpecialString($data->expects[$stepID]));
+            $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
+            if($step->type == 'group') $parentStepID = $this->dao->lastInsertID();
+            if($step->type == 'step')  $parentStepID = 0;
         }
+
+        return array('status' => 'created', 'id' => $caseID, 'caseInfo' => $case);
     }
 
     /**
@@ -235,6 +236,8 @@ class testcaseModel extends model
 
             $caseID       = $this->dao->lastInsertID();
             $caseIDList[] = $caseID;
+
+            $this->dao->update(TABLE_CASE)->set('sort')->eq($caseID)->where('id')->eq($caseID)->exec();
 
             $this->executeHooks($caseID);
 
@@ -1826,35 +1829,36 @@ class testcaseModel extends model
                 $caseData->branch     = isset($data->branch[$key]) ? $data->branch[$key] : $branch;
                 if($caseData->story) $caseData->storyVersion = zget($storyVersionPairs, $caseData->story, 1);
                 $caseData->status = !$forceNotReview ? 'wait' : 'normal';
+
                 $this->dao->insert(TABLE_CASE)->data($caseData)->autoCheck()->checkFlow()->exec();
+                if(dao::isError()) continue;
 
-                if(!dao::isError())
+                $caseID = $this->dao->lastInsertID();
+                $this->dao->update(TABLE_CASE)->set('sort')->eq($caseID)->where('id')->eq($caseID)->exec();
+
+                if($data->desc)
                 {
-                    $caseID       = $this->dao->lastInsertID();
                     $parentStepID = 0;
-                    if($data->desc)
+                    foreach($data->desc[$key] as $id => $desc)
                     {
-                        foreach($data->desc[$key] as $id => $desc)
-                        {
-                            $desc = trim($desc);
-                            if(empty($desc)) continue;
-                            $stepData = new stdclass();
-                            $stepData->type    = ($data->stepType[$key][$id] == 'item' and $parentStepID == 0) ? 'step' : $data->stepType[$key][$id];
-                            $stepData->parent  = ($stepData->type == 'item') ? $parentStepID : 0;
-                            $stepData->case    = $caseID;
-                            $stepData->version = 1;
-                            $stepData->desc    = htmlSpecialString($desc);
-                            $stepData->expect  = htmlSpecialString($data->expect[$key][$id]);
-                            $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
-                            if($stepData->type == 'group') $parentStepID = $this->dao->lastInsertID();
-                            if($stepData->type == 'step')  $parentStepID = 0;
-                        }
+                        $desc = trim($desc);
+                        if(empty($desc)) continue;
+                        $stepData = new stdclass();
+                        $stepData->type    = ($data->stepType[$key][$id] == 'item' and $parentStepID == 0) ? 'step' : $data->stepType[$key][$id];
+                        $stepData->parent  = ($stepData->type == 'item') ? $parentStepID : 0;
+                        $stepData->case    = $caseID;
+                        $stepData->version = 1;
+                        $stepData->desc    = htmlSpecialString($desc);
+                        $stepData->expect  = htmlSpecialString($data->expect[$key][$id]);
+                        $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
+                        if($stepData->type == 'group') $parentStepID = $this->dao->lastInsertID();
+                        if($stepData->type == 'step')  $parentStepID = 0;
                     }
-
-                    $this->action->create('case', $caseID, 'Opened');
-
-                    $this->syncCase2Project($caseData, $caseID);
                 }
+
+                $this->action->create('case', $caseID, 'Opened');
+
+                $this->syncCase2Project($caseData, $caseID);
             }
         }
 
@@ -1947,47 +1951,47 @@ class testcaseModel extends model
             }
 
             $this->dao->insert(TABLE_CASE)->data($case)->autoCheck()->exec();
+            if(dao::isError()) continue;
 
-            if(!dao::isError())
+            $caseID = $this->dao->lastInsertID();
+            $this->dao->update(TABLE_CASE)->set('sort')->eq($caseID)->where('id')->eq($caseID)->exec();
+
+            if(isset($libSteps[$libCaseID]))
             {
-                $caseID = $this->dao->lastInsertID();
-                if(isset($libSteps[$libCaseID]))
+                foreach($libSteps[$libCaseID] as $step)
                 {
-                    foreach($libSteps[$libCaseID] as $step)
-                    {
-                        $step->case = $caseID;
-                        unset($step->id);
-                        $this->dao->insert(TABLE_CASESTEP)->data($step)->exec();
-                    }
+                    $step->case = $caseID;
+                    unset($step->id);
+                    $this->dao->insert(TABLE_CASESTEP)->data($step)->exec();
                 }
-
-                /* If under the project module, the cases is imported need linking to the project. */
-                if($this->app->tab == 'project')
-                {
-                    $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($this->session->project)->orderBy('order_desc')->limit(1)->fetch('order');
-
-                    $this->dao->insert(TABLE_PROJECTCASE)
-                        ->set('project')->eq($this->session->project)
-                        ->set('product')->eq($case->product)
-                        ->set('case')->eq($caseID)
-                        ->set('version')->eq($case->version)
-                        ->set('order')->eq(++ $lastOrder)
-                        ->exec();
-                }
-
-                /* Fix bug #1518. */
-                $oldFiles = zget($libFiles, $libCaseID, array());
-                foreach($oldFiles as $fileID => $file)
-                {
-                    $file->objectID  = $caseID;
-                    $file->addedBy   = $this->app->user->account;
-                    $file->addedDate = helper::now();
-                    $file->downloads = 0;
-                    unset($file->id);
-                    $this->dao->insert(TABLE_FILE)->data($file)->exec();
-                }
-                $this->loadModel('action')->create('case', $caseID, 'fromlib', '', $case->lib);
             }
+
+            /* If under the project module, the cases is imported need linking to the project. */
+            if($this->app->tab == 'project')
+            {
+                $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($this->session->project)->orderBy('order_desc')->limit(1)->fetch('order');
+
+                $this->dao->insert(TABLE_PROJECTCASE)
+                    ->set('project')->eq($this->session->project)
+                    ->set('product')->eq($case->product)
+                    ->set('case')->eq($caseID)
+                    ->set('version')->eq($case->version)
+                    ->set('order')->eq(++ $lastOrder)
+                    ->exec();
+            }
+
+            /* Fix bug #1518. */
+            $oldFiles = zget($libFiles, $libCaseID, array());
+            foreach($oldFiles as $fileID => $file)
+            {
+                $file->objectID  = $caseID;
+                $file->addedBy   = $this->app->user->account;
+                $file->addedDate = helper::now();
+                $file->downloads = 0;
+                unset($file->id);
+                $this->dao->insert(TABLE_FILE)->data($file)->exec();
+            }
+            $this->loadModel('action')->create('case', $caseID, 'fromlib', '', $case->lib);
         }
         if(!empty($imported))
         {
@@ -2041,7 +2045,10 @@ class testcaseModel extends model
                 $libCase->openedBy   = $this->app->user->account;
                 $libCase->openedDate = helper::now();
                 $this->dao->insert(TABLE_CASE)->data($libCase)->autoCheck()->exec();
-                if(!dao::isError()) $libCaseID = $this->dao->lastInsertID();
+                if(dao::isError()) continue;
+
+                $libCaseID = $this->dao->lastInsertID();
+                $this->dao->update(TABLE_CASE)->set('sort')->eq($libCaseID)->where('id')->eq($libCaseID)->exec();
                 $this->action->create('case', $libCaseID, 'tolib', '', $caseID);
             }
             else
@@ -3267,7 +3274,7 @@ class testcaseModel extends model
             ->check('title', 'unique', "product = {$scene->product}")
             ->checkFlow()
             ->exec();
-        if($this->dao->isError()) return false;
+        if(dao::isError()) return false;
 
         $sceneID = $this->dao->lastInsertID();
         if($scene->parent)
@@ -3286,8 +3293,9 @@ class testcaseModel extends model
             $scene->grade = 1;
         }
 
+        $scene->sort = $sceneID;
         $this->dao->update(TABLE_SCENE)->data($scene)->where('id')->eq($sceneID)->exec();
-        if($this->dao->isError()) return false;
+        if(dao::isError()) return false;
 
         $this->loadModel('action')->create('scene', $sceneID, 'Opened');
 
@@ -3693,39 +3701,39 @@ class testcaseModel extends model
         $sceneList = $this->post->sceneList;
         foreach($sceneList as $scene)
         {
-            $tmpId  = $scene["tmpId"];
-            $tmpPId = $scene["tmpPId"];
+            $tmpId  = $scene['tmpId'];
+            $tmpPId = $scene['tmpPId'];
 
             $result = $this->saveScene($scene,$sceneIds);
             /* Rollback. */
-            if($result["result"] == "fail")
+            if($result['result'] == 'fail')
             {
                 $this->dao->rollBack();
                 return $result;
             }
 
-            $sceneIds[$tmpId] = array("id"=>$result['sceneID'], "tmpPId"=>$tmpPId);
+            $sceneIds[$tmpId] = array('id' => $result['sceneID'], 'tmpPId' => $tmpPId);
         }
 
         $testcaseList = $this->post->testcaseList;
         foreach($testcaseList as $testcase)
         {
-            $tmpId  = $testcase["tmpId"];
-            $tmpPId = $testcase["tmpPId"];
+            $tmpId  = $testcase['tmpId'];
+            $tmpPId = $testcase['tmpPId'];
 
             $result = $this->saveTestcase($testcase,$sceneIds);
-            if($result["result"] == "fail")
+            if($result['result'] == 'fail')
             {
                 $this->dao->rollBack();
                 return $result;
             }
 
-            $sceneIds[$tmpId] = array("id"=>$result['testcaseID'], "tmpPId"=>$tmpPId);
+            $sceneIds[$tmpId] = array('id' => $result['testcaseID'], 'tmpPId' => $tmpPId);
         }
 
         $this->dao->commit();
 
-        return array("result"=>"success","message"=>1);
+        return array('result' => 'success','message' => 1);
     }
 
     /**
@@ -3738,26 +3746,26 @@ class testcaseModel extends model
      */
     public function saveTestcase($testcaseData, $sceneIds)
     {
-        $tmpPId = $testcaseData["tmpPId"];
+        $tmpPId = $testcaseData['tmpPId'];
         $scene  = 0;
 
         if(isset($sceneIds[$tmpPId]))
         {
             $pScene = $sceneIds[$tmpPId];
-            $scene  = $pScene["id"];
+            $scene  = $pScene['id'];
         }
 
-        $id         = isset($testcaseData["id"]) ? $testcaseData["id"] : -1;
-        $module     = $testcaseData["module"];
-        $product    = $testcaseData["product"];
-        $branch     = $testcaseData["branch"];
-        $title      = $testcaseData["name"];
-        $pri        = $testcaseData["pri"];
+        $id         = isset($testcaseData['id']) ? $testcaseData['id'] : -1;
+        $module     = $testcaseData['module'];
+        $product    = $testcaseData['product'];
+        $branch     = $testcaseData['branch'];
+        $title      = $testcaseData['name'];
+        $pri        = $testcaseData['pri'];
         $now        = helper::now();
         $testcaseID = -1;
         $version    = 1;
 
-        if(!isset($testcaseData["id"]))
+        if(!isset($testcaseData['id']))
         {
             $testcase             = new stdclass();
             $testcase->scene      = $scene;
@@ -3766,18 +3774,16 @@ class testcaseModel extends model
             $testcase->branch     = $branch;
             $testcase->title      = $title;
             $testcase->pri        = $pri;
-            $testcase->type       = "feature";
-            $testcase->status     = "normal";
+            $testcase->type       = 'feature';
+            $testcase->status     = 'normal';
             $testcase->version    = $version;
             $testcase->openedBy   = $this->app->user->account;
             $testcase->openedDate = $now;
 
             $this->dao->insert(TABLE_CASE)->data($testcase)->autoCheck()->exec();
-            $testcaseID = $this->dao->lastInsertID();
 
-            $order = new stdclass();
-            $order->sort = $testcaseID;
-            $this->dao->update(TABLE_CASE)->data($order)->where('id')->eq((int)$testcaseID)->exec();
+            $testcaseID = $this->dao->lastInsertID();
+            $this->dao->update(TABLE_CASE)->set('sort')->eq($testcaseID)->where('id')->eq($testcaseID)->exec();
         }
         else
         {
@@ -3813,41 +3819,36 @@ class testcaseModel extends model
                 $testcase->branch     = $branch;
                 $testcase->title      = $title;
                 $testcase->pri        = $pri;
-                $testcase->type       = "feature";
-                $testcase->status     = "normal";
+                $testcase->type       = 'feature';
+                $testcase->status     = 'normal';
                 $testcase->version    = $version;
                 $testcase->openedBy   = $this->app->user->account;
                 $testcase->openedDate = $now;
 
                 $this->dao->insert(TABLE_CASE)->data($testcase)->autoCheck()->exec();
-                $testcaseID = $this->dao->lastInsertID();
 
-                $order       = new stdclass();
-                $order->sort = $testcaseID;
-                $this->dao->update(TABLE_CASE)->data($order)->where('id')->eq((int)$testcaseID)->exec();
+                $testcaseID = $this->dao->lastInsertID();
+                $this->dao->update(TABLE_CASE)->set('sort')->eq($testcaseID)->where('id')->eq($testcaseID)->exec();
             }
         }
 
-        if($this->dao->isError())
-        {
-            return array('result' => 'fail', 'message' => $this->dao->getError(true));
-        }
+        if(dao::isError()) return array('result' => 'fail', 'message' => $this->dao->getError(true));
 
-        $stepList = isset($testcaseData["stepList"]) ? $testcaseData["stepList"] : array();
+        $stepList = isset($testcaseData['stepList']) ? $testcaseData['stepList'] : array();
         if(isset($stepList))
         {
             foreach($stepList as $step)
             {
-                $tmpPId = $step["tmpPId"];
+                $tmpPId = $step['tmpPId'];
                 $pObj   = isset($sceneIds[$tmpPId]) ? $sceneIds[$tmpPId] : array();
 
                 $parent = 0;
-                if(isset($sceneIds[$tmpPId])) $parent = $pObj["id"];
+                if(isset($sceneIds[$tmpPId])) $parent = $pObj['id'];
 
                 $case   = $testcaseID;
-                $type   = $step["type"];
-                $desc   = $step["desc"];
-                $expect = isset($step["expect"]) ? $step["expect"] : '';
+                $type   = $step['type'];
+                $desc   = $step['desc'];
+                $expect = isset($step['expect']) ? $step['expect'] : '';
 
                 $casestep            = new stdclass();
                 $casestep->case      = $case;
@@ -3860,13 +3861,13 @@ class testcaseModel extends model
                 $this->dao->insert(TABLE_CASESTEP)->data($casestep)->autoCheck()->exec();
                 $casestepID = $this->dao->lastInsertID();
 
-                if($this->dao->isError()) return array('result' => 'fail', 'message' => $this->dao->getError(true));
+                if(dao::isError()) return array('result' => 'fail', 'message' => $this->dao->getError(true));
 
-                $sceneIds[$step["tmpId"]] = array("id"=>$casestepID, "tmpPId"=>$tmpPId);
+                $sceneIds[$step['tmpId']] = array('id' => $casestepID, 'tmpPId' => $tmpPId);
             }
         }
 
-        return array('result' => 'success', 'message' => 1,'testcaseID'=>$testcaseID);
+        return array('result' => 'success', 'message' => 1, 'testcaseID' => $testcaseID);
     }
 
     /**
@@ -3879,15 +3880,15 @@ class testcaseModel extends model
      */
     public function saveScene($sceneData, $sceneIds)
     {
-        $id      = isset($sceneData["id"]) ? $sceneData["id"] : -1;
-        $name    = $sceneData["name"];
-        $module  = isset($sceneData["module"]) ? $sceneData["module"] : 0;
-        $product = $sceneData["product"];
-        $branch  = $sceneData["branch"];
+        $id      = isset($sceneData['id']) ? $sceneData['id'] : -1;
+        $name    = $sceneData['name'];
+        $module  = isset($sceneData['module']) ? $sceneData['module'] : 0;
+        $product = $sceneData['product'];
+        $branch  = $sceneData['branch'];
         $now     = helper::now();
         $sceneID = -1;
 
-        if(!isset($sceneData["id"]))
+        if(!isset($sceneData['id']))
         {
             $scene             = new stdclass();
             $scene->title      = $name;
@@ -3919,7 +3920,7 @@ class testcaseModel extends model
 
         if($this->dao->isError()) return array('result' => 'fail', 'message' => $this->dao->getError(true));
 
-        $tmpPId = $sceneData["tmpPId"];
+        $tmpPId = $sceneData['tmpPId'];
         $pScene = isset($sceneIds[$tmpPId]) ? $sceneIds[$tmpPId] : array();
         $parent = 0;
         $grade  = 1;
@@ -3927,7 +3928,7 @@ class testcaseModel extends model
 
         if(isset($sceneIds[$tmpPId]))
         {
-            $parent      = $pScene["id"];
+            $parent      = $pScene['id'];
             $parentScene = $this->dao->findById((int)$parent)->from(TABLE_SCENE)->fetch();
             $path        = $parentScene->path . $sceneID . ',';
             $grade       = $parentScene->grade + 1;
@@ -3943,7 +3944,7 @@ class testcaseModel extends model
 
         if($this->dao->isError()) return array('result' => 'fail', 'message' => $this->dao->getError(true));
 
-        return array('result' => 'success', 'message' => 1,"sceneID"=>$sceneID);
+        return array('result' => 'success', 'message' => 1,'sceneID' => $sceneID);
     }
 
     /**
