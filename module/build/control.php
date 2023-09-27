@@ -302,6 +302,7 @@ class build extends control
     }
 
     /**
+     * 删除一个版本。
      * Delete a build.
      *
      * @param  int    $buildID
@@ -315,20 +316,10 @@ class build extends control
         $this->build->delete(TABLE_BUILD, $buildID);
 
         $message = $this->executeHooks($buildID);
-        if($message) $response['message'] = $message;
+        if($message) $this->lang->saveSuccess = $message;
 
-        /* if ajax request, send result. */
-        if(dao::isError())
-        {
-            $response['result']  = 'fail';
-            $response['message'] = dao::getError();
-        }
-        else
-        {
-            $response['result'] = 'success';
-            $response['load']   = helper::createLink($from, 'build', "executionID={$build->$from}");
-        }
-        return $this->send($response);
+        if(dao::isError()) return $this->sendError(dao::getError());
+        return $this->sendSuccess(array('load' => helper::createLink($from, 'build', "executionID={$build->$from}")));
     }
 
     /**
