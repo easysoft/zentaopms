@@ -29,9 +29,9 @@ class actionModel extends model
      * @param  string      $actor
      * @param  bool        $autoDelete
      * @access public
-     * @return int
+     * @return int|bool
      */
-    public function create(string $objectType, int $objectID, string $actionType, string|bool $comment = '', string|float $extra = '', string $actor = '', bool $autoDelete = true): int
+    public function create(string $objectType, int $objectID, string $actionType, string|bool $comment = '', string|int $extra = '', string $actor = '', bool $autoDelete = true): int|bool
     {
         if(strtolower($actionType) == 'commented' && empty($comment)) return false;
 
@@ -58,8 +58,8 @@ class actionModel extends model
         if(empty($comment)) $comment = '';
         $action->comment = fixer::stripDataTags($comment);
 
-        /* 处理action。 */
-        /* Process action. */
+        /* 处理评论内的图片. */
+        /* Process images in comment. */
         if($this->post->uid)
         {
             $action = $this->loadModel('file')->processImgURL($action, 'comment', $this->post->uid);
@@ -155,7 +155,11 @@ class actionModel extends model
         /* Filter object types not in configuration items。 */
         if(strpos($this->config->action->needGetRelateField, ",{$objectType},") !== false)
         {
-            if(!isset($this->config->objectTables[$objectType])) return $emptyRecord;
+            if(!isset($this->config->objectTables[$objectType]))
+            {
+                $emptyRecord['prodcut'] = ',0,';
+                return $emptyRecord;
+            }
 
             $record = $emptyRecord;
             switch($objectType)
@@ -301,8 +305,8 @@ class actionModel extends model
     }
 
     /**
-     * 获取一个对象的操作记录。
-     * Get actions of an object.
+     * 根据对象类型和对象ID获取操作记录。
+     * Get actions by objectType and objectID.
      *
      * @param  string $objectType
      * @param  int    $objectID
@@ -2489,31 +2493,31 @@ class actionModel extends model
      * Get repeat object.
      *
      * @param  object $action
+     * @param  string $table
      * @access public
-     * @return object|bool
+     * @return array
      */
-    public function getRepeatObject(object $action, object &$object): object|bool
+    public function getRepeatObject(object $action, string $table): array
     {
+        $object = $this->dao->select('*')->from($table)->where('id')->eq($action->objectID)->fetch();
         if($action->objectType == 'product')
         {
-            $object       = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->eq($action->objectID)->fetch();
-            $programID    = isset($object->program) ?? 0;
+            $programID    = isset($object->program) ? $object->program : 0;
             $repeatObject = $this->dao->select('*')->from(TABLE_PRODUCT)
                 ->where('id')->ne($action->objectID)
-                ->andWhere("(name = '{$product->name}' and program = {$programID})", true)
-                ->beginIF($product->code)->orWhere("code = '{$product->code}'")->fi()
+                ->andWhere("(name = '{$object->name}' AND program = {$programID})", true)
+                ->beginIF($object->code)->orWhere("code = '{$object->code}'")->fi()
                 ->markRight(1)
                 ->andWhere('deleted')->eq('0')
                 ->fetch();
         }
         else
         {
-            $object        = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($action->objectID)->fetch();
-            $sprintProject = isset($object->project) ?? 0;
+            $sprintProject = isset($object->project) ? $object->project : 0;
             $repeatObject  = $this->dao->select('*')->from(TABLE_PROJECT)
                 ->where('id')->ne($action->objectID)
-                ->beginIF($action->objectType == 'program' || $action->objectType == 'project')->andWhere("(name = '{$object->name}' and parent = {$object->parent})", true)->fi()
-                ->beginIF($action->objectType == 'execution')->andWhere("(name = '{$object->name}' and project = {$sprintProject})", true)->fi()
+                ->beginIF($action->objectType == 'program' || $action->objectType == 'project')->andWhere("(name = '{$object->name}' AND parent = {$object->parent})", true)->fi()
+                ->beginIF($action->objectType == 'execution')->andWhere("(name = '{$object->name}' AND project = {$sprintProject})", true)->fi()
                 ->beginIF($action->objectType == 'project' && $object->code)->orWhere("(code = '{$object->code}' and model = '$object->model')")->fi()
                 ->beginIF($action->objectType == 'execution' && $object->code)->orWhere("code = '{$object->code}'")->fi()
                 ->markRight(1)
@@ -2523,7 +2527,8 @@ class actionModel extends model
                 ->andWhere('deleted')->eq('0')
                 ->fetch();
         }
-        return $repeatObject;
+
+        return array($repeatObject, $object);
     }
 
     /**

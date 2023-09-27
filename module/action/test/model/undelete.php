@@ -11,7 +11,6 @@ zdTable('repo')->config('repo')->gen(3);
 zdTable('pipeline')->gen(1);
 zdTable('projectproduct')->config('projectproduct')->gen(1);
 zdTable('module')->config('module')->gen(3);
-zdTable('reviewissue')->config('reviewissue')->gen(2);
 zdTable('review')->config('review')->gen(2);
 zdTable('release')->config('release')->gen(2);
 zdTable('build')->config('build')->gen(1);

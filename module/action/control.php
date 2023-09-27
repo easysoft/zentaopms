@@ -51,38 +51,9 @@ class action extends control
      */
     public function trash(string $browseType = 'all', string $type = 'all', bool $byQuery = false, int $queryID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $this->loadModel('backup');
-
         /* Url存入session。 */
         /* Save url into session. */
-        $uri = $this->app->getURI(true);
-        $this->session->set('productList',        $uri, 'product');
-        $this->session->set('productPlanList',    $uri, 'product');
-        $this->session->set('storyList',          $uri, 'product');
-        $this->session->set('releaseList',        $uri, 'product');
-        $this->session->set('programList',        $uri, 'program');
-        $this->session->set('projectList',        $uri, 'project');
-        $this->session->set('executionList',      $uri, 'execution');
-        $this->session->set('taskList',           $uri, 'execution');
-        $this->session->set('buildList',          $uri, 'execution');
-        $this->session->set('bugList',            $uri, 'qa');
-        $this->session->set('caseList',           $uri, 'qa');
-        $this->session->set('testtaskList',       $uri, 'qa');
-        $this->session->set('docList',            $uri, 'doc');
-        $this->session->set('opportunityList',    $uri, 'project');
-        $this->session->set('riskList',           $uri, 'project');
-        $this->session->set('trainplanList',      $uri, 'project');
-        $this->session->set('roomList',           $uri, 'admin');
-        $this->session->set('researchplanList',   $uri, 'project');
-        $this->session->set('researchreportList', $uri, 'project');
-        $this->session->set('meetingList',        $uri, 'project');
-        $this->session->set('designList',         $uri, 'project');
-        $this->session->set('storyLibList',       $uri, 'assetlib');
-        $this->session->set('issueLibList',       $uri, 'assetlib');
-        $this->session->set('riskLibList',        $uri, 'assetlib');
-        $this->session->set('opportunityLibList', $uri, 'assetlib');
-        $this->session->set('practiceLibList',    $uri, 'assetlib');
-        $this->session->set('componentLibList',   $uri, 'assetlib');
+        $this->actionZen->saveUrlIntoSession();
 
         /* 保存用于替换搜索语言项的对象名称。 */
         /* Save the object name used to replace the search language item. */
@@ -90,132 +61,45 @@ class action extends control
 
         /* 生成表单搜索数据。 */
         /* Build the search form. */
-        $queryID   = (int)$queryID;
         $actionURL = $this->createLink('action', 'trash', "browseType=$browseType&type=$type&byQuery=true&queryID=myQueryID");
         $this->action->buildTrashSearchForm($queryID, $actionURL);
 
         /* 分页初始化。 */
         /* Load paper. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* 生成排序规则。 */
         /* Generate the sort rules.  */
         $sort           = common::appendOrder($orderBy);
         $trashes        = $byQuery ? $this->action->getTrashesBySearch($browseType, $type, $queryID, $sort, $pager) : $this->action->getTrashes($browseType, $type, $sort, $pager);
-        $objectTypeList = $this->action->getTrashObjectTypes($type);
-        $objectTypeList = array_keys($objectTypeList);
+        $objectTypeList = array_keys($this->action->getTrashObjectTypes($type));
 
         /* 获取头部模块标题导航。 */
         /* Build the header navigation title. */
-        $preferredType       = array();
-        $moreType            = array();
-        $preferredTypeConfig = $this->config->action->preferredType->ALM;
-        if($this->config->systemMode == 'light') $preferredTypeConfig = $this->config->action->preferredType->light;
-        foreach($objectTypeList as $objectType)
-        {
-            if(!isset($this->config->objectTables[$objectType])) continue;
-            in_array($objectType, $preferredTypeConfig) ? $preferredType[$objectType] = $objectType : $moreType[$objectType] = $objectType;
-        }
-        if(count($preferredType) < $this->config->action->preferredTypeNum)
-        {
-            $toPreferredType = array_splice($moreType, 0, $this->config->action->preferredTypeNum - count($preferredType));
-            $preferredType   = $preferredType + $toPreferredType; //填充至设定的展示数量。
-        }
+        $preferredType = $this->actionZen->getTrashesHeaderNavigation($objectTypeList);
+
+        /* 初始化项目、产品、执行列表。 */
+        /* Initialize the project, product, execution list. */
+        $projectList   = array();
+        $productList   = array();
+        $executionList = array();
 
         /* 获取执行所属的项目名称。 */
         /* Get the projects name of executions. */
-        if($browseType == 'execution')
-        {
-            $this->loadModel('project');
-            $projectIdList = array();
-            foreach($trashes as $trash) $projectIdList[] = $trash->project;
-            $projectList = $this->project->getByIdList($projectIdList, 'all');
-            $this->view->projectList = $projectList;
-        }
+        if($browseType == 'execution') $this->view->projectList = $projectList = $this->loadModel('project')->getByIdList(array_column($trashes, 'project'), 'all');
 
         /* 获取用户故事所属的产品名称。 */
         /* Get the products name of story. */
-        if(in_array($browseType, array('story', 'requirement')))
-        {
-            $this->loadModel('story');
-            $storyIdList = array();
-            foreach($trashes as $trash) $storyIdList[] = $trash->objectID;
-            $productList = $this->story->getByList($storyIdList, 'all');
-            $this->view->productList = $productList;
-        }
+        if(in_array($browseType, array('story', 'requirement'))) $this->view->productList = $productList = $this->loadModel('product')->getByIdList(array_column($trashes, 'objectID'), 'all');
 
         /* 获取任务的执行名称。 */
         /* Get the executions name of task. */
-        if($browseType == 'task')
-        {
-            $this->app->loadLang('task');
-            $this->loadModel('execution');
-            $executionIdList = array();
-            foreach($trashes as $trash) $executionIdList[] = $trash->execution;
-            $executionList = $this->execution->getByIdList($executionIdList, 'all');
-            $this->view->executionList = $executionList;
-        }
+        if($browseType == 'task') $this->view->executionList = $executionList = $this->loadModel('execution')->getByIdList(array_column($trashes, 'execution'), 'all');
 
         /* 补充操作记录的信息。 */
         /* Supplement the information recorded by the operation. */
-        foreach($trashes as $action)
-        {
-            if($action->objectType == 'pivot')
-            {
-                $pivotNames = json_decode($action->objectName, true);
-                $action->objectName = zget($pivotNames, $this->app->getClientLang(), '');
-                if(empty($action->objectName))
-                {
-                    $pivotNames = array_filter($pivotNames);
-                    $action->objectName = reset($pivotNames);
-                }
-            }
-            else
-            {
-                $module     = $action->objectType == 'case' ? 'testcase' : $action->objectType;
-                $params     = $action->objectType == 'user' ? "account={$action->objectName}" : "id={$action->objectID}";
-                $methodName = 'view';
-                if($module == 'caselib')
-                {
-                    $methodName = 'view';
-                    $module     = 'caselib';
-                }
-                if($module == 'basicmeas')
-                {
-                    $module     = 'measurement';
-                    $methodName = 'setSQL';
-                    $params     = "id={$action->objectID}";
-                }
-                if($action->objectType == 'api')
-                {
-                    $params     = "libID=0&moduelID=0&apiID={$action->objectID}";
-                    $methodName = 'index';
-                }
-                if(in_array($module, array('traincourse','traincontents')))
-                {
-                    $methodName = $module == 'traincourse' ? 'viewcourse' : 'viewchapter';
-                    $module     = 'traincourse';
-                }
-                if(isset($this->config->action->customFlows[$action->objectType]))
-                {
-                    $flow   = $this->config->action->customFlows[$action->objectType];
-                    $module = $flow->module;
-                }
-                if(strpos($this->config->action->noLinkModules, ",{$module},") === false)
-                {
-                    $tab     = '';
-                    $canView = common::hasPriv($module, $methodName);
-                    if($action->objectType == 'meeting') $tab = $action->project ? "data-app='project'" : "data-app='my'";
-                    if($module == 'requirement') $module = 'story';
-                    $action->objectName = $canView ? html::a($this->createLink($module, $methodName, $params), $action->objectName, '_self', "title='{$action->objectName}' $tab") : "<span title='$action->objectName'>$action->objectName</span>";
-                }
-            }
-
-            if(!empty($projectList[$action->project]))     $action->project   = $projectList[$action->project]->name          . ($projectList[$action->project]->deleted         ? "<span class='label danger ml-2'>{$this->lang->project->deleted}</span>" : '');
-            if(!empty($productList[$action->objectID]))    $action->product   = $productList[$action->objectID]->productTitle . ($productList[$action->objectID]->productDeleted ? "<span class='label danger ml-2'>{$this->lang->story->deleted}</span>" : '');
-            if(!empty($executionList[$action->execution])) $action->execution = $executionList[$action->execution]->name      . ($executionList[$action->execution]->deleted     ? "<span class='label danger ml-2'>{$this->lang->execution->deleted}</span>" : '');
-        }
+        foreach($trashes as $trash) $this->actionZen->processTrash($trash, $projectList, $productList, $executionList);
 
         $this->view->title               = $this->lang->action->trash;
         $this->view->trashes             = $trashes;
@@ -225,8 +109,6 @@ class action extends control
         $this->view->pager               = $pager;
         $this->view->users               = $this->loadModel('user')->getPairs('noletter');
         $this->view->preferredType       = $preferredType;
-        $this->view->moreType            = $moreType;
-        $this->view->preferredTypeConfig = $preferredTypeConfig;
         $this->view->byQuery             = $byQuery;
         $this->view->queryID             = $queryID;
         $this->display();
@@ -244,34 +126,17 @@ class action extends control
      */
     public function undelete(int $actionID, string $browseType = 'all', string $confirmChange = 'no')
     {
-        $oldAction = $this->action->getById($actionID);
+        $oldAction = $this->actionZen->checkActionExist($actionID);
         $extra     = $oldAction->extra == actionModel::BE_HIDDEN ? 'hidden' : 'all';
 
         if(in_array($oldAction->objectType, array('program', 'project', 'execution', 'product')))
         {
-            $object = new stdclass();
-            $repeatObject = $this->action->getRepeatObject($oldAction, $object);
+            $table = $oldAction->objectType == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
+            list($repeatObject, $object) = $this->action->getRepeatObject($oldAction, $table);
+
             if($repeatObject)
             {
-                $table  = $oldAction->objectType == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
-
-                $existNames = $this->action->getLikeObject($table, 'name', 'name', $repeatObject->name . '_%');
-                for($i = 1; $i < 10000; $i ++)
-                {
-                    $replaceName = $repeatObject->name . '_' . $i;
-                    if(!in_array($replaceName, $existNames)) break;
-                }
-                $replaceCode = '';
-                if($object->code)
-                {
-                    $existCodes = $this->action->getLikeObject($table, 'code', 'code', $repeatObject->code . '_%');
-                    for($i = 1; $i < 10000; $i ++)
-                    {
-                        $replaceCode = $repeatObject->code . '_' . $i;
-                        if(!in_array($replaceCode, $existCodes)) break;
-                    }
-                }
-
+                list($replaceName, $replaceCode) = $this->actionZen->getReplaceNameAndCode($repeatObject, $object, $table);
                 if($confirmChange == 'no')
                 {
                     $message = '';
@@ -318,7 +183,7 @@ class action extends control
             {
                 $confirmLang = $this->restoreStages($oldAction, $confirmChange);
                 $url         = $this->createLink('action', 'undelete', "action={$actionID}&browseType={$browseType}&confirmChange=yes");
-                if($confirmLang !== true) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message: '{$confirmLang}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) $.ajaxSubmit({url: '{$url}'});     });"));
+                if($confirmLang !== true) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message: '{$confirmLang}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) $.ajaxSubmit({url: '{$url}'});});"));
             }
         }
 
@@ -342,14 +207,14 @@ class action extends control
      */
     public function hideOne(int $actionID, string $browseType = 'all')
     {
-        $oldAction = $this->action->getById($actionID);
+        $oldAction = $this->actionZen->checkActionExist($actionID);
 
         $this->action->hideOne($actionID);
 
         $sameTypeObjects = $this->action->getTrashes($oldAction->objectType, 'all', 'id_desc', null);
         $browseType      = ($sameTypeObjects && $browseType != 'all') ? $oldAction->objectType : 'all';
 
-        return $this->send(array('result' => 'success', 'load' => $this->createLink('action', 'trash', "browseType=$browseType")));
+        return $this->send(array('result' => 'success', 'load' => $this->createLink('action', 'trash', "browseType={$browseType}")));
     }
 
     /**
@@ -368,11 +233,9 @@ class action extends control
             $message = $this->lang->action->confirmHideAll;
             return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message: '{$message}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) $.ajaxSubmit({url: '{$url}'});});"));
         }
-        else
-        {
-            $this->action->hideAll();
-            return $this->send(array('result' => 'success', 'load' => true));
-        }
+
+        $this->action->hideAll();
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
@@ -386,7 +249,8 @@ class action extends control
      */
     public function comment(string $objectType, int $objectID)
     {
-        /* 当评论的是任务，需判断当前用户是否拥有任务的执行权限。 */
+        /* 当评论的是任务，需判断当前用户是否拥有任务的权限。 */
+        /* When commenting on a task, you need to determine whether the current user has the permission of the task. */
         if(strtolower($objectType) == 'task')
         {
             $task       = $this->loadModel('task')->getById($objectID);
@@ -394,6 +258,7 @@ class action extends control
             if(!in_array($task->execution, $executions)) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
         }
         /* 当评论的是用户故事，需判断当前用户是否有此用户故事的权限。 */
+        /* When commenting on a story, you need to determine whether the current user has the permission of the story. */
         elseif(strtolower($objectType) == 'story')
         {
             $story      = $this->loadModel('story')->getById($objectID);
@@ -413,9 +278,8 @@ class action extends control
     }
 
     /**
-     * 编辑一个action的评论。
-     *
-     * Edit comment of a action.
+     * 编辑评论。
+     * Edit comment.
      *
      * @param  int    $actionID
      * @access public
@@ -454,7 +318,7 @@ class action extends control
      * @access public
      * @return bool|string
      */
-    public function restoreStages(object $action, string $confirmChange): bool|string
+    public function restoreStages(object $action, string $confirmChange = 'no'): bool|string
     {
         /* 检查父阶段是否创建过任务。 */
         /* Check parent stage isCreateTask. */
@@ -512,29 +376,23 @@ class action extends control
         {
             $this->app->loadLang('stage');
 
-            $deletedTitle = trim($deletedTitle, ',');
-            $confirmLang  = sprintf($this->lang->action->hasDeletedParent, $deletedTitle) . $this->lang->action->whetherToRestore;
+            $confirmLang  = sprintf($this->lang->action->hasDeletedParent, trim($deletedTitle, ',')) . $this->lang->action->whetherToRestore;
             if($needChangeAttr) $confirmLang = sprintf($this->lang->action->hasChangedAttr, zget($this->lang->stage->typeList, $parentAttr)) . $this->lang->action->whetherToRestore;
             if(!empty($deletedTitle) && $needChangeAttr) $confirmLang = sprintf($this->lang->action->hasDeletedParent, $deletedTitle) . sprintf($this->lang->action->hasChangedAttr, zget($this->lang->stage->typeList, $parentAttr)) . $this->lang->action->whetherToRestore;
 
-            if($confirmChange == 'no')
-            {
-                return $confirmLang;
-            }
-            else
-            {
-                /* 如果被删除的标题集合不为空，则更新所有的阶段。 */
-                /* If the collection of titles being deleted is not empty, all stages are updated. */
-                if(!empty($deletedTitle)) $this->action->restoreStages($deletedParents);
+            if($confirmChange == 'no') return $confirmLang;
 
-                /* 如果需要更新attribute的值，则恢复路径上所有的父节点以及更新attrubute值。 */
-                /* If the attribute value needs to be updated, restore all parent nodes on the path and update the attribute value. */
-                if($needChangeAttr)
-                {
-                    $needChangedStages = substr($execution->path, strpos($execution->path, ",{$startChangedStage->id},"));
-                    $needChangedStages = explode(',', trim($needChangedStages, ','));
-                    $this->action->updateStageAttribute($parentAttr, $needChangedStages);
-                }
+            /* 如果被删除的标题集合不为空，则更新所有的阶段。 */
+            /* If the collection of titles being deleted is not empty, all stages are updated. */
+            if(!empty($deletedTitle)) $this->action->restoreStages($deletedParents);
+
+            /* 如果需要更新attribute的值，则恢复路径上所有的父节点以及更新attrubute值。 */
+            /* If the attribute value needs to be updated, restore all parent nodes on the path and update the attribute value. */
+            if($needChangeAttr)
+            {
+                $needChangedStages = substr($execution->path, strpos($execution->path, ",{$startChangedStage->id},"));
+                $needChangedStages = explode(',', trim($needChangedStages, ','));
+                $this->action->updateStageAttribute($parentAttr, $needChangedStages);
             }
         }
 
