@@ -1708,7 +1708,56 @@ class screenModel extends model
         if($chartID == 20004) return $this->getActiveProductCard($year, $month);
         if($chartID == 20007) return $this->getActiveProjectCard($year, $month);
         if($chartID == 20010) return $this->getProjectTaskTable($year, $month, $projectList);
+    }
 
+    /**
+     * 获取活跃账号数项目间对比图表。
+     * Get table of active account.
+     *
+     * @param  string $year
+     * @param  string $month
+     * @param  array  $projectList
+     * @access public
+     * @return array
+     */
+    public function getActiveUserTable($year, $month, $projectList)
+    {
+        $date = date("Y-m-t", strtotime("$year-$month"));
+
+        $loginUserList = $this->dao->select('distinct actor')->from(TABLE_ACTION)
+            ->where('objectType')->eq('user')
+            ->andWhere('action')->eq('login')
+            ->andWhere('year(date)')->eq($year)
+            ->andWhere('month(date)')->eq($month)
+            ->fetchPairs();
+
+        $dataset = array();
+        foreach($projectList as $projectID => $projectName)
+        {
+            $teamMemberList = $this->dao->select('t2.id, t2.account')->from(TABLE_TEAM)->alias('t1')
+                ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
+                ->where('t1.root')->eq($projectID)
+                ->andWhere('date(t1.join)')->le($date)
+                ->andWhere('t2.deleted')->eq('0')
+                ->fetchPairs();
+
+            $activeUser = array_filter($teamMemberList, function($item) use ($loginUserList)
+            {
+                return in_array($item, $loginUserList);
+            });
+
+            $row = new stdclass();
+            $row->id            = $projectID;
+            $row->name          = $projectName;
+            $row->year          = $year;
+            $row->month         = $month;
+            $row->totalAccount  = count($teamMemberList);
+            $row->activeAccount = count($activeUser);
+
+            $dataset[] = $row;
+        }
+
+        return $dataset;
     }
 
     /**
