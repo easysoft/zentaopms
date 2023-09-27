@@ -54,7 +54,7 @@ class buildTao extends buildModel
      * @access protected
      * @return array
      */
-    protected function selectedBuildPairs(array $productIdList, string $params, int $objectID, string $objectType, string $buildIdList): array
+    protected function selectedBuildPairs(string $buildIdList, array $productIdList, string $params, int $objectID, string $objectType): array
     {
         $selectedBuilds = array();
         if($buildIdList)

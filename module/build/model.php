@@ -276,7 +276,7 @@ class buildModel extends model
         if(strpos($params, 'notrunk') === false) $sysBuilds = array('trunk' => $this->lang->trunk);
 
         $shadows        = $this->dao->select('shadow')->from(TABLE_RELEASE)->where('product')->in($productIdList)->fetchPairs('shadow', 'shadow'); // Get the buildID under the shadow product.
-        $selectedBuilds = $this->buildTao->selectedBuildPairs($productIdList, $params, $objectID, $objectType, $buildIdList);
+        $selectedBuilds = $this->buildTao->selectedBuildPairs($buildIdList, $productIdList, $params, $objectID, $objectType);
         $allBuilds      = $this->buildTao->fetchBuilds($productIdList, $params, $objectID, $objectType, $shadows);
 
         /* Set builds and filter done executions and terminate releases. */
