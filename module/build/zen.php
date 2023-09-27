@@ -66,4 +66,65 @@ class buildZen extends build
         $this->view->artifactRepos = $artifactRepos;
         $this->display();
     }
+
+    /**
+     * 生成编辑计划的页面数据。
+     * Generate the page data for editing a plan.
+     *
+     * @param  object    $build
+     * @access protected
+     * @return void
+     */
+    protected function assignEditData(object $build)
+    {
+        $builds        = array();
+        $status        = empty($this->config->CRProduct) ? 'noclosed' : '';
+        $projectID     = $build->execution ? $build->execution : $build->project;
+        $productGroups = $this->loadModel('product')->getProducts($projectID, $status);
+        $branches      = $this->loadModel('branch')->getList($build->product, $projectID, 'all');
+        if(!$build->execution) $builds = $this->build->getBuildPairs(array($build->product), 'all', 'noempty,notrunk,singled,separate', $build->project, 'project', $build->builds, false);
+
+        /* Get execution info. */
+        $executions = $this->product->getExecutionPairsByProduct($build->product, $build->branch, (int)$this->session->project, 'stagefilter');
+        $execution  = $build->execution ? $this->loadModel('execution')->getByID($build->execution) : '';
+        if($build->execution && !isset($executions[$build->execution]))
+        {
+            $execution = $this->loadModel('execution')->getByID($build->execution);
+            $executions[$build->execution] = $execution ? $execution->name : '';
+        }
+
+        if(!isset($productGroups[$build->product]))
+        {
+            $product = $this->product->getById($build->product);
+            $product->branch = $build->branch;
+            $productGroups[$build->product] = $product;
+        }
+
+        /* Display status of branch. */
+        $branchTagOption = array();
+        foreach($branches as $branchInfo)
+        {
+            $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+        }
+        foreach(explode(',', $build->branch) as $buildBranch)
+        {
+            if(!isset($branchTagOption[$buildBranch])) $branchTagOption[$buildBranch] = $this->branch->getById($buildBranch, 0, 'name');
+        }
+
+        $products = array();
+        foreach($productGroups as $product) $products[$product->id] = $product->name;
+
+        $this->view->title           = $build->name . $this->lang->colon . $this->lang->build->edit;
+        $this->view->products        = $products;
+        $this->view->product         = isset($productGroups[$build->product]) ? $productGroups[$build->product] : '';
+        $this->view->users           = $this->loadModel('user')->getPairs('noletter', $build->builder);
+        $this->view->branchTagOption = $branchTagOption;
+        $this->view->build           = $build;
+        $this->view->testtask        = $this->loadModel('testtask')->getByBuild($build->id);
+        $this->view->builds          = $builds;
+        $this->view->executions      = $executions;
+        $this->view->executionType   = !empty($execution) && $execution->type == 'stage' ? 1 : 0;
+        $this->view->orderBy         = 'status_asc, stage_asc, id_desc';
+        $this->display();
+    }
 }

@@ -81,23 +81,26 @@ class build extends control
     }
 
     /**
+     * 编辑一个版本。
      * Edit a build.
      *
      * @param  int    $buildID
      * @access public
      * @return void
      */
-    public function edit($buildID)
+    public function edit(int $buildID)
     {
         if(!empty($_POST))
         {
-            $changes = $this->build->update($buildID);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $build = form::data()->get();
+            $changes = $this->build->update($buildID, $build);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
             $files = $this->loadModel('file')->saveUpload('build', $buildID);
             $change[$buildID] = $changes;
             $this->unlinkOldBranch($change);
 
-            if($changes or $files)
+            if($changes || $files)
             {
                 $fileAction = '';
                 if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
@@ -108,75 +111,19 @@ class build extends control
             $message = $this->executeHooks($buildID);
             if($message) $this->lang->saveSuccess = $message;
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('build', 'view', "buildID=$buildID") . "#app={$this->app->tab}"));
+            return $this->sendSuccess(array('locate' => $this->createLink('build', 'view', "buildID=$buildID") . "#app={$this->app->tab}"));
         }
 
         $this->loadModel('execution');
         $this->loadModel('product');
-        $build = $this->build->getById((int)$buildID);
-        $oldBranch = array($buildID => $build->branch);
+        $build = $this->build->getById($buildID);
 
         /* Set menu. */
         if($this->app->tab == 'project')   $this->loadModel('project')->setMenu($build->project);
         if($this->app->tab == 'execution') $this->execution->setMenu($build->execution);
 
-        $builds = array();
-        $status = empty($this->config->CRProduct) ? 'noclosed' : '';
-        if($build->execution)
-        {
-            $productGroups = $this->product->getProducts($build->execution, $status);
-            $branches      = $this->loadModel('branch')->getList($build->product, $build->execution, 'all');
-        }
-        else
-        {
-            $productGroups = $this->product->getProducts($build->project, $status);
-            $branches      = $this->loadModel('branch')->getList($build->product, $build->project, 'all');
-            $builds        = $this->build->getBuildPairs(array($build->product), 'all', 'noempty,notrunk,singled,separate', $build->project, 'project', $build->builds, false);
-        }
-
-        $executions    = $this->product->getExecutionPairsByProduct($build->product, $build->branch, (int)$this->session->project, 'stagefilter');
-        $executionType = $build->execution ? $this->execution->getByID($build->execution) : '';
-        if($build->execution and !isset($executions[$build->execution])) $executions[$build->execution] = $this->loadModel('execution')->getById($build->execution)->name;
-
-        /* Get stories and bugs. */
-        $orderBy = 'status_asc, stage_asc, id_desc';
-
-        if(!isset($productGroups[$build->product]))
-        {
-            $product = $this->product->getById($build->product);
-            $product->branch = $build->branch;
-            $productGroups[$build->product] = $product;
-        }
-
-        /* Display status of branch. */
-        $branchTagOption = array();
-        foreach($branches as $branchInfo)
-        {
-            $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
-        }
-        foreach(explode(',', $build->branch) as $buildBranch)
-        {
-            if(!isset($branchTagOption[$buildBranch])) $branchTagOption[$buildBranch] = $this->branch->getById($buildBranch, 0, 'name');
-        }
-
-        foreach($productGroups as $product) $products[$product->id] = $product->name;
-
         $this->commonActions($build->project);
-
-        $this->view->title           = $build->name . $this->lang->colon . $this->lang->build->edit;
-        $this->view->product         = isset($productGroups[$build->product]) ? $productGroups[$build->product] : '';
-        $this->view->branchTagOption = $branchTagOption;
-        $this->view->orderBy         = $orderBy;
-        $this->view->oldBranch       = $oldBranch;
-        $this->view->executions      = $executions;
-        $this->view->executionType   = (!empty($executionType) and $executionType->type == 'stage') ? 1 : 0;
-        $this->view->productGroups   = $productGroups;
-        $this->view->products        = $products;
-        $this->view->users           = $this->loadModel('user')->getPairs('noletter', $build->builder);
-        $this->view->build           = $build;
-        $this->view->builds          = $builds;
-        $this->view->testtaskID      = $this->dao->select('id')->from(TABLE_TESTTASK)->where('build')->eq($build->id)->andWhere('deleted')->eq(0)->fetch('id');
-        $this->display();
+        $this->buildZen->assignEditData($build);
     }
 
     /**

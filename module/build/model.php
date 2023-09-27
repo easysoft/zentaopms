@@ -507,28 +507,19 @@ class buildModel extends model
     }
 
     /**
+     * 更新一个版本。
      * Update a build.
      *
      * @param  int    $buildID
+     * @param  object $build
      * @access public
-     * @return void
+     * @return bool
      */
-    public function update($buildID)
+    public function update(int $buildID, object $build): bool
     {
-        $buildID    = (int)$buildID;
-        $oldBuild   = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->eq($buildID)->fetch();
-        $newProduct = $this->dao->select('id,type')->from(TABLE_PRODUCT)->where('id')->eq($_POST['product'])->fetchPairs();
-        $branch     = (!isset($_POST['branch']) or $newProduct == 'normal') ? 0 : $oldBuild->branch;
-        $build      = fixer::input('post')->stripTags($this->config->build->editor->edit['id'], $this->config->allowedTags)
-            ->add('id', $buildID)
-            ->setDefault('branch', $branch)
-            ->setDefault('product', $oldBuild->product)
-            ->setDefault('builds', '')
-            ->cleanInt('product,execution')
-            ->join('builds', ',')
-            ->join('branch', ',')
-            ->remove('allchecker,resolvedBy,files,labels,uid')
-            ->get();
+        $oldBuild = $this->fetchByID($buildID);
+        $product  = $this->loadModel('product')->getByID((int) $build->product);
+        $branch   = $this->post->branch === false || $product->type == 'normal' ? 0 : $oldBuild->branch;
 
         if(empty($oldBuild->execution))
         {
@@ -588,11 +579,10 @@ class buildModel extends model
             ->checkFlow()
             ->exec();
         if(isset($build->branch) and $oldBuild->branch != $build->branch) $this->dao->update(TABLE_RELEASE)->set('branch')->eq($build->branch)->where('build')->eq($buildID)->exec();
-        if(!dao::isError())
-        {
-            $this->file->updateObjectID($this->post->uid, $buildID, 'build');
-            return common::createChanges($oldBuild, $build);
-        }
+        if(dao::isError()) return false;
+
+        $this->file->updateObjectID($this->post->uid, $buildID, 'build');
+        return common::createChanges($oldBuild, $build);
     }
 
     /**

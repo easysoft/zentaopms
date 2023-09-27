@@ -30,7 +30,7 @@ $().ready(function()
                 let result = confirm(unlinkBranch) ? true : false;
                 if(!result)
                 {
-                    $('input[name^=branch]').zui('picker').$.setValue(oldBranch[buildID].split(','));
+                    $('input[name^=branch]').zui('picker').$.setValue(build.branch.split(','));
                 }
             }
         });

@@ -10,14 +10,14 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('productGroups', $productGroups);
 jsVar('projectID', $build->project);
 jsVar('executionID', $build->execution);
-jsVar('oldBranch', $oldBranch);
+jsVar('build', $build);
 jsVar('builds', $build->builds);
 jsVar('buildID', $build->id);
 jsVar('multipleSelect', $lang->build->placeholder->multipleSelect);
 $productRow = '';
+$testtaskID = zget($testtask, 'id', 0);
 if(!$hidden)
 {
     $productRow = formRow(
@@ -103,10 +103,14 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            set::name('branch[]'),
             set::label($lang->product->branchName[$productType]),
-            set::value($build->branch),
-            set::items($branchTagOption),
+            picker
+            (
+                set::name('branch[]'),
+                set::value($build->branch),
+                set::items($branchTagOption),
+                set::multiple(true),
+            )
         )
     ),
     !$build->execution ? $buildRow : $executionRow,
