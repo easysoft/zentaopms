@@ -510,64 +510,24 @@ class buildModel extends model
      * 更新一个版本。
      * Update a build.
      *
-     * @param  int    $buildID
-     * @param  object $build
+     * @param  int         $buildID
+     * @param  object      $build
      * @access public
-     * @return bool
+     * @return array|false
      */
-    public function update(int $buildID, object $build): bool
+    public function update(int $buildID, object $build): array|false
     {
         $oldBuild = $this->fetchByID($buildID);
         $product  = $this->loadModel('product')->getByID((int) $build->product);
         $branch   = $this->post->branch === false || $product->type == 'normal' ? 0 : $oldBuild->branch;
-
-        if(empty($oldBuild->execution))
-        {
-            $buildBranch = array();
-            foreach(explode(',', trim($build->branch, ',')) as $branchID) $buildBranch[$branchID] = $branchID;
-
-            /* Get delete builds. */
-            $deleteBuilds = array();
-            $newBuilds    = isset($build->builds) ? $build->builds : '';
-            foreach(explode(',', $oldBuild->builds) as $oldBuildID)
-            {
-                if(empty($oldBuildID)) continue;
-                if(strpos(",$newBuilds,", ",$oldBuildID,") === false) $deleteBuilds[$oldBuildID] = $oldBuildID;
-            }
-
-            /* Delete the branch when the branch of the deleted build has no linked stories. */
-            $deleteBuildBranches = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->in($deleteBuilds)->fetchPairs();
-            $linkedStoryBranches = $this->dao->select('branch')->from(TABLE_STORY)->where('id')->in($oldBuild->stories)->fetchPairs('branch');
-            foreach($deleteBuildBranches as $deleteBuildBranch)
-            {
-                foreach(explode(',', $deleteBuildBranch) as $deleteBuildBranchID)
-                {
-                    if(empty($deleteBuildBranchID) or isset($linkedStoryBranches[$deleteBuildBranchID])) continue;
-                    unset($buildBranch[$deleteBuildBranchID]);
-                }
-            }
-
-            /* Add branch of new builds. */
-            $newBuildBranches = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->in($newBuilds)->fetchPairs();
-            foreach($newBuildBranches as $newBuildBranch)
-            {
-                foreach(explode(',', $newBuildBranch) as $newBuildBranchID)
-                {
-                    if(empty($newBuildBranchID)) continue;
-                    if(!isset($buildBranch[$newBuildBranchID])) $buildBranch[$newBuildBranchID] = $newBuildBranchID;
-                }
-            }
-
-            $build->branch = implode(',', $buildBranch);
-        }
+        if(empty($oldBuild->execution)) $build = $this->processBuildForUpdate($build, $oldBuild);
 
         $product = $this->loadModel('product')->getByID($build->product);
-        if(!empty($product) and $product->type != 'normal' and !isset($_POST['branch']) and isset($_POST['product']))
+        if(!empty($product) && $product->type != 'normal' && !isset($_POST['branch']) && isset($_POST['product']))
         {
             $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
             dao::$errors['branch'] = sprintf($this->lang->error->notempty, $this->lang->product->branch);
         }
-
         if(dao::isError()) return false;
 
         $build = $this->loadModel('file')->processImgURL($build, $this->config->build->editor->edit['id'], $this->post->uid);
@@ -578,7 +538,7 @@ class buildModel extends model
             ->check('name', 'unique', "id != $buildID AND product = {$build->product} AND branch = '{$build->branch}' AND deleted = '0'")
             ->checkFlow()
             ->exec();
-        if(isset($build->branch) and $oldBuild->branch != $build->branch) $this->dao->update(TABLE_RELEASE)->set('branch')->eq($build->branch)->where('build')->eq($buildID)->exec();
+        if(isset($build->branch) && $oldBuild->branch != $build->branch) $this->dao->update(TABLE_RELEASE)->set('branch')->eq($build->branch)->where('build')->eq($buildID)->exec();
         if(dao::isError()) return false;
 
         $this->file->updateObjectID($this->post->uid, $buildID, 'build');
@@ -894,5 +854,50 @@ class buildModel extends model
         if(common::hasPriv($module, 'delete')) $actions[] = 'delete';
 
         return $actions;
+    }
+
+    /**
+     * 处理版本编辑前没有执行的情况。
+     * Process build for update when the build has no execution.
+     *
+     * @param  object $build
+     * @param  object $oldBuild
+     * @access public
+     * @return object
+     */
+    public function processBuildForUpdate(object $build, object $oldBuild): object
+    {
+        if(!empty($oldBuild->execution)) return $build;
+
+        $buildBranch = array();
+        foreach(explode(',', trim($build->branch, ',')) as $branchID) $buildBranch[$branchID] = $branchID;
+
+        /* Get delete builds. */
+        $deleteBuilds = array();
+        $newBuilds    = isset($build->builds) ? explode(',', $build->builds) : array();
+        foreach($newBuilds as $oldBuildID)
+        {
+            if(empty($oldBuildID)) continue;
+            if(!in_array($oldBuildID, $newBuilds)) $deleteBuilds[$oldBuildID] = $oldBuildID;
+        }
+
+        /* Delete the branch when the branch of the deleted build has no linked stories. */
+        $storyBranches = $this->dao->select('branch')->from(TABLE_STORY)->where('id')->in($oldBuild->stories)->fetchPairs('branch');
+        $branches      = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->in($newBuilds + $deleteBuilds)->fetchPairs();
+        foreach($branches as $branch)
+        {
+            foreach(explode(',', $branch) as $branchID)
+            {
+                if(empty($branchID)) continue;
+                if(in_array($branchID, $deleteBuilds) && isset($storyBranches[$branchID])) continue;
+                if(in_array($branchID, $newBuilds)    && isset($buildBranch[$branchID]))   continue;
+
+                if(in_array($branchID, $deleteBuilds)) unset($buildBranch[$branchID]);
+                if(in_array($branchID, $newBuilds))    $buildBranch[$branchID] = $branchID;
+            }
+        }
+
+        $build->branch = implode(',', $buildBranch);
+        return $build;
     }
 }
