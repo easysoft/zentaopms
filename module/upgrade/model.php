@@ -9877,6 +9877,5 @@ class upgradeModel extends model
                 ->exec();
         }
         $this->dao->commit();
->>>>>>> 18.x
     }
 }

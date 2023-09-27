@@ -3946,7 +3946,7 @@ $config->group->package->mangeApplication = new stdclass();
 $config->group->package->mangeApplication->order  = 2840;
 $config->group->package->mangeApplication->subset = 'app';
 $config->group->package->mangeApplication->privs  = array();
-$config->group->package->mangeApplication->privs['instance-manage'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('repo-maintain'), 'recommend' => array());
+$config->group->package->mangeApplication->privs['instance-manage'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('space-browse'), 'recommend' => array());
 
 $config->group->package->trainPracticeLib = new stdclass();
 $config->group->package->trainPracticeLib->order  = 8;
