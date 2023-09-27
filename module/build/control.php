@@ -321,66 +321,53 @@ class build extends control
     }
 
     /**
+     * 获取项目下的版本下拉列表。
      * AJAX: get builds of a project in html select.
      *
      * @param  int        $projectID
-     * @param  string     $varName      the name of the select object to create
-     * @param  string     $build        build to selected
+     * @param  string     $varName    the name of the select object to create
+     * @param  string     $build      build to selected
      * @param  string|int $branch
-     * @param  int        $index        the index of batch create bug.
-     * @param  bool       $needCreate   if need to append the link of create build
-     * @param  string     $type         get all builds or some builds belong to normal releases and executions are not done.
-     * @param  string     $extra
+     * @param  bool       $needCreate if need to append the link of create build
+     * @param  string     $type       get all builds or some builds belong to normal releases and executions are not done.
      * @access public
      * @return string
      */
-    public function ajaxGetProjectBuilds($projectID, $productID, $varName, $build = '', $branch = 'all', $index = 0, $needCreate = false, $type = 'normal', $extra = '')
+    public function ajaxGetProjectBuilds(int $projectID, int $productID, string $varName, string $build = '', string|int $branch = 'all', $needCreate = false, $type = 'normal')
     {
         $isJsonView = $this->app->getViewType() == 'json';
         if($varName == 'openedBuild')
         {
-            if(empty($projectID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $index, $type);
+            if(empty($projectID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $type);
 
-            $params = ($type == 'all') ? 'noempty,withbranch,noreleased' : 'noempty,noterminate,nodone,withbranch,noreleased';
+            $params = $type == 'all' ? 'noempty,withbranch,noreleased' : 'noempty,noterminate,nodone,withbranch,noreleased';
             $builds = $this->build->getBuildPairs(array($productID), $branch, $params, $projectID, 'project', $build);
             if($isJsonView) return print(json_encode($builds));
 
             $items = array();
-            foreach($builds as $id => $name)
-            {
-                if(empty($id)) continue;
-                $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
-            }
+            foreach($builds as $id => $name) $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
             return print(json_encode($items));
         }
         if($varName == 'resolvedBuild')
         {
-            if(empty($projectID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $index, $type);
+            if(empty($projectID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $type);
 
             $params = ($type == 'all') ? 'withbranch,noreleased' : 'noterminate,nodone,withbranch,noreleased';
             $builds = $this->build->getBuildPairs(array($productID), $branch, $params, $projectID, 'project', $build);
             return print(json_encode($builds));
 
             $items = array();
-            foreach($builds as $id => $name)
-            {
-                if(empty($id)) continue;
-                $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
-            }
+            foreach($builds as $id => $name) $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
             if($isJsonView) return print(json_encode($builds));
         }
 
-        if(empty($projectID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $index, $type, $extra);
+        if(empty($projectID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $type);
 
         $builds = $this->build->getBuildPairs(array($productID), $branch, $type, $projectID, 'project', $build, false);
         if($isJsonView) return print(json_encode($builds));
 
         $items = array();
-        foreach($builds as $id => $name)
-        {
-            if(empty($id)) continue;
-            $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
-        }
+        foreach($builds as $id => $name) $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
         return print(json_encode($items));
     }
 
