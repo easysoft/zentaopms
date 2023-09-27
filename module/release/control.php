@@ -720,7 +720,7 @@ class release extends control
         {
             $response['result']  = 'success';
             $response['message'] = '';
-            $response['load']    = $this->createLink('release', 'view', "releaseID={$releaseID}&type={$type}");
+            $response['load']    = $this->createLink($this->app->rawModule, 'view', "releaseID={$releaseID}&type={$type}");
         }
         return $this->send($response);
     }

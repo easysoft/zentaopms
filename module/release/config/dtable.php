@@ -148,6 +148,6 @@ $config->release->dtable->bug->fieldList['actions']['minWidth'] = 60;
 $config->release->dtable->bug->fieldList['actions']['menu']     = array('unlinkBug');
 $config->release->dtable->bug->fieldList['actions']['list']     = $config->release->actionList;
 
-$config->release->dtable->leftBug = $config->release->dtable->bug;
+$config->release->dtable->leftBug = clone $config->release->dtable->bug;
 $config->release->dtable->leftBug->fieldList['severity']['name'] = 'severityOrder';
 $config->release->dtable->leftBug->fieldList['actions']['menu']  = array('unlinkLeftBug');
