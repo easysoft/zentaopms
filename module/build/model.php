@@ -14,14 +14,15 @@
 class buildModel extends model
 {
     /**
+     * 通过版本ID获取版本信息。
      * Get build info.
      *
-     * @param  int    $buildID
-     * @param  bool   $setImgSize
+     * @param  int         $buildID
+     * @param  bool        $setImgSize
      * @access public
      * @return object|bool
      */
-    public function getByID($buildID, $setImgSize = false)
+    public function getByID(int $buildID, bool $setImgSize = false): object|false
     {
         $build = $this->dao->select('t1.*, t2.name as executionName, t3.name as productName, t3.type as productType')
             ->from(TABLE_BUILD)->alias('t1')
@@ -902,5 +903,50 @@ class buildModel extends model
 
         $build->branch = implode(',', $buildBranch);
         return $build;
+    }
+
+    /**
+     * 获取版本关联的bug列表。
+     * Get bug list of build.
+     *
+     * @param  string $bugIdList
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getBugList(string $bugIdList, string $orderBy = '', object $pager = null): array
+    {
+        return $this->dao->select('*')->from(TABLE_BUG)
+            ->where('id')->in($bugIdList)
+            ->andWhere('deleted')->eq(0)
+            ->beginIF($orderBy)->orderBy($orderBy)->fi()
+            ->page($pager)
+            ->fetchAll();
+    }
+
+    /**
+     * 获取版本关联的story列表。
+     * Get story list of build.
+     *
+     * @param  string $storyIdList
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getstoryList(string $storyIdList, int $branch = 0, string $orderBy = '', object $pager = null): array
+    {
+        $stories = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_STORY)
+            ->where('id')->in($storyIdList)
+            ->andWhere('deleted')->eq(0)
+            ->beginIF($orderBy)->orderBy($orderBy)->fi()
+            ->page($pager)
+            ->fetchAll('id');
+
+        $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in(array_keys($stories))->andWhere('branch')->eq($branch)->fetchPairs('story', 'stage');
+        foreach($stages as $storyID => $stage) $stories[$storyID]->stage = $stage;
+
+        return $stories;
     }
 }

@@ -127,6 +127,7 @@ class build extends control
     }
 
     /**
+     * 版本详情。
      * View a build.
      *
      * @param  int    $buildID
@@ -148,102 +149,35 @@ class build extends control
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             return print(js::error($this->lang->notFound) . js::locate($this->createLink('execution', 'all')));
         }
-        $this->session->project = $build->project;
-
-        $this->loadModel('story');
-        $this->loadModel('bug');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
 
         $sort = common::appendOrder($orderBy);
-        if(strpos($sort, 'pri_') !== false and $type == 'story') $sort = str_replace('pri_', 'priOrder_', $sort);
+        if(strpos($sort, 'pri_') !== false && $type == 'story') $sort = str_replace('pri_', 'priOrder_', $sort);
 
-        /* Get product and bugs. */
-        $product = $this->loadModel('product')->getById($build->product);
-        if($product->type != 'normal') $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+        $bugPager          = new pager($type == 'bug' ? $recTotal : 0, $recPerPage, $type == 'bug' ? $pageID : 1);
+        $generatedBugPager = new pager($type == 'generatedBug' ? $recTotal : 0, $recPerPage, $type == 'generatedBug' ? $pageID : 1);
+        $this->buildZen->assignBugVarsForView($build, $type, $sort, $param, $bugPager, $generatedBugPager);
 
-        $bugPager = new pager($type == 'bug' ? $recTotal : 0, $recPerPage, $type == 'bug' ? $pageID : 1);
-        $bugs = $this->dao->select('*')->from(TABLE_BUG)
-            ->where('id')->in($build->allBugs)
-            ->andWhere('deleted')->eq(0)
-            ->beginIF($type == 'bug')->orderBy($sort)->fi()
-            ->page($bugPager)
-            ->fetchAll();
-
-        /* Get stories and stages. */
         $storyPager = new pager($type == 'story' ? $recTotal : 0, $recPerPage, $type == 'story' ? $pageID : 1);
-        $stories    = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_STORY)
-            ->where('id')->in($build->allStories)
-            ->andWhere('deleted')->eq(0)
-            ->beginIF($type == 'story')->orderBy($sort)->fi()
-            ->page($storyPager)
-            ->fetchAll('id');
-
-        $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in(array_keys($stories))->andWhere('branch')->eq($build->branch)->fetchPairs('story', 'stage');
-        foreach($stages as $storyID => $stage) $stories[$storyID]->stage = $stage;
+        $this->buildZen->assignProductVarsForView($build, $type, $sort, $storyPager);
 
         /* Set menu. */
-        $objectType = 'execution';
-        $objectID   = $build->execution;
-        if($this->app->tab == 'project')
-        {
-            $this->loadModel('project')->setMenu($build->project);
-            $objectType = 'project';
-            $objectID   = $build->project;
-        }
-        elseif($this->app->tab == 'execution')
-        {
-            $this->loadModel('execution')->setMenu($build->execution);
-        }
-
-        $executions = $this->loadModel('execution')->getPairs($this->session->project, 'all', 'empty');
-
+        $this->buildZen->setMenuForView($build);
         $this->commonActions($build->project);
-
-        $generatedBugPager = new pager($type == 'generatedBug' ? $recTotal : 0, $recPerPage, $type == 'generatedBug' ? $pageID : 1);
-
         $this->executeHooks($buildID);
-        $branchName = '';
-        if($build->productType != 'normal')
-        {
-            foreach(explode(',', $build->branch) as $buildBranch)
-            {
-                $branchName .= $this->loadModel('branch')->getById($buildBranch);
-                $branchName .= ',';
-            }
-            $branchName = trim($branchName, ',');
-        }
 
         /* Assign. */
-        $this->view->title             = "BUILD #$build->id $build->name" . (isset($executions[$build->execution]) ? " - " . $executions[$build->execution] : '');
-        $this->view->stories           = $stories;
-        $this->view->storyPager        = $storyPager;
-        $this->view->generatedBugs     = $this->bug->getExecutionBugs($build->execution, $build->product, 'all', "$build->id,{$build->builds}", $type, (int)$param, $type == 'generatedBug' ? $sort : 'status_desc,id_desc', '', $generatedBugPager);
-        $this->view->generatedBugPager = $generatedBugPager;
-        $this->view->canBeChanged      = common::canBeChanged('build', $build); // Determines whether an object is editable.
-        $this->view->users             = $this->loadModel('user')->getPairs('noletter');
-        $this->view->build             = $build;
-        $this->view->buildPairs        = $this->build->getBuildPairs(array(0), 'all', 'noempty,notrunk', $objectID, $objectType);
-        $this->view->builds            = $this->build->getByList(array_keys($this->view->buildPairs));
-        $this->view->executions        = $executions;
-        $this->view->actions           = $this->loadModel('action')->getList('build', $buildID);
-        $this->view->link              = $link;
-        $this->view->param             = $param;
-        $this->view->orderBy           = $orderBy;
-        $this->view->bugs              = $bugs;
-        $this->view->type              = $type;
-        $this->view->bugPager          = $bugPager;
-        $this->view->branchName        = empty($branchName) ? $this->lang->branch->main : $branchName;
-        $this->view->childBuilds       = empty($build->builds) ? array() : $this->dao->select('id,name,bugs,stories')->from(TABLE_BUILD)->where('id')->in($build->builds)->fetchAll();
-
-        if($this->app->getViewType() == 'json')
-        {
-            unset($this->view->storyPager);
-            unset($this->view->generatedBugPager);
-            unset($this->view->bugPager);
-        }
+        $this->view->canBeChanged  = common::canBeChanged('build', $build); // Determines whether an object is editable.
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
+        $this->view->build         = $build;
+        $this->view->actions       = $this->loadModel('action')->getList('build', $buildID);
+        $this->view->link          = $link;
+        $this->view->orderBy       = $orderBy;
+        $this->view->execution     = $this->loadModel('execution')->getByID($build->execution);
+        $this->view->childBuilds   = empty($build->builds) ? array() : $this->dao->select('id,name,bugs,stories')->from(TABLE_BUILD)->where('id')->in($build->builds)->fetchAll();
 
         $this->display();
     }
@@ -354,11 +288,11 @@ class build extends control
 
             $params = ($type == 'all') ? 'withbranch,noreleased' : 'noterminate,nodone,withbranch,noreleased';
             $builds = $this->build->getBuildPairs(array($productID), $branch, $params, $projectID, 'project', $build);
-            return print(json_encode($builds));
+            if($isJsonView) return print(json_encode($builds));
 
             $items = array();
             foreach($builds as $id => $name) $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
-            if($isJsonView) return print(json_encode($builds));
+            return print(json_encode($items));
         }
 
         if(empty($projectID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $type);

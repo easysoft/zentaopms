@@ -82,7 +82,7 @@ if($canBatchCloseBug)  $bugFootToolbar['items'][] = array('class' => 'btn primar
 /* Integrated builds or single build. */
 if($build->execution)
 {
-    $executionTitle = empty($multipleProject) ? $lang->build->project : ($executionType ? $lang->build->executionAB : $lang->build->execution);
+    $executionTitle = empty($multipleProject) ? $lang->build->project : ($execution->type ? $lang->build->executionAB : $lang->build->execution);
     $executionName  = zget($executions, $build->execution, '');
 }
 else
