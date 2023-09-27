@@ -1,9 +1,13 @@
 <?php
 $lang->artifactrepo = new stdclass();
 $lang->artifactrepo->common = '制品库';
+$lang->artifactrepo->browse = '制品库列表';
 $lang->artifactrepo->create = '添加制品库';
 $lang->artifactrepo->edit   = '编辑制品库';
 $lang->artifactrepo->delete = '删除制品库';
+
+$lang->artifactrepo->ajaxGetArtifactRepos    = '接口：制品库列表';
+$lang->artifactrepo->ajaxUpdateArtifactRepos = '接口：更新制品库状态';
 
 $lang->artifactrepo->name     = '名称';
 $lang->artifactrepo->serverID = '服务器';

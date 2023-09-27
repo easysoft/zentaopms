@@ -1392,6 +1392,14 @@ $lang->resource->ops->city     = 'city';
 $lang->resource->ops->cpubrand = 'cpuBrand';
 $lang->resource->ops->os       = 'os';
 
+$lang->resource->artifactrepo = new stdclass();
+$lang->resource->artifactrepo->browse                  = 'browse';
+$lang->resource->artifactrepo->ajaxGetArtifactRepos    = 'ajaxGetArtifactRepos';
+$lang->resource->artifactrepo->create                  = 'create';
+$lang->resource->artifactrepo->edit                    = 'edit';
+$lang->resource->artifactrepo->ajaxUpdateArtifactRepos = 'ajaxUpdateArtifactRepos';
+$lang->resource->artifactrepo->delete                  = 'delete';
+
 /* Doc. */
 $lang->resource->doc = new stdclass();
 $lang->resource->doc->index          = 'index';
@@ -2030,7 +2038,6 @@ $lang->resource->projecttrack       = new stdclass();
 $lang->resource->projectqa          = new stdclass();
 $lang->resource->codereview         = new stdclass();
 $lang->resource->repocode           = new stdclass();
-$lang->resource->artifactrepo       = new stdclass();
 $lang->resource->deploy             = new stdclass();
 
 global $config;

@@ -2684,18 +2684,6 @@ $config->group->package->sms->privs['sms-index'] = array('edition' => 'biz,max,i
 $config->group->package->sms->privs['sms-test']  = array('edition' => 'biz,max,ipd', 'vision' => 'lite,rnd,or', 'order' => 10, 'depend' => array('sms-index'), 'recommend' => array());
 $config->group->package->sms->privs['sms-reset'] = array('edition' => 'biz,max,ipd', 'vision' => 'lite,rnd,or', 'order' => 15, 'depend' => array('sms-index'), 'recommend' => array());
 
-$config->group->package->gogs = new stdclass();
-$config->group->package->gogs->order  = 15;
-$config->group->package->gogs->subset = 'repo';
-
-$config->group->package->gitea = new stdclass();
-$config->group->package->gitea->order  = 20;
-$config->group->package->gitea->subset = 'repo';
-
-$config->group->package->sonarqube = new stdclass();
-$config->group->package->sonarqube->order  = 30;
-$config->group->package->sonarqube->subset = 'repo';
-
 $config->group->package->browseJob = new stdclass();
 $config->group->package->browseJob->order  = 5;
 $config->group->package->browseJob->subset = 'pipeline';
@@ -2714,6 +2702,12 @@ $config->group->package->manageJob->privs['compile-syncCompile'] = array('editio
 $config->group->package->manageJob->privs['job-create']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('job-browse'), 'recommend' => array('job-edit'));
 $config->group->package->manageJob->privs['job-edit']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('job-browse'), 'recommend' => array('job-create'));
 $config->group->package->manageJob->privs['job-exec']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('job-browse'), 'recommend' => array('compile-browse', 'compile-logs', 'job-view'));
+
+$config->group->package->deleteJob = new stdclass();
+$config->group->package->deleteJob->order  = 2720;
+$config->group->package->deleteJob->subset = 'pipeline';
+$config->group->package->deleteJob->privs  = array();
+$config->group->package->deleteJob->privs['job-delete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('job-browse'), 'recommend' => array('job-create', 'job-edit'));
 
 $config->group->package->manageMR = new stdclass();
 $config->group->package->manageMR->order  = 10;
@@ -3921,10 +3915,6 @@ $config->group->package->deleteMR->order  = 2680;
 $config->group->package->deleteMR->subset = 'mr';
 $config->group->package->deleteMR->privs  = array();
 $config->group->package->deleteMR->privs['mr-delete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('mr-accept'), 'recommend' => array('mr-create', 'mr-edit'));
-
-$config->group->package->deleteJob = new stdclass();
-$config->group->package->deleteJob->order  = 2720;
-$config->group->package->deleteJob->subset = 'pipeline';
 
 $config->group->package->browseArtifactrepo = new stdclass();
 $config->group->package->browseArtifactrepo->order  = 2780;
