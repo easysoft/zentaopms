@@ -2363,6 +2363,34 @@ class groupModel extends model
     }
 
     /**
+     * Process circular dependency.
+     *
+     * @param array $depends
+     * @param array $privs
+     * @access protected
+     * @return array
+     */
+    protected function processDepends($depends, $privs)
+    {
+        foreach($privs as $priv)
+        {
+            if(!isset($depends[$priv])) continue;
+
+            foreach($depends[$priv] as $dependPriv)
+            {
+                if(isset($privs[$dependPriv])) continue;
+                $privs[$dependPriv] = $dependPriv;
+
+                $dependPrivs = $this->processDepends($depends, $depends[$dependPriv]);
+
+                foreach($dependPrivs as $depend) $privs[$depend] = $depend;
+            }
+        }
+
+        return $privs;
+    }
+
+    /**
      * Get related privs.
      *
      * @param  array  $allPrivList
@@ -2374,6 +2402,8 @@ class groupModel extends model
     public function getRelatedPrivs($allPrivList, $selectedPrivList, $recommendSelect = array())
     {
         $this->loadResourceLang();
+
+        $depends = array();
 
         $privSubsets  = array();
         $relatedPrivs = array('depend' => array(), 'recommend' => array());
@@ -2387,6 +2417,7 @@ class groupModel extends model
                 {
                     /* Show related pirvs when select. */
                     if($type == 'recommend' && in_array($privCode, $recommendSelect)) $relatedPrivs[$type][$privCode] = $privCode;
+                    if($type == 'depend') $depends[$privCode] = $priv['depend'];
 
                     if(!in_array($privCode, $selectedPrivList) || !isset($priv[$type])) continue;
 
@@ -2397,6 +2428,9 @@ class groupModel extends model
                 }
             }
         }
+
+        /* Process circular dependency. */
+        $relatedPrivs['depend'] = $this->processDepends($depends, $relatedPrivs['depend']);
 
         $subsetPrivs = array('depend' => array(), 'recommend' => array());
         foreach(array('depend', 'recommend') as $type)
