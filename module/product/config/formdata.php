@@ -51,8 +51,8 @@ $config->product->form->batchEdit['acl']     = array('type' => 'string', 'contro
 if($config->systemMode != 'ALM') unset($config->product->form->batchEdit['program'], $config->product->form->batchEdit['line']);
 
 $config->product->form->close = array();
-$config->product->form->close['status']      = array('type' => 'string', 'control' => 'hidden', 'required' => false, 'default' => 'close');
-$config->product->form->close['createdDate'] = array('type' => 'string', 'control' => '',       'required' => false, 'default' => helper::now());
+$config->product->form->close['status']     = array('type' => 'string', 'control' => 'hidden', 'required' => false, 'default' => 'close');
+$config->product->form->close['closedDate'] = array('type' => 'string', 'control' => '',       'required' => false, 'default' => helper::now());
 
 $config->product->form->manageLine = array();
 $config->product->form->manageLine['products'] = array('type' => 'array', 'control' => 'text', 'required' => false, 'default' => '');
