@@ -601,7 +601,7 @@
             target = urlInfo.moduleName ? `table-${urlInfo.moduleName}-${urlInfo.methodName}` : ($('.dtable').attr('id') || 'dtable');
         }
         if(target[0] !== '#' && target[0] !== '.') target = `#${target}`;
-        return loadComponent(target, $.extend({component: 'dtable', url: url, selector: `dtable/${target}:component,#featureBar>*`}, options));
+        return loadComponent(target, $.extend({component: 'dtable', url: url, selector: `dtable/${target}:component,#featureBar>*${$('#moduleMenu').length ? ',#moduleMenu' : ''}`}, options));
     }
 
     /**
