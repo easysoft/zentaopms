@@ -550,9 +550,7 @@ class testreportModel extends model
         $storyIdList = '';
         foreach($builds as $build) $storyIdList .= $build->stories . ',';
 
-        return $this->dao->select('*')->from(TABLE_STORY)->where('deleted')->eq(0)
-            ->andWhere('id')->in(trim($storyIdList, ','))
-            ->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_STORY)->where('deleted')->eq('0')->andWhere('id')->in(trim($storyIdList, ','))->fetchAll('id');
     }
 
     /**
