@@ -368,6 +368,7 @@ class projectrelease extends control
     }
 
     /**
+     * 项目发布关联需求。
      * Link stories
      *
      * @param  int    $releaseID
@@ -379,87 +380,9 @@ class projectrelease extends control
      * @access public
      * @return void
      */
-    public function linkStory($releaseID = 0, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function linkStory(int $releaseID = 0, string $browseType = '', int $param = 0, int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
     {
-        if(!empty($_POST['stories']))
-        {
-            $this->projectrelease->linkStory($releaseID);
-            return print(js::locate(inlink('view', "releaseID=$releaseID&type=story"), 'parent'));
-        }
-        $this->session->set('storyList', inlink('view', "releaseID=$releaseID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), $this->app->tab);
-
-        $release = $this->release->getByID($releaseID);
-        if(!$this->session->project)
-        {
-            $releaseProject = explode(',', $release->project);
-            $this->session->set('project', $releaseProject[0], 'project');
-        }
-
-        $builds  = $this->loadModel('build')->getByList($release->build);
-        $project = $this->loadModel('project')->getByID($this->session->project);
-        $this->projectreleaseZen->commonAction($this->session->project, $release->product);
-        $this->loadModel('story');
-        $this->loadModel('tree');
-        $this->loadModel('product');
-
-        /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
-        /* Build search form. */
-        $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
-        unset($this->config->product->search['fields']['product']);
-        unset($this->config->product->search['fields']['project']);
-        if(!$project->hasProduct and !$project->multiple) unset($this->config->product->search['fields']['plan']);
-        $this->config->product->search['actionURL'] = $this->createLink('projectrelease', 'view', "releaseID=$releaseID&type=story&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
-        $this->config->product->search['queryID']   = $queryID;
-        $this->config->product->search['style']     = 'simple';
-        $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($release->product, $release->branch, 'withMainPlan', true);
-        $this->config->product->search['params']['status']         = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
-
-        $searchModules = array();
-        $moduleGroups  = $this->loadModel('tree')->getOptionMenu($release->product, 'story', 0, explode(',', $release->branch));
-        foreach($moduleGroups as $modules) $searchModules += $modules;
-        $this->config->product->search['params']['module']['values'] = $searchModules;
-
-        if($release->productType == 'normal')
-        {
-            unset($this->config->product->search['fields']['branch']);
-            unset($this->config->product->search['params']['branch']);
-        }
-        else
-        {
-            $this->config->product->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$release->productType]);
-            $allBranchs = $this->loadModel('branch')->getPairs($release->product);
-            $branches   = array('' => '', BRANCH_MAIN => $this->lang->branch->main);
-            foreach(explode(',', trim($release->branch, ',')) as $branchID) $branches[$branchID] = zget($allBranchs, $branchID);
-            $this->config->product->search['params']['branch']['values'] = $branches;
-        }
-        if($this->view->project->model == 'waterfall' && empty($this->view->project->hasProduct)) unset($this->config->product->search['fields']['plan']);
-        $this->loadModel('search')->setSearchParams($this->config->product->search);
-
-        $executionIdList = array();
-        foreach($builds as $build) $executionIdList[] = empty($build->execution) ? $build->project : $build->execution;
-        $executionIdList = array_unique($executionIdList);
-
-        $allStories = array();
-        if($browseType == 'bySearch')
-        {
-            $allStories = $this->story->getBySearch($release->product, $release->branch, $queryID, 'id', $executionIdList, 'story', $release->stories, $pager);
-        }
-        else
-        {
-            $allStories = $this->story->batchGetExecutionStories($executionIdList, $release->product, 't1.`order`_desc', 'byBranch', $release->branch, 'story', $release->stories, $pager);
-        }
-
-        $this->view->allStories     = $allStories;
-        $this->view->release        = $release;
-        $this->view->releaseStories = empty($release->stories) ? array() : $this->story->getByList($release->stories);
-        $this->view->users          = $this->loadModel('user')->getPairs('noletter');
-        $this->view->browseType     = $browseType;
-        $this->view->param          = $param;
-        $this->view->pager          = $pager;
-        $this->display();
+        echo $this->fetch('release', 'linkStory', "releaseID={$releaseID}&browseType={$browseType}&param={$param}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
     }
 
     /**
@@ -497,6 +420,7 @@ class projectrelease extends control
     }
 
     /**
+     * 项目发布关联 bug。
      * Link bugs.
      *
      * @param  int    $releaseID
@@ -509,93 +433,9 @@ class projectrelease extends control
      * @access public
      * @return void
      */
-    public function linkBug($releaseID = 0, $browseType = '', $param = 0, $type = 'bug', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function linkBug(int $releaseID = 0, string $browseType = '', int $param = 0, $type = 'bug', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
     {
-        if(!empty($_POST['bugs']))
-        {
-            $this->projectrelease->linkBug($releaseID, $type);
-            return print(js::locate(inlink('view', "releaseID=$releaseID&type=$type"), 'parent'));
-        }
-
-        $this->session->set('bugList', inlink('view', "releaseID=$releaseID&type=$type&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), 'qa');
-        /* Set menu. */
-        $release = $this->release->getByID($releaseID);
-        if(!$this->session->project)
-        {
-            $releaseProject = explode(',', $release->project);
-            $this->session->set('project', $releaseProject[0], 'project');
-        }
-
-        $builds  = $this->loadModel('build')->getByList($release->build);
-        $project = $this->loadModel('project')->getByID($this->session->project);
-        $this->projectreleaseZen->commonAction($this->session->project, $release->product);
-
-        /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
-        /* Build the search form. */
-        $this->loadModel('bug');
-        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
-        unset($this->config->bug->search['fields']['product']);
-        unset($this->config->bug->search['fields']['project']);
-        if(!$project->hasProduct and !$project->multiple) unset($this->config->bug->search['fields']['plan']);
-        $this->config->bug->search['actionURL'] = $this->createLink('projectrelease', 'view', "releaseID=$releaseID&type=$type&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
-        $this->config->bug->search['queryID']   = $queryID;
-        $this->config->bug->search['style']     = 'simple';
-        $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairs($release->product, $release->branch, 'withMainPlan', true);
-        $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($release->product, $release->branch, $release->project);
-        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs(array($release->product), $branch = 0);
-        $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
-
-        $searchModules = array();
-        $moduleGroups  = $this->loadModel('tree')->getOptionMenu($release->product, 'bug', 0, explode(',', $release->branch));
-        foreach($moduleGroups as $modules) $searchModules += $modules;
-        $this->config->bug->search['params']['module']['values'] = $searchModules;
-
-        if($release->productType == 'normal')
-        {
-            unset($this->config->bug->search['fields']['branch']);
-            unset($this->config->bug->search['params']['branch']);
-        }
-        else
-        {
-            $this->config->bug->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$release->productType]);
-            $allBranchs = $this->loadModel('branch')->getPairs($release->product);
-            $branches   = array('' => '', BRANCH_MAIN => $this->lang->branch->main);
-            foreach(explode(',', trim($release->branch, ',')) as $branchID) $branches[$branchID] = zget($allBranchs, $branchID);
-            $this->config->bug->search['params']['branch']['values'] = $branches;
-        }
-        if($this->view->project->model == 'waterfall' && empty($this->view->project->hasProduct)) unset($this->config->bug->search['fields']['plan']);
-        $this->loadModel('search')->setSearchParams($this->config->bug->search);
-
-        $allBugs     = array();
-        $releaseBugs = $type == 'bug' ? $release->bugs : $release->leftBugs;
-        if($browseType == 'bySearch')
-        {
-            $allBugs = $this->bug->getBySearch($release->product, $release->branch, $queryID, 'id_desc', $releaseBugs, $pager);
-        }
-        else
-        {
-            if($type == 'bug')
-            {
-                $allBugs = $this->bug->getReleaseBugs(array_keys($builds), $release->product, $release->branch, $releaseBugs, $pager);
-            }
-            elseif($type == 'leftBug')
-            {
-                $allBugs = $this->bug->getProductLeftBugs(array_keys($builds), $release->product, $release->branch, $releaseBugs, $pager);
-            }
-        }
-
-        $this->view->allBugs     = $allBugs;
-        $this->view->releaseBugs = empty($releaseBugs) ? array() : $this->bug->getByIdList($releaseBugs);
-        $this->view->release     = $release;
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-        $this->view->browseType  = $browseType;
-        $this->view->param       = $param;
-        $this->view->type        = $type;
-        $this->view->pager       = $pager;
-        $this->display();
+        echo $this->fetch('release', 'linkBug', "releaseID={$releaseID}&browseType={$browseType}&param={$param}&type={$type}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
     }
 
     /**
