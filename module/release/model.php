@@ -1040,7 +1040,7 @@ class releaseModel extends model
         $this->config->release->search['actionURL'] = $actionURL;
 
         if($product->type != 'normal') $this->config->release->search['params']['branch']['values'] = $this->loadModel('branch')->getPairs($product->id, 'all');
-        $this->config->release->search['params']['build']['values'] = $this->loadmodel('build')->getbuildpairs($product->id, $branch, 'notrunk|withbranch|hasproject', 0, 'execution', '', false);
+        $this->config->release->search['params']['build']['values'] = $this->loadmodel('build')->getBuildPairs(array($product->id), $branch, 'notrunk|withbranch|hasproject', 0, 'execution', '', false);
 
         $this->loadModel('search')->setSearchParams($this->config->release->search);
     }

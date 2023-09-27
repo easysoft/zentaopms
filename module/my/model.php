@@ -659,7 +659,7 @@ class myModel extends model
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairs();
         $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getAllModulePairs();
         $this->config->bug->search['params']['severity']['values']      = array(0 => '') + $this->lang->bug->severityList;
-        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($products, 'all', 'releasetag');
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs(array_keys($products), 'all', 'releasetag');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
 
         $this->loadModel('search')->setSearchParams($this->config->bug->search);

@@ -66,7 +66,7 @@ class productEntry extends entry
                     $product->parentstories= $this->loadModel('story')->getParentStoryPairs($productID);
                     break;
                 case 'builds':
-                    $product->builds = $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,noterminate,nodone,withbranch', $this->param('object', 0), $this->param('objectType', 'execution'));
+                    $product->builds = $this->loadModel('build')->getBuildPairs(array($productID), 'all', 'noempty,noterminate,nodone,withbranch', $this->param('object', 0), $this->param('objectType', 'execution'));
                     break;
                 case 'actions':
                     $product->addComment = common::hasPriv('action', 'comment') ? true : false;

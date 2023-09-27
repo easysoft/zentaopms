@@ -126,7 +126,7 @@ class projectrelease extends control
         $this->projectreleaseZen->commonAction($projectID);
 
         /* Get the builds that can select. */
-        $builds         = $this->loadModel('build')->getBuildPairs($this->view->product->id, 'all', 'notrunk|withbranch|hasproject', $projectID, 'project', '', false);
+        $builds         = $this->loadModel('build')->getBuildPairs(array($this->view->product->id), 'all', 'notrunk|withbranch|hasproject', $projectID, 'project', '', false);
         $releasedBuilds = $this->projectrelease->getReleasedBuilds($projectID);
         foreach($releasedBuilds as $build) unset($builds[$build]);
 
@@ -182,7 +182,7 @@ class projectrelease extends control
         $this->projectreleaseZen->commonAction($this->session->project, $release->product, $release->branch);
 
         /* Get the builds that can select. */
-        $builds         = $this->loadModel('build')->getBuildPairs($release->product, $release->branch, 'notrunk|withbranch|hasproject', $this->session->project, 'project', $release->build, false);
+        $builds         = $this->loadModel('build')->getBuildPairs(array($release->product), $release->branch, 'notrunk|withbranch|hasproject', $this->session->project, 'project', $release->build, false);
         $bindBuilds     = $this->build->getByList($release->build);
         $releasedBuilds = $this->projectrelease->getReleasedBuilds($this->session->project);
         foreach($releasedBuilds as $releasedBuild)
@@ -562,7 +562,7 @@ class projectrelease extends control
         $this->config->bug->search['style']     = 'simple';
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairs($release->product, $release->branch, 'withMainPlan', true);
         $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($release->product, $release->branch, $release->project);
-        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($release->product, $branch = 0);
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs(array($release->product), $branch = 0);
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
 
         $searchModules = array();
@@ -686,7 +686,7 @@ class projectrelease extends control
      */
     public function ajaxLoadBuilds($projectID, $productID)
     {
-        $builds         = $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk,withbranch,hasproject', $projectID, 'project', '', false);
+        $builds         = $this->loadModel('build')->getBuildPairs(array($productID), 'all', 'notrunk,withbranch,hasproject', $projectID, 'project', '', false);
         $releasedBuilds = $this->projectrelease->getReleasedBuilds($projectID);
         foreach($releasedBuilds as $build) unset($builds[$build]);
 

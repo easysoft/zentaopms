@@ -3838,7 +3838,7 @@ class executionModel extends model
             $productModules = $this->loadModel('tree')->getOptionMenu($product->id, 'bug');
             foreach($productModules as $moduleID => $moduleName) $modules[$moduleID] = ((count($products) >= 2 and $moduleID) ? $product->name : '') . $moduleName;
 
-            $productBuilds  = $this->loadModel('build')->getBuildPairs($product->id, 'all', 'noempty|notrunk|withbranch');
+            $productBuilds  = $this->loadModel('build')->getBuildPairs(array($product->id), 'all', 'noempty|notrunk|withbranch');
             foreach($productBuilds as $buildID => $buildName) $builds[$buildID] = ((count($products) >= 2 and $buildID) ? $product->name . '/' : '') . $buildName;
         }
 

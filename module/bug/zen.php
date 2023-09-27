@@ -306,13 +306,13 @@ class bugZen extends bug
 
         if($executionID)
         {
-            $builds  = $this->build->getBuildPairs($productID, $branch, 'noempty,noterminate,nodone,noreleased', $executionID, 'execution');
+            $builds  = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,noreleased', $executionID, 'execution');
             $stories = $this->story->getExecutionStoryPairs($executionID);
             if(!$projectID) $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
         }
         else
         {
-            $builds   = $this->build->getBuildPairs($productID, $branch, 'noempty,noterminate,nodone,withbranch,noreleased');
+            $builds   = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,withbranch,noreleased');
             $stories  = $this->story->getProductStoryPairs($productID, $branch, $moduleID, 'all','id_desc', 0, 'full', 'story', false);
         }
 
@@ -1075,7 +1075,7 @@ class bugZen extends bug
         $this->view->executions      = $executions;
         $this->view->tasks           = $this->loadModel('task')->getByIdList($taskIdList);
         $this->view->stories         = $this->loadModel('story')->getByList($storyIdList);
-        $this->view->builds          = $this->loadModel('build')->getBuildPairs($product->id, $branch);
+        $this->view->builds          = $this->loadModel('build')->getBuildPairs(array($product->id), $branch);
         $this->view->bugs            = $bugs;
         $this->view->users           = $this->user->getPairs('noletter');
         $this->view->memberPairs     = $this->user->getPairs('noletter|noclosed');
@@ -1209,19 +1209,19 @@ class bugZen extends bug
     {
         if($bug->execution)
         {
-            $openedBuilds = $this->loadModel('build')->getBuildPairs($bug->product, $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased', $bug->execution, 'execution');
+            $openedBuilds = $this->loadModel('build')->getBuildPairs(array($bug->product), $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased', $bug->execution, 'execution');
         }
         elseif($bug->project)
         {
-            $openedBuilds = $this->loadModel('build')->getBuildPairs($bug->product, $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased', $bug->project, 'project');
+            $openedBuilds = $this->loadModel('build')->getBuildPairs(array($bug->product), $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased', $bug->project, 'project');
         }
         else
         {
-            $openedBuilds = $this->loadModel('build')->getBuildPairs($bug->product, $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased');
+            $openedBuilds = $this->loadModel('build')->getBuildPairs(array($bug->product), $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased');
         }
 
         $this->view->openedBuilds   = $openedBuilds;
-        $this->view->resolvedBuilds = $this->build->getBuildPairs($bug->product, $bug->branch, 'noempty');
+        $this->view->resolvedBuilds = $this->build->getBuildPairs(array($bug->product), $bug->branch, 'noempty');
         $this->view->plans          = $this->loadModel('productplan')->getPairs($bug->product, $bug->branch, '', true);
         $this->view->stories        = $bug->execution ? $this->story->getExecutionStoryPairs($bug->execution) : $this->story->getProductStoryPairs($bug->product, $bug->branch, 0, 'all', 'id_desc', 0, 'full', 'story', false);
         $this->view->tasks          = $this->task->getExecutionTaskPairs($bug->execution);
@@ -1317,7 +1317,7 @@ class bugZen extends bug
         if($executionID)
         {
             /* Get builds, stories and branches of this execution. */
-            $builds          = $this->loadModel('build')->getBuildPairs($product->id, $branch, 'noempty,noreleased', $executionID, 'execution');
+            $builds          = $this->loadModel('build')->getBuildPairs(array($product->id), $branch, 'noempty,noreleased', $executionID, 'execution');
             $stories         = $this->story->getExecutionStoryPairs($executionID);
             $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct(array($product->id), $executionID) : array();
             $branches        = isset($productBranches[$product->id]) ? $productBranches[$product->id] : array();
@@ -1330,7 +1330,7 @@ class bugZen extends bug
         else
         {
             /* Get builds, stories and branches of the product. */
-            $builds   = $this->loadModel('build')->getBuildPairs($product->id, $branch, 'noempty,noreleased');
+            $builds   = $this->loadModel('build')->getBuildPairs(array($product->id), $branch, 'noempty,noreleased');
             $stories  = $this->story->getProductStoryPairs($product->id, $branch);
             $branches = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($product->id, 'active') : array();
         }

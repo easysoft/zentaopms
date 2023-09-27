@@ -36,7 +36,7 @@ class optionsEntry extends entry
                 if($product) $options['modules'] = $this->loadModel('tree')->getOptionMenu($product, 'bug');
 
                 $execution = $this->param('execution', 0);
-                $options['build'] = $this->loadModel('build')->getBuildPairs($product, 'all', '', $execution, 'execution');
+                $options['build'] = $this->loadModel('build')->getBuildPairs(array($product), 'all', '', $execution, 'execution');
 
                 break;
         }

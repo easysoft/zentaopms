@@ -740,7 +740,7 @@ class bugModel extends model
         $this->config->bug->search['params']['module']['values']        = $modules;
         $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($productID, '0', (int)$projectID);
         $this->config->bug->search['params']['severity']['values']      = array(0 => '') + $this->lang->bug->severityList; //Fix bug #939.
-        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($productID, 'all', 'withbranch|releasetag');
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs(array($productID), 'all', 'withbranch|releasetag');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
 
         if($this->session->currentProductType == 'normal')
@@ -1382,14 +1382,18 @@ class bugModel extends model
 
         /* 统计最后一次查询的所属产品列表。*/
         /* Get products in the last query. */
-        $products = $this->session->product;
+        $productIdList = $this->session->product ? array($this->session->product) : array();
         if($this->reportCondition() !== true)
         {
             preg_match('/`product` IN \((?P<productIdList>.+)\)/', $this->reportCondition(), $matches);
-            if(!empty($matches) && isset($matches['productIdList'])) $products = str_replace('\'', '', $matches['productIdList']);
+            if(!empty($matches) && isset($matches['productIdList']))
+            {
+                $productIdList = str_replace('\'', '', $matches['productIdList']);
+                $productIdList = explode(',', $productIdList);
+            }
         }
 
-        $builds = $this->loadModel('build')->getBuildPairs($products, $branch = 0, $params = 'hasdeleted');
+        $builds = $this->loadModel('build')->getBuildPairs($productIdList, 0, 'hasdeleted');
 
         $this->app->loadLang('report');
         foreach($datas as $buildID => $data) $data->name = zget($builds, $buildID, $this->lang->report->undefined);

@@ -319,7 +319,7 @@ class testtaskZen extends testtask
         $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->create;
         $this->view->product     = $this->loadModel('product')->getByID($productID);
         $this->view->executions  = $productID ? $this->product->getExecutionPairsByProduct($productID, '', $projectID, 'stagefilter') : array();
-        $this->view->builds      = $productID ? $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk,withexecution', $projectID, 'project', '', false) : array();
+        $this->view->builds      = $productID ? $this->loadModel('build')->getBuildPairs(array($productID), 'all', 'notrunk,withexecution', $projectID, 'project', '', false) : array();
         $this->view->testreports = array('') + $this->loadModel('testreport')->getPairs($productID);
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|qdfirst|nodeleted');
         $this->view->projectID   = $projectID;
@@ -359,7 +359,7 @@ class testtaskZen extends testtask
         $this->view->project      = $this->project->getByID($projectID);
         $this->view->productID    = $productID;
         $this->view->executions   = $executions;
-        $this->view->builds       = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,notrunk,withexecution', $executionID ? $executionID : $task->project, $executionID ? 'execution' : 'project', $task->build, false);
+        $this->view->builds       = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs(array($productID), 'all', 'noempty,notrunk,withexecution', $executionID ? $executionID : $task->project, $executionID ? 'execution' : 'project', $task->build, false);
         $this->view->testreports  = $this->loadModel('testreport')->getPairs($task->product, $task->testreport);
         $this->view->users        = $this->loadModel('user')->getPairs('nodeleted|noclosed', $task->owner);
         $this->view->contactLists = $this->user->getContactLists($this->app->user->account, 'withnote');

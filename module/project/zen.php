@@ -714,7 +714,7 @@ class projectZen extends project
         $this->view->productID    = $productID;
         $this->view->project      = $project;
         $this->view->branchID     = empty($this->view->build->branch) ? $branchID : $this->view->build->branch;
-        $this->view->builds       = $this->loadModel('build')->getBuildPairs($productID);
+        $this->view->builds       = $this->loadModel('build')->getBuildPairs(array($productID));
         $this->view->users        = $this->user->getPairs('noletter');
         $this->view->executions   = $this->loadModel('execution')->getPairs($projectID, 'all', 'empty|withdelete');
         $this->view->plans        = $this->loadModel('productplan')->getPairs($productID ? $productID : array_keys($products));

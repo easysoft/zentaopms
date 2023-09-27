@@ -73,7 +73,7 @@ class executionZen extends execution
         $this->view->users           = $this->loadModel('user')->getPairs('noletter');
         $this->view->param           = $param;
         $this->view->defaultProduct  = (empty($productID) and !empty($products)) ? current(array_keys($products)) : $productID;
-        $this->view->builds          = $this->loadModel('build')->getBuildPairs($productID);
+        $this->view->builds          = $this->loadModel('build')->getBuildPairs(array($productID));
         $this->view->projectPairs    = $this->loadModel('project')->getPairsByProgram();
     }
 

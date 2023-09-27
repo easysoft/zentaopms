@@ -945,7 +945,7 @@ class testtask extends control
         $this->view->runID     = $runID;
         $this->view->results   = $results;
         $this->view->type      = $type;
-        $this->view->builds    = $this->loadModel('build')->getBuildPairs($case->product, $case->branch);
+        $this->view->builds    = $this->loadModel('build')->getBuildPairs(array($case->product), $case->branch);
         $this->view->users     = $this->loadModel('user')->getPairs('noclosed, noletter');
         $this->view->testtasks = $this->testtask->getPairs($case->product);
 
@@ -997,7 +997,7 @@ class testtask extends control
         $this->loadModel('qa')->setMenu($productID);
 
         $executions = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID);
-        $builds     = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk', 0, 'execution', '', false);
+        $builds     = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs(array($productID), 'all', 'notrunk', 0, 'execution', '', false);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->importUnitResult;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted|noclosed');

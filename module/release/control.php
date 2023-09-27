@@ -107,7 +107,7 @@ class release extends control
             return $this->send(array('result' => 'success', 'message' => $message, 'load' => inlink('view', "releaseID={$releaseID}")));
         }
 
-        $builds         = $this->loadModel('build')->getBuildPairs($productID, $branch, 'notrunk|withbranch|hasproject', 0, 'execution', '', false);
+        $builds         = $this->loadModel('build')->getBuildPairs(array($productID), $branch, 'notrunk|withbranch|hasproject', 0, 'execution', '', false);
         $releasedBuilds = $this->release->getReleasedBuilds($productID, $branch);
         foreach($releasedBuilds as $build) unset($builds[$build]);
 
@@ -154,7 +154,7 @@ class release extends control
         $release = $this->release->getById((int)$releaseID);
         $this->commonAction($release->product);
 
-        $builds         = $this->loadModel('build')->getBuildPairs($release->product, $release->branch, 'notrunk|withbranch|hasproject', 0, 'project', $release->build, false);
+        $builds         = $this->loadModel('build')->getBuildPairs(array($release->product), $release->branch, 'notrunk|withbranch|hasproject', 0, 'project', $release->build, false);
         $releasedBuilds = $this->release->getReleasedBuilds($release->product);
         foreach($releasedBuilds as $releasedBuild)
         {
@@ -270,7 +270,7 @@ class release extends control
         $this->view->storyPager    = $storyPager;
         $this->view->bugPager      = $bugPager;
         $this->view->leftBugPager  = $leftBugPager;
-        $this->view->builds        = $this->loadModel('build')->getBuildPairs($release->product, 'all', 'withbranch|hasproject', 0, 'execution', '', false);
+        $this->view->builds        = $this->loadModel('build')->getBuildPairs(array($release->product), 'all', 'withbranch|hasproject', 0, 'execution', '', false);
         $this->view->summary       = $this->product->summary($stories);
         $this->view->storyCases    = $this->loadModel('testcase')->getStoryCaseCounts(array_keys($stories));
 
@@ -642,7 +642,7 @@ class release extends control
 
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairs($release->product, $release->branch, 'withMainPlan', true);
         $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($release->product, $release->branch);
-        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($release->product, 'all', 'releasetag');
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs(array($release->product), 'all', 'releasetag');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
 
         $searchModules = array();

@@ -179,7 +179,7 @@ class bug extends control
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->view->branches    = $branches;
         $this->view->branchName  = $product->type == 'normal' ? '' : zget($branches, $bug->branch, '');
-        $this->view->builds      = $this->loadModel('build')->getBuildPairs($bug->product, 'all');
+        $this->view->builds      = $this->loadModel('build')->getBuildPairs(array($bug->product), 'all');
         $this->view->linkCommits = $this->loadModel('repo')->getCommitsByObject($bug->id, 'bug');
         $this->view->actions     = $this->loadModel('action')->getList('bug', $bug->id);
         $this->view->legendBasic = $this->bugZen->getBasicInfoTable($this->view);
@@ -452,7 +452,7 @@ class bug extends control
         $this->view->execution  = $oldBug->execution ? $this->loadModel('execution')->getByID($oldBug->execution) : '';
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
         $this->view->executions = $this->loadModel('product')->getExecutionPairsByProduct($oldBug->product, $oldBug->branch ? "0,{$oldBug->branch}" : 0, (int)$oldBug->project, 'stagefilter');
-        $this->view->builds     = $this->loadModel('build')->getBuildPairs($oldBug->product, $oldBug->branch, 'withbranch,noreleased');
+        $this->view->builds     = $this->loadModel('build')->getBuildPairs(array($oldBug->product), $oldBug->branch, 'withbranch,noreleased');
         $this->view->actions    = $this->loadModel('action')->getList('bug', $bugID);
         $this->display();
     }
@@ -510,7 +510,7 @@ class bug extends control
         $this->view->title   = $this->lang->bug->activate;
         $this->view->bug     = $oldBug;
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed', $oldBug->resolvedBy);
-        $this->view->builds  = $this->loadModel('build')->getBuildPairs($productID, $oldBug->branch, 'noempty,noreleased', 0, 'execution', $oldBug->openedBuild);
+        $this->view->builds  = $this->loadModel('build')->getBuildPairs(array($productID), $oldBug->branch, 'noempty,noreleased', 0, 'execution', $oldBug->openedBuild);
         $this->view->actions = $this->loadModel('action')->getList('bug', $bugID);
         $this->display();
     }
@@ -1270,7 +1270,7 @@ class bug extends control
         $this->view->title  = $this->products[$productID] . $this->lang->colon . $this->lang->bug->batchActivate;
         $this->view->bugs   = $this->bug->getByIdList($bugIdList);
         $this->view->users  = $this->user->getPairs('noclosed');
-        $this->view->builds = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty,noreleased');
+        $this->view->builds = $this->loadModel('build')->getBuildPairs(array($productID), $branch, 'noempty,noreleased');
         $this->display();
     }
 

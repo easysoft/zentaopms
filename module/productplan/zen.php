@@ -309,7 +309,7 @@ class productplanZen extends productplan
         $this->config->bug->search['params']['plan']['values']          = $this->productplan->getPairs($plan->product, $plan->branch, 'withMainPlan', true);
         $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($plan->product, $plan->branch);
         $this->config->bug->search['params']['module']['values']        = $modulePairs;
-        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($plan->product, 'all', 'releasetag');
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs(array($plan->product), 'all', 'releasetag');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
         $this->config->bug->search['params']['module']['values']        = $modulePairs;
         $this->config->bug->search['params']['project']['values']       = $this->product->getProjectPairsByProduct($plan->product, $plan->branch);
