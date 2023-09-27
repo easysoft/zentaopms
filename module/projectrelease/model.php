@@ -14,6 +14,7 @@
 class projectreleaseModel extends model
 {
     /**
+     * 获取项目发布列表。
      * Get list of releases.
      *
      * @param  int    $projectID

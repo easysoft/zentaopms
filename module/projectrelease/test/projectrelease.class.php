@@ -8,24 +8,21 @@ class projectreleaseTest
     }
 
     /**
-    * Test get list of releases.
-    *
-    * @param  int    $projectID
-    * @param  string $type
-    * @access public
-    * @return array
-    */
-    public function getListTest($projectID, $type = 'all')
+     * 测试获取项目发布列表。
+     * Test get list of releases.
+     *
+     * @param  int    $projectID
+     * @param  string $type
+     * @access public
+     * @return array|string
+     */
+    public function getListTest(int $projectID, string $type = 'all'): array|string
     {
         $objects = $this->objectModel->getList($projectID, $type);
 
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error[0];
-        }
+        if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return implode(',', array_column($objects, 'id'));
     }
 
     /**
