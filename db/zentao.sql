@@ -1447,6 +1447,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `left` float NOT NULL DEFAULT '0',
   `consumed` float NOT NULL DEFAULT '0',
   `teamCount` int NOT NULL DEFAULT '0',
+  `market` mediumint(8) NOT NULL DEFAULT 0,
   `openedBy` varchar(30) NOT NULL DEFAULT '',
   `openedDate` datetime NULL,
   `openedVersion` varchar(20) NOT NULL DEFAULT '',
@@ -1454,6 +1455,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `lastEditedDate` datetime NULL,
   `closedBy` varchar(30) NOT NULL DEFAULT '',
   `closedDate` datetime NULL,
+  `closedReason` varchar(20) NOT NULL DEFAULT '',
   `canceledBy` varchar(30) NOT NULL DEFAULT '',
   `canceledDate` datetime NULL,
   `suspendedDate` date NULL,
@@ -16000,3 +16002,45 @@ INSERT INTO `zt_promptrole` (`role`, `characterization`) VALUES
 ('你是一个自回归的语言模型，已经通过instruction-tuning和RLHF进行了Fine-tuning。', '你仔细地提供准确、事实、深思熟虑、细致入微的答案，并在推理方面表现出色。如果你认为可能没有正确的答案，你会直接说出来。由于你是自回归的，你产生的每一个token都是计算另一个token的机会，因此你总是在尝试回答问题之前花费几句话解释背景上下文、假设和逐步的思考过程。您的用户是AI和伦理学的专家，所以他们已经知道您是一个语言模型以及您的能力和局限性，所以不需要再提醒他们。他们一般都熟悉伦理问题，所以您也不需要再提醒他们。在回答时不要啰嗦，但在可能有助于解释的地方提供详细信息和示例。');
 
 ALTER TABLE `zt_ticket` ADD `subStatus` varchar(30) NOT NULL DEFAULT '';
+
+-- DROP TABLE IF EXISTS `zt_market`;
+CREATE TABLE IF NOT EXISTS `zt_market` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `industry` char(255) NOT NULL DEFAULT '',
+  `scale` decimal(10, 2) NOT NULL DEFAULT '0',
+  `maturity` char(255) NOT NULL DEFAULT '',
+  `speed` varchar(255) NOT NULL DEFAULT '',
+  `competition` char(255) NOT NULL DEFAULT '',
+  `strategy` varchar(255) NOT NULL DEFAULT '',
+  `ppm` varchar(20) NOT NULL DEFAULT '',
+  `desc` mediumtext NULL,
+  `openedBy` varchar(30) NOT NULL DEFAULT '',
+  `openedDate` datetime NULL,
+  `lastEditedBy` varchar(30) NOT NULL DEFAULT '',
+  `lastEditedDate` datetime NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- DROP TABLE IF EXISTS `zt_marketreport`;
+CREATE TABLE IF NOT EXISTS `zt_marketreport` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `market` mediumint(8) NOT NULL DEFAULT 0,
+  `research` mediumint(8) NOT NULL DEFAULT 0,
+  `maturity` varchar(30) NOT NULL DEFAULT '',
+  `owner` varchar(30) NOT NULL DEFAULT '',
+  `participants` char(255) NOT NULL DEFAULT '',
+  `source` varchar(30) NOT NULL DEFAULT '',
+  `desc` mediumtext NULL,
+  `status` varchar(20)  NOT NULL DEFAULT '',
+  `openedBy` varchar(30) NOT NULL DEFAULT '',
+  `openedDate` datetime NULL,
+  `lastEditedBy` varchar(30) NOT NULL DEFAULT '',
+  `lastEditedDate` datetime NULL,
+  `publishedBy` varchar(30) NOT NULL DEFAULT '',
+  `publishedDate` datetime NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
