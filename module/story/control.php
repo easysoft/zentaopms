@@ -1200,7 +1200,7 @@ class story extends control
         $product = $this->product->getByID($story->product);
         $users   = $this->config->vision == 'lite' ? $this->user->getTeamMemberPairs($this->session->project) : $this->user->getPairs('nodeleted|noclosed|pofirst|noletter');
 
-        $this->view->title     = zget($product, 'name', $story->title) . " {$this->lang->colon} {$this->lang->story->assign}";
+        $this->view->title     = zget($product, 'name', $story->title) . $this->lang->colon . $this->lang->story->assign;
         $this->view->story     = $story;
         $this->view->storyType = $storyType;
         $this->view->actions   = $this->action->getList('story', $storyID);
