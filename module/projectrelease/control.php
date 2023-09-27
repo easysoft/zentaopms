@@ -170,7 +170,7 @@ class projectrelease extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID={$releaseID}")));
         }
 
-        $release = $this->projectrelease->getById($releaseID);
+        $release = $this->release->getByID($releaseID);
 
         /* Set menu. */
         if(!$this->session->project)
@@ -405,7 +405,7 @@ class projectrelease extends control
         }
         $this->session->set('storyList', inlink('view', "releaseID=$releaseID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), $this->app->tab);
 
-        $release = $this->projectrelease->getByID($releaseID);
+        $release = $this->release->getByID($releaseID);
         if(!$this->session->project)
         {
             $releaseProject = explode(',', $release->project);
@@ -536,7 +536,7 @@ class projectrelease extends control
 
         $this->session->set('bugList', inlink('view', "releaseID=$releaseID&type=$type&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), 'qa');
         /* Set menu. */
-        $release = $this->projectrelease->getByID($releaseID);
+        $release = $this->release->getByID($releaseID);
         if(!$this->session->project)
         {
             $releaseProject = explode(',', $release->project);

@@ -14,41 +14,6 @@
 class projectreleaseModel extends model
 {
     /**
-     * Get release by id.
-     *
-     * @param  int    $releaseID
-     * @param  bool   $setImgSize
-     * @access public
-     * @return object
-     */
-    public function getByID($releaseID, $setImgSize = false)
-    {
-        $release = $this->dao->select('t1.*, t2.name as productName, t2.type as productType')
-            ->from(TABLE_RELEASE)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-            ->where('t1.id')->eq((int)$releaseID)
-            ->orderBy('t1.id DESC')
-            ->fetch();
-        if(!$release) return false;
-
-        $release->project = trim($release->project, ',');
-        $release->branch  = trim($release->branch, ',');
-        $release->build   = trim($release->build, ',');
-
-        $release->branches = array();
-        $branchIdList = explode(',', $release->branch);
-        foreach($branchIdList as $branchID) $release->branches[$branchID] = $branchID;
-
-        $this->loadModel('file');
-        $release = $this->file->replaceImgURL($release, 'desc');
-        $release->files      = $this->file->getByObject('release', $releaseID);
-        $release->buildInfos = $this->dao->select('id,project,product,execution,name,scmPath,filePath')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll('id');
-        if(empty($release->files))$release->files = $this->file->getByObject('build', $release->build);
-        if($setImgSize) $release->desc = $this->file->setImgSize($release->desc);
-        return $release;
-    }
-
-    /**
      * Get list of releases.
      *
      * @param  int    $projectID
@@ -174,7 +139,7 @@ class projectreleaseModel extends model
      */
     public function linkStory($releaseID)
     {
-        $release = $this->getByID($releaseID);
+        $release = $this->loadModel('release')->getByID($releaseID);
         $product = $this->loadModel('product')->getByID($release->product);
 
         foreach($this->post->stories as $i => $storyID)
@@ -212,7 +177,7 @@ class projectreleaseModel extends model
      */
     public function unlinkStory($releaseID, $storyID)
     {
-        $release = $this->getByID($releaseID);
+        $release = $this->loadModel('release')->getByID($releaseID);
         $release->stories = trim(str_replace(",$storyID,", ',', ",$release->stories,"), ',');
         $this->dao->update(TABLE_RELEASE)->set('stories')->eq($release->stories)->where('id')->eq((int)$releaseID)->exec();
         $this->loadModel('action')->create('story', $storyID, 'unlinkedfromrelease', '', $releaseID);
@@ -228,7 +193,7 @@ class projectreleaseModel extends model
      */
     public function linkBug($releaseID, $type = 'bug')
     {
-        $release = $this->getByID($releaseID);
+        $release = $this->loadModel('release')->getByID($releaseID);
 
         $field = $type == 'bug' ? 'bugs' : 'leftBugs';
 

@@ -8,26 +8,6 @@ class projectreleaseTest
     }
 
     /**
-    * Test get release by id.
-    *
-    * @param  int    $releaseID
-    * @access public
-    * @return object
-    */
-    public function getByIDTest($releaseID)
-    {
-        $objects = $this->objectModel->getByID($releaseID);
-
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error[0];
-        }
-
-        return $objects;
-    }
-
-    /**
     * Test get list of releases.
     *
     * @param  int    $projectID

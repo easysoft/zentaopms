@@ -33,6 +33,10 @@ class releaseModel extends model
 
         $release->builds = $this->dao->select('id, branch, filePath, scmPath, name, execution, project')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll();
 
+        $release->project = trim($release->project, ',');
+        $release->branch  = trim($release->branch, ',');
+        $release->build   = trim($release->build, ',');
+
         $release->branches = array();
         $branchIdList = explode(',', trim($release->branch, ','));
         foreach($branchIdList as $branchID) $release->branches[$branchID] = $branchID;
