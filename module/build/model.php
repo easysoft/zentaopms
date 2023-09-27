@@ -389,8 +389,8 @@ class buildModel extends model
      * @param  array      $builds
      * @param  array      $releases
      * @param  string|int $branch
-     * @param  string    $params                separate|noterminate|withbranch|releasetag|noreleased
-     * @param  array     $excludedReleaseIdList
+     * @param  string     $params                separate|noterminate|withbranch|releasetag|noreleased
+     * @param  array      $excludedReleaseIdList
      * @access public
      * @return array
      */

@@ -468,4 +468,42 @@ class buildTest
 
         return $builds;
     }
+
+    /**
+     * 将版本名称替换为发布名称。
+     * Replace the build name with release name.
+     *
+     * @param  string $branch
+     * @param  string $params
+     * @access public
+     * @return void
+     */
+    public function replaceNameWithReleaseTest(string $branch, string $params)
+    {
+        $allBuilds = $this->objectModel->fetchBuilds(array(), '', 11, 'project');
+        list($builds, $excludedReleaseIdList) = $this->objectModel->setBuildDateGroup($allBuilds, $branch, $params);
+        $releases = $this->objectModel->dao->select('t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t3.name as branchName,t4.type as productType')->from(TABLE_RELEASE)->alias('t1')
+            ->leftJoin(TABLE_BUILD)->alias('t2')->on('FIND_IN_SET(t2.id, t1.build)')
+            ->leftJoin(TABLE_BRANCH)->alias('t3')->on('FIND_IN_SET(t3.id, t1.branch)')
+            ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t1.product=t4.id')
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.shadow')->ne(0)
+            ->fetchAll('id');
+
+        /* Get the buildID under the shadow product. */
+        $shadows = $this->objectModel->dao->select('shadow')->from(TABLE_RELEASE)->fetchPairs('shadow', 'shadow');
+        if($shadows)
+        {
+            /* Append releases of only shadow and not link build. */
+            $releases += $this->objectModel->dao->select('t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t2.name as branchName,t3.type as productType')->from(TABLE_RELEASE)->alias('t1')
+                ->leftJoin(TABLE_BRANCH)->alias('t2')->on('FIND_IN_SET(t2.id, t1.branch)')
+                ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
+                ->where('t1.shadow')->in($shadows)
+                ->andWhere('t1.build')->eq(0)
+                ->andWhere('t1.deleted')->eq(0)
+                ->fetchAll('id');
+        }
+
+        return $this->objectModel->replaceNameWithRelease($allBuilds, $builds, $releases, $branch, $params, $excludedReleaseIdList);
+    }
 }
