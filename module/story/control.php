@@ -1724,6 +1724,7 @@ class story extends control
     }
 
     /**
+     * 查看需求的报告。
      * The report page.
      *
      * @param  int    $productID
@@ -1736,7 +1737,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function report($productID, $branchID, $storyType = 'story', $browseType = 'unclosed', $moduleID = 0, $chartType = 'pie', $projectID = 0)
+    public function report(int $productID, int $branchID, string $storyType = 'story', string $browseType = 'unclosed', int $moduleID = 0, string $chartType = 'pie', int $projectID = 0)
     {
         $this->loadModel('report');
         $this->view->charts = array();
@@ -1759,7 +1760,7 @@ class story extends control
 
         $this->story->replaceURLang($storyType);
 
-        $this->products = $this->product->getPairs('', 0, '', 'all');
+        $product = $this->product->getByID($productID);
         if(strpos('project,execution', $this->app->tab) !== false)
         {
             $project = $this->dao->findByID($projectID)->from(TABLE_PROJECT)->fetch();
@@ -1787,7 +1788,7 @@ class story extends control
 
         if($storyType != 'story') unset($this->lang->story->report->charts['storiesPerStage']);
 
-        $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->story->reportChart;
+        $this->view->title         = $product->name . $this->lang->colon . $this->lang->story->reportChart;
         $this->view->productID     = $productID;
         $this->view->branchID      = $branchID;
         $this->view->browseType    = $browseType;
