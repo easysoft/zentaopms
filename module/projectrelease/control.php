@@ -139,6 +139,7 @@ class projectrelease extends control
     }
 
     /**
+     * 编辑一个发布。
      * Edit a release.
      *
      * @param  int    $releaseID
@@ -147,19 +148,15 @@ class projectrelease extends control
      */
     public function edit(int $releaseID)
     {
-        /* Load module and config. */
-        $this->loadModel('story');
-        $this->loadModel('bug');
-        $this->loadModel('build');
-        $this->loadModel('release');
-        $this->config->projectrelease->create = $this->config->release->create;
+        /* Set edit config. */
+        $this->config->projectrelease->edit = $this->config->release->edit;
 
         if(!empty($_POST))
         {
             $changes = $this->release->update($releaseID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $files = $this->loadModel('file')->saveUpload('release', $releaseID);
-            if($changes or $files)
+            if($changes || $files)
             {
                 $fileAction = '';
                 if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
@@ -170,39 +167,33 @@ class projectrelease extends control
             $message = $this->executeHooks($releaseID);
             if($message) $this->lang->saveSuccess = $message;
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID={$releaseID}")));
         }
 
-        /* Get release and build. */
-        $release = $this->projectrelease->getById((int)$releaseID);
+        $release = $this->projectrelease->getById($releaseID);
+
+        /* Set menu. */
         if(!$this->session->project)
         {
             $releaseProject = explode(',', $release->project);
             $this->session->set('project', $releaseProject[0], 'project');
         }
-
+        $this->project->setMenu($this->session->project);
         $this->projectreleaseZen->commonAction($this->session->project, $release->product, $release->branch);
-        $bindBuilds = $this->build->getByList($release->build);
 
         /* Get the builds that can select. */
-        $builds         = $this->build->getBuildPairs($release->product, $release->branch, 'notrunk|withbranch|hasproject', $this->session->project, 'project', $release->build, false);
+        $builds         = $this->loadModel('build')->getBuildPairs($release->product, $release->branch, 'notrunk|withbranch|hasproject', $this->session->project, 'project', $release->build, false);
+        $bindBuilds     = $this->build->getByList($release->build);
         $releasedBuilds = $this->projectrelease->getReleasedBuilds($this->session->project);
         foreach($releasedBuilds as $releasedBuild)
         {
-            foreach(explode(',', trim($releasedBuild, ',')) as $bindBuildID)
-            {
-                if(!isset($bindBuilds[$bindBuildID])) unset($builds[$bindBuildID]);
-            }
+            if(!isset($bindBuilds[$releasedBuild])) unset($builds[$releasedBuild]);
         }
 
-        /* Set project menu. */
-        $this->project->setMenu($this->session->project);
-
-        $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->release->edit;
-        $this->view->release    = $release;
-        $this->view->builds     = $builds;
-        $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
-
+        $this->view->title   = $this->view->product->name . $this->lang->colon . $this->lang->release->edit;
+        $this->view->release = $release;
+        $this->view->builds  = $builds;
+        $this->view->users   = $this->loadModel('user')->getPairs('noclosed');
         $this->display('release', 'edit');
     }
 
