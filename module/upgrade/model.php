@@ -707,7 +707,7 @@ class upgradeModel extends model
                 {
                     $this->processOldMetrics();
                 }
-                this->processHistoryDataForMetric();
+                $this->processHistoryDataForMetric();
                 break;
         }
 
