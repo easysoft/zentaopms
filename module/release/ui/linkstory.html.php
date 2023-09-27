@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$buildModule = $app->rawModule == 'projectrelease' ? 'projectrelease' : 'release';
+
 $cols = array();
 foreach($config->release->dtable->defaultFields['linkStory'] as $field) $cols[$field] = zget($config->release->dtable->story->fieldList, $field, array());
 $cols = array_map(function($col){$col['show'] = true; return $col;}, $cols);
@@ -31,10 +33,10 @@ dtable
             'btnType'   => 'primary',
             'className' => 'size-sm linkObjectBtn',
             'data-type' => 'story',
-            'data-url'  => inlink('linkStory', "releaseID={$release->id}&browseType={$browseType}&param={$param}"),
+            'data-url'  => createLink($buildModule, 'linkStory', "releaseID={$release->id}&browseType={$browseType}&param={$param}"),
         ))
     )),
-    set::footer(array('checkbox', 'toolbar', array('html' => html::a(inlink('view', "releaseID={$release->id}&type=story"), $lang->goback, '', "class='btn size-sm'")), 'flex', 'pager')),
+    set::footer(array('checkbox', 'toolbar', array('html' => html::a(createLink($buildModule, 'view', "releaseID={$release->id}&type=story"), $lang->goback, '', "class='btn size-sm'")), 'flex', 'pager')),
     set::footPager(usePager()),
 );
 

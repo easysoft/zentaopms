@@ -10,9 +10,11 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$buildModule = $app->rawModule == 'projectrelease' ? 'projectrelease' : 'release';
+
 jsVar('initLink', $link);
 jsVar('type', $type);
-$canBeChanged = common::canBeChanged('release', $release);
+$canBeChanged = common::canBeChanged($buildModule, $release);
 $menus        = $this->release->buildOperateViewMenu($release);
 detailHeader
 (
@@ -22,9 +24,7 @@ detailHeader
 
 jsVar('orderBy', $orderBy);
 jsVar('releaseID', $release->id);
-jsVar('sortLink', helper::createLink('release', 'view', "releaseID={$release->id}&type={type}&link={$link}&param={$param}&orderBy={orderBy}"));
-
-$buildModule = $app->tab == 'project' ? 'projectrelease' : 'release';
+jsVar('sortLink', helper::createLink($buildModule, 'view', "releaseID={$release->id}&type={type}&link={$link}&param={$param}&orderBy={orderBy}"));
 
 /* Table data and setting for finished stories tab. */
 jsVar('summary', $summary);
@@ -34,11 +34,11 @@ jsVar('checkedSummary', str_replace('%storyCommon%', $lang->SRCommon, $lang->pro
 jsVar('unlinkstoryurl', helper::createLink($buildModule, 'unlinkStory', "releaseID={$release->id}&storyID=%s"));
 $storyTableData = initTableData($stories, $config->release->dtable->story->fieldList, $this->release);
 
-$canBatchUnlinkStory = $canBeChanged && common::hasPriv('release', 'batchUnlinkStory');
+$canBatchUnlinkStory = $canBeChanged && common::hasPriv($buildModule, 'batchUnlinkStory');
 $canBatchCloseStory  = $canBeChanged && common::hasPriv('story', 'batchClose');
 
 $storyFootToolbar = array();
-if($canBatchUnlinkStory) $storyFootToolbar['items'][] = array('class' => 'btn secondary size-sm batch-btn', 'text' => $lang->release->batchUnlink, 'data-type' => 'story', 'data-url' => inlink('batchUnlinkStory', "release={$release->id}"));
+if($canBatchUnlinkStory) $storyFootToolbar['items'][] = array('class' => 'btn secondary size-sm batch-btn', 'text' => $lang->release->batchUnlink, 'data-type' => 'story', 'data-url' => createLink($buildModule, 'batchUnlinkStory', "release={$release->id}"));
 if($canBatchCloseStory)  $storyFootToolbar['items'][] = array('class' => 'btn secondary size-sm batch-btn', 'text' => $lang->story->batchClose,    'data-type' => 'story', 'data-url' => createLink('story', 'batchClose', "productID={$release->product}"));
 
 /* Table data and setting for resolved bugs tab. */
@@ -48,11 +48,11 @@ jsVar('unlinkbugurl', helper::createLink($buildModule, 'unlinkBug', "releaseID={
 $config->release->dtable->bug->fieldList['resolvedBuild']['map'] = $builds;
 $bugTableData = initTableData($bugs, $config->release->dtable->bug->fieldList, $this->release);
 
-$canBatchUnlinkBug = $canBeChanged && common::hasPriv('release', 'batchUnlinkBug');
+$canBatchUnlinkBug = $canBeChanged && common::hasPriv($buildModule, 'batchUnlinkBug');
 $canBatchCloseBug  = $canBeChanged && common::hasPriv('bug', 'batchClose');
 
 $bugFootToolbar = array();
-if($canBatchUnlinkBug) $bugFootToolbar['items'][] = array('class' => 'btn secondary size-sm batch-btn', 'text' => $lang->release->batchUnlink, 'data-type' => 'bug', 'data-url' => inlink('batchUnlinkBug', "release={$release->id}"));
+if($canBatchUnlinkBug) $bugFootToolbar['items'][] = array('class' => 'btn secondary size-sm batch-btn', 'text' => $lang->release->batchUnlink, 'data-type' => 'bug', 'data-url' => createLink($buildModule, 'batchUnlinkBug', "release={$release->id}"));
 if($canBatchCloseBug)  $bugFootToolbar['items'][] = array('class' => 'btn secondary size-sm batch-btn', 'text' => $lang->bug->batchClose,      'data-type' => 'bug', 'data-url' => createLink('bug', 'batchClose', "productID={$release->product}"));
 
 /* Table data and setting for left bugs tab. */
@@ -63,7 +63,7 @@ $config->release->dtable->leftBug->fieldList['resolvedBuild']['map'] = $builds;
 $leftBugTableData = initTableData($leftBugs, $config->release->dtable->leftBug->fieldList, $this->release);
 
 $leftBugFootToolbar = array();
-if($canBatchUnlinkBug) $leftBugFootToolbar['items'][] = array('class' => 'btn secondary size-sm batch-btn', 'text' => $lang->release->batchUnlink, 'data-type' => 'bug', 'data-url' => inlink('batchUnlinkBug', "release={$release->id}&type=leftBug"));
+if($canBatchUnlinkBug) $leftBugFootToolbar['items'][] = array('class' => 'btn secondary size-sm batch-btn', 'text' => $lang->release->batchUnlink, 'data-type' => 'bug', 'data-url' => createLink($buildModule, 'batchUnlinkBug', "release={$release->id}&type=leftBug"));
 
 /* Process release info data. */
 $releaseBuild = array();
@@ -77,12 +77,12 @@ if($product->type != 'normal')
 
 /* Right menus, export and link. */
 $exportBtn = null;
-if(common::hasPriv('release', 'export') && ($summary || count($bugs) || count($leftBugs)))
+if(common::hasPriv($buildModule, 'export') && ($summary || count($bugs) || count($leftBugs)))
 {
     $exportBtn = btn(set(array(
         'text'        => $lang->release->export,
         'icon'        => 'export',
-        'url'         => inlink('export', "releaseID={$release->id}"),
+        'url'         => createLink($buildModule, 'export', "releaseID={$release->id}"),
         'class'       => 'ghost',
         'data-size'   => 'sm',
         'data-toggle' => 'modal',
@@ -92,24 +92,24 @@ if(common::hasPriv('release', 'export') && ($summary || count($bugs) || count($l
 $linkStoryBtn = $linkBugBtn = $linkLeftBtn = null;
 if($canBeChanged)
 {
-    if(common::hasPriv('release', 'linkStory'))
+    if(common::hasPriv($buildModule, 'linkStory'))
     {
         $linkStoryBtn = btn(set(array(
             'text'     => $lang->release->linkStory,
             'icon'     => 'link',
-            'data-url' => inlink('linkStory', "releaseID={$release->id}&browseType=story"),
+            'data-url' => createLink($buildModule, 'linkStory', "releaseID={$release->id}&browseType=story"),
             'class'    => 'link',
             'type'     => 'primary',
             'onclick'  => 'showLink(this)',
         )));
     }
 
-    if(common::hasPriv('release', 'linkBug'))
+    if(common::hasPriv($buildModule, 'linkBug'))
     {
         $linkBugBtn = btn(set(array(
             'text'     => $lang->release->linkBug,
             'icon'     => 'bug',
-            'data-url' => inlink('linkBug', "releaseID={$release->id}&browseType=bug"),
+            'data-url' => createLink($buildModule, 'linkBug', "releaseID={$release->id}&browseType=bug"),
             'class'    => 'link',
             'type'     => 'primary',
             'onclick'  => 'showLink(this)',
@@ -118,7 +118,7 @@ if($canBeChanged)
         $linkLeftBtn = btn(set(array(
             'text'     => $lang->release->linkBug,
             'icon'     => 'bug',
-            'data-url' => inlink('linkBug', "releaseID={$release->id}&browseType=leftBug&param=0&type=leftBug"),
+            'data-url' => createLink($buildModule, 'linkBug', "releaseID={$release->id}&browseType=leftBug&param=0&type=leftBug"),
             'class'    => 'link',
             'type'     => 'primary',
             'onclick'  => 'showLink(this)',
@@ -158,7 +158,7 @@ detailBody
                         usePager('storyPager'),
                         set::recPerPage($storyPager->recPerPage),
                         set::recTotal($storyPager->recTotal),
-                        set::linkCreator(helper::createLink('release', 'view', "releaseID={$release->id}&type=story&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$storyPager->recTotal}&recPerPage={recPerPage}&page={page}"))
+                        set::linkCreator(helper::createLink($buildModule, 'view', "releaseID={$release->id}&type=story&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$storyPager->recTotal}&recPerPage={recPerPage}&page={page}"))
                     ),
                     set::checkInfo(jsRaw('function(checkedIDList){return window.setStoryStatistics(this, checkedIDList);}'))
                 )
@@ -189,7 +189,7 @@ detailBody
                         usePager('bugPager'),
                         set::recPerPage($bugPager->recPerPage),
                         set::recTotal($bugPager->recTotal),
-                        set::linkCreator(helper::createLink('release', 'view', "releaseID={$release->id}&type=bug&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$bugPager->recTotal}&recPerPage={recPerPage}&page={page}"))
+                        set::linkCreator(helper::createLink($buildModule, 'view', "releaseID={$release->id}&type=bug&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$bugPager->recTotal}&recPerPage={recPerPage}&page={page}"))
                     ),
                 )
             ),
@@ -219,7 +219,7 @@ detailBody
                         usePager('leftBugPager'),
                         set::recPerPage($leftBugPager->recPerPage),
                         set::recTotal($leftBugPager->recTotal),
-                        set::linkCreator(helper::createLink('release', 'view', "releaseID={$release->id}&type=leftBug&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$leftBugPager->recTotal}&recPerPage={recPerPage}&page={page}"))
+                        set::linkCreator(helper::createLink($buildModule, 'view', "releaseID={$release->id}&type=leftBug&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$leftBugPager->recTotal}&recPerPage={recPerPage}&page={page}"))
                     ),
                 )
             ),

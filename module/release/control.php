@@ -492,9 +492,9 @@ class release extends control
         if(!empty($_POST['stories']))
         {
             $this->release->linkStory($releaseID);
-            return print(js::locate(inlink('view', "releaseID=$releaseID&type=story"), 'parent'));
+            return print(js::locate($this->createLink($this->app->rawModule, 'view', "releaseID=$releaseID&type=story"), 'parent'));
         }
-        $this->session->set('storyList', inlink('view', "releaseID=$releaseID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), 'product');
+        $this->session->set('storyList', $this->createLink($this->app->rawModule, 'view', "releaseID=$releaseID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), 'product');
 
         $release = $this->release->getById($releaseID);
         $this->commonAction($release->product);
@@ -511,7 +511,7 @@ class release extends control
         unset($this->config->product->search['fields']['project']);
 
         $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
-        $this->config->product->search['actionURL'] = $this->createLink('release', 'view', "releaseID=$releaseID&type=story&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
+        $this->config->product->search['actionURL'] = $this->createLink($this->app->rawModule, 'view', "releaseID=$releaseID&type=story&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['style']     = 'simple';
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($release->product, $release->branch, 'withMainPlan', true);
@@ -618,10 +618,10 @@ class release extends control
         if(!empty($_POST['bugs']))
         {
             $this->release->linkBug($releaseID, $type);
-            return print(js::locate(inlink('view', "releaseID=$releaseID&type=$type"), 'parent'));
+            return print(js::locate($this->createLink($this->app->rawModule, 'view', "releaseID=$releaseID&type=$type"), 'parent'));
         }
 
-        $this->session->set('bugList', inlink('view', "releaseID=$releaseID&type=$type&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), 'qa');
+        $this->session->set('bugList', $this->createLink($this->app->rawModule, 'view', "releaseID=$releaseID&type=$type&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), 'qa');
         /* Set menu. */
         $release = $this->release->getByID($releaseID);
         $this->commonAction($release->product);
@@ -636,7 +636,7 @@ class release extends control
         unset($this->config->bug->search['fields']['project']);
 
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
-        $this->config->bug->search['actionURL'] = $this->createLink('release', 'view', "releaseID=$releaseID&type=$type&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
+        $this->config->bug->search['actionURL'] = $this->createLink($this->app->rawModule, 'view', "releaseID=$releaseID&type=$type&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
         $this->config->bug->search['queryID']   = $queryID;
         $this->config->bug->search['style']     = 'simple';
 
