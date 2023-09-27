@@ -10,7 +10,7 @@ $().ready(function()
         }
         else
         {
-            $.get($.createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&letName=builds&build=&branch=all&index=&needCreate=&type=noempty,notrunk,separate,singled&extra=multiple'), function(data)
+            $.get($.createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&letName=builds&build=&branch=all&needCreate=&type=noempty,notrunk,separate,singled'), function(data)
             {
                 if(data)
                 {
