@@ -335,7 +335,7 @@ class cneModel extends model
         $customDomain = $this->loadModel('setting')->getItem('owner=system&module=common&section=domain&key=customDomain');
         if($customDomain) return $customDomain;
 
-        return  getenv('APP_DOMAIN') ? getenv('APP_DOMAIN') : $this->config->CNE->app->domain;
+        return getenv('APP_DOMAIN');
     }
 
     /**
@@ -859,7 +859,7 @@ class cneModel extends model
                 "type" => "secret"
             )
         );
- 
+
         $apiParams = new stdclass;
         $apiParams->cluster   = '';
         $apiParams->namespace = $instance->spaceData->k8space;
@@ -1149,8 +1149,12 @@ class cneModel extends model
     public function apiPost($url, $data, $header = array(), $host = '')
     {
         $requestUri = ($host ? $host : $this->config->CNE->api->host) . $url;
-        $result     = json_decode(commonModel::http($requestUri, $data, array(CURLOPT_CUSTOMREQUEST => 'POST'), $header, 'json', 20));
-        if($result && $result->code == 200) return $result;
+        $result     = json_decode(commonModel::http($requestUri, $data, array(CURLOPT_CUSTOMREQUEST => 'POST'), $header, 'json', 'POST', 20));
+        if($result && in_array($result->code, array(200, 201)))
+        {
+            $result->code = 200;
+            return $result;
+        }
         if($result) return $this->translateError($result);
 
         return $this->cneServerError();
@@ -1317,5 +1321,22 @@ class cneModel extends model
 
         $apiUrl = "/api/cne/platform/restore/status";
         return $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);
+    }
+
+    /**
+     * app资源调度尝试。
+     * Try allocate for apps.
+     *
+     * @param  array $apps
+     * @access public
+     * @return object
+     */
+    public function tryAllocate(array $resources): object
+    {
+        $apiParams = new stdclass();
+        $apiParams->requests = $resources;
+
+        $apiUrl = "/api/cne/system/resource/try-allocate";
+        return $this->apiPost($apiUrl, $apiParams, $this->config->CNE->api->headers);
     }
 }

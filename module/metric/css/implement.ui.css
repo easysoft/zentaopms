@@ -1,0 +1,20 @@
+.border-bottom {border-bottom: solid 1px var(--color-slate-300);}
+.border-bottom span {padding: 4px 12px; background-color: var(--color-slate-100);}
+.margin-top24 {margin-top: 24px;}
+.warning500 {color: var(--color-warning-500);}
+.margin-left8 {margin-left: 8px;}
+.detail-header .gap-x-4 {gap: 0 !important;}
+.verify-content {height: 300px; border: solid 1px var(--color-slate-300);}
+
+.verify-sentence {padding-top: 12px; padding-left: 24px;}
+.verify-sentence i {margin-left: 8px;}
+.verify-sentence.pass i {color: var(--color-success-600);}
+.verify-sentence.error i {color: var(--color-danger-600);}
+
+.footer-actions {display: flex; justify-content: center}
+.footer-actions .toolbar {gap: 15px;}
+.clear-shadow {border: none; box-shadow: none;}
+
+.panel-body .relative {position: relative;}
+.btn-download {position: absolute; right: 0; color: var(--color-primary-500); background-color: var(--color-primary-50); border-color: var(--color-primary-50);}
+.code-slate {color: var(--color-slate-900); background-color: var(--color-slate-100); border: 1px solid var(--color-slate-300); box-shadow: none; padding: 2px 8px;}

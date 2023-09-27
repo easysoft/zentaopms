@@ -575,7 +575,7 @@ class gitlab
                 $log->time      = date('Y-m-d H:i:s', strtotime($commit->created_at));
 
                 $commits[$commit->id] = $log;
-                $files[$commit->id]   = $this->getFilesByCommit($log->revision);
+                if($getFile) $files[$commit->id] = $this->getFilesByCommit($log->revision);
 
                 return array('commits' => $commits, 'files' => $files);
             }
@@ -659,7 +659,7 @@ class gitlab
      * @access public
      * @return array
      */
-    public function getCommitsByPath($path, $fromRevision = '', $toRevision = '', $perPage = 0, $page = 1, $getUrl = false)
+    public function getCommitsByPath($path, $fromRevision = '', $toRevision = '', $perPage = 0, $page = 1, $getUrl = false, $beginDate = '', $endDate = '')
     {
         $path = ltrim($path, DIRECTORY_SEPARATOR);
         $api = "commits";
@@ -668,17 +668,17 @@ class gitlab
         $param->path     = urldecode($path);
         $param->ref_name = ($toRevision != 'HEAD' and $toRevision) ? $toRevision : $this->branch;
 
-        $fromDate = $this->getCommittedDate($fromRevision);
-        $toDate   = $this->getCommittedDate($toRevision);
+        $fromDate = $beginDate ? $beginDate : $this->getCommittedDate($fromRevision);
+        $toDate   = $endDate ? $endDate : $this->getCommittedDate($toRevision);
 
         $since = '';
         $until = '';
-        if($fromRevision and $toRevision)
+        if(($fromRevision && $toRevision) || ($beginDate && $endDate))
         {
             $since = min($fromDate, $toDate);
             $until = max($fromDate, $toDate);
         }
-        elseif($fromRevision)
+        elseif($fromRevision || $beginDate)
         {
             $since = $fromDate;
         }
@@ -948,5 +948,28 @@ class gitlab
             }
         }
         return $lists;
+    }
+
+    /**
+     * 获取特定对象的api。
+     * Get api url for target.
+     *
+     * @param  string $target
+     * @access public
+     * @return string
+     */
+    public function getApiUrl(string $target): string
+    {
+        if($target == 'project')
+        {
+            return str_replace('repository/', '', $this->root). "?private_token={$this->token}";
+        }
+        $params = array();
+        $params['private_token'] = $this->token;
+        $params['page']          = 1;
+        $params['per_page']      = isset($params['per_page']) ? $params['per_page'] : 100;
+
+        $api = $this->root . $target . '?' . http_build_query($params);
+        return $api;
     }
 }

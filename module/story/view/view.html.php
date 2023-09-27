@@ -454,7 +454,7 @@
           <?php if($this->config->URAndSR and !$hiddenURS and $config->vision != 'or'):?>
           <li class='<?php if(empty($twins)) echo 'active';?>'><a href='#legendStories' data-toggle='tab'><?php echo $story->type == 'story' ? $lang->story->requirement : $lang->story->story;?></a></li>
           <?php endif;?>
-          <?php if($story->type == 'story'):?>
+          <?php if($story->type == 'story' && common::hasPriv('story', 'tasks')):?>
           <li class="<?php if((!$this->config->URAndSR || $hiddenURS) and empty($twins)) echo 'active';?>"><a href='#legendProjectAndTask' data-toggle='tab'><?php echo $lang->story->legendProjectAndTask;?></a></li>
           <?php endif;?>
           <li <?php if($config->vision == 'or') echo "class='active'";?>><a href='#legendRelated' data-toggle='tab'><?php echo $lang->story->legendRelated;?></a></li>
@@ -522,6 +522,7 @@
             <table class="table table-data">
               <tbody>
                 <?php if($story->type == 'story'):?>
+                <?php if(common::hasPriv('story', 'bugs')):?>
                 <?php if(!empty($fromBug)):?>
                 <tr>
                   <th><?php echo $lang->story->legendFromBug;?></th>
@@ -546,6 +547,8 @@
                     </ul>
                   </td>
                 </tr>
+                <?php endif;?>
+                <?php if(common::hasPriv('story', 'cases')):?>
                 <tr>
                   <th><?php echo $lang->story->legendCases;?></th>
                   <td class='pd-0'>
@@ -561,6 +564,7 @@
                     </ul>
                   </td>
                 </tr>
+                <?php endif;?>
                 <tr>
                   <th><?php echo $lang->story->legendBuilds;?></th>
                   <td class='pd-0'>
@@ -593,6 +597,7 @@
                   </td>
                 </tr>
                 <?php endif;?>
+                <?php if(common::hasPriv($story->type, 'relation')):?>
                 <tr class='text-top linkStoryTr'>
                   <th><?php echo $lang->story->linkStories;?></th>
                   <td>
@@ -618,6 +623,7 @@
                     </ul>
                   </td>
                 </tr>
+                <?php endif;?>
                 <?php if($story->type == 'story' and helper::hasFeature('devops')):?>
                 <tr>
                   <th><?php echo $lang->story->linkMR;?></th>

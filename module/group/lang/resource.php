@@ -47,6 +47,7 @@ $lang->moduleOrder[110] = 'doc';
 $lang->moduleOrder[111] = 'screen';
 $lang->moduleOrder[112] = 'pivot';
 $lang->moduleOrder[113] = 'chart';
+$lang->moduleOrder[117] = 'metric';
 $lang->moduleOrder[119] = 'report';
 
 $lang->moduleOrder[120] = 'company';
@@ -82,12 +83,6 @@ $lang->moduleOrder[250] = 'holiday';
 
 $lang->resource = new stdclass();
 
-/* Index module. */
-$lang->resource->index = new stdclass();
-$lang->resource->index->index = 'index';
-
-$lang->index->methodOrder[0] = 'index';
-
 /* My module. */
 $lang->resource->my = new stdclass();
 $lang->resource->my->index           = 'indexAction';
@@ -107,7 +102,6 @@ $lang->resource->my->manageContacts  = 'manageContacts';
 $lang->resource->my->deleteContacts  = 'deleteContacts';
 $lang->resource->my->score           = 'score';
 $lang->resource->my->team            = 'team';
-$lang->resource->my->doc             = 'doc';
 $lang->resource->my->execution       = 'execution';
 
 $lang->my->methodOrder[1]  = 'index';
@@ -521,7 +515,7 @@ $lang->resource->story->change             = 'changeAction';
 $lang->resource->story->review             = 'reviewAction';
 $lang->resource->story->submitReview       = 'submitReview';
 $lang->resource->story->batchReview        = 'batchReview';
-$lang->resource->story->recall             = 'recallAction';
+$lang->resource->story->recall             = 'recall';
 $lang->resource->story->assignTo           = 'assignAction';
 $lang->resource->story->close              = 'closeAction';
 $lang->resource->story->batchClose         = 'batchClose';
@@ -630,7 +624,7 @@ $lang->resource->productplan->batchUnlinkStory  = 'batchUnlinkStory';
 $lang->resource->productplan->linkBug           = 'linkBug';
 $lang->resource->productplan->unlinkBug         = 'unlinkBug';
 $lang->resource->productplan->batchUnlinkBug    = 'batchUnlinkBug';
-$lang->resource->productplan->batchEdit         = 'batchEdit';
+$lang->resource->productplan->batchEdit         = 'batchEditAction';
 $lang->resource->productplan->start             = 'start';
 $lang->resource->productplan->finish            = 'finish';
 $lang->resource->productplan->close             = 'close';
@@ -1316,7 +1310,6 @@ $lang->repo->methodOrder[45]  = 'log';
 $lang->repo->methodOrder[50]  = 'revision';
 $lang->repo->methodOrder[55]  = 'blame';
 $lang->repo->methodOrder[60]  = 'download';
-$lang->repo->methodOrder[65]  = 'setRules';
 $lang->repo->methodOrder[70]  = 'apiGetRepoByUrl';
 $lang->repo->methodOrder[75]  = 'downloadCode';
 $lang->repo->methodOrder[80]  = 'linkStory';
@@ -1380,6 +1373,32 @@ $lang->serverroom->methodOrder[5]  = 'create';
 $lang->serverroom->methodOrder[10] = 'edit';
 $lang->serverroom->methodOrder[15] = 'delete';
 $lang->serverroom->methodOrder[20] = 'view';
+
+$lang->resource->instance = new stdclass();
+$lang->resource->instance->manage = 'manage';
+
+$lang->resource->space = new stdclass();
+$lang->resource->space->browse = 'browse';
+
+$lang->resource->system = new stdclass();
+$lang->resource->system->dashboard    = 'dashboard';
+$lang->resource->system->dblist       = 'dbList';
+$lang->resource->system->configdomain = 'configDomain';
+$lang->resource->system->ossview      = 'ossView';
+
+$lang->resource->ops = new stdclass();
+$lang->resource->ops->provide  = 'provider';
+$lang->resource->ops->city     = 'city';
+$lang->resource->ops->cpubrand = 'cpuBrand';
+$lang->resource->ops->os       = 'os';
+
+$lang->resource->artifactrepo = new stdclass();
+$lang->resource->artifactrepo->browse                  = 'browse';
+$lang->resource->artifactrepo->ajaxGetArtifactRepos    = 'ajaxGetArtifactRepos';
+$lang->resource->artifactrepo->create                  = 'create';
+$lang->resource->artifactrepo->edit                    = 'edit';
+$lang->resource->artifactrepo->ajaxUpdateArtifactRepos = 'ajaxUpdateArtifactRepos';
+$lang->resource->artifactrepo->delete                  = 'delete';
 
 /* Doc. */
 $lang->resource->doc = new stdclass();
@@ -1547,9 +1566,6 @@ $lang->mr->methodOrder[95] = 'addReview';
 
 /* App. */
 $lang->resource->app = new stdclass();
-$lang->resource->app->serverlink = 'serverLink';
-
-$lang->app->methodOrder[10] = 'link';
 
 /* Git. */
 $lang->resource->git = new stdclass();
@@ -1721,6 +1737,12 @@ $lang->resource->chart->preview = 'preview';
 
 $lang->chart->methodOrder[2] = 'preview';
 
+$lang->resource->metric = new stdclass();
+$lang->resource->metric->preview   = 'preview';
+$lang->resource->metric->details   = 'detailsAction';
+
+$lang->metric->methodOrder[5]  = 'preview';
+$lang->metric->methodOrder[6]  = 'details';
 /* Report . */
 $lang->resource->report = new stdclass();
 
@@ -2016,11 +2038,7 @@ $lang->resource->projecttrack       = new stdclass();
 $lang->resource->projectqa          = new stdclass();
 $lang->resource->codereview         = new stdclass();
 $lang->resource->repocode           = new stdclass();
-$lang->resource->artifactrepo       = new stdclass();
 $lang->resource->deploy             = new stdclass();
-$lang->resource->ops                = new stdclass();
-$lang->resource->instance           = new stdclass();
-$lang->resource->space              = new stdclass();
 
 global $config;
 $inUpgrade = (defined('IN_UPGRADE') and IN_UPGRADE);

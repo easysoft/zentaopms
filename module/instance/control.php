@@ -530,29 +530,15 @@ class instance extends control
      * Install app.
      *
      * @param  int    $appID
+     * @param  string $checkResource
      * @access public
      * @return void
      */
-    public function install($appID)
+    public function install(int $appID, string $checkResource = 'true')
     {
         if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
         $cloudApp = $this->store->getAppInfo($appID);
         if(empty($cloudApp)) return $this->send(array('result' => 'fail', 'message' => $this->lang->instance->errors->noAppInfo));
-
-        if(empty($this->config->demoAccounts))
-        {
-            $clusterResource = $this->cne->cneMetrics();
-            $freeMemory = intval($clusterResource->metrics->memory->allocatable * 0.9); // Remain 10% memory for system.
-            if($cloudApp->memory > $freeMemory)
-            {
-                $cloudApp       = $cloudApp;
-                $gapMemory      = helper::formatKB(intval(($cloudApp->memory - $freeMemory)));
-                $requiredMemory = helper::formatKB(intval($cloudApp->memory));
-                $freeMemory     = helper::formatKB(intval($freeMemory));
-
-                return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->instance->errors->notEnoughMemory, $cloudApp->alias, $requiredMemory, $freeMemory, $gapMemory)));
-            }
-        }
 
         $versionList = $this->store->appVersionList($cloudApp->id);
         $mysqlList   = $this->cne->sharedDBList('mysql');
@@ -580,6 +566,16 @@ class instance extends control
 
             if(!validater::checkLength($customData->customDomain, 20, 2))      return $this->send(array('result' => 'fail', 'message' => $this->lang->instance->errors->domainLength));
             if(!validater::checkREG($customData->customDomain, '/^[a-z\d]+$/')) return $this->send(array('result' => 'fail', 'message' => $this->lang->instance->errors->wrongDomainCharacter));
+
+            if($checkResource == 'true')
+            {
+                $resource = new stdclass();
+                $resource->cpu    = $cloudApp->cpu;
+                $resource->memory = $cloudApp->memory;
+
+                $result = $this->cne->tryAllocate(array($resource));
+                if(!isset($result->code) || $result->code != 200) return $this->send(array('callback' => 'alertResource()'));
+            }
 
             /* If select the version, replace the latest version of App by selected version. */
             if($customData->version)

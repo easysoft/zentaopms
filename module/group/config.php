@@ -43,4 +43,6 @@ $config->group->priv->search['params']['recommendPrivs'] = array('operator' => '
 $config->group->priv->search['params']['dependPrivs']    = array('operator' => 'include', 'control' => 'select',  'values' => '');
 $config->group->priv->search['params']['desc']           = array('operator' => 'include', 'control' => 'input',   'values' => '');
 
-$config->group->hiddenPriv = array('system-dashboard', 'store-browse', 'store-appView', 'space-getStoreAppInfo', 'system-dblist', 'system-configdomain', 'system-ossview', 'instance-ajaxStart', 'instance-ajaxStop', 'instance-upgrade');
+$config->group->hiddenPriv = array('system-dashboard', 'system-dblist', 'system-configdomain', 'system-ossview');
+
+include 'packagemanager.php';

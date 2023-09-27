@@ -545,11 +545,15 @@ $lang->bi->menu         = new stdclass();
 $lang->bi->menu->screen = array('link' => "{$lang->screen->common}|screen|browse");
 $lang->bi->menu->pivot  = array('link' => "{$lang->pivot->common}|pivot|preview");
 $lang->bi->menu->chart  = array('link' => "{$lang->chart->common}|chart|preview");
+$lang->bi->menu->metric = array('link' => "{$lang->metric->common}|metric|preview");
+
+$lang->bi->dividerMenu = ',metric,';
 
 /* BI menu order. */
 $lang->bi->menuOrder[5]  = 'screen';
 $lang->bi->menuOrder[10] = 'pivot';
 $lang->bi->menuOrder[15] = 'chart';
+$lang->bi->menuOrder[50] = 'metric';
 
 /* Company menu.*/
 $lang->company->menu              = new stdclass();
@@ -661,6 +665,7 @@ $lang->navGroup->pivot    = 'bi';
 $lang->navGroup->chart    = 'bi';
 $lang->navGroup->bidesign = 'bi';
 $lang->navGroup->report   = 'bi';
+$lang->navGroup->metric   = 'bi';
 
 $lang->navGroup->qa            = 'qa';
 $lang->navGroup->bug           = 'qa';
@@ -676,6 +681,7 @@ $lang->navGroup->caselib       = 'qa';
 
 $lang->navGroup->devops           = 'devops';
 $lang->navGroup->repo             = 'devops';
+$lang->navGroup->repo_setRules    = 'admin';
 $lang->navGroup->job              = 'devops';
 $lang->navGroup->jenkins          = 'devops';
 $lang->navGroup->mr               = 'devops';

@@ -635,7 +635,14 @@
      */
     function loadModal(url, target, options, callback)
     {
-        options = $.extend({url}, options);
+        if(!url)
+        {
+            const lasShowModal = zui.Modal.query(undefined, undefined, modal => modal.shown);
+            if(!lasShowModal) return;
+            url = lasShowModal.options.url;
+            target = lasShowModal.id;
+        }
+        options = $.extend(url ? {url: url} : {}, options);
         if(!target) return zui.Modal.open(options);
         else if(target === 'current') target = zui.Modal.query().id;
 

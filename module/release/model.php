@@ -249,7 +249,11 @@ class releaseModel extends model
                 {
                     $build->stories = trim($build->stories, ',');
                     $build->bugs    = trim($build->bugs, ',');
-                    if($build->stories) $release->stories .= ',' . $build->stories;
+                    if($build->stories)
+                    {
+                        $release->stories .= ',' . $build->stories;
+                        $this->loadModel('story')->updateStoryReleasedDate($build->stories, $release->date);
+                    }
                     if($build->bugs)    $release->bugs    .= ',' . $build->bugs;
                 }
             }
@@ -460,6 +464,7 @@ class releaseModel extends model
             if(strpos(",{$release->stories},", ",{$storyID},") !== false) unset($_POST['stories'][$i]);
         }
 
+        $this->loadModel('story')->updateStoryReleasedDate($build->stories, $release->date);
         $release->stories .= ',' . join(',', $this->post->stories);
         $this->dao->update(TABLE_RELEASE)->set('stories')->eq($release->stories)->where('id')->eq((int)$releaseID)->exec();
 

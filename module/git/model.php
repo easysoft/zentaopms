@@ -69,6 +69,8 @@ class gitModel extends model
         /* Get repos and load module. */
         $this->setRepos();
         $this->loadModel('job');
+        $this->loadModel('gitlab');
+        $this->loadModel('repo');
 
         if(empty($this->repos)) return false;
 
@@ -82,7 +84,11 @@ class gitModel extends model
         {
             $this->updateCommit($repo, $commentGroup, true);
 
-            if($repo->SCM == 'Gitlab') $this->loadModel('gitlab')->updateCodePath((int)$repo->serviceHost, (int)$repo->serviceProject, (int)$repo->id);
+            if($repo->SCM == 'Gitlab')
+            {
+                $this->gitlab->updateCodePath((int)$repo->serviceHost, (int)$repo->serviceProject, (int)$repo->id);
+                $this->repo->updateCommitDate((int)$repo->id);
+            }
 
             /* Create compile by tag. */
             $jobs = zget($tagGroup, $repoID, array());
@@ -120,6 +126,8 @@ class gitModel extends model
      */
     public function updateCommit($repo, $commentGroup, $printLog = true)
     {
+        if($repo->SCM == 'Gitlab') return;
+
         /* Load module and print log. */
         $this->loadModel('repo');
         if($printLog) $this->printLog("begin repo $repo->id");

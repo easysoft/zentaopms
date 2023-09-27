@@ -27,19 +27,19 @@
         <td class='strong'><?php echo $lang->group->common;?></td>
       </tr>
       <tr class='text-top'>
-        <td class='w-p30'><?php echo html::select('module', $modulePairs, '', " size='10' onclick='setModulePackages(this.value)' class='form-control'");?></td>
+        <td class='w-p30'><?php echo html::select('module', $subsets, key($subsets), " size='10' onclick='setModulePackages(this.value)' class='form-control'");?></td>
         <td class='w-p30' id='packageBox'>
           <?php
           $hiddenClass = '';
-          foreach($packageGroup as $module => $modulePackages)
+          foreach($packages as $subset => $subsetPackages)
           {
-              echo html::select('packages[]', $modulePackages, '', "onclick='setActions()' multiple='multiple' class='form-control $hiddenClass' data-module='$module'");
+              echo html::select('packages[]', $subsetPackages, '', "onclick='setActions()' multiple='multiple' class='form-control $hiddenClass' data-module='$subset'");
               $hiddenClass = 'hidden';
           }
           ?>
         </td>
         <td class='w-p30' id='actionBox'>
-          <?php echo html::select('actions[]', $indexPrivs, '', "multiple='multiple' class='form-control'");?>
+          <?php echo html::select('actions[]', $privs, '', "multiple='multiple' class='form-control'");?>
         </td>
         <td><?php echo html::select('groups[]', $groups, '', "multiple='multiple' class='form-control'");?></td>
       </tr>
@@ -53,6 +53,6 @@
     </table>
   </form>
 </div>
-<?php js::set('selectedPrivIdList', '[]');?>
+<?php js::set('selectedPrivList', '[]');?>
 <?php js::set('relatedPrivData', '[]');?>
-<?php js::set('excludeIdList', '[]');?>
+<?php js::set('allPrivList', array_keys($privs));?>

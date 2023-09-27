@@ -1,0 +1,19 @@
+---
+title: zt_effort
+author: zhouxin
+version: "1.0"
+fields:
+- field: id
+  range: 1-10000
+- field: execution
+  range: 11-50{10}
+- field: date
+  range: "20100101 000000-20210101 230000:10D"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: consumed
+  range: 1{2},2{3},{3},4{5},1.5{6},2.5{7}
+- field: deleted
+  range: 0{1},1{1}
+...
+

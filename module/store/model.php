@@ -102,6 +102,26 @@ class storeModel extends model
     }
 
     /**
+     * Get app infos map by name array from cloud market.
+     * 根据名称查询多个应用信息。
+     *
+     * @param  array  $nameList
+     * @access public
+     * @return object|null
+     */
+    public function getAppMapByNames($nameList = array(),  $channel = 'stable')
+    {
+        $apiParams = array('name_list' => $nameList, 'channel' => $channel);
+
+        $apiUrl  = $this->config->cloud->api->host;
+        $apiUrl .= '/api/market/app_info_list';
+        $result  = commonModel::apiPost($apiUrl, $apiParams, $this->config->cloud->api->headers);
+        if(!isset($result->code) || $result->code != 200) return null;
+
+        return $result->data;
+    }
+
+    /**
      * Get app version pairs by id.
      *
      * @param  int    $id
@@ -383,21 +403,22 @@ class storeModel extends model
     }
 
     /**
-     * Get solution info by ID.
+     * Get solution info.
      *
-     * @param  int    $id
+     * @param  string     $type
+     * @param  int|string $value
      * @access public
      * @return object
      */
-    public function getSolutionByID($id)
+    public function getSolution($type, $value)
     {
         $apiParams = array();
-        $apiParams['id'] = $id;
+        $apiParams[$type] = $value;
 
         $apiUrl  = $this->config->cloud->api->host;
         $apiUrl .= '/api/market/solution/info?channel='. $this->config->cloud->api->channel;
         $result  = commonModel::apiGet($apiUrl, $apiParams, $this->config->cloud->api->headers);
-        if(!isset($result->code) || $result->code != 200) return null;
+        if(!isset($result->code) || $result->code != 200) return new stdclass();
 
         $solution = $result->data;
         $solution->apps = array_combine(helper::arrayColumn($solution->apps, 'chart'), $solution->apps);
@@ -405,21 +426,22 @@ class storeModel extends model
         return $solution;
     }
     /**
-     * Get solution config by ID.
+     * Get solution config.
      *
-     * @param  int    $id
+     * @param  string     $type
+     * @param  int|string $value
      * @access public
      * @return object
      */
-    public function solutionConfigByID($id)
+    public function solutionConfig($type, $value)
     {
         $apiParams = array();
-        $apiParams['id'] = $id;
+        $apiParams[$type] = $value;
 
         $apiUrl  = $this->config->cloud->api->host;
         $apiUrl .= '/api/market/solution/schema?channel='. $this->config->cloud->api->channel;
         $result  = commonModel::apiGet($apiUrl, $apiParams, $this->config->cloud->api->headers);
-        if(!isset($result->code) || $result->code != 200) return null;
+        if(!isset($result->code) || $result->code != 200) return new stdclass();
 
         return $result->data;
     }

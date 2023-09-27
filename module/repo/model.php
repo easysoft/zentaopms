@@ -203,8 +203,15 @@ class repoModel extends model
 
             if($lastSubmitTime)
             {
-                $lastRevision = $this->repoTao->getLastRevision($repo->id);
-                $repo->lastSubmitTime = isset($lastRevision->time) ? $lastRevision->time : '';
+                if($repo->lastCommit)
+                {
+                    $repo->lastSubmitTime = $repo->lastCommit;
+                }
+                else
+                {
+                    $lastRevision = $this->repoTao->getLastRevision($repo->id);
+                    $repo->lastSubmitTime = isset($lastRevision->time) ? $lastRevision->time : '';
+                }
             }
 
             if(in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) $repo = $this->processGitService($repo, $getCodePath);
@@ -277,10 +284,27 @@ class repoModel extends model
             ->exec();
 
         if(dao::isError()) return false;
+        $repoID = $this->dao->lastInsertID();
 
+        $repo = $this->getByID($repoID);
+        if($repo->SCM == 'Gitlab')
+        {
+            $token = time();
+            $res   = $this->loadModel('gitlab')->addPushWebhook($repo, $token);
+            if($res === false)
+            {
+                $thi->dao->delete()->from(TABLE_REPO)->where('id')->eq($repoID)->exec();
+                dao::$errors['webhook'][] = $this->lang->gitlab->failCreateWebhook;
+                return false;
+            }
+            else
+            {
+                $this->dao->update(TABLE_REPO)->set('password')->eq($token)->where('id')->eq($repoID)->exec();
+            }
+        }
         $this->rmClientVersionFile();
 
-        return $this->dao->lastInsertID();
+        return $repoID;
     }
 
     /**
@@ -392,6 +416,24 @@ class repoModel extends model
             }
         }
 
+        if(($repo->serviceHost != $data->serviceHost || $repo->serviceProject != $data->serviceProject) && $data->SCM == 'Gitlab')
+        {
+            $repo->gitService = $data->serviceHost;
+            $repo->project    = $data->serviceProject;
+
+            $token = time();
+            $res   = $this->loadModel('gitlab')->addPushWebhook($repo, $token);
+            if($res === false)
+            {
+                dao::$errors['webhook'][] = $this->lang->gitlab->failCreateWebhook;
+                return false;
+            }
+            else
+            {
+                $data->password = $token;
+            }
+        }
+
         if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
         $this->dao->update(TABLE_REPO)->data($data, 'serviceToken')
             ->batchCheck($this->config->repo->edit->requiredFields, 'notempty')
@@ -409,6 +451,7 @@ class repoModel extends model
         {
             $this->loadModel('gitlab')->updateCodePath($data->serviceHost, $data->serviceProject, $repo->id);
             $data->path = $this->getByID($id)->path;
+            $this->updateCommitDate($repo->id);
         }
 
         if($repo->path != $data->path)
@@ -440,10 +483,28 @@ class repoModel extends model
         if($type == 'task')  $links = $this->post->tasks;
 
         $revisionInfo = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->eq($revision)->fetch();
-        if(empty($revisionInfo)) $this->updateCommit($repoID);
+        if(empty($revisionInfo))
+        {
+            $repo = $this->getByID($repoID);
+            if($repo->SCM == 'Gitlab')
+            {
+                $scm = $this->app->loadClass('scm');
+                $scm->setEngine($repo);
+                $logs = $scm->getCommits($revision, 1);
+                $this->saveCommit($repoID, $logs, 0);
+            }
+            else
+            {
+                $this->updateCommit($repoID);
+            }
+        }
 
         $revisionInfo = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->eq($revision)->fetch();
-        if(empty($revisionInfo)) return false;
+        if(empty($revisionInfo))
+        {
+            dao::$errors = $this->lang->fail;
+            return false;
+        }
 
         $revisionID = $revisionInfo->id;
         $committer  = $this->dao->select('account')->from(TABLE_USER)->where('commiter')->eq($revisionInfo->committer)->fetch('account');
@@ -451,7 +512,6 @@ class repoModel extends model
         if($from == 'repo') $committer = $this->app->user->account;
         foreach($links as $linkID)
         {
-
             $relation           = new stdclass;
             $relation->AType    = 'revision';
             $relation->AID      = $revisionID;
@@ -858,6 +918,11 @@ class repoModel extends model
         return $branches;
     }
 
+    public function getCommitsByRevisions($revisions)
+    {
+        return $this->dao->select('id')->from(TABLE_REPOHISTORY)->where('revision')->in($revisions)->fetchPairs('id');
+    }
+
     /**
      * Get commits.
      *
@@ -874,7 +939,7 @@ class repoModel extends model
     public function getCommits($repo, $entry, $revision = 'HEAD', $type = 'dir', $pager = null, $begin = 0, $end = 0)
     {
         if(!isset($repo->id)) return array();
-        if($repo->SCM == 'Gitlab' && !$begin && !$end) return $this->loadModel('gitlab')->getCommits($repo, $entry, $revision, $type, $pager, $begin, $end);
+        if($repo->SCM == 'Gitlab') return $this->loadModel('gitlab')->getCommits($repo, $entry, $revision, $type, $pager, $begin, $end);
 
         $entry = ltrim($entry, '/');
         $entry = $repo->prefix . (empty($entry) ? '' : '/' . $entry);
@@ -2284,7 +2349,7 @@ class repoModel extends model
      * @access public
      * @return object
      */
-    public function processGitService($repo, $getCodePath = true)
+    public function processGitService($repo, $getCodePath = false)
     {
         $service = $this->loadModel('pipeline')->getByID($repo->serviceHost);
         if($repo->SCM == 'Gitlab')
@@ -2340,7 +2405,40 @@ class repoModel extends model
         {
             /* Update code commit history. */
             $commentGroup = $this->loadModel('job')->getTriggerGroup('commit', array($repo->id));
-            $this->loadModel('git')->updateCommit($repo, $commentGroup, false);
+            if($repo->SCM == 'Gitlab')
+            {
+                $this->loadModel('repo');
+                $jobs = zget($commentGroup, $repo->id, array());
+
+                $accountPairs  = array();
+                $userList      = $this->loadModel('gitlab')->apiGetUsers($repo->gitService);
+                $acountIDPairs = $this->gitlab->getUserIdAccountPairs($repo->gitService);
+                foreach($userList as $gitlabUser) $accountPairs[$gitlabUser->realname] = zget($acountIDPairs, $gitlabUser->id, '');
+
+                foreach($data->commits as $commit)
+                {
+                    $log = new stdclass();
+                    $log->revision = $commit->id;
+                    $log->msg      = $commit->message;
+                    $log->author   = $commit->author->name;
+                    $log->date     = date("Y-m-d H:i:s", strtotime($commit->timestamp));
+
+                    $objects = $this->repo->parseComment($log->msg);
+                    $this->repo->saveAction2PMS($objects, $log, $repo->path, $repo->encoding, 'git', $accountPairs);
+
+                    foreach($jobs as $job)
+                    {
+                        foreach(explode(',', $job->comment) as $comment)
+                        {
+                            if(strpos($log->msg, $comment) !== false) $this->loadModel('job')->exec($job->id);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                $this->loadModel('git')->updateCommit($repo, $commentGroup, false);
+            }
         }
     }
 
@@ -3028,6 +3126,7 @@ class repoModel extends model
     public function updateCommit($repoID, $objectID = 0, $branchID = 0)
     {
         $repo = $this->getByID($repoID);
+        if($repo->SCM == 'Gitlab') return;
         /* Update code commit history. */
         $commentGroup = $this->loadModel('job')->getTriggerGroup('commit', array($repoID));
 
@@ -3154,5 +3253,30 @@ class repoModel extends model
         }
 
         return false;
+    }
+
+    /**
+     * 更新版本库最后提交时间。
+     * Update repo last commited date.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function updateCommitDate(int $repoID): void
+    {
+        $repo = $this->getByID($repoID);
+        if($repo->SCM == 'Gitlab')
+        {
+            $scm = $this->app->loadClass('scm');
+            $scm->setEngine($repo);
+            $commits = $scm->engine->getCommitsByPath('', '', '', 1, 1);
+            $commit  = $commits[0];
+            if(!empty($commit->committed_date))
+            {
+                $lastCommitDate = date('Y-m-d H:i:s', strtotime($commit->committed_date));
+                $this->dao->update(TABLE_REPO)->set('lastCommit')->eq($lastCommitDate)->where('id')->eq($repoID)->exec();
+            }
+        }
     }
 }

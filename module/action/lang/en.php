@@ -320,6 +320,9 @@ $lang->action->desc->autobackup              = '$date, backed up of system' . "\
 $lang->action->desc->autorestore             = '$date, restored by system.' . "\n";
 $lang->action->desc->deleteexpiredbackup     = '$date, deleted the expired automatic backups by system.' . "\n";
 
+$lang->action->desc->delist  = '$date, delist by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->publish = '$date, publish by <strong>$actor</strong>.' . "\n";
+
 /* Used to display dynamic information. */
 $lang->action->label = new stdclass();
 $lang->action->label->install                 = 'install ';
@@ -507,6 +510,7 @@ $lang->action->label->linkhost                = 'link hosts to';
 $lang->action->label->published               = 'Published';
 $lang->action->label->unpublished             = 'Unpublished';
 $lang->action->label->prompt                  = 'Prompt';
+$lang->action->label->delist                  = 'delist';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
@@ -808,6 +812,13 @@ $lang->action->dynamicAction->ai['created']     = 'Create prompt';
 $lang->action->dynamicAction->ai['edited']      = 'Edited prompt';
 $lang->action->dynamicAction->ai['published']   = 'Published prompt';
 $lang->action->dynamicAction->ai['unpublished'] = 'Unpublished prompt';
+
+$lang->action->dynamicAction->metric['created']   = 'Create Metric';
+$lang->action->dynamicAction->metric['edited']    = 'Edit Metric';
+$lang->action->dynamicAction->metric['deleted']   = 'Delete Metric';
+$lang->action->dynamicAction->metric['undeleted'] = 'Undelete Metric';
+$lang->action->dynamicAction->metric['delist']    = 'Delist Metric';
+$lang->action->dynamicAction->metric['publish']   = 'Publish Metric';
 
 /* Generate the corresponding object link. */
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';

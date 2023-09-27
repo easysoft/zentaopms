@@ -1,0 +1,24 @@
+---
+title: zt_project
+author: qixinzhi
+version: "1.0"
+fields:
+- field: id
+  range: 11-10000
+- field: project
+  range: 1-10{20}
+- field: type
+  range: sprint
+- field: status
+  range: closed{4},doing{3},suspended{2},wait{1}
+- field: deleted
+  range: 0{10},1{10}
+- field: openedDate
+  range: "20100101 000000-20200101 000000:10D"
+  type: timestamp
+  format: YYYY-MM-DD
+- field: closedDate
+  range: "20110101 000000-20210101 000000:10D"
+  type: timestamp
+  format: YYYY-MM-DD
+...

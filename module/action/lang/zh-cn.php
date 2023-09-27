@@ -320,6 +320,9 @@ $lang->action->desc->autobackup              = '$date, 系统执行了自动备�
 $lang->action->desc->autorestore             = '$date, 系统执行了自动还原。' . "\n";
 $lang->action->desc->deleteexpiredbackup     = '$date, 系统删除了过期的自动备份。' . "\n";
 
+$lang->action->desc->delist  = '$date, 由 <strong>$actor</strong> 下架。' . "\n";
+$lang->action->desc->publish = '$date, 由 <strong>$actor</strong> 发布。' . "\n";
+
 /* 用来显示动态信息。*/
 $lang->action->label = new stdclass();
 $lang->action->label->install                 = '安装了';
@@ -507,6 +510,7 @@ $lang->action->label->linkhost                = '主机关联到';
 $lang->action->label->published               = '发布了';
 $lang->action->label->unpublished             = '下架了';
 $lang->action->label->prompt                  = '提词';
+$lang->action->label->delist                  = '下架了';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
@@ -808,6 +812,13 @@ $lang->action->dynamicAction->ai['created']     = '创建提词';
 $lang->action->dynamicAction->ai['edited']      = '编辑提词';
 $lang->action->dynamicAction->ai['published']   = '发布提词';
 $lang->action->dynamicAction->ai['unpublished'] = '下架提词';
+
+$lang->action->dynamicAction->metric['created']   = '创建度量';
+$lang->action->dynamicAction->metric['edited']    = '编辑度量';
+$lang->action->dynamicAction->metric['deleted']   = '删除度量';
+$lang->action->dynamicAction->metric['undeleted'] = '还原度量';
+$lang->action->dynamicAction->metric['delist']    = '下架度量';
+$lang->action->dynamicAction->metric['publish']   = '发布度量';
 
 /* 用来生成相应对象的链接。*/
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';

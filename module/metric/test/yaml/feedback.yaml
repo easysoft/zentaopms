@@ -1,0 +1,30 @@
+---
+title: zt_feedback
+author: qixinzhi
+version: "1.0"
+fields:
+- field: id
+  range: 1-10000
+- field: product
+  range: 1-10{12}
+- field: status
+  range: noreview{1},wait{1},clarify{1},replied{1},commenting{1},closed{1}
+- field: assignedTo
+  range: admin,user{5},test{4},dev{10},pm{8},po{2},closed{10},[]{10}
+- field: openedDate
+  range: "20100101 000000-20210101 230000:10D"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: closedDate
+  range: "20110101 000000-20210101 230000:10D"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: reviewedBy
+  range: admin,user{5},test{4},dev{10},pm{8},po{2},closed{10},[]{10}
+- field: reviewedDate
+  range: "20110101 000000-20210101 230000:10D"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: deleted
+  range: 0{6},1{6}
+...

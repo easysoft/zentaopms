@@ -1,0 +1,18 @@
+---
+title: zt_story
+author: qixinzhi
+version: "1.0"
+fields:
+- field: story
+  range: 1-10000
+- field: version
+  range: 1-3{1}
+- field: reviewer
+  range: admin,user{5},test{3},dev{10},pm{10},po{8},closed{20},[]{40}
+- field: result
+  range: clarify{1},pass{1},reject{1},revert{1},[]{1}
+- field: reviewDate
+  range: "20180101 000000-20210101 230000:3h"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+...

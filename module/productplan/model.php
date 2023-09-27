@@ -598,6 +598,8 @@ class productplanModel extends model
             ->remove('delta,uid,future')
             ->get();
 
+        $plan = $this->buildPlanByStatus($this->post->status, '', $plan);
+
         $product = $this->loadModel('product')->getByID($oldPlan->product);
         if($product->type != 'normal')
         {
@@ -701,10 +703,8 @@ class productplanModel extends model
     {
         $oldPlan = $this->getByID($planID);
 
-        $plan = new stdclass();
-        $plan->status = $status;
-        if($status == 'closed' and $this->post->closedReason) $plan->closedReason = $this->post->closedReason;
-        if($status !== 'closed') $plan->closedReason = '';
+        $closedReason = $this->post->closedReason ? $this->post->closedReason : '';
+        $plan = $this->buildPlanByStatus($status, $closedReason);
 
         $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->where('id')->eq($planID)->exec();
 
@@ -721,6 +721,45 @@ class productplanModel extends model
         return !dao::isError();
     }
 
+
+    /**
+     * 根据状态构建计划对象。
+     * Build a plan object by status.
+     *
+     * @param  string $status doing|done|closed
+     * @param  string $closedReason
+     * @param  object $plan
+     * @access public
+     * @return object
+     */
+    public function buildPlanByStatus(string $status, string $closedReason = '', object $plan = null): object
+    {
+        $now = helper::now();
+
+        if(!$plan) $plan = new stdclass();
+        $plan->status = $status;
+
+        if($status == 'doing')
+        {
+            $plan->finishedDate = null;
+            $plan->closedDate   = null;
+            $plan->closedReason = '';
+        }
+        elseif($status == 'done')
+        {
+            $plan->finishedDate = $now;
+            $plan->closedDate   = null;
+            $plan->closedReason = '';
+        }
+        elseif($status == 'closed')
+        {
+            $plan->closedDate   = $now;
+            $plan->closedReason = $closedReason;
+        }
+
+        return $plan;
+    }
+
     /**
      * Update a parent plan's status.
      *
@@ -730,48 +769,47 @@ class productplanModel extends model
      */
     public function updateParentStatus($parentID)
     {
-        $parent      = $this->getByID($parentID);
+        $oldPlan     = $this->getByID($parentID);
         $childStatus = $this->dao->select('status')->from(TABLE_PRODUCTPLAN)->where('parent')->eq($parentID)->andWhere('deleted')->eq(0)->fetchPairs();
 
         /* If the subplan is empty, update the plan. */
         if(empty($childStatus))
         {
             $this->dao->update(TABLE_PRODUCTPLAN)->set('parent')->eq(0)->set('status')->eq('wait')->where('id')->eq($parentID)->exec();
-            return;
+            return !dao::isError();
         }
 
-        if(count($childStatus) == 1 and isset($childStatus['wait']))
-        {
-            return;
-        }
+        $plan = new stdclass();
+        if(count($childStatus) == 1 and isset($childStatus['wait'])) return;
         elseif(count($childStatus) == 1 and isset($childStatus['closed']))
         {
-            if($parent->status != 'closed')
+            if($oldPlan->status != 'closed')
             {
-                $parentStatus = 'closed';
+                $status       = 'closed';
                 $parentAction = 'closedbychild';
             }
         }
         elseif(!isset($childStatus['wait']) and !isset($childStatus['doing']))
         {
-            if($parent->status != 'done')
+            if($oldPlan->status != 'done')
             {
-                $parentStatus = 'done';
+                $status       = 'done';
                 $parentAction = 'finishedbychild';
             }
         }
         else
         {
-            if($parent->status != 'doing')
+            if($oldPlan->status != 'doing')
             {
-                $parentStatus = 'doing';
+                $status       = 'doing';
                 $parentAction = $this->app->rawMethod == 'create' ? 'createchild' : 'activatedbychild';
             }
         }
 
-        if(isset($parentStatus))
+        if(!empty($status))
         {
-            $this->dao->update(TABLE_PRODUCTPLAN)->set('status')->eq($parentStatus)->where('id')->eq($parentID)->exec();
+            $plan = $this->buildPlanByStatus($status);
+            $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->where('id')->eq($parentID)->exec();
             $this->loadModel('action')->create('productplan', $parentID, $parentAction, '', $parentAction);
         }
         return !dao::isError();
@@ -900,15 +938,12 @@ class productplanModel extends model
 
         $oldPlans = $this->getByIDList($planIDList, $status);
 
-        foreach($planIDList as $planID)
+        foreach($oldPlans as $planID => $oldPlan)
         {
             $oldPlan = $oldPlans[$planID];
             if($status == $oldPlan->status) continue;
 
-            $plan = new stdclass();
-            $plan->status = $status;
-            if($status == 'closed')  $plan->closedReason = $closedReasons[$planID];
-            if($status !== 'closed') $plan->closedReason = '';
+            $plan = $this->buildPlanByStatus($status, $closedReasons[$planID]);
 
             $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->autoCheck()->where('id')->eq((int)$planID)->exec();
 

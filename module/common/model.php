@@ -130,6 +130,8 @@ class commonModel extends model
                  ->where('id')->eq($projectID)
                  ->exec();
 
+            $this->loadModel('project')->recordFirstEnd($projectID);
+
             $actionType = $project->multiple ? 'syncproject' : 'syncmultipleproject';
             if($project->model == 'research') $objectType = 'marketresearch';
             $this->loadModel('action')->create($objectType, $projectID, $actionType);
@@ -186,6 +188,7 @@ class commonModel extends model
         if($execution->status == 'wait')
         {
             $this->dao->update(TABLE_EXECUTION)->set('status')->eq('doing')->set('realBegan')->eq($today)->where('id')->eq($execution->id)->exec();
+            $this->loadModel('project')->recordFirstEnd($execution->id);
             $this->loadModel('action')->create('execution', $execution->id, 'syncexecution');
             if($execution->parent)
             {

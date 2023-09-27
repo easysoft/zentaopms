@@ -159,6 +159,18 @@ function onChangeDbType(event)
     }
 }
 
+window.alertResource = function()
+{
+    zui.Modal.confirm({'message': resourceAlert}).then((res) =>
+    {
+        if(res)
+        {
+            $('#createStoreAppForm').attr('action', $('#createStoreAppForm').attr('action') + '&checkResource=false');
+            $('#createStoreAppForm .form-row .toolbar button[type=submit]').trigger('click');
+        }
+    });
+}
+
 $(function()
 {
     onChangeStoreAppType();

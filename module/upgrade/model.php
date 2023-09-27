@@ -699,9 +699,16 @@ class upgradeModel extends model
 
                 if(in_array($fromVersion, array('18.5', 'biz8.5', 'max4.5'))) $this->addCreateAction4Story();
                 break;
-	    case '18_6':
-		$this->removeProductLineRequired();
-		break;
+            case '18_6':
+                $this->removeProductLineRequired();
+                break;
+            case '18_7':
+                if(!in_array($this->config->edition, array('max', 'ipd')))
+                {
+                    $this->processOldMetrics();
+                }
+                $this->processHistoryDataForMetric();
+                break;
         }
 
         $this->deletePatch();
@@ -9784,5 +9791,92 @@ class upgradeModel extends model
         $this->setting->setItem('system.product.edit.requiredFields', trim($editRequired, ','));
 
         return true;
+    }
+
+    /**
+     * Convert old metrics to new metrics.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processOldMetrics()
+    {
+        $this->loadModel('metric');
+        $scopeMap   = $this->config->metric->oldScopeMap;
+        $purposeMap = $this->config->metric->oldPurposeMap;
+        $objectMap  = $this->config->metric->oldObjectMap;
+
+        $oldMetrics = $this->dao->select('*')->from(TABLE_BASICMEAS)->where('deleted')->eq('0')->orderBy('order_asc')->fetchAll();
+
+        foreach($oldMetrics as $oldMetric)
+        {
+            $metric = new stdclass();
+            $metric->scope       = $scopeMap[$oldMetric->scope] ? $scopeMap[$oldMetric->scope] : 'other';
+            $metric->purpose     = $purposeMap[$oldMetric->purpose] ? $purposeMap[$oldMetric->purpose] : 'other';
+            $metric->object      = $objectMap[$oldMetric->object] ? $objectMap[$oldMetric->object] : 'other';
+            $metric->stage       = 'wait';
+            $metric->type        = 'sql';
+            $metric->name        = $oldMetric->name;
+            $metric->code        = $oldMetric->code;
+            $metric->desc        = '';
+            $metric->definition  = $oldMetric->definition;
+            $metric->createdBy   = $oldMetric->createdBy;
+            $metric->createdDate = helper::isZeroDate($oldMetric->createdDate) ? null : $oldMetric->createdDate;
+            $metric->editedBy    = $oldMetric->editedBy;
+            $metric->editedDate  = helper::isZeroDate($oldMetric->editedDate) ? null : $oldMetric->editedDate;
+            $metric->builtin     = '1';
+            $metric->fromID      = $oldMetric->id;
+            $metric->order       = 0;
+            $metric->deleted     = $oldMetric->deleted;
+
+            $this->dao->insert(TABLE_METRIC)->data($metric)->exec();
+
+            $metricID = $this->dao->lastInsertID();
+
+            $this->loadModel('action')->create('metric', $metricID, 'created', '', '', 'system');
+        }
+
+        return !dao::isError();
+    }
+
+    public function processHistoryDataForMetric()
+    {
+        $this->processHistoryOfStory();
+    }
+
+    public function processHistoryOfStory()
+    {
+        $linked2releaseActions = $this->dao->select('objectID, extra, max(`date`) as date, action')
+            ->from(TABLE_ACTION)
+            ->where('objectType')->eq('story')
+            ->andWhere('action')->eq('linked2release')
+            ->groupBy('objectID')
+            ->get();
+
+        $releasedStorys = $this->dao->select('t2.id, t1.date')
+            ->from("($linked2releaseActions)")->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.objectID = t2.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
+            ->leftJoin(TABLE_RELEASE)->alias('t4')->on('t1.extra = t4.id')
+            ->where('t2.deleted')->eq('0')
+            ->andWhere('t3.deleted')->eq('0')
+            ->andWhere('t2.stage', true)->eq('released')
+            ->orWhere('t2.closedReason')->eq('done')
+            ->markRight(1)
+            ->fetchAll();
+
+        $this->dao->begin();
+        foreach($releasedStorys as $releasedStory)
+        {
+            $story = $releasedStory->id;
+            $date  = $releasedStory->date;
+
+            $this->dao->update(TABLE_STORY)
+                ->set('releasedDate')->eq($date)
+                ->where('id')->eq($story)
+                ->exec();
+        }
+        $this->dao->commit();
+>>>>>>> 18.x
     }
 }

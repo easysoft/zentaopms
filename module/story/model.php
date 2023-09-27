@@ -994,6 +994,7 @@ class storyModel extends model
             ->setIF($this->post->closedReason != false and $oldStory->closedDate == '', 'closedDate', $now)
             ->setIF($this->post->closedBy     != false or  $this->post->closedReason != false, 'status', 'closed')
             ->setIF($this->post->closedReason != false and $this->post->closedBy     == false, 'closedBy', $this->app->user->account)
+            ->setIF($this->post->stage == 'released', 'releasedDate', $now)
             ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'feedbackBy', '')
             ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'notifyEmail', '')
             ->setIF(!empty($_POST['plan'][0]) and $oldStory->stage == 'wait', 'stage', 'planned')
@@ -2423,6 +2424,9 @@ class storyModel extends model
             $story->lastEditedDate = $now;
             $story->stage          = $stage;
             $story->stagedBy       = $account;
+
+            /* Add for record released date. */
+            if($story->stage == 'released') $story->releasedDate = $now;
 
             $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
             $this->dao->update(TABLE_STORYSTAGE)->set('stage')->eq($stage)->set('stagedBy')->eq($account)->where('story')->eq((int)$storyID)->exec();
@@ -6878,7 +6882,7 @@ class storyModel extends model
                     if(isset($branches[$story->branch]) and $showBranch and $this->config->vision != 'lite') $storyTitle .= "<span class='label label-outline label-badge' title={$branches[$story->branch]}>{$branches[$story->branch]}</span> ";
                     if($story->module and isset($modulePairs[$story->module])) $storyTitle .= "<span class='label label-gray label-badge'>{$modulePairs[$story->module]}</span> ";
                     if($story->parent > 0 and !($storyType == 'requirement' and $story->type == 'story')) $storyTitle .= '<span class="label label-badge label-light" title="' . $this->lang->story->children . '">' . $this->lang->story->childrenAB . '</span> ';
-                    $storyTitle .= $canView ? html::a($storyLink, $story->title, '', "title='$story->title' style='color: $story->color' data-app='$tab'") : "<span style='color: $story->color'>{$storyTitle}{$story->title}</span>";
+                    $storyTitle .= $canView ? html::a($storyLink, $story->title, '', "title='$story->title' style='color: $story->color' data-app='$tab'") : "<span style='color: $story->color'>{$story->title}</span>";
                     $data->title = $storyTitle;
                 }
                 if($col->name == 'mailto')
@@ -6886,12 +6890,12 @@ class storyModel extends model
                     $mailto = array_map(function($account) use($users){$account = trim($account); return zget($users, $account);}, explode(',', $story->mailto));
                     $data->mailto = implode(' ', $mailto);
                 }
-		if($col->name == 'URS' || $col->name == 'SRS')
-		{
+                if($col->name == 'URS' || $col->name == 'SRS')
+                {
                     $link    = helper::createLink('story', 'relation', "storyID=$story->id&storyType=$story->type");
                     $storySR = $this->getStoryRelationCounts($story->id, $story->type);
                     $data->{$col->name} = $storySR > 0 ? html::a($link, $storySR, '', 'class="iframe" data-toggle="modal"') : 0;
-		}
+                }
                 if(in_array($col->name, $userFields)) $data->{$col->name} = zget($users, $story->{$col->name});
                 if(in_array($col->name, $dateFields)) $data->{$col->name} = helper::isZeroDate($story->{$col->name}) ? '' : substr($story->{$col->name}, 5, 11);
             }
@@ -6908,5 +6912,24 @@ class storyModel extends model
             if(!empty($story->children)) $rows = array_merge($rows, $this->generateRow($story->children, $cols, $options, $execution, $storyType));
         }
         return $rows;
+    }
+
+    /**
+     * 更新需求的发布日期
+     * Update the released date of story.
+     *
+     * @param  string $stories
+     * @param  string $releasedDate
+     * @access public
+     * @return bool
+     */
+    public function updateStoryReleasedDate(string $stories, string $releasedDate): bool
+    {
+        $this->dao->update(TABLE_STORY)
+            ->set('releasedDate')->eq($releasedDate)
+            ->where('id')->in($stories)
+            ->exec();
+
+        return !dao::isError();
     }
 }

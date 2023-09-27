@@ -173,9 +173,30 @@ class designModel extends model
      * @access public
      * @return void
      */
-    public function linkCommit($designID = 0, $repoID = 0)
+    public function linkCommit(int $designID = 0, int $repoID = 0)
     {
+        $repo      = $this->loadModel('repo')->getByID($repoID);
         $revisions = $_POST['revision'];
+
+        if($repo->SCM == 'Gitlab')
+        {
+            $logs = array();
+            foreach($this->session->designRevisions as $key => $commit)
+            {
+                if(in_array($commit->revision, $revisions))
+                {
+                    $log = new stdclass();
+                    $log->committer = $commit->committer_name;
+                    $log->revision  = $commit->id;
+                    $log->comment   = $commit->message;
+                    $log->time      = date('Y-m-d H:i:s', strtotime($commit->created_at));
+
+                    $logs[] = $log;
+                }
+            }
+            $this->repo->saveCommit($repoID, array('commits' => $logs), 0);
+            $revisions = $this->dao->select('id')->from(TABLE_REPOHISTORY)->where('revision')->in($revisions)->andWhere('repo')->eq($repoID)->fetchPairs('id');
+        }
 
         foreach($revisions as $revision)
         {
@@ -247,10 +268,9 @@ class designModel extends model
         $design->files       = $this->loadModel('file')->getByObject('design', $designID);
         $design->productName = $design->product ? $this->dao->findByID($design->product)->from(TABLE_PRODUCT)->fetch('name') : $this->lang->product->all;
 
-
         $design->commit = '';
         $relations = $this->loadModel('common')->getRelations('design', $designID, 'commit');
-        foreach($relations as $relation) $design->commit .= html::a(helper::createLink('design', 'revision', "repoID=$relation->BID&projectID={$design->project}"), "#$relation->BID");
+        foreach($relations as $relation) $design->commit .= html::a(helper::createLink('design', 'revision', "revisionID=$relation->BID&projectID={$design->project}"), "#$relation->BID");
 
         return $this->loadModel('file')->replaceImgURL($design, 'desc');
     }

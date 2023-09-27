@@ -1,0 +1,14 @@
+---
+title: zt_story
+author: zhouxin
+version: "1.0"
+fields:
+- field: id
+  range: 1-50
+- field: product
+  range: 1-10{5}
+- field: stage
+  range: projected
+...
+
+

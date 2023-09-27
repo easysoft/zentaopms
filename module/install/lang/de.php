@@ -24,6 +24,7 @@ $lang->install->keepInstalling   = 'Installation dieser Version fortsetzen.';
 $lang->install->seeLatestRelease = 'Letzte Version anzeigen';
 $lang->install->welcome          = 'Danke, dass sie sich für ZenTao als Projektmanagement Software entschieden haben!';
 $lang->install->license          = 'ZenTao PMS läuft unter der Z PUBLIC LICENSE(ZPL) 1.2';
+$lang->install->devopsDesc       = 'The underlying foundation of the DevOps platform is built upon cloud-native technologies such as Docker and Kubernetes (K8s). It incorporates an integrated application marketplace, allowing seamless installation of essential tools like code repositories, pipelines, and artifact libraries.';
 $lang->install->desc             = <<<EOT
 ZenTao ALM is an open source software released under <a href='http://zpl.pub/page/zplv12.html' target='_blank'>ZPL</a> or <a href='https://www.gnu.org/licenses/agpl-3.0.en.html' target='_blank'>AGPL</a> License. It integrates with Product Management, Project Management, Test Management, Document Management, CI Management, etc. ZenTao is a perfect choice for managing software development projects.
 
@@ -37,7 +38,7 @@ LinkedIn: <a href='https://www.linkedin.com/company/1156596/' target='_blank'>Ze
 Facebook: <a href='https://www.facebook.com/natureeasysoft' target='_blank'>ZenTao Software</a>
 Twitter: <a href='https://twitter.com/ZentaoA' target='_blank'>ZenTao ALM</a>
 
-You are installing ZenTao <strong class='text-danger'>%s</strong>.
+You are installing <strong class='text-danger'>ZenTao %s</strong>.
 EOT;
 
 $lang->install->selectMode          = "Select mode";
@@ -369,3 +370,10 @@ $lang->install->meshiot->desc = <<<EOD
   <li>Battery Available: no changes required to any equipment on your site</li>
 </ul>
 EOD;
+
+$lang->install->solution = new stdclass();
+$lang->install->solution->skip       = 'Skip';
+$lang->install->solution->title      = 'DevOps platform application settings';
+$lang->install->solution->progress   = 'Installing of DevOps platform';
+$lang->install->solution->desc       = 'Welcome to the DevOps platform. We will install the following applications simultaneously when you install the platform to help you get started quickly!';
+$lang->install->solution->overMemory = 'Insufficient memory prevents simultaneous installation. It is recommended to install applications manually after the platform is started.';

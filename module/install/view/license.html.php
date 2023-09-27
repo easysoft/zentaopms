@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class='modal-footer'>
-      <?php echo html::a(inlink('step1'), $lang->install->next, '', "class='btn btn-primary btn-install btn-wide'");?>
+      <?php echo html::a($config->inQuickon ? inlink('step5') : inlink('step1'), $lang->install->next, '', "class='btn btn-primary btn-install btn-wide'");?>
     </div>
   </div>
 </div>

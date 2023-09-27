@@ -17,7 +17,8 @@ detailHeader
     to::title(
         entityLabel(
             set(array('entityID' => $job->id, 'level' => 1, 'text' => $job->name))
-        )
+        ),
+        $job->deleted ? span(setClass('label danger'), $lang->product->deleted) : null,
     ),
 );
 
@@ -98,12 +99,12 @@ detailBody
                     item
                     (
                         set::name($lang->compile->status),
-                        $status
+                        !empty($status) ? $status : ''
                     ),
                     item
                     (
                         set::name($lang->compile->time),
-                        $time
+                        !empty($time) ? $time : ''
                     ),
                     item
                     (
@@ -117,11 +118,7 @@ detailBody
                 set::key('job-result'),
                 set::title($lang->compile->result),
                 set::active(true),
-                tableData
-                (
-                    //TODO;
-                    div('等待 testtask/view/unitgroup.html.php 重构完成，直接替换')
-                )
+                div(setID('jobCases'), setData('task', $compile->testtask))
             ) : '',
             $hasLog ? tabPane
             (

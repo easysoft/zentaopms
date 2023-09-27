@@ -1,0 +1,32 @@
+---
+title: zt_bug
+author: qixinzhi
+version: "1.0"
+fields:
+- field: id
+  range: 1-10000
+- field: product
+  range: 1-10{48}
+- field: project
+  range: 1-10{48}
+- field: assignedTo
+  range: admin,user{2},test{5},dev{8},pm{7},po{10},closed{5},[]{10}
+- field: openedDate
+  range: "20100101 000000-20210101 230000:10D"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: resolvedDate
+  range: "20110101 000000-20210101 230000:10D"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: closedDate
+  range: "20120101 000000-20220101 230000:10D"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: status
+  range: active{1},resolved{1},closed{1}
+- field: resolution
+  range: bydesign{3},duplicate{3},external{3},fixed{3},notrepro{3},postponed{3},tostory{3},willnotfix{3}
+- field: deleted
+  range: 0{24},1{24}
+...

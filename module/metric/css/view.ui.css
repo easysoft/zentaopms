@@ -1,0 +1,4 @@
+.card-data {display: inline-block; padding: 12px 36px; border: 1px solid #cbd5e1; border-radius: 4px;}
+.card-digit {font-size: 16px; color: #1e293b;}
+.card-title {font-size: 12px; color: #475569;}
+.word-no-wrap {word-break: keep-all; white-space: break-spaces;}

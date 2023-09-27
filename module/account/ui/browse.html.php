@@ -22,7 +22,7 @@ featureBar
 /* zin: Define the toolbar on main menu. */
 $canCreate  = hasPriv('account', 'create');
 $createLink = $this->createLink('account', 'create');
-$createItem = array('text' => $lang->account->create, 'url' => $createLink, 'class' => 'primary', 'icon' => 'plus', 'data-toggle' => 'modal');
+$createItem = array('text' => $lang->account->create, 'url' => $createLink, 'class' => 'primary', 'icon' => 'plus', 'data-toggle' => 'modal', 'data-size' => 'sm');
 
 $tableData = initTableData($accountList, $config->account->dtable->fieldList, $this->account);
 

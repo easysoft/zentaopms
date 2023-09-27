@@ -156,8 +156,8 @@ class repo extends control
             {
                 /* Add webhook. */
                 $repo = $this->repo->getByID($repoID);
-                $this->loadModel('gitlab')->addPushWebhook($repo);
-                $this->gitlab->updateCodePath($repo->serviceHost, $repo->serviceProject, $repo->id);
+                $this->loadModel('gitlab')->updateCodePath($repo->serviceHost, $repo->serviceProject, $repo->id);
+                $this->repo->updateCommitDate($repoID);
             }
 
             $this->loadModel('action')->create('repo', $repoID, 'created');
@@ -571,14 +571,16 @@ class repo extends control
         }
         if(!$repo->synced) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID"));
 
+        if($repo->SCM == 'Gitlab') list($branchInfo, $tagInfo) = $this->repoZen->getBrowseInfo($repo);
+
         /* Set branch or tag for git. */
         $branches = $tags = $branchesAndTags = array();
         if(in_array($repo->SCM, $this->config->repo->gitTypeList))
         {
             $scm = $this->app->loadClass('scm');
             $scm->setEngine($repo);
-            $branches = $scm->branch();
-            $initTags = $scm->tags('');
+            $branches = isset($branchInfo) && $branchInfo !== false ? $branchInfo : $scm->branch();
+            $initTags = isset($tagInfo) && $tagInfo !== false ? $tagInfo : $scm->tags('');
             foreach($initTags as $tag) $tags[$tag] = $tag;
             $branchesAndTags = $branches + $tags;
 
@@ -630,6 +632,8 @@ class repo extends control
             $item->link     = $this->repo->createLink('revision', "repoID=$repoID&objectID=$objectID&revision={$item->revision}" . $pathInfo);
             $item->revision = $repo->SCM != 'Subversion' ? substr($item->revision, 0, 10) : $item->revision;
         }
+
+        if($path == '') $this->repoZen->updateLastCommit($repo, $lastRevision);
 
         /* Get files info. */
         $infos = $this->repoZen->getFilesInfo($repo, $path, $branchID, $refresh, $revision, $lastRevision);
@@ -1062,6 +1066,7 @@ class repo extends control
         $latestInDB = $this->repo->getLatestCommit($repoID);
         $this->view->version    = $latestInDB ? (int)$latestInDB->commit : 1;
         $this->view->repoID     = $repoID;
+        $this->view->repo       = $this->repo->getByID($repoID);
         $this->view->objectID   = $objectID;
         $this->view->branch     = $branch;
         $this->view->browseLink = $this->repo->createLink('browse', "repoID=" . ($this->app->tab == 'devops' ? $repoID : '') . "&branchID=" . helper::safe64Encode(base64_encode($branch)) . "&objectID=$objectID", '', false) . "#app={$this->app->tab}";
@@ -1490,25 +1495,28 @@ class repo extends control
             }
         }
 
-        $latestInDB = $this->dao->select('t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
-            ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
-            ->where('t1.repo')->eq($repoID)
-            ->beginIF($repo->SCM == 'Git' and $this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
-            ->beginIF($repo->SCM == 'Gitlab' and $this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
-            ->orderBy('t1.time')
-            ->limit(1)
-            ->fetch();
+        $logs = array();
+        if($repo->SCM != 'Gitlab')
+        {
+            $latestInDB = $this->dao->select('t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
+                ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
+                ->where('t1.repo')->eq($repoID)
+                ->beginIF($repo->SCM == 'Git' and $this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
+                ->beginIF($repo->SCM == 'Gitlab' and $this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
+                ->orderBy('t1.time')
+                ->limit(1)
+                ->fetch();
 
-        $version  = empty($latestInDB) ? 1 : $latestInDB->commit + 1;
-        $logs     = array();
-        $revision = $version == 1 ? 'HEAD' : (in_array($repo->SCM, array('Git', 'Gitea', 'Gogs')) ? $latestInDB->commit : $latestInDB->revision);
-        if($type == 'batch')
-        {
-            $logs = $this->scm->getCommits($revision, $this->config->repo->batchNum, $branchID);
-        }
-        else
-        {
-            $logs = $this->scm->getCommits($revision, 0, $branchID);
+            $version  = empty($latestInDB) ? 1 : $latestInDB->commit + 1;
+            $revision = $version == 1 ? 'HEAD' : (in_array($repo->SCM, array('Git', 'Gitea', 'Gogs')) ? $latestInDB->commit : $latestInDB->revision);
+            if($type == 'batch')
+            {
+                $logs = $this->scm->getCommits($revision, $this->config->repo->batchNum, $branchID);
+            }
+            else
+            {
+                $logs = $this->scm->getCommits($revision, 0, $branchID);
+            }
         }
 
         $commitCount = $this->repo->saveCommit($repoID, $logs, $version, $branchID);

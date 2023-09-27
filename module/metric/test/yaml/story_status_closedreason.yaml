@@ -1,0 +1,28 @@
+---
+title: zt_story
+author: qixinzhi
+version: "1.0"
+fields:
+- field: id
+  range: 1-10000
+- field: product
+  range: 1-10{70}
+- field: estimate
+  range: 1-10{70}
+- field: openedDate
+  range: "20100101 000000-20210101 230000:10D"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: closedDate
+  range: "20110101 000000-20210101 230000:10D"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: closedReason
+  range: bydesign{1},cancel{1},done{1},duplicate{1},postponed{1},subdivided{1},willnotdo{1}
+- field: status
+  range: changing{7},active{7},draft{7},reviewing{7},closed{7}
+- field: type
+  range: story
+- field: deleted
+  range: 0{35},1{35}
+...

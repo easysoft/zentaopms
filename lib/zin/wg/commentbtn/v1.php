@@ -8,6 +8,7 @@ class commentBtn extends btn
         'dataTarget?:string',
         'dataUrl?:string',
         'dataType?:string',
+        'dataLoad?:string',
         'icon?:string',
         'iconClass?:string',
         'text?:string',
@@ -30,12 +31,14 @@ class commentBtn extends btn
         $dataTarget = $this->prop('dataTarget');
         $dataUrl    = $this->prop('dataUrl');
         $dataType   = $this->prop('dataType');
+        $dataLoad   = $this->prop('dataLoad');
         $props      = parent::getProps();
 
         $props['data-toggle']    = 'modal';
         $props['data-type']      = $dataType;
         $props['data-url']       = $dataUrl;
         $props['data-target']    = $dataTarget;
+        $props['data-load']      = $dataLoad;
 
         return $props;
     }

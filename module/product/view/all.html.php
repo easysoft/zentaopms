@@ -13,6 +13,7 @@
 <?php include '../../common/view/sortable.html.php';?>
 <?php js::set('productLines', $productLines); ?>
 <?php $canBatchEdit = common::hasPriv('product', 'batchEdit'); ?>
+<?php $canSort      = common::hasPriv('product', 'updateOrder');?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolBar pull-left">
     <?php common::sortFeatureMenu();?>
@@ -212,7 +213,7 @@
             <?php if($canBatchEdit):?>
             <td class='c-checkbox'><?php echo html::checkbox('productIDList', array($product->id => ''));?></td>
             <?php endif;?>
-            <td class="c-name text-left sort-handler table-nest-title" title='<?php echo $product->name?>'>
+            <td class="c-name text-left <?php echo $canSort ? 'sort-handler' : '';?> table-nest-title" title='<?php echo $product->name?>'>
               <?php
               echo html::a($this->createLink('product', 'browse', 'productID=' . $product->id), $product->name);
               ?>

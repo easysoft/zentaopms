@@ -225,6 +225,7 @@ $lang->instance->statusList['destroyed']        = 'Destroyed';
 $lang->instance->statusList['abnormal']         = 'Abnormal';
 $lang->instance->statusList['upgrading']        = 'Updating';
 $lang->instance->statusList['unknown']          = 'unknown';
+$lang->instance->statusList['scheduling']       = 'Scheduling';
 
 $lang->instance->htmlStatusesClass = array();
 $lang->instance->htmlStatusesClass['running']          = 'success';
@@ -301,6 +302,7 @@ $lang->instance->notices['enableSMTPSuccess']  = 'Enable SMTP successfully';
 $lang->instance->notices['disableSMTPSuccess'] = 'Disable SMTP successfully';
 $lang->instance->notices['confirmCustom']      = 'After modifying the custom configuration, the service will automatically restart to make the configuration effective.';
 $lang->instance->notices['required']           = 'cannot be empty';
+$lang->instance->notices['notEnoughResource']  = 'Insufficient platform resources. Do you want to continue installing?';
 
 $lang->instance->nameChangeTo      = '%s is modified to %s.';
 $lang->instance->versionChangeTo   = 'Upgrade %s to %s.';

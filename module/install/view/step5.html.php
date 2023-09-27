@@ -67,7 +67,7 @@
             <th></th><td><?php echo html::checkBox('importDemoData', $lang->install->importDemoData);?></td>
           </tr>
           <tr class='text-center'>
-            <td colspan='2'><?php echo html::submitButton();?></td>
+            <td colspan='2'><?php echo html::submitButton($config->inQuickon ? $lang->install->next : $lang->save);?></td>
           </tr>
         </table>
       </form>

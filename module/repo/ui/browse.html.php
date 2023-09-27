@@ -80,7 +80,6 @@ if($fileName) $breadcrumbItems[] = h::span($fileName);
         $app->tab == 'project' ? dropmenu
         (
             set::id('repoDropmenu'),
-            set::module('repo'),
             set::text($repo->name),
             set::url(createLink('repo', 'ajaxGetDropMenu', "repoID={$repo->id}&module=repo&method=browse&projectID={$objectID}"))
         ) : null,
@@ -209,7 +208,7 @@ toolbar
         set::className('last-sync-time'),
         $lang->repo->notice->lastSyncTime . $cacheTime
     ),
-    item(set($refreshItem)),
+    $repo->SCM != 'Gitlab' ? item(set($refreshItem)) : null,
     dropdown
     (
         set::staticMenu(true),
@@ -257,6 +256,7 @@ jsVar('sortLink', helper::createLink('repo', 'browse', "repoID={$repoID}&recTota
 /* Disbale check all checkbox of table header */
 $config->repo->commentDtable->fieldList['id']['checkbox'] = jsRaw('(rowID) => rowID !== \'HEADER\'');
 
+if($repo->SCM == 'Gitlab') unset($config->repo->commentDtable->fieldList['commit']);
 $commentsTableData = initTableData($revisions, $config->repo->commentDtable->fieldList, $this->repo);
 
 $readAllLink = $this->repo->createLink('log', "repoID=$repoID&objectID=$objectID&entry=" . $encodePath . "&revision=HEAD&type=$logType");
