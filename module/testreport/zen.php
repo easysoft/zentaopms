@@ -418,7 +418,7 @@ class testreportZen extends testreport
     {
         /* Get activated bugs. */
         $buildIdList   = array_keys($builds);
-        $activatedBugs = $this->testreport->getActivatedBugs($tasks, $productIdList, $begin, $end, $buildIdList);
+        $activatedBugs = $this->bug->getActivatedBugs($productIdList, $begin, $end, $buildIdList);
 
         /* Get stage and handle groups. */
         list($stageGroups, $handleGroups) = $this->getStageAndHandleGroups($productIdList, $begin, $end, $buildIdList);
