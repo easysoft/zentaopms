@@ -446,29 +446,16 @@ class buildModel extends model
     }
 
     /**
-     * Create a build
+     * 创建一个版本。
+     * Create a build.
      *
+     * @param  object $build
      * @access public
-     * @return void
+     * @return bool
      */
-    public function create()
+    public function create(object $build): bool
     {
-        $build = new stdclass();
-        $build->stories = '';
-        $build->bugs    = '';
-
-        $build = fixer::input('post')
-            ->setDefault('project,execution,product,branch,artifactRepoID', 0)
-            ->setDefault('builds,stories,bugs', '')
-            ->cleanInt('product')
-            ->add('createdBy', $this->app->user->account)
-            ->add('createdDate', helper::now())
-            ->stripTags($this->config->build->editor->create['id'], $this->config->allowedTags)
-            ->join('builds', ',')
-            ->join('branch', ',')
-            ->remove('resolvedBy,allchecker,files,labels,isIntegrated,uid,isArtifactRepo')
-            ->get();
-
+        /* Integrated version merging branch. */
         if($this->post->isIntegrated == 'yes')
         {
             $build->execution = 0;
@@ -483,16 +470,18 @@ class buildModel extends model
             }
             if($relationBranch) $build->branch = implode(',', $relationBranch);
         }
-
-        $product = $this->loadModel('product')->getByID($build->product);
-        if(!empty($product) and $product->type != 'normal' and $this->post->isIntegrated == 'no' and !isset($_POST['branch']))
+        else
         {
-            $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
-            dao::$errors['branch'] = sprintf($this->lang->error->notempty, $this->lang->product->branch);
+            $product = $this->loadModel('product')->getByID((int)$build->product);
+            if(!empty($product) && $product->type != 'normal'&& $this->post->branch === false)
+            {
+                $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+                dao::$errors['branch'] = sprintf($this->lang->error->notempty, $this->lang->product->branch);
+            }
         }
-
         if(dao::isError()) return false;
 
+        /* Process and insert build data. */
         $build = $this->loadModel('file')->processImgURL($build, $this->config->build->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_BUILD)->data($build)
             ->autoCheck()
@@ -500,15 +489,15 @@ class buildModel extends model
             ->check('name', 'unique', "product = {$build->product} AND branch = '{$build->branch}' AND deleted = '0'")
             ->checkFlow()
             ->exec();
+        if(dao::isError()) return false;
 
-        if(!dao::isError())
-        {
-            $buildID = $this->dao->lastInsertID();
-            $this->file->updateObjectID($this->post->uid, $buildID, 'build');
-            $this->file->saveUpload('build', $buildID);
-            $this->loadModel('score')->create('build', 'create', $buildID);
-            return $buildID;
-        }
+        /* Set file linkage and score info. */
+        $buildID = $this->dao->lastInsertID();
+        $this->file->updateObjectID($this->post->uid, $buildID, 'build');
+        $this->file->saveUpload('build', $buildID);
+        $this->loadModel('score')->create('build', 'create', $buildID);
+        $this->loadModel('action')->create('build', $buildID, 'opened');
+        return $buildID;
     }
 
     /**

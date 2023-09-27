@@ -12,13 +12,14 @@
 class build extends control
 {
     /**
+     * 公共函数，设置产品型项目属性。
      * Common actions.
      *
      * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function commonActions($projectID = 0)
+    public function commonActions(int $projectID = 0)
     {
         $hidden  = '';
         if($projectID)
@@ -29,10 +30,12 @@ class build extends control
             $this->view->multipleProject = $project->multiple;
         }
 
-        $this->view->hidden = $hidden;
+        $this->view->hidden    = $hidden;
+        $this->view->projectID = $projectID;
     }
 
     /**
+     * 创建一个版本。
      * Create a build.
      *
      * @param  int    $executionID
@@ -41,104 +44,40 @@ class build extends control
      * @access public
      * @return void
      */
-    public function create($executionID = 0, $productID = 0, $projectID = 0)
+    public function create(int $executionID = 0, int $productID = 0, int $projectID = 0)
     {
-        /* Load these models. */
-        $this->loadModel('execution');
-        $this->loadModel('user');
-
         if(!empty($_POST))
         {
-            if(empty($executionID) && $this->app->tab == 'execution') dao::$errors['execution'] = $this->lang->build->emptyExecution;
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $build = form::data()->get();
+            if(dao::isError()) return $this->sendError(dao::getError());
+            if(commonModel::isTutorialMode()) return $this->sendSuccess(array('closeModal' => true)); // Fix bug #21095.
 
-            if(commonModel::isTutorialMode()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true)); // Fix bug #21095.
-
-            $buildID = $this->build->create();
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->loadModel('action')->create('build', $buildID, 'opened');
+            $buildID = $this->build->create($build);
+            if(dao::isError()) return $this->sendError(dao::getError());
 
             $message = $this->executeHooks($buildID);
             if($message) $this->lang->saveSuccess = $message;
-
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $buildID));
-            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.loadExecutionBuilds($executionID, $buildID)")); // Code for task #5126.
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('build', 'view', "buildID=$buildID") . "#app={$this->app->tab}"));
+            return $this->sendSuccess(array('locate' => $this->createLink('build', 'view', "buildID=$buildID") . "#app={$this->app->tab}", 'id' => $buildID));
         }
 
         $status = empty($this->config->CRProduct) ? 'noclosed' : '';
-        $this->loadModel('product');
+        $this->loadModel('execution');
         $this->loadModel('project');
         /* Set menu. */
         if($this->app->tab == 'project')
         {
             $this->project->setMenu($projectID);
-            $executions    = $this->execution->getPairs($projectID, 'all', 'stagefilter|leaf|order_asc');
-            $executionID   = empty($executionID) ? key($executions) : $executionID;
-            $productGroups = $executionID ? $this->product->getProducts($executionID, $status) : array();
-            $branchGroups  = $executionID ? $this->project->getBranchesByProject($executionID) : array();
-            $this->session->set('project', $projectID);
         }
-        elseif($this->app->tab == 'execution')
+        elseif(in_array($this->app->tab, array('execution', 'qa')))
         {
-            $execution     = $this->execution->getByID($executionID);
-            $executions    = $this->execution->getPairs($execution->project, 'all', 'stagefilter|leaf|order_asc');
-            $projectID     = $execution->project;
-            $productGroups = $this->product->getProducts($executionID, $status);
-            $branchGroups  = $this->project->getBranchesByProject($executionID);
-            $this->execution->setMenu($executionID);
-            $this->session->set('project', $execution->project);
-        }
-        elseif($this->app->tab == 'qa')
-        {
-            $execution     = $this->execution->getByID($executionID);
-            $projectID     = $execution ? $execution->project : 0;
-            $executions    = $this->execution->getPairs($projectID, 'all', 'stagefilter|leaf');
-            $productGroups = $this->product->getProducts($executionID, $status);
-            $branchGroups  = $this->project->getBranchesByProject($executionID);
+            $execution = $this->execution->getByID($executionID);
+            $projectID = $execution ? $execution->project : 0;
         }
 
-        $this->commonActions($projectID);
+        if($this->app->tab == 'execution') $this->execution->setMenu($executionID);
+        if(in_array($this->app->tab, array('execution', 'project'))) $this->session->set('project', $projectID);
 
-        $productID     = $productID ? $productID : key($productGroups);
-        $branchPairs   = $this->loadModel('branch')->getPairs($productID, 'active');
-        $branches      = array();
-        $products      = array();
-
-        /* Set branches and products. */
-        if(isset($productGroups[$productID]) and $productGroups[$productID]->type != 'normal' and isset($branchGroups[$productID]))
-        {
-            foreach($branchGroups[$productID] as $branchID => $branch)
-            {
-                if(isset($branchPairs[$branchID])) $branches[$branchID] = $branchPairs[$branchID];
-            }
-        }
-
-        foreach($productGroups as $product) $products[$product->id] = $product->name;
-
-        if(!$this->view->hidden && $products)
-        {
-            $this->loadModel('artifactrepo');
-            $productArtifactRepos = array();
-            foreach($products as $ID => $productName)
-            {
-                $productArtifactRepos[$ID] = $this->artifactrepo->getReposByProduct($ID);
-            }
-            $this->view->productArtifactRepos = $productArtifactRepos;
-        }
-
-        $this->view->title      = $this->lang->build->create;
-
-        $this->view->product       = isset($productGroups[$productID]) ? $productGroups[$productID] : '';
-        $this->view->branches      = $branches;
-        $this->view->executionID   = $executionID;
-        $this->view->products      = $products;
-        $this->view->projectID     = $projectID;
-        $this->view->executions    = $executions;
-        $this->view->lastBuild     = $this->build->getLast($executionID, $projectID);
-        $this->view->productGroups = $productGroups;
-        $this->view->users         = $this->user->getPairs('nodeleted|noclosed');
-        $this->display();
+        $this->buildZen->assignCreateData($productID, $executionID, $projectID, $status);
     }
 
     /**

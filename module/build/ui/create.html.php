@@ -15,8 +15,7 @@ jsVar('multipleSelect', $lang->build->placeholder->multipleSelect);
 jsVar('autoRelationTip', $lang->build->notice->autoRelation);
 jsVar('projectID', $projectID);
 jsVar('executionID', $executionID);
-jsVar('productGroups', $productGroups);
-jsVar('productArtifactRepos', !empty($productArtifactRepos) ? $productArtifactRepos : '');
+jsVar('artifactRepos', !empty($artifactRepos) ? $artifactRepos : '');
 jsVar('today', helper::today());
 
 $integratedRow = '';
@@ -75,7 +74,7 @@ if(!$hidden)
 
         $artifactRepoRow[] = formRow
         (
-            setClass('artifactrepo ' . ((empty($product) || empty($productArtifactRepos[$product->id])) ? 'hidden' : '')),
+            setClass('artifactrepo ' . ((empty($product) || empty($artifactRepos[$product->id])) ? 'hidden' : '')),
             formGroup
             (
                 set::width('1/2'),
@@ -134,10 +133,14 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            set::name('branch[]'),
             set::label($lang->product->branchName['branch']),
-            set::value(key($productBranches)),
-            set::items($branches),
+            picker
+            (
+                set::name('branch[]'),
+                set::value(key($productBranches)),
+                set::items($branches),
+                set::multiple(true),
+            )
         )
     ),
     !empty($artifactRepoRow) ? $artifactRepoRow : null,

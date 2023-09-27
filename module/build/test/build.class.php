@@ -168,30 +168,31 @@ class buildTest
     /**
      * Function create test by build
      *
-     * @param  int   $executionID
      * @param  array $param
      * @access public
      * @return array
      */
-    public function createTest($executionID, $param = array())
+    public function createTest($param = array())
     {
         $toData = date('Y-m-d');
-        $labels = array();
-        $files  = array();
+        $createFields = array(
+            'product'  => '',
+            'name'     => '',
+            'builder'  => 'admin',
+            'date'     => $toData,
+            'scmPath'  => '',
+            'filePath' => '',
+            'desc'     => '',
+            'branch'   => '',
+        );
 
-        $createFields = array('product' => '', 'name' => '', 'builder' => 'admin', 'date' => $toData, 'scmPath' => '', 'filePath' => '',
-            'labels' => $labels, 'files' => $files, 'desc' => '');
+        foreach($param as $key => $value) $createFields[$key] = $value;
 
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $objectID = $this->objectModel->create($executionID);
-
-        unset($_POST);
+        $objectID = $this->objectModel->create((object)$createFields);
 
         if(dao::isError()) return dao::getError();
 
-        $objects = $this->objectModel->getByID($objectID);
+        $objects = $this->objectModel->getByID((int)$objectID);
         return $objects;
     }
 
