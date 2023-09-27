@@ -18,4 +18,6 @@ fields:
   - field: project
     range: '11,60,61,100'
   - field: execution
-    range: '101,106,118,124,102,107,119,125'
+    range: '101,106,118,124,102,107,119,125,0'
+  - field: branch
+    range: '[],1-5'

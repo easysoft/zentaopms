@@ -508,4 +508,17 @@ class buildTest
 
         return $this->objectModel->replaceNameWithRelease($allBuilds, $builds, $releases, $branch, $params, $excludedReleaseIdList);
     }
+
+    public function processBuildForUpdate($buildID, $type)
+    {
+        $oldBuild = $this->objectModel->getById($buildID);
+
+        $build = new stdclass();
+        $build->name   = $type;
+        $build->branch = '';
+        $build->builds = '';
+        if($type != 'noBranch') $build->branch = '1';
+        if($type != 'noBuild') $build->builds = '1,2,3';
+        return $this->objectModel->processBuildForUpdate($build, $oldBuild);
+    }
 }
