@@ -4274,9 +4274,9 @@ class storyModel extends model
         $storyLang->legendChildStories = str_replace($SRCommon, $URCommon, $storyLang->legendChildStories);
         $storyLang->legendSpec         = str_replace($SRCommon, $URCommon, $storyLang->legendSpec);
 
-        $storyLang->report->charts['storysPerProduct'] = str_replace($SRCommon, $URCommon, $storyLang->report->charts['storysPerProduct']);
-        $storyLang->report->charts['storysPerModule']  = str_replace($SRCommon, $URCommon, $storyLang->report->charts['storysPerModule']);
-        $storyLang->report->charts['storysPerSource']  = str_replace($SRCommon, $URCommon, $storyLang->report->charts['storysPerSource']);
+        $storyLang->report->charts['storiesPerProduct'] = str_replace($SRCommon, $URCommon, $storyLang->report->charts['storiesPerProduct']);
+        $storyLang->report->charts['storiesPerModule']  = str_replace($SRCommon, $URCommon, $storyLang->report->charts['storiesPerModule']);
+        $storyLang->report->charts['storiesPerSource']  = str_replace($SRCommon, $URCommon, $storyLang->report->charts['storiesPerSource']);
     }
 
     /**

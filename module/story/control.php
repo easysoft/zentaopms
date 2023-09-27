@@ -1766,7 +1766,7 @@ class story extends control
             if($project->type == 'project')
             {
                 $this->loadModel('project')->setMenu($projectID);
-                if($project and $project->model == 'waterfall') unset($this->lang->story->report->charts['storysPerPlan']);
+                if($project and $project->model == 'waterfall') unset($this->lang->story->report->charts['storiesPerPlan']);
             }
             else
             {
@@ -1775,9 +1775,9 @@ class story extends control
 
             if(!$project->hasProduct)
             {
-                unset($this->lang->story->report->charts['storysPerProduct']);
+                unset($this->lang->story->report->charts['storiesPerProduct']);
 
-                if(!$project->multiple) unset($this->lang->story->report->charts['storysPerPlan']);
+                if(!$project->multiple) unset($this->lang->story->report->charts['storiesPerPlan']);
             }
         }
         else
@@ -1785,7 +1785,7 @@ class story extends control
             $this->product->setMenu($productID, $branchID);
         }
 
-        if($storyType != 'story') unset($this->lang->story->report->charts['storysPerStage']);
+        if($storyType != 'story') unset($this->lang->story->report->charts['storiesPerStage']);
 
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->story->reportChart;
         $this->view->productID     = $productID;
