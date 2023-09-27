@@ -257,81 +257,99 @@ class buildModel extends model
     }
 
     /**
-     * Get builds in pairs.
+     * 通过条件获取版本id:name的键值对。
+     * Get build pairs by condition.
      *
-     * @param int|array  $products
-     * @param string|int $branch
-     * @param string     $params   noempty|notrunk|noterminate|withbranch|hasproject|noDeleted|singled|noreleased|releasedtag, can be a set of them
-     * @param string|int $objectID
-     * @param string     $objectType
-     * @param int|array  $buildIdList
-     * @param bool       $replace
+     * @param  array      $productIdList
+     * @param  string|int $branch
+     * @param  string     $params       noempty|notrunk|noterminate|withbranch|hasproject|noDeleted|singled|noreleased|releasedtag, can be a set of them
+     * @param  int        $objectID
+     * @param  string     $objectType
+     * @param  string     $buildIdList
+     * @param  bool       $replace
      * @access public
      * @return array
      */
-    public function getBuildPairs($products, $branch = 'all', $params = 'noterminate, nodone', $objectID = 0, $objectType = 'execution', $buildIdList = '', $replace = true)
+    public function getBuildPairs(array $productIdList, string|int $branch = 'all', string $params = 'noterminate, nodone', int $objectID = 0, string $objectType = 'execution', string $buildIdList = '', bool $replace = true): array
     {
-        $productIdList = is_array($products) ? array_keys($products) : $products;
-
         $sysBuilds = array();
         if(strpos($params, 'notrunk') === false) $sysBuilds = array('trunk' => $this->lang->trunk);
 
-        $selectedBuilds = array();
-        if($buildIdList)
-        {
-            $buildIdList = str_replace('trunk', '0', $buildIdList);
-            $selectedBuilds = $this->dao->select('id, name')->from(TABLE_BUILD)
-                ->where('id')->in($buildIdList)
-                ->beginIF($products and $products != 'all')->andWhere('product')->in($productIdList)->fi()
-                ->beginIF($objectType === 'execution' and $objectID)->andWhere('execution')->eq($objectID)->fi()
-                ->beginIF($objectType === 'project' and $objectID)->andWhere('project')->eq($objectID)->fi()
-                ->beginIF(strpos($params, 'hasdeleted') === false)->andWhere('deleted')->eq(0)->fi()
-                ->fetchPairs();
-        }
-
-        $shadows   = $this->dao->select('shadow')->from(TABLE_RELEASE)->where('product')->in($productIdList)->fetchPairs('shadow', 'shadow');
-        $allBuilds = $this->dao->select('t1.id, t1.name, t1.branch, t1.execution, t1.date, t1.deleted, t2.status as objectStatus, t3.id as releaseID, t3.status as releaseStatus, t4.type as productType')->from(TABLE_BUILD)->alias('t1')
-            ->beginIF($objectType === 'execution')->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')->fi()
-            ->beginIF($objectType === 'project')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')->fi()
-            ->leftJoin(TABLE_RELEASE)->alias('t3')->on("FIND_IN_SET(t1.id,t3.build)")
-            ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t1.product = t4.id')
-            ->where('1=1')
-            ->beginIf(!empty($shadows))->andWhere('t1.id')->notIN($shadows)->fi()
-            ->beginIF(strpos($params, 'hasdeleted') === false)->andWhere('t1.deleted')->eq(0)->fi()
-            ->beginIF(strpos($params, 'hasproject') !== false)->andWhere('t1.project')->ne(0)->fi()
-            ->beginIF(strpos($params, 'singled') !== false)->andWhere('t1.execution')->ne(0)->fi()
-            ->beginIF($products and $products != 'all')->andWhere('t1.product')->in($productIdList)->fi()
-            ->beginIF($objectType === 'execution' and $objectID)->andWhere('t1.execution')->eq($objectID)->fi()
-            ->beginIF($objectType === 'project' and $objectID)->andWhere('t1.project')->eq($objectID)->fi()
-            ->orderBy('t1.date desc, t1.id desc')
-            ->fetchAll('id');
-
-        $deletedExecutions = $this->dao->select('id, deleted')->from(TABLE_EXECUTION)->where('type')->eq('sprint')->andWhere('deleted')->eq('1')->fetchPairs();
+        $shadows        = $this->dao->select('shadow')->from(TABLE_RELEASE)->where('product')->in($productIdList)->fetchPairs('shadow', 'shadow'); // Get the buildID under the shadow product.
+        $selectedBuilds = $this->buildTao->selectedBuildPairs($productIdList, $params, $objectID, $objectType, $buildIdList);
+        $allBuilds      = $this->buildTao->fetchBuilds($productIdList, $params, $objectID, $objectType, $shadows);
 
         /* Set builds and filter done executions and terminate releases. */
-        $builds                = array();
-        $validBuildIdList      = array();
-        $excludedBuildIdList   = array();
-        $excludedReleaseIdList = array();
-        $branchPairs = $this->dao->select('id,name')->from(TABLE_BRANCH)->fetchPairs();
+        list($builds, $excludedReleaseIdList) = $this->setBuildDateGroup($allBuilds, $branch, $params);
+        if(empty($builds) && empty($shadows)) return $sysBuilds + $selectedBuilds;
+
+        /* if the build has been released and replace is true, replace build name with release name. */
+        if($replace)
+        {
+            $releases = $this->dao->select('t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t3.name as branchName,t4.type as productType')->from(TABLE_RELEASE)->alias('t1')
+                ->leftJoin(TABLE_BUILD)->alias('t2')->on('FIND_IN_SET(t2.id, t1.build)')
+                ->leftJoin(TABLE_BRANCH)->alias('t3')->on('FIND_IN_SET(t3.id, t1.branch)')
+                ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t1.product=t4.id')
+                ->where('t1.product')->in($productIdList)
+                ->beginIF(!empty($buildIdList))->andWhere('t2.id')->in($buildIdList)->fi()
+                ->andWhere('t1.deleted')->eq(0)
+                ->andWhere('t1.shadow')->ne(0)
+                ->fetchAll('id');
+
+            /* Get the buildID under the shadow product. */
+            $shadows = $this->dao->select('shadow')->from(TABLE_RELEASE)->where('product')->in($productIdList)->fetchPairs('shadow', 'shadow');
+            if($shadows)
+            {
+                /* Append releases of only shadow and not link build. */
+                $releases += $this->dao->select('t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t2.name as branchName,t3.type as productType')->from(TABLE_RELEASE)->alias('t1')
+                    ->leftJoin(TABLE_BRANCH)->alias('t2')->on('FIND_IN_SET(t2.id, t1.branch)')
+                    ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
+                    ->where('t1.shadow')->in($shadows)
+                    ->andWhere('t1.build')->eq(0)
+                    ->andWhere('t1.deleted')->eq(0)
+                    ->fetchAll('id');
+            }
+            $builds = $this->replaceNameWithRelease($allBuilds, $builds, $releases, $branch, $params, $excludedReleaseIdList);
+        }
+
+        krsort($builds);
+        $buildPairs = array();
+        foreach($builds as $childBuilds) $buildPairs += $childBuilds;
+        return $sysBuilds + $buildPairs + $selectedBuilds;
+    }
+
+    /**
+     * 根据版本日期分组设置版本信息。
+     * Set build date group.
+     *
+     * @param  array      $allBuilds
+     * @param  string|int $branch
+     * @param  string     $params
+     * @access public
+     * @return array
+     */
+    public function setBuildDateGroup(array $allBuilds, string|int $branch, string $params): array
+    {
         $this->app->loadLang('branch');
+
+        $deletedExecutions     = $this->dao->select('id, deleted')->from(TABLE_EXECUTION)->where('type')->eq('sprint')->andWhere('deleted')->eq('1')->fetchPairs();
+        $branchPairs           = $this->dao->select('id,name')->from(TABLE_BRANCH)->fetchPairs();
+        $builds                = array();
+        $excludedReleaseIdList = array();
         foreach($allBuilds as $id => $build)
         {
             if($build->branch === '') $build->branch = 0;
-            if(
-                (empty($build->releaseID) and (strpos($params, 'nodone') !== false) and ($build->objectStatus === 'done')) ||
-                ((strpos($params, 'noterminate') !== false) and ($build->releaseStatus === 'terminate')) ||
-                ((strpos($params, 'withexecution') !== false) and $build->execution and isset($deletedExecutions[$build->execution])) ||
-                ($branch !== 'all' and strpos(",{$build->branch},", ",{$branch},") === false)
-            )
+            $isDone        = empty($build->releaseID) && strpos($params, 'nodone') !== false && $build->objectStatus === 'done';
+            $isTerminate   = strpos($params, 'noterminate') !== false && $build->releaseStatus === 'terminate';
+            $isDeleted     = strpos($params, 'withexecution') !== false && $build->execution && isset($deletedExecutions[$build->execution]);
+            $isNotInBranch = $branch !== 'all' && strpos(",{$build->branch},", ",{$branch},") === false;
+            if(in_array(true, array($isDone, $isTerminate, $isDeleted, $isNotInBranch)))
             {
-                $excludedBuildIdList[] = $id;
                 $excludedReleaseIdList[] = $build->releaseID;
                 continue;
             }
 
             if($build->deleted == 1) $build->name .= ' (' . $this->lang->build->deleted . ')';
-
             if(!empty($build->branch))
             {
                 $branchName = '';
@@ -356,74 +374,62 @@ class buildModel extends model
             }
 
             $buildName = $build->name;
-            if(strpos($params, 'withbranch') !== false and $build->productType != 'normal') $buildName = $branchName . '/' . $buildName;
-
-            $validBuildIdList[$id]     = $id;
+            if(strpos($params, 'withbranch') !== false && $build->productType != 'normal') $buildName = $branchName . '/' . $buildName;
             $builds[$build->date][$id] = $buildName;
         }
 
-        if(empty($builds) and empty($shadows)) return $sysBuilds + $selectedBuilds;
+        return array($builds, $excludedReleaseIdList);
+    }
 
-        /* if the build has been released and replace is true, replace build name with release name. */
-        if($replace)
+    /**
+     * 将版本名称替换为发布名称。
+     * Replace the build name with release name.
+     *
+     * @param  array      $allBuilds
+     * @param  array      $builds
+     * @param  array      $releases
+     * @param  string|int $branch
+     * @param  string    $params                separate|noterminate|withbranch|releasetag|noreleased
+     * @param  array     $excludedReleaseIdList
+     * @access public
+     * @return array
+     */
+    public function replaceNameWithRelease(array $allBuilds, array $builds, array $releases, string|int $branch, string $params, array $excludedReleaseIdList): array
+    {
+        $this->app->loadLang('branch');
+
+        $branches = strpos($params, 'separate') === false ? "0,$branch" : $branch;
+        foreach($releases as $release)
         {
-            $releases = $this->dao->select('t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t3.name as branchName,t4.type as productType')->from(TABLE_RELEASE)->alias('t1')
-                ->leftJoin(TABLE_BUILD)->alias('t2')->on('FIND_IN_SET(t2.id, t1.build)')
-                ->leftJoin(TABLE_BRANCH)->alias('t3')->on('FIND_IN_SET(t3.id, t1.branch)')
-                ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t1.product=t4.id')
-                ->where('t1.product')->in($productIdList)
-                ->beginIF(!empty($buildIdList))->andWhere('t2.id')->in($buildIdList)->fi()
-                ->andWhere('t1.deleted')->eq(0)
-                ->andWhere('t1.shadow')->ne(0)
-                ->fetchAll('id');
+            if(strpos($params, 'noterminate') !== false && in_array($release->id, $excludedReleaseIdList)) continue;
 
-            if($shadows)
+            if($branch !== 'all')
             {
-                /* Append releases of only shadow and not link build. */
-                $releases += $this->dao->select('t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t2.name as branchName,t3.type as productType')->from(TABLE_RELEASE)->alias('t1')
-                    ->leftJoin(TABLE_BRANCH)->alias('t2')->on('FIND_IN_SET(t2.id, t1.branch)')
-                    ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
-                    ->where('t1.shadow')->in($shadows)
-                    ->andWhere('t1.build')->eq(0)
-                    ->andWhere('t1.deleted')->eq(0)
-                    ->fetchAll('id');
+                $inBranch = false;
+                foreach(explode(',', trim($release->branch, ',')) as $branchID)
+                {
+                    if($branchID === '') continue;
+                    if(strpos(",{$branches},", ",{$branchID},") !== false) $inBranch = true;
+                }
+                if(!$inBranch) continue;
             }
 
-            $branches = strpos($params, 'separate') === false ? "0,$branch" : $branch;
-            foreach($releases as $release)
+            /* Set release name based on the condition. */
+            $releaseName = $release->name;
+            $branchName  = $release->branchName ? $release->branchName : $this->lang->branch->main;
+            if($release->productType != 'normal') $releaseName = (strpos($params, 'withbranch') !== false ? $branchName . '/' : '') . $releaseName;
+            if(strpos($params, 'releasetag') !== false) $releaseName = $releaseName . " [{$this->lang->build->released}]";
+            $builds[$release->date][$release->shadow] = $releaseName;
+
+            foreach(explode(',', trim($release->build, ',')) as $buildID)
             {
-                if(strpos($params, 'noterminate') !== false && in_array($release->id, $excludedReleaseIdList)) continue;
-
-                if($branch !== 'all')
-                {
-                    $inBranch = false;
-                    foreach(explode(',', trim($release->branch, ',')) as $branchID)
-                    {
-                        if($branchID === '') continue;
-                        if(strpos(",{$branches},", ",{$branchID},") !== false) $inBranch = true;
-                    }
-                    if(!$inBranch) continue;
-                }
-
-                $releaseName = $release->name;
-                $branchName  = $release->branchName ? $release->branchName : $this->lang->branch->main;
-                if($release->productType != 'normal') $releaseName = (strpos($params, 'withbranch') !== false ? $branchName . '/' : '') . $releaseName;
-                if(strpos($params, 'releasetag') !== false) $releaseName = $releaseName . " [{$this->lang->build->released}]";
-                $builds[$release->date][$release->shadow] = $releaseName;
-                foreach(explode(',', trim($release->build, ',')) as $buildID)
-                {
-                    if(!isset($allBuilds[$buildID])) continue;
-                    $build = $allBuilds[$buildID];
-                    if(strpos($params, 'noreleased') !== false) unset($builds[$build->date][$buildID]);
-                }
+                if(!isset($allBuilds[$buildID])) continue;
+                $build = $allBuilds[$buildID];
+                if(strpos($params, 'noreleased') !== false) unset($builds[$build->date][$buildID]);
             }
         }
 
-        krsort($builds);
-        $buildPairs = array();
-        foreach($builds as $childBuilds) $buildPairs += $childBuilds;
-
-        return $sysBuilds + $buildPairs + $selectedBuilds;
+        return $builds;
     }
 
     /**
