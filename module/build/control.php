@@ -509,21 +509,21 @@ class build extends control
     }
 
     /**
+     * 获取执行下的版本下拉列表。
      * AJAX: get builds of an execution in html select.
      *
-     * @param  int        $executionID
-     * @param  int        $productID
-     * @param  string     $varName      the name of the select object to create
-     * @param  string     $build        build to selected
-     * @param  string|int $branch
-     * @param  int        $index        the index of batch create bug.
-     * @param  bool       $needCreate   if need to append the link of create build
-     * @param  string     $type         get all builds or some builds belong to normal releases and executions are not done.
-     * @param  int        $number
+     * @param  int    $executionID
+     * @param  int    $productID
+     * @param  string $varName      the name of the select object to create
+     * @param  string $build        build to selected
+     * @param  string $branch
+     * @param  int    $index        the index of batch create bug.
+     * @param  bool   $needCreate   if need to append the link of create build
+     * @param  string $type         get all builds or some builds belong to normal releases and executions are not done.
      * @access public
      * @return string
      */
-    public function ajaxGetExecutionBuilds(int $executionID, int $productID, string $varName, string $build = '', string $branch = 'all', int $index = 0, bool $needCreate = false, string $type = 'normal', string $number = '')
+    public function ajaxGetExecutionBuilds(int $executionID, int $productID, string $varName, string $build = '', string $branch = 'all', int $index = 0, bool $needCreate = false, string $type = 'normal')
     {
         $isJsonView = $this->app->getViewType() == 'json';
         if($varName == 'openedBuild')
@@ -562,11 +562,7 @@ class build extends control
             if($isJsonView) return print(json_encode($builds));
 
             $items = array();
-            foreach($builds as $buildID => $buildName)
-            {
-                $items[] = array('text' => $buildName, 'value' => $buildID);
-            }
-
+            foreach($builds as $buildID => $buildName) $items[] = array('text' => $buildName, 'value' => $buildID);
             return print(json_encode($items));
         }
         if($varName == 'dropdownList')
@@ -577,7 +573,6 @@ class build extends control
             $list  = "<div class='list-group'>";
             foreach($builds as $buildID => $buildName) $list .= html::a(inlink('view', "buildID={$buildID}"), $buildName);
             $list .= '</div>';
-
             return print($list);
         }
     }
