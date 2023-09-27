@@ -156,7 +156,8 @@ class moduleMenu extends wg
 
         return div
         (
-            setClass('module-menu shadow-sm rounded bg-canvas col rounded-sm'),
+            setID('moduleMenu'),
+            setClass('shadow-sm rounded bg-canvas col rounded-sm'),
             h::header
             (
                 setClass('h-10 flex items-center pl-4 flex-none gap-3'),
@@ -170,10 +171,11 @@ class moduleMenu extends wg
             zui::tree
             (
                 set::_tag('ul'),
-                set::_class('col flex-auto scrollbar-hover overflow-y-auto overflow-x-hidden pl-4 pr-1'),
+                set::_class('col flex-auto scrollbar-hover scrollbar-thin overflow-y-auto overflow-x-hidden pl-4 pr-1'),
                 set::defaultNestedShow(true),
                 set::hover(true),
                 set::preserve($preserve),
+                set::onClickItem(jsRaw('console.log')),
                 set($treeProps)
             ),
             $this->buildActions(),
