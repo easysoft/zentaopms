@@ -1,0 +1,14 @@
+---
+title: zt_history
+author: Mengyi Liu
+version: "1.0"
+fields:
+- field: action
+  range: 1-30
+- field: field
+  range: 1-300
+- field: field
+  range: openedBuild,title,openedBuild{2}
+- field: new
+  range: 0,new,1,trunk
+...

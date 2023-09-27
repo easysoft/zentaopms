@@ -1365,4 +1365,48 @@ class bugTest
         unset($_SESSION['bugOnlyCondition']);
         return $reportCondition;
     }
+
+    /**
+     * 测试获取产品的 bugs。
+     * Test get product bugs.
+     *
+     * @param  string $productIdList
+     * @param  string $type
+     * @param  string $begin
+     * @param  string $end
+     * @access public
+     * @return string
+     */
+    public function getProductBugsTest(string $productIdList, string $type = '', string $begin = '', string $end = ''): string
+    {
+        if($begin == 'today')    $begin = date('Y-m-d', time());
+        if($begin == 'lastweek') $begin = date('Y-m-d', strtotime('-7 days'));
+        if($end   == 'today')    $end   = date('Y-m-d', time());
+        if($end   == 'nextweek') $end   = date('Y-m-d', strtotime('+7 days'));
+        $bugs = $this->objectModel->getProductBugs(explode(',', $productIdList), $type, $begin, $end);
+        if(dao::isError()) return dao::getError();
+        return implode(',', array_column($bugs, 'id'));
+    }
+
+    /**
+     * 测试获取产品的 bugs。
+     * Test get product bugs.
+     *
+     * @param  string $productIdList
+     * @param  string $begin
+     * @param  string $end
+     * @param  string $buildIdList
+     * @access public
+     * @return string
+     */
+    public function getActivatedBugsTest(string $productIdList, string $begin = '', string $end = '', string $buildIdList = ''): string
+    {
+        if($begin == 'lastweek')  $begin = date('Y-m-d', strtotime('-7 days'));
+        if($begin == 'lastmonth') $begin = date('Y-m-d', strtotime('-30 days'));
+        if($end   == 'nextweek')  $end   = date('Y-m-d', strtotime('+7 days'));
+        if($end   == 'nextmonth') $end   = date('Y-m-d', strtotime('+30 days'));
+        $bugs = $this->objectModel->getActivatedBugs(explode(',', $productIdList), $begin, $end, explode(',', $buildIdList));
+        if(dao::isError()) return dao::getError();
+        return implode(',', array_column($bugs, 'id'));
+    }
 }

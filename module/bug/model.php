@@ -1733,6 +1733,77 @@ class bugModel extends model
     }
 
     /**
+     * 获取产品 bugs。
+     * Get product bugs.
+     *
+     * @param  array  $productIdList
+     * @param  string $type
+     * @param  string $begin
+     * @param  string $end
+     * @access public
+     * @return array
+     */
+    public function getProductBugs(array $productIdList, string $type = '', string $begin = '', string $end = ''): array
+    {
+        return $this->dao->select('*')->from(TABLE_BUG)
+            ->where('product')->in($productIdList)
+            ->beginIF($type == 'resolved')->andWhere('resolvedDate')->ge($begin)->andWhere('resolvedDate')->le("{$end} 23:59:59")->fi()
+            ->beginIF($type == 'opened')->andWhere('openedDate')->ge($begin)->andWhere('openedDate')->le("{$end} 23:59:59")->fi()
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll();
+    }
+
+    /**
+     * 获取重新激活的 bugs。
+     * Get activated bugs.
+     *
+     * @param  array  $productIdList
+     * @param  string $begin
+     * @param  string $end
+     * @param  array  $buildIdList
+     * @access public
+     * @return array
+     */
+    public function getActivatedBugs(array $productIdList, string $begin, string $end, array $buildIdList): array
+    {
+        /* Get all bugs in the builds of products. */
+        $buildBugs = array();
+        $allBugs   = $this->getProductBugs($productIdList);
+        foreach($allBugs as $bug)
+        {
+            $intersect = array_intersect(explode(',', $bug->openedBuild), $buildIdList);
+            if(!empty($intersect)) $buildBugs[$bug->id] = $bug;
+        }
+
+        /* Get bug reactivated actions during the testreport. */
+        $actions = $this->dao->select('id,objectID')->from(TABLE_ACTION)
+            ->where('objectType')->eq('bug')
+            ->andWhere('action')->eq('activated')
+            ->andWhere('date')->ge($begin)
+            ->andWhere('date')->le($end . ' 23:59:59')
+            ->andWhere('objectID')->in(array_keys($buildBugs))
+            ->fetchPairs();
+        $histories  = $this->loadModel('action')->getHistory(array_keys($actions));
+        foreach($actions as $actionID => $bugID) $bugActions[$bugID][$actionID] = zget($histories, $actionID, array());
+
+        /* Get reactivated bugs. */
+        $activatedBugs = array();
+        foreach($buildBugs as $bug)
+        {
+            if(empty($bugActions[$bug->id])) continue;
+            foreach($bugActions[$bug->id] as $actionID => $histories)
+            {
+                foreach($histories as $history)
+                {
+                    if($history->field == 'openedBuild' && !in_array($history->new, $buildIdList)) continue;
+                    $activatedBugs[$bug->id] = $bug;
+                }
+            }
+        }
+        return $activatedBugs;
+    }
+
+    /**
      * 判断当前动作是否可以点击。
      * Adjust the action is clickable.
      *

@@ -107,29 +107,6 @@ class testreportTest
     }
 
     /**
-     * Get bug info and summary.
-     *
-     * @param  array  $tasksIDs
-     * @param  array  $productIdList
-     * @param  int    $reportID
-     * @param  array  $buildIDs
-     * @access public
-     * @return array
-     */
-    public function getBug4ReportTest($taskIDs, $productIdList, $reportID, $buildIDs)
-    {
-        $tasks   = $taskIDs ? $this->testtask->getByList($taskIDs) : array();
-        $builds  = $buildIDs ? $this->build->getByList($buildIDs) : array();
-        $report  = $this->objectModel->getByID($reportID);
-
-        $objects = $this->objectModel->getBug4Report($tasks, $productIdList, $report->begin, $report->end, $builds);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
      * 测试获取测试单的用例。
      * Test get task cases.
      *

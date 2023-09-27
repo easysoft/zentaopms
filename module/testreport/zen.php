@@ -302,7 +302,7 @@ class testreportZen extends testreport
         $this->view->datas['testTaskPerRunResult'] = $this->loadModel('report')->computePercent($perCaseResult);
         $this->view->datas['testTaskPerRunner']    = $this->report->computePercent($perCaseRunner);
 
-        list($bugInfo, $bugSummary) = $this->testreport->getBug4Report($reportData['tasks'], $reportData['productIdList'], $reportData['begin'], $reportData['end'], $reportData['builds']);
+        list($bugInfo, $bugSummary) = $this->buildReportBugData($reportData['tasks'], $reportData['productIdList'], $reportData['begin'], $reportData['end'], $reportData['builds']);
         if($method == 'view') $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
         $this->view->bugInfo    = $bugInfo;
         $this->view->legacyBugs = $bugSummary['legacyBugs'];
@@ -400,6 +400,231 @@ class testreportZen extends testreport
         if(!empty($reportErrors)) dao::$errors = $reportErrors;
 
         return $testreport;
+    }
+
+    /**
+     * 构建测试报告的 bug 信息和汇总信息。
+     * build bug info and summary of test report.
+     *
+     * @param  array  $tasks
+     * @param  array  $productIdList
+     * @param  string $begin
+     * @param  string $end
+     * @param  array  $builds
+     * @access public
+     * @return array
+     */
+    protected function buildReportBugData(array $tasks, array $productIdList, string $begin, string $end, array $builds): array
+    {
+        /* Get activated bugs. */
+        $buildIdList   = array_keys($builds);
+        $activatedBugs = $this->testreport->getActivatedBugs($tasks, $productIdList, $begin, $end, $buildIdList);
+
+        /* Get stage and handle groups. */
+        list($stageGroups, $handleGroups) = $this->getStageAndHandleGroups($productIdList, $begin, $end, $buildIdList);
+
+        /* Get the generated and leagcy bug data, and its groups. */
+        list($foundBugs, $legacyBugs, $stageGroups, $handleGroups, $byCaseNum) = $this->getGeneratedAndLegacyBugData(array_keys($tasks), $productIdList, $begin, $end, $buildIdList, $stageGroups, $handleGroups);
+
+        /* Get the found bug's groups. */
+        list($severityGroups, $typeGroups, $statusGroups, $openedByGroups, $moduleGroups, $resolvedByGroups, $resolutionGroups, $resolvedBugs) = $this->getFoundBugGroups($foundBugs);
+
+        /* Set bug summary. */
+        $bugSummary['foundBugs']           = count($foundBugs);
+        $bugSummary['legacyBugs']          = $legacyBugs;
+        $bugSummary['activatedBugs']       = count($activatedBugs);
+        $bugSummary['countBugByTask']      = $byCaseNum;
+        $bugSummary['bugConfirmedRate']    = empty($resolvedBugs) ? 0 : round((zget($resolutionGroups, 'fixed', 0) + zget($resolutionGroups, 'postponed', 0)) / $resolvedBugs * 100, 2);
+        $bugSummary['bugCreateByCaseRate'] = empty($byCaseNum) ? 0 : round($byCaseNum / count($foundBugs) * 100, 2);
+
+        /* Set bug info. */
+        $bugInfo = $this->buildBugInfo($stageGroups, $handleGroups, $severityGroups, $typeGroups, $statusGroups, $openedByGroups, $moduleGroups, $resolvedByGroups, $resolutionGroups, $productIdList);
+
+        return array($bugInfo, $bugSummary);
+    }
+
+    /**
+     * 构建 bug 信息。
+     * Build bug info.
+     *
+     * @param  array     $stageGroups
+     * @param  array     $handleGroups
+     * @param  array     $severityGroups
+     * @param  array     $typeGroups
+     * @param  array     $statusGroups
+     * @param  array     $openedByGroups
+     * @param  array     $moduleGroups
+     * @param  array     $resolvedByGroups
+     * @param  array     $resolutionGroups
+     * @param  array     $productIdList
+     * @access protected
+     * @return array
+     */
+    protected function buildBugInfo(array $stageGroups, array $handleGroups, array $severityGroups, array $typeGroups, array $statusGroups, array $openedByGroups, array $moduleGroups, array $resolvedByGroups, array $resolutionGroups, array $productIdList): array
+    {
+        $bugInfo['bugStageGroups']  = $stageGroups;
+        $bugInfo['bugHandleGroups'] = $handleGroups;
+
+        $this->app->loadLang('bug');
+        $fields = array('severityGroups' => 'severityList', 'typeGroups' => 'typeList', 'statusGroups' => 'statusList', 'resolutionGroups' => 'resolutionList', 'openedByGroups' => 'openedBy', 'resolvedByGroups' => 'resolvedBy');
+        $users  = $this->loadModel('user')->getPairs('noclosed|noletter|nodeleted');
+        foreach($fields as $variable => $fieldType)
+        {
+            $data = array();
+            foreach(${$variable} as $type => $count)
+            {
+                $data[$type] = new stdclass();
+                $data[$type]->name  = strpos($fieldType, 'By') === false ? zget($this->lang->bug->{$fieldType}, $type) : zget($users, $type);
+                $data[$type]->value = $count;
+            }
+            $bugInfo['bug' . ucfirst($variable)] = $data;
+        }
+
+        $this->loadModel('tree');
+        $modules = array();
+        if(!is_array($productIdList)) $productIdList = explode(',', $productIdList);
+        foreach($productIdList as $productID) $modules += $this->tree->getOptionMenu($productID, 'bug');
+
+        $data = array();
+        foreach($moduleGroups as $moduleID => $count)
+        {
+            $data[$moduleID] = new stdclass();
+            $data[$moduleID]->name  = zget($modules, $moduleID);
+            $data[$moduleID]->value = $count;
+        }
+        $bugInfo['bugModuleGroups'] = $data;
+
+        return $bugInfo;
+    }
+
+
+    /**
+     * 获取阶段和状态分组。
+     * Get stage and handle groups.
+     *
+     * @param  array     $productIdList
+     * @param  string    $begin
+     * @param  string    $end
+     * @access protected
+     * @return array
+     */
+    protected function getStageAndHandleGroups(array $productIdList, string $begin, string $end, array $buildIdList): array
+    {
+        /* Init stageGroups. */
+        $stageGroups = array();
+        foreach($this->lang->bug->priList as $priKey => $priValue)
+        {
+            $stageGroups[$priKey]['generated'] = 0;
+            $stageGroups[$priKey]['legacy']    = 0;
+            $stageGroups[$priKey]['resolved']  = 0;
+        }
+
+        /* Init handleGroups. */
+        $handleGroups   = array();
+        $beginTimeStamp = strtotime($begin);
+        $endTimeStamp   = strtotime($end);
+        for($i = $beginTimeStamp; $i <= $endTimeStamp; $i += 86400)
+        {
+            $date = date('m-d', $i);
+            $handleGroups['generated'][$date] = 0;
+            $handleGroups['legacy'][$date]    = 0;
+            $handleGroups['resolved'][$date]  = 0;
+        }
+
+        /* Get the resolved bug data. */
+        $resolvedBugs = $this->bug->getProductBugs($productIdList, 'resolved', $begin, $end);
+        foreach($resolvedBugs as $bug)
+        {
+            if(array_intersect(explode(',', $bug->openedBuild), $buildIdList))
+            {
+                $resolvedDate = date('m-d', strtotime($bug->resolvedDate));
+                $stageGroups[$bug->pri]['resolved']      += 1;
+                $handleGroups['resolved'][$resolvedDate] += 1;
+            }
+        }
+
+        return array($stageGroups, $handleGroups);
+    }
+
+    /**
+     * 获取产生和遗留的 bug。
+     * Get generated and legacy bugs.
+     *
+     * @param  array     $taskIdList
+     * @param  array     $productIdList
+     * @param  string    $begin
+     * @param  string    $end
+     * @param  array     $buildIdList
+     * @param  array     $stageGroups
+     * @param  array     $handleGroups
+     * @access protected
+     * @return array
+     */
+    protected function getGeneratedAndLegacyBugData($taskIdList, $productIdList, $begin, $end, $buildIdList, $stageGroups, $handleGroups): array
+    {
+        $byCaseNum      = 0;
+        $foundBugs      = $legacyBugs = array();
+        $beginTimeStamp = strtotime($begin);
+        $endTimeStamp   = strtotime($end);
+        $generatedBugs  = $this->bug->getProductBugs($productIdList, 'opened', $begin, $end);
+        foreach($generatedBugs as $bug)
+        {
+            if(array_intersect(explode(',', $bug->openedBuild), $buildIdList))
+            {
+                $openedDate = date('m-d', strtotime($bug->openedDate));
+
+                /* Set generated bugs. */
+                $foundBugs[$bug->id] = $bug;
+                $stageGroups[$bug->pri]['generated']    += 1;
+                $handleGroups['generated'][$openedDate] += 1;
+
+                /* Set legacy bugs. */
+                if($bug->status == 'active' || $bug->resolvedDate > "{$end} 23:59:59")
+                {
+                    $legacyBugs[$bug->id] = $bug;
+                    $stageGroups[$bug->pri]['legacy'] += 1;
+
+                    for($currentTimeStamp = $beginTimeStamp; $currentTimeStamp <= $endTimeStamp; $currentTimeStamp += 86400)
+                    {
+                        $dateTime = date('Y-m-d 23:59:59', $currentTimeStamp);
+                        if($bug->openedDate <= $dateTime && (helper::isZeroDate($bug->resolvedDate) || $bug->resolvedDate > $dateTime))
+                        {
+                            $date = date('m-d', $currentTimeStamp);
+                            $handleGroups['legacy'][$date] += 1;
+                        }
+                    }
+                }
+                if($bug->case && !empty($bug->testtask) && in_array($bug->testtask, $taskIdList)) $byCaseNum ++;
+            }
+        }
+        return array($foundBugs, $legacyBugs, $stageGroups, $handleGroups, $byCaseNum);
+    }
+
+    /**
+     * 获取产生的 bug 分组数据。
+     * Get found bug groups.
+     *
+     * @param  array     $foundBugs
+     * @access protected
+     * @return array
+     */
+    protected function getFoundBugGroups($foundBugs): array
+    {
+        $resolvedBugs   = 0;
+        $severityGroups = $typeGroups = $statusGroups = $openedByGroups = $moduleGroups = $resolvedByGroups = $resolutionGroups = array();
+        foreach($foundBugs as $bug)
+        {
+            $severityGroups[$bug->severity] = isset($severityGroups[$bug->severity]) ? $severityGroups[$bug->severity] + 1 : 1;
+            $typeGroups[$bug->type]         = isset($typeGroups[$bug->type])         ? $typeGroups[$bug->type]         + 1 : 1;
+            $statusGroups[$bug->status]     = isset($statusGroups[$bug->status])     ? $statusGroups[$bug->status]     + 1 : 1;
+            $openedByGroups[$bug->openedBy] = isset($openedByGroups[$bug->openedBy]) ? $openedByGroups[$bug->openedBy] + 1 : 1;
+            $moduleGroups[$bug->module]     = isset($moduleGroups[$bug->module])     ? $moduleGroups[$bug->module]     + 1 : 1;
+
+            if($bug->resolvedBy) $resolvedByGroups[$bug->resolvedBy] = isset($resolvedByGroups[$bug->resolvedBy]) ? $resolvedByGroups[$bug->resolvedBy] + 1 : 1;
+            if($bug->resolution) $resolutionGroups[$bug->resolution] = isset($resolutionGroups[$bug->resolution]) ? $resolutionGroups[$bug->resolution] + 1 : 1;
+            if($bug->status == 'resolved' || $bug->status == 'closed') $resolvedBugs ++;
+        }
+        return array($severityGroups, $typeGroups, $statusGroups, $openedByGroups, $moduleGroups, $resolvedByGroups, $resolutionGroups, $resolvedBugs);
     }
 
     /**

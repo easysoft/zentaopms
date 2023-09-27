@@ -1,0 +1,12 @@
+---
+title: zt_action
+author: Mengyi Liu
+version: "1.0"
+fields:
+- field: objectID
+  range: 1-30
+- field: objectType
+  range: bug
+- field: action
+  range: activated{2},opened,resolved
+...
