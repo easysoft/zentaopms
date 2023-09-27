@@ -247,11 +247,12 @@ class buildModel extends model
      * @access public
      * @return array
      */
-    public function getStoryBuilds($storyID)
+    public function getStoryBuilds(int $storyID): array
     {
+        if(empty($storyID)) return array();
         return $this->dao->select('*')->from(TABLE_BUILD)
             ->where('deleted')->eq(0)
-            ->andWhere("CONCAT(stories, ',')")->like("%,$storyID,%")
+            ->andWhere("CONCAT(',', stories, ',')")->like("%,$storyID,%")
             ->orderBy('id_desc')
             ->fetchAll('id');
     }

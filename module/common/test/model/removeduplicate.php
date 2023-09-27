@@ -30,7 +30,7 @@ $doc->gen(1);
 
 /**
 
-title=测试 storyModel->activate();
+title=测试 commonModel->removeDuplicate();
 cid=1
 pid=1
 

@@ -2140,14 +2140,13 @@ EOF;
     /**
      * Get the previous and next object.
      *
-     * @param  string $type story|task|bug|case
+     * @param  string $type     story|task|bug|case
      * @param  int    $objectID
      * @access public
      * @return object
      */
-    public function getPreAndNextObject($type, $objectID)
+    public function getPreAndNextObject(string $type, int $objectID): object
     {
-        /* Get SQL. */
         $queryCondition    = $type . 'QueryCondition';
         $typeOnlyCondition = $type . 'OnlyCondition';
         $queryCondition    = $this->session->$queryCondition;
@@ -2157,105 +2156,10 @@ EOF;
         $preAndNextObject->next = '';
         if(empty($queryCondition)) return $preAndNextObject;
 
-        $table   = $this->config->objectTables[$type];
-        $orderBy = $type . 'OrderBy';
-        $orderBy = $this->session->$orderBy;
-        $select  = '';
-        if($this->session->$typeOnlyCondition)
-        {
-            if(strpos($orderBy, 'priOrder') !== false) $select .= ", IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder";
-            if(strpos($orderBy, 'severityOrder') !== false) $select .= ", IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder";
-            $queryCondition = str_replace('t4.status', 'status', $queryCondition);
-
-            $sql = $this->dao->select("*$select")->from($table)
-                ->where($queryCondition)
-                ->beginIF($orderBy != false)->orderBy($orderBy)->fi()
-                ->get();
-        }
-        else
-        {
-            $sql = $queryCondition . (empty($orderBy) ? '' : " ORDER BY $orderBy");
-        }
-
-        /* Get objectIDList. */
-        $objectIdListKey  = $type . 'BrowseList';
-        $existsObjectList = $this->session->$objectIdListKey;
-        if(empty($existsObjectList) or $existsObjectList['sql'] != $sql)
-        {
-            $queryObjects = $this->dao->query($sql);
-            $objectList   = array();
-            $key          = 'id';
-            while($queryObjects && $object = $queryObjects->fetch())
-            {
-                if(!$this->session->$typeOnlyCondition and $type == 'testcase' and isset($object->case)) $key = 'case';
-                $id  = $object->$key;
-                $objectList[$id] = $id;
-            }
-
-            $this->session->set($objectIdListKey, array('sql' => $sql, 'idkey' => $key, 'objectList' => $objectList), $this->app->tab);
-            $existsObjectList = $this->session->$objectIdListKey;
-        }
-
-        $preObj = false;
-        if(isset($existsObjectList['objectList']))
-        {
-            foreach($existsObjectList['objectList'] as $id)
-            {
-                /* Get next object. */
-                if($preObj === true)
-                {
-                    $preAndNextObject->next = $id;
-                    break;
-                }
-
-                /* Get pre object. */
-                if($id == $objectID)
-                {
-                    if($preObj) $preAndNextObject->pre = $preObj;
-                    $preObj = true;
-                }
-                if($preObj !== true) $preObj = $id;
-            }
-
-            if(empty($queryCondition) or $this->session->$typeOnlyCondition)
-            {
-                if(!empty($preAndNextObject->pre))  $preAndNextObject->pre  = $this->dao->select('*')->from($table)->where('id')->eq($preAndNextObject->pre)->fetch();
-                if(!empty($preAndNextObject->next)) $preAndNextObject->next = $this->dao->select('*')->from($table)->where('id')->eq($preAndNextObject->next)->fetch();
-            }
-            else
-            {
-                $isObject     = false;
-                $objects      = array();
-                $key          = $existsObjectList['idkey'];
-                $queryObjects = $this->dao->query($existsObjectList['sql']);
-                while($object = $queryObjects->fetch())
-                {
-                    $objects[$object->$key] = $object;
-                    if(!empty($preAndNextObject->pre)  and is_numeric($preAndNextObject->pre)  and $object->$key == $preAndNextObject->pre)  $preAndNextObject->pre  = $object;
-                    if(!empty($preAndNextObject->next) and is_numeric($preAndNextObject->next) and $object->$key == $preAndNextObject->next) $preAndNextObject->next = $object;
-                    if((empty($preAndNextObject->pre) or is_object($preAndNextObject->pre)) and (empty($preAndNextObject->next) or is_object($preAndNextObject->next)))
-                    {
-                        $isObject = true;
-                        break;
-                    }
-                }
-
-                /* If the pre object or next object is number type, then continue to find the pre or next. */
-                if(!$isObject)
-                {
-                    $objectIdList  = array_keys($objects);
-                    $objectIdIndex = array_search($objectID, $objectIdList);
-                    if(is_numeric($preAndNextObject->pre))
-                    {
-                        $preAndNextObject->pre = $objectIdIndex - 1 >= 0 ? $objects[$objectIdList[$objectIdIndex - 1]] : '';
-                    }
-                    if(is_numeric($preAndNextObject->next))
-                    {
-                        $preAndNextObject->next = $objectIdIndex + 1 < count($objectIdList) ? $objects[$objectIdList[$objectIdIndex + 1]] : '';
-                    }
-                }
-            }
-        }
+        $sql              = $this->commonTao->getPreAndNextSQL($type);
+        $objectList       = $this->commonTao->queryListForPreAndNext($type, $sql);
+        $preAndNextObject = $this->commonTao->searchPreAndNextFromList($objectID, $objectList);
+        $preAndNextObject = $this->commonTao->fetchPreAndNextObject($type, $objectID, $preAndNextObject);
 
         return $preAndNextObject;
     }

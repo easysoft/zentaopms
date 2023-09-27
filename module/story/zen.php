@@ -1704,4 +1704,56 @@ class storyZen extends story
         $story    = $this->loadModel('file')->processImgURL($postData, $this->config->story->editor->activate['id'], $this->post->uid);
         return $story;
     }
+
+    /**
+     * Get linked objects. e.g. bugs,cases,linkedMRs,linkedCommits,twins,reviewers,relations.
+     *
+     * @param  object    $story
+     * @access protected
+     * @return void
+     */
+    protected function getLinkedObjects(object $story)
+    {
+        $linkedStories = isset($story->linkStoryTitles) ? array_keys($story->linkStoryTitles) : array();
+
+        $this->view->bugs          = $this->dao->select('id,title,status,pri,severity')->from(TABLE_BUG)->where('story')->eq($story->id)->andWhere('deleted')->eq(0)->fetchAll();
+        $this->view->fromBug       = $story->fromBug ? $this->dao->select('id,title')->from(TABLE_BUG)->where('id')->eq($story->fromBug)->fetch() : '';
+        $this->view->cases         = $this->dao->select('id,title,status,pri')->from(TABLE_CASE)->where('story')->eq($story->id)->andWhere('deleted')->eq(0)->fetchAll();
+        $this->view->linkedMRs     = $this->loadModel('mr')->getLinkedMRPairs($story->id, 'story');
+        $this->view->linkedCommits = $this->loadModel('repo')->getCommitsByObject($story->id, 'story');
+        $this->view->modulePath    = $this->tree->getParents($story->module);
+        $this->view->storyModule   = empty($story->module) ? '' : $this->tree->getById($story->module);
+        $this->view->storyProducts = $this->dao->select('id,product')->from(TABLE_STORY)->where('id')->in($linkedStories)->fetchPairs();
+        $this->view->twins         = !empty($story->twins) ? $this->story->getByList($story->twins) : array();
+        $this->view->reviewers     = $this->story->getReviewerPairs($story->id, $story->version);
+        $this->view->relations     = $this->story->getStoryRelation($story->id, $story->type);
+    }
+
+    /**
+     * Set hidden fields for view. like: hiddenPlan,hiddenURS.
+     *
+     * @param  object    $product
+     * @access protected
+     * @return void
+     */
+    protected function setHiddenFieldsForView(object $product)
+    {
+        $this->view->hiddenPlan = false;
+        $this->view->hiddenURS  = false;
+        if(empty($product->shadow)) return;
+
+        $projectInfo = $this->dao->select('t2.model, t2.multiple')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t1.product')->eq($product->id)
+            ->andWhere('t2.type')->eq('project')
+            ->fetch();
+
+        if($projectInfo->model == 'waterfall') $this->view->hiddenPlan = true;
+        if($projectInfo->model == 'kanban')
+        {
+            $this->view->hiddenPlan = true;
+            $this->view->hiddenURS  = true;
+        }
+        if(!$projectInfo->multiple) $this->view->hiddenPlan = true;
+    }
 }

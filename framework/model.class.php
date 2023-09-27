@@ -234,6 +234,7 @@ class model extends baseModel
      */
     public function fetchByID(int $objectID, string $moduleName = ''): object|bool
     {
+        if(empty($objectID)) return false;
         if(empty($moduleName)) $moduleName = $this->getModuleName();
         $table = $this->config->objectTables[$moduleName];
 

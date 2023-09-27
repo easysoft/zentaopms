@@ -171,11 +171,12 @@ class releaseModel extends model
      * @access public
      * @return array
      */
-    public function getStoryReleases($storyID)
+    public function getStoryReleases(int $storyID): array
     {
+        if(empty($storyID)) return array();
         return $this->dao->select('*')->from(TABLE_RELEASE)
             ->where('deleted')->eq(0)
-            ->andWhere("CONCAT(stories, ',')")->like("%,$storyID,%")
+            ->andWhere("CONCAT(',', stories, ',')")->like("%,$storyID,%")
             ->orderBy('id_desc')
             ->fetchAll('id');
     }

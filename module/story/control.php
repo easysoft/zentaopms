@@ -485,60 +485,16 @@ class story extends control
 
         $this->app->loadLang('bug');
         $this->commonAction($storyID, $param);
-
-        $bugs          = $this->dao->select('id,title,status,pri,severity')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
-        $fromBug       = $this->dao->select('id,title')->from(TABLE_BUG)->where('id')->eq($story->fromBug)->fetch();
-        $cases         = $this->dao->select('id,title,status,pri')->from(TABLE_CASE)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
-        $linkedMRs     = $this->loadModel('mr')->getLinkedMRPairs($storyID, 'story');
-        $linkedCommits = $this->loadModel('repo')->getCommitsByObject($storyID, 'story');
-        $modulePath    = $this->tree->getParents($story->module);
-        $storyModule   = empty($story->module) ? '' : $this->tree->getById($story->module);
-        $linkedStories = isset($story->linkStoryTitles) ? array_keys($story->linkStoryTitles) : array();
-        $storyProducts = $this->dao->select('id,product')->from(TABLE_STORY)->where('id')->in($linkedStories)->fetchPairs();
-
-        $this->view->hiddenPlan = false;
-        $this->view->hiddenURS  = false;
-        if(!empty($product->shadow))
-        {
-            $projectInfo = $this->dao->select('t2.model, t2.multiple')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-                ->where('t1.product')->eq($product->id)
-                ->andWhere('t2.type')->eq('project')
-                ->fetch();
-
-            if($projectInfo->model == 'waterfall') $this->view->hiddenPlan = true;
-            if($projectInfo->model == 'kanban')
-            {
-                $this->view->hiddenPlan = true;
-                $this->view->hiddenURS  = true;
-            }
-            if(!$projectInfo->multiple) $this->view->hiddenPlan = true;
-        }
+        $this->storyZen->getLinkedObjects($story);
+        $this->storyZen->setHiddenFieldsForView($product);
 
         if($product->type != 'normal') $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
 
-        $reviewers = $this->story->getReviewerPairs($storyID, $story->version);
-        $execution = empty($story->execution) ? array() : $this->dao->findById($story->execution)->from(TABLE_EXECUTION)->fetch();
-        $project   = $param ? $this->dao->findById($param)->from(TABLE_PROJECT)->fetch() : array();
-
         $this->view->title         = "STORY #$story->id $story->title - $product->name";
         $this->view->branches      = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
-        $this->view->twins         = !empty($story->twins) ? $this->story->getByList($story->twins) : array();
-        $this->view->bugs          = $bugs;
-        $this->view->fromBug       = $fromBug;
-        $this->view->cases         = $cases;
-        $this->view->story         = $story;
-        $this->view->linkedMRs     = $linkedMRs;
-        $this->view->linkedCommits = $linkedCommits;
         $this->view->users         = $this->user->getPairs('noletter');
-        $this->view->reviewers     = $reviewers;
-        $this->view->relations     = $this->story->getStoryRelation($story->id, $story->type);
         $this->view->executions    = $this->execution->getPairs(0, 'all', 'nocode');
-        $this->view->execution     = $execution;
-        $this->view->project       = $project;
-        $this->view->storyModule   = $storyModule;
-        $this->view->modulePath    = $modulePath;
-        $this->view->storyProducts = $storyProducts;
+        $this->view->project       = $this->project->fetchByID($param);
         $this->view->version       = $version;
         $this->view->preAndNext    = $this->loadModel('common')->getPreAndNextObject('story', $storyID);
         $this->view->builds        = $this->loadModel('build')->getStoryBuilds($storyID);

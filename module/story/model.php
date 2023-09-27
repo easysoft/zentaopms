@@ -3342,7 +3342,7 @@ class storyModel extends model
      * @access public
      * @return array|object
      */
-    public function mergeReviewer($stories, $isObject = false)
+    public function mergeReviewer(object|array $stories, $isObject = false)
     {
         $rawQuery = $this->dao->get();
         if($isObject)
