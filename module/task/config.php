@@ -64,7 +64,7 @@ $config->task->datatable->fieldList['id']['checkbox'] = true;
 
 $config->task->datatable->fieldList['name']['title']        = 'name';
 $config->task->datatable->fieldList['name']['required']     = 'yes';
-$config->task->datatable->fieldList['name']['width']        = '356';
+$config->task->datatable->fieldList['name']['width']        = 'auto';
 $config->task->datatable->fieldList['name']['type']         = 'html';
 $config->task->datatable->fieldList['name']['fixed']        = 'left';
 $config->task->datatable->fieldList['name']['sortType']     = true;

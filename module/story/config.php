@@ -60,7 +60,7 @@ $config->story->datatable->defaultField = array('id', 'title', 'pri', 'plan', 's
 
 $config->story->datatable->fieldList['id']['title']    = 'idAB';
 $config->story->datatable->fieldList['id']['fixed']    = 'left';
-$config->story->datatable->fieldList['id']['width']    = '90';
+$config->story->datatable->fieldList['id']['width']    = '70';
 $config->story->datatable->fieldList['id']['required'] = 'yes';
 $config->story->datatable->fieldList['id']['type']     = 'checkID';
 $config->story->datatable->fieldList['id']['sortType'] = true;
@@ -77,7 +77,7 @@ if($app->tab == 'execution')
 }
 
 $config->story->datatable->fieldList['title']['title']        = 'title';
-$config->story->datatable->fieldList['title']['width']        = '356';
+$config->story->datatable->fieldList['title']['width']        = 'auto';
 $config->story->datatable->fieldList['title']['required']     = 'yes';
 $config->story->datatable->fieldList['title']['type']         = 'html';
 $config->story->datatable->fieldList['title']['fixed']        = 'left';
@@ -89,7 +89,7 @@ $config->story->datatable->fieldList['pri']['title']    = 'priAB';
 $config->story->datatable->fieldList['pri']['fixed']    = 'left';
 $config->story->datatable->fieldList['pri']['type']     = 'html';
 $config->story->datatable->fieldList['pri']['sortType'] = true;
-$config->story->datatable->fieldList['pri']['width']    = '40';
+$config->story->datatable->fieldList['pri']['width']    = '45';
 $config->story->datatable->fieldList['pri']['required'] = 'no';
 $config->story->datatable->fieldList['pri']['name']     = $this->lang->story->pri;
 
