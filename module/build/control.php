@@ -583,6 +583,7 @@ class build extends control
     }
 
     /**
+     * 获取最后一次创建的版本。
      * Ajax get last build.
      *
      * @param  int    $projectID
@@ -590,7 +591,7 @@ class build extends control
      * @access public
      * @return string
      */
-    public function ajaxGetLastBuild($projectID, $executionID)
+    public function ajaxGetLastBuild(int $projectID, int $executionID)
     {
         $lastBuild = $this->build->getLast($executionID, $projectID);
         if($lastBuild)
