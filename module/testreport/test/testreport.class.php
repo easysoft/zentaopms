@@ -75,7 +75,6 @@ class testreportTest
      * @access public
      * @return array|object|false
      */
-
     public function getByIdTest(int $reportID): array|object|false
     {
         $object = $this->objectModel->getById($reportID);
@@ -117,7 +116,6 @@ class testreportTest
      * @access public
      * @return array
      */
-
     public function getTaskCasesTest(int $taskID, int $reportID, string $idList = '', object $pager = null): array
     {
         $tasks  = $taskID ? $this->testtask->getByList((array)$taskID) : array();
@@ -129,16 +127,16 @@ class testreportTest
 
         return $objects;
     }
+
      /**
      * 测试获取测试报告的 caseID 列表。
-     * Get caseID list.
+     * Get case id list.
      *
      * @param  int    $reportID
      * @access public
      * @return array
      */
-
-    public function getCaseIdListTest($reportID): array
+    public function getCaseIdListTest(int $reportID): array
     {
         $objects = $this->objectModel->getCaseIdList($reportID);
 
@@ -146,6 +144,7 @@ class testreportTest
 
         return $objects;
     }
+
    /**
      * 获取报告的概况。
      * Get result summary.
@@ -155,7 +154,6 @@ class testreportTest
      * @access public
      * @return string|array
      */
-
     public function getResultSummaryTest(int $taskID, int $reportID): array|string
     {
         $tasks   = $taskID ? $this->testtask->getByList((array)$taskID) : array();
@@ -225,7 +223,6 @@ class testreportTest
      * @access public
      * @return array|string|false
      */
-
     public function getBugs4TestTest(string $buildIdList, int $productID, int $taskID, string $type = 'build'): array|string|false
     {
         $task    = $this->testtask->getByID($taskID);

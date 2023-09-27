@@ -2,6 +2,10 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/testreport.class.php';
+
+zdTable('testreport')->gen(5);
+zdTable('user')->gen(1);
+
 su('admin');
 
 /**
@@ -10,16 +14,8 @@ title=测试 testreportModel->getCaseIdList();
 timeout=0
 cid=1
 
-- 正常查询
- - 属性1 @1
- - 属性4 @4
-- 查询创建者不为自己的数据
- - 属性5 @5
- - 属性8 @8
-- 查询reportID为空的数据 @0
-
 */
-$reportID = array('1', '2', '');
+$reportID = array(1, 2, 0);
 
 $testreport = new testreportTest();
 
