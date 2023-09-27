@@ -27,6 +27,7 @@ class bug_concentration_of_developed_story_in_product extends baseCalc
         $developedStory = $this->dao->select('product, count(id) AS storyNum')
             ->from(TABLE_STORY)
             ->where('deleted')->eq('0')
+            ->andWhere("NOT FIND_IN_SET('or', vision)")
             ->andWhere('stage', true)->in('developed,testing,tested,verified,released')
             ->orWhere('closedReason')->eq('done')
             ->markRight(1)

@@ -30,6 +30,7 @@ class count_of_projected_story_in_product extends baseCalc
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
             ->where('t2.deleted')->eq('0')
             ->andWhere('t3.deleted')->eq('0')
+            ->andWhere("NOT FIND_IN_SET('or', t2.vision)")
             ->groupBy('t1.product');
     }
 

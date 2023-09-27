@@ -29,6 +29,7 @@ class count_of_delivered_story_in_product extends baseCalc
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.shadow')->eq(0)
+            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
             ->andWhere('t1.stage', true)->eq('released')
             ->orWhere('t1.closedReason')->eq('done')
             ->markRight(1)

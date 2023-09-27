@@ -398,7 +398,7 @@ class metricZen extends metric
                 $row->scopeID = $record[$scope];
             }
             $row->value = is_numeric($record['value']) ? round((float)$record['value'], 2) : $record['value'];
-            if(isset($record['date'])) $row->calcTime = date("Y-m-d H:m", strtotime($record['date']));
+            if(isset($record['date'])) $row->calcTime = date("Y-m-d H:i", strtotime($record['date']));
 
             $tableData[] = $row;
         }

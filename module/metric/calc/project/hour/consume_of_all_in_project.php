@@ -32,6 +32,7 @@ class consume_of_all_in_project extends baseCalc
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project=t3.id')
             ->where('t3.deleted')->eq('0')
             ->andWhere('t3.type')->eq('project')
+            ->andWhere("NOT FIND_IN_SET('or', t3.vision)")
             ->groupBy('t3.id')
             ->query();
     }

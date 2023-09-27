@@ -32,6 +32,7 @@ class rate_of_approved_story_in_product extends baseCalc
             ->andWhere('t3.deleted')->eq(0)
             ->andWhere('t2.type')->eq('story')
             ->andWhere('t3.shadow')->eq(0)
+            ->andWhere("NOT FIND_IN_SET('or', t2.vision)")
             ->groupBy('t2.product')
             ->query();
     }
