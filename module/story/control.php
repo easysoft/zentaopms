@@ -1266,8 +1266,7 @@ class story extends control
      */
     public function tasks(int $storyID, int $executionID = 0)
     {
-        $this->loadModel('task');
-        $tasks = $this->task->getListByStory($storyID, $executionID);
+        $tasks = $this->loadModel('task')->getListByStory($storyID, $executionID);
 
         $this->view->tasks   = $tasks;
         $this->view->users   = $this->user->getPairs('noletter');
@@ -1277,6 +1276,7 @@ class story extends control
     }
 
     /**
+     * 查看需求的相关缺陷。
      * Bugs of a story.
      *
      * @param  int    $storyID
@@ -1284,28 +1284,25 @@ class story extends control
      * @access public
      * @return void
      */
-    public function bugs($storyID, $executionID = 0)
+    public function bugs(int $storyID, int $executionID = 0)
     {
-        $this->loadModel('bug');
-
-        $this->view->bugs  = $this->bug->getStoryBugs($storyID, $executionID);
+        $this->view->bugs  = $this->loadModel('bug')->getStoryBugs($storyID, $executionID);
         $this->view->users = $this->user->getPairs('noletter');
         $this->view->story = $this->story->getById($storyID);
         $this->display();
     }
 
     /**
+     * 查看需求的相关用例。
      * Cases of a story.
      *
      * @param  int    $storyID
      * @access public
      * @return void
      */
-    public function cases($storyID)
+    public function cases(int $storyID)
     {
-        $this->loadModel('testcase');
-
-        $this->view->cases      = $this->testcase->getStoryCases($storyID);
+        $this->view->cases      = $this->loadModel('testcase')->getStoryCases($storyID);
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->resultList = $this->lang->testcase->resultList;
         $this->view->story      = $this->story->getById($storyID);
