@@ -4228,7 +4228,8 @@ class storyModel extends model
     }
 
     /**
-     * Replace story lang to requirement.
+     * 将软件需求语言项替换为用户需求语言项。
+     * Replace the lang of the story with the requirement.
      *
      * @param  string $type
      * @access public
