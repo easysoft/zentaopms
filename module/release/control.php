@@ -252,6 +252,12 @@ class release extends control
 
         $this->commonAction($release->product);
         $product = $this->product->getById($release->product);
+        if($this->app->rawModule == 'projectrelease')
+        {
+            $projectID = (int)$this->session->project;
+            $this->loadModel('project')->setMenu($projectID);
+            $this->view->project = $this->project->getById($projectID);
+        }
 
         $this->executeHooks($releaseID);
 
@@ -492,7 +498,8 @@ class release extends control
         if(!empty($_POST['stories']))
         {
             $this->release->linkStory($releaseID);
-            return print(js::locate($this->createLink($this->app->rawModule, 'view', "releaseID=$releaseID&type=story"), 'parent'));
+            if(dao::isError()) return $this->sendError(dao::getError());
+            return $this->sendSuccess(array('load' => $this->createLink($this->app->rawModule, 'view', "releaseID=$releaseID&type=story"), 'closeModal' => true));
         }
         $this->session->set('storyList', $this->createLink($this->app->rawModule, 'view', "releaseID=$releaseID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), 'product');
 

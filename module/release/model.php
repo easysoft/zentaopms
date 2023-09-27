@@ -472,7 +472,7 @@ class releaseModel extends model
             if(strpos(",{$release->stories},", ",{$storyID},") !== false) unset($_POST['stories'][$i]);
         }
 
-        $this->loadModel('story')->updateStoryReleasedDate($build->stories, $release->date);
+        $this->loadModel('story')->updateStoryReleasedDate($release->stories, $release->date);
         $release->stories .= ',' . implode(',', $this->post->stories);
         $this->dao->update(TABLE_RELEASE)->set('stories')->eq($release->stories)->where('id')->eq((int)$releaseID)->exec();
 
