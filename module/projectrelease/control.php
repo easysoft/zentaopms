@@ -400,16 +400,16 @@ class projectrelease extends control
     }
 
     /**
+     * 项目发布批量取消关联需求。
      * Batch unlink story.
      *
      * @param  int    $releaseID
      * @access public
      * @return void
      */
-    public function batchUnlinkStory($releaseID)
+    public function batchUnlinkStory(int $releaseID)
     {
-        $this->loadModel('release')->batchUnlinkStory($releaseID);
-        return print(js::locate($this->createLink('projectrelease', 'view', "releaseID=$releaseID&type=story"), 'parent'));
+        echo $this->fetch('release', 'batchUnlinkStory', "releaseID={$releaseID}");
     }
 
     /**
@@ -447,6 +447,7 @@ class projectrelease extends control
     }
 
     /**
+     * 项目发布批量取消关联 bug。
      * Batch unlink story.
      *
      * @param  int    $releaseID
@@ -454,10 +455,9 @@ class projectrelease extends control
      * @access public
      * @return void
      */
-    public function batchUnlinkBug($releaseID, $type = 'bug')
+    public function batchUnlinkBug(int $releaseID, string $type = 'bug')
     {
-        $this->loadModel('release')->batchUnlinkBug($releaseID, $type);
-        return print(js::locate($this->createLink('projectrelease', 'view', "releaseID=$releaseID&type=$type"), 'parent'));
+        echo $this->fetch('release', 'batchUnlinkBug', "releaseID={$releaseID}&type={$type}");
     }
 
     /**

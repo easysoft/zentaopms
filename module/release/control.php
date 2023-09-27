@@ -605,7 +605,7 @@ class release extends control
     public function batchUnlinkStory(int $releaseID)
     {
         $this->release->batchUnlinkStory($releaseID);
-        return $this->sendSuccess(array('load' => $this->createLink('release', 'view', "releaseID=$releaseID&type=story")));
+        return $this->sendSuccess(array('load' => $this->createLink($this->app->rawModule, 'view', "releaseID={$releaseID}&type=story")));
     }
 
     /**
@@ -626,7 +626,7 @@ class release extends control
         if(!empty($_POST['bugs']))
         {
             $this->release->linkBug($releaseID, $type);
-            return print(js::locate($this->createLink($this->app->rawModule, 'view', "releaseID=$releaseID&type=$type"), 'parent'));
+            return $this->sendSuccess(array('load' => $this->createLink($this->app->rawModule, 'view', "releaseID={$releaseID}&type={$type}")));
         }
 
         $this->session->set('bugList', $this->createLink($this->app->rawModule, 'view', "releaseID=$releaseID&type=$type&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), 'qa');
@@ -744,7 +744,7 @@ class release extends control
     public function batchUnlinkBug(int $releaseID, string $type = 'bug')
     {
         $this->release->batchUnlinkBug($releaseID, $type);
-        return $this->sendSuccess(array('load' => $this->createLink('release', 'view', "releaseID=$releaseID&type=$type")));
+        return $this->sendSuccess(array('load' => $this->createLink($this->app->rawModule, 'view', "releaseID={$releaseID}&type={$type}")));
     }
 
     /**

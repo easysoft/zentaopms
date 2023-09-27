@@ -585,7 +585,7 @@ class releaseModel extends model
      */
     public function batchUnlinkBug($releaseID, $type = 'bug')
     {
-        $bugList = $this->post->unlinkBugs;
+        $bugList = $this->post->bugIdList;
         if(empty($bugList)) return true;
 
         $release = $this->getByID($releaseID);
@@ -596,7 +596,7 @@ class releaseModel extends model
         $this->dao->update(TABLE_RELEASE)->set($field)->eq($release->$field)->where('id')->eq((int)$releaseID)->exec();
 
         $this->loadModel('action');
-        foreach($this->post->unlinkBugs as $unlinkBugID) $this->action->create('bug', $unlinkBugID, 'unlinkedfromrelease', '', $releaseID);
+        foreach($this->post->bugIdList as $unlinkBugID) $this->action->create('bug', $unlinkBugID, 'unlinkedfromrelease', '', $releaseID);
     }
 
     /**

@@ -38,8 +38,8 @@ $canBatchUnlinkStory = $canBeChanged && common::hasPriv($buildModule, 'batchUnli
 $canBatchCloseStory  = $canBeChanged && common::hasPriv('story', 'batchClose');
 
 $storyFootToolbar = array();
-if($canBatchUnlinkStory) $storyFootToolbar['items'][] = array('class' => 'btn secondary size-sm batch-btn', 'text' => $lang->release->batchUnlink, 'data-type' => 'story', 'data-url' => createLink($buildModule, 'batchUnlinkStory', "release={$release->id}"));
-if($canBatchCloseStory)  $storyFootToolbar['items'][] = array('class' => 'btn secondary size-sm batch-btn', 'text' => $lang->story->batchClose,    'data-type' => 'story', 'data-url' => createLink('story', 'batchClose', "productID={$release->product}"));
+if($canBatchUnlinkStory) $storyFootToolbar['items'][] = array('className' => 'btn primary size-sm batch-btn', 'text' => $lang->release->batchUnlink, 'data-type' => 'story', 'data-url' => createLink($buildModule, 'batchUnlinkStory', "release={$release->id}"));
+if($canBatchCloseStory)  $storyFootToolbar['items'][] = array('className' => 'btn primary size-sm batch-btn', 'text' => $lang->story->batchClose,    'data-type' => 'story', 'data-url' => createLink('story', 'batchClose', "productID={$release->product}"));
 
 /* Table data and setting for resolved bugs tab. */
 jsVar('confirmunlinkbug', $lang->release->confirmUnlinkBug);
@@ -52,8 +52,8 @@ $canBatchUnlinkBug = $canBeChanged && common::hasPriv($buildModule, 'batchUnlink
 $canBatchCloseBug  = $canBeChanged && common::hasPriv('bug', 'batchClose');
 
 $bugFootToolbar = array();
-if($canBatchUnlinkBug) $bugFootToolbar['items'][] = array('class' => 'btn secondary size-sm batch-btn', 'text' => $lang->release->batchUnlink, 'data-type' => 'bug', 'data-url' => createLink($buildModule, 'batchUnlinkBug', "release={$release->id}"));
-if($canBatchCloseBug)  $bugFootToolbar['items'][] = array('class' => 'btn secondary size-sm batch-btn', 'text' => $lang->bug->batchClose,      'data-type' => 'bug', 'data-url' => createLink('bug', 'batchClose', "productID={$release->product}"));
+if($canBatchUnlinkBug) $bugFootToolbar['items'][] = array('className' => 'btn primary size-sm batch-btn', 'text' => $lang->release->batchUnlink, 'data-type' => 'bug', 'data-url' => createLink($buildModule, 'batchUnlinkBug', "release={$release->id}"));
+if($canBatchCloseBug)  $bugFootToolbar['items'][] = array('className' => 'btn primary size-sm batch-btn', 'text' => $lang->bug->batchClose,      'data-type' => 'bug', 'data-url' => createLink('bug', 'batchClose', "productID={$release->product}"));
 
 /* Table data and setting for left bugs tab. */
 jsVar('confirmunlinkleftbug', $lang->release->confirmUnlinkBug);
@@ -63,7 +63,7 @@ $config->release->dtable->leftBug->fieldList['resolvedBuild']['map'] = $builds;
 $leftBugTableData = initTableData($leftBugs, $config->release->dtable->leftBug->fieldList, $this->release);
 
 $leftBugFootToolbar = array();
-if($canBatchUnlinkBug) $leftBugFootToolbar['items'][] = array('class' => 'btn secondary size-sm batch-btn', 'text' => $lang->release->batchUnlink, 'data-type' => 'bug', 'data-url' => createLink($buildModule, 'batchUnlinkBug', "release={$release->id}&type=leftBug"));
+if($canBatchUnlinkBug) $leftBugFootToolbar['items'][] = array('className' => 'btn primary size-sm batch-btn', 'text' => $lang->release->batchUnlink, 'data-type' => 'bug', 'data-url' => createLink($buildModule, 'batchUnlinkBug', "release={$release->id}&type=leftBug"));
 
 /* Process release info data. */
 $releaseBuild = array();
