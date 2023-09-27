@@ -393,23 +393,23 @@ class build extends control
     }
 
     /**
+     * 重构获取产品下的版本下拉列表。
      * AJAX: get builds of a product in html select.
      *
-     * @param  int        $productID
-     * @param  string     $varName      the name of the select object to create
-     * @param  string     $build        build to selected
-     * @param  string|int $branch
-     * @param  string     $type         get all builds or some builds belong to normal releases and executions are not done.
-     * @param  string     $extra
+     * @param  int    $productID
+     * @param  string $varName      the name of the select object to create
+     * @param  string $build        build to selected
+     * @param  string $branch
+     * @param  string $type         get all builds or some builds belong to normal releases and executions are not done.
      * @access public
      * @return string
      */
-    public function ajaxGetProductBuilds($productID, $varName, $build = '', $branch = 'all', $type = 'normal', $extra = '')
+    public function ajaxGetProductBuilds(int $productID, string $varName, string $build = '', string $branch = 'all', string $type = 'normal')
     {
         $isJsonView = $this->app->getViewType() == 'json';
         if($varName == 'openedBuild' )
         {
-            $params = ($type == 'all') ? 'noempty,withbranch,noreleased' : 'noempty,noterminate,nodone,withbranch,noreleased';
+            $params = $type == 'all' ? 'noempty,withbranch,noreleased' : 'noempty,noterminate,nodone,withbranch,noreleased';
             $builds = $this->build->getBuildPairs($productID, $branch, $params, 0, 'project', $build);
             if($isJsonView) return print(json_encode($builds));
 
@@ -426,7 +426,7 @@ class build extends control
         }
         if($varName == 'resolvedBuild')
         {
-            $params = ($type == 'all') ? 'withbranch,noreleased' : 'noterminate,nodone,withbranch,noreleased';
+            $params = $type == 'all' ? 'withbranch,noreleased' : 'noterminate,nodone,withbranch,noreleased';
             $builds = $this->build->getBuildPairs($productID, $branch, $params, 0, 'project', $build);
             if($isJsonView) return print(json_encode($builds));
 
@@ -440,7 +440,6 @@ class build extends control
 
         $items = array();
         foreach($builds as $buildID => $buildName) $items[] = array('text' => $buildName, 'value' => $buildID);
-
         return print(json_encode($items));
     }
 
