@@ -1056,7 +1056,7 @@ class screenModel extends model
                 {
                     $field   = $settings->value->field;
                     $sql     = $this->setFilterSQL($chart);
-                    $results = $this->dao->query($sql)->fetchAll();
+                    $results = $this->buildDataset($chart->id, $sql);
 
                     if($settings->value->type === 'value')
                     {
@@ -1179,7 +1179,8 @@ class screenModel extends model
                     }
 
                     $sql     = $this->setFilterSQL($chart);
-                    $results = $this->dao->query($sql)->fetchAll();
+                    $results = $this->buildDataset($chart->id, $sql);
+
                     foreach($results as $result)
                     {
                         $row = array();
@@ -1684,5 +1685,50 @@ class screenModel extends model
             }
         }
         return false;
+    }
+
+    /**
+     * 构建大屏图表的数据源。
+     * Build dataset of chart.
+     *
+     * @param  int    $chartID
+     * @param  string $sql
+     * @access public
+     * @return array
+     */
+    public function buildDataset($chartID, $sql = '')
+    {
+        if(!in_array($chartID, $this->config->screen->phpChart)) return $this->dao->query($sql)->fetchAll();
+
+        $year  = $this->filter->year;
+        $month = $this->filter->month;
+        $projectList = $this->getUsageReportProjects($year, $month);
+
+        if($chartID == 20002) return $this->getActiveUserTable($year, $month, $projectList);
+        if($chartID == 20004) return $this->getActiveProductCard($year, $month);
+        if($chartID == 20007) return $this->getActiveProjectCard($year, $month);
+        if($chartID == 20010) return $this->getProjectTaskTable($year, $month, $projectList);
+
+    }
+
+    /**
+     * 获取应用巡检报告的项目列表。
+     * Get project list for usage report.
+     *
+     * @param  string $year
+     * @param  string $month
+     * @access public
+     * @return array
+     */
+    public function getUsageReportProjects($year, $month)
+    {
+        $date = date("Y-m-t", strtotime("$year-$month"));
+
+        return $this->dao->select('id,name')->from(TABLE_PROJECT)
+            ->where('type')->eq('project')
+            ->andWhere('date(openedDate)')->le($date)
+            ->andWhere('date(closedDate)')->gt($date)
+            ->andWhere('deleted')->eq('0')
+            ->fetchPairs();
     }
 }
