@@ -2748,11 +2748,13 @@ class userModel extends model
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getTeamMembersPairs();
 
+        if(empty($objectIds) and empty($usersToAppended)) return array();
+
         $keyField = strpos($params, 'useid') !== false ? 'id' : 'account';
         $users = $this->dao->select("t2.id, t2.account, t2.realname")->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('t1.type')->eq($type)
-            ->beginIF(!empty($objectIds))->andWhere('t1.root')->in($objectIds)->fi()
+            ->andWhere('t1.root')->in($objectIds)
             ->beginIF($params == 'nodeleted' or empty($this->config->user->showDeleted))
             ->andWhere('t2.deleted')->eq('0')
             ->fi()
