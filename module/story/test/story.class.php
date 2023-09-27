@@ -355,18 +355,13 @@ class storyTest
      * Test review story.
      *
      * @param  int    $storyID
-     * @param  array  $params
+     * @param  object $data
      * @access public
-     * @return void
+     * @return object
      */
-    public function reviewTest($storyID, $params)
+    public function reviewTest($storyID, $data): object
     {
-        $_POST = $params;
-        $changes = $this->objectModel->review($storyID);
-        unset($_POST);
-
-        if(dao::isError()) return dao::getError();
-
+        $this->objectModel->review($storyID, $data);
         return $this->objectModel->getByID($storyID);
     }
 
@@ -985,9 +980,33 @@ class storyTest
         return $this->objectModel->dao->select('*')->from(TABLE_RELATION)->where('AType')->eq('requirement')->andWhere('BType')->eq('story')->andWhere('relation')->eq('subdivideinto')->andWhere('AID')->eq(3)->andWhere('BID')->eq($storyID)->fetch();
     }
 
+    /**
+     * 测试 syncTwins 方法。
+     * Test syncTwins method
+     *
+     * @param  int    $storyID
+     * @param  string $twins
+     * @param  array  $changes
+     * @access public
+     * @return array
+     */
     public function syncTwinsTest(int $storyID, string $twins, array $changes): array
     {
         $this->objectModel->syncTwins($storyID, $twins, $changes, 'changed');
         return $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('id')->in($twins)->orderBy('id')->fetchAll();
+    }
+
+    /**
+     * 测试 recordReviewAction 方法
+     * Test recordReviewAction method
+     *
+     * @param  object $story
+     * @access public
+     * @return object
+     */
+    public function recordReviewActionTest(object $story): object
+    {
+        $actionID = $this->objectModel->recordReviewAction($story);
+        return $this->objectModel->dao->select('*')->from(TABLE_ACTION)->where('id')->in($actionID)->fetch();
     }
 }

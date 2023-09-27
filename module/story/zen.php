@@ -1444,15 +1444,15 @@ class storyZen extends story
     }
 
     /**
-     * 如果是在弹窗中创建需求，获取创建后的跳转地址。
-     * Get response when after create story in modal.
+     * 如果是在弹窗中打开页面，获取跳转地址。
+     * Get response when open in modal.
      *
      * @param  string    $message
      * @param  int       $executionID
      * @access protected
      * @return array|false
      */
-    protected function responseAfterCreateInModal(string $message, int $executionID = 0): array|false
+    protected function getResponseInModal(string $message, int $executionID = 0): array|false
     {
         if(!isonlybody()) return false;
         if($this->app->tab != 'execution') return array('result' => 'success', 'message' => $message, 'load' => true, 'closeModal' => true);

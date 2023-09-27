@@ -1053,13 +1053,15 @@ class storyModel extends model
     {
         $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
         $now      = helper::now();
+        $account  = $this->app->user->account;
+        if(!str_contains(",{$oldStory->reviewedBy},", ",{$account}")) $story->reviewedBy = $oldStory->reviewedBy . ',' . $account;
 
         $this->dao->update(TABLE_STORYREVIEW)
             ->set('result')->eq($story->result)
             ->set('reviewDate')->eq($now)
             ->where('story')->in($storyID . ($oldStory->twins ? ",{$oldStory->twins}" : ''))
             ->andWhere('version')->eq($oldStory->version)
-            ->andWhere('reviewer')->eq($this->app->user->account)
+            ->andWhere('reviewer')->eq($account)
             ->exec();
 
         $story = $this->updateStoryByReview($storyID, $oldStory, $story);

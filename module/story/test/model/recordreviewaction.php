@@ -25,7 +25,7 @@ $storyReview->gen(20);
 
 /**
 
-title=测试 storyModel->review();
+title=测试 storyModel->recordReviewAction();
 cid=1
 pid=1
 
@@ -34,15 +34,25 @@ pid=1
 $story = new storyTest();
 
 $storyData = new stdclass();
+$storyData->id           = '1';
 $storyData->result       = 'pass';
 $storyData->assignedTo   = 'admin';
 $storyData->closedReason = '';
 $storyData->pri          = '2';
-r($story->reviewTest(1, $storyData)) && p('status') && e('active');      // 评审一个草稿的需求，传入评审意见为通过，状态变为激活
+r($story->recordReviewActionTest($storyData)) && p('action') && e('reviewed');
 
-$storyData = new stdclass();
-$storyData->result       = 'reject';
-$storyData->assignedTo   = 'admin';
-$storyData->closedReason = '';
-$storyData->pri          = '2';
-r($story->reviewTest(5, $storyData)) && p('status') && e('closed');      // 评审一个草稿的需求，传入评审意见为通过，状态变为激活
+$storyData->finalResult = 'pass';
+r($story->recordReviewActionTest($storyData)) && p('action') && e('reviewpassed');
+$storyData->finalResult = 'reject';
+r($story->recordReviewActionTest($storyData)) && p('action') && e('reviewrejected');
+$storyData->finalResult = 'clarify';
+r($story->recordReviewActionTest($storyData)) && p('action') && e('reviewclarified');
+$storyData->finalResult = 'revert';
+r($story->recordReviewActionTest($storyData)) && p('action') && e('reviewreverted');
+
+
+$story->objectModel->app->user->account = 'admin';
+$story->objectModel->app->rawModule = 'story';
+$story->objectModel->app->rawMethod = 'review';
+$story->objectModel->config->story->superReviewers = 'admin';
+r($story->recordReviewActionTest($storyData)) && p('action') && e('reviewed');

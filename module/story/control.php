@@ -78,7 +78,7 @@ class story extends control
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'id' => $storyID));
 
             /* Get response when create in modal. */
-            $response = $this->storyZen->responseAfterCreateInModal($message);
+            $response = $this->storyZen->getResponseInModal($message);
             if($response) return $this->send($response);
 
             $response = array('result' => 'success', 'message' => $message);
@@ -156,7 +156,7 @@ class story extends control
             }
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $stories));
-            if(isonlybody()) return $this->send($this->storyZen->responseAfterCreateInModal($this->lang->saveSuccess, $executionID));
+            if(isonlybody()) return $this->send($this->storyZen->getResponseInModal($this->lang->saveSuccess, $executionID));
 
             $locateLink = $this->storyZen->getAfterBatchCreateLocation($productID, $branch, $executionID, $storyID, $storyType);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
@@ -270,7 +270,7 @@ class story extends control
             if(empty($message)) $message = $this->lang->saveSuccess;
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $storyID));
 
-            $response = $this->storyZen->responseAfterCreateInModal($message);
+            $response = $this->storyZen->getResponseInModal($message);
             if($response) return $this->send($response);
 
             $params = $this->app->rawModule == 'story' ? "storyID=$storyID&version=0&param=0&storyType=$storyType" : "storyID=$storyID";
@@ -381,7 +381,7 @@ class story extends control
             if(empty($message)) $message = $this->lang->saveSuccess;
             if(defined('RUN_MODE') and RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $storyID));
 
-            $response = $this->storyZen->responseAfterCreateInModal($message);
+            $response = $this->storyZen->getResponseInModal($message);
             if($response) return $this->send($response);
 
             $location = $this->storyZen->getAfterChangeLocation($storyID, $storyType);
@@ -581,9 +581,7 @@ class story extends control
             if(isonlybody())
             {
                 if($this->app->tab == 'execution') $this->loadModel('kanban')->updateLane($this->session->execution, 'story', $storyID);
-
-                $response = $this->storyZen->responseAfterCreateInModal($message);
-                if($response) return $this->send($response);
+                return $this->send($this->storyZen->getResponseInModal($message));
             }
             if(defined('RUN_MODE') and RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $storyID));
 
