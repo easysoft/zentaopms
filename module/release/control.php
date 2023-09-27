@@ -587,11 +587,12 @@ class release extends control
      * @access public
      * @return void
      */
-    public function unlinkStory(int $releaseID, int$storyID)
+    public function unlinkStory(int $releaseID, int $storyID)
     {
         $this->release->unlinkStory($releaseID, $storyID);
 
-        return $this->sendSuccess(array('load' => $this->createLink('release', 'view', "releaseID=$releaseID&type=story")));
+        if(dao::isError()) return $this->sendError(dao::getError());
+        return $this->sendSuccess(array('load' => $this->createLink($this->app->rawModule, 'view', "releaseID=$releaseID&type=story")));
     }
 
     /**

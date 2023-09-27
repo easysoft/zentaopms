@@ -386,24 +386,17 @@ class projectrelease extends control
     }
 
     /**
-     * Unlink story
+     * 项目发布取消关联需求。
+     * Unlink a story from a release.
      *
      * @param  int    $releaseID
      * @param  int    $storyID
      * @access public
      * @return void
      */
-    public function unlinkStory($releaseID, $storyID, $confirm = 'no')
+    public function unlinkStory(int $releaseID, int $storyID)
     {
-        if($confirm == 'no')
-        {
-            return print(js::confirm($this->lang->release->confirmUnlinkStory, inlink('unlinkstory', "releaseID=$releaseID&storyID=$storyID&confirm=yes")));
-        }
-        else
-        {
-            $this->projectrelease->unlinkStory($releaseID, $storyID);
-            return print(js::reload('parent'));
-        }
+        echo $this->fetch('release', 'unlinkStory', "releaseID={$releaseID}&storyID={$storyID}");
     }
 
     /**
