@@ -10,8 +10,8 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<?php css::import($jsRoot . 'xterm/css/xterm.css');?>
-<?php js::import($jsRoot  . 'xterm/lib/xterm.js'); ?>
+<?php css::import($jsRoot . 'xterm/xterm.css');?>
+<?php js::import($jsRoot  . 'xterm/xterm.js'); ?>
 <?php js::set('solutionID', $solution->id);?>
 <?php js::set('hasError', !in_array($solution->status, array('installing', 'installed', 'finish')));?>
 <?php js::set('notices', $lang->solution->notices);?>
