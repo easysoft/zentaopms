@@ -364,7 +364,7 @@ class projectrelease extends control
             return print($this->fetch('file', 'sendDownHeader', array('fileName' => $this->post->fileName, 'html', $html)));
         }
 
-        $this->display();
+        $this->display('release', 'export');
     }
 
     /**
