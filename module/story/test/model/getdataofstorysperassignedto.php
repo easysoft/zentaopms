@@ -5,7 +5,7 @@ su('admin');
 
 /**
 
-title=测试 storyModel->getDataOfStorysPerAssignedTo();
+title=测试 storyModel->getDataOfStoriesPerAssignedTo();
 cid=1
 pid=1
 
@@ -18,7 +18,7 @@ global $tester;
 $tester->loadModel('story');
 $tester->loadModel('report');
 
-$data = $tester->story->getDataOfStorysPerAssignedTo();
+$data = $tester->story->getDataOfStoriesPerAssignedTo();
 
 r(count($data)) && p()                   && e('5');         // 按照需求指派人分组，获取分组后的需求数量
 r($data)        && p('admin:name,value') && e('admin,100'); // 按照需求指派人分组，获取各个指派人名下的需求数量，查看admin下的数据

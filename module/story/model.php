@@ -2902,12 +2902,12 @@ class storyModel extends model
     }
 
     /**
-     * Get report data of storys per product
+     * Get report data of stories per product
      *
      * @access public
      * @return array
      */
-    public function getDataOfStorysPerProduct()
+    public function getDataOfStoriesPerProduct()
     {
         $datas = $this->dao->select('product as name, count(product) as value')->from(TABLE_STORY)
             ->where($this->reportCondition())
@@ -2919,12 +2919,12 @@ class storyModel extends model
     }
 
     /**
-     * Get report data of storys per module
+     * Get report data of stories per module
      *
      * @access public
      * @return array
      */
-    public function getDataOfStorysPerModule()
+    public function getDataOfStoriesPerModule()
     {
         $datas = $this->dao->select('module as name, count(module) as value, product, branch')
             ->from(TABLE_STORY)
@@ -2959,12 +2959,12 @@ class storyModel extends model
     }
 
     /**
-     * Get report data of storys per source
+     * Get report data of stories per source
      *
      * @access public
      * @return array
      */
-    public function getDataOfStorysPerSource()
+    public function getDataOfStoriesPerSource()
     {
         $datas = $this->dao->select('source as name, count(source) as value')->from(TABLE_STORY)
             ->where($this->reportCondition())
@@ -2976,12 +2976,12 @@ class storyModel extends model
     }
 
     /**
-     * Get report data of storys per plan
+     * Get report data of stories per plan
      *
      * @access public
      * @return array
      */
-    public function getDataOfStorysPerPlan()
+    public function getDataOfStoriesPerPlan()
     {
         $datas = $this->dao->select('plan as name, count(plan) as value')->from(TABLE_STORY)
             ->where($this->reportCondition())
@@ -3027,12 +3027,12 @@ class storyModel extends model
     }
 
     /**
-     * Get report data of storys per status
+     * Get report data of stories per status
      *
      * @access public
      * @return array
      */
-    public function getDataOfStorysPerStatus()
+    public function getDataOfStoriesPerStatus()
     {
         $datas = $this->dao->select('status as name, count(status) as value')->from(TABLE_STORY)
             ->where($this->reportCondition())
@@ -3043,12 +3043,12 @@ class storyModel extends model
     }
 
     /**
-     * Get report data of storys per stage
+     * Get report data of stories per stage
      *
      * @access public
      * @return array
      */
-    public function getDataOfStorysPerStage()
+    public function getDataOfStoriesPerStage()
     {
         $datas = $this->dao->select('stage as name, count(stage) as value')->from(TABLE_STORY)
             ->where($this->reportCondition())
@@ -3059,12 +3059,12 @@ class storyModel extends model
     }
 
     /**
-     * Get report data of storys per pri
+     * Get report data of stories per pri
      *
      * @access public
      * @return array
      */
-    public function getDataOfStorysPerPri()
+    public function getDataOfStoriesPerPri()
     {
         $datas = $this->dao->select('pri as name, count(pri) as value')->from(TABLE_STORY)
             ->where($this->reportCondition())
@@ -3075,12 +3075,12 @@ class storyModel extends model
     }
 
     /**
-     * Get report data of storys per estimate
+     * Get report data of stories per estimate
      *
      * @access public
      * @return array
      */
-    public function getDataOfStorysPerEstimate()
+    public function getDataOfStoriesPerEstimate()
     {
         return $this->dao->select('estimate as name, count(estimate) as value')->from(TABLE_STORY)
             ->where($this->reportCondition())
@@ -3088,12 +3088,12 @@ class storyModel extends model
     }
 
     /**
-     * Get report data of storys per openedBy
+     * Get report data of stories per openedBy
      *
      * @access public
      * @return array
      */
-    public function getDataOfStorysPerOpenedBy()
+    public function getDataOfStoriesPerOpenedBy()
     {
         $datas = $this->dao->select('openedBy as name, count(openedBy) as value')->from(TABLE_STORY)
             ->where($this->reportCondition())
@@ -3105,12 +3105,12 @@ class storyModel extends model
     }
 
     /**
-     * Get report data of storys per assignedTo
+     * Get report data of stories per assignedTo
      *
      * @access public
      * @return array
      */
-    public function getDataOfStorysPerAssignedTo()
+    public function getDataOfStoriesPerAssignedTo()
     {
         $datas = $this->dao->select('assignedTo as name, count(assignedTo) as value')->from(TABLE_STORY)
             ->where($this->reportCondition())
@@ -3122,12 +3122,12 @@ class storyModel extends model
     }
 
     /**
-     * Get report data of storys per closedReason
+     * Get report data of stories per closedReason
      *
      * @access public
      * @return array
      */
-    public function getDataOfStorysPerClosedReason()
+    public function getDataOfStoriesPerClosedReason()
     {
         $datas = $this->dao->select('closedReason as name, count(closedReason) as value')->from(TABLE_STORY)
             ->where($this->reportCondition())
@@ -3138,12 +3138,12 @@ class storyModel extends model
     }
 
     /**
-     * Get report data of storys per change
+     * Get report data of stories per change
      *
      * @access public
      * @return array
      */
-    public function getDataOfStorysPerChange()
+    public function getDataOfStoriesPerChange()
     {
         return $this->dao->select('(version-1) as name, count(*) as value')->from(TABLE_STORY)
             ->where($this->reportCondition())
@@ -4501,7 +4501,7 @@ class storyModel extends model
     }
 
     /**
-     * Get export storys .
+     * Get export stories .
      *
      * @param  int    $executionID
      * @param  string $orderBy

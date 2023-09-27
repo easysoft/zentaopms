@@ -5,7 +5,7 @@ su('admin');
 
 /**
 
-title=测试 storyModel->getDataOfStorysPerPlan();
+title=测试 storyModel->getDataOfStoriesPerPlan();
 cid=1
 pid=1
 
@@ -19,7 +19,7 @@ global $tester;
 $tester->loadModel('story');
 $tester->loadModel('report');
 
-$data = $tester->story->getDataOfStorysPerPlan();
+$data = $tester->story->getDataOfStoriesPerPlan();
 
 r(count($data)) && p()                && e('25');     // 按照计划分组，获取分组后的需求数量
 r($data)        && p('1:name,value')  && e('1.0,18'); // 按照计划分组，获取各个计划的需求数量，查看1下的数据

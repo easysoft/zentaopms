@@ -5,7 +5,7 @@ su('admin');
 
 /**
 
-title=测试 storyModel->getDataOfStorysPerEstimate();
+title=测试 storyModel->getDataOfStoriesPerEstimate();
 cid=1
 pid=1
 
@@ -18,7 +18,7 @@ pid=1
 global $tester;
 $tester->loadModel('story');
 
-$data = $tester->story->getDataOfStorysPerEstimate();
+$data = $tester->story->getDataOfStoriesPerEstimate();
 
 r(count($data)) && p()                && e('21');    // 按照需求预计工时分组，获取分组后的需求数量
 r($data)        && p('19:name,value') && e('17,28'); // 按照需求预计工时分组，获取各个工时的需求数量，查看工时为19的数据

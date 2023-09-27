@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=测试 storyModel->getDataOfStorysPerPri();
+title=测试 storyModel->getDataOfStoriesPerPri();
 cid=1
 pid=1
 
@@ -20,7 +20,7 @@ global $tester;
 $tester->loadModel('story');
 $tester->loadModel('report');
 
-$data = $tester->story->getDataOfStorysPerPri();
+$data = $tester->story->getDataOfStoriesPerPri();
 
 r(count($data)) && p()                && e('4');     // 按照优先级分组，获取分组后的需求数量
 r($data)        && p('1:name,value')  && e('1,113'); // 按照优先级分组，获取各个优先级的需求数量，查看优先级1下的数据

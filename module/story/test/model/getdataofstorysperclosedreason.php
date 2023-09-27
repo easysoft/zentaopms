@@ -5,7 +5,7 @@ su('admin');
 
 /**
 
-title=测试 storyModel->getDataOfStorysPerClosedReason();
+title=测试 storyModel->getDataOfStoriesPerClosedReason();
 cid=1
 pid=1
 
@@ -20,7 +20,7 @@ global $tester;
 $tester->loadModel('story');
 $tester->loadModel('report');
 
-$data = $tester->story->getDataOfStorysPerClosedReason();
+$data = $tester->story->getDataOfStoriesPerClosedReason();
 
 r(count($data)) && p()                       && e('8');           // 按照需求关闭原因分组，获取分组后的需求数量
 r($data)        && p('willnotdo:name,value') && e('不做,12');     // 按照需求关闭原因分组，获取各个关闭原因下的需求数量，查看willnotdo的数据

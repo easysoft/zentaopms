@@ -5,7 +5,7 @@ su('admin');
 
 /**
 
-title=测试 storyModel->getDataOfStorysPerStage();
+title=测试 storyModel->getDataOfStoriesPerStage();
 cid=1
 pid=1
 
@@ -20,7 +20,7 @@ global $tester;
 $tester->loadModel('story');
 $tester->loadModel('report');
 
-$data = $tester->story->getDataOfStorysPerStage();
+$data = $tester->story->getDataOfStoriesPerStage();
 
 r(count($data)) && p()                      && e('11');        // 按照需求阶段分组，获取分组后的需求数量
 r($data)        && p('wait:name,value')     && e('未开始,25'); // 按照需求阶段分组，获取各个需求阶段的需求数量，查看wait下的数据

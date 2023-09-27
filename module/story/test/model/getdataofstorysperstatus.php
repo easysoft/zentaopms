@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=测试 storyModel->getDataOfStorysPerStatus();
+title=测试 storyModel->getDataOfStoriesPerStatus();
 cid=1
 pid=1
 
@@ -21,7 +21,7 @@ global $tester;
 $tester->loadModel('story');
 $tester->loadModel('report');
 
-$data = $tester->story->getDataOfStorysPerStatus();
+$data = $tester->story->getDataOfStoriesPerStatus();
 
 r(count($data)) && p()                    && e('4');         // 按照需求状态分组，获取分组后的需求数量
 r($data)        && p('draft:name,value')  && e('草稿,184');  // 按照需求状态分组，获取各个需求状态的需求数量，查看draft下的数据
