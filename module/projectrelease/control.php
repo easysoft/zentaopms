@@ -218,13 +218,14 @@ class projectrelease extends control
     }
 
     /**
+     * 提示发布。
      * Notify for release.
      *
      * @param  int    $releaseID
      * @access public
      * @return void
      */
-    public function notify($releaseID)
+    public function notify(int $releaseID)
     {
         echo $this->fetch('release', 'notify', "releaseID={$releaseID}&projectID={$this->session->project}");
     }
