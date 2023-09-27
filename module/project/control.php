@@ -1543,7 +1543,7 @@ class project extends control
         $this->view->type = $type;
         foreach($this->lang->resource as $moduleName => $action)
         {
-            if($this->group->checkMenuModule($menu, $moduleName) or $type != 'byGroup') $this->app->loadLang($moduleName);
+            if($this->group->checkNavModule($menu, $moduleName) or $type != 'byGroup') $this->app->loadLang($moduleName);
         }
 
         if(!empty($_POST))

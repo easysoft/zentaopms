@@ -47,7 +47,7 @@ td.menus + td {border-left: 0;}
       </thead>
       <?php foreach($lang->resource as $moduleName => $moduleActions):?>
       <?php if(!count((array)$moduleActions)) continue;?>
-      <?php if(!$this->group->checkMenuModule($menu, $moduleName)) continue;?>
+      <?php if(!$this->group->checkNavModule($menu, $moduleName)) continue;?>
       <?php
       /* Check method in select version. */
       if($version)
