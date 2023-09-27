@@ -19,14 +19,15 @@ class projectreleaseModel extends model
      * @param  int    $projectID
      * @param  string $type
      * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getList($projectID, $type = 'all', $orderBy = 't1.date_desc', $pager = null)
+    public function getList(int $projectID, string $type = 'all', string $orderBy = 't1.date_desc', object $pager = null): array
     {
-        $releases = $this->dao->select('t1.*, t2.name as productName, t2.type as productType')->from(TABLE_RELEASE)->alias('t1')
+        $releases = $this->dao->select('t1.*, t2.name AS productName, t2.type AS productType')->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-            ->where('t1.deleted')->eq(0)
+            ->where('t1.deleted')->eq('0')
             ->andWhere("FIND_IN_SET($projectID, t1.project)")
             ->beginIF($type != 'all' && $type != 'review')->andWhere('t1.status')->eq($type)->fi()
             ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")->fi()
@@ -38,54 +39,15 @@ class projectreleaseModel extends model
         $productIdList = array();
         foreach($releases as $release)
         {
-            $release->project = trim($release->project, ',');
-            $release->branch  = trim($release->branch, ',');
-            $release->build   = trim($release->build, ',');
-
             $buildIdList = array_merge($buildIdList, explode(',', $release->build));
             $productIdList[$release->product] = $release->product;
         }
 
         $branchGroup = $this->loadModel('branch')->getByProducts($productIdList);
-        $builds      = $this->dao->select("id,project,product,branch,execution,name,scmPath,filePath")->from(TABLE_BUILD)->where('id')->in(array_unique($buildIdList))->fetchAll('id');
-        foreach($releases as $release)
-        {
-            $branchName = '';
-            if(isset($branchGroup[$release->product]))
-            {
-                $branches = $branchGroup[$release->product];
-                foreach(explode(',', $release->branch) as $releaseBranch)
-                {
-                    if($releaseBranch == '') continue;
-                    $branchName .= zget($branches, $releaseBranch, '');
-                    $branchName .= ',';
-                }
-                $branchName = trim($branchName, ',');
-            }
-            $release->branchName = $branchName;
+        $builds      = $this->dao->select("id, project, product, branch, execution, name, scmPath, filePath")->from(TABLE_BUILD)->where('id')->in(array_unique($buildIdList))->fetchAll('id');
 
-            $release->buildInfos = array();
-            foreach(explode(',', $release->build) as $buildID)
-            {
-                if(empty($buildID)) continue;
+        foreach($releases as $release) $this->projectreleaseTao->processRelease($release, $branchGroup, $builds);
 
-                $build      = $builds[$buildID];
-                $branchName = '';
-                if(isset($branchGroup[$build->product]))
-                {
-                    $branches = $branchGroup[$build->product];
-                    foreach(explode(',', $build->branch) as $buildBranch)
-                    {
-                        if($buildBranch == '') continue;
-                        $branchName .= zget($branches, $buildBranch, '');
-                        $branchName .= ',';
-                    }
-                    $branchName = trim($branchName, ',');
-                }
-                $build->branchName = $branchName;
-                $release->buildInfos[$buildID] = $build;
-            }
-        }
         return $releases;
     }
 
