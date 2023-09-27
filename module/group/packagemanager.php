@@ -2742,8 +2742,7 @@ $config->group->package->trash->subset = 'systemsetting';
 $config->group->package->trash->privs  = array();
 $config->group->package->trash->privs['action-trash']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array(), 'recommend' => array());
 $config->group->package->trash->privs['action-undelete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 1, 'depend' => array('action-trash'), 'recommend' => array());
-$config->group->package->trash->privs['action-hideOne']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 2, 'depend' => array('action-trash'), 'recommend' => array('action-hideAll'));
-$config->group->package->trash->privs['action-hideAll']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 3, 'depend' => array('action-trash'), 'recommend' => array('action-hideOne'));
+$config->group->package->trash->privs['action-hideOne']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 2, 'depend' => array('action-trash'), 'recommend' => array());
 
 $config->group->package->security = new stdclass();
 $config->group->package->security->order  = 20;
