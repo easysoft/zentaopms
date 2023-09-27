@@ -57,4 +57,26 @@ class projectreleaseTest
         if(dao::isError()) return dao::getError();
         return implode(',', $objects);
     }
+
+    /**
+     * 测试项目发布信息，包括分支名称、版本信息等。
+     * Test process release.
+     *
+     * @param  int               $releaseID
+     * @access public
+     * @return string|array
+     */
+    public function processReleaseTest(int $releaseID): string|array
+    {
+        global $tester;
+        $release     = $tester->dao->findById($releaseID)->from(TABLE_RELEASE)->fetch();
+        $branchGroup = $tester->loadModel('branch')->getByProducts(explode(',', $release->product));
+        $builds      = $tester->dao->select("id, project, product, branch, execution, name, scmPath, filePath")->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll('id');
+        $this->objectModel->processRelease($release, $branchGroup, $builds);
+
+        if(dao::isError()) return dao::getError();
+
+        $return = "project:{$release->project} branch:{$release->branch} build:{$release->build} branchName:{$release->branchName} buildInfos:" . implode(',', array_column($release->buildInfos, 'name'));
+        return $return;
+    }
 }
