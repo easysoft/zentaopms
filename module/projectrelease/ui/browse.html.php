@@ -38,14 +38,7 @@ jsVar('pageSummary', $lang->release->pageSummary);
 jsVar('type', $type);
 jsVar('canViewProjectbuild', common::hasPriv('projectbuild', 'view'));
 
-if($showBranch)
-{
-    $config->projectrelease->dtable->fieldList['branch']['map'] = $branchPairs;
-}
-else
-{
-    unset($config->projectrelease->dtable->fieldList['branch']);
-}
+if(!$showBranch) unset($config->projectrelease->dtable->fieldList['branch']);
 
 $tableData = initTableData($releases, $config->projectrelease->dtable->fieldList);
 dtable

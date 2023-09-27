@@ -31,6 +31,7 @@ class projectrelease extends control
     }
 
     /**
+     * 项目发布列表。
      * Browse releases.
      *
      * @param  int    $projectID
@@ -43,26 +44,26 @@ class projectrelease extends control
      * @access public
      * @return void
      */
-    public function browse($projectID = 0, $executionID = 0, $type = 'all', $orderBy = 't1.date_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function browse(int $projectID = 0, int $executionID = 0, string $type = 'all', string $orderBy = 't1.date_desc', int $recTotal = 0, int $recPerPage = 15, int $pageID = 1)
     {
+        /* 设置发布列表和版本列表 session。*/
+        /* Set releaseList and buildList session. */
         $uri = $this->app->getURI(true);
         $this->session->set('releaseList', $uri, 'project');
         $this->session->set('buildList', $uri);
 
-        $project   = $this->project->getById($projectID);
-        $execution = $this->loadModel('execution')->getById($executionID);
-
-        if($projectID) $this->project->setMenu($projectID);
+        /* 设置菜单。*/
+        /* Set menu. */
+        if($projectID)   $this->project->setMenu($projectID);
         if($executionID) $this->loadModel('execution')->setMenu($executionID, $this->app->rawModule, $this->app->rawMethod);
 
-        $objectName = isset($project->name) ? $project->name : $execution->name;
-
-        /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $releases = $this->projectrelease->getList($projectID, $type, $orderBy, $pager);
 
+        /* 判断是否展示分支。*/
+        /* Judge whether to show branch. */
         $showBranch = false;
         foreach($releases as $release)
         {
@@ -73,15 +74,18 @@ class projectrelease extends control
             }
         }
 
-        $this->view->title       = $objectName . $this->lang->colon . $this->lang->release->browse;
-        $this->view->execution   = $execution;
-        $this->view->project     = $project;
+        $project   = $this->project->getByID($projectID);
+        $execution = $this->loadModel('execution')->getByID($executionID);
+
+        $this->view->title       = (isset($project->name) ? $project->name : $execution->name) . $this->lang->colon . $this->lang->release->browse;
         $this->view->products    = $this->loadModel('product')->getProducts($projectID);
-        $this->view->releases    = $releases;
         $this->view->projectID   = $projectID;
         $this->view->executionID = $executionID;
         $this->view->type        = $type;
         $this->view->from        = $this->app->tab;
+        $this->view->project     = $project;
+        $this->view->execution   = $execution;
+        $this->view->releases    = $releases;
         $this->view->pager       = $pager;
         $this->view->orderBy     = $orderBy;
         $this->view->showBranch  = $showBranch;
