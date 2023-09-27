@@ -481,6 +481,7 @@ class projectrelease extends control
     }
 
     /**
+     * 通过 ajax 加载版本。
      * Ajax load builds.
      *
      * @param  int    $projectID
@@ -488,12 +489,19 @@ class projectrelease extends control
      * @access public
      * @return void
      */
-    public function ajaxLoadBuilds($projectID, $productID)
+    public function ajaxLoadBuilds(int $projectID, int $productID)
     {
         $builds         = $this->loadModel('build')->getBuildPairs(array($productID), 'all', 'notrunk,withbranch,hasproject', $projectID, 'project', '', false);
         $releasedBuilds = $this->projectrelease->getReleasedBuilds($projectID);
-        foreach($releasedBuilds as $build) unset($builds[$build]);
 
-        return print(html::select('build[]', $builds, '', "class='form-control chosen' multiple"));
+        $buildList = array();
+        foreach($builds as $buildID => $buildName)
+        {
+            if(in_array($buildID, $releasedBuilds)) continue;
+
+            $buildList[] = array('text' => $buildName, 'value' => $buildID);
+        }
+
+        return print(json_encode($buildList));
     }
 }
