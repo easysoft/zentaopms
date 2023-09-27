@@ -380,18 +380,17 @@ class build extends control
      * @param  string $varName      the name of the select object to create
      * @param  string $build        build to selected
      * @param  string $branch
-     * @param  int    $index        the index of batch create bug.
      * @param  bool   $needCreate   if need to append the link of create build
      * @param  string $type         get all builds or some builds belong to normal releases and executions are not done.
      * @access public
      * @return string
      */
-    public function ajaxGetExecutionBuilds(int $executionID, int $productID, string $varName, string $build = '', string $branch = 'all', int $index = 0, bool $needCreate = false, string $type = 'normal')
+    public function ajaxGetExecutionBuilds(int $executionID, int $productID, string $varName, string $build = '', string $branch = 'all', bool $needCreate = false, string $type = 'normal')
     {
         $isJsonView = $this->app->getViewType() == 'json';
         if($varName == 'openedBuild')
         {
-            if(empty($executionID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $index, $type);
+            if(empty($executionID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $type);
 
             $params = ($type == 'all') ? 'noempty,noreleased' : 'noempty,noterminate,nodone,noreleased';
             $builds = $this->build->getBuildPairs(array($productID), $branch, $params, $executionID, 'execution', $build);
@@ -403,7 +402,7 @@ class build extends control
         }
         if($varName == 'openedBuilds')
         {
-            if(empty($executionID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $index, $type);
+            if(empty($executionID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $type);
 
             $builds    = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noreleased', $executionID, 'execution', $build);
             $buildList = array();
@@ -412,7 +411,7 @@ class build extends control
         }
         if($varName == 'resolvedBuild')
         {
-            if(empty($executionID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $index, $type);
+            if(empty($executionID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $type);
 
             $params = ($type == 'all') ? ',noreleased' : 'noterminate,nodone,noreleased';
             $builds = $this->build->getBuildPairs(array($productID), $branch, $params, $executionID, 'execution', $build);
