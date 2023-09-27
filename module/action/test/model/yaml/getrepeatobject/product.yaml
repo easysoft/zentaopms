@@ -1,0 +1,10 @@
+title: table zt_product
+desc: "产品"
+author: automated export
+version: "1.0"
+fields:
+  - field: program
+    note: "所属项目集"
+    range: 7
+  - field: name
+    range: 产品标题

@@ -1,0 +1,10 @@
+title: table zt_execution
+author: XuePeng Wang
+version: "1.0"
+fields:
+  - field: type
+    range: sprint{2},project{2},program{2},program,project
+  - field: project
+    range: 8{8}
+  - field: name
+    range: 执行{2},项目{2},项目集{2},项目集x,项目

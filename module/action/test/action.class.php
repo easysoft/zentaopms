@@ -635,4 +635,24 @@ class actionTest
 
         return false;
     }
+    
+    /**
+     * 测试获取重复的对象。
+     * Test get repeat object.
+     * 
+     * @param  object $object
+     * @param  string $table
+     * @access public
+     * @return object|string
+     */
+    public function getRepeatObjectTest(int $actionID, string $table): object|string
+    {
+        $action = $this->objectModel->getById($actionID);
+
+        $result = $this->objectModel->getRepeatObject($action, $table);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result[0];
+    }
 }
