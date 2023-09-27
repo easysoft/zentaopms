@@ -1,21 +1,18 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/build.class.php';
-su('admin');
-
 /**
 
 title=测试 buildModel->getByID();
+timeout=0
 cid=1
-pid=1
-
-项目版本查询 >> 项目版本版本7
-执行版本查询 >> 执行版本版本17
-无id查询 >> 0
-图片字段传字符串测试 >> 17
 
 */
+
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/build.class.php';
+
+zdTable('build')->gen(20);
+su('admin');
 
 $buildID = array('7', '17');
 
