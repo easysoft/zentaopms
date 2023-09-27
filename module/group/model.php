@@ -2367,10 +2367,11 @@ class groupModel extends model
      *
      * @param array $depends
      * @param array $privs
+     * @param array $excludes
      * @access protected
      * @return array
      */
-    protected function processDepends($depends, $privs)
+    protected function processDepends($depends, $privs, $excludes)
     {
         foreach($privs as $priv)
         {
@@ -2378,12 +2379,15 @@ class groupModel extends model
 
             foreach($depends[$priv] as $dependPriv)
             {
-                if(isset($privs[$dependPriv])) continue;
+                if(isset($privs[$dependPriv]) || in_array($dependPriv, $excludes)) continue;
                 $privs[$dependPriv] = $dependPriv;
 
-                $dependPrivs = $this->processDepends($depends, $depends[$dependPriv]);
+                $dependPrivs = $this->processDepends($depends, $depends[$dependPriv], $excludes);
 
-                foreach($dependPrivs as $depend) $privs[$depend] = $depend;
+                foreach($dependPrivs as $depend)
+                {
+                    if(!in_array($depend, $excludes)) $privs[$depend] = $depend;
+                }
             }
         }
 
@@ -2430,7 +2434,7 @@ class groupModel extends model
         }
 
         /* Process circular dependency. */
-        $relatedPrivs['depend'] = $this->processDepends($depends, $relatedPrivs['depend']);
+        $relatedPrivs['depend'] = $this->processDepends($depends, $relatedPrivs['depend'], $selectedPrivList);
 
         $subsetPrivs = array('depend' => array(), 'recommend' => array());
         foreach(array('depend', 'recommend') as $type)
