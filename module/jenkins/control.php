@@ -20,7 +20,10 @@ class jenkins extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
-        if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
+        if(stripos($this->methodName, 'ajax') === false)
+        {
+            if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
+        }
         $this->loadModel('ci')->setMenu();
     }
 

@@ -50,7 +50,7 @@ function checkMemory()
     $.each(category, (index, cate) => 
     {
         var item = $('#' + cate).val();
-        apps.push(item);
+        if(item != '') apps.push(item);
     });
 
     $.post(createLink('install', 'ajaxCheck'), {apps: apps}).done(function(response)

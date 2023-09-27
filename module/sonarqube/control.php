@@ -20,12 +20,16 @@ class sonarqube extends control
     {
         parent::__construct($moduleName, $methodName);
 
-        if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
-
-        if(!in_array(strtolower(strtolower($this->methodName)), array('browseproject', 'reportview', 'browseissue')))
+        if(stripos($this->methodName, 'ajax') === false)
         {
-            if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
+            if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
+
+            if(!in_array(strtolower(strtolower($this->methodName)), array('browseproject', 'reportview', 'browseissue')))
+            {
+                if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
+            }
         }
+
         /* This is essential when changing tab(menu) from gitlab to repo. */
         /* Optional: common::setMenuVars('devops', $this->session->repoID); */
         $this->loadModel('ci')->setMenu();

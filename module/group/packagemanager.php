@@ -2570,7 +2570,7 @@ $config->group->package->browseMR = new stdclass();
 $config->group->package->browseMR->order  = 5;
 $config->group->package->browseMR->subset = 'mr';
 $config->group->package->browseMR->privs  = array();
-$config->group->package->browseMR->privs['mr-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('mr-accept'), 'recommend' => array('mr-addReview', 'mr-approval', 'mr-close', 'mr-create', 'mr-diff', 'mr-edit', 'mr-link', 'mr-linkBug', 'mr-linkStory', 'mr-linkTask', 'mr-reopen', 'mr-unlink', 'mr-view'));
+$config->group->package->browseMR->privs['mr-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('repo-maintain'), 'recommend' => array('mr-addReview', 'mr-approval', 'mr-close', 'mr-create', 'mr-diff', 'mr-edit', 'mr-link', 'mr-linkBug', 'mr-linkStory', 'mr-linkTask', 'mr-reopen', 'mr-unlink', 'mr-view'));
 $config->group->package->browseMR->privs['mr-view']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('mr-accept'), 'recommend' => array('mr-diff', 'mr-link'));
 $config->group->package->browseMR->privs['mr-diff']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('mr-accept'), 'recommend' => array('mr-link', 'mr-view'));
 $config->group->package->browseMR->privs['mr-link']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('mr-accept'), 'recommend' => array('mr-diff', 'mr-view'));
@@ -3940,7 +3940,7 @@ $config->group->package->browseApplication = new stdclass();
 $config->group->package->browseApplication->order  = 2840;
 $config->group->package->browseApplication->subset = 'app';
 $config->group->package->browseApplication->privs  = array();
-$config->group->package->browseApplication->privs['space-browse']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('repo-maintain'), 'recommend' => array());
+$config->group->package->browseApplication->privs['space-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('repo-maintain'), 'recommend' => array());
 
 $config->group->package->mangeApplication = new stdclass();
 $config->group->package->mangeApplication->order  = 2840;

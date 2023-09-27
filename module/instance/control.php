@@ -701,7 +701,6 @@ class instance extends control
      */
     public function ajaxStatus()
     {
-        if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
         $postData = fixer::input('post')->setDefault('idList', array())->get();
 
         $instances  = $this->instance->getByIdList($postData->idList);

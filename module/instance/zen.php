@@ -45,6 +45,7 @@ class instanceZen extends instance
         if(empty($pipeline->account)) $pipeline->account = zget($tempMappings, 'admin_username', '');
 
         $this->pipeline->create($pipeline);
+        if(dao::isError()) dao::getError();
     }
 
     /**
