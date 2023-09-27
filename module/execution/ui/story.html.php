@@ -90,7 +90,7 @@ toolbar
         'text'  => $lang->story->report->common,
         'icon'  => 'bar-chart',
         'class' => 'ghost',
-        'url'   => createLink('story', 'report', "productID={$product->id}&branchID=&storyType={$storyType}&browseType={$type}&moduleID={$param}&chartType=pie&projectID={$execution->id}"),
+        'url'   => createLink('story', 'report', "productID={$product->id}&branchID=&storyType={$storyType}&browseType={$type}&moduleID={$param}&chartType=pie&projectID={$execution->id}#app=execution"),
     ))) : null,
     hasPriv('story', 'export') ? item(set(array
     (
