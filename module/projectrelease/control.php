@@ -31,30 +31,6 @@ class projectrelease extends control
     }
 
     /**
-     * Common actions.
-     *
-     * @param  int    $projectID
-     * @param  int    $productID
-     * @param  int    $branch
-     * @access public
-     * @return void
-     */
-    public function commonAction($projectID = 0, $productID = 0, $branch = 0)
-    {
-        /* Get product and product list by project. */
-        $this->products = $this->product->getProductPairsByProject($projectID);
-        if(empty($this->products)) return print($this->locate($this->createLink('product', 'showErrorNone', 'moduleName=project&activeMenu=projectrelease&projectID=' . $projectID)));
-        if(!$productID) $productID = key($this->products);
-        $product = $this->product->getById($productID);
-
-        $this->view->products = $this->products;
-        $this->view->product  = $product;
-        $this->view->branches = (isset($product->type) and $product->type == 'normal') ? array() : $this->loadModel('branch')->getPairs($productID, 'active', $projectID);
-        $this->view->branch   = $branch;
-        $this->view->project  = $this->project->getByID($projectID);
-    }
-
-    /**
      * Browse releases.
      *
      * @param  int    $projectID
@@ -144,7 +120,7 @@ class projectrelease extends control
         }
 
         $this->project->setMenu($projectID);
-        $this->commonAction($projectID);
+        $this->projectreleaseZen->commonAction($projectID);
 
         /* Get the builds that can select. */
         $builds         = $this->build->getBuildPairs($this->view->product->id, 'all', 'notrunk|withbranch|hasproject', $projectID, 'project', '', false);
@@ -202,7 +178,7 @@ class projectrelease extends control
             $this->session->set('project', $releaseProject[0], 'project');
         }
 
-        $this->commonAction($this->session->project, $release->product, $release->branch);
+        $this->projectreleaseZen->commonAction($this->session->project, $release->product, $release->branch);
         $bindBuilds = $this->build->getByList($release->build);
 
         /* Get the builds that can select. */
@@ -444,7 +420,7 @@ class projectrelease extends control
 
         $builds  = $this->loadModel('build')->getByList($release->build);
         $project = $this->loadModel('project')->getByID($this->session->project);
-        $this->commonAction($this->session->project, $release->product);
+        $this->projectreleaseZen->commonAction($this->session->project, $release->product);
         $this->loadModel('story');
         $this->loadModel('tree');
         $this->loadModel('product');
@@ -575,7 +551,7 @@ class projectrelease extends control
 
         $builds  = $this->loadModel('build')->getByList($release->build);
         $project = $this->loadModel('project')->getByID($this->session->project);
-        $this->commonAction($this->session->project, $release->product);
+        $this->projectreleaseZen->commonAction($this->session->project, $release->product);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
