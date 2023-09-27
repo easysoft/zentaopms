@@ -1,17 +1,15 @@
 <?php
 /**
- * 按全局统计的年度关闭计划数。
+ * 按系统统计的年度关闭计划数。
  * Count of annual closed productplan.
  *
- * 范围：global
+ * 范围：system
  * 对象：productplan
  * 目的：scale
- * 度量名称：按全局统计的年度关闭计划数
+ * 度量名称：按系统统计的年度关闭计划数
  * 单位：个
- * 描述：按全局统计的年度关闭计划数表示每年关闭的计划数量。该度量项反映了组织每年关闭的计划数量，可以用于评估组织的计划管理效能和调整情况。
+ * 描述：按系统统计的年度关闭的产品计划数量。反映组织在特定年度内关闭的产品计划数量，用于评估组织的计划管理效能、资源优化和成本控制，并提供学习机会和产品组合优化的参考。
  * 定义：所有的计划个数求和;关闭时间为某年;过滤已删除的计划;
- * 度量库：
- * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>

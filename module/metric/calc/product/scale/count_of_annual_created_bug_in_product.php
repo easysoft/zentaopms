@@ -4,14 +4,12 @@
  * Count of annual created bug in product.
  *
  * 范围：product
- * 对象：Bug
+ * 对象：bug
  * 目的：scale
  * 度量名称：按产品统计的年度新增Bug数
  * 单位：个
- * 描述：按产品统计的年度新增Bug数是指在某年度新发现的Bug数量。这个度量项反映了系统或项目在某年度出现的新问题数量。年度新增Bug数的增加可能意味着质量控制存在问题，需要及时进行处理和改进。
- * 定义：产品中创建时间为某年的Bug的个数求和;过滤已删除的Bug;过滤已删除的产品;
- * 度量库：
- * 收集方式：realtime
+ * 描述：按产品统计的年度新增Bug数是指产品在某年度新发现的Bug数量。这个度量项反映了产品在某年度出现的新问题数量。年度新增Bug数越多可能意味着质量控制存在问题，需要及时进行处理和改进。
+ * 定义：产品中Bug的个数求和;创建时间为某年;过滤已删除的Bug;过滤已删除的产品;
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>

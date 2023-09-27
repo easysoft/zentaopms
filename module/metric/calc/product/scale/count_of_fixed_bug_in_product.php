@@ -8,10 +8,8 @@
  * 目的：scale
  * 度量名称：按产品统计的已修复Bug数
  * 单位：个
- * 描述：按产品统计的已修复Bug数是指解决并关闭的Bug数量。这个度量项反映了产品解决的问题数量。已修复Bug数的增加说明开发团队在Bug解决方面的工作效率较高。
+ * 描述：按产品统计的已修复Bug数是指解决方案为已解决并且状态为已关闭的Bug数量。这个度量项反映了产品解决的问题数量。已修复Bug数的可以评估开发团队在Bug解决方面的工作效率。
  * 定义：产品中Bug的个数求和;解决方案为已解决;状态为已关闭;过滤已删除的Bug;过滤已删除的产品;
- * 度量库：
- * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
