@@ -3186,7 +3186,7 @@ $config->group->package->manageEffort = new stdclass();
 $config->group->package->manageEffort->order  = 5;
 $config->group->package->manageEffort->subset = 'effort';
 $config->group->package->manageEffort->privs  = array();
-$config->group->package->manageEffort->privs['my-effort']          = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 1, 'depend' => array('effort-calendar'), 'recommend' => array());
+$config->group->package->manageEffort->privs['my-effort']          = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 1, 'depend' => array('effort-calendar'), 'recommend' => array());
 $config->group->package->manageEffort->privs['effort-calendar']    = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array(), 'recommend' => array());
 $config->group->package->manageEffort->privs['effort-batchCreate'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 3, 'depend' => array('effort-calendar'), 'recommend' => array('effort-delete', 'effort-edit', 'effort-view'));
 $config->group->package->manageEffort->privs['effort-edit']        = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 4, 'depend' => array(), 'recommend' => array('effort-batchCreate', 'effort-batchEdit', 'effort-createForObject', 'effort-delete', 'effort-export', 'effort-view'));
