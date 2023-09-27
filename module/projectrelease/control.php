@@ -93,6 +93,7 @@ class projectrelease extends control
     }
 
     /**
+     * 创建一个发布。
      * Create a release.
      *
      * @param  int    $projectID
@@ -101,11 +102,8 @@ class projectrelease extends control
      */
     public function create(int $projectID)
     {
-        /* Load module and config. */
-        $this->loadModel('build');
-        $this->app->loadConfig('release');
+        /* Set create config. */
         $this->config->projectrelease->create = $this->config->release->create;
-        $this->app->loadLang('release');
 
         if(!empty($_POST))
         {
@@ -123,11 +121,12 @@ class projectrelease extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
         }
 
+        /* Set menu. */
         $this->project->setMenu($projectID);
         $this->projectreleaseZen->commonAction($projectID);
 
         /* Get the builds that can select. */
-        $builds         = $this->build->getBuildPairs($this->view->product->id, 'all', 'notrunk|withbranch|hasproject', $projectID, 'project', '', false);
+        $builds         = $this->loadModel('build')->getBuildPairs($this->view->product->id, 'all', 'notrunk|withbranch|hasproject', $projectID, 'project', '', false);
         $releasedBuilds = $this->projectrelease->getReleasedBuilds($projectID);
         foreach($releasedBuilds as $build) unset($builds[$build]);
 

@@ -17,7 +17,7 @@ class projectreleaseZen extends projectrelease
         /* 获取当前项目的所有产品。*/
         /* Get product list by project. */
         $this->products = $this->product->getProductPairsByProject($projectID);
-        if(empty($this->products)) return print($this->locate($this->createLink('product', 'showErrorNone', 'moduleName=project&activeMenu=projectrelease&projectID=' . $projectID)));
+        if(empty($this->products)) $this->locate($this->createLink('product', 'showErrorNone', 'moduleName=project&activeMenu=projectrelease&projectID=' . $projectID));
 
         /* 获取当前的产品。*/
         /*  Get current product. */
