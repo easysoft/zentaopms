@@ -2585,7 +2585,7 @@ $config->group->package->dept = new stdclass();
 $config->group->package->dept->order  = 5;
 $config->group->package->dept->subset = 'staffmanage';
 $config->group->package->dept->privs  = array();
-$config->group->package->dept->privs['dept-browse']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 5, 'depend' => array('admin-index', 'admin-register', 'dept-edit'), 'recommend' => array('dept-delete', 'dept-manageChild', 'dept-updateOrder'));
+$config->group->package->dept->privs['dept-browse']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 5, 'depend' => array('admin-index', 'admin-register'), 'recommend' => array('dept-delete', 'dept-manageChild', 'dept-updateOrder'));
 $config->group->package->dept->privs['dept-updateOrder'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 10, 'depend' => array('admin-index', 'admin-register', 'dept-browse'), 'recommend' => array('dept-delete', 'dept-edit', 'dept-manageChild', 'tree-updateOrder'));
 $config->group->package->dept->privs['dept-manageChild'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 15, 'depend' => array('admin-index', 'admin-register', 'dept-browse'), 'recommend' => array('dept-delete', 'dept-edit', 'tree-updateOrder'));
 $config->group->package->dept->privs['dept-edit']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 20, 'depend' => array('admin-index', 'admin-register', 'dept-browse'), 'recommend' => array('dept-delete', 'dept-manageChild', 'tree-updateOrder'));
@@ -3942,6 +3942,7 @@ $config->group->package->browseApplication->order  = 2840;
 $config->group->package->browseApplication->subset = 'app';
 $config->group->package->browseApplication->privs  = array();
 $config->group->package->browseApplication->privs['space-browse']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
+
 $config->group->package->mangeApplication = new stdclass();
 $config->group->package->mangeApplication->order  = 2840;
 $config->group->package->mangeApplication->subset = 'app';
