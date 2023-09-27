@@ -539,6 +539,8 @@ class buildModel extends model
             ->check('name', 'unique', "id != $buildID AND product = {$build->product} AND branch = '{$build->branch}' AND deleted = '0'")
             ->checkFlow()
             ->exec();
+        if(dao::isError()) return false;
+
         if(isset($build->branch) && $oldBuild->branch != $build->branch) $this->dao->update(TABLE_RELEASE)->set('branch')->eq($build->branch)->where('build')->eq($buildID)->exec();
         if(dao::isError()) return false;
 

@@ -207,19 +207,21 @@ class buildTest
     public function updateTest($buildID, $param = array())
     {
         $toData = date('Y-m-d');
-        $labels = array();
-        $files  = array();
 
-        $createFields = array('name' => '', 'builder' => 'admin', 'date' => $toData, 'scmPath' => '', 'filePath' => '',
-            'labels' => $labels, 'files' => $files, 'desc' => '');
+        $createFields = array(
+            'name'     => '',
+            'builder'  => 'admin',
+            'date'     => $toData,
+            'scmPath'  => '',
+            'filePath' => '',
+            'desc'     => '',
+            'branch'   => '',
+            'product'  => 1,
+        );
 
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
+        foreach($param as $key => $value) $createFields[$key] = $value;
 
-        $objects = $this->objectModel->update($buildID);
-
-        unset($_POST);
-
+        $objects = $this->objectModel->update($buildID, (object)$createFields);
         if(dao::isError()) return dao::getError();
 
         return $objects;
