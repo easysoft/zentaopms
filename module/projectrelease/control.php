@@ -484,19 +484,23 @@ class projectrelease extends control
     }
 
     /**
-     * Change status.
+     * 停止维护或者激活发布。
+     * Terminate or active the release.
      *
      * @param  int    $releaseID
      * @param  string $status
      * @access public
      * @return void
      */
-    public function changeStatus($releaseID, $status)
+    public function changeStatus(int $releaseID, string $status)
     {
         $this->loadModel('release')->changeStatus($releaseID, $status);
-        if(dao::isError()) return print(js::error(dao::getError()));
-        $actionID = $this->loadModel('action')->create('release', $releaseID, 'changestatus', '', $status);
-        return print(js::reload('parent'));
+
+        if(dao::isError()) return $this->send(array('reslut'=> 'fail', 'message' => dao::getError()));
+
+        $this->loadModel('action')->create('release', $releaseID, 'changestatus', '', $status);
+
+        return $this->send(array('reslut'=> 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 
     /**
