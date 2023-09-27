@@ -451,4 +451,21 @@ class buildTest
 
         return $build;
     }
+
+    /**
+     * 根据版本日期分组设置版本信息。
+     * Set build date group.
+     *
+     * @param  string $branch
+     * @param  string $params
+     * @access public
+     * @return array
+     */
+    public function setBuildDateGroupTest(string $branch, string $params): array
+    {
+        $allBuilds = $this->objectModel->fetchBuilds(array(), '', 11, 'project');
+        list($builds, $excludedReleaseIdList) = $this->objectModel->setBuildDateGroup($allBuilds, $branch, $params);
+
+        return $builds;
+    }
 }

@@ -324,7 +324,7 @@ class buildModel extends model
      *
      * @param  array      $allBuilds
      * @param  string|int $branch
-     * @param  string     $params
+     * @param  string     $params    nodone|noterminate|withexecution|withbranch
      * @access public
      * @return array
      */
