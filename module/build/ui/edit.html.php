@@ -17,7 +17,7 @@ jsVar('builds', $build->builds);
 jsVar('buildID', $build->id);
 jsVar('multipleSelect', $lang->build->placeholder->multipleSelect);
 $productRow = '';
-$testtaskID = zget($testtask, 'id', 0);
+$testtaskID = $testtask ? $testtask->id : 0;
 if(!$hidden)
 {
     $productRow = formRow(

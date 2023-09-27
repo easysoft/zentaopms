@@ -2304,7 +2304,7 @@ class testtaskModel extends model
     public function getByBuild(int $buildID): object|false
     {
         return $this->dao->select('*')->from(TABLE_TESTTASK)
-            ->where('build')->eq($build->id)
+            ->where('build')->eq($buildID)
             ->andWhere('deleted')->eq(0)
             ->fetch();
     }
