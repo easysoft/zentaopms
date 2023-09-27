@@ -2292,4 +2292,20 @@ class testtaskModel extends model
 
         return $result;
     }
+
+    /**
+     * 根据版本查询测试用例。
+     * Query test cases by version.
+     *
+     * @param  int          $buildID
+     * @access public
+     * @return object|false
+     */
+    public function getByBuild(int $buildID): object|false
+    {
+        return $this->dao->select('*')->from(TABLE_TESTTASK)
+            ->where('build')->eq($build->id)
+            ->andWhere('deleted')->eq(0)
+            ->fetch();
+    }
 }
