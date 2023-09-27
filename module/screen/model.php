@@ -1761,6 +1761,109 @@ class screenModel extends model
     }
 
     /**
+     * 获取活跃项目数卡片。
+     * Get card of active project.
+     *
+     * @param  string $year
+     * @param  string $month
+     * @access public
+     * @return array
+     */
+    public function getActiveProjectCard($year, $month)
+    {
+        return $this->dao->select('count(distinct project) as count')->from(TABLE_ACTION)
+            ->where('project')->ne(0)
+            ->andWhere('year(date)')->eq($year)
+            ->andWhere('month(date)')->eq($month)
+            ->fetchAll();
+    }
+
+    /**
+     * 获取活跃产品数卡片。
+     * Get card of active product.
+     *
+     * @param  string $year
+     * @param  string $month
+     * @access public
+     * @return mixed
+     */
+    public function getActiveProductCard($year, $month)
+    {
+        $activeProductCount = $this->dao->select('count(distinct product)')->from(TABLE_ACTION)
+            ->where('product')->ne(',0,')
+            ->andWhere('product')->ne(',,')
+            ->andWhere('product')->ne(',,0,,')
+            ->andWhere('objectType')->notin('project,execution,task')
+            ->andWhere('year(date)')->eq($year)
+            ->andWhere('month(date)')->eq($month)
+            ->fetchPairs();
+
+        $activeProuctCard = new stdclass();
+        $activeProuctCard->count = $activeProductCount;
+        $activeProuctCard->year  = $year;
+        $activeProuctCard->month = $month;
+        return array($activeProuctCard);
+    }
+
+    /**
+     * 获取项目任务概况表。
+     * Get table of project task summary.
+     *
+     * @param  string $year
+     * @param  string $month
+     * @param  array  $projectList
+     * @access public
+     * @return array
+     */
+    public function getProjectTaskTable($year, $month, $projectList)
+    {
+        $contributeTaskActions = $this->dao->select('distinct project, actor')->from(TABLE_ACTION)
+            ->where('objectType')->eq('task')
+            ->andWhere('action')->in('opened,closed,finished,canceled,assigned')
+            ->andWhere('year(date)')->eq($year)
+            ->andWhere('month(date)')->eq($month)
+            ->fetchAll();
+
+        $actionGroups = array();
+        foreach($contributeTaskActions as $projectAccount)
+        {
+            $projectID = $projectAccount->project;
+            $account   = $projectAccount->actor;
+
+            if(!isset($actionGroups[$projectID])) $actionGroups[$projectID] = array();
+            $actionGroups[$projectID][] = $account;
+        }
+
+        $dataset = array();
+        foreach($projectList as $projectID => $projectName)
+        {
+            $createdTaskList = $this->dao->select('id')->from(TABLE_TASK)
+                ->where('project')->eq($projectID)
+                ->andWhere('year(openedDate)')->eq($year)
+                ->andWhere('month(openedDate)')->eq($month)
+                ->fetchPairs();
+
+            $finishedTaskList = $this->dao->select('id')->from(TABLE_TASK)
+                ->where('project')->eq($projectID)
+                ->andWhere('year(finishedDate)')->eq($year)
+                ->andWhere('month(finishedDate)')->eq($month)
+                ->fetchPairs();
+
+            $row = new stdclass();
+            $row->name          = $projectName;
+            $row->year          = $year;
+            $row->month         = $month;
+            $row->createdTasks  = count(array_unique($createdTaskList));
+            $row->finishedTasks = count(array_unique($finishedTaskList));
+            $row->contributors  = count($actionGroups[$projectID]);
+
+            $dataset[] = $row;
+        }
+
+        return $dataset;
+    }
+
+    /**
      * 获取应用巡检报告的项目列表。
      * Get project list for usage report.
      *
