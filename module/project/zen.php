@@ -287,7 +287,7 @@ class projectZen extends project
         $this->view->parentProgram       = $parentProgram;
         $this->view->programList         = $this->program->getParentPairs();
         $this->view->URSRPairs           = $this->loadModel('custom')->getURSRPairs();
-        $this->view->availableBudget     = $this->program->getBudgetLeft($parentProgram);
+        $this->view->availableBudget     = $parentProgram ? $this->program->getBudgetLeft($parentProgram) : 0;
         $this->view->budgetUnitList      = $this->project->getBudgetUnitList();
 
         $this->display();
@@ -369,7 +369,7 @@ class projectZen extends project
         $this->view->URSRPairs                = $this->loadModel('custom')->getURSRPairs();
         $this->view->parentProject            = $parentProject;
         $this->view->parentProgram            = $this->program->getByID($project->parent);
-        $this->view->availableBudget          = $this->program->getBudgetLeft($parentProject) + (float)$project->budget;
+        $this->view->availableBudget          = $parentProject ? $this->program->getBudgetLeft($parentProject) + (float)$project->budget : $project->budget;
         $this->view->budgetUnitList           = $this->project->getBudgetUnitList();
         $this->view->model                    = $project->model;
         $this->view->disableModel             = $this->project->checkCanChangeModel($projectID, $project->model) ? '' : 'disabled';
