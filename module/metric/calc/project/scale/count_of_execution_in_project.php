@@ -8,10 +8,8 @@
  * 目的：scale
  * 度量名称：按项目统计的执行总数
  * 单位：个
- * 描述：按项目统计的执行总数表示在项目中所有执行的数量，可以用来评估项目的规模。
+ * 描述：按项目统计的执行总数表示在项目中所有执行的数量，可以用来评估项目的规模、项目执行进度、工作负荷、绩效评估、风险控制和项目管理的有用信息。
  * 定义：项目的执行个数求和;过滤已删除的执行;过滤已删除的项目;
- * 度量库：
- * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>

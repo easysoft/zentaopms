@@ -10,8 +10,6 @@
  * 单位：个
  * 描述：按产品统计的月度新增发布数是指在某月产品中新增加的发布数量。这个度量项可以反映产品团队在该月内对新功能和改进的发布能力和速度。新增发布数越多，说明产品团队在该月内推出了更多的新功能和改进。
  * 定义：产品中发布时间为某年某月的发布个数求和;过滤已删除的发布;过滤已删除的产品;过滤无效时间;
- * 度量库：
- * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>

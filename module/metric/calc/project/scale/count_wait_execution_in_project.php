@@ -10,8 +10,6 @@
  * 单位：个
  * 描述：按项目统计的未开始执行数表示在项目中未开始的执行数，可以用来了解未开始的执行数量。
  * 定义：项目的执行个数求和;状态为未开始;过滤已删除的执行;过滤已删除的项目;
- * 度量库：
- * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
