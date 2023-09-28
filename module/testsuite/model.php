@@ -308,20 +308,17 @@ class testsuiteModel extends model
             }
             else
             {
-                if($this->session->testsuiteQuery == false) $this->session->set('testsuiteQuery', ' 1 = 1');
+                if($this->session->testsuiteQuery === false) $this->session->set('testsuiteQuery', ' 1 = 1');
             }
 
             $query  = $this->session->testsuiteQuery;
             $allLib = "`lib` = 'all'";
-            $withAllLib = strpos($query, $allLib) !== false;
-            if($withAllLib)  $query  = str_replace($allLib, 1, $query);
-            if(!$withAllLib) $query .= " AND `lib` = '$libID'";
+            $query  = strpos($query, $allLib) !== false ? str_replace($allLib, '1 = 1', $query) : "{$query} AND `lib` = '{$libID}'";
         }
 
-
         $this->loadModel('branch');
-        $product  = $this->loadModel('product')->getById($productID);
-        $branches = $product->type != 'normal' ? array(BRANCH_MAIN => $this->lang->branch->main) + $this->branch->getPairs($productID, 'active') : array(0);
+        $product   = $this->loadModel('product')->getById($productID);
+        $branches  = $branch === 'all' && $product->type != 'normal' ? array(BRANCH_MAIN => $this->lang->branch->main) + $this->branch->getPairs($productID, 'active') : array($product->type == 'normal' ? 0 : $branch => '');
         $canImport = array();
         foreach($branches as $branchID => $branchName) $canImport += $this->getCanImportModules($productID, $libID, $branchID);
 

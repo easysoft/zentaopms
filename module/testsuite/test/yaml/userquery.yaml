@@ -1,0 +1,7 @@
+title: table zt_userquery
+desc: "用户查询"
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: sql
+    range: "(1=1 AND `product` = '1')"

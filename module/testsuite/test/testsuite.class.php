@@ -130,7 +130,7 @@ class testsuiteTest
         $suite->name = $name;
         $suite->desc = $desc;
         $suite->type = $type;
-    
+
         if(!empty($uid))
         {
             global $tester;
@@ -140,13 +140,13 @@ class testsuiteTest
         $objects = $this->objectModel->update($suite, $uid);
 
         if(dao::isError()) return dao::getError();
-        
+
         foreach($objects as &$object)
         {
             if($object['field'] == 'desc') $object['result'] = $object['new'] == $desc;
         }
-        
-        return $objects;    
+
+        return $objects;
     }
 
     /**
@@ -185,12 +185,12 @@ class testsuiteTest
         $objects = $this->objectModel->getLinkedCases($suiteID, $orderBy, $pager, $append);
 
         if(dao::isError()) return dao::getError();
-        
+
         if(!$append)
         {
             foreach($objects as $object) $object->results = 'a';
         }
-    
+
         return $objects;
     }
 
@@ -279,5 +279,31 @@ class testsuiteTest
     public function deleteCaseBySuiteIDTest($cases, $suiteID)
     {
         return $this->objectModel->deleteCaseBySuiteID($cases, $suiteID);
+    }
+
+    /**
+     * 测试获取可以导入的用例。
+     * Test get can import cases.
+     *
+     * @param  int         $productID
+     * @param  int         $libID
+     * @param  int|string  $branch
+     * @param  string      $orderBy
+     * @param  string      $browseType
+     * @param  int         $queryID
+     * @param  bool|string $testsuiteQuery
+     * @access public
+     * @return string|array
+     */
+    public function getCanImportCasesTest(int $productID, int $libID, int|string $branch, string $orderBy = 'id_desc', string $browseType = '', int $queryID = 0, bool|string $testsuiteQuery = false): string|array
+    {
+        global $tester;
+        $tester->session->set('testsuiteQuery', $testsuiteQuery);
+
+        $objects = $this->objectModel->getCanImportCases($productID, $libID, $branch, $orderBy, null, $browseType, $queryID);
+
+        if(dao::isError()) return dao::getError();
+
+        return implode(',', array_keys($objects));
     }
 }
