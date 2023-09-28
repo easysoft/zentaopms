@@ -31,7 +31,7 @@
             </tr>
             <?php
               foreach($components->category as $item):
-              if(in_array($item->name, array('analysis', 'artifact'))) array_unshift($item->choices, array('name' => '', 'version' => ''));
+              if(in_array($item->name, array('analysis', 'artifact'))) array_unshift($item->choices, (object)array('name' => $lang->install->solution->skipInstall, 'version' => ''));
               if($item->name === 'pms') continue;
             ?>
             <tr>

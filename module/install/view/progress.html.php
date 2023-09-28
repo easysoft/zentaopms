@@ -27,7 +27,7 @@
     </div>
     <div class='modal-body'>
     <div class='solution-progress'>
-      <div id='terminal'></div>
+      <div id='terminal'><h3><?php echo $lang->install->solution->log;?></h3></div>
       <div class='text-center'>
         <?php $components = json_decode($solution->components);?>
         <?php $order =0;?>

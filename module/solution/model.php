@@ -429,7 +429,7 @@ class solutionModel extends model
         $options = array();
         foreach($schemaChoices as $cloudApp)
         {
-            $appInfo = zget($cloudSolution->apps, $cloudApp->name);
+            $appInfo = zget($cloudSolution->apps, $cloudApp->name, array());
             $options[$cloudApp->name] = zget($appInfo, 'alias', $cloudApp->name);
         }
 

@@ -286,8 +286,10 @@ $lang->install->meshiot->desc = <<<EOD
 EOD;
 
 $lang->install->solution = new stdclass();
-$lang->install->solution->skip       = '跳過';
-$lang->install->solution->title      = 'DevOps平臺應用設置';
-$lang->install->solution->progress   = 'DevOps平臺應用安裝';
-$lang->install->solution->desc       = '歡迎使用DevOps平臺，我們將在您安裝平臺時同時安裝以下應用，幫助您快速上手!';
-$lang->install->solution->overMemory = '内存不足，無法同時安裝，建議平臺啓動后手動安裝應用。';
+$lang->install->solution->skip        = '跳過';
+$lang->install->solution->skipInstall = '暫不安裝';
+$lang->install->solution->log         = '安裝日志';
+$lang->install->solution->title       = 'DevOps平臺應用設置';
+$lang->install->solution->progress    = 'DevOps平臺應用安裝';
+$lang->install->solution->desc        = '歡迎使用DevOps平臺，我們將在您安裝平臺時同時安裝以下應用，幫助您快速上手!';
+$lang->install->solution->overMemory  = '内存不足，無法同時安裝，建議平臺啓動后手動安裝應用。';
