@@ -241,6 +241,52 @@ class baseHelper
     }
 
     /**
+     * 转义 'order by' 之后下一个关键字之前的SQL语句。Wrap partial sql after 'order by' keyword and before the next keyword such as 'limit'.
+     * 将部分MySQL保留字用反引号包裹起来。Wrap some reserved word of MySQL in backticks.
+     * 例如/example: 'order_desc' -> '`order` desc', 'order_asc' -> '`order` asc'
+     * @see https://dev.mysql.com/doc/refman/en/identifiers.html
+     * @see https://dev.mysql.com/doc/refman/en/keywords.html
+     * @param  string $sql
+     * @return string
+     */
+    static public function wrapSqlAfterOrderBy(string $sql): string
+    {
+        $sql = trim($sql);
+        $sql = preg_replace('/_(asc|desc)$/i', ' $1', $sql);
+
+        if(empty($sql)) return '';
+
+        if(strpos($sql, ' ') === false and strpos($sql, ',') === false) return '`' . $sql . '`';
+
+        $reservedWords = ['asc', 'desc', 'order', 'limit'];
+
+        $sqlParts = explode(',', $sql);
+        $wrappedParts = [];
+
+        foreach ($sqlParts as $part) {
+            if(in_array($part, $reservedWords))
+            {
+                $wrappedParts[] = '`' . $part . '`';
+            }
+            else
+            {
+                if(strpos($part, ' ') !== false)
+                {
+                    $part = preg_replace('/([0-9,a-z,A-Z$_]+) (asc|desc)/i', '`$1` $2', $part);
+                    $wrappedParts[] = $part;
+                }
+                else
+                {
+                    $wrappedParts[] = '`' . $part . '`';
+                }
+
+            }
+        }
+
+        return implode(',', $wrappedParts);
+    }
+
+    /**
      * 将数组或者列表转化成 IN( 'a', 'b') 的形式。
      * Convert a list to  IN('a', 'b') string.
      *
