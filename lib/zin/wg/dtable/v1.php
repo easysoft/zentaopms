@@ -80,6 +80,8 @@ class dtable extends wg
                     }
                     $config['control']['props']['items'] = $newItems;
                     unset($config['controlItems']);
+
+                    if(isset($config['defaultValue'])) $config['control']['props']['defaultValue'] = $config['defaultValue'];
                 }
             }
 
