@@ -1097,7 +1097,8 @@ class testtaskModel extends model
     }
 
     /**
-     * Get testtask pairs of a user.
+     * 获取某人负责的测试单的键值对。
+     * Get the key-value pair of the testtask someone is responsible for.
      *
      * @param  string $account
      * @param  int    $limit
@@ -1107,9 +1108,9 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getUserTestTaskPairs($account, $limit = 0, $status = 'all', $skipProductIDList = array(), $skipExecutionIDList = array())
+    public function getUserTestTaskPairs(string $account, int $limit = 0, string $status = 'all', array $skipProductIDList = array(), array $skipExecutionIDList = array()): array
     {
-        $stmt = $this->dao->select('t1.id, t1.name, t2.name as execution')
+        $stmt = $this->dao->select('t1.id, t1.name, t2.name AS execution')
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_EXTENSION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
@@ -1133,9 +1134,9 @@ class testtaskModel extends model
 
     /**
      * 获取执行结果信息。
-     * Get information of a test run.
+     * Get information of a testrun.
      *
-     * @param  int   $runID
+     * @param  int    $runID
      * @access public
      * @return object
      */
