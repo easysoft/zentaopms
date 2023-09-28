@@ -532,18 +532,20 @@ class build extends control
     }
 
     /**
+     * 编辑版本时，解除跟未关联分支的需求和Bug的关联。
      * Unlink story and bug when edit branch of build.
-     * @param  array    $changes
-     * @access protected
+     *
+     * @param  array $changes
+     * @access pulic
      * @return void
      */
-    protected function unlinkOldBranch($changes)
+    public function unlinkOldBranch(array $changes)
     {
         foreach($changes as $buildID => $changeList)
         {
             $oldBranch = '';
             $newBranch = '';
-            foreach($changeList as $changeId => $change)
+            foreach($changeList as $change)
             {
                 if($change['field'] == 'branch')
                 {
