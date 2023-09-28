@@ -1165,7 +1165,8 @@ class testtaskModel extends model
     }
 
     /**
-     * Init testtask result.
+     * 初始化一条记录便于自动化测试完成后回填测试结果。
+     * Init a record for filling back the test result after the automated test is completed.
      *
      * @param  int    $runID
      * @param  int    $caseID
@@ -1174,7 +1175,7 @@ class testtaskModel extends model
      * @access public
      * @return int|false
      */
-    public function createResultForAutomatedTest(int $runID = 0, int $caseID = 0, int $version = 0, int $nodeID = 0): int|false
+    public function initResultForAutomatedTest(int $runID = 0, int $caseID = 0, int $version = 0, int $nodeID = 0): int|false
     {
         $result = new stdClass();
         $result->run        = $runID;
