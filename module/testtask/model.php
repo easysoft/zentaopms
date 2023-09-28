@@ -995,15 +995,18 @@ class testtaskModel extends model
     }
 
     /**
-     * Get test runs of a user.
+     * 获取一个测试单中指派给一个用户的测试用例。
+     * Get the cases assigned to a user among the cases associated with a testtask.
      *
      * @param  int    $taskID
-     * @param  int    $user
+     * @param  string $user
+     * @param  array  $modules
+     * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getUserRuns($taskID, $user, $modules = '', $orderBy = 'id_desc', $pager = null)
+    public function getUserRuns(int $taskID, string $user, array $modules = array(), string $orderBy = 'id_desc', object $pager = null): array
     {
         /* Select the table for these special fields. */
         $specialFields = ',assignedTo,status,lastRunResult,lastRunner,lastRunDate,';
@@ -1013,7 +1016,7 @@ class testtaskModel extends model
         return $this->dao->select('t2.*, t1.*, t2.version AS caseVersion, t3.title AS storyTitle, t2.status AS caseStatus')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
-            ->where('t1.task')->eq((int)$taskID)
+            ->where('t1.task')->eq($taskID)
             ->andWhere('t1.assignedTo')->eq($user)
             ->andWhere('t2.deleted')->eq('0')
             ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi()
