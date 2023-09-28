@@ -24,7 +24,7 @@ class scale_of_monthly_finished_story_in_product extends baseCalc
 {
     public $dataset = 'getDevStories';
 
-    public $fieldList = array('t1.product', 't1.closedDate', 't1.closedReason', 't1.estimate');
+    public $fieldList = array('t1.product', 't1.closedDate', 't1.closedReason', 't1.estimate', 't1.parent');
 
     public $result = array();
 
@@ -34,6 +34,9 @@ class scale_of_monthly_finished_story_in_product extends baseCalc
         $closedDate   = $data->closedDate;
         $closedReason = $data->closedReason;
         $estimate     = $data->estimate;
+        $parent       = $data->parent;
+
+        if($parent == '-1') return false;
 
         if($closedReason != 'done') return false;
 

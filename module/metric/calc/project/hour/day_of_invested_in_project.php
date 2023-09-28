@@ -10,8 +10,6 @@
  * 单位：人天
  * 描述：按项目统计的已投入人天是指项目总共投入的工作天数。该度量项可以用来评估项目的人力资源投入情况。投入总人天的增加可能意味着项目投入的工作时间和资源的增加。
  * 定义：复用：;按项目统计的日志记录的工时总数;公式：;按项目统计的已投入人天=按项目统计的项目内所有消耗工时数/后台配置的每日可用工时;
- * 度量库：
- * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>

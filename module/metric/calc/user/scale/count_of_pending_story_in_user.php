@@ -10,8 +10,6 @@
  * 单位：个
  * 描述：按人员统计的待处理研发需求数表示每个人待处理的研发需求数量之和。反映了每个人员需要处理的研发需求数量的规模。该数值越大，说明需要投入越多的时间处理研发需求。
  * 定义：所有研发需求个数求和;指派给为某人;过滤已删除的研发需求;过滤已删除产品的研发需求;
- * 度量库：
- * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>

@@ -10,8 +10,6 @@
  * 单位：个
  * 描述：按人员统计的日评审研发需求数表示每个人每日评审的研发需求数量之和。反映了每个人每日评审研发需求的规模。该数值越大，说明工作量越大。
  * 定义：所有研发需求个数求和;评审者为某人;评审时间为某日;过滤已删除的研发需求;过滤已删除产品的研发需求;
- * 度量库：
- * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>

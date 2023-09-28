@@ -22,12 +22,15 @@ class scale_of_weekly_finished_story extends baseCalc
 {
     public $dataset = 'getStories';
 
-    public $fieldList = array('t1.status', 't1.closedReason', 't1.closedDate', 't1.estimate');
+    public $fieldList = array('t1.status', 't1.closedReason', 't1.closedDate', 't1.estimate', 't1.parent');
 
     public $result = array();
 
     public function calculate($row)
     {
+        $parent = $row->parent;
+        if($parent == '-1') return false;
+
         $year = $this->getYear($row->closedDate);
         $week = $this->getWeek($row->closedDate);
 

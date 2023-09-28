@@ -9,7 +9,7 @@
  * 度量名称：按产品统计的年度完成研发需求规模数
  * 单位：工时
  * 描述：按产品统计的年度完成研发需求规模数是指产品在某年度已关闭且关闭原因为已完成研发需求的总规模数。这个度量项可以反映产品团队在一年时间内的开发效率和成果。完成研发需求规模数的增加说明产品团队在该年度内取得了更多的开发成果和交付物。
- * 定义：产品中研发需求的规模数求和;关闭时间在某年;关闭原因为已完成;过滤已删除的研发需求;过滤已删除的产品;
+ * 定义：产品中研发需求的规模数求和;关闭时间在某年;关闭原因为已完成;过滤父研发需求;过滤已删除的研发需求;过滤已删除的产品;
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
@@ -22,7 +22,7 @@ class scale_of_annual_finished_story_in_product extends baseCalc
 {
     public $dataset = 'getDevStories';
 
-    public $fieldList = array('t1.product', 't1.closedDate', 't1.closedReason', 't1.estimate');
+    public $fieldList = array('t1.product', 't1.closedDate', 't1.closedReason', 't1.estimate', 't1.parent');
 
     public $result = array();
 
@@ -32,6 +32,9 @@ class scale_of_annual_finished_story_in_product extends baseCalc
         $closedDate   = $data->closedDate;
         $closedReason = $data->closedReason;
         $estimate     = $data->estimate;
+        $parent       = $data->parent;
+
+        if($parent == '-1') return false;
 
         if(empty($closedDate)) return false;
 
