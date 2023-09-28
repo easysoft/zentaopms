@@ -1753,6 +1753,7 @@ class screenModel extends model
             $row->month         = $month;
             $row->totalAccount  = count($teamMemberList);
             $row->activeAccount = count($activeUser);
+            $row->ratio         = number_format(($row->activeAccount/$row->totalAccount) * 100, 2) . '%';
 
             $dataset[] = $row;
         }
@@ -1817,21 +1818,21 @@ class screenModel extends model
      */
     public function getProjectTaskTable($year, $month, $projectList)
     {
-        $contributeTaskActions = $this->dao->select('distinct project, actor')->from(TABLE_ACTION)
+        $createdTaskActions = $this->dao->select('distinct project, actor')->from(TABLE_ACTION)
             ->where('objectType')->eq('task')
-            ->andWhere('action')->in('opened,closed,finished,canceled,assigned')
+            ->andWhere('action')->eq('opened')
             ->andWhere('year(date)')->eq($year)
             ->andWhere('month(date)')->eq($month)
             ->fetchAll();
 
-        $actionGroups = array();
-        foreach($contributeTaskActions as $projectAccount)
+        $createdTaskActors = array();
+        foreach($createdTaskActions as $projectAccount)
         {
             $projectID = $projectAccount->project;
             $account   = $projectAccount->actor;
 
-            if(!isset($actionGroups[$projectID])) $actionGroups[$projectID] = array();
-            $actionGroups[$projectID][] = $account;
+            if(!isset($createdTaskActors[$projectID])) $createdTaskActors[$projectID] = array();
+            $createdTaskActors[$projectID][] = $account;
         }
 
         $dataset = array();
@@ -1855,7 +1856,7 @@ class screenModel extends model
             $row->month         = $month;
             $row->createdTasks  = count(array_unique($createdTaskList));
             $row->finishedTasks = count(array_unique($finishedTaskList));
-            $row->contributors  = count($actionGroups[$projectID]);
+            $row->contributors  = count($createdTaskActors[$projectID]);
 
             $dataset[] = $row;
         }
