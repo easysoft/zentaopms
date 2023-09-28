@@ -555,7 +555,7 @@ class testtaskModel extends model
         if(!$datas) return array();
 
         $this->app->loadLang('testcase');
-        foreach($datas as $result => $data) $data->name = isset($this->lang->testcase->resultList[$result]) ? $this->lang->testcase->resultList[$result] : $this->lang->testtask->unexecuted;
+        foreach($datas as $result => $data) $data->name = zget($this->lang->testcase->resultList, $result, $this->lang->testtask->unexecuted);
 
         return $datas;
     }
@@ -604,7 +604,7 @@ class testtaskModel extends model
         if(!$datas) return array();
 
         $modules = $this->loadModel('tree')->getModulesName(array_keys($datas));
-        foreach($datas as $moduleID => $data) $data->name = isset($modules[$moduleID]) ? $modules[$moduleID] : '/';
+        foreach($datas as $moduleID => $data) $data->name = zget($modules, $moduleID, '/');
 
         return $datas;
     }
