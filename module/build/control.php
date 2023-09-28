@@ -385,18 +385,14 @@ class build extends control
     public function ajaxGetLastBuild(int $projectID, int $executionID)
     {
         $lastBuild = $this->build->getLast($executionID, $projectID);
-        if($lastBuild)
-        {
-            echo "<div class='help-block'> &nbsp; " . $this->lang->build->last . ": <a class='code label light rounded-full' id='lastBuildBtn'>" . $lastBuild->name . "</a></div>";
-        }
-        else
-        {
-            echo '';
-        }
+        if(!$lastBuild) return print('');
+
+        echo "<div class='help-block'> &nbsp; " . $this->lang->build->last . ": <a class='code label light rounded-full' id='lastBuildBtn'>" . $lastBuild->name . "</a></div>";
     }
 
     /**
-     * Link stories.
+     * 版本关联需求。
+     * Link stories to build.
      *
      * @param  int    $buildID
      * @param  string $browseType
@@ -407,7 +403,7 @@ class build extends control
      * @access public
      * @return void
      */
-    public function linkStory($buildID = 0, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function linkStory(int $buildID = 0, string $browseType = '', int $param = 0, int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
     {
         if(!empty($_POST['stories']))
         {
