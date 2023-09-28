@@ -598,7 +598,7 @@ class project extends control
         $this->view->planGroup    = $this->loadModel('execution')->getPlans(array_keys($products));
         $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), '', $linkedBranches);
         $this->view->dynamics     = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, 'all', $projectID);
-        $this->view->programList  = $this->loadModel('program')->getPairsByList($project->path);
+        $this->view->programList  = $this->loadModel('program')->getPairsByList(explode(',', trim($project->path, ',')));
         $this->view->users        = $userPairs;
         $this->view->userList     = $userList;
 
