@@ -1199,19 +1199,24 @@ class productModel extends model
             $totalEstimate += $story->estimate;
             $allCount ++;
 
+            if($story->parent >= 0 && ($story->status != 'closed' || in_array($story->closedReason, array('done', 'postponed'))))
+            {
+                $storyIdList[] = $story->id;
+                $rateCount ++;
+            }
+
             /* When the status is not closed or closedReason is done or postponed then add cases rate..*/
-            if(empty($story->children)) $story->children[] = clone $story;
+            if(empty($story->children)) continue;
             foreach($story->children as $child)
             {
                 if($child->type != $storyType) continue;
 
-                if($story->status != 'closed' || in_array($story->closedReason, array('done', 'postponed')))
+                $allCount ++;
+                if($child->status != 'closed' || in_array($child->closedReason, array('done', 'postponed')))
                 {
                     $storyIdList[] = $child->id;
                     $rateCount ++;
                 }
-
-                if($child->id != $story->id) $allCount ++;
             }
         }
 

@@ -231,43 +231,46 @@ $fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, 
     if($canBatchChangeBranch && $product->type != 'normal') $navActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->product->branchName[$product->type], 'items' => $branchItems);
     if($canBatchChangeStage)  $navActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->story->stageAB, 'items' => $stageItems);
 
-    return $canBatchAction ? array
+    if(!$canBatchAction) return array();
+    $items = array
+    (
+        /* Edit button group. */
+        array('type' => 'btn-group', 'items' => array
+        (
+            /* Edit button. */
+            array
+            (
+                'text'      => $lang->edit,
+                'className' => 'secondary batch-btn',
+                'disabled'  => ($canBatchEdit ? '': 'disabled'),
+                'data-page' => 'batch',
+                'data-formaction' => $this->createLink('story', 'batchEdit', "productID=$storyProductID&projectID=$projectID&branch=$branch&storyType=$storyType")
+            ),
+            /* Popup menu trigger icon. */
+            array('caret' => 'up', 'className' => 'size-sm secondary', 'items' => $navActionItems, 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+        )),
+        /* Unlink stories button. */
+        !$canBatchUnlink ? null : array
+        (
+            'text' => $lang->story->unlink,
+            'className' => 'secondary',
+            'id' => 'batchUnlinkStory'
+        ),
+        /* Module button. */
+        array('caret' => 'up', 'text' => $lang->story->moduleAB, 'className' => $canBatchChangeModule ? 'secondary' : 'hidden', 'items' => $moduleItems, 'type' => 'dropdown', 'data-placement' => 'top-start'),
+        /* Plan button. */
+        array('caret' => 'up', 'text' => $lang->story->planAB, 'className' => $canBatchChangePlan ? 'secondary' : 'hidden', 'items' => $planItems, 'type' => 'dropdown', 'data-placement' => 'top-start'),
+        /* AssignedTo button. */
+        array('caret' => 'up', 'text' => $lang->story->assignedTo, 'className' => ($canBatchAssignTo ? 'secondary' : 'hidden'), 'items' => $assignItems, 'type' => 'dropdown', 'data-placement' => 'top-start'),
+        /* Batch import to lib button .*/
+        !$canBatchImportToLib ? null : array('text' => $lang->story->importToLib, 'className' => 'btn secondary', 'id' => 'importToLib', 'data-toggle' => 'modal', 'url' => '#batchImportToLib'),
+    );
+
+    return array
     (
         'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'),
-        'items' => array
-        (
-            /* Edit button group. */
-            array('type' => 'btn-group', 'items' => array
-            (
-                /* Edit button. */
-                array
-                (
-                    'text'      => $lang->edit,
-                    'className' => 'secondary batch-btn',
-                    'disabled'  => ($canBatchEdit ? '': 'disabled'),
-                    'data-page' => 'batch',
-                    'data-formaction' => $this->createLink('story', 'batchEdit', "productID=$storyProductID&projectID=$projectID&branch=$branch&storyType=$storyType")
-                ),
-                /* Popup menu trigger icon. */
-                array('caret' => 'up', 'className' => 'size-sm secondary', 'items' => $navActionItems, 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
-            )),
-            /* Unlink stories button. */
-            !$canBatchUnlink ? null : array
-            (
-                'text' => $lang->story->unlink,
-                'className' => 'secondary',
-                'id' => 'batchUnlinkStory'
-            ),
-            /* Module button. */
-            array('caret' => 'up', 'text' => $lang->story->moduleAB, 'className' => $canBatchChangeModule ? 'secondary' : 'hidden', 'items' => $moduleItems, 'type' => 'dropdown', 'data-placement' => 'top-start'),
-            /* Plan button. */
-            array('caret' => 'up', 'text' => $lang->story->planAB, 'className' => $canBatchChangePlan ? 'secondary' : 'hidden', 'items' => $planItems, 'type' => 'dropdown', 'data-placement' => 'top-start'),
-            /* AssignedTo button. */
-            array('caret' => 'up', 'text' => $lang->story->assignedTo, 'className' => ($canBatchAssignTo ? 'secondary' : 'hidden'), 'items' => $assignItems, 'type' => 'dropdown', 'data-placement' => 'top-start'),
-            /* Batch import to lib button .*/
-            !$canBatchImportToLib ? null : array('text' => $lang->story->importToLib, 'className' => 'btn secondary', 'id' => 'importToLib', 'data-toggle' => 'modal', 'url' => '#batchImportToLib'),
-        )
-    ) : null;
+        'items' => array_values(array_filter($items)),
+    );
 };
 
 /* Layout. */
@@ -302,15 +305,15 @@ toolbar
 $fnGenerateSideBar();
 
 $footToolbar = $fnGenerateFootToolbar();
-
 dtable
 (
     set::id('stories'),
     set::userMap($users),
-    set::customCols(true),
+    set::customCols(array('url' => createLink('datatable', 'ajaxcustom', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"))),
     set::checkable(!empty($footToolbar)),  // The user can do batch action if this parameter is not false(true, null).
     set::cols($cols),
     set::data($data),
+    set::sortLink(createLink('product', 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&param={$param}&storyType={$storyType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID")),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::checkInfo(jsRaw('function(checkedIdList){return window.setStatistics(this, checkedIdList);}')),
     set::footPager(usePager()),

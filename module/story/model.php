@@ -4491,7 +4491,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getExportStories(int $executionID, string $orderBy = 'id_desc', string $storyType = 'story', object $postData): array
+    public function getExportStories(int $executionID, string $orderBy = 'id_desc', string $storyType = 'story', object|null $postData = null): array
     {
         $orderBy = 'id_desc'; /* The order of the stories for exporting is disabled. */
 

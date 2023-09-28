@@ -23,7 +23,6 @@ $cols['status']     = $config->story->dtable->fieldList['status'];
 $cols['openedBy']   = $config->story->dtable->fieldList['openedBy'];
 $cols['assignedTo'] = $config->story->dtable->fieldList['assignedTo'];
 
-$stories2Link[] = $story;
 $data = array();
 foreach($stories2Link as $story) $data[] = $this->story->formatStoryForList($story);
 

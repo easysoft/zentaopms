@@ -26,12 +26,14 @@ class dtable extends wg
         $this->setDefaultProps(array('id' => static::$dtableID ? ($defaultID . static::$dtableID) : $defaultID));
         static::$dtableID++;
 
-        if($this->prop('customCols') === true)
+        $customColsProp = $this->prop('customCols');
+        if($customColsProp)
         {
+            $customUrl = zget($customColsProp, 'url', null);
             $app->loadLang('datatable');
             $this->setProp('customCols', array(
                 'custom' => array(
-                    'url' => createLink('datatable', 'ajaxcustom', "module=$app->moduleName&method=$app->methodName"),
+                    'url' => $customUrl ? $customUrl : createLink('datatable', 'ajaxcustom', "module=$app->moduleName&method=$app->methodName"),
                     'text' => $app->lang->datatable->custom
                 ),
                 'setGlobal' => array(

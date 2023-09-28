@@ -119,16 +119,18 @@ class datatable extends control
     public function ajaxCustom($module, $method, $extra = '')
     {
         $cols = $this->datatable->getSetting($module, $method, true);
+        if(!$method) $method = $this->app->getMethodName();
 
         if($module == 'testcase') unset($cols['assignedTo']);
-
-        if($module == 'story' && $extra != 'requirement') unset($cols['SRS']);
-
-        if($extra == 'requirement')
+        if(zget($this->config->datatable->moduleAlias, "$module-$method", $module) == 'story')
         {
-            foreach(array('plan', 'stage', 'taskCount', 'bugCount', 'caseCount', 'URS') as $field) unset($cols[$field]);
-
-            $cols['title']['title'] = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
+            unset($cols['product'], $cols['module']);
+            if($extra != 'requirement') unset($cols['SRS']);
+            if($extra == 'requirement')
+            {
+                foreach(array('plan', 'stage', 'taskCount', 'bugCount', 'caseCount', 'URS') as $field) unset($cols[$field]);
+                $cols['title']['title'] = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
+            }
         }
 
         if($module == 'project' && $method == 'bug')
