@@ -688,15 +688,16 @@ class build extends control
     }
 
     /**
-     * Batch unlink story.
+     * 批量解除Bug跟版本的关联关系。
+     * Batch unlink bugs.
      *
-     * @param  int $buildID
+     * @param  int    $buildID
      * @access public
-     * @return bool
+     * @return void
      */
     public function batchUnlinkBug(int $buildID)
     {
-        $this->build->batchUnlinkBug($buildID);
+        if($this->post->bugIdList) $this->build->batchUnlinkBug($buildID, $this->post->bugIdList);
         return $this->sendSuccess(array('load' => $this->createLink('build', 'view', "buildID=$buildID&type=bug")));
     }
 }

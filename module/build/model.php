@@ -710,25 +710,31 @@ class buildModel extends model
     }
 
     /**
+     * 批量解除Bug跟版本的关联关系。
      * Batch unlink bug.
      *
      * @param  int    $buildID
+     * @param  array  $bugIdList
      * @access public
-     * @return true|void
+     * @return bool
      */
-    public function batchUnlinkBug(int $buildID)
+    public function batchUnlinkBug(int $buildID, array $bugIdList): bool
     {
-        $bugList = $this->post->bugIdList;
-        if(empty($bugList)) return true;
+        if(empty($bugIdList)) return true;
 
         $build = $this->getByID($buildID);
+        if(!$build) return false;
+
         $build->bugs = ",$build->bugs,";
-        foreach($bugList as $bugID) $build->bugs = str_replace(",$bugID,", ',', $build->bugs);
+        foreach($bugIdList as $bugID) $build->bugs = str_replace(",$bugID,", ',', $build->bugs);
         $build->bugs = trim($build->bugs, ',');
+
         $this->dao->update(TABLE_BUILD)->set('bugs')->eq($build->bugs)->where('id')->eq((int)$buildID)->exec();
 
         $this->loadModel('action');
-        foreach($bugList as $unlinkBugID) $this->action->create('bug', $unlinkBugID, 'unlinkedfrombuild', '', $buildID);
+        foreach($bugIdList as $unlinkBugID) $this->action->create('bug', $unlinkBugID, 'unlinkedfrombuild', '', $buildID);
+
+        return !dao::isError();
     }
 
     /**

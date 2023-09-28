@@ -1,25 +1,29 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/build.class.php';
-su('admin');
-
 /**
 
 title=测试 buildModel->batchUnlinkBug();
+timeout=0
 cid=1
-pid=1
-
-批量解除项目版本bug >> ,11
-批量解除执行版本bug >> ,101
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/build.class.php';
 
-$buildIDList = array('1', '11');
-$bugs        = array('301', '311');
+$build = zdTable('build')->config('build');
+$build->bugs->range('`1,2,3`,`4,5,6`');
+$build->gen(5);
 
-$build = new buildTest();
+zdTable('user')->gen(5);
+su('admin');
 
-r($build->batchUnlinkBugTest($buildIDList[0],$bugs)) && p('1:bugs,project')    && e(',11');//批量解除项目版本bug
-r($build->batchUnlinkBugTest($buildIDList[1],$bugs)) && p('11:bugs,execution') && e(',101');//批量解除执行版本bug
+$buildIdList  = array(0, 1, 2, 6);
+$bugIdList[0] = array();
+$bugIdList[1] = array(1, 2);
+$bugIdList[2] = array(4, 5);
 
+$buildTester = new buildTest();
+r($buildTester->batchUnlinkBugTest($buildIdList[0], $bugIdList[0])) && p()            && e('0');   // 测试buildID=0，bug ID 列表为空
+r($buildTester->batchUnlinkBugTest($buildIdList[1], $bugIdList[1])) && p('1:id,bugs') && e('1,3'); // 测试buildID=1，bug ID 列表为1,2
+r($buildTester->batchUnlinkBugTest($buildIdList[2], $bugIdList[2])) && p('2:id,bugs') && e('2,6'); // 测试buildID=2，bug ID 列表为4,5
+r($buildTester->batchUnlinkBugTest($buildIdList[3], $bugIdList[1])) && p()            && e('0');   // 测试buildID不存在，bug ID 列表为1,2

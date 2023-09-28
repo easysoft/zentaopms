@@ -364,26 +364,21 @@ class buildTest
         return $objects;
     }
 
-    public function batchUnlinkBugTest($buildID, $bugs)
+    /**
+     * 批量解除Bug跟版本的关联关系。
+     * Batch unlink bugs.
+     *
+     * @param  int    $buildID
+     * @param  array  $bugIdList
+     * @access public
+     * @return array
+     */
+    public function batchUnlinkBugTest(int $buildID, array $bugIdList): array
     {
-        global $tester;
-
-        $createFields = array('bugs' => $bugs);
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        $this->objectModel->linkBug($buildID);
-
-        unset($_POST);
-
-        $newFields = array('unlinkBugs' => $bugs);
-        foreach($newFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        $this->objectModel->batchUnlinkBug($buildID);
-
-        $objects = $tester->dao->select('*')->from(TABLE_BUILD)->where('id')->in($buildID)->fetchAll('id');
-
-        unset($_POST);
+        $this->objectModel->batchUnlinkBug($buildID, $bugIdList);
+        $objects = $this->objectModel->dao->select('*')->from(TABLE_BUILD)->where('id')->in($buildID)->fetchAll('id');
 
         if(dao::isError()) return dao::getError();
-
         return $objects;
     }
 
