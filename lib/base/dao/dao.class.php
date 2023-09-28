@@ -2237,7 +2237,8 @@ class baseSQL
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
 
-        $order = str_replace(array('|', '', '_'), ' ', $order);
+        $order = str_replace(array('|desc', 'desc', '_desc'), ' desc', $order);
+        $order = str_replace(array('|asc', 'asc', '_asc'), ' asc', $order);
 
         /* Add "`" in order string. */
         /* When order has limit string. */
