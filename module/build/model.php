@@ -594,27 +594,31 @@ class buildModel extends model
     }
 
     /**
-     * Link stories
+     * 版本关联需求。
+     * Link stories to a build.
      *
      * @param  int    $buildID
+     * @param  array  $storyIdList
      * @access public
      * @return void
      */
-    public function linkStory($buildID)
+    public function linkStory(int $buildID, array $storyIdList): bool
     {
-        $build = $this->getByID($buildID);
+        if(empty($storyIdList)) return false;
 
-        foreach($this->post->stories as $i => $storyID)
+        $build = $this->getByID($buildID);
+        foreach($storyIdList as $i => $storyID)
         {
-            if(strpos(",{$build->stories},", ",{$storyID},") !== false) unset($_POST['stories'][$i]);
+            if(strpos(",{$build->stories},", ",{$storyID},") !== false) unset($storyIdList[$i]);
         }
 
-        $build->stories .= ',' . implode(',', $this->post->stories);
+        $build->stories .= ',' . implode(',', $storyIdList);
         $this->dao->update(TABLE_BUILD)->set('stories')->eq($build->stories)->where('id')->eq((int)$buildID)->exec();
 
         $this->loadModel('action');
-        foreach($this->post->stories as $storyID) $this->action->create('story', $storyID, 'linked2build', '', $buildID);
-        $this->action->create('build', $buildID, 'linkstory', '', implode(',', $this->post->stories));
+        foreach($storyIdList as $storyID) $this->action->create('story', $storyID, 'linked2build', '', $buildID);
+        $this->action->create('build', $buildID, 'linkstory', '', implode(',', $storyIdList));
+        return !dao::isError();
     }
 
     /**
@@ -638,25 +642,26 @@ class buildModel extends model
     }
 
     /**
+     * 批量解除需求关联。
      * Batch unlink story.
      *
      * @param  int       $buildID
      * @access public
-     * @return true|void
+     * @return bool
      */
-    public function batchUnlinkStory(int $buildID)
+    public function batchUnlinkStory(int $buildID, array $storyIdList): bool
     {
-        $storyList = $this->post->storyIdList;
-        if(empty($storyList)) return true;
+        if(empty($storyIdList)) return true;
 
         $build = $this->getByID($buildID);
         $build->stories = ",$build->stories,";
-        foreach($storyList as $storyID) $build->stories = str_replace(",$storyID,", ',', $build->stories);
+        foreach($storyIdList as $storyID) $build->stories = str_replace(",$storyID,", ',', $build->stories);
         $build->stories = trim($build->stories, ',');
         $this->dao->update(TABLE_BUILD)->set('stories')->eq($build->stories)->where('id')->eq((int)$buildID)->exec();
 
         $this->loadModel('action');
-        foreach($storyList as $unlinkStoryID) $this->action->create('story', $unlinkStoryID, 'unlinkedfrombuild', '', $buildID);
+        foreach($storyIdList as $storyID) $this->action->create('story', $storyID, 'unlinkedfrombuild', '', $buildID);
+        return !dao::isError();
     }
 
     /**

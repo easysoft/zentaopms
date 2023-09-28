@@ -411,7 +411,7 @@ class build extends control
     {
         if(!empty($_POST['stories']))
         {
-            $this->build->linkStory($buildID);
+            $this->build->linkStory($buildID, $this->post->stories);
             return $this->send(array('result' => 'success', 'load' =>inlink('view', "buildID=$buildID&type=story")));
         }
 
@@ -569,15 +569,16 @@ class build extends control
     }
 
     /**
+     * 批量解除需求关联。
      * Batch unlink story.
      *
-     * @param  int   $buildID
+     * @param  int    $buildID
      * @access public
      * @return bool
      */
     public function batchUnlinkStory(int $buildID)
     {
-        $this->build->batchUnlinkStory($buildID);
+        $this->build->batchUnlinkStory($buildID, $this->post->storyIdList);
         return $this->sendSuccess(array('load' => $this->createLink('build', 'view', "buildID=$buildID&type=story")));
     }
 
