@@ -56,12 +56,13 @@ detailHeader
     !empty($menus) ? to::suffix(btnGroup(set::items($menus))) : null
 );
 
-jsVar('initLink',      $link);
-jsVar('type',          $type);
-jsVar('orderBy',       $orderBy);
-jsVar('buildID',       $build->id);
-jsVar('sortLink',      helper::createLink($buildModule, 'view', "buildID={$build->id}&type={type}&link={$link}&param={$param}&orderBy={orderBy}"));
-jsVar('confirmDelete', $lang->build->confirmDelete);
+jsVar('initLink',       $link);
+jsVar('type',           $type);
+jsVar('orderBy',        $orderBy);
+jsVar('buildID',        $build->id);
+jsVar('sortLink',       helper::createLink($buildModule, 'view', "buildID={$build->id}&type={type}&link={$link}&param={$param}&orderBy={orderBy}"));
+jsVar('confirmDelete',  $lang->build->confirmDelete);
+jsVar('currentAccount', $app->user->account);
 
 /* Story's batch btn. */
 $canBatchUnlinkStory = $canBeChanged && common::hasPriv($buildModule, 'batchUnlinkStory');

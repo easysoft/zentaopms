@@ -551,29 +551,29 @@ class buildModel extends model
     }
 
     /**
+     * 更新关联Bug的解决原因。
      * Update linked bug to resolved.
      *
-     * @param  object    $build
+     * @param  object $build
+     * @param  array  $bugIdList
+     * @param  array  $resolvedByList
      * @access public
-     * @return void
+     * @return bool
      */
-    public function updateLinkedBug($build)
+    public function updateLinkedBug(object $build, array $bugIdList = array(), array $resolvedByList = array()): bool
     {
         $bugs = empty($build->bugs) ? '' : $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($build->bugs)->fetchAll();
-        $data = fixer::input('post')->get();
-        $now  = helper::now();
+        if(!$bugs) return false;
 
         $resolvedPairs = array();
-        if(isset($_POST['bugs']))
+        foreach($bugIdList as $bugID)
         {
-            foreach($data->bugs as $bugID)
-            {
-                if(isset($_POST['resolvedBy'][$bugID])) $resolvedPairs[$bugID] = $data->resolvedBy[$bugID];
-            }
+            if(isset($resolvedByList[$bugID])) $resolvedPairs[$bugID] = $resolvedByList[$bugID];
         }
 
         $this->loadModel('action');
-        if(!$bugs) return false;
+
+        $now = helper::now();
         foreach($bugs as $bug)
         {
             if($bug->status == 'resolved' or $bug->status == 'closed') continue;
@@ -591,6 +591,8 @@ class buildModel extends model
             $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bug->id)->exec();
             $this->action->create('bug', $bug->id, 'Resolved', '', 'fixed', $bug->resolvedBy);
         }
+
+        return !dao::isError();
     }
 
     /**
@@ -670,20 +672,21 @@ class buildModel extends model
      *
      * @param  int    $buildID
      * @param  array  $bugIdList
+     * @param  array  $resolvedList
      * @access public
      * @return bool
      */
-    public function linkBug(int $buildID, array $bugIdList): bool
+    public function linkBug(int $buildID, array $bugIdList, array $resolvedList = array()): bool
     {
         $build = $this->getByID($buildID);
 
         foreach($bugIdList as $i => $bugID)
         {
-            if(strpos(",{$build->bugs},", ",{$bugID},") !== false) unset($_POST['bugs'][$i]);
+            if(strpos(",{$build->bugs},", ",{$bugID},") !== false) unset($bugIdList[$i]);
         }
 
         $build->bugs .= ',' . implode(',', $bugIdList);
-        $this->updateLinkedBug($build);
+        $this->updateLinkedBug($build, $bugIdList, $resolvedList);
         $this->dao->update(TABLE_BUILD)->set('bugs')->eq($build->bugs)->where('id')->eq((int)$buildID)->exec();
 
         $this->loadModel('action');

@@ -589,7 +589,7 @@ class build extends control
     {
         if(!empty($_POST['bugs']))
         {
-            $this->build->linkBug($buildID, $this->post->bugs);
+            $this->build->linkBug($buildID, $this->post->bugs, (array)$this->post->resolvedBy);
             return $this->send(array('result' => 'success', 'load' => inlink('view', "buildID=$buildID&type=bug")));
         }
 
