@@ -1,100 +1,21 @@
-window.renderHeight = function()
+window.afterPageUpdate = function($target, info, options)
 {
-    return $('.table-side').height();
-}
-
-window.parseSerialize = function(serialize)
-{
-    var result = {};
-    serialize = serialize.replaceAll('%5B%5D', '');
-    var items = serialize.split('&');
-    for(var i = 0; i < items.length; i++)
-    {
-        var item = items[i].split('=');
-        var key   = item[0];
-        var value = item[1];
-        if(!result[key]) result[key] = [];
-        if(key.startsWith('scope'))
-        {
-            result[key].push(value);
-        }
-        else
-        {
-            result[key] = value;
-        }
+    window.isDropdown  = false;
+    window.lineCount   = 1;
+    window.checkedList = [{id:current.id + '', name:current.name}];
+    window.chartList   = [];
+    for(key in chartTypeList) {
+        chartList.push({value: key, text: chartTypeList[key]});
     }
-    return result;
+    window.filterChecked = {};
+    window.renderDTable(current.id, resultHeader, resultData);
+    window.renderChart(current.id, resultHeader, resultData);
+    if(viewType == 'multiple') window.renderCheckedLabel();
+    $(window).on('resize', window.renderCheckedLabel);
+    window.initFilterPanel();
 }
 
-window.generateCheckItem = function(text, value, scope, isChecked)
-{
-    var checked = isChecked ? 'checked=""' : '';
-    var currentClass = isChecked ? 'metric-current' : '';
-    return `<div class="font-medium checkbox-primary ${currentClass}">
-            <input type="checkbox" id="metric${value}" name="metric" ${checked} value="${value}" scope="${scope}" onchange="window.handleCheckboxChange(this)">
-            <label for="metric${value}">${text}</label>
-          </div>`;
-}
-
-window.messagerWarning = function(message)
-{
-    return zui.Messager.show({
-        content: message,
-        icon: 'icon-exclamation-pure',
-        iconClass: 'center w-6 h-6 rounded-full m-0 warning',
-        contentClass: 'text-lg font-bold',
-        close: false,
-        className: 'p-6 bg-white text-black gap-2 messager-fail',
-    });
-}
-
-window.isMetricChecked = function(id)
-{
-    return window.checkedList.filter(function(metric){return metric.id == id}).length != 0;
-}
-
-window.renderCheckList = function(metrics)
-{
-    $('.side .check-list-metric').empty();
-
-    var metricsHtml = metrics.map(function(metric){
-        var isChecked = window.isMetricChecked(metric.id);
-        return window.generateCheckItem(metric.name, metric.id, metric.scope, isChecked);
-    }).join('');
-
-    $('.side .check-list-metric').html(metricsHtml);
-}
-
-window.updateCheckList = function(id, name, isChecked)
-{
-    if(isChecked)
-    {
-        return window.checkedList.push({id: id, name: name});
-    }
-
-    window.checkedList = window.checkedList.filter(function(item){return item.id != id});
-}
-
-window.updateCheckbox = function(id, isChecked)
-{
-    var $el = $('.side .metric-tree .check-list input#metric' + id);
-    $el.prop('checked', isChecked);
-    if(isChecked)
-    {
-        return $el.closest('.checkbox-primary').addClass('metric-current');
-    }
-
-    $el.closest('.checkbox-primary').removeClass('metric-current');
-}
-
-window.updateCheckAction = function(id, name, isChecked)
-{
-    window.updateCheckList(id, name, isChecked);
-    window.updateCheckbox(id, isChecked);
-    window.renderCheckedLabel();
-    window.updateMetricBoxs(id, isChecked);
-}
-
+/* 事件处理函数。 */
 window.handleCheckboxChange = function($el)
 {
     $el = $($el);
@@ -132,57 +53,9 @@ window.handleNavMenuClick = function($el)
 window.handleQueryClick = function(id)
 {
     var $form = id ? $('#queryForm' + id) : $('#queryForm');
-    var check = window.checkForm($form);
+    var check = window.validateForm($form);
     if(!check) return;
     window.ajaxGetRecords(id, 'filter');
-}
-
-window.deactiveNavMenu = function()
-{
-    var itemSelector = 'menu.nav-ajax .nav-item a';
-    $(itemSelector).removeClass('active');
-    $(itemSelector).find('span.label').remove();
-}
-
-window.ajaxGetMetrics = function(scope, filters = '', callback)
-{
-    $.get($.createLink('metric', 'ajaxGetMetrics', 'scope=' + scope + '&filters=' + filters), function(resp){
-        var metrics = JSON.parse(resp);
-        var total = metrics.length;
-
-        window.renderCheckList(metrics);
-
-        if(typeof callback == 'function') callback(metrics, total);
-    });
-}
-
-window.updateFilterCheck = function()
-{
-    var selector = '.filter-panel .panel-body .check-list-inline .checkbox-primary input:checked';
-    window.filterChecked = {'scope': [], 'object': [], 'purpose': []};
-    var hasChecked = false;
-    $(selector).each(function(index, elem){
-        var name = $(elem).attr('name');
-        var value = $(elem).val();
-
-        window.filterChecked[name].push(value);
-        hasChecked = true;
-    });
-
-    if(!hasChecked)
-    {
-        $('.filter-btn .common').removeClass('hidden');
-        $('.filter-btn .checked').addClass('hidden');
-        return;
-    }
-
-    $('.filter-btn .common').addClass('hidden');
-    $('.filter-btn .checked').removeClass('hidden');
-    var checkedInfo = filterLang.checkedInfo;
-    checkedInfo = checkedInfo.replace('%s', window.filterChecked.scope.length);
-    checkedInfo = checkedInfo.replace('%s', window.filterChecked.object.length);
-    checkedInfo = checkedInfo.replace('%s', window.filterChecked.purpose.length);
-    $('.filter-btn .checked').text(checkedInfo);
 }
 
 window.handleFilterCheck = function()
@@ -194,24 +67,6 @@ window.handleFilterToggle = function($el)
 {
     $el.toggleClass('primary-600');
     $('.filter-panel').toggleClass('hidden');
-}
-
-window.hideFilterPanel = function()
-{
-    $('.filter-btn').removeClass('primary-600');
-    $('.filter-panel').addClass('hidden');
-}
-
-window.resetFilterPanel = function()
-{
-    var $checkboxList = $('.filter-panel .panel').find('.panel-body .check-list-inline .checkbox-primary');
-    $checkboxList.each(function(index, elem){
-        $(elem).find('input').prop('checked', false);
-    });
-
-    window.updateFilterCheck();
-
-    $('.side-title').text(metricListLang);
 }
 
 window.handleFilterClearItem = function($el)
@@ -256,21 +111,125 @@ window.handleFilterClick = function()
     loadPage($.createLink('metric', 'preview', 'scope=filter&viewType=' + viewType + '&metricID=0&filtersBase64=' + filterBase64));
 }
 
-window.afterPageUpdate = function($target, info, options)
+window.handleChartTypeChange = function($el)
 {
-    window.isDropdown  = false;
-    window.lineCount   = 1;
-    window.checkedList = [{id:current.id + '', name:current.name}];
-    window.chartList   = [];
-    for(key in chartTypeList) {
-        chartList.push({value: key, text: chartTypeList[key]});
+    if(viewType == 'single')
+    {
+        var chartType = $('[name=chartType]').val();
+
+        window.renderChart(current.id, resultHeader, resultData, chartType, false);
     }
-    window.filterChecked = {};
-    window.renderDTable(current.id, resultHeader, resultData);
-    window.renderChart(current.id, resultHeader, resultData);
-    if(viewType == 'multiple') window.renderCheckedLabel();
-    $(window).on('resize', window.renderCheckedLabel);
-    window.initFilterPanel();
+    else
+    {
+        var $metricBox = $($el.base.closest('.metricBox'));
+        var metricID   = $metricBox.attr('metric-id');
+        var chartType  = $metricBox.find('[name=chartType]').val();
+
+        $.get($.createLink('metric', 'ajaxGetTableData', 'metricID=' + metricID), function(resp)
+        {
+            var data = JSON.parse(resp);
+            if(data) {
+                window.renderChart(metricID, data.header, data.data, chartType, false);
+            }
+        });
+    }
+}
+
+window.handleRemoveLabel = function(id)
+{
+    var checkedItem = window.checkedList.find(function(checked){return checked.id == id});
+    if(!checkedItem) return;
+
+    window.updateCheckAction(checkedItem.id, checkedItem.name, false);
+}
+/* 事件处理函数结束。 */
+
+window.isMetricChecked = function(id)
+{
+    return window.checkedList.filter(function(metric){return metric.id == id}).length != 0;
+}
+
+window.renderCheckList = function(metrics)
+{
+    $('.side .check-list-metric').empty();
+
+    var metricsHtml = metrics.map(function(metric){
+        var isChecked = window.isMetricChecked(metric.id);
+        return window.generateCheckItem(metric.name, metric.id, metric.scope, isChecked);
+    }).join('');
+
+    $('.side .check-list-metric').html(metricsHtml);
+}
+
+window.updateCheckList = function(id, name, isChecked)
+{
+    if(isChecked)
+    {
+        return window.checkedList.push({id: id, name: name});
+    }
+
+    window.checkedList = window.checkedList.filter(function(item){return item.id != id});
+}
+
+window.updateCheckAction = function(id, name, isChecked)
+{
+    window.updateCheckList(id, name, isChecked);
+    window.updateCheckbox(id, isChecked);
+    window.renderCheckedLabel();
+    window.updateMetricBoxs(id, isChecked);
+}
+
+window.ajaxGetMetrics = function(scope, filters = '', callback)
+{
+    $.get($.createLink('metric', 'ajaxGetMetrics', 'scope=' + scope + '&filters=' + filters), function(resp){
+        var metrics = JSON.parse(resp);
+        var total = metrics.length;
+
+        window.renderCheckList(metrics);
+
+        if(typeof callback == 'function') callback(metrics, total);
+    });
+}
+
+window.updateFilterCheck = function()
+{
+    var selector = '.filter-panel .panel-body .check-list-inline .checkbox-primary input:checked';
+    window.filterChecked = {'scope': [], 'object': [], 'purpose': []};
+    var hasChecked = false;
+    $(selector).each(function(index, elem){
+        var name = $(elem).attr('name');
+        var value = $(elem).val();
+
+        window.filterChecked[name].push(value);
+        hasChecked = true;
+    });
+
+    if(!hasChecked)
+    {
+        $('.filter-btn .common').removeClass('hidden');
+        $('.filter-btn .checked').addClass('hidden');
+        return;
+    }
+
+    $('.filter-btn .common').addClass('hidden');
+    $('.filter-btn .checked').removeClass('hidden');
+    var checkedInfo = filterLang.checkedInfo;
+    checkedInfo = checkedInfo.replace('%s', window.filterChecked.scope.length);
+    checkedInfo = checkedInfo.replace('%s', window.filterChecked.object.length);
+    checkedInfo = checkedInfo.replace('%s', window.filterChecked.purpose.length);
+    $('.filter-btn .checked').text(checkedInfo);
+}
+
+window.resetFilterPanel = function()
+{
+    var $checkboxList = $('.filter-panel .panel').find('.panel-body .check-list-inline .checkbox-primary');
+    $checkboxList.each(function(index, elem){
+        $(elem).find('input').prop('checked', false);
+    });
+
+    window.updateFilterCheck();
+
+    $('.side-title').text(metricListLang);
 }
 
 window.initFilterPanel = function()
@@ -438,19 +397,6 @@ window.initDTable = function($obj, head, data)
     });
 }
 
-window.genDataZoom = function(dataLength, initZoom = 10, axis = 'x')
-{
-    var percent = initZoom / dataLength * 100;
-    percent = percent > 100 ? 100 : percent;
-    var dataZoom = {
-        start: 0,
-        end: percent,
-    };
-    if(axis == 'x') dataZoom.xAxisIndex = [0];
-    if(axis == 'y') dataZoom.yAxisIndex = [0];
-    return [dataZoom];
-}
-
 window.initChart = function($obj, head, data, chartType)
 {
     if(!data.length) return;
@@ -459,7 +405,8 @@ window.initChart = function($obj, head, data, chartType)
         var x = head[1].name;
         var y = head[0].name;
     }
-    else if(head.length == 3) {
+    else if(head.length == 3)
+    {
         var x = head[0].name;
         var y = head[1].name;
     }
@@ -471,32 +418,22 @@ window.initChart = function($obj, head, data, chartType)
 
     var type  = (chartType == 'barX' || chartType == 'barY') ? 'bar' : chartType;
 
+    var xAxis = {
+        type: 'category',
+        data: data.map(item => item[x])
+    };
+    if(head.length == 2) xAxis.data = xAxis.data.map(item => item.slice(0, 10));
+    xAxis.data = [...new Set(xAxis.data)];
+    xAxis.data.sort();
+    var yAxis = {type: 'value'};
+
     if(head.length <= 3) {
-        var xAxis = {
-            type: 'category',
-            data: data.map(item => item[x])
-        };
-        if(head.length == 2) xAxis.data = xAxis.data.map(item => item.slice(0, 10));
-        var yAxis = {
-            type: 'value'
-        };
         var series = [{
             data: data.map(item => item[y]),
             type: type
         }];
     }
     else if(head.length == 4) {
-        var xAxis = {
-            type: 'category',
-            data: data.map(item => item[x]),
-        };
-        xAxis.data = xAxis.data.filter((value, index, self) => {
-            return self.indexOf(value) === index;
-        });
-        xAxis.data.sort();
-        var yAxis = {
-            type: 'value'
-        };
         var series = [];
 
         var groupedData = data.reduce((accumulator, currentValue) => {
@@ -531,42 +468,7 @@ window.initChart = function($obj, head, data, chartType)
         selectedScope[Object.keys(selectedScope)[0]] = true;
     }
 
-    var option = {
-        grid: {
-            left: '10%',
-            right: '10%',
-            bottom: '15%',
-            containLabel: true
-        },
-        legend: {
-            type: 'scroll'
-        },
-        tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-                type: 'cross',
-                label: {
-                    backgroundColor: '#6a7985'
-                }
-            },
-            confine:true,//限制tooltip在图表范围内展示
-            extraCssText: 'max-height:60%;overflow-y:scroll',//最大高度以及超出处理
-            enterable:true//鼠标可以进入tooltip区域，使用滚动条
-        },
-        xAxis: chartType == 'barY' ? yAxis : xAxis,
-        yAxis: chartType == 'barY' ? xAxis : yAxis,
-        series: series,
-    };
-
-    if(selectedScope)
-    {
-        option.legend.selector = true;
-        option.legend.selected = selectedScope;
-    }
-
-    var dataLength = option.series[0].data.length;
-    if(dataLength > 15) option.dataZoom = window.genDataZoom(dataLength, 15, chartType == 'barY' ? 'y' : 'x');
-
+    var option = window.genLineBarOption(chartType, xAxis, yAxis, series, selectedScope);
     window.renderEchart($obj, option);
 }
 
@@ -574,36 +476,9 @@ window.initPieChart = function($obj, head, data)
 {
     var x = head[0].name;
     var y = head[1].name;
-    var datas = [];
-    data.forEach(function(item) {
-        datas.push({name: item[x], value: item[y]});
-    });
+    var datas = data.map(item => ({name: item[x], value: item[y]}));
 
-    var option = {
-        tooltip: {
-            trigger: 'item'
-        },
-        legend: {
-            orient: 'vertical',
-            left: 'left',
-            type: 'scroll'
-        },
-        series: [
-            {
-                type: 'pie',
-                radius: '50%',
-                data: datas,
-                emphasis: {
-                    itemStyle: {
-                        shadowBlur: 10,
-                        shadowOffsetX: 0,
-                        shadowColor: 'rgba(0, 0, 0, 0.5)'
-                    }
-                }
-            }
-        ]
-    };
-
+    var option = window.genPieOption(datas);
     window.renderEchart($obj, option);
 }
 
@@ -630,38 +505,6 @@ window.initPicker = function($obj, items, headLength = 3)
         required: true,
         onChange: function() { window.handleChartTypeChange(this) },
     });
-}
-
-window.handleChartTypeChange = function($el)
-{
-    if(viewType == 'single')
-    {
-        var chartType = $('[name=chartType]').val();
-
-        window.renderChart(current.id, resultHeader, resultData, chartType, false);
-    }
-    else
-    {
-        var $metricBox = $($el.base.closest('.metricBox'));
-        var metricID   = $metricBox.attr('metric-id');
-        var chartType  = $metricBox.find('[name=chartType]').val();
-
-        $.get($.createLink('metric', 'ajaxGetTableData', 'metricID=' + metricID), function(resp)
-        {
-            var data = JSON.parse(resp);
-            if(data) {
-                window.renderChart(metricID, data.header, data.data, chartType, false);
-            }
-        });
-    }
-}
-
-window.handleRemoveLabel = function(id)
-{
-    var checkedItem = window.checkedList.find(function(checked){return checked.id == id});
-    if(!checkedItem) return;
-
-    window.updateCheckAction(checkedItem.id, checkedItem.name, false);
 }
 
 window.setDropDown = function()
@@ -756,7 +599,7 @@ window.ajaxGetRecords = function(id, mode = 'add')
     });
 }
 
-window.checkForm = function($form)
+window.validateForm = function($form)
 {
     var formSerialize = $form.serialize();
     var formObj = window.parseSerialize(formSerialize);
@@ -793,24 +636,12 @@ window.getFormData = function($form)
     return formData;
 }
 
-window.setMultiTableHeight = function(contentHeight)
-{
-    $('.table-and-charts').css('max-height', 'calc(100% - ' + contentHeight + 'px)');
-}
-
 window.collectMetric = function(id)
 {
     $.get($.createLink('metric', 'ajaxCollectMetric', 'metricID=' + id), function(resp)
     {
         var result = JSON.parse(resp);
-        if(result.collect)
-        {
-            $('.metric-collect').find('img').attr('src', 'static/svg/star.svg');
-        }
-        else
-        {
-            $('.metric-collect').find('img').attr('src', 'static/svg/star-empty.svg');
-        }
+        $('.metric-collect').find('i').attr('class', result.collect ? 'icon icon-star star' : 'icon icon-star-empty star-empty');
     });
 }
 
@@ -920,4 +751,168 @@ window.renderCheckedLabel = function()
     window.lineCount = lineCount;
 
     $('.checked-tip').html(selectCount.replace('%s', labels.length));
+}
+
+/* 纯函数 */
+window.renderHeight = function()
+{
+    return $('.table-side').height();
+}
+
+window.parseSerialize = function(serialize)
+{
+    var result = {};
+    serialize = serialize.replaceAll('%5B%5D', '');
+    var items = serialize.split('&');
+    for(var i = 0; i < items.length; i++)
+    {
+        var item = items[i].split('=');
+        var key   = item[0];
+        var value = item[1];
+        if(!result[key]) result[key] = [];
+        if(key.startsWith('scope'))
+        {
+            result[key].push(value);
+        }
+        else
+        {
+            result[key] = value;
+        }
+    }
+    return result;
+}
+
+window.generateCheckItem = function(text, value, scope, isChecked)
+{
+    var checked = isChecked ? 'checked=""' : '';
+    var currentClass = isChecked ? 'metric-current' : '';
+    return `<div class="font-medium checkbox-primary ${currentClass}">
+              <input type="checkbox" id="metric${value}" name="metric" ${checked} value="${value}" scope="${scope}" onchange="window.handleCheckboxChange(this)">
+              <label for="metric${value}">${text}</label>
+            </div>`;
+}
+
+window.messagerWarning = function(message)
+{
+    return zui.Messager.show({
+        content: message,
+        icon: 'icon-exclamation-pure',
+        iconClass: 'center w-6 h-6 rounded-full m-0 warning',
+        contentClass: 'text-lg font-bold',
+        close: false,
+        className: 'p-6 bg-white text-black gap-2 messager-fail',
+    });
+}
+
+window.setMultiTableHeight = function(contentHeight)
+{
+    $('.table-and-charts').css('max-height', 'calc(100% - ' + contentHeight + 'px)');
+}
+
+window.updateCheckbox = function(id, isChecked)
+{
+    var $el = $('.side .metric-tree .check-list input#metric' + id);
+    $el.prop('checked', isChecked);
+    if(isChecked)
+    {
+        return $el.closest('.checkbox-primary').addClass('metric-current');
+    }
+
+    $el.closest('.checkbox-primary').removeClass('metric-current');
+}
+
+window.genDataZoom = function(dataLength, initZoom = 10, axis = 'x')
+{
+    var percent = initZoom / dataLength * 100;
+    percent = percent > 100 ? 100 : percent;
+    var dataZoom = {
+        start: 0,
+        end: percent,
+    };
+    if(axis == 'x') dataZoom.xAxisIndex = [0];
+    if(axis == 'y') dataZoom.yAxisIndex = [0];
+    return [dataZoom];
+}
+
+window.hideFilterPanel = function()
+{
+    $('.filter-btn').removeClass('primary-600');
+    $('.filter-panel').addClass('hidden');
+}
+
+window.deactiveNavMenu = function()
+{
+    var itemSelector = 'menu.nav-ajax .nav-item a';
+    $(itemSelector).removeClass('active');
+    $(itemSelector).find('span.label').remove();
+}
+
+window.genPieOption = function(data)
+{
+    var option = {
+        tooltip: {
+            trigger: 'item'
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left',
+            type: 'scroll'
+        },
+        series: [
+            {
+                type: 'pie',
+                radius: '50%',
+                data: data,
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+        ]
+    };
+
+    return option;
+}
+
+window.genLineBarOption = function(chartType, xAxis, yAxis, series, selectedScope = null)
+{
+    var legend = {type: 'scroll'};
+    if(selectedScope)
+    {
+        legend.selector = true;
+        legend.selected = selectedScope;
+    }
+
+    var option = {
+        grid: {
+            left: '10%',
+            right: '10%',
+            bottom: '15%',
+            containLabel: true
+        },
+        legend: legend,
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'cross',
+                label: {
+                    backgroundColor: '#6a7985'
+                }
+            },
+            confine:true,//限制tooltip在图表范围内展示
+            extraCssText: 'max-height:60%;overflow-y:scroll',//最大高度以及超出处理
+            enterable:true//鼠标可以进入tooltip区域，使用滚动条
+        },
+        xAxis: chartType == 'barY' ? yAxis : xAxis,
+        yAxis: chartType == 'barY' ? xAxis : yAxis,
+        series: series,
+    };
+
+    var dataLength = series[0].data.length;
+    if(dataLength > 15) option.dataZoom = window.genDataZoom(dataLength, 15, chartType == 'barY' ? 'y' : 'x');
+
+    return option;
 }
