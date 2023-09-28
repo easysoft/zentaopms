@@ -681,7 +681,10 @@ window.renderCheckedLabel = function()
         $content.append(html);
 
         var $label     = $content.find('[metric-id="' + label.id + '"]');
-        var labelWidth = Math.ceil($label.width() + parseInt($label.css('padding-left')) + parseInt($label.css('padding-right')) + parseInt($label.css('margin-left')) + parseInt($label.css('margin-right')));
+        var labelWidth = $label.width();
+        var labelLeft  = parseInt($label.css('padding-left')) + parseInt($label.css('margin-left'));
+        var labelRight = parseInt($label.css('padding-right')) + parseInt($label.css('margin-right'));
+        var labelWidth = Math.ceil(labelWidth + labelLeft + labelRight);
 
         left = left - labelWidth;
         if(left <= 0)

@@ -30,17 +30,21 @@ class count_of_daily_finished_task_in_execution extends baseCalc
 
     public function calculate($row)
     {
-        if($row->status != 'done' || empty($row->finishedDate)) return false;
+        $status = $row->status;
+        $finishedDate = $row->finishedDate;
+        $execution = $row->execution;
 
-        if(empty($row->finishedDate)) return false;
-        $date = substr($row->finishedDate, 0, 10);
+        if($status != 'done' || empty($finishedDate)) return false;
+
+        if(empty($finishedDate)) return false;
+        $date = substr($finishedDate, 0, 10);
         list($year, $month, $day) = explode('-', $date);
         if($year == '0000') return false;
 
-        if(!isset($this->result[$row->execution]))                      $this->result[$row->execution] = array();
-        if(!isset($this->result[$row->execution][$year]))               $this->result[$row->execution][$year] = array();
-        if(!isset($this->result[$row->execution][$year][$month]))       $this->result[$row->execution][$year][$month] = array();
-        if(!isset($this->result[$row->execution][$year][$month][$day])) $this->result[$row->execution][$year][$month][$day] = 0;
+        if(!isset($this->result[$execution]))                      $this->result[$execution] = array();
+        if(!isset($this->result[$execution][$year]))               $this->result[$execution][$year] = array();
+        if(!isset($this->result[$execution][$year][$month]))       $this->result[$execution][$year][$month] = array();
+        if(!isset($this->result[$execution][$year][$month][$day])) $this->result[$execution][$year][$month][$day] = 0;
 
         $this->result[$row->execution][$year][$month][$day] ++;
     }

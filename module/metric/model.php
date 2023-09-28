@@ -441,7 +441,19 @@ class metricModel extends model
     {
         $fieldList = array();
         foreach($calcList as $calcInstance) $fieldList  = array_merge($fieldList, $calcInstance->fieldList);
-        return implode(',', array_unique($fieldList));
+        $uniqueList = array_unique($fieldList);
+        $aliasList  = array();
+        foreach($uniqueList as $field)
+        {
+            if(strpos($field, '.') === false)
+            {
+                $aliasList[] = $field;
+                continue;
+            }
+            $alias = str_replace('.', '_', $field);
+            $aliasList[] = $field . ' AS ' . $alias;
+        }
+        return implode(',', $aliasList);
     }
 
     /**

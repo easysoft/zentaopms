@@ -224,9 +224,27 @@ class metricZen extends metric
         {
             foreach($calcList as $calc)
             {
-                $calc->calculate((object)$row);
+                $record = $this->getCalcFields($calc, $row);
+                $calc->calculate($record);
             }
         }
+    }
+
+    protected function getCalcFields($calc, $row)
+    {
+        if(!isset($calc->dataset) || empty($calc->dataset)) return (object)$row;
+
+        $pureRow = new stdclass();
+        foreach($calc->fieldList as $field)
+        {
+            $extractField = explode('.', $field);
+            $pureField    = end($extractField);
+            $aliasField   = str_replace('.', '_', $field);
+
+            $pureRow->$pureField = $row->$aliasField;
+        }
+
+        return $pureRow;
     }
 
     /**
