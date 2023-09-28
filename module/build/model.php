@@ -617,21 +617,23 @@ class buildModel extends model
     }
 
     /**
-     * Unlink story
+     * 解除需求关联。
+     * Unlink story.
      *
      * @param  int    $buildID
      * @param  int    $storyID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function unlinkStory(int $buildID, int $storyID): void
+    public function unlinkStory(int $buildID, int $storyID): bool
     {
         $build = $this->getByID($buildID);
         $build->stories = trim(str_replace(",$storyID,", ',', ",$build->stories,"), ',');
         if($build->stories) $build->stories = ',' . $build->stories;
 
-        $this->dao->update(TABLE_BUILD)->set('stories')->eq($build->stories)->where('id')->eq((int)$buildID)->exec();
+        $this->dao->update(TABLE_BUILD)->set('stories')->eq($build->stories)->where('id')->eq($buildID)->exec();
         $this->loadModel('action')->create('story', $storyID, 'unlinkedfrombuild', '', $buildID, '', false);
+        return !dao::isError();
     }
 
     /**

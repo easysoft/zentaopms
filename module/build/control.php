@@ -498,7 +498,8 @@ class build extends control
     }
 
     /**
-     * Unlink story
+     * 解除需求关联。
+     * Unlink story.
      *
      * @param  int    $buildID
      * @param  int    $storyID
@@ -508,6 +509,7 @@ class build extends control
     public function unlinkStory(int $buildID, int $storyID)
     {
         $this->build->unlinkStory($buildID, $storyID);
+
         $this->loadModel('action')->create('build', $buildID, 'unlinkstory', '', $storyID);
         return $this->sendSuccess(array('load' => $this->createLink('build', 'view', "buildID=$buildID&type=story")));
     }
