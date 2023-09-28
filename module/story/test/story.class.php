@@ -368,19 +368,15 @@ class storyTest
     /**
      * Test batch review.
      *
-     * @param  int    $storyIdList
-     * @param  int    $result
-     * @param  int    $reason
+     * @param  array    $storyIdList
+     * @param  string   $result
+     * @param  string   $reason
      * @access public
-     * @return void
+     * @return array
      */
-    public function batchReviewTest($storyIdList, $result, $reason)
+    public function batchReviewTest(array $storyIdList, string $result, string $reason = ''): array
     {
-        $actions = $this->objectModel->batchReview($storyIdList, $result, $reason);
-
-        if(dao::isError()) return dao::getError();
-
-        $storyIdList = array_keys($actions);
+        $this->objectModel->batchReview($storyIdList, $result, $reason);
         return $this->objectModel->getByList($storyIdList);
     }
 

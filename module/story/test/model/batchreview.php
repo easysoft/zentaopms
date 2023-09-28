@@ -4,34 +4,53 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
 
+$story = zdTable('story');
+$story->product->range(1);
+$story->plan->range('0,1,0{100}');
+$story->duplicateStory->range('0,4,0{100}');
+$story->linkStories->range('0,6,0{100}');
+$story->linkRequirements->range('3,0{100}');
+$story->childStories->range('0,8,0{100}');
+$story->toBug->range('0{9},1,0{100}');
+$story->parent->range('0{17},`-1`,0,18,0{100}');
+$story->twins->range('``{27},30,``,28');
+$story->status->range('reviewing');
+$story->version->range('1');
+$story->gen(30);
+
+$storySpec = zdTable('storyspec');
+$storySpec->story->range('1-30');
+$storySpec->version->range('1');
+$storySpec->gen(30);
+
+$storyReview = zdTable('storyreview');
+$storyReview->story->range('1-30');
+$storyReview->reviewer->range('admin');
+$storyReview->version->range('1');
+$storyReview->gen(30);
+
 /**
 
 title=测试 storyModel->batchReview();
 cid=1
 pid=1
 
-批量评审传入三个ID，查看被评审的需求数量 >> 2
-批量评审需求，查看被评审后的需求状态、阶段等信息 >> active,projected,done
-批量评审传入三个ID，查看被评审的需求数量 >> 2
-批量评审需求，查看被评审后的需求状态、阶段等信息 >> closed,closed,bydesign
-批量评审传入三个ID，查看被评审的需求数量 >> 2
-批量评审需求，查看被评审后的需求状态、阶段等信息 >> active,projected,cancel
-
 */
 
 $story = new storyTest();
 
-$storyIdList1 = array(302, 304, '');
-$storyIdList2 = array(308, 310, 0);
-$storyIdList3 = array(314, 316, 2);
+$storyIdList1 = array(1, 28);
+$storyIdList2 = array(2);
 
-$review1 = $story->batchReviewTest($storyIdList1, 'pass', '');
-$review2 = $story->batchReviewTest($storyIdList2, 'reject', 'done'); 
-$review3 = $story->batchReviewTest($storyIdList3, 'pass', '');
+$review1    = $story->batchReviewTest($storyIdList1, 'pass');
+$twin       = $story->objectModel->fetchByID(30);
+$review2    = $story->batchReviewTest($storyIdList2, 'reject', 'done');
+$reviewList = $story->objectModel->dao->select('*')->from(TABLE_STORYREVIEW)->fetchAll('story');
 
-r(count($review1)) && p()                                && e('2');                       // 批量评审传入三个ID，查看被评审的需求数量
-r($review1)        && p('302:status,stage,closedReason') && e('active,projected,done');   // 批量评审需求，查看被评审后的需求状态、阶段等信息
-r(count($review2)) && p()                                && e('2');                       // 批量评审传入三个ID，查看被评审的需求数量
-r($review2)        && p('308:status,stage,closedReason') && e('closed,closed,bydesign');  // 批量评审需求，查看被评审后的需求状态、阶段等信息
-r(count($review3)) && p()                                && e('2');                       // 批量评审传入三个ID，查看被评审的需求数量
-r($review3)        && p('314:status,stage,closedReason') && e('active,projected,cancel'); // 批量评审需求，查看被评审后的需求状态、阶段等信息
+r($review1[1]) && p('status') && r('active');
+r($twin)       && p('status') && r('active');
+r($review2[2]) && p('status') && r('closed');
+r($reviewList[1])  && p('reviewer,result') && r('admin,pass');
+r($reviewList[2])  && p('reviewer,result') && r('admin,reject');
+r($reviewList[28]) && p('reviewer,result') && r('admin,pass');
+r($reviewList[30]) && p('reviewer,result') && r('admin,pass');
