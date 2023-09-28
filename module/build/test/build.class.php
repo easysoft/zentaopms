@@ -459,6 +459,14 @@ class buildTest
         return $this->objectModel->replaceNameWithRelease($allBuilds, $builds, $releases, $branch, $params, $excludedReleaseIdList);
     }
 
+    /**
+     * Test processBuildForUpdate method.
+     *
+     * @param  int    $buildID
+     * @param  int    $type
+     * @access public
+     * @return object
+     */
     public function processBuildForUpdate($buildID, $type)
     {
         $oldBuild = $this->objectModel->getById($buildID);
@@ -470,5 +478,23 @@ class buildTest
         if($type != 'noBranch') $build->branch = '1';
         if($type != 'noBuild') $build->builds = '1,2,3';
         return $this->objectModel->processBuildForUpdate($build, $oldBuild);
+    }
+
+    /**
+     * Is clickable
+     *
+     * @param  string $model
+     * @param  bool   $deleted
+     * @access public
+     * @return void
+     */
+    public function isClickable($model = 'bug', $deleted = false)
+    {
+        $build = new stdclass();
+        $build->executionDeleted = $deleted;
+        $objectModels = $this->objectModel->isClickable($build, 'create', $model);
+        if(dao::isError()) return dao::getError();
+
+        return $objectModels;
     }
 }

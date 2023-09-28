@@ -765,19 +765,19 @@ class buildModel extends model
     }
 
     /**
+     * 检查按钮是否可用。
      * Adjust the action is clickable.
      *
-     * @param  string $bug
+     * @param  object $buikd
      * @param  string $action
      * @param  string $module
      * @access public
-     * @return void
+     * @return bool
      */
-    public static function isClickable($object, $action, $module = 'bug')
+    public static function isClickable(object $build, string $action, string $module = 'bug'): bool
     {
         $action = strtolower($action);
-
-        if($module == 'testtask' and $action == 'create') return !$object->executionDeleted;
+        if($module == 'testtask' && $action == 'create') return !$build->executionDeleted;
 
         return true;
     }
