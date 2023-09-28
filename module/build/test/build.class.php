@@ -347,31 +347,20 @@ class buildTest
     }
 
     /**
-     * Function unlinkBug test by build
+     * 解除Bug跟版本的关联关系。
+     * Unlink bug.
      *
-     * @param  int $buildID
-     * @param  array $bugs
-     * @param  int $bugID
+     * @param  int    $buildID
+     * @param  int    $bugID
      * @access public
-     * @return array
+     * @return mixed
      */
-    public function unlinkBugTest($buildID, $bugs, $bugID)
+    public function unlinkBugTest(int $buildID, int $bugID): mixed
     {
-        global $tester;
-
-        $createFields = array('bugs' => $bugs);
-
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-
-        $this->objectModel->linkBug($buildID);
         $this->objectModel->unlinkBug($buildID, $bugID);
-
-        $objects = $tester->dao->select('*')->from(TABLE_BUILD)->where('id')->in($buildID)->fetchAll('id');
-
-        unset($_POST);
+        $objects = $this->objectModel->dao->select('*')->from(TABLE_BUILD)->where('id')->in($buildID)->fetch();
 
         if(dao::isError()) return dao::getError();
-
         return $objects;
     }
 

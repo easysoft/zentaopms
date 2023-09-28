@@ -689,6 +689,7 @@ class buildModel extends model
     }
 
     /**
+     * 解除Bug跟版本的关联关系。
      * Unlink bug.
      *
      * @param  int    $buildID
@@ -699,10 +700,12 @@ class buildModel extends model
     public function unlinkBug(int $buildID, int $bugID): void
     {
         $build = $this->getByID($buildID);
+        if(!$build) return;
+
         $build->bugs = trim(str_replace(",$bugID,", ',', ",$build->bugs,"), ',');
         if($build->bugs) $build->bugs = ',' . $build->bugs;
 
-        $this->dao->update(TABLE_BUILD)->set('bugs')->eq($build->bugs)->where('id')->eq((int)$buildID)->exec();
+        $this->dao->update(TABLE_BUILD)->set('bugs')->eq($build->bugs)->where('id')->eq($buildID)->exec();
         $this->loadModel('action')->create('bug', $bugID, 'unlinkedfrombuild', '', $buildID, '', false);
     }
 

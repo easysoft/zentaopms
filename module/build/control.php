@@ -722,12 +722,13 @@ class build extends control
     }
 
     /**
-     * Unlink story
+     * 解除Bug跟版本的关联关系。
+     * Unlink bug.
      *
      * @param  int    $buildID
      * @param  int    $bugID
      * @access public
-     * @return bool
+     * @return void
      */
     public function unlinkBug(int $buildID, int $bugID)
     {
