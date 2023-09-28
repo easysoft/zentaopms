@@ -942,7 +942,8 @@ class testtaskModel extends model
     }
 
     /**
-     * Get test runs of a suite.
+     * 根据一个测试套件获取一个测试单关联的测试用例。
+     * Get cases associated with a testtask according by a test suite.
      *
      * @param  int    $taskID
      * @param  int    $suiteID
@@ -951,7 +952,7 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getRunsBySuite($taskID, $suiteID, $orderBy, $pager = null)
+    public function getRunsBySuite(int $taskID, int $suiteID, string $orderBy, object $pager = null): array
     {
         /* Select the table for these special fields. */
         $specialFields = ',assignedTo,status,lastRunResult,lastRunner,lastRunDate,';
@@ -963,7 +964,7 @@ class testtaskModel extends model
         return $this->dao->select('t2.*,t1.*,t2.version as caseVersion,t3.title as storyTitle,t2.status as caseStatus')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
-            ->where('t1.task')->eq((int)$taskID)
+            ->where('t1.task')->eq($taskID)
             ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t2.id')->in(array_keys($cases))
             ->orderBy($orderBy)
