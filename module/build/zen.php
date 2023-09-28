@@ -128,7 +128,18 @@ class buildZen extends build
         $this->display();
     }
 
-    protected function assignProductVarsForView(object $build, string $type, string $sort, object $storyPager)
+    /**
+     * 生成的版本详情页面的产品数据。
+     * Generate the product data for the build view page.
+     *
+     * @param  object    $build
+     * @param  string    $type
+     * @param  string    $sort
+     * @param  object    $storyPager
+     * @access protected
+     * @return void
+     */
+    protected function assignProductVarsForView(object $build, string $type, string $sort, object $storyPager): void
     {
         $this->loadModel('branch');
 
