@@ -9,7 +9,7 @@
  * 度量名称：按系统统计的年度新增Bug数
  * 单位：个
  * 描述：按系统统计的年度新增Bug数是指在一年内新发现的Bug数量。反映了一个系统或软件每年新增的Bug数量，用于评估评估系统质量、变更管理、资源规划、过程改进和趋势分析等方面。
- * 定义：所有Bug个数求和。;创建时间为某年。;过滤已删除的Bug。;过滤已删除的产品。;
+ * 定义：所有Bug个数求和;创建时间为某年;过滤已删除的Bug;过滤已删除的产品;
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
