@@ -45,6 +45,7 @@ $lang->metric->collectConf   = '定时设置';
 $lang->metric->verifyFile    = '校验文件';
 $lang->metric->verifyResult  = '校验结果';
 $lang->metric->publish       = '发布';
+$lang->metric->moveFailTip   = '移动度量项文件失败';
 $lang->metric->selectCount   = '已选<span class="font-medium checked-count">%s</span>项';
 $lang->metric->testMetric    = '测试度量';
 $lang->metric->calcTime      = '采集时间';
