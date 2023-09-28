@@ -1,4 +1,4 @@
-$(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
+$(document).off('click', '[data-formaction]').on('click', '[data-formaction]', function()
 {
     const $this       = $(this);
     const dtable      = zui.DTable.query($('#stories'));

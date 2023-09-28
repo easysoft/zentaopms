@@ -1443,7 +1443,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function batchChangeModule($storyIdList, $moduleID)
+    public function batchChangeModule(array $storyIdList, int $moduleID): array
     {
         $now        = helper::now();
         $allChanges = array();
@@ -1451,6 +1451,7 @@ class storyModel extends model
         foreach($storyIdList as $storyID)
         {
             $oldStory = $oldStories[$storyID];
+            if(empty($oldStory)) continue;
             if($moduleID == $oldStory->module) continue;
 
             $story = new stdclass();

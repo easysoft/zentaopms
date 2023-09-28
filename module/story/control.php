@@ -909,7 +909,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function batchChangeModule($moduleID, $storyType = 'story')
+    public function batchChangeModule(int $moduleID, string $storyType = 'story')
     {
         if(empty($_POST['storyIdList'])) return $this->send(array('result' => 'success', 'load' => true));
 
