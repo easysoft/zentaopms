@@ -40,7 +40,8 @@ $config->upgrade->maxVersion['max4_4_beta1']  = '18_4_beta1';
 $config->upgrade->maxVersion['max4_4']        = '18_4';
 $config->upgrade->maxVersion['max4_5']        = '18_5';
 $config->upgrade->maxVersion['max4_6']        = '18_6';
-$config->upgrade->maxVersion['max4_7']        = '18_7'; // max insert position.
+$config->upgrade->maxVersion['max4_7']        = '18_7';
+$config->upgrade->maxVersion['max4_8']        = '18_8'; // max insert position.
 
 $config->upgrade->bizVersion = array();
 $config->upgrade->bizVersion['biz1_0']        = '9_5_1';
@@ -119,7 +120,8 @@ $config->upgrade->bizVersion['biz8_4_beta1']  = '18_4_beta1';
 $config->upgrade->bizVersion['biz8_4']        = '18_4';
 $config->upgrade->bizVersion['biz8_5']        = '18_5';
 $config->upgrade->bizVersion['biz8_6']        = '18_6';
-$config->upgrade->bizVersion['biz8_7']        = '18_7'; // biz insert position.
+$config->upgrade->bizVersion['biz8_7']        = '18_7';
+$config->upgrade->bizVersion['biz8_8']        = '18_8'; // biz insert position.
 
 $config->upgrade->proVersion = array();
 $config->upgrade->proVersion['pro1_0']        = '3_1';
@@ -235,7 +237,8 @@ $config->upgrade->ipdVersion = array();
 $config->upgrade->ipdVersion['ipd1_0_beta1'] = '18_4_alpha1';
 $config->upgrade->ipdVersion['ipd1_0']       = '18_5';
 $config->upgrade->ipdVersion['ipd1_0_1']     = '18_6';
-$config->upgrade->ipdVersion['ipd1_0_2']     = '18_7'; // ipd insert position.
+$config->upgrade->ipdVersion['ipd1_0_2']     = '18_7';
+$config->upgrade->ipdVersion['ipd1_1']       = '18_8'; // ipd insert position.
 
 $config->upgrade->lowerTables = array();
 $config->upgrade->lowerTables[$config->db->prefix . 'caseStep']       = $config->db->prefix . 'casestep';
