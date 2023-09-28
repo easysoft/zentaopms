@@ -44,6 +44,14 @@ class dbh
     private $config;
 
     /**
+     * The SQL string of last query.
+     *
+     * @var string
+     * @access private
+     */
+    private $sql;
+
+    /**
      * Constructor
      *
      * @param object $config
@@ -75,6 +83,21 @@ class dbh
     }
 
     /**
+     * Process PDO/SQL error.
+     *
+     * @param  object $exception
+     * @access public
+     * @return void
+     */
+    public function sqlError(object $exception)
+    {
+        $sql      = $this->sql;
+        $message  = $exception->getMessage();
+        $message .= " ,the sql is: '{$sql}'";
+        throw new PDOException($message);
+    }
+
+    /**
      * Execute sql.
      *
      * @param string $sql
@@ -87,20 +110,36 @@ class dbh
         if(!$sql) return true;
 
         if(!empty($this->config->enableSqlite)) $this->pushSqliteQueue($sql);
-        return $this->pdo->exec($sql);
+
+        try
+        {
+            return $this->pdo->exec($sql);
+        }
+        catch(PDOException $e)
+        {
+            $this->sqlError($e);
+        }
     }
 
     /**
      * Query sql.
      *
-     * @param string $sql
+     * @param  string $sql
+     * @see    https://www.php.net/manual/en/pdo.query.php
      * @access public
      * @return PDOStatement|false
      */
     public function query($sql)
     {
         $sql = $this->formatSQL($sql);
-        return $this->pdo->query($sql);
+        try
+        {
+            return $this->pdo->query($sql);
+        }
+        catch(PDOException $e)
+        {
+            $this->sqlError($e);
+        }
     }
 
     /**
@@ -112,7 +151,17 @@ class dbh
      */
     public function prepare($sql)
     {
-        $this->statement = $this->pdo->prepare($sql);
+        $this->sql = $sql;
+
+        try
+        {
+            $this->statement = $this->pdo->prepare($sql);
+        }
+        catch(PDOException $e)
+        {
+            $this->sqlError($e);
+        }
+
         return $this->statement;
     }
 
@@ -127,7 +176,15 @@ class dbh
     public function execute($sql, $params)
     {
         $this->statement = $this->prepare($sql);
-        $this->statement->execute($params);
+
+        try
+        {
+            $this->statement->execute($params);
+        }
+        catch(PDOException $e)
+        {
+            $this->sqlError($e);
+        }
 
         return $this->statement;
     }
@@ -141,7 +198,14 @@ class dbh
      */
     public function rawQuery($sql)
     {
-        return $this->pdo->query($sql);
+        try
+        {
+            return $this->pdo->query($sql);
+        }
+        catch(PDOException $e)
+        {
+            $this->sqlError($e);
+        }
     }
 
     /**
@@ -273,6 +337,8 @@ class dbh
      */
     public function formatSQL($sql)
     {
+        $this->sql = $sql;
+
         switch($this->config->driver)
         {
             case 'dm':
