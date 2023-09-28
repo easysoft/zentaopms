@@ -1148,9 +1148,10 @@ class testtaskModel extends model
     }
 
     /**
-     * Get testtasks by case id list.
+     * 根据用例 ID 分组获取关联的测试单。
+     * Get testtasks associated with cases by case ID.
      *
-     * @param  string|array $caseIDList
+     * @param  int|array $caseIDList
      * @access public
      * @return array
      */
