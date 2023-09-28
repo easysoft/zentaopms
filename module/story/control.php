@@ -639,9 +639,9 @@ class story extends control
      * @access public
      * @return void
      */
-    public function recall($storyID, $from = 'list', $confirm = 'no', $storyType = 'story')
+    public function recall(int $storyID, string $from = 'list', string $confirm = 'no', string $storyType = 'story')
     {
-        $story = $this->story->getById($storyID);
+        $story = $this->story->fetchById($storyID);
 
         if($confirm == 'no')
         {

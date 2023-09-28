@@ -1212,19 +1212,25 @@ class storyModel extends model
      * @access public
      * @return void
      */
-    public function recallChange($storyID)
+    public function recallChange(int $storyID): void
     {
-        $oldStory = $this->getById($storyID);
+        $oldStory = $this->fetchById($storyID);
+        if(empty($oldStory)) return;
 
         /* Update story title and version and status. */
-        $story = clone $oldStory;
-        $story->version = $oldStory->version - 1;
-        $story->title   = $this->dao->select('title')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWHere('version')->eq($story->version)->fetch('title');
-        $story->status  = 'active';
-        $this->dao->update(TABLE_STORY)->set('title')->eq($story->title)->set('version')->eq($story->version)->set('status')->eq($story->status)->where('id')->eq($storyID)->exec();
+        $twinsIdList = $storyID . ($oldStory->twins ? ",{$oldStory->twins}" : '');
+        $titleList   = $this->dao->select('story,title')->from(TABLE_STORYSPEC)->where('story')->in($twinsIdList)->andWHere('version')->eq($oldStory->version - 1)->fetchAll('story');
+
+        foreach(explode(',', $twinsIdList) as $twinID)
+        {
+            $story = new stdclass();
+            $story->title   = $titleList[$twinID]->title;
+            $story->version = $oldStory->version - 1;
+            $story->status  = 'active';
+            $this->dao->update(TABLE_STORY)->set('title')->eq($story->title)->set('version')->eq($story->version)->set('status')->eq($story->status)->where('id')->eq($storyID)->exec();
+        }
 
         /* Delete versions that is after this version. */
-        $twinsIdList = $storyID . ($oldStory->twins ? ",{$oldStory->twins}" : '');
         $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->in($twinsIdList)->andWHere('version')->eq($oldStory->version)->exec();
         $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->in($twinsIdList)->andWhere('version')->eq($oldStory->version)->exec();
 
