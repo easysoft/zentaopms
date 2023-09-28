@@ -661,7 +661,6 @@ $lang->ai->formSchema['testcase']['create']->properties->stage                  
 $lang->ai->formSchema['testcase']['create']->properties->title                            = new stdclass();
 $lang->ai->formSchema['testcase']['create']->properties->precondition                     = new stdclass();
 $lang->ai->formSchema['testcase']['create']->properties->steps                            = new stdclass();
-$lang->ai->formSchema['testcase']['create']->properties->expects                          = new stdclass();
 $lang->ai->formSchema['testcase']['create']->properties->steps->items                     = new stdclass();
 $lang->ai->formSchema['testcase']['create']->properties->steps->items->properties         = new stdclass();
 $lang->ai->formSchema['testcase']['create']->properties->steps->items->properties->steps   = new stdclass();
