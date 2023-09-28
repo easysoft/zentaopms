@@ -809,6 +809,13 @@ $lang->action->dynamicAction->ai['edited']      = 'Edited prompt';
 $lang->action->dynamicAction->ai['published']   = 'Published prompt';
 $lang->action->dynamicAction->ai['unpublished'] = 'Unpublished prompt';
 
+$lang->action->dynamicAction->metric['created']   = 'Create Metric';
+$lang->action->dynamicAction->metric['edited']    = 'Edit Metric';
+$lang->action->dynamicAction->metric['deleted']   = 'Delete Metric';
+$lang->action->dynamicAction->metric['undeleted'] = 'Undelete Metric';
+$lang->action->dynamicAction->metric['delist']    = 'Delist Metric';
+$lang->action->dynamicAction->metric['publish']   = 'Publish Metric';
+
 /* Generate the corresponding object link. */
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';
 $lang->action->label->productplan = 'Plan|productplan|view|productID=%s';
