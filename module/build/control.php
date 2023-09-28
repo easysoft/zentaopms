@@ -515,6 +515,7 @@ class build extends control
     }
 
     /**
+    * 检查并输出移除移除需求和Bug分支的提示信息。
     * AJAX: Get unlinkBranch story and bug.
     *
     * @param  int    $buildID
@@ -522,37 +523,38 @@ class build extends control
     * @access public
     * @return void
     */
-    public function ajaxGetBranch($buildID, $newBranch)
+    public function ajaxGetBranch(int $buildID, int $newBranch)
     {
-        $build        = $this->build->getByID($buildID);
-        $oldBranch    = $build->branch;
+        $build = $this->build->getByID($buildID);
+        if(!$build) return '';
+
         $buildStories = $build->allStories ? $this->loadModel('story')->getByList($build->allStories) : array();
         $buildBugs    = $build->allBugs ? $this->loadModel('bug')->getByIdList($build->allBugs) : array();
         $branchPairs  = $this->loadModel('branch')->getPairs($build->product);
         $typeName     = $this->lang->product->branchName[$build->productType];
 
         $removeBranches = '';
-        foreach(explode(',', $oldBranch) as $oldBranchID)
+        foreach(explode(',', $build->branch) as $oldBranchID)
         {
-            if($oldBranchID and strpos(",$newBranch,", ",$oldBranchID,") === false) $removeBranches .= "{$branchPairs[$oldBranchID]},";
+            if($oldBranchID && strpos(",$newBranch,", ",$oldBranchID,") === false) $removeBranches .= "{$branchPairs[$oldBranchID]},";
         }
 
         $unlinkStoryCounts = 0;
         $unlinkBugCounts   = 0;
-        if($oldBranch)
+        if($build->branch)
         {
             foreach($buildStories as $storyID => $story)
             {
-                if($story->branch and strpos(",$newBranch,", ",$story->branch,") === false) $unlinkStoryCounts ++;
+                if($story->branch && strpos(",$newBranch,", ",$story->branch,") === false) $unlinkStoryCounts ++;
             }
 
             foreach($buildBugs as $bugID => $bug)
             {
-                if($bug->branch and strpos(",$newBranch,", ",$bug->branch,") === false) $unlinkBugCounts ++;
+                if($bug->branch && strpos(",$newBranch,", ",$bug->branch,") === false) $unlinkBugCounts ++;
             }
         }
 
-        if($unlinkStoryCounts and $unlinkBugCounts)
+        if($unlinkStoryCounts && $unlinkBugCounts)
         {
             printf($this->lang->build->confirmChangeBuild, $typeName, trim($removeBranches, ','), $typeName, $unlinkStoryCounts, $unlinkBugCounts);
         }
