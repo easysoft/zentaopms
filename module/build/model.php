@@ -937,7 +937,7 @@ class buildModel extends model
      * @access public
      * @return array
      */
-    public function getstoryList(string $storyIdList, int $branch = 0, string $orderBy = '', object $pager = null): array
+    public function getStoryList(string $storyIdList, int $branch = 0, string $orderBy = '', object $pager = null): array
     {
         $stories = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_STORY)
             ->where('id')->in($storyIdList)

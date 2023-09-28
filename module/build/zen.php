@@ -146,7 +146,7 @@ class buildZen extends build
         $product = $this->loadModel('product')->getByID($build->product);
         if($product->type != 'normal') $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
 
-        $stories = $this->build->getstoryList($build->allStories, (int)$build->branch, $type == 'story' ? $sort : '', $storyPager);
+        $stories = $this->build->getStoryList($build->allStories, (int)$build->branch, $type == 'story' ? $sort : '', $storyPager);
 
         $branchName = '';
         if($build->productType != 'normal')
