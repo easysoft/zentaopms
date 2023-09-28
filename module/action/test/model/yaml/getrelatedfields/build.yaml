@@ -4,7 +4,7 @@ desc: ""
 version: "1.0"
 fields:
   - field: id
-    range: 11
+    range: 1,11{1}
   - field: artifactRepoID
     range: 1
 

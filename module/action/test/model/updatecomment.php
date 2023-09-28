@@ -27,6 +27,6 @@ $uidList      = array('', uniqid());
 $action = new actionTest();
 $file   = new fileTest();
 
-r($action->updateCommentTest($actionIDList[0], $commentList[0], $uidList[0])) && p('comment')             && e('备注1');    // 测试更新action 1的备注
-r($action->updateCommentTest($actionIDList[1], $commentList[1], $uidList[1])) && p('comment')             && e('备注2');    // 测试更新action 2的备注
-r($file->getByIdTest(1))                                                      && p('objectType;objectID') && e('story;2');  //测试文件是否更新成功
+r($action->updateCommentTest($actionIDList[0], $commentList[0], $uidList[0])) && p('comment')             && e('备注1');    // 测试更新action 1的备注, 备注被成功更新为备注1
+r($action->updateCommentTest($actionIDList[1], $commentList[1], $uidList[1])) && p('comment')             && e('备注2');    // 测试更新action 2的备注, 备注被成功更新为备注2
+r($file->getByIdTest(1))                                                      && p('objectType;objectID') && e('story;2');  //测试文件是否更新成功, 文件的objectType和objectID被更新为story和2

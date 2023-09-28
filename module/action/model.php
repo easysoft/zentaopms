@@ -122,186 +122,84 @@ class actionModel extends model
      */
     public function getRelatedFields(string $objectType, int $objectID, string $actionType = '', string $extra = ''): array
     {
-        $emptyRecord = array('product' => '0', 'project' => 0, 'execution' => 0);
+        $product   = array(0);
+        $project   = 0;
+        $execution = 0;
 
-        switch($objectType)
+        if(in_array($objectType, array('project', 'execution', 'product', 'program')))
         {
-            case 'program':
-                $emptyRecord['product'] = ',0,';
-                return $emptyRecord;
-            case 'product':
-                return array('product' => ",$objectID,", 'project' => 0, 'execution' => 0);
-            case 'project':
-            case 'execution':
-                $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectID)->fetchPairs('product');
-                $productList = ',' . join(',', array_keys($products)) . ',';
+            list($product, $project, $execution) = $this->actionTao->getNoFilterRequiredRelation($objectType, $objectID);
 
-                $relation = array($objectType => $objectID, 'product' => $productList);
-
-                if($objectType == 'execution')
-                {
-                    $project = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($objectID)->fetch('project');
-                    $relation['project'] = $project;
-                }
-                else
-                {
-                    $relation['execution'] = 0;
-                }
-
-                return $relation;
+            return array('product' => ',' . implode(',', $product) . ',', 'project' => $project, 'execution' => $execution);
         }
 
         /* 过滤不在配置项中的类型。 */
         /* Filter object types not in configuration items。 */
         if(strpos($this->config->action->needGetRelateField, ",{$objectType},") !== false)
         {
-            if(!isset($this->config->objectTables[$objectType]))
-            {
-                $emptyRecord['product'] = ',0,';
-                return $emptyRecord;
-            }
-
-            $record = $emptyRecord;
+            $table = $this->config->objectTables[$objectType] ?? '';
             switch($objectType)
             {
                 case 'story':
-                    if($actionType == 'linked2build' || $actionType == 'unlinkedfrombuild')
-                    {
-                        $build = $this->dao->select('project,execution')->from(TABLE_BUILD)->where('id')->eq((int)$extra)->fetch();
-                        $record['project']   = $build->project;
-                        $record['execution'] = $build->execution;
-                    }
-                    elseif($actionType == 'estimated')
-                    {
-                        $record['project']   = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq((int)$extra)->fetch('project');
-                        $record['execution'] = (int)$extra;
-                    }
-                    else
-                    {
-                        $projects = $this->dao->select('t2.id,t2.project,t2.type')->from(TABLE_PROJECTSTORY)->alias('t1')
-                            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-                            ->where('t1.story')->eq($objectID)
-                            ->fetchAll();
-                        foreach($projects as $project)
-                        {
-                            if($project->type == 'project')
-                            {
-                                $record['project'] = $project->id;
-                                continue;
-                            }
-                            $record['project']   = $project->project;
-                            $record['execution'] = $project->id;
-                        }
-                    }
+                    list($product, $project, $execution) = $this->actionTao->getStoryActionRelated($objectType, $objectID, (int)$extra);
                 case 'productplan':
                 case 'branch':
-                    $record['product'] = $objectID == 0 ? $extra : $this->dao->select('product')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch('product');
+                    $product = $objectID == 0 ? $extra : $this->dao->select('product')->from($table)->where('id')->eq($objectID)->fetch('product');
                     break;
                 case 'testcase':
                 case 'case':
-                    $result = $this->dao->select('product, project, execution')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
-                    $record['product']   = $result->product;
-                    $record['project']   = $result->project;
-                    $record['execution'] = $result->execution;
-                    if(strpos(',linked2testtask,unlinkedfromtesttask,assigned,run,', ',' . $actionType . ',') !== false && (int)$extra)
-                    {
-                        $testtask = $this->dao->select('project,execution')->from(TABLE_TESTTASK)->where('id')->eq((int)$extra)->fetch();
-                        $record['project']   = $testtask->project;
-                        $record['execution'] = $testtask->execution;
-                    }
+                    list($product, $project, $execution) = $this->actionTao->getCaseRelated($objectType, $actionType, $objectID, (int)$extra);
                     break;
                 case 'build':
                 case 'bug':
                 case 'testtask':
                 case 'doc':
-                    $result = $this->dao->select('product, project, execution')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
-                    $record['product']   = $result->product;
-                    $record['project']   = $result->project;
-                    $record['execution'] = $result->execution;
+                    list($product, $project, $execution) = $this->actionTao->getGenerateRelated($objectType, $objectID);
                     break;
                 case 'repo':
                     $record['execution'] = $this->dao->select('execution')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch('execution');
                     break;
                 case 'release':
-                    $result = $this->dao->select('product, build')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
-                    $record['product'] = $result->product;
-                    $record['project'] = $this->dao->select('project')->from(TABLE_BUILD)->where('id')->eq($result->build)->fetch('project');
+                    list($product, $project, $execution) = $this->actionTao->getReleaseRelated($objectType, $objectID);
                     break;
                 case 'task':
-                    $fields = 'project, execution, story';
-                    $result = $this->dao->select($fields)->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
-                    if(empty($result)) break;
-
-                    if($result->story != 0)
-                    {
-                        $product = $this->dao->select('product')->from(TABLE_STORY)->where('id')->eq($result->story)->fetchPairs('product');
-                        $record['product'] = join(',', array_keys($product));
-                    }
-                    else
-                    {
-                        $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($result->execution)->fetchPairs('product');
-                        $record['product'] = join(',', array_keys($products));
-                    }
-                    $record['project']   = $result->project;
-                    $record['execution'] = $result->execution;
+                    list($product, $project, $execution) = $this->actionTao->getTaskReleated($objectType, $objectID);
                     break;
                 case 'kanbanlane':
-                    $record['execution'] = $this->dao->select('execution')->from(TABLE_KANBANLANE)->where('id')->eq($objectID)->fetch('execution');
+                    $execution = $this->dao->select('execution')->from(TABLE_KANBANLANE)->where('id')->eq($objectID)->fetch('execution');
                     break;
                 case 'kanbancolumn':
-                    $record['execution'] = $extra;
+                    $execution = $extra;
                     break;
                 case 'team':
                     $team = $this->dao->select('type')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch();
                     $type = $team->type == 'project' ? 'project' : 'execution';
-                    $record[$type] = $objectID;
+                    ${$type} = $objectID;
                     break;
                 case 'whitelist':
-                    if($extra == 'product') $record['product'] = $objectID;
-                    if($extra == 'project') $record['project'] = $objectID;
-                    if($extra == 'sprint' || $extra == 'stage') $record['execution'] = $objectID;
+                    if($extra == 'product') $product = $objectID;
+                    if($extra == 'project') $project = $objectID;
+                    if($extra == 'sprint' || $extra == 'stage') $execution = $objectID;
                     break;
                 case 'module':
-                    if(strpos(',deleted,', ",$actionType,") === false) $module = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in($extra)->fetch();
-                    if(strpos(',deleted,', ",$actionType,") !== false) $module = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($objectID)->fetch();
-                    if(!empty($module) && $module->type == 'story') $record['product'] = $module->root;
+                    $value = $actionType == 'deleted' ? $extra : $objectID;
+                    $module = $this->dao->select('type,root')->from(TABLE_MODULE)->where('id')->eq($value)->fetch();
+                    if(!empty($module) && $module->type == 'story') $product = $module->root;
                     break;
                 case 'review':
-                    $result = $this->dao->select('*')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
-                    if($result)
-                    {
-                        $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($result->project)->fetchPairs('product');
-                        $record['product']   = join(',', !empty($products) ? array_keys($products) : array(0));
-                        $record['project']   = zget($result, 'project', 0);
-                    }
+                    list($product, $project, $execution) = $this->actionTao->getReviewRelated($objectType, $objectID);
                     break;
                 default:
-                    $result = $this->dao->select('*')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
-                    $record['product']   = zget($result, 'product', '0');
-                    $record['project']   = zget($result, 'project', 0);
-                    $record['execution'] = zget($result, 'execution', 0);
+                    list($product, $project, $execution) = $this->actionTao->getGenerateRelated($objectType, $objectID, '*');
             }
 
-            if($actionType == 'unlinkedfromproject' || $actionType == 'linked2project') $record['project'] = (int)$extra ;
-            if(in_array($actionType, array('unlinkedfromexecution', 'linked2execution', 'linked2kanban'))) $record['execution'] = (int)$extra;
+            if($actionType == 'unlinkedfromproject' || $actionType == 'linked2project') $project = (int)$extra ;
+            if(in_array($actionType, array('unlinkedfromexecution', 'linked2execution', 'linked2kanban'))) $execution = (int)$extra;
 
-            if($record)
-            {
-                $record['product'] = isset($record['product']) ? ',' . $record['product'] . ',' : ',0,';
-                if(empty($record['project']))   $record['project']   = 0;
-                if(empty($record['execution'])) $record['execution'] = 0;
-
-                if(!empty($record['execution']) && empty($record['project'])) $record['project'] = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($record['execution'])->fetch('project');
-                return $record;
-            }
-        }
-        else
-        {
-            $emptyRecord['product'] = ',0,';
-            return $emptyRecord;
+            if($execution && !$project) $project = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($execution)->fetch('project');
         }
 
-        return $emptyRecord;
+        return array('product' => is_int($product) || is_string($product) ? ',' . $product . ',' : ',' . implode(',', $product) . ',', 'project' => $project, 'execution' => $execution);
     }
 
     /**
@@ -762,7 +660,7 @@ class actionModel extends model
         {
             if($this->session->trashQuery == false) $this->session->set('trashQuery', ' 1 = 1');
         }
-        
+
         $extra      = $type == 'hidden' ? self::BE_HIDDEN : self::CAN_UNDELETED;
         $trashQuery = $this->session->trashQuery;
         $trashQuery = str_replace(array('`objectID`', '`actor`', '`date`'), array('t1.`objectID`', 't1.`actor`', 't1.`date`'), $trashQuery);
@@ -799,7 +697,7 @@ class actionModel extends model
                 ->page($pager)
                 ->fetchAll('objectID');
         }
-        
+
         return $trashes;
     }
 
@@ -1977,12 +1875,12 @@ class actionModel extends model
     public function undelete(int $actionID): string|bool
     {
         if($actionID <= 0) return false;
-        
+
         $action = $this->getById($actionID);
         if(!$action || $action->action != 'deleted') return false;
 
         $table = $this->config->objectTables[$action->objectType];
-        
+
         $orderby = '';
         $field   = '*';
         switch($action->objectType)
@@ -2006,7 +1904,7 @@ class actionModel extends model
 
         $object = $this->actionTao->getObjectBaseInfo($table, array('id' => $action->objectID), $field, $orderby);
         if(empty($object)) return false;
-        
+
         if($action->objectType == 'execution')
         {
             if($object->deleted && empty($object->project)) return $this->lang->action->undeletedTips;
@@ -2069,7 +1967,7 @@ class actionModel extends model
             if($scenerow->deleted) return $this->lang->action->refusescene;
         }
 
-        if($action->objectType == 'doc') 
+        if($action->objectType == 'doc')
         {
             $table = TABLE_DOC;
             if($object->files) $this->dao->update(TABLE_FILE)->set('deleted')->eq('0')->where('id')->in($object->files)->exec();
