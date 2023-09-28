@@ -659,7 +659,7 @@ class productModel extends model
         {
             $storyMethods = ",create,batchcreate,batchclose,";
             if(strpos($storyMethods, "," . $currentMethod . ",") === false) $currentModule = 'product';
-            if($currentMethod == 'view' or $currentMethod == 'change' or $currentMethod == 'review') $currentMethod = 'browse';
+            if($currentMethod == 'view' or $currentMethod == 'change' or $currentMethod == 'review' or $currentMethod == 'edit') $currentMethod = 'browse';
         }
         if($currentModule == 'testcase' and strpos(',view,edit,', ",$currentMethod,") !== false) $currentMethod = 'browse';
         if($currentModule == 'bug' and $currentMethod == 'edit') $currentMethod = 'browse';
