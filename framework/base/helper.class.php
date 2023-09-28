@@ -263,7 +263,8 @@ class baseHelper
         $sqlParts = explode(',', $sql);
         $wrappedParts = [];
 
-        foreach ($sqlParts as $part) {
+        foreach ($sqlParts as $part)
+        {
             if(in_array($part, $reservedWords))
             {
                 $wrappedParts[] = '`' . $part . '`';
@@ -279,7 +280,6 @@ class baseHelper
                 {
                     $wrappedParts[] = '`' . $part . '`';
                 }
-
             }
         }
 
