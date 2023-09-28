@@ -1189,16 +1189,16 @@ class storyModel extends model
      * @access public
      * @return void
      */
-    public function recallReview($storyID)
+    public function recallReview(int $storyID): void
     {
-        $oldStory  = $this->getById($storyID);
-        $isChanged = $oldStory->changedBy ? true : false;
-
-        $story = clone $oldStory;
-        $story->status = $isChanged ? 'changing' : 'draft';
-        $this->dao->update(TABLE_STORY)->set('status')->eq($story->status)->where('id')->eq($storyID)->exec();
-
+        $oldStory    = $this->fetchById($storyID);
+        $isChanged   = $oldStory->changedBy ? true : false;
         $twinsIdList = $storyID . ($oldStory->twins ? ",{$oldStory->twins}" : '');
+
+        $story = new stdclass();
+        $story->status = $isChanged ? 'changing' : 'draft';
+        $this->dao->update(TABLE_STORY)->set('status')->eq($story->status)->where('id')->in($twinsIdList)->exec();
+
         $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->in($twinsIdList)->andWhere('version')->eq($oldStory->version)->exec();
 
         $changes = common::createChanges($oldStory, $story);
@@ -1242,59 +1242,31 @@ class storyModel extends model
      * Submit review.
      *
      * @param  int    $storyID
+     * @param  object $story
      * @access public
      * @return array|bool
      */
-    public function submitReview($storyID)
+    public function submitReview(int $storyID, object $story): array|false
     {
-        if(isset($_POST['reviewer'])) $_POST['reviewer'] = array_filter($_POST['reviewer']);
-        if(!$this->post->needNotReview and empty($_POST['reviewer']))
-        {
-            dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
-            return false;
-        }
+        $story->reviewer = array_filter($story->reviewer);
+        if(empty($story->reviewer)) return false;
 
         $oldStory     = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
         $reviewerList = $this->getReviewerPairs($oldStory->id, $oldStory->version);
         $oldStory->reviewer = implode(',', array_keys($reviewerList));
 
-        $story = fixer::input('post')
-            ->setDefault('status', 'active')
-            ->setDefault('reviewer', '')
-            ->setDefault('reviewedBy', '')
-            ->remove('needNotReview')
-            ->join('reviewer', ',')
-            ->get();
-
         $twinsIdList = $storyID . ($oldStory->twins ? ",{$oldStory->twins}" : '');
         $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->in($twinsIdList)->andWhere('version')->eq($oldStory->version)->exec();
 
-        if(isset($_POST['reviewer']))
+        foreach(explode(',', $twinsIdList) as $twinID)
         {
-            foreach($this->post->reviewer as $reviewer)
-            {
-                if(empty($reviewer)) continue;
-
-                $reviewData = new stdclass();
-                $reviewData->story    = $storyID;
-                $reviewData->version  = $oldStory->version;
-                $reviewData->reviewer = $reviewer;
-                $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
-
-                /* Sync twins. */
-                if(!empty($oldStory->twins))
-                {
-                    foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
-                    {
-                        $reviewData->story = $twinID;
-                        $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
-                    }
-                }
-            }
-            $story->status = 'reviewing';
+            if(empty($twinID)) continue;
+            $this->storyTao->doCreateReviewer($twinID, $story->reviewer, $oldStory->version);
         }
 
-        $this->dao->update(TABLE_STORY)->data($story, 'reviewer')->where('id')->eq($storyID)->exec();
+        $story->reviewer = implode(',', $story->reviewer);
+        $story->status   = 'reviewing';
+        $this->dao->update(TABLE_STORY)->data($story, 'reviewer')->where('id')->in($twinsIdList)->exec();
 
         $changes = common::createChanges($oldStory, $story);
         if(!empty($oldStory->twins)) $this->syncTwins($storyID, $oldStory->twins, $changes, 'submitReview');
@@ -4838,7 +4810,7 @@ class storyModel extends model
             $fieldName  = $changeInfo['field'];
             $fieldValue = $changeInfo['new'];
 
-            if(str_contains(',product,branch,module,plan,stage,stagedBy,spec,verify,files,reviewers,', ",{$fieldName},")) continue;
+            if(str_contains(',product,branch,module,plan,stage,stagedBy,spec,verify,files,reviewers,reviewer,', ",{$fieldName},")) continue;
             $syncFieldList[$fieldName] = $fieldValue;
         }
         if(empty($syncFieldList)) return;

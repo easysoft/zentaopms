@@ -158,3 +158,7 @@ $config->story->form->close['assignedDate']   = array('type' => 'datetime', 'req
 $config->story->form->close['duplicateStory'] = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->story->form->close['childStories']   = array('type' => 'string',   'required' => false, 'default' => '');
 $config->story->form->close['closeSync']      = array('type' => 'string',   'required' => false, 'default' => '');
+
+$config->story->form->submitReview = array();
+$config->story->form->submitReview['reviewer']   = array('type' => 'array',  'control' => 'multi-select', 'required' => false, 'default' => '');
+$config->story->form->submitReview['reviewedBy'] = array('type' => 'string', 'control' => 'hidden', 'required' => false, 'default' => '');

@@ -1706,6 +1706,23 @@ class storyZen extends story
     }
 
     /**
+     * Build story post data for submitReview the story.
+     *
+     * @return object|false
+     */
+    protected function buildStoryForSubmitReview(): object|false
+    {
+        if(isset($_POST['reviewer'])) $_POST['reviewer'] = array_filter($_POST['reviewer']);
+        if(!$this->post->needNotReview and empty($_POST['reviewer']))
+        {
+            dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
+            return false;
+        }
+
+        return form::data($this->config->story->form->submitReview)->get();
+    }
+
+    /**
      * Get linked objects. e.g. bugs,cases,linkedMRs,linkedCommits,twins,reviewers,relations.
      *
      * @param  object    $story

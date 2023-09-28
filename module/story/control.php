@@ -649,40 +649,35 @@ class story extends control
             $confirmURL  = $this->createLink('story', 'recall', "storyID=$storyID&from=$from&confirm=yes&storyType=$storyType");
             return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message:'{$confirmTips}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) $.ajaxSubmit({url: '$confirmURL'});});"));
         }
-        else
+
+        if($story->status == 'changing')  $this->story->recallChange($storyID);
+        if($story->status == 'reviewing') $this->story->recallReview($storyID);
+
+        $action = $story->status == 'changing' ? 'recalledChange' : 'Recalled';
+        $this->loadModel('action')->create('story', $storyID, $action);
+
+        $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
+        if($from == 'view')
         {
-            if($story->status == 'changing')  $this->story->recallChange($storyID);
-            if($story->status == 'reviewing') $this->story->recallReview($storyID);
-
-            $action = $story->status == 'changing' ? 'recalledChange' : 'Recalled';
-            $this->loadModel('action')->create('story', $storyID, $action);
-
-            if($from == 'view')
+            $module = 'story';
+            $method = 'view';
+            $params = "storyID=$storyID&version=0&param=0&storyType=$storyType";
+            if($this->app->tab == 'project')
             {
-                if($this->app->tab == 'project')
-                {
-                    $module = 'projectstory';
-                    $method = 'view';
-                    $params = "storyID=$storyID";
-                }
-                elseif($this->app->tab == 'execution')
-                {
-                    $module = 'execution';
-                    $method = 'storyView';
-                    $params = "storyID=$storyID";
-                }
-                else
-                {
-                    $module = 'story';
-                    $method = 'view';
-                    $params = "storyID=$storyID&version=0&param=0&storyType=$storyType";
-                }
-                return $this->send(array('result' => 'success', 'load' => $this->createLink($module, $method, $params)));
+                $module = 'projectstory';
+                $method = 'view';
+                $params = "storyID=$storyID";
             }
-
-            $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
-            return $this->send(array('result' => 'success', 'load' => $locateLink));
+            elseif($this->app->tab == 'execution')
+            {
+                $module = 'execution';
+                $method = 'storyView';
+                $params = "storyID=$storyID";
+            }
+            $locateLink = $this->createLink($module, $method, $params);
         }
+
+        return $this->send(array('result' => 'success', 'load' => $locateLink));
     }
 
     /**
@@ -693,11 +688,14 @@ class story extends control
      * @access public
      * @return void
      */
-    public function submitReview($storyID, $storyType = 'story')
+    public function submitReview(int $storyID, string $storyType = 'story')
     {
         if($_POST)
         {
-            $changes = $this->story->submitReview($storyID);
+            $storyData = $this->storyZen->buildStoryForSubmitReview();
+            if(!$storyData) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $changes = $this->story->submitReview($storyID, $storyData);
             if(dao::isError()) return print(js::error(dao::getError()));
 
             if($changes)
@@ -711,7 +709,7 @@ class story extends control
         }
 
         /* Get story and product. */
-        $story   = $this->story->getById($storyID);
+        $story   = $this->story->fetchById($storyID);
         $product = $this->product->getById($story->product);
 
         /* Get reviewers. */
@@ -719,7 +717,7 @@ class story extends control
         if(!$reviewers and $product->acl != 'open') $reviewers = $this->loadModel('user')->getProductViewListUsers($product);
 
         /* Get story reviewer. */
-        $reviewerList = $this->story->getReviewerPairs($story->id, $story->version);
+        $reviewerList    = $this->story->getReviewerPairs($story->id, $story->version);
         $story->reviewer = array_keys($reviewerList);
 
         $this->view->story        = $story;
