@@ -320,6 +320,9 @@ $lang->action->desc->autobackup              = '$date, backed up of system' . "\
 $lang->action->desc->autorestore             = '$date, restored by system.' . "\n";
 $lang->action->desc->deleteexpiredbackup     = '$date, deleted the expired automatic backups by system.' . "\n";
 
+$lang->action->desc->delist  = '$date, delist by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->publish = '$date, publish by <strong>$actor</strong>.' . "\n";
+
 /* Used to display dynamic information. */
 $lang->action->label = new stdclass();
 $lang->action->label->install                 = 'install ';
