@@ -629,7 +629,7 @@ class testtaskModel extends model
         if(!$datas) return array();
 
         $users = $this->loadModel('user')->getPairs('noclosed|noletter');
-        foreach($datas as $result => $data) $data->name = $result ? zget($users, $result, $result) : $this->lang->testtask->unexecuted;
+        foreach($datas as $result => $data) $data->name = $result ? zget($users, $result) : $this->lang->testtask->unexecuted;
 
         return $datas;
     }
