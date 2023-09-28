@@ -779,7 +779,9 @@ class groupModel extends model
 
         if($nav == 'general') return !isset($this->config->group->subset->$subset) || !isset($this->config->group->subset->$subset->nav) || $this->config->group->subset->$subset->nav == 'general';
 
-        return isset($this->config->group->subset->$subset) && $this->config->group->subset->$subset->nav == $nav;
+        return isset($this->config->group->subset->$subset)
+            && isset($this->config->group->subset->$subset->nav)
+            && $this->config->group->subset->$subset->nav == $nav;
     }
 
     /**
@@ -1764,6 +1766,8 @@ class groupModel extends model
         /* Privs in package. */
         foreach($this->config->group->package as $packageCode => $packageData)
         {
+            if(!isset($packageData->privs)) continue;
+
             foreach($packageData->privs as $privCode => $priv)
             {
                 list($moduleName, $methodName) = explode('-', $privCode);
@@ -2350,6 +2354,9 @@ class groupModel extends model
      */
     public function loadResourceLang()
     {
+        $this->app->loadLang('doc');
+        $this->app->loadLang('api');
+
         foreach($this->lang->resource as $moduleName => $action)
         {
             $this->app->loadLang($moduleName);
@@ -2413,6 +2420,8 @@ class groupModel extends model
         $relatedPrivs = array('depend' => array(), 'recommend' => array());
         foreach($this->config->group->package as $packagePage => $package)
         {
+            if(!isset($package->privs)) continue;
+
             foreach($package->privs as $privCode => $priv)
             {
                 $privSubsets[$privCode] = $package->subset;

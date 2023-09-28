@@ -243,7 +243,7 @@ class group extends control
                 $package = new stdclass();
                 $package->allCount    = 0;
                 $package->selectCount = 0;
-                $package->subset      = zget($packageData, 'subset', 'other');
+                $package->subset      = zget($this->config->group->package->$packageCode, 'subset', 'other');
                 $package->privs       = array();
 
                 $packages[$subsetCode][$packageCode] = $package;
