@@ -500,7 +500,7 @@ class testtaskModel extends model
         $query = str_replace('t1.`lastRunDate`', 't2.`lastRunDate`', $query);
         $query = str_replace('t1.`lastRunResult`', 't2.`lastRunResult`', $query);
 
-        return $this->dao->select("t1.*, t2.lastRunner, t2.lastRunDate, t2.lastRunResult")->from(TABLE_CASE)->alias('t1')
+        return $this->dao->select('t1.*, t2.lastRunner, t2.lastRunDate, t2.lastRunResult')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
             ->where($query)
             ->andWhere('t1.id')->notin($linkedCases)
@@ -619,7 +619,7 @@ class testtaskModel extends model
      */
     public function getDataOfTestTaskPerRunner($taskID)
     {
-        $datas = $this->dao->select("t1.lastRunner AS name, COUNT('t1.*') AS value")->from(TABLE_TESTRUN)->alias('t1')
+        $datas = $this->dao->select('t1.lastRunner AS name, COUNT(*) AS value')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->where('t1.task')->eq($taskID)
             ->andWhere('t2.deleted')->eq(0)
@@ -704,7 +704,7 @@ class testtaskModel extends model
         if(!$oldTask || !self::isClickable($oldTask, 'close')) return false;
 
         if($task->realFinishedDate <= $oldTask->begin) dao::$errors['realFinishedDate'][] = sprintf($this->lang->testtask->finishedDateLess, $oldTask->begin);
-        if($task->realFinishedDate > date("Y-m-d 00:00:00", strtotime("+1 day"))) dao::$errors['realFinishedDate'][] = $this->lang->testtask->finishedDateMore;
+        if($task->realFinishedDate > date('Y-m-d 00:00:00', strtotime('+1 day'))) dao::$errors['realFinishedDate'][] = $this->lang->testtask->finishedDateMore;
         if(dao::isError()) return false;
 
         $this->dao->update(TABLE_TESTTASK)->data($task, 'comment,uid')
