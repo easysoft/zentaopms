@@ -1790,20 +1790,20 @@ class screenModel extends model
      */
     public function getActiveProductCard($year, $month)
     {
-        $activeProductCount = $this->dao->select('count(distinct product)')->from(TABLE_ACTION)
+        $activeProductCount = $this->dao->select('count(distinct product) as count')->from(TABLE_ACTION)
             ->where('product')->ne(',0,')
             ->andWhere('product')->ne(',,')
             ->andWhere('product')->ne(',,0,,')
             ->andWhere('objectType')->notin('project,execution,task')
             ->andWhere('year(date)')->eq($year)
             ->andWhere('month(date)')->eq($month)
-            ->fetchPairs();
+            ->fetch();
 
-        $activeProuctCard = new stdclass();
-        $activeProuctCard->count = $activeProductCount;
-        $activeProuctCard->year  = $year;
-        $activeProuctCard->month = $month;
-        return array($activeProuctCard);
+        $activeProductCard = new stdclass();
+        $activeProductCard->count = $activeProductCount->count;
+        $activeProductCard->year  = $year;
+        $activeProductCard->month = $month;
+        return array($activeProductCard);
     }
 
     /**
