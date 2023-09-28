@@ -306,4 +306,26 @@ class testsuiteTest
 
         return implode(',', array_keys($objects));
     }
+
+    /**
+     * 测试获取已经导入的用例模块。
+     * Test get can imported case modules.
+     *
+     * @param  int         $productID
+     * @param  int         $libID
+     * @param  int|string  $branch
+     * @param  string      $returnType
+     * @access public
+     * @return string|array
+     */
+    public function getCanImportedModulesTest(int $productID, int $libID, int|string $branch, string $returnType): string|array
+    {
+        $objects = $this->objectModel->getCanImportedModules($productID, $libID, $branch, $returnType);
+
+        if(dao::isError()) return dao::getError();
+
+        $return = '';
+        foreach($objects as $caseID => $modules) $return .= $caseID . ':' . implode(',', array_keys($modules)) . ';';
+        return $return;
+    }
 }

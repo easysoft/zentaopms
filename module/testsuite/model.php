@@ -320,7 +320,7 @@ class testsuiteModel extends model
         $product   = $this->loadModel('product')->getById($productID);
         $branches  = $branch === 'all' && $product->type != 'normal' ? array(BRANCH_MAIN => $this->lang->branch->main) + $this->branch->getPairs($productID, 'active') : array($product->type == 'normal' ? 0 : $branch => '');
         $canImport = array();
-        foreach($branches as $branchID => $branchName) $canImport += $this->getCanImportModules($productID, $libID, $branchID);
+        foreach($branches as $branchID => $branchName) $canImport += $this->getCanImportedModules($productID, $libID, $branchID);
 
         return $this->dao->select('*')->from(TABLE_CASE)
             ->where('deleted')->eq('0')
@@ -334,7 +334,7 @@ class testsuiteModel extends model
     }
 
     /**
-     * 获取。
+     * 获取已经导入的用例模块。
      * Get imported case modules.
      *
      * @param  int        $productID
@@ -344,7 +344,7 @@ class testsuiteModel extends model
      * @access public
      * @return array
      */
-    public function getCanImportModules(int$productID, int $libID, int|string $branch, string $returnType = 'pairs'): array
+    public function getCanImportedModules(int $productID, int $libID, int|string $branch, string $returnType = 'pairs'): array
     {
         $importedModules = $this->dao->select('fromCaseID,module')->from(TABLE_CASE)
             ->where('product')->eq($productID)
