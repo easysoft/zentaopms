@@ -287,4 +287,66 @@ class buildZen extends build
         }
         $this->loadModel('search')->setSearchParams($this->config->product->search);
     }
+
+    /**
+     * 生成关联Bug的搜索表单数据。
+     * Generate the search form data for the build view page.
+     *
+     * @param  object    $build
+     * @param  int       $queryID
+     * @param  string    $productType
+     * @access protected
+     * @return void
+     */
+    protected function buildLinkBugSearchForm(object $build, int $queryID, string $productType)
+    {
+        $this->loadModel('bug');
+        $this->config->bug->search['actionURL'] = $this->createLink('build', 'view', "buildID={$build->id}&type=bug&link=true&param=" . helper::safe64Encode("&browseType=bySearch&queryID=myQueryID"));
+        $this->config->bug->search['queryID']   = $queryID;
+        $this->config->bug->search['style']     = 'simple';
+
+        $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairs($build->product, $build->branch, '', true);
+        $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($build->product, 'bug', 0, $build->branch);
+        $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($build->product, $build->branch, (int)$this->session->project);
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->build->getBuildPairs(array($build->product), 'all', 'releasetag');
+        $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
+
+        unset($this->config->bug->search['fields']['product']);
+        unset($this->config->bug->search['params']['product']);
+        unset($this->config->bug->search['fields']['project']);
+        unset($this->config->bug->search['params']['project']);
+
+        if($build->project)
+        {
+            $project = $this->loadModel('project')->getByID($build->project);
+            if(!$project->hasProduct && $project->model != 'scrum')
+            {
+                unset($this->config->bug->search['fields']['plan']);
+            }
+            elseif(!$project->hasProduct && !$project->multiple)
+            {
+                unset($this->config->bug->search['fields']['plan']);
+            }
+        }
+
+        if($productType == 'normal')
+        {
+            unset($this->config->bug->search['fields']['branch']);
+            unset($this->config->bug->search['params']['branch']);
+        }
+        else
+        {
+            $buildBranch = array();
+            $branchList  = $this->loadModel('branch')->getPairs($build->product, '', $build->execution);
+            $branchAll   = sprintf($this->lang->build->branchAll, $this->lang->product->branchName[$productType]);
+            $branches    = array('' => $branchAll, BRANCH_MAIN => $this->lang->branch->main);
+            if(strpos($build->branch, ',') !== false) $buildBranch = explode(',', $build->branch);
+            foreach($buildBranch as $buildKey) $branches += array($buildKey => zget($branchList, $buildKey));
+
+
+            $this->config->bug->search['fields']['branch']           = sprintf($this->lang->product->branch, $this->lang->product->branchName[$productType]);
+            $this->config->bug->search['params']['branch']['values'] = $branches;
+        }
+        $this->loadModel('search')->setSearchParams($this->config->bug->search);
+    }
 }

@@ -578,7 +578,7 @@ class buildModel extends model
         {
             if($bug->status == 'resolved' or $bug->status == 'closed') continue;
 
-            $bug->resolvedBy     = $resolvedPairs[$bug->id];
+            $bug->resolvedBy     = isset($resolvedPairs[$bug->id]) ? $resolvedPairs[$bug->id] : '';
             $bug->resolvedDate   = $now;
             $bug->status         = 'resolved';
             $bug->confirmed      = 1;
@@ -665,27 +665,31 @@ class buildModel extends model
     }
 
     /**
+     * 版本关联Bug。
      * Link bugs.
      *
      * @param  int    $buildID
+     * @param  array  $bugIdList
      * @access public
-     * @return void
+     * @return bool
      */
-    public function linkBug($buildID)
+    public function linkBug(int $buildID, array $bugIdList): bool
     {
         $build = $this->getByID($buildID);
 
-        foreach($this->post->bugs as $i => $bugID)
+        foreach($bugIdList as $i => $bugID)
         {
             if(strpos(",{$build->bugs},", ",{$bugID},") !== false) unset($_POST['bugs'][$i]);
         }
 
-        $build->bugs .= ',' . implode(',', $this->post->bugs);
+        $build->bugs .= ',' . implode(',', $bugIdList);
         $this->updateLinkedBug($build);
         $this->dao->update(TABLE_BUILD)->set('bugs')->eq($build->bugs)->where('id')->eq((int)$buildID)->exec();
 
         $this->loadModel('action');
-        foreach($this->post->bugs as $bugID) $this->action->create('bug', $bugID, 'linked2bug', '', $buildID);
+        foreach($bugIdList as $bugID) $this->action->create('bug', $bugID, 'linked2bug', '', $buildID);
+
+        return !dao::isError();
     }
 
     /**
