@@ -1755,21 +1755,25 @@ class story extends control
     }
 
     /**
-     * get data to export
+     * 导出需求数据。
+     * Get the data of the stories to export.
      *
      * @param  int    $productID
      * @param  string $orderBy
      * @param  int    $executionID
      * @param  string $browseType
-     * @param  string $storyType requirement|story
+     * @param  string $storyType   requirement|story
      * @access public
      * @return void
      */
-    public function export($productID, $orderBy, $executionID = 0, $browseType = '', $storyType = 'story')
+    public function export(int $productID, string $orderBy, int $executionID = 0, string $browseType = '', string $storyType = 'story')
     {
         /* format the fields of every story in order to export data. */
         if($_POST)
         {
+            $this->loadModel('transfer');
+            $postData = form::data($this->config->transfer->form->export)->get();
+
             $this->session->set('storyTransferParams', array('productID' => $productID, 'executionID' => $executionID));
             /* Create field lists. */
             if(!$productID or $browseType == 'bysearch')
@@ -1786,7 +1790,7 @@ class story extends control
                 $this->config->story->datatable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => $productIdList);
             }
 
-            $this->post->set('rows', $this->story->getExportStories($executionID, $orderBy, $storyType));
+            $this->post->set('rows', $this->story->getExportStories($executionID, $orderBy, $storyType, $postData));
             $this->fetch('transfer', 'export', 'model=story');
         }
 

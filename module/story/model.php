@@ -4509,16 +4509,20 @@ class storyModel extends model
     }
 
     /**
-     * Get export stories .
+     * 获取要导出的需求数据。
+     * Get the stories to export.
      *
      * @param  int    $executionID
-     * @param  string $orderBy
+     * @param  string $orderBy     id_desc
      * @param  string $storyType
+     * @param  object $postData
      * @access public
-     * @return void
+     * @return array
      */
-    public function getExportStories($executionID, $orderBy = 'id_desc', $storyType = 'story')
+    public function getExportStories(int $executionID, string $orderBy = 'id_desc', string $storyType = 'story', object $postData): array
     {
+        $orderBy = 'id_desc'; /* The order of the stories for exporting is disabled. */
+
         $this->loadModel('file');
         $this->loadModel('branch');
 
@@ -4526,8 +4530,8 @@ class storyModel extends model
         $storyLang = $this->lang->story;
 
         /* Create field lists. */
-        $fields = !empty($this->post->exportFields) ? $this->post->exportFields : explode(',', $this->config->story->exportFields);
-        if(empty($this->post->exportFields)) $this->post->exportFields = $this->config->story->exportFields;
+        $fields = !empty($postData->exportFields) ? $postData->exportFields : explode(',', $this->config->story->exportFields);
+        if(empty($postData->exportFields)) $postData->exportFields = $this->config->story->exportFields;
         foreach($fields as $key => $fieldName)
         {
             $fieldName = trim($fieldName);
@@ -4540,7 +4544,7 @@ class storyModel extends model
         $selectedIDList = $this->cookie->checkedItem ? $this->cookie->checkedItem : '0';
         if($this->session->storyOnlyCondition)
         {
-            if($this->post->exportType == 'selected')
+            if($postData->exportType == 'selected')
             {
                 $stories = $this->dao->select('id,title,linkStories,childStories,parent,mailto,reviewedBy')->from(TABLE_STORY)->where('id')->in($selectedIDList)->orderBy($orderBy)->fetchAll('id');
             }
@@ -4552,13 +4556,13 @@ class storyModel extends model
         }
         else
         {
-            if($this->post->exportType == 'selected')
+            if($postData->exportType == 'selected')
             {
-                $stmt  = $this->dbh->query("SELECT * FROM " . TABLE_STORY . "WHERE `id` IN({$selectedIDList})" . " ORDER BY " . strtr($orderBy, '_', ' '));
+                $stmt  = $this->dbh->query("SELECT * FROM " . TABLE_STORY . "WHERE `id` IN({$selectedIDList})" . " ORDER BY " . helper::wrapSqlAfterOrderBy($orderBy));
             }
             else
             {
-                $stmt  = $this->dbh->query($this->session->storyQueryCondition . " ORDER BY " . strtr($orderBy, '_', ' '));
+                $stmt  = $this->dbh->query($this->session->storyQueryCondition . " ORDER BY " . helper::wrapSqlAfterOrderBy($orderBy));
             }
             while($row = $stmt->fetch()) $stories[$row->id] = $row;
         }
@@ -4634,7 +4638,7 @@ class storyModel extends model
                 }
             }
 
-            if($this->post->fileType == 'csv')
+            if($postData->fileType == 'csv')
             {
                 $story->spec = htmlspecialchars_decode($story->spec);
                 $story->spec = str_replace("<br />", "\n", $story->spec);
