@@ -248,7 +248,7 @@ class testreportZen extends testreport
         foreach($tasks as $task) $this->setChartDatas($task->id);
 
         $execution = $this->execution->getById($report->execution);
-        $builds    = $this->build->getByList($report->builds);
+        $builds    = $this->build->getByList(explode(',', $report->builds));
         $stories   = !empty($builds) ? $this->testreport->getStories4Test($builds) : $this->story->getExecutionStories($report->execution);
         $bugs      = $this->testreport->getBugs4Test($builds, $productIdList, $begin, $end, 'execution');
 
@@ -329,7 +329,7 @@ class testreportZen extends testreport
         $reportData['execution']     = $this->execution->getById($report->execution);
         $reportData['stories']       = $report->stories ? $this->story->getByList($report->stories)  : array();
         $reportData['tasks']         = $report->tasks   ? $this->testtask->getByList(explode(',', $report->tasks)) : array();
-        $reportData['builds']        = $report->builds  ? $this->build->getByList($report->builds)   : array();
+        $reportData['builds']        = $report->builds  ? $this->build->getByList(explode(',', $report->builds))   : array();
         $reportData['bugs']          = $report->bugs    ? $this->bug->getByIdList($report->bugs)     : array();
         $reportData['report']        = $report;
         return $reportData;

@@ -183,7 +183,7 @@ class projectrelease extends control
 
         /* Get the builds that can select. */
         $builds         = $this->loadModel('build')->getBuildPairs(array($release->product), $release->branch, 'notrunk|withbranch|hasproject', $this->session->project, 'project', $release->build, false);
-        $bindBuilds     = $this->build->getByList($release->build);
+        $bindBuilds     = $this->build->getByList(explode(',', $release->build));
         $releasedBuilds = $this->projectrelease->getReleasedBuilds($this->session->project);
         foreach($releasedBuilds as $releasedBuild)
         {

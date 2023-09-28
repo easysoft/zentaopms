@@ -177,7 +177,7 @@ class build extends control
         $this->view->link          = $link;
         $this->view->orderBy       = $orderBy;
         $this->view->execution     = $this->loadModel('execution')->getByID($build->execution);
-        $this->view->childBuilds   = empty($build->builds) ? array() : $this->dao->select('id,name,bugs,stories')->from(TABLE_BUILD)->where('id')->in($build->builds)->fetchAll();
+        $this->view->childBuilds   = empty($build->builds) ? array() : $this->build->getByList(explode(',', $build->builds));
 
         $this->display();
     }

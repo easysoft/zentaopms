@@ -545,7 +545,7 @@ class release extends control
         }
         $this->loadModel('search')->setSearchParams($this->config->product->search);
 
-        $builds = $this->loadModel('build')->getByList($release->build);
+        $builds = $this->loadModel('build')->getByList(explode(',', $release->build));
         $executionIdList = array();
         foreach($builds as $build)
         {
@@ -674,7 +674,7 @@ class release extends control
         }
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
 
-        $builds      = $this->loadModel('build')->getByList($release->build);
+        $builds      = $this->loadModel('build')->getByList(explode(',', $release->build));
         $allBugs     = array();
         $releaseBugs = $type == 'bug' ? $release->bugs : $release->leftBugs;
         if($browseType == 'bySearch')

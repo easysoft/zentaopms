@@ -82,7 +82,7 @@ class buildModel extends model
         $executionIdList = array();
         foreach($builds as $build)
         {
-            $build->builds = $this->build->getByList($build->builds);
+            $build->builds = $this->build->getByList(explode(',', $build->builds));
             if(!empty($build->builds))
             {
                 foreach($build->builds as $child)
@@ -225,7 +225,7 @@ class buildModel extends model
         {
             if(!$build->execution && !empty($build->builds))
             {
-                $childBuilds = $this->getByList($build->builds);
+                $childBuilds = $this->getByList(explode(',', $build->builds));
                 foreach($childBuilds as $childBuild)
                 {
                     $childBuild->stories = trim($childBuild->stories, ',');
