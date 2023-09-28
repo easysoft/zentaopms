@@ -674,16 +674,16 @@ class searchModel extends model
         foreach($words as $word)
         {
             $splitedWords = $spliter->utf8Split($word);
-            $trimedWord   = trim($splitedWords['words']);
-            $against     .= '"' . $trimedWord . '" ';
-            $againstCond .= '(+"' . $trimedWord . '") ';
+            $trimmedWord   = trim($splitedWords['words']);
+            $against     .= '"' . $trimmedWord . '" ';
+            $againstCond .= '(+"' . $trimmedWord . '") ';
 
             if(is_numeric($word) and strpos($word, '.') === false and strlen($word) == 5) $againstCond .= "(-\" $word \") ";
         }
 
         $likeCondition = '';
         /* Assisted lookup by like condition when only one word. */
-        if(count($words) == 1 and strpos($words[0], ' ') === false and !is_numeric($words[0])) $likeCondition = "OR title like '%{$trimedWord}%' OR content like '%{$trimedWord}%'";
+        if(count($words) == 1 and strpos($words[0], ' ') === false and !is_numeric($words[0])) $likeCondition = "OR title like '%{$trimmedWord}%' OR content like '%{$trimmedWord}%'";
 
         $words = str_replace('"', '', $against);
         $words = str_pad($words, 5, '_');

@@ -2247,8 +2247,8 @@ class baseSQL
         $limit  = $pos ? substr($order, $pos) : '';
         if(!empty($limit))
         {
-            $trimedLimit = trim(str_replace('limit', '', $limit));
-            if(!preg_match('/^[0-9]+ *(, *[0-9]+)?$/', $trimedLimit)) helper::end("Limit is bad query, The limit is " . htmlspecialchars($limit));
+            $trimmedLimit = trim(str_replace('limit', '', $limit));
+            if(!preg_match('/^[0-9]+ *(, *[0-9]+)?$/', $trimmedLimit)) helper::end("Limit is bad query, The limit is " . htmlspecialchars($limit));
         }
 
         $orders = trim($orders);

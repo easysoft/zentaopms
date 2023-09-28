@@ -1484,8 +1484,8 @@ class testcaseModel extends model
                     $caseStep = array();
                     foreach($steps as $step)
                     {
-                        $trimedStep = trim($step);
-                        if(empty($trimedStep)) continue;
+                        $trimmedStep = trim($step);
+                        if(empty($trimmedStep)) continue;
                         if(preg_match('/^(([0-9]+)\.[0-9]+)([.、]{1})/U', $step, $out) and ($field == 'stepDesc' or ($field == 'stepExpect' and isset($stepData[$row]['desc'][$out[1]]))))
                         {
                             $num     = $out[1];
