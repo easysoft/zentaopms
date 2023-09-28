@@ -787,46 +787,53 @@ class testtaskModel extends model
     }
 
     /**
-     * Link cases.
+     * 关联用例到一个测试单。
+     * Link cases to a testtask.
      *
      * @param  int    $taskID
      * @param  string $type
      * @access public
-     * @return void
+     * @return bool
      */
-    public function linkCase($taskID, $type)
+    public function linkCase(int $taskID, string $type, array $cases): bool
     {
-        if($this->post->cases == false) return;
+        if(!$cases) return false;
+
         $postData = fixer::input('post')->get();
 
-        if($type == 'bybuild') $assignedToPairs = $this->dao->select('`case`, assignedTo')->from(TABLE_TESTRUN)->where('`case`')->in($postData)->fetchPairs('case', 'assignedTo');
-        foreach($postData->cases as $caseID)
-        {
-            $row = new stdclass();
-            $row->task       = $taskID;
-            $row->case       = $caseID;
-            $row->version    = $postData->versions[$caseID];
-            $row->assignedTo = '';
-            $row->status     = 'normal';
-            if($type == 'bybuild') $row->assignedTo = zget($assignedToPairs, $caseID, '');
-            $this->dao->replace(TABLE_TESTRUN)->data($row)->exec();
+        $users = array();
+        if($type == 'build' && !empty($postData)) $users = $this->dao->select('`case`, assignedTo')->from(TABLE_TESTRUN)->where('`case`')->in($postData)->fetchPairs();
 
-            /* When the cases linked the testtask, the cases link to the project. */
+        $run = new stdclass();
+        $run->task   = $taskID;
+        $run->status = 'normal';
+
+        $case = new stdclass();
+        $case->product = $this->session->product;
+        $case->version = 1;
+        foreach($cases as $caseID)
+        {
+            $run->case       = $caseID;
+            $run->version    = $postData->versions[$caseID];
+            $run->assignedTo = zget($users, $caseID, '');
+            $this->dao->replace(TABLE_TESTRUN)->data($run)->exec();
+
+            /* 在项目或执行下关联用例到测试单时把用例关联到项目或执行。*/
+            /* Associate the cases to the project or execution when associating the cases to the testtask under the project or execution. */
             if($this->app->tab != 'qa')
             {
                 $projectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
-                $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
+                $lastOrder = $this->dao->select('MAX(`order`) AS order')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->fetch('order');
 
-                $data = new stdclass();
-                $data->project = $projectID;
-                $data->product = $this->session->product;
-                $data->case    = $caseID;
-                $data->version = 1;
-                $data->order   = ++ $lastOrder;
-                $this->dao->replace(TABLE_PROJECTCASE)->data($data)->exec();
+                $case->project = $projectID;
+                $case->case    = $caseID;
+                $case->order   = ++$lastOrder;
+                $this->dao->replace(TABLE_PROJECTCASE)->data($case)->exec();
             }
             $this->loadModel('action')->create('case', $caseID, 'linked2testtask', '', $taskID);
         }
+
+        return !dao::isError();
     }
 
     /**
