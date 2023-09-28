@@ -211,7 +211,7 @@ class solutionModel extends model
                     }
 
                     if(!$this->checkInstallStatus($solutionID)) return false;
-                    $settings = $this->mountSettings($solutionSchema, $componentApp->chart, $components, $allMappings);
+                    $settings = $this->mountSettings($solutionSchema, $componentApp->chart, $components, $allMappings, isset($components->sonarqube));
                     $instance = $this->installApp($cloudApp, $settings);
                 }
 
@@ -286,7 +286,7 @@ class solutionModel extends model
      * @access private
      * @return array
      */
-    private function mountSettings($solutionSchema, $chart, $components, $mappings)
+    private function mountSettings($solutionSchema, $chart, $components, $mappings, $isInstallSonar = true)
     {
         $settings = array();
 
@@ -296,6 +296,8 @@ class solutionModel extends model
             switch($item->type)
             {
                 case 'static':
+                    if(!$isInstallSonar && $item->key === 'solution.sonarqube.enabled')
+                    break;
                     $settings[] = array('key' => $item->key, 'value' => $item->value);
                     break;
                 case 'choose':

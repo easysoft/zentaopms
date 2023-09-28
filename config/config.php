@@ -184,7 +184,7 @@ $config->cloud->api->host          = 'https://api.qucheng.com';
 $config->cloud->api->auth          = 'X-Auth-Token';
 $config->cloud->api->token         = getenv('CLOUD_API_TOKEN'); // Please set token in my.php.
 $config->cloud->api->headers       = array('Content-Type: application/json');
-$config->cloud->api->channel       = 'stable';
+$config->cloud->api->channel       = getenv('CLOUD_DEFAULT_CHANNEL') ? getenv('CLOUD_DEFAULT_CHANNEL') : 'stable';
 $config->cloud->api->switchChannel = false;
 
 /* Set zin config. */
