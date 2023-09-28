@@ -417,62 +417,15 @@ class build extends control
         $product = $this->loadModel('product')->getById($build->product);
 
         if($build->execution) $this->loadModel('execution')->setMenu($build->execution);
-        $this->loadModel('story');
-        $this->loadModel('tree');
-        $this->loadModel('product');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Build search form. */
-        $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
-        unset($this->config->product->search['fields']['product']);
-        unset($this->config->product->search['fields']['project']);
-        $this->config->product->search['actionURL'] = $this->createLink('build', 'view', "buildID=$buildID&type=story&link=true&param=" . helper::safe64Encode("&browseType=bySearch&queryID=myQueryID"));
-        $this->config->product->search['queryID']   = $queryID;
-        $this->config->product->search['style']     = 'simple';
-        $this->config->product->search['params']['plan']['values']   = $this->loadModel('productplan')->getPairs($build->product, $build->branch, '', true);
-        $this->config->product->search['params']['module']['values'] = $this->tree->getOptionMenu($build->product, 'story', 0, $build->branch);
-        $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
+        $this->buildZen->buildLinkStorySearchForm($build, $browseType == 'bySearch' ? (int)$param : 0, $product->type);
 
-        if($build->project)
-        {
-            $project = $this->loadModel('project')->getByID($build->project);
-            if(!$project->hasProduct and $project->model != 'scrum')
-            {
-                unset($this->config->product->search['fields']['plan']);
-            }
-            elseif(!$project->hasProduct and !$project->multiple)
-            {
-                unset($this->config->product->search['fields']['plan']);
-            }
-        }
-
-        if($product->type == 'normal')
-        {
-            unset($this->config->product->search['fields']['branch']);
-            unset($this->config->product->search['params']['branch']);
-        }
-        else
-        {
-            $branchPairs = $this->loadModel('branch')->getPairs($build->product, 'noempty');
-            $branchAll   = sprintf($this->lang->build->branchAll, $this->lang->product->branchName[$product->type]);
-            $branches    = array('' => $branchAll) + array(BRANCH_MAIN => $this->lang->branch->main);
-            if($build->branch)
-            {
-                foreach(explode(',', $build->branch) as $branchID)
-                {
-                    if($branchID == '0') continue;
-                    $branches += array($branchID => $branchPairs[$branchID]);
-                }
-            }
-
-            $this->config->product->search['fields']['branch']           = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
-            $this->config->product->search['params']['branch']['values'] = $branches;
-        }
-        $this->loadModel('search')->setSearchParams($this->config->product->search);
-
+        $this->loadModel('story');
         $executionID = $build->execution ? $build->execution : $build->project;
         if($browseType == 'bySearch')
         {

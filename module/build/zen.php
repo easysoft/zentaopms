@@ -227,4 +227,64 @@ class buildZen extends build
         $this->view->buildPairs = $this->build->getBuildPairs(array(0), 'all', 'noempty,notrunk', $objectID, $objectType);
         $this->view->builds     = $this->build->getByList(array_keys($this->view->buildPairs));
     }
+
+    /**
+     * 生成关联需求的搜索表单数据。
+     * Generate the search form data for the build view page.
+     *
+     * @param  object    $build
+     * @param  int       $queryID
+     * @param  string    $productType
+     * @access protected
+     * @return void
+     */
+    protected function buildLinkStorySearchForm(object $build, int $queryID, string $productType)
+    {
+        unset($this->config->product->search['fields']['product']);
+        unset($this->config->product->search['fields']['project']);
+
+        $this->config->product->search['actionURL'] = $this->createLink('build', 'view', "buildID={$build->id}&type=story&link=true&param=" . helper::safe64Encode("&browseType=bySearch&queryID=myQueryID"));
+        $this->config->product->search['queryID']   = $queryID;
+        $this->config->product->search['style']     = 'simple';
+        $this->config->product->search['params']['plan']['values']   = $this->loadModel('productplan')->getPairs($build->product, $build->branch, '', true);
+        $this->config->product->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($build->product, 'story', 0, $build->branch);
+        $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
+
+        if($build->project)
+        {
+            $project = $this->loadModel('project')->getByID($build->project);
+            if(!$project->hasProduct and $project->model != 'scrum')
+            {
+                unset($this->config->product->search['fields']['plan']);
+            }
+            elseif(!$project->hasProduct and !$project->multiple)
+            {
+                unset($this->config->product->search['fields']['plan']);
+            }
+        }
+
+        if($productType == 'normal')
+        {
+            unset($this->config->product->search['fields']['branch']);
+            unset($this->config->product->search['params']['branch']);
+        }
+        else
+        {
+            $branchPairs = $this->loadModel('branch')->getPairs($build->product, 'noempty');
+            $branchAll   = sprintf($this->lang->build->branchAll, $this->lang->product->branchName[$productType]);
+            $branches    = array('' => $branchAll) + array(BRANCH_MAIN => $this->lang->branch->main);
+            if($build->branch)
+            {
+                foreach(explode(',', $build->branch) as $branchID)
+                {
+                    if($branchID == '0') continue;
+                    $branches += array($branchID => $branchPairs[$branchID]);
+                }
+            }
+
+            $this->config->product->search['fields']['branch']           = sprintf($this->lang->product->branch, $this->lang->product->branchName[$productType]);
+            $this->config->product->search['params']['branch']['values'] = $branches;
+        }
+        $this->loadModel('search')->setSearchParams($this->config->product->search);
+    }
 }
