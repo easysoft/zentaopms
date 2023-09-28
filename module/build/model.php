@@ -40,13 +40,14 @@ class buildModel extends model
     }
 
     /**
-     * Get by ID list.
+     * 通过版本ID列表获取版本信息。
+     * Get builds by id list.
      *
-     * @param  array $idList
+     * @param  array  $idList
      * @access public
      * @return array
      */
-    public function getByList($idList)
+    public function getByList(array $idList): array
     {
         return $this->dao->select('*')->from(TABLE_BUILD)->where('id')->in($idList)->fetchAll('id');
     }

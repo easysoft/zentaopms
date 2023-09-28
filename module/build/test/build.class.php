@@ -25,19 +25,20 @@ class buildTest
     }
 
     /**
-     * function getByList test by build
+     * 通过版本ID列表获取版本信息。
+     * Get builds by id list.
      *
-     * @param  array  $idList
-     * @param  string $count
+     * @param  array     $idList
+     * @param  int       $count
      * @access public
-     * @return array
+     * @return array|int
      */
-    public function getByListTest($idList, $count)
+    public function getByListTest(array $idList, int $count): array|int
     {
         $objects = $this->objectModel->getByList($idList);
 
         if(dao::isError()) return dao::getError();
-        if($count == '1')  return count($objects);
+        if($count == 1)  return count($objects);
 
         return $objects;
     }
