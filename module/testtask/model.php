@@ -570,7 +570,7 @@ class testtaskModel extends model
      */
     public function getDataOfTestTaskPerType(int $taskID): array
     {
-        $datas = $this->dao->select('t2.type as name,count(*) as value')->from(TABLE_TESTRUN)->alias('t1')
+        $datas = $this->dao->select('t2.type AS name, COUNT(*) AS value')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->where('t1.task')->eq($taskID)
             ->andWhere('t2.deleted')->eq(0)
@@ -594,7 +594,7 @@ class testtaskModel extends model
      */
     public function getDataOfTestTaskPerModule(int $taskID): array
     {
-        $datas = $this->dao->select('t2.module as name,count(*) as value')->from(TABLE_TESTRUN)->alias('t1')
+        $datas = $this->dao->select('t2.module AS name, COUNT(*) AS value')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->where('t1.task')->eq($taskID)
             ->andWhere('t2.deleted')->eq(0)
@@ -1002,7 +1002,7 @@ class testtaskModel extends model
         $fieldToSort   = substr($orderBy, 0, strpos($orderBy, '_'));
         $orderBy       = strpos($specialFields, ',' . $fieldToSort . ',') !== false ? ('t1.' . $orderBy) : ('t2.' . $orderBy);
 
-        return $this->dao->select('t2.*,t1.*,t2.version as caseVersion,t3.title as storyTitle,t2.status as caseStatus')->from(TABLE_TESTRUN)->alias('t1')
+        return $this->dao->select('t2.*, t1.*, t2.version AS caseVersion, t3.title AS storyTitle, t2.status AS caseStatus')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
             ->where('t1.task')->eq((int)$taskID)
