@@ -531,47 +531,43 @@ window.initChart = function($obj, head, data, chartType)
         selectedScope[Object.keys(selectedScope)[0]] = true;
     }
 
-    $.getLib(config.webRoot + 'js/echarts/echarts.common.min.js', {root: false}, function() {
-
-        var myChart = echarts.init($obj);
-        var option = {
-            grid: {
-                left: '10%',
-                right: '10%',
-                bottom: '15%',
-                containLabel: true
+    var option = {
+        grid: {
+            left: '10%',
+            right: '10%',
+            bottom: '15%',
+            containLabel: true
+        },
+        legend: {
+            type: 'scroll'
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'cross',
+                label: {
+                    backgroundColor: '#6a7985'
+                }
             },
-            legend: {
-                type: 'scroll'
-            },
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                    type: 'cross',
-                    label: {
-                        backgroundColor: '#6a7985'
-                    }
-                },
-                confine:true,//限制tooltip在图表范围内展示
-                extraCssText: 'max-height:60%;overflow-y:scroll',//最大高度以及超出处理
-                enterable:true//鼠标可以进入tooltip区域，使用滚动条
-            },
-            xAxis: chartType == 'barY' ? yAxis : xAxis,
-            yAxis: chartType == 'barY' ? xAxis : yAxis,
-            series: series,
-        };
+            confine:true,//限制tooltip在图表范围内展示
+            extraCssText: 'max-height:60%;overflow-y:scroll',//最大高度以及超出处理
+            enterable:true//鼠标可以进入tooltip区域，使用滚动条
+        },
+        xAxis: chartType == 'barY' ? yAxis : xAxis,
+        yAxis: chartType == 'barY' ? xAxis : yAxis,
+        series: series,
+    };
 
-        if(selectedScope)
-        {
-            option.legend.selector = true;
-            option.legend.selected = selectedScope;
-        }
+    if(selectedScope)
+    {
+        option.legend.selector = true;
+        option.legend.selected = selectedScope;
+    }
 
-        var dataLength = option.series[0].data.length;
-        if(dataLength > 15) option.dataZoom = window.genDataZoom(dataLength, 15, chartType == 'barY' ? 'y' : 'x');
+    var dataLength = option.series[0].data.length;
+    if(dataLength > 15) option.dataZoom = window.genDataZoom(dataLength, 15, chartType == 'barY' ? 'y' : 'x');
 
-        option && myChart.setOption(option);
-    });
+    window.renderEchart($obj, option);
 }
 
 window.initPieChart = function($obj, head, data)
@@ -583,34 +579,38 @@ window.initPieChart = function($obj, head, data)
         datas.push({name: item[x], value: item[y]});
     });
 
-    $.getLib(config.webRoot + 'js/echarts/echarts.common.min.js', {root: false}, function() {
-
-        var myChart = echarts.init($obj);
-        option = {
-            tooltip: {
-                trigger: 'item'
-            },
-            legend: {
-                orient: 'vertical',
-                left: 'left',
-                type: 'scroll'
-            },
-            series: [
-                {
-                    type: 'pie',
-                    radius: '50%',
-                    data: datas,
-                    emphasis: {
-                        itemStyle: {
-                            shadowBlur: 10,
-                            shadowOffsetX: 0,
-                            shadowColor: 'rgba(0, 0, 0, 0.5)'
-                        }
+    var option = {
+        tooltip: {
+            trigger: 'item'
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left',
+            type: 'scroll'
+        },
+        series: [
+            {
+                type: 'pie',
+                radius: '50%',
+                data: datas,
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
                     }
                 }
-            ]
-        };
+            }
+        ]
+    };
 
+    window.renderEchart($obj, option);
+}
+
+window.renderEchart = function($obj, option)
+{
+    $.getLib(config.webRoot + 'js/echarts/echarts.common.min.js', {root: false}, function() {
+        var myChart = echarts.init($obj);
         option && myChart.setOption(option);
     });
 }
