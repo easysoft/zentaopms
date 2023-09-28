@@ -89,15 +89,29 @@ class main extends wg
             }
         }
 
-        $hasLeftSide = !empty($leftSides);
+        $children     = $this->children();
+        $hasLeftSide  = !empty($leftSides);
         $hasRightSide = !empty($rightSides);
+
+        if($hasLeftSide || $hasRightSide)
+        {
+            $children = array
+            (
+                setClass('row', array('has-sidebar-left' => $hasLeftSide, 'has-sidebar-right' => $hasRightSide)),
+                $leftSides,
+                div
+                (
+                    $children,
+                    setClass('main-content-cell')
+                ),
+                $rightSides
+            );
+        }
+
         return div
         (
             set::id('mainContent'),
-            $leftSides,
-            ($hasLeftSide || $hasRightSide) ? setClass('row', array('has-sidebar-left' => $hasLeftSide, 'has-sidebar-right' => $hasRightSide)) : null,
-            $this->children(),
-            $rightSides
+            $children,
         );
     }
 

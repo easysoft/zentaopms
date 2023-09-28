@@ -27,15 +27,17 @@ class searchToggle extends wg
         $formName = $this->prop('formName');
         $open     = $this->prop('open');
         if(is_null($open) && !empty($_GET['browseType'])) $open = $_GET['browseType'] === 'bySearch';
+        $id       = $this->gid;
         return btn
         (
+            set::id($id),
             set::className('ghost search-form-toggle'),
             set::icon('search'),
             set::text($lang->searchAB),
             set('data-module', $this->prop('module')),
             set('data-on', 'click'),
-            set('data-do', "window.toggleSearchForm('$module', '$formName');"),
-            $open ? h::jsCall('~window.toggleSearchForm', $module, $formName, true) : null
+            set('data-do', "window.toggleSearchForm('$module', '$formName', undefined, '#$id');"),
+            $open ? h::jsCall('~window.toggleSearchForm', $module, $formName, true, "#$id") : null
         );
     }
 }
