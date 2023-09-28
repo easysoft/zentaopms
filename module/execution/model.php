@@ -1948,13 +1948,14 @@ class executionModel extends model
             $executionQuery = preg_replace('/(`\w*`)/', 't1.$1',$executionQuery);
         }
 
-        $executions = $this->dao->select('t1.*,t2.name projectName, t2.model as projectModel')->from(TABLE_EXECUTION)->alias('t1')
+        $parentExecutions = $this->dao->select('t1.*,t2.name projectName, t2.model as projectModel')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->beginIF($productID)->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.id=t3.project')->fi()
             ->where('t1.type')->in('sprint,stage,kanban')
             ->andWhere('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.multiple')->eq('1')
+            ->andWhere('t1.grade')->eq('1')
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF(!empty($executionQuery))->andWhere($executionQuery)->fi()
             ->beginIF($productID)->andWhere('t3.product')->eq($productID)->fi()
@@ -1969,9 +1970,20 @@ class executionModel extends model
             ->page($pager, 't1.id')
             ->fetchAll('id');
 
-        if(empty($productID) and !empty($executions)) $projectProductIdList = $this->dao->select('project, GROUP_CONCAT(product) as product')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($executions))->groupBy('project')->fetchPairs();
+        /* Get child executions. */
+        $childExecutions = $this->dao->select('t1.*,t2.name projectName, t2.model as projectModel')->from(TABLE_EXECUTION)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->beginIF($productID)->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.id=t3.project')->fi()
+            ->where('t1.type')->in('sprint,stage,kanban')
+            ->andWhere('t1.deleted')->eq('0')
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere('t1.multiple')->eq('1')
+            ->andWhere('t1.grade')->gt('1')
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
+            ->orderBy($orderBy)
+            ->fetchAll('id');
 
-        $burns = $this->getBurnData($executions);
+        if(empty($productID) and !empty($parentExecutions)) $projectProductIdList = $this->dao->select('project, GROUP_CONCAT(product) as product')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($parentExecutions))->groupBy('project')->fetchPairs();
 
         $productNameList = $this->dao->select('t1.id,GROUP_CONCAT(t3.`name`) as productName')->from(TABLE_EXECUTION)->alias('t1')
             ->leftjoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
@@ -1980,6 +1992,10 @@ class executionModel extends model
             ->andWhere('t1.type')->in('kanban,sprint,stage')
             ->groupBy('t1.id')
             ->fetchPairs();
+
+        $executions = array_replace($parentExecutions, $childExecutions);
+
+        $burns = $this->getBurnData($executions);
 
         if($withTasks) $executionTasks = $this->getTaskGroupByExecution(array_keys($executions));
 
@@ -2024,8 +2040,8 @@ class executionModel extends model
             }
             elseif(strpos($param, 'hasParentName') !== false)
             {
-                $parentExecutions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($execution->path, ','))->andWhere('type')->in('stage,kanban,sprint')->orderBy('grade')->fetchPairs();
-                $executions[$execution->id]->title = implode('/', $parentExecutions);
+                $parents = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($execution->path, ','))->andWhere('type')->in('stage,kanban,sprint')->orderBy('grade')->fetchPairs();
+                $executions[$execution->id]->title = implode('/', $parents);
                 if(strpos($param, 'skipParent') !== false)
                 {
                     $children = $this->getChildExecutions($execution->id);
@@ -2052,7 +2068,9 @@ class executionModel extends model
 
         foreach($parentList as $parentID) unset($executions[$parentID]);
 
-        return array_values($executions);
+        $parentExecutions = array_intersect_key($executions, $parentExecutions);
+
+        return array_values($parentExecutions);
     }
 
     /**
