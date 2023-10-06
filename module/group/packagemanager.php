@@ -548,16 +548,8 @@ $config->group->package->profile = new stdclass();
 $config->group->package->profile->order  = 5;
 $config->group->package->profile->subset = 'personalsettings';
 $config->group->package->profile->privs  = array();
-$config->group->package->profile->privs['my-profile']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array('my-index'), 'recommend' => array());
-$config->group->package->profile->privs['my-uploadAvatar']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 2, 'depend' => array('my-index', 'my-profile'), 'recommend' => array());
-$config->group->package->profile->privs['my-editProfile']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 1, 'depend' => array('my-index', 'my-profile'), 'recommend' => array());
-$config->group->package->profile->privs['my-changePassword'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 3, 'depend' => array('my-index', 'my-profile'), 'recommend' => array());
-
-$config->group->package->preference = new stdclass();
-$config->group->package->preference->order  = 10;
-$config->group->package->preference->subset = 'personalsettings';
-$config->group->package->preference->privs  = array();
-$config->group->package->preference->privs['my-preference'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('my-index'), 'recommend' => array());
+$config->group->package->profile->privs['my-uploadAvatar'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 2, 'depend' => array('my-index', 'my-profile'), 'recommend' => array());
+$config->group->package->profile->privs['my-editProfile']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 1, 'depend' => array('my-index', 'my-profile'), 'recommend' => array());
 
 $config->group->package->browseProgram = new stdclass();
 $config->group->package->browseProgram->order  = 5;
