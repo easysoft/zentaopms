@@ -38,12 +38,14 @@
                   <label for='switchDate'><?php echo $lang->todo->periods['future'];?></label>
                 </div>
               </span>
+              <?php if(common::hasPriv('todo', 'createcycle')):?>
               <span class='input-group-addon'>
                 <div class='checkbox-primary'>
                   <input type='checkbox' id='cycle' name='cycle' value='1' onclick='switchDateTodo(this);' />
                   <label for='cycle'><?php echo $lang->todo->cycle;?></label>
                 </div>
               </span>
+              <?php endif;?>
             </div>
           </td><td></td>
         </tr>
