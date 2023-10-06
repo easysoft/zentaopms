@@ -2354,19 +2354,16 @@ class groupModel extends model
      */
     public function loadResourceLang()
     {
+        foreach($this->lang->resource as $moduleName => $action) $this->app->loadLang($moduleName);
+
         $this->app->loadLang('doc');
         $this->app->loadLang('api');
 
-        foreach($this->lang->resource as $moduleName => $action)
-        {
-            $this->app->loadLang($moduleName);
+        $this->lang->custom->common = $this->lang->group->config;
+        $this->lang->doc->common    = $this->lang->doc->manage;
+        $this->lang->api->common    = $this->lang->api->manage;
 
-            $this->lang->custom->common = $this->lang->group->config;
-            $this->lang->doc->common    = $this->lang->doc->manage;
-            $this->lang->api->common    = $this->lang->api->manage;
-
-            if(($this->config->edition == 'max' or $this->config->edition == 'ipd') and $this->config->vision == 'rnd' and isset($this->lang->baseline)) $this->lang->baseline->common = $this->lang->group->docTemplate;
-        }
+        if(($this->config->edition == 'max' or $this->config->edition == 'ipd') and $this->config->vision == 'rnd' and isset($this->lang->baseline)) $this->lang->baseline->common = $this->lang->group->docTemplate;
     }
 
     /**
