@@ -22,15 +22,15 @@ class dtable extends wg
     {
         global $app;
 
-        $defaultID = "table-$app->rawModule-$app->rawMethod";
+        $defaultID = "table-{$app->rawModule}-{$app->rawMethod}";
         $this->setDefaultProps(array('id' => static::$dtableID ? ($defaultID . static::$dtableID) : $defaultID));
         static::$dtableID++;
 
         $customColsProp = $this->prop('customCols');
         if($customColsProp)
         {
-            $customUrl = zget($customColsProp, 'url', null);
             $app->loadLang('datatable');
+            $customUrl = is_bool($customColsProp) || empty($customColsProp['url']) ? null : $customColsProp['url'];
             $this->setProp('customCols', array(
                 'custom' => array(
                     'url' => $customUrl ? $customUrl : createLink('datatable', 'ajaxcustom', "module=$app->moduleName&method=$app->methodName"),
