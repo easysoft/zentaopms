@@ -14,7 +14,9 @@
 <div id='mainContent' class='main-content'>
   <?php unset($_GET['onlybody']);?>
   <?php if(empty($measures)): ?>
-    <div class='empty-tip'><?php echo $lang->sonarqube->noReport;?></div>
+  <div class="table-empty-tip">
+    <p><span class="text-muted"><?php echo $lang->sonarqube->noReport;?></span></p>
+  </div>
   <?php else:?>
   <div class="main-header">
     <div class="page-title">
