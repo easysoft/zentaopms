@@ -724,6 +724,8 @@ $lang->resource->kanban->viewArchivedColumn = 'viewArchivedColumn';
 $lang->resource->kanban->viewArchivedCard   = 'viewArchivedCard';
 $lang->resource->kanban->restoreCard        = 'restoreCard';
 $lang->resource->kanban->batchCreateCard    = 'batchCreateCard';
+$lang->resource->kanban->finishCard         = 'finishCard';
+$lang->resource->kanban->activateCard       = 'activateCard';
 
 $lang->kanban->methodOrder[5]   = 'space';
 $lang->kanban->methodOrder[10]  = 'createSpace';
