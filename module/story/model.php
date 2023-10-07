@@ -3254,7 +3254,7 @@ class storyModel extends model
 
         global $app, $config;
 
-        if($story->parent < 0 and strpos($config->story->list->actionsOpratedParentStory, ",$action,") === false) return false;
+        if($story->parent < 0 and strpos($config->story->list->actionsOperatedParentStory, ",$action,") === false) return false;
 
         $story->reviewer  = isset($story->reviewer)  ? $story->reviewer  : array();
         $story->notReview = isset($story->notReview) ? $story->notReview : array();
