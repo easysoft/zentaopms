@@ -25,7 +25,7 @@ class dataset
      * 获取所有的项目集。
      * Get all program list.
      *
-     * @param  string    $fieldList
+     * @param  string       $fieldList
      * @access public
      * @return PDOStatement
      */
@@ -43,9 +43,9 @@ class dataset
      * 获取所有的顶级项目集。
      * Get top program list.
      *
-     * @param  int    $fieldList
+     * @param  string       $fieldList
      * @access public
-     * @return mixed
+     * @return PDOStatement
      */
     public function getTopPrograms($fieldList)
     {
@@ -62,7 +62,7 @@ class dataset
      * Get all projects.
      * 获取所有项目。
      *
-     * @param  string $fieldList
+     * @param  string       $fieldList
      * @access public
      * @return PDOStatement
      */
@@ -79,7 +79,7 @@ class dataset
      * 获取执行数据。
      * Get executions.
      *
-     * @param  string $fieldList
+     * @param  string       $fieldList
      * @access public
      * @return PDOStatement
      */
@@ -99,7 +99,7 @@ class dataset
      * 获取发布数据。
      * Get release list.
      *
-     * @param  string $fieldList
+     * @param  string       $fieldList
      * @access public
      * @return PDOStatement
      */
@@ -119,7 +119,7 @@ class dataset
      * 按产品获取发布数据。
      * Get release list according to product.
      *
-     * @param  string $fieldList
+     * @param  string       $fieldList
      * @access public
      * @return PDOStatement
      */
@@ -138,7 +138,7 @@ class dataset
      * 获取产品计划数据。
      * Get plan list.
      *
-     * @param  string $fieldList
+     * @param  string       $fieldList
      * @access public
      * @return PDOStatement
      */
@@ -157,7 +157,7 @@ class dataset
      * 获取bug数据。
      * Get bug list.
      *
-     * @param  string $fieldList
+     * @param  string       $fieldList
      * @access public
      * @return PDOStatement
      */
@@ -176,7 +176,7 @@ class dataset
      * 获取项目bug数据。
      * Get project bug list.
      *
-     * @param  string $fieldList
+     * @param  string       $fieldList
      * @access public
      * @return PDOStatement
      */
@@ -196,7 +196,7 @@ class dataset
      * 获取反馈数据。
      * Get feedback list.
      *
-     * @param  string $fieldList
+     * @param  string       $fieldList
      * @access public
      * @return PDOStatement
      */
@@ -214,9 +214,9 @@ class dataset
      * 获取需求数据。
      * Get story list.
      *
-     * @param  string $fieldList
+     * @param  string       $fieldList
      * @access public
-     * @return void
+     * @return PDOStatement
      */
     public function getStories($fieldList)
     {
@@ -233,7 +233,7 @@ class dataset
      * 获取执行的研发需求数据。
      * Get story list, with execution and type is story.
      *
-     * @param  string $fieldList
+     * @param  string       $fieldList
      * @access public
      * @return PDOStatement
      */
@@ -260,7 +260,7 @@ class dataset
      * 获取项目的研发需求数据。
      * Get story list, with project and type is story.
      *
-     * @param  string $fieldList
+     * @param  string       $fieldList
      * @access public
      * @return PDOStatement
      */
@@ -285,7 +285,7 @@ class dataset
      * 获取研发需求数据，过滤影子产品。
      * Get story list, filter shadow product.
      *
-     * @param  string $fieldList
+     * @param  string       $fieldList
      * @access public
      * @return PDOStatement
      */
@@ -306,7 +306,7 @@ class dataset
      * 获取所有研发需求数据，不过滤影子产品。
      * Get all story list, don't filter shadow product.
      *
-     * @param  string $fieldList
+     * @param  string       $fieldList
      * @access public
      * @return PDOStatement
      */
@@ -326,7 +326,7 @@ class dataset
      * 获取已交付的需求数据。
      * Get delivered story list.
      *
-     * @param  string $fieldList
+     * @param  string       $fieldList
      * @access public
      * @return PDOStatement
      */
@@ -349,7 +349,7 @@ class dataset
      * 获取用例数据。
      * Get case list.
      *
-     * @param  string $fieldList
+     * @param  string       $fieldList
      * @access public
      * @return PDOStatement
      */
@@ -368,7 +368,7 @@ class dataset
      * 获取产品数据。
      * Get product list.
      *
-     * @param  string $fieldList
+     * @param  string       $fieldList
      * @access public
      * @return PDOStatement
      */
@@ -386,7 +386,7 @@ class dataset
      * 获取项目数据。
      * Get all tasks.
      *
-     * @param  string $fieldList
+     * @param  string       $fieldList
      * @access public
      * @return PDOStatement
      */
@@ -406,7 +406,7 @@ class dataset
      * 获取产品线数据。
      * Get product lines.
      *
-     * @param  string $fieldList
+     * @param  string       $fieldList
      * @access public
      * @return PDOStatement
      */
@@ -426,7 +426,7 @@ class dataset
      * 获取用户数据。
      * Get users.
      *
-     * @param  string    $fieldList
+     * @param  string       $fieldList
      * @access public
      * @return PDOStatement
      */
@@ -441,7 +441,7 @@ class dataset
      * 获取文档数据。
      * Get docs.
      *
-     * @param  string    $fieldList
+     * @param  string       $fieldList
      * @access public
      * @return PDOStatement
      */
@@ -456,7 +456,7 @@ class dataset
      * 获取风险数据。
      * Get risks.
      *
-     * @param  string    $fieldList
+     * @param  string       $fieldList
      * @access public
      * @return PDOStatement
      */
@@ -474,7 +474,7 @@ class dataset
      * 获取问题数据。
      * Get issues.
      *
-     * @param  string    $fieldList
+     * @param  string       $fieldList
      * @access public
      * @return PDOStatement
      */
@@ -492,6 +492,7 @@ class dataset
      * 获取代码库数量。
      * Get repos count.
      *
+     * @param  string       $fieldList
      * @access public
      * @return PDOStatement
      */
@@ -515,6 +516,24 @@ class dataset
     {
         return $this->dao->select($fieldList)->from(TABLE_PIPELINE)->alias('t1')
             ->where('t1.deleted')->eq('0')
+            ->query();
+    }
+
+    /**
+     * 统计代码库为解决问题数量。
+     * Get pending repo issues.
+     *
+     * @param  string       $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getPendingRepoIssues($fieldList)
+    {
+        return $this->dao->select($fieldList)->from(TABLE_BUG)->alias('t1')
+            ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repo = t2.id')
+            ->where('t1.repo')->gt(0)
+            ->andWhere('t1.deleted')->eq('0')
+            ->andWhere('t1.resolvedBy')->eq('')
             ->query();
     }
 }
