@@ -1532,7 +1532,7 @@ class baseSQL
      * 更新或插入的数据。
      * The data to update or insert.
      *
-     * @var mix
+     * @var mixed
      * @access public
      */
     public $data;
@@ -1568,7 +1568,7 @@ class baseSQL
      * Is the first time to call set.
      *
      * @var bool
-     * @access public;
+     * @access public
      */
     public $isFirstSet = true;
 
@@ -1577,7 +1577,7 @@ class baseSQL
      * If in the logic of judge condition or not.
      *
      * @var bool
-     * @access public;
+     * @access public
      */
     public $inCondition = false;
 
@@ -1586,7 +1586,7 @@ class baseSQL
      * The condition is true or not.
      *
      * @var bool
-     * @access public;
+     * @access public
      */
     public $conditionIsTrue = false;
 
@@ -1595,7 +1595,7 @@ class baseSQL
      * If in mark or not.
      *
      * @var bool
-     * @access public;
+     * @access public
      */
     public $inMark = false;
 
