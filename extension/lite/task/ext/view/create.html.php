@@ -20,6 +20,8 @@
 <?php js::set('productID', $productID);?>
 <?php js::set('teamMemberError', $lang->task->error->teamMember);?>
 <?php js::set('estimateNotEmpty', sprintf($lang->error->gt, $lang->task->estimate, '0'))?>
+<?php js::set('attribute', '');?>
+<?php js::set('hasProduct', 1);?>
 <?php if(!empty($storyID)):?>
 <?php endif;?>
 <div id='mainContent' class='main-content'>
