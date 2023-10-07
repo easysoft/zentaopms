@@ -20,6 +20,15 @@ class gitlab extends control
     {
         parent::__construct($moduleName, $methodName);
 
+        if(stripos($this->methodName, 'ajax') === false)
+        {
+            if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
+    
+            if(!in_array(strtolower(strtolower($this->methodName)), array('browseproject', 'browsegroup', 'browseuser', 'browsebranch', 'browsetag')))
+            {
+                if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
+            }
+        }
         /* This is essential when changing tab(menu) from gitlab to repo. */
         /* Optional: common::setMenuVars('devops', $this->session->repoID); */
         $this->loadModel('ci')->setMenu();
@@ -195,7 +204,9 @@ class gitlab extends control
                     $this->loadModel('action')->create('gitlabuser', $openID, 'bind', '', sprintf($this->lang->gitlab->bindDynamic, $gitlabNames[$openID], $zentaoUsers[$account]->realname));
                 }
             }
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('gitlab', 'browse')));
+
+            if(dao::isError()) return $this->sendError(dao::getError());
+            return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'load' => helper::createLink('space', 'browse')));
         }
 
         $userList      = array();
@@ -263,7 +274,7 @@ class gitlab extends control
         $changes  = common::createChanges($oldGitLab, $gitLab);
         $this->loadModel('action')->logHistory($actionID, $changes);
 
-        $response['load']   = true;
+        $response['load']   = $this->createLink('space', 'browse');
         $response['result'] = 'success';
         return $this->send($response);
     }
@@ -618,7 +629,12 @@ class gitlab extends control
         {
             $this->gitlab->createUser($gitlabID);
 
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError())
+            {
+                $message = dao::getError();
+                foreach($message as &$msg) if(is_string($msg)) $msg = zget($this->lang->gitlab->errorResonse, $msg, $msg);
+                return $this->send(array('result' => 'fail', 'message' => $message));
+            }
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseUser', "gitlabID=$gitlabID")));
         }
 
@@ -725,7 +741,7 @@ class gitlab extends control
         if(!$this->app->user->admin)
         {
             $openID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
-            if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
+            if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('space', 'browse')));
         }
 
         $this->app->loadClass('pager', true);
@@ -745,6 +761,7 @@ class gitlab extends control
             if(!$project->adminer and isset($project->owner) and $project->owner->id == $openID) $project->adminer = true;
 
             $project->isMaintainer = $this->gitlab->checkUserAccess($gitlabID, $project->id, $project, $groupIDList, 'maintainer');
+            $project->isDeveloper  = $this->gitlab->checkUserAccess($gitlabID, $project->id, $project, $groupIDList, 'developer');
         }
 
         $gitlab    = $this->gitlab->getByID($gitlabID);

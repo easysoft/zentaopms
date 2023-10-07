@@ -20,6 +20,8 @@ class gitea extends control
     {
         parent::__construct($moduleName, $methodName);
 
+        if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
+
         /* This is essential when changing tab(menu) from gitea to repo. */
         /* Optional: common::setMenuVars('devops', $this->session->repoID); */
         if($this->app->rawMethod != 'binduser') $this->loadModel('ci')->setMenu();
@@ -163,8 +165,9 @@ class gitea extends control
         $changes = common::createChanges($oldGitea, $gitea);
         $this->loadModel('action')->logHistory($actionID, $changes);
 
-        $response['load']   = true;
-        $response['result'] = 'success';
+        $response['load']    = $this->createLink('space', 'browse');
+        $response['message'] = zget($this->lang->instance->notices, 'uninstallSuccess');
+        $response['result']  = 'success';
 
         return $this->send($response);
     }
@@ -196,7 +199,7 @@ class gitea extends control
      * @access public
      * @return void
      */
-    public function bindUser(int $giteaID, string $type = 'all')
+    public function bindUser($giteaID, $type = 'all')
     {
         $zentaoUsers = $this->dao->select('account,email,realname')->from(TABLE_USER)->fetchAll('account');
         $userPairs   = $this->loadModel('user')->getPairs('noclosed|noletter');
@@ -204,12 +207,12 @@ class gitea extends control
         if($_POST)
         {
             $this->gitea->bindUser($giteaID);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->server->http_referer));
+            if(dao::isError()) return $this->sendError(dao::getError());
+            return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'load' => helper::createLink('space', 'browse')));
         }
 
         $userList      = array();
-        $giteaUsers   = $this->gitea->apiGetUsers($giteaID);
+        $giteaUsers    = $this->gitea->apiGetUsers($giteaID);
         $bindedUsers   = $this->gitea->getUserAccountIdPairs($giteaID);
         $matchedResult = $this->gitea->getMatchedUsers($giteaID, $giteaUsers, $zentaoUsers);
 
@@ -245,6 +248,7 @@ class gitea extends control
         $this->view->recTotal    = count($userList);
         $this->view->userList    = $userList;
         $this->view->userPairs   = $userPairs;
+
         $this->view->zentaoUsers = $zentaoUsers;
         $this->display();
     }
@@ -263,11 +267,13 @@ class gitea extends control
 
         $project  = urldecode(base64_decode($project));
         $branches = $this->gitea->apiGetBranches($giteaID, $project);
-        $options  = "<option value=''></option>";
+
+        $options = array();
+        $options[] = array('text' => '', 'value' => '');;
         foreach($branches as $branch)
         {
-            $options .= "<option value='{$branch->name}'>{$branch->name}</option>";
+            $options[] = array('text' => $branch->name, 'value' => $branch->name);
         }
-        $this->send($options);
+        return print(json_encode($options));
     }
 }

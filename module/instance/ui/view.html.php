@@ -13,12 +13,26 @@ declare(strict_types=1);
 
 namespace zin;
 
-jsVar('instanceID', $instance->id);
+jsVar('copied',         $lang->instance->copied);
+jsVar('instanceID',     $instance->id);
+jsVar('instanceStatus', $instance->status);
+jsVar('instanceType',   $type);
 
-$setting    = usePager('pager');
+$instance->appName = strtolower($instance->appName);
 $cpuInfo    = $this->instance->printCpuUsage($instance, $instanceMetric->cpu, 'array');
 $memoryInfo = $this->instance->printMemUsage($instance, $instanceMetric->memory, 'array');
 $actions    = $this->loadModel('common')->buildOperateMenu($instance);
+
+if($type !== 'store')
+{
+    $defaultAccount = new stdclass();
+    $defaultAccount->username = $instance->account;
+    $defaultAccount->password = $instance->password;
+    $defaultAccount->token    = $instance->token;
+
+    $lang->instance->defaultAccount  = $lang->instance->account;
+    $lang->instance->defaultPassword = $lang->instance->password;
+}
 
 $dbListWg = array();
 foreach($dbList as $db)
@@ -39,11 +53,10 @@ foreach($dbList as $db)
             btn
             (
                 $lang->instance->management,
-                setClass('btn text-primary ghost ' .  $disabledClass),
+                setClass('btn text-primary ghost db-management ' .  $disabledClass),
                 setData('dbname', $db->name),
                 setData('dbtype', $db->db_type),
                 setData('id',   $instance->id),
-                on::click('openAdminer'),
             )
         ),
     );
@@ -55,10 +68,10 @@ detailHeader(
 );
 div
 (
-    setClass('flex flex-normal gap-x-5'),
+    setClass('flex flex-normal gap-x-5 justify-center'),
     div
     (
-        setClass('basis-2/3'),
+        setClass('flex-none w-2/3'),
         setID('instanceInfoContainer'),
         detailBody
         (
@@ -67,26 +80,27 @@ div
                 /* 应用名称信息图标区块 */
                 section
                 (
+                    set::title(''),
                     div
                     (
                         setClass('flex justify-between'),
                         div
                         (
                             setClass('flex basis-full'),
-                            img(set::src($instance->logo), setStyle(array('width' => '50px', 'height' => '50px'))),
+                            $type === 'store' ? img(set::src($instance->logo), setStyle(array('width' => '50px', 'height' => '50px'))) : null,
                             div
                             (
-                                setClass('ml-3 flex col gap-y-1 basis-full'),
+                                setClass(($type === 'store' ? 'ml-3' : '') . ' flex col gap-y-1 basis-full'),
                                 div
                                 (
                                     $instance->name, setClass('text-xl'),
-                                    span($cloudApp->app_version, setClass('ml-3 label lighter rounded-full'))
+                                    $type === 'store' ? span($instance->appVersion, setClass('ml-3 label lighter rounded-full')) : null
                                 ),
-                                div
+                                $type === 'store' ? div
                                 (
                                     setClass('flex progress-container'),
                                     set::title($cpuInfo['tip']),
-                                    icon('cog-outline text-' . $cpuInfo['color']),
+                                    icon('cpu text-' . $cpuInfo['color']),
                                     $lang->instance->cpuUsage,
                                     div
                                     (
@@ -99,7 +113,7 @@ div
                                             setStyle('width', $cpuInfo['rate'])
                                         )
                                     ),
-                                    icon('desktop text-' . $memoryInfo['color']),
+                                    icon('memory text-' . $memoryInfo['color']),
                                     $lang->instance->memUsage,
                                     span
                                     (
@@ -120,10 +134,10 @@ div
                                             setStyle('width', $memoryInfo['rate'])
                                         )
                                     )
-                                ),
+                                ) : null,
                             ),
                         ),
-                        btn
+                        $type !== 'store' ? null : btn
                         (
                             $lang->instance->setting,
                             setClass('btn ghost'),
@@ -144,18 +158,20 @@ div
                         setClass('table w-auto max-w-full bordered mt-4'),
                         h::tr
                         (
-                            h::th($lang->instance->status),
+                            $type !== 'store' ? null : h::th($lang->instance->status),
                             h::th($lang->instance->source),
                             // h::th($lang->instance->appTemplate),
                             h::th($lang->instance->installBy),
                             h::th($lang->instance->installAt),
-                            h::th($lang->instance->runDuration),
-                            $defaultAccount ? h::th($lang->instance->defaultAccount) : null,
-                            $defaultAccount ? h::th($lang->instance->defaultPassword) : null,
+                            $type !== 'store' ? null : h::th($lang->instance->runDuration),
+                            !empty($defaultAccount->username) ? h::th($lang->instance->defaultAccount) : null,
+                            !empty($defaultAccount->password) ? h::th($lang->instance->defaultPassword) : null,
+                            !empty($defaultAccount->token)    ? h::th($lang->instance->token) : null,
+                            (!in_array($instance->appName, array('gitlab', 'sonarqube'))) ? null : h::th($lang->instance->browseProject),
                         ),
                         h::tr
                         (
-                            h::td
+                            $type !== 'store' ? null : h::td
                             (
                                 setID('statusTD'),
                                 setData('reload', in_array($instance->status, array('creating', 'initializing', 'pulling', 'startup', 'starting', 'suspending', 'installing', 'uninstalling', 'stopping', 'destroying', 'upgrading'))),
@@ -169,9 +185,28 @@ div
                             // h::td(a(set::href($this->createLink('store', 'appView', "id=$instance->appID")), $instance->appName)),
                             h::td(zget($users, $instance->createdBy, '')),
                             h::td(substr($instance->createdAt, 0, 16)),
-                            h::td(common::printDuration($instance->runDuration)),
-                            $defaultAccount ? h::td($defaultAccount->username) : null,
-                            $defaultAccount ? h::td($defaultAccount->password) : null,
+                            $type !== 'store' ? null : h::td(common::printDuration($instance->runDuration)),
+                            !empty($defaultAccount->username) ? h::td($defaultAccount->username) : null,
+                            !empty($defaultAccount->password) ? h::td
+                            (
+                                input(set::type('text'), set::value($defaultAccount->password), set::name('password'), setStyle('display', 'none')),
+                                btn(set::className('copy-btn ghost'),set::icon('copy'))
+                            ): null,
+                            !empty($defaultAccount->token)    ? h::td
+                            (
+                                input(set::type('text'), set::value($defaultAccount->token), set::name('token'), setStyle('display', 'none')),
+                                btn(set::className('copy-btn ghost'),set::icon('copy'))
+                            ): null,
+                            (!in_array($instance->appName, array('gitlab', 'sonarqube'))) ? null : h::td
+                            (
+                                btn
+                                (
+                                    $lang->instance->management,
+                                    setClass('btn text-primary ghost'),
+                                    set::disabled($instance->type === 'store' && $instance->status != 'running'),
+                                    set::url(createLink($instance->appName, 'browseProject', "{$instance->appName}ID={$instance->externalID}"))
+                                )
+                            ),
                         )
                     )
                 ),
@@ -205,10 +240,10 @@ div
     ),
     div
     (
-        setClass('basis-auto'),
+        setClass('w-1/3'),
         history
         (
-            set::commentUrl(createLink('action', 'comment', array('objectType' => 'instance', 'objectID' => $instance->id))),
+            set::commentUrl(createLink('action', 'comment', array('objectType' => $type === 'store' ? 'instance' : $instance->type, 'objectID' => $instance->id))),
         )
     )
 );

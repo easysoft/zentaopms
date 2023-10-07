@@ -24,6 +24,7 @@ formPanel
         (
             set::name('name'),
             set::width('500px'),
+            set::required(true),
             set::label($lang->instance->name),
             set::value($instance->name),
         )
@@ -35,6 +36,7 @@ formPanel
             set::name('memory_kb'),
             set::width('250px'),
             set::control('picker'),
+            set::required(true),
             set::label($lang->instance->adjustMem),
             set::value(intval($currentResource->max->memory / 1024)),
             set::items($this->instance->filterMemOptions($currentResource)),

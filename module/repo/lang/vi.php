@@ -230,3 +230,5 @@ $lang->repo->typeList['performance'] = 'Hiệu suất';
 $lang->repo->typeList['security']    = 'Bảo mật';
 $lang->repo->typeList['redundancy']  = 'Redundancy';
 $lang->repo->typeList['logicError']  = 'Logic Error';
+
+$lang->repo->featureBar['maintain']['all'] = 'All';

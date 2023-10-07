@@ -72,6 +72,7 @@ foreach ($cloudApps as $group)
                     setClass('primary btn size-sm install-btn'),
                     setData('prevent', true),
                     setData('toggle', 'modal'),
+                    setData('size', 'sm'),
                     in_array($cloudApp->id, $installedApps) ? setData('confirm', $lang->store->alreadyInstalled) : null,
                     setData('url', $this->createLink('space', 'createApplication', "id={$cloudApp->id}")),
                     on::click('installApp', array('stop' => true)),
@@ -100,7 +101,7 @@ div
             set::current($sortType),
             set::linkParams("sortType={key}"),
         ),
-    
+
         toolbar
         (
             formGroup
@@ -117,7 +118,7 @@ div
             ),
         ),
     ),
-    
+
     div(...$groups),
     pager(
         setID('storePager'),

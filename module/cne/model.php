@@ -50,7 +50,7 @@ class cneModel extends model
         if(empty($result) || $result->code != 200 || empty($result->data)) return array();
 
         $instanceList = $result->data;
-        return array_combine(array_column($instanceList, 'name'), $instanceList);
+        return array_combine(helper::arrayColumn($instanceList, 'name'), $instanceList);
     }
 
     /**
@@ -335,7 +335,7 @@ class cneModel extends model
         $customDomain = $this->loadModel('setting')->getItem('owner=system&module=common&section=domain&key=customDomain');
         if($customDomain) return $customDomain;
 
-        return  getenv('APP_DOMAIN') ? getenv('APP_DOMAIN') : $this->config->CNE->app->domain;
+        return getenv('APP_DOMAIN');
     }
 
     /**
@@ -449,7 +449,7 @@ class cneModel extends model
 
         $apiUrl = "/api/cne/statistics/app";
         $result = $this->apiPost($apiUrl, $apiData, $this->config->CNE->api->headers);
-        if(!isset($result->code) || $result->code != 200)return array_combine(array_column($instancesMetrics, 'id'), $instancesMetrics);
+        if(!isset($result->code) || $result->code != 200)return array_combine(helper::arrayColumn($instancesMetrics, 'id'), $instancesMetrics);
 
         foreach($result->data as $k8sMetric)
         {
@@ -468,7 +468,7 @@ class cneModel extends model
             $instancesMetrics[$k8sMetric->name]->memory->rate  = $instancesMetrics[$k8sMetric->name]->memory->limit > 0 ? round($instancesMetrics[$k8sMetric->name]->memory->usage / $instancesMetrics[$k8sMetric->name]->memory->limit * 100, 2) : 0;
         }
 
-        return array_combine(array_column($instancesMetrics, 'id'), $instancesMetrics);
+        return array_combine(helper::arrayColumn($instancesMetrics, 'id'), $instancesMetrics);
     }
 
     /**
@@ -839,22 +839,27 @@ class cneModel extends model
     {
         if(empty($mappings)) $mappings = array(
             array(
-                "key" => "admin_username",
+                "key"  => "admin_username",
                 "type" => "helm",
                 "path" => "auth.username"
             ),
             array(
-                "key" => "admin_password",
-                "type" => "helm",
-                "path" => "auth.password"
+                "key"  => "z_username",
+                "path" => "z_username",
+                "type" => "secret"
             ),
             array(
-                "key" => "admin_token",
-                "type" => "secret",
-                "path" => "api_token"
+                "key"  => "z_password",
+                "path" => "z_password",
+                "type" => "secret"
             ),
+            array(
+                "key"  => "api_token",
+                "path" => "api_token",
+                "type" => "secret"
+            )
         );
- 
+
         $apiParams = new stdclass;
         $apiParams->cluster   = '';
         $apiParams->namespace = $instance->spaceData->k8space;
@@ -993,7 +998,7 @@ class cneModel extends model
         if(empty($result) || $result->code != 200 || empty($result->data)) return array();
 
         $dbList = $result->data;
-        return array_combine(array_column($dbList, 'name'), $dbList);
+        return array_combine(helper::arrayColumn($dbList, 'name'), $dbList);
     }
 
     /**
@@ -1057,7 +1062,7 @@ class cneModel extends model
         if(empty($result) || $result->code != 200 || empty($result->data)) return array();
 
         $dbList = $result->data;
-        return array_combine(array_column($dbList, 'name'), $dbList);
+        return array_combine(helper::arrayColumn($dbList, 'name'), $dbList);
     }
 
     /**
@@ -1077,7 +1082,7 @@ class cneModel extends model
         if(empty($result) || $result->code != 200 || empty($result->data)) return array();
 
         $dbList = $result->data;
-        return array_combine(array_column($dbList, 'name'), $dbList);
+        return array_combine(helper::arrayColumn($dbList, 'name'), $dbList);
     }
 
     /**
@@ -1144,8 +1149,12 @@ class cneModel extends model
     public function apiPost($url, $data, $header = array(), $host = '')
     {
         $requestUri = ($host ? $host : $this->config->CNE->api->host) . $url;
-        $result     = json_decode(commonModel::http($requestUri, $data, array(CURLOPT_CUSTOMREQUEST => 'POST'), $header, 'json', 20));
-        if($result && $result->code == 200) return $result;
+        $result     = json_decode(commonModel::http($requestUri, $data, array(CURLOPT_CUSTOMREQUEST => 'POST'), $header, 'json', 'POST', 20));
+        if($result && in_array($result->code, array(200, 201)))
+        {
+            $result->code = 200;
+            return $result;
+        }
         if($result) return $this->translateError($result);
 
         return $this->cneServerError();
@@ -1312,5 +1321,22 @@ class cneModel extends model
 
         $apiUrl = "/api/cne/platform/restore/status";
         return $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);
+    }
+
+    /**
+     * app资源调度尝试。
+     * Try allocate for apps.
+     *
+     * @param  array $apps
+     * @access public
+     * @return object
+     */
+    public function tryAllocate(array $resources): object
+    {
+        $apiParams = new stdclass();
+        $apiParams->requests = $resources;
+
+        $apiUrl = "/api/cne/system/resource/try-allocate";
+        return $this->apiPost($apiUrl, $apiParams, $this->config->CNE->api->headers);
     }
 }

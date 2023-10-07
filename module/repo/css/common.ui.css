@@ -7,11 +7,11 @@
 #fileTabs > .nav-tabs {position: absolute; display: flex; padding-left: 25px;}
 #fileTabs .monaco-close{margin-right: 18px;}
 #fileTabs .nav-tabs > li > a > span{margin-left: 18px;font-weight: 700;color: #313c52!important;}
+#related .btn-right, #related .btn-left {padding-top: 6px;}
 #log .action-btn {margin-top: -7px;}
 .repoCode .btn.btn-right, .repoCode .btn.btn-left {margin-right: 0; padding: 6px 6px;}
 .btn-left, .btn-right {display: none;}
 #linkObject{display: none;}
-#related .btn-right, #related .btn-left {padding-top: 6px;}
 #monacoTree .tree-item-content span {cursor: pointer;}
 .directory {background-image:url('theme/default/images/repo/dir.png');}
 .file {background-image:url('theme/default/images/repo/txt.png');}
@@ -50,3 +50,5 @@
 #fileTabs .monaco-dropmenu .caret {display: none;}
 #monacoTabs .gap-x-5 {-moz-column-gap: 0; column-gap: 0;}
 #reviewBugContainer {position: fixed; right: 0; top: 0px; width: 25%; height: 100%; background: #fff; border-left: 5px solid #F4F5F7; overflow-y: auto; z-index: 9;}
+#log .action-btn .btn {padding-left: .25rem; padding-right: .25rem;}
+.dropmenu-btn>.text {max-width: 280px;}

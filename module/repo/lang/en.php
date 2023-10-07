@@ -1,4 +1,6 @@
 <?php
+global $config;
+
 $lang->repo->common          = 'Repo';
 $lang->repo->codeRepo        = 'Code Library';
 $lang->repo->browse          = 'View';
@@ -166,7 +168,7 @@ $lang->repo->encodingList['gbk']   = 'GBK';
 
 $lang->repo->scmList['Gitlab']     = 'GitLab';
 $lang->repo->scmList['Gogs']       = 'Gogs';
-$lang->repo->scmList['Gitea']      = 'Gitea';
+if(!$config->inQuickon) $lang->repo->scmList['Gitea']      = 'Gitea';
 $lang->repo->scmList['Git']        = 'Git';
 $lang->repo->scmList['Subversion'] = 'SVN';
 
@@ -233,6 +235,7 @@ $lang->repo->error->differentVersions = 'The criterion and contrast cannot be th
 $lang->repo->error->needTwoVersion    = 'Two branches or tags must be selected.';
 $lang->repo->error->emptyVersion      = 'Version cannot be empty';
 $lang->repo->error->versionError      = 'Wrong version format!';
+$lang->repo->error->projectUnique     = $lang->repo->serviceProject . " exists. Go to Admin->System->Data->Recycle Bin to restore it, if you are sure it is deleted.";
 
 $lang->repo->syncTips          = '<strong>You may find the reference about how to set Git sync from <a target="_blank" href="https://www.zentao.pm/book/zentaomanual/free-open-source-project-management-software-git-105.html">here</a>.</strong>';
 $lang->repo->encodingsTips     = "The encodings of comments can be comma separated values, e.g. utf-8.";

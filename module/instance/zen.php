@@ -21,9 +21,9 @@ class instanceZen extends instance
      */
     protected function saveAuthInfo(object $instance): void
     {
-        if(empty($this->config->instance->devopsApps[$instance->appID])) return;
+        if(!in_array($instance->chart, $this->config->instance->devopsApps)) return;
 
-        $url      = 'https://' . $instance->domain;
+        $url      = strstr(getWebRoot(true), ':', true) . '://' . $instance->domain;
         $pipeline = $this->loadModel('pipeline')->getByUrl($url);
         if(!empty($pipeline)) return;
 
@@ -31,19 +31,21 @@ class instanceZen extends instance
         if(empty($tempMappings)) return;
 
         $pipeline = new stdclass();
-        $instance->type        = $this->config->instance->devopsApps[$instance->appID];
+        $instance->type        = $instance->chart;
         $pipeline->type        = $instance->type;
         $pipeline->private     = md5(strval(rand(10,113450)));
         $pipeline->createdBy   = 'system';
         $pipeline->createdDate = helper::now();
         $pipeline->url         = $url;
         $pipeline->name        = $this->generatePipelineName($instance);
-        $pipeline->token       = zget($tempMappings, 'admin_token', '');
-        $pipeline->account     = zget($tempMappings, 'admin_username', '');
-        $pipeline->password    = zget($tempMappings, 'admin_password', '');
-        $pipeline->token       = zget($tempMappings, 'admin_token', '');
+        $pipeline->token       = zget($tempMappings, 'api_token', '');
+        $pipeline->account     = zget($tempMappings, 'z_username', '');
+        $pipeline->password    = zget($tempMappings, 'z_password', '');
+        if($instance->appID == 60) $pipeline->token = base64_encode($pipeline->token . ':');
+        if(empty($pipeline->account)) $pipeline->account = zget($tempMappings, 'admin_username', '');
 
         $this->pipeline->create($pipeline);
+        if(dao::isError()) dao::getError();
     }
 
     /**

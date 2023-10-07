@@ -56,11 +56,10 @@ window.getRelation = function(commit)
     $('#codeContainer').css('height', codeHeight / 5 * 3);
     var relatedHeight = codeHeight / 5 * 2 - $('#log').height() - 10;
     $('#related').css('height', relatedHeight);
-    $('#related').css('height', relatedHeight);
     setTimeout(() => {
         var tabsHeight = $('#relationTabs .nav-tabs').height();
         if(!tabsHeight) tabsHeight = 32;
-        $('#relationTabs .tab-content').css('height', relatedHeight - tabsHeight - 5);
+        $('#relationTabs .tab-content').css('height', relatedHeight - tabsHeight - 8);
     }, 500);
     $('#relationTabs ul li').remove();
     $('#relationTabs .tab-content .tab-pane').remove();
@@ -209,7 +208,7 @@ function initPage()
         parent.loadLinkPage(link);
     });
 
-    $('#relationTabs').on('click', '.unlinks', function()
+    $('#relationTabs').off('click', '.unlinks').on('click', '.unlinks', function()
     {
         var link = $(this).data('link');
         $.post(link, function(data)

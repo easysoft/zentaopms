@@ -14,6 +14,7 @@ $config->artifactrepo->dtable->fieldList['format']['sortType'] = true;
 $config->artifactrepo->dtable->fieldList['products']['title'] = $lang->repo->product;
 $config->artifactrepo->dtable->fieldList['products']['name']  = 'productNames';
 $config->artifactrepo->dtable->fieldList['products']['width'] = '300';
+$config->artifactrepo->dtable->fieldList['products']['hint']  = true;
 
 $config->artifactrepo->dtable->fieldList['type']['title']    = $lang->artifactrepo->type;
 $config->artifactrepo->dtable->fieldList['type']['sortType'] = true;
@@ -23,6 +24,7 @@ $config->artifactrepo->dtable->fieldList['status']['sortType'] = true;
 
 $config->artifactrepo->dtable->fieldList['url']['title'] = $lang->artifactrepo->url;
 $config->artifactrepo->dtable->fieldList['url']['width'] = '400';
+$config->artifactrepo->dtable->fieldList['url']['hint']  = true;
 
 $config->artifactrepo->dtable->fieldList['actions']['type'] = 'actions';
 $config->artifactrepo->dtable->fieldList['actions']['menu'] = array('edit', 'delete');

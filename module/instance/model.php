@@ -50,6 +50,20 @@ class InstanceModel extends model
     }
 
     /**
+     * 根据应用url获取应用信息。
+     * Get a application by url.
+     *
+     * @param  string $url
+     * @access public
+     * @return object
+     */
+    public function getByUrl(string $url)
+    {
+        $url = str_replace(array('https://', 'http://'), '', trim($url));
+        return $this->dao->select('id')->from(TABLE_INSTANCE)->where('domain')->eq($url)->fetch();
+    }
+
+    /**
      * Get by id list.
      *
      * @param  array $idList
@@ -63,10 +77,10 @@ class InstanceModel extends model
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
 
-        $spaces = $this->dao->select('*')->from(TABLE_SPACE)->where('deleted')->eq(0)->andWhere('id')->in(array_column($instances, 'space'))->fetchAll('id');
+        $spaces = $this->dao->select('*')->from(TABLE_SPACE)->where('deleted')->eq(0)->andWhere('id')->in(helper::arrayColumn($instances, 'space'))->fetchAll('id');
         foreach($instances as $instance) $instance->spaceData = zget($spaces, $instance->space, new stdclass);
 
-        $solutionIDList = array_column($instances, 'solution');
+        $solutionIDList = helper::arrayColumn($instances, 'solution');
         $solutions      = $this->dao->select('*')->from(TABLE_SOLUTION)->where('id')->in($solutionIDList)->fetchAll('id');
         foreach($instances as $instance) $instance->solutionData = zget($solutions, $instance->solution, new stdclass);
 
@@ -103,13 +117,13 @@ class InstanceModel extends model
      */
     public function getByAccount($account = '', $pager = null, $pinned = '', $searchParam = '', $status = 'all')
     {
-        $defaultSpace = $this->loadModel('space')->defaultSpace($account ? $account : $this->app->user->account);
+        // $defaultSpace = $this->loadModel('space')->defaultSpace($account ? $account : $this->app->user->account);
 
         $instances = $this->dao->select('instance.*')->from(TABLE_INSTANCE)->alias('instance')
             ->leftJoin(TABLE_SPACE)->alias('space')->on('space.id=instance.space')
             ->where('instance.deleted')->eq(0)
-            ->andWhere('space.id')->eq($defaultSpace->id)
-            ->beginIF($account)->andWhere('space.owner')->eq($account)->fi()
+            // ->andWhere('space.id')->eq($defaultSpace->id)
+            // ->beginIF($account)->andWhere('space.owner')->eq($account)->fi()
             ->beginIF($pinned)->andWhere('instance.pinned')->eq((int)$pinned)->fi()
             ->beginIF($searchParam)->andWhere('instance.name')->like("%{$searchParam}%")->fi()
             ->beginIF($status != 'all')->andWhere('instance.status')->eq($status)->fi()
@@ -119,12 +133,12 @@ class InstanceModel extends model
 
         $spaces = $this->dao->select('*')->from(TABLE_SPACE)
             ->where('deleted')->eq(0)
-            ->andWhere('id')->in(array_column($instances, 'space'))
+            ->andWhere('id')->in(helper::arrayColumn($instances, 'space'))
             ->fetchAll('id');
 
         foreach($instances as $instance) $instance->spaceData = zget($spaces, $instance->space, new stdclass);
 
-        $solutionIDList = array_column($instances, 'solution');
+        $solutionIDList = helper::arrayColumn($instances, 'solution');
         $solutions      = $this->dao->select('*')->from(TABLE_SOLUTION)->where('id')->in($solutionIDList)->fetchAll('id');
         foreach($instances as $instance) $instance->solutionData = zget($solutions, $instance->solution, new stdclass);
 
@@ -143,7 +157,7 @@ class InstanceModel extends model
 
         $spaces = $this->dao->select('*')->from(TABLE_SPACE)
             ->where('deleted')->eq(0)
-            ->andWhere('id')->in(array_column($instances, 'space'))
+            ->andWhere('id')->in(helper::arrayColumn($instances, 'space'))
             ->fetchAll('id');
 
         foreach($instances as $instance) $instance->spaceData = zget($spaces, $instance->space, new stdclass);
@@ -330,7 +344,7 @@ class InstanceModel extends model
             ->andWhere("REPLACE(domain, '.$sysDomain', '')")->like("%.%")
             ->fetchAll('id');
 
-        $spaces = $this->dao->select('*')->from(TABLE_SPACE)->where('deleted')->eq(0)->andWhere('id')->in(array_column($instanceList, 'space'))->fetchAll('id');
+        $spaces = $this->dao->select('*')->from(TABLE_SPACE)->where('deleted')->eq(0)->andWhere('id')->in(helper::arrayColumn($instanceList, 'space'))->fetchAll('id');
 
         foreach($instanceList as $instance) $instance->spaceData = zget($spaces, $instance->space, new stdclass);
 
@@ -575,7 +589,7 @@ class InstanceModel extends model
             $settingsMap->global->ingress->host    = $settingsMap->ingress->host;
         }
 
-        if(!empty($this->config->instance->devopsApps[$instance->appID]))
+        if(in_array($instance->chart, $this->config->instance->devopsApps))
         {
             $settingsMap->ci = new stdclass();
             $settingsMap->ci->enabled = true;
@@ -914,7 +928,7 @@ class InstanceModel extends model
      */
     public function createInstance($app, $space, $thirdDomain, $name = '', $k8name = '', $channel = 'stable', $snippets = array())
     {
-        if(empty($k8name)) $k8name = "{$app->chart}-{$this->app->user->account}-" . date('YmdHis'); //name rule: chartName-userAccount-YmdHis;
+        if(empty($k8name)) $k8name = "{$app->chart}-" . date('YmdHis'); //name rule: chartName-userAccount-YmdHis;
 
         $instanceData = new stdclass;
         $instanceData->appId           = $app->id;
@@ -1518,8 +1532,8 @@ class InstanceModel extends model
         $backupList = $result->data;
         usort($backupList, function($backup1, $backup2){ return $backup1->create_time < $backup2->create_time; });
 
-        $accounts = array_column($backupList, 'creator');
-        foreach($backupList as $backup) $accounts = array_merge($accounts, array_column($backup->restores, 'creator'));
+        $accounts = helper::arrayColumn($backupList, 'creator');
+        foreach($backupList as $backup) $accounts = array_merge($accounts, helper::arrayColumn($backup->restores, 'creator'));
 
         $accounts = array_unique($accounts);
 
@@ -1652,7 +1666,7 @@ class InstanceModel extends model
             ->fetchAll();
         if(empty($instanceList)) return;
 
-        $spaceList = $this->dao->select('*')->from(TABLE_SPACE)->where('id')->in(array_column($instanceList, 'space'))->fetchAll('id');
+        $spaceList = $this->dao->select('*')->from(TABLE_SPACE)->where('id')->in(helper::arrayColumn($instanceList, 'space'))->fetchAll('id');
 
         foreach($instanceList as $instance)
         {
@@ -1710,13 +1724,13 @@ class InstanceModel extends model
      *
      * @param  object $instance
      * @param  object $metrics
-     * @param  string $type    'bar' is progress bar, 'pie' is progress pie.
      * @static
      * @access public
      * @return mixed
      */
-    public static function printCpuUsage($instance, $metrics, $type = 'bar')
+    public static function printCpuUsage($instance, $metrics)
     {
+        if($instance->source === 'user') return array('color' => '', 'tip' => '', 'rate' => '', 'usage' => '', 'limit' => '');
         $rate = $instance->status == 'stopped' ? 0 : $metrics->rate;
         $tip  = "{$rate}% = {$metrics->usage} / {$metrics->limit}";
 
@@ -1726,14 +1740,7 @@ class InstanceModel extends model
         if(empty($color) && $rate >= 0 && $rate < 90) $color = 'important';
         if(empty($color) && $rate >= 80)              $color = 'danger';
 
-        if($type == 'array') return array('color' => $color, 'tip' => $tip, 'rate' => $rate . '%', 'usage' => $metrics->usage, 'limit' => $metrics->limit);
-
-        if(strtolower($type) == 'pie') commonModel::printProgressPie($rate, '', $tip);
-
-        $valueType = 'percent';
-        if($instance->status == 'stopped') $valueType = '';
-
-        commonModel::printProgressBar($rate, '', $tip, $valueType);
+        return array('color' => $color, 'tip' => $tip, 'rate' => $rate . '%', 'usage' => $metrics->usage, 'limit' => $metrics->limit);
     }
 
     /**
@@ -1741,13 +1748,13 @@ class InstanceModel extends model
      *
      * @param  object $instance
      * @param  object $metrics
-     * @param  string $type    'bar' is progress bar, 'pie' is progress pie.
      * @static
      * @access public
      * @return mixed
      */
-    public static function printMemUsage($instance, $metrics, $type = 'bar')
+    public static function printMemUsage($instance, $metrics)
     {
+        if($instance->source === 'user') return array('color' => '', 'tip' => '', 'rate' => '', 'usage' => '', 'limit' => '');
         $rate = $instance->status == 'stopped' ? 0 : $metrics->rate;
         $tip  = "{$rate}% = " . helper::formatKB($metrics->usage) . ' / ' . helper::formatKB($metrics->limit);
 
@@ -1757,14 +1764,7 @@ class InstanceModel extends model
         if(empty($color) && $rate >= 0 && $rate < 90) $color = 'important';
         if(empty($color) && $rate >= 80)              $color = 'danger';
 
-        if($type == 'array') return array('color' => $color, 'tip' => $tip, 'rate' => $rate . '%', 'usage' => helper::formatKB($metrics->usage), 'limit' => helper::formatKB($metrics->limit));
-
-        if(strtolower($type) == 'pie') commonModel::printProgressPie($rate, '', $tip);
-
-        $valueType = 'tip';
-        if($instance->status == 'stopped') $valueType = '';
-
-        commonModel::printProgressBar($rate, '', $tip, $valueType);
+        return array('color' => $color, 'tip' => $tip, 'rate' => $rate . '%', 'usage' => helper::formatKB($metrics->usage), 'limit' => helper::formatKB($metrics->limit));
     }
 
     /*
@@ -2054,14 +2054,38 @@ class InstanceModel extends model
     public function isClickable(object $instance, string $action): bool
     {
         if(!isset($instance->type)) $instance->type = 'store';
-        if($action == 'start')     return $instance->type != 'external' ? $this->canDo('start', $instance) : false;
-        if($action == 'stop')      return $instance->type != 'external' ? $this->canDo('stop', $instance) : false;
-        if($action == 'uninstall') return $instance->type != 'external' && $this->canDo('uninstall', $instance);
-        if($action == 'visit')     return $instance->type != 'external' ? ($instance->domain && $this->canDo('visit', $instance)) : true;
-        if($action == 'upgrade')   return !empty($instance->latestVersion);
-        if($action == 'bindUser')  return ($instance->externalID && in_array($instance->appName, array('GitLab', 'Gitea', 'Gogs'))) ? true : false;
-        if($action == 'edit')      return $instance->type != 'external' ? false : true;
 
+        if($instance->type !== 'store')
+        {
+            if($action === 'edit' || $action === 'visit') return true;
+            if($action == 'bindUser')  return in_array($instance->appName, array('GitLab', 'Gitea', 'Gogs'));
+            if($action == 'ajaxUninstall') return true;
+            return false;
+        }
+
+        if($action == 'ajaxStart')     return $this->canDo('start', $instance);
+        if($action == 'ajaxStop')      return $this->canDo('stop', $instance);
+        if($action == 'ajaxUninstall') return $this->canDo('uninstall', $instance);
+        if($action == 'visit')         return !empty($instance->domain) && $this->canDo('visit', $instance);
+        if($action == 'upgrade')       return !empty($instance->latestVersion) && in_array($instance->status, array('stopped', 'running'));
+        if($action == 'edit')          return false;
+        if($action == 'bindUser')      return in_array($instance->appName, array('GitLab', 'Gitea', 'Gogs'));
+
+        return true;
+    }
+
+    /**
+     * 判断按钮是否显示。
+     * Adjust the action display.
+     *
+     * @param  object $instance
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function isDisplay(object $instance, string $action): bool
+    {
+        if($action !== 'visit' && !commonModel::hasPriv('instance', 'manage')) return false;
         return true;
     }
 

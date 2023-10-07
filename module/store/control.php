@@ -47,6 +47,7 @@ class store extends control
      */
     public function browse($sortType = 'create_time', $recPerPage = 0, $pageID = 1, $channel = '')
     {
+        if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
         global $config;
         if(empty($recPerPage)) $recPerPage = $this->cookie->pagerStoreBrowse ? $this->cookie->pagerStoreBrowse : 24;
         if(in_array( $channel, array('stable', 'test')))
@@ -75,7 +76,7 @@ class store extends control
         $pager = pager::init($pagedApps->total, $recPerPage, $pageID);
 
         $pagedCategories = $this->store->getCategories();
-        $categories      = array_combine(array_column($pagedCategories->categories, 'id'), array_column($pagedCategories->categories, 'alias'));
+        $categories      = array_combine(helper::arrayColumn($pagedCategories->categories, 'id'), helper::arrayColumn($pagedCategories->categories, 'alias'));
 
         $this->lang->switcherMenu = $this->store->getBrowseSwitcher();
 
@@ -101,6 +102,7 @@ class store extends control
      */
     public function appView($id, $pageID = 1, $recPerPage = 20)
     {
+        if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
         $appInfo = $this->store->getAppInfo($id, true);
         if(empty($appInfo)) return print(js::locate('back', 'parent'));
 

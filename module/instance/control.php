@@ -37,8 +37,62 @@ class instance extends control
      * @access public
      * @return void
      */
-    public function view($id, $recTotal = 0, $recPerPage = 20, $pageID = 1, $tab ='baseinfo' )
+    public function view($id, $type = 'store', $tab ='baseinfo' )
     {
+        if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
+        if($type === 'store')
+        {
+            $this->storeView($id, $tab);
+        }
+        else
+        {
+            $instance = $this->loadModel('gitea')->getByID($id);
+            $instance->status      = '';
+            $instance->source      = 'user';
+            $instance->externalID  = $instance->id;
+            $instance->runDuration = 0;
+            $instance->appName     = $instance->type;
+            $instance->createdAt   = $instance->createdDate;
+
+            $instanceMetric = new stdclass();
+            $instanceMetric->cpu    = 0;
+            $instanceMetric->memory = 0;
+
+            $this->view->title           = $instance->name;
+            $this->view->instance        = $instance;
+            $this->view->cloudApp        = array();
+            $this->view->seniorAppList   = array();
+            $this->view->actions         = $this->loadModel('action')->getList($instance->type, $id);
+            $this->view->defaultAccount  = '';
+            $this->view->instanceMetric  = $instanceMetric;
+            $this->view->currentResource = '';
+            $this->view->customItems     = array();
+            $this->view->backupList      = array();
+            $this->view->hasRestoreLog   =  false;
+            $this->view->latestBackup    = array();
+            $this->view->dbList          = array();
+            $this->view->domain          = '';
+        }
+
+        $this->view->users = $this->loadModel('user')->getPairs('noletter');
+        $this->view->tab   = $tab;
+        $this->view->type  = $type;
+        $this->display();
+    }
+
+    /**
+     * Show instance view.
+     *
+     * @param  int $id
+     * @param  int $recTotal
+     * @param  int $recPerPage
+     * @param  int $page
+     * @access public
+     * @return void
+     */
+    protected function storeView($id, $tab ='baseinfo' )
+    {
+        if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
         $this->loadModel('system');
         $this->app->loadLang('system');
 
@@ -52,9 +106,6 @@ class instance extends control
         $instanceMetric = $this->cne->instancesMetrics(array($instance));
         $instanceMetric = $instanceMetric[$instance->id];
         $this->lang->switcherMenu = $this->instance->getSwitcher($instance);
-
-        $this->app->loadClass('pager', true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $backupList   = array();
         $latestBackup = new stdclass;
@@ -82,13 +133,18 @@ class instance extends control
         $customItems     = $this->cne->getCustomItems($instance);
 
         if($instance->status == 'running') $this->instanceZen->saveAuthInfo($instance);
+        if(in_array($instance->chart, $this->config->instance->devopsApps))
+        {
+            $url      = strstr(getWebRoot(true), ':', true) . '://' . $instance->domain;
+            $pipeline = $this->loadModel('pipeline')->getByUrl($url);
+            $instance->externalID = !empty($pipeline) ? $pipeline->id : 0;
+        }
 
         $this->view->title           = $instance->appName;
         $this->view->instance        = $instance;
         $this->view->cloudApp        = $this->loadModel('store')->getAppInfoByChart($instance->chart, $instance->channel, false);
         $this->view->seniorAppList   = $tab == 'baseinfo' ? $this->instance->seniorAppList($instance, $instance->channel) :  array();
         $this->view->actions         = $this->loadModel('action')->getList('instance', $id);
-        $this->view->users           = $this->loadModel('user')->getPairs('noletter');
         $this->view->defaultAccount  = $this->cne->getDefaultAccount($instance);
         $this->view->instanceMetric  = $instanceMetric;
         $this->view->currentResource = $currentResource;
@@ -99,9 +155,6 @@ class instance extends control
         $this->view->dbList          = $dbList;
         $this->view->domain          = $this->cne->getDomain($instance);
         $this->view->tab             = $tab;
-        $this->view->pager           = $pager;
-
-        $this->display();
     }
 
     /**
@@ -225,6 +278,7 @@ class instance extends control
      */
     public function setting($id)
     {
+        if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
         $currentResource = new stdclass;
         $instance        = $this->instance->getByID($id);
         $currentResource = $this->cne->getAppConfig($instance);
@@ -302,6 +356,7 @@ class instance extends control
      */
     public function upgrade($id)
     {
+        if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
         $instance = $this->instance->getByID($id);
         $instance->latestVersion = $this->store->appLatestVersion($instance->appID, $instance->version);
 
@@ -342,6 +397,7 @@ class instance extends control
      */
     public function visit(int $id, int $externalID = 0): void
     {
+        if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
         if(!$externalID)
         {
             $instance = $this->instance->getByID($id);
@@ -366,6 +422,8 @@ class instance extends control
      */
     public function createExternalApp(string $type)
     {
+        if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
+
         $this->app->loadModuleConfig('sonarqube');
         $this->app->loadLang('pipeline');
 
@@ -389,6 +447,72 @@ class instance extends control
     }
 
     /**
+     * 编辑手工配置外部应用。
+     * Edit a external app.
+     *
+     * @param  int    $externalID
+     * @access public
+     * @return viod
+     */
+    public function editExternalApp(int $externalID)
+    {
+        if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
+
+        $oldApp = $this->loadModel('pipeline')->getByID($externalID);
+
+        if($_POST)
+        {
+            $this->pipeline->update($externalID);
+            $app = $this->pipeline->getByID($externalID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->loadModel('action');
+            $actionID = $this->action->create($app->type, $externalID, 'edited');
+            $changes  = common::createChanges($oldApp, $app);
+            $this->action->logHistory($actionID, $changes);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
+        }
+
+        $this->app->loadLang('space');
+        $this->app->loadLang('sonarqube');
+
+        $this->view->app = $oldApp;
+        $this->display();
+    }
+
+    /**
+     * 删除一个外部应用。
+     * Delete a external app.
+     *
+     * @param  int    $externalID
+     * @access public
+     * @return viod
+     */
+    public function deleteExternalApp(int $externalID)
+    {
+        if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
+
+        $oldApp = $this->loadModel('pipeline')->getByID($externalID);
+        $actionID = $this->pipeline->delete($externalID, $oldApp->type);
+        if(!$actionID)
+        {
+            $response['result']   = 'fail';
+            $response['callback'] = sprintf('zui.Modal.alert("%s");', $this->lang->pipeline->delError);
+            return $this->send($response);
+        }
+
+        $app     = $this->pipeline->getByID($externalID);
+        $changes = common::createChanges($oldApp, $app);
+        $this->loadModel('action')->logHistory($actionID, $changes);
+
+        $response['load']    = true;
+        $response['message'] = zget($this->lang->instance->notices, 'uninstallSuccess');
+        $response['result']  = 'success';
+
+        return $this->send($response);
+    }
+
+    /**
      * (Not used at present.) Install app by custom settings.
      *
      * @param int $id
@@ -406,28 +530,15 @@ class instance extends control
      * Install app.
      *
      * @param  int    $appID
+     * @param  string $checkResource
      * @access public
      * @return void
      */
-    public function install($appID)
+    public function install(int $appID, string $checkResource = 'true')
     {
+        if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
         $cloudApp = $this->store->getAppInfo($appID);
         if(empty($cloudApp)) return $this->send(array('result' => 'fail', 'message' => $this->lang->instance->errors->noAppInfo));
-
-        if(empty($this->config->demoAccounts))
-        {
-            $clusterResource = $this->cne->cneMetrics();
-            $freeMemory = intval($clusterResource->metrics->memory->allocatable * 0.9); // Remain 10% memory for system.
-            if($cloudApp->memory > $freeMemory)
-            {
-                $cloudApp       = $cloudApp;
-                $gapMemory      = helper::formatKB(intval(($cloudApp->memory - $freeMemory)));
-                $requiredMemory = helper::formatKB(intval($cloudApp->memory));
-                $freeMemory     = helper::formatKB(intval($freeMemory));
-
-                return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->instance->errors->notEnoughMemory, $cloudApp->alias, $requiredMemory, $freeMemory, $gapMemory)));
-            }
-        }
 
         $versionList = $this->store->appVersionList($cloudApp->id);
         $mysqlList   = $this->cne->sharedDBList('mysql');
@@ -455,6 +566,16 @@ class instance extends control
 
             if(!validater::checkLength($customData->customDomain, 20, 2))      return $this->send(array('result' => 'fail', 'message' => $this->lang->instance->errors->domainLength));
             if(!validater::checkREG($customData->customDomain, '/^[a-z\d]+$/')) return $this->send(array('result' => 'fail', 'message' => $this->lang->instance->errors->wrongDomainCharacter));
+
+            if($checkResource == 'true')
+            {
+                $resource = new stdclass();
+                $resource->cpu    = $cloudApp->cpu;
+                $resource->memory = $cloudApp->memory;
+
+                $result = $this->cne->tryAllocate(array($resource));
+                if(!isset($result->code) || $result->code != 200) return $this->send(array('callback' => 'alertResource()'));
+            }
 
             /* If select the version, replace the latest version of App by selected version. */
             if($customData->version)
@@ -505,15 +626,17 @@ class instance extends control
      */
     public function ajaxUninstall($instanceID, $type = '')
     {
-        if($type == 'external')
+        if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
+        if($type !== 'store')
         {
             $instance = $this->loadModel('pipeline')->getByID($instanceID);
-            if(!$instance) return $this->send(array('result' => 'success', 'message' => $this->lang->instance->notices['success']));
+            if(!$instance) return $this->send(array('result' => 'success', 'message' => $this->lang->instance->notices['success'], 'load' => $this->createLink('space', 'browse')));
 
-            return $this->send($this->fetch($instance->type, 'delete', array('id' => $instance->id)));
+            if($instance->type == 'nexus') return $this->deleteExternalApp($instance->id);
+            return $this->fetch($instance->type, 'delete', array('id' => $instance->id));
         }
         $instance = $this->instance->getByID($instanceID);
-        if(!$instance) return $this->send(array('result' => 'success', 'message' => $this->lang->instance->notices['success']));
+        if(!$instance) return $this->send(array('result' => 'success', 'message' => $this->lang->instance->notices['success'], 'load' => $this->createLink('space', 'browse')));
 
         $externalApp = $this->loadModel('space')->getExternalAppByApp($instance);
         if($externalApp)
@@ -524,7 +647,7 @@ class instance extends control
 
         $success = $this->instance->uninstall($instance);
         $this->action->create('instance', $instance->id, 'uninstall', '', json_encode(array('result' => $success, 'app' => array('alias' => $instance->appName, 'app_version' => $instance->version))));
-        if($success) return $this->send(array('result' => 'success', 'message' => zget($this->lang->instance->notices, 'uninstallSuccess'), 'locate' => $this->createLink('space', 'browse')));
+        if($success) return $this->send(array('result' => 'success', 'message' => zget($this->lang->instance->notices, 'uninstallSuccess'), 'load' => $this->createLink('space', 'browse')));
 
         return $this->send(array('result' => 'fail', 'message' => zget($this->lang->instance->notices, 'uninstallFail')));
     }
@@ -538,6 +661,7 @@ class instance extends control
      */
     public function ajaxStart($instanceID)
     {
+        if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
         $instance = $this->instance->getByID($instanceID);
         if(!$instance) return $this->send(array('result' => 'fail', 'message' => $this->lang->instance->instanceNotExists));
 
@@ -558,6 +682,7 @@ class instance extends control
      */
     public function ajaxStop($instanceID)
     {
+        if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
         $instance = $this->instance->getByID($instanceID);
         if(!$instance) return $this->send(array('result' => 'fail', 'message' => $this->lang->instance->instanceNotExists));
 
@@ -656,6 +781,7 @@ class instance extends control
      */
     public function ajaxDBAuthUrl()
     {
+        if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
         $post = fixer::input('post')
             ->setDefault('namespace', 'default')
             ->setDefault('instanceID', 0)
@@ -689,6 +815,7 @@ class instance extends control
      */
     public function ajaxAdjustMemory($instanceID)
     {
+        if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
         $postData = fixer::input('post')->get();
 
         /* Check free memory size is enough or not. */

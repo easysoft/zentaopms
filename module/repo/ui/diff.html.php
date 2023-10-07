@@ -12,7 +12,13 @@ declare(strict_types=1);
 
 namespace zin;
 
-if($app->tab == 'devops') dropmenu(set::module('repo'), set::tab('repo'));
+$module = $app->tab == 'devops' ? 'repo' : $app->tab;
+dropmenu
+(
+    set::module($module),
+    set::tab($module),
+    set::url(createLink($module, $app->tab == 'devops' ? 'ajaxGetDropMenu' : 'ajaxGetDropMenuData', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
+);
 
 jsVar('repo', $repo);
 jsVar('repoLang', $lang->repo);
@@ -65,11 +71,11 @@ if(strpos($repo->SCM, 'Subversion') === false)
     $breadcrumbItems[] = input(set::type('hidden'), set::name('oldRevision'), set::value($oldRevision));
     $breadcrumbItems[] = input(set::type('hidden'), set::name('newRevision'), set::value($newRevision));
     $breadcrumbItems[] = input(set::type('hidden'), set::name('isBranchOrTag'), set::value($isBranchOrTag));
-    $breadcrumbItems[] = span($lang->repo->source . ':');
+    $breadcrumbItems[] = span($lang->repo->source . ':', setClass('ml-3'));
     $breadcrumbItems[] = dropmenu
         (
             setID('source'),
-            set::objectID($selected),
+            set::objectID($objectID),
             set::text($oldRevision),
             set::data(array('data' => $menuData, 'tabs' => $tabs)),
         );
@@ -78,7 +84,7 @@ if(strpos($repo->SCM, 'Subversion') === false)
     $breadcrumbItems[] = dropmenu
         (
             setID('target'),
-            set::objectID($selected),
+            set::objectID($objectID),
             set::text($newRevision),
             set::data(array('data' => $menuData, 'tabs' => $tabs)),
         );
@@ -123,9 +129,9 @@ else
         );
 }
 
-featureBar
+\zin\featureBar
 (
-    backBtn(set::icon('back'), setClass('bg-transparent diff-back-btn'), $lang->goback),
+    backBtn(set::icon('back'), setClass('bg-transparent diff-back-btn'), set::back('GLOBAL'), $lang->goback),
     item(set::type('divider')),
     ...$breadcrumbItems,
 );

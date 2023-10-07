@@ -13,6 +13,7 @@ namespace zin;
 formPanel
 (
     set::title($lang->artifactrepo->create),
+    set::actionsClass('w-2/3'),
     formGroup
     (
         set::width('2/3'),
@@ -50,6 +51,7 @@ formPanel
     (
         set::width('2/3'),
         set::name('type'),
+        set::required(true),
         set::label($lang->artifactrepo->type),
         set::readonly(true),
         input
@@ -62,6 +64,7 @@ formPanel
     (
         set::width('2/3'),
         set::name('status'),
+        set::required(true),
         set::label($lang->artifactrepo->status),
         set::readonly(true),
     ),

@@ -1,9 +1,12 @@
 <?php
-$lang->system->dashboard       = '仪表盘';
+$lang->system->common          = '仪表盘';
+$lang->system->dashboard       = 'DevOps平台仪表盘';
 $lang->system->systemInfo      = '系统信息';
 $lang->system->dbManagement    = '数据库管理';
 $lang->system->ldapManagement  = 'LDAP';
 $lang->system->dbList          = '数据库列表';
+$lang->system->configDomain    = '域名管理';
+$lang->system->ossView         = '对象存储管理';
 $lang->system->dbName          = '名称';
 $lang->system->dbStatus        = '状态';
 $lang->system->dbType          = '类型';
@@ -249,7 +252,6 @@ $lang->system->backup->success->upgrade = '升级成功！';
 $lang->system->backup->success->degrade = '降级成功！';
 
 $lang->system->backup->error = new stdclass();
-
 $lang->system->backup->error->backupFail        = "备份失败!";
 $lang->system->backup->error->restoreFail       = "还原失败!";
 $lang->system->backup->error->upgradeFail       = "升级失败!";

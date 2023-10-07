@@ -1,5 +1,12 @@
 <?php
 $lang->instance = new stdclass;
+$lang->instance->common           = '应用';
+$lang->instance->manage           = '管理应用';
+$lang->instance->view             = '应用详情';
+$lang->instance->ajaxStatus       = '获取应用状态';
+$lang->instance->ajaxStart        = '启动应用';
+$lang->instance->ajaxStop         = '关闭应用';
+$lang->instance->ajaxUninstall    = '卸载应用';
 $lang->instance->name             = '名称';
 $lang->instance->appName          = '应用类型';
 $lang->instance->version          = '版本';
@@ -34,6 +41,7 @@ $lang->instance->editName         = '修改名称';
 $lang->instance->cpuCore          = '核';
 $lang->instance->scalable         = '应用水平扩容';
 $lang->instance->change           = '修改';
+$lang->instance->browseProject    = "项目列表";
 
 $lang->instance->systemLDAPInactive = '未开启系统LDAP';
 $lang->instance->toSystemLDAP       = '去启用';
@@ -41,7 +49,6 @@ $lang->instance->toSystemLDAP       = '去启用';
 $lang->instance->enableSMTP         = '启用SMTP';
 $lang->instance->systemSMTPInactive = '未开启系统SMTP';
 $lang->instance->toSystemSMTP       = '去启用';
-
 
 $lang->instance->serviceInfo      = '服务信息';
 $lang->instance->appTemplate      = '应用模板';
@@ -51,6 +58,10 @@ $lang->instance->installAt        = '创建时间';
 $lang->instance->runDuration      = '已运行';
 $lang->instance->defaultAccount   = '默认用户';
 $lang->instance->defaultPassword  = '默认密码';
+$lang->instance->account          = '用户名';
+$lang->instance->password         = '密码';
+$lang->instance->token            = 'Token';
+$lang->instance->copied           = '复制成功';
 $lang->instance->operationLog     = '操作记录';
 $lang->instance->installedService = '已安装服务';
 $lang->instance->runningService   = '运行中的服务';
@@ -93,7 +104,7 @@ $lang->instance->backup->dbName              = '名称';
 $lang->instance->backup->dbStatus            = '状态';
 $lang->instance->backup->dbSpentSeconds      = '耗时(秒)';
 $lang->instance->backup->dbSize              = '大小';
-$lang->instance->backup->volume              = '数据卷';
+$lang->instance->backup->volumne             = '数据卷';
 $lang->instance->backup->volName             = '名称';
 $lang->instance->backup->volMountName        = '挂载目录';
 $lang->instance->backup->volStatus           = '状态';
@@ -187,8 +198,9 @@ $lang->instance->actionList['autorestore']             = '系统执行了自动�
 $lang->instance->actionList['deleteexpiredbackup']     = '系统删除了过期的自动备份';
 
 $lang->instance->sourceList = array();
-$lang->instance->sourceList['cloud'] = '渠成公共市场';
+$lang->instance->sourceList['cloud'] = '应用市场';
 $lang->instance->sourceList['local'] = '本地市场';
+$lang->instance->sourceList['user']  = '手工配置';
 
 $lang->instance->channelList = array();
 $lang->instance->channelList['test']   = '测试版';
@@ -213,6 +225,7 @@ $lang->instance->statusList['destroyed']        = '已销毁';
 $lang->instance->statusList['abnormal']         = '异常';
 $lang->instance->statusList['upgrading']        = '更新中';
 $lang->instance->statusList['unknown']          = '未知';
+$lang->instance->statusList['scheduling']       = '调度中';
 
 $lang->instance->htmlStatusesClass = array();
 $lang->instance->htmlStatusesClass['running']          = 'success';
@@ -289,6 +302,7 @@ $lang->instance->notices['enableSMTPSuccess']  = '启用SMTP成功';
 $lang->instance->notices['disableSMTPSuccess'] = '禁用SMTP成功';
 $lang->instance->notices['confirmCustom']      = '修改自定义配置后服务将自动重启以使配置生效。';
 $lang->instance->notices['required']           = '不能为空';
+$lang->instance->notices['notEnoughResource']  = '平台资源不足，要继续安装吗？';
 
 $lang->instance->nameChangeTo      = ' %s 修改为 %s  。';
 $lang->instance->versionChangeTo   = ' %s 升级为 %s  。';
@@ -309,8 +323,7 @@ $lang->instance->appLifeTip         = 'demo账号安装的应用有30分钟限�
 $lang->instance->serialDiff         = '查看版本区别';
 $lang->instance->descOfSwitchSerial = '您当前使用的是<strong>%s</strong>，想要体验更多高级功能，可升级至%s。';
 $lang->instance->toSeniorAttention  = '重要提示';
-$lang->instance->toSeniorTips       = "<ul class='text-danger'><li>版本升级后，无法回退到原版本。</li><li>企业版、旗舰版自安装后免费试用6个月。</li><li>开源版升级到企业版或旗舰版后，试用期最大支持3个用户，
-    请检查开源版用户数量。超出限制将不可用。</li><li>升级成功后，服务将自动重启。</li><li>为避免造成数据丢失，请您在升级前务必做好数据备份。</li></ul>";
+$lang->instance->toSeniorTips       = "<ul class='text-danger'><li>版本升级后，无法回退到原版本。</li><li>企业版、旗舰版自安装后免费试用6个月。</li><li>开源版升级到企业版或旗舰版后，试用期最大支持3个用户，请检查开源版用户数量。超出限制将不可用。</li><li>升级成功后，服务将自动重启。</li><li>为避免造成数据丢失，请您在升级前务必做好数据备份。</li></ul>";
 
 $lang->instance->errors = new stdclass;
 $lang->instance->errors->domainLength         = '域名长度必须介于2-20字符之间';

@@ -10,22 +10,26 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('gitlabUrlTips', $lang->gitlab->placeholder->url);
-jsVar('gitlabTokenTips', $lang->gitlab->placeholder->token);
-jsVar('sonarqubeUrlTips', $lang->sonarqube->placeholder->url);
-jsVar('sonarqubeAccountTips', $lang->sonarqube->placeholder->account);
-jsVar('jenkinsTokenTips', $lang->jenkins->tokenFirst);
-jsVar('jenkinsPasswordTips', $lang->jenkins->tips);
-jsVar('apps', $apps);
-jsVar('mysqlList', $mysqlList);
-jsVar('pgList', $pgList);
-jsVar('defaultApp', $defaultApp);
-jsVar('appID', $appID);
-jsVar('externalApps', $config->space->zentaoApps);
-
 $showVersion = getenv('ALLOW_SELECT_VERSION') && (strtolower(getenv('ALLOW_SELECT_VERSION')) == 'true' || strtolower(getenv('ALLOW_SELECT_VERSION')) == '1');
 $dbTypeItems = array();
 foreach($lang->instance->dbTypes as $type => $db) $dbTypeItems[] = array('text' => $db, 'value' => $type);
+
+$colWidth = isInModal() ? 'full' : '2/3';
+
+jsVar('gitlabUrlTips', $lang->gitlab->placeholder->url);
+jsVar('gitlabTokenTips', $lang->gitlab->placeholder->token);
+jsVar('sonarqubeUrlTips', $lang->sonarqube->placeholder->url);
+jsVar('jenkinsTokenTips', $lang->jenkins->tokenFirst);
+jsVar('jenkinsPasswordTips', $lang->jenkins->tips);
+jsVar('sonarqubeAccountTips', $lang->sonarqube->placeholder->account);
+jsVar('apps', $apps);
+jsVar('appID', $appID);
+jsVar('pgList', $pgList);
+jsVar('mysqlList', $mysqlList);
+jsVar('defaultApp', $defaultApp);
+jsVar('showVersion', $showVersion);
+jsVar('externalApps', $config->space->zentaoApps);
+jsVar('resourceAlert', $lang->instance->notices['notEnoughResource']);
 
 if($config->inQuickon)
 {
@@ -36,12 +40,13 @@ if($config->inQuickon)
         set::title($lang->space->install),
         $appID ? set::submitBtnText($lang->instance->install) : null,
         $appID ? set::actions(array('submit', array('text' => $lang->instance->stop, 'data-type' => 'submit', 'data-dismiss' => 'modal'))) : null,
+        set::actionsClass('w-2/3'),
         formRow
         (
             setStyle('display', $appID ? 'none' : 'block'),
             formGroup
             (
-                set::width('2/3'),
+                set::width($colWidth),
                 set::label($lang->app->common),
                 set::name('storeAppType'),
                 set::items($apps),
@@ -71,7 +76,7 @@ if($config->inQuickon)
             setStyle('display', 'block'),
             formGroup
             (
-                set::width('2/3'),
+                set::width($colWidth),
                 set::label($lang->instance->name),
                 set::name('customName'),
                 set::control('input'),
@@ -81,7 +86,7 @@ if($config->inQuickon)
         ),
         $showVersion ? formGroup
         (
-            set::width('2/3'),
+            set::width($colWidth),
             set::label($lang->instance->version),
             set::name('version'),
             set::required(true),
@@ -89,7 +94,7 @@ if($config->inQuickon)
             set::items($versionList)
         ) : formGroup
         (
-            set::width('2/3'),
+            set::width($colWidth),
             set::label($lang->instance->version),
             set::name('app_version'),
             set::required(true),
@@ -104,7 +109,7 @@ if($config->inQuickon)
         (
             formGroup
             (
-                set::width('2/3'),
+                set::width($colWidth),
                 set::label($lang->instance->domain),
                 set::required(true),
                 inputGroup
@@ -146,7 +151,7 @@ if($config->inQuickon)
             setClass('dbType dbService'),
             formGroup
             (
-                set::width('2/3'),
+                set::width($colWidth),
                 set::label($lang->space->instanceType),
                 set::name('dbService'),
                 set::items(array()),
@@ -162,9 +167,10 @@ formPanel
     set::id('createAppForm'),
     set::title($lang->space->install),
     set::url($this->createLink('gitlab', 'create')),
+    set::actionsClass('w-2/3'),
     formGroup
     (
-        set::width('2/3'),
+        set::width($colWidth),
         set::label($lang->app->common),
         set::name('appType'),
         set::items($lang->space->appType),
@@ -183,14 +189,14 @@ formPanel
     ) : null,
     formGroup
     (
-        set::width('2/3'),
+        set::width($colWidth),
         set::label($lang->gitlab->name),
         set::name('name'),
         set::required(true),
     ),
     formGroup
     (
-        set::width('2/3'),
+        set::width($colWidth),
         set::label($lang->gitlab->url),
         set::name('url'),
         set::required(true),
@@ -201,7 +207,7 @@ formPanel
         setClass('jenkins sonarqube hidden'),
         formGroup
         (
-            set::width('2/3'),
+            set::width($colWidth),
             set::label($lang->user->account),
             set::name('account'),
             set::required(true),
@@ -212,7 +218,7 @@ formPanel
         setClass('token'),
         formGroup
         (
-            set::width('2/3'),
+            set::width($colWidth),
             set::label($lang->gitlab->token),
             set::name('token'),
             set::placeholder($lang->gitlab->placeholder->token),
@@ -224,7 +230,7 @@ formPanel
         setClass('jenkins sonarqube password hidden'),
         formGroup
         (
-            set::width('2/3'),
+            set::width($colWidth),
             set::label($lang->user->password),
             set::name('password'),
         ),

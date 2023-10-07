@@ -14,60 +14,72 @@ window.renderInstanceList = function (result, {col, row, value})
                 var statusClass = '';
         }
         result[0] = {html: '<span class="' + statusClass + '">' + result[0] + '</span>'};
-        return result;
     }
     else if(col.name === 'name')
     {
         if(row.data.type == 'external')
         {
-            if(row.data.appName == 'Gitea' || row.data.appName == 'GitLab' || row.data.appName == 'Gogs') result[0] = {html: '<a href="' + $.createLink(row.data.appName, 'view', 'id=' + row.data.externalID) + '" data-toggle="modal">' + result[0] + '</a>'};
+            result[0] = {html: '<a href="' + $.createLink('instance', 'view', 'id=' + row.data.externalID + '&type=external') + '">' + result[0] + '</a>'};
         }
         else
         {
             result[0] = {html: '<a href="' + $.createLink('instance', 'view', 'id=' + row.id) + '">' + result[0] + '</a>'};
         }
-        return result;
+    }
+    else if(col.name === 'createdAt')
+    {
+        if(value.includes('0000-00-00')) result[0] = '';
     }
 
     return result;
 }
 
-var timer = null;
+var refreshTime = 0;
+var timer       = null;
+const postData  = new FormData();
+if(idList.length > 0)
+{
+    idList.forEach(function(id){postData.append('idList[]', id)});
+}
 window.afterPageUpdate = function()
 {
-    if(timer) return;
-    const postData = new FormData();
-    idList.forEach(function(id)
-    {
-        postData.append('idList[]', id)
-    });
-    timer = setInterval(function()
-    {
-        $.ajaxSubmit({
-            url: $.createLink('instance', 'ajaxStatus'),
-            method: 'POST',
-            data:postData,
-            onComplete: function(res)
+    if(idList.length === 0) return;
+    refreshStatus();
+}
+
+function refreshStatus()
+{
+    if(new Date().getTime() - refreshTime < 4000) return;
+    refreshTime = new Date().getTime();
+
+    $.ajaxSubmit({
+        url: $.createLink('instance', 'ajaxStatus'),
+        method: 'POST',
+        data:postData,
+        onComplete: function(res)
+        {
+            if(res.result === 'success')
             {
-                if(res.result != 'success') return;
                 $.each(res.data, function(index, instance)
                 {
                     if(statusMap[instance.id] != instance.status)
                     {
-                        clearInterval(timer);
+                        loadCurrentPage();
                         statusMap[instance.id] = instance.status;
-                        loadPage();
+                        return;
                     }
                 });
             }
-        });
-    }, 10000);
+
+            timer = setTimeout(() => {refreshStatus()}, 5000);
+        }
+    });
 }
 
 window.onPageUnmount = function()
 {
-    if(timer == null) return;
-    clearInterval(timer);
+    if(!timer) return;
+    clearTimeout(timer);
 }
 
 window.bindUser = function(externalID, appName)
@@ -77,6 +89,20 @@ window.bindUser = function(externalID, appName)
 
 window.editApp = function(externalID, appName)
 {
-    $('#editLinkContainer').attr('href', $.createLink(appName.toLowerCase(), 'edit', 'id=' + externalID));
+    if(appName == 'Nexus')
+    {
+        $('#editLinkContainer').attr('href', $.createLink('instance', 'editExternalApp', 'id=' + externalID));
+    }
+    else
+    {
+        $('#editLinkContainer').attr('href', $.createLink(appName.toLowerCase(), 'edit', 'id=' + externalID));
+    }
     $('#editLinkContainer').trigger('click');
+}
+
+window.createSortLink = function(col)
+{
+    var sort = col.name + '_asc';
+    if(sort == orderBy) sort = col.name + '_desc';
+    return sortLink.replace('{orderBy}', sort);
 }

@@ -22,7 +22,7 @@ window.treeClick = function(info)
     form.append('keyword', $('#name').val());
     Object.keys(checkedCategories).forEach((id) => form.append('categories[]', id));
 
-    postAndLoadPage(link, form, '#cloudAppContainer');
+    postAndLoadPage(link, form, '#cloudAppContainer', {partial: true});
 }
 
 /**
@@ -59,6 +59,6 @@ $('#mainContent').on('keydown', '#name', function(event)
         form.append('keyword', $('#name').val());
         Object.keys(checkedCategories).forEach((id) => form.append('categories[]', id));
 
-        postAndLoadPage(link, form, '#cloudAppContainer');
+        postAndLoadPage(link, form);
     }
 });

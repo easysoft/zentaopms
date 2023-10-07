@@ -88,6 +88,7 @@ function onChangeStoreAppType(event)
         }
     }
 
+    $('#createStoreAppForm').data('appid', storeApp);
     $('#createStoreAppForm').attr('action', $.createLink('instance', 'install', 'appID=' + storeApp));
 
     var storeAppName = apps[storeApp];
@@ -108,8 +109,19 @@ function onChangeStoreAppType(event)
         var app = JSON.parse(response);
 
         $('#app_version').val(app.app_version);
-        $('#version').val(app.version);
-        if((app.dependencies.mysql && mysqlList) || (app.dependencies.postgresql && pgList))
+        if(showVersion === true)
+        {
+            $('#version').picker({items: app.versionList, name: 'version', required: true});
+            setTimeout(() =>
+            {
+                $('#version').picker('setValue', app.versionList[0].value);
+            }, 300);
+        }
+        else
+        {
+            $('#version').val(app.version);
+        }
+        if((app.dependencies.mysql && mysqlList) || (app.dependencies.postgresql && pgList && pgList.length > 0))
         {
             $('div.dbType').removeClass('hidden');
             $('[name=dbService]').prop('disabled', false);
@@ -146,6 +158,19 @@ function onChangeDbType(event)
         $('div.dbService').addClass('hidden');
         $('[name=dbService]').prop('disabled', true);
     }
+}
+
+window.alertResource = function()
+{
+    zui.Modal.confirm({'message': resourceAlert}).then((res) =>
+    {
+        if(res)
+        {
+            var appID = $('#createStoreAppForm').data('appid');
+            $('#createStoreAppForm').attr('action', $.createLink('instance', 'install', 'appID=' + appID + '&checkResource=false'));
+            $('#createStoreAppForm .form-row .toolbar button[type=submit]').trigger('click');
+        }
+    });
 }
 
 $(function()

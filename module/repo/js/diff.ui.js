@@ -33,21 +33,25 @@ window.afterPageUpdate = function()
 
         /* Select default tree item. */
         const currentElement = findItemInTreeItems(tree, fileAsId, 0);
-        if(currentElement != undefined) $('#' + currentElement.id).parent().addClass('selected');
+
         expandTree();
+        if(currentElement != undefined) setTimeout(() =>
+        {
+            $('#' + currentElement.id).parent().addClass('selected');
+        }, 100);
 
         $('.btn-left').on('click', function()  {arrowTabs('monacoTabs', 1);});
         $('.btn-right').on('click', function() {arrowTabs('monacoTabs', -2);});
-
-        $('#repoDownloadCode').on('click', function()
-        {
-            var url            = $(this).data('link');
-            var activeFilePath = $('#monacoTabs .nav-item .active').attr('href').substring(5).replace(/-/g, '=');
-            window.open(url.replace('{path}', activeFilePath));
-            return;
-        })
-    }, 200);
+    }, 300);
 };
+
+window.downloadCode = function()
+{
+    var url            = $(this).data('link');
+    var activeFilePath = $('#monacoTabs .nav-item .active').attr('href').substring(5).replace(/-/g, '=');
+    window.open(url.replace('{path}', activeFilePath));
+    return;
+}
 
 /**
  * 点击左侧菜单打开详情tab。

@@ -20,6 +20,7 @@ class gogs extends control
     {
         parent::__construct($moduleName, $methodName);
 
+        if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
         /* This is essential when changing tab(menu) from gogs to repo. */
         /* Optional: common::setMenuVars('devops', $this->session->repoID); */
         if($this->app->rawMethod != 'binduser') $this->loadModel('ci')->setMenu();
@@ -163,7 +164,7 @@ class gogs extends control
         $changes = common::createChanges($oldGogs, $gogs);
         $this->loadModel('action')->logHistory($actionID, $changes);
 
-        $response['load']   = true;
+        $response['load']   = $this->createLink('space', 'browse');
         $response['result'] = 'success';
         return $this->send($response);
     }
@@ -195,7 +196,7 @@ class gogs extends control
      * @access public
      * @return void
      */
-    public function bindUser(int $gogsID, string $type = 'all')
+    public function bindUser($gogsID, $type = 'all')
     {
         $zentaoUsers = $this->dao->select('account,email,realname')->from(TABLE_USER)->fetchAll('account');
         $userPairs   = $this->loadModel('user')->getPairs('noclosed|noletter');
@@ -203,8 +204,8 @@ class gogs extends control
         if($_POST)
         {
             $this->gogs->bindUser($gogsID);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->server->http_referer));
+            if(dao::isError()) return $this->sendError(dao::getError());
+            return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'load' => helper::createLink('space', 'browse')));
         }
 
         $userList      = array();
@@ -262,11 +263,13 @@ class gogs extends control
 
         $project  = urldecode(base64_decode($project));
         $branches = $this->gogs->apiGetBranches($gogsID, $project);
-        $options  = "<option value=''></option>";
+
+        $options = array();
+        $options[] = array('text' => '', 'value' => '');;
         foreach($branches as $branch)
         {
-            $options .= "<option value='{$branch->name}'>{$branch->name}</option>";
+            $options[] = array('text' => $branch->name, 'value' => $branch->name);
         }
-        $this->send($options);
+        return print(json_encode($options));
     }
 }

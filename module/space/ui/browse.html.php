@@ -10,10 +10,13 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$statusMap  = array();
-$canInstall = hasPriv('instance', 'create');
+jsVar('orderBy',  $orderBy);
+jsVar('sortLink', $sortLink);
 
-foreach($instances as $instance) if(!$instance->externalID) $statusMap[$instance->id] = $instance->status;
+$statusMap  = array();
+$canInstall = hasPriv('instance', 'mange');
+
+foreach($instances as $instance) if('store' === $instance->type) $statusMap[$instance->id] = $instance->status;
 jsVar('statusMap', $statusMap);
 jsVar('idList',    array_keys($statusMap));
 
@@ -45,9 +48,11 @@ toolBar
 
 dtable
 (
+    set::userMap($users),
     set::cols($config->space->dtable->fieldList),
     set::data($instances),
     set::onRenderCell(jsRaw('window.renderInstanceList')),
+    set::sortLink(jsRaw('createSortLink')),
     set::footPager(usePager()),
 );
 

@@ -15,12 +15,14 @@ $config->repo->dtable->fieldList['product']['title']    = $lang->repo->product;
 $config->repo->dtable->fieldList['product']['type']     = 'text';
 $config->repo->dtable->fieldList['product']['sortType'] = false;
 $config->repo->dtable->fieldList['product']['width']    = '136';
+$config->repo->dtable->fieldList['product']['hint']     = true;
 
 $config->repo->dtable->fieldList['project']['name']     = 'projectNames';
 $config->repo->dtable->fieldList['project']['title']    = $lang->repo->projects;
 $config->repo->dtable->fieldList['project']['type']     = 'text';
 $config->repo->dtable->fieldList['project']['sortType'] = false;
 $config->repo->dtable->fieldList['project']['width']    = '136';
+$config->repo->dtable->fieldList['project']['hint']     = true;
 
 $config->repo->dtable->fieldList['scm']['name']     = 'SCM';
 $config->repo->dtable->fieldList['scm']['title']    = $lang->repo->type;
@@ -32,6 +34,7 @@ $config->repo->dtable->fieldList['scm']['group']    = 1;
 $config->repo->dtable->fieldList['path']['name']  = 'codePath';
 $config->repo->dtable->fieldList['path']['title'] = $lang->repo->path;
 $config->repo->dtable->fieldList['path']['type']  = 'text';
+$config->repo->dtable->fieldList['path']['hint']  = true;
 $config->repo->dtable->fieldList['path']['width'] = '260';
 $config->repo->dtable->fieldList['path']['group'] = 1;
 
@@ -55,17 +58,17 @@ $config->repo->dtable->fieldList['actions']['list']['edit']['hint'] = $lang->rep
 
 $config->repo->dtable->fieldList['actions']['list']['execJob']['icon']        = 'sonarqube';
 $config->repo->dtable->fieldList['actions']['list']['execJob']['hint']        = $lang->sonarqube->execJob;
-$config->repo->dtable->fieldList['actions']['list']['execJob']['url']         = helper::createLink('sonarqube', 'execJob', "jobID={job}");
-$config->repo->dtable->fieldList['actions']['list']['execJob']['data-toggle'] = 'modal';
+$config->repo->dtable->fieldList['actions']['list']['execJob']['url']         = array('module' => 'sonarqube', 'method' => 'execJob', 'params' => "jobID={job}");
+$config->repo->dtable->fieldList['actions']['list']['execJob']['className']  = 'ajax-submit';
 
 $config->repo->dtable->fieldList['actions']['list']['reportView']['icon']        = 'audit';
 $config->repo->dtable->fieldList['actions']['list']['reportView']['hint']        = $lang->sonarqube->reportView;
-$config->repo->dtable->fieldList['actions']['list']['reportView']['url']         = helper::createLink('sonarqube', 'reportView', "jobID={job}");
-$config->repo->dtable->fieldList['actions']['list']['reportView']['data-toggle'] = 'modal';
+$config->repo->dtable->fieldList['actions']['list']['reportView']['url']         = array('module' => 'sonarqube', 'method' => 'reportView', 'params' => "jobID={job}");
 
-$config->repo->dtable->fieldList['actions']['list']['delete']['icon']        = 'trash';
-$config->repo->dtable->fieldList['actions']['list']['delete']['hint']        = $lang->repo->delete;
-$config->repo->dtable->fieldList['actions']['list']['delete']['data-toggle'] = 'modal';
+$config->repo->dtable->fieldList['actions']['list']['delete']['icon']         = 'trash';
+$config->repo->dtable->fieldList['actions']['list']['delete']['hint']         = $lang->repo->delete;
+$config->repo->dtable->fieldList['actions']['list']['delete']['data-confirm'] = $this->lang->repo->notice->delete;
+$config->repo->dtable->fieldList['actions']['list']['delete']['className']    = 'ajax-submit';
 
 $config->repo->repoDtable = new stdclass();
 
@@ -208,7 +211,7 @@ $config->repo->taskDtable->fieldList['finishedBy']['sortType'] = true;
 $config->repo->taskDtable->fieldList['finishedBy']['show']     = true;
 $config->repo->taskDtable->fieldList['finishedBy']['group']    = 4;
 
-$config->repo->taskDtable->fieldList['assignedTo']['type']        = 'assign';
+$config->repo->taskDtable->fieldList['assignedTo']['type']        = 'user';
 $config->repo->taskDtable->fieldList['assignedTo']['sortType']    = true;
 $config->repo->taskDtable->fieldList['assignedTo']['show']        = true;
 $config->repo->taskDtable->fieldList['assignedTo']['group']       = 3;
@@ -237,6 +240,7 @@ $config->repo->reviewDtable->fieldList['fileLocation']['width'] = '300';
 
 $config->repo->reviewDtable->fieldList['revisionA']['name']  = 'revisionA';
 $config->repo->reviewDtable->fieldList['revisionA']['width'] = '100';
+$config->repo->reviewDtable->fieldList['revisionA']['hint']  = true;
 
 $config->repo->reviewDtable->fieldList['type']['title'] = $lang->repo->type;
 $config->repo->reviewDtable->fieldList['type']['name'] = 'repoType';

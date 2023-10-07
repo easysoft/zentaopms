@@ -107,12 +107,14 @@ formPanel
     on::click('.add-param', 'addItem'),
     on::click('.delete-param', 'deleteItem'),
     on::click('.custom', 'setValueInput'),
+    set::actionsClass('w-2/3'),
     formGroup
     (
         set::name('name'),
         set::label($lang->job->name),
         set::value($job->name),
         set::required(true),
+        set::width('1/2'),
     ),
     formRow
     (
@@ -136,6 +138,7 @@ formPanel
         (
             set::label($lang->job->repo),
             set::required(true),
+            set::width('1/2'),
             set::name('repo'),
             set::items($repoPairs),
             set::value($job->repo),
@@ -155,6 +158,7 @@ formPanel
     formGroup
     (
         set::name('product'),
+        set::width('1/2'),
         set::label($lang->job->product),
         set::items($products),
         set::value($job->product),
@@ -164,6 +168,7 @@ formPanel
         set::name('frame'),
         set::label($lang->job->frame),
         set::items(array()),
+        set::width('1/2'),
         on::change('changeFrame'),
     ),
     formRow
@@ -171,6 +176,7 @@ formPanel
         formGroup
         (
             set::name('triggerType'),
+            set::width('1/2'),
             set::label($lang->job->triggerType),
             set::items($lang->job->triggerTypeList),
             set::value($job->triggerType),
@@ -183,6 +189,7 @@ formPanel
         formGroup
         (
             set::name('svnDir[]'),
+            set::width('1/2'),
             set::label($lang->job->svnDir),
             set::control('select'),
             set::items(!empty($dirs) ? $dirs : array()),
@@ -196,6 +203,7 @@ formPanel
         (
             set::name('sonarqubeServer'),
             set::label($lang->job->sonarqubeServer),
+            set::width('1/2'),
             set::items(array('' => '') +$sonarqubeServerList),
             set::value($job->sonarqubeServer),
             set::required(true),
@@ -205,12 +213,14 @@ formPanel
     formRow
     (
         set::id('sonarProject'),
-        setClass('sonarqube hidden'),
+        setClass('sonarqube', $job->projectKey ? '' : 'hidden'),
         formGroup
         (
             set::name('projectKey'),
+            set::width('1/2'),
             set::label($lang->job->projectKey),
-            set::items(array()),
+            set::items(!empty($sonarqubeProjectPairs) ? $sonarqubeProjectPairs : array()),
+            set::value($job->projectKey),
             set::required(true),
         ),
     ),
@@ -222,6 +232,7 @@ formPanel
             set::name('comment'),
             set::label($lang->job->comment),
             set::value($job->comment),
+            set::width('1/2'),
             set::required(true),
         ),
         h::span
@@ -240,6 +251,7 @@ formPanel
             set::control('checkListInline'),
             set::items($lang->datepicker->dayNames),
             set::value($job->atDay),
+            set::width('1/2'),
         ),
     ),
     formRow
@@ -248,6 +260,7 @@ formPanel
         formGroup
         (
             set::label(''),
+            set::width('1/2'),
             inputGroup
             (
                 $lang->job->atTime,
@@ -267,6 +280,7 @@ formPanel
         (
             set::label($lang->job->jkHost),
             set::required(true),
+            set::width('1/2'),
             inputGroup
             (
                 picker
@@ -282,7 +296,7 @@ formPanel
                 (
                     set::name('jkTask'),
                     set::type('hidden'),
-                    set::value($job->rawPipeline),
+                    set::value(zget($job, 'rawPipeline', $job->pipeline)),
                 ),
                 dropmenu
                 (
@@ -301,13 +315,14 @@ formPanel
         (
             set::label($lang->job->customParam),
             $customParam,
+            set::width('2/3'),
             inputGroup
             (
                 $lang->job->paramName,
                 input
                 (
                     setStyle('width', '50%'),
-                    setClass('form-control'),
+                    setClass('form-control paramName'),
                     set::name('paramName[]'),
                 ),
                 $lang->job->paramValue,
@@ -361,4 +376,3 @@ formPanel
 );
 
 render();
-

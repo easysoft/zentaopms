@@ -10,7 +10,15 @@ declare(strict_types=1);
  */
 namespace zin;
 
-if($app->tab != 'devops') dropmenu(set::module('repo'), set::tab('repo'));
+if($this->app->tab != 'devops')
+{
+    dropmenu
+    (
+        set::module($app->tab),
+        set::tab($app->tab),
+        set::url(createLink($app->tab, 'ajaxGetDropMenuData', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
+    );
+}
 
 jsVar('pathGitTip', $lang->repo->example->path->git);
 jsVar('pathSvnTip', $lang->repo->example->path->svn);
@@ -25,7 +33,7 @@ formPanel
     on::change('#serviceHost', 'onHostChange'),
     on::change('#serviceProject', 'onProjectChange'),
     set::title($lang->repo->createAction),
-    set::back('repo-maintain'),
+    set::back('GLOBAL'),
     formRow
     (
         $this->app->tab != 'devops' ? setClass('hidden') : null,
@@ -37,7 +45,7 @@ formPanel
             set::required(true),
             set::control(array("type" => "picker","multiple" => true)),
             set::items($products),
-            set::value(empty($objectID) ? '' : array_keys($products))
+            set::value(empty($objectID) ? '' : implode(',', array_keys($products)))
         ),
     ),
     formGroup
@@ -47,7 +55,7 @@ formPanel
         set::label($lang->repo->projects),
         set::control(array("type" => "picker","multiple" => true)),
         set::items($projects),
-        set::value(empty($relatedProjects) ? '' : $relatedProjects)
+        set::value(empty($relatedProjects) ? '' : implode(',', array_values($relatedProjects)))
     ),
     formRow
     (

@@ -23,7 +23,7 @@ class artifactrepo extends control
        @access public
      * @return void
      */
-    public function browse($browseType = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 24, $pageID = 1)
+    public function browse($browseType = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 25, $pageID = 1)
     {
         /* Load pager. */
         $this->app->loadClass('pager', true);
@@ -38,7 +38,7 @@ class artifactrepo extends control
         $this->view->recTotal       = $recTotal;
         $this->view->recPerPage     = $recPerPage;
         $this->view->artifactRepos  = $artifactRepos;
-        $this->view->products       = $this->loadModel('product')->getPairs('', 0, '', 'all');
+        $this->view->products       = $this->loadModel('product')->getPairs('all', 0, '', 'all');
         $this->view->pageLink       = $this->createLink('artifactrepo', 'browse', "browseType={$browseType}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
 
         $this->display();
@@ -57,6 +57,7 @@ class artifactrepo extends control
         {
             $repo = form::data($this->config->artifactrepo->form->create)
                 ->join('products', ',')
+                ->add('editedBy',  $this->app->user->account)
                 ->add('createdBy', $this->app->user->account)
                 ->add('createdDate', helper::now())
                 ->get();
@@ -104,9 +105,14 @@ class artifactrepo extends control
 
         $artifactRepo = $this->artifactrepo->getByID($artifactRepoID);
 
+        $products           = $this->loadModel('product')->getPairs('', 0, '', 'all');
+        $linkedProducts     = $this->loadModel('product')->getByIdList(explode(',', $artifactRepo->products));
+        $linkedProductPairs = array_combine(array_keys($linkedProducts), helper::arrayColumn($linkedProducts, 'name'));
+        $products           = $products + $linkedProductPairs;
+
         $this->view->title        = $this->lang->artifactrepo->edit;
         $this->view->artifactRepo = $artifactRepo;
-        $this->view->products     = $this->loadModel('product')->getPairs('', 0, '', 'all');
+        $this->view->products     = $products;
 
         $this->display();
     }
@@ -138,7 +144,9 @@ class artifactrepo extends control
     {
         $repos = $this->artifactrepo->getServerRepos($serverID);
 
-        return print(json_encode($repos));
+        if(!$repos['result']) return $this->send(array('result' => 'fail', 'message' => $this->lang->artifactrepo->loseConnect));
+
+        return print(json_encode($repos['data']));
     }
 
     public function ajaxUpdateArtifactRepos()

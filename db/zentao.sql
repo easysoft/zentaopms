@@ -1482,6 +1482,7 @@ CREATE TABLE IF NOT EXISTS `zt_repo` (
   `acl` text NULL,
   `synced` tinyint(1) NOT NULL DEFAULT '0',
   `lastSync` datetime NULL,
+  `lastCommit` datetime NULL,
   `desc` text NULL,
   `extra` char(30) NOT NULL DEFAULT '',
   `preMerge` enum('0','1') COLLATE 'utf8_general_ci' NOT NULL DEFAULT '0',

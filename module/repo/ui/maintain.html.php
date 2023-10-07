@@ -35,8 +35,9 @@ foreach($repoList as $repo)
         foreach($productList as $productID)
         {
             if(!isset($products[$productID])) continue;
-            $repo->productNames .= ' ' . zget($products, $productID, $productID);
+            $repo->productNames .= '，' . zget($products, $productID, $productID);
         }
+        $repo->productNames = trim($repo->productNames, '，');
     }
 
     $repo->projectNames = '';
@@ -46,20 +47,23 @@ foreach($repoList as $repo)
         foreach($projectList as $projectID)
         {
             if(!isset($projects[$projectID])) continue;
-            $repo->projectNames .= ' ' . zget($projects, $projectID, $projectID);
+            $repo->projectNames .= '，' . zget($projects, $projectID, $projectID);
         }
+        $repo->projectNames = trim($repo->projectNames, '，');
     }
 }
 
 $config->repo->dtable->fieldList['name']['link']                     = $this->createLink('repo', 'browse', "repoID={id}&branchID=&objectID={$objectID}");
 $config->repo->dtable->fieldList['actions']['list']['edit']['url']   = $this->createLink('repo', 'edit', "repoID={id}&objectID={$objectID}");
-$config->repo->dtable->fieldList['actions']['list']['delete']['url'] = $this->createLink('repo', 'delete', "repoID={id}&objectID={$objectID}");
+$config->repo->dtable->fieldList['actions']['list']['delete']['url'] = $this->createLink('repo', 'delete', "repoID={id}&objectID={$objectID}&confirm=yes");
 
 $repos = initTableData($repoList, $config->repo->dtable->fieldList, $this->repo);
+$queryMenuLink = createLink('repo', 'maintain', "objectID=$objectID&orderBy=&recTotal={$pager->recTotal}&pageID={$pager->pageID}&type=bySearch&param={queryID}");
 
-featureBar
+\zin\featureBar
 (
     set::current('all'),
+    set::queryMenuLinkCallback(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink)),
     li(searchToggle(set::open($type == 'bySearch'))),
 );
 

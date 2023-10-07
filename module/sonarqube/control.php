@@ -20,6 +20,16 @@ class sonarqube extends control
     {
         parent::__construct($moduleName, $methodName);
 
+        if(stripos($this->methodName, 'ajax') === false)
+        {
+            if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
+
+            if(!in_array(strtolower(strtolower($this->methodName)), array('browseproject', 'reportview', 'browseissue')))
+            {
+                if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
+            }
+        }
+
         /* This is essential when changing tab(menu) from gitlab to repo. */
         /* Optional: common::setMenuVars('devops', $this->session->repoID); */
         $this->loadModel('ci')->setMenu();
@@ -101,16 +111,7 @@ class sonarqube extends control
      */
     public function ajaxGetProjectList($sonarqubeID, $projectKey = '')
     {
-        $jobPairs      = $this->loadModel('job')->getJobBySonarqubeProject($sonarqubeID, array(), true, true);
-        $existsProject = array_diff(array_keys($jobPairs), array($projectKey));
-
-        $projectList = $this->sonarqube->apiGetProjects($sonarqubeID);
-
-        $projectPairs = array();
-        foreach($projectList as $project)
-        {
-            if(!empty($project) and !in_array($project->key, $existsProject)) $projectPairs[$project->key] = $project->name;
-        }
+        $projectPairs = $this->sonarqube->getProjectPairs($sonarqubeID, $projectKey);
 
         $options = array();
         foreach($projectPairs as $productKey => $projectName)
@@ -197,7 +198,7 @@ class sonarqube extends control
 
         if($_POST)
         {
-            $this->checkToken($sonarqubeID);
+            $this->checkToken($oldSonarQube, $sonarqubeID);
             $this->pipeline->update($sonarqubeID);
             $sonarqube = $this->pipeline->getByID($sonarqubeID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -239,7 +240,7 @@ class sonarqube extends control
         $changes   = common::createChanges($oldSonarQube, $sonarQube);
         $this->action->logHistory($actionID, $changes);
 
-        $response['load']   = true;
+        $response['load']   = $this->createLink('space', 'browse');
         $response['result'] = 'success';
 
         return $this->send($response);
@@ -296,13 +297,24 @@ class sonarqube extends control
         /* Get success jobs of sonarqube.*/
         $projectJobPairs = $this->loadModel('job')->getJobBySonarqubeProject($sonarqubeID, $projectKeyList);
         $successJobs     = $this->loadModel('compile')->getSuccessJobs($projectJobPairs);
+        $sonarqube       = $this->loadModel('pipeline')->getByID($sonarqubeID);
+        $instance        = $this->loadModel('instance')->getByUrl($sonarqube->url);
 
-        $this->view->sonarqube            = $this->loadModel('pipeline')->getByID($sonarqubeID);
+        $sonarqube->instanceID = $sonarqube->id;
+        $sonarqube->type       = 'external';
+        if(!empty($instance->id))
+        {
+            $sonarqube->instanceID = $instance->id;
+            $sonarqube->type       = 'store';
+        }
+
+        $this->view->sonarqube            = $sonarqube;
         $this->view->keyword              = urldecode(urldecode($keyword));
         $this->view->pager                = $pager;
         $this->view->title                = $this->lang->sonarqube->common . $this->lang->colon . $this->lang->sonarqube->browseProject;
         $this->view->sonarqubeID          = $sonarqubeID;
         $this->view->sonarqubeProjectList = (empty($sonarqubeProjectList) or empty($sonarqubeProjectList[$pageID - 1])) ? array() : $sonarqubeProjectList[$pageID - 1];
+
         $this->view->projectJobPairs      = $projectJobPairs;
         $this->view->orderBy              = $orderBy;
         $this->view->successJobs          = $successJobs;

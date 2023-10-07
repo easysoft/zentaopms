@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace zin;
 
-featureBar();
+\zin\featureBar();
 
 if(empty($branch))
 {
@@ -40,7 +40,7 @@ div
             (
                 h3($lang->repo->notice->syncing),
                 div(setClass('sync-line')),
-                p($lang->repo->notice->syncedCount, span($version, set::id('commits')))
+                $repo->SCM != 'Gitlab' ? p($lang->repo->notice->syncedCount, span($version, set::id('commits'))) : null
             )
         )
     )

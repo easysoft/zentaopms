@@ -93,9 +93,9 @@ class gogsModel extends model
      *
      * @param  int    $gogsID
      * @access public
-     * @return bool
+     * @return array
      */
-    public function bindUser(int $gogsID): bool
+    public function bindUser($gogsID)
     {
         $userPairs   = $this->loadModel('user')->getPairs('noclosed|noletter');
         $users       = $this->post->zentaoUsers;
@@ -143,8 +143,6 @@ class gogsModel extends model
                 $this->loadModel('action')->create('gogsuser', $gogsID, 'bind', '', sprintf($this->lang->gogs->bindDynamic, $gogsNames[$openID], $zentaoUsers[$account]->realname));
             }
         }
-
-        return true;
     }
 
     /**
@@ -281,7 +279,7 @@ class gogsModel extends model
      * @access public
      * @return array
      */
-    public function getMatchedUsers(int $gogsID, array $gogsUsers, array $zentaoUsers): array
+    public function getMatchedUsers($gogsID, $gogsUsers, $zentaoUsers)
     {
         $matches = new stdclass;
         foreach($gogsUsers as $gogsUser)
@@ -298,9 +296,9 @@ class gogsModel extends model
         $matchedUsers = array();
         foreach($gogsUsers as $gogsUser)
         {
-            if(isset($bindedUsers[$gogsUser->account]))
+            if(isset($bindedUsers[$gogsUser->id]))
             {
-                $gogsUser->zentaoAccount     = $bindedUsers[$gogsUser->account];
+                $gogsUser->zentaoAccount     = $bindedUsers[$gogsUser->id];
                 $matchedUsers[$gogsUser->id] = $gogsUser;
                 continue;
             }

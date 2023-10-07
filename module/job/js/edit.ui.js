@@ -201,4 +201,10 @@ $(document).ready(function()
     {
         $('#jkTask').val($('#pipelineDropmenu button.dropmenu-btn').data('value'));
     });
+    $(document).on('change', 'select.paramValue', function()
+    {
+        var paramValue = $(this).val();
+        paramValue = paramValue.substr(1).toUpperCase();
+        $(this).prevAll('input').val(paramValue);
+    });
 });

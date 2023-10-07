@@ -12,9 +12,12 @@ class repoModel extends model
     {
         $account = $this->app->user->account;
         $acl     = !empty($repo->acl->acl) ? $repo->acl->acl : 'custom';
+        if(empty($repo->acl))         $repo->acl = new stdclass();
+        if(empty($repo->acl->users))  $repo->acl->users  = array();
+        if(empty($repo->acl->groups)) $repo->acl->groups = array();
 
         if(strpos(",{$this->app->company->admins},", ",$account,") !== false || $acl == 'open') return true;
-        if($acl == 'custom' && empty($repo->acl->groups) && empty($repo->acl->users)) return true;
+        if($acl == 'custom' && empty(array_filter($repo->acl->groups)) && empty(array_filter($repo->acl->users))) return true;
 
         if($acl == 'private')
         {
@@ -137,11 +140,11 @@ class repoModel extends model
 
             if($queryID && $queryID != 'myQueryID')
             {
-                $query = $this->loadModel('search')->getQuery($queryID);
+                $query = $this->loadModel('search')->getZinQuery($queryID);
                 if($query)
                 {
                     $this->session->set($queryName, $query->sql);
-                    $this->session->set($queryName . 'Form', $query->form);
+                    $this->session->set('repoForm', $query->form);
                 }
                 else
                 {
@@ -200,8 +203,15 @@ class repoModel extends model
 
             if($lastSubmitTime)
             {
-                $lastRevision = $this->repoTao->getLastRevision($repo->id);
-                $repo->lastSubmitTime = isset($lastRevision->time) ? $lastRevision->time : '';
+                if($repo->lastCommit)
+                {
+                    $repo->lastSubmitTime = $repo->lastCommit;
+                }
+                else
+                {
+                    $lastRevision = $this->repoTao->getLastRevision($repo->id);
+                    $repo->lastSubmitTime = isset($lastRevision->time) ? $lastRevision->time : '';
+                }
             }
 
             if(in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) $repo = $this->processGitService($repo, $getCodePath);
@@ -249,22 +259,52 @@ class repoModel extends model
      */
     public function create(object $repo, bool $isPipelineServer): int|false
     {
+        if($isPipelineServer)
+        {
+            $serviceProject = $this->dao->select('*')->from(TABLE_REPO)
+                ->where('`SCM`')->eq($repo->SCM)
+                ->andWhere('`serviceHost`')->eq($repo->serviceHost)
+                ->andWhere('`serviceProject`')->eq($repo->serviceProject)
+                ->fetch();
+            if($serviceProject)
+            {
+                dao::$errors['serviceProject'][] = $this->lang->repo->error->projectUnique;
+                return false;
+            }
+        }
+
         $this->dao->insert(TABLE_REPO)->data($repo, 'serviceToken')
             ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
             ->batchCheckIF($repo->SCM != 'Gitlab', 'path,client', 'notempty')
             ->batchCheckIF($isPipelineServer, 'serviceHost,serviceProject', 'notempty')
             ->batchCheckIF($repo->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
-            ->check('name', 'unique', "`SCM` = '{$repo->SCM}'")
-            ->checkIF($isPipelineServer && $repo->serviceProject, 'serviceProject', 'unique', "`SCM` = '{$repo->SCM}' and `serviceHost` = '{$repo->serviceHost}'")
-            ->checkIF(!$isPipelineServer, 'path', 'unique', "`SCM` = '{$repo->SCM}' and `serviceHost` = '{$repo->serviceHost}'")
+            ->check('name', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($repo->SCM))
+            ->checkIF(!$isPipelineServer, 'path', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($repo->SCM) . " and `serviceHost` = " . $this->dao->sqlobj->quote($repo->serviceHost))
             ->autoCheck()
             ->exec();
 
         if(dao::isError()) return false;
+        $repoID = $this->dao->lastInsertID();
 
+        $repo = $this->getByID($repoID);
+        if($repo->SCM == 'Gitlab')
+        {
+            $token = time();
+            $res   = $this->loadModel('gitlab')->addPushWebhook($repo, $token);
+            if($res === false)
+            {
+                $thi->dao->delete()->from(TABLE_REPO)->where('id')->eq($repoID)->exec();
+                dao::$errors['webhook'][] = $this->lang->gitlab->failCreateWebhook;
+                return false;
+            }
+            else
+            {
+                $this->dao->update(TABLE_REPO)->set('password')->eq($token)->where('id')->eq($repoID)->exec();
+            }
+        }
         $this->rmClientVersionFile();
 
-        return $this->dao->lastInsertID();
+        return $repoID;
     }
 
     /**
@@ -292,8 +332,8 @@ class repoModel extends model
             $this->dao->insert(TABLE_REPO)->data($repo)
                 ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
                 ->check('serviceHost,serviceProject', 'notempty')
-                ->check('name', 'unique', "`SCM` = '{$repo->SCM}'")
-                ->check('serviceProject', 'unique', "`SCM` = '{$repo->SCM}' and `serviceHost` = '{$repo->serviceHost}'")
+                ->check('name', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($repo->serviceHost))
+                ->check('serviceProject', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($repo->SCM) . " and `serviceHost` = " . $this->dao->sqlobj->quote($repo->serviceHost))
                 ->autoCheck()
                 ->exec();
 
@@ -306,6 +346,7 @@ class repoModel extends model
                 /* Add webhook. */
                 $repo = $this->getByID($repoID);
                 $this->loadModel('gitlab')->addPushWebhook($repo);
+                $this->gitlab->updateCodePath($repo->serviceHost, $repo->serviceProject, $repo->id);
             }
 
             $this->loadModel('action')->create('repo', $repoID, 'created');
@@ -360,15 +401,47 @@ class repoModel extends model
             $data->prefix = '';
         }
 
+        if($isPipelineServer)
+        {
+            $serviceProject = $this->dao->select('*')->from(TABLE_REPO)
+                ->where('`SCM`')->eq($data->SCM)
+                ->andWhere('`serviceHost`')->eq($data->serviceHost)
+                ->andWhere('`serviceProject`')->eq($data->serviceProject)
+                ->andWhere('id')->ne($id)
+                ->fetch();
+            if($serviceProject)
+            {
+                dao::$errors['serviceProject'][] = $this->lang->repo->error->projectUnique;
+                return false;
+            }
+        }
+
+        if(($repo->serviceHost != $data->serviceHost || $repo->serviceProject != $data->serviceProject) && $data->SCM == 'Gitlab')
+        {
+            $repo->gitService = $data->serviceHost;
+            $repo->project    = $data->serviceProject;
+
+            $token = time();
+            $res   = $this->loadModel('gitlab')->addPushWebhook($repo, $token);
+            if($res === false)
+            {
+                dao::$errors['webhook'][] = $this->lang->gitlab->failCreateWebhook;
+                return false;
+            }
+            else
+            {
+                $data->password = $token;
+            }
+        }
+
         if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
         $this->dao->update(TABLE_REPO)->data($data, 'serviceToken')
             ->batchCheck($this->config->repo->edit->requiredFields, 'notempty')
             ->batchCheckIF($data->SCM != 'Gitlab', 'path,client', 'notempty')
             ->batchCheckIF($isPipelineServer, 'serviceHost,serviceProject', 'notempty')
             ->batchCheckIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
-            ->check('name', 'unique', "`SCM` = '{$data->SCM}' and `id` <> $id")
-            ->checkIF($isPipelineServer && $data->serviceProject, 'serviceProject', 'unique', "`SCM` = '{$data->SCM}' and `serviceHost` = '{$data->serviceHost}' and `id` <> $id")
-            ->checkIF(!$isPipelineServer, 'path', 'unique', "`SCM` = '{$data->SCM}' and `serviceHost` = '{$data->serviceHost}' and `id` <> $id")
+            ->check('name', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($data->SCM) . " and `id` != $id")
+            ->checkIF(!$isPipelineServer, 'path', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($data->SCM) . " and `serviceHost` = " . $this->dao->sqlobj->quote($data->serviceHost) . " and `id` != $id")
             ->autoCheck()
             ->where('id')->eq($id)->exec();
 
@@ -378,6 +451,7 @@ class repoModel extends model
         {
             $this->loadModel('gitlab')->updateCodePath($data->serviceHost, $data->serviceProject, $repo->id);
             $data->path = $this->getByID($id)->path;
+            $this->updateCommitDate($repo->id);
         }
 
         if($repo->path != $data->path)
@@ -397,10 +471,11 @@ class repoModel extends model
      * @param  int    $repoID
      * @param  string $revision
      * @param  string $type
+     * @param  string $from     repo|commit
      * @access public
      * @return void
      */
-    public function link($repoID, $revision, $type = 'story')
+    public function link($repoID, $revision, $type = 'story', $from = 'repo')
     {
         $this->loadModel('action');
         if($type == 'story') $links = $this->post->stories;
@@ -410,17 +485,33 @@ class repoModel extends model
         $revisionInfo = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->eq($revision)->fetch();
         if(empty($revisionInfo))
         {
-            $this->updateCommit($repoID);
-            $revisionInfo = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->eq($revision)->fetch();
+            $repo = $this->getByID($repoID);
+            if($repo->SCM == 'Gitlab')
+            {
+                $scm = $this->app->loadClass('scm');
+                $scm->setEngine($repo);
+                $logs = $scm->getCommits($revision, 1);
+                $this->saveCommit($repoID, $logs, 0);
+            }
+            else
+            {
+                $this->updateCommit($repoID);
+            }
         }
-        if(empty($revisionInfo)) return false;
+
+        $revisionInfo = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->eq($revision)->fetch();
+        if(empty($revisionInfo))
+        {
+            dao::$errors = $this->lang->fail;
+            return false;
+        }
 
         $revisionID = $revisionInfo->id;
         $committer  = $this->dao->select('account')->from(TABLE_USER)->where('commiter')->eq($revisionInfo->committer)->fetch('account');
         if(empty($committer)) $committer = $revisionInfo->committer;
+        if($from == 'repo') $committer = $this->app->user->account;
         foreach($links as $linkID)
         {
-
             $relation           = new stdclass;
             $relation->AType    = 'revision';
             $relation->AID      = $revisionID;
@@ -430,9 +521,9 @@ class repoModel extends model
 
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
 
-            if($type == 'story') $this->action->create('story', $linkID, 'linked2revision', '', $revisionID, $committer);
-            if($type == 'bug')   $this->action->create('bug', $linkID, 'linked2revision', '', $revisionID, $committer);
-            if($type == 'task')  $this->action->create('task', $linkID, 'linked2revision', '', $revisionID, $committer);
+            if($type == 'story') $this->action->create('story', $linkID, 'linked2revision', '', $revisionID, $commiter);
+            if($type == 'bug')   $this->action->create('bug',   $linkID, 'linked2revision', '', $revisionID, $commiter);
+            if($type == 'task')  $this->action->create('task',  $linkID, 'linked2revision', '', $revisionID, $commiter);
         }
     }
 
@@ -543,9 +634,16 @@ class repoModel extends model
             ->fetchAll();
 
         $productIds = $productItems = array();
-        foreach($repos as $repo)
+        if($projectID)
         {
-            $productIds = array_merge($productIds, explode(',', $repo->product));
+            $productIds = $this->loadModel('product')->getProductIDByProject($projectID, false);
+        }
+        else
+        {
+            foreach($repos as $repo)
+            {
+                $productIds = array_merge($productIds, explode(',', $repo->product));
+            }
         }
         $products = $this->loadModel('product')->getByIdList(array_filter(array_unique($productIds)));
         foreach($products as $productID => $product)
@@ -576,6 +674,7 @@ class repoModel extends model
                 $repoItem['keys'] = zget(common::convert2Pinyin(array($repo->name)), $repo->name, '');
 
                 $repoProducts = explode(',', $repo->product);
+                $repoProducts = array_filter($repoProducts);
                 foreach($repoProducts as $productID)
                 {
                     if(($type == 'project' or $type == 'execution') and $projectID)
@@ -611,7 +710,6 @@ class repoModel extends model
         if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
         $repo->codePath = $repo->path;
         if(in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) $repo = $this->processGitService($repo);
-
         $repo->acl = json_decode($repo->acl);
         if(empty($repo->acl)) $repo->acl = new stdclass();
         if(empty($repo->acl->acl)) $repo->acl->acl = 'custom';
@@ -820,6 +918,11 @@ class repoModel extends model
         return $branches;
     }
 
+    public function getCommitsByRevisions($revisions)
+    {
+        return $this->dao->select('id')->from(TABLE_REPOHISTORY)->where('revision')->in($revisions)->fetchPairs('id');
+    }
+
     /**
      * Get commits.
      *
@@ -861,7 +964,7 @@ class repoModel extends model
                 ->where('1=1')
                 ->andWhere('t1.repo')->eq($repo->id)
                 ->beginIF($revisionTime)->andWhere('t2.`time`')->le($revisionTime)->fi()
-                ->andWhere('left(t2.comment, 12)')->ne('Merge branch')
+                ->andWhere('left(t2.`comment`, 12)')->ne('Merge branch')
                 ->beginIF($repo->SCM != 'Subversion' and $this->cookie->repoBranch)->andWhere('t3.branch')->eq($this->cookie->repoBranch)->fi()
                 ->beginIF($type == 'dir')
                 ->andWhere('t1.parent', true)->like(rtrim($entry, '/') . "/%")
@@ -878,7 +981,7 @@ class repoModel extends model
             ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
             ->where('t1.repo')->eq($repoID)
             ->beginIF($revisionTime)->andWhere('t1.`time`')->le($revisionTime)->fi()
-            ->andWhere('left(t1.comment, 12)')->ne('Merge branch')
+            ->andWhere('left(t1.`comment`, 12)')->ne('Merge branch')
             ->beginIF($repo->SCM != 'Subversion' and $this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
             ->beginIF($entry != '/' and !empty($entry))->andWhere('t1.id')->in($historyIdList)->fi()
             ->beginIF($begin)->andWhere('t1.time')->ge($begin)->fi()
@@ -1070,7 +1173,7 @@ class repoModel extends model
                         $file->repo     = $repoID;
                         $this->dao->insert(TABLE_REPOFILES)->data($file)->exec();
 
-                        if($file->oldPath and $file->action == 'R')
+                        if($file->action == 'R' && !empty($file->oldPath))
                         {
                             $file->path    = $file->oldPath;
                             $file->parent  = dirname($file->path);
@@ -1134,7 +1237,7 @@ class repoModel extends model
                 $repoFile->parent   = $parentPath == '\\' ? '/' : $parentPath;
                 $repoFile->type     = $info['kind'];
                 $repoFile->action   = $info['action'];
-                $repoFile->oldPath  = $info['oldPath'];
+                $repoFile->oldPath  = empty($info['oldPath']) ? '' : $info['oldPath'];
                 $this->dao->insert(TABLE_REPOFILES)->data($repoFile)->exec();
 
                 if($repoFile->oldPath and $repoFile->action == 'R')
@@ -1486,7 +1589,8 @@ class repoModel extends model
             return false;
         }
 
-        if(strpos($this->post->client, ' '))
+        /* Check command injection. */
+        if(preg_match('/[ #&;`,\|*?~<>^()\[\]{}$]/', $this->post->client))
         {
             dao::$errors['client'] = $this->lang->repo->error->clientPath;
             return false;
@@ -2245,7 +2349,7 @@ class repoModel extends model
      * @access public
      * @return object
      */
-    public function processGitService($repo, $getCodePath = true)
+    public function processGitService($repo, $getCodePath = false)
     {
         $service = $this->loadModel('pipeline')->getByID($repo->serviceHost);
         if($repo->SCM == 'Gitlab')
@@ -2301,7 +2405,40 @@ class repoModel extends model
         {
             /* Update code commit history. */
             $commentGroup = $this->loadModel('job')->getTriggerGroup('commit', array($repo->id));
-            $this->loadModel('git')->updateCommit($repo, $commentGroup, false);
+            if($repo->SCM == 'Gitlab')
+            {
+                $this->loadModel('repo');
+                $jobs = zget($commentGroup, $repo->id, array());
+
+                $accountPairs  = array();
+                $userList      = $this->loadModel('gitlab')->apiGetUsers($repo->gitService);
+                $acountIDPairs = $this->gitlab->getUserIdAccountPairs($repo->gitService);
+                foreach($userList as $gitlabUser) $accountPairs[$gitlabUser->realname] = zget($acountIDPairs, $gitlabUser->id, '');
+
+                foreach($data->commits as $commit)
+                {
+                    $log = new stdclass();
+                    $log->revision = $commit->id;
+                    $log->msg      = $commit->message;
+                    $log->author   = $commit->author->name;
+                    $log->date     = date("Y-m-d H:i:s", strtotime($commit->timestamp));
+
+                    $objects = $this->repo->parseComment($log->msg);
+                    $this->repo->saveAction2PMS($objects, $log, $repo->path, $repo->encoding, 'git', $accountPairs);
+
+                    foreach($jobs as $job)
+                    {
+                        foreach(explode(',', $job->comment) as $comment)
+                        {
+                            if(strpos($log->msg, $comment) !== false) $this->loadModel('job')->exec($job->id);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                $this->loadModel('git')->updateCommit($repo, $commentGroup, false);
+            }
         }
     }
 
@@ -2418,7 +2555,7 @@ class repoModel extends model
             ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
             ->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t2.id=t3.revision')
             ->where('t1.repo')->eq($repo->id)
-            ->andWhere('left(t2.comment, 12)')->ne('Merge branch')
+            ->andWhere('left(t2.`comment`, 12)')->ne('Merge branch')
             ->beginIF($repo->SCM != 'Subversion' and $branch)->andWhere('t3.branch')->eq($branch)->fi()
             ->beginIF($repo->SCM == 'Subversion')->andWhere('t1.parent')->eq("$parent")->fi()
             ->beginIF($repo->SCM != 'Subversion')->andWhere('t1.parent')->like("$parent%")->fi()
@@ -2491,6 +2628,7 @@ class repoModel extends model
 
         $paths = array();
         $files = $scm->engine->tree($path, 0);
+        if(empty($files)) $files = array();
         foreach($files as $file)
         {
             $paths[] = $file->path;
@@ -2549,7 +2687,8 @@ class repoModel extends model
                     $scm->setEngine($repo);
 
                     $this->app->loadClass('requests', true);
-                    $files    = $scm->engine->tree('', 1, true);
+                    $files = $scm->engine->tree('', 1, true);
+
                     $allFiles = array();
                     foreach($files as $file)
                     {
@@ -2578,7 +2717,7 @@ class repoModel extends model
                 ->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t2.id=t3.revision')
                 ->where('t1.repo')->eq($repo->id)
                 ->andWhere('t1.type')->eq('file')
-                ->andWhere('left(t2.comment, 12)')->ne('Merge branch')
+                ->andWhere('left(t2.`comment`, 12)')->ne('Merge branch')
                 ->beginIF($repo->SCM != 'Subversion' and $branch)->andWhere('t3.branch')->eq($branch)->fi()
                 ->orderBy('t2.`time` asc')
                 ->fetchAll('path');
@@ -2818,8 +2957,8 @@ class repoModel extends model
             }
         }
         $stories = empty($storyIDs) ? array() : $this->loadModel('story')->getByList($storyIDs);
-        $bugs    = empty($bugIDs)   ? array() : $this->loadModel('bug')->getByIdList($bugIDs);
-        $tasks   = empty($taskIDs)  ? array() : $this->loadModel('task')->getByIdList($taskIDs);
+        $bugs    = empty($bugIDs)   ? array() : $this->loadModel('bug')->getByList($bugIDs);
+        $tasks   = empty($taskIDs)  ? array() : $this->loadModel('task')->getByList($taskIDs);
 
         $titleList = array();
         foreach($relationList as $key => $relation)
@@ -2987,6 +3126,7 @@ class repoModel extends model
     public function updateCommit($repoID, $objectID = 0, $branchID = 0)
     {
         $repo = $this->getByID($repoID);
+        if($repo->SCM == 'Gitlab') return;
         /* Update code commit history. */
         $commentGroup = $this->loadModel('job')->getTriggerGroup('commit', array($repoID));
 
@@ -3052,6 +3192,7 @@ class repoModel extends model
     {
         $action = strtolower($action);
 
+        if(!commonModel::hasPriv('repo', $action)) return false;
         if($action == 'execjob')    return $repo->exec == '';
         if($action == 'reportview') return $repo->report == '';
 
@@ -3078,7 +3219,7 @@ class repoModel extends model
         else
         {
             $gitlabUser = $this->loadModel('gitlab')->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
-            if(!$gitlabUser) $this->send(array('message' => array()));
+            if(!$gitlabUser) $this->app->control->send(array('message' => array()));
 
             $projects    = $this->gitlab->apiGetProjects($gitlabID, $filter ? 'false' : 'true');
             $groupIDList = array(0 => 0);
@@ -3094,5 +3235,48 @@ class repoModel extends model
         }
 
         return $projects;
+    }
+
+    /**
+     * Check str in array.
+     *
+     * @param  string $str
+     * @param  array  $checkAry
+     * @access public
+     * @return bool
+     */
+    public function strposAry($str, $checkAry)
+    {
+        foreach($checkAry as $check)
+        {
+            if(mb_strpos($str, $check) !== false) return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * 更新版本库最后提交时间。
+     * Update repo last commited date.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function updateCommitDate(int $repoID): void
+    {
+        $repo = $this->getByID($repoID);
+        if($repo->SCM == 'Gitlab')
+        {
+            $scm = $this->app->loadClass('scm');
+            $scm->setEngine($repo);
+            $commits = $scm->engine->getCommitsByPath('', '', '', 1, 1);
+            $commit  = $commits[0];
+            if(!empty($commit->committed_date))
+            {
+                $lastCommitDate = date('Y-m-d H:i:s', strtotime($commit->committed_date));
+                $this->dao->update(TABLE_REPO)->set('lastCommit')->eq($lastCommitDate)->where('id')->eq($repoID)->exec();
+            }
+        }
     }
 }

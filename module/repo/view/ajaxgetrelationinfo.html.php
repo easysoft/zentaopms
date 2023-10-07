@@ -21,39 +21,39 @@ js::set('objectID', zget($object, 'id', ''));
           <?php if($objectType == 'story'):?>
           <tr>
             <td class="text">
-              <strong class='text-primary' style="font-size: 14px;"><?php echo zget($object, 'title', '');?></strong>
+              <strong class='text-primary'><?php echo zget($object, 'title', '');?></strong>
             </td>
           </tr>
           <tr>
             <td class="text">
-              <div class="spec-content detail-content article-content" style="font-size: 13px;">
+              <div class="spec-content detail-content article-content">
                 <?php echo zget($object, 'spec', ''); ?>
               </div>
             </td>
           </tr>
           <tr>
             <td class="text">
-              <div class="detail-content article-content" style="font-size: 13px;">
+              <div class="detail-content article-content">
                 <?php echo zget($object, 'verify', ''); ?>
               </div>
             </td>
           </tr>
           <?php elseif($objectType == 'task'):?>
           <tr>
-            <td class="text" style="font-size: 14px;">
+            <td class="text">
               <strong class='text-primary'><?php echo zget($object, 'name', '');?></strong>
             </td>
           </tr>
           <tr>
             <td class="text">
-              <div class="spec-content detail-content article-content" style="font-size: 13px;">
+              <div class="spec-content detail-content article-content">
                 <?php echo zget($object, 'desc', ''); ?>
               </div>
             </td>
           </tr>
           <tr>
             <td class="text">
-              <div class="detail-content article-content" style="font-size: 13px;">
+              <div class="detail-content article-content">
                 <?php echo zget($object, 'storyTitle', ''); ?>
               </div>
             </td>
@@ -61,13 +61,13 @@ js::set('objectID', zget($object, 'id', ''));
           <?php elseif($objectType == 'bug'):?>
           <tr>
             <td class="text">
-              <strong class='text-primary' data-id='<?php echo zget($object, 'id', '');?>' style="font-size: 14px;"><?php echo zget($object, 'title', '');?></strong>
+              <strong class='text-primary' data-id='<?php echo zget($object, 'id', '');?>'><?php echo zget($object, 'title', '');?></strong>
             </td>
           </tr>
           <?php if(zget($object, 'steps', '')):?>
           <tr>
             <td class="text">
-              <div class="spec-content detail-content article-content" style="font-size: 13px;">
+              <div class="spec-content detail-content article-content">
                 <?php echo zget($object, 'steps', ''); ?>
               </div>
             </td>
@@ -94,7 +94,7 @@ $(function()
     {
         var link = createLink(objectType, 'view', objectType + 'ID=' + objectID);
         var app = objectType == 'bug' ? 'qa' : (objectType == 'task' ? 'execution' : 'product');
-        parent.parent.openUrl(link, {'app': app});
+        parent.parent.$.apps.open(link, app);
     });
 });
 </script>

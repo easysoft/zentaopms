@@ -10,15 +10,19 @@ declare(strict_types=1);
  */
 namespace zin;
 
+dropmenu(set::tab('repo'));
+jsVar('orderBy', $orderBy);
+jsVar('sortLink', createLink('repo', 'review', "repoID=$repoID&browseType=$browseType&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
+
 foreach($bugs as $bug)
 {
-    $bug->revisionA = $repo->SCM != 'Subversion' ? substr(strtr($bug->v2, '*', '-'), 0, 10) : $bug->v2;
+    $bug->revisionA = $repo->SCM != 'Subversion' ? strtr($bug->v2, '*', '-') : $bug->v2;
 
     $lines = explode(',', trim($bug->lines, ','));
-    $bug->entry = $repo->name . '/' . $this->repo->decodePath($bug->entry);
     if(empty($bug->v1))
     {
-        $revision = $repo->SCM != 'Subversion' ? $this->repo->getGitRevisionName($bug->v2, zget($historys, $bug->v2)) : $bug->v2;
+        $bug->v2   = $repo->SCM != 'Subversion' ? strtr($bug->v2, '*', '-') : $bug->v2;
+        $revision  = $repo->SCM != 'Subversion' ? $this->repo->getGitRevisionName($bug->v2, zget($historys, $bug->v2)) : $bug->v2;
         $bug->link = $this->repo->createLink('view', "repoID=$repoID&objectID=0&entry={$bug->entry}&revision={$bug->v2}") . "#L$lines[0]";
     }
     else
@@ -29,10 +33,12 @@ foreach($bugs as $bug)
         if($repo->SCM != 'Subversion') $revision .= ' (' . zget($historys, $bug->v1) . ' : ' . zget($historys, $bug->v2) . ')';
         $bug->link = $this->repo->createLink('diff', "repoID=$repoID&objectID=0&entry={$bug->entry}&oldRevision={$bug->v1}&newRevision={$bug->v2}") . "#L$lines[0]";
     }
+
+    $bug->entry = $repo->name . '/' . $this->repo->decodePath($bug->entry);
 }
 $bugs = initTableData($bugs, $config->repo->reviewDtable->fieldList);
 
-featureBar
+\zin\featureBar
 (
     set::linkParams("repoID=$repoID&browseType={key}"),
 );
@@ -42,6 +48,7 @@ dtable
     set::userMap($users),
     set::cols($config->repo->reviewDtable->fieldList),
     set::data($bugs),
+    set::sortLink(jsRaw('createSortLink')),
     set::onRenderCell(jsRaw('window.renderRepobugList')),
     set::footPager(usePager()),
 );

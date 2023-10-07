@@ -1,5 +1,7 @@
 <?php
-$lang->repo->common          = '代码';
+global $config;
+
+$lang->repo->common          = '代码库';
 $lang->repo->codeRepo        = '代码库';
 $lang->repo->browse          = '浏览';
 $lang->repo->viewRevision    = '查看修订';
@@ -166,7 +168,7 @@ $lang->repo->encodingList['gbk']   = 'GBK';
 
 $lang->repo->scmList['Gitlab']     = 'GitLab';
 $lang->repo->scmList['Gogs']       = 'Gogs';
-$lang->repo->scmList['Gitea']      = 'Gitea';
+if(!$config->inQuickon) $lang->repo->scmList['Gitea']      = 'Gitea';
 $lang->repo->scmList['Git']        = '本地 Git';
 $lang->repo->scmList['Subversion'] = 'Subversion';
 
@@ -233,6 +235,7 @@ $lang->repo->error->differentVersions = '基准和对比不能一样';
 $lang->repo->error->needTwoVersion    = '必须选择两个分支/标签';
 $lang->repo->error->emptyVersion      = '版本不能为空';
 $lang->repo->error->versionError      = '版本格式错误！';
+$lang->repo->error->projectUnique     = $lang->repo->serviceProject . '已经有这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。';
 
 $lang->repo->syncTips          = '请参照<a target="_blank" href="https://www.zentao.net/book/zentaopmshelp/207.html">这里</a>，设置代码库定时同步。';
 $lang->repo->encodingsTips     = "提交日志的编码，可以用逗号连接起来的多个，比如utf-8。";

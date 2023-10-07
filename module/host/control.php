@@ -152,7 +152,7 @@ class host extends control
     public function delete($id)
     {
         $this->dao->update(TABLE_HOST)->set('deleted')->eq(1)->where('id')->eq($id)->exec();
-        $this->loadModel('action')->create('host', $id, 'deleted', '', actionModel::CAN_UNDELETED);
+        $this->loadModel('action')->create('host', $id, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
 
         if(dao::isError())
         {
@@ -178,7 +178,7 @@ class host extends control
         $reason     = $this->lang->host->{$reasonKey};
         if($_SERVER['REQUEST_METHOD'] == 'POST')
         {
-            $postData = fixer::input('post')->get();
+            $postData = fixer::input('post')->skipSpecial('reason')->get();
             if(empty($postData->reason))
             {
                 dao::$errors['reason'][] = sprintf($this->lang->error->notempty, $reason);

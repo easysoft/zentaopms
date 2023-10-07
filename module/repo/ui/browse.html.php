@@ -14,7 +14,13 @@ namespace zin;
 
 jsVar('copied', $lang->repo->copied);
 
-if($app->tab == 'devops') dropmenu(set::module('repo'), set::tab('repo'));
+$module = $app->tab == 'devops' ? 'repo' : $app->tab;
+dropmenu
+(
+    set::module($module),
+    set::tab($module),
+    set::url(createLink($module, $app->tab == 'devops' ? 'ajaxGetDropMenu' : 'ajaxGetDropMenuData', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
+);
 
 /* Prepare repo select data. */
 $branchMenus = array();
@@ -26,7 +32,7 @@ foreach($branches as $branchName)
     $base64BranchID = helper::safe64Encode(base64_encode($branchName));
     $branchLink     = $this->createLink('repo', 'browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID");
 
-    $branchMenus[] = array('text' => $branchName, 'id' => $branchName, 'keys' => zget(common::convert2Pinyin(array($branchName), $branchName), ''), 'url' => $branchLink);
+    $branchMenus[] = array('text' => $branchName, 'id' => $branchName, 'keys' => zget(common::convert2Pinyin(array($branchName), $branchName), ''), 'url' => $branchLink, 'data-app' => $app->tab);
 }
 foreach($tags as $tagName)
 {
@@ -34,7 +40,7 @@ foreach($tags as $tagName)
     $base64TagID = helper::safe64Encode(base64_encode($tagName));
     $tagLink     = $this->createLink('repo', 'browse', "repoID=$repoID&branchID=$base64TagID&objectID=$objectID&path=&revision=HEAD&refresh=0&branchOrTag=tag");
 
-    $tagMenus[] = array('text' => $tagName, 'id' => $tagName, 'keys' => zget(common::convert2Pinyin(array($tagName), $tagName), ''), 'url' => $tagLink);
+    $tagMenus[] = array('text' => $tagName, 'id' => $tagName, 'keys' => zget(common::convert2Pinyin(array($tagName), $tagName), ''), 'url' => $tagLink, 'data-app' => $app->tab);
 }
 
 $tabs = array(array('name' => 'branch', 'text' => $lang->repo->branch), array('name' => 'tag', 'text' => $lang->repo->tag));
@@ -66,27 +72,33 @@ foreach($paths as $index => $pathName)
 if($fileName) $breadcrumbItems[] = h::span($fileName);
 
 /* zin: Define the set::module('repo') feature bar on main menu. */
-featureBar(
+\zin\featureBar(
     formGroup
     (
         set::className('repo-select'),
         set::required(true),
-        dropmenu
+        $app->tab == 'project' ? dropmenu
+        (
+            set::id('repoDropmenu'),
+            set::text($repo->name),
+            set::url(createLink('repo', 'ajaxGetDropMenu', "repoID={$repo->id}&module=repo&method=browse&projectID={$objectID}"))
+        ) : null,
+        $repo->SCM != 'Subversion' ? dropmenu
         (
             setID('repoBranchDropMenu'),
             set::objectID($selected),
             set::text($selected),
             set::data(array('data' => $menuData, 'tabs' => $tabs)),
-        ),
+        ) : null,
     ),
     ...$breadcrumbItems
 );
 
 /* zin: Define the toolbar on main menu. */
 $refreshLink   = $this->createLink('repo', 'browse', "repoID=$repoID&branchID=" . $base64BranchID . "&objectID=$objectID&path=" . $this->repo->encodePath($path) . "&revision=$revision&refresh=1");
-$refreshItem   = array('text' => $lang->refresh, 'url' => $refreshLink, 'class' => 'primary', 'icon' => 'refresh');
+$refreshItem   = array('text' => $lang->refresh, 'url' => $refreshLink, 'class' => 'primary', 'icon' => 'refresh', 'data-app' => $app->tab);
 
-$createItem = array('text' => $lang->repo->createAction, 'url' => createLink('repo', 'create', "objectID={$objectID}"));
+$createItem = array('text' => $lang->repo->createAction, 'url' => createLink('repo', 'create', "objectID={$objectID}"), 'data-app' => $app->tab);
 
 $tableData = initTableData($infos, $config->repo->repoDtable->fieldList, $this->repo);
 
@@ -95,7 +107,7 @@ $downloadWg = div
     set::id('modal-downloadCode'),
     set::title($lang->repo->downloadCode),
     on('click', '', array('capture' => true, 'prevent' => true, 'stop' => true)),
-    $cloneUrl->svn ? div
+    !empty($cloneUrl->svn) ? div
     (
         p(set::className('repo-downloadCode'), $lang->repo->cloneUrl),
         formRow
@@ -106,6 +118,7 @@ $downloadWg = div
                 input
                 (
                     set::type('text'),
+                    set::name('svnUrl'),
                     set::value($cloneUrl->svn),
                     set::readOnly(true),
                 ),
@@ -121,7 +134,7 @@ $downloadWg = div
         ),
     ) : null,
 
-    $cloneUrl->ssh ? div
+    !empty($cloneUrl->ssh) ? div
     (
         p(set::className('repo-downloadCode'), $lang->repo->sshClone),
         formRow
@@ -132,6 +145,7 @@ $downloadWg = div
                 input
                 (
                     set::type('text'),
+                    set::name('sshUrl'),
                     set::value($cloneUrl->ssh),
                     set::readOnly(true),
                 ),
@@ -148,7 +162,7 @@ $downloadWg = div
         ),
     ) : null,
 
-    $cloneUrl->http ? div
+    !empty($cloneUrl->http) ? div
     (
         p(set::className('repo-downloadCode'), $lang->repo->httpClone),
         formRow
@@ -159,6 +173,7 @@ $downloadWg = div
                 input
                 (
                     set::type('text'),
+                    set::name('httpUrl'),
                     set::value($cloneUrl->http),
                     set::readOnly(true),
                 ),
@@ -193,7 +208,7 @@ toolbar
         set::className('last-sync-time'),
         $lang->repo->notice->lastSyncTime . $cacheTime
     ),
-    item(set($refreshItem)),
+    $repo->SCM != 'Gitlab' ? item(set($refreshItem)) : null,
     dropdown
     (
         set::staticMenu(true),
@@ -205,10 +220,10 @@ toolbar
         ),
         to::items
         (
-           array($downloadWg)
+            array($downloadWg)
         ),
     ),
-    hasPriv('repo', 'create') && $this->app->tab == 'project' ? item
+    hasPriv('repo', 'create') && $app->tab == 'project' ? item
     (
         set($createItem + array
         (
@@ -232,15 +247,16 @@ dtable
 $encodePath  = $this->repo->encodePath($path);
 $diffLink    = $this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=" . $encodePath . "&oldrevision={oldRevision}&newRevision={newRevision}");
 
-jsVar('repoID',      $repoID);
-jsVar('branch',      $branchID);
-jsVar('menus',       $menus);
-jsVar('diffLink',    $diffLink);
+jsVar('appTab',   $app->tab);
+jsVar('repoID',   $repoID);
+jsVar('branch',   $branchID);
+jsVar('diffLink', $diffLink);
 jsVar('sortLink', helper::createLink('repo', 'browse', "repoID={$repoID}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 
 /* Disbale check all checkbox of table header */
 $config->repo->commentDtable->fieldList['id']['checkbox'] = jsRaw('(rowID) => rowID !== \'HEADER\'');
 
+if($repo->SCM == 'Gitlab') unset($config->repo->commentDtable->fieldList['commit']);
 $commentsTableData = initTableData($revisions, $config->repo->commentDtable->fieldList, $this->repo);
 
 $readAllLink = $this->repo->createLink('log', "repoID=$repoID&objectID=$objectID&entry=" . $encodePath . "&revision=HEAD&type=$logType");
@@ -261,7 +277,7 @@ sidebar
         set::canRowCheckable(jsRaw('function(rowID){return canRowCheckable(rowID);}')),
         set::footToolbar($footToolbar),
         set::footer(array('toolbar', 'flex', 'pager')),
-        set::footPager(usePager()),
+        set::footPager(usePager('pager', 'noTotalCount')),
         set::showToolbarOnChecked(false),
     ),
 );

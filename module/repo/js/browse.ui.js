@@ -6,7 +6,7 @@ window.renderCell = function(result, {col, row})
     if(col.name === 'name')
     {
         var iconHtml = '<span class="' + (row.data.kind == 'dir' ? 'directory' : 'file') + ' mini-icon"></span>';
-        result[0] = {html:iconHtml + '<a href="' + row.data.link + '">' + row.data.name + '</a>'};
+        result[0] = {html:iconHtml + '<a href="' + row.data.link + '" data-app="' + appTab + '">' + row.data.name + '</a>'};
 
         return result;
     }
@@ -32,7 +32,7 @@ window.renderCommentCell = function(result, {col, row})
 {
     if(col.name === 'revision')
     {
-        result[0] = {html:'<a href="' + row.data.link + '">' + row.data.revision + '</a>', style:{flexDirection:"column"}};
+        result[0] = {html:'<a href="' + row.data.link + '" data-app="' + appTab + '">' + row.data.revision + '</a>', style:{flexDirection:"column"}};
 
         return result;
     }
@@ -67,7 +67,7 @@ $('#repo-select').on('change', function()
 /**
  * 当选中两行时禁用其他行。
  * Disable checkable attribution when checked rows equal 2.
- * 
+ *
  * @param  object changes
  * @access public
  * @return void

@@ -14,3 +14,23 @@ window.renderGitlabUser = function(result, {row})
 
     return result;
 }
+
+window.bindUser = function()
+{
+    const myDTable = $('#table-gitlab-binduser').zui('dtable');
+    const formData = myDTable.$.getFormData();
+
+    var bindData = $('#table-gitlab-binduser').zui('dtable').$.props.data;
+    var postData = {};
+    postData['gitlabUserNames[]'] = [];
+    for(i in bindData)
+    {
+        postData['gitlabUserNames[]'].push(bindData[i].gitlabID);
+        postData['zentaoUsers[' + bindData[i].gitlabID + ']'] = formData['zentaoUsers[' + bindData[i].gitlabID + ']'];
+    }
+
+    $.ajaxSubmit({
+        url: $.createLink('gitlab', 'bindUser', 'gitlabID=' + gitlabID + '&type=' + type),
+        data: postData
+    });
+}

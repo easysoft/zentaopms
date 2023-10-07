@@ -12,7 +12,13 @@ declare(strict_types=1);
 
 namespace zin;
 
-if($app->tab == 'devops') dropmenu(set::module('repo'), set::tab('repo'));
+$module = $app->tab == 'devops' ? 'repo' : $app->tab;
+dropmenu
+(
+    set::module($module),
+    set::tab($module),
+    set::url(createLink($module, $app->tab == 'devops' ? 'ajaxGetDropMenu' : 'ajaxGetDropMenuData', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
+);
 
 $tree = $this->repo->getFileTree($repo);
 
@@ -29,7 +35,7 @@ jsVar('openedFiles', array($entry));
 jsVar('urlParams', "repoID=$repoID&objectID=$objectID&entry=%s&revision=$revision&showBug=$showBug&encoding=$encoding");
 jsVar('currentLink', $this->createLink('repo', 'view', "repoID=$repoID&objectID=$objectID&entry=$file"));
 
-featureBar();
+\zin\featureBar();
 
 $monacoDropMenus = array();
 if(common::hasPriv('repo', 'blame'))    $monacoDropMenus[] = array('text' => $this->lang->repo->blame,    'icon' => 'blame',    'data-link' => $this->repo->createLink('blame', "repoID=$repoID&objectID=$objectID&entry={path}&revision=$revision&encoding=$encoding"), 'class' => 'repoDropDownMenu');

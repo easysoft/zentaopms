@@ -400,11 +400,11 @@ class gitlabModel extends model
      * @access public
      * @return array
      */
-    public function getCommits($repo, $entry, $revision = 'HEAD', $type = 'dir', $pager = null, $begin = 0, $end = 0)
+    public function getCommits($repo, $entry, $revision = 'HEAD', $type = 'dir', $pager = null, $begin = '', $end = '')
     {
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
-        $comments = $scm->engine->getCommitsByPath($entry, '', '', isset($pager->recPerPage) ? $pager->recPerPage : 10, isset($pager->pageID) ? $pager->pageID : 1);
+        $comments = $scm->engine->getCommitsByPath($entry, '', '', isset($pager->recPerPage) ? $pager->recPerPage : 10, isset($pager->pageID) ? $pager->pageID : 1, false, $begin, $end);
         if(!is_array($comments)) return array();
 
         if(isset($pager->recTotal)) $pager->recTotal = count($comments) < $pager->recPerPage ? $pager->recPerPage * $pager->pageID : $pager->recPerPage * ($pager->pageID + 1);
@@ -439,6 +439,21 @@ class gitlabModel extends model
     public function update($id)
     {
         return $this->loadModel('pipeline')->update($id);
+    }
+
+    /**
+     * 设置项目信息。
+     * Set project data.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  object $project
+     * @access public
+     * @return void
+     */
+    public function setProject(int $gitlabID, int $projectID, object $project): void
+    {
+        $this->projects[$gitlabID][$projectID] = $project;
     }
 
     /**
@@ -640,7 +655,7 @@ class gitlabModel extends model
      */
     public function apiGetGroups($gitlabID, $orderBy = 'id_desc', $minRole = '', $keyword = '')
     {
-        $apiRoot = $this->getApiRoot($gitlabID);
+        $apiRoot = $this->getApiRoot($gitlabID, false);
         $url     = sprintf($apiRoot, "/groups");
         if($minRole == 'owner')
         {
@@ -1018,7 +1033,7 @@ class gitlabModel extends model
      * @access public
      * @return object
      */
-    public function apiGetSingleProject($gitlabID, $projectID, $useUser = false)
+    public function apiGetSingleProject($gitlabID, $projectID, $useUser = true)
     {
         if(isset($this->projects[$gitlabID][$projectID])) return $this->projects[$gitlabID][$projectID];
 
@@ -1252,12 +1267,13 @@ class gitlabModel extends model
      * @access public
      * @return bool
      */
-    public function addPushWebhook($repo)
+    public function addPushWebhook($repo, $token = '')
     {
         $hook = new stdClass;
         $hook->url = common::getSysURL() . '/api.php/v1/gitlab/webhook?repoID='. $repo->id;
         $hook->push_events           = true;
         $hook->merge_requests_events = true;
+        if($token) $hook->token = $token;
 
         /* Return an empty array if where is one existing webhook. */
         if($this->isWebhookExists($repo, $hook->url)) return array();
@@ -2976,5 +2992,42 @@ class gitlabModel extends model
         }
 
         return false;
+    }
+
+    /**
+     * 判断按钮是否可点击。
+     * Adjust the action clickable.
+     *
+     * @param  object $instance
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function isClickable(object $gitlab, string $action): bool
+    {
+        return commonModel::hasPriv('space', 'browse');
+    }
+
+    /**
+     * 判断按钮是否显示在列表页。
+     * Judge an action is displayed in browse page.
+     *
+     * @param  object $sonarqube
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public static function isDisplay(object $sonarqube, string $action): bool
+    {
+        $action = strtolower($action);
+
+        if(!commonModel::hasPriv('space', 'browse')) return false;
+
+        if(!in_array(strtolower(strtolower($action)), array('browseproject', 'browsegroup', 'browseuser', 'browsebranch', 'browsetag')))
+        {
+            if(!commonModel::hasPriv('instance', 'manage')) return false;
+        }
+
+        return true;
     }
 }

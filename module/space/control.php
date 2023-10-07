@@ -23,8 +23,9 @@ class space extends control
        @access public
      * @return void
      */
-    public function browse($spaceID = null, $browseType = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 24, $pageID = 1)
+    public function browse($spaceID = null, $browseType = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
         $this->app->loadLang('instance');
         $this->loadModel('instance');
         $this->loadModel('store');
@@ -45,12 +46,12 @@ class space extends control
             $search = $conditions->search;
         }
 
-        $instances = $this->space->getSpaceInstances($space->id, $browseType, $search);
+        $instances = $this->space->getSpaceInstances(0, $browseType, $search);
         foreach($instances as $instance)
         {
             $instance->externalID = 0;
             $instance->orgID      = $instance->id;
-            $instance->type       = 'app';
+            $instance->type       = 'store';
 
             if(in_array($instance->appName, $this->config->space->zentaoApps))
             {
@@ -58,8 +59,9 @@ class space extends control
                 if($externalApp) $instance->externalID = $externalApp->id;
             }
         }
-        $pipelines = $this->loadModel('pipeline')->getList('', 'id_desc');
         $maxID     = 0;
+        $pipelines = array();
+        if($browseType == 'all' || $browseType == 'running') $pipelines = $this->loadModel('pipeline')->getList('', 'id_desc');
         if(!empty($instances)) $maxID = max(array_keys($instances));
         foreach($pipelines as $key => $pipeline)
         {
@@ -67,7 +69,7 @@ class space extends control
 
             $pipeline->createdAt  = $pipeline->createdDate;
             $pipeline->appName    = $this->lang->space->appType[$pipeline->type];
-            $pipeline->status     = '';
+            $pipeline->status     = 'running';
             $pipeline->type       = 'external';
             $pipeline->externalID = $pipeline->id;
             $pipeline->orgID      = $pipeline->id;
@@ -77,7 +79,7 @@ class space extends control
 
         /* Data sort. */
         list($order, $sort) = explode('_', $orderBy);
-        $createdColumn = array_column((array)$allInstances, $order == 'id' ? 'createdAt' : $order);
+        $createdColumn  = helper::arrayColumn($allInstances, $order == 'id' ? 'createdAt' : $order);
         array_multisort($createdColumn, $sort == 'desc' ? SORT_DESC : SORT_ASC, $allInstances);
 
         /* Pager. */
@@ -89,11 +91,14 @@ class space extends control
         $this->view->title        = $this->lang->space->common;
         $this->view->position[]   = $this->lang->space->common;
         $this->view->pager        = $pager;
+        $this->view->orderBy      = $orderBy;
         $this->view->browseType   = $browseType;
         $this->view->spaceType    = $spaceType;
         $this->view->instances    = (empty($allInstances) or empty($allInstances[$pageID - 1])) ? array() : $allInstances[$pageID - 1];
         $this->view->currentSpace = $space;
         $this->view->searchName   = $search;
+        $this->view->users        = $this->loadModel('user')->getPairs('noclosed,noletter');
+        $this->view->sortLink     = $this->createLink('space', 'browse', "spaceID=&browseType={$browseType}&orderBy={orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}");
 
         $this->display();
     }
@@ -108,7 +113,7 @@ class space extends control
      */
     public function createApplication($appID = 0)
     {
-        if(!commonModel::hasPriv('instance', 'create')) $this->loadModel('common')->deny('instance', 'create', false);
+        if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
 
         $this->app->loadLang('sonarqube');
         $this->app->loadLang('jenkins');
@@ -119,6 +124,7 @@ class space extends control
         $defaultApp = '';
         foreach($pagedApps->apps as $app)
         {
+            if(in_array($app->id, array(29,51,52,53,54,142))) continue;
             if(!$appID and $app->alias == 'GitLab') $defaultApp = $app->id;
 
             $apps[$app->id] = $app->alias;
@@ -128,6 +134,7 @@ class space extends control
         $pgList      = $this->cne->sharedDBList('postgresql');
         $versionList = $this->store->getVersionPairs($appID);
 
+        $this->view->title       = $this->lang->space->install;
         $this->view->apps        = $apps;
         $this->view->appID       = $appID;
         $this->view->defaultApp  = $defaultApp;
@@ -149,7 +156,12 @@ class space extends control
      */
     public function getStoreAppInfo(int $appID)
     {
-        $cloudApp = $this->loadModel('store')->getAppInfo($appID);
+        if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
+        $cloudApp     = $this->loadModel('store')->getAppInfo($appID);
+        $versionPairs = $this->store->getVersionPairs($appID);
+        $versionItems = array();
+        foreach($versionPairs as $k => $v) $versionItems[] = array('text' => $v, 'value' => $k);
+        $cloudApp->versionList = $versionItems;
 
         return print(json_encode($cloudApp));
     }

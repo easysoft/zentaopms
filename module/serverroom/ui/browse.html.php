@@ -12,7 +12,12 @@ declare(strict_types=1);
 
 namespace zin;
 
-featureBar(li(searchToggle()));
+$queryMenuLink = createLink('serverroom', 'browse', "browseType=bySearch&param={queryID}");
+featureBar
+(
+    set::queryMenuLinkCallback(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink)),
+    li(searchToggle())
+);
 
 /* zin: Define the toolbar on main menu. */
 $canCreate  = hasPriv('serverroom', 'create');

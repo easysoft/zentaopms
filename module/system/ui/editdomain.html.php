@@ -31,6 +31,7 @@ formPanel
     ),
     formGroup
     (
+        set::width('2/3'),
         set::label($lang->system->domain->newDomain),
         set::name('customDomain'),
         set::value(zget($domainSettings, 'customDomain', '')),
@@ -57,6 +58,7 @@ formPanel
     ),
     formGroup
     (
+        set::width('2/3'),
         setClass('cert hidden'),
         set::label($lang->system->certPem),
         set::name('certPem'),
@@ -65,6 +67,7 @@ formPanel
     ),
     formGroup
     (
+        set::width('2/3'),
         setClass('cert hidden'),
         set::label($lang->system->certKey),
         set::name('certPem'),

@@ -1,5 +1,6 @@
 <?php
-global $lang;
+global $lang, $app;
+$app->loadLang('repo');
 
 $config->program = new stdclass();
 $config->program->suffix['c']    = "cpp";
@@ -29,6 +30,19 @@ $config->repo->batchNum  = 100;
 $config->repo->images    = '|png|gif|jpg|ico|jpeg|bmp|';
 $config->repo->binary    = '|pdf|';
 $config->repo->synced    = '';
+
+$config->repo->repoSyncLog = new stdclass();
+$config->repo->repoSyncLog->one            = 1;
+$config->repo->repoSyncLog->done           = array('done', '完成');
+$config->repo->repoSyncLog->total          = array('Total', '总数');
+$config->repo->repoSyncLog->fatal          = array('fatal', '致命');
+$config->repo->repoSyncLog->error          = array('error', '错误');
+$config->repo->repoSyncLog->failed         = array('failed', '失败');
+$config->repo->repoSyncLog->finish         = 'finish';
+$config->repo->repoSyncLog->emptyRepo      = array('empty repository', '空仓库');
+$config->repo->repoSyncLog->finishCount    = array('Counting objects: 100%');
+$config->repo->repoSyncLog->logFilePrefix  = '/log/clone.progress.';
+$config->repo->repoSyncLog->finishCompress = array('Compressing objects: 100%');
 
 $config->repo->editor = new stdclass();
 $config->repo->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');

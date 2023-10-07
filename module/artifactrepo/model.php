@@ -71,12 +71,12 @@ class artifactrepoModel extends model
 
         if($server->type == 'nexus')
         {
-            $url = $server->url . '/service/rest/v1/repositorySettings';
+            $url  = $server->url . '/service/rest/v1/repositorySettings';
             $auth = "{$server->account}:{$server->password}";
 
-            $response = common::http($url, '', array(CURLOPT_USERPWD => $auth));
-            $data     = json_decode($response);
-            return is_array($data) ? $data : array();
+            $response = common::http($url, '', array(CURLOPT_USERPWD => $auth), array(), 'data', 'POST', 10, true);
+            $data = array('result' => $response[1] == 200, 'data' => json_decode($response['body']));
+            return $data;
         }
 
         return array();

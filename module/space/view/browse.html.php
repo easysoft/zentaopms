@@ -12,7 +12,7 @@
 ?>
 <?php include $this->app->getModuleRoot() . '/common/view/header.html.php';?>
 <?php js::set('instanceNotices', $lang->instance->notices);?>
-<?php js::set('instanceIdList',  array_column($instances, 'id'));?>
+<?php js::set('instanceIdList',  helper::arrayColumn($instances, 'id'));?>
 <div id='mainMenu' class='clearfix'>
   <form id="spaceSearchForm" method="post" class="not-watch load-indicator">
     <div class="btn-toolbar pull-left">

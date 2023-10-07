@@ -24,6 +24,8 @@ featureBar
 toolbar();
 
 jsVar('zentaoUsers', $zentaoUsers);
+jsVar('giteaID', $giteaID);
+jsVar('type', $type);
 $config->gitea->dtable->bindUser->fieldList['giteaEmail']['onRenderCell'] = jsRaw('renderGitlabUser');
 $config->gitea->dtable->bindUser->fieldList['zentaoUsers']['controlItems'] = $userPairs;
 form
@@ -48,7 +50,7 @@ form
                 array(
                     'text'    => $lang->save,
                     'btnType' => 'primary',
-                    'onClick' => jsRaw("() => {\$('#bindForm').trigger('submit')}")
+                    'onClick' => jsRaw("() => {bindUser()}")
                 ),
                 array(
                     'text'    => $lang->goback,

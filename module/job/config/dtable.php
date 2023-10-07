@@ -78,7 +78,7 @@ $config->job->actionList = array();
 $config->job->actionList['compile']['icon'] = 'history';
 $config->job->actionList['compile']['text'] = $lang->compile->browse;
 $config->job->actionList['compile']['hint'] = $lang->compile->browse;
-$config->job->actionList['compile']['url']  = helper::createLink('compile', 'browse',"repoID={repo}&jobID={id}");
+$config->job->actionList['compile']['url']  = array('module' => 'compile', 'method' => 'browse', 'params' => "repoID={repo}&jobID={id}");
 
 $config->job->actionList['edit']['icon'] = 'edit';
 $config->job->actionList['edit']['text'] = $lang->job->edit;

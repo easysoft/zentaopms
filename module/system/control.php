@@ -29,9 +29,9 @@ class system extends control
         }
         else
         {
-            if(!is_writable($this->backupPath)) $this->view->error = sprintf($this->lang->system->backup->error->noWritable, $this->backupPath);
+            if(!is_writable($this->backupPath)) $this->view->error = sprintf($this->lang->backup->error->noWritable, $this->backupPath);
         }
-        if(!is_writable($this->app->getTmpRoot())) $this->view->error = sprintf($this->lang->system->backup->error->noWritable, $this->app->getTmpRoot());
+        if(!is_writable($this->app->getTmpRoot())) $this->view->error = sprintf($this->lang->backup->error->noWritable, $this->app->getTmpRoot());
 
         $this->loadModel('action');
         $this->loadModel('setting');
@@ -447,13 +447,14 @@ class system extends control
      */
     public function editDomain()
     {
+        if(!commonModel::hasPriv('system', 'configDomain')) $this->loadModel('common')->deny('system', 'configDomain', false);
         $this->loadModel('instance');
 
         if($_POST)
         {
             session_write_close();
             $this->system->saveDomainSettings();
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::$errors));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError(true)));
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->system->notices->updateDomainSuccess, 'locate' => $this->inlink('domainView')));
         }

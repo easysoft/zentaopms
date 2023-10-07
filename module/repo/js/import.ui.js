@@ -38,7 +38,7 @@ function loadProductProjects(event)
     const projects    = $currentRow.find('div.picker-box[data-name="projects"]');
     const projectIds  = $(projects).val();
 
-    $.post($.createLink('repo', 'ajaxProjectsOfProducts'), {products : products, projects: projectIds, number : 1}, function(response)
+    $.post($.createLink('repo', 'ajaxProjectsOfProducts'), {products : products.join(','), projects: projectIds, number : 1}, function(response)
     {
         var items = JSON.parse(response);
         $(projects).zui('picker').render({items: items});

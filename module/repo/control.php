@@ -50,11 +50,18 @@ class repo extends control
 
         if($tab == 'project')
         {
+            $project = $this->loadModel('project')->getByID($objectID);
+            if($project->model === 'kanban') return print($this->locate($this->createLink('project', 'index', "projectID=$objectID")));
+
             $this->loadModel('project')->setMenu($objectID);
             $this->view->projectID = $objectID;
         }
         elseif($tab == 'execution')
         {
+            $execution = $this->loadModel('execution')->getByID($objectID);
+            $features = $this->execution->getExecutionFeatures($execution);
+            if(!$features['devops']) return print($this->locate($this->createLink('execution', 'task', "executionID=$objectID")));
+
             $this->loadModel('execution')->setMenu($objectID);
             $this->view->executionID = $objectID;
         }
@@ -63,7 +70,7 @@ class repo extends control
             $this->repo->setMenu($this->repos, $repoID);
         }
 
-        if(empty($this->repos) and $this->methodName != 'create') return print($this->locate($this->repo->createLink('create', "objectID=$objectID")));
+        if(empty($this->repos) and !in_array($this->methodName, array('create', 'setrules'))) return print($this->locate($this->repo->createLink('create', "objectID=$objectID")));
     }
 
     /**
@@ -89,7 +96,7 @@ class repo extends control
         $recTotal = count($repoList);
         $pager    = new pager($recTotal, $recPerPage, $pageID);
         $repoList = array_chunk($repoList, $pager->recPerPage);
-        $repoList = empty($repoList) ? $repoList : $repoList[$pageID - 1];
+        $repoList = empty($repoList) ? array() : $repoList[$pageID - 1];
 
         /* Get success jobs of sonarqube.*/
         $jobIDList = array();
@@ -99,19 +106,18 @@ class repo extends control
         }
         $successJobs = $this->loadModel('compile')->getSuccessJobs($jobIDList);
 
-        $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
+        $products = $this->loadModel('product')->getPairs('all', 0, '', 'all');
         $projects = $this->loadModel('project')->getPairs();
 
         session_start();
         $this->config->repo->search['params']['product']['values']  = $products;
         $this->config->repo->search['params']['projects']['values'] = $projects;
-        $this->config->repo->search['actionURL'] = $this->createLink('repo', 'maintain', "objectID={$objectID}&orderBy={$orderBy}&recPerPage={$recPerPage}&pageID={$pageID}&type=bySearch&param=myQueryID");
-        $this->config->repo->search['queryID']   = 0;
+        $this->config->repo->search['actionURL']   = $this->createLink('repo', 'maintain', "objectID={$objectID}&orderBy={$orderBy}&recPerPage={$recPerPage}&pageID={$pageID}&type=bySearch&param=myQueryID");
+        $this->config->repo->search['queryID']     = $param;
         $this->config->repo->search['onMenuBar']   = 'yes';
         $this->loadModel('search')->setSearchParams($this->config->repo->search);
 
-        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->browse;
-
+        $this->view->title         = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->browse;
         $this->view->type          = $type;
         $this->view->orderBy       = $orderBy;
         $this->view->objectID      = $objectID;
@@ -150,8 +156,8 @@ class repo extends control
             {
                 /* Add webhook. */
                 $repo = $this->repo->getByID($repoID);
-                $this->loadModel('gitlab')->addPushWebhook($repo);
-                $this->gitlab->updateCodePath($repo->serviceHost, $repo->serviceProject, $repo->id);
+                $this->loadModel('gitlab')->updateCodePath($repo->serviceHost, $repo->serviceProject, $repo->id);
+                $this->repo->updateCommitDate($repoID);
             }
 
             $this->loadModel('action')->create('repo', $repoID, 'created');
@@ -161,6 +167,7 @@ class repo extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
+        $this->commonAction(0, $objectID);
         $this->repoZen->buildCreateForm($objectID);
     }
 
@@ -214,7 +221,7 @@ class repo extends control
 
         $products           = $this->loadModel('product')->getPairs('', 0, '', 'all');
         $linkedProducts     = $this->loadModel('product')->getByIdList(explode(',', $repo->product));
-        $linkedProductPairs = array_combine(array_keys($linkedProducts), array_column($linkedProducts, 'name'));
+        $linkedProductPairs = array_combine(array_keys($linkedProducts), helper::arrayColumn($linkedProducts, 'name'));
         $products           = $products + $linkedProductPairs;
 
         $this->view->title           = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->edit;
@@ -254,11 +261,12 @@ class repo extends control
         $jobs = $this->dao->select('*')->from(TABLE_JOB)->where('repo')->eq($repoID)->andWhere('deleted')->eq('0')->fetchAll();
         if($jobs) $error .= ($error ? '\n' : '') . $this->lang->repo->error->linkedJob;
 
-        if($error) return print(js::alert($error));
+        if($error) return $this->send(array('result' => 'fail', 'message' => $error));
 
-        $this->repo->delete(TABLE_REPO, $repoID);
+        $this->dao->delete()->from(TABLE_REPO)->where('id')->eq($repoID)->exec();
         if(dao::isError()) return print(js::error(dao::getError()));
-        return print(js::reload('parent'));
+        $this->loadModel('action')->create('repo', $repoID, 'deleted', '');
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
@@ -386,11 +394,13 @@ class repo extends control
      */
     public function monaco($repoID, $objectID = 0, $entry = '', $revision = 'HEAD', $showBug = 'false', $encoding = '')
     {
+        $this->commonAction($repoID, $objectID);
+
         $file     = $entry;
         $repo     = $this->repo->getByID($repoID);
         $entry    = $this->repo->decodePath($entry);
         $entry    = urldecode($entry);
-        $pathInfo = pathinfo($entry);
+        $pathInfo = helper::mbPathinfo($entry);
 
         $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->view;
         $this->view->dropMenus   = $this->repoZen->getBranchAndTagItems($repo, $this->cookie->repoBranch);
@@ -437,7 +447,7 @@ class repo extends control
         $this->commonAction($repoID, $objectID);
         $repo = $this->repo->getByID($repoID);
         session_start();
-        $this->session->set('storyList', $this->app->getURI(true), 'product');
+        $this->session->set('storyList', inlink('view',  "repoID=$repoID&objectID=$objectID&entry=$entry&revision=$revision&showBug=$showBug&encoding=$encoding"), 'product');
         session_write_close();
         if($browser['name'] != 'ie') return print($this->fetch('repo', 'monaco', "repoID=$repoID&objectID=$objectID&entry=$entry&revision=$revision&showBug=$showBug&encoding=$encoding"));
 
@@ -534,7 +544,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function browse($repoID = 0, $branchID = '', $objectID = 0, $path = '', $revision = 'HEAD', $refresh = 0, $branchOrTag = 'branch',  $type = 'dir', $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function browse($repoID = 0, $branchID = '', $objectID = 0, $path = '', $revision = 'HEAD', $refresh = 0, $branchOrTag = 'branch',  $type = 'dir', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $repoID                 = $this->repo->saveState($repoID, $objectID);
         $originBranchID         = $branchID;
@@ -561,14 +571,16 @@ class repo extends control
         }
         if(!$repo->synced) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID"));
 
+        if($repo->SCM == 'Gitlab') list($branchInfo, $tagInfo) = $this->repoZen->getBrowseInfo($repo);
+
         /* Set branch or tag for git. */
         $branches = $tags = $branchesAndTags = array();
         if(in_array($repo->SCM, $this->config->repo->gitTypeList))
         {
             $scm = $this->app->loadClass('scm');
             $scm->setEngine($repo);
-            $branches = $scm->branch();
-            $initTags = $scm->tags('');
+            $branches = isset($branchInfo) && $branchInfo !== false ? $branchInfo : $scm->branch();
+            $initTags = isset($tagInfo) && $tagInfo !== false ? $tagInfo : $scm->tags('');
             foreach($initTags as $tag) $tags[$tag] = $tag;
             $branchesAndTags = $branches + $tags;
 
@@ -576,7 +588,7 @@ class repo extends control
             if($branchID) $this->repo->setRepoBranch($branchID);
             if(!isset($branchesAndTags[$branchID]))
             {
-                $branchID = key($branches);
+                $branchID = (string)key($branches);
                 $this->repo->setRepoBranch($branchID);
             }
         }
@@ -620,6 +632,8 @@ class repo extends control
             $item->link     = $this->repo->createLink('revision', "repoID=$repoID&objectID=$objectID&revision={$item->revision}" . $pathInfo);
             $item->revision = $repo->SCM != 'Subversion' ? substr($item->revision, 0, 10) : $item->revision;
         }
+
+        if($path == '') $this->repoZen->updateLastCommit($repo, $lastRevision);
 
         /* Get files info. */
         $infos = $this->repoZen->getFilesInfo($repo, $path, $branchID, $refresh, $revision, $lastRevision);
@@ -943,7 +957,7 @@ class repo extends control
         $this->view->suffix      = $suffix;
         $this->view->file        = $file;
         $this->view->repoID      = $repoID;
-        $this->view->branchID    = $this->cookie->repoBranch;
+        $this->view->branchID    = (string) $this->cookie->repoBranch;
         $this->view->objectID    = $objectID;
         $this->view->repo        = $repo;
         $this->view->encoding    = str_replace('-', '_', $encoding);
@@ -1052,6 +1066,7 @@ class repo extends control
         $latestInDB = $this->repo->getLatestCommit($repoID);
         $this->view->version    = $latestInDB ? (int)$latestInDB->commit : 1;
         $this->view->repoID     = $repoID;
+        $this->view->repo       = $this->repo->getByID($repoID);
         $this->view->objectID   = $objectID;
         $this->view->branch     = $branch;
         $this->view->browseLink = $this->repo->createLink('browse', "repoID=" . ($this->app->tab == 'devops' ? $repoID : '') . "&branchID=" . helper::safe64Encode(base64_encode($branch)) . "&objectID=$objectID", '', false) . "#app={$this->app->tab}";
@@ -1127,7 +1142,7 @@ class repo extends control
         $linkedStories = $this->repo->getRelationByCommit($repoID, $revision, 'story');
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch($product->id, 0, $queryID, 'id', '', 'story', array_keys($linkedStories), $pager);
+            $allStories = $this->story->getBySearch($product->id, 0, $queryID, $orderBy, '', 'story', array_keys($linkedStories), $pager);
         }
         else
         {
@@ -1193,8 +1208,8 @@ class repo extends control
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($product->id => $product->id));
         $this->config->bug->search['params']['module']['values']        = $modules;
         $this->config->bug->search['params']['execution']['values']     = $this->product->getExecutionPairsByProduct($product->id);
-        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs(array($product->id), 'all', '');
-        $this->config->bug->search['params']['resolvedBuild']['values'] = $this->loadModel('build')->getBuildPairs(array($product->id), 'all', '');
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($product->id, 'all', '');
+        $this->config->bug->search['params']['resolvedBuild']['values'] = $this->loadModel('build')->getBuildPairs($product->id, 'all', '');
 
         unset($this->config->bug->search['fields']['product']);
         if($product->type == 'normal')
@@ -1214,11 +1229,11 @@ class repo extends control
         $linkedBugs = $this->repo->getRelationByCommit($repoID, $revision, 'bug');
         if($browseType == 'bySearch')
         {
-            $allBugs = $this->bug->getBySearch($product->id, 0, $queryID, 'id_desc', array_keys($linkedBugs), $pager);
+            $allBugs = $this->bug->getBySearch($product->id, 0, $queryID, $orderBy, array_keys($linkedBugs), $pager);
         }
         else
         {
-            $allBugs = $this->bug->getActiveBugs($product->id, 0, '0', array_keys($linkedBugs), $pager);
+            $allBugs = $this->bug->getActiveBugs($product->id, 0, '0', array_keys($linkedBugs), $pager, $orderBy);
         }
 
         foreach($allBugs as $bug) $bug->statusText = $this->processStatus('bug', $bug);
@@ -1378,10 +1393,12 @@ class repo extends control
         $gitlabList = $this->loadModel('gitlab')->getList();
         $gitlab     = empty($server) ? array_shift($gitlabList) : $this->gitlab->getById($server);
 
-        $repoList = $this->repoZen->getGitlabNotExistRepos($gitlab);
+        $repoList = $gitlab ? $this->repoZen->getGitlabNotExistRepos($gitlab) : array();
 
         $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
 
+
+        $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->importAction;
         $this->view->gitlabPairs = $this->gitlab->getPairs();
         $this->view->products    = $products;
         $this->view->projects    = $this->product->getProjectPairsByProductIDList(array_keys($products));
@@ -1403,42 +1420,43 @@ class repo extends control
         set_time_limit(0);
         $repo = $this->repo->getByID($repoID);
         if(empty($repo)) return;
-        if($repo->synced) return print('finish');
+        if($repo->synced) return print($this->config->repo->repoSyncLog->finish);
 
         if(in_array($repo->SCM, array('Gitea', 'Gogs')))
         {
-            $logFile = realPath($this->app->getTmpRoot() . "/log/clone.progress." . strtolower($repo->SCM) . ".{$repo->name}.log");
+            $logFile = realPath($this->app->getTmpRoot() . $this->config->repo->repoSyncLog->logFilePrefix . strtolower($repo->SCM) . ".{$repo->name}.log");
             if($logFile)
             {
                 $content  = file($logFile);
-                $lastLine = $content[count($content) - 1];
-
-                if(strpos($lastLine, 'done') === false)
+                foreach($content as $line)
                 {
-                    if(strpos($lastLine, 'empty repository') !== false)
+                    if($this->repo->strposAry($line, $this->config->repo->repoSyncLog->fatal) !== false) return print($line);
+                    if($this->repo->strposAry($line, $this->config->repo->repoSyncLog->failed) !== false) return print($line);
+                }
+
+                $lastLine = $content[count($content) - 1];
+                if($this->repo->strposAry($lastLine, $this->config->repo->repoSyncLog->done) === false)
+                {
+                    if($this->repo->strposAry($lastLine, $this->config->repo->repoSyncLog->emptyRepo) !== false)
                     {
                         @unlink($logFile);
                     }
-                    elseif(strpos($lastLine, 'Total') !== false)
+                    elseif($this->repo->strposAry($lastLine, $this->config->repo->repoSyncLog->total) !== false)
                     {
                         $logContent = file_get_contents($logFile);
-                        if(strpos($logContent, 'Counting objects: 100%') !== false and strpos($logContent, 'Compressing objects: 100%') !== false)
+                        if($this->repo->strposAry($logContent, $this->config->repo->repoSyncLog->finishCount) !== false and $this->repo->strposAry($logContent, $this->config->repo->repoSyncLog->finishCompress) !== false)
                         {
                             @unlink($logFile);
                         }
                         else
                         {
-                            return print(1);
+                            return print($this->config->repo->repoSyncLog->one);
                         }
                     }
                     else
                     {
-                        return print(1);
+                        return print($this->config->repo->repoSyncLog->one);
                     }
-                }
-                elseif(strpos($lastLine, 'fatal') !== false)
-                {
-                    return print('finish');
                 }
                 else
                 {
@@ -1477,50 +1495,55 @@ class repo extends control
             }
         }
 
-        $latestInDB = $this->dao->select('t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
-            ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
-            ->where('t1.repo')->eq($repoID)
-            ->beginIF($repo->SCM == 'Git' and $this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
-            ->beginIF($repo->SCM == 'Gitlab' and $this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
-            ->orderBy('t1.time')
-            ->limit(1)
-            ->fetch();
+        $logs = array();
+        if($repo->SCM != 'Gitlab')
+        {
+            $latestInDB = $this->dao->select('t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
+                ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
+                ->where('t1.repo')->eq($repoID)
+                ->beginIF($repo->SCM == 'Git' and $this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
+                ->beginIF($repo->SCM == 'Gitlab' and $this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
+                ->orderBy('t1.time')
+                ->limit(1)
+                ->fetch();
 
-        $version  = empty($latestInDB) ? 1 : $latestInDB->commit + 1;
-        $logs     = array();
-        $revision = 'HEAD';
-        if($version != 1) $revision = in_array($repo->SCM, array('Git', 'Gitea', 'Gogs')) ? $latestInDB->commit : $latestInDB->revision;
-        if($type == 'batch')
-        {
-            $logs = $this->scm->getCommits($revision, $this->config->repo->batchNum, $branchID);
-        }
-        else
-        {
-            $logs = $this->scm->getCommits($revision, 0, $branchID);
+            $version  = empty($latestInDB) ? 1 : $latestInDB->commit + 1;
+            $revision = $version == 1 ? 'HEAD' : (in_array($repo->SCM, array('Git', 'Gitea', 'Gogs')) ? $latestInDB->commit : $latestInDB->revision);
+            if($type == 'batch')
+            {
+                $logs = $this->scm->getCommits($revision, $this->config->repo->batchNum, $branchID);
+            }
+            else
+            {
+                $logs = $this->scm->getCommits($revision, 0, $branchID);
+            }
         }
 
         $commitCount = $this->repo->saveCommit($repoID, $logs, $version, $branchID);
-        if(empty($commitCount) && !$repo->synced)
+        if(empty($commitCount))
         {
-            if(in_array($repo->SCM, $this->config->repo->gitTypeList))
+            if(!$repo->synced)
             {
-                if($branchID) $this->repo->saveExistCommits4Branch($repo->id, $branchID);
+                if(in_array($repo->SCM, $this->config->repo->gitTypeList))
+                {
+                    if($branchID) $this->repo->saveExistCommits4Branch($repo->id, $branchID);
 
-                $branchID = reset($branches);
-                helper::setcookie("syncBranch", $branchID, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+                    $branchID = reset($branches);
+                    setcookie("syncBranch", $branchID, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
-                if($branchID) $this->repo->fixCommit($repoID);
-            }
+                    if($branchID) $this->repo->fixCommit($repoID);
+                }
 
-            if(empty($branchID))
-            {
-                $this->repo->markSynced($repoID);
-                return print('finish');
+                if(empty($branchID))
+                {
+                    $this->repo->markSynced($repoID);
+                    return print($this->config->repo->repoSyncLog->finish);
+                }
             }
         }
 
         $this->dao->update(TABLE_REPO)->set('commits=commits + ' . $commitCount)->where('id')->eq($repoID)->exec();
-        echo $type == 'batch' ?  $commitCount : 'finish';
+        echo $type == 'batch' ?  $commitCount : $this->config->repo->repoSyncLog->finish;
     }
 
     /**
@@ -1657,13 +1680,16 @@ class repo extends control
             $method = 'review';
         }
 
+        $params = '';
+        if($projectID && $method == 'browse') $params = "&branchID=&objectID=$projectID";
+
         /* Get repo group by type. */
         $repoType  = $module == 'mr' ? 'git' : '';
         $repoGroup = $this->repo->getRepoGroup('project', $projectID, $repoType);
 
         $this->view->repoID    = $repoID;
         $this->view->repoGroup = $repoGroup;
-        $this->view->link      = $this->createLink($module, $method, "repoID=%s");
+        $this->view->link      = $this->createLink($module, $method, "repoID=%s" . $params) . ($projectID ? '#app=project' : '');
 
         $this->display();
     }
@@ -1687,7 +1713,7 @@ class repo extends control
 
         $products           = $postData->objectID ? $this->loadModel('product')->getProductPairsByProject($objectID) : $this->loadModel('product')->getPairs();
         $linkedProducts     = $this->loadModel('product')->getByIdList($postData->products);
-        $linkedProductPairs = array_combine(array_keys($linkedProducts), array_column($linkedProducts, 'name'));
+        $linkedProductPairs = array_combine(array_keys($linkedProducts), helper::arrayColumn($linkedProducts, 'name'));
         $products           = $products + $linkedProductPairs;
 
         return print (html::select('product[]', $products, $selectedProducts, "class='form-control chosen' multiple"));

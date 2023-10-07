@@ -98,9 +98,9 @@ class giteaModel extends model
      *
      * @param  int    $giteaID
      * @access public
-     * @return bool
+     * @return array
      */
-    public function bindUser(int $giteaID): bool
+    public function bindUser($giteaID)
     {
         $userPairs   = $this->loadModel('user')->getPairs('noclosed|noletter');
         $users       = $this->post->zentaoUsers;
@@ -116,7 +116,7 @@ class giteaModel extends model
 
         if(count($repeatUsers))
         {
-            dao::$errors[] = sprintf($this->lang->gitea->bindUserError, join(',', $repeatUsers));
+            dao::$errors = sprintf($this->lang->gitea->bindUserError, join(',', $repeatUsers));
             return false;
         }
 
@@ -148,8 +148,6 @@ class giteaModel extends model
                 $this->loadModel('action')->create('giteauser', $giteaID, 'bind', '', sprintf($this->lang->gitea->bindDynamic, $giteaNames[$openID], $zentaoUsers[$account]->realname));
             }
         }
-
-        return true;
     }
 
     /**
@@ -308,13 +306,13 @@ class giteaModel extends model
     /**
      * Get matched gitea users.
      *
-     * @param  int    $giteaID
-     * @param  array  $giteaUsers
-     * @param  array  $zentaoUsers
+     * @param  int   $giteaID
+     * @param  array $giteaUsers
+     * @param  array $zentaoUsers
      * @access public
      * @return array
      */
-    public function getMatchedUsers(int $giteaID, array $giteaUsers, array $zentaoUsers): array
+    public function getMatchedUsers($giteaID, $giteaUsers, $zentaoUsers)
     {
         $matches = new stdclass;
         foreach($giteaUsers as $giteaUser)
@@ -331,9 +329,9 @@ class giteaModel extends model
         $matchedUsers = array();
         foreach($giteaUsers as $giteaUser)
         {
-            if(isset($bindedUsers[$giteaUser->account]))
+            if(isset($bindedUsers[$giteaUser->id]))
             {
-                $giteaUser->zentaoAccount     = $bindedUsers[$giteaUser->account];
+                $giteaUser->zentaoAccount     = $bindedUsers[$giteaUser->id];
                 $matchedUsers[$giteaUser->id] = $giteaUser;
                 continue;
             }
@@ -379,6 +377,7 @@ class giteaModel extends model
             $gitea = $this->getByID($giteaID);
             $oauth = "oauth2:{$gitea->token}@";
             $project->tokenCloneUrl = preg_replace('/(http(s)?:\/\/)/', "\$1$oauth", $project->html_url);
+            $project->tokenCloneUrl = str_replace(array('https://', 'http://'), strstr($url, ':', true) . '://', $project->tokenCloneUrl);
         }
 
         return $project;

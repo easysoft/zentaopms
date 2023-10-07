@@ -287,23 +287,19 @@ class repoZen extends repo
      */
     protected function prepareBatchCreate(): array|false
     {
+        if(!$this->post->serviceProject) return false;
+
         $this->app->loadLang('testcase');
 
         $data = array();
-        foreach($_POST as $key => $vals)
+        foreach($this->post->serviceProject as $i => $project)
         {
-            if(strpos($key, 'serviceProject') === 0)
-            {
-                foreach($vals as $i => $project)
-                {
-                    $products = array_filter($this->post->product[$i]);
-                    if(empty($products)) dao::$errors['product'][] = sprintf($this->lang->testcase->whichLine . $this->lang->error->notempty, $i, $this->lang->repo->product);
-                    if($this->post->name[$i] == '')    dao::$errors['name'][] = sprintf($this->lang->testcase->whichLine . $this->lang->error->notempty, $i, $this->lang->repo->name);
-                    if(dao::isError()) continue;
+            $products = array_filter($this->post->product[$i]);
+            if(empty($products)) continue;
+            if($this->post->name[$i] == '') dao::$errors['name_' . ($i -1)][] = sprintf($this->lang->error->notempty, $this->lang->repo->name);
+            if(dao::isError()) continue;
 
-                    $data[] = array('serviceProject' => $project, 'product' => implode(',', $this->post->product[$i]), 'name' => $this->post->name[$i], 'projects' => empty($_POST['projects'][$i]) ? '' : implode(',', $this->post->projects[$i]));
-                }
-            }
+            $data[] = array('serviceProject' => $project, 'product' => implode(',', $this->post->product[$i]), 'name' => $this->post->name[$i], 'projects' => empty($_POST['projects'][$i]) ? '' : implode(',', $this->post->projects[$i]));
         }
         if(dao::isError()) return false;
 
@@ -363,7 +359,7 @@ class repoZen extends repo
             else
             {
                 $infos        = $this->scm->ls($path, $revision);
-                $revisionList = array_column($infos, 'revision', 'revision');
+                $revisionList = helper::arrayColumn($infos, 'revision', 'revision');
                 $comments     = $this->repo->getHistory($repo->id, $revisionList);
                 foreach($infos as $info)
                 {
@@ -374,11 +370,12 @@ class repoZen extends repo
                     }
                 }
             }
-            if($cacheFile) file_put_contents($cacheFile, serialize($infos), LOCK_EX);
+            if($cacheFile && !empty($infos)) file_put_contents($cacheFile, serialize($infos), LOCK_EX);
         }
         else
         {
             $infos = unserialize(file_get_contents($cacheFile));
+            if(empty($infos)) unlink($cacheFile);
         }
 
         foreach($infos as $info)
@@ -426,6 +423,123 @@ class repoZen extends repo
         }
 
         return array('branchMenus' => $branchMenus, 'tagMenus' => $tagMenus, 'selected' => $selected);
+    }
+
+    /**
+     * 更新版本库最后提交时间。
+     * Update repo last commited date.
+     *
+     * @param  object    $repo
+     * @param  object    $lastRevision
+     * @access protected
+     * @return void
+     */
+    protected function updateLastCommit(object $repo, object $lastRevision): void
+    {
+        if(empty($lastRevision->committed_date)) return;
+        $lastCommitDate = date('Y-m-d H:i:s', strtotime($lastRevision->committed_date));
+        if(empty($repo->lastCommit) || $lastCommitDate > $repo->lastCommit) $this->dao->update(TABLE_REPO)->set('lastCommit')->eq($lastCommitDate)->where('id')->eq($repo->id)->exec();
+    }
+
+    /**
+     * 获取browse方法项目、分支、tags信息。
+     * Get project、branches、tags info for browse method.
+     *
+     * @param  object    $repo
+     * @access protected
+     * @return array
+     */
+    protected function getBrowseInfo(object $repo): array
+    {
+        if($repo->SCM == 'Gitlab')
+        {
+            $scm = $this->app->loadClass('scm');
+            $scm->setEngine($repo);
+            $urls['project']['url']  = $scm->engine->getApiUrl("project");
+            $urls['branches']['url'] = $scm->engine->getApiUrl('branches');
+            $urls['tags']['url']     = $scm->engine->getApiUrl('tags');
+
+            $this->app->loadClass('requests', true);
+            $result = requests::request_multiple($urls);
+
+            if($result['project']->status_code == 200)
+            {
+                $project = json_decode($result['project']->body);
+                $this->loadModel('gitlab')->setProject((int)$repo->gitService, (int)$repo->project, $project);
+            }
+            if(!is_null($result['branches']->headers->offsetGet('x-total')))
+            {
+                $branchList = json_decode($result['branches']->body);
+                $totalPages = $result['branches']->headers->offsetGet('x-total-pages');
+                if($totalPages > 1)
+                {
+                    $requests = array();
+                    for($page = 2; $page <= $totalPages; $page++)
+                    {
+                        $requests[$page]['url'] = str_replace('page=1', "page={$page}", $urls['branches']['url']);
+                    }
+
+                    $reponses = requests::request_multiple($requests, array('timeout' => 10));
+                    foreach($reponses as $reponse)
+                    {
+                        $data = json_decode($reponse->body);
+                        if(!is_array($data)) continue;
+                        $branchList = array_merge($branchList, $data);
+                    }
+                }
+
+                $branches = array();
+                $default  = array();
+                if(!empty($branchList) && is_array($branchList))
+                {
+                    foreach($branchList as $branch)
+                    {
+                        if(!isset($branch->name)) continue;
+                        if($branch->default)
+                        {
+                            $default[$branch->name] = $branch->name;
+                        }
+                        else
+                        {
+                            $branches[$branch->name] = $branch->name;
+                        }
+                    }
+
+                    if(empty($branches) and empty($default)) $branches['master'] = 'master';
+                    asort($branches);
+                    $branches = $default + $branches;
+                }
+            }
+            if(!is_null($result['tags']->headers->offsetGet('x-total')))
+            {
+                $tagList    = json_decode($result['tags']->body);
+                $totalPages = $result['tags']->headers->offsetGet('x-total-pages');
+                if($totalPages > 1)
+                {
+                    $requests = array();
+                    for($page = 2; $page <= $totalPages; $page++)
+                    {
+                        $requests[$page]['url'] = str_replace('page=1', "page={$page}", $urls['tags']['url']);
+                    }
+
+                    $reponses = requests::request_multiple($requests, array('timeout' => 10));
+                    foreach($reponses as $reponse)
+                    {
+                        $data = json_decode($reponse->body);
+                        if(!is_array($data)) continue;
+                        $tagList = array_merge($tagList, $data);
+                    }
+                }
+
+                $tags = array();
+                if(!empty($tagList) && is_array($tagList))
+                {
+                    foreach($tagList as $tag) $tags[] = $tag->name;
+                }
+            }
+
+            return array(isset($branches) ? $branches : false, isset($tags) ? $tags : false);
+        }
     }
 }
 

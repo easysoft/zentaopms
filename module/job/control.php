@@ -95,7 +95,7 @@ class job extends control
             $job->buildSpec   = urldecode($job->pipeline) . '@' . $job->jenkinsName;
             $job->engine      = zget($this->lang->job->engineList, $job->engine);
             $job->frame       = zget($this->lang->job->frameList, $job->frame);
-            $job->productName = $products[$job->product];
+            $job->productName = zget($products, $job->product, '');
         }
 
         $this->view->title   = $this->lang->ci->job . $this->lang->colon . $this->lang->job->browse;
@@ -144,8 +144,7 @@ class job extends control
             }
 
             $this->loadModel('action')->create('job', $jobID, 'created');
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $jobID));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse', "repoID={$this->post->repo}")));
         }
 
         $this->loadModel('ci');
@@ -260,6 +259,11 @@ class job extends control
             if($jobProduct and $jobProduct->deleted == 0) $products += array($job->product => $jobProduct->name);
         }
 
+        if($job->frame == 'sonarqube' && $job->sonarqubeServer && $job->projectKey)
+        {
+            $this->view->sonarqubeProjectPairs = $this->loadModel('sonarqube')->getProjectPairs($job->sonarqubeServer, $job->projectKey);
+        }
+
         $this->view->title               = $this->lang->ci->job . $this->lang->colon . $this->lang->job->edit;
         $this->view->repoPairs           = $repoPairs;
         $this->view->gitlabRepos         = $gitlabRepos;
@@ -316,7 +320,7 @@ class job extends control
         {
             $this->app->loadLang('project');
             $taskID = $compile->testtask;
-            $task   = $this->loadModel('testtask')->getByID($taskID);
+            $task   = $this->loadModel('testtask')->getById($taskID);
             $runs   = $this->testtask->getRuns($taskID, 0, 'id');
 
             $cases = array();
@@ -380,18 +384,34 @@ class job extends control
     public function exec($jobID)
     {
         $job = $this->job->getByID($jobID);
-        if(strtolower($job->engine) == 'gitlab' and (!isset($job->reference) or !$job->reference)) return $this->send(array('result' => 'fail', 'message' => $this->lang->job->setReferenceTips, 'locate' => inlink('edit', "id=$jobID")));
+        //if(strtolower($job->engine) == 'gitlab' and (!isset($job->reference) or !$job->reference)) return $this->send(array('result' => 'fail', 'message' => $this->lang->job->setReferenceTips, 'locate' => inlink('edit', "id=$jobID")));
 
         $compile = $this->job->exec($jobID);
-        if(dao::isError()) return $this->send(array('result' => 'fail', 'callback' => sprintf('zui.Modal.alert("%s");', dao::getError())));
+        if(dao::isError())
+        {
+            $errors = '';
+            foreach(dao::getError() as $error)
+            {
+                if(is_array($error))
+                {
+                    foreach($error as $val)
+                    {
+                        $errors .= $val . '\n';
+                    }
+                }
+                else
+                {
+                    $errors .= $error . '\n';
+                }
+            }
+            return $this->sendError($errors);
+        }
 
         $this->app->loadLang('compile');
         $this->loadModel('action')->create('job', $jobID, 'executed');
 
-        $message              = sprintf($this->lang->job->sendExec, zget($this->lang->compile->statusList, $compile->status));
-        $response['result']   = 'success';
-        $response['callback'] = sprintf('zui.Modal.alert("%s");', $message);
-        return $this->send($response);
+        $message = sprintf($this->lang->job->sendExec, zget($this->lang->compile->statusList, $compile->status));
+        return $this->sendSuccess(array('message' => $message));
     }
 
     /**
