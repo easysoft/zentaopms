@@ -146,17 +146,18 @@ class buildModel extends model
     }
 
     /**
+     * 根据执行ID获取版本信息。
      * Get builds of a execution.
      *
-     * @param  int        $executionID
-     * @param  string     $type      all|product|bysearch
-     * @param  int|string $param     productID|buildQuery
-     * @param  string     $orderBy
-     * @param  object     $pager
+     * @param  int    $executionID
+     * @param  string $type        all|product|bysearch
+     * @param  string $param       productID|buildQuery
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getExecutionBuilds($executionID, $type = '', $param = '', $orderBy = 't1.date_desc,t1.id_desc', $pager = null)
+    public function getExecutionBuilds(int $executionID, string $type = '', string $param = '', string $orderBy = 't1.date_desc,t1.id_desc', object $pager = null): array
     {
         return $this->dao->select('t1.*, t2.name as executionName, t3.name as productName')
             ->from(TABLE_BUILD)->alias('t1')
@@ -164,7 +165,7 @@ class buildModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->where('t1.deleted')->eq(0)
             ->beginIF($executionID)->andWhere('t1.execution')->eq((int)$executionID)->fi()
-            ->beginIF($type == 'product' and $param)->andWhere('t1.product')->eq($param)->fi()
+            ->beginIF($type == 'product' && $param)->andWhere('t1.product')->eq((int)$param)->fi()
             ->beginIF($type == 'bysearch')->andWhere($param)->fi()
             ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")->fi()
             ->orderBy($orderBy)
@@ -173,18 +174,19 @@ class buildModel extends model
     }
 
     /**
+     * 通过条件获取执行下版本列表。
      * Get builds of a execution by search.
      *
-     * @param  int    $executionID
-     * @param  int    $queryID
-     * @param  object $pager
+     * @param  int      $executionID
+     * @param  int      $queryID
+     * @param  object   $pager
      * @access public
      * @return object[]
      */
     public function getExecutionBuildsBySearch(int $executionID, int $queryID, object $pager = null): array
     {
         /* If there are saved query conditions, reset the session. */
-        if((int)$queryID)
+        if($queryID)
         {
             $query = $this->loadModel('search')->getQuery($queryID);
             if($query)
@@ -207,7 +209,7 @@ class buildModel extends model
             }
         }
 
-        return $this->getExecutionBuilds($executionID, 'bysearch', $buildQuery, 't1.date_desc,t1.id_desc', $pager);
+        return $this->getExecutionBuilds($executionID, 'bysearch', (string)$buildQuery, 't1.date_desc,t1.id_desc', $pager);
     }
 
     /**

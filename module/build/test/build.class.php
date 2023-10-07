@@ -87,16 +87,16 @@ class buildTest
     /**
      * function getExecutionBuilds test by build
      *
-     * @param  int    $count
-     * @param  int    $executionID
-     * @param  string $type
-     * @param  string $param
-     * @param  string $orderBy
-     * @param  string $pager
+     * @param  int       $count
+     * @param  int       $executionID
+     * @param  string    $type
+     * @param  string    $param
+     * @param  string    $orderBy
+     * @param  string    $pager
      * @access public
-     * @return array
+     * @return array|int
      */
-    public function getExecutionBuildsTest($count, $executionID, $type = '', $param = '', $orderBy = 't1.date_desc,t1.id_desc', $pager = null)
+    public function getExecutionBuildsTest(int $count, int $executionID, string $type = '', string $param = '', string $orderBy = 't1.date_desc,t1.id_desc', object $pager = null): array|int
     {
         $objects = $this->objectModel->getExecutionBuilds($executionID, $type, $param, $orderBy, $pager);
 
@@ -109,13 +109,13 @@ class buildTest
     /**
      * function getExecutionBuildsBySearch test by build
      *
-     * @param  int $count
-     * @param  int $executionID
-     * @param  int $queryID
+     * @param  int       $count
+     * @param  int       $executionID
+     * @param  int       $queryID
      * @access public
-     * @return arraty
+     * @return array|int
      */
-    public function getExecutionBuildsBySearchTest($count, $executionID, $queryID)
+    public function getExecutionBuildsBySearchTest(int $count, int $executionID, int $queryID): array|int
     {
         $objects = $this->objectModel->getExecutionBuildsBySearch($executionID, $queryID);
 
