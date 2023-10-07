@@ -1576,7 +1576,7 @@ $config->group->package->importTicket = new stdclass();
 $config->group->package->importTicket->order  = 15;
 $config->group->package->importTicket->subset = 'ticket';
 $config->group->package->importTicket->privs  = array();
-$config->group->package->importTicket->privs['ticket-exportTemplate'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 1, 'depend' => array('ticket-browse', 'ticket-import'), 'recommend' => array());
+$config->group->package->importTicket->privs['ticket-exportTemplate'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 1, 'depend' => array('ticket-browse'), 'recommend' => array());
 $config->group->package->importTicket->privs['ticket-import']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 2, 'depend' => array('ticket-browse', 'ticket-exportTemplate'), 'recommend' => array());
 $config->group->package->importTicket->privs['ticket-export']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 0, 'depend' => array('ticket-browse', 'ticket-exportTemplate'), 'recommend' => array());
 
