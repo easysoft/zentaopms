@@ -457,6 +457,7 @@ define('TABLE_PROMPTROLE', '`' . $config->db->prefix . 'promptrole`');
 define('TABLE_METRIC', '' . $config->db->prefix . 'metric');
 define('TABLE_METRICLIB', '' . $config->db->prefix . 'metriclib');
 define('TABLE_METRICRECORDS', '' . $config->db->prefix . 'metricrecords');
+define('TABLE_BASICMEAS', '' . $config->db->prefix . 'basicmeas');
 
 $config->objectTables['product']      = TABLE_PRODUCT;
 $config->objectTables['productplan']  = TABLE_PRODUCTPLAN;
