@@ -602,9 +602,12 @@ class upgradeModel extends model
             case '18_4_alpha1':
                 if($this->config->edition != 'open') $this->processDataset();
                 break;
-            //case '18.7':
-            //    if($this->config-edition == 'max') $this->processOldMetrics();
-            //    break;
+            // case '18_7':
+            //     if(!in_array($this->config->edition, array('max', 'ipd')))
+            //     {
+            //         $this->processOldMetrics();
+            //     }
+            //     $this->processHistoryDataForMetric();
         }
 
         $this->deletePatch();
@@ -9364,5 +9367,57 @@ class upgradeModel extends model
         }
 
         return !dao::isError();
+    }
+
+    /**
+     * Process history data for metric.
+     *
+     * @access public
+     * @return void
+     */
+    public function processHistoryDataForMetric()
+    {
+        $this->processHistoryOfStory();
+    }
+
+    /**
+     * Process history of story.
+     *
+     * @access public
+     * @return void
+     */
+    public function processHistoryOfStory()
+    {
+        $linked2releaseActions = $this->dao->select('objectID, extra, max(`date`) as date, action')
+            ->from(TABLE_ACTION)
+            ->where('objectType')->eq('story')
+            ->andWhere('action')->eq('linked2release')
+            ->groupBy('objectID')
+            ->get();
+
+        $releasedStorys = $this->dao->select('t2.id, t1.date')
+            ->from("($linked2releaseActions)")->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.objectID = t2.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
+            ->leftJoin(TABLE_RELEASE)->alias('t4')->on('t1.extra = t4.id')
+            ->where('t2.deleted')->eq('0')
+            ->andWhere('t3.deleted')->eq('0')
+            ->andWhere('t2.stage', true)->eq('released')
+            ->orWhere('t2.closedReason')->eq('done')
+            ->markRight(1)
+            ->fetchAll();
+
+        $this->dao->begin();
+        foreach($releasedStorys as $releasedStory)
+        {
+            $story = $releasedStory->id;
+            $date  = $releasedStory->date;
+
+            $this->dao->update(TABLE_STORY)
+                ->set('releasedDate')->eq($date)
+                ->where('id')->eq($story)
+                ->exec();
+        }
+        $this->dao->commit();
     }
 }
