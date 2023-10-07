@@ -211,38 +211,6 @@ class buildModel extends model
     }
 
     /**
-     * Filter linked stories or bugs builds.
-     *
-     * @param  array $buildIdList
-     * @access public
-     * @return array
-     */
-    public function filterLinked($buildIdList)
-    {
-        $linkeds   = array();
-        $buildList = $this->getByList($buildIdList);
-        foreach($buildList as $build)
-        {
-            if(!$build->execution && !empty($build->builds))
-            {
-                $childBuilds = $this->getByList(explode(',', $build->builds));
-                foreach($childBuilds as $childBuild)
-                {
-                    $childBuild->stories = trim($childBuild->stories, ',');
-                    $childBuild->bugs    = trim($childBuild->bugs, ',');
-
-                    if($childBuild->stories) $build->stories .= ',' . $childBuild->stories;
-                    if($childBuild->bugs)    $build->bugs    .= ',' . $childBuild->bugs;
-                }
-            }
-
-            if(!empty($build->stories) or !empty($build->bugs)) $linkeds[$build->id] = $build->id;
-        }
-
-        return $linkeds;
-    }
-
-    /**
      * 根据需求ID获取版本列表。
      * Get builds by story ID.
      *
