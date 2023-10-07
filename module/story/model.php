@@ -2883,16 +2883,18 @@ class storyModel extends model
     }
 
     /**
-     * Get report data of stories per product
+     * 获取产品软件需求数量的数据。
+     * Get report data of stories per product.
      *
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerProduct()
+    public function getDataOfStoriesPerProduct(): array
     {
         $datas = $this->dao->select('product as name, count(product) as value')->from(TABLE_STORY)
             ->where($this->reportCondition())
-            ->groupBy('product')->orderBy('value DESC')->fetchAll('name');
+            ->groupBy('product')->orderBy('value DESC')
+            ->fetchAll('name');
         if(!$datas) return array();
         $products = $this->loadModel('product')->getPairs();
         foreach($datas as $productID => $data) $data->name = isset($products[$productID]) ? $products[$productID] : $this->lang->report->undefined;
@@ -2900,12 +2902,13 @@ class storyModel extends model
     }
 
     /**
-     * Get report data of stories per module
+     * 获取按模块软件需求数量的统计数据。
+     * Get report data of stories per module.
      *
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerModule()
+    public function getDataOfStoriesPerModule(): array
     {
         $datas = $this->dao->select('module as name, count(module) as value, product, branch')
             ->from(TABLE_STORY)
@@ -2922,15 +2925,15 @@ class storyModel extends model
             $branchIDList[$project->branch] = $project->branch;
         }
 
-        $branchs  = $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($branchIDList)->andWhere('deleted')->eq(0)->fetchALL('id');
-        $modules = $this->loadModel('tree')->getModulesName(array_keys($datas));
+        $branches = $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($branchIDList)->andWhere('deleted')->eq('0')->fetchALL('id');
+        $modules  = $this->loadModel('tree')->getModulesName(array_keys($datas));
 
         foreach($datas as $moduleID => $data)
         {
             $branch = '';
-            if(isset($branchs[$data->branch]->name))
+            if(isset($branches[$data->branch]->name))
             {
-                $branch = '/' . $branchs[$data->branch]->name;
+                $branch = '/' . $branches[$data->branch]->name;
             }
 
             $data->name = $branch . (isset($modules[$moduleID]) ? $modules[$moduleID] : '/');
@@ -2940,16 +2943,18 @@ class storyModel extends model
     }
 
     /**
-     * Get report data of stories per source
+     * 获取按需求来源统计的数据。
+     * Get report data of stories per source.
      *
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerSource()
+    public function getDataOfStoriesPerSource(): array
     {
         $datas = $this->dao->select('source as name, count(source) as value')->from(TABLE_STORY)
             ->where($this->reportCondition())
-            ->groupBy('source')->orderBy('value DESC')->fetchAll('name');
+            ->groupBy('source')->orderBy('value DESC')
+            ->fetchAll('name');
         if(!$datas) return array();
         $this->lang->story->sourceList[''] = $this->lang->report->undefined;
         foreach($datas as $key => $data) $data->name = isset($this->lang->story->sourceList[$key]) ? $this->lang->story->sourceList[$key] : $this->lang->report->undefined;
@@ -2957,16 +2962,18 @@ class storyModel extends model
     }
 
     /**
-     * Get report data of stories per plan
+     * 获取按计划进行统计的数据。
+     * Get report data of stories per plan.
      *
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerPlan()
+    public function getDataOfStoriesPerPlan(): array
     {
         $datas = $this->dao->select('plan as name, count(plan) as value')->from(TABLE_STORY)
             ->where($this->reportCondition())
-            ->groupBy('plan')->orderBy('value DESC')->fetchAll('name');
+            ->groupBy('plan')->orderBy('value DESC')
+            ->fetchAll('name');
         if(!$datas) return array();
 
         /* Separate for multi-plan key. */
@@ -3008,77 +3015,93 @@ class storyModel extends model
     }
 
     /**
-     * Get report data of stories per status
+     * 获取按状态进行统计的数据。
+     * Get report data of stories per status.
      *
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerStatus()
+    public function getDataOfStoriesPerStatus(): array
     {
         $datas = $this->dao->select('status as name, count(status) as value')->from(TABLE_STORY)
             ->where($this->reportCondition())
-            ->groupBy('status')->orderBy('value DESC')->fetchAll('name');
+            ->groupBy('status')->orderBy('value DESC')
+            ->fetchAll('name');
         if(!$datas) return array();
         foreach($datas as $status => $data) if(isset($this->lang->story->statusList[$status])) $data->name = $this->lang->story->statusList[$status];
         return $datas;
     }
 
     /**
-     * Get report data of stories per stage
+     * 获取按所处阶段进行统计的数据。
+     * Get report data of stories per stage.
      *
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerStage()
+    public function getDataOfStoriesPerStage(): array
     {
         $datas = $this->dao->select('stage as name, count(stage) as value')->from(TABLE_STORY)
             ->where($this->reportCondition())
-            ->groupBy('stage')->orderBy('value DESC')->fetchAll('name');
+            ->groupBy('stage')->orderBy('value DESC')
+            ->fetchAll('name');
         if(!$datas) return array();
         foreach($datas as $stage => $data) $data->name = $this->lang->story->stageList[$stage] != '' ? $this->lang->story->stageList[$stage] : $this->lang->report->undefined;
         return $datas;
     }
 
     /**
-     * Get report data of stories per pri
+     * 获取按优先级进行统计的数据。
+     * Get report data of stories per pri.
      *
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerPri()
+    public function getDataOfStoriesPerPri(): array
     {
         $datas = $this->dao->select('pri as name, count(pri) as value')->from(TABLE_STORY)
             ->where($this->reportCondition())
-            ->groupBy('pri')->orderBy('value DESC')->fetchAll('name');
+            ->groupBy('pri')->orderBy('value DESC')
+            ->fetchAll('name');
         if(!$datas) return array();
-        foreach($datas as $pri => $data)  $data->name = $this->lang->story->priList[$pri] != '' ? $this->lang->story->priList[$pri] : $this->lang->report->undefined;
+        foreach($datas as $pri => $data)
+        {
+            if(isset($this->lang->story->priList[$pri]) && $this->lang->story->priList[$pri] != '')
+                $data->name = $this->lang->story->priList[$pri];
+            else
+                $data->name = $this->lang->report->undefined;
+        }
         return $datas;
     }
 
     /**
-     * Get report data of stories per estimate
+     * 获取按照预计工时进行统计的数据。
+     * Get report data of stories per estimate.
      *
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerEstimate()
+    public function getDataOfStoriesPerEstimate(): array
     {
         return $this->dao->select('estimate as name, count(estimate) as value')->from(TABLE_STORY)
             ->where($this->reportCondition())
-            ->groupBy('estimate')->orderBy('value')->fetchAll();
+            ->groupBy('estimate')->orderBy('value')
+            ->fetchAll();
     }
 
     /**
-     * Get report data of stories per openedBy
+     * 获取按由谁创建来进行统计的数据。
+     * Get report data of stories per openedBy.
      *
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerOpenedBy()
+    public function getDataOfStoriesPerOpenedBy(): array
     {
         $datas = $this->dao->select('openedBy as name, count(openedBy) as value')->from(TABLE_STORY)
             ->where($this->reportCondition())
-            ->groupBy('openedBy')->orderBy('value DESC')->fetchAll('name');
+            ->groupBy('openedBy')->orderBy('value DESC')
+            ->fetchAll('name');
         if(!$datas) return array();
         if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
         foreach($datas as $account => $data) $data->name = isset($this->users[$account]) ? $this->users[$account] : $this->lang->report->undefined;
@@ -3086,16 +3109,18 @@ class storyModel extends model
     }
 
     /**
-     * Get report data of stories per assignedTo
+     * 获取按当前指派给来进行统计的数据。
+     * Get report data of stories per assignedTo.
      *
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerAssignedTo()
+    public function getDataOfStoriesPerAssignedTo(): array
     {
         $datas = $this->dao->select('assignedTo as name, count(assignedTo) as value')->from(TABLE_STORY)
             ->where($this->reportCondition())
-            ->groupBy('assignedTo')->orderBy('value DESC')->fetchAll('name');
+            ->groupBy('assignedTo')->orderBy('value DESC')
+            ->fetchAll('name');
         if(!$datas) return array();
         if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
         foreach($datas as $account => $data) $data->name = (isset($this->users[$account]) and $this->users[$account] != '') ? $this->users[$account] : $this->lang->report->undefined;
@@ -3103,32 +3128,36 @@ class storyModel extends model
     }
 
     /**
-     * Get report data of stories per closedReason
+     * 获取按关闭原因来进行统计的数据。
+     * Get report data of stories per closedReason.
      *
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerClosedReason()
+    public function getDataOfStoriesPerClosedReason(): array
     {
         $datas = $this->dao->select('closedReason as name, count(closedReason) as value')->from(TABLE_STORY)
             ->where($this->reportCondition())
-            ->groupBy('closedReason')->orderBy('value DESC')->fetchAll('name');
+            ->groupBy('closedReason')->orderBy('value DESC')
+            ->fetchAll('name');
         if(!$datas) return array();
         foreach($datas as $reason => $data) $data->name = $this->lang->story->reasonList[$reason] != '' ? $this->lang->story->reasonList[$reason] : $this->lang->report->undefined;
         return $datas;
     }
 
     /**
-     * Get report data of stories per change
+     * 获取按变更次数来进行统计的数据。
+     * Get report data of stories per change.
      *
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerChange()
+    public function getDataOfStoriesPerChange(): array
     {
         return $this->dao->select('(version-1) as name, count(*) as value')->from(TABLE_STORY)
             ->where($this->reportCondition())
-            ->groupBy('version')->orderBy('value')->fetchAll();
+            ->groupBy('version')->orderBy('value')
+            ->fetchAll();
     }
 
     /**
