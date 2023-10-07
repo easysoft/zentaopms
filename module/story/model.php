@@ -4523,7 +4523,7 @@ class storyModel extends model
      */
     public function getExportStories(int $executionID, string $orderBy = 'id_desc', string $storyType = 'story', object|null $postData = null): array
     {
-        $orderBy = 'id_desc'; /* The order of the stories for exporting is disabled. */
+        $orderBy = $orderBy !== 'id_desc' ? 'id_desc' : $orderBy; /* The order of the stories for exporting is disabled. */
 
         $this->loadModel('file');
         $this->loadModel('branch');
