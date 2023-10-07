@@ -1026,6 +1026,8 @@ class InstanceModel extends model
         $success = $result->code == 200 || $result->code == 404;
         if($success) $this->dao->update(TABLE_INSTANCE)->set('deleted')->eq(1)->where('id')->eq($instance->id)->exec();
 
+        $url = strstr(getWebRoot(true), ':', true) . '://' . $instance->domain;
+        $this->dao->delete()->from(TABLE_PIPELINE)->where('url')->eq($url)->exec();
         return $success;
     }
 

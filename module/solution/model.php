@@ -309,6 +309,9 @@ class solutionModel extends model
                     $mappingInfo = zget($mappings, $item->target, '');
                     if($mappingInfo) $settings[] = array('key' => $item->key, 'value' => zget($mappingInfo, $item->key, ''));
                     break;
+                case 'auto':
+                    if($item->value === 'protocol') $settings[] = array('key' => $item->key, 'value' => strstr(getWebRoot(true), ':', true));
+                    break;
             }
         }
 
