@@ -3,16 +3,13 @@ function setDuplicate()
     var resolution = $(event.target).val();
     if(resolution == 'duplicate')
     {
-        $.ajaxSettings.async = false;
-
         $.getJSON($.createLink('bug', 'ajaxGetProductBugs', 'projectID=' + productID + '&bugID=' + bugID),function(bugs)
         {
             if(!bugs) return;
 
-            const $duplicateBug = $('[name="duplicateBug"]').zui('picker');
-            $duplicateBug.render({items: bugs});
+            $('[name="duplicateBug"]').zui('picker').render({items: bugs});
         });
-        $.ajaxSettings.async = true;
+
         $('#duplicateBugBox').removeClass('hidden');
     }
     else
