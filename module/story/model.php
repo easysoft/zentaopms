@@ -3935,9 +3935,9 @@ class storyModel extends model
         $requirement = $this->getByID($storyID);
 
         /* 获取该用户需求细分的研发需求，并构造跟踪矩阵信息。 */
-        $storIdList = $this->storyTao->getRelation($requirement->id, 'requirement');
-        $stories    = $this->dao->select('id,title,parent')->from(TABLE_STORY)->where('id')->in($storyIdList)->andWhere('deleted')->eq(0)->fetchAll('id');
-        $track      = array();
+        $storyIdList = $this->storyTao->getRelation($requirement->id, 'requirement');
+        $stories     = $this->dao->select('id,title,parent')->from(TABLE_STORY)->where('id')->in($storyIdList)->andWhere('deleted')->eq(0)->fetchAll('id');
+        $track       = array();
         foreach($stories as $id => $story) $track[$id] = $this->storyTao->buildStoryTrack($story);
 
         return $track;
