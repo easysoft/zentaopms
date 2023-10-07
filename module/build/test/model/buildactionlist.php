@@ -1,5 +1,13 @@
 #!/usr/bin/env php
 <?php
+/**
+
+title=测试 buildModel->buildActionList();
+timeout=0
+cid=1
+
+*/
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/build.class.php';
 su('admin');
@@ -9,14 +17,6 @@ zdTable('build')->config('build')->gen(7);
 $execution = zdTable('project')->config('execution');
 $execution->deleted->range('0,1');
 $execution->gen(30);
-
-/**
-
-title=测试 buildModel->buildActionList();
-timeout=0
-cid=1
-
-*/
 
 $buildIdList = range(2, 7);
 $executions  = array('normal' => 11, 'deleted' => 60, 'kanban' => 124);
