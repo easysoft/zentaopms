@@ -62,6 +62,10 @@ $config->testtask->form->activate['status']  = array('required' => true,  'type'
 $config->testtask->form->activate['uid']     = array('required' => false, 'type' => 'string', 'default' => '');
 $config->testtask->form->activate['comment'] = array('required' => false, 'type' => 'string', 'default' => '', 'control' => 'editor');
 
+$config->testtask->form->linkCase = array();
+$config->testtask->form->linkCase['case']    = array('required' => false, 'type' => 'int', 'default' => 0, 'base' => true);
+$config->testtask->form->linkCase['version'] = array('required' => false, 'type' => 'int', 'default' => 0);
+
 $config->testtask->form->runCase = array();
 $config->testtask->form->runCase['result'] = array('required' => true,  'type' => 'string', 'default' => '', 'base' => true);
 $config->testtask->form->runCase['real']   = array('required' => false, 'type' => 'string', 'default' => '');
