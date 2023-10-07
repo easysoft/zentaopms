@@ -790,7 +790,8 @@ class buildModel extends model
     }
 
     /**
-     * Build action menu.
+     * 构造详情页面的操作菜单。
+     * Build operate menu for detail page.
      *
      * @param  object $build
      * @access public
