@@ -1135,7 +1135,7 @@ class storyModel extends model
             foreach($reviewerList[$storyID] as $reviewer => $reviewerInfo)
             {
                 if($reviewerInfo->version != $oldStory->version) continue;
-                $reviewerPairs[$reviewer] = $reviewInfo->result;
+                $reviewerPairs[$reviewer] = $reviewerInfo->result;
             }
             $reviewerPairs[$account] = $result;
 
