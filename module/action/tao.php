@@ -319,4 +319,398 @@ class actionTao extends actionModel
 
         return array($product, $project, $execution);
     }
+
+    /**
+     * 根据类型和ID获取操作记录列表。
+     * Get action list by type and ID.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  array  $modules
+     * @access protected
+     * @return array
+     */
+    protected function getActionListByTypeAndID(string $objectType, int $objectID, array $modules): array
+    {
+        return $this->dao->select('*')->from(TABLE_ACTION)
+            ->beginIF($objectType == 'project')
+            ->where("objectType IN('project', 'testtask', 'build')")
+            ->andWhere('project')->in($objectID)
+            ->fi()
+            ->beginIF($objectType == 'story')
+            ->where('objectType')->in('story,requirement')
+            ->andWhere('objectID')->in($objectID)
+            ->fi()
+            ->beginIF($objectType == 'case')
+            ->where('objectType')->in('case,testcase')
+            ->andWhere('objectID')->in($objectID)
+            ->fi()
+            ->beginIF($objectType == 'module')
+            ->where('objectType')->eq($objectType)
+            ->andWhere('((action')->ne('deleted')->andWhere('objectID')->in($objectID)->markRight(1)
+            ->orWhere('(action')->eq('deleted')->andWhere('objectID')->in($modules)->markRight(1)->markRight(1)
+            ->fi()
+            ->beginIF(strpos('project,case,story,module', $objectType) === false)
+            ->where('objectType')->eq($objectType)
+            ->andWhere('objectID')->in($objectID)
+            ->fi()
+            ->orderBy('date, id')
+            ->fetchAll('id');
+    }
+
+    /**
+     * 获取linked操作记录的附加信息。
+     * Get action extra info.
+     *
+     * @param  object $action
+     * @param  string $type
+     * @access protected
+     * @return void
+     */
+    protected function getLinked2Extra(object $action, string $type)
+    {
+        $table = $this->getTableByType($type);
+        if(empty($table)) return false;
+
+        $method = 'view';
+        if(in_array($type, array('executon', 'kanban')))
+        {
+            $fields = 'name, type, multiple';
+            $execution = $this->fetchObjectInfoByID($table, (int)$action->extra, $fields);
+            if($execution->type != 'project' && empty($execution->multiple)) return false;
+
+            $name   = $execution->name;
+            if($execution->type == 'kanban') $method = 'kanban';
+            $action->extra = (!common::hasPriv('execution', $method) || ($method == 'kanban' && isonlybody())) ? $name : html::a(helper::createLink('execution', $method, "executionID={$action->execution}"), $name, '', "data-app='execution'");
+        }
+        elseif($type == 'project')
+        {
+            $fields  = 'name, model';
+            $project = $this->fetchObjectInfoByID($table, (int)$action->extra, $fields);
+            if(empty($project->multiple)) return false;
+
+            $name = $project->name;
+            if($project->model == 'kanban') $method = 'kanban';
+            if($name) $action->extra = common::hasPriv('project', $method) ? html::a(helper::createLink('project', $method, "projectID={$action->project}"), $name) : $name;
+        }
+        elseif($type == 'plan')
+        {
+            $fields = 'title';
+            $plan   = $this->fetchObjectInfoByID($table, (int)$action->extra, $fields);
+            if($plan && $plan->title) $action->extra = common::hasPriv('productplan', 'view') ? html::a(helper::createLink('productplan', $method, "planID={$action->extra}"), $plan->title) : $plan->title;
+        }
+        elseif(in_array($type, array('build', 'bug', 'release', 'testtask')))
+        {
+            $fields = 'name';
+            $object = $this->fetchObjectInfoByID($table, (int)$action->extra, $fields);
+            if($object && $object->name) $action->extra = common::hasPriv($type, $method) ? html::a(helper::createLink($type, $method, $this->processParamString($action, $type), $object->name)) : $object->name;
+        }
+        elseif($type == 'revision')
+        {
+            $this->processRevision($action, $table);
+        }
+    }
+
+    /**
+     * 通过ID获取对象信息。 
+     * Get object info by ID.
+     *
+     * @param  string $table
+     * @param  int    $objectID
+     * @access protected
+     * @return object|bool
+     */
+    protected function fetchObjectInfoByID(string $table, int $objectID, string $field = '*'): object|bool
+    {
+        return $this->dao->select($field)->from($table)->where('id')->eq($objectID)->fetch();
+    }
+
+    /**
+     * 获取unlinked操作记录的附加信息。
+     * Get unlinked action extra info.
+     *
+     * @param  object $action
+     * @param  string $type
+     * @access protected
+     * @return void
+     */
+    protected function getUnlinkedFromExtra(object $action, string $type)
+    {
+        $table = $this->getTableByType($type);
+        if(empty($table)) return false;
+
+        $method = 'view';
+        if($type == 'revision')
+        {
+            $this->processAttribute($action, $table);
+        }
+        elseif(in_array($type, array('execution', 'project', 'build', 'release', 'testtask', 'productplan')))
+        {
+            $fields = $type == 'productplan' ? 'title' : 'name';
+            $this->processActionExtra($table, $action, $fields, $type, $method);
+        }
+    }
+
+    /**
+     * 组建Action的extra信息。
+     * Build action extra info.
+     * 
+     * @param  string $table
+     * @param  object $action
+     * @param  string $fields
+     * @param  string $type
+     * @param  string $method
+     * @param  bool   $onlyBody
+     * @access protected
+     * @return void
+     */
+    protected function processActionExtra(string $table, object $action, string $fields, string $type, string $method = 'view', bool $onlyBody = false)
+    {
+        $object = $this->fetchObjectInfoByID($table, (int)$action->extra, $fields);
+        $condition = common::hasPriv($type, $method);
+        if($onlyBody) $condition = $condition && !isonlybody();
+        if($object && $object->{$fields}) $action->extra = $condition ? html::a(helper::createLink($type, $method, $this->processParamString($action, $type)), "#{$action->extra} " . $object->{$fields}) : "#{$action->extra} " . $object->{$fields};
+    }
+
+    /**
+     * 处理revision
+     * Process revision.
+     *
+     * @param  object $action
+     * @param  string $table
+     * @access protected
+     * @return void
+     */
+    protected function processRevision(object $action, string $table)
+    {
+        $fields = 'repo, revision';
+        $commit = $this->fetchObjectInfoByID($table, $action->extra, $fields);
+        if($commit)
+        {
+            $revision = substr($commit->revision, 0, 10);
+            $action->extra = common::hasPriv('repo', 'revision') ? html::a(helper::createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}"), $revision) : $revision;
+        }
+    }
+
+    /**
+     * 根据类型获取对象表。
+     * Get object table by type.
+     *
+     * @param  string $type
+     * @access protected
+     * @return string
+     */
+    protected function getTableByType(string &$type): string
+    {
+        if($type == 'plan')     $type = 'productplan';
+        if($type == 'revision') $type = 'repohistory';
+        if($type == 'bug')      $type = 'build';
+        return $this->config->objectTables[$type] ?? '';
+    }
+
+    /**
+     * 处理属性。
+     * Process attribute.
+     *
+     * @param  string $type
+     * @access protected
+     * @return string
+     */
+    protected function processAttribute($type): string
+    {
+        if($type == 'testtask') $type = 'task';
+        return $type;
+    }
+
+    /**
+     * 处理参数字符串。
+     * Process param string.
+     *
+     * @param  object $action
+     * @param  string $type
+     * @access protected
+     * @return string
+     */
+    protected function processParamString(object $action, string $type): string
+    {
+        $paramString = '';
+        switch($type)
+        {
+            case 'build':
+            case 'bug':
+            case 'release':
+                $attribute = $this->processAttribute($type);
+                $paramString = "{$attribute}ID={$action->extra}&type={$action->objectType}";
+                break;
+            case 'testtask':
+                $paramString = "taskID={$action->extra}";
+                break;
+            case 'execution':
+            case 'kanban':
+            case 'task':
+                $paramString = "{$type}ID={$action->extra}";
+                break;
+            case 'project':
+                $productID = trim($action->product, ',');
+                $paramString = "{$type}ID={$action->execution}&productID={$productID}";
+                break;
+            case 'productplan':
+                $paramString = "planID={$action->extra}";
+                break;
+            case 'caselib':
+                $paramString = "libID={$action->extra}";
+                break;
+        }
+
+        return $paramString;
+    }
+
+    /**
+     * 搭建创建子任务的Action的extra信息。
+     * Build create children action extra info.
+     *
+     * @param  object $action
+     * @access protected
+     * @return void
+     */
+    protected function processCreateChildrenActionExtra(object $action)
+    {
+        $names = $this->dao->select('id,name')->from(TABLE_TASK)->where('id')->in($action->extra)->fetchPairs('id', 'name');
+        $action->extra = '';
+        if($names)
+        {
+            foreach($names as $id => $name) $action->extra .= common::hasPriv('task', 'view') ? html::a(helper::createLink('task', 'view', "taskID=$id"), "#$id " . $name) . ', ' : "#$id " . $name . ', ';
+        }
+        $action->extra = trim(trim($action->extra), ',');
+    }
+
+    /**
+     * 搭建创建需求的Action的extra信息。
+     * Build create requirement action extra info.
+     *
+     * @param object $action
+     * @access protected
+     * @return void
+     */
+    protected function processCreateRequirementsActionExtra(object $action)
+    {
+        $names = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($action->extra)->fetchPairs('id', 'title');
+        $action->extra = '';
+        if($names)
+        {
+            foreach($names as $id => $name) $action->extra .= common::hasPriv('requriement', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$id"), "#$id " . $name) . ', ' : "#$id " . $name . ', ';
+        }
+        $action->extra = trim(trim($action->extra), ',');
+    }
+
+    /**
+     * 搭建关闭用户故事和解决bug的Action的extra信息。
+     * Build closed story and resolve bug action extra info.
+     *
+     * @param object $action
+     * @access protected
+     * @return void
+     */
+    protected function processClosedStoryAndResolvedBugActionExtra(object $action)
+    {
+        $action->appendLink = '';
+        if(strpos($action->extra, '|') !== false) $action->extra = substr($action->extra, 0, strpos($action->extra, '|'));
+        if(strpos($action->extra, ':') !== false)
+        {
+            list($extra, $id) = explode(':', $action->extra);
+            $action->extra    = $extra;
+            if($id)
+            {
+                $table = $action->objectType == 'story' ? TABLE_STORY : TABLE_BUG;
+                $name  = $this->dao->select('title')->from($table)->where('id')->eq($id)->fetch('title');
+                if($name) $action->appendLink = html::a(helper::createLink($action->objectType, 'view', "id=$id"), "#$id " . $name);
+            }
+        }
+    }
+
+    /**
+     * 结束待办Action的extra信息。
+     * Finish todo action extra info.
+     *
+     * @param object $action
+     * @access protected
+     * @return void
+     */
+    protected function finishToDoActionExtra(object $action)
+    {
+        $action->appendLink = '';
+        if(strpos($action->extra, ':')!== false)
+        {
+            list($extra, $id) = explode(':', $action->extra);
+            $action->extra    = strtolower($extra);
+            if($id)
+            {
+                $table = $this->config->objectTables[$action->extra];
+                $field = $this->config->action->objectNameFields[$action->extra];
+                $name  = $this->dao->select($field)->from($table)->where('id')->eq($id)->fetch($field);
+                if($name) $action->appendLink = html::a(helper::createLink($action->extra, 'view', "id=$id"), "#$id " . $name);
+            }
+        }
+    }
+
+    /**
+     * 执行和项目相关Action的extr信息。
+     * Build execution and project action extra info.
+     *
+     * @param object $action
+     * @access protected
+     * @return void
+     */
+    protected function processExecutionAndProjectActionExtra(object $action)
+    {
+        $this->app->loadLang('execution');
+        $linkedProducts = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->in($action->extra)->fetchPairs('id', 'name');
+        $action->extra  = '';
+        if($linkedProducts && $this->config->vision == 'rnd')
+        {
+            foreach($linkedProducts as $productID => $productName) $linkedProducts[$productID] = html::a(helper::createLink('product', 'browse', "productID=$productID"), "#{$productID} {$productName}");
+            $action->extra = sprintf($this->lang->execution->action->extra, '<strong>' . join(', ', $linkedProducts) . '</strong>');
+        }
+    }
+
+    /**
+     * 搭建关联用户故事和bug的Action的extra信息。
+     * Build link story and bug action extra info.
+     *
+     * @param object $action
+     * @param string $control
+     * @param string $method
+     * @access protected
+     * @return void
+     */
+    protected function processLinkStoryAndBugActionExtra(object $action, string $control, string $method)
+    {
+        $extra = '';
+        foreach(explode(',', $action->extra) as $id) $extra .= common::hasPriv($control, $method) ? html::a(helper::createLink($control, $method, "{$control}ID=$id"), "#$id ") . ', ' : "#$id, ";
+        $action->extra = trim(trim($extra), ',');
+    }
+
+    /**
+     * 搭建与用户故事相关的Action的extra信息。
+     * Build story related action extra info.
+     *
+     * @param object $action
+     * @access protected
+     * @return void
+     */
+    protected function processToStoryActionExtra(object $action)
+    {
+        $productShadow = $this->dao->select('shadow')->from(TABLE_PRODUCT)->where('id')->in(trim($action->product, ','))->fetch('shadow');
+        $title         = $this->dao->select('title')->from(TABLE_STORY)->where('id')->eq($action->extra)->fetch('title');
+        $defaultExtra  = "#$action->extra " . $title;
+        if($productShadow)
+        {
+            $projectID = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($action->extra)->fetch('project');
+            if($title) $action->extra = (common::hasPriv('projectstory', 'view') && $projectID) ? html::a(helper::createLink('projectstory', 'view', "storyID={$action->extra}&projectID=$projectID"), $defaultExtra) : $defaultExtra;
+        }
+        else
+        {
+            if($title) $action->extra = common::hasPriv('story', 'view') ?  html::a(helper::createLink('story', 'view', "storyID=$action->extra"), $defaultExtra) : $defaultExtra;
+        }
+    }
 }

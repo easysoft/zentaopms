@@ -4,7 +4,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/action.class.php';
 su('admin');
 
-zdTable('action')->gen(40);
+zdTable('action')->config('action')->gen(40);
 
 /**
 
