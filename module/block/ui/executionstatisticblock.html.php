@@ -11,13 +11,13 @@ declare(strict_types=1);
 
 namespace zin;
 
-$active    = isset($params['active']) ? $params['active'] : key($executions); // 当前产品 ID。
+$active    = isset($params['active']) ? $params['active'] : key($executions);
 $execution = null;
 
 $items = array();
 foreach($executions as $executionItem)
 {
-    $params  = helper::safe64Encode("projectID={$currentProjectID}&active={$executionItem->id}");
+    $params  = helper::safe64Encode("module={$block->module}&projectID={$currentProjectID}&active={$executionItem->id}");
     $items[] = array
     (
         'id'        => $executionItem->id,
