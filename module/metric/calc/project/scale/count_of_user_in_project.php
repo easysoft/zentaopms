@@ -10,8 +10,6 @@
  * 单位：个
  * 描述：按项目统计的人员总数是指参与项目的全部人员的数量。这个度量项用于了解项目团队的规模和组成，对项目资源的分配和管理起到重要作用。
  * 定义：项目中团队成员个数求和;过滤已移除的人员;过滤已删除的项目;
- * 度量库：
- * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
@@ -33,6 +31,7 @@ class count_of_user_in_project extends baseCalc
             ->where('t1.type')->eq('execution')
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0)
+            ->andWhere("NOT FIND_IN_SET('or', t3.vision)")
             ->groupBy('t3.id')
             ->query();
     }

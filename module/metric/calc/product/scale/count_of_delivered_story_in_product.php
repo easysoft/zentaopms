@@ -8,10 +8,8 @@
  * 目的：scale
  * 度量名称：按产品统计的已交付研发需求数
  * 单位：个
- * 描述：按产品统计的已交付研发需求数表示已交付给用户的研发需求的数量。该度量项反映了产品中已经交付给用户的研发需求的数量，可以用于评估产品的研发需求交付能力和合作效果。
- * 定义：产品中所处阶段为已发布或关闭原因为已完成的研发需求个数求和;过滤已删除的研发需求;过滤已删除的产品;
- * 度量库：
- * 收集方式：realtime
+ * 描述：按产品统计的已交付研发需求数表示已交付给用户的研发需求的数量。该度量项反映了产品中已发布或关闭原因为已完成的研发需求的数量，可以用于评估产品的研发需求交付能力。
+ * 定义：产品中研发需求个数求和;所处阶段为已发布或关闭原因为已完成;过滤已删除的研发需求;过滤已删除的产品;
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
@@ -31,6 +29,7 @@ class count_of_delivered_story_in_product extends baseCalc
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.shadow')->eq(0)
+            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
             ->andWhere('t1.stage', true)->eq('released')
             ->orWhere('t1.closedReason')->eq('done')
             ->markRight(1)

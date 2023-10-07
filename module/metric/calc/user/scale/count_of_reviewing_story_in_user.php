@@ -10,8 +10,6 @@
  * 单位：个
  * 描述：按人员统计的待评审研发需求数表示每个人需要评审的研发需求数量之和。反映了每个人需要评审的研发需求的规模。该数值越大，说明需要投入越多的时间评审需求。
  * 定义：所有研发需求个数求和;状态为评审中;指派给为某人;过滤已删除的研发需求;过滤已删除产品的研发需求;
- * 度量库：
- * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
@@ -33,6 +31,7 @@ class count_of_reviewing_story_in_user extends baseCalc
             ->where('t2.deleted')->eq('0')
             ->andWhere('t3.deleted')->eq('0')
             ->andWhere('t2.status')->eq('reviewing')
+            ->andWhere("NOT FIND_IN_SET('or', t2.vision)")
             ->query();
     }
 

@@ -284,6 +284,8 @@ class metricTao extends metricModel
             ->beginIF(!empty($calcBegin))->andWhere('left(date, 10)')->ge($calcBegin)->fi()
             ->beginIF(!empty($calcEnd))->andWhere('left(date, 10)')->le($calcEnd)->fi()
             ->beginIF(empty($query))->andWhere('date')->gt($date)->fi()
+            ->beginIF(!empty($scopeList))->orderBy("date desc, $scopeKey, year desc, month desc, week desc, day desc")->fi()
+            ->beginIF(empty($scopeList))->orderBy("date desc, year desc, month desc, week desc, day desc")->fi()
             ->fetchAll();
 
         return $records;

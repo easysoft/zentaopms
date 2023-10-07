@@ -9,9 +9,7 @@
  * 度量名称：按瀑布项目统计的进度偏差率
  * 单位：%
  * 描述：按瀑布项目统计的进度偏差率是用来衡量项目当前的进度与计划进度之间的差异。它通过计算已完成的工作量与计划工作量之间的差异来评估项目的进展情况。
- * 定义：复用：;按瀑布项目统计的已完成任务工作的预计工时(EV);按瀑布项目统计的任务的计划完成工时(PV);公式：;按瀑布项目统计的进度偏差率=(EV-PV)/PV*100%;;
- * 度量库：
- * 收集方式：realtime
+ * 定义：复用：;按瀑布项目统计的已完成任务工作的预计工时(EV);按瀑布项目统计的任务的计划完成工时(PV);公式：;按瀑布项目统计的进度偏差率=(EV-PV)/PV*100%;
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
@@ -30,6 +28,7 @@ class sv_in_waterfall extends baseCalc
             ->from(TABLE_TASK)
             ->where('deleted')->eq('0')
             ->andWhere('parent')->ne('-1')
+            ->andWhere("NOT FIND_IN_SET('or', vision)")
             ->andWhere('status', true)->in('done,closed')
             ->orWhere('closedReason')->eq('done')
             ->markRight(1)
@@ -42,6 +41,7 @@ class sv_in_waterfall extends baseCalc
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.type')->eq('project')
             ->andWhere('t1.model')->eq('waterfall')
+            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
             ->query();
     }
 

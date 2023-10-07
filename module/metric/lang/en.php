@@ -23,6 +23,7 @@ $lang->metric->system        = "System";
 $lang->metric->weekCell      = "%s,Week %s";
 $lang->metric->create        = "Create " . $this->lang->metric->common;
 $lang->metric->edit          = "Edit " . $this->lang->metric->common;
+$lang->metric->view          = 'View' . $this->lang->metric->common;
 $lang->metric->afterCreate   = "After Saving";
 $lang->metric->definition    = "Definition";
 $lang->metric->declaration   = "Definition";
@@ -40,6 +41,7 @@ $lang->metric->sqlStatement  = "SQL Statement";
 $lang->metric->other         = "Other";
 $lang->metric->collectType   = 'Collect Type';
 $lang->metric->oldMetricInfo = 'Measurement Info';
+$lang->metric->collectConf   = 'Collect Configure';
 $lang->metric->verifyFile    = 'Verify File';
 $lang->metric->verifyResult  = 'Verify Result';
 $lang->metric->publish       = 'Publish';
@@ -47,6 +49,17 @@ $lang->metric->moveFailTip   = 'Failed to move the metric file.';
 $lang->metric->selectCount   = '%s metrics';
 $lang->metric->testMetric    = 'Test Metric';
 $lang->metric->calcTime      = 'Calculate Time';
+$lang->metric->to            = 'to';
+
+$lang->metric->query = new stdclass();
+$lang->metric->query->action = 'query';
+$lang->metric->query->scope = array();
+$lang->metric->query->scope['project']   = 'Project';
+$lang->metric->query->scope['product']   = 'Product';
+$lang->metric->query->scope['execution'] = 'Execution';
+$lang->metric->query->scope['dept']      = 'Dept';
+$lang->metric->query->scope['user']      = 'User';
+$lang->metric->query->scope['program']   = 'Program';
 
 $lang->metric->viewType = new stdclass();
 $lang->metric->viewType->single   = 'Single view';
@@ -54,12 +67,16 @@ $lang->metric->viewType->multiple = 'Multiple view';
 
 $lang->metric->descTip            = 'Enter the meaning, purpose, and impact of the metric';
 $lang->metric->definitionTip      = 'Enter the calculation rules and filtering conditions of the metric';
+$lang->metric->collectConfText    = "%s %s %s";
 $lang->metric->emptyCollect       = 'There are no collect metrics at this time.';
 $lang->metric->moveFailTip        = 'Move metric file failed';
 $lang->metric->maxSelect          = 'A maximum of %s metrics can be selected';
 $lang->metric->maxSelectTip       = 'Multiple metrics can be selected across a range, up to a maximum of %s.';
 $lang->metric->upgradeTip         = 'This measure is supported by an earlier version. If you want to edit it, reconfigure it according to the rules for configuring the measure of the latest version. Also note that the new version of the measure no longer supports the SQL editor and cannot be referenced by the report template for the time being. Check whether you need to edit it.';
 $lang->metric->saveSqlMeasSuccess = "Query success，result is：%s";
+$lang->metric->monthText          = "%s day";
+$lang->metric->errorDateRange     = "The start date cannot be longer than the end date";
+$lang->metric->errorCalcTimeRange = "The start time of collection cannot be later than the end time of collection";
 
 $lang->metric->noDesc    = "No description available";
 $lang->metric->noFormula = "No calculation rules available";
@@ -79,8 +96,8 @@ $lang->metric->viewAction      = 'View Metric';
 $lang->metric->editAction      = 'Edit Metric';
 $lang->metric->implementAction = 'Implement Metric';
 $lang->metric->deleteAction    = 'Delete Metric';
-$lang->metric->implementAction = 'Implement Metric';
-$lang->metric->deleteAction    = 'Delete Metric';
+$lang->metric->delistAction    = 'Delist Metric';
+$lang->metric->detailsAction   = 'Metric Detail';
 
 $lang->metric->stageList = array();
 $lang->metric->stageList['wait']     = "Not Released";
@@ -107,6 +124,8 @@ $lang->metric->collectStar = 'Collect';
 $lang->metric->oldMetric      = new stdclass();
 $lang->metric->oldMetric->sql = 'SQL';
 $lang->metric->oldMetric->tip = 'This is the implementation of the old metric';
+
+$lang->metric->oldMetric->dayNames = array(1 => 'Monday', 2 => 'Tuesday', 3 => 'Wednesday', 4 => 'Thursday', 5 => 'Friday', 6 => 'Saturday', 0 => 'Sunday');
 
 $lang->metric->moreSelects = array();
 
@@ -174,6 +193,12 @@ if($config->edition != 'open')
 $lang->metric->objectList['review'] = "Review";
 $lang->metric->objectList['other']  = "Other";
 
+$lang->metric->chartTypeList = array();
+$lang->metric->chartTypeList['line'] = 'Line';
+$lang->metric->chartTypeList['barX'] = 'Bar X';
+$lang->metric->chartTypeList['barY'] = 'Bar Y';
+$lang->metric->chartTypeList['pie']  = 'Pie';
+
 $lang->metric->filter = new stdclass();
 $lang->metric->filter->common  = 'Filter';
 $lang->metric->filter->scope   = 'Scope';
@@ -185,12 +210,16 @@ $lang->metric->filter->clearAction = 'Clear selected %s';
 $lang->metric->filter->checkedInfo = 'Selected：Scope(%s)、Object(%s)、Purpose(%s)';
 $lang->metric->filter->filterTotal = 'Filter Result(%s)';
 
-$lang->metric->implementInstructions = "Implementation Instructions";
-$lang->metric->implementTips = array();
-$lang->metric->implementTips[] = '1. Download the metric template code.php. Note: The file name should be consistent with the metric code.';
-$lang->metric->implementTips[] = '2. Perform coding and development operations on the file, referring to the manual for instructions.';
-$lang->metric->implementTips[] = '3. Place the developed code.php file in the [User Zentao Directory]/tmp/metric directory.';
-$lang->metric->implementTips[] = '4. Execute the command to grant executable permissions to the file.';
+$lang->metric->implement = new stdclass();
+$lang->metric->implement->common      = "Implement";
+$lang->metric->implement->tip         = "Please implement the calculation logic of this metric through PHP.";
+$lang->metric->implement->instruction = "Instruction";
+$lang->metric->implement->downloadPHP = "Download Metric Template";
+
+$lang->metric->implement->instructionTips = array();
+$lang->metric->implement->instructionTips[] = '1.Download the measurement template file and perform coding and development operations on the file. For details, see the operation manual.<a class="btn text-primary ghost" target="_blank" href="https://www.zentao.net/book/zentaopms/1103.html">Manual>></a>';
+$lang->metric->implement->instructionTips[] = '2.Please put the developed file in the following directory,<strong>Keep the file name consistent with the measurement code</strong>。<br/> <span class="label code-slate">{tmpRoot}metric</span>';
+$lang->metric->implement->instructionTips[] = '3.Execute commands to grant executable permissions to files:<p><span class="label code-slate">chmod 777 {tmpRoot}metric</span></p><p><span class="label code-slate">chmod 777 {tmpRoot}metric/{code}.php</span></p>';
 
 $lang->metric->verifyList = array();
 $lang->metric->verifyList['checkCustomCalcExists'] = 'Check whether the metric exists';

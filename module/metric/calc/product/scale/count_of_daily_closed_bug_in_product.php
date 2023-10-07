@@ -4,14 +4,12 @@
  * Count of daily closed bug in product.
  *
  * 范围：product
- * 对象：Bug
+ * 对象：bug
  * 目的：scale
  * 度量名称：按产品统计的每日关闭Bug数
  * 单位：个
- * 描述：按产品统计的每日关闭Bug数是指每天在产品开发过程中被确认并关闭的Bug的数量。该度量项可以帮助我们了解开发团队对已解决的Bug进行确认与关闭的速度和效率，通过对比不同时间段的关闭Bug数，可以评估开发团队的协作和问题处理能力。
- * 定义：产品中每日关闭的Bug数求和;过滤已删除的Bug;过滤已删除的产品;
- * 度量库：
- * 收集方式：realtime
+ * 描述：按产品统计的每日关闭Bug数是指每天在产品中每日关闭的Bug的数量。该度量项可以帮助我们了解开发团队对已解决的Bug进行确认与关闭的速度和效率，通过对比不同时间段的关闭Bug数，可以评估开发团队的协作和问题处理能力。
+ * 定义：产品中Bug数求和;关闭时间为某日;过滤已删除的Bug;过滤已删除的产品;
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>

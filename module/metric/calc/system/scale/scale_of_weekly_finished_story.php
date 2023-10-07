@@ -1,17 +1,15 @@
 <?php
 /**
- * 按全局统计的每周完成研发需求规模数。
+ * 按系统统计的每周完成研发需求规模数。
  * Scale of weekly finished story.
  *
- * 范围：global
+ * 范围：system
  * 对象：story
  * 目的：scale
- * 度量名称：按全局统计的每周完成研发需求规模数
- * 单位：sp/工时/功能点
- * 描述：按全局统计的每周完成研发需求规模数表示每周完成的研发需求的数量。该度量项反映了组织每周完成的研发需求数量，可以用于评估组织的研发需求完成能力和绩效。
- * 定义：所有的研发需求个数求和;关闭时间为某周;关闭原因为已完成;过滤已删除的研发需求;过滤已删除的产品;
- * 度量库：
- * 收集方式：realtime
+ * 度量名称：按系统统计的每周完成研发需求规模数
+ * 单位：工时
+ * 描述：按系统统计的每周完成研发需求规模数表示每周完成的研发需求的数量。反映了组织每周完成的研发需求数量，用于评估项目进度、资源规划、需求管理、团队绩效和质量控制的有用信息。它对于项目管理和团队协作具有重要意义，并可以帮助团队监控进度、优化资源利用和提高研发效率。
+ * 定义：所有的研发需求个数求和;关闭时间为某周;关闭原因为已完成;过滤父需求;过滤已删除的研发需求;过滤已删除的产品;
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
@@ -24,12 +22,15 @@ class scale_of_weekly_finished_story extends baseCalc
 {
     public $dataset = 'getStories';
 
-    public $fieldList = array('t1.status', 't1.closedReason', 't1.closedDate', 't1.estimate');
+    public $fieldList = array('t1.status', 't1.closedReason', 't1.closedDate', 't1.estimate', 't1.parent');
 
     public $result = array();
 
     public function calculate($row)
     {
+        $parent = $row->parent;
+        if($parent == '-1') return false;
+
         $year = $this->getYear($row->closedDate);
         $week = $this->getWeek($row->closedDate);
 

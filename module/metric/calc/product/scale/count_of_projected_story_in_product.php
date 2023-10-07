@@ -9,7 +9,7 @@
  * 度量名称：按产品统计的已立项研发需求数
  * 单位：个
  * 描述：按产品统计的已立项研发需求数是指产品中已关联进项目的研发需求数。该度量项表示产品中获得批准需要投入资源进行开发的需求数量。产品中较高的已立项研发需求数可能表示产品相关项目的规模越大。
- * 定义：产品中研发需求个数求和;过滤已删除的产品;过滤已删除的研发需求;研发需求被关联进项目;
+ * 定义：产品中研发需求个数求和;过滤已删除的产品;过滤已删除的研发需求;研发需求被关联进项目;
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
@@ -30,6 +30,7 @@ class count_of_projected_story_in_product extends baseCalc
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
             ->where('t2.deleted')->eq('0')
             ->andWhere('t3.deleted')->eq('0')
+            ->andWhere("NOT FIND_IN_SET('or', t2.vision)")
             ->groupBy('t1.product');
     }
 

@@ -10,8 +10,6 @@
  * 单位：个
  * 描述：按产品统计的月度解决Bug数是指每天在产品开发过程中被解决并关闭的Bug的数量。该度量项可以帮助我们了解开发团队解决Bug的速度和效率。
  * 定义：产品中创建时间在某年某月的Bug个数求和;过滤已删除的Bug;过滤已删除的产品;
- * 度量库：
- * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>

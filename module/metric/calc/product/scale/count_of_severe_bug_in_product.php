@@ -4,14 +4,12 @@
  * Count of severe bug in product.
  *
  * 范围：product
- * 对象：Bug
+ * 对象：bug
  * 目的：scale
  * 度量名称：按产品统计的严重程度为1、2级的Bug数
  * 单位：个
  * 描述：按产品统计的严重程度为1、2级的Bug数是指在产品开发过程中发现的严重程度为1级和2级的Bug数量的总和。统计这些Bug的数量可以评估产品的质量和稳定性，同时也关注影响用户体验和功能完整性的问题。
  * 定义：复用：;按产品统计的严重程度为1级的Bug数;按产品统计的严重程度为2级的Bug数;公式：;按产品统计的严重程度为1、2级的Bug数=按产品统计的严重程度为1级的Bug数+按产品统计的严重程度为2级的Bug数;
- * 度量库：
- * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>

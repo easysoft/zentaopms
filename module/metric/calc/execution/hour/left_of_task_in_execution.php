@@ -7,11 +7,9 @@
  * 对象：task
  * 目的：hour
  * 度量名称：按执行统计的任务剩余工时数
- * 单位：h
+ * 单位：小时
  * 描述：按执行统计的任务剩余工时数是指当前未消耗的工时总和，用于完成所有任务。该度量项反映了任务完成的剩余工作量，可以帮助团队预测任务的完成时间和资源需求。
  * 定义：执行中任务的剩余工时数求和;过滤已删除的任务;过滤已删除的执行;过滤已删除的项目;
- * 度量库：
- * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>

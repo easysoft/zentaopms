@@ -10,8 +10,6 @@
  * 单位：个
  * 描述：按执行统计的任务总数是指整个执行当前存在的任务总量。该度量项可以用来跟踪任务的规模和复杂性，为资源分配和工作计划提供基础，可以帮助团队评估工作负荷和任务分配的合理性。
  * 定义：执行中所有的任务个数求和;过滤已删除的任务;过滤已删除的执行;过滤已删除的项目;
- * 度量库：
- * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>

@@ -1,17 +1,15 @@
 <?php
 /**
- * 按全局统计的年度已关闭项目投入总人天。
+ * 按系统统计的年度已关闭项目投入总人天。
  * Day of annual closed project.
  *
- * 范围：global
+ * 范围：system
  * 对象：project
  * 目的：hour
- * 度量名称：按全局统计的年度已关闭项目投入总人天
+ * 度量名称：按系统统计的年度已关闭项目投入总人天
  * 单位：人天
- * 描述：按全局统计的年度关闭项目投入总人天是指在某年度关闭项目的团队总共投入的工作天数。该度量项可以用来评估项目的人力资源投入情况。投入总人天的增加可能意味着项目投入的工作时间和资源的增加。
- * 定义：复用：;按全局统计的年度关闭项目消耗工时数;公式：;按全局统计的年度关闭项目投入总人天=按全局统计的年度已关闭项目任务的消耗工时数/后台配置的每天可用工时;
- * 度量库：
- * 收集方式：realtime
+ * 描述：按系统统计的年度已关闭项目投入总人天是指在某年度关闭项目投入的人天总数。该度量项可以用来评估项目的人力资源投入情况。投入总人天的增加可能意味着项目投入的工作时间和资源的增加。
+ * 定义：复用：;按系统统计的年度关闭项目消耗工时数;公式：;按系统统计的年度关闭项目投入总人天=按系统统计的年度已关闭项目任务的消耗工时数/后台配置的每天可用工时;
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
@@ -34,6 +32,7 @@ class day_of_annual_closed_project extends baseCalc
             ->from(TABLE_TASK)
             ->where('deleted')->eq('0')
             ->andWhere('parent')->ne('-1')
+            ->andWhere("NOT FIND_IN_SET('or', vision)")
             ->groupBy('project')
             ->get();
 
@@ -43,8 +42,8 @@ class day_of_annual_closed_project extends baseCalc
             ->where('t1.type')->eq('project')
             ->andWhere('t1.status')->eq('closed')
             ->andWhere('t1.deleted')->eq('0')
-            ->andWhere('t1.closedDate IS NOT NULL')
-            ->andWhere('LEFT(t1.closedDate, 4)')->ne('0000')
+            ->andWhere('t1.closedDate')->notZeroDatetime()
+            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
             ->query();
     }
 

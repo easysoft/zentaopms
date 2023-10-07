@@ -10,8 +10,6 @@
  * 单位：个
  * 描述：按项目统计的已完成任务数是指项目已经完成的任务总量。该度量项可以衡量任务完成的进度和效率，以及项目的工作质量和产出。较高的已完成任务总数可能表明项目在交付工作方面表现出较好的能力。
  * 定义：项目中任务个数求和;状态为已完成;过滤已删除的任务;过滤已删除执行的任务;过滤已删除的项目;
- * 度量库：
- * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>

@@ -8,10 +8,8 @@
  * 目的：scale
  * 度量名称：按产品统计的年度关闭研发需求数
  * 单位：个
- * 描述：按产品统计的年度关闭研发需求规模数表示在某年度关闭的研发需求数。该度量项反映了产品团队每年关闭的研发需求数，可以用于评估产品团队的研发需求规模管理和调整情况。
+ * 描述：按产品统计的年度关闭研发需求规模数表示产品在某年度关闭的研发需求数。该度量项反映了产品团队每年因完成、不做或取消等原因关闭的研发需求数，可以用于评估产品团队的研发需求规模管理和调整情况。
  * 定义：产品中关闭时间在某年的研发需求的个数求和;过滤已删除的研发需求;过滤已删除的产品;
- * 度量库：
- * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
@@ -36,6 +34,7 @@ class count_of_annual_closed_story_in_product extends baseCalc
         $product    = $row->product;
         $closedDate = $row->closedDate;
 
+        if(empty($closedDate)) return false;
         $year = substr($closedDate, 0, 4);
         if($year == '0000') return false;
 

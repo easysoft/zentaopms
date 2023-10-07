@@ -4,14 +4,12 @@
  * Count of daily resolved bug in product.
  *
  * 范围：product
- * 对象：Bug
+ * 对象：bug
  * 目的：scale
  * 度量名称：按产品统计的每日解决Bug数
  * 单位：个
- * 描述：按产品统计的每日解决Bug数是指每天在产品开发过程中被解决并关闭的Bug的数量。该度量项可以帮助我们了解开发团队解决Bug的速度和效率。
- * 定义：产品中每日解决的Bug数求和;过滤已删除的Bug;过滤已删除的产品;
- * 度量库：
- * 收集方式：realtime
+ * 描述：按产品统计的每日解决Bug数是指产品每日解决的Bug的数量。该度量项可以帮助我们了解开发团队解决Bug的速度和效率。
+ * 定义：产品中Bug数求和;解决日期为某日;过滤已删除的Bug;过滤已删除的产品;
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
@@ -30,7 +28,7 @@ class count_of_daily_resolved_bug_in_product extends baseCalc
 
     public function calculate($row)
     {
-        if($row->status != 'resolved' || empty($row->resolvedDate)) return false;
+        if($row->status == 'active' || empty($row->resolvedDate)) return false;
 
         $date = substr($row->resolvedDate, 0, 10);
         list($year, $month, $day) = explode('-', $date);

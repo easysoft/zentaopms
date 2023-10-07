@@ -1,17 +1,15 @@
 <?php
 /**
- * 按全局统计的年度新增计划数。
+ * 按系统统计的年度新增计划数。
  * Count of annual created productplan.
  *
- * 范围：global
+ * 范围：system
  * 对象：productplan
  * 目的：scale
- * 度量名称：按全局统计的年度新增计划数
+ * 度量名称：按系统统计的年度新增计划数
  * 单位：个
- * 描述：按全局统计的年度新增计划数表示每年新增加的计划数量。该度量项反映了组织在每年新增加的计划数量，可以用于评估组织的计划管理和战略规划情况。
+ * 描述：按系统统计的年度新增计划数反映了组织在某年度内新增计划数量，用于评估组织创新能力、市场竞争力和投资决策，并用于绩效评估和目标设定。
  * 定义：所有的计划个数求和;创建时间为某年;过滤已删除的计划;
- * 度量库：
- * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>

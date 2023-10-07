@@ -1,7 +1,7 @@
 <?php
 /**
  * 按瀑布项目统计的成本偏差率。
- * CV in waterfall.
+ * Cv in waterfall.
  *
  * 范围：project
  * 对象：task
@@ -9,9 +9,7 @@
  * 度量名称：按瀑布项目统计的成本偏差率
  * 单位：%
  * 描述：按瀑布项目统计的成本偏差率用于衡量项目的实际成本与计划成本之间的差异。它通过计算已花费的成本与预计花费的成本之间的差异来评估项目的成本绩效。
- * 定义：复用：;按瀑布项目统计的已完成任务工作的预计;按瀑布项目统计的实际花费工时(AC);公式：;按瀑布项目统计的成本偏差率=(EV-AC)/AC*100%;;
- * 度量库：
- * 收集方式：realtime
+ * 定义：复用：;按瀑布项目统计的已完成任务工作的预计;按瀑布项目统计的实际花费工时(AC);公式：;按瀑布项目统计的成本偏差率=(EV-AC)/AC*100%;
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
@@ -30,6 +28,7 @@ class cv_in_waterfall extends baseCalc
             ->from(TABLE_TASK)
             ->where('deleted')->eq('0')
             ->andWhere('parent')->ne('-1')
+            ->andWhere("NOT FIND_IN_SET('or', vision)")
             ->andWhere('status', true)->in('done,closed')
             ->orWhere('closedReason')->eq('done')
             ->markRight(1)
@@ -40,6 +39,7 @@ class cv_in_waterfall extends baseCalc
             ->from(TABLE_EFFORT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution=t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project=t3.id')
+            ->where("NOT FIND_IN_SET('or', t3.vision)")
             ->groupBy('t3.id')
             ->get();
 

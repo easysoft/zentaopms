@@ -7,11 +7,9 @@
  * 对象：task
  * 目的：hour
  * 度量名称：按瀑布项目统计的已完成任务工作的预计工时(EV)
- * 单位：h
+ * 单位：小时
  * 描述：按瀑布项目统计的已完成任务工作的预计工时指的是在瀑布项目管理方法中，已经完成的任务的预计工时。这个度量项用来评估项目进展与实际完成情况的一致性。EV的值越高，代表项目团队在按计划完成任务的工作量方面表现得越好。
  * 定义：复用：;按项目统计的任务进度;按项目统计的任务预计工时数;公式：;按项目统计的已完成任务工作的预计工时(EV)=按项目统计的任务预计工时数*按项目统计的任务进度;要求项目为瀑布项目;过滤已删除的任务;过滤已取消的任务;过滤已删除执行下的任务;过滤已删除的项目;
- * 度量库：
- * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
@@ -30,6 +28,7 @@ class ev_of_finished_task_in_waterfall extends baseCalc
             ->from(TABLE_TASK)
             ->where('deleted')->eq('0')
             ->andWhere('parent')->ne('-1')
+            ->andWhere("NOT FIND_IN_SET('or', vision)")
             ->andWhere('status', true)->in('done,closed')
             ->orWhere('closedReason')->eq('done')
             ->markRight(1)
@@ -42,6 +41,7 @@ class ev_of_finished_task_in_waterfall extends baseCalc
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.type')->eq('project')
             ->andWhere('t1.model')->eq('waterfall')
+            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
             ->query();
     }
 

@@ -1,17 +1,15 @@
 <?php
 /**
- * 按全局统计的月度修复Bug数。
+ * 按系统统计的月度修复Bug数。
  * Count of monthly fixed bug.
  *
- * 范围：global
+ * 范围：system
  * 对象：bug
  * 目的：scale
- * 度量名称：按全局统计的月度修复Bug数
+ * 度量名称：按系统统计的月度修复Bug数
  * 单位：个
- * 描述：按全局统计的月度修复Bug数是指在一个月内解决并关闭的Bug数量。这个度量项反映了系统或项目在一个月内解决的问题数量。月度修复Bug数的增加说明开发团队的工作效率较高。
+ * 描述：按系统统计的月度修复Bug数是指在一个月内解决并关闭的Bug数量。反映了一个系统或软件每个月修复的Bug数量，用于评估质量改进、故障管理、变更管理、资源规划以及趋势分析与问题预测等方面。通过跟踪和分析月度修复Bug数，可以及时发现和解决问题，改善系统的质量和可靠性。
  * 定义：所有Bug个数求和;状态为已关闭;解决方案为已解决;关闭时间为某年某月;过滤已删除的Bug;过滤已删除的产品;
- * 度量库：
- * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>

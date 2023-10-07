@@ -1,17 +1,15 @@
 <?php
 /**
- * 按全局统计的进行中执行数。
+ * 按系统统计的进行中执行数。
  * Count of doing execution.
  *
- * 范围：global
+ * 范围：system
  * 对象：execution
  * 目的：scale
- * 度量名称：按全局统计的进行中执行数
+ * 度量名称：按系统统计的进行中执行数
  * 单位：个
- * 描述：按全局统计的进行中执行数表示在整个系统中正在进行中的执行项的数量，可以用来了解当前正在进行的任务数量，反映团队的工作进展。
+ * 描述：按系统统计的进行中执行数表示在整个系统中正在进行中的执行项的数量，可以用来了解当前正在进行的任务数量，反映团队的工作进展。
  * 定义：所有的执行个数求和;状态为进行中;过滤已删除的执行;
- * 度量库：
- * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>

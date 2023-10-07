@@ -1,17 +1,15 @@
 <?php
 /**
- * 按全局统计的每日完成任务数。
+ * 按系统统计的每日完成任务数。
  * Count of daily finished task.
  *
- * 范围：global
+ * 范围：system
  * 对象：task
  * 目的：scale
- * 度量名称：按全局统计的每日完成任务数
+ * 度量名称：按系统统计的每日完成任务数
  * 单位：个
- * 描述：按全局统计的每日完成任务数是指每日完成的任务总量。该度量项可以用来评估团队或组织每日的工作效率和任务完成能力。
+ * 描述：按系统统计的每日完成任务数是指每日完成的任务总量。该度量项可以用来评估团队或组织每日的工作效率和任务完成能力。
  * 定义：所有的任务个数求和;完成时间为某日;过滤已删除的任务;
- * 度量库：
- * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>

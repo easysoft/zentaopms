@@ -8,10 +8,8 @@
  * 目的：qc
  * 度量名称：按产品统计的研发需求评审通过率
  * 单位：%
- * 描述：按产品统计的研发需求评审通过率表示产品中不需要评审的与评审通过的研发需求数相对于不需要评审的与有评审结果的需求数的比例。该度量项反映了需求评审过程中的成功率。
+ * 描述：按产品统计的研发需求评审通过率表示产品中通过评审的研发需求（不需要评审研发需求的与需要评审并通过的研发需求）相对于评审过的研发需求（不需要评审的研发需求与有评审结果的研发需求数）的比例。该度量项反映了需求评审过程中的成功率。
  * 定义：按产品统计的所有研发需求评审通过率=（按产品统计的不需要评审的研发需求数+评审结果确认通过的研发需求数）/（按产品统计的不需要评审的研发需求数+有评审结果的研发需求数）;过滤已删除的研发需求;过滤已删除的产品;
- * 度量库：
- * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
@@ -34,6 +32,7 @@ class rate_of_approved_story_in_product extends baseCalc
             ->andWhere('t3.deleted')->eq(0)
             ->andWhere('t2.type')->eq('story')
             ->andWhere('t3.shadow')->eq(0)
+            ->andWhere("NOT FIND_IN_SET('or', t2.vision)")
             ->groupBy('t2.product')
             ->query();
     }

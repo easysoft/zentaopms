@@ -10,8 +10,6 @@
  * 单位：个
  * 描述：按项目统计的激活Bug数是指当前未解决的Bug数量。这个度量项反映了项目当前存在的待解决问题数量。激活Bug总数越多可能代表项目的稳定性较低，需要加强Bug解决的速度和质量。
  * 定义：项目中Bug个数求和;状态为激活;过滤已删除的Bug;过滤已删除的项目;
- * 度量库：
- * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>

@@ -10,8 +10,6 @@
  * 单位：个
  * 描述：按人员统计的日完成任务数表示每个人每日完成的任务数量之和。反映了每个人每日完成的任务规模。该数值越大，可能说明工作效率越高，任务完成速度越快。
  * 定义：某人某日完成的任务个数求和;
- * 度量库：
- * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>

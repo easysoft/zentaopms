@@ -1,17 +1,15 @@
 <?php
 /**
- * 按产品统计的研发完成需求的Bug密度。
+ * 按产品统计的研发完毕研需规模的Bug密度。
  * Bug concentration of developed story in product.
  *
  * 范围：product
  * 对象：bug
  * 目的：scale
- * 度量名称：按产品统计的研发完成需求的Bug密度
+ * 度量名称：按产品统计的研发完毕研需规模的Bug密度
  * 单位：个
- * 描述：按产品统计的研发完成需求的Bug密度表示按产品统计的研发完成需求的有效Bug数相对于按产品统计的研发完成的研发需求规模数。该度量项反映了研发阶段中需求质量的表现，密度越低代表研发完成的需求质量越高。
+ * 描述：按产品统计的研发完毕研需规模的Bug密度表示按产品统计的有效Bug数相对于按产品统计的研发完成的研发需求规模数。该度量项反映了研发完毕的研需的质量表现，密度越低代表研发完毕的研需质量越高。
  * 定义：复用：;按产品统计的有效Bug数;按产品统计的研发完成的研发需求规模数;公式：;按产品统计的研发完成需求的Bug密度=按产品统计的有效Bug数/按产品统计的研发完成的研发需求规模数;
- * 度量库：
- * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
@@ -29,6 +27,7 @@ class bug_concentration_of_developed_story_in_product extends baseCalc
         $developedStory = $this->dao->select('product, count(id) AS storyNum')
             ->from(TABLE_STORY)
             ->where('deleted')->eq('0')
+            ->andWhere("NOT FIND_IN_SET('or', vision)")
             ->andWhere('stage', true)->in('developed,testing,tested,verified,released')
             ->orWhere('closedReason')->eq('done')
             ->markRight(1)

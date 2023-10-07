@@ -32,8 +32,6 @@ $fnGenerateSide = function() use($metrics, $current, $viewType, $scope, $filters
     return ul($metricList);
 };
 
-$star    = (!empty($current->collector) and strpos($current->collector, ',' . $app->user->account . ',') !== false) ? 'star' : 'star-empty';
-$starBtn = "<a title='{$lang->metric->collectStar}' onclick='window.collectMetric($current->id)' class='btn btn-link square size-sm metric-collect'>" . html::image("static/svg/{$star}.svg", "class='$star'") . '</a>';
 
 $fnGenerateFilterPanel = function($code, $filterItem) use($lang)
 {
@@ -116,12 +114,14 @@ toolbar
         set::url(helper::createLink('metric', 'preview', "scope=$exchangeScope&viewType=multiple&metricID={$current->id}")),
         $lang->metric->viewType->multiple,
     ),
+    /*
     common::hasPriv('metric', 'preview') ? btn
     (
         setClass('btn primary'),
         set::url(helper::createLink('metric', 'browse')),
         $lang->metric->manage
     ) : null,
+    */
 );
 
 $metricRecordType = $this->metric->getMetricRecordType(current($resultData));
@@ -138,7 +138,7 @@ $fnGenerateQueryForm = function() use($metricRecordType, $current)
         (
             setClass('query-inline picker-nowrap'),
             set::width('248px'),
-            set::label($this->lang->metric->scope),
+            set::label($this->lang->metric->query->scope[$current->scope]),
             set::name('scope'),
             set::control(array('type' => 'picker', 'multiple' => true)),
             set::items($objectPairs),
@@ -225,7 +225,7 @@ $fnGenerateQueryForm = function() use($metricRecordType, $current)
                 btn
                 (
                     setClass('btn secondary'),
-                    set::text($this->lang->metric->query),
+                    set::text($this->lang->metric->query->action),
                     set::onclick('window.handleQueryClick()'),
                 ),
             )
@@ -235,6 +235,7 @@ $fnGenerateQueryForm = function() use($metricRecordType, $current)
 };
 
 $sideTitle = $scope == 'filter' ? sprintf($lang->metric->filter->filterTotal, count($metrics)) : $metricList;
+$star = (!empty($current->collector) and strpos($current->collector, ',' . $app->user->account . ',') !== false) ? 'star' : 'star-empty';
 div
 (
     setClass('side'),
@@ -275,7 +276,17 @@ div
                     setClass('metric-name-weight'),
                     isset($current) ? $current->name : null,
                 ),
-                html($starBtn),
+                btn
+                (
+                    setClass('metric-collect'),
+                    set::type('link'),
+                    set::icon($star),
+                    set::iconClass($star),
+                    set::square(true),
+                    set::size('sm'),
+                    set::title($lang->metric->collectStar),
+                    on::click('.metric-collect', "window.collectMetric({$current->id})"),
+                ),
             ),
             div
             (

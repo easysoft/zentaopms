@@ -1,17 +1,15 @@
 <?php
 /**
- * 按全局统计的月度关闭项目的任务消耗工时数。
+ * 按系统统计的月度关闭项目的任务消耗工时数。
  * Consume of monthly closed project.
  *
- * 范围：global
+ * 范围：system
  * 对象：project
  * 目的：hour
- * 度量名称：按全局统计的月度关闭项目的任务消耗工时数
- * 单位：h
- * 描述：按全局统计的月度关闭项目的任务消耗工时数是指团队或组织在某月内预计需要花费的总工时数，用于完成任务。该度量项可以用来评估团队或组织在任务执行过程中的工时投入情况和对资源的利用效率。较高的月度关闭项目的任务消耗工时数可能需要审查工作流程和资源分配，以提高工作效率和进度控制。
- * 定义：所有项目任务消耗工时数求和;项目状态为已关闭;关闭时间为某年某月;过滤已删除的项目;
- * 度量库：
- * 收集方式：realtime
+ * 度量名称：按系统统计的月度关闭项目的任务消耗工时数
+ * 单位：小时
+ * 描述：按系统统计的月度关闭项目的任务消耗工时数是指在某月任务预计需要花费的总工时数。该度量项可以用来评估团队或组织在任务执行过程中的工时投入情况和对资源的利用效率。较高的月度关闭项目的任务消耗工时数可能需要审查工作流程和资源分配，以提高工作效率和进度控制。
+ * 定义：所有项目任务消耗工时数求和;项目状态为已关闭;关闭时间为某年某月;过滤父任务;过滤已删除的任务;过滤已删除的项目;
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
@@ -34,6 +32,7 @@ class consume_of_monthly_closed_project extends baseCalc
             ->from(TABLE_TASK)
             ->where('deleted')->eq('0')
             ->andWhere('parent')->ne('-1')
+            ->andWhere("NOT FIND_IN_SET('or', vision)")
             ->groupBy('project')
             ->get();
 
@@ -45,6 +44,7 @@ class consume_of_monthly_closed_project extends baseCalc
             ->andWhere('t1.deleted')->eq('0')
             ->andWhere('t1.closedDate IS NOT NULL')
             ->andWhere('YEAR(t1.closedDate)')->ne('0000')
+            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
             ->query();
     }
 

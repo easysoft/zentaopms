@@ -35,6 +35,7 @@ class dataset
             ->from(TABLE_PROJECT)->alias('t1')
             ->where('type')->eq('program')
             ->andWhere('deleted')->eq('0')
+            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
             ->query();
     }
 
@@ -53,6 +54,7 @@ class dataset
             ->where('type')->eq('program')
             ->andWhere('grade')->eq('1')
             ->andWhere('deleted')->eq('0')
+            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
             ->query();
     }
 
@@ -69,6 +71,7 @@ class dataset
         return $this->dao->select($fieldList)->from(TABLE_PROJECT)->alias('t1')
             ->where('deleted')->eq(0)
             ->andWhere('type')->eq('project')
+            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
             ->query();
     }
 
@@ -88,6 +91,7 @@ class dataset
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.type')->in('sprint,stage,kanban')
             ->andWhere('t2.type')->eq('project')
+            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
             ->query();
     }
 
@@ -107,6 +111,7 @@ class dataset
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0)
+            ->andWhere("NOT FIND_IN_SET('or', t2.vision)")
             ->query();
     }
 
@@ -183,6 +188,7 @@ class dataset
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0)
+            ->andWhere("NOT FIND_IN_SET('or', t3.vision)")
             ->query();
     }
 
@@ -219,6 +225,7 @@ class dataset
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.shadow')->eq(0)
+            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
             ->query();
     }
 
@@ -245,6 +252,7 @@ class dataset
             ->andWhere('t4.deleted')->eq(0) // 已删除的执行
             ->andWhere('t4.type')->in('sprint,stage,kanban')
             ->andWhere('t5.deleted')->eq(0) // 已删除的项目
+            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
             ->query();
     }
 
@@ -269,6 +277,7 @@ class dataset
             ->andWhere('t2.shadow')->eq(0)
             ->andWhere('t4.deleted')->eq(0)
             ->andWhere('t4.type')->eq('project')
+            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
             ->query();
     }
 
@@ -289,6 +298,7 @@ class dataset
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.type')->eq('story')
             ->andWhere('t2.shadow')->eq(0)
+            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
             ->query();
     }
 
@@ -308,6 +318,7 @@ class dataset
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.type')->eq('story')
+            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
             ->query();
     }
 
@@ -326,6 +337,7 @@ class dataset
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.shadow')->eq(0)
+            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
             ->andWhere('t1.stage', true)->eq('released')
             ->orWhere('t1.closedReason')->eq('done')
             ->markRight(1)
@@ -348,6 +360,7 @@ class dataset
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.shadow')->eq(0)
+            ->andWhere("NOT FIND_IN_SET('or', t2.vision)")
             ->query();
     }
 
@@ -365,6 +378,7 @@ class dataset
             ->from(TABLE_PRODUCT)->alias('t1')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.shadow')->eq(0)
+            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
             ->query();
     }
 
@@ -384,6 +398,7 @@ class dataset
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0)
+            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
             ->query();
     }
 
@@ -403,6 +418,7 @@ class dataset
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.type')->eq('line')
             ->andWhere('t2.type')->eq('program')
+            ->andWhere("NOT FIND_IN_SET('or', t2.vision)")
             ->query();
     }
 

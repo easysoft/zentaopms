@@ -1,7 +1,7 @@
 <?php
 /**
  * 按人员统计的待处理Bug数。
- * count_of_assigned_bug_in_user.
+ * Count of assigned bug in user.
  *
  * 范围：user
  * 对象：bug
@@ -9,9 +9,7 @@
  * 度量名称：按人员统计的待处理Bug数
  * 单位：个
  * 描述：按人员统计的待处理Bug数表示每个人待处理的Bug数量之和。反映了每个人需要处理的Bug数量上的规模。该数值越大，说明需要投入越多的时间解决Bug。
- * 定义：所有Bug个数求和;指派给为某人;过滤已删除的Bug;过滤已删除产品的Bug
- * 度量库：
- * 收集方式：realtime
+ * 定义：所有Bug个数求和;指派给为某人;过滤已删除的Bug;过滤已删除产品的Bug;
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>

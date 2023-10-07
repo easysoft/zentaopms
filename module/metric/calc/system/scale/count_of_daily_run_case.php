@@ -1,17 +1,15 @@
 <?php
 /**
- * 按全局统计的每日执行用例次数。
+ * 按系统统计的每日执行用例次数。
  * Count of daily run case.
  *
- * 范围：global
+ * 范围：system
  * 对象：case
  * 目的：scale
- * 度量名称：按全局统计的每日执行用例次数
- * 单位：次/日
- * 描述：按全局统计的每日执行用例次数表示组织每日执行的用例次数，这个度量项可以反映测试团队每日的工作效率和进展情况。
+ * 度量名称：按系统统计的每日执行用例次数
+ * 单位：个
+ * 描述：按系统统计的每日执行用例次数表示组织每日执行的用例次数，这个度量项可以反映测试团队每日的工作效率和进展情况。
  * 定义：所有用例的执行次数求和;过滤已删除的用例;过滤已删除的产品;执行时间为某日;
- * 度量库：
- * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
@@ -32,7 +30,7 @@ class count_of_daily_run_case extends baseCalc
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product=t3.id')
             ->where('t2.deleted')->eq('0')
             ->andWhere('t3.deleted')->eq('0')
-            ->andWhere('YEAR(t1.date)')->ne('0000')
+            ->andWhere('t1.date')->notZeroDatetime()
             ->groupBy('`year`, `month`, `day`')
             ->query();
     }
