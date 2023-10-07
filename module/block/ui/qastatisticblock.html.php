@@ -158,20 +158,18 @@ statisticBlock
         center
         (
             setClass('gap-4 px-5', $testTasksView ? 'flex-none' : 'flex-1'),
-            center
+            progressCircle
             (
-                setClass('relative w-28 h-28 hide-before-init opacity-0 transition-opacity'),
-                setData(array('zui' => 'ProgressCircle', 'percent' => $product->closedBugRate, 'size' => 112, 'text' => false, 'circle-width' => 0.06)),
+                set::percent($product->closedBugRate),
+                set::size(112),
+                set::text(false),
+                set::circleWidth(0.06),
+                div(span(setClass('text-2xl font-bold'), $product->closedBugRate), '%'),
                 div
                 (
-                    setClass('center absolute inset-0 num gap-1'),
-                    div(span(setClass('text-2xl font-bold'), $product->closedBugRate),   '%'),
-                    div
-                    (
-                        setClass('row text-sm text-gray items-center gap-1'),
-                        $lang->block->qastatistic->closedBugRate,
-                        icon('help text-light text-sm')
-                    )
+                    setClass('row text-sm text-gray items-center gap-1'),
+                    $lang->block->qastatistic->closedBugRate,
+                    icon('help text-light text-sm')
                 )
             ),
             row
