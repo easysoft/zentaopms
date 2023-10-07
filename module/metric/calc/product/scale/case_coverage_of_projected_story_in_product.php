@@ -26,40 +26,31 @@ class case_coverage_of_projected_story_in_product extends baseCalc
 
     public function getStatement()
     {
-       return $this->dao->select('t1.id,t1.product,t3.id as caseID')->from(TABLE_STORY)->alias('t1')
-          ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
-          ->leftJoin(TABLE_CASE)->alias('t3')->on('t1.id=t3.story')
-          ->where('t1.stage')->eq('projected')
-          ->andWhere('t1.deleted')->eq(0)
-          ->andWhere('t2.deleted')->eq(0)
-          ->andWhere('t2.shadow')->eq(0)
-          ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
-          ->query();
+        return $this->dao->select('t1.product, COUNT(t1.id) as total, SUM(IF(t3.id IS NULL, 0, 1)) as hasCase')->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->leftJoin(TABLE_CASE)->alias('t3')->on('t1.id=t3.story')
+            ->where('t1.stage')->eq('projected')
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.shadow')->eq(0)
+            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
+            ->groupBy('t1.product')
+            ->query();
     }
 
     public function calculate($row)
     {
-       if(in_array($row->id, $this->idList)) return false;
+        $product = $row->product;
+        $total   = $row->total;
+        $hasCase = $row->hasCase;
 
-       if(!isset($this->result[$row->product])) $this->result[$row->product] = array('total' => 0, 'haveCase' => 0);
-
-       $this->result[$row->product]['total'] ++;
-       if($row->caseID !== null) $this->result[$row->product]['haveCase'] ++;
-
-       $this->idList[] = $row->id;
+        $rate = $total ? round($hasCase / $total, 2) : 0;
+        $this->result[$product] = $rate;
     }
 
     public function getResult($options = array())
     {
-       $records = array();
-       foreach($this->result as $productID => $result)
-       {
-           $records[] = array(
-               'product' => $productID,
-               'value'    => $result['total'] ? round($result['haveCase'] / $result['total'], 2) : 0,
-           );
-       }
-
-       return $this->filterByOptions($records, $options);
+        $records = $this->getRecords(array('product', 'value'));
+        return $this->filterByOptions($records, $options);
     }
 }
