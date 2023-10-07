@@ -90,8 +90,7 @@ class modalDialog extends wg
         $rawContent = $this->prop('rawContent', !zin::$rawContentCalled);
         return div
         (
-            setClass('modal-body', $this->prop('bodyClass')),
-            on::scroll('e.stopPropagation();'),
+            setClass('modal-body scrollbar-hover', $this->prop('bodyClass')),
             set($this->prop('bodyProps')),
             $this->children(),
             $rawContent ? rawContent() : null,
