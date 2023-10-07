@@ -52,14 +52,6 @@ window.handleNavMenuClick = function($el)
     })
 }
 
-window.handleQueryClick = function(id)
-{
-    var $form = id ? $('#queryForm' + id) : $('#queryForm');
-    var check = window.validateForm($form);
-    if(!check) return;
-    window.ajaxGetRecords(id, 'filter');
-}
-
 window.handleFilterCheck = function()
 {
     window.updateFilterCheck();
@@ -564,40 +556,46 @@ window.updateMetricBoxs = function(id, isChecked)
     }
     else
     {
-        $.get($.createLink('metric', 'ajaxGetMetricBox', 'metricID=' + id), function(resp)
-        {
-            $('.table-and-charts').append(resp);
-        });
-
-        //window.ajaxGetRecords(id, 'add');
+        window.appendMetricBox(id);
     }
 }
 
 /**
- * 多选添加一个度量项到展示区，或者使用筛选器更新一个度量项的展示内容。
- * Add a metricBox or use filter to change metricBox.
+ * 多选添加一个度量项到展示区。
+ * Add a metricBox.
  *
- * @param  string mode add|filter
  * @access public
  * @return void
  */
-window.ajaxGetRecords = function(id, mode = 'add')
+window.appendMetricBox = function(id, mode = 'add')
 {
-    var $form = id ? $('#queryForm' + id) : $('#queryForm');
+    var $form = $('#queryForm' + id);
     var formData = window.getFormData($form);
 
-    id = id ?? current.id;
-
-    $.post($.createLink('metric', 'ajaxGetTableData', 'metricID=' + id),formData, function(resp)
+    $.get($.createLink('metric', 'ajaxGetMultipleMetricBox', 'metricID=' + id), function(resp)
     {
-        var data = JSON.parse(resp);
-        if(data)
-        {
-            var chartType = viewType == 'multiple' ? $('#metricBox' + id).find('[name=chartType]').val() : $('[name=chartType]').val();
-            window.renderDTable(id, data.header, data.data);
+        $('.table-and-charts').append(resp);
+    });
+}
 
-            var initPicker = (mode == 'add');
-            window.renderChart(id, data.header, data.data, chartType, initPicker);
+window.handleQueryClick = function(id, viewType = 'single')
+{
+    var $form = $('#queryForm' + id);
+    var check = window.validateForm($form);
+    if(!check) return;
+
+    var formData = window.getFormData($form);
+
+    $.post($.createLink('metric', 'ajaxGetTableAndCharts', 'metricID=' + id + '&viewType=' + viewType), formData, function(resp)
+    {
+        console.log(resp);
+        if(viewType == 'multiple')
+        {
+            $('#metricBox' + id).find('.table-and-chart').replaceWith(resp);
+        }
+        else
+        {
+            $('.table-and-chart-single').replaceWith(resp);
         }
     });
 }

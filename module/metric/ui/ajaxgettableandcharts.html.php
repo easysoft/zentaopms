@@ -1,0 +1,49 @@
+<?php
+declare(strict_types=1);
+/**
+ * The browse view file of company module of ZenTaoPMS.
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @author      Mengyi Liu <liumengyi@easycorp.ltd>
+ * @package     company
+ * @link        https://www.zentao.net
+ */
+namespace zin;
+
+div
+(
+    setClass("table-and-chart table-and-chart-{$viewType}"),
+    div
+    (
+        setClass('table-side'),
+        div
+        (
+            $resultData ? dtable
+            (
+                $viewType == 'multiple' ? set::height(310) : null,
+                set::bordered(true),
+                set::cols($resultHeader),
+                set::data(array_values($resultData)),
+                set::onRenderCell(jsRaw('window.renderDTableCell')),
+            ) : null,
+        )
+    ),
+    div
+    (
+        setClass('chart-side'),
+        div
+        (
+            setClass('chart-type'),
+        ),
+        div
+        (
+            setClass("chart-{$viewType}"),
+            $echartOptions ? echarts
+            (
+                set::xAxis($echartOptions['xAxis']),
+                set::yAxis($echartOptions['yAxis']),
+                set::series($echartOptions['series']),
+            )->size('100%', '100%') : null,
+        ),
+    ),
+);

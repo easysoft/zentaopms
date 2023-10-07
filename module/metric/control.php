@@ -238,15 +238,30 @@ class metric extends control
         return $this->send($optionList);
     }
 
-    public function ajaxGetMetricBox($metricID)
+    public function ajaxGetMultipleMetricBox($metricID)
+    {
+        $metric = $this->metric->getByID($metricID);
+        $result = $this->metric->getResultByCode($metric->code, array(), 'cron');
+        $resultHeader = $this->metricZen->getViewTableHeader($result);
+        $resultData   = $this->metricZen->getViewTableData($metric, $result);
+
+        $this->view->metric        = $metric;
+        $this->view->resultHeader  = $resultHeader;
+        $this->view->resultData    = $resultData;
+        $this->view->echartOptions = $this->metric->getEchartsOptions($resultHeader, $resultData);
+
+        $this->display();
+    }
+
+    public function ajaxGetTableAndCharts($metricID, $viewType = 'single')
     {
         $metric = $this->metric->getByID($metricID);
         $result = $this->metric->getResultByCode($metric->code, $_POST, 'cron');
         $resultHeader = $this->metricZen->getViewTableHeader($result);
         $resultData   = $this->metricZen->getViewTableData($metric, $result);
 
+        $this->view->viewType      = $viewType;
         $this->view->metric        = $metric;
-        $this->view->result        = $result;
         $this->view->resultHeader  = $resultHeader;
         $this->view->resultData    = $resultData;
         $this->view->echartOptions = $this->metric->getEchartsOptions($resultHeader, $resultData);
