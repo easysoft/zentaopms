@@ -1879,9 +1879,11 @@ class screenModel extends model
 
         return $this->dao->select('id,name')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
-            ->andWhere('date(openedDate)')->le($date)
-            ->andWhere('date(closedDate)')->gt($date)
             ->andWhere('deleted')->eq('0')
+            ->andWhere('date(openedDate)')->le($date)
+            ->andWhere('date(closedDate)', true)->gt($date)
+            ->orWhere('date(closedDate)')->eq('0000-00-00')
+            ->markRight(true)
             ->fetchPairs();
     }
 }
