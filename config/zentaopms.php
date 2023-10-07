@@ -269,6 +269,7 @@ $config->openMethods[] = 'gitlab.managegroupmembers';
 $config->openMethods[] = 'gitlab.browseuser';
 $config->openMethods[] = 'gitlab.createuser';
 $config->openMethods[] = 'gitlab.edituser';
+$config->openMethods[] = 'gitlab.deleteuser';
 $config->openMethods[] = 'gitlab.createbranch';
 $config->openMethods[] = 'gitlab.browsebranch';
 $config->openMethods[] = 'gitlab.webhook';
