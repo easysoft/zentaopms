@@ -559,17 +559,12 @@ window.updateMetricBoxs = function(id, isChecked)
     }
     else
     {
-        var label = window.checkedList.find(function(checked){return checked.id == id});
-        var tpl   = $("#metricBox-tpl").html();
-        var data  = {
-            id: label.id,
-            name: label.name,
-        };
-        var html = $(zui.formatString(tpl, data));
+        $.get($.createLink('metric', 'ajaxGetMetricBox', 'metricID=' + id), function(resp)
+        {
+            $('.table-and-charts').append(resp);
+        });
 
-        $('.table-and-charts').append(html);
-
-        window.ajaxGetRecords(id, 'add');
+        //window.ajaxGetRecords(id, 'add');
     }
 }
 
