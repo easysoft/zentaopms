@@ -85,6 +85,7 @@ class storeModel extends model
      */
     public function getAppInfo($id, $analysis = false, $name = '', $version ='',  $channel = '')
     {
+        if(empty($id)) return null;
         $apiParams = array();
         $apiParams['analysis'] = $analysis ? 'true' : 'false' ;
 
