@@ -31,12 +31,12 @@ div
     div
     (
         setID('menuNav'),
-        ul(set::className('nav'), setID('menuMainNav')),
+        ul(setClass('nav'), setID('menuMainNav')),
         ul
         (
-            set::className('nav'),
+            setClass('nav'),
             setID('menuMoreNav'),
-            li(set::className('divider')),
+            li(setClass('divider')),
             li
             (
                 a
@@ -44,10 +44,10 @@ div
                     set::title($lang->more),
                     set::href('#menuMoreList'),
                     icon('more-circle'),
-                    span(set::className('text'), $lang->more),
+                    span(setClass('text'), $lang->more),
                     toggle::dropdown(array('placement' => 'right-end', 'offset' => 12))
                 ),
-                ul(set::className('dropdown-menu nav'), setID('menuMoreList'))
+                ul(setClass('dropdown-menu nav'), setID('menuMoreList'))
             )
         ),
     ),
@@ -56,13 +56,13 @@ div
         setID('menuFooter'),
         ul
         (
-            set::className('nav'),
+            setClass('nav'),
             li
             (
                 setID('menuToggleMenu'),
                 a
                 (
-                    set::className('menu-toggle justify-center cursor-pointer'),
+                    setClass('menu-toggle justify-center cursor-pointer'),
                     toggle::tooltip(array('placement' => 'right', 'collapse-text' => $lang->collapseMenu, 'unfold-text' => $lang->unfoldMenu)),
                     icon('menu-collapse icon-sm')
                 )
@@ -71,18 +71,17 @@ div
     )
 );
 
-div
-(
-    setID('apps'),
-);
+/* The div used to place the page iframes.  */
+div(setID('apps'));
 
+/* The toolbar docked on the bottom. */
 div
 (
     setID('appsBar'),
     ul
     (
         setID('appTabs'),
-        set::className('nav')
+        setClass('nav')
     ),
     toolbar
     (
@@ -90,7 +89,7 @@ div
         hasPriv('search', 'index') ? globalSearch() : null,
         item
         (
-            set::className('ghost btn-zentao'),
+            setClass('ghost btn-zentao'),
             set::icon('zentao text-2xl'),
             set::url('$lang->website'),
             set::target('_blank'),
