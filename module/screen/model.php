@@ -1856,7 +1856,7 @@ class screenModel extends model
             $row->month         = $month;
             $row->createdTasks  = count(array_unique($createdTaskList));
             $row->finishedTasks = count(array_unique($finishedTaskList));
-            $row->contributors  = count($createdTaskActors[$projectID]);
+            $row->contributors  = isset($createdTaskActors[$projectID]) ? count($createdTaskActors[$projectID]) : 0;
 
             $dataset[] = $row;
         }
