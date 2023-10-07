@@ -1769,9 +1769,17 @@ function roadMap(): roadMap
 }
 
 /**
- * road map widget.
+ * Progress bar widget.
  */
 function progressBar(): progressBar
 {
     return createWg('progressBar', func_get_args());
+}
+
+/**
+ * Progress circle widget.
+ */
+function progressCircle(): progressCircle
+{
+    return createWg('progressCircle', func_get_args());
 }
