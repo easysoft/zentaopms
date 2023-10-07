@@ -26,7 +26,7 @@ class progressBar extends wg
      */
     protected static array $defineProps = array
     (
-        'percent?: number|array=50',         // 百分比。
+        'percent?: number|array=50',   // 百分比。
         'color?: string',              // 颜色。
         'background?: string',         // 背景色。
         'height: number=20',           // 高度。
