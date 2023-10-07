@@ -275,7 +275,7 @@ class projectrelease extends control
             $html = '';
             if($type == 'story' || $type == 'all')   $html .= $this->projectreleaseZen->generateStoryHtml();
             if($type == 'bug'   || $type == 'all')   $html .= $this->projectreleaseZen->generateBugHtml();
-            if($type == 'leftbug' || $type == 'all') $html .= $this->projectreleaseZen->generateLeftBugHtml();
+            if($type == 'leftbug' || $type == 'all') $html .= $this->projectreleaseZen->generateBugHtml('left');
             $html = "<html><head><meta charset='utf-8'><title>{$this->post->fileName}</title><style>table, th, td{font-size:12px; border:1px solid gray; border-collapse:collapse;}</style></head><body>$html</body></html>";
 
             return print($this->fetch('file', 'sendDownHeader', array('fileName' => $this->post->fileName, 'html', $html)));

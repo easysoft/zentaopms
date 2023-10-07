@@ -67,16 +67,18 @@ class projectreleaseZen extends projectrelease
     }
 
     /**
-     * 生成关联的 bug 的 html。
-     * Generate linked bug html.
+     * 生成 bug 的 html。
+     * Generate bug html.
      *
+     * @param  string    $type linked|left
      * @access protected
      * @return string
      */
-    protected function generateBugHtml(): string
+    protected function generateBugHtml($type = 'linked'): string
     {
         $this->loadModel('bug');
-        $html = "<h3>{$this->lang->release->bugs}</h3>";
+
+        $html = '<h3>' . ($type == 'linked' ? $this->lang->release->bugs : $this->lang->release->generatedBugs) . '</h3>';
 
         $fields = array('id' => $this->lang->bug->id, 'title' => $this->lang->bug->title);
 
@@ -84,39 +86,9 @@ class projectreleaseZen extends projectrelease
         foreach($fields as $fieldLabel) $html .= "<th><nobr>$fieldLabel</nobr></th>\n";
         $html .= '</tr>';
 
-        $bugs = $this->dao->select('id, title')->from(TABLE_BUG)->where($this->session->linkedBugQueryCondition)->beginIF($this->session->bugOrderBy != false)->orderBy($this->session->bugOrderBy)->fi()->fetchAll('id');
-
-        foreach($bugs as $bug)
-        {
-            $bug->title = "<a href='" . common::getSysURL() . $this->createLink('bug', 'view', "bugID=$bug->id") . "' target='_blank'>$bug->title</a>";
-
-            $html .= "<tr valign='top'>\n";
-            foreach($fields as $fieldName => $fieldLabel) $html .= "<td><nobr>" . zget($bug, $fieldName, '') . "</nobr></td>\n";
-            $html .= "</tr>\n";
-        }
-        $html .= '</table>';
-
-        return $html;
-    }
-
-    /**
-     * 生成遗留的 bug 的 html。
-     * Generat left bug html.
-     *
-     * @access protected
-     * @return string
-     */
-    protected function generateLeftBugHtml(): string
-    {
-        $html = "<h3>{$this->lang->release->generatedBugs}</h3>";
-
-        $fields = array('id' => $this->lang->bug->id, 'title' => $this->lang->bug->title);
-
-        $html .= '<table><tr>';
-        foreach($fields as $fieldLabel) $html .= "<th><nobr>$fieldLabel</nobr></th>\n";
-        $html .= '</tr>';
-
-        $bugs = $this->dao->select('id, title')->from(TABLE_BUG)->where($this->session->leftBugsQueryCondition)->beginIF($this->session->bugOrderBy != false)->orderBy($this->session->bugOrderBy)->fi()->fetchAll('id');
+        $bugs = array();
+        $queryConditionName = $type == 'linked' ? 'linkedBugQueryCondition' : 'leftBugsQueryCondition';
+        if($this->session->$queryConditionName !== false) $bugs = $this->dao->select('id, title')->from(TABLE_BUG)->where($this->session->$queryConditionName)->beginIF($this->session->bugOrderBy !== false)->orderBy($this->session->bugOrderBy)->fi()->fetchAll('id');
         foreach($bugs as $bug)
         {
             $bug->title = "<a href='" . common::getSysURL() . $this->createLink('bug', 'view', "bugID=$bug->id") . "' target='_blank'>$bug->title</a>";
