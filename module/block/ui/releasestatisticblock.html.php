@@ -28,8 +28,8 @@ foreach($releases as $productName => $releaseCount)
         set::className('flex py-1.5 justify-between'),
         cell
         (
-            set::width('30%'),
-            set::className('ellipsis'),
+            set::width('calc(30% - 0.5rem)'),
+            set::className('clip'),
             label
             (
                 set::className($labelClass . '-pale px-1.5 circle'),
