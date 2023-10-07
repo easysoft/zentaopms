@@ -270,6 +270,97 @@ div
     ),
 );
 
+$metricBoxs = div
+(
+    set::id('metricBox' . $current->id),
+    set('metric-id', $current->id),
+    setClass('metricBox'),
+    div
+    (
+        setClass('metric-name flex flex-between items-center'),
+        div
+        (
+            span
+            (
+                setClass('metric-name-weight'),
+                isset($current) ? $current->name : null,
+            ),
+        ),
+        div
+        (
+            setClass('flex-start'),
+            toolbar
+            (
+                haspriv('metric', 'details') ? item(set(array
+                (
+                    'text'  => $this->lang->metric->details,
+                    'class' => 'ghost details',
+                    'url'         => helper::createLink('metric', 'details', "metricID=$current->id"),
+                    'data-toggle' => 'modal'
+                ))) : null,
+                item(set(array
+                (
+                    'text'    => $this->lang->metric->remove,
+                    'class'   => 'ghost metric-remove hidden',
+                    'onclick' => "window.handleRemoveLabel($current->id)"
+                ))),
+                haspriv('metric', 'filters') ? item(set(array
+                (
+                    'icon'  => 'menu-backend',
+                    'text'  => $this->lang->metric->filters,
+                    'class' => 'ghost hidden',
+                    'url'   => '#',
+                ))) : null,
+                haspriv('metric', 'zAnalysis') ? item(set(array
+                (
+                    'icon'  => 'chart-line',
+                    'text'  => $this->lang->metric->zAnalysis,
+                    'class' => 'ghost chart-line-margin hidden',
+                    'url'   => '#',
+                ))) : null,
+            ),
+        ),
+    ),
+    div
+    (
+        setClass('table-and-chart table-and-chart-multiple'),
+        div
+        (
+            setClass('table-side'),
+            div
+            (
+                $resultData ? dtable
+                (
+                    set::height(310),
+                    set::bordered(true),
+                    set::cols($resultHeader),
+                    set::data(array_values($resultData)),
+                    set::onRenderCell(jsRaw('window.renderDTableCell')),
+                ) : null,
+
+            )
+        ),
+        div
+        (
+            setClass('chart-side'),
+            div
+            (
+                setClass('chart-type'),
+            ),
+            div
+            (
+                setClass('chart chart-multiple'),
+                $echartOptions ? echarts
+                (
+                    set::xAxis($echartOptions['xAxis']),
+                    set::yAxis($echartOptions['yAxis']),
+                    set::series($echartOptions['series']),
+                )->size('100%', '100%') : null,
+            )
+        ),
+    ),
+);
+
 div
 (
     setClass('main'),
@@ -313,82 +404,7 @@ div
         div
         (
             setClass('table-and-charts'),
-            div
-            (
-                set::id('metricBox' . $current->id),
-                set('metric-id', $current->id),
-                setClass('metricBox'),
-                div
-                (
-                    setClass('metric-name flex flex-between items-center'),
-                    div
-                    (
-                        span
-                        (
-                            setClass('metric-name-weight'),
-                            isset($current) ? $current->name : null,
-                        ),
-                    ),
-                    div
-                    (
-                        setClass('flex-start'),
-                        toolbar
-                        (
-                            haspriv('metric', 'details') ? item(set(array
-                            (
-                                'text'  => $this->lang->metric->details,
-                                'class' => 'ghost details',
-                                'url'         => helper::createLink('metric', 'details', "metricID=$current->id"),
-                                'data-toggle' => 'modal'
-                            ))) : null,
-                            item(set(array
-                            (
-                                'text'    => $this->lang->metric->remove,
-                                'class'   => 'ghost metric-remove hidden',
-                                'onclick' => "window.handleRemoveLabel($current->id)"
-                            ))),
-                            haspriv('metric', 'filters') ? item(set(array
-                            (
-                                'icon'  => 'menu-backend',
-                                'text'  => $this->lang->metric->filters,
-                                'class' => 'ghost hidden',
-                                'url'   => '#',
-                            ))) : null,
-                            haspriv('metric', 'zAnalysis') ? item(set(array
-                            (
-                                'icon'  => 'chart-line',
-                                'text'  => $this->lang->metric->zAnalysis,
-                                'class' => 'ghost chart-line-margin hidden',
-                                'url'   => '#',
-                            ))) : null,
-                        ),
-                    ),
-                ),
-                div
-                (
-                    setClass('table-and-chart table-and-chart-multiple'),
-                    div
-                    (
-                        setClass('table-side'),
-                        div
-                        (
-                            setClass('dtable'),
-                        )
-                    ),
-                    div
-                    (
-                        setClass('chart-side'),
-                        div
-                        (
-                            setClass('chart-type'),
-                        ),
-                        div
-                        (
-                            setClass('chart chart-multiple'),
-                        )
-                    ),
-                ),
-            ),
+            $metricBoxs,
         ),
     ),
 );

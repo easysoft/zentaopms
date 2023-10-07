@@ -76,6 +76,7 @@ class metric extends control
         $this->view->filtersBase64 = $filtersBase64;
         $this->view->resultHeader  = $resultHeader;
         $this->view->resultData    = $resultData;
+        $this->view->echartOptions = $this->metric->getEchartsOptions($resultHeader, $resultData);
         $this->display();
     }
 

@@ -64,6 +64,7 @@ $fnGenerateFilterPanel = function($code, $filterItem) use($lang)
 $filterItems = $this->metric->buildFilterCheckList($filters);
 featureBar
 (
+    set::load(''),
     set::current($scope),
     set::linkParams("scope={key}"),
     li
@@ -327,7 +328,13 @@ div
                 setClass('table-side'),
                 div
                 (
-                    setClass('dtable'),
+                    $resultData ? dtable
+                    (
+                        set::bordered(true),
+                        set::cols($resultHeader),
+                        set::data(array_values($resultData)),
+                        set::onRenderCell(jsRaw('window.renderDTableCell')),
+                    ) : null,
                 )
             ),
             div
@@ -339,7 +346,13 @@ div
                 ),
                 div
                 (
-                    setClass('chart chart-single'),
+                    setClass('chart-single'),
+                    $echartOptions ? echarts
+                    (
+                        set::xAxis($echartOptions['xAxis']),
+                        set::yAxis($echartOptions['yAxis']),
+                        set::series($echartOptions['series']),
+                    )->size('100%', '100%') : null,
                 ),
             ),
         ),

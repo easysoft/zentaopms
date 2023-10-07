@@ -8,10 +8,12 @@ window.afterPageUpdate = function($target, info, options)
         chartList.push({value: key, text: chartTypeList[key]});
     }
     window.filterChecked = {};
-    window.renderDTable(current.id, resultHeader, resultData);
-    window.renderChart(current.id, resultHeader, resultData);
-    if(viewType == 'multiple') window.renderCheckedLabel();
-    $(window).on('resize', window.renderCheckedLabel);
+
+    if(viewType == 'multiple') 
+    {
+        window.renderCheckedLabel();
+        $(window).on('resize', window.renderCheckedLabel);
+    }
     window.initFilterPanel();
 }
 

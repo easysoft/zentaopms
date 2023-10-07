@@ -1196,4 +1196,90 @@ class metricModel extends model
         if(empty($type)) $type[] = 'system';
         return implode('-', $type);
     }
+
+    /**
+     * 获取一个echarts的配置项。
+     * Get options of echarts by head and data.
+     *
+     * @param  array    $head 表头
+     * @param  array    $datas 数据
+     * @param  string   $chartType 图表类型 barX|barY|line|pie
+     * @access public
+     * @return array|false
+     */
+    public function getEchartsOptions(array $head, array $datas, string $chartType = 'line'): array|false
+    {
+        if(!$head || !$datas) return false;
+
+        $headLength = count($head);
+        if($headLength == 2)
+        {
+            $x = $head[1]['name'];
+            $y = $head[0]['name'];
+        }
+        elseif($headLength == 3)
+        {
+            $x = $head[0]['name'];
+            $y = $head[1]['name'];
+        }
+        elseif($headLength == 4)
+        {
+            $x = $head[1]['name'];
+            $y = $head[2]['name'];
+        }
+
+        if(!$x || !$y) return false;
+
+        $type = in_array($chartType, array('barX', 'barY')) ? 'bar' : $chartType;
+
+        $xAxis = array('type' => 'category', 'data' => array_unique(array_column($datas, $x)));
+        sort($xAxis['data']);
+        $yAxis = array('type' => 'value');
+
+        $series = array();
+        if($headLength <= 3)
+        {
+            $series = array('type' => $type, 'data' => array_column($datas, $y));
+        }
+        elseif($headLength == 4)
+        {
+            $groupedData = array();
+            foreach($datas as $data)
+            {
+                $scope = $data->scope;
+                $date  = $data->date;
+                $value = $data->value;
+
+                if(!isset($groupedData[$scope])) $groupedData[$scope] = array();
+                $groupedData[$scope][] = array('value' => $value, 'date' => $date);
+            }
+
+            foreach($groupedData as $scope => $groups)
+            {
+                $seriesData = array();
+                foreach($xAxis['data'] as $date)
+                {
+                    $value = 0;
+                    foreach($groups as $group)
+                    {
+                        if($group['date'] == $date)
+                        {
+                            $value = $group['value'];
+                            break;
+                        }
+                    }
+                    $seriesData[] = $value;
+                }
+
+                $series[] = array('type' => $type, 'name' => $scope, 'data' => $seriesData);
+            }
+        }
+
+        $options = array();
+        $options['xAxis']  = $xAxis;
+        $options['yAxis']  = $yAxis;
+        $options['series'] = $series;
+
+        return $options;
+    }
 }
