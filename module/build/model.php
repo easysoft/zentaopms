@@ -745,18 +745,19 @@ class buildModel extends model
     }
 
     /**
+     * 更新子版本关联的Bug。
      * Bugs and stories associated with child builds.
      *
      * @param  object  $build
      * @access public
      * @return object
      */
-    public function joinChildBuilds($build)
+    public function joinChildBuilds(object $build): object
     {
         $build->allBugs    = $build->bugs;
         $build->allStories = $build->stories;
 
-        $childBuilds = $this->dao->select('id,name,bugs,stories')->from(TABLE_BUILD)->where('id')->in($build->builds)->fetchAll();
+        $childBuilds = $this->getByList($build->builds);
         foreach($childBuilds as $childBuild)
         {
             if($childBuild->bugs)    $build->allBugs    .= ",{$childBuild->bugs}";
