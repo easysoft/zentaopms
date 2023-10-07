@@ -483,12 +483,12 @@ class buildTest
     /**
      * Is clickable
      *
-     * @param  string $model
-     * @param  bool   $deleted
+     * @param  string     $model
+     * @param  bool       $deleted
      * @access public
-     * @return void
+     * @return array|bool
      */
-    public function isClickable($model = 'bug', $deleted = false)
+    public function isClickable(string $model = 'bug', bool $deleted = false): array|bool
     {
         $build = new stdclass();
         $build->executionDeleted = $deleted;
@@ -496,5 +496,21 @@ class buildTest
         if(dao::isError()) return dao::getError();
 
         return $objectModels;
+    }
+
+    /**
+     * 根据状态和权限生成列表中操作列按钮。
+     * Build table action menu for build browse page.
+     *
+     * @param  int    $buildID
+     * @param  int    $executionID
+     * @access public
+     * @return string
+     */
+    public function buildActionListObject(int $buildID, int $executionID = 0): string
+    {
+        $build   = $this->objectModel->getByID($buildID);
+        $actions = $this->objectModel->buildActionList($build, $executionID);
+        return implode('|', $actions);
     }
 }
