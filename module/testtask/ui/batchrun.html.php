@@ -81,12 +81,6 @@ foreach($cases as $caseID => $case)
     (
         h::td
         (
-            !$productID ? input
-            (
-                set::type('hidden'),
-                set::name("caseIDList[{$caseID}]"),
-                set::value($caseID)
-            ) : null,
             $caseID,
             input
             (
