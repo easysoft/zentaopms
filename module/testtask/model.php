@@ -933,13 +933,13 @@ class testtaskModel extends model
      * Get cases associated with a testtask.
      *
      * @param  int    $taskID
-     * @param  int    $moduleID
+     * @param  array  $modules
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getRuns(int $taskID, int $moduleID, string $orderBy, object $pager = null): array
+    public function getRuns(int $taskID, array $modules, string $orderBy, object $pager = null): array
     {
         $orderBy = $this->addPrefixToOrderBy($orderBy);
 
@@ -948,7 +948,7 @@ class testtaskModel extends model
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
             ->where('t1.task')->eq($taskID)
             ->andWhere('t2.deleted')->eq('0')
-            ->beginIF($moduleID)->andWhere('t2.module')->in($moduleID)->fi()
+            ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
