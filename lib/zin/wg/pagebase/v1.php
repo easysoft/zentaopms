@@ -97,7 +97,7 @@ class pageBase extends wg
         (
             before(html('<!DOCTYPE html>')),
             set($attrs),
-            set::className("theme-$themeName"),
+            set::className("theme-$themeName", $this->prop('class')),
             set::lang($currentLang),
             h::head
             (
