@@ -15,7 +15,7 @@ class buildTest
      * @access public
      * @return object
      */
-    public function getByIDTest($buildID, $setImgSize = false)
+    public function getByIDTest(int $buildID, bool $setImgSize = false)
     {
         $objects = $this->objectModel->getByID($buildID);
 
@@ -236,28 +236,15 @@ class buildTest
      * @access public
      * @return array
      */
-    public function updateLinkedBugTest($buildID, $param = array())
+    public function updateLinkedBugTest(int $buildID, array $param = array()): array
     {
-        global $tester;
+        $build     = $this->objectModel->getByID($buildID);
+        $bugIdList = zget($param, 'bugs', array());
 
-        $build = $this->objectModel->getByID($buildID);
-        $bugs  = array();
-
-        $createFields = array('bugs' => $bugs);
-
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $build->bugs .= ',' . join(',', $_POST['bugs']);
-
-        $this->objectModel->updateLinkedBug($build);
-
-        $objects = $tester->dao->select('*')->from(TABLE_BUG)->where('id')->in(join(',', $_POST['bugs']))->fetchAll('id');
-
-        unset($_POST);
+        $this->objectModel->updateLinkedBug($build, $bugIdList, zget($param, 'resolvedBy', array()));
+        $objects = $this->objectModel->dao->select('*')->from(TABLE_BUG)->where('id')->in($bugIdList)->fetchAll('id');
 
         if(dao::isError()) return dao::getError();
-
         return $objects;
     }
 

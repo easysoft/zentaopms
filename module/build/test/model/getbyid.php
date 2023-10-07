@@ -14,11 +14,11 @@ include dirname(__FILE__, 2) . '/build.class.php';
 zdTable('build')->gen(20);
 su('admin');
 
-$buildID = array('7', '17');
+$buildID = array(7, 17);
 
 $build = new buildTest();
 
 r($build->getByIDTest($buildID[0], true))   && p('name')    && e('项目版本版本7');  //项目版本查询
 r($build->getByIDTest($buildID[1], false))  && p('name')    && e('执行版本版本17'); //执行版本查询
-r($build->getByIDTest('', true))            && p()          && e('0');              //无id查询
+r($build->getByIDTest(0, true))            && p()          && e('0');              //无id查询
 r($build->getByIDTest($buildID[0], 'test')) && p('project') && e('17');             //图片字段传字符串测试

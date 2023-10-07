@@ -535,23 +535,19 @@ class buildModel extends model
      */
     public function updateLinkedBug(object $build, array $bugIdList = array(), array $resolvedByList = array()): bool
     {
-        $bugs = empty($build->bugs) ? '' : $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($build->bugs)->fetchAll();
+        $bugs = empty($bugIdList) ? array() : $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($bugIdList)->fetchAll();
         if(!$bugs) return false;
 
-        $resolvedPairs = array();
-        foreach($bugIdList as $bugID)
-        {
-            if(isset($resolvedByList[$bugID])) $resolvedPairs[$bugID] = $resolvedByList[$bugID];
-        }
-
         $this->loadModel('action');
-
         $now = helper::now();
         foreach($bugs as $bug)
         {
-            if($bug->status == 'resolved' or $bug->status == 'closed') continue;
+            if($bug->status == 'resolved' || $bug->status == 'closed') continue;
 
-            $bug->resolvedBy     = isset($resolvedPairs[$bug->id]) ? $resolvedPairs[$bug->id] : '';
+            if(helper::isZeroDate($bug->activatedDate)) unset($bug->activatedDate);
+            if(helper::isZeroDate($bug->closedDate))    unset($bug->closedDate);
+
+            $bug->resolvedBy     = zget($resolvedByList, $bug->id, '');
             $bug->resolvedDate   = $now;
             $bug->status         = 'resolved';
             $bug->confirmed      = 1;
@@ -730,7 +726,7 @@ class buildModel extends model
         $build->allBugs    = $build->bugs;
         $build->allStories = $build->stories;
 
-        $childBuilds = $this->getByList($build->builds);
+        $childBuilds = $this->getByList(explode(',', $build->builds));
         foreach($childBuilds as $childBuild)
         {
             if($childBuild->bugs)    $build->allBugs    .= ",{$childBuild->bugs}";
