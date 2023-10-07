@@ -487,4 +487,19 @@ class dataset
             ->andWhere('t2.type')->eq('project')
             ->query();
     }
+
+    /**
+     * 获取代码库数量。
+     * Get repos count.
+     *
+     * @access public
+     * @return PDOStatement
+     */
+    public function getRepos()
+    {
+        return $this->dao->select('count(*) as count')
+            ->from(TABLE_REPO)
+            ->where('deleted')->eq('0')
+            ->query();
+    }
 }
