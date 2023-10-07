@@ -2447,6 +2447,8 @@ class groupModel extends model
         {
             foreach($relatedPrivs[$type] as $relatedPriv)
             {
+                if($type == 'recommend' && isset($relatedPrivs['depend'][$relatedPriv])) continue; // Don't show depend privs to recommend.
+
                 $subset = $privSubsets[$relatedPriv];
                 if(!isset($subsetPrivs[$type][$subset])) $subsetPrivs[$type][$subset] = array('id' => $subset, 'title' => $this->lang->$subset->common, 'children' => array());
 
