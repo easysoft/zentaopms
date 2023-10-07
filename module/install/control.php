@@ -422,15 +422,14 @@ class install extends control
                     $components = json_decode($solution->components);
                     foreach($components as $categorty => $componentApp)
                     {
-                        if($componentApp->status == 'installing')
+                        $instance = $this->loadModel('instance')->instanceOfSolution($solution, $componentApp->chart);
+                        if($instance && $componentApp->status == 'installing')
                         {
-                            $instance = $this->loadModel('instance')->instanceOfSolution($solution, $componentApp->chart);
-                            if($instance)
-                            {
-                                $chartLogs = $this->loadModel('cne')->getAppLogs($instance);
-                                $logs[$componentApp->chart] = !empty($chartLogs->data) ? $chartLogs->data : array();
-                            }
+                            $chartLogs = $this->loadModel('cne')->getAppLogs($instance);
+                            $logs[$componentApp->chart] = !empty($chartLogs->data) ? $chartLogs->data : array();
                         }
+
+                        if($instance && $componentApp->status === 'installed') $this->instance->saveAuthInfo($instance);
                     }
                 }
             }

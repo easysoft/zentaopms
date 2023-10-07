@@ -54,6 +54,11 @@ if($viewType == 'doc' or $viewType == 'api')
     $editTitle   = $lang->doc->editType;
     $deleteTitle = $lang->doc->deleteType;
 }
+if($viewType == 'host')
+{
+    $deleteTitle = $lang->tree->deleteHost;
+    $editTitle   = $lang->tree->editHost;
+}
 ?>
 <!--div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">

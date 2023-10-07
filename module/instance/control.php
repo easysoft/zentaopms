@@ -132,7 +132,7 @@ class instance extends control
         $currentResource = $this->cne->getAppConfig($instance);
         $customItems     = $this->cne->getCustomItems($instance);
 
-        if($instance->status == 'running') $this->instanceZen->saveAuthInfo($instance);
+        if($instance->status == 'running') $this->instance->saveAuthInfo($instance);
         if(in_array($instance->chart, $this->config->instance->devopsApps))
         {
             $url      = strstr(getWebRoot(true), ':', true) . '://' . $instance->domain;

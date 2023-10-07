@@ -2103,4 +2103,62 @@ class InstanceModel extends model
 
         return ($existInstance || $existExternal) ? false : true;
     }
+
+    /**
+     * 自动保存devops应用授权信息。
+     * Auto save auth info of devops.
+     *
+     * @param  object     $instance
+     * @access protected
+     * @return void
+     */
+    public function saveAuthInfo(object $instance): void
+    {
+        if(!in_array($instance->chart, $this->config->instance->devopsApps)) return;
+
+        $url      = strstr(getWebRoot(true), ':', true) . '://' . $instance->domain;
+        $pipeline = $this->loadModel('pipeline')->getByUrl($url);
+        if(!empty($pipeline)) return;
+
+        $tempMappings = $this->loadModel('cne')->getSettingsMapping($instance);
+        if(empty($tempMappings)) return;
+
+        $pipeline = new stdclass();
+        $instance->type        = $instance->chart;
+        $pipeline->type        = $instance->type;
+        $pipeline->private     = md5(strval(rand(10,113450)));
+        $pipeline->createdBy   = 'system';
+        $pipeline->createdDate = helper::now();
+        $pipeline->url         = $url;
+        $pipeline->name        = $this->generatePipelineName($instance);
+        $pipeline->token       = zget($tempMappings, 'api_token', '');
+        $pipeline->account     = zget($tempMappings, 'z_username', '');
+        $pipeline->password    = zget($tempMappings, 'z_password', '');
+        if($instance->chart == 'sonarqube') $pipeline->token = base64_encode($pipeline->token . ':');
+        if(empty($pipeline->account)) $pipeline->account = zget($tempMappings, 'admin_username', '');
+
+        $this->pipeline->create($pipeline);
+        if(dao::isError()) dao::getError();
+    }
+
+    /**
+     * 自动生成pipline表name字段。
+     * Auto generate name of pipline table.
+     *
+     * @param  object     $instance
+     * @access protected
+     * @return string
+     */
+    public function generatePipelineName(object $instance): string
+    {
+        $name = $instance->name;
+        $type = $instance->type;
+        if(empty($this->loadModel('pipeline')->getByNameAndType($name, $type))) return $name;
+        if(empty($this->loadModel('pipeline')->getByNameAndType($name . '-' . $instance->appVersion, $type))) return $name . '-' . $instance->appVersion;
+
+        for($times = 1; $times < 5; $times ++)
+        {
+            if(empty($this->loadModel('pipeline')->getByNameAndType($name . '-' . $times, $name))) return $name . '-' . $times;
+        }
+    }
 }

@@ -30,6 +30,7 @@ if(isset($pageCSS)) css::internal($pageCSS);
             $required    = 'root,name';
         }
         if($type == 'line') $lblEditTree = $lang->tree->manageLine;
+        if($type == 'host') $lblEditTree = $lang->tree->editHost;
         echo $lblEditTree;
         ?>
       </strong>
@@ -62,7 +63,12 @@ if(isset($pageCSS)) css::internal($pageCSS);
         <?php endif;?>
         <?php if($module->type != 'line'):?>
         <tr <?php if($hidden) echo "style='display:none'";?>>
-          <th class='thWidth'><?php echo ($type == 'doc' or $type == 'api') ? $lang->tree->parentCate : $lang->tree->parent;?></th>
+        <?php
+        $parentName = $lang->tree->parent;
+        if($type == 'doc' or $type == 'api') $parentName = $lang->tree->parentCate;
+        if($type == 'host') $parentName = $lang->tree->parentGroup;
+        ?>
+          <th class='thWidth'><?php echo $parentName;?></th>
           <td>
             <div class='input-group' id='moduleIdBox'>
               <?php echo html::select('parent', $optionMenu, $module->parent, "class='form-control chosen'");?>
@@ -76,6 +82,7 @@ if(isset($pageCSS)) css::internal($pageCSS);
             $lblTreeName = $lang->tree->name;
             if($type == 'doc' or $type == 'api') $lblTreeName = $lang->tree->dir;
             if($type == 'line') $lblTreeName = $lang->tree->line;
+            if($type == 'host') $lblTreeName = $lang->tree->groupName;
             echo $lblTreeName;
             ?>
           </th>
