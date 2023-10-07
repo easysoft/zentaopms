@@ -1753,7 +1753,7 @@ class screenModel extends model
             $row->month         = $month;
             $row->totalAccount  = count($teamMemberList);
             $row->activeAccount = count($activeUser);
-            $row->ratio         = number_format(($row->activeAccount/$row->totalAccount) * 100, 2) . '%';
+            $row->ratio         = $row->totalAccount == 0 ? '0.00%' : number_format(($row->activeAccount/$row->totalAccount) * 100, 2) . '%';
 
             $dataset[] = $row;
         }
