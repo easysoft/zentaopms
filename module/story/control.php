@@ -756,7 +756,8 @@ class story extends control
 
             $changes = $this->story->close($storyID, $postData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->story->closeParentRequirement($storyID);
+
+            $this->story->closeParentRequirement($storyID, $postData);
 
             if($changes)
             {

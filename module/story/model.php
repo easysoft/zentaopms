@@ -2529,10 +2529,11 @@ class storyModel extends model
      * Close the parent user requirement if all divided stories has been closed.
      *
      * @param  int    $storyID
+     * @param  object $postData
      * @access public
      * @return void
      */
-    public function closeParentRequirement(int $storyID)
+    public function closeParentRequirement(int $storyID, object $postData)
     {
         $parentID = $this->dao->select('BID')->from(TABLE_RELATION)->where('AID')->eq($storyID)->fetch();
         if(empty($parentID)) return;
@@ -2543,7 +2544,7 @@ class storyModel extends model
             ->andWhere('t2.status')->ne('closed')
             ->andWhere('t2.type')->eq('story')
             ->fetchPairs();
-        if(empty($stories)) $this->close($parentID->BID);
+        if(empty($stories)) $this->close($parentID->BID, $postData);
     }
 
     /**
