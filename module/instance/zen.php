@@ -21,7 +21,7 @@ class instanceZen extends instance
      */
     protected function saveAuthInfo(object $instance): void
     {
-        if(empty($this->config->instance->devopsApps[$instance->appID])) return;
+        if(!in_array($instance->chart, $this->config->instance->devopsApps)) return;
 
         $url      = strstr(getWebRoot(true), ':', true) . '://' . $instance->domain;
         $pipeline = $this->loadModel('pipeline')->getByUrl($url);
@@ -31,7 +31,7 @@ class instanceZen extends instance
         if(empty($tempMappings)) return;
 
         $pipeline = new stdclass();
-        $instance->type        = $this->config->instance->devopsApps[$instance->appID];
+        $instance->type        = $instance->chart;
         $pipeline->type        = $instance->type;
         $pipeline->private     = md5(strval(rand(10,113450)));
         $pipeline->createdBy   = 'system';

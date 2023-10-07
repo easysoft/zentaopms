@@ -88,6 +88,7 @@ function onChangeStoreAppType(event)
         }
     }
 
+    $('#createStoreAppForm').data('appid', storeApp);
     $('#createStoreAppForm').attr('action', $.createLink('instance', 'install', 'appID=' + storeApp));
 
     var storeAppName = apps[storeApp];
@@ -165,7 +166,8 @@ window.alertResource = function()
     {
         if(res)
         {
-            $('#createStoreAppForm').attr('action', $('#createStoreAppForm').attr('action') + '&checkResource=false');
+            var appID = $('#createStoreAppForm').data('appid');
+            $('#createStoreAppForm').attr('action', $.createLink('instance', 'install', 'appID=' + appID + '&checkResource=false'));
             $('#createStoreAppForm .form-row .toolbar button[type=submit]').trigger('click');
         }
     });

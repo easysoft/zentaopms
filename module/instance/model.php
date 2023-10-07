@@ -589,7 +589,7 @@ class InstanceModel extends model
             $settingsMap->global->ingress->host    = $settingsMap->ingress->host;
         }
 
-        if(!empty($this->config->instance->devopsApps[$instance->appID]))
+        if(in_array($instance->chart, $this->config->instance->devopsApps))
         {
             $settingsMap->ci = new stdclass();
             $settingsMap->ci->enabled = true;

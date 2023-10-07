@@ -133,7 +133,7 @@ class instance extends control
         $customItems     = $this->cne->getCustomItems($instance);
 
         if($instance->status == 'running') $this->instanceZen->saveAuthInfo($instance);
-        if(in_array(strtolower($instance->appName), $this->config->instance->devopsApps))
+        if(in_array($instance->chart, $this->config->instance->devopsApps))
         {
             $url      = strstr(getWebRoot(true), ':', true) . '://' . $instance->domain;
             $pipeline = $this->loadModel('pipeline')->getByUrl($url);
