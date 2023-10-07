@@ -250,6 +250,7 @@ class solutionModel extends model
                 }
                 $componentApp->status = 'installed';
                 $this->dao->update(TABLE_SOLUTION)->set('components')->eq(json_encode($components))->where('id')->eq($solution->id)->exec();
+                $this->instance->saveAuthInfo($instance);
             }
             else
             {

@@ -428,8 +428,6 @@ class install extends control
                             $chartLogs = $this->loadModel('cne')->getAppLogs($instance);
                             $logs[$componentApp->chart] = !empty($chartLogs->data) ? $chartLogs->data : array();
                         }
-
-                        if($instance && $componentApp->status === 'installed') $this->instance->saveAuthInfo($instance);
                     }
                 }
             }
