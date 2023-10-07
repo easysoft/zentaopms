@@ -79,7 +79,7 @@ $width = $config->edition != 'open' ? '33%' : '50%';
 
 $lastestExecution = !empty($project->executions) && $project->multiple ? cell
 (
-    setClass('flex flex-auto overflow-hidden whitespace-nowrap clip w-full' . (!$longBlock ? ' text-left w-full' : ' text-right')),
+    setClass('flex flex-auto overflow-hidden whitespace-nowrap clip w-full' . (!$longBlock ? ' text-left w-full' : ' justify-end')),
     span
     (
         setClass('text-gray'),
