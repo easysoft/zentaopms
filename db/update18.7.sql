@@ -546,6 +546,8 @@ INSERT INTO `zt_action`(`objectType`, `objectID`, `product`, `project`, `executi
 INSERT INTO `zt_action`(`objectType`, `objectID`, `product`, `project`, `execution`, `actor`, `action`, `date`, `comment`, `extra`, `efforted`, `read`, `vision`) VALUES ('metric', 243, ',0,', 0, 0, 'system', 'created', '2023-08-22 08:00:00', '', '', 0, '0', 'rnd');
 INSERT INTO `zt_action`(`objectType`, `objectID`, `product`, `project`, `execution`, `actor`, `action`, `date`, `comment`, `extra`, `efforted`, `read`, `vision`) VALUES ('metric', 244, ',0,', 0, 0, 'system', 'created', '2023-08-22 08:00:00', '', '', 0, '0', 'rnd');
 INSERT INTO `zt_action`(`objectType`, `objectID`, `product`, `project`, `execution`, `actor`, `action`, `date`, `comment`, `extra`, `efforted`, `read`, `vision`) VALUES ('metric', 245, ',0,', 0, 0, 'system', 'created', '2023-08-22 08:00:00', '', '', 0, '0', 'rnd');
+INSERT INTO `zt_action`(`objectType`, `objectID`, `product`, `project`, `execution`, `actor`, `action`, `date`, `comment`, `extra`, `efforted`, `read`, `vision`) VALUES ('metric', 246, ',0,', 0, 0, 'system', 'created', '2023-08-22 08:00:00', '', '', 0, '0', 'rnd');
+INSERT INTO `zt_action`(`objectType`, `objectID`, `product`, `project`, `execution`, `actor`, `action`, `date`, `comment`, `extra`, `efforted`, `read`, `vision`) VALUES ('metric', 247, ',0,', 0, 0, 'system', 'created', '2023-08-22 08:00:00', '', '', 0, '0', 'rnd');
 
 ALTER TABLE `zt_repo` ADD `lastCommit` DATETIME NULL DEFAULT NULL AFTER `lastSync`;
 
