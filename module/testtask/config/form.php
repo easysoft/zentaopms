@@ -66,7 +66,6 @@ $config->testtask->form->runCase = array();
 $config->testtask->form->runCase['result'] = array('required' => true,  'type' => 'string', 'default' => '', 'base' => true);
 $config->testtask->form->runCase['real']   = array('required' => false, 'type' => 'string', 'default' => '');
 
-$config->testtask->form = new stdclass();
 $config->testtask->form->importUnitResult = array();
 $config->testtask->form->importUnitResult['execution']   = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->testtask->form->importUnitResult['build']       = array('required' => true,  'type' => 'int',    'default' => '');
