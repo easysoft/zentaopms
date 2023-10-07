@@ -46,16 +46,16 @@ class buildTest
     /**
      * function getProjectBuilds test by build
      *
-     * @param  int    $count
-     * @param  int    $projectID
-     * @param  string $type
-     * @param  string $param
-     * @param  string $orderBy
-     * @param  string $pager
+     * @param  int       $count
+     * @param  int       $projectID
+     * @param  string    $type
+     * @param  string    $param
+     * @param  string    $orderBy
+     * @param  string    $pager
      * @access public
-     * @return array
+     * @return array|int
      */
-    public function getProjectBuildsTest($count, $projectID, $type = 'all', $param = 0, $orderBy = 't1.date_desc,t1.id_desc', $pager = null)
+    public function getProjectBuildsTest(int $count, int $projectID, string $type = 'all', string $param = '', string $orderBy = 't1.date_desc,t1.id_desc', object $pager = null): array|int
     {
         $objects = $this->objectModel->getProjectBuilds($projectID, $type, $param, $orderBy, $pager);
 
@@ -68,13 +68,13 @@ class buildTest
     /**
      * function getProjectBuildsBySearch test by build
      *
-     * @param  string $count
-     * @param  string $projectID
-     * @param  string $queryID
+     * @param  int       $count
+     * @param  int       $projectID
+     * @param  int       $queryID
      * @access public
-     * @return array
+     * @return array|int
      */
-    public function getProjectBuildsBySearchTest($count, $projectID, $queryID)
+    public function getProjectBuildsBySearchTest(int $count, int $projectID, int $queryID): array|int
     {
         $objects = $this->objectModel->getProjectBuildsBySearch($projectID, $queryID);
 

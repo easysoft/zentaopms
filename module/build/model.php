@@ -53,17 +53,18 @@ class buildModel extends model
     }
 
     /**
+     * 通过项目ID获取版本信息。
      * Get builds of a project.
      *
      * @param  int    $projectID
      * @param  string $type
-     * @param  int    $param
+     * @param  string $param
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getProjectBuilds($projectID = 0, $type = 'all', $param = 0, $orderBy = 't1.date_desc,t1.id_desc', $pager = null)
+    public function getProjectBuilds(int $projectID = 0, string $type = 'all', string $param = '', string $orderBy = 't1.date_desc,t1.id_desc', object $pager = null): array
     {
         $builds = $this->dao->select('t1.*, t2.name as productName')
             ->from(TABLE_BUILD)->alias('t1')
@@ -71,18 +72,17 @@ class buildModel extends model
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.project')->ne(0)
             ->beginIF($projectID)->andWhere('t1.project')->eq((int)$projectID)->fi()
-            ->beginIF($type == 'product' and $param)->andWhere('t1.product')->eq($param)->fi()
+            ->beginIF($type == 'product' && $param)->andWhere('t1.product')->eq((int)$param)->fi()
             ->beginIF($type == 'bysearch')->andWhere($param)->fi()
             ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
 
-        $this->loadModel('build');
         $executionIdList = array();
         foreach($builds as $build)
         {
-            $build->builds = $this->build->getByList(explode(',', $build->builds));
+            $build->builds = $this->getByList(explode(',', $build->builds));
             if(!empty($build->builds))
             {
                 foreach($build->builds as $child)
@@ -107,6 +107,7 @@ class buildModel extends model
     }
 
     /**
+     * 根据搜索条件获取项目版本。
      * Get builds of a project by search.
      *
      * @param  int    $projectID
@@ -116,7 +117,7 @@ class buildModel extends model
      * @access public
      * @return array
      */
-    public function getProjectBuildsBySearch($projectID, $queryID, $orderBy = 't1.date_desc,t1.id_desc', $pager = null)
+    public function getProjectBuildsBySearch(int $projectID, int $queryID, string $orderBy = 't1.date_desc,t1.id_desc', object $pager = null): array
     {
         /* If there are saved query conditions, reset the session. */
         if((int)$queryID)
@@ -142,7 +143,7 @@ class buildModel extends model
             }
         }
 
-        return $this->getProjectBuilds($projectID, 'bysearch', $buildQuery, $orderBy, $pager);
+        return $this->getProjectBuilds($projectID, 'bysearch', (string)$buildQuery, $orderBy, $pager);
     }
 
     /**
