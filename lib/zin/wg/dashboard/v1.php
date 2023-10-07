@@ -40,7 +40,8 @@ class dashboard extends wg
         'blockSizeMap?: array',                // 区块大小映射。
         'blockMenu?: array',                  // 区块菜单。
         'onLayoutChange?: function',          // 布局变更事件。
-        'onClickMenu?: function'              // 布局变更事件。
+        'onClickMenu?: function',             // 布局变更事件。
+        'onLoad?: function'                   // 区块加载完成事件。
     );
 
     static $dashboardID = 0;
