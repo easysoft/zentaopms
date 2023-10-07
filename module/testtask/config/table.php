@@ -85,8 +85,12 @@ $config->testtask->cases->dtable->fieldList['actions']['menu']  = array(array('c
 
 $config->testtask->linkcase = new stdclass();
 $config->testtask->linkcase->dtable = new stdclass();
-$config->testtask->linkcase->dtable->fieldList['id']     = $config->testcase->dtable->fieldList['id'];
+$config->testtask->linkcase->dtable->fieldList['id']         = $config->testcase->dtable->fieldList['id'];
+$config->testtask->linkcase->dtable->fieldList['id']['name'] = 'id';
+
 $config->testtask->linkcase->dtable->fieldList['title']  = $config->testcase->dtable->fieldList['title'];
+$config->testtask->linkcase->dtable->fieldList['title']['link'] = array('module' => 'testcase', 'method' => 'view', 'params' => "caseID={id}");
+
 $config->testtask->linkcase->dtable->fieldList['pri']    = $config->testcase->dtable->fieldList['pri'];
 $config->testtask->linkcase->dtable->fieldList['type']   = $config->testcase->dtable->fieldList['type'];
 $config->testtask->linkcase->dtable->fieldList['status'] = $config->testcase->dtable->fieldList['status'];
