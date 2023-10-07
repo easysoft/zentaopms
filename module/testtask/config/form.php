@@ -80,3 +80,9 @@ $config->testtask->form->importUnitResult['mailto']      = array('required' => f
 $config->testtask->form->importUnitResult['createdBy']   = array('required' => false, 'type' => 'string', 'default' => $account);
 $config->testtask->form->importUnitResult['createdDate'] = array('required' => false, 'type' => 'date',   'default' => $now);
 $config->testtask->form->importUnitResult['uid']         = array('required' => false, 'type' => 'string', 'default' => '');
+
+$config->testtask->form->batchRun = array();
+$config->testtask->form->batchRun['version'] = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->testtask->form->batchRun['results'] = array('required' => false, 'type' => 'string', 'default' => '', 'base' => true);
+$config->testtask->form->batchRun['steps']   = array('required' => false, 'type' => 'array',  'default' => array());
+$config->testtask->form->batchRun['reals']   = array('required' => false, 'type' => 'array',  'default' => array());
