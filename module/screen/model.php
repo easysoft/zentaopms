@@ -1058,6 +1058,10 @@ class screenModel extends model
                     $sql     = $this->setFilterSQL($chart);
                     $results = $this->buildDataset($chart->id, $sql);
 
+                    if($settings->value->type === 'text')
+                    {
+                        $value = empty($results[0]) ? '' : $results[0]->$field;
+                    }
                     if($settings->value->type === 'value')
                     {
                         $value = empty($results[0]) ? 0 : $results[0]->$field;
