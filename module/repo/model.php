@@ -332,7 +332,7 @@ class repoModel extends model
             $this->dao->insert(TABLE_REPO)->data($repo)
                 ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
                 ->check('serviceHost,serviceProject', 'notempty')
-                ->check('name', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($repo->serviceHost))
+                ->check('name', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($repo->SCM))
                 ->check('serviceProject', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($repo->SCM) . " and `serviceHost` = " . $this->dao->sqlobj->quote($repo->serviceHost))
                 ->autoCheck()
                 ->exec();
