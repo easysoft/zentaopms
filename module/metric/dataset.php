@@ -495,9 +495,9 @@ class dataset
      * @access public
      * @return PDOStatement
      */
-    public function getRepos()
+    public function getRepos($fieldList)
     {
-        return $this->dao->select('count(*) as count')
+        return $this->dao->select($fieldList)
             ->from(TABLE_REPO)
             ->where('deleted')->eq('0')
             ->query();

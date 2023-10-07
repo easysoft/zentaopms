@@ -22,13 +22,13 @@ class count_of_codebase extends baseCalc
 {
     public $dataset = 'getRepos';
 
-    public $fieldList = array('count');
+    public $fieldList = array('id');
 
     public $result = 0;
 
     public function calculate($row)
     {
-        $this->result += $row->count;
+        $this->result += 1;
     }
 
     public function getResult($options = array())
