@@ -1258,92 +1258,117 @@ class testtaskModel extends model
     }
 
     /**
-     * Batch run case
+     * 批量执行测试用例并记录测试结果。
+     * Batch run test cases and record the test results.
      *
+     * @param  array  $cases
      * @param  string $runCaseType
+     * @param  int    $taskID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function batchRun($runCaseType = 'testcase', $taskID = 0)
+    public function batchRun(array $cases, string $runCaseType = 'testcase', int $taskID = 0): bool
     {
+        $caseIdList = array_filter(array_keys($cases));
+        if(empty($caseIdList)) return false;
+
         $runs = array();
-        $postData   = fixer::input('post')->get();
-        $caseIdList = isset($postData->caseIDList) ? array_keys($postData->caseIDList) : array_keys($postData->results);
         if($runCaseType == 'testtask')
         {
-            $runs = $this->dao->select('id, `case`')->from(TABLE_TESTRUN)
+            /* 如果是从测试单中批量执行测试用例，查询出测试用例和测试执行的键值对便于更新本次执行结果。*/
+            /* If batch run test cases from testtask, query the key-value pair of test cases and test execution for updating the execution results. */
+            $runs = $this->dao->select('`case`, id')->from(TABLE_TESTRUN)
                 ->where('`case`')->in($caseIdList)
                 ->beginIF($taskID)->andWhere('task')->eq($taskID)->fi()
-                ->fetchPairs('case', 'id');
+                ->fetchPairs();
         }
 
-        $stepGroups = $this->dao->select('t1.*')->from(TABLE_CASESTEP)->alias('t1')
-            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
-            ->where('t1.case')->in($caseIdList)
-            ->andWhere('t1.version=t2.version')
-            ->andWhere('t2.status')->ne('wait')
-            ->fetchGroup('case', 'id');
+        $now    = helper::now();
+        $result = new stdClass();
+        $result->lastRunner = $this->app->user->account;
+        $result->date       = $now;
 
-        $now = helper::now();
-        foreach($postData->results as $caseID => $result)
+        $case = new stdClass();
+        $case->lastRunner  = $this->app->user->account;
+        $case->lastRunDate = $now;
+
+        $run = new stdclass();
+        $run->lastRunner  = $this->app->user->account;
+        $run->lastRunDate = $now;
+
+        foreach($cases as $caseID => $postCase)
         {
-            $runID       = isset($runs[$caseID]) ? $runs[$caseID] : (isset($postData->caseIDList) ? $caseID : 0);
-            $version     = $postData->version[$caseID];
-            $dbSteps     = isset($stepGroups[$caseID]) ? $stepGroups[$caseID] : array();
-            $postSteps   = isset($postData->steps[$caseID]) ? $postData->steps[$caseID] : array();
-            $postReals   = $postData->reals[$caseID];
+            $runID       = zget($runs, $caseID, 0);
+            $postSteps   = zget($postCase, 'steps', array());
+            $postReals   = zget($postCase, 'reals', array());
+            $caseResult  = $postCase->results ? $postCase->results : 'pass';
+            $stepResults = $this->processStepResults($caseIdList, $caseID, $caseResult, $postSteps, $postReals);
 
-            $caseResult  = $result ? $result : 'pass';
-            $stepResults = array();
-            if($dbSteps)
-            {
-                foreach($dbSteps as $stepID => $step)
-                {
-                    $step           = array();
-                    $step['result'] = $caseResult == 'pass' ? $caseResult : $postSteps[$stepID];
-                    $step['real']   = $caseResult == 'pass' ? '' : $postReals[$stepID];
-                    $stepResults[$stepID] = $step;
-                }
-            }
-            else
-            {
-                $step           = array();
-                $step['result'] = $caseResult;
-                $step['real']   = $caseResult == 'pass' ? '' : $postReals[0];
-                $stepResults[]  = $step;
-            }
-
-            /* Replace caseID if caseID is runID. */
-            if(isset($postData->caseIDList[$caseID])) $caseID = $postData->caseIDList[$caseID];
-
-            $result              = new stdClass();
             $result->run         = $runID;
             $result->case        = $caseID;
-            $result->version     = $version;
+            $result->version     = $postCase->version;
             $result->caseResult  = $caseResult;
             $result->stepResults = serialize($stepResults);
-            $result->lastRunner  = $this->app->user->account;
-            $result->date        = $now;
-
             $this->dao->insert(TABLE_TESTRESULT)->data($result)->autoCheck()->exec();
-            $this->dao->update(TABLE_CASE)->set('lastRunner')->eq($this->app->user->account)->set('lastRunDate')->eq($now)->set('lastRunResult')->eq($caseResult)->where('id')->eq($caseID)->exec();
 
-            if($runID)
-            {
-                /* Update testRun's status. */
-                if(!dao::isError())
-                {
-                    $runStatus = $caseResult == 'blocked' ? 'blocked' : 'normal';
-                    $this->dao->update(TABLE_TESTRUN)
-                        ->set('lastRunResult')->eq($caseResult)
-                        ->set('status')->eq($runStatus)
-                        ->set('lastRunner')->eq($this->app->user->account)
-                        ->set('lastRunDate')->eq($now)
-                        ->where('id')->eq($runID)
-                        ->exec();
-                }
-            }
+            $case->lastRunResult = $caseResult;
+            $this->dao->update(TABLE_CASE)->data($case)->where('id')->eq($caseID)->exec();
+
+            if(!$runID) continue;
+
+            $run->lastRunResult = $caseResult;
+            $run->status        = $caseResult == 'blocked' ? 'blocked' : 'normal';
+            $this->dao->update(TABLE_TESTRUN)->data($run)->where('id')->eq($runID)->exec();
+
+            if(dao::isError()) return false;
         }
+
+        $this->loadModel('action');
+        foreach(array_keys($cases) as $caseID) $this->action->create('case', $caseID, 'run', '', $taskID);
+
+        return true;
+    }
+
+    /**
+     * 处理测试用例步骤的执行结果。
+     * Process the execution results of the test case steps.
+     *
+     * @param  array   $caseIdList
+     * @param  int     $caseID
+     * @param  string  $caseResult
+     * @param  array   $postSteps
+     * @param  array   $postReals
+     * @access private
+     * @return array
+     */
+    private function processStepResults(array $caseIdList, int $caseID, string $caseResult, array $postSteps, array $postReals): array
+    {
+        static $stepGroups = array();
+        if(empty($stepGroups))
+        {
+            $stepGroups = $this->dao->select('t1.id, t1.case')->from(TABLE_CASESTEP)->alias('t1')
+                ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id AND t1.version = t2.version')
+                ->where('t1.case')->in($caseIdList)
+                ->andWhere('t1.type')->ne('group')
+                ->andWhere('t2.status')->ne('wait')
+                ->fetchGroup('case', 'id');
+        }
+
+        if(empty($stepGroups[$caseID]))
+        {
+            $results[0]['result'] = $caseResult;
+            $results[0]['real']   = $caseResult == 'pass' ? '' : $postReals[0];
+            return $results;
+        }
+
+        $results = array();
+        $dbSteps = array_keys($stepGroups[$caseID]);
+        foreach($dbSteps as $stepID)
+        {
+            $results[$stepID]['result'] = $caseResult == 'pass' ? $caseResult : $postSteps[$stepID];
+            $results[$stepID]['real']   = $caseResult == 'pass' ? '' : $postReals[$stepID];
+        }
+        return $results;
     }
 
     /**

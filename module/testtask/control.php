@@ -874,10 +874,9 @@ class testtask extends control
 
         if($this->post->results)
         {
-            $this->testtask->batchRun($from, $taskID);
-
-            $this->loadModel('action');
-            foreach(array_keys($this->post->results) as $caseID) $this->action->create('case', $caseID, 'run', '', $taskID);
+            $cases = form::batchData($this->config->testtask->form->batchRun)->get();
+            $this->testtask->batchRun($cases, $from, $taskID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $url));
         }
