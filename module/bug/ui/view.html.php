@@ -97,7 +97,7 @@ foreach($legendMisc['linkCommit']['text'] as $commit)
 $legendBasic['os']['text']            = $osHTML;
 $legendBasic['browser']['text']       = $browserHTML;
 $legendBasic['mailto']['text']        = $mailtoHTML;
-$legendBasic['severity']['text']      = severityLabel($legendBasic['severity']['text'], set::text($lang->bug->severityList));
+$legendBasic['severity']['text']      = severityLabel($legendBasic['severity']['text'], set::text($lang->bug->severityList), set::isIcon(true));
 $legendBasic['pri']['text']           = priLabel($legendBasic['pri']['text'], set::text($lang->bug->priList));
 $legendLife['openedBuild']['text']    = $buildsHTML;
 $legendLife['resolution']['text']     = div(zget($lang->bug->resolutionList, $bug->resolution), $duplicateBug);
