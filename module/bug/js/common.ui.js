@@ -734,7 +734,6 @@ function setBranchRelated(event)
     {
         var planID   = $('#plans_' + num).val();
         var planLink = $.createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branchID + '&planID=' + planID + '&fieldID=' + num + '&needCreate=false&expired=&param=skipParent');
-        $.ajaxSettings.async = false;
         $('#plans_' + num).parent('td').load(planLink, function()
         {
             var firstBugID = $('.table-form tbody').first('tr').find('input[id^=bugIDList]').val();
@@ -747,7 +746,6 @@ function setBranchRelated(event)
                 });
             }
         });
-        $.ajaxSettings.async = true;
     }
 }
 

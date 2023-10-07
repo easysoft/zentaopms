@@ -142,7 +142,6 @@ h::script
 
             if($('#' + id).attr('isInit')) return;
 
-            $.ajaxSettings.async = false;
             $.get(createLink('transfer', 'ajaxGetOptions', 'model={$model}&field=' + field + '&value=' + value + '&index=' + index), function(data)
             {
                 $('#' + id).parent().html(data);
@@ -150,7 +149,6 @@ h::script
                 $('#' + id).attr('isInit', true);
                 $('#' + id).attr('data-field', field);
             });
-            $.ajaxSettings.async = true;
         });
 
         $(function()

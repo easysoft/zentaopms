@@ -57,10 +57,8 @@ window.loadBranchRelation = function(e)
     const branchIndex = $picker.options.index;
     const productID   = $('[name=product]').val();
 
-    $.ajaxSettings.async = false;
     loadModuleForTwins(productID, branch, branchIndex)
     loadPlanForTwins(productID, branch, branchIndex)
-    $.ajaxSettings.async = true;
 
     disableSelectedBranches()
 };
@@ -104,10 +102,8 @@ window.addBranchesBox = function(e)
      $newLine.find('.removeNewLine').on('click', deleteBranchesBox);
 
 
-     $.ajaxSettings.async = false;
      loadModuleForTwins(productID, branch, itemIndex)
      loadPlanForTwins(productID, branch, itemIndex)
-     $.ajaxSettings.async = true;
 
     if($("form [id^='branches']").length == $branchPicker.options.items.length)
     {

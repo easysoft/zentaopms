@@ -29,7 +29,6 @@ function editStage()
     {
         var result = true;
 
-        $.ajaxSettings.async = false;
         $.get($.createLink('programplan', 'ajaxGetStageAttr', 'stageID=' + $('#parent').val()), function(attribute)
         {
             if(attribute != 'mix' && plan.attribute != attribute)
@@ -37,7 +36,6 @@ function editStage()
                 result = confirm(changeAttrLang.replace('%s', stageTypeList[attribute]));
             }
         });
-        $.ajaxSettings.async = true;
 
         if(!result) return;
     }
