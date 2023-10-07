@@ -243,7 +243,8 @@ class buildModel extends model
     }
 
     /**
-     * Get story builds.
+     * 根据需求ID获取版本列表。
+     * Get builds by story ID.
      *
      * @param  int    $storyID
      * @access public
@@ -252,6 +253,7 @@ class buildModel extends model
     public function getStoryBuilds(int $storyID): array
     {
         if(empty($storyID)) return array();
+
         return $this->dao->select('*')->from(TABLE_BUILD)
             ->where('deleted')->eq(0)
             ->andWhere("CONCAT(',', stories, ',')")->like("%,$storyID,%")
