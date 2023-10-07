@@ -44,7 +44,7 @@
     $canBatchCreate    = common::hasPriv('task', 'batchCreate');
     ?>
     <table class="table has-sort-head table-fixed" id='taskTable'>
-      <?php $vars = "mode=$mode&type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
+      <?php $vars = "mode=$mode&type=$type&param=0&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
       <thead>
         <tr>
           <th class="c-id">
