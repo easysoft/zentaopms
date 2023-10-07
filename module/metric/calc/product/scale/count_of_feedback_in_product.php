@@ -10,8 +10,6 @@
  * 单位：个
  * 描述：产品的反馈总数
  * 定义：产品中反馈的个数求和;过滤已删除的反馈;过滤已删除的产品;
- * 度量库：
- * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>

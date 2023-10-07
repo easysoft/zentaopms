@@ -10,8 +10,6 @@
  * 单位：个
  * 描述：按项目统计的开放的问题数指的是在项目管理中，正在被跟踪和解决的项目问题的数量。问题是指在项目执行过程中遇到的障碍、困难或需要解决的事项。通过跟踪和解决项目问题，可以避免问题的积累和对项目目标的影响。
  * 定义：项目中问题的个数求和;状态为开放;过滤已删除的问题;过滤已删除的项目;
- * 度量库：
- * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
