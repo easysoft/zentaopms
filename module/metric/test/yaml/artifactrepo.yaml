@@ -1,0 +1,29 @@
+---
+title: zt_artifactrepo
+author: Yanyi Cao
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: products
+    range: 1-100
+  - field: name
+    prefix: 制品库
+    range: 1-100
+  - field: serverID
+    range: 5
+  - field: repoName
+    range: nuget-group
+  - field: format
+    range: nuget,maven2
+  - field: type
+    range: group,proxy,hosted
+  - field: status
+    range: online
+  - field: createdBy
+    range: admin
+  - field: editedBy
+    range:
+  - field: deleted
+    range: 0{5},1{2}
+...
