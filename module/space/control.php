@@ -133,6 +133,8 @@ class space extends control
         $mysqlList   = $this->cne->sharedDBList('mysql');
         $pgList      = $this->cne->sharedDBList('postgresql');
         $versionList = $this->store->getVersionPairs($appID);
+        $cloudApp    = $this->loadModel('store')->getAppInfo($appID);
+        $showDb      = !empty($cloudApp) && (($cloudApp->dependencies->mysql && $mysqlList) || ($cloudApp->dependencies->postgresql && $pgList));
 
         $this->view->title       = $this->lang->space->install;
         $this->view->apps        = $apps;
@@ -141,6 +143,7 @@ class space extends control
         $this->view->pgList      = $pgList;
         $this->view->mysqlList   = $mysqlList;
         $this->view->versionList = $versionList;
+        $this->view->showDb      = $showDb;
         $this->view->addType     = empty($appID) ? 'external' : 'store';
         $this->view->thirdDomain = $this->loadModel('instance')->randThirdDomain();
         $this->display();

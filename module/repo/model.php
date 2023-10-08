@@ -332,7 +332,7 @@ class repoModel extends model
             $this->dao->insert(TABLE_REPO)->data($repo)
                 ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
                 ->check('serviceHost,serviceProject', 'notempty')
-                ->check('name', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($repo->serviceHost))
+                ->check('name', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($repo->SCM))
                 ->check('serviceProject', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($repo->SCM) . " and `serviceHost` = " . $this->dao->sqlobj->quote($repo->serviceHost))
                 ->autoCheck()
                 ->exec();
@@ -356,65 +356,18 @@ class repoModel extends model
     }
 
     /**
+     * 更新版本库。
      * Update a repo.
      *
+     * @param  object $data
      * @param  int    $id
+     * @param  bool   $isPipelineServer
      * @access public
      * @return bool
      */
-    public function update($id)
+    public function update(object $data, int $id, bool $isPipelineServer): bool
     {
         $repo = $this->getByID($id);
-        if($repo->client != $this->post->client and !$this->checkClient()) return false;
-        if(!$this->checkConnection()) return false;
-
-        $isPipelineServer = in_array(strtolower($this->post->SCM), $this->config->repo->gitServiceList) ? true : false;
-
-        $data = fixer::input('post')
-            ->setIf($isPipelineServer, 'password', $this->post->serviceToken)
-            ->setDefault('client', 'svn')
-            ->setIf($this->post->SCM == 'Gitlab', 'client', '')
-            ->setIf($this->post->SCM == 'Gitlab', 'extra', $this->post->serviceProject)
-            ->setDefault('prefix', $repo->prefix)
-            ->setIf($this->post->SCM == 'Gitlab', 'prefix', '')
-            ->setDefault('product', '')
-            ->skipSpecial('path,client,account,password,desc')
-            ->join('product', ',')
-            ->setDefault('projects', '')->join('projects', ',')
-            ->get();
-
-        if($data->path != $repo->path) $data->synced = 0;
-
-        $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
-
-        if($data->SCM == 'Subversion' and $data->path != $repo->path)
-        {
-            $scm = $this->app->loadClass('scm');
-            $scm->setEngine($data);
-            $info     = $scm->info('');
-            $infoRoot = urldecode($info->root);
-            $data->prefix = empty($infoRoot) ? '' : trim(str_ireplace($infoRoot, '', str_replace('\\', '/', $data->path)), '/');
-            if($data->prefix) $data->prefix = '/' . $data->prefix;
-        }
-        elseif($data->SCM != $repo->SCM and $data->SCM == 'Git')
-        {
-            $data->prefix = '';
-        }
-
-        if($isPipelineServer)
-        {
-            $serviceProject = $this->dao->select('*')->from(TABLE_REPO)
-                ->where('`SCM`')->eq($data->SCM)
-                ->andWhere('`serviceHost`')->eq($data->serviceHost)
-                ->andWhere('`serviceProject`')->eq($data->serviceProject)
-                ->andWhere('id')->ne($id)
-                ->fetch();
-            if($serviceProject)
-            {
-                dao::$errors['serviceProject'][] = $this->lang->repo->error->projectUnique;
-                return false;
-            }
-        }
 
         if(($repo->serviceHost != $data->serviceHost || $repo->serviceProject != $data->serviceProject) && $data->SCM == 'Gitlab')
         {
@@ -1573,49 +1526,6 @@ class repoModel extends model
     }
 
     /**
-     * Check svn/git client.
-     *
-     * @access public
-     * @return bool
-     */
-    public function checkClient()
-    {
-        if($this->post->SCM == 'Gitlab') return true;
-        if(!$this->config->features->checkClient) return true;
-
-        if(!$this->post->client)
-        {
-            dao::$errors['client'] = sprintf($this->lang->error->notempty, $this->lang->repo->client);
-            return false;
-        }
-
-        /* Check command injection. */
-        if(preg_match('/[ #&;`,\|*?~<>^()\[\]{}$]/', $this->post->client))
-        {
-            dao::$errors['client'] = $this->lang->repo->error->clientPath;
-            return false;
-        }
-
-        $clientVersionFile = $this->session->clientVersionFile;
-        if(empty($clientVersionFile))
-        {
-            $clientVersionFile = $this->app->getLogRoot() . uniqid('version_') . '.log';
-
-            session_start();
-            $this->session->set('clientVersionFile', $clientVersionFile);
-            session_write_close();
-        }
-
-        if(file_exists($clientVersionFile)) return true;
-
-        $cmd = $this->post->client . " --version > $clientVersionFile";
-        dao::$errors['client'] = sprintf($this->lang->repo->error->safe, $clientVersionFile, $cmd);
-
-        return false;
-    }
-
-
-    /**
      * remove client version file.
      *
      * @access public
@@ -1632,131 +1542,6 @@ class repoModel extends model
 
             if(file_exists($clientVersionFile)) @unlink($clientVersionFile);
         }
-    }
-
-    /**
-     * Check connection
-     *
-     * @access public
-     * @return void
-     */
-    public function checkConnection()
-    {
-        if(empty($_POST)) return false;
-
-        $scm      = $this->post->SCM;
-        $client   = $this->post->client;
-        $account  = $this->post->account;
-        $password = $this->post->password;
-        $encoding = strtoupper($this->post->encoding);
-        $path     = $this->post->path;
-        if($encoding != 'UTF8' and $encoding != 'UTF-8') $path = helper::convertEncoding($path, 'utf-8', $encoding);
-
-        if($scm == 'Subversion')
-        {
-            /* Get svn version. */
-            $versionCommand = "$client --version --quiet 2>&1";
-            exec($versionCommand, $versionOutput, $versionResult);
-            if($versionResult)
-            {
-                $message = sprintf($this->lang->repo->error->output, $versionCommand, $versionResult, implode("<br />", $versionOutput));
-                dao::$errors['client'] = $this->lang->repo->error->cmd . "<br />" . nl2br($message);
-                return false;
-            }
-            $svnVersion = end($versionOutput);
-
-            $path = '"' . str_replace(array('%3A', '%2F', '+'), array(':', '/', ' '), urlencode($path)) . '"';
-            if(stripos($path, 'https://') === 1 or stripos($path, 'svn://') === 1)
-            {
-                if(version_compare($svnVersion, '1.6', '<'))
-                {
-                    dao::$errors['client'] = $this->lang->repo->error->version;
-                    return false;
-                }
-
-                $command = "$client info --username $account --password $password --non-interactive --trust-server-cert-failures=cn-mismatch --trust-server-cert --no-auth-cache $path 2>&1";
-                if(version_compare($svnVersion, '1.9', '<')) $command = "$client info --username $account --password $password --non-interactive --trust-server-cert --no-auth-cache $path 2>&1";
-            }
-            elseif(stripos($path, 'file://') === 1)
-            {
-                $command = "$client info --non-interactive --no-auth-cache $path 2>&1";
-            }
-            else
-            {
-                $command = "$client info --username $account --password $password --non-interactive --no-auth-cache $path 2>&1";
-            }
-
-            exec($command, $output, $result);
-            if($result)
-            {
-                $message = sprintf($this->lang->repo->error->output, $command, $result, implode("<br />", $output));
-                if(stripos($message, 'Expected FS format between') !== false and strpos($message, 'found format') !== false)
-                {
-                    dao::$errors['client'] = $this->lang->repo->error->clientVersion;
-                    return false;
-                }
-                if(preg_match('/[^\:\/A-Za-z0-9_\-\'\"\.]/', $path))
-                {
-                    dao::$errors['encoding'] = $this->lang->repo->error->encoding . "<br />" . nl2br($message);
-                    return false;
-                }
-
-                dao::$errors['submit'] = $this->lang->repo->error->connect . "<br>" . nl2br($message);
-                return false;
-            }
-        }
-        elseif(in_array($scm, array('Gitea', 'Gogs')))
-        {
-            if($this->post->name != '' and $this->post->serviceProject != '')
-            {
-                $module  = strtolower($scm);
-                $project = $this->loadModel($module)->apiGetSingleProject($this->post->serviceHost, $this->post->serviceProject);
-                if(isset($project->tokenCloneUrl))
-                {
-                    $path = $this->app->getAppRoot() . 'www/data/repo/' . $this->post->name . '_' . $module;
-                    if(!realpath($path))
-                    {
-                        $cmd = 'git clone --progress -v "' . $project->tokenCloneUrl . '" "' . $path . '"  > "' . $this->app->getTmpRoot() . "log/clone.progress.$module.{$this->post->name}.log\" 2>&1 &";
-                        if(PHP_OS == 'WINNT') $cmd = "start /b $cmd";
-                        exec($cmd);
-                    }
-                    $_POST['path'] = $path;
-                }
-                else
-                {
-                    dao::$errors['serviceProject'] = $this->lang->repo->error->noCloneAddr;
-                    return false;
-                }
-            }
-        }
-        elseif($scm == 'Git')
-        {
-            if(!is_dir($path))
-            {
-                dao::$errors['path'] = sprintf($this->lang->repo->error->noFile, $path);
-                return false;
-            }
-
-            if(!chdir($path))
-            {
-                if(!is_executable($path))
-                {
-                    dao::$errors['path'] = sprintf($this->lang->repo->error->noPriv, $path);
-                    return false;
-                }
-                dao::$errors['path'] = $this->lang->repo->error->path;
-                return false;
-            }
-
-            $command = "$client tag 2>&1";
-            exec($command, $output, $result);
-            if($result)
-            {
-                dao::$errors['submit'] = $this->lang->repo->error->connect . "<br />" . sprintf($this->lang->repo->error->output, $command, $result, implode("<br />", $output));
-                return false;
-            }
-        }
-        return true;
     }
 
     /**

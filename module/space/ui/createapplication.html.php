@@ -126,7 +126,7 @@ if($config->inQuickon)
         ),
         formRow
         (
-            setClass('dbType'),
+            setClass('dbType' . ($showDb ? '' : ' hidden')),
             formGroup
             (
                 set::label($lang->instance->dbType),
@@ -148,7 +148,7 @@ if($config->inQuickon)
         ),
         formRow
         (
-            setClass('dbType dbService'),
+            setClass('dbType dbService' . ($showDb ? '' : ' hidden')),
             formGroup
             (
                 set::width($colWidth),

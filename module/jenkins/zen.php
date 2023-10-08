@@ -29,8 +29,8 @@ class jenkinsZen extends jenkins
             $itemArray = array
             (
                 'id'    => is_array($task) ? '' : $groupName,
-                'text'  => is_array($task) ? $groupName : $task,
-                'keys'  => zget(common::convert2Pinyin(array($groupName)), $groupName, ''),
+                'text'  => is_array($task) ? urldecode($groupName) : urldecode($task),
+                'keys'  => urldecode(zget(common::convert2Pinyin(array($groupName)), $groupName, '')),
             );
             if(is_array($task))
             {

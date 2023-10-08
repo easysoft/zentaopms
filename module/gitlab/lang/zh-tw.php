@@ -101,6 +101,7 @@ $lang->gitlab->apiError[5] = 'Failed to save group {:path=>["has already been ta
 $lang->gitlab->apiError[6] = 'Failed to save group {:path=>["已经被使用"]}';
 $lang->gitlab->apiError[7] = '403 Forbidden';
 $lang->gitlab->apiError[8] = 'is invalid';
+$lang->gitlab->apiError[9] = 'admin is a reserved name';
 
 $lang->gitlab->errorLang[0] = '私有分組的項目，可見性級別不能設為內部。';
 $lang->gitlab->errorLang[1] = '私有分組的項目，可見性級別不能設為公開。';
@@ -111,6 +112,7 @@ $lang->gitlab->errorLang[5] = '保存失敗，群組URL路徑已經被使用。'
 $lang->gitlab->errorLang[6] = '保存失敗，群組URL路徑已經被使用。';
 $lang->gitlab->errorLang[7] = $lang->gitlab->noAccess;
 $lang->gitlab->errorLang[8] = '格式错误';
+$lang->gitlab->errorLang[9] = 'admin是保留名';
 
 $lang->gitlab->errorResonse['Email has already been taken']    = '邮箱已存在';
 $lang->gitlab->errorResonse['Username has already been taken'] = '用户名已存在';

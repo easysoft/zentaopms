@@ -174,19 +174,25 @@ class repo extends control
     /**
      * Edit a repo.
      *
-     * @param  int $repoID
-     * @param  int $objectID
+     * @param  int    $repoID
+     * @param  int    $objectID
      * @access public
      * @return void
      */
-    public function edit($repoID, $objectID = 0)
+    public function edit(int $repoID, int $objectID = 0)
     {
         $this->commonAction($repoID, $objectID);
 
-        $repo = $this->repo->getByID($repoID);
         if($_POST)
         {
-            $noNeedSync = $this->repo->update($repoID);
+            $repo = $this->repo->getByID($repoID);
+
+            /* Prepare data. */
+            $formData         = form::data($this->config->repo->form->edit);
+            $isPipelineServer = in_array(strtolower($this->post->SCM), $this->config->repo->gitServiceList) ? true : false;
+            $editData         = $this->repoZen->prepareEdit($formData, $repo, $isPipelineServer);
+
+            $noNeedSync = $this->repo->update($editData, $repoID, $isPipelineServer);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $newRepo  = $this->repo->getByID($repoID);
@@ -201,41 +207,7 @@ class repo extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('maintain')));
         }
 
-        $this->app->loadLang('action');
-
-        $scm = strtolower($repo->SCM);
-        if(in_array($scm, $this->config->repo->gitServiceList))
-        {
-            $serviceID = isset($repo->gitService) ? $repo->gitService : 0;
-            $projects  = $this->loadModel($scm)->apiGetProjects($serviceID);
-            $options   = array();
-            foreach($projects as $project)
-            {
-                if($scm == 'gitlab') $options[$project->id] = $project->name_with_namespace;
-                if($scm == 'gitea')  $options[$project->full_name] = $project->full_name;
-                if($scm == 'gogs')   $options[$project->full_name] = $project->full_name;
-            }
-
-            $this->view->projects = $options;
-        }
-
-        $products           = $this->loadModel('product')->getPairs('', 0, '', 'all');
-        $linkedProducts     = $this->loadModel('product')->getByIdList(explode(',', $repo->product));
-        $linkedProductPairs = array_combine(array_keys($linkedProducts), helper::arrayColumn($linkedProducts, 'name'));
-        $products           = $products + $linkedProductPairs;
-
-        $this->view->title           = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->edit;
-        $this->view->repo            = $repo;
-        $this->view->repoID          = $repoID;
-        $this->view->objectID        = $objectID;
-        $this->view->groups          = $this->loadModel('group')->getPairs();
-        $this->view->users           = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
-        $this->view->products        = $products;
-        $this->view->relatedProjects = $this->repo->filterProject(explode(',', $repo->product), explode(',', $repo->projects));
-        $this->view->serviceHosts    = $this->loadModel('pipeline')->getPairs($repo->SCM);
-
-
-        $this->display();
+        $this->repoZen->buildEditForm($repoID, $objectID);
     }
 
     /**

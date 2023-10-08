@@ -47,18 +47,8 @@ class repoZen extends repo
             ->setDefault('projects', '')->join('projects', ',')
             ->get();
 
-        $acl = $this->post->acl;
-        if($acl['acl'] == 'custom')
-        {
-            $aclGroups = array_filter($acl['groups']);
-            $aclUsers  = array_filter($acl['users']);
-            if(empty($aclGroups) && empty($aclUsers))
-            {
-                $this->app->loadLang('product');
-                dao::$errors['acl'] = sprintf($this->lang->error->notempty, $this->lang->product->whitelist);
-                return false;
-            }
-        }
+        $acl = $this->checkACL();
+        if(!$acl) return false;
         $repo->acl = json_encode($acl);
 
         if($repo->SCM == 'Subversion')
@@ -71,6 +61,95 @@ class repoZen extends repo
             if($repo->prefix) $repo->prefix = '/' . $repo->prefix;
         }
         return $repo;
+    }
+
+    /**
+     * 准备编辑版本库的数据。
+     * Prepare edit repo data.
+     *
+     * @param  form      $formData
+     * @param  object    $oldRepo
+     * @param  bool      $isPipelineServer
+     * @access protected
+     * @return object|false
+     */
+    protected function prepareEdit(form $formData, object $oldRepo, bool $isPipelineServer): object|false
+    {
+        if($oldRepo->client != $this->post->client and !$this->checkClient()) return false;
+        if(!$this->checkConnection()) return false;
+
+        $repo = $formData
+            ->setIf($isPipelineServer, 'password', $this->post->serviceToken)
+            ->setDefault('client', 'svn')
+            ->setIf($this->post->SCM == 'Gitlab', 'client', '')
+            ->setIf($this->post->SCM == 'Gitlab', 'extra', $this->post->serviceProject)
+            ->setIf($this->post->SCM == 'Gitlab', 'prefix', '')
+            ->setDefault('product', '')
+            ->skipSpecial('path,client,account,password,desc')
+            ->join('product', ',')
+            ->setDefault('projects', '')->join('projects', ',')
+            ->get();
+
+        if($repo->path != $oldRepo->path) $repo->synced = 0;
+
+        $acl = $this->checkACL();
+        if(!$acl) return false;
+        $repo->acl = json_encode($acl);
+
+        if($repo->SCM == 'Subversion')
+        {
+            $scm = $this->app->loadClass('scm');
+            $scm->setEngine($repo);
+            $info     = $scm->info('');
+            $infoRoot = urldecode($info->root);
+            $repo->prefix = empty($infoRoot) ? '' : trim(str_ireplace($infoRoot, '', str_replace('\\', '/', $repo->path)), '/');
+            if($repo->prefix) $repo->prefix = '/' . $repo->prefix;
+        }
+        elseif($repo->SCM != $oldRepo->SCM and $repo->SCM == 'Git')
+        {
+            $repo->prefix = '';
+        }
+
+        if($isPipelineServer)
+        {
+            $serviceProject = $this->dao->select('*')->from(TABLE_REPO)
+                ->where('`SCM`')->eq($repo->SCM)
+                ->andWhere('`serviceHost`')->eq($repo->serviceHost)
+                ->andWhere('`serviceProject`')->eq($repo->serviceProject)
+                ->andWhere('id')->ne($oldRepo->id)
+                ->fetch();
+            if($serviceProject)
+            {
+                dao::$errors['serviceProject'][] = $this->lang->repo->error->projectUnique;
+                return false;
+            }
+        }
+
+        return $repo;
+    }
+
+    /**
+     * 检查权限数据。
+     * Check acl.
+     *
+     * @access protected
+     * @return array|false
+     */
+    protected function checkACL(): array|false
+    {
+        $acl = $this->post->acl;
+        if($acl['acl'] == 'custom')
+        {
+            $aclGroups = array_filter($acl['groups']);
+            $aclUsers  = array_filter($acl['users']);
+            if(empty($aclGroups) && empty($aclUsers))
+            {
+                $this->app->loadLang('product');
+                dao::$errors['acl'] = sprintf($this->lang->error->notempty, $this->lang->product->whitelist);
+                return false;
+            }
+        }
+        return $acl;
     }
 
     /**
@@ -253,7 +332,6 @@ class repoZen extends repo
     protected function buildCreateForm(int $objectID): void
     {
         $repoID = $this->repo->saveState(0, $objectID);
-        $this->commonAction($repoID, $objectID);
 
         $this->app->loadLang('action');
 
@@ -274,6 +352,53 @@ class repoZen extends repo
         $this->view->relatedProjects = ($this->app->tab == 'project' or $this->app->tab == 'execution') ? array($objectID) : array();
         $this->view->serviceHosts    = $this->loadModel('gitlab')->getPairs();
         $this->view->objectID        = $objectID;
+
+        $this->display();
+    }
+
+    /**
+     * 构建编辑版本库页面数据。
+     * Build form fields for edit repo.
+     *
+     * @param  int       $objectID
+     * @access protected
+     * @return void
+     */
+    protected function buildEditForm(int $repoID, int $objectID): void
+    {
+        $repo = $this->repo->getByID($repoID);
+        $this->app->loadLang('action');
+
+        $scm = strtolower($repo->SCM);
+        if(in_array($scm, $this->config->repo->gitServiceList))
+        {
+            $serviceID = isset($repo->gitService) ? $repo->gitService : 0;
+            $projects  = $this->loadModel($scm)->apiGetProjects($serviceID);
+            $options   = array();
+            foreach($projects as $project)
+            {
+                if($scm == 'gitlab') $options[$project->id] = $project->name_with_namespace;
+                if($scm == 'gitea')  $options[$project->full_name] = $project->full_name;
+                if($scm == 'gogs')   $options[$project->full_name] = $project->full_name;
+            }
+
+            $this->view->projects = $options;
+        }
+
+        $products           = $this->loadModel('product')->getPairs('', 0, '', 'all');
+        $linkedProducts     = $this->loadModel('product')->getByIdList(explode(',', $repo->product));
+        $linkedProductPairs = array_combine(array_keys($linkedProducts), helper::arrayColumn($linkedProducts, 'name'));
+        $products           = $products + $linkedProductPairs;
+
+        $this->view->title           = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->edit;
+        $this->view->repo            = $repo;
+        $this->view->repoID          = $repoID;
+        $this->view->objectID        = $objectID;
+        $this->view->groups          = $this->loadModel('group')->getPairs();
+        $this->view->users           = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
+        $this->view->products        = $products;
+        $this->view->relatedProjects = $this->repo->filterProject(explode(',', $repo->product), explode(',', $repo->projects));
+        $this->view->serviceHosts    = $this->loadModel('pipeline')->getPairs($repo->SCM);
 
         $this->display();
     }
