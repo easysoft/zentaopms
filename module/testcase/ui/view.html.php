@@ -441,17 +441,14 @@ detailBody
             set::content(trim($files, ',')),
             set::useHtml(true),
         ),
-        history(),
-        center
-        (
-            floatToolbar
-            (
-                set::object($case),
-                $isInModal ? null : to::prefix(backBtn(set::icon('back'), set::className('ghost text-white'), $lang->goback)),
-                set::main($actions['mainActions']),
-                set::suffix($actions['suffixActions'])
-            ),
-        ),
+    ),
+    history(),
+    floatToolbar
+    (
+        set::object($case),
+        $isInModal ? null : to::prefix(backBtn(set::icon('back'), set::className('ghost text-white'), $lang->goback)),
+        set::main($actions['mainActions']),
+        set::suffix($actions['suffixActions'])
     ),
     detailSide
     (
