@@ -26,7 +26,7 @@ $(document).on('click', '#toTaskButton', function()
     }
     else
     {
-        zui.modal.alert(errorNoExecution);
+        zui.Modal.alert(errorNoExecution);
     }
 });
 
