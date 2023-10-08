@@ -648,6 +648,7 @@ class buildModel extends model
     public function linkBug(int $buildID, array $bugIdList, array $resolvedList = array()): bool
     {
         $build = $this->getByID($buildID);
+        if(!$build) return false;
 
         foreach($bugIdList as $i => $bugID)
         {

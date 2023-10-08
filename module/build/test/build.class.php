@@ -304,33 +304,24 @@ class buildTest
     }
 
     /**
-     * Function linkBug test by build
+     * 版本关联Bug。
+     * Link bugs.
      *
-     * @param  int $buildID
+     * @param  int   $buildID
      * @param  array $param
      * @access public
      * @return array
      */
-    public function linkBugTest($buildID, $param = array())
+    public function linkBugTest(int $buildID, array $bugs = array()): array
     {
-        global $tester;
+        $oldBuild = $this->objectModel->getByID($buildID);
+        $this->objectModel->linkBug($buildID, $bugs);
 
-        $bugs = array();
-
-        $createFields = array('bugs' => $bugs);
-
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $this->objectModel->linkBug($buildID);
-
-        $objects = $tester->dao->select('*')->from(TABLE_BUILD)->where('id')->in($buildID)->fetchAll('id');
-
-        unset($_POST);
-
+        if(!$oldBuild) return array();
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $build = $this->objectModel->getByID($buildID);
+        return common::createChanges($oldBuild, $build);
     }
 
     /**
