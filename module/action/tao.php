@@ -713,4 +713,177 @@ class actionTao extends actionModel
             if($title) $action->extra = common::hasPriv('story', 'view') ?  html::a(helper::createLink('story', 'view', "storyID=$action->extra"), $defaultExtra) : $defaultExtra;
         }
     }
+
+    /**
+     * 生成用户访问权限检查sql。
+     * Build user access check sql.
+     *
+     * @param  string|int $productID
+     * @param  string|int $projectID
+     * @param  string|int $executionID
+     * @param  array      $executions
+     * @access protected
+     * @return string
+     */
+    protected function buildUserAclsSearchCondition(string|int $productID, string|int $projectID, string|int $executionID, array &$executions): string
+    {
+        /* 验证用户的产品/项目/执行权限。 */
+        /* Verify user's product/project/execution permissions。*/
+        $aclViews = isset($this->app->user->rights['acls']['views']) ? $this->app->user->rights['acls']['views'] : array();
+        if($productID == 'all')   $authedProducts   = (empty($aclViews) || (!empty($aclViews) && !empty($aclViews['product'])))   ? $this->app->user->view->products : '0';
+        if($projectID == 'all')   $authedProjects   = (empty($aclViews) || (!empty($aclViews) && !empty($aclViews['project'])))   ? $this->app->user->view->projects : '0';
+        if($executionID == 'all') $authedExecutions = (empty($aclViews) || (!empty($aclViews) && !empty($aclViews['execution']))) ? $this->app->user->view->sprints  : '0';
+
+        if(empty($authedProducts)) $authedProducts = '0';
+
+        /* 组建产品/项目/执行搜索条件。 */
+        /* Build product/project/execution search condition. */
+        if($productID == 'all' && $projectID == 'all')
+        {
+            $productCondition = '';
+            foreach(explode(',', $authedProducts) as $product) $productCondition = empty($productCondition) ? "(execution = '0' AND project = '0' AND (product LIKE '%,$product,%'" : "$productCondition OR product LIKE '%,$product,%'";
+            if(!empty($productCondition)) $productCondition .= '))';
+
+            $projectCondition   = "(execution = '0' AND project != '0' AND project " . helper::dbIN($authedProjects) . ')';
+            $executionCondition = isset($authedExecutions) ? "(execution != 0 AND execution " . helper::dbIN($authedExecutions) . ')' : "(execution != 0 AND execution = '$executionID')";
+        }
+        elseif($productID == 'all' && is_numeric($projectID))
+        {
+            $products   = $this->loadModel('product')->getProductPairsByProject($projectID);
+            $executions = $this->loadModel('execution')->getPairs($projectID) + array(0 => 0);
+
+            $authedExecutions = isset($authedExecutions) ? array_intersect(array_keys($executions), explode(',', $authedExecutions)) : array_keys($executions);
+
+            $productCondition = '';
+            foreach(array_keys($products) as $product) $productCondition = empty($productCondition) ? "(execution = '0' AND project = '0' AND (product LIKE '%,$product,%'" : "$productCondition OR product LIKE '%,$product,%'";
+            if(!empty($productCondition)) $productCondition .= '))';
+
+            $projectCondition   = "(execution = '0' AND project = '$projectID')";
+            $executionCondition = "(execution != '0' AND execution " . helper::dbIN($authedExecutions) . ')';
+        }
+        elseif(is_numeric($productID) && $projectID == 'all')
+        {
+            $this->loadModel('product');
+            $projects   = $this->product->getProjectPairsByProduct($productID);
+            $executions = $this->product->getExecutionPairsByProduct($productID) + array(0 => 0);
+
+            $authedProjects   = array_intersect(array_keys($projects), explode(',', $authedProjects));
+            $authedExecutions = isset($authedExecutions) ? array_intersect(array_keys($executions), explode(',', $authedExecutions)) : array_keys($executions);
+
+            $productCondition   = "(execution = '0' AND project = '0' AND product LIKE '%,$productID,%')";
+            $projectCondition   = "(execution = '0' AND project != '0' AND project " . helper::dbIN($authedProjects) . ')';
+            $executionCondition = "(execution != '0' AND execution " . helper::dbIN($authedExecutions) . ')';
+        }
+
+        $condition = "((product =',0,' OR product = '0' OR product=',,') AND project = '0' AND execution = '0')";
+        if(!empty($productCondition))   $condition .= " OR $productCondition";
+        if(!empty($projectCondition))   $condition .= " OR $projectCondition";
+        if(!empty($executionCondition)) $condition .= " OR $executionCondition";
+
+        return $condition;
+    }
+
+    /**
+     * 处理effort相关查询条件。
+     * Process effort related search condition.
+     *
+     * @param  string $condition
+     * @access protected
+     * @return void
+     */
+    public function processEffortCondition(string &$condition)
+    {
+        $efforts = $this->dao->select('id')->from(TABLE_EFFORT)->where($condition)->fetchPairs();
+        $efforts = !empty($efforts) ? implode(',', $efforts) : 0;
+
+        $condition .= " OR (`objectID` IN ({$efforts}) AND `objectType` = 'effort')";
+    }
+
+    /**
+     * 处理项目集相关查询条件。
+     * Process program related search condition.
+     *
+     * @param  string $condition
+     * @access protected
+     * @return void
+     */
+    public function processProgramCondition(string &$condition)
+    {
+        $programCondition = $this->app->user->view->programs ? : '0';
+
+        $condition .= " or (`objectid` in ({$programCondition}) and `objecttype` = 'program')";
+    }
+
+    /**
+     * 处理多产品执行相关查询条件。
+     * Process multiple product execution related search condition.
+     *
+     * @param  string $condition
+     * @access protected
+     * @return void
+     */
+    public function processNoMultipleExecutionsConditon(string &$condition)
+    {
+        $noMultipleExecutions = $this->dao->select('id')->from(TABLE_PROJECT)->where('multiple')->eq(0)->andWhere('type')->in('sprint,kanban')->fetchPairs('id', 'id');
+
+        if($noMultipleExecutions)
+        {
+            $condition .= count($noMultipleExecutions) > 1 ? " OR (`objectID` NOT " . helper::dbIN($noMultipleExecutions) . " AND `objectType` = 'execution')" : ' OR (`objectID` !' . helper::dbIN($noMultipleExecutions) . " AND `objectType` = 'execution')";
+        }
+    }
+
+    /**
+     * 通过条件获取操作记录列表。
+     * Get action list by condition.
+     *
+     * @param  string $condition
+     * @param  string $date
+     * @param  string $period
+     * @param  string $begin
+     * @param  string $end
+     * @param  string $direction
+     * @param  string $account
+     * @param  string $beginDate
+     * @param  string $productID
+     * @param  string $projectID
+     * @param  string $executionID
+     * @param  array  $executions
+     * @param  string $actionCondition
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access protected
+     * @return array|bool
+     */
+    protected function getActionListByCondition(string $condition, string $date, string $period, string $begin, string $end, string $direction, string $account, string $beginDate, string $productID, string $projectID, string $executionID, array $executions, string $actionCondition, string $orderBy, object $pager = null): array|bool
+    {
+        return $this->dao->select('*')->from(TABLE_ACTION)
+            ->where('objectType')->notIN($this->config->action->ignoreObjectType4Dynamic)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->beginIF($period != 'all')->andWhere('date')->gt($begin)->fi()
+            ->beginIF($period != 'all')->andWhere('date')->lt($end)->fi()
+            ->beginIF($date)->andWhere('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'")->fi()
+            ->beginIF($account != 'all')->andWhere('actor')->eq($account)->fi()
+            ->beginIF($beginDate)->andWhere('date')->ge($beginDate)->fi()
+            ->beginIF(is_numeric($productID))->andWhere('product')->like("%,$productID,%")->fi()
+            ->andWhere('1=1', true)
+            ->beginIF(is_numeric($projectID))->andWhere('project')->eq($projectID)->fi()
+            ->beginIF(!empty($executions))->andWhere('execution')->in(array_keys($executions))->fi()
+            ->beginIF(is_numeric($executionID))->andWhere('execution')->eq($executionID)->fi()
+            ->markRight(1)
+            /* lite模式下需要排除的一些类型。 */
+            /* Types excluded from Lite. */
+            ->beginIF($this->config->vision == 'lite')->andWhere('objectType')->notin('product')->fi()
+            ->beginIF($this->config->systemMode == 'light')->andWhere('objectType')->notin('program')->fi()
+            ->beginIF($productID == 'notzero')->andWhere('product')->gt(0)->andWhere('product')->notlike('%,0,%')->fi()
+            ->beginIF($projectID == 'notzero')->andWhere('project')->gt(0)->fi()
+            ->beginIF($executionID == 'notzero')->andWhere('execution')->gt(0)->fi()
+            ->andWhere($condition)
+            ->beginIF($actionCondition)->andWhere("($actionCondition)")->fi()
+            /* 过滤客户端的登陆登出操作。 */
+            /* Filter out client login/logout actions. */
+            ->andWhere('action')->notin('disconnectxuanxuan,reconnectxuanxuan,loginxuanxuan,logoutxuanxuan,editmr,removemr')
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
+    }
 }

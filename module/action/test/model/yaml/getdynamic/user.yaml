@@ -1,0 +1,12 @@
+title: table zt_user
+desc: "用户信息"
+author: sgm
+version: "1.0"
+fields:
+  - field: account
+    note: "用户名"
+    fields:
+    - field: account1
+      range: admin,dev,test
+    - field: account2
+      range: "[],17,18"

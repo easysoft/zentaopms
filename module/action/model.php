@@ -192,6 +192,7 @@ class actionModel extends model
                     break;
                 default:
                     list($product, $project, $execution) = $this->actionTao->getGenerateRelated($objectType, $objectID, '*');
+                    break;
             }
 
             if($actionType == 'unlinkedfromproject' || $actionType == 'linked2project') $project = (int)$extra ;
@@ -338,8 +339,11 @@ class actionModel extends model
             ->beginIF($objectType != 'all')->andWhere('objectType')->eq($objectType)->fi()
             ->andWhere('extra')->eq($extra)
             ->andWhere('vision')->eq($this->config->vision)
-            ->orderBy($orderBy)->page($pager)->fetchAll();
-        if(!$trashes) return array();
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
+
+        if(empty($trashes)) return array();
 
         /* 按对象类型对已删除的对象进行分组，并获取名称字段。 */
         /* Group trashes by objectType, and get there name field. */
@@ -429,7 +433,7 @@ class actionModel extends model
 
         if($objectType != 'pipeline')
         {
-            $trashes = $this->dao->select("t1.*, $nameField AS objectName")->from(TABLE_ACTION)->alias('t1')
+            $trashes = $this->dao->select("t1.*, {$nameField} AS objectName")->from(TABLE_ACTION)->alias('t1')
                 ->leftJoin($table)->alias('t2')->on('t1.objectID=t2.id')
                 ->where('t1.action')->eq('deleted')
                 ->andWhere($trashQuery)
@@ -442,7 +446,7 @@ class actionModel extends model
         }
         else
         {
-            $trashes = $this->dao->select("t1.*, t1.objectType AS type, t2.name AS objectName, t2.type AS objectType")->from(TABLE_ACTION)->alias('t1')
+            $trashes = $this->dao->select('t1.*, t1.objectType AS type, t2.name AS objectName, t2.type AS objectType')->from(TABLE_ACTION)->alias('t1')
                 ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.objectID=t2.id')
                 ->where('t1.action')->eq('deleted')
                 ->andWhere($trashQuery)
@@ -755,61 +759,7 @@ class actionModel extends model
         /* Build has priv search condition. */
         $condition  = '1=1';
         $executions = array();
-        if(!$this->app->user->admin)
-        {
-            /* 验证用户的产品/项目/执行权限。 */
-            /* Verify user's product/project/execution permissions。*/
-            $aclViews = isset($this->app->user->rights['acls']['views']) ? $this->app->user->rights['acls']['views'] : array();
-            if($productID == 'all')   $authedProducts   = (empty($aclViews) || (!empty($aclViews) && !empty($aclViews['product'])))   ? $this->app->user->view->products : '0';
-            if($projectID == 'all')   $authedProjects   = (empty($aclViews) || (!empty($aclViews) && !empty($aclViews['project'])))   ? $this->app->user->view->projects : '0';
-            if($executionID == 'all') $authedExecutions = (empty($aclViews) || (!empty($aclViews) && !empty($aclViews['execution']))) ? $this->app->user->view->sprints  : '0';
-
-            if(empty($authedProducts)) $authedProducts = '0';
-
-            /* 组建产品/项目/执行搜索条件。 */
-            /* Build product/project/execution search condition. */
-            if($productID == 'all' && $projectID == 'all')
-            {
-                $productCondition = '';
-                foreach(explode(',', $authedProducts) as $product) $productCondition = empty($productCondition) ? "(execution = '0' AND project = '0' AND (product LIKE '%,$product,%'" : "$productCondition OR product LIKE '%,$product,%'";
-                if(!empty($productCondition)) $productCondition .= '))';
-
-                $projectCondition   = "(execution = '0' AND project != '0' AND project " . helper::dbIN($authedProjects) . ')';
-                $executionCondition = isset($authedExecutions) ? "(execution != 0 AND execution " . helper::dbIN($authedExecutions) . ')' : "(execution != 0 AND execution = '$executionID')";
-            }
-            elseif($productID == 'all' && is_numeric($projectID))
-            {
-                $products   = $this->loadModel('product')->getProductPairsByProject($projectID);
-                $executions = $this->loadModel('execution')->getPairs($projectID) + array(0 => 0);
-
-                $authedExecutions = isset($authedExecutions) ? array_intersect(array_keys($executions), explode(',', $authedExecutions)) : array_keys($executions);
-
-                $productCondition = '';
-                foreach(array_keys($products) as $product) $productCondition = empty($productCondition) ? "(execution = '0' AND project = '0' AND (product LIKE '%,$product,%'" : "$productCondition OR product LIKE '%,$product,%'";
-                if(!empty($productCondition)) $productCondition .= '))';
-
-                $projectCondition   = "(execution = '0' AND project = '$projectID')";
-                $executionCondition = "(execution != '0' AND execution " . helper::dbIN($authedExecutions) . ')';
-            }
-            elseif(is_numeric($productID) && $projectID == 'all')
-            {
-                $this->loadModel('product');
-                $projects   = $this->product->getProjectPairsByProduct($productID);
-                $executions = $this->product->getExecutionPairsByProduct($productID) + array(0 => 0);
-
-                $authedProjects   = array_intersect(array_keys($projects), explode(',', $authedProjects));
-                $authedExecutions = isset($authedExecutions) ? array_intersect(array_keys($executions), explode(',', $authedExecutions)) : array_keys($executions);
-
-                $productCondition   = "(execution = '0' AND project = '0' AND product LIKE '%,$productID,%')";
-                $projectCondition   = "(execution = '0' AND project != '0' AND project " . helper::dbIN($authedProjects) . ')';
-                $executionCondition = "(execution != '0' AND execution " . helper::dbIN($authedExecutions) . ')';
-            }
-
-            $condition = "((product =',0,' OR product = '0' OR product=',,') AND project = '0' AND execution = '0')";
-            if(!empty($productCondition))   $condition .= " OR $productCondition";
-            if(!empty($projectCondition))   $condition .= " OR $projectCondition";
-            if(!empty($executionCondition)) $condition .= " OR $executionCondition";
-        }
+        if(!$this->app->user->admin) $condition = $this->actionTao->buildUserAclsSearchCondition($productID, $projectID, $executionID, $executions);
 
         $actionCondition = $this->getActionCondition();
         if(!$actionCondition && !$this->app->user->admin && isset($this->app->user->rights['acls']['actions'])) return array();
@@ -820,61 +770,21 @@ class actionModel extends model
         if($period == 'all')
         {
             $year = date('Y');
-            $beginDate = $year . '-01-01';
 
             /* 查询所有动态时最多查询最后两年的数据。 */
             /* When query all dynamic then query the data of the last two years at most. */
-            if($this->app->getMethodName() == 'dynamic') $beginDate = $year - 1 . '-01-01';
+            if($this->app->getMethodName() == 'dynamic') $year = $year - 1;
+            $beginDate = $year . '-01-01';
         }
 
-        $programCondition = empty($this->app->user->view->programs) ? '0' : $this->app->user->view->programs;
+        $condition = "(`objectType` IN ('doc', 'doclib') OR ({$condition})) AND `objectType` NOT IN ('program', 'effort', 'execution')";
 
-        $efforts = $this->dao->select('id')->from(TABLE_EFFORT)->where($condition)->fetchPairs();
-        $efforts = !empty($efforts) ? implode(',', $efforts) : 0;
+        $this->actionTao->processNoMultipleExecutionsConditon($condition);
+        $this->actionTao->processProgramCondition($condition);
+        $this->actionTao->processEffortCondition($condition);
+        $condition  = "({$condition})";
 
-        $noMultipleExecutions = $this->dao->select('id')->from(TABLE_PROJECT)->where('multiple')->eq(0)->andWhere('type')->in('sprint,kanban')->fetchPairs('id', 'id');
-
-        $condition = "(`objectType` IN ('doc', 'doclib') OR ($condition)) AND `objectType` NOT IN ('program', 'effort', 'execution')";
-        if($noMultipleExecutions)
-        {
-            if(count($noMultipleExecutions) > 1) $condition .= " OR (`objectID` NOT " . helper::dbIN($noMultipleExecutions) . " AND `objectType` = 'execution')";
-            else $condition .= " OR (`objectID` !" . helper::dbIN($noMultipleExecutions) . " AND `objectType` = 'execution')";
-        }
-        $condition .= " OR (`objectID` IN ($programCondition) AND `objectType` = 'program')";
-        $condition .= " OR (`objectID` IN ($efforts) AND `objectType` = 'effort')";
-        $condition  = "($condition)";
-
-        /* 获取action数据。 */
-        /* Get actions. */
-        $actions = $this->dao->select('*')->from(TABLE_ACTION)
-            ->where('objectType')->notIN($this->config->action->ignoreObjectType4Dynamic)
-            ->andWhere('vision')->eq($this->config->vision)
-            ->beginIF($period != 'all')->andWhere('date')->gt($begin)->fi()
-            ->beginIF($period != 'all')->andWhere('date')->lt($end)->fi()
-            ->beginIF($date)->andWhere('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'")->fi()
-            ->beginIF($account != 'all')->andWhere('actor')->eq($account)->fi()
-            ->beginIF($beginDate)->andWhere('date')->ge($beginDate)->fi()
-            ->beginIF(is_numeric($productID))->andWhere('product')->like("%,$productID,%")->fi()
-            ->andWhere('1=1', true)
-            ->beginIF(is_numeric($projectID))->andWhere('project')->eq($projectID)->fi()
-            ->beginIF(!empty($executions))->andWhere('execution')->in(array_keys($executions))->fi()
-            ->beginIF(is_numeric($executionID))->andWhere('execution')->eq($executionID)->fi()
-            ->markRight(1)
-            /* lite模式下需要排除的一些类型。 */
-            /* Types excluded from Lite. */
-            ->beginIF($this->config->vision == 'lite')->andWhere('objectType')->notin('product')->fi()
-            ->beginIF($this->config->systemMode == 'light')->andWhere('objectType')->notin('program')->fi()
-            ->beginIF($productID == 'notzero')->andWhere('product')->gt(0)->andWhere('product')->notlike('%,0,%')->fi()
-            ->beginIF($projectID == 'notzero')->andWhere('project')->gt(0)->fi()
-            ->beginIF($executionID == 'notzero')->andWhere('execution')->gt(0)->fi()
-            ->andWhere($condition)
-            ->beginIF($actionCondition)->andWhere("($actionCondition)")->fi()
-            /* 过滤客户端的登陆登出操作。 */
-            /* Filter out client login/logout actions. */
-            ->andWhere('action')->notin('disconnectxuanxuan,reconnectxuanxuan,loginxuanxuan,logoutxuanxuan,editmr,removemr')
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll();
+        $actions = $this->actionTao->getActionListByCondition($condition, $date, $period, $begin, $end, $direction, $account, $beginDate, $productID, $projectID, $executionID, $executions, $actionCondition, $orderBy, $pager);
 
         if(!$actions) return array();
 
@@ -1938,10 +1848,10 @@ class actionModel extends model
         $actionType = strtolower($actionType);
         if(!isset($this->config->search->fields->$objectType)) return true;
         if(strpos($this->config->search->buildAction, ",{$actionType},") === false && empty($_POST['comment'])) return true;
-        if($actionType == 'deleted' or $actionType == 'erased') return $this->search->deleteIndex($objectType, $objectID);
+        if($actionType == 'deleted' || $actionType == 'erased') return $this->search->deleteIndex($objectType, $objectID);
 
         $field = $this->config->search->fields->$objectType;
-        $query = $this->search->buildIndexQuery($objectType, $testDeleted = false);
+        $query = $this->search->buildIndexQuery($objectType, false);
         $data  = $query->andWhere('t1.' . $field->id)->eq($objectID)->fetch();
         if(empty($data)) return true;
 
