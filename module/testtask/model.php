@@ -792,30 +792,27 @@ class testtaskModel extends model
      *
      * @param  int    $taskID
      * @param  string $type
+     * @param  array  $runs
      * @access public
      * @return bool
      */
-    public function linkCase(int $taskID, string $type, array $cases): bool
+    public function linkCase(int $taskID, string $type, array $runs): bool
     {
-        if(!$cases) return false;
+        if(!$runs) return false;
 
-        $postData = fixer::input('post')->get();
-
-        $users = array();
-        if($type == 'build' && !empty($postData)) $users = $this->dao->select('`case`, assignedTo')->from(TABLE_TESTRUN)->where('`case`')->in($postData)->fetchPairs();
-
-        $run = new stdclass();
-        $run->task   = $taskID;
-        $run->status = 'normal';
+        $users      = array();
+        $caseIdList = array_unique(array_filter(array_map(function($run){return $run->case;}, $runs)));
+        if($type == 'build' && $caseIdList) $users = $this->dao->select('`case`, assignedTo')->from(TABLE_TESTRUN)->where('`case`')->in($caseIdList)->fetchPairs();
 
         $case = new stdclass();
         $case->product = $this->session->product;
         $case->version = 1;
-        foreach($cases as $caseID)
+
+        foreach($runs as $run)
         {
-            $run->case       = $caseID;
-            $run->version    = $postData->versions[$caseID];
-            $run->assignedTo = zget($users, $caseID, '');
+            $run->task       = $taskID;
+            $run->status     = 'normal';
+            $run->assignedTo = zget($users, $run->case, '');
             $this->dao->replace(TABLE_TESTRUN)->data($run)->exec();
 
             /* 在项目或执行下关联用例到测试单时把用例关联到项目或执行。*/
@@ -826,11 +823,12 @@ class testtaskModel extends model
                 $lastOrder = $this->dao->select('MAX(`order`) AS order')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->fetch('order');
 
                 $case->project = $projectID;
-                $case->case    = $caseID;
+                $case->case    = $run->case;
                 $case->order   = ++$lastOrder;
                 $this->dao->replace(TABLE_PROJECTCASE)->data($case)->exec();
             }
-            $this->loadModel('action')->create('case', $caseID, 'linked2testtask', '', $taskID);
+
+            $this->loadModel('action')->create('case', $run->case, 'linked2testtask', '', $taskID);
         }
 
         return !dao::isError();

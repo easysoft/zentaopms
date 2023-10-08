@@ -737,8 +737,10 @@ class testtask extends control
     {
         if(!empty($_POST))
         {
-            $this->testtask->linkCase($taskID, $type);
+            $runs = form::batchData($this->config->testtask->form->linkCase)->get();
+            $this->testtask->linkCase($taskID, $type, $runs);
             if(dao::isError()) return $this->send(array('result' => 'success', 'message' => dao::getError()));
+
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('cases', "taskID={$taskID}")));
         }
 

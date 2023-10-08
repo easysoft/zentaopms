@@ -8,8 +8,8 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
     const form = new FormData();
     checkedList.forEach((id) =>
     {
-        form.append('cases[]', id);
-        form.append('versions[' + id + ']', $('#versions' + id).val());
+        form.append('case[]', id);
+        form.append('version[]', $('#version' + id).val());
     });
 
     if($(this).hasClass('ajax-btn'))
@@ -48,7 +48,7 @@ window.renderCell = function(result, info)
     if(info.col.name == 'version' && result[0])
     {
         const testcase = info.row.data;
-        let html = "<select name='versions[" + testcase.id + "]' id='versions" + testcase.id + "' class='form-control' style='width:60px'>";
+        let html = "<select name='version[" + testcase.id + "]' id='version" + testcase.id + "' class='form-control' style='width:60px'>";
         for(i = 1; i <= testcase.version; i++)
         {
             html += "<option value='" + i + "'>" + i + "</option>";
