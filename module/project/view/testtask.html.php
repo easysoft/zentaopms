@@ -36,6 +36,7 @@
     <?php endif;?>
   </div>
 </div>
+
 <div id="mainContent">
   <?php if(empty($tasks)):?>
   <div class="table-empty-tip">
@@ -47,7 +48,7 @@
     </p>
   </div>
   <?php else:?>
-  <form class="main-table table-testtask" data-ride="table" data-group="true" method="post" target='hiddenwin' id='testtaskForm'>
+  <form class="main-table table-testtask" data-group="true" method="post" target='hiddenwin' id='testtaskForm'>
     <table class="table table-grouped has-sort-head" id='taskList'>
       <thead>
         <?php $vars = "projectID=$projectID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
@@ -55,6 +56,11 @@
         <tr class='<?php if($total and $project->hasProduct) echo 'divider'; ?>'>
           <th class='c-side text-center <?php if(!$project->hasProduct) echo 'hide';?>'><?php common::printOrderLink('product', $orderBy, $vars, $lang->testtask->product);?></th>
           <th class="c-id">
+            <?php if($canTestReport):?>
+            <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
+              <label></label>
+            </div>
+            <?php endif;?>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
           <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->testtask->name);?></th>
@@ -88,7 +94,11 @@
           </td>
           <?php endif;?>
           <td class="c-id">
+            <?php if($canTestReport):?>
+            <?php echo html::checkbox('taskIdList', array($task->id => sprintf('%03d', $task->id)));?>
+            <?php else:?>
             <?php printf('%03d', $task->id);?>
+            <?php endif;?>
           </td>
           <td class='text-left' title="<?php echo $task->name?>"><?php echo html::a($this->createLink('testtask', 'cases', "taskID=$task->id"), $task->name, '', "data-app='project'");?></td>
           <td title="<?php echo $task->buildName?>">
@@ -139,10 +149,22 @@
       </tbody>
     </table>
     <div class="table-footer">
+      <?php if($canTestReport):?>
+      <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
+      <div class="table-actions btn-toolbar">
+      <?php
+      $actionLink = $this->createLink('project', 'testreport', "objectID=$projectID&objctType=project");
+      $misc       = common::hasPriv('testreport', 'browse') ? "onclick=\"setFormAction('$actionLink', '', '#testtaskForm')\"" : "disabled='disabled'";
+      echo html::commonButton($lang->testreport->common, $misc);
+      ?>
+      </div>
+      <?php endif;?>
       <div class="table-statistic"><?php echo sprintf($lang->testtask->allSummary, $total, $waitCount, $testingCount, $blockedCount, $doneCount);?></div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>
   <?php endif;?>
 </div>
+<?php js::set('pageSummary', sprintf($lang->testtask->allSummary, $total, $waitCount, $testingCount, $blockedCount, $doneCount));?>
+<?php js::set('checkedAllSummary', $lang->testtask->checkedAllSummary);?>
 <?php include '../../common/view/footer.html.php';?>
