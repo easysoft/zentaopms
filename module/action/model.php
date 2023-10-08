@@ -912,7 +912,7 @@ class actionModel extends model
      * @access public
      * @return array
      */
-    public function transformActions($actions): array
+    public function transformActions(array $actions): array
     {
         $this->app->loadLang('todo');
         $this->app->loadLang('stakeholder');
@@ -929,7 +929,10 @@ class actionModel extends model
         extract($this->getRelatedDataByActions($actions));
 
         $projectIdList = array();
-        foreach($relatedProjects as $objectType => $idList) $projectIdList += $idList;
+        foreach($relatedProjects as $objectType => $idList)
+        {
+            if(is_array($idList)) $projectIdList = array_merge($projectIdList, $idList);
+        }
 
         /* 获取需要验证的元素列表。 */
         /* Get the list of elements that need to be verified. */
@@ -993,108 +996,36 @@ class actionModel extends model
      * @access public
      * @return array
      */
-    public function getRelatedDataByActions($actions): array
+    public function getRelatedDataByActions(array $actions): array
     {
-        $this->loadModel('user');
+        /* Init object type array. */
+        $objectTypes = array();
+        foreach($actions as $object) $objectTypes[$object->objectType][$object->objectID] = $object->objectID;
+
+        if(isset($objectTypes['todo'])) $this->app->loadLang('todo');
+        if(isset($objectTypes['branch'])) $this->app->loadLang('branch');
+        $users = isset($objectTypes['gapanalysis']) || isset($objectTypes['stakeholder']) ? $this->loadModel('user')->getPairs('noletter') : array();
 
         $objectNames     = array();
         $relatedProjects = array();
         $requirements    = array();
-        $objectTypes     = array();
-
-        foreach($actions as $object) $objectTypes[$object->objectType][$object->objectID] = $object->objectID;
         foreach($objectTypes as $objectType => $objectIdList)
         {
             if(!isset($this->config->objectTables[$objectType]) && $objectType != 'makeup') continue;    // If no defination for this type, omit it.
 
+            /* Get object name field, if it's empty, continue. */
             $table = $objectType == 'makeup' ? '`' . $this->config->db->prefix . 'overtime`' : $this->config->objectTables[$objectType];
             $field = zget($this->config->action->objectNameFields, $objectType, '');
             if(empty($field)) continue;
 
-            if($table != TABLE_TODO)
-            {
-                $objectName     = array();
-                $relatedProject = array();
-                if(strpos(",{$this->config->action->needGetProjectType},", ",{$objectType},") !== false)
-                {
-                    $objectInfo = $this->dao->select("id, project, $field AS name")->from($table)->where('id')->in($objectIdList)->fetchAll();
-                    if($objectType == 'gapanalysis') $users = $this->user->getPairs('noletter');
-                    foreach($objectInfo as $object)
-                    {
-                        $objectName[$object->id]     = $objectType == 'gapanalysis' ? zget($users, $object->name) : $object->name;
-                        $relatedProject[$object->id] = $object->project;
-                    }
-                }
-                elseif($objectType == 'project' || $objectType == 'execution')
-                {
-                    $objectInfo = $this->dao->select("id, project, $field AS name")->from($table)->where('id')->in($objectIdList)->fetchAll();
-                    foreach($objectInfo as $object)
-                    {
-                        $objectName[$object->id]     = $object->name;
-                        $relatedProject[$object->id] = $object->project > 0 ? $object->project : $object->id;
-                    }
-                }
-                elseif($objectType == 'story')
-                {
-                    $objectInfo = $this->dao->select('id,title,type')->from($table)->where('id')->in($objectIdList)->fetchAll();
-                    foreach($objectInfo as $object)
-                    {
-                        $objectName[$object->id] = $object->title;
-                        if($object->type == 'requirement') $requirements[$object->id] = $object->id;
-                    }
-                }
-                elseif($objectType == 'reviewcl')
-                {
-                    $objectInfo = $this->dao->select('id,title')->from($table)->where('id')->in($objectIdList)->fetchAll();
-                    foreach($objectInfo as $object) $objectName[$object->id] = $object->title;
-                }
-                elseif($objectType == 'team')
-                {
-                    $objectInfo = $this->dao->select('id,team,type')->from(TABLE_PROJECT)->where('id')->in($objectIdList)->fetchAll();
-                    foreach($objectInfo as $object)
-                    {
-                        $objectName[$object->id] = $object->team;
-                        if($object->type == 'project') $relatedProject[$object->id] = $object->id;
-                    }
-                }
-                elseif($objectType == 'stakeholder')
-                {
-                    $objectName = $this->dao->select("t1.id, t2.realname")->from($table)->alias('t1')
-                        ->leftJoin(TABLE_USER)->alias('t2')->on("t1.{$field} = t2.account")
-                        ->where('t1.id')->in($objectIdList)
-                        ->fetchPairs();
-                }
-                elseif($objectType == 'branch')
-                {
-                    $this->app->loadLang('branch');
-                    $objectName = $this->dao->select("id,name")->from(TABLE_BRANCH)->where('id')->in($objectIdList)->fetchPairs();
-                    if(in_array(BRANCH_MAIN, $objectIdList)) $objectName[BRANCH_MAIN] = $this->lang->branch->main;
-                }
-                elseif($objectType == 'privlang')
-                {
-                    $objectName = $this->dao->select("objectID AS id, $field AS name")->from($table)->where('objectID')->in($objectIdList)->andWhere('objectType')->eq('priv')->fetchPairs();
-                }
-                else
-                {
-                    $objectName = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIdList)->fetchPairs();
-                }
+            /* Get object name, related projects, requirements. */
+            list($objectName, $relatedProject, $requirements) = $this->getObjectRelatedData($table, $objectType, $objectIdList, $field, $users, $requirements);
+            if($objectType == 'branch' && in_array(BRANCH_MAIN, $objectIdList)) $objectName[BRANCH_MAIN] = $this->lang->branch->main;
 
-                $objectNames[$objectType]     = $objectName;
-                $relatedProjects[$objectType] = $relatedProject;
-            }
-            else
-            {
-                $todos = $this->dao->select("id, $field AS name, account, private, type, objectID")->from($table)->where('id')->in($objectIdList)->fetchAll('id');
-                foreach($todos as $id => $todo)
-                {
-                    if($todo->type == 'task') $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_TASK)->fetch('name');
-                    if($todo->type == 'bug')  $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_BUG)->fetch('title');
-
-                    $objectNames[$objectType][$id] = $todo->name;
-                    if($todo->private == 1 && $todo->account != $this->app->user->account) $objectNames[$objectType][$id] = $this->lang->todo->thisIsPrivate;
-                }
-            }
+            $objectNames[$objectType]     = $objectName;
+            $relatedProjects[$objectType] = $relatedProject;
         }
+
         $objectNames['user'][0] = 'guest';    // Add guest account.
 
         $relatedData['objectNames']     = $objectNames;
@@ -2123,5 +2054,68 @@ class actionModel extends model
     public function updateStageAttribute(string $attribute, array $stages): int
     {
         return $this->dao->update(TABLE_EXECUTION)->set('attribute')->eq($attribute)->where('id')->in($stages)->exec();
+    }
+
+    /**
+     * 获取动态对象关联的数据。
+     * Get action object related data.
+     *
+     * @param  string $table
+     * @param  string $objectType
+     * @param  array  $objectIdList
+     * @param  string $field
+     * @param  array  $users
+     * @param  array  $requirements
+     * @access public
+     * @return array
+     */
+    public function getObjectRelatedData(string $table, string $objectType, array $objectIdList, string $field, array $users, array $requirements): array
+    {
+        $objectName     = array();
+        $relatedProject = array();
+        if($table == TABLE_TODO)
+        {
+            $todos = $this->dao->select("id, {$field} AS name, account, private, type, objectID")->from($table)->where('id')->in($objectIdList)->fetchAll();
+            foreach($todos as $todo)
+            {
+                /* Get related object name. */
+                if(in_array($todo->type, array('task', 'bug', 'story', 'testtask'))) $todo->name = $this->dao->findById($todo->objectID)->from($this->config->objectTables[$todo->type])->fetch($this->config->action->objectNameFields[$todo->type]);
+                $objectName[$todo->id] = $todo->private == 1 && $todo->account != $this->app->user->account ? $this->lang->todo->thisIsPrivate : $todo->name;
+            }
+        }
+        elseif(strpos(",{$this->config->action->needGetProjectType},", ",{$objectType},") !== false || $objectType == 'project' || $objectType == 'execution')
+        {
+            $objectInfo = $this->dao->select("id, project, {$field} AS name")->from($table)->where('id')->in($objectIdList)->fetchAll();
+            foreach($objectInfo as $object)
+            {
+                $objectName[$object->id]     = $objectType == 'gapanalysis' ? zget($users, $object->name) : $object->name; // Get user realname if objectType is gapanalysis.
+                $relatedProject[$object->id] = $object->project;
+            }
+        }
+        elseif($objectType == 'story' || $objectType == 'team') // Get story or team related data.
+        {
+            $objectField = $objectType == 'story' ? 'id,title,type' : 'id,team AS title,type';
+            $objectInfo  = $this->dao->select($objectField)->from($table)->where('id')->in($objectIdList)->fetchAll();
+            foreach($objectInfo as $object)
+            {
+                $objectName[$object->id] = $object->title;
+                if($object->type == 'requirement') $requirements[$object->id] = $object->id;
+                if($object->type == 'project') $relatedProject[$object->id] = $object->id;
+            }
+        }
+        elseif($objectType == 'stakeholder') // Get stakeholder realname.
+        {
+            $objectName = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->fetchPairs();
+            foreach($objectName as $id => $name) $objectName[$id] = zget($users, $name);
+        }
+        elseif($objectType == 'privlang')
+        {
+            $objectName = $this->dao->select("objectID AS id, {$field} AS name")->from($table)->where('objectID')->in($objectIdList)->andWhere('objectType')->eq('priv')->fetchPairs();
+        }
+        else
+        {
+            $objectName = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->fetchPairs();
+        }
+        return array($objectName, $relatedProject, $requirements);
     }
 }
