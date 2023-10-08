@@ -1841,32 +1841,15 @@ class screenModel extends model
      */
     public function getProjectTaskTable($year, $month, $projectList)
     {
-        $createdTaskActions = $this->dao->select('distinct project, actor')->from(TABLE_ACTION)
-            ->where('objectType')->eq('task')
-            ->andWhere('action')->eq('opened')
-            ->andWhere('year(date)')->eq($year)
-            ->andWhere('month(date)')->eq($month)
-            ->fetchAll();
-
         $deletedExecutionList = $this->dao->select('id')->from(TABLE_EXECUTION)
             ->where('deleted')->eq('1')
             ->andWhere('type')->in('sprint,stage,kanban')
             ->fetchPairs();
 
-        $createdTaskActors = array();
-        foreach($createdTaskActions as $projectAccount)
-        {
-            $projectID = $projectAccount->project;
-            $account   = $projectAccount->actor;
-
-            if(!isset($createdTaskActors[$projectID])) $createdTaskActors[$projectID] = array();
-            $createdTaskActors[$projectID][] = $account;
-        }
-
         $dataset = array();
         foreach($projectList as $projectID => $projectName)
         {
-            $createdTaskList = $this->dao->select('id')->from(TABLE_TASK)
+            $createdTaskList = $this->dao->select('id,openedBy')->from(TABLE_TASK)
                 ->where('project')->eq($projectID)
                 ->andWhere('year(openedDate)')->eq($year)
                 ->andWhere('month(openedDate)')->eq($month)
@@ -1886,9 +1869,9 @@ class screenModel extends model
             $row->name          = $projectName;
             $row->year          = $year;
             $row->month         = $month;
-            $row->createdTasks  = count(array_unique($createdTaskList));
+            $row->createdTasks  = count(array_unique(array_keys($createdTaskList)));
             $row->finishedTasks = count(array_unique($finishedTaskList));
-            $row->contributors  = isset($createdTaskActors[$projectID]) ? count($createdTaskActors[$projectID]) : 0;
+            $row->contributors  = count(array_unique(array_values($createdTaskList)));
 
             if($row->createdTasks === 0 && $row->finishedTasks === 0 && $row->contributors === 0) continue;
             $dataset[] = $row;
