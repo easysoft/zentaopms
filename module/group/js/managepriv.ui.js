@@ -293,42 +293,8 @@ function updatePrivTree(privList)
         selectedPrivIdList = privList;
     }
 
-    $.ajaxSubmit(
-    {
-        url: $.createLink('group', 'ajaxGetRelatedPrivs'),
-        dataType: 'json',
-        method: 'post',
-        data: {"privList" : privList.toString(), "recommendSelect": recommendSelect.toString(), "excludeIdList": Object.values(excludeIdList).toString()},
-        onComplete: function(data)
-        {
-            if(data.depend == undefined || data.depend.length == 0)
-            {
-                $('.side .menuTree.depend').empty();
-                $('.side .menuTree.depend').closest('.priv-panel').find('.table-empty-tip').removeClass('hidden');
-            }
-            else
-            {
-                $.cookie.set('dependData', JSON.stringify(data.depend));
-                $('.side .menuTree.depend').removeClass('hidden');
-                $('.side .menuTree.depend').load($.createLink('group', 'ajaxGetDependTree'));
-                $('.side .menuTree.depend').closest('.priv-panel').find('.table-empty-tip').addClass('hidden');
-            }
-
-            if(data.recommend == undefined || data.recommend.length == 0)
-            {
-                $('.side .menuTree.recommend').empty();
-                $('.side .menuTree.recommend').closest('.priv-panel').find('.table-empty-tip').removeClass('hidden');
-            }
-            else
-            {
-                $.cookie.set('recommendData', JSON.stringify(data.recommend));
-                $.cookie.set('recommendSelect', recommendSelect.toString());
-                $('.side .menuTree.recommend').removeClass('hidden');
-                $('.side .menuTree.recommend').closest('.priv-panel').find('.table-empty-tip').addClass('hidden');
-                $('.side .menuTree.recommend').load($.createLink('group', 'ajaxGetRecommendTree'));
-            }
-        }
-    });
+    let options = {method: 'post', data: {"selectPrivList" : privList.toString(), "recommendSelect": recommendSelect.toString(), "allPrivList": Object.values(allPrivList).toString()}};
+    loadTarget($.createLink('group', 'ajaxGetRelatedPrivs'), '.side', options);
 }
 
 window.onsize = function()
@@ -503,17 +469,17 @@ function recommendChange($item, checked)
         $parentItem.closest('.checkbox-primary').find('label').addClass('checkbox-indeterminate-block');
     }
 
-    var privID = $item.attr('data-relationpriv');
-    if(privID != 0)
+    var privID = $item.attr('module') + '-' + $item.attr('method');
+    if(privID)
     {
         var index = selectedPrivIdList.indexOf(privID);
 
-        if(privID > 0 && index < 0 && checked) selectedPrivIdList.push(privID);
-        if(privID > 0 && index > -1 && !checked) selectedPrivIdList.splice(index, 1);
+        if(index < 0 && checked) selectedPrivIdList.push(privID);
+        if(index > -1 && !checked) selectedPrivIdList.splice(index, 1);
 
         index = recommendSelect.indexOf(privID);
 
-        if(privID > 0 && index < 0 && checked) recommendSelect.push(privID);
-        if(privID > 0 && index > -1 && !checked) recommendSelect.splice(index, 1);
+        if(index < 0 && checked) recommendSelect.push(privID);
+        if(index > -1 && !checked) recommendSelect.splice(index, 1);
     }
 }

@@ -84,3 +84,5 @@ $config->group->actionList['delete']['hint'] = $lang->group->delete;
 $config->group->actionList['delete']['url']  = 'javascript:confirmDelete("{id}", "{name}")';
 
 $config->group->hiddenPriv = array('system-dashboard', 'store-browse', 'store-appView', 'space-getStoreAppInfo', 'system-dblist', 'system-configdomain', 'system-ossview');
+
+include 'packagemanager.php';
