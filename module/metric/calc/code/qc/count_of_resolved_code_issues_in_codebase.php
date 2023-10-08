@@ -22,7 +22,7 @@ class count_of_resolved_code_issues_in_codebase extends baseCalc
 {
     public $dataset = 'getRepoIssues';
 
-    public $fieldList = array('t1.resolvedBy', 't1.repo', 't2.name');
+    public $fieldList = array('t1.resolvedBy', 't1.repo');
 
     public $result = array();
 
@@ -30,7 +30,7 @@ class count_of_resolved_code_issues_in_codebase extends baseCalc
     {
         if(!empty($row->resolvedBy))
         {
-            if(empty($this->result[$row->repo])) $this->result[$row->repo] = 0;
+            if(!isset($this->result[$row->repo])) $this->result[$row->repo] = 0;
 
             $this->result[$row->repo] ++;
         }
