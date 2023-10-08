@@ -122,6 +122,7 @@ $config->bug->actionList['toStory']['icon']         = 'lightbulb';
 $config->bug->actionList['toStory']['id']           = 'toStory';
 $config->bug->actionList['toStory']['text']         = $lang->bug->toStory;
 $config->bug->actionList['toStory']['hint']         = $lang->bug->toStory;
+$config->bug->actionList['toStory']['data-tab']     = 'product';
 $config->bug->actionList['toStory']['data-confirm'] = array('html' => "<strong><i class='icon icon-exclamation-sign text-warning text-lg mr-2'></i>{$lang->bug->notice->confirmToStory}</strong>");
 $config->bug->actionList['toStory']['data-url']     = array('module' => 'story', 'method' => 'create', 'params' => 'product={product}&branch={branch}&module=0&story=0&execution=0&bugID={id}');
 

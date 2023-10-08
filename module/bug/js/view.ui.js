@@ -2,9 +2,10 @@ $(document).on('click', '#toStory', function()
 {
     const message = $(this).data('confirm');
     const url     = $(this).data('url');
+    const tab     = $(this).data('tab');
     zui.Modal.confirm({message, onResult: function(result)
     {
-        if(result) loadPage(url);
+        if(result) openPage(url, tab);
     }});
 });
 
