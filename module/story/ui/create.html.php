@@ -330,19 +330,23 @@ formPanel
     formGroup
     (
         set::label($lang->story->spec),
-        set::control('editor'),
-        set::name('spec'),
-        set::placeholder($lang->story->specTemplate . "\n" . $lang->noticePasteImg),
-        set::value($fields['spec']['default']),
-        set::required($fields['spec']['required']),
+        editor
+        (
+            set::name('spec'),
+            set::placeholder($lang->story->specTemplate . "\n" . $lang->noticePasteImg),
+            set::required($fields['spec']['required']),
+            html($fields['spec']['default']),
+        ),
     ),
     formGroup
     (
         set::label($lang->story->verify),
-        set::control('editor'),
-        set::name('verify'),
-        set::value($fields['verify']['default']),
-        set::required($fields['verify']['required']),
+        editor
+        (
+            set::name('verify'),
+            set::required($fields['verify']['required']),
+            html($fields['verify']['default']),
+        )
     ),
     formGroup
     (
