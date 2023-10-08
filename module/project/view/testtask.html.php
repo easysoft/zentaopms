@@ -36,7 +36,12 @@
     <?php endif;?>
   </div>
 </div>
-
+<?php
+$waitCount    = 0;
+$testingCount = 0;
+$blockedCount = 0;
+$doneCount    = 0;
+?>
 <div id="mainContent">
   <?php if(empty($tasks)):?>
   <div class="table-empty-tip">
@@ -52,7 +57,7 @@
     <table class="table table-grouped has-sort-head" id='taskList'>
       <thead>
         <?php $vars = "projectID=$projectID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
-        <?php $canTestReport = ($canBeChanged and common::hasPriv('testreport', 'browse'));?>
+        <?php $canTestReport = ($canBeChanged and common::hasPriv('testreport', 'browse') and !$project->multiple);?>
         <tr class='<?php if($total and $project->hasProduct) echo 'divider'; ?>'>
           <th class='c-side text-center <?php if(!$project->hasProduct) echo 'hide';?>'><?php common::printOrderLink('product', $orderBy, $vars, $lang->testtask->product);?></th>
           <th class="c-id">
@@ -73,12 +78,6 @@
         </tr>
       </thead>
       <tbody>
-        <?php
-        $waitCount    = 0;
-        $testingCount = 0;
-        $blockedCount = 0;
-        $doneCount    = 0;
-        ?>
         <?php foreach($tasks as $product => $productTasks):?>
         <?php $productName = zget($products, $product, '');?>
         <?php foreach($productTasks as $task):?>
