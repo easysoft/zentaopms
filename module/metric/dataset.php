@@ -489,6 +489,21 @@ class dataset
     }
 
     /**
+     * 获取制品库数量。
+     * Get artifact repo count.
+     *
+     * @param  string       $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getArtifactRepos($fieldList)
+    {
+        return $this->dao->select($fieldList)->from(TABLE_ARTIFACTREPO)
+            ->where('deleted')->eq('0')
+            ->query();
+    }
+
+    /**
      * 获取代码库数量。
      * Get repos count.
      *
@@ -498,8 +513,7 @@ class dataset
      */
     public function getRepos($fieldList)
     {
-        return $this->dao->select($fieldList)
-            ->from(TABLE_REPO)
+        return $this->dao->select($fieldList)->from(TABLE_REPO)
             ->where('deleted')->eq('0')
             ->query();
     }
