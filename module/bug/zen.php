@@ -1153,24 +1153,20 @@ class bugZen extends bug
         $product   = $this->product->getByID($bug->product);
         $execution = $this->loadModel('execution')->getByID($bug->execution);
 
-        /* 获取所属模块列表。*/
         /* Get module option menu. */
         $moduleOptionMenu = $this->tree->getOptionMenu($bug->product, 'bug', 0, $bug->branch);
         if(!isset($moduleOptionMenu[$bug->module])) $moduleOptionMenu += $this->tree->getModulesName((array)$bug->module);
 
-        /* 获取该 bug 关联产品和分支下的 bug 列表。*/
         /* Get bugs of current product. */
         $branch = '';
         if($product->type == 'branch') $branch = $bug->branch > 0 ? "{$bug->branch},0" : '0';
         $productBugs = $this->bug->getProductBugPairs($bug->product, $branch);
         unset($productBugs[$bug->id]);
 
-        /* 获取执行列表。*/
         /* Get execution pairs. */
         $executions = array('') + $this->product->getExecutionPairsByProduct($bug->product, (string)$bug->branch, (int)$bug->project);
         if(!empty($bug->execution) && empty($executions[$bug->execution])) $executions[$execution->id] = $execution->name . "({$this->lang->bug->deleted})";
 
-        /* 获取项目列表。*/
         /* Get project pairs. */
         $projects = array('') + $this->product->getProjectPairsByProduct($bug->product, (string)$bug->branch);
         if(!empty($bug->project) && empty($projects[$bug->project]))
@@ -1179,7 +1175,6 @@ class bugZen extends bug
             $projects[$project->id] = $project->name . "({$this->lang->bug->deleted})";
         }
 
-        /* 如果产品列表没有 bug 相关的产品，把该产品加入产品列表。*/
         /* Add product related to the bug when it is not in the products. */
         if(!isset($this->products[$bug->product]))
         {
@@ -1195,6 +1190,7 @@ class bugZen extends bug
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->projects         = $projects;
         $this->view->executions       = $executions;
+        $this->view->productBugs      = $productBugs;
     }
 
     /**
@@ -1243,7 +1239,7 @@ class bugZen extends bug
         $this->view->actions        = $this->loadModel('action')->getList('bug', $bug->id);
         $this->view->contactList    = $this->loadModel('user')->getContactLists($this->app->user->account, 'withnote');
         $this->view->assignedToList = $assignedToList;
-
+        $this->view->execution      = $this->loadModel('execution')->getByID($bug->execution);
     }
 
     /**

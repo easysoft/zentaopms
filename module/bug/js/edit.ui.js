@@ -1,19 +1,19 @@
 $(function()
 {
     changeProductConfirmed = false;
-    resolution             = $('#resolution').val();
+    resolution             = $('[name=resolution]').val();
 });
 
 function changeResolvedBuild(event)
 {
-    const resolution = $('#resolution').val();
+    const resolution = $('[name=resolution]').val();
     if(resolution != 'fixed') return false;
 
-    if($('#resolvedBuild').val() != bug.resolvedBuild)
+    if($(event.target).val() != bug.resolvedBuild && bug.resolvedBuild != '')
     {
         zui.Modal.confirm({message: confirmUnlinkBuild, onResult: function(result)
         {
-            if(!result) $('#resolvedBuild').val(bug.resolvedBuild);
+            if(!result) $(event.target).val(bug.resolvedBuild);
         }});
     }
 }
@@ -23,11 +23,11 @@ function changeResolution(event)
     const resolution = $(event.target).val();
     if(resolution == 'duplicate')
     {
-        $('#duplicateBugBox').show();
+        $('[name=duplicateBug]').closest('tr').show();
     }
     else
     {
-        $('#duplicateBugBox').hide();
+        $('[name=duplicateBug]').closest('tr').hide();
     }
 }
 

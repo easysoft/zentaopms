@@ -13,7 +13,7 @@ namespace zin;
 
 jsVar('bug',                  $bug);
 jsVar('confirmChangeProduct', $lang->bug->notice->confirmChangeProduct);
-jsVar('moduleID',             $moduleID);
+jsVar('moduleID',             $bug->module);
 jsVar('tab',                  $this->app->tab);
 jsVar('released',             $lang->build->released);
 jsVar('confirmUnlinkBuild',   sprintf($lang->bug->notice->confirmUnlinkBuild, zget($resolvedBuilds, $bug->resolvedBuild)));
@@ -516,7 +516,6 @@ detailBody
             ),
             item
             (
-                set::id('duplicateBugBox'),
                 $bug->resolution != 'duplicate' ? setStyle(array('display' => 'none')) : null,
                 set::name($lang->bug->duplicateBug),
                 picker
@@ -560,7 +559,7 @@ detailBody
                     (
                         set::multiple(true),
                         set::name('relatedBug[]'),
-                        set::items($bug->relatedBugTitles)
+                        set::items(isset($bug->relatedBugTitles) ? $bug->relatedBugTitles : array()),
                     ),
                     common::hasPriv('bug', 'linkBugs') ? span
                     (
