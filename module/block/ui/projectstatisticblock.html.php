@@ -79,7 +79,7 @@ $width = $config->edition != 'open' ? '33%' : '50%';
 
 $lastestExecution = !empty($project->executions) && $project->multiple ? cell
 (
-    setClass('flex flex-auto overflow-hidden whitespace-nowrap clip w-full' . (!$longBlock ? ' text-left w-full' : ' justify-end')),
+    setClass('flex flex-1 overflow-hidden whitespace-nowrap clip w-full' . (!$longBlock ? ' text-left w-full' : '')),
     span
     (
         setClass('text-gray'),
@@ -368,6 +368,7 @@ statisticBlock
     set::active($active),
     set::moreLink(createLink('project', 'browse', "browseType={$block->params->type}")),
     set::items($items),
+    set::className('projectstatistic-block'),
     div
     (
         div
