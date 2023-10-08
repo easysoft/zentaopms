@@ -1080,7 +1080,7 @@ class testcaseModel extends model
         /* 初始化步骤相关变量，获取步骤的描述、结果和期望，以及他们在字符串中的位置。 */
         /* Initializes the step variable, and get the desc, result and expect of the step and its position. */
         $steps        = strip_tags($steps);
-        $caseSteps    = array((object)array('desc' => $steps, 'expect' => ''));   // the default steps before parse.
+        $caseSteps    = array((object)array('name' => '1', 'desc' => $steps, 'step' => $steps, 'expect' => ''));   // the default steps before parse.
         $lblStep      = strip_tags($this->lang->bug->tplStep);
         $lblResult    = strip_tags($this->lang->bug->tplResult);
         $lblExpect    = strip_tags($this->lang->bug->tplExpect);
@@ -1106,7 +1106,7 @@ class testcaseModel extends model
         foreach($caseSteps as $key => $caseStep)
         {
             $expect = $key + 1 == $stepCount ? $caseExpect : '';
-            $caseSteps[$key] = (object)array('desc' => trim($caseStep), 'expect' => $expect, 'type' => 'item');
+            $caseSteps[$key] = (object)array('name' => '1', 'desc' => trim($caseStep), 'step' => trim($caseStep), 'expect' => $expect, 'type' => 'item');
         }
 
         return $caseSteps;
