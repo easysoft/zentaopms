@@ -18,7 +18,7 @@ $(document).on('click', '#toTaskButton', function()
     if(projectID && executionID != 0)
     {
         const url = $.createLink('task', 'create', 'executionID=' + executionID + '&storyID=0&moduleID=0&taskID=0&todoID=0&extra=projectID=' + projectID + '&bugID=' + bugID);
-        loadPage(url);
+        openPage(url, 'execution');
     }
     else if(projectID == 0)
     {
