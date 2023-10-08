@@ -49,7 +49,13 @@ class screenModel extends model
      */
     public function getList($dimensionID)
     {
-        return $this->dao->select('*')->from(TABLE_SCREEN)->where('dimension')->eq($dimensionID)->andWhere('deleted')->eq('0')->fetchAll('id');
+        $hasUsageReport = $this->config->edition !== 'open';
+
+        return $this->dao->select('*')->from(TABLE_SCREEN)
+            ->where('dimension')->eq($dimensionID)
+            ->andWhere('deleted')->eq('0')
+            ->beginIF(!$hasUsageReport)->andWhere('id')->ne(1001)->fi()
+            ->fetchAll('id');
     }
 
     /**
