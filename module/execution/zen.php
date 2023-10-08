@@ -687,7 +687,7 @@ class executionZen extends execution
         $tasks          = array();
         $bugs           = $this->loadModel('bug')->getByIdList(array_keys($postData));
         $showAllModule  = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
-        $modules        = $this->loadModel('tree')->getTaskOptionMenu($execution->id, 0, 0, $showAllModule ? 'allModule' : '');
+        $modules        = $this->loadModel('tree')->getTaskOptionMenu($execution->id, 0, $showAllModule ? 'allModule' : '');
         $now            = helper::now();
         $requiredFields = str_replace(',story,', ',', ',' . $this->config->task->create->requiredFields . ',');
         $requiredFields = trim($requiredFields, ',');

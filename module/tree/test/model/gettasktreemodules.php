@@ -4,49 +4,64 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/tree.class.php';
 su('admin');
 
+$project = zdTable('project');
+$project->id->range('1-30');
+$project->type->range('sprint');
+
+$projectProduct = zdTable('projectproduct');
+$projectProduct->project->range('1-30');
+$projectProduct->product->range('1-30');
+$projectProduct->gen(20);
+
+$story = zdTable('story');
+$story->module->range('1-100');
+$story->type->range('story');
+$story->gen(20);
+
+$projectStory = zdTable('projectstory');
+$projectStory->project->range('1-30');
+$projectStory->story->range('1-30');
+$projectStory->gen(20);
+
+$case = zdTable('case');
+$case->execution->range('1-30');
+$case->module->range('1-100');
+$case->gen(20);
+
+$projectCase = zdTable('projectcase');
+$projectCase->project->range('1-30');
+$projectCase->gen(20);
+
+$task = zdTable('task');
+$task->execution->range('1-30');
+$task->module->range('1-100');
+$task->gen(20);
+
+$bug = zdTable('bug');
+$bug->execution->range('1-30');
+$bug->module->range('1-100');
+$bug->gen(20);
+
+$module = zdTable('module');
+$module->root->range('1-30');
+$module->type->range('story{30},task{30},case{30},bug{30}');
+$module->gen(120);
+
 /**
 
 title=测试 treeModel->getTaskTreeModules();
 cid=1
 pid=1
 
-测试获取 execution 101 parent false story 的树 >> ,1822,1824,21,22,23,3021
-测试获取 execution 102 parent false story 的树 >> ,1826,1828,24,25,26,3022
-测试获取 execution 103 parent false story 的树 >> ,1830,1832,27,28,29,3023
-测试获取 execution 104 parent false story 的树 >> ,1834,1836,30,31,32,3024
-测试获取 execution 101 parent true story 的树 >> ,,1822,1824,21,22,23,3021
-测试获取 execution 102 parent true story 的树 >> ,,1826,1828,24,25,26,23,3022
-测试获取 execution 103 parent true story 的树 >> ,,1830,1832,27,28,29,25,3023
-测试获取 execution 104 parent true story 的树 >> ,,1834,1836,30,31,32,27,3024
-测试获取 execution 101 parent false case 的树 >> ,21,22,23,3021
-测试获取 execution 102 parent false case 的树 >> ,24,25,26,3022
-测试获取 execution 103 parent false case 的树 >> ,27,28,29,3023
-测试获取 execution 104 parent false case 的树 >> ,30,31,32,3024
-测试获取 execution 101 parent true case 的树 >> ,,21,22,23,3021
-测试获取 execution 102 parent true case 的树 >> ,,24,25,26,23,3022
-测试获取 execution 103 parent true case 的树 >> ,,27,28,29,25,3023
-测试获取 execution 104 parent true case 的树 >> ,,30,31,32,27,3024
-
 */
-$executionID = array(101, 102, 103, 104);
+$executionID = array(1, 2, 3, 4);
 $parent      = array(false, true);
-$linkObject  = array('story', 'case');
+$linkObject  = array('story', 'case', 'bug', '');
 
 $tree = new treeTest();
 
-r($tree->getTaskTreeModulesTest($executionID[0], $parent[0], $linkObject[0])) && p() && e(',1822,1824,21,22,23,3021');     // 测试获取 execution 101 parent false story 的树
-r($tree->getTaskTreeModulesTest($executionID[1], $parent[0], $linkObject[0])) && p() && e(',1826,1828,24,25,26,3022');     // 测试获取 execution 102 parent false story 的树
-r($tree->getTaskTreeModulesTest($executionID[2], $parent[0], $linkObject[0])) && p() && e(',1830,1832,27,28,29,3023');     // 测试获取 execution 103 parent false story 的树
-r($tree->getTaskTreeModulesTest($executionID[3], $parent[0], $linkObject[0])) && p() && e(',1834,1836,30,31,32,3024');     // 测试获取 execution 104 parent false story 的树
-r($tree->getTaskTreeModulesTest($executionID[0], $parent[1], $linkObject[0])) && p() && e(',,1822,1824,21,22,23,3021');    // 测试获取 execution 101 parent true story 的树
-r($tree->getTaskTreeModulesTest($executionID[1], $parent[1], $linkObject[0])) && p() && e(',,1826,1828,24,25,26,23,3022'); // 测试获取 execution 102 parent true story 的树
-r($tree->getTaskTreeModulesTest($executionID[2], $parent[1], $linkObject[0])) && p() && e(',,1830,1832,27,28,29,25,3023'); // 测试获取 execution 103 parent true story 的树
-r($tree->getTaskTreeModulesTest($executionID[3], $parent[1], $linkObject[0])) && p() && e(',,1834,1836,30,31,32,27,3024'); // 测试获取 execution 104 parent true story 的树
-r($tree->getTaskTreeModulesTest($executionID[0], $parent[0], $linkObject[1])) && p() && e(',21,22,23,3021');               // 测试获取 execution 101 parent false case 的树
-r($tree->getTaskTreeModulesTest($executionID[1], $parent[0], $linkObject[1])) && p() && e(',24,25,26,3022');               // 测试获取 execution 102 parent false case 的树
-r($tree->getTaskTreeModulesTest($executionID[2], $parent[0], $linkObject[1])) && p() && e(',27,28,29,3023');               // 测试获取 execution 103 parent false case 的树
-r($tree->getTaskTreeModulesTest($executionID[3], $parent[0], $linkObject[1])) && p() && e(',30,31,32,3024');               // 测试获取 execution 104 parent false case 的树
-r($tree->getTaskTreeModulesTest($executionID[0], $parent[1], $linkObject[1])) && p() && e(',,21,22,23,3021');              // 测试获取 execution 101 parent true case 的树
-r($tree->getTaskTreeModulesTest($executionID[1], $parent[1], $linkObject[1])) && p() && e(',,24,25,26,23,3022');           // 测试获取 execution 102 parent true case 的树
-r($tree->getTaskTreeModulesTest($executionID[2], $parent[1], $linkObject[1])) && p() && e(',,27,28,29,25,3023');           // 测试获取 execution 103 parent true case 的树
-r($tree->getTaskTreeModulesTest($executionID[3], $parent[1], $linkObject[1])) && p() && e(',,30,31,32,27,3024');           // 测试获取 execution 104 parent true case 的树
+r($tree->getTaskTreeModulesTest($executionID[0], $parent[0], $linkObject[0])) && p() && e('1,31'); // 测试获取 execution 1 parent false story 的树
+r($tree->getTaskTreeModulesTest($executionID[1], $parent[1], $linkObject[0])) && p() && e('2,32'); // 测试获取 execution 2 parent true story 的树
+r($tree->getTaskTreeModulesTest($executionID[2], $parent[0], $linkObject[2])) && p() && e('3');    // 测试获取 execution 3 parent false bug 的树
+r($tree->getTaskTreeModulesTest($executionID[3], $parent[0], $linkObject[1])) && p() && e('4');    // 测试获取 execution 4 parent false case 的树
+r($tree->getTaskTreeModulesTest($executionID[3], $parent[0], $linkObject[3])) && p() && e('4,34'); // 测试获取 execution 4 parent false  的树

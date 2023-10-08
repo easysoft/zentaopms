@@ -1684,150 +1684,21 @@ class storyModel extends model
      * Batch to task.
      *
      * @param  int    $executionID
-     * @param  int    $projectID
+     * @param  array  $tasks
      * @access public
-     * @return bool|array
+     * @return array|false
      */
-    public function batchToTask($executionID, $projectID = 0)
+    public function batchToTask(int $executionID, array $tasks): array|false
     {
         /* load Module and get the data from the post and get the current time. */
         $this->loadModel('action');
         $this->loadModel('task');
 
-        $now     = helper::now();
-        $account = $this->app->user->account;
-        $tasks   = fixer::input('post')
-            ->remove('syncFields')
-            ->get();
-
-        if(!empty($_POST['syncFields'])) $stories = empty($tasks->story) ? array() : $this->getByList($tasks->story);
-
-        /* Create tasks. */
-        $preStory  = 0;
-        $storyIDs  = array();
-        $taskNames = array();
-        foreach($tasks->story as $key => $storyID)
-        {
-            $tasks->name[$key] = trim($tasks->name[$key]);
-            if(empty($tasks->name[$key])) continue;
-            if($tasks->type[$key] == 'affair') continue;
-            if($tasks->type[$key] == 'ditto' and isset($tasks->type[$key - 1]) and $tasks->type[$key - 1] == 'affair') continue;
-
-            if($storyID == 'ditto') $storyID = $preStory;
-            $preStory = $storyID;
-
-            if(!isset($tasks->story[$key - 1]) and $key > 1 and !empty($tasks->name[$key - 1]))
-            {
-                $storyIDs[]  = 0;
-                $taskNames[] = $tasks->name[$key - 1];
-            }
-
-            $inNames = in_array($tasks->name[$key], $taskNames);
-            if(!$inNames or ($inNames && !in_array($storyID, $storyIDs)))
-            {
-                $storyIDs[]  = $storyID;
-                $taskNames[] = $tasks->name[$key];
-            }
-            else
-            {
-                dao::$errors['message'][] = sprintf($this->lang->duplicate, $this->lang->task->common) . ' ' . $tasks->name[$key];
-                return false;
-            }
-        }
-
-        $story          = 0;
-        $module         = 0;
-        $type           = '';
-        $assignedTo     = '';
-        $estStarted     = null;
-        $deadline       = null;
-        $data           = array();
-        $requiredFields = "," . $this->config->task->create->requiredFields . ",";
-        foreach($tasks->name as $i => $task)
-        {
-            $module     = (!isset($tasks->module[$i]) or $tasks->module[$i] == 'ditto')          ? $module     : $tasks->module[$i];
-            $story      = (!isset($tasks->story[$i]) or $tasks->story[$i] == 'ditto')            ? $story      : $tasks->story[$i];
-            $type       = (!isset($tasks->type[$i]) or $tasks->type[$i] == 'ditto')              ? $type       : $tasks->type[$i];
-            $assignedTo = (!isset($tasks->assignedTo[$i]) or $tasks->assignedTo[$i] == 'ditto')  ? $assignedTo : $tasks->assignedTo[$i];
-            $estStarted = (!isset($tasks->estStarted[$i]) or isset($tasks->estStartedDitto[$i])) ? $estStarted : $tasks->estStarted[$i];
-            $deadline   = (!isset($tasks->deadline[$i]) or isset($tasks->deadlineDitto[$i]))     ? $deadline   : $tasks->deadline[$i];
-
-            if(empty($tasks->name[$i])) continue;
-
-            $data[$i]             = new stdclass();
-            $data[$i]->story      = (int)$story;
-            $data[$i]->type       = $type;
-            $data[$i]->module     = (int)$module;
-            $data[$i]->assignedTo = $assignedTo;
-            $data[$i]->color      = $tasks->color[$i];
-            $data[$i]->name       = $tasks->name[$i];
-            $data[$i]->pri        = $tasks->pri[$i];
-            $data[$i]->estimate   = $tasks->estimate[$i];
-            $data[$i]->left       = $tasks->estimate[$i];
-            $data[$i]->project    = $projectID;
-            $data[$i]->execution  = $executionID;
-            $data[$i]->estStarted = $estStarted;
-            $data[$i]->deadline   = $deadline;
-            $data[$i]->status     = 'wait';
-            $data[$i]->openedBy   = $account;
-            $data[$i]->openedDate = $now;
-            $data[$i]->vision     = 'rnd';
-            if($story)
-            {
-                $data[$i]->storyVersion = $stories[$story]->version;
-                if(strpos(",{$_POST['syncFields']},", ',spec,') !== false) $data[$i]->desc = $stories[$story]->spec;
-                if(strpos(",{$_POST['syncFields']},", 'mailto') !== false) $data[$i]->mailto = $stories[$story]->mailto;
-            }
-
-            if($assignedTo) $data[$i]->assignedDate = $now;
-            if(strpos($requiredFields, ',estStarted,') !== false and empty($estStarted)) $data[$i]->estStarted = '';
-            if(strpos($requiredFields, ',deadline,') !== false and empty($deadline))     $data[$i]->deadline   = '';
-        }
-
-        /* check data. */
-        foreach($data as $i => $task)
-        {
-            if(!helper::isZeroDate($task->deadline) and $task->deadline < $task->estStarted)
-            {
-                dao::$errors['message'][] = $this->lang->task->error->deadlineSmall;
-                return false;
-            }
-
-            if($task->estimate and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $task->estimate))
-            {
-                dao::$errors['message'][] = $this->lang->task->error->estimateNumber;
-                return false;
-            }
-
-            foreach(explode(',', $requiredFields) as $field)
-            {
-                $field = trim($field);
-                if(empty($field)) continue;
-
-                if(!isset($task->$field)) continue;
-                if(!empty($task->$field)) continue;
-                if($field == 'estimate' and strlen(trim($task->estimate)) != 0) continue;
-
-                dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->task->$field);
-                return false;
-            }
-
-            if(!empty($this->config->limitTaskDate))
-            {
-                $this->task->checkEstStartedAndDeadline($executionID, $task->estStarted, $task->deadline);
-                if(dao::isError()) return false;
-            }
-
-            if($task->estimate) $task->estimate = (float)$task->estimate;
-        }
-
         $taskIdList = array();
-        foreach($data as $i => $task)
+        foreach($tasks as $task)
         {
-            $task->version = 1;
-            $this->dao->insert(TABLE_TASK)->data($task)
-                ->autoCheck()
-                ->checkIF($task->estimate != '', 'estimate', 'float')
+            $this->dao->insert(TABLE_TASK)->data($task)->autoCheck()
+                ->batchCheck($this->config->task->create->requiredFields, 'notempty')
                 ->exec();
 
             if(dao::isError()) return false;
@@ -1846,7 +1717,6 @@ class storyModel extends model
             if(dao::isError()) return false;
 
             if($task->story) $this->setStage($task->story);
-
             $this->action->create('task', $taskID, 'Opened', '');
         }
 

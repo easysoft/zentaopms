@@ -1211,7 +1211,7 @@ class executionTest
         $execution      = $this->executionModel->getByID($executionID);
         $bugs           = $this->executionModel->loadModel('bug')->getByIdList(array_keys($postData));
         $showAllModule  = isset($this->executionModel->config->execution->task->allModule) ? $this->executionModel->config->execution->task->allModule : '';
-        $modules        = $this->executionModel->loadModel('tree')->getTaskOptionMenu($execution->id, 0, 0, $showAllModule ? 'allModule' : '');
+        $modules        = $this->executionModel->loadModel('tree')->getTaskOptionMenu($execution->id, 0, $showAllModule ? 'allModule' : '');
         $now            = helper::now();
         foreach($postData as $bugID => $task)
         {

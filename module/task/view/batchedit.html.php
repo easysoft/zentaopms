@@ -83,7 +83,7 @@ js::set('requiredFields', $config->task->edit->requiredFields);
           if(!isset($execution))
           {
               $prjInfo = $this->execution->getById($task->execution);
-              $modules = $this->tree->getTaskOptionMenu($task->execution, 0, 0, 'allModule');
+              $modules = $this->tree->getTaskOptionMenu($task->execution, 0, 'allModule');
               foreach($modules as $moduleID => $moduleName) $modules[$moduleID] = $prjInfo->name. $moduleName;
               $modules = array('ditto' => $this->lang->task->ditto) + $modules;
           }

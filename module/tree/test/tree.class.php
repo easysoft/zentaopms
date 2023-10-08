@@ -100,15 +100,14 @@ class treeTest
      * Test create an option menu of task in html.
      *
      * @param  int    $rootID
-     * @param  int    $productID
      * @param  int    $startModule
      * @param  string $extra
      * @access public
      * @return string
      */
-    public function getTaskOptionMenuTest($rootID, $productID = 0, $startModule = 0, $extra = '')
+    public function getTaskOptionMenuTest($rootID, $startModule = 0, $extra = '')
     {
-        $objects = $this->objectModel->getTaskOptionMenu($rootID, $productID = 0, $startModule = 0, $extra = '');
+        $objects = $this->objectModel->getTaskOptionMenu($rootID, $startModule, $extra);
 
         if(dao::isError()) return dao::getError();
 
@@ -192,15 +191,13 @@ class treeTest
      * @access public
      * @return string
      */
-    public function getTaskTreeModulesTest($executionID, $parent = false, $linkObject = 'story')
+    public function getTaskTreeModulesTest(int $executionID, bool $parent = false, string $linkObject = 'story', array $extra = array()): string
     {
-        $objects = $this->objectModel->getTaskTreeModules($executionID, $parent, $linkObject);
+        $this->objectModel->app->tab = 'execution';
+        $objects = $this->objectModel->getTaskTreeModules($executionID, $parent, $linkObject, $extra);
 
         if(dao::isError()) return dao::getError();
-
-        $ids = '';
-        foreach($objects as $object) $ids .= ',' . $object;
-        return $ids;
+        return implode(',', $objects);
     }
 
     /**

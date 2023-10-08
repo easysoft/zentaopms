@@ -514,22 +514,45 @@ class storyTest
     /**
      * Test story batch to task.
      *
-     * @param  int    $executionID
-     * @param  int    $projectID
-     * @param  array  $params
      * @access public
-     * @return void
+     * @return array
      */
-    public function batchToTaskTest($executionID, $projectID = 0, $params = '')
+    public function batchToTaskTest(): array
     {
-        $_POST      = $params;
-        $taskIdList = $this->objectModel->batchToTask($executionID, $projectID);
-        unset($params);
+        $task = new stdclass();
+        $task->module       = 0;
+        $task->story        = 0;
+        $task->name         = '软件需求1';
+        $task->type         = 'devel';
+        $task->assignedTo   = '';
+        $task->estimate     = 0;
+        $task->estStarted   = date('Y-m-d');
+        $task->deadline     = date('Y-m-d');
+        $task->pri          = 3;
+        $task->status       = 'wait';
+        $task->vision       = 'rnd';
+        $task->openedBy     = 'admin';
+        $task->openedDate   = date('Y-m-d H:i:s');
+        $task->version      = 1;
+        $task->project      = 11;
+        $task->execution    = 101;
+        $task->left         = 0;
+        $task->storyVersion = 1;
+        $task->desc         = '';
+        $task->mailto       = '';
+
+        $tasks = array();
+        $tasks[0] = clone $task;
+        $tasks[0]->name  = '软件需求1';
+        $tasks[0]->story = 1;
+        $tasks[1] = clone $task;
+        $tasks[1]->name  = '软件需求2';
+        $tasks[1]->story = 3;
+        $taskIdList = $this->objectModel->batchToTask($task->execution, $tasks);
 
         if(dao::isError()) return dao::getError();
 
-        global $tester;
-        return $tester->loadModel('task')->getByIdList($taskIdList);
+        return $this->objectModel->dao->select('*')->from(TABLE_TASK)->where('id')->in($taskIdList)->orderBy('id')->fetchAll();
     }
 
     /**

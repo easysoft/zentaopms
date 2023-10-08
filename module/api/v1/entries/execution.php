@@ -78,7 +78,7 @@ class executionEntry extends entry
                     $execution->builds  = $this->loadModel('build')->getBuildPairs(array($productID), 'all', 'noempty,noterminate,nodone', $executionID, 'execution');
                     break;
                 case 'moduleoptionmenu':
-                    $execution->moduleOptionMenu = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, 'allModule');
+                    $execution->moduleOptionMenu = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 'allModule');
                     break;
                 case 'members':
                     $execution->members = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');;

@@ -177,7 +177,7 @@ class taskZen extends task
 
             $this->view->title     = $execution->name . $this->lang->colon . $this->lang->task->batchEdit;
             $this->view->execution = $execution;
-            $this->view->modules   = $this->tree->getTaskOptionMenu($executionID, 0, 0, !empty($this->config->task->allModule) ? 'allModule' : '');
+            $this->view->modules   = $this->tree->getTaskOptionMenu($executionID, 0, !empty($this->config->task->allModule) ? 'allModule' : '');
         }
         else
         {
@@ -263,7 +263,7 @@ class taskZen extends task
         $this->view->taskMembers   = $taskMembers;
         $this->view->users         = $this->loadModel('user')->getPairs('nodeleted|noclosed', "{$task->openedBy},{$task->canceledBy},{$task->closedBy}");
         $this->view->showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
-        $this->view->modules       = $this->tree->getTaskOptionMenu($task->execution, 0, 0, $this->view->showAllModule ? 'allModule' : '');
+        $this->view->modules       = $this->tree->getTaskOptionMenu($task->execution, 0, $this->view->showAllModule ? 'allModule' : '');
         $this->view->executions    = $executions;
         $this->view->contactLists  = $this->loadModel('user')->getContactLists($this->app->user->account, 'withnote');
         $this->display();
@@ -327,7 +327,7 @@ class taskZen extends task
 
         /* 获取模块和需求下拉数据。 Get module and story dropdown data. */
         $showAllModule = !empty($this->config->execution->task->allModule) ? 'allModule' : '';
-        $modules       = $this->loadModel('tree')->getTaskOptionMenu($execution->id, 0, 0, $showAllModule);
+        $modules       = $this->loadModel('tree')->getTaskOptionMenu($execution->id, 0, $showAllModule);
         $story         = $this->story->getByID($storyID);
         $stories       = $this->story->getExecutionStoryPairs($execution->id, 0, 'all', $story ? $story->module : 0, 'short', 'active');
 

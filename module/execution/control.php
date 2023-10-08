@@ -176,7 +176,7 @@ class execution extends control
         $this->view->status      = $status;
         $this->view->param       = $param;
         $this->view->moduleID    = $moduleID;
-        $this->view->modules     = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, $showModule);
+        $this->view->modules     = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, $showModule);
         $this->view->moduleTree  = $this->tree->getTaskTreeMenu($executionID, $productID, 0, array('treeModel', 'createTaskLink'), $showModule);
         $this->view->memberPairs = $memberPairs;
         $this->display();

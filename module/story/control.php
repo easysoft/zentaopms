@@ -935,7 +935,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function batchToTask($executionID = 0, $projectID = 0)
+    public function batchToTask(int $executionID = 0, int $projectID = 0)
     {
         if($this->app->tab == 'execution' and $executionID) $this->loadModel('execution')->setMenu($executionID);
         if($this->app->tab == 'project' and $executionID) $this->loadModel('execution')->setMenu($executionID);
@@ -945,10 +945,13 @@ class story extends control
             $response['result']  = 'success';
             $response['message'] = $this->lang->story->successToTask;
 
-            $tasks = $this->story->batchToTask($executionID, $projectID);
+            $tasks = $this->storyZen->buildDataForBatchToTask($executionID, $projectID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $tasks));
+            $taskIdList = $this->story->batchToTask($executionID, $tasks);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $taskIdList));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('execution', 'task', "executionID=$executionID")));
         }
 
@@ -969,12 +972,12 @@ class story extends control
 
         $this->view->title          = $this->lang->story->batchToTask;
         $this->view->executionID    = $executionID;
-        $this->view->syncFields     = empty($_POST['fields']) ? array() : $_POST['fields'];
-        $this->view->hourPointValue = empty($_POST['hourPointValue']) ? 0 : $_POST['hourPointValue'];
-        $this->view->taskType       = empty($_POST['type']) ? '' : $_POST['type'];
+        $this->view->syncFields     = empty($_POST['fields'])         ? array() : $_POST['fields'];
+        $this->view->hourPointValue = empty($_POST['hourPointValue']) ? 0       : $_POST['hourPointValue'];
+        $this->view->taskType       = empty($_POST['type'])           ? ''      : $_POST['type'];
         $this->view->stories        = $activeStories;
         $this->view->storyPairs     = $storyPairs;
-        $this->view->modules        = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, 'allModule');
+        $this->view->modules        = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 'allModule');
         $this->view->members        = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
         $this->view->storyTasks     = $this->loadModel('task')->getStoryTaskCounts(array_keys($stories), $executionID);
 

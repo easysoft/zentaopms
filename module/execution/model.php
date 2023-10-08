@@ -3916,7 +3916,7 @@ class executionModel extends model
         $this->config->execution->search['params']['execution']['values'] = array(''=>'', $executionID => $executions[$executionID], 'all' => $this->lang->execution->allExecutions);
 
         $showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
-        $this->config->execution->search['params']['module']['values'] = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
+        $this->config->execution->search['params']['module']['values'] = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, $showAllModule ? 'allModule' : '');
 
         $this->loadModel('search')->setSearchParams($this->config->execution->search);
     }

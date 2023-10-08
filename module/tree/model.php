@@ -271,13 +271,12 @@ class treeModel extends model
      * Create an option menu of task in html.
      *
      * @param  int    $rootID
-     * @param  int    $productID
      * @param  int    $startModule
      * @param  string $extra
      * @access public
      * @return void
      */
-    public function getTaskOptionMenu(int $rootID, int $productID = 0, int $startModule = 0, string $extra = '')
+    public function getTaskOptionMenu(int $rootID, int $startModule = 0, string $extra = '')
     {
         /* If createdVersion <= 4.1, go to getOptionMenu(). */
         $products     = $this->loadModel('product')->getProductPairsByProject($rootID);
@@ -290,23 +289,17 @@ class treeModel extends model
         if($startModule > 0)
         {
             $startModule = $this->getById($startModule);
-            if($startModule)
-            {
-                $startModulePath = $startModule->path . '%';
-                $modulePaths = explode(",", $startModulePath);
-                $rootModule  = $this->getById($modulePaths[0]);
-            }
+            if($startModule) $startModulePath = $startModule->path . '%';
         }
         $treeMenu   = array();
         $lastMenu[] = '/';
         $executionModules = $this->getTaskTreeModules($rootID, true);
-        $noProductModules = $this->dao->select('*')->from(TABLE_MODULE)
-                    ->where('root')->eq((int)$rootID)
-                    ->andWhere('type')->eq('task')
-                    ->andWhere('parent')->eq(0)
-                    ->andWhere('deleted')->eq(0)
-                    ->orderBy('grade desc, branch, `order`, type')
-                    ->fetchPairs('id', 'name');
+        $noProductModules = $this->dao->select('*')->from(TABLE_MODULE)->where('root')->eq($rootID)
+            ->andWhere('type')->eq('task')
+            ->andWhere('parent')->eq(0)
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('grade desc, branch, `order`, type')
+            ->fetchPairs('id', 'name');
 
         /* Fix for not in product modules. */
         $productNum = count($products);
@@ -961,64 +954,56 @@ class treeModel extends model
      * @access public
      * @return array
      */
-    public function getTaskTreeModules($executionID, $parent = false, $linkObject = 'story', $extra = array())
+    public function getTaskTreeModules(int $executionID, bool $parent = false, string $linkObject = 'story', array $extra = array()): array
     {
         $executionModules = array();
         $field = $parent ? 'path' : 'id';
-
-        if($linkObject == 'story')
-        {
-            $table1 = TABLE_PROJECTSTORY;
-            $table2 = TABLE_STORY;
-        }
-        if($linkObject == 'case')
-        {
-            $table1 = TABLE_PROJECTCASE;
-            $table2 = TABLE_CASE;
-        }
+        $paths = array();
 
         if($linkObject)
         {
             $branch = zget($extra, 'branchID', 0);
             /* Get object paths of this execution. */
-            if(strpos(',story,case,', ",$linkObject,") !== false)
+            if(str_contains(',story,case,', ",$linkObject,"))
             {
-                $paths = $this->dao->select('DISTINCT t3.' . $field)->from($table1)->alias('t1')
+                $table1 = TABLE_PROJECTSTORY;
+                $table2 = TABLE_STORY;
+                if($linkObject == 'case')
+                {
+                    $table1 = TABLE_PROJECTCASE;
+                    $table2 = TABLE_CASE;
+                }
+
+                $paths = $this->dao->select("t3.{$field}")->from($table1)->alias('t1')
                     ->leftJoin($table2)->alias('t2')->on('t1.' . $linkObject . ' = t2.id')
                     ->leftJoin(TABLE_MODULE)->alias('t3')->on('t2.module = t3.id')
                     ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.project = t4.id')
-                    ->where('(t1.project')->eq($executionID)
-                    ->orWhere('t4.project')->eq($executionID)->markRight(1)
-                    ->andWhere('t3.deleted')->eq(0)
+                    ->where('t3.deleted')->eq(0)
                     ->andWhere('t2.deleted')->eq(0)
+                    ->andWhere("(t1.project = '{$executionID}' OR t4.project = '{$executionID}')")
                     ->beginIF(isset($extra['branchID']) and $branch !== 'all')->andWhere('t2.branch')->eq($branch)->fi()
-                    ->fetchPairs();
+                    ->fetchPairs($field, $field);
             }
-            elseif($linkObject == 'bug' and strpos(',project,execution,', ",{$this->app->tab},") !== false)
+            elseif($linkObject == 'bug' and str_contains(',project,execution,', ",{$this->app->tab},"))
             {
-                $paths = $this->dao->select('DISTINCT t2.' . $field)->from(TABLE_BUG)->alias('t1')
+                $paths = $this->dao->select("t2.{$field}")->from(TABLE_BUG)->alias('t1')
                     ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module = t2.id')
                     ->where('t1.deleted')->eq(0)
                     ->andWhere('t2.deleted')->eq(0)
                     ->beginIF(isset($extra['branchID']) and $branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
                     ->andWhere("t1.{$this->app->tab}")->eq($executionID)
-                    ->fetchPairs();
+                    ->fetchPairs($field, $field);
             }
             else
             {
-                return array();
+                return $paths;
             }
         }
         else
         {
             $productGroups = $this->dao->select('product,branch')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->fetchGroup('product', 'branch');
-            $modules = $this->dao->select('id,root,branch')->from(TABLE_MODULE)
-                ->where('root')->in(array_keys($productGroups))
-                ->andWhere('type')->eq('story')
-                ->andWhere('deleted')->eq(0)
-                ->fetchAll();
+            $modules       = $this->dao->select('id,root,branch')->from(TABLE_MODULE)->where('root')->in(array_keys($productGroups))->andWhere('type')->eq('story')->andWhere('deleted')->eq(0)->fetchAll();
 
-            $paths = array();
             foreach($modules as $module)
             {
                 if(empty($module->branch)) $paths[$module->id] = $module->id;
@@ -1026,33 +1011,28 @@ class treeModel extends model
             }
         }
 
-        if(strpos(',case,bug,', ",$linkObject,") === false)
+        if(!str_contains(',case,bug,', ",$linkObject,"))
         {
             /* Add task paths of this execution.*/
-            $paths += $this->dao->select($field)->from(TABLE_MODULE)
-                ->where('root')->eq($executionID)
-                ->andWhere('type')->eq('task')
-                ->andWhere('deleted')->eq(0)
-                ->fetchPairs();
+            $paths += $this->dao->select($field)->from(TABLE_MODULE)->where('root')->eq($executionID)->andWhere('type')->eq('task')->andWhere('deleted')->eq(0)->fetchPairs($field, $field);
 
             /* Add task paths of this execution for has existed. */
-            $paths += $this->dao->select('DISTINCT t1.' . $field)->from(TABLE_MODULE)->alias('t1')
+            $paths += $this->dao->select("t1.{$field}")->from(TABLE_MODULE)->alias('t1')
             ->leftJoin(TABLE_TASK)->alias('t2')->on('t1.id=t2.module')
             ->where('t2.module')->ne(0)
             ->andWhere('t2.execution')->eq($executionID)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.type')->eq('story')
             ->andWhere('t1.deleted')->eq(0)
-            ->fetchPairs();
+            ->fetchPairs($field, $field);
         }
 
         /* Get all modules from paths. */
         foreach($paths as $path)
         {
-            $modules = explode(',', $path);
-            foreach($modules as $module) $executionModules[$module] = $module;
+            foreach(explode(',', $path) as $module) $executionModules[$module] = $module;
         }
-        return $executionModules;
+        return array_filter($executionModules);
     }
 
     /**

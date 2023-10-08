@@ -591,7 +591,7 @@ class tree extends control
     {
         if($viewType == 'task')
         {
-            $optionMenu = $this->tree->getTaskOptionMenu($rootID, 0, 0, $extra);
+            $optionMenu = $this->tree->getTaskOptionMenu($rootID, 0, $extra);
         }
         else
         {

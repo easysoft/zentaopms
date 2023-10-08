@@ -162,3 +162,18 @@ $config->story->form->close['closeSync']      = array('type' => 'string',   'req
 $config->story->form->submitReview = array();
 $config->story->form->submitReview['reviewer']   = array('type' => 'array',  'control' => 'multi-select', 'required' => false, 'default' => '');
 $config->story->form->submitReview['reviewedBy'] = array('type' => 'string', 'control' => 'hidden', 'required' => false, 'default' => '');
+
+$config->story->form->batchToTask['module']     = array('type' => 'int',    'required' => false, 'default' => 0);
+$config->story->form->batchToTask['story']      = array('type' => 'int',    'required' => false, 'default' => 0);
+$config->story->form->batchToTask['name']       = array('type' => 'string', 'required' => false, 'default' => '', 'base' => true, 'filter' => 'trim');
+$config->story->form->batchToTask['type']       = array('type' => 'string', 'required' => false, 'default' => '');
+$config->story->form->batchToTask['assignedTo'] = array('type' => 'string', 'required' => false, 'default' => '');
+$config->story->form->batchToTask['estimate']   = array('type' => 'float',  'required' => false, 'default' => 0);
+$config->story->form->batchToTask['estStarted'] = array('type' => 'date',   'required' => false, 'default' => '');
+$config->story->form->batchToTask['deadline']   = array('type' => 'date',   'required' => false, 'default' => '');
+$config->story->form->batchToTask['pri']        = array('type' => 'int',    'required' => false, 'default' => 3);
+$config->story->form->batchToTask['status']     = array('type' => 'string', 'required' => false, 'default' => 'wait');
+$config->story->form->batchToTask['vision']     = array('type' => 'string', 'required' => false, 'default' => 'rnd');
+$config->story->form->batchToTask['openedBy']   = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
+$config->story->form->batchToTask['openedDate'] = array('type' => 'string', 'required' => false, 'default' => $now);
+$config->story->form->batchToTask['version']    = array('type' => 'int',    'required' => false, 'default' => 1);

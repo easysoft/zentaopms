@@ -1220,6 +1220,61 @@ class storyZen extends story
     }
 
     /**
+     * 构建需求转化任务的数据。
+     * Build data for batchToTask.
+     *
+     * @param  int       $executionID
+     * @param  int       $projectID
+     * @access protected
+     * @return array|false
+     */
+    protected function buildDataForBatchToTask(int $executionID, int $projectID = 0): array|false
+    {
+        $this->loadModel('task');
+        $now    = helper::now();
+        $fields = $this->config->story->form->batchToTask;
+        $requiredFields = "," . $this->config->task->create->requiredFields . ",";
+        foreach(explode(',', trim($requiredFields, ',')) as $field)
+        {
+            if(isset($fields[$field])) $fields[$field]['required'] = true;
+        }
+
+        $syncFields = zget($_POST, 'syncFields', '');
+        $stories    = array();
+        if(!empty($syncFields)) $stories = empty($_POST['story']) ? array() : $this->story->getByList($_POST['story']);
+
+        $tasks     = form::batchData($fields)->get();
+        $taskNames = array();
+        foreach($tasks as $task)
+        {
+            $task->project   = $projectID;
+            $task->execution = $executionID;
+            $task->left      = $task->estimate;
+            if($task->assignedTo) $task->assignedDate = $now;
+            if($task->story)
+            {
+                $story = zget($stories, $task->story, null);
+                if($story)
+                {
+                    $task->storyVersion = $story->version;
+                    if(str_contains(",{$syncFields},", ',spec,'))   $task->desc   = $story->spec;
+                    if(str_contains(",{$syncFields},", ',mailto,')) $task->mailto = $story->mailto;
+                }
+            }
+
+            if(in_array($task->name, $taskNames)) dao::$errors['message'][] = sprintf($this->lang->duplicate, $this->lang->task->common) . ' ' . $task->name;
+            if(!helper::isZeroDate($task->deadline) and $task->deadline < $task->estStarted) dao::$errors['message'][] = $this->lang->task->error->deadlineSmall;
+            if($task->estimate and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $task->estimate)) dao::$errors['message'][] = $this->lang->task->error->estimateNumber;
+            if(!empty($this->config->limitTaskDate)) $this->task->checkEstStartedAndDeadline($executionID, $task->estStarted, $task->deadline);
+
+            $taskNames[] = $task->name;
+        }
+        if(dao::isError()) return false;
+
+        return $tasks;
+    }
+
+    /**
      * 处理编辑需求数据。
      * Process data for edit.
      *
