@@ -1930,10 +1930,11 @@ class testcaseModel extends model
             $caseModules[$branch] = $this->loadModel('testsuite')->getCanImportModules($productID, $libID,  $branch);
         }
 
-        $libCases = $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)->andWhere('id')->in($data->caseIdList)->fetchAll('id');
-        $libSteps = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->in($data->caseIdList)->orderBy('id')->fetchGroup('case');
-        $libFiles = $this->dao->select('*')->from(TABLE_FILE)->where('objectID')->in($data->caseIdList)->andWhere('objectType')->eq('testcase')->fetchGroup('objectID', 'id');
-        $imported = '';
+        $libCases      = $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)->andWhere('id')->in($data->caseIdList)->fetchAll('id');
+        $libSteps      = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->in($data->caseIdList)->orderBy('id')->fetchGroup('case');
+        $libFiles      = $this->dao->select('*')->from(TABLE_FILE)->where('objectID')->in($data->caseIdList)->andWhere('objectType')->eq('testcase')->fetchGroup('objectID', 'id');
+        $hasImported   = '';
+        $importedCases = array();
         foreach($libCases as $libCaseID => $case)
         {
             $case->fromCaseID      = $case->id;
@@ -1946,7 +1947,7 @@ class testcaseModel extends model
             $branch = isset($case->branch) ? $case->branch : 0;
             if(empty($caseModules[$branch][$case->fromCaseID][$case->module]))
             {
-                $imported .= "$case->fromCaseID,";
+                $hasImported .= "$case->fromCaseID,";
                 continue;
             }
 
@@ -1991,12 +1992,18 @@ class testcaseModel extends model
                 unset($file->id);
                 $this->dao->insert(TABLE_FILE)->data($file)->exec();
             }
+
+            $importedCases[] = $libCaseID;
+
             $this->loadModel('action')->create('case', $caseID, 'fromlib', '', $case->lib);
         }
-        if(!empty($imported))
+
+        if(!empty($importedCases)) print(js::alert(sprintf($this->lang->testcase->importedFromLib, count($importedCases), implode(',', $importedCases))));
+
+        if(!empty($hasImported))
         {
-            $imported = trim($imported, ',');
-            return print(js::error(sprintf($this->lang->testcase->importedCases, $imported)));
+            $hasImported = trim($hasImported, ',');
+            return print(js::error(sprintf($this->lang->testcase->importedCases, $hasImported)));
         }
     }
 
