@@ -113,7 +113,7 @@ pipeline {
 
               def ximUsers = sh(returnStdout: true,script: 'jq -r .notice.users < ci.json').trim()
               env.XIM_USERS = ximUsers + ',' + env.GIT_TAGGER_NAME
-              env.XIM_GROUPS = sh(returnStdout: true,script: 'jq -r .notice.groupsXXX < ci.json').trim()
+              env.XIM_GROUPS = sh(returnStdout: true,script: 'jq -r .notice.groups < ci.json').trim()
 
               env.PMS_VERSION = sh(returnStdout: true, script: 'cat ${SRC_ZENTAOEXT_PATH}/VERSION').trim()
               env.BIZ_VERSION = sh(returnStdout: true, script: 'cat ${SRC_ZENTAOEXT_PATH}/BIZVERSION').trim()
@@ -202,6 +202,7 @@ pipeline {
                     command "sleep"
                     args "99d"
                 }
+                yamlFile 'misc/ci/publish-zip.yaml'
               }
             }
             options {
@@ -478,7 +479,6 @@ pipeline {
                         returnStdout: true,
                         script: "echo ${ARTIFACT_PROTOCOL}://${ARTIFACT_HOST}/repository/${ARTIFACT_REPOSITORY}/zentao/%s/`echo ${GIT_TAG_BUILD_GROUP} | tr . /`/%s/%s/%s"
               ).trim()}"""
-            CI_PUBLIC_IMAGE_NAMESPACE="qisy-test"
           }
 
           steps {
@@ -515,6 +515,46 @@ pipeline {
 
         } // End Docker Image
 
+        stage("Upload rongpm") {
+          agent {
+            kubernetes {
+              inheritFrom "zentao-package xuanim"
+              yamlFile 'misc/ci/normal.yaml'
+            }
+          }
+          when {
+            environment name:'PUBLISH_ZIP', value:'true'
+            beforeAgent true
+          }
+
+          environment {
+            OBJECT_KEY_PREFIX = "zentao/"
+            QINIU_ACCESS_KEY = credentials('qiniu-upload-ak')
+            QINIU_SECRET_KEY = credentials('qiniu-upload-sk')
+          }
+
+          steps {
+            script {
+              if (env.GIT_TAG_BUILD_TYPE=='release') {
+                checkout scmGit(branches: [[name: "master"]],
+                  extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
+                  userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/web/rongpm.git']]
+                )
+
+                container('package') {
+                  sh 'mkdir -p output/rongpm/${PMS_VERSION}'
+                  sh 'cd output/rongpm/${PMS_VERSION} && php7.2 $WORKSPACE/system/bin/buildpractice.php && rm -rf rongpm'
+                }
+
+                container('jnlp') {
+                  sh 'qshell account $QINIU_ACCESS_KEY $QINIU_SECRET_KEY uploader'
+                  sh 'qshell qupload2 --bucket $QINIU_BUCKET --overwrite --src-dir ./output --key-prefix $OBJECT_KEY_PREFIX'
+                }
+              }
+            }
+          }
+        } // End Upload rongpm
+
       }
 
       
@@ -529,6 +569,5 @@ pipeline {
   }
 
 }
-
 
 
