@@ -244,7 +244,7 @@ class actionModel extends model
             if($actionName == 'createrequirements') $this->actionTao->processCreateRequirementsActionExtra($action);
             if($actionName == 'buildopened') $this->actionTao->processActionExtra(TABLE_BUILD, $action, 'name', 'build', 'view');
             if($actionName == 'finished' && $objectType == 'todo') $this->actionTao->finishToDoActionExtra($action);
-            if($actionName == 'fromlib' && $action->objectType == 'case') $this->actionTao->processActionExtra(TABLE_CASELIB, $action, 'name', 'caselib', 'browse');
+            if($actionName == 'fromlib' && $action->objectType == 'case') $this->actionTao->processActionExtra(TABLE_TESTSUITE, $action, 'name', 'caselib', 'browse');
 
             if($action->objectType != 'feedback' && (strpos(',totask,linkchildtask,unlinkchildrentask,linkparenttask,unlinkparenttask,deletechildrentask,', ",$actionName,") !== false)) $this->actionTao->processActionExtra(TABLE_TASK, $action, 'name', 'task', 'view');
 
