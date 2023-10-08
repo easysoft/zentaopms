@@ -112,6 +112,7 @@ class testsuite extends control
         $this->view->summary = $summary;
         $this->view->pager   = $pager;
         $this->view->product = $this->product->getByID($productID);
+        $this->view->users   = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->display();
     }
 
@@ -350,7 +351,7 @@ class testsuite extends control
     public function unlinkCase(int $suiteID, int $caseID)
     {
         $this->testsuite->deleteCaseBysuiteID(array($caseID), $suiteID);
-        
+
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         return $this->send(array('result' => 'success', 'load' => true));
     }
@@ -367,7 +368,7 @@ class testsuite extends control
     {
         $formData = form::data($this->config->testsuite->form->batchUnlinkCases)->get();
         $this->testsuite->deleteCaseBysuiteID($formData->caseIDList, $suiteID);
-        
+
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         return $this->send(array('result' => 'success', 'load' => true));
     }
