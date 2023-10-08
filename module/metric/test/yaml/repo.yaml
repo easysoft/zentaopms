@@ -8,7 +8,7 @@ fields:
   - field: product
     range: 1-100
   - field: name
-    prifix: 代码库
+    prefix: 代码库
     range: 1-100
   - field: path
     range: 42
