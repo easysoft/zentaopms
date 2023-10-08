@@ -1,14 +1,5 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 7) . '/test/lib/init.php';
-include dirname(__FILE__, 4) . '/calc.class.php';
-
-zdTable('product')->config('product', $useCommon = true, $levels = 4)->gen(10);
-zdTable('case')->config('case', $useCommon = true, $levels = 4)->gen(800);
-
-$metric = new metricTest();
-$calc   = $metric->calcMetric(__FILE__);
-
 /**
 
 title=count_of_annual_created_case_in_product
@@ -16,6 +7,14 @@ timeout=0
 cid=1
 
 */
+include dirname(__FILE__, 7) . '/test/lib/init.php';
+include dirname(__FILE__, 4) . '/calc.class.php';
+
+zdTable('product')->config('product', true, 4)->gen(10);
+zdTable('case')->config('case', true, 4)->gen(800);
+
+$metric = new metricTest();
+$calc   = $metric->calcMetric(__FILE__);
 
 r(count($calc->getResult()))                                     && p('')        && e('10'); // 测试分组数
 r($calc->getResult(array('product' => '1', 'year' => '2010')))   && p('0:value') && e('37'); // 测试2010年产品1新增的用例数
