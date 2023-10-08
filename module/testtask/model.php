@@ -1406,18 +1406,18 @@ class testtaskModel extends model
             ->andWhere('version')->in($relatedVersions)
             ->orderBy('id')
             ->fetchGroup('version', 'id');
-        $runs = $this->dao->select('t1.id,t1.task,t2.build')->from(TABLE_TESTRUN)->alias('t1')
+        $runs = $this->dao->select('t1.id, t1.task, t2.build')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_TESTTASK)->alias('t2')->on('t1.task=t2.id')
             ->where('t1.id')->in($runIdList)
-            ->fetchPairs();
+            ->fetchAll('id');
         $nodes = $this->dao->select('id,name')->from(TABLE_ZAHOST)->where('id')->in($nodeIdList)->fetchPairs();
 
         foreach($results as $resultID => $result)
         {
             if($result->stepResults) $result->stepResults = '';
             $result->stepResults = unserialize($result->stepResults);
-            $result->build       = $result->run && !empty($runs[$result->run]->build) ? $runs[$result->run]->build : 0;
-            $result->task        = $result->run && !empty($runs[$result->run]->task) ? $runs[$result->run]->task : 0;
+            $result->build       = !empty($runs[$result->run]->build) ? $runs[$result->run]->build : 0;
+            $result->task        = !empty($runs[$result->run]->task) ? $runs[$result->run]->task : 0;
             $result->nodeName    = zget($nodes, $result->node, '');
             $result->files       = zget($resultFiles, $resultID, array()); //Get files of case result.
             if(isset($relatedSteps[$result->version])) $result->stepResults = $this->processResultSteps($result, $relatedSteps[$result->version]);
