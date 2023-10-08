@@ -2108,10 +2108,6 @@ class actionModel extends model
             $objectName = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->fetchPairs();
             foreach($objectName as $id => $name) $objectName[$id] = zget($users, $name);
         }
-        elseif($objectType == 'privlang')
-        {
-            $objectName = $this->dao->select("objectID AS id, {$field} AS name")->from($table)->where('objectID')->in($objectIdList)->andWhere('objectType')->eq('priv')->fetchPairs();
-        }
         else
         {
             $objectName = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->fetchPairs();
