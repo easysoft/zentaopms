@@ -493,6 +493,21 @@ $config->group->subset->artifactrepo = new stdclass();
 $config->group->subset->artifactrepo->order = 2760;
 $config->group->subset->artifactrepo->nav   = 'devops';
 
+$config->group->subset->market = new stdclass();
+$config->group->subset->market->nav   = 'market';
+
+$config->group->subset->marketreport = new stdclass();
+$config->group->subset->marketreport->nav = 'market';
+
+$config->group->subset->marketresearch = new stdclass();
+$config->group->subset->marketresearch->nav = 'market';
+
+$config->group->subset->researchstage = new stdclass();
+$config->group->subset->researchstage->nav = 'market';
+
+$config->group->subset->researchtask = new stdclass();
+$config->group->subset->researchtask->nav = 'market';
+
 $config->group->subset->other = new stdclass();
 $config->group->subset->other->order = 100000;
 
@@ -3948,3 +3963,122 @@ $config->group->package->trainPracticeLib->privs['traincourse-practice']       =
 $config->group->package->trainPracticeLib->privs['traincourse-practiceBrowse'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('traincourse-practice'), 'recommend' => array('traincourse-practiceView'));
 $config->group->package->trainPracticeLib->privs['traincourse-practiceView']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('traincourse-practice', 'traincourse-practiceBrowse'), 'recommend' => array());
 $config->group->package->trainPracticeLib->privs['traincourse-updatePractice'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('traincourse-practice', 'traincourse-practiceBrowse'), 'recommend' => array('traincourse-practiceView'));
+
+$config->group->package->browseMarket = new stdclass();
+$config->group->package->browseMarket->subset = 'market';
+$config->group->package->browseMarket->privs  = array();
+$config->group->package->browseMarket->privs['market-browse'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5,  'depend' => array(''), 'recommend' => array('market-view'));
+$config->group->package->browseMarket->privs['market-view']   = array('edition' => 'ipd', 'vision' => 'or', 'order' => 10, 'depend' => array('market-browse'), 'recommend' => array());
+
+$config->group->package->manageMarket = new stdclass();
+$config->group->package->manageMarket->subset = 'market';
+$config->group->package->manageMarket->privs  = array();
+$config->group->package->manageMarket->privs['market-create'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5,  'depend' => array('market-browse'), 'recommend' => array('market-view'));
+$config->group->package->manageMarket->privs['market-edit']   = array('edition' => 'ipd', 'vision' => 'or', 'order' => 10, 'depend' => array('market-browse', 'market-view'), 'recommend' => array());
+
+$config->group->package->deleteMarket = new stdclass();
+$config->group->package->deleteMarket->subset = 'market';
+$config->group->package->deleteMarket->privs  = array();
+$config->group->package->deleteMarket->privs['market-delete'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5, 'depend' => array('market-browse', 'market-view'), 'recommend' => array('market-create', 'market-edit'));
+
+$config->group->package->deleteMarket = new stdclass();
+$config->group->package->deleteMarket->subset = 'market';
+$config->group->package->deleteMarket->privs  = array();
+$config->group->package->deleteMarket->privs['market-delete'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5, 'depend' => array('market-browse', 'market-view'), 'recommend' => array('market-create', 'market-edit'));
+
+$config->group->package->browseReport = new stdclass();
+$config->group->package->browseReport->subset = 'marketreport';
+$config->group->package->browseReport->privs  = array();
+$config->group->package->browseReport->privs['marketreport-all']    = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5,  'depend' => array(''), 'recommend' => array('market-view'));
+$config->group->package->browseReport->privs['marketreport-browse'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 10, 'depend' => array(''), 'recommend' => array('market-view'));
+$config->group->package->browseReport->privs['marketreport-view']   = array('edition' => 'ipd', 'vision' => 'or', 'order' => 15, 'depend' => array('marketreport-browse'), 'recommend' => array());
+
+$config->group->package->manageReport = new stdclass();
+$config->group->package->manageReport->subset = 'marketreport';
+$config->group->package->manageReport->privs  = array();
+$config->group->package->manageReport->privs['marketreport-create']    = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5,  'depend' => array('marketreport-all', 'marketreport-browse', 'marketreport-publish'), 'recommend' => array('marketreport-view'));
+$config->group->package->manageReport->privs['marketreport-edit']      = array('edition' => 'ipd', 'vision' => 'or', 'order' => 10, 'depend' => array('marketreport-all', 'marketreport-browse', 'marketreport-publish'), 'recommend' => array('marketreport-view'));
+$config->group->package->manageReport->privs['marketreport-publish']   = array('edition' => 'ipd', 'vision' => 'or', 'order' => 15, 'depend' => array('marketreport-all', 'marketreport-browse', 'marketreport-create', 'marketreport-edit'), 'recommend' => array('marketreport-view'));
+
+$config->group->package->deleteReport = new stdclass();
+$config->group->package->deleteReport->subset = 'marketreport';
+$config->group->package->deleteReport->privs  = array();
+$config->group->package->deleteReport->privs['marketreport-delete'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5, 'depend' => array('marketreport-all', 'marketreport-browse', 'marketreport-publish'), 'recommend' => array('marketreport-create','marketreport-edit'));
+
+$config->group->package->browseResearch = new stdclass();
+$config->group->package->browseResearch->subset = 'marketresearch';
+$config->group->package->browseResearch->privs  = array();
+$config->group->package->browseResearch->privs['marketresearch-all']    = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5,  'depend' => array(''), 'recommend' => array('marketresearch-view'));
+$config->group->package->browseResearch->privs['marketresearch-browse'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 10, 'depend' => array(''), 'recommend' => array('marketresearch-view'));
+$config->group->package->browseResearch->privs['marketresearch-view']   = array('edition' => 'ipd', 'vision' => 'or', 'order' => 15, 'depend' => array(''), 'recommend' => array('marketresearch-all', 'marketresearch-browse'));
+
+$config->group->package->manageResearch = new stdclass();
+$config->group->package->manageResearch->subset = 'marketresearch';
+$config->group->package->manageResearch->privs  = array();
+$config->group->package->manageResearch->privs['marketresearch-create']   = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5,  'depend' => array('marketresearch-all', 'marketresearch-browse'), 'recommend' => array(''));
+$config->group->package->manageResearch->privs['marketresearch-edit']     = array('edition' => 'ipd', 'vision' => 'or', 'order' => 10, 'depend' => array('marketresearch-all', 'marketresearch-browse', 'marketresearch-view'), 'recommend' => array(''));
+$config->group->package->manageResearch->privs['marketresearch-activate'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 15, 'depend' => array('marketresearch-all', 'marketresearch-browse', 'marketresearch-view'), 'recommend' => array(''));
+$config->group->package->manageResearch->privs['marketresearch-start']    = array('edition' => 'ipd', 'vision' => 'or', 'order' => 20, 'depend' => array('marketresearch-all', 'marketresearch-browse', 'marketresearch-view'), 'recommend' => array(''));
+$config->group->package->manageResearch->privs['marketresearch-close']    = array('edition' => 'ipd', 'vision' => 'or', 'order' => 25, 'depend' => array('marketresearch-all', 'marketresearch-browse', 'marketresearch-view'), 'recommend' => array(''));
+
+$config->group->package->researchTeam = new stdclass();
+$config->group->package->researchTeam->subset = 'marketresearch';
+$config->group->package->researchTeam->privs  = array();
+$config->group->package->researchTeam->privs['marketresearch-manageMembers'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5,  'depend' => array('marketresearch-all', 'marketresearch-browse', 'marketresearch-view'), 'recommend' => array(''));
+$config->group->package->researchTeam->privs['marketresearch-unlinkMember']  = array('edition' => 'ipd', 'vision' => 'or', 'order' => 10, 'depend' => array('marketresearch-all', 'marketresearch-browse', 'marketresearch-view', 'marketresearch-manageMembers'), 'recommend' => array(''));
+$config->group->package->researchTeam->privs['marketresearch-team']  = array('edition' => 'ipd', 'vision' => 'or', 'order' => 15, 'depend' => array('marketresearch-all', 'marketresearch-browse'), 'recommend' => array('marketresearch-view'));
+
+$config->group->package->marketResearchReport = new stdclass();
+$config->group->package->marketResearchReport->subset = 'marketresearch';
+$config->group->package->marketResearchReport->privs  = array();
+$config->group->package->marketResearchReport->privs['marketresearch-reports'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5,  'depend' => array('marketreport-browse', 'marketreport-create', 'marketreport-all', 'marketresearch-browse', 'marketreport-view'), 'recommend' => array(''));
+
+$config->group->package->deleteResearch = new stdclass();
+$config->group->package->deleteResearch->subset = 'marketresearch';
+$config->group->package->deleteResearch->privs  = array();
+$config->group->package->deleteResearch->privs['marketresearch-delete'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5,  'depend' => array('marketresearch-all', 'marketresearch-browse', 'marketresearch-view'), 'recommend' => array('marketresearch-create', 'marketresearch-edit'));
+
+$config->group->package->browseResearchStage = new stdclass();
+$config->group->package->browseResearchStage->subset = 'researchstage';
+$config->group->package->browseResearchStage->privs  = array();
+$config->group->package->browseResearchStage->privs['marketresearch-stage'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5,  'depend' => array('marketresearch-all', 'marketresearch-browse'), 'recommend' => array('marketresearch-view'));
+
+$config->group->package->manageResearchStage = new stdclass();
+$config->group->package->manageResearchStage->subset = 'researchstage';
+$config->group->package->manageResearchStage->privs  = array();
+$config->group->package->manageResearchStage->privs['marketresearch-createstage']   = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5,  'depend' => array('marketresearch-stage', 'marketresearch-all', 'marketresearch-browse'), 'recommend' => array('marketresearch-view'));
+$config->group->package->manageResearchStage->privs['marketresearch-editstage']     = array('edition' => 'ipd', 'vision' => 'or', 'order' => 10, 'depend' => array('marketresearch-stage', 'marketresearch-all', 'marketresearch-browse'), 'recommend' => array(''));
+$config->group->package->manageResearchStage->privs['marketresearch-batchstage']    = array('edition' => 'ipd', 'vision' => 'or', 'order' => 15, 'depend' => array('marketresearch-stage', 'marketresearch-all', 'marketresearch-browse'), 'recommend' => array(''));
+$config->group->package->manageResearchStage->privs['marketresearch-startstage']    = array('edition' => 'ipd', 'vision' => 'or', 'order' => 20, 'depend' => array('marketresearch-stage', 'marketresearch-all', 'marketresearch-browse'), 'recommend' => array(''));
+$config->group->package->manageResearchStage->privs['marketresearch-closestage']    = array('edition' => 'ipd', 'vision' => 'or', 'order' => 25, 'depend' => array('marketresearch-stage', 'marketresearch-all', 'marketresearch-browse'), 'recommend' => array(''));
+$config->group->package->manageResearchStage->privs['marketresearch-activatestage'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 30, 'depend' => array('marketresearch-stage', 'marketresearch-all', 'marketresearch-browse'), 'recommend' => array(''));
+
+$config->group->package->deleteResearchStage = new stdclass();
+$config->group->package->deleteResearchStage->subset = 'researchstage';
+$config->group->package->deleteResearchStage->privs  = array();
+$config->group->package->deleteResearchStage->privs['marketresearch-deletestage']   = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5,  'depend' => array('marketresearch-stage', 'marketresearch-all', 'marketresearch-browse'), 'recommend' => array(''));
+
+$config->group->package->browseResearchTask = new stdclass();
+$config->group->package->browseResearchTask->subset = 'researchtask';
+$config->group->package->browseResearchTask->privs  = array();
+$config->group->package->browseResearchTask->privs['marketresearch-stage']    = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5,  'depend' => array('marketresearch-all', 'marketresearch-browse'), 'recommend' => array('viewTask'));
+$config->group->package->browseResearchTask->privs['marketresearch-viewtask'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 10, 'depend' => array('marketresearch-stage', 'marketresearch-all', 'marketresearch-browse'), 'recommend' => array(''));
+
+$config->group->package->manageResearchTask = new stdclass();
+$config->group->package->manageResearchTask->subset = 'researchtask';
+$config->group->package->manageResearchTask->privs  = array();
+$config->group->package->manageResearchTask->privs['marketresearch-createtask']         = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5,  'depend' => array('marketresearch-stage', 'marketresearch-all', 'marketresearch-browse', 'marketresearch-viewTask'), 'recommend' => array('marketresearch-batchCreateTask', 'marketresearch-taskAssignTo', 'marketresearch-editTask', 'marketresearch-startTask', 'marketresearch-finishtask', 'marketresearch-activatetask', 'marketresearch-closetask', 'marketresearch-cancelTask', 'marketresearch-recordTaskEstimate'));
+$config->group->package->manageResearchTask->privs['marketresearch-batchcreatetask']    = array('edition' => 'ipd', 'vision' => 'or', 'order' => 10, 'depend' => array('marketresearch-stage', 'marketresearch-all', 'marketresearch-browse', 'marketresearch-viewTask'), 'recommend' => array('marketresearch-createTask', 'marketresearch-taskAssignTo', 'marketresearch-editTask', 'marketresearch-startTask', 'marketresearch-finishtask', 'marketresearch-activatetask', 'marketresearch-closetask', 'marketresearch-cancelTask', 'marketresearch-recordTaskEstimate'));
+$config->group->package->manageResearchTask->privs['marketresearch-edittask']           = array('edition' => 'ipd', 'vision' => 'or', 'order' => 15, 'depend' => array('marketresearch-stage', 'marketresearch-all', 'marketresearch-browse', 'marketresearch-viewTask'), 'recommend' => array('marketresearch-createTask', 'marketresearch-batchCreateTask', 'marketresearch-taskAssignTo', 'marketresearch-startTask', 'marketresearch-finishtask', 'marketresearch-activatetask', 'marketresearch-closetask', 'marketresearch-cancelTask', 'marketresearch-recordTaskEstimate'));
+$config->group->package->manageResearchTask->privs['marketresearch-taskassignto']       = array('edition' => 'ipd', 'vision' => 'or', 'order' => 20, 'depend' => array('marketresearch-stage', 'marketresearch-all', 'marketresearch-browse', 'marketresearch-viewTask'), 'recommend' => array('marketresearch-createTask', 'marketresearch-batchCreateTask', 'marketresearch-editTask', 'marketresearch-startTask', 'marketresearch-finishtask', 'marketresearch-activatetask', 'marketresearch-closetask', 'marketresearch-cancelTask', 'marketresearch-recordTaskEstimate'));
+$config->group->package->manageResearchTask->privs['marketresearch-starttask']          = array('edition' => 'ipd', 'vision' => 'or', 'order' => 25, 'depend' => array('marketresearch-stage', 'marketresearch-all', 'marketresearch-browse', 'marketresearch-viewTask'), 'recommend' => array('marketresearch-createTask', 'marketresearch-batchCreateTask', 'marketresearch-taskAssignTo', 'marketresearch-editTask', 'marketresearch-finishtask', 'marketresearch-activatetask', 'marketresearch-closetask', 'marketresearch-cancelTask', 'marketresearch-recordTaskEstimate'));
+$config->group->package->manageResearchTask->privs['marketresearch-recordtaskestimate'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 30, 'depend' => array('marketresearch-stage', 'marketresearch-all', 'marketresearch-browse', 'marketresearch-viewTask'), 'recommend' => array('marketresearch-createTask', 'marketresearch-batchCreateTask', 'marketresearch-taskAssignTo', 'marketresearch-editTask', 'marketresearch-startTask', 'marketresearch-finishtask', 'marketresearch-activatetask', 'marketresearch-closetask', 'marketresearch-cancelTask'));
+$config->group->package->manageResearchTask->privs['marketresearch-finishtask']         = array('edition' => 'ipd', 'vision' => 'or', 'order' => 35, 'depend' => array('marketresearch-stage', 'marketresearch-all', 'marketresearch-browse', 'marketresearch-viewTask'), 'recommend' => array('marketresearch-createTask', 'marketresearch-batchCreateTask', 'marketresearch-taskAssignTo', 'marketresearch-editTask', 'marketresearch-startTask', 'marketresearch-activatetask', 'marketresearch-closetask', 'marketresearch-cancelTask', 'marketresearch-recordTaskEstimate'));
+$config->group->package->manageResearchTask->privs['marketresearch-activatetask']       = array('edition' => 'ipd', 'vision' => 'or', 'order' => 40, 'depend' => array('marketresearch-stage', 'marketresearch-all', 'marketresearch-browse', 'marketresearch-viewTask'), 'recommend' => array('marketresearch-createTask', 'marketresearch-batchCreateTask', 'marketresearch-taskAssignTo', 'marketresearch-editTask', 'marketresearch-startTask', 'marketresearch-finishtask', 'marketresearch-closetask', 'marketresearch-cancelTask', 'marketresearch-recordTaskEstimate'));
+$config->group->package->manageResearchTask->privs['marketresearch-closetask']          = array('edition' => 'ipd', 'vision' => 'or', 'order' => 45, 'depend' => array('marketresearch-stage', 'marketresearch-all', 'marketresearch-browse', 'marketresearch-viewTask'), 'recommend' => array('marketresearch-createTask', 'marketresearch-batchCreateTask', 'marketresearch-taskAssignTo', 'marketresearch-editTask', 'marketresearch-startTask', 'marketresearch-finishtask', 'marketresearch-activatetask', 'marketresearch-cancelTask', 'marketresearch-recordTaskEstimate'));
+$config->group->package->manageResearchTask->privs['marketresearch-canceltask']         = array('edition' => 'ipd', 'vision' => 'or', 'order' => 50, 'depend' => array('marketresearch-stage', 'marketresearch-all', 'marketresearch-browse', 'marketresearch-viewTask'), 'recommend' => array('marketresearch-createTask', 'marketresearch-batchCreateTask', 'marketresearch-taskAssignTo', 'marketresearch-editTask', 'marketresearch-startTask', 'marketresearch-finishtask', 'marketresearch-closetask', 'marketresearch-activatetask', 'marketresearch-recordTaskEstimate'));
+
+$config->group->package->deleteResearchTask = new stdclass();
+$config->group->package->deleteResearchTask->subset = 'researchtask';
+$config->group->package->deleteResearchTask->privs  = array();
+$config->group->package->deleteResearchTask->privs['marketresearch-deletetask']   = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5,  'depend' => array('marketresearch-stage', 'marketresearch-all', 'marketresearch-browse', 'marketresearch-viewTask'), 'recommend' => array('marketresearch-createTask', 'marketresearch-batchCreateTask', 'marketresearch-taskAssignTo', 'marketresearch-editTask', 'marketresearch-startTask', 'marketresearch-finishtask', 'marketresearch-closetask', 'marketresearch-activatetask', 'marketresearch-cancelTask', 'marketresearch-recordTaskEstimate'));
