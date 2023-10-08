@@ -1209,16 +1209,28 @@ class bugZen extends bug
     {
         if($bug->execution)
         {
-            $openedBuilds = $this->loadModel('build')->getBuildPairs(array($bug->product), $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased', $bug->execution, 'execution');
+            $openedBuilds   = $this->loadModel('build')->getBuildPairs(array($bug->product), $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased', $bug->execution, 'execution');
+            $assignedToList = $this->user->getTeamMemberPairs($bug->execution, 'execution');
         }
         elseif($bug->project)
         {
-            $openedBuilds = $this->loadModel('build')->getBuildPairs(array($bug->product), $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased', $bug->project, 'project');
+            $openedBuilds   = $this->loadModel('build')->getBuildPairs(array($bug->product), $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased', $bug->project, 'project');
+            $assignedToList = $this->loadModel('project')->getTeamMemberPairs($bug->project);
         }
         else
         {
-            $openedBuilds = $this->loadModel('build')->getBuildPairs(array($bug->product), $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased');
+            $openedBuilds   = $this->loadModel('build')->getBuildPairs(array($bug->product), $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased');
+            $assignedToList = $this->bug->getProductMemberPairs($bug->product, (string)$bug->branch);
+            $assignedToList = array_filter($assignedToList);
+            if(empty($assignedToList)) $assignedToList = $this->user->getPairs('devfirst|noclosed');
         }
+
+        if($bug->assignedTo && !isset($assignedToList[$bug->assignedTo]) && $bug->assignedTo != 'closed')
+        {
+            $assignedTo = $this->user->getById($bug->assignedTo);
+            $assignedToList[$bug->assignedTo] = $assignedTo->realname;
+        }
+        if($bug->status == 'closed') $assignedToList['closed'] = 'Closed';
 
         $this->view->openedBuilds   = $openedBuilds;
         $this->view->resolvedBuilds = $this->build->getBuildPairs(array($bug->product), $bug->branch, 'noempty');
@@ -1230,6 +1242,7 @@ class bugZen extends bug
         $this->view->users          = $this->user->getPairs('', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
         $this->view->actions        = $this->loadModel('action')->getList('bug', $bug->id);
         $this->view->contactList    = $this->loadModel('user')->getContactLists($this->app->user->account, 'withnote');
+        $this->view->assignedToList = $assignedToList;
 
     }
 
