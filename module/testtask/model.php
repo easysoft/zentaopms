@@ -1502,7 +1502,7 @@ class testtaskModel extends model
         $resultFiles = array();
         $stepFiles   = array();
         $files       = $this->dao->select('*')->from(TABLE_FILE)
-            ->where("(objectType = 'caseResult' or objectType = 'stepResult')")
+            ->where('objectType')->in('caseResult, stepResult')
             ->andWhere('objectID')->in($resultIdList)
             ->andWhere('extra')->ne('editor')
             ->orderBy('id')
