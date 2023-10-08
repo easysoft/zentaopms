@@ -1,35 +1,20 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 7) . '/test/lib/init.php';
-include dirname(__FILE__, 4) . '/calc.class.php';
-
-zdTable('product')->config('product', $useCommon = true, $levels = 4)->gen(10);
-zdTable('bug')->config('bug_resolution_status', $useCommon = true, $levels = 4)->gen(3000);
-
-$metric = new metricTest();
-$calc   = $metric->calcMetric(__FILE__);
-
 /**
 
 title=rate_of_fixed_bug_product
 timeout=0
 cid=1
 
-- 测试分组数。 @5
-
-- 测试产品1的bug修复率。第0条的value属性 @0.0833
-
-- 测试产品3的bug修复率。第0条的value属性 @0.0833
-
-- 测试产品5的bug修复率。第0条的value属性 @0.0833
-
-- 测试产品7的bug修复率。第0条的value属性 @0.0833
-
-- 测试产品9的bug修复率。第0条的value属性 @0.0833
-
-- 测试产品10的bug修复率。 @0
-
 */
+include dirname(__FILE__, 7) . '/test/lib/init.php';
+include dirname(__FILE__, 4) . '/calc.class.php';
+
+zdTable('product')->config('product', true, 4)->gen(10);
+zdTable('bug')->config('bug_resolution_status', true, 4)->gen(3000);
+
+$metric = new metricTest();
+$calc   = $metric->calcMetric(__FILE__);
 
 r(count($calc->getResult())) && p('') && e('5'); // 测试分组数。
 

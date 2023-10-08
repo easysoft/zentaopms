@@ -1,13 +1,5 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 7) . '/test/lib/init.php';
-include dirname(__FILE__, 4) . '/calc.class.php';
-
-zdTable('project')->config('project_undelayed', $useCommon = true, $levels = 4)->gen(10);
-
-$metric = new metricTest();
-$calc   = $metric->calcMetric(__FILE__);
-
 /**
 
 title=count_of_undelayed_finished_execution_which_annual_finished
@@ -15,6 +7,13 @@ timeout=0
 cid=1
 
 */
+include dirname(__FILE__, 7) . '/test/lib/init.php';
+include dirname(__FILE__, 4) . '/calc.class.php';
+
+zdTable('project')->config('project_undelayed', true, 4)->gen(10);
+
+$metric = new metricTest();
+$calc   = $metric->calcMetric(__FILE__);
 
 r(count($calc->getResult())) && p('') && e('1'); // 测试分组数
 

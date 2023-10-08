@@ -1,21 +1,20 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 7) . '/test/lib/init.php';
-include dirname(__FILE__, 4) . '/calc.class.php';
-
-zdTable('product')->config('product_shadow', $useCommon = true, $levels = 4)->gen(20);
-zdTable('story')->config('story_projected', $useCommon = true, $levels = 4)->gen(1000);
-
-$metric = new metricTest();
-$calc   = $metric->calcMetric(__FILE__);
-
 /**
 
 title=count_of_daily_review_story_in_user
+timeout=0
 cid=1
-pid=1
 
 */
+include dirname(__FILE__, 7) . '/test/lib/init.php';
+include dirname(__FILE__, 4) . '/calc.class.php';
+
+zdTable('product')->config('product_shadow', true, 4)->gen(20);
+zdTable('story')->config('story_projected', true, 4)->gen(1000);
+
+$metric = new metricTest();
+$calc   = $metric->calcMetric(__FILE__);
 
 r(count($calc->getResult())) && p('') && e('40'); // 测试分组数。
 

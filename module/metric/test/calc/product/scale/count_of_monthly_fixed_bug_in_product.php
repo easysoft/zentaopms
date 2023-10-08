@@ -1,21 +1,20 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 7) . '/test/lib/init.php';
-include dirname(__FILE__, 4) . '/calc.class.php';
-
-zdTable('bug')->config('bug_resolution_status', $useCommon = true, $levels = 4)->gen(1000);
-zdTable('product')->config('product', $useCommon = true, $levels = 4)->gen(10);
-
-$metric = new metricTest();
-$calc   = $metric->calcMetric(__FILE__);
-
 /**
 
 title=count_of_monthly_fixed_bug_in_product
+timeout=0
 cid=1
-pid=1
 
 */
+include dirname(__FILE__, 7) . '/test/lib/init.php';
+include dirname(__FILE__, 4) . '/calc.class.php';
+
+zdTable('bug')->config('bug_resolution_status', true, 4)->gen(1000);
+zdTable('product')->config('product', true, 4)->gen(10);
+
+$metric = new metricTest();
+$calc   = $metric->calcMetric(__FILE__);
 
 r(count($calc->getResult())) && p('') && e('21'); // 测试分组数。
 
