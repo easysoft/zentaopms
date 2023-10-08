@@ -1795,13 +1795,15 @@ class screenModel extends model
      */
     public function getActiveProductCard($year, $month)
     {
-        $activeProductCount = $this->dao->select('count(distinct product) as count')->from(TABLE_ACTION)
-            ->where('product')->ne(',0,')
-            ->andWhere('product')->ne(',,')
-            ->andWhere('product')->ne(',,0,,')
-            ->andWhere('objectType')->notin('project,execution,task')
-            ->andWhere('year(date)')->eq($year)
-            ->andWhere('month(date)')->eq($month)
+        $activeProductCount = $this->dao->select('count(distinct product) as count')->from(TABLE_ACTION)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.product')->ne(',0,')
+            ->andWhere('t1.product')->ne(',,')
+            ->andWhere('t1.product')->ne(',,0,,')
+            ->andWhere('t1.objectType')->notin('project,execution,task')
+            ->andWhere('year(t1.date)')->eq($year)
+            ->andWhere('month(t1.date)')->eq($month)
+            ->andWhere('t2.deleted')->eq('0')
             ->fetch();
 
         $activeProductCard = new stdclass();
