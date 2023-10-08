@@ -66,15 +66,15 @@ class treeTest
      * @param  int    $startModule
      * @param  int    $branch
      * @access public
-     * @return int
+     * @return array
      */
-    public function getOptionMenuTest($rootID, $type = 'story', $startModule = 0, $branch = 0)
+    public function getOptionMenuTest(int $rootID, string $type = 'story', int $startModule = 0, int|string $branch = 0): array
     {
         $objects = $this->objectModel->getOptionMenu($rootID, $type, $startModule, $branch);
 
         if(dao::isError()) return dao::getError();
 
-        return count($objects);
+        return $objects;
     }
 
     /**
@@ -126,18 +126,13 @@ class treeTest
      * @access public
      * @return array
      */
-    public function buildTreeArrayTest(& $treeMenu, $modules, $moduleID, $moduleName = '/')
+    public function buildTreeArrayTest(array & $treeMenu, array $modules, object $module, string $moduleName = '/'): array
     {
-        $module     = $this->objectModel->getByID($moduleID);
-        $moduleName = $module->name;
-
         $this->objectModel->buildTreeArray($treeMenu, $modules, $module, $moduleName);
 
         if(dao::isError()) return dao::getError();
 
-        $objects = array();
-        foreach($treeMenu as $id => $string) $objects[$id] = strlen($string);
-        return $objects;
+        return $treeMenu;
     }
 
     /**
