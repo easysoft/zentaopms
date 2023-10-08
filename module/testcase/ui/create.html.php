@@ -115,12 +115,14 @@ formPanel
         (
             set::width('1/3'),
             set::label($lang->testcase->type),
+            set::required(true),
             picker
             (
                 set::id('type'),
                 set::name('type'),
                 set::items($lang->testcase->typeList),
-                set::value($case->type)
+                set::value($case->type),
+                set::required(true)
             ),
         ),
         formGroup

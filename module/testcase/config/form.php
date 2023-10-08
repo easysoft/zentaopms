@@ -11,7 +11,7 @@ $config->testcase->form->create = array();
 $config->testcase->form->create['product']        = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->testcase->form->create['branch']         = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->testcase->form->create['module']         = array('required' => false, 'type' => 'int',    'default' => 0);
-$config->testcase->form->create['type']           = array('required' => false, 'type' => 'string', 'default' => '');
+$config->testcase->form->create['type']           = array('required' => true, 'type' => 'string', 'default' => '');
 $config->testcase->form->create['stage']          = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
 $config->testcase->form->create['story']          = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->testcase->form->create['scene']          = array('required' => false, 'type' => 'int',    'default' => 0);
@@ -36,7 +36,7 @@ $config->testcase->form->batchCreate['module']       = array('required' => false
 $config->testcase->form->batchCreate['scene']        = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->testcase->form->batchCreate['story']        = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->testcase->form->batchCreate['title']        = array('required' => true,  'type' => 'string', 'default' => '', 'base' => true);
-$config->testcase->form->batchCreate['type']         = array('required' => false, 'type' => 'string', 'default' => '');
+$config->testcase->form->batchCreate['type']         = array('required' => true,  'type' => 'string', 'default' => '');
 $config->testcase->form->batchCreate['color']        = array('required' => false, 'type' => 'string', 'default' => '');
 $config->testcase->form->batchCreate['pri']          = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->testcase->form->batchCreate['precondition'] = array('required' => false, 'type' => 'string', 'default' => '');
@@ -49,7 +49,7 @@ $config->testcase->form->edit['product']      = array('required' => false, 'type
 $config->testcase->form->edit['branch']       = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->testcase->form->edit['module']       = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->testcase->form->edit['story']        = array('required' => false, 'type' => 'int',    'default' => 0);
-$config->testcase->form->edit['type']         = array('required' => false, 'type' => 'string', 'default' => '');
+$config->testcase->form->edit['type']         = array('required' => true,  'type' => 'string', 'default' => '');
 $config->testcase->form->edit['auto']         = array('required' => false, 'type' => 'string', 'default' => '0');
 $config->testcase->form->edit['stage']        = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
 $config->testcase->form->edit['pri']          = array('required' => false, 'type' => 'int',    'default' => 3);
@@ -114,7 +114,7 @@ $config->testcase->form->showImport['title']        = array('required' => true, 
 $config->testcase->form->showImport['branch']       = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->testcase->form->showImport['module']       = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->testcase->form->showImport['story']        = array('required' => false, 'type' => 'int',    'default' => 0);
-$config->testcase->form->showImport['type']         = array('required' => false, 'type' => 'string', 'default' => '');
+$config->testcase->form->showImport['type']         = array('required' => true,  'type' => 'string', 'default' => '');
 $config->testcase->form->showImport['pri']          = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->testcase->form->showImport['precondition'] = array('required' => false, 'type' => 'string', 'default' => '');
 $config->testcase->form->showImport['keywords']     = array('required' => false, 'type' => 'string', 'default' => '');

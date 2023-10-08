@@ -240,6 +240,7 @@ detailBody
             item
             (
                 set::name($lang->testcase->type),
+                set::required(true),
                 inputGroup
                 (
                     picker
