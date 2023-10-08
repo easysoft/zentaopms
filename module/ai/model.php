@@ -459,9 +459,55 @@ class aiModel extends model
     }
 
     /**
-     * Get list of prompts.
+     * Generate conversations with LLM for JSON output, but seperate the conversation into two parts.
      *
-     * TODO: fully implement this.
+     * Usage is the same as function `converseForJSON`, but this function will generate two conversations:
+     * one for manipulating the natural language data, and the other for generating the JSON output.
+     *
+     * @param  array  $messages  array of chat messages
+     * @param  object $schema    schema of the output
+     * @param  array  $options   optional params, see https://platform.openai.com/docs/api-reference/chat/create
+     * @access public
+     * @return mixed  false if error, array of JSON object if success
+     */
+    public function converseTwiceForJSON($messages, $schema, $options = array())
+    {
+        /* First conversation. */
+        $data = compact('messages');
+        if(!empty($options))
+        {
+            foreach($options as $key => $value) $data[$key] = $value;
+        }
+
+        $postData = $this->assembleRequestData('chat', $data);
+        if(!$postData) return false;
+
+        $chatResponse = $this->makeRequest('chat', $postData);
+        $chatMessages = $this->parseChatResponse($chatResponse);
+
+        $chatMessage = end($chatMessages);
+        if(empty($chatMessage)) return false;
+
+        /* Second conversation for JSON output. */
+        $messages     = array_merge($this->lang->ai->engineeredPrompts->askForFunctionCalling, array((object)array('role' => 'user', 'content' => $chatMessage)));
+        $functions    = array((object)array('name' => 'function', 'parameters' => $schema));
+        $functionCall = (object)array('name' => 'function');
+
+        $data = compact('messages', 'functions', 'functionCall');
+        if(!empty($options))
+        {
+            foreach($options as $key => $value) $data[$key] = $value;
+        }
+
+        $postData = $this->assembleRequestData('function', $data);
+        if(!$postData) return false;
+
+        $response = $this->makeRequest('function', $postData);
+        return $this->parseFunctionCallResponse($response);
+    }
+
+    /**
+     * Get list of prompts.
      *
      * @param  string  $module
      * @param  string  $status
@@ -483,8 +529,6 @@ class aiModel extends model
 
     /**
      * Get prompt by id.
-     *
-     * TODO: fully implement this.
      *
      * @param  int     $id
      * @access public

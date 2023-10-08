@@ -793,3 +793,6 @@ $lang->ai->audit->exit         = '退出调试';
 $lang->ai->audit->backLocationList = array();
 $lang->ai->audit->backLocationList[0] = '返回调试页面';
 $lang->ai->audit->backLocationList[1] = '返回调试页面并重新生成';
+
+$lang->ai->engineeredPrompts = new stdclass();
+$lang->ai->engineeredPrompts->askForFunctionCalling = array((object)array('role' => 'user', 'content' => '请把我所发的下一条消息内容转换为 function 调用。'), (object)array('role' => 'assistant', 'content' => '好的，我会把下一条消息转换为 function 调用。'));
