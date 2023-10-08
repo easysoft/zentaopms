@@ -79,22 +79,61 @@ class aiModel extends model
      */
     private function makeRequest($type, $data, $timeout = 10)
     {
+        $modelType   = $this->config->ai->models[$this->modelConfig->type];
+        $modelVendor = $this->modelConfig->vendor;
+
         /* Try encoding data to json, handles both encoded json and raw data. */
         $postData = json_encode($data);
         if(json_last_error()) $postData = $data;
 
         /* Set auth and content-type headers. */
-        $requestHeaders = array(sprintf($this->config->ai->openai->api->{$this->modelConfig->vendor}->authFormat, $this->modelConfig->key));
-        $requestHeaders[] = isset($this->config->ai->openai->contentType[$type]) ? $this->config->ai->openai->contentType[$type] : $this->config->ai->openai->contentType[''];
+        $requestHeaders = array();
+        if(isset($this->config->ai->$modelType->api->$modelVendor->authFormat)) $requestHeaders[] = array(sprintf($this->config->ai->$modelType->api->$modelVendor->authFormat, $this->modelConfig->key));
+        $requestHeaders[] = isset($this->config->ai->$modelType->contentType[$type]) ? $this->config->ai->$modelType->contentType[$type] : $this->config->ai->$modelType->contentType[''];
 
         /* Assemble request url. */
-        if($this->modelConfig->vendor == 'azure')
+        if($modelType == 'openai')
         {
-            $url = sprintf($this->config->ai->openai->api->azure->format, $this->config->ai->openai->api->azure->resource, $this->config->ai->openai->api->azure->deployment, $this->config->ai->openai->api->methods[$type], $this->config->ai->openai->api->azure->apiVersion);
+            if($modelVendor == 'azure')
+            {
+                $url = sprintf($this->config->ai->openai->api->azure->format, $this->config->ai->openai->api->azure->resource, $this->config->ai->openai->api->azure->deployment, $this->config->ai->openai->api->methods[$type], $this->config->ai->openai->api->azure->apiVersion);
+            }
+            else
+            {
+                $url = sprintf($this->config->ai->openai->api->openai->format, $this->config->ai->openai->api->openai->version, $this->config->ai->openai->api->methods[$type]);
+            }
         }
-        else
+        elseif($modelType == 'ernie')
         {
-            $url = sprintf($this->config->ai->openai->api->openai->format, $this->config->ai->openai->api->openai->version, $this->config->ai->openai->api->methods[$type]);
+            $clientID     = $this->modelConfig->key;
+            $clientSecret = $this->modelConfig->secret;
+            $authURL = sprintf($this->config->ai->ernie->api->$modelVendor->auth, $clientID, $clientSecret);
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $authURL);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+            $result = curl_exec($ch);
+            if(!$result || curl_errno($ch))
+            {
+                $response = new stdclass();
+                $response->result  = 'fail';
+                $response->message = curl_error($ch);
+                curl_close($ch);
+                return $response;
+            }
+            $result = json_decode($result);
+            if(json_last_error())
+            {
+                $response = new stdclass();
+                $response->result  = 'fail';
+                $response->message = 'JSON decode error: ' . json_last_error_msg();
+                curl_close($ch);
+                return $response;
+            }
+            $accessToken = $result->access_token;
+
+            $url = sprintf($this->config->ai->ernie->api->$modelVendor->format, $accessToken);
         }
 
         /* Set up requestor. */
@@ -197,20 +236,22 @@ class aiModel extends model
      */
     private function assembleRequestData($type, $data)
     {
+        $modelType = $this->config->ai->models[$this->modelConfig->type];
+
         $postData = new stdclass();
-        $postData->model = $this->config->ai->openai->model->$type;
+        $postData->model = $this->config->ai->$modelType->model->$type;
 
         $data = static::standardizeParams($data);
 
         /* Set required params, abort if missing. */
-        foreach($this->config->ai->openai->params->$type->required as $param)
+        foreach($this->config->ai->$modelType->params->$type->required as $param)
         {
             if(!isset($data->$param)) return false;
             $postData->$param = $data->$param;
         }
 
         /* Set optional params. */
-        foreach($this->config->ai->openai->params->$type->optional as $param)
+        foreach($this->config->ai->$modelType->params->$type->optional as $param)
         {
             if(isset($data->$param)) $postData->$param = $data->$param;
         }
@@ -293,12 +334,24 @@ class aiModel extends model
         $response = $this->decodeResponse($response);
         if(empty($response)) return false;
 
-        /* Extract chat message choices. */
-        if(isset($response->choices) && count($response->choices) > 0)
+        if($this->config->ai->models[$this->modelConfig->type] == 'ernie')
         {
-            $messages = array();
-            foreach($response->choices as $choice) $messages[] = $choice->message->content;
-            return $messages;
+            /* Extract chat message text. */
+            if(!empty($response->result))
+            {
+                $messages = array($response->result);
+                return $messages;
+            }
+        }
+        else
+        {
+            /* Extract chat message choices. */
+            if(isset($response->choices) && count($response->choices) > 0)
+            {
+                $messages = array();
+                foreach($response->choices as $choice) $messages[] = $choice->message->content;
+                return $messages;
+            }
         }
         return false;
     }
@@ -315,15 +368,23 @@ class aiModel extends model
         $response = $this->decodeResponse($response);
         if(empty($response)) return false;
 
-        /* Extract function call choices. */
-        if(isset($response->choices) && count($response->choices) > 0)
+        if($this->config->ai->models[$this->modelConfig->type] == 'ernie')
         {
-            $arguments = array();
-            foreach($response->choices as $choice)
+            /* Extract function call arguments. */
+            if(!empty($response->function_call)) return $response->function_call->arguments;
+        }
+        else
+        {
+            /* Extract function call choices. */
+            if(isset($response->choices) && count($response->choices) > 0)
             {
-                if(!empty($choice->message->function_call)) $arguments[] = $choice->message->function_call->arguments;
+                $arguments = array();
+                foreach($response->choices as $choice)
+                {
+                    if(!empty($choice->message->function_call)) $arguments[] = $choice->message->function_call->arguments;
+                }
+                return $arguments;
             }
-            return $arguments;
         }
         return false;
     }
@@ -990,7 +1051,7 @@ class aiModel extends model
         $schema      = $this->getFunctionCallSchema($prompt->targetForm);
         if(empty($schema)) return -4;
 
-        $response = $this->converseForJSON(array((object)array('role' => 'user', 'content' => $wholePrompt)), $schema);
+        $response = $this->{$this->config->ai->models[$this->modelConfig->type] == 'ernie' ? 'converseTwiceForJSON' : 'converseForJSON'}(array((object)array('role' => 'user', 'content' => $wholePrompt)), $schema);
         if(empty($response)) return -5;
 
         return current($response);

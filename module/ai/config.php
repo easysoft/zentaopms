@@ -4,6 +4,8 @@ $config->ai->vendorList['openai']['requiredFields'] = array('key');
 $config->ai->vendorList['azure']['requiredFields']  = array('key', 'resource', 'deployment');
 $config->ai->vendorList['baidu']['requiredFields']  = array('key', 'secret');
 
+$config->ai->models = array('openai-gpt35' => 'openai', 'baidu-ernie' => 'ernie');
+
 /* OpenAI GPT configurations. */
 $config->ai->openai = new stdclass();
 $config->ai->openai->api = new stdclass();

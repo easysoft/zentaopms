@@ -145,7 +145,7 @@ class ai extends control
 
         $this->ai->setConfig($modelConfig);
 
-        if($currentVendor == 'azure')
+        if($this->config->ai->models[$modelConfig->type] == 'ernie' || $currentVendor == 'azure')
         {
             $messages = array((object)array('role' => 'user', 'content' => 'test'));
             $result = $this->ai->converse($messages, array('maxTokens' => 1));
