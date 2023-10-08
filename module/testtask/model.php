@@ -1525,13 +1525,15 @@ class testtaskModel extends model
     }
 
     /**
-     * Format ztf log.
+     * 格式化 ztf 的执行日志。
+     * Format the execution log of ztf.
      *
-     * @param  string $log
+     * @param  string $result
+     * @param  array  $stepResults
      * @access public
      * @return string
      */
-    public function formatZtfLog($result, $stepResults)
+    public function formatZtfLog(string $result, array $stepResults): string
     {
         $logObj  = json_decode($result);
         $logs    = empty($logObj->log) ? '' : $logObj->log;
@@ -1539,7 +1541,7 @@ class testtaskModel extends model
 
         $logs     = str_replace(array("\r", "\n", "\r\n"), "\n", $logs);
         $logList  = explode("\n", $logs);
-        $logHtml  = "";
+        $logHtml  = '';
 
         foreach($logList as $log)
         {
@@ -1547,12 +1549,12 @@ class testtaskModel extends model
             $log = trim($log);
             if(empty($log)) continue;
 
-            $failHtml = ': <span class="result-testcase fail">' . $this->lang->testtask->fail . '</span>';
-            $passHtml = ': <span class="result-testcase pass">' . $this->lang->testtask->pass . '</span>';
+            $failHtml = ": <span class='result-testcase fail'>{$this->lang->testtask->fail}</span>";
+            $passHtml = ": <span class='result-testcase pass'>{$this->lang->testtask->pass}</span>";
 
             $log = preg_replace(array("/:\x20失败/", "/:\x20fail/", "/:\x20成功/", "/:\x20pass/"), array($failHtml, $failHtml, $passHtml, $passHtml), $log);
 
-            $logHtml .= "<li>" . $log . "</li>";
+            $logHtml .= "<li>{$log}</li>";
         }
 
         if(!empty($stepResults))
@@ -1573,23 +1575,22 @@ class testtaskModel extends model
             }
 
             $caseResult = $passCount ? 'pass':'fail';
-            $logHtml .= "<li class='result-testcase {$caseResult}'>"
-                        . sprintf($this->lang->testtask->stepSummary, $total, $passCount, $failCount)
-                        . "</li>";
+            $logHtml   .= "<li class='result-testcase {$caseResult}'>" . sprintf($this->lang->testtask->stepSummary, $total, $passCount, $failCount) . '</li>';
         }
 
         return $logHtml;
     }
 
     /**
-     * Judge an action is clickable or not.
+     * 判断一个动作是否可以执行。
+     * Determine whether an action can be performed.
      *
-     * @param  object $product
+     * @param  object $testtask
      * @param  string $action
      * @access public
-     * @return void
+     * @return bool
      */
-    public static function isClickable($testtask, $action)
+    public static function isClickable(object $testtask, string $action): bool
     {
         $action = strtolower($action);
 
@@ -1609,13 +1610,14 @@ class testtaskModel extends model
     }
 
     /**
-     * Get toList and ccList.
+     * 获取一个测试单的收件人和抄送人。
+     * Get the recipient and cc of a testtask.
      *
      * @param  object    $testtask
      * @access public
      * @return bool|array
      */
-    public function getToAndCcList($testtask)
+    public function getToAndCcList(object $testtask): false|array
     {
         /* Set toList and ccList. */
         $toList   = zget($testtask, 'owner', '');
@@ -1624,6 +1626,7 @@ class testtaskModel extends model
         if(empty($toList))
         {
             if(empty($ccList)) return false;
+
             if(strpos($ccList, ',') === false)
             {
                 $toList = $ccList;
@@ -1913,7 +1916,8 @@ class testtaskModel extends model
     }
 
     /**
-     * Parse cppunit XML result.
+     * 解析 xml 文件中的 cppunit 的单元测试结果。
+     * Parse unit test result from cppunit xml.
      *
      * @param  object $parsedXML
      * @param  int    $productID
@@ -1961,7 +1965,8 @@ class testtaskModel extends model
     }
 
     /**
-     * Parse unit result from xml.
+     * 解析 xml 文件中的单元测试结果。
+     * Parse unit test result from xml.
      *
      * @param  object $parsedXML
      * @param  int    $productID
@@ -2072,7 +2077,8 @@ class testtaskModel extends model
     }
 
     /**
-     * Parse unit result from ztf.
+     * 解析 ztf 的单元测试结果。
+     * Parse unit test result of ztf.
      *
      * @param  array  $caseResults
      * @param  string $frame
@@ -2082,7 +2088,7 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function parseZTFUnitResult($caseResults, $frame, $productID, $jobID, $compileID)
+    public function parseZTFUnitResult(array $caseResults, string $frame, int $productID, int $jobID, int $compileID): array
     {
         $now        = helper::now();
         $cases      = array();
@@ -2130,7 +2136,8 @@ class testtaskModel extends model
     }
 
     /**
-     * Parse function result from ztf.
+     * 解析 ztf 的功能测试结果。
+     * Parse function test result of ztf.
      *
      * @param  array  $caseResults
      * @param  string $frame
@@ -2140,7 +2147,7 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function parseZTFFuncResult($caseResults, $frame, $productID, $jobID, $compileID)
+    public function parseZTFFuncResult(array $caseResults, string $frame, int $productID, int $jobID, int $compileID): array
     {
         $now        = helper::now();
         $cases      = array();
