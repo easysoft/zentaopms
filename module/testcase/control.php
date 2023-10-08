@@ -357,12 +357,10 @@ class testcase extends control
         if($runID)
         {
             $case    = $this->testtask->getRunById($runID)->case;
-            $results = $this->testtask->getResults($runID);
         }
         elseif($caseID)
         {
             $case    = $this->testcase->getById($caseID);
-            $results = $this->testtask->getResults(0, $caseID);
         }
 
         /* 如果用例不存在，关闭模态框。 */
