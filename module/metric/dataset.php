@@ -520,20 +520,19 @@ class dataset
     }
 
     /**
-     * 统计代码库为解决问题数量。
-     * Get pending repo issues.
+     * 统计代码库问题信息。
+     * Get repo issues.
      *
      * @param  string       $fieldList
      * @access public
      * @return PDOStatement
      */
-    public function getPendingRepoIssues($fieldList)
+    public function getRepoIssues($fieldList)
     {
         return $this->dao->select($fieldList)->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repo = t2.id')
             ->where('t1.repo')->gt(0)
             ->andWhere('t1.deleted')->eq('0')
-            ->andWhere('t1.resolvedBy')->eq('')
             ->query();
     }
 }

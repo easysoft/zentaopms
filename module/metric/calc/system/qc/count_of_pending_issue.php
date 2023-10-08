@@ -20,15 +20,15 @@
  */
 class count_of_pending_issue extends baseCalc
 {
-    public $dataset = 'getPendingRepoIssues';
+    public $dataset = 'getRepoIssues';
 
-    public $fieldList = array('t1.id');
+    public $fieldList = array('t1.resolvedBy');
 
     public $result = 0;
 
     public function calculate($row)
     {
-        $this->result += 1;
+        if(empty($row->resolvedBy)) $this->result += 1;
     }
 
     public function getResult($options = array())
