@@ -217,7 +217,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
-$lang->misc->feature->all['18.8'][]        = array('title' => '', 'desc' => '');
+$lang->misc->feature->all['18.8'][]        = array('title' => 'In the BI section, we have introduced new features such as metric item functionality and an application inspection report dashboard. The DevOps platform edition now includes a configuration wizard. Additionally, we have enhanced the requitement and market management interface by adding a market management feature. New revision of client navigation and personal center.', 'desc' => '');
 $lang->misc->feature->all['18.7'][]        = array('title' => 'DevOps has introduced new features such as cloud-native platform, artifact repository, and application management, while also enhancing the navigation structure and improving the UI interactions. Additionally, a new AI suggestion designer has been added, which supports integration with large language models and allows for customization of AI applications.', 'desc' => '');
 $lang->misc->feature->all['18.6'][]        = array('title' => "Our academy's curriculum now supports cloud-based importing and the previewing of PDF files within courses. Additionally, we've optimized the loading speed of commonly used lists and addressed multiple bugs.", 'desc' => '');
 $lang->misc->feature->all['18.5'][]        = array('title' => "Our academy's curriculum now supports cloud-based importing and the previewing of PDF files within courses. Additionally, we've optimized the loading speed of commonly used lists and addressed multiple bugs.", 'desc' => '');

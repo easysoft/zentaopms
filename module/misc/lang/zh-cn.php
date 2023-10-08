@@ -217,7 +217,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
-$lang->misc->feature->all['18.7'][]        = array('title' => '', 'desc' => '');
+$lang->misc->feature->all['18.8'][]        = array('title' => 'BI中新增了度量项功能和应用巡检报告大屏，DevOps平台版增加了配置向导，需求与市场管理界面中增加了市场管理功能，客户端导航及个人中心全新改版。', 'desc' => '');
 $lang->misc->feature->all['18.7'][]        = array('title' => 'DevOps新增了云原生平台、制品库和应用管理功能，优化了导航结构和相关UI交互。同时，新增了AI提词设计器功能，支持与大语言模型对接，支持自定义AI应用等。', 'desc' => '');
 $lang->misc->feature->all['18.6'][]        = array('title' => '优化了常用列表性能和BI功能的细节，并完善了瀑布项目的功能细节。修复Bug。', 'desc' => '');
 $lang->misc->feature->all['18.5'][]        = array('title' => '学堂课程支持从云端导入，支持课程中PDF文件的预览，同时还优化了常用列表的加载速度，修复了多处Bug。', 'desc' => '');
