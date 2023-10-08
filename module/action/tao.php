@@ -886,4 +886,81 @@ class actionTao extends actionModel
             ->page($pager)
             ->fetchAll();
     }
+
+    /**
+     * 检查Action是否合法。
+     * Check if action is legal.
+     *
+     * @param  object $action
+     * @param  array  $shadowProducts
+     * @param  array  $docList
+     * @param  array  $apiList
+     * @param  array  $docLibList
+     * @access protected
+     * @return bool
+     */
+    protected function checkIsActionLegal(object $action, array $shadowProducts, array $docList, array $apiList, array $docLibList): bool
+    {
+        if($action->objectType == 'doc' && !isset($docList[$action->objectID])) return false;
+        if($action->objectType == 'api' && !isset($apiList[$action->objectID])) return false;
+        if($action->objectType == 'doclib' && !isset($docLibList[$action->objectID])) return false;
+        if($action->objectType == 'product' && isset($shadowProducts[$action->objectID])) return false;
+
+        return true;
+    }
+
+    /**
+     * 为Action添加对象名称。
+     * Add object name for action.
+     *
+     * @param  object $action
+     * @param  array  $objectNames
+     * @access protected
+     * @return void
+     */
+    protected function AddObjectNameForAction(object $action, array $objectNames)
+    {
+        $action->objectName = isset($objectNames[$action->objectType][$action->objectID]) ? $objectNames[$action->objectType][$action->objectID] : '';
+
+        if($action->objectType == 'program' && strpos('syncexecution,syncproject,syncprogram', $action->action) !== false)
+        {
+            $action->objectName .= $this->lang->action->label->startProgram;
+        }
+        elseif($action->objectType == 'branch' && $action->action == 'mergedbranch')
+        {
+            if($action->objectID == 0) $action->objectName = $this->lang->branch->main;
+            $action->objectName = '"' . $action->extra . ' "' . $this->lang->action->to . ' "' . $action->objectName . '"';
+        }
+        elseif($action->objectType == 'user')
+        {
+            $user = $this->dao->select('id,realname')->from(TABLE_USER)->where('id')->eq($action->objectID)->fetch();
+            if($user) $action->objectName = $user->realname;
+        }
+        elseif($action->objectType == 'kanbancard' && strpos($action->action, 'imported') !== false && $action->action != 'importedcard')
+        {
+            $objectType  = str_replace('imported', '', $action->action);
+            $objectTable = zget($this->config->objectTables, $objectType);
+            $objectName  = ($objectType == 'productplan' || $objectType == 'ticket') ? 'title' : 'name';
+            $action->objectName = $this->dao->select($objectName)->from($objectTable)->where('id')->eq($action->extra)->fetch($objectName);
+        }
+        elseif(strpos(',module,chartgroup,', ",$action->objectType,") !== false && !empty($action->extra) && $action->action != 'deleted')
+        {
+            $modules = $this->dao->select('id,name')->from(TABLE_MODULE)->where('id')->in(explode(',', $action->extra))->fetchPairs('id');
+            $action->objectName = implode(',', $modules);
+        }
+        elseif($action->objectType == 'mr' && $action->action == 'deleted')
+        {
+            $action->objectName = $action->extra;
+        }
+        elseif($action->objectType == 'pivot')
+        {
+            $pivotNames = json_decode($action->objectName, true);
+            $action->objectName = zget($pivotNames, $this->app->getClientLang(), '');
+            if(empty($action->objectName))
+            {
+                $pivotNames = array_filter($pivotNames);
+                $action->objectName = reset($pivotNames);
+            }
+        }
+    }
 }

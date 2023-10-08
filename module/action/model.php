@@ -926,10 +926,7 @@ class actionModel extends model
 
         /* 通过action获取对象名称，所属项目以及需求。 */
         /* Get object names, object projects and requirements by actions. */
-        $relatedData     = $this->getRelatedDataByActions($actions);
-        $objectNames     = $relatedData['objectNames'];
-        $relatedProjects = $relatedData['relatedProjects'];
-        $requirements    = $relatedData['requirements'];
+        extract($this->getRelatedDataByActions($actions));
 
         $projectIdList = array();
         foreach($relatedProjects as $objectType => $idList) $projectIdList += $idList;
@@ -946,10 +943,7 @@ class actionModel extends model
         {
             /* 如果doc,api,doclib,product类型对应的对象不存在，则从actions中删除。*/
             /* If the object corresponding to the doc, api, doclib, and product types does not exist, it will be deleted from actions. */
-            if($action->objectType == 'doc' && !isset($docList[$action->objectID])) unset($actions[$i]);
-            if($action->objectType == 'api' && !isset($apiList[$action->objectID])) unset($actions[$i]);
-            if($action->objectType == 'doclib' && !isset($docLibList[$action->objectID])) unset($actions[$i]);
-            if($action->objectType == 'product' && isset($shadowProducts[$action->objectID]))
+            if(!$this->actionTao->checkIsActionLegal($action, $shadowProducts, $docList, $apiList, $docLibList))
             {
                 unset($actions[$i]);
                 continue;
@@ -957,48 +951,7 @@ class actionModel extends model
 
             /* 为action添加objectName属性。 */
             /* Add objectName field to the action. */
-            $action->objectName = isset($objectNames[$action->objectType][$action->objectID]) ? $objectNames[$action->objectType][$action->objectID] : '';
-
-            if($action->objectType == 'program' && strpos('syncexecution,syncproject,syncprogram', $action->action) !== false)
-            {
-                $action->objectName .= $this->lang->action->label->startProgram;
-            }
-            elseif($action->objectType == 'branch' && $action->action == 'mergedbranch')
-            {
-                if($action->objectID == 0) $action->objectName = $this->lang->branch->main;
-                $action->objectName = '"' . $action->extra . ' "' . $this->lang->action->to . ' "' . $action->objectName . '"';
-            }
-            elseif($action->objectType == 'user')
-            {
-                $user = $this->dao->select('id,realname')->from(TABLE_USER)->where('id')->eq($action->objectID)->fetch();
-                if($user) $action->objectName = $user->realname;
-            }
-            elseif($action->objectType == 'kanbancard' && strpos($action->action, 'imported') !== false && $action->action != 'importedcard')
-            {
-                $objectType  = str_replace('imported', '', $action->action);
-                $objectTable = zget($this->config->objectTables, $objectType);
-                $objectName  = ($objectType == 'productplan' || $objectType == 'ticket') ? 'title' : 'name';
-                $action->objectName = $this->dao->select($objectName)->from($objectTable)->where('id')->eq($action->extra)->fetch($objectName);
-            }
-            elseif(strpos(',module,chartgroup,', ",$action->objectType,") !== false && !empty($action->extra) && $action->action != 'deleted')
-            {
-                $modules = $this->dao->select('id,name')->from(TABLE_MODULE)->where('id')->in(explode(',', $action->extra))->fetchPairs('id');
-                $action->objectName = implode(',', $modules);
-            }
-            elseif($action->objectType == 'mr' && $action->action == 'deleted')
-            {
-                $action->objectName = $action->extra;
-            }
-            elseif($action->objectType == 'pivot')
-            {
-                $pivotNames = json_decode($action->objectName, true);
-                $action->objectName = zget($pivotNames, $this->app->getClientLang(), '');
-                if(empty($action->objectName))
-                {
-                    $pivotNames = array_filter($pivotNames);
-                    $action->objectName = reset($pivotNames);
-                }
-            }
+            $this->actionTao->AddObjectNameForAction($action, $objectNames);
 
             $projectID = isset($relatedProjects[$action->objectType][$action->objectID]) ? $relatedProjects[$action->objectType][$action->objectID] : 0;
 
