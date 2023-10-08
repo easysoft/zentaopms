@@ -1783,10 +1783,13 @@ class screenModel extends model
      */
     public function getActiveProjectCard($year, $month)
     {
-        return $this->dao->select('count(distinct project) as count')->from(TABLE_ACTION)
-            ->where('project')->ne(0)
-            ->andWhere('year(date)')->eq($year)
-            ->andWhere('month(date)')->eq($month)
+        return $this->dao->select('count(distinct t1.project) as count')->from(TABLE_ACTION)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.project')->ne(0)
+            ->andWhere('year(t1.date)')->eq($year)
+            ->andWhere('month(t1.date)')->eq($month)
+            ->andWhere('t2.type')->eq('project')
+            ->andWhere('t2.deleted')->eq('0')
             ->fetchAll();
     }
 
@@ -1801,19 +1804,26 @@ class screenModel extends model
      */
     public function getActiveProductCard($year, $month)
     {
-        $activeProductCount = $this->dao->select('count(distinct product) as count')->from(TABLE_ACTION)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
-            ->where('t1.product')->ne(',0,')
-            ->andWhere('t1.product')->ne(',,')
-            ->andWhere('t1.product')->ne(',,0,,')
-            ->andWhere('t1.objectType')->notin('project,execution,task')
-            ->andWhere('year(t1.date)')->eq($year)
-            ->andWhere('month(t1.date)')->eq($month)
-            ->andWhere('t2.deleted')->eq('0')
-            ->fetch();
+        $noDeletedProductList = $this->dao->select('id')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->fetchPairs();
+
+        $activeProductList = $this->dao->select('distinct product')->from(TABLE_ACTION)
+            ->where('product')->ne(',0,')
+            ->andWhere('product')->ne(',,')
+            ->andWhere('product')->ne(',,0,,')
+            ->andWhere('objectType')->notin('project,execution,task')
+            ->andWhere('year(date)')->eq($year)
+            ->andWhere('month(date)')->eq($month)
+            ->fetchPairs();
+
+        $activeProductCount = 0;
+        foreach($activeProductList as $product)
+        {
+            $productID = trim($product, ',');
+            if(in_array($productID, $noDeletedProductList)) $activeProductCount ++;
+        }
 
         $activeProductCard = new stdclass();
-        $activeProductCard->count = $activeProductCount->count;
+        $activeProductCard->count = $activeProductCount;
         $activeProductCard->year  = $year;
         $activeProductCard->month = $month;
         return array($activeProductCard);
@@ -1880,6 +1890,7 @@ class screenModel extends model
             $row->finishedTasks = count(array_unique($finishedTaskList));
             $row->contributors  = isset($createdTaskActors[$projectID]) ? count($createdTaskActors[$projectID]) : 0;
 
+            if($row->createdTasks === 0 && $row->finishedTasks === 0 && $row->contributors === 0) continue;
             $dataset[] = $row;
         }
 
