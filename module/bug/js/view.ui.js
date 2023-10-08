@@ -28,7 +28,6 @@ $(document).on('click', '#toTaskButton', function()
     {
         zui.modal.alert(errorNoExecution);
     }
-
 });
 
 function changeTaskProjects(event)
