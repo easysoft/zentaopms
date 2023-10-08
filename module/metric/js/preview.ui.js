@@ -418,13 +418,15 @@ window.initChart = function($obj, head, data, chartType)
 
     var type  = (chartType == 'barX' || chartType == 'barY') ? 'bar' : chartType;
 
+    data.sort(function(a, b) {
+        return a[x] < b[x] ? -1 : 1;
+    });
+
     var xAxis = {
         type: 'category',
         data: data.map(item => item[x])
     };
     if(head.length == 2) xAxis.data = xAxis.data.map(item => item.slice(0, 10));
-    xAxis.data = [...new Set(xAxis.data)];
-    xAxis.data.sort();
     var yAxis = {type: 'value'};
 
     if(head.length <= 3) {
