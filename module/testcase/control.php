@@ -338,29 +338,25 @@ class testcase extends control
      * Create bug.
      *
      * @param  int    $productID
+     * @param  int    $caseID
+     * @param  int    $version
+     * @param  int    $runID
      * @param  string $extras
      * @access public
      * @return void
      */
-    public function createBug(int $productID, string $extras = '')
+    public function createBug(int $productID, int $caseID, int $version, int $runID = 0)
     {
-        /* 从 extras 中提取变量。 */
-        /* Extract variables from extras. */
-        $extras = str_replace(array(',', ' '), array('&', ''), $extras);
-        parse_str($extras, $params);
-        extract($params);
-
         /* 获取用例和用例执行结果。 */
         /* Get case and results. */
-        $this->loadModel('testtask');
         $case = '';
         if($runID)
         {
-            $case    = $this->testtask->getRunById($runID)->case;
+            $case = $this->loadModel('testtask')->getRunById($runID)->case;
         }
         elseif($caseID)
         {
-            $case    = $this->testcase->getById($caseID);
+            $case = $this->testcase->fetchById($caseID);
         }
 
         /* 如果用例不存在，关闭模态框。 */
@@ -378,10 +374,9 @@ class testcase extends control
         /* 展示变量. */
         /* Show the variables. */
         $this->view->title   = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->createBug;
-        $this->view->runID   = $runID;
-        $this->view->case    = $case;
         $this->view->caseID  = $caseID;
         $this->view->version = $version;
+        $this->view->runID   = $runID;
         $this->display();
     }
 

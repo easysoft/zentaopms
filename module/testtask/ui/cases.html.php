@@ -143,11 +143,6 @@ if($canBatchAction)
 $cols = $this->loadModel('datatable')->getSetting('testtask');
 if(isset($cols['id']['name'])) $cols['id']['name'] = 'case';
 if(isset($cols['title']['link']['params'])) $cols['title']['link']['params'] = 'caseID={case}';
-if(!empty($cols['actions']['list']['createBug']['url']))
-{
-    $url = $cols['actions']['list']['createBug']['url'];
-    $cols['actions']['list']['createBug']['url'] = str_replace(array('%execution%', '%build%', '%testtask%'), array((string)$task->execution, (string)$task->build, (string)$task->id), $url);
-}
 
 $runs = initTableData($runs, $cols);
 

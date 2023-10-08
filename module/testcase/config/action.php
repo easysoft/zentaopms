@@ -44,7 +44,7 @@ $config->testcase->actionList['importToLib']['data-toggle'] = 'modal';
 $config->testcase->actionList['createBug']['icon']        = 'bug';
 $config->testcase->actionList['createBug']['text']        = $lang->testcase->createBug;
 $config->testcase->actionList['createBug']['hint']        = $lang->testcase->createBug;
-$config->testcase->actionList['createBug']['url']         = array('module' => 'testcase', 'method' => 'createBug', 'params' => 'product={product}&extra=caseID={caseID},version={version},runID=');
+$config->testcase->actionList['createBug']['url']         = array('module' => 'testcase', 'method' => 'createBug', 'params' => 'product={product}&caseID={caseID}&version={version}');
 $config->testcase->actionList['createBug']['data-toggle'] = 'modal';
 $config->testcase->actionList['createBug']['data-size']   = 'lg';
 
