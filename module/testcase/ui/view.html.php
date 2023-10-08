@@ -67,6 +67,8 @@ $caseStage         = array();
 $caseChange        = array();
 if($isLibCase)
 {
+    if(!isset($case->linkCaseTitles)) $case->linkCaseTitles = array();
+
     $linkCaseTitles = array();
     foreach($case->linkCaseTitles as $linkCaseID => $linkCaseTitle)
     {
@@ -530,7 +532,7 @@ detailBody
         ),
         tabs
         (
-            set::collapse(true),
+            isset($linkBugItem) || $linkCaseItem ? set::collapse(true) : true,
             tabPane
             (
                 set::key('otherReleted'),
@@ -539,7 +541,7 @@ detailBody
                 tableData
                 (
                     set::useTable(false),
-                    $linkBugItem,
+                    isset($linkBugItem) ? $linkBugItem : null,
                     $linkCaseItem,
                 ),
             ),
