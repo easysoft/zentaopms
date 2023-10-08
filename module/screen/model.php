@@ -1869,7 +1869,7 @@ class screenModel extends model
     }
 
     /**
-     * 获取应用巡检报告的项目列表。
+     * 获取应用健康度体检报告的项目列表。
      * Get project list for usage report.
      *
      * @param  string $year
@@ -1887,6 +1887,7 @@ class screenModel extends model
             ->andWhere('date(openedDate)')->le($date)
             ->andWhere('date(closedDate)', true)->gt($date)
             ->orWhere('date(closedDate)')->eq('0000-00-00')
+            ->orWhere('closedDate')->in(NULL)
             ->markRight(true)
             ->fetchPairs();
     }
