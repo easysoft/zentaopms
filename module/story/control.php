@@ -988,10 +988,11 @@ class story extends control
      * Batch change the plan of story.
      *
      * @param  int    $planID
+     * @param  int    $oldPlanID
      * @access public
      * @return void
      */
-    public function batchChangePlan($planID, $oldPlanID = 0)
+    public function batchChangePlan(int $planID, int $oldPlanID = 0)
     {
         if(empty($_POST['storyIdList'])) return $this->send(array('result' => 'success', 'load' => true));
 

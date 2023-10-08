@@ -1470,30 +1470,36 @@ class storyModel extends model
      *
      * @param  array  $storyIdList
      * @param  int    $planID
+     * @param  int    $oldPlanID
      * @access public
      * @return array
      */
-    public function batchChangePlan($storyIdList, $planID, $oldPlanID = 0)
+    public function batchChangePlan(array $storyIdList, int $planID, int $oldPlanID = 0): array
     {
         /* Prepare data. */
         $now            = helper::now();
-        $allChanges     = array();
         $oldStories     = $this->getByList($storyIdList);
-        $plan           = $this->loadModel('productplan')->getById($planID);
         $oldStoryStages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($storyIdList)->fetchGroup('story', 'branch');
-        $unlinkPlans    = array();
-        $link2Plans     = array();
+        $plan           = $this->loadModel('productplan')->getById($planID);
         if(empty($plan))
         {
             $plan = new stdClass();
             $plan->branch = BRANCH_MAIN;
         }
 
+        $productIdList = array();
+        foreach($oldStories as $oldStory) $productIdList[$oldStory->product] = $oldStory->product;
+        $products = $this->loadModel('product')->getByIdList($productIdList);
+
         /* Cycle every story and process it's plan and stage. */
+        $allChanges  = array();
+        $unlinkPlans = array();
+        $link2Plans  = array();
         foreach($storyIdList as $storyID)
         {
-            $oldStory = $oldStories[$storyID];
-            if($oldStory->branch != BRANCH_MAIN and !in_array($oldStory->branch, explode(',', $plan->branch)) and $plan->branch != BRANCH_MAIN) continue;
+            $oldStory = zget($oldStories, $storyID, null);
+            if(empty($oldStory)) continue;
+            if($oldStory->branch != BRANCH_MAIN and $plan->branch != BRANCH_MAIN and !in_array($oldStory->branch, explode(',', $plan->branch))) continue;
 
             /* Ignore parent story, closed story and story linked to this plan already. */
             if($oldStory->parent < 0) continue;
@@ -1512,7 +1518,8 @@ class storyModel extends model
             $this->updateStoryOrderOfPlan($storyID, $planID, $oldStory->plan);
 
             /* Replace plan field if product is normal or not linked to plan or story linked to a branch. */
-            if($this->session->currentProductType == 'normal') $story->plan = $planID;
+            $productType = $products[$oldStory->product]->type;
+            if($productType == 'normal') $story->plan = $planID;
             if(empty($oldPlanID)) $story->plan = $planID;
             if($oldStory->branch) $story->plan = $planID;
 
@@ -1520,33 +1527,32 @@ class storyModel extends model
             if($planID)
             {
                 if($oldStory->stage == 'wait') $story->stage = 'planned';
-                if($this->session->currentProductType and $this->session->currentProductType != 'normal' and $oldStory->branch == 0)
+                if($productType != 'normal' and $oldStory->branch == 0)
                 {
+                    if(!empty($oldPlanID)) $story->plan = trim("{$story->plan},{$planID}", ',');
                     foreach(explode(',', $plan->branch) as $planBranch)
                     {
-                        if(!isset($oldStoryStages[$storyID][$planBranch]))
-                        {
-                            $story->stage = 'planned';
-                            $newStoryStage = new stdclass();
-                            $newStoryStage->story  = $storyID;
-                            $newStoryStage->branch = $planBranch;
-                            $newStoryStage->stage  = $story->stage;
-                            $this->dao->insert(TABLE_STORYSTAGE)->data($newStoryStage)->autoCheck()->exec();
-                        }
+                        if(isset($oldStoryStages[$storyID][$planBranch])) continue;
+
+                        $story->stage  = 'planned';
+                        $newStoryStage = new stdclass();
+                        $newStoryStage->story  = $storyID;
+                        $newStoryStage->branch = $planBranch;
+                        $newStoryStage->stage  = $story->stage;
+                        $this->dao->insert(TABLE_STORYSTAGE)->data($newStoryStage)->autoCheck()->exec();
                     }
                 }
             }
 
             /* Update story and recompute stage. */
-            $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
+            $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq($storyID)->exec();
 
             if(!$planID) $this->setStage($storyID);
-
             if(!dao::isError())
             {
                 $allChanges[$storyID] = common::createChanges($oldStory, $story);
-                if($story->plan != $oldStory->plan and !empty($oldStory->plan) and strpos($story->plan, ',') === false) $unlinkPlans[$oldStory->plan] = empty($unlinkPlans[$oldStory->plan]) ? $storyID : "{$unlinkPlans[$oldStory->plan]},$storyID";
-                if($story->plan != $oldStory->plan and !empty($story->plan) and strpos($story->plan, ',') === false) $link2Plans[$story->plan]  = empty($link2Plans[$story->plan]) ? $storyID : "{$link2Plans[$story->plan]},$storyID";
+                if($story->plan != $oldStory->plan and !empty($oldStory->plan) and strpos($oldStory->plan, ',') === false) $unlinkPlans[$oldStory->plan] = empty($unlinkPlans[$oldStory->plan]) ? $storyID : "{$unlinkPlans[$oldStory->plan]},$storyID";
+                if($story->plan != $oldStory->plan and !empty($story->plan)    and strpos($story->plan, ',') === false)    $link2Plans[$story->plan]     = empty($link2Plans[$story->plan])     ? $storyID : "{$link2Plans[$story->plan]},$storyID";
             }
         }
 
@@ -1554,7 +1560,7 @@ class storyModel extends model
         {
             $this->loadModel('action');
             foreach($unlinkPlans as $planID => $stories) $this->action->create('productplan', $planID, 'unlinkstory', '', $stories);
-            foreach($link2Plans as $planID => $stories) $this->action->create('productplan', $planID, 'linkstory', '', $stories);
+            foreach($link2Plans  as $planID => $stories) $this->action->create('productplan', $planID, 'linkstory', '', $stories);
         }
 
         return $allChanges;

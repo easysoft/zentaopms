@@ -462,9 +462,9 @@ class storyTest
      * @param  int   $planID
      * @param  int   $oldPlanID
      * @access public
-     * @return void
+     * @return array
      */
-    public function batchChangePlanTest($storyIdList, $planID, $oldPlanID = 0)
+    public function batchChangePlanTest(array $storyIdList, int $planID, int $oldPlanID = 0): array
     {
         $changes = $this->objectModel->batchChangePlan($storyIdList, $planID, $oldPlanID);
 
