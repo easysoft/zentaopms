@@ -400,6 +400,7 @@ $lang->ai->models->common         = '语言模型';
 $lang->ai->models->type           = '语言模型';
 $lang->ai->models->vendor         = '供应商';
 $lang->ai->models->key            = 'API Key';
+$lang->ai->models->secret         = 'Secret Key';
 $lang->ai->models->resource       = 'Resource';
 $lang->ai->models->deployment     = 'Deployment';
 $lang->ai->models->proxyType      = '代理类型';
@@ -423,11 +424,11 @@ $lang->ai->models->statusList['off'] = '停用';
 
 $lang->ai->models->typeList = array();
 $lang->ai->models->typeList['openai-gpt35'] = 'OpenAI / GPT-3.5';
-// $lang->ai->models->typeList['azure-gpt35']  = 'Azure / GPT-3.5';
+$lang->ai->models->typeList['baidu-ernie']  = '百度 / 文心一言';
 
-$lang->ai->models->openaiVendorList = array();
-$lang->ai->models->openaiVendorList['openai'] = 'OpenAI';
-$lang->ai->models->openaiVendorList['azure']  = 'Azure';
+$lang->ai->models->vendorList = new stdclass();
+$lang->ai->models->vendorList->{'openai-gpt35'} = array('openai' => 'OpenAI', 'azure' => 'Azure');
+$lang->ai->models->vendorList->{'baidu-ernie'}  = array('baidu' => '百度千帆大模型平台');
 
 $lang->ai->models->proxyTypes = array();
 $lang->ai->models->proxyTypes['']       = '不使用代理';

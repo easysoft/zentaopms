@@ -11,9 +11,10 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php
-$currentVendor = empty($modelConfig->vendor) ? key($lang->ai->models->openaiVendorList) : $modelConfig->vendor;
+$currentVendor = empty($modelConfig->vendor) ? key($lang->ai->models->vendorList->{empty($modelConfig->type) ? key($lang->ai->models->typeList) : $modelConfig->type}) : $modelConfig->vendor;
 $requiredFields = $config->ai->vendorList[$currentVendor]['requiredFields'];
 js::set('vendorList', $config->ai->vendorList);
+js::set('vendorListLang', $lang->ai->models->vendorList);
 ?>
 <style>
   .required:after {right: -12px;}
@@ -27,11 +28,15 @@ js::set('vendorList', $config->ai->vendorList);
       </tr>
       <tr>
         <th><?php echo $lang->ai->models->vendor;?></th>
-        <td><?php echo html::select('vendor', $lang->ai->models->openaiVendorList, $currentVendor, "class='form-control chosen' required");?></td>
+        <td><?php echo html::select('vendor', $lang->ai->models->vendorList->{empty($modelConfig->type) ? key($lang->ai->models->typeList) : $modelConfig->type}, $currentVendor, "class='form-control chosen' required");?></td>
       </tr>
       <tr class="vendor-row <?php echo in_array('key', $requiredFields) ? '' : ' hidden'; ?>" data-vendor-field="key">
         <th><?php echo $lang->ai->models->key;?></th>
         <td><?php echo html::input('key', $modelConfig->key, "class='form-control' required");?></td>
+      </tr>
+      <tr class="vendor-row <?php echo in_array('secret', $requiredFields) ? '' : ' hidden'; ?>" data-vendor-field="secret">
+        <th><?php echo $lang->ai->models->secret;?></th>
+        <td><?php echo html::input('secret', $modelConfig->secret, "class='form-control' required");?></td>
       </tr>
       <tr class="vendor-row <?php echo in_array('resource', $requiredFields) ? '' : ' hidden'; ?>" data-vendor-field="resource">
         <th><?php echo $lang->ai->models->resource;?></th>
@@ -77,20 +82,29 @@ js::set('vendorList', $config->ai->vendorList);
 </div>
 <script>
 $(function() {
+    $('select[name="type"]').change(function()
+    {
+        var type = $(this).val();
+        var vendorList = vendorListLang[type];
+        $('select[name="vendor"]').html('');
+        for(var vendor in vendorList) $('select[name="vendor"]').append('<option value="' + vendor + '">' + vendorList[vendor] + '</option>');
+        $('select[name="vendor"]').trigger('chosen:updated');
+        $('select[name="vendor"]').trigger('change');
+    });
+    $('select[name="vendor"]').change(function()
+    {
+        var vendor = $(this).val();
+        var requiredFields = vendorList[vendor]['requiredFields'];
+        $('.vendor-row').each(function()
+        {
+            var name = $(this).data('vendor-field');
+            $(this).toggleClass('hidden', !requiredFields.includes(name));
+        });
+    });
     $('select[name="proxyType"]').change(function()
     {
         var proxyType = $(this).val();
         $('#proxyAddrContainer').toggle(proxyType != '');
-    });
-    $('select[name="vendor"]').change(function()
-    {
-      var vendor = $(this).val();
-      var requiredFields = vendorList[vendor]['requiredFields'];
-      $('.vendor-row').each(function()
-      {
-        var name = $(this).data('vendor-field');
-        $(this).toggleClass('hidden', !requiredFields.includes(name));
-      });
     });
     $('#mainForm').on('submit', function()
     {

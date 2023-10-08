@@ -423,11 +423,11 @@ $lang->ai->models->statusList['off'] = 'Disable';
 
 $lang->ai->models->typeList = array();
 $lang->ai->models->typeList['openai-gpt35'] = 'OpenAI / GPT-3.5';
-// $lang->ai->models->typeList['azure-gpt35']  = 'Azure / GPT-3.5';
+$lang->ai->models->typeList['baidu-ernie']  = 'Baidu / ERNIE';
 
-$lang->ai->models->openaiVendorList = array();
-$lang->ai->models->openaiVendorList['openai'] = 'OpenAI';
-$lang->ai->models->openaiVendorList['azure']  = 'Azure';
+$lang->ai->models->vendorList = new stdclass();
+$lang->ai->models->vendorList->{'openai-gpt35'} = array('openai' => 'OpenAI', 'azure' => 'Azure');
+$lang->ai->models->vendorList->{'baidu-ernie'}  = array('baidu' => 'Baidu Qianfan LLM Platform');
 
 $lang->ai->models->proxyTypes = array();
 $lang->ai->models->proxyTypes['']       = 'No Proxy';

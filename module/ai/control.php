@@ -81,7 +81,7 @@ class ai extends control
         {
             $modelConfig = fixer::input('post')->get();
 
-            $currentVendor = empty($modelConfig->vendor) ? key($lang->ai->models->openaiVendorList) : $modelConfig->vendor;
+            $currentVendor = empty($modelConfig->vendor) ? key($this->lang->ai->models->vendorList->{empty($modelConfig->type) ? key($this->lang->ai->models->typeList) : $modelConfig->type}) : $modelConfig->vendor;
             $vendorRequiredFields = $this->config->ai->vendorList[$currentVendor]['requiredFields'];
 
             $errors = array();
@@ -128,7 +128,7 @@ class ai extends control
     {
         $modelConfig = fixer::input('post')->get();
 
-        $currentVendor = empty($modelConfig->vendor) ? key($lang->ai->models->openaiVendorList) : $modelConfig->vendor;
+        $currentVendor = empty($modelConfig->vendor) ? key($this->lang->ai->models->vendorList->{empty($modelConfig->type) ? key($this->lang->ai->models->typeList) : $modelConfig->type}) : $modelConfig->vendor;
         $vendorRequiredFields = $this->config->ai->vendorList[$currentVendor]['requiredFields'];
 
         $errors = array();
@@ -147,10 +147,8 @@ class ai extends control
 
         if($currentVendor == 'azure')
         {
-            $messages = array(
-                (object)array('role' => 'user', 'content' => 'Hello?')
-            );
-            $result = $this->ai->converse($messages);
+            $messages = array((object)array('role' => 'user', 'content' => 'test'));
+            $result = $this->ai->converse($messages, array('maxTokens' => 1));
         }
         else
         {
