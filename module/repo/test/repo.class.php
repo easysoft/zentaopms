@@ -92,7 +92,7 @@ class repoTest
 
         if(dao::isError()) return dao::getError();
 
-        return $this->objectModel->getRepoByID($repoID);
+        return $this->objectModel->getByID($repoID);
     }
 
     public function batchCreateTest($repos, $serviceHost)
@@ -104,13 +104,17 @@ class repoTest
         return $this->objectModel->getList();
     }
 
-    public function updateTest($id)
+    public function updateTest($repoID, $data, $isPipelineServer)
     {
-        $objects = $this->objectModel->update($id);
+        $repo   = $this->objectModel->getByID($repoID);
+        $result = $this->objectModel->update($data, $repoID, $isPipelineServer);
 
         if(dao::isError()) return dao::getError();
+        if($result === false) return 'changeServerProject';
 
-        return $objects;
+        $newRepo = $this->objectModel->getByID($repoID);
+        $changes = common::createChanges($repo, $newRepo);
+        return $changes;
     }
 
     public function saveStateTest($repoID = 0, $objectID = 0)

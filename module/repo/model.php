@@ -293,7 +293,7 @@ class repoModel extends model
             $res   = $this->loadModel('gitlab')->addPushWebhook($repo, $token);
             if($res === false)
             {
-                $thi->dao->delete()->from(TABLE_REPO)->where('id')->eq($repoID)->exec();
+                $this->dao->delete()->from(TABLE_REPO)->where('id')->eq($repoID)->exec();
                 dao::$errors['webhook'][] = $this->lang->gitlab->failCreateWebhook;
                 return false;
             }
@@ -407,7 +407,7 @@ class repoModel extends model
             $this->updateCommitDate($repo->id);
         }
 
-        if($repo->path != $data->path)
+        if(($repo->serviceHost != $data->serviceHost || $repo->serviceProject != $data->serviceProject) && $repo->path != $data->path)
         {
             $this->dao->delete()->from(TABLE_REPOHISTORY)->where('repo')->eq($id)->exec();
             $this->dao->delete()->from(TABLE_REPOFILES)->where('repo')->eq($id)->exec();
