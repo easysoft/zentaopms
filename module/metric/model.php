@@ -1224,39 +1224,11 @@ class metricModel extends model
         return array($x, $y);
     }
 
-    /**
-     * 获取一个echarts的配置项。
-     * Get options of echarts by head and data.
-     *
-     * @param  array    $head 表头
-     * @param  array    $datas 数据
-     * @param  string   $chartType 图表类型 barX|barY|line|pie
-     * @access public
-     * @return array|false
-     */
-    public function getEchartsOptions(array $head, array $datas, string $chartType = 'line'): array|false
+    public function getEchartSeries($head, $datas, $x, $y, $type)
     {
-        if(!$head || !$datas) return false;
-
         $headLength = count($head);
-        
-        list($x, $y) = $this->getEchartXY($head);
-        if(!$x || !$y) return false;
-
-        $type = in_array($chartType, array('barX', 'barY')) ? 'bar' : $chartType;
-
-        $cmp = function($a, $b) use ($x) {
-            $keyA = $a->$x;
-            $keyB = $b->$x;
-
-            return $keyA < $keyB ? -1 : 1;
-        };
-        usort($datas, $cmp);
-
-        $xAxis = array('type' => 'category', 'data' => array_unique(array_column($datas, $x)));
-        $yAxis = array('type' => 'value');
-
         $series = array();
+
         if($headLength <= 3)
         {
             $series = array('type' => $type, 'data' => array_column($datas, $y));
@@ -1295,7 +1267,14 @@ class metricModel extends model
             }
         }
 
+        return $series;
+    }
+
+    public function getEchartLegend($head, $series)
+    {
+        $headLength = count($head);
         $legend = array('type' => 'scroll');
+
         if($headLength == 4)
         {
             $selectedScope = array();
@@ -1308,12 +1287,76 @@ class metricModel extends model
             $legend['selected'] = $selectedScope;
         }
 
+        return $legend;
+    }
+
+    /**
+     * 获取一个echarts的配置项。
+     * Get options of echarts by head and data.
+     *
+     * @param  array    $head 表头
+     * @param  array    $datas 数据
+     * @param  string   $chartType 图表类型 barX|barY|line|pie
+     * @access public
+     * @return array|false
+     */
+    public function getEchartsOptions(array $head, array $datas, string $chartType = 'line'): array|false
+    {
+        if(!$head || !$datas) return false;
+        if($chartType == 'pie') return $this->getPieEchartsOptions($head, $datas);
+
+        list($x, $y) = $this->getEchartXY($head);
+        if(!$x || !$y) return false;
+
+        $cmp = function($a, $b) use ($x) {
+            $keyA = $a->$x;
+            $keyB = $b->$x;
+
+            return $keyA < $keyB ? -1 : 1;
+        };
+        usort($datas, $cmp);
+
+        $xAxis = array('type' => 'category', 'data' => array_unique(array_column($datas, $x)));
+        $yAxis = array('type' => 'value');
+
+        $type   = in_array($chartType, array('barX', 'barY')) ? 'bar' : $chartType;
+        $series = $this->getEchartSeries($head, $datas, $x, $y, $type);
+        $legend = $this->getEchartLegend($head, $series);
+
         $options = array();
         $options['xAxis']  = $xAxis;
         $options['yAxis']  = $yAxis;
         $options['legend'] = $legend;
         $options['series'] = $series;
 
+
+        return $options;
+    }
+
+    /**
+     * 获取一个echarts pie的配置项。
+     * Get options of echarts pie by head and data.
+     *
+     * @param  array    $head 表头
+     * @param  array    $datas 数据
+     * @access public
+     * @return array|false
+     */
+    public function getPieEchartsOptions(array $head, array $datas): array|false
+    {
+        if(!$head || !$datas) return false;
+
+        list($x, $y) = $this->getEchartXY($head);
+        if(!$x || !$y) return false;
+
+        $seriesData = array();
+        foreach($datas as $data)
+        {
+            $seriesData[] = array('name' => $data->$x, 'value' => $data->$y);
+        }
+
+        $options = array();
+        $options['data'] = $seriesData;
 
         return $options;
     }
