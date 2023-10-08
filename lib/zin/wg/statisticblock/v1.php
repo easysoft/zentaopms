@@ -57,20 +57,28 @@ class statisticBlock extends blockPanel
         if(empty($items)) return null;
 
         $navItems = array();
-        foreach($items as $item)
+        $hasPrev  = true;
+        $hasNext  = true;
+        foreach($items as $index => $item)
         {
+            if($item['id'] == $active)
+            {
+                if($index == 0) $hasPrev = false;
+                if($index + 1 == count($items)) $hasNext = false;
+            }
             $navItems[] = li
             (
-                setClass('nav-item group'),
+                setClass('nav-item group' . ($item['id'] == $active ? ' active' : '')),
                 a
                 (
                     toggle::tab(array('target' => "#blockTab_{$id}_{$item['id']}")),
                     setClass('block-statistic-nav-item flex-auto min-w-0', $item['id'] == $active ? 'active scroll-into-view' : ''),
-                    span(setClass('text clip'), $item['text'])
+                    span(setClass('text clip'), $item['text']),
                 ),
-                (isset($item['url']) && !empty($item['url'])) ? a
+                !$longBlock ? span(setClass('block-statistic-nav-title text text-primary font-bold clip'), $item['text']) : null,
+                !empty($item['url']) ? a
                 (
-                    setClass('block-statistic-nav-url top-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity'),
+                    $longBlock ? setClass('block-statistic-nav-url top-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity') : null,
                     set::href($item['url']),
                     icon('import rotate-270 primary-pale rounded-full w-5 h-5 center'),
                 ) : null
@@ -88,15 +96,18 @@ class statisticBlock extends blockPanel
             ),
             $longBlock ? null : array
             (
-                btn(span(setClass('chevron-left scale-75')), setClass('block-statistic-nav-btn size-sm square w-6 transition-opacity canvas text-primary rounded-full shadow-lg absolute top-3 left-2'), setData('type', 'prev')),
-                btn(span(setClass('chevron-right scale-75')), setClass('block-statistic-nav-btn size-sm square w-6 transition-opacity canvas text-primary rounded-full shadow-lg absolute top-3 right-2'), setData('type', 'next')),
+                btn(span(setClass('chevron-left scale-75')), setClass('block-statistic-nav-btn size-sm square w-6 transition-opacity canvas text-primary rounded-full shadow-lg absolute top-3 left-2'), setData('type', 'prev'), set::disabled(!$hasPrev)),
+                btn(span(setClass('chevron-right scale-75')), setClass('block-statistic-nav-btn size-sm square w-6 transition-opacity canvas text-primary rounded-full shadow-lg absolute top-3 right-2'), setData('type', 'next'), set::disabled(!$hasNext)),
                 bind::click('.block-statistic-nav-btn', implode('', array
                 (
                     'const disabled = "disabled";',
                     'const type = $target.data("type");',
                     'const $nextItem = $element.find(".nav-item>.active").parent()[type]();',
                     'if(!$nextItem.length) return $target.addClass(disabled);',
+                    '$element.find(".nav-item>.active").parent().removeClass("active");',
+                    '$element.find(".nav-item>.active").removeClass("active").removeClass("scroll-into-view");',
                     '$nextItem.scrollIntoView({block: "nearest", inline: "center", behavior: "smooth", ifNeeded: false}).find("a")[0].click();',
+                    '$nextItem.addClass("active").addClass("scroll-into-view");',
                     '$element.find(".block-statistic-nav-btn[data-type=\'prev\']").toggleClass(disabled, !$nextItem.prev().length);',
                     '$element.find(".block-statistic-nav-btn[data-type=\'next\']").toggleClass(disabled, !$nextItem.next().length);'
                 )))
