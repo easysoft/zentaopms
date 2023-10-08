@@ -50,7 +50,7 @@ class artifactrepoModel extends model
             ->fetchAll('id');
         foreach($artifactRepos as $repo)
         {
-            $repo->url .= '/repository/' . $repo->repoName;
+            $repo->url .= '/repository/' . $repo->repoName . '/';
         }
 
         return $artifactRepos;
