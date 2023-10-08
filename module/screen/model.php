@@ -1715,8 +1715,8 @@ class screenModel extends model
     }
 
     /**
-     * 获取活跃账号数项目间对比图表。
-     * Get table of active account.
+     * 获取应用健康度体检报告的活跃账号数项目间对比表格。
+     * Get table of active account per project.
      *
      * @param  string $year
      * @param  string $month
@@ -1741,6 +1741,7 @@ class screenModel extends model
             $teamMemberList = $this->dao->select('t2.id, t2.account')->from(TABLE_TEAM)->alias('t1')
                 ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
                 ->where('t1.root')->eq($projectID)
+                ->andWhere('t1.type')->eq('project')
                 ->andWhere('date(t1.join)')->le($date)
                 ->andWhere('t2.deleted')->eq('0')
                 ->fetchPairs();
