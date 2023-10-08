@@ -65,6 +65,9 @@ class metric extends control
             $resultData   = $this->metricZen->getViewTableData($metric, $result);
         }
 
+        $chartTypeList = $this->lang->metric->chartTypeList;
+        if(count($resultHeader) != 3) unset($chartTypeList['pie']);
+
         $this->view->metrics       = $metrics;
         $this->view->current       = $current;
         $this->view->metricList    = $this->lang->metric->metricList;
@@ -76,6 +79,7 @@ class metric extends control
         $this->view->filtersBase64 = $filtersBase64;
         $this->view->resultHeader  = $resultHeader;
         $this->view->resultData    = $resultData;
+        $this->view->chartTypeList = $chartTypeList;
         $this->view->echartOptions = $this->metric->getEchartsOptions($resultHeader, $resultData);
         $this->display();
     }
@@ -171,26 +175,6 @@ class metric extends control
      * @access public
      * @return string
      */
-    public function ajaxGetTableData($metricID)
-    {
-        $metric = $this->metric->getByID($metricID);
-        $result = $this->metric->getResultByCode($metric->code, $_POST, 'cron');
-
-        $response = new stdclass();
-        $response->header = $this->metricZen->getViewTableHeader($result);
-        $response->data   = $this->metricZen->getViewTableData($metric, $result);
-
-        echo json_encode($response);
-    }
-
-    /**
-     * 获取数据表格的数据。
-     * Get data of datatable.
-     *
-     * @param  int $metricID
-     * @access public
-     * @return string
-     */
     public function ajaxCollectMetric($metricID)
     {
         $metric = $this->metric->getByID($metricID);
@@ -267,5 +251,26 @@ class metric extends control
         $this->view->echartOptions = $this->metric->getEchartsOptions($resultHeader, $resultData);
 
         $this->display();
+    }
+
+    /**
+     * 获取数据表格的数据。
+     * Get data of datatable.
+     *
+     * @param  int $metricID
+     * @access public
+     * @return string
+     */
+    public function ajaxGetEchartsOptions($metricID, $chartType = 'line')
+    {
+        $metric = $this->metric->getByID($metricID);
+        $result = $this->metric->getResultByCode($metric->code, $_POST, 'cron');
+
+        $resultHeader = $this->metricZen->getViewTableHeader($result);
+        $resultData   = $this->metricZen->getViewTableData($metric, $result);
+
+        $echartOptions = $this->metric->getEchartsOptions($resultHeader, $resultData, $chartType);
+
+        echo json_encode($echartOptions);
     }
 }

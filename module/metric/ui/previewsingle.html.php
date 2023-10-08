@@ -343,14 +343,23 @@ div
                 div
                 (
                     setClass('chart-type'),
+                    picker
+                    (
+                        set::name('chartType'),
+                        set::items($chartTypeList),
+                        set::value('line'),
+                        set::required(true),
+                        set::onchange("window.handleChartTypeChange($current->id, 'single')"),
+                    )
                 ),
                 div
                 (
-                    setClass('chart-single'),
+                    setClass('chart chart-single'),
                     $echartOptions ? echarts
                     (
                         set::xAxis($echartOptions['xAxis']),
                         set::yAxis($echartOptions['yAxis']),
+                        set::legend($echartOptions['legend']),
                         set::series($echartOptions['series']),
                     )->size('100%', '100%') : null,
                 ),

@@ -105,28 +105,32 @@ window.handleFilterClick = function()
     loadPage($.createLink('metric', 'preview', 'scope=filter&viewType=' + viewType + '&metricID=0&filtersBase64=' + filterBase64));
 }
 
-window.handleChartTypeChange = function($el)
+window.handleChartTypeChange = function(metricID, viewType = 'single')
 {
     if(viewType == 'single')
     {
         var chartType = $('[name=chartType]').val();
-
-        window.renderChart(current.id, resultHeader, resultData, chartType, false);
     }
     else
     {
-        var $metricBox = $($el.base.closest('.metricBox'));
-        var metricID   = $metricBox.attr('metric-id');
-        var chartType  = $metricBox.find('[name=chartType]').val();
-
-        $.get($.createLink('metric', 'ajaxGetTableData', 'metricID=' + metricID), function(resp)
-        {
-            var data = JSON.parse(resp);
-            if(data) {
-                window.renderChart(metricID, data.header, data.data, chartType, false);
-            }
-        });
+        var chartType = $('#metricBox' + metricID).find('[name=chartType]').val();
     }
+
+    $.get($.createLink('metric', 'ajaxGetEchartsOptions', 'metricID=' + metricID + '&chartType=' + chartType), function(resp)
+    {
+        var datas = JSON.parse(resp);
+        if(!datas) return;
+
+        if(chartType == 'pie')
+        {
+        }
+        else
+        {
+            var options = window.genLineBarOption(chartType, datas);
+        }
+
+        window.renderChart(metricID, viewType, options);
+    });
 }
 
 window.handleRemoveLabel = function(id)
@@ -330,7 +334,7 @@ window.initQueryForm = function(id, $el, header = resultHeader, data = resultDat
 
 }
 
-window.renderChart = function(metricID = current.id, header = resultHeader, data = resultData, chartType = 'line', initPicker = true)
+window.renderChart = function(metricID, viewType, options)
 {
     var $currentBox = $('#metricBox' + metricID);
     if(viewType == 'single') $currentBox = $('.table-and-chart-single');
@@ -340,135 +344,12 @@ window.renderChart = function(metricID = current.id, header = resultHeader, data
     $currentBox.find('.chart').remove();
     $currentBox.find('.chart-side').append('<div class="' + classes + '"></div>');
 
-    if(initPicker) window.initPicker($currentBox.find('.chart-type'), window.chartList, header.length);
-    window.initChart($currentBox.find('.chart')[0], header, data, chartType);
+    window.initChart($currentBox.find('.chart')[0], options);
 }
 
-window.initDTable = function($obj, head, data)
+window.initChart = function($obj, options)
 {
-    var height = 310;
-    var width  = 480;
-    if(viewType == 'single') height = $('.table-side').height();
-    if(!head || !data) return;
-
-    var commonWidth = {
-        scope: 160,
-        date: 96,
-        value: 96,
-        calcTime: 128,
-    };
-
-    var cols = head.map(function(col){ return col.name; });
-
-    var cellWidth = {};
-    cols.forEach(function(col) {
-        if(commonWidth[col]) {
-            cellWidth[col] = commonWidth[col];
-        }
-    });
-
-    colsWidth = Object.values(cellWidth).reduce((a, b) => a + b, 0);
-    Object.keys(cellWidth).forEach(function(col) {
-        cellWidth[col] = Math.floor(cellWidth[col] / colsWidth * width);
-    });
-
-    new zui.DTable($obj,{
-        responsive: true,
-        bordered: true,
-        scrollbarHover: true,
-        height: height,
-        cols: head,
-        data: data,
-        // footPager: pager,
-        // footer: ['pager'],
-        onRenderCell: function(result, {row, col})
-        {
-            var html = `<span class="cell-ellipsis" style="width: ${cellWidth[col.name] - 24}px;" title="${row.data[col.name]}">${row.data[col.name]}</span>`;
-            result[0] = {html: html};
-
-            return result;
-        }
-    });
-}
-
-window.initChart = function($obj, head, data, chartType)
-{
-    if(!data.length) return;
-    if(chartType == 'pie') return window.initPieChart($obj, head, data);
-    if(head.length == 2) {
-        var x = head[1].name;
-        var y = head[0].name;
-    }
-    else if(head.length == 3)
-    {
-        var x = head[0].name;
-        var y = head[1].name;
-    }
-    else if(head.length == 4) {
-        var x = head[1].name;
-        var y = head[2].name;
-    }
-    if(!x || !y) return;
-
-    var type  = (chartType == 'barX' || chartType == 'barY') ? 'bar' : chartType;
-
-    data.sort(function(a, b) {
-        var keyA = a[x].toLowerCase();
-        var keyB = b[x].toLowerCase();
-
-        return keyA < keyB ? -1 : 1;
-    });
-
-    var xAxis = {
-        type: 'category',
-        data: data.map(item => item[x])
-    };
-    if(head.length == 2) xAxis.data = xAxis.data.map(item => item.slice(0, 10));
-    var yAxis = {type: 'value'};
-
-    if(head.length <= 3) {
-        var series = [{
-            data: data.map(item => item[y]),
-            type: type
-        }];
-    }
-    else if(head.length == 4) {
-        var series = [];
-
-        var groupedData = data.reduce((accumulator, currentValue) => {
-            var scope = currentValue.scope;
-            var date  = currentValue.date;
-            var value = currentValue.value;
-
-            var group = accumulator.find(item => item.scope === scope);
-            if (group) {
-                group.date.push({date: date, value: value});
-            } else {
-                accumulator.push({ scope, date: [{date: date, value: value}] });
-            }
-            return accumulator;
-        }, []);
-
-        var selectedScope = {};
-
-        for(key in groupedData) {
-            var scope = groupedData[key].scope;
-            var dates = groupedData[key].date;
-
-            var seriesData = [];
-            xAxis.data.forEach(function(date) {
-                seriesData.push(dates.find(item => item.date === date) ? dates.find(item => item.date === date).value : 0);
-            });
-
-            series.push({data: seriesData, type: type, name: scope});
-            selectedScope[scope] = false;
-        }
-
-        selectedScope[Object.keys(selectedScope)[0]] = true;
-    }
-
-    var option = window.genLineBarOption(chartType, xAxis, yAxis, series, selectedScope);
-    window.renderEchart($obj, option);
+    window.renderEchart($obj, options);
 }
 
 window.initPieChart = function($obj, head, data)
@@ -486,24 +367,6 @@ window.renderEchart = function($obj, option)
     $.getLib(config.webRoot + 'js/echarts/echarts.common.min.js', {root: false}, function() {
         var myChart = echarts.init($obj);
         option && myChart.setOption(option);
-    });
-}
-
-window.initPicker = function($obj, items, headLength = 3)
-{
-    if(headLength != 3) {
-        items = items.filter(item => item.value != 'pie');
-    }
-    if($obj.zui('picker')) {
-        $obj.zui('picker').destroy();
-    }
-    console.log(1)
-    new zui.Picker($obj, {
-        items,
-        defaultValue: 'line',
-        name: 'chartType',
-        required: true,
-        onChange: function() { window.handleChartTypeChange(this) },
     });
 }
 
@@ -881,15 +744,8 @@ window.genPieOption = function(data)
     return option;
 }
 
-window.genLineBarOption = function(chartType, xAxis, yAxis, series, selectedScope = null)
+window.genLineBarOption = function(chartType, datas)
 {
-    var legend = {type: 'scroll'};
-    if(selectedScope)
-    {
-        legend.selector = true;
-        legend.selected = selectedScope;
-    }
-
     var option = {
         grid: {
             left: '10%',
@@ -897,7 +753,7 @@ window.genLineBarOption = function(chartType, xAxis, yAxis, series, selectedScop
             bottom: '15%',
             containLabel: true
         },
-        legend: legend,
+        legend: datas.legend,
         tooltip: {
             trigger: 'axis',
             axisPointer: {
@@ -910,12 +766,12 @@ window.genLineBarOption = function(chartType, xAxis, yAxis, series, selectedScop
             extraCssText: 'max-height:60%;overflow-y:scroll',//最大高度以及超出处理
             enterable:true//鼠标可以进入tooltip区域，使用滚动条
         },
-        xAxis: chartType == 'barY' ? yAxis : xAxis,
-        yAxis: chartType == 'barY' ? xAxis : yAxis,
-        series: series,
+        xAxis: chartType == 'barY' ? datas.yAxis : datas.xAxis,
+        yAxis: chartType == 'barY' ? datas.xAxis : datas.yAxis,
+        series: datas.series,
     };
 
-    var dataLength = series[0].data.length;
+    var dataLength = datas.series.data.length;
     if(dataLength > 15) option.dataZoom = window.genDataZoom(dataLength, 15, chartType == 'barY' ? 'y' : 'x');
 
     return option;
