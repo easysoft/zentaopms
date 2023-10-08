@@ -1716,7 +1716,7 @@ class screenModel extends model
 
     /**
      * 获取应用健康度体检报告的活跃账号数项目间对比表格。
-     * Get table of active account per project.
+     * Get table of active account per project in usage report.
      *
      * @param  string $year
      * @param  string $month
@@ -1767,8 +1767,8 @@ class screenModel extends model
     }
 
     /**
-     * 获取活跃项目数卡片。
-     * Get card of active project.
+     * 获取应用健康度体检报告的活跃项目数卡片。
+     * Get card of active project in usage report.
      *
      * @param  string $year
      * @param  string $month
@@ -1785,13 +1785,13 @@ class screenModel extends model
     }
 
     /**
-     * 获取活跃产品数卡片。
-     * Get card of active product.
+     * 获取应用健康度体检报告的活跃产品数卡片。
+     * Get card of active product in usage report.
      *
      * @param  string $year
      * @param  string $month
      * @access public
-     * @return mixed
+     * @return array
      */
     public function getActiveProductCard($year, $month)
     {
@@ -1812,8 +1812,8 @@ class screenModel extends model
     }
 
     /**
-     * 获取项目任务概况表。
-     * Get table of project task summary.
+     * 获取应用健康度体检报告的项目任务概况表。
+     * Get table of project task summary in usage report.
      *
      * @param  string $year
      * @param  string $month
@@ -1829,6 +1829,11 @@ class screenModel extends model
             ->andWhere('year(date)')->eq($year)
             ->andWhere('month(date)')->eq($month)
             ->fetchAll();
+
+        $deletedExecutionList = $this->dao->select('id')->from(TABLE_EXECUTION)
+            ->where('deleted')->eq('1')
+            ->andWhere('type')->in('sprint,stage,kanban')
+            ->fetchPairs();
 
         $createdTaskActors = array();
         foreach($createdTaskActions as $projectAccount)
@@ -1847,12 +1852,16 @@ class screenModel extends model
                 ->where('project')->eq($projectID)
                 ->andWhere('year(openedDate)')->eq($year)
                 ->andWhere('month(openedDate)')->eq($month)
+                ->andWhere('deleted')->eq('0')
+                ->andWhere('execution')->notin($deletedExecutionList)
                 ->fetchPairs();
 
             $finishedTaskList = $this->dao->select('id')->from(TABLE_TASK)
                 ->where('project')->eq($projectID)
                 ->andWhere('year(finishedDate)')->eq($year)
                 ->andWhere('month(finishedDate)')->eq($month)
+                ->andWhere('deleted')->eq('0')
+                ->andWhere('execution')->notin($deletedExecutionList)
                 ->fetchPairs();
 
             $row = new stdclass();
