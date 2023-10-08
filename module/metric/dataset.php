@@ -547,6 +547,7 @@ class dataset
             ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repo = t2.id')
             ->where('t1.repo')->gt(0)
             ->andWhere('t1.deleted')->eq('0')
+            ->andWhere('t2.deleted')->eq('0')
             ->query();
     }
 }
