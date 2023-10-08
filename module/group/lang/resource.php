@@ -1353,17 +1353,6 @@ $lang->compile->methodOrder[5]  = 'browse';
 $lang->compile->methodOrder[10] = 'logs';
 $lang->compile->methodOrder[15] = 'syncCompile';
 
-$lang->resource->jenkins = new stdclass();
-$lang->resource->jenkins->browse = 'browseAction';
-$lang->resource->jenkins->create = 'create';
-$lang->resource->jenkins->edit   = 'edit';
-$lang->resource->jenkins->delete = 'deleteAction';
-
-$lang->jenkins->methodOrder[5]  = 'browse';
-$lang->jenkins->methodOrder[10] = 'create';
-$lang->jenkins->methodOrder[15] = 'edit';
-$lang->jenkins->methodOrder[20] = 'delete';
-
 $lang->resource->job = new stdclass();
 $lang->resource->job->browse = 'browseAction';
 $lang->resource->job->create = 'create';
