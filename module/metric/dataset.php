@@ -550,4 +550,21 @@ class dataset
             ->andWhere('t2.deleted')->eq('0')
             ->query();
     }
+
+    /**
+     * 统计执行节点信息。
+     * Get za nodes.
+     *
+     * @param  string       $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getZaNodes($fieldList)
+    {
+        return $this->dao->select($fieldList)->from(TABLE_ZAHOST)->alias('t1')
+            ->leftJoin(TABLE_IMAGE)->alias('t2')->on('t2.id = t1.image')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere("t1.type = 'node'")
+            ->query();
+    }
 }
