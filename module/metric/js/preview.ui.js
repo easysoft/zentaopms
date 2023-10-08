@@ -9,7 +9,7 @@ window.afterPageUpdate = function($target, info, options)
     }
     window.filterChecked = {};
 
-    if(viewType == 'multiple') 
+    if(viewType == 'multiple')
     {
         window.renderCheckedLabel();
         $(window).on('resize', window.renderCheckedLabel);
@@ -420,13 +420,18 @@ window.initChart = function($obj, head, data, chartType)
 
     var type  = (chartType == 'barX' || chartType == 'barY') ? 'bar' : chartType;
 
+    data.sort(function(a, b) {
+        var keyA = a[x].toLowerCase();
+        var keyB = b[x].toLowerCase();
+
+        return keyA < keyB ? -1 : 1;
+    });
+
     var xAxis = {
         type: 'category',
         data: data.map(item => item[x])
     };
     if(head.length == 2) xAxis.data = xAxis.data.map(item => item.slice(0, 10));
-    xAxis.data = [...new Set(xAxis.data)];
-    xAxis.data.sort();
     var yAxis = {type: 'value'};
 
     if(head.length <= 3) {

@@ -1232,8 +1232,15 @@ class metricModel extends model
 
         $type = in_array($chartType, array('barX', 'barY')) ? 'bar' : $chartType;
 
+        $cmp = function($a, $b) use ($x) {
+            $keyA = $a->$x;
+            $keyB = $b->$x;
+
+            return $keyA < $keyB ? -1 : 1;
+        };
+        usort($datas, $cmp);
+
         $xAxis = array('type' => 'category', 'data' => array_unique(array_column($datas, $x)));
-        sort($xAxis['data']);
         $yAxis = array('type' => 'value');
 
         $series = array();
