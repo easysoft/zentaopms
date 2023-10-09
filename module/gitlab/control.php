@@ -174,7 +174,7 @@ class gitlab extends control
                 $accountList[$user] = $openID;
             }
 
-            if(count($repeatUsers)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->gitlab->bindUserError, join(',', $repeatUsers))));
+            if(count($repeatUsers)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->gitlab->bindUserError, join(',', array_unique($repeatUsers)))));
 
             $user = new stdclass;
             $user->providerID   = $gitlabID;
