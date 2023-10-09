@@ -61,23 +61,6 @@ class releaseTest
     }
 
     /**
-     * Get released test builds from product .
-     *
-     * @param  int        $productID
-     * @param  string|int $branch
-     * @access public
-     * @return void
-     */
-    public function getReleasedBuildsTest($productID, $branch = 'all')
-    {
-        $objects = $this->objectModel->getReleasedBuilds($productID, $branch);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
      * 创建一个发布。
      * Create a release.
      *
