@@ -311,30 +311,16 @@ class releaseModel extends model
     }
 
     /**
+     * 更新一个发布。
      * Update a release.
      *
-     * @param  int    $releaseID
+     * @param  object      $release
+     * @param  object      $oldRelease
      * @access public
-     * @return void
+     * @return array|false
      */
-    public function update($releaseID)
+    public function update($release, $oldRelease): array|false
     {
-        /* Init vars. */
-        $releaseID  = (int)$releaseID;
-        $oldRelease = $this->getById($releaseID);
-
-        $release = fixer::input('post')->stripTags($this->config->release->editor->edit['id'], $this->config->allowedTags)
-            ->setDefault('build', '')
-            ->setIF($this->post->build === false, 'build', 0)
-            ->setDefault('mailto', '')
-            ->setDefault('deleteFiles', array())
-            ->join('build', ',')
-            ->join('mailto', ',')
-            ->setIF(!$this->post->marker, 'marker', 0)
-            ->cleanInt('product')
-            ->remove('files,labels,allchecker,uid')
-            ->get();
-
         $release = $this->loadModel('file')->processImgURL($release, $this->config->release->editor->edit['id'], $this->post->uid);
 
         /* update release project and branch */
@@ -342,6 +328,7 @@ class releaseModel extends model
         {
             $builds   = $this->dao->select('project, branch')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll();
             $branches = array();
+            $projects = array();
             foreach($builds as $build)
             {
                 foreach(explode(',', $build->branch) as $buildBranch)
@@ -358,21 +345,21 @@ class releaseModel extends model
         $this->dao->update(TABLE_RELEASE)->data($release, 'deleteFiles')
             ->autoCheck()
             ->batchCheck($this->config->release->edit->requiredFields, 'notempty')
-            ->check('name', 'unique', "id != '$releaseID' AND product = '{$release->product}' AND branch = '{$release->branch}' AND deleted = '0'")
+            ->check('name', 'unique', "id != '{$oldRelease->id}' AND product = '{$release->product}' AND branch = '{$release->branch}' AND deleted = '0'")
             ->checkFlow()
-            ->where('id')->eq((int)$releaseID)
+            ->where('id')->eq($oldRelease->id)
             ->exec();
-        if(!dao::isError())
-        {
-            $shadowBuild = array();
-            if($release->name != $oldRelease->name)   $shadowBuild['name']   = $release->name;
-            if($release->build != $oldRelease->build) $shadowBuild['builds'] = $release->build;
-            if($release->date != $oldRelease->date)   $shadowBuild['date']   = $release->date;
-            if($shadowBuild) $this->dao->update(TABLE_BUILD)->data($shadowBuild)->where('id')->eq($oldRelease->shadow)->exec();
 
-            $this->file->processFile4Object('release', $oldRelease, $release);
-            return common::createChanges($oldRelease, $release);
-        }
+        if(dao::isError()) return false;
+
+        $shadowBuild = array();
+        if($release->name != $oldRelease->name)   $shadowBuild['name']   = $release->name;
+        if($release->build != $oldRelease->build) $shadowBuild['builds'] = $release->build;
+        if($release->date != $oldRelease->date)   $shadowBuild['date']   = $release->date;
+        if($shadowBuild) $this->dao->update(TABLE_BUILD)->data($shadowBuild)->where('id')->eq($oldRelease->shadow)->exec();
+
+        $this->file->processFile4Object('release', $oldRelease, $release);
+        return common::createChanges($oldRelease, $release);
     }
 
     /**

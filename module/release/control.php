@@ -128,6 +128,7 @@ class release extends control
     }
 
     /**
+     * 编辑一个发布。
      * Edit a release.
      *
      * @param  int    $releaseID
@@ -136,9 +137,13 @@ class release extends control
      */
     public function edit(int $releaseID)
     {
+        $release = $this->release->getByID($releaseID);
+
         if(!empty($_POST))
         {
-            $changes = $this->release->update($releaseID);
+            $releaseData = form::data()->setIF($this->post->build === false, 'build', 0)->get();
+
+            $changes = $this->release->update($releaseData, $release);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($changes)
@@ -149,15 +154,10 @@ class release extends control
 
             $result  = $this->executeHooks($releaseID);
             $message = $result ? $result : $this->lang->saveSuccess;
-
             return $this->send(array('result' => 'success', 'message' => $message, 'load' => inlink('view', "releaseID={$releaseID}")));
         }
-        $this->loadModel('story');
-        $this->loadModel('bug');
-        $this->loadModel('build');
 
         /* Get release and build. */
-        $release = $this->release->getById((int)$releaseID);
         $this->commonAction($release->product);
 
         $builds         = $this->loadModel('build')->getBuildPairs(array($release->product), $release->branch, 'notrunk|withbranch|hasproject', 0, 'project', $release->build, false);
@@ -167,10 +167,10 @@ class release extends control
             if(strpos(',' . trim($release->build, ',') . ',', ",{$releasedBuild},") === false) unset($builds[$releasedBuild]);
         }
 
-        $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->release->edit;
-        $this->view->release    = $release;
-        $this->view->builds     = $builds;
-        $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->title   = $this->view->product->name . $this->lang->colon . $this->lang->release->edit;
+        $this->view->release = $release;
+        $this->view->builds  = $builds;
+        $this->view->users   = $this->loadModel('user')->getPairs('noclosed');
 
         $this->display();
     }
