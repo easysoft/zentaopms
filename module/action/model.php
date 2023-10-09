@@ -1587,7 +1587,7 @@ class actionModel extends model
      * 处理动态用于API。
      * Process dynamic for API.
      *
-     * @param  array    $dynamics
+     * @param  array  $dynamics
      * @access public
      * @return array
      */
