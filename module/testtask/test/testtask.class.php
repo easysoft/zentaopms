@@ -310,13 +310,30 @@ class testtaskTest
         return $objects;
     }
 
-    public function batchRunTest($runCaseType = 'testcase', $taskID = 0)
+    /**
+     * 测试批量执行测试用例。
+     * Test batch run test cases.
+     *
+     * @param  array  $cases
+     * @param  string $runCaseType
+     * @param  int    $taskID
+     * @access public
+     * @return array|object
+     */
+    public function batchRunTest(array $cases, string $runCaseType = 'testcase', int $taskID = 0): bool|array
     {
-        $objects = $this->objectModel->batchRun($runCaseType = 'testcase', $taskID = 0);
-
+        $result = $this->objectModel->batchRun($cases, $runCaseType, $taskID);
         if(dao::isError()) return dao::getError();
+        if(!$result) return $result;
 
-        return $objects;
+        $caseIdList = array_keys($cases);
+
+        $cases   = $this->objectModel->dao->select('id, lastRunner, lastRunDate, lastRunResult')->from(TABLE_CASE)->where('id')->in($caseIdList)->fetchAll('id');
+        $results = $this->objectModel->dao->select('lastRunner, date, run, `case`, version, caseResult, stepResults')->from(TABLE_TESTRESULT)->fetchAll('case');
+        $runs    = $this->objectModel->dao->select('id, lastRunner, lastRunDate, lastRunResult, status')->from(TABLE_TESTRUN)->fetchAll('id');
+        $actions = $this->objectModel->dao->select('objectType,objectID,action,extra')->from(TABLE_ACTION)->fetchAll('objectID');
+
+        return array('cases' => $cases, 'results' => $results, 'runs' => $runs, 'actions' => $actions);
     }
 
     /**

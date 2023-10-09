@@ -1,0 +1,12 @@
+title: table zt_casestep
+author: Gang Liu
+version: "1.0"
+fields:
+  - field: case
+    range: 1-4{3},6-9{3}
+  - field: desc
+    range: "1-3"
+    prefix: "用例步骤描述"
+  - field: expect
+    range: "1-3"
+    prefix: "这是用例预期结果"
