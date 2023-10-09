@@ -1059,7 +1059,7 @@ class actionModel extends model
             if(!is_array($objectLabel)) $actionObjectLabel = $objectLabel;
             if(is_array($objectLabel) && isset($objectLabel[$actionType])) $actionObjectLabel = $objectLabel[$actionType];
 
-            if($objectType == 'module' && $actionType == 'deleted')
+            if($objectType == 'module')
             {
                 $moduleType = $this->dao->select('type')->from(TABLE_MODULE)->where('id')->eq($objectID)->fetch('type');
                 if($moduleType == 'doc')
@@ -1092,206 +1092,56 @@ class actionModel extends model
      */
     public function setObjectLink(object $action, array $deptUsers, array $shadowProducts, object|string $project = ""): object|bool
     {
-        $this->app->loadConfig('doc');
-
         $action->objectLink  = '';
         $action->objectLabel = zget($this->lang->action->objectTypes, $action->objectLabel);
+
+        $moduleName = $methodName = $params = '';
 
         if(strpos($action->objectLabel, '|') !== false)
         {
             list($objectLabel, $moduleName, $methodName, $vars) = explode('|', $action->objectLabel);
 
-            /* Fix bug #2961. */
-            $isLoginOrLogout = $action->objectType == 'user' && ($action->action == 'login' || $action->action == 'logout');
-
             $action->objectLabel = $objectLabel;
             $action->product     = trim($action->product, ',');
 
-            $noLinkObjects = array('program', 'project', 'product', 'execution');
-            if(in_array($action->objectType, $noLinkObjects))
+            if(in_array($action->objectType, array('program', 'project', 'product', 'execution')))
             {
                 $objectTable   = zget($this->config->objectTables, $action->objectType);
                 $objectDeleted = $this->dao->select('deleted')->from($objectTable)->where('id')->eq($action->objectID)->fetch('deleted');
                 if($objectDeleted) return $action;
             }
 
-            if($this->config->edition == 'max'
-               && strpos($this->config->action->assetType, ",{$action->objectType},") !== false
-               && empty($action->project) && empty($action->product) && empty($action->execution))
+            if($this->config->edition == 'max' && strpos($this->config->action->assetType, ",{$action->objectType},") !== false && empty($action->project) && empty($action->product) && empty($action->execution))
             {
-                if($action->objectType == 'doc')
-                {
-                    $assetLibType = $this->dao->select('assetLibType')->from(TABLE_DOC)->where('id')->eq($action->objectID)->fetch('assetLibType');
-                    if($assetLibType) $method = $assetLibType == 'practice' ? 'practiceView' : 'componentView';
-                }
-                else
-                {
-                    $method = $this->config->action->assetViewMethod[$action->objectType];
-                }
-
-                $action->objectLink = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID));
-                if(isset($method)) $action->objectLink = helper::createLink('assetlib', $method, sprintf($vars, $action->objectID));
+                $this->actionTao->processMaxDocObjectLink($action, $moduleName, $methodName, $vars);
             }
             else
             {
+                if($action->objectType !== 'doclib') $params = $this->actionTao->getObjectLinkParams($action, $vars);
+
                 if($action->objectType == 'doclib')
                 {
-                    $libID = $action->objectID;
-                    $type  = 'custom';
-                    if(!empty($action->project))   $type = 'project';
-                    if(!empty($action->execution)) $type = 'execution';
-                    if(!empty($action->product))   $type = 'product';
-
-                    $libObjectID = $type != 'custom' ? $action->$type : '';
-                    $libObjectID = trim($libObjectID, ',');
-                    if(empty($libObjectID) && $type != 'custom') return false;
-
-                    $params = sprintf($vars, $type, $libObjectID, $libID);
+                    list($moduleName, $methodName, $params) = $this->actionTao->getDoclibTypeParams($action);
                 }
-                elseif($action->objectType == 'api')
-                {
-                    $api = $this->dao->select('id,lib,module')->from(TABLE_API)->where('id')->eq($action->objectID)->fetch();
-                    $params = sprintf($vars, $api->lib, $api->id, $api->module);
-                }
-                elseif($action->objectType == 'branch')
-                {
-                    $params = sprintf($vars, trim($action->product, ','));
-                }
-                elseif($action->objectType == 'kanbanspace')
-                {
-                    $kanbanSpace = $this->dao->select('type')->from(TABLE_KANBANSPACE)->where('id')->eq($action->objectID)->fetch();
-                    $params = sprintf($vars, $kanbanSpace->type);
-                }
-                elseif($action->objectType == 'kanbancolumn' || $action->objectType == 'kanbanlane')
-                {
-                    $params = sprintf($vars, $action->extra);
-                }
-                elseif($action->objectType == 'module' && $action->action == 'deleted')
-                {
-                    $params = sprintf($vars, trim($action->product, ','));
-                }
-                else
-                {
-                    $params = sprintf($vars, $action->objectID);
-                }
-                $action->objectLink = helper::createLink($moduleName, $methodName, $params);
-
-                if($action->objectType == 'execution')
-                {
-                    $execution = $this->loadModel('execution')->getById($action->objectID);
-                    if(!empty($execution) && $execution->type == 'kanban') $action->objectLink = helper::createLink('execution', 'kanban', "executionID={$action->objectID}");
-                }
-
-                if($action->objectType == 'story')
+                elseif($action->objectType == 'story')
                 {
                     $story = $this->loadModel('story')->getByID($action->objectID);
-                    if(!empty($story))
-                    {
-                        $moduleName = $story->type;
-                        $action->objectLink = isset($shadowProducts[$story->product]) ? helper::createLink('projectstory', 'view', "storyID=$story->id") : helper::createLink('story', 'view', "id=$story->id&version=0&param=0&storyType=$story->type");
-                    }
+                    if(!empty($story) && isset($shadowProducts[$story->product])) $moduleName = 'projectstory';
                 }
 
-                if($action->objectType == 'doclib')
-                {
-                    $docLib             = $this->dao->select('type,product,project,execution,deleted')->from(TABLE_DOCLIB)->where('id')->eq($action->objectID)->fetch();
-                    $docLib->objectID   = strpos('product,project,execution', $docLib->type) !== false ? $docLib->{$docLib->type} : 0;
-                    $appendLib          = $docLib->deleted == '1' ? $action->objectID : 0;
-                    if($docLib->type == 'api')
-                    {
-                        $module = 'api';
-                        $method = 'index';
-                        $params = "libID={$action->objectID}&moduleID=0&apiID=0&version=0&release=0&appendLib={$appendLib}";
-                        if(!empty($docLib->project) || !empty($docLib->product))
-                        {
-                            $module = 'doc';
-                            if(!empty($docLib->product))
-                            {
-                                $objectID = $docLib->product;
-                                $method   = 'productspace';
-                            }
-
-                            if(!empty($docLib->project))
-                            {
-                                $objectID = $docLib->project;
-                                $method   = 'projectspace';
-                            }
-                            $params = "objectID={$objectID}&libID={$action->objectID}";
-                        }
-                        $action->objectLink = helper::createLink($module, $method, $params);
-                    }
-                    else
-                    {
-                        $method = 'tablecontents';
-                        if(isset($this->config->doc->spaceMethod[$docLib->type])) $method = $this->config->doc->spaceMethod[$docLib->type];
-                        if($method == 'myspace') $params = "type=mine&libID={$action->objectID}";
-                        if(!in_array($method, array('myspace', 'tablecontents'))) $params = "objectID={$docLib->objectID}&libID={$action->objectID}";
-                        $action->objectLink = helper::createLink('doc', $method, $params);
-                    }
-                }
-                elseif($action->objectType == 'user')
-                {
-                    $action->objectLink = !isset($deptUsers[$action->objectID]) ? 'javascript:void(0)' : helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID));
-                }
-            }
-            if(!common::hasPriv($moduleName, $methodName) && !$isLoginOrLogout) $action->objectLink = '';
-        }
-        elseif($action->objectType == 'team')
-        {
-            if($action->project)   $action->objectLink = common::hasPriv('project', 'team')   ? helper::createLink('project',   'team', 'projectID=' . $action->project) : '';
-            if($action->execution) $action->objectLink = common::hasPriv('execution', 'team') ? helper::createLink('execution', 'team', 'executionID=' . $action->execution) : '';
-        }
-        elseif($action->objectType == 'privpackage')
-        {
-            $action->objectLink = '';
-        }
-        elseif($action->objectType == 'privlang')
-        {
-            $action->objectLink = '';
-        }
-
-        if($action->objectType == 'stakeholder' && $action->project == 0) $action->objectLink = '';
-
-        if($action->objectType == 'story' && $action->action == 'import2storylib') $action->objectLink = helper::createLink('assetlib', 'storyView', "storyID=$action->objectID");
-        if($action->objectType == 'story' && $this->config->vision == 'lite') $action->objectLink = helper::createLink('projectstory', 'view', "storyID=$action->objectID");
-
-        if(strpos(',kanbanregion,kanbancard,', ",{$action->objectType},") !== false)
-        {
-            $table    = $this->config->objectTables[$action->objectType];
-            $kanbanID = $this->dao->select('kanban')->from($table)->where('id')->eq($action->objectID)->fetch('kanban');
-
-            $action->objectLink = helper::createLink('kanban', 'view', "kanbanID=$kanbanID");
-        }
-
-        if(strpos(',kanbanlane,kanbancolumn,', ",{$action->objectType},") !== false && empty($action->extra))
-        {
-            $table    = $this->config->objectTables[$action->objectType];
-            $kanbanID = $this->dao->select('t2.kanban')->from($table)->alias('t1')
-                ->leftJoin(TABLE_KANBANREGION)->alias('t2')->on('t1.region=t2.id')
-                ->where('t1.id')->eq($action->objectID)
-                ->fetch('kanban');
-
-            $action->objectLink = helper::createLink('kanban', 'view', "kanbanID=$kanbanID");
-        }
-
-        if($action->objectType == 'chartgroup') $action->objectLink = '';
-        if($action->objectType == 'branch' && $action->action == 'mergedbranch') $action->objectLink = 'javascript:void(0)';
-        if($action->objectType == 'module')
-        {
-            $moduleType = $this->dao->select('type')->from(TABLE_MODULE)->where('id')->eq($action->objectID)->fetch('type');
-            if($moduleType == 'doc')
-            {
-                $this->app->loadLang('doc');
-                $action->objectLabel = $this->lang->doc->menuTitle;
+                $action->objectLink = helper::createLink($moduleName, $methodName, $params);
             }
         }
 
-        if($action->objectType == 'review') $action->objectLink = helper::createLink('review', 'view', "reviewID=$action->objectID");
+        if($action->objectType == 'team') list($moduleName, $methodName, $params) = $this->getObjectTypeTeamParams($action);
+        if($action->objectType == 'story' && $this->config->vision == 'lite') list($moduleName, $methodName, $params) = array('projectstory', 'view', "storyID={$action->objectID}");
+        if($action->objectType == 'review') list($moduleName, $methodName, $params) = array('review', 'view', "reviewID={$action->objectID}");
 
         /* Set app for no multiple project. */
         if(!empty($action->objectLink) && !empty($project) && empty($project->multiple)) $action->objectLink .= '#app=project';
         if($this->config->vision == 'lite' && $action->objectType == 'module') $action->objectLink .= '#app=project';
 
+        $action->objectLink = !$this->actionTao->checkActionClickable($action, $deptUsers, $moduleName, $methodName) ? '' : helper::createLink($moduleName, $methodName, $params);
         return $action;
     }
 
@@ -2113,5 +1963,21 @@ class actionModel extends model
             $objectName = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->fetchPairs();
         }
         return array($objectName, $relatedProject, $requirements);
+    }
+
+    /**
+     * 获取objecttype为team的link元素。
+     * Get link element of objecttype team.
+     *
+     * @param  object $action
+     * @access private
+     * @return array
+     */
+    private function getObjectTypeTeamParams(object $action): array
+    {
+        if($action->project) return array('project', 'team', 'projectID=' . $action->project);
+        if($action->execution) return array('execution', 'team', 'executionID=' . $action->execution);
+
+        return array('', '', '');
     }
 }

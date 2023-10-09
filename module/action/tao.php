@@ -412,7 +412,7 @@ class actionTao extends actionModel
     }
 
     /**
-     * 通过ID获取对象信息。 
+     * 通过ID获取对象信息。
      * Get object info by ID.
      *
      * @param  string $table
@@ -454,7 +454,7 @@ class actionTao extends actionModel
     /**
      * 组建Action的extra信息。
      * Build action extra info.
-     * 
+     *
      * @param  string $table
      * @param  object $action
      * @param  string $fields
@@ -962,5 +962,177 @@ class actionTao extends actionModel
                 $action->objectName = reset($pivotNames);
             }
         }
+    }
+
+    /**
+     * 旗舰版处理文档的链接。
+     * Process doc link for max.
+     *
+     * @param  object $action
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @param  string $vars
+     * @access protected
+     * @return void
+     */
+    protected function processMaxDocObjectLink(object $action, string $moduleName, string $methodName, string $vars)
+    {
+        if($action->objectType == 'doc')
+        {
+            $assetLibType = $this->dao->select('assetLibType')->from(TABLE_DOC)->where('id')->eq($action->objectID)->fetch('assetLibType');
+            if($assetLibType) $method = $assetLibType == 'practice' ? 'practiceView' : 'componentView';
+        }
+        else
+        {
+            $method = $this->config->action->assetViewMethod[$action->objectType];
+        }
+
+        isset($method) ? $action->objectLink = helper::createLink('assetlib', $method, sprintf($vars, $action->objectID)) : helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID));
+    }
+
+    /**
+     * 获取文档库链接参数。
+     * Get doclib link params.
+     *
+     * @param  object $action
+     * @access protected
+     * @return array|bool
+     */
+    protected function getDocLibLinkParameters(object $action)
+    {
+        $libID = $action->objectID;
+        $type  = 'custom';
+        if(!empty($action->project))   $type = 'project';
+        if(!empty($action->execution)) $type = 'execution';
+        if(!empty($action->product))   $type = 'product';
+
+        $libObjectID = $type != 'custom' ? $action->$type : '';
+        $libObjectID = trim($libObjectID, ',');
+        if(empty($libObjectID) && $type != 'custom') return false;
+
+        return array($type, $libID, $libObjectID);
+    }
+
+    /**
+     * 获取文档库类型参数。
+     * Get doclib type params.
+     *
+     * @param  object $action
+     * @access protected
+     * @return array
+     */
+    protected function getDoclibTypeParams(object $action): array
+    {
+        $params = '';
+        $docLib           = $this->dao->select('type,product,project,execution,deleted')->from(TABLE_DOCLIB)->where('id')->eq($action->objectID)->fetch();
+        $docLib->objectID = in_array($docLib->type, array('product', 'project', 'execution')) ? $docLib->{$docLib->type} : 0;
+        $appendLib        = $docLib->deleted == '1' ? $action->objectID : 0;
+        if($docLib->type == 'api')
+        {
+            $moduleName = 'api';
+            $methodName = 'index';
+            $params = "libID={$action->objectID}&moduleID=0&apiID=0&version=0&release=0&appendLib={$appendLib}";
+            if(!empty($docLib->project) || !empty($docLib->product))
+            {
+                $moduleName = 'doc';
+                if(!empty($docLib->product))
+                {
+                    $objectID   = $docLib->product;
+                    $methodName = 'productspace';
+                }
+
+                if(!empty($docLib->project))
+                {
+                    $objectID   = $docLib->project;
+                    $methodName = 'projectspace';
+                }
+                $params = "objectID={$objectID}&libID={$action->objectID}";
+            }
+        }
+        else
+        {
+            $moduleName = 'doc';
+            $methodName = zget($this->config->doc->spaceMethod, $docLib->type, 'tablecontents');
+            if($methodName == 'myspace') $params = "type=mine&libID={$action->objectID}";
+            if(!in_array($methodName, array('myspace', 'tablecontents'))) $params = "objectID={$docLib->objectID}&libID={$action->objectID}";
+        }
+
+        return array($moduleName, $methodName, $params);
+    }
+
+    /**
+     * 检查Action是否可点击。
+     * Check if action is clickable.
+     *
+     * @param  object $action
+     * @param  array  $deptUsers
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @access protected
+     * @return bool
+     */
+    protected function checkActionClickable(object $action, array $deptUsers, string $moduleName, string $methodName): bool
+    {
+        if(empty($moduleName) || empty($methodName)) return false;
+        if(!common::hasPriv($moduleName, $methodName)) return false;
+
+        if($action->objectType == 'user' && !isset($deptUsers[$action->objectID]) && !$this->app->user->admin) return false;
+        if($action->objectType == 'user' && ($action->action == 'login' || $action->action == 'logout')) return false;
+        if($action->objectType == 'user')
+        {
+            $user = $this->dao->select('deleted')->from(TABLE_USER)->where('id')->eq($action->objectID)->fetch();
+            if($user->deleted == '1') return false;
+        }
+        if($action->objectType == 'todo')
+        {
+            $todo = $this->dao->select('*')->from(TABLE_TODO)->where('id')->eq($action->objectID)->fetch();
+
+            if($todo->private == 1 && $todo->account != $this->app->user->account) return false;
+        }
+        
+        if($action->objectType == 'stakeholder' && $action->project == 0) return false;
+        if($action->objectType == 'chartgroup') return false;
+        if($action->objectType == 'branch' && $action->action == 'mergedbranch') return false;
+        
+        return true;
+    }
+
+    /**
+     * 获取对象链接参数。
+     * Get object link params.
+     *
+     * @param  object $action
+     * @param  string $vars
+     * @access protected
+     * @return string
+     */
+    protected function getObjectLinkParams(object $action, string $vars): string
+    {
+        if($action->objectType == 'api')
+        {
+            $api    = $this->dao->select('id,lib,module')->from(TABLE_API)->where('id')->eq($action->objectID)->fetch();
+            $params = sprintf($vars, $api->lib, $api->id, $api->module);
+        }
+        elseif($action->objectType == 'branch' || ($action->objectType == 'module' && $action->action == 'deleted'))
+        {
+            $params = sprintf($vars, trim($action->product, ','));
+        }
+        elseif($action->objectType == 'kanbanspace')
+        {
+            $kanbanSpace = $this->dao->select('type')->from(TABLE_KANBANSPACE)->where('id')->eq($action->objectID)->fetch();
+            $params      = sprintf($vars, $kanbanSpace->type);
+        }
+        elseif($action->objectType == 'kanbancard')
+        {
+            $table    = $this->config->objectTables[$action->objectType];
+            $kanbanID = $this->dao->select('kanban')->from($table)->where('id')->eq($action->objectID)->fetch('kanban');
+            $params   =  sprintf($vars, $kanbanID);
+        }
+        else
+        {
+            $params = sprintf($vars, $action->objectID);
+        }
+
+        return $params;
     }
 }
