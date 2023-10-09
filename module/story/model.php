@@ -1755,12 +1755,14 @@ class storyModel extends model
     /**
      * Batch assign to.
      *
+     * @param  array  $storyIdList
      * @param  string $assignedTo
      * @access public
      * @return array
      */
-    public function batchAssignTo(array $storyIdList, string $assignedTo = '')
+    public function batchAssignTo(array $storyIdList, string $assignedTo = ''): array
     {
+        $this->loadModel('action');
         $now           = helper::now();
         $allChanges    = array();
         $oldStories    = $this->getByList($storyIdList);
@@ -1779,6 +1781,9 @@ class storyModel extends model
 
             $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
             $allChanges[$storyID] = common::createChanges($oldStory, $story);
+
+            $actionID = $this->action->create('story', $storyID, 'Assigned', '', $assignedTo);
+            $this->action->logHistory($actionID, $allChanges[$storyID]);
         }
 
         return $allChanges;

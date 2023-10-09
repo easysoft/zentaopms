@@ -581,12 +581,9 @@ class storyTest
      * @access public
      * @return void
      */
-    public function batchAssignToTest($params)
+    public function batchAssignToTest(array $storyIdList, string $assignedTo): array
     {
-        $_POST   = $params;
-        $changes = $this->objectModel->batchAssignTo();
-        unset($_POST);
-
+        $changes = $this->objectModel->batchAssignTo($storyIdList, $assignedTo);
         if(dao::isError()) return dao::getError();
 
         $storyIdList = array_keys($changes);

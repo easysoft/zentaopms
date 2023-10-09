@@ -1177,7 +1177,7 @@ class story extends control
     {
         if(empty($_POST['storyIdList'])) return $this->send(array('result' => 'success', 'load' => true));
 
-        if(!$assignedTo) $assignedTo = $this->post->assignedTo;
+        if(empty($assignedTo)) $assignedTo = $this->post->assignedTo;
         $storyIdList = array_unique($this->post->storyIdList);
         $oldStories  = $this->story->getByList($storyIdList);
 
@@ -1188,23 +1188,19 @@ class story extends control
         $assignedTwins = array();
         foreach($allChanges as $storyID => $changes)
         {
-            $actionID = $this->action->create('story', $storyID, 'Assigned', '', $assignedTo);
-            $this->action->logHistory($actionID, $changes);
-
             $oldStory = $oldStories[$storyID];
             if($oldStory->status == 'closed') $ignoreStories[] = "#{$storyID}";
 
             /* Sync twins. */
-            if(!empty($oldStory->twins))
+            if(empty($oldStory->twins)) continue;
+
+            $twins = array_unique(array_filter(explode(',', $oldStory->twins)));
+            foreach($twins as $i => $twinID)
             {
-                $twins = $oldStory->twins;
-                foreach(explode(',', $twins) as $twinID)
-                {
-                    if(in_array($twinID, $storyIdList) || isset($assignedTwins[$twinID])) $twins = str_replace(",$twinID,", ',', $twins);
-                }
-                $this->story->syncTwins($storyID, trim($twins, ','), $changes, 'Assigned');
-                foreach(explode(',', trim($twins, ',')) as $assignedID) $assignedTwins[$assignedID] = $assignedID;
+                if(in_array($twinID, $storyIdList) || isset($assignedTwins[$twinID])) unset($twins[$i]);
             }
+            $this->story->syncTwins($storyID, implode(',', $twins), $changes, 'Assigned');
+            foreach($twins as $assignedID) $assignedTwins[$assignedID] = $assignedID;
         }
         $this->loadModel('score')->create('ajax', 'batchOther');
 
