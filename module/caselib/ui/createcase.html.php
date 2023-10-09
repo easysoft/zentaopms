@@ -123,7 +123,7 @@ formPanel
         (
             setClass('grow-0'),
             set::label($lang->testcase->pri),
-            set::control(array('type' => 'priPicker', 'items' => $lang->testcase->priList)),
+            set::control(array('type' => 'priPicker', 'items' => array_filter($lang->testcase->priList))),
             set::name('pri'),
             set::value('3')
         ),
