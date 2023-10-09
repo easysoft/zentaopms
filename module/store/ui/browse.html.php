@@ -96,11 +96,19 @@ div
     div
     (
         setClass('flex'),
-        featureBar
+        backBtn
         (
+            set::icon('back'),
+            set::back('GLOBAL'),
+            setClass('ghost'),
+            $lang->goback
+        ),
+        div(setClass('divider w-px h-5 mx-2'), setStyle('align-self', 'center')),
+       featureBar
+       (
             set::current($sortType),
             set::linkParams("sortType={key}"),
-        ),
+       ),
 
         toolbar
         (
