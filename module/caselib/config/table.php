@@ -23,6 +23,7 @@ $app->loadModuleConfig('testcase');
 
 $config->caselib->dtable = new stdclass();
 $config->caselib->dtable->fieldList = $config->testcase->dtable->fieldList;
+$config->caselib->dtable->fieldList['title']['link'] = array('module' => 'testcase', 'method' => 'view', 'params' => "caseID={id}");
 
 $config->caselib->dtable->fieldList['type']['show']          = true;
 $config->caselib->dtable->fieldList['status']['show']        = true;
