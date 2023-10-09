@@ -1326,13 +1326,31 @@ class programModel extends model
         }
 
         /* 1. Get summary and members of executions to be refreshed. */
-        $summary = $this->dao->select('execution, SUM(t1.estimate) AS totalEstimate, SUM(t1.consumed) AS totalConsumed, SUM(t1.`left`) AS totalLeft')->from(TABLE_TASK)->alias('t1')
+        $tasks = $this->dao->select('t1.id, execution, t1.estimate, t1.consumed, t1.`left`, t1.status')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.parent')->le(0) // Ignore child task.
             ->beginIF(!empty($projects))->andWhere('t1.project')->in(array_keys($projects))->fi()
-            ->groupBy('execution')
-            ->fetchAll();
+            ->fetchAll('id');
+
+        $summary = array();
+        foreach($tasks as $task)
+        {
+            if(empty($task->execution)) continue;
+            if(!isset($summary[$task->execution]))
+            {
+                $summary[$task->execution] = new stdclass();
+                $summary[$task->execution]->totalEstimate = 0;
+                $summary[$task->execution]->totalConsumed = 0;
+                $summary[$task->execution]->totalLeft     = 0;
+            }
+
+            $summary[$task->execution]->execution      = $task->execution;
+            $summary[$task->execution]->totalEstimate += $task->estimate;
+            $summary[$task->execution]->totalConsumed += $task->consumed;
+            $summary[$task->execution]->totalLeft     += ($task->status == 'closed' or $task->status == 'cancel') ? 0 : $task->left;
+        }
+
 
         $teamMembers = $this->dao->select('t1.root, COUNT(1) AS members')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
@@ -1410,7 +1428,7 @@ class programModel extends model
         }
 
         /* 5. Update programStatsTime. */
-        $projectList = $this->dao->select('id,progress,path')->from(TABLE_PROJECT)
+        $projectList = $this->dao->select('id,progress,path,consumed,`left`')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('parent')->ne(0)
             ->andWhere('deleted')->eq(0)
@@ -1423,19 +1441,18 @@ class programModel extends model
             foreach($path as $programID)
             {
                 if($programID == $projectID) continue;
-                $programProgress[$programID][] = $project->progress;
+
+                if(!isset($programProgress[$programID])) $programProgress[$programID] = array('consumed' => 0, 'left' => 0);
+                $programProgress[$programID]['consumed'] += $project->consumed;
+                $programProgress[$programID]['left']     += $project->left;
             }
         }
 
-        foreach($programProgress as $programID => $progress)
+        foreach($programProgress as $programID => $hours)
         {
-            $count = count($progress);
-            $sum = array_sum($progress);
-            $average = round($sum / $count, 2);
-            $this->dao->update(TABLE_PROJECT)
-                ->set('progress')->eq($average)
-                ->where('id')->eq($programID)
-                ->exec();
+            $progress = ($hours['consumed'] + $hours['left']) ? floor($hours['consumed'] / ($hours['consumed'] + $hours['left']) * 1000) / 1000 * 100 : 0;
+
+            $this->dao->update(TABLE_PROJECT)->set('progress')->eq($progress)->where('id')->eq($programID)->exec();
         }
 
         /* 6. Update projectStatsTime in config. */
