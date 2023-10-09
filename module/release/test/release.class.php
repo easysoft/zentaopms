@@ -78,37 +78,30 @@ class releaseTest
     }
 
     /**
+     * 创建一个发布。
      * Create a release.
      *
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  int    $projectID
+     * @param  array  $data
+     * @param  bool   $isSync
      * @access public
      * @return array
      */
 
-    public function createTest($productID = 0, $branch = 0, $projectID = 0, $param = array())
+    public function createTest(array $data, bool $isSync)
     {
+        $date = date('Y-m-d');
+        $createFields = array('name' => '','marker' => '1', 'build' => '', 'date' => $date, 'desc' => '', 'mailto' => '', 'stories' => '', 'bugs' => '', 'createdBy' => 'admin', 'createdDate' => helper::now());
 
-        $date   = date('Y-m-d');
-        $labels = array();
-        $files  = array();
-        $mailto = array();
+        $release = new stdclass();
+        foreach($createFields as $field => $defaultValue) $release->$field = $defaultValue;
+        foreach($data as $key => $value) $release->$key = $value;
 
-        $createFields = array('name' => '','marker' => '1', 'build' => '', 'date' => $date, 'desc' => '', 'mailto' => $mailto , 'labels' => $labels, 'files' => $files);
-
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $objectsID = $this->objectModel->create($productID, $branch, $projectID);
-
-        unset($_POST);
+        $objectID = $this->objectModel->create($release, $isSync);
 
         if(dao::isError()) return dao::getError();
 
-        $objects = $this->objectModel->getByID($objectsID);
-
-        return $objects;
+        $object = $this->objectModel->getByID($objectID);
+        return $object;
     }
     /**
      * Update a release.
@@ -332,5 +325,22 @@ class releaseTest
         if(dao::isError()) return dao::getError();
 
         return $objects;
+    }
+
+    /**
+     * 处理待创建的发布字段。
+     * Process release fields for create.
+     *
+     * @param  int         $releaseID
+     * @param  bool        $isSync
+     * @access public
+     * @return object|false
+     */
+    public function processReleaseForCreateTest(int $releaseID, bool $isSync): object|false
+    {
+        $release = $this->objectModel->getByID($releaseID);
+        if(!$release) return false;
+
+        return $this->objectModel->processReleaseForCreate($release, $isSync);
     }
 }
