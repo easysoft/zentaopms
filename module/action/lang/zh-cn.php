@@ -170,6 +170,7 @@ $lang->action->objectTypes['service']          = '服务';
 $lang->action->objectTypes['domain']           = '域名';
 $lang->action->objectTypes['artifactrepo']     = '制品库';
 $lang->action->objectTypes['prompt']           = '提词';
+$lang->action->objectTypes['metric']           = '度量';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
