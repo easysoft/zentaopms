@@ -783,10 +783,6 @@ $config->group->package->importRequirement->privs['requirement-export']         
 $config->group->package->importRequirement->privs['requirement-import']         = array('edition' => 'max,ipd', 'vision' => 'rnd,or', 'order' => 115, 'depend' => array('product-requirement', 'requirement-exportTemplate'), 'recommend' => array());
 $config->group->package->importRequirement->privs['requirement-exportTemplate'] = array('edition' => 'max,ipd', 'vision' => 'rnd,or', 'order' => 120, 'depend' => array('product-requirement'), 'recommend' => array());
 
-$config->group->package->deleteRequirement = new stdclass();
-$config->group->package->deleteRequirement->order  = 25;
-$config->group->package->deleteRequirement->subset = 'requirement';
-
 $config->group->package->reviewRequirement = new stdclass();
 $config->group->package->reviewRequirement->order  = 15;
 $config->group->package->reviewRequirement->subset = 'requirement';
@@ -2523,10 +2519,6 @@ $config->group->package->workflow->privs['workflow-setApproval'] = array('editio
 $config->group->package->workflow->privs['workflow-setJS']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 80, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflow->privs['workflow-setCSS']      = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 85, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 
-$config->group->package->downloadCode = new stdclass();
-$config->group->package->downloadCode->order  = 10;
-$config->group->package->downloadCode->subset = 'repocode';
-
 $config->group->package->dev = new stdclass();
 $config->group->package->dev->order  = 5;
 $config->group->package->dev->subset = 'dev';
@@ -2664,10 +2656,6 @@ $config->group->package->webhook->privs['webhook-log']        = array('edition' 
 $config->group->package->webhook->privs['webhook-bind']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'lite,rnd,or', 'order' => 30, 'depend' => array('webhook-chooseDept'), 'recommend' => array());
 $config->group->package->webhook->privs['webhook-chooseDept'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'lite,rnd,or', 'order' => 35, 'depend' => array('webhook-browse'), 'recommend' => array('webhook-create', 'webhook-delete', 'webhook-edit'));
 
-$config->group->package->gitlab = new stdclass();
-$config->group->package->gitlab->order  = 10;
-$config->group->package->gitlab->subset = 'repo';
-
 $config->group->package->sms = new stdclass();
 $config->group->package->sms->order  = 20;
 $config->group->package->sms->subset = 'notifysetting';
@@ -2776,10 +2764,6 @@ $config->group->package->chat->privs['client-browse']         = array('edition' 
 $config->group->package->chat->privs['client-create']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 5, 'depend' => array('admin-xuanxuan'), 'recommend' => array());
 $config->group->package->chat->privs['client-edit']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 6, 'depend' => array('admin-xuanxuan'), 'recommend' => array());
 $config->group->package->chat->privs['client-delete']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 7, 'depend' => array('admin-xuanxuan'), 'recommend' => array());
-
-$config->group->package->jenkins = new stdclass();
-$config->group->package->jenkins->order  = 25;
-$config->group->package->jenkins->subset = 'repo';
 
 $config->group->package->systemSetting = new stdclass();
 $config->group->package->systemSetting->order  = 5;
@@ -3061,10 +3045,6 @@ $config->group->package->measurement->privs['report-saveReport']          = arra
 $config->group->package->measurement->privs['report-crystalExport']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 22, 'depend' => array('measurement-template'), 'recommend' => array());
 $config->group->package->measurement->privs['report-export']              = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('measurement-template'), 'recommend' => array());
 
-$config->group->package->usercl = new stdclass();
-$config->group->package->usercl->order  = 25;
-$config->group->package->usercl->subset = 'featureconfig';
-
 $config->group->package->meetingroom = new stdclass();
 $config->group->package->meetingroom->order  = 30;
 $config->group->package->meetingroom->subset = 'featureconfig';
@@ -3212,10 +3192,6 @@ $config->group->package->template->subset = 'generaltemplate';
 $config->group->package->template->privs  = array();
 $config->group->package->template->privs['user-setPublicTemplate'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 10, 'depend' => array(), 'recommend' => array());
 $config->group->package->template->privs['datatable-setGlobal']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 5, 'depend' => array(), 'recommend' => array());
-
-$config->group->package->table = new stdclass();
-$config->group->package->table->order  = 5;
-$config->group->package->table->subset = 'datatable';
 
 $config->group->package->automation = new stdclass();
 $config->group->package->automation->order  = 5;
@@ -3806,10 +3782,6 @@ $config->group->package->deletePrompt->order  = 2140;
 $config->group->package->deletePrompt->subset = 'ai';
 $config->group->package->deletePrompt->privs  = array();
 $config->group->package->deletePrompt->privs['ai-promptDelete'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('admin-index', 'ai-prompts', 'ai-promptView'), 'recommend' => array());
-
-$config->group->package->resource = new stdclass();
-$config->group->package->resource->order  = 2200;
-$config->group->package->resource->subset = 'ops';
 
 $config->group->package->manageServiceProvider = new stdclass();
 $config->group->package->manageServiceProvider->order  = 2300;

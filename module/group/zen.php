@@ -130,7 +130,7 @@ class groupZen extends group
                 $subset = $packageData->subset;
                 if(!isset($subsets[$subset]))
                 {
-                    $subsets[$subset]  = $this->lang->$subset->common;
+                    $subsets[$subset]  = isset($this->lang->$subset) && isset($this->lang->$subset->common) ? $this->lang->$subset->common : $subset;
                     $packages[$subset] = array();
                 }
 

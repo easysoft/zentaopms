@@ -1849,7 +1849,9 @@ class groupModel extends model
                     $this->app->loadLang($moduleName);
                     if($moduleName == 'requirement') $this->app->loadLang('story');
                 }
-                $priv = (object)array('subset' => $packageData->subset, 'package' => $packageCode, 'module' => $moduleName, 'method' => $methodName, 'selected' => false, 'name' => $this->lang->$moduleName->$methodLang);
+
+                $privName = isset($this->lang->$moduleName) && isset($this->lang->$moduleName->$methodLang) ? $this->lang->$moduleName->$methodLang : $privCode;
+                $priv = (object)array('subset' => $packageData->subset, 'package' => $packageCode, 'module' => $moduleName, 'method' => $methodName, 'selected' => false, 'name' => $privName);
 
                 $privList[$privCode] = $priv;
             }
@@ -2516,7 +2518,7 @@ class groupModel extends model
                 $method = $this->lang->resource->$moduleName->$methodName;
 
                 if(!isset($this->lang->$moduleName->$method)) $this->app->loadLang($moduleName);
-                $subsetPrivs[$type][$subsetName]['children'][] = array('id' => $relatedPriv, 'module' => $moduleName, 'method' => $methodName, 'subset' => $subsetName, 'text' => $this->lang->$moduleName->$method);
+                $subsetPrivs[$type][$subsetName]['children'][] = array('id' => $relatedPriv, 'data-module' => $moduleName, 'data-method' => $methodName, 'subset' => $subsetName, 'text' => $this->lang->$moduleName->$method, 'data-id' => $relatedPriv);
             }
         }
 
@@ -2582,16 +2584,16 @@ class groupModel extends model
                 $subset = $packageData->subset;
                 if($subset !== $selectedSubset) continue;
 
-                if($selectedPackages && strpos($selectedPackages, ",$packageCode,") === false) continue;
+                if($selectedPackages && strpos($selectedPackages, "|$packageCode|") === false) continue;
 
                 $methodLang = $this->lang->resource->$moduleName->$methodName;
                 if(!isset($this->lang->$moduleName->$methodLang)) $this->app->loadLang($moduleName);
 
-                $privs[$privCode] = $this->lang->$moduleName->$methodLang;
+                $privs[$privCode] = isset($this->lang->$moduleName) && isset($this->lang->$moduleName->$methodLang) ? $this->lang->$moduleName->$methodLang : $privCode;
             }
         }
 
-        if(empty($selectedPackages) || strpos($selectedPackages, ',other,') !== false)
+        if(empty($selectedPackages) || strpos($selectedPackages, '|other|') !== false)
         {
             /* Privs in resource but not in package. */
             $this->sortResource();
@@ -2604,7 +2606,7 @@ class groupModel extends model
                     if(isset($allPrivs["$module-$method"])) continue;
 
                     if(!isset($this->lang->$module->$methodLang)) $this->app->loadLang($module);
-                    $privs["$module-$method"] = $this->lang->$module->$methodLang;
+                    $privs["$module-$method"] = isset($this->lang->$module) && isset($this->lang->$module->$methodLang) ? $this->lang->$module->$methodLang : "$module-$method";
                 }
             }
         }

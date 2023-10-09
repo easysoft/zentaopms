@@ -9,11 +9,11 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-jsVar('window.selectedPrivIdList', $selectedPrivIdList);
-jsVar('excludeIdList', $excludePrivsIdList);
+jsVar('window.selectedPrivIdList', $selectedPrivList);
+jsVar('allPrivList', $allPrivList);
 jsVar('groupID', $groupID);
 jsVar('type', $type);
-jsVar('menu', $menu);
+jsVar('nav', $nav);
 
 if($group->role == 'limited')
 {
@@ -89,11 +89,11 @@ if($group->role == 'limited')
 }
 else
 {
-    $params        = "type=byGroup&param=$groupID&menu=%s&version=$version";
+    $params        = "type=byGroup&param=$groupID&nav=%s&version=$version";
     $mainNavItems  = null;
     $i             = 0;
     $dropDownItems = array();
-    foreach($lang->mainNav as $module => $title)
+    foreach($lang->mainNav as $navKey => $title)
     {
         if(!is_string($title)) continue;
 
@@ -103,14 +103,14 @@ else
             $dropDownItems[] = array
                 (
                     'text'  => strip_tags(substr($title, 0, strpos($title, '|'))),
-                    'url'   => inlink('managePriv', sprintf($params, $module)),
-                    'class' => $menu == $module ? 'active' : ''
+                    'url'   => inlink('managePriv', sprintf($params, $navKey)),
+                    'class' => $nav == $navKey ? 'active' : ''
                 );
         }
     }
 
     $i = 0;
-    foreach($lang->mainNav as $module => $title)
+    foreach($lang->mainNav as $navKey => $title)
     {
         if(!is_string($title) || $i >= $config->group->maxToolBarCount) continue;
 
@@ -137,8 +137,8 @@ else
                     setClass('nav-item'),
                     a
                     (
-                        setClass($menu == $module ? 'active' : ''),
-                        set::href(inlink('managePriv', sprintf($params, $module))),
+                        setClass($nav == $navKey ? 'active' : ''),
+                        set::href(inlink('managePriv', sprintf($params, $navKey))),
                         strip_tags(substr($title, 0, strpos($title, '|')))
                     )
                 );
@@ -172,7 +172,7 @@ else
                 setclass('nav-item'),
                 a
                 (
-                    setclass(empty($menu) ? 'active' : ''),
+                    setclass(empty($nav) ? 'active' : ''),
                     set::href(inlink('managepriv', sprintf($params, ''))),
                     span($lang->group->all)
                 )
@@ -183,7 +183,7 @@ else
                 setClass('nav-item'),
                 a
                 (
-                    setClass($menu == 'general' ? 'active' : ''),
+                    setClass($nav == 'general' ? 'active' : ''),
                     set::href(inlink('managePriv', sprintf($params, 'general'))),
                     span($lang->group->general)
                 )
@@ -200,19 +200,18 @@ else
         ),
     );
 
-    $getMethodItems = function($privs, $moduleName, $packageID, $groupPrivs)
+    $getMethodItems = function($package, $subsetName, $packageID, $groupPrivs)
     {
         $methodItems = array();
-        foreach($privs as $privID => $priv)
+        foreach($package->privs as $privID => $priv)
         {
-            if(!empty($lang->$moduleName->menus) and ($priv->method == 'browse' or in_array($priv->method, array_keys($lang->$moduleName->menus)))) continue;
             $methodItems[] = div
                 (
                     setClass('group-item'),
-                    set('data-module', $moduleName),
+                    set('data-module', $subsetName),
                     set('data-package', $packageID),
-                    set('data-divid', "{$moduleName}{$packageID}"),
-                    set('data-id', zget($priv, 'id', 0)),
+                    set('data-divid', "{$subsetName}{$packageID}"),
+                    set('data-id', $privID),
                     checkbox
                     (
                         set::name("actions[{$priv->module}][]"),
@@ -220,33 +219,42 @@ else
                         set::checked(isset($groupPrivs[$priv->module][$priv->method])),
                         setID("actions[{$priv->module}][{$priv->method}]"),
                         set::text($priv->name),
-                        set('data-id', $priv->action),
+                        set('data-id', $privID),
                     )
                 );
         }
         return $methodItems;
     };
 
-    $privBody = null;
-    foreach($privList as $moduleName => $packages)
+    $dependTree = null;
+    foreach($relatedPrivData['depend'] as $dependPrivs)
     {
-        if(!count((array)$packages)) continue;
+        $dependTree[] = checkboxGroup
+            (
+                set::title(array('text' => $dependPrivs['text'], 'id' => "dependPrivs[{$dependPrivs['id']}]", 'name' => 'dependPrivs[]', 'data-id' => $dependPrivs['id'], 'data-has-children' => !empty($dependPrivs['children']), 'disabled' => true, 'checked' => true)),
+                !empty($dependPrivs['children']) ? set::items($dependPrivs['children']) : null,
+            );
+    }
 
-        $i             = 1;
-        $modulePrivs   = count($privList[$moduleName], 1) - count($selectPrivs[$moduleName], 1);
-        $moduleSelect  = array_sum($selectPrivs[$moduleName]);
-        foreach($packages as $packageID => $privs)
+    $recommendTree = null;
+    foreach($relatedPrivData['recommend'] as $recommendPrivs)
+    {
+        $recommendTree[] = checkboxGroup
+            (
+                set::title(array('text' => $recommendPrivs['text'], 'id' => "recommendPrivs[{$recommendPrivs['id']}]", 'name' => 'recommendPrivs[]', 'data-id' => $recommendPrivs['id'], 'data-has-children' => !empty($recommendPrivs['children']))),
+                !empty($recommendPrivs['children']) ? set::items($recommendPrivs['children']) : null,
+            );
+    }
+
+    $privBody = null;
+    foreach($subsets as $subsetName => $subset)
+    {
+        if($subset->allCount == 0) continue;
+
+        $i = 1;
+        foreach($packages[$subsetName] as $packageID => $package)
         {
-            $packagePrivs  = count($privs);
-            $packageSelect = $selectPrivs[$moduleName][$packageID];
-            $moduleTitle   = $lang->$moduleName->common;
-            if(in_array($moduleName, array('doc', 'api'))) $moduleTitle = $lang->$moduleName->manage;
-
-            if(isset($lang->$moduleName->menus))
-            {
-                $menusPrivs  = count($lang->$moduleName->menus);
-                $menusSelect = count(array_intersect(array_keys($lang->$moduleName->menus), array_keys(zget($groupPrivs, $moduleName, array()))));
-            }
+            $subsetTitle = isset($lang->$subsetName) && isset($lang->$subsetName->common) ? $lang->$subsetName->common : $subsetName;
 
             $privBody[] = h::tr
                 (
@@ -254,20 +262,20 @@ else
                     $i == 1 ? h::th
                     (
                         setClass('text-middle text-left module'),
-                        set('rowspan', $i == 1 ? count($packages) : 1),
-                        set('data-module', $moduleName),
-                        set('all-privs', $moduleprivs),
-                        set('select-privs', $moduleSelect),
+                        set('rowspan', count($packages[$subsetName]) ? count($packages[$subsetName]) : 1),
+                        set('data-module', $subsetName),
+                        set('all-privs', $subset->allCount),
+                        set('select-privs', $subset->selectCount),
                         div
                         (
                             setClass('checkbox-primary checkbox-inline checkbox-left check-all'),
                             checkbox
                             (
-                                setID("allChecker{$moduleName}"),
+                                setID("allChecker{$subsetName}"),
                                 set::value(1),
-                                set::checked(!empty($moduleSelect) && $modulePrivs == $moduleSelect),
-                                set::text($moduleTitle),
-                                set::labelClass(!empty($moduleSelect) && $modulePrivs != $moduleSelect ? 'text-left checkbox-indeterminate-block' : 'text-left'),
+                                set::checked($subset->selectCount && $subset->selectCount == $subset->allCount),
+                                set::text($subsetTitle),
+                                set::labelClass($subset->selectCount && $subset->selectCount != $subset->allCount ? 'text-left checkbox-indeterminate-block' : 'text-left'),
                             )
                         )
                     ) : null,
@@ -275,58 +283,29 @@ else
                     (
                         setClass('text-middle text-left package'),
                         setClass($i == 1 ? 'td-sm' : 'td-md'),
-                        set('data-module', $moduleName),
+                        set('data-module', $subsetName),
                         set('data-package', $packageID),
-                        set('data-divid', "{$moduleName}{$packageID}"),
-                        set('all-privs', $packagePrivs),
-                        set('select-privs', $packageSelect),
+                        set('data-divid', "{$subsetName}{$packageID}"),
+                        set('all-privs', $package->allCount),
+                        set('select-privs', $package->selectCount),
                         div
                         (
                             setClass('checkbox-primary checkbox-inline checkbox-left check-all'),
                             checkbox
                             (
-                                setID("allCheckerModule{$moduleName}Package{$packageID}"),
+                                setID("allCheckerModule{$subsetName}Package{$packageID}"),
                                 set::value('browse'),
-                                set::checked($packagePrivs == $packageSelect),
-                                set::text(zget($privPackages, $packageID, $lang->group->other)),
-                                set::labelClass(!empty($packageSelect) && $packagePrivs != $packageSelect ? 'text-left checkbox-indeterminate-block' : 'text-left'),
+                                set::checked($package->allCount == $package->selectCount),
+                                set::text($lang->group->package->$packageID),
+                                set::labelClass($package->selectCount && $package->selectCount != $package->allCount ? 'text-left checkbox-indeterminate-block' : 'text-left'),
                             )
                         )
                     ),
-                    isset($lang->$moduleName->menus) ? h::td
-                    (
-                        setClass("menus {$moduleName}"),
-                        set('all-privs', $menusPrivs),
-                        set('select-privs', $menusSelect),
-                        set('data-module', $moduleName),
-                        set('data-package', 0),
-                        set('data-divid', "{$moduleName}0"),
-                        div
-                        (
-                            setClass('checkbox-primary checkbox-inline checkbox-left check-all'),
-                            checkbox
-                            (
-                                setID("actions[{$moduleName}]browse"),
-                                set::value('browse'),
-                                set::checked($menusPrivs == $menusSelect),
-                                set::text($lang->$moduleName->browse),
-                                set::labelClass(!empty($menusSelect) && $menusPrivs != $menusSelect ? 'text-left checkbox-indeterminate-block' : 'text-left'),
-                            ),
-                            icon('plus'),
-                            checkList
-                            (
-                                set::items($lang->$moduleName->menus),
-                                set::name("actions[{$moduleName}]"),
-                                set::value(isset($groupPrivs[$moduleName]) ? implode(',', $groupPrivs[$moduleName]) : ''),
-                            ),
-                        )
-                    ) : null,
                     h::td
                     (
                         setClass('pv-10px'),
-                        setID($moduleName),
-                        set('colspan', !empty($lang->$moduleName->menus) ? 1 : 2),
-                        $getMethodItems($privs, $moduleName, $packageID, $groupPrivs),
+                        setID($subsetName),
+                        $getMethodItems($package, $subsetName, $packageID, $groupPrivs),
                     )
                 );
             $i ++;
@@ -352,13 +331,13 @@ else
                     a
                     (
                         setClass('btn switchBtn'),
-                        set::href(inlink('managePriv', "type=byPackage&param={$groupID}&menu={$menu}&version={$version}")),
+                        set::href(inlink('managePriv', "type=byPackage&param={$groupID}&nav={$nav}&version={$version}")),
                         html("<i class='icon-has-authority-pack'></i>"),
                     ),
                     a
                     (
                         setClass('btn switchBtn text-primary'),
-                        set::href(inlink('managePriv', "type=byGroup&param={$groupID}&menu={$menu}&version={$version}")),
+                        set::href(inlink('managePriv', "type=byGroup&param={$groupID}&nav={$nav}&version={$version}")),
                         html("<i class='icon-without-authority-pack'></i>"),
                     ),
                 ),

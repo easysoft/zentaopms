@@ -321,28 +321,27 @@ function positionBtn()
  * @access  public
  * @return  void
  */
-window.setModulePackages = function()
+window.setSubsetPackages = function()
 {
-    const module = $(this).val();
+    let subset = $(this).val();
     $('#packageBox select').addClass('hidden');                      // Hide all select first.
     $('#packageBox select').val('');                                 // Unselect all select.
-    $("select[data-module='" + module + "']").removeClass('hidden'); // Show the action control for current module.
+    $("select[data-module='" + subset + "']").removeClass('hidden'); // Show the action control for current module.
 
-    updatePrivList('module', module);
+    updatePrivList(subset, '');
 }
 
 /**
- * Update the action box when module or package selected.
+ * Update the action box when subset or package selected.
  *
- * @param  string  parentType  module|package
- * @param  string  parentList
+ * @param  string  selectedSubset
+ * @param  string  selectedPackages
  * @access public
  * @return void
  */
-function updatePrivList(parentType, parentList)
+function updatePrivList(selectedSubset, selectedPackages)
 {
-    const selectedModule = $('#module').val();
-    $.get($.createLink('group', 'ajaxGetPrivByParents', 'module=' + selectedModule + '&parentType=' + parentType + '&parentList=' + parentList), function(data)
+    $.get($.createLink('group', 'ajaxGetPrivByParents', 'subset=' + selectedSubset + '&packages=' + selectedPackages), function(data)
     {
         $('#actions').replaceWith(data);
     })
@@ -358,10 +357,10 @@ function setActions()
 {
     $('#actionBox select').val('');
 
-    var hasSelectedPackage = ',' + $('#packageBox select').not('.hidden').val().join(',') + ',';
+    var selectedSubset   = $('[name=module]').val();
+    var selectedPackages = '|' + $('#packageBox select').not('.hidden').val().join('|') + '|';
 
-    updatePrivList('package', hasSelectedPackage);
-
+    updatePrivList(selectedSubset, selectedPackages);
 }
 
 window.setNoChecked = function()
@@ -411,12 +410,12 @@ function groupItemChange()
     changeParentChecked($(this), moduleName, packageID);
 
     var privID = $(this).closest('.group-item').attr('data-id');
-    if(privID != 0)
+    if(privID)
     {
         var index = selectedPrivIdList.indexOf(privID);
 
-        if(privID > 0 && index < 0 && checked) selectedPrivIdList.push(privID);
-        if(privID > 0 && index > -1 && !checked) selectedPrivIdList.splice(index, 1);
+        if(index < 0 && checked) selectedPrivIdList.push(privID);
+        if(index > -1 && !checked) selectedPrivIdList.splice(index, 1);
 
         updatePrivTree(selectedPrivIdList);
     }
@@ -469,7 +468,7 @@ function recommendChange($item, checked)
         $parentItem.closest('.checkbox-primary').find('label').addClass('checkbox-indeterminate-block');
     }
 
-    var privID = $item.attr('module') + '-' + $item.attr('method');
+    var privID = $item.attr('data-id');
     if(privID)
     {
         var index = selectedPrivIdList.indexOf(privID);

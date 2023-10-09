@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+jsVar('window.selectedPrivIdList', array());
 
 to::header(
     span
@@ -25,16 +26,16 @@ to::header(
 
 $packageBox  = null;
 $hiddenClass = '';
-foreach($packageGroup as $module => $modulePackages)
+foreach($packages as $subset => $subsetPackages)
 {
     $packageBox[] = select
         (
             set::name('packages[]'),
             set::className($hiddenClass),
-            set::items($modulePackages),
+            set::items($subsetPackages),
             set::multiple(true),
             set::required(true),
-            set('data-module', $module),
+            set('data-module', $subset),
             on::change('setActions'),
         );
 
@@ -62,10 +63,11 @@ form
                 select
                 (
                     set::name('module'),
-                    set::items($modulePairs),
+                    set::items($subsets),
                     set::size(10),
+                    set::value(key($subsets)),
                     set::required(true),
-                    on::change('window.setModulePackages'),
+                    on::change('window.setSubsetPackages'),
                 )
             )
         ),
@@ -99,7 +101,7 @@ form
                 select
                 (
                     set::name('actions[]'),
-                    set::items($indexPrivs),
+                    set::items($privs),
                     set::multiple(true),
                     set::required(true)
                 )

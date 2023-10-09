@@ -205,7 +205,7 @@ class group extends control
         }
 
         if($type == 'byGroup' || $type == 'byPackage') $this->groupZen->managePrivByGroup($groupID, $nav, $version);
-        if($type == 'byModule') $this->groupZen->managePrivByModule($groupID, $nav, $version);
+        if($type == 'byModule') $this->groupZen->managePrivByModule();
 
         $this->display();
     }
