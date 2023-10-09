@@ -1081,7 +1081,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function batchChangeStage($stage)
+    public function batchChangeStage(string $stage)
     {
         if(empty($_POST['storyIdList'])) return $this->send(array('result' => 'success', 'load' => true));
 
