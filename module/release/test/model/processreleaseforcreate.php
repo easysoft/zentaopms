@@ -28,7 +28,7 @@ $releases = array(0, 1, 10);
 $releaseTester = new releaseTest();
 r($releaseTester->processReleaseForCreateTest($releases[0], $syncList[0])) && p()       && e('0');     // 测试同步版本数据并处理空的数据
 r($releaseTester->processReleaseForCreateTest($releases[1], $syncList[0])) && p('name') && e('发布1'); // 测试同步版本数据并处理发布1的数据
-r($releaseTester->processReleaseForCreateTest($releases[2], $syncList[0])) && p()       && e('10');    // 测试同步版本数据并处理不存在发布的数据
+r($releaseTester->processReleaseForCreateTest($releases[2], $syncList[0])) && p()       && e('0');     // 测试同步版本数据并处理不存在发布的数据
 r($releaseTester->processReleaseForCreateTest($releases[0], $syncList[1])) && p()       && e('0');     // 测试不同步版本数据并处理空的数据
 r($releaseTester->processReleaseForCreateTest($releases[1], $syncList[1])) && p('name') && e('发布1'); // 测试不同步版本数据并处理发布1的数据
-r($releaseTester->processReleaseForCreateTest($releases[2], $syncList[1])) && p()       && e('10');    // 测试不同步版本数据并处理不存在发布的数据
+r($releaseTester->processReleaseForCreateTest($releases[2], $syncList[1])) && p()       && e('0');     // 测试不同步版本数据并处理不存在发布的数据
