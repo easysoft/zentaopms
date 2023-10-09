@@ -1571,23 +1571,19 @@ class storyModel extends model
      *
      * @param  array  $storyIdList
      * @param  int    $branchID
-     * @param  string $confirm
+     * @param  string $confirm        yes|null
      * @param  array  $plans
      * @access public
      * @return array
      */
-    public function batchChangeBranch($storyIdList, $branchID, $confirm = '', $plans = array())
+    public function batchChangeBranch(array $storyIdList, int $branchID, string $confirm = '', array $plans = array()): array
     {
         $now         = helper::now();
         $allChanges  = array();
         $oldStories  = $this->getByList($storyIdList);
         $story       = current($oldStories);
         $productID   = $story->product;
-        $mainModules = $this->dao->select('id')->from(TABLE_MODULE)
-            ->where('root')->eq($productID)
-            ->andWhere('branch')->eq(0)
-            ->andWhere('type')->eq('story')
-            ->fetchPairs('id');
+        $mainModules = $this->dao->select('id')->from(TABLE_MODULE)->where('root')->eq($productID)->andWhere('branch')->eq(0)->andWhere('type')->eq('story')->fetchPairs('id', 'id');
 
         foreach($storyIdList as $storyID)
         {
@@ -1604,30 +1600,24 @@ class storyModel extends model
             {
                 if($confirm == 'yes')
                 {
-                    $planIdList         = '';
-                    $conflictPlanIdList = '';
+                    $planIdList         = array();
+                    $conflictPlanIdList = array();
 
                     /* Determine whether there is a conflict between the branch of the story and the linked plan. */
                     if($oldStory->branch != $branchID and $branchID != BRANCH_MAIN and isset($plans[$storyID]))
                     {
                         foreach($plans[$storyID] as $planID => $plan)
                         {
-                            if($plan->branch != $branchID)
-                            {
-                                $conflictPlanIdList .= $planID . ',';
-                            }
-                            else
-                            {
-                                $planIdList .= $planID . ',';
-                            }
+                            if($plan->branch != $branchID) $conflictPlanIdList[$planID] = $planID;
+                            if($plan->branch == $branchID) $planIdList[$planID]         = $planID;
                         }
 
                         /* If there is a conflict in the linked plan when the branch story to be modified, the linked with the conflicting plan will be removed. */
-                        if($conflictPlanIdList)
+                        if($conflictPlanIdList) $this->dao->delete()->from(TABLE_PLANSTORY)->where('story')->eq($storyID)->andWhere('plan')->in(implode(',', $conflictPlanIdList))->exec();
+                        if($planIdList)
                         {
-                            $story->plan = $planIdList;
-                            $this->dao->delete()->from(TABLE_PLANSTORY)->where('story')->eq($storyID)->andWhere('plan')->in($conflictPlanIdList)->exec();
-                            $this->dao->update(TABLE_STORY)->set('plan')->eq($planIdList)->where('id')->eq($storyID)->exec();
+                            $story->plan = implode(',', $planIdList);
+                            $this->dao->update(TABLE_STORY)->set('plan')->eq($story->plan)->where('id')->eq($storyID)->exec();
                         }
                     }
                 }

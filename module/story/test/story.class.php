@@ -484,14 +484,14 @@ class storyTest
      * @access public
      * @return void
      */
-    public function batchChangeBranchTest($storyIdList, $branchID, $confirm = '', $plans = array())
+    public function batchChangeBranchTest(array $storyIdList, int $branchID, string $confirm = '', array $plans = array())
     {
         $changes = $this->objectModel->batchChangeBranch($storyIdList, $branchID, $confirm, $plans);
 
         if(dao::isError()) return dao::getError();
 
         $storyIdList = array_keys($changes);
-        return $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('id')->in($storyIdList)->fetchAll();
+        return $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('id')->in($storyIdList)->fetchAll('id');
     }
 
     /**

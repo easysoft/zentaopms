@@ -1019,10 +1019,13 @@ class story extends control
      * @access public
      * @return void
      */
-    public function batchChangeBranch($branchID, $confirm = '', $storyIdList = '', $storyType = 'story')
+    public function batchChangeBranch(int $branchID, string $confirm = '', string $storyIdList = '', string $storyType = 'story')
     {
-        if(empty($storyIdList) and empty($_POST['storyIdList'])) return print(js::locate($this->session->storyList, 'parent'));
+        if(empty($storyIdList) and empty($_POST['storyIdList'])) return $this->send(array('result' => 'success', 'load' => true));
+
         if(!empty($_POST['storyIdList'])) $storyIdList = $this->post->storyIdList;
+        if(is_string($storyIdList))       $storyIdList = array_filter(explode(',', $storyIdList));
+        $storyIdList = array_unique($storyIdList);
         $plans       = $this->loadModel('productplan')->getPlansByStories($storyIdList);
         if(empty($confirm))
         {
@@ -1034,17 +1037,17 @@ class story extends control
             /* Determine whether there is a conflict between the branch of the story and the linked plan. */
             foreach($storyIdList as $storyID)
             {
-                if($stories[$storyID]->branch != $branchID and $branchID != BRANCH_MAIN and isset($plans[$storyID]))
+                if($stories[$storyID]->branch == $branchID) continue;
+                if($branchID == BRANCH_MAIN) continue;
+                if(!isset($plans[$storyID])) continue;
+
+                foreach($plans[$storyID] as $plan)
                 {
-                    foreach($plans[$storyID] as $plan)
-                    {
-                        if($plan->branch != $branchID)
-                        {
-                            $conflictStoryIdList .= '[' . $storyID . ']';
-                            $conflictStoryArray[] = $storyID;
-                            break;
-                        }
-                    }
+                    if($plan->branch == $branchID) continue;
+
+                    $conflictStoryIdList .= "[{$storyID}]";
+                    $conflictStoryArray[] = $storyID;
+                    break;
                 }
             }
 
@@ -1056,21 +1059,19 @@ class story extends control
                 $storyIdList       = implode(',', $storyIdList);
                 $confirmURL        = $this->createLink('story', 'batchChangeBranch', "branchID=$branchID&confirm=yes&storyIdList=$storyIdList&storyType=$storyType");
                 $cancelURL         = $this->createLink('story', 'batchChangeBranch', "branchID=$branchID&confirm=no&storyIdList=$normalStotyIdList&storyType=$storyType");
-                return print(js::confirm(sprintf($this->lang->story->confirmChangeBranch, $conflictStoryIdList ), $confirmURL, $cancelURL));
+                return $this->send(array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->story->confirmChangeBranch, $conflictStoryIdList), 'confirmed' => $confirmURL, 'canceled' => $cancelURL)));
             }
         }
 
-        if(is_string($storyIdList)) $storyIdList = array_filter(explode(',', $storyIdList));
-        $storyIdList = array_unique($storyIdList);
         $allChanges  = $this->story->batchChangeBranch($storyIdList, $branchID, $confirm, $plans);
-        if(dao::isError()) return print(js::error(dao::getError()));
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         foreach($allChanges as $storyID => $changes)
         {
             $actionID = $this->action->create('story', $storyID, 'Edited');
             $this->action->logHistory($actionID, $changes);
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-        echo js::reload('parent');
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**

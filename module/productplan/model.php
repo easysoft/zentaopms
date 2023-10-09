@@ -329,7 +329,7 @@ class productplanModel extends model
      * @access public
      * @return array
      */
-    public function getPlansByStories($storyIdList)
+    public function getPlansByStories(array $storyIdList): array
     {
         if(empty($storyIdList)) return array();
         return $this->dao->select('t2.id as storyID, t3.*')->from(TABLE_PLANSTORY)->alias('t1')
