@@ -1092,15 +1092,12 @@ class actionModel extends model
      */
     public function setObjectLink(object $action, array $deptUsers, array $shadowProducts, object|string $project = ""): object|bool
     {
-        $action->objectLink  = '';
+        $action->objectLink  = $moduleName = $methodName = $params = '';
         $action->objectLabel = zget($this->lang->action->objectTypes, $action->objectLabel);
-
-        $moduleName = $methodName = $params = '';
 
         if(strpos($action->objectLabel, '|') !== false)
         {
             list($objectLabel, $moduleName, $methodName, $vars) = explode('|', $action->objectLabel);
-
             $action->objectLabel = $objectLabel;
             $action->product     = trim($action->product, ',');
 
@@ -1118,7 +1115,6 @@ class actionModel extends model
             else
             {
                 if($action->objectType !== 'doclib') $params = $this->actionTao->getObjectLinkParams($action, $vars);
-
                 if($action->objectType == 'doclib')
                 {
                     list($moduleName, $methodName, $params) = $this->actionTao->getDoclibTypeParams($action);
@@ -1128,7 +1124,6 @@ class actionModel extends model
                     $story = $this->loadModel('story')->getByID($action->objectID);
                     if(!empty($story) && isset($shadowProducts[$story->product])) $moduleName = 'projectstory';
                 }
-
                 $action->objectLink = helper::createLink($moduleName, $methodName, $params);
             }
         }
@@ -1149,7 +1144,7 @@ class actionModel extends model
      * 根据给定的一段时间的参数计算日期的开始和结束。
      * Compute the begin date and end date of a period.
      *
-     * @param  string    $period   all|today|yesterday|twodaysago|latest2days|thisweek|lastweek|thismonth|lastmonth
+     * @param  string $period   all|today|yesterday|twodaysago|latest2days|thisweek|lastweek|thismonth|lastmonth
      * @access public
      * @return array
      */
@@ -1170,6 +1165,7 @@ class actionModel extends model
         if($period == 'twodaysago')  return array('begin' => $twoDaysAgo, 'end' => $yesterday);
         if($period == 'latest3days') return array('begin' => $twoDaysAgo, 'end' => $tomorrow);
 
+        /* 如果时间段为周，则给结束日期增加结束时间。 */
         /* If the period is by week, add the end time to the end date. */
         if($period == 'thisweek' || $period == 'lastweek')
         {
@@ -1185,18 +1181,18 @@ class actionModel extends model
     }
 
     /**
-     * 渲染每一个action的变更。
-     * Render changes of every action.
+     * 渲染每一个action的历史记录。
+     * Render histories of every action.
      *
-     * @param  string    $objectType
-     * @param  array     $histories
-     * @param  bool      $canChangeTag
+     * @param  string $objectType
+     * @param  array  $histories
+     * @param  bool   $canChangeTag
      * @access public
-     * @return void
+     * @return string
      */
-    public function renderChanges(string $objectType, array $histories, bool $canChangeTag = true)
+    public function renderChanges(string $objectType, array $histories, bool $canChangeTag = true): string
     {
-        if(empty($histories)) return;
+        if(empty($histories)) return '';
 
         $maxLength            = 0;          // The max length of fields names.
         $historiesWithDiff    = array();    // To save histories without diff info.
@@ -1207,23 +1203,24 @@ class actionModel extends model
         foreach($histories as $history)
         {
             $fieldName = $history->field;
-            $history->fieldLabel = (isset($this->lang->$objectType) && isset($this->lang->$objectType->$fieldName)) ? $this->lang->$objectType->$fieldName : $fieldName;
-            if($objectType == 'module') $history->fieldLabel = $this->lang->tree->$fieldName;
-            if($fieldName == 'fileName') $history->fieldLabel = $this->lang->file->$fieldName;
+            $history->fieldLabel = isset($this->lang->{$objectType}) && isset($this->lang->{$objectType}->{$fieldName}) ? $this->lang->{$objectType}->{$fieldName} : $fieldName;
+            if($objectType == 'module')   $history->fieldLabel = $this->lang->tree->{$fieldName};
+            if($fieldName  == 'fileName') $history->fieldLabel = $this->lang->file->{$fieldName};
             if(($length = strlen($history->fieldLabel)) > $maxLength) $maxLength = $length;
             $history->diff ? $historiesWithDiff[] = $history : $historiesWithoutDiff[] = $history;
         }
         $histories = array_merge($historiesWithoutDiff, $historiesWithDiff);
 
+        /* 处理历史记录中的差别。 */
+        /* Process the diff of histories. */
         $content = '';
-
         foreach($histories as $history)
         {
             $history->fieldLabel = str_pad($history->fieldLabel, $maxLength, $this->lang->action->label->space);
             if($history->diff != '')
             {
                 $history->diff      = str_replace(array('<ins>', '</ins>', '<del>', '</del>'), array('[ins]', '[/ins]', '[del]', '[/del]'), $history->diff);
-                $history->diff      = ($history->field != 'subversion' && $history->field != 'git') ? htmlSpecialString($history->diff) : $history->diff;   // Keep the diff link.
+                $history->diff      = $history->field != 'subversion' && $history->field != 'git' ? htmlSpecialString($history->diff) : $history->diff;   // Keep the diff link.
                 $history->diff      = str_replace(array('[ins]', '[/ins]', '[del]', '[/del]'), array('<ins>', '</ins>', '<del>', '</del>'), $history->diff);
                 $history->diff      = nl2br($history->diff);
                 $history->noTagDiff = $canChangeTag ? preg_replace('/&lt;\/?([a-z][a-z0-9]*)[^\/]*\/?&gt;/Ui', '', $history->diff) : '';
@@ -1238,16 +1235,16 @@ class actionModel extends model
     }
 
     /**
-     * 打印每一个action的变更。
-     * Print changes of every action.
+     * 打印每一个action的历史记录。
+     * Print histories of every action.
      *
-     * @param  string    $objectType
-     * @param  array     $histories
-     * @param  bool      $canChangeTag
+     * @param  string $objectType
+     * @param  array  $histories
+     * @param  bool   $canChangeTag
      * @access public
      * @return void
      */
-    public function printChanges(string $objectType, array $histories, bool $canChangeTag = true)
+    public function printChanges(string $objectType, array $histories, bool $canChangeTag = true): void
     {
         $content = $this->renderChanges($objectType, $histories, $canChangeTag);
         if(is_string($content)) echo $content;

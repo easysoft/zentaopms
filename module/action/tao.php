@@ -965,7 +965,7 @@ class actionTao extends actionModel
     }
 
     /**
-     * 旗舰版处理文档的链接。
+     * 旗舰版处理资产库的链接。
      * Process doc link for max.
      *
      * @param  object $action
@@ -1089,11 +1089,11 @@ class actionTao extends actionModel
 
             if($todo->private == 1 && $todo->account != $this->app->user->account) return false;
         }
-        
+
         if($action->objectType == 'stakeholder' && $action->project == 0) return false;
         if($action->objectType == 'chartgroup') return false;
         if($action->objectType == 'branch' && $action->action == 'mergedbranch') return false;
-        
+
         return true;
     }
 
