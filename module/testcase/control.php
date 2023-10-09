@@ -418,6 +418,7 @@ class testcase extends control
             $libraries = $this->loadModel('caselib')->getLibraries();
             $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->caselib->setLibMenu($libraries, $case->lib);
 
+            $this->view->libID   = $case->lib;
             $this->view->title   = "CASE #$case->id $case->title - " . $libraries[$case->lib];
             $this->view->libName = $libraries[$case->lib];
         }
