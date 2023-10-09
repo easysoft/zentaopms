@@ -150,6 +150,7 @@ formPanel
         (
             input
             (
+                zui::width('1/2'),
                 set::name('name'),
                 set::required(true),
             ),
