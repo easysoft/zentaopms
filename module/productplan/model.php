@@ -813,20 +813,14 @@ class productplanModel extends model
      */
     public function changeParentField(int $planID): bool
     {
-        $plan = $this->getById($planID);
+        $plan = $this->getByID($planID);
         if($plan->parent <= 0) return true;
 
         $childCount = count($this->getChildren($plan->parent));
         $parent     = $childCount == 0 ? '0' : '-1';
 
-        if($childCount > 0)
-        {
-            $this->dao->update(TABLE_PRODUCTPLAN)->set('parent')->eq($parent)->where('id')->eq((int)$plan->parent)->exec();
-        }
-        else
-        {
-            $this->dao->update(TABLE_PRODUCTPLAN)->set('parent')->eq('0')->where('id')->eq((int)$planID)->exec();
-        }
+        if($childCount >= 0) $this->dao->update(TABLE_PRODUCTPLAN)->set('parent')->eq($parent)->where('id')->eq((int)$plan->parent)->exec();
+        $this->dao->update(TABLE_PRODUCTPLAN)->set('parent')->eq('0')->where('id')->eq($planID)->exec();
 
         return !dao::isError();
     }
