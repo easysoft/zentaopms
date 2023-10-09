@@ -182,40 +182,16 @@ class releaseModel extends model
     }
 
     /**
+     * 创建一个发布。
      * Create a release.
      *
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  int    $projectID
+     * @param  object    $release
+     * @param  bool      $isSync
      * @access public
-     * @return int
+     * @return int|false
      */
-    public function create($productID = 0, $branch = 0, $projectID = 0)
+    public function create(object $release, bool $isSync): int|false
     {
-        /* Init vars. */
-        $productID = $this->post->product ? $this->post->product : (int)$productID;
-        $branch    = $this->post->branch ? $this->post->branch : (int)$branch;
-
-        /* Check build if build is required. */
-        if(strpos($this->config->release->create->requiredFields, 'build') !== false and $this->post->build === false) return dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->release->build);
-
-        $release = fixer::input('post')
-            ->add('product', (int)$productID)
-            ->add('branch',  (int)$branch)
-            ->setIF($projectID, 'project', $projectID)
-            ->setIF($this->post->build === false, 'build', 0)
-            ->setDefault('stories', '')
-            ->setDefault('bugs',    '')
-            ->setDefault('createdBy',   $this->app->user->account)
-            ->setDefault('createdDate', helper::now())
-            ->join('build', ',')
-            ->join('stories', ',')
-            ->join('bugs', ',')
-            ->join('mailto', ',')
-            ->stripTags($this->config->release->editor->create['id'], $this->config->allowedTags)
-            ->remove('allchecker,files,labels,uid,sync')
-            ->get();
-
         /* Auto create shadow build. */
         if($release->name)
         {
@@ -226,101 +202,111 @@ class releaseModel extends model
             $shadowBuild->date         = $release->date;
             $shadowBuild->createdBy    = $this->app->user->account;
             $shadowBuild->createdDate  = helper::now();
-            $this->dao->insert(TABLE_BUILD)->data($shadowBuild)->exec();
-
-            if(dao::isError()) return false;
-            $release->shadow = $this->dao->lastInsertID();
         }
 
-        if($release->build)
-        {
-            $builds = $this->dao->select('id,project,branch,builds,stories,bugs')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll('id');
-            $linkedBuilds = array();
-            foreach($builds as $build)
-            {
-                $build->builds = trim($build->builds, ',');
-                if(empty($build->builds)) continue;
-                $linkedBuilds = array_merge($linkedBuilds, explode(',', $build->builds));
-            }
-            if($linkedBuilds) $builds += $this->dao->select('id,project,branch,builds,stories,bugs')->from(TABLE_BUILD)->where('id')->in($linkedBuilds)->fetchAll('id');
-            $branches = array();
-            foreach($builds as $build)
-            {
-                foreach(explode(',', $build->branch) as $buildBranch)
-                {
-                    if(!isset($branches[$buildBranch])) $branches[$buildBranch] = $buildBranch;
-                }
-
-                $projects[$build->project] = $build->project;
-
-                if($this->post->sync)
-                {
-                    $build->stories = trim($build->stories, ',');
-                    $build->bugs    = trim($build->bugs, ',');
-                    if($build->stories)
-                    {
-                        $release->stories .= ',' . $build->stories;
-                        $this->loadModel('story')->updateStoryReleasedDate($build->stories, $release->date);
-                    }
-                    if($build->bugs)    $release->bugs    .= ',' . $build->bugs;
-                }
-            }
-            if($this->post->sync and $release->bugs)
-            {
-                $releaseBugs   = $this->loadModel('bug')->getReleaseBugs(array_keys($builds), $release->product, $release->branch);
-                $release->bugs = implode(',', array_intersect(explode(',', $release->bugs), array_keys($releaseBugs)));
-            }
-
-            $release->build   = ',' . trim($release->build, ',') . ',';
-            $release->branch  = ',' . trim(implode(',', $branches), ',') . ',';
-            $release->project = ',' . trim(implode(',', $projects), ',') . ',';
-        }
-
+        if($release->build) $release = $this->processReleaseForCreate($release, $isSync);
         $release = $this->loadModel('file')->processImgURL($release, $this->config->release->editor->create['id'], $this->post->uid);
+
         $this->dao->insert(TABLE_RELEASE)->data($release)
             ->autoCheck()
             ->batchCheck($this->config->release->create->requiredFields, 'notempty')
             ->check('name', 'unique', "product = '{$release->product}' AND branch = '{$release->branch}' AND deleted = '0'")
             ->checkFlow();
 
-        if(dao::isError())
-        {
-            if(!empty($release->shadow)) $this->dao->delete()->from(TABLE_BUILD)->where('id')->eq($release->shadow)->exec();
-            return false;
-        }
+        if(dao::isError()) return false;
 
         $this->dao->exec();
+        $releaseID = $this->dao->lastInsertID();
 
-        if(dao::isError())
+        if(isset($shadowBuild))
         {
-            if(!empty($release->shadow)) $this->dao->delete()->from(TABLE_BUILD)->where('id')->eq($release->shadow)->exec();
+            $this->dao->insert(TABLE_BUILD)->data($shadowBuild)->exec();
+            if(dao::isError()) return false;
+
+            $release->shadow = $this->dao->lastInsertID();
+            $this->dao->update(TABLE_RELEASE)->data(array('shadow' => $release->shadow))->where('id')->eq($releaseID)->exec();
         }
-        else
+        $this->file->updateObjectID($this->post->uid, $releaseID, 'release');
+        $this->file->saveUpload('release', $releaseID);
+        $this->loadModel('score')->create('release', 'create', $releaseID);
+
+        /* Set stage to released. */
+        if($release->stories)
         {
-            $releaseID = $this->dao->lastInsertID();
-            $this->file->updateObjectID($this->post->uid, $releaseID, 'release');
-            $this->file->saveUpload('release', $releaseID);
-            $this->loadModel('score')->create('release', 'create', $releaseID);
+            $this->loadModel('story');
+            $this->loadModel('action');
 
-            /* Set stage to released. */
-            if($release->stories)
+            $storyIDList = array_filter(explode(',', $release->stories));
+            foreach($storyIDList as $storyID)
             {
-                $this->loadModel('story');
-                $this->loadModel('action');
+                $this->story->setStage($storyID);
+                $this->action->create('story', $storyID, 'linked2release', '', $releaseID);
+            }
+        }
 
-                $storyIDList = array_filter(explode(',', $release->stories));
-                foreach($storyIDList as $storyID)
-                {
-                    $this->story->setStage($storyID);
+        return $releaseID;
+    }
 
-                    $this->action->create('story', $storyID, 'linked2release', '', $releaseID);
-                }
+    /**
+     * 处理待创建的发布字段。
+     * Process release fields for create.
+     *
+     * @param  object $release
+     * @param  bool   $isSync
+     * @access public
+     * @return object
+     */
+    public function processReleaseForCreate(object $release, bool $isSync): object
+    {
+        $this->loadModel('story');
+        $this->loadModel('bug');
+
+        $builds       = $this->dao->select('id,project,branch,builds,stories,bugs')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll('id');
+        $linkedBuilds = array();
+        foreach($builds as $build)
+        {
+            $build->builds = trim($build->builds, ',');
+            if(empty($build->builds)) continue;
+
+            $linkedBuilds = array_merge($linkedBuilds, explode(',', $build->builds));
+        }
+        if($linkedBuilds) $builds += $this->dao->select('id,project,branch,builds,stories,bugs')->from(TABLE_BUILD)->where('id')->in($linkedBuilds)->fetchAll('id');
+
+        $branches = array();
+        $projects = array();
+        foreach($builds as $build)
+        {
+            foreach(explode(',', $build->branch) as $buildBranch)
+            {
+                if(!isset($branches[$buildBranch])) $branches[$buildBranch] = $buildBranch;
             }
 
-            return $releaseID;
+            $projects[$build->project] = $build->project;
+
+            if($isSync)
+            {
+                $build->stories = trim($build->stories, ',');
+                $build->bugs    = trim($build->bugs, ',');
+                if($build->stories)
+                {
+                    $release->stories .= ',' . $build->stories;
+                    $this->story->updateStoryReleasedDate($build->stories, $release->date);
+                }
+
+                if($build->bugs) $release->bugs .= ',' . $build->bugs;
+            }
+        }
+        if($isSync && $release->bugs)
+        {
+            $releaseBugs   = $this->bug->getReleaseBugs(array_keys($builds), $release->product, $release->branch);
+            $release->bugs = implode(',', array_intersect(explode(',', $release->bugs), array_keys($releaseBugs)));
         }
 
-        return false;
+        $release->build   = ',' . trim($release->build, ',') . ',';
+        $release->branch  = ',' . trim(implode(',', $branches), ',') . ',';
+        $release->project = ',' . trim(implode(',', $projects), ',') . ',';
+
+        return $release;
     }
 
     /**

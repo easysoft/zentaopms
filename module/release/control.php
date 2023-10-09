@@ -83,27 +83,31 @@ class release extends control
     }
 
     /**
+     * 创建一个发布。
      * Create a release.
      *
-     * @param  int        $productID
-     * @param  string|int $branch
+     * @param  int    $productID
+     * @param  string $branch
      * @access public
      * @return void
      */
-    public function create($productID, $branch = 'all')
+    public function create(int $productID, string $branch = 'all')
     {
         if(!empty($_POST))
         {
-            $releaseID = $this->release->create($productID, $branch);
+            $releaseData = $this->releaseZen->buildReleaseForCreate($productID, (int)$branch);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $releaseID = $this->release->create($releaseData, $this->post->sync ? true : false);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('release', $releaseID, 'opened');
 
-            $result = $this->executeHooks($releaseID);
+            $result  = $this->executeHooks($releaseID);
             $message = $result ? $result : $this->lang->saveSuccess;
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'id' => $releaseID));
-            if(isonlybody() or helper::isAjaxRequest()) return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'callback' => "parent.loadProductBuilds($productID)"));
+            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'callback' => "parent.loadProductBuilds($productID)"));
 
             return $this->send(array('result' => 'success', 'message' => $message, 'load' => inlink('view', "releaseID={$releaseID}")));
         }
@@ -113,11 +117,12 @@ class release extends control
         foreach($releasedBuilds as $build) unset($builds[$build]);
 
         $this->commonAction($productID, $branch);
-        $this->view->title          = $this->view->product->name . $this->lang->colon . $this->lang->release->create;
-        $this->view->productID      = $productID;
-        $this->view->builds         = $builds;
-        $this->view->users          = $this->loadModel('user')->getPairs('noclosed');
-        $this->view->lastRelease    = $this->release->getLast($productID, $branch);
+
+        $this->view->title       = $this->view->product->name . $this->lang->colon . $this->lang->release->create;
+        $this->view->productID   = $productID;
+        $this->view->builds      = $builds;
+        $this->view->users       = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->lastRelease = $this->release->getLast($productID, $branch);
 
         $this->display();
     }

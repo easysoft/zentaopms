@@ -56,5 +56,37 @@ class releaseZen extends release
 
         return $releases;
     }
+
+    /**
+     * 构造待创建的发布数据。
+     * Build the release data to be create.
+     *
+     * @param  int          $productID
+     * @param  int          $branch
+     * @param  int          $projectID
+     * @access protected
+     * @return object|false
+     */
+    protected function buildReleaseForCreate(int $productID, int $branch, int $projectID = 0): object|false
+    {
+        $productID = $this->post->product ? $this->post->product : $productID;
+        $branch    = $this->post->branch ? $this->post->branch : $branch;
+
+        $release = form::data()
+            ->add('product', (int)$productID)
+            ->add('branch',  (int)$branch)
+            ->setIF($projectID, 'project', $projectID)
+            ->setIF($this->post->build === false, 'build', 0)
+            ->get();
+
+        /* Check build if build is required. */
+        if(strpos($this->config->release->create->requiredFields, 'build') !== false && empty($release->build))
+        {
+            dao::$errors['build'] = sprintf($this->lang->error->notempty, $this->lang->release->build);
+            return false;
+        }
+
+        return $release;
+    }
 }
 
