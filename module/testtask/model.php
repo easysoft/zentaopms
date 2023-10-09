@@ -1207,7 +1207,7 @@ class testtaskModel extends model
         $caseResult = 'pass';
         foreach($stepResults as $stepResult)
         {
-            if($stepResult->result == 'fail' || $stepResult->result == 'blocked') $caseResult = $stepResult;
+            if($stepResult->result == 'fail' || $stepResult->result == 'blocked') $caseResult = $stepResult->result;
             if($stepResult->result == 'fail') break;
         }
 
