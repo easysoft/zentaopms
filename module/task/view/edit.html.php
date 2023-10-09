@@ -104,7 +104,9 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
                 <td><?php echo html::select('execution', $executions, $task->execution, 'class="form-control chosen" onchange="loadAll(this.value)"');?></td>
               </tr>
               <?php else:?>
+              <tr class='hidden'>
               <?php echo html::hidden('execution', $task->execution);?>
+              </tr>
               <?php endif;?>
               <tr>
                 <th class='thWidth'><?php echo $lang->task->module;?></th>
