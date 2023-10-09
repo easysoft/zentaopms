@@ -70,27 +70,29 @@ class helper extends baseHelper
         }
         else
         {
-            if($feature == 'product' or $feature == 'scrum' or $feature == 'waterfall') return strpos(",$config->disabledFeatures,", ",{$feature},") === false;
+            if(in_array($feature, array('scrum', 'waterfall', 'agileplus', 'waterfallplus'))) return strpos(",$config->disabledFeatures,", ",{$feature},") === false;
 
-            $hasFeature = false;
+            $hasFeature       = false;
+            $canConfigFeature = false;
             foreach($config->featureGroup as $group => $modules)
             {
-                if($feature == $group)
+                foreach($modules as $module)
                 {
-                    foreach($modules as $module)
+                    if($feature == $group or $feature == $module)
                     {
-                        if(helper::hasFeature("{$group}_{$module}")) $hasFeature = true;
-                    }
-                }
-                else
-                {
-                    foreach($modules as $module)
-                    {
-                        if($feature == $module and helper::hasFeature("{$group}_{$module}")) $hasFeature = true;
+                        $canConfigFeature = true;
+                        if(in_array($group, array('scrum', 'waterfall', 'agileplus', 'waterfallplus')))
+                        {
+                            if(helper::hasFeature("{$group}") and helper::hasFeature("{$group}_{$module}")) $hasFeature = true;
+                        }
+                        else
+                        {
+                            if(helper::hasFeature("{$group}_{$module}")) $hasFeature = true;
+                        }
                     }
                 }
             }
-            return $hasFeature && strpos(",$config->disabledFeatures,", ",{$feature},") === false;
+            return !$canConfigFeature or ($hasFeature && strpos(",$config->disabledFeatures,", ",{$feature},") === false);
         }
     }
 
@@ -190,9 +192,11 @@ class helper extends baseHelper
     /**
      * Create url of issue.
      *
-     * @param  string $module
-     * @param  string $method
+     * @param  string $moduleName
+     * @param  string $methodName
      * @param  string $vars
+     * @param  string $viewType
+     * @param  bool   $onlyBody
      * @static
      * @access public
      * @return string
@@ -214,6 +218,50 @@ class helper extends baseHelper
         }
         return common::getSysURL() . $link;
     }
+
+    /**
+     * 是否是内网。
+     * Check is intranet.
+     *
+     * @return bool
+     */
+    public static function isIntranet()
+    {
+        return !defined('USE_INTRANET') ? false : USE_INTRANET;
+    }
+
+    /**
+     * 转换类型。
+     * Convert the type.
+     *
+     * @param mixed  $value
+     * @param string $type
+     * @static
+     * @access public
+     * @return array|bool|float|int|object|string
+     */
+    public static function convertType($value, $type)
+    {
+        switch($type)
+        {
+            case 'int':
+                return (int)$value;
+            case 'float':
+                return (float)$value;
+            case 'bool':
+                return (bool)$value;
+            case 'array':
+                return (array)$value;
+            case 'object':
+                return (object)$value;
+            case 'datetime':
+            case 'date':
+                return $value ? (string)$value : null;
+            case 'string':
+            default:
+                return (string)$value;
+        }
+    }
 }
 
 /**
@@ -229,6 +277,18 @@ function isonlybody()
 }
 
 /**
+ * 检查页面是否是弹窗中。
+ * Check page is modal.
+ *
+ * @access public
+ * @return bool
+ */
+function isInModal(): bool
+{
+    return helper::isAjaxRequest('modal');
+}
+
+/**
  * Format time.
  *
  * @param  int    $time
@@ -238,9 +298,10 @@ function isonlybody()
  */
 function formatTime($time, $format = '')
 {
+    if(empty($time)) return '';
     $time = str_replace('0000-00-00', '', $time);
     $time = str_replace('00:00:00', '', $time);
-    if(trim($time) == '') return ;
+    if(trim($time) == '') return '';
     if($format) return date($format, strtotime($time));
     return trim($time);
 }

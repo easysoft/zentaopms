@@ -470,7 +470,6 @@ function autoloader($class)
 
 spl_autoload_register('autoloader');
 
-
 /**
  * Init page title based on the module name and the method name.
  *
