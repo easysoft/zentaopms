@@ -1,0 +1,17 @@
+---
+title: zt_deploy
+author: Yanyi Cao
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: name
+    prefix: 计划
+    range: 1-100
+  - field: status
+    range: wait{3},done
+  - field: createdBy
+    range: admin
+  - field: deleted
+    range: 0{4},1
+...
