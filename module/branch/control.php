@@ -224,7 +224,7 @@ class branch extends control
         $statusList = $this->branch->getStatusList($productID);
         $link       = $this->loadModel('product')->getProductLink($module, $method, $extra, true);
 
-        $this->view->link            = $this->branchZen->setParamsForLink($module, $link, $this->session->project, $productID);
+        $this->view->link            = $this->branchZen->setParamsForLink($module, $link, (int)$this->session->project, $productID);
         $this->view->productID       = $productID;
         $this->view->module          = $module;
         $this->view->method          = $method;
