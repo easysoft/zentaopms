@@ -395,6 +395,7 @@ class testcase extends control
         $this->session->set('bugList', $this->app->getURI(true), $this->app->tab);
 
         $case = $this->testcase->getById($caseID, $version);
+        $case->caseID = $case->id;
 
         /* 如果用例不存在，返回到测试仪表盘页面。 */
         /* If testcase isn't exist, locate to qa-ndex.*/
