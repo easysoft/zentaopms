@@ -1023,6 +1023,27 @@ class baseHelper
 
         return $output;
     }
+
+    /**
+     * 在本地语言没有中文的环境下解析pathinfo.
+     * pathinfo of utf-8.
+     *
+     * @param  string $filepath
+     * @access public
+     * @return array
+     */
+    public static function mbPathinfo($filepath)
+    {
+        $ret = array('dirname' => '', 'basename' => '', 'extension' => '', 'filename' => '');
+        preg_match('%^(.*?)[\\\\/]*(([^/\\\\]*?)(\.([^\.\\\\/]+?)|))[\\\\/\.]*$%im',$filepath,$m);
+
+        $ret['dirname']   = !empty($m[1]) ? $m[1] : '';
+        $ret['basename']  = !empty($m[2]) ? $m[2] : '';
+        $ret['extension'] = !empty($m[5]) ? $m[5] : '';
+        $ret['filename']  = !empty($m[3]) ? $m[3] : '';
+
+        return $ret;
+    }
 }
 
 //------------------------------- 常用函数。Some tool functions.-------------------------------//
