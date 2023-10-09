@@ -936,7 +936,7 @@ class project extends control
         }
         else
         {
-            $builds = $this->build->getProjectBuilds((int)$projectID, $type, $param, $orderBy, $pager);
+            $builds = $this->build->getProjectBuilds((int)$projectID, $type, (string)$param, $orderBy, $pager);
         }
 
         /* Set view data. */
