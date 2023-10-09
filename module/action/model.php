@@ -1639,7 +1639,7 @@ class actionModel extends model
      * @access public
      * @return void
      */
-    public function buildTrashSearchForm(int $queryID, string $actionURL)
+    public function buildTrashSearchForm(int $queryID, string $actionURL): void
     {
         $this->config->trash->search['actionURL'] = $actionURL;
         $this->config->trash->search['queryID']   = $queryID;
