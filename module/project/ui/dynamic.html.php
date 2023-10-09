@@ -58,7 +58,7 @@ else
             div
             (
                 setClass('my-4 cursor-pointer'),
-                icon('angle-down text-primary border-2 rounded-full toolbar z-10 bg-canvas'),
+                icon('angle-down text-primary border-2 rounded-full z-10 bg-canvas'),
                 span
                 (
                     setClass('article-h3 ml-2'),

@@ -64,7 +64,7 @@ foreach($dateGroups as $date => $actions)
             setClass('cursor-pointer leading-5'),
             span(icon
             (
-                'angle-down text-primary border-2 rounded-full toolbar z-10 bg-canvas align-middle dynamic-collapse-icon'
+                'angle-down text-primary border-2 rounded-full z-10 bg-canvas align-middle dynamic-collapse-icon'
             )),
             span
             (
