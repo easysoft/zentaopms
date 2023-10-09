@@ -239,8 +239,7 @@ detailBody
                     $product->type == 'normal' ? null : item
                     (
                         set::name($lang->story->branch),
-                        common::hasPriv('product', 'view') ? a(set::href($this->createLink('product', 'view', "productID=$story->product&branch=$story->branch")), $branches[$story->branch]) : $branches[$story->branch],
-                        a(set::href($this->createLink('product', 'view', "productID=$story->product")), $product->name)
+                        common::hasPriv('product', 'browse') ? a(set::href($this->createLink('product', 'browse', "productID=$story->product&branch=$story->branch")), $branches[$story->branch]) : $branches[$story->branch],
                     ),
                     item
                     (

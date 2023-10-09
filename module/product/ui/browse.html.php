@@ -191,7 +191,7 @@ $fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, 
     $canBatchClose        = hasPriv($storyType, 'batchClose') && strtolower($browseType) != 'closedbyme' && strtolower($browseType) != 'closedstory';
     $canBatchReview       = $canBeChanged && hasPriv($storyType, 'batchReview');
     $canBatchChangeStage  = $canBeChanged && hasPriv('story', 'batchChangeStage') && $storyType == 'story';
-    $canBatchChangeBranch = $canBeChanged && hasPriv($storyType, 'batchChangeBranch') && $this->session->currentProductType && $this->session->currentProductType != 'normal' && $productID;
+    $canBatchChangeBranch = $canBeChanged && hasPriv($storyType, 'batchChangeBranch') && $product->type != 'normal' && $productID;
     $canBatchChangeModule = $canBeChanged && hasPriv($storyType, 'batchChangeModule');
     $canBatchChangePlan   = $canBeChanged && hasPriv('story', 'batchChangePlan') && $storyType == 'story' && (!$isProjectStory || $projectHasProduct || ($isProjectStory && isset($project->model) && $project->model == 'scrum'));
     $canBatchAssignTo     = $canBeChanged && hasPriv($storyType, 'batchAssignTo');
@@ -228,7 +228,6 @@ $fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, 
     $navActionItems = array();
     if($canBatchClose)  $navActionItems[] = array('text' => $lang->close, 'class' => 'batch-btn', 'data-page' => 'batch', 'data-formaction' => helper::createLink('story', 'batchClose', "productID={$productID}"));
     if($canBatchReview) $navActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->story->review, 'items' => $reviewResultItems);
-    if($canBatchChangeBranch && $product->type != 'normal') $navActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->product->branchName[$product->type], 'items' => $branchItems);
     if($canBatchChangeStage)  $navActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->story->stageAB, 'items' => $stageItems);
 
     if(!$canBatchAction) return array();
@@ -259,7 +258,9 @@ $fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, 
         /* Module button. */
         array('caret' => 'up', 'text' => $lang->story->moduleAB, 'className' => $canBatchChangeModule ? 'secondary' : 'hidden', 'items' => $moduleItems, 'type' => 'dropdown', 'data-placement' => 'top-start', 'data-menu' => array('searchBox' => true)),
         /* Plan button. */
-        array('caret' => 'up', 'text' => $lang->story->planAB, 'className' => $canBatchChangePlan ? 'secondary' : 'hidden', 'items' => $planItems, 'type' => 'dropdown', 'data-placement' => 'top-start'),
+        array('caret' => 'up', 'text' => $lang->story->planAB, 'className' => $canBatchChangePlan ? 'secondary' : 'hidden', 'items' => $planItems, 'type' => 'dropdown', 'data-placement' => 'top-start', 'data-menu' => array('searchBox' => true)),
+        /* Change branch button. */
+        ($canBatchChangeBranch && $product->type != 'normal') ? array('caret' => 'up', 'text' => $lang->product->branchName[$product->type], 'items' => $branchItems, 'type' => 'dropdown', 'data-placement' => 'top-start', 'data-menu' => array('searchBox' => true)) : null,
         /* AssignedTo button. */
         array('caret' => 'up', 'text' => $lang->story->assignedTo, 'className' => ($canBatchAssignTo ? 'secondary' : 'hidden'), 'items' => $assignItems, 'type' => 'dropdown', 'data-placement' => 'top-start', 'data-menu' => array('searchBox' => true)),
         /* Batch import to lib button .*/
