@@ -22,7 +22,7 @@ $config->release->dtable->fieldList['name']['link']  = array('module' => 'releas
 $config->release->dtable->fieldList['name']['type']  = 'title';
 
 $config->release->dtable->fieldList['branch']['title']    = $lang->release->branch;
-$config->release->dtable->fieldList['branch']['name']     = 'branch';
+$config->release->dtable->fieldList['branch']['name']     = 'branchName';
 $config->release->dtable->fieldList['branch']['type']     = 'text';
 $config->release->dtable->fieldList['branch']['sortType'] = true;
 

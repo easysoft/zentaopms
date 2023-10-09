@@ -82,6 +82,7 @@ class releaseModel extends model
             ->leftJoin(TABLE_BRANCH)->alias('t3')->on('t1.branch = t3.id')
             ->fetchAll('id');
 
+        $this->loadModel('branch');
         foreach($releases as $release)
         {
             $releaseBuilds = array();
@@ -94,12 +95,19 @@ class releaseModel extends model
             $release->builds = $releaseBuilds;
 
             $branchName = '';
-            if($release->branch != 'normal')
+            if($release->productType != 'normal')
             {
                 foreach(explode(',', trim($release->branch, ',')) as $releaseBranch)
                 {
-                    $branchName .= $this->loadModel('branch')->getById($releaseBranch);
-                    $branchName .= ',';
+                    if($releaseBranch === '0')
+                    {
+                        $branchName .= $this->lang->branch->main;
+                    }
+                    else
+                    {
+                        $branchName .= $this->branch->getByID($releaseBranch);
+                        $branchName .= ',';
+                    }
                 }
                 $branchName = trim($branchName, ',');
             }
