@@ -171,6 +171,7 @@ class solutionModel extends model
         $solutionSchema = $this->loadModel('store')->solutionConfig('id', $solution->appID);
         $channel        = $this->app->session->cloudChannel ? $this->app->session->cloudChannel : $this->config->cloud->api->channel;
         $components     = json_decode($solution->components);
+        $apps           = helper::arrayColumn(json_decode($solution->components, true), 'chart');
         foreach($components as $categorty => $componentApp)
         {
             $solutionStatus = $this->dao->select('status')->from(TABLE_SOLUTION)->where('id')->eq($solutionID)->fetch();
@@ -211,7 +212,7 @@ class solutionModel extends model
                     }
 
                     if(!$this->checkInstallStatus($solutionID)) return false;
-                    $settings = $this->mountSettings($solutionSchema, $componentApp->chart, $components, $allMappings, isset($components->sonarqube));
+                    $settings = $this->mountSettings($solutionSchema, $componentApp->chart, $components, $allMappings, in_array('sonarqube', $apps));
                     $instance = $this->installApp($cloudApp, $settings);
                 }
 
@@ -292,8 +293,10 @@ class solutionModel extends model
         $settings = array();
 
         $appSettings = zget($solutionSchema->settings, $chart, array());
+        $apps        = helper::arrayColumn((array)$components, 'chart');
         foreach($appSettings as $item)
         {
+            if(!empty($item->when) && !in_array($item->when, $apps)) continue;
             switch($item->type)
             {
                 case 'static':
