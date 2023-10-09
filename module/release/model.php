@@ -128,14 +128,15 @@ class releaseModel extends model
     }
 
     /**
+     * 获取产品下发布的版本ID列表。
      * Get released builds from product.
      *
-     * @param  int        $productID
-     * @param  string|int $branch
+     * @param  int    $productID
+     * @param  string $branch
      * @access public
-     * @return void
+     * @return array
      */
-    public function getReleasedBuilds($productID, $branch = 'all')
+    public function getReleasedBuilds(int $productID, string $branch = 'all'): array
     {
         $releases = $this->dao->select('branch,shadow,build')->from(TABLE_RELEASE)
             ->where('deleted')->eq(0)
@@ -145,7 +146,7 @@ class releaseModel extends model
         $buildIdList = array();
         foreach($releases as $release)
         {
-            if($branch != 'all' and $branch !== '')
+            if($branch != 'all' && $branch !== '')
             {
                 $inBranch = false;
                 foreach(explode(',', trim($release->branch, ',')) as $branchID)
@@ -157,7 +158,7 @@ class releaseModel extends model
                 if(!$inBranch) continue;
             }
 
-            $builds = explode(',', $release->build);
+            $builds        = explode(',', $release->build);
             $buildIdList   = array_merge($buildIdList, $builds);
             $buildIdList[] = $release->shadow;
         }
