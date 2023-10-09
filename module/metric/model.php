@@ -204,6 +204,8 @@ class metricModel extends model
         else
         {
             $calculator->setDAO($this->dao);
+            $scm = $this->app->loadClass('scm');
+            $calculator->setSCM($scm);
 
             $statement = $calculator->getStatement();
             $sql       = $calculator->dao->get();
