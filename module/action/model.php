@@ -1750,7 +1750,7 @@ class actionModel extends model
         foreach($params as $key => $value) $updateParams[] = '`' . $key . '`' . '="' . $value . '"';
         $this->dao->update($table)->set(implode(',', $updateParams))->where('id')->eq($id)->exec();
 
-        return dao::isError();
+        return !dao::isError();
     }
 
     /**
@@ -1761,9 +1761,9 @@ class actionModel extends model
      * @access public
      * @return string
      */
-    public function getAttributeByExecutionID(int $executionID): string
+    public function getAttributeByExecutionID(int $executionID): string|bool
     {
-        return $this->actionTao->getAttributeByID($executionID);
+        return $this->dao->select('attribute')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('attribute');
     }
 
     /**
@@ -1772,11 +1772,11 @@ class actionModel extends model
      *
      * @param  array $list
      * @access public
-     * @return array
+     * @return array|bool
      */
-    public function getDeletedStagedByList(array $list): array
+    public function getDeletedStagedByList(array $list): array|bool
     {
-        return $this->actionTao->getDeletedStagedList($list);
+        return $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($list)->andWhere('deleted')->eq(1)->andWhere('type')->eq('stage')->orderBy('id_asc')->fetchAll('id');
     }
 
     /**

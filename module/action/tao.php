@@ -33,32 +33,6 @@ class actionTao extends actionModel
     }
 
     /**
-     * 获取已经删除了的阶段列表。
-     * Get deleted staged list.
-     *
-     * @param  array $stagePathList
-     * @access protected
-     * @return void
-     */
-    protected function getDeletedStagedList(array $stagePathList)
-    {
-        return $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($stagePathList)->andWhere('deleted')->eq(1)->andWhere('type')->eq('stage')->orderBy('id_asc')->fetchAll('id');
-    }
-
-    /**
-     * 根据执行id获取属性。
-     * Get attribute by execution id.
-     *
-     * @param  int $id
-     * @access protected
-     * @return object
-     */
-    protected function getAttributeByID($id): object
-    {
-        return $this->dao->select('attribute')->from(TABLE_EXECUTION)->where('id')->eq($id)->fetch('attribute');
-    }
-
-    /**
      * 获取无需过滤的关联关系。
      * Get no filter required relation.
      *
