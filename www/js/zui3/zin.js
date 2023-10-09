@@ -367,9 +367,9 @@
                     hasFatal = data.includes('Fatal error') || data.includes('Uncaught TypeError:');
                     data = [{name: hasFatal ? 'fatal' : 'html', data: data}];
                 }
-                if(!options.partial && !hasFatal) currentAppUrl = url;
                 if(Array.isArray(data))
                 {
+                    if(!options.partial && !hasFatal) currentAppUrl = url;
                     data.forEach((item, idx) => item.selector = selectors[idx]);
                     updatePerfInfo(options, 'renderBegin');
                     renderPage(data, options);
