@@ -93,6 +93,8 @@ function setStatistics()
 
         const task = element.getRowInfo(id).data;
 
+        if(task.isParent == true) return true;
+
         totalEstimate += Number(task.estimateNum);
         totalConsumed += Number(task.consumedNum);
         if(task.statusCode != 'cancel' && task.statusCode != 'closed') totalLeft += Number(task.leftNum);
