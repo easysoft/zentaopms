@@ -1216,7 +1216,7 @@ class user extends control
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->pager      = $pager;
         $this->view->user       = $user;
-        $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction, $period);
+        $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction);
         $this->view->direction  = $direction;
         $this->display();
     }

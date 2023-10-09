@@ -2361,7 +2361,7 @@ class execution extends control
         $this->view->pager        = $pager;
         $this->view->account      = $account;
         $this->view->param        = $param;
-        $this->view->dateGroups   = $this->action->buildDateGroup($actions, $direction, $type); /* 将日志按照日期分组，以日期为索引，将日志列表作为值。*/
+        $this->view->dateGroups   = $this->action->buildDateGroup($actions, $direction); /* 将日志按照日期分组，以日期为索引，将日志列表作为值。*/
         $this->view->direction    = $direction;
         $this->view->recTotal     = $recTotal;
         $this->display();

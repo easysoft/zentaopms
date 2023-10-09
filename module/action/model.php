@@ -1378,12 +1378,11 @@ class actionModel extends model
      *
      * @param  array  $actions
      * @param  string $direction
-     * @param  string $type all|today|yesterday|thisweek|lastweek|thismonth|lastmonth
-     * @param  string $orderBy date_desc|date_asc
+     * @param  string $orderBy    date_desc|date_asc
      * @access public
      * @return array
      */
-    public function buildDateGroup(array $actions, string $direction = 'next', string $type = 'today', string $orderBy = 'date_desc'): array
+    public function buildDateGroup(array $actions, string $direction = 'next', string $orderBy = 'date_desc'): array
     {
         $dateGroup = array();
         foreach($actions as $action)

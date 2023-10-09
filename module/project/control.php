@@ -715,7 +715,7 @@ class project extends control
         $this->view->pager      = $pager;
         $this->view->account    = $account;
         $this->view->param      = $param;
-        $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction, $type);
+        $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction);
         $this->view->direction  = $direction;
         $this->view->recTotal   = $pager->recTotal;
         $this->display();

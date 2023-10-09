@@ -1564,7 +1564,7 @@ EOF;
         $this->view->type        = $type;
         $this->view->orderBy     = $orderBy;
         $this->view->pager       = $pager;
-        $this->view->dateGroups  = $this->action->buildDateGroup($actions, $direction, $type);
+        $this->view->dateGroups  = $this->action->buildDateGroup($actions, $direction);
         $this->view->direction   = $direction;
         $this->view->originTotal = $originTotal;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
