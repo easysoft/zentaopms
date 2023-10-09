@@ -20,6 +20,11 @@
     </div>
     <?php if($fileType == 'image'):?>
     <div id='imageFile'><?php echo html::image($this->createLink('file', 'read', "fileID=$file->id"));?></div>
+    <?php elseif($fileType == 'video'):?>
+    <div id='videoFile'>
+        <video src=<?php echo $file->webPath;?> autoplay controls controlsList='nodownload' onerror='showError()'></video>
+        <div class='playfailed hide'><?php echo $lang->file->playFailed;?></div>
+    </div>
     <?php else:?>
     <div id='txtFile'>
         <?php
@@ -51,6 +56,11 @@
   </div>
 </main>
 <script>
+function showError()
+{
+    $('.playfailed').show();
+}
+
 function setCharset(charset)
 {
     var link  = createLink('file', 'download', 'fileID=' + fileID + '&mouse=left');
