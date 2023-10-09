@@ -33,6 +33,7 @@ class testtaskModel extends model
             ->setDefault('project', $projectID)
             ->setDefault('createdBy', $this->app->user->account)
             ->setDefault('createdDate', helper::now())
+            ->setDefault('members', '')
             ->stripTags($this->config->testtask->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->join('type', ',')
@@ -777,6 +778,7 @@ class testtaskModel extends model
             ->setDefault('type', '')
             ->setDefault('mailto', '')
             ->setDefault('deleteFiles', array())
+            ->setDefault('members', '')
             ->stripTags($this->config->testtask->editor->edit['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->join('type', ',')
@@ -1783,7 +1785,7 @@ class testtaskModel extends model
     public function getToAndCcList($testtask)
     {
         /* Set toList and ccList. */
-        $toList   = $testtask->owner;
+        $toList   = $testtask->owner . ',' . $testtask->members . ',';
         $ccList   = str_replace(' ', '', trim($testtask->mailto, ','));
 
         if(empty($toList))
@@ -1801,6 +1803,7 @@ class testtaskModel extends model
                 $ccList   = substr($ccList, $commaPos + 1);
             }
         }
+
         return array($toList, $ccList);
     }
 
