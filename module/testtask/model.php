@@ -1211,6 +1211,10 @@ class testtaskModel extends model
             if($stepResult->result == 'fail') break;
         }
 
+        /* 把用例步骤执行结果转换为数组类型以便于和历史数据保持一致。*/
+        /* Convert the execution results of the test case steps to array type for consistency with historical data. */
+        foreach($stepResults as $key => $stepResult) $stepResults[$key] = (array)$stepResult;
+
         /* 保存测试用例的执行结果。*/
         /* Save the execution results of the test case. */
         $now    = helper::now();
