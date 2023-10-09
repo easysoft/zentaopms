@@ -1,0 +1,38 @@
+title: zt_mr
+author: qixinzhi
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10000
+  - field: hostID
+    range: 1-10{12}
+  - field: sourceProject
+    range: 42
+  - field: sourceBranch
+    range: branch-08
+  - field: targetProject
+    range: 42
+  - field: targetBranch
+    range: master
+  - field: mriid
+    range: 19
+  - field: title
+    range: Test MR
+  - field: status
+    range: opened{2},merged{2},closed{2}
+  - field: mergeStatus
+    range: can_be_merged
+  - field: repoID
+    range: 1
+  - field: jobID
+    range: 0
+  - field: compileID
+    range: 0
+  - field: description
+    range: 描述
+  - field: createdBy
+    range: admin
+  - field: assignee
+    range: admin
+  - field: deleted
+    range: 0{6},1{6}

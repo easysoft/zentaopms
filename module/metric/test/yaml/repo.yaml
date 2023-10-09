@@ -26,6 +26,10 @@ fields:
     range: 1
   - field: job
     range: 1
+  - field: acl
+    range: 1
+  - field: desc
+    range: 1
   - field: deleted
     range: 0
 ...
