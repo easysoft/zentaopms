@@ -1256,11 +1256,13 @@ class actionModel extends model
      *
      * @param  string $objectType
      * @access public
-     * @return void
+     * @return bool
      */
-    public function deleteByType(string $objectType)
+    public function deleteByType(string $objectType): bool
     {
         $this->dao->delete()->from(TABLE_ACTION)->where('objectType')->eq($objectType)->exec();
+
+        return !dao::isError();
     }
 
     /**
