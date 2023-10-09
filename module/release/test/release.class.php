@@ -44,23 +44,6 @@ class releaseTest
     }
 
     /**
-     * function getLastTest by release
-     *
-     * @param  string $productID
-     * @param  string $branch
-     * @access public
-     * @return array
-     */
-    public function getLastTest($productID, $branch = 0)
-    {
-        $objects = $this->objectModel->getLast($productID, $branch);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
      * 创建一个发布。
      * Create a release.
      *
