@@ -1,0 +1,8 @@
+title: table zt_testtask
+author: Gang Liu
+version: "1.0"
+fields:
+  - field: begin
+    range: "`2023-09-11`"
+  - field: end
+    range: "`2023-09-18`"
