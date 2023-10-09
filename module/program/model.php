@@ -1362,6 +1362,8 @@ class programModel extends model
                 $stats[$nodeID]['totalEstimate'] += $execution->totalEstimate;
                 $stats[$nodeID]['totalConsumed'] += $execution->totalConsumed;
                 $stats[$nodeID]['totalLeft']     += $execution->totalLeft;
+
+                // Check $execution->execution and $nodeID(path) is not deleted.
                 if(empty($projectsPairs[$execution->execution]) && empty($projectsPairs[$nodeID]))
                 {
                     $stats[$nodeID]['totalConsumedNotDel'] += $execution->totalConsumed;
