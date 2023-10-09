@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmDelete', $lang->testtask->confirmDelete)?>
 <?php if($project->hasProduct):?>
-<style>.tfoot {margin-left: 205px}</style>
+<style>.table-footer {margin-left: 205px}</style>
 <?php endif;?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
