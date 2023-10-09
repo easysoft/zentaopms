@@ -117,8 +117,7 @@ class actionModel extends model
     public function getRelatedFields(string $objectType, int $objectID, string $actionType = '', string $extra = ''): array
     {
         $product   = array(0);
-        $project   = 0;
-        $execution = 0;
+        $project   = $execution = 0;
 
         /* 处理项目、执行、产品、计划相关。 */
         /* Process project, execution, product, plan related. */
@@ -231,16 +230,11 @@ class actionModel extends model
 
             if($actionName == 'importedcard') $this->actionTao->processActionExtra(TABLE_KANBAN, $action, 'name', 'kanban', 'view', true);
             if($actionName == 'createchildren') $this->actionTao->processCreateChildrenActionExtra($action);
-
-            /* 瀑布模型相关的代码。 */
-            /* Code for wataerfall mode. */
             if($actionName == 'createrequirements') $this->actionTao->processCreateRequirementsActionExtra($action);
             if($actionName == 'buildopened') $this->actionTao->processActionExtra(TABLE_BUILD, $action, 'name', 'build', 'view');
             if($actionName == 'finished' && $objectType == 'todo') $this->actionTao->finishToDoActionExtra($action);
             if($actionName == 'fromlib' && $action->objectType == 'case') $this->actionTao->processActionExtra(TABLE_TESTSUITE, $action, 'name', 'caselib', 'browse');
-
             if($action->objectType != 'feedback' && (strpos(',totask,linkchildtask,unlinkchildrentask,linkparenttask,unlinkparenttask,deletechildrentask,', ",$actionName,") !== false)) $this->actionTao->processActionExtra(TABLE_TASK, $action, 'name', 'task', 'view');
-
             if(($actionName == 'opened' || $actionName == 'managed' || $actionName == 'edited') && ($objectType == 'execution' || $objectType == 'project')) $this->actionTao->processExecutionAndProjectActionExtra($action);
             if(($actionName == 'closed' && $action->objectType == 'story') || ($actionName == 'resolved' && $action->objectType == 'bug')) $this->actionTao->processClosedStoryAndResolvedBugActionExtra($action);
 
@@ -252,7 +246,6 @@ class actionModel extends model
             if(in_array($actionName, array('linkbug', 'unlinkbug'))) $this->actionTao->processLinkStoryAndBugActionExtra($action, 'bug', 'view');
 
             $action->history = isset($histories[$actionID]) ? $histories[$actionID] : array();
-            $actionName = strtolower($action->action);
             if($actionName == 'svncommited') array_map(function($history) {if($history->field == 'subversion') $history->diff = str_replace('+', '%2B', $history->diff);}, $action->history);
             if($actionName == 'gitcommited') array_map(function($history) {if($history->field == 'git') $history->diff = str_replace('+', '%2B', $history->diff);}, $action->history);
 
