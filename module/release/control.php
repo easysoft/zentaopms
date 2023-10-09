@@ -12,20 +12,21 @@
 class release extends control
 {
     /**
-     * Common actions.
+     * 公共函数，设置产品菜单及页面基础数据。
+     * Common action, set the menu and basic data.
      *
      * @param  int    $productID
-     * @param  int    $branch
+     * @param  string $branch
      * @access public
      * @return void
      */
-    public function commonAction($productID, $branch = 0)
+    public function commonAction(int $productID, string $branch = '')
     {
-        $productID = (int)$productID;
         $this->loadModel('product')->setMenu($productID, $branch);
 
         $product = $this->product->getById($productID);
         if(empty($product)) $this->locate($this->createLink('product', 'create'));
+
         $this->view->product  = $product;
         $this->view->branch   = $branch;
         $this->view->branches = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
