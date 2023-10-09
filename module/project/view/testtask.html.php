@@ -85,7 +85,7 @@ $doneCount    = 0;
         <?php if($task->status == 'doing')   $testingCount ++;?>
         <?php if($task->status == 'blocked') $blockedCount ++;?>
         <?php if($task->status == 'done')    $doneCount ++;?>
-        <tr data-id='<?php echo $product;?>' <?php if($task == reset($productTasks)) echo "class='divider-top'";?>>
+        <tr data-id='<?php echo $product;?>' <?php if($task == reset($productTasks)) echo "class='divider-top'";?> data-status='<?php echo $task->status;?>'>
           <?php if($task == reset($productTasks)):?>
           <td rowspan='<?php echo count($productTasks);?>' class='c-side text-left group-toggle <?php if(!$project->hasProduct) echo 'hide';?>'>
             <a class='text-primary' title='<?php echo $productName;?>'><i class='icon icon-caret-down'></i> <?php echo $productName;?></a>
