@@ -1469,17 +1469,17 @@ class actionModel extends model
     {
         $this->loadModel('search');
         $actionType = strtolower($actionType);
-        if(!isset($this->config->search->fields->$objectType)) return true;
-        if(strpos($this->config->search->buildAction, ",{$actionType},") === false && empty($_POST['comment'])) return true;
+        if(!isset($this->config->search->fields->{$objectType})) return false;
+        if(strpos($this->config->search->buildAction, ",{$actionType},") === false && empty($_POST['comment'])) return false;
         if($actionType == 'deleted' || $actionType == 'erased') return $this->search->deleteIndex($objectType, $objectID);
 
-        $field = $this->config->search->fields->$objectType;
+        $field = $this->config->search->fields->{$objectType};
         $query = $this->search->buildIndexQuery($objectType, false);
         $data  = $query->andWhere('t1.' . $field->id)->eq($objectID)->fetch();
-        if(empty($data)) return true;
+        if(empty($data)) return false;
 
         $data->comment = '';
-        if($objectType == 'effort' && $data->objectType == 'task') return true;
+        if($objectType == 'effort' && $data->objectType == 'task') return false;
         if($objectType == 'case')
         {
             $caseStep     = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->eq($objectID)->andWhere('version')->eq($data->version)->fetchAll();
