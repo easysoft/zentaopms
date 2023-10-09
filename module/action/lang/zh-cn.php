@@ -168,6 +168,7 @@ $lang->action->objectTypes['serverroom']       = '机房';
 $lang->action->objectTypes['account']          = '账号';
 $lang->action->objectTypes['host']             = '主机';
 $lang->action->objectTypes['artifactrepo']     = '制品库';
+$lang->action->objectTypes['metric']           = '度量';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();

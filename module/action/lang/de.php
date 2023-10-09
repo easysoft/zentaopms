@@ -168,6 +168,7 @@ $lang->action->objectTypes['serverroom']       = 'IDC';
 $lang->action->objectTypes['account']          = 'Account';
 $lang->action->objectTypes['host']             = 'Host';
 $lang->action->objectTypes['artifactrepo']     = 'Artifact Repo';
+$lang->action->objectTypes['metric']           = 'Metric';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();
