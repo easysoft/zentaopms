@@ -363,15 +363,26 @@ class metricZen extends metric
      * @access protected
      * @return array|false
      */
-    protected function getViewTableHeader($result)
+    protected function getViewTableHeader($metric)
     {
-        if(empty($result)) return array
+        $dataFields = $this->metric->getMetricRecordDateField($metric->code);
+        if($metric->scope != 'system') $dataFields[] = $metric->scope;
+
+        $dataFieldStr = implode(', ', $dataFields);
+        if(!empty($dataFieldStr)) $dataFieldStr .= ', ';
+
+        $result = $this->dao->select("id, {$dataFieldStr} value, date")
+            ->from(TABLE_METRICLIB)
+            ->where('metricCode')->eq($metric->code)
+            ->fetch();
+
+        if(!$result) return array
         (
             array('name' => 'value', 'title' => $this->lang->metric->value),
             array('name' => 'calcTime', 'title' => $this->lang->metric->calcTime, 'width' => 150)
         );
 
-        $fieldList = array_keys((array)current($result));
+        $fieldList = array_keys((array)$result);
         $scopeList = array_intersect($fieldList, $this->config->metric->scopeList);
         $dateList  = array_intersect($fieldList, $this->config->metric->dateList);
         $scope     = current($scopeList);

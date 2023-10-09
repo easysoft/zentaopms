@@ -215,6 +215,32 @@ class metricModel extends model
     }
 
     /**
+     * 获取度量数据的日期字段。
+     * Get date field of metric data.
+     *
+     * @param  string $code
+     * @access protected
+     * @return array
+     */
+    protected function getMetricRecordDateField(string $code): array
+    {
+        $record = $this->dao->select("year, month, week, day")
+            ->from(TABLE_METRICLIB)
+            ->where('metricCode')->eq($code)
+            ->fetch();
+
+        if(!$record) return array();
+
+        $dataFields = array();
+        $recordKeys = array_keys((array)$record);
+        foreach($recordKeys as $recordKey)
+        {
+            if(!empty($record->$recordKey)) $dataFields[] = $recordKey;
+        }
+
+        return $dataFields;
+    }
+    /**
      * 根据代号获取计算实时度量项的结果。
      * Get result of calculate metric by code.
      *
@@ -228,7 +254,7 @@ class metricModel extends model
         if($type == 'cron')
         {
             $metric     = $this->metricTao->fetchMetricByCode($code);
-            $dataFields = $this->metricTao->getMetricRecordDateField($code);
+            $dataFields = $this->getMetricRecordDateField($code);
 
             if($metric->scope != 'system') $dataFields[] = $metric->scope;
 
@@ -1187,16 +1213,18 @@ class metricModel extends model
      * 获取度量项的数据类型。
      * Get data type of metric.
      *
-     * @param  object    $tableData
+     * @param  array    $tableData
      * @access public
      * @return string|false
      */
-    public function getMetricRecordType(object|bool $tableData): string|false
+    public function getMetricRecordType(array|bool $tableData): string|false
     {
         if(!$tableData) return false;
+        $fields = array_column($tableData, 'name');
+
         $type = array();
-        if(isset($tableData->scope)) $type[] = 'scope';
-        if(isset($tableData->date)) $type[] = 'date';
+        if(in_array('scope', $fields)) $type[] = 'scope';
+        if(in_array('date', $fields)) $type[] = 'date';
 
         if(empty($type)) $type[] = 'system';
         return implode('-', $type);
@@ -1277,7 +1305,7 @@ class metricModel extends model
      * Get lengend options of echarts by head and series.
      *
      * @param  array    $head
-     * @param  array    $series 
+     * @param  array    $series
      * @access public
      * @return array
      */

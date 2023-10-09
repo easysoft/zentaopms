@@ -199,6 +199,15 @@ div
             div
             (
                 setClass('chart-type'),
+                $echartOptions ? picker
+                (
+                    set::name('chartType'),
+                    set::items($chartTypeList),
+                    set::value('line'),
+                    set::required(true),
+                    set::onchange("window.handleChartTypeChange($metricID, 'multiple')"),
+                ) : null,
+
             ),
             div
             (

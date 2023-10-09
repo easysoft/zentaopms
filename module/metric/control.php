@@ -61,7 +61,8 @@ class metric extends control
         {
             $metric = $this->metric->getByID($current->id);
             $result = $this->metric->getResultByCode($metric->code, array(), 'cron');
-            $resultHeader = $this->metricZen->getViewTableHeader($result);
+
+            $resultHeader = $this->metricZen->getViewTableHeader($metric);
             $resultData   = $this->metricZen->getViewTableData($metric, $result);
         }
 
@@ -223,12 +224,13 @@ class metric extends control
     {
         $metric = $this->metric->getByID($metricID);
         $result = $this->metric->getResultByCode($metric->code, array(), 'cron');
-        $resultHeader = $this->metricZen->getViewTableHeader($result);
+        $resultHeader = $this->metricZen->getViewTableHeader($metric);
         $resultData   = $this->metricZen->getViewTableData($metric, $result);
 
         $this->view->metric        = $metric;
         $this->view->resultHeader  = $resultHeader;
         $this->view->resultData    = $resultData;
+        $this->view->chartTypeList = $this->metric->getChartTypeList($resultHeader);
         $this->view->echartOptions = $this->metric->getEchartsOptions($resultHeader, $resultData);
 
         $this->display();
@@ -238,7 +240,7 @@ class metric extends control
     {
         $metric = $this->metric->getByID($metricID);
         $result = $this->metric->getResultByCode($metric->code, $_POST, 'cron');
-        $resultHeader = $this->metricZen->getViewTableHeader($result);
+        $resultHeader = $this->metricZen->getViewTableHeader($metric);
         $resultData   = $this->metricZen->getViewTableData($metric, $result);
 
         $this->view->viewType      = $viewType;
@@ -264,7 +266,7 @@ class metric extends control
         $metric = $this->metric->getByID($metricID);
         $result = $this->metric->getResultByCode($metric->code, $_POST, 'cron');
 
-        $resultHeader = $this->metricZen->getViewTableHeader($result);
+        $resultHeader = $this->metricZen->getViewTableHeader($metric);
         $resultData   = $this->metricZen->getViewTableData($metric, $result);
 
         $echartOptions = $this->metric->getEchartsOptions($resultHeader, $resultData, $chartType);

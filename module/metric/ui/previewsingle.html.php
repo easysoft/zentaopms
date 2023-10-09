@@ -125,7 +125,7 @@ toolbar
     */
 );
 
-$metricRecordType = $this->metric->getMetricRecordType(current($resultData));
+$metricRecordType = $this->metric->getMetricRecordType($resultHeader);
 
 $fnGenerateQueryForm = function() use($metricRecordType, $current)
 {

@@ -244,6 +244,7 @@ class metricTao extends metricModel
             {
                 $maxDate = $this->dao->select("max(date) maxDate")->from(TABLE_METRICLIB)->fetch('maxDate');
                 $date    = substr($maxDate, 0, 10);
+                $date = helper::now();
             }
         }
 
@@ -321,33 +322,6 @@ class metricTao extends metricModel
             return $dateParse;
         }
         return $query[$key];
-    }
-
-    /**
-     * 获取度量数据的日期字段。
-     * Get date field of metric data.
-     *
-     * @param  string $code
-     * @access protected
-     * @return array
-     */
-    protected function getMetricRecordDateField(string $code): array
-    {
-        $record = $this->dao->select("year, month, week, day")
-            ->from(TABLE_METRICLIB)
-            ->where('metricCode')->eq($code)
-            ->fetch();
-
-        if(!$record) return array();
-
-        $dataFields = array();
-        $recordKeys = array_keys((array)$record);
-        foreach($recordKeys as $recordKey)
-        {
-            if(!empty($record->$recordKey)) $dataFields[] = $recordKey;
-        }
-
-        return $dataFields;
     }
 
     /**
