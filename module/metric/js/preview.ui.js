@@ -116,10 +116,12 @@ window.handleChartTypeChange = function(metricID, viewType = 'single')
         var chartType = $('#metricBox' + metricID).find('[name=chartType]').val();
     }
 
-    $.get($.createLink('metric', 'ajaxGetEchartsOptions', 'metricID=' + metricID + '&chartType=' + chartType), function(resp)
+    var $form = $('#queryForm' + metricID);
+    var formData = window.getFormData($form);
+
+    $.post($.createLink('metric', 'ajaxGetEchartsOptions', 'metricID=' + metricID + '&chartType=' + chartType), formData, function(resp)
     {
         var datas = JSON.parse(resp);
-        console.log(datas)
         if(!datas) return;
 
         if(chartType == 'pie')
@@ -251,19 +253,6 @@ window.initFilterPanel = function()
     }
 }
 
-window.renderDTable = function(metricID = current.id, header = resultHeader, data = resultData)
-{
-    var $currentBox = $('#metricBox' + metricID);
-    if(viewType == 'single') $currentBox = $('.table-and-chart-single');
-
-    if(!$currentBox.find('.dtable').length) return;
-    $currentBox.find('.dtable').remove();
-    $currentBox.find('.table-side').append('<div class="dtable"></div>');
-
-    window.initDTable($currentBox.find('.dtable'), header, data);
-    if(viewType == 'multiple') window.initQueryForm(metricID, $currentBox.find('.metric-name'), header, data);
-}
-
 window.getMetricRecordType = function(recordRow)
 {
     if(!recordRow) return false;
@@ -357,9 +346,6 @@ window.updateMetricBoxs = function(id, isChecked)
  */
 window.appendMetricBox = function(id, mode = 'add')
 {
-    var $form = $('#queryForm' + id);
-    var formData = window.getFormData($form);
-
     $.get($.createLink('metric', 'ajaxGetMultipleMetricBox', 'metricID=' + id), function(resp)
     {
         $('.table-and-charts').append(resp);
@@ -376,7 +362,6 @@ window.handleQueryClick = function(id, viewType = 'single')
 
     $.post($.createLink('metric', 'ajaxGetTableAndCharts', 'metricID=' + id + '&viewType=' + viewType), formData, function(resp)
     {
-        console.log(resp);
         if(viewType == 'multiple')
         {
             $('#metricBox' + id).find('.table-and-chart').replaceWith(resp);

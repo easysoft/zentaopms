@@ -1270,6 +1270,15 @@ class metricModel extends model
         return $series;
     }
 
+    /**
+     * 获取一个echarts的legend配置。
+     * Get lengend options of echarts by head and series.
+     *
+     * @param  array    $head
+     * @param  array    $series 
+     * @access public
+     * @return array
+     */
     public function getEchartLegend($head, $series)
     {
         $headLength = count($head);
@@ -1359,5 +1368,13 @@ class metricModel extends model
         $options['data'] = $seriesData;
 
         return $options;
+    }
+
+    public function getChartTypeList($head)
+    {
+        $chartTypeList = $this->lang->metric->chartTypeList;
+        if(count($head) != 3) unset($chartTypeList['pie']);
+
+        return $chartTypeList;
     }
 }

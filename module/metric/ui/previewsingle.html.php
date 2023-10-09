@@ -343,14 +343,14 @@ div
                 div
                 (
                     setClass('chart-type'),
-                    picker
+                    $echartOptions ? picker
                     (
                         set::name('chartType'),
                         set::items($chartTypeList),
                         set::value('line'),
                         set::required(true),
                         set::onchange("window.handleChartTypeChange($current->id, 'single')"),
-                    )
+                    ) : null,
                 ),
                 div
                 (

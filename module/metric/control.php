@@ -65,9 +65,6 @@ class metric extends control
             $resultData   = $this->metricZen->getViewTableData($metric, $result);
         }
 
-        $chartTypeList = $this->lang->metric->chartTypeList;
-        if(count($resultHeader) != 3) unset($chartTypeList['pie']);
-
         $this->view->metrics       = $metrics;
         $this->view->current       = $current;
         $this->view->metricList    = $this->lang->metric->metricList;
@@ -79,7 +76,7 @@ class metric extends control
         $this->view->filtersBase64 = $filtersBase64;
         $this->view->resultHeader  = $resultHeader;
         $this->view->resultData    = $resultData;
-        $this->view->chartTypeList = $chartTypeList;
+        $this->view->chartTypeList = $this->metric->getChartTypeList($resultHeader);
         $this->view->echartOptions = $this->metric->getEchartsOptions($resultHeader, $resultData);
         $this->display();
     }
@@ -248,6 +245,7 @@ class metric extends control
         $this->view->metric        = $metric;
         $this->view->resultHeader  = $resultHeader;
         $this->view->resultData    = $resultData;
+        $this->view->chartTypeList = $this->metric->getChartTypeList($resultHeader);
         $this->view->echartOptions = $this->metric->getEchartsOptions($resultHeader, $resultData);
 
         $this->display();
