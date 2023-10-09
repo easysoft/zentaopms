@@ -87,10 +87,10 @@ div(
         div(set::className('absolute top-0 right-0 z-20 arrow-right btn-right'), icon('chevron-right')),
     )
 );
-
 sidebar
 (
     set::side('left'),
+    setClass('repo-sidebar'),
     dropmenu
     (
         setID('repoBranchDropMenu'),
@@ -100,7 +100,7 @@ sidebar
         set::text($dropMenus['selected']),
         set::data(array('data' => $menuData, 'tabs' => $tabs)),
     ),
-    tree
+    treeEditor
     (
         set::id('monacoTree'),
         set::items($tree),

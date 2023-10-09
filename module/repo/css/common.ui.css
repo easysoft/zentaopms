@@ -52,3 +52,4 @@
 #reviewBugContainer {position: fixed; right: 0; top: 0px; width: 25%; height: 100%; background: #fff; border-left: 5px solid #F4F5F7; overflow-y: auto; z-index: 9;}
 #log .action-btn .btn {padding-left: .25rem; padding-right: .25rem;}
 .dropmenu-btn>.text {max-width: 280px;}
+#mainMenu+#mainContent>.repo-sidebar{margin-top: 0;}
