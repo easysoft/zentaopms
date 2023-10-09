@@ -208,14 +208,13 @@ class actionModel extends model
      * 根据对象类型和对象ID获取操作记录。
      * Get actions by objectType and objectID.
      *
-     * @param  string $objectType
-     * @param  int    $objectID
+     * @param  string    $objectType
+     * @param  array|int $objectID
      * @access public
      * @return array
      */
-    public function getList(string $objectType, int $objectID): array
+    public function getList(string $objectType, array|int $objectID): array
     {
-        $objectID  = is_array($objectID) ? $objectID : (int)$objectID;
         $modules   = $objectType == 'module' ? $this->dao->select('id')->from(TABLE_MODULE)->where('root')->in($objectID)->fetchPairs('id') : array();
         $commiters = $this->loadModel('user')->getCommiters();
         $actions   = $this->actionTao->getActionListByTypeAndID($objectType, $objectID, $modules);

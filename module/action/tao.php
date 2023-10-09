@@ -304,7 +304,7 @@ class actionTao extends actionModel
      * @access protected
      * @return array
      */
-    protected function getActionListByTypeAndID(string $objectType, int $objectID, array $modules): array
+    protected function getActionListByTypeAndID(string $objectType, array|int $objectID, array $modules): array
     {
         return $this->dao->select('*')->from(TABLE_ACTION)
             ->beginIF($objectType == 'project')
