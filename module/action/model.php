@@ -1560,7 +1560,6 @@ class actionModel extends model
      */
     public function processActionForAPI(array $actions, array $users = array(), array $objectLang = array()): array
     {
-        $actions = (array)$actions;
         foreach($actions as $action)
         {
             $action->actor = zget($users, $action->actor);
@@ -1576,7 +1575,7 @@ class actionModel extends model
             {
                 foreach($action->history as $i => $history)
                 {
-                    $history->fieldName = zget($objectLang, $history->field);
+                    $history->fieldName  = zget($objectLang, $history->field);
                     $action->history[$i] = $history;
                 }
             }
