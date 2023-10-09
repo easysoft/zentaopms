@@ -933,8 +933,7 @@ class actionModel extends model
             /* Add objectName field to the action. */
             $this->actionTao->addObjectNameForAction($action, $objectNames);
 
-            $projectID = isset($relatedProjects[$action->objectType][$action->objectID]) ? $relatedProjects[$action->objectType][$action->objectID] : 0;
-
+            $projectID  = isset($relatedProjects[$action->objectType][$action->objectID]) ? $relatedProjects[$action->objectType][$action->objectID] : 0;
             $actionType = strtolower($action->action);
             $objectType = strtolower($action->objectType);
 
@@ -952,13 +951,9 @@ class actionModel extends model
             /* Get gitlab, gitea or gogs objectname. */
             if(empty($action->objectName) && (substr($objectType, 0, 6) == 'gitlab' || substr($objectType, 0, 5) == 'gitea' || substr($objectType, 0, 4) == 'gogs')) $action->objectName = $action->extra;
 
-            /* 其它类型的action，设置action的objectLink属性。 */
-            /* For other types of actions, set the objectLink attribute of the action. */
+            /* 设置action的objectLink属性。 */
+            /* Set the objectLink attribute of the action. */
             $this->setObjectLink($action, $deptUsers, $shadowProducts, zget($projectMultiples, $projectID, ''));
-
-            /* 设置合并请求的objectLink属性。 */
-            /* Set merge request objectLink. */
-            if((empty($action->objectName) || $action->action == 'deleted') && $action->objectType == 'mr') $action->objectLink = '';
 
             $action->major = (isset($this->config->action->majorList[$action->objectType]) && in_array($action->action, $this->config->action->majorList[$action->objectType])) ? 1 : 0;
         }

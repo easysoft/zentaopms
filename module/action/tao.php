@@ -1064,6 +1064,7 @@ class actionTao extends actionModel
             if($todo->private == 1 && $todo->account != $this->app->user->account) return false;
         }
 
+        if($action->objectType == 'mr' && (empty($action->objectName) || $action->action == 'deleted')) return false;
         if($action->objectType == 'stakeholder' && $action->project == 0) return false;
         if($action->objectType == 'chartgroup') return false;
         if($action->objectType == 'branch' && $action->action == 'mergedbranch') return false;
