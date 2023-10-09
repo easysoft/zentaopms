@@ -1294,6 +1294,7 @@ class testtaskModel extends model
         $run->lastRunner  = $this->app->user->account;
         $run->lastRunDate = $now;
 
+        $this->loadModel('action');
         foreach($cases as $caseID => $postCase)
         {
             $runID       = zget($runs, $caseID, 0);
@@ -1312,6 +1313,8 @@ class testtaskModel extends model
             $case->lastRunResult = $caseResult;
             $this->dao->update(TABLE_CASE)->data($case)->where('id')->eq($caseID)->exec();
 
+            $this->action->create('case', $caseID, 'run', '', $taskID);
+
             if(!$runID) continue;
 
             $run->lastRunResult = $caseResult;
@@ -1320,9 +1323,6 @@ class testtaskModel extends model
 
             if(dao::isError()) return false;
         }
-
-        $this->loadModel('action');
-        foreach(array_keys($cases) as $caseID) $this->action->create('case', $caseID, 'run', '', $taskID);
 
         return true;
     }
