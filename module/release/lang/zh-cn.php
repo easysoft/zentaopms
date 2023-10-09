@@ -68,7 +68,7 @@ $lang->release->mailto         = '抄送给';
 $lang->release->mailContent    = '<p>尊敬的用户，您好！</p><p style="margin-left: 30px;">您反馈的如下需求和Bug已经在 %s版本中发布，请联系客户经理查看最新版本。</p>';
 $lang->release->storyList      = '<p style="margin-left: 30px;">需求列表：%s。</p>';
 $lang->release->bugList        = '<p style="margin-left: 30px;">Bug列表：%s。</p>';
-$lang->release->pageAllSummary = '本页共 <strong>%total%</strong> 个发布，正常 <strong>%normal%</strong>，停止维护 <strong>%terminate%</strong>。';
+$lang->release->pageAllSummary = '本页共 <strong>%s</strong> 个发布，正常 <strong>%s</strong>，停止维护 <strong>%s</strong>。';
 $lang->release->pageSummary    = "本页共 <strong>%s</strong> 个发布。";
 $lang->release->fileName       = '文件名';
 $lang->release->exportRange    = '要导出的数据';
