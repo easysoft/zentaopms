@@ -89,14 +89,12 @@ detailBody
     history(),
     detailSide
     (
-        sectionList
+        section
         (
-            section
-            (
-                set::title($lang->testsuite->legendDesc),
-                set::content(!empty($suite->desc) ? $suite->desc : "<span class='text-gray'>{$lang->noDesc}</span>"),
-                set::useHtml(true)
-            ),
+            setClass('py-4'),
+            set::title($lang->testsuite->legendDesc),
+            set::content(!empty($suite->desc) ? $suite->desc : "<span class='text-gray'>{$lang->noDesc}</span>"),
+            set::useHtml(true)
         ),
     ),
 );
