@@ -1804,7 +1804,10 @@ class screenModel extends model
      */
     public function getActiveProductCard($year, $month)
     {
-        $noDeletedProductList = $this->dao->select('id')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->fetchPairs();
+        $noDeletedProductList = $this->dao->select('id')->from(TABLE_PRODUCT)
+            ->where('deleted')->eq('0')
+            ->andWhere('shadow')->eq(0)
+            ->fetchPairs();
 
         $activeProductList = $this->dao->select('distinct product')->from(TABLE_ACTION)
             ->where('product')->ne(',0,')
