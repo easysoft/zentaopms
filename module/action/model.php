@@ -1705,7 +1705,7 @@ class actionModel extends model
                 ->where('id')->ne($action->objectID)
                 ->beginIF($action->objectType == 'program' || $action->objectType == 'project')->andWhere("(name = '{$object->name}' AND parent = {$object->parent})", true)->fi()
                 ->beginIF($action->objectType == 'execution')->andWhere("(name = '{$object->name}' AND project = {$sprintProject})", true)->fi()
-                ->beginIF($action->objectType == 'project' && $object->code)->orWhere("(code = '{$object->code}' and model = '$object->model')")->fi()
+                ->beginIF($action->objectType == 'project' && $object->code)->orWhere("(code = '{$object->code}' and model = '{$object->model}')")->fi()
                 ->beginIF($action->objectType == 'execution' && $object->code)->orWhere("code = '{$object->code}'")->fi()
                 ->markRight(1)
                 ->beginIF($action->objectType == 'program')->andWhere('type')->eq('program')->fi()
