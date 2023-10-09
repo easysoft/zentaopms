@@ -1495,7 +1495,8 @@ class repo extends control
             }
         }
 
-        $logs = array();
+        $logs    = array();
+        $version = 1;
         if($repo->SCM != 'Gitlab')
         {
             $latestInDB = $this->dao->select('t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
