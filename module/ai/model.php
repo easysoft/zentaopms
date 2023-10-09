@@ -371,7 +371,7 @@ class aiModel extends model
         if($this->config->ai->models[$this->modelConfig->type] == 'ernie')
         {
             /* Extract function call arguments. */
-            if(!empty($response->function_call)) return $response->function_call->arguments;
+            if(!empty($response->function_call)) return array($response->function_call->arguments);
         }
         else
         {
@@ -546,15 +546,14 @@ class aiModel extends model
         $chatResponse = $this->makeRequest('chat', $postData);
         $chatMessages = $this->parseChatResponse($chatResponse);
 
-        $chatMessage = end($chatMessages);
+        $chatMessage = current($chatMessages);
         if(empty($chatMessage)) return false;
 
         /* Second conversation for JSON output. */
-        $messages     = array_merge($this->lang->ai->engineeredPrompts->askForFunctionCalling, array((object)array('role' => 'user', 'content' => $chatMessage)));
-        $functions    = array((object)array('name' => 'function', 'parameters' => $schema));
-        $functionCall = (object)array('name' => 'function');
+        $messages  = array_merge($this->lang->ai->engineeredPrompts->askForFunctionCalling, array((object)array('role' => 'user', 'content' => $chatMessage)));
+        $functions = array((object)array('name' => 'function', 'description' => 'function', 'parameters' => $schema));
 
-        $data = compact('messages', 'functions', 'functionCall');
+        $data = compact('messages', 'functions');
         if(!empty($options))
         {
             foreach($options as $key => $value) $data[$key] = $value;
