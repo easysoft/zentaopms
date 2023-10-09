@@ -892,7 +892,7 @@ class actionTao extends actionModel
      * @access protected
      * @return void
      */
-    protected function AddObjectNameForAction(object $action, array $objectNames)
+    protected function addObjectNameForAction(object $action, array $objectNames)
     {
         $action->objectName = isset($objectNames[$action->objectType][$action->objectID]) ? $objectNames[$action->objectType][$action->objectID] : '';
 

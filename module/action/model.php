@@ -369,7 +369,6 @@ class actionModel extends model
                 if(isset($objectNames['jenkins'][$trash->objectID])) $objectType = 'jenkins';
                 $trash->objectType = $objectType;
             }
-
             $trash->objectName = isset($objectNames[$objectType][$trash->objectID]) ? $objectNames[$objectType][$trash->objectID] : '';
         }
 
@@ -900,11 +899,6 @@ class actionModel extends model
      */
     public function transformActions(array $actions): array
     {
-        $this->app->loadLang('todo');
-        $this->app->loadLang('stakeholder');
-        $this->app->loadLang('branch');
-        $this->app->loadLang('execution');
-
         /* 获取评论用户以及受信任的部门用户。 */
         /* Get commiters and the same department users. */
         $commiters = $this->loadModel('user')->getCommiters();
@@ -912,13 +906,10 @@ class actionModel extends model
 
         /* 通过action获取对象名称，所属项目以及需求。 */
         /* Get object names, object projects and requirements by actions. */
-        extract($this->getRelatedDataByActions($actions));
+        list($objectNames, $relatedProjects, $requirements) = $this->getRelatedDataByActions($actions);
 
         $projectIdList = array();
-        foreach($relatedProjects as $objectType => $idList)
-        {
-            if(is_array($idList)) $projectIdList = array_merge($projectIdList, $idList);
-        }
+        foreach($relatedProjects as $objectType => $idList) $projectIdList = array_merge($projectIdList, $idList);
 
         /* 获取需要验证的元素列表。 */
         /* Get the list of elements that need to be verified. */
@@ -940,7 +931,7 @@ class actionModel extends model
 
             /* 为action添加objectName属性。 */
             /* Add objectName field to the action. */
-            $this->actionTao->AddObjectNameForAction($action, $objectNames);
+            $this->actionTao->addObjectNameForAction($action, $objectNames);
 
             $projectID = isset($relatedProjects[$action->objectType][$action->objectID]) ? $relatedProjects[$action->objectType][$action->objectID] : 0;
 
@@ -1014,10 +1005,7 @@ class actionModel extends model
 
         $objectNames['user'][0] = 'guest';    // Add guest account.
 
-        $relatedData['objectNames']     = $objectNames;
-        $relatedData['relatedProjects'] = $relatedProjects;
-        $relatedData['requirements']    = $requirements;
-        return $relatedData;
+        return array($objectNames, $relatedProjects, $requirements);
     }
 
     /**
