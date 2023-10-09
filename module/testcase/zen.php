@@ -1512,7 +1512,7 @@ class testcaseZen extends testcase
         $steps          = array();
         $files          = array();
         $caseIdList     = !empty($caseID) ? $caseID : $this->post->caseIdList;
-        $caseIdList     = str_replace('case_' , '', $caseIdList);
+        $caseIdList     = str_replace('case_' , '', (string)$caseIdList);
         $caseIdList     = explode(',' , $caseIdList);
         $fromCases      = $this->testcase->getByList($caseIdList);
         $fromSteps      = $this->testcase->fetchStepsByList($caseIdList);
@@ -1887,7 +1887,7 @@ class testcaseZen extends testcase
         $libCase->fromCaseID      = $case->id;
         $libCase->fromCaseVersion = $case->version;
         $libCase->order           = $maxOrder;
-        $libCase->module          = empty($case->module) ? 0 : $this->importCaseRelatedModules($libID, $case->module, $maxModuleOrder);
+        $libCase->module          = empty($case->module) ? 0 : $this->testcase->importCaseRelatedModules($libID, $case->module, $maxModuleOrder);
 
         if(!isset($libCases[$case->id]))
         {
