@@ -1853,10 +1853,10 @@ class actionModel extends model
     }
 
     /**
-     * 获取objecttype为team的link元素。
+     * 获取对象类型为team的link元素。
      * Get link element of objecttype team.
      *
-     * @param  object $action
+     * @param  object  $action
      * @access private
      * @return array
      */
