@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+unset($lang->testcase->resultList['n/a']);
+
 $caseItems = array();
 foreach($cases as $caseID => $case)
 {
