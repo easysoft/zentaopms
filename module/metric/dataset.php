@@ -519,6 +519,22 @@ class dataset
     }
 
     /**
+     * 获取上线计划数据。
+     * Get deployment data.
+     *
+     * @param  string    $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getDeployment($fieldList)
+    {
+        return $this->dao->select($fieldList)->from(TABLE_DEPLOY)->alias('t1')
+            ->leftJoin(TABLE_DEPLOYPRODUCT)->alias('t2')->on('t1.id=t2.deploy')
+            ->where('t1.deleted')->eq('0')
+            ->query();
+    }
+
+    /**
      * 获取流水线数据。
      * Get pipeline.
      *
