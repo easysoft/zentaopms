@@ -1517,15 +1517,14 @@ class actionModel extends model
      * @access public
      * @return void
      */
-    public function printActionForGitLab(object $action)
+    public function printActionForGitLab(object $action): void
     {
         if(!isset($action->objectType) || !isset($action->action)) return false;
 
-        $objectType = $action->objectType;
         $actionType = strtolower($action->action);
-
-        if(isset($this->lang->action->apiTitle->$actionType) && isset($action->extra))
+        if(isset($this->lang->action->apiTitle->{$actionType}) && isset($action->extra))
         {
+            /* 如果extra列是一个用户名，则组装链接。 */
             /* If extra column is a username, then assemble link to that. */
             if($action->action == "assigned")
             {
@@ -1537,11 +1536,11 @@ class actionModel extends model
                 }
             }
 
-            echo sprintf($this->lang->action->apiTitle->$actionType, $action->extra);
+            echo sprintf($this->lang->action->apiTitle->{$actionType}, $action->extra);
         }
-        elseif(isset($this->lang->action->apiTitle->$actionType) && !isset($action->extra))
+        elseif(isset($this->lang->action->apiTitle->{$actionType}) && !isset($action->extra))
         {
-            echo $this->lang->action->apiTitle->$actionType;
+            echo $this->lang->action->apiTitle->{$actionType};
         }
         else
         {
