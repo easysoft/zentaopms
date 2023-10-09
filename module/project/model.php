@@ -2060,7 +2060,7 @@ class projectModel extends model
             {
                 $hour->totalEstimate += $task->estimate;
                 $hour->totalConsumed += $task->consumed;
-                if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += $task->left;
+                if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += (float)$task->left;
             }
             $hours[$executionID] = $hour;
 
