@@ -709,6 +709,10 @@ class upgradeModel extends model
                 }
                 $this->processHistoryDataForMetric();
                 break;
+            case '18_8':
+                /* Upgrade members for testtask. */
+                $this->upgradeTesttaskMembers();
+                break;
         }
 
         $this->deletePatch();
@@ -9879,5 +9883,24 @@ class upgradeModel extends model
                 ->exec();
         }
         $this->dao->commit();
+    }
+
+    /**
+     * Upgrade testtask members.
+     *
+     * @access public
+     * @return void
+     */
+    public function upgradeTesttaskMembers()
+    {
+        $memberGroup = $this->dao->select('task,lastRunner')->from(TABLE_TESTRUN)
+            ->where('lastRunner')->ne('')
+            ->fetchGroup('task', 'lastRunner');
+
+        foreach($memberGroup as $taskID => $members)
+        {
+            $members = implode(',', array_keys($members));
+            $this->dao->update(TABLE_TESTTASK)->set('members')->eq($members)->where('id')->eq($taskID)->exec();
+        }
     }
 }

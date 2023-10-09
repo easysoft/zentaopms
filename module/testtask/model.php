@@ -36,8 +36,10 @@ class testtaskModel extends model
             ->stripTags($this->config->testtask->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->join('type', ',')
+            ->join('members', ',')
             ->remove('files,labels,uid,contactListMenu')
             ->get();
+        $task->members = trim($task->members, ',');
 
         $task = $this->loadModel('file')->processImgURL($task, $this->config->testtask->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_TESTTASK)->data($task)
@@ -87,8 +89,9 @@ class testtaskModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('t1.execution')->in("0,{$this->app->user->view->sprints}")->fi()
             ->beginIF($scopeAndStatus[0] == 'local')->andWhere('t1.product')->eq((int)$productID)->fi()
             ->beginIF($scopeAndStatus[0] == 'all')->andWhere('t1.product')->in($products)->fi()
+            ->beginIF(strtolower($scopeAndStatus[1]) == 'myinvolved')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.members)")->fi()
             ->beginIF(strtolower($scopeAndStatus[1]) == 'totalstatus')->andWhere('t1.status')->in('blocked,doing,wait,done')->fi()
-            ->beginIF(!in_array(strtolower($scopeAndStatus[1]), array('totalstatus', 'review'), true))->andWhere('t1.status')->eq($scopeAndStatus[1])->fi()
+            ->beginIF(!in_array(strtolower($scopeAndStatus[1]), array('totalstatus', 'review', 'myinvolved'), true))->andWhere('t1.status')->eq($scopeAndStatus[1])->fi()
             ->beginIF($branch !== 'all')->andWhere("CONCAT(',', t4.branch, ',')")->like("%,$branch,%")->fi()
             ->beginIF($beginTime)->andWhere('t1.begin')->ge($beginTime)->fi()
             ->beginIF($endTime)->andWhere('t1.end')->le($endTime)->fi()
@@ -105,6 +108,7 @@ class testtaskModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
+
         foreach($tasks as $taskID => $task)
         {
             if($task->multiple)
@@ -776,8 +780,10 @@ class testtaskModel extends model
             ->stripTags($this->config->testtask->editor->edit['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->join('type', ',')
+            ->join('members', ',')
             ->remove('files,labels,uid,comment,contactListMenu')
             ->get();
+        $task->members = trim($task->members, ',');
 
         /* Fix bug #35419. */
         $execution     = $this->loadModel('execution')->getByID($task->execution);
