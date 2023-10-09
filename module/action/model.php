@@ -58,8 +58,6 @@ class actionModel extends model
         if(empty($comment)) $comment = '';
         $action->comment = fixer::stripDataTags($comment);
 
-        /* 处理评论内的图片. */
-        /* Process images in comment. */
         if($this->post->uid)
         {
             $action = $this->loadModel('file')->processImgURL($action, 'comment', $this->post->uid);
@@ -77,12 +75,8 @@ class actionModel extends model
 
         if($this->post->uid) $this->file->updateObjectID($this->post->uid, $objectID, $objectType);
 
-        /* 调用消息通知函数。 */
-        /* Call the message notification function. */
         $this->loadModel('message')->send(strtolower($objectType), $objectID, $actionType, $actionID, $actor, $extra);
 
-        /* 为全局搜索添加索引。 */
-        /* Add index for global search. */
         $this->saveIndex($objectType, $objectID, $actionType);
 
         return $actionID;
