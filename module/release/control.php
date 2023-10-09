@@ -33,11 +33,12 @@ class release extends control
     }
 
     /**
+     * 发布列表。
      * Browse releases.
      *
      * @param  int    $productID
      * @param  string $branch
-     * @param  string $type
+     * @param  string $type       all|normal|terminate
      * @param  string $orderBy
      * @param  string $param
      * @param  int    $recTotal
@@ -66,9 +67,10 @@ class release extends control
 
         $queryID   = $type == 'bySearch' ? (int)$param : 0;
         $actionURL = $this->createLink('release', 'browse', "productID={$productID}&branch={$branch}&type=bySearch&orderBy={$orderBy}&param=myQueryID");
-        $this->release->buildSearchForm($queryID, $actionURL, $this->view->product, $branch);
+        $this->releaseZen->buildSearchForm($queryID, $actionURL, $this->view->product, $branch);
 
-        $releases = $type == 'bySearch' ? $this->release->getListBySearch($productID, $queryID, $orderBy, $pager) : $this->release->getList($productID, $branch, $type, $orderBy, $queryID, $pager);
+        $releaseQuery = $type == 'bySearch' ? $this->releaseZen->getSearchQuery($queryID) : '';
+        $releases     = $this->release->getList($productID, $branch, $type, $orderBy, $releaseQuery, $pager);
 
         $this->view->title       = $this->view->product->name . $this->lang->colon . $this->lang->release->browse;
         $this->view->releases    = $this->releaseZen->processReleaseListData($releases);

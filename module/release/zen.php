@@ -88,5 +88,57 @@ class releaseZen extends release
 
         return $release;
     }
-}
 
+    /**
+     * 构建搜索表单字段。
+     * Build search form fields.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @param  object $product
+     * @param  string $branch
+     * @access public
+     * @return void
+     */
+    public function buildSearchForm(int $queryID, string $actionURL, object $product, string $branch): void
+    {
+        $this->config->release->search['queryID']   = $queryID;
+        $this->config->release->search['actionURL'] = $actionURL;
+
+        if($product->type != 'normal') $this->config->release->search['params']['branch']['values'] = $this->loadModel('branch')->getPairs($product->id, 'all');
+        $this->config->release->search['params']['build']['values'] = $this->loadmodel('build')->getBuildPairs(array($product->id), $branch, 'notrunk|withbranch|hasproject', 0, 'execution', '', false);
+
+        $this->loadModel('search')->setSearchParams($this->config->release->search);
+    }
+
+    /**
+     * 获取发布列表的搜索条件。
+     * Get the search condition of release list.
+     *
+     * @param  int    $queryID
+     * @access public
+     * @return string
+     */
+    public function getSearchQuery(int $queryID): string
+    {
+        if($queryID)
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set('releaseQuery', $query->sql);
+                $this->session->set('releaseForm', $query->form);
+            }
+        }
+
+        if($this->session->releaseQuery === false) $this->session->set('releaseQuery', ' 1 = 1');
+        $releaseQuery = $this->session->releaseQuery;
+
+        /* Replace the condition of all branch to 1. */
+        $allBranch = "`branch` = 'all'";
+        if(strpos($releaseQuery, $allBranch) !== false) $releaseQuery = str_replace($allBranch, '1', $releaseQuery);
+        $releaseQuery = preg_replace('/`(\w+)`/', 't1.`$1`', $releaseQuery);
+
+        return $releaseQuery;
+    }
+}
