@@ -1399,11 +1399,8 @@ class programModel extends model
             $stats[$projectID]['totalEstimate'] = $projectStats['PV'];
             $stats[$projectID]['totalConsumed'] = $projectStats['AC'];
             $stats[$projectID]['totalLeft']     = $projectStats['left'];
-            if(empty($project->deleted))
-            {
-                $stats[$projectID]['totalConsumedNotDel'] = $projectStats['AC'];
-                $stats[$projectID]['totalLeftNotDel']     = $projectStats['left'];
-            }
+            $stats[$projectID]['totalConsumedNotDel'] = empty($project->deleted) ? $projectStats['AC'] : 0;
+            $stats[$projectID]['totalLeftNotDel']     = empty($project->deleted) ? $projectStats['left'] : 0;
         }
 
         foreach($teamMembers as $projectID => $teamCount)
