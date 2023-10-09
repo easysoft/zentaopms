@@ -25,25 +25,6 @@ class releaseTest
     }
 
     /**
-     * function getListTest by release
-     *
-     * @param  string $productID
-     * @param  string $branch
-     * @param  string $type
-     * @access public
-     * @return array
-     */
-
-    public function getListTest($productID, $branch = 'all', $type = 'all', $orderBy = 't1.date_desc', $pager = null)
-    {
-        $objects = $this->objectModel->getList($productID, $branch, $type, $orderBy, $pager);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
      * 创建一个发布。
      * Create a release.
      *
