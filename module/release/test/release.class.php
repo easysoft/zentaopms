@@ -70,31 +70,25 @@ class releaseTest
         return $object;
     }
     /**
+     * 编辑一个发布。
      * Update a release.
      *
-     * @param  int    $releaseID
+     * @param  int               $releaseID
+     * @param  array             $data
      * @access public
-     * @return array
+     * @return array|object|false
      */
-
-    public function updateTest($releaseID, $param = array())
+    public function updateTest(int $releaseID, array $data = array()): array|object|false
     {
-        $date   = date('Y-m-d');
-        $labels = array();
-        $files  = array();
-        $mailto = array();
+        $release = new stdclass();
+        foreach($data as $key => $value) $release->$key = $value;
+        $oldRelease = $this->objectModel->getByID($releaseID);
+        if(!$oldRelease) return false;
 
-        $createFields = array('name' => '','marker' => '1', 'build' => '', 'date' => $date, 'desc' => '', 'mailto' => $mailto , 'labels' => $labels, 'files' => $files);
-
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-        $this->objectModel->update($releaseID);
-        unset($_POST);
-
+        $this->objectModel->update($release, $oldRelease);
         if(dao::isError()) return dao::getError();
 
-        $objects = $this->objectModel->getByID($releaseID);
-        return $objects;
+        return $this->objectModel->getByID($releaseID);
     }
 
     /**
