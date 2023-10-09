@@ -216,10 +216,12 @@ class actionZen extends action
      * @param  object $object
      * @param  string $replaceName
      * @param  string $replaceCode
+     * @param  string $table
+     * @param  object $oldAction
      * @access public
-     * @return array
+     * @return void
      */
-    public function recoverObject(object $repeatObject, object $object, string $replaceName, string $replaceCode): array
+    public function recoverObject(object $repeatObject, object $object, string $replaceName, string $replaceCode, string $table, object $oldAction)
     {
         $recoverData = array();
         if($repeatObject->name == $object->name && $repeatObject->code && $repeatObject->code == $object->code)

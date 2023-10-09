@@ -151,7 +151,7 @@ class action extends control
                 }
                 elseif($confirmChange == 'yes')
                 {
-                    $this->actionZen->recoverObject($repeatObject, $object, $replaceName, $replaceCode);
+                    $this->actionZen->recoverObject($repeatObject, $object, $replaceName, $replaceCode, $table, $oldAction);
                 }
             }
 

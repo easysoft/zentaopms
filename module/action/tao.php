@@ -1135,4 +1135,35 @@ class actionTao extends actionModel
 
         return $params;
     }
+
+    /**
+     * 根据对象类型获取恢复对象参数。
+     * Get object params by object type.
+     *
+     * @param  string    $objectType
+     * @access protected
+     * @return array
+     */
+    protected function getUndeleteParamsByObjectType(string $objectType): array
+    {
+        $table   = $this->config->objectTables[$objectType];
+        $orderby = '';
+        $field   = '*';
+        switch($objectType)
+        {
+            case 'product':
+                $field = 'id, name, code, acl';
+                break;
+            case 'program':
+            case 'project':
+                $field = 'id, acl, name, hasProduct';
+                break;
+            case 'doc':
+                $table   = TABLE_DOCCONTENT;
+                $orderby = 'version desc';
+            default:
+                break;
+       }
+        return array($table, $orderby, $field);
+    }
 }
