@@ -1313,7 +1313,7 @@ class actionModel extends model
     public function hideOne(int $actionID): bool
     {
         $action = $this->getById($actionID);
-        if($action->action != 'deleted') return false;
+        if(!$action || $action->action != 'deleted') return false;
 
         $this->dao->update(TABLE_ACTION)->set('extra')->eq(self::BE_HIDDEN)->where('id')->eq($actionID)->exec();
         $this->create($action->objectType, $action->objectID, 'hidden');
