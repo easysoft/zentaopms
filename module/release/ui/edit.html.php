@@ -79,7 +79,7 @@ formPanel
         editor
         (
             set::name('desc'),
-            html($release->desc),
+            html(htmlspecialchars_decode($release->desc)),
             set::rows('10'),
         )
     ),
@@ -101,5 +101,6 @@ formPanel
     ),
     formHidden('product', $release->product),
 );
+
 /* ====== Render page ====== */
 render();
