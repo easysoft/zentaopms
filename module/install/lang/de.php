@@ -37,7 +37,7 @@ LinkedIn: <a href='https://www.linkedin.com/company/1156596/' target='_blank'>Ze
 Facebook: <a href='https://www.facebook.com/natureeasysoft' target='_blank'>ZenTao Software</a>
 Twitter: <a href='https://twitter.com/ZentaoA' target='_blank'>ZenTao ALM</a>
 
-You are installing ZenTao <strong class='text-danger'>%s</strong>.
+You are installing <strong class='text-danger'>ZenTao %s</strong>.
 EOT;
 
 $lang->install->selectMode          = "Select mode";

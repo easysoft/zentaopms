@@ -34,6 +34,7 @@ $lang->proName        = '专业版';
 $lang->bizName        = '企业版';
 $lang->maxName        = '旗舰版';
 $lang->liteName       = '迅捷版';
+$lang->devopsPrefix   = '禅道DevOps平台';
 $lang->logoImg        = 'zt-logo.png';
 $lang->welcome        = "%s项目管理系统";
 $lang->logout         = '退出';

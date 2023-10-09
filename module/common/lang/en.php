@@ -34,6 +34,7 @@ $lang->proName        = 'Pro';
 $lang->bizName        = 'Biz';
 $lang->maxName        = 'Max';
 $lang->liteName       = 'Lite';
+$lang->devopsPrefix   = 'DevOps ';
 $lang->logoImg        = 'zt-logo-en.png';
 $lang->welcome        = "%s ALM";
 $lang->logout         = 'Logout';
