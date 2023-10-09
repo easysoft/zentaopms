@@ -30,6 +30,8 @@ fields:
     range: 1
   - field: desc
     range: 1
+  - field: commits
+    range: 10000{1},30000{1},50000{1}
   - field: deleted
     range: 0
 ...
