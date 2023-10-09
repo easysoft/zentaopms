@@ -122,7 +122,7 @@ class release extends control
         $this->view->productID   = $productID;
         $this->view->builds      = $builds;
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed');
-        $this->view->lastRelease = $this->release->getLast($productID, $branch);
+        $this->view->lastRelease = $this->release->getLast($productID, (int)$branch);
 
         $this->display();
     }

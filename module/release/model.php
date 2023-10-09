@@ -110,20 +110,20 @@ class releaseModel extends model
     }
 
     /**
+     * 获取产品下的最新创建的发布。
      * Get last release.
      *
-     * @param  int    $productID
-     * @param  int    $branch
+     * @param  int          $productID
+     * @param  int          $branch
      * @access public
-     * @return bool | object
+     * @return object|false
      */
-    public function getLast($productID, $branch = 0)
+    public function getLast(int $productID, int $branch = 0): object|false
     {
         return $this->dao->select('id, name')->from(TABLE_RELEASE)
-            ->where('product')->eq((int)$productID)
+            ->where('product')->eq($productID)
             ->beginIF($branch)->andWhere('branch')->eq($branch)->fi()
             ->orderBy('id DESC')
-            ->limit(1)
             ->fetch();
     }
 
