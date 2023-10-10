@@ -4663,7 +4663,7 @@ class taskModel extends model
 
             $taskName  = '';
             $taskLink  = helper::createLink('task', 'view', "taskID=$task->id", '', $this->config->vision == 'lite' ? true : false);
-            $linkClass = $this->config->vision == 'lite' ? 'class="iframe"' : '';
+            $linkClass = $this->config->vision == 'lite' ? 'data-toggle="modal" data-type="iframe"' : '';
 
             if($task->parent > 0 and isset($task->parentName)) $task->name = "{$task->parentName} / {$task->name}";
             if(!empty($task->product) and isset($branchGroups[$task->product][$task->branch]) and $showBranch) $taskName .= "<span class='label label-badge label-outline'>" . $branchGroups[$task->product][$task->branch] . '</span> ';
