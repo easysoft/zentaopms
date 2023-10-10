@@ -311,7 +311,7 @@ class actionModel extends model
      * Get deleted objects by search.
      *
      * @param  string     $objectType
-     * @param  string     $type all|hidden
+     * @param  string     $type       all|hidden
      * @param  string|int $queryID
      * @param  string     $orderBy
      * @param  object     $pager
@@ -336,45 +336,34 @@ class actionModel extends model
         }
         else
         {
-            if($this->session->trashQuery == false) $this->session->set('trashQuery', ' 1 = 1');
+            if($this->session->trashQuery === false) $this->session->set('trashQuery', ' 1 = 1');
         }
 
         $extra      = $type == 'hidden' ? self::BE_HIDDEN : self::CAN_UNDELETED;
-        $trashQuery = $this->session->trashQuery;
-        $trashQuery = str_replace(array('`objectID`', '`actor`', '`date`'), array('t1.`objectID`', 't1.`actor`', 't1.`date`'), $trashQuery);
         $table      = $this->config->objectTables[$objectType];
         $nameField  = isset($this->config->action->objectNameFields[$objectType]) ? 't2.' . "`{$this->config->action->objectNameFields[$objectType]}`" : '';
-
+        $trashQuery = $this->session->trashQuery;
+        $trashQuery = str_replace(array('`objectID`', '`actor`', '`date`'), array('t1.`objectID`', 't1.`actor`', 't1.`date`'), $trashQuery);
         if($nameField) $trashQuery = preg_replace("/`objectName`/", $nameField, $trashQuery);
+        $queryFields = $objectType != 'pipeline' ? "t1.*, {$nameField} AS objectName" : 't1.*, t1.objectType AS type, t2.name AS objectName, t2.type AS objectType';
 
-        if($objectType != 'pipeline')
-        {
-            $trashes = $this->dao->select("t1.*, {$nameField} AS objectName")->from(TABLE_ACTION)->alias('t1')
-                ->leftJoin($table)->alias('t2')->on('t1.objectID=t2.id')
-                ->where('t1.action')->eq('deleted')
-                ->andWhere($trashQuery)
-                ->andWhere('t1.extra')->eq($extra)
-                ->andWhere('t1.vision')->eq($this->config->vision)
-                ->beginIF($objectType != 'all')->andWhere('t1.objectType')->eq($objectType)->fi()
-                ->orderBy($orderBy)
-                ->page($pager)
-                ->fetchAll('objectID');
-        }
-        else
-        {
-            $trashes = $this->dao->select('t1.*, t1.objectType AS type, t2.name AS objectName, t2.type AS objectType')->from(TABLE_ACTION)->alias('t1')
-                ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.objectID=t2.id')
-                ->where('t1.action')->eq('deleted')
-                ->andWhere($trashQuery)
-                ->andWhere('t1.extra')->eq($extra)
-                ->andWhere('t1.vision')->eq($this->config->vision)
-                ->andWhere('(t2.type')->eq('gitlab')
-                ->orWhere('t2.type')->eq('jenkins')
-                ->markRight(1)
-                ->orderBy($orderBy)
-                ->page($pager)
-                ->fetchAll('objectID');
-        }
+        $trashes = $this->dao->select($queryFields)->from(TABLE_ACTION)->alias('t1')
+            ->leftJoin($table)->alias('t2')->on('t1.objectID=t2.id')
+            ->where('t1.action')->eq('deleted')
+            ->andWhere($trashQuery)
+            ->andWhere('t1.extra')->eq($extra)
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->beginIF($objectType != 'pipeline' && $objectType != 'all')->andWhere('t1.objectType')->eq($objectType)->fi()
+
+            ->beginIF($objectType == 'pipeline')
+            ->andWhere('(t2.type')->eq('gitlab')
+            ->orWhere('t2.type')->eq('jenkins')
+            ->markRight(1)
+            ->fi()
+
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->query();
 
         return $trashes;
     }
