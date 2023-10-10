@@ -1721,7 +1721,7 @@ class screenModel extends model
         if($chartID == 20011) return $this->getProductTestTable($year, $month, $productList);
         if($chartID == 20004) return $this->getActiveProductCard($year, $month);
         if($chartID == 20007) return $this->getActiveProjectCard($year, $month);
-        //if($chartID == 20013) return $this->getProjectStoryTable($year, $month, $projectList);
+        if($chartID == 20013) return $this->getProjectStoryTable($year, $month, $projectList);
         if($chartID == 20010) return $this->getProjectTaskTable($year, $month, $projectList);
     }
 
@@ -2018,6 +2018,79 @@ class screenModel extends model
             $row = new stdclass();
             $row->id               = $productID;
             $row->name             = $productName;
+            $row->createdStories   = $createdStoryCount->count;
+            $row->deliveredStories = $deliveredStoryCount;
+
+            if($row->createdStories === 0 && $row->deliveredStories === 0) continue;
+            $dataset[] = $row;
+        }
+
+        return $dataset;
+    }
+
+    /**
+     * 获取应用健康度体检报告的项目需求概况表。
+     * Get table of project story summary in usage report.
+     *
+     * @param  string $year
+     * @param  string $month
+     * @param  array  $projectList
+     * @access public
+     * @return array
+     */
+    public function getProjectStoryTable($year, $month, $projectList)
+    {
+        $releasedStories = $this->dao->select('t3.id,t1.id as projectID')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.project')
+            ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story=t3.id')
+            ->leftJoin(TABLE_ACTION)->alias('t4')->on('t3.id=t4.objectID')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t3.deleted')->eq('0')
+            ->andWhere('t3.stage')->eq('released')
+            ->andWhere('t4.objectType')->eq('story')
+            ->andWhere('t4.action')->eq('linked2release')
+            ->andWhere('year(t4.date)')->eq($year)
+            ->andWhere('month(t4.date)')->eq($month)
+            ->fetchPairs();
+
+        $releasedStoryGroups = array();
+        foreach($releasedStories as $storyID => $projectID)
+        {
+            if(!isset($releasedStoryGroups[$projectID])) $releasedStoryGroups[$projectID] = array();
+            $releasedStoryGroups[$projectID][] = $storyID;
+        }
+
+        $dataset = array();
+        foreach($projectList as $projectID => $projectName)
+        {
+            $createdStoryCount = $this->dao->select('count(t3.id) as count')->from(TABLE_PROJECT)->alias('t1')
+                ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.project')
+                ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story=t3.id')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t3.deleted')->eq('0')
+                ->andWhere('t1.type')->eq('project')
+                ->andWhere('t3.type')->eq('story')
+                ->andWhere('t1.id')->eq($projectID)
+                ->andWhere('year(t3.openedDate)')->eq($year)
+                ->andWhere('month(t3.openedDate)')->eq($month)
+                ->fetch();
+
+            $finishedStoryList = $this->dao->select('t3.id')->from(TABLE_PROJECT)->alias('t1')
+                ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.project')
+                ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story=t3.id')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t3.deleted')->eq('0')
+                ->andWhere('t1.id')->eq($projectID)
+                ->andWhere('t3.closedReason')->eq('done')
+                ->andWhere('year(t3.closedDate)')->eq($year)
+                ->andWhere('month(t3.closedDate)')->eq($month)
+                ->fetchPairs();
+
+            $deliveredStoryCount = count(array_merge($finishedStoryList, (array)$releasedStoryGroups[$projectID]));
+
+            $row = new stdclass();
+            $row->id               = $projectID;
+            $row->name             = $projectName;
             $row->createdStories   = $createdStoryCount->count;
             $row->deliveredStories = $deliveredStoryCount;
 
