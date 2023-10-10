@@ -11,7 +11,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php
-$currentVendor = empty($modelConfig->vendor) ? key($lang->ai->models->openaiVendorList) : $modelConfig->vendor;
+$currentVendor = empty($modelConfig->vendor) ? key($lang->ai->models->vendorList->{empty($modelConfig->type) ? key($lang->ai->models->typeList) : $modelConfig->type}) : $modelConfig->vendor;
 $requiredFields = $config->ai->vendorList[$currentVendor]['requiredFields'];
 ?>
 <div id='mainContent' class='main-content'>
@@ -22,12 +22,18 @@ $requiredFields = $config->ai->vendorList[$currentVendor]['requiredFields'];
     </tr>
     <tr>
       <th><?php echo $lang->ai->models->vendor;?></th>
-      <td><?php echo empty($modelConfig->vendor) ? $lang->ai->models->unconfigured : $lang->ai->models->openaiVendorList[$modelConfig->vendor]?></td>
+      <td><?php echo (empty($modelConfig->vendor) || empty($modelConfig->type)) ? $lang->ai->models->unconfigured : $lang->ai->models->vendorList->{$modelConfig->type}[$modelConfig->vendor]?></td>
     </tr>
     <?php if(in_array('key', $requiredFields)): ?>
       <tr>
         <th><?php echo $lang->ai->models->key; ?></th>
         <td><?php echo empty($modelConfig->key) ? $lang->ai->models->unconfigured : ("<code title='{$lang->ai->models->concealTip}'>" . substr_replace($modelConfig->key, '...', 4, strlen($modelConfig->key) - 8) . '</code>'); ?></td>
+      </tr>
+    <?php endif; ?>
+    <?php if(in_array('secret', $requiredFields)): ?>
+      <tr>
+        <th><?php echo $lang->ai->models->secret; ?></th>
+        <td><?php echo empty($modelConfig->secret) ? $lang->ai->models->unconfigured : ("<code title='{$lang->ai->models->concealTip}'>" . substr_replace($modelConfig->secret, '...', 4, strlen($modelConfig->secret) - 8) . '</code>'); ?></td>
       </tr>
     <?php endif; ?>
     <?php if(in_array('resource', $requiredFields)): ?>

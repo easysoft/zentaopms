@@ -2,10 +2,14 @@
 $config->ai->vendorList = array();
 $config->ai->vendorList['openai']['requiredFields'] = array('key');
 $config->ai->vendorList['azure']['requiredFields']  = array('key', 'resource', 'deployment');
+$config->ai->vendorList['baidu']['requiredFields']  = array('key', 'secret');
 
+$config->ai->models = array('openai-gpt35' => 'openai', 'baidu-ernie' => 'ernie');
+
+/* OpenAI GPT configurations. */
 $config->ai->openai = new stdclass();
 $config->ai->openai->api = new stdclass();
-$config->ai->openai->api->vendor             = array('openai', 'azure');
+$config->ai->openai->api->vendor = array('openai', 'azure');
 $config->ai->openai->api->openai = new stdclass();
 $config->ai->openai->api->openai->version    = 'v1';                           // OpenAI API version, required.
 $config->ai->openai->api->openai->format     = 'https://api.openai.com/%s/%s'; // OpenAI API format, args: API version, API name.
@@ -16,33 +20,56 @@ $config->ai->openai->api->azure->deployment  = 'the-first-gpt';                /
 $config->ai->openai->api->azure->apiVersion  = '2023-07-01-preview';           // Azure OpenAI API version, required.
 $config->ai->openai->api->azure->format      = 'https://%s.openai.azure.com/openai/deployments/%s/%s?api-version=%s'; // Azure API format, args: resource name, deployment name, API name, API version.
 $config->ai->openai->api->azure->authFormat  = 'api-key: %s';                  // Azure API auth header format.
-$config->ai->openai->api->methods            = array('function' => 'chat/completions', 'chat' => 'chat/completions', 'completion' => 'completions', 'edit' => 'edits');
+$config->ai->openai->api->methods            = array('function' => 'chat/completions', 'chat' => 'chat/completions', 'completion' => 'completions');
 
 $config->ai->openai->params = new stdclass();
 $config->ai->openai->params->chat       = new stdclass();
 $config->ai->openai->params->function   = new stdclass();
 $config->ai->openai->params->completion = new stdclass();
-$config->ai->openai->params->edit       = new stdclass();
 $config->ai->openai->params->chat->required       = array('messages');
 $config->ai->openai->params->chat->optional       = array('max_tokens', 'temperature', 'top_p', 'n', 'stream', 'stop', 'presence_penalty', 'frequency_penalty', 'logit_bias', 'user');
 $config->ai->openai->params->function->required   = array('messages', 'functions', 'function_call');
 $config->ai->openai->params->function->optional   = array('max_tokens', 'temperature', 'top_p', 'n', 'stream', 'stop', 'presence_penalty', 'frequency_penalty', 'logit_bias', 'user');
 $config->ai->openai->params->completion->required = array('prompt', 'max_tokens');
 $config->ai->openai->params->completion->optional = array('suffix', 'temperature', 'top_p', 'n', 'stream', 'logprobs', 'echo', 'stop', 'presence_penalty', 'frequency_penalty', 'best_of', 'logit_bias', 'user');
-$config->ai->openai->params->edit->required       = array('input', 'instruction');
-$config->ai->openai->params->edit->optional       = array('temperature', 'top_p', 'n');
 
 $config->ai->openai->model = new stdclass();
 $config->ai->openai->model->chat       = 'gpt-3.5-turbo';
-$config->ai->openai->model->function   = 'gpt-3.5-turbo-0613';
-$config->ai->openai->model->completion = 'text-davinci-003';
-$config->ai->openai->model->edit       = 'text-davinci-edit-001';
+$config->ai->openai->model->function   = 'gpt-3.5-turbo';
+$config->ai->openai->model->completion = 'gpt-3.5-turbo-instruct';
 
-$config->ai->openai->contentTypeMapping = array('Content-Type: application/json' => array('', 'function', 'chat', 'completion', 'edit'), 'Content-Type: multipart/form-data' => array());
+$config->ai->openai->contentTypeMapping = array('Content-Type: application/json' => array('', 'function', 'chat', 'completion'), 'Content-Type: multipart/form-data' => array());
 $config->ai->openai->contentType = array();
 foreach($config->ai->openai->contentTypeMapping as $contentType => $apis)
 {
     foreach($apis as $api) $config->ai->openai->contentType[$api] = $contentType;
+}
+
+/* Baidu ERNIE configurations. */
+$config->ai->ernie = new stdclass();
+$config->ai->ernie->api = new stdclass();
+$config->ai->ernie->api->vendor = array('baidu');
+$config->ai->ernie->api->baidu = new stdclass();
+$config->ai->ernie->api->baidu->format = 'https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions?access_token=%s';        // ERNIE API format, arg: access_token (obtained from bce oauth).
+$config->ai->ernie->api->baidu->auth   = 'https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=%s&client_secret=%s'; // BCE auth URL format, args: client_id, client_secret.
+
+$config->ai->ernie->params = new stdclass();
+$config->ai->ernie->params->chat     = new stdclass();
+$config->ai->ernie->params->function = new stdclass();
+$config->ai->ernie->params->chat->required     = array('messages');
+$config->ai->ernie->params->chat->optional     = array('temperature', 'top_p', 'penalty_score', 'stream', 'user_id');
+$config->ai->ernie->params->function->required = array('messages', 'functions');
+$config->ai->ernie->params->function->optional = array('temperature', 'top_p', 'penalty_score', 'stream', 'user_id');
+
+$config->ai->ernie->model = new stdclass();
+$config->ai->ernie->model->chat     = 'ernie-bot-turbo';
+$config->ai->ernie->model->function = 'ernie-bot-turbo';
+
+$config->ai->ernie->contentTypeMapping = array('Content-Type: application/json' => array('', 'function', 'chat'), 'Content-Type: multipart/form-data' => array());
+$config->ai->ernie->contentType = array();
+foreach($config->ai->ernie->contentTypeMapping as $contentType => $apis)
+{
+    foreach($apis as $api) $config->ai->ernie->contentType[$api] = $contentType;
 }
 
 /* Required fields of forms. */

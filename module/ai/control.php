@@ -81,7 +81,7 @@ class ai extends control
         {
             $modelConfig = fixer::input('post')->get();
 
-            $currentVendor = empty($modelConfig->vendor) ? key($lang->ai->models->openaiVendorList) : $modelConfig->vendor;
+            $currentVendor = empty($modelConfig->vendor) ? key($this->lang->ai->models->vendorList->{empty($modelConfig->type) ? key($this->lang->ai->models->typeList) : $modelConfig->type}) : $modelConfig->vendor;
             $vendorRequiredFields = $this->config->ai->vendorList[$currentVendor]['requiredFields'];
 
             $errors = array();
@@ -128,7 +128,7 @@ class ai extends control
     {
         $modelConfig = fixer::input('post')->get();
 
-        $currentVendor = empty($modelConfig->vendor) ? key($lang->ai->models->openaiVendorList) : $modelConfig->vendor;
+        $currentVendor = empty($modelConfig->vendor) ? key($this->lang->ai->models->vendorList->{empty($modelConfig->type) ? key($this->lang->ai->models->typeList) : $modelConfig->type}) : $modelConfig->vendor;
         $vendorRequiredFields = $this->config->ai->vendorList[$currentVendor]['requiredFields'];
 
         $errors = array();
@@ -145,12 +145,10 @@ class ai extends control
 
         $this->ai->setConfig($modelConfig);
 
-        if($currentVendor == 'azure')
+        if($this->config->ai->models[$modelConfig->type] == 'ernie' || $currentVendor == 'azure')
         {
-            $messages = array(
-                (object)array('role' => 'user', 'content' => 'Hello?')
-            );
-            $result = $this->ai->converse($messages);
+            $messages = array((object)array('role' => 'user', 'content' => 'test'));
+            $result = $this->ai->converse($messages, array('maxTokens' => 1));
         }
         else
         {
@@ -520,7 +518,23 @@ class ai extends control
         if(empty($location)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noTargetForm'])));
         if(!empty($stop))    return header("location: $location", true, 302);
 
-        $response = $this->ai->executePrompt($prompt, $object);
+        /* Execute prompt and catch exceptions. */
+        try
+        {
+            $response = $this->ai->executePrompt($prompt, $object);
+        }
+        catch(AIResponseException $e)
+        {
+            $output = array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $e->getMessage()));
+
+            /* Audition shall quit on such exception. */
+            if(isset($_SESSION['auditPrompt']) && time() - $_SESSION['auditPrompt']['time'] < 10 * 60)
+            {
+                $output['locate'] = $this->inlink('promptAudit', "promptID=$promptId&objectId=$objectId&exit=true");
+            }
+            return $this->send($output);
+        }
+
         if(is_int($response)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->executeErrors["$response"]) . (empty($this->ai->errors) ? '' : implode(', ', $this->ai->errors))));
         if(empty($response))  return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noResponse'])));
 

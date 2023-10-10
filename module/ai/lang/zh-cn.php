@@ -59,25 +59,26 @@ $lang->ai->validate->dirtyForm     = '%s的参数配置已变动，是否保存�
 $lang->ai->validate->nameNotUnique = '该名称已使用，请尝试其他名称。';
 
 $lang->ai->prompts = new stdclass();
-$lang->ai->prompts->common      = '提词';
-$lang->ai->prompts->emptyList   = '暂时没有提词。';
-$lang->ai->prompts->create      = '创建提词';
-$lang->ai->prompts->edit        = '编辑提词';
-$lang->ai->prompts->id          = 'ID';
-$lang->ai->prompts->name        = '名称';
-$lang->ai->prompts->description = '描述';
-$lang->ai->prompts->createdBy   = '创建者';
-$lang->ai->prompts->createdDate = '创建时间';
-$lang->ai->prompts->targetForm  = '表单';
-$lang->ai->prompts->funcDesc    = '功能描述';
-$lang->ai->prompts->deleted     = '已删除';
-$lang->ai->prompts->stage       = '阶段';
-$lang->ai->prompts->basicInfo   = '基本信息';
-$lang->ai->prompts->editInfo    = '创建编辑';
-$lang->ai->prompts->createdBy   = '由谁创建';
-$lang->ai->prompts->publishedBy = '由谁发布';
-$lang->ai->prompts->draftedBy   = '由谁下架';
-$lang->ai->prompts->lastEditor  = '最后编辑';
+$lang->ai->prompts->common       = '提词';
+$lang->ai->prompts->emptyList    = '暂时没有提词。';
+$lang->ai->prompts->create       = '创建提词';
+$lang->ai->prompts->edit         = '编辑提词';
+$lang->ai->prompts->id           = 'ID';
+$lang->ai->prompts->name         = '名称';
+$lang->ai->prompts->description  = '描述';
+$lang->ai->prompts->createdBy    = '创建者';
+$lang->ai->prompts->createdDate  = '创建时间';
+$lang->ai->prompts->targetForm   = '表单';
+$lang->ai->prompts->funcDesc     = '功能描述';
+$lang->ai->prompts->deleted      = '已删除';
+$lang->ai->prompts->stage        = '阶段';
+$lang->ai->prompts->basicInfo    = '基本信息';
+$lang->ai->prompts->editInfo     = '创建编辑';
+$lang->ai->prompts->createdBy    = '由谁创建';
+$lang->ai->prompts->publishedBy  = '由谁发布';
+$lang->ai->prompts->draftedBy    = '由谁下架';
+$lang->ai->prompts->lastEditor   = '最后编辑';
+$lang->ai->prompts->modelNeutral = '通用';
 
 $lang->ai->prompts->summary = '本页共 %s 个提词。';
 
@@ -400,6 +401,7 @@ $lang->ai->models->common         = '语言模型';
 $lang->ai->models->type           = '语言模型';
 $lang->ai->models->vendor         = '供应商';
 $lang->ai->models->key            = 'API Key';
+$lang->ai->models->secret         = 'Secret Key';
 $lang->ai->models->resource       = 'Resource';
 $lang->ai->models->deployment     = 'Deployment';
 $lang->ai->models->proxyType      = '代理类型';
@@ -423,11 +425,11 @@ $lang->ai->models->statusList['off'] = '停用';
 
 $lang->ai->models->typeList = array();
 $lang->ai->models->typeList['openai-gpt35'] = 'OpenAI / GPT-3.5';
-// $lang->ai->models->typeList['azure-gpt35']  = 'Azure / GPT-3.5';
+$lang->ai->models->typeList['baidu-ernie']  = '百度 / 文心一言';
 
-$lang->ai->models->openaiVendorList = array();
-$lang->ai->models->openaiVendorList['openai'] = 'OpenAI';
-$lang->ai->models->openaiVendorList['azure']  = 'Azure';
+$lang->ai->models->vendorList = new stdclass();
+$lang->ai->models->vendorList->{'openai-gpt35'} = array('openai' => 'OpenAI', 'azure' => 'Azure');
+$lang->ai->models->vendorList->{'baidu-ernie'}  = array('baidu' => '百度千帆大模型平台');
 
 $lang->ai->models->proxyTypes = array();
 $lang->ai->models->proxyTypes['']       = '不使用代理';
@@ -793,3 +795,9 @@ $lang->ai->audit->exit         = '退出调试';
 $lang->ai->audit->backLocationList = array();
 $lang->ai->audit->backLocationList[0] = '返回调试页面';
 $lang->ai->audit->backLocationList[1] = '返回调试页面并重新生成';
+
+$lang->ai->engineeredPrompts = new stdclass();
+$lang->ai->engineeredPrompts->askForFunctionCalling = array((object)array('role' => 'user', 'content' => '请把我所发的下一条消息内容转换为 function 调用。'), (object)array('role' => 'assistant', 'content' => '好的，我会把下一条消息转换为 function 调用。'));
+
+$lang->ai->aiResponseException = array();
+$lang->ai->aiResponseException['notFunctionCalling'] = 'AI 提词执行返回值结构不正确，请重试（可能可以通过优化提词来解决）';
