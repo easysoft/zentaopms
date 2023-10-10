@@ -21,7 +21,7 @@ class testtaskModel extends model
      * @access public
      * @return int|false
      */
-    function create(object $testtask): int|false
+    public function create(object $testtask): int|false
     {
         $this->dao->insert(TABLE_TESTTASK)->data($testtask)
             ->autoCheck('begin,end')
