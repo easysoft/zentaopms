@@ -304,7 +304,8 @@ class release extends control
     }
 
     /**
-     * Export the stories of release to HTML.
+     * 导出需求列表和Bug列表。
+     * Export story list and bug list.
      *
      * @access public
      * @return void
@@ -315,95 +316,12 @@ class release extends control
         {
             $type     = $this->post->type;
             $fileName = $this->post->fileName;
-            if(empty($fileName)) return $this->sendError(array('fileName' => sprintf($this->lang->error->notempty, $this->lang->release->fileName)));
+            if(empty($fileName)) return $this->sendError(sprintf($this->lang->error->notempty, $this->lang->release->fileName));
 
             $html = '';
-            if($type == 'story' or $type == 'all')
-            {
-                $html .= "<h3>{$this->lang->release->stories}</h3>";
-                $this->loadModel('story');
-
-                $stories = $this->dbh->query($this->session->storyQueryCondition . " ORDER BY " . strtr($this->session->storyOrderBy, '_', ' '))->fetchAll();
-
-                foreach($stories as $story) $story->title = "<a href='" . common::getSysURL() . $this->createLink('story', 'view', "storyID=$story->id") . "' target='_blank'>$story->title</a>";
-
-                $fields = array('id' => $this->lang->story->id, 'title' => $this->lang->story->title);
-                $rows   = $stories;
-
-                $html .= '<table><tr>';
-                foreach($fields as $fieldLabel) $html .= "<th><nobr>$fieldLabel</nobr></th>\n";
-                $html .= '</tr>';
-                foreach($rows as $row)
-                {
-                    $html .= "<tr valign='top'>\n";
-                    foreach($fields as $fieldName => $fieldLabel)
-                    {
-                        $fieldValue = isset($row->$fieldName) ? $row->$fieldName : '';
-                        $html .= "<td><nobr>$fieldValue</nobr></td>\n";
-                    }
-                    $html .= "</tr>\n";
-                }
-                $html .= '</table>';
-            }
-
-            if($type == 'bug' or $type == 'all')
-            {
-                $html .= "<h3>{$this->lang->release->bugs}</h3>";
-                $this->loadModel('bug');
-
-                $bugs = $this->dao->select('id, title')->from(TABLE_BUG)->where($this->session->linkedBugQueryCondition)
-                    ->beginIF($this->session->bugOrderBy !== false)->orderBy($this->session->bugOrderBy)->fi()
-                    ->fetchAll('id');
-
-                foreach($bugs as $bug) $bug->title = "<a href='" . common::getSysURL() . $this->createLink('bug', 'view', "bugID=$bug->id") . "' target='_blank'>$bug->title</a>";
-
-                $fields = array('id' => $this->lang->bug->id, 'title' => $this->lang->bug->title);
-                $rows   = $bugs;
-
-                $html .= '<table><tr>';
-                foreach($fields as $fieldLabel) $html .= "<th><nobr>$fieldLabel</nobr></th>\n";
-                $html .= '</tr>';
-                foreach($rows as $row)
-                {
-                    $html .= "<tr valign='top'>\n";
-                    foreach($fields as $fieldName => $fieldLabel)
-                    {
-                        $fieldValue = isset($row->$fieldName) ? $row->$fieldName : '';
-                        $html .= "<td><nobr>$fieldValue</nobr></td>\n";
-                    }
-                    $html .= "</tr>\n";
-                }
-                $html .= '</table>';
-            }
-
-            if($type == 'leftbug' or $type == 'all')
-            {
-                $html .= "<h3>{$this->lang->release->generatedBugs}</h3>";
-
-                $bugs = $this->dao->select('id, title')->from(TABLE_BUG)->where($this->session->leftBugsQueryCondition)
-                    ->beginIF($this->session->bugOrderBy !== false)->orderBy($this->session->bugOrderBy)->fi()
-                    ->fetchAll('id');
-
-                foreach($bugs as $bug) $bug->title = "<a href='" . common::getSysURL() . $this->createLink('bug', 'view', "bugID=$bug->id") . "' target='_blank'>$bug->title</a>";
-
-                $fields = array('id' => $this->lang->bug->id, 'title' => $this->lang->bug->title);
-                $rows   = $bugs;
-
-                $html .= '<table><tr>';
-                foreach($fields as $fieldLabel) $html .= "<th><nobr>$fieldLabel</nobr></th>\n";
-                $html .= '</tr>';
-                foreach($rows as $row)
-                {
-                    $html .= "<tr valign='top'>\n";
-                    foreach($fields as $fieldName => $fieldLabel)
-                    {
-                        $fieldValue = isset($row->$fieldName) ? $row->$fieldName : '';
-                        $html .= "<td><nobr>$fieldValue</nobr></td>\n";
-                    }
-                    $html .= "</tr>\n";
-                }
-                $html .= '</table>';
-            }
+            if($type == 'story' or $type == 'all')   $html .= $this->releaseZen->buildStoryDataForExport();
+            if($type == 'bug' || $type == 'all')     $html .= $this->releaseZen->buildBugDataForExport();
+            if($type == 'leftbug' || $type == 'all') $html .= $this->releaseZen->buildLeftBugDataForExport();
 
             $html = "<html><head><meta charset='utf-8'><title>{$fileName}</title><style>table, th, td{font-size:12px; border:1px solid gray; border-collapse:collapse;}</style></head><body>$html</body></html>";
             $this->loadModel('file')->sendDownHeader($fileName, 'html', $html);

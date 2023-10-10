@@ -295,4 +295,114 @@ class releaseZen extends release
         }
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
     }
+
+    /**
+     * 构造导出的需求列表数据。
+     * Build the story list data for export.
+     *
+     * @param  string    $html
+     * @access protected
+     * @return string
+     */
+    protected function buildStoryDataForExport(): string
+    {
+        $html  = '';
+        $html .= "<h3>{$this->lang->release->stories}</h3>";
+        $this->loadModel('story');
+
+        $stories = $this->release->getStoryForExport();
+        foreach($stories as $story) $story->title = "<a href='" . common::getSysURL() . $this->createLink('story', 'view', "storyID=$story->id") . "' target='_blank'>$story->title</a>";
+
+        $fields = array('id' => $this->lang->story->id, 'title' => $this->lang->story->title);
+        $rows   = $stories;
+
+        $html .= '<table><tr>';
+        foreach($fields as $fieldLabel) $html .= "<th><nobr>$fieldLabel</nobr></th>\n";
+        $html .= '</tr>';
+        foreach($rows as $row)
+        {
+            $html .= "<tr valign='top'>\n";
+            foreach($fields as $fieldName => $fieldLabel)
+            {
+                $fieldValue = isset($row->$fieldName) ? $row->$fieldName : '';
+                $html .= "<td><nobr>$fieldValue</nobr></td>\n";
+            }
+            $html .= "</tr>\n";
+        }
+        $html .= '</table>';
+
+        return $html;
+    }
+
+    /**
+     * 构造导出的解决的Bug列表数据。
+     * Build the resolved bug list data for export.
+     *
+     * @access protected
+     * @return string
+     */
+    protected function buildBugDataForExport(): string
+    {
+        $html  = '';
+        $html .= "<h3>{$this->lang->release->bugs}</h3>";
+        $this->loadModel('bug');
+
+        $bugs = $this->release->getBugForExport('leftBug');
+        foreach($bugs as $bug) $bug->title = "<a href='" . common::getSysURL() . $this->createLink('bug', 'view', "bugID=$bug->id") . "' target='_blank'>$bug->title</a>";
+
+        $fields = array('id' => $this->lang->bug->id, 'title' => $this->lang->bug->title);
+        $rows   = $bugs;
+
+        $html .= '<table><tr>';
+        foreach($fields as $fieldLabel) $html .= "<th><nobr>$fieldLabel</nobr></th>\n";
+        $html .= '</tr>';
+        foreach($rows as $row)
+        {
+            $html .= "<tr valign='top'>\n";
+            foreach($fields as $fieldName => $fieldLabel)
+            {
+                $fieldValue = isset($row->$fieldName) ? $row->$fieldName : '';
+                $html .= "<td><nobr>$fieldValue</nobr></td>\n";
+            }
+            $html .= "</tr>\n";
+        }
+        $html .= '</table>';
+
+        return $html;
+    }
+
+    /**
+     * 构造导出的遗留的Bug列表数据。
+     *
+     * @access protected
+     * @return string
+     */
+    protected function buildLeftBugDataForExport(): string
+    {
+        $html  = '';
+        $html .= "<h3>{$this->lang->release->generatedBugs}</h3>";
+
+        $bugs = $this->release->getBugForExport('leftBug');
+        foreach($bugs as $bug) $bug->title = "<a href='" . common::getSysURL() . $this->createLink('bug', 'view', "bugID=$bug->id") . "' target='_blank'>$bug->title</a>";
+
+        $fields = array('id' => $this->lang->bug->id, 'title' => $this->lang->bug->title);
+        $rows   = $bugs;
+
+        $html .= '<table><tr>';
+        foreach($fields as $fieldLabel) $html .= "<th><nobr>$fieldLabel</nobr></th>\n";
+        $html .= '</tr>';
+        foreach($rows as $row)
+        {
+            $html .= "<tr valign='top'>\n";
+            foreach($fields as $fieldName => $fieldLabel)
+            {
+                $fieldValue = isset($row->$fieldName) ? $row->$fieldName : '';
+                $html .= "<td><nobr>$fieldValue</nobr></td>\n";
+            }
+            $html .= "</tr>\n";
+        }
+        $html .= '</table>';
+
+        return $html;
+    }
 }

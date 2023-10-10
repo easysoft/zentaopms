@@ -1114,4 +1114,34 @@ class releaseModel extends model
 
         return !dao::isError();
     }
+
+    /**
+     * 获取导出的需求列表数据。
+     * Get the data of stories for export.
+     *
+     * @access public
+     * @return array
+     */
+    public function getStoryForExport(): array
+    {
+        $queryCondition = $this->session->storyQueryCondition ? $this->session->storyQueryCondition : '1=1';
+        return $this->dbh->query($queryCondition . " ORDER BY " . strtr($this->session->storyOrderBy, '_', ' '))->fetchAll();
+    }
+
+    /**
+     * 获取导出的bug列表数据。
+     * Get the data of bugs for export.
+     *
+     * @param  string $type bug|leftBug
+     * @access public
+     * @return array
+     */
+    public function getBugForExport($type = 'bug'): array
+    {
+        $queryName      = $type == 'bug' ? 'linkedBugQueryCondition' : 'leftBugsQueryCondition';
+        $queryCondition = $this->session->$queryName ? $this->session->$queryName : '1=1';
+        return $this->dao->select('id, title')->from(TABLE_BUG)->where($queryCondition)
+            ->beginIF($this->session->bugOrderBy !== false)->orderBy($this->session->bugOrderBy)->fi()
+            ->fetchAll('id');
+    }
 }
