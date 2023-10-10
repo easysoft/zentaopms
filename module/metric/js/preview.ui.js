@@ -8,11 +8,16 @@ window.afterPageUpdate = function($target, info, options)
         chartList.push({value: key, text: chartTypeList[key]});
     }
     window.filterChecked = {};
+    window.scrollToItem();
     window.renderDTable(current.id, resultHeader, resultData);
     window.renderChart(current.id, resultHeader, resultData);
     if(viewType == 'multiple') window.renderCheckedLabel();
     $(window).on('resize', window.renderCheckedLabel);
     window.initFilterPanel();
+}
+window.scrollToItem = function() {
+  var item = $('.metric-tree').find('.metric-' + current.id);
+  item.scrollIntoView();
 }
 
 /* 事件处理函数。 */

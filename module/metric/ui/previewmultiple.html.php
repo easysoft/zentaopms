@@ -228,7 +228,7 @@ $metricCheckItems = array();
 foreach($metrics as $key => $metric)
 {
     $class  = $metric->id == $current->id ? 'metric-current' : '';
-    $class .= ' font-medium checkbox';
+    $class .= " font-medium metric-{$metric->id} checkbox";
     $metricCheckItems[] = item
     (
         set::text($metric->name),
