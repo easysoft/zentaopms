@@ -4653,9 +4653,6 @@ class taskModel extends model
         $rows       = array();
         if($showBranch) $showBranch = isset($this->config->execution->task->showBranch) ? $this->config->execution->task->showBranch : 1;
 
-        $moduleList    = $this->loadModel('tree')->getTaskOptionMenu($executionID);
-        $projectList   = $this->loadModel('project')->getPairs();
-        $executionList = $this->loadModel('execution')->getPairs();
         foreach($tasks as $task)
         {
             $task->assignedTo = $this->printAssignedHtml($task, $users, false);
@@ -4738,10 +4735,6 @@ class taskModel extends model
                 $task->isParent = true;
                 $task->parent   = 0;
             }
-
-            $task->module    = zget($moduleList, $task->module, '');
-            $task->project   = zget($projectList, $task->project, '');
-            $task->execution = zget($executionList, $task->execution, '');
 
             $rows[] = $task;
 

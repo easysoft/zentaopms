@@ -268,11 +268,13 @@ $config->task->datatable->fieldList['module']['display']    = false;
 
 $config->task->datatable->fieldList['execution']['title']      = 'execution';
 $config->task->datatable->fieldList['execution']['control']    = 'hidden';
+$config->task->datatable->fieldList['execution']['type']       = 'html';
 $config->task->datatable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs');
 $config->task->datatable->fieldList['execution']['display']    = false;
 
 $config->task->datatable->fieldList['project']['title']      = 'project';
 $config->task->datatable->fieldList['project']['control']    = 'hidden';
+$config->task->datatable->fieldList['project']['type']       = 'html';
 $config->task->datatable->fieldList['project']['dataSource'] = array('module' => 'project', 'method' => 'getPairs');
 $config->task->datatable->fieldList['project']['display']    = false;
 
