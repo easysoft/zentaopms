@@ -377,7 +377,7 @@ function renderKanbanItem(item, $item)
             .text(item.pri);
 
         var $time = $info.children('.time');
-        if(item.end == '0000-00-00' && item.begin == '0000-00-00')
+        if((item.end == '0000-00-00' && item.begin == '0000-00-00') || (item.end == '' && item.begin == ''))
         {
             $time.hide();
         }
