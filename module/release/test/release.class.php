@@ -224,22 +224,23 @@ class releaseTest
     }
 
     /**
+     * 激活/停止维护发布。
      * Change status.
      *
      * @param  int    $releaseID
-     * @param  string $status
+     * @param  string $status   normal|terminate
      * @access public
-     * @return bool
+     * @return array
      */
-
-    public function changeStatusTest($releaseID, $status)
+    public function changeStatusTest(int $releaseID, string $status)
     {
+        $oldRelease = $this->objectModel->getByID($releaseID);
         $this->objectModel->changeStatus($releaseID, $status);
 
         if(dao::isError()) return dao::getError();
 
-        $objects = $this->objectModel->getByID($releaseID);
-        return $objects;
+        $release = $this->objectModel->getByID($releaseID);
+        return common::createChanges($oldRelease, $release);
     }
 
     /**
