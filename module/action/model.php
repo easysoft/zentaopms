@@ -249,7 +249,7 @@ class actionModel extends model
      * Get deleted objects.
      *
      * @param  string $objectType
-     * @param  string $type all|hidden
+     * @param  string $type      all|hidden
      * @param  string $orderBy
      * @param  object $pager
      * @access public
@@ -266,7 +266,6 @@ class actionModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
-
         if(empty($trashes)) return array();
 
         /* 按对象类型对已删除的对象进行分组，并获取名称字段。 */
@@ -276,40 +275,34 @@ class actionModel extends model
             $object->objectType = str_replace('`', '', $object->objectType);
             $typeTrashes[$object->objectType][] = $object->objectID;
         }
-
         foreach($typeTrashes as $objectType => $objectIdList)
         {
             if(!isset($this->config->objectTables[$objectType])) continue;
             if(!isset($this->config->action->objectNameFields[$objectType])) continue;
 
-            $objectIdList = array_unique($objectIdList);
             $table        = $this->config->objectTables[$objectType];
             $field        = $this->config->action->objectNameFields[$objectType];
+            $objectIdList = array_unique($objectIdList);
             if($objectType == 'pipeline')
             {
-                $objectNames['jenkins'] = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIdList)->andWhere('type')->eq('jenkins')->fetchPairs();
-                $objectNames['gitlab']  = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIdList)->andWhere('type')->eq('gitlab')->fetchPairs();
+                $objectNames['jenkins'] = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->andWhere('type')->eq('jenkins')->fetchPairs();
+                $objectNames['gitlab']  = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->andWhere('type')->eq('gitlab')->fetchPairs();
             }
             else
             {
-                $objectNames[$objectType] = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIdList)->fetchPairs();
+                $objectNames[$objectType] = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->fetchPairs();
             }
         }
 
-        /* 将name字段添加到回收站数据中。 */
+        /* 将对象名称字段添加到回收站数据中。 */
         /* Add name field to the trashes. */
         foreach($trashes as $trash)
         {
-            $objectType = $trash->objectType;
-            if($objectType == 'pipeline')
-            {
-                if(isset($objectNames['gitlab'][$trash->objectID]))  $objectType = 'gitlab';
-                if(isset($objectNames['jenkins'][$trash->objectID])) $objectType = 'jenkins';
-                $trash->objectType = $objectType;
-            }
-            $trash->objectName = isset($objectNames[$objectType][$trash->objectID]) ? $objectNames[$objectType][$trash->objectID] : '';
-        }
+            if($trash->objectType == 'pipeline' && isset($objectNames['gitlab'][$trash->objectID]))  $trash->objectType = 'gitlab';
+            if($trash->objectType == 'pipeline' && isset($objectNames['jenkins'][$trash->objectID])) $trash->objectType = 'jenkins';
 
+            $trash->objectName = isset($objectNames[$trash->objectType][$trash->objectID]) ? $objectNames[$trash->objectType][$trash->objectID] : '';
+        }
         return $trashes;
     }
 
