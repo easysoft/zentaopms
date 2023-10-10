@@ -1,0 +1,15 @@
+title: zt_bug
+author: Shujie Tian
+version: 1.0.0
+fields:
+  - field: id
+    range: 1-100
+  - field: title
+    range: 1-100
+    prefix: 'Bug'
+  - field: product
+    range: 1-10{10}
+  - field: branch
+    range: '0{55},2-15{5}'
+  - field: branch
+    range: 'active,resolved,closed'
