@@ -3,6 +3,7 @@ js::import($jsRoot . 'dtable/min.js');
 css::import($jsRoot . 'dtable/min.css');
 ?>
 <style>
+.page-has-dtable {overflow: hidden;}
 #main {padding-bottom: 0;}
 #sidebar > .cell {padding: 0; display: flex; flex-direction: column;}
 #sidebar > .cell > .tree {flex: auto; overflow: auto; padding: 10px 10px 0;}
@@ -38,14 +39,20 @@ zui.DTable.definePlugin(
     {
         return $.extend({fixedLeftWidth: '40%'}, options, {
             cols: convertCols(options.cols),
+            responsive: 'window',
             height: function(actualHeight)
             {
 
-                const height = Math.min(actualHeight, Math.max(0, window.innerHeight - ($('#mainContent').offset().top || 0)));
+                const height = Math.min(actualHeight, Math.max(0, window.innerHeight - ($('#mainContent').offset().top || 0))) - 1;
                 $('#sidebar>.cell').css('maxHeight', height).children('.tree').addClass('scrollbar-hover');
                 return height - ($('#mainContent .table-footer').outerHeight() || 0);
             }
         });
+    },
+    onMounted: function()
+    {
+        if(!$(this.parent).closest('#main').length) return;
+        $('body').addClass('page-has-dtable');
     }
 }, {buildIn: true})
 zui.DTable.defineFn();
