@@ -606,14 +606,15 @@ class releaseModel extends model
     }
 
     /**
+     * 激活/停止维护发布。
      * Change status.
      *
      * @param  int    $releaseID
-     * @param  string $status
+     * @param  string $status    normal|terminate
      * @access public
      * @return bool
      */
-    public function changeStatus($releaseID, $status)
+    public function changeStatus(int $releaseID, string $status): bool
     {
         $this->dao->update(TABLE_RELEASE)->set('status')->eq($status)->where('id')->eq($releaseID)->exec();
         return !dao::isError();

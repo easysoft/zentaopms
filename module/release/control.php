@@ -613,7 +613,7 @@ class release extends control
      * Change status.
      *
      * @param  int    $releaseID
-     * @param  string $status     normal|terminate
+     * @param  string $status    normal|terminate
      * @access public
      * @return void
      */
