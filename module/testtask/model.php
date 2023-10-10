@@ -373,14 +373,15 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getAllLinkableCases(object $task, string $query, array $linkedCases, object $pager): array
+    public function getAllLinkableCases(object $task, string $query = '', array $linkedCases = array(), object $pager = null): array
     {
-        return $this->dao->select('*')->from(TABLE_CASE)->where($query)
-            ->beginIF(!empty($linkedCases))->andWhere('id')->notIN($linkedCases)->fi()
+        return $this->dao->select('*')->from(TABLE_CASE)
+            ->where('deleted')->eq('0')
             ->andWhere('status')->ne('wait')
             ->andWhere('type')->ne('unit')
             ->beginIF($task->branch !== '')->andWhere('branch')->in("0,{$task->branch}")->fi()
-            ->andWhere('deleted')->eq('0')
+            ->beginIF($query)->andWhere($query)->fi()
+            ->beginIF(!empty($linkedCases))->andWhere('id')->notIN($linkedCases)->fi()
             ->orderBy('id desc')
             ->page($pager)
             ->fetchAll();
