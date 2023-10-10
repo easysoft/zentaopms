@@ -284,4 +284,18 @@ class releaseTest
 
         return $this->objectModel->processReleaseForCreate($release, $isSync);
     }
+
+    /**
+     * 删除发布。
+     * Delete a release.
+     *
+     * @param  int          $releaseID
+     * @access public
+     * @return object|false
+     */
+    public function deleteTest(int $releaseID): object|false
+    {
+        $this->objectModel->delete(TABLE_RELEASE, $releaseID);
+        return $this->objectModel->getByID($releaseID);
+    }
 }
