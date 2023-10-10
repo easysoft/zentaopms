@@ -3,6 +3,10 @@ js::import($jsRoot . 'dtable/min.js');
 css::import($jsRoot . 'dtable/min.css');
 ?>
 <style>
+#main {padding-bottom: 0;}
+#sidebar > .cell {padding: 0; display: flex; flex-direction: column;}
+#sidebar > .cell > .tree {flex: auto; overflow: auto; padding: 10px 10px 0;}
+#sidebar > .cell > div {flex: none}
 .dtable {box-shadow: 0 1px 1px rgba(0,0,0,.05), 0 2px 6px 0 rgba(0,0,0,.045)}
 .dtable-header {border-bottom: 1px solid #f4f5f7;}
 .dtable-header .dtable-cell {font-weight: bold;}
@@ -30,7 +34,19 @@ function convertCols(cols)
 zui.DTable.definePlugin(
 {
     name: 'zentao18',
-    options: function(options){return $.extend({fixedLeftWidth: '40%'}, options, {cols: convertCols(options.cols)});}
+    options: function(options)
+    {
+        return $.extend({fixedLeftWidth: '40%'}, options, {
+            cols: convertCols(options.cols),
+            height: function(actualHeight)
+            {
+
+                const height = Math.min(actualHeight, Math.max(0, window.innerHeight - ($('#mainContent').offset().top || 0)));
+                $('#sidebar>.cell').css('maxHeight', height).children('.tree').addClass('scrollbar-hover');
+                return height - ($('#mainContent .table-footer').outerHeight() || 0);
+            }
+        });
+    }
 }, {buildIn: true})
 zui.DTable.defineFn();
 
