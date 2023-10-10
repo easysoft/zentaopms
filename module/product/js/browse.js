@@ -107,13 +107,13 @@ $(function()
 
     $('#batchUnlinkStory').click(function()
     {
-        var storyIdList = '';
-        $("input[name^='storyIdList']:checked").each(function()
+        var storyIdList = [];
+        $("#productStoryForm input[name^='storyIdList']").each(function()
         {
-            storyIdList += $(this).val() + ',';
+            storyIdList.push($(this).val());
         });
 
-        $.get(createLink('projectstory', 'batchUnlinkStory', 'projectID=' + projectID + '&storyIdList=' + storyIdList), function(data)
+        $.get(createLink('projectstory', 'batchUnlinkStory', 'projectID=' + projectID + '&storyIdList=' + storyIdList.join(',')), function(data)
         {
             if(data)
             {
