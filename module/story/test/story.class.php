@@ -163,9 +163,9 @@ class storyTest
      * @access public
      * @return void
      */
-    public function getRequierementsTest($productID)
+    public function getRequirementsTest(int $productID): array
     {
-        $requirements = $this->objectModel->getRequierements($productID);
+        $requirements = $this->objectModel->getRequirements($productID);
 
         if(dao::isError()) return dao::getError();
 
@@ -215,19 +215,18 @@ class storyTest
     /**
      * Test create story from gitlab issue.
      *
-     * @param  int    $story
+     * @param  object $story
      * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function createStoryFromGitlabIssueTest($story, $executionID)
+    public function createStoryFromGitlabIssueTest(object $story, int $executionID): object|array
     {
         $storyID = $this->objectModel->createStoryFromGitlabIssue($story, $executionID);
 
         if(dao::isError()) return dao::getError();
 
-        global $tester;
-        return $tester->loadModel('story')->getById($storyID);
+        return $this->objectModel->fetchById($storyID);
     }
 
     /**

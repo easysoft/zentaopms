@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of story module of ZenTaoPMS.
  *
@@ -513,7 +514,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function delete($storyID, $confirm = 'no', $from = '', $storyType = 'story')
+    public function delete(int $storyID, string $confirm = 'no', string $from = '', string $storyType = 'story')
     {
         $story = $this->story->fetchById($storyID);
         if($story->parent < 0) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->story->cannotDeleteParent}');"));
@@ -539,20 +540,10 @@ class story extends control
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
 
-            if($this->app->tab == 'execution' and $from == 'taskkanban')
-            {
-                $executionLaneType = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
-                $executionGroupBy  = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
-                $taskSearchValue   = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
-                $kanbanData        = $this->loadModel('kanban')->getExecutionKanban($this->session->execution, $executionLaneType, $executionGroupBy, $taskSearchValue);
-                $kanbanType        = $executionLaneType == 'all' ? 'story' : key($kanbanData);
-                $kanbanData        = $kanbanData[$kanbanType];
-                $kanbanData        = json_encode($kanbanData);
-                return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban(\"story\", $kanbanData)"));
-            }
+            if($this->app->tab == 'execution' and $from == 'taskkanban') return $this->storyZen->getResponseInModal();
 
             $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
-            return $this->send(array('result' => 'success', 'load' => array('back' => $locateLink), 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'load' => $locateLink, 'closeModal' => true));
         }
     }
 
@@ -1975,7 +1966,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function ajaxGetURS(int $productID, string|int $branchID = 0, int $moduleID = 0, string $requirementList = '0')
+    public function ajaxGetURS(int $productID, string $branchID = '0', int $moduleID = 0, string $requirementList = '0')
     {
         $moduleIdList = $this->loadModel('tree')->getAllChildId($moduleID);
 

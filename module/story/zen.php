@@ -1507,7 +1507,7 @@ class storyZen extends story
      * @access protected
      * @return array|false
      */
-    protected function getResponseInModal(string $message, int $executionID = 0): array|false
+    protected function getResponseInModal(string $message = '', int $executionID = 0): array|false
     {
         if(!isonlybody()) return false;
         if($this->app->tab != 'execution') return array('result' => 'success', 'message' => $message, 'load' => true, 'closeModal' => true);

@@ -5,6 +5,7 @@ include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
 
 zdTable('story')->gen(1);
+zdTable('storyspec')->gen(5);
 
 /**
 

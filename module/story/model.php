@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of story module of ZenTaoPMS.
  *
@@ -149,7 +150,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getStorySpecs($storyIdList)
+    public function getStorySpecs(array $storyIdList): array
     {
         return $this->dao->select('story,spec,verify')->from(TABLE_STORYSPEC)
             ->where('story')->in($storyIdList)
@@ -164,7 +165,7 @@ class storyModel extends model
      * @access public
      * @return object
      */
-    public function getAffectedScope($story)
+    public function getAffectedScope(object $story): object
     {
         $users = $this->loadModel('user')->getPairs('pofirst|nodeleted', "{$story->lastEditedBy},{$story->openedBy},{$story->assignedTo}");
 
@@ -181,16 +182,16 @@ class storyModel extends model
      *
      *  @param  int     $productID
      *  @access public
-     *  @return void
+     *  @return array
      */
-    public function getRequirements($productID)
+    public function getRequirements(int $productID): array
     {
         return $this->dao->select('id,title')->from(TABLE_STORY)
            ->where('deleted')->eq(0)
            ->andWhere('product')->eq($productID)
            ->andWhere('type')->eq('requirement')
            ->andWhere('status')->notIN('draft,closed')
-           ->fetchPairs();
+           ->fetchPairs('id', 'title');
     }
 
     /**
@@ -207,7 +208,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionStories(int $executionID = 0, int $productID = 0, string $orderBy = 't1.`order`_desc', string $type = 'byModule', string $param = '0', string $storyType = 'story', array|string $excludeStories = '', object|null $pager = null)
+    public function getExecutionStories(int $executionID = 0, int $productID = 0, string $orderBy = 't1.`order`_desc', string $type = 'byModule', string $param = '0', string $storyType = 'story', array|string $excludeStories = '', object|null $pager = null): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getExecutionStories();
 
@@ -227,8 +228,8 @@ class storyModel extends model
             $modules      = $this->storyTao->getModules4ExecutionStories($type, $param);
             $storyIdList  = $this->storyTao->getIdListOfExecutionsByProjectID($type, $executionID);
             $productParam = ($type == 'byproduct' and $param)        ? $param : $this->cookie->storyProductParam;
-            $branchParam  = ($type == 'bybranch'  and $param !== '') ? $param : $this->cookie->storyBranchParam;
-            if(strpos($branchParam, ',') !== false) list($productParam, $branchParam) = explode(',', $branchParam);
+            $branchParam  = ($type == 'bybranch'  and $param !== '') ? $param : (string)$this->cookie->storyBranchParam;
+            if(str_contains($branchParam, ',')) list($productParam, $branchParam) = explode(',', $branchParam);
 
             /* 设置查询需求的公共 DAO 变量。 */
             $type     = (strpos('bymodule|byproduct', $type) !== false and $this->session->storyBrowseType) ? $this->session->storyBrowseType : $type;
@@ -288,7 +289,7 @@ class storyModel extends model
         unset($unclosedStatus['closed']);
 
         $productParam = '';
-        $branchParam  = ($type == 'bybranch'  and $param !== '') ? $param : $this->cookie->storyBranchParam;
+        $branchParam  = ($type == 'bybranch'  and $param !== '') ? $param : (string)$this->cookie->storyBranchParam;
         if(strpos($branchParam, ',') !== false) list($productParam, $branchParam) = explode(',', $branchParam);
 
         $stories = $this->dao->select("distinct t1.*, t2.*, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as priOrder, t3.type as productType, t2.version as version")->from(TABLE_PROJECTSTORY)->alias('t1')
@@ -361,7 +362,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getPlanStories($planID, $status = 'all', $orderBy = 'id_desc', $pager = null)
+    public function getPlanStories(int $planID, string $status = 'all', string $orderBy = 'id_desc', object|null $pager = null): array
     {
         if(strpos($orderBy, 'module') !== false)
         {
@@ -373,7 +374,8 @@ class storyModel extends model
                 ->where('t1.plan')->eq($planID)
                 ->beginIF($status and $status != 'all')->andWhere('t2.status')->in($status)->fi()
                 ->andWhere('t2.deleted')->eq(0)
-                ->orderBy($orderBy)->page($pager)
+                ->orderBy($orderBy)
+                ->page($pager)
                 ->fetchAll('id');
         }
         else
@@ -384,7 +386,8 @@ class storyModel extends model
                 ->where('t1.plan')->eq($planID)
                 ->beginIF($status and $status != 'all')->andWhere('t2.status')->in($status)->fi()
                 ->andWhere('t2.deleted')->eq(0)
-                ->orderBy($orderBy)->page($pager)
+                ->orderBy($orderBy)
+                ->page($pager)
                 ->fetchAll('id');
         }
 
@@ -394,30 +397,13 @@ class storyModel extends model
     }
 
     /**
-     * Get stories pairs of a plan.
-     *
-     * @param  int    $planID
-     * @param  string $status
-     * @access public
-     * @return array
-     */
-    public function getPlanStoryPairs($planID, $status = 'all')
-    {
-        return $this->dao->select('*')->from(TABLE_STORY)
-            ->where('plan')->eq($planID)
-            ->beginIF($status and $status != 'all')->andWhere('status')->in($status)->fi()
-            ->andWhere('deleted')->eq(0)
-            ->fetchAll();
-    }
-
-    /**
      * Get stories by plan id list.
      *
      * @param  string|array $planIdList
      * @access public
      * @return array
      */
-    public function getStoriesByPlanIdList($planIdList = '')
+    public function getStoriesByPlanIdList(array|string $planIdList = ''): array
     {
         return $this->dao->select('t1.plan as planID, t2.*')->from(TABLE_PLANSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
@@ -449,6 +435,11 @@ class storyModel extends model
         /* Add story spec verify. */
         $this->storyTao->doCreateSpec($storyID, $story, $files);
 
+        /* Create actions. */
+        $action = $bugID == 0 ? 'Opened' : 'Frombug';
+        $extra  = $bugID == 0 ? '' : $bugID;
+        $this->action->create('story', $storyID, $action, '', $extra);
+
         if($executionID) $this->storyTao->linkToExecutionForCreate($executionID, $storyID, $story, $extra);
         if($bugID)       $this->storyTao->closeBugWhenToStory($bugID, $storyID);
         if(!empty($story->reviewer)) $this->storyTao->doCreateReviewer($storyID, $story->reviewer);
@@ -462,11 +453,6 @@ class storyModel extends model
 
         $this->setStage($storyID);
         $this->loadModel('score')->create('story', 'create',$storyID);
-
-        /* Create actions. */
-        $action = $bugID == 0 ? 'Opened' : 'Frombug';
-        $extra  = $bugID == 0 ? '' : $bugID;
-        $this->action->create('story', $storyID, $action, '', $extra);
 
         /* Record submit review action. */
         if($story->status == 'reviewing') $this->action->create('story', $storyID, 'submitReview');
@@ -514,38 +500,35 @@ class storyModel extends model
      * @access public
      * @return int
      */
-    public function createStoryFromGitlabIssue($story, $executionID)
+    public function createStoryFromGitlabIssue(object $story, int $executionID): int|false
     {
         $story->status       = 'active';
         $story->stage        = 'projected';
         $story->openedBy     = $this->app->user->account;
         $story->version      = 1;
         $story->pri          = 3;
-        $story->assignedDate = isset($story->assignedTo) ? helper::now() : 0;
+        $story->assignedDate = isset($story->assignedTo) ? helper::now() : null;
 
         if(isset($story->execution)) unset($story->execution);
 
         $requiredFields = $this->config->story->create->requiredFields;
         $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify,gitlab,gitlabProject')->autoCheck()->batchCheck($requiredFields, 'notempty')->exec();
-        if(!dao::isError())
-        {
-            $storyID = $this->dao->lastInsertID();
+        if(dao::isError()) return false;
 
-            $data          = new stdclass();
-            $data->story   = $storyID;
-            $data->version = 1;
-            $data->title   = $story->title;
-            $data->spec    = $story->spec;
-            $data->verify  = $story->spec;
-            $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
+        $storyID = $this->dao->lastInsertID();
 
-            /* Link story to execution. */
-            $this->linkStory($executionID, $story->product, $storyID);
+        $data          = new stdclass();
+        $data->story   = $storyID;
+        $data->version = 1;
+        $data->title   = $story->title;
+        $data->spec    = $story->spec;
+        $data->verify  = $story->spec;
+        $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
 
-            return $storyID;
-        }
+        /* Link story to execution. */
+        $this->linkStory($executionID, $story->product, $storyID);
 
-        return false;
+        return $storyID;
     }
 
     /**
@@ -776,7 +759,7 @@ class storyModel extends model
      * @access public
      * @return void
      */
-    public function updateStoryProduct($storyID, $productID)
+    public function updateStoryProduct(int $storyID, int $productID): void
     {
         $this->dao->update(TABLE_STORY)->set('product')->eq($productID)->where('id')->eq($storyID)->exec();
         $this->dao->update(TABLE_PROJECTSTORY)->set('product')->eq($productID)->where('story')->eq($storyID)->exec();
@@ -799,96 +782,68 @@ class storyModel extends model
      * @param  int    $parentID
      * @param  bool   $createAction
      * @access public
-     * @return mixed
+     * @return object|bool
      */
-    public function updateParentStatus($storyID, $parentID = 0, $createAction = true)
+    public function updateParentStatus(int $storyID, int $parentID = 0, bool $createAction = true): object|bool
     {
         $childStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
         if(empty($parentID)) $parentID = $childStory->parent;
         if($parentID <= 0) return true;
 
+        $childrenStatus = $this->dao->select('id,status')->from(TABLE_STORY)->where('parent')->eq($parentID)->andWhere('deleted')->eq(0)->fetchPairs('status', 'status');
+        if(empty($childrenStatus))
+        {
+            $this->dao->update(TABLE_STORY)->set('parent')->eq('0')->where('id')->eq($parentID)->exec();
+            return true;
+        }
+
         $oldParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($parentID)->andWhere('deleted')->eq(0)->fetch();
-        if(empty($oldParentStory)) return $this->dao->update(TABLE_STORY)->set('parent')->eq('0')->where('id')->eq($storyID)->exec();
+        if(empty($oldParentStory))
+        {
+            $this->dao->update(TABLE_STORY)->set('parent')->eq('0')->where('id')->eq($storyID)->exec();
+            return true;
+        }
         if($oldParentStory->parent != '-1') $this->dao->update(TABLE_STORY)->set('parent')->eq('-1')->where('id')->eq($parentID)->exec();
         $this->computeEstimate($parentID);
-
-        $childrenStatus = $this->dao->select('id,status')->from(TABLE_STORY)->where('parent')->eq($parentID)->andWhere('deleted')->eq(0)->fetchPairs('status', 'status');
-        if(empty($childrenStatus)) return $this->dao->update(TABLE_STORY)->set('parent')->eq('0')->where('id')->eq($parentID)->exec();
 
         $status = $oldParentStory->status;
         if(count($childrenStatus) == 1 and current($childrenStatus) == 'closed') $status = current($childrenStatus); // Close parent story.
         if($oldParentStory->status == 'closed') $status = $this->getActivateStatus($parentID); // Activate parent story.
 
+        $action    = '';
+        $preStatus = '';
         if($status and $oldParentStory->status != $status)
         {
-            $now  = helper::now();
-            $story = new stdclass();
-            $story->status = $status;
-            $story->stage  = 'wait';
-            if(strpos('active,changing,draft', $status) !== false)
-            {
-                $story->assignedTo   = $oldParentStory->openedBy;
-                $story->assignedDate = $now;
-                $story->closedBy     = '';
-                $story->closedReason = '';
-                $story->closedDate   = null;
-                $story->reviewedBy   = '';
-                $story->reviewedDate = null;
-            }
+            $story = $this->storyTao->doUpdateParentStatus($parentID, $status);
+            if(dao::isError()) return false;
+            if(!$createAction) return $story;
 
+            if(strpos('active,draft,changing', $status) !== false) $action = 'Activated';
             if($status == 'closed')
             {
-                $story->assignedTo   = 'closed';
-                $story->assignedDate = $now;
-                $story->closedBy     = $this->app->user->account;
-                $story->closedDate   = $now;
-                $story->closedReason = 'done';
-                $story->closedReason = 'done';
+                /* Record the status before closed. */
+                $action    = 'closedbysystem';
+                $preStatus = $oldParentStory->status;
+                $isChanged = $oldParentStory->changedBy ? true : false;
+                if($preStatus == 'reviewing') $preStatus = $isChanged ? 'changing' : 'draft';
             }
 
-            $story->lastEditedBy   = $this->app->user->account;
-            $story->lastEditedDate = $now;
-            $story->parent         = '-1';
-            $this->dao->update(TABLE_STORY)->data($story)->where('id')->eq($parentID)->exec();
-            if(!dao::isError())
-            {
-                if(!$createAction) return $story;
-
-                $newParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($parentID)->fetch();
-                $changes   = common::createChanges($oldParentStory, $newParentStory);
-                $action    = '';
-                $preStatus = '';
-                if(strpos('active,draft,changing', $status) !== false) $action = 'Activated';
-                if($status == 'closed')
-                {
-                    /* Record the status before closed. */
-                    $action    = 'closedbysystem';
-                    $preStatus = $oldParentStory->status;
-                    $isChanged = $oldParentStory->changedBy ? true : false;
-                    if($preStatus == 'reviewing') $preStatus = $isChanged ? 'changing' : 'draft';
-                }
-                if($action)
-                {
-                    $actionID = $this->loadModel('action')->create('story', $parentID, $action, '', $preStatus, '', false);
-                    $this->action->logHistory($actionID, $changes);
-                }
-
-                if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldParentStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldParentStory->feedback, $newParentStory->status, $oldParentStory->status);
-            }
+            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldParentStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldParentStory->feedback, $newParentStory->status, $oldParentStory->status);
         }
         else
         {
-            if(!dao::isError())
-            {
-                $newParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($parentID)->fetch();
-                $changes = common::createChanges($oldParentStory, $newParentStory);
-                if($changes)
-                {
-                    $actionID = $this->loadModel('action')->create('story', $parentID, 'Edited', '', '', '', false);
-                    $this->action->logHistory($actionID, $changes);
-                }
-            }
+            $action = 'Edited';
+            if(dao::isError()) return false;
         }
+
+        $newParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($parentID)->fetch();
+        $changes        = common::createChanges($oldParentStory, $newParentStory);
+        if($action and $changes)
+        {
+            $actionID = $this->loadModel('action')->create('story', $parentID, $action, '', $preStatus, '', false);
+            $this->action->logHistory($actionID, $changes);
+        }
+        return true;
     }
 
     /**

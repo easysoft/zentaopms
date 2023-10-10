@@ -1797,4 +1797,52 @@ class storyTao extends storyModel
     {
         return str_contains(',' . zget($this->config->story, 'superReviewers', '') . ',', ",{$this->app->user->account},");
     }
+
+    /**
+     * 更新父需求的状态。
+     * Update parent story status.
+     *
+     * @param  int       $parentID
+     * @param  string    $status
+     * @access protected
+     * @return object|false
+     */
+    protected function doUpdateParentStatus(int $parentID, string $status): object|false
+    {
+        if(empty($parentID)) return false;
+
+        $oldParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($parentID)->andWhere('deleted')->eq(0)->fetch();
+
+        $now   = helper::now();
+        $story = new stdclass();
+        $story->status = $status;
+        $story->stage  = 'wait';
+        if(strpos('active,changing,draft', $status) !== false)
+        {
+            $story->assignedTo   = $oldParentStory->openedBy;
+            $story->assignedDate = $now;
+            $story->closedBy     = '';
+            $story->closedReason = '';
+            $story->closedDate   = null;
+            $story->reviewedBy   = '';
+            $story->reviewedDate = null;
+        }
+
+        if($status == 'closed')
+        {
+            $story->assignedTo   = 'closed';
+            $story->assignedDate = $now;
+            $story->closedBy     = $this->app->user->account;
+            $story->closedDate   = $now;
+            $story->closedReason = 'done';
+            $story->closedReason = 'done';
+        }
+
+        $story->lastEditedBy   = $this->app->user->account;
+        $story->lastEditedDate = $now;
+        $story->parent         = '-1';
+        $this->dao->update(TABLE_STORY)->data($story)->where('id')->eq($parentID)->exec();
+
+        return $story;
+    }
 }
