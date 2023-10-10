@@ -228,7 +228,7 @@ class actionModel extends model
      * 获取一条操作记录。
      * Get an action record.
      *
-     * @param  int    $actionID
+     * @param  int         $actionID
      * @access public
      * @return object|bool
      */
