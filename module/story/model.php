@@ -6771,7 +6771,7 @@ class storyModel extends model
         $products      = zget($options, 'products',      array());
         $isShowBranch  = zget($options, 'isShowBranch',  '');
 
-        $userFields  = array('assignedTo', 'openedBy', 'closedBy', 'lastEditedBy', 'feedbackBy');
+        $userFields  = array('openedBy', 'closedBy', 'lastEditedBy', 'feedbackBy');
         $dateFields  = array('assignedDate', 'openedDate', 'closedDate', 'lastEditedDate', 'reviewedDate', 'activatedDate');
         $executionID = empty($execution) ? $this->session->execution : $execution->id;
         $showBranch  = isset($this->config->product->browse->showBranch) ? $this->config->product->browse->showBranch : 1;
