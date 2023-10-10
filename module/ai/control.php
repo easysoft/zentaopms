@@ -528,6 +528,7 @@ class ai extends control
         }
         if(is_int($response)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->executeErrors["$response"]) . (empty($this->ai->errors) ? '' : implode(', ', $this->ai->errors))));
         if(empty($response))  return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noResponse'])));
+
         $this->ai->setInjectData($prompt->targetForm, $response);
 
         $_SESSION['aiPrompt']['prompt']   = $prompt;
