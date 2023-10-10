@@ -301,18 +301,33 @@ class testtaskTest
         return $object;
     }
 
-    public function createResultTest($runID = 0)
+    /**
+     * 测试执行一条测试用例后记录结果。
+     * Test record result of a test case.
+     *
+     * @param  int    $runID
+     * @param  int    $caseID
+     * @param  int    $version
+     * @param  array  $stepResults
+     * @access public
+     * @return bool|array
+     */
+    public function createResultTest(int $runID, int $caseID, int $version, array $stepResults = array()): bool|array
     {
-        $objects = $this->objectModel->createResult($runID = 0);
-
+        $caseResult = $this->objectModel->createResult($runID, $caseID, $version, $stepResults);
         if(dao::isError()) return dao::getError();
+        if(!$caseResult) return $caseResult;
 
-        return $objects;
+        $case   = $this->objectModel->dao->select('lastRunner, lastRunDate, lastRunResult')->from(TABLE_CASE)->where('id')->eq($caseID)->fetch();
+        $result = $this->objectModel->dao->select('lastRunner, run, `case`, version, caseResult, stepResults')->from(TABLE_TESTRESULT)->where('`case`')->eq($caseID)->orderBy('id_desc')->limit(1)->fetch();
+        $run    = $this->objectModel->dao->select('lastRunner, lastRunDate, lastRunResult, status')->from(TABLE_TESTRUN)->where('id')->eq($runID)->fetch();
+
+        return array('caseResult' => $caseResult, 'case' => $case, 'result' => $result, 'run' => $run);
     }
 
     /**
-     * 测试批量执行测试用例。
-     * Test batch run test cases.
+     * 测试批量执行测试用例后记录结果。
+     * Test batch record result of test cases.
      *
      * @param  array  $cases
      * @param  string $runCaseType
