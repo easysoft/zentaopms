@@ -1,26 +1,23 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/release.class.php';
-su('admin');
-
 /**
 
 title=测试 releaseModel->getByID();
+timeout=0
 cid=1
-pid=1
-
-正常发布查询 >> 产品1正常的发布1,terminate
-停止维护查询 >> 项目1停止维护的里程碑发布6,normal
-无ID查询 >> 0
-图片字段传字符串测试 >> 产品1正常的发布1,terminate
 
 */
-$releaseID = array('1', '6');
 
-$release = new releaseTest();
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-r($release->getByIDTest($releaseID[0],true))   && p('name,status') && e('产品1正常的发布1,terminate');        //正常发布查询
-r($release->getByIDTest($releaseID[1],false))  && p('name,status') && e('项目1停止维护的里程碑发布6,normal'); //停止维护查询
-r($release->getByIDTest('',true))              && p('')            && e('0');                                 //无ID查询
-r($release->getByIDTest($releaseID[0],'true')) && p('name,status') && e('产品1正常的发布1,terminate');        //图片字段传字符串测试
+zdTable('release')->config('release')->gen(5);
+zdTable('user')->gen(5);
+su('admin');
+
+$releases = array(0, 1, 6);
+
+global $tester;
+$tester->loadModel('release');
+r($tester->release->getByID($releases[0])) && p()       && e('0');     // 测试获取ID为0的release信息
+r($tester->release->getByID($releases[1])) && p('name') && e('发布1'); // 测试获取ID为1的release信息
+r($tester->release->getByID($releases[2])) && p()       && e('0');     // 测试获取ID不存在的release信息
