@@ -272,18 +272,18 @@ $lang->ai->dataSource['execution']['execution']['name']     = '执行名称';
 $lang->ai->dataSource['execution']['execution']['desc']     = '执行描述';
 $lang->ai->dataSource['execution']['execution']['estimate'] = '预计工时';
 
-$lang->ai->dataSource['execution']['tasks']['common']      = '任务列表';
-$lang->ai->dataSource['execution']['tasks']['name']        = '任务名称';
-$lang->ai->dataSource['execution']['tasks']['pri']         = '优先级';
-$lang->ai->dataSource['execution']['tasks']['status']      = '状态';
-$lang->ai->dataSource['execution']['tasks']['estimate']    = '预计工时';
-$lang->ai->dataSource['execution']['tasks']['consumed']    = '已消耗';
-$lang->ai->dataSource['execution']['tasks']['left']        = '剩余';
-$lang->ai->dataSource['execution']['tasks']['progress']    = '进度';
-$lang->ai->dataSource['execution']['tasks']['estStarted']  = '预计开始';
-$lang->ai->dataSource['execution']['tasks']['realStarted'] = '实际开始';
-$lang->ai->dataSource['execution']['tasks']['finishedDate']= '完成日期';
-$lang->ai->dataSource['execution']['tasks']['closedReason']= '关闭原因';
+$lang->ai->dataSource['execution']['tasks']['common']       = '任务列表';
+$lang->ai->dataSource['execution']['tasks']['name']         = '任务名称';
+$lang->ai->dataSource['execution']['tasks']['pri']          = '优先级';
+$lang->ai->dataSource['execution']['tasks']['status']       = '状态';
+$lang->ai->dataSource['execution']['tasks']['estimate']     = '预计工时';
+$lang->ai->dataSource['execution']['tasks']['consumed']     = '已消耗';
+$lang->ai->dataSource['execution']['tasks']['left']         = '剩余';
+$lang->ai->dataSource['execution']['tasks']['progress']     = '进度';
+$lang->ai->dataSource['execution']['tasks']['estStarted']   = '预计开始';
+$lang->ai->dataSource['execution']['tasks']['realStarted']  = '实际开始';
+$lang->ai->dataSource['execution']['tasks']['finishedDate'] = '完成日期';
+$lang->ai->dataSource['execution']['tasks']['closedReason'] = '关闭原因';
 
 $lang->ai->dataSource['task']['task']['common']      = '任务';
 $lang->ai->dataSource['task']['task']['name']        = '任务名称';
@@ -403,9 +403,12 @@ $lang->ai->prompts->modules['doc']         = '文档';
 $lang->ai->conversations = new stdclass();
 $lang->ai->conversations->common = '会话';
 
-$lang->ai->miniPrograms = new stdClass();
-$lang->ai->miniPrograms->common = '小程序';
-$lang->ai->miniPrograms->create = '创建小程序';
+$lang->ai->miniPrograms                = new stdClass();
+$lang->ai->miniPrograms->common        = '小程序';
+$lang->ai->miniPrograms->create        = '创建小程序';
+$lang->ai->miniPrograms->configuration = '基本信息配置';
+$lang->ai->miniPrograms->downloadTip   = '创建完成后，您的小程序将在客户端的AI小程序广场上展示。';
+$lang->ai->miniPrograms->download      = '下载禅道客户端';
 
 $lang->ai->models = new stdclass();
 $lang->ai->models->title          = '语言模型配置';

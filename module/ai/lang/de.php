@@ -272,18 +272,18 @@ $lang->ai->dataSource['execution']['execution']['name']     = 'Name';
 $lang->ai->dataSource['execution']['execution']['desc']     = 'Description';
 $lang->ai->dataSource['execution']['execution']['estimate'] = 'Estimated hours';
 
-$lang->ai->dataSource['execution']['tasks']['common']      = 'Task List';
-$lang->ai->dataSource['execution']['tasks']['name']        = 'Name';
-$lang->ai->dataSource['execution']['tasks']['pri']         = 'Priority';
-$lang->ai->dataSource['execution']['tasks']['status']      = 'Status';
-$lang->ai->dataSource['execution']['tasks']['estimate']    = 'Estimated hours';
-$lang->ai->dataSource['execution']['tasks']['consumed']    = 'Consumed hours';
-$lang->ai->dataSource['execution']['tasks']['left']        = 'Remaining hours';
-$lang->ai->dataSource['execution']['tasks']['progress']    = 'Progress';
-$lang->ai->dataSource['execution']['tasks']['estStarted']  = 'Estimated start date';
-$lang->ai->dataSource['execution']['tasks']['realStarted'] = 'Actual start date';
-$lang->ai->dataSource['execution']['tasks']['finishedDate']= 'Finished date';
-$lang->ai->dataSource['execution']['tasks']['closedReason']= 'Closing reason';
+$lang->ai->dataSource['execution']['tasks']['common']       = 'Task List';
+$lang->ai->dataSource['execution']['tasks']['name']         = 'Name';
+$lang->ai->dataSource['execution']['tasks']['pri']          = 'Priority';
+$lang->ai->dataSource['execution']['tasks']['status']       = 'Status';
+$lang->ai->dataSource['execution']['tasks']['estimate']     = 'Estimated hours';
+$lang->ai->dataSource['execution']['tasks']['consumed']     = 'Consumed hours';
+$lang->ai->dataSource['execution']['tasks']['left']         = 'Remaining hours';
+$lang->ai->dataSource['execution']['tasks']['progress']     = 'Progress';
+$lang->ai->dataSource['execution']['tasks']['estStarted']   = 'Estimated start date';
+$lang->ai->dataSource['execution']['tasks']['realStarted']  = 'Actual start date';
+$lang->ai->dataSource['execution']['tasks']['finishedDate'] = 'Finished date';
+$lang->ai->dataSource['execution']['tasks']['closedReason'] = 'Closing reason';
 
 $lang->ai->dataSource['task']['task']['common']      = 'Task';
 $lang->ai->dataSource['task']['task']['name']        = 'Name';
@@ -403,9 +403,12 @@ $lang->ai->prompts->modules['doc']         = 'Document';
 $lang->ai->conversations = new stdclass();
 $lang->ai->conversations->common = 'Conversations';
 
-$lang->ai->miniPrograms = new stdClass();
-$lang->ai->miniPrograms->common = 'Mini Programs';
-$lang->ai->miniPrograms->create = 'Create A Program';
+$lang->ai->miniPrograms                = new stdClass();
+$lang->ai->miniPrograms->common        = 'Mini Programs';
+$lang->ai->miniPrograms->create        = 'Create A Program';
+$lang->ai->miniPrograms->configuration = 'Basic Information Configuration';
+$lang->ai->miniPrograms->downloadTip   = 'Once created, your mini-program will be displayed on the AI Mini-Program Square in the client.';
+$lang->ai->miniPrograms->download      = 'Download Zentao Client';
 
 $lang->ai->models = new stdclass();
 $lang->ai->models->title          = 'Language Model Configuration';
