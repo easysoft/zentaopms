@@ -1055,4 +1055,31 @@ class releaseModel extends model
 
         return $bugs;
     }
+
+    /**
+     * 删除发布。
+     * Delete a release.
+     *
+     * @param  string $table
+     * @param  int    $releaseID
+     * @access public
+     * @return bool
+     */
+    public function delete(string $table, int $releaseID): bool
+    {
+        $this->dao->update(TABLE_RELEASE)->set('deleted')->eq(1)->where('id')->eq($releaseID)->exec();
+        $this->loadModel('action')->create('release', $releaseID, 'deleted');
+
+        $release = $this->getByID($releaseID);
+        if(!$release) return false;
+
+        $builds = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll();
+        $this->dao->update(TABLE_BUILD)->set('deleted')->eq(1)->where('id')->eq($release->shadow)->exec();
+        foreach($builds as $build)
+        {
+            if(empty($build->execution) && $build->createdDate == $release->createdDate) $this->build->delete(TABLE_BUILD, $build->id);
+        }
+
+        return !dao::isError();
+    }
 }

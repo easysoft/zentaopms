@@ -281,15 +281,7 @@ class release extends control
      */
     public function delete(int $releaseID)
     {
-        $release = $this->release->getByID($releaseID);
         $this->release->delete(TABLE_RELEASE, $releaseID);
-
-        $builds  = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll();
-        $this->dao->update(TABLE_BUILD)->set('deleted')->eq(1)->where('id')->eq($release->shadow)->exec();
-        foreach($builds as $build)
-        {
-            if(empty($build->execution) and $build->createdDate == $release->createdDate) $this->build->delete(TABLE_BUILD, $build->id);
-        }
 
         $response = array();
         $message  = $this->executeHooks($releaseID);
@@ -303,6 +295,7 @@ class release extends control
         }
         else
         {
+            $release = $this->release->getByID($releaseID);
             $response['result'] = 'success';
             $response['load']   = inLink('browse', "productID={$release->product}");
         }
