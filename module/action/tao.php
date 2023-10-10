@@ -43,9 +43,8 @@ class actionTao extends actionModel
      */
     protected function getNoFilterRequiredRelation(string $objectType, int $objectID): array
     {
-        $product   = array(0);
-        $project   = 0;
-        $execution = 0;
+        $product = array(0);
+        $project = $execution = 0;
         switch($objectType)
         {
             case 'product':
@@ -53,13 +52,14 @@ class actionTao extends actionModel
                 break;
             case 'project':
             case 'execution':
-                $productList = $this->getProductByProject($objectID);
-                extract(array($objectType => $objectID, 'product' => $productList));
+                $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectID)->fetchPairs();
+                if($products) $product = $products;
+                ${$objectType} = $objectID;
 
                 if($objectType == 'execution')
                 {
-                    $executionInfo = $this->loadModel('execution')->getById($objectID);
-                    $project = $executionInfo ? $executionInfo->project : 0;
+                    $project = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($objectID)->fetch('project');
+                    if(!$project) $project = 0;
                 }
                 break;
         }
@@ -68,40 +68,75 @@ class actionTao extends actionModel
     }
 
     /**
-     * 根据项目获取产品。
-     * Get product by project.
+     * 获取对象的产品项目以及执行。
+     * Get product, project, execution of the object.
      *
-     * @param  int   $objectID
-     * @access protected
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  string $actionType
+     * @param  string $extra
+     * @access public
      * @return array
      */
-    protected function getProductByProject(int $objectID): array
+    protected function getNeedRelatedFields(string $objectType, int $objectID, string $actionType = '', string $extra = ''): array
     {
-        $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectID)->fetchPairs('product');
-        return $products ? array_keys($products) : array();
-    }
-
-    /**
-     * 根据项目获取产品列表。
-     * Get product list by project.
-     *
-     * @param  int   $projectID
-     * @access protected
-     * @return array
-     */
-    protected function getProductListByProject(int $projectID): array
-    {
-        $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs('product');
-        return $products ? array_keys($products) : array();
+        $product = array(0);
+        $project = $execution = 0;
+        switch($objectType)
+        {
+            case 'story':
+                list($product, $project, $execution) = $this->getStoryActionRelated($objectType, $objectID, (int)$extra);
+            case 'productplan':
+            case 'branch':
+                $product = $objectID == 0 ? $extra : $this->dao->select('product')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch('product');
+                break;
+            case 'testcase':
+            case 'case':
+                list($product, $project, $execution) = $this->getCaseRelated($objectType, $actionType, $objectID, (int)$extra);
+                break;
+            case 'repo':
+            case 'kanbanlane':
+                $execution = $this->dao->select('execution')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch('execution');
+                break;
+            case 'release':
+                list($product, $project) = $this->getReleaseRelated($objectType, $objectID);
+                break;
+            case 'task':
+                list($product, $project, $execution) = $this->getTaskReleated($objectType, $objectID);
+                break;
+            case 'kanbancolumn':
+                $execution = $extra;
+                break;
+            case 'team':
+                $type = $this->dao->select('type')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch('type');
+                if($type != 'project') $type = 'execution';
+                ${$type} = $objectID;
+                break;
+            case 'whitelist':
+                if($extra == 'product' || $extra == 'project') ${$extra} = $objectID;
+                if($extra == 'sprint' || $extra == 'stage') $execution = $objectID;
+                break;
+            case 'module':
+                $module = $this->dao->select('type,root')->from(TABLE_MODULE)->where('id')->eq($actionType != 'deleted' ? $extra : $objectID)->fetch();
+                if(!empty($module) && $module->type == 'story') $product = $module->root;
+                break;
+            case 'review':
+                list($product, $project) = $this->getReviewRelated($objectType, $objectID);
+                break;
+            default:
+                list($product, $project, $execution) = $this->getGenerateRelated($objectType, $objectID);
+                break;
+        }
+        return array($product, $project, $execution);
     }
 
     /**
      * 获取用户故事相关的产品、项目、阶段。
      * Get story related product, project, stage.
      *
-     * @param  string $actionType
-     * @param  int    $objectID
-     * @param  int    $extra
+     * @param  string    $actionType
+     * @param  int       $objectID
+     * @param  int       $extra
      * @access protected
      * @return array
      */
@@ -119,13 +154,10 @@ class actionTao extends actionModel
                     $project   = $build->project;
                     $execution = $build->execution;
                 }
-
                 break;
             case 'estimated':
-                $executionInfo = $this->loadModel('execution')->getById($extra);
-                if($execution) $project = $executionInfo->project;
-                $execution = $extra;
-
+                $project   = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq((int)$extra)->fetch('project');
+                $execution = (int)$extra;
                 break;
             default:
                 $projectList = $this->dao->select('t2.id,t2.project,t2.type')->from(TABLE_PROJECTSTORY)->alias('t1')
@@ -144,7 +176,6 @@ class actionTao extends actionModel
                 }
                 break;
         }
-
         return array($product, $project, $execution);
     }
 
@@ -152,30 +183,21 @@ class actionTao extends actionModel
      * 获取用例相关的产品、项目、阶段。
      * Get case related product, project, stage.
      *
-     * @param  string $objectType
-     * @param  string $actionType
-     * @param  string $table
-     * @param  int    $objectID
-     * @param  int    $extra
+     * @param  string    $objectType
+     * @param  string    $actionType
+     * @param  string    $table
+     * @param  int       $objectID
+     * @param  int       $extra
      * @access protected
      * @return array
      */
     protected function getCaseRelated(string $objectType, string $actionType, int $objectID, int $extra): array
     {
-        $product = array(0);
-        $project = $execution = 0;
-        $result  = $this->dao->select('product, project, execution')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
-
-        if($result)
-        {
-            $product   = explode(',', (string)$result->product);
-            $project   = $result->project;
-            $execution = $result->execution;
-        }
+        list($product, $project, $execution) = $this->getGenerateRelated($objectType, $objectID);
 
         if(in_array($actionType, array('linked2testtask', 'unlinkedfromtesttask', 'assigned', 'run')) && $extra)
         {
-            $testtask = $this->dao->select('project,execution')->from(TABLE_TESTTASK)->where('id')->eq($extra)->fetch();
+            $testtask  = $this->dao->select('project,execution')->from(TABLE_TESTTASK)->where('id')->eq($extra)->fetch();
             $project   = $testtask->project;
             $execution = $testtask->execution;
         }
@@ -187,26 +209,22 @@ class actionTao extends actionModel
      * 常规获取相关的产品、项目、执行。
      * Get general related product, project, execution.
      *
-     * @param  string $objectType
-     * @param  int    $objectID
-     * @param  string $field
+     * @param  string    $objectType
+     * @param  int       $objectID
      * @access protected
      * @return array
      */
-    protected function getGenerateRelated(string $objectType, int $objectID, string $field = 'product, project, execution'): array
+    protected function getGenerateRelated(string $objectType, int $objectID): array
     {
         $product = array(0);
         $project = $execution = 0;
-
-        $result  = $this->dao->select($field)->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
-
+        $result  = $this->dao->select('product,project,execution')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
         if($result)
         {
-            $product   = implode(',', array($result->product));
+            $product   = array($result->product);
             $project   = $result->project;
             $execution = $result->execution;
         }
-
         return array($product, $project, $execution);
     }
 
@@ -214,33 +232,30 @@ class actionTao extends actionModel
      * 获取用例相关的产品、项目、执行。
      * Get case related product, project, execution.
      *
-     * @param  string $objectType
-     * @param  int    $objectID
+     * @param  string    $objectType
+     * @param  int       $objectID
      * @access protected
      * @return array
      */
     protected function getReleaseRelated(string $objectType, int $objectID): array
     {
         $product = array(0);
-        $project = $execution = 0;
-
+        $project = 0;
         $result  = $this->dao->select('product, build')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
-
         if($result)
         {
             $product = $result->product;
             $project = $this->dao->select('project')->from(TABLE_BUILD)->where('id')->eq($result->build)->fetch('project');
         }
-
-        return array($product, $project, $execution);
+        return array($product, $project);
     }
 
     /**
      * 获取任务相关的产品、项目、执行。
      * Get task related product, project, execution.
      *
-     * @param  string $objectType
-     * @param  int    $objectID
+     * @param  string    $objectType
+     * @param  int       $objectID
      * @access protected
      * @return array
      */
@@ -248,23 +263,18 @@ class actionTao extends actionModel
     {
         $product = array(0);
         $project = $execution = 0;
-
-        $fields = 'project, execution, story';
-        $result = $this->dao->select($fields)->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
-
+        $result  = $this->dao->select('project,execution,story')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
         if($result)
         {
-            $table = $result->story != 0 ? TABLE_STORY : TABLE_PROJECTPRODUCT;
-            $field = $result->story != 0 ? 'id' : 'project';
-            $value = $result->story != 0 ? $result->story : $result->execution;
-
-            $products = $this->dao->select('product')->from($table)->where($field)->eq($value)->fetch('product');
-            $product  = $products ? array($products) : array();
+            $table    = $result->story != 0 ? TABLE_STORY : TABLE_PROJECTPRODUCT;
+            $field    = $result->story != 0 ? 'id' : 'project';
+            $value    = $result->story != 0 ? $result->story : $result->execution;
+            $products = $this->dao->select('product')->from($table)->where($field)->eq($value)->fetchPairs();
+            if($products) $product = $products;
 
             $project   = $result->project;
             $execution = $result->execution;
         }
-
         return array($product, $project, $execution);
     }
 
@@ -272,26 +282,23 @@ class actionTao extends actionModel
      * 获取需求相关的产品、项目、执行。
      * Get story related product, project, execution.
      *
-     * @param  string $objectType
-     * @param  int    $objectID
+     * @param  string    $objectType
+     * @param  int       $objectID
      * @access protected
      * @return array
      */
     protected function getReviewRelated(string $objectType, int $objectID): array
     {
         $product = array(0);
-        $project = $execution = 0;
-
-        $result = $this->dao->select('*')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
-
+        $project = 0;
+        $result  = $this->dao->select('*')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
         if($result)
         {
-            $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($result->project)->fetchPairs('product');
-            if(!empty($products)) array_keys($products);
-            $project  = zget($result, 'project', 0);
+            $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($result->project)->fetchPairs();
+            if($products) $product = $products;
+            $project = zget($result, 'project', 0);
         }
-
-        return array($product, $project, $execution);
+        return array($product, $project);
     }
 
     /**
