@@ -645,7 +645,7 @@ class bugModel extends model
 
         $excludeBugs .= ",{$bug->id},{$bug->relatedBug}";
 
-        if($bySearch) return $this->bugTao->getBySearch('bug', (array)$bug->product, 'all', 0, 0, $queryID, $excludeBugs, 'id desc', $pager);
+        if($bySearch) return $this->getBySearch('bug', (array)$bug->product, 'all', 0, 0, $queryID, $excludeBugs, 'id desc', $pager);
 
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('deleted')->eq('0')
@@ -916,7 +916,7 @@ class bugModel extends model
 
         if($type == 'bysearch')
         {
-            $bugs = $this->bugTao->getBySearch('project', $productIID, $branchID, $projectID, $param, $excludeBugs, $orderBy, $pager);
+            $bugs = $this->getBySearch('project', $productIID, $branchID, $projectID, $param, $excludeBugs, $orderBy, $pager);
         }
         else
         {
@@ -967,7 +967,7 @@ class bugModel extends model
         $type = strtolower($type);
         if($type == 'bysearch')
         {
-            $bugs = $this->bugTao->getBySearch('execution', $productIID, $branchID, $projectID = 0, $executionID, $param, $excludeBugs, $orderBy, $pager);
+            $bugs = $this->getBySearch('execution', $productIID, $branchID, $projectID = 0, $executionID, $param, $excludeBugs, $orderBy, $pager);
         }
         else
         {
