@@ -554,21 +554,26 @@ class releaseModel extends model
     }
 
     /**
+     * 移除关联的Bug。
      * Unlink bug.
      *
      * @param  int    $releaseID
      * @param  int    $bugID
-     * @param  string $type
+     * @param  string $type      bug|leftBug
      * @access public
-     * @return void
+     * @return bool
      */
-    public function unlinkBug($releaseID, $bugID, $type = 'bug')
+    public function unlinkBug(int $releaseID, int $bugID, string $type = 'bug'): bool
     {
         $release = $this->getByID($releaseID);
+        if(!$release) return false;
+
         $field = $type == 'bug' ? 'bugs' : 'leftBugs';
         $release->{$field} = trim(str_replace(",$bugID,", ',', ",{$release->$field},"), ',');
-        $this->dao->update(TABLE_RELEASE)->set($field)->eq($release->$field)->where('id')->eq((int)$releaseID)->exec();
+        $this->dao->update(TABLE_RELEASE)->set($field)->eq($release->$field)->where('id')->eq($releaseID)->exec();
         $this->loadModel('action')->create('bug', $bugID, 'unlinkedfromrelease', '', $releaseID);
+
+        return !dao::isError();
     }
 
     /**
