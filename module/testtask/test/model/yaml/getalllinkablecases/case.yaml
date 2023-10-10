@@ -1,0 +1,12 @@
+title: table zt_case
+author: Gang Liu
+version: "1.0"
+fields:
+  - field: branch
+    range: 0-2{8}
+  - field: type
+    range: feature,performance,config,install,security,interface,other,unit
+  - field: status
+    range: wait,normal{5},blocked,investigate
+  - field: deleted
+    range: 0{6},1,0
