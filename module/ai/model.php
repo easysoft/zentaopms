@@ -372,6 +372,7 @@ class aiModel extends model
         {
             /* Extract function call arguments. */
             if(!empty($response->function_call)) return array($response->function_call->arguments);
+            throw new AIResponseException('notFunctionCalling', $response);
         }
         else
         {
@@ -530,6 +531,7 @@ class aiModel extends model
      * @param  array  $options   optional params, see https://platform.openai.com/docs/api-reference/chat/create
      * @access public
      * @return mixed  false if error, array of JSON object if success
+     * @throws AIResponseException
      */
     public function converseTwiceForJSON($messages, $schema, $options = array())
     {
@@ -1033,6 +1035,7 @@ class aiModel extends model
      * @param  int|object    $object    object (or id) to execute prompt on.
      * @access public
      * @return string|int    returns either JSON string or negative integer on error.
+     * @throws AIResponseException
      */
     public function executePrompt($prompt, $object)
     {
@@ -1726,5 +1729,45 @@ class aiModel extends model
         if(dao::isError()) return false;
 
         return true;
+    }
+}
+
+/**
+ * Exception class for response from AI.
+ */
+class AIResponseException extends Exception
+{
+    /**
+     * Type of response error, error messages are defined in lang files with type as key.
+     *
+     * See `$lang->ai->aiResponseException`.
+     *
+     * @var    string
+     * @access public
+     */
+    public $type;
+
+    /**
+     * Response with error.
+     *
+     * @var    string|object
+     * @access public
+     */
+    public $response;
+
+    /**
+     * Create a AIResponseException, load error message from lang file.
+     *
+     * @param  string        $type
+     * @param  string|object $response
+     * @access public
+     * @return void
+     */
+    public function __construct($type, $response)
+    {
+        global $app;
+        $this->type     = $type;
+        $this->response = $response;
+        $this->message  = zget($app->lang->ai->aiResponseException, $type, '');
     }
 }

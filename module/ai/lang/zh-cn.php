@@ -797,3 +797,6 @@ $lang->ai->audit->backLocationList[1] = '返回调试页面并重新生成';
 
 $lang->ai->engineeredPrompts = new stdclass();
 $lang->ai->engineeredPrompts->askForFunctionCalling = array((object)array('role' => 'user', 'content' => '请把我所发的下一条消息内容转换为 function 调用。'), (object)array('role' => 'assistant', 'content' => '好的，我会把下一条消息转换为 function 调用。'));
+
+$lang->ai->aiResponseException = array();
+$lang->ai->aiResponseException['notFunctionCalling'] = 'AI 提词执行返回值结构不正确，请重试（可能可以通过优化提词来解决）';

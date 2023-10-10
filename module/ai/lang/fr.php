@@ -796,3 +796,6 @@ $lang->ai->audit->backLocationList[1] = 'back to audit page and regenerate.';
 
 $lang->ai->engineeredPrompts = new stdclass();
 $lang->ai->engineeredPrompts->askForFunctionCalling = array((object)array('role' => 'user', 'content' => 'Please convert my next message into a function call.'), (object)array('role' => 'assistant', 'content' => 'Sure, I\'ll convert your next message into a function call.'));
+
+$lang->ai->aiResponseException = array();
+$lang->ai->aiResponseException['notFunctionCalling'] = 'The response is not a function calling';
