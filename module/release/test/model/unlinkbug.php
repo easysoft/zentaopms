@@ -1,28 +1,36 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/release.class.php';
-su('admin');
-
 /**
 
 title=测试 releaseModel->unlinkBug();
+timeout=0
 cid=1
-pid=1
-
-正常发布批量移除解决的Bug >> 1,
-正常发布批量移除遗留的Bug >> 1,
-停止维护发布批量移除解决的Bug >> 6,
-停止维护发布批量移除遗留的Bug >> 6,
 
 */
-$releaseID = array('1','6');
-$bugs      = array('314');
-$type      = array('bug', 'leftBug');
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/release.class.php';
 
-$release = new releaseTest();
+$release = zdTable('release')->config('release');
+$release->bugs->range('`1,2,3`,`4,5,6`');
+$release->leftBugs->range('`1,2,3`,`4,5,6`');
+$release->gen(5);
+zdTable('user')->gen(5);
+su('admin');
 
-r($release->unlinkBugTest($releaseID[0], $bugs ,$type[0])) && p('id,bugs,leftBugs') && e('1,'); //正常发布批量移除解决的Bug
-r($release->unlinkBugTest($releaseID[0], $bugs ,$type[1])) && p('id,bugs,leftBugs') && e('1,'); //正常发布批量移除遗留的Bug
-r($release->unlinkBugTest($releaseID[1], $bugs ,$type[0])) && p('id,bugs,leftBugs') && e('6,'); //停止维护发布批量移除解决的Bug
-r($release->unlinkBugTest($releaseID[1], $bugs ,$type[1])) && p('id,bugs,leftBugs') && e('6,'); //停止维护发布批量移除遗留的Bug
+$releases = array(0, 1, 6);
+$types    = array('bug', 'leftBug');
+$bugs     = array(2, 4);
+
+$releaseTester = new releaseTest();
+r($releaseTester->unlinkBugTest($releases[0], $bugs[0], $types[0])) && p()                   && e('0');         // 测试发布ID为空时，解除跟bugID=2的关联
+r($releaseTester->unlinkBugTest($releases[1], $bugs[0], $types[0])) && p('0:old;0:new', ';') && e('1,2,3;1,3'); // 测试发布ID=1时，解除跟bugID=2的关联
+r($releaseTester->unlinkBugTest($releases[2], $bugs[0], $types[0])) && p()                   && e('0');         // 测试发布ID不存在时，解除跟bugID=2的关联
+r($releaseTester->unlinkBugTest($releases[0], $bugs[1], $types[0])) && p()                   && e('0');         // 测试发布ID为空时，解除跟bugID=4的关联
+r($releaseTester->unlinkBugTest($releases[1], $bugs[1], $types[0])) && p()                   && e('0');         // 测试发布ID=1时，解除跟bugID=4的关联
+r($releaseTester->unlinkBugTest($releases[2], $bugs[1], $types[0])) && p()                   && e('0');         // 测试发布ID不存在时，解除跟bugID=4的关联
+r($releaseTester->unlinkBugTest($releases[0], $bugs[0], $types[1])) && p()                   && e('0');         // 测试发布ID为空时，解除跟遗留的bugID=2的关联
+r($releaseTester->unlinkBugTest($releases[1], $bugs[0], $types[1])) && p('0:old;0:new', ';') && e('1,2,3;1,3'); // 测试发布ID=1时，解除跟遗留的bugID=2的关联
+r($releaseTester->unlinkBugTest($releases[2], $bugs[0], $types[1])) && p()                   && e('0');         // 测试发布ID不存在时，解除跟遗留的bugID=2的关联
+r($releaseTester->unlinkBugTest($releases[0], $bugs[1], $types[1])) && p()                   && e('0');         // 测试发布ID为空时，解除跟遗留的bugID=4的关联
+r($releaseTester->unlinkBugTest($releases[1], $bugs[1], $types[1])) && p()                   && e('0');         // 测试发布ID=1时，解除跟遗留的bugID=4的关联
+r($releaseTester->unlinkBugTest($releases[2], $bugs[1], $types[1])) && p()                   && e('0');         // 测试发布ID不存在时，解除跟遗留的bugID=4的关联

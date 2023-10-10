@@ -160,14 +160,14 @@ class releaseTest
      * 发布批量关联Bug。
      * Link bugs.
      *
-     * @param  int    $releaseID
-     * @param  string $type      bug|leftBug
-     * @param  array  $bugs
+     * @param  int         $releaseID
+     * @param  string      $type      bug|leftBug
+     * @param  array       $bugs
      * @access public
-     * @return array
+     * @return false|array
      */
 
-    public function linkBugTest(int $releaseID, string $type = 'bug', array $bugs = array())
+    public function linkBugTest(int $releaseID, string $type = 'bug', array $bugs = array()): false|array
     {
         $oldRelease = $this->objectModel->getByID($releaseID);
         $this->objectModel->linkBug($releaseID, $type, $bugs);
@@ -180,27 +180,25 @@ class releaseTest
     }
 
     /**
+     * 移除关联的Bug。
      * Unlink bug.
      *
-     * @param  int    $releaseID
-     * @param  int    $bugID
-     * @param  string $type
+     * @param  int         $releaseID
+     * @param  int         $bugID
+     * @param  string      $type
      * @access public
-     * @return void
+     * @return false|array
      */
-
-    public function unlinkBugTest($releaseID, $bugID, $type = 'bug')
+    public function unlinkBugTest(int $releaseID, int $bugID, string $type = 'bug'): false|array
     {
-        $_POST['bugs'] = $bugID;
-        $this->objectModel->linkBug($releaseID);
-        unset($_POST);
+        $oldRelease = $this->objectModel->getByID($releaseID);
+        $this->objectModel->unlinkBug($releaseID, $bugID, $type);
 
-        $this->objectModel->unlinkBug($releaseID, $bugID[0], $type);
-
+        if(!$oldRelease) return false;
         if(dao::isError()) return dao::getError();
 
-        $objects = $this->objectModel->getByID($releaseID);
-        return $objects;
+        $release = $this->objectModel->getByID($releaseID);
+        return common::createChanges($oldRelease, $release);
     }
 
     /**
