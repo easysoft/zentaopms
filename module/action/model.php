@@ -154,7 +154,6 @@ class actionModel extends model
         $commiters = $this->loadModel('user')->getCommiters();
         $actions   = $this->actionTao->getActionListByTypeAndID($objectType, $objectID, $modules);
         $histories = $this->getHistory(array_keys($actions));
-
         if($objectType == 'project') $actions = $this->processProjectActions($actions);
 
         foreach($actions as $actionID => $action)
@@ -164,30 +163,28 @@ class actionModel extends model
             if(substr($actionName, 0, 7)  == 'linked2')      $this->actionTao->getLinked2Extra($action, substr($actionName, 7));
             if(substr($actionName, 0, 12) == 'unlinkedfrom') $this->actionTao->getUnlinkedFromExtra($action, substr($actionName, 12));
 
-            if($actionName == 'moved' && $action->objectType != 'module') $this->actionTao->processActionExtra(TABLE_PROJECT, $action, 'name', 'execution', 'task');
-            if($actionName == 'frombug' && common::hasPriv('bug', 'view')) $action->extra = html::a(helper::createLink('bug', 'view', "bugID=$action->extra"), $action->extra);
-
             if(in_array($actionName, array('svncommited', 'gitcommited')) && isset($commiters[$action->actor])) $action->actor = $commiters[$action->actor];
-            if(in_array($action->objectType, array('feedback', 'ticket')) && $actionName == 'tostory') $this->actionTao->processToStoryActionExtra($action);
+            if(!in_array($action->objectType, array('feedback', 'ticket')) && $actionName == 'tostory') $this->actionTao->processToStoryActionExtra($action);
 
+            if($actionName == 'moved' && $action->objectType != 'module') $this->actionTao->processActionExtra(TABLE_PROJECT, $action, 'name', 'execution', 'task');
+            if($actionName == 'frombug' && common::hasPriv('bug', 'view')) $action->extra = html::a(helper::createLink('bug', 'view', "bugID={$action->extra}"), $action->extra);
             if($actionName == 'importedcard') $this->actionTao->processActionExtra(TABLE_KANBAN, $action, 'name', 'kanban', 'view', true);
             if($actionName == 'createchildren') $this->actionTao->processCreateChildrenActionExtra($action);
             if($actionName == 'createrequirements') $this->actionTao->processCreateRequirementsActionExtra($action);
             if($actionName == 'buildopened') $this->actionTao->processActionExtra(TABLE_BUILD, $action, 'name', 'build', 'view');
-            if($actionName == 'finished' && $objectType == 'todo') $this->actionTao->finishToDoActionExtra($action);
             if($actionName == 'fromlib' && $action->objectType == 'case') $this->actionTao->processActionExtra(TABLE_TESTSUITE, $action, 'name', 'caselib', 'browse');
-            if($action->objectType != 'feedback' && (strpos(',totask,linkchildtask,unlinkchildrentask,linkparenttask,unlinkparenttask,deletechildrentask,', ",$actionName,") !== false)) $this->actionTao->processActionExtra(TABLE_TASK, $action, 'name', 'task', 'view');
-            if(($actionName == 'opened' || $actionName == 'managed' || $actionName == 'edited') && ($objectType == 'execution' || $objectType == 'project')) $this->actionTao->processExecutionAndProjectActionExtra($action);
+            if($actionName == 'finished' && $objectType == 'todo') $this->actionTao->finishToDoActionExtra($action);
             if(($actionName == 'closed' && $action->objectType == 'story') || ($actionName == 'resolved' && $action->objectType == 'bug')) $this->actionTao->processClosedStoryAndResolvedBugActionExtra($action);
 
-            if(in_array($actionName, array('totask', 'linkchildtask', 'unlinkchildrentask', 'linkparenttask', 'unlinkparenttask', 'deletechildrentask'))) $this->actionTao->processActionExtra(TABLE_STORY, $action, 'title', 'story', 'view');
+            if(in_array($actionName, array('totask', 'linkchildtask', 'un', 'linkparenttask', 'unlinkparenttask', 'deletechildrentask')) && $action->objectType != 'feedback') $this->actionTao->processActionExtra(TABLE_TASK, $action, 'name', 'task', 'view');;
+            if(in_array($actionName, array('linkchildstory', 'unlinkchildrenstory', 'linkparentstory', 'unlinkparentstory', 'deletechildrenstory'))) $this->actionTao->processActionExtra(TABLE_STORY, $action, 'title', 'story', 'view');
             if(in_array($actionName, array('testtaskopened', 'testtaskstarted', 'testtaskclosed'))) $this->actionTao->processActionExtra(TABLE_TESTTASK, $action, 'name', 'testtask', 'view');
             if(in_array($actionName, array('importfromstorylib', 'importfromrisklib', 'importfromissuelib', 'importfromopportunitylib')) && $this->config->edition == 'max') $this->actionTao->processActionExtra(TABLE_ASSETLIB, $action, 'name', 'assetlib', $action->objectType);
             if(in_array($actionName, array('opened', 'managed', 'edited')) && in_array($objectType, array('execution', 'project'))) $this->actionTao->processExecutionAndProjectActionExtra($action);
             if(in_array($actionName, array('linkstory', 'unlinkstory', 'createchildrenstory'))) $this->actionTao->processLinkStoryAndBugActionExtra($action, 'story', 'view');
             if(in_array($actionName, array('linkbug', 'unlinkbug'))) $this->actionTao->processLinkStoryAndBugActionExtra($action, 'bug', 'view');
 
-            $action->history = isset($histories[$actionID]) ? $histories[$actionID] : array();
+            $action->history = zget($histories, $actionID, array();
             if($actionName == 'svncommited') array_map(function($history) {if($history->field == 'subversion') $history->diff = str_replace('+', '%2B', $history->diff);}, $action->history);
             if($actionName == 'gitcommited') array_map(function($history) {if($history->field == 'git') $history->diff = str_replace('+', '%2B', $history->diff);}, $action->history);
 
@@ -195,7 +192,6 @@ class actionModel extends model
 
             $actions[$actionID] = $action;
         }
-
         return $actions;
     }
 
