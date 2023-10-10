@@ -428,8 +428,9 @@ class mrModel extends model
 
         $MR = $this->getByID($MRID);
         $this->linkObjects($MR);
-
-        $this->loadModel('action')->create('mr', $MRID, 'edited');
+        $changes = common::createChanges($oldMR, $MR);
+        $actionID = $this->loadModel('action')->create('mr', $MRID, 'edited');
+        if(!empty($changes)) $this->action->logHistory($actionID, $changes);
         $this->createMRLinkedAction($MRID, 'editmr', $MR->editedDate);
 
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
