@@ -577,27 +577,32 @@ class releaseModel extends model
     }
 
     /**
+     * 批量解除发布跟Bug的关联。
      * Batch unlink bug.
      *
      * @param  int    $releaseID
-     * @param  string $type
+     * @param  string $type      bug|leftBug
+     * @param  array  $bugIdList
      * @access public
-     * @return void
+     * @return bool
      */
-    public function batchUnlinkBug($releaseID, $type = 'bug')
+    public function batchUnlinkBug(int $releaseID, string $type = 'bug', array $bugIdList = array()): bool
     {
-        $bugList = $this->post->bugIdList;
-        if(empty($bugList)) return true;
+        if(empty($bugIdList)) return true;
 
         $release = $this->getByID($releaseID);
-        $field   = $type == 'bug' ? 'bugs' : 'leftBugs';
+        if(!$release) return false;
+
+        $field = $type == 'bug' ? 'bugs' : 'leftBugs';
         $release->$field = ",{$release->$field},";
-        foreach($bugList as $bugID) $release->$field = str_replace(",$bugID,", ',', $release->$field);
+        foreach($bugIdList as $bugID) $release->$field = str_replace(",$bugID,", ',', $release->$field);
         $release->$field = trim($release->$field, ',');
-        $this->dao->update(TABLE_RELEASE)->set($field)->eq($release->$field)->where('id')->eq((int)$releaseID)->exec();
+        $this->dao->update(TABLE_RELEASE)->set($field)->eq($release->$field)->where('id')->eq($releaseID)->exec();
 
         $this->loadModel('action');
-        foreach($this->post->bugIdList as $unlinkBugID) $this->action->create('bug', $unlinkBugID, 'unlinkedfromrelease', '', $releaseID);
+        foreach($bugIdList as $unlinkBugID) $this->action->create('bug', $unlinkBugID, 'unlinkedfromrelease', '', $releaseID);
+
+        return !dao::isError();
     }
 
     /**

@@ -594,6 +594,7 @@ class release extends control
     }
 
     /**
+     * 批量解除发布跟Bug的关联。
      * Batch unlink story.
      *
      * @param  int    $releaseID
@@ -603,7 +604,7 @@ class release extends control
      */
     public function batchUnlinkBug(int $releaseID, string $type = 'bug')
     {
-        $this->release->batchUnlinkBug($releaseID, $type);
+        $this->release->batchUnlinkBug($releaseID, $type, (array)$this->post->bugIdList);
         return $this->sendSuccess(array('load' => $this->createLink($this->app->rawModule, 'view', "releaseID={$releaseID}&type={$type}")));
     }
 
