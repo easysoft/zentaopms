@@ -32,6 +32,17 @@ function loadExecutions(productID)
     });
 }
 
+$('#mainContent').on('change', '#build', function()
+{
+    var buildID = $(this).val();
+    link = createLink('testtask', 'ajaxGetExecutionByBuild', 'buildID=' + buildID);
+    $.get(link, function(data)
+    {
+        $('#execution').val(data);
+        $("#execution").trigger("chosen:updated");
+    });
+})
+
 /* If the mouse hover over the manage contacts button, give tip. */
 $(function()
 {

@@ -20,12 +20,18 @@ class testtaskModel extends model
      * @access public
      * @return void
      */
-    function create($projectID = 0)
+    public function create($projectID = 0)
     {
         if($this->post->execution)
         {
             $execution = $this->loadModel('execution')->getByID($this->post->execution);
             $projectID = $execution->project;
+        }
+
+        if($this->post->build && empty($projectID))
+        {
+            $build     = $this->loadModel('build')->getById($this->post->build);
+            $projectID = $build->project;
         }
 
         $task = fixer::input('post')
@@ -788,8 +794,16 @@ class testtaskModel extends model
         $task->members = trim($task->members, ',');
 
         /* Fix bug #35419. */
-        $execution     = $this->loadModel('execution')->getByID($task->execution);
-        $task->project = $execution->project;
+        $execution = $this->loadModel('execution')->getByID($task->execution);
+        if(!$execution)
+        {
+            $build         = $this->loadModel('build')->getById($task->build);
+            $task->project = $build->project;
+        }
+        else
+        {
+            $task->project = $execution->project;
+        }
 
         $task = $this->loadModel('file')->processImgURL($task, $this->config->testtask->editor->edit['id'], $this->post->uid);
 
