@@ -431,31 +431,34 @@ class releaseModel extends model
     }
 
     /**
-     * Link stories
+     * 发布批量关联需求。
+     * Link stories to a release.
      *
      * @param  int    $releaseID
+     * @param  array  $stories
      * @access public
-     * @return void
+     * @return bool
      */
-    public function linkStory($releaseID)
+    public function linkStory(int $releaseID, array $stories): bool
     {
         $release = $this->getByID($releaseID);
-        $product = $this->loadModel('product')->getByID($release->product);
+        if(!$release) return false;
 
-        foreach($this->post->stories as $i => $storyID)
+        foreach($stories as $i => $storyID)
         {
-            if(strpos(",{$release->stories},", ",{$storyID},") !== false) unset($_POST['stories'][$i]);
+            if(strpos(",{$release->stories},", ",{$storyID},") !== false) unset($stories[$i]);
         }
 
         $this->loadModel('story')->updateStoryReleasedDate($release->stories, $release->date);
-        $release->stories .= ',' . implode(',', $this->post->stories);
-        $this->dao->update(TABLE_RELEASE)->set('stories')->eq($release->stories)->where('id')->eq((int)$releaseID)->exec();
+        $release->stories .= ',' . implode(',', $stories);
+        $this->dao->update(TABLE_RELEASE)->set('stories')->eq($release->stories)->where('id')->eq($releaseID)->exec();
 
         if($release->stories)
         {
-            $this->loadModel('story');
             $this->loadModel('action');
-            foreach($this->post->stories as $storyID)
+
+            $product = $this->loadModel('product')->getByID($release->product);
+            foreach($stories as $storyID)
             {
                 /* Reset story stagedBy field for auto compute stage. */
                 $this->dao->update(TABLE_STORY)->set('stagedBy')->eq('')->where('id')->eq($storyID)->exec();
@@ -466,6 +469,8 @@ class releaseModel extends model
                 $this->action->create('story', $storyID, 'linked2release', '', $releaseID);
             }
         }
+
+        return !dao::isError();
     }
 
     /**

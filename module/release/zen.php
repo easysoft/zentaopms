@@ -199,4 +199,49 @@ class releaseZen extends release
             unset($this->view->leftBugPager);
         }
     }
+
+    /**
+     * 构造关联需求的搜索表单。
+     * Build the search form of link story.
+     *
+     * @param  object    $release
+     * @param  int       $queryID
+     * @access protected
+     * @return void
+     */
+    protected function buildLinkStorySearchForm(object $release, int $queryID): void
+    {
+        $this->app->loadLang('story');
+        $this->loadModel('product');
+
+        unset($this->config->product->search['fields']['product']);
+        unset($this->config->product->search['fields']['project']);
+
+        $this->config->product->search['actionURL'] = $this->createLink($this->app->rawModule, 'view', "releaseID={$release->id}&type=story&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
+        $this->config->product->search['queryID']   = $queryID;
+        $this->config->product->search['style']     = 'simple';
+        $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($release->product, $release->branch, 'withMainPlan', true);
+        $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
+
+        $searchModules = array();
+        $moduleGroups  = $this->loadModel('tree')->getOptionMenu($release->product, 'story', 0, explode(',', $release->branch));
+        foreach($moduleGroups as $modules) $searchModules += $modules;
+        $this->config->product->search['params']['module']['values'] = $searchModules;
+
+        if($this->session->currentProductType == 'normal')
+        {
+            unset($this->config->product->search['fields']['branch']);
+            unset($this->config->product->search['params']['branch']);
+        }
+        else
+        {
+            $allBranchs = $this->loadModel('branch')->getPairs($release->product);
+            $branches   = array('' => '', BRANCH_MAIN => $this->lang->branch->main);
+            foreach(explode(',', trim($release->branch, ',')) as $branchID) $branches[$branchID] = zget($allBranchs, $branchID);
+
+            $this->config->product->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$release->productType]);
+            $this->config->product->search['params']['branch']['values'] = $branches;
+        }
+        $this->loadModel('search')->setSearchParams($this->config->product->search);
+    }
 }
