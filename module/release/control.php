@@ -490,6 +490,7 @@ class release extends control
     }
 
     /**
+     * 批量解除发布跟需求的关联。
      * Batch unlink story.
      *
      * @param  int    $releaseID
@@ -498,7 +499,7 @@ class release extends control
      */
     public function batchUnlinkStory(int $releaseID)
     {
-        $this->release->batchUnlinkStory($releaseID);
+        $this->release->batchUnlinkStory($releaseID, (array)$this->post->storyIdList);
         return $this->sendSuccess(array('load' => $this->createLink($this->app->rawModule, 'view', "releaseID={$releaseID}&type=story")));
     }
 

@@ -496,25 +496,30 @@ class releaseModel extends model
     }
 
     /**
+     * 批量解除发布跟需求的关联。
      * Batch unlink story.
      *
      * @param  int    $releaseID
+     * @param  array  $storyIdList
      * @access public
-     * @return void
+     * @return bool
      */
-    public function batchUnlinkStory($releaseID)
+    public function batchUnlinkStory(int $releaseID, array $storyIdList): bool
     {
-        $storyList = $this->post->storyIdList;
-        if(empty($storyList)) return true;
+        if(empty($storyIdList)) return true;
 
         $release = $this->getByID($releaseID);
+        if(!$release) return false;
+
         $release->stories = ",$release->stories,";
-        foreach($storyList as $storyID) $release->stories = str_replace(",$storyID,", ',', $release->stories);
+        foreach($storyIdList as $storyID) $release->stories = str_replace(",$storyID,", ',', $release->stories);
         $release->stories = trim($release->stories, ',');
         $this->dao->update(TABLE_RELEASE)->set('stories')->eq($release->stories)->where('id')->eq((int)$releaseID)->exec();
 
         $this->loadModel('action');
-        foreach($this->post->storyIdList as $unlinkStoryID) $this->action->create('story', $unlinkStoryID, 'unlinkedfromrelease', '', $releaseID);
+        foreach($storyIdList as $unlinkStoryID) $this->action->create('story', $unlinkStoryID, 'unlinkedfromrelease', '', $releaseID);
+
+        return !dao::isError();
     }
 
     /**
