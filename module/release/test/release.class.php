@@ -157,25 +157,26 @@ class releaseTest
     }
 
     /**
+     * 发布批量关联Bug。
      * Link bugs.
      *
      * @param  int    $releaseID
-     * @param  string $type
-     * @param  string $bugs
+     * @param  string $type      bug|leftBug
+     * @param  array  $bugs
      * @access public
      * @return array
      */
 
-    public function linkBugTest($releaseID, $type = 'bug', $bugs = '')
+    public function linkBugTest(int $releaseID, string $type = 'bug', array $bugs = array())
     {
-        $_POST['bugs'] = $bugs;
-        $this->objectModel->linkBug($releaseID, $type);
-        unset($_POST);
+        $oldRelease = $this->objectModel->getByID($releaseID);
+        $this->objectModel->linkBug($releaseID, $type, $bugs);
 
+        if(!$oldRelease) return false;
         if(dao::isError()) return dao::getError();
 
-        $objects = $this->objectModel->getByID($releaseID);
-        return $objects;
+        $release = $this->objectModel->getByID($releaseID);
+        return common::createChanges($oldRelease, $release);
     }
 
     /**
