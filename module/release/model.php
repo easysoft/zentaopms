@@ -474,19 +474,25 @@ class releaseModel extends model
     }
 
     /**
-     * Unlink story
+     * 移除关联的需求。
+     * Unlink a story.
      *
      * @param  int    $releaseID
      * @param  int    $storyID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function unlinkStory($releaseID, $storyID)
+    public function unlinkStory(int $releaseID, int $storyID): bool
     {
         $release = $this->getByID($releaseID);
+        if(!$release) return false;
+
         $release->stories = trim(str_replace(",$storyID,", ',', ",$release->stories,"), ',');
         $this->dao->update(TABLE_RELEASE)->set('stories')->eq($release->stories)->where('id')->eq((int)$releaseID)->exec();
+
         $this->loadModel('action')->create('story', $storyID, 'unlinkedfromrelease', '', $releaseID);
+
+        return !dao::isError();
     }
 
     /**
