@@ -88,7 +88,7 @@ class aiModel extends model
 
         /* Set auth and content-type headers. */
         $requestHeaders = array();
-        if(isset($this->config->ai->$modelType->api->$modelVendor->authFormat)) $requestHeaders[] = array(sprintf($this->config->ai->$modelType->api->$modelVendor->authFormat, $this->modelConfig->key));
+        if(isset($this->config->ai->$modelType->api->$modelVendor->authFormat)) $requestHeaders[] = sprintf($this->config->ai->$modelType->api->$modelVendor->authFormat, $this->modelConfig->key);
         $requestHeaders[] = isset($this->config->ai->$modelType->contentType[$type]) ? $this->config->ai->$modelType->contentType[$type] : $this->config->ai->$modelType->contentType[''];
 
         /* Assemble request url. */
