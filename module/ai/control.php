@@ -119,6 +119,22 @@ class ai extends control
     }
 
     /**
+     * List mini programs.
+     *
+     * @access public
+     * @return void
+     */
+    public function miniPrograms()
+    {
+        $this->display();
+    }
+
+    public function createMiniProgram()
+    {
+        $this->display();
+    }
+
+    /**
      * Test connection to API endpoint.
      *
      * @access public

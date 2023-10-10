@@ -403,6 +403,10 @@ $lang->ai->prompts->modules['doc']         = 'Document';
 $lang->ai->conversations = new stdclass();
 $lang->ai->conversations->common = 'Conversations';
 
+$lang->ai->miniPrograms = new stdClass();
+$lang->ai->miniPrograms->common = 'Mini Programs';
+$lang->ai->miniPrograms->create = 'Create A Program';
+
 $lang->ai->models = new stdclass();
 $lang->ai->models->title          = 'Language Model Configuration';
 $lang->ai->models->common         = 'Language Model';
