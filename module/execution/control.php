@@ -591,6 +591,9 @@ class execution extends control
         $executions = $this->execution->getPairs(0, 'all', 'nocode');
         $this->execution->setMenu($executionID);
 
+        $execution = $this->execution->getByID($executionID);
+        $project   = $this->loadModel('project')->getByID($execution->project);
+
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -613,13 +616,18 @@ class execution extends control
                 ->leftJoin(TABLE_EXECUTION)->alias('t2')
                 ->on('t1.project = t2.id')
                 ->where('t1.product')->in(array_keys($products))
+                ->andWhere('t2.type')->in('sprint,stage,kanban')
                 ->fetchPairs('project');
+
+            $projects = $this->loadModel('product')->getProjectPairsByProductIDList(array_keys($products));
         }
         else
         {
             $executionName = $executions[$executionID];
             unset($executions);
             $executions[$executionID] = $executionName;
+
+            $projects[$project->id] = $project->name;
         }
 
         /* Get bugs.*/
@@ -650,9 +658,6 @@ class execution extends control
             $bugQuery = str_replace("`product` = 'all'", "`product`" . helper::dbIN(array_keys($products)), $this->session->importBugQuery); // Search all execution.
             $bugs     = $this->execution->getSearchBugs($products, $executionID, $bugQuery, $pager, 'id_desc');
         }
-
-        $execution = $this->execution->getByID($executionID);
-        $project   = $this->loadModel('project')->getByID($execution->project);
 
         /* Build the search form. */
         $this->config->bug->search['actionURL'] = $this->createLink('execution', 'importBug', "executionID=$executionID&browseType=bySearch&param=myQueryID");
@@ -686,6 +691,8 @@ class execution extends control
             }
         }
         $this->config->bug->search['params']['module']['values'] = $bugModules;
+
+        $this->config->bug->search['params']['project']['values'] = array('' => '') + $projects;
 
         unset($this->config->bug->search['fields']['resolvedBy']);
         unset($this->config->bug->search['fields']['closedBy']);
