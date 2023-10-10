@@ -252,7 +252,7 @@ $config->story->datatable->fieldList['lastEditedDate']['title']    = 'lastEdited
 $config->story->datatable->fieldList['lastEditedDate']['fixed']    = 'no';
 $config->story->datatable->fieldList['lastEditedDate']['type']     = 'html';
 $config->story->datatable->fieldList['lastEditedDate']['sortType'] = true;
-$config->story->datatable->fieldList['lastEditedDate']['width']    = '90';
+$config->story->datatable->fieldList['lastEditedDate']['width']    = '110';
 $config->story->datatable->fieldList['lastEditedDate']['required'] = 'no';
 
 $config->story->datatable->fieldList['activatedDate']['title']    = 'activatedDate';
@@ -285,7 +285,7 @@ $config->story->datatable->fieldList['version']['title']    = 'version';
 $config->story->datatable->fieldList['version']['fixed']    = 'no';
 $config->story->datatable->fieldList['version']['type']     = 'html';
 $config->story->datatable->fieldList['version']['sortType'] = true;
-$config->story->datatable->fieldList['version']['width']    = '60';
+$config->story->datatable->fieldList['version']['width']    = '70';
 $config->story->datatable->fieldList['version']['required'] = 'no';
 
 $config->story->datatable->fieldList['taskCount']['title']    = 'T';
