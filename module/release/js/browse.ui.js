@@ -14,7 +14,7 @@ window.renderCell = function(result, {col, row})
         result[0] = '';
         if(!row.data.build.name) return result;
 
-        let branchLabel = showBranch ? "<span class='label label-outline label-badge mr-1'>" + row.data.build.branchName + '</span> ' : '';
+        let branchLabel = showBranch ? "<span class='label label-outline label-badge mr-1' title='" + row.data.build.branchName + "'>" + row.data.build.branchName + '</span> ' : '';
         result[result.length] = {html: branchLabel + "<a href='" + row.data.build.link + "' title='" + row.data.build.name + "'>" + row.data.build.name + '</a>'}
         return result;
     }
@@ -24,7 +24,7 @@ window.renderCell = function(result, {col, row})
         result[0] = '';
         if(row.data.builds.length == 0) return result;
 
-        result[result.length] = {html: row.data.build.projectName};
+        result[result.length] = {html: `<span title='${row.data.build.projectName}'>${row.data.build.projectName}</span>`};
         return result;
     }
 
@@ -48,7 +48,7 @@ window.createSortLink = function(col)
  */
 window.getCellSpan = function(cell)
 {
-    if(['id', 'name', 'branch', 'status', 'date', 'actions'].includes(cell.col.name) && cell.row.data.rowspan)
+    if(['id', 'branchName', 'name', 'branch', 'status', 'date', 'actions'].includes(cell.col.name) && cell.row.data.rowspan)
     {
         return {rowSpan: cell.row.data.rowspan};
     }
