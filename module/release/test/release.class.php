@@ -202,28 +202,25 @@ class releaseTest
     }
 
     /**
+     * 批量解除发布跟Bug的关联。
      * Batch unlink bug.
      *
      * @param  int    $releaseID
-     * @param  string $type
-     * @param  string $bugs
+     * @param  string $type      bug|leftBug
+     * @param  array  $bugIdList
      * @access public
-     * @return array
+     * @return false|array
      */
-    public function batchUnlinkBugTest($releaseID, $type = 'bug', $bugs = '')
+    public function batchUnlinkBugTest(int $releaseID, string $type = 'bug', array $bugIdList = array()): false|array
     {
-        $_POST['bugs'] = $bugs;
-        $this->objectModel->linkBug($releaseID);
-        unset($_POST);
+        $oldRelease = $this->objectModel->getByID($releaseID);
+        $this->objectModel->batchUnlinkBug($releaseID, $type, $bugIdList);
 
-        $_POST['unlinkBugs'] = $bugs;
-        $this->objectModel->batchUnlinkBug($releaseID, $type);
-        unset($_POST);
-
+        if(!$oldRelease) return false;
         if(dao::isError()) return dao::getError();
 
-        $objects = $this->objectModel->getByID($releaseID);
-        return $objects;
+        $release = $this->objectModel->getByID($releaseID);
+        return common::createChanges($oldRelease, $release);
     }
 
     /**
