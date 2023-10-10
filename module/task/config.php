@@ -56,7 +56,7 @@ $config->task->datatable->defaultField = array('id', 'name', 'pri', 'assignedTo'
 global $app, $lang;
 $config->task->datatable->fieldList['id']['title']    = 'idAB';
 $config->task->datatable->fieldList['id']['fixed']    = 'left';
-$config->task->datatable->fieldList['id']['width']    = '70';
+$config->task->datatable->fieldList['id']['minWidth'] = '70';
 $config->task->datatable->fieldList['id']['required'] = 'yes';
 $config->task->datatable->fieldList['id']['type']     = 'checkID';
 $config->task->datatable->fieldList['id']['sortType'] = true;
@@ -128,19 +128,19 @@ $config->task->datatable->fieldList['deadline']['required'] = 'no';
 $config->task->datatable->fieldList['deadline']['control']  = 'date';
 
 $config->task->datatable->fieldList['estimate']['title']    = 'estimateAB';
-$config->task->datatable->fieldList['estimate']['width']    = '85';
+$config->task->datatable->fieldList['estimate']['width']    = '65';
 $config->task->datatable->fieldList['estimate']['sortType'] = true;
 $config->task->datatable->fieldList['estimate']['fixed']    = 'no';
 $config->task->datatable->fieldList['estimate']['required'] = 'no';
 
 $config->task->datatable->fieldList['consumed']['title']    = 'consumedAB';
-$config->task->datatable->fieldList['consumed']['width']    = '85';
+$config->task->datatable->fieldList['consumed']['width']    = '65';
 $config->task->datatable->fieldList['consumed']['sortType'] = true;
 $config->task->datatable->fieldList['consumed']['fixed']    = 'no';
 $config->task->datatable->fieldList['consumed']['required'] = 'no';
 
 $config->task->datatable->fieldList['left']['title']    = 'leftAB';
-$config->task->datatable->fieldList['left']['width']    = '85';
+$config->task->datatable->fieldList['left']['width']    = '65';
 $config->task->datatable->fieldList['left']['sortType'] = true;
 $config->task->datatable->fieldList['left']['fixed']    = 'no';
 $config->task->datatable->fieldList['left']['required'] = 'no';
