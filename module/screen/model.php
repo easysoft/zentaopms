@@ -1717,7 +1717,7 @@ class screenModel extends model
         $productList = $this->getUsageReportProducts($year, $month);
 
         if($chartID == 20002) return $this->getActiveUserTable($year, $month, $projectList);
-        //if($chartID == 20012) return $this->getProductStoryTable($year, $month, $productList);
+        if($chartID == 20012) return $this->getProductStoryTable($year, $month, $productList);
         if($chartID == 20011) return $this->getProductTestTable($year, $month, $productList);
         if($chartID == 20004) return $this->getActiveProductCard($year, $month);
         if($chartID == 20007) return $this->getActiveProjectCard($year, $month);
@@ -1954,6 +1954,74 @@ class screenModel extends model
             $row->contributors  = count(array_unique(array_values($createdTaskList)));
 
             if($row->createdTasks === 0 && $row->finishedTasks === 0 && $row->contributors === 0) continue;
+            $dataset[] = $row;
+        }
+
+        return $dataset;
+    }
+
+    /**
+     * 获取应用健康度体检报告的产品需求概况表。
+     * Get table of product story summary in usage report.
+     *
+     * @param  string $year
+     * @param  string $month
+     * @param  array  $productList
+     * @access public
+     * @return array
+     */
+    public function getProductStoryTable($year, $month, $productList)
+    {
+        $releasedStories = $this->dao->select('t2.id, t1.id as product')->from(TABLE_PRODUCT)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.id=t2.product')
+            ->leftJoin(TABLE_ACTION)->alias('t3')->on('t2.id=t3.objectID')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t2.stage')->eq('released')
+            ->andWhere('t3.objectType')->eq('story')
+            ->andWhere('t3.action')->eq('linked2release')
+            ->andWhere('year(t3.date)')->eq($year)
+            ->andWhere('month(t3.date)')->eq($month)
+            ->fetchPairs();
+
+        $releasedStoryGroups = array();
+        foreach($releasedStories as $storyID => $productID)
+        {
+            if(!isset($releasedStoryGroups[$productID])) $releasedStoryGroups[$productID] = array();
+            $releasedStoryGroups[$productID][] = $storyID;
+        }
+
+        $dataset = array();
+        foreach($productList as $productID => $productName)
+        {
+            $createdStoryCount = $this->dao->select('count(t2.id) as count')->from(TABLE_PRODUCT)->alias('t1')
+                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.id=t2.product')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t2.deleted')->eq('0')
+                ->andWhere('t1.id')->eq($productID)
+                ->andWhere('year(t2.openedDate)')->eq($year)
+                ->andWhere('month(t2.openedDate)')->eq($month)
+                ->fetch();
+
+            $finishedStoryList = $this->dao->select('t2.id')->from(TABLE_PRODUCT)->alias('t1')
+                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.id=t2.product')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t2.deleted')->eq('0')
+                ->andWhere('t1.id')->eq($productID)
+                ->andWhere('t2.closedReason')->eq('done')
+                ->andWhere('year(t2.closedDate)')->eq($year)
+                ->andWhere('month(t2.closedDate)')->eq($month)
+                ->fetchPairs();
+
+            $deliveredStoryCount = count(array_merge($finishedStoryList, (array)$releasedStoryGroups[$productID]));
+
+            $row = new stdclass();
+            $row->id               = $productID;
+            $row->name             = $productName;
+            $row->createdStories   = $createdStoryCount->count;
+            $row->deliveredStories = $deliveredStoryCount;
+
+            if($row->createdStories === 0 && $row->deliveredStories === 0) continue;
             $dataset[] = $row;
         }
 
