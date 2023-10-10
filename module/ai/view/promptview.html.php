@@ -110,7 +110,7 @@
             </tr>
             <tr>
               <th class="w-90px"><?php echo $lang->prompt->model; ?></th>
-              <td><?php echo $lang->ai->models->typeList['openai-gpt35']; ?></td>
+              <td><?php echo $lang->ai->prompts->modelNeutral; ?></td>
             </tr>
             </tbody>
           </table>
