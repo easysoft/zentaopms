@@ -27,6 +27,7 @@ $lang->task->copy                = 'Copy Task';
 $lang->task->waitTask            = 'Waiting Task';
 $lang->task->region              = 'Region';
 $lang->task->lane                = 'Lane';
+$lang->task->execution           = 'Execution';
 
 $lang->task->module       = 'Module';
 $lang->task->allModule    = 'All Module';
