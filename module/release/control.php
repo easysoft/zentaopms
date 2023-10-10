@@ -178,10 +178,11 @@ class release extends control
     }
 
     /**
+     * 查看一个发布。
      * View a release.
      *
      * @param  int    $releaseID
-     * @param  string $type
+     * @param  string $type       story|bug|leftBug
      * @param  string $link
      * @param  string $param
      * @param  string $orderBy
@@ -193,17 +194,13 @@ class release extends control
      */
     public function view(int $releaseID, string $type = 'story', string $link = 'false', string $param = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
     {
-        $releaseID = (int)$releaseID;
-        $release   = $this->release->getByID($releaseID, true);
-        if(!$release) return print(js::error($this->lang->notFound) . js::locate($this->createLink('product', 'index')));
+        $release = $this->release->getByID($releaseID, true);
+        if(!$release) return sendError($this->lang->notFound, $this->createLink('product', 'index'));
 
         $uri = $this->app->getURI(true);
         if(!empty($release->build)) $this->session->set('buildList', $uri, 'project');
         if($type == 'story') $this->session->set('storyList', $uri, 'product');
-        if($type == 'bug' or $type == 'leftBug') $this->session->set('bugList', $uri, 'qa');
-
-        $this->loadModel('story');
-        $this->loadModel('bug');
+        if($type == 'bug' || $type == 'leftBug') $this->session->set('bugList', $uri, 'qa');
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
@@ -213,87 +210,20 @@ class release extends control
         if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
         $sort .= ',buildID_asc';
 
-        $storyPager = new pager($type == 'story' ? $recTotal : 0, $recPerPage, $type == 'story' ? $pageID : 1);
-        $stories = $this->dao->select("t1.*,t2.id as buildID, t2.name as buildName, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")->from(TABLE_STORY)->alias('t1')
-            ->leftJoin(TABLE_BUILD)->alias('t2')->on("FIND_IN_SET(t1.id, t2.stories)")
-            ->where('t1.id')->in($release->stories)
-            ->andWhere('t1.deleted')->eq(0)
-            ->beginIF($type == 'story')->orderBy($sort)->fi()
-            ->page($storyPager)
-            ->fetchAll('id');
-
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
-        $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in(array_keys($stories))->andWhere('branch')->eq($release->branch)->fetchPairs('story', 'stage');
-        foreach($stages as $storyID => $stage) $stories[$storyID]->stage = $stage;
-
-        $bugPager = new pager($type == 'bug' ? $recTotal : 0, $recPerPage, $type == 'bug' ? $pageID : 1);
-        $sort     = common::appendOrder($orderBy);
-        $bugs     = array();
-        if($release->bugs)
-        {
-            $bugs = $this->dao->select('*')->from(TABLE_BUG)
-                ->where('id')->in($release->bugs)
-                ->andWhere('deleted')->eq(0)
-                ->beginIF($type == 'bug')->orderBy($sort)->fi()
-                ->page($bugPager)
-                ->fetchAll();
-
-            $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'linkedBug');
-        }
-
-        $sort = common::appendOrder($orderBy);
-        if($type == 'leftBug' and strpos($orderBy, 'severity_') !== false) $sort = str_replace('severity_', 'severityOrder_', $sort);
+        $storyPager   = new pager($type == 'story' ? $recTotal : 0, $recPerPage, $type == 'story' ? $pageID : 1);
+        $bugPager     = new pager($type == 'bug' ? $recTotal : 0, $recPerPage, $type == 'bug' ? $pageID : 1);
         $leftBugPager = new pager($type == 'leftBug' ? $recTotal : 0, $recPerPage, $type == 'leftBug' ? $pageID : 1);
-
-        $leftBugs = array();
-        if($release->leftBugs)
-        {
-            $leftBugs = $this->dao->select("*, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
-                ->where('deleted')->eq(0)
-                ->andWhere('id')->in($release->leftBugs)
-                ->beginIF($type == 'leftBug')->orderBy($sort)->fi()
-                ->page($leftBugPager)
-                ->fetchAll();
-
-            $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'leftBugs');
-        }
+        $this->releaseZen->assignVarsForView($release, $type, $link, $param, $orderBy, $storyPager, $bugPager, $leftBugPager);
 
         $this->commonAction($release->product);
-        $product = $this->product->getById($release->product);
         if($this->app->rawModule == 'projectrelease')
         {
             $projectID = (int)$this->session->project;
             $this->loadModel('project')->setMenu($projectID);
-            $this->view->project = $this->project->getById($projectID);
+            $this->view->project = $this->project->getByID($projectID);
         }
 
         $this->executeHooks($releaseID);
-
-        $this->view->title         = "RELEASE #$release->id $release->name/" . $product->name;
-        $this->view->release       = $release;
-        $this->view->stories       = $stories;
-        $this->view->bugs          = $bugs;
-        $this->view->leftBugs      = $leftBugs;
-        $this->view->actions       = $this->loadModel('action')->getList('release', $releaseID);
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
-        $this->view->type          = $type;
-        $this->view->link          = $link;
-        $this->view->param         = $param;
-        $this->view->orderBy       = $orderBy;
-        $this->view->branchName    = $release->productType == 'normal' ? '' : $this->loadModel('branch')->getById($release->branch);
-        $this->view->storyPager    = $storyPager;
-        $this->view->bugPager      = $bugPager;
-        $this->view->leftBugPager  = $leftBugPager;
-        $this->view->builds        = $this->loadModel('build')->getBuildPairs(array($release->product), 'all', 'withbranch|hasproject', 0, 'execution', '', false);
-        $this->view->summary       = $this->product->summary($stories);
-        $this->view->storyCases    = $this->loadModel('testcase')->getStoryCaseCounts(array_keys($stories));
-
-        if($this->app->getViewType() == 'json')
-        {
-            unset($this->view->storyPager);
-            unset($this->view->bugPager);
-            unset($this->view->leftBugPager);
-        }
 
         $this->display();
     }

@@ -14,14 +14,15 @@
 class releaseModel extends model
 {
     /**
-     * Get release by id.
+     * 通过ID获取发布信息。
+     * Get release information by ID.
      *
-     * @param  int    $releaseID
-     * @param  bool   $setImgSize
+     * @param  int          $releaseID
+     * @param  bool         $setImgSize
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getByID($releaseID, $setImgSize = false)
+    public function getByID(int $releaseID, bool $setImgSize = false): object|false
     {
         $release = $this->dao->select('t1.*, t2.name as productName, t2.type as productType')
             ->from(TABLE_RELEASE)->alias('t1')
@@ -31,8 +32,7 @@ class releaseModel extends model
             ->fetch();
         if(!$release) return false;
 
-        $release->builds = $this->dao->select('id, branch, filePath, scmPath, name, execution, project')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll();
-
+        $release->builds  = $this->dao->select('id, branch, filePath, scmPath, name, execution, project')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll();
         $release->project = trim($release->project, ',');
         $release->branch  = trim($release->branch, ',');
         $release->build   = trim($release->build, ',');
@@ -46,6 +46,7 @@ class releaseModel extends model
         $release->files = $this->file->getByObject('release', $releaseID);
         if(empty($release->files))$release->files = $this->file->getByObject('build', $release->build);
         if($setImgSize) $release->desc = $this->file->setImgSize($release->desc);
+
         return $release;
     }
 
@@ -1000,5 +1001,58 @@ class releaseModel extends model
         if(common::hasPriv('release', 'delete')) $actions[] = 'delete';
 
         return $actions;
+    }
+
+    /**
+     * 获取发布关联的需求列表。
+     * Get the story list linked with the release.
+     *
+     * @param  string $storyIdList
+     * @param  int    $branch
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getStoryList(string $storyIdList, int $branch, string $orderBy, object $pager = null): array
+    {
+        $stories = $this->dao->select("t1.*,t2.id as buildID, t2.name as buildName, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_BUILD)->alias('t2')->on("FIND_IN_SET(t1.id, t2.stories)")
+            ->where('t1.id')->in($storyIdList)
+            ->andWhere('t1.deleted')->eq(0)
+            ->beginIF($orderBy)->orderBy($orderBy)->fi()
+            ->page($pager)
+            ->fetchAll('id');
+
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
+
+        $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in(array_keys($stories))->andWhere('branch')->eq($branch)->fetchPairs('story', 'stage');
+        foreach($stages as $storyID => $stage) $stories[$storyID]->stage = $stage;
+
+        return $stories;
+    }
+
+    /**
+     * 获取发布关联的Bug列表。
+     * Get the bug list linked with the release.
+     *
+     * @param  string $bugIdList
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getBugList(string $bugIdList,  string $orderBy, object $pager = null): array
+    {
+        $bugs = $this->dao->select("*, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
+            ->where('id')->in($bugIdList)
+            ->andWhere('deleted')->eq(0)
+            ->beginIF($orderBy)->orderBy($orderBy)->fi()
+            ->page($pager)
+            ->fetchAll();
+
+        if($bugIdList) $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'leftBugs');
+
+        return $bugs;
     }
 }

@@ -93,14 +93,14 @@ class releaseZen extends release
      * 构建搜索表单字段。
      * Build search form fields.
      *
-     * @param  int    $queryID
-     * @param  string $actionURL
-     * @param  object $product
-     * @param  string $branch
-     * @access public
+     * @param  int       $queryID
+     * @param  string    $actionURL
+     * @param  object    $product
+     * @param  string    $branch
+     * @access protected
      * @return void
      */
-    public function buildSearchForm(int $queryID, string $actionURL, object $product, string $branch): void
+    protected function buildSearchForm(int $queryID, string $actionURL, object $product, string $branch): void
     {
         $this->config->release->search['queryID']   = $queryID;
         $this->config->release->search['actionURL'] = $actionURL;
@@ -115,11 +115,11 @@ class releaseZen extends release
      * 获取发布列表的搜索条件。
      * Get the search condition of release list.
      *
-     * @param  int    $queryID
-     * @access public
+     * @param  int       $queryID
+     * @access protected
      * @return string
      */
-    public function getSearchQuery(int $queryID): string
+    protected function getSearchQuery(int $queryID): string
     {
         if($queryID)
         {
@@ -140,5 +140,63 @@ class releaseZen extends release
         $releaseQuery = preg_replace('/`(\w+)`/', 't1.`$1`', $releaseQuery);
 
         return $releaseQuery;
+    }
+
+    /**
+     * 生成的发布详情页面的需求数据。
+     * Generate the story data for the release view page.
+     *
+     * @param  object    $release
+     * @param  string    $type
+     * @param  string    $link
+     * @param  string    $param
+     * @param  string    $orderBy
+     * @param  object    $storyPager
+     * @param  object    $bugPager
+     * @param  object    $leftBugPager
+     * @access protected
+     * @return void
+     */
+    protected function assignVarsForView(object $release, string $type, string $link, string $param, string $orderBy, object $storyPager, object $bugPager, object $leftBugPager): void
+    {
+        $sort = common::appendOrder($orderBy);
+        if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
+        $sort .= ',buildID_asc';
+
+        $stories = $this->release->getStoryList($release->stories, (int)$release->branch, $type == 'story' ? $sort : '', $storyPager);
+
+        $sort = common::appendOrder($orderBy);
+        $bugs = $this->release->getBugList($release->bugs, $type == 'bug' ? $sort : '', $bugPager);
+
+        if($type == 'leftBug' && strpos($orderBy, 'severity_') !== false) $sort = str_replace('severity_', 'severityOrder_', $sort);
+        $leftBugs = $this->release->getBugList($release->leftBugs, $type == 'leftBug' ? $sort : '', $leftBugPager);
+
+        $product = $this->loadModel('product')->getByID($release->product);
+
+        $this->view->title        = "RELEASE #$release->id $release->name/" . $product->name;
+        $this->view->actions      = $this->loadModel('action')->getList('release', $release->id);
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->storyPager   = $storyPager;
+        $this->view->stories      = $stories;
+        $this->view->release      = $release;
+        $this->view->orderBy      = $orderBy;
+        $this->view->type         = $type;
+        $this->view->link         = $link;
+        $this->view->param        = $param;
+        $this->view->storyCases   = $this->loadModel('testcase')->getStoryCaseCounts(array_keys($stories));
+        $this->view->summary      = $this->product->summary($stories);
+        $this->view->builds       = $this->loadModel('build')->getBuildPairs(array($release->product), 'all', 'withbranch|hasproject', 0, 'execution', '', false);
+        $this->view->branchName   = $release->productType == 'normal' ? '' : $this->loadModel('branch')->getByID($release->branch);
+        $this->view->bugs         = $bugs;
+        $this->view->leftBugs     = $leftBugs;
+        $this->view->bugPager     = $bugPager;
+        $this->view->leftBugPager = $leftBugPager;
+
+        if($this->app->getViewType() == 'json')
+        {
+            unset($this->view->storyPager);
+            unset($this->view->bugPager);
+            unset($this->view->leftBugPager);
+        }
     }
 }
