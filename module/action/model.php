@@ -184,7 +184,7 @@ class actionModel extends model
             if(in_array($actionName, array('linkstory', 'unlinkstory', 'createchildrenstory'))) $this->actionTao->processLinkStoryAndBugActionExtra($action, 'story', 'view');
             if(in_array($actionName, array('linkbug', 'unlinkbug'))) $this->actionTao->processLinkStoryAndBugActionExtra($action, 'bug', 'view');
 
-            $action->history = zget($histories, $actionID, array();
+            $action->history = zget($histories, $actionID, array());
             if($actionName == 'svncommited') array_map(function($history) {if($history->field == 'subversion') $history->diff = str_replace('+', '%2B', $history->diff);}, $action->history);
             if($actionName == 'gitcommited') array_map(function($history) {if($history->field == 'git') $history->diff = str_replace('+', '%2B', $history->diff);}, $action->history);
 
