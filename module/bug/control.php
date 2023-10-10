@@ -1020,6 +1020,8 @@ class bug extends control
             /* Get bug id list to assign. */
             $bugIdList = array_unique($this->post->bugIdList);
 
+            $oldBugList = $this->bug->getByIdList($bugIdList);
+
             /* 初始化 bug 数据。 */
             /* Init bug data. */
             $bug = form::data($this->config->bug->form->assignTo)->remove('mailto')->get();
@@ -1030,7 +1032,7 @@ class bug extends control
                 $bug->id         = (int)$bugID;
                 $bug->assignedTo = $assignedTo;
 
-                $this->bug->assign($bug);
+                $this->bug->assign($bug, $oldBugList[$bugID]);
             }
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
