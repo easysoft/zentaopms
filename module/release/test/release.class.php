@@ -291,4 +291,40 @@ class releaseTest
         $this->objectModel->delete(TABLE_RELEASE, $releaseID);
         return $this->objectModel->getByID($releaseID);
     }
+
+    /**
+     * 获取发布的导出需求数据。
+     * Get stories for export.
+     *
+     * @param  string $condition
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getStoryForExportTest(string $condition, string $orderBy): array
+    {
+        $this->objectModel->session->storyQueryCondition = $condition;
+        $this->objectModel->session->storyOrderBy        = $orderBy;
+
+        return $this->objectModel->getStoryForExport();
+    }
+
+    /**
+     * 获取发布的导出bug数据。
+     * Get bugs for export.
+     *
+     * @param  string $type
+     * @param  string $condition
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getBugForExportTest(string $type, string $condition, string $orderBy): array
+    {
+        $queryName = $type == 'bug' ? 'linkedBugQueryCondition' : 'leftBugsQueryCondition';
+        $this->objectModel->session->$queryName = $condition;
+        $this->objectModel->session->bugOrderBy = $orderBy;
+
+        return $this->objectModel->getBugForExport($type);
+    }
 }
