@@ -380,7 +380,7 @@
                 }
                 else if(data.load)
                 {
-                    if(data.load === 'dtable') loadTable();
+                    if(data.load === 'table') loadTable();
                     else if(typeof data.load === 'string') loadPage(data.load);
                     else if(data.load === true) loadCurrentPage();
                     else if(typeof data.load === 'object')
