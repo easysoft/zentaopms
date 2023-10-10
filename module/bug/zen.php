@@ -1164,7 +1164,7 @@ class bugZen extends bug
         unset($productBugs[$bug->id]);
 
         /* Get execution pairs. */
-        $executions = array('') + $this->product->getExecutionPairsByProduct($bug->product, (string)$bug->branch, (int)$bug->project);
+        $executions = $this->product->getExecutionPairsByProduct($bug->product, (string)$bug->branch, (int)$bug->project);
         if(!empty($bug->execution) && empty($executions[$bug->execution])) $executions[$execution->id] = $execution->name . "({$this->lang->bug->deleted})";
 
         /* Get project pairs. */
