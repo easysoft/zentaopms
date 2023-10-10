@@ -94,23 +94,24 @@ class releaseTest
     }
 
     /**
-     * Link stories
+     * 发布批量关联需求。
+     * Link stories to a release.
      *
-     * @param  int    $releaseID
+     * @param  int         $releaseID
+     * @param  array       $stories
      * @access public
-     * @return array
+     * @return false|array
      */
-
-    public function linkStoryTest($releaseID, $stories)
+    public function linkStoryTest(int $releaseID, array $stories): false|array
     {
-        $_POST['stories'] = $stories;
-        $this->objectModel->linkStory($releaseID);
-        unset($_POST);
+        $oldRelease = $this->objectModel->getByID($releaseID);
+        $this->objectModel->linkStory($releaseID, $stories);
 
+        if(!$oldRelease) return false;
         if(dao::isError()) return dao::getError();
 
-        $objects = $this->objectModel->getByID($releaseID);
-        return $objects;
+        $release = $this->objectModel->getByID($releaseID);
+        return common::createChanges($oldRelease, $release);
     }
 
     /**
