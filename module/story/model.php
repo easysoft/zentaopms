@@ -4840,6 +4840,7 @@ class storyModel extends model
                     $title  = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
                     $menu  .= common::buildIconButton('story', 'recall', "story={$story->id}", $story, 'list', 'undo', 'hiddenwin', $recallDisabled, '', '', $title);
                 }
+                if(!$execution->hasProduct) $menu .= common::buildIconButton('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type", $story, 'list', '', '', 'showinonlybody');
 
                 $this->lang->task->create = $this->lang->execution->wbs;
                 $toTaskDisabled = $story->status == 'active' ? '' : 'disabled';
@@ -4856,21 +4857,11 @@ class storyModel extends model
                 $this->lang->task->batchCreate = $this->lang->execution->batchWBS;
                 if($hasDBPriv and $storyType == 'story') $menu .= common::buildIconButton('task', 'batchCreate', "executionID=$executionID&story={$story->id}", '', 'list', 'pluses', '', $toTaskDisabled);
 
-                if(($canSubmitReview or $canReview or $canRecall or $canCreateTask or $canBatchCreateTask) and ($canCreateCase or $canEstimate or $canUnlinkStory))
-                {
-                    $menu .= "<div class='dividing-line'></div>";
-                }
-
-                if($canEstimate and $storyType == 'story')
-                {
-                    $menu .= common::buildIconButton('execution', 'storyEstimate', "executionID=$executionID&storyID=$story->id", '', 'list', 'estimate', '', 'iframe', true, "data-width='470px'");
-                }
+                if(($canSubmitReview or $canReview or $canRecall or $canCreateTask or $canBatchCreateTask) and ($canCreateCase or $canEstimate or $canUnlinkStory)) $menu .= "<div class='dividing-line'></div>";
+                if($canEstimate and $storyType == 'story') $menu .= common::buildIconButton('execution', 'storyEstimate', "executionID=$executionID&storyID=$story->id", '', 'list', 'estimate', '', 'iframe', true, "data-width='470px'");
 
                 $this->lang->testcase->batchCreate = $this->lang->testcase->create;
-                if($canCreateCase and $storyType == 'story')
-                {
-                    $menu .= common::buildIconButton('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&form=&param=0&storyID=$story->id", '', 'list', 'sitemap', '', 'iframe', true, "data-app='{$this->app->tab}'");
-                }
+                if($canCreateCase and $storyType == 'story') $menu .= common::buildIconButton('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&form=&param=0&storyID=$story->id", '', 'list', 'sitemap', '', 'iframe', true, "data-app='{$this->app->tab}'");
 
                 if(($canEstimate or $canCreateCase) and $canUnlinkStory) $menu .= "<div class='dividing-line'></div>";
 
@@ -4898,12 +4889,7 @@ class storyModel extends model
                 }
 
                 if(common::hasPriv('story', 'close', "storyType={$story->type}") and !$execution->multiple and !$execution->hasProduct) $menu .= $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, 'browse', '', '', 'iframe', true);
-
-                if($canUnlinkStory)
-                {
-                    $menu .= common::buildIconButton('execution', 'unlinkStory', "executionID=$executionID&storyID=$story->id&confirm=no", '', 'list', 'unlink', 'hiddenwin');
-                }
-
+                if($canUnlinkStory) $menu .= common::buildIconButton('execution', 'unlinkStory', "executionID=$executionID&storyID=$story->id&confirm=no", '', 'list', 'unlink', 'hiddenwin');
             }
         }
 
