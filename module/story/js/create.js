@@ -34,13 +34,24 @@ $(function()
     {
         if(storyType == 'requirement' && systemMode != 'PLM') return false;
 
-        var source = $(this).val();
+        var $sourceBox = $(this).closest('tr.sourceBox');
+        var source     = $(this).val();
         if($.inArray(source, feedbackSource) != -1)
         {
+            if($sourceBox.length > 0)
+            {
+                $(this).closest('td').attr('colspan', '1');
+                $sourceBox.find('.sourceTd').attr('colspan', '1');
+            }
             $('#feedbackBox').removeClass('hidden');
         }
         else
         {
+            if($sourceBox.length > 0)
+            {
+                $(this).closest('td').attr('colspan', '2');
+                $sourceBox.find('.sourceTd').attr('colspan', '2');
+            }
             $('#feedbackBox').addClass('hidden');
         }
     });
