@@ -228,6 +228,7 @@ class testtaskModel extends model
      */
     public function getByList(array $idList): array
     {
+        if(!$idList) return array();
         return $this->dao->select('*')->from(TABLE_TESTTASK)->where('id')->in($idList)->fetchAll('id');
     }
 
