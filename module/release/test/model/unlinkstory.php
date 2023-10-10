@@ -1,25 +1,29 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/release.class.php';
-su('admin');
-
 /**
 
 title=测试 releaseModel->unlinkStory();
+timeout=0
 cid=1
-pid=1
-
-正常任务移除关联需求 >> 1,
-停止维护任务移除关联需求 >> 6,
 
 */
 
-$releaseID = array('1','6');
-$stories   = array('2');
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/release.class.php';
 
-$release   = new releaseTest();
+$release = zdTable('release')->config('release');
+$release->stories->range('`1,2,3`,`4,5,6`');
+$release->gen(5);
+zdTable('user')->gen(5);
+su('admin');
 
-r($release->unlinkStoryTest($releaseID[0],$stories)) && p('id,stories') && e('1,'); //正常任务移除关联需求
-r($release->unlinkStoryTest($releaseID[1],$stories)) && p('id,stories') && e('6,'); //停止维护任务移除关联需求
+$releases = array(0, 1, 6);
+$stories  = array(2, 4);
 
+$releaseTester = new releaseTest();
+r($releaseTester->unlinkStoryTest($releases[0], $stories[0])) && p()                   && e('0');         // 测试发布ID为空时，解除跟需求ID=2的关联
+r($releaseTester->unlinkStoryTest($releases[1], $stories[0])) && p('0:old;0:new', ';') && e('1,2,3;1,3'); // 测试发布ID=1时，解除跟需求ID=2的关联
+r($releaseTester->unlinkStoryTest($releases[2], $stories[0])) && p()                   && e('0');         // 测试发布ID不存在时，解除跟需求ID=2的关联
+r($releaseTester->unlinkStoryTest($releases[0], $stories[1])) && p()                   && e('0');         // 测试发布ID为空时，解除跟需求ID=4的关联
+r($releaseTester->unlinkStoryTest($releases[1], $stories[1])) && p()                   && e('0');         // 测试发布ID=1时，解除跟需求ID=4的关联
+r($releaseTester->unlinkStoryTest($releases[2], $stories[1])) && p()                   && e('0');         // 测试发布ID不存在时，解除跟需求ID=4的关联

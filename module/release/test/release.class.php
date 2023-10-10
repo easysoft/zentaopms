@@ -115,25 +115,24 @@ class releaseTest
     }
 
     /**
-     * Unlink story
+     * 移除关联的需求。
+     * Unlink a story.
      *
-     * @param  int    $releaseID
-     * @param  int    $storyID
+     * @param  int         $releaseID
+     * @param  int         $storyID
      * @access public
-     * @return array
+     * @return false|array
      */
-    public function unlinkStoryTest($releaseID, $storyID)
+    public function unlinkStoryTest(int $releaseID, int $storyID): false|array
     {
-        $_POST['stories'] = $storyID;
-        $this->objectModel->linkStory($releaseID);
-        unset($_POST);
+        $oldRelease = $this->objectModel->getByID($releaseID);
+        $this->objectModel->unlinkStory($releaseID, $storyID);
 
-        $this->objectModel->unlinkStory($releaseID, $storyID[0]);
-
+        if(!$oldRelease) return false;
         if(dao::isError()) return dao::getError();
 
-        $objects = $this->objectModel->getByID($releaseID);
-        return $objects;
+        $release = $this->objectModel->getByID($releaseID);
+        return common::createChanges($oldRelease, $release);
     }
 
     /**
