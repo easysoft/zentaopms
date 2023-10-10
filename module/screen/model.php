@@ -1712,11 +1712,16 @@ class screenModel extends model
 
         $year  = $this->filter->year;
         $month = $this->filter->month;
+
         $projectList = $this->getUsageReportProjects($year, $month);
+        $productList = $this->getUsageReportProducts($year, $month);
 
         if($chartID == 20002) return $this->getActiveUserTable($year, $month, $projectList);
+        //if($chartID == 20012) return $this->getProductStoryTable($year, $month, $productList);
+        if($chartID == 20011) return $this->getProductTestTable($year, $month, $productList);
         if($chartID == 20004) return $this->getActiveProductCard($year, $month);
         if($chartID == 20007) return $this->getActiveProjectCard($year, $month);
+        //if($chartID == 20013) return $this->getProjectStoryTable($year, $month, $projectList);
         if($chartID == 20010) return $this->getProjectTaskTable($year, $month, $projectList);
     }
 
@@ -1833,6 +1838,78 @@ class screenModel extends model
     }
 
     /**
+     * 获取应用健康度体检报告的 产品测试表。
+     * Get table of product test summary in usage report.
+     *
+     * @param  string $year
+     * @param  string $month
+     * @param  array  $productList
+     * @access public
+     * @return array
+     */
+    public function getProductTestTable($year, $month, $productList)
+    {
+        foreach($productList as $productID => $productName)
+        {
+            $createdCaseCount = $this->dao->select('count(t2.id) as count')->from(TABLE_PRODUCT)->alias('t1')
+                ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.id=t2.product')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t2.deleted')->eq('0')
+                ->andWhere('year(t2.openedDate)')->eq($year)
+                ->andWhere('month(t2.openedDate)')->eq($month)
+                ->andWhere('t1.id')->eq($productID)
+                ->fetch();
+
+            $linkedBugCount = $this->dao->select('count(t3.id) as count')->from(TABLE_PRODUCT)->alias('t1')
+                ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.id=t2.product')
+                ->leftJoin(TABLE_BUG)->alias('t3')->on('t2.id=t3.case')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t2.deleted')->eq('0')
+                ->andWhere('t3.deleted')->eq('0')
+                ->andWhere('year(t2.openedDate)')->eq($year)
+                ->andWhere('month(t2.openedDate)')->eq($month)
+                ->andWhere('t1.id')->eq($productID)
+                ->fetch();
+
+            $createdBugCount = $this->dao->select('count(t2.id) as count')->from(TABLE_PRODUCT)->alias('t1')
+                ->leftJoin(TABLE_BUG)->alias('t2')->on('t1.id=t2.product')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t2.deleted')->eq('0')
+                ->andWhere('year(t2.openedDate)')->eq($year)
+                ->andWhere('month(t2.openedDate)')->eq($month)
+                ->andWhere('t1.id')->eq($productID)
+                ->fetch();
+
+            $fixedBugList = $this->dao->select('t2.id,datediff(t2.closedDate, t2.openedDate) as fixedCycle')->from(TABLE_PRODUCT)->alias('t1')
+                ->leftJoin(TABLE_BUG)->alias('t2')->on('t1.id=t2.product')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t2.deleted')->eq('0')
+                ->andWhere('t2.status')->eq('closed')
+                ->andWhere('t2.resolution')->eq('fixed')
+                ->andWhere('year(t2.closedDate)')->eq($year)
+                ->andWhere('month(t2.closedDate)')->eq($month)
+                ->andWhere('t1.id')->eq($productID)
+                ->fetchPairs();
+
+            $row = new stdclass();
+            $row->id            = $productID;
+            $row->name          = $productName;
+            $row->year          = $year;
+            $row->month         = $month;
+            $row->createdCases  = $createdCaseCount->count;
+            $row->avgBugsOfCase = $createdCaseCount->count == 0 ? 0 : round($linkedBugCount->count/$createdCaseCount->count, 2);
+            $row->createdBugs   = $createdBugCount->count;
+            $row->fixedBugs     = count($fixedBugList);
+            $row->avgFixedCycle = count($fixedBugList) == 0 ? 0 : round(array_sum($fixedBugList)/count($fixedBugList), 2);
+
+            if($row->createdCases === 0 && $row->avgBugsOfCase === 0 && $row->createdBugs === 0 && $row->fixedBugs === 0 && $row->avgFixedCycle === 0) continue;
+            $dataset[] = $row;
+        }
+
+        return $dataset;
+    }
+
+    /**
      * 获取应用健康度体检报告的项目任务概况表。
      * Get table of project task summary in usage report.
      *
@@ -1904,6 +1981,26 @@ class screenModel extends model
             ->orWhere('date(closedDate)')->eq('0000-00-00')
             ->orWhere('closedDate')->in(NULL)
             ->markRight(true)
+            ->fetchPairs();
+    }
+
+    /**
+     * 获取应用健康度体检报告的产品列表。
+     * Get product list for usage report.
+     *
+     * @param  string $year
+     * @param  string $month
+     * @access public
+     * @return array
+     */
+    public function getUsageReportProducts($year, $month)
+    {
+        $date = date("Y-m-t", strtotime("$year-$month"));
+
+        return $this->dao->select('id,name')->from(TABLE_PRODUCT)
+            ->where('deleted')->eq('0')
+            ->andWhere('shadow')->eq(0)
+            ->andWhere('date(createdDate)')->le($date)
             ->fetchPairs();
     }
 }
