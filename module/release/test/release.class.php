@@ -136,28 +136,24 @@ class releaseTest
     }
 
     /**
+     * 批量解除发布跟需求的关联。
      * Batch unlink story.
      *
-     * @param  int    $releaseID
+     * @param  int         $releaseID
+     * @param  array       $storyIdList
      * @access public
-     * @return array
+     * @return false|array
      */
-
-    public function batchUnlinkStoryTest($releaseID, $stories)
+    public function batchUnlinkStoryTest(int $releaseID, array $storyIdList): false|array
     {
-        $_POST['stories'] = $stories;
-        $this->objectModel->linkStory($releaseID);
-        unset($_POST);
+        $oldRelease = $this->objectModel->getByID($releaseID);
+        $this->objectModel->batchUnlinkStory($releaseID, $storyIdList);
 
-        $_POST['storyIdList'] = $stories;
-        $this->objectModel->batchUnlinkStory($releaseID);
-        unset($_POST);
-
+        if(!$oldRelease) return false;
         if(dao::isError()) return dao::getError();
 
-        $objects = $this->objectModel->getByID($releaseID);
-
-        return $objects;
+        $release = $this->objectModel->getByID($releaseID);
+        return common::createChanges($oldRelease, $release);
     }
 
     /**

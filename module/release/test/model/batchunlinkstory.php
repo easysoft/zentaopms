@@ -1,25 +1,29 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/release.class.php';
-su('admin');
-
 /**
 
 title=测试 releaseModel->batchUnlinkStory();
+timeout=0
 cid=1
-pid=1
-
-正常任务批量移除关联需求 >> 1,
-停止维护任务批量移除关联需求 >> 6,
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/release.class.php';
 
-$releaseID = array('1','6');
-$stories   = array('2','4');
+$release = zdTable('release')->config('release');
+$release->stories->range('`1,2,3`,`4,5,6`');
+$release->gen(5);
+zdTable('user')->gen(5);
+su('admin');
 
-$release   = new releaseTest();
+$releases   = array(0, 1, 6);
+$stories[0] = array(1, 2);
+$stories[1] = array(4, 5);
 
-r($release->batchUnlinkStoryTest($releaseID[0],$stories)) && p('id,stories') && e('1,'); //正常任务批量移除关联需求
-r($release->batchUnlinkStoryTest($releaseID[1],$stories)) && p('id,stories') && e('6,'); //停止维护任务批量移除关联需求
-
+$releaseTester = new releaseTest();
+r($releaseTester->batchUnlinkStoryTest($releases[0], $stories[0])) && p()                   && e('0');       // 测试发布ID为空时，解除跟需求ID=1,2的关联
+r($releaseTester->batchUnlinkStoryTest($releases[1], $stories[0])) && p('0:old;0:new', ';') && e('1,2,3;3'); // 测试发布ID=1时，解除跟需求ID=1,2的关联
+r($releaseTester->batchUnlinkStoryTest($releases[2], $stories[0])) && p()                   && e('0');       // 测试发布ID不存在时，解除跟需求ID=1,2的关联
+r($releaseTester->batchUnlinkStoryTest($releases[0], $stories[1])) && p()                   && e('0');       // 测试发布ID为空时，解除跟需求ID=4,5的关联
+r($releaseTester->batchUnlinkStoryTest($releases[1], $stories[1])) && p()                   && e('0');       // 测试发布ID=1时，解除跟需求ID=4,5的关联
+r($releaseTester->batchUnlinkStoryTest($releases[2], $stories[1])) && p()                   && e('0');       // 测试发布ID不存在时，解除跟需求ID=4,5的关联
