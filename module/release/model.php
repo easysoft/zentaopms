@@ -1014,7 +1014,7 @@ class releaseModel extends model
      * @access public
      * @return array
      */
-    public function getStoryList(string $storyIdList, int $branch, string $orderBy, object $pager = null): array
+    public function getStoryList(string $storyIdList, int $branch, string $orderBy = '', object $pager = null): array
     {
         $stories = $this->dao->select("t1.*,t2.id as buildID, t2.name as buildName, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_BUILD)->alias('t2')->on("FIND_IN_SET(t1.id, t2.stories)")
@@ -1042,7 +1042,7 @@ class releaseModel extends model
      * @access public
      * @return array
      */
-    public function getBugList(string $bugIdList,  string $orderBy, object $pager = null): array
+    public function getBugList(string $bugIdList,  string $orderBy = '', object $pager = null): array
     {
         $bugs = $this->dao->select("*, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
             ->where('id')->in($bugIdList)
