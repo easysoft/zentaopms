@@ -43,7 +43,7 @@ formPanel
         ),
         $app->tab != 'project' || empty($product->shadow) ? formGroup
         (
-            set::width('1/4'),
+            set::width('1/2'),
             setClass('items-center'),
             checkbox(
                 set::name('marker'),
