@@ -523,29 +523,34 @@ class releaseModel extends model
     }
 
     /**
+     *
+     * 发布批量关联Bug。
      * Link bugs.
      *
      * @param  int    $releaseID
-     * @param  string $type
+     * @param  string $type      bug|leftBug
+     * @param  array  $bugs
      * @access public
-     * @return void
+     * @return bool
      */
-    public function linkBug($releaseID, $type = 'bug')
+    public function linkBug(int $releaseID, string $type = 'bug', array $bugs = array()): bool
     {
         $release = $this->getByID($releaseID);
+        if(!$release) return false;
 
-        $field = $type == 'bug' ? 'bugs' : 'leftBugs';
-
-        foreach($this->post->bugs as $i => $bugID)
+        $field   = $type == 'bug' ? 'bugs' : 'leftBugs';
+        foreach($bugs as $i => $bugID)
         {
-            if(strpos(",{$release->$field},", ",{$bugID},") !== false) unset($_POST['bugs'][$i]);
+            if(strpos(",{$release->$field},", ",{$bugID},") !== false) unset($bugs[$i]);
         }
 
-        $release->$field .= ',' . implode(',', $this->post->bugs);
-        $this->dao->update(TABLE_RELEASE)->set($field)->eq($release->$field)->where('id')->eq((int)$releaseID)->exec();
+        $release->$field .= ',' . implode(',', $bugs);
+        $this->dao->update(TABLE_RELEASE)->set($field)->eq($release->$field)->where('id')->eq($releaseID)->exec();
 
         $this->loadModel('action');
-        foreach($this->post->bugs as $bugID) $this->action->create('bug', $bugID, 'linked2release', '', $releaseID);
+        foreach($bugs as $bugID) $this->action->create('bug', $bugID, 'linked2release', '', $releaseID);
+
+        return !dao::isError();
     }
 
     /**
