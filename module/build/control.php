@@ -429,7 +429,7 @@ class build extends control
         $executionID = $build->execution ? $build->execution : $build->project;
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch($build->product, $build->branch, $queryID, 'id', $executionID, 'story', $build->allStories, $pager);
+            $allStories = $this->story->getBySearch($build->product, $build->branch, (int)$param, 'id', $executionID, 'story', $build->allStories, $pager);
         }
         else
         {
@@ -601,7 +601,7 @@ class build extends control
         if($build->execution) $this->loadModel('execution')->setMenu($build->execution);
 
         /* Build the search form. */
-        $queryID = $browseType == 'bysearch' ? $param : 0;
+        $queryID = $browseType == 'bySearch' ? $param : 0;
         $this->buildZen->buildLinkBugSearchForm($build, $queryID, $product->type);
 
         /* Load pager. */
@@ -612,7 +612,7 @@ class build extends control
         $executionID = $build->execution ? $build->execution : $build->project;
         if($browseType == 'bySearch')
         {
-            $allBugs = $this->bug->getBySearch($build->product, $build->branch, $queryID, 'id_desc', $build->allBugs, $pager, $build->project);
+            $allBugs = $this->bug->getBySearch('bug', $build->product, $build->branch, $build->project, $build->execution, $queryID, $build->allBugs, 'id_desc', $pager);
         }
         else
         {
