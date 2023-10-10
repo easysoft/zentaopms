@@ -962,7 +962,7 @@ class productModel extends model
         $product    = fixer::input('post')
             ->add('id', $productID)
             ->setDefault('status', 'closed')
-            ->setDefault('closedDate', helper::now())
+            ->setDefault('closedDate', helper::today())
             ->stripTags($this->config->product->editor->close['id'], $this->config->allowedTags)
             ->remove('comment')
             ->get();
