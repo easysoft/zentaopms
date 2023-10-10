@@ -124,7 +124,7 @@ $config->story->datatable->fieldList['estimate']['required'] = 'no';
 
 $config->story->datatable->fieldList['reviewer']['title']      = 'reviewer';
 $config->story->datatable->fieldList['reviewer']['type']       = 'html';
-$config->story->datatable->fieldList['reviewer']['sortType']   = true;
+$config->story->datatable->fieldList['reviewer']['sortType']   = false;
 $config->story->datatable->fieldList['reviewer']['control']    = 'multiple';
 $config->story->datatable->fieldList['reviewer']['dataSource'] = array('module' => 'story', 'method' => 'getStoriesReviewer', 'params' => '$productID');
 
