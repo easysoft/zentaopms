@@ -176,6 +176,7 @@ function setStatistics()
         if(story.caseCountNum > 0) checkedCase += 1;
         if(story.isParent) rateCount -= 1;
 
+        if(id.indexOf('-') > 0) id = id.split('-')[1];
         $('#productStoryForm').append('<input type="hidden" name="storyIdList[]" value="' + id + '">');
     });
 
@@ -190,7 +191,7 @@ function setStatistics()
 cols = JSON.parse(cols);
 data = JSON.parse(data).map(function(row)
 {
-    row.key = row.parent ? (row.parent + '-' + row.id) : row.id;
+    row.key = row.parent > 0 ? (row.parent + '-' + row.id) : row.id;
     return row;
 });
 const options =
