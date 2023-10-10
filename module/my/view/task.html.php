@@ -316,7 +316,7 @@ $(function()
                 if(status === 'doing') checkedDoing++;
 
                 var canStatistics = false;
-                if(!$row.hasClass('table-children'))
+                if($row.find('.has-child').length == 0)
                 {
                     canStatistics = true;
                 }
