@@ -305,8 +305,8 @@ class testtaskModel extends model
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t1.product = t4.id')
             ->leftJoin(TABLE_PROJECT)->alias('t5')->on('t2.project = t5.id')
-            ->where('t1.deleted')->eq(0)
-            ->andWhere('t4.deleted')->eq(0)
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t4.deleted')->eq('0')
             ->andWhere('t1.auto')->ne('unit')
             ->andWhere('t1.owner')->eq($account)
             ->andWhere('t2.id')->in($this->app->user->view->sprints)
@@ -1115,8 +1115,8 @@ class testtaskModel extends model
             ->leftJoin(TABLE_EXTENSION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
             ->where('t1.owner')->eq($account)
-            ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t3.deleted')->eq(0)
+            ->andWhere('t1.deleted')->eq('0')
+            ->andWhere('t3.deleted')->eq('0')
             ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->beginIF(!empty($skipProductIDList))->andWhere('t1.product')->notin($skipProductIDList)->fi()
             ->beginIF(!empty($skipExecutionIDList))->andWhere('t1.execution')->notin($skipExecutionIDList)->fi()
@@ -2344,7 +2344,7 @@ class testtaskModel extends model
     {
         return $this->dao->select('*')->from(TABLE_TESTTASK)
             ->where('build')->eq($buildID)
-            ->andWhere('deleted')->eq(0)
+            ->andWhere('deleted')->eq('0')
             ->fetch();
     }
 }
