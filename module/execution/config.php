@@ -284,7 +284,7 @@ $config->execution->datatable->fieldList['progress']['required'] = 'no';
 $config->execution->datatable->fieldList['progress']['sort']     = 'no';
 
 $config->execution->datatable->fieldList['burn']['title']    = 'burn';
-$config->execution->datatable->fieldList['burn']['width']    = '80';
+$config->execution->datatable->fieldList['burn']['width']    = '85';
 $config->execution->datatable->fieldList['burn']['fixed']    = 'right';
 $config->execution->datatable->fieldList['burn']['required'] = 'no';
 $config->execution->datatable->fieldList['burn']['sort']     = 'no';
