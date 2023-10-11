@@ -185,12 +185,16 @@ $lang->metric->objectList['case']        = "Test Case";
 $lang->metric->objectList['user']        = "User";
 $lang->metric->objectList['effort']      = "Effort";
 $lang->metric->objectList['doc']         = "Document";
-if($config->edition != 'open')
+if(in_array($config->edition, array('biz', 'max', 'ipd')))
 {
     $lang->metric->objectList['feedback']    = "Feedback";
+}
+if(in_array($config->edition, array('max', 'ipd')))
+{
     $lang->metric->objectList['risk']        = "Risk";
     $lang->metric->objectList['issue']       = "Issue";
 }
+
 $lang->metric->objectList['review'] = "Review";
 $lang->metric->objectList['other']  = "Other";
 

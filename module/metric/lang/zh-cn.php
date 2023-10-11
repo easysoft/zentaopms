@@ -185,12 +185,16 @@ $lang->metric->objectList['case']        = "用例";
 $lang->metric->objectList['user']        = "人员";
 $lang->metric->objectList['effort']      = "工时";
 $lang->metric->objectList['doc']         = "文档";
-if($config->edition != 'open')
+if(in_array($config->edition, array('biz', 'max', 'ipd')))
 {
     $lang->metric->objectList['feedback'] = "反馈";
+}
+if(in_array($config->edition, array('max', 'ipd')))
+{
     $lang->metric->objectList['risk']     = "风险";
     $lang->metric->objectList['issue']    = "问题";
 }
+
 $lang->metric->objectList['review'] = "评审";
 $lang->metric->objectList['other']  = "其他";
 
