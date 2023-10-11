@@ -27,7 +27,6 @@ zdTable('team')->gen(0);
 zdTable('user')->gen(5);
 su('admin');
 
-
 $releases = array(1, 2, 3);
 
 $releaseTester = new releaseTest();
