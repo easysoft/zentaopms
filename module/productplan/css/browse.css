@@ -22,7 +22,7 @@ td.c-branch {overflow: hidden; text-align: left !important; white-space: nowrap;
 .c-execution {width: 60px !important;}
 .c-bug, .c-hour {width: 60px;}
 .c-desc {width: 140px;}
-.c-date {width: 90px;}
+.c-date {width: 100px;}
 
 .plan-name {position: relative; display: flex; align-items: center;}
 .plan-name > span {flex: none;}
