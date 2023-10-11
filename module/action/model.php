@@ -740,8 +740,8 @@ class actionModel extends model
     {
         $query = $queryID ? $this->loadModel('search')->getQuery($queryID) : '';
 
-        /* 获取sql和表单状态。 */
-        /* Get the sql and form status from the query. */
+        /* 获取sql和表单内容。 */
+        /* Get sql and form content. */
         if($query)
         {
             $this->session->set('actionQuery', $query->sql);
@@ -753,39 +753,31 @@ class actionModel extends model
         $allProjects   = "`project` = 'all'";
         $allExecutions = "`execution` = 'all'";
         $actionQuery   = $this->session->actionQuery;
+        $productID     = 0;
+        if(preg_match("/`product` = '(\d*)'/", $actionQuery, $out)) $productID = $out[1];
 
-        $productID = 0;
-        if(preg_match("/`product` = '(\d*)'/", $actionQuery, $out))
-        {
-            $productID = $out[1];
-        }
+        /* 如果查询条件中包含所有产品的查询条件，不限制产品。 */
+        /* If the query condition include all products, no limit product. */
+        if(strpos($actionQuery, $allProducts) !== false) $actionQuery = str_replace($allProducts, '1 = 1', $actionQuery);
+        /* 如果查询条件中包含所有项目的查询条件，不限制项目。 */
+        /* If the query condition include all projects, no limit project. */
+        if(strpos($actionQuery, $allProjects) !== false) $actionQuery = str_replace($allProjects, '1 = 1', $actionQuery);
+        /* 如果查询条件中包含所有执行的查询条件，不限制执行。 */
+        /* If the query condition include all executions, no limit execution. */
+        if(strpos($actionQuery, $allExecutions) !== false) $actionQuery = str_replace($allExecutions, '1 = 1', $actionQuery);
 
-        /* 如果sql语句中不包含'prodcut', 则添加产品权限检查。 */
-        /* If the sql not include 'product', add check purview for product. */
-        if(strpos($actionQuery, $allProducts) !== false) $actionQuery = str_replace($allProducts, '1', $actionQuery);
-
-        /* 如果sql语句中不包含'project', 则添加项目权限检查。 */
-        /* If the sql not include 'project', add check purview for project. */
-        if(strpos($actionQuery, $allProjects) !== false) $actionQuery = str_replace($allProjects, '1', $actionQuery);
-
-        /* 如果sql语句中不包含'execution', 则添加执行权限检查。 */
-        /* If the sql not include 'execution', add check purview for execution. */
-        if(strpos($actionQuery, $allExecutions) !== false) $actionQuery = str_replace($allExecutions, '1', $actionQuery);
-
-        $actionQuery = str_replace("`product` = '{$productID}'", "`product` LIKE '%,$productID,%'", $actionQuery);
-
-        if($date) $actionQuery = "($actionQuery) AND " . ('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'");
+        $actionQuery = str_replace("`product` = '{$productID}'", "`product` LIKE '%,{$productID},%'", $actionQuery);
+        if($date) $actionQuery = "({$actionQuery}) AND " . ('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'");
 
         /* 如果当前版本为lite，则过滤掉产品相关的动态。 */
         /* If this vision is lite, delete product actions. */
         if($this->config->vision == 'lite') $actionQuery .= " AND objectType != 'product'";
 
-        $actionQuery .= " AND vision = '" . $this->config->vision . "'";
+        $actionQuery .= " AND vision = '{$this->config->vision}'";
         $actions      = $this->getBySQL($actionQuery, $orderBy, $pager);
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
-        if(!$actions) return array();
-        return $this->transformActions($actions);
+        return $actions ? $this->transformActions($actions) : array();
     }
 
     /**
