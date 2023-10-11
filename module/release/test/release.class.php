@@ -73,24 +73,17 @@ class releaseTest
     }
 
     /**
+     * 获取通知的人员。
      * Get notify persons.
      *
-     * @param  string $notfiyList
-     * @param  int    $productID
-     * @param  int    $buildID
      * @param  int    $releaseID
      * @access public
      * @return array
      */
-
-    public function getNotifyPersonsTest($releaseID)
+    public function getNotifyPersonsTest($releaseID): array
     {
         $release = $this->objectModel->getById($releaseID);
-        $objects = $this->objectModel->getNotifyPersons($release);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $this->objectModel->getNotifyPersons($release);
     }
 
     /**
