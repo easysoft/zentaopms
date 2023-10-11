@@ -889,7 +889,7 @@ window.genPieOption = function(data)
 
 window.genLineBarOption = function(chartType, xAxis, yAxis, series, selectedScope = null)
 {
-    var legend = {type: 'scroll'};
+    var legend = {left: '16', right: '16', type: 'scroll'};
     if(selectedScope)
     {
         legend.selector = true;
@@ -898,8 +898,9 @@ window.genLineBarOption = function(chartType, xAxis, yAxis, series, selectedScop
 
     var option = {
         grid: {
-            left: '10%',
-            right: '10%',
+            top: '48',
+            left: '16',
+            right: '16',
             bottom: '15%',
             containLabel: true
         },
