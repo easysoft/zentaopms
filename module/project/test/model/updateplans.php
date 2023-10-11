@@ -31,8 +31,10 @@ cid=1
 
 */
 
-global $tester;
+global $tester, $app;
 $project = new Project();
+$app->rawModule  = 'project';
+$app->moduleName = 'project';
 
 $plan = array();
 $plan[3] = array(1, 4, 7);
