@@ -796,20 +796,6 @@ class releaseModel extends model
     }
 
     /**
-     * Build release action menu.
-     *
-     * @param  object $release
-     * @param  string $type
-     * @access public
-     * @return string
-     */
-    public function buildOperateMenu($release, $type = 'view')
-    {
-        $function = 'buildOperate' . ucfirst($type) . 'Menu';
-        return $this->$function($release);
-    }
-
-    /**
      * Build release view action menu.
      *
      * @param  object $release
@@ -858,40 +844,6 @@ class releaseModel extends model
                 'class'        => 'btn ghost ajax-submit',
                 'data-confirm' => $this->lang->release->confirmDelete
             );
-        }
-
-        return $menu;
-    }
-
-    /**
-     * Build release browse action menu.
-     *
-     * @param  object $release
-     * @access public
-     * @return string
-     */
-    public function buildOperateBrowseMenu($release)
-    {
-        $canBeChanged = common::canBeChanged('release', $release);
-        if(!$canBeChanged) return '';
-
-        $menu          = '';
-        $params        = "releaseID=$release->id";
-        $changedStatus = $release->status == 'normal' ? 'terminate' : 'normal';
-
-        if(common::hasPriv('release', 'linkStory')) $menu .= html::a(inlink('view', "$params&type=story&link=true"), '<i class="icon-link"></i> ', '', "class='btn' title='{$this->lang->release->linkStory}'");
-        if(common::hasPriv('release', 'linkBug'))   $menu .= html::a(inlink('view', "$params&type=bug&link=true"),   '<i class="icon-bug"></i> ',  '', "class='btn' title='{$this->lang->release->linkBug}'");
-        $menu .= $this->buildMenu('release', 'changeStatus', "$params&status=$changedStatus", $release, 'browse', $release->status == 'normal' ? 'pause' : 'play', 'hiddenwin', '', '', '',$this->lang->release->changeStatusList[$changedStatus]);
-        $menu .= $this->buildMenu('release', 'edit',   "release=$release->id", $release, 'browse');
-        $menu .= $this->buildMenu('release', 'notify', "release=$release->id", $release, 'browse', 'bullhorn', '', 'iframe', true);
-        $clickable = $this->buildMenu('release', 'delete', "release=$release->id", $release, 'browse', '', '', '', '', '', '', false);
-
-        if(common::hasPriv('release', 'delete', $release))
-        {
-            $deleteURL = helper::createLink('release', 'delete', "releaseID=$release->id&confirm=yes");
-            $class = 'btn';
-            if(!$clickable) $class .= ' disabled';
-            $menu .= html::a("javascript:ajaxDelete(\"$deleteURL\", \"releaseList\", confirmDelete)", '<i class="icon-trash"></i>', '', "class='{$class}' title='{$this->lang->release->delete}'");
         }
 
         return $menu;
