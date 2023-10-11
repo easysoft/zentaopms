@@ -306,11 +306,7 @@ class blockZen extends block
      */
     protected function printDynamicBlock(): void
     {
-        /* Load pager. */
-        $this->app->loadClass('pager', true);
-        $pager = new pager(0, 30, 1);
-
-        $this->view->actions = $this->loadModel('action')->getDynamic('all', 'today', 'date_desc', $pager);
+        $this->view->actions = $this->loadModel('action')->getDynamic('all', 'today', 'date_desc', 30);
         $this->view->users   = $this->loadModel('user')->getPairs('nodeleted|noletter|all');
     }
 
@@ -1490,11 +1486,7 @@ class blockZen extends block
         $projectID = $this->session->project;
         $count     = isset($block->params->count) ? (int)$block->params->count : 10;
 
-        /* Load pager. */
-        $this->app->loadClass('pager', true);
-        $pager = new pager(0, $count, 1);
-
-        $this->view->actions = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, 'all', $projectID);
+        $this->view->actions = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $count, 'all', $projectID);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
     }
 
@@ -3103,11 +3095,7 @@ class blockZen extends block
     {
         $productID = $this->session->product;
 
-        /* Load pager. */
-        $this->app->loadClass('pager', true);
-        $pager = new pager(0, 30, 1);
-
-        $this->view->actions = $this->loadModel('action')->getDynamic('all', 'today', 'date_desc', $pager, $productID);
+        $this->view->actions = $this->loadModel('action')->getDynamic('all', 'today', 'date_desc', 30, $productID);
         $this->view->users   = $this->loadModel('user')->getPairs('nodeleted|noletter|all');
     }
 
