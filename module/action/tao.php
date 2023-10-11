@@ -860,12 +860,13 @@ class actionTao extends actionModel
      * 为Action添加对象名称。
      * Add object name for action.
      *
-     * @param  object $action
-     * @param  array  $objectNames
+     * @param  object    $action
+     * @param  array     $objectNames
+     * @param  string    $objectType
      * @access protected
      * @return void
      */
-    protected function addObjectNameForAction(object $action, array $objectNames)
+    protected function addObjectNameForAction(object $action, array $objectNames, string $objectType)
     {
         $action->objectName = isset($objectNames[$action->objectType][$action->objectID]) ? $objectNames[$action->objectType][$action->objectID] : '';
 
@@ -909,6 +910,7 @@ class actionTao extends actionModel
                 $action->objectName = reset($pivotNames);
             }
         }
+        if(empty($action->objectName) && (substr($objectType, 0, 6) == 'gitlab' || substr($objectType, 0, 5) == 'gitea' || substr($objectType, 0, 4) == 'gogs')) $action->objectName = $action->extra;
     }
 
     /**

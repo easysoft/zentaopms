@@ -811,8 +811,8 @@ class actionModel extends model
      */
     public function transformActions(array $actions): array
     {
-        /* 获取评论用户以及受信任的部门用户。 */
-        /* Get commiters and the same department users. */
+        /* 获取评论用户以及当前登陆用户的本部门用户。 */
+        /* Get the commenters and the users of the current user's department. */
         $commiters = $this->loadModel('user')->getCommiters();
         $deptUsers = isset($this->app->user->dept) ? $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id') : '';
 
@@ -830,7 +830,6 @@ class actionModel extends model
         $docList          = $this->loadModel('doc')->getPrivDocs('', 0, 'all');
         $apiList          = $this->loadModel('api')->getPrivApis();
         $docLibList       = $this->doc->getLibs('hasApi');
-
         foreach($actions as $i => $action)
         {
             /* 如果doc,api,doclib,product类型对应的对象不存在，则从actions中删除。*/
@@ -841,33 +840,22 @@ class actionModel extends model
                 continue;
             }
 
-            /* 为action添加objectName属性。 */
-            /* Add objectName field to the action. */
-            $this->actionTao->addObjectNameForAction($action, $objectNames);
-
-            $projectID  = isset($relatedProjects[$action->objectType][$action->objectID]) ? $relatedProjects[$action->objectType][$action->objectID] : 0;
             $actionType = strtolower($action->action);
             $objectType = strtolower($action->objectType);
+            $projectID  = isset($relatedProjects[$action->objectType][$action->objectID]) ? $relatedProjects[$action->objectType][$action->objectID] : 0;
 
             $action->originalDate = $action->date;
             $action->date         = date(DT_MONTHTIME2, strtotime($action->date));
             $action->actionLabel  = isset($this->lang->{$objectType}->{$actionType}) ? $this->lang->{$objectType}->{$actionType} : $action->action;
             $action->actionLabel  = isset($this->lang->action->label->{$actionType}) ? $this->lang->action->label->{$actionType} : $action->actionLabel;
             $action->objectLabel  = $this->getObjectLabel($objectType, $action->objectID, $actionType, $requirements);
-
-            /* 如果action的类型为login或者logout，则不需要链接。*/
-            /* If action type is login or logout, needn't link. */
+            $action->major        = isset($this->config->action->majorList[$action->objectType]) && in_array($action->action, $this->config->action->majorList[$action->objectType]) ? 1 : 0;
             if($actionType == 'svncommited' || $actionType == 'gitcommited') $action->actor = zget($commiters, $action->actor);
 
-            /* 获取gitlab,gitea,或者gogs的对象名称。 */
-            /* Get gitlab, gitea or gogs objectname. */
-            if(empty($action->objectName) && (substr($objectType, 0, 6) == 'gitlab' || substr($objectType, 0, 5) == 'gitea' || substr($objectType, 0, 4) == 'gogs')) $action->objectName = $action->extra;
-
-            /* 设置action的objectLink属性。 */
-            /* Set the objectLink attribute of the action. */
+            /* 设置对象的名称和链接。 */
+            /* Set object name and set object link. */
+            $this->actionTao->addObjectNameForAction($action, $objectNames, $objectType);
             $this->setObjectLink($action, $deptUsers, $shadowProducts, zget($projectMultiples, $projectID, ''));
-
-            $action->major = (isset($this->config->action->majorList[$action->objectType]) && in_array($action->action, $this->config->action->majorList[$action->objectType])) ? 1 : 0;
         }
         return $actions;
     }
