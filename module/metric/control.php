@@ -122,7 +122,7 @@ class metric extends control
 
         $this->view->metric         = $metric;
         $this->view->legendBasic    = $this->metricZen->getBasicInfo($this->view,'scope,object,purpose,name,code,unit,desc,definition');
-        $this->view->createEditInfo = $this->metricZen->getCreateEditInfo($this->view, 'createdBy,implementedBy,lastEdited');
+        $this->view->createEditInfo = $this->metricZen->getCreateEditInfo($this->view, 'createdBy');
 
         $this->display();
     }
