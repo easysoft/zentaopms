@@ -732,6 +732,7 @@ class releaseModel extends model
     }
 
     /**
+     * 发送邮件给反馈用户。
      * Send mail to feedback user.
      *
      * @param  object $release
@@ -739,7 +740,7 @@ class releaseModel extends model
      * @access public
      * @return void
      */
-    public function sendMail2Feedback($release, $subject)
+    public function sendMail2Feedback(object $release, string $subject): void
     {
         if(!$release->stories && !$release->bugs) return;
 
@@ -756,6 +757,7 @@ class releaseModel extends model
             ->andWhere('notifyEmail')->ne('')
             ->fetchGroup('notifyEmail', 'id');
 
+        /* Get notify email and object name. */
         $toList     = array();
         $emails     = array();
         $storyNames = array();
@@ -785,15 +787,14 @@ class releaseModel extends model
             foreach($bugList as $bug) $bugNames[] = $bug->title;
         }
 
-        if(!empty($toList))
-        {
-            $storyNames  = implode(',', $storyNames);
-            $bugNames    = implode(',', $bugNames);
-            $mailContent = sprintf($this->lang->release->mailContent, $release->name);
-            if($storyNames) $mailContent .= sprintf($this->lang->release->storyList, $storyNames);
-            if($bugNames)   $mailContent .= sprintf($this->lang->release->bugList,   $bugNames);
-            $this->loadModel('mail')->send(implode(',', $toList), $subject, $mailContent, '', false, $emails);
-        }
+        if(empty($toList)) return;
+
+        $storyNames  = implode(',', $storyNames);
+        $bugNames    = implode(',', $bugNames);
+        $mailContent = sprintf($this->lang->release->mailContent, $release->name);
+        if($storyNames) $mailContent .= sprintf($this->lang->release->storyList, $storyNames);
+        if($bugNames)   $mailContent .= sprintf($this->lang->release->bugList,   $bugNames);
+        $this->loadModel('mail')->send(implode(',', $toList), $subject, $mailContent, '', false, $emails);
     }
 
     /**
