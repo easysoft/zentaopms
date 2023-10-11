@@ -1206,7 +1206,7 @@ class productZen extends product
         $period     = $type == 'account' ? 'all'  : $type;
         $date       = empty($date) ? '' : date('Y-m-d', (int)$date);
         $actions    = $this->loadModel('action')->getDynamic($account, $period, $orderBy, 50, $productID, 'all', 'all', $date, $direction);
-        $dateGroups = $this->action->buildDateGroup($actions, $direction, $type);
+        $dateGroups = $this->action->buildDateGroup($actions, $direction);
 
         return array($actions, $dateGroups);
     }

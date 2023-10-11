@@ -593,25 +593,22 @@ class actionTest
      * @param  string $direction
      * @param  string $type
      * @param  string $orderBy
+     * @param  string $rawModule
      * @access public
-     * @return int
+     * @return array
      */
-    public function buildDateGroupTest($direction = 'next', $type = 'today', $orderBy = 'date_desc')
+    public function buildDateGroupTest(string $direction = 'next', string $type = 'today', string $orderBy = 'date_desc', string $rawModule = 'my'): array
     {
         $actions = $this->objectModel->getDynamic('all', $type);
-        $objects = $this->objectModel->buildDateGroup($actions, $direction, $type, $orderBy);
+
+        global $tester;
+        $tester->app->rawModule = $rawModule;
+        $objects = $this->objectModel->buildDateGroup($actions, $direction, $orderBy);
 
         if(dao::isError()) return dao::getError();
 
-        $firstGroupColumn = current(current($objects));
-        $endGroupColumn   = current(end($objects));
-
-        if(($direction == 'next' && $orderBy == 'date_desc') && strtotime($firstGroupColumn->originalDate) < strtotime($endGroupColumn->originalDate)) return array('count' => 0, 'sort' => false);
-        if(($direction == 'pre' && $orderBy == 'date_asc') && strtotime($firstGroupColumn->originalDate) > strtotime($endGroupColumn->originalDate)) return array('count' => 0, 'sort' => false);
-
-        $count = 0;
-        foreach($objects as $object) $count += count($object);
-        return array('count' => $count, 'sort' => true);
+        if(!$objects) $objects = array(array());
+        return array('dateCount' => count($objects), 'dateActions' => count($objects, true) - count($objects));
     }
 
     /**

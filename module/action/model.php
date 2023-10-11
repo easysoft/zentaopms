@@ -1266,17 +1266,16 @@ class actionModel extends model
      * @param  array  $actions
      * @param  string $direction
      * @param  string $orderBy    date_desc|date_asc
-     * @param  string $type       all|today|yesterday|thisweek|lastweek|thismonth|lastmonth
      * @access public
      * @return array
      */
-    public function buildDateGroup(array $actions, string $direction = 'next', string $type = 'today', string $orderBy = 'date_desc'): array
+    public function buildDateGroup(array $actions, string $direction = 'next', string $orderBy = 'date_desc'): array
     {
         $dateGroup = array();
         foreach($actions as $action)
         {
             $timeStamp    = strtotime(isset($action->originalDate) ? $action->originalDate : $action->date);
-            $date         = $type == 'all' ? date(DT_DATE3, $timeStamp) : date(DT_DATE4, $timeStamp);
+            $date         = date(DT_DATE3, $timeStamp);
             $action->time = date(DT_TIME2, $timeStamp);
             $dateGroup[$date][] = $action;
         }
@@ -1293,7 +1292,7 @@ class actionModel extends model
                 foreach($lastDateActions as $action)
                 {
                     $timeStamp    = strtotime(isset($action->originalDate) ? $action->originalDate : $action->date);
-                    $date         = $type == 'all' ? date(DT_DATE3, $timeStamp) : date(DT_DATE4, $timeStamp);
+                    $date         = date(DT_DATE3, $timeStamp);
                     $action->time = date(DT_TIME2, $timeStamp);
                     $dateGroup[$date][] = $action;
                 }

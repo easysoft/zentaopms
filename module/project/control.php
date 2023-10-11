@@ -692,7 +692,7 @@ class project extends control
         $period     = $type == 'account' ? 'all'  : $type;
         $date       = empty($date) ? '' : date('Y-m-d', $date);
         $actions    = $this->loadModel('action')->getDynamic($account, $period, $orderBy, 50, 'all', $projectID, 'all', $date, $direction);
-        $dateGroups = $this->action->buildDateGroup($actions, $direction, $type);
+        $dateGroups = $this->action->buildDateGroup($actions, $direction);
 
         if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($actions) : $this->action->getDynamicCount();
 

@@ -286,7 +286,7 @@ class company extends control
         $this->config->company->dynamic->search['params']['actor']['values']     = $accountPairs;
         $this->loadModel('search')->setSearchParams($this->config->company->dynamic->search);
 
-        $dateGroups = $this->action->buildDateGroup($actions, $direction, $browseType, $orderBy);
+        $dateGroups = $this->action->buildDateGroup($actions, $direction, $orderBy);
         if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($actions) : $this->action->getDynamicCount();
 
         /* Assign. */
