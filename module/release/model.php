@@ -638,20 +638,21 @@ class releaseModel extends model
     }
 
     /**
+     * 发送邮件给相关用户。
      * Send mail to release related users.
      *
      * @param  int    $releaseID
      * @access public
      * @return void
      */
-    public function sendmail($releaseID)
+    public function sendmail(int $releaseID): void
     {
         if(empty($releaseID)) return;
         $this->app->loadConfig('mail');
 
         /* Load module and get vars. */
         $release = $this->getByID($releaseID);
-        $suffix  = empty($release->product) ? '' : ' - ' . $this->loadModel('product')->getById($release->product)->name;
+        $suffix  = empty($release->product) ? '' : ' - ' . $this->loadModel('product')->getByID($release->product)->name;
         $subject = 'Release #' . $release->id . ' ' . $release->name . $suffix;
 
         $stories  = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($release->stories)->andWhere('deleted')->eq(0)->fetchAll('id');
