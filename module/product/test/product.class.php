@@ -22,6 +22,9 @@ class productTest
         $lang->SRCommon   = '研发需求';
         $lang->URCommon   = '用户需求';
 
+        $app->rawModule  = 'product';
+        $app->moduleName = 'product';
+
         su($user);
         $this->objectModel = $tester->loadModel('product');
         $tester->app->loadClass('dao');
