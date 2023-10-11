@@ -359,4 +359,19 @@ class releaseTest
 
         return $this->objectModel->buildOperateViewMenu($release);
     }
+
+    /**
+     * 判断按钮是否可点击。
+     * udge btn is clickable or not.
+     *
+     * @param  int    $releaseID
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function isClickableTest(int $releaseID, string $action): bool
+    {
+        $release = $this->objectModel->getByID($releaseID);
+        return $this->objectModel->isClickable($release, $action);
+    }
 }
