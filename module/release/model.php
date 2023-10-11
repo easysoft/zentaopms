@@ -167,7 +167,8 @@ class releaseModel extends model
     }
 
     /**
-     * Get story releases.
+     * 获取关联给定需求的发布。
+     * Get releases by story id.
      *
      * @param  int    $storyID
      * @access public
