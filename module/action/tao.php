@@ -695,65 +695,6 @@ class actionTao extends actionModel
     }
 
     /**
-     * 生成用户访问权限检查sql。
-     * Build user access check sql.
-     *
-     * @param  string|int $productID
-     * @param  string|int $projectID
-     * @param  string|int $executionID
-     * @param  array      $executions
-     * @access protected
-     * @return string
-     */
-    protected function buildUserAclsSearchCondition(string|int $productID, string|int $projectID, string|int $executionID, array &$executions): string
-    {
-        /* 验证用户的产品/项目/执行权限。 */
-        /* Verify user's product/project/execution permissions。*/
-        $aclViews = isset($this->app->user->rights['acls']['views']) ? $this->app->user->rights['acls']['views'] : array();
-        if($productID == 'all')   $grantedProducts   = empty($aclViews) || !empty($aclViews['product'])   ? $this->app->user->view->products : '0';
-        if($projectID == 'all')   $grantedProjects   = empty($aclViews) || !empty($aclViews['project'])   ? $this->app->user->view->projects : '0';
-        if($executionID == 'all') $grantedExecutions = empty($aclViews) || !empty($aclViews['execution']) ? $this->app->user->view->sprints  : '0';
-        if(empty($grantedProducts)) $grantedProducts = '0';
-
-        /* If product is selected, show related projects and executions. */
-        if(is_numeric($productID))
-        {
-            $projects   = $this->loadModel('product')->getProjectPairsByProduct($productID);
-            $executions = $this->product->getExecutionPairsByProduct($productID) + array(0 => 0);
-
-            $grantedProjects   = isset($grantedProjects) ? array_intersect(array_keys($projects), explode(',', $grantedProjects)) : array_keys($projects);
-            $grantedExecutions = isset($grantedExecutions) ? array_intersect(array_keys($executions), explode(',', $grantedExecutions)) : array_keys($executions);
-        }
-        /* If project is selected, show related products and executions. */
-        if(is_numeric($projectID))
-        {
-            $products   = $this->loadModel('product')->getProductPairsByProject($projectID);
-            $executions = $this->loadModel('execution')->fetchPairs($projectID) + array(0 => 0);
-
-            $grantedProducts   = isset($grantedProducts) ? array_intersect(array_keys($products), explode(',', $grantedProducts)) : array_keys($products);
-            $grantedExecutions = isset($grantedExecutions) ? array_intersect(array_keys($executions), explode(',', $grantedExecutions)) : array_keys($executions);
-        }
-
-        /* 组建产品/项目/执行搜索条件。 */
-        /* Build product/project/execution search condition. */
-        if(isset($grantedProducts))
-        {
-            $productCondition = '';
-            foreach(explode(',', $grantedProducts) as $product) $productCondition = empty($productCondition) ? "(execution = '0' and project = '0' and (product LIKE '%,{$product},%'" : "{$productCondition} OR product LIKE '%,{$product},%'";
-            if(!empty($productCondition)) $productCondition .= '))';
-        }
-        else
-        {
-            $productCondition   = "(execution = '0' and project = '0' and product like '%,{$productID},%')";
-        }
-        $projectCondition   = isset($grantedProjects) ? "(execution = '0' and project != '0' and project " . helper::dbIN($grantedProjects) . ')' : "(execution = '0' and project = '{$projectID}')";
-        $executionCondition = isset($grantedExecutions) ? "(execution != '0' and execution " . helper::dbIN($grantedExecutions) . ')' : "(execution != '0' and execution = '{$executionID}')";
-
-        $condition = "((product =',0,' or product = '0' or product=',,') AND project = '0' AND execution = '0') OR {$productCondition} OR {$projectCondition} OR {$executionCondition}";
-        return $condition;
-    }
-
-    /**
      * 处理工时相关查询条件。
      * Process effort related search condition.
      *
