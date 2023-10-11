@@ -1216,7 +1216,7 @@ class storyModel extends model
         foreach(explode(',', $twinsIdList) as $twinID)
         {
             if(empty($twinID)) continue;
-            $this->storyTao->doCreateReviewer($twinID, $story->reviewer, $oldStory->version);
+            $this->storyTao->doCreateReviewer((int)$twinID, $story->reviewer, $oldStory->version);
         }
 
         $story->reviewer = implode(',', $story->reviewer);
@@ -1344,9 +1344,9 @@ class storyModel extends model
      *
      * @param  array $stories
      * @access public
-     * @return void
+     * @return array|bool
      */
-    public function batchClose(array $stories)
+    public function batchClose(array $stories): array|bool
     {
         $this->loadModel('action');
         $oldStories = $this->getByList(array_keys($stories));
@@ -1388,6 +1388,7 @@ class storyModel extends model
 
             $this->loadModel('score')->create('story', 'close', $storyID);
         }
+        return true;
     }
 
     /**
@@ -1470,7 +1471,7 @@ class storyModel extends model
             if($oldPlanID) $story->plan = trim(str_replace(",$oldPlanID,", ',', ",$oldStory->plan,"), ',');
 
             /* Update the order of the story in the plan. */
-            $this->updateStoryOrderOfPlan($storyID, $planID, $oldStory->plan);
+            $this->updateStoryOrderOfPlan($storyID, (string)$planID, $oldStory->plan);
 
             /* Replace plan field if product is normal or not linked to plan or story linked to a branch. */
             $productType = $products[$oldStory->product]->type;
@@ -1506,8 +1507,8 @@ class storyModel extends model
             if(!dao::isError())
             {
                 $allChanges[$storyID] = common::createChanges($oldStory, $story);
-                if($story->plan != $oldStory->plan and !empty($oldStory->plan) and strpos($oldStory->plan, ',') === false) $unlinkPlans[$oldStory->plan] = empty($unlinkPlans[$oldStory->plan]) ? $storyID : "{$unlinkPlans[$oldStory->plan]},$storyID";
-                if($story->plan != $oldStory->plan and !empty($story->plan)    and strpos($story->plan, ',') === false)    $link2Plans[$story->plan]     = empty($link2Plans[$story->plan])     ? $storyID : "{$link2Plans[$story->plan]},$storyID";
+                if($story->plan != $oldStory->plan and !empty($oldStory->plan) and strpos((string)$oldStory->plan, ',') === false) $unlinkPlans[$oldStory->plan] = empty($unlinkPlans[$oldStory->plan]) ? $storyID : "{$unlinkPlans[$oldStory->plan]},$storyID";
+                if($story->plan != $oldStory->plan and !empty($story->plan)    and strpos((string)$story->plan, ',') === false)    $link2Plans[$story->plan]     = empty($link2Plans[$story->plan])     ? $storyID : "{$link2Plans[$story->plan]},$storyID";
             }
         }
 
@@ -1680,9 +1681,9 @@ class storyModel extends model
      *
      * @param  int    $storyID
      * @access public
-     * @return array
+     * @return array|false
      */
-    public function assign($storyID)
+    public function assign(int $storyID): array|false
     {
         $oldStory   = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
         $now        = helper::now();
@@ -2088,19 +2089,19 @@ class storyModel extends model
     /**
      * Get stories by a field.
      *
-     * @param  int         $productID
-     * @param  int|string  $branch
-     * @param  string      $modules
-     * @param  string      $fieldName
-     * @param  mixed       $fieldValue
-     * @param  string      $type         requirement|story
-     * @param  string      $orderBy
-     * @param  object      $pager
-     * @param  string      $operator     equal|include
+     * @param  int          $productID
+     * @param  int|string   $branch
+     * @param  string|array $modules
+     * @param  string       $fieldName
+     * @param  string       $fieldValue
+     * @param  string       $type         requirement|story
+     * @param  string       $orderBy
+     * @param  object       $pager
+     * @param  string       $operator     equal|include
      * @access public
      * @return array
      */
-    public function getByField($productID, $branch, $modules, $fieldName, $fieldValue, $type = 'story', $orderBy = '', $pager = null, $operator = 'equal')
+    public function getByField(int $productID, int|string $branch, string|array $modules, string $fieldName, string $fieldValue, string $type = 'story', string $orderBy = '', object|null $pager = null, string $operator = 'equal'): array
     {
         if(!$this->loadModel('common')->checkField(TABLE_STORY, $fieldName) and $fieldName != 'reviewBy' and $fieldName != 'assignedBy') return array();
 
@@ -2142,7 +2143,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function get2BeClosed($productID, $branch, $modules, $type = 'story', $orderBy = '', $pager = null)
+    public function get2BeClosed(int $productID, int|string $branch, string|array $modules, string $type = 'story', string $orderBy = '', object|null $pager = null): array
     {
         $stories = $this->dao->select("*,IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_STORY)
             ->where('product')->in($productID)
@@ -2174,7 +2175,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getBySearch($productID, $branch = '', $queryID = 0, $orderBy = '', $executionID = '', $type = 'story', $excludeStories = '', $pager = null)
+    public function getBySearch(int $productID, int|string $branch = '', int $queryID = 0, string $orderBy = '', int $executionID = 0, string $type = 'story', string $excludeStories = '', object|null $pager = null): array
     {
         $this->loadModel('product');
         $executionID = empty($executionID) ? 0 : $executionID;
@@ -2187,16 +2188,17 @@ class storyModel extends model
         $queryProductID = $productID;
         if(strpos($storyQuery, $allProduct) !== false)
         {
-            $storyQuery     = str_replace($allProduct, '1', $storyQuery);
+            $storyQuery     = str_replace($allProduct, '1=1', $storyQuery);
             $queryProductID = 'all';
         }
 
         $storyQuery = $storyQuery . ' AND `product` ' . helper::dbIN(array_keys($products));
 
         if($excludeStories)
-        {   $dbIN = helper::dbIN($excludeStories);
-            if(strpos($dbIN, '=') === 0 ) $storyQuery = $storyQuery . ' AND `id` !' . helper::dbIN($excludeStories);
-            else $storyQuery = $storyQuery . ' AND `id` NOT ' . helper::dbIN($excludeStories);
+        {
+            $dbIN = helper::dbIN($excludeStories);
+            $dbIN = strpos($dbIN, '=') === 0 ? "`id` !{$dbIN}" : "`id` NOT {$dbIN}";
+            $storyQuery = $storyQuery . ' AND ' . $dbIN;
         }
         if($this->app->moduleName == 'productplan') $storyQuery .= " AND `status` NOT IN ('closed') AND `parent` >= 0 ";
         $allBranch = "`branch` = 'all'";
@@ -2206,13 +2208,8 @@ class storyModel extends model
             $branchProducts = array();
             foreach($products as $product)
             {
-                if($product->type != 'normal')
-                {
-                    $branchProducts[$product->id] = $product;
-                    continue;
-                }
-
-                $normalProducts[$product->id] = $product;
+                if($product->type != 'normal') $branchProducts[$product->id] = $product;
+                if($product->type == 'normal') $normalProducts[$product->id] = $product;
             }
 
             $storyQuery .= ' AND (';
@@ -2232,7 +2229,7 @@ class storyModel extends model
                     $branches[$branch] = $branch;
                 }
 
-                $branches    = implode(',', $branches);
+                $branches = implode(',', $branches);
                 if(!empty($normalProducts)) $storyQuery .= " OR ";
                 $storyQuery .= "(`product` " . helper::dbIN(array_keys($branchProducts)) . " AND `branch` " . helper::dbIN($branches) . ")";
             }
@@ -2252,7 +2249,7 @@ class storyModel extends model
         }
         elseif(strpos($storyQuery, $allBranch) !== false)
         {
-            $storyQuery = str_replace($allBranch, '1', $storyQuery);
+            $storyQuery = str_replace($allBranch, '1=1', $storyQuery);
         }
         elseif($branch !== 'all' and $branch !== '' and strpos($storyQuery, '`branch` =') === false and $queryProductID != 'all')
         {
@@ -2260,26 +2257,24 @@ class storyModel extends model
         }
         $storyQuery = preg_replace("/`plan` +LIKE +'%([0-9]+)%'/i", "CONCAT(',', `plan`, ',') LIKE '%,$1,%'", $storyQuery);
 
-
         return $this->getBySQL($queryProductID, $storyQuery, $orderBy, $pager, $type);
     }
 
     /**
      * Get stories by a sql.
      *
-     * @param  int    $productID
-     * @param  string $sql
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  string $type requirement|story
+     * @param  int|string $productID    int|all
+     * @param  string     $sql
+     * @param  string     $orderBy
+     * @param  object     $pager
+     * @param  string     $type requirement|story
      * @access public
      * @return array
      */
-    public function getBySQL($productID, $sql, $orderBy, $pager = null, $type = 'story')
+    public function getBySQL(int|string $productID, string $sql, string $orderBy, object|null $pager = null, string $type = 'story'): array
     {
         /* Get plans. */
-        $plans = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)
-            ->where('deleted')->eq('0')
+        $plans = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)->where('deleted')->eq('0')
             ->beginIF($productID != 'all' and $productID != '')->andWhere('product')->eq((int)$productID)->fi()
             ->fetchPairs();
 
@@ -2334,7 +2329,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getParentStoryPairs(int $productID, string|int $appendedStories = '')
+    public function getParentStoryPairs(int $productID, string|int $appendedStories = ''): array
     {
         $stories = $this->dao->select('id, title')->from(TABLE_STORY)
             ->where('deleted')->eq('0')
@@ -2347,7 +2342,7 @@ class storyModel extends model
             ->andWhere('twins')->eq('')
             ->beginIF(!empty($appendedStories))->orWhere('id')->in($appendedStories)->fi()
             ->fetchPairs();
-        return array(0 => '') + $stories ;
+        return array(0 => '') + $stories;
     }
 
     /**
@@ -2359,7 +2354,7 @@ class storyModel extends model
      * @access public
      * @return void
      */
-    public function closeParentRequirement(int $storyID, object $postData)
+    public function closeParentRequirement(int $storyID, object $postData): void
     {
         $parentID = $this->dao->select('BID')->from(TABLE_RELATION)->where('AID')->eq($storyID)->fetch();
         if(empty($parentID)) return;
@@ -4605,7 +4600,7 @@ class storyModel extends model
         if($lastAction == 'synctwins')
         {
             $syncStoryID = strpos($lastRecord->extra, '|') !== false ? substr($lastRecord->extra, strpos($lastRecord->extra, '|') + 1) : 0;
-            $status      = $this->getActivateStatus($syncStoryID, false);
+            $status      = $this->getActivateStatus((int)$syncStoryID, false);
         }
 
         return $status;

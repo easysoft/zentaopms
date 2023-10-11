@@ -3,6 +3,12 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
+$story = zdTable('story');
+$story->version->range(1);
+$story->gen(410);
+zdTable('product')->gen(100);
+zdTable('storyreview')->gen(410);
+
 /**
 
 title=测试 storyModel->getUserStories();

@@ -1115,32 +1115,9 @@ class story extends control
 
             $this->executeHooks($storyID);
 
-            if(isonlybody())
-            {
-                $execution         = $this->execution->getByID($this->session->execution);
-                $executionLaneType = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
-                $executionGroupBy  = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
-                if($this->app->tab == 'execution' and $execution->type == 'kanban')
-                {
-                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-                    $kanbanData    = $this->loadModel('kanban')->getRDKanban($this->session->execution, $executionLaneType, 'id_desc', 0, $kanbanGroup, $rdSearchValue);
-                    $kanbanData    = json_encode($kanbanData);
-                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "updateKanban($kanbanData)", 'closeModal' => true));
-                }
-                elseif($from == 'taskkanban')
-                {
-                    $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
-                    $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($execution->id, $executionLaneType, $executionGroupBy, $taskSearchValue);
-                    $kanbanType      = $executionLaneType == 'all' ? 'story' : key($kanbanData);
-                    $kanbanData      = $kanbanData[$kanbanType];
-                    $kanbanData      = json_encode($kanbanData);
-                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "updateKanban('$executionLaneType', $kanbanData)", 'closeModal' => true));
-                }
-                else
-                {
-                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
-                }
-            }
+            $response = $this->storyZen->getResponseInModal($message);
+            if($response) return $this->send($response);
+
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 

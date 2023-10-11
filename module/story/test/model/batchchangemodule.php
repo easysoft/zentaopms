@@ -4,7 +4,10 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
 
-zdTable('story')->gen(10);
+$story = zdTable('story');
+$story->version->range(1);
+$story->gen(10);
+zdTable('storyspec')->gen(50);
 
 /**
 

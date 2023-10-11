@@ -335,19 +335,16 @@ class storyTest
     /**
      * Test batch update stories.
      *
+     * @param  array  $stories
      * @access public
-     * @return void
+     * @return array
      */
-    public function batchUpdateTest($params)
+    public function batchUpdateTest(array $stories): array
     {
-        $_POST      = $params;
-        $allStories = $this->objectModel->batchUpdate();
-        unset($_POST);
-
+        $this->objectModel->batchUpdate($stories);
         if(dao::isError()) return dao::getError();
 
-        $storyIdList = array_keys($allStories);
-        return $this->objectModel->getByList($storyIdList);
+        return $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('id')->in(array_keys($stories))->fetchAll('id');
     }
 
     /**
@@ -442,16 +439,15 @@ class storyTest
      * @param  int    $storyIdList
      * @param  int    $moduleID
      * @access public
-     * @return void
+     * @return array
      */
-    public function batchChangeModuleTest($storyIdList, $moduleID)
+    public function batchChangeModuleTest(array $storyIdList, int $moduleID): array
     {
         $changes = $this->objectModel->batchChangeModule($storyIdList, $moduleID);
 
         if(dao::isError()) return dao::getError();
 
-        $storyIdList = array_keys($changes);
-        return $this->objectModel->getByList($storyIdList);
+        return $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('id')->in($storyIdList)->fetchAll('id');
     }
 
     /**
