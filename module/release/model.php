@@ -958,12 +958,12 @@ class releaseModel extends model
         $canBeChanged = common::canBeChanged('release', $release);
         if(!$canBeChanged) return $actions;
 
-        if(common::hasPriv('release', 'linkStory')) $actions[] = 'linkStory';
-        if(common::hasPriv('release', 'linkBug')) $actions[] = 'linkBug';
+        if(common::hasPriv('release', 'linkStory'))    $actions[] = 'linkStory';
+        if(common::hasPriv('release', 'linkBug'))      $actions[] = 'linkBug';
         if(common::hasPriv('release', 'changeStatus')) $actions[] = $release->status == 'normal' ? 'pause' : 'play';
-        if(common::hasPriv('release', 'edit')) $actions[] = 'edit';
-        if(common::hasPriv('release', 'notify')) $actions[] = 'notify';
-        if(common::hasPriv('release', 'delete')) $actions[] = 'delete';
+        if(common::hasPriv('release', 'edit'))         $actions[] = 'edit';
+        if(common::hasPriv('release', 'notify'))       $actions[] = 'notify';
+        if(common::hasPriv('release', 'delete'))       $actions[] = 'delete';
 
         return $actions;
     }
