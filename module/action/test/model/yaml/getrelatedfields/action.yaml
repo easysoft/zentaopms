@@ -5,7 +5,7 @@ version: "1.0"
 fields:
   - field: objectType
     note: "对象类型"
-    range: program,product,project,execution,story{4},productplan,branch,testcase,case,build,bug,testtask,doc,repo,release,task,kanbanlane,kanbancolumn,team,whitelist,module,review,
+    range: program,product,project,execution,story{4},productplan,branch,testcase,case,build,bug,testtask,doc,repo,release,task,kanbanlane,kanbancolumn,team,whitelist,module,review,story{5}
     prefix: ""
     postfix: ""
     loop: 0
@@ -33,7 +33,7 @@ fields:
     format: ""
   - field: action
     note: "动作"
-    range: common,extra,opened,created,linked2build,unlinkedfrombuild,estimated,changed,edited,assigned,closed,deleted,deletedfile,editfile,erased,undeleted,hidden,commented,activated,blocked,moved,confirmed,caseconfirmed,bugconfirmed,frombug,started,restarted,delayed,suspended,recordestimate,editestimate,deleteestimate,canceled,svncommited,gitcommited,finished,paused,verified,diff1,diff2,diff3,linked2bug
+    range: common,extra,opened,created,linked2build,unlinkedfrombuild,estimated,changed,edited,assigned,closed,deleted,deletedfile,editfile,erased,undeleted,hidden,commented,activated,blocked,moved,confirmed,caseconfirmed,bugconfirmed,frombug,started,unlinkedfromproject,linked2project,unlinkedfromexecution,linked2execution,linked2kanban
     postfix: ""
     loop: 0
     format: ""
