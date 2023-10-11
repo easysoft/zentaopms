@@ -701,26 +701,25 @@ class actionModel extends model
     }
 
     /**
-     * 获取权限内的操作记录搜索条件。
-     * Get search conditions for operation records within permissions.
+     * 通过视野获取用户可访问的动态类型。
+     * Get the action types that the user can access through the vision.
      *
-     * @return String
+     * @access public
+     * @return string
      */
     public function getActionCondition(): string
     {
         if($this->app->user->admin) return '';
 
         $actionCondition = '';
-        if(isset($this->app->user->rights['acls']['actions']))
+        if(!empty($this->app->user->rights['acls']['actions']))
         {
-            if(empty($this->app->user->rights['acls']['actions'])) return '';
-
             foreach($this->app->user->rights['acls']['actions'] as $moduleName => $actions)
             {
                 if(isset($this->lang->mainNav->{$moduleName}) && !empty($this->app->user->rights['acls']['views']) && !isset($this->app->user->rights['acls']['views'][$moduleName])) continue;
-                $actionCondition .= "(`objectType` = '{$moduleName}' and `action` " . helper::dbIN($actions) . ") or ";
+                $actionCondition .= "(`objectType` = '{$moduleName}' AND `action` " . helper::dbIN($actions) . ") OR ";
             }
-            $actionCondition = trim($actionCondition, 'or ');
+            $actionCondition = trim($actionCondition, 'OR ');
         }
         return $actionCondition;
     }
