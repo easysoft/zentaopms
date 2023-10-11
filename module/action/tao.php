@@ -953,7 +953,7 @@ class actionTao extends actionModel
         if(!empty($action->execution)) $type = 'execution';
         if(!empty($action->product))   $type = 'product';
 
-        $libObjectID = $type != 'custom' ? $action->$type : '';
+        $libObjectID = $type != 'custom' ? $action->{$type} : '';
         $libObjectID = trim($libObjectID, ',');
         if(empty($libObjectID) && $type != 'custom') return false;
 

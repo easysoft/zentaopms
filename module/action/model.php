@@ -457,15 +457,15 @@ class actionModel extends model
         {
             if($action->objectType == 'story' && $action->action == 'reviewed' && strpos($action->extra, ',') !== false)
             {
-                $desc = $this->lang->$objectType->action->rejectreviewed;
+                $desc = $this->lang->{$objectType}->action->rejectreviewed;
             }
             elseif($action->objectType == 'productplan' && in_array($action->action, array('startedbychild','finishedbychild','closedbychild','activatedbychild', 'createchild')))
             {
-                $desc = $this->lang->$objectType->action->changebychild;
+                $desc = $this->lang->{$objectType}->action->changebychild;
             }
             elseif($action->objectType == 'module' && in_array($action->action, array('created', 'moved', 'deleted')))
             {
-                $desc = $this->lang->$objectType->action->{$action->action};
+                $desc = $this->lang->{$objectType}->action->{$action->action};
             }
             elseif(strpos('createmr,editmr,removemr', $action->action) !== false && strpos($action->extra, '::') !== false)
             {
@@ -475,19 +475,19 @@ class actionModel extends model
                 if(isonlybody()) $mrLink .= ($this->config->requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes');
 
                 $this->app->loadLang('mr');
-                $desc = sprintf($this->lang->mr->$mrAction, $mrDate, $mrActor, $mrLink);
+                $desc = sprintf($this->lang->mr->{$mrAction}, $mrDate, $mrActor, $mrLink);
             }
             elseif($this->config->edition == 'max' && strpos($this->config->action->assetType, ",{$action->objectType},") !== false && $action->action == 'approved')
             {
                 $desc = empty($this->lang->action->approve->{$action->extra}) ? '' : $this->lang->action->approve->{$action->extra};
             }
-            elseif(isset($this->lang->$objectType) && isset($this->lang->$objectType->action->$actionType))
+            elseif(isset($this->lang->{$objectType}) && isset($this->lang->{$objectType}->action->{$actionType}))
             {
-                $desc = $this->lang->$objectType->action->$actionType;
+                $desc = $this->lang->{$objectType}->action->{$actionType};
             }
-            elseif($action->objectType == 'instance' && isset($this->lang->action->desc->$actionType))
+            elseif($action->objectType == 'instance' && isset($this->lang->action->desc->{$actionType}))
             {
-                $desc  = $this->lang->action->desc->$actionType;
+                $desc  = $this->lang->action->desc->{$actionType};
                 $extra = json_decode($action->extra);
                 if($actionType == 'adjustmemory')
                 {
@@ -514,9 +514,9 @@ class actionModel extends model
                     }
                 }
             }
-            elseif(isset($this->lang->action->desc->$actionType))
+            elseif(isset($this->lang->action->desc->{$actionType}))
             {
-                $desc = $this->lang->action->desc->$actionType;
+                $desc = $this->lang->action->desc->{$actionType};
             }
             else
             {
@@ -549,7 +549,7 @@ class actionModel extends model
             }
             else
             {
-                if($actionType == 'restoredsnapshot' && in_array($action->objectType, array('vm', 'zanode')) && $value == 'defaultSnap') $value = $this->lang->$objectType->snapshot->defaultSnapName;
+                if($actionType == 'restoredsnapshot' && in_array($action->objectType, array('vm', 'zanode')) && $value == 'defaultSnap') $value = $this->lang->{$objectType}->snapshot->defaultSnapName;
 
                 $desc = str_replace('$' . $key, $value, $desc);
             }
@@ -562,7 +562,7 @@ class actionModel extends model
         $extra = strtolower($action->extra);
 
         /* Fix bug #741. */
-        if(isset($desc['extra'])) $desc['extra'] = $this->lang->$objectType->{$desc['extra']};
+        if(isset($desc['extra'])) $desc['extra'] = $this->lang->{$objectType}->{$desc['extra']};
 
         $actionDesc = '';
         if(isset($desc['extra'][$extra]))
@@ -579,7 +579,7 @@ class actionModel extends model
             if(strpos($action->extra, ',') !== false)
             {
                 list($extra, $reason) = explode(',', $extra);
-                $desc['reason'] = $this->lang->$objectType->{$desc['reason']};
+                $desc['reason'] = $this->lang->{$objectType}->{$desc['reason']};
                 $actionDesc = str_replace(array('$extra', '$reason'), array($desc['extra'][$extra], $desc['reason'][$reason]), $desc['main']);
             }
 
@@ -595,7 +595,7 @@ class actionModel extends model
             if(!empty($extra) && strpos($extra, '|') !== false)
             {
                 list($operate, $storyID) = explode('|', $extra);
-                $desc['operate'] = $this->lang->$objectType->{$desc['operate']};
+                $desc['operate'] = $this->lang->{$objectType}->{$desc['operate']};
                 $link = common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$storyID"), "#$storyID ") : "#$storyID";
                 $actionDesc = str_replace(array('$extra', '$operate'), array($link, $desc['operate'][$operate]), $desc['main']);
             }
@@ -717,8 +717,8 @@ class actionModel extends model
 
             foreach($this->app->user->rights['acls']['actions'] as $moduleName => $actions)
             {
-                if(isset($this->lang->mainNav->$moduleName) && !empty($this->app->user->rights['acls']['views']) && !isset($this->app->user->rights['acls']['views'][$moduleName])) continue;
-                $actionCondition .= "(`objectType` = '$moduleName' and `action` " . helper::dbIN($actions) . ") or ";
+                if(isset($this->lang->mainNav->{$moduleName}) && !empty($this->app->user->rights['acls']['views']) && !isset($this->app->user->rights['acls']['views'][$moduleName])) continue;
+                $actionCondition .= "(`objectType` = '{$moduleName}' and `action` " . helper::dbIN($actions) . ") or ";
             }
             $actionCondition = trim($actionCondition, 'or ');
         }
@@ -773,7 +773,7 @@ class actionModel extends model
         /* If the sql not include 'execution', add check purview for execution. */
         if(strpos($actionQuery, $allExecutions) !== false) $actionQuery = str_replace($allExecutions, '1', $actionQuery);
 
-        $actionQuery = str_replace("`product` = '$productID'", "`product` LIKE '%,$productID,%'", $actionQuery);
+        $actionQuery = str_replace("`product` = '{$productID}'", "`product` LIKE '%,$productID,%'", $actionQuery);
 
         if($date) $actionQuery = "($actionQuery) AND " . ('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'");
 
@@ -862,8 +862,8 @@ class actionModel extends model
 
             $action->originalDate = $action->date;
             $action->date         = date(DT_MONTHTIME2, strtotime($action->date));
-            $action->actionLabel  = isset($this->lang->$objectType->$actionType) ? $this->lang->$objectType->$actionType : $action->action;
-            $action->actionLabel  = isset($this->lang->action->label->$actionType) ? $this->lang->action->label->$actionType : $action->actionLabel;
+            $action->actionLabel  = isset($this->lang->{$objectType}->{$actionType}) ? $this->lang->{$objectType}->{$actionType} : $action->action;
+            $action->actionLabel  = isset($this->lang->action->label->{$actionType}) ? $this->lang->action->label->{$actionType} : $action->actionLabel;
             $action->objectLabel  = $this->getObjectLabel($objectType, $action->objectID, $actionType, $requirements);
 
             /* 如果action的类型为login或者logout，则不需要链接。*/
@@ -940,9 +940,9 @@ class actionModel extends model
     public function getObjectLabel(string $objectType, int $objectID, string $actionType, array $requirements): string
     {
         $actionObjectLabel = $objectType;
-        if(isset($this->lang->action->label->$objectType))
+        if(isset($this->lang->action->label->{$objectType}))
         {
-            $objectLabel = $this->lang->action->label->$objectType;
+            $objectLabel = $this->lang->action->label->{$objectType};
 
             /* 用户故事替换为需求。 */
             /* Replace story to requirement. */
