@@ -331,9 +331,9 @@ class actionTest
      * @access public
      * @return int
      */
-    public function getBySQLTest($sql, $orderBy = 'id_desc', $pager = null)
+    public function getBySQLTest(string $sql, string $orderBy = 'id_desc'): int
     {
-        $objects = $this->objectModel->getBySQL($sql, $orderBy, $pager = null);
+        $objects = $this->objectModel->getBySQL($sql, $orderBy);
 
         if(dao::isError()) return dao::getError();
 
