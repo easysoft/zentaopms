@@ -684,13 +684,14 @@ class releaseModel extends model
     }
 
     /**
+     * 获取发送邮件的人员。
      * Get toList and ccList.
      *
-     * @param  object    $release
+     * @param  object      $release
      * @access public
-     * @return bool|array
+     * @return false|array
      */
-    public function getToAndCcList($release)
+    public function getToAndCcList(object $release): false|array
     {
         /* Set toList and ccList. */
         $toList = $this->app->user->account;
@@ -706,7 +707,6 @@ class releaseModel extends model
         }
 
         $ccList = trim($ccList, ',');
-
         if(empty($toList))
         {
             if(empty($ccList)) return false;
