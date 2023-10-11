@@ -1400,8 +1400,11 @@ EOF;
             $label = $list->account == $this->app->user->account ? $this->lang->my->manageContacts : $this->lang->my->viewContacts;
         }
 
+        $userParams = empty($this->config->user->showDeleted) ? 'noletter|noempty|noclosed|noclosed|nodeleted' : 'noletter|noempty|noclosed|noclosed';
+        $users      = $this->user->getPairs($userParams, $mode == 'new' ? '' : $this->view->list->userList, $this->config->maxCount);
+
         $this->view->title = $this->lang->my->common . $this->lang->colon . $label;
-        $this->view->users = $this->user->getPairs('noletter|noempty|noclosed|noclosed', $userList, $this->config->maxCount);
+        $this->view->users = $users;
         $this->view->lists = $this->user->getContactLists($this->app->user->account, '', 'list');
         $this->view->mode  = $mode;
         $this->view->label = $label;

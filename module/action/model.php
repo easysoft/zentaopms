@@ -1951,4 +1951,24 @@ class actionModel extends model
             ->where($condition)
             ->fetch('count');
     }
+
+    /**
+     * 清除一个月前的动态记录。
+     * Clear dynamic records older than one month.
+     *
+     * @access public
+     * @return bool
+     */
+    public function cleanActions(): bool
+    {
+        $cleanDate = zget($this->app->config->global, 'cleanActionsDate', '');
+        $today     = helper::today();
+        if($cleanDate == $today) return true;
+
+        $this->loadModel('setting')->setItem('system.common.global.cleanActionsDate', $today);
+
+        $lastMonth = date('Y-m-d', strtotime('-1 month'));
+        $this->dao->delete()->from(TABLE_ACTIONRECENT)->where('date')->lt($lastMonth)->exec();
+        return !dao::isError();
+    }
 }

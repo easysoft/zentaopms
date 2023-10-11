@@ -120,7 +120,13 @@ class userModel extends model
             $this->config->user->moreLink = $moreLink;
         }
 
-        if($usersToAppended) $users += $this->dao->select($fields)->from(TABLE_USER)->where('account')->in($usersToAppended)->fetchAll($keyField);
+        if($usersToAppended)
+        {
+            $users += $this->dao->select($fields)->from(TABLE_USER)
+                ->where('account')->in($usersToAppended)
+                ->beginIF(strpos($params, 'nodeleted') !== false)->andWhere('deleted')->eq('0')->fi()
+                ->fetchAll($keyField);
+        }
 
         /* Cycle the user records to append the first letter of his account. */
         foreach($users as $account => $user)
