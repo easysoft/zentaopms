@@ -9,7 +9,11 @@ class executionTest
      */
     public function __construct()
     {
-        global $tester;
+        global $tester, $app;
+
+        $app->rawModule  = 'execution';
+        $app->moduleName = 'execution';
+
         $this->executionModel = $tester->loadModel('execution');
         $this->treeModel      = $tester->loadModel('tree');
         $this->productModel   = $tester->loadModel('product');
