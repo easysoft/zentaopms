@@ -943,7 +943,7 @@ class productplanModel extends model
             $oldPlan = $oldPlans[$planID];
             if($status == $oldPlan->status) continue;
 
-            $plan = $this->buildPlanByStatus($status, $closedReasons[$planID]);
+            $plan = $this->buildPlanByStatus($status, $status == 'closed' ? $closedReasons[$planID] : '');
 
             $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->autoCheck()->where('id')->eq((int)$planID)->exec();
 
