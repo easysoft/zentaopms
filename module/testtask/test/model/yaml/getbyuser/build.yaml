@@ -1,0 +1,8 @@
+title: table zt_build
+author: Gang Liu
+version: "1.0"
+fields:
+  - field: project
+    range: 1
+  - field: name
+    range: 项目1版本1

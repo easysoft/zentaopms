@@ -1,0 +1,21 @@
+title: table zt_testtask
+author: Gang Liu
+version: "1.0"
+fields:
+  - field: product
+    range: "1,1,2,1{5}"
+  - field: project
+    range: 1
+  - field: execution
+    range: 2-5
+  - field: build
+    range: 1
+  - field: owner
+    range: 3{8},4{16}
+    prefix: "user"
+  - field: status
+    range: "[wait,doing,wait,doing,done,blocked]{4}"
+  - field: auto
+    range: unit,no{7}
+  - field: deleted
+    range: "0,1,0{6}"

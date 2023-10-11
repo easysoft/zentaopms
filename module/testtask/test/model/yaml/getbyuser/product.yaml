@@ -1,0 +1,6 @@
+title: table zt_product
+author: Gang Liu
+version: "1.0"
+fields:
+  - field: deleted
+    range: 0,1

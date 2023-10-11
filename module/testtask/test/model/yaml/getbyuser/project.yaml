@@ -1,0 +1,30 @@
+title: table zt_project
+author: Gang Liu
+version: "1.0"
+fields:
+  - field: project
+    range: 0,1{4}
+  - field: model
+    range: scrum,[]{4}
+  - field: name
+    fields:
+    - field: name1
+      range: '项目,执行{4}'
+    - field: name2
+      range: 1,1-4
+  - field: type
+    range: project,sprint{4}
+  - field: status
+    range: doing
+  - field: parent
+    range: 0,1{4}
+  - field: path
+    fields:
+      - field: path1
+        range: "`,1,`"
+      - field: path2
+        range: "[],2-5"
+      - field: path3
+        range: "[],`,`{4}"
+  - field: grade
+    range: 1,2{4}
