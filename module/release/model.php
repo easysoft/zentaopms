@@ -621,19 +621,19 @@ class releaseModel extends model
     }
 
     /**
+     * 判断按钮是否可点击。
      * Judge btn is clickable or not.
      *
-     * @param  int    $release
+     * @param  object $release
      * @param  string $action
-     * @static
      * @access public
      * @return bool
      */
-    public static function isClickable($release, $action)
+    public static function isClickable(object $release, string $action): bool
     {
         $action = strtolower($action);
 
-        if($action == 'notify') return $release->bugs or $release->stories;
+        if($action == 'notify') return $release->bugs || $release->stories;
         return true;
     }
 
