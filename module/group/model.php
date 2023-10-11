@@ -2449,11 +2449,13 @@ class groupModel extends model
             {
                 if($type == 'recommend' && isset($relatedPrivs['depend'][$relatedPriv])) continue; // Don't show depend privs to recommend.
 
+                list($moduleName, $methodName) = explode('-', $relatedPriv);
+                if(!isset($this->lang->resource->$moduleName->$methodName)) continue;
+
+                $method = $this->lang->resource->$moduleName->$methodName;
+
                 $subset = $privSubsets[$relatedPriv];
                 if(!isset($subsetPrivs[$type][$subset])) $subsetPrivs[$type][$subset] = array('id' => $subset, 'title' => $this->lang->$subset->common, 'children' => array());
-
-                list($moduleName, $methodName) = explode('-', $relatedPriv);
-                $method = $this->lang->resource->$moduleName->$methodName;
 
                 if(!isset($this->lang->$moduleName->$method)) $this->app->loadLang($moduleName);
                 $subsetPrivs[$type][$subset]['children'][] = array('id' => $relatedPriv, 'module' => $moduleName, 'method' => $methodName, 'subset' => $subset, 'title' => $this->lang->$moduleName->$method);
