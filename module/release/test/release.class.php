@@ -327,4 +327,20 @@ class releaseTest
 
         return $this->objectModel->getBugForExport($type);
     }
+
+    /**
+     * 根据发布状态和权限生成列表中操作列按钮。
+     * Build table action menu for release browse page.
+     *
+     * @param  int    $releaseID
+     * @access public
+     * @return array
+     */
+    public function buildActionListTest(int $releaseID): array
+    {
+        $release = $this->objectModel->getByID($releaseID);
+        if(!$release) return array();
+
+        return $this->objectModel->buildActionList($release);
+    }
 }
