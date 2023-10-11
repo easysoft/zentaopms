@@ -1,0 +1,17 @@
+title: table zt_module
+author: Gang Liu
+version: "1.0"
+fields:
+  - field: name
+    range: 1-4
+    prefix: '模块'
+  - field: parent
+    range: 0,0,1,3
+  - field: path
+    fields:
+      - field: path1
+        range: "`,1,`,`,2,`,`,1,3,`,`,1,3,4,`"
+  - field: grade
+    range: 1,1,2,3
+  - field: type
+    range: testtask
