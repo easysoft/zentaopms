@@ -2513,7 +2513,7 @@ $config->group->package->workflowRule->privs  = array();
 $config->group->package->workflowRule->privs['workflowrule-browse'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 5, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflowRule->privs['workflowrule-create'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 10, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflowRule->privs['workflowrule-edit']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 15, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
-$config->group->package->workflowRule->privs['workflowrule-view']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 20, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
+//$config->group->package->workflowRule->privs['workflowrule-view']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 20, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflowRule->privs['workflowrule-delete'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 25, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 
 $config->group->package->workflow = new stdclass();
