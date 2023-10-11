@@ -224,7 +224,7 @@ class actionTest
         $objects = $this->objectModel->getHistory($actionID);
 
         if(dao::isError()) return dao::getError();
-            
+
         return isset($objects[$actionID])? $objects[$actionID] : false;
     }
 
@@ -271,13 +271,13 @@ class actionTest
      * @param  array  $executions
      * @param  int    $queryID
      * @param  string $orderBy
-     * @param  object $pager
+     * @param  int    $limit
      * @param  string $date
      * @param  string $direction
      * @access public
      * @return array
      */
-    public function getDynamicBySearchTest(int $queryID, string $orderBy = 'date_desc', object $pager = null, string $date = '', string $direction = 'next')
+    public function getDynamicBySearchTest(int $queryID, string $orderBy = 'date_desc', int $limit = 50, string $date = '', string $direction = 'next')
     {
         if($queryID)
         {
@@ -286,7 +286,7 @@ class actionTest
         }
 
         $date = $date == 'today' ? date('Y-m-d', time()) : $date;
-        $objects = $this->objectModel->getDynamicBySearch($queryID, $orderBy, $pager, $date, $direction);
+        $objects = $this->objectModel->getDynamicBySearch($queryID, $orderBy, $limit, $date, $direction);
 
         if(dao::isError()) return dao::getError();
 
@@ -309,7 +309,7 @@ class actionTest
     public function getDynamicTest($account = 'all', $period = 'all', $productID = 'all', $projectID = 'all', $executionID = 'all', $date = '', $direction = 'next')
     {
         $date = $date == 'today' ? date('Y-m-d', time()) : $date;
-        $objects = $this->objectModel->getDynamic($account, $period, 'date_desc', null, $productID, $projectID, $executionID, $date, $direction);
+        $objects = $this->objectModel->getDynamic($account, $period, 'date_desc', 50, $productID, $projectID, $executionID, $date, $direction);
 
         if(dao::isError()) return dao::getError();
 
@@ -503,7 +503,7 @@ class actionTest
      * Test update comment of a action.
      *
      * @param  int    $actionID
-     
+
      */
     public function updateCommentTest(int $actionID, string $comment, string $uid = '')
     {
@@ -516,7 +516,7 @@ class actionTest
         }
 
         $this->objectModel->updateComment($actionID, $comment, $uid);
-        
+
         unset($_POST);
 
         if(dao::isError()) return dao::getError();
@@ -600,7 +600,7 @@ class actionTest
         $firstGroupColumn = current(current($objects));
         $endGroupColumn   = current(end($objects));
 
-        if(($direction == 'next' && $orderBy == 'date_desc') && strtotime($firstGroupColumn->originalDate) < strtotime($endGroupColumn->originalDate)) return array('count' => 0, 'sort' => false);   
+        if(($direction == 'next' && $orderBy == 'date_desc') && strtotime($firstGroupColumn->originalDate) < strtotime($endGroupColumn->originalDate)) return array('count' => 0, 'sort' => false);
         if(($direction == 'pre' && $orderBy == 'date_asc') && strtotime($firstGroupColumn->originalDate) > strtotime($endGroupColumn->originalDate)) return array('count' => 0, 'sort' => false);
 
         $count = 0;
@@ -635,11 +635,11 @@ class actionTest
 
         return false;
     }
-    
+
     /**
      * 测试获取重复的对象。
      * Test get repeat object.
-     * 
+     *
      * @param  object $object
      * @param  string $table
      * @access public

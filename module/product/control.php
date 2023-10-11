@@ -331,14 +331,10 @@ class product extends control
         /* Execute hooks. */
         $this->executeHooks($productID);
 
-        /* Load pager. */
-        $this->app->loadClass('pager', true);
-        $pager = new pager(0, 30, 1);
-
         $this->view->title     = $product->name . $this->lang->colon . $this->lang->product->view;
         $this->view->product   = $product;
         $this->view->actions   = $this->loadModel('action')->getList('product', $productID);
-        $this->view->dynamics  = $this->action->getDynamic('all', 'all', 'date_desc', $pager, $productID);
+        $this->view->dynamics  = $this->action->getDynamic('all', 'all', 'date_desc', 50, $productID);
         $this->view->users     = $this->user->getPairs('noletter');
         $this->view->groups    = $this->loadModel('group')->getPairs();
         $this->view->branches  = $this->loadModel('branch')->getPairs($productID);
@@ -435,8 +431,10 @@ class product extends control
         }
 
         /* Get actions. */
-        list($actions, $pager) = $this->productZen->getActionsForDynamic($account, $orderBy, $productID, $type, $recTotal, $date, $direction);
+        list($actions, $dateGroups) = $this->productZen->getActionsForDynamic($account, $orderBy, $productID, $type, $recTotal, $date, $direction);
         if(empty($recTotal)) $recTotal = count($actions);
+
+        if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($actions) : $this->action->getDynamicCount();
 
         /* Assign. */
         $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->product->dynamic;
@@ -448,8 +446,7 @@ class product extends control
         $this->view->account      = $account;
         $this->view->user         = isset($user) ? $user : '';
         $this->view->param        = $param;
-        $this->view->pager        = $pager;
-        $this->view->dateGroups   = $this->action->buildDateGroup($actions, $direction);
+        $this->view->dateGroups   = $dateGroups;
         $this->view->direction    = $direction;
         $this->view->recTotal     = $recTotal;
 

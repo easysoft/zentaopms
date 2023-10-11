@@ -495,17 +495,13 @@ class executionZen extends execution
             }
         }
 
-        /* Load pager. */
-        $this->app->loadClass('pager', true);
-        $pager = new pager(0, 30, 1);
-
         $this->view->users        = $userPairs;
         $this->view->userList     = $userList;
         $this->view->products     = $products;
         $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), '', $linkedBranches);
         $this->view->planGroups   = $this->execution->getPlans(array_keys($products));
         $this->view->actions      = $this->loadModel('action')->getList('execution', $executionID);
-        $this->view->dynamics     = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, 'all', 'all', $executionID);
+        $this->view->dynamics     = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', 50, 'all', 'all', $executionID);
         $this->view->teamMembers  = $this->execution->getTeamMembers($executionID);
         $this->view->docLibs      = $this->loadModel('doc')->getLibsByObject('execution', $executionID);
         $this->view->statData     = $this->execution->statRelatedData($executionID);

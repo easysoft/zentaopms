@@ -1202,17 +1202,13 @@ class productZen extends product
      */
     protected function getActionsForDynamic(string $account, string $orderBy, int $productID, string $type, int $recTotal, string $date, string $direction): array
     {
-        /* Load pager. */
-        $this->app->loadClass('pager', true);
-
         /* Build parameters. */
-        $pager  = new pager($recTotal, 50, 1);
-        $period = $type == 'account' ? 'all'  : $type;
-        $date   = empty($date) ? '' : date('Y-m-d', (int)$date);
+        $period     = $type == 'account' ? 'all'  : $type;
+        $date       = empty($date) ? '' : date('Y-m-d', (int)$date);
+        $actions    = $this->loadModel('action')->getDynamic($account, $period, $orderBy, 50, $productID, 'all', 'all', $date, $direction);
+        $dateGroups = $this->action->buildDateGroup($actions, $direction, $type);
 
-        $actions = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager, $productID, 'all', 'all', $date, $direction);
-
-        return array($actions, $pager);
+        return array($actions, $dateGroups);
     }
 
     /**

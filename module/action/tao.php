@@ -705,28 +705,31 @@ class actionTao extends actionModel
      * 通过条件获取操作记录列表。
      * Get action list by condition.
      *
-     * @param  string $condition
-     * @param  string $date
-     * @param  string $period
-     * @param  string $begin
-     * @param  string $end
-     * @param  string $direction
-     * @param  string $account
-     * @param  string $beginDate
-     * @param  string $productID
-     * @param  string $projectID
-     * @param  string $executionID
-     * @param  array  $executions
-     * @param  string $actionCondition
-     * @param  string $orderBy
-     * @param  object $pager
+     * @param  string     $condition
+     * @param  string     $date
+     * @param  string     $period
+     * @param  string     $begin
+     * @param  string     $end
+     * @param  string     $direction
+     * @param  string     $account
+     * @param  string     $beginDate
+     * @param  string     $productID
+     * @param  string     $projectID
+     * @param  string     $executionID
+     * @param  array      $executions
+     * @param  string     $actionCondition
+     * @param  string     $orderBy
+     * @param  int        $limit
      * @access protected
      * @return array|bool
      */
-    protected function getActionListByCondition(string $condition, string $date, string $period, string $begin, string $end, string $direction, string $account, string $beginDate, string $productID, string $projectID, string $executionID, array $executions, string $actionCondition, string $orderBy, object $pager = null): array|bool
+    protected function getActionListByCondition(string $condition, string $date, string $period, string $begin, string $end, string $direction, string $account, string $beginDate, string $productID, string $projectID, string $executionID, array $executions, string $actionCondition, string $orderBy, int $limit = 50): array|bool
     {
-        return $this->dao->select('*')->from(TABLE_ACTION)
+        $actionTable = in_array($period, $this->config->action->latestDateList) ? TABLE_ACTIONRECENT : TABLE_ACTION;
+
+        return $this->dao->select('*')->from($actionTable)
             ->where('objectType')->notIN($this->config->action->ignoreObjectType4Dynamic)
+            ->andWhere('action')->notIN($this->config->action->ignoreActions4Dynamic)
             ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($period != 'all')->andWhere('date')->gt($begin)->andWhere('date')->lt($end)->fi()
             ->beginIF($date)->andWhere('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'")->fi()
@@ -747,11 +750,8 @@ class actionTao extends actionModel
             ->beginIF($executionID == 'notzero')->andWhere('execution')->gt(0)->fi()
             ->andWhere($condition)
             ->beginIF($actionCondition)->andWhere("($actionCondition)")->fi()
-            /* 过滤客户端的登陆登出操作。 */
-            /* Filter out client login/logout actions. */
-            ->andWhere('action')->notin('disconnectxuanxuan,reconnectxuanxuan,loginxuanxuan,logoutxuanxuan,editmr,removemr')
             ->orderBy($orderBy)
-            ->page($pager)
+            ->limit($limit)
             ->fetchAll();
     }
 

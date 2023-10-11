@@ -1507,11 +1507,10 @@ EOF;
      * @param  string $type
      * @param  int    $recTotal
      * @param  string $date
-     * @param  string $direction    next|pre
      * @access public
      * @return void
      */
-    public function dynamic($type = 'today', $recTotal = 0, $date = '', $direction = 'next', $originTotal = 0)
+    public function dynamic($type = 'today', $recTotal = 0, $date = '', $direction = 'next')
     {
         /* Save session. */
         $uri = $this->app->getURI(true);
@@ -1546,10 +1545,6 @@ EOF;
         $this->session->set('componentLibList',   $uri, 'assetlib');
         $this->session->set('opportunityList',    $uri, 'project');
 
-        /* Set the pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage = 50, $pageID = 1);
-
         /* Append id for second sort. */
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
 
@@ -1557,17 +1552,18 @@ EOF;
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->dynamic;
 
         $date    = empty($date) ? '' : date('Y-m-d', $date);
-        $actions = $this->loadModel('action')->getDynamic($this->app->user->account, $type, $orderBy, $pager, 'all', 'all', 'all', $date, $direction);
-        if(empty($originTotal)) $originTotal = $pager->recTotal;
+        $actions = $this->loadModel('action')->getDynamic($this->app->user->account, $type, $orderBy, 50, 'all', 'all', 'all', $date, $direction);
+        $dateGroups = $this->action->buildDateGroup($actions, $direction, $type);
+
+        if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($actions) : $this->action->getDynamicCount();
 
         /* Assign. */
-        $this->view->type        = $type;
-        $this->view->orderBy     = $orderBy;
-        $this->view->pager       = $pager;
-        $this->view->dateGroups  = $this->action->buildDateGroup($actions, $direction);
-        $this->view->direction   = $direction;
-        $this->view->originTotal = $originTotal;
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $this->view->type       = $type;
+        $this->view->orderBy    = $orderBy;
+        $this->view->dateGroups = $dateGroups;
+        $this->view->direction  = $direction;
+        $this->view->recTotal   = $recTotal;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->display();
     }
 

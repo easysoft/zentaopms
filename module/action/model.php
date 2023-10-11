@@ -656,7 +656,7 @@ class actionModel extends model
      * @param  string     $account
      * @param  string     $period
      * @param  string     $orderBy
-     * @param  object     $pager
+     * @param  int        $limit
      * @param  string|int $productID   all|int(like 123)|notzero   all => include zero, notzero, greater than 0
      * @param  string|int $projectID   same as productID
      * @param  string|int $executionID same as productID
@@ -665,7 +665,7 @@ class actionModel extends model
      * @access public
      * @return array
      */
-    public function getDynamic(string $account = 'all', string $period = 'all', string $orderBy = 'date_desc', object $pager = null, string|int $productID = 'all', string|int $projectID = 'all', string|int $executionID = 'all', string $date = '', string $direction = 'next'): array
+    public function getDynamic(string $account = 'all', string $period = 'all', string $orderBy = 'date_desc', int $limit = 50, string|int $productID = 'all', string|int $projectID = 'all', string|int $executionID = 'all', string $date = '', string $direction = 'next'): array
     {
         /* 计算时间段的开始和结束时间。 */
         /* Computer the begin and end date of a period. */
@@ -698,6 +698,14 @@ class actionModel extends model
             $beginDate = $year . '-01-01';
         }
 
+        /* 查询项目动态时，只查项目创建日期之后的动态。 */
+        /* When you query project actions, only the actions after the date the project was created. */
+        if(is_numeric($projectID))
+        {
+            $openedDate = $this->dao->select('openedDate')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('openedDate');
+            $beginDate  = $openedDate > $beginDate ? $openedDate : $beginDate;
+        }
+
         $this->actionTao->processEffortCondition($condition, $period, $begin, $end, $beginDate);
 
         $noMultipleExecutions = $this->dao->select('id')->from(TABLE_PROJECT)->where('multiple')->eq(0)->andWhere('type')->in('sprint,kanban')->fetchPairs();
@@ -705,7 +713,7 @@ class actionModel extends model
 
         $condition = "({$condition})";
 
-        $actions = $this->actionTao->getActionListByCondition($condition, $date, $period, $begin, $end, $direction, $account, $beginDate, $productID, $projectID, $executionID, $executions, $actionCondition, $orderBy, $pager);
+        $actions = $this->actionTao->getActionListByCondition($condition, $date, $period, $begin, $end, $direction, $account, $beginDate, $productID, $projectID, $executionID, $executions, $actionCondition, $orderBy, $limit);
         if(!$actions) return array();
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
@@ -742,13 +750,13 @@ class actionModel extends model
      *
      * @param  int    $queryID
      * @param  string $orderBy
-     * @param  object $pager
+     * @param  int    $limit
      * @param  string $date
      * @param  string $direction
      * @access public
      * @return array
      */
-    public function getDynamicBySearch(int $queryID, string $orderBy = 'date_desc', object $pager = null, string $date = '', string $direction = 'next'): array
+    public function getDynamicBySearch(int $queryID, string $orderBy = 'date_desc', int $limit = 50, string $date = '', string $direction = 'next'): array
     {
         $query = $queryID ? $this->loadModel('search')->getQuery($queryID) : '';
 
@@ -786,7 +794,7 @@ class actionModel extends model
         if($this->config->vision == 'lite') $actionQuery .= " AND objectType != 'product'";
 
         $actionQuery .= " AND vision = '{$this->config->vision}'";
-        $actions      = $this->getBySQL($actionQuery, $orderBy, $pager);
+        $actions      = $this->getBySQL($actionQuery, $orderBy, $limit);
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
         return $actions ? $this->transformActions($actions) : array();
@@ -798,18 +806,18 @@ class actionModel extends model
      *
      * @param  string $sql
      * @param  string $orderBy
-     * @param  object $pager
+     * @param  int    $limit
      * @access public
      * @return array
      */
-    public function getBySQL(string $sql, string $orderBy, object $pager = null): array
+    public function getBySQL(string $sql, string $orderBy, int $limit = 50): array
     {
         $actionCondition = $this->getActionCondition();
         return $this->dao->select('*')->from(TABLE_ACTION)
             ->where($sql)
             ->beginIF(!empty($actionCondition))->andWhere("($actionCondition)")->fi()
             ->orderBy($orderBy)
-            ->page($pager)
+            ->limit($limit)
             ->fetchAll();
     }
 
@@ -1258,16 +1266,17 @@ class actionModel extends model
      * @param  array  $actions
      * @param  string $direction
      * @param  string $orderBy    date_desc|date_asc
+     * @param  string $type       all|today|yesterday|thisweek|lastweek|thismonth|lastmonth
      * @access public
      * @return array
      */
-    public function buildDateGroup(array $actions, string $direction = 'next', string $orderBy = 'date_desc'): array
+    public function buildDateGroup(array $actions, string $direction = 'next', string $type = 'today', string $orderBy = 'date_desc'): array
     {
         $dateGroup = array();
         foreach($actions as $action)
         {
             $timeStamp    = strtotime(isset($action->originalDate) ? $action->originalDate : $action->date);
-            $date         = date(DT_DATE3, $timeStamp);
+            $date         = $type == 'all' ? date(DT_DATE3, $timeStamp) : date(DT_DATE4, $timeStamp);
             $action->time = date(DT_TIME2, $timeStamp);
             $dateGroup[$date][] = $action;
         }
@@ -1284,7 +1293,7 @@ class actionModel extends model
                 foreach($lastDateActions as $action)
                 {
                     $timeStamp    = strtotime(isset($action->originalDate) ? $action->originalDate : $action->date);
-                    $date         = date(DT_DATE3, $timeStamp);
+                    $date         = $type == 'all' ? date(DT_DATE3, $timeStamp) : date(DT_DATE4, $timeStamp);
                     $action->time = date(DT_TIME2, $timeStamp);
                     $dateGroup[$date][] = $action;
                 }
@@ -1925,5 +1934,21 @@ class actionModel extends model
             foreach($linkedProducts as $productID => $productName) $linkedProducts[$productID] = html::a(helper::createLink('product', 'browse', "productID=$productID"), "#{$productID} {$productName}");
             $action->extra = sprintf($this->lang->execution->action->extra, '<strong>' . join(', ', $linkedProducts) . '</strong>');
         }
+    }
+
+    /**
+     * 获取动态的数量。
+     * Get dynamic count.
+     *
+     * @access public
+     * @return int
+     */
+    public function getDynamicCount(): int
+    {
+        $condition = $this->session->actionQueryCondition ? $this->session->actionQueryCondition : '1=1';
+
+        return $this->dao->select('count(1) as count')->from(TABLE_ACTION)
+            ->where($condition)
+            ->fetch('count');
     }
 }

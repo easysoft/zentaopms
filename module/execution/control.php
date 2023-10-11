@@ -2333,10 +2333,6 @@ class execution extends control
         $this->execution->setMenu($executionID);
         $execution = $this->execution->getByID($executionID);
 
-        /* Set the pager. */
-        $this->app->loadClass('pager', true);
-        $pager = new pager($recTotal, 50, 1);
-
         /* Set the user and type. */
         $account = 'all';
         if($type == 'account')
@@ -2346,11 +2342,13 @@ class execution extends control
         }
 
         /* 获取这个时间段的操作日志列表。*/
-        $period  = $type == 'account' ? 'all' : $type;
-        $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
-        $date    = empty($date) ? '' : date('Y-m-d', $date);
-        $actions = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager, 'all', 'all', $executionID, $date, $direction);
-        if(empty($recTotal)) $recTotal = count($actions);
+        $period     = $type == 'account' ? 'all' : $type;
+        $orderBy    = $direction == 'next' ? 'date_desc' : 'date_asc';
+        $date       = empty($date) ? '' : date('Y-m-d', $date);
+        $actions    = $this->loadModel('action')->getDynamic($account, $period, $orderBy, 50, 'all', 'all', $executionID, $date, $direction);
+        $dateGroups = $this->action->buildDateGroup($actions, $direction, $type);
+
+        if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($actions) : $this->action->getDynamicCount();
 
         $this->view->title        = $execution->name . $this->lang->colon . $this->lang->execution->dynamic;
         $this->view->userIdPairs  = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted|useid');
@@ -2358,12 +2356,12 @@ class execution extends control
         $this->view->executionID  = $executionID;
         $this->view->type         = $type;
         $this->view->orderBy      = $orderBy;
-        $this->view->pager        = $pager;
         $this->view->account      = $account;
         $this->view->param        = $param;
-        $this->view->dateGroups   = $this->action->buildDateGroup($actions, $direction); /* 将日志按照日期分组，以日期为索引，将日志列表作为值。*/
+        $this->view->dateGroups   = $dateGroups; /* 将日志按照日期分组，以日期为索引，将日志列表作为值。*/
         $this->view->direction    = $direction;
         $this->view->recTotal     = $recTotal;
+
         $this->display();
     }
 

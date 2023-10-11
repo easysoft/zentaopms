@@ -580,10 +580,6 @@ class project extends control
             }
         }
 
-        /* Load pager. */
-        $this->app->loadClass('pager', true);
-        $pager = new pager(0, 30, 1);
-
         $this->executeHooks($projectID);
         list($userPairs, $userList) = $this->projectZen->buildUsers();
 
@@ -597,7 +593,7 @@ class project extends control
         $this->view->workhour     = $this->project->getWorkhour($projectID);
         $this->view->planGroup    = $this->loadModel('execution')->getPlans(array_keys($products));
         $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), '', $linkedBranches);
-        $this->view->dynamics     = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, 'all', $projectID);
+        $this->view->dynamics     = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', 50, 'all', $projectID);
         $this->view->programList  = $this->loadModel('program')->getPairsByList(explode(',', trim($project->path, ',')));
         $this->view->users        = $userPairs;
         $this->view->userList     = $userList;
@@ -685,10 +681,6 @@ class project extends control
         /* Append id for second sort. */
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
 
-        /* Set the pager. */
-        $this->app->loadClass('pager', true);
-        $pager = new pager($recTotal, 50, 1);
-
         /* Set the user and type. */
         $account = 'all';
         if($type == 'account')
@@ -697,9 +689,12 @@ class project extends control
             if($user) $account = $user->account;
         }
 
-        $period  = $type == 'account' ? 'all'  : $type;
-        $date    = empty($date) ? '' : date('Y-m-d', $date);
-        $actions = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager, 'all', $projectID, 'all', $date, $direction);
+        $period     = $type == 'account' ? 'all'  : $type;
+        $date       = empty($date) ? '' : date('Y-m-d', $date);
+        $actions    = $this->loadModel('action')->getDynamic($account, $period, $orderBy, 50, 'all', $projectID, 'all', $date, $direction);
+        $dateGroups = $this->action->buildDateGroup($actions, $direction, $type);
+
+        if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($actions) : $this->action->getDynamicCount();
 
         /* The header and position. */
         $project = $this->project->getByID($projectID);
@@ -712,12 +707,11 @@ class project extends control
         $this->view->projectID  = $projectID;
         $this->view->type       = $type;
         $this->view->orderBy    = $orderBy;
-        $this->view->pager      = $pager;
         $this->view->account    = $account;
         $this->view->param      = $param;
-        $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction);
+        $this->view->dateGroups = $dateGroups;
         $this->view->direction  = $direction;
-        $this->view->recTotal   = $pager->recTotal;
+        $this->view->recTotal   = $recTotal;
         $this->display();
     }
 

@@ -97,8 +97,8 @@ if(!empty($firstAction))
     $lastDate  = substr($lastAction->originalDate, 0, 10);
     $hasPre    = $this->action->hasPreOrNext($firstDate, 'pre');
     $hasNext   = $this->action->hasPreOrNext($lastDate, 'next');
-    $preLink   = $hasPre ? inlink('dynamic', "useID={$user->id}&type={$type}&recTotal={$pager->recTotal}&date=" . strtotime($firstDate) . '&direction=pre') : 'javascript:;';
-    $nextLink  = $hasNext ? inlink('dynamic', "useID={$user->id}&type={$type}&recTotal={$pager->recTotal}&date=" . strtotime($lastDate) . '&direction=next') : 'javascript:;';
+    $preLink   = $hasPre ? inlink('dynamic', "useID={$user->id}&type={$type}&recTotal={$recTotal}&date=" . strtotime($firstDate) . '&direction=pre') : 'javascript:;';
+    $nextLink  = $hasNext ? inlink('dynamic', "useID={$user->id}&type={$type}&recTotal={$recTotal}&date=" . strtotime($lastDate) . '&direction=next') : 'javascript:;';
 
     if($hasPre || $hasNext)
     {
