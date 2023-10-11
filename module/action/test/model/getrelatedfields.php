@@ -21,6 +21,7 @@ zdTable('kanbanlane')->config('kanbanlane')->gen(1);
 zdTable('team')->gen(1);
 zdTable('module')->config('module')->gen(1);
 zdTable('review')->config('review')->gen(1);
+zdTable('productplan')->gen(1);
 
 /**
 
@@ -74,8 +75,8 @@ r($action->getRelatedFieldsTest($objectType[3],  $objectId[3],  $actionType[3], 
 r($action->getRelatedFieldsTest($objectType[4],  $objectId[4],  $actionType[4],  $extra[4]))  && p('product|project|execution', '|') && e(',1,|0|0');     // 测试获取objectType story        objectId 5 actionType linked2build           extra 11 的动态信息
 r($action->getRelatedFieldsTest($objectType[5],  $objectId[5],  $actionType[5],  $extra[5]))  && p('product|project|execution', '|') && e(',1,|0|0');     // 测试获取objectType story        objectId 6 actionType unlinkedfrombuild      extra 11 的动态信息
 r($action->getRelatedFieldsTest($objectType[6],  $objectId[6],  $actionType[6],  $extra[6]))  && p('product|project|execution', '|') && e(',1,|0|0');     // 测试获取objectType story        objectId 7 actionType estimated              extra 11 的动态信息
-r($action->getRelatedFieldsTest($objectType[7],  $objectId[7],  $actionType[7],  $extra[7]))  && p('product|project|execution', '|') && e(',2,|0|11');   // 测试获取objectType story        objectId 8 actionType edited                 extra 11 的动态信息
-r($action->getRelatedFieldsTest($objectType[8],  $objectId[8],  $actionType[8],  $extra[8]))  && p('product|project|execution', '|') && e(',,|0|0');      // 测试获取objectType productplan  objectId 9 actionType assigned               extra 1  的动态信息
+r($action->getRelatedFieldsTest($objectType[7],  $objectId[7],  $actionType[7],  $extra[7]))  && p('product|project|execution', '|') && e(',2,|0|11');    // 测试获取objectType story        objectId 8 actionType edited                 extra 11 的动态信息
+r($action->getRelatedFieldsTest($objectType[8],  $objectId[8],  $actionType[8],  $extra[8]))  && p('product|project|execution', '|') && e(',1,|0|0');     // 测试获取objectType productplan  objectId 9 actionType assigned               extra 1  的动态信息
 r($action->getRelatedFieldsTest($objectType[9],  $objectId[9],  $actionType[9],  $extra[9]))  && p('product|project|execution', '|') && e(',41,|0|0');    // 测试获取objectType branch       objectId 10 actionType closed                extra 1  的动态信息
 r($action->getRelatedFieldsTest($objectType[10], $objectId[10], $actionType[10], $extra[10])) && p('product|project|execution', '|') && e(',1,|~~|101');  // 测试获取objectType testcase     objectId 11 actionType deleted               extra 1  的动态信息
 r($action->getRelatedFieldsTest($objectType[11], $objectId[11], $actionType[11], $extra[11])) && p('product|project|execution', '|') && e(',1,|~~|101');  // 测试获取objectType case         objectId 12 actionType deletedfile           extra 1  的动态信息
