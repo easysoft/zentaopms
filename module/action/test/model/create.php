@@ -6,6 +6,9 @@ include dirname(__FILE__, 2) . '/action.class.php';
 zdTable('actionrecent')->gen(0);
 zdTable('action')->gen(0);
 zdTable('file')->gen(0);
+zdTable('task')->gen(1);
+zdTable('story')->gen(1);
+zdTable('project')->config('execution')->gen(1);
 
 define('IN_UPGRADE', true);
 
@@ -68,7 +71,7 @@ $action->createTest($objectTypeList[0], $objectIDList[0], $storyActionTypeList[0
 r($tester->dao->select('count(*) as count')->from('zt_actionrecent')->fetch('count')) && p() && e('0');       //测试升级中的并且版本号小于18.7的情况，不创建actionrecent
 
 unset(dao::$cache['zt_actionrecent']);
-$action->createTest($objectTypeList[0], $objectIDList[0], $storyActionTypeList[0], $comment[0], '', '', '', $versionList[1]);       
+$action->createTest($objectTypeList[0], $objectIDList[0], $storyActionTypeList[0], $comment[0], '', '', '', $versionList[1]);
 r($tester->dao->select('count(*) as count')->from('zt_actionrecent')->fetch('count')) && p() && e('1');       //测试升级中的并且版本号大于18.7的情况，创建actionrecent
 
 $tester->dao->update(TABLE_CONFIG)->set('value')->eq($version)->where('`key`')->eq('version')->andWhere('owner')->eq('system')->andWhere('module')->eq('common')->exec();
