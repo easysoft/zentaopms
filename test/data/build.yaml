@@ -26,10 +26,10 @@ fields:
       - field: name2
         range: 11-20,101-110
 
-      - field: name2
+      - field: name3
         range: 版本
 
-      - field: name3
+      - field: name4
         range: 1-1000
 
   - field: scmPath
