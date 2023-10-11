@@ -634,26 +634,6 @@ class actionTao extends actionModel
     }
 
     /**
-     * 执行和项目相关Action的extr信息。
-     * Build execution and project action extra info.
-     *
-     * @param  object    $action
-     * @access protected
-     * @return void
-     */
-    protected function processExecutionAndProjectActionExtra(object $action): void
-    {
-        $this->app->loadLang('execution');
-        $linkedProducts = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->in($action->extra)->fetchPairs('id', 'name');
-        $action->extra  = '';
-        if($linkedProducts && $this->config->vision == 'rnd')
-        {
-            foreach($linkedProducts as $productID => $productName) $linkedProducts[$productID] = html::a(helper::createLink('product', 'browse', "productID=$productID"), "#{$productID} {$productName}");
-            $action->extra = sprintf($this->lang->execution->action->extra, '<strong>' . join(', ', $linkedProducts) . '</strong>');
-        }
-    }
-
-    /**
      * 搭建关联用户故事和bug的Action的extra信息。
      * Build link story and bug action extra info.
      *

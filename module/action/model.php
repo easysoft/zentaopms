@@ -180,7 +180,7 @@ class actionModel extends model
             if(in_array($actionName, array('linkchildstory', 'unlinkchildrenstory', 'linkparentstory', 'unlinkparentstory', 'deletechildrenstory'))) $this->actionTao->processActionExtra(TABLE_STORY, $action, 'title', 'story', 'view');
             if(in_array($actionName, array('testtaskopened', 'testtaskstarted', 'testtaskclosed'))) $this->actionTao->processActionExtra(TABLE_TESTTASK, $action, 'name', 'testtask', 'view');
             if(in_array($actionName, array('importfromstorylib', 'importfromrisklib', 'importfromissuelib', 'importfromopportunitylib')) && $this->config->edition == 'max') $this->actionTao->processActionExtra(TABLE_ASSETLIB, $action, 'name', 'assetlib', $action->objectType);
-            if(in_array($actionName, array('opened', 'managed', 'edited')) && in_array($objectType, array('execution', 'project'))) $this->actionTao->processExecutionAndProjectActionExtra($action);
+            if(in_array($actionName, array('opened', 'managed', 'edited')) && in_array($objectType, array('execution', 'project'))) $this->processExecutionAndProjectActionExtra($action);
             if(in_array($actionName, array('linkstory', 'unlinkstory', 'createchildrenstory'))) $this->actionTao->processLinkStoryAndBugActionExtra($action, 'story', 'view');
             if(in_array($actionName, array('linkbug', 'unlinkbug'))) $this->actionTao->processLinkStoryAndBugActionExtra($action, 'bug', 'view');
 
@@ -1893,5 +1893,25 @@ class actionModel extends model
 
         $condition = "((product =',0,' or product = '0' or product=',,') AND project = '0' AND execution = '0') OR {$productCondition} OR {$projectCondition} OR {$executionCondition}";
         return $condition;
+    }
+
+    /**
+     * 执行和项目相关操作记录的extra信息。
+     * Build execution and project action extra info.
+     *
+     * @param  object  $action
+     * @access private
+     * @return void
+     */
+    private function processExecutionAndProjectActionExtra(object $action): void
+    {
+        $this->app->loadLang('execution');
+        $linkedProducts = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->in($action->extra)->fetchPairs('id', 'name');
+        $action->extra  = '';
+        if($linkedProducts && $this->config->vision == 'rnd')
+        {
+            foreach($linkedProducts as $productID => $productName) $linkedProducts[$productID] = html::a(helper::createLink('product', 'browse', "productID=$productID"), "#{$productID} {$productName}");
+            $action->extra = sprintf($this->lang->execution->action->extra, '<strong>' . join(', ', $linkedProducts) . '</strong>');
+        }
     }
 }
