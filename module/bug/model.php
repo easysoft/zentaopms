@@ -3958,22 +3958,22 @@ class bugModel extends model
             }
             $bug->title = $bugTitle;
 
-            if($bug->story && !empty($stories[$bug->story]))
+            $bug->story = zget($stories, $bug->story, '');
+            if($bug->story)
             {
-                $story = $stories[$bug->story];
-                $bug->story = $canViewStory ? html::a(helper::createLink('story', 'view', "storyID={$story->id}", 'html', true), $story->title, '', "class='iframe' title='{$story->title}'") : "<span title='{$story->title}'>{$story->title}</span>";
+                $bug->story = $canViewStory ? html::a(helper::createLink('story', 'view', "storyID={$bug->story->id}", 'html', true), $bug->story->title, '', "class='iframe' title='{$bug->story->title}' data-toggle='modal'") : "<span title='{$bug->story->title}'>{$bug->story->title}</span>";
             }
 
-            if($bug->task && !empty($tasks[$bug->task]))
+            $bug->task = zget($tasks, $bug->task, '');
+            if($bug->task)
             {
-                $task = $tasks[$bug->task];
-                $bug->task = $canViewTask ? html::a(helper::createLink('task', 'view', "taskID={$task->id}", 'html', true), $task->name, '', "class='iframe' title='{$task->name}'") : "<span title='{$task->name}'>{$task->name}</span>";
+                $bug->task = $canViewTask ? html::a(helper::createLink('task', 'view', "taskID={$bug->task->id}", 'html', true), $bug->task->name, '', "class='iframe' title='{$bug->task->name}' data-toggle='modal'") : "<span title='{$bug->task->name}'>{$bug->task->name}</span>";
             }
 
-            if($bug->toTask && !empty($tasks[$bug->toTask]))
+            $bug->toTask = zget($tasks, $bug->toTask, '');
+            if($bug->toTask)
             {
-                $task = $tasks[$bug->toTask];
-                $bug->toTask = $canViewTask ? html::a(helper::createLink('task', 'view', "taskID={$task->id}", 'html', true), $task->name, '', "class='iframe' title='{$task->name}'") : "<span title='{$task->name}'>{$task->name}</span>";
+                $bug->toTask = $canViewTask ? html::a(helper::createLink('task', 'view', "taskID={$bug->toTask->id}", 'html', true), $bug->toTask->name, '', "class='iframe' title='{$bug->toTask->name}' data-toggle='modal'") : "<span title='{$bug->toTask->name}'>{$bug->toTask->name}</span>";
             }
 
             $status      = $bug->status;
