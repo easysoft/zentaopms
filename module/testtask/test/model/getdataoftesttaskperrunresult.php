@@ -3,29 +3,39 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
+zdTable('case')->config('case')->gen(15);
+zdTable('testrun')->config('testrun')->gen(15);
+
 /**
 
 title=测试 testtaskModel->getDataOfTestTaskPerRunResult();
 cid=1
 pid=1
 
-获取测试单0的执行结果 >> 0
-获取测试单1的成功执行结果 >> 2
-获取测试单1的失败执行结果 >> 2
-获取测试单2的成功执行结果 >> 2
-获取测试单2的失败执行结果 >> 2
-
 */
 
 global $tester;
-$tester->loadModel('testtask');
+$testtask = $tester->loadModel('testtask');
 
-$result0 = $tester->testtask->getDataOfTestTaskPerRunResult(0);
-$result1 = $tester->testtask->getDataOfTestTaskPerRunResult(1);
-$result2 = $tester->testtask->getDataOfTestTaskPerRunResult(2);
+$result1 = $testtask->getDataOfTestTaskPerRunResult(0);
+$result2 = $testtask->getDataOfTestTaskPerRunResult(1);
+$result3 = $testtask->getDataOfTestTaskPerRunResult(2);
 
-r($result0) && p()             && e('0'); // 获取测试单0的执行结果
-r($result1) && p('pass:value') && e('2'); // 获取测试单1的成功执行结果
-r($result1) && p('fail:value') && e('2'); // 获取测试单1的失败执行结果
-r($result2) && p('pass:value') && e('2'); // 获取测试单2的成功执行结果
-r($result2) && p('fail:value') && e('2'); // 获取测试单2的失败执行结果
+foreach($result2 as $key => $value)
+{
+    if($key === '') $result2[] = $value;
+}
+
+foreach($result3 as $key => $value)
+{
+    if($key === '') $result3[] = $value;
+}
+
+r($result1) && p() && e(0);                              // 测试单 0 中的用例数为 0。
+r($result2) && p('0:name,value')       && e('未执行,1'); // 获取测试单 1 中的未执行的用例数。
+r($result2) && p('pass:name,value')    && e('通过,2');   // 获取测试单 1 中的执行结果为通过的用例数。
+r($result2) && p('fail:name,value')    && e('失败,2');   // 获取测试单 1 中的执行结果为失败的用例数。
+r($result2) && p('blocked:name,value') && e('阻塞,3');   // 获取测试单 1 中的执行结果为阻塞的用例数。
+r($result3) && p('0:name,value')       && e('未执行,1'); // 获取测试单 2 中的未执行的用例数。
+r($result3) && p('pass:name,value')    && e('通过,2');   // 获取测试单 2 中的执行结果为通过的用例数。
+r($result3) && p('fail:name,value')    && e('失败,1');   // 获取测试单 2 中的执行结果为失败的用例数。

@@ -1,0 +1,8 @@
+title: table zt_case
+author: Gang Liu
+version: "1.0"
+fields:
+  - field: lastRunResult
+    range: "[],pass{2},fail{3},blocked{4}"
+  - field: deleted
+    range: 0{4},1
