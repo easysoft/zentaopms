@@ -237,21 +237,17 @@ class releaseTest
     }
 
     /**
+     * 获取发送邮件的人员。
      * Get toList and ccList.
      *
-     * @param  object    $release
+     * @param  int         $releaseID
      * @access public
-     * @return bool|array
+     * @return false|array
      */
-    public function getToAndCcListTest($releaseID)
+    public function getToAndCcListTest($releaseID): false|array
     {
         $release = $this->objectModel->getByID($releaseID);
-
-        $objects = $this->objectModel->getToAndCcList($release);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $this->objectModel->getToAndCcList($release);
     }
 
     /**
