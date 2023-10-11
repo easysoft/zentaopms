@@ -793,8 +793,6 @@ class actionModel extends model
     public function getBySQL(string $sql, string $orderBy, object $pager = null): array
     {
         $actionCondition = $this->getActionCondition();
-        if(is_array($actionCondition)) return array();
-
         return $this->dao->select('*')->from(TABLE_ACTION)
             ->where($sql)
             ->beginIF(!empty($actionCondition))->andWhere("($actionCondition)")->fi()
