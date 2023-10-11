@@ -14,7 +14,7 @@ jsVar('tab', $app->tab);
 jsVar('modules', $modules);
 jsVar('products', $products);
 jsVar('branchTagOption', $branchTagOption);
-jsVar('productBugList', $productBugList);
+jsVar('productBugOptions', $productBugOptions);
 jsVar('executionMembers', isset($executionMembers) ? $executionMembers : array());
 jsVar('projectMembers', isset($projectMembers) ? $projectMembers : array());
 jsVar('productMembers', isset($productMembers) ? $productMembers : array());
@@ -194,8 +194,8 @@ formBatchPanel
     formBatchItem
     (
         set::label($lang->bug->resolution),
-        set::width('200px'),
-        set::name(''),
+        set::width('220px'),
+        set::name('resolutionBox'),
         set::control('inputGroup'),
         inputGroup
         (
@@ -207,7 +207,7 @@ formBatchPanel
             ),
             picker
             (
-                setClass('hidden'),
+                setClass('duplicate-select hidden'),
                 set::name('duplicate'),
                 set::items(array()),
                 set::placeholder($lang->bug->placeholder->duplicate),

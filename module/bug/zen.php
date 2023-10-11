@@ -1662,12 +1662,26 @@ class bugZen extends bug
             }
         }
 
-        $this->view->bugs            = $bugs;
-        $this->view->branchProduct   = $branchProduct;
-        $this->view->modules         = $bugModules;
-        $this->view->productBugList  = $productBugList;
-        $this->view->branchTagOption = $branchOptions;
-        $this->view->products        = $products;
+        $productBugOptions = array();
+        foreach($productBugList as $productID => $productBugs)
+        {
+            $productBugOptions[$productID] = array();
+            foreach($productBugs as $branchID => $branchBugs)
+            {
+                $productBugOptions[$productID][$branchID] = array();
+                foreach($branchBugs as $bugID => $bugTitle)
+                {
+                    $productBugOptions[$productID][$branchID][] = array('text' => $bugTitle, 'value' => $bugID);
+                }
+            }
+        }
+
+        $this->view->bugs              = $bugs;
+        $this->view->branchProduct     = $branchProduct;
+        $this->view->modules           = $bugModules;
+        $this->view->productBugOptions = $productBugOptions;
+        $this->view->branchTagOption   = $branchOptions;
+        $this->view->products          = $products;
 
         return $branchTagOption;
     }

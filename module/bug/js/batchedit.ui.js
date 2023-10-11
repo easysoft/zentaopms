@@ -36,10 +36,11 @@ window.renderRowData = function($row, index, row)
     }
 
     /* Show the bugs of current bug's product. */
-    if(productBugList[row.product] != undefined && productBugList[row.product][row.branch] != undefined)
+    if(productBugOptions[row.product] != undefined && productBugOptions[row.product][row.branch] != undefined)
     {
-        let duplicateBugs = productBugList[row.product][row.branch];
-        $row.find('[data-name="duplicateBug"]').find('.picker-box').on('inited', function(e, info)
+        let duplicateBugs = productBugOptions[row.product][row.branch];
+
+        $row.find('[data-name="resolutionBox"]').find('.input-group').find('.duplicate-select').on('inited', function(e, info)
         {
             let $duplicateBug = info[0];
             $duplicateBug.render({items: duplicateBugs});
@@ -91,12 +92,6 @@ function setDuplicate(event)
     const $target     = $(event.target);
     const $currentRow = $target.closest('tr');
     const resolution  = $target.val();
-    if(resolution == 'duplicate')
-    {
-        $currentRow.find('.form-batch-input[data-name="duplicateBug"]').removeClass('hidden');
-    }
-    else
-    {
-        $currentRow.find('.form-batch-input[data-name="duplicateBug"]').addClass('hidden');
-    }
+
+    $currentRow.find('[data-name="duplicate"]').toggleClass('hidden', resolution != 'duplicate');
 }
