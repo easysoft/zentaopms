@@ -185,7 +185,7 @@ $items[] = array
     'control'  => 'priPicker',
     'items'    => $lang->bug->priList,
     'value'    => 3,
-    'width'    => '80px',
+    'width'    => '100px',
     'required' => isset($requiredFields['pri']),
     'ditto'    => true,
 );
