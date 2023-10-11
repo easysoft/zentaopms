@@ -364,69 +364,63 @@ class releaseModel extends model
     }
 
     /**
+     * 获取通知的人员。
      * Get notify persons.
      *
      * @param  object $release
      * @access public
      * @return array
      */
-    public function getNotifyPersons($release)
+    public function getNotifyPersons(object $release): array
     {
         if(empty($release->notify)) return array();
 
-        /* Init vars. */
+        /* Get notify users. */
         $notifyPersons = array();
         $managerFields = '';
         $notifyList    = explode(',', $release->notify);
-
         foreach($notifyList as $notify)
         {
-            if($notify == 'PO' or $notify == 'QD' or $notify == 'feedback')
+            if($notify == 'PO' || $notify == 'QD' || $notify == 'feedback')
             {
                 $managerFields .= $notify . ',';
             }
-            elseif($notify == 'SC' and !empty($release->build))
+            elseif($notify == 'SC' && !empty($release->build))
             {
                 $stories  = implode(',', $this->dao->select('stories')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll());
                 $stories .= $this->dao->select('stories')->from(TABLE_RELEASE)->where('id')->eq($release->id)->fetch('stories');
                 $stories  = trim($stories, ',');
-
                 if(empty($stories)) continue;
 
                 $openedByList   = $this->dao->select('openedBy')->from(TABLE_STORY)->where('id')->in($stories)->fetchPairs();
                 $notifyPersons += $openedByList;
             }
-            elseif(($notify == 'ET' or $notify == 'PT') and !empty($release->build))
+            elseif(($notify == 'ET' || $notify == 'PT') && !empty($release->build))
             {
-                $type     = $notify == 'ET' ? 'execution' : 'project';
-                $table    = $notify == 'ET' ? TABLE_BUILD : TABLE_RELEASE;
-                $objectID = $notify == 'ET' ? $release->build : $release->id;
-                $members  = $this->dao->select('t2.account')->from($table)->alias('t1')
+                $table   = $notify == 'ET' ? TABLE_BUILD : TABLE_RELEASE;
+                $members = $this->dao->select('t2.account')->from($table)->alias('t1')
                     ->leftJoin(TABLE_TEAM)->alias('t2')->on("t1.$type=t2.root")
-                    ->where('t1.id')->in($objectID)
-                    ->andWhere('t2.type')->eq($type)
+                    ->where('t1.id')->in($notify == 'ET' ? $release->build : $release->id)
+                    ->andWhere('t2.type')->eq($notify == 'ET' ? 'execution' : 'project')
                     ->fetchPairs();
-
                 if(empty($members)) continue;
 
                 $notifyPersons += $members;
             }
-            elseif($notify == 'CT' and !empty($release->mailto))
+            elseif($notify == 'CT' && !empty($release->mailto))
             {
                 $notifyPersons += explode(',', trim($release->mailto, ','));
             }
         }
 
-        if(!empty($managerFields))
-        {
-            $managerFields = trim($managerFields, ',');
-            $managerUsers  = $this->dao->select($managerFields)->from(TABLE_PRODUCT)->where('id')->eq($release->product)->fetch();
-            foreach($managerUsers as $account)
-            {
-                if(!isset($notifyPersons[$account])) $notifyPersons[$account] = $account;
-            }
-        }
+        if(empty($managerFields)) return $notifyPersons;
 
+        $managerFields = trim($managerFields, ',');
+        $managerUsers  = $this->dao->select($managerFields)->from(TABLE_PRODUCT)->where('id')->eq($release->product)->fetch();
+        foreach($managerUsers as $account)
+        {
+            if(!isset($notifyPersons[$account])) $notifyPersons[$account] = $account;
+        }
         return $notifyPersons;
     }
 
