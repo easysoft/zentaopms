@@ -21,17 +21,17 @@ class actionModel extends model
      * 创建一个操作记录。
      * Create a action.
      *
-     * @param  string      $objectType
-     * @param  int         $objectID
-     * @param  string      $actionType
-     * @param  string|bool $comment
-     * @param  string|int  $extra        the extra info of this action, according to different modules and actions, can set different extra.
-     * @param  string      $actor
-     * @param  bool        $autoDelete
+     * @param  string           $objectType
+     * @param  int              $objectID
+     * @param  string           $actionType
+     * @param  string|bool      $comment
+     * @param  string|int|float $extra        the extra info of this action, according to different modules and actions, can set different extra.
+     * @param  string            $actor
+     * @param  bool              $autoDelete
      * @access public
      * @return int|bool
      */
-    public function create(string $objectType, int $objectID, string $actionType, string|bool $comment = '', string|int $extra = '', string $actor = '', bool $autoDelete = true): int|bool
+    public function create(string $objectType, int $objectID, string $actionType, string|bool $comment = '', string|int|float $extra = '', string $actor = '', bool $autoDelete = true): int|bool
     {
         if(strtolower($actionType) == 'commented' && empty($comment)) return false;
 
@@ -41,6 +41,7 @@ class actionModel extends model
         if($actor == 'guest' && $actionType == 'logout') return false;
 
         $objectType = str_replace('`', '', $objectType);
+        $extra      = (string)$extra;
 
         $action             = new stdclass();
         $action->objectType = strtolower($objectType);
@@ -50,7 +51,6 @@ class actionModel extends model
         $action->date       = helper::now();
         $action->extra      = (string)$extra;
         if(!$this->app->upgrading) $action->vision = $this->config->vision;
-
         if($objectType == 'story' && in_array($actionType, array('reviewpassed', 'reviewrejected', 'reviewclarified', 'reviewreverted', 'synctwins'))) $action->actor = $this->lang->action->system;
 
         /* 使用purifier处理注解。 */
