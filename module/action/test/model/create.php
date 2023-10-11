@@ -2,14 +2,12 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/action.class.php';
-include dirname(__FILE__, 4) . '/file/test/file.class.php';
 
-zdTable('file')->config('file')->gen(1);
 zdTable('actionrecent')->gen(0);
 zdTable('action')->gen(0);
-$resouceImage = dirname(__FILE__) . '/yaml/create/1314382308742pf5';
-$targetImage  = dirname(__FILE__, 5) . '/test/www/data/upload/1/202309/1314382308742pf5';
-exec("cp {$resouceImage} {$targetImage}");
+zdTable('file')->gen(0);
+
+define('IN_UPGRADE', true);
 
 /**
 
@@ -33,8 +31,8 @@ pid=1
 测试创建story 1 reviewreverted  >> story,1,系统,reviewreverted
 测试创建story 1 synctwins       >> story,1,系统,synctwins
 
-测试创建task 1 edited uniqid()     >> task,1,admin,edited
-测试创建task 11 commented uniqid() >> task,11,admin,commented
+测试升级中的并且版本号小于18.7的情况，不创建actionrecent >> 0
+测试升级中的并且版本号大于18.7的情况，创建actionrecent   >> 1
 
 */
 $objectTypeList      = array('task', 'project', 'user', 'bug', 'story');
@@ -45,10 +43,9 @@ $actor               = 'guest';
 $comment             = array('', '测试备注', '<p><img src="ccreate?m=file&f=read&t=jpeg&fileID=1"></p>');
 $uid                 = array('', uniqid());
 $autoDelete          = array(true, false);
+$versionList         = array('18.1', '18.7');
 
 $action = new actionTest();
-
-$file = new fileTest();
 
 r($action->createTest($objectTypeList[0], $objectIDList[0], $actionTypeList[1])) && p('objectType;objectID;actor') && e('task;1;guest'); //测试创建task，1，edited
 r($action->createTest($objectTypeList[2], $objectIDList[0], $actionTypeList[6])) && p('') && e('0');                                     //测试创建user，1，logout
@@ -56,7 +53,7 @@ r($action->createTest($objectTypeList[2], $objectIDList[0], $actionTypeList[6]))
 su('admin');
 
 r($action->createTest($objectTypeList[0], $objectIDList[0], $actionTypeList[0], ''))          && p('') && e(0);                                             //测试创建task，1，commented,
-r($action->createTest($objectTypeList[0], $objectIDList[0], $actionTypeList[0], $comment[1])) && p('objectType,objectID,comment') && e('task,1,测试备注');  //测试创建task，1，commented, '测试备注'
+r($action->createTest($objectTypeList[0], $objectIDList[0], $actionTypeList[0], $comment[1])) && p('objectType|objectID|comment|product|project|execution', '|') && e('task|1|测试备注|,1,|11|101');  //测试创建task，1，commented, '测试备注'
 
 r($action->createTest($objectTypeList[4], $objectIDList[0], $storyActionTypeList[0])) && p('objectType,objectID,actor,action') && e('story,1,系统,reviewpassed');    //测试创建story,1,reviewpassed
 r($action->createTest($objectTypeList[4], $objectIDList[0], $storyActionTypeList[1])) && p('objectType,objectID,actor,action') && e('story,1,系统,reviewrejected');  //测试创建story,1,reviewrejected
@@ -64,8 +61,14 @@ r($action->createTest($objectTypeList[4], $objectIDList[0], $storyActionTypeList
 r($action->createTest($objectTypeList[4], $objectIDList[0], $storyActionTypeList[3])) && p('objectType,objectID,actor,action') && e('story,1,系统,reviewreverted');  //测试创建story,1,reviewreverted
 r($action->createTest($objectTypeList[4], $objectIDList[0], $storyActionTypeList[4])) && p('objectType,objectID,actor,action') && e('story,1,系统,synctwins');       //测试创建story,1,synctwins
 
-r($action->createTest($objectTypeList[0], $objectIDList[0], $actionTypeList[1], '', '', '', $uid[0]))                          && p('objectType,objectID,actor,action') && e('task,1,admin,edited');     //测试创建task,1,edited,,,,uniqid()
-r($action->createTest($objectTypeList[0], $objectIDList[1], $actionTypeList[0], $comment[2], '', '', $uid[1], $autoDelete[1])) && p('objectType,objectID,actor,action') && e('task,11,admin,commented'); //测试创建task,1,edited,,,,uniqid()
-r($file->getByIdTest(1))                                                                                                       && p('objectType;objectID')              && e('task;11');                 //测试文件是否更新成功
-r($action->createTest($objectTypeList[0], $objectIDList[1], $actionTypeList[0], $comment[2], '', '', $uid[1], $autoDelete[0])) && p('objectType,objectID,actor,action') && e('task,11,admin,commented'); //测试创建task,1,edited,,,,uniqid()
-r($file->getByIdTest(1))                                                                                                       && p('')                                 && e('0');                       //测试文件是否更新成功
+global $tester;
+$version = $tester->dao->select('value')->from(TABLE_CONFIG)->where('`key`')->eq('version')->andWhere('owner')->eq('system')->andWhere('module')->eq('common')->fetch('value');
+
+$action->createTest($objectTypeList[0], $objectIDList[0], $storyActionTypeList[0], $comment[0], '', '', '', $versionList[0]);
+r($tester->dao->select('count(*) as count')->from('zt_actionrecent')->fetch('count')) && p() && e('0');       //测试升级中的并且版本号小于18.7的情况，不创建actionrecent
+
+unset(dao::$cache['zt_actionrecent']);
+$action->createTest($objectTypeList[0], $objectIDList[0], $storyActionTypeList[0], $comment[0], '', '', '', $versionList[1]);       
+r($tester->dao->select('count(*) as count')->from('zt_actionrecent')->fetch('count')) && p() && e('1');       //测试升级中的并且版本号大于18.7的情况，创建actionrecent
+
+$tester->dao->update(TABLE_CONFIG)->set('value')->eq($version)->where('`key`')->eq('version')->andWhere('owner')->eq('system')->andWhere('module')->eq('common')->exec();

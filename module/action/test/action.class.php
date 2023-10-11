@@ -21,8 +21,14 @@ class actionTest
      * @access public
      * @return object
      */
-    public function createTest($objectType, $objectID, $actionType, $comment = '', $extra = '', $actor = '', $uid = '', $autoDelete = true)
+    public function createTest($objectType, $objectID, $actionType, $comment = '', $extra = '', $actor = '', $uid = '', string $version = '')
     {
+        if(defined('IN_UPGRADE') && IN_UPGRADE && !empty($version))
+        {
+            global $tester;
+            $tester->dao->update(TABLE_CONFIG)->set('value')->eq($version)->where('`key`')->eq('version')->andWhere('owner')->eq('system')->andWhere('module')->eq('common')->exec();
+        }
+
         $_SERVER['HTTP_HOST'] = 'pms.zentao.com';
         if($uid)
         {
@@ -32,7 +38,7 @@ class actionTest
             $tester->session->set('album', array($uid => array(1), 'used' => array($uid => array(1))));
         }
 
-        $objectID = $this->objectModel->create($objectType, $objectID, $actionType, $comment, $extra, $actor, $autoDelete);
+        $objectID = $this->objectModel->create($objectType, $objectID, $actionType, $comment, $extra, $actor);
 
         unset($_POST);
         if(dao::isError()) return dao::getError();
