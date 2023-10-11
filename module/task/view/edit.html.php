@@ -130,7 +130,7 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
               <?php if($task->parent >= 0 and empty($task->team)):?>
               <tr>
                 <th><?php echo $lang->task->parent;?></th>
-                <td><?php echo html::select('parent', $tasks, $task->parent, "class='form-control chosen'");?></td>
+                <td><?php echo html::select('parent', $tasks, $task->parent, "class='form-control picker-select'");?></td>
               </tr>
               <?php endif;?>
               <tr class="modeBox">
