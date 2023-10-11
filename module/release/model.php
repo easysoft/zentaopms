@@ -796,19 +796,20 @@ class releaseModel extends model
     }
 
     /**
+     * 构造发布详情页面的操作按钮。
      * Build release view action menu.
      *
      * @param  object $release
      * @access public
-     * @return string
+     * @return array
      */
-    public function buildOperateViewMenu($release)
+    public function buildOperateViewMenu(object $release): array
     {
         $canBeChanged = common::canBeChanged('release', $release);
-        if($release->deleted || !$canBeChanged || isonlybody()) return '';
+        if($release->deleted || !$canBeChanged || isInModal()) return array();
 
         $menu   = array();
-        $params = "releaseID=$release->id";
+        $params = "releaseID={$release->id}";
 
         if(common::hasPriv('release', 'changeStatus', $release))
         {
@@ -817,13 +818,11 @@ class releaseModel extends model
             $menu[] = array(
                 'text'         => $this->lang->release->changeStatusList[$changedStatus],
                 'icon'         => $release->status == 'normal' ? 'pause' : 'play',
-                'url'          => helper::createLink($this->app->tab == 'project' ? 'projectrelease' : 'release', 'changeStatus', "releaseID={$release->id}&status={$changedStatus}"),
+                'url'          => helper::createLink($this->app->tab == 'project' ? 'projectrelease' : 'release', 'changeStatus', "{$params}&status={$changedStatus}"),
                 'class'        => 'btn ghost ajax-submit',
                 'data-confirm' => $release->status == 'normal' ? $this->lang->release->confirmTerminate : $this->lang->release->confirmActivate
             );
         }
-
-        //$menu .= $this->buildFlowMenu('release', $release, 'view', 'direct');
 
         if(common::hasPriv('release', 'edit'))
         {
@@ -840,7 +839,7 @@ class releaseModel extends model
             $menu[] = array(
                 'text'         => $this->lang->delete,
                 'icon'         => 'trash',
-                'url'          => helper::createLink($this->app->tab == 'project' ? 'projectrelease' : 'release', 'delete', "releaseID={$release->id}"),
+                'url'          => helper::createLink($this->app->tab == 'project' ? 'projectrelease' : 'release', 'delete', $params),
                 'class'        => 'btn ghost ajax-submit',
                 'data-confirm' => $this->lang->release->confirmDelete
             );
