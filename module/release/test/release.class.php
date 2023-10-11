@@ -343,4 +343,20 @@ class releaseTest
 
         return $this->objectModel->buildActionList($release);
     }
+
+    /**
+     * 构造发布详情页面的操作按钮。
+     * Build release view action menu.
+     *
+     * @param  int    $releaseID
+     * @access public
+     * @return array
+     */
+    public function buildOperateViewMenuTest(int $releaseID): array
+    {
+        $release = $this->objectModel->getByID($releaseID);
+        if(!$release) return array();
+
+        return $this->objectModel->buildOperateViewMenu($release);
+    }
 }
