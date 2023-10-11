@@ -74,14 +74,14 @@ class actionModel extends model
         $actionID = $this->dao->lastInsertID();
 
         $hasRecentTable = true;
-        if(defined('IN_UPGRADE') and IN_UPGRADE)
+        if(defined('IN_UPGRADE') && IN_UPGRADE)
         {
             $fromVersion = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=version');
-            if(is_numeric($fromVersion[0]) and version_compare($fromVersion, '18.6', '<'))               $hasRecentTable = false;
+            if(is_numeric($fromVersion[0]) && version_compare($fromVersion, '18.6', '<'))               $hasRecentTable = false;
             if(strpos($fromVersion, 'pro') !== false) $hasRecentTable = false;
-            if(strpos($fromVersion, 'biz') !== false and version_compare($fromVersion, 'biz8.6',   '<')) $hasRecentTable = false;
-            if(strpos($fromVersion, 'max') !== false and version_compare($fromVersion, 'max4.6',   '<')) $hasRecentTable = false;
-            if(strpos($fromVersion, 'ipd') !== false and version_compare($fromVersion, 'ipd1.0.1', '<')) $hasRecentTable = false;
+            if(strpos($fromVersion, 'biz') !== false && version_compare($fromVersion, 'biz8.6',   '<')) $hasRecentTable = false;
+            if(strpos($fromVersion, 'max') !== false && version_compare($fromVersion, 'max4.6',   '<')) $hasRecentTable = false;
+            if(strpos($fromVersion, 'ipd') !== false && version_compare($fromVersion, 'ipd1.0.1', '<')) $hasRecentTable = false;
         }
         if($hasRecentTable) $this->dao->insert(TABLE_ACTIONRECENT)->data($action)->autoCheck()->exec();
 
