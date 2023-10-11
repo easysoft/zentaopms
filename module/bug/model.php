@@ -3976,6 +3976,7 @@ class bugModel extends model
                 $bug->toTask = $canViewTask ? html::a(helper::createLink('task', 'view', "taskID={$task->id}", 'html', true), $task->name, '', "class='iframe' title='{$task->name}'") : "<span title='{$task->name}'>{$task->name}</span>";
             }
 
+            $status      = $bug->status;
             $bugStatus   = $this->processStatus('bug', $bug);
             $bug->status = "<span class='status-bug status-{$bug->status}' title='{$bugStatus}'> {$bugStatus}</span>";
 
@@ -4025,7 +4026,10 @@ class bugModel extends model
 
             foreach(array_merge(array('os', 'browser', 'mailto', 'branch', 'project', 'plan', 'execution', 'type', 'resolution', 'keywords', 'openedBuild', 'resolvedBuild', 'activatedCount'), $userFields, $dateFields) as $field)
             {
-                if($bug->$field) $bug->$field = "<span title='{$bug->$field}'>{$bug->$field}<span>";
+                if(empty($bug->$field)) continue;
+
+                $class = ($field == 'deadline' && isset($bug->delay) && $status == 'active') ? "class='delayed'" : '';
+                $bug->$field = "<span $class title='{$bug->$field}'>{$bug->$field}</span>";
             }
 
             $rows[] = $bug;
