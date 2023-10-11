@@ -148,7 +148,7 @@ class actionTao extends actionModel
         {
             case 'linked2build':
             case 'unlinkedfrombuild':
-                $build = $this->loadModel('build')->getByID($extra);
+                $build = $this->dao->select('project,execution')->from(TABLE_BUILD)->where('id')->eq($extra)->fetch();
                 if($build)
                 {
                     $project   = $build->project;
