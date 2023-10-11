@@ -778,7 +778,7 @@ class baseRouter
      */
     protected function setupProfiling(): void
     {
-        if(!empty($this->config->debug) && $this->config->debug >= 3) $this->dbh->exec('SET profiling = 1');
+        if(!empty($this->config->debug) && $this->config->debug >= 3 && $this->config->installed) $this->dbh->exec('SET profiling = 1');
     }
 
     /**
@@ -2401,7 +2401,7 @@ class baseRouter
         }
 
         /* 调用该方法   Call the method. */
-        $module = $this->control ? $this->control : $this->config->default->module;
+        $module = $this->control;
         $method = $this->methodName ? $this->methodName : $this->config->default->method;
 
         call_user_func_array(array($module, $method), $this->params);

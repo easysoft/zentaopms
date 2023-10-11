@@ -32,5 +32,12 @@ $app->setDebug();
 /* During the installation, if the database params is setted, auto connect the db. */
 if(isset($config->installed) and $config->installed) $app->connectDB();
 
-$app->parseRequest();
-$app->loadModule();
+try
+{
+    $app->parseRequest();
+    $app->loadModule();
+}
+catch (EndResponseException $endResponseException)
+{
+    echo $endResponseException->getContent();
+}

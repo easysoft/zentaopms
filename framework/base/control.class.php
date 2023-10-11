@@ -1017,7 +1017,7 @@ class baseControl
 
         \zin\zin::$data = (array)$this->view;
         \zin\zin::$data['zinDebug'] = array();
-        if($this->config->debug && $this->config->debug >= 2)
+        if($this->config->debug && $this->config->debug >= 2 && $this->config->installed)
         {
             \zin\zin::$data['zinDebug']['trace'] = $this->app->loadClass('trace')->getTrace();
         }
