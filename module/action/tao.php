@@ -710,106 +710,74 @@ class actionTao extends actionModel
         /* 验证用户的产品/项目/执行权限。 */
         /* Verify user's product/project/execution permissions。*/
         $aclViews = isset($this->app->user->rights['acls']['views']) ? $this->app->user->rights['acls']['views'] : array();
-        if($productID == 'all')   $authedProducts   = (empty($aclViews) || (!empty($aclViews) && !empty($aclViews['product'])))   ? $this->app->user->view->products : '0';
-        if($projectID == 'all')   $authedProjects   = (empty($aclViews) || (!empty($aclViews) && !empty($aclViews['project'])))   ? $this->app->user->view->projects : '0';
-        if($executionID == 'all') $authedExecutions = (empty($aclViews) || (!empty($aclViews) && !empty($aclViews['execution']))) ? $this->app->user->view->sprints  : '0';
+        if($productID == 'all')   $grantedProducts   = empty($aclViews) || !empty($aclViews['product'])   ? $this->app->user->view->products : '0';
+        if($projectID == 'all')   $grantedProjects   = empty($aclViews) || !empty($aclViews['project'])   ? $this->app->user->view->projects : '0';
+        if($executionID == 'all') $grantedExecutions = empty($aclViews) || !empty($aclViews['execution']) ? $this->app->user->view->sprints  : '0';
+        if(empty($grantedProducts)) $grantedProducts = '0';
 
-        if(empty($authedProducts)) $authedProducts = '0';
+        /* If product is selected, show related projects and executions. */
+        if(is_numeric($productID))
+        {
+            $projects   = $this->loadModel('product')->getProjectPairsByProduct($productID);
+            $executions = $this->product->getExecutionPairsByProduct($productID) + array(0 => 0);
+
+            $grantedProjects   = isset($grantedProjects) ? array_intersect(array_keys($projects), explode(',', $grantedProjects)) : array_keys($projects);
+            $grantedExecutions = isset($grantedExecutions) ? array_intersect(array_keys($executions), explode(',', $grantedExecutions)) : array_keys($executions);
+        }
+        /* If project is selected, show related products and executions. */
+        if(is_numeric($projectID))
+        {
+            $products   = $this->loadModel('product')->getProductPairsByProject($projectID);
+            $executions = $this->loadModel('execution')->fetchPairs($projectID) + array(0 => 0);
+
+            $grantedProducts   = isset($grantedProducts) ? array_intersect(array_keys($products), explode(',', $grantedProducts)) : array_keys($products);
+            $grantedExecutions = isset($grantedExecutions) ? array_intersect(array_keys($executions), explode(',', $grantedExecutions)) : array_keys($executions);
+        }
 
         /* 组建产品/项目/执行搜索条件。 */
         /* Build product/project/execution search condition. */
-        if($productID == 'all' && $projectID == 'all')
+        if(isset($grantedProducts))
         {
             $productCondition = '';
-            foreach(explode(',', $authedProducts) as $product) $productCondition = empty($productCondition) ? "(execution = '0' AND project = '0' AND (product LIKE '%,$product,%'" : "$productCondition OR product LIKE '%,$product,%'";
+            foreach(explode(',', $grantedProducts) as $product) $productCondition = empty($productCondition) ? "(execution = '0' and project = '0' and (product LIKE '%,{$product},%'" : "{$productCondition} OR product LIKE '%,{$product},%'";
             if(!empty($productCondition)) $productCondition .= '))';
-
-            $projectCondition   = "(execution = '0' AND project != '0' AND project " . helper::dbIN($authedProjects) . ')';
-            $executionCondition = isset($authedExecutions) ? "(execution != 0 AND execution " . helper::dbIN($authedExecutions) . ')' : "(execution != 0 AND execution = '$executionID')";
         }
-        elseif($productID == 'all' && is_numeric($projectID))
+        else
         {
-            $products   = $this->loadModel('product')->getProductPairsByProject($projectID);
-            $executions = $this->loadModel('execution')->getPairs($projectID) + array(0 => 0);
-
-            $authedExecutions = isset($authedExecutions) ? array_intersect(array_keys($executions), explode(',', $authedExecutions)) : array_keys($executions);
-
-            $productCondition = '';
-            foreach(array_keys($products) as $product) $productCondition = empty($productCondition) ? "(execution = '0' AND project = '0' AND (product LIKE '%,$product,%'" : "$productCondition OR product LIKE '%,$product,%'";
-            if(!empty($productCondition)) $productCondition .= '))';
-
-            $projectCondition   = "(execution = '0' AND project = '$projectID')";
-            $executionCondition = "(execution != '0' AND execution " . helper::dbIN($authedExecutions) . ')';
+            $productCondition   = "(execution = '0' and project = '0' and product like '%,{$productID},%')";
         }
-        elseif(is_numeric($productID) && $projectID == 'all')
-        {
-            $this->loadModel('product');
-            $projects   = $this->product->getProjectPairsByProduct($productID);
-            $executions = $this->product->getExecutionPairsByProduct($productID) + array(0 => 0);
+        $projectCondition   = isset($grantedProjects) ? "(execution = '0' and project != '0' and project " . helper::dbIN($grantedProjects) . ')' : "(execution = '0' and project = '{$projectID}')";
+        $executionCondition = isset($grantedExecutions) ? "(execution != '0' and execution " . helper::dbIN($grantedExecutions) . ')' : "(execution != '0' and execution = '{$executionID}')";
 
-            $authedProjects   = array_intersect(array_keys($projects), explode(',', $authedProjects));
-            $authedExecutions = isset($authedExecutions) ? array_intersect(array_keys($executions), explode(',', $authedExecutions)) : array_keys($executions);
-
-            $productCondition   = "(execution = '0' AND project = '0' AND product LIKE '%,$productID,%')";
-            $projectCondition   = "(execution = '0' AND project != '0' AND project " . helper::dbIN($authedProjects) . ')';
-            $executionCondition = "(execution != '0' AND execution " . helper::dbIN($authedExecutions) . ')';
-        }
-
-        $condition = "((product =',0,' OR product = '0' OR product=',,') AND project = '0' AND execution = '0')";
-        if(!empty($productCondition))   $condition .= " OR $productCondition";
-        if(!empty($projectCondition))   $condition .= " OR $projectCondition";
-        if(!empty($executionCondition)) $condition .= " OR $executionCondition";
-
+        $condition = "((product =',0,' or product = '0' or product=',,') AND project = '0' AND execution = '0') OR {$productCondition} OR {$projectCondition} OR {$executionCondition}";
         return $condition;
     }
 
     /**
-     * 处理effort相关查询条件。
+     * 处理工时相关查询条件。
      * Process effort related search condition.
      *
-     * @param  string $condition
+     * @param  string    $condition
+     * @param  string    $period
+     * @param  string    $begin
+     * @param  string    $end
+     * @param  string    $beginDate
      * @access protected
      * @return void
      */
-    public function processEffortCondition(string &$condition)
+    public function processEffortCondition(string &$condition, string $period, string $begin, string $end, string $beginDate): void
     {
-        $efforts = $this->dao->select('id')->from(TABLE_EFFORT)->where($condition)->fetchPairs();
+        $efforts = $this->dao->select('id')->from(TABLE_EFFORT)
+            ->where($condition)
+            ->beginIF($period != 'all')
+            ->beginIF($begin)->andWhere('date')->gt($begin)->fi()
+            ->beginIF($end)->andWhere('date')->lt($end)->fi()
+            ->fi()
+            ->beginIF($beginDate)->andWhere('date')->ge($beginDate)->fi()
+            ->fetchPairs();
         $efforts = !empty($efforts) ? implode(',', $efforts) : 0;
 
         $condition .= " OR (`objectID` IN ({$efforts}) AND `objectType` = 'effort')";
-    }
-
-    /**
-     * 处理项目集相关查询条件。
-     * Process program related search condition.
-     *
-     * @param  string $condition
-     * @access protected
-     * @return void
-     */
-    public function processProgramCondition(string &$condition)
-    {
-        $programCondition = $this->app->user->view->programs ? : '0';
-
-        $condition .= " or (`objectid` in ({$programCondition}) and `objecttype` = 'program')";
-    }
-
-    /**
-     * 处理多产品执行相关查询条件。
-     * Process multiple product execution related search condition.
-     *
-     * @param  string $condition
-     * @access protected
-     * @return void
-     */
-    public function processNoMultipleExecutionsConditon(string &$condition)
-    {
-        $noMultipleExecutions = $this->dao->select('id')->from(TABLE_PROJECT)->where('multiple')->eq(0)->andWhere('type')->in('sprint,kanban')->fetchPairs('id', 'id');
-
-        if($noMultipleExecutions)
-        {
-            $condition .= count($noMultipleExecutions) > 1 ? " OR (`objectID` NOT " . helper::dbIN($noMultipleExecutions) . " AND `objectType` = 'execution')" : ' OR (`objectID` !' . helper::dbIN($noMultipleExecutions) . " AND `objectType` = 'execution')";
-        }
     }
 
     /**
@@ -839,8 +807,7 @@ class actionTao extends actionModel
         return $this->dao->select('*')->from(TABLE_ACTION)
             ->where('objectType')->notIN($this->config->action->ignoreObjectType4Dynamic)
             ->andWhere('vision')->eq($this->config->vision)
-            ->beginIF($period != 'all')->andWhere('date')->gt($begin)->fi()
-            ->beginIF($period != 'all')->andWhere('date')->lt($end)->fi()
+            ->beginIF($period != 'all')->andWhere('date')->gt($begin)->andWhere('date')->lt($end)->fi()
             ->beginIF($date)->andWhere('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'")->fi()
             ->beginIF($account != 'all')->andWhere('actor')->eq($account)->fi()
             ->beginIF($beginDate)->andWhere('date')->ge($beginDate)->fi()

@@ -641,15 +641,15 @@ class actionModel extends model
      * 获取动态。
      * Get actions as dynamic.
      *
-     * @param  string $account
-     * @param  string $period
-     * @param  string $orderBy
-     * @param  object $pager
+     * @param  string     $account
+     * @param  string     $period
+     * @param  string     $orderBy
+     * @param  object     $pager
      * @param  string|int $productID   all|int(like 123)|notzero   all => include zero, notzero, greater than 0
      * @param  string|int $projectID   same as productID
      * @param  string|int $executionID same as productID
-     * @param  string $date
-     * @param  string $direction
+     * @param  string     $date
+     * @param  string     $direction
      * @access public
      * @return array
      */
@@ -662,12 +662,16 @@ class actionModel extends model
 
         /* 构建权限搜索条件。 */
         /* Build has priv search condition. */
-        $condition  = '1=1';
         $executions = array();
-        if(!$this->app->user->admin) $condition = $this->actionTao->buildUserAclsSearchCondition($productID, $projectID, $executionID, $executions);
+        $condition = !$this->app->user->admin ? $this->actionTao->buildUserAclsSearchCondition($productID, $projectID, $executionID, $executions) : '1=1';
 
         $actionCondition = $this->getActionCondition();
         if(!$actionCondition && !$this->app->user->admin && isset($this->app->user->rights['acls']['actions'])) return array();
+
+        $condition = "`objectType` IN ('doc', 'doclib') OR ({$condition})";
+
+        $programCondition = empty($this->app->user->view->programs) ? '0' : $this->app->user->view->programs;
+        $condition .= " OR (`objectID` in ($programCondition) AND `objectType` = 'program')";
 
         /* 用户不传入时间的情况下，限定只能查询今年的数据。 */
         /* If the user does not enter the time, only this year's data can be queried. */
@@ -682,15 +686,14 @@ class actionModel extends model
             $beginDate = $year . '-01-01';
         }
 
-        $condition = "(`objectType` IN ('doc', 'doclib') OR ({$condition})) AND `objectType` NOT IN ('program', 'effort', 'execution')";
+        $this->actionTao->processEffortCondition($condition, $period, $begin, $end, $beginDate);
 
-        $this->actionTao->processNoMultipleExecutionsConditon($condition);
-        $this->actionTao->processProgramCondition($condition);
-        $this->actionTao->processEffortCondition($condition);
-        $condition  = "({$condition})";
+        $noMultipleExecutions = $this->dao->select('id')->from(TABLE_PROJECT)->where('multiple')->eq(0)->andWhere('type')->in('sprint,kanban')->fetchPairs();
+        if($noMultipleExecutions) $condition = count($noMultipleExecutions) > 1 ? "({$condition}) AND (`objectType` != 'execution' || (`objectID` NOT " . helper::dbIN($noMultipleExecutions) . " AND `objectType` = 'execution'))" : "({$condition}) AND (`objectType` != 'execution' || (`objectID` !" . helper::dbIN($noMultipleExecutions) . " AND `objectType` = 'execution'))";
+
+        $condition = "({$condition})";
 
         $actions = $this->actionTao->getActionListByCondition($condition, $date, $period, $begin, $end, $direction, $account, $beginDate, $productID, $projectID, $executionID, $executions, $actionCondition, $orderBy, $pager);
-
         if(!$actions) return array();
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
