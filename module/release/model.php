@@ -892,25 +892,6 @@ class releaseModel extends model
     }
 
     /**
-     * 通过产品ID列表获取产品下发布的数量。
-     * Get release count of the product through the product ID list.
-     *
-     * @param  array  $productIdList
-     * @param  string $date
-     * @access public
-     * @return array
-     */
-    public function getReleaseCountByProduct(array $productIdList, string $date = ''): array
-    {
-        return $this->dao->select('product, status, COUNT(*) AS count')->from(TABLE_RELEASE)
-            ->where('deleted')->eq(0)
-            ->andWhere('product')->in($productIdList)
-            ->beginIF($date)->andWhere('date')->eq($date)->fi()
-            ->groupBy('product, status')
-            ->fetchGroup('product', 'status');
-    }
-
-    /**
      * 获取产品下的发布列表信息。
      * Get the release list information under the product.
      *
