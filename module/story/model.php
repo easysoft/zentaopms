@@ -5227,7 +5227,6 @@ class storyModel extends model
             }
 
             echo "<td class='" . $class . "' title='$title' style='$style'>";
-            if($this->config->edition != 'open') $this->loadModel('flow')->printFlowCell('story', $story, $id);
             switch($id)
             {
             case 'id':
@@ -6765,6 +6764,12 @@ class storyModel extends model
         $tab         = $this->app->tab;
         $rows        = array();
 
+        if($this->config->edition != 'open')
+        {
+            $this->loadModel('flow');
+            $extendFields = $this->loadModel('workflowfield')->getList('story');
+        }
+
         $storyIdList = array_keys($stories);
         $storyTasks  = $this->loadModel('task')->getStoryTaskCounts($storyIdList);
         $storyBugs   = $this->loadModel('bug')->getStoryBugCounts($storyIdList);
@@ -6884,6 +6889,13 @@ class storyModel extends model
                 }
                 if(in_array($col->name, $userFields)) $data->{$col->name} = zget($users, $story->{$col->name});
                 if(in_array($col->name, $dateFields)) $data->{$col->name} = helper::isZeroDate($story->{$col->name}) ? '' : substr($story->{$col->name}, 5, 11);
+                if($this->config->edition != 'open')
+                {
+                    if(isset($extendFields[$col->name]) && !$extendFields[$col->name]->buildin)
+                    {
+                        $data->{$col->name} = $this->flow->printFlowCell('story', $story, $col->name, true);
+                    }
+                }
             }
 
             $data->isParent = false;
