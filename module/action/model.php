@@ -874,13 +874,11 @@ class actionModel extends model
         $objectTypes = array();
         foreach($actions as $object) $objectTypes[$object->objectType][$object->objectID] = $object->objectID;
 
-        if(isset($objectTypes['todo'])) $this->app->loadLang('todo');
+        if(isset($objectTypes['todo']))   $this->app->loadLang('todo');
         if(isset($objectTypes['branch'])) $this->app->loadLang('branch');
         $users = isset($objectTypes['gapanalysis']) || isset($objectTypes['stakeholder']) ? $this->loadModel('user')->getPairs('noletter') : array();
 
-        $objectNames     = array();
-        $relatedProjects = array();
-        $requirements    = array();
+        $objectNames = $relatedProjects = $requirements = array();
         foreach($objectTypes as $objectType => $objectIdList)
         {
             if(!isset($this->config->objectTables[$objectType]) && $objectType != 'makeup') continue;    // If no defination for this type, omit it.
