@@ -762,3 +762,6 @@ UPDATE `zt_scene` SET `path` = REPLACE(`path`, ',100000', ',');
 UPDATE `zt_scene` SET `path` = REPLACE(`path`, ',10000', ',');
 
 DROP VIEW IF EXISTS `ztv_scenecase`;
+
+ALTER TABLE `zt_action` MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT;
+ALTER TABLE `zt_actionrecent` MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT;

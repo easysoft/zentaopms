@@ -372,6 +372,7 @@ define('TABLE_API_LIB_RELEASE', '`' . $config->db->prefix . 'api_lib_release`');
 
 define('TABLE_MODULE',        '`' . $config->db->prefix . 'module`');
 define('TABLE_ACTION',        '`' . $config->db->prefix . 'action`');
+define('TABLE_ACTIONRECENT',  '`' . $config->db->prefix . 'actionrecent`');
 define('TABLE_FILE',          '`' . $config->db->prefix . 'file`');
 define('TABLE_HOLIDAY',       '`' . $config->db->prefix . 'holiday`');
 define('TABLE_HISTORY',       '`' . $config->db->prefix . 'history`');

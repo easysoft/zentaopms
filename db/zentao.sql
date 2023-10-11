@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS `zt_acl` (
   `source` char(30) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- DROP TABLE IF EXISTS `zt_action`;
 CREATE TABLE IF NOT EXISTS `zt_action` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -26,13 +27,38 @@ CREATE TABLE IF NOT EXISTS `zt_action` (
   `read` enum('0','1') NOT NULL DEFAULT '0',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `efforted` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  KEY `date` (`date`),
-  KEY `actor` (`actor`),
-  KEY `project` (`project`),
-  KEY `action` (`action`),
-  KEY `objectID` (`objectID`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE INDEX `date`     ON `zt_action`(`date`);
+CREATE INDEX `actor`    ON `zt_action`(`actor`);
+CREATE INDEX `project`  ON `zt_action`(`project`);
+CREATE INDEX `action`   ON `zt_action`(`action`);
+CREATE INDEX `objectID` ON `zt_action`(`objectID`);
+
+-- DROP TABLE IF EXISTS `zt_actionrecent`;
+CREATE TABLE IF NOT EXISTS `zt_actionrecent` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `objectType` varchar(30) NOT NULL DEFAULT '',
+  `objectID` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `product` text NULL,
+  `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `actor` varchar(100) NOT NULL DEFAULT '',
+  `action` varchar(80) NOT NULL DEFAULT '',
+  `date` datetime NULL,
+  `comment` text NULL,
+  `extra` text NULL,
+  `read` enum('0','1') NOT NULL DEFAULT '0',
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
+  `efforted` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE INDEX `date`     ON `zt_actionrecent`(`date`);
+CREATE INDEX `actor`    ON `zt_actionrecent`(`actor`);
+CREATE INDEX `project`  ON `zt_actionrecent`(`project`);
+CREATE INDEX `action`   ON `zt_actionrecent`(`action`);
+CREATE INDEX `objectID` ON `zt_actionrecent`(`objectID`);
+
 -- DROP TABLE IF EXISTS `zt_api_lib_release`;
 CREATE TABLE IF NOT EXISTS `zt_api_lib_release` (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,

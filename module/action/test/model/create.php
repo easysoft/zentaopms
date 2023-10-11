@@ -5,6 +5,7 @@ include dirname(__FILE__, 2) . '/action.class.php';
 include dirname(__FILE__, 4) . '/file/test/file.class.php';
 
 zdTable('file')->config('file')->gen(1);
+zdTable('actionrecent')->gen(0);
 zdTable('action')->gen(0);
 $resouceImage = dirname(__FILE__) . '/yaml/create/1314382308742pf5';
 $targetImage  = dirname(__FILE__, 5) . '/test/www/data/upload/1/202309/1314382308742pf5';
@@ -54,7 +55,7 @@ r($action->createTest($objectTypeList[2], $objectIDList[0], $actionTypeList[6]))
 
 su('admin');
 
-r($action->createTest($objectTypeList[0], $objectIDList[0], $actionTypeList[0], ''))          && p('') && e(0);                                             //测试创建task，1，commented, 
+r($action->createTest($objectTypeList[0], $objectIDList[0], $actionTypeList[0], ''))          && p('') && e(0);                                             //测试创建task，1，commented,
 r($action->createTest($objectTypeList[0], $objectIDList[0], $actionTypeList[0], $comment[1])) && p('objectType,objectID,comment') && e('task,1,测试备注');  //测试创建task，1，commented, '测试备注'
 
 r($action->createTest($objectTypeList[4], $objectIDList[0], $storyActionTypeList[0])) && p('objectType,objectID,actor,action') && e('story,1,系统,reviewpassed');    //测试创建story,1,reviewpassed
