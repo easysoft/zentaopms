@@ -1900,18 +1900,19 @@ class actionModel extends model
         /* Build product/project/execution search condition. */
         if(isset($grantedProducts))
         {
+            if(is_string($grantedProducts)) $grantedProducts = explode(',', $grantedProducts);
             $productCondition = '';
-            foreach(explode(',', $grantedProducts) as $product) $productCondition = empty($productCondition) ? "(execution = '0' and project = '0' and (product LIKE '%,{$product},%'" : "{$productCondition} OR product LIKE '%,{$product},%'";
+            foreach($grantedProducts as $product) $productCondition = empty($productCondition) ? " OR (execution = '0' and project = '0' and (product LIKE '%,{$product},%'" : "{$productCondition} OR product LIKE '%,{$product},%'";
             if(!empty($productCondition)) $productCondition .= '))';
         }
         else
         {
-            $productCondition   = "(execution = '0' and project = '0' and product like '%,{$productID},%')";
+            $productCondition   = " OR (execution = '0' and project = '0' and product like '%,{$productID},%')";
         }
         $projectCondition   = isset($grantedProjects) ? "(execution = '0' and project != '0' and project " . helper::dbIN($grantedProjects) . ')' : "(execution = '0' and project = '{$projectID}')";
         $executionCondition = isset($grantedExecutions) ? "(execution != '0' and execution " . helper::dbIN($grantedExecutions) . ')' : "(execution != '0' and execution = '{$executionID}')";
 
-        $condition = "((product =',0,' or product = '0' or product=',,') AND project = '0' AND execution = '0') OR {$productCondition} OR {$projectCondition} OR {$executionCondition}";
+        $condition = "((product =',0,' or product = '0' or product=',,') AND project = '0' AND execution = '0') {$productCondition} OR {$projectCondition} OR {$executionCondition}";
         return $condition;
     }
 

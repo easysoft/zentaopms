@@ -951,13 +951,13 @@ class actionTao extends actionModel
         if($action->objectType == 'user')
         {
             $user = $this->dao->select('deleted')->from(TABLE_USER)->where('id')->eq($action->objectID)->fetch();
-            if($user->deleted == '1') return false;
+            if($user && $user->deleted == '1') return false;
         }
         if($action->objectType == 'todo')
         {
             $todo = $this->dao->select('*')->from(TABLE_TODO)->where('id')->eq($action->objectID)->fetch();
 
-            if($todo->private == 1 && $todo->account != $this->app->user->account) return false;
+            if($todo && $todo->private == 1 && $todo->account != $this->app->user->account) return false;
         }
 
         if($action->objectType == 'mr' && (empty($action->objectName) || $action->action == 'deleted')) return false;

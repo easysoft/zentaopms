@@ -1,0 +1,78 @@
+title: table zt_action
+desc: "系统日志"
+author: automated export
+version: "1.0"
+fields:
+  - field: objectType
+    note: "对象类型"
+    range: product,story,productplan,release,project,task,build,bug,testcase,case,testtask,user,doc,doclib,todo,branch,module,testsuite,caselib,testreport,entry,webhook,review
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: objectID
+    note: "对象ID"
+    range: "1-100000"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: product
+    note: "产品"
+    range: "1-100000"
+    prefix: ","
+    postfix: ","
+    loop: 0
+    format: ""
+  - field: project
+    note: "项目"
+    range: "1-100000"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: actor
+    note: "操作者"
+    fields:
+      - field: actor1
+        range: admin,dev,test
+      - field: actor2
+        range: "[],17-18"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: action
+    note: "动作"
+    range: common,extra,opened,created,changed,edited,assigned,closed,deleted,deletedfile,editfile,erased,undeleted,hidden,commented,activated,blocked,moved,confirmed,caseconfirmed,bugconfirmed,frombug,started,restarted,delayed,suspended,recordestimate,editestimate,deleteestimate,canceled,svncommited,gitcommited,finished,paused,verified,diff1,diff2,diff3,linked2bug
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: date
+    note: "日期"
+    range: "(-1M)-(w):1D"
+    type: timestamp
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: comment
+    note: "备注"
+    range: 1-100000
+    prefix: "这是一个系统日志测试备注"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: extra
+    note: "附加参数"
+    range: 1{4},11,1{3}, 2 ,1{18},33,1{22},101,1{22},131,1{22},161,1{3}
+    prefix: ""
+    postfix: ""
+    loop: 0
+  - field: read
+    note: ""
+    range: "0,1"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

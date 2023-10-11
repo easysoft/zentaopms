@@ -4,6 +4,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/action.class.php';
 
 zdTable('action')->gen(30);
+zdTable('actionrecent')->gen(30);
 zdTable('doclib')->config('doclib')->gen(15);
 zdTable('doc')->config('doc')->gen(5);
 zdTable('product')->gen(5);
