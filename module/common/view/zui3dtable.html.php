@@ -37,17 +37,16 @@ zui.DTable.definePlugin(
     name: 'zentao18',
     options: function(options)
     {
-        var height = options.height ? options.height : function(actualHeight)
-        {
-            const height = Math.min(actualHeight, Math.max(0, window.innerHeight - ($('#mainContent').offset().top || 0))) - 1;
-            $('#sidebar>.cell').css('maxHeight', height).children('.tree').addClass('scrollbar-hover');
-            return height - ($('#mainContent .table-footer').outerHeight() || 0);
-        }
-
         return $.extend({fixedLeftWidth: '40%'}, options, {
             cols: convertCols(options.cols),
             responsive: 'window',
-            height: height,
+            height: function(actualHeight)
+            {
+
+                const height = Math.min(actualHeight, Math.max(0, window.innerHeight - ($('#mainContent').offset().top || 0))) - 1;
+                $('#sidebar>.cell').css('maxHeight', height).children('.tree').addClass('scrollbar-hover');
+                return height - ($('#mainContent .table-footer').outerHeight() || 0);
+            }
         });
     },
     onMounted: function()
