@@ -1,27 +1,34 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/build.class.php';
-su('admin');
-
-$build = zdTable('release');
-$build->stories->range('1-20{2}');
-$build->createdBy->range('admin');
-$build->createdDate->range('`' . date('Y-m-d H:i:s') . '`');
-$build->gen(20);
-
 /**
 
-title=测试 buildModel->getStoryBuilds();
+title=测试 buildModel->getStoryReleases();
+timeout=0
 cid=1
-pid=1
-
-项目版本查询 >> 项目版本版本7
-执行版本查询 >> 执行版本版本17
-无id查询 >> 0
-图片字段传字符串测试 >> 17
 
 */
+
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+
+$release = zdTable('release')->config('release');
+$release->stories->range('`1,2,3`, `1,2`, `3,4`, `2,3`, []');
+$release->gen(5);
+
+zdTable('user')->gen(5);
+su('admin');
+
+$stories = array(0, 1, 2, 3, 6);
+
 global $tester;
-$release = $tester->loadModel('release');
-r(count($release->getStoryReleases(1))) && p() && e('2');  //项目版本查询
+$tester->loadModel('release');
+r($tester->release->getStoryReleases($stories[0])) && p()         && e('0');     // 测试获取关联需求ID=0的发布列表
+r($tester->release->getStoryReleases($stories[1])) && p('1:name') && e('发布1'); // 测试获取关联需求ID=1的发布列表
+r($tester->release->getStoryReleases($stories[2])) && p('2:name') && e('发布2'); // 测试获取关联需求ID=2的发布列表
+r($tester->release->getStoryReleases($stories[3])) && p('3:name') && e('发布3'); // 测试获取关联需求ID=3的发布列表
+r($tester->release->getStoryReleases($stories[4])) && p()         && e('0');     // 测试获取关联需求ID不存在的发布列表
+
+r(count($tester->release->getStoryReleases($stories[0]))) && p() && e('0'); // 测试获取关联需求ID=0的发布数量
+r(count($tester->release->getStoryReleases($stories[1]))) && p() && e('2'); // 测试获取关联需求ID=1的发布数量
+r(count($tester->release->getStoryReleases($stories[2]))) && p() && e('3'); // 测试获取关联需求ID=2的发布数量
+r(count($tester->release->getStoryReleases($stories[3]))) && p() && e('3'); // 测试获取关联需求ID=3的发布数量
+r(count($tester->release->getStoryReleases($stories[4]))) && p() && e('0'); // 测试获取关联需求ID不存在的发布数量
