@@ -41,9 +41,9 @@ zui.DTable.definePlugin(
             cols: convertCols(options.cols),
             height: function(actualHeight)
             {
-                const height = Math.min(actualHeight, Math.max(0, window.innerHeight - ($('#mainContent').offset().top || 0))) - 1;
+                const height = Math.max(0, window.innerHeight - ($('#mainContent').offset().top || 0)) - 1;
                 $('#sidebar>.cell').css('maxHeight', height).children('.tree').addClass('scrollbar-hover');
-                return height - ($('#mainContent .table-footer').outerHeight() || 0);
+                return Math.min(actualHeight, height - ($('#mainContent .table-footer').outerHeight() || 0));
             }
         });
     },
