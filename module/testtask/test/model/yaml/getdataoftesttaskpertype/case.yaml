@@ -1,0 +1,8 @@
+title: table zt_case
+author: Gang Liu
+version: "1.0"
+fields:
+  - field: type
+    range: unit,interface{2},feature{3},install{4},config{5},performance{6},security{7},other{8}
+  - field: deleted
+    range: 0{5},1

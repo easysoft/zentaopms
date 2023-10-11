@@ -1,24 +1,16 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/testtask.class.php';
 su('admin');
+
+zdTable('case')->config('case')->gen(36);
+zdTable('testrun')->config('testrun')->gen(36);
 
 /**
 
 title=测试 testtaskModel->getDataOfTestTaskPerType();
 cid=1
 pid=1
-
-获取测试单0的类型分组 >> 0
-获取测试单1的config类型数量 >> 1
-获取测试单1的feature类型数量 >> 1
-获取测试单1的install类型数量 >> 1
-获取测试单1的performance类型数量 >> 1
-获取测试单2的other类型数量 >> 1
-获取测试单2的security类型数量 >> 1
-获取测试单2的feature类型数量 >> 1
-获取测试单2的interface类型数量 >> 1
 
 */
 
@@ -29,12 +21,13 @@ $result0 = $tester->testtask->getDataOfTestTaskPerType(0);
 $result1 = $tester->testtask->getDataOfTestTaskPerType(1);
 $result2 = $tester->testtask->getDataOfTestTaskPerType(2);
 
-r($result0) && p()                    && e('0'); // 获取测试单0的类型分组
-r($result1) && p('config:value')      && e('1'); // 获取测试单1的config类型数量
-r($result1) && p('feature:value')     && e('1'); // 获取测试单1的feature类型数量
-r($result1) && p('install:value')     && e('1'); // 获取测试单1的install类型数量
-r($result1) && p('performance:value') && e('1'); // 获取测试单1的performance类型数量
-r($result2) && p('other:value')       && e('1'); // 获取测试单2的other类型数量
-r($result2) && p('security:value')    && e('1'); // 获取测试单2的security类型数量
-r($result2) && p('feature:value')     && e('1'); // 获取测试单2的feature类型数量
-r($result2) && p('interface:value')   && e('1'); // 获取测试单2的interface类型数量
+r($result0) && p()                         && e('0');          // 测试单 0 中的用例数为 0。
+r($result1) && p('unit:name,value')        && e('单元测试,1'); // 获取测试单 1 中类型为单元测试的用例数。
+r($result1) && p('interface:name,value')   && e('接口测试,2'); // 获取测试单 1 中类型为接口测试的用例数。
+r($result1) && p('feature:name,value')     && e('功能测试,2'); // 获取测试单 1 中类型为功能测试的用例数。
+r($result1) && p('install:name,value')     && e('安装部署,4'); // 获取测试单 1 中类型为安装部署的用例数。
+r($result1) && p('config:name,value')      && e('配置相关,4'); // 获取测试单 1 中类型为配置相关的用例数。
+r($result1) && p('performance:name,value') && e('性能测试,1'); // 获取测试单 1 中类型为性能测试的用例数。
+r($result1) && p('security:name,value')    && e('安全相关,6'); // 获取测试单 1 中类型为安全相关的用例数。
+r($result1) && p('other:name,value')       && e('其他,6');     // 获取测试单 1 中类型为其他的用例数。
+r($result2) && p('performance:name,value') && e('性能测试,4'); // 获取测试单 2 中类型为性能测试的用例数。
