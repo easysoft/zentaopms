@@ -5865,6 +5865,10 @@ class executionModel extends model
             $execution->asParent = !empty($execution->children);
             $execution->status   = zget($this->lang->execution->statusList, $execution->status);
             $execution->PM       = zget($users, $execution->PM);
+            if(isset($this->config->setCode) and $this->config->setCode == 1)
+            {
+                $execution->code = "<div title=$execution->code style='justify-content: start;'>$execution->code</div>";
+            }
 
             $children = isset($execution->children) ? $execution->children : array();
             unset($execution->children);

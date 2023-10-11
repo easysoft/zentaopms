@@ -204,8 +204,8 @@ $config->execution->datatable->fieldList['name']['required']     = 'yes';
 if(isset($config->setCode) and $config->setCode == 1)
 {
     $config->execution->datatable->fieldList['code']['title']    = 'execCode';
-    $config->execution->datatable->fieldList['code']['type']     = 'text';
-    $config->execution->datatable->fieldList['code']['width']    = 180;
+    $config->execution->datatable->fieldList['code']['type']     = 'html';
+    $config->execution->datatable->fieldList['code']['width']    = '180';
     $config->execution->datatable->fieldList['code']['fixed']    = 'left';
     $config->execution->datatable->fieldList['code']['required'] = 'no';
 }
