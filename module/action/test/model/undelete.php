@@ -133,7 +133,7 @@ r($result && !$file->deleted) && p('') && e('1');                               
 
 $result = $action->undeleteTest($actionIDList[24]);
 $parentPlan = $tester->dao->select('*')->from('zt_productplan')->where('id')->eq('1')->fetch();
-r($result && $parentPlan->parent == '-1') && p('') && e('1');                                                                             // 测试还原action 24, objectType productplan 的数据。
+r($result && $parentPlan->parent == '0') && p('') && e('1');                                                                              // 测试还原action 24, objectType productplan 的数据。
     
 $result = $action->undeleteTest($actionIDList[25]);
 $task   = $tester->dao->select('*')->from('zt_task')->where('id')->eq('1')->fetch();
