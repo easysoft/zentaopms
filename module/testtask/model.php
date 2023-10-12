@@ -356,8 +356,8 @@ class testtaskModel extends model
         if($type == 'all')     return $this->getAllLinkableCases($task, $query, $linkedCases, $pager);
         if($type == 'bystory') return $this->getLinkableCasesByStory($productID, $task, $query, $linkedCases, $pager);
         if($type == 'bybug')   return $this->getLinkableCasesByBug($productID, $task, $query, $linkedCases, $pager);
-        if($type == 'bysuite') return $this->getLinkableCasesBySuite($productID, $task, $query, $param, $linkedCases, $pager);
-        if($type == 'bybuild') return $this->getLinkableCasesByTestTask($param, $linkedCases, $query, $pager);
+        if($type == 'bysuite') return $this->getLinkableCasesBySuite($productID, $task, $param, $query, $linkedCases, $pager);
+        if($type == 'bybuild') return $this->getLinkableCasesByTestTask($param, $query, $linkedCases, $pager);
 
         return array();
     }
@@ -457,14 +457,14 @@ class testtaskModel extends model
      *
      * @param  int    $productID
      * @param  object $task
-     * @param  string $query
      * @param  string $suite
+     * @param  string $query
      * @param  array  $linkedCases
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getLinkableCasesBySuite(int $productID, object $task, string $query, int $suite, array$linkedCases, object $pager): array
+    public function getLinkableCasesBySuite(int $productID, object $task, int $suite, string $query, array$linkedCases, object $pager): array
     {
         if(strpos($query, '`product`') !== false) $query = str_replace('`product`', 't1.`product`', $query);
 
@@ -488,13 +488,13 @@ class testtaskModel extends model
      * Get linkeable cases by testtask.
      *
      * @param  int    $testTask
-     * @param  array  $linkedCases
      * @param  string $query
+     * @param  array  $linkedCases
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getLinkableCasesByTestTask(int $testTask, array $linkedCases = array(), string $query = '', object $pager = null): array
+    public function getLinkableCasesByTestTask(int $testTask, string $query = '', array $linkedCases = array(), object $pager = null): array
     {
         /* Format the query condition. */
         $query = preg_replace('/`(\w+)`/', 't1.`$1`', $query);
