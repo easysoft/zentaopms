@@ -658,4 +658,24 @@ class actionTest
 
         return $result[0];
     }
+    
+    /**
+     * 测试更新阶段的属性。
+     * Test update stage attribute.
+     *
+     * @param  string     $attributeList
+     * @param  array      $executionID
+     * @access public
+     * @return array|bool
+     */
+    public function updateStageAttributeTest(string $attribute, array $stages): array|bool
+    {
+        $this->objectModel->updateStageAttribute($attribute, $stages);
+
+        if(dao::isError()) return dao::getError();
+
+        global $tester;
+        $objects = $tester->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($stages)->fetchAll();
+        return $objects;
+    }
 }

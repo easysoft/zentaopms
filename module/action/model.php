@@ -1671,13 +1671,15 @@ class actionModel extends model
      * Update stage attribute.
      *
      * @param  string $attribute
-     * @param  array  $idList
+     * @param  array  $executions
      * @access public
-     * @return int
+     * @return bool
      */
-    public function updateStageAttribute(string $attribute, array $stages): int
+    public function updateStageAttribute(string $attribute, array $executions): bool
     {
-        return $this->dao->update(TABLE_EXECUTION)->set('attribute')->eq($attribute)->where('id')->in($stages)->exec();
+        $this->dao->update(TABLE_EXECUTION)->set('attribute')->eq($attribute)->where('id')->in($executions)->exec();
+
+        return !dao::isError();
     }
 
     /**
