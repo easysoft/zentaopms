@@ -31,7 +31,6 @@ window.renderRowData = function($row, index, row)
             let bugModules = modules[row.product][row.branch];
             let $module    = info[0];
             $module.render({items: bugModules});
-            $module.$.setValue(row.module);
         });
     }
 
@@ -45,6 +44,8 @@ window.renderRowData = function($row, index, row)
             let $duplicateBug = info[0];
             $duplicateBug.render({items: duplicateBugs});
         });
+
+        $row.find('[data-name="resolutionBox"]').find('.input-group').find('.duplicate-select').toggleClass('hidden', row.resolution != 'duplicate');
     }
 
     /* Change assigner. */
