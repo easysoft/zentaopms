@@ -42,6 +42,8 @@ CREATE TABLE IF NOT EXISTS `zt_metriclib` (
   `project`    char(30)     NOT NULL DEFAULT '',
   `product`    char(30)     NOT NULL DEFAULT '',
   `execution`  char(30)     NOT NULL DEFAULT '',
+  `code`       char(30)     NOT NULL DEFAULT '',
+  `pipeline`   char(30)     NOT NULL DEFAULT '',
   `user`       text,
   `dept`       char(30)     NOT NULL DEFAULT '',
   `year`       char(4)      NOT NULL DEFAULT '0',
