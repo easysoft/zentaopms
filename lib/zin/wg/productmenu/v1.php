@@ -66,6 +66,7 @@ class productMenu extends wg
             set::defaultValue($activeKey),
             set::text($title),
             set::caret(true),
+            set::leadingAngle(false),
             set::popWidth(200),
             set::popClass('popup text-md'),
             set::onClick(jsRaw("(event) => {if(!event.target.closest('.is-caret')) return; openUrl('$closeLink'); return false}")),
