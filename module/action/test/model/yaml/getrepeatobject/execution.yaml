@@ -3,8 +3,12 @@ author: XuePeng Wang
 version: "1.0"
 fields:
   - field: type
-    range: sprint{2},project{2},program{2},program,project
+    range: sprint{2},project{3},program{2},program,project
   - field: project
-    range: 8{8}
+    range: 9{9}
   - field: name
-    range: 执行{2},项目{2},项目集{2},项目集x,项目
+    range: 执行{2},项目{3},项目集{2},项目集x,项目
+  - field: model
+    range: 1{2},2{1},1{100}
+  - field: code
+    range: execution{2},project{3},program{2},program,project

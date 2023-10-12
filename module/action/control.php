@@ -138,7 +138,6 @@ class action extends control
 
             if($repeatObject)
             {
-
                 list($replaceName, $replaceCode) = $this->actionZen->getReplaceNameAndCode($repeatObject, $object, $table);
                 if($confirmChange == 'no')
                 {

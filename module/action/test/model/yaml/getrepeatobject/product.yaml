@@ -8,3 +8,5 @@ fields:
     range: 7
   - field: name
     range: 产品标题
+  - field: code
+    range: code1, ,
