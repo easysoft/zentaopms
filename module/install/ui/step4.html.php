@@ -156,7 +156,7 @@ div
                             btn
                             (
                                 on::click('selectUsage'),
-                                set::id('useLight'),
+                                set::id('light'),
                                 set::btnType('submit'),
                                 setClass('px-4'),
                                 $lang->custom->useLight,
@@ -167,7 +167,7 @@ div
                             btn
                             (
                                 on::click('selectUsage'),
-                                set::id('useALM'),
+                                set::id('ALM'),
                                 set::btnType('submit'),
                                 setClass('px-4'),
                                 $lang->custom->useALM,

@@ -32,7 +32,7 @@ $lang->personnel->SR            = $lang->SRCommon;
 
 $lang->personnel->whitelist       = '白名单列表';
 $lang->personnel->addWhitelist    = '添加白名单';
-$lang->personnel->unbindWhitelist = '删除白名单';
+$lang->personnel->unbindWhitelist = '移除白名单';
 $lang->personnel->confirmDelete   = '确认将该用户移除白名单？';
 $lang->personnel->copy            = '复制白名单';
 

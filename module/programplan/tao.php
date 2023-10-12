@@ -320,8 +320,8 @@ class programplanTao extends programplanModel
             $data->realEnd       = $realEnd ? substr($realEnd, 0, 10) : '';
             $data->parent        = $plan->grade == 1 ? 0 :$plan->parent;
             $data->open          = true;
-            $data->start_date    = $realBegan ? $realBegan : $start;
-            $data->endDate       = $realEnd ? $realEnd : $end;
+            $data->start_date    = $start;
+            $data->endDate       = $end;
             $data->duration      = 1;
             $data->color         = $this->lang->execution->gantt->stage->color;
             $data->progressColor = $this->lang->execution->gantt->stage->progressColor;

@@ -82,7 +82,7 @@ formPanel
                         on::change("zui.DatePicker.query('#date').render({disabled: e.target.checked})")
                     )
                 ),
-                div(
+                common::hasPriv('todo', 'createcycle') ? div(
                     setClass('input-group-addon'),
                     checkbox
                     (
@@ -92,7 +92,7 @@ formPanel
                         set::text($lang->todo->cycle),
                         on::change('toggleCycle')
                     )
-                )
+                ) : null
             )
         ),
     ),

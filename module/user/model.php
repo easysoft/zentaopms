@@ -1137,11 +1137,9 @@ class userModel extends model
         }
 
         /* Set basic priv when no any priv. */
-        if(empty($rights))
-        {
-            $rights['index']['index'] = 1;
-            $rights['my']['index']    = 1;
-        }
+        $rights['index']['index'] = 1;
+        $rights['my']['index']    = 1;
+
         return array('rights' => $rights, 'acls' => $acls, 'projects' => $canManageProjects, 'programs' => $canManagePrograms, 'products' => $canManageProducts, 'executions' => $canManageExecutions);
     }
 
