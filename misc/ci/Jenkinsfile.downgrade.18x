@@ -122,7 +122,6 @@ pipeline {
                   allowMissing: true,
                   alwaysLinkToLastBuild: false,
                   keepAll: true,
-                  reportDir: env.ZENTAO_RELEASE_PATH,
                   reportFiles: 'downgradeReport.html',
                   reportName: 'DowngradeReport'
                 ])
