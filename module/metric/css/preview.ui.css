@@ -8,7 +8,7 @@
 .filter-btn {padding-left: 0.625rem !important; padding-right: 0.625rem !important;}
 
 .main, .side {border-radius: 2px;}
-.side .title {height: 48px; padding-left: 16px; margin-bottom: 8px;}
+.side .title {height: 48px; padding-left: 16px;}
 .side .name-color {color: var(--color-slate-600);}
 .side .metric-tree {height: calc(100vh - 180px); max-height: 864px; overflow-y: scroll;}
 .side .metric-item {padding-left: 24px; padding-top: 6px; padding-bottom: 6px;}
@@ -21,7 +21,7 @@
 .side .checkbox-primary:hover {background-color: var(--color-gray-100);}
 .side .check-list-metric {padding-top: 0; padding-bottom: 12px; gap: 0;}
 
-.main .metric-name {height: 48px; padding-left: 16px; margin-bottom: 8px; border-bottom: 1px solid var(--color-slate-300);}
+.main .metric-name {height: 48px; padding-left: 16px; margin-bottom: 8px; padding-right: 16px;}
 .main .metric-name-notfirst {border-top: 1px solid var(--color-slate-300);}
 .main .name-and-star {display: flex; align-items: center;}
 .main .metric-collect {margin-left: 12px;}
