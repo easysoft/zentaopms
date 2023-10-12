@@ -1199,4 +1199,30 @@ class task extends control
         $this->view->members     = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
         $this->display();
     }
+
+    /**
+     * AJAX: 获取批量创建任务的需求下拉列表。
+     * AJAX: Get the stories selection list for batch create tasks.
+     *
+     * @param  int    $executionID
+     * @param  int    $moduleID
+     * @param  string $zeroTaskStory
+     * @access public
+     * @return void
+     */
+    public function ajaxGetStories(int $executionID, int $moduleID, string $zeroTaskStory = 'false')
+    {
+        $stories       = $this->loadModel('story')->getExecutionStoryPairs($executionID, 0, 'all', $moduleID, 'short', 'active');
+        $taskCountList = $this->task->getStoryTaskCounts(array_keys($stories), $executionID);
+
+        $items = array();
+        foreach($stories as $storyID => $storyName)
+        {
+            if(empty($storyName)) continue;
+            if($zeroTaskStory == 'true' && $taskCountList[$storyID] > 0) continue;
+            $items[] = array('text' => $storyName, 'value' => $storyID, 'keys' => $storyName);
+        }
+
+        return print(json_encode($items));
+    }
 }

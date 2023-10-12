@@ -25,7 +25,7 @@ if(!$hideStory)
     $storyItem = formBatchItem(
         set::name('story'),
         set::label($lang->task->story),
-        set::control('select'),
+        set::control('picker'),
         set::items($stories),
         set::width('240px'),
         set::ditto(true),
@@ -43,9 +43,9 @@ if(!$hideStory)
             set('icon', 'eye'),
             set('class', 'ghost'),
             set('hint', $lang->preview),
-            set('tagName', 'a'),
-            set('url', '#'),
+            set('data-url', '#'),
             set('data-toggle', 'modal'),
+            set('disabled', true),
         )
     );
 
@@ -94,7 +94,7 @@ if($execution->type == 'kanban')
     $regionItem = formBatchItem(
         set::name('region'),
         set::label($lang->kanbancard->region),
-        set::control('select'),
+        set::control('picker'),
         set::value($regionID),
         set::items($regionPairs),
         set::width('160px'),
@@ -104,7 +104,7 @@ if($execution->type == 'kanban')
     $laneItem = formBatchItem(
         set::name('lane'),
         set::label($lang->kanbancard->lane),
-        set::control('select'),
+        set::control('picker'),
         set::value($laneID),
         set::items($lanePairs),
         set::width('160px'),
@@ -131,7 +131,7 @@ formBatchPanel
     (
         set::name('module'),
         set::label($lang->task->module),
-        set::control('select'),
+        set::control('picker'),
         set::value($moduleID),
         set::items($modules),
         set::width('200px'),
@@ -155,7 +155,7 @@ formBatchPanel
     (
         set::name('type'),
         set::label($lang->task->type),
-        set::control('select'),
+        set::control('picker'),
         set::items($lang->task->typeList),
         set::width('160px'),
         set::ditto(true),
@@ -164,7 +164,7 @@ formBatchPanel
     (
         set::name('assignedTo'),
         set::label($lang->task->assignedTo),
-        set::control('select'),
+        set::control('picker'),
         set::items($members),
         set::width('128px'),
         set::ditto(true),

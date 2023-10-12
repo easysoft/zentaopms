@@ -9,27 +9,25 @@ $('#zeroTaskStory').closest('.checkbox-primary').addClass('items-center');
  */
 function setStories(event)
 {
-    const $module     = $(event.target);
-    const $currentRow = $module.closest('tr');
-    const moduleID    = $module.val();
-    const link        = $.createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=all&moduleID=' + moduleID + '&storyID=0&pageType=batch&type=short');
-    $.getJSON(link, function(stories)
-    {
-        if(!stories) return;
-        let $row = $currentRow;
-        while($row.length)
-        {
-            $story = $row.find('.form-batch-input[data-name="story"]').empty();
-            $.each(stories, function(index, story)
-            {
-                if(story.value && $('#zeroTaskStory').hasClass('checked') && storyTasks[story.value] > 0) return;
-                $story.append('<option value="' + story.value + '">' + story.text + '</option>');
-            });
+    const $module      = $(event.target);
+    const $currentRow  = $module.closest('tr');
+    const moduleID     = $module.val();
+    const getStoryLink = $.createLink('task', 'ajaxGetStories', 'executionID=' + executionID + '&moduleID=' + moduleID + '&zeroTaskStory=' + $('#zeroTaskStory').hasClass('checked'));
 
-            $row = $row.next('tr');
-            if(!$row.find('td[data-name="story"][data-ditto="on"]').length) break;
-        }
-    });
+    let $row = $currentRow;
+    while($row.length)
+    {
+        const $storyPicker = $row.find('[name^=story]').zui('picker');
+        const storyID      = $row.find('[name^=story]').val();
+        $.getJSON(getStoryLink, function(stories)
+        {
+            $storyPicker.render({items: stories})
+            $storyPicker.$.setValue(storyID);
+        });
+
+        $row = $row.next('tr');
+        if(!$row.find('td[data-name="module"][data-ditto="on"]').length) break;
+    }
 }
 
 /**
@@ -40,24 +38,19 @@ function setStories(event)
  */
 function toggleZeroTaskStory()
 {
-    var $toggle = $('#zeroTaskStory').toggleClass('checked');
-    var zeroTask = $toggle.hasClass('checked');
+    let $toggle = $('#zeroTaskStory').toggleClass('checked');
+    let zeroTask = $toggle.hasClass('checked');
     $.cookie.set('zeroTask', zeroTask, {expires:config.cookieLife, path:config.webRoot});
-    $('select[data-name="story"]').each(function()
+
+    $('td[data-name="story"]').each(function()
     {
-        var $storySelect = $(this);
-        var selectVal    = $storySelect.val();
-        $storySelect.find('option').each(function()
+        const moduleID     = $(this).closest('tr').find('input[name^=module]').val();
+        const getStoryLink = $.createLink('task', 'ajaxGetStories', 'executionID=' + executionID + '&moduleID=' + moduleID + '&zeroTaskStory=' + zeroTask);
+        const $storyTd     = $(this);
+        $.getJSON(getStoryLink, function(stories)
         {
-            var $option = $(this);
-            var value = $option.attr('value');
-            $option.show();
-            if(value != 'ditto' && storyTasks[value] > 0 && zeroTask)
-            {
-                $option.hide();
-                if(selectVal == value) selectVal = '';
-            }
-        })
+            $storyTd.find('[name^=story]').zui('picker').render({items: stories});
+        });
     });
 }
 
@@ -69,40 +62,49 @@ function toggleZeroTaskStory()
  */
 function setStoryRelated(event)
 {
-    const $story         = $(event.target);
-    const $currentRow    = $story.closest('tr');
-    const storyID        = $story.val();
-    const $storyEstimate = $currentRow.find('.form-batch-input[data-name="storyEstimate"]');
-    const $storyPri      = $currentRow.find('.form-batch-input[data-name="storyPri"]');
-    const $storyDesc     = $currentRow.find('.form-batch-input[data-name="storyDesc"]');
-    const $module        = $currentRow.find('.form-batch-input[data-name="module"]');
-    const $preview       = $currentRow.find('.form-batch-input[data-name="preview"]');
-    if(storyID)
+    let $story      = $(event.target);
+    let $currentRow = $story.closest('tr');
+    let storyID     = $story.val();
+    let link        = $.createLink('story', 'ajaxGetInfo', 'storyID=' + storyID + '&pageType=batch');
+    let $row        = $currentRow;
+
+    while($row.length)
     {
-        var link = $.createLink('story', 'ajaxGetInfo', 'storyID=' + storyID + '&pageType=batch');
-        $.getJSON(link, function(data)
+        let $storyEstimate = $row.find('.form-batch-input[data-name="storyEstimate"]');
+        let $storyPri      = $row.find('.form-batch-input[data-name="storyPri"]');
+        let $storyDesc     = $row.find('.form-batch-input[data-name="storyDesc"]');
+        let $module        = $row.find('input[name^="module"]');
+        let $preview       = $row.find('.form-batch-input[data-name="preview"] + button');
+
+        if(storyID)
         {
-            const storyInfo = data['storyInfo'];
-            $module.val(parseInt(storyInfo.moduleID));
+            $.getJSON(link, function(data)
+            {
+                const storyInfo = data['storyInfo'];
 
-            $storyEstimate.val(storyInfo.estimate);
-            $storyPri.val(storyInfo.pri);
-            $storyDesc.val(storyInfo.spec);
-        });
+                $module.zui('picker').$.setValue(parseInt(storyInfo.moduleID));
+                $storyEstimate.val(storyInfo.estimate);
+                $storyPri.val(storyInfo.pri);
+                $storyDesc.val(storyInfo.spec);
 
-        $preview.removeAttr('disabled');
-        $preview.css('pointer-events', 'auto');
-        $preview.attr('href', $.createLink('story', 'view', "storyID=" + storyID));
-    }
-    else
-    {
-        $storyEstimate.val('');
-        $storyPri.val(3);
-        $storyDesc.val('');
+                $preview.removeClass('disabled');
+                $preview.css('pointer-events', 'auto');
+                $preview.attr('data-url', $.createLink('story', 'view', "storyID=" + storyID));
+            });
+        }
+        else
+        {
+            $storyEstimate.val('');
+            $storyPri.val(3);
+            $storyDesc.val('');
 
-        $preview.attr('disabled', true);
-        $preview.css('pointer-events', 'none');
-        $preview.attr('href', '#');
+            $preview.addClass('disabled');
+            $preview.css('pointer-events', 'none');
+            $preview.attr('data-url', '#');
+        }
+
+        $row = $row.next('tr');
+        if(!$row.find('td[data-name="story"][data-ditto="on"]').length) break;
     }
 }
 
@@ -115,12 +117,11 @@ function setStoryRelated(event)
 function copyStoryTitle(event)
 {
     const $currentRow    = $(event.target).closest('tr');
-    const $story         = $currentRow.find('.form-batch-input[data-name="story"]');
+    const $story         = $currentRow.find('td[data-name="story"]');
     const $storyEstimate = $currentRow.find('.form-batch-input[data-name="storyEstimate"]');
     const $storyPri      = $currentRow.find('.form-batch-input[data-name="storyPri"]');
     const $storyDesc     = $currentRow.find('.form-batch-input[data-name="storyDesc"]');
-    const storyValue     = $story.val();
-    var   storyTitle     = $story.find('option[value="' + storyValue + '"]').text();
+    let   storyTitle     = $story.find('.picker-single-selection').text();
 
     startPosition  = storyTitle.indexOf(':') + 1;
     endPosition    = storyTitle.lastIndexOf('[');
@@ -128,7 +129,7 @@ function copyStoryTitle(event)
 
     $currentRow.find('.form-batch-input[data-name="name"]').val(storyTitle);
     $currentRow.find('.form-batch-input[data-name="estimate"]').val($storyEstimate.val());
-    $currentRow.find('.form-batch-input[data-name="pri"]').val($storyPri.val() ? $storyPri.val() : 0);
+    $currentRow.find('input[name^="pri"]').zui('pripicker').$.setValue($storyPri.val() ? $storyPri.val() : 0);
     $currentRow.find('.form-batch-input[data-name="desc"]').val(($storyDesc.val()).replace(/<[^>]+>/g,'').replace(/(\n)+\n/g, "\n").replace(/^\n/g, '').replace(/\t/g, ''));
 }
 
@@ -143,14 +144,17 @@ function loadLanes(event)
     const regionID    = $(event.target).val();
     const $currentRow = $(event.target).closest('tr');
     const laneLink    = $.createLink('kanban', 'ajaxGetLanes', 'regionID=' + regionID + '&type=task&field=lanes&pageType=batch');
-    $.getJSON(laneLink, function(lanes)
+    let $row = $currentRow;
+    while($row.length)
     {
-        $lane = $currentRow.find('.form-batch-input[data-name="lane"]').empty();
-        if(!lanes) return;
-        $.each(lanes, function(index, lane)
+        const $lanePicker = $row.find('[name^=lane]').zui('picker');
+        $.getJSON(laneLink, function(lanes)
         {
-            $lane.append('<option value="' + lane.value + '">' + lane.text + '</option>');
+            $lanePicker.render({items: lanes})
+            $lanePicker.$.setValue(lanes[0].value);
         });
 
-    });
+        $row = $row.next('tr');
+        if(!$row.find('td[data-name="region"][data-ditto="on"]').length) break;
+    }
 }
