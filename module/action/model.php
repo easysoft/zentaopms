@@ -172,8 +172,8 @@ class actionModel extends model
         {
             $actionName = strtolower($action->action);
 
-            if(substr($actionName, 0, 7)  == 'linked2')      $this->actionTao->getLinked2Extra($action, substr($actionName, 7));
-            if(substr($actionName, 0, 12) == 'unlinkedfrom') $this->actionTao->getUnlinkedFromExtra($action, substr($actionName, 12));
+            if(substr($actionName, 0, 7)  == 'linked2')      $this->actionTao->getLinkedExtra($action, substr($actionName, 7));
+            if(substr($actionName, 0, 12) == 'unlinkedfrom') $this->actionTao->getLinkedExtra($action, substr($actionName, 12));
 
             if(in_array($actionName, array('svncommited', 'gitcommited')) && isset($commiters[$action->actor])) $action->actor = $commiters[$action->actor];
             if(!in_array($action->objectType, array('feedback', 'ticket')) && $actionName == 'tostory') $this->actionTao->processToStoryActionExtra($action);
@@ -185,10 +185,9 @@ class actionModel extends model
             if($actionName == 'createrequirements') $this->actionTao->processCreateRequirementsActionExtra($action);
             if($actionName == 'buildopened') $this->actionTao->processActionExtra(TABLE_BUILD, $action, 'name', 'build', 'view');
             if($actionName == 'fromlib' && $action->objectType == 'case') $this->actionTao->processActionExtra(TABLE_TESTSUITE, $action, 'name', 'caselib', 'browse');
-            if($actionName == 'finished' && $objectType == 'todo') $this->actionTao->finishToDoActionExtra($action);
-            if(($actionName == 'closed' && $action->objectType == 'story') || ($actionName == 'resolved' && $action->objectType == 'bug')) $this->actionTao->processClosedStoryAndResolvedBugActionExtra($action);
+            if(($actionName == 'finished' && $objectType == 'todo') || ($actionName == 'closed' && in_array($action->objectType, array('story', 'demand'))) || ($actionName == 'resolved' && $action->objectType == 'bug')) $this->actionTao->processAppendLinkByExtra($action);
 
-            if(in_array($actionName, array('totask', 'linkchildtask', 'un', 'linkparenttask', 'unlinkparenttask', 'deletechildrentask')) && $action->objectType != 'feedback') $this->actionTao->processActionExtra(TABLE_TASK, $action, 'name', 'task', 'view');;
+            if(in_array($actionName, array('totask', 'linkchildtask', 'unlinkchildrentask', 'linkparenttask', 'unlinkparenttask', 'deletechildrentask')) && $action->objectType != 'feedback') $this->actionTao->processActionExtra(TABLE_TASK, $action, 'name', 'task', 'view');;
             if(in_array($actionName, array('linkchildstory', 'unlinkchildrenstory', 'linkparentstory', 'unlinkparentstory', 'deletechildrenstory'))) $this->actionTao->processActionExtra(TABLE_STORY, $action, 'title', 'story', 'view');
             if(in_array($actionName, array('testtaskopened', 'testtaskstarted', 'testtaskclosed'))) $this->actionTao->processActionExtra(TABLE_TESTTASK, $action, 'name', 'testtask', 'view');
             if(in_array($actionName, array('importfromstorylib', 'importfromrisklib', 'importfromissuelib', 'importfromopportunitylib')) && $this->config->edition == 'max') $this->actionTao->processActionExtra(TABLE_ASSETLIB, $action, 'name', 'assetlib', $action->objectType);
@@ -1933,7 +1932,7 @@ class actionModel extends model
         $action->extra  = '';
         if($linkedProducts && $this->config->vision == 'rnd')
         {
-            foreach($linkedProducts as $productID => $productName) $linkedProducts[$productID] = html::a(helper::createLink('product', 'browse', "productID=$productID"), "#{$productID} {$productName}");
+            foreach($linkedProducts as $productID => $productName) $linkedProducts[$productID] = html::a(helper::createLink('product', 'browse', "productID={$productID}"), "#{$productID} {$productName}");
             $action->extra = sprintf($this->lang->execution->action->extra, '<strong>' . join(', ', $linkedProducts) . '</strong>');
         }
     }

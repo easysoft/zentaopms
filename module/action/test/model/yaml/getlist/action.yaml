@@ -1,0 +1,143 @@
+title: table zt_action
+desc: "系统日志"
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: objectType
+    note: "对象类型"
+    range: "story,
+      story{13},
+      story{13},
+      bug{3},feedback,ticket,
+      task,module,
+      story,
+      task{2},
+      task{2},
+      story{2},
+      release{2},
+      case{2},story,
+      todo{3},story,
+      story{3},todo,
+      bug{3},todo,
+      task{6},
+      feedback{6},
+      story{5},
+      testtask{3},
+      task,risk,issue,opportunity,
+      execution{4},project{4},
+      story{3},
+      bug{2},
+      task{2},
+      task{2}"
+  - field: objectID
+    note: "对象ID"
+    range: "1,
+      2-14,
+      15-27,
+      1-3,1{2},
+      1{2},
+      28,
+      2-3,
+      4-5,
+      29-30,
+      1-2,
+      1-2,31,
+      1-3,32,
+      33-35,4,
+      4-6,5,
+      6-11,
+      2-7,
+      36-40,
+      1-3,
+      12,1,1,1,
+      101-104,11-14,
+      41-43,
+      7-8,
+      13-14,
+      15-16"
+  - field: product
+    note: "产品"
+    range: "1,
+      1{13},
+      1{13},
+      1,2,3,1{2},
+      0{2},
+      0,
+      0{2},
+      0{2},
+      1{2},
+      1{2},
+      1{3},
+      0{4},
+      1{4},
+      1{4},
+      0{6},
+      0{6},
+      1{5},
+      1{3},
+      0{4},
+      0{4},
+      0{4},
+      0{2},
+      0{2}"
+  - field: project
+    note: "项目"
+    range: 1-86,11-14
+  - field: action
+    note: "动作"
+    range: "linked2product,
+      linked2project{2},linked2execution{2},linked2kanban{2},linked2plan,linked2productplan,linked2build,linked2bug,linked2release,linked2testtask,linked2revision,
+      unlinkedfromproject{2},unlinkedfromexecution{2},unlinkedfromkanban{2},unlinkedfromplan,unlinkedfromproductplan,unlinkedfrombuild,unlinkedfrombug,unlinkedfromrelease,unlinkedfromtesttask,unlinkedfromrevision,
+      tostory{5},
+      moved{2},
+      frombug,
+      importedcard{2},
+      createchildren{2},
+      createrequirements{2},
+      buildopened{2},
+      fromlib{3},
+      finished{4},
+      closed{4},
+      resolved{4},
+      totask,linkchildtask,unlinkchildrentask,linkparenttask,unlinkparenttask,deletechildrentask,
+      totask,linkchildtask,unlinkchildrentask,linkparenttask,unlinkparenttask,deletechildrentask,
+      linkchildstory,unlinkchildrenstory,linkparentstory,unlinkparentstory,deletechildrenstory,
+      testtaskopened,testtaskstarted,testtaskclosed,
+      importfromstorylib,importfromrisklib,importfromissuelib,importfromopportunitylib,
+      opened,managed,edited,closed,opened,managed,edited,closed,
+      linkstory,unlinkstory,createchildrenstory,
+      linkbug,unlinkbug,
+      svncommited{2},
+      gitcommited{2}"
+  - field: extra
+    note: "附加参数"
+    range: "1,
+      11,102,101,102,161,162,1{7},
+      11,102,101,102,161,162,1{7},
+      2,6,9,1{2},
+      1{2},
+      1,
+      1,2,
+      `2,3`,0,
+      `2,3`,0,
+      `2,3`,0,
+      `2,3`,0{2},
+      `task:1`,`task:10000`,0{2},
+      `story:1`,`story:10000`,0{2},
+      `bug:1`,`bug:10000`,0{2},
+      1{6},
+      1{6},
+      1{5},
+      1{3},
+      `1,2`{8},
+      1{4},
+      1{4},
+      1{2},
+      1{2}"
+  - field: actor
+    note: "操作者"
+    fields:
+      - field: actor1
+        range: admin,user,admin,test
+      - field: actor2
+        range: "[],1,[],2"

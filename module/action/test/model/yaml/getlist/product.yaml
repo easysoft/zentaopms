@@ -1,0 +1,8 @@
+title: table zt_product
+desc: "产品"
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: shadow
+    note: "影子产品"
+    range: 0,1,0{38}

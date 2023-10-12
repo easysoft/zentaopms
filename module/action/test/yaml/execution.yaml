@@ -73,3 +73,5 @@ fields:
       - from: common.user.v1.yaml
         use: three{8}
         prefix: ","
+  - field: multiple
+    range: 1,0,1{28}

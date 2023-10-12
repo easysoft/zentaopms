@@ -107,22 +107,38 @@ class actionTest
      *
      * @param  string $objectType
      * @param  int    $objectID
+     * @param  string $edition
      * @access public
-     * @return object
+     * @return string
      */
-    public function getListTest($objectType, $objectID)
+    public function getListTest(string $objectType, int $objectID, string $edition = 'pms'): string
     {
-        $objects = $this->objectModel->getList($objectType, $objectID);
+        global $tester;
+        $oldEdition = $tester->config->edition;
+        $tester->config->edition = $edition;
+
+        $objects  = $this->objectModel->getList($objectType, $objectID);
+
+        $tester->config->edition = $oldEdition;
+
+        global $tester;
+        $modules   = $objectType == 'module' ? $tester->dao->select('id')->from(TABLE_MODULE)->where('root')->in($objectID)->fetchPairs('id') : array();
+        $actions   = $this->objectModel->getActionListByTypeAndID($objectType, $objectID, $modules);
 
         if(dao::isError()) return dao::getError();
 
-        $dirname = dirname(__DIR__) . DS;
+        $actionID = key($actions);
 
-        $objects[$objectID]->extra = str_replace($dirname, '', $objects[$objectID]->extra);
-        $objects[$objectID]->extra = trim($objects[$objectID]->extra, "\n");
-        if(strpos($objects[$objectID]->extra, 'href') !== false) $objects[$objectID]->extra = 'a';
+        if(isset($objects[$actionID]->appendLink)) return 'link';
 
-        return $objects[$objectID];
+        if($objects[$actionID]->extra == $actions[$actionID]->extra) return 'nochanged';
+
+        $dirname  = dirname(__DIR__) . DS;
+        $newExtra = str_replace($dirname, '', $objects[$actionID]->extra);
+        $newExtra = trim($newExtra, "\n");
+        $newExtra = strpos($newExtra, 'href') !== false ? 'link' : 'title';
+
+        return $newExtra;
     }
 
     /**

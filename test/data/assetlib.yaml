@@ -1,0 +1,29 @@
+title: zt_assetlib
+author: Mengyi liu
+version: "1.0"
+fields:
+  - field: id
+    range: 1-1000
+  - field: name
+    fields:
+      - field: name1
+        range: 需求,风险,问题,机会
+      - field: name2
+        range: 库
+      - field: name3
+        range: 1-10000{4}
+  - field: type
+    range: story,risk,issue,opportunity
+  - field: desc
+    range: ""
+  - field: order
+    range: 0
+  - field: createdBy
+    range: admin
+  - field: createdDate
+    note: "创建日期"
+    range: "(M)-(w)"
+    type: timestamp
+    format: "YY/MM/DD"
+  - field: deleted
+    range: 0

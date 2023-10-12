@@ -69,13 +69,5 @@ fields:
       type: timestamp
       format: "YYYY-MM-DD"
       prefix: "\t"
-    - field: lastEditedBy
-      range: ""
-    - field: lastEditedDate
-      range: ""
-    - field: closedBy
-      range: ""
-    - field: closedDate
-      range: ""
     - field: deleted
       range: "0"
