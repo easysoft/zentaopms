@@ -170,24 +170,41 @@ $lang->metric->scopeList['other']     = "Other";
 
 global $config;
 $lang->metric->objectList = array();
-$lang->metric->objectList['program']     = "Program Set";
-$lang->metric->objectList['line']        = "Product Line";
-$lang->metric->objectList['product']     = "Product";
-$lang->metric->objectList['project']     = "Project";
-$lang->metric->objectList['productplan'] = "Plan";
-$lang->metric->objectList['execution']   = "Execution";
-$lang->metric->objectList['release']     = "Release";
-$lang->metric->objectList['story']       = $lang->SRCommon;
-$lang->metric->objectList['requirement'] = $lang->URCommon;
-$lang->metric->objectList['task']        = "Task";
-$lang->metric->objectList['bug']         = "Bug";
-$lang->metric->objectList['case']        = "Test Case";
-$lang->metric->objectList['user']        = "User";
-$lang->metric->objectList['effort']      = "Effort";
-$lang->metric->objectList['doc']         = "Document";
-if($config->edition != 'open')
+$lang->metric->objectList['program']       = "Program Set";
+$lang->metric->objectList['line']          = "Product Line";
+$lang->metric->objectList['product']       = "Product";
+$lang->metric->objectList['project']       = "Project";
+$lang->metric->objectList['productplan']   = "Plan";
+$lang->metric->objectList['execution']     = "Execution";
+$lang->metric->objectList['release']       = "Release";
+$lang->metric->objectList['story']         = $lang->SRCommon;
+$lang->metric->objectList['requirement']   = $lang->URCommon;
+$lang->metric->objectList['task']          = "Task";
+$lang->metric->objectList['bug']           = "Bug";
+$lang->metric->objectList['case']          = "Test Case";
+$lang->metric->objectList['user']          = "User";
+$lang->metric->objectList['effort']        = "Effort";
+$lang->metric->objectList['doc']           = "Document";
+$lang->metric->objectList['codebase']      = "Code Base";
+$lang->metric->objectList['pipeline']      = "Pipeline";
+$lang->metric->objectList['artifact']      = "Artufact";
+$lang->metric->objectList['deployment']    = "Deployment";
+$lang->metric->objectList['node']          = "Node";
+$lang->metric->objectList['application']   = "Application";
+$lang->metric->objectList['cpu']           = "CPU";
+$lang->metric->objectList['memory']        = "Memory";
+$lang->metric->objectList['issue']         = "Issue";
+$lang->metric->objectList['commit']        = "Commit";
+$lang->metric->objectList['mergeRequest']  = "Merge Request";
+$lang->metric->objectList['code']          = "Code";
+$lang->metric->objectList['vulnerability'] = "Vulnerability";
+$lang->metric->objectList['codeAnalysis']  = "Code Analysis";
+if(in_array($config->edition, array('biz', 'max', 'ipd')))
 {
     $lang->metric->objectList['feedback']    = "Feedback";
+}
+if(in_array($config->edition, array('max', 'ipd')))
+{
     $lang->metric->objectList['risk']        = "Risk";
     $lang->metric->objectList['issue']       = "Issue";
 }
