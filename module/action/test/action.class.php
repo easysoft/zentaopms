@@ -577,8 +577,10 @@ class actionTest
      * @access public
      * @return bool
      */
-    public function saveIndexTest($objectType, $objectID, $actionType)
+    public function saveIndexTest(string $objectType, int $objectID, string $actionType, string $comment = '')
     {
+        if($comment) $_POST['comment'] = $comment;
+
         $result = $this->objectModel->saveIndex($objectType, $objectID, $actionType);
 
         if(dao::isError()) return dao::getError();
