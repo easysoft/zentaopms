@@ -24,10 +24,10 @@ $pager = new pager(0, 5, 1);
 $testtask = $tester->loadModel('testtask');
 
 $task1 = (object)array('build' => 0, 'branch' => 0); // 测试单 1 版本 0 分支 0 没有用例。
-$task2 = (object)array('build' => 1, 'branch' => 0); // 测试单 1 版本 1 分支 0 没有用例。
-$task3 = (object)array('build' => 3, 'branch' => 0); // 测试单 1 版本 3 分支 0 没有用例。
-$task4 = (object)array('build' => 2, 'branch' => 0); // 测试单 1 版本 2 分支 0 有用例。
-$task5 = (object)array('build' => 2, 'branch' => 1); // 测试单 1 版本 2 分支 1 有用例。
+$task2 = (object)array('build' => 1, 'branch' => 0); // 测试单 2 版本 1 分支 0 没有用例。
+$task3 = (object)array('build' => 3, 'branch' => 0); // 测试单 3 版本 3 分支 0 没有用例。
+$task4 = (object)array('build' => 2, 'branch' => 0); // 测试单 4 版本 2 分支 0 有用例。
+$task5 = (object)array('build' => 2, 'branch' => 1); // 测试单 5 版本 2 分支 1 有用例。
 
 r($testtask->getLinkableCasesByBug(0, $task4)) && p() && e(0); // 产品 0 测试单 4 可关联到测试单的用例数为 0
 r($testtask->getLinkableCasesByBug(2, $task4)) && p() && e(0); // 产品 2 测试单 4 可关联到测试单的用例数为 0。
