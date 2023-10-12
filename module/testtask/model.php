@@ -399,7 +399,7 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getLinkableCasesByStory(int $productID, object $task, string $query, array $linkedCases, object $pager): array
+    public function getLinkableCasesByStory(int $productID, object $task, string $query = '', array $linkedCases = array(), object $pager = null): array
     {
         $stories = $this->dao->select('stories')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch('stories');
         if(!$stories) return array();
@@ -407,14 +407,14 @@ class testtaskModel extends model
         $query = preg_replace('/`(\w+)`/', 't1.`$1`', $query);
         return $this->dao->select('t1.*, t2.title AS storyTitle')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-            ->where($query)
-            ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
+            ->where('t1.deleted')->eq('0')
             ->andWhere('t1.product')->eq($productID)
             ->andWhere('t1.status')->ne('wait')
-            ->beginIF(!empty($linkedCases))->andWhere('t1.id')->notIN($linkedCases)->fi()
-            ->beginIF($task->branch !== '')->andWhere('t1.branch')->in("0,{$task->branch}")->fi()
             ->andWhere('t1.story')->in(trim($stories, ','))
-            ->andWhere('t1.deleted')->eq('0')
+            ->beginIF($query)->andWhere($query)->fi()
+            ->beginIF(!empty($linkedCases))->andWhere('t1.id')->notin($linkedCases)->fi()
+            ->beginIF($task->branch !== '')->andWhere('t1.branch')->in("0,{$task->branch}")->fi()
+            ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
             ->orderBy('t1.id desc')
             ->page($pager)
             ->fetchAll();
