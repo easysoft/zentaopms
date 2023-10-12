@@ -1223,7 +1223,7 @@ class myModel extends model
         if($this->config->edition != 'max') return array();
 
         $pendingList    = $this->loadModel('approval')->getPendingReviews('review');
-        $projectReviews = $this->loadModel('review')->getByList($pendingList, $orderBy);
+        $projectReviews = $this->loadModel('review')->getByList(0, $pendingList, $orderBy);
 
         $this->app->loadLang('project');
         $this->session->set('reviewList', $this->app->getURI(true));
