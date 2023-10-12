@@ -304,7 +304,7 @@ class gitlab
         if(!scm::checkRevision($fromRevision) and $extra != 'isBranchOrTag') return array();
         if(!scm::checkRevision($toRevision) and $extra != 'isBranchOrTag')   return array();
 
-        $sameVersion = $fromRevision == $toRevision . '^';
+        $sameVersion = $fromRevision == '^' || $fromRevision == $toRevision . '^';
         $api    = $sameVersion ? "commits/$toRevision/diff" : "compare";
         $params = array('from' => $fromRevision, 'to' => $toRevision, 'straight' => true);
         if($fromProject) $params['from_project_id'] = $fromProject;
