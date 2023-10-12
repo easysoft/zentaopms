@@ -1,0 +1,15 @@
+title: table zt_execution
+author: Zhu Jinyong
+version: "1.0"
+fields:
+  - field: name
+    note: "名称"
+    fields:
+    - field: name1
+      range: 阶段{30}
+    - field: name2
+      range: 1-10000
+  - field: type
+    range: stage{30}
+  - field: deleted
+    range: 1{10000}

@@ -678,4 +678,21 @@ class actionTest
         $objects = $tester->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($stages)->fetchAll();
         return $objects;
     }
+
+    /**
+     * 通过id列表获取被删除的阶段。
+     * Get deleted stages by id list.
+     *
+     * @param  array  $stages
+     * @access public
+     * @return array
+     */
+    public function getDeletedStagedByList(array $list): array
+    {
+        $objects = $this->objectModel->getDeletedStagedByList($list);
+
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
+    }
 }

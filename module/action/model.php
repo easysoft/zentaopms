@@ -1646,7 +1646,7 @@ class actionModel extends model
      *
      * @param  int    $executionID
      * @access public
-     * @return string
+     * @return string|bool
      */
     public function getAttributeByExecutionID(int $executionID): string|bool
     {
