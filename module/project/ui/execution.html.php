@@ -111,7 +111,7 @@ featureBar
 );
 
 /* zin: Define the toolbar on main menu. */
-$createLink = $isStage ? createLink('programplan', 'create', "projectID=$projectID&productID=$productID") : createLink('execution', 'create');
+$createLink = $isStage ? createLink('programplan', 'create', "projectID={$projectID}&productID={$productID}") : createLink('execution', 'create', "projectID={$projectID}");
 toolbar
 (
     hasPriv('execution', 'export') ? item(set(array
@@ -120,7 +120,7 @@ toolbar
         'text'        => $lang->programplan->exporting,
         'class'       => "ghost export",
         'data-toggle' => "modal",
-        'url'         => createLink('execution', 'export', "status=$status&productID=$productID&orderBy=$orderBy&from=project"),
+        'url'         => createLink('execution', 'export', "status={$status}&productID={$productID}&orderBy={$orderBy}&from=project"),
     ))) : null,
     hasPriv('execution', 'create') ? item(set(array
     (
