@@ -1198,4 +1198,18 @@ class metricModel extends model
         if(empty($type)) $type[] = 'system';
         return implode('-', $type);
     }
+
+    /**
+     * 更新度量项的创建时间
+     * Update created date of metrics.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateMetricDate()
+    {
+        $now = helper::now();
+        $metricIDList = $this->dao->select('id')->from(TABLE_METRIC)->where('deleted')->eq('0')->fetchPairs();
+        foreach($metricIDList as $metricID) $this->dao->update(TABLE_METRIC)->set('createdDate')->eq($now)->exec();
+    }
 }

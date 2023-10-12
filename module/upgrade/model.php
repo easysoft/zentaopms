@@ -705,6 +705,7 @@ class upgradeModel extends model
             case '18_7':
                 if(in_array($this->config->edition, array('max', 'ipd'))) $this->processOldMetrics();
                 $this->processHistoryDataForMetric();
+                $this->loadModel('metric')->updateMetricDate();
                 break;
         }
 
