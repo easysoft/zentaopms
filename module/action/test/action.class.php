@@ -687,12 +687,33 @@ class actionTest
      * @access public
      * @return array
      */
-    public function getDeletedStagedByList(array $list): array
+    public function getDeletedStagedByListTest(array $list): array
     {
         $objects = $this->objectModel->getDeletedStagedByList($list);
 
         if(dao::isError()) return dao::getError();
 
         return $objects;
+    }
+
+    /**
+     * 通过id更新对象。
+     * Update object by id.
+     *
+     * @param  string $table
+     * @param  int    $id
+     * @param  array  $updateParams
+     * @access public
+     * @return object
+     */
+    public function updateObjectByIDTest(string $table, int $id, array $updateParams)
+    {
+        $this->objectModel->updateObjectByID($table, $id, $updateParams);
+
+        if(dao::isError()) return dao::getError();
+
+        global $tester;
+        $object = $tester->dao->select('*')->from($table)->where('id')->eq($id)->fetch();
+        return $object;
     }
 }
