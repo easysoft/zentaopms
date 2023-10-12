@@ -2270,8 +2270,8 @@ class bugZen extends bug
         /* Get plan list that has been changed. */
         if($bug->plan != $oldBug->plan)
         {
-            if(!empty($oldBug->plan)) $unlinkPlans[$oldBug->plan] = empty($unlinkPlans[$oldBug->plan]) ? $bugID : "{$unlinkPlans[$oldBug->plan]},{$bugID}";
-            if(!empty($bug->plan))    $link2Plans[$bug->plan]     = empty($link2Plans[$bug->plan])     ? $bugID : "{$link2Plans[$bug->plan]},{$bugID}";
+            if(!empty($oldBug->plan)) $unlinkPlans[$oldBug->plan] = empty($unlinkPlans[$oldBug->plan]) ? $bugID : "{$unlinkPlans[$oldBug->plan]},{$oldBug->id}";
+            if(!empty($bug->plan))    $link2Plans[$bug->plan]     = empty($link2Plans[$bug->plan])     ? $bugID : "{$link2Plans[$bug->plan]},{$oldBug->id}";
         }
 
         return array($toTaskIdList, $unlinkPlans, $link2Plans);
