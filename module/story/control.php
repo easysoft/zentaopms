@@ -3115,7 +3115,7 @@ class story extends control
      */
     public function ajaxGetProductUserStories($productID, $branchID = 0, $requirementList = 0)
     {
-        $URS = $this->story->getProductStoryPairs($productID, $branchID, 0, 'active', 'id_desc', 0, '', 'requirement');
+        $URS = $this->story->getProductStoryPairs($productID, $branchID, 0, 'active,launched', 'id_desc', 0, '', 'requirement');
 
         return print(html::select('URS[]', $URS, $requirementList, "class='form-control chosen' multiple"));
     }
