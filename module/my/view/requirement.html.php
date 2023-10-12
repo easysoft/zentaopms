@@ -146,7 +146,6 @@
           <td class='c-product' title="<?php echo $child->productTitle;?>"><?php echo $child->productTitle;?></td>
           <td class='c-user'><?php echo zget($users, $child->openedBy);?></td>
           <td class='c-hours'><?php echo $child->estimate . $config->hourUnit;?></td>
-          <td class='c-stage'><?php echo zget($lang->story->stageList, $child->stage);?></td>
           <td class='c-actions'>
             <?php
             if($canBeChanged)
