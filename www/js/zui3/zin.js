@@ -381,6 +381,7 @@
                 else if(data.load)
                 {
                     if(data.load === 'table') loadTable();
+                    if(data.load === 'login') window.top.location.href = $.createLink('user', 'login', 'referer=' + btoa(url));
                     else if(typeof data.load === 'string') loadPage(data.load);
                     else if(data.load === true) loadCurrentPage();
                     else if(typeof data.load === 'object')
@@ -1024,6 +1025,11 @@
         {
             if(data === 'table') return loadTable();
             if(data === 'modal') return loadModal();
+            if(data === 'login')
+            {
+                window.top.location.href = $.createLink('user', 'login', 'referer=' + btoa(currentAppUrl));
+                return;
+            }
             data = {url: data};
         }
 
