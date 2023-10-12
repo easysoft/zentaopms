@@ -499,6 +499,8 @@ class releaseModel extends model
         $release->stories = trim(str_replace(",$storyID,", ',', ",$release->stories,"), ',');
         $this->dao->update(TABLE_RELEASE)->set('stories')->eq($release->stories)->where('id')->eq((int)$releaseID)->exec();
         $this->loadModel('action')->create('story', $storyID, 'unlinkedfromrelease', '', $releaseID);
+
+        $this->loadModel('story')->setStage($storyID);
     }
 
     /**
@@ -520,7 +522,12 @@ class releaseModel extends model
         $this->dao->update(TABLE_RELEASE)->set('stories')->eq($release->stories)->where('id')->eq((int)$releaseID)->exec();
 
         $this->loadModel('action');
-        foreach($this->post->storyIdList as $unlinkStoryID) $this->action->create('story', $unlinkStoryID, 'unlinkedfromrelease', '', $releaseID);
+        $this->loadModel('story');
+        foreach($this->post->storyIdList as $unlinkStoryID)
+        {
+            $this->action->create('story', $unlinkStoryID, 'unlinkedfromrelease', '', $releaseID);
+            $this->story->setStage($unlinkStoryID);
+        }
     }
 
     /**
