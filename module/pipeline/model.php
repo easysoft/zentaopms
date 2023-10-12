@@ -80,11 +80,11 @@ class pipelineModel extends model
      *
      * @return array
      */
-    public function getPairs($type)
+    public function getPairs($type = null)
     {
         $pipeline = $this->dao->select('id,name')->from(TABLE_PIPELINE)
             ->where('deleted')->eq('0')
-            ->AndWhere('type')->eq($type)
+            ->beginIF($type)->AndWhere('type')->eq($type)->fi()
             ->orderBy('id')->fetchPairs('id', 'name');
 
         return $pipeline;
