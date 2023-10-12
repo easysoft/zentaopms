@@ -405,6 +405,7 @@ class productplanModel extends model
         {
             $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
             dao::$errors['branch[]'] = sprintf($this->lang->error->notempty, $this->lang->product->branch);
+            return false;
         }
 
         if($plan->parent > 0)

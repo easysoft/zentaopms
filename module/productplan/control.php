@@ -773,12 +773,12 @@ class productplan extends control
      * AJAX: Get last plan.
      *
      * @param  int    $productID
-     * @param  int    $branch
+     * @param  string $branch
      * @param  int    $parent
      * @access public
      * @return string
      */
-    public function ajaxGetLast(int $productID, int $branch = 0, int $parent = 0)
+    public function ajaxGetLast(int $productID, string $branch = '', int $parent = 0)
     {
         $lastPlan = $this->productplan->getLast($productID, $branch, $parent);
         echo json_encode($lastPlan);
@@ -852,8 +852,8 @@ class productplan extends control
         if(empty($diffBranchesTip)) return;
 
         /* Find stories and bugs in diff branches. */
-        $unlinkStories = $this->productplanTao->checkUnlinkObjects($diffBranches, $parentID, 'story');
-        $unlinkBugs    = $this->productplanTao->checkUnlinkObjects($diffBranches, $parentID, 'bug');
+        $unlinkStories = $this->productplan->checkUnlinkObjects($diffBranches, $parentID, 'story');
+        $unlinkBugs    = $this->productplan->checkUnlinkObjects($diffBranches, $parentID, 'bug');
         if(empty($unlinkStories) && empty($unlinkBugs)) return;
 
         $this->lang->productplan->diffBranchesTip = str_replace('@branch@', $this->lang->product->branchName[$product->type], $this->lang->productplan->diffBranchesTip);

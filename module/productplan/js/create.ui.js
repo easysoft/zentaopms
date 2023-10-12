@@ -3,7 +3,7 @@ $(document).on('change', 'input[name=begin],input[name=end]', function()
     $("input[name='delta']").prop('checked', false);
 });
 
-$(document).on('click', 'button[type=submit]', function()
+window.clickSubmit = function()
 {
     const parentPlan = $('input[name=parent]').val();
     let branches     = $('[name^=branch]').val();
@@ -27,4 +27,4 @@ $(document).on('click', 'button[type=submit]', function()
         });
         return false;
     }
-});
+}
