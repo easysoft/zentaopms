@@ -87,8 +87,8 @@ r($action->getDynamicTest($accountList[0], $typeList[0], $productIDList[0], $pro
 r($action->getDynamicTest($accountList[0], $typeList[0], $productIDList[0], $projectIDList[0], $executionIDList[0], $dateList[1])) && p() && e('30');  // 查找今天的动态
 
 su('dev17');
-r($action->getDynamicTest())                                                                                                       && p() && e('5');  // 查找全部动态
-r($action->getDynamicTest($accountList[1]))                                                                                        && p() && e('2');  // 查找用户admin动态
+r($action->getDynamicTest())                                                                                                       && p() && e('4');  // 查找全部动态
+r($action->getDynamicTest($accountList[1]))                                                                                        && p() && e('1');  // 查找用户admin动态
 r($action->getDynamicTest($accountList[2]))                                                                                        && p() && e('3');  // 查找用户dev17动态
 r($action->getDynamicTest($accountList[3]))                                                                                        && p() && e('0');  // 查找用户test18动态
 r($action->getDynamicTest($accountList[0], $typeList[1]))                                                                          && p() && e('2');  // 查找今天的动态
@@ -103,4 +103,4 @@ r($action->getDynamicTest($accountList[0], $typeList[0], $productIDList[0], $pro
 r($action->getDynamicTest($accountList[0], $typeList[0], $productIDList[0], $projectIDList[0], $executionIDList[1]))               && p() && e('0');  // 查找执行1的动态
 r($action->getDynamicTest($accountList[0], $typeList[0], $productIDList[0], $projectIDList[0], $executionIDList[2]))               && p() && e('0');  // 查找执行2的动态
 r($action->getDynamicTest($accountList[0], $typeList[0], $productIDList[0], $projectIDList[0], $executionIDList[3]))               && p() && e('0');  // 查找执行3的动态
-r($action->getDynamicTest($accountList[0], $typeList[0], $productIDList[0], $projectIDList[0], $executionIDList[0], $dateList[1])) && p() && e('3');  // 查找今天的动态
+r($action->getDynamicTest($accountList[0], $typeList[0], $productIDList[0], $projectIDList[0], $executionIDList[0], $dateList[1])) && p() && e('2');  // 查找今天的动态

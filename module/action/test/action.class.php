@@ -372,11 +372,11 @@ class actionTest
         global $tester;
         $actions = $tester->dao->select('*')->from(TABLE_ACTION)->where('id')->in($actions)->fetchAll('id');
 
-        $objects = $this->objectModel->getRelatedDataByActions($actions);
+        list($objectNames, $relatedProjects, $requirements) = $this->objectModel->getRelatedDataByActions($actions);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects[$field];
+        return ${$field};
     }
 
     /**
