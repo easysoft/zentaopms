@@ -208,7 +208,7 @@ formBatchPanel
             picker
             (
                 setClass('duplicate-select hidden'),
-                set::name('duplicate'),
+                set::name('duplicateBug'),
                 set::items(array()),
                 set::placeholder($lang->bug->placeholder->duplicate),
                 set::required(true),

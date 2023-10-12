@@ -94,5 +94,5 @@ function setDuplicate(event)
     const $currentRow = $target.closest('tr');
     const resolution  = $target.val();
 
-    $currentRow.find('[data-name="duplicate"]').toggleClass('hidden', resolution != 'duplicate');
+    $currentRow.find('[data-name="duplicateBug"]').toggleClass('hidden', resolution != 'duplicate');
 }
