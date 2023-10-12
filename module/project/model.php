@@ -1409,7 +1409,7 @@ class projectModel extends model
     {
         $oldProject = $this->getById($projectID);
 
-        $project = $this->loadModel('file')->processImgURL($postData, $this->config->project->editor->start, $postData->uid);
+        $project = $this->loadModel('file')->processImgURL($postData, $this->config->project->editor->start, $this->post->uid);
 
         $this->projectTao->doStart($projectID, $project);
 
