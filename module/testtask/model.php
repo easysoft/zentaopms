@@ -464,20 +464,20 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getLinkableCasesBySuite(int $productID, object $task, int $suite, string $query, array$linkedCases, object $pager): array
+    public function getLinkableCasesBySuite(int $productID, object $task, int $suite, string $query = '', array$linkedCases = array(), object $pager = null): array
     {
         if(strpos($query, '`product`') !== false) $query = str_replace('`product`', 't1.`product`', $query);
 
         return $this->dao->select('t1.*, t2.version AS version')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_SUITECASE)->alias('t2')->on('t1.id=t2.case')
-            ->where($query)
-            ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
-            ->andWhere('t2.suite')->eq($suite)
+            ->where('t1.deleted')->eq('0')
             ->andWhere('t1.product')->eq($productID)
-            ->andWhere('status')->ne('wait')
+            ->andWhere('t1.status')->ne('wait')
+            ->andWhere('t2.suite')->eq($suite)
+            ->beginIF($query)->andWhere($query)->fi()
             ->beginIF($linkedCases)->andWhere('t1.id')->notIN($linkedCases)->fi()
             ->beginIF($task->branch !== '')->andWhere('t1.branch')->in("0,{$task->branch}")->fi()
-            ->andWhere('deleted')->eq('0')
+            ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
             ->orderBy('id desc')
             ->page($pager)
             ->fetchAll();
