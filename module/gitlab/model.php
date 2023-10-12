@@ -655,7 +655,7 @@ class gitlabModel extends model
      */
     public function apiGetGroups($gitlabID, $orderBy = 'id_desc', $minRole = '', $keyword = '')
     {
-        $apiRoot = $this->getApiRoot($gitlabID, false);
+        $apiRoot = $this->getApiRoot($gitlabID, $minRole == 'owner' ? true : false);
         $url     = sprintf($apiRoot, "/groups");
         if($minRole == 'owner')
         {
