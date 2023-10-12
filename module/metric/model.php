@@ -559,6 +559,9 @@ class metricModel extends model
                     ->andWhere('type')->in('sprint,stage')
                     ->fetchPairs();
                 break;
+            case 'code':
+                $objectPairs = $this->loadModel('repo')->getRepoPairs('repo');
+                break;
             default:
                 $objectPairs = $this->loadModel($scope)->getPairs();
                 break;
