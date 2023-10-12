@@ -1,0 +1,6 @@
+title: table zt_case
+author: Gang Liu
+version: "1.0"
+fields:
+  - field: project
+    range: 1{5},2{5}
