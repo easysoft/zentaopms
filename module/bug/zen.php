@@ -946,7 +946,7 @@ class bugZen extends bug
     {
         $bug = $formData->setIF($this->lang->navGroup->bug != 'qa', 'project', $this->session->project)
             ->setIF($formData->data->assignedTo != '', 'assignedDate', helper::now())
-            ->setIF($formData->data->story !== false, 'storyVersion', $this->loadModel('story')->getVersion($formData->data->story))
+            ->setIF($formData->data->story !== false, 'storyVersion', $this->loadModel('story')->getVersion((int)$formData->data->story))
             ->get();
 
         return $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->create['id'], $this->post->uid);
@@ -992,7 +992,7 @@ class bugZen extends bug
             ->setIF($formData->data->resolution  != '' && $formData->data->resolution   != 'duplicate', 'duplicateBug', 0)
             ->setIF($formData->data->assignedTo  == '' && $oldBug->status               == 'closed', 'assignedTo', 'closed')
             ->setIF($formData->data->resolution  != '', 'confirmed', 1)
-            ->setIF($formData->data->story && $formData->data->story != $oldBug->story, 'storyVersion', $this->loadModel('story')->getVersion($formData->data->story))
+            ->setIF($formData->data->story && $formData->data->story != $oldBug->story, 'storyVersion', $this->loadModel('story')->getVersion((int)$formData->data->story))
             ->stripTags($this->config->bug->editor->edit['id'], $this->config->allowedTags)
             ->get();
 

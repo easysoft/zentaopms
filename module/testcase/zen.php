@@ -613,7 +613,7 @@ class testcaseZen extends testcase
             ->setDefault('stage', '')
             ->setDefault('deleteFiles', array())
             ->setDefault('storyVersion', $oldCase->storyVersion)
-            ->setIF($formData->data->story != false && $formData->data->story != $oldCase->story, 'storyVersion', $this->loadModel('story')->getVersion($formData->data->story))
+            ->setIF($formData->data->story != false && $formData->data->story != $oldCase->story, 'storyVersion', $this->loadModel('story')->getVersion((int)$formData->data->story))
             ->setIF(!$formData->data->linkCase, 'linkCase', '')
             ->setIF($formData->data->auto, 'auto', 'auto')
             ->setIF($formData->data->auto && $formData->data->script, 'script', htmlentities($formData->data->script))
@@ -1289,7 +1289,7 @@ class testcaseZen extends testcase
             ->setIF($this->post->auto && $this->post->script, 'script', $this->post->script ? htmlentities($this->post->script) : '')
             ->setIF($this->app->tab == 'project',   'project',   $this->session->project)
             ->setIF($this->app->tab == 'execution', 'execution', $this->session->execution)
-            ->setIF($this->post->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
+            ->setIF($this->post->story, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
             ->get();
     }
 
@@ -1323,7 +1323,7 @@ class testcaseZen extends testcase
             if($testcase->story && !isset($storyVersions[$testcase->story]))
             {
                 if(count($storyVersions) == 0) $this->loadModel('story');
-                $testcase->storyVersion = $this->story->getVersion($testcase->story);
+                $testcase->storyVersion = $this->story->getVersion((int)$testcase->story);
                 $storyVersions[$testcase->story] = $testcase->storyVersion;
             }
             unset($testcase->review);

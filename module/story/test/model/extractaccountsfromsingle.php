@@ -3,6 +3,8 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
+zdTable('story')->gen(10);
+
 /**
 
 title=测试 storyModel->extractAccountsFromSingle();
@@ -18,13 +20,13 @@ pid=1
 
 global $tester;
 $tester->loadModel('story');
-$story1 = $tester->story->getById(2); 
+$story1 = $tester->story->getById(2);
 $story2 = $tester->story->getById(4);
 
 $accounts1 = $tester->story->extractAccountsFromSingle($story1);
 $accounts2 = $tester->story->extractAccountsFromSingle($story2);
 
-r(count($accounts1)) && p()    && e('1');     // 根据需求2获取的accounts数量
+r(count($accounts1)) && p()    && e('2');     // 根据需求2获取的accounts数量
 r(count($accounts2)) && p()    && e('1');     // 根据需求4获取的accounts数量
 r($accounts1[0])     && p('0') && e('user2'); // 根据需求2获取的account详情
 r($accounts2[0])     && p('0') && e('dev4');  // 根据需求4获取的account详情

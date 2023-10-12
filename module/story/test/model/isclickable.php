@@ -3,6 +3,8 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
+zdTable('story')->gen(5);
+
 /**
 
 title=测试 storyModel->recall();

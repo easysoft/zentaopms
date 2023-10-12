@@ -2381,7 +2381,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getUserStories($account, $type = 'assignedTo', $orderBy = 'id_desc', $pager = null, $storyType = 'story', $includeLibStories = true, $shadow = 0, $productID = 0)
+    public function getUserStories(string $account, string $type = 'assignedTo', string $orderBy = 'id_desc', object|null $pager = null, string $storyType = 'story', bool $includeLibStories = true, string|int $shadow = 0, int $productID = 0): array
     {
         $sql = $this->dao->select("t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle, t2.shadow as shadow")->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id');
@@ -2448,7 +2448,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getIdListWithTask($executionID)
+    public function getIdListWithTask(int $executionID): array
     {
         return $this->dao->select('story')->from(TABLE_TASK)
             ->where('execution')->eq($executionID)
@@ -2465,7 +2465,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getTeamMembers($storyID, $actionType)
+    public function getTeamMembers(int $storyID, string $actionType): array
     {
         $teamMembers = array();
         if($actionType == 'changed')
@@ -2474,7 +2474,7 @@ class storyModel extends model
                 ->where('story')->eq($storyID)
                 ->andWhere('status')->ne('cancel')
                 ->andWhere('deleted')->eq(0)
-                ->fetchPairs();
+                ->fetchPairs('execution', 'execution');
             if($executions) $teamMembers = $this->dao->select('account')->from(TABLE_TEAM)->where('root')->in($executions)->andWhere('type')->eq('execution')->fetchPairs('account');
         }
         else
@@ -2485,7 +2485,7 @@ class storyModel extends model
                 ->where('t1.story')->eq((int)$storyID)
                 ->andWhere('t2.status')->eq('doing')
                 ->andWhere('t2.deleted')->eq(0)
-                ->fetchPairs();
+                ->fetchPairs('project', 'project');
             if($projects) $teamMembers = $this->dao->select('account')->from(TABLE_TEAM)->where('root')->in($projects)->andWhere('type')->eq('project')->fetchPairs('account');
         }
         return $teamMembers;
@@ -2498,9 +2498,9 @@ class storyModel extends model
      * @access public
      * @return int
      */
-    public function getVersion($storyID)
+    public function getVersion(int $storyID): int
     {
-        return (int)$this->dao->select('version')->from(TABLE_STORY)->where('id')->eq((int)$storyID)->fetch('version');
+        return (int)$this->dao->select('version')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch('version');
     }
 
     /**
@@ -2510,9 +2510,9 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getVersions($storyID)
+    public function getVersions(string|array $storyIdList): array
     {
-        return $this->dao->select('id, version')->from(TABLE_STORY)->where('id')->in($storyID)->fetchPairs();
+        return $this->dao->select('id, version')->from(TABLE_STORY)->where('id')->in($storyIdList)->fetchPairs('id', 'version');
     }
 
     /**
@@ -2571,11 +2571,9 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function batchGetStoryStage($stories)
+    public function batchGetStoryStage(array $storyIdList): array
     {
-        return $this->dao->select('*')->from(TABLE_STORYSTAGE)
-            ->where('story')->in($stories)
-            ->fetchGroup('story', 'branch');
+        return $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($storyIdList)->fetchGroup('story', 'branch');
     }
 
     /**
@@ -2585,7 +2583,7 @@ class storyModel extends model
      * @access public
      * @return array|object
      */
-    public function checkNeedConfirm($data)
+    public function checkNeedConfirm(array|object $data): array|object
     {
         $objectList = is_object($data) ? array($data->id => $data) : $data;
 
@@ -2627,6 +2625,7 @@ class storyModel extends model
         $storyPairs = array(0 => '');
         foreach($stories as $story)
         {
+            $property = '';
             if($type == 'short')
             {
                 $property = '[p' . (!empty($this->lang->story->priList[$story->pri]) ? $this->lang->story->priList[$story->pri] : 0) . ', ' . $story->estimate . "{$this->config->hourUnit}]";
@@ -2634,10 +2633,6 @@ class storyModel extends model
             elseif($type == 'full')
             {
                 $property = '(' . $this->lang->story->pri . ':' . (!empty($this->lang->story->priList[$story->pri]) ? $this->lang->story->priList[$story->pri] : 0) . ',' . $this->lang->story->estimate . ':' . $story->estimate . ')';
-            }
-            else
-            {
-                $property = '';
             }
             $storyPairs[$story->id] = $story->id . ':' . $story->title . ' ' . $property;
         }
@@ -2653,7 +2648,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function extractAccountsFromList($stories)
+    public function extractAccountsFromList(array $stories): array
     {
         $accounts = array();
         foreach($stories as $story)
@@ -2673,7 +2668,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function extractAccountsFromSingle($story)
+    public function extractAccountsFromSingle(object $story): array
     {
         $accounts = array();
         if(!empty($story->openedBy))     $accounts[] = $story->openedBy;
@@ -2691,7 +2686,7 @@ class storyModel extends model
      * @access public
      * @return void
      */
-    public function mergeChartOption(string $chartType)
+    public function mergeChartOption(string $chartType): void
     {
         $chartOption  = $this->lang->story->report->$chartType;
         $commonOption = $this->lang->story->report->options;
@@ -2989,7 +2984,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getKanbanGroupData($stories)
+    public function getKanbanGroupData(array $stories): array
     {
         $storyGroup = array();
         foreach($stories as $story) $storyGroup[$story->stage][$story->id] = $story;
@@ -3005,7 +3000,7 @@ class storyModel extends model
      * @access public
      * @return bool|array
      */
-    public function getToAndCcList($story, $actionType)
+    public function getToAndCcList(object $story, string $actionType): bool|array
     {
         /* Set toList and ccList. */
         $toList = $story->assignedTo;
@@ -3059,9 +3054,9 @@ class storyModel extends model
      * @param  object $story
      * @param  string $action
      * @access public
-     * @return void
+     * @return bool
      */
-    public static function isClickable($story, $action)
+    public static function isClickable(object $story, string $action): bool
     {
         static $shadowProducts = array();
         if(empty($shadowProducts[$story->product]))
@@ -3109,7 +3104,7 @@ class storyModel extends model
      * @access public
      * @return string
      */
-    public function buildOperateMenu($story, $type = 'view', $execution = '', $storyType = 'story')
+    public function buildOperateMenu(object $story, string $type = 'view', object|null $execution = null, string $storyType = 'story'): array
     {
         $menu       = '';
         $mainMenu   = array();
@@ -3151,8 +3146,10 @@ class storyModel extends model
                 $dropMenus['caseActions'][] = commonModel::buildActionItem('testcase', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=0&$params", null, array('text' => $this->lang->testcase->batchCreate, 'data-toggle' => 'modal', 'data-size' => 'lg'));
             }
 
-            if(($this->app->tab == 'execution' or (!empty($execution) and $execution->multiple === '0')) and $story->status == 'active' and $story->type == 'story')
-            $mainMenu[] = commonModel::buildActionItem('task', 'create', "execution={$this->session->execution}&{$params}&moduleID=$story->module", $story, array('icon' => 'plus', 'text' => $this->lang->task->create));
+            if(($this->app->tab == 'execution' or (!empty($execution) and $execution->multiple == '0')) and $story->status == 'active' and $story->type == 'story')
+            {
+                $mainMenu[] = commonModel::buildActionItem('task', 'create', "execution={$this->session->execution}&{$params}&moduleID=$story->module", $story, array('icon' => 'plus', 'text' => $this->lang->task->create));
+            }
 
             //$menu .= "<div class='divider'></div>";
             //$menu .= $this->buildFlowMenu('story', $story, $type, 'direct');
@@ -3174,7 +3171,7 @@ class storyModel extends model
      * @access public
      * @return array|object
      */
-    public function mergeReviewer(object|array $stories, $isObject = false)
+    public function mergeReviewer(object|array $stories, $isObject = false): array|object
     {
         $rawQuery = $this->dao->get();
         if($isObject)

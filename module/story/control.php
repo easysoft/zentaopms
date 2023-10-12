@@ -59,7 +59,7 @@ class story extends control
 
         if(!empty($_POST))
         {
-            helper::setcookie('lastStoryModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            helper::setcookie('lastStoryModule', $this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
             /* Get story data from post. */
             $storyData = $this->storyZen->buildStoryForCreate($objectID, $bugID);
@@ -90,7 +90,7 @@ class story extends control
                 return $this->send($response);
             }
 
-            $response['locate'] = $this->storyZen->getAfterCreateLocation($productID, $branch, $objectID, $storyID, $storyType);
+            $response['locate'] = $this->storyZen->getAfterCreateLocation((int)$productID, $branch, $objectID, $storyID, $storyType);
             return $this->send($response);
         }
 
