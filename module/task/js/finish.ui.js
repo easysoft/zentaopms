@@ -8,9 +8,22 @@ $(function()
         totalConsumed = Math.round(totalConsumed * 1000) / 1000;
         $('#totalConsumed').html(totalConsumed);
     })
-
-    $('#submit').on('click', function()
-    {
-        if(task.consumed != 0 && $('#currentConsumed').val() == 0 && $('#currentConsumed').val() != '') return confirm(consumedEmpty);
-    })
 })
+
+window.clickSubmit = function()
+{
+    if(task.consumed != 0 && $('#currentConsumed').val() == 0 && $('#currentConsumed').val() != '')
+    {
+        zui.Modal.confirm(consumedEmpty).then(function(result)
+        {
+            if(result)
+            {
+                $.ajaxSubmit({
+                    url:  $('#finishForm').attr('action'),
+                    data: new FormData($('#finishForm')[0])
+                });
+            }
+        });
+        return false;
+    }
+}

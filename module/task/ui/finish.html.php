@@ -119,6 +119,8 @@ else
 
     formPanel
     (
+        setID('finishForm'),
+        set::ajax(array('beforeSubmit' => jsRaw("clickSubmit"))),
         $consumedControl,
         formGroup
         (
