@@ -375,7 +375,7 @@ class actionModel extends model
 
             ->orderBy($orderBy)
             ->page($pager)
-            ->query();
+            ->fetchAll('objectID');
 
         return $trashes;
     }
