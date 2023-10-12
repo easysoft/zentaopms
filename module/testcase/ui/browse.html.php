@@ -27,9 +27,8 @@ $canImportToLib             = hasPriv('testcase', 'importToLib') && !$isOnlyScen
 $canGroupBatch              = ($canBatchRun || $canBatchEdit || $canBatchReview || $canBatchDelete || $canBatchChangeType || $canBatchConfirmStoryChange);
 $canBatchAction             = ($canGroupBatch || $canBatchChangeBranch || $canBatchChangeModule || $canBatchChangeScene || $canImportToLib);
 
-$caseProductIds = array();
-foreach($cases as $case) $caseProductIds[$case->product] = $case->product;
-$caseProductID = count($caseProductIds) > 1 ? 0 : $productID;
+$productCount  = count(array_unique(array_map(function($case){return $case->product;}, $cases)));
+$caseProductID = $productCount > 1 ? 0 : $productID;
 
 $navActions = array();
 if($canBatchReview || $canBatchDelete || $canBatchChangeType || $canBatchConfirmStoryChange)
