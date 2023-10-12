@@ -12,12 +12,19 @@ window.afterPageUpdate = function($target, info, options)
     window.renderDTable(current.id, resultHeader, resultData);
     window.renderChart(current.id, resultHeader, resultData);
     if(viewType == 'multiple') window.renderCheckedLabel();
+    if(viewType == 'single') window.addTitle2Star();
     $(window).on('resize', window.renderCheckedLabel);
     window.initFilterPanel();
 }
-window.scrollToItem = function() {
-  var item = $('.metric-tree').find('.metric-' + current.id);
-  item.scrollIntoView();
+window.scrollToItem = function() 
+{
+    var item = $('.metric-tree').find('.metric-' + current.id);
+    item.scrollIntoView();
+}
+
+window.addTitle2Star = function() 
+{
+    $('.metric-collect').attr('title', collectStar);
 }
 
 /* 事件处理函数。 */

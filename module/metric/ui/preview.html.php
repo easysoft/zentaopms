@@ -26,6 +26,7 @@ jsVar('chartTypeList',      $lang->metric->chartTypeList);
 jsVar('errorDateRange',     $lang->metric->errorDateRange);
 jsVar('errorCalcTimeRange', $lang->metric->errorCalcTimeRange);
 jsVar('queryScopeLang',     $lang->metric->query->scope);
+jsVar('collectStar',        $lang->metric->collectStar);
 // jsVar('pager',              usePager());
 
 if($scope == 'collect' and empty($current))
