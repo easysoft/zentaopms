@@ -3014,7 +3014,7 @@ class baseRouter
     public function dbQuery($query)
     {
         if(!$this->dbh) return false;
-        if($this->slaveDBH) return $this->slaveDBH->query($query);
+        if($this->slaveDBH && strtolower(substr($query, 0, 6)) == 'select') return $this->slaveDBH->query($query);
 
         return $this->dbh->query($query);
     }
