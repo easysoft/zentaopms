@@ -66,11 +66,8 @@ $config->db->driver          = 'mysql';   // 目前只支持MySQL数据库。Mus
 $config->db->encoding        = 'UTF8';    // 数据库编码。           Encoding of database.
 $config->db->strictMode      = true;      // 默认开启MySQL的严格模式。  Turn on the strict mode of MySQL.
 $config->db->prefix          = 'zt_';     // 数据库表名前缀。       The prefix of the table name.
-$config->db->enableSqlite    = false;      // 是否启用SQLite         Enable SQLite or not.
-$config->slaveDB->persistent = false;
-$config->slaveDB->driver     = 'mysql';
-$config->slaveDB->encoding   = 'UTF8';
-$config->slaveDB->strictMode = true;
+$config->db->enableSqlite    = false;     // 是否启用SQLite         Enable SQLite or not.
+$config->slaveDBList         = array();   // 支持多个从库。         Support multiple slave dbs.
 
 /* 可用域名后缀列表。Domain postfix lists. */
 $config->domainPostfix  = "|com|com.cn|com.hk|com.tw|com.vc|edu.cn|es|";

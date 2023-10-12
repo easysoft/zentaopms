@@ -24,7 +24,7 @@ class customModel extends model
         try
         {
             $sql  = $this->dao->select('*')->from(TABLE_LANG)->where('`lang`')->in("$currentLang,all")->andWhere('vision')->eq($this->config->vision)->orderBy('lang,id')->get();
-            $stmt = $this->dbh->query($sql);
+            $stmt = $this->app->dbQuery($sql);
 
             $allCustomLang = array();
             while($row = $stmt->fetch())
@@ -475,10 +475,10 @@ class customModel extends model
      */
     public static function mergeFeatureBar($module, $method)
     {
-        global $lang, $app, $dbh;
+        global $lang, $app;
         if(!isset($lang->$module->featureBar[$method])) return;
         $queryModule = $module == 'execution' ? 'task' : ($module == 'product' ? 'story' : $module);
-        $shortcuts   = $dbh->query('select id, title from ' . TABLE_USERQUERY . " where (`account` = '{$app->user->account}' or `common` = '1') AND `module` = '{$queryModule}' AND `shortcut` = '1' order by id")->fetchAll();
+        $shortcuts   = $app->dbQuery('select id, title from ' . TABLE_USERQUERY . " where (`account` = '{$app->user->account}' or `common` = '1') AND `module` = '{$queryModule}' AND `shortcut` = '1' order by id")->fetchAll();
 
         if($shortcuts)
         {

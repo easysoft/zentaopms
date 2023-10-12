@@ -410,4 +410,25 @@ class model extends baseModel
 
         $app->triggerError("the module {$moduleName} has no {$method} method", __FILE__, __LINE__, true);
     }
+
+    /**
+     * Load dao of bi.
+     *
+     * @access public
+     * @return void
+     */
+    public function loadBIDAO()
+    {
+        global $config, $biDAO;
+        if(is_object($biDAO)) return $this->dao = $biDAO;
+
+        if(!isset($config->biDB)) return;
+
+        $driver = $config->db->driver;
+        $biDAO = new $driver();
+
+        $biDAO->slaveDBH = $this->app->connectByPDO($config->biDB, 'BI');
+
+        $this->dao = $biDAO;
+    }
 }

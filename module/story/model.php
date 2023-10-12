@@ -3061,8 +3061,8 @@ class storyModel extends model
         static $shadowProducts = array();
         if(empty($shadowProducts[$story->product]))
         {
-            global $dbh;
-            $stmt = $dbh->query('SELECT id FROM ' . TABLE_PRODUCT . " WHERE shadow = 1")->fetchAll();
+            global $app;
+            $stmt = $app->dbQuery('SELECT id FROM ' . TABLE_PRODUCT . " WHERE shadow = 1")->fetchAll();
             foreach($stmt as $row) $shadowProducts[$row->id] = $row->id;
         }
 
@@ -4304,11 +4304,11 @@ class storyModel extends model
         {
             if($postData->exportType == 'selected')
             {
-                $stmt  = $this->dbh->query("SELECT * FROM " . TABLE_STORY . "WHERE `id` IN({$selectedIDList})" . " ORDER BY " . helper::wrapSqlAfterOrderBy($orderBy));
+                $stmt  = $this->app->dbQuery("SELECT * FROM " . TABLE_STORY . "WHERE `id` IN({$selectedIDList})" . " ORDER BY " . helper::wrapSqlAfterOrderBy($orderBy));
             }
             else
             {
-                $stmt  = $this->dbh->query($this->session->storyQueryCondition . " ORDER BY " . helper::wrapSqlAfterOrderBy($orderBy));
+                $stmt  = $this->app->dbQuery($this->session->storyQueryCondition . " ORDER BY " . helper::wrapSqlAfterOrderBy($orderBy));
             }
             while($row = $stmt->fetch()) $stories[$row->id] = $row;
         }

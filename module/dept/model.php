@@ -69,7 +69,7 @@ class deptModel extends model
     public function getOptionMenu($rootDeptID = 0)
     {
         $deptMenu = array();
-        $stmt = $this->dbh->query($this->buildMenuQuery($rootDeptID));
+        $stmt = $this->app->dbQuery($this->buildMenuQuery($rootDeptID));
         $depts = array();
         while($dept = $stmt->fetch()) $depts[$dept->id] = $dept;
 
@@ -138,7 +138,7 @@ class deptModel extends model
     {
         $deptMenu = array();
         $data     = new stdclass();
-        $stmt     = $this->dbh->query($this->buildMenuQuery($rootDeptID));
+        $stmt     = $this->app->dbQuery($this->buildMenuQuery($rootDeptID));
         while($dept = $stmt->fetch())
         {
             $data = new stdclass();

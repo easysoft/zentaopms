@@ -307,10 +307,10 @@ class commonModel extends model
      */
     public static function formConfig(string $module, string $method): array
     {
-        global $config, $app, $dbh;
+        global $config, $app;
         if($config->edition == 'open') return array();
 
-        $required   = $dbh->query("SELECT * FROM " . TABLE_WORKFLOWRULE . " WHERE `type` = 'system' and `rule` = 'notempty'")->fetch();
+        $required   = $app->dbQuery("SELECT * FROM " . TABLE_WORKFLOWRULE . " WHERE `type` = 'system' and `rule` = 'notempty'")->fetch();
         $fields     = $app->control->loadModel('flow')->getExtendFields($module, $method);
         $formConfig = array();
         $type       = 'string';
@@ -593,12 +593,12 @@ class commonModel extends model
         $productID = isset($_SESSION['product']) ? $_SESSION['product'] : 0;
         if($productID)
         {
-            $product = $app->dbh->query("SELECT id  FROM " . TABLE_PRODUCT . " WHERE `deleted` = '0' and vision = '{$config->vision}' and id = '{$productID}'")->fetch();
+            $product = $app->dbQuery("SELECT id  FROM " . TABLE_PRODUCT . " WHERE `deleted` = '0' and vision = '{$config->vision}' and id = '{$productID}'")->fetch();
             if(empty($product)) $productID = 0;
         }
         if(!$productID and $app->user->view->products)
         {
-            $product = $app->dbh->query("SELECT id FROM " . TABLE_PRODUCT . " WHERE `deleted` = '0' and vision = '{$config->vision}' and id " . helper::dbIN($app->user->view->products) . " order by `order` desc limit 1")->fetch();
+            $product = $app->dbQuery("SELECT id FROM " . TABLE_PRODUCT . " WHERE `deleted` = '0' and vision = '{$config->vision}' and id " . helper::dbIN($app->user->view->products) . " order by `order` desc limit 1")->fetch();
             if($product) $productID = $product->id;
         }
 
@@ -607,7 +607,7 @@ class commonModel extends model
             $condition  = " WHERE `deleted` = '0' AND `vision` = 'lite' AND `model` = 'kanban'";
             if(!$app->user->admin) $condition .= " AND `id` " . helper::dbIN($app->user->view->projects);
 
-            $object = $app->dbh->query("select id from " . TABLE_PROJECT . $condition . ' LIMIT 1')->fetch();
+            $object = $app->dbQuery("select id from " . TABLE_PROJECT . $condition . ' LIMIT 1')->fetch();
             if(empty($object)) unset($lang->createIcons['story'], $lang->createIcons['task'], $lang->createIcons['execution']);
         }
 
@@ -675,7 +675,7 @@ class commonModel extends model
                         if($config->vision == 'lite')
                         {
                             $projectID = isset($_SESSION['project']) ? $_SESSION['project'] : 0;
-                            $projects  = $app->dbh->query("SELECT t2.id FROM " . TABLE_PROJECTPRODUCT . " AS t1 LEFT JOIN " . TABLE_PROJECT . " AS t2 ON t1.project = t2.id WHERE t1.`product` = '{$productID}' and t2.`type` = 'project' and t2.id " . helper::dbIN($app->user->view->projects) . " ORDER BY `order` desc")->fetchAll();
+                            $projects  = $app->dbQuery("SELECT t2.id FROM " . TABLE_PROJECTPRODUCT . " AS t1 LEFT JOIN " . TABLE_PROJECT . " AS t2 ON t1.project = t2.id WHERE t1.`product` = '{$productID}' and t2.`type` = 'project' and t2.id " . helper::dbIN($app->user->view->projects) . " ORDER BY `order` desc")->fetchAll();
 
                             $projectIdList = array();
                             foreach($projects as $project) $projectIdList[$project->id] = $project->id;
@@ -1782,14 +1782,14 @@ EOF;
 
         if(commonModel::isTutorialMode()) return '';
 
-        $object = $app->dbh->query('SELECT project,`type` FROM ' . TABLE_EXECUTION . " WHERE `id` = '$executionID'")->fetch();
+        $object = $app->dbQuery('SELECT project,`type` FROM ' . TABLE_EXECUTION . " WHERE `id` = '$executionID'")->fetch();
         if(empty($object)) return '';
 
         $executionPairs = array();
         $userCondition  = !$app->user->admin ? " AND `id` " . helper::dbIN($app->user->view->sprints) : '';
         $orderBy        = $object->type == 'stage' ? 'ORDER BY `id` ASC' : 'ORDER BY `id` DESC';
 
-        $executionList  = $app->dbh->query("SELECT id,name,parent,project FROM " . TABLE_EXECUTION . " WHERE `project` = '{$object->project}' AND `deleted` = '0' $userCondition $orderBy")->fetchAll();
+        $executionList  = $app->dbQuery("SELECT id,name,parent,project FROM " . TABLE_EXECUTION . " WHERE `project` = '{$object->project}' AND `deleted` = '0' $userCondition $orderBy")->fetchAll();
         $executions     = array();
         foreach($executionList as $execution) $executions[$execution->id] = $execution;
 
@@ -1848,7 +1848,7 @@ EOF;
             if(empty($types)) return '';
             $condition .= ' AND `type` in (' . trim($types, ',') . ')';
         }
-        $pipelineList = $app->dbh->query("SELECT `type`,name,url FROM " . TABLE_PIPELINE . " WHERE `deleted` = '0' $condition order by type")->fetchAll();
+        $pipelineList = $app->dbQuery("SELECT `type`,name,url FROM " . TABLE_PIPELINE . " WHERE `deleted` = '0' $condition order by type")->fetchAll();
         if(empty($pipelineList)) return '';
 
         $appCommon = isset($lang->db->custom['devopsMenu']['menu']['app']) ? $lang->db->custom['devopsMenu']['menu']['app'] : $lang->app->common;
@@ -2027,12 +2027,12 @@ EOF;
 
             if($oldID and $oldStatus and $newStatus and !$newSubStatus and $oldStatus != $newStatus)
             {
-                $field = $app->dbh->query('SELECT options FROM ' . TABLE_WORKFLOWFIELD . " WHERE `module` = '$moduleName' AND `field` = 'subStatus'")->fetch();
+                $field = $app->dbQuery('SELECT options FROM ' . TABLE_WORKFLOWFIELD . " WHERE `module` = '$moduleName' AND `field` = 'subStatus'")->fetch();
                 if(!empty($field->options)) $field->options = json_decode($field->options, true);
 
                 if(!empty($field->options[$newStatus]['default']))
                 {
-                    $flow    = $app->dbh->query('SELECT `table` FROM ' . TABLE_WORKFLOW . " WHERE `module`='$moduleName'")->fetch();
+                    $flow    = $app->dbQuery('SELECT `table` FROM ' . TABLE_WORKFLOW . " WHERE `module`='$moduleName'")->fetch();
                     $default = $field->options[$newStatus]['default'];
 
                     $app->dbh->exec("UPDATE `$flow->table` SET `subStatus` = '$default' WHERE `id` = '$oldID'");
@@ -2043,7 +2043,7 @@ EOF;
 
             $dateFields = array();
             $sql        = "SELECT `field` FROM " . TABLE_WORKFLOWFIELD . " WHERE `module` = '{$moduleName}' and `control` in ('date', 'datetime')";
-            $stmt       = $app->dbh->query($sql);
+            $stmt       = $app->dbQuery($sql);
             while($row = $stmt->fetch()) $dateFields[$row->field] = $row->field;
         }
 

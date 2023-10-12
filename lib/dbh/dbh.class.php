@@ -20,6 +20,14 @@
 class dbh
 {
     /**
+     * Flag for database.
+     *
+     * @var string MASTER|SLAVE|BI
+     * @access private
+     */
+    private $flag;
+
+    /**
      * PDO.
      *
      * @var object
@@ -56,10 +64,11 @@ class dbh
      *
      * @param object $config
      * @param bool   $setSchema
+     * @param string $flag
      * @access public
      * @return void
      */
-    public function __construct($config, $setSchema = true)
+    public function __construct($config, $setSchema = true, $flag = 'MASTER')
     {
         $dsn = "{$config->driver}:host={$config->host};port={$config->port}";
         if($setSchema) $dsn .= ";dbname={$config->name}";
@@ -80,6 +89,7 @@ class dbh
 
         $this->pdo    = $pdo;
         $this->config = $config;
+        $this->flag   = $flag;
     }
 
     /**
@@ -113,6 +123,7 @@ class dbh
 
         try
         {
+            dao::$querys[] = "[$this->flag] " . dao::processKeywords($sql);
             return $this->pdo->exec($sql);
         }
         catch(PDOException $e)
@@ -134,6 +145,7 @@ class dbh
         $sql = $this->formatSQL($sql);
         try
         {
+            dao::$querys[] = "[$this->flag] " . dao::processKeywords($sql);
             return $this->pdo->query($sql);
         }
         catch(PDOException $e)
@@ -200,6 +212,7 @@ class dbh
     {
         try
         {
+            dao::$querys[] = "[$this->flag] " . dao::processKeywords($sql);
             return $this->pdo->query($sql);
         }
         catch(PDOException $e)

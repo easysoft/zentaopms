@@ -729,6 +729,7 @@ class baseRouter
         $_POST   = validater::filterSuper($_POST);
         $_GET    = validater::filterSuper($_GET);
         $_COOKIE = validater::filterSuper($_COOKIE);
+        $_SERVER = validater::filterSuper($_SERVER);
 
         /* Filter common get and cookie vars. */
         if($this->config->framework->filterParam == 2)
@@ -856,10 +857,10 @@ class baseRouter
         {
             $sql     = new sql();
             $account = $sql->quote($account);
-            $vision  = $this->dbh->query("SELECT * FROM " . TABLE_CONFIG . " WHERE owner = $account AND `key` = 'vision' LIMIT 1")->fetch();
+            $vision  = $this->dbQuery("SELECT * FROM " . TABLE_CONFIG . " WHERE owner = $account AND `key` = 'vision' LIMIT 1")->fetch();
             if($vision) $vision = $vision->value;
 
-            $user = $this->dbh->query("SELECT * FROM " . TABLE_USER . " WHERE account = $account AND deleted = '0' LIMIT 1")->fetch();
+            $user = $this->dbQuery("SELECT * FROM " . TABLE_USER . " WHERE account = $account AND deleted = '0' LIMIT 1")->fetch();
             if(!empty($user->visions))
             {
                 $userVisions = explode(',', (string) $user->visions);
@@ -882,7 +883,7 @@ class baseRouter
      */
     public function getInstalledVersion()
     {
-        $version = $this->dbh->query("SELECT `value` FROM " . TABLE_CONFIG . " WHERE `owner` = 'system' AND `key` = 'version' AND `module` = 'common' AND `section` = 'global' LIMIT 1")->fetch();
+        $version = $this->dbQuery("SELECT `value` FROM " . TABLE_CONFIG . " WHERE `owner` = 'system' AND `key` = 'version' AND `module` = 'common' AND `section` = 'global' LIMIT 1")->fetch();
         $version = $version ? $version->value : '0.3.beta';                  // No version, set as 0.3.beta.
         if($version == '3.0.stable') $version = '3.0';    // convert 3.0.stable to 3.0.
         return $version;
@@ -2889,8 +2890,50 @@ class baseRouter
         global $config, $dbh, $slaveDBH;
         if(!isset($config->installed) or !$config->installed) return;
 
-        if(isset($config->db->host))      $this->dbh      = $dbh      = $this->connectByPDO($config->db);
-        if(isset($config->slaveDB->host)) $this->slaveDBH = $slaveDBH = $this->connectByPDO($config->slaveDB);
+        /* Set master db. */
+        if(isset($config->db->host)) $this->dbh = $dbh = $this->connectByPDO($config->db, 'MASTER');
+
+        /* Set slave db. */
+        if(empty($config->slaveDBList)) return;
+
+        $biIndex   = 0;
+        $slaveList = array();
+        foreach($config->slaveDBList as $index => $db)
+        {
+            if(isset($db->type) && $db->type == 'bi')
+            {
+                $biIndex = $index;
+            }
+            else
+            {
+                $slaveList[] = $index;
+            }
+        }
+        $slaveIndex = empty($slaveList) ? $biIndex : $slaveList[array_rand($slaveList)];
+
+        $config->biDB   = $this->initSlaveDB($biIndex);
+        $this->slaveDBH = $slaveDBH = $this->connectByPDO($this->initSlaveDB($slaveIndex), 'SLAVE');
+    }
+
+    /**
+     * Init config of slave db.
+     *
+     * @param  int     $slaveIndex
+     * @access private
+     * @return object
+     */
+    private function initSlaveDB(int $slaveIndex = 0)
+    {
+        global $config;
+
+        $slaveDB             = $config->slaveDBList[$slaveIndex];
+        $slaveDB->persistant = $config->db->persistent;
+        $slaveDB->driver     = $config->db->driver;
+        $slaveDB->encoding   = $config->db->encoding;
+        $slaveDB->strictMode = $config->db->strictMode;
+        $slaveDB->prefix     = $config->db->prefix;
+
+        return $slaveDB;
     }
 
     /**
@@ -2898,16 +2941,17 @@ class baseRouter
      * Connect database by PDO.
      *
      * @param  object    $params    the database params.
+     * @param  string    $flag      the database flag.
      * @access public
      * @return object|bool
      */
-    public function connectByPDO(object $params): object|bool
+    public function connectByPDO(object $params, $flag = 'MASTER'): object|bool
     {
         if(!isset($params->driver)) static::triggerError('no pdo driver defined, it should be mysql or sqlite', __FILE__, __LINE__, true);
         if(!isset($params->user)) return false;
         try
         {
-            $dbh = new dbh($params);
+            $dbh = new dbh($params, true, $flag);
             $dbh->exec("SET NAMES {$params->encoding}");
 
             /*
@@ -2958,6 +3002,21 @@ class baseRouter
         }
 
         return new sqlite($params);
+    }
+
+    /**
+     * Query from database, use master or slave db.
+     *
+     * @param  string $query
+     * @access public
+     * @return mixed
+     */
+    public function dbQuery($query)
+    {
+        if(!$this->dbh) return false;
+        if($this->slaveDBH) return $this->slaveDBH->query($query);
+
+        return $this->dbh->query($query);
     }
 
     //-------------------- 错误处理方法(Error methods) ------------------//

@@ -427,7 +427,7 @@ detailBody
                     !common::hasPriv($story->type, 'linkStory') ? null : h::li(a(set::href(helper::createLink('story', 'linkStory', "storyID=$story->id&type=linkStories&linkedID=0&browseType=&queryID=0&storyType=$story->type")), set('data-toggle', 'modal'), set('data-size', 'lg'), set::id('linkButton'), setClass('btn secondary size-sm'), icon('plus'), $lang->story->link . ($story->type == 'story' ? $lang->story->requirement : $lang->story->story))),
                 )
             ) : null,
-            $story->type == 'story' ? tabPane
+            $story->type == 'story' && common::hasPriv('story', 'tasks') ? tabPane
             (
                 set::key('legendProjectAndTask'),
                 set::title($lang->story->legendProjectAndTask),
@@ -441,7 +441,7 @@ detailBody
                 tableData
                 (
                     set::useTable(false),
-                    $story->type == 'story' && !empty($fromBug) ? item
+                    $story->type == 'story' && !empty($fromBug) && common::hasPriv('story', 'bugs') ? item
                     (
                         set::collapse(true),
                         set::name($lang->story->legendFromBug),
@@ -473,7 +473,7 @@ detailBody
                             }, $bugs))
                         )
                     ) : null,
-                    $story->type == 'story' ? item
+                    $story->type == 'story' && common::hasPriv('story', 'cases') ? item
                     (
                         set::collapse(true),
                         set::name($lang->story->legendCases),

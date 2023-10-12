@@ -307,7 +307,7 @@ class bugTest
     public function updateObject($bugID, $param = array())
     {
         global $tester;
-        $object = $tester->dbh->query("SELECT * FROM " . TABLE_BUG  ." WHERE id = $bugID")->fetch();
+        $object = $tester->app->dbQuery("SELECT * FROM " . TABLE_BUG  ." WHERE id = $bugID")->fetch();
 
         $bug = new stdclass();
         foreach($object as $field => $value)

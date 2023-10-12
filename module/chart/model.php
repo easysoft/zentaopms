@@ -12,6 +12,18 @@
 class chartModel extends model
 {
     /**
+     * Construct.
+     *
+     * @access public
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->loadBIDAO();
+    }
+
+    /**
      * Get first chart group id.
      *
      * @param  int    $dimensionID
