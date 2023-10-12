@@ -169,24 +169,41 @@ $lang->metric->scopeList['other']     = "其他";
 
 global $config;
 $lang->metric->objectList = array();
-$lang->metric->objectList['program']     = "项目集";
-$lang->metric->objectList['line']        = "产品线";
-$lang->metric->objectList['product']     = "产品";
-$lang->metric->objectList['project']     = "项目";
-$lang->metric->objectList['productplan'] = "计划";
-$lang->metric->objectList['execution']   = "执行";
-$lang->metric->objectList['release']     = "发布";
-$lang->metric->objectList['story']       = $lang->SRCommon;
-$lang->metric->objectList['requirement'] = $lang->URCommon;
-$lang->metric->objectList['task']        = "任务";
-$lang->metric->objectList['bug']         = "Bug";
-$lang->metric->objectList['case']        = "用例";
-$lang->metric->objectList['user']        = "人员";
-$lang->metric->objectList['effort']      = "工时";
-$lang->metric->objectList['doc']         = "文档";
-if($config->edition != 'open')
+$lang->metric->objectList['program']       = "项目集";
+$lang->metric->objectList['line']          = "产品线";
+$lang->metric->objectList['product']       = "产品";
+$lang->metric->objectList['project']       = "项目";
+$lang->metric->objectList['productplan']   = "计划";
+$lang->metric->objectList['execution']     = "执行";
+$lang->metric->objectList['release']       = "发布";
+$lang->metric->objectList['story']         = $lang->SRCommon;
+$lang->metric->objectList['requirement']   = $lang->URCommon;
+$lang->metric->objectList['task']          = "任务";
+$lang->metric->objectList['bug']           = "Bug";
+$lang->metric->objectList['case']          = "用例";
+$lang->metric->objectList['user']          = "人员";
+$lang->metric->objectList['effort']        = "工时";
+$lang->metric->objectList['doc']           = "文档";
+$lang->metric->objectList['codebase']      = "代码库";
+$lang->metric->objectList['pipeline']      = "流水线";
+$lang->metric->objectList['artifact']      = "制品库";
+$lang->metric->objectList['deployment']    = "上线";
+$lang->metric->objectList['node']          = "节点";
+$lang->metric->objectList['application']   = "应用";
+$lang->metric->objectList['cpu']           = "CPU";
+$lang->metric->objectList['memory']        = "内存";
+$lang->metric->objectList['issue']         = "问题";
+$lang->metric->objectList['commit']        = "代码提交";
+$lang->metric->objectList['mergeRequest']  = "合并请求";
+$lang->metric->objectList['code']          = "代码";
+$lang->metric->objectList['vulnerability'] = "安全漏洞";
+$lang->metric->objectList['codeAnalysis']  = "代码分析";
+if(in_array($config->edition, array('biz', 'max', 'ipd')))
 {
     $lang->metric->objectList['feedback'] = "反馈";
+}
+if(in_array($config->edition, array('max', 'ipd')))
+{
     $lang->metric->objectList['risk']     = "风险";
     $lang->metric->objectList['issue']    = "问题";
 }
