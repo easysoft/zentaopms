@@ -14,7 +14,13 @@ window.afterPageUpdate = function($target, info, options)
         window.renderCheckedLabel();
         $(window).on('resize', window.renderCheckedLabel);
     }
+    if(viewType == 'single') window.addTitle2Star();
     window.initFilterPanel();
+}
+
+window.addTitle2Star = function()
+{
+    $('.metric-collect').attr('title', collectStar);
 }
 
 /* 事件处理函数。 */
