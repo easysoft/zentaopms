@@ -1747,7 +1747,7 @@ class testcase extends control
             }
 
             /* Get cases. */
-	    $queryCondition = preg_replace("/AND\s+t[0-9]\.scene\s+=\s+'0'/i", '', $this->session->testcaseQueryCondition);
+            $queryCondition = preg_replace("/AND\s+t[0-9]\.scene\s+=\s+'0'/i", '', $this->session->testcaseQueryCondition);
             if($this->session->testcaseOnlyCondition)
             {
                 $caseIDList = array();
