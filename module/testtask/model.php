@@ -337,14 +337,13 @@ class testtaskModel extends model
      *
      * @param  int    $productID
      * @param  object $task
-     * @param  int    $taskID
      * @param  string $type
      * @param  int    $param
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getLinkableCases(int $productID, object $task, int $taskID, string $type, int $param, object $pager): array
+    public function getLinkableCases(int $productID, object $task, string $type, int $param, object $pager): array
     {
         if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
         $query = $this->session->testcaseQuery;
@@ -352,7 +351,7 @@ class testtaskModel extends model
         if(strpos($query, '`product` =') === false && $type != 'bysuite') $query .= " AND `product` = $productID";
         if(strpos($query, $allProduct) !== false) $query = str_replace($allProduct, '1', $query);
 
-        $linkedCases = $this->dao->select('`case`')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->fetchPairs('case');
+        $linkedCases = $this->dao->select('`case`')->from(TABLE_TESTRUN)->where('task')->eq($task->id)->fetchPairs('case');
 
         if($type == 'all')     return $this->getAllLinkableCases($task, $query, $linkedCases, $pager);
         if($type == 'bystory') return $this->getLinkableCasesByStory($productID, $task, $query, $linkedCases, $pager);

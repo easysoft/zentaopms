@@ -769,7 +769,7 @@ class testtask extends control
         /* Query the cases that can be associated with a testtask from the database. */
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
-        $cases = $this->testtask->getLinkableCases($productID, $task, $taskID, $type, $param, $pager);
+        $cases = $this->testtask->getLinkableCases($productID, $task, $type, $param, $pager);
 
         $this->view->title        = $task->name . $this->lang->colon . $this->lang->testtask->linkCase;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
