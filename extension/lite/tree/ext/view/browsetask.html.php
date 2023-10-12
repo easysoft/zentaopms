@@ -246,11 +246,10 @@ $(function()
 
     var tree = $tree.data('zui.tree');
     if(!tree.store.time) tree.expand($tree.find('li:not(.tree-action-item)').first());
-    if(<?php echo $currentModuleID ?>)
-    {
-        var $currentLi = $tree.find('.module-name[data-id=' + <?php echo $currentModuleID ?> + ']').closest('li');
-        if($currentLi.length) tree.show($currentLi);
-    }
+    <?php if($currentModuleID): ?>
+    var $currentLi = $tree.find('.module-name[data-id=' + <?php echo $currentModuleID ?> + ']').closest('li');
+    if($currentLi.length) tree.show($currentLi);
+    <?php endif; ?>
 
     $tree.on('mouseenter', 'li:not(.tree-action-item)', function(e)
     {
