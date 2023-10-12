@@ -421,6 +421,7 @@ class taskZen extends task
         $now  = helper::now();
         $task = form::data($this->config->task->form->edit)->add('id', $task->id)
             ->setDefault('deleteFiles', array())
+            ->add('lastEditedDate', $now)
             ->setIF(!$task->assignedTo && !empty($oldTask->team) && !empty($this->post->team), 'assignedTo', $this->task->getAssignedTo4Multi($this->post->team, $oldTask))
             ->setIF($task->assignedTo != $oldTask->assignedTo, 'assignedDate', $now)
             ->setIF($task->mode == 'single', 'mode', '')
@@ -501,14 +502,17 @@ class taskZen extends task
      */
     protected function buildTasksForBatchCreate(object $execution, int $taskID, array $output): false|array
     {
+        $this->loadModel('story');
+
         $tasks = form::batchData()->get();
         foreach($tasks as $task)
         {
-            $task->project   = $execution->project;
-            $task->execution = $execution->id;
-            $task->left      = $task->estimate;
-            $task->parent    = $taskID;
-            $task->lane      = empty($task->lane) && !empty($output['laneID']) ? (int)$output['laneID'] : $task->lane;
+            $task->project      = $execution->project;
+            $task->execution    = $execution->id;
+            $task->left         = $task->estimate;
+            $task->parent       = $taskID;
+            $task->lane         = empty($task->lane) && !empty($output['laneID']) ? (int)$output['laneID'] : $task->lane;
+            $task->storyVersion = $task->story ? $this->story->getVersion($task->story) : 1;
         }
 
         /* Remove data with the same task name. */
@@ -539,7 +543,7 @@ class taskZen extends task
             ->setDefault('left', 0)
             ->setIF($this->post->estimate, 'left', $this->post->estimate)
             ->setIF($this->post->mode, 'mode', $this->post->mode)
-            ->setIF($this->post->story, 'storyVersion', isset($this->post->story) ? $this->loadModel('story')->getVersion((int)$this->post->story) : 0)
+            ->setIF($this->post->story, 'storyVersion', $this->post->story ? $this->loadModel('story')->getVersion((int)$this->post->story) : 1)
             ->setIF(!$this->post->multiple || count($team) < 1, 'mode', '')
             ->setIF($this->task->isNoStoryExecution($execution), 'story', 0)
             ->setIF($this->post->assignedTo, 'assignedDate', helper::now())
