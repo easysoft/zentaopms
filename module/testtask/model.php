@@ -433,19 +433,20 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getLinkableCasesByBug(int $productID, object $task, string $query, array $linkedCases, object $pager): array
+    public function getLinkableCasesByBug(int $productID, object $task, string $query = '', array $linkedCases = array(), object $pager = null): array
     {
         $bugs = $this->dao->select('bugs')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch('bugs');
         if(!$bugs) return array();
 
-        return $this->dao->select('*')->from(TABLE_CASE)->where($query)
-            ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('project')->eq($this->session->project)->fi()
+        return $this->dao->select('*')->from(TABLE_CASE)
+            ->where('deleted')->eq('0')
             ->andWhere('product')->eq($productID)
             ->andWhere('status')->ne('wait')
+            ->andWhere('fromBug')->in(trim($bugs, ','))
+            ->beginIF($query)->andWhere($query)->fi()
             ->beginIF($linkedCases)->andWhere('id')->notIN($linkedCases)->fi()
             ->beginIF($task->branch !== '')->andWhere('branch')->in("0,{$task->branch}")->fi()
-            ->andWhere('fromBug')->in(trim($bugs, ','))
-            ->andWhere('deleted')->eq('0')
+            ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('project')->eq($this->session->project)->fi()
             ->orderBy('id desc')
             ->page($pager)
             ->fetchAll();
