@@ -14968,7 +14968,7 @@ CREATE TABLE IF NOT EXISTS `zt_pivot`  (
   `objects` mediumtext NULL,
   `settings` mediumtext NULL,
   `filters` mediumtext NULL,
-  `step` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `step` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `stage` enum('draft','published') NOT NULL DEFAULT 'draft',
   `builtin` enum('0', '1') NOT NULL DEFAULT '0',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
