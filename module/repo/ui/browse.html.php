@@ -274,7 +274,7 @@ sidebar
         set::data($commentsTableData),
         set::onRenderCell(jsRaw('window.renderCommentCell')),
         set::onCheckChange(jsRaw('window.checkedChange')),
-        set::canRowCheckable(jsRaw('function(rowID){return canRowCheckable(rowID);}')),
+        set::canRowCheckable(jsRaw('window.canRowCheckable')),
         set::footToolbar($footToolbar),
         set::footer(array('toolbar', 'flex', 'pager')),
         set::footPager(usePager('pager', 'noTotalCount')),
