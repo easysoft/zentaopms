@@ -329,7 +329,7 @@ class todoModel extends model
         if(!empty($todoIDList))
         {
             /* Initialize todos from the post data. */
-            $oldTodos = $this->dao->select('*')->from(TABLE_TODO)->where('id')->in(array_keys($todos))->fetchAll('id');
+            $oldTodos = $this->dao->select('*')->from(TABLE_TODO)->where('id')->in($todoIDList)->fetchAll('id');
             foreach($todoIDList as $todoID)
             {
                 $oldTodo = $oldTodos[$todoID];
@@ -356,7 +356,7 @@ class todoModel extends model
             foreach($todos as $todoID => $todo)
             {
                 $oldTodo = $oldTodos[$todoID];
-                if(in_array($todo->type, $this->config->todo->moduList)) $oldTodo->name = '';
+                if(in_array($todo->type, $this->config->todo->moduleList)) $oldTodo->name = '';
                 $this->dao->update(TABLE_TODO)->data($todo)
                     ->autoCheck()
                     ->checkIF(!in_array($todo->type, $this->config->todo->moduleList), $this->config->todo->edit->requiredFields, 'notempty')
