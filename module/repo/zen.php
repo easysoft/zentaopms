@@ -60,6 +60,20 @@ class repoZen extends repo
             $repo->prefix = empty($infoRoot) ? '' : trim(str_ireplace($infoRoot, '', str_replace('\\', '/', $repo->path)), '/');
             if($repo->prefix) $repo->prefix = '/' . $repo->prefix;
         }
+
+        if($isPipelineServer)
+        {
+            $serviceProject = $this->dao->select('*')->from(TABLE_REPO)
+                ->where('`SCM`')->eq($repo->SCM)
+                ->andWhere('`serviceHost`')->eq($repo->serviceHost)
+                ->andWhere('`serviceProject`')->eq($repo->serviceProject)
+                ->fetch();
+            if($serviceProject)
+            {
+                dao::$errors['serviceProject'][] = $this->lang->repo->error->projectUnique;
+                return false;
+            }
+        }
         return $repo;
     }
 
@@ -467,46 +481,58 @@ class repoZen extends repo
      * @param  int       $refresh
      * @param  string    $revision
      * @param  object    $lastRevision
+     * @param  string    $base64BranchID
+     * @param  int       $objectID
      * @access protected
      * @return array
      */
-    protected function getFilesInfo(object $repo, string $path, string $branchID, int $refresh, string $revision, object $lastRevision): array
+    protected function getFilesInfo(object $repo, string $path, string $branchID, int $refresh, string $revision, object $lastRevision, string $base64BranchID, int $objectID): array
     {
-        $cacheFile        = $this->repo->getCacheFile($repo->id, $path, $branchID);
-        $cacheRefreshTime = isset($lastRevision->time) ? date('Y-m-d H:i', strtotime($lastRevision->time)) : date('Y-m-d H:i');
-        $this->scm->setEngine($repo);
-        if($refresh or !$cacheFile or !file_exists($cacheFile) or filemtime($cacheFile) < strtotime($cacheRefreshTime))
+        if($repo->SCM == 'Gitlab')
         {
-            if($repo->SCM == 'Gitlab')
+            $cacheFile        = $this->repo->getCacheFile($repo->id, $path, $branchID);
+            $cacheRefreshTime = isset($lastRevision->time) ? date('Y-m-d H:i', strtotime($lastRevision->time)) : date('Y-m-d H:i');
+            $this->scm->setEngine($repo);
+            if($refresh or !$cacheFile or !file_exists($cacheFile) or filemtime($cacheFile) < strtotime($cacheRefreshTime))
             {
                 $infos = $this->repo->getFileList($repo, $branchID, $path);
-            }
-            else
-            {
-                $infos        = $this->scm->ls($path, $revision);
-                $revisionList = helper::arrayColumn($infos, 'revision', 'revision');
-                $comments     = $this->repo->getHistory($repo->id, $revisionList);
-                foreach($infos as $info)
+
+                if($cacheFile && !empty($infos))
                 {
-                    if(isset($comments[$info->revision]))
+                    if(!file_exists($cacheFile . '.lock'))
                     {
-                        $comment = $comments[$info->revision];
-                        $info->comment = $comment->comment;
+                        touch($cacheFile . '.lock');
+                        file_put_contents($cacheFile, serialize($infos));
+                        unlink($cacheFile . '.lock');
                     }
                 }
             }
-            if($cacheFile && !empty($infos)) file_put_contents($cacheFile, serialize($infos), LOCK_EX);
+            else
+            {
+                $infos = unserialize(file_get_contents($cacheFile));
+                if(empty($infos)) unlink($cacheFile);
+            }
         }
         else
         {
-            $infos = unserialize(file_get_contents($cacheFile));
-            if(empty($infos)) unlink($cacheFile);
+            $infos = $this->repo->getFileCommits($repo, $branchID, $path);
         }
 
         foreach($infos as $info)
         {
             $info->originalComment = $info->comment;
             $info->comment         = $this->repo->replaceCommentLink($info->comment);
+            $info->revision        = $repo->SCM == 'Subversion' ? $info->revision : substr($info->revision, 0, 10);
+
+            $infoPath       = trim(urldecode($path) . '/' . $info->name, '/');
+            if($info->kind == 'dir')
+            {
+                $info->link = $this->repo->createLink('browse', "repoID={$repo->id}&branchID=$base64BranchID&objectID=$objectID&path=" . $this->repo->encodePath($infoPath));
+            }
+            else
+            {
+                $info->link = $this->repo->createLink('view', "repoID={$repo->id}&objectID=$objectID&entry=" . $this->repo->encodePath($infoPath));
+            }
         }
 
         return $infos;
@@ -666,5 +692,136 @@ class repoZen extends repo
             return array(isset($branches) ? $branches : false, isset($tags) ? $tags : false);
         }
     }
-}
 
+    /**
+     * 为git类型版本库设置分支和tag。
+     * Set branch or tag for git.
+     *
+     * @param  object     $repo
+     * @param  string     $branchID
+     * @param  array|bool $branchInfo
+     * @param  array|bool $tagInfo
+     * @access protected
+     * @return array
+     */
+    protected function setBranchTag(object $repo, string $branchID, array|bool $branchInfo = false, array|bool $tagInfo = false): array
+    {
+        $repoID   = $repo->id;
+        $branches = $tags = $branchesAndTags = array();
+        if(in_array($repo->SCM, $this->config->repo->gitTypeList))
+        {
+            $scm = $this->app->loadClass('scm');
+            $scm->setEngine($repo);
+            $branches = isset($branchInfo) && $branchInfo !== false ? $branchInfo : $scm->branch();
+            $initTags = isset($tagInfo) && $tagInfo !== false ? $tagInfo : $scm->tags('');
+            foreach($initTags as $tag) $tags[$tag] = $tag;
+            $branchesAndTags = $branches + $tags;
+
+            if(empty($branchID) and $this->cookie->repoBranch and $this->session->repoID == $repoID) $branchID = $this->cookie->repoBranch;
+            if($branchID) $this->repo->setRepoBranch($branchID);
+            if(!isset($branchesAndTags[$branchID]))
+            {
+                $branchID = (string)key($branches);
+                $this->repo->setRepoBranch($branchID);
+            }
+
+            return array($branchID, $branches, $tags, $branchesAndTags);
+        }
+        else
+        {
+            $this->repo->setRepoBranch('');
+            return array('', array(), array(), array());
+        }
+    }
+
+    /**
+     * 获取commits列表
+     * Get commits.
+     *
+     * @param  object    $repo
+     * @param  string    $path
+     * @param  string    $revision
+     * @param  string    $type
+     * @param  object    $pager
+     * @param  int       $objectID
+     * @access protected
+     * @return array
+     */
+    protected function getCommits(object $repo, string $path, string $revision, string $type, object $pager, int $objectID): array
+    {
+        $revisions = $this->repo->getCommits($repo, $path, $revision, $type, $pager);
+        $pathInfo  = '&root=' . $this->repo->encodePath(empty($path) ? '/' : $path);
+        foreach($revisions as $item)
+        {
+            $item->link     = $this->repo->createLink('revision', "repoID={$repo->id}&objectID=$objectID&revision={$item->revision}" . $pathInfo);
+            $item->revision = $repo->SCM != 'Subversion' ? substr($item->revision, 0, 10) : $item->revision;
+        }
+
+        return $revisions;
+    }
+
+    /**
+     * 设置session信息。
+     * Set session.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function setBrowseSession(): void
+    {
+        $this->repo->setBackSession('list', true);
+
+        session_start();
+        $this->session->set('revisionList', $this->app->getURI(true));
+        $this->session->set('gitlabBranchList', $this->app->getURI(true));
+        session_write_close();
+    }
+
+    /**
+     * 构建版本库搜索框。
+     * Build repo search form.
+     *
+     * @param  array     $products
+     * @param  array     $projects
+     * @param  int       $objectID
+     * @param  string    $orderBy
+     * @param  int       $recPerPage
+     * @param  int       $pageID
+     * @param  int       $param
+     * @access protected
+     * @return void
+     */
+    protected function buildRepoSearchForm(array $products, array $projects, int $objectID, string $orderBy, int $recPerPage, int $pageID, int $param): void
+    {
+        session_start();
+        $this->config->repo->search['params']['product']['values']  = $products;
+        $this->config->repo->search['params']['projects']['values'] = $projects;
+        $this->config->repo->search['actionURL']   = $this->createLink('repo', 'maintain', "objectID={$objectID}&orderBy={$orderBy}&recPerPage={$recPerPage}&pageID={$pageID}&type=bySearch&param=myQueryID");
+        $this->config->repo->search['queryID']     = $param;
+        $this->config->repo->search['onMenuBar']   = 'yes';
+        $this->loadModel('search')->setSearchParams($this->config->repo->search);
+        session_write_close();
+    }
+
+    /**
+     * 检查删除版本库的错误。
+     * Check repo delete error.
+     *
+     * @param  int $repoID
+     * @access protected
+     * @return string
+     */
+    protected function checkDeleteError(int $repoID): string
+    {
+        $relationID = $this->dao->select('id')->from(TABLE_RELATION)
+            ->where('extra')->eq($repoID)
+            ->andWhere('AType')->eq('design')
+            ->fetch();
+        $error      = $relationID ? $this->lang->repo->error->deleted : '';
+
+        $jobs = $this->dao->select('*')->from(TABLE_JOB)->where('repo')->eq($repoID)->andWhere('deleted')->eq('0')->fetchAll();
+        if($jobs) $error .= ($error ? '\n' : '') . $this->lang->repo->error->linkedJob;
+
+        return $error;
+    }
+}

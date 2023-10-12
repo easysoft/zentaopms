@@ -70,11 +70,12 @@ function changeEncoding(encoding)
  * @access public
  * @return string
  */
-function htmlspecialchars_decode(str){
+function htmlspecialchars_decode(str)
+{
     str = str.replace(/&amp;/g, '&');
     str = str.replace(/&lt;/g, '<');
     str = str.replace(/&gt;/g, '>');
-    str = str.replace(/&quot;/g, "''");
+    str = str.replace(/&quot;/g, '"');
     str = str.replace(/&#039;/g, "'");
     return str;
 }
@@ -98,27 +99,38 @@ function getDiffs(fileName)
     {
         if(diff.fileName == fileName)
         {
-            if(typeof diff.contents[0].lines != 'object') return result;
-
-            var lines = diff.contents[0].lines;
-            $.each(lines, function(l, code)
+            $.each(diff.contents, function(c, content)
             {
-                if(code.type == 'all' || code.type == 'new')
-                {
-                    result.code.new += htmlspecialchars_decode(code.line.substring(2)) + "\n";
-                    result.line.new.push(code.newlc);
-                }
+                if(typeof content.lines != 'object') return result;
 
-                if(code.type == 'all' || code.type == 'old')
+                var lines = content.lines;
+                $.each(lines, function(l, code)
                 {
-                    result.code.old += htmlspecialchars_decode(code.line.substring(2)) + "\n";
-                    result.line.old.push(code.oldlc);
-                }
-            })
+                    var subIndex = code.type == 'all' ? 1 : 2;
+                    var lineCode = htmlspecialchars_decode(code.line.substring(subIndex)) + "\n";
+
+                    if(code.type == 'new')
+                    {
+                        result.code.new += lineCode;
+                        result.line.new.push(code.newlc);
+                    }
+                    else if(code.type == 'old')
+                    {
+                        result.code.old += lineCode;
+                        result.line.old.push(code.oldlc);
+                    }
+                    else
+                    {
+                        result.code.new += lineCode;
+                        result.code.old += lineCode;
+                        result.line.new.push(code.newlc);
+                        result.line.old.push(code.oldlc);
+                    }
+                });
+            });
             return result;
         }
     });
-
     return result;
 }
 

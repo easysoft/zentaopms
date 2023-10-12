@@ -1,7 +1,7 @@
 <?php
 global $lang;
 
-$config->mr->dtable = new stdclass;
+$config->mr->dtable = new stdclass();
 
 $config->mr->dtable->fieldList['id']['name']  = 'id';
 $config->mr->dtable->fieldList['id']['title'] = $lang->idAB;
@@ -40,7 +40,7 @@ $config->mr->dtable->fieldList['createdBy']['sortType'] = true;
 
 $config->mr->dtable->fieldList['createdDate']['name']     = 'createdDate';
 $config->mr->dtable->fieldList['createdDate']['title']    = $lang->mr->createdDate;
-$config->mr->dtable->fieldList['createdDate']['type']     = 'date';
+$config->mr->dtable->fieldList['createdDate']['type']     = 'datetime';
 $config->mr->dtable->fieldList['createdDate']['sortType'] = true;
 
 $config->mr->dtable->fieldList['actions']['name']  = 'actions';
@@ -49,3 +49,40 @@ $config->mr->dtable->fieldList['actions']['type']  = 'actions';
 $config->mr->dtable->fieldList['actions']['menu']  = array('view', 'edit', 'diff', 'link', 'delete');
 $config->mr->dtable->fieldList['actions']['list']  = $config->mr->actionList;
 
+$config->mr->taskDtable = new stdclass();
+$config->mr->taskDtable->fieldList['id']['title']    = $lang->idAB;
+$config->mr->taskDtable->fieldList['id']['type']     = 'checkID';
+$config->mr->taskDtable->fieldList['id']['sortType'] = 'desc';
+$config->mr->taskDtable->fieldList['id']['checkbox'] = false;
+$config->mr->taskDtable->fieldList['id']['required'] = true;
+
+$config->mr->taskDtable->fieldList['name']['fixed']        = 'left';
+$config->mr->taskDtable->fieldList['name']['title']        = $lang->task->name;
+$config->mr->taskDtable->fieldList['name']['flex']         = '';
+$config->mr->taskDtable->fieldList['name']['type']         = 'nestedTitle';
+$config->mr->taskDtable->fieldList['name']['nestedToggle'] = true;
+$config->mr->taskDtable->fieldList['name']['sortType']     = true;
+$config->mr->taskDtable->fieldList['name']['link']         = array('module' => 'task', 'method' => 'view', 'params' => 'taskID={id}', 'target' => '_blank');
+$config->mr->taskDtable->fieldList['name']['required']     = true;
+
+$config->mr->taskDtable->fieldList['pri']['title']    = $lang->priAB;
+$config->mr->taskDtable->fieldList['pri']['type']     = 'pri';
+$config->mr->taskDtable->fieldList['pri']['sortType'] = true;
+$config->mr->taskDtable->fieldList['pri']['show']     = true;
+
+$config->mr->taskDtable->fieldList['assignedTo']['type']        = 'desc';
+$config->mr->taskDtable->fieldList['assignedTo']['title']       = $lang->task->assignedTo;
+$config->mr->taskDtable->fieldList['assignedTo']['currentUser'] = $app->user->account;
+$config->mr->taskDtable->fieldList['assignedTo']['sortType']    = true;
+$config->mr->taskDtable->fieldList['assignedTo']['show']        = true;
+
+$config->mr->taskDtable->fieldList['finishedBy']['title']    = $lang->task->finishedByAB;
+$config->mr->taskDtable->fieldList['finishedBy']['type']     = 'user';
+$config->mr->taskDtable->fieldList['finishedBy']['sortType'] = true;
+$config->mr->taskDtable->fieldList['finishedBy']['show']     = true;
+
+$config->mr->taskDtable->fieldList['status']['title']     = $lang->statusAB;
+$config->mr->taskDtable->fieldList['status']['type']      = 'status';
+$config->mr->taskDtable->fieldList['status']['statusMap'] = $lang->task->statusList;
+$config->mr->taskDtable->fieldList['status']['sortType']  = true;
+$config->mr->taskDtable->fieldList['status']['show']      = true;

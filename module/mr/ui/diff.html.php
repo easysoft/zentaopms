@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+dropmenu(set::objectID($MR->repoID), set::tab('repo'));
+
 detailHeader
 (
     to::title
@@ -34,7 +36,7 @@ $fileInfo     = $entry ? pathinfo($entry) : array();
 $showBug      = isset($showBug) ? $showBug : true;
 $objectID     = isset($objectID) ? $objectID : 0;
 $tree         = $this->repo->getFileTree($repo, '', $diffs);
-$diffLink     = $this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=" . $file . "&oldrevision={oldRevision}&newRevision={newRevision}");
+$diffLink     = $this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=&oldrevision={oldRevision}&newRevision={newRevision}");
 
 jsVar('diffs', $diffs);
 jsVar('tree', $tree);

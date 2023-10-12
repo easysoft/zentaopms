@@ -21,7 +21,8 @@ function urlencode(param)
  */
 function getBranchPriv(project)
 {
-    var branchUrl = $.createLink('mr', 'ajaxGetBranchPivs', "hostID=" + hostID + "&project=" + project);
+    var sourceProject = projectNamespace ? urlencode(projectNamespace) : project;
+    var branchUrl     = $.createLink('mr', 'ajaxGetBranchPivs', "hostID=" + hostID + "&project=" + sourceProject);
     $.get(branchUrl, function(response)
     {
         branchPrivs = eval('(' + response + ')');
@@ -30,7 +31,8 @@ function getBranchPriv(project)
 
 function onProjectChange()
 {
-    var branchUrl     = $.createLink(hostType, 'ajaxGetProjectBranches', hostType + "ID=" + hostID + "&projectID=" + projectID);
+    var sourceProject = projectNamespace ? urlencode(projectNamespace) : projectID;
+    var branchUrl     = $.createLink(hostType, 'ajaxGetProjectBranches', hostType + "ID=" + hostID + "&projectID=" + sourceProject);
     $.ajaxSubmit(
     {
         url: branchUrl,

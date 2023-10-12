@@ -67,7 +67,7 @@ div(
             ),
             div(set::id('tab-' . $file)),
         ),
-        dropdown
+        empty($monacoDropMenus) ? null : dropdown
         (
             set::arrow(false),
             set::staticMenu(true),

@@ -928,7 +928,9 @@ class InstanceModel extends model
      */
     public function createInstance($app, $space, $thirdDomain, $name = '', $k8name = '', $channel = 'stable', $snippets = array())
     {
+        $createdBy = $this->app->user->account;
         if(empty($k8name)) $k8name = "{$app->chart}-" . date('YmdHis'); //name rule: chartName-userAccount-YmdHis;
+        if(defined('IN_INSTALL') && IN_INSTALL && empty($this->app->user->account)) $createdBy = trim($this->app->company->admins, ','); //Set createdBy if in login progress;
 
         $instanceData = new stdclass;
         $instanceData->appId           = $app->id;

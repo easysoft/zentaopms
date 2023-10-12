@@ -123,7 +123,7 @@ class mrModel extends model
     public function getGiteaProjects($hostID = 0)
     {
         $projects = $this->loadModel('gitea')->apiGetProjects($hostID);
-        return array($hostID => array_column($projects, null, 'full_name'));
+        return array($hostID => helper::arrayColumn($projects, null, 'full_name'));
     }
 
     /**
@@ -136,7 +136,7 @@ class mrModel extends model
     public function getGogsProjects($hostID = 0)
     {
         $projects = $this->loadModel('gogs')->apiGetProjects($hostID);
-        return array($hostID => array_column($projects, null, 'full_name'));
+        return array($hostID => helper::arrayColumn($projects, null, 'full_name'));
     }
 
     /**
@@ -219,6 +219,7 @@ class mrModel extends model
             ->setDefault('removeSourceBranch','0')
             ->setDefault('needCI', 0)
             ->setDefault('squash', 0)
+            ->setIF($this->post->needCI == 0, 'jobID', 0)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->get();
@@ -427,8 +428,9 @@ class mrModel extends model
 
         $MR = $this->getByID($MRID);
         $this->linkObjects($MR);
-
-        $this->loadModel('action')->create('mr', $MRID, 'edited');
+        $changes = common::createChanges($oldMR, $MR);
+        $actionID = $this->loadModel('action')->create('mr', $MRID, 'edited');
+        if(!empty($changes)) $this->action->logHistory($actionID, $changes);
         $this->createMRLinkedAction($MRID, 'editmr', $MR->editedDate);
 
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
@@ -635,7 +637,7 @@ class mrModel extends model
                 {
                     $todoDesc = $this->dao->select('*')
                         ->from(TABLE_TODO)
-                        ->where('objectID')->eq($rawTodo->id)
+                        ->where('idvalue')->eq($rawTodo->id)
                         ->fetch();
                     if(empty($todoDesc))
                     {
@@ -651,7 +653,7 @@ class mrModel extends model
                         $todo->begin        = '2400'; /* 2400 means begin is 'undefined'. */
                         $todo->end          = '2400'; /* 2400 means end is 'undefined'. */
                         $todo->type         = 'custom';
-                        $todo->objectID     = $rawTodo->id;
+                        $todo->idvalue      = $rawTodo->id;
                         $todo->pri          = 3;
                         $todo->name         = $this->lang->mr->common . ": " . $rawTodo->target->title;
                         $todo->desc         = $author . '&nbsp;' . $this->lang->mr->at . '&nbsp;' . '<a href="' . $this->gitlab->apiGetSingleProject($hostID, $projectID)->web_url . '" target="_blank">' . $rawTodo->project->path .'</a>' . '&nbsp;' . $this->lang->mr->todomessage . '<a href="' . $rawTodo->target->web_url . '" target="_blank">' . '&nbsp;' . $this->lang->mr->common .'</a>' . '。';
@@ -720,7 +722,7 @@ class mrModel extends model
             $MRObject->head = $MR->sourceBranch;
             $MRObject->base = $MR->targetBranch;
             $MRObject->body = $MR->description;
-            if($MR->assignee)
+            if(!$MR->assignee)
             {
                 $assignee = $this->{$host->type}->getUserIDByZentaoAccount($this->post->hostID, $MR->assignee);
                 if($assignee) $MRObject->assignee = $assignee;
@@ -761,11 +763,12 @@ class mrModel extends model
         }
 
         $response = json_decode(commonModel::http($url, $data = null, $options = array(), $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30, $httpCode = false, $log = false));
-        if(empty($response)) $response = array();
+        if(empty($response) || isset($response->message)) $response = array();
         if($scm == 'Gitea')
         {
             foreach($response as $MR)
             {
+                if(empty($MR)) continue;
                 $MR->iid   = $MR->number;
                 $MR->state = $MR->state == 'open' ? 'opened' : $MR->state;
                 if($MR->merged) $MR->state = 'merged';
@@ -842,7 +845,7 @@ class mrModel extends model
         $host = $this->loadModel('pipeline')->getByID($hostID);
         if($host->type == 'gitlab')
         {
-            $url = sprintf($this->gitlab->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID");
+            $url = sprintf($this->gitlab->getApiRoot($hostID, false), "/projects/$projectID/merge_requests/$MRID");
             $MR  = json_decode(commonModel::http($url));
         }
         elseif($host->type == 'gitea')
@@ -945,11 +948,11 @@ class mrModel extends model
             $newMR->squash               = $MR->squash == '1' ? 1 : 0;
             if($MR->assignee)
             {
-                $gitlabAssignee = $this->gitlab->getUserIDByZentaoAccount($MR->hostID, $MR->assignee);
+                $gitlabAssignee = $this->gitlab->getUserIDByZentaoAccount($hostID, $MR->assignee);
                 if($gitlabAssignee) $newMR->assignee_ids = $gitlabAssignee;
             }
             $url = sprintf($this->gitlab->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID");
-            return json_decode(commonModel::http($url, $MR, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));
+            return json_decode(commonModel::http($url, $newMR, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));
         }
         else
         {
@@ -962,7 +965,6 @@ class mrModel extends model
                 $assignee = $this->{$host->type}->getUserIDByZentaoAccount($this->post->hostID, $MR->assignee);
                 if($assignee) $newMR->assignee = $assignee;
             }
-
             $mergeResult = json_decode(commonModel::http($url, $newMR, array(), array(), 'json', 'PATCH'));
             if(isset($mergeResult->number)) $mergeResult->iid = $host->type == 'gitea' ? $mergeResult->number : $mergeResult->id;
             if(isset($mergeResult->mergeable))
@@ -1973,7 +1975,7 @@ class mrModel extends model
     {
         $product = array();
 
-        if($MR->repoID)
+        if(is_object($MR) && $MR->repoID)
         {
             $productID = $this->dao->select('product')->from(TABLE_REPO)->where('id')->eq($MR->repoID)->fetch('product');
         }

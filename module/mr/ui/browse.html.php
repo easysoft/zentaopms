@@ -10,6 +10,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('orderBy',  $orderBy);
+jsVar('sortLink', $sortLink);
+
 dropmenu(set::objectID($repo->id), set::text($repo->name), set::tab('repo'));
 
 foreach($MRList as $MR)
@@ -72,8 +75,10 @@ toolBar
 
 dtable
 (
+    set::userMap($users),
     set::cols($config->mr->dtable->fieldList),
     set::data($MRs),
+    set::sortLink(jsRaw('createSortLink')),
     set::footPager(usePager()),
 );
 

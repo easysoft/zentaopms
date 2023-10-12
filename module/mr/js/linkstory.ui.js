@@ -3,7 +3,7 @@ window.createSortLink = function(col)
     var sort = col.name + '_asc';
     if(sort == orderBy) sort = col.name + '_desc';
 
-    return sortLink.replace('{orderBy}', sort);
+    return "javascript:loadTarget('" + sortLink.replace('{orderBy}', sort) + "', 'mr-story')";
 }
 
 $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer .batch-btn', function(e)
@@ -20,6 +20,7 @@ $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer
         url:  $(this).data('url'),
         data: postData
     });
+    $(this).prop('disabled', true);
 });
 
 window.onSearchFormResult = function(formName, response)

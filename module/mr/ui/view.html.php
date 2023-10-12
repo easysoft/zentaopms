@@ -10,14 +10,14 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$repoName = $this->dao->select('name')->from(TABLE_REPO)->where('id')->eq($MR->repoID)->fetch('name');
-dropmenu(set::objectID($MR->repoID), set::text($repoName), set::tab('repo'));
+dropmenu(set::objectID($MR->repoID), set::tab('repo'));
 
 $hasNoConflict     = $MR->synced === '1' ? $rawMR->has_conflicts : (bool)$MR->hasNoConflict;
 $sourceDisabled    = ($MR->status == 'merged' && $MR->removeSourceBranch == '1') ? 'disabled' : '';
 $compileNotSuccess = !empty($compile->id) && $compile->status != 'success';
 
-$mainActions = array();
+$mainActions   = array();
+$suffixActions = array();
 foreach($config->mr->view->operateList as $operate)
 {
     if(!common::hasPriv('mr', $operate == 'reject' ? 'approval' : $operate)) continue;
@@ -29,7 +29,7 @@ foreach($config->mr->view->operateList as $operate)
     if(in_array($operate, array('approval', 'reject', 'close', 'edit')))
     {
         if(!$MR->synced || $rawMR->state != 'opened') continue;
-        if($operate == 'reject' && $MR->approvalStatus == 'rejected') continue;
+        if($operate == 'reject' && $MR->approvalStatus == 'rejected') $action['disabled'] = true;
 
         if($operate == 'approval')
         {
@@ -38,6 +38,14 @@ foreach($config->mr->view->operateList as $operate)
     }
     if($operate == 'reopen' && (!$MR->synced || $rawMR->state != 'closed')) continue;
 
+    if($operate == 'delete' && !$projectOwner && !$this->app->user->admin) $action['disabled'] = true;
+    if($operate == 'edit' && !$projectEdit && !$this->app->user->admin) $action['disabled'] = true;
+
+    if($operate === 'edit' || $operate === 'delete')
+    {
+        $suffixActions[] = $action;
+        continue;
+    }
     $mainActions[] = $action;
 }
 
@@ -209,7 +217,7 @@ panel
                         item
                         (
                             set::name($lang->mr->description),
-                            !empty($MR->description) ? $MR->description : $lang->noData,
+                            !empty($MR->description) ? html(nl2br($MR->description)) : $lang->noData,
                         ),
                     ),
                 ),
@@ -235,7 +243,7 @@ panel
                 div
                 (
                     setClass('article-h1'),
-                    $lang->compile->job,
+                    $lang->mr->jobID,
                 ),
                 $job
             ),
@@ -250,6 +258,7 @@ div
         set::object($MR),
         isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), $lang->goback)),
         set::main($mainActions),
+        set::suffix($suffixActions)
     ),
 );
 

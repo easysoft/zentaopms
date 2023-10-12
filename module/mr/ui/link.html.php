@@ -10,9 +10,14 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$repoName = $this->dao->select('name')->from(TABLE_REPO)->where('id')->eq($MR->repoID)->fetch('name');
+dropmenu(set::objectID($MR->repoID), set::text($repoName), set::tab('repo'));
+
 jsVar('type', $type);
 jsVar('orderBy', $orderBy);
-jsVar('sortLink', createLink('mr', 'link', "MRID={$MR->id}&type={type}&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
+jsVar('sortLink', createLink('mr', 'link', "MRID={$MR->id}&type={type}&orderBy={orderBy}&recTotal=&recPerPage=&pageID="));
+
+dropmenu(set::objectID($MR->repoID), set::tab('repo'));
 
 $actionMenu = array();
 $actionMenu['title'] = $lang->actions;
@@ -23,37 +28,32 @@ $actionMenu['list']['unlink']['hint']      = $lang->productplan->unlinkStory;
 $actionMenu['list']['unlink']['className'] = 'ajax-submit';
 
 $storyCols = $config->release->dtable->story->fieldList;
-$storyCols['actions']    = $actionMenu;
+$storyCols['actions']               = $actionMenu;
+$storyCols['id']['checkbox']        = false;
+$storyCols['title']['data-toggle']  = '';
+$storyCols['title']['nestedToggle'] = false;
+$storyCols['title']['link']         = array('module' => 'story', 'method' => 'view', 'params' => 'storyID={id}', 'target' => '_blank');
+
 $storyCols['actions']['list']['unlink']['data-confirm'] = $lang->productplan->confirmUnlinkStory;
 $storyCols['actions']['list']['unlink']['url']          = $this->createLink('mr', 'unlink', "MRID=$MR->id&productID=$product->id&type=story&linkID={id}&confirm=yes");
-$storyCols['id']['checkbox'] = false;
+
 $stories = initTableData($stories, $storyCols);
 
 $bugCols = $config->release->dtable->bug->fieldList;
 $bugCols['actions'] = $actionMenu;
 $bugCols['actions']['list']['unlink']['data-confirm'] = $lang->productplan->confirmUnlinkBug;
 $bugCols['actions']['list']['unlink']['url']          = $this->createLink('mr', 'unlink', "MRID=$MR->id&productID=$product->id&type=bug&linkID={id}&confirm=yes");
-$bugCols['id']['checkbox'] = false;
+
+$bugCols['id']['checkbox']       = false;
+$bugCols['title']['data-toggle'] = '';
+$bugCols['title']['link']        = array('module' => 'bug', 'method' => 'view', 'params' => 'bugID={id}', 'target' => '_blank');
 $bugs = initTableData($bugs, $bugCols);
 
-$taskCols = array();
-$taskCols['id']         = $config->task->dtable->fieldList['id'];
-$taskCols['name']       = $config->task->dtable->fieldList['name'];
-$taskCols['pri']        = $config->task->dtable->fieldList['pri'];
-$taskCols['finishedBy'] = $config->task->dtable->fieldList['finishedBy'];
-$taskCols['assignedTo'] = $config->task->dtable->fieldList['assignedTo'];
-$taskCols['status']     = $config->task->dtable->fieldList['status'];
+$taskCols = $config->mr->taskDtable->fieldList;
 $taskCols['actions']    = $actionMenu;
 $taskCols['actions']['list']['unlink']['data-confirm'] = $lang->mr->confirmUnlinkTask;
 $taskCols['actions']['list']['unlink']['url']          = $this->createLink('mr', 'unlink', "MRID=$MR->id&productID=$product->id&type=task&linkID={id}&confirm=yes");
-$taskCols['id']['checkbox'] = false;
-$taskCols['name']['title']  = $lang->task->name;
-$taskCols['name']['fixed']   = '';
-$taskCols['assignedTo']['title']  = $lang->task->assignedTo;
-foreach($taskCols as $col => $colConfig)
-{
-    if(isset($colConfig['group'])) unset($taskCols[$col]['group']);
-}
+
 $tasks = initTableData($tasks, $taskCols);
 
 if(common::hasPriv('mr', 'linkStory'))

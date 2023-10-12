@@ -4,7 +4,7 @@ $lang->mr->common       = "合并请求";
 $lang->mr->server       = "服务器";
 $lang->mr->view         = "概况";
 $lang->mr->viewAction   = "{$lang->mr->common}详情";
-$lang->mr->create       = "提{$lang->mr->common}";
+$lang->mr->create       = "创建{$lang->mr->common}";
 $lang->mr->apiCreate    = "接口：创建{$lang->mr->common}";
 $lang->mr->browse       = "浏览{$lang->mr->common}";
 $lang->mr->browseAction = "{$lang->mr->common}列表";
@@ -43,7 +43,7 @@ $lang->mr->commits     = '提交数';
 $lang->mr->changes     = '更改数';
 $lang->mr->gitlabID    = 'GitLab';
 $lang->mr->repoID      = '版本库';
-$lang->mr->jobID       = '构建任务';
+$lang->mr->jobID       = '流水线任务';
 
 $lang->mr->canMerge  = "可合并";
 $lang->mr->cantMerge = "不可合并";
@@ -65,7 +65,7 @@ $lang->mr->approvalResultList['approve'] = '通过';
 $lang->mr->approvalResultList['reject']  = '拒绝';
 
 $lang->mr->needApproved       = '需要通过评审才能合并';
-$lang->mr->needCI             = '需要通过构建才能合并';
+$lang->mr->needCI             = '需要通过流水线才能合并';
 $lang->mr->removeSourceBranch = '合并后删除源分支';
 $lang->mr->squash             = '合并提交记录';
 
@@ -100,13 +100,13 @@ $lang->mr->sourceProject     = '源仓库';
 $lang->mr->sourceBranch      = '源分支';
 $lang->mr->targetProject     = '目标仓库';
 $lang->mr->targetBranch      = '目标分支';
-$lang->mr->noCompileJob      = '没有构建任务';
+$lang->mr->noCompileJob      = '没有流水线任务';
 $lang->mr->compileUnexecuted = '还未执行';
 
 $lang->mr->notFound          = "此{$lang->mr->common}不存在。";
-$lang->mr->toCreatedMessage  = "您提交的合并请求：<a href='%s'>%s</a> 构建任务执行通过。";
+$lang->mr->toCreatedMessage  = "您提交的合并请求：<a href='%s'>%s</a> 流水线任务执行通过。";
 $lang->mr->toReviewerMessage = "有一个合并请求：<a href='%s'>%s</a> 待审核。";
-$lang->mr->failMessage       = "您提交的合并请求：<a href='%s'>%s</a> 构建任务执行失败，查看执行结果。";
+$lang->mr->failMessage       = "您提交的合并请求：<a href='%s'>%s</a> 流水线任务执行失败，查看执行结果。";
 $lang->mr->storySummary      = "本页共 <strong>%s</strong> 个" . $lang->SRCommon;
 
 $lang->mr->apiError = new stdclass;

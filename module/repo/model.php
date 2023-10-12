@@ -167,16 +167,6 @@ class repoModel extends model
             ->page($pager)
             ->fetchAll('id');
 
-        if($getCodePath)
-        {
-            $gitlabRepos = array();
-            foreach($repos as $repo)
-            {
-                if($repo->SCM == 'Gitlab') $gitlabRepos[$repo->id] = $repo;
-            }
-            $this->loadModel('gitlab')->apiMultiGetProjects($gitlabRepos);
-        }
-
         /* Get products. */
         $productIdList = $this->loadModel('product')->getProductIDByProject($projectID, false);
         foreach($repos as $i => $repo)
@@ -259,20 +249,6 @@ class repoModel extends model
      */
     public function create(object $repo, bool $isPipelineServer): int|false
     {
-        if($isPipelineServer)
-        {
-            $serviceProject = $this->dao->select('*')->from(TABLE_REPO)
-                ->where('`SCM`')->eq($repo->SCM)
-                ->andWhere('`serviceHost`')->eq($repo->serviceHost)
-                ->andWhere('`serviceProject`')->eq($repo->serviceProject)
-                ->fetch();
-            if($serviceProject)
-            {
-                dao::$errors['serviceProject'][] = $this->lang->repo->error->projectUnique;
-                return false;
-            }
-        }
-
         $this->dao->insert(TABLE_REPO)->data($repo, 'serviceToken')
             ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
             ->batchCheckIF($repo->SCM != 'Gitlab', 'path,client', 'notempty')
@@ -409,9 +385,7 @@ class repoModel extends model
 
         if(($repo->serviceHost != $data->serviceHost || $repo->serviceProject != $data->serviceProject) && $repo->path != $data->path)
         {
-            $this->dao->delete()->from(TABLE_REPOHISTORY)->where('repo')->eq($id)->exec();
-            $this->dao->delete()->from(TABLE_REPOFILES)->where('repo')->eq($id)->exec();
-            $this->dao->delete()->from(TABLE_REPOBRANCH)->where('repo')->eq($id)->exec();
+            $this->repoTao->deleteInfoByID($id);
             return false;
         }
 
@@ -1437,7 +1411,6 @@ class repoModel extends model
      */
     public function setRepoBranch($branch)
     {
-        if(empty($branch)) return;
         helper::setcookie("repoBranch", $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
         $_COOKIE['repoBranch'] = $branch;
     }
@@ -2192,6 +2165,9 @@ class repoModel extends model
             $commentGroup = $this->loadModel('job')->getTriggerGroup('commit', array($repo->id));
             if($repo->SCM == 'Gitlab')
             {
+                $scm = $this->app->loadClass('scm');
+                $scm->setEngine($repo);
+
                 $this->loadModel('repo');
                 $jobs = zget($commentGroup, $repo->id, array());
 
@@ -2207,6 +2183,13 @@ class repoModel extends model
                     $log->msg      = $commit->message;
                     $log->author   = $commit->author->name;
                     $log->date     = date("Y-m-d H:i:s", strtotime($commit->timestamp));
+                    $log->files    = array();
+
+                    $diffs = $scm->engine->getFilesByCommit($log->revision);
+                    if(!empty($diffs))
+                    {
+                        foreach($diffs as $diff) $log->files[$diff->action][] = $diff->path;
+                    }
 
                     $objects = $this->repo->parseComment($log->msg);
                     $this->repo->saveAction2PMS($objects, $log, $repo->path, $repo->encoding, 'git', $accountPairs);

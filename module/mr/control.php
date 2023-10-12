@@ -57,6 +57,7 @@ class mr extends control
         }
         $filterProjects = empty($repo->serviceProject) ? array() : array($repo->serviceHost => array($repo->serviceProject => $repo->serviceProject));
         $MRList         = $this->mr->getList($mode, $param, $orderBy, $pager, $filterProjects, $repoID);
+
         if($repo->SCM == 'Gitlab')
         {
             $projectIds = array();
@@ -83,7 +84,6 @@ class mr extends control
         {
             $product         = $this->mr->getMRProduct($MR);
             $MR->linkButton  = empty($product) ? false : true;
-            $MR->createdDate = date('m-d H:i', strtotime($MR->createdDate));
         }
 
         /* Load lang from compile module */
@@ -118,6 +118,7 @@ class mr extends control
         $this->view->orderBy    = $orderBy;
         $this->view->openIDList = $openIDList;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->sortLink   = $this->createLink('mr', 'browse', "repoID={$repoID}&mode={$mode}&param={$param}&objectID={$objectID}&orderBy={orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}");
         $this->display();
     }
 
@@ -258,7 +259,7 @@ class mr extends control
         $this->loadModel('action')->create('mr', $MRID, 'deleted', '', $MR->title);
         $this->mr->createMRLinkedAction($MRID, 'removemr');
 
-        return $this->send(array('result' => 'success', 'reload' => inlink('browse')));
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
@@ -271,7 +272,7 @@ class mr extends control
     public function view($MRID)
     {
         $MR = $this->mr->getByID($MRID);
-        if(!$MR) return print(js::error($this->lang->notFound) . js::locate($this->createLink('mr', 'browse')));
+        if(!$MR) return $this->locate($this->createLink('mr', 'browse'));
         if(isset($MR->hostID)) $rawMR = $this->mr->apiGetSingleMR($MR->hostID, $MR->targetProject, $MR->mriid);
         if($MR->synced and (!isset($rawMR->id) or (isset($rawMR->message) and $rawMR->message == '404 Not found') or empty($rawMR))) return $this->display();
 
@@ -287,11 +288,30 @@ class mr extends control
         $sourceBranch  = $this->$scm->apiGetSingleBranch($MR->hostID, $MR->sourceProject, $MR->sourceBranch);
         $targetBranch  = $this->$scm->apiGetSingleBranch($MR->hostID, $MR->targetProject, $MR->targetBranch);
 
-        $projectOwner = true;
+        $projectOwner = $projectEdit = false;
         if(isset($MR->hostID) and !$this->app->user->admin)
         {
             $openID = $this->$scm->getUserIDByZentaoAccount($MR->hostID, $this->app->user->account);
             if(!$projectOwner and isset($sourceProject->owner->id) and $sourceProject->owner->id == $openID) $projectOwner = true;
+        }
+
+        if($scm == 'gitlab')
+        {
+            $gitUsers    = $this->gitlab->getUserAccountIdPairs($MR->hostID);
+            $groupIDList = array(0 => 0);
+            $groups      = $this->gitlab->apiGetGroups($MR->hostID, 'name_asc', 'developer');
+            foreach($groups as $group) $groupIDList[] = $group->id;
+            $isDeveloper = $this->gitlab->checkUserAccess($MR->hostID, 0, $sourceProject, $groupIDList, 'developer');
+
+            if(isset($gitUsers[$this->app->user->account]) && $isDeveloper) $projectEdit = true;
+        }
+        elseif($scm == 'gitea')
+        {
+            $projectEdit = (isset($sourceProject->allow_merge_commits) and $sourceProject->allow_merge_commits == true) ? true : false;
+        }
+        elseif($scm == 'gogs')
+        {
+            $projectEdit = (isset($sourceProject->permissions->push) and $sourceProject->permissions->push) ? true : false;
         }
 
         $this->view->sourceProjectName = $sourceProject->name_with_namespace;
@@ -310,6 +330,7 @@ class mr extends control
         $this->view->compile      = $this->loadModel('compile')->getById($MR->compileID);
         $this->view->compileJob   = $MR->jobID ? $this->job->getById($MR->jobID) : false;
         $this->view->projectOwner = $projectOwner;
+        $this->view->projectEdit  = $projectEdit;
 
         $this->view->title   = $this->lang->mr->view;
         $this->view->MR      = $MR;
@@ -545,6 +566,7 @@ class mr extends control
 
         $this->app->loadModuleConfig('release');
         $this->app->loadModuleConfig('task');
+        $this->app->loadModuleConfig('repo');
 
         $MR       = $this->mr->getByID($MRID);
         $product  = $this->mr->getMRProduct($MR);
@@ -650,7 +672,7 @@ class mr extends control
         $linkedStories = $this->mr->getLinkList($MRID, $product->id, 'story');
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch($productID, 0, $queryID, 'id', '', 'story', array_keys($linkedStories), $pager);
+            $allStories = $this->story->getBySearch($productID, 0, $queryID, $orderBy, '', 'story', array_keys($linkedStories), '', $pager);
         }
         else
         {
@@ -716,7 +738,7 @@ class mr extends control
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($productID => $productID));
         $this->config->bug->search['params']['module']['values']        = $modules;
         $this->config->bug->search['params']['execution']['values']     = $this->product->getExecutionPairsByProduct($productID);
-        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs(array($productID), 'all', 'releasetag');
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($productID, 'all', 'releasetag');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
 
         unset($this->config->bug->search['fields']['product']);
@@ -739,16 +761,12 @@ class mr extends control
         $linkedBugs = $this->mr->getLinkList($MRID, $product->id, 'bug');
         if($browseType == 'bySearch')
         {
-            $allBugs = $this->bug->getBySearch($productID, 0, $queryID, 'id_desc', array_keys($linkedBugs), $pager);
+            $allBugs = $this->bug->getBySearch($productID, 0, $queryID, $orderBy, array_keys($linkedBugs), $pager);
         }
         else
         {
-            $allBugs = $this->bug->getActiveBugs($productID, 0, '0', array_keys($linkedBugs), $pager);
+            $allBugs = $this->bug->getActiveBugs($productID, 0, '0', array_keys($linkedBugs), $pager, $orderBy);
         }
-
-        list($order, $sort) = explode('_', $orderBy);
-        $sortCol = array_column($allBugs, $order);
-        array_multisort($sortCol, $sort == 'asc' ? SORT_ASC : SORT_DESC, $allBugs);
 
         $this->view->modules     = $modules;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
@@ -792,6 +810,7 @@ class mr extends control
         $this->loadModel('execution');
         $this->loadModel('product');
         $this->app->loadLang('task');
+        $this->app->loadModuleConfig('repo');
 
         /* Set browse type. */
         $browseType = strtolower($browseType);

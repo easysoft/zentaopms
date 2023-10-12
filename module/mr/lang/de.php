@@ -21,6 +21,7 @@ $lang->mr->link         = 'Link of stories,Bugs,tasks';
 $lang->mr->createAction = '%s, <strong>%s</strong> submitted a <a href="%s">Merge Request</a>.';
 $lang->mr->editAction   = '%s, <strong>%s</strong> edited <a href="%s">Merge Request</a>。';
 $lang->mr->removeAction = '%s, <strong>%s</strong> deleted <a href="%s">Merge Request</a>。';
+$lang->mr->submitType   = 'Submit type';
 
 $lang->mr->linkList  = 'Link List of stories,Bugs,tasks';
 $lang->mr->linkStory = 'Link Stories';
@@ -42,7 +43,7 @@ $lang->mr->commits     = 'commits';
 $lang->mr->changes     = 'changes';
 $lang->mr->gitlabID    = 'GitLab';
 $lang->mr->repoID      = 'Repo';
-$lang->mr->jobID       = 'Compile job';
+$lang->mr->jobID       = 'Pipeline job';
 
 $lang->mr->canMerge  = "Can be merged";
 $lang->mr->cantMerge = "Can not be merged";
@@ -64,7 +65,7 @@ $lang->mr->approvalResultList['approve'] = 'Approve';
 $lang->mr->approvalResultList['reject']  = 'Reject';
 
 $lang->mr->needApproved       = 'This MR should be approved before merge';
-$lang->mr->needCI             = 'Merge only after passing CI';
+$lang->mr->needCI             = 'Merge only after passing pipeline';
 $lang->mr->removeSourceBranch = 'Delete source branch after merge';
 $lang->mr->squash             = 'Squash commits';
 
@@ -99,11 +100,11 @@ $lang->mr->sourceProject     = 'Source repository';
 $lang->mr->sourceBranch      = 'Source branch';
 $lang->mr->targetProject     = 'Target repository';
 $lang->mr->targetBranch      = 'Target branch';
-$lang->mr->noCompileJob      = 'No Compile Job';
+$lang->mr->noCompileJob      = 'No Pipeline Job';
 $lang->mr->compileUnexecuted = 'Compile Unexecuted';
 
 $lang->mr->notFound          = "Merge Request does not exist!";
-$lang->mr->toCreatedMessage  = "The merge request you submitted：<a href='%s'>%s</a>, the build task succeeded.";
+$lang->mr->toCreatedMessage  = "The merge request you submitted：<a href='%s'>%s</a>, the pipeline task succeeded.";
 $lang->mr->toReviewerMessage = "You have one merge request <a href='%s'>%s</a> waiting.";
 $lang->mr->failMessage       = "Your merge request <a href='%s'>%s</a> failed. Please check its execution result. ";
 $lang->mr->storySummary      = "Total <strong>%s</strong> {$lang->SRCommon} on this page.";

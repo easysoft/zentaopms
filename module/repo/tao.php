@@ -24,5 +24,20 @@ class repoTao extends repoModel
     {
         return $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->orderBy('time_desc')->fetch();
     }
+
+    /**
+     * 根据id删除版本库信息。
+     * Delete repo info by id.
+     *
+     * @param  int $repoID
+     * @access protected
+     * @return void
+     */
+    protected function deleteInfoByID(int $repoID): void
+    {
+        $this->dao->delete()->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->exec();
+        $this->dao->delete()->from(TABLE_REPOFILES)->where('repo')->eq($repoID)->exec();
+        $this->dao->delete()->from(TABLE_REPOBRANCH)->where('repo')->eq($repoID)->exec();
+    }
 }
 

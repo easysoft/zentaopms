@@ -32,7 +32,7 @@ $taskRepoModule = 0;
 $taskMembers    = array('' => '');
 if($repoExecution)
 {
-    $taskModules    = $this->loadModel('tree')->getTaskOptionMenu($repoExecution);
+    $taskModules    = $this->loadModel('tree')->getTaskOptionMenu($repoExecution, 0, 0, '');
     $taskRepoModule = (!empty($lastReview->task) && $lastReview->task->execution == $repoExecution) ? $lastReview->task->module : '';
     $taskMembers    = $this->loadModel('user')->getTeamMemberPairs($repoExecution, 'execution', 'nodeleted');
 }

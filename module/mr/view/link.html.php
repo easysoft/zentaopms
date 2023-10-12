@@ -156,7 +156,7 @@
                 <th class='w-70px' title=<?php echo $lang->pri;?>> <?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
                 <th class='text-left'><?php common::printOrderLink('title',      $orderBy, $vars, $lang->bug->title);?></th>
                 <th class='c-user'> <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
-                <th class='c-user'> <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->bug->abbr->assignedTo);?></th>
+                <th class='c-user'> <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->bug->assignedToAB);?></th>
                 <th class='w-100px'><?php common::printOrderLink('status',     $orderBy, $vars, $lang->bug->status);?></th>
                 <th class='w-50px'> <?php echo $lang->actions?></th>
               </tr>
