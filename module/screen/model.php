@@ -895,8 +895,15 @@ class screenModel extends model
             case 'month':
                 $component->option->value = $this->filter->month;
 
+                $currentYear  = date('Y');
+                $currentMonth = date('n');
+
                 $options = array();
-                for($month = 12; $month >= 1; $month--) $options[] = array('label' => $month, 'value' => $month);
+                for($month = 12; $month >= 1; $month--)
+                {
+                    if($this->filter->year == $currentYear and $month > $currentMonth) continue;
+                    $options[] = array('label' => $month, 'value' => $month);
+                }
                 $component->option->dataset = $options;
 
                 $url = "createLink('screen', 'view', 'screenID=" . $this->filter->screen. "&year=" . $this->filter->year . "&month=' + value + '&dept=" . $this->filter->dept . "&account=" . $this->filter->account . "')";
