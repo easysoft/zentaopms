@@ -10,9 +10,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$config->system->dtable->dbList->fieldList['actions']['list']['management']['url'] = 'javascript:manageDb("{name}", "{db_type}", "{namespace}")';
+$config->system->dtable->dbList->fieldList['actions']['list']['dblist']['url'] = 'javascript:manageDb("{name}", "{db_type}", "{namespace}")';
 
-$dbList = initTableData($dbList, $config->system->dtable->dbList->fieldList, $this->system);
+$dbList = initTableData($dbList, $config->system->dtable->dbList->fieldList);
 
 panel
 (

@@ -21,10 +21,11 @@ $config->system->dtable->dbList->fieldList['dbStatus']['map']   = $lang->instanc
 $config->system->dtable->dbList->fieldList['actions']['name']  = 'actions';
 $config->system->dtable->dbList->fieldList['actions']['title'] = $lang->actions;
 $config->system->dtable->dbList->fieldList['actions']['type']  = 'actions';
-$config->system->dtable->dbList->fieldList['actions']['menu']  = array('management');
+$config->system->dtable->dbList->fieldList['actions']['menu']  = array('dblist');
 
-$config->system->dtable->dbList->fieldList['actions']['list']['management']['icon'] = 'cog-outline';
-$config->system->dtable->dbList->fieldList['actions']['list']['management']['hint'] = $lang->system->management;
+$config->system->dtable->dbList->fieldList['actions']['list']['dblist']['icon'] = 'cog-outline';
+$config->system->dtable->dbList->fieldList['actions']['list']['dblist']['hint'] = $lang->system->management;
+$config->system->dtable->dbList->fieldList['actions']['list']['dblist']['url']  = array('method' => 'dblist');
 
 $config->system->dtable->backup = new stdclass();
 
