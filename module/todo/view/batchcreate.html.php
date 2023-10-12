@@ -83,7 +83,7 @@
           </td>
           <td class="visible <?php echo zget($visibleFields, 'beginAndEnd', 'hidden')?>">
             <div class='checkbox-primary'>
-              <input type='checkbox' name="switchTime[<?php echo $i?>]" id="switchTime<?php echo $i?>" class='control-time-switch' onclick='switchTimeList(<?php echo $i?>);' />
+              <input type='checkbox' name="switchTime[<?php echo $i?>]" id="switchTime<?php echo $i?>" class='control-time-switch' onchange='switchTimeList(<?php echo $i?>);' />
               <label for="switchTime<?php echo $i?>"> <?php echo $lang->todo->periods['future'];?></label>
             </div>
           </td>
