@@ -3557,9 +3557,9 @@ class storyModel extends model
      * @param  object    $story
      * @param  array     $users
      * @access public
-     * @return string
+     * @return void
      */
-    public function printAssignedHtml($story, $users)
+    public function printAssignedHtml(object $story, array $users): void
     {
         $btnTextClass   = '';
         $btnClass       = '';
@@ -3795,28 +3795,6 @@ class storyModel extends model
     }
 
     /**
-     * Get story relation by Ids.
-     *
-     * @param  array  $storyIdList
-     * @param  string $storyType
-     * @access public
-     * @return array
-     */
-    public function getStoryRelationByIds($storyIdList, $storyType)
-    {
-        $conditionField = $storyType == 'story' ? 'BID' : 'AID';
-        $storyType      = $storyType == 'story' ? 'BID, GROUP_CONCAT(`AID` SEPARATOR ",")' : 'AID, GROUP_CONCAT(`BID` SEPARATOR ",")';
-
-        return $this->dao->select($storyType)->from(TABLE_RELATION)
-            ->where('AType')->eq('requirement')
-            ->andWhere('BType')->eq('story')
-            ->andWhere('relation')->eq('subdivideinto')
-            ->andWhere($conditionField)->in($storyIdList)
-            ->groupBy($conditionField)
-            ->fetchPairs();
-    }
-
-    /**
      * Link a story.
      *
      * @param  int    $executionID
@@ -3848,7 +3826,7 @@ class storyModel extends model
      * @access public
      * @return void
      */
-    public function linkStories(int $storyID, array|object $storyList = array())
+    public function linkStories(int $storyID, array|object $storyList = array()): void
     {
         $story   = $this->getByID($storyID);
         $stories = empty($storyList) ? $this->post->stories : $storyList;
@@ -3888,9 +3866,9 @@ class storyModel extends model
      * @param  int $storyID
      * @param  int $linkedStoryID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function unlinkStory($storyID, $linkedStoryID)
+    public function unlinkStory(int $storyID, int $linkedStoryID): bool
     {
         $idList = "$storyID,$linkedStoryID";
 
@@ -3903,27 +3881,6 @@ class storyModel extends model
             ->exec();
 
         return !dao::isError();
-    }
-
-    /**
-     * Get software requirements associated with user needs.
-     *
-     * @param  array  $storyID
-     * @param  string $storyType
-     * @access public
-     * @return int
-     */
-    public function getStoryRelationCounts($storyID, $storyType = '')
-    {
-        $selectField    = ($storyType == 'story') ? 'AID' : 'BID';
-        $conditionField = ($storyType == 'story') ? 'BID' : 'AID';
-
-        return $this->dao->select('count('. $selectField .') as id')->from(TABLE_RELATION)
-            ->where('AType')->eq('requirement')
-            ->andWhere('BType')->eq('story')
-            ->andWhere('relation')->eq('subdivideinto')
-            ->andWhere($conditionField)->eq($storyID)
-            ->fetch('id');
     }
 
     /**
@@ -3979,7 +3936,7 @@ class storyModel extends model
      * @access public
      * @return void
      */
-    public function saveEstimateInfo($storyID)
+    public function saveEstimateInfo(int $storyID): void
     {
         $data = fixer::input('post')->get();
 
@@ -3991,18 +3948,11 @@ class storyModel extends model
         $estimates = array();
         foreach($data->account as $key => $account)
         {
-            $estimates[$account]['account']  = $account;
-            if(!empty($data->estimate[$key]) and !is_numeric($data->estimate[$key]))
-            {
-                dao::$errors[] = $this->lang->story->estimateMustBeNumber;
-                return false;
-            }
+            if(!empty($data->estimate[$key]) and !is_numeric($data->estimate[$key])) dao::$errors[] = $this->lang->story->estimateMustBeNumber;
+            if(!empty($data->estimate[$key]) and $data->estimate[$key] < 0) dao::$errors[] = $this->lang->story->estimateMustBePlus;
+            if(dao::isError()) return;
 
-            if(!empty($data->estimate[$key]) and $data->estimate[$key] < 0)
-            {
-                dao::$errors[] = $this->lang->story->estimateMustBePlus;
-                return false;
-            }
+            $estimates[$account]['account']  = $account;
             $estimates[$account]['estimate'] = strpos($data->estimate[$key], '-') !== false ? (int)$data->estimate[$key] : (float)$data->estimate[$key];
         }
 
@@ -4302,31 +4252,6 @@ class storyModel extends model
             ->exec();
 
         return $story;
-    }
-
-    /**
-     * Get related objects id lists.
-     *
-     * @param  int    $object
-     * @param  string $pairs
-     * @access public
-     * @return void
-     */
-    public function getRelatedObjects($object, $pairs = '')
-    {
-        $storys = $this->loadModel('transfer')->getQueryDatas('story');
-
-        /* Get related objects id lists. */
-        $relatedObjectIdList = array();
-        $relatedObjects      = array();
-
-        foreach($storys as $story) $relatedObjectIdList[$story->$object]  = $story->$object;
-
-        if($object == 'plan') $object = 'productplan';
-        /* Get related objects title or names. */
-        $table = $this->config->objectTables[$object];
-        if($table) $relatedObjects = $this->dao->select($pairs)->from($table) ->where('id')->in($relatedObjectIdList)->fetchPairs();
-        return $relatedObjects;
     }
 
     /**
@@ -4906,15 +4831,9 @@ class storyModel extends model
         if(empty($options['execution'])) $story->isParent = isset($story->children);
         if($story->mailto)
         {
-            $mailto = '';
-            foreach(explode(',', $story->mailto) as $account)
-            {
-                $account = trim($account);
-                if(empty($account)) continue;
-
-                $mailto .= zget(zget($options, 'users', array()), $account) . ' ';
-            }
-            $story->mailto = $mailto;
+            $mailto = array_filter(explode(',', $story->mailto));
+            foreach($mailto as $i => $account) $mailto[i] = zget(zget($options, 'users', array()), $account);
+            $story->mailto = implode(' ', $mailto);
         }
 
         /* Rewrite actions by action menus in options. */
