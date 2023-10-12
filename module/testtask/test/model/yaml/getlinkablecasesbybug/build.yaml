@@ -1,0 +1,6 @@
+title: table zt_build
+author: Gang Liu
+version: "1.0"
+fields:
+  - field: bugs
+    range: "[],`1,2`,`3,4`"
