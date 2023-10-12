@@ -494,7 +494,7 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getLinkableCasesByTestTask(int $testTask, array $linkedCases, string $query, object $pager): array
+    public function getLinkableCasesByTestTask(int $testTask, array $linkedCases = array(), string $query = '', object $pager = null): array
     {
         /* Format the query condition. */
         $query = preg_replace('/`(\w+)`/', 't1.`$1`', $query);
@@ -504,11 +504,11 @@ class testtaskModel extends model
 
         return $this->dao->select('t1.*, t2.lastRunner, t2.lastRunDate, t2.lastRunResult')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
-            ->where($query)
-            ->andWhere('t1.id')->notin($linkedCases)
-            ->andWhere('t2.task')->eq($testTask)
-            ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
+            ->where('t2.task')->eq($testTask)
             ->andWhere('t1.status')->ne('wait')
+            ->beginIF($query)->andWhere($query)->fi()
+            ->beginIF($linkedCases)->andWhere('t1.id')->notin($linkedCases)->fi()
+            ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
             ->page($pager)
             ->fetchAll();
     }
