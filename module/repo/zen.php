@@ -347,35 +347,34 @@ class repoZen extends repo
      */
     protected function getFilesInfo(object $repo, string $path, string $branchID, int $refresh, string $revision, object $lastRevision): array
     {
-        $cacheFile        = $this->repo->getCacheFile($repo->id, $path, $branchID);
-        $cacheRefreshTime = isset($lastRevision->time) ? date('Y-m-d H:i', strtotime($lastRevision->time)) : date('Y-m-d H:i');
-        $this->scm->setEngine($repo);
-        if($refresh or !$cacheFile or !file_exists($cacheFile) or filemtime($cacheFile) < strtotime($cacheRefreshTime))
+        if($repo->SCM == 'Gitlab')
         {
-            if($repo->SCM == 'Gitlab')
+            $cacheFile        = $this->repo->getCacheFile($repo->id, $path, $branchID);
+            $cacheRefreshTime = isset($lastRevision->time) ? date('Y-m-d H:i', strtotime($lastRevision->time)) : date('Y-m-d H:i');
+            $this->scm->setEngine($repo);
+            if($refresh or !$cacheFile or !file_exists($cacheFile) or filemtime($cacheFile) < strtotime($cacheRefreshTime))
             {
                 $infos = $this->repo->getFileList($repo, $branchID, $path);
-            }
-            else
-            {
-                $infos        = $this->scm->ls($path, $revision);
-                $revisionList = helper::arrayColumn($infos, 'revision', 'revision');
-                $comments     = $this->repo->getHistory($repo->id, $revisionList);
-                foreach($infos as $info)
+
+                if($cacheFile && !empty($infos))
                 {
-                    if(isset($comments[$info->revision]))
+                    if(!file_exists($cacheFile . '.lock'))
                     {
-                        $comment = $comments[$info->revision];
-                        $info->comment = $comment->comment;
+                        touch($cacheFile . '.lock');
+                        file_put_contents($cacheFile, serialize($infos));
+                        unlink($cacheFile . '.lock');
                     }
                 }
             }
-            if($cacheFile && !empty($infos)) file_put_contents($cacheFile, serialize($infos), LOCK_EX);
+            else
+            {
+                $infos = unserialize(file_get_contents($cacheFile));
+                if(empty($infos)) unlink($cacheFile);
+            }
         }
         else
         {
-            $infos = unserialize(file_get_contents($cacheFile));
-            if(empty($infos)) unlink($cacheFile);
+            $infos = $this->repo->getFileCommits($repo, $branchID, $path);
         }
 
         foreach($infos as $info)

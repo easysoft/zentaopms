@@ -1484,7 +1484,6 @@ class repoModel extends model
      */
     public function setRepoBranch($branch)
     {
-        if(empty($branch)) return;
         helper::setcookie("repoBranch", $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
         $_COOKIE['repoBranch'] = $branch;
     }
