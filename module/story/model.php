@@ -631,10 +631,6 @@ class storyModel extends model
                 if(is_array($story->{$extendField->field})) $story->{$extendField->field} = join(',', $story->{$extendField->field});
 
                 $story->{$extendField->field} = htmlSpecialString($story->{$extendField->field});
-                if(empty($story->{$extendField->field}))
-                {
-                    dao::$errors["{$extendField->field}$i"][] = sprintf($this->lang->error->notempty, $extendField->name);
-                }
             }
 
             foreach(explode(',', $this->config->story->create->requiredFields) as $field)
