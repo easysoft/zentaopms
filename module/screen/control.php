@@ -67,6 +67,7 @@ class screen extends control
      *
      * @param  int $screenID
      * @param  int $year
+     * @param  int $month
      * @param  int $dept
      * @param  string $account
      * @access public
@@ -79,7 +80,7 @@ class screen extends control
 
         if($screenID == 3)
         {
-            echo $this->fetch('report', 'annualData', "year=$year&dept=$dept&account=$account");
+            echo $this->fetch('report', 'annualData', "year=$year&month=$month&dept=$dept&account=$account");
             return;
         }
 

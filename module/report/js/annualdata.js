@@ -202,7 +202,7 @@ $(function()
         var dept    = $('select#dept').val();
         var account = $('select#account').val();
         if($(this).attr('id') == 'dept') account = '';
-        location.href = createLink('screen', 'view', 'screenID=3&year=' + year + '&dept=' + dept + '&account=' + account);
+        location.href = createLink('screen', 'view', 'screenID=3&year=' + year + '&month=' + '&dept=' + dept + '&account=' + account);
     });
 
     $('#actionData > div > ul > li').mouseenter(function(e)
