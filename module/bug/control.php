@@ -826,7 +826,7 @@ class bug extends control
 
             $oldBugs = $this->bug->getByIdList(array_column($bugs, 'id'));
 
-            $message      = '';
+            $message = '';
             foreach($bugs as $bugID => $bug)
             {
                 $this->bug->update($bug);
