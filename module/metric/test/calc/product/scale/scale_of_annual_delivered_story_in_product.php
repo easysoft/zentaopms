@@ -1,21 +1,20 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 7) . '/test/lib/init.php';
-include dirname(__FILE__, 4) . '/calc.class.php';
-
-zdTable('product')->config('product', $useCommon = true, $levels = 4)->gen(10);
-zdTable('story')->config('story_stage_closedreason', $useCommon = true, $levels = 4)->gen(2000);
-
-$metric = new metricTest();
-$calc   = $metric->calcMetric(__FILE__);
-
 /**
 
 title=scale_of_annual_delivered_story_in_product
+timeout=0
 cid=1
-pid=1
 
 */
+include dirname(__FILE__, 7) . '/test/lib/init.php';
+include dirname(__FILE__, 4) . '/calc.class.php';
+
+zdTable('product')->config('product', true, 4)->gen(10);
+zdTable('story')->config('story_stage_closedreason', true, 4)->gen(2000);
+
+$metric = new metricTest();
+$calc   = $metric->calcMetric(__FILE__);
 
 r(count($calc->getResult())) && p('') && e('18'); // 测试分组数。
 

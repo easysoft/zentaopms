@@ -1,7 +1,7 @@
 <?php
 /**
  * 按人员统计的待评审反馈数。
- * count_of_reviewing_feedback_in_user.
+ * Count of reviewing feedback in user.
  *
  * 范围：user
  * 对象：feedback
@@ -9,9 +9,7 @@
  * 度量名称：按人员统计的待评审反馈数
  * 单位：个
  * 描述：按人员统计的待评审反馈数表示每个人待评审的反馈数量之和。反映了每个人需要评审的反馈的规模。该数值越大，说明需要投入越多的时间评审反馈。
- * 定义：所有反馈个数求和;状态为待评审;指派给为某人;过滤已删除的反馈;过滤已删除产品的反馈
- * 度量库：
- * 收集方式：realtime
+ * 定义：所有反馈个数求和;状态为待评审;指派给为某人;过滤已删除的反馈;过滤已删除产品的反馈;
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>

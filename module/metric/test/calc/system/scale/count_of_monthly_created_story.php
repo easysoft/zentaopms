@@ -1,14 +1,5 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 7) . '/test/lib/init.php';
-include dirname(__FILE__, 4) . '/calc.class.php';
-
-zdTable('product')->config('product', $useCommon = true, $levels = 4)->gen(10);
-zdTable('story')->config('story_status', $useCommon = true, $levels = 4)->gen(1000);
-
-$metric = new metricTest();
-$calc   = $metric->calcMetric(__FILE__);
-
 /**
 
 title=count_of_monthly_created_story
@@ -16,6 +7,14 @@ timeout=0
 cid=1
 
 */
+include dirname(__FILE__, 7) . '/test/lib/init.php';
+include dirname(__FILE__, 4) . '/calc.class.php';
+
+zdTable('product')->config('product', true, 4)->gen(10);
+zdTable('story')->config('story_status', true, 4)->gen(1000);
+
+$metric = new metricTest();
+$calc   = $metric->calcMetric(__FILE__);
 
 r(count($calc->getResult())) && p('') && e('67'); // 测试按产品的月度新增需求分组数。
 

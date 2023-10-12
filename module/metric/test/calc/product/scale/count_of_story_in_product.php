@@ -1,5 +1,12 @@
 #!/usr/bin/env php
 <?php
+/**
+
+title=count_of_story_in_product
+timeout=0
+cid=1
+
+*/
 include dirname(__FILE__, 7) . '/test/lib/init.php';
 include dirname(__FILE__, 4) . '/calc.class.php';
 
@@ -8,14 +15,6 @@ zdTable('product')->gen(100);
 
 $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);
-
-/**
-
-title=count_of_story_in_product
-timeout=0
-cid=1
-
-*/
 
 r(count($calc->getResult())) && p('') && e('25'); // 测试分组数
 
