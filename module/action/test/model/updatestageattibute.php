@@ -9,7 +9,7 @@ zdTable('project')->gen(5);
 
 /**
 
-title=测试 actionModel->read();
+title=测试 actionModel->updateStageAttributeTest();
 cid=1
 pid=1
 

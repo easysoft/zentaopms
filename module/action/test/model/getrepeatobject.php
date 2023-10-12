@@ -10,7 +10,7 @@ zdTable('project')->config('execution')->gen(8);
 
 /**
 
-title=测试 actionModel->create();
+title=测试 actionModel->getRepeatObjectTest();
 cid=1
 pid=1
 

@@ -658,7 +658,7 @@ class actionTest
 
         return $result[0];
     }
-    
+
     /**
      * 测试更新阶段的属性。
      * Test update stage attribute.
@@ -715,5 +715,25 @@ class actionTest
         global $tester;
         $object = $tester->dao->select('*')->from($table)->where('id')->eq($id)->fetch();
         return $object;
+    }
+
+    /**
+     * 测试获取近似的对象。
+     * Test get like object.
+     *
+     * @param  string $table
+     * @param  string $field
+     * @param  string $param
+     * @param  string $value
+     * @access public
+     * @return int
+     */
+    public function getLikeObjectTest(string $table, string $field, string $param, string $value): int
+    {
+        $objects = $this->objectModel->getLikeObject($table, $field, $param, $value);
+
+        if(dao::isError()) return dao::getError();
+
+        return count($objects);
     }
 }

@@ -1,8 +1,6 @@
 #!/usr/bin/env php
 <?php
 
-use Spiral\RoadRunner\Console\Configuration\Section\Amqp;
-
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/action.class.php';
 
