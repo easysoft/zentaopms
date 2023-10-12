@@ -380,7 +380,7 @@ class storyModel extends model
                 if($executionID != 0)
                 {
                     $this->linkStory($executionID, $this->post->product, $storyID);
-                    if($this->config->systemMode == 'ALM' and $executionID != $this->session->project) $this->linkStory($this->session->project, $this->post->product, $storyID);
+                    if(in_array($this->config->systemMode, array('ALM', 'PLM')) and $executionID != $this->session->project) $this->linkStory($this->session->project, $this->post->product, $storyID);
 
                     $this->loadModel('kanban');
 
