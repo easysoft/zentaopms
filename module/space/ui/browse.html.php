@@ -14,7 +14,7 @@ jsVar('orderBy',  $orderBy);
 jsVar('sortLink', $sortLink);
 
 $statusMap  = array();
-$canInstall = hasPriv('instance', 'mange');
+$canInstall = hasPriv('instance', 'manage');
 
 foreach($instances as $instance) if('store' === $instance->type) $statusMap[$instance->id] = $instance->status;
 jsVar('statusMap', $statusMap);
