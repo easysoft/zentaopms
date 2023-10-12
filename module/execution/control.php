@@ -981,7 +981,6 @@ class execution extends control
         $this->view->gobackLink          = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('execution', 'all') : '';
         $this->view->allProducts         = array_filter($this->executionZen->getAllProductsForCreate($project));
         $this->view->allProjects         = $this->project->getPairsByModel('all', 'noclosed,multiple');
-        $this->view->multiBranchProducts = $this->loadModel('product')->getMultiBranchPairs();
         $this->view->products            = $products;
         $this->view->teams               = $this->execution->getCanCopyObjects($projectID);
         $this->view->users               = $this->loadModel('user')->getPairs('nodeleted|noclosed');
@@ -1127,7 +1126,6 @@ class execution extends control
         $this->view->users                = $this->loadModel('user')->getPairs('nodeleted|noclosed');
         $this->view->groups               = $this->loadModel('group')->getPairs();
         $this->view->branches             = $branches;
-        $this->view->multiBranchProducts  = $this->product->getMultiBranchPairs();
         $this->view->allProducts          = $linkedObjects->allProducts;
         $this->view->linkedProducts       = $linkedObjects->linkedProducts;
         $this->view->linkedBranches       = $linkedObjects->linkedBranches;

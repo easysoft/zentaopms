@@ -12,10 +12,8 @@ namespace zin;
 
 jsVar('weekend', $config->execution->weekend);
 jsVar('errorSameProducts', $lang->execution->errorSameProducts);
-jsVar('errorSameBranches', $lang->execution->errorSameBranches);
 jsVar('unmodifiableProducts',$unmodifiableProducts);
 jsVar('unmodifiableBranches', $unmodifiableBranches);
-jsVar('multiBranchProducts', $multiBranchProducts);
 jsVar('linkedStoryIDList', $linkedStoryIDList);
 jsVar('confirmSync', $lang->execution->confirmSync);
 jsVar('unLinkProductTip', $lang->project->unLinkProductTip);

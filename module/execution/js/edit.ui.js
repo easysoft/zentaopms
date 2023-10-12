@@ -2,38 +2,6 @@ $(function()
 {
     if($('#typeHover').length) new zui.Tooltip('#typeHover', {title: typeTip, trigger: 'hover', placement: 'right', type: 'white', 'className': 'text-gray border border-light'});
 
-    $(document).on('click', 'button[type=submit]', function()
-    {
-        let products      = new Array();
-        let existedBranch = false;
-
-        /* Determine whether the products of the same branch are linked. */
-        $(".productsBox select[name^='products']").each(function()
-        {
-            let productID = $(this).val();
-            if(typeof(products[productID]) == 'undefined') products[productID] = new Array();
-            if(multiBranchProducts[productID])
-            {
-                let branchID = $(this).closest('.form-row').find("select[name^=branch]").val();
-                if(products[productID][branchID])
-                {
-                    existedBranch = true;
-                }
-                else
-                {
-                    products[productID][branchID] = branchID;
-                }
-                if(existedBranch) return false;
-            }
-        });
-
-        if(existedBranch)
-        {
-            zui.Modal.alert(errorSameBranches);
-            return false;
-        }
-    });
-
     if(isWaterfall) hidePlanBox(executionAttr);
 });
 

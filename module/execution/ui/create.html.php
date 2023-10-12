@@ -15,10 +15,8 @@ jsVar('+projectID', $projectID);
 jsVar('copyProjectID', $copyProjectID);
 jsVar('weekend', $config->execution->weekend);
 jsVar('errorSameProducts', $lang->execution->errorSameProducts);
-jsVar('errorSameBranches', $lang->execution->errorSameBranches);
 jsVar('isStage', $isStage);
 jsVar('copyExecutionID', $copyExecutionID);
-jsVar('multiBranchProducts', $multiBranchProducts);
 jsVar('executionID', isset($executionID) ? $executionID : 0);
 
 $methodBox         = null;
