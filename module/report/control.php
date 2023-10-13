@@ -116,7 +116,7 @@ class report extends control
      * @access public
      * @return void
      */
-    public function annualData($year = '', $dept = '', $account = '')
+    public function annualData($year = '', $month = '', $dept = '', $account = '')
     {
         $this->app->loadLang('story');
         $this->app->loadLang('task');
