@@ -535,7 +535,7 @@ class metricModel extends model
                 $objectPairs = $this->loadModel('dept')->getDeptPairs();
                 break;
             case 'user':
-                $objectPairs = $this->loadModel('user')->getPairs('noletter');
+                $objectPairs = $this->loadModel('user')->getPairs('noletter|noclosed');
                 break;
             case 'program':
                 $objectPairs = $this->dao->select('id, name')->from(TABLE_PROGRAM)
@@ -1065,7 +1065,7 @@ class metricModel extends model
         }
         elseif($optionType == 'user')
         {
-            $options = $this->loadModel('user')->getPairs('noletter');
+            $options = $this->loadModel('user')->getPairs('noletter|noclosed');
         }
         elseif(strpos($optionType, '.') !== false)
         {
