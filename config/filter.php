@@ -435,6 +435,7 @@ $filter->repo->default->get['entry']    = 'reg::base64';
 $filter->repo->apigetrepobyurl->get['url'] = 'reg::any';
 
 $filter->repo->default->cookie['repoBranch']        = 'reg::any';
+$filter->repo->default->cookie['repoCodePath']      = 'reg::any';
 $filter->repo->diff->cookie['arrange']              = 'reg::word';
 $filter->repo->diff->cookie['repoPairs']            = 'array';
 $filter->repo->view->cookie['repoPairs']            = 'array';

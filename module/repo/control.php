@@ -284,6 +284,8 @@ class repo extends control
      */
     public function ajaxGetDiffEditorContent($repoID, $objectID = 0, $entry = '', $oldRevision = '', $newRevision = '', $showBug = 'false', $encoding = '')
     {
+        if(!$entry) $entry = (string) $this->cookie->repoCodePath;
+
         $file      = $entry;
         $repo      = $this->repo->getByID($repoID);
         $entry     = urldecode($this->repo->decodePath($entry));
@@ -331,6 +333,8 @@ class repo extends control
      */
     public function ajaxGetEditorContent($repoID, $objectID = 0, $entry = '', $revision = 'HEAD', $showBug = 'false', $encoding = '')
     {
+        if(!$entry) $entry = (string) $this->cookie->repoCodePath;
+
         $file     = $entry;
         $repo     = $this->repo->getByID($repoID);
         $entry    = urldecode($this->repo->decodePath($entry));

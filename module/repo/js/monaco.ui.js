@@ -28,11 +28,12 @@ window.afterPageUpdate = function()
         $('#monacoTree').css('height', getSidebarHeight() - 8 + 'px');
         /* Init tab template. */
         if(!tabTemp) tabTemp = $('#monacoTabs ul li').first().clone();
-        
+
         /* Load default tab content. */
         var height = getIframeHeight();
-        $('#tab-' + fileAsId).html("<iframe class='repo-iframe' src='" + $.createLink('repo', 'ajaxGetEditorContent', urlParams.replace('%s', file)) + "' width='100%' height='" + height + "' scrolling='no'></iframe>")
-        
+        $.cookie.set('repoCodePath', file);
+        $('#tab-' + fileAsId).html("<iframe class='repo-iframe' src='" + $.createLink('repo', 'ajaxGetEditorContent', urlParams.replace('%s', '')) + "' width='100%' height='" + height + "' scrolling='no'></iframe>")
+
         /* Select default tree item. */
         const currentElement = findItemInTreeItems(tree, fileAsId, 0);
         if(currentElement != undefined) $('#' + currentElement.id).parent().addClass('selected');
@@ -55,7 +56,7 @@ window.afterPageUpdate = function()
             if(url != 'javascript:;') return;
 
             if(branchOrTag != $.cookie.get('repoBranch')) $.cookie.set('repoBranch', branchOrTag);
-            
+
             openUrl(currentLink);
         })
 
@@ -114,7 +115,8 @@ function openTab(entry, name)
     $('#monacoTabs .nav-tabs').append(newTab);
 
     var height = getIframeHeight();
-    $('#monacoTabs .tab-content').append("<div id='" + eleId + "' class='tab-pane active in'><iframe class='repo-iframe' src='" + $.createLink('repo', 'ajaxGetEditorContent', urlParams.replace('%s', entry)) + "' width='100%' height='" + height + "' scrolling='no'></iframe></div>")
+    $.cookie.set('repoCodePath', entry);
+    $('#monacoTabs .tab-content').append("<div id='" + eleId + "' class='tab-pane active in'><iframe class='repo-iframe' src='" + $.createLink('repo', 'ajaxGetEditorContent', urlParams.replace('%s', '')) + "' width='100%' height='" + height + "' scrolling='no'></iframe></div>")
 
     if($('.monaco-dropmenu').attr('class').indexOf('hidden')) $('.monaco-dropmenu').removeClass('hidden');
     setTimeout(() => {
