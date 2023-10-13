@@ -323,7 +323,8 @@ $config->projectGroup->dtable->fieldList['actions']['list']['delete']['hint'] = 
 $config->projectGroup->dtable->fieldList['actions']['list']['delete']['url']  = helper::createLink('group', 'delete', "groupID={id}");
 
 $app->loadLang('execution');
-$config->project->dtable->team->fieldList['account']['title']    = $lang->team->account;
+$config->project->dtable->team->fieldList['account']['title']    = $lang->team->realname;
+$config->project->dtable->team->fieldList['account']['align']    = 'left';
 $config->project->dtable->team->fieldList['account']['name']     = 'realname';
 $config->project->dtable->team->fieldList['account']['type']     = 'user';
 $config->project->dtable->team->fieldList['account']['link']     = array('module' => 'user', 'method' => 'view', 'params' => 'userID={userID}');

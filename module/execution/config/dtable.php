@@ -137,7 +137,8 @@ $config->execution->team->actionList['unlink']['icon'] = 'unlink';
 $config->execution->team->actionList['unlink']['hint'] = $lang->execution->unlinkMember;
 $config->execution->team->actionList['unlink']['url']  = 'javascript:deleteMember("{root}", "{userID}")';
 
-$config->execution->team->dtable->fieldList['account']['title']    = $lang->team->account;
+$config->execution->team->dtable->fieldList['account']['title']    = $lang->team->realname;
+$config->execution->team->dtable->fieldList['account']['align']    = 'left';
 $config->execution->team->dtable->fieldList['account']['name']     = 'realname';
 $config->execution->team->dtable->fieldList['account']['type']     = 'user';
 $config->execution->team->dtable->fieldList['account']['link']     = array('module' => 'user', 'method' => 'view', 'params' => 'userID={userID}');

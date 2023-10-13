@@ -187,6 +187,7 @@ $lang->execution->cfdTypeList['task']  = "按任务查看";
 $lang->execution->cfdTypeList['bug']   = "按Bug查看";
 
 $lang->team->account    = '用户';
+$lang->team->realname   = '姓名';
 $lang->team->role       = '角色';
 $lang->team->roleAB     = '我的角色';
 $lang->team->join       = '加盟日期';

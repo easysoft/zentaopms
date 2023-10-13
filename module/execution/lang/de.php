@@ -187,6 +187,7 @@ $lang->execution->cfdTypeList['task']  = "View by task";
 $lang->execution->cfdTypeList['bug']   = "View By bug";
 
 $lang->team->account    = 'Konto';
+$lang->team->realname   = 'Name';
 $lang->team->role       = 'Rolle';
 $lang->team->roleAB     = 'Meine Rolle';
 $lang->team->join       = 'Beigetreten';
