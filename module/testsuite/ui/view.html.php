@@ -16,7 +16,7 @@ detailHeader
     (
         entityLabel
         (
-            set::entityID(17),
+            set::entityID($suite->id),
             set::level(1),
             set::text($suite->name)
         )
@@ -57,15 +57,15 @@ $canBatchRun    = common::hasPriv('testtask', 'batchRun');
 $hasCheckbox    = ($canBeChanged && $canBatchEdit && $canBatchUnlink && $canBatchRun);
 
 $batchItems = array(
-    $canBatchUnlink ? array('text' => $lang->testsuite->unlinkCase, 'class' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testsuite', 'batchUnlinkCases', "suiteID={$suite->id}"))              : null,
-    $canBatchRun    ? array('text' => $lang->testtask->runCase,     'class' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testtask', 'batchRun', "productID={$productID}&&orderBy={$orderBy}")) : null,
+    $canBatchUnlink ? array('text' => $lang->testsuite->unlinkCase, 'className' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testsuite', 'batchUnlinkCases', "suiteID={$suite->id}"))              : null,
+    $canBatchRun    ? array('text' => $lang->testtask->runCase,     'className' => 'batch-btn not-open-url',          'data-url' => helper::createLink('testtask', 'batchRun', "productID={$productID}&&orderBy={$orderBy}")) : null,
 );
 
 $footToolbar = array('items' => array(
     array('type' => 'btn-group', 'items' => array
     (
-        array('text' => $lang->edit, 'class' => 'batch-btn', 'data-url' => createLink('testcase', 'batchEdit', "productID={$productID}")),
-        array('caret' => 'up', 'class' => 'btn btn-caret size-sm primary not-open-url', 'data-placement' => 'top-start', 'items' => $batchItems),
+        array('text' => $lang->edit, 'className' => 'batch-btn', 'data-url' => createLink('testcase', 'batchEdit', "productID={$productID}")),
+        array('caret' => 'up',       'className' => 'btn btn-caret size-sm primary not-open-url', 'data-placement' => 'top-start', 'items' => $batchItems),
     )),
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'primary'));
 
@@ -86,7 +86,7 @@ detailBody
             set::footPager(usePager('pager', 'short')),
         ),
     ),
-    history(),
+    history(set::commentUrl(createLink('action', 'comment', array('objectType' => 'testsuite', 'objectID' => $suite->id))),),
     detailSide
     (
         section
