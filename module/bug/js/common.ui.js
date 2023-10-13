@@ -65,7 +65,7 @@ function changeExecution(event)
     const projectID   = $('[name="project"]').val() == 'undefined' ? 0 : $('[name="project"]').val();
     const executionID = $(event.target).val();
 
-    if(executionID != '0')
+    if(executionID != 0)
     {
         loadProjectByExecutionID(executionID);
         loadExecutionTasks(executionID);
