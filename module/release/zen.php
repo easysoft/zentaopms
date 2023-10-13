@@ -38,8 +38,8 @@ class releaseZen extends release
                     $releaseInfo  = clone $release;
                     $moduleName   = $build->execution ? 'build' : 'projectbuild';
                     $canClickable = false;
-                    if($moduleName == 'projectbuild' && $this->project->checkPriv($build->project)) $canClickable = true;
-                    if($moduleName == 'build' && $this->execution->checkPriv($build->execution))    $canClickable = true;
+                    if($moduleName == 'projectbuild' && $this->project->checkPriv((int)$build->project)) $canClickable = true;
+                    if($moduleName == 'build' && $this->execution->checkPriv((int)$build->execution))    $canClickable = true;
                     $build->link = $canClickable ? $this->createLink($moduleName, 'view', "buildID={$build->id}") : '';
 
                     $releaseInfo->build = $build;
