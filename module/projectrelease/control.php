@@ -161,27 +161,23 @@ class projectrelease extends control
     {
         /* Set edit config. */
         $this->config->projectrelease->edit = $this->config->release->edit;
+        $release = $this->release->getByID($releaseID);
 
         if(!empty($_POST))
         {
-            $changes = $this->release->update($releaseID);
+            $releaseData = form::data($this->config->release->form->edit)->setIF($this->post->build === false, 'build', 0)->get();
+            $changes     = $this->release->update($releaseData, $release);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $files = $this->loadModel('file')->saveUpload('release', $releaseID);
-            if($changes || $files)
+            if($changes)
             {
-                $fileAction = '';
-                if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
-                $actionID = $this->loadModel('action')->create('release', $releaseID, 'Edited', $fileAction);
+                $actionID = $this->loadModel('action')->create('release', $releaseID, 'Edited');
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
 
             $message = $this->executeHooks($releaseID);
             if($message) $this->lang->saveSuccess = $message;
-
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID={$releaseID}")));
         }
-
-        $release = $this->release->getByID($releaseID);
 
         /* Set menu. */
         if(!$this->session->project)
