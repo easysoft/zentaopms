@@ -737,6 +737,7 @@ class project extends control
         $this->loadModel('execution');
         $this->loadModel('task');
         $this->loadModel('programplan');
+        $this->loadModel('product');
         $this->session->set('executionList', $this->app->getURI(true), 'project');
 
         if($this->cookie->showTask) $this->session->set('taskList', $this->app->getURI(true), 'project');
@@ -753,7 +754,7 @@ class project extends control
 
         $this->view->title          = $this->lang->execution->allExecutions;
         $this->view->executionStats = $this->execution->getStatData($projectID, $status, $productID, 0, (bool)$this->cookie->showTask, '', $orderBy, $pager);
-        $this->view->productList    = $this->loadModel('product')->getProductPairsByProject($projectID, 'all', '', false);
+        $this->view->productList    = array(0 => $this->lang->product->all) + $this->product->getProductPairsByProject($projectID, 'all', '', false);
         $this->view->productID      = $productID;
         $this->view->product        = $this->product->getByID($productID);
         $this->view->projectID      = $projectID;

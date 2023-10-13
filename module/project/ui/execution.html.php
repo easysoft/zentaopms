@@ -84,11 +84,15 @@ $productMenuLink = createLink(
         'productID'  => '{key}'
     )
 );
+
+$productItems = array();
+foreach($productList as $key => $value) $productItems[] = array('text' => $value, 'id' => $key);
+
 featureBar
 (
     to::before(productMenu(set
     ([
-        'items' => $productList,
+        'items' => $productItems,
         'activeKey' => $productID,
         'closeLink' => '#',
         'link' => $productMenuLink
