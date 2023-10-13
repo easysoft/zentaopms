@@ -7,9 +7,9 @@
  * 对象：issue
  * 目的：qc
  * 度量名称：按代码库统计代码问题解决总数
- * 单位：count
+ * 单位：个
  * 描述：按代码库统计的代码问题解决总数是指在特定代码库中解决的所有代码问题的总数。它可以反映团队在代码质量方面的工作效能和改进情况。
- * 定义：代码库中问题解决次数相加。;不包含已删除。;
+ * 定义：代码库中问题解决次数相加。;不包含已删除。;
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>

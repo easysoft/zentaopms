@@ -7,9 +7,9 @@
  * 对象：issue
  * 目的：qc
  * 度量名称：按代码库统计代码问题提交次数
- * 单位：count
+ * 单位：个
  * 描述：按代码库统计代码问题提交次数，可作为度量项衡量研发过程中出现的代码问题频率。代码问题提交次数反映了代码质量和稳定性方面的情况。
- * 定义：代码库中问题提交次数相加。;不包含已删除。;
+ * 定义：代码库中问题提交次数相加。;不包含已删除。;
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    Yanyi Cao <caoyanyi@easycorp.ltd>
