@@ -29,7 +29,7 @@ formPanel
         set::control('picker'),
         set::items($products)
     ),
-    $noMultipleExecutionID ? input
+    isset($noMultipleExecutionID) ? input
     (
         set::type('hidden'),
         set::name('execution'),

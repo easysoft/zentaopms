@@ -316,6 +316,14 @@ class testtaskZen extends testtask
             if(!empty($execution) && $execution->type == 'kanban') $this->lang->testtask->execution = str_replace($this->lang->execution->common, $this->lang->kanban->common, $this->lang->testtask->execution);
         }
 
+        /* 如果测试单所属产品在产品键值对中不存在，将其加入。*/
+        /* Prepare the product key-value pairs. */
+        if(!isset($this->products[$productID]))
+        {
+            $product = $this->loadModel('product')->getByID($productID);
+            $this->products[$productID] = $product->name;
+        }
+
         $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->create;
         $this->view->product     = $this->loadModel('product')->getByID($productID);
         $this->view->executions  = $productID ? $this->product->getExecutionPairsByProduct($productID, '', $projectID, 'stagefilter') : array();
