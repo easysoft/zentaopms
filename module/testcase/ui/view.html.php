@@ -546,4 +546,13 @@ detailBody
     ),
 );
 
+if(!isInModal())
+{
+    floatPreNextBtn
+        (
+            !empty($preAndNext->pre)  ? set::preLink(createLink('testcase', 'view', "testcaseID={$preAndNext->pre->id}"))   : null,
+            !empty($preAndNext->next) ? set::nextLink(createLink('testcase', 'view', "testcaseID={$preAndNext->next->id}")) : null
+        );
+}
+
 render();
