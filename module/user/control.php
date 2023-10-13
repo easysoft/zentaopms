@@ -1286,17 +1286,20 @@ class user extends control
     }
 
     /**
+     * Ajax: 获取联系人列表。
      * Ajax get contact list.
      *
      * @param  string $dropdownName mailto|whitelist
      * @access public
      * @return string
      */
-    public function ajaxGetContactList($dropdownName = 'mailto')
+    public function ajaxGetContactList(string $dropdownName = 'mailto')
     {
         $contactList = $this->user->getContactLists($this->app->user->account, 'withnote');
-        if(empty($contactList)) return false;
-        return print(html::select('contactListMenu', $contactList, '', "class='form-control' onchange=\"setMailto('$dropdownName', this.value)\""));
+
+        $items = array();
+        foreach($contactList as $contactID => $contactName) $items[] = array('text' => $contactName, 'value' => $contactID);
+        return print(json_encode($items));
     }
 
     /**

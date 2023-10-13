@@ -32,7 +32,7 @@ function changeProduct(event)
         loadAssignedTo(productID);
         loadProductBuilds(productID);
         loadProductPlans(productID);
-        loadProductStories(productID, bug.story);
+        loadProductStories(productID, bug.storyID);
     }
 }
 
@@ -46,7 +46,7 @@ function changeBranch(event)
     loadAssignedTo(productID);
     loadProductBuilds(productID);
     loadProductPlans(productID);
-    loadProductStories(productID, bug.story);
+    loadProductStories(productID, bug.storyID);
 }
 
 function changeProject(event)
@@ -76,7 +76,7 @@ function changeExecution(event)
     }
     else
     {
-        loadProductStories(productID, bug.story);
+        loadProductStories(productID, bug.storyID);
         loadTestTasks(productID);
         if(projectID == 0)
         {
@@ -95,11 +95,11 @@ function changeModule(event)
 {
     const moduleID  = $(event.target).val();
     const productID = $('[name="product"]').val();
-    const storyID   = $('#story').val();
+    const storyID   = $('[name="story"]').val();
     let executionID = $('[name="execution"]').val();
     if(typeof(executionID) == 'undefined') executionID = 0;
     loadAssignedToByModule(moduleID, productID);
-    loadProductStories(productID, storyID, executionID, moduleID);
+    loadProductStories(productID, storyID, moduleID, executionID);
 }
 
 function changeRegion(event)
@@ -127,7 +127,14 @@ function refreshModule(event)
 
 function refreshContact(event)
 {
-    loadContacts();
+    const link = $.createLink('user', 'ajaxGetContactList', 'dropdownName=mailto');
+    $.getJSON(link, function(contacts)
+    {
+        let contactID      = $('[name="contactListMenu"]').val();
+        let $contactPicker = $('[name="contactListMenu"]').zui('picker');
+        $contactPicker.render({items: contacts});
+        $contactPicker.$.setValue(contactID);
+    });
 }
 
 function refreshProductBuild(event)
@@ -523,13 +530,12 @@ function loadProductPlans(productID)
     if(typeof(branch) == 'undefined') branch = 0;
 
     const link = $.createLink('productplan', 'ajaxGetProductplans', 'productID=' + productID + '&branch=' + branch);
-    $.get(link, function(data)
+    $.getJSON(link, function(data)
     {
-        let planID      = $('[name="plan"]').val();
-        let $planPicker = $('[name="plan"]').zui('picker');
         if(data)
         {
-            data = JSON.parse(data);
+            let planID      = $('[name="plan"]').val();
+            let $planPicker = $('[name="plan"]').zui('picker');
             $planPicker.render({items: data});
             $planPicker.$.setValue(planID);
         }
@@ -542,15 +548,11 @@ function loadProductStories(productID, storyID, moduleID = 0, executionID = 0)
     if(typeof(branch) == 'undefined') branch = 0;
 
     const link = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID=' + storyID + '&onlyOption=false&status=&limit=0&type=full&hasParent=0&executionID=' + executionID);
-    $.get(link, function(data)
+    $.getJSON(link, function(data)
     {
         let $storyPicker = $('[name="story"]').zui('picker');
-        if(data)
-        {
-            data = JSON.parse(data);
-            $storyPicker.render({items: data});
-            $storyPicker.$.setValue('');
-        }
+        $storyPicker.render({items: data});
+        $storyPicker.$.setValue(storyID);
     });
 }
 
@@ -560,17 +562,13 @@ function loadExecutionStories(executionID)
     let   branch    = $('[name="branch"]').val();
     if(typeof(branch) == 'undefined') branch = 0;
 
-    const link = $.createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=' + productID + '&branch=' + branch + '&moduleID=0&storyID=' + bug.story + '&number=&type=full&status=all&from=bug');
-    $.get(link, function(data)
+    const link = $.createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=' + productID + '&branch=' + branch + '&moduleID=0&storyID=' + bug.storyID + '&number=&type=full&status=all&from=bug');
+    $.getJSON(link, function(data)
     {
         let story        = $('[name="story"]').val();
         let $storyPicker = $('[name="story"]').zui('picker');
-        if(data)
-        {
-            data = JSON.parse(data);
-            $storyPicker.render({items: data});
-            $storyPicker.$.setValue(story);
-        }
+        $storyPicker.render({items: data});
+        $storyPicker.$.setValue(story);
     });
 }
 
@@ -629,18 +627,14 @@ function loadAllUsers(event)
     const isClosedBug = bug.status = 'closed';
     const params      = isClosedBug ? '&params=devfirst' : '';
     const link        = $.createLink('bug', 'ajaxLoadAllUsers', params);
-    $.get(link, function(data)
+    $.getJSON(link, function(data)
     {
-        if(data)
+        $('[name="assignedTo"]').zui('picker').render({items: data});
+        if(!isClosedBug)
         {
-            data = JSON.parse(data);
-            $('[name="assignedTo"]').zui('picker').render({items: data});
-            if(!isClosedBug)
-            {
-                const moduleID  = $('[name="module"]').val();
-                const productID = $('[name="product"]').val();
-                loadAssignedToByModule(moduleID, productID);
-            }
+            const moduleID  = $('[name="module"]').val();
+            const productID = $('[name="product"]').val();
+            loadAssignedToByModule(moduleID, productID);
         }
     });
 }
@@ -785,16 +779,6 @@ function loadBuildActions()
         }
         $('#buildBoxActions').html(html).show();
     }
-}
-
-function loadContacts()
-{
-    const link = $.createLink('user', 'ajaxGetContactList', 'dropdownName=mailto');
-    $.get(link, function(contacts)
-    {
-        if(!contacts) return false;
-        $('#contactBox').html(contacts)
-    });
 }
 
 function setMailto(contactID)
