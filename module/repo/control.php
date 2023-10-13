@@ -263,8 +263,12 @@ class repo extends control
 
         if($error) return $this->send(array('result' => 'fail', 'message' => $error));
 
+        $this->dao->delete()->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->exec();
+        $this->dao->delete()->from(TABLE_REPOFILES)->where('repo')->eq($repoID)->exec();
+        $this->dao->delete()->from(TABLE_REPOBRANCH)->where('repo')->eq($repoID)->exec();
         $this->dao->delete()->from(TABLE_REPO)->where('id')->eq($repoID)->exec();
         if(dao::isError()) return print(js::error(dao::getError()));
+
         $this->loadModel('action')->create('repo', $repoID, 'deleted', '');
         return $this->send(array('result' => 'success', 'load' => true));
     }
@@ -660,13 +664,12 @@ class repo extends control
         if($this->cookie->repoRefresh) helper::setcookie('repoRefresh', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         /* Synchronous commit only in root path. */
-        if(in_array($repo->SCM, $this->config->repo->gitTypeList) and empty($path) and $infos and empty($revisions)) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID&branch=" . helper::safe64Encode(base64_encode($this->cookie->repoBranch))));
+        if(in_array($repo->SCM, $this->config->repo->gitTypeList) && $repo->SCM != 'Gitlab' && empty($path) && $infos && empty($revisions)) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID&branch=" . helper::safe64Encode(base64_encode($this->cookie->repoBranch))));
 
         $this->view->title           = $this->lang->repo->common;
         $this->view->repo            = $repo;
         $this->view->repos           = $this->repos;
         $this->view->revisions       = $revisions;
-        $this->view->repoGroup       = $this->repo->getRepoGroup($this->app->tab, $objectID);
         $this->view->revision        = $revision;
         $this->view->infos           = $infos;
         $this->view->repoID          = $repoID;
