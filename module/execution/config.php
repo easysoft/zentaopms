@@ -194,7 +194,7 @@ $config->execution->datatable->fieldList['id']['checkbox'] = true;
 
 $config->execution->datatable->fieldList['name']['name']         = 'name';
 $config->execution->datatable->fieldList['name']['title']        = $lang->execution->execName;
-$config->execution->datatable->fieldList['name']['width']        = '356';
+$config->execution->datatable->fieldList['name']['width']        = 'auto';
 $config->execution->datatable->fieldList['name']['type']         = 'html';
 $config->execution->datatable->fieldList['name']['fixed']        = 'left';
 $config->execution->datatable->fieldList['name']['sortType']     = true;
