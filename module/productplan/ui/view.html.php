@@ -37,6 +37,7 @@ foreach($config->productplan->defaultFields['bug'] as $field)   $bugCols[$field]
 $storyCols['title']['link']         = $this->createLink('story', 'view', "storyID={id}");
 $storyCols['title']['nestedToggle'] = false;
 $storyCols['assignedTo']['type']    = 'user';
+$storyCols['actions']['width']      = 50;
 $bugCols['assignedTo']['type']      = 'user';
 $storyCols['module']['type']        = 'text';
 $storyCols['module']['map']         = $modulePairs;
@@ -186,7 +187,7 @@ detailBody
             setClass('w-full'),
             tabPane
             (
-                to::prefix(icon(setClass('text-primary'), $lang->icons['story'])),
+                to::prefix(icon($lang->icons['story'])),
                 set::key('stories'),
                 set::title($lang->productplan->linkedStories),
                 set::active($type == 'story'),
@@ -270,9 +271,9 @@ detailBody
                     item(set::name($lang->productplan->end), $plan->end == FUTURE_TIME ? $lang->productplan->future : $plan->end),
                     $plan->parent == '-1' ? item(set::name($lang->productplan->children), $fnGetChildrenPlans($childrenPlans)) : null,
                     item(set::name($lang->productplan->status), $lang->productplan->statusList[$plan->status]),
-                    item(set::name($lang->productplan->desc), empty($plan->desc) ? $lang->noData : $plan->desc),
+                    item(set::name($lang->productplan->desc), empty($plan->desc) ? $lang->noData : html(($plan->desc))),
                 ),
-                h::hr(setClass('border-2 mt-4')),
+                h::hr(setClass('mt-4')),
                 history(),
             ),
         )
