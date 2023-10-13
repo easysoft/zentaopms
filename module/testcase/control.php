@@ -94,7 +94,7 @@ class testcase extends control
         $productID  = $this->app->tab != 'project' ? $this->product->checkAccess($productID, $this->products) : $productID;
         $branch     = ($this->cookie->preBranch !== '' && $branch === '') ? $this->cookie->preBranch : $branch;
         $browseType = strtolower($browseType);
-        $moduleID   = ($browseType == 'bymodule') ? $param : ($browseType == 'bysearch' ? 0 : ($this->cookie->caseModule ? $this->cookie->caseModule : 0));
+        $moduleID   = ($browseType == 'bymodule') ? $param : 0;
         $suiteID    = ($browseType == 'bysuite')  ? $param : ($browseType == 'bymodule' ? ($this->cookie->caseSuite ? $this->cookie->caseSuite : 0) : 0);
         $queryID    = ($browseType == 'bysearch') ? $param : 0;
 
@@ -210,6 +210,7 @@ class testcase extends control
         $this->view->projectID  = $projectID;
         $this->view->productID  = $productID;
         $this->view->branchID   = $branchID;
+        $this->view->branch     = $branchID;
         $this->view->orderBy    = $orderBy;
         $this->view->suiteList  = $this->loadModel('testsuite')->getSuites($productID);
         $this->view->browseType = '';
