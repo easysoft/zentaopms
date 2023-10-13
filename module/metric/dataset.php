@@ -599,6 +599,14 @@ class dataset
             ->query();
     }
 
+    /**
+     * 统计合并请求信息。
+     * Get mr list.
+     *
+     * @param  string $fieldList
+     * @access public
+     * @return PDOStatement
+     */
     public function getMRs($fieldList)
     {
         return $this->dao->select($fieldList)->from(TABLE_MR)->alias('t1')
