@@ -157,7 +157,7 @@ function loadScenes(productID, sceneName = 'scene')
     $.getJSON(link, function(scenes)
     {
         const $picker = $('[name=' + sceneName + ']').zui('picker');
-        $picker.render({scenes});
+        $picker.render({items: scenes});
         $picker.$.setValue(sceneID);
     });
 }
