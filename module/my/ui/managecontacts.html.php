@@ -163,7 +163,14 @@ panel
                     formGroup
                     (
                         set::label(''),
-                        button(setClass('btn primary'), set::type('submit'), $lang->save)
+                        button(setClass('btn primary'), set::type('submit'), $lang->save),
+                        $mode == 'edit' ? button
+                        (
+                            setClass('btn ajax-submit ml-4'),
+                            setData('url', createLink('my', 'deleteContacts', "listID=$listID")),
+                            setData('confirm', $lang->user->contacts->confirmDelete),
+                            $lang->delete
+                        ): null
                     )
                 )
             ) : tableData

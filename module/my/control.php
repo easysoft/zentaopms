@@ -1416,21 +1416,13 @@ EOF;
      * Delete a contact list.
      *
      * @param  int    $listID
-     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function deleteContacts($listID, $confirm = 'no')
+    public function deleteContacts(int $listID)
     {
-        if($confirm == 'no')
-        {
-            return print(js::confirm($this->lang->user->contacts->confirmDelete, inlink('deleteContacts', "listID=$listID&confirm=yes")));
-        }
-        else
-        {
-            $this->user->deleteContactList($listID);
-            return print(js::locate(inlink('manageContacts'), 'parent'));
-        }
+        $this->user->deleteContactList($listID);
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
