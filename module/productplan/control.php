@@ -610,7 +610,7 @@ class productplan extends control
     {
         if($this->post->storyIdList)
         {
-            foreach($this->post->storyIdList as $storyID) $this->productplan->unlinkStory($storyID, $planID);
+            foreach($this->post->storyIdList as $storyID) $this->productplan->unlinkStory((int)$storyID, $planID);
 
             $this->loadModel('action')->create('productplan', $planID, 'unlinkstory', '', implode(',', $this->post->storyIdList));
         }
