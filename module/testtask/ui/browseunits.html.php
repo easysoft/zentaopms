@@ -34,12 +34,10 @@ featureBar
 (
     $canSwitch ? to::before
     (
-        productMenu
+        dropdown
         (
-            set::title($lang->testcase->typeList['unit']),
+            to('trigger', btn($lang->testcase->typeList['unit'], setClass('ghost'))),
             set::items($caseTypeItems),
-            set::activeKey('unit'),
-            set::link(createLink('testcase', 'browse', "productID={$product->id}&branch=&browseType=all&param=0&caseType={key}")),
         )
     ) : null,
     set::link(createLink('testtask', 'browseUnits', "productID={$product->id}&browseType={key}"))
