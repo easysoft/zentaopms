@@ -192,7 +192,6 @@ $lang->metric->objectList['node']          = "节点";
 $lang->metric->objectList['application']   = "应用";
 $lang->metric->objectList['cpu']           = "CPU";
 $lang->metric->objectList['memory']        = "内存";
-$lang->metric->objectList['issue']         = "问题";
 $lang->metric->objectList['commit']        = "代码提交";
 $lang->metric->objectList['mergeRequest']  = "合并请求";
 $lang->metric->objectList['code']          = "代码";

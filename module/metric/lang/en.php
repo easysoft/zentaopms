@@ -192,7 +192,6 @@ $lang->metric->objectList['node']          = "Node";
 $lang->metric->objectList['application']   = "Application";
 $lang->metric->objectList['cpu']           = "CPU";
 $lang->metric->objectList['memory']        = "Memory";
-$lang->metric->objectList['issue']         = "Issue";
 $lang->metric->objectList['commit']        = "Commit";
 $lang->metric->objectList['mergeRequest']  = "Merge Request";
 $lang->metric->objectList['code']          = "Code";

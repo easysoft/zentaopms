@@ -91,11 +91,11 @@ class metricTao extends metricModel
         $metrics = $this->dao->select('*')->from(TABLE_METRIC)
             ->where('deleted')->eq('0')
             ->andWhere('scope')->eq($scope)
+            ->andWhere('object')->in(array_keys($this->lang->metric->objectList))
             ->beginIF($query)->andWhere($query)->fi()
             ->beginIF($stage != 'all')->andWhere('stage')->eq($stage)->fi()
             ->beginIF(!empty($object))->andWhere('object')->eq($object)->fi()
             ->beginIF(!empty($purpose))->andWhere('purpose')->eq($purpose)->fi()
-            ->beginIF($this->config->edition == 'open')->andWhere('object')->notIN('feedback,issue,risk')
             ->beginIF($sort)->orderBy($sort)->fi()
             ->beginIF($pager)->page($pager)->fi()
             ->fetchAll();
