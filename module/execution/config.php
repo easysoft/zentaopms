@@ -187,6 +187,7 @@ else
 
 $config->execution->datatable->fieldList['id']['title']    = 'idAB';
 $config->execution->datatable->fieldList['id']['type']     = 'checkID';
+$config->execution->datatable->fieldList['id']['width']    = '130';
 $config->execution->datatable->fieldList['id']['fixed']    = 'left';
 $config->execution->datatable->fieldList['id']['sortType'] = true;
 $config->execution->datatable->fieldList['id']['checkbox'] = true;
@@ -229,7 +230,7 @@ $config->execution->datatable->fieldList['PM']['fixed']    = 'right';
 $config->execution->datatable->fieldList['PM']['required'] = 'no';
 
 $config->execution->datatable->fieldList['openedDate']['title']    = 'openedDate';
-$config->execution->datatable->fieldList['openedDate']['width']    = '85';
+$config->execution->datatable->fieldList['openedDate']['width']    = '150';
 $config->execution->datatable->fieldList['openedDate']['sortType'] = 'true';
 $config->execution->datatable->fieldList['openedDate']['fixed']    = 'right';
 $config->execution->datatable->fieldList['openedDate']['required'] = 'no';
@@ -247,13 +248,13 @@ $config->execution->datatable->fieldList['end']['required'] = 'no';
 $config->execution->datatable->fieldList['end']['sortType'] = 'true';
 
 $config->execution->datatable->fieldList['realBegan']['title']    = 'realBegan';
-$config->execution->datatable->fieldList['realBegan']['width']    = '100';
+$config->execution->datatable->fieldList['realBegan']['minWidth'] = '110';
 $config->execution->datatable->fieldList['realBegan']['fixed']    = 'right';
 $config->execution->datatable->fieldList['realBegan']['required'] = 'no';
 $config->execution->datatable->fieldList['realBegan']['sortType'] = 'true';
 
 $config->execution->datatable->fieldList['realEnd']['title']    = 'realEnd';
-$config->execution->datatable->fieldList['realEnd']['width']    = '100';
+$config->execution->datatable->fieldList['realEnd']['minWidth'] = '110';
 $config->execution->datatable->fieldList['realEnd']['fixed']    = 'right';
 $config->execution->datatable->fieldList['realEnd']['required'] = 'no';
 $config->execution->datatable->fieldList['realEnd']['sortType'] = 'true';
