@@ -1807,6 +1807,7 @@ class screenModel extends model
             ->andWhere('month(t1.date)')->eq($month)
             ->andWhere('t2.type')->eq('project')
             ->andWhere('t2.deleted')->eq('0')
+            ->andWhere("NOT FIND_IN_SET('or', t2.vision)")
             ->fetchAll();
     }
 
@@ -1946,6 +1947,7 @@ class screenModel extends model
                 ->andWhere('year(openedDate)')->eq($year)
                 ->andWhere('month(openedDate)')->eq($month)
                 ->andWhere('deleted')->eq('0')
+                ->andWhere("NOT FIND_IN_SET('or', vision)")
                 ->andWhere('execution')->notin($deletedExecutionList)
                 ->fetchPairs();
 
@@ -1954,6 +1956,7 @@ class screenModel extends model
                 ->andWhere('year(finishedDate)')->eq($year)
                 ->andWhere('month(finishedDate)')->eq($month)
                 ->andWhere('deleted')->eq('0')
+                ->andWhere("NOT FIND_IN_SET('or', vision)")
                 ->andWhere('execution')->notin($deletedExecutionList)
                 ->fetchPairs();
 
@@ -1989,6 +1992,7 @@ class screenModel extends model
             ->leftJoin(TABLE_ACTION)->alias('t3')->on('t2.id=t3.objectID')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t2.deleted')->eq('0')
+            ->andWhere("NOT FIND_IN_SET('or', t2.vision)")
             ->andWhere('t2.stage')->eq('released')
             ->andWhere('t3.objectType')->eq('story')
             ->andWhere('t3.action')->eq('linked2release')
@@ -2010,6 +2014,7 @@ class screenModel extends model
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.id=t2.product')
                 ->where('t1.deleted')->eq('0')
                 ->andWhere('t2.deleted')->eq('0')
+                ->andWhere("NOT FIND_IN_SET('or', t2.vision)")
                 ->andWhere('t1.id')->eq($productID)
                 ->andWhere('year(t2.openedDate)')->eq($year)
                 ->andWhere('month(t2.openedDate)')->eq($month)
@@ -2019,6 +2024,7 @@ class screenModel extends model
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.id=t2.product')
                 ->where('t1.deleted')->eq('0')
                 ->andWhere('t2.deleted')->eq('0')
+                ->andWhere("NOT FIND_IN_SET('or', t2.vision)")
                 ->andWhere('t1.id')->eq($productID)
                 ->andWhere('t2.closedReason')->eq('done')
                 ->andWhere('year(t2.closedDate)')->eq($year)
@@ -2058,6 +2064,8 @@ class screenModel extends model
             ->leftJoin(TABLE_ACTION)->alias('t4')->on('t3.id=t4.objectID')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t3.deleted')->eq('0')
+            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
+            ->andWhere("NOT FIND_IN_SET('or', t3.vision)")
             ->andWhere('t3.stage')->eq('released')
             ->andWhere('t4.objectType')->eq('story')
             ->andWhere('t4.action')->eq('linked2release')
@@ -2080,6 +2088,8 @@ class screenModel extends model
                 ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story=t3.id')
                 ->where('t1.deleted')->eq('0')
                 ->andWhere('t3.deleted')->eq('0')
+                ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
+                ->andWhere("NOT FIND_IN_SET('or', t3.vision)")
                 ->andWhere('t1.type')->eq('project')
                 ->andWhere('t3.type')->eq('story')
                 ->andWhere('t1.id')->eq($projectID)
@@ -2092,6 +2102,8 @@ class screenModel extends model
                 ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story=t3.id')
                 ->where('t1.deleted')->eq('0')
                 ->andWhere('t3.deleted')->eq('0')
+                ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
+                ->andWhere("NOT FIND_IN_SET('or', t3.vision)")
                 ->andWhere('t1.id')->eq($projectID)
                 ->andWhere('t3.closedReason')->eq('done')
                 ->andWhere('year(t3.closedDate)')->eq($year)
@@ -2130,6 +2142,7 @@ class screenModel extends model
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq('0')
             ->andWhere('date(openedDate)')->le($date)
+            ->andWhere("NOT FIND_IN_SET('or', vision)")
             ->andWhere('date(closedDate)', true)->gt($date)
             ->orWhere('date(closedDate)')->eq('0000-00-00')
             ->orWhere('closedDate')->in(NULL)
