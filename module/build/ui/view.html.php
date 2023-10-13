@@ -234,20 +234,32 @@ detailBody
                         item
                         (
                             set::name($lang->build->scmPath),
-                            html::a($build->scmPath, $build->scmPath, '_blank')
+                            h::a
+                            (
+                                $build->scmPath,
+                                set('href', $build->scmPath),
+                                set('target', '_blank'),
+                                set('rel', 'nooperner noreferrer'),
+                            )
                         ),
                         item
                         (
                             set::name($lang->build->filePath),
-                            html::a($build->filePath, $build->filePath, '_blank')
+                            h::a
+                            (
+                                $build->filePath,
+                                set('href', $build->filePath),
+                                set('target', '_blank'),
+                                set('rel', 'nooperner noreferrer'),
+                            )
                         ),
                         item
                         (
                             set::name($lang->build->desc),
-                            $build->desc
+                            html($build->desc)
                         ),
                     ),
-                    h::hr(set::className('mt-6')),
+                    $build->files ? h::hr(set::className('mt-6')) : null,
                     section
                     (
                         $build->files ? fileList
