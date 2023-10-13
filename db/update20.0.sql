@@ -142,8 +142,6 @@ CREATE TABLE `zt_artifactrepo` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-ALTER TABLE `zt_repo` ADD `lastCommit` DATETIME NULL DEFAULT NULL AFTER `lastSync`;
-
 ALTER TABLE `zt_build` ADD `artifactRepoID` MEDIUMINT(8) UNSIGNED NOT NULL AFTER `bugs`;
 
 CREATE TABLE IF NOT EXISTS `zt_session` (

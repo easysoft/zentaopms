@@ -254,20 +254,20 @@ CREATE TABLE IF NOT EXISTS `zt_approvalrole` (
 CREATE TABLE IF NOT EXISTS `zt_block` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `account` char(30) NOT NULL DEFAULT '',
-  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
+  `dashboard` varchar(20) NOT NULL DEFAULT '',
   `module` varchar(20) NOT NULL DEFAULT '',
-  `type` char(30) NOT NULL DEFAULT '',
   `title` varchar(100) NOT NULL DEFAULT '',
-  `source` varchar(20) NOT NULL DEFAULT '',
   `block` varchar(30) NOT NULL DEFAULT '',
+  `code` varchar(30) NOT NULL DEFAULT '',
+  `width` enum ('1', '2', '3') NOT NULL DEFAULT '1',
+  `height` smallint(6) UNSIGNED NOT NULL DEFAULT 3,
+  `left` enum('0', '1', '2') NOT NULL DEFAULT '0',
+  `top` smallint(5) UNSIGNED NOT NULL DEFAULT 0,
   `params` text NULL,
-  `order` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `grid` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `height` smallint(6) unsigned NOT NULL DEFAULT '0',
   `hidden` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE UNIQUE INDEX `account_vision_module_type_order` ON `zt_block`(`account`,`vision`,`module`,`type`,`order`);
 CREATE INDEX `account` ON `zt_block`(`account`);
 
 -- DROP TABLE IF EXISTS `zt_branch`;
@@ -1702,6 +1702,14 @@ CREATE TABLE IF NOT EXISTS `zt_searchindex` (
 CREATE UNIQUE INDEX `object` ON `zt_searchindex`(`objectType`,`objectID`);
 CREATE INDEX `addedDate` ON `zt_searchindex` (`addedDate`);
 
+CREATE TABLE IF NOT EXISTS `zt_session` (
+    `id` varchar(32) NOT NULL,
+    `data` mediumtext,
+    `timestamp` int(10) unsigned DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `timestamp` (`timestamp`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- DROP TABLE IF EXISTS `zt_stage`;
 CREATE TABLE IF NOT EXISTS `zt_stage` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -2070,6 +2078,7 @@ CREATE TABLE IF NOT EXISTS `zt_testtask` (
   `pri` tinyint(3) unsigned NOT NULL default '0',
   `begin` date NULL,
   `end` date NULL,
+  `realBegan` date NULL,
   `realFinishedDate` datetime NULL,
   `mailto` text NULL,
   `desc` mediumtext NULL,
@@ -2096,13 +2105,13 @@ CREATE TABLE IF NOT EXISTS `zt_todo` (
   `feedback` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `type` char(15) NOT NULL DEFAULT '',
   `cycle` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `idvalue` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `objectID` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `pri` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `name` char(150) NOT NULL DEFAULT '',
   `desc` mediumtext NULL,
   `status` enum('wait','doing','done','closed') NOT NULL DEFAULT 'wait',
   `private` tinyint(1) NOT NULL DEFAULT '0',
-  `config` varchar(255) NOT NULL DEFAULT '',
+  `config` varchar(1000) NOT NULL DEFAULT '',
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
   `assignedBy` varchar(30) NOT NULL DEFAULT '',
   `assignedDate` datetime NULL,
@@ -2179,6 +2188,7 @@ CREATE TABLE IF NOT EXISTS `zt_usercontact` (
   `account` char(30) NOT NULL DEFAULT '',
   `listName` varchar(60) NOT NULL DEFAULT '',
   `userList` text NULL,
+  `public` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE INDEX `account` ON `zt_usercontact` (`account`);
