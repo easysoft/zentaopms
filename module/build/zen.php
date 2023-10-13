@@ -153,7 +153,7 @@ class buildZen extends build
         {
             foreach(explode(',', $build->branch) as $buildBranch)
             {
-                $branchName .= $this->loadModel('branch')->getById($buildBranch);
+                $branchName .= $buildBranch == BRANCH_MAIN ?$this->lang->branch->main : $this->loadModel('branch')->getById($buildBranch);
                 $branchName .= ',';
             }
             $branchName = trim($branchName, ',');
