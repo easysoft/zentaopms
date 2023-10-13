@@ -310,4 +310,13 @@ modal
     )
 );
 
+if(!isInModal())
+{
+    floatPreNextBtn
+    (
+        !empty($preAndNext->pre)  ? set::preLink(createLink('bug', 'view', "bugID={$preAndNext->pre->id}"))   : null,
+        !empty($preAndNext->next) ? set::nextLink(createLink('bug', 'view', "bugID={$preAndNext->next->id}")) : null
+    );
+}
+
 render();

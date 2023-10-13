@@ -186,6 +186,7 @@ class bug extends control
         $this->view->legendLife  = $this->bugZen->getBugLifeTable($this->view);
         $this->view->legendMain  = $this->bugZen->getMainRelatedTable($this->view);
         $this->view->legendMisc  = $this->bugZen->getOtherRelatedTable($this->view);
+        $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('bug', $bugID);
         $this->display();
     }
 
