@@ -1377,6 +1377,7 @@ CREATE TABLE IF NOT EXISTS `zt_product` (
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `createdVersion` varchar(20) NOT NULL DEFAULT '',
+  `closedDate` date DEFAULT NULL,
   `order` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
@@ -1396,6 +1397,8 @@ CREATE TABLE IF NOT EXISTS `zt_productplan` (
   `desc` mediumtext NULL,
   `begin` date NULL,
   `end` date NULL,
+  `finishedDate` datetime DEFAULT NULL,
+  `closedDate` datetime DEFAULT NULL,
   `order` text NULL,
   `closedReason` varchar(20) NOT NULL DEFAULT '',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
@@ -1430,6 +1433,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `hasProduct` tinyint(1) unsigned NOT NULL DEFAULT 1,
   `begin` date NULL,
   `end` date NULL,
+  `firstEnd` date DEFAULT NULL,
   `realBegan` date NULL,
   `realEnd` date NULL,
   `days` smallint(6) unsigned NOT NULL DEFAULT 0,
@@ -1770,6 +1774,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `changedDate` datetime NULL,
   `reviewedBy` varchar(255) NOT NULL DEFAULT '',
   `reviewedDate` datetime NULL,
+  `releasedDate` datetime DEFAULT NULL,
   `closedBy` varchar(30) NOT NULL DEFAULT '',
   `closedDate` datetime NULL,
   `closedReason` varchar(30) NOT NULL DEFAULT '',
@@ -16351,13 +16356,6 @@ INSERT INTO `zt_metric`(`purpose`, `scope`, `object`, `stage`, `type`, `name`, `
 INSERT INTO `zt_metric`(`purpose`, `scope`, `object`, `stage`, `type`, `name`, `code`, `unit`, `collector`, `desc`, `definition`, `when`, `event`, `cronCFG`, `time`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `implementedBy`, `implementedDate`, `delistedBy`, `delistedDate`, `builtin`, `fromID`, `order`, `deleted`) VALUES ('scale', 'user', 'feedback', 'released', 'php', '按人员统计的待处理反馈数', 'count_of_assigned_feedback_in_user', 'count', NULL, '按人员统计的待处理反馈数表示每个人待处理的反馈数量之和。反映了每个人需要处理的反馈数量上的规模。该数值越大，说明需要投入越多的时间处理反馈。', '所有反馈个数求和\r\n指派给为某人\r\n过滤已删除的反馈\r\n过滤已删除产品的反馈', 'realtime', '', '', '', 'system', '2023-08-22 08:00:00', '', NULL, '', NULL, '', NULL, '1', 0, 0, '0');
 INSERT INTO `zt_metric`(`purpose`, `scope`, `object`, `stage`, `type`, `name`, `code`, `unit`, `collector`, `desc`, `definition`, `when`, `event`, `cronCFG`, `time`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `implementedBy`, `implementedDate`, `delistedBy`, `delistedDate`, `builtin`, `fromID`, `order`, `deleted`) VALUES ('scale', 'user', 'feedback', 'released', 'php', '按人员统计的待评审反馈数', 'count_of_reviewing_feedback_in_user', 'count', NULL, '按人员统计的待评审反馈数表示每个人待评审的反馈数量之和。反映了每个人需要评审的反馈的规模。该数值越大，说明需要投入越多的时间评审反馈。', '所有反馈个数求和\r\n状态为待评审\r\n指派给为某人\r\n过滤已删除的反馈\r\n过滤已删除产品的反馈', 'realtime', '', '', '', 'system', '2023-08-22 08:00:00', '', NULL, '', NULL, '', NULL, '1', 0, 0, '0');
 INSERT INTO `zt_metric`(`purpose`, `scope`, `object`, `stage`, `type`, `name`, `code`, `unit`, `collector`, `desc`, `definition`, `when`, `event`, `cronCFG`, `time`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `implementedBy`, `implementedDate`, `delistedBy`, `delistedDate`, `builtin`, `fromID`, `order`, `deleted`) VALUES ('scale', 'user', 'feedback', 'released', 'php', '按人员统计的每日评审反馈数', 'count_of_daily_review_feedback_in_user', 'count', NULL, '按人员统计的日评审反馈数表示每个人每日评审的反馈数量之和。反映了每个人每日评审的反馈的规模。该数值越大，说明工作量越大。', '所有反馈个数求和\r\n由谁评审为某人\r\n评审时间为某日\r\n过滤已删除的反馈\r\n过滤已删除产品的反馈', 'realtime', '', '', '', 'system', '2023-08-22 08:00:00', '', NULL, '', NULL, '', NULL, '1', 0, 0, '0');
-
-ALTER TABLE `zt_repo` ADD `lastCommit` DATETIME NULL DEFAULT NULL AFTER `lastSync`;
-ALTER TABLE `zt_story` ADD `releasedDate` datetime DEFAULT NULL AFTER `reviewedDate`;
-ALTER TABLE `zt_project` ADD `firstEnd` date DEFAULT NULL AFTER `end`;
-ALTER TABLE `zt_product` ADD `closedDate` date DEFAULT NULL AFTER `createdVersion`;
-ALTER TABLE `zt_productplan` ADD `finishedDate` datetime DEFAULT NULL AFTER `end`;
-ALTER TABLE `zt_productplan` ADD `closedDate` datetime DEFAULT NULL AFTER `finishedDate`;
 
 INSERT INTO `zt_cron`(`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES ('59', '23', '*', '*', '*', 'moduleName=metric&methodName=updateMetricLib', '计算度量数据', 'system', 1, 'normal', NUll);
 
