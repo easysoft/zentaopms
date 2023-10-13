@@ -4185,9 +4185,9 @@ class taskModel extends model
         }
 
         $list  = "<tr $trAttrs class='$trClass $showmore'>";
-        $list .= '<td>';
+        $list .= '<td class="c-name text-left flex">';
         if($task->parent > 0) $list .= '<span class="label label-badge label-light" title="' . $this->lang->task->children . '">' . $this->lang->task->childrenAB . '</span> ';
-        $list .= common::hasPriv('task', 'view') ? html::a(helper::createLink('task', 'view', "id=$task->id"), $task->name, '', "style='color: $task->color'", "data-app='project'") : "<span style='color:$task->color'>$task->name</span>";
+        $list .= common::hasPriv('task', 'view') ? html::a(helper::createLink('task', 'view', "id=$task->id"), $task->name, '', "style='color: $task->color' class='text-ellipsis'", "data-app='project'") : "<span style='color:$task->color'>$task->name</span>";
         if(!helper::isZeroDate($task->deadline))
         {
             if($task->status != 'done')
