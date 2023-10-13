@@ -953,7 +953,7 @@ class productplanModel extends model
         foreach($newPlans as $planID)
         {
             $planStories = $planProducts = array();
-            $planStory   = $this->story->getPlanStories($planID);
+            $planStory   = $this->story->getPlanStories((int)$planID);
             if(!empty($planStory))
             {
                 $projectProducts = $this->project->getBranchesByProject($projectID);

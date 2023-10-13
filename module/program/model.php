@@ -1141,12 +1141,12 @@ class programModel extends model
      * 获取项目集的预算剩余。
      * Get budget left of program.
      *
-     * @param  object $parentProgram
-     * @param  int    $leftBudget
+     * @param  object    $parentProgram
+     * @param  int|float $leftBudget
      * @access public
      * @return float
      */
-    public function getBudgetLeft(object $parentProgram, int $leftBudget = 0): float
+    public function getBudgetLeft(object $parentProgram, int|float $leftBudget = 0): float
     {
         if(empty($parentProgram->id)) return 0;
 
