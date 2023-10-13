@@ -209,7 +209,6 @@ class testcase extends control
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->projectID  = $projectID;
         $this->view->productID  = $productID;
-        $this->view->branchID   = $branchID;
         $this->view->branch     = $branchID;
         $this->view->orderBy    = $orderBy;
         $this->view->suiteList  = $this->loadModel('testsuite')->getSuites($productID);

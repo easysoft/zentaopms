@@ -26,7 +26,7 @@
       <tr>
         <?php
         $this->app->rawModule = 'testcase';
-        $vars = "productID=$productID&branchID=$branchID&orderBy=%s&project=$projectID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";
+        $vars = "productID=$productID&branchID=$branch&orderBy=%s&project=$projectID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";
         ?>
         <th class='c-id'>
           <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
