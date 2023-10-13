@@ -209,20 +209,20 @@ formPanel
             inputGroup
             (
                 set::id('assignedToBox'),
-                picker(setID('assignedTo'), set::name('assignedTo'), set::items($fields['assignedTo']['options']), set::value($fields['assignedTo']['value']))
+                picker(setID('assignedTo'), set::name('assignedTo'), set::items($fields['assignedTo']['options']), set::value($fields['assignedTo']['default']))
             )
         ),
         formGroup
         (
             set::width('1/4'),
             set::label($lang->story->source),
-            picker(setID('source'), set::name('source'), set::items($fields['source']['options']), set::value($fields['source']['value']))
+            picker(setID('source'), set::name('source'), set::items($fields['source']['options']), set::value($fields['source']['default']))
         ),
         formGroup
         (
             set::width('1/4'),
             set::label($lang->story->sourceNote),
-            input(set::name('sourceNote'), set::value($fields['sourceNote']['value']))
+            input(set::name('sourceNote'), set::value($fields['sourceNote']['default']))
         ),
     ) : null,
     formRow
@@ -256,7 +256,7 @@ formPanel
             set::label($lang->story->requirement),
             inputGroup
             (
-                span(setClass('URSBox'), picker(setID('URS'), set::name('URS[]'), set::items($fields['URS']['options']), set::value($fields['URS']['value']))),
+                span(setClass('URSBox'), picker(setID('URS'), set::name('URS[]'), set::items($fields['URS']['options']), set::value($fields['URS']['default']))),
                 btn(set('data-on', 'click'), set('data-call', 'loadURS'), set('data-params', 'allURS'), $lang->story->loadAllStories),
             )
         ),
@@ -267,7 +267,7 @@ formPanel
             set::label($lang->story->parent),
             set::name('parent'),
             set::items($fields['parent']['options']),
-            set::value($fields['parent']['value']),
+            set::value($fields['parent']['default']),
         )
     ) : null,
     $type == 'story' && !$this->config->URAndSR ? formRow
@@ -278,7 +278,7 @@ formPanel
             set::label($lang->story->parent),
             set::name('parent'),
             set::items($fields['parent']['options']),
-            set::value($fields['parent']['value']),
+            set::value($fields['parent']['default']),
         )
     ) : null,
     isset($executionType) && $executionType == 'kanban' ? formRow

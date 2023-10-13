@@ -4655,7 +4655,7 @@ class storyModel extends model
         if($story->mailto)
         {
             $mailto = array_filter(explode(',', $story->mailto));
-            foreach($mailto as $i => $account) $mailto[i] = zget(zget($options, 'users', array()), $account);
+            foreach($mailto as $i => $account) $mailto[$i] = zget(zget($options, 'users', array()), $account);
             $story->mailto = implode(' ', $mailto);
         }
 

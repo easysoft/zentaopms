@@ -43,5 +43,3 @@ r($afterActivate1)  && p('status') && e('active');  //查看激活之后的需�
 r($afterActivate2)  && p('status') && e('active');  //查看激活之后的需求状态
 r($afterActivate3)  && p('status') && e('active');  //查看激活之后的需求状态
 r($afterActivate4)  && p('status') && e('active');  //查看激活之后的需求状态
-
-
