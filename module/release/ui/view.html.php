@@ -274,7 +274,7 @@ detailBody
                             item
                             (
                                 set::name($lang->release->desc),
-                                $release->desc
+                                html($release->desc)
                             ),
                         )
                     ),

@@ -452,11 +452,13 @@ formPanel
     ) : null,
     formGroup
     (
-        set::name('desc'),
-        set::value($project->desc),
         set::label($lang->project->desc),
-        set::control('editor'),
-        set::placeholder($lang->project->editorPlaceholder)
+        editor
+        (
+            set::name('desc'),
+            html($project->desc),
+            set::placeholder($lang->project->editorPlaceholder)
+        )
     ),
     formGroup
     (

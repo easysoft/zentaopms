@@ -79,7 +79,7 @@ formPanel
         editor
         (
             set::name('desc'),
-            html(htmlspecialchars_decode($release->desc)),
+            html($release->desc),
             set::rows('10'),
         )
     ),
