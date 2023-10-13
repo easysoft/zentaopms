@@ -15,12 +15,6 @@ window.loadBranches = function(productID)
         return false;
     }
 
-    let oldBranch = 0;
-    if(typeof(productGroups[productID]) != "undefined")
-    {
-        oldBranch = productGroups[productID]['branches'];
-    }
-
     $.get($.createLink('branch', 'ajaxGetBranches', 'productID=' + productID + '&oldBranch=0&param=active&projectID=' + $('input[name=execution]').val() + '&withMainBranch=true&isSiblings=no&fieldID=0&multiple=multiple'), function(data)
     {
         if(data)
