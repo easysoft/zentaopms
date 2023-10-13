@@ -222,13 +222,35 @@ class testtaskTest
         return array('cases' => implode(',', $cases), 'actions' => $actions);
     }
 
-    public function linkCaseTest($taskID, $type)
+    /**
+     * 测试批量用例到一个测试单。
+     * Test batch link cases to a testtask.
+     *
+     * @param  int    $taskID
+     * @param  string $type     all|bystory|bysuite|bybuild|bybug
+     * @param  array  $runs
+     * @access public
+     * @return bool|array
+     */
+    public function linkCaseTest(int $taskID, string $type, array $runs): bool|array
     {
-        $objects = $this->objectModel->linkCase($taskID, $type);
-
+        $result = $this->objectModel->linkCase($taskID, $type, $runs);
         if(dao::isError()) return dao::getError();
+        if(!$result) return $result;
 
-        return $objects;
+        $limit   = count($runs);
+        $runs    = $this->objectModel->dao->select('task, `case`, version, assignedTo, status')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->orderBy('id_desc')->limit($limit)->fetchAll();
+        $actions = $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit($limit)->fetchAll();
+
+        $cases = array();
+        $tab   = $this->objectModel->app->tab;
+        if($tab == 'project' || $tab == 'execution')
+        {
+            $project = $tab == 'project' ? $this->objectModel->session->project : $this->objectModel->session->execution;
+            $cases   = $this->objectModel->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($project)->limit($limit)->fetchAll();
+        }
+
+        return array('runs' => $runs, 'cases' => $cases, 'actions' => $actions);
     }
 
     /**

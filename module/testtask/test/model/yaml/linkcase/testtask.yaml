@@ -1,0 +1,8 @@
+title: table zt_testtask
+author: Gang Liu
+version: "1.0"
+fields:
+  - field: project
+    range: 1
+  - field: execution
+    range: 2
