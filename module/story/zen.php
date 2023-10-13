@@ -874,9 +874,9 @@ class storyZen extends story
      * Get stories by post checked id list.
      *
      * @access protected
-     * @return array
+     * @return array|false
      */
-    protected function getStoriesByChecked(): array
+    protected function getStoriesByChecked(): array|bool
     {
         $storyIdList = $this->post->storyIdList;
         if(empty($storyIdList)) return false;
