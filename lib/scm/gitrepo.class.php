@@ -238,10 +238,11 @@ class GitRepo
      *
      * @param  string $path
      * @param  string $revision
+     * @param  bool   $showComment
      * @access public
      * @return array
      */
-    public function blame($path, $revision)
+    public function blame($path, $revision, $showComment = true)
     {
         if(!scm::checkRevision($revision)) return array();
 
@@ -267,9 +268,13 @@ class GitRepo
                 $blame['line']      = $matches[5];
                 $blame['lines']     = 1;
                 $blame['content']   = strpos($matches[6], ' ') === false ? $matches[6] : substr($matches[6], 1);
+                $blame['message']   = '';
 
-                $log = $this->log('', '', '', 1);
-                $blame['message'] = $log[0]->comment;
+                if($showComment)
+                {
+                    $log = $this->log('', '', '', 1);
+                    $blame['message'] = $log[0]->comment;
+                }
 
                 $revision         = $matches[1];
                 $revLine          = $matches[5];
