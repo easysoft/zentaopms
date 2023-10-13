@@ -239,18 +239,23 @@ class storyTest
      * @access public
      * @return void
      */
-    public function batchCreateTest($productID = 0, $branch = 0, $type = 'story', $params = '')
+    public function batchCreateTest(int $productID = 0, int $branch = 0, string $type = 'story', array $params = array()): array
     {
-        $_POST   = $params;
-        $results = $this->objectModel->batchCreate($productID, $branch, $type);
-        unset($_POST);
+        $stories = array();
+        foreach($params as $field => $items)
+        {
+            foreach($items as $storyID => $value)
+            {
+                if(!isset($stories[$storyID])) $stories[$storyID] = new stdclass();
+                $stories[$storyID]->$field = $value;
+            }
+        }
+        foreach($stories as $story) $story->type = $type;
 
+        $storyIdList = $this->objectModel->batchCreate($stories, $productID, $branch, $type);
         if(dao::isError()) return dao::getError();
 
-        foreach($results as $result) $storyIdList[] = $result->storyID;
-
-        global $tester;
-        $stories = $tester->loadModel('story')->getByList($storyIdList);
+        $stories = $this->objectModel->getByList($storyIdList);
         return $stories;
     }
 
@@ -258,16 +263,13 @@ class storyTest
      * Test change story.
      *
      * @param  int    $storyID
-     * @param  array  $params
+     * @param  object $params
      * @access public
-     * @return void
+     * @return object|array
      */
-    public function changeTest($storyID, $params)
+    public function changeTest(int $storyID, object $params): object|array
     {
-        $_POST = $params;
-        $this->objectModel->change($storyID);
-        unset($_POST);
-
+        $this->objectModel->change($storyID, $params);
         if(dao::isError()) return dao::getError();
 
         global $tester;
@@ -284,10 +286,7 @@ class storyTest
      */
     public function updateTest($storyID, $params)
     {
-        $_POST = $params;
-        $this->objectModel->update($storyID);
-        unset($_POST);
-
+        $this->objectModel->update($storyID, $params);
         if(dao::isError()) return dao::getError();
 
         return $this->objectModel->getById($storyID);

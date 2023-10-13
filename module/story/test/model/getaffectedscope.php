@@ -65,12 +65,6 @@ title=测试 storyModel->getAffectedScope();
 cid=1
 pid=1
 
-获取需求1影响任务的数量 >> 6
-获取需求15影响任务的数量 >> 0
-查看返回的需求1的title >> 用户需求版本三41
-查看返回的需求15的title >> 软件需求版本三55
-查看需求100的影响的迭代的名字 >> 迭代25
-
 */
 
 $story = new storyTest();

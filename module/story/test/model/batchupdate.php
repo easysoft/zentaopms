@@ -12,11 +12,6 @@ title=测试 storyModel->batchUpdate();
 cid=1
 pid=1
 
-更新两条软件需求，判断返回的需求总量 >> 2
-更新两条用户需求，判断返回的需求总量 >> 2
-更新两条软件需求，判断返回的title、type等信息 >> 测试软件需求2,story,3,测试来源备注2,3,2223
-更新两条用户需求，判断返回的title、type等信息 >> 测试用户需求2,requirement,3,测试来源备注2,3,2221
-
 */
 
 $story = new storyTest();

@@ -15,7 +15,7 @@ pid=1
 
 global $tester;
 
-$tester->story->updateStoryReleasedDate('1,2,3', '2022-02-02');
+$tester->loadModel('story')->updateStoryReleasedDate('1,2,3', '2022-02-02');
 $story1 = $tester->story->fetchByID(1);
 $story2 = $tester->story->fetchByID(2);
 $story3 = $tester->story->fetchByID(3);

@@ -25,7 +25,7 @@ $bug->gen(5);
 
 $task = zdTable('task');
 $task->story->range('11{8},19{2}');
-$task->parent->range('0{8},-1,9');
+$task->parent->range('0{8},`-1`,9');
 $task->gen(10);
 
 $design = zdTable('design');
@@ -42,7 +42,6 @@ $relation->relation->range('subdivideinto,subdividedfrom,completedin');
 $relation->gen(24);
 
 zdTable('repohistory')->gen(10);
-
 
 /**
 

@@ -11,11 +11,6 @@ title=测试 storyModel->extractAccountsFromList();
 cid=1
 pid=1
 
-根据产品1的需求列表获取的accounts数量 >> 3
-根据产品2的需求列表获取的accounts数量 >> 4
-根据产品1的需求列表获取的account详情 >> user2
-根据产品2的需求列表获取的account详情 >> user2
-
 */
 
 global $tester;

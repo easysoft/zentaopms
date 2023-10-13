@@ -22,7 +22,7 @@ global $tester;
 $tester->loadModel('story');
 $taslIdList1 = $tester->story->getIdListWithTask(101);
 $taslIdList2 = $tester->story->getIdListWithTask(1);
-$taslIdList3 = $tester->story->getIdListWithTask(null);
+$taslIdList3 = $tester->story->getIdListWithTask(0);
 $taslIdList4 = $tester->story->getIdListWithTask(110);
 
 r(count($taslIdList1)) && p() && e('1'); // 获取执行101下的有关联需求的任务ID列表数量

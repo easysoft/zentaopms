@@ -17,16 +17,6 @@ title=测试 storyModel->getByField();
 cid=1
 pid=1
 
-根据指派给获取软件需求 >> 用户需求1,requirement,admin
-根据创建人获取软件需求 >> 软件需求6,user2
-根据由谁评审获取软件需求 >> 软件需求12,admin
-根据由谁评审获取软件需求数量 >> 2
-根据由谁评审获取软件需求 >> 软件需求306,story
-根据由谁关闭获取软件需求 >> 用户需求23,requirement,test3,关闭原因23
-根据状态获取软件需求 >> 软件需求22,active,story
-根据计划获取软件需求 >> 软件需求26,projected,7,19
-根据计划获取软件需求数量 >> 2
-
 */
 
 global $tester;

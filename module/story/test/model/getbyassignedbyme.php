@@ -10,12 +10,6 @@ title=storyModel->getByAssignedbyme();
 cid=1
 pid=1
 
-查看产品 1 由我指派的需求 >> 0
-查看产品 2 由我指派的需求 >> 0
-查看产品 3 由我指派的需求 >> 0
-查看产品 4 由我指派的需求 >> 0
-查看产品 5 由我指派的需求 >> 0
-
 */
 
 $productIDList = array(1, 2, 3, 4 ,5);

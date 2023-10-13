@@ -3,23 +3,13 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-zdTable('story')->gen(4);
+zdTable('story')->gen(10);
 
 /**
 
 title=测试 storyModel->activate();
 cid=1
 pid=1
-
-查看激活之前的需求状态 >> draft
-查看激活之前的需求状态 >> active
-查看激活之前的需求状态 >> closed
-查看激活之前的需求状态 >> changing
-
-查看激活之后的需求状态 >> active
-查看激活之后的需求状态 >> active
-查看激活之后的需求状态 >> active
-查看激活之后的需求状态 >> active
 
 */
 

@@ -4,15 +4,14 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
 
+zdTable('task')->gen(0);
+zdTable('taskspec')->gen(0);
+
 /**
 
 title=测试 storyModel->batchToTask();
 cid=1
 pid=1
-
-2个需求批量转任务，查看转化后的数量 >> 2
-查看从需求转化过来的任务的名称、状态、类型等字段 >> 11,101,软件需求66,wait,0,test,
-查看从需求转化过来的任务的名称、状态、类型等字段 >> 11,101,软件需求68,wait,0,test,
 
 */
 

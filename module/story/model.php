@@ -447,7 +447,7 @@ class storyModel extends model
         if(!empty($story->parent))   $this->subdivide($story->parent, array($storyID));
         if(!empty($story->plan))
         {
-            $this->updateStoryOrderOfPlan($storyID, $story->plan); // Set story order in this plan.
+            $this->updateStoryOrderOfPlan($storyID, (string)$story->plan); // Set story order in this plan.
             $this->action->create('productplan', $story->plan, 'linkstory', '', $storyID);
         }
 
@@ -558,7 +558,7 @@ class storyModel extends model
             if(!empty($story->reviewer)) $this->storyTao->doCreateReviewer($storyID, $story->reviewer);
             if($story->plan)
             {
-                $this->updateStoryOrderOfPlan($storyID, $story->plan);
+                $this->updateStoryOrderOfPlan($storyID, (string)$story->plan);
                 $link2Plans[$story->plan] = empty($link2Plans[$story->plan]) ? $storyID : "{$link2Plans[$story->plan]},$storyID";
             }
 
@@ -677,7 +677,7 @@ class storyModel extends model
      */
     public function update(int $storyID, object $story, string $comment = ''): bool
     {
-        $oldStory = $this->fetchByID($storyID);
+        $oldStory = $this->getByID($storyID);
 
         /* Relieve twins when change product. */
         if(!empty($oldStory->twins) and $story->product != $oldStory->product)
@@ -717,8 +717,8 @@ class storyModel extends model
         {
             $this->updateStoryOrderOfPlan($storyID, $story->plan, $oldStory->plan); // Insert a new story sort in this plan.
             if(empty($oldStory->plan) or empty($story->plan)) $this->setStage($storyID); // Set new stage for this story.
-            if(!empty($oldStory->plan)) $this->action->create('productplan', $oldStory->plan, 'unlinkstory', '', $storyID);
-            if(!empty($story->plan))    $this->action->create('productplan', $story->plan, 'linkstory', '', $storyID);
+            if(!empty($oldStory->plan)) $this->action->create('productplan', (int)$oldStory->plan, 'unlinkstory', '', $storyID);
+            if(!empty($story->plan))    $this->action->create('productplan', (int)$story->plan, 'linkstory', '', $storyID);
         }
 
         if(isset($story->stage) and $oldStory->stage != $story->stage)
@@ -1853,12 +1853,12 @@ class storyModel extends model
 
         if($browseType == 'bySearch')
         {
-            $stories2Link = $this->getBySearch($story->product, $story->branch, $queryID, 'id_desc', '', $tmpStoryType, $storyIDList, $pager);
+            $stories2Link = $this->getBySearch($story->product, $story->branch, $queryID, 'id_desc', 0, $tmpStoryType, $storyIDList, $pager);
         }
         elseif($type != 'linkRelateSR' and $type != 'linkRelateUR')
         {
             $status = $storyType == 'story' ? 'active' : 'all';
-            $stories2Link = $this->getProductStories($story->product, $story->branch, 0, $status, $tmpStoryType, 'id_desc', true, $storyIDList, $pager);
+            $stories2Link = $this->getProductStories($story->product, $story->branch, '', $status, $tmpStoryType, 'id_desc', true, $storyIDList, $pager);
         }
 
         if($type != 'linkRelateSR' and $type != 'linkRelateUR')
@@ -2175,7 +2175,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getBySearch(int $productID, int|string $branch = '', int $queryID = 0, string $orderBy = '', int $executionID = 0, string $type = 'story', string $excludeStories = '', object|null $pager = null): array
+    public function getBySearch(int $productID, int|string $branch = '', int $queryID = 0, string $orderBy = '', int $executionID = 0, string $type = 'story', array|string $excludeStories = '', object|null $pager = null): array
     {
         $this->loadModel('product');
         $executionID = empty($executionID) ? 0 : $executionID;
@@ -2796,7 +2796,7 @@ class storyModel extends model
         /* Separate for multi-plan key. */
         foreach($datas as $planID => $data)
         {
-            if(strpos($planID, ',') !== false)
+            if(strpos((string)$planID, ',') !== false)
             {
                 $planIdList = explode(',', $planID);
                 foreach($planIdList as $multiPlanID)
@@ -3312,11 +3312,11 @@ class storyModel extends model
         $excludeStories = $this->storyTao->getSubdividedStoriesByProduct($productID);
         if($projectID)
         {
-            $stories = $this->getExecutionStories($projectID, $productID, '`order`_desc', 'all', 0, 'story', $excludeStories, $this->config->URAndSR ? null : $pager);
+            $stories = $this->getExecutionStories($projectID, $productID, '`order`_desc', 'all', '0', 'story', $excludeStories, $this->config->URAndSR ? null : $pager);
         }
         else
         {
-            $stories = $this->getProductStories($productID, $branch, 0, 'all', 'story', 'id_desc', true, $excludeStories, $this->config->URAndSR ? null : $pager);
+            $stories = $this->getProductStories($productID, $branch, '', 'all', 'story', 'id_desc', true, $excludeStories, $this->config->URAndSR ? null : $pager);
         }
         if(empty($stories)) return $tracks;
 
@@ -3369,7 +3369,7 @@ class storyModel extends model
 
         /* 获取关联项目的研发需求。*/
         $projectStories = array();
-        if($projectID) $projectStories = $this->getExecutionStories($projectID, $productID, '`order`_desc', 'all', 0, 'story');
+        if($projectID) $projectStories = $this->getExecutionStories($projectID, $productID, '`order`_desc', 'all', '0', 'story');
 
         /* 获取用户需求细分的研发需求。 */
         $requirementStories = $this->storyTao->batchGetRelations(array_keys($requirements), 'requirement', array('id', 'title', 'parent'));
@@ -3832,6 +3832,7 @@ class storyModel extends model
         $isSuperReviewer = $this->storyTao->isSuperReviewer();
         $result          = zget($story, 'result', '');
         $reason          = zget($story, 'closedReason', '');
+        $story->id       = (int)$story->id;
 
         $this->loadModel('action');
         if($isSuperReviewer and $this->app->rawMethod != 'edit') return $this->action->create('story', $story->id, 'Reviewed', $comment, ucfirst($result) . '|superReviewer');

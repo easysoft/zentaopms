@@ -24,9 +24,6 @@ title=测试 storyModel->getChangedStories();
 cid=1
 pid=1
 
-获取需求26关联的用户需求数量 >> 1
-获取需求26关联的用户需求详情 >> 用户需求25,draft,requirement
-
 */
 
 global $tester;

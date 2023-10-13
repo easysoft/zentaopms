@@ -21,13 +21,6 @@ title=测试 storyModel->batchClose();
 cid=1
 pid=1
 
-批量关闭需求，查看需求2被关闭后的字段  >> closed,closed,done,0
-批量关闭需求，查看需求4被关闭后的字段  >> closed,closed,willnotdo,0
-批量关闭需求，查看需求6被关闭后的字段  >> closed,closed,putoff,0
-批量关闭需求，查看需求8被关闭后的字段  >> closed,closed,duplicate,20
-批量关闭需求，查看需求10被关闭后的字段 >> closed,closed,cancel,0
-批量关闭需求，查看需求12被关闭后的字段 >> closed,closed,bydesign,0
-
 */
 
 $story = new storyTest();

@@ -11,11 +11,6 @@ title=测试 storyModel->get2BeClosed();
 cid=1
 pid=1
 
-获取产品3下需要关闭的软件需求数量 >> 1
-获取产品3下需要关闭的软件需求详情 >> 软件需求10,story,developed
-获取产品10下需要关闭的软件需求数量 >> 1
-获取产品10下需要关闭的软件需求详情 >> 软件需求38,story,released
-
 */
 
 global $tester;
