@@ -70,7 +70,7 @@
                   <td class='required'><?php echo html::select('project', $objects, isset($execution) ? $execution->project : $objectID, "class='form-control picker-select' onchange=loadExecutions(this.value)");?></td>
                   <?php if($this->app->tab == 'doc' and $config->vision == 'rnd'):?>
                   <th><?php echo $lang->doc->execution?></th>
-                  <td id='executionBox'><?php echo html::select('execution', $executions, isset($execution) ? $objectID : '', "class='form-control chosen' onchange='loadObjectModules(\"execution\", this.value)'")?></td>
+                  <td id='executionBox'><?php echo html::select('execution', $executions, isset($execution) ? $execution->id : '', "class='form-control chosen' onchange='loadObjectModules(\"execution\", this.value)'")?></td>
                   <td class='pl-0px'><i class='icon icon-help' title='<?php echo $lang->doc->placeholder->execution;?>'></i></td>
                   <?php endif;?>
                 </tr>

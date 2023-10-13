@@ -30,7 +30,8 @@ function loadObjectModules(objectType, objectID, docType)
  */
 function loadExecutions(projectID)
 {
-    var link = createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&executionID=0&mode=multiple,leaf,noprefix&type=sprint,stage");
+    var executionID = $('#execution').val();
+    var link = createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&executionID=" + executionID + "&mode=multiple,leaf,noprefix&type=sprint,stage");
     $('#executionBox').load(link, function()
     {
         var $extension = $('#executionBox').find('select');
