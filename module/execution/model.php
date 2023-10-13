@@ -3700,7 +3700,7 @@ class executionModel extends model
                 $totalEstimate += $task->estimate;
                 $totalConsumed += $task->consumed;
 
-                if($task->status != 'cancel' and $task->status != 'closed') $totalLeft += $task->left;
+                if($task->status != 'cancel' and $task->status != 'closed') $totalLeft += (float)$task->left;
             }
 
             if(isset($summations[$task->status])) $summations[$task->status] ++;

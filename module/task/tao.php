@@ -317,7 +317,7 @@ class taskTao extends taskModel
     {
         if($task->parent >= 0)
         {
-            if($task->left != 0) return round($task->consumed / ($task->consumed + $task->left), 2) * 100;
+            if($task->left > 0) return round($task->consumed / ($task->consumed + (float)$task->left), 2) * 100;
             if($task->consumed == 0) return 0;
             return 100;
         }

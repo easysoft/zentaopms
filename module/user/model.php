@@ -1299,7 +1299,7 @@ class userModel extends model
                 if($task->status == 'wait') $hour->waitTasks += 1;
                 if($task->finishedBy != '') $hour->doneTasks += 1;
                 if($task->status != 'cancel') $hour->totalConsumed += $task->consumed;
-                if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += $task->left;
+                if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += (float)$task->left;
                 if($task->assignedTo == $account) $hour->assignedToMeTasks += 1;
             }
             $hours[$objectID] = $hour;
