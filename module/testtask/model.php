@@ -1116,7 +1116,7 @@ class testtaskModel extends model
     {
         $stmt = $this->dao->select('t1.id, t1.name, t2.name AS execution')
             ->from(TABLE_TESTTASK)->alias('t1')
-            ->leftJoin(TABLE_EXTENSION)->alias('t2')->on('t1.execution = t2.id')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
             ->where('t1.owner')->eq($account)
             ->andWhere('t1.deleted')->eq('0')
