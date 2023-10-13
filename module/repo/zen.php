@@ -464,6 +464,8 @@ class repoZen extends repo
             if($result['project']->status_code == 200)
             {
                 $project = json_decode($result['project']->body);
+                if(!is_object($project)) $project = new stdclass();
+
                 $this->loadModel('gitlab')->setProject((int)$repo->gitService, (int)$repo->project, $project);
             }
             if(!is_null($result['branches']->headers->offsetGet('x-total')))

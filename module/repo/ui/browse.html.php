@@ -208,7 +208,7 @@ toolbar
         set::className('last-sync-time'),
         $lang->repo->notice->lastSyncTime . $cacheTime
     ),
-    $repo->SCM != 'Gitlab' ? item(set($refreshItem)) : null,
+    item(set($refreshItem)),
     dropdown
     (
         set::staticMenu(true),
