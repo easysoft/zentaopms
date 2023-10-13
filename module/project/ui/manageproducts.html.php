@@ -62,7 +62,7 @@ foreach($allProducts as $productID => $productName)
     {
         $linkedList[] = btn
         (
-            setClass('product-block modal-content center-row justify-start items-center'),
+            setClass('product-block modal-content center-row justify-start'),
             checkbox
             (
                 set::name("products[{$index}]"),
@@ -73,12 +73,13 @@ foreach($allProducts as $productID => $productName)
                 on::click('checkUnlink'),
                 setClass('linked-product')
             ),
-            isset($allBranches[$productID][$branchID]) ? select
+            isset($allBranches[$productID][$branchID]) ? picker
             (
                 set::name("branch[{$index}]"),
                 set::value($branchID),
                 set::items($allBranches[$productID]),
                 set::disabled(true),
+                set::required(true)
             ) : null,
             $cannotUnlink ? input
             (
@@ -129,17 +130,18 @@ foreach($unlinkedProducts as $productID => $productName)
 {
     $unlinkList[] = btn
     (
-        setClass('product-block modal-content center-row justify-start items-center'),
+        setClass('product-block modal-content center-row justify-start'),
         checkbox
         (
             set::name("products[{$index}]"),
             set::text($productName),
             set::value($productID),
         ),
-        isset($branchGroups[$productID]) ? select
+        isset($branchGroups[$productID]) ? picker
         (
             set::name("branch[{$index}]"),
             set::items($branchGroups[$productID]),
+            set::required(true)
         ) : null
     );
 
@@ -157,7 +159,7 @@ form
             set::title($lang->execution->linkedProducts),
             div
             (
-                setClass('flex items-center flex-wrap'),
+                setClass('flex flex-wrap'),
                 $linkedList
             )
         ),
@@ -181,7 +183,7 @@ form
             ) : null,
             div
             (
-                setClass('flex items-center flex-wrap'),
+                setClass('flex flex-wrap'),
                 $unlinkList
             )
         ) : null,
