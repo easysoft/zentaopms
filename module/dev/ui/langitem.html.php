@@ -100,7 +100,7 @@ if(in_array($type, $config->dev->navTypes))
         foreach($menuTree as $menu)
         {
             $menu->id   = "{$menu->module}_{$menu->method}";
-            $menu->text = $menu->title;
+            $menu->text = '';
             $menu->url  = helper::createLink('dev', 'langItem', "type={$type}&module={$menu->module}&method={$menu->method}&language={$language}");
             if(!empty($menu->children))
             {
