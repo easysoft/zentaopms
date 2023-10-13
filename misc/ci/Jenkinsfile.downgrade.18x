@@ -120,7 +120,7 @@ pipeline {
                 
                 container('package') {
                   sh 'mkdir /tmp/publishHtml'
-                  sh 'cp ${ZENTAO_RELEASE_PATH}/downgradeReport.html /tmp/publishHtml/'
+                  sh 'test -f ${ZENTAO_RELEASE_PATH}/downgradeReport.html && cp ${ZENTAO_RELEASE_PATH}/downgradeReport.html /tmp/publishHtml/ || echo "No syntax error"'
                 }
 
                 publishHTML([
@@ -148,4 +148,5 @@ pipeline {
   }
 
 }
+
 
