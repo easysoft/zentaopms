@@ -29,6 +29,7 @@ class sv_in_waterfall extends baseCalc
             ->where('deleted')->eq('0')
             ->andWhere('parent')->ne('-1')
             ->andWhere("NOT FIND_IN_SET('or', vision)")
+            ->andWhere("NOT FIND_IN_SET('lite', vision)")
             ->andWhere('status', true)->in('done,closed')
             ->orWhere('closedReason')->eq('done')
             ->markRight(1)
@@ -42,6 +43,7 @@ class sv_in_waterfall extends baseCalc
             ->andWhere('t1.type')->eq('project')
             ->andWhere('t1.model')->eq('waterfall')
             ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
+            ->andWhere("NOT FIND_IN_SET('lite', t1.vision)")
             ->query();
     }
 

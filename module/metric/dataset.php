@@ -464,6 +464,7 @@ class dataset
     {
         return $this->dao->select($fieldList)->from(TABLE_DOC)->alias('t1')
             ->where('t1.deleted')->eq('0')
+            ->andWhere("NOT FIND_IN_SET('lite', t1.vision)")
             ->query();
     }
 

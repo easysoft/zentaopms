@@ -33,6 +33,7 @@ class consume_of_annual_closed_project extends baseCalc
             ->where('deleted')->eq('0')
             ->andWhere('parent')->ne('-1')
             ->andWhere("NOT FIND_IN_SET('or', vision)")
+            ->andWhere("NOT FIND_IN_SET('lite', vision)")
             ->groupBy('project')
             ->get();
 
@@ -44,6 +45,7 @@ class consume_of_annual_closed_project extends baseCalc
             ->andWhere('t1.deleted')->eq('0')
             ->andWhere('t1.closedDate')->notZeroDatetime()
             ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
+            ->andWhere("NOT FIND_IN_SET('lite', t1.vision)")
             ->query();
     }
 

@@ -29,6 +29,7 @@ class cv_in_waterfall extends baseCalc
             ->where('deleted')->eq('0')
             ->andWhere('parent')->ne('-1')
             ->andWhere("NOT FIND_IN_SET('or', vision)")
+            ->andWhere("NOT FIND_IN_SET('lite', vision)")
             ->andWhere('status', true)->in('done,closed')
             ->orWhere('closedReason')->eq('done')
             ->markRight(1)

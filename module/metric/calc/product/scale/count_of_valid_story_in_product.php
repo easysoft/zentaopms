@@ -32,6 +32,7 @@ class count_of_valid_story_in_product extends baseCalc
             ->andWhere('t1.type')->eq('story')
             ->andWhere('t1.closedReason')->notin('duplicate,willnotdo,bydesign,cancel')
             ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
+            ->andWhere("NOT FIND_IN_SET('or', t2.vision)")
             ->query();
     }
 
