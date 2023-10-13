@@ -523,6 +523,7 @@ modalTrigger
                 set::name('project'),
                 set::items($copyProjects),
                 set::value($projectID),
+                set::required(true),
                 on::change('loadProjectExecutions'),
             ),
         ),
