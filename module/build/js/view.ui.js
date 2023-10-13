@@ -49,7 +49,6 @@ $(document).on('click', '.linkObjectBtn', function()
     const type        = $this.data('type');
     const dtable      = zui.DTable.query($this);
     const checkedList = dtable.$.getChecks();
-    const formData    = dtable.$.getFormData();
     if(!checkedList.length) return;
 
     const postKey  = type == 'story' ? 'stories' : 'bugs';
@@ -59,6 +58,7 @@ $(document).on('click', '.linkObjectBtn', function()
         postData.append(postKey + '[]', id)
         if(type == 'bug')
         {
+            const formData = dtable.$.getFormData();
             let resolvedBy = formData['resolvedByControl[' +  id + ']'];
             if(typeof resolvedBy == 'undefined') resolvedBy = currentAccount;
             if(resolvedBy) postData.append('resolvedBy[' + id + ']', resolvedBy);
