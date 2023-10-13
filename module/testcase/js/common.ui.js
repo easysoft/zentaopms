@@ -100,15 +100,11 @@ function loadProductStories(productID)
     if(typeof(storyID)  == 'undefined') storyID  = 0;
 
     const link = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID=' + storyID + '&onlyOption=false&status=noclosed&limit=0&type=full&hasParent=1&executionID=' + executionID);
-    $.get(link, function(data)
+    $.getJSON(link, function(data)
     {
-        if(data)
-        {
-            let $storyPicker = $('[name=story]').zui('picker');
-            data = JSON.parse(data);
-            $storyPicker.render({items: data});
-            $storyPicker.$.changeState({value: ''});
-        }
+        let $storyPicker = $('[name=story]').zui('picker');
+        $storyPicker.render({items: data});
+        $storyPicker.$.setValue(storyID);
     })
 }
 
@@ -121,19 +117,14 @@ function loadProductBranches(productID)
 
     $.get($.createLink('branch', 'ajaxGetBranches', param), function(data)
     {
-        if(data)
-        {
-            $('#branch').show();
+        if(!data) $('#branch').hide();
+        data = JSON.parse(data);
 
-            let $branchPicker = $('[name=branch]').zui('picker');
-            data = JSON.parse(data);
-            $branchPicker.render({items: data});
-            $branchPicker.$.changeState({value: ''});
-        }
-        else
-        {
-            $('#branch').hide();
-        }
+        let branch        = $('[name=branch]').val();
+        let $branchPicker = $('[name=branch]').zui('picker');
+        $branchPicker.render({items: data});
+        $branchPicker.$.setValue(branch);
+        $('#branch').show();
     })
 }
 
@@ -143,40 +134,14 @@ function loadProductModules(productID)
     if(typeof(branch) == 'undefined') branch = 0;
 
     const getModuleLink = $.createLink('testcase', 'ajaxGetOptionMenu', 'rootID=' + productID + '&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=');
-    $.get(getModuleLink, function(data)
+    $.getJSON(getModuleLink, function(data)
     {
-        if(data)
-        {
-            let $modulePicker = $('[name=module]').zui('picker');
-            data = JSON.parse(data);
-            $modulePicker.render({items: data});
-            $modulePicker.$.changeState({value: ''});
+        let oldModule     = $('[name=module]').val();
+        let $modulePicker = $('[name=module]').zui('picker');
+        $modulePicker.render({items: data});
+        $modulePicker.$.setValue(oldModule);
 
-            $('#module').next('.input-group-addon').toggleClass('hidden', data.length > 1);
-        }
-    })
-}
-
-function loadProductStories(productID)
-{
-    let branch   = $('[name=branch]').val();
-    let moduleID = $('[name=module]').val();
-    let storyID  = $('[name=story]').val();
-
-    if(typeof(branch)   == 'undefined') branch   = 0;
-    if(typeof(moduleID) == 'undefined') moduleID = 0;
-    if(typeof(storyID)  == 'undefined') storyID  = 0;
-
-    const link = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID=' + storyID + '&onlyOption=false&status=noclosed&limit=0&type=full&hasParent=1&executionID=' + executionID);
-    $.get(link, function(data)
-    {
-        if(data)
-        {
-            let $storyPicker = $('[name=story]').zui('picker');
-            data = JSON.parse(data);
-            $storyPicker.render({items: data});
-            $storyPicker.$.changeState({value: ''});
-        }
+        $('#module').next('.input-group-addon').toggleClass('hidden', data.length > 1);
     })
 }
 
@@ -189,11 +154,10 @@ function loadScenes(productID, sceneName = 'scene')
     if(typeof(sceneID)  == 'undefined') sceneID  = 0;
 
     const link = $.createLink('testcase', 'ajaxGetScenes', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&sceneID=' + sceneID);
-    $.get(link, function(scenes)
+    $.getJSON(link, function(scenes)
     {
         const $picker = $('[name=' + sceneName + ']').zui('picker');
-        const items = JSON.parse(scenes);
-        $picker.render({items});
-        $picker.$.setValue({value: ''});
+        $picker.render({scenes});
+        $picker.$.setValue(sceneID);
     });
 }
