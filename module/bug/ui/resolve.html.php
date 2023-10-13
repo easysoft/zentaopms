@@ -44,6 +44,7 @@ formPanel
         set::label($lang->bug->resolution),
         set::value(''),
         set::items($lang->bug->resolutionList),
+        set::required(false),
         on::change('setDuplicate'),
     ),
     formRow
@@ -88,7 +89,7 @@ formPanel
                     set::name('resolvedBuild'),
                     set::value(''),
                     set::items($builds),
-                    set::required(true),
+                    set::required(false),
                 ),
             ),
         ),
