@@ -59,7 +59,9 @@ class story extends control
 
         if(!empty($_POST))
         {
-            helper::setcookie('lastStoryModule', $this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            if(isset($_POST['module']))  $moduleID = $this->post->module;
+            if(isset($_POST['modules'])) $moduleID = reset($_POST['modules']);
+            helper::setcookie('lastStoryModule', $moduleID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
             /* Get story data from post. */
             $storyData = $this->storyZen->buildStoryForCreate($objectID, $bugID);
@@ -1758,7 +1760,7 @@ class story extends control
                 $this->config->story->datatable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => $productIdList);
             }
 
-            $this->post->set('rows', $this->story->getExportStories($executionID, $orderBy, $storyType, $postData));
+            $this->post->set('rows', $this->story->getExportStories($orderBy, $storyType, $postData));
             $this->fetch('transfer', 'export', 'model=story');
         }
 

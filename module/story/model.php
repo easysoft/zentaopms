@@ -3233,356 +3233,6 @@ class storyModel extends model
     }
 
     /**
-     * Print cell data
-     *
-     * @param  object  $col
-     * @param  object  $story
-     * @param  array   $users
-     * @param  array   $branches
-     * @param  array   $storyStages
-     * @param  array   $modulePairs
-     * @param  array   $storyTasks
-     * @param  array   $storyBugs
-     * @param  array   $storyCases
-     * @param  string  $mode
-     * @param  string  $storyType
-     * @param  object  $execution
-     * @param  string  $isShowBranch
-     * @access public
-     * @return void
-     */
-    public function printCell($col, $story, $users, $branches, $storyStages, $modulePairs = array(), $storyTasks = array(), $storyBugs = array(), $storyCases = array(), $mode = 'datatable', $storyType = 'story', $execution = null, $isShowBranch = '')
-    {
-        $tab         = $this->app->tab;
-        $executionID = empty($execution) ? $this->session->execution : $execution->id;
-        $account     = $this->app->user->account;
-        $storyLink   = helper::createLink('story', 'view', "storyID=$story->id&version=0&param=&storyType=$story->type") . "#app=$tab";
-        $canView     = common::hasPriv($story->type, 'view', null, "storyType=$story->type");
-
-        if($tab == 'project')
-        {
-            if($this->session->multiple)
-            {
-                $storyLink = helper::createLink('projectstory', 'view', "storyID=$story->id&project={$this->session->project}");
-                $canView   = common::hasPriv('projectstory', 'view');
-            }
-            else
-            {
-                $storyLink = helper::createLink('story', 'view', "storyID=$story->id&version=0&param={$this->session->execution}&storyType=$story->type");
-            }
-        }
-        elseif($tab == 'execution')
-        {
-            $storyLink = helper::createLink('execution', 'storyView', "storyID=$story->id&execution={$this->session->execution}");
-            $canView   = common::hasPriv('execution', 'storyView');
-        }
-
-        /* Check the product is closed. */
-        $canBeChanged = common::canBeChanged('story', $story);
-
-        $canBatchEdit         = common::hasPriv('story',        'batchEdit');
-        $canBatchClose        = common::hasPriv($story->type,   'batchClose');
-        $canBatchReview       = common::hasPriv('story',        'batchReview');
-        $canBatchChangeStage  = common::hasPriv('story',        'batchChangeStage');
-        $canBatchChangeBranch = common::hasPriv($story->type,   'batchChangeBranch');
-        $canBatchChangeModule = common::hasPriv($story->type,   'batchChangeModule');
-        $canBatchChangePlan   = common::hasPriv('story',        'batchChangePlan');
-        $canBatchAssignTo     = common::hasPriv($story->type,   'batchAssignTo');
-        $canBatchUnlinkStory  = common::hasPriv('projectstory', 'batchUnlinkStory');
-        $canBatchUnlink       = common::hasPriv('execution',    'batchUnlinkStory');
-
-        if($tab == 'execution')
-        {
-            $checkObject = new stdclass();
-            $checkObject->execution = $executionID;
-
-            $canBatchToTask = common::hasPriv('story', 'batchToTask', $checkObject);
-        }
-
-        if($tab == 'execution')
-        {
-            $canBatchAction = ($canBeChanged and ($canBatchEdit or $canBatchClose or $canBatchChangeStage or $canBatchUnlink or $canBatchToTask));
-        }
-        elseif($tab == 'project')
-        {
-            $canBatchAction = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeBranch or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo or $canBatchUnlinkStory);
-        }
-        else
-        {
-            $canBatchAction = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeBranch or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo);
-        }
-
-        $id = $col->id;
-        if($col->show)
-        {
-            $class = "c-{$id}";
-            $title = '';
-            $style = '';
-
-            if($id == 'assignedTo')
-            {
-                $title = zget($users, $story->assignedTo, $story->assignedTo);
-                if($story->assignedTo == $account) $class .= ' red';
-            }
-            elseif($id == 'openedBy')
-            {
-                $title = zget($users, $story->openedBy, $story->openedBy);
-            }
-            elseif($id == 'title')
-            {
-                $title  = $story->title;
-                $class .= ' text-ellipsis';
-                if(!empty($story->children)) $class .= ' has-child';
-            }
-            elseif($id == 'plan')
-            {
-                $title  = isset($story->planTitle) ? $story->planTitle : '';
-                $class .= ' text-ellipsis';
-            }
-            elseif($id == 'branch')
-            {
-                $title  = zget($branches, $story->branch, '');
-                $class .= ' text-ellipsis';
-            }
-            elseif($id == 'sourceNote')
-            {
-                $title  = $story->sourceNote;
-                $class .= ' text-ellipsis';
-            }
-            elseif($id == 'category')
-            {
-                $title  = zget($this->lang->story->categoryList, $story->category);
-            }
-            elseif($id == 'estimate')
-            {
-                $title = $story->estimate . ' ' . $this->lang->hourCommon;
-            }
-            elseif($id == 'reviewedBy')
-            {
-                $reviewedBy = '';
-                foreach(explode(',', $story->reviewedBy) as $user) $reviewedBy .= zget($users, $user) . ' ';
-                $story->reviewedBy = trim($reviewedBy);
-
-                $title  = $reviewedBy;
-                $class .= ' text-ellipsis';
-            }
-            elseif($id == 'stage')
-            {
-                $style .= 'overflow: visible;';
-
-                $maxStage    = $story->stage;
-                $stageList   = implode(',', array_keys($this->lang->story->stageList));
-                $maxStagePos = strpos($stageList, $maxStage);
-                if(isset($storyStages[$story->id]))
-                {
-                    foreach($storyStages[$story->id] as $storyStage)
-                    {
-                        if(strpos($stageList, $storyStage->stage) !== false and strpos($stageList, $storyStage->stage) > $maxStagePos)
-                        {
-                            $maxStage    = $storyStage->stage;
-                            $maxStagePos = strpos($stageList, $storyStage->stage);
-                        }
-                    }
-                }
-                $title .= $this->lang->story->stageList[$maxStage];
-            }
-            elseif($id == 'feedbackBy')
-            {
-                $title = $story->feedbackBy;
-            }
-            elseif($id =='version')
-            {
-                $title = $story->version;
-                $class = 'text-center';
-            }
-            elseif($id == 'notifyEmail')
-            {
-                $title = $story->notifyEmail;
-            }
-            elseif($id == 'actions')
-            {
-                $class .= ($tab == 'project' and $story->type == 'requirement') ? ' text-center' : ' text-left';
-            }
-            elseif($id == 'order')
-            {
-                $class = 'sort-handler c-sort';
-            }
-
-            echo "<td class='" . $class . "' title='$title' style='$style'>";
-            if($this->config->edition != 'open') $this->loadModel('flow')->printFlowCell('story', $story, $id);
-            switch($id)
-            {
-            case 'id':
-                if($canBatchAction and ($storyType == 'story' or ($storyType == 'requirement' and $story->type == 'requirement'))) echo html::checkbox('storyIdList', array($story->id => ''));
-                if($canBatchAction and $storyType == 'requirement' and $story->type == 'story') echo "<span class='c-span'></span>";
-                echo $canView ? html::a($storyLink, sprintf('%03d', $story->id), '', "data-app='$tab'") : sprintf('%03d', $story->id);
-                break;
-            case 'order':
-                echo "<i class='icon-move'>";
-                break;
-            case 'pri':
-                echo "<span class='" . ($story->pri ? "label-pri label-pri-" . $story->pri : '') . "' title='" . zget($this->lang->story->priList, $story->pri, $story->pri) . "'>";
-                echo zget($this->lang->story->priList, $story->pri, $story->pri);
-                echo "</span>";
-                break;
-            case 'title':
-                $titleHtml = '';
-                if($storyType == 'requirement' and $story->type == 'story') $titleHtml = '<span class="label label-badge label-light">SR</span> ';
-                if($story->parent > 0 and isset($story->parentName)) $titleHtml = "{$story->parentName} / ";
-                if($story->module and isset($modulePairs[$story->module])) $titleHtml = "<span class='label label-gray label-badge'>{$modulePairs[$story->module]}</span> ";
-                if($story->parent > 0) $titleHtml = '<span class="label label-badge label-light" title="' . $this->lang->story->children . '">' . $this->lang->story->childrenAB . '</span> ';
-                echo $canView ? html::a($storyLink, $titleHtml . $story->title, '', "title='$story->title' style='color: $story->color' data-app='$tab'") : "<span style='color: $story->color'>{$titleHtml}{$story->title}</span>";
-                if(!empty($story->children)) echo '<a class="story-toggle" data-id="' . $story->id . '"><i class="icon icon-angle-right"></i></a>';
-                break;
-            case 'plan':
-                echo isset($story->planTitle) ? $story->planTitle : '';
-                break;
-            case 'branch':
-                echo zget($branches, $story->branch, '');
-                break;
-            case 'keywords':
-                echo $story->keywords;
-                break;
-            case 'source':
-                echo zget($this->lang->story->sourceList, $story->source, $story->source);
-                break;
-            case 'sourceNote':
-                echo $story->sourceNote;
-                break;
-            case 'category':
-                echo zget($this->lang->story->categoryList, $story->category);
-                break;
-            case 'status':
-                if($story->URChanged)
-                {
-                    print("<span class='status-story status-changed'>{$this->lang->story->URChanged}</span>");
-                    break;
-                }
-                echo "<span class='status-{$story->status}'>";
-                echo $this->processStatus('story', $story);
-                echo '</span>';
-                break;
-            case 'estimate':
-                echo $story->estimate . $this->config->hourUnit;
-                break;
-            case 'stage':
-                echo $this->lang->story->stageList[$maxStage];
-                break;
-            case 'taskCount':
-                $tasksLink = helper::createLink('story', 'tasks', "storyID=$story->id", '', 'class="iframe"');
-                $storyTasks[$story->id] > 0 ? print(html::a($tasksLink, $storyTasks[$story->id], '', 'class="iframe"')) : print(0);
-                break;
-            case 'bugCount':
-                $bugsLink = helper::createLink('story', 'bugs', "storyID=$story->id");
-                $storyBugs[$story->id] > 0 ? print(html::a($bugsLink, $storyBugs[$story->id], '', 'class="iframe"')) : print(0);
-                break;
-            case 'caseCount':
-                $casesLink = helper::createLink('story', 'cases', "storyID=$story->id");
-                $storyCases[$story->id] > 0 ? print(html::a($casesLink, $storyCases[$story->id], '', 'class="iframe"')) : print(0);
-                break;
-            case 'openedBy':
-                echo zget($users, $story->openedBy, $story->openedBy);
-                break;
-            case 'openedDate':
-                echo helper::isZeroDate($story->openedDate) ? '' : substr($story->openedDate, 5, 11);
-                break;
-            case 'assignedTo':
-                $this->printAssignedHtml($story, $users);
-                break;
-            case 'assignedDate':
-                echo helper::isZeroDate($story->assignedDate) ? '' : substr($story->assignedDate, 5, 11);
-                break;
-            case 'activatedDate':
-                echo helper::isZeroDate($story->activatedDate) ? '' : substr($story->activatedDate, 5, 11);
-                break;
-            case 'reviewedBy':
-                echo $story->reviewedBy;
-                break;
-            case 'reviewedDate':
-                echo helper::isZeroDate($story->reviewedDate) ? '' : substr($story->reviewedDate, 5, 11);
-                break;
-            case 'closedBy':
-                echo zget($users, $story->closedBy, $story->closedBy);
-                break;
-            case 'closedDate':
-                echo helper::isZeroDate($story->closedDate) ? '' : substr($story->closedDate, 5, 11);
-                break;
-            case 'closedReason':
-                echo zget($this->lang->story->reasonList, $story->closedReason, $story->closedReason);
-                break;
-            case 'lastEditedBy':
-                echo zget($users, $story->lastEditedBy, $story->lastEditedBy);
-                break;
-            case 'lastEditedDate':
-                echo helper::isZeroDate($story->lastEditedDate) ? '' : substr($story->lastEditedDate, 5, 11);
-                break;
-            case 'feedbackBy':
-                echo $story->feedbackBy;
-                break;
-            case 'notifyEmail':
-                echo $story->notifyEmail;
-                break;
-            case 'mailto':
-                $mailto = explode(',', $story->mailto);
-                foreach($mailto as $account)
-                {
-                    $account = trim($account);
-                    if(empty($account)) continue;
-                    echo zget($users, $account) . ' &nbsp;';
-                }
-                break;
-            case 'version':
-                echo $story->version;
-                break;
-            case 'actions':
-                if($tab == 'execution' or ($tab == 'project' and isset($_SESSION['multiple']) and empty($_SESSION['multiple'])))
-                {
-                    $menuType = 'execution';
-                    if($storyType == 'requirement') $menuType = 'browse';
-                }
-                else
-                {
-                    $menuType = 'browse';
-                }
-                echo $this->buildOperateMenu($story, $menuType, $execution, $storyType);
-                break;
-            }
-            echo '</td>';
-        }
-    }
-
-    /**
-     * Product module story page add assignment function.
-     *
-     * @param  object    $story
-     * @param  array     $users
-     * @access public
-     * @return void
-     */
-    public function printAssignedHtml(object $story, array $users): void
-    {
-        $btnTextClass   = '';
-        $btnClass       = '';
-        $assignedToText = zget($users, $story->assignedTo);
-
-        if(empty($story->assignedTo))
-        {
-            $btnClass       = $btnTextClass = 'assigned-none';
-            $assignedToText = $this->lang->task->noAssigned;
-        }
-
-        if($story->assignedTo == $this->app->user->account) $btnClass = $btnTextClass = 'assigned-current';
-        if(!empty($story->assignedTo) and $story->assignedTo != $this->app->user->account) $btnClass = $btnTextClass = 'assigned-other';
-
-        $btnClass    .= $story->assignedTo == 'closed' ? ' disabled' : '';
-        $btnClass    .= ' iframe btn btn-icon-left btn-sm';
-        $assignToLink = helper::createLink('story', 'assignTo', "storyID=$story->id&kanbanGroup=default&from=&storyType=$story->type", '', true);
-        $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span>{$assignedToText}</span>", '', "class='$btnClass'");
-
-        echo !common::hasPriv($story->type, 'assignTo', $story) ? "<span style='padding-left: 21px' class='$btnTextClass'>{$assignedToText}</span>" : $assignToHtml;
-    }
-
-    /**
      * Set report condition.
      *
      * @access public
@@ -4258,14 +3908,13 @@ class storyModel extends model
      * 获取要导出的需求数据。
      * Get the stories to export.
      *
-     * @param  int    $executionID
      * @param  string $orderBy     id_desc
      * @param  string $storyType
      * @param  object $postData
      * @access public
      * @return array
      */
-    public function getExportStories(int $executionID, string $orderBy = 'id_desc', string $storyType = 'story', object|null $postData = null): array
+    public function getExportStories(string $orderBy = 'id_desc', string $storyType = 'story', object|null $postData = null): array
     {
         $orderBy = $orderBy !== 'id_desc' ? 'id_desc' : $orderBy; /* The order of the stories for exporting is disabled. */
 
@@ -4290,26 +3939,16 @@ class storyModel extends model
         $selectedIDList = $this->cookie->checkedItem ? $this->cookie->checkedItem : '0';
         if($this->session->storyOnlyCondition)
         {
-            if($postData->exportType == 'selected')
-            {
-                $stories = $this->dao->select('id,title,linkStories,childStories,parent,mailto,reviewedBy')->from(TABLE_STORY)->where('id')->in($selectedIDList)->orderBy($orderBy)->fetchAll('id');
-            }
-            else
-            {
-                $queryCondition = str_replace('story', 'id', $this->session->storyQueryCondition);
-                $stories = $this->dao->select('id,title,linkStories,childStories,parent,mailto,reviewedBy')->from(TABLE_STORY)->where($queryCondition)->orderBy($orderBy)->fetchAll('id');
-            }
+            $queryCondition = $postData->exportType == 'selected' ? ' `id` ' . helper::dbIN($selectedIDList) : str_replace('story', 'id', $this->session->storyQueryCondition);
+            $stories        = $this->dao->select('id,title,linkStories,childStories,parent,mailto,reviewedBy')->from(TABLE_STORY)->where($queryCondition)->orderBy($orderBy)->fetchAll('id');
         }
         else
         {
-            if($postData->exportType == 'selected')
-            {
-                $stmt  = $this->app->dbQuery("SELECT * FROM " . TABLE_STORY . "WHERE `id` IN({$selectedIDList})" . " ORDER BY " . helper::wrapSqlAfterOrderBy($orderBy));
-            }
-            else
-            {
-                $stmt  = $this->app->dbQuery($this->session->storyQueryCondition . " ORDER BY " . helper::wrapSqlAfterOrderBy($orderBy));
-            }
+            $orderBy  = " ORDER BY " . helper::wrapSqlAfterOrderBy($orderBy);
+            $querySQL = $this->session->storyQueryCondition . $orderBy;
+            if($postData->exportType == 'selected') $querySQL = "SELECT * FROM " . TABLE_STORY . "WHERE `id` IN({$selectedIDList})" . $orderBy;
+
+            $stmt = $this->app->dbQuery($querySQL);
             while($row = $stmt->fetch()) $stories[$row->id] = $row;
         }
 
@@ -4332,31 +3971,22 @@ class storyModel extends model
             foreach($stories as $story)
             {
                 $reorderStories[$story->id] = $story;
-                if(isset($children[$story->id]))
-                {
-                    foreach($children[$story->id] as $childrenID => $childrenStory)
-                    {
-                        $reorderStories[$childrenID] = $childrenStory;
-                    }
-                }
-                unset($stories[$story->id]);
+                if(!isset($children[$story->id])) continue;
+
+                foreach($children[$story->id] as $childrenID => $childrenStory) $reorderStories[$childrenID] = $childrenStory;
             }
             $stories = $reorderStories;
         }
 
         /* Get users, products and relations. */
-        $users           = $this->loadModel('user')->getPairs('noletter');
-        $relatedStoryIds = array();
-
-        foreach($stories as $story) $relatedStoryIds[$story->id] = $story->id;
-
-        $storyTasks = $this->loadModel('task')->getStoryTaskCounts($relatedStoryIds);
-        $storyBugs  = $this->loadModel('bug')->getStoryBugCounts($relatedStoryIds);
-        $storyCases = $this->loadModel('testcase')->getStoryCaseCounts($relatedStoryIds);
+        $users      = $this->loadModel('user')->getPairs('noletter');
+        $storyTasks = $this->loadModel('task')->getStoryTaskCounts($storyIdList);
+        $storyBugs  = $this->loadModel('bug')->getStoryBugCounts($storyIdList);
+        $storyCases = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
 
         /* Get related objects title or names. */
         $relatedSpecs   = $this->dao->select('*')->from(TABLE_STORYSPEC)->where('`story`')->in($storyIdList)->orderBy('version desc')->fetchGroup('story');
-        $relatedStories = $this->dao->select('*')->from(TABLE_STORY)->where('`id`')->in($relatedStoryIds)->fetchPairs('id', 'title');
+        $relatedStories = $this->dao->select('*')->from(TABLE_STORY)->where('`id`')->in($storyIdList)->fetchPairs('id', 'title');
 
         $fileIdList = array();
         foreach($relatedSpecs as $relatedSpec)
@@ -4378,10 +4008,7 @@ class storyModel extends model
                 $story->spec   = $storySpec->spec;
                 $story->verify = $storySpec->verify;
 
-                if(!empty($storySpec->files) and empty($relatedFiles[$story->id]) and !empty($filesInfo[$storySpec->files]))
-                {
-                    $relatedFiles[$story->id][0] = $filesInfo[$storySpec->files];
-                }
+                if(!empty($storySpec->files) and empty($relatedFiles[$story->id]) and !empty($filesInfo[$storySpec->files])) $relatedFiles[$story->id][0] = $filesInfo[$storySpec->files];
             }
 
             if($postData->fileType == 'csv')
@@ -4396,8 +4023,8 @@ class storyModel extends model
                 $story->verify = str_replace('"', '""', $story->verify);
                 $story->verify = str_replace('&nbsp;', ' ', $story->verify);
             }
-            /* fill some field with useful value. */
 
+            /* fill some field with useful value. */
             if(isset($storyTasks[$story->id])) $story->taskCountAB = $storyTasks[$story->id];
             if(isset($storyBugs[$story->id]))  $story->bugCountAB  = $storyBugs[$story->id];
             if(isset($storyCases[$story->id])) $story->caseCountAB = $storyCases[$story->id];
@@ -4406,26 +4033,16 @@ class storyModel extends model
             {
                 $tmpLinkStories    = array();
                 $linkStoriesIdList = explode(',', $story->linkStories);
-                foreach($linkStoriesIdList as $linkStoryID)
-                {
-                    $linkStoryID = trim($linkStoryID);
-                    $tmpLinkStories[] = zget($relatedStories, $linkStoryID);
-                }
-                $story->linkStories = implode("; \n", $tmpLinkStories);
+                foreach($linkStoriesIdList as $linkStoryID) $tmpLinkStories[] = zget($relatedStories, trim($linkStoryID), '');
+                $story->linkStories = implode("; \n", array_filter($tmpLinkStories));
             }
 
             if($story->childStories)
             {
                 $tmpChildStories = array();
                 $childStoriesIdList = explode(',', $story->childStories);
-                foreach($childStoriesIdList as $childStoryID)
-                {
-                    if(empty($childStoryID)) continue;
-
-                    $childStoryID = trim($childStoryID);
-                    $tmpChildStories[] = zget($relatedStories, $childStoryID);
-                }
-                $story->childStories = implode("; \n", $tmpChildStories);
+                foreach($childStoriesIdList as $childStoryID) $tmpChildStories[] = zget($relatedStories, trim($childStoryID));
+                $story->childStories = implode("; \n", array_filter($tmpChildStories));
             }
 
             /* Set related files. */
@@ -4439,30 +4056,13 @@ class storyModel extends model
                 }
             }
 
-            if(!empty($story->mailto))
-            {
-                $story->mailto = trim(trim($story->mailto), ',');
-                $mailtos = explode(',', $story->mailto);
-                $story->mailto = '';
-                foreach($mailtos as $mailto)
-                {
-                    $mailto = trim($mailto);
-                    if(isset($users[$mailto])) $story->mailto .= $users[$mailto] . ',';
-                }
-                $story->mailto = rtrim($story->mailto, ',');
-            }
-            else
-                $story->mailto = '';
+            $mailtoList = array_filter(explode(',', $story->mailto));
+            foreach($mailtoList as $i => $mailto) $mailtoList[$i] = zget($users, trim($mailto));
+            $story->mailto = implode(',', array_filter($mailtoList));
 
-            $story->reviewedBy = trim(trim($story->reviewedBy), ',');
-            $reviewedBys = explode(',', $story->reviewedBy);
-            $story->reviewedBy = '';
-            foreach($reviewedBys as $reviewedBy)
-            {
-                $reviewedBy = trim($reviewedBy);
-                if(isset($users[$reviewedBy])) $story->reviewedBy .= $users[$reviewedBy] . ',';
-            }
-            $story->reviewedBy = rtrim($story->reviewedBy, ',');
+            $reviewedByList = array_filter(explode(',', $story->reviewedBy));
+            foreach($reviewedByList as $i => $reviewedBy) $reviewedByList[$i] = zget($users, trim($reviewedBy));
+            $story->reviewedBy = implode(',', array_filter($reviewedByList));
 
             /* Set child story title. */
             if($story->parent > 0 && strpos($story->title, htmlentities('>', ENT_COMPAT | ENT_HTML401, 'UTF-8')) !== 0) $story->title = '>' . $story->title;

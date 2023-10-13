@@ -31,7 +31,7 @@ $createStoryLink = $this->createLink('story', 'create', "productID={$story->prod
 $versions = array();
 for($i = $story->version; $i >= 1; $i --) $versions[] = array('text' => "#{$i}", 'url' => inlink('view', "storyID={$story->id}&version=$i&param=0&storyType={$story->type}"));
 
-$menus = $this->story->buildOperateMenu($story, 'view', $project);
+$menus = $this->story->buildOperateMenu($story, 'view', $project ? $project : null);
 foreach($menus['dropMenus'] as $dropMenuKey => $dropItems) menu(set::id($dropMenuKey), setClass('menu dropdown-menu'), set::items($dropItems));
 
 /* Get module items. */
