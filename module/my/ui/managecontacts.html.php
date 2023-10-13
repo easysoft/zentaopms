@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$listID = isset($list->id) ? $list->id : 0;
+
 $myContactList     = array();
 $publicContactList = array();
 foreach($lists as $contactList)
@@ -18,7 +20,7 @@ foreach($lists as $contactList)
     {
         $myContactList[] = li
         (
-            setClass('contact ellipsis pl-2 ' . ($list->id == $contactList->id ? 'active' : '')),
+            setClass('contact ellipsis pl-2 ' . ($listID == $contactList->id ? 'active' : '')),
             set('data-id', $contactList->id),
             $contactList->listName
         );
