@@ -402,15 +402,6 @@ class testtaskTest
         return $objects;
     }
 
-    public function processAutoResultTest($testtaskID, $productID, $suites, $cases, $results, $suiteNames = array(), $caseTitles = array(), $auto = 'unit')
-    {
-        $objects = $this->objectModel->processAutoResult($testtaskID, $productID, $suites, $cases, $results, $suiteNames = array(), $caseTitles = array(), $auto = 'unit');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
     public function parseCppXMLResultTest($fileName, $productID, $frame)
     {
         $objects = $this->objectModel->parseCppXMLResult($fileName, $productID, $frame);
