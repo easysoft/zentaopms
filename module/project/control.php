@@ -1526,7 +1526,7 @@ class project extends control
     public function ajaxGetPairsByExecution(int $executionID)
     {
         $execution    = $this->loadModel('execution')->getByID($executionID);
-        $projectPairs = $this->loadModel('project')->getPairsByIdList($execution->project);
+        $projectPairs = $this->loadModel('project')->getPairsByIdList(array($execution->project));
 
         if($this->app->getViewType() == 'json')
         {

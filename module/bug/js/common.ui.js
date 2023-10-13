@@ -65,7 +65,7 @@ function changeExecution(event)
     const projectID   = $('[name="project"]').val() == 'undefined' ? 0 : $('[name="project"]').val();
     const executionID = $(event.target).val();
 
-    if(executionID)
+    if(executionID != '0')
     {
         loadProjectByExecutionID(executionID);
         loadExecutionTasks(executionID);
@@ -209,16 +209,12 @@ function loadProductProjects(productID)
     if(typeof(branch) == 'undefined') branch = 0;
 
     const link = $.createLink('product', 'ajaxGetProjects', 'productID=' + productID + '&branch=' + branch + '&projectID=' + $('[name="project"]').val());
-    $.get(link, function(data)
+    $.getJSON(link, function(data)
     {
         let project        = $('[name="project"]').val();
         let $projectPicker = $('[name="project"]').zui('picker');
-        if(data)
-        {
-            data = JSON.parse(data);
-            $projectPicker.render({items: data});
-            $projectPicker.$.setValue(project != '0' ? project : '');
-        }
+        $projectPicker.render({items: data});
+        $projectPicker.$.setValue(project != '0' ? project : '');
     });
 }
 
