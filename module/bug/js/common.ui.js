@@ -246,7 +246,7 @@ function loadExecutionLabel(projectID)
 
 function loadAssignedTo(productID, projectID = 0, executionID = 0)
 {
-    if(projectID)
+    if(projectID != 0)
     {
         loadAssignedToByProject(projectID);
     }
