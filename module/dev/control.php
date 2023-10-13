@@ -149,19 +149,21 @@ class dev extends control
                 if(isset($this->config->custom->commonLang[$upperKey])) $this->config->custom->commonLang[$upperKey] = $langValue;
             }
 
-            $this->view->currentLangs      = $this->dev->getOriginalLang($type, $module, $method, $clientLang);
-            $this->view->currentCommonLang = $currentCommonLang;
+            $currentLangs      = $this->dev->getOriginalLang($type, $module, $method, $clientLang);
+            $currentCommonLang = $currentCommonLang;
         }
 
-        $this->view->title         = $this->lang->langItem;
-        $this->view->type          = $type;
-        $this->view->originalLangs = $this->dev->getOriginalLang($type, $module, $method, $language);
-        $this->view->customedLangs = $this->dev->getCustomedLang($type, $module, $method, $language);
-        $this->view->menuTree      = $this->dev->getMenuTree($type, $module, $method);
-        $this->view->moduleName    = $moduleName;
-        $this->view->module        = $module;
-        $this->view->method        = $method;
-        $this->view->language      = str_replace('-', '_', $language);
+        $this->view->title             = $this->lang->langItem;
+        $this->view->type              = $type;
+        $this->view->originalLangs     = $this->dev->getOriginalLang($type, $module, $method, $language);
+        $this->view->customedLangs     = $this->dev->getCustomedLang($type, $module, $method, $language);
+        $this->view->menuTree          = $this->dev->getMenuTree($type, $module, $method);
+        $this->view->moduleName        = $moduleName;
+        $this->view->module            = $module;
+        $this->view->method            = $method;
+        $this->view->language          = str_replace('-', '_', $language);
+        $this->view->currentLangs      = isset($currentLangs) ? $currentLangs : array();
+        $this->view->currentCommonLang = isset($currentCommonLang) ? $currentCommonLang : array();
         $this->display();
     }
 
