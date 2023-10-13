@@ -224,16 +224,12 @@ function loadExecutions(productID, projectID = 0)
     if(typeof(branch) == 'undefined') branch = 0;
 
     const link = $.createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID + '&branch=' + branch + '&pageType=&executionID=from=&mode=stagefilter');
-    $.get(link, function(data)
+    $.getJSON(link, function(data)
     {
         let executionID      = $('[name="execution"]').val();
         let $executionPicker = $('[name="execution"]').zui('picker');
-        if(data)
-        {
-            data = JSON.parse(data);
-            $executionPicker.render({items: data});
-            $executionPicker.$.setValue(executionID != '0' ? executionID : '');
-        }
+        $executionPicker.render({items: data});
+        $executionPicker.$.setValue(executionID != '0' ? executionID : '');
     });
 
     projectID != 0 ? loadProjectBuilds(projectID) : loadProductBuilds(productID);
