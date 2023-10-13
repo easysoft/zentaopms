@@ -168,22 +168,17 @@ function loadProductBranches(productID)
     const oldBranch    = config.currentMethod == 'edit' ? bug.branch : 0;
     let   param        = "productID=" + productID + "&oldBranch=" + oldBranch + "&param=" + branchStatus;
     if(typeof(tab) != 'undefined' && (tab == 'execution' || tab == 'project')) param += "&projectID=" + bug[tab];
-    $.get($.createLink('branch', 'ajaxGetBranches', param), function(data)
+    $.getJSON($.createLink('branch', 'ajaxGetBranches', param), function(data)
     {
-        let branch = $('[name="branch"]').val();
         if($('[name="branch"]').length > 0)
         {
             $('[name="branch"]').zui('picker').destroy();
             $('[name="product"]').closest('.picker-box').next('.picker-box').remove();
         }
         $('#branchPicker').remove();
-        if(data)
-        {
-            data = JSON.parse(data);
 
-            $('[name="product"]').closest('.input-group').append($('<div id="branchPicker" class="form-group-wrapper picker-box"></div>').picker({name: 'branch', items: data}));
-            $('#branchPicker').css('width', config.currentMethod == 'create' ? '120px' : '65px');
-        }
+        $('[name="product"]').closest('.input-group').append($('<div id="branchPicker" class="form-group-wrapper picker-box"></div>').picker({name: 'branch', items: data, defaultValue: data[0].value}));
+        $('#branchPicker').css('width', config.currentMethod == 'create' ? '120px' : '65px');
     });
 }
 
