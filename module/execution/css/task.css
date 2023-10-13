@@ -21,7 +21,7 @@ body {margin-bottom: 10px;}
 .dtable-cell[data-sort='up']   .dtable-sort:before {color: #000; opacity: 1}
 .dtable-cell[data-sort='down'] .dtable-sort:after  {color: #000; opacity: 1}
 .dtable .toggle-icon {border-radius: 50%; border-style: solid;}
-.dtable-nested-toggle.is-no-child, .dtable-nested-indent, .dtable-cell-html .icon-angle-double-right {display: none;}
+.dtable-nested-indent, .dtable-cell-html .icon-angle-double-right {display: none;}
 
 .dtable-row.is-normal .dtable-cell[data-col="name"] {padding-left: 20px;}
 .dtable-cell[data-col="actions"] > .dtable-cell-content .c-actions .dividing-line {width: 1px; height: 16px; display: inline-block; vertical-align: middle; background: #F4F5F7; margin: 0 4px 0 0;}
