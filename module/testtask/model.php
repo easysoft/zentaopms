@@ -343,7 +343,7 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getLinkableCases(int $productID, object $task, string $type, int $param, object $pager): array
+    public function getLinkableCases(int $productID, object $task, string $type = 'all', int $param = 0, object $pager = null): array
     {
         if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
         $query = $this->session->testcaseQuery;
@@ -379,9 +379,9 @@ class testtaskModel extends model
             ->where('deleted')->eq('0')
             ->andWhere('status')->ne('wait')
             ->andWhere('type')->ne('unit')
-            ->beginIF($task->branch !== '')->andWhere('branch')->in("0,{$task->branch}")->fi()
             ->beginIF($query)->andWhere($query)->fi()
             ->beginIF(!empty($linkedCases))->andWhere('id')->notIN($linkedCases)->fi()
+            ->beginIF($task->branch !== '')->andWhere('branch')->in("0,{$task->branch}")->fi()
             ->orderBy('id desc')
             ->page($pager)
             ->fetchAll();
