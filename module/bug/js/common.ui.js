@@ -116,7 +116,20 @@ function changeRegion(event)
 function changeContact(event)
 {
     const contactID = $(event.target).val();
-    setMailto(contactID);
+    const link     = $.createLink('user', 'ajaxGetContactUsers', 'listID=' + contactID);
+    $.getJSON(link, function(users)
+    {
+        let $mailtoPicker = $('[name^="mailto"]').zui('picker');
+        let mailtoItems   = $mailtoPicker.options.items;
+        let mailtoUsers   = $('[name^="mailto"]').val();
+        users.forEach(user => {
+            mailtoItems.push(user);
+            mailtoUsers.push(user.value);
+
+        });
+        $mailtoPicker.render({items: mailtoItems});
+        $mailtoPicker.$.setValue(mailtoUsers);
+    });
 }
 
 function refreshModule(event)
@@ -779,16 +792,6 @@ function loadBuildActions()
         }
         $('#buildBoxActions').html(html).show();
     }
-}
-
-function setMailto(contactID)
-{
-    const oldUsers = $('#mailto').val();
-    const link     = $.createLink('user', 'ajaxGetContactUsers', 'listID=' + contactID + '&dropdownName=mailto&oldUsers=' + oldUsers);
-    $.get(link, function(users)
-    {
-        $('#mailto').replaceWith(users);
-    });
 }
 
 let checkHasCheckedData = function(item, checkedValue)

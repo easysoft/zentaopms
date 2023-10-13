@@ -1265,35 +1265,31 @@ class user extends control
     }
 
     /**
+     * AJAX: 获取联系人列表人员。
      * AJAX: get users from a contact list.
      *
      * @param  int    $contactListID
-     * @param  string $dropdownName mailto|whitelist
-     * @param  string $oldUsers
      * @access public
      * @return string
      */
-    public function ajaxGetContactUsers($contactListID, $dropdownName = 'mailto', $oldUsers = '')
+    public function ajaxGetContactUsers(int $contactListID)
     {
-        $list = $contactListID ? $this->user->getContactListByID($contactListID) : '';
-        $attr = $dropdownName == 'mailto' ? "data-placeholder='{$this->lang->chooseUsersToMail}' data-drop-direction='bottom'" : '';
+        $list  = $contactListID ? $this->user->getContactListByID($contactListID) : '';
+        $users = $this->user->getContactUserPairs($list ? $list->userList : '');
 
-        $users = $this->user->getPairs('devfirst|nodeleted|noclosed', $list ? $list->userList : '', $this->config->maxCount);
-        if(isset($this->config->user->moreLink)) $this->config->moreLinks[$dropdownName . "[]"] = $this->config->user->moreLink;
-
-        $defaultUsers = empty($contactListID) ? '' : $list->userList . ',' . trim($oldUsers);
-        return print(html::select($dropdownName . "[]", $users, $defaultUsers, "class='form-control picker-select' multiple $attr"));
+        $items = array();
+        foreach($users as $userID => $userName) $items[] = array('text' => $userName, 'value' => $userID);
+        return print(json_encode($items));
     }
 
     /**
      * Ajax: 获取联系人列表。
      * Ajax get contact list.
      *
-     * @param  string $dropdownName mailto|whitelist
      * @access public
      * @return string
      */
-    public function ajaxGetContactList(string $dropdownName = 'mailto')
+    public function ajaxGetContactList()
     {
         $contactList = $this->user->getContactLists($this->app->user->account, 'withnote');
 
