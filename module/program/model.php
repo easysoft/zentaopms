@@ -1043,21 +1043,24 @@ class programModel extends model
     }
 
     /**
-     * 该项目集下未关闭的子项目集或项目的数量。
+     * 该项目集下是否有未关闭的子项目集或项目。
      * Judge whether there is an unclosed programs or projects.
      *
      * @param  object  $program
      * @access public
-     * @return int
+     * @return bool
      */
-    public function hasUnfinished(object $program): int
+    public function hasUnfinishedChildren(object $program): bool
     {
-        return $this->dao->select("count(IF(id != {$program->id}, 1, 0)) as count")->from(TABLE_PROJECT)
+        $count = $this->dao->select("id")->from(TABLE_PROJECT)
             ->where('type')->in('program, project')
             ->andWhere('path')->like($program->path . '%')
+            ->andWhere('id')->ne($program->id)
             ->andWhere('status')->ne('closed')
             ->andWhere('deleted')->eq('0')
-            ->fetch('count');
+            ->count();
+
+        return $count != 0;
     }
 
     /**

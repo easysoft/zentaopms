@@ -245,17 +245,17 @@ class programTest
     }
 
     /**
-     * 该项目集下未关闭的子项目集或项目的数量。
+     * 该项目集下是否未关闭的子项目集或项目。
      * Judge whether there is an unclosed programs or projects.
      *
      * @param  int    $programID
      * @access public
-     * @return int
+     * @return bool
      */
-    public function hasUnfinishedTest(int $programID): int
+    public function hasUnfinishedChidlrenTest(int $programID): bool
     {
         $program = $this->program->getByID($programID);
-        return $this->program->hasUnfinished($program);
+        return $this->program->hasUnfinishedChildren($program);
     }
 
     /*

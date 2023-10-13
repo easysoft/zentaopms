@@ -236,7 +236,7 @@ class program extends control
         if(!empty($_POST))
         {
             /* Only when all subprograms and subprojects are closed can the program be closed. */
-            $hasUnfinished = $this->program->hasUnfinished($program);
+            $hasUnfinished = $this->program->hasUnfinishedChildren($program);
             if($hasUnfinished) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->program->closeErrorMessage}');"));
 
             $programData = form::data()->get();
