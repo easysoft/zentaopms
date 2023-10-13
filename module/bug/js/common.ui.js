@@ -194,16 +194,12 @@ function loadProductModules(productID)
     if(typeof(moduleID) == 'undefined') moduleID = 0;
 
     const link = $.createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=bug&branch=' + branch + '&rootModuleID=0&returnType=items&fieldID=&needManage=true&extra=nodeleted&currentModuleID=' + moduleID);
-    $.get(link, function(data)
+    $.getJSON(link, function(data)
     {
         let moduleID      = $('[name="module"]').val();
         let $modulePicker = $('[name="module"]').zui('picker');
-        if(data)
-        {
-            data = JSON.parse(data);
-            $modulePicker.render({items: data});
-            if(moduleID != 0) $modulePicker.$.setValue('0');
-        }
+        $modulePicker.render({items: data});
+        if(moduleID != 0) $modulePicker.$.setValue('0');
     });
 }
 
