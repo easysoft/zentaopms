@@ -55,8 +55,7 @@ if($rawMethod == 'browseunits') $caseType = 'unit';
 if($canSwitchCaseType)
 {
     /* Process variables of case type menu. */
-    $currentCaseType = zget($lang->testcase->typeList, $caseType, '');
-    $currentTypeName = empty($currentCaseType) ? $lang->testcase->allType : $currentCaseType;
+    $currentTypeName = zget($lang->testcase->typeList, $caseType, $lang->testcase->allType);
     $caseTypeItems   = array();
     foreach($lang->testcase->typeList as $type => $typeName)
     {
@@ -101,19 +100,7 @@ if($canDisplaySuite)
 $linkParams = $projectParam . "productID=$productID&branch=$branch&browseType={key}&param=0&caseType={$caseType}";
 $browseLink = createLink('testcase', 'browse', $linkParams);
 if($rawMethod == 'browseunits') $browseLink = createLink('testtask', 'browseUnits', "productID=$productID&browseType={key}");
-$productMenuLink = createLink(
-    'project',
-    'testcase',
-    array(
-        'projectID'  => $projectID,
-        'productID'  => '{key}',
-        'branch'     => $branch,
-        'browseType' => $browseType,
-        'param'      => $param,
-        'caseType'   => $caseType,
-        'orderBy'    => $orderBy,
-    )
-);
+$productMenuLink = createLink('project', 'testcase', array('projectID' => $projectID, 'productID' => '{key}', 'branch' => $branch, 'browseType' => $browseType, 'param' => $param, 'caseType' => $caseType, 'orderBy' => $orderBy,));
 
 featureBar
 (
@@ -129,16 +116,10 @@ featureBar
     set::load($load),
     $canSwitchCaseType ? to::before
     (
-        productMenu
+        dropdown
         (
-            set::title($currentTypeName),
+            to('trigger', btn($currentTypeName, setClass('ghost'))),
             set::items($caseTypeItems),
-            set::activeKey($caseType),
-            set::link
-            (
-                $rawMethod == 'groupcase' ? $this->createLink('testcase', 'groupcase', "productID=$productID&branch=$branch&groupBy=$groupBy&projectID=$projectID") : $this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param")
-            ),
-            set::closeLink('#'),
         )
     ) : null,
     $canDisplaySuite && $rawMethod != 'groupcase' ? li
