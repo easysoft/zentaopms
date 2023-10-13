@@ -15,7 +15,7 @@ $config->productplan->form->create['branch']      = array('type' => 'array',    
 $config->productplan->form->create['title']       = array('type' => 'string',    'required' => true,  'default' => '', 'filter' => 'trim');
 $config->productplan->form->create['begin']       = array('type' => 'date',      'required' => false, 'default' => null);
 $config->productplan->form->create['end']         = array('type' => 'date',      'required' => false, 'default' => null);
-$config->productplan->form->create['desc']        = array('type' => 'string',    'required' => false, 'default' => '');
+$config->productplan->form->create['desc']        = array('type' => 'string',    'required' => false, 'default' => '', 'control' => 'editor');
 $config->productplan->form->create['product']     = array('type' => 'int',       'required' => false, 'default' => 0);
 $config->productplan->form->create['createdBy']   = array('type' => 'string',    'required' => false, 'default' => $app->user->account);
 $config->productplan->form->create['createdDate'] = array('type' => 'datetime ', 'required' => false, 'default' => $now);
@@ -25,6 +25,6 @@ $config->productplan->form->edit['branch']  = array('type' => 'array',     'requ
 $config->productplan->form->edit['title']   = array('type' => 'string',    'required' => true,  'default' => '', 'filter' => 'trim');
 $config->productplan->form->edit['begin']   = array('type' => 'date',      'required' => false, 'default' => null);
 $config->productplan->form->edit['end']     = array('type' => 'date',      'required' => false, 'default' => null);
-$config->productplan->form->edit['desc']    = array('type' => 'string',    'required' => false, 'default' => '');
+$config->productplan->form->edit['desc']    = array('type' => 'string',    'required' => false, 'default' => '', 'control' => 'editor');
 $config->productplan->form->edit['product'] = array('type' => 'int',       'required' => false, 'default' => 0);
 $config->productplan->form->edit['status']  = array('type' => 'string',    'required' => false, 'default' => '');

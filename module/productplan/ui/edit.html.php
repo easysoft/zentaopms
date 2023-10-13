@@ -124,8 +124,7 @@ formPanel
         editor
         (
             set::name('desc'),
-            set::rows(10),
-            set::value(htmlSpecialString((string)$plan->desc)),
+            html($plan->desc),
         )
     ),
 );
