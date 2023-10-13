@@ -58,8 +58,9 @@ class commonTao extends commonModel
      */
     protected function queryListForPreAndNext(string $type, string $sql): array
     {
-        $objectIdListKey  = strtolower($type . $this->app->getModuleName() . $this->app->getMethodName()) . 'BrowseList';
-        $existsObjectList = $this->session->$objectIdListKey;
+        $objectIdListKey   = strtolower($type . $this->app->getModuleName() . $this->app->getMethodName()) . 'BrowseList';
+        $existsObjectList  = $this->session->$objectIdListKey;
+        $typeOnlyCondition = $type . 'OnlyCondition';
         if(empty($existsObjectList) or trim($existsObjectList['sql']) != trim($sql))
         {
             $queryObjects = $this->dao->query($sql);
