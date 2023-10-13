@@ -1842,7 +1842,7 @@ class executionZen extends execution
         $copyProjectID = empty($project) ? key($copyProjects) : $project->id;
         $this->view->copyProjects   = $copyProjects;
         $this->view->copyProjectID  = $copyProjectID;
-        $this->view->copyExecutions = $this->execution->getList($copyProjectID, 'all', 'all', 0, 0, 0, null, false);
+        $this->view->copyExecutions = empty($copyProjectID) ? array() : $this->execution->getList($copyProjectID, 'all', 'all', 0, 0, 0, null, false);
     }
 
     /**
