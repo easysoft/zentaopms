@@ -1534,7 +1534,7 @@ class productModel extends model
                     $node['href']    = common::hasPriv($moduleName, 'view') ? helper::createLink($moduleName, 'view', "id={$roadmap->id}") : '###';
                     $node['version'] = $isPlan ? $roadmap->title : $roadmap->name;
                     $node['date']    = $isPlan ? $roadmap->begin . '~' . $roadmap->end : $roadmap->date;
-                    if(!empty($roadmap->marker)) $node['marker'] = true;
+                    $node['marker']  = !empty($roadmap->marker);
                     $yearNodes[] = $node;
                 }
 
