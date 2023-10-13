@@ -191,7 +191,7 @@ $fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, 
     $canBatchClose        = hasPriv($storyType, 'batchClose') && strtolower($browseType) != 'closedbyme' && strtolower($browseType) != 'closedstory';
     $canBatchReview       = $canBeChanged && hasPriv($storyType, 'batchReview');
     $canBatchChangeStage  = $canBeChanged && hasPriv('story', 'batchChangeStage') && $storyType == 'story';
-    $canBatchChangeBranch = $canBeChanged && hasPriv($storyType, 'batchChangeBranch') && $product->type != 'normal' && $productID;
+    $canBatchChangeBranch = $canBeChanged && hasPriv($storyType, 'batchChangeBranch') && $product && $product->type != 'normal' && $productID;
     $canBatchChangeModule = $canBeChanged && hasPriv($storyType, 'batchChangeModule');
     $canBatchChangePlan   = $canBeChanged && hasPriv('story', 'batchChangePlan') && $storyType == 'story' && (!$isProjectStory || $projectHasProduct || ($isProjectStory && isset($project->model) && $project->model == 'scrum'));
     $canBatchAssignTo     = $canBeChanged && hasPriv($storyType, 'batchAssignTo');
