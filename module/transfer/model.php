@@ -679,7 +679,7 @@ class transferModel extends model
                 }
 
                 /* if value = 0 or value = 0000:00:00 set value = ''. */
-                if($value == '0' or substr($value, 0, 4) == '0000') $rows[$id]->$field = '';
+                if(is_string($value) and ($value == '0' or substr($value, 0, 4) == '0000')) $rows[$id]->$field = '';
             }
         }
 
