@@ -182,8 +182,7 @@ formPanel
             editor
             (
                 set::name('desc'),
-                set::html($build->desc),
-                set::rows('10'),
+                html($build->desc),
             )
         ),
     )

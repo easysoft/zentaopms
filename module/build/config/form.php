@@ -9,7 +9,7 @@ $config->build->form->create['artifactRepoID'] = array('type' => 'int',       'r
 $config->build->form->create['product']        = array('type' => 'int',       'required' => true,  'default' => 0);
 $config->build->form->create['scmPath']        = array('type' => 'string',    'required' => false, 'default' => '');
 $config->build->form->create['filePath']       = array('type' => 'string',    'required' => false, 'default' => '');
-$config->build->form->create['desc']           = array('type' => 'string',    'required' => false, 'default' => '');
+$config->build->form->create['desc']           = array('type' => 'string',    'required' => false, 'default' => '', 'control' => 'editor');
 $config->build->form->create['builder']        = array('type' => 'string',    'required' => true,  'default' => '');
 $config->build->form->create['name']           = array('type' => 'string',    'required' => true,  'default' => '', 'filter' => 'trim');
 $config->build->form->create['branch']         = array('type' => 'array',     'required' => false, 'default' => array(), 'filter' => 'join');
@@ -24,7 +24,7 @@ $config->build->form->edit['execution'] = array('type' => 'int',       'required
 $config->build->form->edit['product']   = array('type' => 'int',       'required' => true,  'default' => 0);
 $config->build->form->edit['scmPath']   = array('type' => 'string',    'required' => false, 'default' => '');
 $config->build->form->edit['filePath']  = array('type' => 'string',    'required' => false, 'default' => '');
-$config->build->form->edit['desc']      = array('type' => 'string',    'required' => false, 'default' => '');
+$config->build->form->edit['desc']      = array('type' => 'string',    'required' => false, 'default' => '', 'control' => 'editor');
 $config->build->form->edit['builder']   = array('type' => 'string',    'required' => true,  'default' => '');
 $config->build->form->edit['name']      = array('type' => 'string',    'required' => true,  'default' => '', 'filter' => 'trim');
 $config->build->form->edit['branch']    = array('type' => 'array',     'required' => false, 'default' => array(), 'filter' => 'join');
