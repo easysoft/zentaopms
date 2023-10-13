@@ -232,7 +232,7 @@ function loadExecutions(productID, projectID = 0)
         $executionPicker.$.setValue(executionID != '0' ? executionID : '');
     });
 
-    projectID != 0 ? loadProjectBuilds(projectID) : loadProductBuilds(productID);
+    if($('[name="execution"]').val() == 0) projectID != 0 ? loadProjectBuilds(projectID) : loadProductBuilds(productID);
 }
 
 function loadExecutionLabel(projectID)
@@ -343,47 +343,33 @@ function loadProjectBuilds(projectID)
     if(config.currentMethod == 'create')
     {
         const link = $.createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=&branch=' + branch);
-        $.get(link, function(data)
+        $.getJSON(link, function(data)
         {
             let buildID      = $('[name^="openedBuild"]').val();
             let $buildPicker = $('[name^="openedBuild"]').zui('picker');
-            if(data)
-            {
-                data = JSON.parse(data);
-                $buildPicker.render({items: data});
-                $buildPicker.$.setValue(buildID);
-            }
+            $buildPicker.render({items: data});
+            $buildPicker.$.setValue(buildID);
             loadBuildActions();
         })
     }
     else
     {
         const openedLink = $.createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch);
-        $.get(openedLink, function(data)
+        $.getJSON(openedLink, function(data)
         {
             let buildID      = $('[name^="openedBuild"]').val();
             let $buildPicker = $('[name^="openedBuild"]').zui('picker');
-            if(data)
-            {
-                data = JSON.parse(data);
-                $buildPicker.render({items: data});
-                $buildPicker.$.setValue(buildID);
-            }
+            $buildPicker.render({items: data});
+            $buildPicker.$.setValue(buildID);
             loadBuildActions();
         })
 
         const oldResolvedBuild = $('[name="resolvedBuild"]').val() ? $('[name="resolvedBuild"]').val() : 0;
         const resolvedLink     = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch);
-        $.get(resolvedLink, function(data)
+        $.getJSON(resolvedLink, function(data)
         {
-            let buildID      = $('[name="resolvedBuild"]').val();
             let $buildPicker = $('[name="resolvedBuild"]').zui('picker');
-            if(data)
-            {
-                data = JSON.parse(data);
-                $buildPicker.render({items: data});
-                $buildPicker.$.setValue(buildID);
-            }
+            $buildPicker.render({items: data});
             $buildPicker.$.setValue(oldResolvedBuild);
         });
     }
@@ -399,16 +385,12 @@ function loadProductBuilds(productID, type = 'normal', buildBox = 'all')
         if(buildBox == 'all' || buildBox == 'openedBuild')
         {
             const link = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=&branch=' + branch + '&type=' + type);
-            $.get(link, function(data)
+            $.getJSON(link, function(data)
             {
                 let buildID      = $('[name^="openedBuild"]').val();
                 let $buildPicker = $('[name^="openedBuild"]').zui('picker');
-                if(data)
-                {
-                    data = JSON.parse(data);
-                    $buildPicker.render({items: data});
-                    $buildPicker.$.setValue(buildID);
-                }
+                $buildPicker.render({items: data});
+                $buildPicker.$.setValue(buildID);
                 loadBuildActions();
             });
         }
@@ -418,16 +400,12 @@ function loadProductBuilds(productID, type = 'normal', buildBox = 'all')
         if(buildBox == 'all' || buildBox == 'openedBuild')
         {
             const openedLink = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=' + bug.openedBuild + '&branch=' + branch + '&type=' + type);
-            $.get(openedLink, function(data)
+            $.getJSON(openedLink, function(data)
             {
                 let buildID      = $('[name^="openedBuild"]').val();
                 let $buildPicker = $('[name^="openedBuild"]').zui('picker');
-                if(data)
-                {
-                    data = JSON.parse(data);
-                    $buildPicker.render({items: data});
-                    $buildPicker.$.setValue(buildID);
-                }
+                $buildPicker.render({items: data});
+                $buildPicker.$.setValue(buildID);
             });
         }
 
@@ -435,16 +413,10 @@ function loadProductBuilds(productID, type = 'normal', buildBox = 'all')
         {
             const oldResolvedBuild = $('[name="resolvedBuild"]').val() ? $('[name="resolvedBuild"]').val() : 0;
             const resolvedLink = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch + '&type=' + type);
-            $.get(resolvedLink, function(data)
+            $.getJSON(resolvedLink, function(data)
             {
-                let buildID      = $('[name="resolvedBuild"]').val();
                 let $buildPicker = $('[name="resolvedBuild"]').zui('picker');
-                if(data)
-                {
-                    data = JSON.parse(data);
-                    $buildPicker.render({items: data});
-                    $buildPicker.$.setValue(buildID);
-                }
+                $buildPicker.render({items: data});
                 $buildPicker.$.setValue(oldResolvedBuild);
             });
         }
@@ -455,53 +427,41 @@ function loadExecutionBuilds(executionID, num)
 {
     if(typeof(num) == 'undefined') num = '';
 
-    let branch           = $('#branch' + num).val();
-    let productID        = $('#product' + num).val();
+    let branch           = num != '' ? $('#branch' + num).val() : $('[name="branch"]').val();
+    let productID        = num != '' ? $('#product' + num).val() : $('[name="product"]').val();
     const oldOpenedBuild = $('[name^="openedBuild"]' + num).val() ? $('[name^="openedBuild"]' + num).val() : 0;
 
-    if(typeof(branch) == 'undefined')    branch    = 0;
+    if(typeof(branch) == 'undefined')    branch    = 'all';
     if(typeof(productID) == 'undefined') productID = 0;
 
     if(config.currentMethod == 'create')
     {
         const link = $.createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + "&branch=" + branch + "&needCreate=true");
-        $.get(link, function(data)
+        $.getJSON(link, function(data)
         {
             let $buildPicker = $('[name^="openedBuild"]').zui('picker');
-            if(data)
-            {
-                data = JSON.parse(data);
-                $buildPicker.render({items: data});
-                $buildPicker.$.setValue(oldOpenedBuild);
-            }
+            $buildPicker.render({items: data});
+            $buildPicker.$.setValue(oldOpenedBuild);
             loadBuildActions();
         });
     }
     else
     {
         const openedLink = $.createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch + '&needCreate=false&type=normal&number=' + num);
-        $.get(openedLink, function(data)
+        $.getJSON(openedLink, function(data)
         {
             let $buildPicker = $('[name^="openedBuild"]').zui('picker');
-            if(data)
-            {
-                data = JSON.parse(data);
-                $buildPicker.render({items: data});
-                $buildPicker.$.setValue(oldOpenedBuild);
-            }
+            $buildPicker.render({items: data});
+            $buildPicker.$.setValue(oldOpenedBuild);
         });
 
         const oldResolvedBuild = $('[name="resolvedBuild"]').val() ? $('[name="resolvedBuild"]').val() : 0;
         const resolvedLink     = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch);
-        $.get(resolvedLink, function(data)
+        $.getJSON(resolvedLink, function(data)
         {
-            let $buildPicker = $('[name^="openedBuild"]').zui('picker');
-            if(data)
-            {
-                data = JSON.parse(data);
-                $buildPicker.render({items: data});
-                $buildPicker.$.setValue(oldResolvedBuild);
-            }
+            let $buildPicker = $('[name^="resolvedBuild"]').zui('picker');
+            $buildPicker.render({items: data});
+            $buildPicker.$.setValue(oldResolvedBuild);
         });
     }
 }

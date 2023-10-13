@@ -276,15 +276,15 @@ class bugZen extends bug
         {
             $objectID        = $this->app->tab == 'project' ? $bug->projectID : $bug->executionID;
             $productBranches = $currentProduct->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct(array($productID), $objectID, 'noclosed|withMain') : array();
-            $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
+            $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array('');
             $branch          = key($branches);
         }
         else
         {
-            $branches = $currentProduct->type != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
+            $branches = $currentProduct->type != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array('');
         }
 
-        return $this->updateBug($bug, array('branches' => $branches, 'branch' => $branch));
+        return $this->updateBug($bug, array('branches' => $branches, 'branch' => (string)$branch));
     }
 
     /**
