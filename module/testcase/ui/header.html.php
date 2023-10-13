@@ -113,7 +113,7 @@ featureBar
     ]))) : null,
     set::linkParams($rawMethod == 'zerocase' || $rawMethod == 'browseunits' ? null : $linkParams),
     set::link($rawMethod == 'zerocase' || $rawMethod == 'browseunits' ? $browseLink : null),
-    set::current($this->session->caseBrowseType),
+    set::current($rawMethod == 'browse' ? $this->session->caseBrowseType : null),
     set::load($load),
     $canSwitchCaseType ? to::leading
     (
@@ -130,8 +130,9 @@ featureBar
         (
             a
             (
-                setClass('ghost' . ($browseType == 'bysuite' ? ' active' : '')),
+                setClass('ghost' . (($rawMethod == 'browse' && $this->session->caseBrowseType == 'bysuite') ? ' active' : '')),
                 $currentSuiteName,
+                ($rawMethod == 'browse' && $this->session->caseBrowseType == 'bysuite' && $pager->recTotal != '') ? span(setClass('label size-sm rounded-full white'), $pager->recTotal) : null,
                 span(setClass('caret'))
             ),
             set::items($suiteItems)
@@ -146,7 +147,8 @@ featureBar
             set('data-app', $app->tab),
             set('data-id', 'zerocaseTab'),
             set('class', $rawMethod == 'zerocase' ? 'active' : ''),
-            $lang->testcase->zeroCase
+            $lang->testcase->zeroCase,
+            ($rawMethod == 'zerocase' && $pager->recTotal != '') ? span(setClass('label size-sm rounded-full white'), $pager->recTotal) : null,
         )
     ) : null,
     $rawMethod == 'browse' ? li
@@ -198,7 +200,7 @@ if(!empty($productID))
     }
     if($canExportXmind)
     {
-        $link = $this->createLink('testcase', 'exportXmind', "productID=$productID&moduleID=$moduleID&branch=$branch");
+        $link = $this->createLink('testcase', 'exportXmind', "productID=$productID&moduleID=$initModule&branch=$branch");
         $exportItems[] = array('text' => $lang->testcase->xmindExport, 'url' => $link, 'data-toggle' => 'modal', 'data-app' => $app->tab);
     }
 
@@ -322,7 +324,7 @@ if($rawMethod != 'zerocase' && $rawMethod != 'browseunits' && $rawMethod != 'gro
         moduleMenu(set(array
         (
             'modules'     => $moduleTree,
-            'activeKey'   => $moduleID,
+            'activeKey'   => $initModule,
             'settingLink' => $settingLink,
             'closeLink'   => $closeLink
         )))
