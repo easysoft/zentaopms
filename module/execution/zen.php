@@ -53,6 +53,7 @@ class executionZen extends execution
         }
         $tree       = $moduleID ? $this->tree->getByID($moduleID) : '';
         $showModule = !empty($this->config->execution->bug->showModule) ? $this->config->execution->bug->showModule : '';
+        $build      = !empty($build) ? $this->loadModel('build')->getById($build) : null;
 
         /* Assign. */
         $this->view->title           = $execution->name . $this->lang->colon . $this->lang->execution->bug;
@@ -65,8 +66,7 @@ class executionZen extends execution
         $this->view->moduleTree      = $moduleTree;
         $this->view->moduleID        = $moduleID;
         $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'bug', $showModule) : array();
-        $this->view->build           = $this->loadModel('build')->getById($build);
-        $this->view->buildID         = $this->view->build ? $this->view->build->id : 0;
+        $this->view->buildID         = $build ? $build->id : 0;
         $this->view->productID       = $productID;
         $this->view->product         = $this->product->getByID($productID);
         $this->view->branchID        = empty($this->view->build->branch) ? $branch : $this->view->build->branch;
@@ -382,7 +382,7 @@ class executionZen extends execution
         $this->loadModel('tree');
 
         /* Get cases. */
-        $cases = $this->loadModel('testcase')->getExecutionCases($executionID, $productID, $branchID, $moduleID, $orderBy, $pager, $type);
+        $cases = $this->loadModel('testcase')->getExecutionCases($type, $executionID, $productID, $branchID, $moduleID, $orderBy, $pager);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
         $cases = $this->testcase->appendData($cases, 'case');
         $cases = $this->loadModel('story')->checkNeedConfirm($cases);
