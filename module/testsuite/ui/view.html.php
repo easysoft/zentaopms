@@ -86,7 +86,12 @@ detailBody
             set::footPager(usePager('pager', 'short')),
         ),
     ),
-    history(set::commentUrl(createLink('action', 'comment', array('objectType' => 'testsuite', 'objectID' => $suite->id))),),
+    history(
+        set::commentUrl(createLink('action', 'comment', array('objectType' => 'testsuite', 'objectID' => $suite->id))),
+        set::hasComment(false),
+        set::commentBtn(false),
+        set::methodName('view_1'),
+    ),
     detailSide
     (
         section
