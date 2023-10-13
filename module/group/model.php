@@ -2415,6 +2415,7 @@ class groupModel extends model
 
         $privSubsets  = array();
         $relatedPrivs = array('depend' => array(), 'recommend' => array());
+        $privOrder    = array();
         foreach($this->config->group->package as $packagePage => $package)
         {
             if(!isset($package->privs)) continue;
@@ -2436,6 +2437,8 @@ class groupModel extends model
                         if(!in_array($relatedPriv, $selectedPrivList) && in_array($relatedPriv, $allPrivList)) $relatedPrivs[$type][$relatedPriv] = $relatedPriv;
                     }
                 }
+
+                $privOrder[$privCode] = $priv['order'];
             }
         }
 
@@ -2458,7 +2461,20 @@ class groupModel extends model
                 if(!isset($subsetPrivs[$type][$subset])) $subsetPrivs[$type][$subset] = array('id' => $subset, 'title' => $this->lang->$subset->common, 'children' => array());
 
                 if(!isset($this->lang->$moduleName->$method)) $this->app->loadLang($moduleName);
-                $subsetPrivs[$type][$subset]['children'][] = array('id' => $relatedPriv, 'module' => $moduleName, 'method' => $methodName, 'subset' => $subset, 'title' => $this->lang->$moduleName->$method);
+                $subsetPrivs[$type][$subset]['children'][] = array('id' => $relatedPriv, 'module' => $moduleName, 'method' => $methodName, 'subset' => $subset, 'title' => $this->lang->$moduleName->$method, 'order' => $privOrder[$relatedPriv]);
+
+                usort($subsetPrivs[$type][$subset]['children'], function ($relatedPriv1, $relatedPriv2)
+                {
+                    if ($relatedPriv1['order'] > $relatedPriv2['order'])
+                    {
+                        return 1;
+                    } 
+                    elseif ($relatedPriv1['order'] < $relatedPriv2['order'])
+                    {
+                        return -1;
+                    }
+                    return 0;
+                });
             }
         }
 
