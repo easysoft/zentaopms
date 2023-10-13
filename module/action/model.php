@@ -1719,6 +1719,7 @@ class actionModel extends model
         }
         elseif($objectType == 'story' || $objectType == 'team') // Get story or team related data.
         {
+            if($objectType == 'team') $table = TABLE_PROJECT;
             $objectField = $objectType == 'story' ? 'id,title,type' : 'id,team AS title,type';
             $objectInfo  = $this->dao->select($objectField)->from($table)->where('id')->in($objectIdList)->fetchAll();
             foreach($objectInfo as $object)
