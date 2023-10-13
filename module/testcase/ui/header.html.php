@@ -113,6 +113,7 @@ featureBar
     ]))) : null,
     set::linkParams($rawMethod == 'zerocase' || $rawMethod == 'browseunits' ? null : $linkParams),
     set::link($rawMethod == 'zerocase' || $rawMethod == 'browseunits' ? $browseLink : null),
+    set::current($this->session->caseBrowseType),
     set::load($load),
     $canSwitchCaseType ? to::leading
     (
