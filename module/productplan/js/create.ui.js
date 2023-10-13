@@ -6,8 +6,9 @@ $(document).on('change', 'input[name=begin],input[name=end]', function()
 window.clickSubmit = function()
 {
     const parentPlan = $('input[name=parent]').val();
-    let branches     = $('[name^=branch]').val();
-    if(parentPlan > 0 && branches)
+    const branches   = $('select[name^=branch]').val();
+    const title      = $('input[name=title]').val();
+    if(parentPlan > 0 && branches && title)
     {
         const link = $.createLink('productplan', 'ajaxGetDiffBranchesTip', "productID=" + productID + "&parentID=" + parentPlan + "&branches=" + branches.toString());
         $.get(link, function(diffBranchesTip)
