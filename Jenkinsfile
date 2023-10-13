@@ -113,7 +113,11 @@ pipeline {
 
               def ximUsers = sh(returnStdout: true,script: 'jq -r .notice.users < ci.json').trim()
               env.XIM_USERS = ximUsers + ',' + env.GIT_TAGGER_NAME
-              env.XIM_GROUPS = sh(returnStdout: true,script: 'jq -r .notice.groups < ci.json').trim()
+              if (env.GIT_TAG_BUILD_TYPE=='release') {
+                env.XIM_GROUPS = sh(returnStdout: true,script: 'jq -r .notice.groups2 < ci.json').trim()
+              } else {
+                env.XIM_GROUPS = sh(returnStdout: true,script: 'jq -r .notice.groups < ci.json').trim()
+              }
 
               env.PMS_VERSION = sh(returnStdout: true, script: 'cat ${SRC_ZENTAOEXT_PATH}/VERSION').trim()
               env.BIZ_VERSION = sh(returnStdout: true, script: 'cat ${SRC_ZENTAOEXT_PATH}/BIZVERSION').trim()
