@@ -1175,12 +1175,10 @@ class bugZen extends bug
             $projects[$project->id] = $project->name . "({$this->lang->bug->deleted})";
         }
 
-        /* Add product related to the bug when it is not in the products. */
-        if(!isset($this->products[$bug->product]))
-        {
-            $this->products[$bug->product] = $product->name;
-            $this->view->products = $this->products;
-        }
+        /* 获取分支列表。*/
+        /* Get branch options. */
+        $branchTagOption = array();
+        if($product->type != 'normal') $branchTagOption = $this->getBranchOptions($product->id);
 
         $this->assignVarsForEdit($bug);
 
@@ -1191,6 +1189,7 @@ class bugZen extends bug
         $this->view->projects         = $projects;
         $this->view->executions       = $executions;
         $this->view->productBugs      = $productBugs;
+        $this->view->branchTagOption  = $branchTagOption;
     }
 
     /**
@@ -1203,6 +1202,13 @@ class bugZen extends bug
      */
     protected function assignVarsForEdit(object $bug): void
     {
+        /* Add product related to the bug when it is not in the products. */
+        if(!isset($this->products[$bug->product]))
+        {
+            $this->products[$bug->product] = $product->name;
+            $this->view->products = $this->products;
+        }
+
         if($bug->execution)
         {
             $openedBuilds   = $this->loadModel('build')->getBuildPairs(array($bug->product), $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased', $bug->execution, 'execution');

@@ -104,7 +104,7 @@ detailBody
             set::tdClass('w-64'),
             item
             (
-                set::className($product->shadow ? 'hidden' : ''),
+                set::trClass($product->shadow ? 'hidden' : ''),
                 set::name($lang->bug->product),
                 inputGroup
                 (
@@ -158,7 +158,7 @@ detailBody
             ),
             item
             (
-                set::className($product->shadow && isset($project) && empty($project->multiple) ? 'hidden' : ''),
+                set::trClass($product->shadow && isset($project) && empty($project->multiple) ? 'hidden' : ''),
                 set::name($lang->bug->plan),
                 inputGroup
                 (
@@ -380,7 +380,7 @@ detailBody
             ),
             item
             (
-                set::className($execution && !$execution->multiple ? 'hidden' : ''),
+                set::trClass($execution && !$execution->multiple ? 'hidden' : ''),
                 set::name($lang->bug->execution),
                 inputGroup
                 (
@@ -516,7 +516,7 @@ detailBody
             ),
             item
             (
-                $bug->resolution != 'duplicate' ? setStyle(array('display' => 'none')) : null,
+                set::trClass($bug->resolution != 'duplicate' ? 'hidden' : ''),
                 set::name($lang->bug->duplicateBug),
                 picker
                 (
