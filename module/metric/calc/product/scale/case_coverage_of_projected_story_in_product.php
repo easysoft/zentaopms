@@ -32,7 +32,6 @@ class case_coverage_of_projected_story_in_product extends baseCalc
 
         return $this->dao->select('t1.product, COUNT(t1.id) as total, SUM(CASE WHEN t3.case_count > 0 THEN 1 ELSE 0 END) as hasCase')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
-            ->leftJoin(TABLE_CASE)->alias('t3')->on('t1.id=t3.story')
             ->leftJoin("($caseQuery)")->alias('t3')->on('t1.id=t3.story')
             ->where('t1.stage')->eq('projected')
             ->andWhere('t1.deleted')->eq(0)
