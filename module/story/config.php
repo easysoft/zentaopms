@@ -104,7 +104,7 @@ $config->story->datatable->fieldList['plan']['dataSource'] = array('module' => '
 
 $config->story->datatable->fieldList['status']['title']    = 'statusAB';
 $config->story->datatable->fieldList['status']['fixed']    = 'no';
-$config->story->datatable->fieldList['status']['width']    = '60';
+$config->story->datatable->fieldList['status']['width']    = '70';
 $config->story->datatable->fieldList['status']['type']     = 'html';
 $config->story->datatable->fieldList['status']['sortType'] = true;
 $config->story->datatable->fieldList['status']['required'] = 'no';
