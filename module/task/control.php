@@ -554,6 +554,7 @@ class task extends control
     {
         $this->commonAction($taskID);
         $task = $this->task->getById($taskID);
+        if($this->app->tab == 'project') $this->loadModel('project')->setMenu($task->project);
 
         if(!empty($_POST))
         {
