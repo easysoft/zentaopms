@@ -1,0 +1,8 @@
+title: table zt_suitecase
+author: Gang Liu
+version: "1.0"
+fields:
+  - field: suite
+    range: 1
+  - field: product
+    range: 1
