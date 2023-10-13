@@ -269,48 +269,36 @@ function loadAssignedToByProduct(productID)
     if(typeof(branch) == 'undefined') branch = 0;
 
     const link = $.createLink('bug', 'ajaxGetProductMembers', 'productID=' + productID + '&selectedUser=' + $('[name="assignedTo"]').val() + '&branchID=' + branch);
-    $.get(link, function(data)
+    $.getJSON(link, function(data)
     {
         let assignedTo        = $('[name="assignedTo"]').val();
         let $assignedToPicker = $('[name="assignedTo"]').zui('picker');
-        if(data)
-        {
-            data = JSON.parse(data);
-            $assignedToPicker.render({items: data});
-            $assignedToPicker.$.setValue(assignedTo);
-        }
+        $assignedToPicker.render({items: data});
+        $assignedToPicker.$.setValue(assignedTo);
     });
 }
 
 function loadAssignedToByProject(projectID)
 {
     const link = $.createLink('bug', 'ajaxGetProjectTeamMembers', 'projectID=' + projectID);
-    $.get(link, function(data)
+    $.getJSON(link, function(data)
     {
         let assignedTo        = $('[name="assignedTo"]').val();
         let $assignedToPicker = $('[name="assignedTo"]').zui('picker');
-        if(data)
-        {
-            data = JSON.parse(data);
-            $assignedToPicker.render({items: data});
-            $assignedToPicker.$.setValue(assignedTo);
-        }
+        $assignedToPicker.render({items: data});
+        $assignedToPicker.$.setValue(assignedTo);
     });
 }
 
 function loadAssignedToByExecution(executionID)
 {
     const link = $.createLink('bug', 'ajaxLoadAssignedTo', 'executionID=' + executionID);
-    $.get(link, function(data)
+    $.getJSON(link, function(data)
     {
         let assignedTo        = $('[name="assignedTo"]').val();
         let $assignedToPicker = $('[name="assignedTo"]').zui('picker');
-        if(data)
-        {
-            data = JSON.parse(data);
-            $assignedToPicker.render({items: data});
-            $assignedToPicker.$.setValue(assignedTo);
-        }
+        $assignedToPicker.render({items: data});
+        $assignedToPicker.$.setValue(assignedTo);
     });
 }
 
@@ -319,15 +307,14 @@ function loadAssignedToByModule(moduleID, productID)
     if(typeof(productID) == 'undefined') productID = $('[name="product"]').val();
     if(typeof(moduleID) == 'undefined')  moduleID  = $('[name="module"]').val();
     const link = $.createLink('bug', 'ajaxGetModuleOwner', 'moduleID=' + moduleID + '&productID=' + productID);
-    $.get(link, function(owner)
+    $.getJSON(link, function(owner)
     {
-        owner                 = JSON.parse(owner);
-        var account           = owner[0];
-        var realName          = owner[1];
-        var isExist           = false;
-        var $assignedToPicker = $('[name="assignedTo"]').zui('picker');
-        var assignedToItems   = $assignedToPicker.ref.current.state.items;
-        var count             = assignedToItems.length;
+        let account           = owner.account;
+        let realName          = owner.realname;
+        let isExist           = false;
+        let $assignedToPicker = $('[name="assignedTo"]').zui('picker');
+        let assignedToItems   = $assignedToPicker.options.items;
+        let count             = assignedToItems.length;
         for(var i = 0; i < count; i++)
         {
             if(assignedToItems[i].value == account)

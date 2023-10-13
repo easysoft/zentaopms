@@ -1353,8 +1353,8 @@ class bug extends control
     {
         /* 获取bug模块负责人。 */
         /* Get module owner. */
-        $moduleOwner = $this->bug->getModuleOwner($moduleID, $productID);
-        return print(json_encode($moduleOwner));
+        list($account, $realname) = $this->bug->getModuleOwner($moduleID, $productID);
+        return print(json_encode(array('account' => $account, 'realname' => $realname)));
     }
 
     /**
@@ -1373,7 +1373,7 @@ class bug extends control
         $items   = array();
         foreach($members as $account => $member)
         {
-            if($account) $items[] = array('text' => $member, 'value' => $account, 'keys' => $account . $member);
+            if($account) $items[] = array('text' => $member, 'value' => $account);
         }
         return print(json_encode($items));
     }
@@ -1455,7 +1455,7 @@ class bug extends control
         $items = array();
         foreach($productMembers as $account => $member)
         {
-            if($account) $items[] = array('text' => $member, 'value' => $account, 'keys' => $member);
+            if($account) $items[] = array('text' => $member, 'value' => $account);
         }
         return print(json_encode($items));
     }
@@ -1481,7 +1481,7 @@ class bug extends control
         unset($productBugs[$bugID]);
 
         $bugList = array();
-        foreach($productBugs as $bugID => $bugName) $bugList[] = array('value' => $bugID, 'text' => $bugName, 'keys' => $bugName);
+        foreach($productBugs as $bugID => $bugName) $bugList[] = array('value' => $bugID, 'text' => $bugName);
         return $this->send($bugList);
     }
 
@@ -1504,7 +1504,7 @@ class bug extends control
             if($account)
             {
                 $userName = ucfirst(mb_substr($account, 0, 1)) . ':' . ($member ? $member : $account);
-                $items[] = array('text' => $userName, 'value' => $account, 'keys' => $userName);
+                $items[] = array('text' => $userName, 'value' => $account);
             }
         }
         return print(json_encode($items));
