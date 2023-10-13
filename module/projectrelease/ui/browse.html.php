@@ -39,6 +39,7 @@ jsVar('type', $type);
 jsVar('canViewProjectbuild', common::hasPriv('projectbuild', 'view'));
 
 if(!$showBranch) unset($config->projectrelease->dtable->fieldList['branch']);
+$config->projectrelease->dtable->fieldList['product']['map'] = $products;
 
 $tableData = initTableData($releases, $config->projectrelease->dtable->fieldList);
 dtable

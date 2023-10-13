@@ -78,7 +78,7 @@ class projectrelease extends control
         $execution = $this->loadModel('execution')->getByID($executionID);
 
         $this->view->title       = (isset($project->name) ? $project->name : $execution->name) . $this->lang->colon . $this->lang->release->browse;
-        $this->view->products    = $this->loadModel('product')->getProducts($projectID);
+        $this->view->products    = $this->loadModel('product')->getProductPairsByProject($projectID);
         $this->view->projectID   = $projectID;
         $this->view->executionID = $executionID;
         $this->view->type        = $type;
@@ -107,17 +107,28 @@ class projectrelease extends control
 
         if(!empty($_POST))
         {
-            $releaseID = $this->release->create(0, 0, $projectID);
+            $release = form::data($this->config->release->form->create)
+                ->add('product', $this->post->product ? $this->post->product : 0)
+                ->add('branch', $this->post->branch ? $this->post->branch : 0)
+                ->setIF($projectID, 'project', $projectID)
+                ->setIF($this->post->build === false, 'build', 0)
+                ->get();
+
+            /* Check build if build is required. */
+            if(strpos($this->config->release->create->requiredFields, 'build') !== false && empty($release->build)) dao::$errors['build'] = sprintf($this->lang->error->notempty, $this->lang->release->build);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $releaseID = $this->release->create($release, $this->post->sync ? true : false);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             $this->loadModel('action')->create('release', $releaseID, 'opened');
 
             $message = $this->executeHooks($releaseID);
             if($message) $this->lang->saveSuccess = $message;
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $releaseID));
-
             if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
-
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
         }
 
