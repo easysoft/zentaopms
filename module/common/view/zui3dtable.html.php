@@ -22,30 +22,28 @@ window.setCheckedCookie = function()
     $.cookie('checkedItem', dtable.$.getChecks().join(','), {expires: config.cookieLife, path: config.webRoot});
 };
 
-function convertCols(cols)
-{
-    cols.forEach(function(col)
-    {
-        if(col.fixed == 'no') col.fixed = false;
-        if(col.type === 'html' && col.flex === undefined) col.flex = col.width === 'auto' ? 1 : false;
-    });
-
-    return cols;
-}
 zui.DTable.definePlugin(
 {
     name: 'zentao18',
     options: function(options)
     {
+        let allLeftColsFixed = true;
+        const cols = options.cols.map(function(col)
+        {
+            if(col.fixed == 'no') col.fixed = false;
+            if(col.type === 'html' && col.flex === undefined) col.flex = col.width === 'auto' ? 1 : false;
+            if(col.width === 'auto') allLeftColsFixed = false;
+            return col;
+        });
         return $.extend({fixedLeftWidth: '40%'}, options, {
-            cols: convertCols(options.cols),
+            cols: cols,
             height: function(actualHeight)
             {
                 const height = Math.max(0, window.innerHeight - ($('#mainContent').offset().top || 0)) - 1;
                 $('#sidebar>.cell').css('maxHeight', height).children('.tree').addClass('scrollbar-hover');
                 return Math.min(actualHeight, height - ($('#mainContent .table-footer').outerHeight() || 0));
             }
-        });
+        }, allLeftColsFixed ? {fixedLeftWidth: 'auto'} : {});
     },
     onMounted: function()
     {
