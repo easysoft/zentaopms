@@ -1,0 +1,10 @@
+title: table zt_testtask
+author: Gang Liu
+version: "1.0"
+fields:
+  - field: product
+    range: "1,2"
+  - field: auto
+    range: auto,no{4}
+  - field: deleted
+    range: 0{4},1
