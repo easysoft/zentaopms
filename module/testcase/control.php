@@ -1518,7 +1518,7 @@ class testcase extends control
         {
             $scene = form::data($this->config->testcase->form->editScene)->get();
 
-            $this->testcase->updateScene($scene);
+            $this->testcase->updateScene($scene, $oldScene);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $sceneID));

@@ -1969,17 +1969,13 @@ class testcaseModel extends model
      * @access public
      * @return bool
      */
-    public function updateScene(object $scene): bool
+    public function updateScene(object $scene, object $oldScene): bool
     {
-        $sceneID  = $scene->id;
-        $oldScene = $this->getSceneByID($sceneID);
-        if(!$oldScene) return false;
-
         $this->dao->update(TABLE_SCENE)->data($scene)
             ->autoCheck()
             ->batchCheck($this->config->testcase->editscene->requiredFields, 'notempty')
-            ->check('title', 'unique', "product = '{$scene->product}' AND id != '{$sceneID}'")
-            ->where('id')->eq($sceneID)
+            ->check('title', 'unique', "product = '{$scene->product}' AND id != '{$oldScene->id}'")
+            ->where('id')->eq($oldScene->id)
             ->checkFlow()
             ->exec();
         if(dao::isError()) return false;
@@ -1990,7 +1986,7 @@ class testcaseModel extends model
             {
                 $parent = $this->getSceneByID($scene->parent);
 
-                $scene->path    = $parent->path . $sceneID . ',';
+                $scene->path    = $parent->path . $oldScene->id . ',';
                 $scene->grade   = ++$parent->grade;
                 $scene->product = $parent->product;
                 $scene->branch  = $parent->branch;
@@ -1998,13 +1994,13 @@ class testcaseModel extends model
             }
             else
             {
-                $scene->path  = ',' . $sceneID . ',';
+                $scene->path  = ',' . $oldScene->id . ',';
                 $scene->grade = 1;
             }
 
-            $this->dao->update(TABLE_SCENE)->data($scene)->where('id')->eq($sceneID)->exec();
+            $this->dao->update(TABLE_SCENE)->data($scene)->where('id')->eq($oldScene->id)->exec();
             $this->dao->update(TABLE_SCENE)->set("path = REPLACE(path, '{$oldScene->path}', '{$scene->path}')")
-                ->where('id')->ne($sceneID)
+                ->where('id')->ne($oldScene->id)
                 ->andWhere('path')->like("{$oldScene->path}%")
                 ->exec();
         }
@@ -2012,7 +2008,7 @@ class testcaseModel extends model
         $changes = common::createChanges($oldScene, $scene);
         if($changes)
         {
-            $actionID = $this->loadModel('action')->create('scene', $sceneID, 'edited');
+            $actionID = $this->loadModel('action')->create('scene', $oldScene->id, 'edited');
             $this->action->logHistory($actionID, $changes);
         }
 
