@@ -19,6 +19,8 @@ $config->caselib->testcase->actionList['delete']['data-confirm'] = $lang->testca
 
 $config->caselib->dtable = new stdclass();
 $config->caselib->dtable->fieldList = $config->testcase->dtable->fieldList;
+$config->caselib->dtable->fieldList['id']['name'] = 'id';
+
 $config->caselib->dtable->fieldList['title']['link'] = array('module' => 'testcase', 'method' => 'view', 'params' => "caseID={id}");
 
 $config->caselib->dtable->fieldList['type']['show']          = true;
