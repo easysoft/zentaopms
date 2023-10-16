@@ -8,18 +8,14 @@ $config->caselib->testcase->actionList['edit']['hint']  = $lang->testcase->edit;
 $config->caselib->testcase->actionList['edit']['text']  = $lang->testcase->edit;
 $config->caselib->testcase->actionList['edit']['url']   = array('module' => 'testcase', 'method' => 'edit', 'params' => 'caseID={id}');
 $config->caselib->testcase->actionList['edit']['order'] = 5;
-$config->caselib->testcase->actionList['edit']['show']  = 'clickable';
 
 $config->caselib->testcase->actionList['delete']['icon']         = 'trash';
 $config->caselib->testcase->actionList['delete']['hint']         = $lang->testcase->delete;
 $config->caselib->testcase->actionList['delete']['text']         = $lang->testcase->delete;
 $config->caselib->testcase->actionList['delete']['url']          = array('module' => 'testcase', 'method' => 'delete', 'params' => 'caseID={id}');
 $config->caselib->testcase->actionList['delete']['order']        = 10;
-$config->caselib->testcase->actionList['delete']['show']         = 'clickable';
-$config->caselib->testcase->actionList['delete']['class']        = 'ajax-submit';
+$config->caselib->testcase->actionList['delete']['className']    = 'ajax-submit';
 $config->caselib->testcase->actionList['delete']['data-confirm'] = $lang->testcase->confirmDelete;
-
-$app->loadModuleConfig('testcase');
 
 $config->caselib->dtable = new stdclass();
 $config->caselib->dtable->fieldList = $config->testcase->dtable->fieldList;
