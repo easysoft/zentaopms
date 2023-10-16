@@ -10,6 +10,8 @@ jsVar('sumSubBudgetLang',    $lang->program->sumSubBudget);
 jsVar('exceededBudgetLang',  $lang->program->exceededBudget);
 jsVar('remainingBudgetLang', $lang->program->remainingBudget);
 jsVar('langManDay',          $lang->program->manDay);
+jsVar('pageSummary',         $summary);
+jsVar('checkedSummary',      $lang->program->checkedProjects);
 
 $this->loadModel('project');
 $cols    = $this->loadModel('datatable')->getSetting('program');
@@ -177,22 +179,34 @@ toolbar
     ])),
 );
 
-$footToolbar  = common::hasPriv('project', 'batchEdit') ? array('items' => array(array('text' => $lang->project->edit, 'class' => 'btn batch-btn size-sm secondary', 'data-url' => createLink('project', 'batchEdit')))) : null;
-$dtableFooter = array('checkbox', 'toolbar', array('html' => $summary, 'className' => 'text-dark'), 'flex', 'pager');
-if(empty($data)) $dtableFooter = array('flex', 'pager');
-
+$canBatchEdit = common::hasPriv('project', 'batchEdit');
 dtable
 (
+    setID('projectviews'),
     set::cols($cols),
     set::data(array_values($data)),
-    set::nested(true),
-    set::onRenderCell(jsRaw('window.renderCell')),
-    set::canRowCheckable(jsRaw("function(rowID){return this.getRowInfo(rowID).data.type == 'project';}")),
-    set::footPager(usePager()),
-    set::footer($dtableFooter),
+    set::userMap($users),
     set::customCols(true),
-    set::userMap($this->loadModel('user')->getPairs('noletter|pofirst')),
-    set::footToolbar($footToolbar),
+    set::checkable($canBatchEdit),
+    set::nested(true),
+    set::className('shadow rounded'),
+    set::footPager(usePager()),
+    set::canRowCheckable(jsRaw("function(rowID){return this.getRowInfo(rowID).data.type == 'project';}")),
+    set::onRenderCell(jsRaw('window.renderCell')),
+    set::footToolbar(array
+    (
+        'type'  => 'btn-group',
+        'items' => array(
+            $canBatchEdit ? array
+            (
+                'text'      => $lang->edit,
+                'className' => 'secondary size-sm batch-btn',
+                'data-page' => 'batch',
+                'data-formaction' => $this->createLink('project', 'batchEdit')
+            ) : null,
+        )
+    )),
+    set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(checkedIDList);}"))
 );
 
 render();

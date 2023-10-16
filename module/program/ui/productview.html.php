@@ -256,6 +256,7 @@ toolbar($fnGenerateCreateProgramBtns());
 
 dtable
 (
+    setID('productviews'),
     set::cols($fnGenerateCols()),
     set::data($data),
     set::userMap($users),
@@ -272,11 +273,11 @@ dtable
         'items' => array(
             $canBatchEdit ? array
             (
-                'text'    => $lang->edit,
-                'btnType' => 'secondary',
-                'data-url'=> createLink('product', 'batchEdit'),
-                'onClick' => jsRaw('window.onClickBatchEdit')
-            ) : null
+                'text'      => $lang->edit,
+                'className' => 'secondary batch-btn',
+                'data-page' => 'batch',
+                'data-formaction' => $this->createLink('product', 'batchEdit')
+            ) : null,
         )
     )),
     set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(checkedIDList);}"))

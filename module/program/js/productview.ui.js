@@ -31,35 +31,6 @@ window.iconRenderProductView = function(value, row)
     return '';
 }
 
-/**
- * Submit data to product batch edit page by html form while click on the batch edit button.
- *
- * @param  object event
- * @access public
- * @return void
- */
-window.onClickBatchEdit = function(event)
-{
-    const dtable      = zui.DTable.query(event.target);
-    const checkedList = dtable.$.getChecks();
-
-    if(!checkedList.length) return;
-
-    const formData = new FormData();
-    checkedList.forEach(function(id)
-    {
-        formData.append('productIDList[]', id);
-    });
-
-    postAndLoadPage($(event.target.closest('button')).data('url'), formData, '', {app: 'product'});
-};
-
-onClickCheckBatchEdit = function(event)
-{
-    $.cookie.set('checkedEditProduct', 1);
-    loadCurrentPage(["table/#dtable:type=json&data=props"]);
-};
-
 window.footerSummary = function(checkedIdList)
 {
     if(!checkedIdList.length)
@@ -78,3 +49,16 @@ window.footerSummary = function(checkedIdList)
 
     return {html: summary};
 };
+
+$(document).off('click', '[data-formaction]').on('click', '[data-formaction]', function()
+{
+    const $this       = $(this);
+    const dtable      = zui.DTable.query($('#productviews'));
+    const checkedList = dtable.$.getChecks();
+    if(!checkedList.length) return;
+
+    const postData = new FormData();
+    checkedList.forEach((id) => postData.append('productIDList[]', id));
+
+    if($this.data('page') == 'batch') postAndLoadPage($this.data('formaction'), postData);
+});

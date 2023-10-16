@@ -48,18 +48,6 @@ window.confirmDelete = function(projectID, module, projectName)
     });
 }
 
-$(document).on('click', '.batch-btn', function()
-{
-    const $this  = $(this);
-    const dtable = zui.DTable.query($this);
-    const checkedList = dtable.$.getChecks();
-    if(!checkedList.length) return;
-
-    const postData = new FormData();
-    checkedList.forEach((id) => postData.append('projectIdList[]', id));
-    postAndLoadPage($(this).data('url'), postData, '', {app: 'project'});
-})
-
 /* Put the checked projects to cookie for exporting. */
 $(document).on('click', '.has-checkbox', function()
 {
@@ -70,3 +58,31 @@ $(document).on('click', '.has-checkbox', function()
 
     $.cookie.set('checkedItem', checkedList);
 })
+
+$(document).off('click', '[data-formaction]').on('click', '[data-formaction]', function()
+{
+    const $this       = $(this);
+    const dtable      = zui.DTable.query($('#projectviews'));
+    const checkedList = dtable.$.getChecks();
+    if(!checkedList.length) return;
+
+    const postData = new FormData();
+    checkedList.forEach((id) => postData.append('projectIdList[]', id));
+
+    if($this.data('page') == 'batch') postAndLoadPage($this.data('formaction'), postData);
+});
+
+window.footerSummary = function(checkedIdList)
+{
+    if(!checkedIdList.length) return {html: pageSummary, className: 'text-dark'};
+
+    let totalProjects = 0;
+    checkedIdList.forEach(function(id)
+    {
+        totalProjects++;
+    });
+
+    var summary = checkedSummary.replace('%s', totalProjects);
+
+    return {html: summary};
+};
