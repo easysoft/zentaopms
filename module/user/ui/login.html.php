@@ -159,6 +159,7 @@ div
             ) : null,
             empty($demoUsers) ? null : div
             (
+                setClass('footer'),
                 span($lang->user->loginWithDemoUser),
                 $demoUserItems,
             ),
