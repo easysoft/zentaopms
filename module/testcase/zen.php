@@ -332,7 +332,7 @@ class testcaseZen extends testcase
         if(!isset($modules[$moduleID])) $modules += $this->tree->getModulesName($moduleID);
 
         $scenes = $this->testcase->getSceneMenu($productID, $moduleID, $branchID, 0, $oldScene->id);
-        if(!isset($scenes[$parentID])) $scenes += $this->testcase->getScenesName($parentID);
+        if(!isset($scenes[$parentID])) $scenes += $this->testcase->getScenesName((array)$parentID);
 
         $this->view->title    = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->editScene;
         $this->view->products = $this->products;
@@ -387,7 +387,7 @@ class testcaseZen extends testcase
         $this->view->stories          = $stories;
         $this->view->currentModuleID  = $currentModuleID;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, 'case', 0, $branch === 'all' || !isset($branches[$branch]) ? 0 : $branch);
-        $this->view->sceneOptionMenu  = $this->testcase->getSceneMenu($productID, $moduleID, $branch === 'all' || !isset($branches[$branch]) ? 0 : $branch);
+        $this->view->sceneOptionMenu  = $this->testcase->getSceneMenu($productID, $currentModuleID, $branch === 'all' || !isset($branches[$branch]) ? 0 : $branch);
     }
 
     /**
