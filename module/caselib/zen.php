@@ -304,6 +304,7 @@ class caselibZen extends caselib
      */
     protected function getStepsAndExpectsFromImportFile(string $field, int $row, string $cellValue): array
     {
+        $steps = array();
         if(strpos($cellValue, "\n")) $steps = explode("\n", $cellValue);
         if(strpos($cellValue, "\r")) $steps = explode("\r", $cellValue);
 
