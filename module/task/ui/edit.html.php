@@ -392,6 +392,8 @@ detailBody
                     h::a
                     (
                         setClass('span-text'),
+                        set::href(inlink('recordWorkhour', "id={$task->id}")),
+                        set('data-toggle', 'modal'),
                         icon('time')
                     ),
                     formHidden('consumed', $task->consumed)
