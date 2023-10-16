@@ -46,9 +46,6 @@ if($stepsType == 'table')
     }
 }
 
-$files = '';
-foreach($case->files as $file) $files .= $file->title . ',';
-
 /* Get data in legend of basic information. */
 $app->loadLang('product');
 $productLink = $case->product && hasPriv('product', 'view') ? $this->createLink('product', 'view', "productID={$case->product}") : '';
@@ -434,13 +431,11 @@ detailBody
             ),
             set::useHtml(true),
         ),
-        section
+        $case->files ? fileList
         (
-            setClass(empty($files) ? 'hidden' : ''),
-            set::title($lang->files),
-            set::content(trim($files, ',')),
-            set::useHtml(true),
-        ),
+            set::files($case->files),
+            set::padding(false),
+        ) : null,
     ),
     history(),
     floatToolbar
