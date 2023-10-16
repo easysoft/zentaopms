@@ -31,5 +31,6 @@ $config->caselib->dtable->fieldList['lastRunner']['show']    = false;
 $config->caselib->dtable->fieldList['lastRunDate']['show']   = false;
 $config->caselib->dtable->fieldList['lastRunResult']['show'] = false;
 
-$config->caselib->dtable->fieldList['actions']['list'] = $config->caselib->testcase->actionList;
-$config->caselib->dtable->fieldList['actions']['menu'] = array('edit', 'delete');
+$config->caselib->dtable->fieldList['actions']['list']  = $config->caselib->testcase->actionList;
+$config->caselib->dtable->fieldList['actions']['menu']  = array('edit', 'delete');
+$config->caselib->dtable->fieldList['actions']['width'] = '80';

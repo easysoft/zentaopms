@@ -161,6 +161,8 @@ class caselib extends control
         $cases = $this->caselib->getLibCases($libID, $browseType, $queryID, $moduleID, $sort, $pager);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', true);
 
+        $this->loadModel('testcase');
+
         $this->view->title         = $this->lang->caselib->common . $this->lang->colon . $libraries[$libID];
         $this->view->libID         = $libID;
         $this->view->libName       = $libraries[$libID];
