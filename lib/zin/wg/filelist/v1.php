@@ -80,6 +80,7 @@ class fileList extends wg
         (
             setClass('files', 'pt-4', 'canvas'),
             $this->prop('padding') ? setClass($px, $pb) : null,
+            set::title($lang->files),
             to::actions
             (
                 icon('paper-clip'),
