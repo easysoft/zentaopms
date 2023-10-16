@@ -288,10 +288,11 @@ class executionModel extends model
      *
      * @param  int    $executionID
      * @param  object $postData
+     * @param  object $formData
      * @access public
      * @return array|false
      */
-    public function update(int $executionID, object $postData): array|false
+    public function update(int $executionID, object $postData, object $formData = null): array|false
     {
         $oldExecution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
 
@@ -312,20 +313,21 @@ class executionModel extends model
             return false;
         }
 
-        if($postData->products)
+        if(!empty($formData->products))
         {
             $multipleProducts = $this->loadModel('product')->getMultiBranchPairs();
-            if(!empty($postData->branch)) $postData->branch = is_array($postData->branch) ? $postData->branch : json_decode($postData->branch, true);
-            foreach($postData->products as $index => $productID)
+            if(!empty($formData->branch)) $formData->branch = is_array($formData->branch) ? $formData->branch : json_decode($formData->branch, true);
+            foreach($formData->products as $index => $productID)
             {
-                if(isset($multipleProducts[$productID]) and !isset($postData->branch[$index]))
+                if(!isset($formData->branch[$index])) continue;
+                $branches = implode(',', $formData->branch[$index]);
+                if(isset($multipleProducts[$productID]) && $branches == '')
                 {
-                    dao::$errors[] = $this->lang->project->emptyBranch;
+                    dao::$errors["branch[$index][]"] = $this->lang->project->error->emptyBranch;
                     return false;
                 }
             }
         }
-
 
         if(!empty($postData->heightType) && $postData->heightType == 'custom' && !$this->loadModel('kanban')->checkDisplayCards($postData->displayCards)) return false;
 
@@ -1158,10 +1160,11 @@ class executionModel extends model
         /* The total workload of the first stage should not exceed 100%. */
         if($type == 'create' || ($oldExecutionGrade == 1 && isset($this->lang->execution->typeList[$oldExecutionType])))
         {
+            $branchID        = !empty($_POST['branch'][0]) ? current($this->post->branch[0]) : 0;
             $oldPercentTotal = $this->dao->select('SUM(t2.percent) as total')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
                 ->where('t1.product')->eq($this->post->products[0])
-                ->beginIF(!empty($_POST['branch'][0]))->andWhere('t1.branch')->eq(current($this->post->branch[0]))->fi()
+                ->beginIF($branchID)->andWhere('t1.branch')->eq($branchID)->fi()
                 ->andWhere('t2.type')->eq('stage')
                 ->andWhere('t2.grade')->eq(1)
                 ->andWhere('t2.deleted')->eq(0)

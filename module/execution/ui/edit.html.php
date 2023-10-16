@@ -133,6 +133,8 @@ elseif($execution->type != 'kanban')
 $productsBox = null;
 if($project->model != 'waterfall' && $project->model != 'waterfallplus')
 {
+    $hidden = true;
+    if(!empty($project->hasProduct)) $hidden = false;
     if(!empty($project) && !empty($project->hasProduct) && $linkedProducts)
     {
         $i = 0;
@@ -143,12 +145,11 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
             $plans     = isset($productPlans[$product->id]) ? $productPlans[$product->id] : array();
             $productsBox[] = formRow
                 (
-                    set::className('productsBox'),
+                    set::hidden($hidden),
                     formGroup
                     (
                         set::width($hasBranch ? '1/4' : '1/2'),
                         setClass('linkProduct'),
-                        set::required(true),
                         $i == 0 ? set::label($lang->project->manageProducts) : set::label(''),
                         inputGroup
                         (
@@ -158,15 +159,13 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                                 picker
                                 (
                                     set::id("products{$i}"),
-                                    set::name("products[$i]"),
-                                    set::value($product->id),
+                                    set::name("products[{$i}]"),
                                     set::items($allProducts),
+                                    set::value($product->id),
                                     set::last($product->id),
                                     $hasBranch ? set::lastBranch(implode(',', $product->branches)) : null,
-                                    set::disabled($execution->type == 'stage' && $project->stageBy == 'project'),
-                                    $execution->type == 'stage' && $project->stageBy == 'project' ? formHidden("products[$i]", $product->id) : null,
                                 )
-                            ),
+                            )
                         )
                     ),
                     formGroup
@@ -219,7 +218,7 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                                 icon('trash'),
                             ),
                         )
-                    ),
+                    )
                 );
 
             $i ++;
@@ -239,8 +238,9 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                 (
                     set::name("plans[{$planProductID}][]"),
                     set::items(isset($productPlans[$planProductID]) ? $productPlans[$planProductID] : array()),
+                    set::value(isset($linkedProducts[$planProductID]) ? $linkedProducts[$planProductID]->plans : ''),
                     set::multiple(true),
-                    formHidden('products[]', $planProductID),
+                    formHidden('products[0]', $planProductID),
                     formHidden('branch[0][0]', 0),
                 )
             ),
@@ -248,14 +248,14 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
     }
     else
     {
-        $productsBox [] = formRow
+        $productsBox[] = formRow
             (
+                set::hidden($hidden),
                 set::className('productsBox'),
                 formGroup
                 (
                     set::width('1/2'),
                     setClass('linkProduct'),
-                    set::required(true),
                     set::label($lang->project->manageProducts),
                     picker
                     (
@@ -275,7 +275,6 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                         (
                             set::id('branch0'),
                             set::name('branch[0][]'),
-                            set::control('picker'),
                             set::multiple(true),
                             set::items(array()),
                             on::change('branchChange')
@@ -316,9 +315,10 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
             );
     }
 }
-else
+elseif(!empty($project) && !empty($project->hasProduct))
 {
-    if(!empty($project) && !empty($project->hasProduct))
+    $i = 0;
+    foreach($linkedProducts as $product)
     {
         $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);
         $branches  = isset($branchGroups[$product->id]) ? $branchGroups[$product->id] : array();
@@ -330,7 +330,7 @@ else
                 (
                     set::width($hasBranch ? '1/4' : '1/2'),
                     setClass('linkProduct'),
-                    set::required(true),
+                    set::required(in_array($project->model, array('waterfall', 'waterfallplus'))),
                     $i == 0 ? set::label($lang->project->manageProducts) : set::label(''),
                     inputGroup
                     (
@@ -341,12 +341,12 @@ else
                             (
                                 set::id("products{$i}"),
                                 set::name("products[$i]"),
-                                set::value($product->id),
                                 set::items($allProducts),
+                                set::value($product->id),
                                 set::last($product->id),
                                 $hasBranch && $product->branches ? set::lastBranch(implode(',', $product->branches)) : null,
-                                set::disabled($project->model == 'waterfall' || $project->model == 'waterfallplus'),
-                                $project->model == 'waterfall' || $project->model == 'waterfallplus' ? formHidden("products[$i]", $product->id) : null,
+                                set::disabled(in_array($project->model, array('waterfall', 'waterfallplus'))),
+                                set::required(in_array($project->model, array('waterfall', 'waterfallplus'))),
                             )
                         ),
                     )
@@ -355,7 +355,7 @@ else
                 (
                     set::width('1/4'),
                     setClass('ml-px'),
-                    $hasBranch ? null : setClass('hidden'),
+                    set::hidden(!$hasBranch),
                     inputGroup
                     (
                         $lang->product->branchName['branch'],
@@ -387,13 +387,22 @@ else
                             set::multiple(true)
                         )
                     ),
-                ),
+                )
             );
 
         $i ++;
-        $productsBox[] = formHidden('products[]', key($linkedProducts));
-        $productsBox[] = formHidden('branch', json_encode(array_values($linkedBranches)));
     }
+
+    if(empty($linkedProducts))
+    {
+        $productsBox[] = formHidden('products[0]', array());
+        $productsBox[] = formHidden('branch', '');
+    }
+}
+else
+{
+    $productsBox[] = formHidden('products[0]', key($linkedProducts));
+    $productsBox[] = formHidden('branch', json_encode(array_values($linkedBranches)));
 }
 
 if(helper::isAjaxRequest('modal')) modalHeader(set::title($lang->execution->edit));

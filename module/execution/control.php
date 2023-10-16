@@ -1048,13 +1048,12 @@ class execution extends control
                 ->setIF($oldExecution->type == 'stage', 'project', $oldExecution->project)
                 ->setDefault('days', '0')
                 ->setDefault('team', $this->post->name)
-                ->setDefault('products', $this->post->products)
                 ->setDefault('branch', $this->post->branch)
                 ->stripTags($this->config->execution->editor->edit['id'], $this->config->allowedTags)
                 ->cleanInt('id,project')
                 ->get();
 
-            $changes = $this->execution->update($executionID, $postData);
+            $changes = $this->execution->update($executionID, $postData, $formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->execution->updateProducts($executionID, $formData);

@@ -166,22 +166,14 @@ function loadBranches(e)
         $formRow.find('.form-group').eq(1).addClass('hidden');
     }
 
-    $.get($.createLink('branch', 'ajaxGetBranches', "productID=" + $product.val() + "&oldBranch=" + oldBranch + "&param=active&projectID=" + projectID + "&withMainBranch=true"), function(data)
+    $.getJSON($.createLink('branch', 'ajaxGetBranches', "productID=" + $product.val() + "&oldBranch=" + oldBranch + "&param=active&projectID=" + projectID + "&withMainBranch=true"), function(data)
     {
         if(data)
         {
-            $formRow.find('.form-group').eq(1).find('.picker-box').empty();
-            $formRow.find('.form-group').eq(1).find('.picker-box').append(`<div id='branch${index}'></div>`);
-
             $formRow.find('.form-group').eq(0).addClass('w-1/4').removeClass('w-1/2');
             $formRow.find('.form-group').eq(1).removeClass('hidden');
-
-            data = JSON.parse(data);
-            new zui.Picker(`#branch${index}`, {
-                items: data,
-                multiple: true,
-                name: `branch[${index}]`,
-            });
+            const $branchPicker = $formRow.find('select[name^=branch]').zui('picker');
+            $branchPicker.render({items: data, multiple: true});
         }
     });
 

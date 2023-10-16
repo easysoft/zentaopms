@@ -2075,11 +2075,17 @@ class executionZen extends execution
 
             foreach($branches[$productID] as $branchID => $branch)
             {
-                $productPlans[$productID] += isset($plans[$productID][$branchID]) ? $plans[$productID][$branchID] : array();
+                if(isset($plans[$productID][$branchID]))
+                {
+                    foreach($plans[$productID][$branchID] as $plan) $productPlans[$productID][$plan->id] = $plan->title;
+                }
 
                 $linkedBranchList[$branchID]           = $branchID;
                 $linkedBranches[$productID][$branchID] = $branchID;
-                if($branchID != BRANCH_MAIN && isset($plans[$productID][BRANCH_MAIN])) $productPlans[$productID] += $plans[$productID][BRANCH_MAIN];
+                if($branchID != BRANCH_MAIN && isset($plans[$productID][BRANCH_MAIN]))
+                {
+                    foreach($plans[$productID][BRANCH_MAIN] as $plan) $productPlans[$productID][$plan->id] = $plan->title;
+                }
                 if(!empty($executionStories[$productID][$branchID]))
                 {
                     array_push($unmodifiableProducts, $productID);
