@@ -1,7 +1,6 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-su('admin');
 
 zdTable('case')->config('case')->gen(10);
 zdTable('testrun')->config('testrun')->gen(10);
