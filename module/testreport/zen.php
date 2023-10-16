@@ -142,7 +142,7 @@ class testreportZen extends testreport
 
         $productIdList[$productID] = $productID;
 
-        $build  = $this->build->getById($task->build);
+        $build  = $this->build->getById((int)$task->build);
         $builds = !empty($build->id) ? array($build->id => $build) : array();
         $bugs   = $this->testreport->getBugs4Test($builds, $productID, $begin, $end);
 
