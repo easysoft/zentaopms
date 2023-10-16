@@ -169,10 +169,7 @@ formPanel
             $report->files ? fileList
             (
                 set::files($report->files),
-                set::hasTitle(false),
-                set::padding(false),
-                set::margin(false),
-                set::pt('0'),
+                set::fieldset(false),
             ) : null,
             upload()
         )
