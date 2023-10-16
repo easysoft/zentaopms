@@ -1698,8 +1698,7 @@ class testtaskModel extends model
         /* 创建测试单。*/
         /* Create test task. */
         unset($task->frame);
-        //$taskID = $this->create($task);
-        $taskID = 620;
+        $taskID = $this->create($task);
         if(dao::isError()) return false;
 
         $this->loadModel('action')->create('testtask', $taskID, 'opened');
