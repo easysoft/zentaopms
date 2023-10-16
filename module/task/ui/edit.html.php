@@ -260,6 +260,7 @@ detailBody
                     picker
                     (
                         set::name('status'),
+                        set::required(true),
                         set::value($task->status),
                         set::items($statusOptions)
                     ),
