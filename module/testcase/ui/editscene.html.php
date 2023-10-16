@@ -33,6 +33,7 @@ formPanel
         (
             set::label($lang->testcase->product),
             set::width('1/2'),
+            set::required(true),
             inputGroup
             (
                 picker
@@ -41,6 +42,7 @@ formPanel
                     set::name('product'),
                     set::items($products),
                     set::value($scene->product),
+                    set::required(true)
                 ),
                 isset($product->type) && $product->type != 'normal' ? picker
                 (
@@ -48,7 +50,8 @@ formPanel
                     zui::width('120px'),
                     set::name('branch'),
                     set::items($branches),
-                    set::value($scene->branch)
+                    set::value($scene->branch),
+                    set::required(true)
                 ) : null
             )
         ),
