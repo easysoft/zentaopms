@@ -22,6 +22,7 @@ formPanel
 (
     on::change('#product', 'changeProduct'),
     on::change('#branch',  'changeBranch'),
+    on::change('#module',  'changeModule'),
     on::change('#story',   'changeStory'),
     on::click('#refresh',  'clickRefresh'),
     to::headingActions(icon('cog-outline')),

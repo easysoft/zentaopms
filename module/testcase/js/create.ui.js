@@ -13,6 +13,14 @@ function changeBranch()
     const productID = $('[name=product]').val();
     loadProductModules(productID);
     loadProductStories(productID);
+    loadScenes(productID);
+}
+
+function changeModule()
+{
+    const productID = $('[name=product]').val();
+    loadProductStories(productID);
+    loadScenes(productID);
 }
 
 function clickRefresh()
