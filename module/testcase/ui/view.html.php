@@ -254,7 +254,7 @@ else
                 set::href($this->createLink('testcase', 'view', "caseID={$linkCaseID}")),
                 set::level(4),
                 set::entityID($linkCaseID),
-                set::text($case->fromBugData->linkCaseTitle),
+                set::text($linkCaseTitle),
                 set::labelProps(array('data-toggle' => 'modal', 'data-size' => 'lg')),
                 set('title', $linkCaseTitle),
             );

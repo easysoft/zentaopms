@@ -10,7 +10,7 @@ $(document).off('click', '.link-btn').on('click', '.link-btn', function()
         rowData = dtable.$.getRowInfo(id).data;
         const caseTitle =  '#' + id + rowData.title;
 
-        $('#linkCase').append("<div class='checkbox-primary'><input type='checkbox' id='linkBug[]_" + id + "' name='linkBug[]' checked value=" + id + "><label for='linkBug[]_" + id + "'>" + caseTitle + "</label></div>");
+        $('#linkCase').append("<div class='checkbox-primary'><input type='checkbox' id='linkCase[]_" + id + "' name='linkCase[]' checked value=" + id + "><label for='linkCase[]_" + id + "'>" + caseTitle + "</label></div>");
         $('#linkCase').closest('tr').removeClass('hidden');
     });
 
