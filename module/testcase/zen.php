@@ -2333,7 +2333,7 @@ class testcaseZen extends testcase
         $this->config->testcase->search['params']['scene']['values']   = $this->testcase->getSceneMenu($productID, $moduleID, $branch, 0, 0, true);
         $this->config->testcase->search['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
 
-        if($this->session->currentProductType == 'normal')
+        if($this->session->currentProductType == 'normal' || $this->app->tab == 'project')
         {
             unset($this->config->testcase->search['fields']['branch']);
             unset($this->config->testcase->search['params']['branch']);
