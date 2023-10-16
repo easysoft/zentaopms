@@ -43,14 +43,16 @@ formPanel
                     set::items($products),
                     set::value(!empty($case->product) ? $case->product :  $productID)
                 ),
-                isset($product->type) && $product->type != 'normal' ? picker
+                picker
                 (
+                    set::className(!isset($product->type) || $product->type == 'normal' ? 'hidden' : ''),
                     set::width('100px'),
                     set::id('branch'),
                     set::name('branch'),
                     set::items($branches),
-                    set::value($branch)
-                ) : null
+                    set::value($branch),
+                    set::emptyValue('')
+                )
             )
         ),
         formGroup
@@ -289,11 +291,7 @@ function printStepsTable()
     {
         $stepsTR[] = h::tr
         (
-            h::td
-            (
-                set::className('center'),
-                $i
-            ),
+            h::td(set::className('center'), $i),
             h::td
             (
                 inputGroup

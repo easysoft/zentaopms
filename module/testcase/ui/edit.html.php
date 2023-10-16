@@ -181,13 +181,14 @@ detailBody
                         set::items($products),
                         set::value($case->product),
                     ),
-                    isset($product->type) && $product->type != 'normal' ? picker
+                    picker
                     (
+                        set::className(!isset($product->type) || $product->type == 'normal' ? 'hidden' : ''),
                         setID('branch'),
                         set::name('branch'),
                         set::items($branchTagOption),
                         set::value($case->branch),
-                    ) : null,
+                    )
                 )
             ),
             item
