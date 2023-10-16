@@ -8,14 +8,14 @@ function changeProduct(event)
     loadScenes(productID);
 }
 
-function changeBranch(event)
+function changeBranch()
 {
     const productID = $('[name=product]').val();
     loadProductModules(productID);
     loadProductStories(productID);
 }
 
-function clickRefresh(event)
+function clickRefresh()
 {
     const productID = $('[name=product]').val();
     loadProductModules(productID);
