@@ -2,6 +2,7 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';
+zdTable('user')->gen(10);
 su('admin');
 
 $usercontact = zdTable('usercontact');
@@ -22,5 +23,5 @@ $userTester = new userTest();
 $userList = array('admin,test2,user29,assfjg');
 
 r($userTester->updateContactListTest(1, '新的列表名称1', $userList)) && p('listName')             && e('新的列表名称1');          //更新ID为1的联系人列表，获取更新的联系人列表名称
-r($userTester->updateContactListTest(2, '新的列表名称2', $userList)) && p('userList')             && e('新的列表名称2');          //更新ID为2的联系人列表，获取更新的联系人列表名称
+r($userTester->updateContactListTest(2, '新的列表名称2', $userList)) && p('userList', '-')             && e('admin,test2,user29,assfjg');          //更新ID为2的联系人列表，获取更新的联系人列表名称
 r($userTester->updateContactListTest(1, '',              array()))   && p('message[listName]:0')  && e('『列表名称』不能为空。'); //列表名称为空时                                                                                                     // 列表名称为空时

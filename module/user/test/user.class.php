@@ -667,7 +667,10 @@ class userTest
      */
     public function updateContactListTest($listID = 0, $listName = '', $userList = array())
     {
-        $this->objectModel->updateContactList($listID, $listName, $userList);
+        $_POST = array();
+        $_POST['listName'] = $listName;
+        $_POST['userList'] = $userList;
+        $this->objectModel->updateContactList($listID);
 
         if(dao::isError()) return array('message' => dao::getError());
         return $this->objectModel->getContactListByID($listID);
@@ -1039,8 +1042,8 @@ class userTest
      */
     public function setUserListTest($users, $account)
     {
-        $string = $this->objectModel->setUserList($users, $account);
-        return strpos($string, "<option value='$account' selected='selected'") !== false ? 1 : 0;
+        $accounts = $this->objectModel->setUserList($users, $account);
+        return isset($accounts[$account]) ? 1 : 0;
     }
 
     /**
