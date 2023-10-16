@@ -82,6 +82,12 @@ class solutionModel extends model
             if(empty($selectedApps[$category])) unset($selectedApps[$category]);
         }
 
+        if(!$this->app->user->account)
+        {
+            $this->app->user = new stdclass();
+            $this->app->user->account = $this->dao->select('*')->from(TABLE_USER)->where('deleted')->eq(0)->fetch('account');
+        }
+
         /* Create solution. */
         $solution = new stdclass;
         $solution->name         = $cloudSolution->title;
