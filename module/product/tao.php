@@ -444,7 +444,12 @@ class productTao extends productModel
             ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t2.id')->in($this->app->user->view->products)->fi()
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
             ->markRight(1)
-            ->beginIF($append)->orWhere('t2.id')->in($append)->fi()
+            ->beginIF($append && empty($projectID))->orWhere('(t1.product')->in($append)->fi()
+            ->beginIF($append && !empty($projectID))
+            ->orWhere('(t1.product')->in($append)
+            ->andWhere('t1.project')->eq($projectID)
+            ->markRight(1)
+            ->fi()
             ->orderBy($orderBy)
             ->fetchAll();
     }
