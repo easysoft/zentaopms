@@ -836,8 +836,8 @@ class baseHelper
 
         $repairCode = '|1034|1035|1194|1195|1459|';
         $errorInfo  = $exception->errorInfo;
-        $errorCode  = $errorInfo[1];
-        $errorMsg   = $errorInfo[2];
+        $errorCode  = zget($errorInfo, 1, 0);
+        $errorMsg   = zget($errorInfo, 2, '');
         $message    = $exception->getMessage();
 
         if(str_contains($repairCode, "|$errorCode|") or ($errorCode == '1016' and str_contains((string) $errorMsg, 'errno: 145')) or str_contains((string) $message, 'repair'))

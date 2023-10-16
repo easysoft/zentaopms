@@ -122,24 +122,28 @@ toolbar
     )))
 );
 
+$canBatchEdit = common::hasPriv('product', 'batchEdit');
 dtable
 (
+    setID('products'),
     set::cols($cols),
     set::data($fnGenerateTableData($productStats)),
     set::userMap($users),
     set::customCols(true),
-    set::checkable(common::hasPriv('product', 'batchEdit')),
+    set::checkable($canBatchEdit),
     set::sortLink(createLink('product', 'all', "browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$recTotal}&recPerPage={$recPerPage}")),
     set::footToolbar(array
     (
         'type'  => 'btn-group',
-        'items' => array(array
-        (
-            'text'     => $lang->edit,
-            'btnType'  => 'secondary',
-            'data-url' => createLink('product', 'batchEdit'),
-            'onClick'  => jsRaw('onClickBatchEdit')
-        ))
+        'items' => array(
+            $canBatchEdit ? array
+            (
+                'text'      => $lang->edit,
+                'className' => 'secondary batch-btn',
+                'data-page' => 'batch',
+                'data-formaction' => $this->createLink('product', 'batchEdit')
+            ) : null,
+        )
     )),
     set::footPager(usePager())
 );

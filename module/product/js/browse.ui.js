@@ -57,7 +57,7 @@ window.renderCell = function(result, info)
     return result;
 };
 
-window.setStatistics = function(element, checkedIdList)
+window.setStatistics = function(element, checkedIdList, pageSummary)
 {
     if(checkedIdList.length == 0) return {html: pageSummary};
 

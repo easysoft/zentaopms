@@ -285,7 +285,6 @@ data('storyBrowseType', $storyBrowseType);
 
 jsVar('projectID',      $projectID);
 jsVar('modulePairs',    $modulePairs);
-jsVar('+pageSummary',   $summary);
 jsVar('checkedSummary', str_replace('%storyCommon%', $storyCommon, $lang->product->checkedSummary));
 
 featureBar
@@ -316,7 +315,7 @@ dtable
     set::data($data),
     set::sortLink(createLink('product', 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&param={$param}&storyType={$storyType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID")),
     set::onRenderCell(jsRaw('window.renderCell')),
-    set::checkInfo(jsRaw('function(checkedIdList){return window.setStatistics(this, checkedIdList);}')),
+    set::checkInfo(jsRaw("function(checkedIdList){return window.setStatistics(this, checkedIdList, '{$summary}');}")),
     set::footPager(usePager()),
     set::footToolbar($footToolbar),
 );

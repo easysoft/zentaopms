@@ -353,7 +353,7 @@ class productplanModel extends model
     public function getBranchPlanPairs(int $productID, array $branches = array(), string $param = '', bool $skipParent = false): array
     {
         $branchQuery = '';
-        if($branches !== '' and $branches !== 'all')
+        if(!empty($branches) and is_array($branches))
         {
             $branchQuery .= '(';
             foreach($branches as $branchID)

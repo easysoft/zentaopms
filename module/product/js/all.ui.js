@@ -23,22 +23,15 @@ window.programMenuOnClick = function(data, url)
     loadPage(url.replace('%d', data.item.key));
 };
 
-/**
- * Submit data to product batch edit page by html form while click on the batch edit button.
- *
- * @param  object event
- * @access public
- * @return void
- */
-window.onClickBatchEdit = function(event)
+$(document).off('click', '[data-formaction]').on('click', '[data-formaction]', function()
 {
-    const dtable = zui.DTable.query(event.target);
-
+    const $this       = $(this);
+    const dtable      = zui.DTable.query($('#products'));
     const checkedList = dtable.$.getChecks();
-    if(checkedList.length === 0) return;
+    if(!checkedList.length) return;
 
     const postData = new FormData();
     checkedList.forEach((id) => postData.append('productIDList[]', id));
 
-    postAndLoadPage($(event.target).parents('button').data('url'), postData);
-};
+    if($this.data('page') == 'batch') postAndLoadPage($this.data('formaction'), postData);
+});
