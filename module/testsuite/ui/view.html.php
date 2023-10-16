@@ -43,6 +43,7 @@ detailHeader
             common::hasPriv('testsuite', 'delete') ? a
             (
                 setClass('ghost btn btn-default'),
+                setData('confirm', $lang->testsuite->confirmDelete),
                 set::href(createLink('testsuite', 'delete', "suiteID={$suite->id}")),
                 icon('trash', setClass('text-primary')),
                 $lang->delete,
