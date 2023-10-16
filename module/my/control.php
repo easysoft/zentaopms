@@ -1355,6 +1355,7 @@ EOF;
      */
     public function changePassword()
     {
+        $this->app->loadLang('admin');
         if($this->app->user->account == 'guest') return print(js::alert('guest') . js::locate('back'));
         if(!empty($_POST))
         {

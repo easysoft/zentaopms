@@ -66,7 +66,7 @@ formPanel
     !empty($reason) ? div
     (
         setClass('alert alert-info'),
-        $lang->admin->safe->common . ' : ' . ($reason == 'weak' ? $lang->admin->safe->changeWeak : $lang->adin->safe->$reason)
+        $lang->admin->safe->common . ' : ' . ($reason == 'weak' ? $lang->admin->safe->changeWeak : $lang->admin->safe->$reason)
     ) : null
 );
 
