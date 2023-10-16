@@ -2362,7 +2362,8 @@ class project extends control
         if($projectID)
         {
             $project    = $this->project->getById($projectID);
-            $executions = array('' => '') + $this->loadModel('execution')->getPairs($projectID, $type, $mode);
+            $executions = $this->loadModel('execution')->getPairs($projectID, $type, $mode);
+            $executions = array('' => '') + $this->execution->resetExecutionSorts($executions, array(), array(), $projectID);
             $disabled   = !empty($project->multiple) ? '' : 'disabled';
         }
 
