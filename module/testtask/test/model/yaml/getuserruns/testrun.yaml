@@ -1,0 +1,10 @@
+title: table zt_testrun
+author: Gang Liu
+version: "1.0"
+fields:
+  - field: task
+    range: 1
+  - field: assignedTo
+    range: user1{8},user2{2}
+  - field: status
+    range: normal, blocked, done
