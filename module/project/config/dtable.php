@@ -113,6 +113,7 @@ $config->project->dtable->fieldList['actions']['name']     = 'actions';
 $config->project->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->project->dtable->fieldList['actions']['type']     = 'actions';
 $config->project->dtable->fieldList['actions']['sortType'] = false;
+$config->project->dtable->fieldList['actions']['width']    = '140';
 $config->project->dtable->fieldList['actions']['list']     = $config->project->actionList;
 $config->project->dtable->fieldList['actions']['menu']     = array(array('start|activate|close', 'other' => array('suspend', 'activate|close')), 'edit', 'group', 'perm', 'more' => array('link', 'whitelist', 'delete'));
 
