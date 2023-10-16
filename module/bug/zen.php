@@ -716,7 +716,7 @@ class bugZen extends bug
         $toTaskLink   = $bug->toTask  && $canViewTask  ? helper::createLink('task',  'view', "taskID={$bug->toTask}")   : '';
 
         $legendMisc = array();
-        $legendMisc['relatedBug'] = array('name' => $lang->bug->relatedBug, 'text' => isset($bug->linkBugTitles) ? $bug->linkBugTitles : array());
+        $legendMisc['relatedBug'] = array('name' => $lang->bug->relatedBug, 'text' => isset($bug->relatedBugTitles) ? $bug->relatedBugTitles : array());
         $legendMisc['toCase']     = array('name' => $lang->bug->toCase,     'text' => $bug->toCases);
         $legendMisc['toStory']    = array('name' => $lang->bug->toStory,    'text' => $toStoryName,  'href' => $toStoryLink,  'attr' => array('data-toggle' => 'modal', 'data-size' => 'lg'));
         $legendMisc['toTask']     = array('name' => $lang->bug->toTask,     'text' => $toTaskName,   'href' => $toTaskLink,   'attr' => array('data-toggle' => 'modal', 'data-size' => 'lg'));
