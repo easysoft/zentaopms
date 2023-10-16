@@ -843,6 +843,8 @@ class testcaseZen extends testcase
             $stories = $this->loadModel('story')->getProductStoryPairs($case->product, $case->branch, $moduleIdList, 'all','id_desc', 0, 'full', 'story', false);
         }
 
+        if(!in_array($this->app->tab, array('execution', 'project')) && empty($stories)) $stories = $this->story->getProductStoryPairs($case->product, $case->branch, 0, 'all', 'id_desc', 0, 'full', 'story', false);
+
         $this->view->stories = $stories;
     }
 
