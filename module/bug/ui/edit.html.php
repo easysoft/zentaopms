@@ -304,7 +304,8 @@ detailBody
                 (
                     set::items($lang->bug->browserList),
                     set::name('browser'),
-                    set::value($bug->browser)
+                    set::value($bug->browser),
+                    set::multiple(true),
                 )
             ),
             item
