@@ -163,7 +163,6 @@ class testreportZen extends testreport
         }
 
         $reportData = array('begin' => $begin, 'end' => $end, 'builds' => $builds, 'tasks' => $tasks, 'owner' => $owner, 'stories' => $stories, 'bugs' => $bugs, 'execution' => $execution, 'productIdList' => $productIdList);
-        if($method == 'create') unset($reportData['owner']);
         return $reportData;
     }
 
