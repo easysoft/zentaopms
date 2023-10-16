@@ -1533,9 +1533,9 @@ class executionZen extends execution
     protected function getLink(string $module, string $method, string $type = ''): string
     {
         $executionModules = array('task', 'testcase', 'build', 'bug', 'case', 'testtask', 'testreport');
-        if(in_array($module, array('task', 'testcase')) && in_array($method, array('view', 'edit', 'batchedit'))) $method = $module;
-        if(in_array($module, $executionModules) && in_array($method, array('view', 'edit')))                      $method = $module;
-        if(in_array($module, $executionModules + array('story', 'product')))                                      $module = 'execution';
+        if(in_array($module, array('task', 'testcase')) && in_array($method, array('view', 'edit', 'batchedit', 'create', 'batchcreate'))) $method = $module;
+        if(in_array($module, $executionModules) && in_array($method, array('view', 'edit'))) $method = $module;
+        if(in_array($module, $executionModules + array('story', 'product'))) $module = 'execution';
 
         if($module == 'story') $method = 'story';
         if($module == 'product' && $method == 'showerrornone') $method = 'task';
