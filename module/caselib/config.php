@@ -20,16 +20,17 @@ $config->caselib->customCreateFields   = 'stage,pri,keywords';
 
 include dirname(__FILE__) . DS . 'config' . DS . 'form.php';
 
-$config->caselib->actionList['edit']['icon']  = 'edit';
-$config->caselib->actionList['edit']['hint']  = $lang->caselib->edit;
-$config->caselib->actionList['edit']['text']  = $lang->edit;
-$config->caselib->actionList['edit']['url']   = helper::createLink('caselib', 'edit', 'libID={id}');
+$config->caselib->actionList['edit']['icon']      = 'edit';
+$config->caselib->actionList['edit']['hint']      = $lang->caselib->edit;
+$config->caselib->actionList['edit']['text']      = $lang->edit;
+$config->caselib->actionList['edit']['url']       = helper::createLink('caselib', 'edit', 'libID={id}');
+$config->caselib->actionList['edit']['data-load'] = 'modal';
 
 $config->caselib->actionList['delete']['icon']         = 'trash';
 $config->caselib->actionList['delete']['hint']         = $lang->caselib->delete;
 $config->caselib->actionList['delete']['text']         = $lang->caselib->delete;
 $config->caselib->actionList['delete']['url']          = helper::createLink('caselib', 'delete', 'libID={id}');
-$config->caselib->actionList['delete']['class']        = 'ajax-submit';
+$config->caselib->actionList['delete']['className']    = 'ajax-submit';
 $config->caselib->actionList['delete']['data-confirm'] = $lang->testcase->confirmDelete;
 
 $config->caselib->exportTemplateFields = array('module', 'title', 'precondition', 'stepDesc', 'stepExpect', 'keywords', 'pri', 'type', 'stage');
