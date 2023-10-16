@@ -472,7 +472,7 @@ class treeModel extends model
      */
     public function getTaskTreeMenu($rootID, $productID = 0, $startModule = 0, $userFunc = '', $extra = '')
     {
-        $extra = array('tip' => true, 'extra' => $extra);
+        $extra = array('tip' => true, 'extra' => $extra, 'executionID' => $rootID, 'productID' => $productID);
 
         /* If createdVersion <= 4.1, go to getTreeMenu(). */
         $products      = $this->loadModel('product')->getProductPairsByProject($rootID);
@@ -1133,8 +1133,8 @@ class treeModel extends model
     public function createTaskLink(string $type, object $module): object
     {
         $data = new stdclass();
-        $data->id     = $parent ? uniqid() : $module->id;
-        $data->parent = $parent ? $parent : $module->parent;
+        $data->id     = $module->id;
+        $data->parent = $module->parent;
         $data->name   = $module->name;
         $data->url    = helper::createLink('execution', 'task', "executionID={$executionID}&type=byModule&param={$module->id}");
 
@@ -1216,30 +1216,27 @@ class treeModel extends model
     /**
      * Create the task manage link of a module.
      *
-     * @param  int    $productID
+     * @param  string $type
      * @param  object $module
+     * @param  int    $parent
+     * @param  array  $extra
      * @access public
      * @return void
      */
-    public function createTaskManageLink($type, $module, $extra)
+    public function createTaskManageLink(string $type, object $module, int $parent, array $extra)
     {
         $executionID = $extra['executionID'];
         $productID   = $extra['productID'];
+        $moduleName  = ($extra['tip'] && $module->type != 'story' ? ' [T]' : '') . $module->name;
+
+        $data = new stdclass();
+        $data->id     = $module->id;
+        $data->parent = $module->parent;
+        $data->name   = $moduleName;
         $tip         = $extra['tip'];
-        $linkHtml    = $module->name;
-        $linkHtml   .= ($tip and $module->type != 'story') ? ' [T]' : '';
-        if($module->type == 'story')
-        {
-            if(common::hasPriv('tree', 'browseTask')) $linkHtml .= ' ' . html::a(helper::createLink('tree', 'browsetask', "rootID=$executionID&productID=$productID&module={$module->id}"), $this->lang->tree->child);
-        }
-        else
-        {
-            if(common::hasPriv('tree', 'edit'))        $linkHtml .= ' ' . html::a(helper::createLink('tree', 'edit', "module={$module->id}&type=task"), $this->lang->tree->edit, '', 'data-toggle="modal" data-type="ajax"');
-            if(common::hasPriv('tree', 'browseTask'))  $linkHtml .= ' ' . html::a(helper::createLink('tree', 'browsetask', "rootID=$executionID&productID=$productID&module={$module->id}"), $this->lang->tree->child);
-            if(common::hasPriv('tree', 'delete'))      $linkHtml .= ' ' . html::a(helper::createLink('tree', 'delete', "root={$module->root}&module={$module->id}"), $this->lang->delete, 'hiddenwin');
-            if(common::hasPriv('tree', 'updateorder')) $linkHtml .= ' ' . html::input("orders[$module->id]", $module->order, 'style="width:30px;text-align:center"');
-        }
-        return $linkHtml;
+        $data->url    = helper::createLink('tree', 'browsetask', "rootID=$executionID&productID=$productID&module={$module->id}");
+
+        return $data;
     }
 
     /**

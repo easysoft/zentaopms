@@ -108,7 +108,7 @@ $parentPath[] = span
     a
     (
         setClass('tree-link'),
-        set('href', helper::createLink('tree', 'browse', "rootID=$root->id&view={$viewType}&productID=$productID")),
+        set('href', helper::createLink('tree', 'browse', "rootID=$root->id&view={$viewType}&currentModuleID=0&branch=$branch")),
         $root->name,
     ),
     h::i
@@ -124,7 +124,7 @@ foreach($parentModules as $module)
         a
         (
             setClass('tree-link'),
-            set('href', helper::createLink('tree', 'browse', "rootID=$root->id&view={$viewType}&currentModuleID=$module->id&productID=$productID")),
+            set('href', helper::createLink('tree', 'browse', "rootID=$root->id&view={$viewType}&currentModuleID=$module->id&branch=$branch")),
             $module->name,
         ),
         h::i
