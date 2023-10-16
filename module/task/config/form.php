@@ -59,7 +59,7 @@ $config->task->form->edit['mailto']         = array('type' => 'array',    'requi
 $config->task->form->edit['mode']           = array('type' => 'string',   'required' => false, 'default' => '');
 $config->task->form->edit['assignedTo']     = array('type' => 'string',   'required' => false, 'default' => '');
 $config->task->form->edit['type']           = array('type' => 'string',   'required' => true);
-$config->task->form->edit['status']         = array('type' => 'string',   'required' => false, 'default' => '');
+$config->task->form->edit['status']         = array('type' => 'string',   'required' => true);
 $config->task->form->edit['pri']            = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->task->form->edit['estStarted']     = array('type' => 'date',     'required' => false, 'default' => null);
 $config->task->form->edit['deadline']       = array('type' => 'date',     'required' => false, 'default' => null);
