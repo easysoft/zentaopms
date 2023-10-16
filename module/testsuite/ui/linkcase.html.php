@@ -20,7 +20,7 @@ featureBar
             entityLabel(set(array('entityID' => $suite->id, 'level' => 3, 'text' => $suite->name))),
             icon('angle-right'),
             $lang->testsuite->linkCase,
-            div(searchToggle())
+            li(searchToggle(set::open(true)))
         )
     ),
 );

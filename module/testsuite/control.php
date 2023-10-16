@@ -334,6 +334,7 @@ class testsuite extends control
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->view->cases   = $this->testsuite->getUnlinkedCases($suite, $param, $pager);
         $this->view->suiteID = $suiteID;
+        $this->view->param   = $param;
         $this->view->pager   = $pager;
         $this->view->suite   = $suite;
         $this->display();
