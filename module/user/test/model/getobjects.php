@@ -2,7 +2,6 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';
-su('admin');
 
 $user = zdTable('user');
 $user->gen(50);
@@ -18,6 +17,7 @@ $project->multiple->range('1');
 $project->deleted->range('0{90},1{10}');
 $project->gen(100);
 
+su('admin');
 /**
 
 title=测试 userModel::getObjects();

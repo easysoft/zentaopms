@@ -23,4 +23,4 @@ $outsideUsers  = $user->getByQueryTest('outside');
 
 r(count($insideQAUsers)) && p()              && e('303');    //对比获取到的内部用户的数量
 r($insideQAUsers)        && p('302:account') && e('admin');  //按ID倒序查询内部用户，获取最后一个用户的account
-r($outsideUsers)         && p('0:realname')  && e('用户1');  //获取第一个外部用户的真实姓名
+r($outsideUsers)         && p('0:realname')  && e('外用户1');  //获取第一个外部用户的真实姓名

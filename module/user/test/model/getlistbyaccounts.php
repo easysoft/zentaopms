@@ -2,6 +2,7 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';
+zdTable('user')->gen(10);
 su('admin');
 
 $user = zdTable('user');

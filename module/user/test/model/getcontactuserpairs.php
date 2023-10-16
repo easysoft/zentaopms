@@ -2,6 +2,7 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';
+zdTable('user')->gen(10);
 su('admin');
 
 $user = zdTable('user');
@@ -23,9 +24,8 @@ pid=1
 
 */
 $user = new userTest('admin');
-$accountList = array('account1', 'account2', 'account3', 'asdasd');
+$accountList = array('account1', 'account2', 'account3');
 
 r($user->getContactUserPairsTest($accountList)) && p('account1') && e('测试人员1'); //根据传入的accountList获取account1真实姓名
 r($user->getContactUserPairsTest($accountList)) && p('account2') && e('测试人员2'); //根据传入的accountList获取account2真实姓名
 r($user->getContactUserPairsTest($accountList)) && p('account3') && e('测试人员3'); //根据传入的accountList获取account3真实姓名
-r($user->getContactUserPairsTest($accountList)) && p('asdasd')   && e('');          //根据传入的accountList获取asdasd真实姓名

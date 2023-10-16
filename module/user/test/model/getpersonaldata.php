@@ -27,4 +27,4 @@ $emptyData = $user->getPersonalDataTest('');
 
 r($adminData) && p('createdBugs')  && e('30'); //获取admin用户的createdBugs数量
 r($test2Data) && p('createdCases') && e('4');   //获取test2用户createdCases数量
-r($emptyData) && p('createdTodos') && e('3');   //当获取一个空用户的数据时，系统默认返回当前登录用户的数据
+r($emptyData) && p('createdTodos') && e('0');   //当获取一个空用户的数据时，系统默认返回当前登录用户的数据

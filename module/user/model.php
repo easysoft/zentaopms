@@ -1459,7 +1459,7 @@ class userModel extends model
         $contacts = $mode == 'pairs' ? $this->dao->fetchPairs('id', 'listName') : $this->dao->fetchAll();
         if(empty($contacts)) return array();
 
-        if(strpos($params, 'withempty') !== false) $contacts = $contacts;
+        if(strpos($params, 'withempty') !== false) $contacts = array('' => '') + $contacts;
         if(strpos($params, 'withnote')  !== false) $contacts = array('' => $this->lang->user->contacts->common) + $contacts;
 
         return $contacts;
@@ -1607,7 +1607,7 @@ class userModel extends model
     public function getDataInJSON($user)
     {
         $newUser = new stdclass();
-        foreach($user as $key => $value)$newUser->$key = $value;
+        foreach($user as $key => $value) $newUser->$key = $value;
         unset($newUser->password);
         unset($newUser->deleted);
         $newUser->company = $this->app->company->name;

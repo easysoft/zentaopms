@@ -20,5 +20,5 @@ pid=1
 $user = new userTest();
 $commiters = $user->getCommitersTest();
 
-r($commiters)        && p('user10') && e('测试10'); //获取源代码账号为user10的用户真实姓名
+r($commiters)        && p('user10') && e('用户10'); //获取源代码账号为user10的用户真实姓名
 r(count($commiters)) && p()         && e('30');     //获取系统中源代码账号不为空的用户数量
