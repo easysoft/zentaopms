@@ -28,12 +28,12 @@ featureBar
 /* zin: Define the toolbar on main menu. */
 toolbar();
 
-jsVar('orderBy',          $orderBy);
-jsVar('sortLink',         helper::createLink('compile', 'browse', "repoID=$repoID&jobID={$jobID}&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
+jsVar('orderBy',  $orderBy);
+jsVar('sortLink', helper::createLink('compile', 'browse', "repoID=$repoID&jobID={$jobID}&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 
 $tableData = initTableData($buildList, $config->compile->dtable->fieldList, $this->compile);
 
-foreach($tableData as $row) if(!$row->testtask) $row->actions[1]['disabled'] = 1;
+foreach($tableData as $row) if(!$row->testtask) unset($row->actions[1]);
 
 dtable
 (
