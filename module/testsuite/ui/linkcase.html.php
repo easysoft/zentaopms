@@ -27,7 +27,7 @@ featureBar
 
 $footToolbar = array('items' => array
 (
-    array('text' => $lang->save, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testsuite', 'linkCase', "suiteID=$suiteID&param=$param"))
+    array('text' => $lang->save, 'className' => 'batch-btn not-open-url ajax-btn', 'data-url' => helper::createLink('testsuite', 'linkCase', "suiteID=$suiteID&param=$param"))
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
 
 div
