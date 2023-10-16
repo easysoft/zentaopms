@@ -535,7 +535,6 @@ class admin extends control
                 'name'      => $menuKey,
                 'content'   => array('html' => "<div class='flex items-center my-2'><img class='mr-2' src='static/svg/admin-{$menuKey}.svg'/> {$menuGroup['name']}</div>"),
                 'text'      => '',
-                'title'     => $menuGroup['name'],
                 'type'      => 'item',
                 'url'       => $menuGroup['disabled'] ? '' : $menuGroup['link'],
                 'active'    => $currentMenuKey == $menuKey,
