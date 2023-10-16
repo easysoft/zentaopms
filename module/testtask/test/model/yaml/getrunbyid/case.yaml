@@ -1,0 +1,17 @@
+title: table zt_case
+author: Gang Liu
+version: "1.0"
+fields:
+  - field: execution
+    range: 0
+  - field: title
+    range: 1-100
+    prefix: 测试用例
+  - field: module
+    range: "1,2"
+  - field: story
+    range: 0
+  - field: storyVersion
+    range: 0
+  - field: deleted
+    range: 0{4},1
