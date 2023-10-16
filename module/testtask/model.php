@@ -1142,13 +1142,15 @@ class testtaskModel extends model
      *
      * @param  int    $runID
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getRunById(int $runID): object
+    public function getRunById(int $runID): object|false
     {
-        $testRun = $this->dao->findById($runID)->from(TABLE_TESTRUN)->fetch();
-        $testRun->case = $this->loadModel('testcase')->getById($testRun->case, $testRun->version);
-        return $testRun;
+        $run = $this->dao->findById($runID)->from(TABLE_TESTRUN)->fetch();
+        if(!$run) return false;
+
+        $run->case = $this->loadModel('testcase')->getById($run->case, $run->version);
+        return $run;
     }
 
     /**
