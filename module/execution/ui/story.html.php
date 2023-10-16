@@ -55,8 +55,8 @@ modal
 $canModifyProduct = common::canModify('product', $product);
 $canCreate        = $canModifyProduct && hasPriv('story', 'create');
 $canBatchCreate   = $canModifyProduct && hasPriv('story', 'canBatchCreate');
-$createLink       = createLink('story', 'create', "product={$product->id}&branch=0&moduleID=0&storyID=0&objectID={$execution->id}&bugID=0&planID=0&todoID=0&extra=&storyType={$storyType}");
-$batchCreateLink  = createLink('story', 'batchCreate', "productID={$product->id}&branch=0&moduleID=0&storyID=0&executionID={$execution->id}&plan=0&storyType={$storyType}");
+$createLink       = createLink('story', 'create', "product={$product->id}&branch=0&moduleID=0&storyID=0&objectID={$execution->id}&bugID=0&planID=0&todoID=0&extra=&storyType={$storyType}") . '#app=execution';
+$batchCreateLink  = createLink('story', 'batchCreate', "productID={$product->id}&branch=0&moduleID=0&storyID=0&executionID={$execution->id}&plan=0&storyType={$storyType}") . '#app=execution';
 
 /* Tutorial create link. */
 if(commonModel::isTutorialMode())
@@ -90,7 +90,7 @@ toolbar
         'text'  => $lang->story->report->common,
         'icon'  => 'bar-chart',
         'class' => 'ghost',
-        'url'   => createLink('story', 'report', "productID={$product->id}&branchID=&storyType={$storyType}&browseType={$type}&moduleID={$param}&chartType=pie&projectID={$execution->id}#app=execution"),
+        'url'   => createLink('story', 'report', "productID={$product->id}&branchID=&storyType={$storyType}&browseType={$type}&moduleID={$param}&chartType=pie&projectID={$execution->id}") . '#app=execution',
     ))) : null,
     hasPriv('story', 'export') ? item(set(array
     (
