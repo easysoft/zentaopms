@@ -821,7 +821,14 @@ class executionZen extends execution
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
     }
 
-    protected function checkPostForCreate() : bool
+    /**
+     * 检查创建的表单数据。
+     * Check the form data for create.
+     *
+     * @access protected
+     * @return bool
+     */
+    protected function checkPostForCreate(): bool
     {
         if(empty($_POST['project']))
         {
@@ -831,7 +838,7 @@ class executionZen extends execution
 
         $projectID = (int)$_POST['project'];
         $project   = $this->loadModel('project')->fetchByID($projectID);
-        $this->execution->checkBeginAndEndDate($projectID, $_POST['begin'], $_POST['end']);
+        $this->execution->checkBeginAndEndDate($projectID, $_POST['begin'], $_POST['end'], $projectID);
         if(dao::isError()) return false;
 
         /* Judge workdays is legitimate. */
@@ -845,12 +852,14 @@ class executionZen extends execution
         $_POST['products'] = array_filter($_POST['products']);
         if($_POST['products'])
         {
+            $this->app->loadLang('project');
             $multipleProducts  = $this->loadModel('product')->getMultiBranchPairs();
             foreach($_POST['products'] as $index => $productID)
             {
-                if(isset($multipleProducts[$productID]) && !isset($_POST['branch'][$index]))
+                $branches = implode(',', $_POST['branch'][$index]);
+                if(isset($multipleProducts[$productID]) && $branches == '')
                 {
-                    dao::$errors[] = $this->lang->project->emptyBranch;
+                    dao::$errors["branch[{$index}][]"] = $this->lang->project->error->emptyBranch;
                     return false;
                 }
             }
@@ -859,7 +868,9 @@ class executionZen extends execution
         /* Determine whether to add a sprint or a stage according to the model of the execution. */
         if($project->model == 'waterfall' || $project->model == 'waterfallplus')
         {
-            if(empty($_POST['products'])) dao::$errors['products0'] = $this->lang->project->errorNoProducts;
+            if(empty($_POST['products'])) dao::$errors['products[0]'] = $this->lang->project->errorNoProducts;
+            if(dao::isError()) return false;
+
             if(isset($this->config->setPercent) && $this->config->setPercent == 1) $this->execution->checkWorkload('create', (int)$_POST['percent'], $project);
             if(dao::isError()) return false;
             $this->config->execution->create->requiredFields .= ',percent';
@@ -868,6 +879,13 @@ class executionZen extends execution
         return true;
     }
 
+    /**
+     * 构造创建执行的数据。
+     * Build the data for create execution.
+     *
+     * @access protected
+     * @return object|false
+     */
     protected function buildExecutionForCreate(): object|false
     {
         if(!$this->checkPostForCreate()) return false;
@@ -1870,13 +1888,13 @@ class executionZen extends execution
 
             $lang->execution->typeList['sprint'] = $executionCommonLang;
         }
-        elseif($project->model == 'waterfall' or $project->model == 'waterfallplus')
+        elseif($project->model == 'waterfall' || $project->model == 'waterfallplus')
         {
+            $this->app->loadLang('stage');
+
             global $lang;
             $lang->executionCommon = $lang->execution->stage;
             include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
-
-            $this->config->execution->create->requiredFields .= ',products0';
         }
 
         if(isset($project->hasProduct) and empty($project->hasProduct)) $this->lang->execution->PO = $this->lang->common->story . $this->lang->execution->owner;

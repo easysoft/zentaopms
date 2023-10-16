@@ -981,6 +981,7 @@ class execution extends control
         $this->view->gobackLink          = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('execution', 'all') : '';
         $this->view->allProducts         = array_filter($this->executionZen->getAllProductsForCreate($project));
         $this->view->allProjects         = $this->project->getPairsByModel('all', 'noclosed,multiple');
+        $this->view->multiBranchProducts = $this->loadModel('product')->getMultiBranchPairs();
         $this->view->products            = $products;
         $this->view->teams               = $this->execution->getCanCopyObjects($projectID);
         $this->view->users               = $this->loadModel('user')->getPairs('nodeleted|noclosed');
@@ -1042,11 +1043,13 @@ class execution extends control
                 ->setIF(helper::isZeroDate($this->post->end), 'end', '')
                 ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
                 ->join('whitelist', ',')
-                ->setIF($this->post->status == 'closed' and $oldExecution->status != 'closed', 'closedDate', helper::now())
-                ->setIF($this->post->status == 'suspended' and $oldExecution->status != 'suspended', 'suspendedDate', helper::today())
+                ->setIF($this->post->status == 'closed' && $oldExecution->status != 'closed', 'closedDate', helper::now())
+                ->setIF($this->post->status == 'suspended' && $oldExecution->status != 'suspended', 'suspendedDate', helper::today())
                 ->setIF($oldExecution->type == 'stage', 'project', $oldExecution->project)
                 ->setDefault('days', '0')
                 ->setDefault('team', $this->post->name)
+                ->setDefault('products', $this->post->products)
+                ->setDefault('branch', $this->post->branch)
                 ->stripTags($this->config->execution->editor->edit['id'], $this->config->allowedTags)
                 ->cleanInt('id,project')
                 ->get();
@@ -1127,6 +1130,7 @@ class execution extends control
         $this->view->groups               = $this->loadModel('group')->getPairs();
         $this->view->branches             = $branches;
         $this->view->allProducts          = $linkedObjects->allProducts;
+        $this->view->multiBranchProducts  = $this->product->getMultiBranchPairs();
         $this->view->linkedProducts       = $linkedObjects->linkedProducts;
         $this->view->linkedBranches       = $linkedObjects->linkedBranches;
         $this->view->linkedStoryIDList    = $linkedObjects->linkedStoryIDList;

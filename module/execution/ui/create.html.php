@@ -18,6 +18,7 @@ jsVar('errorSameProducts', $lang->execution->errorSameProducts);
 jsVar('isStage', $isStage);
 jsVar('copyExecutionID', $copyExecutionID);
 jsVar('executionID', isset($executionID) ? $executionID : 0);
+jsVar('multiBranchProducts', $multiBranchProducts);
 
 $methodBox         = null;
 $showExecutionExec = !empty($from) and ($from == 'execution' || $from == 'doc');
@@ -65,7 +66,8 @@ if((empty($project) || $project->model != 'kanban') && $execution->type != 'kanb
                 set::id($isStage ? 'attribute' : 'lifetime'),
                 set::name($isStage ? 'attribute' : 'lifetime'),
                 set::items($isStage ? $lang->stage->typeList : $lang->execution->lifeTimeList),
-                !$isStage ? on::change('showLifeTimeTips') : null
+                !$isStage ? on::change('showLifeTimeTips') : null,
+                set::required(true),
             )
         ),
         formGroup
@@ -106,7 +108,7 @@ if(isset($project->hasProduct) && !empty($project->hasProduct) && $products)
             (
                 set::width($hasBranch ? '1/4' : '1/2'),
                 setClass('linkProduct'),
-                set::required(true),
+                set::required(in_array($project->model, array('waterfall', 'waterfallplus'))),
                 $i == 0 ? set::label($lang->project->manageProducts) : set::label(''),
                 inputGroup
                 (
@@ -211,7 +213,7 @@ else
         (
             set::width('1/2'),
             setClass('linkProduct'),
-            set::required(true),
+            set::required(in_array($project->model, array('waterfall', 'waterfallplus'))),
             set::label($lang->project->manageProducts),
             picker
             (

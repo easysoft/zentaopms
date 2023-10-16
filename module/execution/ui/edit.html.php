@@ -24,6 +24,7 @@ jsVar('branchGroups', $branchGroups);
 jsVar('isWaterfall', isset($project) && ($project->model == 'waterfall' || $project->model == 'waterfallplus'));
 jsVar('executionAttr', $execution->attribute);
 jsVar('window.lastProjectID', $execution->project);
+jsVar('multiBranchProducts', $multiBranchProducts);
 
 $projectBox = null;
 if(isset($project))
@@ -81,6 +82,7 @@ if($project->model == 'waterfall' || $project->model == 'waterfallplus')
                     set::name('attribute'),
                     set::items($lang->stage->typeList),
                     set::value($execution->attribute),
+                    set::required(true),
                 ) : span(zget($lang->stage->typeList, $execution->attribute)),
             ),
             formGroup
@@ -113,6 +115,7 @@ elseif($execution->type != 'kanban')
                     set::name('lifetime'),
                     set::items($lang->execution->lifeTimeList),
                     set::value($execution->lifetime),
+                    set::required(true),
                     on::change('showLifeTimeTips')
                 )
             ),
@@ -388,9 +391,9 @@ else
             );
 
         $i ++;
+        $productsBox[] = formHidden('products[]', key($linkedProducts));
+        $productsBox[] = formHidden('branch', json_encode(array_values($linkedBranches)));
     }
-    $productsBox[] = formHidden('products[]', key($linkedProducts));
-    $productsBox[] = formHidden('branch', json_encode(array_values($linkedBranches)));
 }
 
 if(helper::isAjaxRequest('modal')) modalHeader(set::title($lang->execution->edit));
@@ -491,9 +494,13 @@ formPanel
     (
         set::width('1/2'),
         set::label($lang->execution->status),
-        set::name('status'),
-        set::items($lang->execution->statusList),
-        set::value($execution->status),
+        picker
+        (
+            set::name('status'),
+            set::items($lang->execution->statusList),
+            set::value($execution->status),
+            set::required(true),
+        )
     ),
     $productsBox,
     formRowGroup(set::title($lang->execution->teamSetting)),
