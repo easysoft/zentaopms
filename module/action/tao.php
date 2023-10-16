@@ -383,7 +383,7 @@ class actionTao extends actionModel
         elseif(in_array($type, array('build', 'bug', 'release', 'testtask')))
         {
             $object = $this->fetchObjectInfoByID($table, (int)$action->extra, 'name');
-            if($object && $object->name) $action->extra = common::hasPriv($type, $method) ? html::a(helper::createLink($type, $method, $this->processParamString($action, $type), $object->name)) : $object->name;
+            if($object && $object->name) $action->extra = common::hasPriv($type, $method) ? html::a(helper::createLink($type, $method, $this->processParamString($action, $type)), $object->name) : $object->name;
         }
         elseif($type == 'revision')
         {
@@ -551,6 +551,7 @@ class actionTao extends actionModel
                 $name   = $this->dao->select($field)->from($table)->where('id')->eq($id)->fetch($field);
                 if($name) $action->appendLink = html::a(helper::createLink($module, 'view', "id={$id}"), "#{$id} " . $name);
             }
+            $action->extra = $extra;
         }
     }
 
