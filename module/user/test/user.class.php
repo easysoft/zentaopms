@@ -426,8 +426,6 @@ class userTest
      */
     public function identifyTest($account, $password)
     {
-        $_POST = $params;
-
         $user = $this->objectModel->identify($account, $password);
         unset($_POST);
 

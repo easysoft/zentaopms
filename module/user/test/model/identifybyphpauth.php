@@ -3,10 +3,8 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';
 
+zdTable('user')->gen(300);
 su('admin');
-
-$user = zdTable('user');
-$user->gen(300);
 
 /**
 
@@ -36,4 +34,4 @@ $notExistUser = $user->identifyByPhpAuthTest('asdqwe');
 
 r($normalUser)    && p() && e('1'); //验证admin用户
 r($guest)         && p() && e('0'); //验证游客用户
-r($notExistsUser) && p() && e('0'); //获取不存在的用户
+r($notExistUser)  && p() && e('0'); //获取不存在的用户

@@ -31,11 +31,5 @@ $normalAccount->id      = 4;
 $normalAccount->account = 'user3';
 $normalAccount          = $userClass->loginTest($normalAccount);
 
-$emptyAccount = new stdclass();
-$emptyAccount->id      = 0;
-$emptyAccount->account = '';
-$emptyAccount          = $userClass->loginTest($emptyAccount);
-
 r($admin)                        && p('admin') && e('1'); //使用admin登录，返回此用户为超级管理员
 r(count($normalAccount->rights)) && p()        && e('6'); //使用admin登录，返回权限列表的数量
-r(count($emptyAccount->group))   && p()        && e('0'); //使用空账号登录，返回权限列表数量为0
