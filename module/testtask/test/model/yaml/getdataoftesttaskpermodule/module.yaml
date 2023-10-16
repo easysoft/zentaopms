@@ -12,6 +12,6 @@ fields:
       - field: path1
         range: "`,1,`,`,2,`,`,1,3,`,`,1,3,4,`"
   - field: grade
-    range: 1,1,2,3
+    range: "1,1,2,3"
   - field: type
     range: testtask
