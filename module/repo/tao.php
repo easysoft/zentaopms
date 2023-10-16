@@ -18,11 +18,11 @@ class repoTao extends repoModel
      *
      * @param  int       $repoID
      * @access protected
-     * @return object|false
+     * @return string|false
      */
-    protected function getLastRevision(int $repoID): object|false
+    protected function getLastRevision(int $repoID): string|false
     {
-        return $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->orderBy('time_desc')->fetch();
+        return $this->dao->select('time')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->orderBy('time_desc')->fetch('time');
     }
 
     /**
@@ -38,6 +38,33 @@ class repoTao extends repoModel
         $this->dao->delete()->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->exec();
         $this->dao->delete()->from(TABLE_REPOFILES)->where('repo')->eq($repoID)->exec();
         $this->dao->delete()->from(TABLE_REPOBRANCH)->where('repo')->eq($repoID)->exec();
+    }
+
+    /**
+     * 处理版本库搜索查询。
+     * Process repo search query.
+     *
+     * @param  int       $queryID
+     * @access protected
+     * @return string
+     */
+    protected function processSearchQuery(int $queryID): string
+    {
+            $queryName = 'repoQuery';
+
+            if($queryID)
+            {
+                $query = $this->loadModel('search')->getQuery($queryID);
+
+                if($query)
+                {
+                    $this->session->set($queryName, $query->sql);
+                    $this->session->set('repoForm', $query->form);
+                }
+            }
+            if($this->session->$queryName == false) $this->session->set($queryName, ' 1 = 1');
+
+            return  $this->session->$queryName;
     }
 }
 

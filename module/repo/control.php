@@ -215,121 +215,10 @@ class repo extends control
         $error = $this->repoZen->checkDeleteError($repoID);
         if($error) return $this->send(array('result' => 'fail', 'message' => $error));
 
-        $this->dao->delete()->from(TABLE_REPO)->where('id')->eq($repoID)->exec();
+        $this->repo->deleteRepo($repoID);
         if(dao::isError()) return print(js::error(dao::getError()));
-        $this->loadModel('action')->create('repo', $repoID, 'deleted', '');
+
         return $this->send(array('result' => 'success', 'load' => true));
-    }
-
-    /**
-     * Get diff editor content by ajax.
-     *
-     * @param  int    $repoID
-     * @param  int    $objectID
-     * @param  string $entry
-     * @param  string $oldRevision
-     * @param  string $newRevision
-     * @param  string $showBug
-     * @param  string $encoding
-     * @access public
-     * @return void
-     */
-    public function ajaxGetDiffEditorContent($repoID, $objectID = 0, $entry = '', $oldRevision = '', $newRevision = '', $showBug = 'false', $encoding = '')
-    {
-        $file      = $entry;
-        $repo      = $this->repo->getByID($repoID);
-        $entry     = urldecode($this->repo->decodePath($entry));
-        $revision  = str_replace('*', '-', $oldRevision);
-        $nRevision = str_replace('*', '-', $newRevision);
-
-        $entry    = urldecode($entry);
-        $pathInfo = pathinfo($entry);
-        $encoding = empty($encoding) ? $repo->encoding : $encoding;
-        $encoding = strtolower(str_replace('_', '-', $encoding));
-
-        $this->scm->setEngine($repo);
-        $info = $this->scm->info($entry, $nRevision);
-
-        $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->diff;
-        $this->view->type        = 'diff';
-        $this->view->encoding    = str_replace('-', '_', $encoding);
-        $this->view->repoID      = $repoID;
-        $this->view->objectID    = $objectID;
-        $this->view->repo        = $repo;
-        $this->view->revision    = $nRevision;
-        $this->view->oldRevision = $revision;
-        $this->view->file        = $file;
-        $this->view->entry       = $entry;
-        $this->view->info        = $info;
-        $this->view->content     = '';
-        $this->view->pathInfo    = $pathInfo;
-        $this->view->suffix      = 'c';
-        $this->view->blames      = array();
-        $this->view->showEditor  = true;
-        $this->display('repo', 'ajaxgeteditorcontent');
-    }
-
-    /**
-     * Get editor content by ajax.
-     *
-     * @param  int    $repoID
-     * @param  int    $objectID
-     * @param  string $entry
-     * @param  string $revision
-     * @param  string $showBug
-     * @param  string $encoding
-     * @access public
-     * @return void
-     */
-    public function ajaxGetEditorContent($repoID, $objectID = 0, $entry = '', $revision = 'HEAD', $showBug = 'false', $encoding = '')
-    {
-        $file     = $entry;
-        $repo     = $this->repo->getByID($repoID);
-        $entry    = urldecode($this->repo->decodePath($entry));
-        $revision = str_replace('*', '-', $revision);
-
-        $this->scm->setEngine($repo);
-        $info = $this->scm->info($entry, $revision);
-        $path = $entry ? $info->path : '';
-        if($info->kind == 'dir') $this->locate($this->repo->createLink('browse', "repoID=$repoID&branchID=&objectID=$objectID&path=" . $this->repo->encodePath($path) . "&revision=$revision"));
-        $content  = $this->scm->cat($entry, $revision);
-        $entry    = urldecode($entry);
-        $pathInfo = pathinfo($entry);
-        $encoding = empty($encoding) ? $repo->encoding : $encoding;
-        $encoding = strtolower(str_replace('_', '-', $encoding));
-
-        $suffix   = '';
-        if(isset($pathInfo["extension"])) $suffix = strtolower($pathInfo["extension"]);
-        if(!$suffix or (!array_key_exists($suffix, $this->config->program->suffix) and strpos($this->config->repo->images, "|$suffix|") === false)) $suffix = $this->repo->isBinary($content, $suffix) ? 'binary' : 'c';
-
-        if(strpos($this->config->repo->images, "|$suffix|") !== false)
-        {
-            $content = base64_encode($content);
-        }
-        elseif($encoding != 'utf-8')
-        {
-            $content = helper::convertEncoding($content, $encoding);
-        }
-
-        $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->view;
-        $this->view->type        = 'view';
-        $this->view->showBug     = $showBug;
-        $this->view->encoding    = str_replace('-', '_', $encoding);
-        $this->view->repoID      = $repoID;
-        $this->view->branchID    = $this->cookie->repoBranch;
-        $this->view->objectID    = $objectID;
-        $this->view->repo        = $repo;
-        $this->view->revision    = $revision;
-        $this->view->oldRevision = '';
-        $this->view->file        = $file;
-        $this->view->entry       = $entry;
-        $this->view->path        = $entry;
-        $this->view->info        = $info;
-        $this->view->suffix      = $suffix;
-        $this->view->content     = $content ? $content : '';
-        $this->view->pathInfo    = $pathInfo;
-        $this->view->showEditor  = (strpos($this->config->repo->images, "|$suffix|") === false and $suffix != 'binary') ? true : false;
-        $this->display();
     }
 
     /**
@@ -558,7 +447,7 @@ class repo extends control
         $infos          = $this->repoZen->getFilesInfo($repo, $path, $branchID, $refresh, $revision, $lastRevision, $base64BranchID, $objectID);
 
         /* Synchronous commit only in root path. */
-        if(in_array($repo->SCM, $this->config->repo->gitTypeList) and empty($path) and $infos and empty($revisions)) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID&branch=" . helper::safe64Encode(base64_encode($this->cookie->repoBranch))));
+        if(in_array($repo->SCM, $this->config->repo->gitTypeList) && $repo->SCM != 'Gitlab' && empty($path) && $infos && empty($revisions)) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID&branch=" . helper::safe64Encode(base64_encode($this->cookie->repoBranch))));
 
         $this->view->title           = $this->lang->repo->common;
         $this->view->repo            = $repo;
@@ -987,71 +876,29 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function linkStory($repoID, $revision, $browseType = '', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function linkStory(int $repoID, string $revision, string $browseType = '', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 10, int $pageID = 1)
     {
-        if(!empty($_POST['stories']))
-        {
-            $this->repo->link($repoID, $revision, 'story');
-
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            return $this->send(array('result' => 'success', 'callback' => "$('.tab-content .active iframe')[0].contentWindow.getRelation('$revision')", 'closeModal' => true));
-        }
+        if(!empty($_POST['stories'])) return $this->send($this->repoZen->linkObject($repoID, $revision, 'story'));
 
         $this->loadModel('story');
-        $this->app->loadLang('release');
-        $this->app->loadModuleConfig('release');
+        $this->loadModel('release');
         $this->app->loadLang('productplan');
 
         $repo    = $this->repo->getByID($repoID);
-        $product = $this->loadModel('product')->getById($repo->product);
-        $modules = $this->loadModel('tree')->getOptionMenu($repo->product, 'story');
+        $product = $this->loadModel('product')->getById((int)$repo->product);
+        $modules = $this->loadModel('tree')->getOptionMenu((int)$repo->product, 'story');
+        $queryID = $browseType == 'bySearch' ? (int)$param : 0;
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Build search form. */
-        unset($this->lang->story->statusList['closed']);
-        $storyStatusList = $this->lang->story->statusList;
-        $queryID         = $browseType == 'bySearch' ? (int)$param : 0;
-
-        unset($this->config->product->search['fields']['product']);
-        $this->config->product->search['actionURL']                   = $this->createLink('repo', 'linkStory', "repoID=$repoID&revision=$revision&browseType=bySearch&queryID=myQueryID");
-        $this->config->product->search['queryID']                     = $queryID;
-        $this->config->product->search['style']                       = 'simple';
-        $this->config->product->search['params']['plan']['values']    = $this->loadModel('productplan')->getForProducts(array($product->id => $product->id));
-        $this->config->product->search['params']['module']['values']  = $modules;
-        $this->config->product->search['params']['status']            = array('operator' => '=', 'control' => 'select', 'values' => $storyStatusList);
-
-        if($product->type == 'normal')
-        {
-            unset($this->config->product->search['fields']['branch']);
-            unset($this->config->product->search['params']['branch']);
-        }
-        else
-        {
-            $this->config->product->search['fields']['branch'] = $this->lang->product->branch;
-            $this->config->product->search['params']['branch']['values'] = $this->loadModel('branch')->getPairs($product->id, 'noempty');
-        }
-
-        session_start();
-        $this->loadModel('search')->setSearchParams($this->config->product->search);
-        session_write_close();
-
-        $linkedStories = $this->repo->getRelationByCommit($repoID, $revision, 'story');
-        if($browseType == 'bySearch')
-        {
-            $allStories = $this->story->getBySearch($product->id, 0, $queryID, $orderBy, '', 'story', array_keys($linkedStories), $pager);
-        }
-        else
-        {
-            $allStories = $this->story->getProductStories($product->id, 0, '0', 'draft,active,changed', 'story', $orderBy, false, array_keys($linkedStories), $pager);
-        }
+        $this->repoZen->buildStorySearchForm($repoID, $revision, $browseType, $queryID, $product, $modules);
 
         $this->view->modules        = $modules;
         $this->view->users          = $this->loadModel('user')->getPairs('noletter');
-        $this->view->allStories     = $allStories;
+        $this->view->allStories     = $this->repoZen->getLinkStories($repoID, $revision, $browseType, $product, $orderBy, $pager, $queryID);
         $this->view->product        = $product;
         $this->view->repoID         = $repoID;
         $this->view->revision       = $revision;
@@ -1076,71 +923,29 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function linkBug($repoID, $revision = '', $browseType = '', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function linkBug(int $repoID, string $revision = '', string $browseType = '', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 10, int $pageID = 1)
     {
-        if(!empty($_POST['bugs']))
-        {
-            $this->repo->link($repoID, $revision, 'bug');
-
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            return $this->send(array('result' => 'success', 'callback' => "$('.tab-content .active iframe')[0].contentWindow.getRelation('$revision')", 'closeModal' => true));
-        }
+        if(!empty($_POST['bugs'])) return $this->send($this->repoZen->linkObject($repoID, $revision, 'bug'));
 
         $this->loadModel('bug');
-        $this->app->loadLang('release');
-        $this->app->loadModuleConfig('release');
+        $this->loadModel('release');
         $this->app->loadLang('productplan');
-        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
 
         $repo    = $this->repo->getByID($repoID);
-        $product = $this->loadModel('product')->getById($repo->product);
-        $modules = $this->loadModel('tree')->getOptionMenu($product->id, 'bug');
+        $product = $this->loadModel('product')->getById((int)$repo->product);
+        $modules = $this->loadModel('tree')->getOptionMenu((int)$product->id, 'bug');
+        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Build search form. */
-        $this->config->bug->search['actionURL']                         = $this->createLink('repo', 'linkBug', "repoID=$repoID&revision=$revision&browseType=bySearch&queryID=myQueryID");
-        $this->config->bug->search['queryID']                           = $queryID;
-        $this->config->bug->search['style']                             = 'simple';
-        $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($product->id => $product->id));
-        $this->config->bug->search['params']['module']['values']        = $modules;
-        $this->config->bug->search['params']['execution']['values']     = $this->product->getExecutionPairsByProduct($product->id);
-        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($product->id, 'all', '');
-        $this->config->bug->search['params']['resolvedBuild']['values'] = $this->loadModel('build')->getBuildPairs($product->id, 'all', '');
-
-        unset($this->config->bug->search['fields']['product']);
-        if($product->type == 'normal')
-        {
-            unset($this->config->bug->search['fields']['branch']);
-            unset($this->config->bug->search['params']['branch']);
-        }
-        else
-        {
-            $this->config->bug->search['fields']['branch']           = $this->lang->product->branch;
-            $this->config->bug->search['params']['branch']['values'] = $this->loadModel('branch')->getPairs($product->id, 'noempty');
-        }
-        session_start();
-        $this->loadModel('search')->setSearchParams($this->config->bug->search);
-        session_write_close();
-
-        $linkedBugs = $this->repo->getRelationByCommit($repoID, $revision, 'bug');
-        if($browseType == 'bySearch')
-        {
-            $allBugs = $this->bug->getBySearch($product->id, 0, $queryID, $orderBy, array_keys($linkedBugs), $pager);
-        }
-        else
-        {
-            $allBugs = $this->bug->getActiveBugs($product->id, 0, '0', array_keys($linkedBugs), $pager, $orderBy);
-        }
-
-        foreach($allBugs as $bug) $bug->statusText = $this->processStatus('bug', $bug);
+        $this->repoZen->buildBugSearchForm($repoID, $revision, $browseType, $queryID, $product, $modules);
 
         $this->view->modules     = $modules;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-        $this->view->allBugs     = $allBugs;
+        $this->view->allBugs     = $this->repoZen->getLinkBugs($repoID, $revision, $browseType, $product, $orderBy, $pager, $queryID);
         $this->view->product     = $product;
         $this->view->repoID      = $repoID;
         $this->view->revision    = $revision;
@@ -1165,16 +970,9 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function linkTask($repoID, $revision = '', $browseType = 'unclosed', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function linkTask(int $repoID, string $revision = '', string $browseType = 'unclosed', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 10, int $pageID = 1)
     {
-        if(!empty($_POST['tasks']))
-        {
-            $this->repo->link($repoID, $revision, 'task');
-
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            return $this->send(array('result' => 'success', 'callback' => "$('.tab-content .active iframe')[0].contentWindow.getRelation('$revision')", 'closeModal' => true));
-        }
+        if(!empty($_POST['tasks'])) return $this->send($this->repoZen->linkObject($repoID, $revision, 'task'));
 
         $this->loadModel('execution');
         $this->loadModel('product');
@@ -1182,64 +980,26 @@ class repo extends control
 
         /* Set browse type. */
         $browseType = strtolower($browseType);
-        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
 
         $repo    = $this->repo->getByID($repoID);
-        $product = $this->loadModel('product')->getById($repo->product);
-        $modules = $this->loadModel('tree')->getOptionMenu($product->id, 'task');
+        $product = $this->loadModel('product')->getById((int)$repo->product);
+        $modules = $this->loadModel('tree')->getOptionMenu((int)$product->id, 'task');
+        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        /* Build search form. */
-        $this->config->execution->search['actionURL']                     = $this->createLink('repo', 'linkTask', "repoID=$repoID&revision=$revision&browseType=bySearch&queryID=myQueryID", '', true);
-        $this->config->execution->search['queryID']                       = $queryID;
-        $this->config->execution->search['style']                         = 'simple';
-        $this->config->execution->search['params']['module']['values']    = $modules;
-        $this->config->execution->search['params']['execution']['values'] = $this->product->getExecutionPairsByProduct($product->id);
-
         /* Get executions by product. */
         $productExecutions   = $this->product->getExecutionPairsByProduct($product->id);
         $productExecutionIDs = array_filter(array_keys($productExecutions));
-        $this->config->execution->search['params']['execution']['values'] = array_filter($productExecutions);
 
-        session_start();
-        $this->loadModel('search')->setSearchParams($this->config->execution->search);
-        session_write_close();
-
-        /* Get tasks by executions. */
-        $allTasks = array();
-        foreach($productExecutionIDs as $productExecutionID)
-        {
-            $tasks    = $this->execution->getTasks(0, $productExecutionID, array(), $browseType, $queryID, 0, $orderBy, null);
-            $allTasks = array_merge($tasks, $allTasks);
-        }
-
-        /* Filter linked tasks. */
-        $linkedTasks   = $this->repo->getRelationByCommit($repoID, $revision, 'task');
-        $linkedTaskIDs = array_keys($linkedTasks);
-        foreach($allTasks as $key => $task)
-        {
-            if(in_array($task->id, $linkedTaskIDs)) unset($allTasks[$key]);
-        }
-
-        /* Page the records. */
-        $pager->setRecTotal(count($allTasks));
-        $pager->setPageTotal();
-        if($pager->pageID > $pager->pageTotal) $pager->setPageID($pager->pageTotal);
-        $count    = 1;
-        $limitMin = ($pager->pageID - 1) * $pager->recPerPage;
-        $limitMax = $pager->pageID * $pager->recPerPage;
-        foreach($allTasks as $key => $task)
-        {
-            if($count <= $limitMin or $count > $limitMax) unset($allTasks[$key]);
-            $count ++;
-        }
+        /* Build search form. */
+        $this->repoZen->buildTaskSearchForm($repoID, $revision, $browseType, $queryID, $product, $modules, $productExecutions);
 
         $this->view->modules      = $modules;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
-        $this->view->allTasks     = $allTasks;
+        $this->view->allTasks     = $this->repoZen->getLinkTasks($repoID, $revision, $browseType, $product, $orderBy, $pager, $queryID, $productExecutionIDs);
         $this->view->product      = $product;
         $this->view->repoID       = $repoID;
         $this->view->revision     = $revision;
@@ -1304,6 +1064,121 @@ class repo extends control
         $this->view->projects    = $this->product->getProjectPairsByProductIDList(array_keys($products));
         $this->view->gitlab      = $gitlab;
         $this->view->repoList    = array_values($repoList);
+        $this->display();
+    }
+
+    /**
+     * Get diff editor content by ajax.
+     *
+     * @param  int    $repoID
+     * @param  int    $objectID
+     * @param  string $entry
+     * @param  string $oldRevision
+     * @param  string $newRevision
+     * @param  string $showBug
+     * @param  string $encoding
+     * @access public
+     * @return void
+     */
+    public function ajaxGetDiffEditorContent($repoID, $objectID = 0, $entry = '', $oldRevision = '', $newRevision = '', $showBug = 'false', $encoding = '')
+    {
+        if(!$entry) $entry = (string) $this->cookie->repoCodePath;
+
+        $file      = $entry;
+        $repo      = $this->repo->getByID($repoID);
+        $entry     = urldecode($this->repo->decodePath($entry));
+        $revision  = str_replace('*', '-', $oldRevision);
+        $nRevision = str_replace('*', '-', $newRevision);
+
+        $entry    = urldecode($entry);
+        $pathInfo = pathinfo($entry);
+        $encoding = empty($encoding) ? $repo->encoding : $encoding;
+        $encoding = strtolower(str_replace('_', '-', $encoding));
+
+        $this->scm->setEngine($repo);
+        $info = $this->scm->info($entry, $nRevision);
+
+        $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->diff;
+        $this->view->type        = 'diff';
+        $this->view->encoding    = str_replace('-', '_', $encoding);
+        $this->view->repoID      = $repoID;
+        $this->view->objectID    = $objectID;
+        $this->view->repo        = $repo;
+        $this->view->revision    = $nRevision;
+        $this->view->oldRevision = $revision;
+        $this->view->file        = $file;
+        $this->view->entry       = $entry;
+        $this->view->info        = $info;
+        $this->view->content     = '';
+        $this->view->pathInfo    = $pathInfo;
+        $this->view->suffix      = 'c';
+        $this->view->blames      = array();
+        $this->view->showEditor  = true;
+        $this->display('repo', 'ajaxgeteditorcontent');
+    }
+
+    /**
+     * Get editor content by ajax.
+     *
+     * @param  int    $repoID
+     * @param  int    $objectID
+     * @param  string $entry
+     * @param  string $revision
+     * @param  string $showBug
+     * @param  string $encoding
+     * @access public
+     * @return void
+     */
+    public function ajaxGetEditorContent($repoID, $objectID = 0, $entry = '', $revision = 'HEAD', $showBug = 'false', $encoding = '')
+    {
+        if(!$entry) $entry = (string) $this->cookie->repoCodePath;
+
+        $file     = $entry;
+        $repo     = $this->repo->getByID($repoID);
+        $entry    = urldecode($this->repo->decodePath($entry));
+        $revision = str_replace('*', '-', $revision);
+
+        $this->scm->setEngine($repo);
+        $info = $this->scm->info($entry, $revision);
+        $path = $entry ? $info->path : '';
+        if($info->kind == 'dir') $this->locate($this->repo->createLink('browse', "repoID=$repoID&branchID=&objectID=$objectID&path=" . $this->repo->encodePath($path) . "&revision=$revision"));
+        $content  = $this->scm->cat($entry, $revision);
+        $entry    = urldecode($entry);
+        $pathInfo = pathinfo($entry);
+        $encoding = empty($encoding) ? $repo->encoding : $encoding;
+        $encoding = strtolower(str_replace('_', '-', $encoding));
+
+        $suffix   = '';
+        if(isset($pathInfo["extension"])) $suffix = strtolower($pathInfo["extension"]);
+        if(!$suffix or (!array_key_exists($suffix, $this->config->program->suffix) and strpos($this->config->repo->images, "|$suffix|") === false)) $suffix = $this->repo->isBinary($content, $suffix) ? 'binary' : 'c';
+
+        if(strpos($this->config->repo->images, "|$suffix|") !== false)
+        {
+            $content = base64_encode($content);
+        }
+        elseif($encoding != 'utf-8')
+        {
+            $content = helper::convertEncoding($content, $encoding);
+        }
+
+        $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->view;
+        $this->view->type        = 'view';
+        $this->view->showBug     = $showBug;
+        $this->view->encoding    = str_replace('-', '_', $encoding);
+        $this->view->repoID      = $repoID;
+        $this->view->branchID    = $this->cookie->repoBranch;
+        $this->view->objectID    = $objectID;
+        $this->view->repo        = $repo;
+        $this->view->revision    = $revision;
+        $this->view->oldRevision = '';
+        $this->view->file        = $file;
+        $this->view->entry       = $entry;
+        $this->view->path        = $entry;
+        $this->view->info        = $info;
+        $this->view->suffix      = $suffix;
+        $this->view->content     = $content ? $content : '';
+        $this->view->pathInfo    = $pathInfo;
+        $this->view->showEditor  = (strpos($this->config->repo->images, "|$suffix|") === false and $suffix != 'binary') ? true : false;
         $this->display();
     }
 

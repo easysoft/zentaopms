@@ -1,0 +1,28 @@
+title: zt_repo
+author: Gang Zeng
+version: "1.0"
+fields:
+  - field: id
+    range: 1-5
+  - field: product
+    range: 1
+  - field: name
+    range: "723test,Demo,本地git,svn"
+  - field: path
+    range: 42
+  - field: SCM
+    range: "Gitlab,Gitea,Git,Subversion"
+  - field: client
+    range: "/usr/bin/git{3},/usr/bin/svn{1}"
+  - field: serviceHost
+    range: "1,4"
+  - field: serviceProject
+    range: "42,root/Demo,[]{2}"
+  - field: extra
+    range: 42
+  - field: preMerge
+    range: 1
+  - field: job
+    range: 1
+  - field: deleted
+    range: 0

@@ -77,46 +77,12 @@ class repoModel extends model
             }
 
             if(!in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) unset($this->lang->devops->menu->mr);
-           // if(count($repos) > 1) $this->lang->switcherMenu = $this->getSwitcher($repoID);
         }
 
         if(!in_array($this->app->methodName, array('maintain', 'create', 'edit','import'))) common::setMenuVars('devops', $repoID);
         if(!session_id()) session_start();
         $this->session->set('repoID', $repoID);
         session_write_close();
-    }
-
-    /**
-     * Get switcher.
-     *
-     * @param  int    $repoID
-     * @access public
-     * @return string
-     */
-    public function getSwitcher($repoID)
-    {
-        $currentModule = $this->app->moduleName;
-        $currentMethod = $this->app->methodName;
-        if(!in_array($currentModule, $this->config->repo->switcherModuleList)) return '';
-        if($currentModule == 'repo' and !in_array($currentMethod, $this->config->repo->switcherMethodList)) return '';
-
-        $currentRepo     = $this->getByID($repoID);
-        $currentRepoName = $currentRepo->name;
-
-        if($this->app->viewType == 'mhtml' and $repoID)
-        {
-            $output  = $this->lang->repo->common . $this->lang->colon;
-            $output .= "<a id='currentItem' href=\"javascript:showSearchMenu('repo', '$repoID', '$currentModule', '$currentMethod', '')\">{$currentRepoName} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
-            return $output;
-        }
-
-        $projectID    = $this->app->tab == 'project' ? $this->get->objectID : 0;
-        $dropMenuLink = helper::createLink('repo', 'ajaxGetDropMenu', "repoID=$repoID&module=$currentModule&method=$currentMethod&projectId=$projectID");
-
-        $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentRepoName}'><span class='text'>{$currentRepoName}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
-        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>'; $output .= "</div></div>";
-
-        return $output;
     }
 
     /**
@@ -130,34 +96,9 @@ class repoModel extends model
      * @access public
      * @return array
      */
-    public function getList($projectID = 0, $SCM = '', $orderBy = 'id_desc', $pager = null, $getCodePath = false, $lastSubmitTime = false, $type = '', $param = 0)
+    public function getList(int $projectID = 0, string $SCM = '', string $orderBy = 'id_desc', object $pager = null, bool $getCodePath = false, bool $lastSubmitTime = false, string $type = '', int $param = 0): array
     {
-        $repoQuery = '';
-        if($type == 'bySearch')
-        {
-            $queryID = $param;
-            $queryName = 'repoQuery';
-
-            if($queryID && $queryID != 'myQueryID')
-            {
-                $query = $this->loadModel('search')->getZinQuery($queryID);
-                if($query)
-                {
-                    $this->session->set($queryName, $query->sql);
-                    $this->session->set('repoForm', $query->form);
-                }
-                else
-                {
-                    $this->session->set($queryName, ' 1 = 1');
-                }
-            }
-            else
-            {
-                if($this->session->$queryName == false) $this->session->set($queryName, ' 1 = 1');
-            }
-
-            $repoQuery = $this->session->$queryName;
-        }
+        $repoQuery = $type == 'bySearch' ? $this->repoTao->processSearchQuery($param) : '';
 
         $repos = $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq('0')
@@ -177,32 +118,18 @@ class repoModel extends model
             {
                 unset($repos[$i]);
             }
-            else
+            elseif($projectID)
             {
-                if($projectID)
+                $hasPriv = false;
+                foreach(explode(',', $repo->product) as $productID)
                 {
-                    $hasPriv = false;
-                    foreach(explode(',', $repo->product) as $productID)
-                    {
-                        if(isset($productIdList[$productID])) $hasPriv = true;
-                    }
-
-                    if(!$hasPriv) unset($repos[$i]);
+                    if(isset($productIdList[$productID])) $hasPriv = true;
                 }
+
+                if(!$hasPriv) unset($repos[$i]);
             }
 
-            if($lastSubmitTime)
-            {
-                if($repo->lastCommit)
-                {
-                    $repo->lastSubmitTime = $repo->lastCommit;
-                }
-                else
-                {
-                    $lastRevision = $this->repoTao->getLastRevision($repo->id);
-                    $repo->lastSubmitTime = isset($lastRevision->time) ? $lastRevision->time : '';
-                }
-            }
+            if($lastSubmitTime) $repo->lastSubmitTime = $repo->lastCommit ? $repo->lastCommit : $this->repoTao->getLastRevision($repo->id);
 
             if(in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) $repo = $this->processGitService($repo, $getCodePath);
         }
@@ -448,10 +375,26 @@ class repoModel extends model
 
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
 
-            if($type == 'story') $this->action->create('story', $linkID, 'linked2revision', '', $revisionID, $commiter);
-            if($type == 'bug')   $this->action->create('bug',   $linkID, 'linked2revision', '', $revisionID, $commiter);
-            if($type == 'task')  $this->action->create('task',  $linkID, 'linked2revision', '', $revisionID, $commiter);
+            $this->action->create($type, $linkID, 'linked2revision', '', $revisionID, $committer);
         }
+    }
+
+    /**
+     * 删除一个版本库。
+     * Delete a repo.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return bool
+     */
+    public function deleteRepo(int $repoID): bool
+    {
+        $this->repoTao->deleteInfoByID($repoID);
+        $this->dao->delete()->from(TABLE_REPO)->where('id')->eq($repoID)->exec();
+        if(dao::isError()) return false;
+
+        $this->loadModel('action')->create('repo', $repoID, 'deleted', '');
+        return true;
     }
 
     /**
@@ -2726,7 +2669,7 @@ class repoModel extends model
         }
         $stories = empty($storyIDs) ? array() : $this->loadModel('story')->getByList($storyIDs);
         $bugs    = empty($bugIDs)   ? array() : $this->loadModel('bug')->getByList($bugIDs);
-        $tasks   = empty($taskIDs)  ? array() : $this->loadModel('task')->getByList($taskIDs);
+        $tasks   = empty($taskIDs)  ? array() : $this->loadModel('task')->getByIdList($taskIDs);
 
         $titleList = array();
         foreach($relationList as $key => $relation)

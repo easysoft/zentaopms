@@ -56,7 +56,7 @@ class repoTest
 
         if(!empty($objects))
         {
-           return $objects[1]->name;
+           return $objects;
         }
         else
         {

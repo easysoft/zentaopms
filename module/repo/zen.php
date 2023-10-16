@@ -616,9 +616,11 @@ class repoZen extends repo
             if($result['project']->status_code == 200)
             {
                 $project = json_decode($result['project']->body);
+                if(!is_object($project)) $project = new stdclass();
+
                 $this->loadModel('gitlab')->setProject((int)$repo->gitService, (int)$repo->project, $project);
             }
-            if(!is_null($result['branches']->headers->offsetGet('x-total')))
+            if(!empty($result['branches']->headers) && !is_null($result['branches']->headers->offsetGet('x-total')))
             {
                 $branchList = json_decode($result['branches']->body);
                 $totalPages = $result['branches']->headers->offsetGet('x-total-pages');
@@ -661,7 +663,7 @@ class repoZen extends repo
                     $branches = $default + $branches;
                 }
             }
-            if(!is_null($result['tags']->headers->offsetGet('x-total')))
+            if(!empty($result['branches']->headers) && !is_null($result['tags']->headers->offsetGet('x-total')))
             {
                 $tagList    = json_decode($result['tags']->body);
                 $totalPages = $result['tags']->headers->offsetGet('x-total-pages');
@@ -801,6 +803,239 @@ class repoZen extends repo
         $this->config->repo->search['onMenuBar']   = 'yes';
         $this->loadModel('search')->setSearchParams($this->config->repo->search);
         session_write_close();
+    }
+
+    /**
+     * 构建需求搜索表格。
+     * Build story search form.
+     *
+     * @param  int       $repoID
+     * @param  string    $revision
+     * @param  string    $browseType
+     * @param  int       $param
+     * @param  object    $product
+     * @param  array     $modules
+     * @access protected
+     * @return void
+     */
+    protected function buildStorySearchForm(int $repoID, string $revision, string $browseType, int $queryID, object $product, array $modules): void
+    {
+        unset($this->lang->story->statusList['closed']);
+        $storyStatusList = $this->lang->story->statusList;
+
+        unset($this->config->product->search['fields']['product']);
+        $this->config->product->search['actionURL']                   = $this->createLink('repo', 'linkStory', "repoID=$repoID&revision=$revision&browseType=bySearch&queryID=myQueryID");
+        $this->config->product->search['queryID']                     = $queryID;
+        $this->config->product->search['style']                       = 'simple';
+        $this->config->product->search['params']['plan']['values']    = $this->loadModel('productplan')->getForProducts(array($product->id => $product->id));
+        $this->config->product->search['params']['module']['values']  = $modules;
+        $this->config->product->search['params']['status']            = array('operator' => '=', 'control' => 'select', 'values' => $storyStatusList);
+
+        if($product->type == 'normal')
+        {
+            unset($this->config->product->search['fields']['branch']);
+            unset($this->config->product->search['params']['branch']);
+        }
+        else
+        {
+            $this->config->product->search['fields']['branch'] = $this->lang->product->branch;
+            $this->config->product->search['params']['branch']['values'] = $this->loadModel('branch')->getPairs($product->id, 'noempty');
+        }
+
+        session_start();
+        $this->loadModel('search')->setSearchParams($this->config->product->search);
+        session_write_close();
+    }
+
+    /**
+     * 获取关联需求列表。
+     * Get link stories list.
+     *
+     * @param  int       $repoID
+     * @param  string    $revision
+     * @param  string    $browseType
+     * @param  object    $product
+     * @param  string    $orderBy
+     * @param  object    $pager
+     * @access protected
+     * @return array
+     */
+    protected function getLinkStories(int $repoID, string $revision, string $browseType, object $product, string $orderBy, object $pager, int $queryID): array
+    {
+        $linkedStories = $this->repo->getRelationByCommit($repoID, $revision, 'story');
+        if($browseType == 'bySearch')
+        {
+            $allStories = $this->loadModel('story')->getBySearch($product->id, 0, $queryID, $orderBy, 0, 'story', array_keys($linkedStories), $pager);
+        }
+        else
+        {
+            $allStories = $this->loadModel('story')->getProductStories($product->id, 0, '0', 'draft,active,changed', 'story', $orderBy, false, array_keys($linkedStories), $pager);
+        }
+
+        return $allStories;
+    }
+
+    /**
+     * 构建bug搜索表格。
+     * Build bug search form.
+     *
+     * @param  int       $repoID
+     * @param  string    $revision
+     * @param  string    $browseType
+     * @param  int       $param
+     * @param  object    $product
+     * @param  array     $modules
+     * @access protected
+     * @return void
+     */
+    protected function buildBugSearchForm(int $repoID, string $revision, string $browseType, int $queryID, object $product, array $modules): void
+    {
+
+        $this->config->bug->search['actionURL']                         = $this->createLink('repo', 'linkBug', "repoID=$repoID&revision=$revision&browseType=bySearch&queryID=myQueryID");
+        $this->config->bug->search['queryID']                           = $queryID;
+        $this->config->bug->search['style']                             = 'simple';
+        $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($product->id => $product->id));
+        $this->config->bug->search['params']['module']['values']        = $modules;
+        $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($product->id);
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs(array($product->id), 'all', '');
+        $this->config->bug->search['params']['resolvedBuild']['values'] = $this->loadModel('build')->getBuildPairs(array($product->id), 'all', '');
+
+        unset($this->config->bug->search['fields']['product']);
+        if($product->type == 'normal')
+        {
+            unset($this->config->bug->search['fields']['branch']);
+            unset($this->config->bug->search['params']['branch']);
+        }
+        else
+        {
+            $this->config->bug->search['fields']['branch']           = $this->lang->product->branch;
+            $this->config->bug->search['params']['branch']['values'] = $this->loadModel('branch')->getPairs($product->id, 'noempty');
+        }
+        session_start();
+        $this->loadModel('search')->setSearchParams($this->config->bug->search);
+        session_write_close();
+    }
+
+    /**
+     * 获取关联bug列表。
+     * Get link bugs list.
+     *
+     * @param  int       $repoID
+     * @param  string    $revision
+     * @param  string    $browseType
+     * @param  object    $product
+     * @param  string    $orderBy
+     * @param  object    $pager
+     * @access protected
+     * @return array
+     */
+    protected function getLinkBugs(int $repoID, string $revision, string $browseType, object $product, string $orderBy, object $pager, int $queryID): array
+    {
+        $linkedBugs = $this->repo->getRelationByCommit($repoID, $revision, 'bug');
+        if($browseType == 'bySearch')
+        {
+            $allBugs = $this->loadModel('bug')->getBySearch($product->id, 0, $queryID, $orderBy, array_keys($linkedBugs), $pager);
+        }
+        else
+        {
+            $allBugs = $this->loadModel('bug')->getActiveBugs($product->id, 0, '0', array_keys($linkedBugs), $pager, $orderBy);
+        }
+
+        foreach($allBugs as $bug) $bug->statusText = $this->processStatus('bug', $bug);
+        return $allBugs;
+    }
+
+    /**
+     * 构建任务搜索表格。
+     * Build task search form.
+     *
+     * @param  int       $repoID
+     * @param  string    $revision
+     * @param  string    $browseType
+     * @param  int       $param
+     * @param  object    $product
+     * @param  array     $modules
+     * @param  array     $productExecutions
+     * @access protected
+     * @return void
+     */
+    protected function buildTaskSearchForm(int $repoID, string $revision, string $browseType, int $queryID, object $product, array $modules, array $productExecutions): void
+    {
+        $this->config->execution->search['actionURL']                     = $this->createLink('repo', 'linkTask', "repoID=$repoID&revision=$revision&browseType=bySearch&queryID=myQueryID", '', true);
+        $this->config->execution->search['queryID']                       = $queryID;
+        $this->config->execution->search['style']                         = 'simple';
+        $this->config->execution->search['params']['module']['values']    = $modules;
+        $this->config->execution->search['params']['execution']['values'] = $this->loadModel('product')->getExecutionPairsByProduct($product->id);
+        $this->config->execution->search['params']['execution']['values'] = array_filter($productExecutions);
+
+        session_start();
+        $this->loadModel('search')->setSearchParams($this->config->execution->search);
+        session_write_close();
+    }
+
+    /**
+     * 获取关联任务列表。
+     * Get link tasks list.
+     *
+     * @param  int       $repoID
+     * @param  string    $revision
+     * @param  string    $browseType
+     * @param  object    $product
+     * @param  string    $orderBy
+     * @param  object    $pager
+     * @param  array     $productExecutionIDs
+     * @access protected
+     * @return array
+     */
+    protected function getLinkTasks(int $repoID, string $revision, string $browseType, object $product, string $orderBy, object $pager, int $queryID, array $productExecutionIDs): array
+    {
+        $allTasks = array();
+        foreach($productExecutionIDs as $productExecutionID)
+        {
+            $tasks    = $this->loadModel('execution')->getTasks(0, $productExecutionID, array(), $browseType, $queryID, 0, $orderBy, null);
+            $allTasks = array_merge($tasks, $allTasks);
+        }
+
+        /* Filter linked tasks. */
+        $linkedTasks   = $this->repo->getRelationByCommit($repoID, $revision, 'task');
+        $linkedTaskIDs = array_keys($linkedTasks);
+        foreach($allTasks as $key => $task)
+        {
+            if(in_array($task->id, $linkedTaskIDs)) unset($allTasks[$key]);
+        }
+
+        /* Page the records. */
+        $pager->setRecTotal(count($allTasks));
+        $pager->setPageTotal();
+        if($pager->pageID > $pager->pageTotal) $pager->setPageID($pager->pageTotal);
+        $count    = 1;
+        $limitMin = ($pager->pageID - 1) * $pager->recPerPage;
+        $limitMax = $pager->pageID * $pager->recPerPage;
+        foreach($allTasks as $key => $task)
+        {
+            if($count <= $limitMin or $count > $limitMax) unset($allTasks[$key]);
+            $count ++;
+        }
+
+        return $allTasks;
+    }
+
+    /**
+     * 关联对象。
+     * Link object.
+     *
+     * @param  int       $repoID
+     * @param  string    $revision
+     * @param  string    $type story|bug|task
+     * @access protected
+     * @return array
+     */
+    protected function linkObject(int $repoID, string $revision, string $type): array
+    {
+        $this->repo->link($repoID, $revision, $type);
+        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+
+        return array('result' => 'success', 'callback' => "$('.tab-content .active iframe')[0].contentWindow.getRelation('$revision')", 'closeModal' => true);
     }
 
     /**
