@@ -320,7 +320,7 @@ class executionModel extends model
             foreach($formData->products as $index => $productID)
             {
                 if(!isset($formData->branch[$index])) continue;
-                $branches = implode(',', $formData->branch[$index]);
+                $branches = is_array($formData->branch[$index]) ? implode(',', $formData->branch[$index]) : $formData->branch[$index];
                 if(isset($multipleProducts[$productID]) && $branches == '')
                 {
                     dao::$errors["branch[$index][]"] = $this->lang->project->error->emptyBranch;

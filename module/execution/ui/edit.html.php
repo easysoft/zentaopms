@@ -396,13 +396,27 @@ elseif(!empty($project) && !empty($project->hasProduct))
     if(empty($linkedProducts))
     {
         $productsBox[] = formHidden('products[0]', array());
-        $productsBox[] = formHidden('branch', '');
+        $productsBox[] = picker
+            (
+                set::hidden(true),
+                set::name("branch[][]"),
+                set::items(array()),
+                set::value(''),
+                set::multiple(true),
+            );
     }
 }
 else
 {
     $productsBox[] = formHidden('products[0]', key($linkedProducts));
-    $productsBox[] = formHidden('branch', json_encode(array_values($linkedBranches)));
+    $productsBox[] = picker
+        (
+            set::name("branch[][]"),
+            set::hidden(true),
+            set::items(isset($linkedBranches[key($linkedProducts)]) ? $linkedBranches[key($linkedProducts)] : array()),
+            set::value(isset($linkedBranches[key($linkedProducts)]) ? implode(',', $linkedBranches[key($linkedProducts)]) : ''),
+            set::multiple(true),
+        );
 }
 
 if(helper::isAjaxRequest('modal')) modalHeader(set::title($lang->execution->edit));
