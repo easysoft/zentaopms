@@ -18,7 +18,7 @@ featureBar
 (
     set::current($browseType),
     set::linkParams("productID={$productID}&branch={$branch}&browseType={key}&queryID={$queryID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
-    li(searchToggle(set::module('productplan'), set::open($browseType == 'bysearch')))
+    li(searchToggle(set::module('productplan'), set::open($browseType == 'bySearch')))
 );
 
 $canCreatePlan = common::canModify('product', $product) && common::hasPriv($app->rawModule, 'create');
