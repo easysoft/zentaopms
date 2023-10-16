@@ -166,6 +166,14 @@ formPanel
         formGroup
         (
             set::label($lang->files),
+            $report->files ? fileList
+            (
+                set::files($report->files),
+                set::hasTitle(false),
+                set::padding(false),
+                set::margin(false),
+                set::pt('0'),
+            ) : null,
             upload()
         )
     )
@@ -371,6 +379,7 @@ foreach(array('generated', 'legacy', 'resolved') as $field)
 
 for($time = $beginTime; $time <= $endTime; $time += 86400)
 {
+    $date      = date('m-d', $time);
     $generated = !empty($infoValue['generated'][$date]) ? $infoValue['generated'][$date] : 0;
     $legacy    = !empty($infoValue['legacy'][$date])    ? $infoValue['legacy'][$date]    : 0;
     $resolved  = !empty($infoValue['resolved'][$date])  ? $infoValue['resolved'][$date]  : 0;
@@ -378,8 +387,6 @@ for($time = $beginTime; $time <= $endTime; $time += 86400)
     $chartOption['generated']['data'][] = $generated;
     $chartOption['legacy']['data'][]    = $legacy;
     $chartOption['resolved']['data'][]  = $resolved;
-
-    $date         = date('m-d', $time);
     $xAxisData[]  = $date;
     $tableTR[]    = h::tr
     (
@@ -438,7 +445,7 @@ $bugHandleChart = div
 $bugCharts = array();
 foreach($bugInfo as $infoKey => $infoValue)
 {
-    if($infokey == 'bugStageGroups' || $infoKey == 'bugHandleGroups') continue;
+    if($infoKey == 'bugStageGroups' || $infoKey == 'bugHandleGroups') continue;
     $list = $infoValue;
     if($infoKey == 'bugSeverityGroups')   $list = $lang->bug->severityList;
     if($infoKey == 'bugStatusGroups')     $list = $lang->bug->statusList;
