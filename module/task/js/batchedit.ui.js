@@ -34,10 +34,10 @@ window.renderRowData = function($row, index, row)
     if(row.assignedTo && taskMembers[row.assignedTo] == undefined) taskMembers[row.assignedTo] = users[row.assignedTo];
     for(let account in taskMembers) taskUsers.push({value: account, text: taskMembers[account]});
 
-    $(`#assignedTo_${index}`).picker({
-        items: taskUsers,
-        defaultValue: row.assignedTo,
-        disabled: disabled,
+    $row.find('[data-name="assignedTo"]').find('.picker-box').on('inited', function(e, info)
+    {
+        let $assignedTo = info[0];
+        $assignedTo.render({items: taskUsers, disabled: disabled});
     });
 
     if(teams[row.id] != undefined || row.parent < 0)
