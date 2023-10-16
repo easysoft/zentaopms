@@ -14,9 +14,6 @@ class fileList extends wg
         'showEdit?:bool=true',
         'object?:object',
         'padding?:bool=true',
-        'margin?:bool=true',
-        'hasTitle?:bool=true',
-        'pt?:string=4',
     );
 
     public static function getPageCSS(): string|false
@@ -38,14 +35,13 @@ class fileList extends wg
         $showDelete   = $this->prop('showDelete');
         $showEdit     = $this->prop('showEdit');
         $object       = (object)$this->prop('object');
-        $margin       = $this->prop('margin');
         $fileListView = h::ul(setClass('files-list col relative'));
 
         foreach($files as $file)
         {
             $fileItemView = li
                 (
-                    $margin ? setClass('mb-2') : null,
+                    setClass('mb-2'),
                     html($app->loadTarget('file')->printFile($file, $method, $showDelete, $showEdit, $object))
                 );
 
@@ -80,16 +76,14 @@ class fileList extends wg
             $this->fileList()
         );
 
-        $hasTitle = $this->prop('hasTitle');
         return $fieldset ? new section
         (
-            setClass('files', 'pt-' . $this->prop('pt'), 'canvas'),
+            setClass('files', 'pt-4', 'canvas'),
             $this->prop('padding') ? setClass($px, $pb) : null,
-            $hasTitle ? set::title($lang->files) : null,
-            $hasTitle ? to::actions
+            to::actions
             (
                 icon('paper-clip'),
-            ) : null,
+            ),
             $fileDiv
         ) : $fileDiv;
     }
