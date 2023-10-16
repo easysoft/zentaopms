@@ -6,7 +6,7 @@ $(document).off('click', '.batch-btn > a, .batch-btn').on('click', '.batch-btn >
 
     const url  = $(this).data('url');
     const form = new FormData();
-    checkedList.forEach((id) => form.append('caseIDList[]', id));
+    checkedList.forEach((id) => form.append('caseIdList[]', id));
 
     if($(this).hasClass('ajax-btn'))
     {

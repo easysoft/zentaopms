@@ -19,7 +19,8 @@ detailHeader
             set::entityID($suite->id),
             set::level(1),
             set::text($suite->name)
-        )
+        ),
+        $suite->deleted ? span(setClass('label danger'), $lang->testsuite->deleted) : null,
     ),
     to::suffix
     (

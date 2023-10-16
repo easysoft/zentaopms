@@ -236,7 +236,7 @@ class testsuite extends control
             }
 
             $message = $this->executeHooks($suiteID) ? : $this->lang->testsuite->successSaved;
-            return $this->send(array('result' => 'fail', 'message' => $message, 'locate' => inlink('view', "suiteID={$suiteID}")));
+            return $this->send(array('result' => 'success', 'message' => $message, 'locate' => inlink('view', "suiteID={$suiteID}")));
         }
 
         /* 设置1.5级导航。 */
@@ -351,7 +351,7 @@ class testsuite extends control
      */
     public function unlinkCase(int $suiteID, int $caseID)
     {
-        $this->testsuite->deleteCaseBysuiteID(array($caseID), $suiteID);
+        $this->testsuite->deleteCaseBySuiteID(array($caseID), $suiteID);
 
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         return $this->send(array('result' => 'success', 'load' => true));
@@ -368,7 +368,8 @@ class testsuite extends control
     public function batchUnlinkCases(int $suiteID)
     {
         $formData = form::data($this->config->testsuite->form->batchUnlinkCases)->get();
-        $this->testsuite->deleteCaseBysuiteID($formData->caseIDList, $suiteID);
+        $this->testsuite->deleteCaseBySuiteID($formData->caseIdList, $suiteID);
+
 
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         return $this->send(array('result' => 'success', 'load' => true));
