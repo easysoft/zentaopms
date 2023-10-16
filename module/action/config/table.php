@@ -11,7 +11,7 @@ $config->action->dtable->fieldList['objectType']['type']      = 'status';
 $config->action->dtable->fieldList['objectType']['statusMap'] = $lang->action->objectTypes;
 $config->action->dtable->fieldList['objectType']['fixed']     = 'left';
 
-$config->action->dtable->fieldList['id']['name']  = 'id';
+$config->action->dtable->fieldList['id']['name']  = 'objectID';
 $config->action->dtable->fieldList['id']['title'] = $lang->idAB;
 $config->action->dtable->fieldList['id']['type']  = 'id';
 
