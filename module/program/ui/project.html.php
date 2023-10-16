@@ -64,7 +64,7 @@ dtable
     set::nested(false),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
-    set::footer(array('checkbox', 'toolbar', array('html' => $summary, 'className' => "text-dark"), 'flex', 'pager')),
+    set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(checkedIDList, '{$summary}');}")),
 );
 
 render();

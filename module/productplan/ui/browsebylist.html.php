@@ -10,7 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('+pageSummary', $summary);
 jsVar('checkedSummary', $lang->productplan->checkedSummary);
 
 /* zin: Define the set::module('productplan') feature bar on main menu. */
@@ -85,7 +84,7 @@ dtable
     set::customCols(true),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::footToolbar($footToolbar),
-    set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
+    set::checkInfo(jsRaw("function(checkedIDList){return window.setStatistics(this, checkedIDList, '{$summary}');}")),
     set::footPager(
         usePager(array('linkCreator' => createLink($app->rawModule, 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&queryID={$queryID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&pageID={page}"))),
     )

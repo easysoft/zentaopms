@@ -1,10 +1,11 @@
 /**
  * Submit data to product batch edit page by html form while click on the batch edit button.
  */
-window.onClickBatchEdit = function(event)
+$(document).off('click', '[data-formaction]').on('click', '[data-formaction]', function()
 {
-    const checkedList = zui.DTable.query(event.target).$.getChecks();
-
+    const $this       = $(this);
+    const dtable      = zui.DTable.query($('#products'));
+    const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
 
     const formData = new FormData();
@@ -13,5 +14,10 @@ window.onClickBatchEdit = function(event)
         formData.append('productIDList[]', id);
     });
 
-    postAndLoadPage($(event.target.closest('button')).data('url'), formData, '', {app: 'program'});
-};
+    postAndLoadPage($this.data('formaction'), formData);
+});
+
+window.footerSummary = function(checkedIdList, pageSummary)
+{
+    return {html: pageSummary};
+}

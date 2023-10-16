@@ -37,30 +37,29 @@ $products = initTableData($products, $cols, $this->product);
 foreach($products as $product) $data[] = $this->product->formatDataForList($product, $users, $usersAvatar);
 
 $summary = sprintf($lang->product->pageSummary, count($data));
-$footToolbar = common::hasPriv('product', 'batchEdit') ?
-    array(
-        'type'  => 'btn-group',
-        'items' => array(
-            array(
-                'text'     => $lang->edit,
-                'btnType'  => 'secondary size-sm',
-                'data-url' => $this->createLink('product', 'batchEdit', "programID={$programID}"),
-                'data-app' => $this->app->tab,
-                'onClick'  => jsRaw('window.onClickBatchEdit')
-            )
-        )
-    ) :
-    null;
+$footToolbar = common::hasPriv('product', 'batchEdit') ? array(
+    'type'  => 'btn-group',
+    'items' => array(
+        array(
+            'text'      => $lang->edit,
+            'className' => 'secondary size-sm batch-btn',
+            'data-page' => 'batch',
+            'data-app'  => $this->app->tab,
+            'data-formaction' => $this->createLink('product', 'batchEdit', "programID={$programID}")
+        ),
+    )
+) : null;
 
 dtable
 (
+    setID('products'),
     set::userMap($users),
     set::cols($cols),
     set::data($data),
     set::nested(false),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
-    set::footer(array('checkbox', 'toolbar', array('html' => $summary, 'className' => "text-dark"), 'flex', 'pager')),
+    set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(checkedIDList, '{$summary}');}")),
 );
 
 render();

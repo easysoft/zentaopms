@@ -9,12 +9,9 @@ const executionDropdownMap = new Map();
  * @access public
  * @return object
  */
-window.setStatistics = function(element, checkedIDList)
+window.setStatistics = function(element, checkedIDList, pageSummary)
 {
-    if(!checkedIDList.length)
-    {
-        return {html: pageSummary, className: 'text-dark'};
-    }
+    if(!checkedIDList.length) return {html: pageSummary, className: 'text-dark'};
 
     let total            = checkedIDList.length;
     let totalParent      = 0;

@@ -26,6 +26,7 @@ $fnGenerateFields = function() use ($lang, $fields)
         $field['name'] = $name;
         if(!empty($field['options'])) $field['items'] = $field['options'];
         if(!empty($field['default'])) $field['value'] = $field['default'];
+        if($field['control'] == 'select') $field['control'] = 'picker';
         unset($field['options']);
 
         return $field;
@@ -42,7 +43,6 @@ formBatchPanel
     set::pasteField('title'),
     set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'batchCreateFields')),
     set::items($fnGenerateFields()),
-    set::onRenderRow(jsRaw('renderRowData')),
     set::actions(array
     (
         array('text' => $lang->save,             'id' => 'saveButton',      'class' => 'primary'),

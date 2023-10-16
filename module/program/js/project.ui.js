@@ -24,3 +24,8 @@ $(document).on('click', '.batch-btn', function()
     checkedList.forEach((id) => form.append('projectIdList[]', id));
     postAndLoadPage(url, form);
 });
+
+window.footerSummary = function(checkedIdList, pageSummary)
+{
+    return {html: pageSummary};
+}

@@ -17,6 +17,7 @@ $items['id']            = array('name' => 'id', 'label' => $lang->idAB, 'control
 foreach($fields as $fieldName => $field)
 {
     $items[$fieldName] = array('name' => $fieldName, 'label' => $field['title'], 'control' => $field['control'], 'width' => $field['width'], 'required' => $field['required'], 'items' => zget($field, 'options', array()));
+    if($items[$fieldName]['control'] == 'select') $items[$fieldName]['control'] = 'picker';
 }
 $items['acl']['control'] = array('type' => $items['acl']['control'], 'inline' => true);
 
@@ -24,9 +25,10 @@ $extendFields = $this->product->getFlowExtendFields();
 foreach($extendFields as $extendField)
 {
     $items[$extendField->field] = array('name' => $extendField->field, 'label' => $extendField->name,  'required' => strpos(",$extendField->rules,", ',1,') !== false, 'control' => $extendField->control, 'items' => zget($extendField, 'options', array()));
+    if($extendField->control == 'select') $items[$extendField->field]['control'] = 'picker';
     if($extendField->control == 'multi-select')
     {
-        $items[$extendField->field]['control']  = 'select';
+        $items[$extendField->field]['control']  = 'picker';
         $items[$extendField->field]['multiple'] = true;
     }
 }
