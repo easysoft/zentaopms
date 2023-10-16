@@ -910,7 +910,7 @@ class bug extends control
         /* 返回批量修改分支 bugs 后的响应。 */
         /* Return response after batch changing branch of the bugs. */
         $load = $this->session->bugList;
-        if(!empty($skipBugIdList)) $load = array('confirm' => sprintf($this->lang->bug->notice->noSwitchBranch, $skipBugIdList), 'confirmed' => 'true', 'canceled' => 'true');
+        if(!empty($skipBugIdList)) $load = array('confirm' => sprintf($this->lang->bug->notice->noSwitchBranch, $skipBugIdList), 'confirmed' => true, 'canceled' => true);
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $load));
     }
 
