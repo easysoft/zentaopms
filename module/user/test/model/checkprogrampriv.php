@@ -25,6 +25,7 @@ $program->name     = '测试项目集';
 $program->PM       = 'test2';
 $program->openedBy = 'pm1';
 $program->acl      = 'private';
+$program->parent   = 0;
 
 $stakeholders['user10'] = 'user10';
 $whiteList['user60']    = 'user60';

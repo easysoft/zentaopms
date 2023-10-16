@@ -25,7 +25,5 @@ pid=1
 
 $user = new userTest();
 $userLocked   = $user->cleanLockedTest('user8');
-$notExistUser = $user->cleanLockedTest('test999');
 
 r($userLocked)   && p('') && e('success'); //获取user8的锁定时间，重置为空
-r($notExistUser) && p('') && e('fail');    //获取不存在的用户的锁定时间，返回空

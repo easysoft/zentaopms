@@ -22,7 +22,12 @@ $user = new userTest();
 $project = new stdclass();
 $project->id       = 10;
 $project->name     = '测试项目';
+$project->type     = 'project';
+$project->parent   = 0;
 $project->PM       = 'test2';
+$project->PO       = '';
+$project->QD       = '';
+$project->RD       = '';
 $project->openedBy = 'pm1';
 $project->acl      = 'private';
 

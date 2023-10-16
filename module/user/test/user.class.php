@@ -547,9 +547,7 @@ class userTest
 
         $locked = $tester->dao->select('locked')->from(TABLE_USER)->where('account')->eq($account)->fetch('locked');
 
-        $result = $locked === '0000-00-00 00:00:00' ? 'success' : 'fail';
-
-        return $result;
+        return helper::isZeroDate($locked) ? 'success' : 'fail';
     }
 
     /**
@@ -839,7 +837,7 @@ class userTest
      * @access public
      * @return void
      */
-    public function checkSprintPrivTest($sprint, $account, $stakeholders, $teams, $whiteList)
+    public function checkSprintPrivTest($sprint, $account, $stakeholders = array(), $teams = array(), $whiteList = array())
     {
         return $this->objectModel->checkSprintPriv($sprint, $account, $stakeholders, $teams, $whiteList);
     }
@@ -856,7 +854,7 @@ class userTest
      * @access public
      * @return bool
      */
-    public function checkProductPrivTest(object $product, string $account, array $groups = array(), array $teams = array(), array $stakeholders = array(), array $whiteList = array(), array $admins = array()): bool
+    public function checkProductPrivTest(object $product, string $account, string $groups = '', array $teams = array(), array $stakeholders = array(), array $whiteList = array(), array $admins = array()): bool
     {
         return $this->objectModel->checkProductPriv($product, $account, $groups, $teams, $stakeholders, $whiteList, $admins);
     }
