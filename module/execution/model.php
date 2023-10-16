@@ -4416,7 +4416,7 @@ class executionModel extends model
             {
                 case 'task':
                     $label = $tree->parent > 0 ? $this->lang->task->children : $this->lang->task->common;
-                    $treeData[$index]['link']    = helper::createLink('execution', 'treeTask', "taskID={$tree->id}");
+                    $treeData[$index]['url']    = helper::createLink('execution', 'treeTask', "taskID={$tree->id}");
                     $treeData[$index]['content'] = array(
                         'html' => "<div class='tree-link'><span class='label gray-pale rounded-full'>{$label}</span><span class='ml-4'>{$tree->id}</span><span class='title ml-4 text-primary' title='{$tree->title}'>" . $tree->title . '</span> <span class="user"><i class="icon icon-person"></i> ' . (empty($tree->assignedTo) ? $tree->openedBy : $tree->assignedTo) . '</span></div>',
                     );
@@ -4428,7 +4428,7 @@ class executionModel extends model
                     break;
                 case 'story':
                     $this->app->loadLang('story');
-                    $treeData[$index]['link']    = helper::createLink('execution', 'treeStory', "taskID={$tree->storyId}");
+                    $treeData[$index]['url']    = helper::createLink('execution', 'treeStory', "taskID={$tree->storyId}");
                     $treeData[$index]['content'] = array(
                         'html' => "<div class='tree-link'><span class='label gray-pale rounded-full'>{$this->lang->story->common}</span><span class='ml-4'>{$tree->storyId}</span><span class='title text-primary ml-4' title='{$tree->title}'>{$tree->title}</span> <span class='user'><i class='icon icon-person'></i> " . (empty($tree->assignedTo) ? $tree->openedBy : $tree->assignedTo) . "</span></div>",
                     );
@@ -4449,7 +4449,7 @@ class executionModel extends model
             if(isset($tree->children))
             {
                 if($tree->type == 'task') $treeData[$index]['content']['html'] = "<div class='tree-toggle'><span class='title' title='{$tree->title}'>{$tree->title}</span></div>";
-                $treeData[$index]['children'] = $this->buildTree($tree->children, $hasProduct);
+                $treeData[$index]['items'] = $this->buildTree($tree->children, $hasProduct);
             }
         }
         return $treeData;
