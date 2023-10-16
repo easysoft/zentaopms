@@ -647,13 +647,15 @@ class userTest
      */
     public function createContactListTest($listName = '', $userList = array())
     {
-        ob_start();
-        $listID  = $this->objectModel->createContactList($listName, $userList);
-        $message = ob_get_clean();
+        $_POST = array();
+        $_POST['listName'] = $listName;
+        $_POST['userList'] = $userList;
 
-        if($message) return array('message' => array('listName' => array(1)));
+        $listID  = $this->objectModel->createContactList();
+
         if(dao::isError()) return array('message' => dao::getError());
-        return $this->objectModel->getContactListByID($listID);
+        global $dao;
+        return $dao->select('*')->from(TABLE_USERCONTACT)->orderBy('id_desc')->fetch();
     }
 
     /**
@@ -739,7 +741,7 @@ class userTest
      * @access public
      * @return void
      */
-    public function computeUserViewTest($account, $force = false)
+    public function computeUserViewTest($account, $force = true)
     {
         $userview = $this->objectModel->computeUserView($account, $force);
 
