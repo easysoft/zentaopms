@@ -1,0 +1,9 @@
+title: table zt_case
+author: Gang Liu
+version: "1.0"
+fields:
+  - field: name
+    range: 1-2
+    prefix: "执行"
+  - field: type
+    range: sprint

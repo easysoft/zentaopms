@@ -1,0 +1,12 @@
+title: table zt_case
+author: Gang Liu
+version: "1.0"
+fields:
+  - field: execution
+    range: 1-2
+  - field: product
+    range: 1{8},2{2}
+  - field: owner
+    range: user1{2},user2{2}
+  - field: deleted
+    range: 0{4},1
