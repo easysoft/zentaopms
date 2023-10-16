@@ -5,18 +5,26 @@ declare(strict_types=1);
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Sun Guangming<sunguangming@easycorp.ltd>
- * @package     project 
+ * @package     project
  * @link        https://www.zentao.net
  */
 namespace zin;
 
-$setCode = (isset($config->setCode) and $config->setCode == 1);
-$aclList = (empty($globalDisableProgram) and $project->parent) ? $lang->program->subAcls : $lang->project->acls;
+$programAclList = array();
+$projectAclList = array();
+foreach($lang->program->subAcls as $acl => $label) $programAclList[] = array('text' => $label, 'value' => $acl);
+foreach($lang->project->acls as $acl => $label) $projectAclList[] = array('text' => $label, 'value' => $acl);
 
+jsVar('programAclList', $programAclList);
+jsVar('projectAclList', $projectAclList);
+jsVar('disabledprograms', !empty($globalDisableProgram));
+
+$setCode = (isset($config->setCode) and $config->setCode == 1);
 formBatchPanel
 (
     set::mode('edit'),
     set::data(array_values($projects)),
+    set::onRenderRow(jsRaw('renderRowData')),
     formBatchItem
     (
         set::name('id'),
@@ -63,17 +71,6 @@ formBatchPanel
     ),
     formBatchItem
     (
-        set::name('PO'),
-        set::label($lang->project->PO),
-        set::control('select'),
-        set::ditto(true),
-        set::defaultDitto('off'),
-        set::items($poUsers),
-        set::width('80px'),
-        set::hidden(true),
-    ),
-    formBatchItem
-    (
         set::name('begin'),
         set::label($lang->project->begin),
         set::control('date'),
@@ -90,8 +87,8 @@ formBatchPanel
     (
         set::name('acl'),
         set::label($lang->project->acl),
-        set::control('select'),
-        set::items($aclList),
+        set::control('picker'),
+        set::items(array()),
         set::width('128px'),
     ),
 );
