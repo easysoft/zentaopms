@@ -1,0 +1,9 @@
+title: table zt_testsuite
+author: Gang Liu
+version: "1.0"
+fields:
+  - field: product
+    range: 1
+  - field: name
+    range: 1-100
+    prefix: 测试套件
