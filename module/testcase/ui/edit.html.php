@@ -60,7 +60,7 @@ detailBody
 (
     set::isForm(true),
     on::change('#lib', 'loadLibModules'),
-    on::change('#product', 'loadProductRelated()'),
+    on::change('#product', 'loadProductRelated'),
     on::change('#module', 'loadModuleRelated'),
     on::change('#branch', 'loadBranchRelated'),
     on::change('#scriptFile', 'readScriptContent'),

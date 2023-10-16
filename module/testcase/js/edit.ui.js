@@ -15,7 +15,7 @@ function loadLibModules()
     });
 }
 
-function loadProductRelated()
+function loadProductRelated(event)
 {
     const productID = $(event.target).val();
 
@@ -37,9 +37,7 @@ function loadBranchRelated()
 function loadModuleRelated()
 {
     const productID = $('[name=product]').val();
-
     loadScenes(productID);
-
     if($('#story').length) loadProductStories(productID);
 }
 
