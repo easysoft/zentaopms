@@ -117,20 +117,14 @@ function loadProductBranches(productID)
 
     $.get($.createLink('branch', 'ajaxGetBranches', param), function(data)
     {
-        if(!data)
-        {
-            $('#branch').addClass('hidden');
-        }
-        else
-        {
-            data = JSON.parse(data);
+        $('#branch').toggleClass('hidden', !data);
+        data = JSON.parse(data);
 
-            let branch        = $('[name=branch]').val();
-            let $branchPicker = $('[name=branch]').zui('picker');
-            $branchPicker.render({items: data});
-            $branchPicker.$.setValue(branch);
-            $('#branch').removeClass('hidden');
-        }
+        let branch        = $('[name=branch]').val();
+        let $branchPicker = $('[name=branch]').zui('picker');
+        $branchPicker.render({items: data});
+        $branchPicker.$.setValue(branch);
+        $('#branch').removeClass('hidden');
     })
 }
 
