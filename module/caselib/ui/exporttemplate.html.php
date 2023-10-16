@@ -12,7 +12,7 @@ namespace zin;
 
 set::title($lang->testcase->exportTemplate);
 
-form
+formPanel
 (
     set::target('_self'),
     on::submit('setDownloading'),
