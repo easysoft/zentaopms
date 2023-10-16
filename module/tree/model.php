@@ -1136,7 +1136,7 @@ class treeModel extends model
         $data->id     = $module->id;
         $data->parent = $module->parent;
         $data->name   = $module->name;
-        $data->url    = helper::createLink('execution', 'task', "executionID={$executionID}&type=byModule&param={$module->id}");
+        $data->url    = helper::createLink('execution', 'task', "executionID={$module->root}&type=byModule&param={$module->id}");
 
         return $data;
     }
