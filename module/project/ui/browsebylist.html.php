@@ -86,8 +86,8 @@ if($canBatchEdit)
 $settings = $this->loadModel('datatable')->getSetting('project');
 foreach($settings as $key => $value)
 {
-    if($value['id'] == 'status' && strpos(',all,bysearch,undone,', ",$browseType,") === false)      unset($settings[$key]);
-    if(commonModel::isTutorialMode() && in_array($value['id'], array('PM', 'budget', 'teamCount'))) unset($settings[$key]);
+    if($value['name'] == 'status' && strpos(',all,bysearch,undone,', ",$browseType,") === false)      unset($settings[$key]);
+    if(commonModel::isTutorialMode() && in_array($value['name'], array('PM', 'budget', 'teamCount'))) unset($settings[$key]);
 }
 $tableData = initTableData($projectStats, $settings, $this->project);
 
