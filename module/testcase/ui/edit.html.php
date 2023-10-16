@@ -40,6 +40,7 @@ if(isset($case->toBugs))
         $linkBugItems[] = array('text' => "#{$bugID} {$bug->title}", 'value' => $bugID, 'checked' => true);
     }
 }
+$priList = array_filter($lang->testcase->priList);
 
 detailHeader
 (
@@ -297,7 +298,7 @@ detailBody
                 priPicker
                 (
                     set::name('pri'),
-                    set::items($lang->testcase->priList),
+                    set::items($priList),
                     set::value($case->pri),
                 )
             ),
