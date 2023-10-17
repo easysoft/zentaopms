@@ -132,12 +132,6 @@ $config->block->params['bugstatistic']->type['options'] = $lang->block->typeList
 $config->block->params['bugstatistic']->type['control'] = 'picker';
 $config->block->params['bugstatistic']->count = $config->block->params['default']->count;
 
-$config->block->params['releasestatistic'] = new stdclass();
-$config->block->params['releasestatistic']->type['name']    = $lang->block->type;
-$config->block->params['releasestatistic']->type['options'] = $lang->block->typeList->product;
-$config->block->params['releasestatistic']->type['control'] = 'picker';
-$config->block->params['releasestatistic']->count = $config->block->params['default']->count;
-
 $config->block->params['executionstatistic'] = new stdclass();
 $config->block->params['executionstatistic']->type['name']    = $lang->block->type;
 $config->block->params['executionstatistic']->type['options'] = $lang->block->typeList->execution;
