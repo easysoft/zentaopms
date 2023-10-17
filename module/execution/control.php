@@ -3425,7 +3425,7 @@ class execution extends control
         $object     = $this->project->getByID($objectID, 'project,sprint,stage,kanban');
         $products   = $this->product->getProducts($objectID);
         $queryID    = ($browseType == 'bySearch') ? (int)$param : 0;
-        $browseLink = $this->session->executionStoryList ? $this->session->executionStoryList : $this->createLink('execution', 'story', "executionID=$objectID");
+        $browseLink = $this->createLink('execution', 'story', "executionID=$objectID");
         if($this->app->tab == 'project' and $object->multiple and !$browseLink) $browseLink = $this->createLink('projectstory', 'story', "objectID=$objectID&productID=0&branch=0&browseType=&param=0&storyType=$storyType");
         if($object->type == 'kanban' && !$object->hasProduct) $this->lang->productCommon = $this->lang->project->common;
 

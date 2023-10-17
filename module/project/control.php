@@ -1096,6 +1096,11 @@ class project extends control
         $this->project->setMenu($projectID);
 
         if(!$projectID) return print(js::locate($this->createLink('project', 'browse')));
+        if(!$project->multiple)
+        {
+            $executionID = $this->execution->getNoMultipleID($projectID);
+            return print(js::locate($this->createLink('execution', 'task', "executionID=$executionID")));
+        }
         if(!empty($project->model) and $project->model == 'kanban' and !(defined('RUN_MODE') and RUN_MODE == 'api')) return print(js::locate($this->createLink('project', 'index', "projectID=$projectID")));
 
         /* Load pager and get tasks. */
