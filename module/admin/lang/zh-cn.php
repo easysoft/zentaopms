@@ -184,7 +184,7 @@ $lang->admin->menuSetting['convert']['desc']   = '第三方系统的数据导入
 $lang->admin->menuSetting['platform']['name']  = 'DevOps设置';
 $lang->admin->menuSetting['platform']['desc']  = '资源、环境等DevOps各要素配置。';
 $lang->admin->menuSetting['ai']['name']        = 'AI 配置';
-$lang->admin->menuSetting['ai']['desc']        = '管理 AI 提词应用、配置语言模型。';
+$lang->admin->menuSetting['ai']['desc']        = '支持配置与管理AI提词、AI小程序及大语言模型。';
 
 $lang->admin->updateDynamics   = '更新动态';
 $lang->admin->updatePatch      = '补丁更新';

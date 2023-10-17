@@ -48,7 +48,7 @@
         </table>
         <div class='text-center form-actions'>
           <?php echo html::a(inlink('step6'), $lang->install->solution->skip, '', "id='skipBtn' class='btn btn-install btn-wide' style='display:none;'");?>
-          <?php echo html::commonButton($lang->solution->install, "id='submitBtn'", 'btn btn-primary btn-wide')?>
+          <?php echo html::commonButton($lang->solution->install, "id='submitBtn' disabled=disabled", 'btn btn-primary btn-wide')?>
         </div>
       </form>
     </div>

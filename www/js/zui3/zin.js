@@ -380,9 +380,9 @@
                     hasFatal = data.includes('Fatal error') || data.includes('Uncaught TypeError:');
                     data = [{name: hasFatal ? 'fatal' : 'html', data: data}];
                 }
-                if(!options.partial && !hasFatal) currentAppUrl = url;
                 if(Array.isArray(data))
                 {
+                    if(!options.partial && !hasFatal) currentAppUrl = url;
                     data.forEach((item, idx) => item.selector = selectors[idx]);
                     updatePerfInfo(options, 'renderBegin');
                     renderPage(data, options);
@@ -393,7 +393,8 @@
                 }
                 else if(data.load)
                 {
-                    if(data.load === 'dtable') loadTable();
+                    if(data.load === 'table') loadTable();
+                    if(data.load === 'login') window.top.location.href = $.createLink('user', 'login', 'referer=' + btoa(url));
                     else if(typeof data.load === 'string') loadPage(data.load);
                     else if(data.load === true) loadCurrentPage();
                     else if(typeof data.load === 'object')
@@ -1104,7 +1105,7 @@
         parent.selectTheme(theme);
     }
 
-    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, changeAppLang, changeAppTheme: changeAppTheme, uploadFileByChunk: uploadFileByChunk});
+    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, changeAppLang, changeAppTheme: changeAppTheme, uploadFileByChunk: uploadFileByChunk});
     $.extend($.apps, {openUrl: openUrl});
     $.extend($, {ajaxSendScore: ajaxSendScore, selectLang: selectLang});
 
@@ -1159,6 +1160,11 @@
         {
             if(data === 'table') return loadTable();
             if(data === 'modal') return loadModal();
+            if(data === 'login')
+            {
+                window.top.location.href = $.createLink('user', 'login', 'referer=' + btoa(currentAppUrl));
+                return;
+            }
             data = {url: data};
         }
 

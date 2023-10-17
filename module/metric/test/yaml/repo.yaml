@@ -1,0 +1,37 @@
+---
+title: zt_repo
+author: Yanyi Cao
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: product
+    range: 1-100
+  - field: name
+    prefix: 代码库
+    range: 1-100
+  - field: path
+    range: 42
+  - field: SCM
+    range: Gitlab
+  - field: client
+    range: 1
+  - field: serviceHost
+    range: 1
+  - field: serviceProject
+    range: 42
+  - field: extra
+    range: 42
+  - field: preMerge
+    range: 1
+  - field: job
+    range: 1
+  - field: acl
+    range: 1
+  - field: desc
+    range: 1
+  - field: commits
+    range: 10000{1},30000{1},50000{1}
+  - field: deleted
+    range: 0
+...

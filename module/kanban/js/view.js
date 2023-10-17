@@ -377,7 +377,7 @@ function renderKanbanItem(item, $item)
             .text(item.pri);
 
         var $time = $info.children('.time');
-        if(item.end == '0000-00-00' && item.begin == '0000-00-00')
+        if((item.end == '0000-00-00' && item.begin == '0000-00-00') || (item.end == '' && item.begin == ''))
         {
             $time.hide();
         }
@@ -1476,6 +1476,7 @@ function initKanban($kanban)
     var id         = $kanban.data('id');
     var region     = regions[id];
     var cardHeight = kanbanInfo.performable == 1 ? 87 : 60;
+    var droppable  = priv['canMoveCard'] ? {target: findDropColumns, finish: handleFinishDrop} : false;
 
     $kanban.kanban(
     {
@@ -1500,11 +1501,7 @@ function initKanban($kanban)
         virtualize:            true,
         virtualRenderOptions:  {container: $(window).add($('#kanbanContainer'))},
         virtualCardList:       true,
-        droppable:
-        {
-            target:       findDropColumns,
-            finish:       handleFinishDrop
-        },
+        droppable:             droppable,
     });
 
     $kanban.on('click', '.action-cancel', hideKanbanAction);

@@ -32,6 +32,7 @@ class ac_of_all_in_waterfall extends baseCalc
             ->andWhere('t3.type')->eq('project')
             ->andWhere('t3.model')->eq('waterfall')
             ->andWhere("NOT FIND_IN_SET('or', t3.vision)")
+            ->andWhere("NOT FIND_IN_SET('lite', t3.vision)")
             ->groupBy('t3.id')
             ->query();
     }

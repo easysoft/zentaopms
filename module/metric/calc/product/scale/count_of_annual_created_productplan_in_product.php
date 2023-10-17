@@ -29,6 +29,7 @@ class count_of_annual_created_productplan_in_product extends baseCalc
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.shadow')->eq(0)
+            ->andWhere("NOT FIND_IN_SET('or', t2.vision)")
             ->query();
     }
 

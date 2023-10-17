@@ -16,6 +16,7 @@
 li.story-item > .tree-actions .tree-action[data-type=sort] {display: none;}
 li.story-item > .tree-actions .tree-action[data-type=edit] {display: none;}
 li.story-item > .tree-actions .tree-action[data-type=delete] {display: none;}
+#modulesTree li.dragging {opacity: .3;}
 </style>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
@@ -229,11 +230,10 @@ $(function()
 
     var tree = $tree.data('zui.tree');
     if(!tree.store.time) tree.expand($tree.find('li:not(.tree-action-item)').first());
-    if(<?php echo $currentModuleID ?>)
-    {
-        var $currentLi = $tree.find('.module-name[data-id=' + <?php echo $currentModuleID ?> + ']').closest('li');
-        if($currentLi.length) tree.show($currentLi);
-    }
+    <?php if($currentModuleID): ?>
+    var $currentLi = $tree.find('.module-name[data-id=' + <?php echo $currentModuleID ?> + ']').closest('li');
+    if($currentLi.length) tree.show($currentLi);
+    <?php endif; ?>
 
     $tree.on('mouseenter', 'li:not(.tree-action-item)', function(e)
     {

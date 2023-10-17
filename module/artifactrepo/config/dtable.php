@@ -21,6 +21,7 @@ $config->artifactrepo->dtable->fieldList['type']['sortType'] = true;
 
 $config->artifactrepo->dtable->fieldList['status']['title']    = $lang->artifactrepo->status;
 $config->artifactrepo->dtable->fieldList['status']['sortType'] = true;
+$config->artifactrepo->dtable->fieldList['status']['map']      = $lang->artifactrepo->statusList;
 
 $config->artifactrepo->dtable->fieldList['url']['title'] = $lang->artifactrepo->url;
 $config->artifactrepo->dtable->fieldList['url']['width'] = '400';

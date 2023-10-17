@@ -52,6 +52,7 @@ dtable
 (
     set::cols($config->artifactrepo->dtable->fieldList),
     set::data($artifactRepos),
+    set::onRenderCell(jsRaw('window.renderList')),
     set::sortLink(jsRaw('createSortLink')),
     set::footPager(usePager()),
 );

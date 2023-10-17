@@ -161,7 +161,8 @@ class artifactrepo extends control
         $hasUpdate = false;
         foreach($artifactRepos as $repo)
         {
-            foreach($serverRepos[$repo->serverID] as $serverRepo)
+            if(!isset($serverRepos[$repo->serverID])) continue;
+            foreach($serverRepos[$repo->serverID]['data'] as $serverRepo)
             {
                 $serverRepo->onlineStatus = $serverRepo->online ? 'online' : 'offline';
                 if($serverRepo->name == $repo->repoName && $serverRepo->onlineStatus != $repo->status)

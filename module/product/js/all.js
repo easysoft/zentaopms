@@ -214,3 +214,19 @@ $(function()
         updateStatistic()
     });
 });
+
+/**
+ * Get checked items.
+ *
+ * @access public
+ * @return array
+ */
+function getCheckedItems()
+{
+    var checkedItems = [];
+    $('#productListForm [name^=productIDList]:checked').each(function(index, ele)
+    {
+        checkedItems.push($(ele).val());
+    });
+    return checkedItems;
+};

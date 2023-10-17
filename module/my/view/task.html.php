@@ -195,7 +195,7 @@
                 <?php echo ($task->projectName and $task->project) ? html::a($this->createLink('project', 'view', "projectID=$task->project"), $task->projectName) : '';?>
               </td>
               <td class='c-project' title="<?php if($child->executionMultiple) echo $child->projectName;?>">
-                <?php if($child->executionMultiple) echo html::a($this->createLink('execution', 'task', "executionID=$child->project"), $child->executionName, '');?>
+                <?php if($child->executionMultiple) echo html::a($this->createLink('execution', 'task', "executionID=$child->execution"), $child->executionName, '');?>
               </td>
               <?php if($type != 'assignedTo'): ?>
               <td class="c-assignedTo has-btn" title="<?php echo zget($users, $child->assignedTo);?>"> <?php $this->task->printAssignedHtml($child, $users);?></td>
@@ -316,7 +316,7 @@ $(function()
                 if(status === 'doing') checkedDoing++;
 
                 var canStatistics = false;
-                if(!$row.hasClass('table-children'))
+                if($row.find('.has-child').length == 0)
                 {
                     canStatistics = true;
                 }

@@ -263,10 +263,11 @@ class Subversion
      *
      * @param  string $path
      * @param  int    $revision
+     * @param  bool   $showComment
      * @access public
      * @return array
      */
-    public function blame($path, $revision)
+    public function blame($path, $revision, $showComment = true)
     {
         if(!scm::checkRevision($revision)) return array();
 
@@ -310,9 +311,13 @@ class Subversion
                     $blame['line']      = (int)$line['line-number'];
                     $blame['lines']     = 1;
                     $blame['content']   = $content[$blame['line'] - 1];
+                    $blame['message']   = '';
 
-                    $log = $this->log('', $blame['revision'], 'HEAD', 1);
-                    $blame['message'] = $log[0]->comment;
+                    if($showComment)
+                    {
+                        $log = $this->log('', $blame['revision'], 'HEAD', 1);
+                        $blame['message'] = $log[0]->comment;
+                    }
 
                     $revision         = $blame['revision'];
                     $revLine          = $blame['line'];

@@ -16,6 +16,7 @@ $fnGenerateSide = function() use($metrics, $current, $viewType, $scope, $filters
     foreach($metrics as $key => $metric)
     {
         $class = $metric->id == $current->id ? 'metric-current' : '';
+        $class .= " metric-{$metric->id}";
         $params = "scope=$scope&viewType=$viewType&metricID={$metric->id}";
         if(!empty($filtersBase64)) $params .= "&filtersBase64={$filtersBase64}";
 

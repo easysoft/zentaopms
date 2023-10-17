@@ -4,31 +4,13 @@ version: "1.0"
 fields:
   - field: id
     range: 1
-  - field: assetID
-    range: 1
   - field: hardwareType
     range: server
   - field: hostType
     range: virtual
-  - field: unit
-    range: GB
-  - field: privateIP
-    range: 192.168.1.215
-  - field: address
-    range: 192.168.1.215
   - field: osName
     range: linux
   - field: status
     range: online
-  - field: agentPort
-    range: 8086
-  - field: instanceNum
-    range: 1
-  - field: pri
-    range: 100
-  - field: tags
-    range: vm
   - field: provider
     range: native
-  - field: bridgeID
-    range: br0

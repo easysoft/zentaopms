@@ -201,6 +201,8 @@ class metricModel extends model
         else
         {
             $calculator->setDAO($this->dao);
+            $scm = $this->app->loadClass('scm');
+            $calculator->setSCM($scm);
 
             $statement = $calculator->getStatement();
             $sql       = $calculator->dao->get();
@@ -533,7 +535,7 @@ class metricModel extends model
                 $objectPairs = $this->loadModel('dept')->getDeptPairs();
                 break;
             case 'user':
-                $objectPairs = $this->loadModel('user')->getPairs('noletter');
+                $objectPairs = $this->loadModel('user')->getPairs('noletter|noclosed');
                 break;
             case 'program':
                 $objectPairs = $this->dao->select('id, name')->from(TABLE_PROGRAM)
@@ -556,6 +558,9 @@ class metricModel extends model
                     ->where('deleted')->eq(0)
                     ->andWhere('type')->in('sprint,stage')
                     ->fetchPairs();
+                break;
+            case 'code':
+                $objectPairs = $this->loadModel('repo')->getRepoPairs('repo');
                 break;
             default:
                 $objectPairs = $this->loadModel($scope)->getPairs();
@@ -1060,7 +1065,7 @@ class metricModel extends model
         }
         elseif($optionType == 'user')
         {
-            $options = $this->loadModel('user')->getPairs('noletter');
+            $options = $this->loadModel('user')->getPairs('noletter|noclosed');
         }
         elseif(strpos($optionType, '.') !== false)
         {
@@ -1195,5 +1200,19 @@ class metricModel extends model
 
         if(empty($type)) $type[] = 'system';
         return implode('-', $type);
+    }
+
+    /**
+     * 更新度量项的创建时间
+     * Update created date of metrics.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateMetricDate()
+    {
+        $now = helper::now();
+        $metricIDList = $this->dao->select('id')->from(TABLE_METRIC)->where('deleted')->eq('0')->fetchPairs();
+        foreach($metricIDList as $metricID) $this->dao->update(TABLE_METRIC)->set('createdDate')->eq($now)->exec();
     }
 }

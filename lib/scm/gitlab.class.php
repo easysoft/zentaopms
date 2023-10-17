@@ -244,10 +244,11 @@ class gitlab
      *
      * @param  string $path
      * @param  string $revision
+     * @param  bool   $showComment
      * @access public
      * @return array
      */
-    public function blame($path, $revision)
+    public function blame($path, $revision, $showComment = true)
     {
         if(!scm::checkRevision($revision)) return array();
 
@@ -304,7 +305,7 @@ class gitlab
         if(!scm::checkRevision($fromRevision) and $extra != 'isBranchOrTag') return array();
         if(!scm::checkRevision($toRevision) and $extra != 'isBranchOrTag')   return array();
 
-        $sameVersion = $fromRevision == $toRevision . '^';
+        $sameVersion = $fromRevision == '^' || strpos($fromRevision, $toRevision) === 0;
         $api    = $sameVersion ? "commits/$toRevision/diff" : "compare";
         $params = array('from' => $fromRevision, 'to' => $toRevision, 'straight' => true);
         if($fromProject) $params['from_project_id'] = $fromProject;

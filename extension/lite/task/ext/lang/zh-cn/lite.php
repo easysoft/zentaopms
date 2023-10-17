@@ -27,6 +27,7 @@ $lang->task->copy                = '复制任务';
 $lang->task->waitTask            = '未开始的任务';
 $lang->task->region              = '所属区域';
 $lang->task->lane                = '所属泳道';
+$lang->task->execution           = '所属看板';
 
 $lang->task->module       = '所属目录';
 $lang->task->allModule    = '所有目录';

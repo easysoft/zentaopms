@@ -149,6 +149,7 @@ ALTER TABLE `zt_story` MODIFY `status` enum('','changing','active','draft','clos
 ALTER TABLE `zt_project` ADD `charter` mediumint(8) NOT NULL DEFAULT 0 AFTER `project`;
 ALTER TABLE `zt_project` ADD `category` char(30) COLLATE 'utf8_general_ci' NOT NULL AFTER `type`;
 
+DELETE FROM `zt_stage` WHERE `projectType` = 'ipd';
 REPLACE INTO `zt_stage` (`name`, `percent`, `type`, `projectType`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `deleted`) VALUES
 ('概念',        '10',   'concept',   'ipd', 'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
 ('计划',        '10',   'plan',      'ipd', 'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),

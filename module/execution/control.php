@@ -3432,7 +3432,7 @@ class execution extends control
         $object     = $this->project->getByID($objectID, 'project,sprint,stage,kanban');
         $products   = $this->product->getProducts($objectID);
         $queryID    = ($browseType == 'bySearch') ? (int)$param : 0;
-        $browseLink = $this->session->executionStoryList;
+        $browseLink = $this->createLink('execution', 'story', "executionID=$objectID");
         if($this->app->tab == 'project' and $object->multiple and !$browseLink) $browseLink = $this->createLink('projectstory', 'story', "objectID=$objectID&productID=0&branch=0&browseType=&param=0&storyType=$storyType");
         if($object->type == 'kanban' && !$object->hasProduct) $this->lang->productCommon = $this->lang->project->common;
 
@@ -4108,7 +4108,7 @@ class execution extends control
         $this->view->productID        = $productID;
         $this->view->pager            = $pager;
         $this->view->orderBy          = $orderBy;
-        $this->view->users            = $this->loadModel('user')->getPairs('noletter', '', 0, array_unique(helper::arrayColumn($executionStats, 'PM')));
+        $this->view->users            = $this->loadModel('user')->getPairs('noletter');
         $this->view->projects         = array('') + $this->project->getPairsByProgram();
         $this->view->status           = $status;
         $this->view->from             = $from;

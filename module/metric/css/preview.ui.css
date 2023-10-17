@@ -8,7 +8,7 @@
 .filter-btn {padding-left: 0.625rem !important; padding-right: 0.625rem !important;}
 
 .main, .side {border-radius: 2px;}
-.side .title {height: 48px; padding-left: 16px; margin-bottom: 8px;}
+.side .title {height: 48px; padding-left: 16px;}
 .side .name-color {color: var(--color-slate-600);}
 .side .metric-tree {height: calc(100vh - 180px); max-height: 864px; overflow-y: scroll;}
 .side .metric-item {padding-left: 24px; padding-top: 6px; padding-bottom: 6px;}
@@ -21,7 +21,7 @@
 .side .checkbox-primary:hover {background-color: var(--color-gray-100);}
 .side .check-list-metric {padding-top: 0; padding-bottom: 12px; gap: 0;}
 
-.main .metric-name {height: 48px; padding-left: 16px; margin-bottom: 8px; border-bottom: 1px solid var(--color-slate-300);}
+.main .metric-name {height: 48px; padding-left: 16px; margin-bottom: 8px; padding-right: 16px;}
 .main .metric-name-notfirst {border-top: 1px solid var(--color-slate-300);}
 .main .name-and-star {display: flex; align-items: center;}
 .main .metric-collect {margin-left: 12px;}
@@ -34,14 +34,14 @@
 .metric-remove:hover {color: var(--color-primary-500);}
 .main .chart-line-margin {margin-right: 16px;}
 .main .table-and-chart {display: flex;}
-.main .table-and-chart-single {height: calc(100vh - 180px - 48px); max-height: 864px; padding: 8px 16px 16px 16px;}
-.main .table-and-chart-multiple {max-height: 352px; padding: 8px 16px 16px 16px;}
+.main .table-and-chart-single {height: calc(100vh - 180px - 56px); max-height: 864px; padding: 16px;}
+.main .table-and-chart-multiple {max-height: 346px; padding: 16px;}
 .main .canvas {height: calc(100vh - 172px + 48px); max-height: 920px; overflow-y: hidden;}
 .main .table-and-charts {height: calc(100vh - 172px); max-height: calc(100% - 48px); overflow-y: scroll;}
-.main .metricBox {max-height: 408px;}
+.main .metricBox {max-height: 432px;}
 .chart-single {height: calc(100% - 32px); width: 100%;}
 .chart-multiple {height: 285px; width: 100%;}
-.chart-type {width: 30%; padding-left: 50px;}
+.chart-type {width: 30%; padding-left: 16px;}
 
 i.star-empty {color: var(--color-slate-400);}
 i.star {color: var(--color-warning-300);}
@@ -93,5 +93,5 @@ i.star {color: var(--color-warning-300);}
 
 .query-inline {padding-left: 80px !important;}
 .query-inline>label {justify-content: flex-start !important; width: 80px !important;}
-.query-btn {padding-left: 20px !important;}
+.query-btn {padding-left: 16px !important;}
 .picker-nowrap .picker-multi-selections {flex-wrap: nowrap !important; overflow: hidden !important;}

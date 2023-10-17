@@ -83,7 +83,7 @@ if($fileName) $breadcrumbItems[] = h::span($fileName);
             set::text($repo->name),
             set::url(createLink('repo', 'ajaxGetDropMenu', "repoID={$repo->id}&module=repo&method=browse&projectID={$objectID}"))
         ) : null,
-        $repo->SCM != 'Subversion' ? dropmenu
+        ($repo->SCM != 'Subversion' && ($branches || $tags)) ? dropmenu
         (
             setID('repoBranchDropMenu'),
             set::objectID($selected),
@@ -208,7 +208,7 @@ toolbar
         set::className('last-sync-time'),
         $lang->repo->notice->lastSyncTime . $cacheTime
     ),
-    $repo->SCM != 'Gitlab' ? item(set($refreshItem)) : null,
+    item(set($refreshItem)),
     dropdown
     (
         set::staticMenu(true),
@@ -274,7 +274,7 @@ sidebar
         set::data($commentsTableData),
         set::onRenderCell(jsRaw('window.renderCommentCell')),
         set::onCheckChange(jsRaw('window.checkedChange')),
-        set::canRowCheckable(jsRaw('function(rowID){return canRowCheckable(rowID);}')),
+        set::canRowCheckable(jsRaw('window.canRowCheckable')),
         set::footToolbar($footToolbar),
         set::footer(array('toolbar', 'flex', 'pager')),
         set::footPager(usePager('pager', 'noTotalCount')),

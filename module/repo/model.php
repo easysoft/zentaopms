@@ -293,7 +293,7 @@ class repoModel extends model
             $res   = $this->loadModel('gitlab')->addPushWebhook($repo, $token);
             if($res === false)
             {
-                $thi->dao->delete()->from(TABLE_REPO)->where('id')->eq($repoID)->exec();
+                $this->dao->delete()->from(TABLE_REPO)->where('id')->eq($repoID)->exec();
                 dao::$errors['webhook'][] = $this->lang->gitlab->failCreateWebhook;
                 return false;
             }
@@ -454,7 +454,7 @@ class repoModel extends model
             $this->updateCommitDate($repo->id);
         }
 
-        if($repo->path != $data->path)
+        if(($repo->serviceHost != $data->serviceHost || $repo->serviceProject != $data->serviceProject) && $repo->path != $data->path)
         {
             $this->dao->delete()->from(TABLE_REPOHISTORY)->where('repo')->eq($id)->exec();
             $this->dao->delete()->from(TABLE_REPOFILES)->where('repo')->eq($id)->exec();
@@ -1484,7 +1484,6 @@ class repoModel extends model
      */
     public function setRepoBranch($branch)
     {
-        if(empty($branch)) return;
         helper::setcookie("repoBranch", $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
         $_COOKIE['repoBranch'] = $branch;
     }
@@ -2083,7 +2082,7 @@ class repoModel extends model
                         }
                         else
                         {
-                            $this->task->recordWorkhour($taskID);
+                            $this->task->recordEstimate($taskID);
                         }
 
                         $action->action     = $scm == 'svn' ? 'svncommited' : 'gitcommited';
@@ -2266,8 +2265,8 @@ class repoModel extends model
         {
             foreach($actionFiles as $file)
             {
-                $catLink  = trim(html::a($this->buildURL('cat',  $repoRoot . $file, $log->revision, $scm), 'view', '', "class='iframe' data-width='960'"));
-                $diffLink = trim(html::a($this->buildURL('diff', $repoRoot . $file, $log->revision, $scm), 'diff', '', "class='iframe' data-width='960'"));
+                $catLink  = trim(html::a($this->buildURL('cat',  $repoRoot . $file, $log->revision, $scm), 'view', '', "data-width='960'"));
+                $diffLink = trim(html::a($this->buildURL('diff', $repoRoot . $file, $log->revision, $scm), 'diff', '', "data-width='960'"));
                 $diff .= $action . " " . $file . " $catLink ";
                 $diff .= $action == 'M' ? "$diffLink\n" : "\n" ;
             }
@@ -2407,6 +2406,9 @@ class repoModel extends model
             $commentGroup = $this->loadModel('job')->getTriggerGroup('commit', array($repo->id));
             if($repo->SCM == 'Gitlab')
             {
+                $scm = $this->app->loadClass('scm');
+                $scm->setEngine($repo);
+
                 $this->loadModel('repo');
                 $jobs = zget($commentGroup, $repo->id, array());
 
@@ -2422,6 +2424,13 @@ class repoModel extends model
                     $log->msg      = $commit->message;
                     $log->author   = $commit->author->name;
                     $log->date     = date("Y-m-d H:i:s", strtotime($commit->timestamp));
+                    $log->files    = array();
+
+                    $diffs = $scm->engine->getFilesByCommit($log->revision);
+                    if(!empty($diffs))
+                    {
+                        foreach($diffs as $diff) $log->files[$diff->action][] = $diff->path;
+                    }
 
                     $objects = $this->repo->parseComment($log->msg);
                     $this->repo->saveAction2PMS($objects, $log, $repo->path, $repo->encoding, 'git', $accountPairs);

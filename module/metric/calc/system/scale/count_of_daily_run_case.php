@@ -31,6 +31,7 @@ class count_of_daily_run_case extends baseCalc
             ->where('t2.deleted')->eq('0')
             ->andWhere('t3.deleted')->eq('0')
             ->andWhere('t1.date')->notZeroDatetime()
+            ->andWhere("NOT FIND_IN_SET('or', t3.vision)")
             ->groupBy('`year`, `month`, `day`')
             ->query();
     }

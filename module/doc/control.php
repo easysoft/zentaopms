@@ -617,6 +617,7 @@ class doc extends control
         {
             $execution = $this->loadModel('execution')->getById($objectID);
             $objects   = $this->execution->getPairs($execution->project, 'all', "multiple,leaf,noprefix");
+            $objects   = $this->execution->resetExecutionSorts($objects, array(), array(), $execution->project);
         }
         elseif($objectType == 'product')
         {

@@ -649,7 +649,13 @@ class bug extends control
         $executions = isset($executions[$executionID]) ? $executions : $executions + array($executionID => $execution->name);
 
         /* Set custom. */
+        if($execution and !$execution->multiple)
+        {
+            $this->config->bug->list->customCreateFields = str_replace('execution,', '', $this->config->bug->list->customCreateFields);
+            $this->config->bug->custom->createFields = str_replace('execution,', '', $this->config->bug->custom->createFields);
+        }
         foreach(explode(',', $this->config->bug->list->customCreateFields) as $field) $customFields[$field] = $this->lang->bug->$field;
+
 
         $this->view->title        = isset($this->products[$productID]) ? $this->products[$productID] . $this->lang->colon . $this->lang->bug->create : $this->lang->bug->create;
         $this->view->customFields = $customFields;

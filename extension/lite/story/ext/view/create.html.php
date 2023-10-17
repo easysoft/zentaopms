@@ -20,6 +20,9 @@
 <?php if(common::checkNotCN()):?>
 <style> .sourceTd > .input-group > .input-group > .input-group-addon:first-child{padding: 5px 18px} </style>
 <?php endif;?>
+<style>
+.close-modal-btn {margin-right: -48px;}
+</style>
 <div id="mainContent" class="main-content">
   <div class="center-block">
     <div class="main-header">
@@ -30,6 +33,11 @@
           <input id='needNotReview' name='needNotReview' value='1' type='checkbox' class='no-margin' <?php echo $needReview;?>/>
           <label for='needNotReview'><?php echo $lang->story->needNotReview;?></label>
         </div>
+      </div>
+      <?php endif;?>
+      <?php if(isonlybody()):?>
+      <div class='btn-toolbar pull-right close-modal-btn'>
+        <button id="closeModal" type="button" class="btn btn-link" data-dismiss="modal"><i class="icon icon-close"></i></button>
       </div>
       <?php endif;?>
     </div>

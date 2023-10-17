@@ -35,7 +35,7 @@
     <form class="load-indicator main-form form-ajax" method='post' enctype='multipart/form-data' id='dataform'>
       <table class="table table-form">
         <tbody>
-          <tr>
+          <tr class="<?php echo $project->model == 'ipd' ? 'hidden' : '';?>">
             <th class="w-100px"><?php echo $lang->programplan->parent;?></th>
             <td colspan='2'><?php echo html::select('parent', $parentStageList, $plan->parent, "class='form-control chosen '");?></td>
           </tr>
@@ -72,6 +72,7 @@
               if($project->model == 'ipd')
               {
                   echo zget($lang->stage->ipdTypeList, $plan->attribute);
+                  echo html::hidden('attribute', $plan->attribute);
               }
               elseif($enableOptionalAttr)
               {

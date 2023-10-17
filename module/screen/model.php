@@ -49,7 +49,13 @@ class screenModel extends model
      */
     public function getList($dimensionID)
     {
-        return $this->dao->select('*')->from(TABLE_SCREEN)->where('dimension')->eq($dimensionID)->andWhere('deleted')->eq('0')->fetchAll('id');
+        $hasUsageReport = $this->config->edition !== 'open';
+
+        return $this->dao->select('*')->from(TABLE_SCREEN)
+            ->where('dimension')->eq($dimensionID)
+            ->andWhere('deleted')->eq('0')
+            ->beginIF(!$hasUsageReport)->andWhere('id')->ne(1001)->fi()
+            ->fetchAll('id');
     }
 
     /**
@@ -876,11 +882,11 @@ class screenModel extends model
             case 'year':
                 $component->option->value = $this->filter->year;
 
-                $begin = $this->dao->select('YEAR(MIN(date)) year')->from(TABLE_ACTION)->where('date')->notZeroDate()->fetch('year');
-                if($begin < 2009) $begin = 2009;
+                $beginYear = $this->dao->select('YEAR(MIN(date)) year')->from(TABLE_ACTION)->where('date')->notZeroDate()->fetch('year');
+                if($beginYear < 2009) $beginYear = 2009;
 
                 $options = array();
-                for($year = date('Y'); $year >= $begin; $year--) $options[] = array('label' => $year, 'value' => $year);
+                for($year = date('Y'); $year >= $beginYear; $year--) $options[] = array('label' => $year, 'value' => $year);
                 $component->option->dataset = $options;
 
                 $url = "createLink('screen', 'view', 'screenID=" . $this->filter->screen. "&year=' + value + '&month=" . $this->filter->month . "&dept=" . $this->filter->dept . "&account=" . $this->filter->account . "')";
@@ -889,8 +895,20 @@ class screenModel extends model
             case 'month':
                 $component->option->value = $this->filter->month;
 
+                $beginYear  = $this->dao->select('YEAR(MIN(date)) year')->from(TABLE_ACTION)->where('date')->notZeroDate()->fetch('year');
+                $beginMonth = $this->dao->select('MONTH(MIN(date)) month')->from(TABLE_ACTION)->where('date')->notZeroDate()->fetch('month');
+
+                $currentYear  = date('Y');
+                $currentMonth = date('n');
+
                 $options = array();
-                for($month = 12; $month >= 1; $month--) $options[] = array('label' => $month, 'value' => $month);
+                for($month = 12; $month >= 1; $month--)
+                {
+                    if($currentYear == $this->filter->year && $month > $currentMonth) continue;
+                    if($currentYear == $beginYear && $month < $beginMonth) continue;
+
+                    $options[] = array('label' => $month, 'value' => $month);
+                }
                 $component->option->dataset = $options;
 
                 $url = "createLink('screen', 'view', 'screenID=" . $this->filter->screen. "&year=" . $this->filter->year . "&month=' + value + '&dept=" . $this->filter->dept . "&account=" . $this->filter->account . "')";
@@ -1706,17 +1724,22 @@ class screenModel extends model
 
         $year  = $this->filter->year;
         $month = $this->filter->month;
+
         $projectList = $this->getUsageReportProjects($year, $month);
+        $productList = $this->getUsageReportProducts($year, $month);
 
         if($chartID == 20002) return $this->getActiveUserTable($year, $month, $projectList);
+        if($chartID == 20012) return $this->getProductStoryTable($year, $month, $productList);
+        if($chartID == 20011) return $this->getProductTestTable($year, $month, $productList);
         if($chartID == 20004) return $this->getActiveProductCard($year, $month);
         if($chartID == 20007) return $this->getActiveProjectCard($year, $month);
+        if($chartID == 20013) return $this->getProjectStoryTable($year, $month, $projectList);
         if($chartID == 20010) return $this->getProjectTaskTable($year, $month, $projectList);
     }
 
     /**
-     * 获取活跃账号数项目间对比图表。
-     * Get table of active account.
+     * 获取应用健康度体检报告的活跃账号数项目间对比表格。
+     * Get table of active account per project in usage report.
      *
      * @param  string $year
      * @param  string $month
@@ -1741,6 +1764,7 @@ class screenModel extends model
             $teamMemberList = $this->dao->select('t2.id, t2.account')->from(TABLE_TEAM)->alias('t1')
                 ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
                 ->where('t1.root')->eq($projectID)
+                ->andWhere('t1.type')->eq('project')
                 ->andWhere('date(t1.join)')->le($date)
                 ->andWhere('t2.deleted')->eq('0')
                 ->fetchPairs();
@@ -1766,8 +1790,8 @@ class screenModel extends model
     }
 
     /**
-     * 获取活跃项目数卡片。
-     * Get card of active project.
+     * 获取应用健康度体检报告的活跃项目数卡片。
+     * Get card of active project in usage report.
      *
      * @param  string $year
      * @param  string $month
@@ -1776,43 +1800,131 @@ class screenModel extends model
      */
     public function getActiveProjectCard($year, $month)
     {
-        return $this->dao->select('count(distinct project) as count')->from(TABLE_ACTION)
-            ->where('project')->ne(0)
-            ->andWhere('year(date)')->eq($year)
-            ->andWhere('month(date)')->eq($month)
+        return $this->dao->select('count(distinct t1.project) as count')->from(TABLE_ACTION)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.project')->ne(0)
+            ->andWhere('year(t1.date)')->eq($year)
+            ->andWhere('month(t1.date)')->eq($month)
+            ->andWhere('t2.type')->eq('project')
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere("NOT FIND_IN_SET('or', t2.vision)")
             ->fetchAll();
     }
 
     /**
-     * 获取活跃产品数卡片。
-     * Get card of active product.
+     * 获取应用健康度体检报告的活跃产品数卡片。
+     * Get card of active product in usage report.
      *
      * @param  string $year
      * @param  string $month
      * @access public
-     * @return mixed
+     * @return array
      */
     public function getActiveProductCard($year, $month)
     {
-        $activeProductCount = $this->dao->select('count(distinct product) as count')->from(TABLE_ACTION)
+        $noDeletedProductList = $this->dao->select('id')->from(TABLE_PRODUCT)
+            ->where('deleted')->eq('0')
+            ->andWhere('shadow')->eq(0)
+            ->fetchPairs();
+
+        $activeProductList = $this->dao->select('distinct product')->from(TABLE_ACTION)
             ->where('product')->ne(',0,')
             ->andWhere('product')->ne(',,')
             ->andWhere('product')->ne(',,0,,')
             ->andWhere('objectType')->notin('project,execution,task')
             ->andWhere('year(date)')->eq($year)
             ->andWhere('month(date)')->eq($month)
-            ->fetch();
+            ->fetchPairs();
+
+        $activeProductCount = 0;
+        foreach($activeProductList as $product)
+        {
+            $productID = trim($product, ',');
+            if(in_array($productID, $noDeletedProductList)) $activeProductCount ++;
+        }
 
         $activeProductCard = new stdclass();
-        $activeProductCard->count = $activeProductCount->count;
+        $activeProductCard->count = $activeProductCount;
         $activeProductCard->year  = $year;
         $activeProductCard->month = $month;
         return array($activeProductCard);
     }
 
     /**
-     * 获取项目任务概况表。
-     * Get table of project task summary.
+     * 获取应用健康度体检报告的 产品测试表。
+     * Get table of product test summary in usage report.
+     *
+     * @param  string $year
+     * @param  string $month
+     * @param  array  $productList
+     * @access public
+     * @return array
+     */
+    public function getProductTestTable($year, $month, $productList)
+    {
+        foreach($productList as $productID => $productName)
+        {
+            $createdCaseCount = $this->dao->select('count(t2.id) as count')->from(TABLE_PRODUCT)->alias('t1')
+                ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.id=t2.product')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t2.deleted')->eq('0')
+                ->andWhere('year(t2.openedDate)')->eq($year)
+                ->andWhere('month(t2.openedDate)')->eq($month)
+                ->andWhere('t1.id')->eq($productID)
+                ->fetch();
+
+            $linkedBugCount = $this->dao->select('count(t3.id) as count')->from(TABLE_PRODUCT)->alias('t1')
+                ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.id=t2.product')
+                ->leftJoin(TABLE_BUG)->alias('t3')->on('t2.id=t3.case')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t2.deleted')->eq('0')
+                ->andWhere('t3.deleted')->eq('0')
+                ->andWhere('year(t2.openedDate)')->eq($year)
+                ->andWhere('month(t2.openedDate)')->eq($month)
+                ->andWhere('t1.id')->eq($productID)
+                ->fetch();
+
+            $createdBugCount = $this->dao->select('count(t2.id) as count')->from(TABLE_PRODUCT)->alias('t1')
+                ->leftJoin(TABLE_BUG)->alias('t2')->on('t1.id=t2.product')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t2.deleted')->eq('0')
+                ->andWhere('year(t2.openedDate)')->eq($year)
+                ->andWhere('month(t2.openedDate)')->eq($month)
+                ->andWhere('t1.id')->eq($productID)
+                ->fetch();
+
+            $fixedBugList = $this->dao->select('t2.id,datediff(t2.closedDate, t2.openedDate) as fixedCycle')->from(TABLE_PRODUCT)->alias('t1')
+                ->leftJoin(TABLE_BUG)->alias('t2')->on('t1.id=t2.product')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t2.deleted')->eq('0')
+                ->andWhere('t2.status')->eq('closed')
+                ->andWhere('t2.resolution')->eq('fixed')
+                ->andWhere('year(t2.closedDate)')->eq($year)
+                ->andWhere('month(t2.closedDate)')->eq($month)
+                ->andWhere('t1.id')->eq($productID)
+                ->fetchPairs();
+
+            $row = new stdclass();
+            $row->id            = $productID;
+            $row->name          = $productName;
+            $row->year          = $year;
+            $row->month         = $month;
+            $row->createdCases  = $createdCaseCount->count;
+            $row->avgBugsOfCase = $createdCaseCount->count == 0 ? 0 : round($linkedBugCount->count/$createdCaseCount->count, 2);
+            $row->createdBugs   = $createdBugCount->count;
+            $row->fixedBugs     = count($fixedBugList);
+            $row->avgFixedCycle = count($fixedBugList) == 0 ? 0 : round(array_sum($fixedBugList)/count($fixedBugList), 2);
+
+            if($row->createdCases === 0 && $row->avgBugsOfCase === 0 && $row->createdBugs === 0 && $row->fixedBugs === 0 && $row->avgFixedCycle === 0) continue;
+            $dataset[] = $row;
+        }
+
+        return $dataset;
+    }
+
+    /**
+     * 获取应用健康度体检报告的项目任务概况表。
+     * Get table of project task summary in usage report.
      *
      * @param  string $year
      * @param  string $month
@@ -1822,46 +1934,41 @@ class screenModel extends model
      */
     public function getProjectTaskTable($year, $month, $projectList)
     {
-        $createdTaskActions = $this->dao->select('distinct project, actor')->from(TABLE_ACTION)
-            ->where('objectType')->eq('task')
-            ->andWhere('action')->eq('opened')
-            ->andWhere('year(date)')->eq($year)
-            ->andWhere('month(date)')->eq($month)
-            ->fetchAll();
-
-        $createdTaskActors = array();
-        foreach($createdTaskActions as $projectAccount)
-        {
-            $projectID = $projectAccount->project;
-            $account   = $projectAccount->actor;
-
-            if(!isset($createdTaskActors[$projectID])) $createdTaskActors[$projectID] = array();
-            $createdTaskActors[$projectID][] = $account;
-        }
+        $deletedExecutionList = $this->dao->select('id')->from(TABLE_EXECUTION)
+            ->where('deleted')->eq('1')
+            ->andWhere('type')->in('sprint,stage,kanban')
+            ->fetchPairs();
 
         $dataset = array();
         foreach($projectList as $projectID => $projectName)
         {
-            $createdTaskList = $this->dao->select('id')->from(TABLE_TASK)
+            $createdTaskList = $this->dao->select('id,openedBy')->from(TABLE_TASK)
                 ->where('project')->eq($projectID)
                 ->andWhere('year(openedDate)')->eq($year)
                 ->andWhere('month(openedDate)')->eq($month)
+                ->andWhere('deleted')->eq('0')
+                ->andWhere("NOT FIND_IN_SET('or', vision)")
+                ->andWhere('execution')->notin($deletedExecutionList)
                 ->fetchPairs();
 
             $finishedTaskList = $this->dao->select('id')->from(TABLE_TASK)
                 ->where('project')->eq($projectID)
                 ->andWhere('year(finishedDate)')->eq($year)
                 ->andWhere('month(finishedDate)')->eq($month)
+                ->andWhere('deleted')->eq('0')
+                ->andWhere("NOT FIND_IN_SET('or', vision)")
+                ->andWhere('execution')->notin($deletedExecutionList)
                 ->fetchPairs();
 
             $row = new stdclass();
             $row->name          = $projectName;
             $row->year          = $year;
             $row->month         = $month;
-            $row->createdTasks  = count(array_unique($createdTaskList));
+            $row->createdTasks  = count(array_unique(array_keys($createdTaskList)));
             $row->finishedTasks = count(array_unique($finishedTaskList));
-            $row->contributors  = isset($createdTaskActors[$projectID]) ? count($createdTaskActors[$projectID]) : 0;
+            $row->contributors  = count(array_unique(array_values($createdTaskList)));
 
+            if($row->createdTasks === 0 && $row->finishedTasks === 0 && $row->contributors === 0) continue;
             $dataset[] = $row;
         }
 
@@ -1869,7 +1976,157 @@ class screenModel extends model
     }
 
     /**
-     * 获取应用巡检报告的项目列表。
+     * 获取应用健康度体检报告的产品需求概况表。
+     * Get table of product story summary in usage report.
+     *
+     * @param  string $year
+     * @param  string $month
+     * @param  array  $productList
+     * @access public
+     * @return array
+     */
+    public function getProductStoryTable($year, $month, $productList)
+    {
+        $releasedStories = $this->dao->select('t2.id, t1.id as product')->from(TABLE_PRODUCT)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.id=t2.product')
+            ->leftJoin(TABLE_ACTION)->alias('t3')->on('t2.id=t3.objectID')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere("NOT FIND_IN_SET('or', t2.vision)")
+            ->andWhere('t2.stage')->eq('released')
+            ->andWhere('t3.objectType')->eq('story')
+            ->andWhere('t3.action')->eq('linked2release')
+            ->andWhere('year(t3.date)')->eq($year)
+            ->andWhere('month(t3.date)')->eq($month)
+            ->fetchPairs();
+
+        $releasedStoryGroups = array();
+        foreach($releasedStories as $storyID => $productID)
+        {
+            if(!isset($releasedStoryGroups[$productID])) $releasedStoryGroups[$productID] = array();
+            $releasedStoryGroups[$productID][] = $storyID;
+        }
+
+        $dataset = array();
+        foreach($productList as $productID => $productName)
+        {
+            $createdStoryCount = $this->dao->select('count(t2.id) as count')->from(TABLE_PRODUCT)->alias('t1')
+                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.id=t2.product')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t2.deleted')->eq('0')
+                ->andWhere("NOT FIND_IN_SET('or', t2.vision)")
+                ->andWhere('t1.id')->eq($productID)
+                ->andWhere('year(t2.openedDate)')->eq($year)
+                ->andWhere('month(t2.openedDate)')->eq($month)
+                ->fetch();
+
+            $finishedStoryList = $this->dao->select('t2.id')->from(TABLE_PRODUCT)->alias('t1')
+                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.id=t2.product')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t2.deleted')->eq('0')
+                ->andWhere("NOT FIND_IN_SET('or', t2.vision)")
+                ->andWhere('t1.id')->eq($productID)
+                ->andWhere('t2.closedReason')->eq('done')
+                ->andWhere('year(t2.closedDate)')->eq($year)
+                ->andWhere('month(t2.closedDate)')->eq($month)
+                ->fetchPairs();
+
+            $deliveredStoryCount = count(array_merge($finishedStoryList, (array)$releasedStoryGroups[$productID]));
+
+            $row = new stdclass();
+            $row->id               = $productID;
+            $row->name             = $productName;
+            $row->createdStories   = $createdStoryCount->count;
+            $row->deliveredStories = $deliveredStoryCount;
+
+            if($row->createdStories === 0 && $row->deliveredStories === 0) continue;
+            $dataset[] = $row;
+        }
+
+        return $dataset;
+    }
+
+    /**
+     * 获取应用健康度体检报告的项目需求概况表。
+     * Get table of project story summary in usage report.
+     *
+     * @param  string $year
+     * @param  string $month
+     * @param  array  $projectList
+     * @access public
+     * @return array
+     */
+    public function getProjectStoryTable($year, $month, $projectList)
+    {
+        $releasedStories = $this->dao->select('t3.id,t1.id as projectID')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.project')
+            ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story=t3.id')
+            ->leftJoin(TABLE_ACTION)->alias('t4')->on('t3.id=t4.objectID')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t3.deleted')->eq('0')
+            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
+            ->andWhere("NOT FIND_IN_SET('or', t3.vision)")
+            ->andWhere('t3.stage')->eq('released')
+            ->andWhere('t4.objectType')->eq('story')
+            ->andWhere('t4.action')->eq('linked2release')
+            ->andWhere('year(t4.date)')->eq($year)
+            ->andWhere('month(t4.date)')->eq($month)
+            ->fetchPairs();
+
+        $releasedStoryGroups = array();
+        foreach($releasedStories as $storyID => $projectID)
+        {
+            if(!isset($releasedStoryGroups[$projectID])) $releasedStoryGroups[$projectID] = array();
+            $releasedStoryGroups[$projectID][] = $storyID;
+        }
+
+        $dataset = array();
+        foreach($projectList as $projectID => $projectName)
+        {
+            $createdStoryCount = $this->dao->select('count(t3.id) as count')->from(TABLE_PROJECT)->alias('t1')
+                ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.project')
+                ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story=t3.id')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t3.deleted')->eq('0')
+                ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
+                ->andWhere("NOT FIND_IN_SET('or', t3.vision)")
+                ->andWhere('t1.type')->eq('project')
+                ->andWhere('t3.type')->eq('story')
+                ->andWhere('t1.id')->eq($projectID)
+                ->andWhere('year(t3.openedDate)')->eq($year)
+                ->andWhere('month(t3.openedDate)')->eq($month)
+                ->fetch();
+
+            $finishedStoryList = $this->dao->select('t3.id')->from(TABLE_PROJECT)->alias('t1')
+                ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.project')
+                ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story=t3.id')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t3.deleted')->eq('0')
+                ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
+                ->andWhere("NOT FIND_IN_SET('or', t3.vision)")
+                ->andWhere('t1.id')->eq($projectID)
+                ->andWhere('t3.closedReason')->eq('done')
+                ->andWhere('year(t3.closedDate)')->eq($year)
+                ->andWhere('month(t3.closedDate)')->eq($month)
+                ->fetchPairs();
+
+            $deliveredStoryCount = count(array_merge($finishedStoryList, (array)$releasedStoryGroups[$projectID]));
+
+            $row = new stdclass();
+            $row->id               = $projectID;
+            $row->name             = $projectName;
+            $row->createdStories   = $createdStoryCount->count;
+            $row->deliveredStories = $deliveredStoryCount;
+
+            if($row->createdStories === 0 && $row->deliveredStories === 0) continue;
+            $dataset[] = $row;
+        }
+
+        return $dataset;
+    }
+
+    /**
+     * 获取应用健康度体检报告的项目列表。
      * Get project list for usage report.
      *
      * @param  string $year
@@ -1885,9 +2142,31 @@ class screenModel extends model
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq('0')
             ->andWhere('date(openedDate)')->le($date)
+            ->andWhere("NOT FIND_IN_SET('or', vision)")
             ->andWhere('date(closedDate)', true)->gt($date)
             ->orWhere('date(closedDate)')->eq('0000-00-00')
+            ->orWhere('closedDate')->in(NULL)
             ->markRight(true)
+            ->fetchPairs();
+    }
+
+    /**
+     * 获取应用健康度体检报告的产品列表。
+     * Get product list for usage report.
+     *
+     * @param  string $year
+     * @param  string $month
+     * @access public
+     * @return array
+     */
+    public function getUsageReportProducts($year, $month)
+    {
+        $date = date("Y-m-t", strtotime("$year-$month"));
+
+        return $this->dao->select('id,name')->from(TABLE_PRODUCT)
+            ->where('deleted')->eq('0')
+            ->andWhere('shadow')->eq(0)
+            ->andWhere('date(createdDate)')->le($date)
             ->fetchPairs();
     }
 }

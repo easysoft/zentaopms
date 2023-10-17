@@ -46,6 +46,7 @@ $(function()
  */
 function checkMemory()
 {
+    $('#submitBtn').attr('disabled', true);
     var apps = [];
     $.each(category, (index, cate) => 
     {

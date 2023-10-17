@@ -4185,9 +4185,9 @@ class taskModel extends model
         }
 
         $list  = "<tr $trAttrs class='$trClass $showmore'>";
-        $list .= '<td>';
+        $list .= '<td class="c-name text-left flex">';
         if($task->parent > 0) $list .= '<span class="label label-badge label-light" title="' . $this->lang->task->children . '">' . $this->lang->task->childrenAB . '</span> ';
-        $list .= common::hasPriv('task', 'view') ? html::a(helper::createLink('task', 'view', "id=$task->id"), $task->name, '', "style='color: $task->color'", "data-app='project'") : "<span style='color:$task->color'>$task->name</span>";
+        $list .= common::hasPriv('task', 'view') ? html::a(helper::createLink('task', 'view', "id=$task->id"), $task->name, '', "style='color: $task->color' class='text-ellipsis'", "data-app='project'") : "<span style='color:$task->color'>$task->name</span>";
         if(!helper::isZeroDate($task->deadline))
         {
             if($task->status != 'done')
@@ -4280,7 +4280,7 @@ class taskModel extends model
 
         $menu .= $this->buildMenu('task', 'edit', $params, $task, 'view', '', '', 'showinonlybody');
         $menu .= $this->buildMenu('task', 'create', "projctID={$task->execution}&storyID=0&moduleID=0&taskID=$task->id", $task, 'view', 'copy');
-        $menu .= $this->buildMenu('task', 'delete', "executionID=$task->execution&taskID=$task->id", $task, 'view', 'trash', 'hiddenwin', 'showinonlybody', true);
+        $menu .= $this->buildMenu('task', 'delete', "executionID=$task->execution&taskID=$task->id", $task, 'view', 'trash', 'hiddenwin', 'showinonlybody');
         if($task->parent > 0) $menu .= $this->buildMenu('task', 'view', "taskID=$task->parent", $task, 'view', 'chevron-double-up', '', '', '', '', $this->lang->task->parent);
 
         return $menu;
@@ -4320,7 +4320,7 @@ class taskModel extends model
         }
 
         $menu .= $this->buildMenu('task', 'recordEstimate', $params, $task, 'browse', 'time', '', 'iframe', true, 'data-toggle="modal"');
-        $menu .= $this->buildMenu('task', 'edit',           $params, $task, 'browse');
+        $menu .= $this->buildMenu('task', 'edit',           $params, $task, 'browse', 'edit', '', '', false, 'data-app="execution"');
         if($this->config->vision != 'lite')
         {
             $menu .= $this->buildMenu('task', 'batchCreate', "execution=$task->execution&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=0", $task, 'browse', 'split', '', '', '', '', $this->lang->task->children);
@@ -4652,6 +4652,7 @@ class taskModel extends model
         $canView    = common::hasPriv('task', 'view');
         $rows       = array();
         if($showBranch) $showBranch = isset($this->config->execution->task->showBranch) ? $this->config->execution->task->showBranch : 1;
+
         foreach($tasks as $task)
         {
             $task->assignedTo = $this->printAssignedHtml($task, $users, false);
@@ -4659,7 +4660,7 @@ class taskModel extends model
 
             $taskName  = '';
             $taskLink  = helper::createLink('task', 'view', "taskID=$task->id", '', $this->config->vision == 'lite' ? true : false);
-            $linkClass = $this->config->vision == 'lite' ? 'class="iframe"' : '';
+            $linkClass = $this->config->vision == 'lite' ? 'data-toggle="modal" data-type="iframe"' : '';
 
             if($task->parent > 0 and isset($task->parentName)) $task->name = "{$task->parentName} / {$task->name}";
             if(!empty($task->product) and isset($branchGroups[$task->product][$task->branch]) and $showBranch) $taskName .= "<span class='label label-badge label-outline'>" . $branchGroups[$task->product][$task->branch] . '</span> ';

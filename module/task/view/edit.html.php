@@ -104,7 +104,9 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
                 <td><?php echo html::select('execution', $executions, $task->execution, 'class="form-control chosen" onchange="loadAll(this.value)"');?></td>
               </tr>
               <?php else:?>
+              <tr class='hidden'>
               <?php echo html::hidden('execution', $task->execution);?>
+              </tr>
               <?php endif;?>
               <tr>
                 <th class='thWidth'><?php echo $lang->task->module;?></th>
@@ -128,7 +130,7 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
               <?php if($task->parent >= 0 and empty($task->team)):?>
               <tr>
                 <th><?php echo $lang->task->parent;?></th>
-                <td><?php echo html::select('parent', $tasks, $task->parent, "class='form-control chosen'");?></td>
+                <td><?php echo html::select('parent', $tasks, $task->parent, "class='form-control picker-select'");?></td>
               </tr>
               <?php endif;?>
               <tr class="modeBox">
@@ -198,7 +200,7 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
                 <th><?php echo $lang->task->mailto;?></th>
                 <td>
                   <div class='input-group'>
-                    <?php echo html::select('mailto[]', $users, $task->mailto, 'class="form-control picker-select" multiple data-drop-direction="bottom"');?>
+                    <?php echo html::select('mailto[]', $users, $task->mailto, 'class="form-control picker-select" multiple data-drop-direction="bottom" data-drop-width="auto"');?>
                     <?php echo $this->fetch('my', 'buildContactLists');?>
                   </div>
                 </td>

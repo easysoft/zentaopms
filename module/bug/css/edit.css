@@ -7,3 +7,6 @@
 #branch {width: 95px;}
 #storyIdBox .chosen-auto-max-width {width: 215px !important;}
 .form-group {margin-left: 10px; margin-right: 10px;}
+#resolvedBuildBox {table-layout: fixed;}
+@media (max-width: 1366px) {#resolvedBuildBox {width: calc(100% - 50px);}}
+@media (min-width: 1367px) {#resolvedBuildBox {width: calc(100% - 48px);}}

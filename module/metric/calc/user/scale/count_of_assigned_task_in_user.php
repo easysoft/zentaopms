@@ -22,15 +22,17 @@ class count_of_assigned_task_in_user extends baseCalc
 {
     public $dataset = 'getTasks';
 
-    public $fieldList = array('assignedTo');
+    public $fieldList = array('t1.assignedTo', 't1.status');
 
     public $result = array();
 
     public function calculate($row)
     {
         $assignedTo = $row->assignedTo;
+        $status     = $row->status;
 
         if(empty($assignedTo) || $assignedTo == 'closed') return false;
+        if($status == 'closed' || $status == 'cancel') return false;
 
         if(!isset($this->result[$assignedTo])) $this->result[$assignedTo] = 0;
         $this->result[$assignedTo] += 1;

@@ -23,7 +23,7 @@ class gitlab extends control
         if(stripos($this->methodName, 'ajax') === false)
         {
             if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
-    
+
             if(!in_array(strtolower(strtolower($this->methodName)), array('browseproject', 'browsegroup', 'browseuser', 'browsebranch', 'browsetag')))
             {
                 if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
@@ -174,7 +174,7 @@ class gitlab extends control
                 $accountList[$user] = $openID;
             }
 
-            if(count($repeatUsers)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->gitlab->bindUserError, join(',', $repeatUsers))));
+            if(count($repeatUsers)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->gitlab->bindUserError, join(',', array_unique($repeatUsers)))));
 
             $user = new stdclass;
             $user->providerID   = $gitlabID;
@@ -423,10 +423,10 @@ class gitlab extends control
         if(!$this->app->user->admin)
         {
             $openID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
-            if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
+            if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('space', 'browse')));
 
             $members = $this->gitlab->apiGetGroupMembers($gitlabID, $groupID, $openID);
-            if(empty($members) or $members[0]->access_level < $this->config->gitlab->accessLevel['owner']) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
+            if(empty($members) or $members[0]->access_level < $this->config->gitlab->accessLevel['owner']) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('space', 'browse')));
         }
 
         if($_POST)

@@ -9,7 +9,6 @@ td.article-content{overflow:auto !important;}
 td.c-build{white-space: nowrap; overflow:hidden;}
 th.c-user,td.c-user{text-align:left;}
 
-#stories th, #stories td{padding-left:16px;padding-right:16px;}
 #stories .c-build{width:160px; text-align:left}
 #stories .c-estimate{width:90px; text-align:right}
 #stories .c-status{width:120px}

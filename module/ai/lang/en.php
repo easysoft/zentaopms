@@ -59,25 +59,26 @@ $lang->ai->validate->dirtyForm     = 'The design step of %s has changed. Do you 
 $lang->ai->validate->nameNotUnique = 'A prompt with the same name already exists, please change the name.';
 
 $lang->ai->prompts = new stdclass();
-$lang->ai->prompts->common      = 'Prompt';
-$lang->ai->prompts->emptyList   = 'No prompts yet.';
-$lang->ai->prompts->create      = 'Create Prompt';
-$lang->ai->prompts->edit        = 'Edit Prompt';
-$lang->ai->prompts->id          = 'ID';
-$lang->ai->prompts->name        = 'Name';
-$lang->ai->prompts->description = 'Description';
-$lang->ai->prompts->createdBy   = 'Creator';
-$lang->ai->prompts->createdDate = 'Created Date';
-$lang->ai->prompts->targetForm  = 'Target Form';
-$lang->ai->prompts->funcDesc    = 'Function Description';
-$lang->ai->prompts->deleted     = 'Deleted';
-$lang->ai->prompts->stage       = 'Stage';
-$lang->ai->prompts->basicInfo   = 'Basic Info';
-$lang->ai->prompts->editInfo    = 'Edit Info';
-$lang->ai->prompts->createdBy   = 'Created By';
-$lang->ai->prompts->publishedBy = 'Published By';
-$lang->ai->prompts->draftedBy   = 'Drafted By';
-$lang->ai->prompts->lastEditor  = 'Last Editor';
+$lang->ai->prompts->common       = 'Prompt';
+$lang->ai->prompts->emptyList    = 'No prompts yet.';
+$lang->ai->prompts->create       = 'Create Prompt';
+$lang->ai->prompts->edit         = 'Edit Prompt';
+$lang->ai->prompts->id           = 'ID';
+$lang->ai->prompts->name         = 'Name';
+$lang->ai->prompts->description  = 'Description';
+$lang->ai->prompts->createdBy    = 'Creator';
+$lang->ai->prompts->createdDate  = 'Created Date';
+$lang->ai->prompts->targetForm   = 'Target Form';
+$lang->ai->prompts->funcDesc     = 'Function Description';
+$lang->ai->prompts->deleted      = 'Deleted';
+$lang->ai->prompts->stage        = 'Stage';
+$lang->ai->prompts->basicInfo    = 'Basic Info';
+$lang->ai->prompts->editInfo     = 'Edit Info';
+$lang->ai->prompts->createdBy    = 'Created By';
+$lang->ai->prompts->publishedBy  = 'Published By';
+$lang->ai->prompts->draftedBy    = 'Drafted By';
+$lang->ai->prompts->lastEditor   = 'Last Editor';
+$lang->ai->prompts->modelNeutral = 'Model Neutral';
 
 $lang->ai->prompts->summary = 'There are %s prompts on this page.';
 
@@ -423,11 +424,11 @@ $lang->ai->models->statusList['off'] = 'Disable';
 
 $lang->ai->models->typeList = array();
 $lang->ai->models->typeList['openai-gpt35'] = 'OpenAI / GPT-3.5';
-// $lang->ai->models->typeList['azure-gpt35']  = 'Azure / GPT-3.5';
+$lang->ai->models->typeList['baidu-ernie']  = 'Baidu / ERNIE';
 
-$lang->ai->models->openaiVendorList = array();
-$lang->ai->models->openaiVendorList['openai'] = 'OpenAI';
-$lang->ai->models->openaiVendorList['azure']  = 'Azure';
+$lang->ai->models->vendorList = new stdclass();
+$lang->ai->models->vendorList->{'openai-gpt35'} = array('openai' => 'OpenAI', 'azure' => 'Azure');
+$lang->ai->models->vendorList->{'baidu-ernie'}  = array('baidu' => 'Baidu Qianfan LLM Platform');
 
 $lang->ai->models->proxyTypes = array();
 $lang->ai->models->proxyTypes['']       = 'No Proxy';
@@ -793,3 +794,9 @@ $lang->ai->audit->exit         = 'Exit Audit';
 $lang->ai->audit->backLocationList = array();
 $lang->ai->audit->backLocationList[0] = 'back to audit page.';
 $lang->ai->audit->backLocationList[1] = 'back to audit page and regenerate.';
+
+$lang->ai->engineeredPrompts = new stdclass();
+$lang->ai->engineeredPrompts->askForFunctionCalling = array((object)array('role' => 'user', 'content' => 'Please convert my next message into a function call.'), (object)array('role' => 'assistant', 'content' => 'Sure, I\'ll convert your next message into a function call.'));
+
+$lang->ai->aiResponseException = array();
+$lang->ai->aiResponseException['notFunctionCalling'] = 'The response is not a function calling';

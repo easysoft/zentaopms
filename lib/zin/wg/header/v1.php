@@ -179,16 +179,17 @@ class header extends wg
                 {
                     $items[] = array
                     (
-                        'url' => createLink('tutorial', 'start'),
+                        'url' => createLink('tutorial', 'start', '', '', true),
                         'icon' => 'guide',
                         'text' => $lang->tutorialAB,
-                        'class' => '800',
+                        'class' => 'iframe',
                         'outerClass' => 'user-tutorial',
                         'data-width' => 700,
                         'data-class-name' => 'modal-inverse',
                         'data-headerless' => true,
                         'data-backdrop' => true,
-                        'data-keyboard' => true
+                        'data-keyboard' => true,
+                        'data-toggle' => 'iframeModal'
                     );
                 }
 

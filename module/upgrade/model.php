@@ -703,11 +703,9 @@ class upgradeModel extends model
                 $this->removeProductLineRequired();
                 break;
             case '18_7':
-                if(!in_array($this->config->edition, array('max', 'ipd')))
-                {
-                    $this->processOldMetrics();
-                }
+                if(in_array($this->config->edition, array('max', 'ipd'))) $this->processOldMetrics();
                 $this->processHistoryDataForMetric();
+                $this->loadModel('metric')->updateMetricDate();
                 break;
             case '18_8':
                 /* Upgrade members for testtask. */

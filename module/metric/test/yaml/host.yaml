@@ -1,0 +1,49 @@
+---
+title: zt_host
+author: Yanyi Cao
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: admin
+    range: 1-10
+  - field: serverRoom
+    range: 1-10
+  - field: serverModel
+    range:
+  - field: hardwareType
+    range: server
+  - field: hostType
+    range: physical,virtual
+  - field: cpuBrand
+    range:
+  - field: cpuModel
+    range:
+  - field: cpuNumber
+    range: 1,2,4,8,12
+  - field: cpuCores
+    range:
+  - field: memory
+    range: 2,4,8,16
+  - field: diskSize
+    range: 120,256,512,1024
+  - field: mac
+    range:
+  - field: osName
+    range: linux
+  - field: osVersion
+    range: ubuntu18
+  - field: status
+    range: online{4},offline
+  - field: name
+    prefix: 主机
+    range: 1-100
+  - field: type
+    range: normal,node
+  - field: createdBy
+    range: admin
+  - field: editedBy
+    range:
+  - field: deleted
+    range: 0{5},1{2}
+...

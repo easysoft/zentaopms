@@ -47,7 +47,7 @@ js::set('maxColWidth',$kanban->fluidBoard == '0' ? $kanban->colWidth : $kanban->
 js::set('alignment', $kanban->alignment);
 js::set('defaultMinColWidth', $this->config->minColWidth);
 js::set('defaultMaxColWidth', $this->config->maxColWidth);
-js::set('priv', array('canAssignCard' => common::hasPriv('kanban', 'assigncard')));
+js::set('priv', array('canAssignCard' => common::hasPriv('kanban', 'assigncard'), 'canMoveCard' => common::hasPriv('kanban', 'moveCard')));
 
 $canSortRegion         = commonModel::hasPriv('kanban', 'sortRegion') && count($regions) > 1;
 $canEditRegion         = commonModel::hasPriv('kanban', 'editRegion');

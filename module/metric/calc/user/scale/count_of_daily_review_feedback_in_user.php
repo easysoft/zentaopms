@@ -1,7 +1,7 @@
 <?php
 /**
  * 按人员统计的每日评审反馈数。
- * count_of_daily_review_feedback_in_user.
+ * Count of daily review feedback in user.
  *
  * 范围：user
  * 对象：feedback
@@ -9,9 +9,7 @@
  * 度量名称：按人员统计的每日评审反馈数
  * 单位：个
  * 描述：按人员统计的日评审反馈数表示每个人每日评审的反馈数量之和。反映了每个人每日评审的反馈的规模。该数值越大，说明工作量越大。
- * 定义：所有反馈个数求和;由谁评审为某人;评审时间为某日;过滤已删除的反馈;过滤已删除产品的反馈
- * 度量库：
- * 收集方式：realtime
+ * 定义：所有反馈个数求和;由谁评审为某人;评审时间为某日;过滤已删除的反馈;过滤已删除产品的反馈;
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>

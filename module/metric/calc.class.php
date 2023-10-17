@@ -30,6 +30,15 @@ class baseCalc
     public $dao = null;
 
     /**
+     * Git 仓库对象。
+     * Git repository object.
+     *
+     * @var object
+     * @access public
+     */
+    public $scm = null;
+
+    /**
      * 参数列表。
      * fieldList
      *
@@ -85,6 +94,11 @@ class baseCalc
     public function setDAO($dao)
     {
         $this->dao = $dao;
+    }
+
+    public function setSCM($scm)
+    {
+        $this->scm = $scm;
     }
 
     /**

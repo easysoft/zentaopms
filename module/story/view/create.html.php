@@ -19,7 +19,10 @@
 <?php js::set('requiredFields', $config->story->create->requiredFields);?>
 <?php js::set('systemMode', $config->systemMode);?>
 <?php if($type == 'requirement'): ?>
-<style>.input-group .control-branch + .chosen-container-single .chosen-single {border-radius: 0 2px 2px 0; border-left-width: 0px;}</style>
+<style>
+.input-group .control-branch + .chosen-container-single .chosen-single {border-radius: 0 2px 2px 0; border-left-width: 0px;}
+#sourceNote {width: 140px;}
+</style>
 <?php endif; ?>
 <?php
 foreach(explode(',', $config->story->create->requiredFields) as $field)

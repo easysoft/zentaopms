@@ -5878,6 +5878,10 @@ class executionModel extends model
             $execution->asParent = !empty($execution->children);
             $execution->status   = zget($this->lang->execution->statusList, $execution->status);
             $execution->PM       = zget($users, $execution->PM);
+            if(isset($this->config->setCode) and $this->config->setCode == 1)
+            {
+                $execution->code = "<div title=$execution->code style='justify-content: start;'>$execution->code</div>";
+            }
 
             $children = isset($execution->children) ? $execution->children : array();
             unset($execution->children);
@@ -6140,17 +6144,19 @@ class executionModel extends model
      * @param  array  $executions
      * @param  array  $parentExecutions
      * @param  array  $childExecutions
+     * @param  int    $projectID
      * @access public
      * @return array
      */
-    public function resetExecutionSorts($executions, $parentExecutions = array(), $childExecutions = array())
+    public function resetExecutionSorts($executions, $parentExecutions = array(), $childExecutions = array(), $projectID = 0)
     {
         if(empty($executions)) return array();
         if(empty($parentExecutions))
         {
             $execution        = current($executions);
+            $projectID        = isset($execution->project) ? $execution->project : $projectID;
             $parentExecutions = $this->dao->select('id,parent,project,grade,status,name,type,PM')->from(TABLE_EXECUTION)
-                ->where('parent')->eq($execution->project)
+                ->where('parent')->eq($projectID)
                 ->andWhere('deleted')->eq('0')
                 ->andWhere('type')->in('kanban,sprint,stage')
                 ->andWhere('grade')->eq(1)

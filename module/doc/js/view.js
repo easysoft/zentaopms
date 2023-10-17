@@ -147,6 +147,22 @@ document.addEventListener('msfullscreenChange', function (e)
     if(!document.msfullscreenElement) exitFullScreen();
 });
 
+function showContentPadding()
+{
+    var content     = $('#content');
+    var outlineMenu = $('#outlineMenu');
+    if(outlineMenu && !outlineMenu.hasClass('hidden') && ($('.outline-toggle').css('display') != 'none'))
+    {
+        content.css('padding-right', '180px');
+        $('.outline-toggle .icon').removeClass('icon-menu-arrow-left').addClass('icon-menu-arrow-right').css('left', '-9px');
+    }
+    else
+    {
+        content.css('padding-right', '0px');
+        $('.outline-toggle .icon').removeClass('icon-menu-arrow-right').addClass('icon-menu-arrow-left');
+    }
+}
+
 $(function()
 {
 
@@ -166,15 +182,15 @@ $(function()
         $('.outline').css({'min-width' : '180px', 'border-left' : '2px solid #efefef'});
         $(this).removeClass('icon-menu-arrow-left').addClass('icon-menu-arrow-right').css('left', '-9px');
         $('.outline').removeClass('hidden');
-        $('#content').css('padding-right', '180px');
         $('.outline-content').show();
         if($('#sidebar>.cell').is(':visible')) $('#sidebar .icon.icon-menu-arrow-right').trigger("click");
+        showContentPadding();
     }).on('click', '.outline-toggle i.icon-menu-arrow-right', function()
     {
         $(this).removeClass('icon-menu-arrow-right').addClass('icon-menu-arrow-left');
         $('.outline').css({'min-width' : '180px', 'border-left' : 'none'});
         $('.outline').addClass('hidden');
-        $('#content').css('padding-right', '0px');
+        showContentPadding();
     }).on('click', '#outline li', function(e)
     {
         $('#outline li.active').removeClass('active');
@@ -208,6 +224,7 @@ $(function()
             $icon.removeClass('text-primary');
             $icon.addClass('history-btn');
         }
+        showContentPadding();
     }).on('click', '#closeBtn', function()
     {
         $('#history').addClass('hidden');
@@ -284,6 +301,7 @@ $(function()
     {
         $('#outlineMenu').css('display', 'none');
         $('.outline-toggle').css('display', 'none');
+        showContentPadding();
     }
 
     var $titleContent = $('.detail-title.doc-title')

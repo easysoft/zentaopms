@@ -20,3 +20,6 @@ $lang->artifactrepo->url      = '库地址';
 $lang->artifactrepo->confirmDelete = '您确认要删除该制品库吗？';
 $lang->artifactrepo->deleteError   = '当前制品库中制品已关联版本，请取消关联后重试。';
 $lang->artifactrepo->loseConnect   = '制品库服务器无法连接';
+
+$lang->artifactrepo->statusList['online']  = '在线';
+$lang->artifactrepo->statusList['offline'] = '离线';

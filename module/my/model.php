@@ -1220,10 +1220,10 @@ class myModel extends model
     public function getReviewingApprovals($orderBy = 'id_desc', $checkExists = false)
     {
         if(!common::hasPriv('review', 'assess')) return array();
-        if($this->config->edition != 'max') return array();
+        if($this->config->edition != 'max' and $this->config->edition != 'ipd') return array();
 
         $pendingList    = $this->loadModel('approval')->getPendingReviews('review');
-        $projectReviews = $this->loadModel('review')->getByList($pendingList, $orderBy);
+        $projectReviews = $this->loadModel('review')->getByList(0, $pendingList, $orderBy);
 
         $this->app->loadLang('project');
         $this->session->set('reviewList', $this->app->getURI(true));

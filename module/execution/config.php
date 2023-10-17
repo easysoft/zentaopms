@@ -62,7 +62,7 @@ $config->execution->search['fields']['estimate']       = $lang->task->estimate;
 $config->execution->search['fields']['left']           = $lang->task->left;
 $config->execution->search['fields']['consumed']       = $lang->task->consumed;
 $config->execution->search['fields']['type']           = $lang->task->type;
-$config->execution->search['fields']['fromBug']        = $lang->task->fromBugID;
+if($config->vision != 'lite') $config->execution->search['fields']['fromBug'] = $lang->task->fromBugID;
 $config->execution->search['fields']['closedReason']   = $lang->task->closedReason;
 
 $config->execution->search['fields']['openedBy']       = $lang->task->openedBy;
@@ -187,13 +187,14 @@ else
 
 $config->execution->datatable->fieldList['id']['title']    = 'idAB';
 $config->execution->datatable->fieldList['id']['type']     = 'checkID';
+$config->execution->datatable->fieldList['id']['width']    = '80';
 $config->execution->datatable->fieldList['id']['fixed']    = 'left';
 $config->execution->datatable->fieldList['id']['sortType'] = true;
 $config->execution->datatable->fieldList['id']['checkbox'] = true;
 
 $config->execution->datatable->fieldList['name']['name']         = 'name';
-$config->execution->datatable->fieldList['name']['title']        = $lang->execution->name;
-$config->execution->datatable->fieldList['name']['width']        = '356';
+$config->execution->datatable->fieldList['name']['title']        = $lang->execution->execName;
+$config->execution->datatable->fieldList['name']['width']        = 'auto';
 $config->execution->datatable->fieldList['name']['type']         = 'html';
 $config->execution->datatable->fieldList['name']['fixed']        = 'left';
 $config->execution->datatable->fieldList['name']['sortType']     = true;
@@ -204,8 +205,8 @@ $config->execution->datatable->fieldList['name']['required']     = 'yes';
 if(isset($config->setCode) and $config->setCode == 1)
 {
     $config->execution->datatable->fieldList['code']['title']    = 'execCode';
-    $config->execution->datatable->fieldList['code']['type']     = 'text';
-    $config->execution->datatable->fieldList['code']['width']    = 180;
+    $config->execution->datatable->fieldList['code']['type']     = 'html';
+    $config->execution->datatable->fieldList['code']['width']    = '180';
     $config->execution->datatable->fieldList['code']['fixed']    = 'left';
     $config->execution->datatable->fieldList['code']['required'] = 'no';
 }
@@ -229,7 +230,7 @@ $config->execution->datatable->fieldList['PM']['fixed']    = 'right';
 $config->execution->datatable->fieldList['PM']['required'] = 'no';
 
 $config->execution->datatable->fieldList['openedDate']['title']    = 'openedDate';
-$config->execution->datatable->fieldList['openedDate']['width']    = '85';
+$config->execution->datatable->fieldList['openedDate']['width']    = '150';
 $config->execution->datatable->fieldList['openedDate']['sortType'] = 'true';
 $config->execution->datatable->fieldList['openedDate']['fixed']    = 'right';
 $config->execution->datatable->fieldList['openedDate']['required'] = 'no';
@@ -247,13 +248,13 @@ $config->execution->datatable->fieldList['end']['required'] = 'no';
 $config->execution->datatable->fieldList['end']['sortType'] = 'true';
 
 $config->execution->datatable->fieldList['realBegan']['title']    = 'realBegan';
-$config->execution->datatable->fieldList['realBegan']['width']    = '100';
+$config->execution->datatable->fieldList['realBegan']['minWidth'] = '110';
 $config->execution->datatable->fieldList['realBegan']['fixed']    = 'right';
 $config->execution->datatable->fieldList['realBegan']['required'] = 'no';
 $config->execution->datatable->fieldList['realBegan']['sortType'] = 'true';
 
 $config->execution->datatable->fieldList['realEnd']['title']    = 'realEnd';
-$config->execution->datatable->fieldList['realEnd']['width']    = '100';
+$config->execution->datatable->fieldList['realEnd']['minWidth'] = '110';
 $config->execution->datatable->fieldList['realEnd']['fixed']    = 'right';
 $config->execution->datatable->fieldList['realEnd']['required'] = 'no';
 $config->execution->datatable->fieldList['realEnd']['sortType'] = 'true';
@@ -284,7 +285,7 @@ $config->execution->datatable->fieldList['progress']['required'] = 'no';
 $config->execution->datatable->fieldList['progress']['sort']     = 'no';
 
 $config->execution->datatable->fieldList['burn']['title']    = 'burn';
-$config->execution->datatable->fieldList['burn']['width']    = '80';
+$config->execution->datatable->fieldList['burn']['width']    = '85';
 $config->execution->datatable->fieldList['burn']['fixed']    = 'right';
 $config->execution->datatable->fieldList['burn']['required'] = 'no';
 $config->execution->datatable->fieldList['burn']['sort']     = 'no';

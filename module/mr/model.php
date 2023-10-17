@@ -428,8 +428,9 @@ class mrModel extends model
 
         $MR = $this->getByID($MRID);
         $this->linkObjects($MR);
-
-        $this->loadModel('action')->create('mr', $MRID, 'edited');
+        $changes = common::createChanges($oldMR, $MR);
+        $actionID = $this->loadModel('action')->create('mr', $MRID, 'edited');
+        if(!empty($changes)) $this->action->logHistory($actionID, $changes);
         $this->createMRLinkedAction($MRID, 'editmr', $MR->editedDate);
 
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
@@ -762,11 +763,12 @@ class mrModel extends model
         }
 
         $response = json_decode(commonModel::http($url, $data = null, $options = array(), $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30, $httpCode = false, $log = false));
-        if(empty($response)) $response = array();
+        if(empty($response) || isset($response->message)) $response = array();
         if($scm == 'Gitea')
         {
             foreach($response as $MR)
             {
+                if(empty($MR)) continue;
                 $MR->iid   = $MR->number;
                 $MR->state = $MR->state == 'open' ? 'opened' : $MR->state;
                 if($MR->merged) $MR->state = 'merged';
@@ -946,11 +948,11 @@ class mrModel extends model
             $newMR->squash               = $MR->squash == '1' ? 1 : 0;
             if($MR->assignee)
             {
-                $gitlabAssignee = $this->gitlab->getUserIDByZentaoAccount($MR->hostID, $MR->assignee);
+                $gitlabAssignee = $this->gitlab->getUserIDByZentaoAccount($hostID, $MR->assignee);
                 if($gitlabAssignee) $newMR->assignee_ids = $gitlabAssignee;
             }
             $url = sprintf($this->gitlab->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID");
-            return json_decode(commonModel::http($url, $MR, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));
+            return json_decode(commonModel::http($url, $newMR, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));
         }
         else
         {
@@ -963,7 +965,6 @@ class mrModel extends model
                 $assignee = $this->{$host->type}->getUserIDByZentaoAccount($this->post->hostID, $MR->assignee);
                 if($assignee) $newMR->assignee = $assignee;
             }
-
             $mergeResult = json_decode(commonModel::http($url, $newMR, array(), array(), 'json', 'PATCH'));
             if(isset($mergeResult->number)) $mergeResult->iid = $host->type == 'gitea' ? $mergeResult->number : $mergeResult->id;
             if(isset($mergeResult->mergeable))

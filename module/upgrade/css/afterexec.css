@@ -4,7 +4,7 @@
 .col-md-6 {width: 100% !important;}
 .row .divider {display: block; width: 2px; height: 450px; background-color: rgba(0,0,0,.05); float: left;}
 
-.row .col-md-6 .message {padding-left: 50px; padding-top: 50px;}
+.row .col-md-6 .message {padding-top: 50px;}
 .row .col-md-6 .message #tohome {margin-top: 50px;}
 .row .col-md-6 .message p {font-size: 16px;}
 .row .col-md-6 .message .icon-check-circle {font-size: 85px; color: green;}

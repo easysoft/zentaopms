@@ -22,7 +22,7 @@ class heading extends wg
 
     protected function buildAppName()
     {
-        list($tab, $lang) = data(['app.tab', 'lang']);
+        list($tab, $lang) = data(array('app.tab', 'lang'));
         $icon = zget($lang->navIconNames, $tab, '');
 
         if(!in_array($tab, array('program', 'product', 'project')))

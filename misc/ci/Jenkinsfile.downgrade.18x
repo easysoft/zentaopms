@@ -117,12 +117,17 @@ pipeline {
                   sh 'ls -l zentaopms'
                   sh './misc/downgrade.sh -p "$DOWNGRADE_VERSIONS" -r zentaopms -i -s -o "$ZENTAO_RELEASE_PATH" framework lib module/*'
                 }
+                
+                container('package') {
+                  sh 'mkdir /tmp/publishHtml'
+                  sh 'test -f ${ZENTAO_RELEASE_PATH}/downgradeReport.html && cp ${ZENTAO_RELEASE_PATH}/downgradeReport.html /tmp/publishHtml/ || echo "No syntax error"'
+                }
 
                 publishHTML([
                   allowMissing: true,
                   alwaysLinkToLastBuild: false,
                   keepAll: true,
-                  reportDir: env.ZENTAO_RELEASE_PATH,
+                  reportDir: '/tmp/publishHtml',
                   reportFiles: 'downgradeReport.html',
                   reportName: 'DowngradeReport'
                 ])
@@ -143,3 +148,5 @@ pipeline {
   }
 
 }
+
+

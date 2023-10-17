@@ -3587,7 +3587,8 @@ class bugModel extends model
         $btnClass    .= ' iframe btn btn-icon-left btn-sm';
 
         $assignToLink = helper::createLink('bug', 'assignTo', "bugID=$bug->id", '', true);
-        $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span title='" . zget($users, $bug->assignedTo) . "'>{$assignedToText}</span>", '', "class='$btnClass'");
+        $modalToggle  = $bug->assignedTo == 'closed' ? '' : "data-toggle='modal'";
+        $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span title='" . zget($users, $bug->assignedTo) . "'>{$assignedToText}</span>", '', "class='$btnClass' $modalToggle");
 
         $html = !common::hasPriv('bug', 'assignTo', $bug) ? "<span style='padding-left: 21px' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml;
         if(!$output) return $html;
@@ -3958,24 +3959,25 @@ class bugModel extends model
             }
             $bug->title = $bugTitle;
 
-            if($bug->story && !empty($stories[$bug->story]))
+            $bug->story = zget($stories, $bug->story, '');
+            if($bug->story)
             {
-                $story = $stories[$bug->story];
-                $bug->story = $canViewStory ? html::a(helper::createLink('story', 'view', "storyID={$story->id}", 'html', true), $story->title, '', "class='iframe' title='{$story->title}'") : "<span title='{$story->title}'>{$story->title}</span>";
+                $bug->story = $canViewStory ? html::a(helper::createLink('story', 'view', "storyID={$bug->story->id}", 'html', true), $bug->story->title, '', "class='iframe' title='{$bug->story->title}' data-toggle='modal'") : "<span title='{$bug->story->title}'>{$bug->story->title}</span>";
             }
 
-            if($bug->task && !empty($tasks[$bug->task]))
+            $bug->task = zget($tasks, $bug->task, '');
+            if($bug->task)
             {
-                $task = $tasks[$bug->task];
-                $bug->task = $canViewTask ? html::a(helper::createLink('task', 'view', "taskID={$task->id}", 'html', true), $task->name, '', "class='iframe' title='{$task->name}'") : "<span title='{$task->name}'>{$task->name}</span>";
+                $bug->task = $canViewTask ? html::a(helper::createLink('task', 'view', "taskID={$bug->task->id}", 'html', true), $bug->task->name, '', "class='iframe' title='{$bug->task->name}' data-toggle='modal'") : "<span title='{$bug->task->name}'>{$bug->task->name}</span>";
             }
 
-            if($bug->toTask && !empty($tasks[$bug->toTask]))
+            $bug->toTask = zget($tasks, $bug->toTask, '');
+            if($bug->toTask)
             {
-                $task = $tasks[$bug->toTask];
-                $bug->toTask = $canViewTask ? html::a(helper::createLink('task', 'view', "taskID={$task->id}", 'html', true), $task->name, '', "class='iframe' title='{$task->name}'") : "<span title='{$task->name}'>{$task->name}</span>";
+                $bug->toTask = $canViewTask ? html::a(helper::createLink('task', 'view', "taskID={$bug->toTask->id}", 'html', true), $bug->toTask->name, '', "class='iframe' title='{$bug->toTask->name}' data-toggle='modal'") : "<span title='{$bug->toTask->name}'>{$bug->toTask->name}</span>";
             }
 
+            $status      = $bug->status;
             $bugStatus   = $this->processStatus('bug', $bug);
             $bug->status = "<span class='status-bug status-{$bug->status}' title='{$bugStatus}'> {$bugStatus}</span>";
 
@@ -4025,7 +4027,10 @@ class bugModel extends model
 
             foreach(array_merge(array('os', 'browser', 'mailto', 'branch', 'project', 'plan', 'execution', 'type', 'resolution', 'keywords', 'openedBuild', 'resolvedBuild', 'activatedCount'), $userFields, $dateFields) as $field)
             {
-                if($bug->$field) $bug->$field = "<span title='{$bug->$field}'>{$bug->$field}<span>";
+                if(empty($bug->$field)) continue;
+
+                $class = ($field == 'deadline' && isset($bug->delay) && $status == 'active') ? "class='delayed'" : '';
+                $bug->$field = "<span $class title='{$bug->$field}'>{$bug->$field}</span>";
             }
 
             $rows[] = $bug;

@@ -390,13 +390,6 @@ function setStories(moduleID, executionID)
         {
             $('#storyBox').removeClass('hidden');
             $('#story').parent().addClass('hidden');
-
-            /* change link when lite */
-            if(vision == 'lite')
-            {
-                config.onlybody = 'no';
-                $('#storyBox > a:first').attr('href', createLink('story', 'create', 'productID=' + productID + '&branch=0&moduleID=' + moduleID + '&storyID=0&projectID=' + projectID + '&bugID=0&planID=0&todoID=0&extra=&type=story') + '#_single');
-            }
         }
     });
 }

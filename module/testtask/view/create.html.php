@@ -36,7 +36,9 @@
         <?php endif;?>
 
         <?php if(isset($noMultipleExecutionID)):?>
+        <tr class='hide'>
         <?php echo html::hidden('execution', $noMultipleExecutionID);?>
+        </tr>
         <?php else:?>
         <tr class='<?php echo ($app->tab == 'execution' and $executionID) ? 'hide' : '';?>'>
           <th class='w-100px'><?php echo $lang->testtask->execution;?></th>

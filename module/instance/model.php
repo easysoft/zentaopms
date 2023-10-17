@@ -928,7 +928,15 @@ class InstanceModel extends model
      */
     public function createInstance($app, $space, $thirdDomain, $name = '', $k8name = '', $channel = 'stable', $snippets = array())
     {
+        $createdBy = $this->app->user->account;
         if(empty($k8name)) $k8name = "{$app->chart}-" . date('YmdHis'); //name rule: chartName-userAccount-YmdHis;
+        if(defined('IN_INSTALL') && IN_INSTALL && empty($this->app->user->account)) $createdBy = trim($this->app->company->admins, ','); //Set createdBy if in login progress;
+
+        if(!$this->app->user->account)
+        {
+            $this->app->user = new stdclass();
+            $this->app->user->account = $this->dao->select('*')->from(TABLE_USER)->where('deleted')->eq(0)->fetch('account');
+        }
 
         $instanceData = new stdclass;
         $instanceData->appId           = $app->id;
@@ -2071,7 +2079,7 @@ class InstanceModel extends model
         if($action == 'visit')         return !empty($instance->domain) && $this->canDo('visit', $instance);
         if($action == 'upgrade')       return !empty($instance->latestVersion) && in_array($instance->status, array('stopped', 'running'));
         if($action == 'edit')          return false;
-        if($action == 'bindUser')      return in_array($instance->appName, array('GitLab', 'Gitea', 'Gogs'));
+        if($action == 'bindUser')      return $instance->status == 'running' && in_array($instance->appName, array('GitLab', 'Gitea', 'Gogs'));
 
         return true;
     }
