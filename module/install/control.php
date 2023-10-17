@@ -341,6 +341,7 @@ class install extends control
      */
     public function app()
     {
+        $this->loadModel('common');
         $this->loadModel('solution');
         $cloudSolution = $this->loadModel('store')->getSolution('name', 'devops');
         $components    = $this->loadModel('store')->solutionConfig('name', 'devops');
@@ -396,6 +397,7 @@ class install extends control
      */
     public function ajaxProgress($id)
     {
+        $this->loadModel('common');
         $solution = $this->loadModel('solution')->getByID($id);
         $logs     = array();
         if(in_array($solution->status, array('installing', 'installed')))
@@ -462,6 +464,7 @@ class install extends control
      */
     public function ajaxUninstall($solutionID)
     {
+        $this->loadModel('common');
         $this->loadModel('solution')->uninstall($solutionID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -478,6 +481,7 @@ class install extends control
      */
     public function ajaxCheck()
     {
+        $this->loadModel('common');
         $data      = fixer::input('post')->get();
         $appMap    = $this->loadModel('store')->getAppMapByNames($data->apps);
         $resources = array();
