@@ -74,6 +74,7 @@ class release extends control
 
         $this->view->title       = $this->view->product->name . $this->lang->colon . $this->lang->release->browse;
         $this->view->releases    = $this->releaseZen->processReleaseListData($releases);
+        $this->view->pageSummary = $this->release->getPageSummary($releases, $type);
         $this->view->type        = $type;
         $this->view->orderBy     = $orderBy;
         $this->view->param       = $param;

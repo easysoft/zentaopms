@@ -185,6 +185,29 @@ class releaseModel extends model
     }
 
     /**
+     * 获取发布列表统计信息。
+     * Get summary info of release browse page.
+     *
+     * @param  array  $releases
+     * @param  int    $type
+     * @access public
+     * @return string
+     */
+    public function getPageSummary(array $releases, string $type): string
+    {
+        if($type != 'all') return sprintf($this->lang->release->pageSummary, count($releases));
+
+        $totalNormal    = 0;
+        $totalTerminate = 0;
+        foreach($releases as $release)
+        {
+            if($release->status == 'normal') $totalNormal ++;
+            if($release->status == 'terminate') $totalTerminate ++;
+        }
+        return sprintf($this->lang->release->pageAllSummary, count($releases), $totalNormal, $totalTerminate);
+    }
+
+    /**
      * 创建一个发布。
      * Create a release.
      *

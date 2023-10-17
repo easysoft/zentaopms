@@ -34,22 +34,6 @@ jsVar('orderBy', $orderBy);
 jsVar('sortLink', helper::createLink('release', 'browse', "productID={$product->id}&branch={$branch}&type={$type}&orderBy={orderBy}&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 jsVar('type', $type);
 
-if($type == 'all')
-{
-    $totalNormal    = 0;
-    $totalTerminate = 0;
-    foreach($releases as $release)
-    {
-        if($release->status == 'normal') $totalNormal ++;
-        if($release->status == 'terminate') $totalTerminate ++;
-    }
-    $pageSummary = sprintf($lang->release->pageAllSummary, count($releases), $totalNormal, $totalTerminate);
-}
-else
-{
-    $pageSummary = sprintf($lang->release->pageSummary, count($releases));
-}
-
 if($showBranch) $config->release->dtable->fieldList['branch']['map'] = $branchPairs;
 dtable
 (
