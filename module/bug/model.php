@@ -916,7 +916,7 @@ class bugModel extends model
 
         if($type == 'bysearch')
         {
-            $bugs = $this->getBySearch('project', $productIID, $branchID, $projectID, $param, $excludeBugs, $orderBy, $pager);
+            $bugs = $this->getBySearch('project', $productID, $branchID, $projectID, $param, $excludeBugs, $orderBy, $pager);
         }
         else
         {
@@ -967,7 +967,7 @@ class bugModel extends model
         $type = strtolower($type);
         if($type == 'bysearch')
         {
-            $bugs = $this->getBySearch('execution', $productIID, $branchID, $projectID = 0, $executionID, $param, $excludeBugs, $orderBy, $pager);
+            $bugs = $this->getBySearch('execution', $productID, $branchID, $projectID = 0, $executionID, $param, $excludeBugs, $orderBy, $pager);
         }
         else
         {
