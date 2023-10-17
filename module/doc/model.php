@@ -3150,6 +3150,15 @@ class docModel extends model
                         unset($releases[$index]);
                     }
                 }
+
+                if(!empty($lib->versions))
+                {
+                    /* Set default version. */
+                    $defaultVersion = new stdclass();
+                    $defaultVersion->id      = 0;
+                    $defaultVersion->version = $this->lang->build->common;
+                    $lib->versions = array_merge(array($defaultVersion), $lib->versions);
+                }
             }
         }
 

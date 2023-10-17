@@ -88,10 +88,11 @@ class docMenu extends wg
             if($this->currentModule == 'doc')
             {
                 $linkParams = str_replace(array('browseType=&', 'param=0'), array('browseType=byrelease&', "param={$releaseID}"), $linkParams);
-                if($this->rawMethod == 'view') $linkParams = "libID={$this->libID}&moduleID=0&browseType=byrelease&orderBy=&status,id_desc&param={$releaseID}";
             }
             else
             {
+                $moduleName = 'api';
+                $methodName = 'index';
                 $linkParams = "libID={$this->libID}&moduleID=0&apiID=0&version=0&release={$releaseID}";
             }
         }
@@ -114,7 +115,7 @@ class docMenu extends wg
             $itemID = 0;
             if(!in_array(strtolower($setting->type), $this->mineTypes)) $itemID = $setting->id ? $setting->id : $parentID;
 
-            $moduleName = $setting->type == 'apiLib' || $setting->objectType == 'api' ? 'api' : 'doc';
+            $moduleName = $setting->type == 'apiLib' || (isset($setting->objectType) && $setting->objectType) == 'api' ? 'api' : 'doc';
 
             $item = array(
                 'key'         => $itemID,
@@ -210,10 +211,12 @@ class docMenu extends wg
             global $lang;
             $versionTitle = $lang->build->common;
             $versionBtn = array(
-                'key'      => 'version',
-                'text'     => $versionTitle,
-                'type'     => 'dropdown',
-                'dropdown' => array(
+                'key'       => 'version',
+                'text'      => $versionTitle,
+                'hint'      => $versionTitle,
+                'className' => 'versions-list',
+                'type'      => 'dropdown',
+                'dropdown'  => array(
                     'placement' => 'bottom-end',
                     'items'     => array(),
                 )
@@ -221,11 +224,16 @@ class docMenu extends wg
 
             foreach($item->versions as $version)
             {
-                if($version->id == $this->release) $versionBtn['text'] = $version->version;
+                if($version->id == $this->release)
+                {
+                    $versionBtn['text'] = $version->version;
+                    $versionBtn['hint'] = $version->version;
+                }
 
                 $versionBtn['dropdown']['items'][] = array(
                     'text'   => $version->version,
-                    'href'   => $this->buildLink($item, $version->id),
+                    'hint'   => $version->version,
+                    'url'    => $this->buildLink($item, $version->id),
                     'active' => $version->id == $this->release,
                 );
             }

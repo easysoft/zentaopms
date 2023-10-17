@@ -9,6 +9,7 @@
 
 .module-menu .tree .tree-item .item-content {overflow: clip;}
 .module-menu .tree .tree-item .toolbar {margin-left: 0;}
+.module-menu .tree .tree-item .toolbar .versions-list .text{overflow: hidden; width: 25px;}
 .module-menu .tree .tree-item .tree-link {text-overflow: clip; overflow: hidden; flex: 1 10 auto;}
 .module-menu .tree .tree-item .tree-actions {margin-left: 0;}
 .module-menu .tree .tree-item .tree-actions .icon-ellipsis-v {display: none;}
