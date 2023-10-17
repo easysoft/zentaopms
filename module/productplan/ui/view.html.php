@@ -213,6 +213,7 @@ detailBody
                     set::checkable($canBatchActionStory),
                     set::onRenderCell(jsRaw('window.renderStoryCell')),
                     set::footToolbar($storyFootToolbar),
+                    set::sortLink(createLink('productplan', 'view', "planID={$plan->id}&type=story&orderBy={name}_{sortType}&link=false&param={$param}&recTotal={$storyPager->recTotal}&recPerPage={$storyPager->recPerPage}&page={$storyPager->pageID}")),
                     set::footer(array('checkbox', 'toolbar', array('html' => $summary, 'className' => "text-dark"), 'flex', 'pager')),
                     set::footPager
                     (
@@ -244,6 +245,7 @@ detailBody
                     set::data(array_values($planBugs)),
                     set::checkable($canBatchActionBug),
                     set::footToolbar($bugFootToolbar),
+                    set::sortLink(createLink('productplan', 'view', "planID={$plan->id}&type=bug&orderBy={name}_{sortType}&link=false&param={$param}&recTotal={$bugPager->recTotal}&recPerPage={$bugPager->recPerPage}&page={$bugPager->pageID}")),
                     set::footer(array('checkbox', 'toolbar', array('html' => sprintf($lang->productplan->bugSummary, count($planBugs)), 'className' => "text-dark"), 'flex', 'pager')),
                     set::footPager
                     (

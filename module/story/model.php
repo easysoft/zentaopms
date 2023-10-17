@@ -2425,7 +2425,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getUserStoryPairs(string $account, int $limit = 10, string $type = 'story', array $skipProductIDList = array(), int|string $appendStoryID = 0): array
+    public function getUserStoryPairs(string $account, int $limit = 10, string $type = 'story', array|string $skipProductIDList = array(), int|string|array $appendStoryID = 0): array
     {
         return $this->dao->select('id, title')->from(TABLE_STORY)
             ->where('deleted')->eq('0')

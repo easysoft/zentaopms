@@ -333,6 +333,7 @@ class todoZen extends todo
     protected function batchEditFromMyTodo(array|false $todoIdList, string $type, int $userID, string $status): void
     {
         /* Initialize vars. */
+        if(empty($todoIdList)) $todoIdList = array();
         $editedTodos = $objectIdList = $reviews = array();
         $columns     = 7;
         unset($this->lang->todo->typeList['cycle']);
