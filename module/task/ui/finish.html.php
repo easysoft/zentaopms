@@ -144,7 +144,7 @@ else
             set::width('1/3'),
             set::name('realStarted'),
             set::label($lang->project->realBeganAB),
-            set::control('datetime'),
+            set::control('datetime-local'),
             set::value($realStarted),
             set('disabled', $realStarted)
         ),
@@ -154,7 +154,7 @@ else
             set::name('finishedDate'),
             set::label($lang->project->realEndAB),
             set::value(helper::now()),
-            set::control('datetime')
+            set::control('datetime-local')
         ),
         formGroup
         (
