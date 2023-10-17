@@ -282,25 +282,15 @@ class release extends control
     public function delete(int $releaseID)
     {
         $this->release->delete(TABLE_RELEASE, $releaseID);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        $response = array();
-        $message  = $this->executeHooks($releaseID);
-        if($message) $response['message'] = $message;
+        $message = $this->executeHooks($releaseID) ?: $this->lang->saveSuccess;
 
-        /* if ajax request, send result. */
-        if(dao::isError())
-        {
-            $response['result']  = 'fail';
-            $response['message'] = dao::getError();
-        }
-        else
-        {
-            $release = $this->release->getByID($releaseID);
-            $response['result'] = 'success';
-            $response['load']   = inLink('browse', "productID={$release->product}");
-        }
+        if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message));
 
-        return $this->send($response);
+        $locate = $this->session->releaseList ? $this->session->releaseList : $this->createLink($this->app->rawModule, 'browse', "productID={$release->product}");
+
+        return $this->send(array('result' => 'success', 'load' => $locate));
     }
 
     /**
