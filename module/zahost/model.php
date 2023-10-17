@@ -594,4 +594,21 @@ class zahostModel extends model
 
         return $result->data;
     }
+
+    /**
+     * 判断按钮是否可点击。
+     * Judge an action is clickable or not.
+     *
+     * @param  object $host
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public static function isClickable(object $host, string $action): bool
+    {
+        if($action == 'browseImage') return $host->status != 'wait';
+        if($action == 'delete') return $host->canDelete;
+
+        return true;
+    }
 }
