@@ -115,7 +115,7 @@ class docMenu extends wg
             $itemID = 0;
             if(!in_array(strtolower($setting->type), $this->mineTypes)) $itemID = $setting->id ? $setting->id : $parentID;
 
-            $moduleName = $setting->type == 'apiLib' || (isset($setting->objectType) && $setting->objectType) == 'api' ? 'api' : 'doc';
+            $moduleName = $setting->type == 'apiLib' || (isset($setting->objectType) && $setting->objectType == 'api') ? 'api' : 'doc';
 
             $item = array(
                 'key'         => $itemID,
