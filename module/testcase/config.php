@@ -89,16 +89,19 @@ $config->testcase->datatable->fieldList['id']['fixed']    = 'left';
 $config->testcase->datatable->fieldList['id']['width']    = '70';
 $config->testcase->datatable->fieldList['id']['required'] = 'yes';
 
-$config->testcase->datatable->fieldList['product']['title']      = 'priAB';
+$config->testcase->datatable->fieldList['product']['title']      = 'product';
 $config->testcase->datatable->fieldList['product']['control']    = 'hidden';
+$config->testcase->datatable->fieldList['product']['display']    = false;
 $config->testcase->datatable->fieldList['product']['dataSource'] = array('module' => 'product', 'method' => 'getPairs', 'params' => '&0&&all');
 
 $config->testcase->datatable->fieldList['module']['title']      = 'module';
 $config->testcase->datatable->fieldList['module']['control']    = 'select';
+$config->testcase->datatable->fieldList['module']['display']    = false;
 $config->testcase->datatable->fieldList['module']['dataSource'] = array('module' => 'testcase', 'method' => 'getDatatableModules', 'params' => '$productID');
 
 $config->testcase->datatable->fieldList['scene']['title']      = 'scene';
 $config->testcase->datatable->fieldList['scene']['control']    = 'select';
+$config->testcase->datatable->fieldList['scene']['display']    = false;
 $config->testcase->datatable->fieldList['scene']['dataSource'] = array('module' => 'testcase', 'method' => 'getSceneMenu', 'params' => '$productID&0');
 
 $config->testcase->datatable->fieldList['title']['title']    = 'title';
