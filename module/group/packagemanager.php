@@ -788,7 +788,7 @@ $config->group->package->manageRequirement->privs['requirement-batchChangeModule
 $config->group->package->manageRequirement->privs['requirement-linkRequirements']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 105, 'depend' => array('requirement-view'), 'recommend' => array('requirement-activate', 'requirement-assignTo', 'requirement-change', 'requirement-close', 'requirement-create', 'requirement-edit', 'requirement-linkStory', 'requirement-recall', 'requirement-submitReview'));
 $config->group->package->manageRequirement->privs['requirement-batchEdit']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 110, 'depend' => array('product-requirement'), 'recommend' => array('requirement-edit'));
 $config->group->package->manageRequirement->privs['requirement-batchChangeRoadmap'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 125, 'depend' => array('product-requirement'), 'recommend' => array('requirement-batchCreate', 'requirement-create', 'requirement-edit'));
-$config->group->package->manageRequirement->privs['requirement-relation']           = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 130, 'depend' => array(), 'recommend' => array());
+$config->group->package->manageRequirement->privs['requirement-relation']           = array('edition' => 'max,ipd', 'vision' => 'rnd,or', 'order' => 130, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->importRequirement = new stdclass();
 $config->group->package->importRequirement->order  = 20;
