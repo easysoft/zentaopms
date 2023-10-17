@@ -15,7 +15,10 @@ $(function()
             $('.dtable-row').click().addClass('is-checked');
             $('.has-checkbox input[type="checkbox"]').prop('checked', true);
         }
-    })
+    });
+
+    var table = $('#dtable .dtable');
+    table.css('height', table.height() - 10 + 'px');
 });
 
 /**
