@@ -19,17 +19,6 @@ $(function()
 
         $('#status').val('normal');
     });
-
-    $('.form').on('click', '#saveDraft', function()
-    {
-        if($('#title').val() == '')
-        {
-            zui.Modal.alert(titleNotEmpty);
-            return false;
-        }
-
-        $('[name=status]').val('draft');
-    });
 })
 
 window.loadExecutions = function(e)
@@ -43,4 +32,9 @@ window.loadExecutions = function(e)
         $picker.render({items: data});
         $picker.$.setValue('');
     });
+}
+
+window.clickSubmit = function(e)
+{
+    if($(e.submitter).hasClass('save-draft')) $('input[name=status]').val('draft');
 }

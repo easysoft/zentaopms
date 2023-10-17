@@ -78,6 +78,7 @@ else
     form
     (
         set::actions(''),
+        set::ajax(array('beforeSubmit' => jsRaw("clickSubmit"))),
         div
         (
             setClass('flex titleBox'),
@@ -97,9 +98,8 @@ else
                 (
                     array
                     (
-                        'class' => 'btn secondary',
+                        'class' => 'btn secondary save-draft mr-2',
                         'text'  => $lang->doc->saveDraft,
-                        'id'    => 'saveDraft',
                         'btnType' => 'submit',
                     )
                 )
@@ -110,10 +110,10 @@ else
                 (
                     array
                     (
+                        'id'          => 'basicInfoLink',
                         'class'       => 'btn primary',
                         'text'        => $lang->doc->release,
                         'data-toggle' => 'modal',
-                        'id'          => 'basicInfoLink',
                         'url'         => '#modalBasicInfo'
                     )
                 )
@@ -143,35 +143,41 @@ else
                 (
                     set::width('1/2'),
                     set::label($lang->doc->execution),
+                    set::required(true),
                     picker
                     (
                         set::name('execution'),
                         set::id('execution'),
                         set::items($objects),
-                        set::value($objectID)
+                        set::value($objectID),
+                        set::required(true)
                     )
                 ) : null,
                 ($linkType == 'product') ? formGroup
                 (
                     set::width('1/2'),
                     set::label($lang->doc->product),
+                    set::required(true),
                     picker
                     (
                         set::name('product'),
                         set::id('product'),
                         set::items($objects),
-                        set::value($objectID)
+                        set::value($objectID),
+                        set::required(true)
                     )
                 ) : null,
                 formGroup
                 (
                     set::width('1/2'),
                     set::label($lang->doc->lib),
+                    set::required(true),
                     picker
                     (
                         set::name('module'),
                         set::items($moduleOptionMenu),
-                        set::value($moduleID)
+                        set::value($moduleID),
+                        set::required(true)
                     )
                 ),
                 formGroup

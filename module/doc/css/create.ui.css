@@ -2,7 +2,6 @@
 #title {border: unset; font-size: 18px; font-weight: bold; color: #3c4353; padding-left: 16px; --tw-ring-shadow: none}
 #title:focus {box-shadow: none; outline: unset}
 .titleBox{padding: 7px; background: #fff}
-#saveDraft {margin-right: 0.75em}
 #modalBasicInfo .form-group {margin-top: calc(1rem*(1 - var(--tw-space-y-reverse)));}
 .form-grid>:not([hidden])~:not([hidden]){margin-top: 0;}
 #whitelistBox .form-group-wrapper+.form-group-wrapper {margin-top: 10px;}
