@@ -117,6 +117,7 @@ $lang->api->control            = 'Access Control';
 $lang->api->noLib              = 'No API library yet.';
 $lang->api->noApi              = 'No API yet.';
 $lang->api->noStruct           = 'No API yet.';
+$lang->api->noRelease          = 'No version yet.';
 $lang->api->lib                = 'API Library';
 $lang->api->apiList            = 'API List';
 $lang->api->formTitle          = 'API Name';
