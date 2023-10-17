@@ -136,7 +136,7 @@ window.rendDocCell = function(result, {col, row})
         {
             const starIcon = row.data.collector.indexOf(',' + currentAccount + ',') >= 0 ? 'star' : 'star-empty';
 
-            docNameHtml += `<a class='ajaxCollect' href='###' data-link="` + $.createLink('doc', 'collect', `objectID=${row.data.id}&objectType=doc`) + `"><img src='static/svg/${starIcon}.svg' class='${starIcon} ml-1'></a>`;
+            docNameHtml += `<a class='ajaxCollect' href="` + $.createLink('doc', 'collect', `objectID=${row.data.id}&objectType=doc`) + `"><img src='static/svg/${starIcon}.svg' class='${starIcon} ml-1'></a>`;
         }
         docNameHtml +='</div>';
         result[0] = {html: docNameHtml};
