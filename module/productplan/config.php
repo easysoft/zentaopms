@@ -46,12 +46,12 @@ $config->productplan->actionList['start']['url']          = helper::createLink('
 $config->productplan->actionList['start']['data-confirm'] = $lang->productplan->confirmStart;
 $config->productplan->actionList['start']['className']    = 'ajax-submit';
 
-$config->productplan->actionList['finish']['icon']        = 'checked';
-$config->productplan->actionList['finish']['hint']        = $lang->productplan->finish;
-$config->productplan->actionList['finish']['text']        = $lang->productplan->finish;
-$config->productplan->actionList['finish']['url']         = helper::createLink('productplan', 'finish', 'planID={id}');
-$config->productplan->actionList['finish']['data-toggle'] = 'modal';
-$config->productplan->actionList['finish']['innerClass']  = 'ajax-submit';
+$config->productplan->actionList['finish']['icon']         = 'checked';
+$config->productplan->actionList['finish']['hint']         = $lang->productplan->finish;
+$config->productplan->actionList['finish']['text']         = $lang->productplan->finish;
+$config->productplan->actionList['finish']['url']          = helper::createLink('productplan', 'finish', 'planID={id}');
+$config->productplan->actionList['finish']['data-confirm'] = $lang->productplan->confirmFinish;
+$config->productplan->actionList['finish']['innerClass']   = 'ajax-submit';
 
 $config->productplan->actionList['close']['icon']        = 'off';
 $config->productplan->actionList['close']['hint']        = $lang->productplan->close;
@@ -59,12 +59,12 @@ $config->productplan->actionList['close']['text']        = $lang->productplan->c
 $config->productplan->actionList['close']['url']         = helper::createLink('productplan', 'close', 'planID={id}');
 $config->productplan->actionList['close']['data-toggle'] = 'modal';
 
-$config->productplan->actionList['activate']['icon']        = 'magic';
-$config->productplan->actionList['activate']['hint']        = $lang->productplan->activate;
-$config->productplan->actionList['activate']['text']        = $lang->productplan->activate;
-$config->productplan->actionList['activate']['url']         = helper::createLink('productplan', 'activate', 'planID={id}');
-$config->productplan->actionList['activate']['data-toggle'] = 'modal';
-$config->productplan->actionList['activate']['className']   = 'ajax-submit';
+$config->productplan->actionList['activate']['icon']         = 'magic';
+$config->productplan->actionList['activate']['hint']         = $lang->productplan->activate;
+$config->productplan->actionList['activate']['text']         = $lang->productplan->activate;
+$config->productplan->actionList['activate']['url']          = helper::createLink('productplan', 'activate', 'planID={id}');
+$config->productplan->actionList['activate']['data-confirm'] = $lang->productplan->confirmActivate;
+$config->productplan->actionList['activate']['className']    = 'ajax-submit';
 
 $config->productplan->actionList['createExecution']['icon']        = 'plus';
 $config->productplan->actionList['createExecution']['hint']        = $lang->productplan->createExecution;
