@@ -133,10 +133,11 @@ statisticBlock
                     (
                         array
                         (
-                            'type'  => 'bar',
-                            'stack' => 'Ad',
-                            'name'  => $lang->bug->activate,
-                            'data'  => array_values($activateBugs),
+                            'type'     => 'bar',
+                            'barWidth' => '8',
+                            'stack'    => 'Ad',
+                            'name'     => $lang->bug->activate,
+                            'data'     => array_values($activateBugs),
                         ),
                         array
                         (
