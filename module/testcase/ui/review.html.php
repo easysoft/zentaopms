@@ -12,7 +12,7 @@ namespace zin;
 
 modalHeader();
 
-form
+formPanel
 (
     formGroup
     (
