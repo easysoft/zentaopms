@@ -63,6 +63,8 @@ class model extends baseModel
      */
     public function delete(string $table, int $id)
     {
+        if(empty($id)) return false;
+
         $this->dao->update($table)->set('deleted')->eq(1)->where('id')->eq($id)->exec();
         $objectType = preg_replace('/^' . preg_quote((string) $this->config->db->prefix) . '/', '', trim($table, '`'));
         $this->loadModel('action')->create($objectType, $id, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
