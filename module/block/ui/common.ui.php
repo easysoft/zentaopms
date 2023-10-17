@@ -7,12 +7,15 @@ namespace zin;
  *
  * @param  object $block
  * @param  array  $params
+ * @param  string $module
+ * @param  string $code
  * @return array
  */
-function buildParamsRows(object $block = null, ?array $params = null): array
+function buildParamsRows(object $block = null, ?array $params = null, string $module = '', string $code = ''): array
 {
     if(empty($params)) $params = data('params');
-    $rows = array();
+    $rows        = array();
+    $isSameBlock = !empty($block) && $block->module == $module && $block->code == $code;
     foreach($params as $key => $row)
     {
         $rows[] = formRow
@@ -21,7 +24,7 @@ function buildParamsRows(object $block = null, ?array $params = null): array
             (
                 set::label($row['name']),
                 set::name("params[$key]"),
-                set::value(!empty($block) && !empty($block->params) ? zget($block->params, $key, '') : zget($row, 'default', '')),
+                set::value($isSameBlock && !empty($block->params) ? zget($block->params, $key, '') : zget($row, 'default', '')),
                 set::control(array
                 (
                     'id'       => "params$key",

@@ -83,7 +83,7 @@ row
                         set::control('input')
                     ),
                 ),
-                buildParamsRows($block),
+                buildParamsRows($block, null, $module, $code),
                 formRow
                 (
                     setClass(empty($code) ? 'hidden' : ''),
@@ -105,7 +105,7 @@ row
                     formGroup
                     (
                         set::label($lang->block->lblHtml),
-                        editor(set::name('html'), html($block->params->html)),
+                        editor(set::name('html'), html(zget($block->params, 'html'))),
                     )
                 )
             )

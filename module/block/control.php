@@ -249,7 +249,7 @@ class block extends control
         $this->view->codes      = $codes;
         $this->view->code       = in_array($code, array_keys($codes)) ? $code : ''; // 当变更了所属模块(module)后, 判断当前code在是否还包含在codes中，没有的话置空code。
         $this->view->params     = $params;
-        $this->view->blockTitle = $this->blockZen->getBlockTitle($modules, $module, $codes, $code, $params);
+        $this->view->blockTitle = $module == $block->module && $code == $block->code ? $block->title : $this->blockZen->getBlockTitle($modules, $module, $codes, $code, $params);
         $this->display();
     }
 
