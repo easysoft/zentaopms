@@ -248,25 +248,8 @@ class projectrelease extends control
      */
     public function delete(int $releaseID)
     {
-        /* Delete release. */
-        $this->release->delete(TABLE_RELEASE, $releaseID);
-
-        /* Delete release's shadow build. */
-        $release = $this->release->getByID($releaseID);
-        $builds  = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll('id');
-        $this->loadModel('build')->delete(TABLE_BUILD, $release->shadow);
-        foreach($builds as $build)
-        {
-            if(empty($build->execution) and $build->createdDate == $release->createdDate) $this->build->delete(TABLE_BUILD, $build->id);
-        }
-
-        $message = $this->executeHooks($releaseID);
-
-        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-        if(!$message) $message = $this->lang->release->deleted;
-        return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->session->releaseList ? $this->session->releaseList : inlink('browse', "projectID={$release->project}") , 'closeModal' => true));
-}
+        return $this->fetch('release', 'delete', "releaseID={$releaseID}");
+    }
 
     /**
      * Export the stories of release to HTML.
