@@ -10,6 +10,7 @@ $lang->solution->view          = '解决方案详情';
 $lang->solution->detail        = '查看';
 $lang->solution->progress      = '安装进度';
 $lang->solution->install       = '安装';
+$lang->solution->background    = '后台安装';
 $lang->solution->cancelInstall = '取消安装';
 $lang->solution->uninstall     = '卸载';
 $lang->solution->retryInstall  = '重试';
