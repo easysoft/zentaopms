@@ -33,8 +33,6 @@ jsVar('showBranch', $showBranch);
 jsVar('products', $products);
 jsVar('orderBy', $orderBy);
 jsVar('sortLink', helper::createLink('projectrelease', 'browse', "projectID={$project->id}&executionID={$executionID}&type={$type}&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
-jsVar('pageAllSummary', $lang->release->pageAllSummary);
-jsVar('pageSummary', $lang->release->pageSummary);
 jsVar('type', $type);
 jsVar('canViewProjectbuild', common::hasPriv('projectbuild', 'view'));
 
@@ -48,7 +46,7 @@ dtable
     set::data($tableData),
     set::fixedLeftWidth('0.33'),
     set::onRenderCell(jsRaw('window.renderCell')),
-    set::footer([jsRaw('function(){return window.setStatistics.call(this);}'), 'flex', 'pager']),
+    set::footer([jsRaw("function(){return {html: '{$pageSummary}'};}"), 'flex', 'pager']),
     set::footPager(usePager()),
 );
 
