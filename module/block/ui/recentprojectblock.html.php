@@ -19,10 +19,10 @@ foreach($projects as $projectID => $project)
 
     $cards[] = cell
     (
-        setClass('p-2', $longBlock ? 'w-1/3' : 'w-full'),
+        setClass('p-2', $longBlock ? 'w-1/3' : 'w-full h-40'),
         div
         (
-            setClass('border rounded-sm h-full p-4 hover:shadow hover:border-primary cursor-pointer open-url group'),
+            setClass('border rounded-sm h-full px-4 hover:shadow hover:border-primary cursor-pointer open-url group', $longBlock ? 'py-4' : 'py-2'),
             setData('url', $viewLink),
             div
             (

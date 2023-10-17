@@ -325,7 +325,7 @@ $config->block->size['product']['releasestatistic'] = array(1 => 8, 2 => 5);
 
 $config->block->size['project']['overview']      = array(1 => 3);
 $config->block->size['project']['statistic']     = array(2 => 5, 1 => 8);
-$config->block->size['project']['recentproject'] = array(2 => 4, 1 => 8);
+$config->block->size['project']['recentproject'] = array(2 => 4, 1 => 9);
 $config->block->size['project']['project']       = array(2 => 6, 1 => 6);
 
 $config->block->size['scrumproject']['scrumoverview']  = array(2 => 5, 1 => 8);
