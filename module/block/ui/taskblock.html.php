@@ -12,9 +12,10 @@ namespace zin;
 
 if(!$longBlock)
 {
-    unset($config->block->task->dtable->fieldList['status']);
     unset($config->block->task->dtable->fieldList['deadline']);
     unset($config->block->task->dtable->fieldList['estimate']);
+    unset($config->block->task->dtable->fieldList['left']);
+    unset($config->block->task->dtable->fieldList['progress']);
 }
 
 panel
