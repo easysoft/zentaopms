@@ -20,6 +20,7 @@ if(!$longBlock)
     unset($config->block->project->dtable->fieldList['status']);
     unset($config->block->project->dtable->fieldList['consumed']);
     unset($config->block->project->dtable->fieldList['storyCount']);
+    unset($config->block->project->dtable->fieldList['leftStories']);
     unset($config->block->project->dtable->fieldList['leftTasks']);
     unset($config->block->project->dtable->fieldList['leftBugs']);
 }
