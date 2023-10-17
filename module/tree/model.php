@@ -1911,8 +1911,16 @@ class treeModel extends model
         if((empty($module->root) or empty($module->name)) and in_array($self->type, array('doc', 'api')))
         {
             $this->app->loadLang('doc');
-            if(empty($module->root)) helper::end(js::alert(sprintf($this->lang->error->notempty, $this->lang->doc->lib)));
-            if(empty($module->name)) helper::end(js::alert(sprintf($this->lang->error->notempty, $this->lang->doc->catalogName)));
+            if(empty($module->root))
+            {
+                dao::$errors['root'] = sprintf($this->lang->error->notempty, $this->lang->doc->lib);
+                return false;
+            }
+            if(empty($module->name))
+            {
+                dao::$errors['name'] = sprintf($this->lang->error->notempty, $this->lang->doc->catalogName);
+                return false;
+            }
         }
 
         $modules = $self->type == 'story' ? $this->getOptionMenu($self->root, 'story', 0, 'all') : array();

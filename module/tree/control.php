@@ -408,13 +408,8 @@ class tree extends control
 
             $this->tree->update($moduleID, $type);
 
-            $response = array();
-            $response['result']     = 'success';
-            $response['message']    = $this->lang->saveSuccess;
-            $response['closeModal'] = true;
-            $response['load']       = true;
-
-            $this->send($response);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->sendSuccess(array('clodeModal' => true, 'load' => true));
         }
 
         $module = $this->tree->getById($moduleID);

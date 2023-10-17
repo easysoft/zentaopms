@@ -53,12 +53,14 @@ formPanel
     ) : null,
     $type == 'doc' ? formGroup
     (
-        set::name('root'),
         set::label($lang->doc->lib),
-        set::control('picker'),
-        set::name('root'),
-        set::value($module->root),
-        set::items($libs)
+        picker
+        (
+            set::name('root'),
+            set::value($module->root),
+            set::items($libs),
+            set::required(true)
+        )
     ) : null,
     formGroup
     (
@@ -71,12 +73,12 @@ formPanel
     (
         set::className($hidden ? 'moduleBox hidden' : 'moduleBox'),
         set::label(($type == 'doc' or $type == 'api') ? $lang->tree->parentCate : $lang->tree->parent),
-        control
+        picker
         (
-            set::type('picker'),
             set::name('parent'),
             set::value($module->parent),
-            set::items($optionMenu)
+            set::items($optionMenu),
+            set::required(true)
         )
     ) : null,
     $type == 'bug' ? formGroup
