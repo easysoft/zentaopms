@@ -129,7 +129,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                 <tr class='<?php if($product->shadow and isset($project) and empty($project->multiple)) echo 'hide'?>'>
                   <th><?php echo $lang->bug->productplan;?></th>
                   <td>
-                    <span id="planIdBox"><?php echo html::select('plan', $plans, $bug->plan, "class='form-control chosen'");?></span>
+                    <span id="planIdBox"><?php echo html::select('plan', $plans, $bug->plan, "class='form-control chosen' data-max_drop_width=100%");?></span>
                   </td>
                 </tr>
                 <tr>
@@ -226,7 +226,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->task;?></th>
-                  <td><div id='taskIdBox'><?php echo html::select('task', $tasks, $bug->task, "class='form-control chosen'");?></div></td>
+                  <td><div id='taskIdBox'><?php echo html::select('task', $tasks, $bug->task, "class='form-control chosen' data-max_drop_width=100%");?></div></td>
                 </tr>
               </tbody>
             </table>
