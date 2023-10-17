@@ -647,6 +647,7 @@ EOF;
         $this->view->blockedCount = $blockedCount;
         $this->view->mode         = 'testtask';
         $this->view->pager        = $pager;
+        $this->view->param        = $param;
         $this->display();
     }
 

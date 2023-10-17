@@ -24,7 +24,6 @@ dtable
 (
     set::cols($cols),
     set::data($data),
-    set::userMap($users),
     set::fixedLeftWidth('20%'),
     set::footer(array(array('html' => $footerHTML), 'flex', 'pager')),
     set::footPager(usePager()),
