@@ -35,6 +35,7 @@ panel
     (
         set::height(318),
         set::bordered(false),
+        set::fixedLeftWidth('0.5'),
         set::horzScrollbarPos('inside'),
         set::cols(array_values($config->block->build->dtable->fieldList)),
         set::data(array_values($builds)),
