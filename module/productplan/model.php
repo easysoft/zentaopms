@@ -97,9 +97,9 @@ class productplanModel extends model
      * @param  string $param      skipparent|noproduct
      * @param  int    $queryID
      * @access public
-     * @return object
+     * @return array
      */
-    public function getList(int $productID = 0, string $branch = '', string $browseType = 'undone', object|null $pager = null, string $orderBy = 'begin_desc', string $param = '', int $queryID = 0)
+    public function getList(int $productID = 0, string $branch = '', string $browseType = 'undone', object|null $pager = null, string $orderBy = 'begin_desc', string $param = '', int $queryID = 0): array
     {
         $this->loadModel('search')->setQuery('productplan', $queryID);
 
