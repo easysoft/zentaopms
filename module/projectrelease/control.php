@@ -396,13 +396,7 @@ class projectrelease extends control
      */
     public function changeStatus(int $releaseID, string $status)
     {
-        $this->loadModel('release')->changeStatus($releaseID, $status);
-
-        if(dao::isError()) return $this->send(array('reslut'=> 'fail', 'message' => dao::getError()));
-
-        $this->loadModel('action')->create('release', $releaseID, 'changestatus', '', $status);
-
-        return $this->send(array('reslut'=> 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+        return $this->fetch('release', 'changeStatus', "releaseID={$releaseID}&status={$status}");
     }
 
     /**

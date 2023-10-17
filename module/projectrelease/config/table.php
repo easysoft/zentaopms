@@ -13,13 +13,17 @@ $config->projectrelease->actionList['linkBug']['icon'] = 'bug';
 $config->projectrelease->actionList['linkBug']['hint'] = $lang->release->linkBug;
 $config->projectrelease->actionList['linkBug']['url']  = helper::createLink('projectrelease', 'view', 'releaseID={id}&type=bug&link=true');
 
-$config->projectrelease->actionList['play']['icon'] = 'play';
-$config->projectrelease->actionList['play']['hint'] = $this->lang->release->changeStatusList['normal'];
-$config->projectrelease->actionList['play']['url']  = 'javascript:changeStatus("{id}", "normal")';
+$config->projectrelease->actionList['play']['icon']         = 'play';
+$config->projectrelease->actionList['play']['hint']         = $lang->release->changeStatusList['normal'];
+$config->projectrelease->actionList['play']['url']          = helper::createLink('projectrelease', 'changeStatus', 'releaseID={id}&status=normal');
+$config->projectrelease->actionList['play']['className']    = 'ajax-submit';
+$config->projectrelease->actionList['play']['data-confirm'] = $lang->release->confirmActivate;
 
-$config->projectrelease->actionList['pause']['icon'] = 'pause';
-$config->projectrelease->actionList['pause']['hint'] = $this->lang->release->changeStatusList['terminate'];
-$config->projectrelease->actionList['pause']['url']  = 'javascript:changeStatus("{id}", "terminate")';
+$config->projectrelease->actionList['pause']['icon']         = 'pause';
+$config->projectrelease->actionList['pause']['hint']         = $lang->release->changeStatusList['terminate'];
+$config->projectrelease->actionList['pause']['url']          = helper::createLink('projectrelease', 'changeStatus', 'releaseID={id}&status=terminate');
+$config->projectrelease->actionList['pause']['className']    = 'ajax-submit';
+$config->projectrelease->actionList['pause']['data-confirm'] = $lang->release->confirmTerminate;
 
 $config->projectrelease->actionList['edit']['icon'] = 'edit';
 $config->projectrelease->actionList['edit']['hint'] = $lang->release->edit;
