@@ -260,7 +260,7 @@ detailBody
                             set::type('checkbox'),
                             set::name('auto'),
                             set::text($lang->testcase->automated),
-                            set::value($case->auto)
+                            set::checked($case->auto == 'auto' ? true : false)
                         )
                     )
                 )
