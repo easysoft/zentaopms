@@ -7,6 +7,8 @@
 #docDropmenu .is-leading {display: none;}
 #docDropmenu .primary {--tw-ring-color: var(--btn-border-color); background-color: var(--btn-bg); color: inherit; width: 100%;}
 
+.module-menu .tree .tree-item .item-content {overflow: clip;}
+.module-menu .tree .tree-item .toolbar {margin-left: 0;}
 .module-menu .tree .tree-item .tree-link {text-overflow: clip; overflow: hidden; flex: 1 10 auto;}
 .module-menu .tree .tree-item .tree-actions {margin-left: 0;}
 .module-menu .tree .tree-item .tree-actions .icon-ellipsis-v {display: none;}
