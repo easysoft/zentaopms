@@ -1572,7 +1572,7 @@ class bugZen extends bug
         /* Get custom Fields. */
         foreach(explode(',', $this->config->bug->list->customBatchEditFields) as $field) $customFields[$field] = $this->lang->bug->$field;
 
-        $this->view->title        = zget($products, $productID, '', $products[$productID]->name . $this->lang->colon) . "BUG" . $this->lang->bug->batchEdit;
+        $this->view->title        = ($productID ? (zget($products, $productID, '', $products[$productID]->name . $this->lang->colon) . "BUG") : '') . $this->lang->bug->batchEdit;
         $this->view->customFields = $customFields;
 
         /* Judge whether the editedBugs is too large and set session. */
