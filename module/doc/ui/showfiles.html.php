@@ -81,7 +81,7 @@ if(!empty($files))
                                     set::href(createLink(($file->objectType == 'requirement' ? 'story' : $file->objectType), 'view', "objectID={$file->objectID}")),
                                     set::title($file->sourceName),
                                     $file->sourceName,
-                                    $file->objectType != 'doc' ? set('data-toggle', 'modal') : null,
+                                    $file->objectType != 'doc' ? set(array('data-toggle' => 'modal', 'data-size' => 'lg')) : null,
                                 )
                             )
                         )

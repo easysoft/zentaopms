@@ -30,7 +30,7 @@ window.renderCell = function(result, {col, row})
 
     if(col.name == 'objectID')
     {
-        const sourceAttr = row.data.objectType != 'doc' ? " data-toggle='modal'" : '';
+        const sourceAttr = row.data.objectType != 'doc' ? " data-toggle='modal' data-size='lg'" : '';
         const objectLink = $.createLink(row.data.objectType == 'requirement' ? 'story' : row.data.objectType, 'view', `objectID=${row.data.objectID}`);
         const sourceHtml = `<span>${row.data.objectName}</span><a title='${row.data.sourceName}' href='${objectLink}' ${sourceAttr}> ${row.data.sourceName}</a>`;
 
