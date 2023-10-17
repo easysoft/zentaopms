@@ -38,14 +38,14 @@ $getAffectedTabs = function($story, $users)
                 set::key('affectedProjects'),
                 set::title($lang->story->affectedProjects),
                 set::active(true),
-                $affectedProjects,
+                empty($affectedProjects) ? div(setClass('dtable-empty-tip'), div(setClass('text-gray'), $lang->noData)) : $affectedProjects,
             ),
             tabPane
             (
                 to::suffix(label(count($story->bugs))),
                 set::key('affectedBugs'),
                 set::title($lang->story->affectedBugs),
-                empty($story->bugs) ? null : dtable
+                dtable
                 (
                     set::cols($config->story->affect->bugs->fields),
                     set::data(array_values($story->bugs))
@@ -56,7 +56,7 @@ $getAffectedTabs = function($story, $users)
                 to::suffix(label(count($story->cases))),
                 set::key('affectedCases'),
                 set::title($lang->story->affectedCases),
-                empty($story->cases) ? null : dtable
+                dtable
                 (
                     set::cols($config->story->affect->cases->fields),
                     set::data(array_values($story->cases))
