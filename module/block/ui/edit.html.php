@@ -39,8 +39,8 @@ row
         setClass('flex-auto pr-6 pb-4'),
         form
         (
-            on::change('#code', 'getForm'),
-            on::change('#paramstype', 'changeType'),
+            on::change('[name="code"]', 'getForm'),
+            on::change('[name="params\[type\]"]', 'changeType'),
             formRow
             (
                 setClass('hidden'),

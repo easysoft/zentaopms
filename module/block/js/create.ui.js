@@ -20,8 +20,8 @@ function getForm(event)
 function changeType()
 {
     const lang = config.clientLang;
-    const code = $('#code').zui('picker').$.state.selections[0].text;
-    const type = $('#paramstype').zui('picker').$.state.selections[0].text;
+    const code = $('[name="code"]').zui('picker').$.state.selections[0].text;
+    const type = $('[name="params[type]"]').zui('picker').$.state.selections[0].text;
 
     /* 在项目仪表盘创建的待测版本区块时，直接取类型名称为该区块的标题。*/
     /* When creating a test version block in the project dashboard, directly take the name of the block of type.*/
