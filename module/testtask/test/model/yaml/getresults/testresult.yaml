@@ -1,0 +1,6 @@
+title: table zt_testresult
+author: Gang Liu
+version: "1.0"
+fields:
+  - field: stepResults
+    range: []

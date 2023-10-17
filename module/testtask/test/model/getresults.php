@@ -2,15 +2,18 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/testtask.class.php';
-su('admin');
+
+zdTable('case')->gen(5);
+zdTable('casestep')->gen(5);
+zdTable('testresult')->config('testresult')->gen(5);
+zdTable('testrun')->gen(5);
+zdTable('host')->gen(0);
 
 /**
 
 title=测试 testtaskModel->getResults();
 cid=1
 pid=1
-
-
 
 */
 
