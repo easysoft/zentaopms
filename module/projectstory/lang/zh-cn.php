@@ -32,5 +32,5 @@ $lang->projectstory->featureBar['story']['draft']             = '草稿';
 $lang->projectstory->featureBar['story']['reviewing']         = '评审中';
 $lang->projectstory->featureBar['story']['changing']          = '变更中';
 $lang->projectstory->featureBar['story']['closed']            = '已关闭';
-$lang->projectstory->featureBar['story']['linkedExecution']   = '已关联' . $lang->execution->common;
-$lang->projectstory->featureBar['story']['unlinkedExecution'] = '未关联' . $lang->execution->common;
+$lang->projectstory->featureBar['story']['linkedexecution']   = '已关联' . $lang->execution->common;
+$lang->projectstory->featureBar['story']['unlinkedexecution'] = '未关联' . $lang->execution->common;

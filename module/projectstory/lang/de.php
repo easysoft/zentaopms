@@ -32,5 +32,5 @@ $lang->projectstory->featureBar['story']['draft']             = 'Draft';
 $lang->projectstory->featureBar['story']['reviewing']         = 'Reviewing';
 $lang->projectstory->featureBar['story']['changing']          = 'Changing';
 $lang->projectstory->featureBar['story']['closed']            = 'Closed';
-$lang->projectstory->featureBar['story']['linkedExecution']   = 'Linked ' . $lang->execution->common;
-$lang->projectstory->featureBar['story']['unlinkedExecution'] = 'Unlinked ' . $lang->execution->common;
+$lang->projectstory->featureBar['story']['linkedexecution']   = 'Linked ' . $lang->execution->common;
+$lang->projectstory->featureBar['story']['unlinkedexecution'] = 'Unlinked ' . $lang->execution->common;

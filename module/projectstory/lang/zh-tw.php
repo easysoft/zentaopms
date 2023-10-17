@@ -34,5 +34,5 @@ $lang->projectstory->featureBar['story']['draft']             = $lang->product->
 $lang->projectstory->featureBar['story']['reviewing']         = $lang->product->reviewingStory;
 $lang->projectstory->featureBar['story']['changing']          = $lang->product->changingStory;
 $lang->projectstory->featureBar['story']['closed']            = $lang->product->closedStory;
-$lang->projectstory->featureBar['story']['linkedExecution']   = '已關聯' . $lang->execution->common;
-$lang->projectstory->featureBar['story']['unlinkedExecution'] = '未關聯' . $lang->execution->common;
+$lang->projectstory->featureBar['story']['linkedexecution']   = '已關聯' . $lang->execution->common;
+$lang->projectstory->featureBar['story']['unlinkedexecution'] = '未關聯' . $lang->execution->common;
