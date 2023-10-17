@@ -13,14 +13,13 @@ class caselibZen extends caselib
      */
     public function saveLibState(int $libID = 0, array $libraries = array()): int
     {
+        if(empty($libraries)) return 0;
+
         if($libID > 0) $this->session->set('caseLib', (int)$libID);
-        if($libID == 0 and $this->cookie->lastCaseLib) $this->session->set('caseLib', $this->cookie->lastCaseLib);
-        if($libID == 0 and $this->session->caseLib == '') $this->session->set('caseLib', key($libraries));
-        if(!isset($libraries[$this->session->caseLib]))
-        {
-            $this->session->set('caseLib', key($libraries));
-            $libID = $this->session->caseLib;
-        }
+        if($libID == 0 && $this->cookie->lastCaseLib) $this->session->set('caseLib', $this->cookie->lastCaseLib);
+        if($libID == 0 && !$this->session->caseLib) $this->session->set('caseLib', key($libraries));
+
+        if(!isset($libraries[$this->session->caseLib])) $this->session->set('caseLib', key($libraries));
         return $this->session->caseLib;
     }
 
