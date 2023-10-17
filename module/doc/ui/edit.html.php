@@ -19,6 +19,7 @@ jsVar('contentNotEmpty', sprintf($lang->error->notempty, $lang->doc->content));
 form
 (
     set::actions(''),
+    set::ajax(array('beforeSubmit' => jsRaw("clickSubmit"))),
     div
     (
         setClass('flex titleBox'),
@@ -33,14 +34,25 @@ form
                 set::placeholder($lang->doc->titlePlaceholder),
             ),
         ),
+        $doc->status == 'draft' ? btn
+        (
+            set
+            (
+                array
+                (
+                    'class' => 'btn secondary mr-2 save-draft',
+                    'text'  => $lang->doc->saveDraft,
+                    'btnType' => 'submit',
+                )
+            )
+        ) : null,
         btn
         (
             set
             (
                 array
                 (
-                    'class' => 'btn primary',
-                    'id'    => 'saveBtn',
+                    'class' => 'btn primary save-btn',
                     'text'  => $lang->doc->release,
                     'btnType' => 'submit',
                 )
@@ -103,7 +115,8 @@ form
                     set::name($type),
                     set::id($type),
                     set::items($objects),
-                    set::value($objectID)
+                    set::value($objectID),
+                    set::required(true)
                 )
             ) : null,
             formGroup
@@ -115,7 +128,8 @@ form
                 (
                     set::name('module'),
                     set::items($moduleOptionMenu),
-                    set::value($doc->lib . '_' . $doc->module)
+                    set::value($doc->lib . '_' . $doc->module),
+                    set::required(true)
                 )
             ),
             formGroup
