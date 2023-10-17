@@ -65,53 +65,28 @@ $canBatchChangePlanBug     = common::hasPriv('bug', 'batchChangePlan');
 $canBatchActionStory = ($canBeChanged && ($canBatchUnlinkStory || $canBatchCloseStory || $canBatchEditStory || $canBatchReviewStory || $canBatchChangeBranchStory || $canBatchChangeModuleStory || $canBatchChangePlanStory || $canBatchChangeStageStory || $canBatchAssignToStory));
 $canBatchActionBug   = ($canBeChanged && ($canBatchUnlinkBug || $canBatchEditBug || $canBatchChangePlanBug));
 
-$bugFootToolbar   = array();
-$storyFootToolbar = array();
-if($canBatchActionStory)
-{
-    $storyFootToolbar = array('items' => array
-    (
-        array('type' => 'btn-group', 'items' => array
-        (
-            array('text' => $lang->productplan->unlinkStoryAB, 'className' => 'batch-btn size-sm secondary', 'disabled' => ($canBatchUnlinkStory ? '' : 'disabled'), 'btnType' => 'primary', 'data-type' => 'story', 'data-formaction' => helper::createLink('productplan', 'batchUnlinkStory', "planID=$plan->id&orderBy=$orderBy")),
-            array('caret' => 'up', 'className' => 'size-sm secondary', 'btnType' => 'primary', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start', 'url' => '#navStoryActions'),
-        )),
-    ));
-}
-if($canBatchActionBug)
-{
-    $bugFootToolbar = array('items' => array
-    (
-        array('type' => 'btn-group', 'items' => array
-        (
-            $canBatchUnlinkBug ? array('text' => $lang->productplan->unlinkAB, 'className' => 'batch-btn size-sm secondary', 'btnType' => 'primary', 'data-type' => 'bug', 'data-formaction' => helper::createLink('productplan', 'batchUnlinkBug', "planID=$plan->id&orderBy=$orderBy")) : null,
-            array('caret' => 'up', 'className' => 'size-sm secondary', 'btnType' => 'primary', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start', 'url' => '#navBugActions'),
-        )),
-    ));
-}
-
 unset($lang->story->reviewResultList[''], $lang->story->reviewResultList['revert']);
 unset($lang->story->reasonList[''], $lang->story->reasonList['subdivided'], $lang->story->reasonList['duplicate']);
 unset($plans[''], $lang->story->stageList[''], $users['']);
 
-foreach($lang->story->reviewResultList as $key => $result) $reviewResultItems[$key] = array('text' => $result,     'class' => 'batch-btn', 'data-type' => 'story', 'data-formaction' => $this->createLink('story', 'batchReview', "result=$key"));
-foreach($lang->story->reasonList as $key => $reason)       $reviewRejectItems[]     = array('text' => $reason,     'class' => 'batch-btn', 'data-type' => 'story', 'data-formaction' => $this->createLink('story', 'batchReview', "result=reject&reason=$key"));
-foreach($branchTagOption as $branchID => $branchName)      $branchItems[]           = array('text' => $branchName, 'class' => 'batch-btn', 'data-type' => 'story', 'data-formaction' => $this->createLink('story', 'batchChangeBranch', "branchID=$branchID"));
-foreach($modules as $moduleID => $moduleName)              $moduleItems[]           = array('text' => $moduleName, 'class' => 'batch-btn', 'data-type' => 'story', 'data-formaction' => $this->createLink('story', 'batchChangeModule', "moduleID=$moduleID"));
-foreach($plans as $planID => $planName)                    $planItems[]             = array('text' => $planName,   'class' => 'batch-btn', 'data-type' => 'story', 'data-formaction' => $this->createLink('story', 'batchChangePlan', "planID=$planID&oldPlanID={$plan->id}"));
-foreach($lang->story->stageList as $key => $stageName)     $stageItems[]            = array('text' => $stageName,  'class' => 'batch-btn', 'data-type' => 'story', 'data-formaction' => $this->createLink('story', 'batchChangeStage', "stage=$key"));
+foreach($lang->story->reviewResultList as $key => $result) $reviewResultItems[$key] = array('text' => $result,     'class' => 'batch-btn', 'data-type' => 'story', 'data-url' => $this->createLink('story', 'batchReview', "result=$key"));
+foreach($lang->story->reasonList as $key => $reason)       $reviewRejectItems[]     = array('text' => $reason,     'class' => 'batch-btn', 'data-type' => 'story', 'data-url' => $this->createLink('story', 'batchReview', "result=reject&reason=$key"));
+foreach($branchTagOption as $branchID => $branchName)      $branchItems[]           = array('text' => $branchName, 'class' => 'batch-btn', 'data-type' => 'story', 'data-url' => $this->createLink('story', 'batchChangeBranch', "branchID=$branchID"));
+foreach($modules as $moduleID => $moduleName)              $moduleItems[]           = array('text' => $moduleName, 'class' => 'batch-btn', 'data-type' => 'story', 'data-url' => $this->createLink('story', 'batchChangeModule', "moduleID=$moduleID"));
+foreach($plans as $planID => $planName)                    $planItems[]             = array('text' => $planName,   'class' => 'batch-btn', 'data-type' => 'story', 'data-url' => $this->createLink('story', 'batchChangePlan', "planID=$planID&oldPlanID={$plan->id}"));
+foreach($lang->story->stageList as $key => $stageName)     $stageItems[]            = array('text' => $stageName,  'class' => 'batch-btn', 'data-type' => 'story', 'data-url' => $this->createLink('story', 'batchChangeStage', "stage=$key"));
 foreach($users as $account => $realname)
 {
     if($account == 'closed') continue;
-    $assignItems[] = array('text' => $realname, 'class' => 'batch-btn', 'data-type' => 'story', 'data-formaction' => $this->createLink('story', 'batchAssignTo', "productID=$plan->product"), 'data-account' => $account);
+    $assignItems[] = array('text' => $realname, 'class' => 'batch-btn', 'data-type' => 'story', 'data-url' => $this->createLink('story', 'batchAssignTo', "productID=$plan->product"), 'data-account' => $account);
 }
 
 if(isset($reviewResultItems['reject'])) $reviewResultItems['reject'] = array('class' => 'not-hide-menu', 'text' => $lang->story->reviewResultList['reject'], 'items' => $reviewRejectItems);
 $reviewResultItems = array_values($reviewResultItems);
 
 $navStoryActionItems = array();
-if($canBatchCloseStory)  $navStoryActionItems[] = array('text' => $lang->close, 'class' => 'batch-btn', 'data-type' => 'story', 'data-page' => 'batch', 'data-formaction' => helper::createLink('story', 'batchClose', "productID={$plan->product}"));
-if($canBatchEditStory)   $navStoryActionItems[] = array('text' => $lang->edit, 'class' => 'batch-btn',  'data-type' => 'story', 'data-page' => 'batch', 'data-formaction' => helper::createLink('story', 'batchEdit', "productID=$plan->product&projectID=$projectID&branch=$branch"));
+if($canBatchCloseStory)  $navStoryActionItems[] = array('text' => $lang->close, 'class' => 'batch-btn', 'data-type' => 'story', 'data-page' => 'batch', 'data-url' => helper::createLink('story', 'batchClose', "productID={$plan->product}"));
+if($canBatchEditStory)   $navStoryActionItems[] = array('text' => $lang->edit, 'class' => 'batch-btn',  'data-type' => 'story', 'data-page' => 'batch', 'data-url' => helper::createLink('story', 'batchEdit', "productID=$plan->product&projectID=$projectID&branch=$branch"));
 if($canBatchReviewStory) $navStoryActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->story->review, 'items' => $reviewResultItems);
 if($canBatchChangeBranchStory && $product->type != 'normal') $navStoryActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->product->branchName[$product->type], 'items' => $branchItems);
 if($canBatchChangeModuleStory) $navStoryActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->story->moduleAB, 'items' => $moduleItems);
@@ -119,25 +94,39 @@ if($canBatchChangePlanStory)   $navStoryActionItems[] = array('class' => 'not-hi
 if($canBatchChangeStageStory)  $navStoryActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->story->stageAB, 'items' => $stageItems);
 if($canBatchAssignToStory)     $navStoryActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->story->assignedTo, 'items' => $assignItems);
 
-menu
-(
-    set::id('navStoryActions'),
-    set::className('menu dropdown-menu'),
-    set::items($navStoryActionItems)
-);
+$storyFootToolbar = array();
+if($canBatchActionStory)
+{
+    $storyFootToolbar = array('items' => array
+    (
+        array('type' => 'btn-group', 'items' => array
+        (
+            array('text' => $lang->productplan->unlinkStoryAB, 'className' => 'batch-btn size-sm secondary', 'disabled' => ($canBatchUnlinkStory ? '' : 'disabled'), 'btnType' => 'primary', 'data-type' => 'story', 'data-url' => helper::createLink('productplan', 'batchUnlinkStory', "planID=$plan->id&orderBy=$orderBy")),
+            array('caret' => 'up', 'className' => 'size-sm secondary', 'btnType' => 'primary', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start', 'items' => $navStoryActionItems),
+        )),
+    ));
+}
+
 
 $planItems = array();
-foreach($plans as $planID => $planName) $planItems[] = array('text' => $planName, 'class' => 'batch-btn', 'data-type' => 'bug', 'data-formaction' => $this->createLink('bug', 'batchChangePlan', "planID=$planID"));
+foreach($plans as $planID => $planName) $planItems[] = array('text' => $planName, 'class' => 'batch-btn', 'data-type' => 'bug', 'data-url' => $this->createLink('bug', 'batchChangePlan', "planID=$planID"));
 
 $navBugActionItems = array();
-if($canBatchEditBug)       $navBugActionItems[] = array('text' => $lang->edit, 'class' => 'batch-btn', 'data-type' => 'bug', 'data-page' => 'batch', 'data-formaction' => helper::createLink('bug', 'batchEdit', "productID=$plan->product&branch=$branch"));
+if($canBatchEditBug)       $navBugActionItems[] = array('text' => $lang->edit, 'class' => 'batch-btn', 'data-type' => 'bug', 'data-page' => 'batch', 'data-url' => helper::createLink('bug', 'batchEdit', "productID=$plan->product&branch=$branch"));
 if($canBatchChangePlanBug) $navBugActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->story->planAB, 'items' => $planItems);
-menu
-(
-    set::id('navBugActions'),
-    set::className('menu dropdown-menu'),
-    set::items($navBugActionItems)
-);
+
+$bugFootToolbar = array();
+if($canBatchActionBug)
+{
+    $bugFootToolbar = array('items' => array
+    (
+        array('type' => 'btn-group', 'items' => array
+        (
+            $canBatchUnlinkBug ? array('text' => $lang->productplan->unlinkAB, 'className' => 'batch-btn size-sm secondary', 'btnType' => 'primary', 'data-type' => 'bug', 'data-url' => helper::createLink('productplan', 'batchUnlinkBug', "planID=$plan->id&orderBy=$orderBy")) : null,
+            array('caret' => 'up', 'className' => 'size-sm secondary', 'btnType' => 'primary', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start', 'items' => $navBugActionItems),
+        )),
+    ));
+}
 
 $planStories = initTableData($planStories, $storyCols, $this->productplan);
 $planBugs    = initTableData($planBugs,    $bugCols,   $this->productplan);

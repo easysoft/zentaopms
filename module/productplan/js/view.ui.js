@@ -35,7 +35,7 @@ window.showLink = function(obj)
     $(idName).load($this.data('linkurl'));
 };
 
-$(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
+$(document).off('click', '.batch-btn > a, .batch-btn').on('click', '.batch-btn > a, .batch-btn', function()
 {
     const $this  = $(this);
     const type   = $this.data('type');
@@ -49,11 +49,11 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
 
     if($(this).data('page') == 'batch')
     {
-        postAndLoadPage($(this).data('formaction'), postData);
+        postAndLoadPage($(this).data('url'), postData);
     }
     else
     {
-        $.ajaxSubmit({"url": $(this).data('formaction'), "data": postData});
+        $.ajaxSubmit({"url": $(this).data('url'), "data": postData});
     }
 });
 
