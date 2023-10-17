@@ -89,7 +89,6 @@ detailBody
         ),
     ),
     history(
-        set::commentUrl(createLink('action', 'comment', array('objectType' => 'testsuite', 'objectID' => $suite->id))),
         set::hasComment(false),
         set::commentBtn(false),
         set::methodName('view_1'),

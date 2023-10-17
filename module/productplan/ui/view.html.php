@@ -274,7 +274,11 @@ detailBody
                     item(set::name($lang->productplan->desc), empty($plan->desc) ? $lang->noData : html(($plan->desc))),
                 ),
                 h::hr(setClass('mt-4')),
-                history(),
+                history(
+                    set::hasCommont(false),
+                    set::commentBtn(false),
+                    set::methodName('view_1'),
+                ),
             ),
         )
     )
