@@ -45,7 +45,7 @@ $(function()
                     if(res.logs.hasOwnProperty(cloudApp.chart))
                     {
                         if(!shownLogs.hasOwnProperty(cloudApp.chart)) shownLogs[cloudApp.chart] = [];
-    
+
                         var logs = res.logs[cloudApp.chart]
                         for(var j in logs)
                         {
@@ -67,7 +67,8 @@ $(function()
             else
             {
                 $('#retryInstallBtn').show();
-                $('#skipInstallBtn').show();
+                $('#skipInstallBtn').removeClass('btn-primary');
+                $('#skipInstallBtn').text(skipLang);
                 $('#cancelInstallBtn').hide();
                 $('.progress.loading').hide();
 
@@ -117,7 +118,8 @@ $(function()
             if(!result) return;
 
             $('#retryInstallBtn').hide();
-            $('#skipInstallBtn').hide();
+            $('#skipInstallBtn').text(backgroundLang);
+            $('#skipInstallBtn').addClass('btn-primary');
             $('#cancelInstallBtn').show();
             $('.error-message').text('');
             $('.progress.loading').show();
@@ -142,7 +144,6 @@ $(function()
     });
 
     $('#retryInstallBtn').hide();
-    $('#skipInstallBtn').hide();
     $('#cancelInstallBtn').show();
 
     if('true' === startInstall)

@@ -19,7 +19,8 @@ class install extends control
      */
     public function __construct()
     {
-        if(!defined('IN_INSTALL')) helper::end();
+        if(!defined('IN_INSTALL') && !isonlybody()) helper::end();
+
         parent::__construct();
         $this->app->loadLang('user');
         $this->app->loadLang('admin');

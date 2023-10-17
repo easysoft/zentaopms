@@ -88,10 +88,15 @@ class space extends control
         $pager    = new pager($recTotal, $recPerPage, $pageID);
         $allInstances = array_chunk($allInstances, $pager->recPerPage);
 
+        $solutionID = 0;
+        $solution   = $this->loadModel('solution')->getLastSolution();
+        if($solution && $solution->status == 'installing') $solutionID = $solution->id;
+
         $this->view->title        = $this->lang->space->common;
         $this->view->position[]   = $this->lang->space->common;
         $this->view->pager        = $pager;
         $this->view->orderBy      = $orderBy;
+        $this->view->solutionID   = $solutionID;
         $this->view->browseType   = $browseType;
         $this->view->spaceType    = $spaceType;
         $this->view->instances    = (empty($allInstances) or empty($allInstances[$pageID - 1])) ? array() : $allInstances[$pageID - 1];

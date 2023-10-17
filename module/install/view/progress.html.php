@@ -19,18 +19,29 @@
 <?php js::set('installLabel', $lang->solution->install);?>
 <?php js::set('configLabel', $lang->solution->config);?>
 <?php js::set('startInstall', $install);?>
+<?php js::set('skipLang', $lang->install->solution->skip);?>
+<?php js::set('backgroundLang', $lang->solution->background);?>
+
+<?php if(isonlybody()):?>
+<style>
+.solution-progress {margin-top: -20px;}
+.m-install-progress .modal-dialog {margin-top: 0;}
+</style>
+<?php endif;?>
 
 <div class='container'>
   <div class='modal-dialog'>
+    <?php if(!isonlybody()):?>
     <div class='modal-header'>
       <h3><?php echo $lang->install->solution->progress;?></h3>
     </div>
+    <?php endif;?>
     <div class='modal-body'>
     <div class='solution-progress'>
       <div id='terminal'><h3><?php echo $lang->install->solution->log;?></h3></div>
       <div class='text-center'>
         <?php $components = json_decode($solution->components);?>
-        <?php $order =0;?>
+        <?php $order = 0;?>
         <?php foreach($components as $category => $cloudApp):?>
         <?php $active = (isset($cloudApp->status) && $cloudApp->status !='waiting') ? 'active' : '';?>
         <?php if($order++ > 0):?>
@@ -47,14 +58,15 @@
         <span class='progress-message'></span>
       </div>
       <div class='error-message text-red text-center'></div>
+      <?php if(!isonlybody()):?>
       <div class='form-actions text-center'>
-        <?php echo html::a(inlink('step6'), $lang->install->solution->skip, '', "class='btn btn-install btn-wide' style='display: none;' id='skipInstallBtn'");?>
+        <?php echo html::a(inlink('step6'), $lang->solution->background, '', "class='btn btn-install btn-primary btn-wide' id='skipInstallBtn'");?>
         <?php echo html::commonButton($lang->solution->retryInstall, "id='retryInstallBtn' class='hide'", 'btn btn-primary btn-wide');?>
-        <?php echo html::commonButton($lang->solution->cancelInstall, "id='cancelInstallBtn'", 'btn btn-primary btn-wide');?>
+        <?php echo html::commonButton($lang->solution->cancelInstall, "id='cancelInstallBtn'", 'btn btn-wide');?>
       </div>
+      <?php endif;?>
     </div>
     </div>
   </div>
 </div>
-
 <?php include  $this->app->getModuleRoot() . '/common/view/footer.html.php';?>
