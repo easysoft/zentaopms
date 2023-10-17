@@ -17,6 +17,7 @@ class tabs extends wg
         /* Tabs direction: h - horizontal, v - vertical */
         'direction?:string="h"',
         'collapse?: bool=false',
+        'headerClass?:string=""'
     );
 
     public static function getPageCSS(): string|false
@@ -55,12 +56,13 @@ class tabs extends wg
      */
     protected function buildTabHeader(array $titleViews): wg
     {
-        $isVertical = $this->prop('direction') === 'v';
-        $collapse   = $this->prop('collapse');
+        $isVertical  = $this->prop('direction') === 'v';
+        $collapse    = $this->prop('collapse');
+        $headerClass = $this->prop('headerClass');
 
         return ul
         (
-            setClass('nav nav-tabs gap-x-5', $collapse ? 'relative' : null),
+            setClass('nav nav-tabs gap-x-5', $collapse ? 'relative' : null, $headerClass ?: null),
             $isVertical ? setClass('nav-stacked') : null,
             $titleViews,
             $this->buildCollapseBtn(),
