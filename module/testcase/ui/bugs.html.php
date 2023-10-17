@@ -14,8 +14,9 @@ namespace zin;
 set::title($lang->testcase->bugs);
 dtable
 (
-    set::cols(array_values($config->testcase->bug->dtable->fieldList)),
-    set::data(array_values($bugs))
+    set::cols($config->testcase->bug->dtable->fieldList),
+    set::data(array_values($bugs)),
+    set::userMap($users),
 );
 
 render();
