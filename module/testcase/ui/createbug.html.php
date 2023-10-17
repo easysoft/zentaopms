@@ -17,11 +17,8 @@ set::title($lang->testcase->createBug);
 div
 (
     setClass('main'),
-    set::id('resultsContainer'),
-    div
-    (
-        set::id('casesResults'),
-    ),
+    setID('resultsContainer'),
+    div(setID('casesResults')),
 );
 
 render('modalDialog');
