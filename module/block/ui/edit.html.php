@@ -83,7 +83,7 @@ row
                         set::control('input')
                     ),
                 ),
-                buildParamsRows(),
+                buildParamsRows($block),
                 formRow
                 (
                     setClass(empty($code) ? 'hidden' : ''),

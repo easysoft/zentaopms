@@ -5,10 +5,11 @@ namespace zin;
 /**
  * Build params rows.
  *
- * @param array $params
+ * @param  object $block
+ * @param  array  $params
  * @return array
  */
-function buildParamsRows(?array $params = null): array
+function buildParamsRows(object $block = null, ?array $params = null): array
 {
     if(empty($params)) $params = data('params');
     $rows = array();
@@ -20,7 +21,7 @@ function buildParamsRows(?array $params = null): array
             (
                 set::label($row['name']),
                 set::name("params[$key]"),
-                set::value(zget($row, 'default', '')),
+                set::value(!empty($block) && !empty($block->params) ? zget($block->params, $key, '') : zget($row, 'default', '')),
                 set::control(array
                 (
                     'id'       => "params$key",
