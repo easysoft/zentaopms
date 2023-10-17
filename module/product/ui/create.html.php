@@ -74,7 +74,7 @@ foreach($fields as $field => $attr)
             set::name($fieldName),
             set::label($attr['title']),
             set::control($control),
-            set::value($attr['default']),
+            $attr['required'] ? '' : set::value($attr['default']),
             set::required($attr['required'])
         );
     }
