@@ -58,15 +58,16 @@ row
                 formGroup
                 (
                     set::label($lang->block->lblBlock),
-                    set::name('code'),
-                    set::value($code),
-                    set::control
+                    $showCodes ? picker
                     (
-                        $showCodes ? array
-                        (
-                            'type'  => 'picker',
-                            'items' => array('') + $codes
-                        ) : 'input'
+                        set::name('code'),
+                        set::value($code),
+                        set::items($codes),
+                        set::required(false),
+                    ) : input
+                    (
+                        set::name('code'),
+                        set::value($code),
                     )
                 )
             ),
