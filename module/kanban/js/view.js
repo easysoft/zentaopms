@@ -1476,6 +1476,7 @@ function initKanban($kanban)
     var id         = $kanban.data('id');
     var region     = regions[id];
     var cardHeight = kanbanInfo.performable == 1 ? 87 : 60;
+    var droppable  = priv['canMoveCard'] ? {target: findDropColumns, finish: handleFinishDrop} : false;
 
     $kanban.kanban(
     {
@@ -1500,11 +1501,7 @@ function initKanban($kanban)
         virtualize:            true,
         virtualRenderOptions:  {container: $(window).add($('#kanbanContainer'))},
         virtualCardList:       true,
-        droppable:
-        {
-            target:       findDropColumns,
-            finish:       handleFinishDrop
-        },
+        droppable:             droppable,
     });
 
     $kanban.on('click', '.action-cancel', hideKanbanAction);
