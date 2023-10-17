@@ -114,6 +114,8 @@ class docMenu extends wg
             $itemID = 0;
             if(!in_array(strtolower($setting->type), $this->mineTypes)) $itemID = $setting->id ? $setting->id : $parentID;
 
+            $moduleName = $setting->type == 'apiLib' || $setting->objectType == 'api' ? 'api' : 'doc';
+
             $item = array(
                 'key'         => $itemID,
                 'text'        => $setting->name,
@@ -125,7 +127,7 @@ class docMenu extends wg
                 'data-lib'    => in_array($setting->type, array('docLib', 'apiLib')) ? $itemID : zget($setting, 'libID', ''),
                 'data-type'   => $setting->type,
                 'data-parent' => $setting->parentID,
-                'data-module' => $this->currentModule,
+                'data-module' => $moduleName,
                 'active'      => zget($setting, 'active', $itemID == $activeKey),
                 'actions'     => $this->getActions($setting)
             );
@@ -259,8 +261,9 @@ class docMenu extends wg
         $menus = array();
         if(in_array($item->type, array('docLib', 'apiLib')))
         {
-            $itemID = $item->id ? $item->id : $item->parentID;
-            if(hasPriv($this->currentModule, 'addCatalog'))
+            $itemID     = $item->id ? $item->id : $item->parentID;
+            $moduleName = $item->type == 'docLib' ? 'doc' : 'api';
+            if(hasPriv($moduleName, 'addCatalog'))
             {
                 $menus[] = array(
                     'key'     => 'adddirectory',
@@ -270,32 +273,33 @@ class docMenu extends wg
                 );
             }
 
-            if(hasPriv($this->currentModule, 'editCatalog'))
+            if(hasPriv($moduleName, 'editLib'))
             {
                 $menus[] = array(
                     'key'         => 'editlib',
                     'icon'        => 'edit',
                     'text'        => $this->lang->doc->libDropdown['editLib'],
                     'data-toggle' => 'modal',
-                    'data-url'    => createlink($this->currentModule, 'editlib', "libID={$itemID}"),
+                    'data-url'    => createlink($moduleName, 'editLib', "libID={$itemID}"),
                 );
             }
 
-            if(hasPriv($this->currentModule, 'deleteCatalog'))
+            if(hasPriv($moduleName, 'deleteLib'))
             {
                 $menus[] = array(
                     'key'          => 'dellib',
                     'icon'         => 'trash',
                     'text'         => $this->lang->doc->libDropdown['deleteLib'],
-                    'class'        => 'ajax-submit',
-                    'data-url'     => createLink($this->currentModule, 'deleteLib', "libID={$itemID}"),
+                    'innerClass'   => 'ajax-submit',
+                    'data-url'     => createLink($moduleName, 'deleteLib', "libID={$itemID}"),
                     'data-confirm' => $this->lang->doc->confirmDeleteLib,
                 );
             }
         }
         elseif($item->type == 'module')
         {
-            if(hasPriv($this->currentModule, 'addCatalog'))
+            $moduleName = $item->objectType == 'api' ? 'api' : 'doc';
+            if(hasPriv($moduleName, 'addCatalog'))
             {
                 $menus[] = array(
                     'key'     => 'adddirectory',
@@ -311,7 +315,7 @@ class docMenu extends wg
                 );
             }
 
-            if(hasPriv($this->currentModule, 'editCatalog'))
+            if(hasPriv($moduleName, 'editCatalog'))
             {
                 $menus[] = array(
                     'key'  => 'editmodule',
@@ -319,19 +323,19 @@ class docMenu extends wg
                     'text' => $this->lang->doc->libDropdown['editModule'],
                     'link' => '',
                     'data-toggle' => 'modal',
-                    'data-url'    => createlink($this->currentModule, 'editCatalog', "moduleID={$item->id}&type=" . ($this->rawModule == 'api' ? 'api' : 'doc')),
+                    'data-url'    => createlink($moduleName, 'editCatalog', "moduleID={$item->id}&type=" . ($this->rawModule == 'api' ? 'api' : 'doc')),
                 );
             }
 
-            if(hasPriv($this->currentModule, 'deleteCatalog'))
+            if(hasPriv($moduleName, 'deleteCatalog'))
             {
                 $menus[] = array(
                     'key'          => 'delmodule',
                     'icon'         => 'trash',
                     'text'         => $this->lang->doc->libDropdown['delModule'],
-                    'class'        => 'ajax-submit',
-                    'data-url'     => createLink($this->currentModule, 'deleteCatalog', "rootID={$item->parentID}&moduleID={$item->id}"),
-                    'data-confirm' => $this->lang->api->confirmDeleteLib,
+                    'innerClass'   => 'ajax-submit',
+                    'data-url'     => createLink($moduleName, 'deleteCatalog', "moduleID={$item->id}"),
+                    'data-confirm' => $this->lang->doc->confirmDeleteModule,
                 );
             }
         }

@@ -1004,15 +1004,13 @@ class api extends control
     /**
      * Delete a catalog.
      *
-     * @param  int    $rootID
      * @param  int    $moduleID
-     * @param  string $confirm yes|no
      * @access public
      * @return void
      */
-    public function deleteCatalog($rootID, $moduleID, $confirm = 'no')
+    public function deleteCatalog($moduleID)
     {
-        echo $this->fetch('tree', 'delete', "rootID=$rootID&moduleID=$moduleID&confirm=$confirm");
+        echo $this->fetch('tree', 'delete', "moduleID=$moduleID&confirm=yes");
     }
 
     /**

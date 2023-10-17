@@ -304,6 +304,7 @@ $lang->doc->confirmDelete        = "您确定删除该文档吗？";
 $lang->doc->confirmDeleteLib     = "您确定删除该文档库吗？";
 $lang->doc->confirmDeleteBook    = "您确定删除该手册吗？";
 $lang->doc->confirmDeleteChapter = "您确定删除该章节吗？";
+$lang->doc->confirmDeleteModule  = "您确定删除该目录吗？";
 $lang->doc->confirmOtherEditing  = "该文档正在编辑中，如果继续编辑将覆盖他人编辑内容，是否继续？";
 $lang->doc->errorEditSystemDoc   = "系统文档库无需修改。";
 $lang->doc->errorEmptyProduct    = "没有{$lang->productCommon}，无法创建文档";
