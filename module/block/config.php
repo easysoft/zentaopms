@@ -230,7 +230,6 @@ $config->block->params['assigntome']->storyCount['control']  = 'input';
 $config->block->params['assigntome']->reviewCount['name']    = $this->lang->block->reviewCount;
 $config->block->params['assigntome']->reviewCount['default'] = 20;
 $config->block->params['assigntome']->reviewCount['control'] = 'input';
-$config->block->params['assigntome']->count = $config->block->params['default']->count;
 
 $config->block->params['scrumtest'] = new stdclass();
 $config->block->params['scrumtest']->type['name']    = $lang->block->type;
