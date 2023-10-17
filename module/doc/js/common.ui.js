@@ -31,11 +31,10 @@ function toggleAcl(type)
         if(libType == 'project' && typeof(doclibID) != 'undefined')
         {
             let link = $.createLink('doc', 'ajaxGetWhitelist', 'doclibID=' + doclibID + '&acl=' + acl);
-            $.get(link, function(users)
+            $.getJSON(link, function(users)
             {
                 if(users != 'private' && users)
                 {
-                    users = JSON.parse(users);
                     const $usersPicker = $('select[name^=users]').zui('picker');
                     $usersPicker.render({items: users});
                     $usersPicker.$.setValue('');
@@ -62,15 +61,10 @@ window.loadWhitelist = function(libID)
 {
     let groupLink = $.createLink('doc', 'ajaxGetWhitelist', 'libID=' + libID + '&acl=&control=group');
     let userLink  = $.createLink('doc', 'ajaxGetWhitelist', 'libID=' + libID + '&acl=&control=user');
-    $.get(groupLink, function(groups)
+    $.getJSON(groupLink, function(groups)
     {
         if(groups != 'private' && groups)
         {
-            $('#groups').replaceWith(groups);
-            $('#groups').next('.picker').remove();
-            $('#groups').picker();
-
-            groups = JSON.parse(groups);
             const $groupsPicker = $('select[name^=groups]').zui('picker');
             $groupsPicker.render({items: groups});
             $groupsPicker.$.setValue('');
