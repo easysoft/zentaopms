@@ -431,7 +431,7 @@ function getAppCode(urlOrModuleName)
         }
         else if(methodLowerCase === 'browsetask')
         {
-            return 'project';
+            return 'execution';
         }
     }
     if(moduleName === 'search' && methodLowerCase === 'buildindex') return 'admin';
