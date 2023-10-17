@@ -5,7 +5,7 @@ su('admin');
 
 zdTable('product')->config('product')->gen(100);
 zdTable('project')->config('project')->gen(100);
-zdTable('project')->config('execution')->gen(300, false);
+zdTable('project')->config('execution')->gen(300, false, false);
 zdTable('build')->gen(500);
 zdTable('testtask')->gen(500);
 
