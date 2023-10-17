@@ -61,11 +61,6 @@ class docMenu extends wg
             $methodName = 'showFiles';
             $linkParams = "type={$objectType}&objectID={$item->objectID}";
         }
-        else if(in_array($item->type, array('text', 'word', 'ppt', 'excel')))
-        {
-            $methodName = 'view';
-            $linkParams = "docID={$this->moduleID}";
-        }
         else if($objectType == 'execution')
         {
             $moduleName = 'execution';
@@ -122,6 +117,7 @@ class docMenu extends wg
             $item = array(
                 'key'         => $itemID,
                 'text'        => $setting->name,
+                'hint'        => $setting->name,
                 'icon'        => $this->getIcon($setting),
                 'url'         => $this->buildLink($setting),
                 'attrs'       => array('data-app' => $this->tab),
