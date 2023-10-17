@@ -27,10 +27,7 @@ window.onRenderCell = function(result, {row, col})
             result.push({outer: false, style: {alignItems: 'start', 'padding-top': '8px'}})
         }
     }
-    if(result && col.name == 'id' && row.data.hidden)
-    {
-        result.push({outer: false, style: {alignItems: 'center', justifyContent: 'start'}})
-    }
+    if(result && col.name == 'id' && row.data.hidden) result.push({outer: false, style: {alignItems: 'center', justifyContent: 'start'}})
 
     return result;
 }
@@ -45,14 +42,9 @@ window.onRenderCell = function(result, {row, col})
  */
 window.getCellSpan = function(cell)
 {
-    if(cell.col.name == 'storyTitle' && cell.row.data.rowspan)
-    {
-        return {rowSpan: cell.row.data.rowspan};
-    }
-    if(cell.col.name == 'id' && cell.row.data.colspan)
-    {
-        return {colSpan: cell.row.data.colspan};
-    }
+    if(cell.col.name == 'storyTitle' && cell.row.data.rowspan) return {rowSpan: cell.row.data.rowspan};
+
+    if(cell.col.name == 'id' && cell.row.data.colspan) return {colSpan: cell.row.data.colspan};
 }
 
 window.deformation = function(event)
@@ -61,7 +53,6 @@ window.deformation = function(event)
     const options    = zui.DTable.query().options;
     const story      = $(event.target).closest('a').data('story');
     const oldOptions = $.extend(true, {}, initialOptions);
-
 
     if($(event.target).closest('a').find('span').hasClass('is-collapsed'))
     {
@@ -87,10 +78,7 @@ window.deformation = function(event)
     }
     else
     {
-        options.data = options.data.filter(function(option)
-        {
-            return option.story != story || option.rowspan != 0;
-        });
+        options.data = options.data.filter(function(option){ return option.story != story || option.rowspan != 0; });
         $.each(options.data, function(index)
         {
             if(options.data[index] && options.data[index].story == story)
