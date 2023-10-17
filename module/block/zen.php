@@ -2625,7 +2625,7 @@ class blockZen extends block
         if(!empty($bugFixedRate))      $bugFixedRate      = array_column($bugFixedRate,      null, 'product');
         if(!empty($effectiveBugGroup)) $effectiveBugGroup = array_column($effectiveBugGroup, null, 'product');
         if(!empty($fixedBugGroup))     $fixedBugGroup     = array_column($fixedBugGroup,     null, 'product');
-        if(!empty($fixedBugGroup))     $activatedBugGroup = array_column($activatedBugGroup, null, 'product');
+        if(!empty($activatedBugGroup)) $activatedBugGroup = array_column($activatedBugGroup, null, 'product');
 
         /* 按照产品和日期分组获取产品每月新增和完成的需求数度量项。 */
         $years  = array();
@@ -2643,15 +2643,15 @@ class blockZen extends block
         $monthClosedBugGroup  = $this->metric->getResultByCode('count_of_monthly_closed_bug_in_product',  array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的关闭Bug数。
 
         /* 组装页面所需的度量项数组。 */
-        $closedBug     = isset($fixedBugGroup[$productID]['value'])     ? $fixedBugGroup[$productID]['value']      : 0;
-        $unresovledBug = isset($activatedBugGroup[$productID]['value']) ? $activatedBugGroup[$productID]['value']  : 0;
-        $totalBug      = isset($effectiveBugGroup[$productID]['value']) ? $effectiveBugGroup[$productID]['value']  : 0;
-        $resolvedRate  = isset($bugFixedRate[$productID]['value'])      ? $bugFixedRate[$productID]['value'] * 100 : 0;
+        $closedBugs     = isset($fixedBugGroup[$productID]['value'])     ? $fixedBugGroup[$productID]['value']      : 0;
+        $unresovledBugs = isset($activatedBugGroup[$productID]['value']) ? $activatedBugGroup[$productID]['value']  : 0;
+        $totalBugs      = isset($effectiveBugGroup[$productID]['value']) ? $effectiveBugGroup[$productID]['value']  : 0;
+        $resolvedRate   = isset($bugFixedRate[$productID]['value'])      ? $bugFixedRate[$productID]['value'] * 100 : 0;
         foreach($groups as $group)
         {
-            $activateBug[$group] = 0;
-            $resolveBug[$group]  = 0;
-            $closeBug[$group]    = 0;
+            $activateBugs[$group] = 0;
+            $resolveBugs[$group]  = 0;
+            $closeBugs[$group]    = 0;
 
             if(!empty($monthCreatedBugGroup))
             {
@@ -2678,16 +2678,15 @@ class blockZen extends block
             }
         }
 
-
-        $this->view->months        = $months;
-        $this->view->products      = $products;
-        $this->view->totalBug      = $totalBug;
-        $this->view->closedBug     = $closedBug;
-        $this->view->unresovledBug = $unresovledBug;
-        $this->view->resolvedRate  = $resolvedRate;
-        $this->view->activateBug   = $activateBug;
-        $this->view->resolveBug    = $resolveBug;
-        $this->view->closeBug      = $closeBug;
+        $this->view->months         = $months;
+        $this->view->products       = $products;
+        $this->view->totalBugs      = $totalBugs;
+        $this->view->closedBugs     = $closedBugs;
+        $this->view->unresovledBugs = $unresovledBugs;
+        $this->view->resolvedRate   = $resolvedRate;
+        $this->view->activateBugs   = $activateBugs;
+        $this->view->resolveBugs    = $resolveBugs;
+        $this->view->closeBugs      = $closeBugs;
     }
 
     /**

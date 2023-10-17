@@ -49,7 +49,7 @@ statisticBlock
                     set('percent', $resolvedRate),
                     set('size', 112),
                     set('circleWidth', 6),
-                    set('text', $active . '%'),
+                    set('text', $resolvedRate . '%'),
                     set('textY', 50),
                     set('textStyle', 'font-size: 30px;'),
                 ),
@@ -77,7 +77,7 @@ statisticBlock
                     span
                     (
                         setClass('flex justify-center'),
-                        $active,
+                        $totalBugs,
                     ),
                     span
                     (
@@ -90,7 +90,7 @@ statisticBlock
                     span
                     (
                         setClass('flex justify-center'),
-                        $active,
+                        $closedBugs,
                     ),
                     span
                     (
@@ -103,7 +103,7 @@ statisticBlock
                     span
                     (
                         setClass('flex justify-center'),
-                        $active,
+                        $unresovledBugs,
                     ),
                     span
                     (
@@ -133,25 +133,24 @@ statisticBlock
                     (
                         array
                         (
-                            'type'     => 'bar',
-                            'barWidth' => '8',
-                            'stack'    => 'Ad',
-                            'name'     => $lang->bug->activate,
-                            'data'     => $activateBug,
+                            'type'  => 'bar',
+                            'stack' => 'Ad',
+                            'name'  => $lang->bug->activate,
+                            'data'  => array_values($activateBugs),
                         ),
                         array
                         (
                             'type'  => 'bar',
                             'name'  => $lang->bug->resolve,
                             'stack' => 'Ad',
-                            'data'  => $resolveBug,
+                            'data'  => array_values($resolveBugs),
                         ),
                         array
                         (
                             'type'  => 'bar',
                             'name'  => $lang->bug->close,
                             'stack' => 'Ad',
-                            'data'  => $closeBug,
+                            'data'  => array_values($closeBugs),
                         ),
                     ),
                 ),
