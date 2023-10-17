@@ -1119,19 +1119,20 @@ class blockZen extends block
         /* Get projects. */
         $projectID = $block->dashboard == 'my' ? 0 : (int)$this->session->project;
         if(isset($params['project'])) $projectID = (int)$params['project'];
-        $executions = $this->loadModel('execution')->getOrderedExecutions($projectID, $status, $count, 'skipparent');
-        $executionIdList = array_keys($executions);
+        $executions  = $this->loadModel('execution')->getOrderedExecutions($projectID, $status, $count, 'skipparent');
+        $executionID = isset($params['active']) && isset($executions[$params['active']]) ? $params['active'] : key($executions);
+        $execution   = $executions[$executionID];
 
         $this->loadModel('metric');
-        $estimateGroup       = $this->metric->getResultByCode('estimate_of_task_in_execution', array('execution' => join(',', $executionIdList)));         // 从度量项获取执行的预计工时。
-        $consumeGroup        = $this->metric->getResultByCode('consume_of_task_in_execution',  array('execution' => join(',', $executionIdList)));         // 从度量项获取执行的消耗工时。
-        $leftGroup           = $this->metric->getResultByCode('left_of_task_in_execution',     array('execution' => join(',', $executionIdList)));         // 从度量项获取执行的剩余工时。
-        $developedStoryGroup = $this->metric->getResultByCode('count_of_developed_story_in_execution', array('execution' => join(',', $executionIdList))); // 从度量项获取执行的已完成需求。
-        $totalStoryGroup     = $this->metric->getResultByCode('count_of_story_in_execution',           array('execution' => join(',', $executionIdList))); // 从度量项获取执行的总需求数量。
+        $estimateGroup       = $this->metric->getResultByCode('estimate_of_task_in_execution', array('execution' => $executionID));         // 从度量项获取执行的预计工时。
+        $consumeGroup        = $this->metric->getResultByCode('consume_of_task_in_execution',  array('execution' => $executionID));         // 从度量项获取执行的消耗工时。
+        $leftGroup           = $this->metric->getResultByCode('left_of_task_in_execution',     array('execution' => $executionID));         // 从度量项获取执行的剩余工时。
+        $developedStoryGroup = $this->metric->getResultByCode('count_of_developed_story_in_execution', array('execution' => $executionID)); // 从度量项获取执行的已完成需求。
+        $totalStoryGroup     = $this->metric->getResultByCode('count_of_story_in_execution',           array('execution' => $executionID)); // 从度量项获取执行的总需求数量。
         $yesterday           = strtotime("-1 day");
-        $totalTaskGroup      = $this->metric->getResultByCode('count_of_task_in_execution',            array('execution' => join(',', $executionIdList))); // 从度量项获取执行的任务总数。
-        $unfinishedTaskGroup = $this->metric->getResultByCode('count_of_unfinished_task_in_execution', array('execution' => join(',', $executionIdList))); // 从度量项获取执行的未完成任务。
-        $dailyFinishedGroup  = $this->metric->getResultByCode('count_of_daily_finished_task ',         array('execution' => join(',', $executionIdList), 'year' => date('Y', $yesterday), 'month' => date('m', $yesterday), 'day' => date('d', $yesterday))); // 从度量项获取执行的昨日完成任务数。
+        $totalTaskGroup      = $this->metric->getResultByCode('count_of_task_in_execution',            array('execution' => $executionID)); // 从度量项获取执行的任务总数。
+        $unfinishedTaskGroup = $this->metric->getResultByCode('count_of_unfinished_task_in_execution', array('execution' => $executionID)); // 从度量项获取执行的未完成任务。
+        $dailyFinishedGroup  = $this->metric->getResultByCode('count_of_daily_finished_task ',         array('execution' => $executionID, 'year' => date('Y', $yesterday), 'month' => date('m', $yesterday), 'day' => date('d', $yesterday))); // 从度量项获取执行的昨日完成任务数。
 
         if(!empty($estimateGroup))       $estimateGroup       = array_column($estimateGroup,       null, 'execution');
         if(!empty($consumeGroup))        $consumeGroup        = array_column($consumeGroup,        null, 'execution');
@@ -1143,30 +1144,34 @@ class blockZen extends block
         if(!empty($dailyFinishedGroup))  $dailyFinishedGroup  = array_column($dailyFinishedGroup,  null, 'execution');
 
         /* 将从度量项获取的数据塞入执行列表中。 */
-        foreach($executions as $executionID => $execution)
-        {
-            $execution->totalEstimate     = 0;
-            $execution->totalConsumed     = 0;
-            $execution->totalLeft         = 0;
-            $execution->doneStory         = 0;
-            $execution->totalStory        = 0;
-            $execution->totalTask         = 0;
-            $execution->undoneTask        = 0;
-            $execution->yesterdayDoneTask = 0;
+        $execution->totalEstimate     = 0;
+        $execution->totalConsumed     = 0;
+        $execution->totalLeft         = 0;
+        $execution->doneStory         = 0;
+        $execution->totalStory        = 0;
+        $execution->totalTask         = 0;
+        $execution->undoneTask        = 0;
+        $execution->yesterdayDoneTask = 0;
 
-            if(!empty($estimateGroup[$executionID]))       $execution->totalEstimate     = zget($estimateGroup[$executionID],       'value', 0);
-            if(!empty($consumeGroup[$executionID]))        $execution->totalConsumed     = zget($consumeGroup[$executionID],        'value', 0);
-            if(!empty($leftGroup[$executionID]))           $execution->totalLeft         = zget($leftGroup[$executionID],           'value', 0);
-            if(!empty($developedStoryGroup[$executionID])) $execution->doneStory         = zget($developedStoryGroup[$executionID], 'value', 0);
-            if(!empty($totalStoryGroup[$executionID]))     $execution->totalStory        = zget($totalStoryGroup[$executionID],     'value', 0);
-            if(!empty($totalTaskGroup[$executionID]))      $execution->totalTask         = zget($totalTaskGroup[$executionID],      'value', 0);
-            if(!empty($unfinishedTaskGroup[$executionID])) $execution->undoneTask        = zget($unfinishedTaskGroup[$executionID], 'value', 0);
-            if(!empty($dailyFinishedGroup[$executionID]))  $execution->yesterdayDoneTask = zget($dailyFinishedGroup[$executionID],  'value', 0);
+        if(!empty($estimateGroup[$executionID]))       $execution->totalEstimate     = zget($estimateGroup[$executionID],       'value', 0);
+        if(!empty($consumeGroup[$executionID]))        $execution->totalConsumed     = zget($consumeGroup[$executionID],        'value', 0);
+        if(!empty($leftGroup[$executionID]))           $execution->totalLeft         = zget($leftGroup[$executionID],           'value', 0);
+        if(!empty($developedStoryGroup[$executionID])) $execution->doneStory         = zget($developedStoryGroup[$executionID], 'value', 0);
+        if(!empty($totalStoryGroup[$executionID]))     $execution->totalStory        = zget($totalStoryGroup[$executionID],     'value', 0);
+        if(!empty($totalTaskGroup[$executionID]))      $execution->totalTask         = zget($totalTaskGroup[$executionID],      'value', 0);
+        if(!empty($unfinishedTaskGroup[$executionID])) $execution->undoneTask        = zget($unfinishedTaskGroup[$executionID], 'value', 0);
+        if(!empty($dailyFinishedGroup[$executionID]))  $execution->yesterdayDoneTask = zget($dailyFinishedGroup[$executionID],  'value', 0);
 
-            $execution->totalHours = $execution->totalLeft + $execution->totalConsumed;
-            $execution->progress   = $execution->totalHours ? round($execution->totalConsumed / $execution->totalHours * 100) : 0; // 计算执行的进度， 公式为 [任务消耗工时数 / (任务消耗工时数+任务剩余工时数)]。
-        }
+        $execution->totalHours = $execution->totalLeft + $execution->totalConsumed;
+        $execution->progress   = $execution->totalHours ? round($execution->totalConsumed / $execution->totalHours * 100) : 0; // 计算执行的进度， 公式为 [任务消耗工时数 / (任务消耗工时数+任务剩余工时数)]。
+        /* Process the burns. */
+        $execution->burns = array();
+        $burnData = isset($burns[$execution->id]) ? $burns[$execution->id] : array();
+        foreach($burnData as $data) $execution->burns[] = $data->value;
 
+        list($dateList, $interval) = $this->execution->getDateList($execution->begin, $execution->end, 'noweekend', 0, 'Y-m-d', $execution->end);
+
+        $this->view->chartData        = $this->execution->buildBurnData($executionID, $dateList, 'left', $execution->end);
         $this->view->executions       = $executions;
         $this->view->projects         = $this->loadModel('project')->getPairs();
         $this->view->currentProjectID = $projectID;

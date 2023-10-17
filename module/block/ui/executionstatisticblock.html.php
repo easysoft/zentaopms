@@ -61,7 +61,7 @@ $burn = center
                     (
                         'show' => false,
                         'type' => 'category',
-                        'data' => array(1,2,3,4,5,6),
+                        'data' => $chartData['labels'],
                         'boundaryGap' => false,
                     )
                 ),
@@ -73,7 +73,7 @@ $burn = center
                         array
                         (
                             'type' => 'line',
-                            'data' => array(80,60,40,20,0),
+                            'data' => $chartData['baseLine'],
                             'symbolSize' => 0,
                             'itemStyle' => array
                             (
@@ -92,7 +92,7 @@ $burn = center
                         ),
                         array
                         (
-                            'data' => array(74,55,75,55),
+                            'data' => $chartData['burnLine'],
                             'type' => 'line',
                             'symbolSize' => 0,
                             'areaStyle' => array
