@@ -11,18 +11,30 @@ declare(strict_types=1);
 
 namespace zin;
 
-$uniqid         =  uniqid();
-$blockNavCode   = 'nav-' . $uniqid;
-$navTabs        = array();
-$selected       = key($products);
-$statisticCells = array();
-$preproductID   = 0;
-$nextproductID  = 0;
-$productIdList  = array_keys($products);
-$tabItems       = array();
-foreach($products as $productID => $product)
+$active  = isset($params['active']) ? $params['active'] : key($products);
+$product = null;
+
+$items = array();
+foreach($products as $productItem)
 {
-    $productInfo = div
+    $projectID = isset($params['projectID']) ? $params['projectID'] : 0;
+    $params    = helper::safe64Encode("module={$block->module}&projectID={$projectID}&active={$productItem->id}");
+    $items[]   = array
+    (
+        'id'        => $productItem->id,
+        'text'      => $productItem->name,
+        'url'       => createLink('product', 'browse', "productID={$productItem->id}"),
+        'activeUrl' => createLink('block', 'printBlock', "blockID={$block->id}&params={$params}")
+    );
+    if($productItem->id == $active) $product = $productItem;
+}
+
+statisticBlock
+(
+    set::block($block),
+    set::active($active),
+    set::items($items),
+    div
     (
         setClass('flex' . ($longBlock ? ' flex-nowrap' : ' flex-wrap')),
         cell
@@ -34,10 +46,10 @@ foreach($products as $productID => $product)
                 setClass('flex justify-center w-full'),
                 zui::progressCircle
                 (
-                    set('percent', zget($resolvedRate, $productID, 0)),
+                    set('percent', $resolvedRate),
                     set('size', 112),
                     set('circleWidth', 6),
-                    set('text', zget($resolvedRate, $productID, 0) . '%'),
+                    set('text', $active . '%'),
                     set('textY', 50),
                     set('textStyle', 'font-size: 30px;'),
                 ),
@@ -65,7 +77,7 @@ foreach($products as $productID => $product)
                     span
                     (
                         setClass('flex justify-center'),
-                        zget($totalBugs, $productID, 0),
+                        $active,
                     ),
                     span
                     (
@@ -78,7 +90,7 @@ foreach($products as $productID => $product)
                     span
                     (
                         setClass('flex justify-center'),
-                        zget($closedBugs, $productID, 0),
+                        $active,
                     ),
                     span
                     (
@@ -91,7 +103,7 @@ foreach($products as $productID => $product)
                     span
                     (
                         setClass('flex justify-center'),
-                        zget($unresovledBugs, $productID, 0),
+                        $active,
                     ),
                     span
                     (
@@ -125,169 +137,27 @@ foreach($products as $productID => $product)
                             'barWidth' => '8',
                             'stack'    => 'Ad',
                             'name'     => $lang->bug->activate,
-                            'data'     => array_values($activateBugs[$productID]),
+                            'data'     => $activateBug,
                         ),
                         array
                         (
                             'type'  => 'bar',
                             'name'  => $lang->bug->resolve,
                             'stack' => 'Ad',
-                            'data'  => array_values($resolveBugs[$productID]),
+                            'data'  => $resolveBug,
                         ),
                         array
                         (
                             'type'  => 'bar',
                             'name'  => $lang->bug->close,
                             'stack' => 'Ad',
-                            'data'  => array_values($closeBugs[$productID]),
+                            'data'  => $closeBug,
                         ),
                     ),
                 ),
             )->size('100%', 200),
         ),
-    );
-
-    if($longBlock)
-    {
-        $navTabs[] = li
-        (
-            setClass('nav-item'),
-            a
-            (
-                setClass('ellipsis title ' . ($product->id == $selected ? ' active' : '')),
-                set('data-toggle', 'tab'),
-                set::href("#tab{$blockNavCode}Content{$product->id}"),
-                $product->name
-
-            ),
-            a
-            (
-                setClass('link flex-1 text-right hidden'),
-                set::href(helper::createLink('product', 'browse', "productID={$product->id}")),
-                icon
-                (
-                    setClass('rotate-90 text-primary'),
-                    'export'
-                )
-            )
-        );
-
-        $tabItems[] = div
-        (
-            setClass('tab-pane' . ($product->id == $selected ? ' active' : '')),
-            set('id', "tab{$blockNavCode}Content{$product->id}"),
-            $productInfo,
-        );
-    }
-    else
-    {
-        $index         = array_search($product->id, $productIdList);
-        $nextProductID = $index !== false && !empty($productIdList[$index + 1]) ? $productIdList[$index + 1] : 0;
-
-        $tabItems = array();
-        $tabItems[] = cell
-        (
-            ul
-            (
-                setClass('nav nav-tabs h-10 px-1 justify-between items-center'),
-                set::width('100%'),
-                li
-                (
-                    setClass('nav-item'),
-                    btn
-                    (
-                        setClass('size-sm shadow-lg circle pre-button'),
-                        set::square(true),
-                        set::disabled(empty($preProductID)),
-                        set::href("#tab{$blockNavCode}Content{$preProductID}"),
-                        set('data-toggle', 'tab'),
-                        set::iconClass('text-xl text-primary'),
-                        set::icon('angle-left'),
-                    ),
-                ),
-                li
-                (
-                    setClass('nav-item px-4'),
-                    hasPriv('product', 'browse') ? btn
-                    (
-                        setClass('ghost'),
-                        set::url(createLink('product', 'browse', "productID={$product->id}")),
-                        span
-                        (
-                            setClass('text-primary'),
-                            $product->name
-                        ),
-                        icon
-                        (
-                            setClass('text-primary ml-4 rotate-90'),
-                            'export'
-                        ),
-                    ) : $product->name,
-                ),
-                li
-                (
-                    setClass('nav-item'),
-                    btn
-                    (
-                        setClass('size-sm shadow-lg circle next-button'),
-                        set::square(true),
-                        set::disabled(empty($nextProductID)),
-                        set::href("#tab{$blockNavCode}Content{$nextProductID}"),
-                        set('data-toggle', 'tab'),
-                        set::iconClass('text-xl text-primary'),
-                        set::icon('angle-right'),
-                    ),
-                ),
-            ),
-        );
-        $tabItems[] = cell
-        (
-            setClass('tab-content pt-1'),
-            set::width('100%'),
-            div
-            (
-                $productInfo,
-            ),
-        );
-        $statisticCells[] = cell
-        (
-            setClass('tab-pane pt-1 w-full' . ($product->id == $selected ? ' active' : '')),
-            set('id', "tab{$blockNavCode}Content{$product->id}"),
-            $tabItems,
-        );
-        $preProductID = $product->id;
-    }
-}
-if($longBlock)
-{
-    $statisticCells[] = cell
-    (
-        set::width('22%'),
-        setClass('bg-secondary-pale overflow-y-auto overflow-x-hidden'),
-        ul
-        (
-            setClass('nav nav-tabs nav-stacked'),
-            $navTabs,
-        ),
-    );
-    $statisticCells[] = cell
-    (
-         setClass('tab-content'),
-         set::width('78%'),
-         $tabItems,
-    );
-}
-
-panel
-(
-    setClass('bugstatistic-block ' . ($longBlock ? 'block-long' : 'block-sm')),
-    set::bodyClass('no-shadow border-t p-0'),
-    set::title($block->title),
-    div
-    (
-        setClass('flex h-full' . (!$longBlock ? ' flex-wrap' : '')),
-        $statisticCells,
-    )
+    ),
 );
 
 render();

@@ -2603,23 +2603,24 @@ class blockZen extends block
      * Print bug statistic block.
      *
      * @param  object    $block
+     * @param  array     $param
      * @access protected
      * @return void
      */
-    protected function printBugStatisticBlock(object $block)
+    protected function printBugStatisticBlock(object $block, array $params = array())
     {
         /* 获取需要统计的产品列表。 */
         /* Obtain a list of products that require statistics. */
-        $status         = isset($block->params->type)  ? $block->params->type  : '';
-        $count          = isset($block->params->count) ? $block->params->count : '';
-        $products       = $this->loadModel('product')->getOrderedProducts($status, (int)$count);
-        $productIdList  = array_keys($products);
+        $status     = isset($block->params->type)  ? $block->params->type  : '';
+        $count      = isset($block->params->count) ? $block->params->count : '';
+        $products   = $this->loadModel('product')->getOrderedProducts($status, (int)$count);
+        $productID  = !empty($params['active']) ? $params['active'] : key($products);
 
         $this->loadModel('metric');
-        $bugFixedRate      = $this->metric->getResultByCode('rate_of_fixed_bug_in_product',      array('product' => join(',', $productIdList))); // 从度量项获取各个产品的Bug修复率。
-        $effectiveBugGroup = $this->metric->getResultByCode('count_of_effective_bug_in_product', array('product' => join(',', $productIdList))); // 从度量项获取各个产品的有效Bug数。
-        $fixedBugGroup     = $this->metric->getResultByCode('count_of_fixed_bug_in_product',     array('product' => join(',', $productIdList))); // 从度量项获取各个产品的Bug修复数。
-        $activatedBugGroup = $this->metric->getResultByCode('count_of_activated_bug_in_product', array('product' => join(',', $productIdList))); // 从度量项获取各个产品的Bug激活数。
+        $bugFixedRate      = $this->metric->getResultByCode('rate_of_fixed_bug_in_product',      array('product' => $productID)); // 从度量项获取各个产品的Bug修复率。
+        $effectiveBugGroup = $this->metric->getResultByCode('count_of_effective_bug_in_product', array('product' => $productID)); // 从度量项获取各个产品的有效Bug数。
+        $fixedBugGroup     = $this->metric->getResultByCode('count_of_fixed_bug_in_product',     array('product' => $productID)); // 从度量项获取各个产品的Bug修复数。
+        $activatedBugGroup = $this->metric->getResultByCode('count_of_activated_bug_in_product', array('product' => $productID)); // 从度量项获取各个产品的Bug激活数。
 
         if(!empty($bugFixedRate))      $bugFixedRate      = array_column($bugFixedRate,      null, 'product');
         if(!empty($effectiveBugGroup)) $effectiveBugGroup = array_column($effectiveBugGroup, null, 'product');
@@ -2637,64 +2638,56 @@ class blockZen extends block
             $groups[] = date('Y-m', strtotime("first day of -{$i} month"));
         }
 
-        $monthCreatedBugGroup = $this->metric->getResultByCode('count_of_monthly_created_bug_in_product', array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的激活Bug数。
-        $monthFixedBugGroup   = $this->metric->getResultByCode('count_of_monthly_fixed_bug_in_product',   array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的解决Bug数。
-        $monthClosedBugGroup  = $this->metric->getResultByCode('count_of_monthly_closed_bug_in_product',  array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的关闭Bug数。
+        $monthCreatedBugGroup = $this->metric->getResultByCode('count_of_monthly_created_bug_in_product', array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的激活Bug数。
+        $monthFixedBugGroup   = $this->metric->getResultByCode('count_of_monthly_fixed_bug_in_product',   array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的解决Bug数。
+        $monthClosedBugGroup  = $this->metric->getResultByCode('count_of_monthly_closed_bug_in_product',  array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的关闭Bug数。
 
         /* 组装页面所需的度量项数组。 */
-        $closedBugs     = array();
-        $unresovledBugs = array();
-        $resolvedRate   = array();
-        $activateBugs   = array();
-        $resolveBugs    = array();
-        $closeBugs      = array();
-        foreach($productIdList as $productID)
+        $closedBug     = isset($fixedBugGroup[$productID]['value'])     ? $fixedBugGroup[$productID]['value']      : 0;
+        $unresovledBug = isset($activatedBugGroup[$productID]['value']) ? $activatedBugGroup[$productID]['value']  : 0;
+        $totalBug      = isset($effectiveBugGroup[$productID]['value']) ? $effectiveBugGroup[$productID]['value']  : 0;
+        $resolvedRate  = isset($bugFixedRate[$productID]['value'])      ? $bugFixedRate[$productID]['value'] * 100 : 0;
+        foreach($groups as $group)
         {
-            $closedBugs[$productID]     = isset($fixedBugGroup[$productID]['value'])     ? $fixedBugGroup[$productID]['value']      : 0;
-            $unresovledBugs[$productID] = isset($activatedBugGroup[$productID]['value']) ? $activatedBugGroup[$productID]['value']  : 0;
-            $totalBugs[$productID]      = isset($effectiveBugGroup[$productID]['value']) ? $effectiveBugGroup[$productID]['value']  : 0;
-            $resolvedRate[$productID]   = isset($bugFixedRate[$productID]['value'])      ? $bugFixedRate[$productID]['value'] * 100 : 0;
-            foreach($groups as $group)
+            $activateBug[$group] = 0;
+            $resolveBug[$group]  = 0;
+            $closeBug[$group]    = 0;
+
+            if(!empty($monthCreatedBugGroup))
             {
-                $activateBugs[$productID][$group] = 0;
-                $resolveBugs[$productID][$group]  = 0;
-                $closeBugs[$productID][$group]    = 0;
-
-                if(!empty($monthCreatedBugGroup))
+                foreach($monthCreatedBugGroup as $data)
                 {
-                    foreach($monthCreatedBugGroup as $data)
-                    {
-                        if($group == "{$data['year']}-{$data['month']}" && $productID == $data['product']) $activateBugs[$productID][$group] = $data['value'];
-                    }
+                    if($group == "{$data['year']}-{$data['month']}" && $productID == $data['product']) $activateBugs[$group] = $data['value'];
                 }
+            }
 
-                if(!empty($monthFixedBugGroup))
+            if(!empty($monthFixedBugGroup))
+            {
+                foreach($monthFixedBugGroup as $data)
                 {
-                    foreach($monthFixedBugGroup as $data)
-                    {
-                        if($group == "{$data['year']}-{$data['month']}" && $productID == $data['product']) $resolveBugs[$productID][$group] = $data['value'];
-                    }
+                    if($group == "{$data['year']}-{$data['month']}" && $productID == $data['product']) $resolveBugs[$group] = $data['value'];
                 }
+            }
 
-                if(!empty($monthClosedBugGroup))
+            if(!empty($monthClosedBugGroup))
+            {
+                foreach($monthClosedBugGroup as $data)
                 {
-                    foreach($monthClosedBugGroup as $data)
-                    {
-                        if($group == "{$data['year']}-{$data['month']}" && $productID == $data['product']) $closeBugs[$productID][$group] = $data['value'];
-                    }
+                    if($group == "{$data['year']}-{$data['month']}" && $productID == $data['product']) $closeBugs[$group] = $data['value'];
                 }
             }
         }
 
-        $this->view->months         = $months;
-        $this->view->products       = $products;
-        $this->view->totalBugs      = $totalBugs;
-        $this->view->closedBugs     = $closedBugs;
-        $this->view->unresovledBugs = $unresovledBugs;
-        $this->view->resolvedRate   = $resolvedRate;
-        $this->view->activateBugs   = $activateBugs;
-        $this->view->resolveBugs    = $resolveBugs;
-        $this->view->closeBugs      = $closeBugs;
+
+        $this->view->months        = $months;
+        $this->view->products      = $products;
+        $this->view->totalBug      = $totalBug;
+        $this->view->closedBug     = $closedBug;
+        $this->view->unresovledBug = $unresovledBug;
+        $this->view->resolvedRate  = $resolvedRate;
+        $this->view->activateBug   = $activateBug;
+        $this->view->resolveBug    = $resolveBug;
+        $this->view->closeBug      = $closeBug;
     }
 
     /**

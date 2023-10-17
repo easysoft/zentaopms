@@ -1,4 +1,4 @@
-.bugstatistic-block .progress-circle text {font-size: 35px;}
-.bugstatistic-block .progress-circle .progress-text {position: relative; top: -45px;}
-.bugstatistic-block .bg-secondary-pale {background: #F3F6FA;}
-.bugstatistic-block .tab-pane .nav-tabs>.nav-item>a:after {border-bottom: none;}
+.block-bugstatistic .progress-circle text {font-size: 35px;}
+.block-bugstatistic .progress-circle .progress-text {position: relative; top: -45px;}
+.block-bugstatistic .bg-secondary-pale {background: #F3F6FA;}
+.block-bugstatistic .tab-pane .nav-tabs>.nav-item>a:after {border-bottom: none;}
