@@ -39,12 +39,12 @@ $config->productplan->defaultFields['bug']       = array('id', 'title', 'pri', '
 $config->productplan->defaultFields['linkStory'] = array('id', 'pri', 'plan', 'module', 'title', 'openedBy', 'assignedTo', 'estimate', 'status', 'stage');
 $config->productplan->defaultFields['linkBug']   = array('id', 'pri', 'title', 'openedBy', 'assignedTo', 'status');
 
-$config->productplan->actionList['start']['icon']        = 'play';
-$config->productplan->actionList['start']['hint']        = $lang->productplan->start;
-$config->productplan->actionList['start']['text']        = $lang->productplan->start;
-$config->productplan->actionList['start']['url']         = helper::createLink('productplan', 'start', 'planID={id}');
-$config->productplan->actionList['start']['data-toggle'] = 'modal';
-$config->productplan->actionList['start']['className']   = 'ajax-submit';
+$config->productplan->actionList['start']['icon']         = 'play';
+$config->productplan->actionList['start']['hint']         = $lang->productplan->start;
+$config->productplan->actionList['start']['text']         = $lang->productplan->start;
+$config->productplan->actionList['start']['url']          = helper::createLink('productplan', 'start', 'planID={id}');
+$config->productplan->actionList['start']['data-confirm'] = $lang->productplan->confirmStart;
+$config->productplan->actionList['start']['className']    = 'ajax-submit';
 
 $config->productplan->actionList['finish']['icon']        = 'checked';
 $config->productplan->actionList['finish']['hint']        = $lang->productplan->finish;
