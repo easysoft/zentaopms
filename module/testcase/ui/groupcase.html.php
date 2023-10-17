@@ -13,14 +13,26 @@ jsVar('allTestcases', $lang->testcase->allTestcases);
 
 include 'header.html.php';
 
-$cases = initTableData(array_values($cases), $config->testcase->group->dtable->fieldList);
+$cols = $config->testcase->group->dtable->fieldList;
+if(!empty($cols['actions']['list']))
+{
+    $executionID = ($app->tab == 'project' || $app->tab == 'execution') ? $this->session->{$app->tab} : '0';
+    foreach($cols['actions']['list'] as $method => $methodParams)
+    {
+        if(!isset($methodParams['url'])) continue;
+
+        $cols['actions']['list'][$method]['url'] = str_replace('%executionID%', (string)$executionID, $methodParams['url']);
+    }
+}
+
+$cases = initTableData(array_values($cases), $cols);
 
 dtable
 (
     set::id('groupCaseTable'),
-    set::userMap($users),
-    set::cols($config->testcase->group->dtable->fieldList),
+    set::cols($cols),
     set::data($cases),
+    set::userMap($users),
     set::plugins(array('cellspan')),
     set::onRenderCell(jsRaw('window.onRenderCell')),
     set::getCellSpan(jsRaw('window.getCellSpan')),

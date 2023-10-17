@@ -2082,8 +2082,10 @@ class testcaseZen extends testcase
         /* Get cases. */
         $cases = $this->testcase->getModuleCases($productID, $branch, 0, '', 'no', $caseType, $groupBy);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
+
         $cases = $this->loadModel('story')->checkNeedConfirm($cases);
         $cases = $this->testcase->appendData($cases);
+        foreach($cases as $case) $case->caseID  = $case->id;
 
         /* 获取用例的需求分组。 */
         /* Get story groups of cases. */
