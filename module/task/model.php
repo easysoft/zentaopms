@@ -4320,7 +4320,7 @@ class taskModel extends model
         }
 
         $menu .= $this->buildMenu('task', 'recordEstimate', $params, $task, 'browse', 'time', '', 'iframe', true, 'data-toggle="modal"');
-        $menu .= $this->buildMenu('task', 'edit',           $params, $task, 'browse');
+        $menu .= $this->buildMenu('task', 'edit',           $params, $task, 'browse', 'edit', '', '', false, 'data-app="execution"');
         if($this->config->vision != 'lite')
         {
             $menu .= $this->buildMenu('task', 'batchCreate', "execution=$task->execution&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=0", $task, 'browse', 'split', '', '', '', '', $this->lang->task->children);
