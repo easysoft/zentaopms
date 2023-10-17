@@ -16,7 +16,7 @@
 .module-menu .tree .tree-item .tree-item-content:hover .tree-actions .icon {display: block;}
 .module-menu .tree .tree-item .tree-item-content .tree-actions .with-popover-show .icon {display: block;}
 
-.tree > .tree-item > .project-tree-title {font-size: 16px; margin-bottom: 0.5rem;}
-.tree > .tree-item > .project-tree-title .text {margin-left: 0.5rem;}
-.tree > .tree-item > .project-tree-title .tree-icon {color: var(--nav-active-color); opacity: 1;}
-.tree > .tree-item > .project-tree-title > .tree-toggle-icon {display: none;}
+.tree > .tree-item.project-tree-title {font-size: 16px; margin-bottom: 0.5rem; pointer-events: none;}
+.tree > .tree-item.project-tree-title .text {margin-left: 0.5rem;}
+.tree > .tree-item.project-tree-title .item-icon {color: var(--nav-active-color); opacity: 1;}
+.tree > .tree-item.project-tree-title > .tree-toggle-icon {display: none;}
