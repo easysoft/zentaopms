@@ -12,7 +12,7 @@ namespace zin;
 
 set::title($lang->testcase->exportXmind);
 
-form
+formPanel
 (
     on::submit('setDownloading'),
     formGroup

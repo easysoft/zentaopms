@@ -41,21 +41,21 @@ js
     function setDownloading()
     {
         if(navigator.userAgent.toLowerCase().indexOf("opera") > -1) return true; // Opera don't support, omit it.
-    
+
         $.cookie.set('downloading', 0);
-    
+
         time = setInterval(function()
         {
             if($.cookie.get('downloading') == 1)
             {
                 $('.modal .modal-actions .close')[0].click();
-    
+
                 $.cookie.set('downloading', null);
-    
+
                 clearInterval(time);
             }
         }, 300);
-    
+
         return true;
     }
     JAVASCRIPT
