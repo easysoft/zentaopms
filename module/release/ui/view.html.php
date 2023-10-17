@@ -133,6 +133,7 @@ detailBody
         tabs
         (
             set::className('w-full'),
+            set::headerClass('border-b'),
 
             /* Linked story table. */
             tabPane
