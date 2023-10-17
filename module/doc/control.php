@@ -1187,13 +1187,15 @@ class doc extends control
         $this->view->actions        = $docID ? $this->action->getList('doc', $docID) : array();
         $this->view->users          = $this->user->getPairs('noclosed,noletter');
         $this->view->autoloadPage   = $this->doc->checkAutoloadPage($doc);
-        $this->view->libTree        = $this->doc->getLibTree($libID, $libs, $type, $doc->module, $objectID);
+        $this->view->libTree        = $this->doc->getLibTree($libID, $libs, $type, $doc->module, $objectID, '', 0, $docID);
         $this->view->preAndNext     = $this->loadModel('common')->getPreAndNextObject('doc', $docID);
         $this->view->moduleID       = $doc->module;
         $this->view->objectDropdown = $objectDropdown;
         $this->view->canExport      = ($this->config->edition != 'open' && common::hasPriv('doc', $type . '2export'));
         $this->view->exportMethod   = $type . '2export';
         $this->view->editors        = $this->doc->getEditors($docID);
+        $this->view->linkParams     = "objectID=$objectID&%s&browseType=&orderBy=status,id_desc&param=0";
+        $this->view->spaceType      = $objectType;
 
         $this->display();
     }

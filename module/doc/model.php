@@ -2950,7 +2950,7 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getModuleTree($rootID, $moduleID = 0, $type = 'doc', $parent = 0, $modules = array())
+    public function getModuleTree($rootID, $moduleID = 0, $type = 'doc', $parent = 0, $modules = array(), $docID = 0)
     {
         if(is_array($modules) and empty($modules))
         {
@@ -2976,7 +2976,7 @@ class docModel extends model
             $item->libID      = $rootID;
             $item->active     = $module->id == $moduleID ? 1 : 0;
             $item->order      = $module->order;
-            $item->children   = $this->getModuleTree($rootID, $moduleID, $type, $module->id, $modules);
+            $item->children   = $this->getModuleTree($rootID, $moduleID, $type, $module->id, $modules, $docID);
             $showDoc = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=doc&key=showDoc');
             $showDoc = $showDoc === '0' ? 0 : 1;
             if($this->app->rawMethod == 'view' and $module->type != 'api' and $showDoc)
@@ -2989,6 +2989,7 @@ class docModel extends model
                 if(!empty($docs))
                 {
                     $docs = array_values($docs);
+                    foreach($docs as $doc) $doc->active = $doc->id == $docID ? 1 : 0;
                     $item->children = array_merge($docs, $item->children);
                 }
             }
@@ -3013,7 +3014,7 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getLibTree($libID, $libs, $type, $moduleID, $objectID = 0, $browseType = '', $param = 0)
+    public function getLibTree($libID, $libs, $type, $moduleID, $objectID = 0, $browseType = '', $param = 0, $docID = 0)
     {
         if($type == 'project')
         {
@@ -3050,7 +3051,7 @@ class docModel extends model
             $item->objectType = $type;
             $item->objectID   = $objectID;
             $item->active     = $lib->id == $libID && $browseType != 'bysearch' ? 1 : 0;
-            $item->children   = $this->getModuleTree($lib->id, $moduleID, $lib->type == 'api' ? 'api' : 'doc', 0, $releaseModule);
+            $item->children   = $this->getModuleTree($lib->id, $moduleID, $lib->type == 'api' ? 'api' : 'doc', 0, $releaseModule, $docID);
             $showDoc = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=doc&key=showDoc');
             $showDoc = $showDoc === '0' ? 0 : 1;
             if($this->app->rawMethod == 'view' and $lib->type != 'apiLib' and $showDoc)
@@ -3065,6 +3066,7 @@ class docModel extends model
                 if(!empty($docs))
                 {
                     $docs = array_values($docs);
+                    foreach($docs as $doc) $doc->active = $doc->id == $docID ? 1 : 0;
                     $item->children = array_merge($docs, $item->children);
                 }
             }

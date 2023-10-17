@@ -150,13 +150,13 @@ panel
                 ),
                 common::hasPriv('doc', 'collect') ? html($starBtn) : null,
                 ($config->vision == 'rnd' and $config->edition == 'max' and $app->tab == 'project') ? $importLibBtn : null,
-                (!$isRelease && common::hasPriv('doc', 'edit')) ? btn
+                common::hasPriv('doc', 'edit') ? btn
                 (
                     set::url(createLink('doc', 'edit', "docID=$doc->id")),
                     setClass('btn ghost'),
                     icon('edit'),
                 ) : null,
-                (!$isRelease && common::hasPriv('doc', 'delete')) ? btn
+                common::hasPriv('doc', 'delete') ? btn
                 (
                     set::url(createLink('doc', 'delete', "docID=$doc->id")),
                     setClass('btn ghost ajax-submit'),
