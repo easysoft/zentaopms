@@ -566,15 +566,12 @@ class bug extends control
      * Delete a bug.
      *
      * @param  string $bugID
-     * @param  string $confirm yes|no
      * @param  string $from    taskkanban
      * @access public
      * @return void
      */
-    public function delete(string $bugID, string $confirm = 'no', string $from = '')
+    public function delete(string $bugID, string $from = '')
     {
-        if($confirm == 'no') return $this->send(array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->notice->confirmDelete, 'confirmed' => inlink('delete', "bugID=$bugID&confirm=yes&from=$from"))));
-
         /* 删除 bug。 */
         /* Delete bug. */
         $bug = $this->bug->getByID($bugID);

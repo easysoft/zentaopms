@@ -148,7 +148,9 @@ $config->bug->actionList['copy']['text'] = $lang->bug->copy;
 $config->bug->actionList['copy']['hint'] = $lang->bug->copy;
 $config->bug->actionList['copy']['url']  = array('module' => 'bug', 'method' => 'create', 'params' => 'productID={product}&branch={branch}&extra=bugID={id}');
 
-$config->bug->actionList['delete']['icon'] = 'trash';
-$config->bug->actionList['delete']['text'] = $lang->bug->delete;
-$config->bug->actionList['delete']['hint'] = $lang->bug->delete;
-$config->bug->actionList['delete']['url']  = array('module' => 'bug', 'method' => 'delete', 'params' => 'bugID={id}');
+$config->bug->actionList['delete']['icon']         = 'trash';
+$config->bug->actionList['delete']['text']         = $lang->bug->delete;
+$config->bug->actionList['delete']['hint']         = $lang->bug->delete;
+$config->bug->actionList['delete']['url']          = array('module' => 'bug', 'method' => 'delete', 'params' => 'bugID={id}');
+$config->bug->actionList['delete']['className']    = 'ajax-submit';
+$config->bug->actionList['delete']['data-confirm'] = $lang->bug->notice->confirmDelete;
