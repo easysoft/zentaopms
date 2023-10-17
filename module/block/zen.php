@@ -18,10 +18,12 @@ class blockZen extends block
         $vision  = $this->config->vision;
 
         /* 获取该仪表盘下的初始化默认布局。 */
-        $blocks = $dashboard == 'my' ? $this->lang->block->default[$flow][$dashboard] : $this->lang->block->default[$dashboard];
-
+        $blocks      = $dashboard == 'my' ? $this->lang->block->default[$flow][$dashboard] : $this->lang->block->default[$dashboard];
+        $closedBlock = isset($this->config->block->closed) ? $this->config->block->closed : '';
         foreach($blocks as $block)
         {
+            if(strpos(",{$closedBlock},", ",{$block['module']}|{$block['code']},") !== false) continue;
+
             /* 根据module和code生成区块的宽度和高度。 */
             $sizeConfig  = $this->config->block->size[$block['module']][$block['code']];
             $defaultSize = empty($sizeConfig) ? $this->config->block->defaultSize : $sizeConfig; // 默认为区块的统一默认尺寸。
