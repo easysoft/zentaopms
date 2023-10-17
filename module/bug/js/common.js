@@ -277,9 +277,10 @@ function loadAllProductBuilds(productID, buildBox)
             link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch + '&index=0&type=all');
             $('#resolvedBuildBox').load(link, function()
             {
-                $(this).find('select').picker({optionRender: markReleasedBuilds, dropWidth: 'auto'})
+                $(this).find('select').picker({optionRender: markReleasedBuilds})
                 var $pkResolvedBuild = $('#pk_resolvedBuild-search');
                 $pkResolvedBuild.closest('.picker').css('width', $pkResolvedBuild.closest('td').width());
+                $('#resolvedBuildBox .input-group-btn').remove();
             });
         }
     }
@@ -515,7 +516,7 @@ function loadExecutionRelated(executionID)
     {
         if(currentProjectID == 0) loadProjectByExecutionID(executionID);
         loadExecutionStories(executionID);
-        loadExecutionBuilds(executionID);
+        if($('#openedBuildBox .input-group-btn').length == 1) loadExecutionBuilds(executionID);
         loadAssignedTo(executionID, $('#assignedTo').val());
         loadTestTasks($('#product').val(), executionID);
     }

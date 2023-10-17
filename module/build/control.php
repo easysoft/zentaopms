@@ -427,6 +427,8 @@ class build extends control
      */
     public function ajaxGetProductBuilds($productID, $varName, $build = '', $branch = 'all', $index = 0, $type = 'normal', $extra = '')
     {
+        $this->app->loadLang('bug');
+        $loadAllBtn = '<span class="input-group-btn"> <button type="button" class="btn" onclick="loadAllBuilds(this)" style="border-radius: 0px 2px 2px 0px; border-left-color: transparent;">' . $this->lang->bug->allBuilds . '</button></span>';
         $isJsonView = $this->app->getViewType() == 'json';
         if($varName == 'openedBuild' )
         {
@@ -446,7 +448,7 @@ class build extends control
             $params = ($type == 'all') ? 'withbranch,noreleased' : 'noterminate,nodone,withbranch,noreleased';
             $builds = $this->build->getBuildPairs($productID, $branch, $params, 0, 'project', $build);
             if($isJsonView) return print(json_encode($builds));
-            return print(html::select($varName, $builds, $build, "class='form-control'"));
+            return print(html::select($varName, $builds, $build, "class='form-control'") . $loadAllBtn);
         }
 
         $builds = $this->build->getBuildPairs($productID, $branch, $type, 0, 'project', $build, false);
@@ -515,7 +517,9 @@ class build extends control
      */
     public function ajaxGetExecutionBuilds($executionID, $productID, $varName, $build = '', $branch = 'all', $index = 0, $needCreate = false, $type = 'normal', $number = '')
     {
+        $this->app->loadLang('bug');
         $isJsonView = $this->app->getViewType() == 'json';
+        $loadAllBtn = '<span class="input-group-btn"> <button type="button" class="btn" onclick="loadAllBuilds(this)" style="border-radius: 0px 2px 2px 0px; border-left-color: transparent;">' . $this->lang->bug->allBuilds . '</button></span>';
         if($varName == 'openedBuild')
         {
             if(empty($executionID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $index, $type);
@@ -525,7 +529,7 @@ class build extends control
             if($isJsonView) return print(json_encode($builds));
 
             $varName = $number === '' ? $varName : $varName . "[$number]";
-            return print(html::select($varName . '[]', $builds , '', 'size=4 class=form-control multiple'));
+            return print(html::select($varName . '[]', $builds , '', 'size=4 class=form-control multiple') . $loadAllBtn);
         }
         if($varName == 'openedBuilds')
         {
