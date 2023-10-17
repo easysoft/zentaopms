@@ -1517,7 +1517,7 @@ class doc extends control
         if($_POST)
         {
             $this->setting->setItem($this->app->user->account . '.doc.showDoc', $this->post->showDoc);
-            return print(js::reload('parent.parent'));
+            return $this->sendSuccess(array('load' => true, 'closeModal' => true));
         }
 
         $showDoc = $this->setting->getItem('owner=' . $this->app->user->account . '&module=doc&key=showDoc');

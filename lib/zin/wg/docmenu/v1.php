@@ -402,13 +402,17 @@ class docMenu extends wg
                 ? a
                 (
                     setClass('btn'),
-                    setStyle('background', '#EEF5FF'),
+                    setStyle('background', 'rgb(var(--color-primary-50-rgb))'),
                     setStyle('box-shadow', 'none'),
                     set('data-app', $app->tab),
                     set('data-size', 'sm'),
                     set('data-toggle', 'modal'),
                     set::href($settingLink),
-                    $settingText
+                    span
+                    (
+                        setClass('text-primary'),
+                        $settingText
+                    )
                 )
                 : null,
         );
