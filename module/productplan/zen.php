@@ -19,12 +19,11 @@ class productplanZen extends productplan
      * @access protected
      * @return array|string
      */
-    protected function buildPlansForBatchEdit(int $productID): array|string
+    protected function buildPlansForBatchEdit(): array|string
     {
         $plans        = form::batchData($this->config->productplan->form->batchEdit)->get();
         $oldPlans     = $this->productplan->getByIDList(array_keys($plans));
         $futureConfig = $this->config->productplan->future;
-        $product      = $this->loadModel('product')->getByID($productID);
         foreach($plans as $planID => $plan)
         {
             $oldPlan  = $oldPlans[$planID];
@@ -52,7 +51,7 @@ class productplanZen extends productplan
             }
             elseif($parentID == -1 && $plan->begin != $futureConfig)
             {
-                $childPlans = $this->productplan->getChildren($parentID);
+                $childPlans = $this->productplan->getChildren($plan->id);
                 $minBegin   = $plan->begin;
                 $maxEnd     = $plan->end;
                 foreach($childPlans as $childID => $childPlan)
@@ -88,7 +87,7 @@ class productplanZen extends productplan
 
         if($product->type == 'normal')
         {
-            $planGroup = $this->productplan->getList($product->id, 0, 'all', '', $orderBy, 'skipparent');
+            $planGroup = $this->productplan->getList($product->id, '0', 'all', null, $orderBy, 'skipparent');
 
             $this->view->planCount = count(array_filter($planGroup));
         }

@@ -177,7 +177,7 @@ class productplan extends control
         if(!empty($_POST['title']))
         {
             /* 从POST中获取数据。 */
-            $plans = $this->productplanZen->buildPlansForBatchEdit($productID);
+            $plans = $this->productplanZen->buildPlansForBatchEdit();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->productplan->batchUpdate($productID, $plans);
@@ -281,7 +281,7 @@ class productplan extends control
         if(!$branch) $branch = 0;
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Append id for second sort. */
@@ -303,7 +303,7 @@ class productplan extends control
 
         if($viewType == 'kanban') $this->productplanZen->assignKanbanData($product, $branchID, $orderBy);
 
-        $plans = $this->productplan->getList($productID, (string) $branch, $browseType, $pager, $sort, "", $queryID);
+        $plans = $this->productplan->getList($productID, (string)$branch, $browseType, $pager, $sort, "", $queryID);
         $plans = $this->productplanZen->buildDataForBrowse($plans, $this->view->branchOption);
 
         $this->view->title      = $productName . $this->lang->colon . $this->lang->productplan->browse;
