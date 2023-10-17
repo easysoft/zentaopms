@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('doclibID', $lib->id);
+jsVar('libType', $lib->type);
 modalHeader
 (
     set::title($lang->api->editLib),
