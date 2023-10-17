@@ -196,7 +196,7 @@ detailBody
                     setClass('tabnActions'),
                     dropdown
                     (
-                        btn(set::text($lang->story->create), setClass('secondary' . (empty($createStoryLink) ? ' disabled' : '')), set::icon('plus'), set::caret(true), set::url($createStoryLink)),
+                        btn(set::text($lang->story->create), set::target('_parent'), setClass('secondary' . (empty($createStoryLink) ? ' disabled' : '')), set::icon('plus'), set::caret(true), set::url($createStoryLink)),
                         set::items(array(array('text' => $lang->story->batchCreate, 'url' => $batchCreateStoryLink, 'class' => empty($batchCreateStoryLink) ? 'disabled' : ''))),
                         set::trigger('hover'),
                         set::placement('bottom-end'),
