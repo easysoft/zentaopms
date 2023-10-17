@@ -1038,6 +1038,11 @@ class doc extends control
         $this->view->libTree        = $this->doc->getLibTree(0, $libs, $type, 0, $objectID);
         $this->view->objectDropdown = $objectDropdown;
         $this->view->searchTitle    = $searchTitle;
+        $this->view->linkParams     = "objectID=$objectID&%s&browseType=&orderBy=status,id_desc&param=0";
+        $this->view->spaceType      = $type;
+        $this->view->objectType     = $type;
+        $this->view->libID          = 0;
+        $this->view->moduleID       = 0;
 
         $this->display();
     }
