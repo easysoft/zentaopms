@@ -838,7 +838,7 @@ class releaseModel extends model
             $menu[] = array(
                 'text'         => $this->lang->release->changeStatusList[$changedStatus],
                 'icon'         => $release->status == 'normal' ? 'pause' : 'play',
-                'url'          => helper::createLink($this->app->tab == 'project' ? 'projectrelease' : 'release', 'changeStatus', "{$params}&status={$changedStatus}"),
+                'url'          => helper::createLink($this->app->rawModule, 'changeStatus', "{$params}&status={$changedStatus}"),
                 'class'        => 'btn ghost ajax-submit',
                 'data-confirm' => $release->status == 'normal' ? $this->lang->release->confirmTerminate : $this->lang->release->confirmActivate
             );
@@ -849,7 +849,7 @@ class releaseModel extends model
             $menu[] = array(
                 'text'  => $this->lang->edit,
                 'icon'  => 'edit',
-                'url'   => inlink('edit', $params),
+                'url'   => helper::createLink($this->app->rawModule, 'edit', $params),
                 'class' => 'btn ghost'
             );
         }
@@ -859,7 +859,7 @@ class releaseModel extends model
             $menu[] = array(
                 'text'         => $this->lang->delete,
                 'icon'         => 'trash',
-                'url'          => helper::createLink($this->app->tab == 'project' ? 'projectrelease' : 'release', 'delete', $params),
+                'url'          => helper::createLink($this->app->rawModule, 'delete', $params),
                 'class'        => 'btn ghost ajax-submit',
                 'data-confirm' => $this->lang->release->confirmDelete
             );
