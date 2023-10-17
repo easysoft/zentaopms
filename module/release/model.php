@@ -1051,17 +1051,17 @@ class releaseModel extends model
      */
     public function delete(string $table, int $releaseID): bool
     {
-        $this->dao->update(TABLE_RELEASE)->set('deleted')->eq(1)->where('id')->eq($releaseID)->exec();
-        $this->loadModel('action')->create('release', $releaseID, 'deleted');
-
-        $release = $this->getByID($releaseID);
+        $release = $this->fetchByID($releaseID);
         if(!$release) return false;
 
+        parent::delete(TABLE_RELEASE, $releaseID);
+
+        if($release->shadow) $this->dao->update(TABLE_BUILD)->set('deleted')->eq(1)->where('id')->eq($release->shadow)->exec();
+
         $builds = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll();
-        $this->dao->update(TABLE_BUILD)->set('deleted')->eq(1)->where('id')->eq($release->shadow)->exec();
         foreach($builds as $build)
         {
-            if(empty($build->execution) && $build->createdDate == $release->createdDate) $this->build->delete(TABLE_BUILD, $build->id);
+            if(empty($build->execution) && $build->createdDate == $release->createdDate) parent::delete(TABLE_BUILD, $build->id);
         }
 
         return !dao::isError();
