@@ -2224,7 +2224,7 @@ class testcaseZen extends testcase
     protected function prepareReviewData(int $caseID, object $oldCase): bool|object
     {
         $now    = helper::now();
-        $status = $this->testcase->getStatusForReview($oldCase);
+        $status = $this->getStatusForReview($oldCase);
 
         $case = form::data($this->config->testcase->form->review)->add('id', $caseID)
             ->setForce('status', $status)
@@ -2895,10 +2895,10 @@ class testcaseZen extends testcase
      * Get status for review.
      *
      * @param  object $case
-     * @access public
+     * @access private
      * @return string
      */
-    public function getStatusForReview(object $case): string
+    private function getStatusForReview(object $case): string
     {
         if($this->post->result == 'pass') return 'normal';
         return zget($case, 'status', '');
