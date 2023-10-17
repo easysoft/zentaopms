@@ -173,6 +173,7 @@ class apiModel extends model
             ->add('lib', $old->lib)
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', $now)
+            ->stripTags($this->config->api->editor->editstruct['id'], $this->config->allowedTags)
             ->remove('undefined')
             ->get();
 

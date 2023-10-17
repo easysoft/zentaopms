@@ -16,6 +16,7 @@ formPanel
         set::label($lang->api->lib),
         input
         (
+            set::name(''),
             set::value($libName),
             set::disabled(true)
         )
@@ -110,7 +111,7 @@ formPanel
         set::id('form-header'),
         setClass('params-group'),
         set::label($lang->api->header),
-        h::table 
+        h::table
         (
             setClass('table condensed bordered'),
             h::tr
@@ -177,7 +178,7 @@ formPanel
         set::id('form-query'),
         setClass('params-group'),
         set::label($lang->api->query),
-        h::table 
+        h::table
         (
             setClass('table condensed bordered'),
             h::tr
@@ -257,7 +258,7 @@ formPanel
         set::id('form-params'),
         setClass('params-group'),
         set::label($lang->api->params),
-        h::table 
+        h::table
         (
             setClass('table condensed bordered'),
             h::tr
@@ -294,13 +295,17 @@ formPanel
                 set('data-parent', '0'),
                 h::td
                 (
-                    input(),
+                    input
+                    (
+                        set::name(''),
+                    ),
                 ),
                 h::td
                 (
                     select
                     (
                         setClass('objectType'),
+                        set::name(''),
                         set::value('object'),
                         set::items($lang->api->paramsTypeOptions)
                     )
@@ -356,7 +361,7 @@ formPanel
         set::id('form-response'),
         setClass('response'),
         set::label($lang->api->response),
-        h::table 
+        h::table
         (
             setClass('table condensed bordered'),
             h::tr
@@ -393,13 +398,17 @@ formPanel
                 set('data-parent', '0'),
                 h::td
                 (
-                    input(),
+                    input
+                    (
+                        set::name(''),
+                    ),
                 ),
                 h::td
                 (
                     select
                     (
                         setClass('objectType'),
+                        set::name(''),
                         set::value('object'),
                         set::items($lang->api->paramsTypeOptions)
                     )

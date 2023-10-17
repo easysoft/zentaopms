@@ -12,7 +12,7 @@ namespace zin;
 
 set::title($lang->api->releases);
 
-if(empty($release))
+if(empty($releases))
 {
     div
     (

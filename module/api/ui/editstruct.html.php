@@ -29,6 +29,7 @@ if(!empty($struct->attribute))
                 $level ? setStyle('padding-left', ($level + 1) * 10 . 'px') : null,
                 input
                 (
+                    set::name(''),
                     set::value($data['field'])
                 )
             ),
@@ -37,6 +38,7 @@ if(!empty($struct->attribute))
                 select
                 (
                     setClass('objectType'),
+                    set::name(''),
                     set::value($data['paramsType']),
                     set::items($typeList)
                 )
@@ -50,6 +52,7 @@ if(!empty($struct->attribute))
                 textarea
                 (
                     set::rows(1),
+                    set::name(''),
                     set::value($data['desc'])
                 ),
             ),
@@ -98,13 +101,17 @@ else
         set('data-parent', '0'),
         h::td
         (
-            input(),
+            input
+            (
+                set::name(''),
+            ),
         ),
         h::td
         (
             select
             (
                 setClass('objectType'),
+                set::name(''),
                 set::value('object'),
                 set::items($lang->api->paramsTypeOptions)
             )
@@ -117,7 +124,8 @@ else
         (
             textarea
             (
-                set::rows(1)
+                set::rows(1),
+                set::name(''),
             ),
         ),
         h::td
@@ -220,7 +228,7 @@ formPanel
         editor
         (
             set::name('desc'),
-            set::value($struct->desc)
+            html($struct->desc)
         ),
     ),
 );

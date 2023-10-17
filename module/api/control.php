@@ -348,6 +348,7 @@ class api extends control
         $this->view->orderBy   = $orderBy;
         $this->view->title     = $this->lang->api->struct;
         $this->view->pager     = $pager;
+        $this->view->users     = $this->loadModel('user')->getPairs('noclosed,noletter');
         $this->display();
     }
 
@@ -371,6 +372,7 @@ class api extends control
                 ->add('addedBy', $this->app->user->account)
                 ->add('addedDate', helper::now())
                 ->skipSpecial('attribute')
+                ->stripTags($this->config->api->editor->createstruct['id'], $this->config->allowedTags)
                 ->remove('undefined')
                 ->get();
 
@@ -440,22 +442,14 @@ class api extends control
      *
      * @param  int    $libID
      * @param  int    $structID
-     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function deleteStruct($libID, $structID = 0, $confirm = 'no')
+    public function deleteStruct($libID, $structID = 0)
     {
-        if($confirm == 'no')
-        {
-            return print(js::confirm($this->lang->custom->notice->confirmDelete, $this->createLink('api', 'deleteStruct', "libID=$libID&structID=$structID&confirm=yes"), ''));
-        }
-        else
-        {
-            $this->api->delete(TABLE_APISTRUCT, $structID);
-            if(dao::isError()) return $this->sendError(dao::getError());
-            return print(js::locate(inlink('struct', "libID=$libID"), 'parent'));
-        }
+        $this->api->delete(TABLE_APISTRUCT, $structID);
+        if(dao::isError()) return $this->sendError(dao::getError());
+        return $this->sendSuccess(array('load' => inlink('struct', "libID=$libID")));
     }
 
     /**
