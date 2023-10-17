@@ -11,6 +11,14 @@ declare(strict_types=1);
 
 namespace zin;
 
+if(!$longBlock)
+{
+    unset($config->block->execution->dtable->fieldList['status']);
+    unset($config->block->execution->dtable->fieldList['totalEstimate']);
+    unset($config->block->execution->dtable->fieldList['totalConsumed']);
+    unset($config->block->execution->dtable->fieldList['burns']);
+}
+
 panel
 (
     set::title($block->title),

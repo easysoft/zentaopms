@@ -1958,7 +1958,7 @@ class blockZen extends block
         $this->app->loadClass('pager', true);
         $pager = pager::init(0, $count, 1);
 
-        $projectID = $block->module == 'my' ? 0 : (int)$this->session->project;
+        $projectID = $block->dashboard == 'my' ? 0 : (int)$this->session->project;
 
         $executions = $this->execution->getStatData($projectID, $status, 0, 0, false, 'skipParent', 'id_asc', $pager);
         if($executions)
