@@ -292,6 +292,8 @@ if($('.dtable .dtable-header .has-checkbox').length > 0)
     const checkedList = dtable.$.getChecks();
     if(checkedList.length)
     {
+        if(window.config.currentModule == 'testcase') checkedList.forEach(function(item, index){ checkedList[index] = item.replace('case_', '');});
+
         $('#exportType').val('selected');
         $.cookie.set('checkedItem', checkedList.join(','));
     }
