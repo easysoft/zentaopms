@@ -654,6 +654,7 @@ EOF;
         $this->view->mode         = 'testtask';
         $this->view->pager        = $pager;
         $this->view->param        = $param;
+        $this->view->orderBy      = $orderBy;
         $this->display();
     }
 

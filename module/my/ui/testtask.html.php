@@ -25,6 +25,8 @@ dtable
     set::cols($cols),
     set::data($data),
     set::fixedLeftWidth('20%'),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('my', 'work', "mode={$mode}&type={$type}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footer(array(array('html' => $footerHTML), 'flex', 'pager')),
     set::footPager(usePager()),
 );
