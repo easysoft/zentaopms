@@ -260,7 +260,7 @@ $config->projectGroup->dtable = new stdclass();
 $config->projectGroup->dtable->fieldList['id']['title']    = $lang->idAB;
 $config->projectGroup->dtable->fieldList['id']['name']     = 'id';
 $config->projectGroup->dtable->fieldList['id']['type']     = 'checkID';
-$config->projectGroup->dtable->fieldList['id']['sortType'] = 'desc';
+$config->projectGroup->dtable->fieldList['id']['sortType'] = false;
 $config->projectGroup->dtable->fieldList['id']['fixed']    = 'left';
 $config->projectGroup->dtable->fieldList['id']['checkbox'] = false;
 $config->projectGroup->dtable->fieldList['id']['width']    = '80';
@@ -271,7 +271,7 @@ $config->projectGroup->dtable->fieldList['name']['name']     = 'name';
 $config->projectGroup->dtable->fieldList['name']['fixed']    = 'left';
 $config->projectGroup->dtable->fieldList['name']['flex']     = 1;
 $config->projectGroup->dtable->fieldList['name']['type']     = 'title';
-$config->projectGroup->dtable->fieldList['name']['sortType'] = true;
+$config->projectGroup->dtable->fieldList['name']['sortType'] = false;
 $config->projectGroup->dtable->fieldList['name']['group']    = 1;
 
 $config->projectGroup->dtable->fieldList['desc']['title']    = $lang->group->desc;
