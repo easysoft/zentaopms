@@ -16,13 +16,13 @@ window.afterPageUpdate = function($target, info, options)
     $(window).on('resize', window.renderCheckedLabel);
     window.initFilterPanel();
 }
-window.scrollToItem = function() 
+window.scrollToItem = function()
 {
     var item = $('.metric-tree').find('.metric-' + current.id);
     item.scrollIntoView();
 }
 
-window.addTitle2Star = function() 
+window.addTitle2Star = function()
 {
     $('.metric-collect').attr('title', collectStar);
 }
@@ -439,6 +439,7 @@ window.initChart = function($obj, head, data, chartType)
         data: data.map(item => item[x])
     };
     if(head.length == 2) xAxis.data = xAxis.data.map(item => item.slice(0, 10));
+    xAxis.data = [...new Set(xAxis.data)];
     var yAxis = {type: 'value'};
 
     if(head.length <= 3) {
