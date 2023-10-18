@@ -132,10 +132,10 @@ dtable
     (
         item
         (
+            set::url('product', 'batchEdit'),
             set::text($lang->edit),
-            set::btnType('secondary batch-btn'),
-            setData('page', 'batch'),
-            setData('formaction', $this->createLink('product', 'batchEdit'))
+            setData('load', 'post'),
+            setData('dataMap', array('productIDList[]' => '#products:checkedIDList'))
         )
     ) : null,
     set::footPager(usePager())
