@@ -1046,8 +1046,8 @@ class testcase extends control
 
             /* 获取上传文件中的用例字段。 */
             /* Get imported fields of the testcase. */
-            $fields    = $this->testcase->getImportFields($productID);
-            $fields    = array_flip($fields);
+            $fields = $this->testcase->getImportFields($productID);
+            $fields = array_flip($fields);
 
             /* 获取字段列值。 */
             /* Get column key. */
