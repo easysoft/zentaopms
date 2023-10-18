@@ -130,7 +130,7 @@ $config->projectExecution->dtable = new stdclass();
 $config->projectExecution->dtable->fieldList['rawID']['title']    = $lang->idAB;
 $config->projectExecution->dtable->fieldList['rawID']['name']     = 'rawID';
 $config->projectExecution->dtable->fieldList['rawID']['type']     = 'checkID';
-$config->projectExecution->dtable->fieldList['rawID']['sortType'] = 'desc';
+$config->projectExecution->dtable->fieldList['rawID']['sortType'] = false;
 $config->projectExecution->dtable->fieldList['rawID']['checkbox'] = true;
 $config->projectExecution->dtable->fieldList['rawID']['width']    = '80';
 
@@ -140,12 +140,12 @@ $config->projectExecution->dtable->fieldList['name']['fixed']        = 'left';
 $config->projectExecution->dtable->fieldList['name']['flex']         = 1;
 $config->projectExecution->dtable->fieldList['name']['type']         = 'nestedTitle';
 $config->projectExecution->dtable->fieldList['name']['nestedToggle'] = true;
-$config->projectExecution->dtable->fieldList['name']['sortType']     = true;
+$config->projectExecution->dtable->fieldList['name']['sortType']     = false;
 
 $config->projectExecution->dtable->fieldList['productName']['title']    = $lang->execution->product;
 $config->projectExecution->dtable->fieldList['productName']['name']     = 'productName';
 $config->projectExecution->dtable->fieldList['productName']['type']     = 'desc';
-$config->projectExecution->dtable->fieldList['productName']['sortType'] = true;
+$config->projectExecution->dtable->fieldList['productName']['sortType'] = false;
 $config->projectExecution->dtable->fieldList['productName']['minWidth'] = '160';
 $config->projectExecution->dtable->fieldList['productName']['group']    = '1';
 
@@ -153,28 +153,28 @@ $config->projectExecution->dtable->fieldList['status']['title']     = $lang->exe
 $config->projectExecution->dtable->fieldList['status']['name']      = 'status';
 $config->projectExecution->dtable->fieldList['status']['type']      = 'status';
 $config->projectExecution->dtable->fieldList['status']['statusMap'] = $lang->execution->statusList + $lang->task->statusList;
-$config->projectExecution->dtable->fieldList['status']['sortType']  = true;
+$config->projectExecution->dtable->fieldList['status']['sortType']  = false;
 $config->projectExecution->dtable->fieldList['status']['width']     = '80';
 $config->projectExecution->dtable->fieldList['status']['group']     = '1';
 
 $config->projectExecution->dtable->fieldList['PM']['title']    = $lang->execution->PM;
 $config->projectExecution->dtable->fieldList['PM']['name']     = 'PM';
 $config->projectExecution->dtable->fieldList['PM']['type']     = 'avatarBtn';
-$config->projectExecution->dtable->fieldList['PM']['sortType'] = true;
+$config->projectExecution->dtable->fieldList['PM']['sortType'] = false;
 $config->projectExecution->dtable->fieldList['PM']['width']    = '100';
 $config->projectExecution->dtable->fieldList['PM']['group']    = '2';
 
 $config->projectExecution->dtable->fieldList['begin']['title']    = $lang->execution->begin;
 $config->projectExecution->dtable->fieldList['begin']['name']     = 'begin';
 $config->projectExecution->dtable->fieldList['begin']['type']     = 'date';
-$config->projectExecution->dtable->fieldList['begin']['sortType'] = true;
+$config->projectExecution->dtable->fieldList['begin']['sortType'] = false;
 $config->projectExecution->dtable->fieldList['begin']['width']    = '96';
 $config->projectExecution->dtable->fieldList['begin']['group']    = '3';
 
 $config->projectExecution->dtable->fieldList['end']['title']    = $lang->execution->end;
 $config->projectExecution->dtable->fieldList['end']['name']     = 'end';
 $config->projectExecution->dtable->fieldList['end']['type']     = 'date';
-$config->projectExecution->dtable->fieldList['end']['sortType'] = true;
+$config->projectExecution->dtable->fieldList['end']['sortType'] = false;
 $config->projectExecution->dtable->fieldList['end']['width']    = '96';
 $config->projectExecution->dtable->fieldList['end']['group']    = '3';
 
