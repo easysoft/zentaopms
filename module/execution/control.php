@@ -473,7 +473,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function bug(int $executionID = 0, int $productID = 0, string $branch = 'all', string $orderBy = 'status,id_desc', string $build = '', string $type = 'all', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function bug(int $executionID = 0, int $productID = 0, string $branch = 'all', string $orderBy = 'id_desc', string $build = '', string $type = 'all', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Save session and load model. */
         $this->loadModel('bug');

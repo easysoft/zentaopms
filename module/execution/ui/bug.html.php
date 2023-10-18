@@ -85,8 +85,6 @@ if($canBatchAssignTo)
     $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->task->assignedTo, 'btnType' => 'secondary', 'url' => '#navAssignedTo','data-toggle' => 'dropdown');
 }
 
-jsVar('orderBy', $orderBy);
-jsVar('sortLink', helper::createLink('execution', 'bug', "executionID={$execution->id}&productID={$productID}&branch={$branchID}&orderBy={orderBy}&build=$buildID&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 jsVar('+pageSummary', $summary);
 jsVar('checkedSummary', $lang->selectedItems);
 
@@ -104,7 +102,8 @@ dtable
     set::cols($cols),
     set::data(array_values($bugs)),
     set::checkable($canBatchAssignTo),
-    set::sortLink(jsRaw('createSortLink')),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('execution', 'bug', "executionID={$execution->id}&productID={$productID}&branch={$branchID}&orderBy={name}_{sortType}&build=$buildID&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footToolbar($footToolbar),
     set::customCols(true),
     set::footPager(
