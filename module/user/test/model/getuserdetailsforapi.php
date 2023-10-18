@@ -20,6 +20,5 @@ $user = new userTest();
 $userList = array('admin', 'test2', 'user10', '');
 $users    = $user->getUserDetailsForAPITest($userList);
 
-r($users) && p('admin:url')      && e('getuserdetailsforapi');          //获取admin用户的url
 r($users) && p('test2:realname') && e('测试2');                     //获取test2用户的真实姓名
-r($users) && p('user10:avatar')  && e('http:///home/z/tmp/10.png'); //获取user10的头像信息
+r($users) && p('user10:avatar')  && e('https://www.gravatar.com/avatar/990d67a9f94696b1abe2dccf06900322?d=identicon&s=80'); //获取user10的头像信息

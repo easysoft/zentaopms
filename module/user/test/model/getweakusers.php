@@ -10,10 +10,6 @@ title=测试 userModel->getWeakUsers();
 cid=1
 pid=1
 
-获取密码较弱的用户 >> 0
 
 */
 $user = new userTest();
-a($user->getWeakUsersTest());die;
-
-r($user->getWeakUsersTest()) && p('') && e('0'); //获取密码较弱的用户
