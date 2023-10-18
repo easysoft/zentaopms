@@ -198,6 +198,7 @@ dtable
     set::checkable($canBatchAction),
     set::sortLink(jsRaw('createSortLink')),
     set::onRenderCell(jsRaw('window.renderCell')),
+    set::modules($modulePairs),
     set::footToolbar($footToolbar),
     set::footPager(usePager(array
     (

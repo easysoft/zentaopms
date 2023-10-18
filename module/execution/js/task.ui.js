@@ -100,6 +100,10 @@ window.renderCell = function(result, info)
     {
         const task = info.row.data;
         let html = '';
+
+        const module = this.options.modules[info.row.data.module];
+        if(module) html += '<span class="label lighter rounded-full">' + module + '</span>'; // 添加模块标签
+
         if(task.team)
         {
             html += "<span class='label gray-pale rounded-xl'>" + multipleAB + "</span>";
