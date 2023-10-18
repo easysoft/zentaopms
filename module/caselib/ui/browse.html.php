@@ -156,6 +156,8 @@ dtable
     set::data(array_values($tableData)),
     set::checkable($canBatchAction),
     set::customCols(true),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('caselib', 'browse', "libID={$libID}&browseType={$browseType}&params={$params}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footToolbar($footToolbar),
     set::footPager(usePager())
 );
