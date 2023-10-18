@@ -1,6 +1,6 @@
 <?php
 namespace zin;
-$apiHeader = $apiQuery = $apiParams = $apiResponse = array();
+$apiHeader = $apiQuery = $apiParams = $apiResponse = null;
 $defaultTR = function()
 {
     return h::tr
@@ -8,7 +8,10 @@ $defaultTR = function()
         setClass('input-row'),
         h::td
         (
-            input(),
+            input
+            (
+                set::name('')
+            ),
         ),
         h::td
         (
@@ -52,6 +55,7 @@ if(!empty($api->params['header']))
             (
                 input
                 (
+                    set::name(''),
                     set::value($param['field'])
                 ),
             ),
@@ -89,7 +93,7 @@ if(!empty($api->params['header']))
 }
 else
 {
-    $apiHeader[] = $defaultTR;
+    $apiHeader[] = $defaultTR();
 }
 
 if(!empty($api->params['query']))
@@ -103,6 +107,7 @@ if(!empty($api->params['query']))
             (
                 input
                 (
+                    set::name(''),
                     set::value($query['field'])
                 ),
             ),
@@ -140,7 +145,7 @@ if(!empty($api->params['query']))
 }
 else
 {
-    $apiQuery[] = $defaultTR;
+    $apiQuery[] = $defaultTR();
 }
 
 $parseTree = function($data, $typeList, $level = 0) use (&$parseTree)
@@ -159,6 +164,7 @@ $parseTree = function($data, $typeList, $level = 0) use (&$parseTree)
             $level ? setStyle('padding-left', ($level + 1) * 10 . 'px') : null,
             input
             (
+                set::name(''),
                 set::value($data['field'])
             )
         ),
@@ -167,6 +173,7 @@ $parseTree = function($data, $typeList, $level = 0) use (&$parseTree)
             select
             (
                 setClass('objectType'),
+                set::name(''),
                 set::value($data['paramsType']),
                 set::items($typeList)
             )
@@ -222,7 +229,7 @@ if(!empty($api->params['params']))
 }
 else
 {
-    $apiParams = h::tr
+    $apiParams[] = h::tr
     (
         setClass('input-row'),
         set('data-level', 1),
@@ -230,13 +237,17 @@ else
         set('data-parent', '0'),
         h::td
         (
-            input(),
+            input
+            (
+                set::name(''),
+            ),
         ),
         h::td
         (
             select
             (
                 setClass('objectType'),
+                set::name(''),
                 set::value('object'),
                 set::items($lang->api->paramsTypeOptions)
             )
@@ -291,13 +302,17 @@ else
         set('data-parent', '0'),
         h::td
         (
-            input(),
+            input
+            (
+                set::name(''),
+            ),
         ),
         h::td
         (
             select
             (
                 setClass('objectType'),
+                set::name(''),
                 set::value('object'),
                 set::items($lang->api->paramsTypeOptions)
             )
@@ -351,18 +366,19 @@ formPanel
     formGroup
     (
         set::width('1/2'),
-        set::required(true),
         set::label($lang->api->module),
         picker
         (
             set::items($moduleOptionMenu),
             set::name('module'),
             set::value($api->module),
+            set::required(true),
         ),
     ),
     formGroup
     (
         set::width('1/2'),
+        set::required(true),
         set::label($lang->api->title),
         input
         (
@@ -443,7 +459,7 @@ formPanel
         set::id('form-header'),
         setClass('params-group'),
         set::label($lang->api->header),
-        h::table 
+        h::table
         (
             setClass('table condensed bordered'),
             h::tr
@@ -475,7 +491,7 @@ formPanel
         set::id('form-query'),
         setClass('params-group'),
         set::label($lang->api->query),
-        h::table 
+        h::table
         (
             setClass('table condensed bordered'),
             h::tr
@@ -520,7 +536,7 @@ formPanel
         set::id('form-params'),
         setClass('params-group'),
         set::label($lang->api->params),
-        h::table 
+        h::table
         (
             setClass('table condensed bordered'),
             h::tr
@@ -567,7 +583,7 @@ formPanel
         set::id('form-response'),
         setClass('response'),
         set::label($lang->api->response),
-        h::table 
+        h::table
         (
             setClass('table condensed bordered'),
             h::tr

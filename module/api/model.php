@@ -242,6 +242,8 @@ class apiModel extends model
             ->where('id')->eq($apiID)
             ->exec();
 
+        if(dao::isError()) return false;
+
         $data->id = $apiID;
         $apiSpec  = $this->getApiSpecByData($data);
         $this->dao->replace(TABLE_API_SPEC)->data($apiSpec)->exec();
