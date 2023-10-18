@@ -30,7 +30,7 @@ if($canBatchReview)
     foreach($lang->story->reasonList as $key => $reason)
     {
         if(!$key || $key == 'subdivided' || $key == 'duplicate') continue;
-        $rejectItems[] = array('text' => $reason, 'class' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('story', 'batchReview', "result=reject&reason={$key}&storyType=requirement"));
+        $rejectItems[] = array('text' => $reason, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('story', 'batchReview', "result=reject&reason={$key}&storyType=requirement"));
     }
 
     foreach($lang->story->reviewResultList as $key => $result)
@@ -42,7 +42,7 @@ if($canBatchReview)
         }
         else
         {
-            $reviewItems[] = array('text' => $result, 'class' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('story', 'batchReview', "result={$key}&reason=&storyType=requirement"));
+            $reviewItems[] = array('text' => $result, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('story', 'batchReview', "result={$key}&reason=&storyType=requirement"));
         }
     }
 }
@@ -53,7 +53,7 @@ if($canBatchAssignTo)
     foreach($users as $key => $value)
     {
         if(empty($key) || $key == 'closed') continue;
-        $assignedToItems[] = array('text' => $value, 'class' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('story', 'batchAssignTo', "storyType=requirement&assignedTo={$key}"));
+        $assignedToItems[] = array('text' => $value, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('story', 'batchAssignTo', "storyType=requirement&assignedTo={$key}"));
     }
 }
 
