@@ -300,7 +300,7 @@ class docMenu extends wg
                     'text'         => $this->lang->doc->libDropdown['deleteLib'],
                     'innerClass'   => 'ajax-submit',
                     'data-url'     => createLink($moduleName, 'deleteLib', "libID={$itemID}"),
-                    'data-confirm' => $this->lang->doc->confirmDeleteLib,
+                    'data-confirm' => $this->lang->{$moduleName}->confirmDeleteLib,
                 );
             }
         }
