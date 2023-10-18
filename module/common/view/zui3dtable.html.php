@@ -37,11 +37,13 @@ zui.DTable.definePlugin(
         });
         return $.extend({fixedLeftWidth: '40%'}, options, {
             cols: cols,
+            responsive: 'window,parent,#queryBox',
             height: function(actualHeight)
             {
                 const height = Math.max(0, window.innerHeight - ($('#mainContent').offset().top || 0)) - 1;
+                const $queryBox = $('#queryBox');
                 $('#sidebar>.cell').css('maxHeight', height).children('.tree').addClass('scrollbar-hover');
-                return Math.min(actualHeight, height - ($('#mainContent .table-footer').outerHeight() || 0));
+                return Math.min(actualHeight, height - ($('#mainContent .table-footer').outerHeight() || 0) - ($queryBox.outerHeight() || 0) - (Number.parseInt($queryBox.css('margin-bottom')) || 0));
             }
         }, allLeftColsFixed ? {fixedLeftWidth: 'auto'} : {});
     },
