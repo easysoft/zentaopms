@@ -42,8 +42,8 @@ else
         $cols[$colName] = $col;
     }
 
-    $params    = "objectID={$objectID}&libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&orderBy={$orderBy}&param={$param}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}";
-    $tableData = initTableData($docs, $cols);
+    $params     = "objectID={$objectID}&libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&orderBy={$orderBy}&param={$param}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}";
+    $tableData  = initTableData($docs, $cols);
     $docContent = dtable
     (
         set::userMap($users),
@@ -51,11 +51,6 @@ else
         set::data($tableData),
         set::checkable($canExport),
         set::onRenderCell(jsRaw('window.rendDocCell')),
-        set::footPager(
-            usePager
-            (
-                array('linkCreator' => helper::createLink('doc', $app->rawMethod, $params)),
-            ),
-        ),
+        set::footPager(usePager(array('linkCreator' => helper::createLink('doc', $app->rawMethod, $params)))),
     );
 }

@@ -10,11 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 include 'lefttree.html.php';
-if($libID && common::hasPriv('doc', 'create'))
-{
-    include 'createbutton.html.php';
-    include 'mydoclist.html.php';
-}
+if($libID && common::hasPriv('doc', 'create')) include 'createbutton.html.php';
+include 'mydoclist.html.php';
 
 jsVar('browseType', $browseType);
 jsVar('docLang', $lang->doc);

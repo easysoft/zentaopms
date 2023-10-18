@@ -22,6 +22,7 @@ if($app->rawModule == 'doc' && $app->rawMethod == 'myspace')
         }
     }
 }
+
 sidebar
 (
     docMenu
@@ -35,7 +36,7 @@ sidebar
         set::spaceType($spaceType),
         set::objectType(isset($type) ? $type : ''),
         set::objectID(isset($objectID) ? $objectID : 0),
-        set::title(isset($objectDropdown['text']) ? $objectDropdown['text'] : $moduleTitle),
+        set::title(!empty($objectDropdown['text']) ? $objectDropdown['text'] : $moduleTitle),
         set::menuLink(isset($objectDropdown['link']) ? $objectDropdown['link'] : ''),
         set::settingLink($app->rawModule == 'doc' && $app->rawMethod == 'view' && common::hasPriv('doc', 'displaySetting') ? inlink('displaySetting') : ''),
         set::settingText($lang->doc->displaySetting),
