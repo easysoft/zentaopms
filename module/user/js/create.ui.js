@@ -2,7 +2,6 @@ $(function()
 {
     password1Encrypted = false;
     password2Encrypted = false;
-    verifyEncrypted    = false;
     passwordStrength   = 0;
 })
 
@@ -84,7 +83,6 @@ function clickSubmit()
         const rand = $('input#verifyRand').val();
         if(password1 && !password1Encrypted) $('#password1').val(md5(password1) + rand);
         if(password2 && !password2Encrypted) $('#password2').val(md5(password2) + rand);
-        if(verifyPassword && !verifyPassword) $('#verifyPassword').val(md5(verifyPassword) + rand);
 
         password1Encrypted = true;
         password2Encrypted = true;
