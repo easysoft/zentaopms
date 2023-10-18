@@ -120,6 +120,30 @@ else
     }
 }
 
+if(!function_exists('array_is_list'))
+{
+    /**
+     * Checks whether a given array is a list.
+     *
+     * @param array $array
+     * @return bool
+     */
+    function array_is_list(array $array)
+    {
+        if ($array === []) {
+            return true;
+        }
+        return array_keys($array) === range(0, count($array) - 1);
+    }
+}
+else
+{
+    function array_is_list(array $array)
+    {
+        return \array_is_list($array);
+    }
+}
+
 function uncamelize(string $camelCaps, string $separator = '-'): string
 {
     return strtolower(preg_replace('/([a-z])([A-Z])/', "$1" . $separator . "$2", $camelCaps));
