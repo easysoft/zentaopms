@@ -62,7 +62,7 @@ class zin
         {
             if(is_object($item))
             {
-                if((isset($item->parent) && $item->parent) || ($item instanceof wg && $item->shortType() === 'wg'))
+                if((isset($item->parent) && $item->parent) || ($item instanceof wg && ($item->shortType() === 'wg' || $item->shortType() === 'item')))
                 continue;
             }
             $globalItems[] = $item;
