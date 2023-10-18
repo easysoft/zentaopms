@@ -150,7 +150,6 @@ statisticBlock
 (
     set::block($block),
     set::active($active),
-    set::moreLink(createLink('product', 'all', 'browseType=' . $block->params->type)),
     set::items($items),
     div
     (
