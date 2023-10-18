@@ -27,14 +27,14 @@ class set
             }
             return directive('prop', array('class' => $args));
         }
-        // compatible with zui prop className.
+
+        /* compatible with zui prop className. */
         else if($prop === '_className')
         {
             return directive('prop', array('className' => $args));
         }
 
-        $value = array_shift($args);
-        if(is_object($value)) $value = (array)$value;
+        $value = count($args) > 1 ? $args : array_shift($args);
         return directive('prop', array($prop => $value));
     }
 }
