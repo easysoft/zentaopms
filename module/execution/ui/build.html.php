@@ -37,9 +37,7 @@ toolbar
     !empty($createItem) ? item(set($createItem)) : null,
 );
 
-jsVar('orderBy', $orderBy);
 jsVar('executionID', $execution->id);
-jsVar('sortLink', helper::createLink('execution', 'build', "executionID={$execution->id}&type={$type}&param={$param}&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 jsVar('changeProductLink', helper::createLink('execution', 'build', "executionID={$execution->id}&type=product&param={productID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 jsVar('scmPathTip', $lang->build->scmPath);
 jsVar('filePathTip', $lang->build->filePath);
@@ -50,8 +48,9 @@ dtable
     set::cols($config->build->dtable->fieldList),
     set::data($builds),
     set::plugins(array('cellspan')),
-    set::sortLink(jsRaw('createSortLink')),
     set::onRenderCell(jsRaw('window.renderCell')),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('execution', 'build', "executionID={$execution->id}&type={$type}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::getCellSpan(jsRaw('window.getCellSpan')),
     set::footPager(
         usePager
