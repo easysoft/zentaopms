@@ -57,6 +57,8 @@ dtable
     set::data($tasks),
     set::plugins(array('cellspan')),
     set::onRenderCell(jsRaw('window.onRenderCell')),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('execution', 'testtask', "executionID={$execution->id}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&page={$pager->pageID}")),
     set::getCellSpan(jsRaw('window.getCellSpan')),
     set::footToolbar($footToolbar),
     set::footPager(usePager(array
