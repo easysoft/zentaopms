@@ -78,7 +78,8 @@ function clickSubmit()
             $("#passwordLength").val(password1.length);
         }
 
-        $('#passwordLength').after("<input type='hidden' name='passwordStrength' value='" + passwordStrength + "' />");
+        if($("form input[name=passwordStrength]").length == 0) $('#passwordLength').after("<input type='hidden' name='passwordStrength' value='0' />");
+        $("form input[name=passwordStrength]").val(passwordStrength);
 
         const rand = $('input#verifyRand').val();
         if(password1 && !password1Encrypted) $('#password1').val(md5(password1) + rand);
