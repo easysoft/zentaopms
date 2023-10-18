@@ -120,6 +120,11 @@ form
     )
 );
 
+$pagerItems = array();
+$pagerItems[] = array('type' => 'info', 'text' => '{page}/{pageTotal}');
+$pagerItems[] = array('type' => 'link', 'hint' => $lang->pager->previousPage, 'page' => 'prev', 'icon' => 'icon-angle-left');
+$pagerItems[] = array('type' => 'link', 'hint' => $lang->pager->nextPage,     'page' => 'next', 'icon' => 'icon-angle-right');
+
 panel
 (
     setID('searchResult'),
@@ -150,6 +155,7 @@ panel
         pager
         (
             set::type('short'),
+            set::items($pagerItems),
             set::_className('justify-end mt-2')
         )
     ): null
