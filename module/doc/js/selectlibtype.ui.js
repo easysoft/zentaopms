@@ -168,5 +168,5 @@ window.redirectParentWindow = function(objectType, libID, moduleID, docType)
     {
         link = $.createLink('doc', 'create', 'objectType=' + objectType + '&objectID=0&libID=' + libID + '&moduleID=' + moduleID + '&docType=' + docType) + '#app=doc';
     }
-    loadPage(link);
+    openUrl(link, 'doc');
 }
