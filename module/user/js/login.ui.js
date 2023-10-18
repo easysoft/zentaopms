@@ -86,4 +86,39 @@ window.safeSubmit = function(e)
     return false;
 };
 
+window.demoSubmit = function($el)
+{
+    let account          = $($el).attr('data-account');
+    let password         = $($el).attr('data-password');
+    let link             = $.createLink('user', 'login');
+    let timeout          = true;
+    let captcha          = $('#captcha').length == 1 ? $('#captcha').val() : '';
+    let passwordStrength = computePasswordStrength(password);
+
+    clearTimeout(timeoutID);
+    timeoutID = setTimeout(function()
+    {
+        if(timeout) zui.Modal.alert(loginTimeoutTip);
+    }, 4000);
+    $.post(link,
+    {
+        "account"          : account,
+        "password"         : password,
+        'passwordStrength' : passwordStrength,
+        'captcha'          : captcha
+    },
+    function(data)
+    {
+        data = JSON.parse(data);
+        if(data.result == 'fail')
+        {
+            zui.Modal.alert(data.message);
+            if($('.captchaBox').length == 1) refreshCaptcha($('.captchaBox .input-group .input-group-addon img'));
+            return false;
+        }
+
+        location.href = data.locate;
+    });
+}
+
 document.getElementById("account").focus();

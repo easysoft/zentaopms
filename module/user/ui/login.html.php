@@ -42,7 +42,7 @@ if(!empty($this->config->global->showDemoUsers))
     foreach($demoUsers as $demoAccount => $demoUser)
     {
         if($demoUser->password != $md5Password) continue;
-        $demoUserItems[] = a(set::href($link . "account={$demoAccount}&password=" . md5($md5Password . $this->session->rand)), $demoUser->realname);
+        $demoUserItems[] = a(set::href('#'), set::onclick('window.demoSubmit(this)'), set('data-account', $demoAccount), set('data-password', md5($md5Password . $this->session->rand)), $demoUser->realname);
     }
 }
 
