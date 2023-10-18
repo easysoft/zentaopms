@@ -1351,7 +1351,6 @@ class programModel extends model
             $summary[$task->execution]->totalLeft     += ($task->status == 'closed' or $task->status == 'cancel') ? 0 : $task->left;
         }
 
-
         $teamMembers = $this->dao->select('t1.root, COUNT(1) AS members')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
             ->where('t1.type')->eq('project')
@@ -1418,8 +1417,8 @@ class programModel extends model
                 ->set('progress')->eq($progress)
                 ->set('teamCount')->eq($project['teamCount'])
                 ->set('estimate')->eq($project['totalEstimate'])
-                ->set('consumed')->eq($project['totalConsumed'])
-                ->set('left')->eq($project['totalLeft'])
+                ->set('consumed')->eq($project['totalConsumedNotDel'])
+                ->set('left')->eq($project['totalLeftNotDel'])
                 ->where('id')->eq($projectID)
                 ->exec();
         }
