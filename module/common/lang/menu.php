@@ -457,7 +457,6 @@ $lang->qa->menu->testsuite     = array('link' => "{$lang->testcase->testsuite}|t
 $lang->qa->menu->testtask      = array('link' => "{$lang->testtask->common}|testtask|browse|productID=%s", 'subModule' => 'testtask', 'alias' => 'view,edit,linkcase,cases,start,close,batchrun,groupcase,report,importunitresult');
 $lang->qa->menu->report        = array('link' => "{$lang->testreport->common}|testreport|browse|productID=%s", 'subModule' => 'testreport');
 $lang->qa->menu->caselib       = array('link' => "{$lang->testcase->caselib}|caselib|browse|libID=0", 'subModule' => 'caselib');
-$lang->qa->menu->automation    = array('link' => "{$lang->automation->common}:|project|other|productID=%s", 'subModule' => 'automation', 'alias' => '', 'class' => "qa-automation-menu");
 $lang->qa->menu->zahost        = array('link' => "{$lang->zahost->common}|zahost|browse", 'subModule' => 'zahost');
 $lang->qa->menu->zanode        = array('link' => "{$lang->zanode->common}|zanode|browse", 'subModule' => 'zanode');
 
@@ -470,7 +469,6 @@ $lang->qa->menuOrder[25] = 'testsuite';
 $lang->qa->menuOrder[30] = 'testtask';
 $lang->qa->menuOrder[35] = 'report';
 $lang->qa->menuOrder[40] = 'caselib';
-$lang->qa->menuOrder[45] = 'automation';
 
 // $lang->qa->menu->automation['subMenu'] = new stdclass();
 // $lang->qa->menu->automation['subMenu']->browse = array('link' => "{$lang->automation->common}|zahost|browse", 'alias' => 'create');
