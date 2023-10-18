@@ -46,7 +46,7 @@ class company extends control
      * @access public
      * @return void
      */
-    public function browse($browseType = 'inside', $param = 0, $type = 'bydept', $orderBy = 'id', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($browseType = 'inside', $param = 0, $type = 'bydept', $orderBy = 'id_asc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->lang->navGroup->company = 'admin';
 

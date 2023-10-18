@@ -2357,7 +2357,7 @@ EOF;
                 'message' => array('ajaxgetmessage'),
             );
 
-            if(!empty($this->app->user->modifyPassword) and (!isset($beforeValidMethods[$module]) or !in_array($method, $beforeValidMethods[$module]))) return print(js::locate(helper::createLink('my', 'changepassword')));
+            if(!empty($this->app->user->modifyPassword) and (!isset($beforeValidMethods[$module]) or !in_array($method, $beforeValidMethods[$module]))) return helper::header('location', helper::createLink('my', 'changePassword'));
             if(!$this->loadModel('user')->isLogon() and $this->server->php_auth_user) $this->user->identifyByPhpAuth();
             if(!$this->loadModel('user')->isLogon() and $this->cookie->za) $this->user->identifyByCookie();
             if($this->isOpenMethod($module, $method)) return true;

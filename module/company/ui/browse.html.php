@@ -69,6 +69,8 @@ $tableData = initTableData($users, $this->config->company->user->dtable->fieldLi
 dtable
 (
     setID('userList'),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('company', 'browse', "browseType={$browseType}&param={$param}&type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::cols($this->config->company->user->dtable->fieldList),
     set::data($tableData),
     set::checkable(common::hasPriv('user', 'batchEdit')),
