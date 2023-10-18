@@ -889,7 +889,7 @@ class testcaseZen extends testcase
     protected function assignForEdit(int $productID, object $case, array $testtasks): void
     {
         $sceneOptionMenu = $this->testcase->getSceneMenu($productID, $case->module);
-        if(!isset($sceneOptionMenu[$case->scene])) $sceneOptionMenu += $this->testcase->getScenesName($case->scene);
+        if(!isset($sceneOptionMenu[$case->scene])) $sceneOptionMenu += $this->testcase->getScenesName((array)$case->scene);
 
         $forceNotReview = $this->testcase->forceNotReview();
         if($forceNotReview) unset($this->lang->testcase->statusList['wait']);
