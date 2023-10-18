@@ -92,6 +92,8 @@ dtable
     set::cols($cols),
     set::data($data),
     set::onRenderCell(jsRaw('window.onRenderCell')),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('my', 'audit', "browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footPager(usePager()),
 );
 

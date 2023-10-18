@@ -600,9 +600,10 @@ $config->my->audit->actionList['review']['url']         = array('module' => 'sto
 $config->my->audit->actionList['review']['data-toggle'] = 'modal';
 
 $config->my->audit->dtable = new stdclass();
-$config->my->audit->dtable->fieldList['id']['name']  = 'id';
-$config->my->audit->dtable->fieldList['id']['title'] = $lang->idAB;
-$config->my->audit->dtable->fieldList['id']['type']  = 'id';
+$config->my->audit->dtable->fieldList['id']['name']     = 'id';
+$config->my->audit->dtable->fieldList['id']['title']    = $lang->idAB;
+$config->my->audit->dtable->fieldList['id']['type']     = 'id';
+$config->my->audit->dtable->fieldList['id']['sortType'] = true;
 
 $config->my->audit->dtable->fieldList['title']['name']        = 'title';
 $config->my->audit->dtable->fieldList['title']['title']       = $lang->my->auditField->title;
@@ -611,22 +612,27 @@ $config->my->audit->dtable->fieldList['title']['link']        = array('module' =
 $config->my->audit->dtable->fieldList['title']['fixed']       = 'left';
 $config->my->audit->dtable->fieldList['title']['data-toggle'] = 'modal';
 $config->my->audit->dtable->fieldList['title']['data-size']   = 'lg';
+$config->my->audit->dtable->fieldList['title']['sortType']    = true;
 
-$config->my->audit->dtable->fieldList['type']['name']  = 'type';
-$config->my->audit->dtable->fieldList['type']['title'] = $lang->my->auditField->type;
-$config->my->audit->dtable->fieldList['type']['type']  = 'catetory';
+$config->my->audit->dtable->fieldList['type']['name']     = 'type';
+$config->my->audit->dtable->fieldList['type']['title']    = $lang->my->auditField->type;
+$config->my->audit->dtable->fieldList['type']['type']     = 'catetory';
+$config->my->audit->dtable->fieldList['type']['sortType'] = true;
 
-$config->my->audit->dtable->fieldList['time']['name']  = 'time';
-$config->my->audit->dtable->fieldList['time']['title'] = $lang->my->auditField->time;
-$config->my->audit->dtable->fieldList['time']['type']  = 'datetime';
+$config->my->audit->dtable->fieldList['time']['name']     = 'time';
+$config->my->audit->dtable->fieldList['time']['title']    = $lang->my->auditField->time;
+$config->my->audit->dtable->fieldList['time']['type']     = 'datetime';
+$config->my->audit->dtable->fieldList['time']['sortType'] = true;
 
-$config->my->audit->dtable->fieldList['result']['name']  = 'result';
-$config->my->audit->dtable->fieldList['result']['title'] = $lang->my->auditField->result;
-$config->my->audit->dtable->fieldList['result']['type']  = 'text';
+$config->my->audit->dtable->fieldList['result']['name']     = 'result';
+$config->my->audit->dtable->fieldList['result']['title']    = $lang->my->auditField->result;
+$config->my->audit->dtable->fieldList['result']['type']     = 'text';
+$config->my->audit->dtable->fieldList['result']['sortType'] = true;
 
-$config->my->audit->dtable->fieldList['status']['name']  = 'status';
-$config->my->audit->dtable->fieldList['status']['title'] = $lang->my->auditField->status;
-$config->my->audit->dtable->fieldList['status']['type']  = 'status';
+$config->my->audit->dtable->fieldList['status']['name']     = 'status';
+$config->my->audit->dtable->fieldList['status']['title']    = $lang->my->auditField->status;
+$config->my->audit->dtable->fieldList['status']['type']     = 'status';
+$config->my->audit->dtable->fieldList['status']['sortType'] = true;
 
 $config->my->audit->dtable->fieldList['actions']['name']     = 'actions';
 $config->my->audit->dtable->fieldList['actions']['title']    = $lang->actions;

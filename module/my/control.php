@@ -1011,6 +1011,7 @@ EOF;
         $this->view->browseType  = $browseType;
         $this->view->orderBy     = $orderBy;
         $this->view->pager       = $pager;
+        $this->view->param       = $param;
         $this->view->mode        = 'audit';
         $this->display();
     }
