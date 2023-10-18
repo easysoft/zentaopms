@@ -11,7 +11,7 @@ $(function()
         },
         error: function(XMLHttpRequest, textStatus)
         {
-            $('.btn.primary.disabled').attr('onclick', "self.location.href=\"" + createLink('upgrade', 'consistency', "netConnect=0") + "\"").removeClass('disabled');
+            $('.btn.primary.disabled').attr('onclick', "self.location.href=\"" + $.createLink('upgrade', 'consistency', "netConnect=0") + "\"").removeClass('disabled');
         }
     });
 });
