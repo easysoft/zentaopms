@@ -55,8 +55,8 @@ modal
 $canModifyProduct = common::canModify('product', $product);
 $canCreate        = $canModifyProduct && hasPriv('story', 'create');
 $canBatchCreate   = $canModifyProduct && hasPriv('story', 'canBatchCreate');
-$createLink       = createLink('story', 'create', "product={$product->id}&branch=0&moduleID=0&storyID=0&objectID={$execution->id}&bugID=0&planID=0&todoID=0&extra=&storyType={$storyType}") . '#app=execution';
-$batchCreateLink  = createLink('story', 'batchCreate', "productID={$product->id}&branch=0&moduleID=0&storyID=0&executionID={$execution->id}&plan=0&storyType={$storyType}") . '#app=execution';
+$createLink       = $product ? createLink('story', 'create', "product={$product->id}&branch=0&moduleID=0&storyID=0&objectID={$execution->id}&bugID=0&planID=0&todoID=0&extra=&storyType={$storyType}") . '#app=execution' : '';
+$batchCreateLink  = $product ? createLink('story', 'batchCreate', "productID={$product->id}&branch=0&moduleID=0&storyID=0&executionID={$execution->id}&plan=0&storyType={$storyType}") . '#app=execution' : '';
 
 /* Tutorial create link. */
 if(commonModel::isTutorialMode())
@@ -83,7 +83,7 @@ if(commonModel::isTutorialMode())
 $linkItem     = array('text' => $lang->story->linkStory, 'url' => $linkStoryUrl);
 $linkPlanItem = array('text' => $lang->execution->linkStoryByPlan, 'url' => '#linkStoryByPlan', 'data-toggle' => 'modal', 'data-size' => 'sm');
 
-toolbar
+$product ? toolbar
 (
     hasPriv('story', 'report') ? item(set(array
     (
@@ -139,7 +139,7 @@ toolbar
     ) : null,
     $canLinkStory && !$canlinkPlanStory ? item(set($linkItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
     $canlinkPlanStory && !$canLinkStory ? item(set($linkPlanItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
-);
+) : null;
 
 sidebar
 (
