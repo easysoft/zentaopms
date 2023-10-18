@@ -1363,6 +1363,7 @@ EOF;
      */
     public function changePassword()
     {
+        $this->app->loadLang('admin');
         if($this->app->user->account == 'guest') return $this->send(array('result' => 'fail', 'message' => 'guest', 'load' => array('alter' => 'guest', 'back' => true)));
 
         if(!empty($_POST))
