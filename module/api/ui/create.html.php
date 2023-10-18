@@ -25,22 +25,20 @@ formPanel
     formGroup
     (
         set::width('1/2'),
-        set::required(true),
         set::label($lang->api->module),
         picker
         (
             set::items($moduleOptionMenu),
             set::name('module'),
+            set::required(true)
         ),
     ),
     formGroup
     (
         set::width('1/2'),
         set::label($lang->api->title),
-        input
-        (
-            set::name('title')
-        ),
+        set::required(true),
+        set::name('title')
     ),
     formRow
     (
