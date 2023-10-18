@@ -60,21 +60,20 @@ $fnGenerateProgramMenu = function($programList) use($lang, $programID, $browseTy
 
     return programMenu
     (
-        setStyle(array('margin-right' => '20px')),
-        set(array
-        (
-            'title'       => $lang->program->all,
-            'programs'    => $programList,
-            'activeKey'   => !empty($programList) ? $programID : null,
-            'link'        => sprintf($programMenuLink, 0),
-        ))
+        set::title($lang->program->all),
+        set::programs($programList),
+        set::activeKey(!empty($programList) ? $programID : null),
+        set::link(sprintf($programMenuLink, 0)),
+        set::leadingAngle(false)
     );
 };
+
+jsVar('langSummary', $lang->product->pageSummary);
 
 /* ====== Define the page structure with zin widgets ====== */
 featureBar
 (
-    to::before($fnGenerateProgramMenu($programList)),
+    to::leading($fnGenerateProgramMenu($programList)),
     set::link(createLink
     (
         $this->app->rawModule,
@@ -97,57 +96,48 @@ toolbar
 (
     btn
     (
-        setClass('ghost text-darker'),
+        set::className('ghost text-darker'),
         set::icon('export'),
-        set('data-toggle', 'modal'),
-        set('data-url', createLink('product', 'export', "programID=$programID&status=$browseType&orderBy=$orderBy&param=$param")),
+        toggle::modal(array('url' => createLink('product', 'export', "programID=$programID&status=$browseType&orderBy=$orderBy&param=$param"))),
         $lang->export
     ),
-    div(setClass('nav-divider')),
     $config->systemMode == 'ALM' ? btn
     (
-        setClass('ghost text-primary'),
+        set::className('ghost text-primary'),
         set::icon('edit'),
-        set('data-toggle', 'modal'),
-        set('data-url', createLink('product', 'manageLine', $browseType)),
-        set('data-id', 'manageLineModal'),
+        toggle::modal(array('url' => createLink('product', 'manageLine', $browseType), 'id' => 'manageLineModal')),
         $lang->product->editLine
     ) : null,
-    item(set(array
+    btn
     (
-        'text'  => $lang->product->create,
-        'icon'  => 'plus',
-        'class' => 'primary',
-        'url'   => createLink('product', 'create')
-    )))
+        set::text($lang->product->create),
+        set::icon('plus'),
+        set::type('primary'),
+        set::url(createLink('product', 'create'))
+    )
 );
 
 $canBatchEdit = common::hasPriv('product', 'batchEdit');
 dtable
 (
-    setID('products'),
+    set::id('products'),
     set::cols($cols),
     set::data($fnGenerateTableData($productStats)),
     set::userMap($users),
     set::customCols(true),
     set::checkable($canBatchEdit),
     set::sortLink(createLink('product', 'all', "browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$recTotal}&recPerPage={$recPerPage}")),
-    set::footToolbar(array
+    $canBatchEdit ? set::footToolbar(array
     (
-        'type'  => 'btn-group',
-        'items' => array(
-            $canBatchEdit ? array
-            (
-                'text'      => $lang->edit,
-                'className' => 'secondary batch-btn',
-                'data-page' => 'batch',
-                'data-formaction' => $this->createLink('product', 'batchEdit')
-            ) : null,
+        array
+        (
+            'text'      => $lang->edit,
+            'btnType'   => 'secondary batch-btn',
+            'data-page' => 'batch',
+            'data-formaction' => $this->createLink('product', 'batchEdit')
         )
-    )),
+    )) : null,
     set::footPager(usePager())
 );
-
-jsVar('langSummary', $lang->product->pageSummary);
 
 render();
