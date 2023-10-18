@@ -29,7 +29,7 @@ class personnel extends control
         common::setMenuVars('program', $programID);
         $this->app->loadLang('user');
 
-        $program = $this->program->getByID($programID);
+        $program = $this->loadMOdel('program')->getByID($programID);
 
         /* Build the search form. */
         $queryID       = $browseType == 'bysearch' ? (int)$param : 0;

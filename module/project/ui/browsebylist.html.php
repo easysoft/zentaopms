@@ -65,9 +65,10 @@ toolbar
 sidebar
 (
     moduleMenu(set(array(
-        'modules'   => $programTree,
-        'activeKey' => $programID,
-        'closeLink' => $this->createLink('project', 'browse')
+        'modules'     => $programTree,
+        'activeKey'   => $programID,
+        'closeLink'   => $this->createLink('project', 'browse'),
+        'showDisplay' => false
     )))
 );
 

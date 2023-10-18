@@ -68,6 +68,8 @@ class treeEditor extends wg
                 $item['items'] = $this->buildTree($item['children']);
                 unset($item['children']);
             }
+            unset($item['type']);
+
             $items[$key] = $item;
         }
 
