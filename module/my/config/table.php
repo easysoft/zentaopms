@@ -426,9 +426,10 @@ $config->my->story->actionList['close']['url']         = array('module' => 'stor
 $config->my->story->actionList['close']['data-toggle'] = 'modal';
 
 $config->my->story->dtable = new stdclass();
-$config->my->story->dtable->fieldList['id']['name']  = 'id';
-$config->my->story->dtable->fieldList['id']['title'] = $lang->idAB;
-$config->my->story->dtable->fieldList['id']['type']  = 'id';
+$config->my->story->dtable->fieldList['id']['name']     = 'id';
+$config->my->story->dtable->fieldList['id']['title']    = $lang->idAB;
+$config->my->story->dtable->fieldList['id']['type']     = 'id';
+$config->my->story->dtable->fieldList['id']['sortType'] = true;
 
 $config->my->story->dtable->fieldList['title']['name']         = 'title';
 $config->my->story->dtable->fieldList['title']['title']        = common::checkNotCN() ? $lang->SRCommon . ' ' . $lang->my->name : $lang->SRCommon . $lang->my->name;
@@ -436,43 +437,51 @@ $config->my->story->dtable->fieldList['title']['type']         = 'title';
 $config->my->story->dtable->fieldList['title']['nestedToggle'] = true;
 $config->my->story->dtable->fieldList['title']['link']         = array('module' => 'story', 'method' => 'view', 'params' => 'id={id}');
 $config->my->story->dtable->fieldList['title']['fixed']        = 'left';
+$config->my->story->dtable->fieldList['title']['sortType']     = true;
 
-$config->my->story->dtable->fieldList['pri']['name']  = 'pri';
-$config->my->story->dtable->fieldList['pri']['title'] = $lang->priAB;
-$config->my->story->dtable->fieldList['pri']['type']  = 'pri';
-$config->my->story->dtable->fieldList['pri']['group'] = 'pri';
+$config->my->story->dtable->fieldList['pri']['name']     = 'pri';
+$config->my->story->dtable->fieldList['pri']['title']    = $lang->priAB;
+$config->my->story->dtable->fieldList['pri']['type']     = 'pri';
+$config->my->story->dtable->fieldList['pri']['group']    = 'pri';
+$config->my->story->dtable->fieldList['pri']['sortType'] = true;
 
-$config->my->story->dtable->fieldList['product']['name']  = 'productTitle';
-$config->my->story->dtable->fieldList['product']['title'] = $lang->story->product;
-$config->my->story->dtable->fieldList['product']['type']  = 'text';
-$config->my->story->dtable->fieldList['product']['group'] = 'product';
+$config->my->story->dtable->fieldList['product']['name']     = 'productTitle';
+$config->my->story->dtable->fieldList['product']['title']    = $lang->story->product;
+$config->my->story->dtable->fieldList['product']['type']     = 'text';
+$config->my->story->dtable->fieldList['product']['group']    = 'product';
+$config->my->story->dtable->fieldList['product']['sortType'] = true;
 
-$config->my->story->dtable->fieldList['plan']['name']  = 'planTitle';
-$config->my->story->dtable->fieldList['plan']['title'] = $lang->story->plan;
-$config->my->story->dtable->fieldList['plan']['type']  = 'text';
-$config->my->story->dtable->fieldList['plan']['group'] = 'product';
+$config->my->story->dtable->fieldList['plan']['name']     = 'planTitle';
+$config->my->story->dtable->fieldList['plan']['title']    = $lang->story->plan;
+$config->my->story->dtable->fieldList['plan']['type']     = 'text';
+$config->my->story->dtable->fieldList['plan']['group']    = 'product';
+$config->my->story->dtable->fieldList['plan']['sortType'] = true;
 
 $config->my->story->dtable->fieldList['status']['name']      = 'status';
 $config->my->story->dtable->fieldList['status']['title']     = $lang->statusAB;
 $config->my->story->dtable->fieldList['status']['type']      = 'status';
 $config->my->story->dtable->fieldList['status']['statusMap'] = $lang->story->statusList;
 $config->my->story->dtable->fieldList['status']['group']     = 'product';
+$config->my->story->dtable->fieldList['status']['sortType']  = true;
 
-$config->my->story->dtable->fieldList['openedBy']['name']  = 'openedBy';
-$config->my->story->dtable->fieldList['openedBy']['title'] = $lang->story->openedByAB;
-$config->my->story->dtable->fieldList['openedBy']['type']  = 'user';
-$config->my->story->dtable->fieldList['openedBy']['group'] = 'openedBy';
+$config->my->story->dtable->fieldList['openedBy']['name']     = 'openedBy';
+$config->my->story->dtable->fieldList['openedBy']['title']    = $lang->story->openedByAB;
+$config->my->story->dtable->fieldList['openedBy']['type']     = 'user';
+$config->my->story->dtable->fieldList['openedBy']['group']    = 'openedBy';
+$config->my->story->dtable->fieldList['openedBy']['sortType'] = true;
 
-$config->my->story->dtable->fieldList['estimate']['name']  = 'estimate';
-$config->my->story->dtable->fieldList['estimate']['title'] = $lang->story->estimateAB;
-$config->my->story->dtable->fieldList['estimate']['type']  = 'count';
-$config->my->story->dtable->fieldList['estimate']['group'] = 'openedBy';
+$config->my->story->dtable->fieldList['estimate']['name']     = 'estimate';
+$config->my->story->dtable->fieldList['estimate']['title']    = $lang->story->estimateAB;
+$config->my->story->dtable->fieldList['estimate']['type']     = 'count';
+$config->my->story->dtable->fieldList['estimate']['group']    = 'openedBy';
+$config->my->story->dtable->fieldList['estimate']['sortType'] = true;
 
-$config->my->story->dtable->fieldList['stage']['name']  = 'stage';
-$config->my->story->dtable->fieldList['stage']['title'] = $lang->story->stageAB;
-$config->my->story->dtable->fieldList['stage']['type']  = 'category';
-$config->my->story->dtable->fieldList['stage']['map']   = $lang->story->stageList;
-$config->my->story->dtable->fieldList['stage']['group'] = 'openedBy';
+$config->my->story->dtable->fieldList['stage']['name']     = 'stage';
+$config->my->story->dtable->fieldList['stage']['title']    = $lang->story->stageAB;
+$config->my->story->dtable->fieldList['stage']['type']     = 'category';
+$config->my->story->dtable->fieldList['stage']['map']      = $lang->story->stageList;
+$config->my->story->dtable->fieldList['stage']['group']    = 'openedBy';
+$config->my->story->dtable->fieldList['stage']['sortType'] = true;
 
 $config->my->story->dtable->fieldList['actions']['name']     = 'actions';
 $config->my->story->dtable->fieldList['actions']['title']    = $lang->actions;

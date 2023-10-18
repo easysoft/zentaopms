@@ -351,6 +351,7 @@ EOF;
 
         /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
+        if(strpos($sort, 'planTitle') !== false) $sort = str_replace('planTitle', 'plan', $sort);
         if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
         $queryID = ($type == 'bysearch') ? (int)$param : 0;
 
@@ -385,6 +386,7 @@ EOF;
         $this->view->param    = $param;
         $this->view->mode     = 'story';
         $this->view->pager    = $pager;
+        $this->view->orderBy  = $orderBy;
         $this->display();
     }
 
