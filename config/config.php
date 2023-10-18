@@ -195,6 +195,25 @@ if(file_exists($filterConfig)) include $filterConfig;
 $dbConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'db.php';
 if(file_exists($dbConfig)) include $dbConfig;
 
+/* 读取环境变量的配置。 Read the env config. */
+if($config->inContainer || $config->inQuickon)
+{
+    $config->installed     = (bool)getenv('ZT_INSTALLED');
+    $config->debug         = (int)getenv('ZT_DEBUG');
+    $config->requestType   = getenv('ZT_REQUEST_TYPE');
+    $config->timezone      = getenv('ZT_TIMEZONE');
+    $config->db->driver    = getenv('ZT_DB_DRIVER');
+    $config->db->host      = getenv('ZT_DB_HOST');
+    $config->db->port      = getenv('ZT_DB_PORT');
+    $config->db->name      = getenv('ZT_DB_NAME');
+    $config->db->user      = getenv('ZT_DB_USER');
+    $config->db->encoding  = getenv('ZT_DB_ENCODING');
+    $config->db->password  = getenv('ZT_DB_PASSWORD');
+    $config->db->prefix    = getenv('ZT_DB_PREFIX');
+    $config->webRoot       = getenv('ZT_WEB_ROOT');
+    $config->default->lang = getenv('ZT_DEFAULT_LANG');
+}
+
 /* 引用自定义的配置。 Include the custom config file. */
 $myConfigRoot = (defined('RUN_MODE') and RUN_MODE == 'test') ? dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'config' : dirname(__FILE__);
 $myConfig = $myConfigRoot . DIRECTORY_SEPARATOR . 'my.php';
