@@ -32,7 +32,7 @@
               </div>
               <?php if(common::hasPriv('execution', 'burn')):?>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('execution', 'burn', "executionID=$execution->id", strtoupper($lang->more), '', "title=$lang->more");?></li>
+                <li><?php common::printLink('execution', 'burn', "executionID=$execution->id", mb_strtoupper($lang->more), '', "title=$lang->more");?></li>
               </nav>
               <?php endif;?>
             </div>
@@ -61,7 +61,7 @@
               <div class="panel-title"><?php echo $lang->execution->latestDynamic;?></div>
               <?php if(common::hasPriv('execution', 'dynamic')):?>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('execution', 'dynamic', "executionID=$execution->id&type=all", strtoupper($lang->more), '', "title=$lang->more");?></li>
+                <li><?php common::printLink('execution', 'dynamic', "executionID=$execution->id&type=all", mb_strtoupper($lang->more), '', "title=$lang->more");?></li>
               </nav>
               <?php endif;?>
             </div>
@@ -85,7 +85,7 @@
               <div class="panel-title"><?php echo $lang->execution->relatedMember;?></div>
               <?php if(common::hasPriv('execution', 'team')):?>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('execution', 'team', "executionID=$execution->id", strtoupper($lang->more), '', "title=$lang->more");?></li>
+                <li><?php common::printLink('execution', 'team', "executionID=$execution->id", mb_strtoupper($lang->more), '', "title=$lang->more");?></li>
               </nav>
               <?php endif;?>
             </div>
@@ -131,7 +131,7 @@
             <div class="panel-title"><?php echo $lang->execution->doclib;?></div>
               <?php if(common::hasPriv('execution', 'doc')):?>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('execution', 'doc', "executionID=$execution->id", strtoupper($lang->more), '', "title=$lang->more");?></li>
+                <li><?php common::printLink('execution', 'doc', "executionID=$execution->id", mb_strtoupper($lang->more), '', "title=$lang->more");?></li>
               </nav>
               <?php endif;?>
             </div>
@@ -173,7 +173,7 @@
               <div class="panel-title"><?php echo $execution->name . $lang->execution->CFD;?></div>
               <?php if(common::hasPriv('execution', 'cfd')):?>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('execution', 'cfd', "executionID=$execution->id&type=task&withWeekend=false&begin=$begin&end=$end", strtoupper($lang->more), '', "title=$lang->more");?></li>
+                <li><?php common::printLink('execution', 'cfd', "executionID=$execution->id&type=task&withWeekend=false&begin=$begin&end=$end", mb_strtoupper($lang->more), '', "title=$lang->more");?></li>
               </nav>
               <?php endif;?>
             </div>
@@ -198,7 +198,7 @@
               <div class="panel-title"><?php echo $lang->execution->relatedMember;?></div>
               <?php if(common::hasPriv('execution', 'team')):?>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('execution', 'team', "executionID=$execution->id", strtoupper($lang->more), '', "title=$lang->more");?></li>
+                <li><?php common::printLink('execution', 'team', "executionID=$execution->id", mb_strtoupper($lang->more), '', "title=$lang->more");?></li>
               </nav>
               <?php endif;?>
             </div>

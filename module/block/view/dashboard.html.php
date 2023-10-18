@@ -39,7 +39,7 @@ $useGuest = $this->app->user->account == 'guest';
         <?php endif;?>
           <nav class='panel-actions nav nav-default'>
             <?php if($this->config->vision == 'rnd' and $block->block == 'guide' and !defined('TUTORIAL')) echo '<li>' . html::a($this->createLink('tutorial', 'start'), $lang->block->tutorial, '', "title='{$lang->block->tutorial}' class='iframe tutorialBtn'") . '</li>'; ?>
-            <?php if(!empty($block->moreLink)) echo '<li>' . html::a($block->moreLink, strtoupper($lang->more), '', "title='{$lang->more}'") . '</li>'; ?>
+            <?php if(!empty($block->moreLink)) echo '<li>' . html::a($block->moreLink, mb_strtoupper($lang->more), '', "title='{$lang->more}'") . '</li>'; ?>
             <li class='dropdown'>
               <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
               <ul class='dropdown-menu pull-right'>
@@ -74,7 +74,7 @@ $useGuest = $this->app->user->account == 'guest';
           <div class='panel-title'><?php echo $block->title;?></div>
         <?php endif;?>
           <nav class='panel-actions nav nav-default'>
-            <?php if(!empty($block->moreLink)) echo '<li>' . html::a($block->moreLink, strtoupper($lang->more), '', "title='{$lang->more}'") . '</li>';?>
+            <?php if(!empty($block->moreLink)) echo '<li>' . html::a($block->moreLink, mb_strtoupper($lang->more), '', "title='{$lang->more}'") . '</li>';?>
             <li class='dropdown'>
               <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
               <ul class='dropdown-menu pull-right'>
