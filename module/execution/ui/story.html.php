@@ -386,6 +386,8 @@ dtable
     set::className('shadow rounded'),
     set::footToolbar($footToolbar),
     set::onRenderCell(jsRaw('window.renderStoryCell')),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy={name}_{sortType}&type={$type}&param={$param}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&page={$pager->pageID}")),
     set::footPager(usePager(array
     (
         'recPerPage'  => $pager->recPerPage,
