@@ -82,6 +82,8 @@ dtable
     set::cols($cols),
     set::data($tableData),
     set::customCols(true),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('productplan', 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&queryID={$queryID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::footToolbar($footToolbar),
     set::emptyTip($lang->productplan->noPlan),
