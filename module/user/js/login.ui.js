@@ -92,7 +92,6 @@ window.demoSubmit = function($el)
     let password         = $($el).attr('data-password');
     let link             = $.createLink('user', 'login');
     let timeout          = true;
-    let captcha          = $('#captcha').length == 1 ? $('#captcha').val() : '';
     let passwordStrength = computePasswordStrength(password);
 
     clearTimeout(timeoutID);
@@ -105,7 +104,6 @@ window.demoSubmit = function($el)
         "account"          : account,
         "password"         : password,
         'passwordStrength' : passwordStrength,
-        'captcha'          : captcha
     },
     function(data)
     {
@@ -113,7 +111,6 @@ window.demoSubmit = function($el)
         if(data.result == 'fail')
         {
             zui.Modal.alert(data.message);
-            if($('.captchaBox').length == 1) refreshCaptcha($('.captchaBox .input-group .input-group-addon img'));
             return false;
         }
 
