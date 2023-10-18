@@ -75,15 +75,13 @@ foreach($cases as $case)
     $case->stage = implode($lang->comma, $stages);
 }
 
-jsVar('orderBy', $orderBy);
-jsVar('sortLink', helper::createLink('execution', 'testcase', "executionID={$executionID}&productID={$productID}&branchID={$branchID}&type={$type}&moduleID={$moduleID}&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
-
 dtable
 (
     set::userMap($users),
     set::cols($config->testcase->dtable->fieldList),
     set::data($cases),
-    set::sortLink(jsRaw('createSortLink')),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('execution', 'testcase', "executionID={$executionID}&productID={$productID}&branchID={$branchID}&type={$type}&moduleID={$moduleID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footPager(
         usePager(array('linkCreator' => helper::createLink('execution', 'testcase', "executionID={$executionID}&productID={$productID}&branchID={$branchID}&type={$type}&moduleID={$moduleID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&pageID={page}"))),
     ),
