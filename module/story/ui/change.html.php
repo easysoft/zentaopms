@@ -50,7 +50,7 @@ $formItems['reviewer'] = formGroup
             set::items($fields['reviewer']['options']),
             set::value($fields['reviewer']['default']),
         ),
-        $forceReview ? null : span
+        $forceReview ? span
         (
             setClass('input-group-addon'),
             checkbox
@@ -60,7 +60,7 @@ $formItems['reviewer'] = formGroup
                 set::checked($needReview),
                 set::text($lang->story->needNotReview)
             )
-        )
+        ) : null,
     ),
     set::required($fields['reviewer']['required'])
 );
