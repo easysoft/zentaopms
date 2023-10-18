@@ -338,17 +338,21 @@ $config->project->dtable->team->fieldList['role']['title']    = $lang->team->rol
 $config->project->dtable->team->fieldList['role']['type']     = 'user';
 $config->project->dtable->team->fieldList['role']['sortType'] = false;
 
-$config->project->dtable->team->fieldList['join']['title'] = $lang->team->join;
-$config->project->dtable->team->fieldList['join']['type']  = 'date';
+$config->project->dtable->team->fieldList['join']['title']    = $lang->team->join;
+$config->project->dtable->team->fieldList['join']['type']     = 'date';
+$config->project->dtable->team->fieldList['join']['sortType'] = false;
 
-$config->project->dtable->team->fieldList['days']['title'] = $lang->team->days;
-$config->project->dtable->team->fieldList['days']['type']  = 'number';
+$config->project->dtable->team->fieldList['days']['title']    = $lang->team->days;
+$config->project->dtable->team->fieldList['days']['type']     = 'number';
+$config->project->dtable->team->fieldList['days']['sortType'] = false;
 
-$config->project->dtable->team->fieldList['hours']['title'] = $lang->team->hours;
-$config->project->dtable->team->fieldList['hours']['type']  = 'number';
+$config->project->dtable->team->fieldList['hours']['title']    = $lang->team->hours;
+$config->project->dtable->team->fieldList['hours']['type']     = 'number';
+$config->project->dtable->team->fieldList['hours']['sortType'] = false;
 
-$config->project->dtable->team->fieldList['total']['title'] = $lang->team->totalHours;
-$config->project->dtable->team->fieldList['total']['type']  = 'number';
+$config->project->dtable->team->fieldList['total']['title']    = $lang->team->totalHours;
+$config->project->dtable->team->fieldList['total']['type']     = 'number';
+$config->project->dtable->team->fieldList['total']['sortType'] = false;
 
 $config->project->dtable->team->fieldList['limited']['title']    = $lang->team->limited;
 $config->project->dtable->team->fieldList['limited']['type']     = 'user';
