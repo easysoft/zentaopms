@@ -109,8 +109,8 @@ div
         (
             set::object($user),
             set::main(array(
-                common::hasPriv('my', 'changepassword') ? array('text' => $lang->changePassword,    'url' => createLink('my', 'changepassword')) : null,
-                common::hasPriv('my', 'editprofile')    ? array('text' => $lang->user->editProfile, 'url' => createLink('my', 'editprofile')) : null,
+                common::hasPriv('my', 'changepassword') ? array('text' => $lang->changePassword,    'data-toggle' => 'modal', 'url' => createLink('my', 'changepassword')) : null,
+                common::hasPriv('my', 'editprofile')    ? array('text' => $lang->user->editProfile, 'data-toggle' => 'modal', 'url' => createLink('my', 'editprofile')) : null,
                 common::hasPriv('my', 'uploadAvatar')   ? array('text' => $lang->my->uploadAvatar,  'data-on' => 'click', 'data-call' => 'uploadAvatar') : null
             )),
         )
