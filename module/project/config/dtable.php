@@ -56,11 +56,12 @@ $config->project->dtable->fieldList['executionCount']['type']   = 'count';
 $config->project->dtable->fieldList['executionCount']['group']  = 4;
 $config->project->dtable->fieldList['executionCount']['show']   = 4;
 
-$config->project->dtable->fieldList['budget']['title'] = $lang->project->budget;
-$config->project->dtable->fieldList['budget']['name']  = 'budget';
-$config->project->dtable->fieldList['budget']['type']  = 'money';
-$config->project->dtable->fieldList['budget']['group'] = 5;
-$config->project->dtable->fieldList['budget']['show']  = true;
+$config->project->dtable->fieldList['budget']['title']    = $lang->project->budget;
+$config->project->dtable->fieldList['budget']['name']     = 'budget';
+$config->project->dtable->fieldList['budget']['type']     = 'money';
+$config->project->dtable->fieldList['budget']['group']    = 5;
+$config->project->dtable->fieldList['budget']['show']     = true;
+$config->project->dtable->fieldList['budget']['sortType'] = true;
 
 $config->project->dtable->fieldList['teamCount']['title'] = $lang->project->teamCount;
 $config->project->dtable->fieldList['teamCount']['name']  = 'teamCount';
@@ -73,17 +74,19 @@ $config->project->dtable->fieldList['invested']['type']  = 'count';
 $config->project->dtable->fieldList['invested']['group'] = 5;
 $config->project->dtable->fieldList['invested']['show']  = true;
 
-$config->project->dtable->fieldList['begin']['title'] = $lang->project->begin;
-$config->project->dtable->fieldList['begin']['name']  = 'begin';
-$config->project->dtable->fieldList['begin']['type']  = 'date';
-$config->project->dtable->fieldList['begin']['group'] = 6;
-$config->project->dtable->fieldList['begin']['show']  = true;
+$config->project->dtable->fieldList['begin']['title']    = $lang->project->begin;
+$config->project->dtable->fieldList['begin']['name']     = 'begin';
+$config->project->dtable->fieldList['begin']['type']     = 'date';
+$config->project->dtable->fieldList['begin']['group']    = 6;
+$config->project->dtable->fieldList['begin']['show']     = true;
+$config->project->dtable->fieldList['begin']['sortType'] = true;
 
-$config->project->dtable->fieldList['end']['title'] = $lang->project->end;
-$config->project->dtable->fieldList['end']['name']  = 'end';
-$config->project->dtable->fieldList['end']['type']  = 'date';
-$config->project->dtable->fieldList['end']['group'] = 6;
-$config->project->dtable->fieldList['end']['show']  = true;
+$config->project->dtable->fieldList['end']['title']    = $lang->project->end;
+$config->project->dtable->fieldList['end']['name']     = 'end';
+$config->project->dtable->fieldList['end']['type']     = 'date';
+$config->project->dtable->fieldList['end']['group']    = 6;
+$config->project->dtable->fieldList['end']['show']     = true;
+$config->project->dtable->fieldList['end']['sortType'] = true;
 
 $config->project->dtable->fieldList['realBegan']['title'] = $lang->project->realBeganAB;
 $config->project->dtable->fieldList['realBegan']['type']  = 'date';
