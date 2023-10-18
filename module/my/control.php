@@ -1317,11 +1317,8 @@ EOF;
      */
     public function editProfile()
     {
-        if($this->app->user->account == 'guest')
-        {
-            echo js::alert('guest'), js::locate('back');
-            return;
-        }
+        if($this->app->user->account == 'guest') return $this->send(array('result' => 'fail', 'message' => 'guest', 'load' => array('alter' => 'guest', 'back' => true)));
+
         if(!empty($_POST))
         {
             $_POST['account'] = $this->app->user->account;
@@ -1331,7 +1328,8 @@ EOF;
 
             $this->user->update($this->app->user->id);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('my', 'profile'), 'closeModal' => true));
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('my', 'profile')));
         }
 
         $this->app->loadConfig('user');
@@ -1356,14 +1354,14 @@ EOF;
      */
     public function changePassword()
     {
-        $this->app->loadLang('admin');
-        if($this->app->user->account == 'guest') return print(js::alert('guest') . js::locate('back'));
+        if($this->app->user->account == 'guest') return $this->send(array('result' => 'fail', 'message' => 'guest', 'load' => array('alter' => 'guest', 'back' => true)));
+
         if(!empty($_POST))
         {
             $this->user->updatePassword($this->app->user->id);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('my', 'index')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('my', 'index')));
         }
 
         $this->view->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->changePassword;
@@ -1388,7 +1386,7 @@ EOF;
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.parent.ajaxGetContacts('#mailto')"));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('manageContacts', "listID=$listID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('manageContacts', "listID={$listID}")));
         }
 
         $list     = $listID ? $this->user->getContactListByID($listID) : null;

@@ -10,8 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-import('/js/md5.js', 'js');
-
 $contacts = array();
 if(!empty($config->user->contactField))
 {
@@ -33,6 +31,7 @@ if(!empty($config->user->contactField))
 
 formPanel
 (
+    h::import($config->webRoot . 'js/md5.js', 'js'),
     to::heading
     (
         div
@@ -80,10 +79,10 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            set::label($lang->user->type),
+            set::label($lang->user->join),
             set::control('datePicker'),
-            set::name('type'),
-            set::value($user->type)
+            set::name('join'),
+            set::value($user->join)
         ),
     ),
     formRowGroup(set::title($lang->my->form->lblAccount)),
