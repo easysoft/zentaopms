@@ -152,7 +152,7 @@ class testcaseZen extends testcase
      * @access protected
      * @return void
      */
-    protected function assignForImportFromLib(int $productID, string $branch, int $libID, string $orderBy, int $queryID, array $libraries): void
+    protected function assignForImportFromLib(int $productID, string $branch, int $libID, string $orderBy, int $queryID, array $libraries, int $projectID): void
     {
         $product    = $this->loadModel('product')->getById($productID);
         $branches   = array();

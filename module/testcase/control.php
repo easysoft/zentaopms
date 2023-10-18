@@ -1135,7 +1135,7 @@ class testcase extends control
 
         /* 展示变量. */
         /* Show the variables. */
-        $this->testcaseZen->assignForImportFromLib($productID, $branch, $libID, $orderBy, $queryID, $libraries);
+        $this->testcaseZen->assignForImportFromLib($productID, $branch, $libID, $orderBy, $queryID, $libraries, $projectID);
 
         $this->view->title      = $this->lang->testcase->common . $this->lang->colon . $this->lang->testcase->importFromLib;
         $this->view->libraries  = $libraries;
