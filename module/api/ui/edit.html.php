@@ -1,6 +1,6 @@
 <?php
 namespace zin;
-$apiHeader = $apiQuery = $apiParams = $apiResponse = null;
+$apiHeader = $apiQuery = $apiParams = $apiResponse = array();
 $defaultTR = function()
 {
     return h::tr
