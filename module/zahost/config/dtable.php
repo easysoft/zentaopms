@@ -4,11 +4,11 @@ global $lang;
 $config->zahost->dtable = new stdclass();
 
 $config->zahost->dtable->fieldList['id']['title'] = $lang->idAB;
-$config->zahost->dtable->fieldList['id']['name'] = 'hostID';
-$config->zahost->dtable->fieldList['id']['type'] = 'id';
+$config->zahost->dtable->fieldList['id']['name']  = 'hostID';
+$config->zahost->dtable->fieldList['id']['type']  = 'id';
 
 $config->zahost->dtable->fieldList['name']['type'] = 'title';
-$config->zahost->dtable->fieldList['name']['link']  = array('module' => 'zahost', 'method' => 'view', 'params' => 'id={hostID}');
+$config->zahost->dtable->fieldList['name']['link'] = array('module' => 'zahost', 'method' => 'view', 'params' => 'id={hostID}');
 
 $config->zahost->dtable->fieldList['type']['name']     = 'hostType';
 $config->zahost->dtable->fieldList['type']['title']    = $lang->zahost->type;

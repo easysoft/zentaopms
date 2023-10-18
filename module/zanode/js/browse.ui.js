@@ -27,6 +27,7 @@ window.renderList = function (result, {col, row, value})
 
 window.afterRender = function()
 {
+    $('.dtable-cell-content .toolbar button.create-snapshot i').replaceWith("<img src='static/svg/snapshot.svg' />");
 }
 
 function goHelp()

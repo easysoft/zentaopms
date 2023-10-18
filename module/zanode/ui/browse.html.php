@@ -49,6 +49,7 @@ dtable
     set::afterRender(jsRaw('window.afterRender')),
     set::sortLink(jsRaw('createSortLink')),
     set::footPager(usePager()),
+    set::orderBy($orderBy),
 );
 
 render();

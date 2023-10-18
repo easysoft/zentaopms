@@ -194,7 +194,7 @@ class zanodemodel extends model
 
         $result = json_decode(commonModel::http($agnetUrl . static::KVM_EXPORT_PATH, json_encode($param,JSON_NUMERIC_CHECK), null, array("Authorization:$node->tokenSN"), 'data', 'POST', 10));
 
-        
+
         if(!empty($result) and $result->code == 'success')
         {
             $this->dao->update(TABLE_ZAHOST)->set('status')->eq(static::STATUS_CREATING_IMG)->where('id')->eq($node->id)->exec();
@@ -1154,5 +1154,29 @@ class zanodemodel extends model
      */
     public function syncCasesToZentao($path)
     {
+    }
+
+    /**
+     * 判断按钮是否可点击。
+     * Judge an action is clickable or not.
+     *
+     * @param  object $host
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public static function isClickable(object $node, string $action): bool
+    {
+        if($action == 'resume')  return $node->status == 'suspend' && $node->hostType != 'physics' && $node->status != 'running' && $node->status != 'wait';
+        if($action == 'suspend') return $node->status != 'suspend' && $node->hostType != 'physics' && $node->status == 'running';
+
+        if($action == 'start')  return $node->status == 'shutoff' && $node->hostType != 'physics' && !in_array($node->status, array('wait', 'creating_img', 'creating_snap', 'restoring'));
+        if($action == 'close')  return $node->status != 'shutoff' && $node->hostType != 'physics' && !in_array($node->status, array('wait', 'creating_img', 'creating_snap', 'restoring'));
+
+        if($action == 'getVNC')  return $node->hostType == '' && in_array($node->status ,array('running', 'launch', 'wait'));
+        if($action == 'reboot') return $node->hostType != 'physics' && !in_array($node->status, array('wait', 'creating_img', 'creating_snap', 'restoring', 'shutoff'));
+        if($action == 'createSnapshot') return $node->hostType != 'physics' && $node->status == 'running';
+
+        return true;
     }
 }

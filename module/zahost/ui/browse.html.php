@@ -10,8 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('orderBy',  $orderBy);
-jsVar('sortLink',  $sortLink);
+jsVar('orderBy', $orderBy);
+jsVar('sortLink', $sortLink);
 jsVar('webRoot', getWebRoot());
 jsVar('undeletedNotice', $lang->zahost->undeletedNotice);
 jsVar('uninitNotice', $lang->zahost->uninitNotice);

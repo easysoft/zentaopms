@@ -1,0 +1,2 @@
+button.create-snapshot img {position: relative; left: -80px; filter: drop-shadow(#18a6fd 80px 0); width: 18px;}
+button.create-snapshot.disabled img {filter: drop-shadow(#313c52 80px 0);}
