@@ -70,7 +70,7 @@ formPanel
         formGroup
         (
             set::label($lang->holiday->desc),
-            editor
+            textarea
             (
                 set::name('desc'),
                 set::rows('2'),

@@ -54,12 +54,11 @@ sidebar
 );
 
 $tableData = initTableData($holidays, $this->config->holiday->dtable->fieldList, $this->holiday);
-div
+panel
 (
-    setClass('main-col main-content'),
     div
     (
-        setClass('main-header'),
+        setClass('flex'),
         featureBar
         (
             div
@@ -98,13 +97,13 @@ div
         set::data($tableData),
         set::footer(),
     ),
-    div
+    center
     (
-        setClass('flex-center mt-2'),
+        setClass('mt-2'),
         div
         (
             setClass('table-import shadow-sm'),
-            html(sprintf($lang->holiday->importTip, html::a(helper::createLink('holiday', 'import', "year=$currentYear", '', true), $lang->import, '', "class='text-primary' data-toggle='modal' data-size='480px'"))),
+            html(sprintf($lang->holiday->importTip, html::a(helper::createLink('holiday', 'import', "year={$currentYear}"), $lang->import, '', "class='text-primary' data-toggle='modal' data-size='480px'"))),
         )
     )
 );
