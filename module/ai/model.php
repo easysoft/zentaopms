@@ -305,6 +305,63 @@ class aiModel extends model
     }
 
     /**
+     * Create a temp mini program.
+     *
+     * @access public
+     * @return int
+     */
+    public function createTmpMiniProgram()
+    {
+        $data = fixer::input('post')->get();
+        $data->createdBy   = $this->app->user->account;
+        $data->createdDate = helper::now();
+        $data->editedBy    = $this->app->user->account;
+        $data->editedDate  = helper::now();
+        $data->icon        = $data->iconName . '-' . $data->iconTheme;
+        unset($data->iconName);
+        unset($data->iconTheme);
+        $this->dao->insert(TABLE_MINIPROGRAM)
+            ->data($data)
+            ->exec();
+        if(dao::isError()) return false;
+        return $this->dao->lastInsertID();
+    }
+
+    /**
+     * Check for duplicate names of Mini programs.
+     *
+     * @param string $name
+     * @access public
+     * @return boolean
+     */
+    public function checkDuplicatedAppName($name)
+    {
+        $miniProgram = $this->dao->select('*')
+            ->from(TABLE_MINIPROGRAM)
+            ->where('name')->eq($name)
+            ->fetch();
+        return !empty($miniProgram);
+    }
+
+    /**
+     * Verify that any required fields are empty.
+     *
+     * @param array $requiredFields
+     * @access public
+     * @return false|array false or errors.
+     */
+    public function verifyRequiredFields($requiredFields)
+    {
+        $errors = array();
+        foreach($requiredFields as $field => $fieldLang)
+        {
+            if(!isset($_POST[$field]) || empty($_POST[$field])) $errors[$field] = sprintf($this->lang->error->notempty, $fieldLang);
+        }
+        if(!empty($errors)) return $errors;
+        return false;
+    }
+
+    /**
      * Parse text responses from simple APIs. For example, completion.
      *
      * @param  string   $response  json string

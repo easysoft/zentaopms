@@ -465,6 +465,9 @@ define('TABLE_METRICLIB', '' . $config->db->prefix . 'metriclib');
 define('TABLE_METRICRECORDS', '' . $config->db->prefix . 'metricrecords');
 define('TABLE_BASICMEAS', '' . $config->db->prefix . 'basicmeas');
 
+define('TABLE_MINIPROGRAM',       '`' . $config->db->prefix . 'miniprogram`');
+define('TABLE_MINIPROGRAMFIELDS', '`' . $config->db->prefix . 'miniprogramfields`');
+
 $config->objectTables['product']      = TABLE_PRODUCT;
 $config->objectTables['productplan']  = TABLE_PRODUCTPLAN;
 $config->objectTables['story']        = TABLE_STORY;

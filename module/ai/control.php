@@ -10,6 +10,22 @@
  */
 class ai extends control
 {
+    /**
+     * AI model.
+     *
+     * @var aiModel
+     * @access public
+     */
+    public $ai;
+
+    /**
+     * User model.
+     *
+     * @var userModel
+     * @access public
+     */
+    public $user;
+
     public function __construct($module = '', $method = '')
     {
         parent::__construct($module, $method);
@@ -129,8 +145,41 @@ class ai extends control
         $this->display();
     }
 
+    /**
+     * Create a mini program.
+     *
+     * @access public
+     * @return void
+     */
     public function createMiniProgram()
     {
+        if(!empty($_POST))
+        {
+            $requiredFields = array('category' => $this->lang->ai->miniPrograms->category, 'model' => $this->lang->prompt->model, 'name' => $this->lang->prompt->name);
+            $errors = $this->ai->verifyRequiredFields($requiredFields);
+            if($errors !== false) return $this->sendError($errors);
+            $isDuplicated = $this->ai->checkDuplicatedAppName($_POST['name']);
+            if($isDuplicated) return $this->sendError(array('name' => $this->lang->ai->miniPrograms->field->duplicatedNameTip));
+            $id = $this->ai->createTmpMiniProgram();
+            if($id !== false) return  $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'locate' => $this->createLink('ai', 'configuredMiniProgram', "appID=$id")));
+        }
+        $this->view->iconName = 'writinghand';
+        $this->view->iconTheme = 7;
+        $this->view->title = $this->lang->ai->miniPrograms->common;
+        $this->display();
+    }
+
+    /**
+     * Configured a mini program.
+     *
+     * @param string $appID
+     * @access public
+     * @return void
+     */
+    public function configuredMiniProgram($appID)
+    {
+        if(!is_numeric($appID)) return $this->locate('ai', 'createMiniProgram');
+        $this->view->title = $this->lang->ai->miniPrograms->common;
         $this->display();
     }
 

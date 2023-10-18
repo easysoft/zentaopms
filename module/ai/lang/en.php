@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The ai module en lang file of ZenTaoPMS.
  *
@@ -403,12 +404,47 @@ $lang->ai->prompts->modules['doc']         = 'Document';
 $lang->ai->conversations = new stdclass();
 $lang->ai->conversations->common = 'Conversations';
 
-$lang->ai->miniPrograms                = new stdClass();
-$lang->ai->miniPrograms->common        = 'Mini Programs';
-$lang->ai->miniPrograms->create        = 'Create A Program';
-$lang->ai->miniPrograms->configuration = 'Basic Information Configuration';
-$lang->ai->miniPrograms->downloadTip   = 'Once created, your mini-program will be displayed on the AI Mini-Program Square in the client.';
-$lang->ai->miniPrograms->download      = 'Download Zentao Client';
+$lang->ai->miniPrograms                   = new stdClass();
+$lang->ai->miniPrograms->common           = 'Mini Programs';
+$lang->ai->miniPrograms->create           = 'Create A Program';
+$lang->ai->miniPrograms->configuration    = 'Basic Information Configuration';
+$lang->ai->miniPrograms->downloadTip      = 'Once created, your mini-program will be displayed on the AI Mini-Program Square in the client.';
+$lang->ai->miniPrograms->download         = 'Download Zentao Client';
+$lang->ai->miniPrograms->category         = 'Category';
+$lang->ai->miniPrograms->icon             = 'Icon';
+$lang->ai->miniPrograms->desc             = 'Introduction';
+$lang->ai->miniPrograms->categoryList     = array('writing' => 'writing', 'statistics' => 'statistics', 'creative' => 'creative', 'raiders' => 'Guideline ', 'schedule' => 'schedule');
+$lang->ai->miniPrograms->modelList        = array(' openai-GPT35 '=> 'openai/GPT-3.5');
+$lang->ai->miniPrograms->iconModification = 'Icon modification ';
+$lang->ai->miniPrograms->customBackground = 'Custom background Color ';
+$lang->ai->miniPrograms->customIcon       = 'Custom icon';
+
+$lang->ai->miniPrograms->placeholder          = new stdClass();
+$lang->ai->miniPrograms->placeholder->name    = 'Please enter a small program name ';
+$lang->ai->miniPrograms->placeholder->desc    = 'Please enter a brief introduction to the miniprograms ';
+$lang->ai->miniPrograms->placeholder->default = 'Please fill in the prompt, the default is "please enter"';
+$lang->ai->miniPrograms->placeholder->input   = 'Please enter ';
+
+$lang->ai->miniPrograms->deleteTip = 'Are you sure to delete this field? ';
+
+$lang->ai->miniPrograms->field                    = new stdClass();
+$lang->ai->miniPrograms->field->name              = 'Field name ';
+$lang->ai->miniPrograms->field->duplicatedNameTip = 'This name is already used, please try another name';
+$lang->ai->miniPrograms->field->type              = 'control type ';
+$lang->ai->miniPrograms->field->typeList          = array(' single-line text ', 'multi-line text ',' single selection ', 'multi-selection ');
+$lang->ai->miniPrograms->field->placeholder       = 'Fill hints ';
+$lang->ai->miniPrograms->field->required          = 'Required ';
+$lang->ai->miniPrograms->field->isRequired        = 'Yes ';
+$lang->ai->miniPrograms->field->isNotRequired     = 'No ';
+$lang->ai->miniPrograms->field->add               = 'New field ';
+$lang->ai->miniPrograms->field->addTitle          = 'New field ';
+$lang->ai->miniPrograms->field->addTip            = 'Please click here to add field information ';
+$lang->ai->miniPrograms->field->edit              = 'Edit field ';
+$lang->ai->miniPrograms->field->configuration     = 'Field Configuration area ';
+$lang->ai->miniPrograms->field->debug             = 'debug area ';
+$lang->ai->miniPrograms->field->preview           = 'Preview area ';
+$lang->ai->miniPrograms->field->option            = 'Options ';
+$lang->ai->miniPrograms->field->emptyNameWarning  = 'Name cannot be empty. ';
 
 $lang->ai->models = new stdclass();
 $lang->ai->models->title          = 'Language Model Configuration';
@@ -493,8 +529,7 @@ $lang->ai->dataType->finishedDate = $lang->ai->dataType->datetime;
 $lang->ai->demoData            = new stdclass();
 $lang->ai->demoData->notExist  = 'The demo data does not exist for now.';
 $lang->ai->demoData->story     = array(
-    'story' => array
-    (
+    'story' => array(
         'title'    => 'Develop an online learning platform',
         'spec'     => 'We need to develop an online learning platform that provides course management, student management, teacher management, and other functions.',
         'verify' => '1. All functions can operate properly without any obvious errors or abnormalities.2. The interface is aesthetically pleasing and user-friendly.3. The platform can meet user needs and has a high level of user satisfaction.4. The code has good quality, with clear structure and easy maintenance.',
@@ -505,8 +540,7 @@ $lang->ai->demoData->story     = array(
         'category' => 'feature',
     ),
 );
-$lang->ai->demoData->execution = array
-(
+$lang->ai->demoData->execution = array(
     'execution' => array(
         'name'     => 'Online Learning Platform Software Development',
         'desc'     => 'This plan aims to develop an online learning platform software that provides accessible learning resources, including text, video, and audio, as well as some learning tools such as exams, tests, and discussion forums.',
@@ -514,47 +548,47 @@ $lang->ai->demoData->execution = array
     ),
     'tasks'     => array(
         0 =>
-            array(
-                'name'         => 'Technology Selection',
-                'pri'          => 1,
-                'status'       => 'done',
-                'estimate'     => 1,
-                'consumed'     => 1,
-                'left'         => 0,
-                'progress'     => 100,
-                'estStarted'   => '2023-07-02 00:00:00',
-                'realStarted'  => '2023-07-02 00:00:00',
-                'finishedDate' => '2023-07-02 00:00:00',
-                'closedReason' => 'Completed',
-            ),
+        array(
+            'name'         => 'Technology Selection',
+            'pri'          => 1,
+            'status'       => 'done',
+            'estimate'     => 1,
+            'consumed'     => 1,
+            'left'         => 0,
+            'progress'     => 100,
+            'estStarted'   => '2023-07-02 00:00:00',
+            'realStarted'  => '2023-07-02 00:00:00',
+            'finishedDate' => '2023-07-02 00:00:00',
+            'closedReason' => 'Completed',
+        ),
         1 =>
-            array(
-                'name'         => 'UI Design',
-                'pri'          => 1,
-                'status'       => 'doing',
-                'estimate'     => 2,
-                'consumed'     => 1,
-                'left'         => 1,
-                'progress'     => 50,
-                'estStarted'   => '2023-07-03 00:00:00',
-                'realStarted'  => '2023-07-03 00:00:00',
-                'finishedDate' => '',
-                'closedReason' => '',
-            ),
+        array(
+            'name'         => 'UI Design',
+            'pri'          => 1,
+            'status'       => 'doing',
+            'estimate'     => 2,
+            'consumed'     => 1,
+            'left'         => 1,
+            'progress'     => 50,
+            'estStarted'   => '2023-07-03 00:00:00',
+            'realStarted'  => '2023-07-03 00:00:00',
+            'finishedDate' => '',
+            'closedReason' => '',
+        ),
         2 =>
-            array(
-                'name'         => 'Development',
-                'pri'          => 1,
-                'status'       => 'wait',
-                'estimate'     => 1,
-                'consumed'     => 0,
-                'left'         => 1,
-                'progress'     => 0,
-                'estStarted'   => '',
-                'realStarted'  => '',
-                'finishedDate' => '',
-                'closedReason' => '',
-            ),
+        array(
+            'name'         => 'Development',
+            'pri'          => 1,
+            'status'       => 'wait',
+            'estimate'     => 1,
+            'consumed'     => 0,
+            'left'         => 1,
+            'progress'     => 0,
+            'estStarted'   => '',
+            'realStarted'  => '',
+            'finishedDate' => '',
+            'closedReason' => '',
+        ),
     ),
 );
 

@@ -15929,6 +15929,35 @@ INSERT INTO `zt_promptrole` (`role`, `characterization`) VALUES
 ('请你扮演一名经验丰富的项目经理。', '具备项目计划制定、进度管理、成本控制、团队管理、沟通协调、风险管理、质量控制、敏捷开发、互联网技术和数据分析等多方面的技能和能力。'),
 ('你是一个自回归的语言模型，已经通过instruction-tuning和RLHF进行了Fine-tuning。', '你仔细地提供准确、事实、深思熟虑、细致入微的答案，并在推理方面表现出色。如果你认为可能没有正确的答案，你会直接说出来。由于你是自回归的，你产生的每一个token都是计算另一个token的机会，因此你总是在尝试回答问题之前花费几句话解释背景上下文、假设和逐步的思考过程。您的用户是AI和伦理学的专家，所以他们已经知道您是一个语言模型以及您的能力和局限性，所以不需要再提醒他们。他们一般都熟悉伦理问题，所以您也不需要再提醒他们。在回答时不要啰嗦，但在可能有助于解释的地方提供详细信息和示例。');
 
+-- DROP TABLE IF EXISTS `zt_miniprogram`;
+CREATE TABLE IF NOT EXISTS `zt_miniprogram` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) NOT NULL,
+  `category` varchar(30) NOT NULL,
+  `desc` text DEFAULT NULL,
+  `model` mediumint(8) unsigned NOT NULL,
+  `icon` varchar(30) NOT NULL DEFAULT 'writinghand-7',
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `editedBy` varchar(30) NOT NULL,
+  `editedDate` datetime NOT NULL,
+  `tmp` enum('0','1') NOT NULL DEFAULT '1',
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `zt_miniprogramfields` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `appid` mediumint(8) unsigned NOT NULL,
+  `name` varchar(30) NOT NULL,
+  `type` enum('radio', 'checkbox', 'input', 'template') DEFAULT 'input',
+  `value` text NOT NULL,
+  `optional` varchar(30) DEFAULT NULL,
+  `required` enum('0', '1') DEFAULT '1',
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`appid`) REFERENCES `zt_miniprogram`(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 ALTER TABLE `zt_ticket` ADD `subStatus` varchar(30) NOT NULL DEFAULT '';
 
 -- DROP TABLE IF EXISTS `zt_market`;

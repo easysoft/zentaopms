@@ -759,6 +759,7 @@ $lang->navGroup->host          = 'admin';
 $lang->navGroup->ops           = 'admin';
 $lang->navGroup->service       = 'admin';
 $lang->navGroup->domain        = 'admin';
+$lang->navGroup->ai            = 'admin';
 
 $lang->navGroup->index   = 'index';
 $lang->navGroup->misc    = 'misc';

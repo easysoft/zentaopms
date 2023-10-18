@@ -1,0 +1,9 @@
+.field-configuration .drag-area {cursor: move; text-align: right;}
+.field-configuration .drag-area > div {display: inline-flex; align-items: center; gap: 4px;}
+.options-container {display: flex; flex-direction: column; gap: 16px;}
+
+#mainContent {position: fixed; left: 20px; right: 20px; top: 70px; bottom: 0; display: flex; background: #f0f2f5; padding: 0;}
+#mainContent > div {height: 100%; background: #fff; display: flex; flex-direction: column;}
+#mainContent > div > header {background: #f8f8fa; height: 40px; display: flex; align-items: center; padding-left: 24px;}
+#mainContent > div > header > strong {font-size: 16px;}
+#mainContent > div > main {flex-grow: 1; overflow-y: auto;}

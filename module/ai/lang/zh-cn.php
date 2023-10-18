@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The ai module zh-cn lang file of ZenTaoPMS.
  *
@@ -403,12 +404,47 @@ $lang->ai->prompts->modules['doc']         = '文档';
 $lang->ai->conversations = new stdclass();
 $lang->ai->conversations->common = '会话';
 
-$lang->ai->miniPrograms                = new stdClass();
-$lang->ai->miniPrograms->common        = '小程序';
-$lang->ai->miniPrograms->create        = '创建小程序';
-$lang->ai->miniPrograms->configuration = '基本信息配置';
-$lang->ai->miniPrograms->downloadTip   = '创建完成后，您的小程序将在客户端的AI小程序广场上展示。';
-$lang->ai->miniPrograms->download      = '下载禅道客户端';
+$lang->ai->miniPrograms                    = new stdClass();
+$lang->ai->miniPrograms->common            = '小程序';
+$lang->ai->miniPrograms->create            = '创建小程序';
+$lang->ai->miniPrograms->configuration     = '基本信息配置';
+$lang->ai->miniPrograms->downloadTip       = '创建完成后，您的小程序将在客户端的AI小程序广场上展示。';
+$lang->ai->miniPrograms->download          = '下载禅道客户端';
+$lang->ai->miniPrograms->category          = '所属分类';
+$lang->ai->miniPrograms->icon              = '图标';
+$lang->ai->miniPrograms->desc              = '简介';
+$lang->ai->miniPrograms->categoryList      = array('writing' => '写作', 'statistics' => '统计', 'creative' => '创意', 'raiders' => '攻略', 'schedule' => '日程');
+$lang->ai->miniPrograms->modelList         = array('openai-gpt35' => 'OpenAI / GPT-3.5');
+$lang->ai->miniPrograms->iconModification  = '图标修改';
+$lang->ai->miniPrograms->customBackground  = '自定义背景色';
+$lang->ai->miniPrograms->customIcon        = '自定义icon';
+
+$lang->ai->miniPrograms->placeholder          = new stdClass();
+$lang->ai->miniPrograms->placeholder->name    = '请输入小程序名称';
+$lang->ai->miniPrograms->placeholder->desc    = '请输入小程序简介';
+$lang->ai->miniPrograms->placeholder->default = '请输入填写提示，默认为“请输入”';
+$lang->ai->miniPrograms->placeholder->input   = '请输入';
+
+$lang->ai->miniPrograms->deleteTip = '您确定删除该字段吗？';
+
+$lang->ai->miniPrograms->field                    = new stdClass();
+$lang->ai->miniPrograms->field->name              = '字段名称';
+$lang->ai->miniPrograms->field->duplicatedNameTip = '该名称已使用，请尝试其他名称';
+$lang->ai->miniPrograms->field->type              = '控件类型';
+$lang->ai->miniPrograms->field->typeList          = array('单行文本', '多行文本', '单选', '多选');
+$lang->ai->miniPrograms->field->placeholder       = '填写提示';
+$lang->ai->miniPrograms->field->required          = '是否必填';
+$lang->ai->miniPrograms->field->isRequired        = '是';
+$lang->ai->miniPrograms->field->isNotRequired     = '否';
+$lang->ai->miniPrograms->field->add               = '新增字段';
+$lang->ai->miniPrograms->field->addTitle          = '新增字段';
+$lang->ai->miniPrograms->field->addTip            = '请点击此处以添加字段信息';
+$lang->ai->miniPrograms->field->edit              = '编辑字段';
+$lang->ai->miniPrograms->field->configuration     = '字段配置区';
+$lang->ai->miniPrograms->field->debug             = '调试区';
+$lang->ai->miniPrograms->field->preview           = '预览区';
+$lang->ai->miniPrograms->field->option            = '选项';
+$lang->ai->miniPrograms->field->emptyNameWarning  = '『名称』不能为空。';
 
 $lang->ai->models = new stdclass();
 $lang->ai->models->title          = '语言模型配置';
@@ -493,8 +529,7 @@ $lang->ai->dataType->finishedDate = $lang->ai->dataType->datetime;
 $lang->ai->demoData            = new stdclass();
 $lang->ai->demoData->notExist  = '暂无演示数据。';
 $lang->ai->demoData->story     = array(
-    'story' => array
-    (
+    'story' => array(
         'title'    => '开发一个在线学习平台',
         'spec'     => '我们需要开发一个在线学习平台，能够提供课程管理、学生管理、教师管理等功能。',
         'verify' => '1. 所有功能均能够正常运行，没有明显的错误和异常。2. 界面美观、易用性好。3. 平台能够满足用户需求，具有较高的用户满意度。4. 代码质量好，结构清晰、易于维护。',
@@ -505,8 +540,7 @@ $lang->ai->demoData->story     = array(
         'category' => 'feature',
     ),
 );
-$lang->ai->demoData->execution = array
-(
+$lang->ai->demoData->execution = array(
     'execution' => array(
         'name'     => '在线学习平台软件开发',
         'desc'     => '本计划旨在开发一款在线学习平台软件，该软件将提供可访问的学习资源，包括文本、视频和音频等，以及一些学习工具如考试、测试和讨论论坛等。',
@@ -514,47 +548,47 @@ $lang->ai->demoData->execution = array
     ),
     'tasks'     => array(
         0 =>
-            array(
-                'name'         => '技术选型',
-                'pri'          => 1,
-                'status'       => 'done',
-                'estimate'     => 1,
-                'consumed'     => 1,
-                'left'         => 0,
-                'progress'     => 100,
-                'estStarted'   => '2023-07-02 00:00:00',
-                'realStarted'  => '2023-07-02 00:00:00',
-                'finishedDate' => '2023-07-02 00:00:00',
-                'closedReason' => '已完成',
-            ),
+        array(
+            'name'         => '技术选型',
+            'pri'          => 1,
+            'status'       => 'done',
+            'estimate'     => 1,
+            'consumed'     => 1,
+            'left'         => 0,
+            'progress'     => 100,
+            'estStarted'   => '2023-07-02 00:00:00',
+            'realStarted'  => '2023-07-02 00:00:00',
+            'finishedDate' => '2023-07-02 00:00:00',
+            'closedReason' => '已完成',
+        ),
         1 =>
-            array(
-                'name'         => 'UI设计',
-                'pri'          => 1,
-                'status'       => 'doing',
-                'estimate'     => 2,
-                'consumed'     => 1,
-                'left'         => 1,
-                'progress'     => 50,
-                'estStarted'   => '2023-07-03 00:00:00',
-                'realStarted'  => '2023-07-03 00:00:00',
-                'finishedDate' => '',
-                'closedReason' => '',
-            ),
+        array(
+            'name'         => 'UI设计',
+            'pri'          => 1,
+            'status'       => 'doing',
+            'estimate'     => 2,
+            'consumed'     => 1,
+            'left'         => 1,
+            'progress'     => 50,
+            'estStarted'   => '2023-07-03 00:00:00',
+            'realStarted'  => '2023-07-03 00:00:00',
+            'finishedDate' => '',
+            'closedReason' => '',
+        ),
         2 =>
-            array(
-                'name'         => '开发',
-                'pri'          => 1,
-                'status'       => 'wait',
-                'estimate'     => 1,
-                'consumed'     => 0,
-                'left'         => 1,
-                'progress'     => 0,
-                'estStarted'   => '',
-                'realStarted'  => '',
-                'finishedDate' => '',
-                'closedReason' => '',
-            ),
+        array(
+            'name'         => '开发',
+            'pri'          => 1,
+            'status'       => 'wait',
+            'estimate'     => 1,
+            'consumed'     => 0,
+            'left'         => 1,
+            'progress'     => 0,
+            'estStarted'   => '',
+            'realStarted'  => '',
+            'finishedDate' => '',
+            'closedReason' => '',
+        ),
     ),
 );
 
