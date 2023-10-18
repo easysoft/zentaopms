@@ -19,11 +19,12 @@ $config->testreport->actionList['delete']['show']         = 'clickable';
 $config->testreport->actionList['delete']['class']        = 'ajax-submit';
 $config->testreport->actionList['delete']['data-confirm'] = $lang->testreport->confirmDelete;
 
-$config->testreport->dtable->fieldList['id']['name']  = 'id';
-$config->testreport->dtable->fieldList['id']['title'] = $lang->idAB;
-$config->testreport->dtable->fieldList['id']['type']  = 'ID';
-$config->testreport->dtable->fieldList['id']['align'] = 'left';
-$config->testreport->dtable->fieldList['id']['fixed'] = 'left';
+$config->testreport->dtable->fieldList['id']['name']     = 'id';
+$config->testreport->dtable->fieldList['id']['title']    = $lang->idAB;
+$config->testreport->dtable->fieldList['id']['type']     = 'ID';
+$config->testreport->dtable->fieldList['id']['align']    = 'left';
+$config->testreport->dtable->fieldList['id']['fixed']    = 'left';
+$config->testreport->dtable->fieldList['id']['sortType'] = true;
 
 $config->testreport->dtable->fieldList['title']['name']     = 'title';
 $config->testreport->dtable->fieldList['title']['title']    = $lang->testreport->title;
@@ -31,6 +32,7 @@ $config->testreport->dtable->fieldList['title']['type']     = 'title';
 $config->testreport->dtable->fieldList['title']['minWidth'] = '200';
 $config->testreport->dtable->fieldList['title']['fixed']    = 'left';
 $config->testreport->dtable->fieldList['title']['link']     = array('module' => 'testreport', 'method' => 'view', 'params' => 'testreportID={id}');
+$config->testreport->dtable->fieldList['title']['sortType'] = true;
 
 $config->testreport->dtable->fieldList['execution']['name']     = 'execution';
 $config->testreport->dtable->fieldList['execution']['title']    = $lang->testreport->execution;

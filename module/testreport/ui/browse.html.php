@@ -30,7 +30,7 @@ featureBar
     set::module('testreport'),
     set::method('browse'),
     set::current('all'),
-    set::linkParams("objectID=$objectID&objectType=$objectType&extra=$extra&orderBy=$orderBy&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID"),
+    set::linkParams("objectID={$objectID}&objectType={$objectType}&extra={$extra}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
 );
 
 toolbar
@@ -51,6 +51,8 @@ dtable
 (
     set::cols($cols),
     set::data($data),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('testreport', 'browse', "objectID={$objectID}&objectType={$objectType}&extra={$extra}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::fixedLeftWidth('0.33'),
     set::footPager(usePager()),
 );
