@@ -101,6 +101,7 @@ dtable
     set::checkable($canBatchEdit),
     set::footToolbar($footToolbar),
     set::sortLink(helper::createLink('project', 'browse', "programID=$programID&browseType=$browseType&param=$param&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::orderBy($orderBy),
     set::footPager(usePager()),
     set::customCols(true)
 );
