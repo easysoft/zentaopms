@@ -129,8 +129,8 @@ class execution extends control
 
         /* Append id for second sort and process the order by field. */
         if(!$orderBy) $orderBy = $this->cookie->executionTaskOrder ? $this->cookie->executionTaskOrder : 'status,id_desc';
-        $orderBy = common::appendOrder($orderBy);
-        $this->executionZen->setTaskPageStorage($executionID, $orderBy, $browseType, (int)$param);
+        $sort = common::appendOrder($orderBy);
+        $this->executionZen->setTaskPageStorage($executionID, $sort, $browseType, (int)$param);
 
         /* Set queryID, moduleID and productID. */
         $queryID = $moduleID = $productID = 0;
@@ -147,7 +147,7 @@ class execution extends control
         $this->app->loadClass('pager', true);
         if($this->app->getViewType() == 'mhtml' || $this->app->getViewType() == 'xhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
-        $tasks = $this->execution->getTasks($productID, $executionID, $this->executions, $browseType, $queryID, $moduleID, $orderBy, $pager);
+        $tasks = $this->execution->getTasks($productID, $executionID, $this->executions, $browseType, $queryID, $moduleID, $sort, $pager);
 
         /* Build the search form. */
         $actionURL = $this->createLink('execution', 'task', "executionID=$executionID&status=bySearch&param=myQueryID");

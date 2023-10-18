@@ -3,7 +3,7 @@ $config->task->dtable = new stdclass();
 
 $config->task->dtable->fieldList['id']['title']    = $lang->idAB;
 $config->task->dtable->fieldList['id']['type']     = 'checkID';
-$config->task->dtable->fieldList['id']['sortType'] = 'desc';
+$config->task->dtable->fieldList['id']['sortType'] = true;
 $config->task->dtable->fieldList['id']['checkbox'] = true;
 $config->task->dtable->fieldList['id']['required'] = true;
 

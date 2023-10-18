@@ -78,13 +78,6 @@ window.setStatistics = function(element, checkedIDList)
     };
 }
 
-window.createSortLink = function(col)
-{
-    var sort = col.name + '_asc';
-    if(sort == orderBy) sort = col.name + '_desc';
-    return sortLink.replace('{orderBy}', sort);
-}
-
 /**
  * 对部分列进行重定义。
  * Redefine the partial column.
