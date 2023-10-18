@@ -12,8 +12,8 @@ class dtable extends wg
         'data?:array',                        // 表格数据源
         'module?:string',                     // 模块信息，主要是获取语言项
         'emptyTip?:string',                   // 表格数据源为空时显示的文本
+        'createTip?:string',                  // 表格数据源为空时的创建文本
         'createLink?:array|string',           // 表格数据源为空时的创建链接
-        'createTip?:string',                  // 表格数据源为空时显示的文本
     );
 
     static $dtableID = 0;
@@ -173,15 +173,15 @@ class dtable extends wg
 
     protected function build(): wg
     {
-        if(empty($this->prop('data')) && !$this->hasProp('emptyTip'))
+        if(empty($this->prop('data')))
         {
             global $lang;
+            $emptyTip   = $this->prop('emptyTip', $lang->noData);
             $createLink = !empty($this->prop('createLink')) ? $this->getLink($this->prop('createLink')) : '';
-            $emptyTip = $lang->noData;
             if(!empty($createLink))
             {
                 $createTip = $this->prop('createTip', $lang->create);
-                $emptyTip = array('html' => "<div class='text-gray'>$emptyTip</div><a class='btn primary-pale border-primary' href='$createLink'><i class='icon icon-plus'></i> $createTip</a>", 'className' => 'row gap-4 items-center');
+                $emptyTip  = array('html' => "<div class='text-gray'>$emptyTip</div><a class='btn primary-pale border-primary' href='$createLink'><i class='icon icon-plus'></i> $createTip</a>", 'className' => 'row gap-4 items-center');
             }
             else
             {
