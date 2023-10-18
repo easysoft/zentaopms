@@ -47,6 +47,8 @@ dtable
     set::defaultSummary(array('html' => $summary)),
     set::checkedSummary($lang->execution->checkedSummary),
     set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('my', 'work', "mode={$mode}&type={$type}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
 );

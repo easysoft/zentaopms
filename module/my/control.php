@@ -529,6 +529,8 @@ EOF;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->pager      = $pager;
         $this->view->mode       = 'task';
+        $this->view->orderBy    = $orderBy;
+        $this->view->param      = $param;
         $this->display();
     }
 
