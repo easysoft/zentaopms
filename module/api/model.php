@@ -100,6 +100,7 @@ class apiModel extends model
             ->add('editedDate', $now)
             ->add('version', 1)
             ->setDefault('product,module', 0)
+            ->stripTags($this->config->api->editor->create['id'], $this->config->allowedTags)
             ->get();
 
         $this->dao->insert(TABLE_API)->data($data)
@@ -229,6 +230,7 @@ class apiModel extends model
             ->add('editedDate', $now)
             ->add('version', $oldApi->version)
             ->setDefault('product,module', 0)
+            ->stripTags($this->config->api->editor->edit['id'], $this->config->allowedTags)
             ->remove('type,undefined')
             ->get();
 

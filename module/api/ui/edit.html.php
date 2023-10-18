@@ -631,6 +631,7 @@ formPanel
         editor
         (
             set::name('desc'),
+            html($api->desc),
         ),
     ),
 );

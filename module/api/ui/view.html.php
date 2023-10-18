@@ -273,7 +273,7 @@ div
                 set::className('panel-body'),
                 set::id('content'),
                 h2($api->title),
-                div(setClass('desc'), $api->desc),
+                div(setClass('desc'), html($api->desc)),
                 $apiHeader,
                 $apiQuery,
                 $apiParams,
