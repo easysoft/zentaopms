@@ -1070,7 +1070,6 @@ class storyModel extends model
         $isSuperReviewer     = $this->storyTao->isSuperReviewer();
         $cannotReviewStories = array();
         $cannotReviewTips    = $this->lang->product->reviewStory;
-        if(!$isSuperReviewer && empty($reviewerList)) return sprintf($cannotReviewTips, implode(',', $cannotReviewStories));
 
         foreach($storyIdList as $storyID)
         {
@@ -1132,6 +1131,7 @@ class storyModel extends model
                 foreach(explode(',', trim($twins, ',')) as $reviewedID) $reviewedTwins[$reviewedID] = $reviewedID;
             }
         }
+        if(!$isSuperReviewer && empty($reviewerList) && !empty($cannotReviewStories)) return sprintf($cannotReviewTips, implode(',', $cannotReviewStories));
 
         if($cannotReviewStories) return sprintf($cannotReviewTips, implode(',', $cannotReviewStories));
         return null;
@@ -1471,7 +1471,7 @@ class storyModel extends model
             if($oldPlanID) $story->plan = trim(str_replace(",$oldPlanID,", ',', ",$oldStory->plan,"), ',');
 
             /* Update the order of the story in the plan. */
-            $this->updateStoryOrderOfPlan($storyID, (string)$planID, $oldStory->plan);
+            $this->updateStoryOrderOfPlan((int)$storyID, (string)$planID, $oldStory->plan);
 
             /* Replace plan field if product is normal or not linked to plan or story linked to a branch. */
             $productType = $products[$oldStory->product]->type;
@@ -1738,7 +1738,7 @@ class storyModel extends model
             $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
             $allChanges[$storyID] = common::createChanges($oldStory, $story);
 
-            $actionID = $this->action->create('story', $storyID, 'Assigned', '', $assignedTo);
+            $actionID = $this->action->create('story', (int)$storyID, 'Assigned', '', $assignedTo);
             $this->action->logHistory($actionID, $allChanges[$storyID]);
         }
 
