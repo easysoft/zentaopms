@@ -115,20 +115,10 @@ if($canBatchAction)
 {
     if($canBatchClose || $canBatchCancel)
     {
-        menu
+        $batchItems = array
         (
-            set::id('navActions'),
-            set::className('dropdown-menu'),
-            $canBatchClose ? item(set(array(
-                'text'     => $lang->close,
-                'class'    => 'batch-btn ajax-btn',
-                'data-url' => createLink('task', 'batchClose')
-            ))) : null,
-            $canBatchCancel ? item(set(array(
-                'text'     => $lang->task->cancel,
-                'class'    => 'batch-btn ajax-btn',
-                'data-url' => createLink('task', 'batchCancel')
-            ))) : null,
+            array('text' => $lang->close,        'innerClass' => 'batch-btn ajax-btn not-open-url' . ($canBatchClose  ? '' : 'hidden'), 'data-url' => createLink('task', 'batchClose')),
+            array('text' => $lang->task->cancel, 'innerClass' => 'batch-btn ajax-btn not-open-url' . ($canBatchCancel ? '' : 'hidden'), 'data-url' => createLink('task', 'batchCancel')),
         );
     }
 
@@ -137,15 +127,8 @@ if($canBatchAction)
         $moduleItems = array();
         foreach($modules as $moduleID => $module)
         {
-            $moduleItems[] = array('text' => $module, 'class' => 'batch-btn ajax-btn', 'data-url' => createLink('task', 'batchChangeModule', "moduleID=$moduleID"));
+            $moduleItems[] = array('text' => $module, 'innerClass' => 'batch-btn ajax-btn', 'data-url' => createLink('task', 'batchChangeModule', "moduleID=$moduleID"));
         }
-
-        menu
-        (
-            set::id('navModule'),
-            set::className('dropdown-menu'),
-            set::items($moduleItems)
-        );
     }
 
     if($canBatchAssignTo)
@@ -153,15 +136,8 @@ if($canBatchAction)
         $assignedToItems = array();
         foreach ($memberPairs as $account => $name)
         {
-            $assignedToItems[] = array('text' => $name, 'class' => 'batch-btn ajax-btn', 'data-url' => createLink('task', 'batchAssignTo', "executionID={$execution->id}&assignedTo={$account}"));
+            $assignedToItems[] = array('text' => $name, 'innerClass' => 'batch-btn ajax-btn', 'data-url' => createLink('task', 'batchAssignTo', "executionID={$execution->id}&assignedTo={$account}"));
         }
-
-        menu
-        (
-            set::id('navAssignedTo'),
-            set::className('dropdown-menu'),
-            set::items($assignedToItems)
-        );
     }
 
     if($canBatchClose || $canBatchCancel || $canBatchEdit)
@@ -171,13 +147,13 @@ if($canBatchAction)
             'type'  => 'btn-group',
             'items' => array(
                 array('text' => $lang->edit, 'className' => "btn size-sm {$editClass}", 'btnType' => 'secondary', 'data-url' => createLink('task', 'batchEdit', "executionID={$execution->id}")),
-                array('caret' => 'up', 'className' => 'btn btn-caret size-sm', 'btnType' => 'secondary', 'url' => '#navActions', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+                array('caret' => 'up', 'className' => 'btn btn-caret size-sm  not-open-url', 'btnType' => 'secondary', 'items' => $batchItems, 'data-placement' => 'top-start'),
             )
         );
     }
 
-    if($canBatchChangeModule) $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->task->moduleAB,   'className' => 'btn btn-caret size-sm', 'btnType' => 'secondary', 'url' => '#navModule',    'data-toggle' => 'dropdown', 'data-placement' => 'top-start');
-    if($canBatchAssignTo)     $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->task->assignedTo, 'className' => 'btn btn-caret size-sm', 'btnType' => 'secondary', 'url' => '#navAssignedTo','data-toggle' => 'dropdown');
+    if($canBatchChangeModule) $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->task->moduleAB,   'className' => 'btn btn-caret size-sm', 'btnType' => 'secondary', 'items' => $moduleItems,    'type' => 'dropdown', 'data-placement' => 'top-start', 'data-menu' => array('searchBox' => true));
+    if($canBatchAssignTo)     $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->task->assignedTo, 'className' => 'btn btn-caret size-sm', 'btnType' => 'secondary', 'items' => $assignedToItems,'type' => 'dropdown');
 }
 
 jsVar('orderBy',        $orderBy);
