@@ -12,6 +12,7 @@ namespace zin;
 jsVar('stepData', $stepData);
 jsVar('productID', $productID);
 
+$priList = array_filter($lang->testcase->priList);
 $requiredFields = $config->testcase->create->requiredFields;
 $items[] = array
 (
@@ -66,7 +67,7 @@ $items[] = array
     'name'    => 'pri',
     'label'   => $lang->testcase->pri,
     'control' => 'pripicker',
-    'items'   => $lang->testcase->priList,
+    'items'   => $priList,
     'width'   => '80px',
     'required' => strpos(",$requiredFields,", ',pri,') !== false
 );
