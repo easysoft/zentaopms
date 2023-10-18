@@ -36,7 +36,7 @@ $URSRItems = array();
 foreach($URSRList as $URSRKey => $URSRValue)
 {
     $contentHtml = "<div class=''><span class='label light-pale circle mr-4'>{$URSRKey}</span>{$URSRValue}</div>";
-    $URSRItems[] = array('value' => $URSRValue, 'text' => $URSRValue, 'content' => array('html' => $contentHtml, 'class' => 'flex w-full border p-4 preference-box'));
+    $URSRItems[] = array('value' => $URSRKey, 'text' => $URSRValue, 'content' => array('html' => $contentHtml, 'class' => 'flex w-full border p-4 preference-box'));
 }
 
 foreach(array('program', 'product', 'project', 'execution') as $objectType)
@@ -54,7 +54,7 @@ foreach(array('program', 'product', 'project', 'execution') as $objectType)
     }
 }
 
-form
+formPanel
 (
     set::labelWidth('140px'),
     formGroup
