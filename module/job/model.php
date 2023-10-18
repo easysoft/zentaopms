@@ -58,7 +58,7 @@ class jobModel extends model
             ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repo=t2.id')
             ->leftJoin(TABLE_PIPELINE)->alias('t3')->on('t1.server=t3.id')
             ->where('t1.deleted')->eq('0')
-            ->beginIF($repoID)->andWhere('t1.repo')->eq($repoID)->fi()
+            ->beginIF($repoID)->andWhere("FIND_IN_SET('{$repoID}', t1.repo)")->fi()
             ->beginIF($engine)->andWhere('t1.engine')->eq($engine)->fi()
             ->beginIF($pipeline)->andWhere('t1.pipeline')->eq($pipeline)->fi()
             ->orderBy($orderBy)
@@ -77,7 +77,7 @@ class jobModel extends model
     {
         return $this->dao->select('id, name, lastStatus')->from(TABLE_JOB)
             ->where('deleted')->eq('0')
-            ->andWhere('repo')->eq($repoID)
+            ->andWhere("FIND_IN_SET('{$repoID}', repo)")
             ->orderBy('id_desc')
             ->fetchAll('id');
     }
@@ -94,7 +94,7 @@ class jobModel extends model
     {
         return $this->dao->select('id, name')->from(TABLE_JOB)
             ->where('deleted')->eq('0')
-            ->andWhere('repo')->eq($repoID)
+            ->andWhere("FIND_IN_SET('{$repoID}', repo)")
             ->beginIF($engine)->andWhere('engine')->eq($engine)->fi()
             ->orderBy('id_desc')
             ->fetchPairs();
