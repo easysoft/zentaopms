@@ -177,15 +177,18 @@ class dtable extends wg
         {
             global $lang;
             $emptyTip   = $this->prop('emptyTip', $lang->noData);
-            $createLink = !empty($this->prop('createLink')) ? $this->getLink($this->prop('createLink')) : '';
-            if(!empty($createLink))
+            $createLink = !empty($this->prop('createLink')) ? $this->prop('createLink') : '';
+            if(is_string($emptyTip))
             {
-                $createTip = $this->prop('createTip', $lang->create);
-                $emptyTip  = array('html' => "<div class='text-gray'>$emptyTip</div><a class='btn primary-pale border-primary' href='$createLink'><i class='icon icon-plus'></i> $createTip</a>", 'className' => 'row gap-4 items-center');
-            }
-            else
-            {
-                $emptyTip = array('html' => "$emptyTip", 'className' => 'text-gray');
+                if(!empty($createLink))
+                {
+                    $createTip = $this->prop('createTip', $lang->create);
+                    $emptyTip  = array('html' => "<div class='text-gray'>$emptyTip</div><a class='btn primary-pale border-primary' href='$createLink'><i class='icon icon-plus'></i> $createTip</a>", 'className' => 'row gap-4 items-center');
+                }
+                else
+                {
+                    $emptyTip = array('html' => "$emptyTip", 'className' => 'text-gray');
+                }
             }
             $this->setProp('emptyTip', $emptyTip);
         }

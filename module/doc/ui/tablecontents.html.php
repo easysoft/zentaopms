@@ -19,6 +19,69 @@ if($canExport)
     if($libType == 'api') $exportLink = $this->createLink('api', $exportMethod, "libID={$libID}&version=0&release={$release}&moduleID={$moduleID}");
 }
 
+/* zin: Define the set::module('doc') feature bar on main menu. */
+featureBar
+(
+    set::current($browseType),
+    set::method('tableContents'),
+    set::linkParams("objectID={$objectID}&libID={$libID}&moduleID={$moduleID}&browseType={key}"),
+    li(searchToggle(set::module($type . $libType . 'Doc')))
+);
+
+toolbar
+(
+    $libType == 'api' && common::hasPriv('api', 'struct') ? item(set(array
+    (
+        'icon'  => 'treemap',
+        'class' => 'ghost',
+        'text'  => $lang->api->struct,
+        'url'   => createLink('api', 'struct', "libID={$libID}"),
+    ))) : null,
+    $libType == 'api' && common::hasPriv('api', 'releases') ? item(set(array
+    (
+        'icon'        => 'version',
+        'class'       => 'ghost',
+        'text'        => $lang->api->releases,
+        'url'         => createLink('api', 'releases', "libID={$libID}"),
+        'data-toggle' => 'modal'
+    ))) : null,
+    $libType == 'api' && common::hasPriv('api', 'createRelease') ? item(set(array
+    (
+        'icon'        => 'publish',
+        'class'       => 'ghost',
+        'text'        => $lang->api->createRelease,
+        'url'         => createLink('api', 'createRelease', "libID={$libID}"),
+        'data-toggle' => 'modal'
+    ))) : null,
+    $canExport ? item(set(array
+    (
+        'id'          => $exportMethod,
+        'icon'        => 'export',
+        'class'       => 'ghost export',
+        'text'        => $lang->export,
+        'url'         => $exportLink,
+        'data-toggle' => 'modal'
+    ))) : null,
+    common::hasPriv('doc', 'createLib') ? item(set(array
+    (
+        'icon'        => 'plus',
+        'class'       => 'btn secondary',
+        'text'        => $lang->doc->createLib,
+        'url'         => createLink('doc', 'createLib', "type={$type}&objectID={$objectID}"),
+        'data-toggle' => 'modal'
+    ))) : null,
+    $libType == 'api' && common::hasPriv('api', 'create') ? item(set(array
+    (
+        'icon'        => 'plus',
+        'class'       => 'btn primary ml-2',
+        'text'        => $lang->api->createApi,
+        'url'         => createLink('api', 'create', "libID={$libID}&moduleID={$moduleID}"),
+        'data-size'   => 'lg',
+        'data-toggle' => 'modal'
+    ))) : null,
+    $libType != 'api' && $libID && common::hasPriv('doc', 'create') ? $createButton : null
+);
+
 if($browseType == 'annex')
 {
     include 'showfiles.html.php';
@@ -33,74 +96,4 @@ else
     include 'doclist.html.php';
 }
 
-/* zin: Define the set::module('doc') feature bar on main menu. */
-div
-(
-    setClass('flex flex-wrap content-start'),
-    featureBar
-    (
-        set::current($browseType),
-        set::method('tableContents'),
-        set::linkParams("objectID={$objectID}&libID={$libID}&moduleID={$moduleID}&browseType={key}"),
-        li(searchToggle(set::module($type . $libType . 'Doc')))
-    ),
-
-    toolbar
-    (
-        $libType == 'api' && common::hasPriv('api', 'struct') ? item(set(array
-        (
-            'icon'  => 'treemap',
-            'class' => 'ghost',
-            'text'  => $lang->api->struct,
-            'url'   => createLink('api', 'struct', "libID={$libID}"),
-        ))) : null,
-        $libType == 'api' && common::hasPriv('api', 'releases') ? item(set(array
-        (
-            'icon'        => 'version',
-            'class'       => 'ghost',
-            'text'        => $lang->api->releases,
-            'url'         => createLink('api', 'releases', "libID={$libID}"),
-            'data-toggle' => 'modal'
-        ))) : null,
-        $libType == 'api' && common::hasPriv('api', 'createRelease') ? item(set(array
-        (
-            'icon'        => 'publish',
-            'class'       => 'ghost',
-            'text'        => $lang->api->createRelease,
-            'url'         => createLink('api', 'createRelease', "libID={$libID}"),
-            'data-toggle' => 'modal'
-        ))) : null,
-        $canExport ? item(set(array
-        (
-            'id'          => $exportMethod,
-            'icon'        => 'export',
-            'class'       => 'ghost export',
-            'text'        => $lang->export,
-            'url'         => $exportLink,
-            'data-toggle' => 'modal'
-        ))) : null,
-        common::hasPriv('doc', 'createLib') ? item(set(array
-        (
-            'icon'        => 'plus',
-            'class'       => 'btn secondary',
-            'text'        => $lang->doc->createLib,
-            'url'         => createLink('doc', 'createLib', "type={$type}&objectID={$objectID}"),
-            'data-toggle' => 'modal'
-        ))) : null,
-        $libType == 'api' && common::hasPriv('api', 'create') ? item(set(array
-        (
-            'icon'        => 'plus',
-            'class'       => 'btn primary ml-2',
-            'text'        => $lang->api->createApi,
-            'url'         => createLink('api', 'create', "libID={$libID}&moduleID={$moduleID}"),
-            'data-size'   => 'lg',
-            'data-toggle' => 'modal'
-        ))) : null,
-        $libType != 'api' && $libID && common::hasPriv('doc', 'create') ? $createButton : null
-    ),
-    div
-    (
-        setClass('doc-content mt-2 flex-initial w-full'),
-        $docContent
-    )
-);
+$docContent;

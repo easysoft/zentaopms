@@ -10,50 +10,36 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$docContent = null;
-if(empty($docs))
+jsVar('iconList', $config->doc->iconList);
+jsVar('draftText', $lang->doc->draft);
+jsVar('canViewDoc', common::hasPriv('doc', 'view'));
+jsVar('canCollect', common::hasPriv('doc', 'collect') && $libType && $libType != 'api');
+jsVar('currentAccount', $app->user->account);
+
+$cols = array();
+foreach($config->doc->dtable->fieldList as $colName => $col)
 {
-    $emptyCreateBtn = $buildCreateBtn($type, $objectID, $lib, $moduleID, $templateParam, $buttonItems);
-    $docContent = div
-    (
-        setClass('table-empty-tip flex justify-center items-center'),
-        span
-        (
-            setClass('text-gray'),
-            $lang->doc->noDoc
-        ),
-        $browseType != 'bySearch' && $libID && (common::hasPriv('doc', 'create') || (common::hasPriv('api', 'create') && !$apiLibID)) ? $emptyCreateBtn : null
-    );
+    if($canExport && $colName == 'id') $col['type'] = 'checkID';
+    if(!in_array($colName, array('id', 'title', 'addedBy', 'addedDate', 'editedBy', 'editedDate', 'actions'))) continue;
+
+    $cols[$colName] = $col;
 }
-else
-{
-    jsVar('iconList', $config->doc->iconList);
-    jsVar('draftText', $lang->doc->draft);
-    jsVar('canViewDoc', common::hasPriv('doc', 'view'));
-    jsVar('canCollect', common::hasPriv('doc', 'collect') && $libType && $libType != 'api');
-    jsVar('currentAccount', $app->user->account);
 
-    $cols = array();
-    foreach($config->doc->dtable->fieldList as $colName => $col)
-    {
-        if($canExport && $colName == 'id') $col['type'] = 'checkID';
-        if(!in_array($colName, array('id', 'title', 'addedBy', 'addedDate', 'editedBy', 'editedDate', 'actions'))) continue;
-
-        $cols[$colName] = $col;
-    }
-
-    $params     = "objectID={$objectID}&libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&orderBy={$orderBy}&param={$param}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}";
-    $tableData  = initTableData($docs, $cols);
-    $docContent = dtable
-    (
-        set::module($this->app->moduleName),
-        set::userMap($users),
-        set::cols($cols),
-        set::data($tableData),
-        set::checkable($canExport),
-        set::onRenderCell(jsRaw('window.rendDocCell')),
-        set::orderBy($orderBy),
-        set::sortLink(createLink($app->rawModule, $app->rawMethod, "objectID={$objectID}&libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&orderBy={name}_{sortType}&param={$param}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
-        set::footPager(usePager(array('linkCreator' => helper::createLink($app->rawModule, $app->rawMethod, $params)))),
-    );
-}
+$params        = "objectID={$objectID}&libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&orderBy={$orderBy}&param={$param}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}";
+$tableData     = empty($docs) ? array() : initTableData($docs, $cols);
+$createDocLink = '';
+if($browseType != 'bysearch' && $libID && common::hasPriv('doc', 'create')) $createDocLink = createLink('doc', 'create', "objectType={$type}&objectID={$objectID}&libID={$lib->id}&moduleID={$moduleID}&type=html{$templateParam}");
+$docContent = dtable(
+    set::module($this->app->moduleName),
+    set::userMap($users),
+    set::cols($cols),
+    set::data($tableData),
+    set::checkable($canExport),
+    set::onRenderCell(jsRaw('window.rendDocCell')),
+    set::emptyTip($lang->doc->noDoc),
+    set::createLink($createDocLink),
+    set::createTip($lang->doc->create),
+    set::orderBy($orderBy),
+    set::sortLink(createLink($app->rawModule, $app->rawMethod, "objectID={$objectID}&libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&orderBy={name}_{sortType}&param={$param}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::footPager(usePager(array('linkCreator' => helper::createLink('doc', $app->rawMethod, $params)))),
+);
