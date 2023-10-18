@@ -127,6 +127,7 @@ dtable
     set::customCols(true),
     set::checkable($canBatchEdit),
     set::sortLink(createLink('product', 'all', "browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$recTotal}&recPerPage={$recPerPage}")),
+    set::orderBy($orderBy),
     $canBatchEdit ? set::footToolbar(array
     (
         array
