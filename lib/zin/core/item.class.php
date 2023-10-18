@@ -17,7 +17,7 @@ require_once __DIR__ . DS . 'wg.func.php';
 
 class item extends wg
 {
-    public function build(): wg
+    public function build(): array|wg|directive
     {
         if($this->parent instanceof wg && method_exists($this->parent, 'onBuildItem'))
         {
