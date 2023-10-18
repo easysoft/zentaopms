@@ -28,6 +28,8 @@ dtable
     set::cols($config->my->execution->dtable->fieldList),
     set::data($executions),
     set::onRenderCell(jsRaw('window.onRenderExecutionCell')),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('my', 'execution', "type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footPager
     (
         usePager(),

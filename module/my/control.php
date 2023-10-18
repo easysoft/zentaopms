@@ -868,6 +868,7 @@ EOF;
         $this->view->parentGroup = $parentGroup;
         $this->view->type        = $type;
         $this->view->pager       = $pager;
+        $this->view->orderBy     = $orderBy;
         $this->view->mode        = 'execution';
 
         $this->display();

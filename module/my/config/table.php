@@ -688,10 +688,11 @@ $config->my->execution->dtable->fieldList['role']['title'] = $lang->team->roleAB
 $config->my->execution->dtable->fieldList['role']['type']  = 'category';
 $config->my->execution->dtable->fieldList['role']['group'] = '2';
 
-$config->my->execution->dtable->fieldList['assignedToMeTasks']['name']  = 'assignedToMeTasks';
-$config->my->execution->dtable->fieldList['assignedToMeTasks']['title'] = $lang->execution->myTask;
-$config->my->execution->dtable->fieldList['assignedToMeTasks']['type']  = 'count';
-$config->my->execution->dtable->fieldList['assignedToMeTasks']['group'] = '2';
+$config->my->execution->dtable->fieldList['assignedToMeTasks']['name']     = 'assignedToMeTasks';
+$config->my->execution->dtable->fieldList['assignedToMeTasks']['title']    = $lang->execution->myTask;
+$config->my->execution->dtable->fieldList['assignedToMeTasks']['type']     = 'count';
+$config->my->execution->dtable->fieldList['assignedToMeTasks']['group']    = '2';
+$config->my->execution->dtable->fieldList['assignedToMeTasks']['sortType'] = false;
 
 $config->my->execution->dtable->fieldList['openedDate']['name']   = 'openedDate';
 $config->my->execution->dtable->fieldList['openedDate']['title']  = $lang->execution->openedDate;
@@ -709,15 +710,17 @@ $config->my->execution->dtable->fieldList['end']['title'] = $lang->execution->en
 $config->my->execution->dtable->fieldList['end']['type']  = 'date';
 $config->my->execution->dtable->fieldList['end']['group'] = '3';
 
-$config->my->execution->dtable->fieldList['join']['name']  = 'join';
-$config->my->execution->dtable->fieldList['join']['title'] = $lang->team->join;
-$config->my->execution->dtable->fieldList['join']['type']  = 'date';
-$config->my->execution->dtable->fieldList['join']['group'] = '4';
+$config->my->execution->dtable->fieldList['join']['name']     = 'join';
+$config->my->execution->dtable->fieldList['join']['title']    = $lang->team->join;
+$config->my->execution->dtable->fieldList['join']['type']     = 'date';
+$config->my->execution->dtable->fieldList['join']['group']    = '4';
+$config->my->execution->dtable->fieldList['join']['sortType'] = false;
 
-$config->my->execution->dtable->fieldList['hours']['name']  = 'hours';
-$config->my->execution->dtable->fieldList['hours']['title'] = $lang->my->hours;
-$config->my->execution->dtable->fieldList['hours']['type']  = 'number';
-$config->my->execution->dtable->fieldList['hours']['group'] = '4';
+$config->my->execution->dtable->fieldList['hours']['name']     = 'hours';
+$config->my->execution->dtable->fieldList['hours']['title']    = $lang->my->hours;
+$config->my->execution->dtable->fieldList['hours']['type']     = 'number';
+$config->my->execution->dtable->fieldList['hours']['group']    = '4';
+$config->my->execution->dtable->fieldList['hours']['sortType'] = false;
 
 $config->my->execution->dtable->fieldList['realBegan']['name']   = 'realBegan';
 $config->my->execution->dtable->fieldList['realBegan']['title']  = $lang->execution->realBegan;
