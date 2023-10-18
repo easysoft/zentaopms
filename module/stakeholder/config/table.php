@@ -19,10 +19,12 @@ $config->stakeholder->dtable->fieldList['name']['group']    = 1;
 
 $config->stakeholder->dtable->fieldList['from']['title']    = $lang->stakeholder->from;
 $config->stakeholder->dtable->fieldList['from']['name']     = 'from';
-$config->stakeholder->dtable->fieldList['from']['type']     = 'text';
+$config->stakeholder->dtable->fieldList['from']['type']     = 'category';
+$config->stakeholder->dtable->fieldList['from']['map']      = $lang->stakeholder->fromList;
 $config->stakeholder->dtable->fieldList['from']['sortType'] = true;
 $config->stakeholder->dtable->fieldList['from']['show']     = true;
 $config->stakeholder->dtable->fieldList['from']['group']    = 2;
+$config->stakeholder->dtable->fieldList['from']['width']    = '100px';
 
 $config->stakeholder->dtable->fieldList['phone']['title'] = $lang->stakeholder->phone;
 $config->stakeholder->dtable->fieldList['phone']['name']  = 'phone';
