@@ -708,6 +708,12 @@
             selector = null;
         }
         options = $.extend({url: url, selector: selector, method: 'POST', data, contentType: false}, options);
+        if(options.dataMap)
+        {
+            options.data = $.extend(options.data || {}, zui.mapFormData(options.dataMap));
+            delete options.dataMap;
+        }
+
         if(options.app) openPage(url, options.app, options);
         else            loadPage(options);
     }
@@ -789,6 +795,7 @@
             if(url) options.url = url;
             if(load)
             {
+                if(load === 'post') return postAndLoadPage(options.url, options.data, options);
                 if(load === 'table')
                 {
                     if(!options.target && event) options.target = $(event.target).closest('.dtable').attr('id');
