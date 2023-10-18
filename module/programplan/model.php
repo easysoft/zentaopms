@@ -338,7 +338,7 @@ class programplanModel extends model
             if(($today > $end) and $plan->status != 'closed')
             {
                 $data->delay     = $this->lang->programplan->delayList[1];
-                $data->delayDays = helper::diffDate($today, substr($end, 0, 10));
+                $data->delayDays = helper::diffDate(($task->status == 'done' || $task->status == 'closed') ? substr($task->finishedDate, 0, 10) : $today, substr($end, 0, 10));
             }
 
             /* If multi task then show the teams. */
