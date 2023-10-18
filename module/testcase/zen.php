@@ -533,7 +533,7 @@ class testcaseZen extends testcase
         $this->view->productID       = $productID;
         $this->view->productName     = $this->products[$productID];
         $this->view->product         = $product;
-        $this->view->branch          = (!empty($product) and $product->type != 'normal') ? $branch : 0;
+        $this->view->branchID        = (!empty($product) and $product->type != 'normal') ? $branch : 0;
         $this->view->branchOption    = $branchOption;
         $this->view->branchTagOption = $branchTagOption;
     }
