@@ -119,14 +119,14 @@ if($canBatchReview)
     foreach($lang->testcase->reviewResultList as $key => $result)
     {
         if($key == '') continue;
-        $reviewItems[] = array('text' => $result, 'className' => 'batch-btn ajax-btn not-open-url', 'data-url' => $this->createLink('testcase', 'batchReview', "result=$key"));
+        $reviewItems[] = array('text' => $result, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => $this->createLink('testcase', 'batchReview', "result=$key"));
     }
 }
 
 $moduleItems = array();
 if($canBatchChangeModule)
 {
-    foreach($modules as $moduleID => $module) $moduleItems[] = array('text' => $module, 'class' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchChangeModule', "moduleID=$moduleID"));
+    foreach($modules as $moduleID => $module) $moduleItems[] = array('text' => $module, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchChangeModule', "moduleID=$moduleID"));
 }
 
 $navActions = array();
@@ -135,7 +135,7 @@ if($canBatchReview || $canBatchDelete || $canBatchChangeModule)
     $navActions = array
     (
         $canBatchReview ? array('text' => $lang->testcase->review, 'class' => 'not-hide-menu', 'items' => $reviewItems) : null,
-        $canBatchDelete ? array('text' => $lang->delete, 'class' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchDelete', "libID=$libID")) : null,
+        $canBatchDelete ? array('text' => $lang->delete, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchDelete', "libID=$libID")) : null,
         $canBatchChangeModule ? array('text' => $lang->testcase->module, 'class' => 'not-hide-menu', 'items' => $moduleItems) : null,
     );
 }
