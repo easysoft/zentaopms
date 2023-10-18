@@ -22,6 +22,8 @@ input[name="realEnd"] {width: 150px;}
 #cards .project-detail .leftTasks, .totalLeft {display:block; font-size: 18px; font-weight: bold; color: #3C4353;}
 #cards .project-team {display:inline-block;}
 #cards .project-actions {display:inline-block; float: right; margin-bottom: 8px;}
+
+.m-project-browse .project-menu-actions {display: flex;}
 .m-project-browse .project-menu-actions > .menu-item > a:hover {background: none; color: var(--menu-hover-bg);}
 
 #cards #cardsFooter {width: 100%; display: flex; justify-content: end;}
