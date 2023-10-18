@@ -22,7 +22,7 @@
     <div class="page-title">
       <span class='text' title="<?php echo $projectName;?>">
         <h4>
-          <?php echo common::hasPriv('sonarqube', 'browseIssue') ? html::a($this->createLink('sonarqube', 'browseIssue', "sonarqubeID={$sonarqubeID}&project={$projectName}"), $projectName, '_parent') : $projectName;?>
+          <?php echo common::hasPriv('sonarqube', 'browseIssue') ? html::a($this->createLink('sonarqube', 'browseIssue', "sonarqubeID={$sonarqubeID}&project=" . str_replace('-', '*', $projectKey)), $projectName, '_parent') : $projectName;?>
           <?php if(!empty($qualitygate->projectStatus->status) and $qualitygate->projectStatus->status != 'NONE'):?>
           <span class="label label-badge label-<?php echo zget($config->sonarqube->projectStatusClass, $qualitygate->projectStatus->status);?>">
             <?php echo zget($lang->sonarqube->qualitygateList, $qualitygate->projectStatus->status);?>
