@@ -16,6 +16,7 @@ jsVar('executionTeams', $executionTeams);
 jsVar('users', $users);
 jsVar('teams', $teams);
 jsVar('currentUser', $app->user->account);
+jsVar('moduleGroup', $moduleGroup);
 
 /* ====== Define the page structure with zin widgets ====== */
 formBatchPanel

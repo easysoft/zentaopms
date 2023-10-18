@@ -23,9 +23,9 @@ window.renderRowData = function($row, index, row)
         taskMembers = members;
     }
 
-    const taskUsers = [];
-    let   disabled  = false;
-    let $assignedTo = $row.find('.form-batch-input[data-name="assignedTo"]').empty();
+    const taskUsers   = [];
+    let   disabled    = false;
+    let   $assignedTo = $row.find('.form-batch-input[data-name="assignedTo"]').empty();
     if(teams[row.id] != undefined && ((row.assignedTo != currentUser && row.mode == 'linear') || taskMembers[currentUser] == undefined))
     {
         disabled = true;
@@ -45,5 +45,16 @@ window.renderRowData = function($row, index, row)
         $row.find('.form-batch-input[data-name="estimate"]').attr('disabled', 'disabled');
         $row.find('.form-batch-input[data-name="consumed"]').attr('disabled', 'disabled');
         $row.find('.form-batch-input[data-name="left"]').attr('disabled', 'disabled');
+    }
+
+    if(moduleGroup[executionID] != undefined)
+    {
+        $row.find('[data-name="module"]').find('.picker-box').on('inited', function(e, info)
+        {
+            let $module = info[0];
+            let modules = moduleGroup[executionID];
+            $module.render({items: modules});
+            $module.$.setValue(row.module);
+        });
     }
 }

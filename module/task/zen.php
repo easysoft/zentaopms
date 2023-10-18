@@ -169,6 +169,8 @@ class taskZen extends task
      */
     protected function assignBatchEditVars(int $executionID): void
     {
+        $this->loadModel('tree');
+
         /* Set menu and related variables. */
         if($executionID)
         {
@@ -184,8 +186,9 @@ class taskZen extends task
             $this->loadModel('my');
             $this->lang->my->menu->work['subModule'] = 'task';
 
-            $this->view->title = $this->lang->task->batchEdit;
-            $this->view->users = $this->loadModel('user')->getPairs('noletter');
+            $this->view->title   = $this->lang->task->batchEdit;
+            $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+            $this->view->modules = array();
         }
 
         /* Check if the request data size exceeds the PHP limit. */
@@ -207,14 +210,25 @@ class taskZen extends task
         $executionTeamList = $this->execution->getMembersByIdList($executionIdList);
         foreach($executionIdList as $id) $executionTeams[$id] = array_column($executionTeamList[$id], 'account');
 
+        $moduleGroup = array();
+        if(!$executionID)
+        {
+            foreach($tasks as $task)
+            {
+                if(isset($moduleGroup[$task->execution])) continue;
+                $executionInfo    = $this->execution->getByID($task->execution);
+                $executionModules = $this->tree->getTaskOptionMenu($task->execution, 0, 'allModule');
+                foreach($executionModules as $moduleID => $moduleName) $moduleGroup[$task->execution][] = array('text' => $executionInfo->name. $moduleName, 'value' => $moduleID);
+            }
+        }
+
         /* Assign. */
         $this->view->executionID    = $executionID;
         $this->view->tasks          = $tasks;
         $this->view->teams          = $this->task->getTeamMembersByIdList($this->post->taskIdList);
         $this->view->executionTeams = $executionTeams;
-        $this->view->executionName  = zget($execution, 'name', '');
-        $this->view->executionType  = zget($execution, 'type', '');
         $this->view->users          = $this->loadModel('user')->getPairs('nodeleted');
+        $this->view->moduleGroup    = $moduleGroup;
 
         $this->display();
     }
