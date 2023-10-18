@@ -39,7 +39,7 @@ function loadStories(productID, moduleID, num, $currentRow = null)
         let $row = $currentRow;
         while($row.length)
         {
-            const $story = $row.find('[data-name="story"] .picker').zui('picker');
+            const $story = $row.find('.form-batch-control[data-name="story"] .picker').zui('picker');
             $story.render({items: stories});
             $story.$.setValue($story.$.value);
 
@@ -73,15 +73,11 @@ function setModules(event)
         let $row = $currentRow;
         while($row.length)
         {
-            const $module = $row.find('.form-batch-input[data-name="module"]').empty();
-
-            $.each(data.modules, function(index, module)
-            {
-                $module.append('<option value="' + module.value + '"' + (module.value == data.currentModuleID ? 'selected' : '')  + '>' + module.text + '</option>');
-            });
+            const $module = $row.find('.form-batch-control[data-name="module"] .picker').zui('picker');
+            $module.render({items: data.modules});
+            $module.$.setValue(data.currentModuleID);
 
             $row = $row.next('tr');
-
             if(!$row.find('td[data-name="module"][data-ditto="on"]').length || !$row.find('td[data-name="branch"][data-ditto="on"]').length) break;
         }
     });
