@@ -222,12 +222,12 @@ $(function(){
     }
     checkInterval = setInterval(() => {
         intervalTimes++;
-        if(intervalTimes > 300)
+        if(intervalTimes > 200)
         {
             clearInterval(checkInterval)
         }
         checkServiceStatus();
-    }, 2000);
+    }, 3000);
 })
 
 /**

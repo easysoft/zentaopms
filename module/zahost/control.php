@@ -77,6 +77,8 @@ class zahost extends control
         $zahost = $this->zahost->getById($id);
 
         $this->view->title      = $this->lang->zahost->view;
+        $this->view->position[] = html::a($this->createLink('host', 'browse'), $this->lang->zahost->common);
+        $this->view->position[] = $this->lang->zahost->view;
 
         $this->view->zahost     = $zahost;
         $this->view->orderBy    = $orderBy;
@@ -169,7 +171,7 @@ class zahost extends control
         }
 
         $this->dao->update(TABLE_ZAHOST)->set('deleted')->eq(1)->where('id')->eq($hostID)->exec();
-        $this->loadModel('action')->create('zahost', $hostID, 'deleted', '', actionModel::CAN_UNDELETED);
+        $this->loadModel('action')->create('zahost', $hostID, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
 
         /* if ajax request, send result. */
         if($this->server->ajax)

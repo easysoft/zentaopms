@@ -42,8 +42,8 @@ $config->zanode->search['fields']['extranet']   = $lang->zanode->extranet;
 $config->zanode->search['params']['name']       = array('operator' => 'include', 'control' => 'input', 'values' => '');
 $config->zanode->search['params']['osName']     = array('operator' => 'include', 'control' => 'input', 'values' => '');
 $config->zanode->search['params']['host']       = array('operator' => '=', 'control' => 'select', 'values' => '');
-$config->zanode->search['params']['status']     = array('operator' => '=', 'control' => 'select', 'values' => $lang->zanode->statusList);
-$config->zanode->search['params']['cpuCores']   = array('operator' => '=', 'control' => 'select', 'values' => $config->zanode->os->cpuCores);
+$config->zanode->search['params']['status']     = array('operator' => '=', 'control' => 'select', 'values' => array('' => '') + $lang->zanode->statusList);
+$config->zanode->search['params']['cpuCores']   = array('operator' => '=', 'control' => 'select', 'values' => array('' => '') + $config->zanode->os->cpuCores);
 $config->zanode->search['params']['memory']     = array('operator' => '=', 'control' => 'input',  'values' => '');
 $config->zanode->search['params']['diskSize']   = array('operator' => '=', 'control' => 'input',  'values' => '');
 
