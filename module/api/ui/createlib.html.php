@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace zin;
 jsVar('productLang', $lang->productCommon);
 jsVar('projectLang', $lang->projectCommon);
-jsVar('libType', $type);
+jsVar('window.libType', $type);
 formPanel
 (
     set::title($lang->api->createLib),
@@ -37,7 +37,7 @@ formPanel
             set::width('3/4'),
             set::name('product'),
             set::items($products),
-            set::value($objectID),
+            set::value($type == 'product' ? $objectID : 0),
             set::required(true),
         )
     ),
@@ -51,7 +51,7 @@ formPanel
             set::width('3/4'),
             set::name('project'),
             set::items($projects),
-            set::value($objectID),
+            set::value($type == 'project' ? $objectID : 0),
             set::required(true),
         )
     ),

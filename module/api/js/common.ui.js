@@ -345,3 +345,38 @@ window.loadWhitelist = function(libID)
         }
     });
 }
+
+/**
+ * Toggle lib type.
+ *
+ * @param  string $libType
+ * @access public
+ * @return void
+ */
+function toggleLibType(e)
+{
+    libType = $(e.target).val() == undefined ? libType : $(e.target).val();
+    if(libType == 'project')
+    {
+        $('#projectBox').removeClass('hidden');
+        $('#productBox').addClass('hidden');
+        $('#acldefault').closest('.radio-primary').show();
+        $('#acldefault').next('label').html($('#acldefault').next('label').html().replace(productLang, projectLang));
+    }
+    else if(libType == 'product')
+    {
+        $('#projectBox').addClass('hidden');
+        $('#productBox').removeClass('hidden');
+        $('#acldefault').closest('.radio-primary').show();
+        $('#acldefault').next('label').html($('#acldefault').next('label').html().replace(projectLang, productLang));
+    }
+    else
+    {
+        var acl = $("input[name='acl']:checked").val();
+        if(acl == 'default') $("input[id='aclopen']").prop('checked', true);
+
+        $('#projectBox').addClass('hidden');
+        $('#productBox').addClass('hidden');
+        $('#acldefault').closest('.radio-primary').hide();
+    }
+}
