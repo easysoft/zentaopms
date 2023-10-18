@@ -126,6 +126,13 @@ class dtable extends wg
             }
             $this->setProp('footPager', $pager);
         }
+
+        $orderBy = $this->prop('orderBy');
+        if(is_string($orderBy))
+        {
+            list($orderByName, $orderByType) = explode('_', $orderBy);
+            $this->setProp('orderBy', array($orderByName => $orderByType));
+        }
     }
 
     public static function getPageCSS(): string|false
