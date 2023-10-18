@@ -1366,6 +1366,9 @@ EOF;
         $this->app->loadLang('admin');
         if($this->app->user->account == 'guest') return $this->send(array('result' => 'fail', 'message' => 'guest', 'load' => array('alter' => 'guest', 'back' => true)));
 
+        $isonlybody = helper::inOnlyBodyMode();
+        if(!$isonlybody) unset($this->lang->my->menu);
+
         if(!empty($_POST))
         {
             $this->user->updatePassword($this->app->user->id);
@@ -1374,9 +1377,10 @@ EOF;
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('my', 'index')));
         }
 
-        $this->view->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->changePassword;
-        $this->view->user  = $this->user->getById($this->app->user->account);
-        $this->view->rand  = $this->user->updateSessionRandom();
+        $this->view->isonlybody = $isonlybody;
+        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->changePassword;
+        $this->view->user       = $this->user->getById($this->app->user->account);
+        $this->view->rand       = $this->user->updateSessionRandom();
         $this->display();
     }
 

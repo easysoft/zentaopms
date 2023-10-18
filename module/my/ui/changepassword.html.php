@@ -12,13 +12,24 @@ namespace zin;
 
 $reason = $app->user->modifyPasswordReason;
 
-modalHeader
+$isonlybody ? modalHeader
 (
     set::title($lang->my->changePassword)
-);
+) : null;
 
 formPanel
 (
+    set::size('sm'),
+    setStyle('padding-top', '1rem'),
+    $isonlybody ? null :
+    to::heading
+    (
+        div
+        (
+            setClass('panel-title text-lg'),
+            $lang->my->changePassword,
+        )
+    ),
     on::change('#originalPassword,#password1,#password2', 'changePassword'),
     on::click('button[type=submit]', 'clickSubmit'),
     h::import($config->webRoot . 'js/md5.js', 'js'),
