@@ -549,25 +549,28 @@ $config->my->testtask->dtable->fieldList['actions']['list']['edit']['data-size']
 
 $config->my->testcase = new stdclass();
 $config->my->testcase->dtable = new stdclass();
-$config->my->testcase->dtable->fieldList['id']['name']  = 'id';
-$config->my->testcase->dtable->fieldList['id']['title'] = $lang->idAB;
-$config->my->testcase->dtable->fieldList['id']['type']  = 'checkID';
-$config->my->testcase->dtable->fieldList['id']['fixed'] = 'left';
+$config->my->testcase->dtable->fieldList['id']['name']     = 'id';
+$config->my->testcase->dtable->fieldList['id']['title']    = $lang->idAB;
+$config->my->testcase->dtable->fieldList['id']['type']     = 'checkID';
+$config->my->testcase->dtable->fieldList['id']['fixed']    = 'left';
+$config->my->testcase->dtable->fieldList['id']['sortType'] = true;
 
-$config->my->testcase->dtable->fieldList['title']['name']  = 'title';
-$config->my->testcase->dtable->fieldList['title']['title'] = $lang->testcase->title;
-$config->my->testcase->dtable->fieldList['title']['type']  = 'title';
-$config->my->testcase->dtable->fieldList['title']['link']  = array('module' => 'testcase', 'method' => 'view', 'params' => 'caseID={id}&version={version}');
-$config->my->testcase->dtable->fieldList['title']['fixed'] = 'left';
+$config->my->testcase->dtable->fieldList['title']['name']     = 'title';
+$config->my->testcase->dtable->fieldList['title']['title']    = $lang->testcase->title;
+$config->my->testcase->dtable->fieldList['title']['type']     = 'title';
+$config->my->testcase->dtable->fieldList['title']['link']     = array('module' => 'testcase', 'method' => 'view', 'params' => 'caseID={id}&version={version}');
+$config->my->testcase->dtable->fieldList['title']['fixed']    = 'left';
+$config->my->testcase->dtable->fieldList['title']['sortType'] = true;
 
 $config->my->testcase->dtable->fieldList['pri']    = $config->testcase->dtable->fieldList['pri'];
 $config->my->testcase->dtable->fieldList['type']   = $config->testcase->dtable->fieldList['type'];
 $config->my->testcase->dtable->fieldList['status'] = $config->testcase->dtable->fieldList['status'];
 
-$config->my->testcase->dtable->fieldList['testtask']['name']  = 'taskName';
-$config->my->testcase->dtable->fieldList['testtask']['title'] = $lang->testtask->common;
-$config->my->testcase->dtable->fieldList['testtask']['type']  = 'text';
-$config->my->testcase->dtable->fieldList['testtask']['group'] = 'testtask';
+$config->my->testcase->dtable->fieldList['testtask']['name']     = 'taskName';
+$config->my->testcase->dtable->fieldList['testtask']['title']    = $lang->testtask->common;
+$config->my->testcase->dtable->fieldList['testtask']['type']     = 'text';
+$config->my->testcase->dtable->fieldList['testtask']['group']    = 'testtask';
+$config->my->testcase->dtable->fieldList['testtask']['sortType'] = true;
 
 $config->my->testcase->dtable->fieldList['openedBy']      = $config->testcase->dtable->fieldList['openedBy'];
 $config->my->testcase->dtable->fieldList['lastRunner']    = $config->testcase->dtable->fieldList['lastRunner'];
