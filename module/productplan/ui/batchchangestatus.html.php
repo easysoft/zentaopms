@@ -35,7 +35,6 @@ formBatchPanel
     set::mode('edit'),
     set::items($items),
     set::data(array_values($plans)),
-    set::onRenderRow(jsRaw('renderRowData')),
 );
 
 render();
