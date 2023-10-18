@@ -331,9 +331,10 @@ $config->my->requirement->actionList['close']['url']         = array('module' =>
 $config->my->requirement->actionList['close']['data-toggle'] = 'modal';
 
 $config->my->requirement->dtable = new stdclass();
-$config->my->requirement->dtable->fieldList['id']['name']  = 'id';
-$config->my->requirement->dtable->fieldList['id']['title'] = $lang->idAB;
-$config->my->requirement->dtable->fieldList['id']['type']  = 'id';
+$config->my->requirement->dtable->fieldList['id']['name']     = 'id';
+$config->my->requirement->dtable->fieldList['id']['title']    = $lang->idAB;
+$config->my->requirement->dtable->fieldList['id']['type']     = 'id';
+$config->my->requirement->dtable->fieldList['id']['sortType'] = true;
 
 $config->my->requirement->dtable->fieldList['title']['name']         = 'title';
 $config->my->requirement->dtable->fieldList['title']['title']        = common::checkNotCN() ? $lang->URCommon . ' ' . $lang->my->name : $lang->URCommon . $lang->my->name;
@@ -341,38 +342,45 @@ $config->my->requirement->dtable->fieldList['title']['type']         = 'title';
 $config->my->requirement->dtable->fieldList['title']['nestedToggle'] = true;
 $config->my->requirement->dtable->fieldList['title']['link']         = array('module' => 'story', 'method' => 'view', 'params' => 'id={id}&version=0&param=0&storyType=requirement');
 $config->my->requirement->dtable->fieldList['title']['fixed']        = 'left';
+$config->my->requirement->dtable->fieldList['title']['sortType']     = true;
 
-$config->my->requirement->dtable->fieldList['pri']['name']  = 'pri';
-$config->my->requirement->dtable->fieldList['pri']['title'] = $lang->priAB;
-$config->my->requirement->dtable->fieldList['pri']['type']  = 'pri';
-$config->my->requirement->dtable->fieldList['pri']['group'] = 'pri';
+$config->my->requirement->dtable->fieldList['pri']['name']     = 'pri';
+$config->my->requirement->dtable->fieldList['pri']['title']    = $lang->priAB;
+$config->my->requirement->dtable->fieldList['pri']['type']     = 'pri';
+$config->my->requirement->dtable->fieldList['pri']['group']    = 'pri';
+$config->my->requirement->dtable->fieldList['pri']['sortType'] = true;
 
-$config->my->requirement->dtable->fieldList['product']['name']  = 'productTitle';
-$config->my->requirement->dtable->fieldList['product']['title'] = $lang->story->product;
-$config->my->requirement->dtable->fieldList['product']['type']  = 'text';
-$config->my->requirement->dtable->fieldList['product']['group'] = 'pri';
+$config->my->requirement->dtable->fieldList['product']['name']     = 'productTitle';
+$config->my->requirement->dtable->fieldList['product']['title']    = $lang->story->product;
+$config->my->requirement->dtable->fieldList['product']['type']     = 'text';
+$config->my->requirement->dtable->fieldList['product']['group']    = 'pri';
+$config->my->requirement->dtable->fieldList['product']['sortType'] = true;
 
 $config->my->requirement->dtable->fieldList['status']['name']      = 'status';
 $config->my->requirement->dtable->fieldList['status']['title']     = $lang->statusAB;
 $config->my->requirement->dtable->fieldList['status']['type']      = 'status';
 $config->my->requirement->dtable->fieldList['status']['statusMap'] = $lang->story->statusList;
 $config->my->requirement->dtable->fieldList['status']['group']     = 'pri';
+$config->my->requirement->dtable->fieldList['status']['sortType']  = true;
 
-$config->my->requirement->dtable->fieldList['openedBy']['name']  = 'openedBy';
-$config->my->requirement->dtable->fieldList['openedBy']['title'] = $lang->story->openedByAB;
-$config->my->requirement->dtable->fieldList['openedBy']['type']  = 'user';
-$config->my->requirement->dtable->fieldList['openedBy']['group'] = 'openedBy';
+$config->my->requirement->dtable->fieldList['openedBy']['name']     = 'openedBy';
+$config->my->requirement->dtable->fieldList['openedBy']['title']    = $lang->story->openedByAB;
+$config->my->requirement->dtable->fieldList['openedBy']['type']     = 'user';
+$config->my->requirement->dtable->fieldList['openedBy']['group']    = 'openedBy';
+$config->my->requirement->dtable->fieldList['openedBy']['sortType'] = true;
 
-$config->my->requirement->dtable->fieldList['estimate']['name']  = 'estimate';
-$config->my->requirement->dtable->fieldList['estimate']['title'] = $lang->story->estimateAB;
-$config->my->requirement->dtable->fieldList['estimate']['type']  = 'count';
-$config->my->requirement->dtable->fieldList['estimate']['group'] = 'openedBy';
+$config->my->requirement->dtable->fieldList['estimate']['name']     = 'estimate';
+$config->my->requirement->dtable->fieldList['estimate']['title']    = $lang->story->estimateAB;
+$config->my->requirement->dtable->fieldList['estimate']['type']     = 'count';
+$config->my->requirement->dtable->fieldList['estimate']['group']    = 'openedBy';
+$config->my->requirement->dtable->fieldList['estimate']['sortType'] = true;
 
-$config->my->requirement->dtable->fieldList['stage']['name']  = 'stage';
-$config->my->requirement->dtable->fieldList['stage']['title'] = $lang->story->stageAB;
-$config->my->requirement->dtable->fieldList['stage']['type']  = 'category';
-$config->my->requirement->dtable->fieldList['stage']['map']   = $lang->story->stageList;
-$config->my->requirement->dtable->fieldList['stage']['group'] = 'openedBy';
+$config->my->requirement->dtable->fieldList['stage']['name']     = 'stage';
+$config->my->requirement->dtable->fieldList['stage']['title']    = $lang->story->stageAB;
+$config->my->requirement->dtable->fieldList['stage']['type']     = 'category';
+$config->my->requirement->dtable->fieldList['stage']['map']      = $lang->story->stageList;
+$config->my->requirement->dtable->fieldList['stage']['group']    = 'openedBy';
+$config->my->requirement->dtable->fieldList['stage']['sortType'] = true;
 
 $config->my->requirement->dtable->fieldList['actions']['name']     = 'actions';
 $config->my->requirement->dtable->fieldList['actions']['title']    = $lang->actions;

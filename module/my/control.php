@@ -414,6 +414,7 @@ EOF;
 
         /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
+        if(strpos($sort, 'productTitle') !== false) $sort = str_replace('productTitle', 'product', $sort);
         if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
         $queryID = ($type == 'bysearch') ? (int)$param : 0;
 
@@ -448,6 +449,7 @@ EOF;
         $this->view->param    = $param;
         $this->view->mode     = 'requirement';
         $this->view->pager    = $pager;
+        $this->view->orderBy  = $orderBy;
         $this->display();
     }
 
