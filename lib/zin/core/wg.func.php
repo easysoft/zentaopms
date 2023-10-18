@@ -111,7 +111,7 @@ function setData(string|array $name, mixed $value = null): directive
     $attrs = array();
     foreach($map as $key => $value)
     {
-        $name = "data-$key";
+        $name = 'data-' . strtolower(preg_replace('/(?<!^)[A-Z]/', '-$0', $key));
         if(is_bool($value))       $attrs[$name] = $value ? 'true' : 'false';
         else if(is_array($value)) $attrs[$name] = json_encode($value);
         else                      $attrs[$name] = $value;
