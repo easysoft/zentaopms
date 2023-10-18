@@ -49,6 +49,9 @@ dtable
     set::onRenderCell(jsRaw('window.renderCell')),
     set::footer(jsRaw("function(){return [{html: '{$summary}', className: 'text-dark'}, 'flex', 'pager'];}")),
     set::footPager(usePager()),
+    set::emptyTip($lang->testsuite->noTestsuite),
+    set::createTip($lang->testsuite->create),
+    set::createLink(array('module' => 'testsuite', 'method' => 'create', 'params' => "productID={$product->id}")), 
 );
 
 render();
