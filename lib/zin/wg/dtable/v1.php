@@ -133,6 +133,25 @@ class dtable extends wg
             list($orderByName, $orderByType) = explode('_', $orderBy);
             $this->setProp('orderBy', array($orderByName => $orderByType));
         }
+
+        /* Support to set footToolbar with items array. */
+        $footToolbar = $this->prop('footToolbar');
+        if(!empty($footToolbar))
+        {
+            if(!is_array($footToolbar))     $footToolbar = array('items' => array($footToolbar));
+            if(array_is_list($footToolbar)) $footToolbar = array('items' => $footToolbar);
+            $footToolbarItems = array();
+            if(isset($footToolbar['items']))
+            {
+                foreach($footToolbar['items'] as $item)
+                {
+                    if($item instanceof item) $item = $item->props->toJSON();
+                    $footToolbarItems[] = $item;
+                }
+                $footToolbar['items'] = $footToolbarItems;
+            }
+            $this->setProp('footToolbar', $footToolbar);
+        }
     }
 
     public static function getPageCSS(): string|false
