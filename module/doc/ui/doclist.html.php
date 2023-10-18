@@ -46,11 +46,14 @@ else
     $tableData  = initTableData($docs, $cols);
     $docContent = dtable
     (
+        set::module($this->app->moduleName),
         set::userMap($users),
         set::cols($cols),
         set::data($tableData),
         set::checkable($canExport),
         set::onRenderCell(jsRaw('window.rendDocCell')),
-        set::footPager(usePager(array('linkCreator' => helper::createLink('doc', $app->rawMethod, $params)))),
+        set::orderBy($orderBy),
+        set::sortLink(createLink($app->rawModule, $app->rawMethod, "objectID={$objectID}&libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&orderBy={name}_{sortType}&param={$param}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+        set::footPager(usePager(array('linkCreator' => helper::createLink($app->rawModule, $app->rawMethod, $params)))),
     );
 }
