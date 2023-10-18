@@ -1178,6 +1178,8 @@ class InstanceModel extends model
                     ->autoCheck()
                     ->exec();
                 $instance->status = $statusData->status;
+
+                if($instance->status == 'running') $this->saveAuthInfo($instance);
             }
 
             $status = new stdclass;
