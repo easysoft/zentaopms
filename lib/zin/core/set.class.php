@@ -28,13 +28,22 @@ class set
             return directive('prop', array('class' => $args));
         }
 
-        /* compatible with zui prop className. */
-        else if($prop === '_className')
+        /* Compatible with zui prop className. */
+        if($prop === '_className')
         {
             return directive('prop', array('className' => $args));
         }
 
-        $value = count($args) > 1 ? $args : array_shift($args);
+        /* Support to set url with createLink params. */
+        if(($prop === 'url' || $prop === 'href' || $prop === 'link') && count($args) > 1)
+        {
+            $value = call_user_func_array('\helper::createLink', $args);
+        }
+        else
+        {
+            $value = count($args) > 1 ? $args : array_shift($args);
+        }
+
         return directive('prop', array($prop => $value));
     }
 }
