@@ -83,6 +83,7 @@ foreach($reviewList as $review)
 }
 
 $reviewList = initTableData($reviewList, $config->my->audit->dtable->fieldList, $this->my);
+$sortLink   = $app->rawMethod == 'audit' ? createLink('my', 'audit', "browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}") : createLink('my', $app->rawMethod, "mode={$mode}&type={$type}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
 
 $cols = array_values($config->my->audit->dtable->fieldList);
 $data = array_values($reviewList);
@@ -93,7 +94,7 @@ dtable
     set::data($data),
     set::onRenderCell(jsRaw('window.onRenderCell')),
     set::orderBy($orderBy),
-    set::sortLink(createLink('my', 'audit', "browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::sortLink($sortLink),
     set::footPager(usePager()),
 );
 
