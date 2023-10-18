@@ -21,6 +21,7 @@ if(hasPriv('dept', 'edit'))
     $deptAction['key']  = 'edit';
     $deptAction['icon'] = 'edit';
     $deptAction['hint'] = $lang->dept->edit;
+    $deptAction['onClick'] = jsRaw('window.operateDept');
 
     $deptActions[] = $deptAction;
 }
@@ -30,6 +31,7 @@ if(hasPriv('dept', 'delete'))
     $deptAction['key']  = 'delete';
     $deptAction['icon'] = 'trash';
     $deptAction['hint'] = $lang->dept->delete;
+    $deptAction['onClick'] = jsRaw('window.operateDept');
 
     $deptActions[] = $deptAction;
 }
@@ -47,7 +49,6 @@ sidebar
             set::items($tree),
             set::hover(true),
             set::itemActions($deptActions),
-            set::onClick(jsRaw('window.operateDept')),
         ),
     ),
 );
@@ -77,7 +78,7 @@ $deptInputs = array();
 foreach($sons as $dept)
 {
 
-    if($sonDept->order > $maxOrder) $maxOrder = $sonDept->order;
+    if($dept->order > $maxOrder) $maxOrder = $dept->order;
     $deptInputs[] = formGroup
     (
         setClass('w-full my-1'),

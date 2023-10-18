@@ -482,4 +482,18 @@ class deptModel extends model
         krsort($tree);
         return array_pop($tree);
     }
+
+    /**
+     * 删除部门。
+     * Delete dept.
+     *
+     * @access public
+     * @return array
+     */
+    public function deleteDept($deptID): bool
+    {
+        $this->dao->delete()->from(TABLE_DEPT)->where('id')->eq($deptID)->exec();
+
+        return !dao::isError();
+    }
 }
