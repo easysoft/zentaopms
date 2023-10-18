@@ -128,16 +128,16 @@ dtable
     set::checkable($canBatchEdit),
     set::sortLink(createLink('product', 'all', "browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$recTotal}&recPerPage={$recPerPage}")),
     set::orderBy($orderBy),
-    $canBatchEdit ? set::footToolbar(array
+    $canBatchEdit ? set::footToolbar
     (
-        array
+        item
         (
-            'text'      => $lang->edit,
-            'btnType'   => 'secondary batch-btn',
-            'data-page' => 'batch',
-            'data-formaction' => $this->createLink('product', 'batchEdit')
+            set::text($lang->edit),
+            set::btnType('secondary batch-btn'),
+            setData('page', 'batch'),
+            setData('formaction', $this->createLink('product', 'batchEdit'))
         )
-    )) : null,
+    ) : null,
     set::footPager(usePager())
 );
 
