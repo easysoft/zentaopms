@@ -83,7 +83,7 @@ featureBar
             on::change('changeItem'),
         ),
     ),
-    li(searchToggle()),
+    li(searchToggle(set::module('action'))),
 );
 
 $content = null;
