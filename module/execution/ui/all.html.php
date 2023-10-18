@@ -91,6 +91,8 @@ dtable
     set::customCols(true),
     set::footToolbar($footToolbar),
     set::onRenderCell(jsRaw('window.onRenderCell')),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('execution', 'all', "status={$status}&orderBy={name}_{sortType}&productID={$productID}&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&page={$pager->pageID}")),
     set::footPager(usePager(array
     (
         'linkCreator' => helper::createLink('execution', 'all', "status={$status}&orderBy={$orderBy}&productID={$productID}&param=$param&recTotal={recTotal}&recPerPage={recPerPage}&page={page}")

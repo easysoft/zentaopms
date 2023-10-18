@@ -2655,8 +2655,12 @@ class execution extends control
         $actionURL = $this->createLink('execution', 'all', "status=bySearch&orderBy=$orderBy&productID=$productID&param=myQueryID");
         $this->execution->buildSearchForm($queryID, $actionURL);
 
+        $sort = $orderBy;
+        if(strpos($sort, 'rawID_') !== false) $sort = str_replace('rawID_', 'id_', $sort);
+        if(strpos($sort, 'nameCol_') !== false) $sort = str_replace('nameCol_', 'name_', $sort);
+
         $this->view->title          = $this->lang->execution->allExecutions;
-        $this->view->executionStats = $this->execution->getStatData(0, $status, $productID, 0, false, $queryID, $orderBy, $pager);
+        $this->view->executionStats = $this->execution->getStatData(0, $status, $productID, 0, false, $queryID, $sort, $pager);
         $this->view->productList    = $this->loadModel('product')->getProductPairsByProject(0);
         $this->view->productID      = $productID;
         $this->view->pager          = $pager;
