@@ -76,15 +76,10 @@ class doc extends control
 
         if($moduleID) $libID = $this->tree->getById($moduleID)->root;
         list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType('mine', 0, $libID);
-        if($type != 'mine')
-        {
-            $objectTitle = '';
-            if($type == 'view')      $objectTitle = $this->lang->doc->myView;
-            if($type == 'collect')   $objectTitle = $this->lang->doc->myCollection;
-            if($type == 'createdby') $objectTitle = $this->lang->doc->myCreation;
-            if($type == 'editedby')  $objectTitle = $this->lang->doc->myEdited;
-            if($objectTitle) $objectDropdown = "<div id='sidebarHeader'><div class='title' title='{$objectTitle}'>{$objectTitle}</div></div>";
-        }
+
+        $titleList      = array('mine' => 'myLib', 'view' => 'myView', 'collect' => 'myCollection', 'createdby' => 'myCreation', 'editedby' => 'myEdited');
+        $objectTitle    = $this->lang->doc->{$titleList[$type]};
+        $objectDropdown = "<div id='sidebarHeader'><div class='title' title='{$objectTitle}'>{$objectTitle}</div></div>";
 
         /* Build the search form. */
         $queryID    = $browseType == 'bysearch' ? (int)$param : 0;
