@@ -89,4 +89,12 @@ input
     set::value($rand)
 );
 
-render();
+if($isonlybody)
+{
+    render();
+}
+else
+{
+    set::zui(true);
+    render('pagebase');
+}
