@@ -66,6 +66,8 @@ dtable
     set::cols($config->project->dtable->fieldList),
     set::data($projects),
     set::onRenderCell(jsRaw('window.onRenderProjectNameCell')),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('my', 'project', "status={$status}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&orderBy={name}_{sortType}")),
     set::footer(array(array('html' => $footerHtml), 'flex', 'pager')),
     set::footPager(usePager()),
 );
