@@ -56,6 +56,7 @@ $config->personnel->whitelist->dtable->fieldList['realname']['title']    = $lang
 $config->personnel->whitelist->dtable->fieldList['realname']['type']     = 'title';
 $config->personnel->whitelist->dtable->fieldList['realname']['minWidth'] = '200';
 $config->personnel->whitelist->dtable->fieldList['realname']['fixed']    = 'left';
+$config->personnel->whitelist->dtable->fieldList['realname']['sortType'] = false;
 
 $config->personnel->whitelist->dtable->fieldList['dept']['name']   = 'dept';
 $config->personnel->whitelist->dtable->fieldList['dept']['title']  = $lang->user->dept;
