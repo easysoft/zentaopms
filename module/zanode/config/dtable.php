@@ -57,12 +57,12 @@ $config->zanode->dtable->fieldList['actions']['list']['suspend']['url']       = 
 $config->zanode->dtable->fieldList['actions']['list']['suspend']['className'] = 'ajax-submit';
 
 $config->zanode->dtable->fieldList['actions']['list']['start']['icon']      = 'play';
-$config->zanode->dtable->fieldList['actions']['list']['start']['hint']      = $lang->zanode->start;
+$config->zanode->dtable->fieldList['actions']['list']['start']['hint']      = $lang->zanode->boot;
 $config->zanode->dtable->fieldList['actions']['list']['start']['url']       = array('module' => 'zanode', 'method' => 'start', 'params' => 'zanodeID={id}');
 $config->zanode->dtable->fieldList['actions']['list']['start']['className'] = 'ajax-submit';
 
 $config->zanode->dtable->fieldList['actions']['list']['close']['icon']      = 'off';
-$config->zanode->dtable->fieldList['actions']['list']['close']['hint']      = $lang->zanode->close;
+$config->zanode->dtable->fieldList['actions']['list']['close']['hint']      = $lang->zanode->shutdown;
 $config->zanode->dtable->fieldList['actions']['list']['close']['url']       = array('module' => 'zanode', 'method' => 'close', 'params' => 'zanodeID={id}');
 $config->zanode->dtable->fieldList['actions']['list']['close']['className'] = 'ajax-submit';
 
@@ -87,6 +87,6 @@ $config->zanode->dtable->fieldList['actions']['list']['createImage']['url']     
 $config->zanode->dtable->fieldList['actions']['list']['createImage']['data-toggle'] = 'modal';
 
 $config->zanode->dtable->fieldList['actions']['list']['destroy']['icon']      = 'trash';
-$config->zanode->dtable->fieldList['actions']['list']['destroy']['hint']      = $lang->zanode->destory;
+$config->zanode->dtable->fieldList['actions']['list']['destroy']['hint']      = $lang->zanode->destroy;
 $config->zanode->dtable->fieldList['actions']['list']['destroy']['url']       = array('module' => 'zanode', 'method' => 'destory', 'params' => 'zanodeID={id}');
 $config->zanode->dtable->fieldList['actions']['list']['destroy']['className'] = 'ajax-submit';
