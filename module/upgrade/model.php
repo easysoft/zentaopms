@@ -536,6 +536,7 @@ class upgradeModel extends model
                 {
                     $table  = $this->config->db->prefix . 'im_chat';
                     $exists = $this->checkFieldsExists($table, 'adminInvite');
+                    $exists = $this->checkFieldsExists($table, 'adminInvite');
                     if(!$exists)
                     {
                         $this->dbh->query("ALTER TABLE $table ADD `adminInvite` enum('0','1') NOT NULL DEFAULT '0' AFTER `mergedChats`");

@@ -22,7 +22,7 @@ div
         (
             set::width('800px'),
             set::target('_self'),
-            set::url(inlink('execute')),
+            set::url(inlink('execute', "fromVersion={$fromVersion}")),
             on::submit('submit.disabled=1'),
             set::title($lang->upgrade->confirm),
             div
