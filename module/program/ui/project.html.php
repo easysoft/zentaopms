@@ -30,7 +30,9 @@ toolbar
     ))) : null,
 );
 
-$cols         = $this->config->project->dtable->fieldList;
+$cols = $this->config->project->dtable->fieldList;
+$cols['progress']['sortType'] = false;
+
 $projectStats = initTableData($projectStats, $cols, $this->project);
 
 $waitCount      = 0;
@@ -62,6 +64,8 @@ dtable
     set::cols($cols),
     set::data(array_values($projectStats)),
     set::nested(false),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('program', 'project', "programID={$programID}&&browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
     set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(checkedIDList, '{$summary}');}")),
