@@ -713,6 +713,7 @@
             options.data = $.extend(options.data || {}, zui.mapFormData(options.dataMap));
             delete options.dataMap;
         }
+        if(!Object.keys(options.data).length) return;
 
         if(options.app) openPage(url, options.app, options);
         else            loadPage(options);
