@@ -585,7 +585,7 @@ class commonModel extends model
             echo "<li class='text-gray switchTo'>{$lang->switchTo}</li>";
             foreach($userVisions as $vision)
             {
-                echo ($currentVision == $vision ? '<li class="active">' : '<li>') . html::a(helper::createLink('my', 'ajaxSwitchVision', "vision=$vision"), $lang->visionList[$vision], '', "data-type='ajax'") . '</li>';
+                if(isset($lang->visionList[$vision])) echo ($currentVision == $vision ? '<li class="active">' : '<li>') . html::a(helper::createLink('my', 'ajaxSwitchVision', "vision=$vision"), $lang->visionList[$vision], '', "data-type='ajax'") . '</li>';
             }
             echo '</ul>';
 
