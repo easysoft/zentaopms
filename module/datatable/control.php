@@ -189,17 +189,15 @@ class datatable extends control
      *
      * @param  string $module
      * @param  string $method
-     * @param  int    $system
      * @access public
      * @return void
      */
-    public function ajaxSaveGlobal($module, $method)
+    public function ajaxSaveGlobal(string $module, string $method)
     {
-        $account  = $this->app->user->account;
         $target   = $module . ucfirst($method);
         $settings = isset($this->config->datatable->$target->cols) ? $this->config->datatable->$target->cols : '';
         if(!empty($settings)) $this->loadModel('setting')->setItem("system.datatable.{$target}.cols", $settings);
 
-        return $this->send(array('result' => 'success', 'load' => true));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
     }
 }
