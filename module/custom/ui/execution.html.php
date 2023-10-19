@@ -24,7 +24,7 @@ div
         span
         (
             setClass('article-h2'),
-            $lang->custom->$module->fields['product']
+            $lang->custom->$module->fields[$module]
         ),
         formGroup
         (
