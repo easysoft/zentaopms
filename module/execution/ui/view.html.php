@@ -417,7 +417,7 @@ if(common::hasPriv('execution', 'doc'))
             a
             (
                 $docLib->name,
-                set('data-app', $app->tab),
+                set('data-app', $app->tab == 'search' ? 'execution' : $app->tab),
                 set::href($libID == 'files' ? $this->createLink('doc', 'showFiles', "type=execution&objectID={$execution->id}") : $this->createLink('execution', 'doc', "objectID={$execution->id}&libID={$libID}")),
             )
         );
