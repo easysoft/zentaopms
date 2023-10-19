@@ -710,6 +710,7 @@ class upgradeModel extends model
             case '18_8':
                 /* Upgrade members for testtask. */
                 $this->upgradeTesttaskMembers();
+                $this->loadModel('program')->refreshStats(true);
                 break;
         }
 

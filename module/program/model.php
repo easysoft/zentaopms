@@ -1389,19 +1389,6 @@ class programModel extends model
             }
         }
 
-        $this->loadModel('project');
-        foreach($projects as $projectID => $project)
-        {
-            if($project->model != 'waterfall') continue;
-
-            $projectStats = $this->project->getWaterfallPVEVAC($projectID);
-            $stats[$projectID]['totalEstimate'] = $projectStats['PV'];
-            $stats[$projectID]['totalConsumed'] = $projectStats['AC'];
-            $stats[$projectID]['totalLeft']     = $projectStats['left'];
-            $stats[$projectID]['totalConsumedNotDel'] = empty($project->deleted) ? $projectStats['AC'] : 0;
-            $stats[$projectID]['totalLeftNotDel']     = empty($project->deleted) ? $projectStats['left'] : 0;
-        }
-
         foreach($teamMembers as $projectID => $teamCount)
         {
             if(!isset($stats[$projectID])) $stats[$projectID] = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'teamCount' => 0, 'totalConsumedNotDel' => 0, 'totalLeftNotDel' => 0);
