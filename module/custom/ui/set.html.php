@@ -42,7 +42,6 @@ if($module == 'project' && $field == 'unitList')
     (
         set::width('1/3'),
         set::label($lang->custom->project->defaultCurrency),
-        set::control('select'),
         set::name('defaultCurrency'),
         set::items($checkedUnitList),
         set::value($defaultCurrency),
