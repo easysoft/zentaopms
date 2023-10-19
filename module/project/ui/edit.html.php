@@ -492,6 +492,7 @@ formPanel
         set::items($lang->project->authList),
         set::value('extend')
     ),
+    formHidden('multiple', $project->multiple),
 );
 
 useData('title', $title);

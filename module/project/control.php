@@ -465,11 +465,12 @@ class project extends control
         {
             $postData        = form::data($this->config->project->form->edit);
             $postProductData = form::data($this->config->project->form->edit)->get('products,plans,branch');
-            $newProject = $this->projectZen->prepareProject($postData, $project->hasProduct);
-
+            $newProject      = $this->projectZen->prepareProject($postData, $project->hasProduct);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $changes = $this->project->update($newProject, $project, $postProductData);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             if($changes)
             {
                 $actionID = $this->loadModel('action')->create('project', $projectID, 'edited');
