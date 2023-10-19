@@ -144,7 +144,7 @@ else
     (
         'name'     => 'precondition',
         'label'    => $lang->testcase->precondition,
-        'control'  => 'editor',
+        'control'  => 'textarea',
         'hidden'   => !isset($visibleFields['precondition']),
         'required' => isset($requiredFields['precondition']),
     );
