@@ -10,8 +10,6 @@ zdTable('task')->gen(1);
 zdTable('story')->gen(1);
 zdTable('project')->config('execution')->gen(1);
 
-define('IN_UPGRADE', true);
-
 /**
 
 title=测试 actionModel->create();
@@ -65,6 +63,7 @@ r($action->createTest($objectTypeList[4], $objectIDList[0], $storyActionTypeList
 r($action->createTest($objectTypeList[4], $objectIDList[0], $storyActionTypeList[4])) && p('objectType,objectID,actor,action') && e('story,1,系统,synctwins');       //测试创建story,1,synctwins
 
 global $tester;
+$tester->app->upgrading = true;
 $version = $tester->dao->select('value')->from(TABLE_CONFIG)->where('`key`')->eq('version')->andWhere('owner')->eq('system')->andWhere('module')->eq('common')->fetch('value');
 
 $action->createTest($objectTypeList[0], $objectIDList[0], $storyActionTypeList[0], $comment[0], '', '', '', $versionList[0]);
@@ -75,3 +74,4 @@ $action->createTest($objectTypeList[0], $objectIDList[0], $storyActionTypeList[0
 r($tester->dao->select('count(*) as count')->from('zt_actionrecent')->fetch('count')) && p() && e('1');       //测试升级中的并且版本号大于18.7的情况，创建actionrecent
 
 $tester->dao->update(TABLE_CONFIG)->set('value')->eq($version)->where('`key`')->eq('version')->andWhere('owner')->eq('system')->andWhere('module')->eq('common')->exec();
+$tester->app->upgrading = false;

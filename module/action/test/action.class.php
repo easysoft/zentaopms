@@ -23,7 +23,8 @@ class actionTest
      */
     public function createTest($objectType, $objectID, $actionType, $comment = '', $extra = '', $actor = '', $uid = '', string $version = '')
     {
-        if(defined('IN_UPGRADE') && IN_UPGRADE && !empty($version))
+        global $tester;
+        if($tester->app->upgrading && !empty($version))
         {
             global $tester;
             $tester->dao->update(TABLE_CONFIG)->set('value')->eq($version)->where('`key`')->eq('version')->andWhere('owner')->eq('system')->andWhere('module')->eq('common')->exec();
