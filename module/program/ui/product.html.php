@@ -57,6 +57,8 @@ dtable
     set::cols($cols),
     set::data($data),
     set::nested(false),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('program', 'product', "programID={$programID}&browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
     set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(checkedIDList, '{$summary}');}")),

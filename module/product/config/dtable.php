@@ -17,7 +17,7 @@ $config->product->dtable->fieldList['productLine']['name']     = 'productLine';
 $config->product->dtable->fieldList['productLine']['title']    = $lang->product->belongingLine;
 $config->product->dtable->fieldList['productLine']['width']    = 136;
 $config->product->dtable->fieldList['productLine']['type']     = 'format';
-$config->product->dtable->fieldList['productLine']['sortType'] = true;
+$config->product->dtable->fieldList['productLine']['sortType'] = false;
 $config->product->dtable->fieldList['productLine']['border']   = 'right';
 $config->product->dtable->fieldList['productLine']['align']    = 'left';
 
@@ -25,7 +25,7 @@ $config->product->dtable->fieldList['PO']['name']     = 'PO';
 $config->product->dtable->fieldList['PO']['title']    = $lang->product->manager;
 $config->product->dtable->fieldList['PO']['minWidth'] = 108;
 $config->product->dtable->fieldList['PO']['type']     = 'avatarBtn';
-$config->product->dtable->fieldList['PO']['sortType'] = false;
+$config->product->dtable->fieldList['PO']['sortType'] = true;
 $config->product->dtable->fieldList['PO']['border']   = 'right';
 $config->product->dtable->fieldList['PO']['align']    = 'left';
 
