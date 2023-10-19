@@ -90,15 +90,15 @@ EOD;
 $lang->weekly->blockHelpNotice = <<<EOD
 <h2>Progress this week</h2>
 Calculation method:
-<br />1) Progress of this week=total consumed man hours/(total consumed man hours+remaining man hours)
+<br />1) Project progress = consumed task hours / (consumed task hours + remaining task hours) * 100%
 <p>Statistical range:</p>
-1) The total consumed man hours include task, demand, bug, use case, version, test sheet, problem, risk, document and review time
-<br />2) To avoid repeated calculation, the task only contains child tasks, not parent tasks
-<br />3) Including deleted tasks, requirements, bugs, use cases, versions, test sheets, problems, risks, documents, and consumed man hours in reviews
-<br />4) This includes the work hours consumed by deleted tasks, requirements, bugs, use cases, versions, test sheets, and documents
-<br />5) Including work hours consumed by cancelled tasks, problems and risks
-<br />6) Exclude remaining work on canceled tasks
-<br />7) Exclude remaining work for deleted tasks in progress
+1) Only the working hour consumption data of the task is counted
+<br />2) To avoid repeated calculation, the task working hours only include child tasks, not parent tasks
+<br />3) Including the working hours consumed by canceled tasks
+<br />4) Excluding the working hours consumed in deleted tasks
+<br />5) Excluding the working hours consumed in deleted tasks in progress
+<br />6) Excluding the remaining working hours of canceled tasks
+<br />7) Excluding the remaining working hours of deleted tasks in progress
 <h2>PV Planned Value</h2>
 Calculation method:
 <br />1) The estimated start date and end date of the task are within the range of the start and end dates of this week, and the estimated work hours are accumulated
