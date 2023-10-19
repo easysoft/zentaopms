@@ -96,6 +96,7 @@ class sonarqube extends control
         $this->view->measures    = $measures;
         $this->view->qualitygate = $qualitygate;
         $this->view->projectName = $projectName;
+        $this->view->projectKey  = $job->projectKey;
         $this->view->sonarqubeID = $job->sonarqubeServer;
 
         $this->display();
@@ -119,7 +120,6 @@ class sonarqube extends control
             $options[] = array('text' => $projectName, 'value' => $productKey);
         }
         return print(json_encode($options));
-        //echo html::select('projectKey', $projectPairs, str_replace('*', '-', $projectKey), "class='form-control chosen'");
     }
 
     /**
@@ -381,6 +381,7 @@ class sonarqube extends control
      */
     public function browseIssue($sonarqubeID, $projectKey = '', $search = false, $orderBy = 'severity_desc', $recPerPage = 100, $pageID = 1)
     {
+        $projectKey = str_replace('*', '-', $projectKey);
         if(isset($_POST['keyword']))
         {
             $keyword = htmlspecialchars(trim($_POST['keyword']));

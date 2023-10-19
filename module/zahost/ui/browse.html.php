@@ -54,6 +54,7 @@ dtable
     set::afterRender(jsRaw('window.afterRender')),
     set::sortLink(jsRaw('createSortLink')),
     set::footPager(usePager()),
+    set::orderBy(str_replace('id_', 'hostID_', $orderBy)),
 );
 
 render();

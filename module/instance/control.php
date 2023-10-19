@@ -594,6 +594,7 @@ class instance extends control
                 $sharedDB = zget($pgList, $customData->dbService);
             }
             $instance = $this->instance->install($cloudApp, $sharedDB, $customData);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if(!$instance) return $this->send(array('result' => 'fail', 'message' => $this->lang->instance->notices['installFail']));
 
             unset($_GET['onlybody']);

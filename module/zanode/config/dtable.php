@@ -7,11 +7,12 @@ $config->zanode->dtable = new stdclass();
 $config->zanode->dtable->fieldList['id']['title'] = $lang->idAB;
 $config->zanode->dtable->fieldList['id']['type']  = 'id';
 
-$config->zanode->dtable->fieldList['name']['type'] = 'title';
+$config->zanode->dtable->fieldList['name']['type'] = 'name';
 $config->zanode->dtable->fieldList['name']['link'] = array('module' => 'zanode', 'method' => 'view', 'params' => 'id={id}');
 
-$config->zanode->dtable->fieldList['type']['name']  = 'hostType';
-$config->zanode->dtable->fieldList['type']['title'] = $lang->zahost->type;
+$config->zanode->dtable->fieldList['type']['name']     = 'hostType';
+$config->zanode->dtable->fieldList['type']['title']    = $lang->zahost->type;
+$config->zanode->dtable->fieldList['type']['map']      = array('physics' => $this->lang->zanode->typeList['physics'], 'physical' => $this->lang->zanode->typeList['node']);
 $config->zanode->dtable->fieldList['type']['sortType'] = true;
 
 $config->zanode->dtable->fieldList['extranet']['name'] = 'extranet';
@@ -26,7 +27,7 @@ $config->zanode->dtable->fieldList['memory']['sortType'] = true;
 $config->zanode->dtable->fieldList['diskSize']['name']     = 'diskSize';
 $config->zanode->dtable->fieldList['diskSize']['sortType'] = true;
 
-$config->zanode->dtable->fieldList['osName']['name'] = 'osName';
+$config->zanode->dtable->fieldList['osName']['name']  = 'osName';
 
 $config->zanode->dtable->fieldList['status']['name']     = 'status';
 $config->zanode->dtable->fieldList['status']['map']      = $lang->zanode->statusList;
@@ -38,7 +39,7 @@ $config->zanode->dtable->fieldList['hostName']['sortType'] = true;
 $config->zanode->dtable->fieldList['actions']['name']  = 'actions';
 $config->zanode->dtable->fieldList['actions']['title'] = $lang->actions;
 $config->zanode->dtable->fieldList['actions']['type']  = 'actions';
-$config->zanode->dtable->fieldList['actions']['menu']  = array('getVNC', 'resume|suspend', 'start|close', 'reboot', 'createSnapshot', 'more' => array('edit'));
+$config->zanode->dtable->fieldList['actions']['menu']  = array('getVNC', 'resume|suspend', 'start|close', 'reboot', 'createSnapshot', 'more' => array('edit', 'createImage', 'destroy'));
 
 $config->zanode->dtable->fieldList['actions']['list']['getVNC']['icon']   = 'remote';
 $config->zanode->dtable->fieldList['actions']['list']['getVNC']['hint']   = $lang->zanode->getVNC;
@@ -76,11 +77,16 @@ $config->zanode->dtable->fieldList['actions']['list']['createSnapshot']['url']  
 $config->zanode->dtable->fieldList['actions']['list']['createSnapshot']['data-toggle'] = 'modal';
 $config->zanode->dtable->fieldList['actions']['list']['createSnapshot']['className']   = 'create-snapshot';
 
-$config->zanode->dtable->fieldList['actions']['list']['more']['icon']      = 'ellipsis-v';
-$config->zanode->dtable->fieldList['actions']['list']['more']['hint']      = 'more';
-$config->zanode->dtable->fieldList['actions']['list']['more']['type']      = 'dropdown';
-$config->zanode->dtable->fieldList['actions']['list']['more']['caret']      = false;
+$config->zanode->dtable->fieldList['actions']['list']['edit']['icon'] = 'edit';
+$config->zanode->dtable->fieldList['actions']['list']['edit']['hint'] = $lang->zanode->edit;
+$config->zanode->dtable->fieldList['actions']['list']['edit']['url']  = array('module' => 'zanode', 'method' => 'edit', 'params' => 'zanodeID={id}');
 
-$config->zanode->dtable->fieldList['actions']['list']['edit']['icon']      = 'edit';
-$config->zanode->dtable->fieldList['actions']['list']['edit']['hint']      = $lang->zanode->edit;
-$config->zanode->dtable->fieldList['actions']['list']['edit']['url']       = array('module' => 'zanode', 'method' => 'edit', 'params' => 'zanodeID={id}');
+$config->zanode->dtable->fieldList['actions']['list']['createImage']['icon']        = 'export';
+$config->zanode->dtable->fieldList['actions']['list']['createImage']['hint']        = $lang->zanode->createImage;
+$config->zanode->dtable->fieldList['actions']['list']['createImage']['url']         = array('module' => 'zanode', 'method' => 'createImage', 'params' => 'zanodeID={id}');
+$config->zanode->dtable->fieldList['actions']['list']['createImage']['data-toggle'] = 'modal';
+
+$config->zanode->dtable->fieldList['actions']['list']['destroy']['icon']      = 'trash';
+$config->zanode->dtable->fieldList['actions']['list']['destroy']['hint']      = $lang->zanode->destory;
+$config->zanode->dtable->fieldList['actions']['list']['destroy']['url']       = array('module' => 'zanode', 'method' => 'destory', 'params' => 'zanodeID={id}');
+$config->zanode->dtable->fieldList['actions']['list']['destroy']['className'] = 'ajax-submit';

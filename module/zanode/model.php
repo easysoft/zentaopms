@@ -1160,7 +1160,7 @@ class zanodemodel extends model
      * 判断按钮是否可点击。
      * Judge an action is clickable or not.
      *
-     * @param  object $host
+     * @param  object $node
      * @param  string $action
      * @access public
      * @return bool
@@ -1173,9 +1173,11 @@ class zanodemodel extends model
         if($action == 'start')  return $node->status == 'shutoff' && $node->hostType != 'physics' && !in_array($node->status, array('wait', 'creating_img', 'creating_snap', 'restoring'));
         if($action == 'close')  return $node->status != 'shutoff' && $node->hostType != 'physics' && !in_array($node->status, array('wait', 'creating_img', 'creating_snap', 'restoring'));
 
-        if($action == 'getVNC')  return $node->hostType == '' && in_array($node->status ,array('running', 'launch', 'wait'));
+        if($action == 'getVNC') return $node->hostType == '' && in_array($node->status ,array('running', 'launch', 'wait'));
         if($action == 'reboot') return $node->hostType != 'physics' && !in_array($node->status, array('wait', 'creating_img', 'creating_snap', 'restoring', 'shutoff'));
+
         if($action == 'createSnapshot') return $node->hostType != 'physics' && $node->status == 'running';
+        if($action == 'createImage')    return $node->hostType != 'physics' && $node->status == 'running';
 
         return true;
     }

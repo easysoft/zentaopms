@@ -82,6 +82,12 @@ class solutionModel extends model
             if(empty($selectedApps[$category])) unset($selectedApps[$category]);
         }
 
+        if(!$this->app->user->account)
+        {
+            $this->app->user = new stdclass();
+            $this->app->user->account = $this->dao->select('*')->from(TABLE_USER)->where('deleted')->eq(0)->fetch('account');
+        }
+
         /* Create solution. */
         $solution = new stdclass;
         $solution->name         = $cloudSolution->title;
@@ -171,6 +177,7 @@ class solutionModel extends model
         $solutionSchema = $this->loadModel('store')->solutionConfig('id', $solution->appID);
         $channel        = $this->app->session->cloudChannel ? $this->app->session->cloudChannel : $this->config->cloud->api->channel;
         $components     = json_decode($solution->components);
+        $apps           = helper::arrayColumn(json_decode($solution->components, true), 'chart');
         foreach($components as $categorty => $componentApp)
         {
             $solutionStatus = $this->dao->select('status')->from(TABLE_SOLUTION)->where('id')->eq($solutionID)->fetch();
@@ -211,7 +218,7 @@ class solutionModel extends model
                     }
 
                     if(!$this->checkInstallStatus($solutionID)) return false;
-                    $settings = $this->mountSettings($solutionSchema, $componentApp->chart, $components, $allMappings, isset($components->sonarqube));
+                    $settings = $this->mountSettings($solutionSchema, $componentApp->chart, $components, $allMappings, in_array('sonarqube', $apps));
                     $instance = $this->installApp($cloudApp, $settings);
                 }
 
@@ -250,6 +257,7 @@ class solutionModel extends model
                 }
                 $componentApp->status = 'installed';
                 $this->dao->update(TABLE_SOLUTION)->set('components')->eq(json_encode($components))->where('id')->eq($solution->id)->exec();
+                $this->instance->saveAuthInfo($instance);
             }
             else
             {
@@ -291,8 +299,10 @@ class solutionModel extends model
         $settings = array();
 
         $appSettings = zget($solutionSchema->settings, $chart, array());
+        $apps        = helper::arrayColumn((array)$components, 'chart');
         foreach($appSettings as $item)
         {
+            if(!empty($item->when) && !in_array($item->when, $apps)) continue;
             switch($item->type)
             {
                 case 'static':
@@ -307,6 +317,9 @@ class solutionModel extends model
                 case 'mappings':
                     $mappingInfo = zget($mappings, $item->target, '');
                     if($mappingInfo) $settings[] = array('key' => $item->key, 'value' => zget($mappingInfo, $item->key, ''));
+                    break;
+                case 'auto':
+                    if($item->value === 'protocol') $settings[] = array('key' => $item->key, 'value' => strstr(getWebRoot(true), ':', true));
                     break;
             }
         }

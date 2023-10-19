@@ -49,7 +49,7 @@ dtable
     set::afterRender(jsRaw('window.afterRender')),
     set::sortLink(jsRaw('createSortLink')),
     set::footPager(usePager()),
-    set::orderBy($orderBy),
+    set::orderBy(str_replace('t1.', '', $orderBy)),
 );
 
 render();

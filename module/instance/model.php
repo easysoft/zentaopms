@@ -996,6 +996,7 @@ class InstanceModel extends model
         if($result->code != 200)
         {
             $this->dao->delete()->from(TABLE_INSTANCE)->where('id')->eq($instance->id)->exec();
+            dao::$errors['server'][] = $result->message;
             return false;
         }
 
@@ -1177,6 +1178,8 @@ class InstanceModel extends model
                     ->autoCheck()
                     ->exec();
                 $instance->status = $statusData->status;
+
+                if($instance->status == 'running') $this->saveAuthInfo($instance);
             }
 
             $status = new stdclass;
@@ -2135,7 +2138,7 @@ class InstanceModel extends model
 
         $pipeline = new stdclass();
         $instance->type        = $instance->chart;
-        $pipeline->type        = $instance->type;
+        $pipeline->type        = $instance->type == 'nexus3' ? 'nexus' : $instance->type;
         $pipeline->private     = md5(strval(rand(10,113450)));
         $pipeline->createdBy   = 'system';
         $pipeline->createdDate = helper::now();
