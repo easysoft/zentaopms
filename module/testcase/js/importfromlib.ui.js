@@ -6,12 +6,11 @@ window.renderModuleItem = function(result, info)
     return result;
 }
 
-function reload()
+function toggleLib(event)
 {
-    const libID = $(this).val();
+    const libID = $(event.target).val();
     const link  = $.createLink('testcase','importFromLib','productID=' + productID + '&branch=' + branch + '&libID=' + libID);
-
-    location.href = link;
+    loadPage(link, '#main');
 }
 
 $(document).off('click', '.import-btn').on('click', '.import-btn', function()

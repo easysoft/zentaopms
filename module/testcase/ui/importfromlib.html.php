@@ -33,7 +33,7 @@ featureBar
             set::items($libraries),
             set::value($libID),
             set::placeholder($lang->testcase->placeholder->selectLib),
-            on::change('reload')
+            on::change('toggleLib'),
         )
     ),
 );
