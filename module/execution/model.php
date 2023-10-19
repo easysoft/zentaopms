@@ -3925,6 +3925,35 @@ class executionModel extends model
             foreach($productBuilds as $buildID => $buildName) $builds[$buildID] = ((count($products) >= 2 and $buildID) ? $product->name . '/' : '') . $buildName;
         }
 
+        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
+        $branchPairs  = array();
+        $productType  = 'normal';
+        $productPairs = array(0 => '');
+        foreach($products as $product)
+        {
+            $productPairs[$product->id] = $product->name;
+            if($product->type != 'normal')
+            {
+                $productType = $product->type;
+                if(isset($product->branches))
+                {
+                    foreach($product->branches as $branch)
+                    {
+                        if(isset($branchGroups[$product->id][$branch])) $branchPairs[$branch] = (count($products) > 1 ? $product->name . '/' : '') . $branchGroups[$product->id][$branch];
+                    }
+                }
+                else
+                {
+                    $productBranches = isset($branchGroups[$product->id]) ? $branchGroups[$product->id] : array(0);
+                    if(count($products) > 1)
+                    {
+                        foreach($productBranches as $branchID => $branchName) $productBranches[$branchID] = $product->name . '/' . $branchName;
+                    }
+                    $branchPairs += $productBranches;
+                }
+            }
+        }
+
         $this->config->testcase->search['module']    = $type == 'execution' ? 'executionCase' : 'projectCase';
         $this->config->testcase->search['actionURL'] = $actionURL;
         $this->config->testcase->search['queryID']   = $queryID;
@@ -3933,6 +3962,7 @@ class executionModel extends model
         $this->config->testcase->search['params']['module']['values']        = $modules;
         $this->config->testcase->search['params']['openedBuild']['values']   = $builds;
         $this->config->testcase->search['params']['resolvedBuild']['values'] = $this->config->testcase->search['params']['openedBuild']['values'];
+        if(isset($this->config->testcase->search['params']['product'])) $this->config->testcase->search['params']['product']['values'] = $productPairs + array('all' => $this->lang->product->allProductsOfProject);
 
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
     }
