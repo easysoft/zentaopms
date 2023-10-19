@@ -286,6 +286,7 @@ class productplan extends control
 
         /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
+        if(strpos($sort, 'branchName_') !== false) $sort = str_replace('branchName_', 'branch_', $sort);
         $this->session->set('productPlanList', $this->app->getURI(true), 'product');
 
         $viewType = $this->cookie->viewType ? $this->cookie->viewType : 'list';
