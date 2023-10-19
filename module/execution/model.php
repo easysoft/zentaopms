@@ -3967,6 +3967,18 @@ class executionModel extends model
         $this->config->testcase->search['params']['resolvedBuild']['values'] = $this->config->testcase->search['params']['openedBuild']['values'];
         if(isset($this->config->testcase->search['params']['product'])) $this->config->testcase->search['params']['product']['values'] = $productPairs + array('all' => $this->lang->product->allProductsOfProject);
 
+        if($productType == 'normal')
+        {
+            unset($this->config->testcase->search['fields']['branch']);
+            unset($this->config->testcase->search['params']['branch']);
+        }
+        else
+        {
+            $this->config->testcase->search['fields']['branch']           = sprintf($this->lang->product->branch, $this->lang->product->branchName[$productType]);
+            $this->config->testcase->search['params']['branch']['values'] = $branchPairs;
+        }
+        $this->config->testcase->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->testcase->statusList);
+
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
     }
 
