@@ -53,12 +53,12 @@ div
 (
     set::id('mainContent'),
     setClass('row has-sidebar-left'),
-    $sidebarMenu,
+    isset($sidebarMenu) ? $sidebarMenu : null,
     formPanel
     (
         set::id('requiredForm'),
         setClass('flex-auto'),
-        setClass($sidebarMenu ? 'ml-0.5' : null),
+        setClass(isset($sidebarMenu) ? 'ml-0.5' : null),
         set::actionsClass('w-1/2'),
         set::actions($formActions),
         span
