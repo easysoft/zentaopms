@@ -1623,7 +1623,7 @@ class storyModel extends model
             {
                 $changes  = common::createChanges($oldStory, $story);
                 $action   = $stage == 'verified' ? 'Verified' : 'Edited';
-                $actionID = $this->action->create('story', $storyID, $action);
+                $actionID = $this->action->create('story', (int)$storyID, $action);
                 $this->action->logHistory($actionID, $changes);
             }
         }
