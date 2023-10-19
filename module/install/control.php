@@ -134,7 +134,7 @@ class install extends control
             $myConfig = array();
             foreach($_POST as $key => $value) $myConfig[$key] = $value;
             $this->session->set('myConfig', $myConfig);
-            return $this->send(array('result' => 'success', 'load' => inlink('step3')));
+            return $this->send(array('result' => 'success', 'load' => inlink('showTableProgress')));
         }
         $dbHost = $dbPort = $dbName = $dbUser = $dbPassword = '';
 
@@ -153,6 +153,74 @@ class install extends control
         $this->view->dbUser     = $dbUser ? $dbUser : 'root';
         $this->view->dbPassword = $dbPassword ? $dbPassword : '';
         $this->display();
+    }
+
+    /**
+     * Show create table progress box.
+     *
+     * @access public
+     * @return void
+     */
+    public function showTableProgress()
+    {
+        $this->view->title = $this->lang->install->dbProgress;
+        $this->display();
+    }
+
+    /**
+     * Ajax create table and save log.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxCreateTable()
+    {
+        ignore_user_abort(true);
+        set_time_limit(0);
+        session_write_close();
+
+        $logFile     = $this->install->buildDBLogFile('progress');
+        $errorFile   = $this->install->buildDBLogFile('error');
+        $successFile = $this->install->buildDBLogFile('success');
+        if(file_exists($logFile))     unlink($logFile);
+        if(file_exists($errorFile))   unlink($errorFile);
+        if(file_exists($successFile)) unlink($successFile);
+
+        $config           = json_decode(file_get_contents($this->install->buildDBLogFile('config')));
+        $this->config->db = $config->db;
+        $_POST            = (array)$config->post;
+        $version          = $this->install->getDatabaseVersion();
+        if($this->install->createTable($version, true)) file_put_contents($this->install->buildDBLogFile('success'), 'success');
+    }
+
+    /**
+     * Ajax get progress and show in showTableProgress page.
+     *
+     * @param  int    $offset
+     * @access public
+     * @return void
+     */
+    public function ajaxShowProgress($offset = 0)
+    {
+        session_write_close();
+        $logFile     = $this->install->buildDBLogFile('progress');
+        $errorFile   = $this->install->buildDBLogFile('error');
+        $successFile = $this->install->buildDBLogFile('success');
+
+        $error  = !file_exists($errorFile)   ? '' : file_get_contents($errorFile);
+        $finish = !file_exists($successFile) ? '' : file_get_contents($successFile);
+        $log    = !file_exists($logFile)     ? '' : file_get_contents($logFile, false, null, $offset);
+        $size   = 10 * 1024;
+        if(!empty($log) && mb_strlen($log) > $size)
+        {
+            $left     = mb_substr($log, $size);
+            $log      = mb_substr($log, 0, $size);
+            $position = strpos($left, "\n");
+            if($position !== false) $log .= substr($left, 0, $position + 1);
+        }
+        $log = trim($log);
+        if(!empty($log)) $error = $finish = '';
+        return print(json_encode(array('log' => str_replace("\n", "<br />", $log) . '<br />', 'error' => $error, 'finish' => $finish, 'offset' => $offset + strlen($log))));
     }
 
     /**
@@ -333,6 +401,13 @@ class install extends control
         unset($_SESSION['installing']);
         unset($_SESSION['myConfig']);
         session_destroy();
+
+        $logFile     = $this->install->buildDBLogFile('progress');
+        $errorFile   = $this->install->buildDBLogFile('error');
+        $successFile = $this->install->buildDBLogFile('success');
+        if(file_exists($logFile))     unlink($logFile);
+        if(file_exists($errorFile))   unlink($errorFile);
+        if(file_exists($successFile)) unlink($successFile);
 
         $this->view->installFileDeleted = $installFileDeleted;
         $this->view->title              = $this->lang->install->success;

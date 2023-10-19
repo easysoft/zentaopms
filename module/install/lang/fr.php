@@ -287,9 +287,11 @@ $lang->install->cronList['moduleName=ci&methodName=checkCompileStatus'] = 'Synch
 $lang->install->cronList['moduleName=ci&methodName=exec']               = 'Executer Jenkins';
 $lang->install->cronList['moduleName=mr&methodName=syncMR']             = 'Synchronize GitLab merge request';
 
-$lang->install->success  = "Installé !";
-$lang->install->login    = 'Login ZenTao';
-$lang->install->register = "S'enregistrer sur la Communauté ZenTao";
+$lang->install->dbProgress = "Table install progress";
+$lang->install->dbFinish   = "Table install finished";
+$lang->install->success    = "Installé !";
+$lang->install->login      = 'Login ZenTao';
+$lang->install->register   = "S'enregistrer sur la Communauté ZenTao";
 
 $lang->install->successLabel       = "<p>Vous avez installé ZenTao %s.</p>";
 $lang->install->successNoticeLabel = "<p>Vous avez installé ZenTao %s.<strong class='text-danger'> Supprimez install.php asap</strong>.</p>";

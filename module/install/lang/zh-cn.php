@@ -287,9 +287,11 @@ $lang->install->cronList['moduleName=ci&methodName=checkCompileStatus'] = '同�
 $lang->install->cronList['moduleName=ci&methodName=exec']               = '执行Jenkins任务';
 $lang->install->cronList['moduleName=mr&methodName=syncMR']             = '定时同步GitLabMR信息';
 
-$lang->install->success  = "安装成功";
-$lang->install->login    = '登录禅道管理系统';
-$lang->install->register = '禅道社区注册';
+$lang->install->dbProgress = "数据库安装进度";
+$lang->install->dbFinish   = "数据库安装完毕";
+$lang->install->success    = "安装成功";
+$lang->install->login      = '登录禅道管理系统';
+$lang->install->register   = '禅道社区注册';
 
 $lang->install->successLabel       = "<p>您已经成功安装禅道管理系统%s。</p>";
 $lang->install->successNoticeLabel = "<p>您已经成功安装禅道管理系统%s，<strong class='text-danger'>请及时删除install.php</strong>。</p>";

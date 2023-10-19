@@ -314,14 +314,6 @@ class installModel extends model
             return $return;
         }
 
-        /* Create tables. */
-        if(!$this->createTable($version))
-        {
-            $return->result = 'fail';
-            $return->error  = $this->lang->install->errorCreateTable;
-            return $return;
-        }
-
         return $return;
     }
 
@@ -352,6 +344,8 @@ class installModel extends model
         }
         $this->config->db->name     = $this->post->dbName;
         $this->config->db->prefix   = $this->post->dbPrefix;
+
+        file_put_contents($this->buildDBLogFile('config'), json_encode(array('db' => $this->config->db, 'post' => $_POST)));
     }
 
     /**
@@ -381,6 +375,7 @@ class installModel extends model
     public function getDatabaseVersion()
     {
         if($this->config->db->driver != 'mysql') return 8;
+        if(empty($this->dbh)) $this->dbh = $this->connectDB();
 
         $sql = "SELECT VERSION() AS version";
         $result = $this->dbh->query($sql)->fetch();
@@ -391,10 +386,11 @@ class installModel extends model
      * Create tables.
      *
      * @param  string    $version
+     * @param  bool      $saveLog
      * @access public
      * @return bool
      */
-    public function createTable($version)
+    public function createTable($version, $saveLog = false)
     {
         /* Add exception handling to ensure that all SQL is executed successfully. */
         try
@@ -434,15 +430,33 @@ class installModel extends model
                 $table = str_replace('`ztv_', $this->config->db->name . '.`ztv_', $table);
                 $table = str_replace('zt_', $this->config->db->prefix, $table);
 
+                if($saveLog) file_put_contents($this->buildDBLogFile('progress'), $table . "\n", FILE_APPEND);
                 $this->dbh->exec($table);
             }
         }
         catch (PDOException $exception)
         {
-            echo $exception->getMessage();
+            $message = $exception->getMessage();
+            if($saveLog) file_put_contents($this->buildDBLogFile('error'), $message);
+            echo nl2br($message);
             helper::end();
         }
         return true;
+    }
+
+    /**
+     * Build DB log file.
+     *
+     * @param  string    $type config|error|success|progress
+     * @access public
+     * @return string
+     */
+    public function buildDBLogFile($type)
+    {
+        if($type == 'config')   return $this->app->getCacheRoot() . 'db.cnf';
+        if($type == 'error')    return $this->app->getCacheRoot() . 'dberror.log';
+        if($type == 'success')  return $this->app->getCacheRoot() . 'dbsuccess.log';
+        if($type == 'progress') return $this->app->getCacheRoot() . 'dbprogress.log';
     }
 
     /**
