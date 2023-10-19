@@ -476,9 +476,12 @@ class program extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        $sort = $orderBy;
+        if(strpos($sort, 'name_') !== false) $sort = str_replace('name_', 'realname_', $sort);
+
         $this->view->title        = $this->lang->program->stakeholder;
         $this->view->pager        = $pager;
-        $this->view->stakeholders = $this->program->getStakeholders($programID, $orderBy, $pager);
+        $this->view->stakeholders = $this->program->getStakeholders($programID, $sort, $pager);
         $this->view->programID    = $programID;
         $this->view->program      = $this->program->getByID($programID);
         $this->view->users        = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');

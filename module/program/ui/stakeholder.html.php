@@ -98,6 +98,8 @@ dtable
     set::data($data),
     set::footPager(usePager()),
     set::checkable(true),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('program', 'stakeholder', "programID={$programID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footToolbar(array(
         'type'  => 'btn-group',
         'items' => array(array
