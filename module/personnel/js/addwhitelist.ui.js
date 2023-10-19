@@ -2,7 +2,13 @@ window.renderRowData = function($row, index, row)
 {
     if(row != undefined && row.isAppend == undefined)
     {
-        $row.find('td[data-name="account"] > *').attr('readonly', 'readonly');
+        $row.find('[data-name="account"]').find('.picker-box').on('inited', function(e, info)
+        {
+            let $account = info[0];
+            $account.render({items: userItems});
+            $account.$.setValue(row.account);
+            $account.render({required: true, disabled: true});
+        });
     }
 }
 
@@ -15,8 +21,8 @@ window.renderRowData = function($row, index, row)
  */
 function setObjectUsers()
 {
-    var copyID = $('#object').val();
-    var deptID = $('#dept').val();
+    var copyID = $('input[name=object]').val();
+    var deptID = $('input[name=dept]').val();
     var link   = $.createLink(module, moduleMethod, 'objectID=' + objectID + '&deptID=' + deptID + '&copyID=' + copyID + '&objectType=' + objectType + '&module=' + module);
     if(module == 'program') link = $.createLink(module, moduleMethod, 'objectID=' + objectID + '&deptID=' + deptID + '&copyID=' + copyID + '&programID=' + programID + '&from=' + from);
 

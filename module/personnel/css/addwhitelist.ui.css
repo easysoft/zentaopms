@@ -1,4 +1,4 @@
 .add-whitelist-panel .panel-heading .select-dept-box, .add-whitelist-panel .select-object-box {display: inline-flex;}
-.add-whitelist-panel .panel-heading .select-dept-box select, .add-whitelist-panel .select-object-box select {width: 248px;}
+.add-whitelist-panel .panel-heading .select-dept-box .picker, .add-whitelist-panel .select-object-box .picker {width: 248px;}
 .add-whitelist-panel form {width: 280px; min-width: unset;}
 .add-whitelist-panel .panel-body .toolbar.form-actions {width: 280px; margin-top: 1.5rem;}

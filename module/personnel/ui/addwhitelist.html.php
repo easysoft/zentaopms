@@ -21,8 +21,13 @@ foreach($appendUsers as $account => $realname)
     $member->account  = $account;
     $member->realname = $realname;
     $member->isAppend = '1';
-    $members[]       = $member;
+
+    $members[] = $member;
 }
+
+$userItems = array();
+foreach($members as $member) $userItems[] = array('value' => $member->account, 'text' => $member->realname);
+jsVar('userItems', $userItems);
 
 dropmenu(set::objectID($objectID));
 
@@ -43,12 +48,12 @@ formBatchPanel
                 set::className('flex items-center dept-title mr-2'),
                 $lang->execution->selectDept
             ),
-            select
+            picker
             (
-                set::id('dept'),
                 set::name('dept'),
                 set::value($deptID),
                 set::items($depts),
+                set::required(true),
                 set('data-placeholder', $lang->execution->selectDeptTitle),
                 on::change('setObjectUsers'),
             ),
@@ -61,9 +66,8 @@ formBatchPanel
                 setClass('flex items-center object-title mr-2'),
                 $lang->personnel->copy
             ),
-            select
+            picker
             (
-                set::id('object'),
                 set::name('object'),
                 set::value($copyID),
                 set::items($objects),
@@ -76,7 +80,7 @@ formBatchPanel
     (
         set::name('account'),
         set::label($lang->team->account),
-        set::control('select'),
+        set::control('picker'),
         set::items($users),
         set::width('200px'),
     ),
