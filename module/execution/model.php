@@ -3902,6 +3902,31 @@ class executionModel extends model
     }
 
     /**
+     * 构造用例列表的搜索表单。
+     * Build testcase search form.
+     *
+     * @param  array  $products
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function buildCaseSearchForm(array $products, int $queryID, string $actionURL, string $type = 'execution')
+    {
+        $this->config->testcase->search['module']    = $type == 'execution' ? 'executionCase' : 'projectCase';
+        $this->config->testcase->search['actionURL'] = $actionURL;
+        $this->config->testcase->search['queryID']   = $queryID;
+
+        $this->config->testcase->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array_keys($products));
+        $this->config->testcase->search['params']['module']['values']        = $modules;
+        $this->config->testcase->search['params']['openedBuild']['values']   = $builds;
+        $this->config->testcase->search['params']['resolvedBuild']['values'] = $this->config->testcase->search['params']['openedBuild']['values'];
+
+        $this->loadModel('search')->setSearchParams($this->config->testcase->search);
+    }
+
+    /**
      * 构建搜索任务的表单。
      * Build task search form.
      *
