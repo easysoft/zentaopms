@@ -4436,7 +4436,7 @@ class executionModel extends model
                 case 'branch':
                     $this->app->loadLang('branch');
                     $treeData[$index]['content'] = array(
-                        'html' => "<div class='tree-toggle'><span class='label gray-pale rounded-full'>{$this->lang->branch->common}</span><span class='title ml-4' title='{$tree->name}'>{$tree->name}</span></div>"
+                        'html' => "<span class='label gray-pale rounded-full'>{$this->lang->branch->common}</span><span class='title ml-4' title='{$tree->name}'>{$tree->name}</span>"
                     );
                     break;
                 default:
@@ -4448,7 +4448,7 @@ class executionModel extends model
             }
             if(isset($tree->children))
             {
-                if($tree->type == 'task') $treeData[$index]['content']['html'] = "<div class='tree-toggle'><span class='title' title='{$tree->title}'>{$tree->title}</span></div>";
+                if($tree->type == 'task') $treeData[$index]['content']['html'] = "<span class='title' title='{$tree->title}'>{$tree->title}</span>";
                 $treeData[$index]['items'] = $this->buildTree($tree->children, $hasProduct);
             }
         }

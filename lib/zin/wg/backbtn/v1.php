@@ -43,7 +43,7 @@ class backBtn extends btn
         global $app;
 
         $backs = array(
-            'task'           => 'execution-task,my-work,my-contribute,',
+            'task'           => 'execution-task,my-work,my-contribute,execution-tree',
             'story'          => 'product-browse,projectstory-story,execution-story,my-work,my-contribute,productplan-view',
             'bug'            => 'bug-browse,project-bug,my-work,my-contribute,',
             'testcase'       => 'testcase-browse,project-testcase,my-work,my-contribute,',
