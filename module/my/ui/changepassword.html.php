@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 $reason = $app->user->modifyPasswordReason;
+jsVar('isonlybody', $isonlybody);
 
 $isonlybody ? modalHeader
 (

@@ -33,3 +33,16 @@ function clickSubmit()
     password1Encrypted = true;
     password2Encrypted = true;
 }
+
+$(function() {
+    if(isonlybody) return;
+    var secondButton = $(".form-actions button").eq(1);
+
+    secondButton.removeClass('open-url');
+    secondButton.off("click").on("click", function() {
+        $.get($.createLink('user', 'logout'), function(data)
+        {
+            location.href = $.createLink('user', 'login');
+        });
+    });
+})
