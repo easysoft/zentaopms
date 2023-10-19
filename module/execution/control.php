@@ -540,7 +540,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function testcase(int $executionID = 0, int $productID = 0, string $branchID = 'all', string $type = 'all', int $moduleID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function testcase(int $executionID = 0, int $productID = 0, string $branchID = 'all', string $type = 'all', int $param = 0, int $moduleID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->commonAction($executionID);
         $uri = $this->app->getURI(true);
@@ -571,6 +571,10 @@ class execution extends control
         unset($this->config->testcase->dtable->fieldList['title']['nestedToggle']);
         unset($this->config->testcase->dtable->fieldList['id']);
         if($productID && $products[$productID]->type == 'normal') unset($this->config->testcase->dtable->fieldList['branch']);
+
+        /* Build the search form. */
+        $actionURL = $this->createLink('execution', 'testcase', "executionID=$executionID&productID=$productID&branchID=$branchID&type=bysearch&queryID=myQueryID&moduleID=0&orderBy=$orderBy");
+        $this->execution->buildCaseSearchForm($products, $param, $actionURL);
 
         $this->executionZen->assignTestcaseVars($executionID, $productID, $branchID, $moduleID, $orderBy, $type, $pager);
 
