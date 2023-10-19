@@ -2,9 +2,10 @@
 global $lang;
 $config->group->dtable = new stdclass();
 
-$config->group->dtable->fieldList['id']['title'] = $lang->idAB;
-$config->group->dtable->fieldList['id']['name']  = 'id';
-$config->group->dtable->fieldList['id']['type']  = 'id';
+$config->group->dtable->fieldList['id']['title']    = $lang->idAB;
+$config->group->dtable->fieldList['id']['name']     = 'id';
+$config->group->dtable->fieldList['id']['type']     = 'id';
+$config->group->dtable->fieldList['id']['sortType'] = false;
 
 $config->group->dtable->fieldList['name']['title']    = $lang->group->name;
 $config->group->dtable->fieldList['name']['name']     = 'name';
