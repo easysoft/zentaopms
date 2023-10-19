@@ -1,4 +1,5 @@
 #header {height: 50px;}
+#header + #main {min-height: calc(100vh - 50px);}
 #navbar > .nav > .nav-item > .active {background: rgba(0,0,0,.1);}
 #navbar > .nav > .nav-item > .active:after {display: none;}
 #navbar .nav-divider {width: 2px; height: 20px;}
