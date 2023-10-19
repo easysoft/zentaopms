@@ -65,12 +65,15 @@ class release extends control
             unset($this->config->release->search['params']['branch']);
         }
 
+        $sort = $orderBy;
+        if(strpos($sort, 'branchName_') !== false) $sort = str_replace('branchName_', 'branch_', $sort);
+
         $queryID   = $type == 'bySearch' ? (int)$param : 0;
-        $actionURL = $this->createLink('release', 'browse', "productID={$productID}&branch={$branch}&type=bySearch&orderBy={$orderBy}&param=myQueryID");
+        $actionURL = $this->createLink('release', 'browse', "productID={$productID}&branch={$branch}&type=bySearch&orderBy={$sort}&param=myQueryID");
         $this->releaseZen->buildSearchForm($queryID, $actionURL, $this->view->product, $branch);
 
         $releaseQuery = $type == 'bySearch' ? $this->releaseZen->getSearchQuery($queryID) : '';
-        $releases     = $this->release->getList($productID, $branch, $type, $orderBy, $releaseQuery, $pager);
+        $releases     = $this->release->getList($productID, $branch, $type, $sort, $releaseQuery, $pager);
 
         $this->view->title       = $this->view->product->name . $this->lang->colon . $this->lang->release->browse;
         $this->view->releases    = $this->releaseZen->processReleaseListData($releases);

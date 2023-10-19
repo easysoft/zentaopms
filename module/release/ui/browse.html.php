@@ -30,8 +30,6 @@ toolbar
 
 jsVar('markerTitle', $lang->release->marker);
 jsVar('showBranch', $showBranch);
-jsVar('orderBy', $orderBy);
-jsVar('sortLink', helper::createLink('release', 'browse', "productID={$product->id}&branch={$branch}&type={$type}&orderBy={orderBy}&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 jsVar('type', $type);
 
 if($showBranch) $config->release->dtable->fieldList['branch']['map'] = $branchPairs;
@@ -42,7 +40,8 @@ dtable
     set::plugins(array('cellspan')),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::getCellSpan(jsRaw('window.getCellSpan')),
-    set::sortLink(jsRaw('createSortLink')),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('release', 'browse', "productID={$product->id}&branch={$branch}&type={$type}&orderBy={name}_{sortType}&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footer([jsRaw("function(){return {html: '{$pageSummary}'};}"), 'flex', 'pager']),
     set::footPager(
         usePager
