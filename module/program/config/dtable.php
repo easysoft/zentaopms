@@ -83,7 +83,7 @@ $config->program->productview->dtable->fieldList['PM']['group'] = 'g2';
 $config->program->productview->dtable->fieldList['createdDate']['name']     = 'createdDate';
 $config->program->productview->dtable->fieldList['createdDate']['title']    = $lang->program->createdDate;
 $config->program->productview->dtable->fieldList['createdDate']['type']     = 'datetime';
-$config->program->productview->dtable->fieldList['createdDate']['sortType'] = true;
+$config->program->productview->dtable->fieldList['createdDate']['sortType'] = false;
 $config->program->productview->dtable->fieldList['createdDate']['group']    = 'g3';
 
 $config->program->productview->dtable->fieldList['createdBy']['name']  = 'createdBy';
@@ -96,14 +96,14 @@ $config->program->productview->dtable->fieldList['totalUnclosedStories']['title'
 $config->program->productview->dtable->fieldList['totalUnclosedStories']['minWidth'] = 100;
 $config->program->productview->dtable->fieldList['totalUnclosedStories']['type']     = 'number';
 $config->program->productview->dtable->fieldList['totalUnclosedStories']['show']     = true;
-$config->program->productview->dtable->fieldList['totalUnclosedStories']['sortType'] = true;
+$config->program->productview->dtable->fieldList['totalUnclosedStories']['sortType'] = false;
 $config->program->productview->dtable->fieldList['totalUnclosedStories']['group']    = 'g4';
 
 $config->program->productview->dtable->fieldList['totalStories']['name']     = 'totalStories';
 $config->program->productview->dtable->fieldList['totalStories']['title']    = $lang->program->totalStories;
 $config->program->productview->dtable->fieldList['totalStories']['minWidth'] = 100;
 $config->program->productview->dtable->fieldList['totalStories']['type']     = 'number';
-$config->program->productview->dtable->fieldList['totalStories']['sortType'] = true;
+$config->program->productview->dtable->fieldList['totalStories']['sortType'] = false;
 $config->program->productview->dtable->fieldList['totalStories']['group']    = 'g4';
 
 $config->program->productview->dtable->fieldList['closedStoryRate']['name']     = 'closedStoryRate';
@@ -111,28 +111,28 @@ $config->program->productview->dtable->fieldList['closedStoryRate']['title']    
 $config->program->productview->dtable->fieldList['closedStoryRate']['minWidth'] = 100;
 $config->program->productview->dtable->fieldList['closedStoryRate']['type']     = 'progress';
 $config->program->productview->dtable->fieldList['closedStoryRate']['show']     = true;
-$config->program->productview->dtable->fieldList['closedStoryRate']['sortType'] = true;
+$config->program->productview->dtable->fieldList['closedStoryRate']['sortType'] = false;
 $config->program->productview->dtable->fieldList['closedStoryRate']['group']    = 'g4';
 
 $config->program->productview->dtable->fieldList['totalPlans']['name']     = 'totalPlans';
 $config->program->productview->dtable->fieldList['totalPlans']['title']    = $lang->productplan->shortCommon;
 $config->program->productview->dtable->fieldList['totalPlans']['type']     = 'number';
 $config->program->productview->dtable->fieldList['totalPlans']['show']     = true;
-$config->program->productview->dtable->fieldList['totalPlans']['sortType'] = true;
+$config->program->productview->dtable->fieldList['totalPlans']['sortType'] = false;
 $config->program->productview->dtable->fieldList['totalPlans']['group']    = 'g5';
 
 $config->program->productview->dtable->fieldList['totalProjects']['name']     = 'totalProjects';
 $config->program->productview->dtable->fieldList['totalProjects']['title']    = $lang->program->project;
 $config->program->productview->dtable->fieldList['totalProjects']['type']     = 'number';
 $config->program->productview->dtable->fieldList['totalProjects']['link']     = array('module' => 'product', 'method' => 'project', 'params' => 'status=all&&productID={id}');
-$config->program->productview->dtable->fieldList['totalProjects']['sortType'] = true;
+$config->program->productview->dtable->fieldList['totalProjects']['sortType'] = false;
 $config->program->productview->dtable->fieldList['totalProjects']['group']    = 'g5';
 
 $config->program->productview->dtable->fieldList['totalExecutions']['name']     = 'totalExecutions';
 $config->program->productview->dtable->fieldList['totalExecutions']['title']    = $lang->execution->common;
 $config->program->productview->dtable->fieldList['totalExecutions']['type']     = 'number';
 $config->program->productview->dtable->fieldList['totalExecutions']['show']     = true;
-$config->program->productview->dtable->fieldList['totalExecutions']['sortType'] = true;
+$config->program->productview->dtable->fieldList['totalExecutions']['sortType'] = false;
 $config->program->productview->dtable->fieldList['totalExecutions']['group']    = 'g5';
 
 $config->program->productview->dtable->fieldList['testCaseCoverage']['name']     = 'testCaseCoverage';
@@ -140,7 +140,7 @@ $config->program->productview->dtable->fieldList['testCaseCoverage']['title']   
 $config->program->productview->dtable->fieldList['testCaseCoverage']['minWidth'] = 100;
 $config->program->productview->dtable->fieldList['testCaseCoverage']['type']     = 'progress';
 $config->program->productview->dtable->fieldList['testCaseCoverage']['show']     = true;
-$config->program->productview->dtable->fieldList['testCaseCoverage']['sortType'] = true;
+$config->program->productview->dtable->fieldList['testCaseCoverage']['sortType'] = false;
 $config->program->productview->dtable->fieldList['testCaseCoverage']['group']    = 'g6';
 
 $config->program->productview->dtable->fieldList['totalActivatedBugs']['name']     = 'totalActivatedBugs';
@@ -148,14 +148,14 @@ $config->program->productview->dtable->fieldList['totalActivatedBugs']['title'] 
 $config->program->productview->dtable->fieldList['totalActivatedBugs']['minWidth'] = 86;
 $config->program->productview->dtable->fieldList['totalActivatedBugs']['type']     = 'number';
 $config->program->productview->dtable->fieldList['totalActivatedBugs']['show']     = true;
-$config->program->productview->dtable->fieldList['totalActivatedBugs']['sortType'] = true;
+$config->program->productview->dtable->fieldList['totalActivatedBugs']['sortType'] = false;
 $config->program->productview->dtable->fieldList['totalActivatedBugs']['group']    = 'g7';
 
 $config->program->productview->dtable->fieldList['totalBugs']['name']     = 'totalBugs';
 $config->program->productview->dtable->fieldList['totalBugs']['title']    = $lang->program->totalBugs;
 $config->program->productview->dtable->fieldList['totalBugs']['minWidth'] = 86;
 $config->program->productview->dtable->fieldList['totalBugs']['type']     = 'number';
-$config->program->productview->dtable->fieldList['totalBugs']['sortType'] = true;
+$config->program->productview->dtable->fieldList['totalBugs']['sortType'] = false;
 $config->program->productview->dtable->fieldList['totalBugs']['group']    = 'g7';
 
 $config->program->productview->dtable->fieldList['fixedRate']['name']     = 'fixedRate';
@@ -163,7 +163,7 @@ $config->program->productview->dtable->fieldList['fixedRate']['title']    = $lan
 $config->program->productview->dtable->fieldList['fixedRate']['minWidth'] = 80;
 $config->program->productview->dtable->fieldList['fixedRate']['type']     = 'progress';
 $config->program->productview->dtable->fieldList['fixedRate']['show']     = true;
-$config->program->productview->dtable->fieldList['fixedRate']['sortType'] = true;
+$config->program->productview->dtable->fieldList['fixedRate']['sortType'] = false;
 $config->program->productview->dtable->fieldList['fixedRate']['group']    = 'g7';
 
 $config->program->productview->dtable->fieldList['totalReleases']['name']     = 'totalReleases';

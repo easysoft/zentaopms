@@ -267,6 +267,8 @@ dtable
     set::footPager(usePager()),
     set::canRowCheckable(jsRaw("function(rowID){return this.getRowInfo(rowID).data.type == 'product';}")),
     set::onRenderCell(jsRaw('window.renderCellProductView')),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('program', 'productview', "browseType={$browseType}&orderBy={name}_{sortType}&param={$param}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footToolbar(array
     (
         'type'  => 'btn-group',

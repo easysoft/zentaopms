@@ -732,6 +732,7 @@ class program extends control
         $this->view->browseType         = $browseType;
         $this->view->pager              = $pager;
         $this->view->checkedEditProduct = !empty((int)$this->cookie->checkedEditProduct);
+        $this->view->param              = $param;
 
         $this->render();
     }
