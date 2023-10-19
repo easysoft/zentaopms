@@ -135,7 +135,7 @@ dtable
             set::url('product', 'batchEdit'),
             set::text($lang->edit),
             setData('load', 'post'),
-            setData('dataMap', array('productIDList[]' => '#products:checkedIDList'))
+            setData('dataMap', 'productIDList[]:#products~checkedIDList')
         )
     ) : null,
     set::footPager(usePager())
