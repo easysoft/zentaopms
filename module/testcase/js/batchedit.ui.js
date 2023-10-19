@@ -1,5 +1,14 @@
 window.handleRenderRow = function($row, index, row)
 {
+    /* Set the branches for the row. */
+    if(branchProduct)
+    {
+        $row.find('.form-batch-control[data-name="branch"] .picker-box').on('inited', function(e, info)
+        {
+            let $branch = info[0];
+            $branch.$.setValue(row.branch);
+        });
+    }
     /* Set the modules for the row. */
     $row.find('.form-batch-control[data-name="module"] .picker-box').on('inited', function(e, info)
     {

@@ -10,11 +10,13 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('modulePairs', $modulePairs);
-jsVar('scenePairs',  $scenePairs);
-jsVar('productID',   $productID);
-jsVar('products',    $products);
-jsVar('cases',       $cases);
+jsVar('branchProduct', $branchProduct);
+jsVar('branchOption',  $branchTagOption[$productID]);
+jsVar('modulePairs',   $modulePairs);
+jsVar('scenePairs',    $scenePairs);
+jsVar('productID',     $productID);
+jsVar('products',      $products);
+jsVar('cases',         $cases);
 
 if(isset($suhosinInfo))
 {
