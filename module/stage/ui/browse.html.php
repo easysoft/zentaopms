@@ -40,6 +40,8 @@ dtable
 (
     set::cols($config->stage->dtable->fieldList),
     set::data($tableData),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('stage', 'browse', "orderBy={name}_{sortType}&type={$type}")),
 );
 
 /* ====== Render page ====== */
