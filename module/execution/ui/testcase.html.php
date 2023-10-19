@@ -40,7 +40,7 @@ featureBar
     to::before($branchDropdown),
     set::current($type),
     set::linkParams("executionID={$executionID}&productID={$productID}&branchID={$branchID}&type={key}&moduleID={$moduleID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
-    li(searchToggle(set::module('testcase')))
+    li(searchToggle(set::module('executionCase')))
 );
 
 /* zin: Define the toolbar on main menu. */
