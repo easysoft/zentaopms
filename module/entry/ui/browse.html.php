@@ -30,6 +30,8 @@ dtable
     set::cols($this->config->entry->dtable->fieldList),
     set::data($tableData),
     set::fixedLeftWidth('0.33'),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('entry', 'browse', "orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footer(jsRaw("function(){return window.footerGenerator.call(this, '" . sprintf($lang->entry->summaryTip, count($tableData)) . "');}")),
     set::footPager(usePager()),
 );

@@ -57,6 +57,7 @@ class entryModel extends model
      */
     public function getList($orderBy = 'id_desc', $pager = null)
     {
+        if(strpos($orderBy, 'desc_') !== false) $orderBy = str_replace('desc_', '`desc`_', $orderBy);
         return $this->dao->select('*')->from(TABLE_ENTRY)->where('deleted')->eq('0')->orderBy($orderBy)->page($pager)->fetchAll('id');
     }
 
