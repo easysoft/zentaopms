@@ -710,10 +710,10 @@
         options = $.extend({url: url, selector: selector, method: 'POST', data, contentType: false}, options);
         if(options.dataMap)
         {
-            options.data = $.extend(options.data || {}, zui.mapFormData(options.dataMap));
+            options.data = zui.createFormData(zui.mapFormData(options.dataMap), options.data);
             delete options.dataMap;
         }
-        if(!Object.keys(options.data).length) return;
+        if(!options.data || !(options.data instanceof FormData || Object.keys(options.data).length)) return;
 
         if(options.app) openPage(url, options.app, options);
         else            loadPage(options);
