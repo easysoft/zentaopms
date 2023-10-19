@@ -14,6 +14,7 @@ $config->personnel->accessible->dtable->fieldList['realname']['title']    = $lan
 $config->personnel->accessible->dtable->fieldList['realname']['type']     = 'title';
 $config->personnel->accessible->dtable->fieldList['realname']['minWidth'] = '200';
 $config->personnel->accessible->dtable->fieldList['realname']['fixed']    = 'left';
+$config->personnel->accessible->dtable->fieldList['realname']['sortType'] = false;
 
 $config->personnel->accessible->dtable->fieldList['dept']['name']   = 'dept';
 $config->personnel->accessible->dtable->fieldList['dept']['title']  = $lang->personnel->department;
