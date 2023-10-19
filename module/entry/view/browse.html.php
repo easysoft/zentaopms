@@ -28,7 +28,7 @@
           <th class='c-code'><?php common::printOrderLink('code', $orderBy, $vars, $lang->entry->code);?></th>
           <th class='c-key'><?php common::printOrderLink('key',  $orderBy, $vars, $lang->entry->key);?></th>
           <th class='c-ip'><?php common::printOrderLink('ip',   $orderBy, $vars, $lang->entry->ip);?></th>
-          <th><?php echo common::printOrderLink('desc', $orderBy, $vars, $lang->entry->desc);?></th>
+          <th><?php echo $lang->entry->desc;?></th>
           <th class='c-actions-3'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
