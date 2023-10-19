@@ -19,7 +19,6 @@ modalHeader
 
 formPanel
 (
-    h::import($config->webRoot . 'js/md5.js', 'js'),
     formGroup
     (
         set::label($lang->user->verifyPassword),

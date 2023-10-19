@@ -18,7 +18,6 @@ $items['visions']['items'] = $visionList;
 
 formBatchPanel
 (
-    h::import($config->webRoot . 'js/md5.js', 'js'),
     set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'batchEditFields')),
     set::title($lang->user->batchEdit),
     set::mode('edit'),

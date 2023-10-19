@@ -10,7 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('passwordStrengthList', $lang->user->passwordStrengthList);
 jsVar('batchCreateCount', $config->user->batchCreate);
 
 $visibleFields  = array();
@@ -27,7 +26,6 @@ foreach(explode(',', $config->user->create->requiredFields) as $field)
 
 formBatchPanel
 (
-    h::import($config->webRoot . 'js/md5.js', 'js'),
     set::headingClass('user-batchcreate-heading'),
     set::title($lang->user->batchCreate),
     on::change('[data-name="new"]', 'toggleNew'),
