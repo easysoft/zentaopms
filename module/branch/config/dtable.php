@@ -7,10 +7,10 @@ $config->branch->dtable->fieldList['id']['width']    = 30;
 $config->branch->dtable->fieldList['id']['sortType'] = false;
 
 $config->branch->dtable->fieldList['name']['type']     = 'title';
-$config->branch->dtable->fieldList['name']['sortType'] = false;
+$config->branch->dtable->fieldList['name']['sortType'] = true;
 
 $config->branch->dtable->fieldList['status']['type']      = 'status';
-$config->branch->dtable->fieldList['status']['sortType']  = false;
+$config->branch->dtable->fieldList['status']['sortType']  = true;
 $config->branch->dtable->fieldList['status']['statusMap'] = $lang->branch->statusList;
 
 $config->branch->dtable->fieldList['createdDate']['type'] = 'date';

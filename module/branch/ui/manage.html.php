@@ -29,9 +29,6 @@ toolbar
 jsVar('confirmclose',    $lang->branch->confirmClose);
 jsVar('confirmactivate', $lang->branch->confirmActivate);
 
-jsVar('orderBy', $orderBy);
-jsVar('sortLink', helper::createLink('branch', 'manage', "productID={$product->id}&browseType={$browseType}&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
-
 modal
 (
     setID('mergeModal'),
@@ -138,14 +135,11 @@ dtable
     set::data($tableData),
     set::checkable(true),
     set::canRowCheckable(jsRaw("(rowID) => {return rowID == '0' ? false : true}")),
-    set::sortLink(jsRaw('createSortLink')),
+    set::sortLink(createLink('branch', 'manage', "productID={$product->id}&browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
     set::onCheckChange(jsRaw('checkedChange')),
     set::footToolbar($footToolbar),
     set::footPager(
         usePager(),
-        set::recPerPage($pager->recPerPage),
-        set::recTotal($pager->recTotal),
-        set::linkCreator(helper::createLink('branch', 'manage', "productID={$product->id}&browseType={$browseType}&orderBy={$orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}")),
     )
 );
 
