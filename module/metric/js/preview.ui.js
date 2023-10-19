@@ -431,7 +431,7 @@ window.initChart = function($obj, head, data, chartType)
     var type  = (chartType == 'barX' || chartType == 'barY') ? 'bar' : chartType;
 
     data.sort(function(a, b) {
-        return a[x] < b[x] ? -1 : 1;
+        return a[x] > b[x] ? -1 : 1;
     });
 
     var xAxis = {
