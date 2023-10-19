@@ -210,6 +210,7 @@ class dtable extends wg
                 }
             }
             $this->setProp('emptyTip', $emptyTip);
+            $this->setProp('customCols', false);
         }
         return zui::dtable(inherit($this));
     }
