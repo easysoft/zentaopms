@@ -1453,7 +1453,7 @@ class testcaseZen extends testcase
             {
                 if($branch != 'ditto') $prevBranch = $branch;
                 if($branch == 'ditto') $branches[$caseID] = $prevBranch;
-                if(!isset($caseModules[$branch]) && in_array($caseID, $caseIdList) !== false) $caseModules[$branch] = $this->testsuite->getCanImportedModules($productID, $libID, $branch);
+                if(!isset($caseModules[$branch]) && in_array($caseID, $caseIdList) !== false) $caseModules[$branch] = $this->loadModel('testsuite')->getCanImportedModules($productID, $libID, $branch);
             }
         }
         else
