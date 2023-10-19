@@ -725,7 +725,7 @@ foreach($config->project->view->operateList['common'] as $operate)
 
     $settings = $config->project->actionList[$operate];
     $settings['text'] = '';
-    if($operate == 'edit') $settings['url'] = createLink('project', 'edit', "projectID={$project->id}");
+    if($operate == 'edit') $settings['url'] = createLink('project', 'edit', "projectID={$project->id}&from=view");
 
     $commonActions[] = $settings;
 }
