@@ -59,8 +59,8 @@ $canBatchRun    = common::hasPriv('testtask', 'batchRun');
 $hasCheckbox    = ($canBeChanged && $canBatchEdit && $canBatchUnlink && $canBatchRun);
 
 $batchItems = array(
-    $canBatchUnlink ? array('text' => $lang->testsuite->unlinkCase, 'className' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testsuite', 'batchUnlinkCases', "suiteID={$suite->id}"))              : null,
-    $canBatchRun    ? array('text' => $lang->testtask->runCase,     'className' => 'batch-btn not-open-url',          'data-url' => helper::createLink('testtask', 'batchRun', "productID={$productID}&&orderBy={$orderBy}")) : null,
+    $canBatchUnlink ? array('text' => $lang->testsuite->unlinkCase, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testsuite', 'batchUnlinkCases', "suiteID={$suite->id}"))              : null,
+    $canBatchRun    ? array('text' => $lang->testtask->runCase,     'innerClass' => 'batch-btn not-open-url',          'data-url' => helper::createLink('testtask', 'batchRun', "productID={$productID}&&orderBy={$orderBy}")) : null,
 );
 
 $footToolbar = array('items' => array(
