@@ -29,7 +29,6 @@ $config->index->oldPages[] = 'program-kanban';
 $config->index->oldPages[] = 'project-kanban';
 $config->index->oldPages[] = 'execution-taskkanban';
 $config->index->oldPages[] = 'kanban-space';
-$config->index->oldPages[] = 'screen-browse';
 $config->index->oldPages[] = 'pivot-preview';
 $config->index->oldPages[] = 'chart-preview';
 $config->index->oldPages[] = 'kanban-space';
