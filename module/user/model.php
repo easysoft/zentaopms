@@ -373,7 +373,7 @@ class userModel extends model
         $userID = $this->dao->lastInsertID();
 
         /* Set usergroup for account. */
-        if(isset($_POST['group']))
+        if(!empty(array_filter($_POST['group'])))
         {
             foreach($this->post->group as $groupID)
             {
