@@ -21,11 +21,15 @@
 <?php js::set('startInstall', $install);?>
 <?php js::set('skipLang', $lang->install->solution->skip);?>
 <?php js::set('backgroundLang', $lang->solution->background);?>
+<?php js::set('isonlybody', isonlybody());?>
 
 <?php if(isonlybody()):?>
 <style>
 .solution-progress {margin-top: -20px;}
 .m-install-progress .modal-dialog {margin-top: 0;}
+.step-title {font-size: 13px;}
+.arrow {padding-bottom: 12px;}
+.app-list {margin-top: -40px;}
 </style>
 <?php endif;?>
 
@@ -39,7 +43,7 @@
     <div class='modal-body'>
     <div class='solution-progress'>
       <div id='terminal'><h3><?php echo $lang->install->solution->log;?></h3></div>
-      <div class='text-center'>
+      <div class='text-center app-list'>
         <?php $components = json_decode($solution->components);?>
         <?php $order = 0;?>
         <?php foreach($components as $category => $cloudApp):?>

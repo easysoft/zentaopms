@@ -61,7 +61,14 @@ $(function()
                 if(installed)
                 {
                     $('.progress-message').text(notices.installationSuccess);
-                    window.location.href = createLink('install', 'step6');
+                    if(isonlybody)
+                    {
+                        $('.progress.loading').hide();
+
+                        parent[0].loadCurrentPage();
+                        parent.$('.close').click();
+                    }
+                    if(!isonlybody) window.location.href = createLink('install', 'step6');
                 }
             }
             else
