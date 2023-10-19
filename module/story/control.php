@@ -1902,7 +1902,7 @@ class story extends control
             $changes = $this->story->close($storyID);
             if(dao::isError())
             {
-                if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => dao::getError()));
                 return print(js::error(dao::getError()));
             }
             $this->story->closeParentRequirement($storyID);
