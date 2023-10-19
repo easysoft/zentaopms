@@ -407,9 +407,9 @@ class userModel extends model
         $users    = fixer::input('post')->get();
         $data     = array();
         $accounts = array();
-        for($i = 0; $i < $this->config->user->batchCreate; $i++)
+        for($i = 1; $i < $this->config->user->batchCreate; $i++)
         {
-            $users->account[$i] = trim($users->account[$i]);
+            if(!empty($users->account[$i])) $users->account[$i] = trim($users->account[$i]);
             if($users->account[$i] != '')
             {
                 if(strtolower($users->account[$i]) == 'guest') dao::$errors["account{$i}"][] = $this->lang->user->error->reserved;

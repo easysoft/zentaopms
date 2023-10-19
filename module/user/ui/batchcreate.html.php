@@ -11,6 +11,8 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('batchCreateCount', $config->user->batchCreate);
+jsVar('passwordStrengthList', $lang->user->passwordStrengthList);
+h::jsCall('$.getLib', 'md5.js', array('root' => $this->app->getWebRoot() . 'js/'));
 
 $visibleFields  = array();
 foreach(explode(',', $showFields) as $field)
@@ -111,7 +113,8 @@ formBatchPanel
     (
         set::name('visions'),
         set::label($lang->user->visions),
-        set::control(array('type' => 'select', 'items' => $visionList, 'multiple' => true)),
+        set::items($visionList),
+        set::control(array('type' => 'picker', 'multiple' => true)),
         set::width('200px'),
         set::value(isset($visionList[$this->config->vision]) ? $this->config->vision : key($visionList)),
         set::ditto(true),
@@ -130,7 +133,8 @@ formBatchPanel
     (
         set::name('group'),
         set::label($lang->user->group),
-        set::control(array('type' => 'select', 'items' => $groupList, 'multiple' => true)),
+        set::control(array("type" => "picker","multiple" => true)),
+        set::items($groupList),
         set::width('200px'),
         set::value(''),
         set::ditto(true),
