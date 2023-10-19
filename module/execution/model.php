@@ -3914,6 +3914,17 @@ class executionModel extends model
      */
     public function buildCaseSearchForm(array $products, int $queryID, string $actionURL, string $type = 'execution')
     {
+        $modules = array();
+        $builds  = array('' => '', 'trunk' => $this->lang->trunk);
+        foreach($products as $product)
+        {
+            $productModules = $this->loadModel('tree')->getOptionMenu($product->id, 'case');
+            foreach($productModules as $moduleID => $moduleName) $modules[$moduleID] = ((count($products) >= 2 and $moduleID) ? $product->name : '') . $moduleName;
+
+            $productBuilds  = $this->loadModel('build')->getBuildPairs(array($product->id), 'all', 'noempty|notrunk|withbranch');
+            foreach($productBuilds as $buildID => $buildName) $builds[$buildID] = ((count($products) >= 2 and $buildID) ? $product->name . '/' : '') . $buildName;
+        }
+
         $this->config->testcase->search['module']    = $type == 'execution' ? 'executionCase' : 'projectCase';
         $this->config->testcase->search['actionURL'] = $actionURL;
         $this->config->testcase->search['queryID']   = $queryID;
