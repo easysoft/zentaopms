@@ -18,73 +18,6 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
     }
 });
 
-/**
- * Set stories.
- *
- * @param  int     productID
- * @param  int     moduleID
- * @param  int     num
- * @access public
- * @return void
- */
-function loadStories(productID, moduleID, num, $currentRow = null)
-{
-    var branchIDName = (config.currentMethod == 'batchcreate' || config.currentMethod == 'showimport') ? '#branch' : '#branches';
-    var branchID     = config.currentMethod == 'batchcreate' ? $(branchIDName + '_' + num).val() : $(branchIDName + num).val();
-    var storyLink    = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=0&type=full&hasParent=1&executionID=0&number=' + num);
-    $.getJSON(storyLink, function(stories)
-    {
-        if(!stories) return;
-
-        let $row = $currentRow;
-        while($row.length)
-        {
-            const $story = $row.find('.form-batch-control[data-name="story"] .picker').zui('picker');
-            $story.render({items: stories});
-            $story.$.setValue($story.$.value);
-
-            $row = $row.next('tr');
-
-            if(!$row.find('td[data-name="story"][data-ditto="on"]').length || !$row.find('td[data-name="branch"][data-ditto="on"]').length || !$row.find('td[data-name="module"][data-ditto="on"]').length) break;
-        }
-    });
-}
-
-/**
- * Set modules.
- *
- * @param  int     $branchID
- * @param  int     $productID
- * @param  int     $num
- * @access public
- * @return void
- */
-function setModules(event)
-{
-    const $target     = $(event.target);
-    const $currentRow = $target.closest('tr');
-    const branchID    = $target.val();
-    const moduleID    = $currentRow.find('.form-batch-input[data-name="module"]').val();
-
-    $.getJSON($.createLink('tree', 'ajaxGetModules', 'productID=' + productID + '&viewType=case&branch=' + branchID + '&number=0&currentModuleID=' + moduleID), function(data)
-    {
-        if(!data || !data.modules) return;
-
-        let $row = $currentRow;
-        while($row.length)
-        {
-            const $module = $row.find('.form-batch-control[data-name="module"] .picker').zui('picker');
-            $module.render({items: data.modules});
-            $module.$.setValue(data.currentModuleID);
-
-            $row = $row.next('tr');
-            if(!$row.find('td[data-name="module"][data-ditto="on"]').length || !$row.find('td[data-name="branch"][data-ditto="on"]').length) break;
-        }
-    });
-
-    loadStories(productID, moduleID, 0, $currentRow);
-}
-
 function loadProductStories(productID)
 {
     let branch   = $('[name=branch]').val();
@@ -155,5 +88,101 @@ function loadScenes(productID, sceneName = 'scene')
         const $picker = $('[name=' + sceneName + ']').zui('picker');
         $picker.render({items: scenes});
         $picker.$.setValue(sceneID);
+    });
+}
+
+/**
+ * Set modules.
+ *
+ * @param  int     $branchID
+ * @param  int     $productID
+ * @param  int     $num
+ * @access public
+ * @return void
+ */
+function onBranchChangedForBatch(event)
+{
+    const $target     = $(event.target);
+    const $currentRow = $target.closest('tr');
+    const branchID    = $target.val();
+    const moduleID    = $currentRow.find('.form-batch-control[data-name="module"] .pick-value').val();
+
+    $.getJSON($.createLink('tree', 'ajaxGetModules', 'productID=' + productID + '&viewType=case&branch=' + branchID + '&number=0&currentModuleID=' + moduleID), function(data)
+    {
+        if(!data || !data.modules) return;
+
+        let $row = $currentRow;
+        while($row.length)
+        {
+            const $module = $row.find('.form-batch-control[data-name="module"] .picker').zui('picker');
+            $module.render({items: data.modules});
+            $module.$.setValue(data.currentModuleID);
+
+            $row = $row.next('tr');
+            if(!$row.find('td[data-name="module"][data-ditto="on"]').length || !$row.find('td[data-name="branch"][data-ditto="on"]').length) break;
+        }
+    });
+
+    loadScenesForBatch(productID, moduleID, $currentRow);
+    loadStoriesForBatch(productID, moduleID, 0, $currentRow);
+}
+
+function onModuleChangedForBatch(event)
+{
+    const $target     = $(event.target);
+    const $currentRow = $target.closest('tr');
+    const moduleID    = $target.val();
+
+    loadScenesForBatch(productID, moduleID, $currentRow);
+    loadStoriesForBatch(productID, moduleID, 0, $currentRow);
+}
+
+function loadScenesForBatch(productID, moduleID, $currentRow)
+{
+    let branchID = $currentRow.find('.form-batch-control[data-name="branch"] .pick-value').val();
+    let sceneLink = $.createLink('testcase', 'ajaxGetScenes', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID);
+    $.getJSON(sceneLink, function(scenes)
+    {
+        let $row = $currentRow;
+        while($row.length)
+        {
+            const $scene = $row.find('.form-batch-control[data-name="scene"] .picker').zui('picker');
+            $scene.render({items: scenes});
+            $scene.$.setValue($scene.$.value);
+
+            $row = $row.next('tr');
+            if(!$row.find('td[data-name="scene"][data-ditto="on"]').length || !$row.find('td[data-name="module"][data-ditto="on"]').length) break;
+        }
+    });
+}
+
+/**
+ * Set stories.
+ *
+ * @param  int     productID
+ * @param  int     moduleID
+ * @param  int     num
+ * @access public
+ * @return void
+ */
+function loadStoriesForBatch(productID, moduleID, num, $currentRow = null)
+{
+    const branchID = $currentRow.find('.form-batch-control[data-name="branch"] .pick-value').val();
+    var storyLink  = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=0&type=full&hasParent=1&executionID=0&number=' + num);
+    $.getJSON(storyLink, function(stories)
+    {
+        if(!stories) return;
+
+        let $row = $currentRow;
+        while($row.length)
+        {
+            const $story = $row.find('.form-batch-control[data-name="story"] .picker').zui('picker');
+            $story.render({items: stories});
+            $story.$.setValue($story.$.value);
+
+            $row = $row.next('tr');
+
+            if(!$row.find('td[data-name="story"][data-ditto="on"]').length || !$row.find('td[data-name="branch"][data-ditto="on"]').length || !$row.find('td[data-name="module"][data-ditto="on"]').length) break;
+        }
     });
 }

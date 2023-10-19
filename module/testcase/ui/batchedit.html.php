@@ -12,7 +12,6 @@ namespace zin;
 
 jsVar('modulePairs', $modulePairs);
 jsVar('scenePairs',  $scenePairs);
-jsVar('branchPairs', $branchTagOption);
 jsVar('productID',   $productID);
 jsVar('products',    $products);
 jsVar('cases',       $cases);
@@ -86,7 +85,7 @@ else
         'label'   => $lang->testcase->branch,
         'width'   => '180px',
         'control' => 'picker',
-        'items'   => array(),
+        'items'   => $branchTagOption[$productID],
         'hidden'  => !$branchProduct,
     );
     $items[] = array
@@ -169,7 +168,8 @@ else
 
     formBatchPanel
     (
-        on::change('[data-name=branch]', 'loadBranches'),
+        on::change('[data-name="branch"]', 'onBranchChangedForBatch'),
+        on::change('[data-name="module"]', 'onModuleChangedForBatch'),
         set::mode('edit'),
         set::data(array_values($cases)),
         set::items($items),

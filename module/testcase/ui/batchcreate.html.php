@@ -182,8 +182,8 @@ formBatchPanel
     set::title($lang->testcase->batchCreate),
     set::pasteField('title'),
     set::items($items),
-    on::change('[data-name="branch"]', 'setModules'),
-    on::change('[data-name="module"]', 'onModuleChanged'),
+    on::change('[data-name="branch"]', 'onBranchChangedForBatch'),
+    on::change('[data-name="module"]', 'onModuleChangedForBatch'),
 );
 
 render();
