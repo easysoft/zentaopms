@@ -3954,6 +3954,9 @@ class executionModel extends model
             }
         }
 
+        unset($this->config->testcase->search['fields']['execution']);
+        unset($this->config->testcase->search['params']['execution']);
+
         $this->config->testcase->search['module']    = $type == 'execution' ? 'executionCase' : 'projectCase';
         $this->config->testcase->search['actionURL'] = $actionURL;
         $this->config->testcase->search['queryID']   = $queryID;
