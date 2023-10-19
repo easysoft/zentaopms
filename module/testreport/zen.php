@@ -26,6 +26,7 @@ class testreportZen extends testreport
         {
             $productID = $this->product->checkAccess($objectID, $this->products);
             $this->loadModel('qa')->setMenu($productID);
+            $this->view->productID = $productID;
             return $productID;
         }
 
@@ -34,6 +35,7 @@ class testreportZen extends testreport
             $executions  = $this->execution->getPairs();
             $executionID = $this->execution->checkAccess($objectID, $executions);
             $this->execution->setMenu($executionID);
+            $this->view->executionID = $executionID;
             return $executionID;
         }
 
@@ -42,6 +44,7 @@ class testreportZen extends testreport
             $projects  = $this->project->getPairsByProgram();
             $projectID = $this->project->checkAccess($objectID, $projects);
             $this->project->setMenu($projectID);
+            $this->view->projectID = $projectID;
             return $projectID;
         }
     }
