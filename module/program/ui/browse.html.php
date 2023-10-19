@@ -193,6 +193,8 @@ dtable
     set::footPager(usePager()),
     set::canRowCheckable(jsRaw("function(rowID){return this.getRowInfo(rowID).data.type == 'project';}")),
     set::onRenderCell(jsRaw('window.renderCell')),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('program', 'browse', "status={$status}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&param={$param}")),
     set::footToolbar(array
     (
         'type'  => 'btn-group',

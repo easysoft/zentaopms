@@ -62,6 +62,7 @@ class program extends control
         $this->view->usersAvatar  = $this->user->getAvatarPairs('');
         $this->view->PMList       = $PMList;
         $this->view->progressList = $this->program->getProgressList();
+        $this->view->param        = $param;
 
         $this->display();
     }
