@@ -29,30 +29,35 @@ else
     {
         if($screenID == 3 && !hasPriv('screen', 'annualData')) continue;
 
-        $class = empty($screen->cover) ? "image_{$screen->status}" : '';
-        $src   = empty($screen->cover) ? "static/images/screen_{$screen->status}.png" : $screen->cover;
+        $class   = empty($screen->cover) ? "image_{$screen->status}" : '';
+        $src     = empty($screen->cover) ? "static/images/screen_{$screen->status}.png" : $screen->cover;
+        $content = div
+        (
+            setClass('border border-light'),
+            div
+            (
+                setClass("h-48 {$class}"),
+                img(setClass('h-full object-cover object-top'), set(array('src' => $src, 'width' => '100%')))
+            ),
+            div
+            (
+                setClass('px-4 py-3 h-20'),
+                setData(array('builtin' => $screen->builtin, 'status' => $screen->status)),
+                div(setClass('text-black text-md overflow-hidden'), set::title($screen->name), $screen->name),
+                div(setClass('text-gray text-sm overflow-hidden'), set::title($screen->name), $screen->desc ?: $lang->screen->noDesc)
+            )
+        );
 
         $items[] = div
         (
             setData(array('id' => $screen->id)),
             setClass('pl-2.5 pr-2.5 mb-2 w-1/4'),
-            div
+            $canView ? a
             (
-                setClass('border' . ($canView ? ' open-url cursor-pointer' : '')),
-                $canView ? setData(array('url' => createLink('screen', 'view', "id={$screen->id}"), 'target' => '_blank')) : null,
-                div
-                (
-                    setClass("h-48 {$class}"),
-                    img(setClass('h-full object-cover object-top'),set(array('src' => $src, 'width' => '100%')))
-                ),
-                div
-                (
-                    setClass('px-4 py-3 h-20'),
-                    setData(array('builtin' => $screen->builtin, 'status' => $screen->status)),
-                    div(setClass('text-md overflow-hidden'), set::title($screen->name), $screen->name),
-                    div(setClass('text-gray text-sm overflow-hidden'), set::title($screen->name), $screen->desc ?: $lang->screen->noDesc)
-                )
-            )
+                set::href(createLink('screen', 'view', "id={$screen->id}")),
+                set::target('_blank'),
+                $content
+            ) : $content
         );
     }
 
