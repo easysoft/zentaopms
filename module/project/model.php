@@ -2011,7 +2011,11 @@ class projectModel extends model
         /* Get execution of the status is doing. */
         $executions        = $this->loadModel('execution')->getStatData(0, 'doing', 0, 0, false, 'hasParentName|skipParent');
         $projectExecutions = array();
-        foreach($executions as $execution) $projectExecutions[$execution->project][$execution->id] = $execution;
+        foreach($executions as $execution)
+        {
+            if(!empty($execution->projectName)) $execution->projectName = htmlspecialchars_decode($execution->projectName);
+            $projectExecutions[$execution->project][$execution->id] = $execution;
+        }
 
         /* The execution is sorted in reverse order by execution ID. */
         $ongoingExecutions = array();
@@ -2026,6 +2030,9 @@ class projectModel extends model
 
         /* Only display recent two closed projects. */
         $projectsStats = $this->projectTao->sortAndReduceClosedProjects($projectsStats, 2);
+
+        /* Convert predefined HTML entities to characters. */
+        foreach($projectsStats as $project) $project->name = htmlspecialchars_decode($project->name, ENT_QUOTES);
 
         return array($projectsStats, $ongoingExecutions);
     }
