@@ -1361,6 +1361,7 @@ class programModel extends model
             ->fetchGroup('root', 'account');
 
         $stats = $this->appendStatToProjects($projects, 'hours,teamCount,teamMembers,leftTasks', array('hours' => $hours, 'teams' => $teamMembers, 'leftTasks' => $leftTasks));
+        foreach($stats as $project) $project->name = htmlspecialchars_decode($project->name, ENT_QUOTES); //  Convert predefined HTML entities to characters.
 
         return $stats;
     }

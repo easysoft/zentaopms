@@ -7,6 +7,7 @@ $config->project->dtable->defaultField = array('id', 'name', 'status', 'PM', 'bu
 $config->project->dtable->fieldList['id']['title']    = $lang->idAB;
 $config->project->dtable->fieldList['id']['name']     = 'id';
 $config->project->dtable->fieldList['id']['type']     = 'checkID';
+$config->project->dtable->fieldList['id']['sortType'] = true;
 $config->project->dtable->fieldList['id']['checkbox'] = true;
 $config->project->dtable->fieldList['id']['group']    = 1;
 $config->project->dtable->fieldList['id']['required'] = true;
@@ -14,6 +15,7 @@ $config->project->dtable->fieldList['id']['required'] = true;
 $config->project->dtable->fieldList['name']['title']      = $lang->project->name;
 $config->project->dtable->fieldList['name']['name']       = 'name';
 $config->project->dtable->fieldList['name']['type']       = 'title';
+$config->project->dtable->fieldList['name']['sortType']   = true;
 $config->project->dtable->fieldList['name']['link']       = array('module' => 'project', 'method' => 'index', 'params' => 'projectID={id}');
 $config->project->dtable->fieldList['name']['iconRender'] = 'RAWJS<function(val,row){ if(row.data.model == \'scrum\') return \'icon-sprint text-gray\'; if([\'waterfall\', \'kanban\', \'agileplus\', \'waterfallplus\'].indexOf(row.data.model) !== -1) return \'icon-\' + row.data.model + \' text-gray\'; return \'\';}>RAWJS';
 $config->project->dtable->fieldList['name']['group']      = 1;
@@ -24,6 +26,7 @@ if(!empty($config->setCode))
     $config->project->dtable->fieldList['code']['title']    = $lang->project->code;
     $config->project->dtable->fieldList['code']['name']     = 'code';
     $config->project->dtable->fieldList['code']['type']     = 'text';
+    $config->project->dtable->fieldList['code']['sortType'] = true;
     $config->project->dtable->fieldList['code']['group']    = 1;
     $config->project->dtable->fieldList['code']['required'] = true;
 }
@@ -31,18 +34,21 @@ if(!empty($config->setCode))
 $config->project->dtable->fieldList['status']['title']     = $lang->project->status;
 $config->project->dtable->fieldList['status']['name']      = 'status';
 $config->project->dtable->fieldList['status']['type']      = 'status';
+$config->project->dtable->fieldList['status']['sortType']  = true;
 $config->project->dtable->fieldList['status']['statusMap'] = $lang->project->statusList;
 $config->project->dtable->fieldList['status']['group']     = 2;
 $config->project->dtable->fieldList['status']['show']      = true;
 
-$config->project->dtable->fieldList['hasProduct']['title'] = $lang->project->type;
-$config->project->dtable->fieldList['hasProduct']['name']  = 'hasProduct';
-$config->project->dtable->fieldList['hasProduct']['type']  = 'category';
-$config->project->dtable->fieldList['hasProduct']['group'] = 2;
+$config->project->dtable->fieldList['hasProduct']['title']    = $lang->project->type;
+$config->project->dtable->fieldList['hasProduct']['name']     = 'hasProduct';
+$config->project->dtable->fieldList['hasProduct']['type']     = 'category';
+$config->project->dtable->fieldList['hasProduct']['sortType'] = true;
+$config->project->dtable->fieldList['hasProduct']['group']    = 2;
 
 $config->project->dtable->fieldList['PM']['title']    = $lang->project->PM;
 $config->project->dtable->fieldList['PM']['name']     = 'PM';
 $config->project->dtable->fieldList['PM']['type']     = 'avatarBtn';
+$config->project->dtable->fieldList['PM']['sortType'] = true;
 $config->project->dtable->fieldList['PM']['group']    = 3;
 $config->project->dtable->fieldList['PM']['required'] = true;
 
@@ -59,6 +65,7 @@ $config->project->dtable->fieldList['executionCount']['show']   = 4;
 $config->project->dtable->fieldList['budget']['title']    = $lang->project->budget;
 $config->project->dtable->fieldList['budget']['name']     = 'budget';
 $config->project->dtable->fieldList['budget']['type']     = 'money';
+$config->project->dtable->fieldList['budget']['sortType'] = true;
 $config->project->dtable->fieldList['budget']['group']    = 5;
 $config->project->dtable->fieldList['budget']['show']     = true;
 $config->project->dtable->fieldList['budget']['sortType'] = true;
@@ -77,16 +84,16 @@ $config->project->dtable->fieldList['invested']['show']  = true;
 $config->project->dtable->fieldList['begin']['title']    = $lang->project->begin;
 $config->project->dtable->fieldList['begin']['name']     = 'begin';
 $config->project->dtable->fieldList['begin']['type']     = 'date';
+$config->project->dtable->fieldList['begin']['sortType'] = true;
 $config->project->dtable->fieldList['begin']['group']    = 6;
 $config->project->dtable->fieldList['begin']['show']     = true;
-$config->project->dtable->fieldList['begin']['sortType'] = true;
 
 $config->project->dtable->fieldList['end']['title']    = $lang->project->end;
 $config->project->dtable->fieldList['end']['name']     = 'end';
 $config->project->dtable->fieldList['end']['type']     = 'date';
+$config->project->dtable->fieldList['end']['sortType'] = true;
 $config->project->dtable->fieldList['end']['group']    = 6;
 $config->project->dtable->fieldList['end']['show']     = true;
-$config->project->dtable->fieldList['end']['sortType'] = true;
 
 $config->project->dtable->fieldList['realBegan']['title'] = $lang->project->realBeganAB;
 $config->project->dtable->fieldList['realBegan']['type']  = 'date';
@@ -96,15 +103,17 @@ $config->project->dtable->fieldList['realEnd']['title'] = $lang->project->realEn
 $config->project->dtable->fieldList['realEnd']['type']  = 'date';
 $config->project->dtable->fieldList['realEnd']['group'] = 6;
 
-$config->project->dtable->fieldList['estimate']['title'] = $lang->project->estimate;
-$config->project->dtable->fieldList['estimate']['name']  = 'estimate';
-$config->project->dtable->fieldList['estimate']['type']  = 'number';
-$config->project->dtable->fieldList['estimate']['group'] = 7;
+$config->project->dtable->fieldList['estimate']['title']    = $lang->project->estimate;
+$config->project->dtable->fieldList['estimate']['name']     = 'estimate';
+$config->project->dtable->fieldList['estimate']['type']     = 'number';
+$config->project->dtable->fieldList['estimate']['sortType'] = true;
+$config->project->dtable->fieldList['estimate']['group']    = 7;
 
-$config->project->dtable->fieldList['consume']['title'] = $lang->project->consume;
-$config->project->dtable->fieldList['consume']['name']  = 'consume';
-$config->project->dtable->fieldList['consume']['type']  = 'number';
-$config->project->dtable->fieldList['consume']['group'] = 7;
+$config->project->dtable->fieldList['consume']['title']    = $lang->project->consume;
+$config->project->dtable->fieldList['consume']['name']     = 'consume';
+$config->project->dtable->fieldList['consume']['type']     = 'number';
+$config->project->dtable->fieldList['consume']['sortType'] = true;
+$config->project->dtable->fieldList['consume']['group']    = 7;
 
 $config->project->dtable->fieldList['progress']['title'] = $lang->project->progress;
 $config->project->dtable->fieldList['progress']['name']  = 'progress';
