@@ -33,4 +33,3 @@ div
 );
 
 render('pagebase');
-
