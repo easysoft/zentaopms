@@ -62,7 +62,7 @@
             <div class='chart-wrapper text-center'>
               <h5><?php echo $lang->testreport->$infoKey?></h5>
               <div class='chart-canvas'>
-                <?php if(isset($_POST["chart-{$infoKey}"])):?>
+                <?php if(isset($_POST["chart-{$infoKey}"]) and strpos($_POST["chart-{$infoKey}"], 'data:image/png;base64,') === 0):?>
                 <img src='<?php echo strip_tags($_POST["chart-{$infoKey}"])?>' />
                 <?php else:?>
                 <canvas id='chart-<?php echo $infoKey?>' width='90' height='20' data-responsive='true'></canvas>
@@ -99,7 +99,7 @@
             <div class='chart-wrapper text-center'>
               <h5><?php echo $lang->testreport->$infoKey?></h5>
               <div class='chart-canvas'>
-                <?php if(isset($_POST["chart-{$infoKey}"])):?>
+                <?php if(isset($_POST["chart-{$infoKey}"]) and strpos($_POST["chart-{$infoKey}"], 'data:image/png;base64,') === 0):?>
                 <img src='<?php echo strip_tags($_POST["chart-{$infoKey}"])?>' />
                 <?php else:?>
                 <canvas id='chart-<?php echo $infoKey?>' width='90' height='20' data-responsive='true'></canvas>
@@ -142,7 +142,7 @@
             <div class='chart-wrapper text-center'>
               <h5><?php echo $lang->testreport->$infoKey?></h5>
               <div class='chart-canvas'>
-                <?php if(isset($_POST["chart-{$infoKey}"])):?>
+                <?php if(isset($_POST["chart-{$infoKey}"]) and strpos($_POST["chart-{$infoKey}"], 'data:image/png;base64,') === 0):?>
                 <img src='<?php echo strip_tags($_POST["chart-{$infoKey}"])?>' />
                 <?php else:?>
                 <canvas id='chart-<?php echo $infoKey?>' width='500' height='140' data-responsive='true'></canvas>
