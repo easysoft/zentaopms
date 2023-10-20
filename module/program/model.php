@@ -1490,9 +1490,6 @@ class programModel extends model
             $project->teamMembers = isset($teamMembers[$projectID]) ? array_keys($teamMembers[$projectID]) : array();
             $project->leftTasks   = isset($leftTasks[$projectID]) ? $leftTasks[$projectID]->tasks : '—';
 
-            /* Convert predefined HTML entities to characters. */
-            $project->name = htmlspecialchars_decode($project->name, ENT_QUOTES);
-
             $stats[$projectID] = $project;
         }
 

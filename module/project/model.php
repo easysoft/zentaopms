@@ -2660,7 +2660,12 @@ class projectModel extends model
 
         $doingExecutions  = array();
         $latestExecutions = array();
-        foreach($executions as $execution) $doingExecutions[$execution->project][$execution->id] = $execution;
+        foreach($executions as $execution)
+        {
+            if(!empty($execution->projectName)) $execution->projectName = htmlspecialchars_decode($execution->projectName);
+            $doingExecutions[$execution->project][$execution->id] = $execution;
+        }
+
         foreach($doingExecutions as $projectID => $executions)
         {
             krsort($doingExecutions[$projectID]);
@@ -2673,6 +2678,9 @@ class projectModel extends model
         foreach($projects as $project)
         {
             if(strpos('wait,doing,closed', $project->status) === false) continue;
+
+            /* Convert predefined HTML entities to characters. */
+            $project->name = htmlspecialchars_decode($project->name, ENT_QUOTES);
 
             $projectPath = explode(',', trim($project->path, ','));
             $topProgram  = !empty($project->parent) ? $projectPath[0] : $project->parent;
