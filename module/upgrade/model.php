@@ -8587,6 +8587,8 @@ class upgradeModel extends model
             ->exec();
 
         $mixInserted = array();
+        global $lang;
+        if(!isset($lang->stage)) $lang->stage = new stdclass();
         foreach($typeList as $type)
         {
             if(!isset($mixInserted[$type->lang . '-' . $type->vision]))
