@@ -3063,7 +3063,9 @@ class baseRouter
         /* Only show error when debug is open. */
         if(!$this->config->debug) helper::end();
 
-        $log = "ERROR: $message in $file on line $line";
+        $log  = (new Exception())->getTraceAsString(); /* Print a backtrace like debug_print_backtrace(). */
+        $log  = str_replace($this->basePath, '', $log); /* Remove the base path from the backtrace. */
+        $log .= "ERROR: $message in $file on line $line";
         if(isset($_SERVER['SCRIPT_URI'])) $log .= ", request: $_SERVER[SCRIPT_URI]";
         $trace = debug_backtrace();
         extract($trace[0]);
