@@ -175,11 +175,15 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            set::id('parent'),
-            set::name('parent'),
             set::label($lang->project->parent),
-            set::items($programList),
-            set::value($programID),
+            set::id('parent'),
+            picker
+            (
+                set::name('parent'),
+                set::items($programList),
+                set::value($programID),
+                set::required(true),
+            )
         ),
         formGroup
         (

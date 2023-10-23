@@ -70,7 +70,7 @@ window.setParentProgram = function()
     const programID = $('[name=parent]').val();
     const link = $.createLink('project', 'create', 'model=' + model + '&program=' + programID);
     loadPage(link, '#aclList');
-    $('#whitelist').closest('.form-row').removeClass('hidden')
+    $('select[name^=whitelist]').closest('.form-row').removeClass('hidden')
 }
 
 /**
@@ -254,7 +254,7 @@ window.confirmDelete = function(projectID, projectName)
 function setWhite()
 {
     const acl = $("input[name='acl']:checked").val();
-    acl != 'open' ? $('#whitelist').closest('.form-row').removeClass('hidden') : $('#whitelist').closest('.form-row').addClass('hidden');
+    acl != 'open' ? $('select[name^=whitelist]').closest('.form-row').removeClass('hidden') : $('select[name^=whitelist]').closest('.form-row').addClass('hidden');
 }
 
 $(document).on('change', "input[name='acl']", setWhite);
