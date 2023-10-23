@@ -1,3 +1,0 @@
-ALTER TABLE `zt_job` ADD COLUMN `desc` text NULL AFTER `name`;
-ALTER TABLE `zt_job` ADD COLUMN `jobKey` varchar(255) NOT NULL DEFAULT '' AFTER `pipeline`;
-ALTER TABLE `zt_job` MODIFY COLUMN repo VARCHAR(255) NOT NULL DEFAULT '';
