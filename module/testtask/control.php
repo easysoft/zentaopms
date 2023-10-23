@@ -195,7 +195,7 @@ class testtask extends control
             if($formData->execution)
             {
                 $execution = $this->loadModel('execution')->fetchByID($formData->execution);
-                $formData->projectID = $execution->project;
+                $formData->project = $execution->project;
             }
 
             /* 创建测试单。*/

@@ -75,13 +75,26 @@ function loadTestReports(productID)
  */
 function suitEndDate()
 {
-    beginDate = $('#begin').val();
+    beginDate = $('#begin').zui('datePicker').$.value;
     if(!beginDate) return;
-    endDate = $('#end').val();
+    endDate = $('#end').zui('datePicker').$.value;
     if(endDate) return;
 
-    endDate = $.zui.formatDate(convertStringToDate(beginDate).addDays(1), 'yyyy-MM-dd');
-    $('#end').val(endDate);
+    endDate = getNextDay(beginDate); 
+    $('#end').zui('datePicker').$.changeState({value: endDate});
+}
+
+function getNextDay(dateString) 
+{
+    var currentDate = new Date(dateString);
+    currentDate.setDate(currentDate.getDate() + 1);
+
+    var nextYear = currentDate.getFullYear();
+    var nextMonth = ('0' + (currentDate.getMonth() + 1)).slice(-2);
+    var nextDay = ('0' + currentDate.getDate()).slice(-2);
+
+    var nextDate = nextYear + '-' + nextMonth + '-' + nextDay;
+    return nextDate;
 }
 
 /**

@@ -109,20 +109,20 @@ formPanel
         set::required(true),
         inputGroup
         (
-            input
+            datePicker
             (
+                set::id('begin'),
                 set::name('begin'),
-                set::type('date'),
                 set::required(true),
                 on::change('suitEndDate'),
             ),
             $lang->testtask->end,
-            input
+            datePicker
             (
+                set::id('end'),
                 set::name('end'),
-                set::type('date'),
                 set::required(true),
-            )
+            ),
         )
     ),
     formGroup
