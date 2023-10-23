@@ -125,7 +125,7 @@ if($canBatchAction)
         $footToolbar['items'][] = array('type' => 'btn-group', 'items' => array
         (
             array('text' => $lang->edit, 'className' => 'batch-btn not-open-url secondary', 'data-url' => helper::createLink('testcase', 'batchEdit', "productID=$productID&branch=all")),
-            array('caret' => 'up', 'className' => 'secondary', 'items' => array(array('text' => $lang->unlink, 'class' => 'batch-btn not-open-url ajax-btn', 'data-url' => inlink('batchUnlinkCases', "taskID=$task->id"))), 'data-placement' => 'top-start')
+            array('caret' => 'up', 'className' => 'secondary', 'items' => array(array('text' => $lang->unlink, 'innerClass' => 'batch-btn not-open-url ajax-btn', 'data-url' => inlink('batchUnlinkCases', "taskID=$task->id"))), 'data-placement' => 'top-start')
         ));
     }
     if($canBatchEdit && !$canBatchUnlink) $footToolbar['items'][] = array('text' => $lang->edit, 'className' => 'batch-btn not-open-url', 'btnType' => 'secondary', 'data-url' => $this->createLink('testcase', 'batchEdit', "productID=$productID&branch=all"));
@@ -133,7 +133,7 @@ if($canBatchAction)
     if($canBatchAssign)
     {
         $userItems = array();
-        foreach($assignedToList as $account => $realname) $userItems[] = array('text' => $realname, 'class' => 'batch-btn ajax-btn not-open-url', 'data-url' => inlink('batchAssign', "taskID=$task->id&account=$account"));
+        foreach($assignedToList as $account => $realname) $userItems[] = array('text' => $realname, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => inlink('batchAssign', "taskID=$task->id&account=$account"));
 
         $footToolbar['items'][] = array('text' => $lang->testtask->assign, 'caret' => 'up', 'btnType' => 'secondary', 'type' => 'dropdown', 'items' => $userItems, 'data-placement' => 'top-start');
     }
