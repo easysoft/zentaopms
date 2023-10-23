@@ -11,16 +11,18 @@ declare(strict_types=1);
 namespace zin;
 
 $setCode    = (isset($config->setCode) and $config->setCode == 1);
-$showMethod = $app->tab == 'project' and isset($project) and ($project->model == 'agileplus' or $project->model == 'waterfallplus');
+$showMethod = $app->tab == 'project' && isset($project) && ($project->model == 'agileplus' || $project->model == 'waterfallplus');
 $typeTip    = $this->app->tab == 'execution' ? $lang->execution->waterfallTip . lcfirst($lang->execution->typeTip) : $lang->execution->typeTip;
 
 jsVar('stageList', $lang->stage->typeList);
+jsVar('confirmSync', $lang->execution->confirmSync);
 
 formBatchPanel
 (
     set::mode('edit'),
     set::data(array_values($executions)),
     set::onRenderRow(jsRaw('renderRowData')),
+    on::change('[data-name="project"]', 'changeProject'),
     formBatchItem
     (
         set::name('id'),
@@ -35,11 +37,21 @@ formBatchPanel
         set::control('index'),
         set::width('38px'),
     ),
+    isset($project) && $project->model == 'scrum' ? formBatchItem
+    (
+        set::label($lang->execution->projectName),
+        set::control('picker'),
+        set::name("project"),
+        set::items($allProjects),
+        set::required(true),
+        set::width('136px'),
+    ) : null,
     formBatchItem
     (
         set::name('name'),
         set::label($lang->execution->name),
         set::width('240px'),
+        set::required(true)
     ),
     $showMethod ? formBatchItem
     (
@@ -48,7 +60,7 @@ formBatchPanel
         set::control('picker'),
         set::items($lang->execution->typeList),
         set::disabled(true),
-        set::width('64px'),
+        set::width('80px'),
     ) : null,
     $setCode ? formBatchItem
     (
@@ -59,12 +71,12 @@ formBatchPanel
     formBatchItem
     (
         set::name('PM'),
-        set::label($lang->execution->execPM),
+        set::label($lang->execution->PM),
         set::control('picker'),
         set::ditto(true),
         set::defaultDitto('off'),
         set::items($pmUsers),
-        set::width('136px'),
+        set::width('112px'),
     ),
     formBatchItem
     (
@@ -105,12 +117,12 @@ formBatchPanel
         set::label(
             $lang->execution->type
         ),
-        set::control('select'),
+        set::control('picker'),
         set::items($lang->execution->lifeTimeList),
-        set::width('80px'),
+        set::width('64px'),
         set::tipIcon('help'),
-        set::tip($typeTip),
-        set
+        $showMethod ? set::tip($typeTip) : null,
+        $showMethod ? set
         (
             'tipProps',
             array
@@ -119,7 +131,7 @@ formBatchPanel
                 'data-toggle'    => 'tooltip',
                 'data-placement' => 'right',
             )
-        ),
+        ) : null,
     ),
     formBatchItem
     (
@@ -127,6 +139,7 @@ formBatchPanel
         set::label($lang->execution->begin),
         set::control('date'),
         set::width('76px'),
+        set::required(true),
     ),
     formBatchItem
     (
@@ -134,6 +147,7 @@ formBatchPanel
         set::label($lang->execution->end),
         set::control('date'),
         set::width('76px'),
+        set::required(true),
     ),
     formBatchItem
     (
@@ -164,7 +178,7 @@ formBatchPanel
                 'suffixWidth' => 20
             )
         ),
-        set::width('76px'),
+        set::width('64px'),
     ),
 );
 
