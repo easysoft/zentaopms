@@ -37,7 +37,7 @@ class projectZen extends project
             ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
             ->get();
 
-        if(!isset($this->config->setCode) || $this->config->setCode == 0) unset($project->code);
+        if(isset($this->config->setCode) && $this->config->setCode == 0) unset($project->code);
 
         /* Lean mode relation defaultProgram. */
         if($this->config->systemMode == 'light') $project->parent = $this->config->global->defaultProgram;
@@ -326,8 +326,19 @@ class projectZen extends project
             {
                 $linkedBranchList[$branchID] = $branchID;
 
-                if(!isset($productPlans[$productID])) $productPlans[$productID] = isset($plans[$productID][BRANCH_MAIN]) ? $plans[$productID][BRANCH_MAIN] : array();
-                $productPlans[$productID] += isset($plans[$productID][$branchID]) ? $plans[$productID][$branchID] : array();
+                if(!isset($productPlans[$productID]))
+                {
+                    $productPlans[$productID] = array();
+                    if(isset($plans[$productID][BRANCH_MAIN]))
+                    {
+                        foreach($plans[$productID][BRANCH_MAIN] as $plan) $productPlans[$productID][] = array('text' => $plan->title, 'value' => $plan->id);
+                    }
+                }
+
+                if(!empty($plans[$productID][$branchID]))
+                {
+                    foreach($plans[$productID][$branchID] as $plan) $productPlans[$productID][] = array('text' => $plan->title, 'value' => $plan->id);
+                }
 
                 if(!empty($projectStories[$productID][$branchID]) || !empty($projectBranches[$productID][$branchID]))
                 {
