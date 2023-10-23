@@ -302,9 +302,13 @@ class testreport extends control
 
         list($bugInfo, $bugSummary) = $this->testreport->getBug4Report($tasks, $productIdList, $begin, $end, $builds);
 
+        $members     = $this->dao->select('DISTINCT lastRunner')->from(TABLE_TESTRUN)->where('task')->in(array_keys($tasks))->fetchPairs('lastRunner', 'lastRunner');
+        $taskMembers = explode(',', $task->members);
+        $members     = array_merge($members, $taskMembers);
+
         $this->view->begin   = $begin;
         $this->view->end     = $end;
-        $this->view->members = $this->dao->select('DISTINCT lastRunner')->from(TABLE_TESTRUN)->where('task')->in(array_keys($tasks))->fetchPairs('lastRunner', 'lastRunner');
+        $this->view->members = $members; 
         $this->view->owner   = $owner;
 
         $this->view->stories       = $stories;
