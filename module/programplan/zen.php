@@ -19,8 +19,8 @@ class programplanZen extends programplan
      */
     protected function beforeCreate(object $formData): object
     {
-        $formData->setIf(empty($formData->data->codes), 'codes', array());
-        $formData->setIf(empty($formData->data->output), 'output', array());
+        $formData->setIF(empty($formData->data->code), 'code', array());
+        $formData->setIF(empty($formData->data->output), 'output', array());
         return $formData;
     }
 

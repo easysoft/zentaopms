@@ -98,6 +98,8 @@ $fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields
         $fields['code']['required'] = true;
     }
 
+    $fields['attribute']['required'] = $fields['acl']['required'] = true;
+
     $renderFields = implode(',', array_keys($requiredFields));
     $renderFields = ",$renderFields,$showFields,";
 
@@ -145,6 +147,8 @@ $fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields
             $field['hidden'] = false;
             $field['items']  = $lang->execution->typeList;
         }
+
+        if($name == 'milestone') $field['value'] = 0;
 
         $items[] = $field;
     }
