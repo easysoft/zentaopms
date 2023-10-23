@@ -24,3 +24,17 @@ window.handleRenderRow = function($row, index, row)
     $row.find('td[data-name=stepDesc]').html(stepDesc);
     $row.find('td[data-name=stepExpect]').html(stepExpect);
 }
+
+function computeImportTimes()
+{
+    if(parseInt($(this).val()))
+    {
+        $('#times').html(Math.ceil(parseInt($("#totalAmount").html()) / parseInt($(this).val())));
+    }
+}
+
+function importNextPage()
+{
+    link = $.createLink('testcase', 'showImport', "productID=" + productID + "&branch=" + branch + "&pageID=1&maxImport=" + $('#maxImport').val());
+    loadPage(link);
+}

@@ -1191,7 +1191,7 @@ class testcase extends control
             file_put_contents($tmpFile, serialize($data));
         }
 
-        $this->assignShowImportVars($productID, $branch, $data['caseData'], isset($stepVars) ? $stepVars : 0, $pagerID, $maxImport);
+        $this->testcaseZen->assignShowImportVars($productID, $branch, $data['caseData'], isset($stepVars) ? $stepVars : 0, $pagerID, $maxImport);
 
         $this->view->title      = $this->lang->testcase->common . $this->lang->colon . $this->lang->testcase->showImport;
         $this->view->stories    = $this->loadModel('story')->getProductStoryPairs($productID, $branch);
