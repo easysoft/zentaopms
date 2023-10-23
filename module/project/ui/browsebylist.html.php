@@ -68,7 +68,7 @@ sidebar
     moduleMenu(set(array(
         'modules'     => $programTree,
         'activeKey'   => $programID,
-        'closeLink'   => $this->createLink('project', 'browse'),
+        'closeLink'   => $this->createLink('project', 'browse', "programID=0&browseType={$browseType}"),
         'showDisplay' => false
     )))
 );
