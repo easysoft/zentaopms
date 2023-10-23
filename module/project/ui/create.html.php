@@ -215,7 +215,7 @@ formPanel
         set::value($copyProjectID ? $copyProject->name : ''),
         set::strong(true),
     ),
-    (!isset($config->setCode) or $config->setCode == 1) ? formGroup
+    (!isset($config->setCode) || $config->setCode == 1) ? formGroup
     (
         set::width('1/2'),
         set::name('code'),
