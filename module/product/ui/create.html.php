@@ -65,7 +65,7 @@ foreach($fields as $field => $attr)
             )
         );
     }
-    else
+    elseif($field != 'line')
     {
         $formGroup = formGroup
         (
