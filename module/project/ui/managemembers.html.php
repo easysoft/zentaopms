@@ -278,7 +278,16 @@ div
                     set::value('no'),
                 )
             )
-        )
+        ),
+        set::actions(array(
+            array(
+            'text'    => $lang->save,
+            'type'    => 'primary',
+            'btnType' => 'button',
+            'onclick' => 'changeProjectMembers()'
+            ),
+            'cancel'
+        ))
     ),
 );
 

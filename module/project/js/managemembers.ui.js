@@ -76,7 +76,7 @@ function choseTeam2Copy()
     loadPage(link);
 }
 
-$(document).on('click', 'button[type=submit]', function()
+window.changeProjectMembers = function()
 {
     let isDeleted   = false;
     let accountList = [];
@@ -103,10 +103,13 @@ $(document).on('click', 'button[type=submit]', function()
     {
         zui.Modal.confirm({message: unlinkExecutionMembers}).then((res) =>
         {
-            if(res) $('#removeExecution').val('yes');
-            const formData = new FormData($("#teamForm")[0]);
-            $.ajaxSubmit({url: $('#teamForm').attr('action'), data: formData});
+            if(res)
+            {
+                $('#removeExecution').val('yes');
+                const formData = new FormData($("#teamForm")[0]);
+                $.ajaxSubmit({url: $('#teamForm').attr('action'), data: formData});
+            }
         });
     }
     return false;
-})
+}
