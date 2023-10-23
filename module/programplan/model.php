@@ -813,7 +813,7 @@ class programplanModel extends model
                     $this->computeProgress($stageID, 'create');
                 }
             }
-            $this->execution->updateProducts($stageID);
+            $this->execution->updateProducts($stageID, $_POST);
 
             /* If child plans has milestone, update parent plan set milestone eq 0 . */
             if($parentID and $milestone) $this->dao->update(TABLE_PROJECT)->set('milestone')->eq(0)->where('id')->eq($parentID)->exec();
