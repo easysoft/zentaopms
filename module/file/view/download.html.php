@@ -1,8 +1,9 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <?php js::set('fileID', $file->id);?>
 <style>
-#imageFile {text-align: center; padding: 0; margin: 0 -10px;}
+#imageFile,#videoFile {text-align: center; padding: 0; margin: 0 -10px;}
 #imageFile img {max-width: 100%;}
+#videoFile video {max-width: 100%;}
 #txtFile {padding: 5px 0; margin: 0 -10px;}
 #txtFile pre {margin: 0;}
 #txtFile div {overflow-x: auto;}
