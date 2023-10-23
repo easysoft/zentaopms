@@ -43,6 +43,7 @@ class index extends control
         $this->view->open              = helper::safe64Decode($open);
         $this->view->latestVersionList = $latestVersionList;
         $this->view->appsItems         = commonModel::getMainNavList($this->app->rawModule);
+        $this->view->browserMessage     = $this->loadModel('message')->getBrowserMessageConfig();
 
         $this->display();
     }

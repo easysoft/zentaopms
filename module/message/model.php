@@ -264,4 +264,16 @@ class messageModel extends model
 
         return $notices;
     }
+
+    /**
+     * 获取浏览器通知的相关配置信息。
+     * Get browser message config.
+     *
+     * @access public
+     * @return array
+     */
+    public function getBrowserMessageConfig(): array
+    {
+        return array('turnon' => $this->config->message->browser->turnon, 'pollTime' => $this->config->message->browser->pollTime);
+    }
 }

@@ -43,3 +43,6 @@
 .app-container.loading.open-from-hidden {transition-delay: 0s;}
 .app-container.loading.open-from-hidden > iframe {opacity: 0;}
 .app-container > iframe {width: 100%; height: 100%; background: inherit;}
+
+.browser-message-content {color: rgba(30,168,254)}
+.browser-message-content > a {color: rgba(49,60,82)}

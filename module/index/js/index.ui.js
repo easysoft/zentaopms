@@ -724,11 +724,35 @@ function changeAppsTheme(theme)
     });
 }
 
+var messageTimer = null;
+function buildMessageTimer()
+{
+    if(messageTimer || browserMessage.turnon != 1) return;
+    messageTimer = setInterval(function(){
+        $.get($.createLink('message', 'ajaxGetMessage'), html =>
+        {
+            if(html === '') return;
+            console.log(typeof html)
+            zui.Messager.show(
+            {
+                content: {html: html},
+                placement: 'bottom-right',
+                time: 0,
+                icon: 'envelope-o',
+                className: 'primary-pale'
+            })
+        });
+    }, browserMessage.pollTime * 1000);
+}
+
 initAppsMenu();
 /* Refresh more menu on window resize */
 $(window).on('resize', refreshMenu);
 refreshMenu();
 setTimeout(refreshMenu, 500);
+
+/* Scheduled tasks for browser message */
+buildMessageTimer();
 
 /* Bind event for menut-toggle */
 $(document).on('click', '.menu-toggle', () => toggleMenu());
