@@ -278,6 +278,7 @@ class testtaskZen extends testtask
         $this->view->assignedToList = $assignedToList;
         $this->view->suites         = $suites;
         $this->view->productID      = $product->id;
+        $this->view->product        = $product;
         $this->view->task           = $testtask;
         $this->view->moduleID       = $moduleID;
         $this->view->browseType     = $browseType;
