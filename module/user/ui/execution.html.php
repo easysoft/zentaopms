@@ -25,6 +25,7 @@ $cols['id']    = array('type' => 'checkID', 'title' => $lang->idAB, 'checkbox' =
 $cols['role']  = array('type' => 'user',    'title' => $lang->team->role);
 $cols['join']  = array('type' => 'date',    'title' => $lang->team->join);
 $cols['hours'] = array('type' => 'number',  'width' => 100, 'title' => $lang->team->hours);
+$cols['name']['name'] = 'name';
 
 $cols = array_map(function($col)
 {
