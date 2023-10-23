@@ -40,6 +40,7 @@ $labelClass     = $config->project->labelClass[$model];
 $stageByClass   = ($project->stageBy == 'product' and count($linkedProducts) < 2) ? 'hidden' : '';
 $disableStageBy = !empty($executions) ? true : false;
 $disableParent  = false;
+$delta          = $project->end == LONG_TIME ? 999 : (strtotime($project->end) - strtotime($project->begin)) / 3600 / 24 + 1;
 if(!isset($programList[$project->parent]))
 {
     $disableParent = true;
@@ -329,6 +330,7 @@ formPanel
                     set::value($project->end),
                     set::placeholder($lang->project->end),
                     set::required(true),
+                    set::disabled($project->end == LONG_TIME),
                 ),
             )
         ),
@@ -339,31 +341,35 @@ formPanel
             radioList
             (
                 set::name('delta'),
-                set::value((strtotime($project->end) - strtotime($project->begin)) / 3600 / 24 + 1),
+                set::value($delta),
                 set::inline(true),
                 set::items($lang->project->endList)
             )
         ),
     ),
-    formGroup
+    formRow
     (
-        set::label($lang->project->days),
-        set::width('1/4'),
-        inputGroup
+        setClass($delta == 999 ? 'hidden' : ''),
+        formGroup
         (
-            setClass('has-suffix'),
-            input
+            set::label($lang->project->days),
+            set::width('1/4'),
+            inputGroup
             (
-                set::name('days'),
-                set::value($project->days),
-                set::required(true),
-            ),
-            div
-            (
-                setClass('input-control-suffix z-50'),
-                $lang->project->day
+                setClass('has-suffix'),
+                input
+                (
+                    set::name('days'),
+                    set::value($project->days),
+                    set::required(true),
+                ),
+                div
+                (
+                    setClass('input-control-suffix z-50'),
+                    $lang->project->day
+                )
             )
-        )
+        ),
     ),
     empty($linkedProducts) ?
     formRow
