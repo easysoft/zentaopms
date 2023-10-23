@@ -108,7 +108,7 @@ class projectZen extends project
         /* Check if work days legtimate. */
         if(!$this->checkWorkdaysLegtimate($project)) return false;
 
-        if(!isset($this->config->setCode) || $this->config->setCode == 0) unset($project->code);
+        if(isset($this->config->setCode) && $this->config->setCode == 0) unset($project->code);
 
         /* Lean mode relation defaultProgram. */
         if($this->config->systemMode == 'light') $project->parent = $this->config->global->defaultProgram;
