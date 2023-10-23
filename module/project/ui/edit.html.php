@@ -127,7 +127,7 @@ if($linkedProducts)
                     btn
                     (
                         setClass('btn ghost removeLine'),
-                        icon('close'),
+                        icon('trash'),
                         $i == 0 ? set::disabled(true) : null
                     ),
                 )
