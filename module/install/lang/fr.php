@@ -287,7 +287,7 @@ $lang->install->cronList['moduleName=ci&methodName=checkCompileStatus'] = 'Synch
 $lang->install->cronList['moduleName=ci&methodName=exec']               = 'Executer Jenkins';
 $lang->install->cronList['moduleName=mr&methodName=syncMR']             = 'Synchronize GitLab merge request';
 
-$lang->install->dbProgress = "Table install progress";
+$lang->install->dbProgress = "Installing Database Table";
 $lang->install->dbFinish   = "Table install finished";
 $lang->install->success    = "Installé !";
 $lang->install->login      = 'Login ZenTao';
