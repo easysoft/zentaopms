@@ -2807,7 +2807,7 @@ class docModel extends model
             {
                 $param = ($type == 'project' and $this->config->vision == 'lite') ? 'model=kanban' : '';
                 $methodName = ($type == 'project' and $this->config->vision != 'lite') ? 'createGuide' : 'create';
-                return print(js::locate(helper::createLink($type, $methodName, $param)));
+                return helper::createLink($type, $methodName, $param);
             }
 
             $objects  = $this->getOrderedObjects($type, 'merge', $objectID);
@@ -2849,7 +2849,7 @@ class docModel extends model
         $tab  = strpos(',doc,product,project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'doc';
         if($type == 'mine')   $type = 'my';
         if($type == 'custom') $type = 'team';
-        if($tab == 'doc' and !common::hasPriv('doc', $type . 'Space')) return print(js::locate(helper::createLink('user', 'deny', "module=doc&method={$type}Space")));
+        if($tab == 'doc' and !common::hasPriv('doc', $type . 'Space')) return helper::createLink('user', 'deny', "module=doc&method={$type}Space");
         if($tab != 'doc' and method_exists($type . 'Model', 'setMenu'))
         {
             $this->loadModel($type)->setMenu($objectID);

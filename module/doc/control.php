@@ -1236,7 +1236,11 @@ class doc extends control
         if($moduleID) $libID = $this->tree->getById($moduleID)->root;
         $isFirstLoad = $libID == 0 ? true : false;
         if(empty($browseType)) $browseType = 'all';
-        list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($type, $objectID, $libID);
+
+        $libData = $this->doc->setMenuByType($type, $objectID, $libID);
+        if(is_string($libData)) $this->locate($libData);
+
+        list($libs, $libID, $object, $objectID, $objectDropdown) = $libData;
 
         $libID   = (int)$libID;
         $title   = $type == 'custom' ? $this->lang->doc->tableContents : $object->name . $this->lang->colon . $this->lang->doc->tableContents;
