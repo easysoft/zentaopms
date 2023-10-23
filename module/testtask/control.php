@@ -269,6 +269,7 @@ class testtask extends control
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->actions    = $this->loadModel('action')->getList('testtask', $testtaskID);
         $this->view->testreport = $this->loadModel('testreport')->getById($testtask->testreport);
+        $this->view->buildName  = $testtask->build == 'trunk' ? $this->lang->trunk : $testtask->buildName;
         $this->view->task       = $testtask;
         $this->display();
     }

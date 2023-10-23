@@ -23,14 +23,6 @@ detailHeader
     ),
 );
 
-$taskBuild = a
-(
-    set::href(createLink('build', 'view', "buildID=$task->build")),
-    $task->buildName,
-);
-if($isInModal)              $taskBuild = $task->buildName;
-if($task->build == 'trunk') $taskBuild = $lang->trunk;
-
 $taskType = '';
 foreach(explode(',', $task->type) as $type) $testType .= zget($lang->testtask->typeList, $type);
 
@@ -87,7 +79,14 @@ detailBody
                     item
                     (
                         set::name($lang->testtask->build),
-                        span($taskBuild),
+                        span
+                        (
+                            $isInModal ? $buildName :a
+                            (
+                                set::href(createLink('build', 'view', "buildID=$task->build")),
+                                $buildName,
+                            )
+                        ),
                     ),
                     item
                     (
