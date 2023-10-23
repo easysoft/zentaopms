@@ -18,10 +18,9 @@ div
     div
     (
         set::id('mainContent'),
-        formpanel
+        formPanel
         (
             zui::width('800px'),
-            set::url(inlink('confirm')),
             set::target('_self'),
             set::title($lang->upgrade->selectVersion),
             formRow

@@ -96,6 +96,8 @@ class upgrade extends control
             $this->config->version = ($this->config->edition == 'biz' ? 'LiteVIP' : 'Lite') . $this->config->liteVersion;
         }
 
+        if($_POST) $this->locate(inlink('confirm', "fromVersion={$this->post->fromVersion}"));
+
         $this->view->title      = $this->lang->upgrade->common . $this->lang->colon . $this->lang->upgrade->selectVersion;
         $this->view->version    = $version;
         $this->display();
@@ -104,21 +106,32 @@ class upgrade extends control
     /**
      * Confirm the version.
      *
+     * @param  string  $fromVersion
      * @access public
      * @return void
      */
-    public function confirm()
+    public function confirm($fromVersion = '')
     {
-        if(strpos($this->post->fromVersion, 'lite') !== false) $this->post->fromVersion = $this->config->upgrade->liteVersion[$this->post->fromVersion];
-        $confirmSql = $this->upgrade->getConfirm($this->post->fromVersion);
+        $this->view->fromVersion = $fromVersion;
+
+        if(strpos($fromVersion, 'lite') !== false) $fromVersion = $this->config->upgrade->liteVersion[$fromVersion];
+        if(strpos($fromVersion, 'ipd') !== false)  $fromVersion = $this->config->upgrade->ipdVersion[$fromVersion];
+
+        $writable = true;
+        if (!is_writable($this->app->getTmpRoot())) $writable = false;
+        if(file_exists($this->app->getTmpRoot() . 'upgradeSqlLines')) @unlink($this->app->getTmpRoot() . 'upgradeSqlLines');
+        $confirmSql = $this->upgrade->getConfirm($fromVersion);
         $confirmSql = str_replace('ENGINE=InnoDB', 'ENGINE=MyISAM', $confirmSql);
 
         $this->session->set('step', '');
         $this->view->title       = $this->lang->upgrade->confirm;
         $this->view->confirm     = $confirmSql;
-        $this->view->fromVersion = $this->post->fromVersion;
+        $this->view->writable    = $writable;
+
         /* When sql is empty then skip it. */
-        if(empty($this->view->confirm)) $this->locate(inlink('execute', "fromVersion={$this->post->fromVersion}"));
+        if(empty($this->view->confirm)) $this->locate(inlink('execute', "fromVersion={$fromVersion}"));
+
+        if($_POST) $this->locate(inlink('execute', "fromVersion={$fromVersion}"));
 
         $this->display();
     }
@@ -131,6 +144,7 @@ class upgrade extends control
      */
     public function execute($fromVersion = '')
     {
+        session_write_close();
         $this->session->set('step', '');
 
         $this->view->title      = $this->lang->upgrade->result;
@@ -139,14 +153,15 @@ class upgrade extends control
         if($result)
         {
             $this->view->result = 'fail';
-            $this->view->errors  = $result;
+            $this->view->errors = $result;
 
             return $this->display();
         }
 
-        $fromVersion = isset($_POST['fromVersion']) ? $this->post->fromVersion : $fromVersion;
-        if(strpos($fromVersion, 'lite') !== false) $fromVersion = $this->config->upgrade->liteVersion[$fromVersion];
-        $this->upgrade->execute($fromVersion);
+        $rawFromVersion = isset($_POST['fromVersion']) ? $this->post->fromVersion : $fromVersion;
+        if(strpos($fromVersion, 'lite') !== false) $rawFromVersion = $this->config->upgrade->liteVersion[$fromVersion];
+        if(strpos($fromVersion, 'ipd') !== false)  $rawFromVersion = $this->config->upgrade->ipdVersion[$fromVersion];
+        $this->upgrade->execute($rawFromVersion);
 
         if(!$this->upgrade->isError())
         {
@@ -155,8 +170,8 @@ class upgrade extends control
             /* Delete all patch actions if upgrade success. */
             $this->loadModel('action')->deleteByType('patch');
 
-            $openVersion = $this->upgrade->getOpenVersion(str_replace('.', '_', $fromVersion));
-            $selectMode = true;
+            $openVersion = $this->upgrade->getOpenVersion(str_replace('.', '_', $rawFromVersion));
+            $selectMode  = true;
 
             if($systemMode == 'classic')
             {
@@ -194,9 +209,22 @@ class upgrade extends control
             }
             if(version_compare($openVersion, '18_0_beta1', '>=')) $selectMode = false;
 
-            if($selectMode) $this->locate(inlink('to18Guide', "fromVersion=$fromVersion"));
+            if($this->config->edition == 'ipd' && strpos($fromVersion, 'ipd') === false)
+            {
+                $this->loadModel('setting')->setItem('system.common.global.mode', 'PLM');
+                $this->loadModel('setting')->setItem('system.custom.URAndSR', '1');
+                $this->loadModel('setting')->setItem('system.common.closedFeatures', '');
+                $this->loadModel('setting')->setItem('system.common.disabledFeatures', '');
+                $this->upgrade->addORPriv();
+            }
 
-            $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
+            if($selectMode)
+            {
+                if($this->config->edition == 'ipd') $this->locate(inlink('to18Guide', "fromVersion={$fromVersion}&mode=ALM"));
+                $this->locate(inlink('to18Guide', "fromVersion={$fromVersion}"));
+            }
+
+            $this->locate(inlink('afterExec', "fromVersion={$fromVersion}"));
         }
 
         $this->view->result = 'sqlFail';
@@ -207,16 +235,18 @@ class upgrade extends control
     /**
      * Guide to 18 version.
      *
-     * @param  string    $fromVersion
+     * @param  string $fromVersion
+     * @param  string $mode
      * @access public
      * @return void
      */
-    public function to18Guide($fromVersion)
+    public function to18Guide($fromVersion, $mode = '')
     {
-        if($_POST)
+        if($_POST || $mode)
         {
             $mode = fixer::input('post')->get('mode');
             $this->loadModel('setting')->setItem('system.common.global.mode', $mode);
+            if($this->config->edition == 'ipd') $this->loadModel('setting')->setItem('system.common.global.mode', 'PLM');
             $this->loadModel('custom')->disableFeaturesByMode($mode);
 
             /* Update sprint concept. */
@@ -314,6 +344,7 @@ class upgrade extends control
                 if(isset($result['result']) && $result['result'] == 'fail') return $this->send($result);
 
                 list($programID, $projectList, $lineID) = $this->upgrade->createProgram($linkedProducts, $linkedSprints);
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
                 /* Process merged products and projects. */
                 if($projectType == 'execution')
@@ -448,7 +479,7 @@ class upgrade extends control
                 }
             }
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('upgrade', 'mergeProgram', "type=$type&programID=$programID&projectType=$projectType")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('upgrade', 'mergeProgram', "type={$type}&programID={$programID}&projectType={$projectType}")));
         }
 
         /* Get no merged product and project count. */
@@ -776,6 +807,27 @@ class upgrade extends control
     }
 
     /**
+     * Ajax get progress.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProgress()
+    {
+        $tmpProgressFile = $this->app->getTmpRoot() . 'upgradeSqlLines';
+        if(!file_exists($tmpProgressFile)) return print(1);
+        $sqlLines = file_get_contents($tmpProgressFile);
+        if(empty($sqlLines)) return print($this->session->upgradeProgress ? $this->session->upgradeProgress : 1);
+        if($sqlLines == 'completed') return print(100);
+
+        $sqlLines = explode('-', $sqlLines);
+        $progress = round((int)$sqlLines[1] / (int)$sqlLines[0] * 100);
+        if($progress > 95) $progress = 100;
+        $this->session->set('upgradeProgress', $progress);
+        return print($progress);
+    }
+
+    /**
      * Get the project of the program it belongs to.
      *
      * @param  int   $programID
@@ -834,7 +886,7 @@ class upgrade extends control
         }
 
         $extFiles = $this->upgrade->getExtFiles();
-        if(!empty($extFiles) and $skipMoveFile == 'no') $this->locate(inlink('moveExtFiles', "fromVersion=$fromVersion"));
+        if(!empty($extFiles) and $skipMoveFile == 'no') $this->locate(inlink('moveExtFiles', "fromVersion={$fromVersion}"));
 
         $response = $this->upgrade->removeEncryptedDir();
         if($response['result'] == 'fail')
@@ -861,6 +913,9 @@ class upgrade extends control
         if(empty($needProcess) or $processed == 'yes')
         {
             $this->loadModel('setting')->updateVersion($this->config->version);
+
+            $zfile = $this->app->loadClass('zfile');
+            $zfile->removeDir($this->app->getTmpRoot() . 'model/');
 
             $installFile = $this->app->getAppRoot() . 'www/install.php';
             $upgradeFile = $this->app->getAppRoot() . 'www/upgrade.php';
@@ -1031,6 +1086,12 @@ class upgrade extends control
         {
             $this->upgrade->processOldMetrics();
         }
+        echo 'ok';
+    }
+
+    public function processHistoryDataForMetric()
+    {
+        $this->upgrade->processHistoryDataForMetric();
         echo 'ok';
     }
 }

@@ -26,7 +26,7 @@ jsVar('window.needProcess', $needProcess);
 jsVar('window.processLink', inlink('afterExec', "fromVersion=$fromVersion&processed=yes&skipMoveFile=yes"));
 
 $tips = array();
-if($needProcess['changeEngine'])
+if(!empty($needProcess['changeEngine']))
 {
     $tips[] = div
     (
@@ -39,7 +39,7 @@ if($needProcess['changeEngine'])
         $lang->upgrade->needChangeEngine,
     );
 }
-if($needProcess['search'])
+if(!empty($needProcess['search']))
 {
     $tips[] = div
     (
@@ -52,7 +52,7 @@ if($needProcess['search'])
         $lang->upgrade->needBuild4Add,
     );
 }
-if($needProcess['updateFile'])
+if(!empty($needProcess['updateFile']))
 {
     $tips[] = div
     (

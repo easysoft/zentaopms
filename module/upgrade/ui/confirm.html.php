@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 set::zui(true);
+jsVar('writable', $writable);
 
 div
 (
@@ -20,10 +21,10 @@ div
         set::id('mainContent'),
         formPanel
         (
+            setClass('upgrade-confirm'),
+            on::click('button[type=submit]', "submitConfirm"),
             set::width('800px'),
             set::target('_self'),
-            set::url(inlink('execute', "fromVersion={$fromVersion}")),
-            on::submit('submit.disabled=1'),
             set::title($lang->upgrade->confirm),
             div
             (
@@ -44,6 +45,22 @@ div
             set::submitBtnText($lang->upgrade->sureExecute),
         )
     )
+);
+
+modal
+(
+    set::id('progress'),
+    set::title('1%'),
+    div
+    (
+        setClass('progress'),
+        div
+        (
+            setClass('progress-bar'),
+            set('role', 'progressbar'),
+            set('style', '"width: 1%'),
+        ),
+    ),
 );
 
 render('pagebase');

@@ -9,6 +9,7 @@
  * @version     $Id: zh-cn.php 5119 2013-07-12 08:06:42Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
+global $config;
 $lang->upgrade->common          = '升级';
 $lang->upgrade->start           = '开始';
 $lang->upgrade->result          = '升级结果';
@@ -31,6 +32,22 @@ $lang->upgrade->warnningContent = <<<EOT
    比如： mysqldump -u root -p zentao > zentao.bak
 </pre>
 EOT;
+
+if($config->db->driver == 'dm')
+{
+    $lang->upgrade->warnningContent = <<<EOT
+<p>升级对数据库权限要求较高，请使用管理员用户。<br>
+   升级有危险，请先备份数据库，以防万一。</p>
+<pre>
+1. 可以通过图形化客户端工具进行备份。
+2. 使用DIsql工具进行备份。
+   $> BACKUP DATABASE BACKUPSET  <span class='text-danger'>'filename'</span>;
+   语句执行完后会在默认的备份路径下生成名为“filename”的备份集目录。
+   默认的备份路径为 dm.ini 中 BAK_PATH 配置的路径，若未配置 BAK_PATH，则默认使用 SYSTEM_PATH 下的 bak 目录。
+   这是最简单的数据库备份语句，如果要设置其他的备份选项需了解联机备份数据库的语法。
+</pre>
+EOT;
+}
 
 $lang->upgrade->createFileWinCMD   = '打开命令行，执行<strong style="color:#ed980f">echo > %s</strong>';
 $lang->upgrade->createFileLinuxCMD = '在命令行执行: <strong style="color:#ed980f">touch %s</strong>';
@@ -142,3 +159,5 @@ $lang->upgrade->recoveryActions->review = '评审';
 
 $lang->upgrade->remark     = '备注';
 $lang->upgrade->remarkDesc = '后续您还可以在禅道的后台-系统设置-模式中进行切换。';
+
+$lang->upgrade->upgradingTip = '系统正在升级中，请耐心等待...';
