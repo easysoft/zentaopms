@@ -18,7 +18,7 @@ namespace zin;
         <div class="tile-amount"><?php echo (int)$statistic->totalDocs;?></div>
         <div class="tile-title"><?php echo $lang->doc->allDoc;?></div>
       </div>
-      <div class="tile divider">
+      <div class="tile border-right">
         <div class="tile-amount"><?php echo (int)$statistic->todayEditedDocs;?></div>
         <div class="tile-title"><?php echo $lang->doc->todayEdited;?></div>
       </div>
@@ -42,7 +42,7 @@ namespace zin;
         <div class="tile-amount"><?php echo (int)$statistic->myDoc->docViews;?></div>
         <div class="tile-title"><?php echo $lang->doc->docViews;?></div>
       </div>
-      <div class="tile divider">
+      <div class="tile border-right">
         <div class="tile-amount"><?php echo (int)$statistic->myDoc->docCollects;?></div>
         <div class="tile-title"><?php echo $lang->doc->docCollects;?></div>
       </div>
