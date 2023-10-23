@@ -330,7 +330,7 @@ class project extends control
         $this->view->projectStats  = $this->projectZen->processProjectListData($projectStats);
         $this->view->pager         = $pager;
         $this->view->programID     = $programID;
-        $this->view->programTree   = $this->project->getProgramTree();
+        $this->view->programTree   = $this->project->getProgramTree($browseType);
         $this->view->browseType    = $browseType;
         $this->view->param         = $param;
         $this->view->orderBy       = $orderBy;

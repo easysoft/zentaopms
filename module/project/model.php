@@ -992,10 +992,11 @@ class projectModel extends model
      * 获取项目集列表。
      * Get the program tree of project.
      *
+     * @param  string $browseType
      * @access public
      * @return array
      */
-    public function getProgramTree(): array
+    public function getProgramTree(string $browseType): array
     {
         /* Get program list. */
         $programsList = $this->dao->select('id,name,parent')->from(TABLE_PROGRAM)
@@ -1014,7 +1015,7 @@ class projectModel extends model
             $programs[$index]->id     = $program->id;
             $programs[$index]->name   = $program->name;
             $programs[$index]->parent = $program->parent;
-            $programs[$index]->url    = helper::createLink('project', 'browse', "programID={$program->id}");
+            $programs[$index]->url    = helper::createLink('project', 'browse', "programID={$program->id}&browseType={$browseType}");
         }
         return $programs;
     }
