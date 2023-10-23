@@ -486,7 +486,6 @@ formPanel
         set::id('aclList'),
         formGroup
         (
-            set::width('1/2'),
             set::name('acl'),
             set::label($lang->project->acl),
             set::control('radioList'),

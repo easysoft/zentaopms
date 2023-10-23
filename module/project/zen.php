@@ -298,10 +298,12 @@ class projectZen extends project
      *
      * @param  int       $projectID
      * @param  object    $project
+     * @param  string    $from
+     * @param  int       $programID
      * @access protected
      * @return void
      */
-    protected function buildEditForm(int $projectID, object $project): void
+    protected function buildEditForm(int $projectID, object $project, string $from = '', int $programID = 0): void
     {
         $productPlans     = array();
         $linkedBranchList = array();
@@ -374,6 +376,8 @@ class projectZen extends project
         $this->view->model                    = $project->model;
         $this->view->disableModel             = $this->project->checkCanChangeModel($projectID, $project->model) ? '' : 'disabled';
         $this->view->teamMembers              = $this->user->getTeamMemberPairs($projectID, 'project');
+        $this->view->from                     = $from;
+        $this->view->programID                = $programID;
 
         $this->display();
     }

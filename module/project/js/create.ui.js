@@ -158,3 +158,17 @@ $(document).on('click', '#days', function()
     $('#days').removeClass('has-info');
     $('#daysLabelInfo').remove();
 });
+
+/**
+ * Set acl list when change program.
+ *
+ * @access public
+ * @return void
+ */
+window.setParentProgram = function()
+{
+    const programID = $('[name=parent]').val();
+    const link      = $.createLink('project', 'create', 'model=' + model + '&program=' + programID);
+    loadPage(link, '#aclList');
+    $('select[name^=whitelist]').closest('.form-row').removeClass('hidden')
+}

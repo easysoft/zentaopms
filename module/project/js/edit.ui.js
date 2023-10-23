@@ -1,6 +1,8 @@
 $(function()
 {
     new zui.Tooltip('#programHover', {title: programTip, trigger: 'hover', placement: 'right', type: 'white', 'className': 'text-gray border border-light programTip'});
+
+    setWhite();
 });
 
 /* 切换项目管理模型的逻辑. */
@@ -82,4 +84,18 @@ window.branchChange = function(e)
             }
         }
     }
+}
+
+/**
+ * Set acl list when change program.
+ *
+ * @access public
+ * @return void
+ */
+window.setParentProgram = function()
+{
+    const programID = $('[name=parent]').val();
+    const link      = $.createLink('project', 'edit', `projectID=${projectID}&from=${from}&pgoramID=${programID}`) ;
+    loadPage(link, '#aclList');
+    $('select[name^=whitelist]').closest('.form-row').removeClass('hidden')
 }

@@ -60,20 +60,6 @@ function setDate()
 }
 
 /**
- * Set acl list when change program.
- *
- * @access public
- * @return void
- */
-window.setParentProgram = function()
-{
-    const programID = $('[name=parent]').val();
-    const link = $.createLink('project', 'create', 'model=' + model + '&program=' + programID);
-    loadPage(link, '#aclList');
-    $('select[name^=whitelist]').closest('.form-row').removeClass('hidden')
-}
-
-/**
  * 计算两个时间的天数。
  * Compute delta of two days.
  *

@@ -447,9 +447,10 @@ class project extends control
      *
      * @param  int    $projectID
      * @param  string $from
+     * @param  int    $programID
      * @access public
      */
-    public function edit(int $projectID, string $from = '')
+    public function edit(int $projectID, string $from = '', int $programID = 0)
     {
         $project = $this->project->getByID($projectID);
         $this->project->setMenu($projectID);
@@ -491,7 +492,7 @@ class project extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $locateLink));
         }
 
-        $this->projectZen->buildEditForm($projectID, $project);
+        $this->projectZen->buildEditForm($projectID, $project, $from, $programID);
     }
 
     /**

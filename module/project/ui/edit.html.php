@@ -17,6 +17,8 @@ jsVar('unLinkProductTip', $lang->project->unLinkProductTip);
 jsVar('allProducts', $allProducts);
 jsVar('branchGroups', $branchGroups);
 jsVar('programTip', $lang->program->tips);
+jsVar('projectID', $project->id);
+jsVar('from', $from);
 
 $projectModelItems = array();
 foreach($lang->project->modelList as $key => $text)
@@ -182,11 +184,16 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            set::name('parent'),
-            set::value($project->parent),
+            set::id('parent'),
             set::label($lang->project->parent),
-            set::disabled($disableParent),
-            set::items($programList),
+            picker
+            (
+                set::name('parent'),
+                set::value($project->parent),
+                set::disabled($disableParent),
+                set::items($programList),
+                set::required(true),
+            )
         ),
         $disableParent ? formHidden('parent', $project->parent) : null,
         formGroup
@@ -391,6 +398,7 @@ formPanel
                 picker
                 (
                     set::name("branch[0][]"),
+                    set::items(array()),
                 )
             ),
         ),
@@ -404,7 +412,7 @@ formPanel
                 picker
                 (
                     set::name('plans[0][]'),
-                    set::items(null),
+                    set::items(array()),
                 )
             ),
             div
@@ -419,7 +427,6 @@ formPanel
                 (
                     setClass('btn ghost removeLine'),
                     icon('trash'),
-                    $i == 0 ? set::disabled(true) : null
                 ),
             )
         ),
@@ -460,16 +467,19 @@ formPanel
             set::placeholder($lang->project->editorPlaceholder)
         )
     ),
-    formGroup
+    formRow
     (
-        set::width('1/2'),
-        set::name('acl'),
-        set::label($lang->project->acl),
-        set::control('radioList'),
-        set::items($lang->project->aclList),
-        set::value($project->acl)
+        set::id('aclList'),
+        formGroup
+        (
+            set::name('acl'),
+            set::label($lang->project->acl),
+            set::control('radioList'),
+            set::items($lang->project->aclList),
+            $programID ? set::items($lang->project->subAclList) : set::items($lang->project->aclList),
+            set::value($project->acl),
+        ),
     ),
-    /* TODO add events */
     formGroup
     (
         set::width('1/2'),
