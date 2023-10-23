@@ -150,7 +150,7 @@ formPanel
         (
             set::name('desc'),
             set::rows('3'),
-            set::value($entry->desc),
+            html($entry->desc),
         )
     ),
 );

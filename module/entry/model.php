@@ -81,23 +81,16 @@ class entryModel extends model
     }
 
     /**
+     * 创建一个应用。
      * Create an entry.
      *
+     * @param  object   $entry
      * @access public
-     * @return bool | int
+     * @return bool|int
      */
-    public function create()
+    public function create(object $entry): bool|int
     {
-        $entry = fixer::input('post')
-            ->setDefault('ip', '*')
-            ->setIF($this->post->allIP, 'ip', '*')
-            ->setIF($this->post->freePasswd == '1', 'account', '')
-            ->add('createdBy', $this->app->user->account)
-            ->add('createdDate', helper::now())
-            ->remove('allIP')
-            ->get();
-
-        if($this->post->freePasswd == 1) $this->config->entry->create->requiredFields = 'name, code, key';
+        if($entry->freePasswd == 1) $this->config->entry->create->requiredFields = 'name, code, key';
 
         $this->dao->insert(TABLE_ENTRY)->data($entry)
             ->batchCheck($this->config->entry->create->requiredFields, 'notempty')
@@ -111,25 +104,19 @@ class entryModel extends model
     }
 
     /**
+     * 更新一个应用。
      * Update an entry.
      *
-     * @param  int    $entryID
+     * @param  int        $entryID
+     * @param  object     $entry
      * @access public
-     * @return bool | array
+     * @return bool|array
      */
-    public function update($entryID)
+    public function update(int $entryID, object $entry): bool|array
     {
         $oldEntry = $this->getById($entryID);
 
-        $entry = fixer::input('post')
-            ->setDefault('ip', '*')
-            ->setIF($this->post->allIP, 'ip', '*')
-            ->add('editedBy', $this->app->user->account)
-            ->add('editedDate', helper::now())
-            ->remove('allIP')
-            ->get();
-
-        if($this->post->freePasswd == 1) $this->config->entry->edit->requiredFields = 'name, code, key';
+        if($entry->freePasswd == 1) $this->config->entry->edit->requiredFields = 'name, code, key';
 
         $this->dao->update(TABLE_ENTRY)->data($entry)
             ->batchCheck($this->config->entry->edit->requiredFields, 'notempty')

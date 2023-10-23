@@ -43,7 +43,15 @@ class entry extends control
     {
         if($_POST)
         {
-            $id = $this->entry->create();
+            $entry = form::data($this->config->entry->form->create)
+                ->setIF($this->post->allIP === 'on', 'ip', '*')
+                ->setIF($this->post->freePasswd == '1', 'account', '')
+                ->add('createdBy', $this->app->user->account)
+                ->add('createdDate', helper::now())
+                ->remove('allIP')
+                ->get();
+
+            $id = $this->entry->create($entry);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('entry', $id, 'created');
@@ -67,7 +75,15 @@ class entry extends control
     {
         if($_POST)
         {
-            $changes = $this->entry->update($id);
+            $entry = form::data($this->config->entry->form->create)
+                ->setIF($this->post->allIP === 'on', 'ip', '*')
+                ->setIF($this->post->freePasswd == '1', 'account', '')
+                ->add('createdBy', $this->app->user->account)
+                ->add('createdDate', helper::now())
+                ->remove('allIP')
+                ->get();
+
+            $changes = $this->entry->update($id, $entry);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($changes)
