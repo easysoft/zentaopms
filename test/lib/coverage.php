@@ -185,6 +185,7 @@ class coverage
      */
     private function getClassMethodCount(string $moduleName, string $type): int
     {
+        if(file_exists($this->getClassFile($moduleName, $type)) === false) return 0;
         $classFileContents = file_get_contents($this->getClassFile($moduleName, $type));
         preg_match_all('/function\s+\w+\s*\(/', $classFileContents, $matches);
         $methodCount = count($matches[0]);
@@ -347,9 +348,11 @@ EOT;
 
         foreach($moduleTraces as $type => $methods)
         {
-            foreach($methods as $method => $methodCoverage) $moduleCoverageList[$type] += $methodCoverage['coverage'];
+            $moduleCoverageList[$type] = 0;
+            foreach($methods as $methodCoverage) $moduleCoverageList[$type] += $methodCoverage['coverage'];
         }
 
+        $summaryTable  = '<tr>' . PHP_EOL;
         $summaryTable .= "<th>$module</th>" . PHP_EOL;
         $summaryTable .= "<td>$controlMethodesCount</td>" . PHP_EOL;
         $summaryTable .= "<td>$controlCoverageCount</td>" . PHP_EOL;
@@ -368,7 +371,6 @@ EOT;
             $summaryTable .= isset($moduleCoverageList[$fileType]) ? "<td><a href='?module=$module&file=$fileType'>" . round($moduleCoverageList[$fileType] / $methodCount, 2) * 100 . '%</a></td>' . PHP_EOL : '<td>0%</td>' . PHP_EOL;
         }
         $summaryTable .= '</tr>' . PHP_EOL;
-        $summaryTable .= $moduleSummaryTable;
 
         return $summaryTable;
     }
