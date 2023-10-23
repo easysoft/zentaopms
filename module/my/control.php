@@ -1627,6 +1627,6 @@ EOF;
 
         $_SESSION['user']->rights = $this->loadModel('user')->authorize($this->app->user->account);
 
-        echo js::locate($this->createLink('index', 'index'), 'parent');
+        return $this->send(array('result' => 'success', 'load' => helper::createLink('index', 'index')));
     }
 }

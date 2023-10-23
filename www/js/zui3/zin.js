@@ -983,7 +983,19 @@
         $.apps.changeAppsTheme(theme);
     }
 
-    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, changeAppLang, changeAppTheme: changeAppTheme, uploadFileByChunk: uploadFileByChunk});
+    /**
+     * Select vision.
+     * @param {string} vision
+     */
+    function selectVision(vision)
+    {
+        $.get($.createLink('my', 'ajaxSwitchVision', 'vision=' + vision), function()
+        {
+            window.top.location.href = $.createLink('index', 'index');
+        });
+    }
+
+    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, selectVision: selectVision, changeAppLang, changeAppTheme: changeAppTheme, uploadFileByChunk: uploadFileByChunk});
     $.extend($.apps, {openUrl: openUrl});
     $.extend($, {ajaxSendScore: ajaxSendScore, selectLang: selectLang});
 

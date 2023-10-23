@@ -107,7 +107,7 @@ class header extends wg
             $items[] = array
             (
                 'active' => $currentVision == $vision,
-                'url' => createLink('my', 'ajaxSwitchVision', "vision=$vision"),
+                'url' => "javascript:selectVision(\"$vision\")",
                 'data-type' => 'ajax',
                 'text' => isset($lang->visionList[$vision]) ? $lang->visionList[$vision] : $vision,
             );
