@@ -303,6 +303,7 @@ $filter->project->export->cookie['checkedItem']          = 'reg::checked';
 $filter->project->execution->cookie['pagerExecutionAll'] = 'int';
 $filter->project->execution->cookie['showTask']          = 'code';
 $filter->project->testcase->cookie['onlyAutoCase']       = 'int';
+$filter->project->testcase->cookie['onlyScene']          = 'code';
 
 $filter->projectstory->story->cookie['storyModuleParam']   = 'int';
 $filter->projectstory->story->cookie['pagerProductBrowse'] = 'int';
@@ -363,9 +364,6 @@ $filter->testtask->cases->cookie['taskCaseModule'] = 'int';
 $filter->testtask->default->cookie['lastProduct']  = 'int';
 $filter->testtask->default->cookie['preProductID'] = 'int';
 $filter->testcase->browse->cookie['onlyScene']     = 'code';
-
-if(empty($filter->project->testcase)) $filter->project->testcase = new stdclass();
-$filter->project->testcase->cookie = array('onlyScene' => 'code');
 
 $filter->todo->export->cookie['checkedItem'] = 'reg::checked';
 
