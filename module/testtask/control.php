@@ -479,7 +479,7 @@ class testtask extends control
         /* 从数据库中查询一个测试单下关联的测试用例。*/
         /* Query the cases associated with a testtask from the database. */
         $groupBy = $groupBy ?: 'story';
-        $cases   = $this->testtask->getRuns($taskID, 0, $groupBy);
+        $cases   = $this->testtask->getRuns($taskID, array(0), $groupBy);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
         $cases = $this->loadModel('testcase')->appendData($cases, 'run');
 
