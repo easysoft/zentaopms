@@ -1,4 +1,4 @@
-function setDownloading()
+function setDownloading(event)
 {
     if(navigator.userAgent.toLowerCase().indexOf("opera") > -1) return true; // Opera don't support, omit it.
 
@@ -8,7 +8,7 @@ function setDownloading()
     {
         if($.cookie.get('downloading') == 1)
         {
-            $('.modal').trigger('to-hide.modal.zui');
+            $(event.target).closest('div.modal')[0].classList.remove('show');
 
             $.cookie.set('downloading', null);
 

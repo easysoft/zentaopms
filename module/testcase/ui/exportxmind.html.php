@@ -14,6 +14,7 @@ set::title($lang->testcase->exportXmind);
 
 formPanel
 (
+    set::target('_self'),
     on::submit('setDownloading'),
     formGroup
     (
