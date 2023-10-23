@@ -485,7 +485,7 @@ class api extends control
         $this->view->objectID = $objectID;
         $this->view->groups   = $this->loadModel('group')->getPairs();
         $this->view->users    = $this->user->getPairs('nocode|noclosed');
-        $this->view->projects = $this->loadModel('project')->getPairsByModel('scrum,waterfall,agileplus,waterfallplus');
+        $this->view->projects = $this->loadModel('project')->getPairsByModel(array('scrum', 'waterfall', 'agileplus', 'waterfallplus'));
         $this->view->products = $this->loadModel('product')->getPairs();
 
         $this->display();
