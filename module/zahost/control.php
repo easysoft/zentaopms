@@ -380,6 +380,12 @@ class zahost extends control
     public function ajaxGetHosts()
     {
         $hostList = $this->zahost->getPairs();
-        return print(html::select("parent", $hostList, '', "class='form-control chosen'"));
+
+        $options = array();
+        foreach($hostList as $key => $host)
+        {
+            $options[] = array('text' => $host, 'value' => $key);
+        }
+        return print(json_encode($options));
     }
 }

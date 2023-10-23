@@ -493,7 +493,12 @@ class zanode extends control
     {
         $templatePairs = $this->loadModel('zahost')->getImagePairs($hostID);
 
-        return print(html::select('image', $templatePairs, '', "class='form-control chosen'"));
+        $options = array();
+        foreach($templatePairs as $key => $template)
+        {
+            $options[] = array('text' => $template, 'value' => $key);
+        }
+        return print(json_encode($options));
     }
 
     /**
