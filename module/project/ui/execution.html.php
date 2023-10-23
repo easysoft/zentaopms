@@ -88,10 +88,12 @@ $productMenuLink = createLink(
 $productItems = array();
 foreach($productList as $key => $value) $productItems[] = array('text' => $value, 'id' => $key);
 
+$productName = !empty($product) ? $product->name : '';
 featureBar
 (
     to::before(productMenu(set
     ([
+        'title' => $productName,
         'items' => $productItems,
         'activeKey' => $productID,
         'closeLink' => '#',
