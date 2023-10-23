@@ -347,7 +347,7 @@ class testtaskZen extends testtask
     protected function assignForEdit(object $task, int $productID): void
     {
         $this->loadModel('project');
-        $productID   = $productID ? $productID : key($this->products);
+        $productID   = $productID;
         $projectID   = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->project;
         $executionID = $task->execution;
         $executions  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, $projectID);
@@ -360,6 +360,12 @@ class testtaskZen extends testtask
                 $project = $this->project->getById($execution->project);
                 $executions[$executionID] = "{$project->name}({$this->lang->project->disableExecution})";
             }
+        }
+
+        if(!isset($this->products[$productID]))
+        {
+            $product = $this->loadModel('product')->getByID($productID);
+            $this->products[$productID] = $product->name;
         }
 
         $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->edit;

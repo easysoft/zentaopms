@@ -41,7 +41,9 @@ function loadExecutionBuilds()
         {
             data = JSON.parse(data);
             $buildPicker.render({items: data});
-            $buildPicker.$.changeState({value: '0'});
+
+            let value = data.length > 0 ? '1' : null;
+            $buildPicker.$.changeState({value: value});
         }
     });
 }

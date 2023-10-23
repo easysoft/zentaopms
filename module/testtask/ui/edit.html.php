@@ -13,6 +13,13 @@ namespace zin;
 formPanel
 (
     on::change('#execution', 'loadExecutionRelated'),
+    input
+    (
+        set::width('1/2'),
+        set::className('hidden'),
+        set::name('product'),
+        set::value($productID),
+    ),
     formGroup
     (
         set::width('1/2'),
