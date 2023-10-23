@@ -188,6 +188,7 @@ class story extends control
         $this->view->customFields = $customFields;
         $this->view->showFields   = $showFields;
         $this->view->product      = $product;
+        $this->view->branch       = $branch;
         $this->view->productID    = $productID;
         $this->view->storyID      = $storyID;
         $this->view->moduleID     = $moduleID;

@@ -120,6 +120,7 @@ class navbar extends wg
         if($isTutorialMode and defined('WIZARD_MODULE')) $currentModule  = WIZARD_MODULE;
         if($isTutorialMode and defined('WIZARD_METHOD')) $currentMethod  = WIZARD_METHOD;
 
+        $storyType  = data('storyType');
         $menu       = \customModel::getMainMenu();
         $tab        = $app->tab;
         $activeMenu = '';
@@ -182,6 +183,7 @@ class navbar extends wg
                 }
 
                 $dataApp = (isset($lang->navGroup->$module) and $tab != $lang->navGroup->$module) ? $tab : null;
+                if($isActive && $storyType) $isActive = $menuItem->name == $storyType;
                 if($isActive && empty($activeMenu)) $activeMenu = $menuItem->name;
                 else $isActive = false;
 
@@ -259,11 +261,7 @@ class navbar extends wg
             }
             else
             {
-                $items[] = array(
-                    'class'  => $class,
-                    'text'   => $menuItem->text,
-                    'active' => $isActive,
-                );
+                $items[] = array('class' => $class, 'text' => $menuItem->text, 'active' => $isActive);
             }
         }
 
