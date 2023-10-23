@@ -1410,4 +1410,18 @@ class metricModel extends model
 
         return $chartTypeList;
     }
+
+    /**
+     * 更新度量项的创建时间
+     * Update created date of metrics.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateMetricDate()
+    {
+        $now = helper::now();
+        $metricIDList = $this->dao->select('id')->from(TABLE_METRIC)->where('deleted')->eq('0')->fetchPairs();
+        foreach($metricIDList as $metricID) $this->dao->update(TABLE_METRIC)->set('createdDate')->eq($now)->exec();
+    }
 }
