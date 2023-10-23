@@ -69,7 +69,7 @@ formPanel
                 (
                     set::name('project'),
                     set::items($projects),
-                    set::value($bug->projectID)
+                    set::value($defaultProject)
                 )
             )
         )

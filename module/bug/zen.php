@@ -1084,14 +1084,14 @@ class bugZen extends bug
      * Build form fields for create bug.
      *
      * @param  object    $bug
-     * @param  array     $output
+     * @param  array     $param
      * @param  string    $from
      * @access protected
      * @return void
      */
-    protected function buildCreateForm(object $bug, array $output, string $from): void
+    protected function buildCreateForm(object $bug, array $param, string $from): void
     {
-        extract($output);
+        extract($param);
         $currentProduct = $this->product->getByID($bug->productID);
 
         /* 获得版本下拉和需求下拉列表。 */
@@ -1128,6 +1128,7 @@ class bugZen extends bug
         $this->view->resultFiles           = (!empty($resultID) and !empty($stepIdList)) ? $this->loadModel('file')->getByObject('stepResult', $resultID, str_replace('_', ',', $stepIdList)) : array();
         $this->view->product               = $currentProduct;
         $this->view->contactList           = $this->loadModel('user')->getContactLists($this->app->user->account, 'withnote');
+        $this->view->defaultProject        = isset($projectID) ? $projectID : $bug->projectID;
     }
 
     /**
