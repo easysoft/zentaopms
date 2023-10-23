@@ -1,0 +1,13 @@
+title: table_meeting
+desc: ""
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: minutedDate
+    range: "(-1M)-(+1w)"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: editedDate
+    range: "(-1M)-(+1w)"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
