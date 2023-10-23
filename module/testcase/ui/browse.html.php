@@ -21,7 +21,7 @@ $canBatchDelete             = hasPriv('testcase', 'batchDelete') && !$isOnlyScen
 $canBatchChangeType         = hasPriv('testcase', 'batchChangeType') && !$isOnlyScene;
 $canBatchConfirmStoryChange = hasPriv('testcase', 'batchConfirmStoryChange') && !$isOnlyScene;
 $canBatchChangeBranch       = hasPriv('testcase', 'batchChangeBranch') && !$isOnlyScene && $this->session->currentProductType && $this->session->currentProductType != 'normal';
-$canBatchChangeModule       = hasPriv('testcase', 'batchChangeModule') && !empty($productID) && ($product->type == 'normal' || $branchID !== 'all');
+$canBatchChangeModule       = hasPriv('testcase', 'batchChangeModule') && !empty($productID) && ($product->type == 'normal' || $branch !== 'all');
 $canBatchChangeScene        = hasPriv('testcase', 'batchChangeScene') && !$isOnlyScene;
 $canImportToLib             = hasPriv('testcase', 'importToLib') && !$isOnlyScene;
 $canGroupBatch              = ($canBatchRun || $canBatchEdit || $canBatchReview || $canBatchDelete || $canBatchChangeType || $canBatchConfirmStoryChange);
@@ -80,7 +80,7 @@ $footToolbar = $canBatchAction ? array('items' => array
     $canGroupBatch ? array('type' => 'btn-group', 'items' => array
     (
         $canBatchRun ? array('text' => $lang->testtask->runCase, 'className' => 'batch-btn primary not-open-url', 'data-url' => helper::createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy")) : null,
-        $canBatchEdit ? array('text' => $lang->edit, 'className' => 'batch-btn primary not-open-url', 'data-url' => helper::createLink('testcase', 'batchEdit', "productID=$caseProductID&branch=$branchID")) : null,
+        $canBatchEdit ? array('text' => $lang->edit, 'className' => 'batch-btn primary not-open-url', 'data-url' => helper::createLink('testcase', 'batchEdit', "productID=$caseProductID&branch=$branch")) : null,
         !empty($navActions) ? array('caret' => 'up', 'className' => 'primary', 'items' => $navActions, 'data-placement' => 'top-start') : null,
     )) : null,
     $canBatchChangeBranch ? array('caret' => 'up', 'text' => $lang->product->branchName[$this->session->currentProductType], 'type' => 'dropdown', 'items' => $branchItems, 'data-placement' => 'top-start') : null,
