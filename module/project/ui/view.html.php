@@ -93,7 +93,7 @@ if($project->hasProduct)
                 if(!isset($planGroup[$productID][$planID])) continue;
 
                 $planClass  = count($plans) > 2 ? 'mt-2' : '';
-                $planClass .= count($plans) % 3 != 0 ? 'pl-4' : '';
+                $planClass .= count($plans) % 3 != 0 ? ' pl-4' : '';
                 $plans[] = div
                     (
                         setClass("flex-none w-1/3 clip {$planClass}"),
