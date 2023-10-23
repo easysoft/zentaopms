@@ -774,7 +774,7 @@ class task extends control
             }
         }
 
-        return print(js::reload('parent'));
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
