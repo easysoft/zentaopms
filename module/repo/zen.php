@@ -47,6 +47,110 @@ class repoZen extends repo
             ->setDefault('projects', '')->join('projects', ',')
             ->get();
 
+        $acl = $this->checkACL();
+        if(!$acl) return false;
+        $repo->acl = json_encode($acl);
+
+        if($repo->SCM == 'Subversion')
+        {
+            $scm = $this->app->loadClass('scm');
+            $scm->setEngine($repo);
+            $info     = $scm->info('');
+            $infoRoot = urldecode($info->root);
+            $repo->prefix = empty($infoRoot) ? '' : trim(str_ireplace($infoRoot, '', str_replace('\\', '/', $repo->path)), '/');
+            if($repo->prefix) $repo->prefix = '/' . $repo->prefix;
+        }
+
+        if($isPipelineServer)
+        {
+            $serviceProject = $this->dao->select('*')->from(TABLE_REPO)
+                ->where('`SCM`')->eq($repo->SCM)
+                ->andWhere('`serviceHost`')->eq($repo->serviceHost)
+                ->andWhere('`serviceProject`')->eq($repo->serviceProject)
+                ->fetch();
+            if($serviceProject)
+            {
+                dao::$errors['serviceProject'][] = $this->lang->repo->error->projectUnique;
+                return false;
+            }
+        }
+        return $repo;
+    }
+
+    /**
+     * 准备编辑版本库的数据。
+     * Prepare edit repo data.
+     *
+     * @param  form      $formData
+     * @param  object    $oldRepo
+     * @param  bool      $isPipelineServer
+     * @access protected
+     * @return object|false
+     */
+    protected function prepareEdit(form $formData, object $oldRepo, bool $isPipelineServer): object|false
+    {
+        if($oldRepo->client != $this->post->client and !$this->checkClient()) return false;
+        if(!$this->checkConnection()) return false;
+
+        $repo = $formData
+            ->setIf($isPipelineServer, 'password', $this->post->serviceToken)
+            ->setDefault('client', 'svn')
+            ->setIf($this->post->SCM == 'Gitlab', 'client', '')
+            ->setIf($this->post->SCM == 'Gitlab', 'extra', $this->post->serviceProject)
+            ->setIf($this->post->SCM == 'Gitlab', 'prefix', '')
+            ->setDefault('product', '')
+            ->skipSpecial('path,client,account,password,desc')
+            ->join('product', ',')
+            ->setDefault('projects', '')->join('projects', ',')
+            ->get();
+
+        if($repo->path != $oldRepo->path) $repo->synced = 0;
+
+        $acl = $this->checkACL();
+        if(!$acl) return false;
+        $repo->acl = json_encode($acl);
+
+        if($repo->SCM == 'Subversion')
+        {
+            $scm = $this->app->loadClass('scm');
+            $scm->setEngine($repo);
+            $info     = $scm->info('');
+            $infoRoot = urldecode($info->root);
+            $repo->prefix = empty($infoRoot) ? '' : trim(str_ireplace($infoRoot, '', str_replace('\\', '/', $repo->path)), '/');
+            if($repo->prefix) $repo->prefix = '/' . $repo->prefix;
+        }
+        elseif($repo->SCM != $oldRepo->SCM and $repo->SCM == 'Git')
+        {
+            $repo->prefix = '';
+        }
+
+        if($isPipelineServer)
+        {
+            $serviceProject = $this->dao->select('*')->from(TABLE_REPO)
+                ->where('`SCM`')->eq($repo->SCM)
+                ->andWhere('`serviceHost`')->eq($repo->serviceHost)
+                ->andWhere('`serviceProject`')->eq($repo->serviceProject)
+                ->andWhere('id')->ne($oldRepo->id)
+                ->fetch();
+            if($serviceProject)
+            {
+                dao::$errors['serviceProject'][] = $this->lang->repo->error->projectUnique;
+                return false;
+            }
+        }
+
+        return $repo;
+    }
+
+    /**
+     * 检查权限数据。
+     * Check acl.
+     *
+     * @access protected
+     * @return array|false
+     */
+    protected function checkACL(): array|false
+    {
         $acl = $this->post->acl;
         if($acl['acl'] == 'custom')
         {
@@ -59,18 +163,7 @@ class repoZen extends repo
                 return false;
             }
         }
-        $repo->acl = json_encode($acl);
-
-        if($repo->SCM == 'Subversion')
-        {
-            $scm = $this->app->loadClass('scm');
-            $scm->setEngine($repo);
-            $info     = $scm->info('');
-            $infoRoot = urldecode($info->root);
-            $repo->prefix = empty($infoRoot) ? '' : trim(str_ireplace($infoRoot, '', str_replace('\\', '/', $repo->path)), '/');
-            if($repo->prefix) $repo->prefix = '/' . $repo->prefix;
-        }
-        return $repo;
+        return $acl;
     }
 
     /**
@@ -253,7 +346,6 @@ class repoZen extends repo
     protected function buildCreateForm(int $objectID): void
     {
         $repoID = $this->repo->saveState(0, $objectID);
-        $this->commonAction($repoID, $objectID);
 
         $this->app->loadLang('action');
 
@@ -274,6 +366,53 @@ class repoZen extends repo
         $this->view->relatedProjects = ($this->app->tab == 'project' or $this->app->tab == 'execution') ? array($objectID) : array();
         $this->view->serviceHosts    = $this->loadModel('gitlab')->getPairs();
         $this->view->objectID        = $objectID;
+
+        $this->display();
+    }
+
+    /**
+     * 构建编辑版本库页面数据。
+     * Build form fields for edit repo.
+     *
+     * @param  int       $objectID
+     * @access protected
+     * @return void
+     */
+    protected function buildEditForm(int $repoID, int $objectID): void
+    {
+        $repo = $this->repo->getByID($repoID);
+        $this->app->loadLang('action');
+
+        $scm = strtolower($repo->SCM);
+        if(in_array($scm, $this->config->repo->gitServiceList))
+        {
+            $serviceID = isset($repo->gitService) ? $repo->gitService : 0;
+            $projects  = $this->loadModel($scm)->apiGetProjects($serviceID);
+            $options   = array();
+            foreach($projects as $project)
+            {
+                if($scm == 'gitlab') $options[$project->id] = $project->name_with_namespace;
+                if($scm == 'gitea')  $options[$project->full_name] = $project->full_name;
+                if($scm == 'gogs')   $options[$project->full_name] = $project->full_name;
+            }
+
+            $this->view->projects = $options;
+        }
+
+        $products           = $this->loadModel('product')->getPairs('', 0, '', 'all');
+        $linkedProducts     = $this->loadModel('product')->getByIdList(explode(',', $repo->product));
+        $linkedProductPairs = array_combine(array_keys($linkedProducts), helper::arrayColumn($linkedProducts, 'name'));
+        $products           = $products + $linkedProductPairs;
+
+        $this->view->title           = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->edit;
+        $this->view->repo            = $repo;
+        $this->view->repoID          = $repoID;
+        $this->view->objectID        = $objectID;
+        $this->view->groups          = $this->loadModel('group')->getPairs();
+        $this->view->users           = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
+        $this->view->products        = $products;
+        $this->view->relatedProjects = $this->repo->filterProject(explode(',', $repo->product), explode(',', $repo->projects));
+        $this->view->serviceHosts    = $this->loadModel('pipeline')->getPairs($repo->SCM);
 
         $this->display();
     }
@@ -342,10 +481,12 @@ class repoZen extends repo
      * @param  int       $refresh
      * @param  string    $revision
      * @param  object    $lastRevision
+     * @param  string    $base64BranchID
+     * @param  int       $objectID
      * @access protected
      * @return array
      */
-    protected function getFilesInfo(object $repo, string $path, string $branchID, int $refresh, string $revision, object $lastRevision): array
+    protected function getFilesInfo(object $repo, string $path, string $branchID, int $refresh, string $revision, object $lastRevision, string $base64BranchID, int $objectID): array
     {
         if($repo->SCM == 'Gitlab')
         {
@@ -381,6 +522,17 @@ class repoZen extends repo
         {
             $info->originalComment = $info->comment;
             $info->comment         = $this->repo->replaceCommentLink($info->comment);
+            $info->revision        = $repo->SCM == 'Subversion' ? $info->revision : substr($info->revision, 0, 10);
+
+            $infoPath       = trim(urldecode($path) . '/' . $info->name, '/');
+            if($info->kind == 'dir')
+            {
+                $info->link = $this->repo->createLink('browse', "repoID={$repo->id}&branchID=$base64BranchID&objectID=$objectID&path=" . $this->repo->encodePath($infoPath));
+            }
+            else
+            {
+                $info->link = $this->repo->createLink('view', "repoID={$repo->id}&objectID=$objectID&entry=" . $this->repo->encodePath($infoPath));
+            }
         }
 
         return $infos;
@@ -468,7 +620,7 @@ class repoZen extends repo
 
                 $this->loadModel('gitlab')->setProject((int)$repo->gitService, (int)$repo->project, $project);
             }
-            if(!is_null($result['branches']->headers->offsetGet('x-total')))
+            if(!empty($result['branches']->headers) && !is_null($result['branches']->headers->offsetGet('x-total')))
             {
                 $branchList = json_decode($result['branches']->body);
                 $totalPages = $result['branches']->headers->offsetGet('x-total-pages');
@@ -511,7 +663,7 @@ class repoZen extends repo
                     $branches = $default + $branches;
                 }
             }
-            if(!is_null($result['tags']->headers->offsetGet('x-total')))
+            if(!empty($result['branches']->headers) && !is_null($result['tags']->headers->offsetGet('x-total')))
             {
                 $tagList    = json_decode($result['tags']->body);
                 $totalPages = $result['tags']->headers->offsetGet('x-total-pages');
@@ -542,5 +694,372 @@ class repoZen extends repo
             return array(isset($branches) ? $branches : false, isset($tags) ? $tags : false);
         }
     }
-}
 
+    /**
+     * 为git类型版本库设置分支和tag。
+     * Set branch or tag for git.
+     *
+     * @param  object     $repo
+     * @param  string     $branchID
+     * @param  array|bool $branchInfo
+     * @param  array|bool $tagInfo
+     * @access protected
+     * @return array
+     */
+    protected function setBranchTag(object $repo, string $branchID, array|bool $branchInfo = false, array|bool $tagInfo = false): array
+    {
+        $repoID   = $repo->id;
+        $branches = $tags = $branchesAndTags = array();
+        if(in_array($repo->SCM, $this->config->repo->gitTypeList))
+        {
+            $scm = $this->app->loadClass('scm');
+            $scm->setEngine($repo);
+            $branches = isset($branchInfo) && $branchInfo !== false ? $branchInfo : $scm->branch();
+            $initTags = isset($tagInfo) && $tagInfo !== false ? $tagInfo : $scm->tags('');
+            foreach($initTags as $tag) $tags[$tag] = $tag;
+            $branchesAndTags = $branches + $tags;
+
+            if(empty($branchID) and $this->cookie->repoBranch and $this->session->repoID == $repoID) $branchID = $this->cookie->repoBranch;
+            if($branchID) $this->repo->setRepoBranch($branchID);
+            if(!isset($branchesAndTags[$branchID]))
+            {
+                $branchID = (string)key($branches);
+                $this->repo->setRepoBranch($branchID);
+            }
+
+            return array($branchID, $branches, $tags, $branchesAndTags);
+        }
+        else
+        {
+            $this->repo->setRepoBranch('');
+            return array('', array(), array(), array());
+        }
+    }
+
+    /**
+     * 获取commits列表
+     * Get commits.
+     *
+     * @param  object    $repo
+     * @param  string    $path
+     * @param  string    $revision
+     * @param  string    $type
+     * @param  object    $pager
+     * @param  int       $objectID
+     * @access protected
+     * @return array
+     */
+    protected function getCommits(object $repo, string $path, string $revision, string $type, object $pager, int $objectID): array
+    {
+        $revisions = $this->repo->getCommits($repo, $path, $revision, $type, $pager);
+        $pathInfo  = '&root=' . $this->repo->encodePath(empty($path) ? '/' : $path);
+        foreach($revisions as $item)
+        {
+            $item->link     = $this->repo->createLink('revision', "repoID={$repo->id}&objectID=$objectID&revision={$item->revision}" . $pathInfo);
+            $item->revision = $repo->SCM != 'Subversion' ? substr($item->revision, 0, 10) : $item->revision;
+        }
+
+        return $revisions;
+    }
+
+    /**
+     * 设置session信息。
+     * Set session.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function setBrowseSession(): void
+    {
+        $this->repo->setBackSession('list', true);
+
+        session_start();
+        $this->session->set('revisionList', $this->app->getURI(true));
+        $this->session->set('gitlabBranchList', $this->app->getURI(true));
+        session_write_close();
+    }
+
+    /**
+     * 构建版本库搜索框。
+     * Build repo search form.
+     *
+     * @param  array     $products
+     * @param  array     $projects
+     * @param  int       $objectID
+     * @param  string    $orderBy
+     * @param  int       $recPerPage
+     * @param  int       $pageID
+     * @param  int       $param
+     * @access protected
+     * @return void
+     */
+    protected function buildRepoSearchForm(array $products, array $projects, int $objectID, string $orderBy, int $recPerPage, int $pageID, int $param): void
+    {
+        session_start();
+        $this->config->repo->search['params']['product']['values']  = $products;
+        $this->config->repo->search['params']['projects']['values'] = $projects;
+        $this->config->repo->search['actionURL']   = $this->createLink('repo', 'maintain', "objectID={$objectID}&orderBy={$orderBy}&recPerPage={$recPerPage}&pageID={$pageID}&type=bySearch&param=myQueryID");
+        $this->config->repo->search['queryID']     = $param;
+        $this->config->repo->search['onMenuBar']   = 'yes';
+        $this->loadModel('search')->setSearchParams($this->config->repo->search);
+        session_write_close();
+    }
+
+    /**
+     * 构建需求搜索表格。
+     * Build story search form.
+     *
+     * @param  int       $repoID
+     * @param  string    $revision
+     * @param  string    $browseType
+     * @param  int       $queryID
+     * @param  object    $product
+     * @param  array     $modules
+     * @access protected
+     * @return void
+     */
+    protected function buildStorySearchForm(int $repoID, string $revision, string $browseType, int $queryID, object $product, array $modules): void
+    {
+        unset($this->lang->story->statusList['closed']);
+        $storyStatusList = $this->lang->story->statusList;
+
+        unset($this->config->product->search['fields']['product']);
+        $this->config->product->search['actionURL']                   = $this->createLink('repo', 'linkStory', "repoID=$repoID&revision=$revision&browseType=bySearch&queryID=myQueryID");
+        $this->config->product->search['queryID']                     = $queryID;
+        $this->config->product->search['style']                       = 'simple';
+        $this->config->product->search['params']['plan']['values']    = $this->loadModel('productplan')->getForProducts(array($product->id => $product->id));
+        $this->config->product->search['params']['module']['values']  = $modules;
+        $this->config->product->search['params']['status']            = array('operator' => '=', 'control' => 'select', 'values' => $storyStatusList);
+
+        if($product->type == 'normal')
+        {
+            unset($this->config->product->search['fields']['branch']);
+            unset($this->config->product->search['params']['branch']);
+        }
+        else
+        {
+            $this->config->product->search['fields']['branch'] = $this->lang->product->branch;
+            $this->config->product->search['params']['branch']['values'] = $this->loadModel('branch')->getPairs($product->id, 'noempty');
+        }
+
+        session_start();
+        $this->loadModel('search')->setSearchParams($this->config->product->search);
+        session_write_close();
+    }
+
+    /**
+     * 获取关联需求列表。
+     * Get link stories list.
+     *
+     * @param  int       $repoID
+     * @param  string    $revision
+     * @param  string    $browseType
+     * @param  object    $product
+     * @param  string    $orderBy
+     * @param  object    $pager
+     * @param  int       $queryID
+     * @access protected
+     * @return array
+     */
+    protected function getLinkStories(int $repoID, string $revision, string $browseType, object $product, string $orderBy, object $pager, int $queryID): array
+    {
+        $linkedStories = $this->repo->getRelationByCommit($repoID, $revision, 'story');
+        if($browseType == 'bySearch')
+        {
+            $allStories = $this->loadModel('story')->getBySearch($product->id, 0, $queryID, $orderBy, 0, 'story', array_keys($linkedStories), $pager);
+        }
+        else
+        {
+            $allStories = $this->loadModel('story')->getProductStories($product->id, 0, '0', 'draft,active,changed', 'story', $orderBy, false, array_keys($linkedStories), $pager);
+        }
+
+        return $allStories;
+    }
+
+    /**
+     * 构建bug搜索表格。
+     * Build bug search form.
+     *
+     * @param  int       $repoID
+     * @param  string    $revision
+     * @param  string    $browseType
+     * @param  int       $queryID
+     * @param  object    $product
+     * @param  array     $modules
+     * @access protected
+     * @return void
+     */
+    protected function buildBugSearchForm(int $repoID, string $revision, string $browseType, int $queryID, object $product, array $modules): void
+    {
+
+        $this->config->bug->search['actionURL']                         = $this->createLink('repo', 'linkBug', "repoID=$repoID&revision=$revision&browseType=bySearch&queryID=myQueryID");
+        $this->config->bug->search['queryID']                           = $queryID;
+        $this->config->bug->search['style']                             = 'simple';
+        $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($product->id => $product->id));
+        $this->config->bug->search['params']['module']['values']        = $modules;
+        $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($product->id);
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs(array($product->id), 'all', '');
+        $this->config->bug->search['params']['resolvedBuild']['values'] = $this->loadModel('build')->getBuildPairs(array($product->id), 'all', '');
+
+        unset($this->config->bug->search['fields']['product']);
+        if($product->type == 'normal')
+        {
+            unset($this->config->bug->search['fields']['branch']);
+            unset($this->config->bug->search['params']['branch']);
+        }
+        else
+        {
+            $this->config->bug->search['fields']['branch']           = $this->lang->product->branch;
+            $this->config->bug->search['params']['branch']['values'] = $this->loadModel('branch')->getPairs($product->id, 'noempty');
+        }
+        session_start();
+        $this->loadModel('search')->setSearchParams($this->config->bug->search);
+        session_write_close();
+    }
+
+    /**
+     * 获取关联bug列表。
+     * Get link bugs list.
+     *
+     * @param  int       $repoID
+     * @param  string    $revision
+     * @param  string    $browseType
+     * @param  object    $product
+     * @param  string    $orderBy
+     * @param  object    $pager
+     * @param  int       $queryID
+     * @access protected
+     * @return array
+     */
+    protected function getLinkBugs(int $repoID, string $revision, string $browseType, object $product, string $orderBy, object $pager, int $queryID): array
+    {
+        $linkedBugs = $this->repo->getRelationByCommit($repoID, $revision, 'bug');
+        if($browseType == 'bySearch')
+        {
+            $allBugs = $this->loadModel('bug')->getBySearch($product->id, 0, $queryID, $orderBy, array_keys($linkedBugs), $pager);
+        }
+        else
+        {
+            $allBugs = $this->loadModel('bug')->getActiveBugs($product->id, 0, '0', array_keys($linkedBugs), $pager, $orderBy);
+        }
+
+        foreach($allBugs as $bug) $bug->statusText = $this->processStatus('bug', $bug);
+        return $allBugs;
+    }
+
+    /**
+     * 构建任务搜索表格。
+     * Build task search form.
+     *
+     * @param  int       $repoID
+     * @param  string    $revision
+     * @param  string    $browseType
+     * @param  int       $queryID
+     * @param  object    $product
+     * @param  array     $modules
+     * @param  array     $productExecutions
+     * @access protected
+     * @return void
+     */
+    protected function buildTaskSearchForm(int $repoID, string $revision, string $browseType, int $queryID, object $product, array $modules, array $productExecutions): void
+    {
+        $this->config->execution->search['actionURL']                     = $this->createLink('repo', 'linkTask', "repoID=$repoID&revision=$revision&browseType=bySearch&queryID=myQueryID", '', true);
+        $this->config->execution->search['queryID']                       = $queryID;
+        $this->config->execution->search['style']                         = 'simple';
+        $this->config->execution->search['params']['module']['values']    = $modules;
+        $this->config->execution->search['params']['execution']['values'] = $this->loadModel('product')->getExecutionPairsByProduct($product->id);
+        $this->config->execution->search['params']['execution']['values'] = array_filter($productExecutions);
+
+        session_start();
+        $this->loadModel('search')->setSearchParams($this->config->execution->search);
+        session_write_close();
+    }
+
+    /**
+     * 获取关联任务列表。
+     * Get link tasks list.
+     *
+     * @param  int       $repoID
+     * @param  string    $revision
+     * @param  string    $browseType
+     * @param  object    $product
+     * @param  string    $orderBy
+     * @param  object    $pager
+     * @param  int       $queryID
+     * @param  array     $productExecutionIDs
+     * @access protected
+     * @return array
+     */
+    protected function getLinkTasks(int $repoID, string $revision, string $browseType, object $product, string $orderBy, object $pager, int $queryID, array $productExecutionIDs): array
+    {
+        $allTasks = array();
+        foreach($productExecutionIDs as $productExecutionID)
+        {
+            $tasks    = $this->loadModel('execution')->getTasks(0, $productExecutionID, array(), $browseType, $queryID, 0, $orderBy, null);
+            $allTasks = array_merge($tasks, $allTasks);
+        }
+
+        /* Filter linked tasks. */
+        $linkedTasks   = $this->repo->getRelationByCommit($repoID, $revision, 'task');
+        $linkedTaskIDs = array_keys($linkedTasks);
+        foreach($allTasks as $key => $task)
+        {
+            if(in_array($task->id, $linkedTaskIDs)) unset($allTasks[$key]);
+        }
+
+        /* Page the records. */
+        $pager->setRecTotal(count($allTasks));
+        $pager->setPageTotal();
+        if($pager->pageID > $pager->pageTotal) $pager->setPageID($pager->pageTotal);
+        $count    = 1;
+        $limitMin = ($pager->pageID - 1) * $pager->recPerPage;
+        $limitMax = $pager->pageID * $pager->recPerPage;
+        foreach($allTasks as $key => $task)
+        {
+            if($count <= $limitMin or $count > $limitMax) unset($allTasks[$key]);
+            $count ++;
+        }
+
+        return $allTasks;
+    }
+
+    /**
+     * 关联对象。
+     * Link object.
+     *
+     * @param  int       $repoID
+     * @param  string    $revision
+     * @param  string    $type story|bug|task
+     * @access protected
+     * @return array
+     */
+    protected function linkObject(int $repoID, string $revision, string $type): array
+    {
+        $this->repo->link($repoID, $revision, $type);
+        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+
+        return array('result' => 'success', 'callback' => "$('.tab-content .active iframe')[0].contentWindow.getRelation('$revision')", 'closeModal' => true);
+    }
+
+    /**
+     * 检查删除版本库的错误。
+     * Check repo delete error.
+     *
+     * @param  int $repoID
+     * @access protected
+     * @return string
+     */
+    protected function checkDeleteError(int $repoID): string
+    {
+        $relationID = $this->dao->select('id')->from(TABLE_RELATION)
+            ->where('extra')->eq($repoID)
+            ->andWhere('AType')->eq('design')
+            ->fetch();
+        $error      = $relationID ? $this->lang->repo->error->deleted : '';
+
+        $jobs = $this->dao->select('*')->from(TABLE_JOB)->where('repo')->eq($repoID)->andWhere('deleted')->eq('0')->fetchAll();
+        if($jobs) $error .= ($error ? '\n' : '') . $this->lang->repo->error->linkedJob;
+
+        return $error;
+    }
+}
