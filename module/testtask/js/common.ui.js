@@ -77,13 +77,13 @@ function loadTestReports(productID)
  */
 function suitEndDate()
 {
-    beginDate = $('#begin').zui('datePicker').$.value;
+    beginDate = $('#beginDate').zui('datePicker').$.state.value;
     if(!beginDate) return;
-    endDate = $('#end').zui('datePicker').$.value;
+    endDate = $('#endDate').zui('datePicker').$.state.value;
     if(endDate) return;
 
     endDate = getNextDay(beginDate); 
-    $('#end').zui('datePicker').$.changeState({value: endDate});
+    $('#endDate').zui('datePicker').$.changeState({value: endDate});
 }
 
 function getNextDay(dateString) 

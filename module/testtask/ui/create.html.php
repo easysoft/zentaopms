@@ -111,7 +111,7 @@ formPanel
         (
             datePicker
             (
-                set::id('begin'),
+                set::id('beginDate'),
                 set::name('begin'),
                 set::required(true),
                 on::change('suitEndDate'),
@@ -119,7 +119,7 @@ formPanel
             $lang->testtask->end,
             datePicker
             (
-                set::id('end'),
+                set::id('endDate'),
                 set::name('end'),
                 set::required(true),
             ),

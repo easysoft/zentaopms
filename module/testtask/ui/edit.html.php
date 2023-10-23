@@ -66,22 +66,22 @@ formPanel
         set::required(true),
         inputGroup
         (
-            input
+            datePicker
             (
+                set::id('beginDate'),
                 set::name('begin'),
-                set::type('date'),
                 set::required(true),
                 set::value($task->begin),
                 on::change('suitEndDate'),
             ),
             $lang->testtask->end,
-            input
+            datePicker
             (
+                set::id('endDate'),
                 set::name('end'),
-                set::type('date'),
                 set::required(true),
                 set::value($task->end),
-            )
+            ),
         )
     ),
     formGroup
