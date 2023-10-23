@@ -24,7 +24,7 @@ detailHeader
 );
 
 $taskType = '';
-foreach(explode(',', $task->type) as $type) $testType .= zget($lang->testtask->typeList, $type);
+foreach(explode(',', $task->type) as $type) $taskType .= zget($lang->testtask->typeList, $type);
 
 $mailto = '';
 if($task->mailto)
@@ -62,6 +62,7 @@ detailBody
             set::collapse(true),
             tabPane
             (
+                set::key('basicInfo'),
                 set::title($lang->testtask->legendBasicInfo),
                 set::active(true),
                 tableData
