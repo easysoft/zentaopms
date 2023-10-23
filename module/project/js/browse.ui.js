@@ -51,3 +51,10 @@ $(document).off('click', '.switchButton').on('click', '.switchButton', function(
     $.cookie.set('projectType', projectType);
     loadCurrentPage();
 });
+
+window.showInvolved = function()
+{
+    var involved = $(this).is(':checked') ? 1 : 0;
+    $.cookie.set('involved', involved, {expires:config.cookieLife, path:config.webRoot});
+    loadCurrentPage();
+}
