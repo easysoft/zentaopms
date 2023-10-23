@@ -1092,6 +1092,8 @@ class bugZen extends bug
     protected function buildCreateForm(object $bug, array $param, string $from): void
     {
         extract($param);
+        if(isset($executionID)) $projectID = $this->dao->select('project')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch('project');
+
         $currentProduct = $this->product->getByID($bug->productID);
 
         /* 获得版本下拉和需求下拉列表。 */
@@ -1129,6 +1131,7 @@ class bugZen extends bug
         $this->view->product               = $currentProduct;
         $this->view->contactList           = $this->loadModel('user')->getContactLists($this->app->user->account, 'withnote');
         $this->view->defaultProject        = isset($projectID) ? $projectID : $bug->projectID;
+        $this->view->defaultExecution      = isset($executionID) ? $executionID : (!empty($bug->execution->id) ? $bug->execution->id : '');
     }
 
     /**
