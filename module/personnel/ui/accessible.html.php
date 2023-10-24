@@ -19,7 +19,7 @@ dropmenu();
 
 featureBar
 (
-    li(searchToggle(set::module('accessible')))
+    li(searchToggle(set::module('accessible'), set::open($browseType == 'bysearch'))),
 );
 
 $closeLink = $this->createLink('personnel', 'accessible', "programID=$programID&deptID=0");
@@ -30,8 +30,7 @@ sidebar
         set::modules($deptTree),
         set::activeKey($deptID),
         set::closeLink($closeLink),
-        set::moduleSetting(false),
-        set::displaySetting(false),
+        set::showDisplay(false),
     ),
 );
 

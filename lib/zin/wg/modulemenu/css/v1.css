@@ -1,4 +1,4 @@
-#moduleMenu {max-height: calc(100vh - 80px);}
+#moduleMenu {max-height: calc(100vh - 80px); padding-bottom:10px;}
 #moduleMenu .active {color: var(--color-primary-600); font-weight: 500;}
 #moduleMenu header a:hover > .icon {color: var(--color-primary-600) !important;}
 #moduleMenu .tree-item * {white-space: nowrap;}
