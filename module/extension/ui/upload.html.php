@@ -21,7 +21,6 @@ if(!empty($error))
             set('url', createLink('extension', 'upload')),
             set::type('primary'),
             $lang->extension->refreshPage,
-            
         )
     );
 }

@@ -48,6 +48,7 @@ foreach($files as $fileName => $md5)
 
 empty($error) && isset($license) ? div
 (
+    setClass('text-center'),
     div
     (
         setClass('font-bold mb-2'),

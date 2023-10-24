@@ -24,8 +24,18 @@ class extension extends control
         parent::__construct($moduleName, $methodName);
 
         $statusFile = $this->loadModel('common')->checkSafeFile();
-
-        if($statusFile) $this->fetch('extension', 'safe', "statusFile=$statusFile");
+        if($statusFile) 
+        {
+            if(helper::isAjaxRequest('modal'))
+            {
+                $link = $this->createLink('extension', 'safe', "statusFile=$statusFile");
+                return $this->send(array('result' => 'success', 'callback' => array('name' => 'loadInModal', 'params' => $link)));
+            }
+            else
+            {
+                $this->fetch('extension', 'safe', "statusFile=$statusFile");
+            }
+        }
     }
 
     public function safe($statusFile)
