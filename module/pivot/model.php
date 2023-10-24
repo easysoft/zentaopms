@@ -336,10 +336,12 @@ class pivotModel extends model
     /**
      * Get products.
      *
+     * @param  string $conditions
+     * @param  string $storyType
      * @access public
      * @return array
      */
-    public function getProducts($conditions, $storyType = 'story')
+    public function getProducts(string $conditions, string $storyType = 'story'): array
     {
         $permission = common::hasPriv('pivot', 'showProduct') or $this->app->user->admin;
         $products   = $this->dao->select('t1.id as id, t1.code, t1.name, t1.PO')->from(TABLE_PRODUCT)->alias('t1')
