@@ -15,22 +15,28 @@ namespace zin;
  * Define the grouped data list.
  */
 
-$defaultItem = array();
-$defaultItem['id']     = 0;
-$defaultItem['text']   = $lang->product->all;
-$defaultItem['active'] = $productID == 0;
-$defaultItem['type']   = 'product';
+$data = array('normal' => array(), 'closed' => array());
+if($currentMethod != 'zerocase')
+{
+    $defaultItem = array();
+    $defaultItem['id']       = 0;
+    $defaultItem['text']     = $lang->product->all;
+    $defaultItem['active']   = $productID == 0;
+    $defaultItem['type']     = 'product';
+    $defaultItem['data-app'] = $app->tab;
 
-$data = array('normal' => array($defaultItem), 'closed' => array());
+    $data['normal'][] = $defaultItem;
+}
 
 foreach($products as $product)
 {
     $item = array();
-    $item['id']     = $product->id;
-    $item['text']   = $product->name;
-    $item['active'] = $productID == $product->id;
-    $item['type']   = 'product';
-    $item['keys']   = zget(common::convert2Pinyin(array($product->name)), $product->name, '');
+    $item['id']       = $product->id;
+    $item['text']     = $product->name;
+    $item['active']   = $productID == $product->id;
+    $item['type']     = 'product';
+    $item['keys']     = zget(common::convert2Pinyin(array($product->name)), $product->name, '');
+    $item['data-app'] = $app->tab;
 
     if($product->status == 'closed')
     {

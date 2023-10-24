@@ -179,6 +179,11 @@ class testcase extends control
             $this->loadModel('project')->setMenu($this->session->project);
             $products  = $this->product->getProducts($this->session->project, 'all', '', false);
             $productID = $this->product->checkAccess($productID, $products);
+            $this->config->hasSwitcherMethods[] = 'testcase-zerocase';
+
+            $productPairs = $this->project->getMultiLinkedProducts($this->session->project);
+            $this->view->switcherParams = "projectID={$this->session->project}&productID={$productID}&currentMethod=zerocase";
+            $this->view->switcherText   = zget($productPairs, $productID, $this->lang->product->all);
         }
         else
         {

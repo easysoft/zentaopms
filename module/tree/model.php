@@ -439,7 +439,7 @@ class treeModel extends model
         }
         elseif(($type == 'story' and $this->app->rawModule == 'projectstory') or (strpos(',case,bug,', ",$type,") !== false and $this->app->tab == 'project'))
         {
-            if($product->type != 'normal' and $projectID) $branches += $this->branch->getPairs($product->id, 'noempty', $projectID);
+            if($product->type != 'normal' and $projectID) $branches += $this->branch->getPairs((int)$product->id, 'noempty', $projectID);
             if($onlyGetLinked) $executionModules = $this->getTaskTreeModules($projectID, true, $type, $type == 'story' ? array() : array('branchID' => $branch));
         }
 

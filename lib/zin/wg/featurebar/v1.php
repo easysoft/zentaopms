@@ -15,7 +15,8 @@ class featureBar extends wg
         'module?:string',
         'method?:string',
         'load?: string="table"',
-        'loadID?: string'
+        'loadID?: string',
+        'app?: string=""'
     );
 
     protected static array $defineBlocks = array
@@ -46,6 +47,7 @@ class featureBar extends wg
         $link     = $this->prop('link');
         $loadID   = $this->prop('loadID');
         $load     = $this->prop('load');
+        $tab      = $this->prop('app');
 
         data('activeFeature', $current);
 
@@ -75,7 +77,7 @@ class featureBar extends wg
                     $subItem['text']   = $text;
                     $subItem['active'] = $key == $current;
                     $subItem['url']    = ($callback instanceof \Closure) ? $callback($key, $text) : str_replace('{key}', (string)$key, $link);
-                    $subItem['attrs']  = ['data-id' => $key, 'data-load' => $load, 'data-target' => $loadID];
+                    $subItem['attrs']  = ['data-id' => $key, 'data-load' => $load, 'data-target' => $loadID, 'data-app' => $tab];
 
                     if($item->name == 'QUERY')
                     {
@@ -116,7 +118,7 @@ class featureBar extends wg
                 'active' => $isActive,
                 'url'    => str_replace('{key}', strval($item->name), $link),
                 'badge'  => $isActive && $recTotal != '' ? array('text' => $recTotal, 'class' => 'size-sm rounded-full white') : null,
-                'props'  => array('data-id' => $item->name, 'data-load' => $load, 'data-target' => $loadID)
+                'props'  => array('data-id' => $item->name, 'data-load' => $load, 'data-target' => $loadID, 'data-app' => $tab)
             );
         }
 

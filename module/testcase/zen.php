@@ -575,6 +575,14 @@ class testcaseZen extends testcase
         $this->view->libraries   = $this->loadModel('caselib')->getLibraries();
         $this->view->stories     = array('') + $this->loadModel('story')->getPairs($productID);
         $this->view->automation  = $this->loadModel('zanode')->getAutomationByProduct($productID);
+
+        if($projectID)
+        {
+            $productPairs = $this->project->getMultiLinkedProducts($projectID);
+
+            $this->view->switcherParams = "projectID={$projectID}&productID={$productID}&currentMethod=testcase";
+            $this->view->switcherText   = zget($productPairs, $productID, $this->lang->product->all);
+        }
     }
 
     /**
@@ -2361,7 +2369,7 @@ class testcaseZen extends testcase
 
         $this->config->testcase->search['actionURL'] = $actionURL;
         $this->config->testcase->search['queryID']   = $queryID;
-        $this->config->testcase->search['module']    = $this->app->rawModule;
+        $this->config->testcase->search['module']    = 'testcase';
 
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
     }

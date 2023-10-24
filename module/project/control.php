@@ -1555,10 +1555,14 @@ class project extends control
      */
     public function ajaxSwitcherMenu(int $projectID, int $productID, string $currentMethod = '')
     {
-        $this->view->link      = helper::createLink('project', $currentMethod, "projectID=$projectID&productID={id}");
-        $this->view->productID = $productID;
-        $this->view->products  = $this->loadModel('product')->getProducts($projectID);
-        $this->view->projectID = $projectID;
+        $currentModule = $currentMethod == 'zerocase' ? 'testcase' : 'project';
+        $params        = $currentMethod == 'zerocase' ? "productID={id}&branchID=0&orderBy=id_desc&projectID={$projectID}" : "projectID={$projectID}&productID={id}";
+
+        $this->view->link          = helper::createLink($currentModule, $currentMethod, $params);
+        $this->view->productID     = $productID;
+        $this->view->products      = $this->loadModel('product')->getProducts($projectID);
+        $this->view->projectID     = $projectID;
+        $this->view->currentMethod = $currentMethod;
         $this->display();
     }
 }

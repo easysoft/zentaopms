@@ -99,22 +99,16 @@ if($canDisplaySuite)
 
 $linkParams = $projectParam . "productID=$productID&branch=$branch&browseType={key}&param=0&caseType={$caseType}";
 $browseLink = createLink('testcase', 'browse', $linkParams);
+if($app->tab == 'project') $browseLink = createLink('project', 'testcase', $linkParams);
 if($rawMethod == 'browseunits') $browseLink = createLink('testtask', 'browseUnits', "productID=$productID&browseType={key}");
-$productMenuLink = createLink('project', 'testcase', array('projectID' => $projectID, 'productID' => '{key}', 'branch' => $branch, 'browseType' => $browseType, 'param' => $param, 'caseType' => $caseType, 'orderBy' => $orderBy,));
 
 featureBar
 (
-    !empty($hasProduct) && !empty($projectID) ? to::before(productMenu(set
-    ([
-        'items' => $products,
-        'activeKey' => $productID,
-        'closeLink' => '#',
-        'link' => $productMenuLink
-    ]))) : null,
     set::linkParams($rawMethod == 'zerocase' || $rawMethod == 'browseunits' ? null : $linkParams),
     set::link($rawMethod == 'zerocase' || $rawMethod == 'browseunits' ? $browseLink : null),
     set::current($rawMethod == 'browse' ? $this->session->caseBrowseType : null),
     set::load($load),
+    set::app($app->tab),
     $canSwitchCaseType ? to::leading
     (
         dropdown
@@ -173,7 +167,7 @@ featureBar
             $lang->testcase->onlyAutomated
         )
     ) : null,
-    $rawMethod != 'browseunits' && $rawMethod != 'groupcase' ? (searchToggle(set::open($browseType == 'bysearch'))) : null
+    !in_array($rawMethod, array('browseunits', 'groupcase', 'zerocase'))? (searchToggle(set::open($browseType == 'bysearch'))) : null
 );
 
 $viewItems   = array(array('text' => $lang->testcase->listView, 'url' => $app->tab == 'project' ? createLink('project', 'testcase', "projectID={$projectID}") : inlink('browse', "productID=$productID&branch=$branch&browseType=all"), 'active' => $rawMethod != 'groupcase' ? true : false));
