@@ -17,6 +17,7 @@ jsVar('groupID', $group->id);
 
 featureBar
 (
+    set::load('+#pivot-content'),
     set::current($group->id),
     set::linkParams("dimension={$dimension}&group={key}")
 );
@@ -63,5 +64,10 @@ div
             html(empty($config->isINT) ? $lang->bizVersion : $lang->bizVersionINT)
         ) : null
     ),
-    $generateData()
+    div
+    (
+        setID('pivot-content'),
+        setClass('w-full'),
+        $generateData()
+    )
 );
