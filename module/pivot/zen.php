@@ -25,7 +25,8 @@ class pivotZen extends pivot
 
         $group = $this->loadModel('tree')->getByID($groupID);;
 
-        $this->$method($params);
+        parse_str($params, $result);
+        call_user_func_array(array($this, $method), $result);
 
         $this->view->menus     = $this->getSidebarMenus($dimension, $group, $module, $method, $params);
         $this->view->dimension = $dimension;
