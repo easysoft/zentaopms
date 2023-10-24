@@ -32,9 +32,11 @@ toolbar
     (
         'text' => $lang->bug->create,
         'icon' => 'plus',
-        'class' => 'primary',
-        'url' => createLink('bug', 'create', "productID={$productID}&branch=$branchID&extras=projectID=$project->id")
-    ))) : null,
+        'type' => 'primary',
+        'url'  => createLink('bug', 'create', "productID={$productID}&branch={$branchID}&extras=projectID={$project->id}")
+    )),
+    setData('app', 'project')
+    ) : null,
 );
 
 $closeLink = $type != 'bysearch' ? createLink('project', 'bug', "projectID={$project->id}&productID={$productID}&branchID=$branchID&orderBy=$orderBy&build=$buildID&type=$type&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("bugModule")';

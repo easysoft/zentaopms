@@ -823,7 +823,7 @@ class bugZen extends bug
         }
         elseif($this->app->tab == 'project')
         {
-            if(isset($output['projectID'])) $this->loadModel('project')->setMenu($output['projectID']);
+            if(isset($output['projectID'])) $this->loadModel('project')->setMenu((int)$output['projectID']);
         }
         else
         {
