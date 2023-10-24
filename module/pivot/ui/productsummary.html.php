@@ -30,34 +30,6 @@ $generateData = function() use ($module, $method, $lang, $users, $products)
         'storyTotal'     => array('title' => $lang->pivot->total,                   'width' => '60', 'align' => 'center')
     );
 
-    foreach($products as $product)
-    {
-        $product->planTitle      = '';
-        $product->planBegin      = '';
-        $product->planEnd        = '';
-        $product->storyDraft     = 0;
-        $product->storyReviewing = 0;
-        $product->storyActive    = 0;
-        $product->storyChanging  = 0;
-        $product->storyClosed    = 0;
-        $product->storyTotal     = 0;
-
-        if(!isset($product->plans)) continue;
-
-        foreach($product->plans as $plan)
-        {
-            $product->planTitle      = $plan->title;
-            $product->planBegin      = $plan->begin == '2030-01-01' ? $lang->productplan->future : $plan->begin;
-            $product->planEnd        = $plan->end   == '2030-01-01' ? $lang->productplan->future : $plan->end;
-            $product->storyDraft     = isset($plan->status['draft'])     ? $plan->status['draft']     : 0;
-            $product->storyReviewing = isset($plan->status['reviewing']) ? $plan->status['reviewing'] : 0;
-            $product->storyActive    = isset($plan->status['active'])    ? $plan->status['active']    : 0;
-            $product->storyChanging  = isset($plan->status['changing'])  ? $plan->status['changing']  : 0;
-            $product->storyClosed    = isset($plan->status['closed'])    ? $plan->status['closed']    : 0;
-            $product->storyTotal     = $product->storyDraft + $product->storyReviewing + $product->storyActive + $product->storyChanging + $product->storyClosed;
-        }
-    }
-
     return array
     (
         div
