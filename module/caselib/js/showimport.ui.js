@@ -44,5 +44,5 @@ function computeImportTimes()
 
 function importNextPage()
 {
-    return location.href = $.createLink('caselib', 'showImport', "libID='" + libID + "'&pageID=" + $('#pageID').val() + '&maxImport=' + $('#maxImport').val());
+    return loadPage($.createLink('caselib', 'showImport', "libID='" + libID + "'&pageID=" + $('#pageID').val() + '&maxImport=' + $('#maxImport').val()));
 }
