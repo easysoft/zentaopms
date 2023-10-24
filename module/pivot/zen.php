@@ -353,10 +353,12 @@ class pivotZen extends pivot
     /**
      * Project deviation pivot.
      *
+     * @param  int    $begin
+     * @param  int    $end
      * @access public
      * @return void
      */
-    public function projectDeviation($begin = 0, $end = 0)
+    public function projectDeviation(int $begin = 0, int $end = 0): void
     {
         $this->session->set('executionList', $this->app->getURI(true), 'execution');
 
@@ -364,12 +366,10 @@ class pivotZen extends pivot
         $end   = date('Y-m-d', ($end   ? strtotime($end)   : time() + (date('t') - date('j')) * 24 * 3600));
 
         $this->view->title      = $this->lang->pivot->projectDeviation;
-
         $this->view->executions = $this->pivot->getExecutions($begin, $end);
         $this->view->begin      = $begin;
         $this->view->end        = $end;
         $this->view->submenu    = 'project';
-        $this->display();
     }
 
     /**
