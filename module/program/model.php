@@ -1537,4 +1537,153 @@ class programModel extends model
             ->andWhere('type')->eq('program')
             ->fetchAll('id');
     }
+
+    /**
+     * Refresh stats fields(estimate,consumed,left,progress) of program, project, execution.
+     *
+     * @param  bool $refreshAll
+     * @access public
+     * @return void
+     */
+    public function refreshStats($refreshAll = false)
+    {
+        $updateTime = zget($this->app->config->global, 'projectStatsTime', '');
+        $now        = helper::now();
+
+        /*
+         * If projectStatsTime is before two weeks ago, refresh all executions directly.
+         * Else only refresh the latest executions in action table.
+         */
+        $projects = array();
+        if($updateTime < date('Y-m-d', strtotime('-14 days')) or $refreshAll)
+        {
+            $projects = $this->dao->select('id,project,model,deleted')->from(TABLE_PROJECT)->fetchAll('id');
+        }
+        else
+        {
+            $projects = $this->dao->select('distinct t1.project,t2.model,t2.deleted')->from(TABLE_ACTION)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                ->where('t1.`date`')->ge($updateTime)
+                ->fetchAll('project');
+            if(empty($projects)) return;
+        }
+
+        /* 1. Get summary and members of executions to be refreshed. */
+        $summary = $this->dao->select('execution, SUM(t1.estimate) AS totalEstimate, SUM(t1.consumed) AS totalConsumed, SUM(t1.`left`) AS totalLeft')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t1.parent')->le(0) // Ignore child task.
+            ->beginIF(!empty($projects))->andWhere('t1.project')->in(array_keys($projects))->fi()
+            ->groupBy('execution')
+            ->fetchAll();
+
+        $teamMembers = $this->dao->select('t1.root, COUNT(1) AS members')->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
+            ->where('t1.type')->eq('project')
+            ->beginIF(!empty($projects))->andWhere('t1.root')->in(array_keys($projects))->fi()
+            ->andWhere('t2.deleted')->eq(0)
+            ->groupBy('t1.root')
+            ->fetchPairs('root');
+
+        $projectsPairs = $this->dao->select('id,deleted')->from(TABLE_PROJECT)->fetchPairs();
+
+        /* 2. Get all parents to be refreshed. */
+        $executions = array();
+        foreach($summary as $execution) $executions[$execution->execution] = $execution->execution;
+        $paths = $this->dao->select('id,path')->from(TABLE_PROJECT)->where('id')->in($executions)->fetchAll();
+        $executionPaths = array();
+        foreach($paths as $path) $executionPaths[$path->id] = explode(',', trim($path->path, ','));
+
+        /* 3. Compute stats of execution and parents. */
+        $stats = array();
+        foreach($summary as $execution)
+        {
+            $executionID = $execution->execution;
+            foreach($executionPaths[$executionID] as $nodeID)
+            {
+                if(!isset($stats[$nodeID])) $stats[$nodeID] = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'teamCount' => 0, 'totalLeftNotDel' => 0, 'totalConsumedNotDel' => 0);
+                $stats[$nodeID]['totalEstimate'] += $execution->totalEstimate;
+                $stats[$nodeID]['totalConsumed'] += $execution->totalConsumed;
+                $stats[$nodeID]['totalLeft']     += $execution->totalLeft;
+                if(empty($projectsPairs[$execution->execution]) && empty($projectsPairs[$nodeID]))
+                {
+                    $stats[$nodeID]['totalConsumedNotDel'] += $execution->totalConsumed;
+                    $stats[$nodeID]['totalLeftNotDel']     += $execution->totalLeft;
+                }
+            }
+        }
+
+        $this->loadModel('project');
+        foreach($projects as $projectID => $project)
+        {
+            if($project->model != 'waterfall') continue;
+
+            $projectStats = $this->project->getWaterfallPVEVAC($projectID);
+            $stats[$projectID]['totalEstimate'] = $projectStats['PV'];
+            $stats[$projectID]['totalConsumed'] = $projectStats['AC'];
+            $stats[$projectID]['totalLeft']     = $projectStats['left'];
+            if(empty($project->deleted))
+            {
+                $stats[$projectID]['totalConsumedNotDel'] = $projectStats['AC'];
+                $stats[$projectID]['totalLeftNotDel']     = $projectStats['left'];
+            }
+        }
+
+        foreach($teamMembers as $projectID => $teamCount)
+        {
+            if(!isset($stats[$projectID])) $stats[$projectID] = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'teamCount' => 0, 'totalConsumedNotDel' => 0, 'totalLeftNotDel' => 0);
+            $stats[$projectID]['teamCount'] = $teamCount;
+        }
+
+        /* 4. Refresh stats to db. */
+        foreach($stats as $projectID => $project)
+        {
+            $totalRealNotDel = $project['totalConsumedNotDel'] + $project['totalLeftNotDel'];
+            $progress        = $totalRealNotDel ? floor($project['totalConsumedNotDel'] / $totalRealNotDel * 1000) / 1000 * 100 : 0;
+            $this->dao->update(TABLE_PROJECT)
+                ->set('progress')->eq($progress)
+                ->set('teamCount')->eq($project['teamCount'])
+                ->set('estimate')->eq($project['totalEstimate'])
+                ->set('consumed')->eq($project['totalConsumed'])
+                ->set('left')->eq($project['totalLeft'])
+                ->where('id')->eq($projectID)
+                ->exec();
+        }
+
+        /* 5. Update programStatsTime. */
+        $projectList = $this->dao->select('id,progress,path')->from(TABLE_PROJECT)
+            ->where('type')->eq('project')
+            ->andWhere('parent')->ne(0)
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll('id');
+        $programProgress = array();
+        foreach($projectList as $projectID => $project)
+        {
+            $path = explode(',', trim($project->path, ','));
+
+            foreach($path as $programID)
+            {
+                if($programID == $projectID) continue;
+                $programProgress[$programID][] = $project->progress;
+            }
+        }
+
+        foreach($programProgress as $programID => $progress)
+        {
+            $count = count($progress);
+            $sum = array_sum($progress);
+            $average = round($sum / $count, 2);
+            $this->dao->update(TABLE_PROJECT)
+                ->set('progress')->eq($average)
+                ->where('id')->eq($programID)
+                ->exec();
+        }
+
+        /* 6. Update projectStatsTime in config. */
+        $this->loadModel('setting')->setItem('system.common.global.projectStatsTime', $now);
+        $this->app->config->global->projectStatsTime = $now;
+
+        /* 7. Clear actions older than 30 days. */
+        $this->loadModel('action')->cleanActions();
+    }
 }
