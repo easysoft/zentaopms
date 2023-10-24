@@ -115,8 +115,8 @@ $lang->extension->errorDownloadPathNotWritable = 'Extension download path <stron
 $lang->extension->errorPackageFileExists       = '<strong>%s</strong> exists in the download path.<strong> Please %s it again, <a href="%s" class="alert-link">CLICK HERE</a></h5>';
 $lang->extension->errorDownloadFailed          = 'Download failed. Please try it again. If still not OK, try to download it manually and upload it to install.';
 $lang->extension->errorMd5Checking             = 'Incomplete File. Please download it again. If still not OK, try to download it manually and upload it to install.';
-$lang->extension->errorCheckIncompatible       = 'Incompatible with your ZenTao. It may not be used %s later.<strong>You can choose to <a href="%s" class="btn size-sm">force%s</a> or <a href="#" onclick=parent.location.href="%s" class="btn size-sm">cancel</a></h5>';
-$lang->extension->errorFileConflicted          = '<br />%s <strong> is conflicted with others. Choose <a href="%s" class="btn size-sm">Override</a> or <a href="#" onclick=parent.location.href="%s" class="btn size-sm">Cancel</a></h5>';
+$lang->extension->errorCheckIncompatible       = 'Incompatible with your ZenTao. It may not be used %s later.<strong>You can choose to <a href="#" load-url="%s" onclick="loadUrl(this)" class="btn size-sm">force%s</a> or <a href="#" load-url="%s" onclick="loadParentUrl(this)" class="btn size-sm">cancel</a></h5>';
+$lang->extension->errorFileConflicted          = '<br />%s <strong> is conflicted with others. Choose <a href="#" load-url="%s" onclick="loadUrl(this)" class="btn size-sm">Override</a> or <a href="#" load-url="%s" onclick="loadParentUrl(this)" class="btn size-sm">Cancel</a></h5>';
 $lang->extension->errorPackageNotFound         = '<strong>%s </strong> is not found. Downloading might be failed. Please download it again.';
 $lang->extension->errorTargetPathNotWritable   = '<strong>%s </strong> is not writable.';
 $lang->extension->errorTargetPathNotExists     = '<strong>%s </strong> is not found.';

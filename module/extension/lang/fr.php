@@ -115,8 +115,8 @@ $lang->extension->errorDownloadPathNotWritable = 'Le chemin de téléchargement 
 $lang->extension->errorPackageFileExists       = '<strong>%s</strong> existe déjà dans le répertoire de téléchargement.<strong> Veuillez %s à nouveau, <a href="%s" class="alert-link">CLIQUEZ ICI</a></h5>';
 $lang->extension->errorDownloadFailed          = "Echec du téléchargement. Réessayez. Si ce n'est toujours pas OK, essayez de le télécharger manuellement et uploadez-la pour l'installer.";
 $lang->extension->errorMd5Checking             = "Fichier Incomplet. Téléchargez-le à nouveau. Si ce n'est toujours pas OK, essayez de le télécharger manuellement et uploadez-la pour l'installer.";
-$lang->extension->errorCheckIncompatible       = 'Incompatible avec votre version de ZenTao. Il ne pourra pas être utilisé %s ultérieurement.<strong>Vous pouvez choisir de <a href="%s" class="btn size-sm">force%s</a> ou <a href="#" onclick=parent.location.href="%s" class="btn size-sm">annuler</a></h5>';
-$lang->extension->errorFileConflicted          = '<br />%s <strong> est en conflit avec d\'autres. Choose <a href="%s" class="btn size-sm">Override</a> or <a href="#" onclick=parent.location.href="%s" class="btn size-sm">Cancel</a></h5>';
+$lang->extension->errorCheckIncompatible       = 'Incompatible with your ZenTao. It may not be used %s later.<strong>You can choose to <a href="#" load-url="%s" onclick="loadUrl(this)" class="btn size-sm">force%s</a> or <a href="#" load-url="%s" onclick="loadParentUrl(this)" class="btn size-sm">cancel</a></h5>';
+$lang->extension->errorFileConflicted          = '<br />%s <strong> is conflicted with others. Choose <a href="#" load-url="%s" onclick="loadUrl(this)" class="btn size-sm">Override</a> or <a href="#" load-url="%s" onclick="loadParentUrl(this)" class="btn size-sm">Cancel</a></h5>';
 $lang->extension->errorPackageNotFound         = '<strong>%s </strong> non trouvé. Le téléchargement a peut-être échoué. Téléchargez à nouveau.';
 $lang->extension->errorTargetPathNotWritable   = '<strong>%s </strong> non inscriptible.';
 $lang->extension->errorTargetPathNotExists     = '<strong>%s </strong> non trouvé.';
