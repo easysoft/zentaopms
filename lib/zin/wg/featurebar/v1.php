@@ -114,7 +114,7 @@ class featureBar extends wg
             (
                 'text'   => $item->text,
                 'active' => $isActive,
-                'url'    => str_replace('{key}', $item->name, $link),
+                'url'    => str_replace('{key}', strval($item->name), $link),
                 'badge'  => $isActive && $recTotal != '' ? array('text' => $recTotal, 'class' => 'size-sm rounded-full white') : null,
                 'props'  => array('data-id' => $item->name, 'data-load' => $load, 'data-target' => $loadID)
             );
