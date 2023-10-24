@@ -83,8 +83,8 @@ empty($error) && !isset($license) ? div
     btn
     (
         set::type('success'),
-        set::url(createLink('extension', 'browse')),
-        set('data-dismiss', 'modal'),
+        set('load-url', createLink('extension', 'browse')),
+        set::onclick('window.loadParentUrl(this)'),
         $lang->extension->viewInstalled,
     ),
     div

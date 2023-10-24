@@ -23,8 +23,8 @@ window.loadInModal = function(link)
 {
     const modal = window.getCurrentModal();
     if(!modal) return;
-    console.log(modal);
 
+    $("#" + modal.id).attr('load-url', link);
     modal.render({url: link});
 }
 
