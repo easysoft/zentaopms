@@ -424,7 +424,7 @@ class design extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu($projectID, $productID)
+    public function ajaxSwitcherMenu($projectID, $productID)
     {
         $products = $this->loadModel('product')->getProducts($projectID);
 

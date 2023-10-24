@@ -52,9 +52,6 @@ dtable
     set::data($tableData),
     set::footPager(
         usePager(),
-        set::recPerPage($pager->recPerPage),
-        set::recTotal($pager->recTotal),
-        set::linkCreator(helper::createLink('design', 'browse', "projectID={$projectID}&productID={$productID}&type={$type}&param={$param}&orderBy={$orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={pageID}")),
     ),
 );
 

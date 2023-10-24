@@ -14,7 +14,14 @@ namespace zin;
  * 定义每个分组下的选项数据列表。
  * Define the grouped data list.
  */
-$data = array('my' => array(), 'other' => array(), 'closed' => array());
+
+$defaultItem = array();
+$defaultItem['id']     = 0;
+$defaultItem['text']   = $lang->product->all;
+$defaultItem['active'] = $productID == 0;
+$defaultItem['type']   = 'product';
+
+$data = array('normal' => array($defaultItem), 'closed' => array());
 
 foreach($products as $product)
 {
