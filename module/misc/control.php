@@ -19,8 +19,7 @@ class misc extends control
      */
     public function ping()
     {
-        if(mt_rand(0, 1) == 1) $this->loadModel('setting')->setSN();
-        echo "<html><head><meta http-equiv='refresh' content='600' /></head><body></body></html>";
+        if(empty($this->config->global->sn) and mt_rand(0, 1) == 1) $this->loadModel('setting')->setSN();
     }
 
     /**

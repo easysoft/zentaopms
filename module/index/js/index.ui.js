@@ -724,35 +724,11 @@ function changeAppsTheme(theme)
     });
 }
 
-var messageTimer = null;
-function buildMessageTimer()
-{
-    if(messageTimer || browserMessage.turnon != 1) return;
-    messageTimer = setInterval(function(){
-        $.get($.createLink('message', 'ajaxGetMessage'), html =>
-        {
-            if(html === '') return;
-            console.log(typeof html)
-            zui.Messager.show(
-            {
-                content: {html: html},
-                placement: 'bottom-right',
-                time: 0,
-                icon: 'envelope-o',
-                className: 'primary-pale'
-            })
-        });
-    }, browserMessage.pollTime * 1000);
-}
-
 initAppsMenu();
 /* Refresh more menu on window resize */
 $(window).on('resize', refreshMenu);
 refreshMenu();
 setTimeout(refreshMenu, 500);
-
-/* Scheduled tasks for browser message */
-buildMessageTimer();
 
 /* Bind event for menut-toggle */
 $(document).on('click', '.menu-toggle', () => toggleMenu());
@@ -820,3 +796,79 @@ $.apps = $.extend(apps,
     changeAppsLang: changeAppsLang,
     changeAppsTheme: changeAppsTheme
 });
+
+window.notifyMessage = function(data)
+{
+    if(!window.Notification) return;
+
+    var notify  = null;
+    var message = data;
+    if(typeof data.message == 'string') message = data.message;
+    if(Notification.permission == "granted")
+    {
+        notify = new Notification("", {body:message, tag:'zentao', data:data});
+    }
+    else if(Notification.permission != "denied")
+    {
+        Notification.requestPermission().then(function(permission)
+        {
+            notify = new Notification("", {body:message, tag:'zentao', data:data});
+        });
+    }
+
+    if(!notify) return;
+
+    notify.onclick = function()
+    {
+        window.focus();
+        if(typeof notify.data.url == 'string' && notify.data.url) window.location.href = notify.data.url;
+        notify.close();
+    }
+    setTimeout(function(){notify.close();}, 3000);
+}
+
+window.browserNotify = function()
+{
+    let windowBlur = false;
+    if(window.Notification && Notification.permission == 'granted')
+    {
+        window.onblur  = function(){windowBlur = true;}
+        window.onfocus = function(){windowBlur = false;}
+    }
+
+    setInterval(function()
+    {
+        $.get($.createLink('message', 'ajaxGetMessage', "windowBlur=" + (windowBlur ? '1' : '0')), function(data)
+        {
+            if(!windowBlur)
+            {
+                if(!data) return;
+                zui.Messager.show(
+                {
+                    content: {html: data},
+                    placement: 'bottom-right',
+                    time: 0,
+                    icon: 'envelope-o',
+                    className: 'primary-pale'
+                });
+            }
+            else
+            {
+                if(!data) return;
+                if(typeof data == 'string') data = $.parseJSON(data);
+                if(typeof data.message == 'string') notifyMessage(data);
+            }
+        });
+    }, pollTime * 1000);
+};
+
+window.ping = function()
+{
+    setInterval(function(){$.get($.createLink('misc', 'ping'));}, pollTime * 1000);
+}
+
+window.startCron = function(restart)
+{
+    if(typeof(restart) == 'undefined') restart = 0;
+    $.ajax({type:"GET", timeout:100, url:$.createLink('cron', 'ajaxExec', 'restart=' + restart)});
+}
