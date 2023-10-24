@@ -137,7 +137,7 @@ else
         }
     }
 
-   $submitText = $isEndPage ? $this->lang->save : $this->lang->file->saveAndNext;
+    $submitText = $isEndPage ? $this->lang->save : $this->lang->file->saveAndNext;
     formBatchPanel
     (
         set::title($lang->caselib->import),
@@ -149,7 +149,7 @@ else
         input(set::className('hidden'), set::name('isEndPage'), set::value($isEndPage ? '1' : '0')),
         input(set::className('hidden'), set::name('pageID'), set::value($pageID)),
         input(set::className('hidden'), set::name('insert'), set::value($dataInsert)),
-        (!$insert && $dataInsert === '') ? set::actions(array(array('text' => $submitText, 'data-toggle' => 'modal', 'data-target' => '#importNoticeModal', 'class' => 'primary showNotice'), 'cancel')) : null
+        (!$insert && $dataInsert === '') ? set::actions(array(array('text' => $submitText, 'data-toggle' => 'modal', 'data-target' => '#importNoticeModal', 'class' => 'primary showNotice'), 'cancel')) : set::submitBtnText($submitText)
     );
 
     if(!$insert && $dataInsert === '') include '../../common/ui/noticeimport.html.php';
