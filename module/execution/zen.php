@@ -856,6 +856,8 @@ class executionZen extends execution
             $multipleProducts  = $this->loadModel('product')->getMultiBranchPairs();
             foreach($_POST['products'] as $index => $productID)
             {
+                if(empty($_POST['branch'][$index])) continue;
+
                 $branches = implode(',', $_POST['branch'][$index]);
                 if(isset($multipleProducts[$productID]) && $branches == '')
                 {
