@@ -19,7 +19,7 @@ dropmenu();
 
 featureBar
 (
-    li(searchToggle())
+    li(searchToggle(set::module('accessible')))
 );
 
 $closeLink = $this->createLink('personnel', 'accessible', "programID=$programID&deptID=0");

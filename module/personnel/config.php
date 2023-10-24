@@ -1,7 +1,7 @@
 <?php
 global $lang;
 $config->personnel->accessible = new stdClass();
-$config->personnel->accessible->search['module']             = 'personnel';
+$config->personnel->accessible->search['module']             = 'accessible';
 $config->personnel->accessible->search['fields']['realname'] = $lang->personnel->realName;
 $config->personnel->accessible->search['fields']['role']     = $lang->personnel->job;
 $config->personnel->accessible->search['fields']['account']  = $lang->personnel->userName;
