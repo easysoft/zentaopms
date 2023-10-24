@@ -264,13 +264,16 @@ class personnelTest
     public function deleteProgramWhitelistTest($programID, $account)
     {
         global $tester;
-        $tester->dao->update(TABLE_ACL)->set('source')->eq('sync')->where('objectID')->eq($programID)->andWhere('objectType')->eq('program')->exec();
+        $list1 = $tester->dao->select('*')->from(TABLE_ACL)->where('objectID')->eq($programID)->andWhere('objectType')->eq('program')->andWhere('account')->eq($account)->andWhere('source')->eq('sync')->fetchAll();
+
         $this->objectModel->deleteProgramWhitelist($programID, $account);
 
-        if(dao::isError()) return dao::getError();
+        if(dao::isError() || count($list1) < 1) return -1;
 
-        $tester->dao->update(TABLE_ACL)->set('source')->eq('sync')->where('objectID')->eq($programID)->andWhere('objectType')->eq('program')->exec();
-        return $objects;
+        unset(dao::$cache[TABLE_ACL]);
+        $list2 = $tester->dao->select('*')->from(TABLE_ACL)->where('objectID')->eq($programID)->andWhere('objectType')->eq('program')->andWhere('account')->eq($account)->andWhere('source')->eq('sync')->fetchAll();
+
+        return count($list1) == count($list2);
     }
 
     /**
