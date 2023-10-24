@@ -24,6 +24,9 @@ $lang->chart->groupWeek = '%s年第%s周';
 $lang->chart->noChart         = '暂时没有图表';
 $lang->chart->noChartSelected = '请选择至少一个图表。';
 
+$lang->chart->featureBar = array();
+$lang->chart->featureBar['preview'] = array();
+
 $lang->chart->aggList = array();
 $lang->chart->aggList['count']    = '计数';
 $lang->chart->aggList['distinct'] = '去重后计数';

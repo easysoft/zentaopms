@@ -26,6 +26,7 @@ class chart extends control
         if(!$groupID) $groupID = $this->chart->getFirstChartGroupID($dimensionID);
 
         list($chartTree, $charts) = $this->chart->getPreviewCharts($groupID);
+        $this->setFeatureBar($dimensionID);
 
         if(!empty($_POST))
         {
@@ -48,7 +49,6 @@ class chart extends control
         $this->view->group       = $this->loadModel('tree')->getByID($groupID);
         $this->view->chartTree   = $chartTree;
         $this->view->charts      = $charts;
-        $this->view->groups      = $this->loadModel('tree')->getGroupPairs($dimensionID, 0, 1);
         $this->display();
     }
 
