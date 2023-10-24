@@ -558,7 +558,6 @@ EOF;
         if($type != 'bySearch')            $this->session->set('myBugType', $type);
         if($this->app->viewType != 'json') $this->session->set('bugList', $this->app->getURI(true), 'qa');
 
-
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;

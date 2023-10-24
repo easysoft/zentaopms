@@ -92,7 +92,7 @@ dtable
     set::checkedSummary($lang->todo->checkedSummary),
     set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
     set::orderBy($orderBy),
-    set::sortLink(createLink('my', 'todo', "type={$type}&userID={$userID}&status={$status}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::sortLink(createLink('my', 'todo', "type={$type}&userID={$user->id}&status={$status}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
     set::footer(array('checkbox', 'toolbar', common::hasPriv('todo', 'import2Today') && $importFuture ? jsRaw('window.generateHtml') : '', 'checkedInfo', 'flex', 'pager')),

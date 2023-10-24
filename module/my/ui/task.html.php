@@ -18,7 +18,7 @@ featureBar
 (
     set::current($type),
     set::linkParams("mode={$mode}&type={key}"),
-    li(searchToggle(set::module('task')))
+    li(searchToggle(set::module($this->app->rawMethod . 'Task')))
 );
 
 $canBatchEdit  = common::hasPriv('task', 'batchEdit');

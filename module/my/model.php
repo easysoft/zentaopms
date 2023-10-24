@@ -418,7 +418,7 @@ class myModel extends model
 
         $scene = $this->loadModel('testcase')->getSceneMenu(0);
 
-        $queryName = $type == 'contribute' ? 'contributeTestcase' : 'workTestcase';
+        $queryName = $this->app->rawMethod . 'Testcase';
         $this->app->loadModuleConfig('testcase');
         $this->config->testcase->search['module']                      = $queryName;
         $this->config->testcase->search['queryID']                     = $queryID;
@@ -684,7 +684,7 @@ class myModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->orderBy('order_asc')
             ->fetchPairs();
-        $queryName = $type == 'contribute' ? 'contributeRisk' : 'workRisk';
+        $queryName = $this->app->rawMethod . 'Risk';
 
         $this->app->loadConfig('risk');
         $this->config->risk->search['module']    = $queryName;
@@ -778,7 +778,7 @@ class myModel extends model
 
         $productIdList = array_keys($products);
         $branchParam   = '';
-        $queryName = $type == 'contribute' ? 'contributeStory' : 'workStory';
+        $queryName     = $this->app->rawMethod . 'Story';
         $this->app->loadConfig('product');
         $this->config->product->search['module']                      = $queryName;
         $this->config->product->search['queryID']                     = $queryID;
@@ -892,7 +892,7 @@ class myModel extends model
 
         $productIdList = array_keys($products);
         $branchParam   = '';
-        $queryName = $type == 'contribute' ? 'contributeRequirement' : 'workRequirement';
+        $queryName     = $this->app->rawMethod . 'Requirement';
         $this->app->loadConfig('product');
         $this->config->product->search['module']                      = $queryName;
         $this->config->product->search['queryID']                     = $queryID;

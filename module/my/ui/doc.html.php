@@ -18,7 +18,7 @@ featureBar
 (
     set::current($type),
     set::linkParams("mode=doc&type={key}&param={$param}"),
-    li(searchToggle(set::module('doc')))
+    li(searchToggle(set::module('contributeDoc')))
 );
 
 if($type == 'openedbyme') unset($config->my->doc->dtable->fieldList['addedBy']);

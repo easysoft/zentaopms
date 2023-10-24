@@ -1,5 +1,5 @@
 <?php
-public function setMenu($executionID, $buildID = 0, $extra = '')
+public function setMenu(int $executionID, int $buildID = 0, string $extra = '')
 {
     common::setMenuVars('execution', $executionID);
 
@@ -76,7 +76,7 @@ public function setMenu($executionID, $buildID = 0, $extra = '')
     $this->lang->modulePageNav = $modulePageNav;
 }
 
-public function getTree($executionID)
+public function getTree(int $executionID): array
 {
     $fullTrees = $this->loadModel('tree')->getTaskStructure($executionID, 0);
 
@@ -121,7 +121,7 @@ public function getTree($executionID)
     return array_values($newTrees);
 }
 
-public function getTRActions($currentMethod)
+public function getTRActions(string $currentMethod): string
 {
     $subMenu = $this->lang->execution->menu;
 
