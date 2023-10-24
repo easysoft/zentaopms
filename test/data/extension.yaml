@@ -75,12 +75,9 @@ fields:
     format: ""
   - field: installedTime
     note: "安装时间"
-    from: common.date.v1.yaml
-    use: dateA
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: "-:60"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
   - field: depends
     note: "依赖"
     range: 0

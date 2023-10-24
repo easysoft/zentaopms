@@ -17,11 +17,12 @@ pid=1
 
 global $tester;
 
-$api = $tester->loadModel('extension')->getModulesByAPI();
+$apiModules = $tester->loadModel('extension')->getModulesByAPI();
+$modules    = array_column($apiModules, 'name');
 
-$includeUser    = strpos($api, '个人相关') !== false;
-$includeProject = strpos($api, '项目相关') !== false;
-$includeMy      = strpos($api, '地盘相关') !== false;
+$includeUser    = in_array('个人相关', $modules);
+$includeProject = in_array('项目相关' ,$modules);
+$includeMy      = in_array('地盘相关', $modules);
 
 r($includeUser)    && p() && e('1'); // 判断返回的API中是否包含个人相关
 r($includeProject) && p() && e('1'); // 判断返回的API中是否包含项目相关

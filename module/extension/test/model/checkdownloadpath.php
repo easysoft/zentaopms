@@ -17,5 +17,5 @@ pid=1
 global $tester;
 $result = $tester->loadModel('extension')->checkDownloadPath();
 
-r(count($result)) && p()         && e('2');  // 查看获取到的结果数量
-r($result)        && p('result') && e('ok'); // 查看获取到的结果
+r(count((array)$result)) && p()         && e('2');  // 查看获取到的结果数量
+r($result)               && p('result') && e('ok'); // 查看获取到的结果
