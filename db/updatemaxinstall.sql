@@ -511,6 +511,7 @@ CREATE TABLE IF NOT EXISTS `zt_review` (
   `title` varchar(255) NOT NULL,
   `object` mediumint(8) NOT NULL,
   `template` mediumint(8) NOT NULL,
+  `doc` mediumint(8) DEFAULT NULL,
   `status` char(30) NOT NULL,
   `reviewedBy` varchar(255) NOT NULL,
   `auditedBy` varchar(255) NOT NULL,
