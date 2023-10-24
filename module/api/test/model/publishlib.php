@@ -32,5 +32,5 @@ $normalRelease->lib       = 910;
 $normalRelease->addedBy   = $tester->app->user->account;
 $normalRelease->addedDate = helper::now();
 
-r($api->publishLibTest($emptyBuildRelease)) && p('version:0') && e('『版本』不能为空。');  //没有版本名的发布
+r($api->publishLibTest($emptyBuildRelease)) && p('version:0') && e('『版本号』不能为空。');  //没有版本名的发布
 r($api->publishLibTest($normalRelease)) && p('version') && e('Version1');                               //正常的发布

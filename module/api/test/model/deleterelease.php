@@ -14,5 +14,5 @@ pid=1
 
 */
 
-global $tester;
+$api = new apiTest();
 r($api->deleteReleaseTest(1, 1)) && p('id') && e('1'); //删除一个发布
