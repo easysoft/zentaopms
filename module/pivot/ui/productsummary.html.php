@@ -50,6 +50,8 @@ $generateData = function() use ($module, $method, $lang, $users, $products)
             set::cols($cols),
             set::data($products),
             set::fixedLeftWidth('0.25'),
+            set::plugins(array('cellspan')),
+            set::getCellSpan(jsRaw('getCellSpanOfProductSummary')),
             set::emptyTip($lang->error->noData)
         )
     );
