@@ -29,6 +29,8 @@ $normalUser['realname']         = '新的测试用户';
 $normalUser['password1']        = '6da8a7c05e2aa1774828500a8370feea';
 $normalUser['password2']        = '6da8a7c05e2aa1774828500a8370feea';
 $normalUser['type']             = 'inside';
+$normalUser['join']             = '2023-10-01';
+$normalUser['group']            = array(1);
 $normalUser['passwordStrength'] = 1;
 $normalUser['visions']          = 'rnd';
 

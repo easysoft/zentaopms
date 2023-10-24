@@ -27,6 +27,7 @@ $normalUser['realname']         = '新的测试用户';
 $normalUser['password1']        = 'a0933c1218a4e745bacdcf572b10eba7';
 $normalUser['password2']        = 'a0933c1218a4e745bacdcf572b10eba7';
 $normalUser['type']             = 'inside';
+$normalUser['join']             = '2023-10-01';
 $normalUser['passwordStrength'] = 1;
 $normalUser['visions']          = 'rnd';
 
