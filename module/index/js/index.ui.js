@@ -257,6 +257,7 @@ function updateApp(code, url, title, type)
 
     app.currentUrl = url;
     window.history.pushState(state, title, url);
+    zui.store.session.set('lastOpenApp', {code, url});
     if(debug) console.log('[APPS]', 'update:', {code, url, title, type});
     return state;
 }
@@ -778,7 +779,15 @@ $.get($.createLink('index', 'app'), html =>
         const params = $.parseUrlParams(location.hash.substring(1));
         defaultOpenUrl = params.app;
     }
-    openApp.apply(null, defaultOpenUrl.split(' '));
+    const parts = defaultOpenUrl.split(' ');
+    const url = parts[0];
+    let code = parts[1];
+    if(!code)
+    {
+        const lastOpenApp = zui.store.session.get('lastOpenApp');
+        if(lastOpenApp) code = lastOpenApp.code;
+    }
+    openApp(url, code);
 });
 
 $.apps = $.extend(apps,
