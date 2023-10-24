@@ -228,7 +228,7 @@ class bugTao extends bugModel
      * 处理搜索的查询语句。
      * Process search query.
      *
-     * @param  string     $object
+     * @param  string     $object         bug|project
      * @param  int        $queryID
      * @param  array|int  $productIdList
      * @param  int|string $branch
@@ -256,9 +256,9 @@ class bugTao extends bugModel
 
         $bugQuery = $this->getBugQuery($this->session->$queryName);
 
-        /* 在 bug 的查询中加上产品的限制。*/
-        /* Append product condition in bug query. */
-        if($object != 'bug') return $this->appendProductConditionForProject($bugQuery, $productIdList, $branch);
+        /* 如果搜索项目下的 bug 列表，在 bug 的查询中加上产品的限制。*/
+        /* If search bug under project, append product condition in bug query. */
+        if($object == 'project') return $this->appendProductConditionForProject($bugQuery, $productIdList, $branch);
 
         return $this->appendProductConditionForBug($bugQuery, (array)$productIdList, (string)$branch);
     }
@@ -274,7 +274,7 @@ class bugTao extends bugModel
      */
     protected function appendProductConditionForProject(string $bugQuery, int $productID, string|int $branchID): string
     {
-        if(strpos($bugQuery, 'product') === false && strpos($bugQuery, '`product` IN') === false)
+        if(strpos($bugQuery, 'product') === false && strpos($bugQuery, '`product` IN') === false && $productID)
         {
             $bugQuery .= ' AND `product` = ' . $productID;
             if($branchID != 'all') $bugQuery .= ' AND `branch` = ' . $branchID;
