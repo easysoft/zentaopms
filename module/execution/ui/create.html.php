@@ -345,9 +345,8 @@ formPanel
                 (
                     set::name('end'),
                     set('id', 'end'),
-                    set::value((isset($plan) && !empty($plan->end) ? $plan->end : ''),
+                    set::value((isset($plan) && !empty($plan->end)) ? $plan->end : ''),
                     set::placeholder($lang->execution->end),
-                    ),
                 )
             ),
         ),
